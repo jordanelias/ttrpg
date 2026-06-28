@@ -1,0 +1,1583 @@
+<!-- Recovered from killed workflow wf_1fd6d183-bde. 6 adversarial verifiers pending re-run. Distillation not yet synthesized. -->
+
+# Combat-Critique Recovered: Module Audits & Resolution Diagnostic
+
+## Module 1: tempo_approach
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Tempo is necessary as an action-gating axis (ready accumulator), and close_tempo's compression to de-emphasise it in the close is intentional. However, weapon_tempo is doing double duty as both action-frequency governor AND closing-movement-speed input (wrapper.py:68 divides it by 2 and feeds it into close_rate) — one variable, two physical roles. AGI_TEMPO_K=0.03 adds a tempo contribution so small it is effectively inert (max delta ~0.09 vs BASE_TEMPO=2.0), meaning it consumes a config slot without adding differentiation. |
+| **R** | partial | Floors and caps are present (TEMPO_FLOOR=0.7, MAX_TEMPO_PEN=0.8, soft_cap on sigma). Stop-hit sub-resolver uses the canonical resolution_pool (History-driven, consistent with closed exchange). However: (1) close_rate hardcodes fatigue=0 in the balance_eff call (wrapper.py:68) while computing ffat correctly for tempo — a fatigued shorter-weapon fighter closes at the same rate as fresh, breaking the robustness contract at a physical extreme; (2) STOPHIT_CHANCE=0.75 means a stop-hit attempts fires 75% of approach beats at full gap — at extreme-reach mismatches the longer weapon fires a sub-resolver 75% of every beat, dominating the approach and suppressing the shorter weapon's agency to near-zero before the close even begins. |
+| **S** | fail | Two role-conflation defects break smoothness: (1) weapon_tempo is used as both action-frequency governor (ready accumulator) and movement-speed input (close_rate, wrapper.py:68 /2) — these are physically distinct quantities; a heavy weapon with low tempo closes slowly in this model, which is not physically motivated (footwork governs closing speed, not weapon cadence); (2) wrapper.py:117 computes a per-exchange static 'init' term (Agi/reading/history * tempo channel weight) that feeds net_sigma alongside the dynamic Vor state initiative_sigma(aggressor, defender, cfg) — two initiative channels of the same quantity flowing to the same roll, creating double-counting potential between the static attribute edge and the Vor state. |
+| **E** | partial | The tempo-as-action-gate is legible (accumulate ready, fire when >= ACT_THRESHOLD). The stop-hit is legible as a threat the longer weapon poses during approach. However: CLOSE_TEMPO_COMPRESS=0.38 means players cannot intuitively read close-tempo differences — a dagger and a spear (choked) barely differ in close cadence; the compression is invisible to players. The grip branch in weapon_tempo (choke/lunge penalties) presents meaningful-sounding choices in the docstring but is never activated since c.grip is never mutated by the wrapper. |
+
+### Churn Assessment
+
+Tempo generates moderate churn in the open phase (action-frequency differentiates weapons, faster weapons can act multiple times before slower ones reach ACT_THRESHOLD). However four churn-inert or churn-negative properties exist: (1) CLOSE_TEMPO_COMPRESS=0.38 collapses tempo differentiation in the close — the phase where most consequential decisions happen has the weakest tempo signal; (2) BURST_MAX=4 always exits as separation regardless of burst content — it caps but never branches; (3) the grip state (choke/lunge) changes the tempo calculation in a documented and interesting way but is never written by the wrapper, so the choice space exists only in documentation; (4) AGI_TEMPO_K=0.03 makes agility's tempo contribution so small it cannot branch the action-frequency ladder — the effective tempo range is governed almost entirely by weapon speed and weight.
+
+### Contract
+
+**Consumes:**
+
+- `weapon_tempo(c, cfg, fatigue) → float`
+- `close_tempo(c, cfg, fatigue) → float (calls weapon_tempo + CLOSE_TEMPO_COMPRESS)`
+- `approach_displace(shorter, longer, cfg) → float [0, APPROACH_DISPLACE_MAX]`
+- `ready[c] accumulator (+=rate[c] per beat)`
+- `ACT_THRESHOLD (2.5) — gating closed exchanges`
+- `BURST_MAX (4) — per-turn burst ceiling`
+- `STOPHIT_CHANCE (0.75), STOPHIT_FULL_GAP (3.0) — stop-hit probability`
+- `close_rate = CLOSE_RATE_K * balance_eff(shorter,0,cfg)/3 * weapon_tempo(shorter,cfg,ffat[shorter])/2 * (1+displ)`
+- `core.resolution_pool(longer.history) — stop-hit sub-resolver pool`
+- `nsig = REACH_DISADV_K*measure_gap + STOPHIT_NSIG_BASE + WOUND_DEF_OB*shorter.wt.wounds - WOUND_ATK_OB*longer.wt.wounds — stop-hit net sigma`
+
+**Emits:**
+
+- `ready[c] (accumulated action readiness — gates closed exchange actors)`
+- `closed=True transition (when measure_gap <= 0.3)`
+- `stophit wound on shorter (shorter.apply_wound / shorter.conc -= CONC_DRAIN_HIT)`
+- `close_rate delta on measure_gap (measure_gap -= close_rate)`
+- `displ fraction (passed to stophit_p scaling and close_rate boost)`
+
+**Dead data:**
+
+- AGI_TEMPO_K=0.03 contribution to weapon_tempo: at (agi-4)*0.03 per point, the agility tempo term is ~3.6% of BASE_TEMPO even at extreme agi — negligible, functionally inert as a differentiator
+- LUNGE_TEMPO_PEN=0.6 and CHOKE_TEMPO_PEN=0.4 in config.py:14 — grip='lunge'/'choke' is set in Combatant.__init__ as 'normal'; nothing in wrapper.py or systems.py ever mutates c.grip, so these grip-conditional branches in weapon_tempo (systems.py:25-27) are never reached in practice
+- CLOSE_TEMPO_COMPRESS=0.38 compresses the close-tempo spread to 38% of its raw range — close_tempo is computed and consumed, but its variance is so crushed it barely differentiates weapons in the close; functions as a near-constant
+
+**Orphans:**
+
+- BURST_MAX (config.py:32) cap exit (wrapper.py:271): when exchanges >= BURST_MAX the engagement returns None (separation), identical outcome to all other separation exits — the cap never branches differently or seeds any narrative choice; it only prevents runaway loops but emits no distinct state
+
+### Findings
+
+#### TA-01 [P1] (role-conflation)
+
+**Claim:** weapon_tempo is used as BOTH action-frequency governor (ready accumulator) AND closing-movement-speed input in close_rate — two physically distinct quantities assigned to one variable. Footwork governs how fast a fighter closes the measure; weapon cadence governs how often they ACT. A heavy two-handed weapon moves toward the opponent at the same pace as a light dagger in real physics; in the engine, the longsword closes ~40% slower than a sabre purely because of its tempo penalty. This conflation is not documented as intentional design.
+
+**Evidence:** `wrapper.py:68 — close_rate = CLOSE_RATE_K * balance_eff(shorter,0,cfg)/3 * weapon_tempo(shorter,cfg,ffat[shorter])/2; systems.py:17-31 — weapon_tempo returns action cadence governed by weapon weight/speed/grip/fatigue/poise`
+
+#### TA-02 [P1] (correctness)
+
+**Claim:** close_rate hardcodes fatigue=0 in the balance_eff call (wrapper.py:68: S.balance_eff(shorter,0,cfg)) while correctly computing and using ffat[shorter] for the weapon_tempo argument on the same line. A fighter at max fatigue closes at the same rate as a fresh fighter, breaking the physical model at the fatigue extreme. The ffat dict is computed at wrapper.py:39 and used correctly everywhere else in the beat loop.
+
+**Evidence:** `wrapper.py:68 — balance_eff(shorter,0,cfg) vs ffat={A:max(0.0,1-A.stamina/max(1,A.stamina_max)), B:...} at wrapper.py:39`
+
+#### TA-03 [P1] (dead-data)
+
+**Claim:** The grip state branches in weapon_tempo (systems.py:25-27) — CHOKE_TEMPO_PEN and LUNGE_TEMPO_PEN — are unreachable. Combatant.__init__ sets self.grip='normal' (combatant.py:66) and nothing in wrapper.py or systems.py ever writes c.grip to any other value. The grip/stance toggle is documented in the weapon_tempo docstring and in ability_armature.md §2b as a live mechanic, but the state machine is missing: no event writes grip='choke' or grip='lunge'. CHOKE_TEMPO_PEN=0.4 and LUNGE_TEMPO_PEN=0.6 are dead config values.
+
+**Evidence:** `combatant.py:66 — self.grip='normal'; systems.py:25-27 — grip branches; wrapper.py (full) — no assignment to c.grip anywhere; config.py:14 — CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6`
+
+#### TA-04 [P2] (role-conflation)
+
+**Claim:** Two independent initiative channels both flow into net_sigma on the same roll: (a) a per-exchange static 'init' term at wrapper.py:117 computed as (INIT_K*(agi-agi_d) + reading_diff + history_diff)*TR.eff_cw(aggressor,'tempo'), added to atk_sig at wrapper.py:140; and (b) initiative_sigma(aggressor, defender, cfg) = INIT_SIGMA_K*tanh(delta_initiative/INIT_SCALE) at wrapper.py:142, added separately. Channel (a) is a static per-beat attribute edge; channel (b) is the dynamic Vor state. They are distinct in intent but indistinguishable in effect — both are sigma contributions to the same roll, with no guard against their compounding. This risks double-crediting tempo/reading-derived edges.
+
+**Evidence:** `wrapper.py:117 — init=(...)*TR.eff_cw(aggressor,'tempo'); wrapper.py:140 — atk_sig includes init; wrapper.py:142 — init_edge=S.initiative_sigma(aggressor,defender,cfg); wrapper.py:143 — net_sigma includes both atk_sig and init_edge`
+
+#### TA-05 [P2] (churn-inert)
+
+**Claim:** BURST_MAX=4 at wrapper.py:271 returns None (separation), the same outcome as clean-defence separation, stamina-collapse, and beat-ceiling exits. The burst ceiling never branches into a different state or seeds a different narrative consequence — it is a safety valve masquerading as a design feature. At BURST_MAX the game cannot tell whether the burst was decisive (4 hits) or grinding (4 misses with ripostes) before cutting it off.
+
+**Evidence:** `wrapper.py:264-272 — comments describe BURST_MAX as 'ceiling' then 'return None'; same None return at lines 84, 271, 272 (stamina collapse, burst ceiling, clean defence)`
+
+#### TA-06 [P2] (dead-data)
+
+**Claim:** AGI_TEMPO_K=0.03 in config.py:32 makes the agility contribution to weapon_tempo functionally inert as a differentiator. At agi=7 vs agi=1 (max spread), the delta is 6*0.03=0.18, versus BASE_TEMPO=2.0. The spread is 9% of BASE_TEMPO; in practice the combat agi range (3-5) yields deltas of 0.03-0.06. The AGI_TEMPO_K slot exists in config.py and is applied in systems.py:28, but produces no meaningful tempo differentiation — it cannot move a fighter up or down the action-frequency ladder.
+
+**Evidence:** `config.py:32 — AGI_TEMPO_K=0.03; systems.py:28 — t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen`
+
+#### TA-07 [P2] (orphan-emit)
+
+**Claim:** CLOSE_TEMPO_COMPRESS=0.38 (config.py:11) compresses the close-tempo spread to 38% of its raw range. The formula at systems.py:42 is CLOSE_TEMPO_MEAN + (t - CLOSE_TEMPO_MEAN)*0.38. For the extreme pole case (spear not choked, closes_poorly): raw close_tempo floor ~0.7, compressed to 1.5+(0.7-1.5)*0.38=1.196. For a dagger: raw ~2.1 (approx), compressed to 1.5+(2.1-1.5)*0.38=1.728. The ratio is 1.728/1.196=1.44 — vs the raw ratio ~3:1. The compression is so aggressive that close-tempo is nearly constant across the weapon roster, making it unable to generate meaningful action-order differentiation in the close phase. The config constant exists and is consumed, but its mechanical effect is near-null differentiation.
+
+**Evidence:** `config.py:11 — CLOSE_TEMPO_COMPRESS=0.38; systems.py:36-42 — close_tempo calculation; comment at systems.py:35 explicitly documents 'spread COMPRESSED toward the mean so action-frequency is a secondary edge, not the deciding axis'`
+
+#### TA-08 [P2] (correctness)
+
+**Claim:** STOPHIT_CHANCE=0.75 causes stop-hit attempts to fire on 75% of approach beats at full gap (gap >= STOPHIT_FULL_GAP=3.0). The sub-resolver then runs at pool=resolution_pool(longer.history) with nsig biased positive (STOPHIT_NSIG_BASE=0.4 favours the longer weapon). At large reach mismatches (spear vs dagger), the longer weapon fires a stop-hit sub-resolver 3 out of 4 beats during approach, suppressing the shorter weapon's approach entirely — the shorter weapon has near-zero agency to reach close range against a skilled longer weapon, making the reach advantage deterministic rather than probabilistic.
+
+**Evidence:** `config.py:32 — STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0; wrapper.py:74-85 — stophit_p = STOPHIT_CHANCE * min(1, measure_gap/STOPHIT_FULL_GAP) * (1-displ); wrapper.py:76-80 — stop-hit sub-resolver`
+
+#### TA-09 [P2] (doc-drift)
+
+**Claim:** ability_armature.md §7 (line 167) and the lever map at §2c (line 53) both list the 'seize' lever as 'live'. The ABILITIES dict in tradition.py:97,107 registers vorschlag (+4.0 to seize) and sen_no_sen (+4.0 to seize). However per verified-facts the 'seize' lever has NO consumer in wrapper.py or systems.py — pre-contact seizure was CUT 2026-06-05 (documented at systems.py:243, wrapper.py:27). These two flagship abilities (German S1/S2 Vorschlag, Japanese S2 sen-no-sen) silently do nothing when equipped.
+
+**Evidence:** `ability_armature.md:53,167 — seize listed as 'live'; tradition.py:97 — vorschlag lever='seize'; tradition.py:107 — sen_no_sen lever='seize'; systems.py:243-246 — seizure CUT 2026-06-05; wrapper.py (full) — no call to ability_bonus(c,'seize') or any seize consumer`
+
+#### TA-10 [P3] (gap)
+
+**Claim:** The stop-hit sub-resolver at wrapper.py:76 uses core.resolution_pool(longer.history) with no wound penalty applied to the pool, while the closed exchange DOES apply wound effects (via WOUND_DEF_OB/WOUND_ATK_OB in net_sigma at wrapper.py:77,143). The stop-hit DOES include wound terms in nsig (wrapper.py:77), so the wound effect IS present — but only as an Ob-shift approximation, not via the same mechanism as the closed exchange. The sub-resolver treats a badly-wounded longer weapon identically to a healthy one in pool size, which is asymmetric with the closed exchange behaviour (where wounds degrade both attack and defence through net_sigma).
+
+**Evidence:** `wrapper.py:76 — pool=max(1, core.resolution_pool(longer.history)); wrapper.py:77 — nsig includes WOUND_DEF_OB*shorter.wt.wounds - WOUND_ATK_OB*longer.wt.wounds; wrapper.py:143 — closed exchange net_sigma also includes wound terms but wounds affect both sides symmetrically there`
+
+### Recommendations
+
+- TA-01 (role-conflation): Replace weapon_tempo in the close_rate formula with a dedicated footwork/movement-speed term driven by balance_eff and agility, not action cadence. Weapon tempo should gate actions; approach speed should gate the close. The close_rate formula at wrapper.py:68 can be simplified to CLOSE_RATE_K * balance_eff(shorter, ffat[shorter], cfg)/3 — dropping the /2 tempo division entirely and fixing the fatigue=0 bug simultaneously.
+- TA-02 (correctness): Fix the fatigue=0 bug at wrapper.py:68 — change S.balance_eff(shorter,0,cfg) to S.balance_eff(shorter,ffat[shorter],cfg). One character change; no design decision required.
+- TA-03 (dead grip state): Either implement grip mutation in the wrapper (a grip-change action consuming stamina/beats, triggered by range-state transitions) or remove the grip branches and config values entirely. If grip is deferred, mark CHOKE_TEMPO_PEN and LUNGE_TEMPO_PEN as PENDING in config.py comments and document the open queue item in HANDOFF.md. Do not leave documented-but-unreachable branches as silent dead code.
+- TA-04 (dual initiative channels): Audit whether the per-exchange static 'init' term at wrapper.py:117 is still necessary now that initiative_sigma(aggressor, defender, cfg) carries the Vor state edge. If both serve the same purpose (give the more-agile/better-reading fighter an edge), collapse them: either let the static edge seed into the Vor state at engagement start (removing the per-exchange static term) or remove initiative_sigma and rely entirely on the static term. Two channels of the same quantity is leverage pile.
+- TA-05 (BURST_MAX churn): Give BURST_MAX exits a distinct narrative state — e.g., return a result tuple distinguishing 'burst_ceiling' from 'separation' so the game layer can narrate a clinch, a grapple break, or a mutual stand-off rather than always the same separation. Alternatively, at burst ceiling, convert to a bind sub-resolver (the two combatants have ground to a close-quarters contest) rather than separating.
+- TA-06 (AGI_TEMPO_K inert): Either raise AGI_TEMPO_K to a level that can actually shift action-frequency order (e.g., 0.15-0.20 per point, so agi 5 vs agi 3 gives 0.3-0.4 delta against BASE_TEMPO 2.0 — a 15-20% speed edge) or remove it and route agility's close-combat contribution entirely through the existing agility_delta_sigma / initiative channels in r1 where it is already balanced.
+- TA-07 (CLOSE_TEMPO_COMPRESS): Raise CLOSE_TEMPO_COMPRESS from 0.38 to 0.55-0.65, or document with simulation evidence that the current compression is calibrated and intentional. At 0.38 the close-tempo axis generates almost no meaningful choice for players; it should either differentiate or be removed. The existing comment 'action-frequency is a secondary edge' is design intent but 0.38 overcorrects.
+- TA-08 (STOPHIT_CHANCE): Reduce STOPHIT_CHANCE from 0.75 to 0.40-0.50. The current value means the longer weapon fires a sub-resolver attempt every three-quarters of approach beats, which dominates the approach phase and gives the shorter weapon almost no agency. A 40-50% base with approach_displace providing the main mitigation restores the intended balance between stop-hit deterrence and the shorter weapon's ability to close.
+- TA-09 (seize doc drift): The ability_armature.md lever map must be updated immediately to mark 'seize' as DEAD/CUT (not 'live') with a pointer to the 2026-06-05 cut. The vorschlag and sen_no_sen ability entries in tradition.py:93-108 must either (a) be re-levered to an active lever (e.g., counter_success or initiative init-gain), or (b) be marked explicitly as INERT with a TODO to wire when a replacement pre-contact seize mechanic is designed. Leaving two S1/S2 flagship abilities silently doing nothing is a P2 correctness and doc-drift defect.
+- TA-10 (stop-hit wound asymmetry): Add a wound pool penalty to the stop-hit sub-resolver at wrapper.py:76 consistent with the closed exchange — e.g., pool=max(1, core.resolution_pool(longer.history) - int(longer.wt.wounds * WOUND_ATK_OB)) — or document explicitly why the stop-hit resolver intentionally omits the wound pool penalty (if it is a design choice, add a comment and track it in the ledger).
+
+---
+
+## Module 2: read_feint (systems.py:reading/legibility/feint_eval + tradition.py:familiarity + wrapper.py:read_win logistic)
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | reading() and legibility() are necessary and lean — reading is a single coherent formula (systems.py:53); legibility is necessary differentiation (in-line vs lateral arc) that branches mode-selection outcomes. feint_eval, however, is borderline: the precommit channel it exclusively consumes (systems.py:203) becomes an orphan if feint is ever disabled (FEINT_ENABLE=False cuts the only precommit consumer), and feint itself is the sole justification for the channel weight. The read_win -> mode-selection -> dsig cascade is also load-bearing, not bolt-on. But the double-application of feint_debuff to both read_d and dsig (wrapper.py:131,139) adds an undocumented third lever (it also degrades mode_sigma base via read_win, wrapper.py:133/systems.py:93) — three effects from one mechanic without design intent stated, approaching lever-pile. |
+| **R** | fail | feint_streak reset bug (systems.py:201 new_streak=0 on no-fire, wrapper.py:121 unconditional assign): the streak resets to 0 on every non-feint beat, so the FEINT_MAX_STREAK=3 cap is dead configuration and feint has no accumulation limit in practice. A determined spammer fires at FEINT_P=0.30 per beat with no streak penalty accumulating. This is an unbounded feedback path (the stated damper is broken). Additionally: feint_debuff applied with a negative sign when defender reads the feint (debuff=-0.12) is algebraically correct but the magnitude asymmetry (punish=0.12 vs debuff=0.30, a 2.5x ratio) is not calibrated to any stated principle. |
+| **S** | partial | legibility mode-shift for cut_thrust (systems.py:186-188) is correctly coupled to coupling()'s mode-shift and wrapper passes defender.armor (wrapper.py:130) — this is clean. BUT: the logistic scale in the main read contest is 1.0 (wrapper.py:133) while feint_eval uses scale 2.0 (systems.py:204); different sharpness for structurally equivalent contests is inconsistent without documented rationale. Familiarity is applied to defender.read_d in the main contest (wrapper.py:131) but NOT to aggressor.read_a — the aggressor perfectly reads any tradition while the defender is penalised for unfamiliarity. In feint_eval, familiarity is also absent from def_read (systems.py:203) despite being thematically relevant (unfamiliar fighters should be harder to read-feint). Inconsistent familiarity application across three contest sites. |
+| **E** | partial | reading() as (2*cog + att)/3 + history-term is legible to a player: cog is primary, att secondary, experience adds. legibility as a multiplier on the read is intuitive — a thrust is harder to see coming. The feint loop outcome (fooled=debuff, read=punish) is directionally legible. However: the double-application of feint_debuff to read_d AND dsig independently is not surfaced to a player — winning the read after a feint does not just give you better mode selection, it also separately boosts your mode sigma, but these are silently stacked in two formulas. The precommit channel's isolation to feint_eval only means a Japanese fighter's precommit=1.35 edge is invisible in ordinary play (only visible when an opponent feints) — opacity without a player-facing signal. |
+
+### Churn Assessment
+
+Moderate churn with a correctness defect. reading() and legibility() generate real churn: the read_win branch point dictates whether the defender picks their best mode (optimal) or a random mode (suboptimal), which is a meaningful binary that seeds different exchange outcomes. The feint loop adds another branch (fooled / read feint / no feint) that interacts with commitment and stamina — this is genuine emergent narrative potential. However, the feint_streak accumulation bug (resets every non-feint beat) means the designed 'bluff exhaustion / telegraph' arc (streak builds -> opponent adapts) never materialises. The cap of 3 in a row was intended to create a saturation cliff and force the aggressor to vary; instead feint spam costs only stamina with no escalating tell. The mechanic becomes a pure probabilistic tax rather than a dynamic read/counter-read game. The precommit channel's isolation to feint-resistance only means Japanese fighters' key tradition advantage is dead in most exchanges (feint fires ~30% of beats) — the flagship tradition mechanic is mostly inert. Net verdict: the read/legibility core generates churn; the feint subsystem has the architecture for churn but the streak bug guts the designed feedback loop.
+
+### Contract
+
+**Consumes:**
+
+- `aggressor.cog`
+- `aggressor.att`
+- `aggressor.history`
+- `aggressor.skill('technique')`
+- `defender.cog`
+- `defender.att`
+- `defender.history`
+- `defender.focus`
+- `defender.stamina / stamina_max (mental_fat_d)`
+- `defender.conc / conc_max (cfrac_d)`
+- `TR.eff_cw(aggressor, 'visual')`
+- `TR.eff_cw(aggressor, 'tempo')`
+- `TR.eff_cw(defender, 'visual')`
+- `TR.eff_cw(defender, 'precommit')`
+- `TR.familiarity(td, ta)`
+- `aggressor.w['head']`
+- `defender.armor`
+- `aggressor.grip`
+- `feint_streak (engagement-scoped)`
+- `commit (per-beat)`
+- `cfg['LEGIB_SWING'], cfg['LEGIB_THRUST'], cfg['LEGIB_COMMIT_K'], cfg['LEGIB_LUNGE']`
+- `cfg['READ_K'], cfg['MENTAL_FAT_READ_K'], cfg['MENTAL_FAT_DEF_K'], cfg['FOCUS_MENTAL_K']`
+- `cfg['FEINT_ENABLE'], cfg['FEINT_P'], cfg['FEINT_MAX_STREAK'], cfg['FEINT_BEAT_COST'], cfg['FEINT_STAMINA'], cfg['FEINT_DEBUFF'], cfg['FEINT_PUNISH']`
+
+**Emits:**
+
+- `read_win (bool) -> mode selection, Indes-steal gate, displace-and-step gate`
+- `feint_debuff (float) -> read_d multiplier, dsig multiplier`
+- `feint_streak (updated int) -> next beat feint_eval gate`
+- `beats +FEINT_BEAT_COST (tempo tax)`
+- `aggressor.stamina -FEINT_STAMINA`
+
+**Dead data:**
+
+- cfg['FEINT_MAX_STREAK']=3 effectively unreachable: feint_streak resets to 0 on every non-feint beat (systems.py:201, wrapper.py:121), so the cap of 3 is never tested in practice
+- TR.eff_cw(aggressor, 'visual') in read_a (wrapper.py:132): channel weight applied to aggressor's read, but familiarity and legibility are NOT applied to read_a, making TR tradition weighting asymmetric and partially inert on the aggressor side
+
+**Orphans:**
+
+- TR.eff_cw(defender, 'precommit') consumed ONLY in feint_eval def_read (systems.py:203) — the Japanese tradition's primary channel (precommit=1.35) has exactly one downstream effect: feint-resistance. It does not reach mode_sigma, bind_sigma, the main read_win contest, or initiative. The channel is real but isolated.
+
+### Findings
+
+#### RF-01 [P1] (loop)
+
+**Claim:** feint_streak accumulation is broken: on every no-fire beat feint_eval returns new_streak=0 (systems.py:201) and the wrapper unconditionally assigns feint_streak=fv['new_streak'] (wrapper.py:121). The streak resets to zero between every feint, so FEINT_MAX_STREAK=3 is a dead cap. A feint fires independently per beat at FEINT_P=0.30 with no escalating tell — the designed bluff-exhaustion damper does not exist.
+
+**Evidence:** `systems.py:201 (new_streak=0 in no-fire branch), wrapper.py:121 (feint_streak=fv['new_streak'] unconditional), config.py:23 (FEINT_MAX_STREAK=3)`
+
+#### RF-02 [P1] (dead-data)
+
+**Claim:** The 'seize' ability lever has no consumer. vorschlag (tradition.py:96) and sen_no_sen (tradition.py:106) both target lever='seize'. ability_bonus(c,'seize') is never called anywhere in wrapper.py or systems.py after the 2026-06-05 pre-contact seizure cut. Both German Vorschlag and Japanese Sen-no-sen abilities are registered but fully dead.
+
+**Evidence:** `tradition.py:96-97 (vorschlag lever='seize'), tradition.py:106-107 (sen_no_sen lever='seize'), systems.py:243-246 (seizure_score removed comment), wrapper.py passim (no ability_bonus call for 'seize')`
+
+#### RF-03 [P1] (doc-drift)
+
+**Claim:** ability_armature.md §7 and §2c table list 'seize' as a LIVE lever with checkmarks against vorschlag and sen_no_sen. The lever has been dead since the 2026-06-05 pre-contact seizure cut (systems.py:243). The doc claims live status for a dead mechanism for two flagship tradition abilities.
+
+**Evidence:** `ability_armature.md:51 ('seize' listed as 'live'), ability_armature.md:106 (vorschlag checkmark), ability_armature.md:131 (sen_no_sen checkmark), tradition.py:96,106 (both lever='seize'), systems.py:243 (cut comment)`
+
+#### RF-04 [P2] (redundancy)
+
+**Claim:** feint_debuff is applied twice independently: once to read_d (wrapper.py:131, degrading P(read_win)) and once to dsig (wrapper.py:139, degrading mode sigma regardless of read outcome). A fooled defender takes a triple hit: (1) lower P(read_win) -> random mode selection, (2) lower dsig from the debuff multiplier, and (3) lower dsig again because read_win=False forces 0.7x in mode_sigma base (systems.py:93). None of these interactions are documented in feint_eval's docstring. The triple-hit from a single feint flag is undocumented leverage stacking.
+
+**Evidence:** `wrapper.py:131 (feint_debuff in read_d), wrapper.py:139 (feint_debuff in dsig), systems.py:93 (read_win False -> 0.7x base), systems.py:195 (docstring claims only 'defence/read is degraded')`
+
+#### RF-05 [P2] (orphan-emit)
+
+**Claim:** TR.eff_cw(defender, 'precommit') is consumed only in feint_eval's def_read (systems.py:203). The Japanese tradition's precommit weight (1.35) has exactly one downstream effect across the entire engine: feint-resistance. It does not reach mode_sigma, bind_sigma, reach_sigma, initiative, or the main read_win contest. With FEINT_P=0.30, the channel is inert on ~70% of beats. The flagship Japanese cognitive mode is near-silent in normal play.
+
+**Evidence:** `systems.py:203 (only precommit consumption), tradition.py:34 (japanese precommit=1.35), wrapper.py passim (no other precommit reference), config.py:23 (FEINT_P=0.30)`
+
+#### RF-06 [P2] (role-conflation)
+
+**Claim:** Familiarity is applied asymmetrically across contest sites: (a) main read contest: applied to defender.read_d only (wrapper.py:131), not to aggressor's read_a (wrapper.py:132) — aggressor always fully reads any tradition; (b) feint_eval: familiarity absent from def_read entirely (systems.py:203) despite being thematically appropriate (unfamiliar fighter should be harder to read-feint); (c) bind_sigma: applied to both sides symmetrically (systems.py:236-237). Three sites, three different contracts for the same concept.
+
+**Evidence:** `wrapper.py:129-132 (fam applied defender-only), systems.py:203 (def_read no familiarity), systems.py:236-237 (both-sides familiarity in bind)`
+
+#### RF-07 [P2] (cliff)
+
+**Claim:** The read_win logistic uses scale=1.0 (wrapper.py:133) while feint_eval's read-feint logistic uses scale=2.0 (systems.py:204). These are structurally equivalent contests (can defender read the aggressor's intent) with different sharpness — a 1-unit advantage gives ~73% in the main read but only ~62% in feint-read. No documented rationale for the difference.
+
+**Evidence:** `wrapper.py:133 (exp scale 1.0), systems.py:204 (exp scale 2.0)`
+
+#### RF-08 [P2] (dead-data)
+
+**Claim:** cfg['FEINT_MAX_STREAK']=3 is dead configuration (consequence of RF-01). The config entry, the comment ('capped at 3 in a row'), and the guard (feint_streak < cfg['FEINT_MAX_STREAK']) all exist but do nothing in practice since the streak resets to 0 between every beat.
+
+**Evidence:** `config.py:23 (FEINT_MAX_STREAK=3), systems.py:198 (feint_streak < cfg['FEINT_MAX_STREAK'] guard), systems.py:201 (new_streak=0)`
+
+#### RF-09 [P2] (gap)
+
+**Claim:** feint_eval's feint_q formula (systems.py:202) uses reading() + skill('technique') * TR.eff_cw(aggressor,'tempo'). The tempo channel weight modulates the entire sum (reading + technique), meaning tradition tempo weighting scales both cognitive reading and physical technique equally. This conflates tempo as cadence-exploitation with tempo as cognitive reading speed — one channel doing two jobs.
+
+**Evidence:** `systems.py:202 (feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.eff_cw(aggressor,'tempo'))`
+
+#### RF-10 [P3] (balance)
+
+**Claim:** feint_punish=-0.12 (defender reads the feint) vs feint_debuff=+0.30 (defender fooled): a 2.5x magnitude asymmetry. A fooled defender takes 30% penalty but a defender who reads the feint gets only a 12% boost. The cost of being fooled is 2.5x larger than the reward for reading correctly, which disincentivises optimal read play and makes feinting a positive-EV play even if the defender reads it ~29% of the time. No calibration rationale in config.
+
+**Evidence:** `config.py:24 (FEINT_DEBUFF=0.30, FEINT_PUNISH=0.12), systems.py:205 (debuff assignment)`
+
+#### RF-11 [P3] (other)
+
+**Claim:** aggressor.read_a in the main read contest (wrapper.py:132) does not apply familiarity. An aggressor always reads the defender at full effectiveness regardless of tradition familiarity. The stated knowledge-of-others model (tradition.py:50-67) only penalises the defender's read of the aggressor, creating a one-directional familiarity tax that systematically advantages the aggressor role.
+
+**Evidence:** `wrapper.py:131-132 (fam applied to read_d, absent from read_a), tradition.py:62-67 (familiarity() defined symmetrically)`
+
+### Recommendations
+
+- RF-01 FIX (P1): Preserve feint_streak across non-feint beats. In systems.py feint_eval, remove new_streak=0 from the no-fire return (systems.py:201) and return the passed-in feint_streak unchanged: dict(do=False, debuff=0.0, new_streak=feint_streak, ...). Only a SUCCESSFUL read by the defender should reset the streak (read_feint=True -> new_streak=0), while a no-fire beat should leave the streak intact. This restores the designed bluff-exhaustion arc: consecutive feints build the tell, not single beats.
+- RF-02/03 FIX (P1): Either (a) implement a replacement consumer for the 'seize' lever — the natural candidate is the Indes initiative-steal magnitude (wrapper.py:151: steal += TR.ability_bonus(aggressor,'seize') before clamping) or the DISP_INIT_K pre-beat initiative drift — or (b) retarget vorschlag and sen_no_sen to an existing live lever (e.g., counter_select for sen_no_sen, or a new init_hold bonus for vorschlag). Whichever path: update ability_armature.md §2c/§7 to accurately reflect the lever status. The current doc-drift is P1 because a developer will implement against the table and silently build more dead abilities.
+- RF-04 CLARIFY (P2): Document the three-layer feint penalty explicitly in feint_eval's docstring and wrapper comments, or collapse them. If the triple-hit is intentional, name it. If not, remove feint_debuff from dsig (wrapper.py:139) and let the read_win cascade carry the defence penalty — the mode-selection penalty already propagates to dsig through mode_sigma's read_win branch.
+- RF-05 FIX (P2): Extend precommit consumption to the main read contest. Add TR.eff_cw(defender, 'precommit') to the defender's read_d computation (wrapper.py:131) — it is thematically correct (precommit = pre-commitment intent-read, the 'finest initiative tier' per tradition.py:15) and gives Japanese sen-sen-no-sen a live signal in all exchanges, not just the ~30% that contain a feint.
+- RF-06 FIX (P2): Apply familiarity symmetrically. In the main read contest, apply familiarity to read_a as well (the aggressor's read of the defender should be degraded by unfamiliarity): read_a = S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')*TR.familiarity(ta,td) + consistency_a. Also add familiarity to feint_eval's def_read — an unfamiliar fighter's feints should be harder to read (lower familiarity -> lower def_read).
+- RF-07 ALIGN (P2): Standardise the logistic scale across read contests. Either use 1.0 everywhere (sharper, more decisive) or 2.0 (softer gradient). Document the rationale if they intentionally differ. The main read_win at scale=1.0 is already steep — a 2-point reading gap (~skill difference of one tradition weight) gives ~88% P(read_win). Consider whether scale=1.5 across both contests would better match the engine's continuous-gradation principle.
+- RF-09 REFINE (P2): Separate cognitive and physical components in feint_q. Consider feint_q = reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual') + aggressor.skill('technique')*TR.eff_cw(aggressor,'tempo') — visual channel for the deceptive read, tempo channel for the execution. This removes the conflation and makes the tradition weighting semantically correct.
+- RF-10 CALIBRATE (P3): Rebalance FEINT_PUNISH toward FEINT_DEBUFF. A ratio of ~1.5-2.0x (not 2.5x) would make reading the feint worth approximately half the cost of being fooled — creating a meaningful but not dominant read reward. Consider FEINT_PUNISH=0.20 as a starting calibration.
+
+---
+
+## Module 3: reopen_recovery
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Three creation paths are mechanically justified and add distinct churn-positive conditions, but path (c) fires on EVERY closed beat (p=0.22) for all 2H longer weapons, making it effectively a background tax rather than a discrete moment — one of the three paths dissolves into a per-beat probability rather than a named event. push_avail as a separate flag adds a fourth implicit state without a fourth resolver path; the single reopen_prob() cannot distinguish path-a from path-b, making the three-path distinction partially inert at the resolver level. |
+| **R** | partial | REOPEN_MAX=0.6 caps probability; base_gap is static (recomputed from er[] which is fixed at engagement start), so the check base_gap>0.3 is a permanent predicate — if the weapons have enough reach difference the gate is always open once closed, if not it never opens. push_avail stale carry-over (not reset on failed attempt) is a bounded but unintended state accumulation. balance_eff fatigue hardcoded to 0 removes the fatigue modulation from the probability calculation, a missing robustness signal. |
+| **S** | partial | reopen_prob uses the 'visual' channel for the moment-identification read regardless of path type; path-b moments (bind/defensive maneuver) are tactile/leverage events (the same binding context uses tactile in bind_sigma), producing tradition-channel inconsistency: a German Fühlen-dominant fighter gets visual=0.95 disadvantage on bind-created reopen moments. The normalization constant /0.62 duplicates cfg['REACH_W']['none'] rather than referencing it, creating a silent config-drift risk. |
+| **E** | pass | The gate structure is legible: a moment must be created before the attempt fires, the attempt is probabilistic scaled by reach-gap and footwork, and the outcome (closed=False, ready reset) is clean and comprehensible. The read-contest via logistic function is consistent with the rest of the engine's read mechanics. |
+
+### Churn Assessment
+
+Path (a) — shorter weapon overcommits: churn-positive. A shorter weapon's player faces a real trade-off: deep commits land harder but cede the reopen moment to the longer weapon. This seeds emergent narrative (the shorter fighter must choose commitment depth knowing the longer fighter can re-establish distance). Reachable whenever the shorter weapon acts as aggressor and commits to 4+, which happens frequently (disposition-skewed probabilities, aggressive temperament). Branching: yes.
+
+Path (b) — longer weapon defensive maneuver: churn-positive. The longer weapon's defensive success (bind, clean fail/partial) converts to a distance-creating opportunity. This makes the longer fighter's defensive choices meaningful — a bind is not just about Vor-stealing but can open distance. Reachable whenever shorter is aggressor and longer defends cleanly. Branching: yes.
+
+Path (c) — freed-hand shove (2H only): churn-NEGATIVE in its current form. It fires with p=0.22 on every closed beat unconditionally for any 2H longer weapon (spear, longsword, greatsword, poleaxe, staff). This is a background tick, not a moment — it is not triggered by any fighter choice, not denied by any opponent action, and generates no decision point. It functions as a 22%-per-beat passive reopen tax that advantages 2H longer weapons regardless of what either fighter does. The shorter fighter has no agency to deny path (c). This is an inert lever by the churn principle: it tunes the probability without branching the path or creating meaningful choice.
+
+Spear-specific: the spear is 2H, has the largest reach advantage against most weapons (base_gap ~1.4–1.9), AND has closes_poorly=True which handicaps it at close range. Path (c) gives the spear a passive 22%-per-beat chance to reclaim its primary advantage without the spear player doing anything — offsetting the closes_poorly penalty without requiring a tactical choice. A choke grip would be the meaningful decision path (closes_poorly is suppressed by grip='choke'), but the spear player who chokes up to fight close is also getting the path-c bonus with no additional cost. The closes_poorly→choke→reopen interaction is not coherent as a choice architecture.
+
+### Contract
+
+**Consumes:**
+
+- `closed (bool, engagement state)`
+- `beats > 1 (beat counter guard)`
+- `reopen_moment (bool flag, set by paths a/b/c)`
+- `push_avail (bool, sticky — set by path c, reset only on successful reopen)`
+- `base_gap = er[longer]-er[shorter] (static reach delta, recomputed from fixed er dict each beat)`
+- `aggressor is shorter (bool, for path a)`
+- `commit >= 4 (int, for path a)`
+- `defender is longer (bool, for path b)`
+- `bind (bool, for path b)`
+- `deg in ('fail','partial') and not hit (for path b)`
+- `longer.w['hands'] == 2 (for path c)`
+- `rng.random() < PUSH_AVAIL_P=0.22 (for path c)`
+- `reading(longer/shorter, cfg) (cognitive read)`
+- `TR.eff_cw(longer/shorter, 'visual') (tradition visual channel weight)`
+- `balance_eff(longer, 0, cfg) (hardcoded fatigue=0, not actual fatigue)`
+- `cfg['REACH_W'][shorter.armor] (shorter's armor tier)`
+- `cfg['REOPEN_K']=0.34, cfg['REOPEN_MAX']=0.6, cfg['PUSH_REOPEN_BONUS']=0.18`
+
+**Emits:**
+
+- `closed = False (measure re-opened)`
+- `measure_gap = base_gap (static reach delta restored, not dynamic)`
+- `ready = {A:0.0, B:0.0} (initiative reset)`
+- `reopen_moment = False (flag consumed)`
+- `push_avail = False (flag consumed, only on successful reopen)`
+
+**Dead data:**
+
+- push_avail stale carry-over: flag is NOT reset on failed reopen attempt (wrapper.py:62 only clears on success); a push_avail=True from beat N persists into beat N+1, where it can augment a reopen_moment created by path a or b — delivering a shove bonus that belongs to a prior beat
+- balance_eff(longer, 0, cfg): the fatigue=0 argument is hardcoded in reopen_prob (systems.py:223); the longer weapon's actual stamina state and fatigue are computed in wrapper.py line 39 (ffat) but are never passed to reopen_prob — real fatigue is dead input for this calculation
+- cfg['REACH_W']['none']=0.62 hardcoded as divisor in reopen_prob (systems.py:224 '/0.62'): normalization constant duplicates the config value rather than referencing it; if REACH_W['none'] changes, the normalization breaks silently
+
+**Orphans:**
+
+- reopen_moment single-flag collapses three physically distinct events (overcommit / defensive-maneuver / shove) into one boolean; reopen_prob() cannot distinguish path a from path b — both receive the same probability formula, differentiated only by the separate push_avail flag; the physical type of moment is an orphan emit from paths a/b that reopen_prob never reads
+- TR.eff_cw(longer, 'visual') used as the 'identify the moment' read in reopen_prob — the tactile and measure channels, which are the primary sensors for path-b moments (bind / defensive maneuver) and path-a moments (balance read), are ignored; visual is structurally wrong for at least two of the three creation paths
+
+### Findings
+
+#### RR-01 [P2] (dead-data)
+
+**Claim:** push_avail is not reset on a FAILED reopen attempt — only on success (wrapper.py:62). A path-c shove created in beat N survives to beat N+1 where it can augment a path-a or path-b moment, delivering the PUSH_REOPEN_BONUS for a shove event that belonged to the previous beat. The cross-beat contamination is unintended and undetectable from play state.
+
+**Evidence:** `wrapper.py:62 (reset only inside success branch), wrapper.py:64 (reopen_moment reset, push_avail NOT reset), wrapper.py:224-225 (push_avail set True)`
+
+#### RR-02 [P2] (dead-data)
+
+**Claim:** balance_eff() is called with hardcoded fatigue=0 in reopen_prob() (systems.py:223). The longer weapon's actual fatigue fraction (ffat[longer]) is computed at wrapper.py:39 and used in every other tempo/balance calculation but is never passed into reopen_prob. A fatigued longer weapon has the same reopen probability as a fresh one — the fatigue signal is dead for this module.
+
+**Evidence:** `systems.py:223 (balance_eff(longer,0,cfg)), wrapper.py:39 (ffat computed), wrapper.py:60 (reopen_prob call — no fat argument), systems.py:217 (signature takes no fat param)`
+
+#### RR-03 [P2] (redundancy)
+
+**Claim:** The '/0.62' divisor in reopen_prob (systems.py:224) hardcodes cfg['REACH_W']['none']=0.62 as a normalization constant. If REACH_W['none'] is retuned, the normalization breaks silently — the reopen formula is no longer correctly normalized relative to the unarmored baseline, producing undetectable drift in all reopen probabilities.
+
+**Evidence:** `systems.py:224 (cfg['REACH_W'][shorter.armor]/0.62), config.py:9 (REACH_W={'none':0.62,...})`
+
+#### RR-04 [P2] (role-conflation)
+
+**Claim:** reopen_prob() uses TR.eff_cw(longer, 'visual') for the moment-identification read across all three creation paths. Path (b) moments (bind, defensive maneuver) are tactile/leverage events — the same bind context uses tactile in bind_sigma (systems.py:237). A German fighter (tactile=1.35, visual=0.95) is modeled as slightly WORSE at reading the reopen moment created by a bind it just dominated. The visual channel is channel-misaligned for at least paths (a) and (b).
+
+**Evidence:** `systems.py:220-221 (id_read uses 'visual'), systems.py:237 (bind_sigma uses tactile), tradition.py:25 (german: visual=0.95, tactile=1.35)`
+
+#### RR-05 [P2] (churn-inert)
+
+**Claim:** Path (c) — freed-hand shove (wrapper.py:224-225) — fires p=0.22 per closed beat unconditionally for ALL 2H longer weapons (spear, longsword, greatsword, staff, poleaxe). It is not triggered by fighter choice, not deniable by the shorter fighter, and creates no decision point. It functions as a background tax rather than a created moment, violating the churn principle. The spear in particular benefits from path (c) while simultaneously having closes_poorly=True; the penalty and the passive remedy are parallel without a player-controlled trade-off (the choke grip suppresses closes_poorly but also receives the shove bonus — no cost to choking).
+
+**Evidence:** `wrapper.py:224-225 (unconditional rng gate, no choice gating), combatant.py:21 (spear: hands=2, closes_poorly=True), config.py:11 (PUSH_AVAIL_P=0.22)`
+
+#### RR-06 [P2] (gap)
+
+**Claim:** reopen_moment is a single bool that collapses three physically distinct events. reopen_prob() cannot distinguish a path-a moment (opponent off-balance from overcommit) from a path-b moment (longer weapon won a defensive maneuver). Both receive the same resolver, differentiated only by push_avail. The physical nature of the moment is an orphan emit: it affects which defensive technique created the opportunity but has no downstream effect on the probability model.
+
+**Evidence:** `wrapper.py:217-225 (all three paths set the same reopen_moment=True flag), systems.py:217-226 (reopen_prob signature: no path-type param)`
+
+#### RR-07 [P3] (doc-drift)
+
+**Claim:** ability_armature.md:51,53,167 and tradition.py:87 state that 'seize' is a **live** lever wired at its engine sites. The pre-contact seizure mechanic was CUT 2026-06-05 (wrapper.py:27-28, systems.py:243-244). No consumer of ability_bonus(c,'seize') exists in wrapper.py or systems.py. The 'vorschlag' (german) and 'sen_no_sen' (japanese) abilities targeting the 'seize' lever are therefore dead — equipped but producing no effect. The armature doc and tradition.py comment are stale.
+
+**Evidence:** `wrapper.py:27-28, systems.py:243-244 (seizure cut), tradition.py:87,96,106 ('seize' lever described as live), ability_armature.md:51,53,167 ('seize' listed as live lever)`
+
+#### RR-08 [P3] (gap)
+
+**Claim:** The 'reopen'/'disengage' lever is noted in ability_armature.md:61 as 'not yet built (concrete-mechanics queue)'. No tradition ability can currently modulate the reopen module. Specifically, German Nachreisen (travelling-after), Japanese Zanshin (continued awareness/follow-through), and Italian cavazione/durchwechseln — all documented techniques associated with distance management and re-opening — have no ability scaffold and therefore produce no tradition differentiation in this module. The reopen module is tradition-flat except via the visual channel weight.
+
+**Evidence:** `ability_armature.md:61 ('not yet built'), ability_armature.md:110 (Nachreisen candidate), ability_armature.md:134 (Zanshin candidate)`
+
+#### RR-09 [P1] (portability)
+
+**Claim:** The engine is non-runnable on this checkout, CI, and Godot because sys.path.insert(0,'/home/claude') and sys.path.insert(0,'/home/claude/v32') point to nonexistent sandbox paths. The substrate modules (m1_dice_sigma_core, r1_sigma_resolution, r8_parity_harness) physically exist at tests/sim/v32-combat-balance/ but are not on sys.path for any real deployment target. This is a system-wide finding but directly affects the reopen module's resolver (reopen_prob calls balance_eff which imports nothing, but reopen_prob is called only from wrapper.py which imports core/systems both of which rely on dead imports).
+
+**Evidence:** `wrapper.py:4 (sys.path.insert('/home/claude/combat_engine')), core.py:3 (sys.path.insert('/home/claude'), '/home/claude/v32'), systems.py:4 (sys.path.insert('/home/claude/combat_engine'))`
+
+### Recommendations
+
+- RR-01 fix: Reset push_avail on FAILED reopen attempt. Change wrapper.py:58-63 to also set push_avail=False when the rng check fails (i.e., move push_avail=False outside the success branch so it reads: if closed and beats>1 and reopen_moment: base_gap=...; if base_gap>0.3 and rng.random()<...: closed=False; ...; reopen_moment=False; push_avail=False; continue; else: push_avail=False). This makes the shove a per-moment bonus, not a sticky carry.
+- RR-02 fix: Pass actual fatigue to reopen_prob. Add a fat_longer parameter to reopen_prob() signature and call site, replacing the hardcoded 0 in balance_eff(longer, 0, cfg) with balance_eff(longer, fat_longer, cfg). Call site in wrapper.py:60 passes ffat[longer]. This makes a fatigued longer weapon less able to exploit a reopen moment.
+- RR-03 fix: Replace the hardcoded /0.62 divisor in systems.py:224 with /cfg['REACH_W']['none']. This makes the normalization robust to config retuning.
+- RR-04 fix (or deliberate choice): Distinguish path type in the read contest. The cleanest option is a path-type argument ('overcommit'|'maneuver'|'shove') to reopen_prob, with path-b moments using TR.eff_cw(longer,'tactile') for the longer fighter's identification read (consistent with how bind uses tactile in bind_sigma). Alternatively, document the current choice as intentional (visual-only read for all paths) and update the docstring to explain why.
+- RR-05 fix: Gate path (c) on a fighter choice or make it deniable. Replace the unconditional rng.random()<PUSH_AVAIL_P check with a condition that involves the shorter fighter's ability to deny the shove — e.g., multiply by (1 - some_deny_read_factor) or gate it on a balance contest. Alternatively, make path (c) only available when the longer fighter's recent action was defensive (fold it into path-b). The current 22%-per-beat free reopen for all 2H weapons is an inert passive lever with no counterplay.
+- RR-07 fix: Either (a) remove 'vorschlag' and 'sen_no_sen' from ABILITIES and mark them as 'cut with seizure' with a TODO noting they need rebinding to an in-fight Vor lever if they are to be revived, or (b) re-wire them to the initiative substrate (e.g., ability_bonus on INIT_GAIN_HIT or on the Indes steal magnitude). Also update ability_armature.md and tradition.py:87 to remove 'seize' from the live lever list.
+- RR-08 (design queue): Build the 'reopen' lever in the ability armature and wire it into reopen_prob — e.g., as a multiplicative factor on the base probability or an additive bonus to p. This would let German Nachreisen, Japanese Zanshin, and Italian cavazione differentiate in the reopen module. Without it, the reopen module is tradition-flat except via the incidental visual channel weight.
+- RR-09 (infrastructure): Resolve the dead import paths. Either (a) move/copy the substrate modules into the engine dir and update sys.path, or (b) use relative imports / a proper package structure with __init__.py so the engine is importable from the working tree. This is a prerequisite for CI validation and Godot integration.
+
+---
+
+## Module 4: commit_disposition
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Three DISP hooks (commit skew, initiative drift, counter-select) are distinct and non-redundant — each targets a different phase. However, commit depth itself is not a per-action player decision; the player sets disp once and the engine samples from a biased distribution each exchange. This collapses what could be a branching per-action lever (choose shallow/deep for this moment) into a temperament tuner that only adjusts probabilities. The module is not lean enough: DISP_COMMIT_K and overcommit_exposure already interlock — aggression simultaneously increases commit frequency AND exposure per deep commit, stacking two dependent penalties on the same dial without an independent countervailing degree of freedom. |
+| **R** | fail | OOB is a hard binary cliff (wrapper.py:107): stamina at 0.001 pays zero penalty; stamina at -0.001 pays full OOB=2 sigma penalty (-1.0 to atk_sig at wrapper.py:140). No graded degradation between low-positive and negative stamina. This violates P-iii (no cliffs). Additionally, the three DISP cost profiles are asymmetric in their stochasticity: cautious fighters bleed initiative deterministically every beat (DISP_INIT_K*lean, wrapper.py:45-46), while aggressive fighters pay their Indes/overcommit penalty only stochastically (requires read_win AND commit>=4); at low-pool matchups where read_win is unreliable, cautious fighters face a guaranteed per-beat loss while aggressive fighters avoid their penalty with higher frequency — the robustness balance between poles is pool-dependent and not bounded. |
+| **S** | partial | Commit skew weights are computed on-the-fly from disp_lean at wrapper.py:99-105 using a clean linear formula; the transition from neutral to max-aggressive is smooth and monotonic. The initiative drift hook is likewise continuous. However, the OOB binary cliff produces a step discontinuity in the attack sigma profile at stamina=0 that is not smooth across the stamina range — a fighter teetering around zero stamina oscillates between full performance and -1.0 sigma per exchange. Role consistency is clean: disp_lean is defined once in systems.py:62-64, all three DISP hook sites consume it from the same formula, no inversion. |
+| **E** | partial | The player-legibility problem: 'commit depth' is presented in comments as the key commitment lever, but players never choose it directly — they choose disp (1-7) once at character creation and the engine samples commit from a biased distribution. The causal chain (disp -> lean -> weighted commit distribution -> overcommit_exposure -> initiative penalty) is several steps removed from intuition. A player who sets aggressive disp=6 cannot predict that they will commit to depth 4-5 roughly 60-70% of exchanges. The OOB cliff is the least legible mechanic: 'out-of-breath' applies at an invisible threshold (stamina crosses zero) with a 1.0-sigma sudden step, with no graded warning signal in the output stream. The initiative drift hook is the most elegant: DISP_INIT_K=0.10 per beat scales cleanly with lean and produces smooth pressure. |
+
+### Churn Assessment
+
+Partial churn, skewed toward tuning rather than branching. The disposition system does generate emergent path-divergence at the fight level: an aggressive fighter builds initiative through pressing but risks being read and losing it in a single Indes steal; a cautious fighter bleeds initiative but positions well for counter-selection. This is genuine churn with meaningful downstream consequences (who holds the Vor shapes every exchange). However, the commit-depth lever itself is inert as a per-action choice — the player cannot decide 'I will commit shallow THIS exchange because I am tired and my opponent is fresh.' The commit draw is probabilistic and disposition-fixed, so it only tunes expected values, not individual exchange strategy. The stamina resource provides a natural depletion arc (acts-before-exhaustion), but the OOB cliff and the absence of graded degradation mean the interesting strategic question ('how deep can I press before running out?') has an anticlimactic resolution (fine, fine, fine, sudden cliff). The three DISP hooks collectively produce a temperament that modulates multiple outcome streams, which is better than a single knob, but the interaction is predominantly additive rather than branching: there is no scenario where a cautious fighter's disposition causes a qualitatively different exchange resolution path vs a neutral fighter — only a lower probability of deep commits. The seize-lever deadness (vorschlag, sen_no_sen both inert) reduces the churn specifically for the initiative-seizure arc, which was its richest narrative moment (the bold first-strike that takes the Vor) now produces no distinguishable outcome.
+
+### Contract
+
+**Consumes:**
+
+- `c.disp (combatant.py:63, 1-7 integer, aggression axis)`
+- `c.stamina (live state, wrapper.py:106)`
+- `c.weight via WEAPONS[c.weapon]['wt'] (combatant.py:87, 'light'/'heavy')`
+- `cfg['DISP_COMMIT_K']=0.8 (config.py:91)`
+- `cfg['DISP_INIT_K']=0.10 (config.py:91, per-beat initiative drift)`
+- `cfg['DISP_COUNTER_K']=0.5 (config.py:91, counter-select suppressor)`
+- `cfg['ACT_BASE']=2.0, cfg['ACT_WEIGHT']=1.0, cfg['ACT_COMMIT']=0.4, cfg['COST_SCALE']=0.5 (config.py:34)`
+- `cfg['OOB']=2 (config.py:34, penalty magnitude)`
+- `aggressor initiative (per-beat drift input, wrapper.py:45-46)`
+
+**Emits:**
+
+- `commit int 2-5 (wrapper.py:101/105, drawn per-exchange, feeds atk_sig and overcommit_exposure)`
+- `aggressor.stamina decrement (wrapper.py:106, act_cost consumed)`
+- `oob flag 0 or 2 (wrapper.py:107, binary gate on stamina<=0)`
+- `atk_sig via COMMIT_SIGMA*(commit-3) - oob*0.5 term (wrapper.py:140, feeds net_sigma)`
+- `per-beat initiative drift +=DISP_INIT_K*disp_lean for both combatants (wrapper.py:45-46)`
+- `counter_attempt probability modulation via max(0, 1-DISP_COUNTER_K*lean_d) (wrapper.py:158)`
+
+**Dead data:**
+
+- 'seize' lever in ABILITIES dict (tradition.py:97,106) — vorschlag and sen_no_sen target lever='seize' with op='+'; ability_bonus(c,'seize') has zero call sites in wrapper.py or systems.py after pre-contact seizure cut 2026-06-05
+
+**Orphans:**
+
+- oob float (0 or 2.0) is consumed at wrapper.py:140 as -oob*0.5; no other consumer — not orphaned. All three DISP hooks are consumed downstream. No true orphan emissions in this sub-cluster.
+
+### Findings
+
+#### CD-1 [P1] (cliff)
+
+**Claim:** OOB is a hard binary cliff at stamina=0: no degradation between low-positive and negative stamina. A fighter at stamina=0.001 applies zero OOB penalty; at stamina=-0.001 they take -1.0 sigma (OOB=2, consumed at atk_sig via -oob*0.5). This violates P-iii (no cliffs, graded recoverable output). Additionally, oob is evaluated BEFORE the feint (wrapper.py:107 before 121-123), so a fighter who has just crossed the OOB threshold can still spend 1.0 more stamina on a feint (wrapper.py:123), deepening the negative without retriggering the OOB check (it already fired). The combat can proceed for several more exchanges at stamina=-3 paying the same OOB penalty as at stamina=-0.001.
+
+**Evidence:** `wrapper.py:107 (oob gate), wrapper.py:123 (feint stamina deduct after oob check), wrapper.py:140 (-oob*0.5 in atk_sig), config.py:34 (OOB=2)`
+
+#### CD-2 [P2] (dead-data)
+
+**Claim:** The 'seize' ability lever has no consumer. ABILITIES dict registers 'vorschlag' (tradition.py:96-97, lever='seize', op='+', value=4.0) and 'sen_no_sen' (tradition.py:106-107, lever='seize', op='+', value=4.0). ability_bonus(c,'seize') is never called anywhere in wrapper.py or systems.py after the pre-contact seizure cut of 2026-06-05 (wrapper.py:27-29). Both flagship abilities are silently inert: equipping them has zero effect.
+
+**Evidence:** `tradition.py:96-97,106-107 (ABILITIES entries), wrapper.py:27-29 (seizure cut comment), systems.py full text (no ability_bonus(c,'seize') call), wrapper.py full text (no ability_bonus(c,'seize') call)`
+
+#### CD-3 [P2] (doc-drift)
+
+**Claim:** ability_armature.md §7 (line 167) states 'Live levers: seize (Vorschlag, Sen-no-sen)...' as if seize is wired. The pre-contact seizure was cut 2026-06-05 and the lever has no consumer. The armature doc has not been updated to reflect this and actively misleads anyone extending abilities from the documented menu.
+
+**Evidence:** `ability_armature.md:167 ('Live levers: seize (Vorschlag, Sen-no-sen)'), wrapper.py:27-29 (seizure cut annotation), tradition.py:ABILITIES (seize entries), no consumption site found`
+
+#### CD-4 [P2] (churn-inert)
+
+**Claim:** Commit depth is not a per-action player decision. The aggressor draws commit from a disposition-biased random distribution each exchange (wrapper.py:100-105); the player sets disp once at character creation. No mechanic allows an actor to intentionally modulate commit depth in response to fight state (e.g. shallow when exhausted, deep when the opponent is off-balance). The lever only tunes probabilities, never branches the path. A tactical 'feint-then-deep-commit' chain requires two separate RNG wins (feint_p=0.30 AND commit landing on 4 or 5), both beyond player agency.
+
+**Evidence:** `wrapper.py:98-106 (commit draw), systems.py:62-64 (disp_lean formula), combatant.py:63 (disp set at init)`
+
+#### CD-5 [P2] (doc-drift)
+
+**Claim:** State map §4A A5 (combat_engine_flow_and_state_map.md:203) lists 'DAMAGE_SCALE=4.0 · CAP_END=4' as live config entries. These were removed per commit 793f1a62 and do not exist in config.py. core.py:51 uses DMG_SCALE=1.55, a constant inlined in core.py, not in CFG. Any tooling or future audit that reads the state map as a config inventory will find two non-existent keys.
+
+**Evidence:** `combat_engine_flow_and_state_map.md:203 (DAMAGE_SCALE/CAP_END listing), config.py full text (no DAMAGE_SCALE or CAP_END keys), core.py:51 (DMG_SCALE=1.55 inlined)`
+
+#### CD-6 [P2] (balance)
+
+**Claim:** The three DISP cost profiles are asymmetric in stochasticity in a pool-dependent way. Cautious fighters (lean<0) bleed initiative deterministically every beat: -DISP_INIT_K*|lean| per beat regardless of engagement state (wrapper.py:45-46). Aggressive fighters (lean>0) pay their Indes/overcommit penalty only when read_win AND commit>=4 (wrapper.py:147-167). At low History (small pool), read_win probability is lower; aggressive fighters therefore pay less frequently. The balance between the two poles — whether both truly cost — depends on History, which is not accounted for in the disposition design. At history=2 (pool=8), read_win is roughly 50/50 at neutral sigma, so aggressive fighters dodge their stochastic penalty ~50% of the time while cautious fighters never dodge theirs.
+
+**Evidence:** `wrapper.py:45-46 (deterministic initiative drift), wrapper.py:147 (Indes gate: read_win AND commit>=4), systems.py:62-64 (disp_lean), config.py:91 (DISP_INIT_K=0.10, DISP_COMMIT_K=0.8)`
+
+#### CD-7 [P2] (gap)
+
+**Claim:** act_cost has no History/skill modifier. A master fighter (History=7) pays the same stamina cost as a novice (History=2) for the same commit depth and weapon weight (systems.py:47-48). Stamina cost is independent of technique efficiency. This misses a natural channel: expert technique should be more economical. The absence forces a design where stamina resource management is orthogonal to skill progression, reducing the meaningful differentiation of the History axis.
+
+**Evidence:** `systems.py:47-48 (act_cost formula — no History term), config.py:34 (ACT_BASE, ACT_WEIGHT, ACT_COMMIT, COST_SCALE — no skill coefficients)`
+
+#### CD-8 [P3] (correctness)
+
+**Claim:** Commit draw at wrapper.py:101 uses rng.integers(2,6) which under NumPy semantics returns {2,3,4,5} (high exclusive) — correct for the stated {2,3,4,5} range. However, the weighted draw at wrapper.py:105 calls rng.choice([2,3,4,5], p=[...]) which is also correct. The two paths (neutral=integers, biased=choice) produce identical support sets. But rng.integers(2,6) returns a numpy int64, cast to int via int() at line 101/105 — this is correct and safe. No bug, but worth noting the dual-path implementation.
+
+**Evidence:** `wrapper.py:100-105 (commit draw logic), NumPy integers() semantics (high exclusive)`
+
+#### CD-9 [P3] (redundancy)
+
+**Claim:** DISP_COMMIT_K and overcommit_exposure form a compounded penalty loop for aggressive fighters without an independent countervailing degree of freedom. DISP_COMMIT_K=0.8 pushes commit toward 4-5 for aggressive fighters; overcommit_exposure = max(0, 0.06*(commit-3)) fires at commit>=4. Aggressive disposition simultaneously increases commit frequency to the exposure zone AND increases exposure magnitude at commit=5 vs 4. The two effects are not independently tunable — raising DISP_COMMIT_K increases both more-frequent-deep-commits AND more-frequent-exposure. A designer wanting to increase commit skew without proportionally increasing exposure has no knob.
+
+**Evidence:** `wrapper.py:99-105 (DISP_COMMIT_K skew), wrapper.py:163 (overcommit_exposure formula), config.py:91 (DISP_COMMIT_K=0.8), config.py:49 (COMMIT_EXPOSE_K=0.06)`
+
+### Recommendations
+
+- CD-1 (P1 cliff): Replace the binary OOB gate with a continuous stamina-degradation sigma penalty. Simplest fix: replace `oob = cfg['OOB'] if aggressor.stamina<=0 else 0` (wrapper.py:107) with `oob = max(0.0, -aggressor.stamina / cfg['OOB_SCALE'])` where OOB_SCALE is tunable (e.g. 4.0). This makes the stamina-exhaustion penalty rise smoothly from zero as stamina goes negative, peaks at a cap (apply soft_cap or clamp), and gives fighters a graded warning signal rather than a sudden cliff. The current OOB=2 * 0.5 = 1.0 sigma at the cliff can be reproduced asymptotically as the reference.
+- CD-2/CD-3 (P2 dead-data + doc-drift): Either (a) re-implement a 'seize' consumer — for example, wire ability_bonus(c,'seize') into the initiative drift hook as an additional per-beat or per-engagement boost to aggressor.initiative at engagement start, giving vorschlag/sen_no_sen a concrete effect; or (b) retire the seize lever formally by removing or marking vorschlag and sen_no_sen as '(cut 2026-06-05; pending replacement)' in both tradition.py ABILITIES and ability_armature.md §7. Option (b) is the minimal safe fix; option (a) restores the flagship flagship narrative moment. In either case, ability_armature.md §7 must be updated to say seize is INERT.
+- CD-4 (P2 churn-inert): Expose commit depth as a per-exchange player input rather than an auto-sampled disposition parameter. The simplest path: the game surface presents a 'press / measured / hold' intent token each exchange (maps to commit 5/3/2 respectively), with disposition biasing the DEFAULT but the player overriding. This converts the lever from a stat-tuned random outcome to a per-action decision with stochastic execution. If full per-action agency is too complex for the current phase, consider at minimum a 'tempo signal' output the player can read — e.g. expose the Vor delta so players can infer when pressing is rewarded.
+- CD-5 (P2 doc-drift): Update combat_engine_flow_and_state_map.md §4A A5 to remove DAMAGE_SCALE and CAP_END from the config table and note that DMG_SCALE=1.55 is now an inline constant in core.py:51, not a CFG entry. Add a 'last-verified' date/SHA stamp to the state map header so staleness is detectable.
+- CD-6 (P2 balance): Add a pool-size correction to the aggressive-pole cost. One option: scale DISP_INIT_K by pool so that at low-History (small pool), the cautious drain is smaller, making the two poles converge toward symmetric cost at the novice level. Alternatively, gate the aggressive penalty reduction: rather than pure stochastic (fires when read_win AND commit>=4), add a deterministic component such that even without a read win, a deeply committed aggressor loses a fraction of initiative unconditionally (e.g. 50% of the overcommit loss fires regardless of read_win). This would make the aggressive cost less pool-dependent.
+- CD-7 (P2 gap): Add a History-efficiency term to act_cost: `(cfg['ACT_BASE'] + cfg['ACT_WEIGHT']*(c.weight=='heavy') + cfg['ACT_COMMIT']*commit - cfg['ACT_SKILL_K']*max(0, c.history-3)) * cfg['COST_SCALE']` with ACT_SKILL_K tuned small (e.g. 0.05-0.10). This gives the History axis a stamina-efficiency expression: expert fighters are not just more accurate, they are more economical — a meaningful differentiation that rewards skill investment along a second axis beyond pool size.
+- CD-9 (P3 redundancy): Decouple commit-skew magnitude from overcommit-exposure magnitude by introducing a separate DISP_EXPOSE_K coefficient (currently baked into the DISP_COMMIT_K+COMMIT_EXPOSE_K product). The clean fix: apply DISP_COMMIT_K only to the commit distribution weights (wrapper.py:103-104) and add a separate 'discipline modifier' to anti_overcommit (systems.py:70) scaled by disp_lean, so an aggressive fighter's commit-discipline partially offsets their exposure. This creates an independent tuning axis.
+
+---
+
+## Module 5: defence_modes
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | CHOKE_BIND_K (config.py:43) is an unnecessary lever: its multiplier is permanently zero (wrapper.py:135 hardcodes choke=0.0). fat_d is an unnecessary parameter in mode_sigma (systems.py:88): it is accepted but does no work. Both add surface area without contributing. The core three-mode selection IS necessary; GATE caps differentiate weapons meaningfully. Grip state is additional unnecessary scaffolding (combatant.py:66) that is never mutated. |
+| **R** | partial | GATE caps span 0.4-1.0 (range 0.6 for wind), producing physically grounded ceilings. The neutralize cliff at overwhelming (-0.45 absolute) drops wind to 5% protection (config.py:48), which is very steep but bounded. No unbounded loops; no Ob floor violations (neutralize is a post-roll gate, not an Ob shift). Weakness: cap multiplies the ENTIRE (base+sig) expression at systems.py:108, so weapon caps squash reading-skill contributions that are person-not-weapon — a read bonus for a wind-incompatible weapon is shrunk by the cap even though reading is cognitive, not mechanical. |
+| **S** | partial | Wind mode has a fundamentally different outcome profile from parry/dodge (partial=bind, success=55% bind then maybe neutralize vs parry/dodge graze then neutralize), creating a discontinuity at mode boundaries: a fighter who switches from parry to wind faces a qualitatively different outcome channel, not a smooth rescaling. Balance tradition channel is applied in reach_sigma (systems.py:171-172) but not in mode_sigma dodge (systems.py:92 uses bare balance_eff without TR.eff_cw). Spanish destreza balance=1.30 tradition bonus applies in approach but not in dodge defence, an asymmetry across phases. |
+| **E** | partial | Commit depth creates a clean reactive flip (parry->dodge at commit>=4, systems.py:105-107) — elegant and legible. The read_win=False path (wrapper.py:136) yields uniform random mode with no skill expression: an unskilled defender has 33% wind even on rapier (cap=0.4, the weapon's worst mode). This compounds the read-loss penalty without any legibility. At neutral stats, three weapons (sabre, mace, longsword_halfsword) resolve cap ties by Python list-order, invisibly defaulting to parry without merit; a player cannot intuit this. |
+
+### Churn Assessment
+
+Mode selection is partially churn-positive. The commit-depth flip (parry to dodge at commit>=4, systems.py:105-107) is genuinely reactive and per-exchange: a defender reads a deep commit and shifts mode, which branches the outcome path (graze vs bind vs neutralize). This is meaningful churn. Guard values (hand_guard/blade_guard) create static weapon personality but no per-exchange branching. The read_win=False path (wrapper.py:136) is uniform random — 33% each mode regardless of weapon or stats — meaning a read-losing fighter gets no skill expression and may be forced into their weapon's worst mode. The argmax path (read_win=True) is fully deterministic given stats and commit depth: one correct answer always exists per configuration, no stochastic within-exchange mode choice. The choke grip bonus (CHOKE_BIND_K) intended to create a grip-switching tactical choice is permanently dead. Overall: commit creates genuine branching; read-loss creates a meaningful penalty; but grip and fatigue as tactical mode-selection levers are inert, reducing the mode palette to a stat-derived fixed function of commit depth.
+
+### Contract
+
+**Consumes:**
+
+- `aggressor (Combatant role-object)`
+- `defender (Combatant role-object)`
+- `commit (int 2-5)`
+- `read_win (bool)`
+- `fat_d (float, dead inside mode_sigma)`
+- `cfg (CFG dict)`
+- `TR (tradition module)`
+- `GATE[defender.weapon][mode] (cap)`
+- `NEUTRALIZE_PARRY/DODGE/WIND (fixed constants from cfg)`
+
+**Emits:**
+
+- `mode (str: parry|dodge|wind)`
+- `dsig (float, consumed at wrapper.py:139 in net_sigma)`
+- `neutralize (float constant, consumed at wrapper.py:172-183 for outcome mapping)`
+
+**Dead data:**
+
+- choke parameter to mode_sigma: hardcoded 0.0 at wrapper.py:135; CHOKE_BIND_K=0.30 (config.py:43) multiplied by literal zero, never fires
+- fat_d parameter in mode_sigma signature (systems.py:88): accepted but never referenced inside the function body; fatigue reaches dsig only via mental_fat_d at wrapper.py:139
+- grip state on Combatant (combatant.py:66): initialized to 'normal', never mutated by wrapper.py; CHOKE_TEMPO_PEN=0.4 and LUNGE_TEMPO_PEN=0.6 (config.py:14) are read by weapon_tempo (systems.py:26-27) but grip is always 'normal', so no choke/lunge tempo penalty ever fires
+
+### Findings
+
+#### DM-01 [P2] (dead-data)
+
+**Claim:** CHOKE_BIND_K (0.30) is a permanently dead config constant. The wind mode's choke-grip bonus never fires because wrapper.py:135 hardcodes the choke argument to 0.0: msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}. The mode_sigma wind branch (systems.py:103) computes cfg['CHOKE_BIND_K']*choke = 0.30*0.0 = 0 in every exchange.
+
+**Evidence:** `wrapper.py:135, systems.py:103, config.py:43`
+
+#### DM-02 [P2] (dead-data)
+
+**Claim:** fat_d is a dead parameter in mode_sigma. The function signature (systems.py:88) accepts fat_d but the function body (lines 89-108) never references it. Fatigue affects dsig magnitude via mental_fat_d at wrapper.py:139, but mode SELECTION is fatigue-blind: an exhausted fighter picks the same mode as a fresh one.
+
+**Evidence:** `systems.py:88-108, wrapper.py:135, wrapper.py:139`
+
+#### DM-03 [P2] (dead-data)
+
+**Claim:** The grip state on Combatant is initialized to 'normal' (combatant.py:66) and never mutated anywhere in wrapper.py. weapon_tempo reads getattr(c,'grip','normal') at systems.py:25 and branches on choke/lunge (systems.py:26-27), and close_tempo reads it at systems.py:37-40, but since grip is permanently 'normal', CHOKE_TEMPO_PEN=0.4 and LUNGE_TEMPO_PEN=0.6 never add any penalty. The full grip-state subsystem (three states, two config constants, documented trade-offs) is inert.
+
+**Evidence:** `combatant.py:66, wrapper.py (no .grip= assignment), systems.py:25-27, systems.py:37-40, config.py:14`
+
+#### DM-04 [P2] (correctness)
+
+**Claim:** The GATE cap multiplies the ENTIRE (base+sig) expression at systems.py:108: return (base+sig)*cap. base = READ_K*rd*(1.3 if read_win else 0.7) is a person-level cognitive reading advantage, not a weapon-mechanical quantity. Multiplying it by the weapon-mode suitability cap squashes a cognitively skilled fighter's reading advantage based on whether their weapon is appropriate for that mode. A rapier fighter attempting wind (cap=0.4) gets only 40% of their reading bonus, even though reading is independent of weapon fit. The cap should gate the mode-specific mechanical sigma (sig), not the shared cognitive base.
+
+**Evidence:** `systems.py:93, systems.py:108, config.py:8 (GATE rapier wind=0.4)`
+
+#### DM-05 [P3] (balance)
+
+**Claim:** Balance tradition channel weight is applied in reach_sigma (systems.py:171-172 use TR.eff_cw(defender,'balance')) but NOT in mode_sigma dodge (systems.py:92 calls bare balance_eff(defender,fat_d,cfg) without TR.eff_cw). A Spanish destreza fighter with balance channel weight=1.30 (tradition.py:32) gets full tradition amplification in approach footwork but zero tradition amplification on dodge mode selection. This asymmetry means the tradition's signature footwork advantage is phase-inconsistent.
+
+**Evidence:** `systems.py:92, systems.py:171-172, tradition.py:32`
+
+#### DM-06 [P3] (churn-inert)
+
+**Claim:** Three weapons have GATE cap ties that resolve by Python list order, invisibly defaulting to parry: sabre (parry=dodge=0.9), mace (all 0.7), longsword_halfsword (parry=wind=1.0). At neutral fighter stats all mode_sigs are zero, so msig=0 for all modes, and max() on the dict returns the first key ('parry') silently. A sabre or mace fighter defaults to parry regardless of weapon personality with no legible reason.
+
+**Evidence:** `systems.py:74-82, wrapper.py:136, systems.py:88-108`
+
+#### DM-07 [P3] (doc-drift)
+
+**Claim:** The canon state map (combat_engine_flow_and_state_map.md, section A3) states 'precommit has zero consumption sites (audit F2)'. This is stale: systems.py:203 in feint_eval computes def_read = reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*(1-0.4*mental_fat_d). The precommit channel weight IS consumed, albeit only on the feint-defence path (gated by FEINT_ENABLE, rng<0.30, and streak<3).
+
+**Evidence:** `systems.py:203, designs/audit/2026-06-09-personal-combat-comprehensive/combat_engine_flow_and_state_map.md:194`
+
+#### DM-08 [P3] (gap)
+
+**Claim:** The read_win=False fallback path (wrapper.py:136: modes[rng.integers(3)]) is uniform random across all three modes regardless of weapon or stats. A defender who loses the read contest has a 33% chance of the wind mode even on weapons with wind cap=0.4 (rapier) or 0.5 (dagger). This compounds the read-loss penalty (worse roll distribution from lower dsig) with a random mode assignment that can land on the weapon's weakest defence. The punishment is intentional (losing read should cost) but the random path provides zero skill expression and can be mechanically inconsistent with the weapon's physical capabilities.
+
+**Evidence:** `wrapper.py:136, systems.py:74 (rapier wind=0.4, dagger wind=0.5)`
+
+#### DM-09 [P2] (redundancy)
+
+**Claim:** wind mode at overwhelming has only 5% effective neutralize (config.py:48: NEUTRALIZE_WIND=0.50 minus NEUTRALIZE_OVERWHELM_DROP=0.45 = 0.05). The bind channel at overwhelming is also unavailable (wrapper.py:184-185: at overwhelming degree the wind=bind path is bypassed, only neutralize or hit). Wind therefore provides near-zero recovery at overwhelming degree. While the steep overwhelming cliff is intentional, wind's 90% drop (compared to parry 82%, dodge 73%) means wind is uniquely exposed at the top degree band. This is not a bug but worth flagging as a potential balance concern: fighters in weapons that GATE-default to wind (longsword, greatsword, poleaxe) face near-zero protection at overwhelming.
+
+**Evidence:** `wrapper.py:183-185, config.py:48-49, systems.py:78 (longsword wind=1.0, greatsword wind=0.9, poleaxe wind=1.0)`
+
+### Recommendations
+
+- Fix DM-01+DM-02+DM-03 together as one choke-grip pass: (1) add a grip-mutation site in wrapper.py when the engagement closes (e.g. a pole-weapon fighter auto-chokes, or a player-directed choice); (2) pass getattr(defender,'grip','normal')=='choke' as a bool to mode_sigma instead of 0.0; (3) keep the fat_d parameter or remove it from the signature — currently it is dead weight that misleads a future author into thinking fatigue affects mode selection. If fatigue affecting mode ranking is not desired, remove the parameter and document that choice explicitly.
+- Fix DM-04: separate the cap into two terms — apply it only to the mode-specific mechanical sigma (sig), not to the shared cognitive base: return base + sig*cap. This preserves the weapon-suitability ceiling on mechanical competence while letting reading skill transfer fully across modes. Validate with the mirror matchup (should be unaffected at equal stats).
+- Fix DM-05: apply TR.eff_cw(defender,'balance') inside mode_sigma dodge (systems.py:100) to match the reach_sigma treatment. Change ftw=balance_eff(defender,fat_d,cfg) to ftw=balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender,'balance'). This makes the Spanish destreza tradition balance advantage consistent between approach and defence.
+- Fix DM-06 (low priority): break cap ties with a secondary sort or explicit weapon-personality heuristic. Alternatively, add a small tie-breaker per weapon in the GATE table rather than relying on list-order. For sabre (parry=dodge) consider a fractional separation (parry=0.91, dodge=0.89 or vice versa) that encodes the intended character.
+- Fix DM-07: update combat_engine_flow_and_state_map.md section A3 to note that precommit is consumed in feint_eval (systems.py:203) on the feint-defence path, not zero sites.
+- Consider DM-08: weight the read_win=False path by GATE caps rather than uniform random, so a defender who loses the read still has lower probability of an inappropriate mode. e.g. p(mode) proportional to GATE[weapon][mode]. This keeps the penalty (worse than argmax) while granting basic weapon-competence even when out-read. Run invariant suite before and after.
+- Monitor DM-09: wind at overwhelming (5% neutralize) is a steep cliff for the weapons that GATE-default to wind (longsword wind=1.0, poleaxe wind=1.0). Track win-rate tails in sim for longsword vs high-net-sigma opponents. If the cliff produces P1 matchup distortion, consider raising NEUTRALIZE_WIND slightly or reducing NEUTRALIZE_OVERWHELM_DROP for wind specifically.
+
+---
+
+## Module 6: measure_reach
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | reach_base serves three distinct physical jobs (threat zone for reach_sigma, measure_gap for approach/closed determination, lever-arm demand in str_demand); this is elegant re-use but the reach_adj field then pollutes str_demand — paired_short reach_adj=+1.4 gives it arming-sword handling demand even though it is a lighter weapon. Two dead config keys (REACH_ADV_K, RESIDUAL_REACH_FRAC) are surplus levers in the namespace. balance_eff enters defence through three additive paths (foot_meas in reach_sigma, stance_stability, dodge mode_sigma), all from the same base stat — shallow lever pile. |
+| **R** | pass | reach_sigma is bounded and monotonic: gap is a continuous signed differential, REACH_W[armor] falls 0.62->0.50->0.34->0.20 across armour tiers (reach -> clinch rotation), and the maximum raw sigma (spear vs arming, gap=1.9, armor=none) is 0.966 sigma — well below the M_MAX=1.5 soft-cap ceiling; no cliff. At armor=heavy the reach advantage is attenuated to 32%, providing a graded underdog floor. REACH_W[shorter.armor]/0.62 in reopen_prob introduces a portability defect (hardcoded 0.62 = REACH_W['none']) but does not produce an out-of-band value today. |
+| **S** | partial | lunge grip increases tempo penalty and legibility in systems.py:27,191 but does NOT extend reach_base — a lunge physically extends the threat zone by roughly one forearm length and is the primary range extender in rapier fencing, yet reach_base is grip-agnostic (systems.py:11-14). This is a role gap at the seam between grip state and reach. Additionally reach_sigma docstring states it models 'the DEFENDER's reach' but the implementation silently handles the attacker-longer case via negative gap; the bidirectional semantics are correct but unlabelled. |
+| **E** | pass | One scalar (reach_base) drives three downstream effects (exchange penalty, approach phase assignment, reopen probability) — a single number doing more work, which is the canonical E test. REACH_W[armor] creates the reach-to-clinch rotation without a separate subsystem. The tradition meas_w ratio cleanly differentiates how efficiently each fighter uses the reach gap. HEAD_REACH point=1.0 correctly models thrust range extension. Odds are legible: more reach = harder to hit you, softened by armour. |
+
+### Churn Assessment
+
+The module generates genuine churn via three mechanisms. First, the REACH_W[armor] rotation: a heavily armored fighter absorbs reach disadvantage (32% weight at heavy), so armor-vs-reach is a real strategic tradeoff that changes how fights resolve — lightly armored reach-users win at distance, heavily armored fighters are incentivized to close. Second, the tradition meas_w ratio amplifies or dampens reach advantage based on measure emphasis (destreza 1.35 vs german 1.05 gives a 1.29x multiplier), so tradition selection creates meaningfully different reach dynamics. Third, reach_base determines longer/shorter assignment, which gates stop-hit access, reopen probability, and the approach phase itself — these are path branches, not just tuning. The module is NOT inert. However the lunge grip has only costs (tempo+legibility penalty) and no reach reward, making an all-cost stance choice the dominant-answer-avoidance failure case: no fighter should ever hold lunge grip in the current implementation without a reach benefit to weigh against those costs. reach_sigma itself is a continuous tuner within closed exchanges, but its upstream effects (approach-phase assignment, stop-hit) are true path branches.
+
+### Contract
+
+**Consumes:**
+
+- `WEAPONS[w]['reach'] (long/short)`
+- `WEAPONS[w]['hands'] (1/2)`
+- `WEAPONS[w]['head'] (point/cut_thrust/straight_cut/curved_cut/blunt)`
+- `WEAPONS[w].get('reach_adj', 0.0)`
+- `cfg['L0'], cfg['LONG'], cfg['HANDS2'], cfg['HEADR'], cfg['HEAD_REACH']`
+- `cfg['REACH_FRAC'], cfg['REACH_W'][defender.armor]`
+- `cfg['FOOT_MEASURE_K']`
+- `balance_eff(defender, fat_d, cfg) * TR.eff_cw(defender, 'balance')`
+- `balance_eff(aggressor, fat_a, cfg) * TR.eff_cw(aggressor, 'balance')`
+- `TR.eff_cw(defender, 'measure'), TR.eff_cw(aggressor, 'measure')`
+- `cfg['D_LEN'] * reach_base(c, cfg) in str_demand (secondary consumer)`
+- `cfg['REACH_W'][shorter.armor] / 0.62 in reopen_prob (tertiary consumer)`
+
+**Emits:**
+
+- `er[A], er[B] — effective reach dict consumed by engagement.longer/shorter assignment (wrapper.py:25)`
+- `measure_gap — closed/open state determination (wrapper.py:26)`
+- `reach_pen — subtracted from net_sigma in every closed exchange (wrapper.py:115,143)`
+- `str_demand component — feeds handling_penalty for both fighters (systems.py:58)`
+- `reopen_prob factor — REACH_W[shorter.armor]/0.62 scales re-open probability (systems.py:224)`
+
+**Dead data:**
+
+- cfg['REACH_ADV_K']=0.12 — defined in config.py:5, never read in any engine module (systems.py, wrapper.py, core.py, tradition.py, geometry.py)
+- cfg['RESIDUAL_REACH_FRAC']=0.3 — defined in config.py:5, never read anywhere in engine code
+
+### Findings
+
+#### MR-01 [P2] (dead-data)
+
+**Claim:** REACH_ADV_K=0.12 is defined in config.py but never consumed by any engine module. It exists alongside the used REACH_DISADV_K=0.22 (stop-hit nsig, wrapper.py:77), suggesting a planned symmetrical reach-advantage term that was never wired. As dead config it confuses calibration sweeps.
+
+**Evidence:** `config.py:5; grep confirms zero occurrences in systems.py, wrapper.py, core.py, tradition.py, geometry.py`
+
+#### MR-02 [P2] (dead-data)
+
+**Claim:** RESIDUAL_REACH_FRAC=0.3 is defined in config.py but never consumed anywhere in the engine. Likely a remnant of an earlier approach-phase model where some fraction of reach advantage persisted after closing.
+
+**Evidence:** `config.py:5; zero occurrences in all engine modules`
+
+#### MR-03 [P2] (role-conflation)
+
+**Claim:** reach_base serves three physically distinct roles: (1) threat-zone differential for reach_sigma, (2) measure_gap for closed/open state and longer/shorter assignment, and (3) str_demand multiplier via D_LEN=0.35 (systems.py:58). This means reach_adj on a weapon inflates its handling demand. paired_short reach_adj=+1.4 gives it str_demand from reach equal to an arming sword (D_LEN*5.90=2.065), despite being a lighter weapon. A dedicated 'handling_len' or 'physical_len' field would decouple leverage-moment demand from operational threat-zone.
+
+**Evidence:** `systems.py:11-14 (reach_base); systems.py:58 (str_demand uses reach_base); combatant.py:20 (paired_short reach_adj=1.4)`
+
+#### MR-04 [P2] (gap)
+
+**Claim:** lunge grip has no reach benefit. systems.py:27 adds LUNGE_TEMPO_PEN (slower to repeat) and systems.py:191 adds LEGIB_LUNGE (+0.25 more readable) — both costs. reach_base is grip-agnostic (systems.py:11-14) and is never re-evaluated for lunge state. Physically, a lunge extends the threat zone by roughly one body segment and is the primary range extender in rapier fencing. This creates a dominant-answer problem: lunge grip is always a net negative with no compensating upside.
+
+**Evidence:** `systems.py:11-14 (reach_base, no grip check); systems.py:27-28 (LUNGE_TEMPO_PEN); systems.py:190-192 (LEGIB_LUNGE); combatant.py:66 (grip states)`
+
+#### MR-05 [P2] (doc-drift)
+
+**Claim:** reach_sigma docstring (systems.py:167-169) states it models 'the DEFENDER's reach' imposed on the aggressor, but the implementation handles the full signed gap including when the attacker has longer reach (gap<0 -> reach_sigma<0 -> subtracting a negative in wrapper:143 benefits the attacker). The bidirectional semantics are mechanically correct but the docstring misleads auditors and calibrators about what the function returns.
+
+**Evidence:** `systems.py:167-175 (reach_sigma); wrapper.py:143 (net_sigma = atk_sig - dsig - reach_pen ...)`
+
+#### MR-06 [P2] (portability)
+
+**Claim:** reopen_prob (systems.py:224) hardcodes the literal 0.62 as a normalization denominator: cfg['REACH_W'][shorter.armor]/0.62. This value is REACH_W['none'] — if that constant is tuned during calibration, the hardcode diverges silently. Should reference cfg['REACH_W']['none'] for portability.
+
+**Evidence:** `systems.py:224; config.py:9 (REACH_W={'none':0.62,...})`
+
+#### MR-07 [P3] (redundancy)
+
+**Claim:** balance_eff enters the defender's net_sigma contribution through three additive paths: (1) foot_meas in reach_sigma (FOOT_MEASURE_K=0.15, then scaled by REACH_W and meas_w, systems.py:171-174); (2) stance_stability unconditionally added to dsig (FOOT_STANCE_K=0.05, systems.py:71, wrapper.py:139); (3) dodge mode_sigma (weight 0.70*(ftw-3)/3 inside DODGE_K=0.9, systems.py:100-101). These are not double-counted in a strict sense — foot_meas is differential and models approach denial, stance_stability is an absolute defensive floor, and dodge mode_sigma is mode-gated — but all three channels amplify the same underlying stat (Agi+Str) into defence. At balance_eff delta=1 these contribute 0.093 + 0.05 + ~0.15 (if dodge chosen) sigma additively.
+
+**Evidence:** `systems.py:70-71, 100-101, 171-174; wrapper.py:139`
+
+#### MR-08 [P3] (other)
+
+**Claim:** paired_short reach_adj=+1.4 is undocumented in code — no comment explains why a paired short weapon matches arming-sword reach (5.90 vs 5.90). The design intent (active secondary weapon creates a wider bilateral threat envelope) is plausible but unverifiable. As a non-obvious calibration choice, it should carry an inline justification comment.
+
+**Evidence:** `combatant.py:20 (paired_short reach_adj=1.4, no explanatory comment)`
+
+#### MR-09 [P3] (leverage)
+
+**Claim:** meas_w = TR.eff_cw(defender,'measure') / TR.eff_cw(aggressor,'measure') is a ratio used to amplify or dampen reach_edge (systems.py:173-174). The minimum tradition measure weight is 0.95 (spanish defender vs none attacker gives 1.35/1.00=1.35, the maximum case). No guard against division by zero. While impossible under current TRADITIONS data (all measure weights >= 0.95), the formula is fragile to future tradition data entry.
+
+**Evidence:** `systems.py:173-174; tradition.py:23-47 (all measure weights 0.95-1.35)`
+
+### Recommendations
+
+- MR-01+02: Remove REACH_ADV_K and RESIDUAL_REACH_FRAC from config.py. If a reach-advantage term in the approach phase is desired, wire it deliberately with a named function and a cite. These dead keys pollute the calibration surface.
+- MR-03: Decouple str_demand from reach_base. Introduce a separate 'physical_len' weapon field (or reuse head_len+grip_len) for the lever-arm demand calculation in str_demand. reach_adj should only affect the threat-zone (reach_base for reach_sigma/measure_gap), not handling effort. This removes the role-conflation and fixes the paired_short str_demand inflation.
+- MR-04: Add a lunge reach bonus to reach_base. When grip=='lunge', add a small offset (e.g., cfg['LUNGE_REACH_ADJ'] ~ 0.3-0.5) to the returned reach_base. This makes lunge a genuine tradeoff (reach + commit vs tempo + legibility) rather than an all-cost state, and closes the dominant-answer defect. Gate it so it only applies to eligible weapons (rapier, arming, longsword).
+- MR-05: Fix the reach_sigma docstring to state that gap is signed — positive means defender longer (penalty to attacker), negative means attacker longer (bonus to attacker). The current 'DEFENDER's reach imposes on aggressor' framing obscures that the function returns a bidirectional signed value.
+- MR-06: Replace the hardcoded 0.62 in reopen_prob (systems.py:224) with cfg['REACH_W']['none'], which evaluates to the same value at runtime but tracks REACH_W changes during calibration: p = cfg['REOPEN_K']*base_gap*foot*read_edge * cfg['REACH_W'][shorter.armor] / cfg['REACH_W']['none'].
+- MR-07: If reach remains the dominant driver (r=+0.83), review whether foot_meas in reach_sigma should be reduced or removed given that stance_stability already covers the balance-to-defence channel. Keeping all three at current magnitudes concentrates Agi+Str into defence through multiple additive paths. Consider making FOOT_MEASURE_K a tuning target in the next calibration sweep to assess sensitivity.
+- MR-08: Add an inline comment to paired_short in WEAPONS (combatant.py:20) explaining reach_adj=+1.4: 'bilateral threat envelope from active secondary (main-gauche/buckler): short weapons in pairs cover a wider strike arc'. This makes the design intent auditable.
+- MR-09: Add a guard in reach_sigma for meas_w: meas_w = TR.eff_cw(defender,'measure') / max(0.01, TR.eff_cw(aggressor,'measure')) — zero-division guard against future tradition data that zeroes a channel weight.
+
+---
+
+## Module 7: outcome-map / overcommit / bind-kuzushi / riposte / displace (post-strike cluster)
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | The cluster carries two redundant probability gates stacked on the same resolution path: on a 'success' + wind mode, the engine first rolls WIND_BIND_P (0.55) for bind, then on failure rolls NEUTRALIZE_WIND (0.50) for neutralize-riposte, then on failure lands the hit — three independent coin-flips on a single degree outcome. This is lever-pile on the success+wind branch. Additionally poise_factor delivers a 12% max effect band [0.88,1.0] that duplicates the initiative and handling_penalty signals already encoding imbalance — it is not a necessary separate lever. |
+| **R** | partial | Bind loop is hard-capped at 3 iterations (wrapper.py:243) but beats++ inside the loop (line 244) fires BEFORE the outer while-ceiling check, allowing beats to reach up to 27 when the ceiling is 24 — a bounded but real overshoot of the stated ceiling. Initiative substrate has decay+cap (INIT_DECAY=0.75, INIT_CAP=1.5) satisfying the damper<1+cap requirement. Poise has a floor (POISE_FLOOR=0.5) and recovery (0.20/beat), so kuzushi is bounded and recoverable. The 'seize' lever is dead so TR.ability_bonus(c,'seize') returns 0 silently — robustness failure in the opposite direction: an ability with a positive value produces zero effect. |
+| **S** | partial | The outcome-map branches for 'partial' mode='wind' (→ bind) and 'success' mode='wind' (→ WIND_BIND_P coin, then neutralize, then hit) are asymmetric: a partial wind always binds (no coin), a success wind only binds 55% of the time and may neutralize-riposte or hit. The logic is consistent within the branch but the different treatment of partial vs success on wind is not obviously intuitive — partial produces a more reliable bind than success. sim flag (wrapper.py:199) is evaluated after counter_attempt and before displace-inside; displace requires 'not hit' so no false sim is possible, but the ordering relies on an implicit invariant not stated in a comment. |
+| **E** | partial | The outcome tree has 6 top-level branches (fail, partial×3-mode, success×3-mode×2-sub, overwhelming), each with nested coin flips, giving a player-facing outcome space that cannot be intuitively predicted. The single-time counter adds a fourth resolution path (counter_attempt: gate, success, miss-punishment) that interacts with the existing three-branch outcome map — a player who triggers counter_attempt cannot predict whether their mode-shaped defense still applies. The bind sub-loop resolving via bind_sigma iterations is elegant (tactile+leverage deciding the bind is legible), but it emits riposte=True after a lost bind, which then triggers role flip — two conceptual steps chained without a player-visible beat. |
+
+### Churn Assessment
+
+Moderate-positive but uneven. The riposte role-flip is the cluster's strongest churn generator: a failed attack can immediately reverse the role map, seeding a chain of exchanges where each outcome branches the next actor. Bind creates a sub-contest (Fühlen / leverage) that meaningfully differentiates weapon types and traditions, then either eliminates or role-flips — positive churn. Overcommit_exposure produces a real feedback loop: deep commit → exposure → raised riposte probability → role flip → new aggressor. The single-time counter (counter_attempt) is a high-stakes branch with an asymmetric miss punishment, generating genuine choice churn. However: (1) poise_factor is inert as a player-facing lever — its 12% range is absorbed into the simulator without narrative signal; (2) the 'seize' lever being dead means the two highest-prestige tradition abilities (Vorschlag, Sen-no-sen) produce zero differentiation, gutting the churn their design intended; (3) the triple coin-flip on success+wind creates outcome entropy rather than emergent choice — the player chose wind mode but three independent random gates then determine the actual outcome, replacing choice-churn with dice-churn.
+
+### Contract
+
+**Consumes:**
+
+- `deg (fail/partial/success/overwhelming from core.resolve)`
+- `mode (parry/dodge/wind chosen by defender)`
+- `neutralize (fixed per-mode constant, NEUTRALIZE_PARRY/DODGE/WIND)`
+- `overcommit_exposure (max(0, COMMIT_EXPOSE_K*(commit-3)) - anti_overcommit - ability)`
+- `commit (2-5, disposition-skewed)`
+- `hit (int damage from core.strike)`
+- `read_win (bool, visual read contest)`
+- `counter_attempt (bool, gated on read_win and commit>=4)`
+- `steal (INIT_STEAL_INDES * init_steal_factor * indes_scale, defined only inside read_win+commit>=4 block)`
+- `bind_sigma (aggressor, defender, cfg, TR) per iteration`
+- `aggressor.w['head'], aggressor.poise, defender.poise`
+- `leverage(defender,cfg), leverage(aggressor,cfg)`
+- `bsig0 (bind entry sigma, determines bw/bl)`
+- `DISPLACE_LEV_GAP, DISPLACE_P, DISPLACE_PULLBACK_GRAZE`
+- `POISE_BREAK_OVERCOMMIT, POISE_BREAK_BIND, POISE_BREAK_HIT, POISE_SOLID_HIT`
+- `RIPOSTE_ON_FAIL, RIPOSTE_ON_NEUTRALIZE (floats)`
+- `WIND_BIND_P, BIND_HIT_P`
+- `PARTIAL_DODGE_GRAZE, PARTIAL_PARRY_GRAZE`
+- `NEUTRALIZE_OVERWHELM_DROP`
+- `COUNTER_SUCCESS_BASE, COUNTER_TRAIN_K, COUNTER_REFLEX_K`
+- `TR.ability_bonus(defender,'counter_success')`
+- `TR.eff_cw(bw,'leverage') [for kuzushi magnitude]`
+- `closed (bool, measure state)`
+- `aggressor.w['hands'] (for push_avail)`
+
+**Emits:**
+
+- `hit (int wound damage applied to defender, or 0)`
+- `riposte (bool: triggers role flip aggressor<->defender)`
+- `bind (bool: triggers bind iteration sub-loop)`
+- `sim (bool: hit>0 and riposte — simultaneous exchange flag for disruption check)`
+- `reopen_moment (bool: signals longer weapon can attempt distance next beat)`
+- `push_avail (bool: freed-hand shove bonus to reopen_prob)`
+- `aggressor.initiative mutations (overcommit loss, Indes steal back-cede on counter miss, hit gain)`
+- `defender.initiative mutations (hit loss, Indes steal, counter-miss steal cede-back)`
+- `aggressor.poise mutation (POISE_BREAK_OVERCOMMIT * exposure)`
+- `defender.poise mutations (POISE_BREAK_BIND*lev_w at bind entry, POISE_BREAK_HIT*clamp(hit/8) on hit)`
+- `bl.poise mutation (POISE_BREAK_BIND * TR.eff_cw(bw,'leverage') at bind entry)`
+- `role swap: aggressor, defender = defender, aggressor (Python rebind, frame-safe)`
+- `return defender if felled (from strike)`
+- `return aggressor if felled (from sim disruption graze)`
+- `conc drain on defender (CONC_DRAIN_HIT on hit, CONC_DRAIN_LOSS on riposte)`
+- `conc drain on bind-loser defender (CONC_DRAIN_HIT per bind strike)`
+
+**Dead data:**
+
+- 'seize' ability lever: vorschlag and sen_no_sen both target lever='seize'; no call to TR.ability_bonus(c,'seize') or TR.ability_factor(c,'seize') exists in wrapper.py or systems.py — the pre-contact seizure was cut 2026-06-05 and the lever has no surviving consumer (tradition.py:96-107)
+- 'clinch' weapon field: defined on every weapon in combatant.py:14-27 but never read by any module
+- geometry baked 'thrust', 'cut', 'perc_conc', 'halfsword' fields: geometry.bake returns these four; combatant.py stores them in WEAPONS[w]['geo'] but only 'gap' is extracted and consumed; the other four are dead (geometry.py:66-72, combatant.py:52-53)
+
+**Orphans:**
+
+- poise_factor range [0.88,1.0] emits a multiplier on tempo and balance_eff but the effective delta (12% maximum) is never surfaced to the player or any observable output — the mechanic runs silently inside the simulator without a UI/narrative hook
+- push_avail is set True inside the longer.w['hands']==2 check (wrapper.py:224) but reopen_prob only adds a bounded bonus (PUSH_REOPEN_BONUS*foot) — the variable's effect is marginal and not distinguishable from noise in play
+
+### Findings
+
+#### OUT-01 [P1] (dead-data)
+
+**Claim:** 'seize' ability lever is dead: vorschlag and sen_no_sen both register lever='seize' and are marked live in ability_armature.md §7, but no call to TR.ability_bonus(c,'seize') or TR.ability_factor(c,'seize') exists anywhere in wrapper.py or systems.py. The pre-contact seizure was cut 2026-06-05. These are the German and Japanese flagship tradition abilities; equipping them has zero mechanical effect.
+
+**Evidence:** `tradition.py:96-107 (abilities defined), wrapper.py:27-29 (seizure cut comment), systems.py:243-246 (seizure_score removed), wrapper.py and systems.py: no 'seize' call anywhere; ability_armature.md:167 (incorrectly lists 'seize' as live)`
+
+#### OUT-02 [P1] (correctness)
+
+**Claim:** Bind loop increments beats inside the loop body (wrapper.py:244) before the outer while-ceiling check runs, allowing beats to reach up to soft*3+3 = 27 when the stated ceiling is 24. The ceiling is not enforced during a bind sub-loop, so a bind that enters at beats=23 can exit at beats=26 without ever triggering the separation path.
+
+**Evidence:** `wrapper.py:35 (while beats < soft*3, soft=8, ceiling=24), wrapper.py:243-252 (for _ in range(3): beats+=1 with no ceiling check inside)`
+
+#### OUT-03 [P2] (loop)
+
+**Claim:** Bind loop always runs at most 3 iterations regardless of outcome — this is bounded, not an infinite loop — but the loop evaluates bind_sigma using the original aggressor/defender labels (wrapper.py:245), while the bind winner/loser are tracked as bw/bl (line 237). If bsig0<0 (defender wins), bw=defender but the loop tests rng < sigmoid(-bsig) where bsig is positive for aggressor. The aggressor still loses most iterations (bsig negative) → riposte=True, which is directionally correct. However the loop is technically re-evaluating from the fixed aggressor perspective rather than the dynamic bw perspective, making the code misleading and potentially wrong if weapon state changes during the loop (halfsword switch happens before the loop, so it is frozen, but the conceptual mismatch is a maintenance hazard).
+
+**Evidence:** `wrapper.py:236-252 (bw/bl assignment at :237, bsig0 sign test, then for-loop at :243 using bind_sigma(aggressor, defender, ...) not bind_sigma(bw, bl, ...))`
+
+#### OUT-04 [P2] (dead-data)
+
+**Claim:** 'clinch' weapon field is defined on every weapon in WEAPONS dict (combatant.py:14-27) but is never read by any code in wrapper.py, systems.py, core.py, or geometry.py. It carries integer values (rapier=2, longsword=6, dagger=10, etc.) suggesting it was intended for close-quarters grappling logic that was not implemented.
+
+**Evidence:** `combatant.py:14-27 (clinch defined on all 12 weapons), Grep across engine dir: zero consumers`
+
+#### OUT-05 [P2] (dead-data)
+
+**Claim:** geometry.bake returns five fields {gap, thrust, cut, perc_conc, halfsword}; combatant.py extracts only 'gap' and stores the full baked dict in WEAPONS[w]['geo'] (line 52-53). The fields 'thrust', 'cut', 'perc_conc', and 'halfsword' inside ['geo'] are never read by any module — four derived geometry values are computed at import but produce no output.
+
+**Evidence:** `geometry.py:58-72 (bake returns all five), combatant.py:52-53 (only gap extracted, geo stored), Grep: no read of ['geo']['thrust'] or ['geo']['cut'] or ['geo']['perc_conc'] or ['geo']['halfsword'] in any engine file`
+
+#### OUT-06 [P2] (doc-drift)
+
+**Claim:** ability_armature.md §7 (line 167) states: 'Live levers: seize (Vorschlag, Sen-no-sen)'. This is incorrect — the 'seize' lever has no engine consumer since pre-contact seizure was cut 2026-06-05. The armature's own §2c lever map shows seize as 'live' (line 51). Both references are stale.
+
+**Evidence:** `ability_armature.md:51 (seize listed as live), ability_armature.md:167 (seize listed as live), systems.py:243 (seizure cut comment), wrapper.py:27-29 (seizure cut)`
+
+#### OUT-07 [P2] (redundancy)
+
+**Claim:** On a 'success' + 'wind' mode outcome, three independent probability gates run in series: (1) WIND_BIND_P=0.55 for bind, (2) on non-bind: NEUTRALIZE_WIND=0.50 for riposte (then RIPOSTE_ON_NEUTRALIZE=0.20+exposure), (3) on non-neutralize: hit lands. This produces outcome entropy (the player chose 'wind' mode but three coin-flips then determine what actually happens) rather than a clean mode-shaped outcome. Contrast with 'parry' on success: one coin (NEUTRALIZE_PARRY=0.55 → riposte or hit). Wind mode carries extra complexity without extra player legibility.
+
+**Evidence:** `wrapper.py:179-182 (success branch: wind→WIND_BIND_P coin, then neutralize coin, then RIPOSTE_ON_NEUTRALIZE coin, then hit); config.py:48,53 (values)`
+
+#### OUT-08 [P2] (role-conflation)
+
+**Claim:** overcommit_exposure is computed and used in three distinct roles: (A) initiative penalty gate (wrapper.py:165-166), (B) poise break magnitude (line 167), and (C) riposte probability addend on fail/neutralize (lines 174, 181). A single scalar carries three separate mechanical effects, making it impossible to tune any one effect independently. Raising COMMIT_EXPOSE_K simultaneously increases all three.
+
+**Evidence:** `wrapper.py:163 (exposure computed), wrapper.py:165-167 (roles A+B: initiative and poise), wrapper.py:174 and 181 (role C: riposte probability); config.py:49 (COMMIT_EXPOSE_K=0.06, RIPOSTE_ON_FAIL=0.32)`
+
+#### OUT-09 [P2] (churn-inert)
+
+**Claim:** poise_factor maps poise in [POISE_FLOOR=0.5, 1.0] to a multiplier in [POISE_EFFECT_FLOOR=0.88, 1.0]. The maximum degradation is 12% of tempo and balance_eff. At typical kuzushi levels (POISE_BREAK_OVERCOMMIT=0.09 per event, recovery=0.20/beat), poise rarely stays below 0.85, yielding a real effect of ~2-4%. This is a continuous tuner with no player-visible threshold or narrative hook — it modulates but never branches the path. Kuzushi as a mechanic produces no emergent narrative signal.
+
+**Evidence:** `systems.py:282-291 (poise_factor, range [0.88,1.0]); config.py:69-70 (POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20, POISE_BREAK_OVERCOMMIT=0.09)`
+
+#### OUT-10 [P2] (gap)
+
+**Claim:** Displace-and-step-inside (wrapper.py:204-213) fires AFTER sim is evaluated (line 199) and sets riposte=True without re-evaluating sim. This is structurally safe (displace requires 'not hit', so sim would be False anyway), but the mechanic's Vor/initiative state is not mutated on successful displace — the defender gets role flip (riposte) and initiative-steal happens on Indes steal (line 152) only if read_win+commit>=4 was triggered earlier. A displace that fires WITHOUT a prior Indes block (e.g. read_win and commit==4, Indes fires; but if read_win and commit==3... no, displace requires commit>=4, so Indes always fires before displace can). Displace always follows a Vor steal — this coupling is implicit and undocumented.
+
+**Evidence:** `wrapper.py:147 (read_win and commit>=4 gate for Indes), wrapper.py:204 (displace gate: commit>=4 implies Indes already fired), wrapper.py:151-153 (steal always happens before displace check)`
+
+#### OUT-11 [P3] (portability)
+
+**Claim:** wrapper.py:4 and core.py:3-4 both sys.path.insert('/home/claude/...') — hardcoded sandbox paths that do not exist on this checkout, any CI runner, or Godot. The engine is non-runnable on the working tree. The substrate files physically exist at C:/Github/ttrpg/tests/sim/v32-combat-balance/ but are never on the Python path via any portable mechanism.
+
+**Evidence:** `wrapper.py:4 (sys.path.insert(0,'/home/claude/combat_engine')), core.py:3-4 (sys.path.insert(0,'/home/claude') and '/home/claude/v32'), combatant.py:4 (same), systems.py:4 (same); substrate files at tests/sim/v32-combat-balance/`
+
+#### OUT-12 [P3] (cliff)
+
+**Claim:** On an 'overwhelming' degree with wind mode, the neutralize window collapses to max(0, NEUTRALIZE_WIND - NEUTRALIZE_OVERWHELM_DROP) = max(0, 0.50-0.45) = 0.05 (5% chance to void). This is near-zero — essentially a cliff from 'success+wind → 50% bind OR 50% neutralize path' to 'overwhelming+wind → 95%+ certain hit'. The drop from 50% to 5% neutralize across one degree boundary is larger than the analogous drop for parry (0.55→0.10) or dodge (0.62→0.17).
+
+**Evidence:** `config.py:48 (NEUTRALIZE_WIND=0.50, NEUTRALIZE_OVERWHELM_DROP=0.45), wrapper.py:172 (neutralize assignment), wrapper.py:184 (max(0.0, neutralize-NEUTRALIZE_OVERWHELM_DROP))`
+
+### Recommendations
+
+- CRITICAL — wire or remove the 'seize' lever: either add TR.ability_bonus(c, 'seize') to the initiative substrate (e.g. to the DISP_INIT_K drift or as an initial Vor credit at engagement start) or formally deprecate vorschlag and sen_no_sen in tradition.py and update ability_armature.md §2c and §7. The current state (abilities registered as live, producing zero effect) is a correctness failure for the two flagship tradition abilities.
+- Fix bind beats ceiling overshoot: move the `beats += 1` increment inside the bind loop to after the ceiling check, or add an explicit guard `if beats >= soft*3: return None` at the top of the bind for-loop body. The off-by-3 overshoot is bounded but violates the stated engagement ceiling.
+- Rename bw/bl bind-winner labels and use them consistently in the bind loop: replace `bind_sigma(aggressor, defender, cfg, TR)` at wrapper.py:245 with `bind_sigma(bw, bl, cfg, TR)` (where bw is the bind winner) and update the test to `if rng.random() < 1/(1+exp(-bsig)):` meaning bw wins iteration → hit. This aligns the loop semantics with the entry-steal semantics and eliminates the silent polarity dependency on the initial aggressor label.
+- Collapse the triple coin-flip on success+wind: reduce to a single probability gate. Suggested: on success+wind, roll one value; below WIND_BIND_P (0.55) → bind; above 0.55 but below 0.55+neutralize_combined → riposte; else hit. This preserves the wind-favors-bind design while making the outcome legible to the player as a single branching point.
+- Split overcommit_exposure into three separate tunable outputs: initiative_penalty = COMMIT_EXPOSE_INIT_K*(commit-3) - anti_overcommit; poise_pen = COMMIT_EXPOSE_POISE_K*(commit-3); riposte_bonus = COMMIT_EXPOSE_RIPOSTE_K*(commit-3). Three named constants replace one shared scalar, allowing independent calibration and making the design intent explicit.
+- Make poise a player-visible threshold: add a 'staggered' state emitted when poise < a named POISE_STAGGER_THRESHOLD (e.g. 0.70), which triggers a narrative signal and a concrete branching outcome (e.g. forced mode change or reduced commit options). Without a threshold the mechanic cannot generate churn — it only tunes continuous values.
+- Replace hardcoded /home/claude/ sys.path inserts with a relative path based on __file__ or a project-level constants file. Suggested: at the top of wrapper.py, core.py, systems.py, combatant.py, replace sys.path.insert(0,'/home/claude/combat_engine') with a path derived from pathlib.Path(__file__).parents[N] / 'tests/sim/v32-combat-balance'. This makes the engine runnable on any checkout and in CI.
+- Remove or wire the 'clinch' weapon field: either implement a grapple/clinch mechanic that reads it (the dagger=10 / longsword=6 gradient suggests intended close-quarters grapple priority) or delete it from all WEAPONS entries and the data model documentation.
+- Wire or delete the four dead geometry baked fields (thrust, cut, perc_conc, halfsword inside WEAPONS[w]['geo']): the geometry.bake investment was made to derive these; either consume thrust in the armor_defeat_sigma calculation (replacing the ADEF_POINT*gap formula with a geometry-derived thrust factor) and perc_conc in p_auth (concentrating percussion authority by strike geometry), or remove the bake output fields and the GEOMETRY dict if they are genuinely deferred.
+- Tighten the wind/overwhelming cliff: reduce NEUTRALIZE_OVERWHELM_DROP from 0.45 to ~0.30 (leaving 20% neutralize on overwhelming+wind vs the current 5%), keeping it below the parry/dodge equivalent but above near-zero. Document the intent explicitly in config.py with a comment.
+
+---
+
+## Module 8: initiative_vor
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Core Vor substrate (decay + cap + sigma edge) is lean and non-redundant. However, the disposition drift (DISP_INIT_K, wrapper.py:45-46) and the hit-gain/loss deltas (INIT_GAIN_HIT, INIT_LOSS_WOUNDED, wrapper.py:229-230) together with the Indes steal produce four independent Vor-modifying pathways that partly duplicate one another (all push initiative in the same direction after a hit; the overcommit path and the Indes steal both respond to commit>=4 deep actions, so they stack on the same event). The 'precommit' channel is registered and tuned across eight traditions (tradition.py:25-46) but consumed only as a minor multiplier inside feint_eval (systems.py:203), an infrequent branch — it adds a nominal lever weight entry that does almost no work. vorschlag and sen_no_sen abilities (tradition.py:96,106) target the dead 'seize' lever, making them inert registered entries, not active mechanics. |
+| **R** | pass | Vor loop is demonstrably bounded: INIT_DECAY=0.75 is a geometric damper (< 1), the hard INIT_CAP=1.5 clamp is applied after every mutation (systems.py:257, called at wrapper.py:41-42,45-46,152-153,166,195-196,229-230,239-240), disposition fixed point is +-0.40 (well inside CAP), and maximum initiative_sigma edge is INIT_SIGMA_K*tanh(3/1.2)=0.158 sigma — impactful but bounded. init_hold_decay is robust: all current tradition measure weights are >= 1.0, so the damper factor stays in [0.75, 0.815]; a measure weight below 0.25 would invert the formula (oscillating initiative), but no current tradition reaches that value. Indes steal ceiling is 2x scale * INIT_STEAL_INDES * steal_factor, clamped by CAP before the sigma conversion. Counter success is clamped [0.05, 0.92] (wrapper.py:190). ER-2 continuity is irrelevant to this module (it operates on initiative deltas, not degree thresholds). No unbound loop found. |
+| **S** | partial | Indes steal and bind steal both call S.init_steal_factor with the same INIT_STEAL_INDES base (wrapper.py:151 and 238), which is consistent. Overcommit Vor loss routes through S.init_overcommit_loss (systems.py:278) which correctly divides by TR.eff_cw(aggressor,'tempo') — faster fighters lose less, coherent with true-times doctrine. However: the counter_select probability is unguarded against values > 1.0. At Italian (tempo=1.30) + mezzo_tempo (x1.40) + cautious disposition (lean=-1 => factor=1.5), the product is 0.45*1.30*1.5*1.40 = 1.229 (wrapper.py:158), which makes counter_attempt deterministically True whenever read_win AND commit>=4 — effectively bypassing the probabilistic gate and turning the feature into a deterministic branch for that tradition+disposition combination. This is a seam failure. ATTACKER_BIAS=0.12 (config.py:74) is per-exchange on the current aggressor; comment claims 'mirror stays 50 because aggressor alternates,' but within a burst (BURST_MAX=4 exchanges, no riposte path, wrapper.py:272) the same fighter can hold the aggressor role continuously, accumulating 4*0.12=0.48 sigma asymmetrically. Across bursts this averages out via riposte role-flip, but per-burst it is not symmetric — acceptable for a grounded first-mover edge but the 'stays 50' claim is only approximately true at fight level, not exchange level. |
+| **E** | partial | The Vor meter (signed initiative float, tanh-bounded sigma edge, decay toward zero) is conceptually legible and well-grounded in the Liechtenauer Vor/Nach/Indes doctrine. The differentiation layer (steal_factor branching on bind vs open; hold-decay scaling with measure) is elegant and compact. However: three separate Vor-gaining events (Indes steal on read_win+commit>=4, hit-gain on landing a blow, overcommit-loss on deep commit exposure) all fire in close temporal proximity — sometimes on the same exchange — and the net initiative delta is not displayed to the player during play. A player cannot intuit 'I lost 0.28+0.936 initiative this exchange' from the current output surface. The counter_select overflow (probability > 1.0) makes the mechanic less legible to designers: a cautious Italian fighter with mezzo_tempo effectively has a guaranteed counter-attempt on every read_win+commit>=4 exchange, but there is no signal that the probabilistic gate has become deterministic. The 'precommit' channel weight is tuned per tradition (values 1.00-1.35) but its only effect is on feint-reading (systems.py:203), an infrequent path — a 35% tradition bonus on a channel that fires 30% of exchanges is opaque in its actual impact. |
+
+### Churn Assessment
+
+Rich. The Vor cluster generates branching narrative through multiple genuine choice vectors: (1) disposition lock-in — an aggressive fighter builds Vor faster via drift and deep commits but risks overcommit exposure and the defender's Indes steal on the same exchange; a cautious fighter bleeds Vor but reaches for the single-time counter more readily, creating a meaningful trade-off between two poles rather than a dominant answer; (2) the single-time counter itself is a high-variance 'desperate-idiot' gamble with asymmetric punishment — a miss cedes the stolen Vor back and upgrades the incoming hit to success grade (wrapper.py:195-198), making the risk/reward legible and tradition-differentiated; (3) the Indes steal creates a steal-and-riposte moment that is actually a branching outcome tree rather than a tuning dial — a successful counter voids the attack and flips roles; a missed counter is punished; no counter means the Vor slowly bleeds. The one genuine inert path in this cluster is the 'precommit' channel: it only tunes feint-reading (a low-frequency branch) rather than branching any meaningful decision. The two dead abilities (vorschlag, sen_no_sen on the 'seize' lever) are entirely inert — they are equipped by players who expect a Vor-seizing mechanic but receive no effect, which is a churn-killing dead end for those traditions.
+
+### Contract
+
+**Consumes:**
+
+- `combatant.initiative (signed float, per-beat read/write)`
+- `cfg['INIT_SIGMA_K'], cfg['INIT_SCALE'] — tanh-bounded sigma edge formula`
+- `cfg['INIT_DECAY'] — per-beat geometric damper`
+- `cfg['INIT_CAP'] — hard clamp on |initiative|`
+- `cfg['DISP_INIT_K'] * disp_lean(c) — disposition drift applied per beat (wrapper.py:45-46)`
+- `cfg['INDES_COMMIT_K'], cfg['INDES_READ_K'], cfg['INDES_SCALE_FLOOR/CEIL'] — steal scaling (wrapper.py:149-150)`
+- `cfg['INIT_STEAL_INDES'] — base steal magnitude (wrapper.py:151-153, 238-240)`
+- `cfg['INIT_GAIN_HIT'], cfg['INIT_LOSS_WOUNDED'] — Vor delta on a hit landing (wrapper.py:229-230)`
+- `cfg['INIT_LOSS_OVERCOMMIT'] — overcommit bleeds Vor (wrapper.py:166, systems.py:278)`
+- `cfg['COUNTER_SELECT_BASE'], cfg['DISP_COUNTER_K'] — counter selection gate (wrapper.py:158)`
+- `cfg['COUNTER_SUCCESS_BASE'], cfg['COUNTER_TRAIN_K'], cfg['COUNTER_REFLEX_K'] — counter resolve (wrapper.py:189-190)`
+- `TR.eff_cw(c, 'tempo') — tradition tempo weight used in steal_factor and counter select`
+- `TR.eff_cw(c, 'tactile'), TR.eff_cw(c, 'leverage') — steal_factor in bind (systems.py:267)`
+- `TR.eff_cw(holder, 'measure') — init_hold_decay denominator (systems.py:273)`
+- `TR.ability_factor(defender, 'counter_select') — mezzo_tempo multiplicative (wrapper.py:158)`
+- `TR.ability_bonus(defender, 'counter_success') — indes additive (wrapper.py:189)`
+- `TR.ability_bonus(aggressor, 'anti_overcommit') — overcommit discipline (wrapper.py:163)`
+- `read_win, commit, read_d, read_a — Indes gate inputs (wrapper.py:147-153)`
+- `overcommit_exposure — gate for overcommit Vor loss (wrapper.py:163-166)`
+
+**Emits:**
+
+- `combatant.initiative (mutated in place, per-beat) — consumed next beat by initiative_sigma() -> net_sigma`
+- `counter_attempt bool — branches outcome tree (wrapper.py:186-198)`
+- `steal value — used in counter-miss Vor-cede path (wrapper.py:195-196)`
+- `riposte=True on counter land (wrapper.py:191) — consumed by burst-exit and role-flip logic`
+
+**Dead data:**
+
+- ABILITIES['vorschlag'] (lever='seize', op='+', value=4.0, tradition.py:96): ability_bonus(c, 'seize') has zero call sites in wrapper.py and systems.py; pre-contact seizure was cut 2026-06-05
+- ABILITIES['sen_no_sen'] (lever='seize', op='+', value=4.0, tradition.py:106): same dead lever — no consumer
+- cfg['INIT_SEIZE_K'] / seizure_score removed 2026-06-05; ABILITIES referencing 'seize' remain registered but orphaned
+
+**Orphans:**
+
+- precommit channel weight (tradition.py:12,25,28,31,34,37,40,43,46): consumed only in systems.py:203 inside feint_eval for feint-defense read, NOT in the main visual read contest (wrapper.py:131-132); Japanese precommit=1.35 is declared 'finest initiative tier' but has no initiative-path consumer
+- ability_armature.md §7 declares 'seize' a live lever; it is dead (doc drift from 2026-06-05 cut)
+
+### Findings
+
+#### INI-01 [P1] (correctness)
+
+**Claim:** counter_select probability is unguarded against values > 1.0. For an Italian fighter (tempo=1.30) with mezzo_tempo equipped (x1.40) and cautious disposition (lean=-1, factor=1.5), the expression 0.45*1.30*1.5*1.40 = 1.229 is passed directly to rng.random() < p. Since rng.random() always returns [0,1), p > 1.0 makes counter_attempt deterministically True on every qualifying read_win+commit>=4 exchange. The probabilistic gate silently becomes a deterministic branch for this tradition+ability+disposition combination, violating the mechanic's own 'SELECTION is tempo-driven' design contract.
+
+**Evidence:** `wrapper.py:158; config.py:79 (COUNTER_SELECT_BASE=0.45); tradition.py:28 (italian tempo=1.30); tradition.py:101 (mezzo_tempo op='*' value=1.40); systems.py:62-64 (disp_lean); computed: 0.45*1.30*1.5*1.40=1.229`
+
+#### INI-02 [P1] (dead-data)
+
+**Claim:** Abilities 'vorschlag' and 'sen_no_sen' target lever='seize' (tradition.py:96,106) but ability_bonus(c, 'seize') is never called anywhere in wrapper.py or systems.py after the pre-contact seizure was cut on 2026-06-05 (systems.py:243-246). A German fighter equipping 'vorschlag' (value=4.0) or a Japanese fighter equipping 'sen_no_sen' (value=4.0) receives zero mechanical effect. This is silent dead weight masquerading as a live ability — the worst churn-killer: player invests in a named technique that does nothing.
+
+**Evidence:** `tradition.py:96-97 (vorschlag lever='seize'); tradition.py:106-107 (sen_no_sen lever='seize'); systems.py:243-246 (seizure cut comment); grep of wrapper.py and systems.py finds zero calls to ability_bonus(c, 'seize')`
+
+#### INI-03 [P2] (doc-drift)
+
+**Claim:** ability_armature.md §7 (line 167) states: 'Live levers: seize (Vorschlag, Sen-no-sen), counter_success (Indes), counter_select (Mezzo-tempo), anti_overcommit (True Times). Each shows a positive, bounded edge.' The 'seize' lever has had no consumer since 2026-06-05 (INI-02 above). The armature doc was not updated when seizure was cut. Similarly §2c lever map (ability_armature.md:51) marks 'seize' as 'live' with a green checkmark. Both claims are incorrect.
+
+**Evidence:** `ability_armature.md:51 (seize marked live); ability_armature.md:167 (seize listed as live lever); systems.py:243-246 (seizure cut 2026-06-05); tradition.py:96,106 (vorschlag/sen_no_sen point to dead lever)`
+
+#### INI-04 [P2] (orphan-emit)
+
+**Claim:** The 'precommit' channel weight is set for every tradition (tradition.py:25-46, values 1.00-1.35) and consumed only inside feint_eval's def_read calculation (systems.py:203), which itself only triggers when a feint fires (p=0.30 of exchanges, gate: streak<3 and stamina>0). This means Japanese precommit=1.35 — described as 'pre-commitment intent-read (sen-sen-no-sen); finest initiative tier' in tradition.py:12 — is narrowly a feint-read bonus, not a general anticipation or initiative edge. The main visual read contest (wrapper.py:131-132) does not consume precommit. The precommit channel is an orphan emitter relative to its documented role.
+
+**Evidence:** `tradition.py:12 (precommit described as 'finest initiative tier'); tradition.py:34 (japanese precommit=1.35); systems.py:203 (only feint_eval consumption site); wrapper.py:131-132 (main read contest: only 'visual' channel consumed, no precommit)`
+
+#### INI-05 [P2] (loop)
+
+**Claim:** The Vor loop has the damper (INIT_DECAY=0.75) and CAP (INIT_CAP=1.5) required for boundedness. However, the Indes steal path (wrapper.py:151-153) and the hit-gain path (wrapper.py:229-230) can both fire on the same exchange: a deep-commit aggressor who lands a hit triggers Indes steal IF read_win is true (INDES path fires first at wrapper.py:147), then the hit-gain fires at line 229. Net initiative delta for defender on a single exchange where they win read, steal lands, AND a hit still occurs: defender gains steal AND aggressor gains INIT_GAIN_HIT. These are not in conflict (the hit is on the aggressor's side, the steal was before the roll), but they compound without a combined ceiling, meaning a maximal exchange can move the initiative state by steal_max + INIT_GAIN_HIT in the same beat before the per-beat decay runs. This is bounded by the CAP but the compounding is not documented and may surprise calibrators.
+
+**Evidence:** `wrapper.py:147-153 (Indes steal fires when read_win AND commit>=4); wrapper.py:229-230 (INIT_GAIN_HIT fires on hit>0); both can co-occur on same exchange if read_win+deep commit+hit; max compound delta = 0.936+0.18=1.116 before clamp`
+
+#### INI-06 [P2] (correctness)
+
+**Claim:** ATTACKER_BIAS=0.12 is described as 'mirror stays 50 — aggressor alternates' (config.py:73). This is only true across a full fight where ripostes ensure role-alternation. Within a single burst (BURST_MAX=4 exchanges, wrapper.py:271), if the aggressor lands hits without triggering ripostes (all hits, no riposte path), they remain aggressor for up to 4 consecutive exchanges, accumulating 4*0.12=0.48 sigma of non-alternating first-mover advantage. The per-fight claim is approximately correct via the riposte role-flip mechanism, but the per-burst accumulation is systematically asymmetric in favour of whoever won the first actor-gate coin flip in that burst.
+
+**Evidence:** `config.py:73-74 (ATTACKER_BIAS=0.12, '50% mirror' comment); wrapper.py:90-93 (aggressor selection by ready/coin flip); wrapper.py:261 (role flip only on riposte); wrapper.py:271-272 (BURST_MAX=4 exit, no mandatory role alternation)`
+
+#### INI-07 [P2] (churn-inert)
+
+**Claim:** DISP_INIT_K=0.10 disposition drift (wrapper.py:45-46) produces a fixed point of +-0.40 initiative from disposition alone (fp = drift/(1-decay) = 0.10/0.25 = 0.40). The maximum sigma edge from this disposition-only fixed point is INIT_SIGMA_K*tanh(0.80/1.2) = ~0.097 sigma — below the ATTACKER_BIAS flat term of 0.12. A pure disposition signal never exceeds the unconditional first-mover edge. This means disposition's 'aggressive drifts Vor UP' story is correct but the magnitude is so small that the Vor lever from disposition adds minimal distinguishable effect on outcome, making the hook a tuner rather than a real branch lever at current calibration.
+
+**Evidence:** `config.py:91 (DISP_INIT_K=0.10); config.py:62 (INIT_DECAY=0.75); systems.py:62-64 (disp_lean range +-1); computed: fp=0.10/0.25=0.40, edge=0.16*tanh(0.8/1.2)=0.097 sigma < ATTACKER_BIAS=0.12`
+
+#### INI-08 [P3] (portability)
+
+**Claim:** init_hold_decay (systems.py:273-274) computes 1 - (1-INIT_DECAY)/m where m = TR.eff_cw(holder, 'measure'). All current tradition measure weights are >= 1.0, so the formula is safe (decay factor in [0.75, 0.815]). However, the formula has an implicit invariant: if m < (1 - INIT_DECAY) = 0.25, the decay factor goes negative and initiative oscillates each beat. If m = 0 exactly, there is a division by zero. No guard or assertion exists. Adding a future tradition with measure < 0.25 (or an ability that multiplies measure toward zero) would silently corrupt the Vor loop.
+
+**Evidence:** `systems.py:273-274 (formula); config.py:62 (INIT_DECAY=0.75 => threshold m < 0.25 unsafe); tradition.py:23-47 (all current measure values 1.00-1.35 — safe today)`
+
+#### INI-09 [P3] (gap)
+
+**Claim:** The counter_attempt gate (wrapper.py:158) uses max(0.0, 1 - DISP_COUNTER_K * disp_lean(defender)) to model 'cautious temperament favours the single-time counter.' For the most aggressive disposition (disp=7, lean=+1), the factor is max(0, 1-0.5*1) = 0.5, halving the selection rate. For the most cautious (disp=1, lean=-1), the factor is max(0, 1+0.5) = 1.5, boosting it by 50%. The aggressive pole's counter suppression is bounded at 0.5 (cannot go negative), but there is no complementary mechanic that rewards the aggressive fighter for skipping the counter — they simply have lower counter frequency with no compensating path added in this code block.
+
+**Evidence:** `wrapper.py:157-158 (DISP_COUNTER_K suppression); config.py:88-91 (disposition hooks: commit skew + counter tilt + Vor drift); no counter-skip reward in wrapper.py:147-198`
+
+#### INI-10 [P3] (role-conflation)
+
+**Claim:** The steal variable computed at wrapper.py:151-153 is re-used as a state reference inside the counter-miss branch at wrapper.py:195-196 to cede the Vor back. This works correctly when counter_attempt is True within the same if-block, but the variable 'steal' is only defined inside the 'if read_win and commit>=4' block (wrapper.py:147). The counter_attempt check at line 186 is outside that block ('if counter_attempt:'), and counter_attempt is initialized to False at line 146 — so the only path that sets counter_attempt=True is inside the read_win+commit>=4 block where steal was defined. The code is safe, but 'steal' is used as an implicit closure variable from an outer if-block rather than being passed explicitly, making the data flow fragile to restructuring.
+
+**Evidence:** `wrapper.py:146 (counter_attempt=False initial); wrapper.py:147 (if read_win and commit>=4:); wrapper.py:151 (steal= computed); wrapper.py:158 (counter_attempt set inside same if-block); wrapper.py:186 (if counter_attempt: outer scope); wrapper.py:195 (steal used in else-branch — valid only because counter_attempt=True implies steal is defined)`
+
+### Recommendations
+
+- INI-01 (P1): Add a clamp to the counter_select probability before the rng comparison. Replace the raw product with min(1.0, cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')) in wrapper.py:158. This preserves the scaling intent while enforcing the probabilistic contract. Alternatively, add a test that asserts no COUNTER_SELECT_BASE * max_tradition_tempo * max_disp_factor * max_ability_factor can exceed 1.0.
+- INI-02 (P1): Remove 'vorschlag' and 'sen_no_sen' from ABILITIES in tradition.py or reroute them to a live lever. Option A: remap both to 'counter_select' (the Indes steal already handles the Vor-seizing narrative through read_win+commit>=4; vorschlag could be a multiplicative bonus to counter_select for the German tradition). Option B: remove them entirely and document the cut. Do not leave dead ABILITIES entries that silently do nothing when equipped — this is a correctness and trust failure for players who equip them expecting a Vorschlag advantage.
+- INI-03 (P1/P2): Update ability_armature.md §7 and §2c to remove 'seize' from the 'live levers' list and mark 'vorschlag' and 'sen_no_sen' as [CUT 2026-06-05, reroute pending] or remove them from the table. The doc must not claim live status for dead mechanics.
+- INI-04 (P2): Either (a) add precommit as a consumer in the main read contest at wrapper.py:131 — e.g., read_d *= TR.eff_cw(defender, 'precommit') for a unified 'visual+precommit anticipation' read that honours the Japanese sen-sen-no-sen doctrine — or (b) collapse precommit into the visual channel and remove the separate channel weight column. As-is, Japanese precommit=1.35 is a 35% bonus on a channel that only fires in feint-reading (~30% of exchanges), giving about 10pp marginal effect vs the documented 'finest initiative tier' claim. The channel needs either a live wiring path or honest removal.
+- INI-08 (P3): Add a defensive assert in init_hold_decay (systems.py:273) or in eff_cw: assert m > 0, 'measure channel weight must be positive'. Optionally enforce m >= (1-INIT_DECAY) with an assertion or a max() guard: return max(0.01, 1 - (1-cfg['INIT_DECAY'])/max(0.01, m)). This prevents silent formula inversion if a future tradition or ability drives measure below the critical threshold.
+- INI-07 (calibration): Consider doubling DISP_INIT_K from 0.10 to 0.20, or reducing ATTACKER_BIAS from 0.12 to 0.06, so that the aggressive disposition's Vor drift (fixed point ~0.40) produces a sigma edge that is materially distinguishable from the unconditional attacker bias (currently 0.097 vs 0.12). At current values the disposition Vor hook is a tuner with sub-attacker-bias effect; the design intent is that 'both poles cost' but the aggressive pole's Vor gain is invisible in outcomes.
+- INI-10 (P3 / structural hygiene): Extract the steal value into the counter block explicitly. Define steal_for_counter = 0.0 at the top of the beat and set it only when the steal occurs, so the counter-miss Vor-cede path (wrapper.py:195) reads steal_for_counter rather than the implicit outer-scope variable. This eliminates the fragile implicit closure and makes the data flow auditable.
+
+---
+
+## Module 9: tradition_layer (tradition.py + ability_armature.md)
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Channel weights are necessary and non-redundant for the 5 wired channels that differentiate paths (tempo, visual, tactile, leverage, measure). But 'seize' lever with two abilities (vorschlag, sen_no_sen) is a dead construct adding zero value; precommit is a single-site underuse of a labeled channel; balance weight misses 80% of its intended call sites. Lever-pile risk is low (7 channels is not excessive) but two dead ability slots and one mislabeled channel are unnecessary complexity. |
+| **R** | partial | Channel weights are bounded (all 0.85-1.35, multiplicative on continuous substrate) and do not cliff. familiarity is bounded [0.85,1.0]. init_hold_decay math is correct (higher measure weight -> higher multiplier -> slower decay). HOWEVER: balance channel weight only applies at one of five balance_eff call sites, creating a partial cliff where Spanish/Filipino balance advantage silently vanishes at dodge/anti_overcommit/stance; the 'seize' lever is dead so Vorschlag/sen_no_sen produce zero effect regardless of value (4.0 is un-exercised but the 8pp tanh bound claim in ability_armature.md:17 is therefore unverifiable); the hand-set percussion field in armor_defeat_sigma is not derived from p_auth, creating a dual-physics inconsistency. |
+| **S** | fail | Three transitions are broken at seams: (1) 'seize' lever claimed live in tradition.py:87 and ability_armature.md §7 but has no consumer — the seam between the ability registry and the engine is severed; (2) precommit channel labeled 'sen-sen-no-sen finest initiative tier' fires only as feint-resistance, not initiative — role conflation at the label/engine seam; (3) balance channel weight only routes into reach_sigma, not the broader balance_eff surface — the channel does not coherently represent the competence it names. |
+| **E** | partial | The TRADITIONS design (cognitive modes as channel weights) is elegant and legible: a player can intuit that German wins the bind, Italian wins the open counter, Spanish holds measure. The five wired channels produce genuine path differentiation. But elegance is undermined by: two dead flagship abilities (Vorschlag is German's iconic opener, sen-no-sen is Japanese's defining technique) leaving the most narratively prominent abilities inert; the 0.85/0.93/1.0 familiarity tiers are a tuning knob not a branching choice; and 'none' tradition getting full familiarity everywhere creates an unintuitive free-rider effect. |
+
+### Churn Assessment
+
+Channel weights produce genuine churn at 5 of 7 channels: tempo (initiative per beat, counter selection probability, feint quality, overcommit Vor loss) and visual (read contest win/loss, reopen probability) fork the path at every exchange. Tactile+leverage (bind steal, bind_sigma) differentiates German from Italian at the bind vs open seam. Measure (reach_sigma multiplier, Vor hold duration) differentiates Spanish. These are branching choices with dominant answers per context, seeding emergent narrative. HOWEVER: the ability layer that was supposed to amplify this churn is 40% dead (seize lever) or partially suppressed (balance), so the designed 'you can improve your tradition signature' layer generates zero additional churn for German first-strike identity (Vorschlag) and Japanese preemption identity (sen_no_sen). The familiarity system (0.85/0.93/1.0) is a pure tuning knob: it degrades a single multiplicative factor on one read-contest term, producing no branching and no player decision. Chinese and Filipino have no ability layer, making their churn identical to a tradition with the same channel weights but no identity name — they are labels on a number vector, not characters. The 'none' tradition free-rider effect (always familiarity 1.0) means an untrained fighter never pays the cross-tradition penalty, which subtly discourages tradition acquisition at the margin.
+
+### Contract
+
+**Consumes:**
+
+- `c.tradition string key into TRADITIONS`
+- `c.equipped list of ability keys for ability_bonus/ability_factor`
+- `reader_trad and opponent_trad strings for familiarity()`
+- `channel string arg for channel_weight and eff_cw`
+- `TRADITIONS dict substrate weights`
+- `ABILITIES dict lever/op/value entries`
+- `ADJACENT frozenset for familiarity lookup`
+
+**Emits:**
+
+- `eff_cw(c, channel) -> float, consumed at ~19 call sites in systems.py and wrapper.py`
+- `familiarity(r, o) -> float, consumed at wrapper.py:129 and systems.py:236-237`
+- `ability_bonus(c, lever) -> float, consumed at wrapper.py:163 (anti_overcommit) and wrapper.py:189 (counter_success)`
+- `ability_factor(c, lever) -> float, consumed at wrapper.py:158 (counter_select) and inside eff_cw for channel abilities`
+- `profile(trad) -> dict, utility only, not consumed by engine`
+- `channel_weight(trad, ch) -> float, superseded by eff_cw at all active sites; still called internally by eff_cw`
+
+**Dead data:**
+
+- ABILITIES['vorschlag']: lever='seize', ability_bonus(c,'seize') has no call site anywhere; pre-contact seizure cut 2026-06-05 (systems.py:243); tradition.py:96-97
+- ABILITIES['sen_no_sen']: same dead lever='seize'; Japanese flagship ability cannot fire; tradition.py:106-107
+- WEAPONS[w]['geo'] baked surface: thrust/cut/perc_conc/halfsword stored in combatant.py:49-53 but no engine path reads them; geometry.py:67-72
+- WEAPONS[w]['clinch']: defined for all weapons in combatant.py:14-27 but no consumer in any .py file
+- tradition.py comment at line 89-90 claims channel levers are 'INERT pending eff_cw routing (~21 sites)'; all 7 channels already have eff_cw call sites, making this dead documentation
+
+**Orphans:**
+
+- balance channel weight: eff_cw(...,'balance') only applied in reach_sigma() foot_meas term (systems.py:171-172); balance_eff() calls at wrapper.py:68, systems.py:70-71, 92, 223 do not multiply by balance channel weight, so Spanish (1.30) and Filipino (1.25) advantage is suppressed at dodge, anti_overcommit, stance_stability, close_rate, reopen_prob
+- precommit channel: only consumed in feint_eval def_read (systems.py:203); docstring calls it 'sen-sen-no-sen finest initiative tier' but it only boosts feint resistance, not any seizure or initiative path; role mislabel
+- armor_defeat_sigma() reads aggressor.w.get('percussion',8) (systems.py:124) for blunt armor-defeat; core.p_auth() derives percussion from mass/pob_frac for damage(); two competing physics models for the same quantity; only the hand-set legacy field governs the mechanically dominant armor-defeat path
+
+### Findings
+
+#### TL-01 [P1] (dead-data)
+
+**Claim:** 'seize' lever has no consumer: ability_bonus(c,'seize') is never called in wrapper.py or systems.py. Pre-contact seizure was cut 2026-06-05 (systems.py comment at line 243). Vorschlag (tradition.py:96) and sen_no_sen (tradition.py:106) are therefore inert dead code producing zero mechanical effect regardless of their value=4.0.
+
+**Evidence:** `tradition.py:96-97, tradition.py:106-107, systems.py:243-246; grep of wrapper.py and systems.py finds zero calls to ability_bonus(c,'seize') or ability_factor(c,'seize')`
+
+#### TL-02 [P1] (dead-data)
+
+**Claim:** Japanese tradition's ONLY ability (sen_no_sen) is dead (TL-01). Japanese is defined as the 'flagship' of the precommit channel and sen-no-sen initiative seizing, but it has no live mechanic expressing this identity. The tradition differentiates only via channel weights (precommit=1.35, tempo=1.20) — which are wired — but its single ability is a no-op.
+
+**Evidence:** `tradition.py:34 (japanese definition), tradition.py:106-107 (sen_no_sen dead lever), wrapper.py:243 (no seize consumer)`
+
+#### TL-03 [P1] (doc-drift)
+
+**Claim:** ability_armature.md §7 and tradition.py:87 both declare 'seize' a 'live lever' with Vorschlag and sen_no_sen showing 'positive, bounded edge'. This is false: the lever has no consumer. The documentation actively misleads about which abilities are functional.
+
+**Evidence:** `ability_armature.md:167 ('Live levers: seize (Vorschlag, Sen-no-sen)'), tradition.py:87 ('LIVE levers this version: seize'); no call to ability_bonus(c,'seize') anywhere`
+
+#### TL-04 [P2] (orphan-emit)
+
+**Claim:** 'balance' channel weight is an orphan emitter at 4 of 5 balance_eff call sites. eff_cw(...,'balance') only multiplies balance_eff inside reach_sigma() foot_meas (systems.py:171-172). The callers balance_eff() at wrapper.py:68, systems.py:70-71, 92, 223 — governing dodge, anti_overcommit, stance_stability, close_rate, reopen_prob — do not apply the balance channel weight. Spanish (balance=1.30) and Filipino (balance=1.25) advantage is suppressed by ~80%.
+
+**Evidence:** `systems.py:65-69 (balance_eff definition, no channel multiply), systems.py:70-71 (anti_overcommit, stance_stability, no channel multiply), systems.py:92 (mode_sigma ftw, no channel multiply), systems.py:171-172 (only site with eff_cw balance multiply), wrapper.py:68 (close_rate, no channel multiply)`
+
+#### TL-05 [P2] (role-conflation)
+
+**Claim:** 'precommit' channel is labeled 'pre-commitment intent-read (sen-sen-no-sen); finest initiative tier' (tradition.py:12) and mapped to 'initiative / seizing' in ability_armature.md §2c. But its ONLY eff_cw call site is feint_eval def_read (systems.py:203), where it modulates feint RESISTANCE. It has no connection to seizure, initiative, or Vor state. The label and the implementation describe different competencies.
+
+**Evidence:** `tradition.py:12 (docstring label), ability_armature.md:59 (lever map claims 'initiative / seizing'), systems.py:203 (only call site: feint defender read)`
+
+#### TL-06 [P2] (redundancy)
+
+**Claim:** Two competing physics models for blunt percussion: core.p_auth() derives percussion from mass and pob_frac (core.py:38) and is the consumer for the damage() path (core.py:82). armor_defeat_sigma() reads the hand-set legacy field aggressor.w.get('percussion',8) (systems.py:124) for the armor-defeat path. The same physical quantity (blunt striking authority) is computed two different ways; the legacy field wins the mechanically dominant path.
+
+**Evidence:** `core.py:35-38 (p_auth definition), core.py:82 (blunt heft uses p_auth via perc argument), systems.py:124 (armor_defeat_sigma reads w.get('percussion',8) directly), combatant.py:14-24 (hand-set percussion values per weapon)`
+
+#### TL-07 [P2] (doc-drift)
+
+**Claim:** tradition.py comment at lines 89-90 states channel levers ('measure','tempo','leverage','visual','tactile','precommit','balance') are 'INERT until the channel-weight sites are routed through eff_cw() (the next pass; ~21 sites)'. This is false: all 7 channels have eff_cw call sites already. Channel abilities (staerke_schwaeche/leverage, misura/measure, atajo/measure) will take effect when equipped. The comment creates false technical debt and may block ability deployment.
+
+**Evidence:** `tradition.py:89-90 (stale comment), systems.py:171-173 (balance + measure wired), systems.py:202-203 (tempo + visual + precommit wired), systems.py:234-237 (leverage + tactile wired), systems.py:267-268 (tactile + leverage + tempo wired), systems.py:273 (measure wired), systems.py:279 (tempo wired), wrapper.py:117 (tempo wired), wrapper.py:131-132 (visual wired), wrapper.py:158 (tempo wired), wrapper.py:242 (leverage wired)`
+
+#### TL-08 [P2] (dead-data)
+
+**Claim:** WEAPONS[w]['clinch'] is defined for all 12 weapons in combatant.py:14-27 but has zero consumers in any engine module. No code path reads w['clinch'] or c.w['clinch'].
+
+**Evidence:** `combatant.py:14-27 (clinch field in all weapon dicts); grep of wrapper.py, systems.py, core.py, tradition.py, geometry.py finds no 'clinch' read`
+
+#### TL-09 [P2] (gap)
+
+**Claim:** Chinese and Filipino traditions have no ability entries and are effectively pure number vectors with tradition labels. Filipino appears in three ADJACENT pairs (chinese, japanese) granting familiarity bonuses but has no ability differentiator. ability_armature.md §5 notes 'NO abilities until S1/S2 anchored', which is correct discipline, but the gap means these traditions offer only scalar channel weight biases and no path-branching mechanic, and are indistinguishable from any other tradition with similar weights.
+
+**Evidence:** `tradition.py:37-41 (chinese, filipino definitions), ABILITIES dict has no entries with tradition='chinese' or tradition='filipino'; ability_armature.md:148-149 (priority-gap note)`
+
+#### TL-10 [P2] (other)
+
+**Claim:** familiarity('none', any_tradition) returns 1.0 (tradition.py:65), granting untrained fighters full familiarity against all traditions. This means a 'none'-tradition fighter never pays a cross-tradition read penalty, creating an implicit free-rider advantage: the untrained fighter is undeceived by Spanish geometric evasion or Japanese precommit concealment at the same rate as against a fellow untrained. Discourages tradition selection at the margin.
+
+**Evidence:** `tradition.py:63-66 (familiarity logic), tradition.py:46-47 ('none' tradition definition)`
+
+#### TL-11 [P3] (churn-inert)
+
+**Claim:** The familiarity system (0.85 / 0.93 / 1.0 tiers) is a static tuning knob, not a branching choice. It degrades a single multiplicative factor on one read-contest term per exchange with no player decision point, no counter-play, no escalation, and no narrative hook. It produces no churn.
+
+**Evidence:** `tradition.py:54-67, wrapper.py:129-131 (fam multiplied into read_d only)`
+
+#### TL-12 [P3] (portability)
+
+**Claim:** Engine is non-runnable on this checkout, on Windows CI, and in Godot: wrapper.py:4, combatant.py:4, and core.py:3 each insert '/home/claude' and '/home/claude/v32' (or '/home/claude/combat_engine') into sys.path — POSIX sandbox paths that do not exist on this Windows clone or any production environment. The tradition module itself does not import these paths, but any call through wrapper.py or combatant.py will fail at import.
+
+**Evidence:** `core.py:3 (sys.path.insert('/home/claude'), '/home/claude/v32'), wrapper.py:4 (sys.path.insert('/home/claude/combat_engine')), combatant.py:4 (sys.path.insert('/home/claude'), '/home/claude/v32')`
+
+### Recommendations
+
+- CRITICAL — TL-01/02/03: Add a consumer for the 'seize' lever or remove Vorschlag and sen_no_sen from ABILITIES. The simplest fix: wire ability_bonus(c,'seize') into init_steal_factor() as an additive bonus to the steal magnitude (or into the counter_attempt gate as a seizure-rate boost). Without this, German and Japanese traditions have dead flagship abilities and the armature's own invariant claim ('positive, bounded edge') is unverifiable. Update tradition.py:87 and ability_armature.md §7 to mark 'seize' as DEAD until wired.
+- HIGH — TL-04: Apply eff_cw(c,'balance') inside balance_eff() itself (at systems.py:65-69) rather than only at the reach_sigma call site. This makes the balance channel uniformly effective across all balance-derived outcomes (dodge, anti_overcommit, stance_stability, close_rate, reopen_prob). Alternatively, pass a TR handle to balance_eff and multiply there. Without this, Spanish Destreza and Filipino compas footwork identities are ~80% suppressed.
+- HIGH — TL-05: Either rename the 'precommit' channel to 'feint_read' (matching its actual single call site in feint_eval) and update TRADITIONS docstrings, or add an initiative/seizure-related eff_cw('precommit') call site (e.g., in the Indes steal magnitude or in the counter_attempt gate for a 'sen' seizure path). The current name misleads about what the channel does. For Japanese, this is especially urgent: the tradition's core identity ('intentional' mode, sen-sen-no-sen) is labeled but not expressed.
+- MEDIUM — TL-06: Unify percussion sources. Either derive the armor_defeat_sigma blunt cap from p_auth(aggressor.w) instead of aggressor.w.get('percussion',8), or remove hand-set 'percussion' from WEAPONS and make p_auth the single source for both paths. Having two physics models for the same quantity is a correctness hazard when weapon values are tuned.
+- MEDIUM — TL-07: Update the comment at tradition.py:89-90 to accurately reflect that all 7 channels are already wired through eff_cw. Mark staerke_schwaeche, misura, and atajo as 'registered and reachable (channel wired); calibrate value before deploying' rather than 'pending channel wiring'. This unblocks ability deployment that may be stalled on a false prerequisite.
+- MEDIUM — TL-09: For Chinese and Filipino, either add a single S1/S2-grounded ability per the armature discipline (even a conservative one), or explicitly mark them as 'channel-weights only, no ability layer' in TRADITIONS and the armature. The current state is indistinguishable from an oversight vs a deliberate design choice. If the selection-effect discipline holds, document it in tradition.py to prevent future ability additions that violate the grade rule.
+- LOW — TL-10: Consider making 'none' tradition pay a partial familiarity cost vs high-precommit traditions (e.g., Japanese), rather than always returning 1.0. The current rule ('no tradition to misread') is logically coherent but creates an implicit free-rider. An alternative: return FAMILIARITY_DEFAULT (0.85) when opponent_trad != 'none' and reader_trad == 'none', reflecting that an untrained fighter has no framework to decode tradition-specific concealment.
+- LOW — TL-08: Remove WEAPONS[w]['clinch'] from all weapon dicts until a close-quarters grapple mechanic exists to consume it, or create that mechanic. Dead weapon fields degrade readability and accumulate maintenance debt.
+
+---
+
+## Module 10: damage_armour
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Core damage = Impact x Coupling x Quality x DMG_SCALE is elegantly minimal and necessary. But QUAL['partial'] is computed and stored yet dead (damage gate filters it). The close and gap parameters are carried through strike()->damage() as dead weight — they take argument slots but do nothing. p_auth() is computed for all weapons including non-blunt ones where it is silently discarded. Three dead parameters in a 9-arg function that already earned a 'transposition-bug class' comment is a necessary-mechanics failure. |
+| **R** | partial | ER-2 continuity is correctly inline in core.degree() (k-0.5 thresholds). p_auth is min-capped at 8 and floor-protected (max(0, mass)). OW q saturates via tanh toward OW_MAX=2.5, preventing runaway overwhelming tails for typical builds (STR4 mace OW-base does not one-shot an average end=4 defender). However: (1) ADEF_THRESHOLD is non-monotonic (light=0.70 > medium=0.45 < heavy=0.72), so cut_thrust weapons (arming/paired_short, gap=0.65) get WORSE adef vs light armour than vs mail — arming vs light gives -0.020 sigma, vs medium gives +0.200 sigma. This is a resolved non-monotonicity within the armoured regime. (2) The cliff at none->light for pure cut heads: 0 to -0.640 sigma in one tier step is a real discontinuity (26% of sigma_n at pool=9). (3) At extreme builds (STR7 mace, gap=none, OW-max via high net_sigma), damage can exceed end=4 health in one hit — the tanh guard on q only mitigates, does not prevent this for outlier stat+net combinations. |
+| **S** | partial | The two-percussion-source problem is structurally inconsistent even if numerically convergent for existing weapons: damage uses p_auth(mass*pob_frac) while armor_defeat_sigma reads hand-set w['percussion'] (systems.py:124). For current roster the delta is <1% (staff) or 0% (mace/poleaxe) but the divergence becomes a silent correctness bug the moment any new blunt weapon is added with mass/pob_frac that do not calibrate to match its hand-set percussion. The HEFT categorical (0 for light, 3 for heavy, fixed) gives greatsword (mass=2.7) the same heft contribution as longsword (mass=1.4); plan #9 deferred continuous-mass but this is a visible seam where the continuous (p_auth for blunt) and discrete (HEFT for cut/thrust) models meet without explanation at the boundary. The ADEF_THRESHOLD non-monotonicity (light > medium) is not documented in config, making the adef profile counterintuitive to calibrators. |
+| **E** | partial | The Impact x Coupling x Quality x DMG_SCALE formula is highly legible and the blunt heft continuous derivation from p_auth is elegant. The OW quality tail (tanh saturation) directly links roll margin to wound severity. However, the gap parameter threading (passed but unused in coupling) is invisible dead weight that will confuse the next calibrator. ADEF_THRESHOLD non-monotonicity (a point-thrust vs mail does better than vs cloth) is physically correct for gap-thrust but produces a table-unintuitive result (heavier armour sometimes helps more). The three dead QUAL/close/gap parameters erode the 'one number doing more work' ideal. |
+
+### Churn Assessment
+
+Moderate churn in the damage chain, but partly inert. The Impact x Coupling x Quality fork generates real branching: weapon head selects mode (shear/puncture/percussion), armour tier changes transmit fraction, degree ladder gates injury magnitude, OW q links roll margin to wound severity. The blunt heft continuous path (p_auth) creates meaningful differentiation within blunt weapons. The cut_thrust versatility (max of cut vs half-sword modes) creates genuine weapon-choice branching vs armour. However: the gear under the hood does not fully branch the player-facing path. QUAL['partial'] and the close/coverage parameters exist in the schema but produce zero churn (they are never populated). The gap parameter that geometry.bake computes sits in the weapon vector but does not reach the damage coupling — so the geometry system generates data that cannot influence wound outcomes. The HEFT categorical (0 vs 3) is a cliff not a gradient for cut/thrust weapons, reducing what should be a continuous mass-to-force relationship to a binary choice point. armor_defeat_sigma does create meaningful armour-tier differentiation that branches the exchange outcome (sigma shift ranges from -2.754 for pure cut vs plate to +0.986 for blunt vs plate), which is good churn. The main churn gap: the partial-coverage armour system is fully implemented but disconnected, so there is no mechanical choice between armour coverage styles in play.
+
+### Contract
+
+**Consumes:**
+
+- `deg (graze/success/overwhelming from core.degree)`
+- `weapon_wt (light/heavy categorical)`
+- `weapon_head (blunt/point/cut_thrust/straight_cut/curved_cut)`
+- `strength (attacker attribute)`
+- `armor (none/light/medium/heavy tier)`
+- `net (for OW M-QUAL q computation in strike())`
+- `pool (for sigma_n denominator in OW q)`
+- `attacker.w['mass'] and attacker.w['pob_frac'] -> p_auth (blunt heft)`
+- `attacker.w['gap'] (consumed by armor_defeat_sigma for point/cut_thrust; dead in damage coupling)`
+- `attacker.w['percussion'] (hand-set; consumed by armor_defeat_sigma blunt branch)`
+- `RESIST[material][mode] (per-mode material resistance)`
+- `DELIVERY[head] (force-delivery factor per head type)`
+- `ADEF_W[armor], ADEF_BLUNT, ADEF_POINT, ADEF_CUT, ADEF_THRESHOLD[armor] (armour-defeat config)`
+
+**Emits:**
+
+- `int damage (wound-points, consumed by Combatant.apply_wound / WoundTracker.apply)`
+- `float armor_defeat_sigma (net-sigma adjustment, consumed by wrapper.py:143 net_sigma sum)`
+
+**Dead data:**
+
+- QUAL['partial']=0.5: defined in core.py:49 but damage() gate (line 81) filters deg=='partial' to return 0; the wrapper never calls strike() with deg='partial'
+- close parameter in damage(): taken as 6th positional arg (core.py:75) but never read inside the function body (line 81-85)
+- gap parameter in damage(): taken as 7th positional arg and passed from strike() via attacker.w['gap'] (core.py:99), but coupling() is called without a coverage arg that would thread it to _transmit()
+- COVERAGE_GAP['partial']=0.5: defined in core.py:59 but coupling() is called from damage() without the coverage arg, so it always defaults to 'full'; partial coverage is unreachable in the live call chain
+- geometry.bake perc_conc: baked and stored in WEAPONS[w]['geo']['perc_conc'] (combatant.py:53) but never read by armor_defeat_sigma (which reads hand-set 'percussion') or by damage() (which uses p_auth)
+- geometry.bake thrust: stored in WEAPONS[w]['geo']['thrust'] but no engine consumer
+- geometry.bake cut: stored in WEAPONS[w]['geo']['cut'] but no engine consumer
+- geometry.bake halfsword: stored in WEAPONS[w]['geo']['halfsword'] but halfsword_target() in systems.py uses HALFSWORD_FORM dict logic, not this field
+- p_auth computed for non-blunt weapons: strike() always calls p_auth(attacker.w) (line 99) and passes result as perc, but damage() ignores perc for non-blunt heads (line 82 blunt branch only)
+
+**Orphans:**
+
+- coupling() coverage='partial' path: _transmit() has full partial-coverage logic (lines 62-65) that produces materially different output (~8-17% more damage through partial armour) but is never reachable from damage()
+
+### Findings
+
+#### DA-01 [P2] (dead-data)
+
+**Claim:** QUAL['partial']=0.5 is defined in core.py but is unreachable: damage() returns 0 for any deg not in ('graze','success','overwhelming'), and the wrapper never calls strike() with deg='partial' — the partial outcome branch maps to a graze strike instead. The constant occupies a table slot and will mislead calibrators expecting a continuous 0.25->0.5->1.0->1.5 quality ladder.
+
+**Evidence:** `core.py:49 (QUAL definition), core.py:81 (gate filter), wrapper.py:176-177 (partial->graze path never calling strike with 'partial')`
+
+#### DA-02 [P2] (dead-data)
+
+**Claim:** The `close` parameter in damage() (6th positional, core.py:75) is taken from strike() (line 98) and documented as available for close-range modifiers, but the function body never reads it. Callers always pass a value; the parameter is silently swallowed.
+
+**Evidence:** `core.py:75 (signature), core.py:81-85 (body — no reference to `close`)`
+
+#### DA-03 [P2] (dead-data)
+
+**Claim:** The `gap` parameter in damage() (7th positional, default 0.65, core.py:75) is passed from strike() as attacker.w['gap'] (core.py:99 — the geometry-baked precision value), but coupling() is called without a coverage argument. Inside _transmit() the gap-thrust precision field is not threaded at all — only the fixed COVERAGE_GAP{'full':0.15,'partial':0.5} dict is read. So the per-weapon gap field from geometry.bake is dead in the damage coupling chain (though live in armor_defeat_sigma for point/cut_thrust heads).
+
+**Evidence:** `core.py:75,85 (gap param taken, coupling called without it), core.py:60-65 (_transmit uses COVERAGE_GAP not weapon gap), core.py:99 (strike passes attacker.w['gap'])`
+
+#### DA-04 [P2] (dead-data)
+
+**Claim:** COVERAGE_GAP['partial']=0.5 is defined in core.py:59 and _transmit() contains a full partial-coverage path that would yield ~8-17% more damage than full coverage. But coupling() always defaults to coverage='full' because damage() never passes the arg. The partial-armour path (e.g. breastplate only) is implemented but unreachable via the live call chain.
+
+**Evidence:** `core.py:59 (COVERAGE_GAP), core.py:66 (coupling signature has coverage='full'), core.py:85 (damage calls coupling(weapon_head, armor) with no coverage arg), core.py:60-65 (_transmit partial logic)`
+
+#### DA-05 [P2] (dead-data)
+
+**Claim:** geometry.bake() produces five coefficients {gap, thrust, cut, perc_conc, halfsword}; only `gap` is live (overwrites the hand-set weapon gap at combatant.py:52). The other four — thrust, cut, perc_conc, halfsword — are stored in WEAPONS[w]['geo'] (combatant.py:53) but have no consumption site in core.py, systems.py, or wrapper.py. perc_conc in particular was designed to modulate blunt armour-defeat by strike concentration (geometry.py:48-51) but armor_defeat_sigma reads hand-set 'percussion' instead.
+
+**Evidence:** `combatant.py:52-53 (bake and store), geometry.py:60-72 (all five keys), systems.py:124 (reads w.get('percussion',8) not geo['perc_conc']), core.py:82 (damage uses p_auth not geo), Grep confirms no other consumer`
+
+#### DA-06 [P2] (role-conflation)
+
+**Claim:** The blunt percussion quantity exists in two competing forms with different physical grounding: (1) p_auth(w) = min(8, 9.5*(sqrt(mass)*pob_frac)^0.30) — derived from weapon dynamics — used in damage() to compute blunt heft; (2) w['percussion'] — hand-set integer (0–8) — used in armor_defeat_sigma (systems.py:124) for the armour-defeat capability cap. For existing roster weapons the numerical divergence is <1% (staff) or 0% (mace/poleaxe), but the two sources are structurally independent: adding a new blunt weapon with mass/pob_frac that do not reproduce the hand-set percussion will silently produce inconsistent damage vs armour-defeat without any assertion to catch it.
+
+**Evidence:** `core.py:34-38 (p_auth, used at line 99), systems.py:124 (reads w.get('percussion',8)), combatant.py:22-24 (hand-set percussion values for blunt weapons)`
+
+#### DA-07 [P2] (cliff)
+
+**Claim:** ADEF_THRESHOLD is non-monotonic across the armour tiers: light=0.70 > medium=0.45 < heavy=0.72. For cut_thrust weapons with gap <= 0.70 (arming, paired_short: gap=0.65), this makes light armour harder to pierce via adef than medium armour: arming vs light = -0.020 sigma, arming vs medium = +0.200 sigma. A player equipping cloth (light) armour actually defends better in the exchange than a player in mail (medium) against an arming sword — the opposite of the expected gradient. This is not documented in config.py.
+
+**Evidence:** `config.py:28-29 (ADEF_THRESHOLD and ADEF_POINT values), computation: arming gap=0.65 -> adef(light)=0.4*(0.65-0.70)=-0.020, adef(medium)=1.0*(0.65-0.45)=+0.200`
+
+#### DA-08 [P2] (cliff)
+
+**Claim:** Pure-cut heads (greatsword, sabre) transition from adef=0 (unarmoured, ADEF_W gate) to adef=-0.640 sigma (light armoured) in one tier step. This is a discontinuity of 0.640 sigma at the none->light boundary — 26.7% of sigma_n at pool=9 — with no gradient between them. The gate at ADEF_W['none']=0 is correct (no armour = no armour interaction), but the sudden negative sigma imposed by the lightest armour is a cliff rather than a smooth degradation.
+
+**Evidence:** `core.py (systems.py):110-115 (gate: if a==0 return 0), config.py:28 (ADEF_W, ADEF_CUT=-0.9, ADEF_THRESHOLD['light']=0.70); computed: 0.4*(-0.9-0.70)=-0.640`
+
+#### DA-09 [P2] (correctness)
+
+**Claim:** p_auth() is computed by strike() for every weapon (line 99: p_auth(attacker.w)) including non-blunt heads, where it is immediately discarded by damage() (line 82: blunt branch only). This wastes a sqrt + power computation per non-blunt strike. More importantly, it is a footgun: future callers who audit strike() will see p_auth always called and may assume it is always used, when non-blunt heads silently ignore it.
+
+**Evidence:** `core.py:99 (always calls p_auth), core.py:82 (branch: only blunt uses perc)`
+
+#### DA-10 [P1] (correctness)
+
+**Claim:** At extreme but legal stat values (STR7 heavy blunt weapon, mace p_auth=8, vs unarmoured defender end=1) a single OW base (q=1.5) hit deals ~37 damage against a health of 14 (WI=7, MW=1): felling in one blow and exceeding MW by 5 wounds. For the average defender (end=4) this same blow deals 26 damage against MW=3*WI=30: 2 wounds, not a one-shot — so the average case is safe. The robustness failure is at the legal extreme (STR7 + heavy blunt + unarmoured end=1 target). The linear (no-tanh) model removed the old saturation that would have capped this.
+
+**Evidence:** `core.py:44 (no tanh/cap comment), core.py:82 (blunt heft=3.0*(8.0/8.0)=3.0), damage calc: (7+3.0)*1.6*1.5*1.55=37, WI(end=1)=7, MW(end=1)=1, Health=14; felled=True after one hit`
+
+#### DA-11 [P2] (dead-data)
+
+**Claim:** The `seize` lever in tradition.py ABILITIES (vorschlag, sen_no_sen: value=4.0, op='+') is still described as 'live' in ability_armature.md §7 ('Live levers: seize (Vorschlag, Sen-no-sen)'), but the pre-contact seizure was cut 2026-06-05 (systems.py comment at line 243, wrapper.py:27-29 sets initiatives to 0.0 with the seizure comment). There is no seizure_score or initiative_seize function consuming the seize lever — TR.ability_bonus(c, 'seize') has no call site in the engine.
+
+**Evidence:** `ability_armature.md:167 (claims seize is live), systems.py:243-246 (seizure cut comment), wrapper.py:27-29 (initiatives set to 0.0, seizure removed), tradition.py:96-97 and 106-107 (vorschlag and sen_no_sen both use lever='seize'), Grep confirms no call to ability_bonus(c, 'seize') in wrapper.py or systems.py`
+
+#### DA-12 [P3] (doc-drift)
+
+**Claim:** ability_armature.md §7 states seize is a live lever and lists vorschlag and sen_no_sen as built/live. The engine cut this lever 2026-06-05. The document has not been updated to reflect that these two abilities are inert.
+
+**Evidence:** `ability_armature.md:167 ('Live levers: seize (Vorschlag, Sen-no-sen)'), systems.py:243 (seizure cut comment), wrapper.py:27-29 (no seizure_score call)`
+
+#### DA-13 [P3] (portability)
+
+**Claim:** mace and poleaxe have identical armor_defeat_sigma because they share percussion=8 and the formula cap=ADEF_BLUNT*(perc/8)=1.3 regardless of their geometric strike concentration (mace perc_conc=0.75, poleaxe perc_conc=0.93 from geometry.bake). These weapons have meaningfully different strike profiles (poleaxe beak/pick concentrates force far more than a mace face) but produce identical armour-defeat sigma. The geometry.bake perc_conc field was purpose-built to differentiate them.
+
+**Evidence:** `combatant.py:23-24 (mace percussion=8, poleaxe percussion=8), systems.py:124 (uses percussion/8.0 not perc_conc), geometry.py:48-51 (percussion_concentration for mace=0.75, poleaxe=0.93 computed but unused)`
+
+#### DA-14 [P3] (gap)
+
+**Claim:** HEFT for non-blunt heads is categorical {light:0, heavy:3} regardless of weapon mass. Greatsword (mass=2.7) and longsword (mass=1.4) both contribute HEFT=3; sabre (mass=0.9) and arming (mass=1.2) both contribute HEFT=0. The continuous mass-informed path exists only for blunt (p_auth). Plan #9 deferred continuous-mass cut-impact; this comment is present in the code (core.py:45) but creates a visible model seam where the blunt and cut branches have different levels of physical fidelity.
+
+**Evidence:** `core.py:48 (HEFT={light:0, heavy:3}), core.py:44-45 (comment: cut/thrust heft weight-class, deferred), combatant.py:17 (greatsword mass=2.7, wt=heavy), combatant.py:16 (longsword mass=1.4, wt=heavy)`
+
+### Recommendations
+
+- DA-06 (two percussion sources): Route armor_defeat_sigma through p_auth for blunt heads — replace systems.py:124 `aggressor.w.get('percussion',8)/8.0` with `core.p_auth(aggressor.w)/8.0`. This unifies the physical model and makes new blunt weapons self-consistent without requiring hand-tuning of percussion.
+- DA-01/DA-02/DA-03 (dead parameters): (a) Remove QUAL['partial'] from the dict or rename to a comment; (b) Remove the `close` parameter from damage() and strike() signatures — it communicates intent without effect and adds to the transposition-bug surface; (c) Either thread the weapon gap precision into coupling() (replacing the fixed COVERAGE_GAP ratio for puncture hits) or explicitly document that gap is adef-only and rename the parameter to avoid confusion.
+- DA-04/orphan (dead coverage path): If partial armour coverage is a planned mechanic, thread it from Combatant (armor_coverage attribute) through strike()->damage()->coupling(). If it is not planned for this design phase, remove COVERAGE_GAP['partial'] and the partial branch from _transmit() to avoid the orphan implementation confusing future contributors.
+- DA-07 (ADEF_THRESHOLD non-monotonic): Document the intentional inversion (ADEF_THRESHOLD['light']=0.70 > ADEF_THRESHOLD['medium']=0.45) in config.py with a comment explaining why cloth resists gap-thrust better than mail, or re-examine whether this empirical calibration correctly encodes the historical reality. At minimum, the non-monotonic profile should be called out as deliberate.
+- DA-08 (ADEF_CUT cliff at none->light): Consider softening the step from 0 to -0.640 sigma by introducing a small negative adef even vs unarmoured (e.g. ADEF_W['none']=-0.05) or by scaling ADEF_CUT continuously with armour weight. The current gate creates an exploitable discontinuity where adding the lightest armour imposes a large sigma penalty that is larger in proportional terms than heavier armour tiers.
+- DA-10 (extreme one-shot risk): Re-evaluate whether STR7 + heavy blunt + end=1 target should be felled in a single OW hit under the linear model. If it should not, add a damage cap at (MW+1)*WI (equivalent to the maximum cumulable damage before felling) applied in apply_wound() or damage(). If it should (high-STR heavy-weapon one-shots are intentional), document this explicitly as a design decision.
+- DA-05/DA-13 (dead geometry data): Wire perc_conc into armor_defeat_sigma for blunt heads: `cap = cfg['ADEF_BLUNT'] * p_auth(aggressor.w)/8.0 * aggressor.w['geo']['perc_conc']`. This differentiates mace (perc_conc=0.75) from poleaxe (perc_conc=0.93) and redeems the geometry investment. Alternatively, if thrust/cut/halfsword baked values will never be consumed, remove them from bake() and the GEOMETRY tables to eliminate the dead-data surface.
+- DA-11/DA-12 (seize lever and doc drift): Update ability_armature.md §7 to remove seize from 'Live levers', add vorschlag and sen_no_sen to the inert/pending list. If the seize lever will never be re-introduced, mark those abilities as deprecated in tradition.py ABILITIES to prevent future ability_factor lookups from silently returning 1.0 on a lever that was designed to return >1.
+
+---
+
+## Module 11: wrapper_structure
+
+### NERS Verdicts
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Core engagement loop is lean and each subsystem call has a distinct job; however ATTACKER_BIAS is a tuning knob that could be subsumed into the existing initiative/Vor machinery, CONC_BASE_K is an orphaned constant adding noise, and clinch is a per-weapon field that does nothing — three inert items reduce N score from pass to partial. |
+| **R** | partial | Positive-feedback loops (initiative, poise) are correctly damped (decay factor INIT_DECAY=0.75 per beat plus hard clamp INIT_CAP=1.5; poise recovery each beat toward 1.0); beat ceiling soft*3=24 bounds the outer loop; BURST_MAX=4 bounds inner burst; UPSET_FLOOR bounds empirical win-rate to [0.05,0.95]. Main robustness failure: fight() resets WoundTracker with only `end` (wrapper.py:278), losing spirit/strength for all non-default combatants in bouts 2+, silently corrupting health stats mid-fight. Secondary: feint adds fractional beats (0.3 float to int beats counter) and bind loop increments beats up to 3 without checking the outer loop guard, allowing beats to reach 27 before termination. |
+| **S** | partial | Role-object A/B architecture is clean and consistently enforced; aggressor/defender assignment is frame-safe throughout. Seam defect: the engagement()/fight() boundary is described only in a comment (wrapper.py:281) with no formal interface contract, and the game-facing API (single engagement) vs sim-facing API (fight()) are in the same file with no export control. The /home/claude import paths in all four modules make the engine non-runnable on this checkout, in CI, and in Godot — a structural seam failure between the sandbox where it was authored and every real deployment target. |
+| **E** | pass | The μ-shift architecture (boost IS sigma_N-scaled so leverage is pool-uniform), the tiered outcome mapping (fail/partial/success/overwhelming), graded recoverable damage, and the 95% videogame cap all serve legibility. The initiative Vor system gives players an intuitive persistent-pressure mechanic. The feint/counter system adds meaningful choice with both upside (debuff fooled defender) and downside (punished if read). The role-object pattern makes the code-level model match the conceptual model. One elegance concern: ATTACKER_BIAS is a flat scalar addition rather than emerging from the Vor/initiative system that already models first-mover advantage — it duplicates a role already held by initiative_sigma. |
+
+### Churn Assessment
+
+The engagement loop generates strong churn on every exchange: commit depth (2-5) branches stamina cost, legibility, overcommit exposure, and Indes steal probability; mode selection (parry/dodge/wind) branches the entire outcome tree; counter_attempt creates a high-variance forking path with both a dominant-outcome (voiding the attack) and a catastrophic-miss path (eating the attack undefended). The measure/approach/close phase branches into stop-hits and displacement. The reopen-moment system creates a second-order distance game inside the closed phase. The disposition (disp) lever meaningfully forks both commit distribution and counter-selection tendency, and its initiative drift means both aggressive and cautious extremes have costs (overcommit exposure vs Vor bleed). The BURST_MAX=4 ceiling plus stamina depletion means fights do not resolve in a single burst, creating persistent resource pressure across bouts. Assessment: churn is healthy — the principal paths branch narrative state (felled/separation/bind/riposte/counter) rather than just tuning a number. The one inert section is the 'seize' ability cluster (vorschlag/sen_no_sen), which registers as a meaningful player-facing choice in the armature doc but does nothing in play.
+
+### Contract
+
+**Consumes:**
+
+- `A: Combatant (aggressor object)`
+- `B: Combatant (defender object)`
+- `first: Combatant (initiating fighter for engagement())`
+- `cfg: dict (CFG from config.py)`
+- `rng: numpy Generator`
+- `max_bouts: int (default 12, fight() only)`
+
+**Emits:**
+
+- `engagement() -> Combatant | None (felled fighter or separation)`
+- `fight() -> int (+1 A won / -1 B won / 0 unresolved)`
+- `Mutations on Combatant objects: .stamina, .conc, .initiative, .poise, .ready, .weapon (halfsword), .wt (via apply_wound)`
+
+**Dead data:**
+
+- clinch field on all 12 WEAPONS dicts in combatant.py:14-27 — stored, never read by any consumer in wrapper.py/systems.py/core.py/tradition.py
+- CONC_BASE_K=4.0 in config.py:36 — defined, no consumer anywhere in the engine
+- geo sub-keys thrust/cut/perc_conc/halfsword on WEAPONS[w]['geo'] in combatant.py:52-53 — baked at import, only 'gap' is extracted and used; the full baked surface stored under 'geo' is never read downstream
+
+**Orphans:**
+
+- vorschlag ability (tradition.py:96) targets lever='seize' — no consumer; pre-contact seizure was cut 2026-06-05 (wrapper.py:27-29, systems.py:243)
+- sen_no_sen ability (tradition.py:106) targets lever='seize' — same dead consumer; ability_armature.md:167 falsely claims 'seize' is a live lever
+- tradition.py:87 comment lists 'seize' as a live wired lever — stale since the 2026-06-05 cut
+
+### Findings
+
+#### W-01 [P1] (portability)
+
+**Claim:** Engine is entirely non-runnable on this checkout, in CI, and in Godot: all four modules insert dead /home/claude paths. Substrate files live in tests/sim/v32-combat-balance/ — no engine module references that path.
+
+**Evidence:** `wrapper.py:4, systems.py:4, core.py:3, combatant.py:4`
+
+#### W-02 [P1] (correctness)
+
+**Claim:** fight() resets WoundTracker with only `end`, silently dropping `spirit` and `strength`. For any combatant with spirit!=3 or strength!=4, bouts 2+ use wrong health_full, wound_interval, and felled threshold. Silent stat-corruption for all non-default characters in multi-bout fights.
+
+**Evidence:** `wrapper.py:278 (`A.wt.__init__(A.end)`), combatant.py:71 (`r8.WoundTracker(end, spirit=self.spirit, strength=self.strength)`), r2_consequence_wounds.py:71 (`def __init__(self, end, equipment_health=0, spirit=3, strength=4)`)`
+
+#### W-03 [P2] (dead-data)
+
+**Claim:** 'seize' lever has no consumer in the engine. vorschlag and sen_no_sen abilities both target lever='seize'. tradition.py comment and ability_armature.md §7 both assert these are 'live' — direct doc drift post-2026-06-05 cut.
+
+**Evidence:** `tradition.py:87, tradition.py:96, tradition.py:106, wrapper.py:27-29, systems.py:243, ability_armature.md:167`
+
+#### W-04 [P2] (dead-data)
+
+**Claim:** 'clinch' integer field defined on all 12 weapon entries. No consumer in wrapper.py, systems.py, core.py, or tradition.py. Pure dead data in every weapon dict.
+
+**Evidence:** `combatant.py:14-27 (all 12 weapon entries define clinch=), grep of all engine files finds zero consumers`
+
+#### W-05 [P2] (dead-data)
+
+**Claim:** CONC_BASE_K=4.0 defined in config.py but consumed nowhere in the engine. Orphaned config constant.
+
+**Evidence:** `config.py:36`
+
+#### W-06 [P2] (correctness)
+
+**Claim:** feint adds fractional beats (FEINT_BEAT_COST=0.3) to an integer `beats` counter, corrupting the loop bound semantics. beats < soft*3 (=24) is evaluated against a float after the first feint. Three consecutive feints advance beats by 0.9 without any actual beat passing, effectively borrowing 3 sub-beats against the ceiling.
+
+**Evidence:** `wrapper.py:32 (`beats=0`), wrapper.py:123 (`beats += fv['beat_cost']`), config.py:23 (`FEINT_BEAT_COST=0.3`)`
+
+#### W-07 [P2] (loop)
+
+**Claim:** Bind sub-loop (3 iterations, each incrementing beats+=1) bypasses the outer while-loop guard. Can push beats to 27 before the outer condition fires, violating the stated beats<24 ceiling. Not bounded within the inner loop.
+
+**Evidence:** `wrapper.py:243-251 (`for _ in range(3): beats+=1`), wrapper.py:35 (`while beats < soft*3`)`
+
+#### W-08 [P2] (other)
+
+**Claim:** ATTACKER_BIAS (+0.12 flat to net_sigma each exchange) is not guaranteed to be symmetric over a fight. Alternation only occurs on riposte; a non-riposte burst (BURST_MAX=4 exchanges) leaves one fighter as aggressor for up to 4 consecutive exchanges, each receiving the +0.12 bias. For mirror matchups the fighter who wins the first-aggressor coin flip in fight() gets a systematic within-burst advantage that the Vor/initiative system already models.
+
+**Evidence:** `wrapper.py:143 (`cfg['ATTACKER_BIAS']`), wrapper.py:89-90 (aggressor re-assignment on tie), config.py:74 (`ATTACKER_BIAS=0.12`)`
+
+#### W-09 [P2] (gap)
+
+**Claim:** engagement()/fight() split has no formal interface contract. The game-facing single-engagement call and the sim-facing fight() are in the same file with no __all__, docstring return-type annotation, or export guard. Godot port risk: caller must know to call engagement() directly, but nothing enforces this distinction.
+
+**Evidence:** `wrapper.py:16 (engagement signature), wrapper.py:275 (fight signature), README.md:16 (mentions Godot port)`
+
+#### W-10 [P2] (redundancy)
+
+**Claim:** ATTACKER_BIAS is a flat sigma addition that duplicates the first-mover advantage already expressed by the initiative/Vor system (initiative_sigma = INIT_SIGMA_K*tanh(...)). Two mechanisms for the same physical concept (first-mover edge) with independent calibration constants.
+
+**Evidence:** `wrapper.py:143 (ATTACKER_BIAS added to net_sigma), wrapper.py:143 (init_edge = S.initiative_sigma(...) also added to net_sigma)`
+
+#### W-11 [P3] (doc-drift)
+
+**Claim:** State map (combat_engine_flow_and_state_map.md) predates the 2026-06-05 seizure cut and the wounds/eff_cw wiring; it references an eff_ob in the ROLL step that is now display-only per core.py:30-32. The map is stated as an audit companion but diverges from HEAD on multiple call sites.
+
+**Evidence:** `combat_engine_flow_and_state_map.md:75 (ROLL step references eff_ob), core.py:30 (eff_ob is display-only in HEAD)`
+
+#### W-12 [P3] (other)
+
+**Claim:** stop-hit path uses pool floor of max(1,...) while the substrate resolution_pool() already floors at POOL_FLOOR=5. The max(1,...) wrapper is always overridden by the substrate, making it a misleading dead floor.
+
+**Evidence:** `wrapper.py:76 (`pool=max(1, core.resolution_pool(longer.history))`), r1_sigma_resolution.py:72 (`return max(POOL_FLOOR, ...)`), wrapper.py:159 (same pattern in closed exchange)`
+
+### Recommendations
+
+- P1-FIX (W-02): Change wrapper.py:278 from `A.wt.__init__(A.end); B.wt.__init__(B.end)` to `A.wt.__init__(A.end, spirit=A.spirit, strength=A.strength); B.wt.__init__(B.end, spirit=B.spirit, strength=B.strength)` to match the Combatant constructor's tracker call. Add a comment linking to combatant.py:71.
+- P1-FIX (W-01): Replace all /home/claude sys.path inserts with a relative path: `import os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../tests/sim/v32-combat-balance'))` in core.py and combatant.py (which import from v32), and `os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance')` for wrapper.py and systems.py (which import core/r8 from combat_engine). Verify import graph resolves correctly on Windows.
+- P2-FIX (W-03): In tradition.py update the ABILITIES comment at line 87 to remove 'seize' from the live-levers list; add a note that 'seize' was cut 2026-06-05. Update ability_armature.md §7 Current State to move vorschlag and sen_no_sen from 'live' to 'registered but consumer removed (pre-contact seizure cut 2026-06-05)'. No code change needed — the abilities being registered-but-inert is acceptable; the doc asserting they are live is the defect.
+- P2-FIX (W-04/W-05): Remove clinch from all 12 weapon dicts in combatant.py and remove CONC_BASE_K from config.py. Add a CLEANUP.md or commit note listing removed dead keys so git history records the intent.
+- P2-FIX (W-06): Convert FEINT_BEAT_COST to a float that is tracked separately from the integer beat counter, or round beats after the feint addition (beats = int(beats + fv['beat_cost'])). The cleanest fix is to rename to FEINT_BEAT_FRAC and accumulate separately, only incrementing beats when the fraction crosses 1.0, preserving the intent (feint slows the loop) without corrupting the integer semantics.
+- P2-FIX (W-07): Add a beats < soft*3 check at the top of the bind sub-loop, or track bind beats against the same ceiling. Alternatively, cap the bind sub-loop to min(3, max(0, int(soft*3 - beats))) iterations so the outer ceiling is never exceeded.
+- P2-DESIGN (W-08/W-10): Consider removing ATTACKER_BIAS entirely and letting the initiative/Vor system carry the full first-mover signal. The Vor already gives a bounded edge to whoever holds initiative, and aggressor role assignment already favors the higher-ready fighter. If a first-mover bias is desired for non-Vor situations, wire it through INIT_GAIN_HIT / DISP_INIT_K rather than a flat unconditional add.
+- P2-FIX (W-09): Add `__all__ = ['engagement']` to wrapper.py (or at minimum a module docstring noting that `fight()` is the sim harness and `engagement()` is the game-facing API), and add a return-type comment to each function. This is the Godot-integration safety contract.
+
+---
+
+## Resolution Diagnostic
+
+### Properties
+
+| Property | Verdict | Reason |
+|----------|---------|--------|
+| **P_i** | pass | Odds are legible: one continuous net = roll_net(pool) + soft_cap(net_sigma)*sigma_n(pool) (core.py:31), banded by a single 4-degree ladder (core.py:21-24). r1.effective_ob is the display surface a UI can show (core.py:12, r1:101-105). The main draw is one number. CAVEAT: the engine stacks SECONDARY logistic sub-draws on top of the main roll — read_win 1/(1+exp(-(read_d-read_a)/1.0)) (wrapper:133), bind 1/(1+exp(-bsig)) x3 (wrapper:243-252), counter_success clamp (wrapper:189-190), stop-hit (wrapper:75). Each is individually legible but a player cannot intuit the COMPOUND outcome distribution (read-win AND mode-select AND degree AND neutralize AND riposte AND counter). Legible per-draw, opaque in aggregate. |
+| **P_ii** | pass | Leverage is sigma_N-scaled and uniform BY CONSTRUCTION: boost = soft_cap(net_sigma)*sigma_n(pool), sigma_n=0.8*sqrt(pool) (m1:65-67), and the sqrt(N) cancels in the z-score (m1:76-99, validated test (c) +25.8pp uniform across pools 3-20). It is NOT a flat +X. The global soft_cap = 1.5*tanh(x/1.5) (m1:70-73, M_MAX=1.5) bounds the ENTIRE summed lever pile (wrapper:143) to +/-1.5 sigma_N, so no individual lever or sum can blow past band. This is the engine's strongest property. |
+| **P_iii** | partial | Bounded + monotonic + Ob floor: PASS. Ob is the fixed constant DECISIVE_OB=3 (never floored below 1). soft_cap is monotonic and saturating, no cliffs. ER-2 continuity IS present in core.degree() and reads thresholds at k-0.5 (core.py:21-24): with ob=3, success>=2.5, overwhelming>=5.5, fail<0.5. SEAM: the M-QUAL overwhelming-severity zero-point in strike() uses z=(net-2*DECISIVE_OB)/sigma_n = (net-6) (core.py:96), but the ER-2-corrected overwhelming BAR is net>=5.5 (core.py:22). A net in [5.5, 6.0) is 'overwhelming' yet yields z<=0 -> q clamped to the 1.5 floor. Continuous (no cliff) but the 0.5 offset was propagated to the degree BAR and not to the severity ANCHOR -> minor internal inconsistency, P3. |
+| **P_iv** | pass | Graded recoverable: degree ladder is 4-graded (fail/partial/success/overwhelming), overwhelming severity is itself a continuous tanh tail q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z) (core.py:96-97), not a binary crit. Underdog floor: UPSET_FLOOR=0.05 clamps every decided fight to [0.05,0.95] (wrapper:295-296). Wounds degrade via bilateral Ob (net_sigma += WOUND_DEF_OB*def.wounds - WOUND_ATK_OB*atk.wounds, wrapper:143) NOT pool reduction, so a wounded fighter is never driven to a fragile sub-5D regime (see P_v). Poise recovers toward 1.0 with a floor (systems:282-291). |
+| **P_v** | pass | Right engine for the regime. The personal-combat pool is resolution_pool(history)=max(5, history+6) (r1:71-74), giving pool in [5,13] in THIS engine. The prompt's hypothesised wound-reduced sub-5D cliff does NOT exist here: wounds route through the Ob/net_sigma channel, not the pool (wrapper:143, config WOUND_*_OB). The ER-2 continuity correction was calibrated for exactly the 5-13D band (core.degree docstring). Sub-5D only occurs in the r8 HARNESS (resolution_pool - pen - oob, r8:151) and the stop-hit path floors at resolution_pool>=5. Continuous sigma-leverage is the correct engine for a continuous bounded pool. The substrate is physically unreachable on this checkout (sys.path /home/claude — see findings) which is an infra defect, not an engine-regime defect. |
+
+### NERS
+
+| Axis | Verdict | Reason |
+|------|---------|--------|
+| **N** | partial | Several added mechanics are NOT necessary / not reachable. DEAD: 'seize' lever has zero consumers -> vorschlag + sen_no_sen abilities inert (tradition:96,106; no ability_bonus(c,'seize') anywhere). DEAD baked data: WEAPONS[w]['geo'] and the thrust/cut/perc_conc/halfsword coefficients (combatant:53, geometry:60-71) — only 'gap' is consumed. DEAD field: 'clinch' (combatant:14-27, never read). REDUNDANT: two independent percussion-authority sources for one physical quantity — hand-set w['percussion'] in armor_defeat_sigma (systems:124) vs derived p_auth (core:38) in damage. LEVER-PILE: net_sigma sums ~9 contributors into one soft_cap (wrapper:143); past saturation many levers wash out (tune-only, no path-branch). The core resolver itself is necessary and non-redundant. |
+| **R** | pass | Robust at extremes. Global soft_cap (m1:73) bounds the whole lever pile to +/-1.5 sigma_N -> leverage stays in-band no matter how large the sum. All loops damped AND bounded (see loops table): Vor decay 0.75<1 + INIT_CAP 1.5; poise recover toward 1.0 + POISE_FLOOR; bind fixed range(3); burst BURST_MAX=4; outer while beats<24 monotonic. Ob>=1 honored (fixed 3). ER-2 continuity present sub-5D-safe because pool>=5 here. No cliffs. graded recoverable output. |
+| **S** | partial | Smooth within the engine, but SEAMS with siblings. (1) THREE divergent damage models coexist: core.damage (head key 'cut_thrust', linear Impact*Coupling*Quality, core:75-85), damage_model.damage (head key 'cut_and_thrust' with underscore, same shape, standalone, NOT imported, damage_model:82-87), and r8/r2 strike_damage (net + STR*mult + weapon-vs-armour table, crit doubles mod, r2:46-61). The engine uses core.damage; r2's multiplicative model is the one r8's parity harness validates against. README:16-17 explicitly disowns the v30 multiplicative model 'still found in deprecated sims' — yet r2 (the model r8 validates) IS that multiplicative model, imported live by the substrate. (2) M-QUAL severity anchor (6) vs ER-2 degree bar (5.5) seam (P_iii). No role-conflation at the A/B seam — the Combatant-object design (wrapper:1-3) genuinely cures the inversion bug class. |
+| **E** | partial | Elegant CORE (one continuous number, soft_cap doing the bounding work for the whole pile — one number doing a lot), but the periphery accretes subsystems that fight elegance: dead geometry-bake surface, dead seize/clinch, two percussion sources, three damage formulas, ~9-term additive net_sigma pile that saturates. The substrate's /home/claude import paths (core:3, wrapper:4, systems:4, combatant:4) make the engine non-runnable on this checkout/CI/Godot — the opposite of legible/deployable. |
+
+### Feedback Loops
+
+#### Vor / initiative (INIT_GAIN_HIT, steals, decay)
+
+- **Damper:** init_hold_decay = 1-(1-INIT_DECAY)/m, INIT_DECAY=0.75; m=eff_cw(measure)>=1.0 across all traditions, so multiplier in [0.75,0.815], always <1 (systems:270-274, config:62)
+- **Cap:** clamp_initiative hard-bounds |initiative|<=INIT_CAP=1.5 (systems:255-257); the edge it confers is further tanh-bounded by INIT_SIGMA_K=0.16 (systems:248-253)
+- **Verdict:** PASS — damped (<1) AND double-bounded (clamp + tanh). Positive feedback (hit->gain Vor->edge) cannot run away.
+
+#### Poise / kuzushi
+
+- **Damper:** recovers toward 1.0 each beat: poise += POISE_RECOVER*(1+focus)*(1-poise) (wrapper:48-49); the (1-poise) factor is the damper (approaches 1.0, never overshoots)
+- **Cap:** clamp_poise to [POISE_FLOOR=0.5, 1.0]; effect factor floored at POISE_EFFECT_FLOOR=0.88 (systems:282-291)
+- **Verdict:** PASS — graded recovery with explicit floor and ceiling; breaks (overcommit/bind/hit) are bounded subtractions.
+
+#### Bind iteration
+
+- **Damper:** n/a — fixed for _ in range(3), no accumulation; bsig recomputed but inputs unchanged across iters (wrapper:243-252)
+- **Cap:** hard 3-iteration ceiling; breaks on hit or riposte
+- **Verdict:** PASS — bounded by construction (fixed-count, not feedback). Note: the 3 draws are i.i.d. of the same p (no per-iter state change) — bounded but mechanically inert as a 'struggle'.
+
+#### Burst (run of exchanges in a turn)
+
+- **Damper:** tempo-gated re-entry (must re-reach ACT_THRESHOLD); ends on a clean defensive resolve (wrapper:272)
+- **Cap:** exchanges >= BURST_MAX=4 -> return (wrapper:271, config:32)
+- **Verdict:** PASS — hard cap 4 + clean-resolve exit.
+
+#### Outer engagement loop
+
+- **Damper:** beats strictly monotonic-increasing (beats+=1 each pass, +feint/+bind costs)
+- **Cap:** while beats < soft*3 = 24 (wrapper:35); plus stamina<=-4 abort, fell/separation exits
+- **Verdict:** PASS — guaranteed termination; ceiling 24 beats.
+
+### Findings
+
+#### F1 [P1] (portability)
+
+**Claim:** Engine is non-runnable on this checkout / CI / Godot: every module hardcodes sandbox import paths sys.path.insert(0,'/home/claude') / '/home/claude/v32' / '/home/claude/combat_engine' that do not exist here. The resolver substrate (m1/r1/r2/r5/r8) physically lives in tests/sim/v32-combat-balance/ but is never on the path. Static-analysis-only is forced by this defect.
+
+**Evidence:** `core.py:3; wrapper.py:4; systems.py:4; combatant.py:4; substrate at tests/sim/v32-combat-balance/m1_dice_sigma_core.py etc.`
+
+#### F2 [P2] (dead-data)
+
+**Claim:** 'seize' ability lever has NO consumer: ability_bonus(c,'seize') is called nowhere in wrapper.py/systems.py (only anti_overcommit, counter_success via ability_bonus; counter_select via ability_factor). The pre-contact seizure mechanic was CUT 2026-06-05. Therefore the German flagship 'vorschlag' AND the Japanese flagship 'sen_no_sen' abilities are DEAD (registered, inert).
+
+**Evidence:** `tradition.py:96 (vorschlag lever='seize'), tradition.py:106 (sen_no_sen lever='seize'); wrapper.py:158,163,189 are the only ability_* call sites; systems.py:243-246 documents the seizure cut`
+
+#### F3 [P2] (doc-drift)
+
+**Claim:** Doc drift in ability_armature.md: 'seize' is labelled **live** (§2c table) and listed under 'Live levers: seize (Vorschlag, Sen-no-sen)' (§7), and tradition.py's header comment claims 'seize' is 'wired at their engine sites' — all false (see F2). The doc asserts the exact opposite of the code.
+
+**Evidence:** `ability_armature.md:51, ability_armature.md:167; tradition.py:87`
+
+#### F4 [P2] (doc-drift)
+
+**Claim:** REVERSE doc drift: the channel-lever abilities (staerke_schwaeche->leverage, misura/atajo->measure) are documented as '(channel; pending)' / 'Registered but inert until eff_cw routes ~21 sites' — but eff_cw IS now wired at many sites (leverage, measure, tempo, visual, tactile, precommit, balance all consumed), so these abilities are in fact LIVE. Docs understate the code.
+
+**Evidence:** `ability_armature.md:56-60,168; tradition.py:90-91,98-99,103-104,112-113 vs systems.py:171-173,202-203,234,267-268,273,279 and wrapper.py:117,131-132,242`
+
+#### F5 [P2] (role-conflation)
+
+**Claim:** Two competing sources for ONE physical quantity (percussion authority / blunt heft). core.p_auth derives percussion from sqrt(mass)*pob_frac and core.damage uses it for blunt heft; but systems.armor_defeat_sigma independently reads the HAND-SET w['percussion'] for blunt armour-defeat. They are merely calibrated to roughly agree per-weapon; editing a weapon's mass/pob_frac silently desyncs armour-defeat from damage.
+
+**Evidence:** `core.py:38 (p_auth) + core.py:82 (blunt heft uses perc=p_auth); systems.py:124 (armor_defeat uses w.get('percussion',8))`
+
+#### F6 [P2] (dead-data)
+
+**Claim:** Dead baked geometry data: combatant bakes {gap,thrust,cut,perc_conc,halfsword} per weapon and stores the full surface as WEAPONS[w]['geo'], but only 'gap' is ever consumed (it overrides hand-set gap). 'geo', 'thrust', 'cut', 'perc_conc', 'halfsword' have zero read sites — computed/stored, never consumed.
+
+**Evidence:** `geometry.py:58-72 (bake returns 5 coeffs); combatant.py:52-53 (gap used, geo stored); no '\bgeo\b'/thrust/cut/perc_conc/halfsword read site in any engine .py`
+
+#### F7 [P3] (dead-data)
+
+**Claim:** Dead weapon field 'clinch' present on all 11 weapon dicts, never read anywhere in the engine.
+
+**Evidence:** `combatant.py:14-27 (clinch=2..10); no consumer`
+
+#### F8 [P2] (redundancy)
+
+**Claim:** Sibling-engine seam: THREE divergent damage models coexist with inconsistent head-key vocabularies. core.damage uses head key 'cut_thrust' (no underscore) and a linear Impact*Coupling*Quality model; damage_model.py uses 'cut_and_thrust' (underscore) for the same linear shape but is a standalone island (not imported by the engine); r2.strike_damage (the model r8's parity harness validates against) is the OLD multiplicative net+STR*mult+weapon-vs-armour-table model that README explicitly disowns as 'deprecated'. The engine's live damage path (core) is therefore validated by no harness, and the harness validates a model the engine doesn't use.
+
+**Evidence:** `core.py:52,75-85; damage_model.py:45-48,82-87; r2_consequence_wounds.py:46-61; README.md:16-17`
+
+#### F9 [P3] (cliff)
+
+**Claim:** M-QUAL severity seam: the ER-2 continuity offset (-0.5) was applied to the overwhelming degree BAR (net>=2*ob-0.5=5.5) but NOT to the overwhelming-severity zero-point in strike() which still uses z=(net-2*DECISIVE_OB)/sigma_n = (net-6). A net in [5.5,6.0) is 'overwhelming' but produces z<=0, clamping quality to the 1.5 floor. Continuous (no cliff) but internally inconsistent by the same 0.5 the fix introduced.
+
+**Evidence:** `core.py:22 (bar uses 2*ob-0.5) vs core.py:96 (severity uses net-2*DECISIVE_OB)`
+
+#### F10 [P2] (doc-drift)
+
+**Claim:** Audit companion state map is STALE vs HEAD (as warned): it lists core/damage params 'DAMAGE_SCALE=4.0 · CAP_END=4' (removed from config; core documents removal) and flags 'precommit channel, mass/pob_frac' as dead — but precommit is consumed (feint_eval) and mass/pob_frac are consumed (p_auth). Map should not be trusted over code.
+
+**Evidence:** `combat_engine_flow_and_state_map.md:202,306 vs config.py (no DAMAGE_SCALE/CAP_END), core.py:38,78, systems.py:203`
+
+#### F11 [P3] (leverage)
+
+**Claim:** Lever-pile / churn risk: net_sigma is a ~9-term additive sum (atk_sig, dsig, reach_pen, adef, init_edge, ATTACKER_BIAS, two wound terms) fed into a single soft_cap. Because soft_cap saturates near +/-1.5 sigma, once the sum is large many contributing levers become near-inert (they tune the linear region but cannot branch the path at the extremes). Distinct mechanics collapse to the same saturated outcome — weakens the churn principle (a lever that only tunes, never branches).
+
+**Evidence:** `wrapper.py:140-143 (the sum) -> core.py:31 (soft_cap*sigma_n); m1.py:70-73 (saturation)`
+
+#### F12 [P3] (churn-inert)
+
+**Claim:** Bind loop iterations are mechanically inert as a 'struggle': for _ in range(3) recomputes bind_sigma with IDENTICAL inputs each pass (no aggressor/defender state mutates inside the loop except on the terminating hit), so it is 3 i.i.d. Bernoulli draws of one probability rather than an evolving contest. Bounded and correct, but generates no intra-bind churn.
+
+**Evidence:** `wrapper.py:243-252 (bsig recomputed, inputs unchanged)`
+
+### Verdict
+
+PARTIAL PASS. The CORE sigma-leverage resolver is sound and is the right engine for this regime: leverage is sigma_N-scaled uniform by construction (m1 sqrt(N) cancellation, validated +25.8pp flat across pools), the global soft_cap (1.5*tanh) bounds the entire additive lever pile in-band so no cliff or runaway is reachable, ER-2 continuity is present and correct in core.degree() for the [5,13]D band this engine actually occupies, and every feedback loop (Vor, poise, bind, burst, outer) is both damped (<1) and hard-capped. The prompt's hypothesised wounded-fighter sub-5D cliff does NOT exist because wounds route through the Ob/net_sigma channel, not pool. P-i/P-ii/P-iv/P-v PASS; P-iii PARTIAL (one 0.5 severity-anchor seam, P3). NERS R PASS; N/S/E PARTIAL. The defects are at the PERIPHERY and in DOCS, not the resolver: (P1) the engine is non-runnable here due to /home/claude sandbox import paths; (P2) dead 'seize' lever kills the German+Japanese flagship abilities while docs call them live; (P2) two competing percussion sources; (P2) dead baked geometry surface; (P2) three divergent damage models where the live core path is validated by no harness and the harness validates a model README disowns; plus stale state map and reverse channel-ability drift. Fix priority: F1 (path/runnability) > F8 (damage-model reconciliation + harness coverage of the live path) > F2/F3 (seize dead + doc drift) > F5/F6 (percussion dedup, geometry prune).
