@@ -45,5 +45,11 @@ Every rule lives once, in `tools/`, and is called by both CI and the local hooks
 - `valoria-editorial-register` — editorial-debt workflow over `canon/editorial_ledger.jsonl`.
 - `valoria-atomizer` — index/infill doc-hygiene convention.
 - `valoria-vector-audit` — structural-debt corpus scan.
+- `valoria-chunker` — structural splitting of an oversized doc into index + chunks.
+- `valoria-compiler` — structural assembly of canonical artifacts with a canon-guard pass.
+- `valoria-simulator` — incremental module-by-module sim build with a verification ledger.
+
+`valoria-orchestrator` was retired to `deprecated/skills/` (it was the `/home/claude`
+GraphQL-harness session driver; superseded by the Claude Code-native model — see HANDOFF.md).
 
 Claude Code discovers skills by name + description; invoke the one that fits the task.

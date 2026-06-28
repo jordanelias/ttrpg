@@ -7,33 +7,36 @@ This is the external enforcement gate — runs outside Claude, cannot be bypasse
 """
 import os, sys
 
-# Single source of truth for the coverage-matrix cap: references/atomization_rules.yaml
-# (the declarative atomizer spec the local compliance gate already reads). Sourcing it
-# here removes the duplicated literal that drifted once (8000 vs 10000, 2026-06-24).
-# Falls back to a hardcoded value so this unbypassable CI gate never crashes on a
-# missing/unparseable rules file.
-_COVERAGE_MATRIX_FALLBACK = 10_000
+ATOMIZATION_RULES = "references/atomization_rules.yaml"
 
 
-def _coverage_matrix_threshold(
-    rules_path="references/atomization_rules.yaml",
-    match="tests/coverage_matrix.md",
-    fallback=_COVERAGE_MATRIX_FALLBACK,
-):
-    """Read the coverage_matrix max_tokens from atomization_rules.yaml; fall back on any error."""
-    try:
-        import yaml
-        with open(rules_path, encoding="utf-8") as f:
-            rules = yaml.safe_load(f)
-        for policy in (rules or {}).get("policies", []):
-            if policy.get("match") == match:
-                mt = policy.get("max_tokens")
-                if isinstance(mt, int):
-                    return mt
-    except Exception as e:
-        print(f"NOTE: coverage_matrix threshold falling back to {fallback:,} ({type(e).__name__}: {e})")
-    return fallback
+def yaml_max_tokens(match_path, rules_file=ATOMIZATION_RULES):
+    """Read the `max_tokens` for a `- match: "<match_path>"` block from the
+    atomization-rules policy file, without a YAML dependency (consistent with the
+    no-PyYAML-in-validators convention, cf. ci_vetting_check.py). Returns int or
+    None if the file or entry is absent. This keeps a single source of truth for
+    thresholds that are also declared in the policy file."""
+    if not os.path.exists(rules_file):
+        return None
+    target = f'match: "{match_path}"'
+    in_block = False
+    with open(rules_file, encoding='utf-8', errors='replace') as f:
+        for line in f:
+            stripped = line.strip()
+            if stripped.startswith('- match:'):
+                in_block = target in stripped
+                continue
+            if in_block and stripped.startswith('max_tokens:'):
+                try:
+                    return int(stripped.split(':', 1)[1].split('#', 1)[0].strip())
+                except ValueError:
+                    return None
+    return None
 
+
+# Single-sourced from references/atomization_rules.yaml; falls back to the
+# inline default only if the policy entry is missing.
+COVERAGE_MATRIX_LIMIT = yaml_max_tokens("tests/coverage_matrix.md") or 10_000
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
@@ -47,10 +50,11 @@ THRESHOLDS = {
     # the 115 canonical_sha fields move to references/canonical_freshness.yaml.
     "references/canonical_sources.yaml":      12_000,
     "canon/patch_register_active.yaml":       20_000,
-    # coverage_matrix cap sourced from references/atomization_rules.yaml (single source —
-    # 2026-06-28 consolidation). Was independently set 10_000 here AND in the yaml; the
-    # literal drifted once (8000 vs 10000). To change it, edit the yaml policy only.
-    "tests/coverage_matrix.md":              _coverage_matrix_threshold(),
+    # Single-sourced from references/atomization_rules.yaml (COVERAGE_MATRIX_LIMIT).
+    # coverage_matrix grows naturally as test coverage expands; adjust the cap in
+    # the policy file (one place) and this validator follows. Drift between the two
+    # is caught by tests/valoria/test_coverage_matrix_threshold.py.
+    "tests/coverage_matrix.md":   COVERAGE_MATRIX_LIMIT,
     "references/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
@@ -63,37 +67,42 @@ THRESHOLDS = {
     "canon/patch_register_index.md":         20_000,
 }
 
-violations = []
-checked = 0
+def main():
+    violations = []
+    checked = 0
 
-for path, threshold in sorted(THRESHOLDS.items()):
-    if not os.path.exists(path):
-        print(f"SKIP {path}: not present in repo")
-        continue
-    try:
-        with open(path, encoding='utf-8', errors='strict') as f:
-            content = f.read()
-    except UnicodeDecodeError as e:
-        print(f'FAIL {path}: encoding error — {e}')
-        violations.append((path, -1, threshold))
+    for path, threshold in sorted(THRESHOLDS.items()):
+        if not os.path.exists(path):
+            print(f"SKIP {path}: not present in repo")
+            continue
+        try:
+            with open(path, encoding='utf-8', errors='strict') as f:
+                content = f.read()
+        except UnicodeDecodeError as e:
+            print(f'FAIL {path}: encoding error — {e}')
+            violations.append((path, -1, threshold))
+            checked += 1
+            continue
+        tokens = len(content) // 4
         checked += 1
-        continue
-    tokens = len(content) // 4
-    checked += 1
-    if tokens > threshold:
-        violations.append((path, tokens, threshold))
-        print(f"FAIL {path}: {tokens:,} tokens (limit {threshold:,})")
-    else:
-        print(f"OK   {path}: {tokens:,} / {threshold:,} tokens")
+        if tokens > threshold:
+            violations.append((path, tokens, threshold))
+            print(f"FAIL {path}: {tokens:,} tokens (limit {threshold:,})")
+        else:
+            print(f"OK   {path}: {tokens:,} / {threshold:,} tokens")
 
-print(f"\nChecked {checked} files.")
-if violations:
-    print(f"\n[REGISTER SIZE VIOLATIONS: {len(violations)}]")
-    for path, tokens, limit in violations:
-        print(f"  {path}: {tokens:,} tokens exceeds {limit:,} limit")
-        print(f"    Action: archive resolved/applied/struck content to the _archive file")
-        print(f"    Ref: register chunking protocol in CLAUDE.md")
-    sys.exit(1)
-else:
-    print("All register sizes within limits.")
-    sys.exit(0)
+    print(f"\nChecked {checked} files.")
+    if violations:
+        print(f"\n[REGISTER SIZE VIOLATIONS: {len(violations)}]")
+        for path, tokens, limit in violations:
+            print(f"  {path}: {tokens:,} tokens exceeds {limit:,} limit")
+            print(f"    Action: archive resolved/applied/struck content to the _archive file")
+            print(f"    Ref: register chunking protocol in CLAUDE.md")
+        sys.exit(1)
+    else:
+        print("All register sizes within limits.")
+        sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()

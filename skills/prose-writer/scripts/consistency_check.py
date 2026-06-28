@@ -69,10 +69,14 @@ AUTHOR_REQUIRED_IN = ['anti-patterns', 'techniques', 'lit-review']
 
 
 def load_pat():
-    for path in ['/home/claude/.valoria_pat', '/mnt/project/VALORIA_PAT']:
-        if os.path.exists(path):
-            return open(path).read().strip()
-    raise FileNotFoundError("No PAT found at expected paths")
+    # Prefer the env var; the working tree is the source of truth, so a PAT is
+    # only needed if this helper is run against the remote rather than disk.
+    env = os.environ.get('GITHUB_PAT')
+    if env:
+        return env.strip()
+    if os.path.exists('/mnt/project/VALORIA_PAT'):
+        return open('/mnt/project/VALORIA_PAT').read().strip()
+    raise FileNotFoundError("No PAT found (set GITHUB_PAT)")
 
 
 def fetch_file(pat, path):

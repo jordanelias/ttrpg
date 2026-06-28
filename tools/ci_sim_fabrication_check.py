@@ -60,6 +60,9 @@ def is_sim_file(path: str) -> bool:
     if not path.endswith('.py'):
         return False
     norm = path.replace('\\', '/')
+    # Archival trees are non-authoritative — never gated (cf. ci_naming_check).
+    if norm.startswith('deprecated/') or norm.startswith('archives/'):
+        return False
     if norm.startswith('tests/sim/'):
         return True
     basename = norm.rsplit('/', 1)[-1].lower()
