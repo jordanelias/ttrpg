@@ -16,15 +16,11 @@ description: >
   triangulation passed validation 2/3 structural properties).
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
 # Valoria Vector Audit
 
 ## Purpose
 
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
-
-**Model:** Sonnet 4.6 for full pipeline, Haiku 4.5 for partial (single-mode) runs over pre-computed graphs.
 
 **Scope:** **Analytic instrument only**, never gameplay mechanic. Self-exempting on Ω/Μ vetting (Class A, mu: [], M-ratings ○ across the board) — produces evidence for design decisions but is not itself a design decision. Findings are PROVISIONAL leads, not verdicts; methodology validation outcome must be reported with results.
 
@@ -34,21 +30,16 @@ Surface project weaknesses that hand-curation cannot reliably find: implied-but-
 
 ## Step 1 — Input Validation (MANDATORY, BLOCKING)
 
-```python
-required = [
-    'references/canonical_sources.yaml',         # systems list (controlled vocabulary)
-    'designs/architecture/complete_systems_reference.md',  # NPC list, faction list
-    'references/throughlines_meta.md',           # T-NN framework header
-    'references/throughlines_meta_infill.md',    # T-NN table (parsed for G_throughline)
-    'canon/patch_register_active.yaml',          # PP affects: lists for G_pp
-]
-files = g.read_files_graphql(required)
-for path, content in files.items():
-    if content is None:
-        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
-```
+Read these files from the working tree (use the Read tool) before proceeding. The checkout is
+authoritative — do not fetch from GitHub and do not work from memory. If any is absent, stop and report it.
 
-The pipeline ALWAYS bypasses index routing for content fetch (uses direct Contents API) — index files lack the body content needed for citation graph extraction.
+- `references/canonical_sources.yaml` — systems list (controlled vocabulary)
+- `designs/architecture/complete_systems_reference.md` — NPC list, faction list
+- `references/throughlines_meta.md` — T-NN framework header
+- `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
+- `canon/patch_register_active.yaml` — PP affects: lists for G_pp
+
+The pipeline reads full document bodies (not index files) — index files lack the body content needed for citation graph extraction.
 
 ---
 

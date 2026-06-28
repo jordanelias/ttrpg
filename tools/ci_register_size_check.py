@@ -63,37 +63,42 @@ THRESHOLDS = {
     "canon/patch_register_index.md":         20_000,
 }
 
-violations = []
-checked = 0
+def main():
+    violations = []
+    checked = 0
 
-for path, threshold in sorted(THRESHOLDS.items()):
-    if not os.path.exists(path):
-        print(f"SKIP {path}: not present in repo")
-        continue
-    try:
-        with open(path, encoding='utf-8', errors='strict') as f:
-            content = f.read()
-    except UnicodeDecodeError as e:
-        print(f'FAIL {path}: encoding error — {e}')
-        violations.append((path, -1, threshold))
+    for path, threshold in sorted(THRESHOLDS.items()):
+        if not os.path.exists(path):
+            print(f"SKIP {path}: not present in repo")
+            continue
+        try:
+            with open(path, encoding='utf-8', errors='strict') as f:
+                content = f.read()
+        except UnicodeDecodeError as e:
+            print(f'FAIL {path}: encoding error — {e}')
+            violations.append((path, -1, threshold))
+            checked += 1
+            continue
+        tokens = len(content) // 4
         checked += 1
-        continue
-    tokens = len(content) // 4
-    checked += 1
-    if tokens > threshold:
-        violations.append((path, tokens, threshold))
-        print(f"FAIL {path}: {tokens:,} tokens (limit {threshold:,})")
-    else:
-        print(f"OK   {path}: {tokens:,} / {threshold:,} tokens")
+        if tokens > threshold:
+            violations.append((path, tokens, threshold))
+            print(f"FAIL {path}: {tokens:,} tokens (limit {threshold:,})")
+        else:
+            print(f"OK   {path}: {tokens:,} / {threshold:,} tokens")
 
-print(f"\nChecked {checked} files.")
-if violations:
-    print(f"\n[REGISTER SIZE VIOLATIONS: {len(violations)}]")
-    for path, tokens, limit in violations:
-        print(f"  {path}: {tokens:,} tokens exceeds {limit:,} limit")
-        print(f"    Action: archive resolved/applied/struck content to the _archive file")
-        print(f"    Ref: register chunking protocol in CLAUDE.md")
-    sys.exit(1)
-else:
-    print("All register sizes within limits.")
-    sys.exit(0)
+    print(f"\nChecked {checked} files.")
+    if violations:
+        print(f"\n[REGISTER SIZE VIOLATIONS: {len(violations)}]")
+        for path, tokens, limit in violations:
+            print(f"  {path}: {tokens:,} tokens exceeds {limit:,} limit")
+            print(f"    Action: archive resolved/applied/struck content to the _archive file")
+            print(f"    Ref: register chunking protocol in CLAUDE.md")
+        sys.exit(1)
+    else:
+        print("All register sizes within limits.")
+        sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()
