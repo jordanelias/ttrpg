@@ -103,7 +103,7 @@ resolved_decisions:
   - "OWN-1/2 -- LOCKED (Jordan, passC): MS net-decays by default; start MS=60 (resolves 60-vs-72 -> 60); passive Warden Mending exists but degradable. Propagation: annotate ms_trajectory + clock_registry (start 72->60); add Warden-interruption events."
   - "OWN-3 -- RESOLVED (passC): maintain = de-escalate + heal (no WC buff). Open piece -> pending (closure threshold)."
   - "FR -- RESOLVED (Jordan 2026-05-29): faction-resolver = AGGREGATE the pool + smooth Ob monotonic in target strength. Kills the bare-stat small-pool binary (the R/S/E failure). Implemented as the d+sigma resolver, RATIFIED 2026-05-31 (ED-874). Residual: faction_layer_v30 prose propagation (W3.3)."
-  - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Execution pending: flip ED-844-856 status to ratified in a focused editorial turn."
+  - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Status flip DONE 2026-06-28: ED-845/848/856 (the residual open entries) set to resolved in the JSONL ledger, citing this ratification. Default-content propagation to docs may still be needed."
   - "CMB -- DEFERRED (Jordan 2026-05-29): combat_v32 N3/N4/N5 moved to a dedicated combat-testing chat + I-17 build-axis sim; not decided here."
   - "OWN-3T -- RESOLVED (Jordan 2026-05-29): maintain-victory closure at a 1:2 damage:healing ratio -- one season of tearing requires two seasons of mending to undo (~2 seasons per wound-point; supersedes the 3.5-season estimate). Foundational Mend rate / site-wound counter tuned to this ratio (sim-tuning)."
   - "CAP -- RESOLVED (Jordan 2026-05-29): build/adopt the -10/s Force-3 heavy-tearing guardrail. Propagation pending: params + ms section 5."
