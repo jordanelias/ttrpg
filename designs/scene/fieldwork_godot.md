@@ -77,7 +77,7 @@ Journal
 
 NPC Disposition drives the dialogue system:
 
-**Disposition meter:** Visible on NPC portrait during interaction. Range −3 to +5 displayed as a segmented bar.
+**Disposition meter:** Visible on NPC portrait during interaction. Range −5 to +5 displayed as a segmented bar.
 
 **Dialogue option gating:** Conversation options are filtered by current Disposition + character attributes. A Bond-focused dialogue option requiring Disposition +3 simply does not appear at Disposition +1. The player sees what their character could plausibly say in this relationship.
 

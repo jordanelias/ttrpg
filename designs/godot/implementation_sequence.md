@@ -42,7 +42,7 @@
    - 6 exploration depths, 6 investigation actions, 7 social actions
    - Evidence Track with 3 thresholds (Simple/Complex/Structural)
    - Exposure tracking with Cover-derived thresholds
-   - Disposition system (−3 to +5)
+   - Disposition system (−5 to +5)
    - Knot formation (§5.6a)
    - ~60% of player scene actions use this system
 

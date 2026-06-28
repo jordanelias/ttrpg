@@ -385,9 +385,9 @@ Multipliers and interaction design pending settlement_v30 development. Not canon
 
 ## §10 — Cross-Scale Bridges
 
-### 10.1 Disposition Cap by Bonds Attribute
+### 10.1 Disposition and the Bonds Attribute (ED-912 — decoupled)
 
-Disposition ceiling = Bonds (PP-684). Bonds is structural capability (how deep relationships CAN go). Disposition is current state (how deep this relationship IS). Pattern identical to Wealth→Treasury.
+Disposition is a flat **−5..+5** (ED-912 — supersedes the PP-684 "ceiling = Bonds"). Bonds is structural capability (relational *capacity* — it gates Knot eligibility at Bonds ≥ 5 and sets max Knot count); Disposition is current relational state. The two are **decoupled**: Bonds no longer caps Disposition. (Disposition is therefore NOT a Bonds-derived value — it is its own −5..+5 track per NPC.)
 
 Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. Knot candidacy (Disposition +5) requires Bonds ≥ 5 (achievable at creation).
 
@@ -557,7 +557,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 
 | Track | Range | Direction | Owner | Notes |
 |-------|-------|-----------|-------|-------|
-| Disposition | −4 to +Bonds | Oscillating | Relational (per NPC) | Bonds caps positive side (PP-684) |
+| Disposition | −5 to +5 | Oscillating | Relational (per NPC) | Flat; Bonds does NOT cap (ED-912) |
 | Piety Track | 0–10 | Oscillating | Per character | Personal religious standing |
 | Certainty | 0–5 | Drifts down with Thread exposure | Per character | Cosmological worldview |
 | Coherence | 0–10 | Monotonic drain | Per character | Personal rendering legibility — moved from "Derived Scores" per F7 |

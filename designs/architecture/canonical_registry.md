@@ -167,15 +167,15 @@ Thread exception: (Spirit × 2) + History + TPS (replaces +3). TN 7 standard, TN
 
 **Cover calibration (SIM-DEBT-FW-06):** Cover 3 = detected in 3 scenes. Cover 9 = full season. Cover 12+ = near-immune.
 
-## 4.6 Disposition (PP-632 — corrected from prior versions)
+## 4.6 Disposition (ED-912 — supersedes PP-632 / PP-684)
 
-**Range: −4 to floor(Bonds/2)+1.** Maximum +4 at Bonds 6–7.
+**Range: −5 to +5** (flat; NOT Bonds-capped). Canonical: fieldwork_v30 §5.1.
 
-**Ob calculation: max(1, base Ob − Disposition).** One rule, no lookup table.
+**Ob calculation: stepped table** (Hateful −5 = +5 Ob … Neutral 0 … Bonded +5 = −3 Ob), floor Ob 1. Replaces the old `max(1, base Ob − Disposition)` direct subtraction.
 
-**Decay threshold: above +2** (was above +3). Decays −1/season.
+**Decay threshold: above +2.** Decays −1/season without contact.
 
-**Disposition ceiling = floor(Bonds/2)+1.** Same formula as max Knot count. Bonds governs relational depth in both directions simultaneously.
+**Bonds decoupled (ED-912):** Bonds no longer caps Disposition. Bonds drives **Knot capacity** (max count floor(Bonds/2)+1) and gates Knot eligibility (Bonds ≥ 5).
 
 **Starting values:** Derived from faction alignment and lifepath (±0.5 increments, floor). Same faction +1, Allied 0, Neutral 0/−1, Rival −1/−2, Hostile −2/−3.
 

@@ -205,7 +205,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "f55b09a94e3fb8078a4f97e555d560c93201c012"
+    canonical_sha__designs__scene__derived_stats_v30_md: "1b5f300f97130b4fedca25c30fa4a9d489085cc0"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
@@ -398,7 +398,7 @@ systems:
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "17d1cc2af1eaca2da6f1fcef3c865e689e03eeb7"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "f05c86ab45810361b41d5c41969420f23916110d"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
@@ -437,15 +437,15 @@ systems:
     exploration: designs/scene/fieldwork_exploration.md
     canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
     exposure: designs/scene/fieldwork_exposure.md
-    canonical_sha__designs__scene__fieldwork_exposure_md: "51e9e1a94e845cc73e2e3c5d92501c299e42a4e6"
+    canonical_sha__designs__scene__fieldwork_exposure_md: "b8ce2c4c1e0f10e207c3c017ef75b465bb420eee"
     godot: designs/scene/fieldwork_godot.md
-    canonical_sha__designs__scene__fieldwork_godot_md: "a1d03ce664024d31154e985caf7858bf033ba1d0"
+    canonical_sha__designs__scene__fieldwork_godot_md: "c827744afe2480d6fc60c61d30c723ef113f4c5b"
     investigation: designs/scene/fieldwork_investigation.md
     canonical_sha__designs__scene__fieldwork_investigation_md: "a1604b831b505e2e2b58eae62976e19983452482"
     rationale: designs/scene/fieldwork_rationale.md
     canonical_sha__designs__scene__fieldwork_rationale_md: "25b8893296466e9909357e267b998e3c0c9b6df3"
     socializing: designs/scene/fieldwork_socializing.md
-    canonical_sha__designs__scene__fieldwork_socializing_md: "6bc994b81d163ea86d2c2eee3cd073393a168792"
+    canonical_sha__designs__scene__fieldwork_socializing_md: "99a4b811d5fe49cb2ded09d0f61294309bd2b424"
     summary: designs/scene/fieldwork_summary.md
     canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
   npc_roster:
