@@ -50,10 +50,12 @@ def do_trace(req):
     A = _make_fighter(req['scenario']['A'], 'A')
     B = _make_fighter(req['scenario']['B'], 'B')
     result, events = run_traced_fight(A, B, cfg=cfg, seed=seed)
-    for e in events:                      # attach the alternate-branch distribution to each node
+    for e in events:                      # attach the alternate-branch distribution to each node (depth-1)
         d = P.node_distribution(e)
         if d is not None:
             e['dist'] = d
+            if e['kind'] == 'roll':       # depth-2: what each degree leads to (hit/bind/riposte/miss under the mode)
+                e['dist2'] = {deg: P.outcome_distribution(deg, e['mode'], cfg) for deg in d}
     return {'result': result, 'narration': narrate.render(events, seed=seed), 'events': events,
             'winner': (A.label if result == 1 else B.label if result == -1 else None)}
 

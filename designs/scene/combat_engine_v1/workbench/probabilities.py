@@ -50,6 +50,36 @@ def read_win_p(read_d, read_a):
     return round(1.0 / (1.0 + exp(-(read_d - read_a) / 1.0)), 4)
 
 
+def outcome_distribution(degree, mode, cfg, exposure=0.0):
+    """DEPTH-2: given a roll degree and the defender's mode, the {hit, bind, riposte, miss} distribution it leads
+    to — computed from the engine's outcome-mapping rules (wrapper.py:173-198) + cfg. This is the "what does each
+    roll outcome lead to" branch the explorer expands under the roll node (overcommit_exposure≈0 by default)."""
+    neut = {'parry': cfg['NEUTRALIZE_PARRY'], 'dodge': cfg['NEUTRALIZE_DODGE'], 'wind': cfg['NEUTRALIZE_WIND']}[mode]
+    out = {'hit': 0.0, 'bind': 0.0, 'riposte': 0.0, 'miss': 0.0}
+    if degree == 'fail':
+        rip = min(0.95, cfg['RIPOSTE_ON_FAIL'] + exposure)
+        out['riposte'], out['miss'] = rip, 1 - rip
+    elif degree == 'partial':
+        if mode == 'dodge':
+            g = cfg['PARTIAL_DODGE_GRAZE']; out['hit'], out['miss'] = g, 1 - g
+        elif mode == 'parry':
+            g = cfg['PARTIAL_PARRY_GRAZE']; out['hit'], out['miss'] = g, 1 - g
+        else:
+            out['bind'] = 1.0
+    elif degree == 'success':
+        rip_p = min(0.95, cfg['RIPOSTE_ON_NEUTRALIZE'] + exposure)
+        rem = 1.0
+        if mode == 'wind':
+            out['bind'] = cfg['WIND_BIND_P']; rem = 1 - cfg['WIND_BIND_P']
+        out['riposte'] += rem * neut * rip_p
+        out['miss'] += rem * neut * (1 - rip_p)
+        out['hit'] += rem * (1 - neut)
+    else:  # overwhelming
+        miss = max(0.0, neut - cfg['NEUTRALIZE_OVERWHELM_DROP'])
+        out['miss'], out['hit'] = miss, 1 - miss
+    return {k: round(v, 4) for k, v in out.items()}
+
+
 def node_distribution(ev):
     """For a trace event, return {branch_label: probability} for the alternate branches at that node,
     or None if the node is not a probabilistic branch point. Used by the narrator and branch explorer."""
