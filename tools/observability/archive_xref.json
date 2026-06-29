@@ -1,0 +1,2756 @@
+{
+  "meta": {
+    "resolved_index_size": 908,
+    "archive_docs": 66,
+    "open_items": 524,
+    "id_hits": 23,
+    "topical_hits": 106,
+    "unresolved_refs": 8,
+    "docket_items": [
+      "J-1",
+      "J-12",
+      "J-19",
+      "J-2",
+      "J-20",
+      "J-4",
+      "J-5",
+      "J-7",
+      "J-8"
+    ]
+  },
+  "id_hits": [
+    {
+      "ref": "ED-673",
+      "open": "| \u2691N2 | body taxonomy (Territorial; Field/Foundational costs undefined) \u2014 reaches mass_battle A.10 + integration ED-673(c) | Jordan ruling pending |",
+      "open_loc": [
+        "designs/audit/2026-06-11-threadwork-resolution-diagnostic/threadwork_flattened_spec_2026-06-11.md:239"
+      ],
+      "priority": 1,
+      "resolution": "Thread Domain Echo pathway. scale_transitions_v30.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-773",
+      "open": "4. `[OPEN \u2014 Jordan]` **Knot model:** strain model (ED-773) vs PP-632 tier-cost model \u2014 ED-841's open TIER-DRIFT-001, now with the formation-roll conflict added.",
+      "open_loc": [
+        "designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md:105"
+      ],
+      "priority": 1,
+      "resolution": "Knot Lifecycle specified in fieldwork \u00a75.6b. Closes spec gap surfaced by stress-test 26: Knot strain accumulation was canonized across multiple use-sites (\u00a72.6 remote investigation +1, social_contest \u00a74 Composure buffer +1, ED-664 \u00a73.5.3 counsel extraction +1, FR Dissolution near Knot partner +1, Conviction Scar firing in Knot partner +1, sustained Disposition < +3 +1) but the break/rupture mechan",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-907",
+      "open": "Verified still-open (no change):* ED-911, ED-970/971, ED-1032/1033/1036, ED-864/879, ED-907(prov), ED-869, ED-1009 (whole-graph R-FAIL). *Not added (out of register scope):* 'NERS audit' phrase routing + audit bare-word-rule extension (skil",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:31"
+      ],
+      "priority": 1,
+      "resolution": "Football-Manager-style three-level compositional command architecture for mass battle (videogame realization), adopted across design conversations 2026-05-15 (FM as canonical command reference; mentality > team instructions > roles > player instructions; historical-general / Cannae model) and 2026-06-02 (allocation grid + team-instruction layer + intervention windows). LEVELS: (1) Army doctrine [U",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-935",
+      "open": "<!-- [STUB: payload inferred, not canon-specified \u2014 provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->",
+      "open_loc": [
+        "designs/architecture/key_type_registry_v30.md:145",
+        "designs/architecture/key_type_registry_v30.md:162"
+      ],
+      "priority": 1,
+      "resolution": "",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-936",
+      "open": "<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions \u00a77 bullet 5 + \u00a75 Domain Echo. Jordan-vetoable.] -->",
+      "open_loc": [
+        "designs/provincial/faction_behavior_v30.md:435"
+      ],
+      "priority": 1,
+      "resolution": "J-2 consumer wiring: consumption design authored for the ED-935 types under delegated authority.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-970",
+      "open": "Verified still-open (no change):* ED-911, ED-970/971, ED-1032/1033/1036, ED-864/879, ED-907(prov), ED-869, ED-1009 (whole-graph R-FAIL). *Not added (out of register scope):* 'NERS audit' phrase routing + audit bare-word-rule extension (skil",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:31"
+      ],
+      "priority": 1,
+      "resolution": "Jordan-decided Volley pool min(Size,Power)+Power (ED-800, 2026-05-11) is live in the engine but the design doc/volley sections still teach the superseded framing. Doc-reconciliation only; no mechanic change. Staged in the 2026-06-09 comprehensive analysis \u00a78 (not appended per ID-conflict counsel); filed 2026-06-20 in the mass-battle loose-ends consolidation. | RESOLVED 2026-06-20 (CORRECTED): bott",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "PP-665",
+      "open": "<!-- [EDITORIAL: PP-665 \u2014 Yrsa Vossen \u2192 Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->",
+      "open_loc": [
+        "designs/npcs/npc_behavior_system_v1.md:1",
+        "designs/arcs/gm_ref/arcs_36_40.md:1"
+      ],
+      "priority": 1,
+      "resolution": "Maret Vossen \u2192 Yrsa Vossen forename rename \u2014 resolves forename collision between Maret Uln (Varfell succession, npc_behavior \u00a72.10) and Maret Vossen (RM leader, npc_behavior \u00a72.6). Uln retains forename; Vossen becomes Yrsa Vossen. 43 instances of 'Maret Vossen' replaced across 25 files. 2 standalone 'Maret' instances in Aldric Hann's belief quote (RM context) rewritten to 'Yrsa'. Remaining standal",
+      "resolution_source": "archives/patches/patch_register_archive_2026_05_01_a.yaml",
+      "kind": "PP"
+    },
+    {
+      "ref": "PP-674",
+      "open": "Each becomes a `designs/proposals/PP-NNN-*.md` entry with vetting block per PP-674. Candidate IDs `PC-N`; assigned PP-N at Jordan approval. **Each PC-4.x advances from proposal \u2192 PROVISIONAL canon only after sim battery PASS; remains PROVIS",
+      "open_loc": [
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:97"
+      ],
+      "priority": 1,
+      "resolution": "Framework enforcement + tier N (Necessity Test). Adds vetting_gate to valoria_hooks.py, new task type design_proposal, new tier N (subject-grounding check) above \u03a9 in references/throughlines_meta.md. Tier N codifies the user's design constraint: Valoria's complexity is earned only when modeling load-bearing Renaissance-era political-leadership dynamics; complexity for its own sake is rejected. Fou",
+      "resolution_source": "archives/patches/patch_register_archive_2026_05_01_a.yaml",
+      "kind": "PP"
+    },
+    {
+      "ref": "ED-676",
+      "open": "\"CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-mi",
+      "open_loc": [
+        "references/module_contracts.yaml:254"
+      ],
+      "priority": 2,
+      "resolution": "CV movement from Thread operations. conviction_track_v30.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-676",
+      "open": "CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-mig",
+      "open_loc": [
+        "references/module_contracts.yaml"
+      ],
+      "priority": 2,
+      "resolution": "CV movement from Thread operations. conviction_track_v30.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-935",
+      "open": "| 31 | **ED-937/PR-1 Lane-B propagation** \u2014 battle_concluded naming fixed at substrate \u00a78.5; residual: `module_contracts.yaml` L446 drift-form + stale `[unreg]`/`NOT in registry` comments (L130-133/268/467/816, now registered ED-935) + `mod",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:76"
+      ],
+      "priority": 2,
+      "resolution": "",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-937",
+      "open": "| 31 | **ED-937/PR-1 Lane-B propagation** \u2014 battle_concluded naming fixed at substrate \u00a78.5; residual: `module_contracts.yaml` L446 drift-form + stale `[unreg]`/`NOT in registry` comments (L130-133/268/467/816, now registered ED-935) + `mod",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:76"
+      ],
+      "priority": 2,
+      "resolution": "Provisional resolution of the three J-2-cluster remainders.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-937",
+      "open": "31 \u2014 ED-937/PR-1 Lane-B propagation.** *Pending:* battle_concluded naming fixed at the substrate source only. *Needs:* in `references/module_contracts.yaml` \u2014 resolve L446 `scene_outcome.battle_concluded` (align to / strike in favour of L44",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:96"
+      ],
+      "priority": 2,
+      "resolution": "Provisional resolution of the three J-2-cluster remainders.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-717",
+      "open": "| **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP \u2014 Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / L\u00f6wenritter) have authored T-15 postures; rest pending per ED-717. |",
+      "open_loc": [
+        "designs/provincial/faction_canon_v30.md:359"
+      ],
+      "priority": 3,
+      "resolution": "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/L\u00f6wenritter/RM lacking \u041c-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md \u00a73.1. Design-doc propagation complete 2026-04-19: Hafenmark \u00a78.4, L\u00f6wenritter \u00a78.9, RM \u00a78.8 (factions_personal_v30).",
+      "resolution_source": "deprecated/canon/editorial_ledger_archive_2026-04_a.yaml",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-717",
+      "open": "`[GAP \u2014 Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal \u2014 Crown treats Thread / rendering as Church's domain while quietly recognizing it is",
+      "open_loc": [
+        "designs/provincial/faction_canon_v30.md:429"
+      ],
+      "priority": 3,
+      "resolution": "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/L\u00f6wenritter/RM lacking \u041c-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md \u00a73.1. Design-doc propagation complete 2026-04-19: Hafenmark \u00a78.4, L\u00f6wenritter \u00a78.9, RM \u00a78.8 (factions_personal_v30).",
+      "resolution_source": "deprecated/canon/editorial_ledger_archive_2026-04_a.yaml",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-717",
+      "open": "`[GAP \u2014 Phase B authoring per ED-717]`. Likely structural shape: rendering-reinforcement posture (T-08 candidate per cross-references). Church's framework actively suppresses Thread perception (perceptual prophylaxis at `Foundations \u00a79.1`) ",
+      "open_loc": [
+        "designs/provincial/faction_canon_v30.md:593"
+      ],
+      "priority": 3,
+      "resolution": "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/L\u00f6wenritter/RM lacking \u041c-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md \u00a73.1. Design-doc propagation complete 2026-04-19: Hafenmark \u00a78.4, L\u00f6wenritter \u00a78.9, RM \u00a78.8 (factions_personal_v30).",
+      "resolution_source": "deprecated/canon/editorial_ledger_archive_2026-04_a.yaml",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-874",
+      "open": "resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874",
+      "open_loc": [
+        "references/module_contracts.yaml:50"
+      ],
+      "priority": 3,
+      "resolution": "Faction Domain Action resolver \u2014 RATIFIED (Jordan 2026-05-31, 'works well'). At faction/strategic scale, bare-stat dice pools (1-7D) are statistically degenerate: a Military-2 faction succeeds at a Domain Action at only P~=0.070 @ Ob 3 (ER-1 / diagnostic F1; authoritative die rule, verified mu). Resolution: aggregate / deterministic+stochastic (sum relevant unit/derived values; CK3 / EU / Stellari",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-874",
+      "open": "resolver: d_sigma   # [ASSUMPTION] Domain Action resolver = deterministic+stochastic d+sigma (ED-874)",
+      "open_loc": [
+        "references/module_contracts.yaml:464"
+      ],
+      "priority": 3,
+      "resolution": "Faction Domain Action resolver \u2014 RATIFIED (Jordan 2026-05-31, 'works well'). At faction/strategic scale, bare-stat dice pools (1-7D) are statistically degenerate: a Military-2 faction succeeds at a Domain Action at only P~=0.070 @ Ob 3 (ER-1 / diagnostic F1; authoritative die rule, verified mu). Resolution: aggregate / deterministic+stochastic (sum relevant unit/derived values; CK3 / EU / Stellari",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-874",
+      "open": "| 12 | domain_actions | **d_sigma** | provincial | `DomainActionSystem` refit to d+\u03c3 ED-874 | 2 | Home doc [GAP \u2014 resolver spec sits in an audit dir; promote]. Drop `scene.draft_da` (W3.4). |",
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:71"
+      ],
+      "priority": 3,
+      "resolution": "Faction Domain Action resolver \u2014 RATIFIED (Jordan 2026-05-31, 'works well'). At faction/strategic scale, bare-stat dice pools (1-7D) are statistically degenerate: a Military-2 faction succeeds at a Domain Action at only P~=0.070 @ Ob 3 (ER-1 / diagnostic F1; authoritative die rule, verified mu). Resolution: aggregate / deterministic+stochastic (sum relevant unit/derived values; CK3 / EU / Stellari",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-936",
+      "open": "<!-- [STUB: drift magnitude/curve unspecified \u2014 provisional; pending Jordan tuning; tracked workplan #30 / ED-936] -->",
+      "open_loc": [
+        "designs/provincial/political_dynamics_keys_migration_v30.md:328"
+      ],
+      "priority": 3,
+      "resolution": "J-2 consumer wiring: consumption design authored for the ED-935 types under delegated authority.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-937",
+      "open": "<!-- [STUB: emitting_systems=[fieldwork] may under-attribute \u2014 npc_behavior \u00a73 belief revision may also emit this; verify; tracked workplan #32 / ED-937] -->",
+      "open_loc": [
+        "designs/architecture/key_type_registry_v30.md:848"
+      ],
+      "priority": 3,
+      "resolution": "Provisional resolution of the three J-2-cluster remainders.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "ED-937",
+      "open": "32 \u2014 ED-937/PR-3 belief_revised under-attribution.** *Pending:* registry `state.belief_revised` `emitting_systems=[fieldwork]`. *Needs:* read `npc_behavior \u00a73` (belief formation/revision) to determine whether it emits `state.belief_revised`",
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:98"
+      ],
+      "priority": 3,
+      "resolution": "Provisional resolution of the three J-2-cluster remainders.",
+      "resolution_source": "canon/editorial_ledger.jsonl",
+      "kind": "ED"
+    },
+    {
+      "ref": "PP-674",
+      "open": "`[GAP: sim battery designs are proposal-level sketches]`** \u2014 each PC-4.x patch register entry will need full sim battery design per PP-674 vetting block discipline.",
+      "open_loc": [
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:226"
+      ],
+      "priority": 3,
+      "resolution": "Framework enforcement + tier N (Necessity Test). Adds vetting_gate to valoria_hooks.py, new task type design_proposal, new tier N (subject-grounding check) above \u03a9 in references/throughlines_meta.md. Tier N codifies the user's design constraint: Valoria's complexity is earned only when modeling load-bearing Renaissance-era political-leadership dynamics; complexity for its own sake is rejected. Fou",
+      "resolution_source": "archives/patches/patch_register_archive_2026_05_01_a.yaml",
+      "kind": "PP"
+    }
+  ],
+  "topical_hits": [
+    {
+      "open": "[INTER-12b] \"Discipline\" name collision: unit stat vs faction derived value",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/mass_battle_interdependency_2026-04-29.md:55"
+      ],
+      "candidates": [
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_a.md",
+          "shared": [
+            "collision",
+            "faction",
+            "inter",
+            "stat",
+            "unit"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-a-2026-05-31_2026-06-03.yaml",
+          "shared": [
+            "collision",
+            "discipline",
+            "faction",
+            "name",
+            "unit"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "collision",
+            "discipline",
+            "faction",
+            "stat"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Isolate the build-budget heisenbug (bisect the import set; suspect a module-level name collision across r1\u2013r7) or sidestep it by constructing builds inline with an explicit point-allocation that is as",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-29-combat-armature/harness_defect_handoff.md:45"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/2026-05-29-combat-armature-sigma-leverage_2026-06-03.yaml",
+          "shared": [
+            "across",
+            "budget",
+            "build",
+            "builds",
+            "level",
+            "module"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-28-i17-v32-balance-sim_2026-05-31.yaml",
+          "shared": [
+            "build",
+            "inline",
+            "level",
+            "module",
+            "name",
+            "point"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "build",
+            "collision",
+            "module",
+            "point"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| 3 | territorial_piety | accounting | territory/provincial | CV/CI/TC system (new) | 1 | CANONICAL doc, **zero Key integration** \u2014 registry \u00a710 keying pass precedes emit wiring. Name collision with #",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:62"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-regression-fix_2026-05-18.yaml",
+          "shared": [
+            "accounting",
+            "collision",
+            "integration",
+            "pass",
+            "provincial",
+            "territory",
+            "wiring"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_a.md",
+          "shared": [
+            "accounting",
+            "canonical",
+            "collision",
+            "provincial",
+            "registry",
+            "territory"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-step-4-2-lethality_2026-05-19.yaml",
+          "shared": [
+            "accounting",
+            "canonical",
+            "collision",
+            "integration",
+            "provincial",
+            "wiring"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| piety_track | extracted | det_accounting | personal | **NON-CONFORMANT** | A8 doc absent from canonical_sources\u2192ED-1006; A6\u00d76 consume; 3-way name collision\u2192ED-1006 |",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-module-adjudication/verdict_full_graph.md:57"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-a-2026-05-31_2026-06-03.yaml",
+          "shared": [
+            "canonical_sources",
+            "collision",
+            "name",
+            "personal"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| territorial_piety | extracted | det_accounting | territory\u00b7provincial | CONFORMANT \u2014 isolated | zero Key integration (canonical doc, no registry entry; \u00a710 candidate)\u2192ED-1006; name collision |",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-module-adjudication/verdict_full_graph.md:65"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "canonical",
+            "entry",
+            "extracted",
+            "integration",
+            "registry",
+            "territory"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_a.md",
+          "shared": [
+            "canonical",
+            "collision",
+            "entry",
+            "provincial",
+            "registry",
+            "territory"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-29-resolution-diagnostic-faction-ratifications_2026-06-01.yaml",
+          "shared": [
+            "canonical",
+            "entry",
+            "provincial",
+            "registry",
+            "territory"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| 3-way piety/conviction name collision | naming resolution | Jordan | ED-1006 |",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-module-adjudication/verdict_full_graph.md:113"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_1.md",
+          "shared": [
+            "conviction",
+            "name",
+            "piety",
+            "resolution"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "1. **The 3-way name collision is confirmed at the source, not just the adjudicator.** The registry/substrate use canon names (`da_framework`, `faction_layer`, `conviction_track`); the contracts use im",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_atlas_v1.md:248"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-a-2026-05-31_2026-06-03.yaml",
+          "shared": [
+            "canon",
+            "collision",
+            "confirmed",
+            "faction_layer",
+            "name",
+            "names",
+            "source"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "collision",
+            "confirmed",
+            "names",
+            "registry",
+            "source",
+            "substrate"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_infrastructure_2026-05-11_2026-05-11-stress-workplan-v11-q-resolutions.md",
+          "shared": [
+            "canon",
+            "collision",
+            "names",
+            "registry",
+            "source"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| **7** | **3-way piety/conviction name collision** + CI-clock vs Influence-stat overload \u2014 intuitability hazard. | verdict \u00a73/\u00a75-E; game_flow; hierarchy Tier 4 | naming resolution | **P2** | ED-1009 ",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:208"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "adjudication",
+            "hierarchy",
+            "influence",
+            "naming",
+            "stat",
+            "verdict"
+          ]
+        },
+        {
+          "file": "archives/editorials/editorial_ledger_archive_401_600.yaml",
+          "shared": [
+            "adjudication",
+            "clock",
+            "name",
+            "naming",
+            "resolution",
+            "stat"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "collision",
+            "influence",
+            "resolution",
+            "stat",
+            "tier"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "PT: {term: \"Piety Track\", silo: 9, status: recorded}  # COLLISION: \"Piety Territory (PT)\" derived_stats + \"Parliamentary Transfer (PT)\" faction; ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml:50"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_5.md",
+          "shared": [
+            "faction",
+            "status",
+            "territory",
+            "track",
+            "transfer"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_4.md",
+          "shared": [
+            "faction",
+            "status",
+            "territory",
+            "track",
+            "transfer"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "collision",
+            "faction",
+            "status",
+            "territory",
+            "track"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "CI: {term: \"Church Influence\", silo: 9, status: recorded}  # COLLISION: \"Crown Index (CI)\" in derived_stats_v30 \u00a7; Jordan rename ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml:51"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "church",
+            "collision",
+            "crown",
+            "influence",
+            "status"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "church",
+            "collision",
+            "crown",
+            "influence"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "church",
+            "index",
+            "rename",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "PC: {term: \"Per-Cell\", silo: 5, status: recorded}                # COLLISION: \"Personal Combat\" + \"Player Character (PC)\" also use PC; ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml:56"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "character",
+            "combat",
+            "personal",
+            "player",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-a-2026-05-31_2026-06-03.yaml",
+          "shared": [
+            "character",
+            "collision",
+            "personal",
+            "recorded",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "character",
+            "collision",
+            "player",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "IP: {term: \"Institutional Pressure\", silo: 12, status: recorded}  # COLLISION: \"Imperial Pressure (IP)\" in derived_stats_v30; ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml:64"
+      ],
+      "candidates": [
+        {
+          "file": "archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml",
+          "shared": [
+            "collision",
+            "institutional",
+            "pressure",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Abbreviation 'PT' collides \u2014 owner ''. COLLISION: \"Piety Territory (PT)\" derived_stats + \"Parliamentary Transfer (PT)\" faction; ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/2026-05-28-resolution-ledger-candidates-and-concessions_2026-05-29.yaml",
+          "shared": [
+            "collides",
+            "faction",
+            "owner",
+            "territory"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Abbreviation 'PC' collides \u2014 owner ''. COLLISION: \"Personal Combat\" + \"Player Character (PC)\" also use PC; ruling pending",
+      "priority": 1,
+      "open_loc": [
+        "references/name_collision_database.yaml"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "character",
+            "combat",
+            "personal",
+            "player"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-17-scene-combat-redesign-exploration_2026-05-29.yaml",
+          "shared": [
+            "combat",
+            "owner",
+            "personal",
+            "player"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| Articulation | `designs/articulation/articulation_layer_v30.md` | Tier 1/2/3 surfacing of state to player; trigger ruleset; Knot/Belief/Inspiration integration | Strong; PROVISIONAL pending ratifica",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-08-character-generation-audit.md:20"
+      ],
+      "candidates": [
+        {
+          "file": "archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml",
+          "shared": [
+            "articulation",
+            "articulation_layer_v",
+            "belief",
+            "designs",
+            "ruleset",
+            "state",
+            "tier",
+            "trigger"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "articulation",
+            "articulation_layer_v",
+            "designs",
+            "ruleset",
+            "state",
+            "tier",
+            "trigger"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_02.md",
+          "shared": [
+            "articulation",
+            "articulation_layer_v",
+            "designs",
+            "ruleset",
+            "state",
+            "tier",
+            "trigger"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Baralta's Primary Conviction was changed from Order (stage6) to **Precedent** with an in-doc flag `[EDITORIAL: ED-400 \u2026 User approval required]` (`npc_behavior_v30.md:91`). Separately, `baralta_v30.md",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-22-npc-comprehensive-audit.md:194"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_1.md",
+          "shared": [
+            "baralta",
+            "conviction",
+            "does",
+            "editorial",
+            "flag",
+            "marked",
+            "provisional",
+            "required"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_a.md",
+          "shared": [
+            "changed",
+            "editorial",
+            "flag",
+            "npc_behavior_v",
+            "provisional",
+            "required",
+            "user"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10.md",
+          "shared": [
+            "does",
+            "editorial",
+            "flag",
+            "item",
+            "npc_behavior_v",
+            "required"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Drafted by Claude (claude-opus-4-7) at user direction 2026-04-30. Pending ratification before execution.*",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/ecosystem_workplan_2026-04-30.md:456"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-mass-battle_2026-05-18.yaml",
+          "shared": [
+            "before",
+            "claude",
+            "direction",
+            "drafted"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->",
+      "priority": 1,
+      "open_loc": [
+        "designs/npcs/character_canon_v30.md:2"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_infrastructure_2026-05-11_2026-05-11-stress-workplan-v11-q-resolutions.md",
+          "shared": [
+            "complete",
+            "decision",
+            "ratification",
+            "scope",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_1.md",
+          "shared": [
+            "complete",
+            "decision",
+            "provisional",
+            "scope",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-XX-editorial-ledger-consolidation_2026-05-29.yaml",
+          "shared": [
+            "complete",
+            "decision",
+            "provisional",
+            "scope",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "[STATUS: CANONICAL synthesis \u2014 Pass 2g 2026-05-17. Three canon contradictions forward-flagged to Pass 2k. Interpretive choices marked PROVISIONAL pending Jordan ratification.]",
+      "priority": 1,
+      "open_loc": [
+        "designs/personal/knots_v30.md:379"
+      ],
+      "candidates": [
+        {
+          "file": "archives/editorial/editorial_ledger_archive_2026_05_01_b.yaml",
+          "shared": [
+            "canon",
+            "canonical",
+            "flagged",
+            "forward",
+            "pass",
+            "provisional",
+            "status",
+            "synthesis"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01.md",
+          "shared": [
+            "canon",
+            "canonical",
+            "flagged",
+            "pass",
+            "status",
+            "synthesis",
+            "three"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_7.md",
+          "shared": [
+            "canon",
+            "canonical",
+            "forward",
+            "pass",
+            "status",
+            "synthesis"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
+      "priority": 1,
+      "open_loc": [
+        "designs/provincial/faction_canon_v30.md:2"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-b-2026-05-31_2026-06-04.yaml",
+          "shared": [
+            "canonical",
+            "files",
+            "provisional",
+            "remain",
+            "source",
+            "status",
+            "until"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_1.md",
+          "shared": [
+            "canonical",
+            "commits",
+            "files",
+            "provisional",
+            "remain",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/editorials/editorial_ledger_archive_1001_1200.yaml",
+          "shared": [
+            "canonical",
+            "files",
+            "provisional",
+            "source",
+            "status",
+            "until"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.",
+      "priority": 1,
+      "open_loc": [
+        "designs/provincial/mass_battle_integration_v30.md:301"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-engine-resume_2026-06-03.yaml",
+          "shared": [
+            "default",
+            "derivation",
+            "explicit",
+            "note",
+            "pass"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10.md",
+          "shared": [
+            "either",
+            "note",
+            "params",
+            "patch"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01.md",
+          "shared": [
+            "default",
+            "note",
+            "params",
+            "pass"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Status:** All artifacts PROVISIONAL \u2014 pending Jordan ratification per each proposal's open-questions section.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-04-30-architecture-session/00_index.md:4"
+      ],
+      "candidates": [
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_b.md",
+          "shared": [
+            "each",
+            "proposal",
+            "provisional",
+            "questions",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_infrastructure_2026-05-11_2026-05-11-stress-workplan-v11-q-resolutions.md",
+          "shared": [
+            "each",
+            "proposal",
+            "ratification",
+            "status"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-28-i17-v32-balance-sim_2026-05-31.yaml",
+          "shared": [
+            "each",
+            "proposal",
+            "questions",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Editorial ledger candidates staged:** 13 entries total across batches (12 in batch 1, 1 in batch 2 social SC1 architectural note). All pending Jordan ratification + commit to canon/editorial_ledger.ya",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-28-resolution-diagnostic/resolution_diagnostic_README_batch2.md:37"
+      ],
+      "candidates": [
+        {
+          "file": "archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml",
+          "shared": [
+            "across",
+            "batch",
+            "canon",
+            "commit",
+            "editorial",
+            "editorial_ledger",
+            "entries",
+            "ledger"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_02.md",
+          "shared": [
+            "batch",
+            "batches",
+            "canon",
+            "commit",
+            "editorial",
+            "editorial_ledger",
+            "entries",
+            "note"
+          ]
+        },
+        {
+          "file": "archives/editorial/editorial_ledger_archive_2026_05_01_b.yaml",
+          "shared": [
+            "across",
+            "batch",
+            "canon",
+            "commit",
+            "editorial",
+            "editorial_ledger",
+            "entries",
+            "ledger"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[SELF-AUTHORED \u2014 bias risk]` engine is largely my own work this session; design stated as an independent reviewer; magnitudes are Jordan-vetoable.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md:4"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "authored",
+            "design",
+            "engine",
+            "magnitudes",
+            "self",
+            "vetoable",
+            "work"
+          ]
+        },
+        {
+          "file": "archives/handoffs/weapon-physics-stage2-2026-06-05_2026-06-09.yaml",
+          "shared": [
+            "design",
+            "engine",
+            "self",
+            "session",
+            "vetoable",
+            "work"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-17-scene-combat-redesign-exploration_2026-05-29.yaml",
+          "shared": [
+            "bias",
+            "design",
+            "engine",
+            "magnitudes",
+            "session",
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[SELF-AUTHORED \u2014 bias risk]` engine is largely my own; phases stated as an independent reviewer; all mechanical magnitudes Jordan-vetoable, no canon edited without the editorial workflow.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-01-massbattle-stub-wiring/mb_engine_workplan.md:4"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "authored",
+            "canon",
+            "engine",
+            "magnitudes",
+            "mechanical",
+            "self",
+            "vetoable"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-28-i17-v32-balance-sim_2026-05-31.yaml",
+          "shared": [
+            "canon",
+            "engine",
+            "magnitudes",
+            "mechanical",
+            "risk",
+            "without"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-17-scene-combat-redesign-exploration_2026-05-29.yaml",
+          "shared": [
+            "bias",
+            "canon",
+            "engine",
+            "magnitudes",
+            "mechanical",
+            "without"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[SELF-AUTHORED \u2014 bias risk]` I proposed this; magnitudes/coefficients are Class-B sim-tunable and Jordan-vetoable.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-01-massbattle-stub-wiring/mb_lanchester_design.md:4"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "authored",
+            "class",
+            "magnitudes",
+            "self",
+            "tunable",
+            "vetoable"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-engine-resume_2026-06-03.yaml",
+          "shared": [
+            "bias",
+            "class",
+            "coefficients",
+            "tunable"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Plus Class-B `[ASSUMPTION]` tuning flags (stamina, recovery, troop-speed-class mapping at 1037) \u2014 logged, Jordan-vetoable, not defects.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-01-massbattle-stub-wiring/resume_audit_workplan.md:44"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_7.md",
+          "shared": [
+            "defects",
+            "recovery",
+            "speed",
+            "stamina"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-troop-types-roles_2026-06-04.yaml",
+          "shared": [
+            "mapping",
+            "speed",
+            "stamina",
+            "troop"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "5. **Doc-hygiene drift (minor).** `canon/intent_of_game.yaml` is HTTP 404 \u2014 the canonical positive-loop spec survives only as the PI one-liner and an architecture mention. `key_substrate_v30.md` close",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-04-loop-safety-ledger/key_cascade_scope.md:180"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-b-2026-05-31_2026-06-04.yaml",
+          "shared": [
+            "canonical",
+            "canonical_sources",
+            "drift",
+            "header",
+            "only",
+            "provisional",
+            "spec",
+            "survives"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "architecture",
+            "canon",
+            "canonical",
+            "canonical_sources",
+            "header",
+            "hygiene",
+            "only",
+            "spec"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "canon",
+            "canonical",
+            "canonical_sources",
+            "closes",
+            "header",
+            "only",
+            "spec",
+            "yaml"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "7. **Layer gate:** does the change touch metaphysics / world / characters / tone? If yes \u2192 **stop, ask Jordan** (`<identity>` creative-tier bar). Mechanical gap-fills: log `[ASSUMPTION:]` with bottom-",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-06-architecture-map/valoria_system_wiring_analysis.md:150"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-c-2026-05-31_2026-06-04.yaml",
+          "shared": [
+            "creative",
+            "does",
+            "gate",
+            "layer",
+            "mechanical",
+            "source",
+            "tier",
+            "world"
+          ]
+        },
+        {
+          "file": "params/threadwork_superseded.md",
+          "shared": [
+            "characters",
+            "does",
+            "down",
+            "gate",
+            "mechanical",
+            "source",
+            "world"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-29-resolution-diagnostic-faction-ratifications_2026-06-01.yaml",
+          "shared": [
+            "change",
+            "down",
+            "gate",
+            "layer",
+            "mechanical",
+            "source",
+            "world"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "provenance: produced in-session from the 06-09 reconciled report + four subsequent evaluation/adversarial/reconciliation rounds; [SELF-AUTHORED \u2014 bias risk] acknowledged; Jordan-vetoable throughout.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md:6"
+      ],
+      "candidates": [
+        {
+          "file": "params/threadwork_superseded.md",
+          "shared": [
+            "rounds",
+            "self",
+            "session",
+            "subsequent"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "End of v1. Status PROPOSED; every recommendation above is Jordan-vetoable; the [OPEN] register (Part VIII) is the veto surface.*",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:230"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_infrastructure_2026-05-11_2026-05-11-stress-workplan-v11-q-resolutions.md",
+          "shared": [
+            "proposed",
+            "recommendation",
+            "register",
+            "status",
+            "surface"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_b.md",
+          "shared": [
+            "above",
+            "every",
+            "register",
+            "status",
+            "surface"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "part",
+            "register",
+            "status",
+            "surface",
+            "veto"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Integrated 2026-06-11 (this session): findings from the 06-11 **game-flow** (committed `c005da27`/`6199d83a`), **canon-flatten** (conv `a835dd91`, **uncommitted**), and **threadwork** (conv `79e2cad2`",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md:117"
+      ],
+      "candidates": [
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_c.md",
+          "shared": [
+            "canon",
+            "committed",
+            "findings",
+            "game",
+            "read",
+            "session",
+            "sessions",
+            "threadwork"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "canon",
+            "committed",
+            "findings",
+            "flatten",
+            "game",
+            "read",
+            "session"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "canon",
+            "committed",
+            "flatten",
+            "read",
+            "session",
+            "sessions",
+            "threadwork"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| LA-14 | Coup-Counter \u2192 graduated-autonomy migration (throughline \u00a74 tables onto Loyal/Restless/Autonomous/Split); fix the dangling `params/clocks/clock_registry_v30.md` path; `[ASSUMPTION: autonomy ",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:151"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "clock",
+            "clock_registry_v",
+            "clocks",
+            "counter",
+            "coup",
+            "dangling",
+            "migration",
+            "params"
+          ]
+        },
+        {
+          "file": "session_log_archive.md",
+          "shared": [
+            "counter",
+            "coup",
+            "migration",
+            "params",
+            "path",
+            "split"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "clock",
+            "counter",
+            "coup",
+            "graduated",
+            "params",
+            "path"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "status: PROVISIONAL \u00b7 PROPOSED, Jordan-vetoable \u00b7 no ED IDs assigned \u00b7 not bootstrapped-to-HEAD for ratification**",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-13-combat-bottomup/README.md:3"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_infrastructure_2026-05-11_2026-05-11-stress-workplan-v11-q-resolutions.md",
+          "shared": [
+            "bootstrapped",
+            "proposed",
+            "ratification",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "[CONFIDENCE: high] on everything cited to read source + the engine tests run this session (\u00a73 map, \u00a74 orphaning + fix, the ledger/verdict status). [CONFIDENCE: medium] on the run-to-run *outcome* delt",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-20-massbattle-loose-ends/massbattle_loose_ends_resolution.md:117"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/resolution-diagnostic-v3-2026-06-01_2026-06-03.yaml",
+          "shared": [
+            "engine",
+            "ledger",
+            "read",
+            "session",
+            "source",
+            "status",
+            "stochastic",
+            "validation"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-regression-fix_2026-05-18.yaml",
+          "shared": [
+            "deltas",
+            "engine",
+            "ledger",
+            "read",
+            "session",
+            "source",
+            "status",
+            "tests"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-28-i17-v32-balance-sim_2026-05-31.yaml",
+          "shared": [
+            "engine",
+            "ledger",
+            "read",
+            "session",
+            "source",
+            "status",
+            "tests",
+            "verdict"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[mechanical-tier, Jordan-vetoable: which consumers go per-subunit, and that reserve relief is positional (the engine has no reserve-hold AI \u2014 a held reserve is shown via target_delay_ticks), are desi",
+      "priority": 1,
+      "open_loc": [
+        "references/historical/mass_battle_gauge_grounding.md:139"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "anchored",
+            "bottom",
+            "built",
+            "design",
+            "down",
+            "engine",
+            "hold",
+            "mechanical"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-04_2026-06-09.yaml",
+          "shared": [
+            "bottom",
+            "built",
+            "design",
+            "engine",
+            "held",
+            "picq",
+            "subunit",
+            "which"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_audit_2026-05-31_96fe8db6d8aba773.md",
+          "shared": [
+            "bottom",
+            "built",
+            "consumers",
+            "engine",
+            "hold",
+            "mechanical",
+            "tier"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[mechanical-tier, Jordan-vetoable: the snake_case key set and the decision to map only Power/Discipline/Morale (deferring Armour\u2192dr and Endur\u2192stamina) are design calls \u2014 built bottom-up from the cano",
+      "priority": 1,
+      "open_loc": [
+        "references/historical/mass_battle_gauge_grounding.md:159"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "anchored",
+            "bottom",
+            "built",
+            "canonical",
+            "design",
+            "discipline",
+            "down",
+            "mechanical"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-troop-types-roles_2026-06-04.yaml",
+          "shared": [
+            "canonical",
+            "decision",
+            "design",
+            "discipline",
+            "down",
+            "mechanical",
+            "morale",
+            "only"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-29-resolution-diagnostic-faction-ratifications_2026-06-01.yaml",
+          "shared": [
+            "anchored",
+            "canonical",
+            "decision",
+            "design",
+            "down",
+            "maps",
+            "mechanical",
+            "model"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[mechanical-tier, Jordan-vetoable: forks (a) derived unit-rout and (b) no intra-unit cascade are canon-structure-adjacent design calls \u2014 built bottom-up from the engine and \u00a7A.4/\u00a7A.12, anchored top-d",
+      "priority": 1,
+      "open_loc": [
+        "references/historical/mass_battle_gauge_grounding.md:182"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "anchored",
+            "bottom",
+            "built",
+            "byte",
+            "cannae",
+            "canon",
+            "design",
+            "down"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-engine-resume_2026-06-03.yaml",
+          "shared": [
+            "byte",
+            "cannae",
+            "canon",
+            "derived",
+            "design",
+            "down",
+            "engine",
+            "exact"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-troop-types-roles_2026-06-04.yaml",
+          "shared": [
+            "byte",
+            "canon",
+            "design",
+            "down",
+            "engine",
+            "exact",
+            "mechanical",
+            "rout"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "vaynards_hall: Varfell Mandate-gain action (name + mechanic pending Jordan ratification)",
+      "priority": 1,
+      "open_loc": [
+        "sim/provincial/__init__.py:15"
+      ],
+      "candidates": [
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "action",
+            "gain",
+            "mandate",
+            "mechanic",
+            "varfell"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "action",
+            "gain",
+            "mandate",
+            "mechanic",
+            "varfell"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_1.md",
+          "shared": [
+            "action",
+            "mandate",
+            "mechanic",
+            "name",
+            "varfell"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "D-\u03b1 `[OPEN \u2014 Jordan]` \u2014 replace vs coexist (structural-ontological).** Do the native traditions **replace** the historical-named scaffold in `tradition.py` (german/italian/\u2026 demoted to grounding comme",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-29-combat-armature/martial_traditions_synthesis.md:90"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "historical",
+            "named",
+            "replace",
+            "tradition",
+            "traditions"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-30_9b2bf9fbf90b10d1.md",
+          "shared": [
+            "historical",
+            "named",
+            "replace",
+            "tradition",
+            "traditions"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-29-resolution-diagnostic-faction-ratifications_2026-06-01.yaml",
+          "shared": [
+            "demoted",
+            "here",
+            "historical",
+            "ners",
+            "structural"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "D-\u03b2 `[OPEN \u2014 Jordan]` \u2014 count.** Proposed **six** (each universal weapon then reachable by 3\u20135 traditions; keeps NERS-E). Tunable to ~4\u20135 or ~8.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-29-combat-armature/martial_traditions_synthesis.md:91"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "each",
+            "then",
+            "traditions",
+            "tunable",
+            "weapon"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-30_9b2bf9fbf90b10d1.md",
+          "shared": [
+            "each",
+            "then",
+            "traditions",
+            "tunable",
+            "weapon"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "count",
+            "ners",
+            "then",
+            "traditions",
+            "weapon"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "D-\u03b4 `[OPEN \u2014 Jordan]` \u2014 in-world naming + metaphysics.** All working labels, the `set`/`mode` strings, founding legends, and any essence-system coupling are Jordan's creative layer. This doc provides ",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-29-combat-armature/martial_traditions_synthesis.md:93"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "coupling",
+            "mode",
+            "naming",
+            "structure",
+            "working",
+            "world"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-30_9b2bf9fbf90b10d1.md",
+          "shared": [
+            "coupling",
+            "mode",
+            "naming",
+            "structure",
+            "working",
+            "world"
+          ]
+        },
+        {
+          "file": "archives/handoffs/win-computation-victory-2026-06-09_2026-06-09.yaml",
+          "shared": [
+            "labels",
+            "layer",
+            "mode",
+            "naming",
+            "only",
+            "world"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "high-infrastructure \u2192 keep a type/infrastructure term. `[OPEN \u2014 needs registry data]`.",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-30-lps-mandate-ners-audit/lps_mandate_comprehensive_ners_audit.md:161"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-modularize-lanchester-resume_2026-06-02.yaml",
+          "shared": [
+            "infrastructure",
+            "needs",
+            "registry",
+            "term",
+            "type"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_audit_2026-05-31_96fe8db6d8aba773.md",
+          "shared": [
+            "data",
+            "needs",
+            "registry",
+            "type"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_01_b.md",
+          "shared": [
+            "data",
+            "infrastructure",
+            "term",
+            "type"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "[OPEN \u2014 Jordan design decision] shape-aware envelopment (wing-wrap geometry) that lifts H3/H5/H6 without",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-05-31-percell-combat/percell_validation_stage4.md:56"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/valoria-troops-in-cell-cap-decision_2026-06-04.yaml",
+          "shared": [
+            "decision",
+            "design",
+            "geometry",
+            "shape"
+          ]
+        },
+        {
+          "file": "archives/handoffs/massbattle-troop-types-roles_2026-06-04.yaml",
+          "shared": [
+            "decision",
+            "design",
+            "geometry",
+            "shape"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "FLAGGED \u2014 Jordan/world-layer decision (do NOT invent):** *what a captured general/officer actually triggers* \u2014 ransom, imprisonment, escape/rescue arc, Disposition/relationship effects, return-to-play",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-01-massbattle-stub-wiring/mb_engine_workplan.md:86"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "canon",
+            "decision",
+            "escape",
+            "flagged",
+            "invent",
+            "mechanic",
+            "none",
+            "what"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-30_9b2bf9fbf90b10d1.md",
+          "shared": [
+            "canon",
+            "decision",
+            "escape",
+            "flagged",
+            "invent",
+            "mechanic",
+            "none",
+            "what"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "canon",
+            "canonical_sources",
+            "conditions",
+            "disposition",
+            "layer",
+            "mechanic",
+            "triggers",
+            "world"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "2. **[P1 \u00b7 Jordan] One canonical roster doc + retire vestigial Mind/Body/Spirit.** **Re-test:** **`[OPEN \u2014 verify first]`** confirm **no live system consumes a Mind/Body/Spirit *aggregation*** before ",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-04-attributes-derived-ners/04_RECONCILED_MASTER.md:43"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "audit",
+            "before",
+            "canonical",
+            "check",
+            "combat",
+            "confirm",
+            "core",
+            "nothing"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-30_9b2bf9fbf90b10d1.md",
+          "shared": [
+            "audit",
+            "before",
+            "canonical",
+            "check",
+            "combat",
+            "confirm",
+            "core",
+            "nothing"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-mass-battle_2026-05-18.yaml",
+          "shared": [
+            "audit",
+            "before",
+            "blocks",
+            "canonical",
+            "check",
+            "confirm",
+            "resolution",
+            "roster"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Per `<document_consolidation>`: the originals stay in git history; formally superseding/archiving them is a commit step for Jordan's call, not done here. Substantive open conflicts are carried as `[OP",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-04-loop-safety-ledger/loop_safety_ledger.md:19"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_7.md",
+          "shared": [
+            "carried",
+            "commit",
+            "conflicts",
+            "done",
+            "never",
+            "resolved"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-18-phase-7-regression-fix_2026-05-18.yaml",
+          "shared": [
+            "call",
+            "commit",
+            "never",
+            "resolved",
+            "silently",
+            "step"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_simulation_2026-05-31_87d18e4525adeed6.md",
+          "shared": [
+            "commit",
+            "done",
+            "never",
+            "resolved",
+            "them"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[OPEN \u2014 Jordan: F1/F2/F3 are P1 and warrant `editorial_ledger.jsonl` entries; ID assignment is blocked on the ~94-conflict backlog. Did not commit \u2014 no instruction to, and clean-ID pull needs your ad",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-06-architecture-map/valoria_system_wiring_analysis.md:121"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "adjudication",
+            "backlog",
+            "blocked",
+            "commit",
+            "conflict",
+            "editorial_ledger",
+            "entries",
+            "jsonl"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-28-editorial-ledger-jsonl-migration_2026-05-31.yaml",
+          "shared": [
+            "adjudication",
+            "blocked",
+            "clean",
+            "commit",
+            "conflict",
+            "editorial_ledger",
+            "entries",
+            "jsonl"
+          ]
+        },
+        {
+          "file": "archives/handoffs/win-computation-victory-2026-06-09_2026-06-09.yaml",
+          "shared": [
+            "adjudication",
+            "assignment",
+            "backlog",
+            "conflict",
+            "editorial_ledger",
+            "entries",
+            "jsonl"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "`[OPEN \u2014 Jordan] (a) canonize \u00a71 input semantics into weapon_axes_v2 if/when the physics layer is activated; (b) reach-dominance vs tanh-saturation as the lever for weapon distinctiveness; (c) draw-ra",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-06-weapon-physics-ners/weapon_physics_ners_reconciliation.md:111"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/weapon-physics-stage2-2026-06-05_2026-06-09.yaml",
+          "shared": [
+            "draw",
+            "physics",
+            "rate",
+            "target",
+            "weapon",
+            "when"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "draw",
+            "layer",
+            "physics",
+            "rate",
+            "semantics",
+            "weapon"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-29-combat-armature-sigma-leverage_2026-06-03.yaml",
+          "shared": [
+            "dominance",
+            "layer",
+            "lever",
+            "reach",
+            "tanh",
+            "weapon"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Reconciled bottom line:** the project is **healthy, well-governed, and mid-execution on a plan that already answers this request.** The genuine outstanding work is (a) **reconcile the two stale handof",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-09-ecosystem-reconciliation/valoria_ecosystem_reconciled_report_2026-06-09.md:143"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "build",
+            "execute",
+            "handoffs",
+            "master",
+            "plan",
+            "stale",
+            "three",
+            "work"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-04_2026-06-09.yaml",
+          "shared": [
+            "already",
+            "bottom",
+            "build",
+            "handoffs",
+            "master",
+            "outstanding",
+            "reconcile",
+            "work"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "already",
+            "execution",
+            "genuine",
+            "line",
+            "master",
+            "project",
+            "stale"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Four mixed-boundary cases \u2014 [OPEN \u2014 Jordan rulings] (gate does not ship until ruled):**",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md:68"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-04_2026-06-09.yaml",
+          "shared": [
+            "does",
+            "gate",
+            "ruled",
+            "ship"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "So the strategy is:** (Part I\u2013III) one consolidated picture of what exists on all three legs; (Part IV) the target all-directions hierarchy with the conversion unit fixed as the **module contract**; (",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:17"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "conversion",
+            "directions",
+            "godot",
+            "hierarchy",
+            "module",
+            "part",
+            "strategy",
+            "three"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10.md",
+          "shared": [
+            "directions",
+            "exists",
+            "part",
+            "protocol",
+            "python",
+            "target",
+            "three"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "consolidated",
+            "directions",
+            "module",
+            "part",
+            "three",
+            "what"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| 4 | piety_track (personal) | accounting | personal | scar system on Tracker (new) | 3 | 3-way name collision (substrate \u00a78.4 \"Piety Track\" = registry `conviction_track` = personal scars vs territori",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:63"
+      ],
+      "candidates": [
+        {
+          "file": "params/threadwork_superseded.md",
+          "shared": [
+            "accounting",
+            "personal",
+            "substrate",
+            "territorial",
+            "track"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-c-2026-05-31_2026-06-04.yaml",
+          "shared": [
+            "accounting",
+            "personal",
+            "substrate",
+            "territorial",
+            "track"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_6.md",
+          "shared": [
+            "personal",
+            "registry",
+            "scar",
+            "track"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| 15 | settlement_economy | accounting | settlement | fold-vs-distinct vs #1 | 2-hold | Possibly the same system as settlement_layer Local Economy [OPEN \u2014 Jordan]; do not double-implement. |",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:74"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/massbattle-speed-facing-resume_2026-06-03.yaml",
+          "shared": [
+            "distinct",
+            "double",
+            "hold",
+            "local"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| 27 | campaign_architecture | \u2014 | \u2014 | \u2014 | **R** | Reclassified 06-10: a consolidation doc, not a runtime module; contents distribute to victory/threadwork/settlement/strain. Stub retirement [OPEN \u2014 J",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:86"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "consolidation",
+            "module",
+            "settlement",
+            "victory"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "| D6 | P2 | Open since 04-27: Church L+PS 4/4 vs canonical 5/5; Church Man/Wea values | `stats_1_7_scale` / workplan \u00a74.1 | Carried `[OPEN \u2014 Jordan]` in design_sync; resolve at first faction-data expo",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:111"
+      ],
+      "candidates": [
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "_scale",
+            "canonical",
+            "church",
+            "faction",
+            "first",
+            "stats_"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "_scale",
+            "canonical",
+            "faction",
+            "first",
+            "stats_",
+            "workplan"
+          ]
+        },
+        {
+          "file": "references/propagation_map_archive_2026-05-10.md",
+          "shared": [
+            "canonical",
+            "church",
+            "data",
+            "export",
+            "workplan"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "PART VIII \u2014 CONSOLIDATED [OPEN \u2014 Jordan] REGISTER (conversion-specific; all vetoable)",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:208"
+      ],
+      "candidates": [
+        {
+          "file": "archives/session/session_log_archive_part_3.md",
+          "shared": [
+            "consolidated",
+            "part",
+            "register",
+            "specific"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Contents:** `godot_conversion_strategy_v1.md` \u2014 the consolidated conversion strategy and all-directions hierarchy spec. Status **PROPOSED**, Jordan-vetoable throughout; the Part-VIII `[OPEN \u2014 Jordan]`",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-godot-conversion-strategy/README.md:3"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-09_2026-06-11.yaml",
+          "shared": [
+            "conversion",
+            "directions",
+            "godot_conversion_strategy_v",
+            "hierarchy",
+            "part",
+            "register",
+            "spec",
+            "strategy"
+          ]
+        },
+        {
+          "file": "archives/handoffs/active-work-index-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "consolidated",
+            "directions",
+            "part",
+            "register",
+            "status",
+            "surface",
+            "veto"
+          ]
+        },
+        {
+          "file": "archives/handoffs/2026-05-17-scene-combat-redesign-exploration_2026-05-29.yaml",
+          "shared": [
+            "directions",
+            "hierarchy",
+            "register",
+            "spec",
+            "status",
+            "surface"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "Resolution direction (Jordan's call; F-DISP argues ceiling = Bonds is the only value consistent with Knot candidacy at +5):** pick the master line, regenerate params/fieldwork from it, decide stepped-",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md:39"
+      ],
+      "candidates": [
+        {
+          "file": "archives/handoffs/lane-A-2026-06-11_2026-06-22.yaml",
+          "shared": [
+            "both",
+            "call",
+            "choices",
+            "fieldwork",
+            "line",
+            "master",
+            "only",
+            "params"
+          ]
+        },
+        {
+          "file": "archives/handoffs/lane-a-2026-05-31_2026-06-03.yaml",
+          "shared": [
+            "both",
+            "call",
+            "direction",
+            "floor",
+            "only",
+            "params",
+            "resolution"
+          ]
+        },
+        {
+          "file": "archives/editorials/editorial_ledger_archive_001_200.yaml",
+          "shared": [
+            "bonds",
+            "ceiling",
+            "fieldwork",
+            "floor",
+            "knot",
+            "only",
+            "resolution"
+          ]
+        }
+      ]
+    },
+    {
+      "open": "1. `[OPEN \u2014 Jordan]` **Disposition\u2192Ob rule:** stepped table (master \u00a75.1, caps \u00b13/\u22122) vs direct subtraction with floor 1 (params PP-632). Different balance at |Disposition| \u2265 2; PP-684's note covers t",
+      "priority": 1,
+      "open_loc": [
+        "designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md:102"
+      ],
+      "candidates": [
+        {
+          "file": "references/propagation_map_archive_2026-05-10b.md",
+          "shared": [
+            "caps",
+            "ceiling",
+            "note",
+            "only",
+            "params",
+            "table"
+          ]
+        },
+        {
+          "file": "archives/session/session_log_archive_part_2.md",
+          "shared": [
+            "balance",
+            "floor",
+            "intent",
+            "params",
+            "rule",
+            "table"
+          ]
+        },
+        {
+          "file": "archives/propagation/propagation_map_archive_2026_05_02.md",
+          "shared": [
+            "caps",
+            "ceiling",
+            "note",
+            "only",
+            "params",
+            "table"
+          ]
+        }
+      ]
+    }
+  ],
+  "unresolved_refs": [
+    {
+      "ref": "ED-400",
+      "open": "Baralta's Primary Conviction was changed from Order (stage6) to **Precedent** with an in-doc flag `[EDITORIAL: ED-400 \u2026 User approval required]` (`npc_behavior_",
+      "loc": [
+        "designs/audit/2026-06-22-npc-comprehensive-audit.md:194"
+      ]
+    },
+    {
+      "ref": "PP-406",
+      "open": "\"NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \\\"Piety Track\\\" (this personal scar system, registry system conviction_track, home designs/personal/conv",
+      "loc": [
+        "references/module_contracts.yaml:223"
+      ]
+    },
+    {
+      "ref": "PP-406",
+      "open": "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/convict",
+      "loc": [
+        "references/module_contracts.yaml"
+      ]
+    },
+    {
+      "ref": "PP-460",
+      "open": "| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |",
+      "loc": [
+        "params/bg/stress_patches.md:63"
+      ]
+    },
+    {
+      "ref": "PP-686",
+      "open": "| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |",
+      "loc": [
+        "params/bg/stress_patches.md:63"
+      ]
+    },
+    {
+      "ref": "PP-686",
+      "open": "`[ASSUMPTION: PP-686 v2 PROVISIONAL canonical status accepted]` per file headers; treating as canonical for audit basis.",
+      "loc": [
+        "designs/audit/2026-05-16-faction-ners-all-directions.md:315"
+      ]
+    },
+    {
+      "ref": "PP-685",
+      "open": "13-Conviction taxonomy (PP-684; migration roster PP-685 primary on conflicts per D1; axis matrix; effective_convictions PP-686 \u00a73.7) \u00b7 Self-Other scalar \u00b7 4 **R",
+      "loc": [
+        "designs/audit/2026-06-11-canon-flatten/canon_flatten_examination.md:117"
+      ]
+    },
+    {
+      "ref": "PP-686",
+      "open": "13-Conviction taxonomy (PP-684; migration roster PP-685 primary on conflicts per D1; axis matrix; effective_convictions PP-686 \u00a73.7) \u00b7 Self-Other scalar \u00b7 4 **R",
+      "loc": [
+        "designs/audit/2026-06-11-canon-flatten/canon_flatten_examination.md:117"
+      ]
+    },
+    {
+      "ref": "PP-685",
+      "open": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
+      "loc": [
+        "references/npc_registry.yaml:41"
+      ]
+    },
+    {
+      "ref": "PP-685",
+      "open": "assigned inferred Convictions per PP-685 \u00a74 with [ASSUMPTION] flags.",
+      "loc": [
+        "references/npc_registry.yaml:1027"
+      ]
+    },
+    {
+      "ref": "PP-650",
+      "open": "`[GAP: Cultural template for Niflhel-related NPCs after PP-650 strike \u2014 reason: migration_roster \u00a72.7 uses hafenmark_procedural as placeholder; specific replace",
+      "loc": [
+        "designs/audit/2026-05-08-character-generation-audit.md:259"
+      ]
+    },
+    {
+      "ref": "PP-687",
+      "open": "T-D-2 (P3):** Chain rigorous *given* the conviction/key substrate. **Cannot fully verify without reading PP-687 and PP-684 files.** `[GAP: PP-687 key_substrate,",
+      "loc": [
+        "designs/audit/2026-05-16-faction-ners-all-directions.md:173"
+      ]
+    },
+    {
+      "ref": "PP-687",
+      "open": "`[CONFIDENCE: medium-high]` overall, with `[GAP: PP-687 key_substrate, PP-684 conviction_taxonomy, full design docs for victory/factions_personal/faction_politi",
+      "loc": [
+        "designs/audit/2026-05-16-faction-ners-all-directions.md:314"
+      ]
+    },
+    {
+      "ref": "PP-687",
+      "open": "[GAP: PP-684 + PP-687 substrates not deep-read; A-5 strategic fog still PARTIAL; full bottom-up chain verification deferred]",
+      "loc": [
+        "designs/audit/2026-05-16-session-handoff.md:282"
+      ]
+    },
+    {
+      "ref": "PP-687",
+      "open": "| V-1.7 | M-1 | P3 | `conviction_taxonomy_v30.md` (PP-684) \u00b7 `key_substrate_v30.md` (PP-687) | Personal-scale \u2194 faction-scale Conviction flow soundness (needed ",
+      "loc": [
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:48"
+      ]
+    },
+    {
+      "ref": "PP-719",
+      "open": "Master \u00a75.6b cites **PP-719** (\"PP-719 clarification per EC-F2.A-01\") \u2014 PP-719 is absent from `canon/patch_register_active.yaml` (NOT FOUND) and has 0 ledger hi",
+      "loc": [
+        "designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md:50"
+      ]
+    },
+    {
+      "ref": "PP-719",
+      "open": "`[GAP: PP-719 \u2014 cited in master \u00a75.6b; absent from active register and ledger]`",
+      "loc": [
+        "designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md:119"
+      ]
+    },
+    {
+      "ref": "PP-686",
+      "open": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political iso",
+      "loc": [
+        "params/factions/stats_1_7_scale.md:45"
+      ]
+    },
+    {
+      "ref": "PP-460",
+      "open": "RM Founding outcome stats: Mandate 2/Mandate 1 \u2192 L 2 + PS 2 / L 1 + PS 1 (seed equal per PP-686 v2). Inline TODO flagged: PP-460 says RM is statless; may be obs",
+      "loc": [
+        "references/propagation_map_archive_2026-05-10b.md:218"
+      ]
+    },
+    {
+      "ref": "PP-686",
+      "open": "RM Founding outcome stats: Mandate 2/Mandate 1 \u2192 L 2 + PS 2 / L 1 + PS 1 (seed equal per PP-686 v2). Inline TODO flagged: PP-460 says RM is statless; may be obs",
+      "loc": [
+        "references/propagation_map_archive_2026-05-10b.md:218"
+      ]
+    }
+  ],
+  "docket": [
+    {
+      "id": "J-2",
+      "open": "<!-- [STUB: payload inferred, not canon-specified \u2014 provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->",
+      "loc": [
+        "designs/architecture/key_type_registry_v30.md:145",
+        "designs/architecture/key_type_registry_v30.md:162"
+      ]
+    },
+    {
+      "id": "J-2",
+      "open": "| **7** | **3-way piety/conviction name collision** + CI-clock vs Influence-stat overload \u2014 intuitability hazard. | verdict \u00a73/\u00a75-E; game_flow; hierarchy Tier 4 | naming resolution | **P2** | ED-1009 ",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:208"
+      ]
+    },
+    {
+      "id": "J-4",
+      "open": "| **7** | **3-way piety/conviction name collision** + CI-clock vs Influence-stat overload \u2014 intuitability hazard. | verdict \u00a73/\u00a75-E; game_flow; hierarchy Tier 4 | naming resolution | **P2** | ED-1009 ",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:208"
+      ]
+    },
+    {
+      "id": "J-1",
+      "open": "`[OPEN \u2014 J-1: the eight cross-band seams resolve the same way once Jordan rules C7-exempt-vs-explicit-\u00a73-rule. (`ED-1006` is the module-contract-extraction finding, **not** this gap \u2014 mis-cited in pri",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_atlas_v1.md:135"
+      ]
+    },
+    {
+      "id": "J-1",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-12",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-19",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-2",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-20",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-4",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-5",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-7",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-8",
+      "open": "`[OPEN \u2014 Jordan: items 1\u20137 + 8\u20139 are the live J-1/J-2/J-4/J-5/J-7/J-8/J-12/J-19/J-20 docket. This master assigns no new ED IDs (the ~94-ID-conflict backlog is unresolved \u2014 unilateral appends would wor",
+      "loc": [
+        "designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md:217"
+      ]
+    },
+    {
+      "id": "J-2",
+      "open": "| 18 | J-2 | Key payloads/magnitudes = **APPROVE** inferred payloads + grounded default magnitudes | flip registry [STUB] #29/#30; set grounded defaults (logged, vetoable) | QUEUED (medium) |",
+      "loc": [
+        "designs/audit/2026-06-19-ratification/ratification_decisions_2026-06-19.md:50"
+      ]
+    }
+  ]
+}

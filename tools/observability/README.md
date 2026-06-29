@@ -27,6 +27,13 @@ how attributes / scores / statistics / Keys propagate, instead of reading it fil
 - **Handshakes** — the named cross-scale handoffs (`scale_transitions §3` + Domain Echo §5): the
   inter-container ripples drawn as a scale-to-scale diagram. These are *authored sugar* over the
   all-directions Key substrate beneath.
+- **Decisions** — the centralized open-decision register: every loose end (open rulings, naming
+  collisions, unratified provisionals, gaps, assumptions) deduplicated and prioritized P1/P2/P3,
+  with the file:line locations where each is flagged. The plain-language companion is
+  [`DECISIONS.md`](DECISIONS.md); the archive cross-reference is
+  [`ARCHIVE_RELEVANCE.md`](ARCHIVE_RELEVANCE.md) (open items whose answer already exists in the
+  archives). Plain-language, system-named walkthroughs of the whole game live in
+  [`guide/EXECUTIVE_GUIDE.md`](guide/EXECUTIVE_GUIDE.md).
 - **Health panel (chips)** — emit/route closure %, orphan emits, broadcast keys, **naming alerts**
   (the canonical registry-system ↔ module-name drift, surfaced and reconciled, never hidden), and
   term / abbreviation / collision / handshake counts.
@@ -78,8 +85,11 @@ tracing, and records every substitution in `graph.json → meta.naming_alerts`.
 | `index.html` | viewer that loads `graph_data.js` + `lexicon_data.js` (edit this to change the UI; rebuild to refresh `console.html`) |
 | `graph_data.js` / `graph.json` | `window.VALORIA_GRAPH = {…}` — the propagation graph |
 | `lexicon_data.js` / `lexicon.json` | `window.VALORIA_LEXICON = {…}` — terms, abbreviations, collisions, deprecated, handshakes |
-| `build_graph.py` | the graph extractor (also drives the lexicon build + the bundle) |
+| `build_graph.py` | the graph extractor (also drives lexicon + decisions + archive xref + the bundle) |
 | `build_lexicon.py` | the lexicon extractor |
+| `build_decisions.py` / `DECISIONS.md` / `decisions.json` | open-decision register extractor + readable register + data |
+| `build_archive_xref.py` / `ARCHIVE_RELEVANCE.md` | archive→open-item cross-referencer (what's already answered) |
+| `guide/EXECUTIVE_GUIDE.md` | plain-language, system-named walkthrough of the whole game (mermaid charts) |
 
 ## Relationship to the other two deliverables
 

@@ -111,6 +111,7 @@
         <div class="tab" data-tab="key">Keys</div>
         <div class="tab" data-tab="scalar">Scalars</div>
         <div class="tab" data-tab="lexicon">Lexicon</div>
+        <div class="tab" data-tab="decision">Decisions</div>
       </div>
       <div class="filters">
         <select id="f-scale"><option value="">all scales</option></select>
@@ -145,6 +146,7 @@
 
 <script src="graph_data.js"></script>
 <script src="lexicon_data.js"></script>
+<script src="decisions_data.js"></script>
 <script>
 "use strict";
 const G = window.VALORIA_GRAPH;
@@ -172,6 +174,11 @@ const LEX = window.VALORIA_LEXICON || {terms:[],abbreviations:[],collisions:[],d
 const lexByCanon = {}; LEX.terms.forEach(t=>lexByCanon[t.canonical.toLowerCase()]=t);
 const STATUS_COL={canonical:'#3fb950',deprecated:'#ff8c42',censured:'#ff6b6b',placeholder:'#a78bfa'};
 function resolveName(q){const hit=(LEX.name_index||{})[q.trim().toLowerCase()];return hit?hit.map(c=>lexByCanon[c.toLowerCase()]).filter(Boolean):[];}
+
+// decisions
+const DEC = window.VALORIA_DECISIONS || {decisions:[],meta:{by_priority:{}}};
+const PRIO_COL={1:'#ff6b6b',2:'#ff8c42',3:'#7d8aa0'};
+const CAT_LABEL={ruling:'Open ruling',naming:'Naming/collision',ratification:'Ratification',mechanics:'Mechanics',gap:'Gap',assumption:'Assumption',stub:'Stub',todo:'TODO'};
 function nodeColor(id){const k=kindOf(id);if(k==='system')return sysById[id].id==='engine'?'var(--engine)':'var(--system)';if(k==='key')return 'var(--key)';if(k==='scalar')return 'var(--scalar)';return 'var(--scale)';}
 function label(id){const k=kindOf(id);if(k==='scalar')return scById[id].name;return id;}
 
@@ -196,7 +203,7 @@ function inOf(id){
 }
 
 // ---- state ----
-let TAB='system', SELECTED=null, SELTERM=null, MODE='ripple', DEPTH=3, FILTER_SCALE='', FILTER_EXTRA='';
+let TAB='system', SELECTED=null, SELTERM=null, SELDEC=null, MODE='ripple', DEPTH=3, FILTER_SCALE='', FILTER_EXTRA='';
 let view={x:0,y:0,k:1};
 
 // ---- header chips ----
@@ -216,6 +223,8 @@ let view={x:0,y:0,k:1};
   if(ls){add(`<b>${ls.terms}</b> terms`);add(`<b>${ls.abbreviations}</b> abbr`);
     if(ls.collisions)add(`<b style="color:#ff8c42">${ls.collisions}</b> collisions`);
     add(`<b>${ls.handshakes}</b> handshakes`);}
+  const dp=DEC.meta&&DEC.meta.by_priority;
+  if(dp)add(`open decisions <b style="color:#ff6b6b">${dp[1]||0}</b>·${dp[2]||0}·${dp[3]||0}`);
 })();
 
 // ---- filters ----
@@ -229,7 +238,8 @@ function refreshExtraFilter(){
   if(TAB==='system'){opts=[...new Set(G.systems.map(s=>s.resolver).filter(Boolean))].sort();sel.append(el('option',{value:''},'all resolvers'));}
   else if(TAB==='key'){opts=G.families.slice();sel.append(el('option',{value:''},'all families'));}
   else if(TAB==='scalar'){opts=[...new Set(G.scalars.map(s=>s.bucket).filter(Boolean))].sort();sel.append(el('option',{value:''},'all buckets'));}
-  else{opts=[...new Set(LEX.terms.map(t=>t.type).filter(Boolean))].sort();sel.append(el('option',{value:''},'all types'));}
+  else if(TAB==='lexicon'){opts=[...new Set(LEX.terms.map(t=>t.type).filter(Boolean))].sort();sel.append(el('option',{value:''},'all types'));}
+  else{opts=['1','2','3'];sel.append(el('option',{value:''},'all priorities'));}
   opts.forEach(o=>sel.append(el('option',{value:o},o)));
   FILTER_EXTRA='';
 }
@@ -241,9 +251,12 @@ function listItems(){
   if(TAB==='system')items=G.systems.map(s=>({id:s.id,meta:s.resolver||s.status,scales:s.scales,extra:s.resolver}));
   else if(TAB==='key')items=G.keys.map(k=>({id:k.id,meta:k.family,scales:k.scale_signature,extra:k.family}));
   else if(TAB==='scalar')items=G.scalars.map(s=>({id:s.id,name:s.name,meta:s.bucket,scales:[sysById[s.owner]?.scales||[]].flat(),extra:s.bucket}));
-  else items=LEX.terms.map(t=>({term:t,id:'lex:'+t.canonical,name:t.canonical,isTerm:true,
+  else if(TAB==='lexicon')items=LEX.terms.map(t=>({term:t,id:'lex:'+t.canonical,name:t.canonical,isTerm:true,
         meta:(t.status!=='canonical'?t.status:(t.abbreviations[0]||t.type||'')),extra:t.type||'',
         search:[t.canonical,...t.aliases,...t.abbreviations,...t.legacy].join(' ').toLowerCase()}));
+  else items=DEC.decisions.map((d,i)=>({dec:d,id:'dec:'+i,name:d.text,isDec:true,
+        meta:'P'+d.priority+' '+(CAT_LABEL[d.category]||d.category),extra:String(d.priority),
+        search:(d.text+' '+(d.systems||[]).join(' ')+' '+d.category).toLowerCase()}));
   return items.filter(it=>{
     if(q){const hay=it.isTerm?it.search:(it.name||it.id).toLowerCase();if(!hay.includes(q))return false;}
     if(!it.isTerm && FILTER_SCALE && !(it.scales||[]).includes(FILTER_SCALE))return false;
@@ -256,21 +269,24 @@ function renderList(){
   const items=listItems();
   items.sort((a,b)=>(a.name||a.id).localeCompare(b.name||b.id));
   items.forEach(it=>{
-    const isSel=it.isTerm?(SELTERM&&SELTERM.canonical===it.term.canonical):(it.id===SELECTED);
+    let isSel,dotCol,onClick;
+    if(it.isTerm){isSel=SELTERM&&SELTERM.canonical===it.term.canonical;dotCol=STATUS_COL[it.term.status]||'#7d8aa0';onClick=()=>selectTerm(it.term);}
+    else if(it.isDec){isSel=SELDEC===it.dec;dotCol=PRIO_COL[it.dec.priority]||'#7d8aa0';onClick=()=>selectDec(it.dec);}
+    else{isSel=it.id===SELECTED;dotCol=nodeColor(it.id);onClick=()=>select(it.id);}
     const row=el('div',{class:'row'+(isSel?' sel':'')});
-    row.append(el('span',{class:'dot'}));
-    row.lastChild.style.background=it.isTerm?(STATUS_COL[it.term.status]||'#7d8aa0'):nodeColor(it.id);
+    row.append(el('span',{class:'dot'}));row.lastChild.style.background=dotCol;
     row.append(el('span',{class:'nm'},it.name||it.id));
     row.append(el('span',{class:'meta'},it.meta||''));
-    row.onclick=it.isTerm?(()=>selectTerm(it.term)):(()=>select(it.id));
+    row.onclick=onClick;
     box.append(row);
   });
   if(!items.length)box.append(el('div',{class:'pad muted small'},'no matches'));
 }
 
 // ---- selection ----
-function select(id){SELECTED=id;SELTERM=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
-function selectTerm(t){SELTERM=t;SELECTED=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function select(id){SELECTED=id;SELTERM=null;SELDEC=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function selectTerm(t){SELTERM=t;SELECTED=null;SELDEC=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function selectDec(d){SELDEC=d;SELECTED=null;SELTERM=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
 
 // ---- ripple BFS ----
 function ripple(root,dir,maxD){
@@ -297,8 +313,18 @@ function render(){
   canvas.innerHTML='';$('#trace').style.display='none';
   if(MODE==='handshakes'){renderHandshakes();return;}
   if(SELTERM){renderTermCard();return;}
+  if(SELDEC){renderDecCard();return;}
   if(!SELECTED)return;
   if(MODE==='ripple')renderRipple();else renderAtlas();
+}
+function renderDecCard(){
+  const d=SELDEC;
+  const sysLink=(d.systems||[]).find(s=>sysById[s]);
+  if(sysLink){renderRipple(sysLink);return;}
+  const h=$('#hint');h.style.display='block';
+  h.innerHTML=`<b style="font-size:14px;color:${PRIO_COL[d.priority]||'#fff'}">P${d.priority} · ${esc(CAT_LABEL[d.category]||d.category)}</b>`+
+    `<br><span class="muted">${esc(d.text)}</span>`+
+    `<br><span class="muted small">${(d.locations||[]).length} location(s) — see panel for the list</span>`;
 }
 function renderTermCard(){
   const t=SELTERM;
@@ -482,6 +508,7 @@ function renderHandshakes(){
 function renderDetail(){
   const box=$('#detail');box.innerHTML='';
   if(SELTERM){detailTerm(SELTERM);return;}
+  if(SELDEC){detailDecision(SELDEC);return;}
   if(!SELECTED){box.append(el('div',{class:'pad muted small'},'Nothing selected.'));return;}
   const k=kindOf(SELECTED);
   if(k==='system')detailSystem(sysById[SELECTED]);
@@ -512,6 +539,14 @@ function sec(title){const s=el('div',{class:'sec'});s.append(el('h3',{},title));
 function pills(container,ids,kindFor){ids.forEach(id=>{const p=el('span',{class:'pill'});p.append(el('span',{class:'dot'}));p.lastChild.style.background=nodeColor(id);p.append(document.createTextNode(label(id)));p.onclick=()=>select(id);container.append(p);});if(!ids.length)container.append(el('span',{class:'muted small'},'—'));}
 const BUCKETCOL={pool:'#3fb950',derived_value:'#f0b542',track:'#58a6ff',clock:'#ff8c42'};
 
+function detailDecision(d){
+  head('P'+d.priority+' decision',(CAT_LABEL[d.category]||d.category),PRIO_COL[d.priority]||'#7d8aa0');
+  let m=sec('the open item');
+  m.append(el('div',{class:'small'},d.text));
+  m.append(el('div',{class:'small muted'},`priority P${d.priority} · ${CAT_LABEL[d.category]||d.category} · cited ${d.count||1}×`));
+  if((d.systems||[]).length){let s=sec('systems');d.systems.forEach(sy=>{const p=el('span',{class:'pill'});if(sysById[sy]){p.append(el('span',{class:'dot'}));p.lastChild.style.background=nodeColor(sy);p.onclick=()=>select(sy);}p.append(document.createTextNode(sy));s.append(p);});}
+  if((d.locations||[]).length){let l=sec(`locations (${d.locations.length})`);d.locations.slice(0,40).forEach(loc=>l.append(el('div',{class:'note',html:'<code>'+esc(loc)+'</code>'})));}
+}
 function detailSystem(s){
   head(s.id,(s.registry_only?'registry-only ':'')+'engine',nodeColor(s.id));
   let m=sec('shape');
