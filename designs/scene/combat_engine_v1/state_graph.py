@@ -52,6 +52,53 @@ STATES = {
 TERMINAL_STATES = {s for s, v in STATES.items() if v.get('terminal')}
 ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}
 
+# ── INJECTION POINTS (WS-1): where a tradition's methodology plugs into the graph ────────────────
+# "The state graph must be able to accept all these differences across traditions" — this is that, as data.
+# Each decision node where the engine currently makes a GENERIC choice is an injection point: a tradition's
+# preferred-node / access / bias (from tradition_decomposition_v1.md) biases the branch HERE. This is the
+# single-source bridge WS-4 (the access catalogue) and WS-5 (The Approach imposition) wire against. Note the
+# FEINT-NODE ABSORB: there is deliberately no separate Feint state — the feint/micro-read lives inside
+# Exchange.read (feint-as-attack), so the graph already reflects the dissolved structure; WS-5 removes the
+# separate feint_eval CODE, not a graph node.
+INJECTION_POINTS = {
+    'approach.measure':    {'node': 'Approach',  'site': 'wrapper.py:66-74',
+                            'generic': 'shorter closes / longer stop-hits',
+                            'injects': 'measure-control: Spanish circulo / Italian misura bias close_rate + preferred measure'},
+    'reopen.measure':      {'node': 'AwaitTempo', 'site': 'wrapper.py:58-64',
+                            'generic': 'reopen vs stay closed (reopen_prob)',
+                            'injects': 'reach/measure-hold: Spanish/Reach impose re-opening (the geometric Vor hold)'},
+    'exchange.commit':     {'node': 'Exchange',  'site': 'wrapper.py:98-105',
+                            'generic': 'commit depth 2-5, disposition-skewed',
+                            'injects': 'Stance posture (The Approach) + wariness vs unread tradition (WS-5)'},
+    'exchange.read':       {'node': 'Exchange',  'site': 'wrapper.py:131-133',
+                            'generic': 'read_win logistic',
+                            'injects': 'precommit (Japanese sen-sen-no-sen) + the FEINT/micro-read manipulation (feint-as-attack, WS-5)'},
+    'exchange.mode':       {'node': 'Exchange',  'site': 'wrapper.py:135-136',
+                            'generic': 'parry/dodge/wind by mode_sigma',
+                            'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
+    'exchange.bind_entry': {'node': 'Bind',      'site': 'wrapper.py:178-180',
+                            'generic': 'bind on wind/partial',
+                            'injects': 'German IMPOSE the bind (Winden); Italian/English REFUSE it (cavazione/disengage) — the contact axis'},
+    'exchange.counter':    {'node': 'Riposte',   'site': 'wrapper.py:147-158',
+                            'generic': 'single-time counter select',
+                            'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},
+    'burst.continuation':  {'node': 'AwaitTempo', 'site': 'wrapper.py:272',
+                            'generic': 'continue burst vs separate (clean defence)',
+                            'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
+    'contact.axis':        {'node': 'Bind',      'site': '(WS-5, unbuilt)',
+                            'generic': '(no contact pole today)',
+                            'injects': 'clinch / disengage / choke (German Ringen, Italian cavazione) — the genuinely-missing distinction'},
+}
+
+
+def injection_markdown():
+    out = ["### Tradition injection points (where each methodology biases the state graph)",
+           "| point | state | engine site | generic choice today | what a tradition injects |",
+           "|---|---|---|---|---|"]
+    for k, v in INJECTION_POINTS.items():
+        out.append(f"| `{k}` | {v['node']} | `{v['site']}` | {v['generic']} | {v['injects']} |")
+    return "\n".join(out)
+
 
 def transitions_from(state):
     return STATES[state]['to']
@@ -156,6 +203,12 @@ if __name__ == '__main__':
         if any(e['kind'] == 'engagement_end' and e['felled'] for e in ev):
             felled_seen = True; break
     checks.append(felled_seen); print(f"(f) Felled terminal reachable (a kill occurs): {'OK' if felled_seen else 'FAIL'}")
+
+    # (g) every injection point references a defined state (the WS-1 bridge stays synced with the graph)
+    bad_inj = {k: v['node'] for k, v in INJECTION_POINTS.items() if v['node'] not in valid}
+    g_ok = not bad_inj
+    checks.append(g_ok); print(f"(g) {len(INJECTION_POINTS)} injection points reference defined states: {'OK' if g_ok else 'FAIL — ' + str(bad_inj)}")
+    print('\n' + injection_markdown())
 
     print('\n' + rule)
     bad = [i for i, c in enumerate(checks) if not c]

@@ -64,6 +64,13 @@ def test_live_trace_visits_core_states():
         assert core in fired, f"core state {core} never fired in the smoke sweep"
 
 
+def test_injection_points_reference_defined_states():
+    """The WS-1 tradition injection-point bridge stays synced with the graph — every point names a real state."""
+    valid = set(G.STATES)
+    for k, v in G.INJECTION_POINTS.items():
+        assert v['node'] in valid, f"injection point {k} -> undefined state {v['node']}"
+
+
 def test_known_dead_branch_is_documented():
     """The collapse (stamina<=-4) separation reason is empirically dead — assert it's a DECLARED reason (so the
     harness can flag it) rather than silently absent. This pins the finding; a future fix can remove it from
