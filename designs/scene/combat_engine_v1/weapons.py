@@ -89,3 +89,8 @@ for _w, _rec in WEAPONS.items():
 # Back-compat view: GEOMETRY as a name-keyed map onto each record's nested geometry (consumers: the systems
 # key-sync assert, weapon_physics docstring). The single source is WEAPONS[w]['geometry'].
 GEOMETRY = {_w: _rec['geometry'] for _w, _rec in WEAPONS.items()}
+
+# HALF-SWORD FORM mapping (weapon data): which base weapon switches to which shortened gripped-blade form. The
+# inverse is DERIVED (not a second hand-maintained dict). Read by systems.halfsword_target + capabilities.
+HALFSWORD_FORM = {'longsword': 'longsword_halfsword'}
+HALFSWORD_BASE = {_form: _base for _base, _form in HALFSWORD_FORM.items()}

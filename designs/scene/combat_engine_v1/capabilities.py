@@ -13,16 +13,14 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-import systems as S
-import core
-from combatant import WEAPONS
+from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
 
 # Each capability: the state-graph node it gates, a pure predicate over (name, weapon-dict), and the human
 # "needs" string. Predicates are seeded to match current engine behavior exactly (verified in __main__).
 CAPABILITIES = {
     'halfsword': {
         'node': 'closed.form_switch (systems.halfsword_target)',
-        'pred': lambda name, w: name in S.HALFSWORD_FORM or name in S.HALFSWORD_BASE,
+        'pred': lambda name, w: name in HALFSWORD_FORM or name in HALFSWORD_BASE,
         'needs': "a long rigid blade you can grip mid-stave (the longsword family)",
     },
     'gap_thrust': {
@@ -75,6 +73,8 @@ if __name__ == '__main__':
         pass
     from combatant import Combatant
     from config import CFG
+    import systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
+    import core
     checks, rule = [], '=' * 64
     print("capabilities.py — affordance gates verified against the live engine"); print(rule)
 

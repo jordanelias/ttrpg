@@ -6,7 +6,7 @@ import r8_parity_harness as r8
 
 # The weapons DICTIONARY + GEOMETRY live in weapons.py (the data layer); the DERIVATION in weapon_physics.py.
 # Re-exported here so existing `from combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
-from weapons import WEAPONS, GEOMETRY  # noqa: F401  (each weapon is ONE record in weapons.py; GEOMETRY is a view)
+from weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F401  (data lives in weapons.py)
 
 
 class Combatant:

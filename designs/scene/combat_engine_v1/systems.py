@@ -5,7 +5,7 @@ import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp, tanh
 from config import HANDLE_RANK
 import core
-from combatant import WEAPONS, GEOMETRY
+from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg):
@@ -212,8 +212,7 @@ def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
 
 
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
-HALFSWORD_FORM = {'longsword':'longsword_halfsword'}
-HALFSWORD_BASE = {'longsword_halfsword':'longsword'}
+# HALFSWORD_FORM / HALFSWORD_BASE are weapon DATA (single source in weapons.py, inverse derived); imported above.
 
 def halfsword_target(c, closed, opp_armor):
     """PURE predicate: the weapon-form a half-sword-capable fighter SHOULD be in for the current range/armour
