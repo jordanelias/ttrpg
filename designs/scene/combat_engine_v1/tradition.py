@@ -79,7 +79,28 @@ def familiarity(reader_trad, opponent_trad):
 def profile(trad):
     return TRADITIONS.get(trad, TRADITIONS['none'])
 
+# ─────────────────────────── AFFINITY POINT-BUY (WS-4 dissolution) ───────────────────────────
+# The scalar channel vector is dissolved into a BALANCED affinity allocation: every tradition (including 'none')
+# now spends the SAME total budget across the 7 channels. This removes the systematic edge that made the raw
+# vectors unbalanced — they summed unequally (german/spanish 7.75, none 7.0), so 'none' was disadvantaged and the
+# field carried a measured 6.8pp unconditional spread. A tradition's SHAPE (relative emphasis) is its identity;
+# the TOTAL is equal -> vacuum-balanced by construction (the representation_alternatives recommendation). The
+# imposition gate (PREFERRED) carries the qualitative "which fight"; this carries the balance. AFFINITY_NORMALIZE
+# toggles it (for A/B measurement vs the old raw vectors).
+_CHANNELS = ('visual', 'tactile', 'precommit', 'leverage', 'tempo', 'measure', 'balance')
+AFFINITY_BUDGET = 7.0          # = 7 channels x neutral 1.0; every tradition is normalised to this sum
+AFFINITY_NORMALIZE = True
+def _normalized(trad):
+    v = TRADITIONS.get(trad, TRADITIONS['none'])
+    s = sum(v[ch] for ch in _CHANNELS)
+    f = AFFINITY_BUDGET / s if s > 0 else 1.0
+    return {ch: v[ch] * f for ch in _CHANNELS}
+_AFFINITY = {t: _normalized(t) for t in TRADITIONS}
+
+
 def channel_weight(trad, channel):
+    if AFFINITY_NORMALIZE:
+        return _AFFINITY.get(trad, _AFFINITY['none']).get(channel, 1.0)
     return TRADITIONS.get(trad, TRADITIONS['none']).get(channel, 1.0)
 
 # ─────────────────────────── EQUIPPABLE ABILITIES (scaffold) ───────────────────────────

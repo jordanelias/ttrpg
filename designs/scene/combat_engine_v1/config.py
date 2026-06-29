@@ -110,7 +110,7 @@ CFG = dict(
   # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
   # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
   # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
-  IMPOSITION_GATE=False, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,
+  IMPOSITION_GATE=True, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,   # ON by default (WS-4 dissolution): with the affinity budget it beats the keep-bias baseline on spread + none-fairness + qualitative differentiation (section C). Toggle off to compare.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
