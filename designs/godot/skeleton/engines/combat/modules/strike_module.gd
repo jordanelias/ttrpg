@@ -135,12 +135,14 @@ func _roll_net_continuous(pool: int, cfg: CombatConfig) -> float:
 	return GameState.rng.randfn(0.40 * pool, 0.800 * sqrt(float(maxi(1, pool))))
 
 
-## canonical degree band (r1.degree_of_success), base Ob = decisive_ob (3).
+## degree band WITH the ER-2 continuity correction — band on net-(ob-0.5), matching core.py
+## degree() (commit 793f1a62). Without the -0.5 shifts the Godot port ran ~5-9pp low on success
+## vs the discrete/Python engine below ~5D (the personal-combat 5-13D band) — verification RU-1.
 func _degree(net: float, ob: float) -> String:
-	if net <= 0.0:
+	if net < 0.5:
 		return "failure"
-	if net >= 2.0 * ob and net >= 3.0:
+	if net >= 2.0 * ob - 0.5 and net >= 2.5:
 		return "overwhelming"
-	if net >= ob:
+	if net >= ob - 0.5:
 		return "success"
 	return "partial"

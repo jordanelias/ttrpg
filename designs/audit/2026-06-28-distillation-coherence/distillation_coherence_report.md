@@ -10,6 +10,8 @@
 # Valoria — Distillation & Cross-Scale Coherence Investigation
 **Date:** 2026-06-28 · **Scope:** every runtime system, the Key substrate, the resolver layer, the scale-transition fabric.
 
+> **✓ Adversarially verified 2026-06-28** — all 7 lenses complete (6 with independent skeptic verifiers, the 7th/ESCP self-verified in the main loop after a session-limit cutoff); all proposals survived. See **[verification_addendum.md](verification_addendum.md)** (§D = the ESCP lens), which **supersedes this report where they conflict.** Two body claims are reversed there: **(A1)** Instance B is *not* a limiting case of Instance A — two distinct kernels, keep both; **(A2)** do *not* add a 5th `state_axis` KeyBus bucket — Initiative/Poise are engine-internal, the bus stays at 4. Plus ten smaller corrections and the resolved handoff/loop questions. Concrete safe fixes from this pass are committed alongside; design-gated items are in **[open_decisions.md](open_decisions.md)**.
+
 ---
 
 ## 0. Executive summary (plain language)
