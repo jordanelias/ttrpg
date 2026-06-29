@@ -20,6 +20,7 @@ import numpy as np
 import wrapper
 from combatant import Combatant
 import presets, probabilities as P, narrate
+from commentary import commentate
 from trace import run_traced_fight
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
@@ -56,7 +57,7 @@ def do_trace(req):
             e['dist'] = d
             if e['kind'] == 'roll':       # depth-2: what each degree leads to (hit/bind/riposte/miss under the mode)
                 e['dist2'] = {deg: P.outcome_distribution(deg, e['mode'], cfg) for deg in d}
-    return {'result': result, 'narration': narrate.render(events, seed=seed), 'events': events,
+    return {'result': result, 'commentary': commentate(events, cfg), 'events': events,
             'winner': (A.label if result == 1 else B.label if result == -1 else None)}
 
 

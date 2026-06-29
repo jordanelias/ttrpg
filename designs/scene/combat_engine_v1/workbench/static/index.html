@@ -53,6 +53,14 @@
   .meta{color:var(--dim);font-size:12px}
   .sep{color:var(--dim);margin:4px 0 2px 6px}
   .result{margin-top:14px;font-size:15px;font-weight:700}
+  .call{font-size:14px;line-height:1.55;padding:1px 0}
+  .call.hit{color:var(--good)} .call.bind{color:var(--bind)} .call.riposte{color:var(--accent)} .call.felled{color:var(--bad);font-weight:600}
+  .mech{margin:3px 0 6px 12px;color:var(--dim);font-size:12px;border-left:2px solid var(--line);padding-left:10px}
+  .mech div{padding:1px 0}
+  .oddstoggle{margin:1px 0 6px 12px;color:var(--accent);font-size:12px;cursor:pointer;opacity:.85}
+  .oddstoggle:hover{opacity:1}
+  .oddsbox{display:none;margin:2px 0 8px 10px}
+  .oddsbox.open{display:block}
   /* tuning */
   .tab{display:flex;gap:6px;margin-bottom:10px}
   .tab button{background:var(--panel2);color:var(--ink);font-weight:600;padding:4px 9px;font-size:12px}
@@ -258,12 +266,40 @@ function renderTrace(events){
     else if(e.kind==='fight_result'){ add(`<div class="result">${e.winner?e.winner+' wins':'unresolved'}</div>`); }
   }
 }
+// ---- commentary transcript (the legible main view) ----
+function distRowsFor(dist, took, dist2){
+  return Object.entries(dist).map(([label,p])=>{
+    const isTook = took!=null && label===took;
+    const d2 = dist2 && dist2[label];
+    if(d2){
+      const head=distRow(label+' ▸',p,` onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('open')"`,(isTook?'took ':'')+'d2');
+      const kids='<div class="branches d2">'+Object.entries(d2).map(([k,v])=>distRow(k,v,'','')).join('')+'</div>';
+      return head+kids;
+    }
+    return distRow(label,p,'',isTook?'took':'');
+  }).join('');
+}
+function branchNode(b){
+  return `<div class="node" onclick="this.nextElementSibling.classList.toggle('open')"><span class="tag">${b.label} ▸</span></div><div class="branches">${distRowsFor(b.dist,b.took,b.dist2)}</div>`;
+}
+function entryHTML(e){
+  const mech = e.mech ? `<div class="mech">${(Array.isArray(e.mech)?e.mech:[e.mech]).map(m=>'<div>'+m+'</div>').join('')}</div>` : '';
+  const odds = e.branches ? `<div class="oddstoggle" onclick="this.nextElementSibling.classList.toggle('open')">▸ odds &amp; alternate branches</div><div class="oddsbox">${e.branches.filter(Boolean).map(branchNode).join('')}</div>` : '';
+  if(e.type==='turn') return `<div class="turn">${e.line}</div>`;
+  if(e.type==='result') return `<div class="result">${e.line}</div>${mech}`;
+  if(e.type==='beat') return `<div class="beat"><div class="call ${e.cls||''}">${e.line}</div>${mech}${odds}</div>`;
+  const cls = e.type==='sep'?'sep':'meta';
+  return `<div class="${cls}"><span class="${e.cls||''}">${e.line}</span></div>${mech}${odds}`;
+}
+function renderCommentary(entries){
+  document.getElementById('trace').innerHTML = entries.map(entryHTML).join('');
+}
 async function runTrace(){
   setStatus('running…');
   document.getElementById('modebadge').textContent='n = 1 — one outcome, not a probability';
   const r=await api('/api/trace',{scenario:scenario(),overrides:overrides(),seed:+document.getElementById('seed').value});
   if(r.error){setStatus('error: '+r.error);return;}
-  renderTrace(r.events); setStatus('done · '+(r.winner?r.winner+' won this run':'unresolved'));
+  renderCommentary(r.commentary); setStatus('done · '+(r.winner?r.winner+' won this run':'unresolved'));
 }
 async function runMC(){
   setStatus('running trials…');
