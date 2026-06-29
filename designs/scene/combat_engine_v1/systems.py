@@ -20,7 +20,8 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     often). A choked grip trades cadence for close-quarters control; a lunge/extended grip trades repeat-speed for
     reach (handled at the call site via grip state)."""
     w=c.w
-    pen=cfg['WEIGHT_PEN']*(w['wt']=='heavy')+cfg['HANDS_COMMIT']*(w['hands']==2 and w['wt']=='heavy')
+    _heft=core.heft_resp(w,cfg)   # WS-2 req4: continuous heft (binary mode -> {0,1}, byte-identical to wt=='heavy')
+    pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
     grip=getattr(c,'grip','normal')
     if grip=='choke':  pen += cfg['CHOKE_TEMPO_PEN']    # choked grip: a bit slower cadence (control/leverage gain elsewhere)
@@ -45,7 +46,7 @@ def close_tempo(c, cfg, fatigue=0.0):
 def stamina_max(c): 
     import r8_parity_harness as r8; return r8.stamina_max(c.end,c.spirit)
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*(c.weight=='heavy')+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*core.heft_resp(c.w,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # WS-2 req4: continuous heft
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
@@ -55,7 +56,7 @@ def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cf
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
-    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*(w['wt']=='heavy')+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)
+    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*core.heft_resp(w,cfg)+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)   # WS-2 req4: continuous heft
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
