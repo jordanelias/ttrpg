@@ -3,6 +3,14 @@
 **Status:** Decomposition artifact (mechanical-tier; the foundation WS-4 consumes). Evidence-traced, source-tier
 graded; **not** canon — the in-world naming and which cultures train which tradition stay Jordan's creative layer.
 
+> **UPDATE 2026-06-29 — the WS-4 dissolution has since LANDED** (`design/scene-combat-v1`). The scalar
+> channel-weight vector below is no longer "current": `tradition.py` now normalises every tradition (incl. `none`)
+> to an **equal affinity budget** (the shape is identity, the total is equal → total-competence vacuum-balanced
+> by construction; `none` lifted 46→49), and the **imposition gate** (default on) carries the qualitative
+> "which fight". That combination beats the keep-bias baseline on §C. The residual ~6pp is channel-LEVERAGE,
+> under C1 verification (the tradition×context matrix). The analysis below stands as the *reasoning* that drove
+> the dissolution; read it as provenance, not as a description of the live primitive.
+
 ## Why this exists (req 2 + your directive)
 
 The current `tradition.py` models a tradition as a 7-dim scalar channel-weight vector (e.g. `german tactile=1.35`).

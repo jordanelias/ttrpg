@@ -83,6 +83,18 @@ shape the methodology is meant to manage:
   cannot specialize AND balance) and the **baseline §C's re-architecture must beat**: the WS-4 tradition model
   (affinity budget + abilities-as-access) has to bring this spread inside the band while staying qualitatively
   distinct (C1), or it falls back to keep-bias.
+- **UPDATE 2026-06-29 — WS-4 dissolution landed; §C PARTIALLY met.** The affinity point-buy budget (every
+  tradition normalised to an equal total) + the imposition gate (default on) **fixed the `none` injustice**
+  (45.1→~49, no longer lowest) and beats the keep-bias baseline on spread + qualitative differentiation. BUT the
+  new **C1 contextual test** (`balance.tradition_context_matrix`, tradition×weapon, 5 contexts) shows full
+  context-balance is **not** achieved: only **2 distinct leaders** across the 5 contexts (the top cluster is
+  noise-tight — two runs disagreed on the non-spanish leader), with **spanish broadly strong** (clean niche at
+  rapier = its measure paradigm) and **chinese broadly weak** (never leads, ≤47.6%). The residual is channel
+  **LEVERAGE** (some channels move win-rate more than others, so a shape emphasising them — spanish's
+  measure/balance — wins across contexts; chinese's burst loses across them). Equalising the *budget* removed the
+  gross total-competence edge but not the per-channel leverage. **Closing it** = the effectiveness-functions
+  calibration (normalise each channel's marginal value so each paradigm is decisive in *its* context), which is
+  design-laden (paradigm-strength = Jordan's call) — run `balance.py context` to re-measure after any change.
 
 ## How to use it
 

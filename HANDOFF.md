@@ -9,10 +9,35 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Pending
 
-- _(nothing in flight)_
+- **`design/scene-combat-v1`** (22 commits ahead of main, UNMERGED) — the scene-combat engine build (WS-0..WS-8).
+  Substantially complete; awaiting Jordan's ratification before merge. See the Decisions entry below and
+  `designs/scene/combat_engine_v1/`. Open follow-ups (Jordan's calls) listed in Next actions.
 
 ## Decisions
 
+- 2026-06-29 — **Scene-combat engine (`design/scene-combat-v1`, 22 commits, UNMERGED — awaiting ratification).**
+  Built the 1v1 scene-combat engine (`designs/scene/combat_engine_v1/`: wrapper=state machine, core=σ-leverage
+  resolution, systems=subsystems, tradition=affinity model, combatant/config=continuous morphology, workbench=
+  visual tuning + narrated n=1 watch + depth-2 branch explorer). Delivered the 7 requirements (WS-1 state-graph
+  integrity+injection points, WS-2 continuous morphology weight=kg + affordance gates, WS-3 bottom-up tradition
+  decomposition, WS-4 representation, WS-5 The Approach, WS-6 workbench, WS-8 balancing methodology) + WS-7
+  multi-combatant design. Core design decisions this session:
+  - **Commitment is a SPECTRUM** — commit is continuous (`2+3·Beta`), not integer rungs; feint↔all-in is one axis.
+  - **Commitment = recovery, made PHYSICAL** — overcommit cost scales with how hard the weapon is to arrest, and
+    weight is **NON-LINEAR** (`mass**1.5 · pob`): rapier 0.93 < longsword 1.0 < mace 1.45 < poleaxe 2.24.
+  - **Grip/stance/lunge DERIVED from morphology, never flagged** (Jordan's directive) — `close_unwieldiness`(reach),
+    `can_choke`(grip_len), `lunge_quality`(thrust × non-linear lightness × hand-balance × 1H). Emergent: the
+    rapier (long reach, short grip) can't choke → suffers in the close; a longsword lunge ≠ a rapier lunge.
+  - **Tempo coupled to commitment+recovery** — a deep/heavy commit costs readiness (slower next action); heavy
+    weapons self-regulate. `RECOVERY_TEMPO_K=0.15` (structural ~5pp effect on extremes; magnitude is Jordan's).
+  - **WS-4 dissolution** — the channel vector became an **affinity point-buy budget** (equal total per tradition;
+    shape=identity, total=equal) + the **imposition gate** (default on). Fixed the `none` injustice (46→49) and
+    beats the keep-bias baseline. **Weapons are NOT equalised** (spear 94 / mace 38) — a battlefield weapon ≠ a
+    duelling weapon (the contextual-balance principle).
+  - **§C verdict — PARTIAL** (honest, refines the "clears §C" commit msg): none-fairness fixed + beats keep-bias,
+    but the C1 contextual test (`balance.tradition_context_matrix`) shows only **2 distinct leaders / 5 contexts**
+    — spanish broadly strong (clean niche: rapier/measure), chinese broadly weak. Residual = channel **leverage**.
+  All gates green; 26 combat tests pass; mirrors fair (~0.50).
 - 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOCKING).** Diagnosed the
   292 report-only violations: 286 `NONEXISTENT` from **dual ledger-of-record drift** (design docs minted ED
   numbers in inline `[EDITORIAL:]` tables never migrated to the JSONL), 6 `OPEN_AS_BASIS` (2 of them validator
@@ -65,6 +90,18 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 _(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
 allocation: workplan-v5 **LB-21**, at the next integration pause.)_
 
+- **Scene-combat (`design/scene-combat-v1`) — awaiting Jordan, then merge:**
+  1. **Close the channel-leverage residual (the §C remainder).** The affinity budget fixed total-competence but
+     not per-channel leverage → spanish broad-strong, chinese broad-weak, only 2 niches. The fix is the
+     **effectiveness-functions calibration**: measure each channel's marginal win-leverage, then normalise so each
+     paradigm is decisive in *its* context (chinese-burst should win a fast/light-weapon context; german-bind the
+     longsword context — currently it doesn't). **Design-laden** (how strong each paradigm should be = Jordan).
+     Re-measure with `python designs/scene/combat_engine_v1/workbench/balance.py context`.
+  2. **The abilities-as-access depth** (WS-4's other half): the 7 phase-slots + techniques-as-permission + the
+     learning-gate ("can't bind-and-wind / Spanish footwork without having trained it"). Carries the open
+     decisions the plan flags as Jordan's: affinity full-point-buy vs thin, the cyclic node relation, naming.
+  3. **Tunable magnitudes** (Class-C, workbench-adjustable): `RECOVERY_TEMPO_K` (0.15), `LUNGE_*`, `CLOSE_REACH_REF`.
+  4. **Ratify → merge to main** (squash; the branch is self-contained under `designs/scene/` + `tests/valoria/`).
 - **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired to
   `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier` Check 4 blocking
   for `skills/`). Earlier passes already landed the coverage_matrix single-source + 12-skill boilerplate

@@ -100,6 +100,40 @@ def tradition_field_table(cfg=None, n=400):
     return {'n': n, 'rows': rows}
 
 
+def tradition_context_matrix(cfg=None, contexts=('arming', 'longsword', 'rapier', 'sabre', 'spear'), n=150):
+    """C1 contextual-balance test (WS-8 section 5): does the tradition ranking FLIP across weapon-contexts? For
+    each context weapon, every fighter wields that weapon and we measure each tradition's field-average win-rate.
+    If the leading tradition VARIES by context (each leads in some context, none is globally dominant), the
+    unconditional spread is legitimate context-conditional balance — 'each fighter has a preferred paradigm' — not
+    a flat-balance failure. Returns {weapon: [(tradition, win%), ... sorted]}."""
+    cfg = cfg or config.CFG
+    out = {}
+    for wpn in contexts:
+        rows = []
+        for t in TRADITIONS:
+            ps = []
+            for opp in TRADITIONS:
+                p, *_ = winrate({'weapon': wpn, 'tradition': t}, {'weapon': wpn, 'tradition': opp},
+                                cfg, n, seed=(hash((wpn, t, opp)) % 9999))
+                ps.append(p)
+            rows.append((t, round(100 * sum(ps) / len(ps), 1)))
+        rows.sort(key=lambda r: -r[1])
+        out[wpn] = rows
+    return out
+
+
+def _md_context(m):
+    out = ["### Tradition x weapon-context — C1 test (does the leader FLIP across contexts?)",
+           "_If each tradition leads in SOME context, the unconditional spread is context-conditional, not dominance._",
+           "| context | leader | win% | runner-up | spread |", "|---|---|---|---|---|"]
+    for wpn, rows in m.items():
+        sp = round(rows[0][1] - rows[-1][1], 1)
+        out.append(f"| {wpn} | **{rows[0][0]}** | {rows[0][1]} | {rows[1][0]} ({rows[1][1]}) | {sp}pp |")
+    leaders = {rows[0][0] for rows in m.values()}
+    out.append(f"\n_distinct leaders across {len(m)} contexts: **{len(leaders)}** ({', '.join(sorted(leaders))})_")
+    return "\n".join(out)
+
+
 def _md_weapon(t):
     out = [f"### Weapon matchup vs {t['baseline']} (uniform-4, light armour, N={t['n']} position-swapped)",
            "| weapon | win% | 95% CI |", "|---|---|---|"]
@@ -142,3 +176,5 @@ if __name__ == '__main__':
         print(_md_attr(attribute_parity_table(n=n)) + "\n")
     if which in ('tradition', 'all'):
         print(_md_trad(tradition_field_table(n=max(200, n // 2))) + "\n")
+    if which in ('context', 'all'):
+        print(_md_context(tradition_context_matrix(n=max(120, n // 3))) + "\n")
