@@ -15,7 +15,7 @@
 | 0 | 5 | 1 | VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1 |
 | 1 | 6 | 2 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 2 | 7 | 2 | Date: 2026-04-13 |
-| 3 | 8 | 2 | Cross-references: stage6_factions.md, social_contest_system_v2.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md |
+| 3 | 8 | 2 | Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md |
 | 4 | 9 | 2 | Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9) |
 | 5 | 10 | 2 | Patches: None (new system) |
 | 6 | 14 | 2 | §1 CORE CONCEPTS |
@@ -129,7 +129,7 @@
 | 0 | 22,481 | VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1 |
 | 1 | 17 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 2 | 4 | Date: 2026-04-13 |
-| 3 | 64 | Cross-references: stage6_factions.md, social_contest_system_v2.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md |
+| 3 | 64 | Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md |
 | 4 | 14 | Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9) |
 | 5 | 8 | Patches: None (new system) |
 | 6 | 734 | §1 CORE CONCEPTS |

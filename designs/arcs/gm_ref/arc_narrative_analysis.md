@@ -90,7 +90,7 @@ Average: 22/25. Consistently strong emergence quality. The non-greedy framework 
 |-----------|-------|------------|
 | Emergence | 5 | A successful Parliamentary action creates a Crown weakness as a side effect. The interaction between Debate outcome → Mandate shift → Crown Virtue Ethics framework vulnerability is multi-system and unpredictable. |
 | Table experience | 5 | "Hafenmark won the debate and created a Crown weakness they now have to decide whether to exploit or repair." This is a perfect dilemma: the winning faction must choose whether to capitalise on their victory's collateral damage. No false choices. |
-| Mechanical grounding | 4 | Social contest mechanics are canonical (social_contest_system_v2). Crown Virtue Ethics Ob modifiers are in params_factions. The Piety Track interaction is documented but the precise numbers for the aftermath cascade could be tighter. |
+| Mechanical grounding | 4 | Social contest mechanics are canonical (social_contest_v30). Crown Virtue Ethics Ob modifiers are in params_factions. The Piety Track interaction is documented but the precise numbers for the aftermath cascade could be tighter. |
 | NPC fidelity | 3 | Baralta drives the debate, but the arc is primarily about institutional mechanics rather than personal character. Any competent Hafenmark leader could trigger this. |
 | Thematic coherence | 4 | Strong institutional theme. Less connected to Thread/Forgetting/metaphysics. This is a governance arc — excellent for the BG/Hybrid layer, less essential for the TTRPG metaphysical layer. |
 | **Total** | **21/25** | Excellent political emergence. Would benefit from deeper NPC entanglement. |

@@ -1,0 +1,30 @@
+{
+ "C0_baseline": {
+  "A": 12,
+  "B": 19,
+  "draw": 19,
+  "decA": 38.7,
+  "draw_pct": 38.0
+ },
+ "C1_envelop": {
+  "A": 0,
+  "B": 0,
+  "draw": 50,
+  "decA": 50.0,
+  "draw_pct": 100.0
+ },
+ "C2_cav_speed": {
+  "A": 27,
+  "B": 17,
+  "draw": 6,
+  "decA": 61.4,
+  "draw_pct": 12.0
+ },
+ "C3_sigma": {
+  "A": 0,
+  "B": 50,
+  "draw": 0,
+  "decA": 0.0,
+  "draw_pct": 0.0
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "12": {
+  "routs_wedge": 0,
+  "B_cas_pct": 41.4
+ },
+ "18": {
+  "routs_wedge": 6,
+  "B_cas_pct": 56.1
+ },
+ "24": {
+  "routs_wedge": 19,
+  "B_cas_pct": 61.4
+ },
+ "36": {
+  "routs_wedge": 20,
+  "B_cas_pct": 61.8
+ },
+ "48": {
+  "routs_wedge": 20,
+  "B_cas_pct": 61.8
+ }
+}

@@ -1,7 +1,19 @@
-# VALORIA — SOCIAL CONTEST SYSTEM v2
+<!-- ================================================================= -->
+<!-- ⛔ SUPERSEDED — DO NOT CITE AS LIVE RULES ⛔                        -->
+<!-- Canonical social-contest spec: designs/scene/social_contest_v30.md -->
+<!--   (+ _index, _infill; params/contest.md, params/contest_extensions.md) -->
+<!-- This v2 file is retained for HISTORICAL REFERENCE ONLY. All active   -->
+<!-- references were repointed to social_contest_v30.md (ED-938, docket    -->
+<!-- J-31, 2026-06-24). v30 inherited this file's section numbering, so    -->
+<!-- §-anchors map 1:1 — EXCEPT §5 "Initiative" → v30 "First to Speak"     -->
+<!-- and §9.6 "Forced Unmask" → v30 "Chamber Violence (Forced Forfeit)"   -->
+<!-- (ED-897). v30 also adds §6.1/§6.2/§6.3, §7.1/§7.2/§7.3, §9.4b.        -->
+<!-- ================================================================= -->
+
+# VALORIA — SOCIAL CONTEST SYSTEM v2 [SUPERSEDED]
 ## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
 ## Patches applied: PP-234, PP-235, PP-236, PP-237, PP-272, PP-278, PP-279
-## Status: SUPERSEDED — canonical doc is designs/contest/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as historical reference.
+## Status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as historical reference ONLY — DO NOT CITE AS LIVE RULES (see top banner; ED-938).
 ## Source: Opus 4.6 session 2026-04-04
 ## Patch: PP-234 (genre restructure, attribute renames, Composure resolution, faction boost revision, dice consistency)
 ## Three-mode: TTRPG (§§1–9), Board Game (§10), Hybrid (§11)

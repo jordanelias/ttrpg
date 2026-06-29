@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_is_charge_actor', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
@@ -62,6 +62,15 @@ def _subunit_braced(atom):
     """Per-subunit brace (Jordan directive): THIS subunit carries 'brace'. For a single-subunit
     unit this equals _unit_braced(unit) -> byte-exact; for a mixed unit only the braced subunit resists."""
     return 'brace' in getattr(atom, 'instructions', ())
+
+def _is_charge_actor(atom):
+    """True if THIS subunit delivers a genuine CHARGE -- a mounted actor (cavalry / mounted_archers)
+    or an explicit 'charge' instruction. The reciprocal charge-recoil (a braced wall SHATTERING a
+    charger -- Courtrai/Swiss/Waterloo squares, Burkholder 2007) is a charge phenomenon: an advancing
+    INFANTRY line that merely out-momentums a held wall is a push, not a charge, and must NOT trigger
+    the recoil. Gauge-byte-exact: the only braced scenarios (C2/C6) have a cavalry charger -> True."""
+    return (getattr(atom, 'troop_type', '') in ('cavalry', 'mounted_archers')
+            or 'charge' in getattr(atom, 'instructions', ()))
 
 def _disc_prep(disc):
     """Discipline -> preparedness 0..1. SHARED by the charge-shock brace gate (independent retention)

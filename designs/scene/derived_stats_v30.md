@@ -132,7 +132,7 @@ End 4: Stamina 20. Standard attacks at 5/round: 4 rounds before Out of Breath. H
 | Formula | Charisma × 3 |
 | Range | 3–21 |
 | Direction | Strain accumulates toward threshold; Rattled when strain ≥ Composure |
-| Depleted at | Rattled: +1 Ob per Rattled level to all contest rolls (cumulative) |
+| Depleted at | Rattled: −1D per Rattled level to all contest rolls (cumulative) |
 | Recovery | Full restore at scene change (unchanged) |
 | Equipment | Court attire +2, Crown regalia +4, formal robes +3. Emotional state: +3 in own court, −3 confronting personal enemy. |
 
@@ -142,18 +142,22 @@ Focus defense (defender): `floor(Foc/2) × 3`. Range 0–9.
 
 **Eliminates:** Current formula `Cha + 6`. Removes the +6 constant. Low-Cha characters become appropriately fragile in social contests.
 
+[EDITORIAL: ED-939 — Rattled penalty channel corrected +1 Ob → −1D (PP-716 / Decision-B channel reservation: Ob channel reserved for circumstance, dice channel for condition); aligns §5.1 with §10.5. Outbound social-contest propagation pass, docket J-31.]
+
 ### 5.2 Concentration (action economy resource)
 
 | Property | Value |
 |----------|-------|
-| Formula | Focus × 3 |
-| Range | 3–21 |
+| Formula | (3 × Focus) + (2 × Spirit) |
+| Range | 5–35 |
 | Direction | Drains down from max |
 | Depleted at | 0 (Spent: −2D next exchange, opponent +1D; then resets to max) |
 | Depletion rate | −3 per exchange; −3 additional on exchange loss |
-| Recovery | Regroup forfeit action: restores to max (Focus × 3) |
+| Recovery | Regroup forfeit action: restores to max ((3 × Focus) + (2 × Spirit)) |
 
-**Eliminates:** Current formula `Focus + Recall`. Recall removed — has no conceptual connection to sustained mental focus. Recall already provides +2D citation bonus in the Argue step (correct role for knowledge/memory). Concentration is sustained focus under pressure, governed by Focus alone.
+**Eliminates:** Current formula `Focus + Recall`. Recall removed — has no conceptual connection to sustained mental focus. Recall already provides +2D citation bonus in the Argue step (correct role for knowledge/memory). Concentration is sustained focus under pressure, governed by Focus (primary driver) plus Spirit (the will to sustain) — the `(3 × Focus) + (2 × Spirit)` form per ED-902 (2026-06-04, Jordan), superseding the Focus × 3 interim.
+
+[EDITORIAL: ED-939 — §5.2 Concentration formula propagated Focus × 3 → (3 × Focus) + (2 × Spirit) to match §14.1 / §12 (ED-902); closes the intra-file contradiction. Outbound social-contest propagation pass, docket J-31.]
 
 ---
 
@@ -478,6 +482,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 | Unit destroyed: Military −1 | KEEP | Permanent force loss |
 | Campaign defeat: Mandate −1 | KEEP | Major political event |
 | Crown Treaty: target Mandate −1 | KEEP | Diplomatic victory — structural |
+| Social contest Domain Echo (decisive Memory win): faction Mandate +1 in cited domain | KEEP | Fires only on decisive institutional wins — structural, matching the Crown Treaty precedent (social_contest_v30 §6) |
 | Appease (Institutional Mandate): Mandate −1 | KEEP | Deliberate institutional sacrifice |
 | Parliamentary Censure/Outlawry: Mandate −1/−2 | KEEP | Formal political action |
 | Crown-break: Stability −2, Mandate −1 | KEEP | Treaty betrayal — structural crisis |
@@ -514,7 +519,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 - All faction stat → dice pool relationships
 - All mass combat formulas (Pool, H, damage per success)
 - Coherence (10→0 countdown), Certainty (0–5), Momentum (0–4)
-- Social contest: Argue pools, genre/orientation, Piety Track, interaction types
+- Social contest: Argue pools, genre/orientation, Persuasion Track, interaction types
 - Thread operations: Leap procedure, operation types, co-movement, Ob values
 - Disposition Track, Renown Track, Standing
 - CI, PT, Accord, MS, IP — already distinct tracked values

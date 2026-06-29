@@ -1,5 +1,11 @@
 """
-sim/personal/contest.py — Social contest engine
+sim/personal/contest.py — Social contest engine (REDUCED MODEL)
+
+[C3 banner: REDUCED model, NOT a validation reference. Does NOT implement the §4
+interaction types (CLASH/REINFORCE/CROSS), strain/Composure/Rattled, Concentration
+depletion/Spent, or genre/orientation/Recall/style dice. The canonical implementation
+is the groundup engine (designs/audit/2026-06-03-contest-groundup/). Do not cite this
+module's outputs as balance validation for the current ruleset.]
 
 Canon source: designs/scene/social_contest_v30.md §1-§9
 
@@ -119,7 +125,8 @@ def build_argue_pool(actor, position: Any = None) -> int:
 def resolve_exchange(parties: list, exchange_n: int,
                      persuasion_track: int,
                      resistance: int = RESISTANCE_DEFAULT,
-                     world=None, rng=None) -> tuple[ExchangeResult, int]:
+                     world=None, rng=None,
+                     first_to_speak: str = 'A') -> tuple[ExchangeResult, int]:
     """§4 Resolve a single exchange between two parties.
 
     parties: list of exactly 2 actor objects with side labels via .side ('A' or 'B').
@@ -158,11 +165,10 @@ def resolve_exchange(parties: list, exchange_n: int,
         winner = 'B'
         movement = -max(0, margin - resistance)
     else:
-        # §4 — Tied exchanges: track moves +1 toward first-to-speak holder
-        # [canonical: §4 — "Persuasion Track moves +1 toward first-to-speak"]
-        # We treat A as first-to-speak by default; caller can swap by side label.
+        # §4 — Tied exchanges: track moves +1 toward the first-to-speak holder.
+        # [C3 fix: previously hardcoded toward A; now honors first_to_speak.]
         winner = None
-        movement = +1   # toward A by convention if no first-to-speak override
+        movement = +1 if first_to_speak == 'A' else -1
 
     new_track = max(0, min(10, persuasion_track + movement))
 
@@ -190,11 +196,16 @@ def run_contest(parties: list, stakes: dict, world=None, rng=None) -> ContestRes
     resistance = stakes.get('resistance', RESISTANCE_DEFAULT)
     track = stakes.get('starting_track', PERSUASION_TRACK_START_DEFAULT)
     belief_ids = stakes.get('belief_ids', {})
+    first_to_speak = stakes.get('first_to_speak', 'A')  # §5; transfers to exchange winner, tie stays
 
     exchanges = []
     for n in range(1, exchange_count + 1):
-        result, track = resolve_exchange(parties, n, track, resistance, world=world, rng=rng)
+        result, track = resolve_exchange(parties, n, track, resistance,
+                                         world=world, rng=rng,
+                                         first_to_speak=first_to_speak)
         exchanges.append(result)
+        if result.winning_side in ('A', 'B'):
+            first_to_speak = result.winning_side  # §5: transfers to exchange winner
 
     # §6 Post-contest resolution
     if track >= PERSUASION_WIN_THRESHOLD:
@@ -234,12 +245,13 @@ def run_contest(parties: list, stakes: dict, world=None, rng=None) -> ContestRes
             except (ImportError, AttributeError):
                 pass
 
-    # §6 Contest Fatigue for losing primary orator
+    # §6 Contest Fatigue — Total Victory only (track ≥ 9 or ≤ 1), per social_contest §6.
+    # [C3 fix: previously applied on any Decisive win (≥7/≤3); corrected to Total Victory.]
     contest_fatigue = []
-    if winner == 'A':
+    if total_victory and winner == 'A':
         losing = next((p for p in parties if getattr(p, 'side', None) == 'B'), parties[1])
         contest_fatigue.append(getattr(losing, 'actor_id', 'B'))
-    elif winner == 'B':
+    elif total_victory and winner == 'B':
         losing = next((p for p in parties if getattr(p, 'side', None) == 'A'), parties[0])
         contest_fatigue.append(getattr(losing, 'actor_id', 'A'))
 

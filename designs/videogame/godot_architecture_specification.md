@@ -881,7 +881,7 @@ Wire: season start → overview (auto-confirm) → conflict container → combat
 
 ## Phase 6 — Debate Container (3–4 weeks)
 
-**Extract from:** `designs/contest/social_contest_system_v2.md` (404 lines), `references/params_contest.md`
+**Extract from:** `designs/scene/social_contest_v30.md`, `references/params_contest.md`
 
 Argument styles, interaction types, Piety Track, Composure/strain, exchange resolution (OpposedSimultaneous mode), contest end conditions, Bond-based corroboration, Domain Echo scope recognition for debate outcomes, Register Shift (scene escalation to combat).
 

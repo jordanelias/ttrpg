@@ -183,7 +183,7 @@ Consolidated from `conviction_track_v1.md` (the mechanic itself; **the 9-Convict
 
 NPCs hold authored Beliefs — first-person truth-statements that shape interpretation. Beliefs are revealed to players through:
 
-- Contest Appraise step (Overwhelming: one Belief revealed per `social_contest_system_v2 §4`)
+- Contest Appraise step (Overwhelming: one Belief revealed per `social_contest_v30 §4`)
 - Observation (engine grants Belief revelation when the NPC acts on a Belief in a way the PC witnesses)
 - Settlement-broker intelligence (per `settlement_layer_v30 §4.7-4.9` — replaces struck Niflhel intelligence-broker mode)
 

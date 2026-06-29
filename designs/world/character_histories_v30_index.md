@@ -15,7 +15,7 @@
 | 0 | 5 | 1 | VALORIA — Character Histories: Lifepath System |
 | 1 | 6 | 2 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 2 | 7 | 2 | Scope: Lifepath-based History generation with SaGa-style sparking, Recall-gated equip slots, skill levels 1–3 |
-| 3 | 8 | 2 | Cross-references: params_core.md, combat_design_v1.md, social_contest_system_v2.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md |
+| 3 | 8 | 2 | Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md |
 | 4 | 9 | 2 | [EDITORIAL: ED-374 — Character Histories system. Setting/worldbuilding/character content — editorial gate applies.] |
 | 5 | 10 | 2 | Godot implementation: jordanelias/valoria-game (see docs/history_skill_integration.md) |
 | 6 | 14 | 2 | Structure |
@@ -67,7 +67,7 @@
 | 0 | 9,727 | VALORIA — Character Histories: Lifepath System |
 | 1 | 17 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 2 | 28 | Scope: Lifepath-based History generation with SaGa-style sparking, Recall-gated equip slots, skill levels 1–3 |
-| 3 | 43 | Cross-references: params_core.md, combat_design_v1.md, social_contest_system_v2.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md |
+| 3 | 43 | Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md |
 | 4 | 29 | [EDITORIAL: ED-374 — Character Histories system. Setting/worldbuilding/character content — editorial gate applies.] |
 | 5 | 23 | Godot implementation: jordanelias/valoria-game (see docs/history_skill_integration.md) |
 | 6 | 561 | Structure |

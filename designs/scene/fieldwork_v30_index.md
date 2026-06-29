@@ -17,7 +17,7 @@
 | 2 | 7 | 2 | Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest). |
 | 3 | 8 | 2 | Mode applicability: ALL (TTRPG baseline; Hybrid bridging; Board Game abstraction; Godot video game) |
 | 4 | 9 | 2 | Canon compliance: P-01 (inseparability — applied to Thread-Read operations, not passive discovery), P-03 (rendering = consciousness-performed), P-05 (three emergence modes — Mode 1/2 distinction added to §3.1), P-07 (Calamity = rendered-side mechanism), P-08 (epistemological barrier), P-14 (all modes express inseparability), P-15 (three-layer being-persistence) |
-| 5 | 10 | 2 | Cross-references: params_core.md, social_contest_system_v2.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md |
+| 5 | 10 | 2 | Cross-references: params_core.md, social_contest_v30.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md |
 | 6 | 11 | 2 | Review applied: fieldwork_review.md (2026-04-13). All 11 required corrections + 8 recommended additions incorporated. |
 | 7 | 15 | 2 | CORE PRINCIPLE: INTELLIGIBILITY GRADIENT |
 | 8 | 27 | 2 | §1 DEPTH AXIS |
@@ -93,7 +93,7 @@
 | 2 | 40 | Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest). |
 | 3 | 25 | Mode applicability: ALL (TTRPG baseline; Hybrid bridging; Board Game abstraction; Godot video game) |
 | 4 | 91 | Canon compliance: P-01 (inseparability — applied to Thread-Read operations, not passive discovery), P-03 (rendering = consciousness-performed), P-05 (three emergence modes — Mode 1/2 distinction added to §3.1), P-07 (Calamity = rendered-side mechanism), P-08 (epistemological barrier), P-14 (all modes express inseparability), P-15 (three-layer being-persistence) |
-| 5 | 44 | Cross-references: params_core.md, social_contest_system_v2.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md |
+| 5 | 44 | Cross-references: params_core.md, social_contest_v30.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md |
 | 6 | 31 | Review applied: fieldwork_review.md (2026-04-13). All 11 required corrections + 8 recommended additions incorporated. |
 | 7 | 100 | CORE PRINCIPLE: INTELLIGIBILITY GRADIENT |
 | 8 | 500 | §1 DEPTH AXIS |

@@ -1,0 +1,51 @@
+### GAUGE against modular engine — N=60, 20 scenarios (H1-H11 formation + C1-C7 cavalry)
+
+----- MODE: single  (engine: C:\Github\ttrpg\tests\sim\massbattle_battery\engine_shim.py)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----
+  id   matchup                           A%    B%    D%   val    band dexp    m verdict
+  H1   Line vs Line (mirror)            0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  H2   Arrowhead(wedge) vs Line         0.0   0.0 100.0  50.0  48-62  high decA UNRESOLVED
+  H3   Horseshoe(envelop) vs Line       0.0   0.0 100.0  50.0  55-72  high decA UNRESOLVED
+  H4   Horseshoe vs Arrowhead (Cannae   0.0   0.0 100.0  50.0  45-62  high decA UNRESOLVED
+  H5   RefusedFlank vs Horseshoe        0.0   0.0 100.0  50.0  48-62  high decA UNRESOLVED
+  H6   RefusedFlank vs Line             0.0   0.0 100.0  50.0  48-60  high decA UNRESOLVED
+  H7   GappedLine(manip) vs Line        0.0   0.0 100.0  50.0  48-62  high decA UNRESOLVED
+  H8   GappedLine vs Arrowhead          0.0   0.0 100.0  50.0  50-65  high decA UNRESOLVED
+  H9   Line vs Arrowhead (rev H2)       0.0   0.0 100.0  50.0  38-52  high decA UNRESOLVED
+  H10  Line vs Horseshoe (rev H3)       0.0   0.0 100.0  50.0  28-45  high decA UNRESOLVED
+  H11  Arrowhead vs Horseshoe (rev H4   0.0   0.0 100.0  50.0  38-55  high decA UNRESOLVED
+  R1   Ranged vs Line (open field)      0.0   0.0 100.0  50.0   0-30   low decA UNRESOLVED
+  R3   Ranged vs Ranged (mirror)        0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C1   Cav vs steady unbraced Line      0.0   0.0 100.0  50.0  35-55  high decA UNRESOLVED
+  C2   Cav vs BRACED Line (hold+d8+br   0.0   0.0 100.0   0.0   0-30  high rawA REPELLED
+  C3   Cav vs Cav (mirror control)      0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C4   Cav flank/envelopment vs Line    0.0   0.0 100.0  50.0  75-95   low decA UNRESOLVED
+  C5   Cav vs SHAKEN Line (m2/start6)   0.0   0.0 100.0  50.0  65-98   low decA UNRESOLVED
+  C6   Cav vs BRACED-shallow Line (ho   0.0   0.0 100.0   0.0   0-30  high rawA REPELLED
+  C7   Cav envelop vs holding Line (h   0.0   0.0 100.0  50.0  65-100  low decA UNRESOLVED
+  => pass 2/20  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)
+
+----- MODE: multi  (engine: C:\Github\ttrpg\tests\sim\massbattle_battery\engine_shim.py)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----
+  id   matchup                           A%    B%    D%   val    band dexp    m verdict
+  H1   Line vs Line (mirror)           33.3  28.3  38.3  54.1  42-58  high decA OK
+  H2   Arrowhead(wedge) vs Line        33.3  50.0  16.7  40.0  48-62  high decA WIN-OUT
+  H3   Horseshoe(envelop) vs Line      46.7  30.0  23.3  60.9  55-72  high decA OK
+  H4   Horseshoe vs Arrowhead (Cannae  26.7  38.3  35.0  41.0  45-62  high decA WIN-OUT
+  H5   RefusedFlank vs Horseshoe       35.0  48.3  16.7  42.0  48-62  high decA WIN-OUT
+  H6   RefusedFlank vs Line            28.3  50.0  21.7  36.2  48-60  high decA WIN-OUT
+  H7   GappedLine(manip) vs Line       33.3  36.7  30.0  47.6  48-62  high decA WIN-OUT
+  H8   GappedLine vs Arrowhead         51.7  33.3  15.0  60.8  50-65  high decA OK
+  H9   Line vs Arrowhead (rev H2)      43.3  40.0  16.7  52.0  38-52  high decA OK
+  H10  Line vs Horseshoe (rev H3)      35.0  41.7  23.3  45.7  28-45  high decA WIN-OUT
+  H11  Arrowhead vs Horseshoe (rev H4  43.3  36.7  20.0  54.2  38-55  high decA OK
+  R1   Ranged vs Line (open field)      0.0  11.7  88.3   0.0   0-30   low decA TOO-DRAWISH
+  R3   Ranged vs Ranged (mirror)        0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C1   Cav vs steady unbraced Line     33.3  55.0  11.7  37.7  35-55  high decA OK
+  C2   Cav vs BRACED Line (hold+d8+br   3.3   0.0  96.7   3.3   0-30  high rawA REPELLED
+  C3   Cav vs Cav (mirror control)     41.7  45.0  13.3  48.1  42-58  high decA OK
+  C4   Cav flank/envelopment vs Line   86.7   6.7   6.7  92.9  75-95   low decA OK
+  C5   Cav vs SHAKEN Line (m2/start6)  90.0   5.0   5.0  94.7  65-98   low decA OK
+  C6   Cav vs BRACED-shallow Line (ho   3.3   0.0  96.7   3.3   0-30  high rawA REPELLED
+  C7   Cav envelop vs holding Line (h  85.0   0.0  15.0 100.0  65-100  low decA OK
+  => pass 12/20  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)
+
+==== modular-engine: single=2/20  multi=12/20  (N=60; multi is the resolving mode) ====

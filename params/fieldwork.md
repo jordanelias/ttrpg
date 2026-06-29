@@ -234,7 +234,7 @@ Wounds and Thread ops: +1 Ob to Leap-based Thread ops (concentration, not pool p
 
 ## Contest Escalation (§5.7)
 Negotiate applies only when: (a) shared goal, disagree on method, or (b) outcome not consequential enough for Contest.
-Opposed + uncertain + consequential → Contest per social_contest_system_v2.md §1.
+Opposed + uncertain + consequential → Contest per social_contest_v30.md §1.
 Disposition maps to Conviction offset: ±1 per 2 Disposition, cap ±2.
 
 ## System Transitions (§2.3)

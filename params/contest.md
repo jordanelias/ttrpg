@@ -36,12 +36,12 @@ Genre + orientation presented as a single choice per exchange:
 
 | Style | = Genre + Orientation | Flavour |
 |-------|----------------------|---------|
-| Cite Precedent | Past + Direct | Citing what happened openly |
-| Bury Precedent | Past + Indirect | Burying inconvenient history |
-| Propose Vision | Future + Direct | Proposing a transparent future |
-| Imply Consequence | Future + Indirect | Implying unstated consequences |
+| Precedent | Memory + Revealing | Citing what happened openly |
+| Suppression | Memory + Obscuring | Burying inconvenient history |
+| Vision | Projection + Revealing | Proposing a transparent future |
+| Insinuation | Projection + Obscuring | Implying unstated consequences |
 
-Interaction type derived: same style = Echo Match, same genre opposite orientation = Head-On, different genre = Cross-Time.
+Interaction type derived: same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS.
 ## Genre and Orientation Bonus Dice
 | Source | Bonus | Condition |
 |--------|-------|-----------|
@@ -52,22 +52,23 @@ Interaction type derived: same style = Echo Match, same genre opposite orientati
 ## Faction Boosts (single axis per faction)
 | Faction | Ethical Mode | Boost | Axis |
 |---------|-------------|-------|------|
-| Church | Faith | Indirect | Orientation |
-| Crown | Virtue | Direct | Orientation |
+| Church | Divine Command | Obscuring | Orientation |
+| Crown | Virtue Ethics | Revealing | Orientation |
 | Varfell | Consequentialism | Projection | Genre |
 | Hafenmark | Categorical Imperative | Memory | Genre |
-| Restoration | Equity Social Contract | Direct | Orientation |
+| Restoration | Rawlsian Social Contract | Revealing | Orientation |
 | Guilds | Moral Relativism | GM picks | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
+<!-- ED-899/ED-897: ethical-mode labels aligned to social_contest §2 skeleton set (Divine Command / Virtue Ethics / Rawlsian Social Contract); orientation Indirect/Direct → Obscuring/Revealing. Niflhel row already struck (ED-764, above). -->
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. Was: ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. -->
 
 ## First to Speak
-Exchange 1: higher Attunement acts last (information advantage). [ED-138: deterministic vs rolled?]
+Exchange 1: ROLLED — both orators roll Attunement vs Attunement, TN 7, Ob 1; higher net successes acts last (information advantage). On net tie: higher Attunement stat; then the adjudicator assigns. [ED-895: ED-138 resolved to rolled per ED-581 — aligns with combat initiative. Supersedes the prior deterministic "higher Attunement acts last".]
 Subsequent: transfers to exchange winner. Tie: stays with holder.
 Institutional override: institution determines proposer in asymmetric proceedings.
 
 ## Exchange Structure
-Step 1 — Read (Attunement, TN 7, Ob 1):
+Step 1 — Appraise (Attunement + Recall, TN 7, Ob = opponent Cha ÷ 2 round up, min 1) [PP-614 / ED-893; the old "Read = Attunement only, Ob 1" is struck — see §Pools]:
 | Net | Information |
 |-----|-------------|
 | Failure | Misleading signal: wrong boost identified |
@@ -86,12 +87,14 @@ Step 7 — GM records.
 ## Interaction Types (3 + TIE)
 | Type | Condition | Resolution | Strain |
 |------|-----------|------------|--------|
-| Head-On | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
-| Echo Match | Same genre, same orientation | Same as Head-On | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
-| Cross-Time | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
-| TIE | Equal successes, any type | Both take 1 strain (except Cross-Time: no strain — PP-236); track +1 toward first-to-speak holder | 1 each (except Cross-Time: 0 — PP-236) |
+| CLASH | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
+| REINFORCE | Same genre, same orientation | Same as CLASH | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
+| CROSS | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
+| TIE | Equal successes, any type | Both take 1 strain (except CROSS: no strain — PP-236); track +1 toward first-to-speak holder | 1 each (except CROSS: 0 — PP-236) |
 
-Indirect win: no track movement; place Suspicion Token on opponent (−2 to opponent's next winning margin; one active at a time; consumed on use).
+Obscuring win: no track movement; place a Doubt Marker on the opponent (−2 to opponent's next winning margin; one active at a time; consumed on use). [ED-897: "Indirect"→"Obscuring", "Doubt Marker"→"Doubt Marker" to match social_contest §4.]
+
+**Coalition Push (clarification, ED-897):** not a separate interaction type — it denotes a REINFORCE (same genre, same orientation) executed by a coalition (§9.2), whose shared pool yields the larger movement noted in ED-297. The interaction types are CLASH / REINFORCE / CROSS / TIE.
 
 ## Persuasion Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
@@ -102,10 +105,10 @@ Audience resistance: average Stability of factions (round up) − 1, minimum 0. 
 | Value | Formula | Range |
 |-------|---------|-------|
 | Composure | Charisma × 3 | 3–21 |
-| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 |
-| Focus defence | floor(Foc ÷ 2) | 0–3 |
+| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 |
+| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 |
 | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 |
-| Read pool | Attunement only | 1–7 |
+| Appraise pool | Attunement + Recall | 2–14 |
 
 ## Composure and Rattled
 At strain ≥ Composure: Rattled mark (Composure resets; excess carries over). [Composure = Cha × 3 per ED-694]
@@ -114,14 +117,14 @@ Recovery: 1 mark/scene of non-social activity. Composure restores at scene chang
 Knot buffer: redirect damage to Knot (+1 strain/use).
 
 ## Concentration and Spent
-Depletes −1/exchange, −1 additional on loss.
+Depletes −5/exchange, −5 additional on loss. [ED-890/DEP: rescaled −1 → −5 to match social_contest §4 and keep Spent reachable under the (3 × Focus) + (2 × Spirit) 5–35 range; the prior −1 left Spent inert.]
 At 0: Spent (−2D next exchange; opponent +1D). Resets to max after.
 Rattled + Spent: cumulative. Pool minimum 1D.
 
 ## Forfeit Actions
 | Action | Strain | Track Effect | Benefit |
 |--------|--------|-------------|---------|
-| Regroup | 0 | +1 toward non-forfeiting side | Concentration restores by Focus |
+| Regroup | 0 | +1 toward non-forfeiting side | Concentration restores to max (per social_contest §4 Step 5) |
 | Concede a Point | 1 | +1 toward non-forfeiting side | +1D next exchange |
 
 ## Post-Contest
@@ -167,11 +170,11 @@ Resolved questions cannot be re-contested without significantly changed circumst
 <!-- patch_history: references/params_contest_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
-## PP-236 — Cross-Time Tie no-strain
-Cross-Time interaction + equal successes: no strain to either orator. Cross-Time no-strain rule overrides Tie +1-strain. Persuasion Track +1 toward first-to-speak holder as normal.
+## PP-236 — CROSS Tie no-strain
+CROSS interaction + equal successes: no strain to either orator. CROSS no-strain rule overrides Tie +1-strain. Persuasion Track +1 toward first-to-speak holder as normal.
 
 ## PP-237 — Coalition Concentration shared pool
-Shared pool = sum of all coalition members' (Focus+Recall) at setup. Depletes 1/exchange (+1 on loss) regardless of Lead rotation. Spent at 0; resets to setup total.
+Shared pool = sum of all coalition members' (3×Focus)+(2×Spirit) at setup. Depletes 5/exchange (+5 on loss) regardless of Lead rotation. Spent at 0; resets to setup total. [ED-894: Recall removed (ED-694); mirrors solo Concentration.]
 
 ## History bonus note (PP-234 era)
 History bonus = history points + 3 (per Stage 2 §4.1). Pool (PrimaryAttr×2)+H is equivalent to combat pool (Agi×2)+H+3. The +3 is embedded in H.
@@ -214,34 +217,34 @@ Prevents BG-layer pre-deciding Contest outcome.
 §6.15 exception: ordained members only.
 Does not apply when Thread op targets a Church institutional interest.
 
-## Temporal Axis Conflict Penalty (PP-258)
-Replaces PP-123. When temporal axis conflict fires: −1D to BOTH parties' Argue rolls for that exchange.
-Symmetric: both destabilised equally.
+## Temporal Axis Conflict Penalty (PP-258 — SUPERSEDED, ED-900 / D-3)
+[SUPERSEDED: temporal-axis conflict now routes the thread op's co-movement to the Persuasion Track (±1 per co-movement instance) per the canonical PP-351 (contest_extensions / social_contest §9.4). The prior "−1D to both Argue" is retired.]
 
 ## Passive MS from Contest — Gate (PP-259)
 MS consequence fires automatically when:
 (a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange.
 All other subjects: no MS consequence. No GM discretion required.
 
-## BG Suspicion Token Analog
+## BG Doubt Marker Analog
 No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handles faction-level outcomes.
 
 
-## P1 Findings — Awaiting Resolution (2026-04-04)
+## P1 Findings — RESOLVED (superseded by "P1 Findings — Resolved 2026-05-17" below)
+[ED-896: this 2026-04-04 block is stale — ED-295 (resolved: Option D per-exchange erosion), ED-296 (resolved: max(0, …) floor), ED-297 (resolved: coalition dominance RATIFIED as intended) are all settled in the Resolved block below. The "User decision required" markers below are obsolete; retained only for trace.]
 
-### ED-295: Head-On movement stalls at median
+### ED-295: CLASH movement stalls at median
 floor(margin × genre_weight × orientation_weight − resistance) produces 0 movement
-when margin barely exceeds resistance. At median dice results, Head-On advances
+when margin barely exceeds resistance. At median dice results, CLASH advances
 the Persuasion Track by 0 — contest stalls. Four fix options proposed (A-D).
 **User decision required.**
 
-### ED-296: Echo Match produces negative movement
+### ED-296: REINFORCE produces negative movement
 (margin − 1) × modifiers − resistance goes negative when the stronger orator's
-margin is small. Fix: apply max(0, ...) floor to Echo Match movement.
+margin is small. Fix: apply max(0, ...) floor to REINFORCE movement.
 **Mechanical fix — can apply without user decision if authorized.**
 
-### ED-297: Coalition Push dominant over Head-On
-Coalition Push produces ~5 movement/exchange vs Head-On ~0 at median. Coalitions are
+### ED-297: Coalition Push dominant over CLASH
+Coalition Push produces ~5 movement/exchange vs CLASH ~0 at median. Coalitions are
 mechanically superior to solo advocacy. May be intended design (rewarding alliances).
 **User decision required: confirm or rebalance.**
 
@@ -251,7 +254,7 @@ mechanically superior to solo advocacy. May be intended design (rewarding allian
 ## Extensions
 
 Additional canonical rules for Contest! are filed at `params/contest_extensions.md`:
-- PP-NEW-A — TIE/Cross-Time no-strain exception (SIM-DB-STRESS-01 D-04)
+- PP-NEW-A — TIE/CROSS no-strain exception (SIM-DB-STRESS-01 D-04)
 - PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b; updated PP-716)
 - Evidence Track Findings in Contest (PP-636)
 - Resonant Style Targeting (from npc_behavior_system_v1.md §6)
@@ -260,8 +263,8 @@ Additional canonical rules for Contest! are filed at `params/contest_extensions.
 
 ## P1 Findings — Resolved 2026-05-17 (audit ED-864)
 
-- **ED-295** (Head-On stalls at median margin): Option D — audience resistance erodes per exchange. Per-exchange erosion: `Stab_resistance_t = max(0, Stab_resistance_0 − ⌊exchange_count / 2⌋)`. First exchange uses baseline resistance; every two exchanges thereafter reduces audience resistance by 1. Long contests resolve organically; short contests retain current dynamics. Spec applies to all Interaction Types (Head-On, Echo Match, Cross-Time, Coalition Push).
-- **ED-296** (Echo Match negative movement): floor at 0 — already applied in Interaction Types table (`max(0, (Margin − 1) + Cha modifier − Foc defence)`).
+- **ED-295** (CLASH stalls at median margin): Option D — audience resistance erodes per exchange. Per-exchange erosion: `Stab_resistance_t = max(0, Stab_resistance_0 − ⌊exchange_count / 2⌋)`. First exchange uses baseline resistance; every two exchanges thereafter reduces audience resistance by 1. Long contests resolve organically; short contests retain current dynamics. Spec applies to all Interaction Types (CLASH, REINFORCE, CROSS, Coalition Push).
+- **ED-296** (REINFORCE negative movement): floor at 0 — already applied in Interaction Types table (`max(0, (Margin − 1) + Cha modifier − Foc defence)`).
 - **ED-297** (Coalition Push magnitude ~5/exchange vs solo ~0): RATIFIED as canonical design. Coalitions mechanically dominate solo advocacy by intent (parliamentary politics).
 
 Source: `designs/audit/2026-05-17-scene-combat-contest/decisions.md`

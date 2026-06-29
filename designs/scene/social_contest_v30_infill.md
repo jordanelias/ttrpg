@@ -25,9 +25,9 @@ If the question does not clearly favour one genre, the GM assigns whichever is m
 ## §3 ARGUE POOL CONSTRUCTION
 **Design note:** the three social attributes (Cognition, Charisma, Attunement) each have a domain where they are primary. High-Cognition characters excel before judges and tribunals. High-Charisma characters excel before crowds and parliaments. High-Attunement characters excel in private dealings. This produces meaningful character differentiation across social contexts without adding mechanical complexity — the formula is the same; only the base attribute changes.
 ## §4 EXCHANGE STRUCTURE
-**Step 2 — Choose:** Each orator selects genre (Past or Future) and orientation (Direct or Indirect).
+**Step 2 — Choose:** Each orator selects genre (Memory or Projection) and orientation (Revealing or Obscuring). [ED-897: canonical genre/orientation names; "Past/Future" and "Direct/Indirect" are the pre-PP-234 labels retained only in the rationale above.]
 One orator invokes what has been (Past); the other projects what could become (Future). The fundamental rhetorical collision.
-**INDIRECT WIN** (winning any exchange with Indirect orientation in Head-On or Echo Match; see Cross-Time clause for Cross-Time-specific Suspicion Token rule):
+**OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
 - At strain ≥ Composure: take a **Rattled** mark (Composure resets to full, excess strain carries over).
 - At 2 Rattled marks: socially incapacitated — cannot participate in formal social scenes until recovered. Informal conversation still possible.
 - Knot as Composure buffer: redirect Composure damage to a Knot (+1 strain per use). Prevents Rattled but accelerates Knot decay.
@@ -44,8 +44,9 @@ One orator invokes what has been (Past); the other projects what could become (F
 ### §9.3 Practitioner Weaving in Contests (R-65)
 ### §9.4 Thread Operations Between Exchanges
 ### §9.5 Beliefs Integration
-### §9.6 Forced Unmask
-Violence in the contest chamber = immediate Unmask. Violent party auto-loses. Exception: monster incursion or external catastrophe = postponement. Proceeding resumes next scene if both parties survive.
+### §9.6 Chamber Violence (Forced Forfeit)
+[ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision.]
+Violence in the contest chamber = immediate forfeit. Violent party auto-loses. Exception: monster incursion or external catastrophe = postponement. Proceeding resumes next scene if both parties survive.
 ### §9.7 Niflhel Social Toolkit
 ## §10 BOARD GAME PARLIAMENTARY VOTE
 ### BG Vote Setup
