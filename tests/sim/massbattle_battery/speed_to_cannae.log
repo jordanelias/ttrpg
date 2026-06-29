@@ -1,0 +1,17 @@
+=== (1) cavalry-speed WINGS (natural 2x; historical Cannae) vs infantry-only, F=1 ===
+  infantry converging-3           6r: routs  0/20 (B_cas 17.6)   12r: routs  0/20 (B_cas 34.9)   24r: routs 12/20
+  cavalry-winged combined arms    6r: routs 15/20 (B_cas 74.9)   12r: routs 20/20 (B_cas 77.1)   24r: routs 20/20
+
+=== (2) global infantry SPEED multiplier F (converging-3 infantry) ===
+  F=1.0x :  6r routs  0/20 (B_cas 17.6)   12r routs  0/20 (B_cas 34.9)
+  F=1.5x :  6r routs  0/20 (B_cas 39.5)   12r routs  7/20 (B_cas 55.5)
+  F=2.0x :  6r routs  0/20 (B_cas 39.5)   12r routs  7/20 (B_cas 55.5)
+  F=3.0x :  6r routs  0/20 (B_cas 43.2)   12r routs  9/20 (B_cas 61.5)
+  F=4.0x :  6r routs  0/20 (B_cas 39.1)   12r routs  6/20 (B_cas 56.6)
+
+=== (3) SANITY at F=2 and F=3: Line-vs-Line mirror must NOT become an instant blowout (12r) ===
+  F=1.0x mirror Line vs Line, 12r:  A routs B  0/20  (B_cas  0.0)  -> want ~balanced/modest, not 20/20
+  F=2.0x mirror Line vs Line, 12r:  A routs B  0/20  (B_cas 36.9)  -> want ~balanced/modest, not 20/20
+  F=3.0x mirror Line vs Line, 12r:  A routs B  0/20  (B_cas 37.9)  -> want ~balanced/modest, not 20/20
+
+wrote speed_to_cannae_results.json

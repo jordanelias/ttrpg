@@ -1,0 +1,38 @@
+{
+ "1": {
+  "lone_horseshoe": {
+   "decA": 50.0,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "A": 0,
+   "B": 0,
+   "routsB": 0
+  },
+  "converging_three": {
+   "decA": 50.0,
+   "draw_pct": 100.0,
+   "cas_margin": 17.1,
+   "A": 0,
+   "B": 0,
+   "routsB": 0
+  }
+ },
+ "3": {
+  "lone_horseshoe": {
+   "decA": 50.0,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "A": 0,
+   "B": 0,
+   "routsB": 0
+  },
+  "converging_three": {
+   "decA": 50.0,
+   "draw_pct": 100.0,
+   "cas_margin": 24.9,
+   "A": 0,
+   "B": 0,
+   "routsB": 0
+  }
+ }
+}

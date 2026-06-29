@@ -1,0 +1,206 @@
+{
+ "A_strategy": {
+  "Line / balanced  (control mirror)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "Horseshoe / balanced (envelop)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "Arrowhead / balanced (wedge)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "RefusedFlank / balanced (oblique)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "GappedLine / balanced (manipular)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "Line / aggressive": {
+   "decA": 43.8,
+   "A": 7,
+   "B": 9,
+   "draw": 14,
+   "draw_pct": 46.7,
+   "cas_margin": -2.0,
+   "avg_turns": 18.1
+  },
+  "Line / hold (defensive)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  }
+ },
+ "B_tactic": {
+  "plain  (control)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "brace": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "brace + hold (shieldwall)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "charge": {
+   "decA": 43.8,
+   "A": 7,
+   "B": 9,
+   "draw": 14,
+   "draw_pct": 46.7,
+   "cas_margin": -2.0,
+   "avg_turns": 18.1
+  },
+  "advance / push": {
+   "decA": 43.8,
+   "A": 7,
+   "B": 9,
+   "draw": 14,
+   "draw_pct": 46.7,
+   "cas_margin": -2.0,
+   "avg_turns": 18.1
+  },
+  "envelop": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "loose / harass (skirmish)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  }
+ },
+ "C_troop_type": {
+  "levy": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "light_infantry": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "heavy_infantry (control)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "cavalry": {
+   "decA": 100.0,
+   "A": 25,
+   "B": 0,
+   "draw": 5,
+   "draw_pct": 16.7,
+   "cas_margin": 23.9,
+   "avg_turns": 9.2
+  },
+  "archers (melee)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "archers (ranged)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "crossbow (ranged)": {
+   "decA": 50.0,
+   "A": 0,
+   "B": 0,
+   "draw": 30,
+   "draw_pct": 100.0,
+   "cas_margin": 0.0,
+   "avg_turns": 20.0
+  },
+  "knights_templar": {
+   "decA": 100.0,
+   "A": 24,
+   "B": 0,
+   "draw": 6,
+   "draw_pct": 20.0,
+   "cas_margin": 20.8,
+   "avg_turns": 14.7
+  }
+ }
+}

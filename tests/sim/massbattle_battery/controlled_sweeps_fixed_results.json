@@ -1,0 +1,113 @@
+{
+ "A_strategy": {
+  "Line / balanced (control mirror)": {
+   "decA": 55.2,
+   "draw_pct": 3.3,
+   "cas_margin": 3.6
+  },
+  "Horseshoe (envelop)": {
+   "decA": 41.7,
+   "draw_pct": 20.0,
+   "cas_margin": -3.9
+  },
+  "Arrowhead (wedge)": {
+   "decA": 73.3,
+   "draw_pct": 0.0,
+   "cas_margin": 16.5
+  },
+  "RefusedFlank (oblique)": {
+   "decA": 22.7,
+   "draw_pct": 26.7,
+   "cas_margin": -9.9
+  },
+  "GappedLine (manipular)": {
+   "decA": 33.3,
+   "draw_pct": 60.0,
+   "cas_margin": -7.8
+  },
+  "Line / aggressive": {
+   "decA": 80.0,
+   "draw_pct": 16.7,
+   "cas_margin": 9.6
+  },
+  "Line / hold": {
+   "decA": 39.1,
+   "draw_pct": 23.3,
+   "cas_margin": -5.6
+  }
+ },
+ "B_tactic": {
+  "plain (control)": {
+   "decA": 55.2,
+   "draw_pct": 3.3,
+   "cas_margin": 3.6
+  },
+  "brace": {
+   "decA": 55.2,
+   "draw_pct": 3.3,
+   "cas_margin": 3.6
+  },
+  "brace+hold (shieldwall)": {
+   "decA": 96.4,
+   "draw_pct": 6.7,
+   "cas_margin": 38.5
+  },
+  "charge": {
+   "decA": 80.0,
+   "draw_pct": 16.7,
+   "cas_margin": 9.6
+  },
+  "advance/push": {
+   "decA": 80.0,
+   "draw_pct": 16.7,
+   "cas_margin": 9.6
+  },
+  "envelop": {
+   "decA": 96.7,
+   "draw_pct": 0.0,
+   "cas_margin": 39.0
+  },
+  "loose/harass (skirmish)": {
+   "decA": 55.2,
+   "draw_pct": 3.3,
+   "cas_margin": 3.6
+  }
+ },
+ "C_troop_type": {
+  "levy": {
+   "decA": 0.0,
+   "draw_pct": 0.0,
+   "cas_margin": -55.7
+  },
+  "light_infantry": {
+   "decA": 0.0,
+   "draw_pct": 16.7,
+   "cas_margin": -30.7
+  },
+  "heavy_infantry (control)": {
+   "decA": 55.2,
+   "draw_pct": 3.3,
+   "cas_margin": 3.6
+  },
+  "cavalry": {
+   "decA": 100.0,
+   "draw_pct": 0.0,
+   "cas_margin": 50.7
+  },
+  "archers (melee)": {
+   "decA": 0.0,
+   "draw_pct": 13.3,
+   "cas_margin": -28.4
+  },
+  "archers (ranged)": {
+   "decA": 0.0,
+   "draw_pct": 0.0,
+   "cas_margin": -50.5
+  },
+  "knights_templar": {
+   "decA": 96.6,
+   "draw_pct": 3.3,
+   "cas_margin": 36.7
+  }
+ }
+}

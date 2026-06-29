@@ -1,0 +1,13 @@
+ENV: {'PER_CELL': '1', 'LANCHESTER_ENABLED': '1', 'COMMAND_SIGMA_ENABLED': '1', 'PC_BRACE_ENABLED': '1'}
+
+[Layer 1] micro — combined-arms unit (3 roles) vs heavy line ...
+  ticks=24  winner=draw
+  A Anvil (heavy inf)         troops   400.0 ->   377.9  cohesion 1.00->0.94  routed=False
+  A Shock (cavalry)           troops   400.0 ->   376.0  cohesion 1.00->0.94  routed=False
+  A Skirmish (light inf)      troops   400.0 ->   400.0  cohesion 1.00->1.00  routed=False
+  B Heavy line              troops   400.0 ->   335.4  routed=False
+
+[Layer 2] macro — double envelopment, n=40 ...
+  wins={'A': 40, 'B': 0, 'draw': 0}  avg flank-attacks/battle=3.3  avg pursuits=2.73  avg cascades=2.0
+
+wrote C:\Github\ttrpg\tests\sim\massbattle_battery\macro_micro_telemetry.json

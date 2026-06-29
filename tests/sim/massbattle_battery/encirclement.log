@@ -1,0 +1,10 @@
+12-round (72t) continuous engagement vs a single WEDGE; band-relevant signal = enveloper wins / positive margin
+
+  -- ENCIRCLEMENT_PENALTY = 1 --
+     lone Horseshoe (1 subunit) : decA= 50.0  draws=100.0%  cas-margin= +0.0  routs-wedge=0/20
+     converging 3 subunits      : decA= 50.0  draws=100.0%  cas-margin=+17.1  routs-wedge=0/20
+  -- ENCIRCLEMENT_PENALTY = 3 --
+     lone Horseshoe (1 subunit) : decA= 50.0  draws=100.0%  cas-margin= +0.0  routs-wedge=0/20
+     converging 3 subunits      : decA= 50.0  draws=100.0%  cas-margin=+24.9  routs-wedge=0/20
+
+wrote encirclement_results.json

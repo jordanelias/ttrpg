@@ -1919,10 +1919,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    # [D1] Recoil fires only on a GENUINE CHARGE (mounted/'charge' actor) driven home
+                    # FRONTALLY into the braced wall -- the wall must FACE the charger (you cannot brace a
+                    # flank/rear). An advancing INFANTRY line that merely out-momentums a held wall is a push,
+                    # not a charge, so it no longer shatters the wall (Hastings: the wall HOLDS, attrited, not
+                    # annihilated). Gauge-byte-exact: C2/C6 (cavalry vs braced, frontal) still fire.
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b):
+                        if (a_mom > b_mom and _subunit_braced(atom_b)
+                                and _is_charge_actor(atom_a) and b_angle_mod > -0.5):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                        elif (b_mom > a_mom and _subunit_braced(atom_a)
+                                and _is_charge_actor(atom_b) and a_angle_mod > -0.5):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D

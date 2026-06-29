@@ -1,0 +1,165 @@
+{
+ "sweep": {
+  "H4 Horseshoe vs Arrowhead  (Cannae,  band 45-62)": {
+   "18": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": -2.0,
+    "A": 0,
+    "B": 0
+   },
+   "36": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": -1.0,
+    "A": 0,
+    "B": 0
+   },
+   "72": {
+    "decA": 0.0,
+    "draw_pct": 95.0,
+    "cas_margin": -5.2,
+    "A": 0,
+    "B": 1
+   },
+   "108": {
+    "decA": 37.5,
+    "draw_pct": 20.0,
+    "cas_margin": -6.6,
+    "A": 6,
+    "B": 10
+   },
+   "144": {
+    "decA": 42.1,
+    "draw_pct": 5.0,
+    "cas_margin": -6.5,
+    "A": 8,
+    "B": 11
+   }
+  },
+  "H3 Horseshoe vs Line       (envelop, band 55-72)": {
+   "18": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": 4.5,
+    "A": 0,
+    "B": 0
+   },
+   "36": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": 9.0,
+    "A": 0,
+    "B": 0
+   },
+   "72": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": 14.5,
+    "A": 0,
+    "B": 0
+   },
+   "108": {
+    "decA": 73.3,
+    "draw_pct": 25.0,
+    "cas_margin": 19.8,
+    "A": 11,
+    "B": 4
+   },
+   "144": {
+    "decA": 78.9,
+    "draw_pct": 5.0,
+    "cas_margin": 20.0,
+    "A": 15,
+    "B": 4
+   }
+  },
+  "H6 RefusedFlank vs Line    (oblique, band 48-60)": {
+   "18": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": -1.5,
+    "A": 0,
+    "B": 0
+   },
+   "36": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": -0.0,
+    "A": 0,
+    "B": 0
+   },
+   "72": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "cas_margin": -5.4,
+    "A": 0,
+    "B": 0
+   },
+   "108": {
+    "decA": 0.0,
+    "draw_pct": 85.0,
+    "cas_margin": -8.7,
+    "A": 0,
+    "B": 3
+   },
+   "144": {
+    "decA": 25.0,
+    "draw_pct": 40.0,
+    "cas_margin": -10.1,
+    "A": 3,
+    "B": 9
+   }
+  }
+ },
+ "reset_vs_continuous": {
+  "4": {
+   "continuous": {
+    "decA": 0.0,
+    "draw_pct": 95.0,
+    "cas_margin": -5.2,
+    "A": 0,
+    "B": 1
+   },
+   "reset": {
+    "decA": 50.0,
+    "draw_pct": 100.0,
+    "A": 0,
+    "B": 0
+   },
+   "ticks": 72
+  },
+  "6": {
+   "continuous": {
+    "decA": 37.5,
+    "draw_pct": 20.0,
+    "cas_margin": -6.6,
+    "A": 6,
+    "B": 10
+   },
+   "reset": {
+    "decA": 66.7,
+    "draw_pct": 85.0,
+    "A": 2,
+    "B": 1
+   },
+   "ticks": 108
+  },
+  "8": {
+   "continuous": {
+    "decA": 42.1,
+    "draw_pct": 5.0,
+    "cas_margin": -6.5,
+    "A": 8,
+    "B": 11
+   },
+   "reset": {
+    "decA": 60.0,
+    "draw_pct": 75.0,
+    "A": 3,
+    "B": 2
+   },
+   "ticks": 144
+  }
+ }
+}
