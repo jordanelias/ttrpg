@@ -43,6 +43,27 @@ GEOMETRY = {
   'longsword_halfsword': dict(curvature=0.0, point_concentration=0.85, cross_section=0.95, edge_keenness=0.5, strike_concentration=0.1),
 }
 
+# COMPOSITE-MASS primitives (weapon_physics §4, recovered 2026-06-22): the three primitives the {mass,head_len,
+# grip_len} set lacked, so PoB stops being hand-set and DERIVES from an iron-on-wood mass model.
+#   wclass  — mass-distribution class: bladed (grip+blade+pommel) / hafted_tip (wood shaft + iron point: spear,
+#             staff, poleaxe) / hafted_block (haft + iron head lump: mace).
+#   hilt    — guard mass at the cross: compound (cup/swept ~0.30kg) / simple (cross ~0.12) / none.
+#   pommel_kg — the iron counterweight at the hand, back-solved from sourced specimen PoB (bladed weapons only).
+COMPOSITE = {
+ 'rapier':   dict(wclass='bladed', hilt='compound', pommel_kg=0.348),
+ 'arming':   dict(wclass='bladed', hilt='simple',   pommel_kg=0.234),
+ 'longsword':dict(wclass='bladed', hilt='simple',   pommel_kg=0.140),
+ 'greatsword':dict(wclass='bladed', hilt='simple',  pommel_kg=0.548),
+ 'sabre':    dict(wclass='bladed', hilt='simple',   pommel_kg=0.195),
+ 'dagger':   dict(wclass='bladed', hilt='none',     pommel_kg=0.021),
+ 'paired_short':dict(wclass='bladed', hilt='none',  pommel_kg=0.202),
+ 'longsword_halfsword':dict(wclass='bladed', hilt='simple', pommel_kg=0.140),
+ 'spear':    dict(wclass='hafted_tip',   hilt='none', pommel_kg=0.0, is_poleaxe=False),
+ 'staff':    dict(wclass='hafted_tip',   hilt='none', pommel_kg=0.0, is_poleaxe=False),
+ 'poleaxe':  dict(wclass='hafted_tip',   hilt='none', pommel_kg=0.0, is_poleaxe=True),
+ 'mace':     dict(wclass='hafted_block', hilt='none', pommel_kg=0.0, is_poleaxe=False),
+}
+
 # Bake the precalculated coefficient surface ONCE at import (zero added runtime cost): geometry derives `gap`
 # (and thrust/cut/perc_conc/halfsword for downstream wiring) from each weapon's geometry, overriding hand-set gap.
 import geometry as _geo
@@ -51,6 +72,9 @@ for _w, _params in GEOMETRY.items():
         _b = _geo.bake(_params)
         WEAPONS[_w]['gap'] = _b['gap']
         WEAPONS[_w]['geo'] = _b   # full baked surface available to modules
+for _w, _c in COMPOSITE.items():   # merge the composite-mass primitives into the weapons dictionary
+    if _w in WEAPONS:
+        WEAPONS[_w].update(_c)
 
 
 class Combatant:
