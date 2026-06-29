@@ -337,6 +337,18 @@ def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, def
     return (atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']
             + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
 
+def commit_depth(aggressor, defender, cfg, rng, TR):
+    """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
+    lean + WARINESS (vs an unread tradition the aggressor commits shallower) skew a Beta over the range; the 0.25
+    param floor is the spread-floor (never collapses to a spike). Consumes one rng.beta draw (kept here so the
+    wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean)."""
+    ln=disp_lean(aggressor)
+    wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
+    g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
+    ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
+    commit=2.0+3.0*float(rng.beta(ba,bb))
+    return commit, ba, bb, ln
+
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
     return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))

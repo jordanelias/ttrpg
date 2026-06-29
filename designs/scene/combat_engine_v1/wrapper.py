@@ -116,20 +116,9 @@ def engagement(A, B, first, cfg, rng):
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
-        # STANCE (commit skew, ED-912): aggressive leans deep (4,5), cautious shallow (2,3). WARINESS (WS-5): vs an
-        # UNREAD tradition the aggressor commits more cautiously (familiarity<1 -> a shallow bias) — wariness is a
-        # property of the same micro-read layer as the attack. The per-weight 0.05 floor is the hard SPREAD-FLOOR:
-        # disposition+wariness can never collapse the {2,3,4,5} distribution to all-{2}. none/same-tradition ->
-        # familiarity 1.0 -> no wariness (invariant-safe for default fighters).
-        _ln=S.disp_lean(aggressor)
-        _wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
-        _k=cfg['DISP_COMMIT_K']*_ln - _wary
-        # CONTINUOUS commitment depth in [2,5] — the commitment-recovery axis is a SPECTRUM, not four rungs. _k skews
-        # a Beta over the range (neutral a=b -> centred ~3.5; aggressive -> toward 5; cautious/wary -> toward 2); the
-        # 0.25 param floor is the spread-floor (the distribution never collapses to a spike). (Was int rng.integers/choice.)
-        _g=cfg['COMMIT_BETA_K']*_k
-        _ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+_g)); _bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-_g))
-        commit=2.0+3.0*float(rng.beta(_ba,_bb))
+        # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
+        # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).
+        commit, _ba, _bb, _ln = S.commit_depth(aggressor, defender, cfg, rng, TR)
         _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
         if commit>=cfg['LUNGE_COMMIT'] and rng.random() < S.lunge_quality(aggressor, cfg):
             aggressor.grip='lunge'   # a deep thrust BECOMES a lunge in proportion to how WELL the weapon lunges (lunge_quality: rapier readily, longsword sometimes, spear rarely, a cutter never) -> weapon-derived, not a flat head-check; the body extends -> lower recovery (recoverability_factor, non-linear in weight) + more readable
