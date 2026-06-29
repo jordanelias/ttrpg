@@ -64,7 +64,7 @@ def render(events, seed=None):
                  f"[{_dist(P.degree_distribution(ev['pool'], ev['net_sigma']), DEGORD)}]")
         elif k == 'commit':
             line(f"    · {ev['aggressor']} commits {ev['commit']}   "
-                 f"[depth {_dist({str(d): p for d, p in ev['probs'].items()})}]")
+                 f"[bands {_dist(P.beta_band_probs(ev['beta_a'], ev['beta_b']))}]")
         elif k == 'read':
             res = "READS it (Vor steal opens)" if ev['read_win'] else "misses the read (acts on instinct)"
             line(f"        {ev['defender']}'s read: {_pct(ev['p_read_win'])} to catch it … {res}")

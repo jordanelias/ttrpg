@@ -80,12 +80,33 @@ def outcome_distribution(degree, mode, cfg, exposure=0.0):
     return {k: round(v, 4) for k, v in out.items()}
 
 
+def _beta_pdf(x, a, b):
+    from math import gamma
+    if x <= 0.0 or x >= 1.0:
+        return 0.0
+    return x ** (a - 1.0) * (1.0 - x) ** (b - 1.0) / (gamma(a) * gamma(b) / gamma(a + b))
+
+
+def beta_band_probs(a, b):
+    """P(commit lands in each band) for the continuous draw commit = 2 + 3*Beta(a,b): feint (<=2.75) / light
+    (2.75-3.5) / committed (3.5-4.25) / all-in (>=4.25). Deterministic numerical integration — no scipy."""
+    import numpy as np
+    xs = np.linspace(1e-4, 1 - 1e-4, 600)
+    pdf = np.array([_beta_pdf(x, a, b) for x in xs])
+    cdf = np.concatenate([[0.0], np.cumsum((pdf[1:] + pdf[:-1]) / 2 * np.diff(xs))])
+    cdf = cdf / cdf[-1] if cdf[-1] > 0 else cdf
+    F = lambda t: float(np.interp(t, xs, cdf))
+    edges = [0.0, 0.25, 0.5, 0.75, 1.0]
+    labels = ['feint', 'light', 'committed', 'all-in']
+    return {labels[i]: round(F(edges[i + 1]) - F(edges[i]), 3) for i in range(4)}
+
+
 def node_distribution(ev):
     """For a trace event, return {branch_label: probability} for the alternate branches at that node,
     or None if the node is not a probabilistic branch point. Used by the narrator and branch explorer."""
     k = ev.get('kind')
     if k == 'commit':
-        return {f'commit {d}': p for d, p in ev['probs'].items()}
+        return beta_band_probs(ev['beta_a'], ev['beta_b'])
     if k == 'read':
         p = ev['p_read_win']
         return {'defender reads (Vor flips)': round(p, 4), 'attacker hides it': round(1 - p, 4)}

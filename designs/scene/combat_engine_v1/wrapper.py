@@ -123,12 +123,13 @@ def engagement(A, B, first, cfg, rng):
         _ln=S.disp_lean(aggressor)
         _wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
         _k=cfg['DISP_COMMIT_K']*_ln - _wary
-        if abs(_k)<1e-9:
-            commit_probs={2:0.25,3:0.25,4:0.25,5:0.25}; commit=int(rng.integers(2,6))
-        else:
-            _w=[max(0.05,1-_k), max(0.05,1-0.5*_k), max(0.05,1+0.5*_k), max(0.05,1+_k)]
-            _s=sum(_w); commit_probs={d:round(x/_s,3) for d,x in zip([2,3,4,5],_w)}; commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
-        _emit('commit', aggressor=_agg0, defender=_def0, commit=commit, probs=commit_probs, stance_lean=round(_ln,3))
+        # CONTINUOUS commitment depth in [2,5] — the commitment-recovery axis is a SPECTRUM, not four rungs. _k skews
+        # a Beta over the range (neutral a=b -> centred ~3.5; aggressive -> toward 5; cautious/wary -> toward 2); the
+        # 0.25 param floor is the spread-floor (the distribution never collapses to a spike). (Was int rng.integers/choice.)
+        _g=cfg['COMMIT_BETA_K']*_k
+        _ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+_g)); _bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-_g))
+        commit=2.0+3.0*float(rng.beta(_ba,_bb))
+        _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))

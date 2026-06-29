@@ -117,9 +117,10 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
         sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
-    if mode=='parry' and commit>=4: sig-=0.25
-    if mode=='dodge' and commit>=4: sig+=0.10
-    if mode=='dodge' and commit<=2: sig-=0.10
+    _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
+    _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
+    if mode=='parry': sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
+    if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
 def armor_defeat_sigma(aggressor, defender, cfg):

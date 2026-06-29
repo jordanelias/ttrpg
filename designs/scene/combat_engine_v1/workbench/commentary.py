@@ -13,17 +13,19 @@ import probabilities as P
 
 # ---- how the engine's numbers read in plain language -----------------------------------------------------
 COMMIT_LINE = {
-    2: "{a} flicks out a light feint — a threat {a} can fully pull back",
-    3: "{a} commits to a clean, measured strike",
-    4: "{a} drives in hard, putting weight behind it",
-    5: "{a} throws everything into one all-out blow — no taking it back now",
+    'feint': "{a} flicks out a light feint — a threat {a} can fully pull back",
+    'light': "{a} commits to a clean, measured strike",
+    'committed': "{a} drives in hard, putting weight behind it",
+    'all-in': "{a} throws everything into one all-out blow — no taking it back now",
 }
 COMMIT_MECH = {
-    2: "commit-depth 2 = the FEINT pole: minimal commitment, FULL recovery — near-zero exposure, {a} can abort and reset (to commit is to give up recovery; here {a} gives up almost none)",
-    3: "commit-depth 3 (measured): a balanced trade of power for recoverability",
-    4: "commit-depth 4 (deep): more power and reach, but LESS recoverable — at depth 4+ the exposure window opens (the Indes counter), scaled by how hard {a}'s weapon is to retract (a hand-balanced blade recovers; a forward-heavy one can't)",
-    5: "commit-depth 5 (all-in): maximum power, but committed = IRRECOVERABLE — {a} can't stop or retract it, so a clean read by {d} flips the whole exchange",
+    'feint': "the FEINT pole (commit ~{c}): minimal commitment, FULL recovery — near-zero exposure, {a} can abort and reset (to commit is to give up recovery; here {a} gives up almost none)",
+    'light': "a measured commit (~{c}): a balanced trade of power for recoverability",
+    'committed': "a deep commit (~{c}): more power and reach but LESS recoverable — the exposure window opens (the Indes counter), scaled by how hard {a}'s weapon is to retract (a hand-balanced blade recovers; a forward-heavy one can't)",
+    'all-in': "all-in (commit ~{c}): maximum power, but committed = IRRECOVERABLE — {a} can't stop or retract it, so a clean read by {d} flips the whole exchange",
 }
+def _commit_band(commit):
+    return 'feint' if commit < 2.75 else 'light' if commit < 3.5 else 'committed' if commit < 4.25 else 'all-in'
 MODE_LINE = {
     'parry': "{d} sweeps the blade aside with a parry",
     'dodge': "{d} slips off the line of attack",
@@ -79,7 +81,7 @@ def commentate(events, cfg):
                         'mech': f"stop-hit roll {e['degree']} (pool {e['pool']}D, edge {e['net_sigma']:+}sig)",
                         'cls': 'hit' if landed else 'clean'})
         elif k == 'commit':
-            cur = {'a': e['aggressor'], 'd': e['defender'], 'commit': e['commit'], 'probs': e['probs']}
+            cur = {'a': e['aggressor'], 'd': e['defender'], 'commit': e['commit'], 'beta_a': e['beta_a'], 'beta_b': e['beta_b']}
         elif k == 'read':
             cur['read_win'] = e['read_win']; cur['read_p'] = e['p_read_win']; cur['read_d'] = e['read_d']; cur['read_a'] = e['read_a']
         elif k == 'mode':
@@ -118,7 +120,8 @@ def _beat(cur, outcome, cfg, wound_str):
     deg = cur.get('degree', 'fail')
 
     # the call: attack -> read -> defence -> result
-    call = COMMIT_LINE[commit].format(a=a)
+    band = _commit_band(commit)
+    call = COMMIT_LINE[band].format(a=a)
     if rw:
         call += f", but {d} sees it coming — " + MODE_LINE[mode].format(d=d)
     else:
@@ -139,7 +142,7 @@ def _beat(cur, outcome, cfg, wound_str):
         cls = 'clean'
 
     # the mechanics underneath
-    mech = [COMMIT_MECH[commit].format(a=a, d=d)]
+    mech = [COMMIT_MECH[band].format(a=a, d=d, c=round(commit, 1))]
     if rw:
         mech.append(f"the read: {d} out-reads the attack ({round(rp*100)}% to read it) — so {d} picks the BEST defence (not a guess)" +
                     (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= 4 else ""))
@@ -160,8 +163,8 @@ def _beat(cur, outcome, cfg, wound_str):
 
     # odds for the explorer
     branches = [
-        {'label': 'how deep ' + a + ' committed', 'dist': {f'commit {k}': v for k, v in cur['probs'].items()},
-         'took': f'commit {commit}'},
+        {'label': 'how deep ' + a + ' committed', 'dist': P.beta_band_probs(cur['beta_a'], cur['beta_b']),
+         'took': band},
         {'label': 'the read', 'dist': {f'{d} reads it': round(rp, 3), f'{a} hides it': round(1 - rp, 3)},
          'took': f'{d} reads it' if rw else f'{a} hides it'},
         {'label': 'the resolution roll', 'dist': P.degree_distribution(cur.get('pool', 5), cur.get('net_sigma', 0.0)),
