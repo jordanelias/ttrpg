@@ -5,7 +5,7 @@
 ## Almud · Lenneth · Baralta · Vaynard
 ## Consolidated | Date: 2026-04-11 | Status: DESIGN
 ## Incorporates: ruler_diamond_foil_analysis.md + ruler_diamond_extended_foils.md
-## [EDITORIAL: All characterization canonical per ED-393 through ED-401.]
+## [EDITORIAL: All characterization per ED-393 through ED-401 (provisional — confirmation pending).]
 # PART ONE: AXIS ANALYSIS
 ## The Diamond's Axes
 The four rulers occupy distinct positions on every significant political axis. No two-faction alliance is stable across all issues.

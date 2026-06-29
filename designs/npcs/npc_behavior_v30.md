@@ -88,7 +88,7 @@ Every named NPC holds three interconnected attributes.
 
 | Attribute | Value | Notes |
 |---|---|---|
-| Primary Conviction | Precedent | Constitutional procedure IS justice. What has been established governs what comes next. [EDITORIAL: ED-400 — Changed from Order (stage6 canonical) to Precedent. Rationale: distinguishes Baralta from Almud; aligns with Categorical Imperative framework. Stage6 is stale compilation; this is an intentional refinement. User approval required.] |
+| Primary Conviction | Precedent | Constitutional procedure IS justice. What has been established governs what comes next. [EDITORIAL: ED-400 (proposed — approval pending) — Changed from Order (stage6 canonical) to Precedent. Rationale: distinguishes Baralta from Almud; aligns with Categorical Imperative framework. Stage6 is stale compilation; this is an intentional refinement. User approval required.] |
 | Secondary Conviction | Faith | "Faith is not mediated — it is lived." Her faith is genuine but privatised. It does not govern her political decisions until her Precedent framework fails. |
 | Ethical Framework | Categorical Imperative (Hafenmark) | Aligned: −1 Ob on legal precedent/constitutional action. Contradictory: +1 Ob on ad hoc/precedent-breaking action. |
 | Primary Resonant Style | Evidence | Show her that constitutional procedure has failed to prevent the specific injustice she claims it prevents. She cannot dismiss evidence that her own system is broken without abandoning her standard. Documents, records, historical cases — these are her language. |
@@ -352,7 +352,7 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 ---
 
 
-### §2.15 Crown Inner Circle (ED-634, approved 2026-04-17)
+### §2.15 Crown Inner Circle [PROVISIONAL: ED-634 — names proposed, naming pending Jordan]
 
 | Role | Name | Conviction | MS | Certainty | Notes |
 |------|------|------------|-----|-----------|-------|
@@ -544,7 +544,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 ### §5.2 Named NPC Arc Profiles
 
-*Arc expansion v1 (ED-591-609, approved 2026-04-17): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), Niflhel operatives (Quartermaster/The Quiet One), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
+*Arc expansion v1 [PROVISIONAL] (ED-591–594 resolved 2026-04-24; ED-595–609 proposed — pending approval): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), Niflhel operatives (Quartermaster/The Quiet One), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
 
 [EDITORIAL: ED-1042 — de-duplicated the doubled `### §5.2 Named NPC Arc Profiles` heading (CM-10, docket J-31).]
 
@@ -1182,7 +1182,7 @@ Canonical values for NPC Behavior System integration:
 
 | NPC | Thread Sensitivity (TS) | Certainty | Rationale |
 |---|---|---|---|
-| Almud | 0 | 3 | TS 0 per ED-398. Certainty 3 — governance pragmatist with genuine ethical doubt. |
+| Almud | 0 | 3 | TS 0 per ED-398 (provisional — confirm pending). Certainty 3 — governance pragmatist with genuine ethical doubt. |
 | Lenneth | 8 (starting, develops) | 3 | TS 8 per lenneth_threadwork_design. Certainty 3 — institutional certainty disrupted by archive encounters. |
 | Baralta | 0 (triple-barrier) | 5 | TS 0, Ob 4 on growth (ED-417). Certainty 5 — unshakeable sovereign divine right conviction. |
 | Vaynard | 10 (hidden) | 2 | TS 10 starting, environmental exposure. Certainty 2 — direct Thread perception has destabilised worldview. |

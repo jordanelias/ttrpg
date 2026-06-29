@@ -366,7 +366,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Attribute | Value |
 |-----------|-------|
 | Thread Sensitivity | 0 (confirmed per ED-392 resolution) |
-| Certainty | 5 (confirmed per ED-393: Deed-logic worldview is self-reinforcing) |
+| Certainty | 5 (per ED-393, provisional — confirm pending: Deed-logic worldview is self-reinforcing) |
 | Coherence | N/A |
 
 **Beliefs:**

@@ -38,7 +38,7 @@
 | 23 | 277 | 3 | §2.13 Cardinal Officers (Church — Sub-NPCs) |
 | 24 | 292 | 4 | §2.13a Extra-Territorial Heresy Jurisdiction (ED-670) |
 | 25 | 306 | 3 | §2.14 Registrar Lennart Haelgrund (Ministry — Throughline T4) |
-| 26 | 362 | 3 | §2.15 Crown Inner Circle (ED-634, approved 2026-04-17) |
+| 26 | 362 | 3 | §2.15 Crown Inner Circle [PROVISIONAL: ED-634 — names proposed, naming pending Jordan] |
 | 27 | 372 | 3 | §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17) |
 | 28 | 379 | 3 | §2.17 Varfell Jarl Council (ED-637, ED-638, approved 2026-04-17) |
 | 29 | 387 | 2 | §3 NPC BELIEFS: FORMATION, REVISION, AND SCARS |
@@ -152,7 +152,7 @@
 | 23 | 717 | §2.13 Cardinal Officers (Church — Sub-NPCs) |
 | 24 | 482 | §2.13a Extra-Territorial Heresy Jurisdiction (ED-670) |
 | 25 | 1,578 | §2.14 Registrar Lennart Haelgrund (Ministry — Throughline T4) |
-| 26 | 242 | §2.15 Crown Inner Circle (ED-634, approved 2026-04-17) |
+| 26 | 242 | §2.15 Crown Inner Circle [PROVISIONAL: ED-634 — names proposed, naming pending Jordan] |
 | 27 | 73 | §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17) |
 | 28 | 78 | §2.17 Varfell Jarl Council (ED-637, ED-638, approved 2026-04-17) |
 | 29 | 955 | §3 NPC BELIEFS: FORMATION, REVISION, AND SCARS |

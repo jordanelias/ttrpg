@@ -118,6 +118,59 @@ def test_canonical_claim_in_params_still_caught():
     assert 'OPEN_AS_BASIS' in _kinds(v, 'ED-869')
 
 
+def test_active_overrides_stale_archive_status():
+    # Precedence: load_ed_universe appends archives FIRST, active ledger LAST, so
+    # build_status_map's last-write-wins makes the active status authoritative.
+    # Regression for the ED-864 false positive: active 'struck' must beat archived 'open'.
+    m = vec.build_status_map([{'id': 'ED-864', 'status': 'open'},      # archived (stale)
+                              {'id': 'ED-864', 'status': 'struck'}])   # active (authoritative)
+    assert m['ED-864'] == 'struck'
+    assert vec._is_resolved(m['ED-864'])
+
+
+def test_salvage_recovers_ids_from_malformed_yaml():
+    # A frozen archive fragment with mixed indentation / orphaned head lines that
+    # yaml.safe_load rejects — salvage must still recover id + status per block.
+    raw = (
+        '    decision: "orphaned head line from a split fragment"\n'
+        '    tags: [naming]\n'
+        '  - id: ED-427\n'
+        '    status: resolved\n'
+        '- id: ED-311\n'          # column-0 entry mixed with column-2 entries
+        '    status: struck\n'
+        '  - id: ED-999\n'        # no status in its block
+        '    description: "x"\n'
+    )
+    got = {e['id']: e['status'] for e in vec._salvage_entries(raw)}
+    assert got == {'ED-427': 'resolved', 'ED-311': 'struck', 'ED-999': None}
+
+
+def test_salvaged_archive_ids_satisfy_existence():
+    # An ID recoverable only from a malformed archive must NOT be flagged NONEXISTENT
+    # once salvaged into the status map.
+    status_map = vec.build_status_map(vec._salvage_entries('- id: ED-427\n  status: resolved\n'))
+    v = vec.audit_citations({'d.md': 'per ED-427 (canonical).'}, status_map)
+    assert _kinds(v, 'ED-427') == set()
+
+
+def test_basis_keyword_does_not_bleed_across_table_rows():
+    # A neighbouring table row's "RESOLVED" must NOT make THIS row's open-ED
+    # citation an OPEN_AS_BASIS — basis detection is scoped to the citation's line.
+    doc = ("| ED-700 | Some mechanic. Edge cases foreclosed. **RESOLVED.** | P2 |\n"
+           "| ED-701 | Godot node arch. Deferred until implementation. **FLAGGED.** | P3 |\n")
+    v = vec.audit_citations({'designs/scene/x_v30.md': doc},
+                            {'ED-700': 'resolved', 'ED-701': 'open'})
+    assert _kinds(v, 'ED-701') == {'OPEN_INFO'}   # not OPEN_AS_BASIS from the row above
+
+
+def test_same_line_basis_still_caught():
+    # Precision must not become permissiveness: a basis claim ON the citation's line
+    # is still flagged.
+    doc = "| ED-701 | Godot arch — CANONICAL, ratified. | P3 |\n"
+    v = vec.audit_citations({'params/x.md': doc}, {'ED-701': 'open'})
+    assert 'OPEN_AS_BASIS' in _kinds(v, 'ED-701')
+
+
 def test_reproduces_p1_resolver_incident():
     # Mirrors params/factions/stats_1_7_scale.md L56/L92/L95/L101.
     doc = (

@@ -49,7 +49,7 @@
     note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-515 through ED-531 open."
     compilation_stage: null
     compilation_current: false
-    note: "fieldwork_v30.md is canonical (designs/fieldwork/). Sub-files: fieldwork_socializing.md (PP-632: Disposition redesign, Knot mechanics), fieldwork_editorial.md (PP-632: ED harvest). PP-626–632 applied. 3 open editorials: ED-507/508/509. 3 SIM-DEBT items (SOC-01–03)."
+    note: "fieldwork_v30.md is canonical (designs/fieldwork/). Sub-files: fieldwork_socializing.md (PP-632: Disposition redesign, Knot mechanics), fieldwork_editorial.md (PP-632: ED harvest). PP-626–632 applied. 3 editorials pending: ED-507/508/509. 3 SIM-DEBT items (SOC-01–03)."
     compilation_stage: null
     compilation_current: false
     note: "Geographic graduation of RS threshold effects. Supersedes geography_design.md Calamity Bleed Gradient. Cross-references threadwork_v25 §5.3 and §6. Created 2026-04-06."

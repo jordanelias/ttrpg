@@ -574,7 +574,7 @@ Thread combat vs Mode 3 entities: **Thread pool split (Off/Def) applies** identi
 See designs/npcs/lenneth_threadwork_design.md for full design.
 Lenneth is patron, not practitioner. Catherine the Great parallel.
 Mira relationship: patron-to-practitioner (archive access), not teacher-to-student.
-ED-119 resolved by 2026-04-11 session. ED-161 also resolved. ED-413 documents the dissolution. -->
+ED-119 resolved by 2026-04-11 session. ED-161 also resolved. ED-413 (pending) documents the dissolution. -->
 Lenneth Almqvist: Thread Sensitivity **8** (starting). Development path: archive research (Spirit + Einhir Scholar, TN 7, Ob 2). Maximum potential TS 40-50.
 
 ## ED-134 Resolution (PP-289)

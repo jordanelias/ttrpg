@@ -13,6 +13,17 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOCKING).** Diagnosed the
+  292 report-only violations: 286 `NONEXISTENT` from **dual ledger-of-record drift** (design docs minted ED
+  numbers in inline `[EDITORIAL:]` tables never migrated to the JSONL), 6 `OPEN_AS_BASIS` (2 of them validator
+  false positives). Fixed 3 validator defects (`tools/validate_ed_citations.py`): active-ledger precedence
+  over stale archives, loud-parse + regex-salvage of 7 malformed archive YAMLs, and same-line basis scoping
+  (table-row bleed). **Registered 91 grounded entries** (36 resolved / 12 provisional / 30 open / 13
+  needs_jordan) — each verified against its citing doc by per-batch subagents (anti-fabrication). Repointed
+  the ED-814→ED-907 phantom and reworded open/provisional over-claims to `pending`. Dropped `continue-on-error`
+  on the `ed-citations` CI job + added to `ci-summary` needs. Report:
+  `designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md`. **Residual for Jordan:** 13 needs_jordan
+  items (NPC naming ED-634/595–602/610, ED-885 ratification ID); ID collisions ED-408–411/413/417/647.
 - 2026-06-28 — **Editorial-ledger relevance triage.** Deep per-item verification of all **93 unresolved**
   entries (82 open + 10 provisional + 1 deferred) against the live working tree, in 6 read-only cluster
   passes. Result: **37 still relevant** (25 real open work + 12 NEEDS_JORDAN), **56 stale**. Applied via
