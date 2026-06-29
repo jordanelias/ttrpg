@@ -69,6 +69,20 @@ def balance_eff(c, fat, cfg):
     # to the engine's balance-neutral (3), so a default fighter's substrate is unchanged. Still 1.0× at full poise.
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
+def recoverability_factor(c, cfg):
+    """The IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis made physical. To
+    commit is to give up recovery; HOW MUCH depends on how hard the action is to terminate/retract: the weapon's
+    static turning moment (mass*pob_frac — a forward-heavy mace 'wants to continue' and can't be stopped; a
+    hand-balanced rapier retracts instantly, which is WHY a rapier can feint and a mace can't), plus footwork (a
+    lunge extends the body = low recovery; a choke/gathered grip stays recoverable). 1.0 at the longsword
+    reference; bounded below so it never flips sign. Pure."""
+    w=c.w
+    moment = w.get('mass',1.0)*w.get('pob_frac',0.15)            # static forward moment: heavy+forward = hard to stop
+    mult = 1.0 + cfg['EXPOSE_MOMENT_K']*(moment - cfg['EXPOSE_MOMENT_REF'])
+    grip=getattr(c,'grip','normal')
+    if grip=='lunge':   mult += cfg['EXPOSE_LUNGE_K']            # extended body = committed, low recovery
+    elif grip=='choke': mult -= cfg['EXPOSE_CHOKE_K']           # gathered in = more recoverable
+    return max(0.3, mult)
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
 # ---------- defense modes (parry/dodge/wind) ----------

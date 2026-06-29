@@ -189,7 +189,7 @@ def engagement(A, B, first, cfg, rng):
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
-        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
+        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*S.recoverability_factor(aggressor,cfg)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')   # commit cost scales with IRRECOVERABILITY (weapon moment + footwork): a forward-heavy weapon can't retract a committed blow
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)

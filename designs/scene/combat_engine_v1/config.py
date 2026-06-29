@@ -53,6 +53,13 @@ CFG = dict(
   # outcome-mapping (audit C-2: neutralize is a fixed per-mode shape, not dsig-scaled)
   NEUTRALIZE_PARRY=0.55, NEUTRALIZE_DODGE=0.62, NEUTRALIZE_WIND=0.50, NEUTRALIZE_OVERWHELM_DROP=0.45,
   RIPOSTE_ON_FAIL=0.32, COMMIT_EXPOSE_K=0.06,
+  # COMMITMENT = (im)RECOVERABILITY (the physical axis): to commit IS to give up recovery, so the overcommit cost
+  # scales with how hard the action is to terminate/retract — the weapon's static turning moment (mass*pob_frac:
+  # a forward-heavy mace "wants to continue" and can't be stopped; a hand-balanced rapier retracts instantly,
+  # which is WHY a rapier can feint and a mace can't) plus footwork (lunge = extended body = low recovery; choke
+  # = gathered = recoverable). 1.0 at the longsword reference (mass1.4*pob0.14=0.196). The grip terms await the
+  # Stance/grip writer (WS-5); the weapon-moment term is live now.
+  EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=0.196, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
