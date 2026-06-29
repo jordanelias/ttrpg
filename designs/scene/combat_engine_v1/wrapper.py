@@ -100,7 +100,7 @@ def engagement(A, B, first, cfg, rng):
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
             if not closed:
-                if A.stamina<=-4 or B.stamina<=-4: return None
+                if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
                 continue
         # ----- CLOSED: tempo-gated exchange -----
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
@@ -295,10 +295,10 @@ def engagement(A, B, first, cfg, rng):
         # measure breaks (the floor: one swing, one dodge, separate = 1 exchange). A landed hit, a riposte (role flip),
         # or a bind CONTINUES the pressing. Felling / stamina-collapse exits are handled above. Combat = many such
         # turns; wounds persist across them, so equal fighters take several turns to resolve (emergent, not enforced).
-        if A.stamina<=-4 or B.stamina<=-4: return None
-        if exchanges >= cfg['BURST_MAX']: return None
-        if not (hit>0 or riposte or bind): return None
-    return None
+        if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
+        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None
+        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None
+    _emit('separation', reason='beat_exhaustion'); return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
     import numpy as np
