@@ -11,24 +11,19 @@ Differentiation is BOTTOM-UP only: the learned ABILITIES it grants (ability_prim
 raw numbers below survive only as `set`/`mode`/provenance metadata, read by nothing as weights.
 """
 
-# Each tradition: the named-set it expresses (bridge mapping) + vestigial channel/mode metadata (NOT read as weights).
+# Each tradition: the named-set it expresses (bridge mapping) + the cognitive-mode label. The old 7-dim channel-weight
+# vector was REMOVED 2026-06-29 (degenerate top-down tuning) and its vestigial numbers deleted 2026-06-29 (read by
+# nothing). Differentiation is bottom-up: the abilities it grants (ability_primitives) + the imposition gate
+# (PREFERRED) + familiarity. `mode` is flavour metadata (the governing-analogue label); not read at resolution.
 TRADITIONS = {
-    'german':   dict(visual=0.95, tactile=1.35, precommit=1.00, leverage=1.30, tempo=1.10, measure=1.05, balance=1.00,
-                     set='Bind Fighter', mode='tactile'),
-    'italian':  dict(visual=1.20, tactile=1.00, precommit=1.00, leverage=0.95, tempo=1.30, measure=1.25, balance=1.05,
-                     set='Thrust Duelist', mode='temporal-spatial'),
-    'spanish':  dict(visual=1.15, tactile=0.95, precommit=1.00, leverage=0.95, tempo=1.05, measure=1.35, balance=1.30,
-                     set='Thrust Duelist', mode='geometric'),
-    'japanese': dict(visual=1.05, tactile=1.15, precommit=1.35, leverage=1.05, tempo=1.20, measure=1.10, balance=1.10,
-                     set='Counter-time', mode='intentional'),
-    'chinese':  dict(visual=1.05, tactile=1.20, precommit=1.05, leverage=1.15, tempo=1.05, measure=1.20, balance=1.15,
-                     set='Burst', mode='kinetic-rhythmic'),
-    'filipino': dict(visual=1.00, tactile=1.25, precommit=1.05, leverage=1.00, tempo=1.15, measure=1.05, balance=1.25,
-                     set='Continuous-flow', mode='kinetic-rhythmic'),
-    'english':  dict(visual=1.10, tactile=1.05, precommit=1.00, leverage=1.05, tempo=1.15, measure=1.15, balance=1.10,
-                     set='Counter-time', mode='biomechanical'),
-    'none':     dict(visual=1.00, tactile=1.00, precommit=1.00, leverage=1.00, tempo=1.00, measure=1.00, balance=1.00,
-                     set=None, mode=None),
+    'german':   dict(set='Bind Fighter',    mode='tactile'),
+    'italian':  dict(set='Thrust Duelist',  mode='temporal-spatial'),
+    'spanish':  dict(set='Thrust Duelist',  mode='geometric'),
+    'japanese': dict(set='Counter-time',    mode='intentional'),
+    'chinese':  dict(set='Burst',           mode='kinetic-rhythmic'),
+    'filipino': dict(set='Continuous-flow', mode='kinetic-rhythmic'),
+    'english':  dict(set='Counter-time',    mode='biomechanical'),
+    'none':     dict(set=None,              mode=None),
 }
 
 # Knowledge-of-others: how well a tradition READS an unfamiliar one (the imposition/read edge against a novel style).

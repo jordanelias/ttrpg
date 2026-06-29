@@ -258,23 +258,6 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
     return legib
 
-# [UNUSED since WS-5 2026-06-28 — the feint is dissolved into the attack (wrapper no longer calls this; deception
-#  is intrinsic to commit-depth + legibility + the read contest). Kept until a cleanup pass removes it + FEINT_*.]
-def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
-    """Decide/resolve a feint. Pure (reads rng): returns dict {do, debuff, new_streak, beat_cost, stamina_cost}.
-    A fooled defender's real-attack defence/read is degraded; a defender who READS it gains a small counter-edge.
-    Capped at FEINT_MAX_STREAK; short phase; costs stamina. Wrapper applies the state changes."""
-    do = (cfg['FEINT_ENABLE'] and feint_streak < cfg['FEINT_MAX_STREAK']
-          and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
-    if not do:
-        return dict(do=False, debuff=0.0, new_streak=0, beat_cost=0.0, stamina_cost=0.0)
-    feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.eff_cw(aggressor, 'tempo')
-    def_read = reading(defender,cfg)*TR.eff_cw(defender, 'visual')*TR.eff_cw(defender, 'precommit')*(1-0.4*mental_fat_d)
-    read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
-    debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
-    return dict(do=True, debuff=debuff, new_streak=feint_streak+1,
-                beat_cost=cfg['FEINT_BEAT_COST'], stamina_cost=cfg['FEINT_STAMINA'])
-
 def approach_displace(shorter, longer, cfg):
     """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,
     suppressing its stop-hit and speeding the close. Returns a fraction in [0, APPROACH_DISPLACE_MAX]. Pure."""

@@ -18,10 +18,7 @@ CFG = dict(
   LEVER_K=2.2, LEVER_REF=0.30, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
   DISPLACE_LEV_GAP=0.15, DISPLACE_P=0.55, DISPLACE_PULLBACK_GRAZE=0.30, APPROACH_DISPLACE_K=0.7, APPROACH_DISPLACE_MAX=0.6,
-  # feinting [DEPRECATED — dissolved into the attack (WS-5 2026-06-28); feint_eval removed from the engine path, these keys now unused, kept until cleanup]:
-  # short phase, costs stamina, readable (a defender who reads it gains a small counter-edge). Tuned not-overpowered.
-  FEINT_ENABLE=True, FEINT_P=0.30, FEINT_MAX_STREAK=3, FEINT_BEAT_COST=0.3, FEINT_STAMINA=1.0,
-  FEINT_DEBUFF=0.30, FEINT_PUNISH=0.12,
+  # (feint config removed 2026-06-29: the feint is dissolved into the attack — WS-5 — so FEINT_*/feint_eval are gone.)
   # hilt/guard primitive: blade_guard (cross/quillons/rings) catches the blade in the bind & enhances winding;
   # hand_guard protects the hand in the parry ("don't parry with your hands"). Modulated around a neutral cross.
   BIND_GUARD_K=0.55, PARRY_GUARD_K=0.45, WIND_GUARD_K=0.40, GUARD_NEUTRAL=0.45,

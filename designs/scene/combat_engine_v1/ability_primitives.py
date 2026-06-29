@@ -20,8 +20,6 @@ ABILITIES = {
     # German (Liechtenauer; S1/S2)
     'indes':          dict(tradition='german',   grade='S1/S2', lever='counter_success', op='+', value=0.15,
                            desc="Indes / Fühlen — feeling the bind, the simultaneous counter in the same tempo"),
-    'vorschlag':      dict(tradition='german',   grade='S1/S2', lever='seize',           op='+', value=4.0,
-                           desc="Vorschlag — the first-strike that seizes the Vor [DEAD: 'seize' lever has no consumer since 2026-06-05]"),
     'staerke_schwaeche': dict(tradition='german', grade='S1/S2', lever='leverage',       op='*', value=1.20,
                            desc="Stärke-Schwäche — strong/weak leverage in the bind (channel lever)"),
     # Italian (Fiore -> rapier; S2)
@@ -29,9 +27,6 @@ ABILITIES = {
                            desc="Mezzo tempo — the half-time counterattack; reaches for the in-tempo counter more readily"),
     'misura':         dict(tradition='italian',  grade='S2',    lever='measure',         op='*', value=1.15,
                            desc="Misura — distance / measure control (channel lever)"),
-    # Japanese (koryū; S2)
-    'sen_no_sen':     dict(tradition='japanese', grade='S2',    lever='seize',           op='+', value=4.0,
-                           desc="Sen-no-sen — pre-emptive seizing as the opponent commits [DEAD: 'seize' lever has no consumer since 2026-06-05]"),
     # English (Silver; S2)
     'true_times':     dict(tradition='english',  grade='S2',    lever='anti_overcommit', op='+', value=0.25,
                            desc="True Times — Silver's true-vs-false times: commitment discipline, fewer over-commits"),
@@ -39,6 +34,21 @@ ABILITIES = {
     'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='measure',         op='*', value=1.18,
                            desc="Atajo — Destreza blade-constraint / measure off the círculo (channel lever; S2/S3)"),
 }
+
+
+# THE BUNDLE, made explicit: validate every ability's tradition tag (catch typos at import) and build the forward
+# index "what does tradition T grant?". This is the data-level realisation of "a tradition is a bundle of ability
+# primitives" — TRADITION_KIT['german'] -> ['indes', 'staerke_schwaeche', ...]. One-way import (traditions has no
+# dependency on this module), so no cycle.
+from traditions import TRADITIONS as _TRADITIONS
+for _name, _a in ABILITIES.items():
+    assert _a['tradition'] in _TRADITIONS, f"ability {_name!r} tags unknown tradition {_a['tradition']!r}"
+TRADITION_KIT = {t: [a for a, d in ABILITIES.items() if d['tradition'] == t] for t in _TRADITIONS}
+
+
+def kit(trad):
+    """The list of ability primitives a tradition teaches (its bundle). Empty for 'none'/untrained."""
+    return TRADITION_KIT.get(trad, [])
 
 
 def ability_bonus(c, lever):
