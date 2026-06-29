@@ -146,16 +146,11 @@ def engagement(A, B, first, cfg, rng):
         # large/lateral movement is easier to perceive than in-line motion. A thrust (in-line, point/high-gap) is
         # HARD to read; a swing/cut (lateral arc) is EASY; and a deeper commit / lunge = more biomechanical action =
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
-        fam = TR.familiarity(td, ta)
-        legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
-        read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)   # WS-5: precommit (intent-read) now LIVE every exchange — was feint-only (RF-05); feint_debuff removed
-        read_a=S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
-        read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
+        # READ CONTEST + mode selection — computed in systems.read_contest; the wrapper sequences + emits.
+        _rc=S.read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR)
+        read_win=_rc['read_win']; read_d=_rc['read_d']; read_a=_rc['read_a']; mode=_rc['mode']; msig=_rc['msig']
         _emit('read', defender=_def0, read_d=round(read_d,3), read_a=round(read_a,3),
-              p_read_win=round(1/(1+exp(-(read_d-read_a)/1.0)),3), read_win=read_win)
-        modes=['parry','dodge','wind']
-        msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
-        mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+              p_read_win=round(_rc['p_read'],3), read_win=read_win)
         _emit('mode', defender=_def0, mode=mode, msig={m:round(v,3) for m,v in msig.items()}, chosen_by=('read' if read_win else 'random'))
         # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
         # via balance_eff — no separate blanket multiply here (would double-count the stance term).

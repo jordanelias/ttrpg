@@ -349,6 +349,22 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     commit=2.0+3.0*float(rng.beta(ba,bb))
     return commit, ba, bb, ln
 
+def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
+    """The defender's READ of the attack + the resulting mode selection. read_d (visual+precommit, familiarity-
+    and legibility-scaled) vs read_a -> read_win (logistic). If the read wins, the defender picks the BEST mode;
+    else it guesses. Consumes rng.random (the read) then rng.integers ONLY on a missed read — the same order as the
+    inline version, so byte-identical. Pure resolution+selection logic moved out of the orchestrator. Returns a dict."""
+    fam=TR.familiarity(defender.tradition, aggressor.tradition)
+    legib=legibility(aggressor, commit, cfg, defender.armor)
+    read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
+    read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
+    p_read=1/(1+exp(-(read_d-read_a)/1.0))
+    read_win=rng.random() < p_read
+    modes=['parry','dodge','wind']
+    msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
+    mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+    return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
+
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
     return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))
