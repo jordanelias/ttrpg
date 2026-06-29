@@ -35,10 +35,11 @@ def close_tempo(c, cfg, fatigue=0.0):
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
     toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs)."""
     t=weapon_tempo(c,cfg,fatigue)
-    w=c.w; grip=getattr(c,'grip','normal')
-    # a long pole (spear/staff: data flag `closes_poorly`) pays the closed penalty UNLESS it has choked up to fight
-    # close (grip adjustment offsets it). Explicit weapon DATA, not an attribute-conjunction guess.
-    if w.get('closes_poorly', False) and grip!='choke': t -= cfg['POLE_CLOSE_PENALTY']
+    grip=getattr(c,'grip','normal')
+    # a weapon UNWIELDY in the close (DERIVED from reach — long business-end) is slow to recover once a handier
+    # weapon is inside, UNLESS it has choked up. Scales with HOW unwieldy; pure morphology, no closes_poorly flag.
+    if grip!='choke':
+        t -= cfg['POLE_CLOSE_K']*close_unwieldiness(c,cfg)
     t=max(cfg['TEMPO_FLOOR'],t)
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
@@ -72,25 +73,51 @@ def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(
 def recoverability_factor(c, cfg):
     """The IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis made physical. To
     commit is to give up recovery; HOW MUCH depends on how hard the action is to terminate/retract: the weapon's
-    static turning moment (mass*pob_frac — a forward-heavy mace 'wants to continue' and can't be stopped; a
-    hand-balanced rapier retracts instantly, which is WHY a rapier can feint and a mace can't), plus footwork (a
-    lunge extends the body = low recovery; a choke/gathered grip stays recoverable). 1.0 at the longsword
-    reference; bounded below so it never flips sign. Pure."""
+    forward moment (a forward-heavy mace 'wants to continue' and can't be stopped; a hand-balanced rapier retracts
+    instantly — WHY a rapier can feint and a mace can't), NON-LINEAR in weight (a heavy weapon is disproportionately
+    hard to arrest — the effect of mass is not linear), plus footwork: a lunge extends the body = low recovery, and
+    a HEAVY lunge is far worse than a light one (a longsword lunge is nothing like a rapier's); a choke/gathered
+    grip stays recoverable. 1.0 at the longsword reference; bounded below so it never flips sign. Pure."""
     w=c.w
-    moment = w.get('mass',1.0)*w.get('pob_frac',0.15)            # static forward moment: heavy+forward = hard to stop
+    mass=w.get('mass',1.0); e=cfg['MOMENT_MASS_EXP']
+    moment = mass**e * w.get('pob_frac',0.15)                    # forward moment, NON-LINEAR in weight (mass**e * pob)
     mult = 1.0 + cfg['EXPOSE_MOMENT_K']*(moment - cfg['EXPOSE_MOMENT_REF'])
     grip=getattr(c,'grip','normal')
-    if grip=='lunge':   mult += cfg['EXPOSE_LUNGE_K']            # extended body = committed, low recovery
+    if grip=='lunge':   mult += cfg['EXPOSE_LUNGE_K']*(mass/cfg['LUNGE_REF_MASS'])**e   # a HEAVY lunge is disproportionately unrecoverable
     elif grip=='choke': mult -= cfg['EXPOSE_CHOKE_K']           # gathered in = more recoverable
     return max(0.3, mult)
+def close_unwieldiness(c, cfg):
+    """How poorly a weapon serves IN THE CLOSE — DERIVED from its reach (a long weapon's business end is past the
+    fight at grappling distance and slow to bring back to bear). 0 for a short/handy weapon. No closes_poorly flag:
+    pure morphology (reach = length + head + hands)."""
+    return max(0.0, reach_base(c,cfg) - cfg['CLOSE_REACH_REF'])
+def can_choke(c, cfg):
+    """Can the fighter CHOKE UP — slide the hands up to shorten the weapon? Needs a long grip/shaft: you can shorten
+    a staff, spear, poleaxe or longsword, but NOT a short-hilted arming sword or rapier (which is why a rapier,
+    long but short-gripped, just suffers in the close). Derived from grip_len; no flag."""
+    return c.w.get('grip_len',0.8) >= cfg['CHOKE_GRIP_MIN']
 def adopt_stance(c, closed, cfg):
-    """GRIP/STANCE writer (The Approach — factors 1 footwork & 3 stance). A long pole that closes_poorly GATHERS
-    IN (chokes up) once the measure is closed — recoverable and faster in the close, at the cost of reach;
-    otherwise a grounded normal stance. The LUNGE (extended body, low recovery) is NOT set here — a deep thrust
-    IS a lunge, set on the acting fighter at the attack (wrapper). Pure (returns the grip; the wrapper writes it)."""
-    if closed and c.w.get('closes_poorly'):
+    """GRIP/STANCE writer (The Approach — factors 1 footwork & 3 stance), fully DERIVED from morphology. Once the
+    measure is CLOSED, a weapon unwieldy there (long reach) that CAN be choked up (long grip) GATHERS IN (choke) —
+    recoverable and faster in the close, at the cost of reach. A weapon that is unwieldy but CANNOT choke (a rapier:
+    long reach, short hilt) just suffers. Otherwise grounded. The LUNGE is set at the attack (wrapper), gated by
+    lunge_quality. Pure (returns the grip; the wrapper writes it)."""
+    if closed and close_unwieldiness(c,cfg) > 0.0 and can_choke(c,cfg):
         return 'choke'
     return 'normal'
+def lunge_quality(c, cfg):
+    """How well a weapon LUNGES (an extended-body thrust) — DERIVED, NON-LINEAR in weight. A light, hand-balanced,
+    one-handed thrusting blade (rapier) lunges superbly; a heavy two-handed weapon's extension is slow and badly
+    recoverable (a longsword 'lunge' is nothing like a rapier's). 0 for a non-thrusting head — it cannot lunge a
+    thrust at all. Returns a propensity in [0,1]; the wrapper rolls against it to decide whether a deep thrust
+    becomes a lunge. Pure."""
+    w=c.w
+    if w['head'] not in ('point','cut_thrust'):
+        return 0.0
+    light   = (cfg['LUNGE_REF_MASS']/max(0.2,w.get('mass',1.0)))**cfg['MOMENT_MASS_EXP']   # NON-LINEAR lightness
+    handbal = 1.0 - w.get('pob_frac',0.15)                                                  # hand-balanced = recoverable lunge
+    onehand = cfg['LUNGE_1H_BONUS'] if w['hands']==1 else cfg['LUNGE_2H_FACTOR']            # the classical lunge is one-handed
+    return max(0.0, min(1.0, light*handbal*onehand))
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
 # ---------- defense modes (parry/dodge/wind) ----------

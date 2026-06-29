@@ -57,9 +57,17 @@ CFG = dict(
   # scales with how hard the action is to terminate/retract — the weapon's static turning moment (mass*pob_frac:
   # a forward-heavy mace "wants to continue" and can't be stopped; a hand-balanced rapier retracts instantly,
   # which is WHY a rapier can feint and a mace can't) plus footwork (lunge = extended body = low recovery; choke
-  # = gathered = recoverable). 1.0 at the longsword reference (mass1.4*pob0.14=0.196). The grip terms await the
-  # Stance/grip writer (WS-5); the weapon-moment term is live now.
-  EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=0.196, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,
+  # = gathered = recoverable). Weight is NON-LINEAR in recovery: the forward moment and the lunge cost scale as
+  # mass**MOMENT_MASS_EXP, so a heavy weapon is disproportionately hard to arrest (a longsword lunge != a rapier
+  # lunge). REF is the longsword anchor recomputed for the exponent (1.4**1.5 * 0.14 = 0.232) so it stays mult 1.0.
+  EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=(1.4**1.5)*0.14, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
+  MOMENT_MASS_EXP=1.5, LUNGE_REF_MASS=1.4,
+  # Grip/stance DERIVED from morphology (no closes_poorly flag): unwieldy-in-close = reach beyond CLOSE_REACH_REF
+  # (spear/staff/greatsword/rapier/poleaxe); choke-up needs grip_len >= CHOKE_GRIP_MIN (poles + 2H, NOT a rapier).
+  CLOSE_REACH_REF=6.5, CHOKE_GRIP_MIN=1.0, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
+  # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
+  # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
+  RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)

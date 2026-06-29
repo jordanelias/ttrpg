@@ -24,6 +24,22 @@ def test_open_or_non_pole_is_grounded():
     assert S.adopt_stance(Combatant('x', weapon='arming'), True, CFG) == 'normal'   # not a pole
 
 
+def test_lunge_quality_is_weapon_derived_nonlinear():
+    q = lambda w: S.lunge_quality(Combatant('x', weapon=w), CFG)
+    assert q('rapier') == 1.0                        # light, hand-balanced, one-handed thruster: lunges freely
+    assert q('greatsword') == 0.0                    # a cutter cannot lunge a thrust at all
+    assert q('staff') == 0.0                         # blunt: no thrust
+    assert 0.0 < q('longsword') < q('rapier')        # two-handed thruster lunges, but nothing like a rapier
+    assert q('spear') < q('longsword')               # heavy two-hander lunges rarely (non-linear in weight)
+
+
+def test_rapier_cannot_choke_but_pole_can():
+    assert S.can_choke(Combatant('x', weapon='staff'), CFG)
+    assert S.can_choke(Combatant('x', weapon='spear'), CFG)
+    assert not S.can_choke(Combatant('x', weapon='rapier'), CFG)   # long reach, short hilt -> can't gather in, suffers close
+    assert not S.can_choke(Combatant('x', weapon='arming'), CFG)
+
+
 def test_lunge_raises_choke_lowers_irrecoverability():
     c = Combatant('x', weapon='longsword')
     base = S.recoverability_factor(c, CFG)

@@ -131,9 +131,10 @@ def engagement(A, B, first, cfg, rng):
         _ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+_g)); _bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-_g))
         commit=2.0+3.0*float(rng.beta(_ba,_bb))
         _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
-        if aggressor.w['head'] in ('point','cut_thrust') and commit>=cfg['LUNGE_COMMIT']:
-            aggressor.grip='lunge'   # a deep THRUST is a lunge: the body extends for reach+commitment -> lower recovery (recoverability_factor) + more readable (legibility)
+        if commit>=cfg['LUNGE_COMMIT'] and rng.random() < S.lunge_quality(aggressor, cfg):
+            aggressor.grip='lunge'   # a deep thrust BECOMES a lunge in proportion to how WELL the weapon lunges (lunge_quality: rapier readily, longsword sometimes, spear rarely, a cutter never) -> weapon-derived, not a flat head-check; the body extends -> lower recovery (recoverability_factor, non-linear in weight) + more readable
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
+        ready[aggressor]-=cfg['RECOVERY_TEMPO_K']*(commit-2.0)*S.recoverability_factor(aggressor,cfg)   # TEMPO is coupled to RECOVERY: a deep, hard-to-recover commit (a heavy or lunged blow) leaves you SLOWER to act again — the next action waits on the recovery; a feint (commit~2, full recovery) costs no tempo. Non-linear in weight via recoverability_factor.
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))
         cfrac_d=defender.conc/max(1,defender.conc_max)

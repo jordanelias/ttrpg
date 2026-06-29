@@ -1,9 +1,9 @@
 """CI-tier: commitment = recoverability (the physical commitment axis).
 
 systems.recoverability_factor makes the overcommit cost scale with how hard an action is to terminate/retract —
-the weapon's static turning moment (mass*pob_frac). These tests pin the physics: a hand-balanced rapier retracts
-(low multiplier — it can feint), a forward-heavy mace/poleaxe cannot (high multiplier), longsword is the 1.0
-reference, and the multiplier is floored so it never flips sign.
+the weapon's forward moment (mass**MOMENT_MASS_EXP * pob_frac, NON-LINEAR in weight). These tests pin the physics:
+a hand-balanced rapier retracts (low multiplier — it can feint), a forward-heavy mace/poleaxe cannot (high
+multiplier), longsword is the 1.0 reference, and the multiplier is floored so it never flips sign.
 """
 import os
 import sys
