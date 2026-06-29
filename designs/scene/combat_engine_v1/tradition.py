@@ -84,17 +84,18 @@ def channel_weight(trad, channel):
 # priority-gap traditions (Polish szabla, Hungarian sabre, Filipino, Chinese-technique, …) get NO ability until an
 # S1/S2 anchor exists. 'grade' records the source tier.
 #
-# LIVE levers this version (wired at their engine sites): 'seize' (+ seizure score), 'counter_success' (+ single-time
-#   counter success), 'counter_select' (* counter selection rate), 'anti_overcommit' (+ commitment discipline).
-# CHANNEL levers ('measure','tempo','leverage','visual','tactile','precommit','balance') are registered but INERT until
-#   the channel-weight sites are routed through eff_cw() (the next pass; ~21 sites). Abilities below marked "(channel;
-#   pending)" therefore have no effect yet — registered, not live.
+# LEVER STATUS (corrected 2026-06-28 per the recovered combat-critique; supersedes the prior 'pending' note):
+#   the 7 CHANNEL levers ('measure','tempo','leverage','visual','tactile','precommit','balance') ARE wired -
+#   eff_cw() is consumed at ~9 live sites - so staerke_schwaeche/misura/atajo are LIVE (calibrate before relying).
+#   'counter_success', 'counter_select', 'anti_overcommit' are live. The 'seize' lever is DEAD: its pre-contact
+#   consumer was cut 2026-06-05, so 'vorschlag'/'sen_no_sen' do NOTHING when equipped. Do not implement against
+#   'seize' (slated for retire-or-reroute in scene-combat WS-4).
 ABILITIES = {
     # German (Liechtenauer; S1/S2 — critically edited)
     'indes':          dict(tradition='german',   grade='S1/S2', lever='counter_success', op='+', value=0.15,
                            desc="Indes / Fühlen — feeling the bind, the simultaneous counter in the same tempo"),
     'vorschlag':      dict(tradition='german',   grade='S1/S2', lever='seize',           op='+', value=4.0,
-                           desc="Vorschlag — the first-strike that seizes the Vor before the opponent acts"),
+                           desc="Vorschlag — the first-strike that seizes the Vor before the opponent acts [DEAD: 'seize' lever has no consumer since 2026-06-05]"),
     'staerke_schwaeche': dict(tradition='german', grade='S1/S2', lever='leverage',       op='*', value=1.20,
                            desc="Stärke-Schwäche — strong/weak leverage in the bind (channel; pending)"),
     # Italian (Fiore -> rapier; S2)
@@ -104,7 +105,7 @@ ABILITIES = {
                            desc="Misura — distance / measure control (channel; pending)"),
     # Japanese (koryū; S2)
     'sen_no_sen':     dict(tradition='japanese', grade='S2',    lever='seize',           op='+', value=4.0,
-                           desc="Sen-no-sen — pre-emptive seizing, taking the initiative as the opponent commits"),
+                           desc="Sen-no-sen — pre-emptive seizing, taking the initiative as the opponent commits [DEAD: 'seize' lever has no consumer since 2026-06-05]"),
     # English (Silver; S2)
     'true_times':     dict(tradition='english',  grade='S2',    lever='anti_overcommit', op='+', value=0.25,
                            desc="True Times — Silver's true-vs-false times: commitment discipline, fewer over-commits"),

@@ -57,15 +57,15 @@ def engagement(A, B, first, cfg, rng):
         # withdrawal needs FOOTWORK; and the attempt is READABLE — the shorter weapon's own read can deny it.
         if closed and beats>1 and reopen_moment:
             base_gap=er[longer]-er[shorter]
-            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
+            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, ffat[longer], push_avail, cfg, TR):
                 closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}
                 reopen_moment=False; push_avail=False
                 continue
-        reopen_moment=False   # the moment is fleeting; consumed/expires each beat unless re-created below
+        reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
         # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
         if not closed:
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
-            close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,0,cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2
+            close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,ffat[shorter],cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2  # TA-02: a fatigued closer closes slower (was hardcoded fatigue=0)
             close_rate *= (1+displ)                                  # displacing the point lets you close faster
             measure_gap=max(0.0, measure_gap-close_rate)
             just_closed = (measure_gap<=0.3)

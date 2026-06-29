@@ -214,14 +214,15 @@ def approach_displace(shorter, longer, cfg):
     rd=(reading(shorter,cfg)-reading(longer,cfg))
     return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
 
-def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
+def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
-    denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
+    denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability).
+    RR-02: takes the longer fighter's actual fatigue (was hardcoded 0). RR-03: normalises by REACH_W['none']."""
     id_read = reading(longer,cfg)*TR.eff_cw(longer, 'visual')
     deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
     read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
-    foot = balance_eff(longer,0,cfg)/3
-    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
+    foot = balance_eff(longer,fat_longer,cfg)/3
+    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W']['none']
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
     return min(cfg['REOPEN_MAX'], p)
 

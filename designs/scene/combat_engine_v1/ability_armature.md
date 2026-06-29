@@ -44,6 +44,8 @@ An ability targets a **lever**, addressed by two axes: a **phase** (when in the 
 | **Leverage / binding** | `leverage` | the bind, Stärke-Schwäche, winding |
 
 ### 2c. The lever map (category → engine lever → wiring status)
+> **STATUS CORRECTION (2026-06-28, per the recovered combat-critique — read this, not the per-row "live/pending" markers below, which are STALE).** Current truth at HEAD: the channel levers (`measure`/`tempo`/`leverage`/`visual`/`tactile`/`precommit`/`balance`) ARE wired — `eff_cw()` is consumed at ~9 live sites — so `staerke_schwaeche`/`misura`/`atajo` are LIVE (calibrate before relying). `counter_success`/`counter_select`/`anti_overcommit` are live. The `seize` lever is **DEAD** (its pre-contact-seizure consumer was cut 2026-06-05): `vorschlag` and `sen_no_sen` do **nothing** when equipped. Retire-or-reroute of `seize` is scene-combat WS-4.
+
 Live levers are wired at their engine sites *now*; pending levers are registered but inert until the channel-weight sites route through `eff_cw` (the channel-wiring pass).
 
 | Lever | Category | Op | Status |
