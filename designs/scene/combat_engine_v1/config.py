@@ -95,6 +95,11 @@ CFG = dict(
   # BOTH poles cost: aggression risks overcommit (its deep commits raise existing exposure), caution bleeds the Vor. At
   # lean=0 every hook is a no-op (default fighters unchanged). Anchored to the German Vor/Nach doctrine (S2).
   DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10, WARINESS_K=1.5,   # WARINESS_K (WS-5): commit-caution vs an UNREAD tradition (familiarity<1 -> shallow bias), spread-floored; 0 = off
+  # WS-4/WS-5 imposition gate (section C EXPERIMENT, default OFF): a tradition imposes/refuses its PREFERRED node
+  # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
+  # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
+  # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
+  IMPOSITION_GATE=False, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )

@@ -225,6 +225,8 @@ def engagement(A, B, first, cfg, rng):
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
                 hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
+        if cfg.get('IMPOSITION_GATE'):   # WS-4/WS-5 section-C experiment (flag, default off): tradition imposes/refuses its node
+            bind, riposte = S.impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR)
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the

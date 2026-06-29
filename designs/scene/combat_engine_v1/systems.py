@@ -145,6 +145,22 @@ def leverage(c, cfg):
     if w['hands']==2: lev += cfg['LEVER_2H']                  # two hands = more control over the lever
     return lev
 
+def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
+    """WS-4/WS-5 imposition (section C, flag-gated): a tradition biases the exchange toward its PREFERRED node,
+    DECOUPLED from channel magnitude (fixed normalized rates, not eff_cw — the repair the gate-reconciliation
+    requires: the magnitude must not drive imposition). German (bind-seeker) imposes the crossing; the
+    bind-refusers (Italian/English/Spanish counter/measure schools) slip a forming bind into a counter
+    (cavazione/disengage). A landed hit is never re-routed. Pure (reads rng); returns (bind, riposte)."""
+    if hit > 0:
+        return bind, riposte
+    pa = TR.preferred(aggressor.tradition); pd = TR.preferred(defender.tradition)
+    if pa == 'bind' and not bind and rng.random() < cfg['IMPOSE_BIND_BOOST']:
+        bind = True                                  # German forces the crossing onto an unwilling opponent
+    if pd in ('counter', 'measure') and bind and rng.random() < cfg['IMPOSE_REFUSE_P']:
+        bind = False; riposte = True                 # the refuser slips the bind into a single-time counter
+    return bind, riposte
+
+
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
 HALFSWORD_FORM = {'longsword':'longsword_halfsword'}
 HALFSWORD_BASE = {'longsword_halfsword':'longsword'}

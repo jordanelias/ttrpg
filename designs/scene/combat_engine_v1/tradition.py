@@ -59,6 +59,16 @@ ADJACENT = {                        # pairs that historically exchanged (read ea
     frozenset({'japanese','filipino'}),
 }
 
+# WS-4/WS-5 (section C, flag-gated): each tradition's PREFERRED node — the part of the state graph it fights to
+# impose (tradition_decomposition_v1.md). 'bind' = German (the crossing); 'counter' = Italian/Japanese/English
+# (the single-time counter, refusing the bind); 'measure' = Spanish (the circulo). none = no preference. Read ONLY
+# when cfg['IMPOSITION_GATE'] is on (the imposition experiment) — decoupled from the channel magnitudes.
+PREFERRED = {'german': 'bind', 'italian': 'counter', 'spanish': 'measure', 'japanese': 'counter',
+             'english': 'counter', 'chinese': 'burst', 'filipino': 'flow', 'none': None}
+def preferred(trad):
+    return PREFERRED.get(trad)
+
+
 def familiarity(reader_trad, opponent_trad):
     """How well `reader_trad` reads `opponent_trad`. 1.0 if same or either is 'none' (no tradition to misread)."""
     if reader_trad==opponent_trad: return 1.0
