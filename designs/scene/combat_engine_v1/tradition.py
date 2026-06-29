@@ -79,29 +79,16 @@ def familiarity(reader_trad, opponent_trad):
 def profile(trad):
     return TRADITIONS.get(trad, TRADITIONS['none'])
 
-# ─────────────────────────── AFFINITY POINT-BUY (WS-4 dissolution) ───────────────────────────
-# The scalar channel vector is dissolved into a BALANCED affinity allocation: every tradition (including 'none')
-# now spends the SAME total budget across the 7 channels. This removes the systematic edge that made the raw
-# vectors unbalanced — they summed unequally (german/spanish 7.75, none 7.0), so 'none' was disadvantaged and the
-# field carried a measured 6.8pp unconditional spread. A tradition's SHAPE (relative emphasis) is its identity;
-# the TOTAL is equal -> vacuum-balanced by construction (the representation_alternatives recommendation). The
-# imposition gate (PREFERRED) carries the qualitative "which fight"; this carries the balance. AFFINITY_NORMALIZE
-# toggles it (for A/B measurement vs the old raw vectors).
-_CHANNELS = ('visual', 'tactile', 'precommit', 'leverage', 'tempo', 'measure', 'balance')
-AFFINITY_BUDGET = 7.0          # = 7 channels x neutral 1.0; every tradition is normalised to this sum
-AFFINITY_NORMALIZE = True
-def _normalized(trad):
-    v = TRADITIONS.get(trad, TRADITIONS['none'])
-    s = sum(v[ch] for ch in _CHANNELS)
-    f = AFFINITY_BUDGET / s if s > 0 else 1.0
-    return {ch: v[ch] * f for ch in _CHANNELS}
-_AFFINITY = {t: _normalized(t) for t in TRADITIONS}
-
-
-def channel_weight(trad, channel):
-    if AFFINITY_NORMALIZE:
-        return _AFFINITY.get(trad, _AFFINITY['none']).get(channel, 1.0)
-    return TRADITIONS.get(trad, TRADITIONS['none']).get(channel, 1.0)
+# ─────────────────────── SCALAR CHANNEL WEIGHTS REMOVED (2026-06-29, Jordan) ───────────────────────
+# The 7-dim per-tradition channel-weight vector is GONE — it was top-down tuning, twice rejected. A leverage
+# diagnostic (balance.channel_leverage) proved it degenerate: emphasising the 'balance' channel was worth +21pp
+# while 'measure' COST -10pp, so the whole field was a "who-bought-balance" contest and 'spanish' led on a scalar
+# it never earned. Normalising the vector to an equal budget (the prior pass) removed the gross total-competence
+# edge but NOT the per-channel leverage — same top-down disease. So the channels carry NO intrinsic weight now.
+# Traditions differentiate ONLY bottom-up: learned ABILITIES (ability_factor/ability_bonus), the IMPOSITION gate
+# (preferred node — german imposes the bind, italian refuses), and FAMILIARITY (reading an unfamiliar style).
+# The `channel` argument to eff_cw survives only as the LEVER NAME an ability hooks (e.g. an ability on 'measure').
+# The raw numbers in TRADITIONS[*] are vestigial (kept for `set`/`mode`/provenance); nothing reads them as weights.
 
 # ─────────────────────────── EQUIPPABLE ABILITIES (scaffold) ───────────────────────────
 # Traditions grant equippable abilities that MODULATE the vocabulary (improve a competence or phase-behaviour) — they
@@ -162,7 +149,9 @@ def ability_factor(c, lever):
     return f
 
 def eff_cw(c, channel):
-    """Effective channel weight = substrate (tradition) weight × equipped-ability channel modulators. The channel-lever
-    wiring path: replace TR.channel_weight(c.tradition, ch) with TR.eff_cw(c, ch) at the call sites to make channel
-    abilities (misura, atajo, Stärke-Schwäche, …) live. Default (no abilities) == channel_weight (invariant-safe)."""
-    return channel_weight(c.tradition, channel) * ability_factor(c, channel)
+    """Effective lever modulator for `channel`. The scalar channel WEIGHTS are removed (see the note above): the
+    only thing that can move this off 1.0 is a learned ABILITY hooked to that lever (ability_factor). With no such
+    ability — the default for every tradition today — this is exactly 1.0, so the channel has NO intrinsic effect
+    and traditions differ only via the imposition gate + familiarity. (Name kept so the call sites read as the
+    lever they modulate; an authored ability on e.g. 'measure' goes live here with zero further wiring.)"""
+    return ability_factor(c, channel)
