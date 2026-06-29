@@ -90,7 +90,7 @@ modules:
     transitions:
       - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
     loops:
-      - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); damper unconfirmed [OPEN — Jordan]
+      - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); DAMPED [verification LD-5]: drift_coef=0.6/season (faction_behavior §3.2.4) + mission-shift 4-consecutive-season counter; crisis-bypass (scars>=3) is intentional bounded un-damping
     accounting_phase: [DA_proposal, settlement_accounting]
     gap_notes:
       - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
@@ -212,7 +212,7 @@ modules:
     emits:
       - {type: "state.scar_acquired", terminal: false}
     state:
-      - {name: "conviction scars", bucket: track, writable: true}   # conviction_track_v1 §2 — §1 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717); §2/§3 canonical pending PP-718
+      - {name: "conviction scars", bucket: clock, writable: true}   # bucket track->clock [verification A4: Scars are indelible, advance toward crisis thresholds] — conviction_track_v1 §2 — §1 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717); §2/§3 canonical pending PP-718
     transitions: []
     loops: []
     gates:
@@ -276,7 +276,7 @@ modules:
       - {type: "meta.thread_woven", terminal: false}   # registry-declared
     state:
       - {name: "Coherence", bucket: pool, writable: true}   # [ASSUMPTION bucket] depleting continuous resource (canonical pool notice PP-616/618/619/624/625)
-      - {name: "Thread Fatigue", bucket: track, writable: true}   # ED-694, replaces Contact Rounds
+      - {name: "Thread Fatigue", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to Spirit*5 contact-break threshold] — ED-694, replaces Contact Rounds
     transitions:
       - {via: "scale_transitions §3.1 Personal → Thread"}
       - {via: "scale_transitions §3.5 Thread → Faction"}
@@ -304,7 +304,7 @@ modules:
       - {type: "scene.gift", terminal: false}
       - {type: "state.belief_revised", terminal: false}
     state:
-      - {name: "knot strain", bucket: track, writable: true}   # knots_v30 §5
+      - {name: "knot strain", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to capacity-break] — knots_v30 §5
       - {name: "Bonds", bucket: track, writable: true}   # knots_v30 §3.4 capacity (ED-780)
       - {name: "Evidence Track", bucket: clock, writable: true}   # fieldwork_v30 §4.1
       - {name: "Disposition Track", bucket: track, writable: true}   # fieldwork_v30 §5.1
@@ -434,7 +434,7 @@ modules:
       - {type: "scene.insult", terminal: false}
       - {type: "scene.threat", terminal: false}
     state:
-      - {name: "persuasion_track", bucket: track, writable: true}
+      - {name: "persuasion_track", bucket: clock, writable: true}   # bucket track->clock [verification A4: bidirectional clock, terminal thresholds >=7 / <=3]
     transitions:
       - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}
     loops: []
