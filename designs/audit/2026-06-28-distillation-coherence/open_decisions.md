@@ -5,13 +5,16 @@
 
 What the investigation + adversarial pass surfaced that was **not** applied in this PR, split into: (1) safe relabels deferred only because they need canon process; (2) design decisions only Jordan can make; (3) the multi-file structural programs. Letter tags reference the addendum.
 
-## 0. Applied in this PR (for reference)
+## 0. Applied (PR #26 + the follow-up relabel PR)
 - `strike_module.gd`: ER-2 continuity correction in `_degree()` (verified bug; ~5–9pp low below 5D). [RU-1]
 - `module_contracts.yaml` bucket relabels track→clock: conviction scars, Thread Fatigue, knot strain, persuasion_track (bidirectional). [A4/BUCKET-1]
 - `module_contracts.yaml` faction_state self-loop: "damper unconfirmed" → cite drift_coef=0.6 + 4-season counter + crisis-bypass. [LD-5]
 - The verification addendum (incl. ESCP §D) + the report's verification pointer.
 
-## 1. Safe relabels deferred (need canon process: ED/supersession/co-file pairing)
+## 0b. Also applied (relabel PR)
+- npc projects + arc-state buckets -> clock [A4]; resolver reclassifications (articulation->deterministic_accounting RU-4; scene_slate/game_director->manifest, scene_timer/audit observability RU-5); social_contest<->npc 2-cycle damper [LD-1]; settlement_economy retire-rec [LD-2]; faction_state=two docs [A6]; miraculous_event doc/scales [P6].
+
+## 1. Still deferred (canon process or larger refactor — NOT design decisions)
 - **KC-1 registry enum fix:** `key_type_registry_v30.md` — `default_permanence: structural → persistent`; `default_time_horizon: medium → near` (on `opinion_revised`/`gossip`/`concern_resolved`). **Do NOT delete `default_visibility`** (A9). Needs a registry supersession note + likely a co-file reconciliation (key_type_registry is Class-A governed). [KC-1]
 - **Resolver-enum relabels** (`module_contracts.yaml`): `armature_dot_product`→`deterministic_accounting` + "interpretation primitive" note [RU-4]; `scene_slate` state_reader→manifest, `game_director`→manifest/orchestrator, `scene_timer`/`audit`→observability (out of runtime enum) [RU-5]; fold `dice_pool`+`d_sigma`→`instance_a` + render flag [RU-1]. Contract-internal but voluminous — batch as one adjudicator pass.
 - **npc arc-state + projects** bucket track→clock [A4].

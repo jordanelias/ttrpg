@@ -95,6 +95,7 @@ modules:
     gap_notes:
       - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
       - "registry system name faction_layer vs module faction_state — vocabulary unification [OPEN — Jordan]"
+      - "SCOPE [verification A6]: faction_state = {faction_layer_v30 (stability/occupation/treaties/parliament) + faction_behavior_v30 (PP-686 mission/cascade/expectation/Mandate)}; the doc field names only faction_behavior_v30. Boundary vs faction_politics (rank ladder) is the registry dual-emit on state.standing_change/coup_attempted/succession."
     status: extracted
     sources:
       - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
@@ -145,8 +146,8 @@ modules:
     state:
       - {name: "beliefs/opinions", bucket: track, writable: true}   # doc-12 §5 opinion drift; npc_behavior §3.1-3.2
       - {name: "concerns", bucket: track, writable: true}   # doc-12 §3 generation/resolution
-      - {name: "projects", bucket: track, writable: true}   # doc-12 §4 advancement/stall
-      - {name: "arc state", bucket: track, writable: true}   # npc_behavior §5 state machine
+      - {name: "projects", bucket: clock, writable: true}   # bucket track->clock [verification A4: 0->10 monotonic progress toward completion/stall threshold] doc-12 §4 advancement/stall
+      - {name: "arc state", bucket: clock, writable: true}   # bucket track->clock [verification A4: one-way FSM, advances to terminal arc phase] npc_behavior §5 state machine
     transitions: []
     loops:
       - {open: true}   # 2-cycle with social_contest (emits opinion_revised it consumes; consumes its scene.dialogue/contest_resolved) + self-loop via scene.witness; dampers unconfirmed [OPEN — Jordan]
@@ -342,7 +343,7 @@ modules:
     registry_system: "scene_slate"   # Key Type Registry vocabulary
     doc: null
     scales: [scene]
-    resolver: state_reader   # [ASSUMPTION] scene activation/anchoring (settlement_layer §4.1)
+    resolver: manifest   # deterministic 7-priority slate generation [verification RU-5: manifest-generator, not state_reader] (settlement_layer §4.1; player_agency §4.2)
     consumes: []
     emits:
       - {type: "mechanical.scene_entered", terminal: false}   # substrate §8.5 verbatim — registry attributes scene lifecycle (entered/exited/skipped) to game_director instead: cross-doc attribution conflict [OPEN — Jordan]
@@ -368,7 +369,7 @@ modules:
     registry_system: "game_director"   # Key Type Registry vocabulary
     doc: null
     scales: [scene]
-    resolver: state_reader   # [ASSUMPTION] scene lifecycle orchestration
+    resolver: manifest   # season-loop + zoom-stack orchestrator [verification RU-5: orchestrator, not state_reader]
     consumes: []
     emits:
       - {type: "mechanical.scene_entered", terminal: false}
@@ -387,7 +388,7 @@ modules:
     registry_system: "scene_timer"   # Key Type Registry vocabulary
     doc: null
     scales: [scene]
-    resolver: clock_advance   # [ASSUMPTION] scene-duration clocks
+    resolver: state_reader   # OBSERVABILITY/tooling: wall-clock sidecar OUTSIDE the Key log, advances no game clock [verification RU-5 — not a runtime gameplay resolver]
     consumes:
       - {type: "mechanical.scene_entered", from: [game_director]}
       - {type: "mechanical.scene_exited", from: [game_director]}
@@ -406,7 +407,7 @@ modules:
     registry_system: "audit"   # Key Type Registry vocabulary
     doc: null
     scales: [scene]
-    resolver: state_reader   # [ASSUMPTION] telemetry consumer
+    resolver: state_reader   # OBSERVABILITY/tooling consumer [verification RU-5: QA/telemetry, not a runtime gameplay system]
     consumes:
       - {type: "mechanical.scene_entered", from: [game_director]}
       - {type: "mechanical.scene_exited", from: [game_director]}
@@ -437,7 +438,8 @@ modules:
       - {name: "persuasion_track", bucket: clock, writable: true}   # bucket track->clock [verification A4: bidirectional clock, terminal thresholds >=7 / <=3]
     transitions:
       - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}
-    loops: []
+    loops:
+      - {with: npc_behavior, damper: "2-cycle: emits scene.contest_resolved/scene.dialogue, consumes state.opinion_revised. BOUNDED [verification LD-1]: Procedure-D batch cadence (1/Accounting) + |delta-affect|>=0.5 emission threshold + Chain-Contest cap 3 then 4-season cold equilibrium. NOTE: the affect_axis clamp is NOT in canon; convergence rests on these bounds + the saturating §5.4 drift curve."}
     status: extracted
     sources:
       - "key_substrate_v30 §8.5 (PP-683) [READ: 2026-06-10]"
@@ -618,6 +620,7 @@ modules:
     loops: []
     gap_notes:
       - "registry-derived; relationship to settlement_layer §1.3 Local Economy derived value unestablished — possibly the same system [OPEN — Jordan]; home doc [GAP]"
+      - "RECOMMEND RETIRE [verification Lens-2/LD-2]: phantom module (no doc/state/logic). Fold da.economic_intervention -> settlement_layer Prosperity delta; re-point env.population_change consumer to settlement_layer. Adding a Population stat is a DESIGN decision (deferred — open_decisions §2). Self-edge hazard: settlement_layer both emits and would consume env.population_change — route peninsular_strain -> settlement_layer."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -722,9 +725,9 @@ modules:
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
-    doc: null
-    scales: [personal, scene]
-    resolver: state_reader   # [ASSUMPTION] event source
+    doc: designs/scene/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
+    scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
+    resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
     consumes: []
     emits:
       - {type: "meta.miraculous_event", terminal: false}
@@ -759,7 +762,7 @@ modules:
     registry_system: "articulation"   # Key Type Registry vocabulary
     doc: designs/articulation/articulation_layer_v30.md
     scales: [personal, scene, provincial]
-    resolver: armature_dot_product   # matrix-mediated armature interpretation (substrate §8.2, §8.7)
+    resolver: deterministic_accounting   # significance-function accounting + embedded armature read [verification RU-4: the armature dot-product is the SUBSTRATE interpretation primitive (key_substrate §2.5/§4.1), NOT a system resolver] (substrate §8.2, §8.7)
     consumes:
       - {type: "*", from: engine}   # universal reader of the full Key stream (substrate §8.7); registry also lists 31 explicit per-type subscriptions — kept as the wildcard
     emits: []
