@@ -105,7 +105,7 @@ CFG = dict(
   # CONTINUOUS commitment (the commitment-recovery axis is a SPECTRUM, not 4 rungs): commit ~ 2 + 3*Beta(a,b),
   # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
   # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
-  COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6,
+  COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_COMMIT=4.0,   # LUNGE_COMMIT: a THRUST committed at/above this depth IS a lunge (the body extends — reach+commitment, low recovery, more readable)
   # WS-4/WS-5 imposition gate (section C EXPERIMENT, default OFF): a tradition imposes/refuses its PREFERRED node
   # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
   # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it

@@ -62,6 +62,7 @@ def engagement(A, B, first, cfg, rng):
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
         A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(A.focus-3))*(1-A.poise), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03)
         B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(B.focus-3))*(1-B.poise), cfg)
+        for c in (A,B): c.grip=S.adopt_stance(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole chokes up to fight in the close; else grounded. The lunge is set at the attack below.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -130,6 +131,8 @@ def engagement(A, B, first, cfg, rng):
         _ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+_g)); _bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-_g))
         commit=2.0+3.0*float(rng.beta(_ba,_bb))
         _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
+        if aggressor.w['head'] in ('point','cut_thrust') and commit>=cfg['LUNGE_COMMIT']:
+            aggressor.grip='lunge'   # a deep THRUST is a lunge: the body extends for reach+commitment -> lower recovery (recoverability_factor) + more readable (legibility)
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))

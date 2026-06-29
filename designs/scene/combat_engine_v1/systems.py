@@ -83,6 +83,14 @@ def recoverability_factor(c, cfg):
     if grip=='lunge':   mult += cfg['EXPOSE_LUNGE_K']            # extended body = committed, low recovery
     elif grip=='choke': mult -= cfg['EXPOSE_CHOKE_K']           # gathered in = more recoverable
     return max(0.3, mult)
+def adopt_stance(c, closed, cfg):
+    """GRIP/STANCE writer (The Approach — factors 1 footwork & 3 stance). A long pole that closes_poorly GATHERS
+    IN (chokes up) once the measure is closed — recoverable and faster in the close, at the cost of reach;
+    otherwise a grounded normal stance. The LUNGE (extended body, low recovery) is NOT set here — a deep thrust
+    IS a lunge, set on the acting fighter at the attack (wrapper). Pure (returns the grip; the wrapper writes it)."""
+    if closed and c.w.get('closes_poorly'):
+        return 'choke'
+    return 'normal'
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
 # ---------- defense modes (parry/dodge/wind) ----------
