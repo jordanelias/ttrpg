@@ -10,7 +10,7 @@
 | ID | Description | Priority |
 |----|-------------|----------|
 | ED-507 | POI catalog per territory. Each territory needs 2–6 authored POIs across depth levels (Landmark, Resource, Secret, Remnant, Anomaly, Breach) with conditional availability gates. Cross-reference with geography_design.md and calamity_radiation.md required. | P2 |
-| ED-508 | Named NPC starting Dispositions. Lifepath derivation formula (±0.5 increments, floor) is now canonical — ED-508 now covers only the specific starting values for the named NPC roster (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja) once Jordan provides lifepath profiles. ARC-T23 Remembrancer partially addresses RM context. | P2 |
+| ED-508 | Named NPC starting Dispositions. Lifepath derivation formula (±0.5 increments, floor) is now canonical — ED-508 (pending Jordan) now covers only the specific starting values for the named NPC roster (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja) once Jordan provides lifepath profiles. ARC-T23 Remembrancer partially addresses RM context. | P2 |
 | ED-509 | Godot POI node architecture (§10.1). Validation against Valoria-game Godot project structure. Deferred until Godot implementation phase. | P3 |
 
 ### Resolved editorials (PP-630/PP-631/PP-632)

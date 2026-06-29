@@ -160,7 +160,13 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
                 continue
             line = text.count('\n', 0, m.start()) + 1
             ctx = text[max(0, m.start() - CONTEXT): m.end() + CONTEXT].replace('\n', ' ').strip()
-            ctx_l = ctx.lower()
+            # Basis detection uses the citation's OWN line only — a 90-char window
+            # bleeds across table-row / list-item boundaries and counts a neighbour
+            # row's "RESOLVED"/"canonical" as if it qualified this citation (false
+            # OPEN_AS_BASIS). The display ctx above stays wide for human context.
+            ls = text.rfind('\n', 0, m.start()) + 1
+            le = text.find('\n', m.end())
+            ctx_l = text[ls:(le if le != -1 else len(text))].lower()
             for num in _expand_nums(m.group(2)):
                 raw = f"{prefix}-{num}"
                 key = _canon_id(prefix, num)
@@ -199,6 +205,29 @@ def _read(path):
         return None
 
 
+# id + (optionally) nearby status, tolerant of malformed/garbled YAML indentation.
+_SALVAGE_ID = re.compile(r'(?:^|[\s"\'-])id["\']?\s*:\s*["\']?(ED-\d+)', re.M)
+_SALVAGE_STATUS = re.compile(r'status["\']?\s*:\s*["\']?([A-Za-z][\w-]*)')
+
+
+def _salvage_entries(raw: str) -> list:
+    """Recover {'id','status'} entries from an archive whose YAML won't parse.
+
+    Frozen archive fragments carry orphaned/mixed-indent lines that defeat
+    yaml.safe_load. Rather than silently lose every ID in the file (or hand-edit
+    frozen history), pull each `id: ED-NNN` and the `status:` in its block so the
+    universe still includes archived IDs. Status is read from the window up to the
+    next `id:` (its own block); absent => None (still registers ID existence)."""
+    out = []
+    hits = list(_SALVAGE_ID.finditer(raw))
+    for i, m in enumerate(hits):
+        end = hits[i + 1].start() if i + 1 < len(hits) else len(raw)
+        block = raw[m.end():end]
+        sm = _SALVAGE_STATUS.search(block)
+        out.append({'id': m.group(1), 'status': sm.group(1) if sm else None})
+    return out
+
+
 def _walk_repo_files():
     out = []
     for base in ('canon', 'designs', 'params', 'references', 'archives', 'deprecated'):
@@ -210,18 +239,21 @@ def _walk_repo_files():
     return out
 
 
-def load_ed_universe() -> dict:
-    """Active JSONL ledger + editorial archive YAMLs on disk -> {canon_id: status}."""
+def load_ed_universe(warn=True) -> dict:
+    """Active JSONL ledger + editorial archive YAMLs on disk -> {canon_id: status}.
+
+    The active ledger is AUTHORITATIVE. Archive entries are loaded FIRST and the
+    active JSONL LAST, so that build_status_map's last-write-wins ordering lets a
+    current active-ledger status override any stale archived copy of the same ID
+    (e.g. an archived 'ED-864: open' must not shadow the active 'ED-864: struck').
+
+    Archive YAML parse failures are SURFACED (stderr) and counted, never silently
+    swallowed — otherwise the 'active + archives' universe would quietly shrink to
+    active-only and start emitting false NONEXISTENTs for archive-only IDs.
+    """
     import yaml
-    entries = []
-    led = _read('canon/editorial_ledger.jsonl') or ''
-    for ln in led.splitlines():
-        ln = ln.strip()
-        if ln:
-            try:
-                entries.append(json.loads(ln))
-            except Exception:
-                pass
+    archive_entries = []
+    dropped = []
     for ap in _walk_repo_files():
         if (any(ap.startswith(g) for g in ARCHIVE_GLOBS)
                 and 'editorial_ledger' in ap and ap.endswith(('.yaml', '.yml'))):
@@ -230,11 +262,32 @@ def load_ed_universe() -> dict:
                 continue
             try:
                 data = yaml.safe_load(raw)
-            except Exception:
+                parsed = list(_walk_entries(data))
+            except Exception as e:
+                # Don't lose the file: salvage its IDs via regex, but record that
+                # it is malformed so the breakage stays visible.
+                salvaged = _salvage_entries(raw)
+                dropped.append((ap, (str(e).splitlines()[0] if str(e) else type(e).__name__), len(salvaged)))
+                archive_entries.extend(salvaged)
                 continue
-            for d in _walk_entries(data):
-                entries.append(d)
-    return build_status_map(entries)
+            archive_entries.extend(parsed)
+    active_entries = []
+    led = _read('canon/editorial_ledger.jsonl') or ''
+    for ln in led.splitlines():
+        ln = ln.strip()
+        if ln:
+            try:
+                active_entries.append(json.loads(ln))
+            except Exception:
+                pass
+    if warn and dropped:
+        sys.stderr.write(
+            f"WARNING: {len(dropped)} editorial-archive file(s) failed YAML parse; "
+            f"IDs salvaged via regex fallback (fix the source YAML to silence this):\n")
+        for ap, msg, n in dropped:
+            sys.stderr.write(f"  - {ap}: {msg} (salvaged {n} id(s))\n")
+    # archives first, active last → active status is authoritative on conflict.
+    return build_status_map(archive_entries + active_entries)
 
 
 def select_docs(only_paths=None):

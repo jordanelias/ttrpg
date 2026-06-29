@@ -384,7 +384,7 @@ characters:
 
 # ═══════════════════════════════════════════════════════════════
 # CROWN INNER CIRCLE (faction_canon_v30, npc_behavior_v30 §2.15)
-# Status: VERIFIED — confirmed active named NPCs per ED-634
+# Status: VERIFIED — confirmed active named NPCs (faction_canon_v30; ED-634 naming pending)
 # ═══════════════════════════════════════════════════════════════
 
   - id: NPC-030
@@ -456,7 +456,7 @@ characters:
     last_name: Thale
     faction: Crown (Inner Circle)
     role: Spymaster
-    status: canonical  # verified per faction_canon_v30 / ED-634
+    status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
@@ -479,7 +479,7 @@ characters:
     last_name: Linder
     faction: Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)
     role: Archbishop's Representative / Father
-    status: canonical  # verified per faction_canon_v30 / ED-634
+    status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     title: Father
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -503,7 +503,7 @@ characters:
     last_name: Kreutz
     faction: Crown (Inner Circle) / Löwenritter Liaison
     role: Royal Guard Captain
-    status: canonical  # verified per faction_canon_v30 / ED-634
+    status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
@@ -526,7 +526,7 @@ characters:
     last_name: Voss
     faction: Crown (Inner Circle)
     role: Royal Marshal
-    status: canonical  # verified per faction_canon_v30 / ED-634
+    status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
@@ -549,7 +549,7 @@ characters:
     last_name: Reichard
     faction: Crown (Inner Circle)  # CORRECTED: was listed as Church/Cardinal — actually Crown Lord Treasurer per faction_canon
     role: Lord Treasurer
-    status: canonical  # verified per faction_canon_v30 / ED-634
+    status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null

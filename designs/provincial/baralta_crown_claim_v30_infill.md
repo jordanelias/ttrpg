@@ -12,11 +12,11 @@ No mechanism exists for Hafenmark/Baralta to claim the Crown. The deed-monarchy'
 ### Trigger
 - Ehrenwall Coup fires (Coup Counter 4) AND Ehrenwall does not claim the Crown for Löwenritter directly
 ### Contest Mechanics
-**If Löwenritter wins: Standard coup outcome. Baralta remains Duchess. Ehrenwall's conditional support per ED-406 does not apply (she claimed the Crown herself).**
+**If Löwenritter wins: Standard coup outcome. Baralta remains Duchess. Ehrenwall's conditional support per ED-406 (pending) does not apply (she claimed the Crown herself).**
 ### Baralta Claim Precondition (Active Positioning)
 Hafenmark may take a Domain Action during any Council Phase: **Stake Claim** (Senator Outward targeting Crown).
 - **Success:** Hafenmark places a Claim Token on the Crown faction mat. This token does three things:
-  2. Ehrenwall's Coup Counter assessment now includes Baralta as a succession option (per ED-406 — Ehrenwall evaluates conditionally)
+  2. Ehrenwall's Coup Counter assessment now includes Baralta as a succession option (per ED-406, pending — Ehrenwall evaluates conditionally)
   3. Church becomes aware of Baralta's Crown ambition (if not already) — Himlensendt begins internal assessment
 **Design rationale:** The Stake Claim action makes Baralta's Crown ambition a BG-legible strategic move, not just a background characterisation. Hafenmark players can choose to pursue it or not. The preconditions (Crown Mandate ≤ 2, PI ≥ 5) ensure it only fires when Crown is genuinely weakened — Baralta does not move against a strong Crown.
 ## 3. Consecration Crisis Mechanic (BG Expression of ED-407)

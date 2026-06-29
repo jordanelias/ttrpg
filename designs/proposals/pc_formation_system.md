@@ -8,7 +8,7 @@ Intended home on acceptance: `designs/` (formation system) + reconciliation into
 ## 0. Provenance (what this is grounded in)
 
 - **`[READ:]` engine, this session** — `tests/sim/mass_battle/{config,geometry,orchestration,percell,resolution}.py`: the emergent primitives (`oriented_pattern`, `octagon_angle`, `_support_along_vector`, `_defender_depth`, `_lanchester_strength`, `cell_speed`, `_charge_shock_sigma`, `_momentum_speed`), the `MIN_DISCIPLINE` gate, and the now-**retired** `SHAPE_OFF_MOD`/`SHAPE_DEF_MOD` (commit `e677a11f`).
-- **ED-814 + prior conversation** — the formation grid is *not* a hand-authored 9-cell grid; it is an **adjustable allocation surface** (set intent → engine auto-distributes → manual override). "The Football Manager analogy is exact." The three-level surface + team-instruction layer + intervention-window model are recorded design, not invented here.
+- **ED-907 + prior conversation** — the formation grid is *not* a hand-authored 9-cell grid; it is an **adjustable allocation surface** (set intent → engine auto-distributes → manual override). "The Football Manager analogy is exact." The three-level surface + team-instruction layer + intervention-window model are recorded design, not invented here.
 - **This session's emergence work** — Lanchester laws (form emerges from frontage/concentration), Command-only sigma base (quality from Command, not Size), and the SHAPE-mod retirement establish the through-line this doc extends.
 - **Jordan principles (this conversation)** — (1) the Discipline/Command/Morale governance split; (2) **formations grant no flat bonuses — a template is a shape, effects emerge bottom-up.**
 - Canonical mechanic references below tagged *(canon §A.x — recovered from prior design; verify/reconcile on canonization)* are not fresh-read this session and must be confirmed against `mass_battle_v30.md` before any canon edit.
@@ -31,7 +31,7 @@ This is the same discipline as the rest of the engine: **target the goal (emerge
 
 ---
 
-## 2. The three-level compositional surface (FM model, ED-814)
+## 2. The three-level compositional surface (FM model, ED-907)
 
 | Level | FM analogue | Valoria object | Governed by |
 |---|---|---|---|
@@ -39,7 +39,7 @@ This is the same discipline as the rest of the engine: **target the goal (emerge
 | **L2 — Unit formation (shape)** | team formation (4-4-2 / custom) | a **shape** — default template (Line / Wedge / Column / Horseshoe / Arrowhead / Refused-flank / Gapped-line / …) **OR a custom allocation** (set %composition + shape intent; engine auto-distributes to cells; manual cell override). **A shape is arrangement only — no behavior, no bonus.** | adopt-gated by **Discipline** (`MIN_DISCIPLINE`) |
 | **L3 — Subunit role + instructions** | player role + player instructions | each subunit is assigned a **role drawn from a menu gated by its troop type** (the FM position→role model, §3.5). A role bundles a typical shape + an **instruction package** (brace / hold / advance / charge / skirmish / refuse / lure …). E.g. heavy-infantry → **Shield Wall** (dense line + *brace*); cavalry → **Shock** (wedge + *charge*) or **Feint** (*lure*). | menu gated by **troop type**; adherence gated by **Discipline**; concerted ploys executed + capped by **Command** |
 
-L2's "custom allocation" **is** ED-814's adjustable surface, and the canonical A.6 formations become **shape templates** here — names for arrangements, **with no dice rules and no behavior attached**. Behavior lives at L3 as instructions (§3.5); the flat-bonus parts of A.6 are superseded (§8). **"Shield wall" is therefore a *role* (heavy-infantry + brace), not a shape** — see §3.5.
+L2's "custom allocation" **is** ED-907's adjustable surface, and the canonical A.6 formations become **shape templates** here — names for arrangements, **with no dice rules and no behavior attached**. Behavior lives at L3 as instructions (§3.5); the flat-bonus parts of A.6 are superseded (§8). **"Shield wall" is therefore a *role* (heavy-infantry + brace), not a shape** — see §3.5.
 
 ---
 
@@ -153,7 +153,7 @@ The whole sequence is gated by your split: **Command** sets the asymmetric doctr
 
 ## 7. Bottom-up engine mapping
 
-- **`Formation` on `Unit`** — `template_id | custom_allocation_grid`; drives cell layout (the allocation→cells **solver** replaces the hardcoded `*_cells` selection). Auto-distribution = the solver (ED-814 core); manual override = per-cell edit.
+- **`Formation` on `Unit`** — `template_id | custom_allocation_grid`; drives cell layout (the allocation→cells **solver** replaces the hardcoded `*_cells` selection). Auto-distribution = the solver (ED-907 core); manual override = per-cell edit.
 - **`troop_type` → role gating + `role` + `instructions` on `Subunit`** (§3.5) — a `TROOP_TYPE_ROLES[troop_type]` table gates the selectable roles (FM position→role); a `role` sets a shape + an `instructions` set; **instructions modulate primitives** (brace → +density, skirmish → −density, charge → point-concentration), never add flat numbers. The one behavior-cascading addition is the **density primitive (B)**: how much `brace` raises effective density and how much density damps penetration — calibrated + validated against the gauge (it will move the bands).
 - **`doctrine` on the army/side** — L1 Aggression + Cohesion-priority.
 - **No per-shape σ injection.** Effects flow **only** through the resulting geometry into the existing primitives (§1 table). This is the load-bearing constraint: the solver outputs cells; the engine does the rest. (The retired SHAPE mods guarantee no flat shortcut exists.)
@@ -187,7 +187,7 @@ Still open:
 ## 10. Citations
 
 - `[READ:]` `tests/sim/mass_battle/{config,geometry,orchestration,percell,resolution,engine}.py` (this session).
-- ED-814 (adjustable allocation surface), ED-815 (`MIN_DISCIPLINE`), ED-899 (Command-only base; emergence), ED-136 (Discipline-via-stratagem, open).
+- ED-907 (adjustable allocation surface), ED-815 (`MIN_DISCIPLINE`), ED-899 (Command-only base; emergence), ED-136 (Discipline-via-stratagem, open).
 - Prior conversation: the three-level FM surface + SI/FM intervention pivot + team-instruction layer (recorded design).
 - This session (Jordan, 2026-06-02): shield-wall is a *role* not a shape; roles = troop-type-gated instruction packages (FM position→role); bracing is an instruction; the §1 toughness resolution C+B / reject A.
 - `mass_battle_v30.md` §A.5 (Command), §A.6 (formations), §A.8 (tactics), §A.12 (rout/morale) — *recovered; verify on canonization.*

@@ -8,7 +8,7 @@ Implements **ED-909** (formation-taxonomy reconciliation; supersedes ED-816 in p
 
 1. **Unit-layer scope = FULL ED-907** — the allocation grid + doctrine + Aggression/Cohesion team-instruction layer, not the minimal two-preset version.
 2. **§A.6 ↔ geometric mapping = ED-909 orthogonal** — geometry × posture as independent axes; this **supersedes ED-816's replacement framing** (Wedge→Arrowhead, Shield Wall→Line+heavy-front, Skirmish→spread-Line), which is amended in ED-816 at Stage 4.
-3. **Setup UX = split flow** — per-Subunit geometry + posture, then Unit-level deployment preset + doctrine; intended per ED-820 ("select shape at setup").
+3. **Setup UX = split flow** — per-Subunit geometry + posture, then Unit-level deployment preset + doctrine; intended per ED-820 (proposed — "select shape at setup").
 
 ## Headline: this is a build, not a deletion
 
@@ -19,7 +19,7 @@ Horseshoe and RefusedFlank move from `Subunit.shape` — where ED-816 validated 
 - `class Unit` (orchestration.py L999) is a bare container of Subunits — no allocation grid, no deployment presets, no doctrine / Aggression / Cohesion. ED-907 is filed but unbuilt.
 - Horseshoe / RefusedFlank referenced as shapes in: `config.py` L62 (Disc/Cmd table); `geometry.py` L75–77, L112–129 (`_SHAPE_BUILD` + `horseshoe_cells` / `refused_flank_cells`), L337–347 (`cell_speed`); `orchestration.py` L881–899 (shape-keyed dice-modifier branches), comments L101–137 / L755 / L1539; `validators.py` V-CANNAE L215.
 - ED-816 validated values — **STAYS:** Line (Disc 1, Cmd 1, baseline), Arrowhead (Disc 4, Cmd 2, center +2D Off / flanks −1D Off; counters GappedLine), GappedLine (Disc 5, Cmd 3, gap channel / kill-zone). **DEMOTE:** Horseshoe (Disc 5, Cmd 3, center −2D Off / +1D Def, flanks +2D Off; 54% winrate; Cannae), RefusedFlank (Disc 3, Cmd 2, refused −2D Off / engaged +1D Off; Leuctra).
-- ED-816 cites a phantom **"Composition (ED-814)"** — ED-814 is not a real entry; the reference should point to **ED-907**.
+- ED-816 cited a phantom **"Composition"** entry (the bare number was never filed); corrected to **ED-907** (the real FM command-architecture entry).
 
 ## Build
 
@@ -38,13 +38,13 @@ On `class Unit`:
 - **§A.6 dice-modifier formations = POSTURE axis, orthogonal to geometry:** a Subunit picks a geometry *and* a posture independently — e.g. Shield Wall = a Line/heavy-front geometry in a defensive posture; Wedge = Arrowhead geometry in an offensive posture; Skirmish = a spread/GappedLine geometry in a harass posture. This supersedes ED-816's replacement mapping.
 - **Re-express the demoted shapes' effects as emergent:** Horseshoe's flank +2D becomes the existing flanking-detection bonus when wings actually reach a flank; RefusedFlank's oblique becomes the deployment preset.
 
-### C. Setup UX — split flow (decision 3, per ED-820)
+### C. Setup UX — split flow (decision 3, per ED-820 — proposed)
 
 Two-stage selection: (1) per-Subunit geometry + posture; (2) Unit-level deployment preset (Envelopment / Refused Flank / Line-of-battle) + doctrine.
 
 ## Canon amendments (Stage 4)
 
-- **ED-816** — mark Horseshoe / RefusedFlank demoted to `Unit`-level (per ED-909); preserve Line / Arrowhead / GappedLine validations; flag the static modifiers superseded by emergent flanking (re-validation required); replace the replacement-mapping with the orthogonal geometry × posture model (decision 2); fix the "ED-814" reference → ED-907.
+- **ED-816** — mark Horseshoe / RefusedFlank demoted to `Unit`-level (per ED-909); preserve Line / Arrowhead / GappedLine validations; flag the static modifiers superseded by emergent flanking (re-validation required); replace the replacement-mapping with the orthogonal geometry × posture model (decision 2); fix the stale composition reference → ED-907.
 - **ED-909** — update the §A.6↔geometric residual from "open / orthogonal-hypothesis" to "decided: orthogonal" (decision 2).
 
 ## Re-validation (mandatory)

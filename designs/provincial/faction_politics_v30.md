@@ -1014,7 +1014,7 @@ Deviations from parity must be explicitly justified in the rank's specification.
 
 | Original ED | Description | Resolution in this register |
 |-------------|-------------|----------------------------|
-| ED-POL-01 | Name inner circle NPCs | **Resolved (partial)** — Crown inner circle named (§1.1d); Hafenmark named (§1.2c); Varfell named (§1.3c). Church inner circle is the College of Prelates; 3 of 5 Prelates are canonical (Jarnstal, Olafsson, Klapp); 2 need naming (ED-649). |
+| ED-POL-01 | Name inner circle NPCs | **Resolved (partial)** — Crown inner circle named (§1.1d); Hafenmark named (§1.2c); Varfell named (§1.3c). Church inner circle is the College of Prelates; 3 of 5 Prelates are canonical (Jarnstal, Olafsson, Klapp); 2 need naming (ED-649 — naming pending Jordan). |
 | ED-POL-02 | Succession rivals with Stance Triangles | **Partial.** Torben's Triangle specified (§1.1d). Crown Cadet Claimant, Varfell Vaynard-protégé, Hafenmark alternative candidates still require naming — new ED-650. |
 | ED-POL-03 | Torben generational clock | **Resolved** — Part 8 specification. |
 | ED-POL-04 | Renown / Shadow Renown tracking burden | **Proposed resolution**: Shadow Renown tracked on companion app as separate subfield of Renown track; does not create additional burden. Confirm with companion_specification_v30. |

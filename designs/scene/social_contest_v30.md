@@ -120,7 +120,7 @@ The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator
 ## §4 EXCHANGE STRUCTURE
 
 **Step 1 — Appraise (both orators) (PP-278 / PP-614):**
-Roll Attunement + Recall, TN 7, Ob = opponent's Charisma ÷ 2 (round up, min 1). [ED-893: adopts the canonical PP-614 form; the prior "Attunement alone, Ob 1" was struck in params. Recall contributes to the Appraise pool and the citation bonus, but not to Concentration (ED-694).]
+Roll Attunement + Recall, TN 7, Ob = opponent's Charisma ÷ 2 (round up, min 1). [ED-893 (pending reconciliation): adopts the canonical PP-614 form; the prior "Attunement alone, Ob 1" was struck in params. Recall contributes to the Appraise pool and the citation bonus, but not to Concentration (ED-694).]
 
 Each exchange's Appraise senses the CURRENT state of the audience (which may have shifted from Doubt Markers, track movement, or strain). This is not a re-attempt of the same question — it is a fresh perception of changed circumstances.
 

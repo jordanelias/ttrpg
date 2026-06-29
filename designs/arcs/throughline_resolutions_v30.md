@@ -403,7 +403,7 @@ This document is CANONICAL effective 2026-04-17 via PP-661. It resolves the 10 t
 ## §9.3 Open Dependencies
 
 - **ED-629** (Thread stress test): Warden ladder integration depends on this resolution. Post-ED-629, confirmatory audit of faction_politics_expanded_v1 §2.7 required.
-- **ED-647** (Rank dismissal mechanics): partially resolved by §2 above (failure-clause revision); full mechanical spec still pending.
+- **ED-647** (provisional, pending) (Rank dismissal mechanics): partially resolved by §2 above (failure-clause revision); full mechanical spec still pending.
 - **SIM-POL-R01–R05**: deferred per 2026-04-17 instruction. Coverage_matrix entry created for discoverability.
 
 ---

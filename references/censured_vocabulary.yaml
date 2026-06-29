@@ -175,10 +175,10 @@ terms:
 
   - term: "CV (abbreviation for Conviction Track)"
     canonical_full: "PT (Piety Track)"
-    reason: "CV was a legacy abbreviation for the per-territory track. PT is canonical per ED-644."
+    reason: "CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644 (rename pending)."
     replacement: "PT"
     date: "2026-05-08"
-    authority: "ED-644 + vocabulary audit"
+    authority: "ED-644 + vocabulary audit (rename pending)"
 
   - term: "Initiative (contest-context)"
     canonical_full: "First to Speak"

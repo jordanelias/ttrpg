@@ -266,15 +266,15 @@ jobs:
       - run: python3 tools/ci_vetting_check.py
 
   ed-citations:
-    name: ED Citation Integrity (report-only)
+    name: ED Citation Integrity
     runs-on: ubuntu-latest
     needs: syntax-check
     timeout-minutes: 10
-    # Report-only for now: the existing tree has pre-existing ED-citation violations
-    # (the ED-883-class issues this validator was built to find). It surfaces them
-    # without blocking the migration; flip to blocking (drop continue-on-error and
-    # add to ci-summary needs) once the violations are triaged. See HANDOFF.md.
-    continue-on-error: true
+    # Blocking as of 2026-06-29: the full ED-citation backlog was reconciled to 0
+    # genuine violations (292 -> 0). 91 ledger-lag / open EDs registered, the
+    # ED-814->ED-907 phantom repointed, and open/provisional over-claims reworded;
+    # validator precedence + table-row-bleed false positives fixed.
+    # See designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md.
     permissions:
       contents: read
     steps:
@@ -378,6 +378,7 @@ jobs:
       - unit-tests
       - integrity
       - compliance-check
+      - ed-citations
     steps:
       - name: Assert all gates ran and succeeded
         run: |
