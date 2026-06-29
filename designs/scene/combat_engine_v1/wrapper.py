@@ -169,11 +169,12 @@ def engagement(A, B, first, cfg, rng):
         _emit('mode', defender=_def0, mode=mode, msig={m:round(v,3) for m,v in msig.items()}, chosen_by=('read' if read_win else 'random'))
         # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
         # via balance_eff — no separate blanket multiply here (would double-count the stance term).
-        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)   # WS-5: feint_debuff removed (feint dissolved into the attack)
-        atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
+        # net-σ ASSEMBLY — the wrapper SEQUENCES the contributions; systems owns the arithmetic (no formula in the orchestrator).
+        dsig=S.defence_sigma(defender, msig[mode], mental_fat_d, fat_d, cfg)   # WS-5: feint_debuff removed (feint dissolved into the attack)
+        atk_sig=S.attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg)
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
-        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS'] + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds  # first-mover/Vor edge (bounded; mirror stays 50 — aggressor alternates)
+        net_sigma=S.assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg)
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
         counter_attempt=False

@@ -322,6 +322,21 @@ def initiative_sigma(aggressor, defender, cfg):
     'hold the Vor while defending'. Pure, tanh-bounded (cannot exceed INIT_SIGMA_K)."""
     return cfg['INIT_SIGMA_K']*tanh((aggressor.initiative - defender.initiative)/cfg['INIT_SCALE'])
 
+# ---------- net-σ ASSEMBLY (moved out of the wrapper: the orchestrator sequences, the systems layer does the math) ----------
+def defence_sigma(defender, mode_msig, mental_fat_d, fat_d, cfg):
+    """The defender's δσ for the chosen mode: its mode_sigma (mental-fatigue-scaled) - handling + stance stability. Pure."""
+    return mode_msig*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d) - handling_penalty(defender,fat_d,cfg) + stance_stability(defender,fat_d,cfg)
+
+def attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg):
+    """The aggressor's raw attack σ: commit-depth power + initiative emphasis - out-of-stamina penalty - handling + consistency. Pure."""
+    return cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - handling_penalty(aggressor,fat_a,cfg) + consistency_a
+
+def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg):
+    """The net σ the core resolves against: attack - defence - reach + armour-defeat + Vor-edge + attacker-bias +
+    bilateral wound-Ob. Pure; the wrapper SEQUENCES the contributions, this owns the arithmetic. Mirror stays 50."""
+    return (atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']
+            + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
+
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
     return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))
