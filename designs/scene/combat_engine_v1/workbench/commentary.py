@@ -13,16 +13,16 @@ import probabilities as P
 
 # ---- how the engine's numbers read in plain language -----------------------------------------------------
 COMMIT_LINE = {
-    2: "{a} flicks out a light, probing attack",
+    2: "{a} flicks out a light feint — a threat {a} can fully pull back",
     3: "{a} commits to a clean, measured strike",
     4: "{a} drives in hard, putting weight behind it",
-    5: "{a} throws everything into one all-out blow",
+    5: "{a} throws everything into one all-out blow — no taking it back now",
 }
 COMMIT_MECH = {
-    2: "commit-depth 2 (shallow): barely any power behind it, but it's almost unreadable and costs little — {a} stays balanced and safe",
-    3: "commit-depth 3 (measured): a balanced trade of power for safety",
-    4: "commit-depth 4 (deep): more power and reach — but it telegraphs, and at depth 4+ {a} is exposed, opening a counter window (the Indes steal) if {d} reads it",
-    5: "commit-depth 5 (all-in): maximum power and reach, but heavily telegraphed and badly exposed — a clean read by {d} can flip the whole exchange",
+    2: "commit-depth 2 = the FEINT pole: minimal commitment, FULL recovery — near-zero exposure, {a} can abort and reset (to commit is to give up recovery; here {a} gives up almost none)",
+    3: "commit-depth 3 (measured): a balanced trade of power for recoverability",
+    4: "commit-depth 4 (deep): more power and reach, but LESS recoverable — at depth 4+ the exposure window opens (the Indes counter), scaled by how hard {a}'s weapon is to retract (a hand-balanced blade recovers; a forward-heavy one can't)",
+    5: "commit-depth 5 (all-in): maximum power, but committed = IRRECOVERABLE — {a} can't stop or retract it, so a clean read by {d} flips the whole exchange",
 }
 MODE_LINE = {
     'parry': "{d} sweeps the blade aside with a parry",
