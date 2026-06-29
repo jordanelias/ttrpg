@@ -1,0 +1,89 @@
+flowchart TD
+    %% ============ BUILD-TIME ============
+    subgraph BUILD["BUILD-TIME · runs once at import · zero runtime cost"]
+        direction LR
+        GEOM["geometry.py<br/>bake(curvature, cross-section,<br/>point-concentration, keenness)"]
+        WEAP["combatant.py · WEAPONS<br/>reach · head · gap · percussion<br/>clinch · guards · lengths"]
+        CONF["config.py · CFG<br/>grounded + calibrated constants"]
+        KASRT["key-sync assert<br/>WEAPONS = GEOMETRY = GATE"]
+        GEOM -->|"derives gap +<br/>geo surface"| WEAP
+        WEAP --- KASRT
+    end
+
+    %% ============ ENTRY ============
+    START(["fight(A, B)"]) --> INIT["_init_live: stamina · conc · ready<br/>reset wound trackers · A,B fixed objects"]
+    INIT --> BOUT{"bout less than 12 ?"}
+    BOUT -->|"yes"| FIRST["pick initiator (coin-flip)"]
+    FIRST --> ENG["engagement(A, B, first)<br/>A/B never swapped"]
+    ENG --> REACH["reach_base(A), reach_base(B)<br/>then longer / shorter / measure_gap / closed?"]
+    REACH --> BEAT{"beat loop"}
+
+    BEAT --> TEMPO["fatigue from stamina<br/>tempo: weapon_tempo / close_tempo<br/>ready[c] += rate"]
+    TEMPO --> PHASE{"closed?"}
+
+    %% ============ APPROACH ============
+    PHASE -->|"no — APPROACH"| APPR["approach_displace (lever sets point aside)<br/>measure_gap -= close_rate"]
+    APPR --> STOP{"stop-hit?<br/>longer weapon, scales with gap"}
+    STOP -->|"hit"| RES1["RESOLVE via core: pool to effective_ob<br/>to roll_net to degree to strike()"]
+    STOP -->|"miss"| BEAT
+    RES1 --> WND1["wound + conc drain · felled?"]
+    WND1 --> BEAT
+
+    %% ============ CLOSED EXCHANGE ============
+    PHASE -->|"yes — CLOSED"| ACT{"actor ready >= threshold?"}
+    ACT -->|"no"| BEAT
+    ACT -->|"yes"| AGG["aggressor = max(ready)<br/>halfsword_target sets form<br/>commit 2-6 · stamina cost"]
+    AGG --> COMPOSE["COMPOSE net_sigma<br/>(wrapper SUMS pure modules)"]
+
+    subgraph SIGMA["net_sigma CONTRIBUTIONS · pure functions · role-objects in"]
+        direction TB
+        RDS["read contest: reading x tradition<br/>x familiarity x legibility x fatigue<br/>then read_win"]
+        MSG["mode_sigma: parry / dodge / wind<br/>(+ hand / blade guards)"]
+        RSG["reach_sigma<br/>(defender reach, falls with armour)"]
+        ADS["armor_defeat_sigma<br/>percussion / gap-thrust vs cut-collapse<br/>threshold rises with armour"]
+        FEV["feint_eval (capped, readable)"]
+    end
+
+    COMPOSE -.-> RDS
+    COMPOSE -.-> MSG
+    COMPOSE -.-> RSG
+    COMPOSE -.-> ADS
+    COMPOSE -.-> FEV
+    COMPOSE --> NETSIG["net_sigma = atk_sig - dsig - reach_pen + adef"]
+
+    NETSIG --> RES2["RESOLVE via core to canonical engine:<br/>pool to effective_ob(pool, net_sigma)<br/>to roll_net to degree"]
+    RES2 --> DEG{"degree"}
+    DEG -->|"fail"| RIP["riposte? (+ overcommit exposure)"]
+    DEG -->|"partial"| OUT1["graze / bind"]
+    DEG -->|"success"| OUT2["hit / bind / neutralize then riposte"]
+    DEG -->|"overwhelming"| OUT3["hit (unless neutralized)"]
+
+    OUT1 --> APPLY["apply hit to wound + conc drain<br/>bind loop x3 (bind_sigma)<br/>displace-inside · create reopen-moment"]
+    OUT2 --> APPLY
+    OUT3 --> APPLY
+    APPLY --> FLIP["riposte then role flip (object swap)"]
+    RIP --> FLIP
+    FLIP --> ECAP{"exchanges >= cap<br/>· felled · separate?"}
+    ECAP -->|"no"| BEAT
+    ECAP -->|"yes"| BEND["return felled / None"]
+
+    BEND --> RECOV["bout recovery: stamina · conc"]
+    RECOV --> BOUT
+    BOUT -->|"no / felled"| RESULT["result: felled,<br/>else wound-count tiebreak"]
+    RESULT --> UPSET["95% UPSET CAP (UPSET_FLOOR)<br/>5% the decided loser steals it"]
+    UPSET --> WIN(["win: A or B"])
+
+    %% ============ RESOLUTION CORE ============
+    CORE["core.py · canonical resolver<br/>r1 sigma-resolution + r8 continuous roll<br/>+ damage / coupling (armour x mode)"]
+    RES1 -. uses .-> CORE
+    RES2 -. uses .-> CORE
+
+    %% ============ STYLING ============
+    classDef build fill:#1f2937,stroke:#6b7280,color:#e5e7eb;
+    classDef resolve fill:#0f3d2e,stroke:#34d399,color:#d1fae5;
+    classDef sigma fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe;
+    classDef cap fill:#3f2d1e,stroke:#f59e0b,color:#fde68a;
+    class GEOM,WEAP,CONF,KASRT build;
+    class RES1,RES2,CORE resolve;
+    class RDS,MSG,RSG,ADS,FEV,COMPOSE,NETSIG sigma;
+    class UPSET cap;
