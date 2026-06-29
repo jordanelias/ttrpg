@@ -162,25 +162,19 @@ def engagement(A, B, first, cfg, rng):
         net_sigma=S.assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg)
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
+        # INDES STEAL — systems computes the steal AMOUNT + the counter selection; the wrapper APPLIES the mutation.
         counter_attempt=False
         if read_win and commit>=4:
-            # steal scales with commit-DEPTH x read-MARGIN (a deep commit read cleanly -> near-complete flip), bounded.
-            indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
-                            (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
-            steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)*indes_scale
+            steal=S.indes_steal_amount(defender, mode=='wind', commit, read_d, read_a, cfg, TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
-            # SINGLE-TIME COUNTER (a tier of the unified counter): reading a committed aggressor opens a counter IN THE
-            # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
-            # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
-            # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
-            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+            counter_attempt=S.counter_select(defender, cfg, rng, TR)
         pool=max(1, core.resolution_pool(aggressor.history))
         deg, net = core.resolve(pool, net_sigma, rng)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
-        # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
-        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*S.recoverability_factor(aggressor,cfg)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')   # commit cost scales with IRRECOVERABILITY (weapon moment + footwork): a forward-heavy weapon can't retract a committed blow
+        # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
+        overcommit_exposure = S.overcommit_exposure(aggressor, commit, fat_a, cfg, TR)
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)

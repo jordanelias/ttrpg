@@ -365,6 +365,23 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 
+def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
+    """The Indes / sen-no-sen initiative-steal AMOUNT: a defender who out-read a deep commit steals the Vor, scaled
+    by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
+    indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
+                    (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
+    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, TR)*indes_scale
+
+def counter_select(defender, cfg, rng, TR):
+    """Whether the defender reaches for the single-time counter (tempo-driven SELECTION; SUCCESS is gated later, a
+    miss punished). Consumes one rng.random."""
+    return rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+
+def overcommit_exposure(aggressor, commit, fat_a, cfg, TR):
+    """The aggressor's exposure to the riposte from over-committing: commit-depth x irrecoverability, minus the
+    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0. The wrapper applies the loss."""
+    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)) - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
+
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
     return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))
