@@ -179,13 +179,13 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "ee7571c228fa1c9897d1931a9d5686a7692da97b"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "89c51d352640792c41963b402bf79e8b88fa77a1"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
-    canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
+    canonical_sha__designs__provincial__military_layer_v30_md: "d6f6bb2f2f14096f10405872d019ec9d81807c99"
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
-    canonical_sha__designs__provincial__ci_political_v30_md: "32b30e19e986dcbda51f54ffddc0057a52fb5acc"
+    canonical_sha__designs__provincial__ci_political_v30_md: "cbb0f0561c1e8b5d5fcf07e9ca4e2ab4caba6066"
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
     canonical_sha__designs__provincial__peninsular_strain_v30_md: "01097df17fa52083779a0611c73270db73913fd8"
@@ -212,7 +212,7 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "07a7279e59bbb70433ccf88a4917c4895022cf75"
+    canonical_sha__designs__scene__conviction_track_v30_md: "dad0ab6d08832f10d99339c4c935c47e1c1fa3ee"
     conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
@@ -274,22 +274,22 @@ systems:
     added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
   solmund_voice:
     design_doc: designs/world/solmund_voice_v30.md
-    canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
+    canonical_sha__designs__world__solmund_voice_v30_md: "e55456fbd843d2d30ca3b6bf5ae4f44cb8ed7845"
     status: provisional
     added: '2026-04-25 Stage 4; 2026-05-02 ED-784 Phase 2: Mandate→L+PS migration applied (38 refs reclassified per audit §2.1; Ethical Framework Modifiers + Löwenritter PP-246 sections SUPERSEDED per PP-686 v2)'
   solmund_philosophy:
     design_doc: designs/world/solmund_philosophy_v30.md
-    canonical_sha__designs__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"
+    canonical_sha__designs__world__solmund_philosophy_v30_md: "818b3e59183e034eade53a471615b90085dd221f"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund:
     design_doc: designs/world/solmund_v30.md
-    canonical_sha__designs__world__solmund_v30_md: "27f8e4eeee7b2640cee645a4006c9b46ca017064"
+    canonical_sha__designs__world__solmund_v30_md: "ddf0ab26aef917ef7b3324708837e5afa0e4c02b"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund_artifacts:
     design_doc: designs/world/solmund_artifacts_v30.md
-    canonical_sha__designs__world__solmund_artifacts_v30_md: "393eb32b1c9e0bdb829420928cdc06476059ba7b"
+    canonical_sha__designs__world__solmund_artifacts_v30_md: "5db2871dcf71d14c11164ef3ca40e33d401ca602"
     status: provisional
     added: '2026-04-25 Stage 4'
   miraculous_event:
@@ -299,7 +299,7 @@ systems:
     added: '2026-04-25 Stage 4'
   baralta:
     design_doc: designs/npcs/baralta_v30.md
-    canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
+    canonical_sha__designs__npcs__baralta_v30_md: "ebabcdffedbaad21bd5d8c06e8d959fc8e0fb7f3"
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
   key_substrate:
@@ -374,7 +374,7 @@ systems:
 
   npc_relational_graph:
     design_doc: designs/npcs/npc_relational_graph_v30.md
-    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "9e67cd7122cbf3f46d3966a60af90e949eee0e9f"
+    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "02c6bec99b1b886486142d2e795e5ddc3d9239b4"
     pp: PP-724
     status: provisional
 
@@ -398,7 +398,7 @@ systems:
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "17d1cc2af1eaca2da6f1fcef3c865e689e03eeb7"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "faf58ee0c15ada1bcb15bce941d2ecca6f05ab91"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
@@ -450,7 +450,7 @@ systems:
     canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
   npc_roster:
     design_doc: designs/npcs/npc_roster_v30.md
-    canonical_sha__designs__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
+    canonical_sha__designs__npcs__npc_roster_v30_md: "633cc65c768a2fe1b904147ab226b68d788a0fcd"
     index: designs/npcs/npc_roster_v30_index.md
     canonical_sha__designs__npcs__npc_roster_v30_index_md: "42da7a6787bd19acfd70c863f8b31d7618412005"
     infill: designs/npcs/npc_roster_v30_infill.md
@@ -462,7 +462,7 @@ systems:
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
     design_doc: designs/threadwork/thread_horizontal_integration_spec.md
-    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
+    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "b27fd0c98f598570f9d08e1326a7dec6e6f0fb0b"
     index: designs/threadwork/thread_horizontal_integration_spec_index.md
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
   throughline_resolutions:
@@ -472,7 +472,7 @@ systems:
     canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "5dc526993ff1549be2948f316940be39035b5633"
   ui_ux:
     design_doc: designs/ui/valoria_ui_ux_v4.md
-    canonical_sha__designs__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
+    canonical_sha__designs__ui__valoria_ui_ux_v4_md: "d448dc8439215b3d44e987d6c4c1f6ee6f5f0b9b"
     valoria_ui_ux_1: designs/ui/valoria_ui_ux_v4_1.md
   videogame_mode_spec:
     design_doc: designs/architecture/videogame_mode_spec.md

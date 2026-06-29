@@ -2,6 +2,7 @@
 
 
 # Solmund Philosophical Frameworks (PROVISIONAL)
+## Status: CANONICAL (generation v40)
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §8, §9, §10, §11, §12

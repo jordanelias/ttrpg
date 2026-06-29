@@ -2,6 +2,7 @@
 
 
 # Solmund Artifact Taxonomy (PROVISIONAL)
+## Status: CANONICAL (generation v40)
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §16, §17, §18

@@ -32,6 +32,17 @@ RECOGNIZED = ("CANONICAL", "CURRENT", "CANON", "WORKING", "DESIGN", "REFERENCE",
 
 DOC_KEYS = r"(design_doc|index|infill|integration_plan_doc|spec|related)"
 
+# _index / _infill co-files inherit their parent doc's status — a redundant Status
+# line on a navigation/atomization artifact is noise, so they are exempt.
+COFILE_SUFFIXES = ("_index.md", "_infill.md")
+
+# Docs that are legitimately BOTH canonical and a superseded_id: a partial
+# supersession where only one layer died and the rest is retained-canonical.
+# Each must carry an in-file banner for the dead layer (see supersession_register).
+KNOWN_PARTIAL = {
+    "designs/scene/combat_v30.md",  # RESOLUTION layer -> combat_engine_v1 (ED-900); lore/flavor canonical
+}
+
 
 def canonical_docs():
     """Design-doc paths referenced as authoritative in canonical_sources.yaml."""
@@ -70,12 +81,14 @@ def main():
     sup = superseded_ids()
     no_status, drift, nonstd = [], [], []
     for d in docs:
+        is_cofile = d.endswith(COFILE_SUFFIXES)
         s = status_of(d)
         if s is None:
-            no_status.append(d)
+            if not is_cofile:
+                no_status.append(d)
         elif not any(k in s.upper() for k in RECOGNIZED):
             nonstd.append((d, s))
-        if d in sup:
+        if d in sup and d not in KNOWN_PARTIAL:
             drift.append(d)
 
     print("[generation v40] %d canonical design docs checked." % len(docs))

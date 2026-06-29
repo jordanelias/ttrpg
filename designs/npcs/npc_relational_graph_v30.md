@@ -4,6 +4,7 @@
 <!-- COMPANIONS: designs/npcs/character_canon_v30.md (per-NPC vector state), designs/npcs/npc_behavior_v30.md (priority trees + Resonant Style), designs/scene/fieldwork_v30.md §5.6b (Knot lifecycle — architectural template for this doc's strain mechanics), designs/territory/valoria_geography_v30.yaml :: settlement_adjacency: (PP-723; consumed by §6 settlement coupling) -->
 
 # Valoria — NPC Relational Graph (PP-724)
+## Status: CANONICAL (generation v40)
 
 **Class:** A — new substrate-defining system. Personal-scale NPC-NPC relational state.
 **Status:** PROVISIONAL.

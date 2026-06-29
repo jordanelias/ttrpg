@@ -1,4 +1,6 @@
 # VALORIA — UI/UX Comprehensive Reference v4
+## Status: CANONICAL (generation v40)
+
 ## Godot-development-ready interface specification
 
 **Date:** 2026-04-16

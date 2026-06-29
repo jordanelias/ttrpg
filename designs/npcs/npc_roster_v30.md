@@ -3,6 +3,8 @@
 
 <!-- v30 baseline — renamed from designs/npcs/npc_roster.md on 2026-04-13 -->
 # Valoria — Named NPC Roster
+## Status: CANONICAL (generation v40)
+
 ## Consolidated | Date: 2026-04-11 | Status: CANONICAL
 ## Incorporates: npc_roster.md + npc_roster_caste_annotations.md
 ## [EDITORIAL: All NPC identities, motivations, and arc trajectories flagged for user review.]

@@ -8,6 +8,8 @@
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — Faction Layer: Stability, Occupation, Treaties, Negotiation & Parliament
+## Status: CANONICAL (generation v40)
+
 ## v1.0 — Canonical design for faction-layer stability and diplomacy mechanics
 
 ---

@@ -59,12 +59,16 @@ fixes the disease, not the symptom.
 - **Status vocabulary** (normalize to these): `CURRENT` (canonical head, generation v40) · `PROVISIONAL`
   (pending ratification) · `WORKING DESIGN` (live, pre-compile) · `REFERENCE` (live support) ·
   `SUPERSEDED` (→ pointer; lives in `archives/`/`deprecated/`).
-- **Normalization pass (staged):** stamp the **34 no-status docs** with the right Status line and
-  normalize the rest to the vocabulary. This is a ~34–91-file edit; **defer until the active combat +
-  distillation sessions settle** (those touch combat/threadwork/faction heads — stamping now guarantees
-  merge conflicts). The stamper is idempotent, so it re-runs cleanly post-merge.
-- **Flip the gate to blocking** (`blocking=True` in `valoria_local.py` + add to CI) once §3's WARN count
-  is zero.
+- **Normalization pass — DONE (2026-06-28, this branch).** Co-files (`_index`/`_infill`) are exempt
+  (they inherit parent status), which dropped the 34 no-status WARNs to 15 primary docs. Those were
+  stamped `## Status: CANONICAL (generation v40)` and their `canonical_sha` pins re-synced — **except
+  `designs/npcs/companion_specification_v30.md`**, which has no editorial marker at all and is
+  character/narrative content under Jordan's exclusive authority (the editorial gate correctly blocked
+  it). `combat_v30.md`'s partial-supersession is allowlisted in the gate (`KNOWN_PARTIAL`). Gate now
+  reports **1 remaining WARN** (companion — Jordan to stamp).
+- **Flip the gate to blocking** (`blocking=True` in `valoria_local.py` + add to CI) once that last WARN
+  clears — **staged for after the active combat/distillation sessions merge**, so their in-flight
+  branches (which still carry the pre-stamp docs) don't hit a surprise CI failure.
 
 ## 5. Drift to resolve during normalization
 - `designs/scene/combat_v30.md` — confirm the partial-supersession banner is in place (RESOLUTION → engine);
@@ -76,10 +80,12 @@ fixes the disease, not the symptom.
   decision; stamp `PROVISIONAL` until J-5 rules.
 
 ## 6. Execution order
-1. *(done)* gate tool + `valoria_local.py` wiring + `CURRENT.md` v40 header + this plan → commit on
-   `chore/deprecation-archive-2026-06-28`.
-2. *(after active sessions merge)* run the normalization stamper over the 91-doc set; resolve §5 drift.
-3. flip `ci_generation_consistency.py` to blocking; add it to `.github/workflows/valoria-ci.yml`.
+1. *(done)* gate tool + `valoria_local.py` wiring + `CURRENT.md` v40 header + this plan.
+2. *(done)* co-file exemption + stamped 14 primary docs `## Status: CANONICAL (generation v40)` +
+   re-pinned their `canonical_sha`. Remaining: `companion_specification_v30.md` (Jordan stamps — needs
+   an editorial marker) and the §5 drift items.
+3. *(after active sessions merge)* flip `ci_generation_consistency.py` to blocking; add it to
+   `.github/workflows/valoria-ci.yml`.
 4. `git tag v40.0`.
 
 **Net:** a real, named v40 generation and an *enforced* currency guarantee — the clarity a rename can't

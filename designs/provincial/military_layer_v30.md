@@ -6,6 +6,8 @@
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — Military Layer: Unit Bridge & CI Revision
+## Status: CANONICAL (generation v40)
+
 ## v1.0 — Faction-layer unit representation → mass battle; CI competitive formula
 
 ---

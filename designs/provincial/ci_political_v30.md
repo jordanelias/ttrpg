@@ -6,6 +6,8 @@
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — CI Political Legitimacy Redesign, Stat Economy & Card System
+## Status: CANONICAL (generation v40)
+
 ## v1.0
 
 ---

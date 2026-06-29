@@ -2,6 +2,7 @@
 
 
 # Solmund Voice & Register (PROVISIONAL)
+## Status: CANONICAL (generation v40)
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §4, §5, §6, §7, §19, §20, §21

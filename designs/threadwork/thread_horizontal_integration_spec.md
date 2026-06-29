@@ -1,4 +1,6 @@
 # VALORIA — Thread Horizontal Integration Specification
+## Status: CANONICAL (generation v40)
+
 ## ED-673 through ED-681 | Status: CANONICAL
 ## Date: 2026-04-17
 ## Scope: All remaining cross-system Thread fire paths, editorial resolutions, and patches

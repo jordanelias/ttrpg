@@ -2,6 +2,7 @@
 
 
 # Solmund's Nature & The Two Witness Traditions (PROVISIONAL)
+## Status: CANONICAL (generation v40)
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §13, §14, §15

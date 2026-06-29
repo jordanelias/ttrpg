@@ -3,6 +3,8 @@
 
 <!-- v30 baseline — renamed from designs/systems/clock_registry.md on 2026-04-13 -->
 # Valoria Clock & Track Registry
+## Status: CANONICAL (generation v40)
+
 ## Created: 2026-04-08 | Updated: 2026-06-24 (contest-track sync — Persuasion Track + Obligation clocks registered; Composure/Concentration/Health/Stamina formulas synced to derived_stats §14.1; ED-939, docket J-31) | Status: CANONICAL
 ## Single source of truth for all clocks, tracks, and counters.
 ## Cross-references to authoritative source for each track's rules.

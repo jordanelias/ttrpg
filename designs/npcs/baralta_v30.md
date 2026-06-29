@@ -1,6 +1,7 @@
 [PROVISIONAL: Baralta NPC profile — extracted from designs/scene/miraculous_event_v30.md §21 (Baralta's Theological Position) on 2026-04-25 to correct Stage 4 routing error (world-entity content was placed in scene-mechanic file). Pending Jordan editorial review of Baralta entity-canon. Source: atoms_pending/2026-04-25/_consolidated/02_solmund_cultural_guide.md PART 7 §21.]
 
 # Baralta — Theological Position & Restoration Adversary
+## Status: CANONICAL (generation v40)
 
 **Generated:** 2026-04-25 — Stage 4 follow-up correction (Baralta extraction from miraculous_event_v30 → designs/npcs/).
 **Status:** PROVISIONAL — pending Jordan editorial review.

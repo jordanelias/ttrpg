@@ -3,6 +3,8 @@
 
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Piety Track & Church Victory Redesign
+## Status: CANONICAL (generation v40)
+
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied | Sections §4.2, §4.3, §6, §7 SUPERSEDED-BY GD-1 (2026-05-17 — peninsula-only victory)2026-04-17 (ED-643)
 ## Scope: Piety Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
