@@ -6,6 +6,18 @@ from math import exp
 import core, systems as S, tradition as TR
 from config import CFG
 
+# ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
+# _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost
+# and CANNOT change behavior (no rng draw, no state mutation). The workbench sets wrapper._TRACE to a
+# callable(event: dict) before a run and resets it to None after. Events carry the INPUTS each decision
+# node consumed (read margins, the commit distribution, the roll's pool/net_sigma) so the narrator and
+# the branch explorer can reconstruct the local probability of every alternate branch without re-deriving
+# engine internals. The engine emits facts; probability math lives in the workbench (probabilities.py).
+_TRACE = None
+def _emit(kind, **data):
+    if _TRACE is not None:
+        _TRACE(dict(kind=kind, **data))
+
 def _init_live(c, cfg):
     c.stamina_max=S.stamina_max(c); c.stamina=float(c.stamina_max)
     c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
@@ -32,6 +44,9 @@ def engagement(A, B, first, cfg, rng):
     beats=0; exchanges=0; soft=8
     reopen_moment=False; push_avail=False   # distance-creating-moment state for re-opening (corrections 1+3)
     feint_streak=0                           # feints-in-a-row counter (capped at FEINT_MAX_STREAK)
+    _emit('engagement_start', aggressor=first.label, defender=(B if first is A else A).label,
+          longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
+          reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
     while beats < soft*3:
         beats+=1
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
@@ -72,10 +87,14 @@ def engagement(A, B, first, cfg, rng):
             if just_closed:
                 closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
+            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
+                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE'] + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
                 deg, net = core.resolve(pool, nsig, rng)
+                _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
+                      pool=pool, net_sigma=round(nsig,3), net=round(net,2), degree=deg)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
@@ -91,6 +110,7 @@ def engagement(A, B, first, cfg, rng):
         else:
             aggressor = actors[0]
         defender = B if aggressor is A else A
+        _agg0=aggressor.label; _def0=defender.label   # frozen for the outcome emit (roles may flip on riposte)
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
@@ -98,11 +118,12 @@ def engagement(A, B, first, cfg, rng):
         # DISPOSITION (commit skew): aggressive leans deep (4,5), cautious shallow (2,3); neutral = uniform {2,3,4,5}.
         _ln=S.disp_lean(aggressor)
         if abs(_ln)<1e-9:
-            commit=int(rng.integers(2,6))
+            commit_probs={2:0.25,3:0.25,4:0.25,5:0.25}; commit=int(rng.integers(2,6))
         else:
             _k=cfg['DISP_COMMIT_K']*_ln
             _w=[max(0.05,1-_k), max(0.05,1-0.5*_k), max(0.05,1+0.5*_k), max(0.05,1+_k)]
-            _s=sum(_w); commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
+            _s=sum(_w); commit_probs={d:round(x/_s,3) for d,x in zip([2,3,4,5],_w)}; commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
+        _emit('commit', aggressor=_agg0, defender=_def0, commit=commit, probs=commit_probs, stance_lean=round(_ln,3))
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))
@@ -131,9 +152,12 @@ def engagement(A, B, first, cfg, rng):
         read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
         read_a=S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
+        _emit('read', defender=_def0, read_d=round(read_d,3), read_a=round(read_a,3),
+              p_read_win=round(1/(1+exp(-(read_d-read_a)/1.0)),3), read_win=read_win)
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
         mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+        _emit('mode', defender=_def0, mode=mode, msig={m:round(v,3) for m,v in msig.items()}, chosen_by=('read' if read_win else 'random'))
         # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
         # via balance_eff — no separate blanket multiply here (would double-count the stance term).
         dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
@@ -158,6 +182,7 @@ def engagement(A, B, first, cfg, rng):
             counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
         pool=max(1, core.resolution_pool(aggressor.history))
         deg, net = core.resolve(pool, net_sigma, rng)
+        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
@@ -259,6 +284,9 @@ def engagement(A, B, first, cfg, rng):
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
+        _emit('outcome', aggressor=_agg0, defender=_def0, mode=mode, degree=deg,
+              hit=int(hit), bind=bool(bind), riposte=bool(riposte),
+              A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)
         exchanges+=1
         # TURN = one approach -> burst -> separation (Jordan 2026-06-03). The burst is a SMALL EMERGENT run of
         # exchanges, gated by TEMPO (who re-reaches ACT_THRESHOLD via close_tempo), NOT by ripostes: a faster fighter
@@ -280,10 +308,14 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     # defaults — corrupting wi, health_full, and every derived health value from bout 2 onward. Pass spirit/strength.
     A.wt.__init__(A.end, spirit=A.spirit, strength=A.strength); B.wt.__init__(B.end, spirit=B.spirit, strength=B.strength)
     _init_live(A,cfg); _init_live(B,cfg)
+    _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
+          armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         first = A if rng.random()<0.5 else B
+        _emit('turn_start', turn=turn+1, first=first.label)
         loser = engagement(A,B,first,cfg,rng)
+        _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None))
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
@@ -297,4 +329,5 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     # symmetric in form, so an X% raw win-rate is clamped toward [UPSET_FLOOR, 1-UPSET_FLOOR].
     if result!=0 and rng.random()<cfg['UPSET_FLOOR']:
         result = -result
+    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None))
     return result
