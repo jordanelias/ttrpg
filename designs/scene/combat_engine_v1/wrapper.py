@@ -43,7 +43,7 @@ def engagement(A, B, first, cfg, rng):
     ready={A:0.0,B:0.0}
     beats=0; exchanges=0; soft=8
     reopen_moment=False; push_avail=False   # distance-creating-moment state for re-opening (corrections 1+3)
-    feint_streak=0                           # feints-in-a-row counter (capped at FEINT_MAX_STREAK)
+    # (feint_streak removed — feint dissolved into the attack, WS-5)
     _emit('engagement_start', aggressor=first.label, defender=(B if first is A else A).label,
           longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
           reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
@@ -115,12 +115,17 @@ def engagement(A, B, first, cfg, rng):
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
-        # DISPOSITION (commit skew): aggressive leans deep (4,5), cautious shallow (2,3); neutral = uniform {2,3,4,5}.
+        # STANCE (commit skew, ED-912): aggressive leans deep (4,5), cautious shallow (2,3). WARINESS (WS-5): vs an
+        # UNREAD tradition the aggressor commits more cautiously (familiarity<1 -> a shallow bias) — wariness is a
+        # property of the same micro-read layer as the attack. The per-weight 0.05 floor is the hard SPREAD-FLOOR:
+        # disposition+wariness can never collapse the {2,3,4,5} distribution to all-{2}. none/same-tradition ->
+        # familiarity 1.0 -> no wariness (invariant-safe for default fighters).
         _ln=S.disp_lean(aggressor)
-        if abs(_ln)<1e-9:
+        _wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
+        _k=cfg['DISP_COMMIT_K']*_ln - _wary
+        if abs(_k)<1e-9:
             commit_probs={2:0.25,3:0.25,4:0.25,5:0.25}; commit=int(rng.integers(2,6))
         else:
-            _k=cfg['DISP_COMMIT_K']*_ln
             _w=[max(0.05,1-_k), max(0.05,1-0.5*_k), max(0.05,1+0.5*_k), max(0.05,1+_k)]
             _s=sum(_w); commit_probs={d:round(x/_s,3) for d,x in zip([2,3,4,5],_w)}; commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
         _emit('commit', aggressor=_agg0, defender=_def0, commit=commit, probs=commit_probs, stance_lean=round(_ln,3))
@@ -137,11 +142,10 @@ def engagement(A, B, first, cfg, rng):
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
         init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
         consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.conc/5.0 - 3)   # Concentration tracker (3F+2S, depletes), not static Focus (Jordan #12)
-        # feinting (module): wrapper applies the state changes the pure evaluator returns.
-        fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
-        feint_debuff=fv['debuff']; feint_streak=fv['new_streak']
-        if fv['do']:
-            beats += fv['beat_cost']; aggressor.stamina -= fv['stamina_cost']
+        # FEINT DISSOLVED INTO THE ATTACK (WS-5): there is no separate feint maneuver. Deception is intrinsic to
+        # HOW one attacks — the micro-read carried by commit-depth, head, grip and disguise — already modelled by
+        # legibility() + the read contest below (the soccer-stepover principle: twitching the body/blade IS part of
+        # attacking). Removes the old feint_eval double-machinery and its streak/triple-debuff bugs (RF-01/04).
         # VISUAL read (pre-contact anticipation; temporal-spatial). Weighted by tradition's visual emphasis, DEGRADED
         # vs an unfamiliar aggressor (knowledge-of-others), and MODULATED BY MOVEMENT LEGIBILITY (correction 4):
         # large/lateral movement is easier to perceive than in-line motion. A thrust (in-line, point/high-gap) is
@@ -149,7 +153,7 @@ def engagement(A, B, first, cfg, rng):
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
         legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
-        read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
+        read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)   # WS-5: precommit (intent-read) now LIVE every exchange — was feint-only (RF-05); feint_debuff removed
         read_a=S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
         _emit('read', defender=_def0, read_d=round(read_d,3), read_a=round(read_a,3),
@@ -160,7 +164,7 @@ def engagement(A, B, first, cfg, rng):
         _emit('mode', defender=_def0, mode=mode, msig={m:round(v,3) for m,v in msig.items()}, chosen_by=('read' if read_win else 'random'))
         # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
         # via balance_eff — no separate blanket multiply here (would double-count the stance term).
-        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
+        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)   # WS-5: feint_debuff removed (feint dissolved into the attack)
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)

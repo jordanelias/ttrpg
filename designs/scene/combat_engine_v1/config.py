@@ -18,7 +18,7 @@ CFG = dict(
   LEVER_K=2.2, LEVER_REF=0.30, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
   DISPLACE_LEV_GAP=0.15, DISPLACE_P=0.55, DISPLACE_PULLBACK_GRAZE=0.30, APPROACH_DISPLACE_K=0.7, APPROACH_DISPLACE_MAX=0.6,
-  # feinting: a non-existent action that degrades a FOOLED defender's real-attack defence/read; capped at 3 in a row,
+  # feinting [DEPRECATED — dissolved into the attack (WS-5 2026-06-28); feint_eval removed from the engine path, these keys now unused, kept until cleanup]:
   # short phase, costs stamina, readable (a defender who reads it gains a small counter-edge). Tuned not-overpowered.
   FEINT_ENABLE=True, FEINT_P=0.30, FEINT_MAX_STREAK=3, FEINT_BEAT_COST=0.3, FEINT_STAMINA=1.0,
   FEINT_DEBUFF=0.30, FEINT_PUNISH=0.12,
@@ -94,7 +94,7 @@ CFG = dict(
   # instead; (3) the INITIATIVE LEVER — aggressive drifts the Vor UP (pressing builds Vor), cautious DOWN (cedes it), so
   # BOTH poles cost: aggression risks overcommit (its deep commits raise existing exposure), caution bleeds the Vor. At
   # lean=0 every hook is a no-op (default fighters unchanged). Anchored to the German Vor/Nach doctrine (S2).
-  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10,
+  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10, WARINESS_K=1.5,   # WARINESS_K (WS-5): commit-caution vs an UNREAD tradition (familiarity<1 -> shallow bias), spread-floored; 0 = off
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )

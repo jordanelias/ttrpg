@@ -192,6 +192,8 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
     return legib
 
+# [UNUSED since WS-5 2026-06-28 — the feint is dissolved into the attack (wrapper no longer calls this; deception
+#  is intrinsic to commit-depth + legibility + the read contest). Kept until a cleanup pass removes it + FEINT_*.]
 def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
     """Decide/resolve a feint. Pure (reads rng): returns dict {do, debuff, new_streak, beat_cost, stamina_cost}.
     A fooled defender's real-attack defence/read is degraded; a defender who READS it gains a small counter-edge.
