@@ -22,13 +22,17 @@ class Combatant:
         self.grip='normal'                   # grip/stance state: normal | choke (close, leverage) | lunge (reach, commit)
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
-        # derived (canonical)
-        self.pool=max(5, history+6)
+        # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
+        self.pool=max(5, history+6)                          # resolution pool (History)
         self.wt=r8.WoundTracker(end, spirit=self.spirit, strength=self.strength)
-        self.health_full=self.wt.health_full
-        # live state (reset/managed by wrapper)
-        self.stamina=0.0; self.stamina_max=0.0
-        self.conc=0.0; self.conc_max=0.0
+        self.health_full=self.wt.health_full                 # total Health (End+Spirit+Str buffer)
+        self.wound_interval=self.wt.wi                       # damage per wound-gate (WI)
+        self.max_wounds=self.wt.max_wounds                   # wound-gate cap (felled beyond)
+        self.stamina_max=r8.stamina_max(end, self.spirit)    # max stamina from Endurance+Spirit (cfg-free)
+        self.conc_max=0.0                                    # max concentration (3*Focus+2*Spirit) — set in derive_stats(cfg)
+        # ---- live state (reset/managed by the wrapper each bout) ----
+        self.stamina=0.0
+        self.conc=0.0
         self.ready=0.0
         self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
         self.poise=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
@@ -41,6 +45,15 @@ class Combatant:
     def head(self): return WEAPONS[self.weapon]['head']
     @property
     def weight(self): return WEAPONS[self.weapon]['wt']
+    # ---- derived-figure host (the combatant computes its own; consumers import these, never recompute) ----
+    def derive_stats(self, cfg):
+        """Compute the cfg-dependent derived figures and store them on self (called once at bout reset). Keeps the
+        derivation WITH the combatant so core/systems read c.conc_max etc. rather than calculating them."""
+        self.conc_max = cfg['CONC_FOCUS']*self.focus + cfg['CONC_SPIRIT']*self.spirit   # 3F+2S (ED-902)
+    @property
+    def fatigue(self):
+        """Current endurance fatigue in [0,1]: 0 fresh, ->1 spent. Derived from live stamina vs stamina_max."""
+        return max(0.0, 1 - self.stamina/self.stamina_max) if self.stamina_max else 0.0
     @property
     def felled(self): return self.wt.felled
     def apply_wound(self, d):

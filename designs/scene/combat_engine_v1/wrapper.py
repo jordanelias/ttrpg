@@ -19,8 +19,9 @@ def _emit(kind, **data):
         _TRACE(dict(kind=kind, **data))
 
 def _init_live(c, cfg):
-    c.stamina_max=S.stamina_max(c); c.stamina=float(c.stamina_max)
-    c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
+    c.derive_stats(cfg)                  # the combatant computes its cfg-dependent figures (conc_max); stamina_max/health set at build
+    c.stamina=float(c.stamina_max)       # reset live state from the combatant's own held maxima
+    c.conc=c.conc_max
     c.ready=0.0
     c.initiative=0.0
     c.poise=1.0

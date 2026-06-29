@@ -44,14 +44,14 @@ def close_tempo(c, cfg, fatigue=0.0):
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
 # ---------- stamina ----------
-def stamina_max(c): 
-    import r8_parity_harness as r8; return r8.stamina_max(c.end,c.spirit)
+def stamina_max(c):
+    return c.stamina_max          # the combatant HOSTS its derived figures; thin accessor (back-compat)
 def act_cost(c, commit, cfg):
     return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*core.heft_resp(c.w,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # WS-2 req4: continuous heft
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
-    return cfg['CONC_FOCUS']*c.focus + cfg['CONC_SPIRIT']*c.spirit   # 3*Focus + 2*Spirit (Jordan 2026-06-04, canonical ED-902; corrects prior Cog-driven form)
+    c.derive_stats(cfg); return c.conc_max   # the combatant HOSTS it (3F+2S, ED-902); thin accessor (back-compat)
 def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
