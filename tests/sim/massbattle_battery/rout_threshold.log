@@ -1,0 +1,6 @@
+  12 rounds ( 72t): converging-3 routs wedge  0/20   B_casualties= 41.4%
+  18 rounds (108t): converging-3 routs wedge  6/20   B_casualties= 56.1%
+  24 rounds (144t): converging-3 routs wedge 19/20   B_casualties= 61.4%
+  36 rounds (216t): converging-3 routs wedge 20/20   B_casualties= 61.8%
+  48 rounds (288t): converging-3 routs wedge 20/20   B_casualties= 61.8%
+wrote rout_threshold_results.json

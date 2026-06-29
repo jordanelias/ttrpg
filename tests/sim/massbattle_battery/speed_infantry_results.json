@@ -1,0 +1,114 @@
+{
+ "part_a_cav_speed": {
+  "2.0": {
+   "cav-envelop  (Horseshoe cav vs Line inf)  band 75-95": {
+    "A": 21,
+    "B": 1,
+    "draw": 2,
+    "decA": 95.5,
+    "rawA": 87.5,
+    "draw_pct": 8.3
+   },
+   "cav-mirror   (Arrowhead cav vs same)      ~even ctrl": {
+    "A": 8,
+    "B": 13,
+    "draw": 3,
+    "decA": 38.1,
+    "rawA": 33.3,
+    "draw_pct": 12.5
+   },
+   "cav-vs-braced(Arrowhead cav vs brace wall) rawA LOW": {
+    "A": 1,
+    "B": 0,
+    "draw": 23,
+    "decA": 100.0,
+    "rawA": 4.2,
+    "draw_pct": 95.8
+   },
+   "h4-cav       (Horseshoe cav vs Arrowhead cav) band 45-62": {
+    "A": 11,
+    "B": 12,
+    "draw": 1,
+    "decA": 47.8,
+    "rawA": 45.8,
+    "draw_pct": 4.2
+   }
+  },
+  "3.0": {
+   "cav-envelop  (Horseshoe cav vs Line inf)  band 75-95": {
+    "A": 24,
+    "B": 0,
+    "draw": 0,
+    "decA": 100.0,
+    "rawA": 100.0,
+    "draw_pct": 0.0
+   },
+   "cav-mirror   (Arrowhead cav vs same)      ~even ctrl": {
+    "A": 7,
+    "B": 10,
+    "draw": 7,
+    "decA": 41.2,
+    "rawA": 29.2,
+    "draw_pct": 29.2
+   },
+   "cav-vs-braced(Arrowhead cav vs brace wall) rawA LOW": {
+    "A": 3,
+    "B": 0,
+    "draw": 21,
+    "decA": 100.0,
+    "rawA": 12.5,
+    "draw_pct": 87.5
+   },
+   "h4-cav       (Horseshoe cav vs Arrowhead cav) band 45-62": {
+    "A": 11,
+    "B": 10,
+    "draw": 3,
+    "decA": 52.4,
+    "rawA": 45.8,
+    "draw_pct": 12.5
+   }
+  }
+ },
+ "part_b_infantry": {
+  "lone_horseshoe": {
+   "18": {
+    "B_cas_pct": 14.1,
+    "B_routs": 0,
+    "A_routs": 0,
+    "n": 12
+   },
+   "50": {
+    "B_cas_pct": 36.7,
+    "B_routs": 0,
+    "A_routs": 0,
+    "n": 12
+   },
+   "100": {
+    "B_cas_pct": 57.1,
+    "B_routs": 7,
+    "A_routs": 0,
+    "n": 12
+   }
+  },
+  "combined_arms": {
+   "18": {
+    "B_cas_pct": 1.1,
+    "B_routs": 0,
+    "A_routs": 0,
+    "n": 12
+   },
+   "50": {
+    "B_cas_pct": 13.1,
+    "B_routs": 0,
+    "A_routs": 0,
+    "n": 12
+   },
+   "100": {
+    "B_cas_pct": 27.0,
+    "B_routs": 0,
+    "A_routs": 0,
+    "n": 12
+   }
+  }
+ }
+}

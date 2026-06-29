@@ -1,0 +1,9 @@
+flags: {'PER_CELL': '1', 'PC_REFUSE': True, 'PC_WHEEL': True, 'PC_ENVELOP_PATH': True, 'PC_ENVELOP_SIGMA': 0.0, 'PC_ENVELOP_MOD': -1.0}
+H4 Cannae band = (45, 62) decisive-split; N=50
+
+  C0 baseline   inf Horseshoe vs inf Arrowhead     decA= 38.7  draws=38.0%  [below]
+  C1 +envelop   inf Horseshoe(envelop) vs Arrowhd  decA= 50.0  draws=100.0%  [above]  <- WIRING (rear-wrap path)
+  C2 cav-speed  cav Horseshoe vs cav Arrowhead     decA= 61.4  draws=12.0%  [IN BAND]  <- SPEED (2x close)
+  C3 sigma=0.6  inf Horseshoe (width-sigma on)     decA=  0.0  draws= 0.0%  [below]  <- TUNING (dormant width bonus)
+
+wrote cannae_probe_results.json

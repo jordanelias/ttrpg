@@ -1,0 +1,34 @@
+N=30 per cell; control opponent = heavy-infantry Line/balanced
+
+=== SWEEP A — STRATEGY (unit formation/stance) (vs fixed control: heavy-infantry Line/balanced; decA = test-unit decisive split) ===
+  variable value                       decA  draw%  cas-marg  turns
+  Line / balanced  (control mirror)    50.0  100.0      +0.0   20.0
+  Horseshoe / balanced (envelop)       50.0  100.0      +0.0   20.0
+  Arrowhead / balanced (wedge)         50.0  100.0      +0.0   20.0
+  RefusedFlank / balanced (oblique)    50.0  100.0      +0.0   20.0
+  GappedLine / balanced (manipular)    50.0  100.0      +0.0   20.0
+  Line / aggressive                    43.8   46.7      -2.0   18.1
+  Line / hold (defensive)              50.0  100.0      +0.0   20.0
+
+=== SWEEP B — TACTIC (subunit instruction) (vs fixed control: heavy-infantry Line/balanced; decA = test-unit decisive split) ===
+  variable value                       decA  draw%  cas-marg  turns
+  plain  (control)                     50.0  100.0      +0.0   20.0
+  brace                                50.0  100.0      +0.0   20.0
+  brace + hold (shieldwall)            50.0  100.0      +0.0   20.0
+  charge                               43.8   46.7      -2.0   18.1
+  advance / push                       43.8   46.7      -2.0   18.1
+  envelop                              50.0  100.0      +0.0   20.0
+  loose / harass (skirmish)            50.0  100.0      +0.0   20.0
+
+=== SWEEP C — TROOP TYPE (subunit) (vs fixed control: heavy-infantry Line/balanced; decA = test-unit decisive split) ===
+  variable value                       decA  draw%  cas-marg  turns
+  levy                                 50.0  100.0      +0.0   20.0
+  light_infantry                       50.0  100.0      +0.0   20.0
+  heavy_infantry (control)             50.0  100.0      +0.0   20.0
+  cavalry                             100.0   16.7     +23.9    9.2
+  archers (melee)                      50.0  100.0      +0.0   20.0
+  archers (ranged)                     50.0  100.0      +0.0   20.0
+  crossbow (ranged)                    50.0  100.0      +0.0   20.0
+  knights_templar                     100.0   20.0     +20.8   14.7
+
+wrote controlled_sweeps_results.json

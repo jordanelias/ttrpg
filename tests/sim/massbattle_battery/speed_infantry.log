@@ -1,0 +1,21 @@
+=== Part A: cavalry speed sweep (PC_CAVALRY_SPEED_MULT) ===
+
+  -- mult = 2.0x --
+     cav-envelop  (Horseshoe cav vs Line inf)  band 75-95 decA= 95.5  draws= 8.3%
+     cav-mirror   (Arrowhead cav vs same)      ~even ctrl decA= 38.1  draws=12.5%
+     cav-vs-braced(Arrowhead cav vs brace wall) rawA LOW  rawA=  4.2  draws=95.8%
+     h4-cav       (Horseshoe cav vs Arrowhead cav) band 45-62 decA= 47.8  draws= 4.2%
+
+  -- mult = 3.0x --
+     cav-envelop  (Horseshoe cav vs Line inf)  band 75-95 decA=100.0  draws= 0.0%
+     cav-mirror   (Arrowhead cav vs same)      ~even ctrl decA= 41.2  draws=29.2%
+     cav-vs-braced(Arrowhead cav vs brace wall) rawA LOW  rawA= 12.5  draws=87.5%
+     h4-cav       (Horseshoe cav vs Arrowhead cav) band 45-62 decA= 52.4  draws=12.5%
+
+=== Part B: infantry envelopment via STRUCTURE + DURATION (no speed boost) ===
+  enemy = heavy-infantry Line; measure B casualty% and routs over a prolonged single engagement
+  ticks= 18: lone-Horseshoe  B_cas= 14.1%  B_routs=0/12   |  combined-arms  B_cas=  1.1%  B_routs=0/12
+  ticks= 50: lone-Horseshoe  B_cas= 36.7%  B_routs=0/12   |  combined-arms  B_cas= 13.1%  B_routs=0/12
+  ticks=100: lone-Horseshoe  B_cas= 57.1%  B_routs=7/12   |  combined-arms  B_cas= 27.0%  B_routs=0/12
+
+wrote speed_infantry_results.json
