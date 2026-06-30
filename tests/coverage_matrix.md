@@ -335,3 +335,14 @@ Archived entries in tests/coverage_matrix_archive.md
 ## 2026-06-20 — base_combat_pool comment alignment + PP-683 framing (byte-exact; defect cleanup)
 - orchestration.py base_combat_pool: the [canonical:] comment cited the legacy min(Size,Command)+Command; updated to the live Command*(1+cohesion) (ED-899/ED-1013), consistent with the now-propagated §A.4. Comment-only -> byte-exact (gauge digest 1f8c05a9 unchanged).
 - PP-683 (encirclement -3 morale-cap removal) intentionally NOT wired: the engine delivers encirclement via PC_ENVELOP_SHOCK + Lanchester contact-overlap; a second cap-removal term double-counts and breaks H4 Cannae (same reason _envelopment_sigma is held dormant, NERS-N/E: no unneeded apparatus). The -3 cap (L314 min(loss,3.0)) stays in force; encirclement lethality is the shock + overlap. Doc PP-683 note added in the matching editorial commit.
+
+## 2026-06-30 — Mass-battle bottom-up audit: provenance registry seed (ED-1043) [additive, data-only, byte-exact]
+- ADDED `tests/sim/mass_battle/provenance.py`: a primitive-provenance registry SEED (the `Prov` schema +
+  `PROVENANCE` rows for the 9 anti-pattern findings F1-F9 + the 3 grounded laws). Pure data record — it does
+  NOT import or touch the engine, so the gauge digest is UNCHANGED (byte-exact). All `value` fields are stored
+  as strings (a record of a constant, not a live constant), so it adds no mechanical literal to the engine.
+- PURPOSE: machine-readable grounding tier per constant (derived / academic-law / historical / calibrated /
+  ungrounded), enforcing the "no asserted value" bar. Seed counts: 3 academic-law, calibrated + ungrounded =
+  the retirement worklist (target zero). Audit: `designs/audit/2026-06-30-massbattle-bottomup/`.
+- NO regression test (data-only, no behavior); CI cross-check (provenance pass on ci_sim_fabrication_check)
+  is roadmap Stage 0/5, not this pass.
