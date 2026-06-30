@@ -37,6 +37,10 @@ def yaml_max_tokens(match_path, rules_file=ATOMIZATION_RULES):
 # Single-sourced from references/atomization_rules.yaml; falls back to the
 # inline default only if the policy entry is missing.
 COVERAGE_MATRIX_LIMIT = yaml_max_tokens("tests/coverage_matrix.md") or 10_000
+# Same single-sourcing for the patch register. The old hardcoded 20_000 had drifted
+# above the policy file's 15_000 — two gates, one file, two limits. Read the cap from
+# the policy so they cannot diverge again. (Live register is ~5k tokens, well under both.)
+PATCH_REGISTER_LIMIT = yaml_max_tokens("canon/patch_register_active.yaml") or 15_000
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
@@ -49,7 +53,9 @@ THRESHOLDS = {
     # freshness SHA-split, roadmap K-2 / workplan LB-6). Returns to 5_000 when
     # the 115 canonical_sha fields move to references/canonical_freshness.yaml.
     "references/canonical_sources.yaml":      12_000,
-    "canon/patch_register_active.yaml":       20_000,
+    # Single-sourced from references/atomization_rules.yaml (PATCH_REGISTER_LIMIT) so the
+    # validator and the policy file can't drift (was hardcoded 20_000 vs policy 15_000).
+    "canon/patch_register_active.yaml":   PATCH_REGISTER_LIMIT,
     # Single-sourced from references/atomization_rules.yaml (COVERAGE_MATRIX_LIMIT).
     # coverage_matrix grows naturally as test coverage expands; adjust the cap in
     # the policy file (one place) and this validator follows. Drift between the two
