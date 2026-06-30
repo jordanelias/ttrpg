@@ -378,13 +378,7 @@ Archived entries in tests/coverage_matrix_archive.md
 
 ## 2026-06-30 — Stage 1c (re-architecture): extract core/attrition.py (behaviour-frozen) [byte-exact]
 - EXTRACTED _lanchester_strength (the linear-law contact-frontage attrition term) from orchestration.py into
-  core/attrition.py. The coefficients (K_LINEAR/REF/DENSITY_REF) are config tunables INJECTED, not authored —
-  the resolver applies the law. orchestration re-imports via star; engine.py adds core.attrition to surface + scan.
-  (The square-law volley term still lives in volley_phase, pending a later increment.)
-- G1: core/attrition imports config only; duck-typed unit.hp/ncells — no up-DAG import, no cycle.
-- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green.
-- Stage-1 core/ layer now: exchange (pool) + state (morale/discipline/rout) + attrition (Lanchester).
-  orchestration.py: 2,899 -> 2,740 lines.
+  core/attrition.py. (coeffs injected, not authored). G1 clean; BYTE-EXACT both modes + stress.
 
 ## 2026-06-30 — Stage 1d (re-architecture): extract core/contact.py + _oriented->geometry [byte-exact]
 - EXTRACTED the targeting/contact-detection cluster (assign_targets, resolve_cross_side_contention,
@@ -405,3 +399,6 @@ Archived entries in tests/coverage_matrix_archive.md
   the only orchestration-internal module dependency of those dataclasses' methods.
 - BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
   stats_for('cavalry') correct. orchestration.py: 2,549 -> 2,505 lines.
+
+## 2026-06-30 — Stage 1f (re-architecture): extract hierarchy/units.py (Subunit/Unit) [byte-exact]
+- MOVED the Subunit/Unit dataclasses (data model + per-object geometry/movement/state methods) from orchestration.py into hierarchy/units.py. Deps all lower-layer (config, geometry, core.exchange, troop_types, percell, resolution); no orchestration import (no cycle). Fixed: restored orchestration's resolution import (rode into hierarchy with the block); moved maneuver toggles PC_ENVELOP_PATH/PC_SWEEP to hierarchy (consumer); validators toggle repointed to hierarchy.units. BYTE-EXACT both modes + stress S1-S18 ALL PASS; selftest green. orchestration.py: 2,899 -> 1,705 lines.

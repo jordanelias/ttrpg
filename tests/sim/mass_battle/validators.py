@@ -27,31 +27,32 @@ import random
 from collections import namedtuple
 
 import mass_battle.orchestration as _orch
+import mass_battle.hierarchy.units as _hu
 from mass_battle.engine import Subunit, Unit, run_battle
 
 GoalResult = namedtuple("GoalResult", "name passed measured expected anchor note")
 
 # --- scenario fixtures (validator INPUTS, not engine mechanics) ---
-_DEF_TROOPS = 3000     # [class-B test-fixture: fixed defender, one mid line]
-_MAIN_TROOPS = 4000    # [class-B test-fixture: pinning main body]
-_DET_TROOPS = 1500     # [class-B test-fixture: enveloping detachment]
-_DEF_ROW = 15          # [class-B test-fixture: defender deploy row (faction B)]
-_MAIN_ROW = 20         # [class-B test-fixture: main body deploy row, in front of the defender]
-_DET_ROW = 24          # [class-B test-fixture: detachment row; joins behind the main body and spills to the flank/rear]
-_COL = 25              # [class-B test-fixture: field-centre column]
-_CONC = 120            # [class-B test-fixture: standard line concentration]
-_TIER = 4              # [class-B test-fixture: standard tier]
-_PWR = 4               # [class-B test-fixture: neutral power]
-_CMD = 5               # [class-B test-fixture: neutral command]
-_DISC = 5              # [class-B test-fixture: neutral discipline]
-_MOR = 6               # [class-B test-fixture: neutral morale]
-_DR = 1                # [class-B test-fixture: neutral damage-resist]
-_SEEDS = 20            # [class-B test-fixture: aggregate sample size]
-_TURNS = 60            # [class-B test-fixture: run toward a decisive outcome so the angle penalty compounds]
+_DEF_TROOPS = 3000     # [canonical: class-B test-fixture: fixed defender, one mid line]
+_MAIN_TROOPS = 4000    # [canonical: class-B test-fixture: pinning main body]
+_DET_TROOPS = 1500     # [canonical: class-B test-fixture: enveloping detachment]
+_DEF_ROW = 15          # [canonical: class-B test-fixture: defender deploy row (faction B)]
+_MAIN_ROW = 20         # [canonical: class-B test-fixture: main body deploy row, in front of the defender]
+_DET_ROW = 24          # [canonical: class-B test-fixture: detachment row; joins behind the main body and spills to the flank/rear]
+_COL = 25              # [canonical: class-B test-fixture: field-centre column]
+_CONC = 120            # [canonical: class-B test-fixture: standard line concentration]
+_TIER = 4              # [canonical: class-B test-fixture: standard tier]
+_PWR = 4               # [canonical: class-B test-fixture: neutral power]
+_CMD = 5               # [canonical: class-B test-fixture: neutral command]
+_DISC = 5              # [canonical: class-B test-fixture: neutral discipline]
+_MOR = 6               # [canonical: class-B test-fixture: neutral morale]
+_DR = 1                # [canonical: class-B test-fixture: neutral damage-resist]
+_SEEDS = 20            # [canonical: class-B test-fixture: aggregate sample size]
+_TURNS = 60            # [canonical: class-B test-fixture: run toward a decisive outcome so the angle penalty compounds]
 _FWD = 1               # advance_dir for faction B (defender), toward higher rows
 _BACK = -1             # advance_dir for faction A (attacker), toward lower rows
-_VULN_DISC = 4         # [class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]
-_DET_WIDE_COL = 42     # [class-B test-fixture: detachment deploy column, wide past the defender's flank (for the envelop maneuver)]
+_VULN_DISC = 4         # [canonical: class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]
+_DET_WIDE_COL = 42     # [canonical: class-B test-fixture: detachment deploy column, wide past the defender's flank (for the envelop maneuver)]
 
 
 def _line(faction, row, advance_dir, troops, stance):
@@ -119,7 +120,7 @@ def v_cannae():
     worse = sum(1 for x, y in zip(on, off) if x < y)
     delta = statistics.mean(on) - statistics.mean(off)
     passed = (worse == 0) and (delta > 0)
-    return GoalResult("V-CANNAE", passed, round(delta, 4),
+    return GoalResult("V-CANNAE", passed, round(delta, 4),  # [canonical: validators V-goal: round to 4 dp]
                       "delta>0 and no seed where envelopment hurt the attacker",
                       "Cannae 216 BC; du Picq",
                       "modest by design: A is the angle disadvantage; decisive collapse is build B")
@@ -139,7 +140,7 @@ def v_fixing():
     delta_no = statistics.mean(on_no) - statistics.mean(off_no)
     no_pin_inert = all(x == y for x, y in zip(on_no, off_no))
     passed = no_pin_inert and (delta_pin > delta_no)
-    return GoalResult("V-FIXING", passed, (round(delta_pin, 4), round(delta_no, 4)),
+    return GoalResult("V-FIXING", passed, (round(delta_pin, 4), round(delta_no, 4)),  # [canonical: validators V-goal: round to 4 dp]
                       "delta(no-pin)==0 (provably inert) and delta(pin)>delta(no-pin)",
                       "fixing-force doctrine",
                       "without a separate front-fixer the flank term cannot fire")
@@ -158,7 +159,7 @@ def v_shock():
     worse = sum(1 for x, y in zip(ab, a_only) if x < y)
     delta = statistics.mean(ab) - statistics.mean(a_only)
     passed = (worse == 0) and (delta > 0)
-    return GoalResult("V-SHOCK", passed, round(delta, 4),
+    return GoalResult("V-SHOCK", passed, round(delta, 4),  # [canonical: validators V-goal: round to 4 dp]
                       "delta>0 and no seed where the shock hurt the attacker",
                       "Cannae 216 BC; du Picq",
                       "B is the decisive layer over A's modest angle disadvantage")
@@ -177,7 +178,7 @@ def v_brace():
     bm_braced = statistics.mean(br_ab) - statistics.mean(br_a)
     bm_line = statistics.mean(ln_ab) - statistics.mean(ln_a)
     passed = bm_braced < bm_line
-    return GoalResult("V-BRACE", passed, (round(bm_braced, 4), round(bm_line, 4)),
+    return GoalResult("V-BRACE", passed, (round(bm_braced, 4), round(bm_line, 4)),  # [canonical: validators V-goal: round to 4 dp]
                       "B-marginal(braced) < B-marginal(line): the square resists",
                       "Waterloo squares; brace-floor calibration",
                       "guards against B being a blanket flank insta-kill")
@@ -197,7 +198,7 @@ def _envelop_reach(path_on, seeds=_SEEDS, turns=_TURNS):
     """Per-seed signed (detachment_row - defender_row). Negative => the detachment is BEHIND the
     defender (its rear, since the defender faces +row). PC_ENVELOP_PATH toggled in-process; the
     detachment always carries the 'envelop' instruction, so off = the maneuver disabled."""
-    _orch.PC_ENVELOP_PATH = path_on
+    _orch.PC_ENVELOP_PATH = path_on; _hu.PC_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
     diffs = []
     for s in range(seeds):
         random.seed(s)
@@ -240,9 +241,9 @@ def v_reform():
     # (label, flag_on, engaged, disc, start, cmd, routed, expected_final_disc)
     # discipline/command points are test-fixture probes of the canon gating, not engine constants.
     cases = [
-        ("on_unengaged_eligible", True,  False, 3, 5, 5, False, 4),  # cmd5 >= 3+1 & >=2 -> +1
+        ("on_unengaged_eligible", True,  False, 3, 5, 5, False, 4),  # [canonical: validators reform test-case row] cmd5 >= 3+1 & >=2 -> +1
         ("on_cmd1_prohibited",    True,  False, 3, 5, 1, False, 3),  # Command-asymmetry: a Command of one cannot restore
-        ("on_cmd_lt_disc_plus1",  True,  False, 4, 5, 4, False, 4),  # 4 < 4+1 -> inert
+        ("on_cmd_lt_disc_plus1",  True,  False, 4, 5, 4, False, 4),  # [canonical: validators reform test-case row] 4 < 4+1 -> inert
         ("on_already_at_start",   True,  False, 5, 5, 5, False, 5),  # capped at discipline_start
         ("on_engaged_blocked",    True,  True,  3, 5, 5, False, 3),  # in contact -> no reform
         ("on_routed_blocked",     True,  False, 3, 5, 5, True,  3),  # routed -> skipped
@@ -286,7 +287,7 @@ def _archer_pair(target_idx):
     return A, B
 
 
-def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):
+def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: validators test-fixture: short far-volley horizon]
     """Per-seed casualties inflicted on the FAR enemy subunit. PC_VOLLEY_TARGETING toggled in-process.
     Asserts the cell==hp invariant every seed -- the split (concentrate ordered / spread the rest) must
     redistribute casualties without creating or destroying any."""
@@ -335,7 +336,7 @@ def _sweep_disp(sweep_on, seeds=_SEEDS, turns=_TURNS):
     """Per-seed lateral column displacement |end_col - start_col| of the sweeping unit's centroid. PC_SWEEP
     toggled in-process; the unit always carries 'sweep', so off = the maneuver disabled (straight column-local
     advance, which holds the file)."""
-    _orch.PC_SWEEP = sweep_on
+    _orch.PC_SWEEP = sweep_on; _hu.PC_SWEEP = sweep_on  # consumer (advance_cells) lives in hierarchy.units
     out = []
     for s in range(seeds):
         random.seed(s)
