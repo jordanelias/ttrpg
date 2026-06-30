@@ -346,3 +346,13 @@ Archived entries in tests/coverage_matrix_archive.md
   the retirement worklist (target zero). Audit: `designs/audit/2026-06-30-massbattle-bottomup/`.
 - NO regression test (data-only, no behavior); CI cross-check (provenance pass on ci_sim_fabrication_check)
   is roadmap Stage 0/5, not this pass.
+
+## 2026-06-30 — Stage 1 (re-architecture): committed byte-exact DIGEST gate (bat.py)
+- ADDED `tests/sim/mass_battle/bat.py`: the deterministic golden-digest harness the matrix previously
+  referenced but that was never committed. Runs a fixed battery (10 matchups × 24 seeds, per-trial
+  random.seed exactly as gauge_mb.py) and hashes the full per-trial end state (winner, battle-turns, hp,
+  morale, discipline, rout flags). `--check` asserts the baseline; exit 1 on any drift.
+- BASELINE (HEAD 4d970a0, pre-refactor): unit=7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725 ;
+  cell=1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7. These are the G5 gate for the
+  Stage-1 wrapper/core split (behaviour-frozen) and update ONLY on an intentional behaviour change in a
+  later stage (recorded here, like the ED-1032 digest change above).
