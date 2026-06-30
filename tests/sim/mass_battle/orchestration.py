@@ -159,6 +159,7 @@ from typing import List, Tuple, Optional, Dict, Set
 from mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
 from mass_battle.core.exchange import *  # [Stage-1] pool primitives extracted to core.exchange
 from mass_battle.core.state import *  # [Stage-1] morale/discipline/rout transitions extracted to core.state
+from mass_battle.core.attrition import *  # [Stage-1] Lanchester attrition law extracted to core.attrition
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -1505,24 +1506,6 @@ PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelo
 PC_ENVELOP_PATH = (os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # C: directed envelop maneuver -- a detachment with the 'envelop' instruction paths around the flank into the rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 PC_SWEEP = (os.environ.get("PC_SWEEP", "1") == "1")  # E (lateral half): a subunit with the 'sweep' instruction marches laterally to the nearer enemy flank then drives in (toggle; default ON)
-
-def _lanchester_strength(contact_cells, unit=None):
-    """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
-    contact-frontage (distinct contact columns) normalized to ~1 at LANCHESTER_STRENGTH_REF
-    so K_LINEAR composes with the canonical exchange scale (PP-233 successes×(1+Power)).
-    Frontage-capped BY CONSTRUCTION: contact columns can never exceed the meeting frontage,
-    so numerical superiority is a LINEAR edge (via overlap/envelopment), never square.
-    Mode-agnostic: contact cells exist under PER_CELL 0 and 1; depletion enters via the
-    pool (effective_size→degree) and, under PER_CELL=1, via dead columns leaving contact.
-    [spec mb_lanchester_design.md §3a; Lanchester Linear Law = frontage-capped ancient melee.]
-    """
-    if not contact_cells:
-        return 0.0
-    n_eng_cols = len(set(c for r, c in contact_cells))
-    if unit is not None and getattr(unit, 'ncells', 0):
-        tpc = unit.hp / unit.ncells   # all-fight: current per-cell troops (thins as casualties mount)
-        return n_eng_cols * (min(tpc, CELL_CAP) / LANCHESTER_DENSITY_REF) / LANCHESTER_STRENGTH_REF
-    return n_eng_cols / LANCHESTER_STRENGTH_REF
 
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.

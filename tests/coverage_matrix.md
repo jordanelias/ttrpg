@@ -381,3 +381,13 @@ Archived entries in tests/coverage_matrix_archive.md
 - G1 import-direction: core/state imports config+math only; calls Subunit/Unit methods duck-typed (erode_morale,
   derive_rout, degrade_discipline) — no up-DAG import, no cycle.
 - BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; mechanics_selftest green.
+
+## 2026-06-30 — Stage 1c (re-architecture): extract core/attrition.py (behaviour-frozen) [byte-exact]
+- EXTRACTED _lanchester_strength (the linear-law contact-frontage attrition term) from orchestration.py into
+  core/attrition.py. The coefficients (K_LINEAR/REF/DENSITY_REF) are config tunables INJECTED, not authored —
+  the resolver applies the law. orchestration re-imports via star; engine.py adds core.attrition to surface + scan.
+  (The square-law volley term still lives in volley_phase, pending a later increment.)
+- G1: core/attrition imports config only; duck-typed unit.hp/ncells — no up-DAG import, no cycle.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green.
+- Stage-1 core/ layer now: exchange (pool) + state (morale/discipline/rout) + attrition (Lanchester).
+  orchestration.py: 2,899 -> 2,740 lines.
