@@ -81,5 +81,47 @@ def mechanics_selftest():
     missing = [name for name,spec in MECHANICS.items() if _resolve(spec["fn"]) is None]
     return (len(missing)==0, missing)
 
+
+# ─── WRAPPER DUTIES (Stage-1 finish): the wrapper adapts + routes; it RESOLVES NOTHING. ─────────────
+# build_* are the faction→unit ADAPTER; resolve_battle is the battle-type ROUTER. Both delegate to the
+# lower layers (hierarchy.units for the data model, orchestration for the loop) — no resolution logic
+# lives here. This is the P1 seam: engine.py = adapter + router + I/O, never an outcome computation.
+
+def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
+               power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+               speed='Standard', instructions=(), dr=1):
+    """Faction→unit ADAPTER: construct a single-subunit Unit. The canonical public constructor — the
+    wrapper's adapter duty. Deployment follows the engine convention (faction A faces −row from
+    SIDE_A_START_ROW; B faces +row from SIDE_B_START_ROW); `anchor_col` is the deployment column. Draws
+    the data model from hierarchy.units and stats as given; resolution stays in core/. No outcome logic."""
+    advance_dir = -1 if faction == 'A' else 1
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
+                 starting_position=(start_row, anchor_col), advance_dir=advance_dir,
+                 unit_type=unit_type, instructions=tuple(instructions))
+    return Unit(name=name, faction=faction, power=power, command=command,
+                discipline=discipline, discipline_start=discipline,
+                morale=morale, morale_start=(morale if morale_start is None else morale_start),
+                subunits=[su], dr=dr, stance=stance, speed=speed)
+
+
+def resolve_battle(*args, kind='multi', **kwargs):
+    """Battle-type ROUTER — the wrapper's routing duty. Transparently dispatches to the loop in
+    orchestration; it computes no outcome itself. Kinds:
+      'single'     → run_battle(unit_a, unit_b, max_turns=18)
+      'multi'      → run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns=8)
+      'multi_unit' → run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns=8)
+    Args/kwargs pass straight through, so routing is byte-exact with calling the run_* function directly."""
+    if kind == 'single':
+        return run_battle(*args, **kwargs)
+    if kind == 'multi':
+        return run_multi_turn_battle(*args, **kwargs)
+    if kind == 'multi_unit':
+        return run_multi_unit_battle(*args, **kwargs)
+    raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
+
+
+_WRAPPER_API = {"build_unit", "resolve_battle"}
+
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
-__all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"})
+__all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)

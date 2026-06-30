@@ -19,7 +19,7 @@ import os, sys, hashlib
 # import the package exactly as the stress harness / gauge do
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # tests/sim on path
 from mass_battle.engine import (  # noqa: E402
-    Subunit, Unit, run_multi_turn_battle, SIDE_A_START_ROW, SIDE_B_START_ROW)
+    build_unit, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW)
 import random  # noqa: E402
 
 # anchor columns per (shape,tier) — copied from gauge_mb.py ANCHOR_MAP (T3 row used below)
@@ -35,27 +35,21 @@ MAX_TURNS = 20                            # [canonical: gauge_mb.py — multi-mo
 
 
 def make_unit(shape, name, faction, **kw):
-    """Single-subunit unit, mirroring gauge_mb.make_unit defaults (P4/C4/D5/M6 infantry)."""
-    advance_dir = -1 if faction == 'A' else 1                                  # [canonical: gauge_mb.py]
-    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    """Single-subunit unit at tier-3 defaults (P4/C4/D5/M6 infantry). Dogfoods the wrapper adapter
+    engine.build_unit — resolving the deployment column here, the engine builds the data model. If the
+    battery digest is unchanged vs the direct-construction baseline, build_unit is provably transparent."""
     anchor_col = ANCHOR_MAP.get((shape, TIER), ANCHOR_MAP[('Line', TIER)])
-    troop_type = kw.pop('troop_type', 'infantry')
-    unit_type = kw.pop('unit_type', 'melee')
-    stance = kw.pop('stance', 'balanced')
-    instructions = tuple(kw.pop('instructions', ()))
-    power = kw.pop('power', 4)             # [canonical: sim_mb_06_v9_historical_spec.md — P4]
-    command = kw.pop('command', 4)         # [canonical: sim_mb_06_v9_historical_spec.md — C4]
-    discipline = kw.pop('discipline', 5)   # [canonical: sim_mb_06_v9_historical_spec.md — D5]
-    morale = kw.pop('morale', 6)           # [canonical: sim_mb_06_v9_historical_spec.md — M6]
-    morale_start = kw.pop('morale_start', None)
-    speed = kw.pop('speed', 'Standard')
-    su = Subunit(shape=shape, troop_type=troop_type, tier=TIER,
-                 starting_position=(start_row, anchor_col),
-                 advance_dir=advance_dir, unit_type=unit_type, instructions=instructions)
-    return Unit(name=name, faction=faction, power=power, command=command,
-                discipline=discipline, discipline_start=discipline,
-                morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=[su], dr=1, stance=stance, speed=speed)
+    return build_unit(shape, TIER, name, faction, anchor_col,
+                      troop_type=kw.pop('troop_type', 'infantry'),
+                      unit_type=kw.pop('unit_type', 'melee'),
+                      power=kw.pop('power', 4),             # [canonical: sim_mb_06_v9_historical_spec.md — P4]
+                      command=kw.pop('command', 4),         # [canonical: sim_mb_06_v9_historical_spec.md — C4]
+                      discipline=kw.pop('discipline', 5),   # [canonical: sim_mb_06_v9_historical_spec.md — D5]
+                      morale=kw.pop('morale', 6),           # [canonical: sim_mb_06_v9_historical_spec.md — M6]
+                      morale_start=kw.pop('morale_start', None),
+                      stance=kw.pop('stance', 'balanced'),
+                      speed=kw.pop('speed', 'Standard'),
+                      instructions=tuple(kw.pop('instructions', ())))
 
 
 # Fixed battery: (label, shape_a, shape_b, kwargs_a, kwargs_b). Spans melee mirror / wedge /
@@ -114,7 +108,7 @@ def compute():
             random.seed(s + SEED_BASE)
             ua = make_unit(sa, 'A', 'A', **ka)
             ub = make_unit(sb, 'B', 'B', **kb)
-            r = run_multi_turn_battle(ua, ub, sa, sb, ANCHOR_MAP, max_battle_turns=MAX_TURNS)
+            r = resolve_battle(ua, ub, sa, sb, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
             h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
     return mode, h.hexdigest()
 
