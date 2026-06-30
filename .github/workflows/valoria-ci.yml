@@ -333,22 +333,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      # ED-1053: these three now read the LOCAL WORKING TREE (no PAT, no network) —
+      # they validate the checkout under test, not remote main.
       - name: Broken dependency check
-        env:
-          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
         run: python3 tools/broken_dependency_checker.py
       - name: Patch propagation check
-        env:
-          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
         run: python3 tools/patch_propagation_checker.py
-      # Report-only: freshness flags pre-existing stale canonical docs (the
-      # canonical_sha SHA-split content work, roadmap K-2 / LB-6) — real debt, but
-      # not the harness migration's scope. Was hidden until gate decoupling let this
-      # job run. Drop continue-on-error once the stale docs are refreshed. See HANDOFF.md.
+      # Report-only: freshness now compares each canonical doc's working-tree git blob
+      # SHA to its canonical_sha__ pin. It flags pre-existing pin drift (~12 stale pins,
+      # the canonical_sha content work — roadmap K-2 / LB-6) — real debt, not this
+      # change's scope. Drop continue-on-error once those pins are refreshed
+      # (python3 tools/freshness_gate.py --update). See HANDOFF.md.
       - name: Freshness gate check (report-only)
         continue-on-error: true
-        env:
-          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
         run: python3 tools/freshness_gate.py
       - name: Upload failure report on error
         if: failure()
