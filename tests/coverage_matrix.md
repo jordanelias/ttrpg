@@ -391,3 +391,13 @@ Archived entries in tests/coverage_matrix_archive.md
 - BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green.
 - Stage-1 core/ layer now: exchange (pool) + state (morale/discipline/rout) + attrition (Lanchester).
   orchestration.py: 2,899 -> 2,740 lines.
+
+## 2026-06-30 — Stage 1d (re-architecture): extract core/contact.py + _oriented->geometry [byte-exact]
+- EXTRACTED the targeting/contact-detection cluster (assign_targets, resolve_cross_side_contention,
+  find_contacts, count_engagements_per_atom) from orchestration.py into core/contact.py.
+- RELOCATED _oriented (the oriented-footprint helper — pure geometry: footprint_for + oriented_pattern) from
+  orchestration.py into geometry.py (its proper cells/geometry home; added to geometry __all__). Its ~16 callers
+  (Subunit/Unit methods + the contact fns) resolve it via the existing geometry star-import.
+- G1: core/contact imports config+geometry+math only; geometry imports config only — no up-DAG import, no cycle.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
+  geometry exposes _oriented; orchestration re-exports the contact fns. orchestration.py: 2,740 -> 2,549 lines.
