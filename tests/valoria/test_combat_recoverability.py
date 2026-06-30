@@ -26,8 +26,10 @@ def test_recoverability_ordering_by_static_moment():
     assert _r('dagger') < 1.0 and _r('greatsword') > 1.0
 
 
-def test_longsword_is_the_reference():
-    assert abs(_r('longsword') - 1.0) < 1e-9
+def test_anchor_is_near_one():
+    """The 2H cut-thrust anchor (a ~1.4kg longsword-class blade) sets the scale -> recoverability ~1.0. The refs
+    (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0."""
+    assert abs(_r('longsword') - 1.0) < 0.03
 
 
 def test_recoverability_is_floored():
@@ -35,8 +37,18 @@ def test_recoverability_is_floored():
         assert S.recoverability_factor(Combatant('x', weapon=n), CFG) >= 0.3
 
 
-def test_moment_off_reproduces_flat():
-    """EXPOSE_MOMENT_K=0 -> the multiplier is 1.0 everywhere (the pre-recoverability behaviour)."""
-    cfg = dict(CFG); cfg['EXPOSE_MOMENT_K'] = 0.0
-    for n in ('rapier', 'mace', 'poleaxe'):
-        assert abs(S.recoverability_factor(Combatant('x', weapon=n), cfg) - 1.0) < 1e-9
+def test_gathering_a_pole_lowers_irrecoverability():
+    """Grip-aware (Phase-3 Stage 2): a tipped pole that GATHERS IN (grip_position 0->1) slides toward its working
+    balance, dropping the forward static moment -> more recoverable. The spear gathered to balance retracts freely."""
+    s = Combatant('x', weapon='spear')
+    open_grip = S.recoverability_factor(s, CFG)          # grip_position 0 (butt-grip, committed reach)
+    s.grip_position = 1.0
+    assert S.recoverability_factor(s, CFG) < open_grip   # gathered to balance: far more recoverable
+
+
+def test_lunge_raises_irrecoverability():
+    """The body-extension (lunge) axis — the best-grounded leg (Silver true-times) — raises irrecoverability."""
+    c = Combatant('x', weapon='longsword')
+    base = S.recoverability_factor(c, CFG)
+    c.lunge_depth = 1.0
+    assert S.recoverability_factor(c, CFG) > base

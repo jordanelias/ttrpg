@@ -63,7 +63,9 @@ def engagement(A, B, first, cfg, rng):
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
         A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(A.focus-3))*(1-A.poise), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03)
         B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(B.focus-3))*(1-B.poise), cfg)
-        for c in (A,B): c.grip=S.adopt_stance(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole chokes up to fight in the close; else grounded. The lunge is set at the attack below.
+        for c in (A,B):
+            c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
+            c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -123,7 +125,7 @@ def engagement(A, B, first, cfg, rng):
         commit, _ba, _bb, _ln = S.commit_depth(aggressor, defender, cfg, rng, TR)
         _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
         if commit>=cfg['LUNGE_COMMIT'] and rng.random() < S.lunge_quality(aggressor, cfg):
-            aggressor.grip='lunge'   # a deep thrust BECOMES a lunge in proportion to how WELL the weapon lunges (lunge_quality: rapier readily, longsword sometimes, spear rarely, a cutter never) -> weapon-derived, not a flat head-check; the body extends -> lower recovery (recoverability_factor, non-linear in weight) + more readable
+            aggressor.lunge_depth = min(1.0, (commit-cfg['LUNGE_COMMIT'])/cfg['LUNGE_DEPTH_SCALE'])   # a deep thrust BECOMES a lunge (gated stochastically by lunge_quality: rapier readily, a cutter never) — its DEPTH scales with commit (CONTINUOUS); the extended body -> lower recovery (recoverability_factor) + more readable (legibility)
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         ready[aggressor]-=cfg['RECOVERY_TEMPO_K']*(commit-2.0)*S.recoverability_factor(aggressor,cfg)   # TEMPO is coupled to RECOVERY: a deep, hard-to-recover commit (a heavy or lunged blow) leaves you SLOWER to act again — the next action waits on the recovery; a feint (commit~2, full recovery) costs no tempo. Non-linear in weight via recoverability_factor.
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0

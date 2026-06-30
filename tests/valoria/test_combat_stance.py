@@ -14,27 +14,27 @@ from combatant import Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 
 
-def test_closing_pole_chokes_up():
-    # A BUTT-gripped reach pole (spear: head_len >> grip_len) is unwieldy in the close, so it CHOKES UP — slides the
-    # hands toward the centre to fight in the close (becoming staff-like). Phase-3b grip-position insight.
-    assert S.adopt_stance(Combatant('x', weapon='spear'), True, CFG) == 'choke'
+def test_closing_pole_gathers_in():
+    # A BUTT-gripped reach pole (spear: head_len >> grip_len) is unwieldy in the close, so it GATHERS IN —
+    # grip_target rises above 0 (it regrips up the haft toward balance). Phase-3 Stage-2: CONTINUOUS grip-position.
+    assert S.grip_target(Combatant('x', weapon='spear'), True, CFG) > 0.0
     # A CENTRE-gripped pole (staff: head_len == grip_len) is ALREADY close-capable (derived reach < CLOSE_REACH_REF),
-    # so it does NOT need to choke — its two-ended centre grip already fights in the close.
-    assert S.adopt_stance(Combatant('x', weapon='staff'), True, CFG) == 'normal'
+    # so close_unwieldiness == 0 -> it does NOT need to gather (grip_target 0).
+    assert S.grip_target(Combatant('x', weapon='staff'), True, CFG) == 0.0
 
 
-def test_open_or_non_pole_is_grounded():
-    assert S.adopt_stance(Combatant('x', weapon='spear'), False, CFG) == 'normal'   # open measure: not gathered yet
-    assert S.adopt_stance(Combatant('x', weapon='arming'), True, CFG) == 'normal'   # not a pole
+def test_open_or_non_pole_does_not_gather():
+    assert S.grip_target(Combatant('x', weapon='spear'), False, CFG) == 0.0   # open measure: full reach, no gather
+    assert S.grip_target(Combatant('x', weapon='arming'), True, CFG) == 0.0   # short hilt: grip_choke_max 0, cannot gather
 
 
-def test_lunge_quality_is_weapon_derived_nonlinear():
+def test_lunge_quality_is_weapon_derived_continuous():
     q = lambda w: S.lunge_quality(Combatant('x', weapon=w), CFG)
-    assert q('rapier') == 1.0                        # light, hand-balanced, one-handed thruster: lunges freely
-    assert q('greatsword') == 0.0                    # a cutter cannot lunge a thrust at all
-    assert q('staff') == 0.0                         # blunt: no thrust
+    assert q('rapier') == 1.0                        # light, hand-balanced, one-handed, point-concentrated: lunges freely (capped)
+    assert q('greatsword') < 0.25                    # heavy forward cutter: a poor lunge (LOW via mass+balance, not a hard-0 head gate)
+    assert q('staff') < 0.1                          # blunt (point_concentration ~0): barely lunges
     assert 0.0 < q('longsword') < q('rapier')        # two-handed thruster lunges, but nothing like a rapier
-    assert q('spear') < q('longsword')               # heavy two-hander lunges rarely (non-linear in weight)
+    assert q('spear') < q('longsword')               # forward-balanced reach pole: poor lunge recovery
 
 
 def test_rapier_cannot_choke_but_pole_can():
@@ -44,10 +44,14 @@ def test_rapier_cannot_choke_but_pole_can():
     assert not S.can_choke(Combatant('x', weapon='arming'), CFG)
 
 
-def test_lunge_raises_choke_lowers_irrecoverability():
+def test_lunge_raises_gather_lowers_irrecoverability():
+    # extended body (lunge) = harder to recover
     c = Combatant('x', weapon='longsword')
     base = S.recoverability_factor(c, CFG)
-    c.grip = 'lunge'
-    assert S.recoverability_factor(c, CFG) > base    # extended body = harder to recover
-    c.grip = 'choke'
-    assert S.recoverability_factor(c, CFG) < base    # gathered in = more recoverable
+    c.lunge_depth = 1.0
+    assert S.recoverability_factor(c, CFG) > base
+    # GATHERING IN lowers it — for a pole that CAN gather (the spear gathers to its working balance)
+    s = Combatant('x', weapon='spear')
+    s_open = S.recoverability_factor(s, CFG)
+    s.grip_position = 1.0
+    assert S.recoverability_factor(s, CFG) < s_open

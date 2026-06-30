@@ -2,7 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-from math import exp, tanh
+from math import exp, tanh, sqrt
 from config import HANDLE_RANK
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
@@ -30,9 +30,8 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     _heft=core.heft_resp(w,cfg)   # WS-2 req4: continuous heft (binary mode -> {0,1}, byte-identical to wt=='heavy')
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
-    grip=getattr(c,'grip','normal')
-    if grip=='choke':  pen += cfg['CHOKE_TEMPO_PEN']    # choked grip: a bit slower cadence (control/leverage gain elsewhere)
-    elif grip=='lunge':pen += cfg['LUNGE_TEMPO_PEN']    # extended/lunge: slower to repeat (reach/commit gain elsewhere)
+    pen += cfg['CHOKE_TEMPO_PEN']*getattr(c,'grip_position',0.0)   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
+    pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
     t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
@@ -42,11 +41,10 @@ def close_tempo(c, cfg, fatigue=0.0):
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
     toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs)."""
     t=weapon_tempo(c,cfg,fatigue)
-    grip=getattr(c,'grip','normal')
     # a weapon UNWIELDY in the close (DERIVED from reach — long business-end) is slow to recover once a handier
-    # weapon is inside, UNLESS it has choked up. Scales with HOW unwieldy; pure morphology, no closes_poorly flag.
-    if grip!='choke':
-        t -= cfg['POLE_CLOSE_K']*close_unwieldiness(c,cfg)
+    # weapon is inside; GATHERING IN (grip_position) reduces the penalty in proportion (a fully-gathered pole pays
+    # none). Pure morphology, CONTINUOUS in grip_position (no choke string, no closes_poorly flag).
+    t -= cfg['POLE_CLOSE_K']*close_unwieldiness(c,cfg)*(1.0 - getattr(c,'grip_position',0.0))
     t=max(cfg['TEMPO_FLOOR'],t)
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
@@ -78,53 +76,66 @@ def balance_eff(c, fat, cfg):
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
 def recoverability_factor(c, cfg):
-    """The IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis made physical. To
-    commit is to give up recovery; HOW MUCH depends on how hard the action is to terminate/retract: the weapon's
-    forward moment (a forward-heavy mace 'wants to continue' and can't be stopped; a hand-balanced rapier retracts
-    instantly — WHY a rapier can feint and a mace can't), NON-LINEAR in weight (a heavy weapon is disproportionately
-    hard to arrest — the effect of mass is not linear), plus footwork: a lunge extends the body = low recovery, and
-    a HEAVY lunge is far worse than a light one (a longsword lunge is nothing like a rapier's); a choke/gathered
-    grip stays recoverable. 1.0 at the longsword reference; bounded below so it never flips sign. Pure."""
+    """IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis, made physical and
+    GRIP-AWARE (Phase-3 Stage 2, grounded). Reads the DERIVED dynamics at the chosen grip-position (WP.at_grip):
+      - SWING arrest: sqrt of the re-pivoted MoI (energy-limited Δt=Iω/τ), GATED by the forward static moment so a
+        centre-balanced pole (a staff) is NOT mis-ranked as irrecoverable;
+      - THRUST retract: the forward static moment alone (it retracts along the line);
+      blended by point_concentration (CONTINUOUS head weight — a hand-balanced rapier retracts, a forward mace
+      'wants to continue'; no head NAME); a MoI-aware 1H/2H force-couple control credit; and the body-extension
+      (lunge) term — the lead, best-grounded axis (Silver true-times / Giganti). Normalized to a 2H cut-thrust
+      anchor (recoverability 1.0; the mirror is symmetric). Bounded below. Pure. The sqrt(I)/parallel-axis/couple
+      STRUCTURE is [ASSERTED — first-principles]; the gains are [FIAT/SIM-CALIBRATE]. See tasks/w811gujrg.output."""
     w=c.w
-    mass=w.get('mass',1.0); e=cfg['MOMENT_MASS_EXP']
-    moment = mass**e * w.get('pob_frac',0.15)                    # forward moment, NON-LINEAR in weight (mass**e * pob)
-    mult = 1.0 + cfg['EXPOSE_MOMENT_K']*(moment - cfg['EXPOSE_MOMENT_REF'])
-    grip=getattr(c,'grip','normal')
-    if grip=='lunge':   mult += cfg['EXPOSE_LUNGE_K']*(mass/cfg['LUNGE_REF_MASS'])**e   # a HEAVY lunge is disproportionately unrecoverable
-    elif grip=='choke': mult -= cfg['EXPOSE_CHOKE_K']           # gathered in = more recoverable
-    return max(0.3, mult)
+    g  = getattr(c, 'grip_position', 0.0)
+    ld = getattr(c, 'lunge_depth', 0.0)
+    a = WP.at_grip(w, g)
+    I_g, S_g = max(1e-9, a['I_g']), a['S_g']
+    I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
+    two = 1.0 if w['hands'] == 2 else 0.0
+    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
+    # (A) MODE commitment — both dimensionless vs the anchor, then blended by geometry
+    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref)
+    C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
+    C_mode   = pc * C_thrust + (1 - pc) * C_swing
+    # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
+    tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * WP.UNIT_M * two)
+    tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'] * WP.UNIT_M)
+    arrest  = (tau / sqrt(I_g)) / (tau_ref / sqrt(I_ref))                       # >1 = more controllable than the anchor
+    ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
+    # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
+    lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
+    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
 def close_unwieldiness(c, cfg):
     """How poorly a weapon serves IN THE CLOSE — DERIVED from its reach (a long weapon's business end is past the
     fight at grappling distance and slow to bring back to bear). 0 for a short/handy weapon. No closes_poorly flag:
     pure morphology (reach = length + head + hands)."""
     return max(0.0, reach_base(c,cfg) - cfg['CLOSE_REACH_REF'])
 def can_choke(c, cfg):
-    """Can the fighter CHOKE UP — slide the hands up to shorten the weapon? Needs a long grip/shaft: you can shorten
-    a staff, spear, poleaxe or longsword, but NOT a short-hilted arming sword or rapier (which is why a rapier,
-    long but short-gripped, just suffers in the close). Derived from grip_len; no flag."""
-    return c.w.get('grip_len',0.8) >= cfg['CHOKE_GRIP_MIN']
-def adopt_stance(c, closed, cfg):
-    """GRIP/STANCE writer (The Approach — factors 1 footwork & 3 stance), fully DERIVED from morphology. Once the
-    measure is CLOSED, a weapon unwieldy there (long reach) that CAN be choked up (long grip) GATHERS IN (choke) —
-    recoverable and faster in the close, at the cost of reach. A weapon that is unwieldy but CANNOT choke (a rapier:
-    long reach, short hilt) just suffers. Otherwise grounded. The LUNGE is set at the attack (wrapper), gated by
-    lunge_quality. Pure (returns the grip; the wrapper writes it)."""
-    if closed and close_unwieldiness(c,cfg) > 0.0 and can_choke(c,cfg):
-        return 'choke'
-    return 'normal'
-def lunge_quality(c, cfg):
-    """How well a weapon LUNGES (an extended-body thrust) — DERIVED, NON-LINEAR in weight. A light, hand-balanced,
-    one-handed thrusting blade (rapier) lunges superbly; a heavy two-handed weapon's extension is slow and badly
-    recoverable (a longsword 'lunge' is nothing like a rapier's). 0 for a non-thrusting head — it cannot lunge a
-    thrust at all. Returns a propensity in [0,1]; the wrapper rolls against it to decide whether a deep thrust
-    becomes a lunge. Pure."""
-    w=c.w
-    if w['head'] not in ('point','cut_thrust'):
+    """Can the fighter gather in (regrip toward the centre)? DERIVED from the grippable length — a long shaft/grip
+    yes, a short hilt or a block-headed club no. Thin bool over WP.grip_choke_max (the continuous primitive)."""
+    return WP.grip_choke_max(c.w) > 0.0
+def grip_target(c, closed, cfg):
+    """The CONTINUOUS grip-position g* in [0,1] the fighter adopts (The Approach — footwork & stance), fully DERIVED
+    from morphology — replaces the discrete adopt_stance string ('choke' was g>0, 'normal' g=0). Once the measure is
+    CLOSED, a fighter GATHERS IN (g>0) in proportion to how unwieldy the weapon is in the close (close_unwieldiness),
+    bounded by how far it can regrip (WP.grip_choke_max): a pole gathers up the haft; a rapier (short hilt) cannot
+    and just suffers. At open measure g=0 (full reach). Pure (returns g; the wrapper writes grip_position)."""
+    if not closed:
         return 0.0
-    light   = (cfg['LUNGE_REF_MASS']/max(0.2,w.get('mass',1.0)))**cfg['MOMENT_MASS_EXP']   # NON-LINEAR lightness
-    handbal = 1.0 - w.get('pob_frac',0.15)                                                  # hand-balanced = recoverable lunge
+    drive = min(1.0, close_unwieldiness(c, cfg) / cfg['CHOKE_DRIVE_REF'])     # 0..1: the more unwieldy in the close, the more you gather
+    return WP.grip_choke_max(c.w) * drive
+def lunge_quality(c, cfg):
+    """How well a weapon LUNGES (an extended-body thrust) — DERIVED, CONTINUOUS (Phase-3 Stage 2). A light, hand-
+    balanced, point-concentrated weapon lunges well; the hard head-NAME gate ('point'/'cut_thrust') becomes the
+    CONTINUOUS point_concentration weight (a blunt/cut head -> ~0, never an exact-0 category). Hand-balance is the
+    DERIVED forward static moment (no hand-set pob_frac). Propensity in [0,1]; the wrapper rolls against it. Pure."""
+    w=c.w
+    pc      = w['geometry']['point_concentration']                                          # CONTINUOUS thrust-ness (was the head-name gate)
+    light   = (cfg['LUNGE_REF_MASS']/max(0.2,w.get('mass',1.0)))**cfg['MOMENT_MASS_EXP']    # NON-LINEAR lightness
+    handbal = max(0.0, 1.0 - WP.derive(w)['PoB_frac'])                                       # DERIVED hand-balance (forward-balanced = poor lunge recovery)
     onehand = cfg['LUNGE_1H_BONUS'] if w['hands']==1 else cfg['LUNGE_2H_FACTOR']            # the classical lunge is one-handed
-    return max(0.0, min(1.0, light*handbal*onehand))
+    return max(0.0, min(1.0, pc*light*handbal*onehand))
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
 # ---------- defense modes (parry/dodge/wind) ----------
@@ -278,7 +289,7 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
         legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
     else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
-    if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
+    legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     return legib
 
 def approach_displace(shorter, longer, cfg):

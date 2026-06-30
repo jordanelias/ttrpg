@@ -73,8 +73,17 @@ CFG = dict(
   # lunge). REF is the longsword anchor recomputed for the exponent (1.4**1.5 * 0.14 = 0.232) so it stays mult 1.0.
   EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=(1.4**1.5)*0.14, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
   MOMENT_MASS_EXP=1.5, LUNGE_REF_MASS=1.4,
-  # Grip/stance DERIVED from morphology (no closes_poorly flag): unwieldy-in-close = reach beyond CLOSE_REACH_REF
-  # (spear/staff/greatsword/rapier/poleaxe); choke-up needs grip_len >= CHOKE_GRIP_MIN (poles + 2H, NOT a rapier).
+  # ── recovery model (Phase-3 Stage 2): commitment=recovery, GRIP-AWARE, normalized to a 2H cut-thrust anchor.
+  # recoverability_factor reads WP.at_grip(I_g,S_g) + point_concentration + hands at the chosen grip-position. The
+  # STRUCTURE (sqrt(I) swing-arrest / parallel-axis / the 1H-2H force-couple) is [ASSERTED — first-principles;
+  # validate vs motion-capture, NOT the engine's own config]; the anchor refs + gains are [SIM-CALIBRATE/FIAT].
+  # Leads with body-extension (lunge), the best-grounded axis (Silver true-times / Giganti). See tasks/w811gujrg.output.
+  REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.85,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len (~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
+  REC_S_FLOOR=0.3, REC_THRUST_BASE=1.0, REC_W2=0.6, REC_K_COUPLE=0.9, REC_CTRL_K=0.3, RECOVER_FLOOR=0.3,   # [FIAT] swing static-moment floor / thrust anchor / 2H-couple gains / control-credit / lower bound
+  CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over LUNGE_COMMIT for a full-depth lunge
+  # Grip/stance DERIVED from morphology: a closing fighter GATHERS (grip_position 0->1) in proportion to how unwieldy
+  # the weapon is in the close, bounded by WP.grip_choke_max (a rapier's short hilt cannot gather; a pole regrips up
+  # the haft). 'choke'/'normal'/'lunge' strings are RETIRED -> continuous grip_position + lunge_depth on the Combatant.
   CLOSE_REACH_REF=6.5, CHOKE_GRIP_MIN=1.0, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
   # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.

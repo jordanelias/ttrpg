@@ -19,7 +19,8 @@ class Combatant:
         self.disp=disp                       # disposition / temperament, aggression axis (1-7, 4=neutral); lean=(disp-4)/3, orthogonal to tradition
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
-        self.grip='normal'                   # grip/stance state: normal | choke (close, leverage) | lunge (reach, commit)
+        self.grip_position=0.0               # CONTINUOUS grip-position in [0,1]: 0=as-issued (full reach), 1=gathered to the working balance (close control). Retires the choke/normal/lunge strings; derived per-beat by the wrapper from grip_target.
+        self.lunge_depth=0.0                  # CONTINUOUS body-extension in [0,1] of an in-progress lunge (set at the attack; 0 = no lunge). Reads into recoverability_factor / weapon_tempo / legibility.
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
