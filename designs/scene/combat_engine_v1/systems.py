@@ -20,6 +20,17 @@ def reach_base(c, cfg):
     geom = w['head_len'] + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
     return cfg['L0'] + cfg['REACH_GEOM_SCALE']*geom + w.get('reach_adj',0.0)
 
+# ---------- wielding heft (DERIVED, g-aware — the COST of swinging; replaces the binary wt class) ----------
+def wield_heft(c, cfg):
+    """Wielding heft (the tempo/stamina/strength COST of bringing a weapon to bear) — DERIVED from the g-aware swing
+    inertia at the chosen grip (WP.at_grip I_g), a COMPRESSED power-law so the ~1000x MoI range across the roster
+    maps to a sane heft spread. Anchored so the 2H cut-thrust reference reads ~1.0 (the old heavy-class heft). The
+    half-sword form's tiny MoI now reads LIGHT (was binary wt='heavy' -> fixes the longsword-vs-plate collapse at
+    root); a GATHERED pole (lower I_g) is lighter to wield. Replaces core.heft_resp on the COST path only (the
+    damage-impact path keeps heft_resp pending the wt de-leak). Pure."""
+    I_g = WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g']
+    return (max(1e-6, I_g) / cfg['REC_I_REF']) ** cfg['WIELD_HEFT_EXP']
+
 # ---------- tempo ----------
 def weapon_tempo(c, cfg, fatigue=0.0):
     """General cadence — CONDITIONAL on grip/stance/fatigue (correction 2), not a static weapon property. Heavy
@@ -27,7 +38,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     often). A choked grip trades cadence for close-quarters control; a lunge/extended grip trades repeat-speed for
     reach (handled at the call site via grip state)."""
     w=c.w
-    _heft=core.heft_resp(w,cfg)   # WS-2 req4: continuous heft (binary mode -> {0,1}, byte-identical to wt=='heavy')
+    _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
     pen += cfg['CHOKE_TEMPO_PEN']*getattr(c,'grip_position',0.0)   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
@@ -52,7 +63,7 @@ def close_tempo(c, cfg, fatigue=0.0):
 def stamina_max(c):
     return c.stamina_max          # the combatant HOSTS its derived figures; thin accessor (back-compat)
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*core.heft_resp(c.w,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # WS-2 req4: continuous heft
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
@@ -62,7 +73,7 @@ def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cf
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
-    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*core.heft_resp(w,cfg)+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)   # WS-2 req4: continuous heft
+    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)   # DERIVED g-aware heft (Stage 2b)
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat

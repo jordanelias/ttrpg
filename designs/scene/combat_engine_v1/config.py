@@ -81,6 +81,12 @@ CFG = dict(
   REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.85,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len (~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
   REC_S_FLOOR=0.3, REC_THRUST_BASE=1.0, REC_W2=0.6, REC_K_COUPLE=0.9, REC_CTRL_K=0.3, RECOVER_FLOOR=0.3,   # [FIAT] swing static-moment floor / thrust anchor / 2H-couple gains / control-credit / lower bound
   CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over LUNGE_COMMIT for a full-depth lunge
+  # WIELDING heft (tempo/stamina/strength COST) — DERIVED from the g-aware swing inertia (WP.at_grip I_g), a
+  # COMPRESSED power-law (like agility) so the ~1000x MoI range maps to a sane spread; anchored at REC_I_REF so the
+  # 2H cut-thrust reference ~= 1.0 (the old heavy heft). Retires the binary wt class for the COST path; the half-
+  # sword's tiny MoI now reads LIGHT (fixes longsword-vs-plate at root). The damage-impact path keeps heft_resp (a
+  # separate wt de-leak). [SIM-CALIBRATE] exponent. EXP shared with agility (Cross/Fleisig handle-axis, [ASSERTED]).
+  WIELD_HEFT_EXP=0.3,
   # Grip/stance DERIVED from morphology: a closing fighter GATHERS (grip_position 0->1) in proportion to how unwieldy
   # the weapon is in the close, bounded by WP.grip_choke_max (a rapier's short hilt cannot gather; a pole regrips up
   # the haft). 'choke'/'normal'/'lunge' strings are RETIRED -> continuous grip_position + lunge_depth on the Combatant.
