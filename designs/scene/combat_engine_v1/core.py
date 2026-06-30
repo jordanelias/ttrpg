@@ -65,10 +65,19 @@ OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5-
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
 DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
-RESIST={'none': {'percussion':0,  'shear':0,  'puncture':0},        # [damage_model — material resistance per mode in [0,1]]
-        'cloth':{'percussion':.10,'shear':.35,'puncture':.15},
-        'mail': {'percussion':.20,'shear':.80,'puncture':.45},
-        'plate':{'percussion':.30,'shear':.95,'puncture':.70}}
+# Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
+# and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/. CHANGED 4 cells: cloth.shear .35->.45
+# (a 16-30 layer jack sheds a ~60-130 J cut); cloth.puncture .15->.12 (a point stops at only ~50 J vs ~80 J cut — the
+# documented cut>>point asymmetry); cloth.percussion .10->.12 (modest standalone blunt absorption); mail.shear .80->.85
+# (cutting riveted mail is "functionally impossible," >130 J ceiling). Plate row + mail perc/punc KEEP (well-pinned).
+# [CI — DESIGNER-SET/UNSOURCED: the cloth fractions are a designer normalisation of Williams' joules onto the 0-1 scale,
+#  NOT a Williams figure.]  [PACKAGE: plate.percussion .30 is honest ONLY with the FIX-1b authority gate below — never
+#  tune one without the other (ungated, an honest plate-vs-blunt resist is ~.55-.65).]  Assumes RIVETED mail + HARDENED
+# ~2mm plate (butted mail / wrought iron are far weaker — not modelled).
+RESIST={'none': {'percussion':0,   'shear':0,   'puncture':0},
+        'cloth':{'percussion':.12, 'shear':.45, 'puncture':.12},
+        'mail': {'percussion':.20, 'shear':.85, 'puncture':.45},
+        'plate':{'percussion':.30, 'shear':.95, 'puncture':.70}}
 TIER2MAT={'none':'none','light':'cloth','medium':'mail','heavy':'plate'}  # [armour_axes presets — tier->material]
 COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_model — gap/bare-zone exposure]
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:

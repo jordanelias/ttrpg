@@ -61,25 +61,34 @@ joules onto the 0–1 scale — NOT Williams figures**; CI-flag designer-set/uns
 authority gate are one package, never tuned apart** (ungated, an honest value is ~0.55–0.65). Caveats: **riveted ≠ butted**
 (butted ~10–15× weaker; the model assumes riveted), **hardened ≠ wrought** (the 0.95/0.70 plate row assumes ~2 mm hardened).
 
-## 3 & 4. Use-mode model: weapons afford a SET of strike modes; the wielder SELECTS per exchange (tasks `wht7pkx1c`, `w4bekmb5e`)
+## 3 & 4. Use-mode model: strike modes are UNIVERSAL; effectiveness + affordance EMERGE from primitives (tasks `wht7pkx1c`, `w4bekmb5e`)
 
-The engine fixes one `head` per weapon, so the mode is weapon-fixed. But a weapon affords several modes the fighter
-chooses each exchange (the technique). **The engine already does this for `cut_thrust`** (a 2-element set auto-selected
-by `max()` vs armour) + `halfsword_target` (form-switch vs harness) + `legibility` (thrust hard-to-read / swing easy).
-Generalize that one seam — no new resolution physics.
+**Bottom-up, NOT a per-weapon mode table.** `poleaxe`/`mace`/`staff` are labels for bundles of aggregated primitives;
+there is **no** "poleaxe gets modes X,Y,Z" list (that would re-introduce exactly the name-keyed behaviour table L0 /
+the primitive-law purge forbid). The modes are the **universal** set {thrust, cut, percuss, puncture}, and each mode's
+effectiveness is **DERIVED** from the weapon's existing geometry primitives — which `geometry.py` bake already computes:
 
-**Afforded mode sets (each mode = an existing head string + a geometry override; all S1 unless noted):**
-- **POLEAXE** {`thrust_dague`(point/gap — *dominant* per Le Jeu), `swing_hammer`(blunt/concussion — attested *once*),
-  `hook_bec`(point/puncture + hook/leverage), `strike_queue`(butt-spike, uses `butt_kg`), `demy_hache`(centre-haft
-  leverage/bind, head=None)}. **Thrust-and-haft dominant** — `head='blunt'` is backwards.
-- **SPEAR** {`thrust_point`(primary, "held short to deceive"), `haft_as_staff`(blunt/swing on a failed thrust),
-  `butt_sauroter`(uses `butt_kg`)}.
-- **STAFF** {`strike_blow`(blunt), `end_thrust`(point, low concentration ~0.3)} — Silver "no fight perfect without both
-  blow and thrust."
-- **LONGSWORD** {`cut`,`thrust`(both already in `cut_thrust`), `half_sword`(already `HALFSWORD_FORM`), **`mordhau`**(blunt
-  pommel — *the one missing mode*)}.
-- **SINGLE-MODE 1H** (mace=swing, rapier=thrust, sabre=cut, arming=cut+thrust, dagger=thrust-to-gap): keep scalar `head`,
-  **zero behaviour change** — mode-set cardinality is itself a weapon property.
+| mode | derived effectiveness (already in-engine) | from primitives |
+|---|---|---|
+| **thrust** | `gap_precision` | `point_concentration` × `cross_section` |
+| **cut** | `cut_factor` | `edge_keenness` × `curvature` |
+| **percuss** | `percussion_authority` (× the §1 energy-credit) | `mass` × `PoB_frac` × hands/grip |
+| **puncture/pick** | `puncture_pressure` | `percussion_authority` × `strike_concentration` |
+| (rear-element: mordhau / queue / sauroter) | percussion via the rear mass | `pommel_kg` / `butt_kg` |
+
+A weapon **affords** a mode iff its derived effectiveness > ε (an **emergent** gate, not a declared flag). So the
+afforded set falls out of the primitive bundle — **nothing is authored per weapon**:
+- **poleaxe** affords thrust (`point_concentration 0.78`→`gap_precision`), percuss (`mass 2.5`→authority), puncture
+  (`strike_concentration 0.85`→`puncture_pressure`) — emergent; **thrust-and-haft dominant** falls out, not declared.
+- **mace** affords percuss (high authority) but **not** thrust (`point_concentration 0.02`→`gap_precision≈0`) — emergent.
+- **staff** is weak in every mode (low authority, low concentration) — emergent (correctly poor vs armour).
+- **spear** is thrust-dominant (`point_concentration 0.78` ≫ its haft's percussion) — emergent.
+- **arming/longsword** already afford cut+thrust (their `cut_thrust` is the 2-mode case); the longsword's pommel
+  (mordhau) percussion emerges from `pommel_kg`; the half-sword grip is the existing `grip_position` form.
+
+**This RETIRES the `head` category** — the last categorical aggregate (`blunt`/`point`/`cut_thrust`) — replacing it with
+the four derived per-mode effectivenesses. It *completes* the primitive purge rather than adding a table, and removes the
+single-`head` collapse that currently forces the poleaxe to percussion-only. **No `Mode` lists to author.**
 
 **Selection cascade `select_mode(weapon, armor, closed, bind, tradition, history)`:**
 - **RULE 1 ARMOUR** (hard-deletes options): vs harness, delete cut/shear modes → survivors {thrust-to-gap, half-sword,
