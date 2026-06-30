@@ -8,6 +8,7 @@ from mass_battle.core.exchange import *  # [Stage-1] resolver layer: pool-assemb
 from mass_battle.core.state import *     # [Stage-1] resolver layer: morale/discipline/rout transitions
 from mass_battle.core.attrition import * # [Stage-1] resolver layer: Lanchester attrition law
 from mass_battle.core.contact import *   # [Stage-1] targeting + contact detection
+from mass_battle.troop_types.registry import *  # [Stage-1] troop-type stats + gated roles
 from mass_battle.geometry import *
 from mass_battle.percell import *
 from mass_battle.resolution import *
@@ -18,6 +19,7 @@ import mass_battle.core.exchange as _ce
 import mass_battle.core.state as _cs
 import mass_battle.core.attrition as _ca
 import mass_battle.core.contact as _cc
+import mass_battle.troop_types.registry as _tt
 import mass_battle.geometry as _geo
 import mass_battle.percell as _pc
 import mass_battle.resolution as _res
@@ -28,7 +30,7 @@ import mass_battle.orchestration as _orch
 #   SIDE_A_START_ROW, SIDE_B_START_ROW, plus the full mechanic surface via import *.
 
 def _resolve(sym):
-    for m in (_ce,_cs,_ca,_cc,_orch,_res,_pc,_geo,_cfg):
+    for m in (_ce,_cs,_ca,_cc,_tt,_orch,_res,_pc,_geo,_cfg):
         if hasattr(m, sym): return getattr(m, sym)
     return None
 
@@ -77,5 +79,5 @@ def mechanics_selftest():
     missing = [name for name,spec in MECHANICS.items() if _resolve(spec["fn"]) is None]
     return (len(missing)==0, missing)
 
-_mods = (_cfg,_ce,_cs,_ca,_cc,_geo,_pc,_res,_orch)
+_mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"})

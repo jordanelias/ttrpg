@@ -349,9 +349,7 @@ Archived entries in tests/coverage_matrix_archive.md
 
 ## 2026-06-30 — Stage 1 (re-architecture): committed byte-exact DIGEST gate (bat.py)
 - ADDED `tests/sim/mass_battle/bat.py`: the deterministic golden-digest harness the matrix previously
-  referenced but that was never committed. Runs a fixed battery (10 matchups × 24 seeds, per-trial
-  random.seed exactly as gauge_mb.py) and hashes the full per-trial end state (winner, battle-turns, hp,
-  morale, discipline, rout flags). `--check` asserts the baseline; exit 1 on any drift.
+  referenced but that was never committed. Fixed battery (10 matchups × 24 seeds, per-trial seed) hashing full per-trial end state; `--check` asserts baseline, exit 1 on drift.
 - BASELINE (HEAD 4d970a0, pre-refactor): unit=7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725 ;
   cell=1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7. These are the G5 gate for the
   Stage-1 wrapper/core split (behaviour-frozen) and update ONLY on an intentional behaviour change in a
@@ -365,13 +363,9 @@ Archived entries in tests/coverage_matrix_archive.md
   G1 import-direction: core/exchange imports config+math only (no up-DAG import; no cycle).
 - BYTE-EXACT: bat.py --check passes both modes (unit 7be8499b…, cell 1c5b2851… unchanged); stress S1-S18 ALL PASS;
   mechanics_selftest green. A pure code move — identical call graph.
-- GATE FIX (tools/ci_sim_fabrication_check.py): the fabrication scanner now masks multi-line triple-quoted
-  docstrings before the line scan (it previously only stripped single-line string literals, so docstring prose
-  numerals — "§A.12", "ED-899", "1-7 scale" — were false positives; orchestration.py carried 55 at HEAD). Real
-  in-code constants are still caught (verified: a bare `x=37` still flags). Also added honest `# [canonical:]`
-  citations to 19 pre-existing uncited code constants in orchestration.py (§A.4 discipline/morale tiers, §B.2
-  troop stats, §A.7 turn caps, §A.3b octagon, wing-width tier tables flagged as F2 derive-targets) — comment-only,
-  byte-exact. orchestration.py now scans clean (0 violations), unblocking further extraction.
+- GATE FIX (tools/ci_sim_fabrication_check.py): masks multi-line triple-quoted docstrings before the line scan
+  (docstring prose numerals were false positives; real in-code constants still caught). Cited 19 pre-existing
+  uncited constants in orchestration.py (§A.4/§B.2/§A.7/§A.3b) — comment-only; orchestration scans clean.
 
 ## 2026-06-30 — Stage 1b (re-architecture): extract core/state.py (behaviour-frozen) [byte-exact]
 - EXTRACTED the morale/discipline/rout state-transition phase hooks (morale_check_phase, rout_resolution,
@@ -401,3 +395,13 @@ Archived entries in tests/coverage_matrix_archive.md
 - G1: core/contact imports config+geometry+math only; geometry imports config only — no up-DAG import, no cycle.
 - BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
   geometry exposes _oriented; orchestration re-exports the contact fns. orchestration.py: 2,740 -> 2,549 lines.
+
+## 2026-06-30 — Stage 1e (re-architecture): extract troop_types/registry.py [byte-exact]
+- EXTRACTED the troop-type module (TROOP_TYPE_STATS canonical §B.2 stat presets + stats_for / roles_for /
+  role_allowed gated-role accessors) from orchestration.py into troop_types/registry.py — the user-requested
+  "troop types module". Depends on config (TROOP_TYPE_ROLES) only. orchestration re-imports via star
+  (Subunit.of_type + stress-test imports unchanged); engine.py adds troop_types.registry to its surface.
+- G1: no up-DAG import, no cycle. This also unblocks the hierarchy/units (Subunit/Unit) move — stats_for was
+  the only orchestration-internal module dependency of those dataclasses' methods.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
+  stats_for('cavalry') correct. orchestration.py: 2,549 -> 2,505 lines.
