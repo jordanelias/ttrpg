@@ -10,15 +10,25 @@ PRIMITIVES consumed (per weapon, from combatant.WEAPONS):
   hilt{compound,simple,none}, hands, hand_guard, blade_guard, reach_adj, head, + geometry geo{cut,thrust,perc_conc}
   and the raw geometry {cross_section, strike_concentration, ...} on combatant.GEOMETRY.
 
-DERIVED (the single basis every consumer wires to):
+DERIVED (the intended single basis; wiring is PARTIAL — see WIRING STATUS):
   STAGE 1 composite mass -> PoB, m_head, MoI, static_moment   (recovered weapon_physics 2026-06-22, self-tested 0.05cm)
   STAGE 2 PoB+mass -> percussion authority, puncture pressure, armour-defeat mode   (recovered percussion_authority)
   STAGE 3 dynamics -> agility, authority(impact), reach, the {parry,dodge,wind} defence affinities
-  STAGE 4 the five categorical->continuous consumer terms (reach_term/heft_term/tempo_penalty/strdemand_term)
+
+WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; nothing live reads STAGE 3/4" claim,
+which is now FALSE):
+  · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
+    percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
+  · NOT YET WIRED — the live engine derives these in PARALLEL elsewhere (the open single-source debt): reach()
+    [live path = systems.reach_base], authority() and armour_defeat_mode() [diagnostic-only]. Consolidating the
+    parallel derivations onto this module is the deferred single-source RE-BASELINE (Gate-1 finding; it changes
+    balance numbers, so it is Jordan-gated — the percussion-authority split core.p_auth vs WP.percussion_authority,
+    which read DIFFERENT inputs (hand-set pob_frac vs derived PoB_frac), is the sharpest case).
+  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) were DELETED 2026-06-30 —
+    a dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
 
 CALIBRATION: the composite constants are physically sourced; the engine-scale K_* gains are [SIM-CALIBRATE] —
-fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted. This module is BUILD-ONLY until Phase 3 wires
-its outputs into the consumers; today nothing live reads STAGE 3/4 (the engine still uses the hand tables).
+fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 """
 import math
 
@@ -41,8 +51,10 @@ PERC_CAP = 8.0
 HEAVY_BLUNT_THRESHOLD = 6.0
 
 # ── engine-scale mapping gains — [SIM-CALIBRATE] starting values, fit in the Phase-3 re-baseline ──
-K_REACH = 2.05; K_HEFT = 5.2; K_TEMPO = 1.5; K_STRD = 0.55
-MOI_AGILITY_K = 6.0     # (legacy rational form; superseded by the power law below — kept until the wiring deletes it)
+MOI_AGILITY_K = 6.0     # LIVE [SIM-CALIBRATE]: the bind-leverage normaliser in defense_affinities.wind (reaches the
+                        # engine via systems.mode_sigma's 'wind' cap). The agility POWER LAW below replaced this
+                        # rational form FOR AGILITY only; this constant is still load-bearing here — NOT dead.
+                        # (The dead STAGE-4 gains K_REACH/K_HEFT/K_TEMPO/K_STRD were removed with STAGE-4, 2026-06-30.)
 # agility power law (Phase-3 grounding): EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
 # mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1). Replaces 1/(1+K·MoI).
 AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
@@ -229,23 +241,6 @@ def at_grip(w, g):
     d_g = PoB - u                                              # CoM-to-working-hand distance after the slide
     return dict(I_g=I_cm + m * d_g ** 2,                       # MINIMUM (= I_cm) when u reaches the CoM
                 S_g=m * abs(d_g), d_g=d_g, u=u)
-
-
-# ════════════════════ STAGE 4 — the five categorical->continuous consumer terms (Phase-3 wiring) ════════════════════
-def reach_term(w, cfg):
-    return cfg['L0'] + K_REACH * (derive(w)['fwd_extent_m']) + cfg['HANDS2'] * (w['hands'] == 2) + w.get('reach_adj', 0.0)
-
-
-def heft_term(w):
-    return max(0.0, min(4.0, K_HEFT * derive(w)['MoI']))
-
-
-def tempo_penalty(w):
-    return K_TEMPO * derive(w)['MoI']
-
-
-def strdemand_term(w):
-    return K_STRD * derive(w)['static_moment']
 
 
 if __name__ == '__main__':

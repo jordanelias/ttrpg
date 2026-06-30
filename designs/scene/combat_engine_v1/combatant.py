@@ -41,11 +41,9 @@ class Combatant:
     @property
     def w(self): return WEAPONS[self.weapon]
     @property
-    def reach(self): return WEAPONS[self.weapon]['reach']
-    @property
     def head(self): return WEAPONS[self.weapon]['head']
-    @property
-    def weight(self): return WEAPONS[self.weapon]['wt']
+    # (.reach / .weight categorical accessors removed 2026-06-30 — dead vestigial; reach derives via
+    #  systems.reach_base, heft via systems.wield_heft / core.heft_resp; no live consumer read these.)
     # ---- derived-figure host (the combatant computes its own; consumers import these, never recompute) ----
     def derive_stats(self, cfg):
         """Compute the cfg-dependent derived figures and store them on self (called once at bout reset). Keeps the

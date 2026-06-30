@@ -1,13 +1,13 @@
 """All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
 CFG = dict(
   # reach (continuous, derived from weapon vector)
-  L0=4.0, HANDS2=0.8,   # L0: live reach_base anchor; HANDS2: build-only reach() term. (LONG/HEADR/HEAD_REACH retired Phase-3b — reach is geometry-derived; head is a primitive, not a categorical reach table.)
+  L0=4.0,   # live reach_base anchor. (HANDS2 removed 2026-06-30 with the dead WP.reach_term; LONG/HEADR/HEAD_REACH retired Phase-3b — reach is geometry-derived; head is a primitive, not a categorical reach table.)
 
   REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
   # Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' + HEAD_REACH + the reach_adj triple-duty).
   # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
   # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
-  # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HEADR/HEAD_REACH retired here; L0/HANDS2 stay (build-only reach()).
+  # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HEADR/HEAD_REACH retired here; L0 stays.
   REACH_GEOM_SCALE=0.635, REACH_2H_K=0.4,
   # reach as a standing per-exchange advantage (reference structure): keep most of the gap, weight it high
   # unarmoured and let it FALL with armour (the reach->clinch rotation). Tuned so reach governs A0 across the roster.
