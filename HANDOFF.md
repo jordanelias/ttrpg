@@ -28,12 +28,21 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     `877c8a06`: sauroter `butt_kg=0.25` + `haft_d=0.035` (35mm shaft) → real 0.40kg head; retracts free when gripped at
     balance (the grip-position model). Grip-position derivations (`grip_choke_max`/`grip_travel_max`/`at_grip`,
     parallel-axis, build-only) validated: gather monotone-down to the CoM, spear→balance, mace flat (a club, not a pole).
-  - **NEXT — recovery/grip STAGE 2 (behaviour-changing):** rewrite `recoverability_factor` to read `at_grip` I_g/S_g/
-    point_concentration/hands; `lunge_quality_continuous` (point_concentration not head-name); replace `combatant.grip`
-    enum {normal,choke,lunge} with continuous `grip_position` + the wrapper `g*` ramp (collapses adopt_stance/can_choke/
-    close_unwieldiness — the Category-B de-leak); rewire heft/agility/tempo/str-demand + `agility()` onto `I_g`;
-    `bind_sigma`←`tau` couple. Then validate the 7 invariant falsifiers (mirror≈50 chief) + the joint re-baseline
-    (incl. GATE→defense_affinities once its band is fixed) → Gate-1 adversarial audit → ED entries → merge.
+  - **Recovery/grip STAGE 2 + 2b + GATE — DONE + committed** (`baaa6d77` → `d3661936` → `1dae44e8`):
+    - `baaa6d77` — grip-enum {normal,choke,lunge} → continuous `grip_position`+`lunge_depth`; `recoverability_factor`
+      rewritten grounded (at_grip I_g/S_g + point_concentration + 1H/2H couple + lunge-led); `adopt_stance`→`grip_target`,
+      `can_choke`→`grip_choke_max`, `lunge_quality` continuous. Mirror ~50, 27/27 tests.
+    - `d3661936` — `wield_heft` (g-aware MoI) on the COST path → **fixes longsword-vs-plate** (the half-sword's tiny MoI
+      now reads light; vs-plate 23/27% → 66/91%). Damage-impact path keeps heft_resp (the wt de-leak is separate).
+    - `1dae44e8` — **retired systems.GATE** (the last per-weapon table); defence affinities DERIVE from geometry. The
+      resolution spine now carries NO per-weapon table + NO weapon name.
+    - Re-baselined matrix coherent: mace/dagger/poleaxe rise vs plate, cutters collapse, longsword half-sword holds,
+      arming baseline ~50. "Balance is not symmetry" realized from primitives.
+  - **NEXT (the remaining Phase-3 tail → Gate 1):** the SPEAR flat-dominance (94-96% all tiers — its win is REACH, not
+    tempo: needs the reach/close-game + the spear gathering live in the wrapper, Phase-5-adjacent); residual de-leaks
+    (`hand`→handling, `wt`/`spd`/`pob_frac` legacy fields, half-sword form→grip_position fold); the agility [FIAT] clamp
+    (flattens light-weapon dodge); strikes-to-fell for the plate cells (longsword 87 / staff 93 heavy are baseline-collapse
+    noise); calibrate the [FIAT] recovery/heft gains; then **Gate-1 adversarial audit (7 lenses)** → ED entries → merge.
 
 ## Decisions
 
