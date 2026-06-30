@@ -1,4 +1,10 @@
 # Phase 5.4 — Godot Scene Tree Architecture
+
+> **⚠️ STALE / PARTIALLY SUPERSEDED (flagged 2026-06-30).** Dated 2026-04-18 — pre-`d+σ`, pre-LPS-2e.
+> **Do not implement from this doc.** The governing Godot spec is
+> `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (itself PROPOSED).
+> Tracked by ED-1054.
+
 # Date: 2026-04-18
 # Maps UI/UX v4.1 §1.1 states to Godot scene tree
 

@@ -4,7 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed']
+__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented']
 
 def arrowhead_cells(tier):
     cells = []
@@ -17,8 +17,8 @@ def arrowhead_cells(tier):
     return cells
 
 def line_cells(tier):
-    sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}
-    width, depth = sizes.get(tier, (7, 5))
+    sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}  # [canonical: geometry line_cells tier table (F2 derive-target); §A.3b deployment]
+    width, depth = sizes.get(tier, (7, 5))  # [canonical: line_cells default (F2 derive-target)]
     return [(r, c) for r in range(depth) for c in range(width)]
 
 
@@ -31,8 +31,8 @@ def column_cells(tier):
     return [(c, r) for (r, c) in line_cells(tier)]
 
 def horseshoe_cells(tier):
-    sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}
-    wing_w, depth = sizes.get(tier, (3, 4))
+    sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}  # [canonical: geometry horseshoe_cells tier table (F2 derive-target); §A.3b]
+    wing_w, depth = sizes.get(tier, (3, 4))  # [canonical: horseshoe_cells default (F2 derive-target)]
     full_width = wing_w * 2 + 1
     cells = []
     for r in range(depth):
@@ -47,8 +47,8 @@ def horseshoe_cells(tier):
 def gapped_line_cells(tier):
     # [canonical: v10 — sized to match Line cell count at each tier so advantage
     #  emerges from arrangement (the gap), not extra troops. Was 56 cells T3, now 24.]
-    sizes = {1: (2, 2), 2: (3, 3), 3: (4, 3), 4: (4, 4)}
-    half_w, depth = sizes.get(tier, (4, 4))
+    sizes = {1: (2, 2), 2: (3, 3), 3: (4, 3), 4: (4, 4)}  # [canonical: geometry gapped_line_cells tier table (F2 derive-target); §A.3b]
+    half_w, depth = sizes.get(tier, (4, 4))  # [canonical: gapped_line_cells default (F2 derive-target)]
     cells = []
     for r in range(depth):
         for c in range(half_w):
@@ -62,8 +62,8 @@ def refused_flank_cells(tier):
     #  block is (width-1) × depth, plus 1 cell at front of refused column.
     #  The refused side withdraws troops from contact (geometric concentration on engaging side),
     #  not from total. Was 21 cells T3, now 25.]
-    sizes = {1: (3, 4), 2: (4, 5), 3: (5, 6), 4: (6, 7)}
-    width, depth = sizes.get(tier, (6, 7))
+    sizes = {1: (3, 4), 2: (4, 5), 3: (5, 6), 4: (6, 7)}  # [canonical: geometry refused_flank_cells tier table (F2 derive-target); §A.3b]
+    width, depth = sizes.get(tier, (6, 7))  # [canonical: refused_flank_cells default (F2 derive-target)]
     cells = []
     for r in range(depth):
         for c in range(width - 1):
@@ -167,18 +167,18 @@ def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
     Returns zone string and angle in degrees.
     """
     fr, fc = defender_facing_vec
-    fmag = max(1e-9, (fr*fr + fc*fc) ** 0.5)
+    fmag = max(1e-9, (fr*fr + fc*fc) ** 0.5)  # [canonical: epsilon: float magnitude guard]
     # Vector from defender to attacker
     dr = attacker_pos[0] - defender_pos[0]
     dc = attacker_pos[1] - defender_pos[1]
-    amag = max(1e-9, (dr*dr + dc*dc) ** 0.5)
+    amag = max(1e-9, (dr*dr + dc*dc) ** 0.5)  # [canonical: epsilon: float magnitude guard]
     # Cosine of angle between defender facing and direction-to-attacker
     cos_a = (dr * fr + dc * fc) / (amag * fmag)
     cos_a = max(-1.0, min(1.0, cos_a))
     angle_deg = math.degrees(math.acos(cos_a))
     # [canonical: Jordan design — octagon: GREEN<45deg, YELLOW 45-90deg, RED>=90deg]
     # 45.0 = half of GREEN 90deg face; 90.0 = boundary of rear hemisphere
-    if angle_deg < 45.0:   return "GREEN",  angle_deg
+    if angle_deg < 45.0:   return "GREEN",  angle_deg  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary]
     if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: designs/provincial/mass_battle_v30.md §octagon]
     return "RED", angle_deg
 
@@ -204,14 +204,14 @@ def _support_along_vector(cell, attacker_pos, friendly_cells):
     dr = cell[0] - attacker_pos[0]
     dc = cell[1] - attacker_pos[1]
     mag = (dr * dr + dc * dc) ** 0.5
-    if mag < 1e-9:
+    if mag < 1e-9:  # [canonical: epsilon: float magnitude guard]
         return 1.0
     dr /= mag; dc /= mag
     tot = 0.0
     for (fr, fc) in friendly_cells:
         rr = fr - cell[0]; rc = fc - cell[1]
         t = rr * dr + rc * dc            # parallel distance along away-from-attacker dir
-        if t < -1e-9:                    # in front of cell (toward attacker): not depth
+        if t < -1e-9:                    # [canonical: epsilon: float projection tolerance] in front of cell (toward attacker): not depth
             continue
         pr = rr - t * dr; pc = rc - t * dc
         perp = (pr * pr + pc * pc) ** 0.5
@@ -297,7 +297,7 @@ def _rotate_defender_facing(defender_atom, defender_abs_cells, attacker_abs_cell
             if (comp_r, comp_c) == (abs_r, abs_c):
                 dr = att_r - abs_r
                 dc = att_c - abs_c
-                mag = max(1e-9, (dr*dr + dc*dc)**0.5)
+                mag = max(1e-9, (dr*dr + dc*dc)**0.5)  # [canonical: epsilon: float magnitude guard]
                 dynamic_facings[_cell_facing_key(defender_atom, orig_r, orig_c)] = \
                     (round(dr / mag), round(dc / mag))
                 break
@@ -337,17 +337,17 @@ def cell_speed(shape, tier, local_r, local_c):
     if shape == "Column":  return 1
     if shape == "Arrowhead": return 2 if local_r == 0 else 1
     if shape == "Horseshoe":
-        sizes = {1: 2, 2: 2, 3: 3, 4: 3}
+        sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: cell_speed shape table (F1 derive-target); precedents_warfare Leuctra]
         wing_w = sizes.get(tier, 3)
-        depth_sizes = {1: 2, 2: 3, 3: 3, 4: 4}
-        depth = depth_sizes.get(tier, 4)
+        depth_sizes = {1: 2, 2: 3, 3: 3, 4: 4}  # [canonical: cell_speed depth table (F1 derive-target)]
+        depth = depth_sizes.get(tier, 4)  # [canonical: cell_speed depth default (F1 derive-target)]
         if local_r == depth:    return 0
         elif local_c != wing_w: return 2
         return 1
     if shape == "GappedLine": return 1
     if shape == "RefusedFlank":
-        sizes = {1: 3, 2: 4, 3: 5, 4: 6}
-        width = sizes.get(tier, 6)
+        sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: cell_speed refused table (F1 derive-target)]
+        width = sizes.get(tier, 6)  # [canonical: cell_speed refused default (F1 derive-target)]
         # v12: front row of engaged side at speed 2 (oblique-order charge).
         # The "phalanx push" was led by the front rank at battle pace, with
         # deeper ranks following at marching pace. Whole-column speed 2 over-tunes
@@ -362,3 +362,17 @@ def cell_speed(shape, tier, local_r, local_c):
         return 1
     return 1
 
+
+def _oriented(su):
+    """Oriented base pattern for a subunit, as a list of (orig_r, orig_c, or_r, or_c) tuples.
+    Continuous path (su.troops set): footprint_for(shape, troops, concentration). Legacy path
+    (troops None): oriented_pattern(shape, tier) — byte-exact. Orientation matches
+    oriented_pattern exactly. [Jordan directive — continuous footprint]"""
+    troops = getattr(su, 'troops', None)
+    if troops is not None:
+        pat = footprint_for(su.shape, troops, su.concentration)
+        if su.advance_dir == -1:
+            return [(r, c, r, c) for r, c in pat]
+        max_r = max(r for r, c in pat)
+        return [(r, c, max_r - r, c) for r, c in pat]
+    return oriented_pattern(su.shape, su.tier, su.advance_dir)

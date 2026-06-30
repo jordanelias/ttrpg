@@ -1,5 +1,12 @@
 # Per-Session-Log Subsystem
-**Status:** built (D5 resolved — the per-session system is the live target) · documented 2026-05-31 (Lane B, roadmap 2.5)
+
+> **⚠️ RETIRED (2026-06-30).** This documents the `valoria-orchestrator` GraphQL/`/home/claude` session
+> driver, now retired to `deprecated/skills/`. The Public API below is **not live — do not call it.**
+> There is no session-log machinery in use; continuity lives in `HANDOFF.md` + git history. The
+> `session_logs/` and `session_log_current.md` files in the tree are inert. Kept for historical
+> reference. Tracked by ED-1054.
+
+**Status:** RETIRED — superseded by HANDOFF.md + git (was: built/D5, documented 2026-05-31, Lane B, roadmap 2.5)
 **Source:** `skills/valoria-orchestrator/scripts/github_ops.py` (`g`) — `start_session_log`, `update_session_log`, `close_session_log`, `safe_session_close` (legacy), `SESSION_SCOPES`, `_generate_pointer`
 
 ## Purpose

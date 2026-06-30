@@ -2,7 +2,12 @@
 schema_version: 1
 session_token: 1bd81c9e9bca010e
 created_at: '2026-06-26T22:13:47.451836+00:00'
-status: active
+status: retired
+retired_at: '2026-06-30'
+retired_note: >-
+  Checkpoint machinery is retired (orchestrator -> deprecated/skills/). This file is INERT; do NOT
+  resume from it. Live continuity is HANDOFF.md + git history only. Tracked by ED-1054.
+status_was_active_until_retirement: true
 task_scope: 'combat-traditions: morphology critique -> integration spec -> NERS distillation
   (contact-axis regime pair clinch/disengage/choke)'
 context_tokens_at_checkpoint: 83470
