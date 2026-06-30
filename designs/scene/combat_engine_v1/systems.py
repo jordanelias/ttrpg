@@ -5,6 +5,7 @@ import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp, tanh
 from config import HANDLE_RANK
 import core
+import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
@@ -158,32 +159,45 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
+def adef_cap(w, cfg):
+    """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
+    can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
+    deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
+    concentrated beak/spike that pierces plate — the poleaxe queue); both DERIVED (Phase-3b retires hand-set
+    `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
+    mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
+    cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
+    cutter collapses (ADEF_CUT). NOTE: the poleaxe's derived percussion_authority (~6.4) sits below the mace's (~7.5)
+    because the energy-limited p_auth form omits the 2H/long-lever energy credit — flagged joint-calibration item
+    (ties to the 2H commitment/recovery question)."""
+    head=w['head']
+    if head=='blunt':
+        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w)/cfg['ADEF_PERC_REF']),
+                   cfg['ADEF_POINT']*(WP.puncture_pressure(w)/cfg['ADEF_PERC_REF']))
+    if head=='point':      return cfg['ADEF_POINT']*w['gap']
+    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*w['gap'])   # cut OR half-sword gap-thrust
+    return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
+
 def armor_defeat_sigma(aggressor, defender, cfg):
-    """In armour, the weapon that CAN defeat the armour controls the exchange (reference 'lethality-in-state' term,
-    and the reach->armour-defeat rotation). Returns a net-sigma adjustment for the aggressor vs the defender's armour:
-    blunt/percussion and gap-thrust gain; pure cut COLLAPSES as armour rises. Zero unarmoured."""
+    """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor
+    vs the defender's armour: capability ABOVE the per-tier threshold = control (+); below = the armour SHIELDS (−).
+    The threshold RISES with armour (monotonically harder). Zero unarmoured (ADEF_W['none']=0)."""
     a=cfg['ADEF_W'][defender.armor]
     if a==0.0: return 0.0
-    head=aggressor.w['head']
-    # capability = the BEST mode available to this head vs armour. A cut-and-thrust sword may CUT or half-sword to a
-    # gap-thrust POINT; it uses whichever is more effective — so a defender taking MORE armour never flips the
-    # attacker into a suddenly-stronger mode (removes the light->medium cliff). Pure cutters cut; points thrust.
-    if head=='blunt':
-        # blunt armour-defeat scales with PERCUSSION AUTHORITY (§4): a steel hammer/beak (mace/poleaxe, perc 8)
-        # defeats plate; a wooden quarterstaff (perc 4) does not — wood transmits little through plate. Reference =
-        # perc 8 (full credit); lower percussion weapons get proportionally less armour-defeat.
-        cap=cfg['ADEF_BLUNT']*(aggressor.w.get('percussion',8)/8.0)
-    elif head=='point':
-        cap=cfg['ADEF_POINT']*aggressor.w['gap']
-    elif head=='cut_thrust':
-        cut_cap=cfg['ADEF_CUT']
-        point_cap=cfg['ADEF_POINT']*aggressor.w['gap']     # half-sword gap-thrust (precision-scaled)
-        cap=max(cut_cap, point_cap)                         # take the better of cut vs half-sword at THIS armour level
-    else:                                                   # straight/curved pure cut
-        cap=cfg['ADEF_CUT']
-    # RELATIVE to a per-state threshold: capability above the bar = control (+); below = the defender's armour
-    # SHIELDS against you (−). The threshold RISES with armour, so more armour is monotonically harder to defeat.
-    return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
+    return a*(adef_cap(aggressor.w, cfg) - cfg['ADEF_THRESHOLD'][defender.armor])
+
+def reach_threat(longer, defender, cfg):
+    """FIX-1 — the factor by which a LONGER weapon's structural-reach advantage DECAYS when it CANNOT defeat the
+    defender's armour: a head that can't threaten the harness can't hold a closing armoured man off — he walks
+    through the reach (the differential reference's 'armour forces the fight down the reach-ladder'). DERIVED from
+    the armour-defeat capability vs the tier threshold; A0-SAFE BY CONSTRUCTION (ADEF_W['none']=0 -> factor 1.0, so
+    unarmoured reach is untouched with no special-case). A weapon that CAN defeat the tier (mace/poleaxe/dagger-gap)
+    clears the threshold -> deficit 0 -> factor 1. Returns a factor in [REACH_THREAT_FLOOR, 1]. REACH_DECAY_K is
+    [FIAT — designer-set; tightened to avoid triple-counting REACH_W + ADEF_CUT]."""
+    aw=cfg['ADEF_W'][defender.armor]
+    if aw==0.0: return 1.0
+    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - adef_cap(longer.w, cfg))
+    return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
 def leverage(c, cfg):
     """Lever-arm primitive: capacity to redirect/bind/displace another weapon. EXPLICIT hand-to-contact lever arm

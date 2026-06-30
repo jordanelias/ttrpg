@@ -74,21 +74,22 @@ def engagement(A, B, first, cfg, rng):
         # withdrawal needs FOOTWORK; and the attempt is READABLE — the shorter weapon's own read can deny it.
         if closed and beats>1 and reopen_moment:
             base_gap=er[longer]-er[shorter]
-            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, ffat[longer], push_avail, cfg, TR):
+            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, ffat[longer], push_avail, cfg, TR)*S.reach_threat(longer, shorter, cfg):
                 closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}
                 reopen_moment=False; push_avail=False
                 continue
         reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
         # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
         if not closed:
+            rt = S.reach_threat(longer, shorter, cfg)               # FIX-1: a long weapon that can't defeat the closer's armour loses its reach edge (1.0 unarmoured by construction)
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
             close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,ffat[shorter],cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2  # TA-02: a fatigued closer closes slower (was hardcoded fatigue=0)
-            close_rate *= (1+displ)                                  # displacing the point lets you close faster
+            close_rate *= (1+displ) * (2.0-rt)                      # displacing the point + walking through an un-threatening reach (FIX-1) -> close faster
             measure_gap=max(0.0, measure_gap-close_rate)
             just_closed = (measure_gap<=0.3)
             if just_closed:
                 closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
-            stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
+            stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
             _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
                   close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if rng.random() < stophit_p:

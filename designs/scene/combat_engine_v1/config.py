@@ -1,7 +1,8 @@
 """All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
 CFG = dict(
   # reach (continuous, derived from weapon vector)
-  L0=4.0, LONG=2.0, HANDS2=0.8, HEADR=1.0, HEAD_REACH={'point':1.0,'straight_cut':0.5,'curved_cut':0.5,'cut_thrust':0.5,'blunt':0.0},
+  L0=4.0, LONG=2.0, HANDS2=0.8, HEADR=1.0, HEAD_REACH={'point':1.0,'straight_cut':0.5,'curved_cut':0.5,'cut_thrust':0.5,'blunt':0.5},   # PRIMITIVE-AUDIT [C]: blunt 0.0->0.5 — a blunt pole-end still reaches; shared fix retires the per-weapon reach_adj fudges on staff/mace/poleaxe
+
   REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
   # reach as a standing per-exchange advantage (reference structure): keep most of the gap, weight it high
   # unarmoured and let it FALL with armour (the reach->clinch rotation). Tuned so reach governs A0 across the roster.
@@ -25,6 +26,12 @@ CFG = dict(
   # hand_guard protects the hand in the parry ("don't parry with your hands"). Modulated around a neutral cross.
   BIND_GUARD_K=0.55, PARRY_GUARD_K=0.45, WIND_GUARD_K=0.40, GUARD_NEUTRAL=0.45,
   ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.0, ADEF_CUT=-0.9,
+  ADEF_PERC_REF=8.0,   # [SIM-CALIBRATE] derived-percussion-authority reference (a steel hammer ~8) for blunt armour-defeat (Phase-3b)
+  # FIX-1 (reach-threat decay): a long weapon that CANNOT defeat the closer's armour loses its reach/approach edge —
+  # the armoured man walks through a threat that can't hurt him. Derived from adef_cap vs the tier threshold; 0-effect
+  # unarmoured by construction. REACH_DECAY_K [FIAT — designer-set; deliberately LOW to avoid triple-counting REACH_W
+  # + ADEF_CUT, which already remove most cut-vs-plate reach value]. FLOOR keeps a residual (an armoured man still works to close).
+  REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
   ADEF_THRESHOLD={'none':0.0,'light':0.70,'medium':0.45,'heavy':0.72},
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
   # tempo
