@@ -401,4 +401,9 @@ Archived entries in tests/coverage_matrix_archive.md
   stats_for('cavalry') correct. orchestration.py: 2,549 -> 2,505 lines.
 
 ## 2026-06-30 — Stage 1f (re-architecture): extract hierarchy/units.py (Subunit/Unit) [byte-exact]
-- MOVED the Subunit/Unit dataclasses (data model + per-object geometry/movement/state methods) from orchestration.py into hierarchy/units.py. Deps all lower-layer (config, geometry, core.exchange, troop_types, percell, resolution); no orchestration import (no cycle). Fixed: restored orchestration's resolution import (rode into hierarchy with the block); moved maneuver toggles PC_ENVELOP_PATH/PC_SWEEP to hierarchy (consumer); validators toggle repointed to hierarchy.units. BYTE-EXACT both modes + stress S1-S18 ALL PASS; selftest green. orchestration.py: 2,899 -> 1,705 lines.
+- MOVED the Subunit/Unit dataclasses from orchestration.py to hierarchy/units.py (deps all lower-layer; no cycle). Fixed: restored orchestration's resolution import; moved PC_ENVELOP_PATH/PC_SWEEP toggles to the consumer; repointed validators. BYTE-EXACT both modes + stress ALL PASS. orchestration.py: 2,899 -> 1,705.
+
+## 2026-06-30 — Stage 1g (re-architecture): engine.py true wrapper (build_unit + resolve_battle) [byte-exact]
+- ADDED the wrapper's two non-resolution duties to engine.py: build_unit (faction→unit adapter) + resolve_battle
+  (router dispatching single/multi/multi_unit). Wrapper resolves nothing (P1 seam). Dogfooded: bat.py builds+routes
+  via them; BYTE-EXACT both modes (digests unchanged) → provably transparent; stress S1-S18 ALL PASS.
