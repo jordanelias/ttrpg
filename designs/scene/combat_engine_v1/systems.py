@@ -439,3 +439,63 @@ def poise_factor(c, cfg):
 def clamp_poise(x, cfg):
     """Bound structure to [POISE_FLOOR, 1.0]."""
     return max(cfg['POISE_FLOOR'], min(1.0, x))
+
+# ============================================================================
+# WRAPPER DE-LEAK (Phase-3 tail — completes the Phase-2 invariant "the wrapper computes NO sigma of its own").
+# The Phase-2 pass moved the CLOSED-exchange net-sigma + commit + read into pure systems.*; these are the
+# remaining inline sigma/formula ASSEMBLIES the pass missed (the APPROACH path especially). Each is a pure
+# function lifted VERBATIM from the wrapper so the extraction is byte-identical. SCOPE DISCIPLINE: only genuine
+# sigma/formula assemblies are lifted; LEGITIMATE L3 orchestration is left in the wrapper — composing a gate
+# roll from a config scalar + already-derived systems outputs (stophit_p, the neutralize mode-pick, the
+# RIPOSTE_ON_* gate, the bind-entry steal multiply) is the orchestrator sequencing pre-derived values, not
+# assembling a formula of its own (per the Gate-1 audit's adversarial ruling on those sites).
+# ============================================================================
+def stophit_sigma(longer, shorter, measure_gap, cfg):
+    """The APPROACH-path stop-hit net-sigma (the longer weapon threatening across the closing gap). The analog of
+    assemble_net_sigma for the approach: reach-disadvantage by gap + base + bilateral wound-Ob. Pure."""
+    return (cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
+            + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds)
+
+def close_rate(shorter, ffat_shorter, displ, rt, cfg):
+    """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),
+    sped by displacing a thrusting point (displ) and by walking through an un-threatening reach (2.0-rt). Pure."""
+    cr = cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
+    return cr*(1+displ)*(2.0-rt)
+
+def init_emphasis_sigma(aggressor, defender, cfg, TR):
+    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) + experience(History),
+    re-weighted by the aggressor's tempo channel. Pure (the formula the wrapper used to assemble inline)."""
+    return (cfg['INIT_K']*(aggressor.agi-defender.agi)
+            + cfg['INIT_READING_K']*(reading(aggressor,cfg)-reading(defender,cfg))
+            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')
+
+def consistency(c, cfg):
+    """Baseline-consistency sigma term from the Concentration tracker (3F+2S, depletes), centred at 3. Pure."""
+    return cfg['FOCUS_CONSISTENCY_K']*(c.conc/5.0 - 3)
+
+def mental_fatigue(c, fat, cfg):
+    """Mental-fatigue scalar: endurance fatigue degraded by Concentration reserve (focus protects the read/technique
+    under fatigue). cfrac is the fighter's current Concentration fraction. Pure."""
+    cfrac = c.conc/max(1, c.conc_max)
+    return fat*(1-cfg['FOCUS_MENTAL_K']*max(0, min(1, cfrac)))
+
+def poise_regen(c, cfg):
+    """Per-beat structure (kuzushi) regathering toward 1.0, Focus-accelerated. Returns the new poise PRE-clamp (the
+    wrapper applies clamp_poise + the mutation). Pure."""
+    return c.poise + cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(c.focus-3))*(1-c.poise)
+
+def counter_success_prob(defender, cfg, TR):
+    """Single-time-counter SUCCESS probability (bounded): base + training(History) + reflex + the counter ability.
+    The untrained counter mostly fails; abilities modulate it upward. Pure — the wrapper rolls rng against it."""
+    succ = (cfg['COUNTER_SUCCESS_BASE'] + cfg['COUNTER_TRAIN_K']*(defender.history-3)
+            + cfg['COUNTER_REFLEX_K']*(reflex(defender,cfg)-3) + TR.ability_bonus(defender,'counter_success'))
+    return max(0.05, min(0.92, succ))
+
+def bind_dominance_p(bsig):
+    """Logistic of the bind net-sigma: P(aggressor dominates this bind iteration). Pure."""
+    return 1/(1+exp(-bsig))
+
+def disrupt_resist_p(c, cfg):
+    """Concentration disruption-resistance: P(the fighter completes a simultaneous strike despite being hit),
+    logistic in Focus. Pure."""
+    return 1/(1+exp(-cfg['DISRUPT_K']*(c.focus-3)))
