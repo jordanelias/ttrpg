@@ -8,6 +8,8 @@ graph properties plus one small live smoke that the trace actually visits the co
 import os
 import sys
 
+import pytest
+
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
@@ -52,6 +54,7 @@ def test_terminals_have_no_outgoing_edges():
 def test_live_trace_visits_core_states():
     """A small live sweep: the engine's trace must visit the core path states (proves the graph is live, not
     just well-formed). Kept tiny + seeded for CI speed/determinism."""
+    pytest.importorskip("numpy")  # this smoke runs a live fight (-> r8 -> numpy); skip where numpy is absent (the 7 static graph tests above still run)
     from combatant import Combatant
     from trace import run_traced_fight
     fired = set()
