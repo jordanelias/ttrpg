@@ -4,12 +4,14 @@ Imports all modules and re-exports the full namespace, so `from mass_battle.engi
 Also defines MECHANICS: a registry of canonical mechanic -> implementing symbol + toggle +
 canonical source + status, with a self-test asserting every registered mechanic resolves."""
 from mass_battle.config import *
+from mass_battle.core.exchange import *  # [Stage-1] resolver layer: pool-assembly primitives
 from mass_battle.geometry import *
 from mass_battle.percell import *
 from mass_battle.resolution import *
 from mass_battle.orchestration import *
 
 import mass_battle.config as _cfg
+import mass_battle.core.exchange as _ce
 import mass_battle.geometry as _geo
 import mass_battle.percell as _pc
 import mass_battle.resolution as _res
@@ -20,7 +22,7 @@ import mass_battle.orchestration as _orch
 #   SIDE_A_START_ROW, SIDE_B_START_ROW, plus the full mechanic surface via import *.
 
 def _resolve(sym):
-    for m in (_orch,_res,_pc,_geo,_cfg):
+    for m in (_ce,_orch,_res,_pc,_geo,_cfg):
         if hasattr(m, sym): return getattr(m, sym)
     return None
 
@@ -69,5 +71,5 @@ def mechanics_selftest():
     missing = [name for name,spec in MECHANICS.items() if _resolve(spec["fn"]) is None]
     return (len(missing)==0, missing)
 
-_mods = (_cfg,_geo,_pc,_res,_orch)
+_mods = (_cfg,_ce,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"})

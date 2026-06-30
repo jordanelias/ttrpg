@@ -71,6 +71,27 @@ def is_sim_file(path: str) -> bool:
     return False
 
 
+# Build the pattern without a literal triple-quote in source, so this checker masks its OWN
+# docstrings correctly (a literal """ inside a string would mis-pair the matcher on this file).
+_TQ_D = '"' * 3
+_TQ_S = "'" * 3
+_TRIPLE_QUOTED = re.compile(r'(?s)(' + _TQ_D + '|' + _TQ_S + r')(.*?)\1')
+
+
+def _mask_triple_quoted(content: str) -> str:
+    """Blank the BODY of every triple-quoted string (docstrings, multi-line literals) while
+    preserving line count + column structure, so reported line numbers stay accurate. Numbers in
+    documentation prose ("§A.12", "ED-899", "the 1-7 scale") are never live mechanical constants;
+    the original line scanner only stripped SINGLE-line string literals, so multi-line docstrings
+    leaked their prose numerals as false positives — which blocked any edit to docstring-heavy sim
+    files (orchestration.py alone carried dozens of such false positives at HEAD). Masking removes that
+    class of false positive without weakening real detection (a numeric literal in code is untouched)."""
+    def _blank(m):
+        body = m.group(2)
+        return m.group(1) + ''.join('\n' if c == '\n' else ' ' for c in body) + m.group(1)
+    return _TRIPLE_QUOTED.sub(_blank, content)
+
+
 def extract_uncited_constants(content: str):
     """
     Pure core (no I/O). Scan Python content for numeric literals on lines without
@@ -78,20 +99,23 @@ def extract_uncited_constants(content: str):
     for uncited values.
 
     Heuristic — skips exempt values (0, 1, 2, 10, 100), comment-only lines, and
-    numbers inside range()/len()/enumerate()/slice() idioms. String literals and
-    inline comments are stripped before scanning. A line is "cited" if it, or the
-    line immediately above it, matches `# [canonical: ...]`.
+    numbers inside range()/len()/enumerate()/slice() idioms. String literals (both
+    single-line and multi-line triple-quoted docstrings) and inline comments are
+    stripped before scanning. A line is "cited" if it, or the line immediately above
+    it, matches `# [canonical: ...]`.
 
-    Ported verbatim from valoria_hooks._extract_uncited_constants.
+    Ported from valoria_hooks._extract_uncited_constants; extended to mask multi-line
+    triple-quoted strings (the original only stripped single-line string literals).
     """
     uncited = []
-    lines = content.split('\n')
-    for i, line in enumerate(lines, 1):
+    masked = _mask_triple_quoted(content).split('\n')   # docstring bodies blanked; line numbers preserved
+    orig = content.split('\n')                           # report the ORIGINAL text, not the masked text
+    for i, line in enumerate(masked, 1):
         stripped = line.strip()
         if not stripped or stripped.startswith('#'):
             continue
         # Does this line or the line before have a canonical comment?
-        prev = lines[i - 2] if i >= 2 else ''
+        prev = masked[i - 2] if i >= 2 else ''
         if _CANONICAL_COMMENT_PATTERN.search(line) or _CANONICAL_COMMENT_PATTERN.search(prev):
             continue
         # Strip string literals to avoid flagging numbers in strings.
@@ -110,7 +134,7 @@ def extract_uncited_constants(content: str):
             # it's probably structural.
             if re.search(rf'(range|len|enumerate|slice)\s*\([^)]*\b{n}\b', code_only):
                 continue
-            uncited.append((i, line.rstrip(), n))
+            uncited.append((i, orig[i - 1].rstrip(), n))
     return uncited
 
 

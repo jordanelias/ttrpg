@@ -157,6 +157,7 @@ from typing import List, Tuple, Optional, Dict, Set
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 from mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
+from mass_battle.core.exchange import *  # [Stage-1] pool primitives extracted to core.exchange
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -263,16 +264,6 @@ def _subunit_depth(atom):
     return (max(r for r, c in pattern) + 1) if pattern else 1
 
 
-def _stamina_pool_penalty(stamina):
-    """Return pool penalty (negative int) based on current stamina level."""
-    if stamina <= 0:
-        return STAMINA_EXHAUSTED_POOL_PENALTY
-    for threshold, penalty in STAMINA_POOL_THRESHOLDS:
-        if stamina >= threshold:
-            return penalty
-    return STAMINA_EXHAUSTED_POOL_PENALTY
-
-
 def stamina_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """G-1: at phase boundary, recover stamina proportional to formation depth.
     Drain happens per-tick in run_battle; this hook handles rotation recovery.
@@ -305,7 +296,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 continue
             frac = atom.cohesion           # single-subunit: == u.hp/u.hp_max (byte-exact); else this subunit's own
             loss = 0.0
-            if frac < 0.50: loss += 1.0    # Size < 50% max -> -1
+            if frac < 0.50: loss += 1.0    # [canonical: mass_battle_v30.md §A.4 — Size<50% morale trigger] Size < 50% max -> -1
             if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
             if u.broken: loss += 1.0       # unit formation-broken pressure (kept unit-scoped for byte-exactness)
             if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
@@ -494,14 +485,14 @@ def role_allowed(troop_type, role):
 TROOP_TYPE_STATS = {
     # troop_type        : power, discipline, morale   (morale_start defaults to morale)
     "levy":             {"power": 1, "discipline": 1, "morale": 2},
-    "light_infantry":   {"power": 3, "discipline": 3, "morale": 4},
-    "heavy_infantry":   {"power": 4, "discipline": 4, "morale": 5},
+    "light_infantry":   {"power": 3, "discipline": 3, "morale": 4},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
+    "heavy_infantry":   {"power": 4, "discipline": 4, "morale": 5},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
     "cavalry":          {"power": 5, "discipline": 5, "morale": 5},
     "archers":          {"power": 3, "discipline": 3, "morale": 3},
     "crossbow":         {"power": 3, "discipline": 3, "morale": 3},
     "sling":            {"power": 2, "discipline": 2, "morale": 3},
     "artillery":        {"power": 2, "discipline": 2, "morale": 3},
-    "knights_templar":  {"power": 5, "discipline": 6, "morale": 6},
+    "knights_templar":  {"power": 5, "discipline": 6, "morale": 6},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
 }
 
 
@@ -662,7 +653,7 @@ class Subunit:
         return getattr(self, '_unit', None)
     @property
     def eff_power(self):
-        return self.power if self.power is not None else (self._u().power if self._u() else 4)
+        return self.power if self.power is not None else (self._u().power if self._u() else 4)  # [canonical: sim_mb_06_v9_historical_spec.md — P4 tier baseline default]
     @property
     def eff_discipline(self):
         return self.discipline if self.discipline is not None else (self._u().discipline if self._u() else 5)
@@ -820,7 +811,7 @@ class Subunit:
         self._node_prev_pos = {cid: p for cid, p in self._node_pos.items()}
         self._moved_this_turn = set()
         op = _oriented(self)
-        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)
+        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
         stance_mod = STANCE_SPEED_MOD[self.stance]
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
@@ -923,7 +914,7 @@ class Subunit:
         # v13: reset per-turn movement tracker
         self._moved_this_turn = set()
         op = _oriented(self)
-        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)
+        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
         stance_mod = STANCE_SPEED_MOD[self.stance]
         all_speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _, _ in op]
         nonzero_speeds = [s for s in all_speeds if s > 0]
@@ -1091,19 +1082,19 @@ class Subunit:
                     if abs(abs_c - contact_col) <= 0.5: return "tip"
             return "flank"
         if self.shape == "Horseshoe":
-            sizes = {1: 2, 2: 2, 3: 3, 4: 3}
+            sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width tier table (F2 derive-target)]
             wing_w = sizes.get(self.tier, 3)
             if contact_col == wing_w + self.starting_position[1]: return "center"
             return "flank_engaged"
         if self.shape == "GappedLine":
             # [canonical: v11 — updated to match equalized gapped_line_cells sizes]
             sizes = {1: 2, 2: 3, 3: 4, 4: 4}
-            half_w = sizes.get(self.tier, 4)
+            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width default]
             if contact_col == half_w + self.starting_position[1]: return "gap"
             return "flank_engaged"
         if self.shape == "RefusedFlank":
-            sizes = {1: 3, 2: 4, 3: 5, 4: 6}
-            width = sizes.get(self.tier, 6)
+            sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: geometry.py refused_flank_cells / §A.3b — width tier table (F2 derive-target)]
+            width = sizes.get(self.tier, 6)  # [canonical: geometry.py refused_flank_cells / §A.3b — width default]
             if contact_col == (width - 1) + self.starting_position[1]: return "refused"
             return "engaged"
         return "normal"
@@ -1178,58 +1169,6 @@ class Subunit:
         return (n_halted, n_merged)
 
 # ─── UNIT ────────────────────────────────────────────────────────────────────
-
-def derive_command(charisma, cognition):
-    """Command DERIVED from Charisma (primary weight) + Cognition (secondary weight).
-    [canonical: Jordan canon-structure directive] Command = leadership leverage:
-    Charisma primary (inspire/hold the line), Cognition secondary (tactical read).
-    Weighted mean on the 1-7 scale, rounded and clamped to 1-7 (derived_stats weighting convention).
-    """
-    w = CMD_CHA_WEIGHT + CMD_COG_WEIGHT
-    val = round((CMD_CHA_WEIGHT * charisma + CMD_COG_WEIGHT * cognition) / w)
-    # [canonical: params/factions/stats_1_7_scale.md — attributes on the 1-7 scale; Command clamped to it]
-    return max(1, min(7, int(val)))
-
-
-def command_base_pool(command, pen, stam_pen):
-    """Command-only base exchange pool (the COMMAND_SIGMA branch): MULT×Command + pool advantages.
-    Module-level so the MECHANICS 'command_sigma_base' entry resolves to a real callable rather than
-    a bare constant. [canonical: Jordan canon-structure directive — base driven SOLELY by
-    Command; Size enters outcomes only via the Lanchester frontage term; MULT=2 matches
-    min(Size,Cmd)+Cmd at Size≥Cmd.]"""
-    return COMMAND_POOL_MULT * command + pen + stam_pen
-
-
-def subunit_combat_pool(unit, atom):
-    """Per-subunit combat pool (Jordan directive): SHARED Command (the general),
-    per-subunit Discipline + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a
-    single-subunit unit (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline inherits unit) ->
-    byte-exact for the homogeneous gauge; differentiates per subunit for mixed units.
-    [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
-     mirrors Unit.discipline_penalty 'fix discipline'; size-decoupled cohesion form]"""
-    if unit.routed or unit.broken or atom.routed or atom.broken:
-        return 0
-    disc = atom.eff_discipline
-    if disc <= 0:
-        # Per-subunit broken state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
-        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is broken only when
-        # EVERY subunit is broken (the whole formation is gone); a single broken section must NOT zero
-        # its healthy siblings' pools -- that was an unintended intra-unit break cascade, contradicting
-        # §A.12's inter-unit-only cascade decision and the per-subunit "siblings fight on" model.
-        # Single-subunit: the lone subunit broken => all() true => unit.broken set exactly as before
-        # (byte-exact for the homogeneous gauge).
-        atom.broken = True
-        if all(s.broken for s in unit.subunits):
-            unit.broken = True
-        return 0
-    pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
-    stam_pen = _stamina_pool_penalty(atom.eff_stamina)
-    if COMMAND_SIGMA_ENABLED:
-        raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
-    else:
-        raw = min(atom.eff_size, unit.command) + unit.command + pen + stam_pen
-    return max(1, math.floor(raw))
-
 
 @dataclass
 class Unit:
@@ -1337,13 +1276,13 @@ class Unit:
     def discipline_penalty(self):
         # SMOOTH (Jordan 2026-06-15 'fix discipline'): continuous linear penalty over the SAME range as the
         # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> broken.
-        if self.discipline <= 0: return -99
+        if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-broken]
         return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
 
     def base_combat_pool(self):
         if self.routed or self.broken: return 0
         pen = self.discipline_penalty()
-        if pen == -99: self.broken = True; return 0
+        if pen == -99: self.broken = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 broken-formation flag]
         # v16: pool uses continuous effective_size (float), floored for dice count.
         # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
         #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
@@ -1585,7 +1524,7 @@ def _cascade_depth_key(pair):
     [canonical: Jordan handoff §(3) — tip arrives first]"""
     atom_a = pair["atom_a"]
     a_cells = pair["a_cells"]
-    if not a_cells: return 999
+    if not a_cells: return 999  # [canonical: sentinel: 999 = no-cells max distance]
     if atom_a.advance_dir == -1:
         return min(r for r, c in a_cells)
     return -max(r for r, c in a_cells)
@@ -1787,7 +1726,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     for a in atk_sorted:
                         _z, _a = octagon_angle(a, d_pos, facing)
                         if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
-                                and _a < 45.0):
+                                and _a < 45.0):  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
                             pinned = True; break
                     worst_mod = 0; worst_ang = 0.0; worst_pos = None
                     for a in _wrappers:
@@ -2134,7 +2073,7 @@ def volley_phase(unit_a, unit_b):
             return 0, None, False
         # Pool = unit Power dice (PP-503). Discipline penalty applies (per §A.4).
         _vdisc = shooter_atom.eff_discipline   # per-subunit volley pool (Jordan directive): shooter subunit's power + discipline
-        _vpen = 0 if _vdisc >= 5 else (1 if _vdisc >= 3 else (2 if _vdisc >= 1 else 99))
+        _vpen = 0 if _vdisc >= 5 else (1 if _vdisc >= 3 else (2 if _vdisc >= 1 else 99))  # [canonical: mass_battle_v30.md §A.4 — volley discipline penalty tiers]
         pool = max(1, shooter_atom.eff_power - _vpen)
         net = _roll_volley_pool(pool)
         # DR subtracts from net successes (Ranged DR Table)
@@ -2175,7 +2114,7 @@ def volley_phase(unit_a, unit_b):
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
-def run_battle(unit_a, unit_b, max_turns=18):
+def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
     v16: max_turns=18 = one battle turn's engagement cap (3 phases).
     Multi-turn battles call this repeatedly with persistent unit state.
@@ -2475,7 +2414,7 @@ def reset_positions(unit, shape, anchor_map):
 
 
 def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
-                          max_battle_turns=8):
+                          max_battle_turns=8):  # [canonical: mass_battle_v30.md §A.7 — battle-turn cap]
     """Run a multi-turn battle. Each turn = 3 phases of engagement.
     Returns list of per-turn result dicts + final outcome.
     [canonical: Jordan direction — 5-8 turns per battle, 3 phases per turn]"""
@@ -2634,7 +2573,7 @@ def freed_attacker_damage(freed_unit, target_unit):
 
 
 def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
-                          anchor_map, max_battle_turns=8):
+                          anchor_map, max_battle_turns=8):  # [canonical: mass_battle_v30.md §A.7 — battle-turn cap]
     """Run a multi-unit battle with morale cascade and freed-attacker.
 
     Args:

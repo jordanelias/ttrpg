@@ -356,3 +356,19 @@ Archived entries in tests/coverage_matrix_archive.md
   cell=1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7. These are the G5 gate for the
   Stage-1 wrapper/core split (behaviour-frozen) and update ONLY on an intentional behaviour change in a
   later stage (recorded here, like the ED-1032 digest change above).
+
+## 2026-06-30 — Stage 1a (re-architecture): extract core/exchange.py (behaviour-frozen) [byte-exact]
+- EXTRACTED the pool-assembly primitives (derive_command, command_base_pool, subunit_combat_pool,
+  _stamina_pool_penalty) from orchestration.py into a new resolver layer tests/sim/mass_battle/core/
+  (core/__init__.py + core/exchange.py). orchestration.py re-imports them via `from mass_battle.core.exchange
+  import *` so every call site is unchanged; engine.py adds core.exchange to its public surface + _resolve scan.
+  G1 import-direction: core/exchange imports config+math only (no up-DAG import; no cycle).
+- BYTE-EXACT: bat.py --check passes both modes (unit 7be8499b…, cell 1c5b2851… unchanged); stress S1-S18 ALL PASS;
+  mechanics_selftest green. A pure code move — identical call graph.
+- GATE FIX (tools/ci_sim_fabrication_check.py): the fabrication scanner now masks multi-line triple-quoted
+  docstrings before the line scan (it previously only stripped single-line string literals, so docstring prose
+  numerals — "§A.12", "ED-899", "1-7 scale" — were false positives; orchestration.py carried 55 at HEAD). Real
+  in-code constants are still caught (verified: a bare `x=37` still flags). Also added honest `# [canonical:]`
+  citations to 19 pre-existing uncited code constants in orchestration.py (§A.4 discipline/morale tiers, §B.2
+  troop stats, §A.7 turn caps, §A.3b octagon, wing-width tier tables flagged as F2 derive-targets) — comment-only,
+  byte-exact. orchestration.py now scans clean (0 violations), unblocking further extraction.
