@@ -1,4 +1,10 @@
 # Phase 5.2 — Godot Implementation Sequence
+
+> **⚠️ STALE / PARTIALLY SUPERSEDED (flagged 2026-06-30).** Dated 2026-04-18 — pre-`d+σ`, pre-LPS-2e.
+> **Do not implement from this doc.** The governing Godot spec is
+> `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (itself PROPOSED);
+> resolve module order via `references/module_contracts.yaml`. Tracked by ED-1054.
+
 # Date: 2026-04-18
 # Build order based on interdependency (highest fan-out first)
 

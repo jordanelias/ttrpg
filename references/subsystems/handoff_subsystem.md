@@ -1,5 +1,11 @@
 # Handoff Subsystem
-**Status:** built · documented 2026-05-31 (Lane B, roadmap 2.1)
+
+> **⚠️ RETIRED (2026-06-30).** This documents the `valoria-orchestrator` GraphQL/`/home/claude` session
+> driver, now retired to `deprecated/skills/`. The Public API below is **not live — do not call it.**
+> Continuity now lives in the single root `HANDOFF.md` + git history; the `handoffs/<id>.yaml` machinery
+> is not in use. Kept for historical reference. Tracked by ED-1054.
+
+**Status:** RETIRED — superseded by HANDOFF.md + git (was: built, documented 2026-05-31, Lane B, roadmap 2.1)
 **Source:** `skills/valoria-orchestrator/scripts/github_ops.py` (write/read/archive/conflicts/context) + `valoria_hooks.py` (validation/enforcement)
 
 ## Purpose

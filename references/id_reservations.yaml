@@ -17,26 +17,34 @@
 #      bump it themselves within their reserved range and let CollisionError-retry serialize.
 #   Reserved blocks are disjoint, so step-3 races are append-safe (retryable, never a real clash).
 # =====================================================================================
-version: 1
-updated: "2026-05-31"
-source: "valoria_master_workplan_v2_2026-05-31 (item 5.10)"
+version: 2
+updated: "2026-06-30"
+source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 884                          # canon/editorial_ledger.jsonl (max ED referenced)
+  ED: 1042                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-06-30)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
-  verified_on: "2026-05-31"
+  verified_on: "2026-06-30"
 
+# Round-1 blocks A/B/C (ED 890-999) were exhausted and overrun to ED-1042 in the unreserved
+# 1000-1042 overflow — exactly the collision class this file exists to prevent. Round 2 below
+# opens a fresh disjoint block starting safely above the live max (1043-1049 left as buffer).
 reservations:
+  # ── Round 1 (2026-05-31) — EXHAUSTED, retained for provenance ──────────────
   A:
-    ED: { block: "890-939", next_free: 890 }
+    ED: { block: "890-939", next_free: 940, status: exhausted }
     PP: { block: "727-759", next_free: 727 }
     reconciliation_zone_ED: "874-889"   # Lane A ONLY: cleanup of reserved-unfiled 874-882,885 (Track 1.8/1.11)
   B:
-    ED: { block: "940-969", next_free: 940 }
+    ED: { block: "940-969", next_free: 970, status: exhausted }
     PP: { block: "760-779", next_free: 760 }
   C:
-    ED: { block: "970-999", next_free: 970 }
+    ED: { block: "970-999", next_free: 1000, status: exhausted }
     PP: { block: "780-799", next_free: 780 }
+  # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
+  D:
+    ED: { block: "1050-1099", next_free: 1055 }   # 1050-1054 filed: ecosystem-review Top-5 (ED-1050..1054)
+    PP: { block: "800-829", next_free: 800 }
 
 # When all three lanes exhaust their blocks, the integration seam allocates the next
 # round of disjoint blocks (extend each by the same stride) and bumps `version`.

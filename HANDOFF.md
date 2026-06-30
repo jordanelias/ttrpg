@@ -9,9 +9,28 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Pending
 
-- _(nothing in flight)_
+- **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
+  ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
+  harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
+  resolvers, Gate-0 spine unbuilt — **needs_jordan**); ED-1052 typed engine-params layer for Godot ingestion;
+  ED-1053 integrity gates validate `main` not the diff + leaky fabrication guard + untested sim;
+  ED-1054 navigation surface (partially done this pass). Full report:
+  `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
 
 ## Decisions
+
+- 2026-06-30 — **Adversarial ecosystem review + safe fixes.** Ran a 72-agent verification workflow
+  (6 audit dimensions × 2 skeptical lenses); 24 findings survived, headline items hand-spot-checked.
+  Rewrote `CLAUDE.md` into a Claude-Code-optimized operating manual (numbered sections, currency
+  priority, data→Godot pipeline, port state, known-defect callouts). Filed the report under
+  `designs/audit/` and the Top-5 as ED-1050..1054. **Re-blocked IDs** (`references/id_reservations.yaml`
+  v2: round-1 A/B/C exhausted+overrun to ED-1042; round-2 block D = ED 1050-1099 / PP 800-829, next_free
+  ED-1055). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
+  (`ci_register_size_check.py` 20k→policy 15k; register is ~5k); RETIRED banners on
+  `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md`; flipped
+  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `designs/godot/*.md`
+  specs; rewrote `README.md` to defer to CLAUDE/CURRENT/HANDOFF. **Not done (needs Jordan / re-sweep):**
+  the parity-oracle balance values (ED-1050) and the Gate-0/contracts authoring (ED-1051).
 
 - 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOCKING).** Diagnosed the
   292 report-only violations: 286 `NONEXISTENT` from **dual ledger-of-record drift** (design docs minted ED
