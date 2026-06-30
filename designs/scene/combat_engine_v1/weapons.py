@@ -73,7 +73,7 @@ WEAPONS = {
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form.
  'longsword_halfsword': dict(
    mass=1.4, head_len=1.4, grip_len=2.6, hands=2, head='point', clinch=7, hand_guard=0.35, blade_guard=0.25,
-   wclass='bladed', hilt='simple', pommel_kg=0.14,
+   wclass='bladed', hilt='simple', pommel_kg=0.14, gripped=True,   # HAND-ON-BLADE form: the held span is STEEL, not a wood grip (weapon_physics.derive reads `gripped`)
    geometry=dict(curvature=0.0, point_concentration=0.85, cross_section=0.95, edge_keenness=0.5, strike_concentration=0.1),
    reach='short', wt='heavy', spd=-0.5, percussion=4, pob_frac=0.12, hand='Demanding', base='longsword'),
 }

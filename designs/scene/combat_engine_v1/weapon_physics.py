@@ -43,7 +43,17 @@ HEAVY_BLUNT_THRESHOLD = 6.0
 
 # ── engine-scale mapping gains — [SIM-CALIBRATE] starting values, fit in the Phase-3 re-baseline ──
 K_REACH = 2.05; K_HEFT = 5.2; K_TEMPO = 1.5; K_STRD = 0.55
-MOI_AGILITY_K = 6.0     # agility = 1/(1+MOI_AGILITY_K*MoI); scales physical MoI (kg.m^2) into a useful 0..1 spread
+MOI_AGILITY_K = 6.0     # (legacy rational form; superseded by the power law below — kept until the wiring deletes it)
+# agility power law (Phase-3 grounding): EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
+# mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1). Replaces 1/(1+K·MoI).
+AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
+AGILITY_REF = 0.088     # [SIM-CALIBRATE] anchor MoI (a handy arming sword) where agility≈1.0; fit in the re-baseline
+# 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
+K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
+# [WIRING HAZARD — Phase-3b] weapon_physics.reach() spans ~0.7–6.0 (head_len-based); the LIVE systems.reach_base it
+# replaces spans ~4.5–7.8 (L0=4.0-based). CLOSE_REACH_REF=6.5 + close_unwieldiness assume the 4.5–7.8 band, so wiring
+# reach() in UNSCALED zeroes the long-weapon close penalty (spear 5.98 < 6.5). Wire via an affine remap, or re-tune
+# CLOSE_REACH_REF/reach_adj/the gap-normalisation together in the same pass. Do NOT wire reach() raw.
 
 
 # ════════════════════ STAGE 1 — composite mass -> balance & inertia ════════════════════
@@ -55,6 +65,25 @@ def derive(w):
     Lg, Lh = gl * UNIT_M, hl * UNIT_M
     Lt = Lg + Lh
     ch = C_HEAD[cls]
+    if w.get('gripped'):
+        # HAND-ON-BLADE form (half-sword): the held span (grip_len) is STEEL — the gripped lower blade — NOT a
+        # low-density wood grip. The standard bladed branch mis-reads grip_len as wood and yields a NON-PHYSICAL
+        # negative PoB (recovered defect: longsword_halfsword derived PoB = -12.9 cm, MoI 0.184 > the full form's
+        # 0.169). LUMPED model: the forward WORKING segment (head_len ahead of the forward hand) is approximated as
+        # the steel fraction of the bar ahead of the hand; the pommel + rear grip are neglected in the swing inertia
+        # (two-handed point work braced by the rear hand, not a free swing). The long grip behind feeds leverage
+        # (systems.leverage). The forward end is light -> small +PoB and LOW swing-MoI (high close control). Build-only
+        # (nothing live reads STAGE-1 derive() for the half-sword yet); the lumped approximation is calibration-grade,
+        # not exact. Pure.
+        m_lin = m / Lt                                  # ~uniform steel mass per unit length (you grip the blade)
+        m_fwd = m_lin * Lh                              # steel forward of the working hand — loads the point
+        c_fwd = ch * Lh                                 # centroid of the forward working segment ahead of the hand
+        moment = m_fwd * c_fwd                          # forward moment of the light working end
+        moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0   # working-segment swing inertia about the hand (low)
+        m_head = m_fwd
+        PoB = moment / m
+        return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
+                    MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
     if cls == 'bladed':
         m_grip = _A_GRIP * Lg * RHO_SWORD_GRIP
         m_pom = w.get('pommel_kg', 0.0)
@@ -88,7 +117,7 @@ def percussion_authority(w):
 def puncture_pressure(w):
     """Concentrated-blunt pierce: same authority delivered through a beak/pick (strike_concentration) -> pressure
     that defeats plate; a broad face -> 0 (concussion, not puncture)."""
-    sc = w.get('geo', {}).get('strike_concentration', w.get('strike_concentration', 0.0))
+    sc = w.get('geo', {}).get('strike_concentration', 0.0)   # raw primitive, passed through by geometry.bake (geo is complete)
     return percussion_authority(w) * sc
 
 
@@ -105,8 +134,18 @@ def armour_defeat_mode(w):
 
 # ════════════════════ STAGE 3 — dynamics: agility, authority, reach, defence affinities ════════════════════
 def agility(w):
-    """Speed/handiness: a high-MoI weapon is slow to bring to bear. In (0,1]; light hand-balanced ~1."""
-    return 1.0 / (1.0 + MOI_AGILITY_K * derive(w)['MoI'])
+    """Speed/handiness from swing inertia. GROUNDED SHAPE — a constant-exponent POWER LAW about the grip axis:
+    agility ∝ MoI^(−AGILITY_EXP), EXP≈0.25 (Cross & Nathan 2009 / Fleisig 2002 — handle-axis bat/racket/golf swing
+    studies, mass-independent, exponent 0.20–0.28). Replaces the prior 1/(1+K·MoI), whose LOCAL exponent climbed
+    0.1→0.9 across the roster and over-penalised heavy weapons ~2× (greatsword 0.22 vs the power-law ~0.6). Anchored
+    at AGILITY_REF (a handy arming sword's MoI) where agility≈1, capped at 1.0 for lighter weapons. The exponent is
+    grounded; AGILITY_REF is [SIM-CALIBRATE] (sets the spread, fit in the Phase-3 re-baseline). In (0,1].
+    [FIAT/WIRING-HAZARD] Below AGILITY_REF the literature fit (Cross & Nathan, sampled MoI≈0.2–0.6) is EXTRAPOLATED
+    and the min(1.0,…) CLAMP is a FIAT cap, not grounded — it collapses the whole light-weapon spread (dagger 0.002,
+    arming 0.088, half-sword 0.025 all pin to 1.0), erasing the dagger>paired>sabre tempo ordering. MUST be resolved
+    when agility is wired live in Phase-3b (re-anchor AGILITY_REF at/below the lightest MoI, or drop the cap and
+    renormalise the consumer to (0,k]) — the power law itself is correct uncapped."""
+    return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
 
 
 def authority(w):
@@ -117,8 +156,14 @@ def authority(w):
 
 
 def reach(w):
-    """Effective forward reach + 2H extension (replaces reach=='long' + HEAD_REACH[head])."""
-    return w['head_len'] + (0.8 if w['hands'] == 2 else 0.0) + w.get('reach_adj', 0.0)
+    """Effective forward reach (replaces the categorical reach=='long' + HEAD_REACH[head]). GROUNDED REVISION
+    (HEMA measure-grammar): a two-handed weapon's extra reach comes from the HANDLE LENGTH / rear-hand setback, NOT
+    from hand-count — a longsword thrusts as far as a rapier because of its longer grip, and a one-handed extension
+    reaches equal-or-farther. So the prior flat `+0.8 if 2H` is replaced by K_GRIP_REACH·grip_len for 2H weapons.
+    reach_adj is the per-weapon [SIM-CALIBRATE] correction (git eb5535eb tuned it to A0–A3 sim error; it is the
+    dominant per-weapon term and is flagged NOT grounded). The standing arm+lunge offset lives in L0 (the consumer)."""
+    twohand = K_GRIP_REACH * w['grip_len'] if w['hands'] == 2 else 0.0
+    return w['head_len'] + twohand + w.get('reach_adj', 0.0)
 
 
 def defense_affinities(w):
@@ -127,7 +172,7 @@ def defense_affinities(w):
     dodge: void with footwork — lightness (agility) x one-handedness.
     parry: deflect safely — a guarded hand commits the parry; a handy weapon parries fast."""
     d = derive(w)
-    cross_section = w.get('geo', {}).get('cross_section', w.get('cross_section', 0.6))
+    cross_section = w.get('geo', {}).get('cross_section', 0.6)   # raw primitive via geometry.bake (geo is complete)
     rigidity = 0.30 + 0.70 * cross_section
     ag = agility(w)
     lever_norm = d['MoI'] / (1.0 / MOI_AGILITY_K + d['MoI'])      # bind-leverage in (0,1): heavy/forward dominates

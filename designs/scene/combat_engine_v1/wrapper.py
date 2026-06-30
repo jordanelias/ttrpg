@@ -213,12 +213,19 @@ def engagement(A, B, first, cfg, rng):
         if cfg.get('IMPOSITION_GATE'):   # WS-4/WS-5 section-C experiment (flag, default off): tradition imposes/refuses its node
             bind, riposte = S.impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR)
         sim=(hit>0 and riposte)
-        # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
-        # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the
-        # thruster is committed — collapsing measure in the defender's favour. CAVEAT (Jordan): the thruster's
-        # pull-back/recovery can still graze. Needs the defender to win the read (already gated) and leverage edge.
-        if (aggressor.w['head']=='point' and commit>=4 and not hit and read_win
-                and S.leverage(defender,cfg) > S.leverage(aggressor,cfg)+cfg['DISPLACE_LEV_GAP']):
+        # DISPLACE-AND-STEP-INSIDE (manual technique): a COMMITTED THRUST (point head, deep commit) is exploitable by
+        # TWO DISTINCT routes on DISTINCT primitives (M3 decoupling — the two were conflated under bind-leverage, so
+        # the leverage re-grounding wrongly suppressed the short-fighter counter):
+        #   (a) BEAT IT ASIDE — a strong-LEVERAGE weapon (poleaxe/staff/long-grip) sets the point offline with grip+mass.
+        #   (b) SLIP INSIDE — a SHORTER, quicker fighter ducks inside the over-extended point: the close-fighter's
+        #       canonical answer to a thrust (the dagger inside the rapier lunge). Driven by REACH (being shorter = having
+        #       inside to step into) + REFLEX, NOT leverage. [Phase-5 contact axis elaborates this into the close.]
+        # Either route needs the defender to win the read (gated) + the thruster committed deep; the thruster's
+        # pull-back/recovery can still graze (commitment=recovery: the deep thrust IS the exposure).
+        beat_aside  = S.leverage(defender,cfg) > S.leverage(aggressor,cfg)+cfg['DISPLACE_LEV_GAP']
+        slip_inside = (S.reach_base(defender,cfg) < S.reach_base(aggressor,cfg)
+                       and S.reflex(defender,cfg) >= S.reflex(aggressor,cfg))
+        if (aggressor.w['head']=='point' and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
             if rng.random() < cfg['DISPLACE_P']:
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender

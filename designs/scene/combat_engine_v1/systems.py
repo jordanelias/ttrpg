@@ -186,13 +186,17 @@ def armor_defeat_sigma(aggressor, defender, cfg):
     return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
 
 def leverage(c, cfg):
-    """Lever-arm primitive: capacity to redirect/bind/displace another weapon, from grip BEHIND the contact vs head
-    AHEAD of it (mechanical advantage). Long grip + compact head (poleaxe/longsword/staff) = high; long head/point on
-    short grip (spear) or tiny weapon (dagger) = low. Two hands add control. Nominal scale ~ -1..+1 around a sword."""
+    """Lever-arm primitive: capacity to redirect/bind/displace another weapon. EXPLICIT hand-to-contact lever arm
+    (Phase-3 grounding fix): the ABSOLUTE lever behind the controlling hand (grip_len) minus a fraction of the load
+    AHEAD of the contact (head_len). A long-gripped pole (poleaxe/staff/half-sword) commands high leverage; a COMPACT
+    weapon does NOT score spuriously high — the prior grip/(grip+head) RATIO rewarded short heads and let a dagger
+    out-bind a spear (the verified HEMA inversion: dagger 0.140 > spear -0.066). Two hands add control. Nominal scale
+    ~ -0.1..+0.6 around a sword. LEVER_HEAD_K/LEVER_REF/LEVER_2H are [SIM-CALIBRATE] (the lever-arm STRUCTURE is
+    grounded; the magnitudes fit the bind win-rate in the re-baseline)."""
     w=c.w
-    ratio = w['grip_len']/(w['grip_len']+w['head_len'])      # fraction of the weapon that is grip (lever behind hand)
-    lev = cfg['LEVER_K']*(ratio - cfg['LEVER_REF'])           # vs a reference sword ratio
-    if w['hands']==2: lev += cfg['LEVER_2H']                  # two hands = more control over the lever
+    lever = w['grip_len'] - cfg['LEVER_HEAD_K']*w['head_len']   # absolute lever behind the hand minus the load ahead
+    lev = cfg['LEVER_K']*(lever - cfg['LEVER_REF'])             # vs a reference one-hand sword's net lever
+    if w['hands']==2: lev += cfg['LEVER_2H']                    # two hands = more control over the lever
     return lev
 
 def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):

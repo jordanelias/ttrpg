@@ -14,7 +14,14 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import numpy as np
+import zlib
 import wrapper, config
+
+
+def _seed(key):
+    """Deterministic per-cell seed (run-to-run reproducible). `hash()` is PYTHONHASHSEED-salted, so a matrix used as
+    the re-baseline reference must NOT seed from it (audit finding). crc32 of the repr is stable across processes."""
+    return zlib.crc32(repr(key).encode()) % 9999
 from combatant import Combatant
 import presets
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
@@ -67,7 +74,7 @@ def weapon_matchup_table(cfg=None, n=600, baseline='arming'):
     cfg = cfg or config.CFG
     rows = []
     for w in WEAPONS:
-        p, lo, hi, dec, _ = winrate({'weapon': w}, {'weapon': baseline}, cfg, n, seed=hash(w) % 9999)
+        p, lo, hi, dec, _ = winrate({'weapon': w}, {'weapon': baseline}, cfg, n, seed=_seed(w))
         rows.append((w, round(100 * p, 1), round(100 * lo, 1), round(100 * hi, 1)))
     rows.sort(key=lambda r: -r[1])
     return {'baseline': baseline, 'n': n, 'rows': rows}
@@ -79,7 +86,7 @@ def attribute_parity_table(cfg=None, n=600):
     base = {a: (4 if a in ('strength', 'agi', 'end') else (4 if a == 'disp' else 3)) for a in ATTRS}
     for a in ATTRS:
         up = dict(base); up[a] = base[a] + 1
-        p, lo, hi, dec, _ = winrate(up, base, cfg, n, seed=hash(a) % 9999)
+        p, lo, hi, dec, _ = winrate(up, base, cfg, n, seed=_seed(a))
         rows.append((a, round(100 * p, 1), f"+{round(100*p-50,1)}pp"))
     rows.sort(key=lambda r: -r[1])
     return {'n': n, 'rows': rows}
@@ -93,7 +100,7 @@ def tradition_field_table(cfg=None, n=400):
         ps = []
         for opp in TRADITIONS:
             p, *_ = winrate({'weapon': 'arming', 'tradition': t}, {'weapon': 'arming', 'tradition': opp},
-                            cfg, n, seed=(hash((t, opp)) % 9999))
+                            cfg, n, seed=_seed((t, opp)))
             ps.append(p)
         rows.append((t, round(100 * (sum(ps) / len(ps)), 1)))
     rows.sort(key=lambda r: -r[1])
@@ -114,7 +121,7 @@ def tradition_context_matrix(cfg=None, contexts=('arming', 'longsword', 'rapier'
             ps = []
             for opp in TRADITIONS:
                 p, *_ = winrate({'weapon': wpn, 'tradition': t}, {'weapon': wpn, 'tradition': opp},
-                                cfg, n, seed=(hash((wpn, t, opp)) % 9999))
+                                cfg, n, seed=_seed((wpn, t, opp)))
                 ps.append(p)
             rows.append((t, round(100 * sum(ps) / len(ps), 1)))
         rows.sort(key=lambda r: -r[1])
@@ -131,6 +138,44 @@ def _md_context(m):
         out.append(f"| {wpn} | **{rows[0][0]}** | {rows[0][1]} | {rows[1][0]} ({rows[1][1]}) | {sp}pp |")
     leaders = {rows[0][0] for rows in m.values()}
     out.append(f"\n_distinct leaders across {len(m)} contexts: **{len(leaders)}** ({', '.join(sorted(leaders))})_")
+    return "\n".join(out)
+
+
+def weapon_armour_matrix(cfg=None, n=600, baseline='arming', armours=('none', 'light', 'medium', 'heavy')):
+    """The four-state weapon x armour matrix (the README's 'A0 unarmoured -> A3 full plate'), which the single-tier
+    weapon_matchup_table did NOT actually instrument. Each weapon vs the uniform baseline with BOTH fighters at the
+    SAME armour tier, swept across tiers: a weapon's win% ARC across armour is its CONTEXTUAL SIGNATURE — the
+    duel-vs-battlefield principle (methodology §5) made measurable. A pure cutter collapses vs plate (the edge
+    glances off); a percussion/gap-thrust weapon INVERTS (poor unarmoured, decisive vs harness). Balance here is
+    NOT a flat column — it is each weapon's arc landing where its physical primitives + the armour-mitigation matrix
+    (core.coupling / systems.armor_defeat_sigma) put it. Returns {'baseline','n','armours','rows':[(w, [p...],
+    [(lo,hi)...]) ...]} sorted by the UNARMOURED (A0) win-rate.
+    NOTE: sweeps the module-level WEAPONS list (the 11 startable weapons); `longsword_halfsword` is excluded — it is a
+    derived auto-switch FORM (mit dem kurzen Schwert), never a starting loadout. Seeds are deterministic (_seed)."""
+    cfg = cfg or config.CFG
+    rows = []
+    for w in WEAPONS:
+        ps, cis = [], []
+        for a in armours:
+            p, lo, hi, dec, _ = winrate({'weapon': w, 'armor': a}, {'weapon': baseline, 'armor': a},
+                                        cfg, n, seed=_seed((w, a)))
+            ps.append(round(100 * p, 1)); cis.append((round(100 * lo, 1), round(100 * hi, 1)))
+        rows.append((w, ps, cis))
+    rows.sort(key=lambda r: -r[1][0])
+    return {'baseline': baseline, 'n': n, 'armours': list(armours), 'rows': rows}
+
+
+def _md_weapon_armour(m):
+    A0, A3 = m['armours'][0], m['armours'][-1]
+    hdr = " | ".join(m['armours'])
+    out = [f"### Weapon x armour matrix vs {m['baseline']} (both fighters same tier, N={m['n']}/cell, sorted by {A0})",
+           f"_A weapon's ARC is its contextual signature; the {A0}->{A3} swing (delta) shows whether it is a "
+           f"duel weapon (falls), a battlefield/armour weapon (rises), or context-flat._",
+           f"| weapon | {hdr} | {A0}->{A3} |", "|---|" + "---|" * (len(m['armours']) + 1)]
+    for w, ps, _cis in m['rows']:
+        delta = round(ps[-1] - ps[0], 1)
+        arrow = "rises" if delta > 6 else ("falls" if delta < -6 else "flat")
+        out.append(f"| {w} | " + " | ".join(f"{p}" for p in ps) + f" | {delta:+} ({arrow}) |")
     return "\n".join(out)
 
 
@@ -178,3 +223,5 @@ if __name__ == '__main__':
         print(_md_trad(tradition_field_table(n=max(200, n // 2))) + "\n")
     if which in ('context', 'all'):
         print(_md_context(tradition_context_matrix(n=max(120, n // 3))) + "\n")
+    if which in ('armour', 'armor', 'matrix'):
+        print(_md_weapon_armour(weapon_armour_matrix(n=n)) + "\n")

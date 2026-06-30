@@ -14,8 +14,10 @@ CFG = dict(
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
   LEGIB_SWING=1.25, LEGIB_THRUST=0.80, LEGIB_COMMIT_K=0.10, LEGIB_LUNGE=0.25,
-  # lever-arm primitive: redirect/bind capacity from grip-vs-head length (LEVER_REF ~ a one-hand sword's grip ratio)
-  LEVER_K=2.2, LEVER_REF=0.30, LEVER_2H=0.20,
+  # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
+  # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
+  # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
+  LEVER_K=0.22, LEVER_HEAD_K=0.2, LEVER_REF=0.32, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
   DISPLACE_LEV_GAP=0.15, DISPLACE_P=0.55, DISPLACE_PULLBACK_GRAZE=0.30, APPROACH_DISPLACE_K=0.7, APPROACH_DISPLACE_MAX=0.6,
   # (feint config removed 2026-06-29: the feint is dissolved into the attack — WS-5 — so FEINT_*/feint_eval are gone.)
