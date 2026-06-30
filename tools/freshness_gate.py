@@ -4,198 +4,66 @@ freshness_gate.py — Valoria canonical source freshness enforcer.
 Detects drift between params files and the canonical documents they were
 synced from. Uses canonical_sha__ fields in canonical_sources.yaml.
 
-If the live HEAD SHA of a canonical doc differs from the recorded SHA,
-the params file is stale and simulation/audit/patch is BLOCKED.
+If the working-tree git blob SHA of a canonical doc differs from the recorded
+SHA, the params file is stale and simulation/audit/patch is BLOCKED.
+
+ED-1053: ported off the GitHub API to the LOCAL WORKING TREE. It used to resolve
+each canonical doc's blob OID from remote `main` via GraphQL (and re-sync pins FROM
+GitHub on --update), requiring GITHUB_PAT — so it validated remote main, not the
+checkout, directly contradicting CLAUDE.md's working-tree rule, and its --update path
+was dead (hardcoded /home/claude github_ops). It now computes the git blob OID of the
+local file — sha1(b"blob <len>\\0" + bytes), identical to the OID GitHub stores — and
+--update rewrites the pins from local SHAs in place (no commit; the caller commits).
 
 Usage:
     python3 tools/freshness_gate.py                      # check all systems
     python3 tools/freshness_gate.py --system combat      # check one system
-    python3 tools/freshness_gate.py --update             # re-sync all SHAs after a commit
+    python3 tools/freshness_gate.py --update             # re-sync all SHAs from the working tree
 
-Requires: GITHUB_PAT environment variable
 Exit codes:
     0 = all systems fresh
     1 = one or more stale — BLOCK simulation/audit/patch
     2 = canonical_sha fields missing — run --update first
 """
 
-import os, sys, json, re, base64, urllib.request, argparse
+import os, sys, re, hashlib, argparse
 
-REPO_OWNER = "jordanelias"
-REPO_NAME  = "ttrpg"
-BRANCH     = "main"
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 CANONICAL_SOURCES_PATH = "references/canonical_sources.yaml"
 
-# ── GitHub helpers ─────────────────────────────────────────────────────────────
+# ── Working-tree blob SHA (git hash-object equivalent) ──────────────────────────
 
-def _headers():
-    pat = os.environ.get("GITHUB_PAT", "")
-    if not pat:
-        raise RuntimeError("GITHUB_PAT not set")
-    return {"Authorization": f"token {pat}", "Accept": "application/vnd.github.v3+json"}
+def _blob_sha_bytes(data: bytes) -> str:
+    """git blob SHA-1 of raw bytes: sha1(b'blob <len>\\0' + data). Identical to the
+    blob OID GitHub stores, so it is directly comparable to the canonical_sha__ pins."""
+    h = hashlib.sha1()
+    h.update(b"blob " + str(len(data)).encode() + b"\0" + data)
+    return h.hexdigest()
 
-def _graphql(query, variables=None):
-    payload = json.dumps({"query": query, "variables": variables or {}}).encode()
-    req = urllib.request.Request(
-        "https://api.github.com/graphql",
-        data=payload,
-        headers={**_headers(), "Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
 
 def get_blob_sha(path):
-    """Return the current HEAD blob OID for a repo file. None if missing.
-
-    Distinguishes API errors (rate limit, auth failure, network) from genuine
-    file-not-found. API errors raise RuntimeError; only a successful query
-    where the repo returns `object: null` yields None ("file truly absent").
-
-    Background: prior implementation silently mapped any response without a
-    populated `data.repository.object` field to None, which conflated
-    rate-limit-induced empty responses with real 404s. That bug surfaced as
-    spurious [MISSING] entries during freshness_gate scans run after heavy
-    GraphQL usage. Fix: inspect response shape before defaulting to None.
-    """
-    q = """query($owner:String!,$name:String!,$expr:String!){
-      repository(owner:$owner,name:$name){
-        object(expression:$expr){...on Blob{oid}}
-      }
-    }"""
-    result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME, "expr": f"HEAD:{path}"})
-
-    # Detect API-level errors before interpreting empty data as "file missing"
-    if "errors" in result:
-        err_types = [e.get("type", "") for e in result["errors"]]
-        err_msgs  = [e.get("message", "") for e in result["errors"]]
-        if "RATE_LIMITED" in err_types or "RATE_LIMIT" in err_types or \
-           any("rate limit" in m.lower() for m in err_msgs):
-            raise RuntimeError(
-                f"GitHub GraphQL rate limit hit while resolving HEAD:{path}. "
-                f"Re-run after reset; do NOT trust missing-file reports from this scan."
-            )
-        raise RuntimeError(f"GraphQL error resolving HEAD:{path}: {result['errors']}")
-
-    if "data" not in result:
-        # No errors key but also no data — unexpected. Raise rather than
-        # silently report missing.
-        raise RuntimeError(
-            f"GraphQL response missing 'data' for HEAD:{path}: {result}"
-        )
-
-    repo_obj = result["data"].get("repository")
-    if repo_obj is None:
-        # Repo itself unresolvable (auth issue, repo renamed, etc.) — not
-        # a per-file missing condition.
-        raise RuntimeError(
-            f"GraphQL returned null repository for HEAD:{path}: {result}"
-        )
-
-    obj = repo_obj.get("object")
-    # Only here does None genuinely mean "file does not exist at HEAD"
-    return obj["oid"] if obj else None
+    """Return the working-tree git blob OID for a repo-relative file. None if missing."""
+    try:
+        with open(os.path.join(REPO_ROOT, path), "rb") as f:
+            return _blob_sha_bytes(f.read())
+    except (FileNotFoundError, IsADirectoryError, OSError):
+        return None
 
 
-
-# Public alias used by valoria_hooks.assert_bootstrap freshness check.
-# Kept as a thin alias of get_blob_sha for API stability — callers use
-# whichever name is more readable in context. Do not remove without
-# updating callers (current caller: skills/valoria-orchestrator/scripts/valoria_hooks.py).
+# Public alias kept for API stability (thin alias of get_blob_sha).
 get_live_sha = get_blob_sha
 
 
 def get_blob_shas_batch(paths):
-    """Return {path: live_sha | None} for many paths via a single GraphQL call.
-
-    Uses GraphQL aliases to batch N path queries into one request. Reduces
-    bootstrap freshness-check cost from N GraphQL calls to 1.
-
-    For N up to ~200 (typical canonical_sources.yaml size: ~110 pairs) this
-    fits comfortably in a single GraphQL request and a single rate-limit
-    point. For larger N, split into batches of 200; GraphQL rate-limit
-    cost is per request, not per alias.
-
-    Distinguishes API errors (rate limit, auth failure, network) from genuine
-    file-not-found, matching the error-distinction pattern in get_blob_sha.
-    API errors raise RuntimeError; only a successful query where the alias's
-    `object` field is null yields None for that path ("file truly absent").
-
-    Returns dict mapping every input path to its current HEAD blob OID
-    (or None if the path doesn't exist on HEAD).
-    """
-    if not paths:
-        return {}
-
-    BATCH_SIZE = 200
-    out = {}
-    for batch_start in range(0, len(paths), BATCH_SIZE):
-        batch = paths[batch_start:batch_start + BATCH_SIZE]
-        aliases = {f"p{i}": p for i, p in enumerate(batch)}
-        fields = "\n".join(
-            f'  {alias}: object(expression: "HEAD:{p}") {{ ... on Blob {{ oid }} }}'
-            for alias, p in aliases.items()
-        )
-        q = f"""query($owner:String!,$name:String!){{
-          repository(owner:$owner,name:$name){{
-        {fields}
-          }}
-        }}"""
-        result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME})
-
-        # Detect API-level errors before interpreting empty data as "files missing"
-        if "errors" in result:
-            err_types = [e.get("type", "") for e in result["errors"]]
-            err_msgs  = [e.get("message", "") for e in result["errors"]]
-            if "RATE_LIMITED" in err_types or "RATE_LIMIT" in err_types or \
-               any("rate limit" in m.lower() for m in err_msgs):
-                raise RuntimeError(
-                    f"GitHub GraphQL rate limit hit during freshness batch "
-                    f"({len(batch)} paths). Re-run after reset; do NOT trust "
-                    f"missing-file reports from this scan."
-                )
-            raise RuntimeError(f"freshness batch GraphQL failed: {result['errors']}")
-
-        if "data" not in result:
-            raise RuntimeError(
-                f"GraphQL response missing 'data' for freshness batch: {result}"
-            )
-
-        repo_obj = result["data"].get("repository")
-        if repo_obj is None:
-            raise RuntimeError(
-                f"GraphQL returned null repository for freshness batch: {result}"
-            )
-
-        for alias, path in aliases.items():
-            obj = repo_obj.get(alias)
-            # Only here does None genuinely mean "file does not exist at HEAD"
-            out[path] = obj["oid"] if obj else None
-    return out
+    """Return {path: blob_sha | None} for many paths (local — no batching needed)."""
+    return {p: get_blob_sha(p) for p in (paths or [])}
 
 
 def get_file(path):
-    """Return (content_str, rest_blob_sha) for a repo file."""
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}?ref={BRANCH}"
-    req = urllib.request.Request(url, headers=_headers())
-    with urllib.request.urlopen(req) as r:
-        data = json.loads(r.read())
-    return base64.b64decode(data["content"]).decode("utf-8"), data["sha"]
-
-def put_file(path, content, message, sha):
-    """Commit a single file update. sha = REST blob SHA of current file."""
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}"
-    body = {
-        "message": message,
-        "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
-        "branch": BRANCH,
-        "sha": sha,
-    }
-    payload = json.dumps(body).encode()
-    req = urllib.request.Request(url, data=payload,
-                                  headers={**_headers(), "Content-Type": "application/json"})
-    req.get_method = lambda: "PUT"
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
+    """Return (content_str, blob_sha) for a repo file read from the working tree."""
+    with open(os.path.join(REPO_ROOT, path), "rb") as f:
+        raw = f.read()
+    return raw.decode("utf-8"), _blob_sha_bytes(raw)
 
 # ── Parsing helpers ────────────────────────────────────────────────────────────
 
@@ -291,7 +159,7 @@ def run_check(system_filter=None):
         live_sha = get_blob_sha(path)
 
         if live_sha is None:
-            print(f"  [MISSING] {path} — not found on GitHub")
+            print(f"  [MISSING] {path} — not found in working tree")
             stale.append(path)
         elif recorded_sha is None:
             print(f"  [NO-SHA]  {path} — canonical_sha field missing")
@@ -347,7 +215,7 @@ def run_update():
 
     missing = [p for p, s in path_to_sha.items() if not s]
     if missing:
-        print(f"\n[WARN] {len(missing)} paths not found on GitHub:")
+        print(f"\n[WARN] {len(missing)} paths not found in working tree:")
         for p in missing:
             print(f"  {p}")
 
@@ -356,58 +224,11 @@ def run_update():
     sha_count = updated.count("canonical_sha__")
     print(f"canonical_sha__ fields in updated file: {sha_count}")
 
-    print("Committing to GitHub...")
-    # Prefer atomic_commit (hook-compatible) when github_ops is available
-    try:
-        sys.path.insert(0, "/home/claude")
-        import github_ops as g
-        g._load_cache()
-        g.atomic_commit(
-            additions=[(CANONICAL_SOURCES_PATH, updated)],
-            deletions=[],
-            message="[infrastructure] freshness_gate --update: sync canonical_sha fields",
-        )
-        # Invalidate the bootstrap fetch-cache for the path just committed so the
-        # NEXT bootstrap freshness check reads the new content and recomputes.
-        # atomic_commit (unlike safe_commit) does not evict, so without this the
-        # same session keeps reporting the pre-update (stale) SHAs until cache TTL
-        # or container reset. This uses the existing cache_evict API and adds no
-        # new on-disk cache state of its own -- storage-agnostic, so it rides any
-        # future SQLite-backed cache substrate unchanged.
-        try:
-            # cache_evict (hard delete + persist) — NOT cache_evict_committed, whose
-            # session-permanent branch updates memory without saving to disk, and which
-            # atomic_commit does not invoke. Hard-evicting forces a fresh re-fetch of
-            # canonical_sources on the next bootstrap so freshness recomputes correctly.
-            g.cache_evict(CANONICAL_SOURCES_PATH, repo=REPO_NAME)
-            # Also drop the stale fetch_head entry so the next bootstrap cannot
-            # short-circuit the re-fetch on a HEAD match. Mirrors the verified
-            # cache state that makes the freshness check recompute clean.
-            try:
-                g._fetch_head.pop(f"{REPO_NAME}:{CANONICAL_SOURCES_PATH}", None)
-                g._save_cache()
-            except Exception:
-                pass
-        except Exception as _evict_err:
-            print(f"[WARN] post-commit cache eviction failed: {_evict_err} "
-                  f"(re-bootstrap or container reset will clear the stale warning)")
-    except Exception:
-        # Fallback: direct REST commit (CI environment, no github_ops)
-        put_file(
-            CANONICAL_SOURCES_PATH,
-            updated,
-            "[infrastructure] freshness_gate --update: sync canonical_sha fields",
-            sha=rest_sha
-        )
-        # Best-effort eviction if github_ops is importable in the fallback path.
-        try:
-            import github_ops as _g
-            _g._load_cache()
-            _g.cache_evict(CANONICAL_SOURCES_PATH, repo=REPO_NAME)
-        except Exception:
-            pass
-    print("\n[DONE] canonical_sources.yaml updated with current SHAs.")
-    print("Run 'python3 tools/freshness_gate.py' to verify.")
+    print("Writing canonical_sources.yaml in the working tree...")
+    with open(os.path.join(REPO_ROOT, CANONICAL_SOURCES_PATH), "w", encoding="utf-8") as f:
+        f.write(updated)
+    print("\n[DONE] canonical_sources.yaml updated with current working-tree SHAs.")
+    print("Review and commit it yourself; then run 'python3 tools/freshness_gate.py' to verify.")
     sys.exit(0)
 
 # ── Entry point ────────────────────────────────────────────────────────────────
@@ -416,7 +237,7 @@ def main():
     parser = argparse.ArgumentParser(description="Valoria canonical source freshness gate")
     parser.add_argument("--system", help="Check a single named system only")
     parser.add_argument("--update", action="store_true",
-                        help="Re-sync all canonical_sha fields from live GitHub SHAs")
+                        help="Re-sync all canonical_sha fields from the working tree")
     args = parser.parse_args()
 
     if args.update:

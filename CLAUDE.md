@@ -176,15 +176,19 @@ Do not represent the skeleton as a runnable head-start.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
-- **Some "integrity" gates re-fetch from GitHub** (`broken_dependency_checker.py`,
-  `patch_propagation_checker.py`, `freshness_gate.py`) — they validate remote `main` and require
-  `GITHUB_PAT`, not the working tree. This is the unfinished API→working-tree port.
 - **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
   `deprecated/`, or hardcode `/home/claude`): `compliance_check`, `extract_values`, `extract_proper_nouns`,
-  `freshness_gate`, `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
+  `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
   They fail opaquely — don't assume "tool exists ⇒ rule enforced."
-- **Token-size limits are enforced twice** with drifted thresholds (`ci_register_size_check.py` hardcoded
-  dict vs `references/atomization_rules.yaml`).
+
+*Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
+`patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
+no network), validating the checkout under test; `freshness_gate` computes blob SHAs locally
+(`git hash-object`-equivalent) and is no longer dead. The duplicated token-size cap was single-sourced
+from `references/atomization_rules.yaml`. The `sim/` reference now has a deterministic seeded CI test
+(`sim/tests/`), and the sim-fabrication guard matches constants by `(variable, value)` and captures
+full float literals. Residual: ~12 stale `canonical_sha__` pins surfaced by the now-local freshness
+gate (refresh with `python3 tools/freshness_gate.py --update`); freshness stays report-only until then.
 
 Run the unit tests locally: `pip install pyyaml pytest && python -m pytest tests/valoria -q`.
 

@@ -103,6 +103,61 @@ def test_number_in_inline_comment_not_flagged():
     assert violations == []
 
 
+# ── ED-1053 hardening: float tokenization (§4.2) ──────────────────────────────
+def test_float_is_one_token_not_split():
+    # `1.7` must scan as a single literal, not `1` (exempt) + `7`.
+    violations = ci_sim_fabrication_check.extract_uncited_constants("LETHALITY = 1.7\n")
+    assert _numbers(violations) == {'1.7'}
+
+
+def test_fabricated_float_not_excused_by_integer_token_collision():
+    # The §4.2 hole: `1.7` split to `7`, and `7` in the ledger excused it.
+    # By-pair matcher with `7` as a loose value must STILL flag `1.7`.
+    v = ci_sim_fabrication_check.genuine_violations_by_pair("LETHALITY = 1.7\n", {}, {'7'})
+    assert _numbers(v) == {'1.7'}
+
+
+def test_trivial_dot_zero_floats_are_exempt():
+    content = "a = 1.0\nb = 2.0\nc = 100.0\n"
+    assert ci_sim_fabrication_check.extract_uncited_constants(content) == []
+
+
+# ── ED-1053 hardening: (variable, value) matching (§4.1) ───────────────────────
+def test_by_pair_flags_value_collision_under_wrong_variable():
+    # `25` is a ledger value but registered for BATTLEFIELD_SIZE, not FABRICATED_CRIT.
+    pairs = {'BATTLEFIELD_SIZE': {'25'}}
+    v = ci_sim_fabrication_check.genuine_violations_by_pair(
+        "FABRICATED_CRIT = 25\n", pairs, {'25'})
+    assert _numbers(v) == {'25'}
+
+
+def test_by_pair_cites_registered_variable():
+    pairs = {'BATTLEFIELD_SIZE': {'25'}}
+    v = ci_sim_fabrication_check.genuine_violations_by_pair(
+        "BATTLEFIELD_SIZE = 25\n", pairs, {'25'})
+    assert v == []
+
+
+def test_by_pair_unassigned_literal_keeps_loose_value_match():
+    # No assignment target -> loose value-match against the flat ledger set.
+    v = ci_sim_fabrication_check.genuine_violations_by_pair(
+        "total = compute([25, 30])\n", {}, {'25'})
+    assert _numbers(v) == {'30'}  # 25 excused loosely, 30 not in ledger -> flagged
+
+
+def test_by_pair_numeric_normalization():
+    # 0.60 (code) must match 0.6 (ledger JSON float) for the same variable.
+    pairs = {'ADEF': {'0.6'}}
+    v = ci_sim_fabrication_check.genuine_violations_by_pair("ADEF = 0.60\n", pairs, set())
+    assert v == []
+
+
+def test_num_match_int_float_equivalence():
+    assert ci_sim_fabrication_check._num_match('25', {'25.0'}) is True
+    assert ci_sim_fabrication_check._num_match('0.60', {'0.6'}) is True
+    assert ci_sim_fabrication_check._num_match('7', {'8', '9'}) is False
+
+
 # is_sim_file path classifier.
 def test_is_sim_file_classification():
     assert ci_sim_fabrication_check.is_sim_file('tests/sim/foo/bar.py') is True
