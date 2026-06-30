@@ -262,3 +262,14 @@ Archived entries in tests/coverage_matrix_archive.md
 ## 2026-06-30 — Stage 2 (re-architecture): standalone weapons + armour modules [additive, byte-exact]
 - ADDED equipment/ package (weapons.py ARSENAL, armour.py ARMOURY, _base.py EquipmentRecord+Registry, __init__ TROOP_LOADOUT): weapons/armour split out of troop_types into their own dynamic/adaptable registries (open records + runtime register/override/variant) so the equipment model can be re-mapped onto scene-combat without disturbing the troop taxonomy. Descriptive axes only (no primitive grounding yet); a troop type NAMES a weapon+armour. NOT wired into resolution.
 - G5 byte-exact: bat.py --check both modes match baseline (unit 7be8499b, cell 1c5b2851); sim-fabrication gate clean (only canonical DR literals). Co-file: the oldest 2026-06-05/06 build-log sections were archived to coverage_matrix_archive.md to stay under the 10k cap.
+
+## 2026-06-30 — Stage 2 / Track M: FIELD_MOVEMENT continuous-speed toggle [default OFF → byte-exact]
+- ADDED config.FIELD_MOVEMENT (default OFF) + Subunit._speed_accum; advance_cells uses a per-cell
+  fractional-speed accumulator when ON, so a discipline-degraded body advances at its TRUE average rate
+  instead of flooring to 0 every turn (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions
+  preserved; only per-turn step TIMING changes. [movement-substrate review 06 — finding 2]
+- G5: bat.py --check both modes byte-exact with the toggle OFF (unit 7be8499b / cell 1c5b2851 unchanged,
+  the OFF branch is the exact prior code). ON is a recorded behaviour change carrying its own digest
+  (unit 4c5943c1…); NOT yet gauge-re-baselined — the field path's validation is the gated Track-M
+  G-decision (06_movement_substrate_review.md). Heading-continuous + cid-threading deferred (need the
+  float substrate / a contact-path refactor).
