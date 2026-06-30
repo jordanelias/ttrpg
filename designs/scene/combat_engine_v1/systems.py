@@ -149,20 +149,12 @@ def lunge_quality(c, cfg):
     return max(0.0, min(1.0, pc*light*handbal*onehand))
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
-# ---------- defense modes (parry/dodge/wind) ----------
-GATE={
- 'rapier':{'parry':1.0,'dodge':0.8,'wind':0.4},'arming':{'parry':0.9,'dodge':0.8,'wind':0.7},
- 'longsword':{'parry':0.9,'dodge':0.7,'wind':1.0},'greatsword':{'parry':0.7,'dodge':0.6,'wind':0.9},
- 'sabre':{'parry':0.9,'dodge':0.9,'wind':0.6},'dagger':{'parry':0.6,'dodge':0.9,'wind':0.5},
- 'paired_short':{'parry':1.0,'dodge':0.9,'wind':0.4},'spear':{'parry':0.8,'dodge':0.9,'wind':0.8},
- 'staff':{'parry':0.9,'dodge':0.8,'wind':0.8},'mace':{'parry':0.7,'dodge':0.7,'wind':0.7},
- 'poleaxe':{'parry':0.8,'dodge':0.5,'wind':1.0},
- 'longsword_halfsword':{'parry':1.0,'dodge':0.5,'wind':1.0},
-}
-
-# fail-fast: the three hand-maintained weapon dicts must stay key-synchronised (a missing GATE key -> KeyError at
-# mode_sigma; a missing GEOMETRY key -> silent stale gap). Catch drift at import, not mid-fight.
-assert set(GATE)>=set(WEAPONS), f"GATE missing weapons: {set(WEAPONS)-set(GATE)}"
+# ---------- defense modes (parry/dodge/wind) — DERIVED, no per-weapon table ----------
+# The hand-authored per-weapon GATE parry/dodge/wind table is RETIRED (the worst primitive-law leak: defence
+# behaviour authored per weapon name in engine code). The {parry,dodge,wind} caps now DERIVE from geometry + dynamics
+# via WP.defense_affinities: parry from hand_guard x agility (a guarded, handy weapon parries fast); dodge from
+# agility x one-handedness (light + free hand voids); wind from blade_guard x rigidity(cross_section) x bind-leverage
+# (MoI) x edge-length. So a rapier's parry-1.0 EMERGES from its hand_guard, a poleaxe's wind from its blade-leverage.
 assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
 def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
@@ -170,7 +162,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
     ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
-    cap=GATE[defender.weapon][mode]
+    cap=WP.defense_affinities(defender.w)[mode]   # DERIVED from geometry+dynamics (retired the hand GATE table)
     if mode=='parry':
         sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill('parry')
         # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
