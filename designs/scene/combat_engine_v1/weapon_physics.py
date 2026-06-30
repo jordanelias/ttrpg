@@ -91,7 +91,8 @@ def derive(w):
         moment = m_head * (ch * Lh) - m_grip * (Lg / 2) - m_pom * Lg
         moi = m_head * (ch * Lh) ** 2 + m_grip * (Lg / 2) ** 2 + m_pom * (Lg ** 2)
     else:
-        m_shaft = min(_A_HAFT * Lt * RHO_WOOD, m)
+        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2    # per-weapon shaft cross-section: a spear shaft (~35mm) is thinner than the staff/poleaxe-calibrated D_HAFT (40mm)
+        m_shaft = min(a_haft * Lt * RHO_WOOD, m)
         butt = w.get('butt_kg', 0.0)            # rear queue/spike counterweight (kg); generalises the retired is_poleaxe flag — ANY rear-weighted haft counterweights for free
         m_iron = max(0.0, m - m_shaft - butt)
         shaft_c = (Lt / 2) - Lg
@@ -183,6 +184,51 @@ def defense_affinities(w):
     def _band(x, lo, hi):                                         # into the old GATE's ~[0.4,1.0] band
         return round(0.4 + 0.6 * max(0.0, min(1.0, (x - lo) / (hi - lo))), 2)
     return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.2, 0.95), wind=_band(wind, 0.05, 0.45))
+
+
+# ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
+# Grip is MORPHOLOGY, not a named state. Where the working hand sits on the shaft is a CONTINUOUS choice, bounded by
+# the weapon's own geometry: a long shaft/grip slides (butt<->centre), a short hilt cannot. "Choke" = grip-position
+# toward the centre, EMERGENT from grip_len — never a category. reach / MoI / close-capability / recovery all derive
+# from g. (Grounded: the parallel-axis re-pivot. [FIAT]: the GRIP_* bounds, calibrated to the old CHOKE_GRIP_MIN.)
+GRIP_SHORT = 1.0        # [FIAT, = old CHOKE_GRIP_MIN] grip_len at/below which the hand cannot gather forward (short hilt)
+GRIP_LONG = 3.0         # [FIAT] grip_len at which the full gather range is available
+GRIP_MIN_WORKING = 0.30 # [FIAT] m of weapon kept ahead of the working hand (you must still have a weapon out front)
+
+def _gather_len(w):
+    """Grippable length along the weapon, in metres — how far a hand can travel along it. A TIPPED pole's forward
+    shaft is itself grippable (you regrip up the haft toward balance — the spear gathering to a short staff); a
+    block-headed club or a hilted weapon offers only its grip (you cannot grip up a mace's head). Name-free: wclass
+    selects which length primitives are grippable."""
+    L = w['grip_len'] + (w['head_len'] if w.get('wclass') == 'hafted_tip' else 0.0)
+    return L * UNIT_M
+
+def grip_travel_max(w):
+    """Forward hand-slide available, in metres = the grippable length less the minimum weapon kept out front."""
+    return max(0.0, _gather_len(w) - GRIP_MIN_WORKING)
+
+def grip_choke_max(w):
+    """Regrip freedom in [0,1], DERIVED from the grippable length: a short hilt or a block-headed club -> 0 (cannot
+    gather in), a long shaft -> 1. EMERGENT from morphology — never a weapon name or a 'can_choke' flag."""
+    Lu = _gather_len(w) / UNIT_M
+    return max(0.0, min(1.0, (Lu - GRIP_SHORT) / (GRIP_LONG - GRIP_SHORT)))
+
+def at_grip(w, g):
+    """Re-derive the working-pivot dynamics at grip-position g ∈ [0,1] (0 = held as issued; 1 = gathered to the
+    working BALANCE — the hand slides forward toward the CoM, stopping AT it, since the CoM is the inertia minimum;
+    you gather for control, you do not slide past it). The lunge/extension (reach side) is a BODY term handled in
+    recoverability, not a hand-slide. EXACT parallel-axis off the LEAD-HAND axis (the axis derive() already uses).
+    Returns {I_g, S_g, d_g, u}. GROUNDED (parallel-axis theorem); the gather REACH is morphology-bounded ([FIAT] GRIP_*).
+    A POLE regrips up the whole haft toward balance (the spear gathers to a short staff); a HILT slides within its
+    grip only, gated by grip_len (a short hilt cannot gather — its half-sword form, not a slide, is its mid-blade grip)."""
+    d = derive(w)
+    m, PoB, I0 = w['mass'], d['PoB_m'], d['MoI']
+    I_cm = max(0.0, I0 - m * PoB ** 2)                          # back out CoM inertia (same axis => valid, >=0)
+    u_max = grip_choke_max(w) * max(0.0, min(PoB, grip_travel_max(w)))   # gather TOWARD the CoM, gated by regrip freedom; never past the inertia minimum
+    u = max(0.0, min(1.0, g)) * u_max                          # forward hand-slide (m)
+    d_g = PoB - u                                              # CoM-to-working-hand distance after the slide
+    return dict(I_g=I_cm + m * d_g ** 2,                       # MINIMUM (= I_cm) when u reaches the CoM
+                S_g=m * abs(d_g), d_g=d_g, u=u)
 
 
 # ════════════════════ STAGE 4 — the five categorical->continuous consumer terms (Phase-3 wiring) ════════════════════

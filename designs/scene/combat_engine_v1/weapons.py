@@ -52,9 +52,9 @@ WEAPONS = {
    reach='short', wt='light', spd=2.5, percussion=2, pob_frac=0.22, hand='Demanding'),
  'spear': dict(
    mass=2.0, head_len=5.5, grip_len=1.2, hands=2, head='point', clinch=2, hand_guard=0.1, blade_guard=0.2,
-   wclass='hafted_tip', hilt='none', pommel_kg=0.0,
+   wclass='hafted_tip', hilt='none', pommel_kg=0.0, haft_d=0.035, butt_kg=0.25,   # SPEAR-BALANCE [Jordan A, 2026-06-30]: a war spear is butt-weighted (sauroter 0.25kg) on a ~35mm ash shaft -> a real 0.40kg head (40mm gave an impossible 0.23kg head); balances at the forward grip, retracts free when gripped at balance (grip-position model)
    geometry=dict(curvature=0.0, point_concentration=0.78, cross_section=0.82, edge_keenness=0.4, strike_concentration=0.0),
-   reach='long', wt='light', spd=0.0, percussion=1, pob_frac=0.0, hand='Forgiving'),   # PRIMITIVE-AUDIT [G,T1]: pob_frac 0.42->0.0 — a butt-counterweighted spear balances at/behind the lead hand (was the worst-recovering thruster, inverted)
+   reach='long', wt='light', spd=0.0, percussion=1, pob_frac=0.0, hand='Forgiving'),   # LEGACY pob_frac (live recoverability_factor still reads it); derive() now returns the real forward-balance from the mass model — the recovery/grip model consumes the derived value at the chosen grip
  'staff': dict(
    mass=1.5, head_len=2.8, grip_len=2.8, hands=2, head='blunt', clinch=3, hand_guard=0.15, blade_guard=0.3, reach_adj=0.0,   # PRIMITIVE-AUDIT [C]: reach_adj 0.5->0.0 — the blunt head-reach now lives in HEAD_REACH['blunt']=0.5 (shared), retiring this fudge
    wclass='hafted_tip', hilt='none', pommel_kg=0.0,
