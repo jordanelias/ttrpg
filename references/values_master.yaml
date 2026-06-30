@@ -2,6 +2,16 @@
 # Auto-extracted from params/*.md by tools/extract_values.py
 # Each entry records a named mechanical value with its source location.
 # Conflicts (same name, different values across files) surfaced below.
+#
+# ⚠️ STALE / NOT THE GODOT INGESTION SOURCE (ED-1052, flagged 2026-06-30).
+# This index is auto-extracted and partly stale: its `formula` fields are byte-identical
+# free-text English (not parseable), it references a NONEXISTENT params/combat.md (~70
+# entries), and it pulls some values from params/threadwork_superseded.md. The generator
+# (tools/extract_values.py) is currently dead (imports the retired github_ops), so it
+# cannot be regenerated in place. DO NOT lift numbers from here as canonical for the engine.
+# Typed, Godot-ingestible parameters live in references/engine_params/*.json (CI round-trip-
+# checked against the prose). For values not yet typed there, resolve the head via CURRENT.md
+# and read the prose params/*.md directly.
 
 version: 1
 total_values: 464

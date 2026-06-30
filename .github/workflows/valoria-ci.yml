@@ -321,6 +321,23 @@ jobs:
       # degenerate-balance regression could land unflagged. ~20s.
       - run: python -m pytest sim/tests -q
 
+  engine-params:
+    name: Engine Params Round-Trip
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      # ED-1052: the typed Godot-ingestion params (references/engine_params/*.json) must
+      # round-trip to their prose sources — every entry's source.quote still appears in the
+      # cited params doc, so the typed layer can't silently drift from canon.
+      - run: python3 tools/engine_params_check.py
+
   integrity:
     name: Repository Integrity
     runs-on: ubuntu-latest
@@ -393,6 +410,7 @@ jobs:
       - vetting-check
       - unit-tests
       - sim-regression
+      - engine-params
       - integrity
       - compliance-check
       - ed-citations

@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "subsystem": "core_resolution",
+  "title": "Core dice engine — typed engine parameters",
+  "generation": "v40",
+  "description": "Typed, Godot-ingestible parameters for the core d10 resolution engine and derived character scores. Numeric operands, structured formulas (operator expression + declared inputs), and explicit clamps — so a Godot importer can load these directly instead of parsing the prose markdown tables in params/core.md.",
+  "provenance_note": "Hand-authored from the canonical prose head params/core.md (and designs/scene/derived_stats_v30.md for Health). The prose remains the human canon; THIS file is the typed ingestion source for these values. CI round-trip-checks every entry's `source.quote` against its `source.doc` via tools/engine_params_check.py, so the typed layer cannot silently drift from the prose. Add a subsystem by dropping another *.json beside this one.",
+  "ingestion_target": "jordanelias/valoria-game (Godot 4.6)",
+
+  "scalars": {
+    "tn_controlled": {
+      "value": 6, "type": "int", "unit": "target_number",
+      "source": {"doc": "params/core.md", "section": "TN Values", "quote": "| Controlled | 6 |"}
+    },
+    "tn_standard": {
+      "value": 7, "type": "int", "unit": "target_number",
+      "source": {"doc": "params/core.md", "section": "TN Values", "quote": "| Standard | 7 |"}
+    },
+    "tn_desperate": {
+      "value": 8, "type": "int", "unit": "target_number",
+      "source": {"doc": "params/core.md", "section": "TN Values", "quote": "| Desperate | 8 |"}
+    },
+    "ob_min": {
+      "value": 1, "type": "int", "unit": "obstacle",
+      "source": {"doc": "params/core.md", "section": "Obstacle Scale", "patch": "PP-232", "quote": "Ob minimum: 1."}
+    },
+    "ob_cap": {
+      "value": 20, "type": "int", "unit": "obstacle",
+      "source": {"doc": "params/core.md", "section": "Obstacle Scale", "quote": "no stacking above 20"}
+    },
+    "overwhelming_net_floor": {
+      "value": 3, "type": "int", "unit": "net_successes",
+      "source": {"doc": "params/core.md", "section": "Degrees of Success", "patch": "PP-232", "quote": "minimum of 3 net successes"}
+    },
+    "continuity_correction": {
+      "value": 0.5, "type": "float", "unit": "net_successes",
+      "notes": "Continuous (Godot) engine resolves against net − (Ob − 0.5); the −0.5 half-step restores agreement with the discrete lattice below ~5D.",
+      "source": {"doc": "params/core.md", "section": "Continuity correction", "quote": "net − (Ob − 0.5)"}
+    },
+    "pool_floor": {
+      "value": 1, "type": "int", "unit": "dice",
+      "source": {"doc": "params/core.md", "section": "Pool Floor (all systems)", "quote": "Pool floor: 1D."}
+    },
+    "momentum_min": {
+      "value": 0, "type": "int", "unit": "momentum",
+      "source": {"doc": "params/core.md", "section": "Momentum", "quote": "Range: 0–4"}
+    },
+    "momentum_max": {
+      "value": 4, "type": "int", "unit": "momentum",
+      "source": {"doc": "params/core.md", "section": "Momentum", "quote": "Range: 0–4"}
+    },
+    "attribute_min": {
+      "value": 1, "type": "int", "unit": "attribute",
+      "source": {"doc": "params/core.md", "section": "Attributes", "quote": "Range: **1–7** (all attributes)"}
+    },
+    "attribute_max": {
+      "value": 7, "type": "int", "unit": "attribute",
+      "source": {"doc": "params/core.md", "section": "Attributes", "quote": "Range: **1–7** (all attributes)"}
+    },
+    "ms_baseline_decay_per_year": {
+      "value": 1, "type": "int", "unit": "ms_per_year",
+      "notes": "−1 MS per in-game year from baseline drift (sign is a decrement).",
+      "source": {"doc": "params/core.md", "section": "MS Baseline Decay (PP-255)", "patch": "PP-255", "quote": "−1 per in-game year"}
+    },
+    "ms_floor": {
+      "value": 0, "type": "int", "unit": "ms",
+      "source": {"doc": "params/core.md", "section": "MS Baseline Decay (PP-255)", "quote": "MS floor: 0"}
+    },
+    "ms_ceiling": {
+      "value": 100, "type": "int", "unit": "ms",
+      "source": {"doc": "params/core.md", "section": "MS Baseline Decay (PP-255)", "quote": "MS ceiling: 100"}
+    }
+  },
+
+  "formulas": {
+    "combat_pool": {
+      "expr": "(agility * 2) + (weapon_history_points + 3)",
+      "inputs": ["agility", "weapon_history_points"],
+      "clamp": {"min": 5},
+      "result_type": "int",
+      "notes": "Authoritative single definition — collapses the prior triple-definition (values_master, the stale PP-247 header note, module_contracts). PP-615 confirmed the doubled formula canonical and the PP-247 'Agi + hist + 3' note stale.",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "patch": "PP-615", "quote": "(Agility × 2) + weapon History (points + 3)"}
+    },
+    "stamina": {
+      "expr": "(3 * endurance) + (2 * spirit)",
+      "inputs": ["endurance", "spirit"],
+      "clamp": {"min": 5, "max": 35},
+      "result_type": "int",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "patch": "ED-694", "quote": "(3 × Endurance) + (2 × Spirit)"}
+    },
+    "composure": {
+      "expr": "charisma * 3",
+      "inputs": ["charisma"],
+      "clamp": {"min": 3, "max": 21},
+      "result_type": "int",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "patch": "ED-694", "quote": "Charisma × 3"}
+    },
+    "thread_fatigue": {
+      "expr": "spirit * 5",
+      "inputs": ["spirit"],
+      "clamp": {"min": 5, "max": 35},
+      "result_type": "int",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "patch": "ED-694", "quote": "Spirit × 5"}
+    },
+    "health": {
+      "expr": "(endurance + 6) * (mortal_wounds + 1)",
+      "inputs": ["endurance", "mortal_wounds"],
+      "clamp": {"min": 14, "max": 48},
+      "result_type": "int",
+      "notes": "MW = min(floor(End/2)+1, 3). designs/scene/derived_stats_v30.md §4.1 is authoritative for Health (PP-716/PP-717).",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "patch": "PP-716", "quote": "(End+6) × (MW+1)"}
+    },
+    "resolve": {
+      "expr": "spirit",
+      "inputs": ["spirit"],
+      "clamp": {"min": 1, "max": 7},
+      "result_type": "int",
+      "source": {"doc": "params/core.md", "section": "Derived Scores", "quote": "| Resolve | Spirit |"}
+    }
+  },
+
+  "tables": {
+    "die_faces": {
+      "description": "d10 face → net successes. Net = successes − 1s; may be negative. No chain rule.",
+      "source": {"doc": "params/core.md", "section": "Die Rule (d10)", "patch": "PP-246", "quote": "| 10 | +2 successes |"},
+      "rows": {
+        "1": -1,
+        "2": 0, "3": 0, "4": 0, "5": 0, "6": 0,
+        "7": 1, "8": 1, "9": 1,
+        "10": 2
+      }
+    },
+    "ev_per_die": {
+      "description": "Per-die statistics by TN for the continuous engine: net ~ Normal(mu·N, sigma·sqrt(N)).",
+      "source": {"doc": "params/core.md", "section": "Expected Value (per die)", "quote": "| 7 | 0.40 | 0.64 | 0.800 |"},
+      "rows": {
+        "6": {"mu": 0.50, "sigma2": 0.65, "sigma": 0.806},
+        "7": {"mu": 0.40, "sigma2": 0.64, "sigma": 0.800},
+        "8": {"mu": 0.30, "sigma2": 0.61, "sigma": 0.781}
+      }
+    },
+    "degrees_of_success": {
+      "description": "Outcome degree from net successes vs Ob. Overwhelming also requires net ≥ overwhelming_net_floor.",
+      "source": {"doc": "params/core.md", "section": "Degrees of Success", "quote": "| Success | Net ≥ Ob |"},
+      "rows": {
+        "overwhelming": {"condition": "net >= 2*ob and net >= 3"},
+        "success": {"condition": "net >= ob"},
+        "partial": {"condition": "net > 0 and net < ob"},
+        "failure": {"condition": "net <= 0"}
+      }
+    }
+  }
+}

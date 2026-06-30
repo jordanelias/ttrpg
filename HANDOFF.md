@@ -66,6 +66,15 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-06-30 — **ED-1052 started: typed engine-params pipeline + Combat Pool collapse.** Established the
+  Godot ingestion layer: `references/engine_params/core_resolution.json` (d10 engine + derived scores as
+  numeric operands / structured formulas / explicit clamps), held honest by `tools/engine_params_check.py`
+  — a CI round-trip gate ("Engine Params Round-Trip") that asserts every entry's `source.quote` still
+  appears in its prose doc. Collapsed the Combat Pool triple-definition to one authoritative entry
+  (`(Agility × 2) + weapon History (points + 3)`, min 5, PP-615). Bannered `values_master.yaml` as
+  stale/not-the-Godot-source; updated CLAUDE.md §5 + `references/engine_params/README.md`. 10 new unit
+  tests. **ED-1052 stays open** — only the core slice is typed; contest/mass_combat/threadwork/board_game/
+  factions remain prose-only (drop a new `*.json` per the README to extend).
 - 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the three
   "integrity" gates off the GitHub API to the working tree (no PAT/network): `broken_dependency_checker`
   and `patch_propagation_checker` now `os.walk`/read locally (both green against the checkout);

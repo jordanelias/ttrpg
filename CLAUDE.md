@@ -96,23 +96,27 @@ are more "current state" files than there should be; trust them in this strict p
 This is the most fragile and most load-bearing surface for the videogame, and it has known traps. Do
 not treat any "structured" data layer as ground truth without checking it against the prose.
 
-- **Numbers live as prose, not typed data.** All mechanical parameters in `params/*.md` are markdown
-  tables (unicode `×`, en-dashes, parenthetical caveats like "minimum 5", footnotes). A Godot importer
-  **cannot ingest these directly** — there is no typed engine-params file yet.
-- **`references/values_master.yaml` is auto-extracted and partly stale/wrong.** Its `formula` fields are
-  byte-identical free-text English (not parseable ASTs); it indexes a **nonexistent** `params/combat.md`
-  (~70 entries) and pulls 8 values from `params/threadwork_superseded.md`. **Do not lift numbers from it
-  as canonical** — verify against the current prose head in `CURRENT.md` first.
+- **Typed engine params (the Godot ingestion source) — `references/engine_params/*.json`.** Numeric
+  operands, structured formulas (`expr` + declared `inputs`), explicit clamps. CI round-trip-checks each
+  entry's `source.quote` against its prose doc (`tools/engine_params_check.py`, job "Engine Params
+  Round-Trip"), so the typed layer can't silently drift. **Coverage is incremental (ED-1052):** so far
+  only `core_resolution.json` (the d10 engine + derived scores) is typed; other subsystems are still
+  prose-only. See `references/engine_params/README.md` to add one.
+- **Most numbers still live as prose.** Mechanical parameters in `params/*.md` are markdown tables
+  (unicode `×`, en-dashes, caveats like "minimum 5", footnotes) a Godot importer cannot ingest. Until a
+  subsystem is typed under `engine_params/`, its values are hand-transcribed — flag drift risk.
+- **`references/values_master.yaml` is auto-extracted and partly stale/wrong** (carries a STALE banner).
+  Its `formula` fields are free-text English (not parseable); it indexes a **nonexistent** `params/combat.md`
+  (~70 entries) and pulls values from `params/threadwork_superseded.md`; its generator (`extract_values.py`)
+  is dead. **Do not lift Godot numbers from it** — use `engine_params/` or the prose head via `CURRENT.md`.
 - **Derived-stat schema is IN FLUX.** `descriptor_registry.yaml` marks the 9-attribute roster "IN FLUX",
-  aggregates (`agg.body/mind/social`) as `placeholder` and not wired, and attribute keys as `warn` (not
-  `block`). **Combat Pool is defined three different ways** across `values_master.yaml`, `params/core.md`
-  (PP-247), and `module_contracts.yaml`. Do not bind Godot resource fields to these keys yet.
-- **When you need a number for the engine:** resolve the subsystem head via `CURRENT.md` → read the prose
-  param/design doc → cite the `PP-NNN`/`ED-NNN` that established it. Do not synthesize a value the ledger
-  does not back (the anti-fabrication gate exists, but is leaky — §7).
-- **Recommended (not yet built):** a typed engine-params YAML/JSON (numeric operands, structured
-  formulas, explicit clamps) generated from the prose and CI round-trip-checked, ingested directly by
-  Godot. Until that exists, every value crossing into Godot is hand-transcribed — flag drift risk.
+  aggregates (`agg.body/mind/social`) as `placeholder`/not wired, attribute keys as `warn` (not `block`).
+  *(Combat Pool's former triple-definition is now collapsed to one authoritative entry —
+  `engine_params/core_resolution.json` `formulas.combat_pool`, `(Agility × 2) + weapon History (points + 3)`,
+  min 5, PP-615.)* Do not bind Godot resource fields to the in-flux attribute keys yet.
+- **When you need a number for the engine:** prefer `references/engine_params/` if the subsystem is typed;
+  otherwise resolve the head via `CURRENT.md` → read the prose → cite the `PP-NNN`/`ED-NNN` that established
+  it. Do not synthesize a value the ledger does not back (the anti-fabrication gate exists but is leaky — §7).
 
 ---
 
