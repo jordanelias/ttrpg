@@ -8,7 +8,7 @@ three parallel name-keyed dicts; consolidated 2026-06-29 per the architecture au
 RECORD SCHEMA (per weapon):
   PHYSICAL   mass(kg) · head_len · grip_len (length-units) · hands(1/2) · head{point,cut_thrust,straight_cut,
              curved_cut,blunt} · clinch(grappling affinity) · hand_guard(0-1) · blade_guard(0-1) · reach_adj
-  COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none} · pommel_kg · is_poleaxe
+  COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none} · pommel_kg · butt_kg(rear counterweight, kg)
   GEOMETRY   geometry=dict(curvature, point_concentration, cross_section, edge_keenness, strike_concentration) -> bake
   LEGACY (derived in weapon_physics; live until the Phase-3 wiring): reach{long/short} · wt{light/heavy} · spd ·
              percussion · pob_frac · hand{Forgiving/Standard/Demanding}.  `gap`/`geo` are DERIVED by the bake below.
@@ -52,22 +52,22 @@ WEAPONS = {
    reach='short', wt='light', spd=2.5, percussion=2, pob_frac=0.22, hand='Demanding'),
  'spear': dict(
    mass=2.0, head_len=5.5, grip_len=1.2, hands=2, head='point', clinch=2, hand_guard=0.1, blade_guard=0.2,
-   wclass='hafted_tip', hilt='none', pommel_kg=0.0, is_poleaxe=False,
+   wclass='hafted_tip', hilt='none', pommel_kg=0.0,
    geometry=dict(curvature=0.0, point_concentration=0.78, cross_section=0.82, edge_keenness=0.4, strike_concentration=0.0),
    reach='long', wt='light', spd=0.0, percussion=1, pob_frac=0.0, hand='Forgiving'),   # PRIMITIVE-AUDIT [G,T1]: pob_frac 0.42->0.0 — a butt-counterweighted spear balances at/behind the lead hand (was the worst-recovering thruster, inverted)
  'staff': dict(
    mass=1.5, head_len=2.8, grip_len=2.8, hands=2, head='blunt', clinch=3, hand_guard=0.15, blade_guard=0.3, reach_adj=0.0,   # PRIMITIVE-AUDIT [C]: reach_adj 0.5->0.0 — the blunt head-reach now lives in HEAD_REACH['blunt']=0.5 (shared), retiring this fudge
-   wclass='hafted_tip', hilt='none', pommel_kg=0.0, is_poleaxe=False,
+   wclass='hafted_tip', hilt='none', pommel_kg=0.0,
    geometry=dict(curvature=0.0, point_concentration=0.05, cross_section=0.55, edge_keenness=0.0, strike_concentration=0.15),
    reach='long', wt='light', spd=0.0, percussion=4, pob_frac=0.05, hand='Forgiving'),
  'mace': dict(
    mass=1.2, head_len=1.8, grip_len=0.7, hands=1, head='blunt', clinch=4, hand_guard=0.18, blade_guard=0.3, reach_adj=0.0,   # PRIMITIVE-AUDIT [G]: hand_guard 0.45->0.18 (a bare haft is below a cross-hilt); reach_adj cleared (was masking the 'long' tag)
-   wclass='hafted_block', hilt='none', pommel_kg=0.0, is_poleaxe=False,
+   wclass='hafted_block', hilt='none', pommel_kg=0.0,
    geometry=dict(curvature=0.0, point_concentration=0.02, cross_section=0.85, edge_keenness=0.0, strike_concentration=0.45),
    reach='short', wt='heavy', spd=0.0, percussion=8, pob_frac=0.6, hand='Forgiving'),   # PRIMITIVE-AUDIT [G,T1 Wallace A978 51.8cm]: reach 'long'->'short' — a ~0.55m sidearm, not a reach weapon
  'poleaxe': dict(
    mass=2.5, head_len=3.0, grip_len=3.0, hands=2, head='blunt', clinch=5, hand_guard=0.3, blade_guard=0.6, reach_adj=-0.05,   # PRIMITIVE-AUDIT [G,T0/T2]: length 1.32->1.8m (keep the 50/50 centre-grip split); was shorter than every specimen (Art Institute 177.8cm, RA VII.1510 236.7cm)
-   wclass='hafted_tip', hilt='none', pommel_kg=0.0, is_poleaxe=True,
+   wclass='hafted_tip', hilt='none', pommel_kg=0.0, butt_kg=0.22,   # rear queue/spike counterweight (kg) — derive() reads it; the old is_poleaxe flag is gone
    geometry=dict(curvature=0.0, point_concentration=0.78, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.85),
    reach='long', wt='heavy', spd=-0.5, percussion=8, pob_frac=0.45, hand='Demanding'),
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form.

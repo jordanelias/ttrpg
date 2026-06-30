@@ -21,7 +21,7 @@ CAPABILITIES = {
     'halfsword': {
         'node': 'closed.form_switch (systems.halfsword_target)',
         'pred': lambda name, w: name in HALFSWORD_FORM or name in HALFSWORD_BASE,
-        'needs': "a long rigid blade you can grip mid-stave (the longsword family)",
+        'needs': "a long rigid blade you can grip mid-stave — high cross_section, sufficient blade length, a hilt that doesn't block the mid-blade grip",
     },
     'gap_thrust': {
         'node': 'closed.coupling / armour-defeat (core.coupling puncture path)',
@@ -46,7 +46,7 @@ def allowed(key, name):
 
 def capability_table():
     """{weapon: {capability: bool}} for every weapon in the roster (auto-form half-sword excluded as a base)."""
-    names = [n for n in WEAPONS if n != 'longsword_halfsword']
+    names = [n for n, rec in WEAPONS.items() if 'base' not in rec]   # exclude auto-switched FORMS (records carrying a `base`), never a named weapon
     return {n: {k: allowed(k, n) for k in CAPABILITIES} for n in names}
 
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     checks, rule = [], '=' * 64
     print("capabilities.py — affordance gates verified against the live engine"); print(rule)
 
-    names = [n for n in WEAPONS if n != 'longsword_halfsword']
+    names = [n for n, rec in WEAPONS.items() if 'base' not in rec]   # exclude auto-switched FORMS (records carrying a `base`), never a named weapon
 
     # (a) halfsword predicate matches systems.halfsword_target (does the form actually switch?)
     a_ok = True

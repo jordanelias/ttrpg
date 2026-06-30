@@ -30,7 +30,6 @@ D_HAFT = 0.040          # m haft diameter (staff back-solve)
 D_GRIP = 0.030          # m sword grip
 RHO_SWORD_GRIP = 900.0  # kg/m^3 wood scales + thin tang
 GUARD = {'compound': 0.30, 'simple': 0.12, 'none': 0.0}   # hilt mass at the cross (kg)
-POLEAXE_BUTT = 0.22     # rear queue/spike counterweight (kg)
 C_HEAD = {'bladed': 0.45, 'hafted_tip': 0.97, 'hafted_block': 0.88}  # head-mass centroid frac of head_len
 _A_HAFT = math.pi * (D_HAFT / 2) ** 2
 _A_GRIP = math.pi * (D_GRIP / 2) ** 2
@@ -93,7 +92,7 @@ def derive(w):
         moi = m_head * (ch * Lh) ** 2 + m_grip * (Lg / 2) ** 2 + m_pom * (Lg ** 2)
     else:
         m_shaft = min(_A_HAFT * Lt * RHO_WOOD, m)
-        butt = POLEAXE_BUTT if w.get('is_poleaxe') else 0.0
+        butt = w.get('butt_kg', 0.0)            # rear queue/spike counterweight (kg); generalises the retired is_poleaxe flag — ANY rear-weighted haft counterweights for free
         m_iron = max(0.0, m - m_shaft - butt)
         shaft_c = (Lt / 2) - Lg
         moment = m_iron * (ch * Lh) + m_shaft * shaft_c - butt * Lg
