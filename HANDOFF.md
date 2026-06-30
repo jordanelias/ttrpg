@@ -9,6 +9,51 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Pending
 
+- **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
+  L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
+  - **Committed Phase-3 chain:** `297458d7` (foundation: leverage→lever-arm, FIX-1b, M3, half-sword geometry) →
+    `210dd1b4` (armor_defeat→derived percussion + FIX-1 reach-threat) → `360325d0` (Tier-2/3 primitives) →
+    `d069be7c` (**reach wired to geometry — the grip insight: a centre-gripped staff reaches less than a butt-gripped
+    spear, emergent; staff now close-capable**) → `d5a25cc3` (**primitive-law purge Wave 1, behaviour-identical:**
+    retired `is_poleaxe`→`butt_kg` primitive, the `longsword_halfsword` name-filter→derived, dead `HEAD_REACH`) →
+    `877c8a06` (**recovery/grip FOUNDATION, build-only**).
+  - **Two Ultracode assessments banked (this session):** (1) **weapon-name leak audit** (11 agents) — register in
+    `tasks/wclbz78ux.output`; worst leak = `systems.GATE` (per-weapon parry/dodge/wind table keyed by `defender.weapon`),
+    deferred because the derived `defense_affinities` does NOT yet reproduce it (parry rank-ρ 0.56, wind 0.33; needs the
+    agility-clamp fix + band recalibration in the re-baseline). (2) **recovery+grip grounding** (HEMA+physics, survived
+    its own adversarial refute — killed an extrapolated swing-exponent + a FABRICATED citation) — formulation in
+    `tasks/w811gujrg.output`. Leads with body-extension/lunge (Silver+Giganti, best-grounded); mode-split secondary
+    (exponent flagged [ASSERTED]); physics flagged [ASSERTED — first-principles].
+  - **Spear decision (Jordan, 2026-06-30): option A — butt-weighted war spear.** Delivered at the mass-model layer in
+    `877c8a06`: sauroter `butt_kg=0.25` + `haft_d=0.035` (35mm shaft) → real 0.40kg head; retracts free when gripped at
+    balance (the grip-position model). Grip-position derivations (`grip_choke_max`/`grip_travel_max`/`at_grip`,
+    parallel-axis, build-only) validated: gather monotone-down to the CoM, spear→balance, mace flat (a club, not a pole).
+  - **Recovery/grip STAGE 2 + 2b + GATE — DONE + committed** (`baaa6d77` → `d3661936` → `1dae44e8`):
+    - `baaa6d77` — grip-enum {normal,choke,lunge} → continuous `grip_position`+`lunge_depth`; `recoverability_factor`
+      rewritten grounded (at_grip I_g/S_g + point_concentration + 1H/2H couple + lunge-led); `adopt_stance`→`grip_target`,
+      `can_choke`→`grip_choke_max`, `lunge_quality` continuous. Mirror ~50, 27/27 tests.
+    - `d3661936` — `wield_heft` (g-aware MoI) on the COST path → **fixes longsword-vs-plate** (the half-sword's tiny MoI
+      now reads light; vs-plate 23/27% → 66/91%). Damage-impact path keeps heft_resp (the wt de-leak is separate).
+    - `1dae44e8` — **retired systems.GATE** (the last per-weapon table); defence affinities DERIVE from geometry. The
+      resolution spine now carries NO per-weapon table + NO weapon name.
+    - Re-baselined matrix coherent: mace/dagger/poleaxe rise vs plate, cutters collapse, longsword half-sword holds,
+      arming baseline ~50. "Balance is not symmetry" realized from primitives.
+  - **NEXT (the remaining Phase-3 tail → Gate 1):** the SPEAR flat-dominance (94-96% all tiers — its win is REACH, not
+    tempo: needs the reach/close-game + the spear gathering live in the wrapper, Phase-5-adjacent); residual de-leaks
+    (`hand`→handling, `wt`/`spd`/`pob_frac` legacy fields, half-sword form→grip_position fold); the agility [FIAT] clamp
+    (flattens light-weapon dodge); strikes-to-fell for the plate cells (longsword 87 / staff 93 heavy are baseline-collapse
+    noise); calibrate the [FIAT] recovery/heft gains; then **Gate-1 adversarial audit (7 lenses)** → ED entries → merge.
+  - **SPEAR-FIX FINDING (2026-06-30, measured — corrects the hypothesis above):** the dominance is ~88% the **APPROACH**,
+    NOT the closed exchange. Tried a close-game (reach→clinch rotation: inside the point, `reach_sigma` returns a
+    `close_handiness`/clinch edge instead of the static reach gap). Measured: at K=0 (closed-reach fully NEGATED) the
+    spear STILL beats the dagger **91.8%** (vs 94.8% live) — so the closed-reach edge is only ~3pp of the win; and
+    negating it **crashed the rapier** (54→27%, it legitimately banks closed-reach). So the close-game is the WRONG
+    lever — the fix is **approach-side** (`stophit_p` / `reach_threat` / `close_rate` in `wrapper.engagement`, where the
+    closing weapon eats stop-hits + the spear re-opens). The spear SHOULD win the approach (typology: "the short weapon's
+    whole problem is surviving the approach") — just less than 95%; a survivable-close + modest grapple-reward is the
+    shape, but it's a careful multi-lever calibration, not a single term. **Experiment reverted** (engine at known-good,
+    spread ~52, rapier ~54); `clinch` confirmed the right close-suitability primitive (rapier≈spear, both poor grapplers).
+
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
   harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
@@ -32,6 +77,29 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
   specs; rewrote `README.md` to defer to CLAUDE/CURRENT/HANDOFF. **Not done (needs Jordan / re-sweep):**
   the parity-oracle balance values (ED-1050) and the Gate-0/contracts authoring (ED-1051).
 
+- 2026-06-29 — **Scene-combat engine (`design/scene-combat-v1`, 22 commits, UNMERGED — awaiting ratification).**
+  Built the 1v1 scene-combat engine (`designs/scene/combat_engine_v1/`: wrapper=state machine, core=σ-leverage
+  resolution, systems=subsystems, tradition=affinity model, combatant/config=continuous morphology, workbench=
+  visual tuning + narrated n=1 watch + depth-2 branch explorer). Delivered the 7 requirements (WS-1 state-graph
+  integrity+injection points, WS-2 continuous morphology weight=kg + affordance gates, WS-3 bottom-up tradition
+  decomposition, WS-4 representation, WS-5 The Approach, WS-6 workbench, WS-8 balancing methodology) + WS-7
+  multi-combatant design. Core design decisions this session:
+  - **Commitment is a SPECTRUM** — commit is continuous (`2+3·Beta`), not integer rungs; feint↔all-in is one axis.
+  - **Commitment = recovery, made PHYSICAL** — overcommit cost scales with how hard the weapon is to arrest, and
+    weight is **NON-LINEAR** (`mass**1.5 · pob`): rapier 0.93 < longsword 1.0 < mace 1.45 < poleaxe 2.24.
+  - **Grip/stance/lunge DERIVED from morphology, never flagged** (Jordan's directive) — `close_unwieldiness`(reach),
+    `can_choke`(grip_len), `lunge_quality`(thrust × non-linear lightness × hand-balance × 1H). Emergent: the
+    rapier (long reach, short grip) can't choke → suffers in the close; a longsword lunge ≠ a rapier lunge.
+  - **Tempo coupled to commitment+recovery** — a deep/heavy commit costs readiness (slower next action); heavy
+    weapons self-regulate. `RECOVERY_TEMPO_K=0.15` (structural ~5pp effect on extremes; magnitude is Jordan's).
+  - **WS-4 dissolution** — the channel vector became an **affinity point-buy budget** (equal total per tradition;
+    shape=identity, total=equal) + the **imposition gate** (default on). Fixed the `none` injustice (46→49) and
+    beats the keep-bias baseline. **Weapons are NOT equalised** (spear 94 / mace 38) — a battlefield weapon ≠ a
+    duelling weapon (the contextual-balance principle).
+  - **§C verdict — PARTIAL** (honest, refines the "clears §C" commit msg): none-fairness fixed + beats keep-bias,
+    but the C1 contextual test (`balance.tradition_context_matrix`) shows only **2 distinct leaders / 5 contexts**
+    — spanish broadly strong (clean niche: rapier/measure), chinese broadly weak. Residual = channel **leverage**.
+  All gates green; 26 combat tests pass; mirrors fair (~0.50).
 - 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOCKING).** Diagnosed the
   292 report-only violations: 286 `NONEXISTENT` from **dual ledger-of-record drift** (design docs minted ED
   numbers in inline `[EDITORIAL:]` tables never migrated to the JSONL), 6 `OPEN_AS_BASIS` (2 of them validator
@@ -84,6 +152,18 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 _(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
 allocation: workplan-v5 **LB-21**, at the next integration pause.)_
 
+- **Scene-combat (`design/scene-combat-v1`) — awaiting Jordan, then merge:**
+  1. **Close the channel-leverage residual (the §C remainder).** The affinity budget fixed total-competence but
+     not per-channel leverage → spanish broad-strong, chinese broad-weak, only 2 niches. The fix is the
+     **effectiveness-functions calibration**: measure each channel's marginal win-leverage, then normalise so each
+     paradigm is decisive in *its* context (chinese-burst should win a fast/light-weapon context; german-bind the
+     longsword context — currently it doesn't). **Design-laden** (how strong each paradigm should be = Jordan).
+     Re-measure with `python designs/scene/combat_engine_v1/workbench/balance.py context`.
+  2. **The abilities-as-access depth** (WS-4's other half): the 7 phase-slots + techniques-as-permission + the
+     learning-gate ("can't bind-and-wind / Spanish footwork without having trained it"). Carries the open
+     decisions the plan flags as Jordan's: affinity full-point-buy vs thin, the cyclic node relation, naming.
+  3. **Tunable magnitudes** (Class-C, workbench-adjustable): `RECOVERY_TEMPO_K` (0.15), `LUNGE_*`, `CLOSE_REACH_REF`.
+  4. **Ratify → merge to main** (squash; the branch is self-contained under `designs/scene/` + `tests/valoria/`).
 - **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired to
   `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier` Check 4 blocking
   for `skills/`). Earlier passes already landed the coverage_matrix single-source + 12-skill boilerplate

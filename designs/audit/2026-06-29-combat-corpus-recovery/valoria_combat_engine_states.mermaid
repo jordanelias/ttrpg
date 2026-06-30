@@ -1,0 +1,57 @@
+stateDiagram-v2
+    [*] --> Setup
+    Setup : init stamina + conc, reset wounds
+    Setup : A and B become fixed objects, never swapped
+
+    Setup --> ENG : start bout, coin-flip initiator
+
+    state "ENGAGEMENT  (one bout)" as ENG {
+        [*] --> Gauge
+        Gauge : reach_base both, then longer / shorter / measure_gap
+        Gauge --> APPROACH : measure_gap > 0.3
+        Gauge --> CLOSED : measure_gap <= 0.3
+
+        state "APPROACH — open measure" as APPROACH {
+            [*] --> Closing
+            Closing : tempo accrues, displace point, shrink measure_gap
+            Closing --> StopHit : longer weapon threatens
+            StopHit --> Closing : miss
+            StopHit --> Closing : hit — wound, not felling
+        }
+
+        state "CLOSED — tempo-gated exchange" as CLOSED {
+            [*] --> Exchange
+            Exchange : aggressor = max ready; half-sword form set
+            Exchange : compose net_sigma, resolve, degree
+            Exchange --> Exchange : hit / miss
+            Exchange --> Exchange : riposte — role flip by object swap
+            Exchange --> BIND : degree yields a bind
+            BIND : blades locked, up to 3 bind iterations
+            BIND --> Exchange : bind resolves or riposte
+        }
+
+        APPROACH --> CLOSED : measure_gap <= 0.3, just closed
+        CLOSED --> APPROACH : reopen-moment + reopen_prob, longer regains distance
+    }
+
+    ENG --> FELLED : a telling blow fells a fighter
+    ENG --> SEPARATED : exchange cap / stamina collapse / random break
+
+    SEPARATED --> Recovery : stamina + conc recover
+    Recovery --> ENG : next bout, under 12
+    Recovery --> RESULT : bouts exhausted
+    FELLED --> RESULT
+
+    RESULT : felled fighter loses; else wound-count tiebreak
+    RESULT --> UPSET
+    UPSET : 95% cap — 5% chance the decided loser steals the win
+    UPSET --> [*]
+
+    classDef phase fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe;
+    classDef terminal fill:#3f1d2e,stroke:#f87171,color:#fecaca;
+    classDef cap fill:#3f2d1e,stroke:#f59e0b,color:#fde68a;
+    classDef setup fill:#1f2937,stroke:#9ca3af,color:#e5e7eb;
+    class APPROACH,CLOSED,BIND phase;
+    class FELLED,SEPARATED terminal;
+    class UPSET cap;
+    class Setup,Recovery setup;

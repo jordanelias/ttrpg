@@ -2,16 +2,34 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-from math import exp, tanh
+from math import exp, tanh, sqrt
 from config import HANDLE_RANK
 import core
-from combatant import WEAPONS, GEOMETRY
+import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
+from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg):
+    """Standing reach = body/arm offset (L0) + the weapon's forward extent DERIVED from geometry (Phase-3b: retires
+    the categorical reach=='long' + HEAD_REACH[head] + the per-weapon reach_adj triple-duty). Forward extent =
+    head_len (the blade/shaft forward of the lead hand) + a 2H rear-hand setback (REACH_2H_K*grip_len). So a
+    CENTRE-gripped pole (staff, head_len≈grip_len) reaches LESS than a BUTT-gripped one (spear, head_len≫grip_len),
+    and a long blade (greatsword) more than a short one — the grip-position insight, emergent. reach_adj is now a
+    SMALL per-weapon residual, not the dominant term."""
     w=c.w
-    return (cfg['L0']+cfg['LONG']*(w['reach']=='long')+cfg['HANDS2']*(w['hands']==2)
-            +cfg['HEADR']*cfg['HEAD_REACH'][w['head']] + w.get('reach_adj',0.0))
+    geom = w['head_len'] + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
+    return cfg['L0'] + cfg['REACH_GEOM_SCALE']*geom + w.get('reach_adj',0.0)
+
+# ---------- wielding heft (DERIVED, g-aware — the COST of swinging; replaces the binary wt class) ----------
+def wield_heft(c, cfg):
+    """Wielding heft (the tempo/stamina/strength COST of bringing a weapon to bear) — DERIVED from the g-aware swing
+    inertia at the chosen grip (WP.at_grip I_g), a COMPRESSED power-law so the ~1000x MoI range across the roster
+    maps to a sane heft spread. Anchored so the 2H cut-thrust reference reads ~1.0 (the old heavy-class heft). The
+    half-sword form's tiny MoI now reads LIGHT (was binary wt='heavy' -> fixes the longsword-vs-plate collapse at
+    root); a GATHERED pole (lower I_g) is lighter to wield. Replaces core.heft_resp on the COST path only (the
+    damage-impact path keeps heft_resp pending the wt de-leak). Pure."""
+    I_g = WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g']
+    return (max(1e-6, I_g) / cfg['REC_I_REF']) ** cfg['WIELD_HEFT_EXP']
 
 # ---------- tempo ----------
 def weapon_tempo(c, cfg, fatigue=0.0):
@@ -20,11 +38,11 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     often). A choked grip trades cadence for close-quarters control; a lunge/extended grip trades repeat-speed for
     reach (handled at the call site via grip state)."""
     w=c.w
-    pen=cfg['WEIGHT_PEN']*(w['wt']=='heavy')+cfg['HANDS_COMMIT']*(w['hands']==2 and w['wt']=='heavy')
+    _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
+    pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
-    grip=getattr(c,'grip','normal')
-    if grip=='choke':  pen += cfg['CHOKE_TEMPO_PEN']    # choked grip: a bit slower cadence (control/leverage gain elsewhere)
-    elif grip=='lunge':pen += cfg['LUNGE_TEMPO_PEN']    # extended/lunge: slower to repeat (reach/commit gain elsewhere)
+    pen += cfg['CHOKE_TEMPO_PEN']*getattr(c,'grip_position',0.0)   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
+    pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
     t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
@@ -34,28 +52,28 @@ def close_tempo(c, cfg, fatigue=0.0):
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
     toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs)."""
     t=weapon_tempo(c,cfg,fatigue)
-    w=c.w; grip=getattr(c,'grip','normal')
-    # a long pole (spear/staff: data flag `closes_poorly`) pays the closed penalty UNLESS it has choked up to fight
-    # close (grip adjustment offsets it). Explicit weapon DATA, not an attribute-conjunction guess.
-    if w.get('closes_poorly', False) and grip!='choke': t -= cfg['POLE_CLOSE_PENALTY']
+    # a weapon UNWIELDY in the close (DERIVED from reach — long business-end) is slow to recover once a handier
+    # weapon is inside; GATHERING IN (grip_position) reduces the penalty in proportion (a fully-gathered pole pays
+    # none). Pure morphology, CONTINUOUS in grip_position (no choke string, no closes_poorly flag).
+    t -= cfg['POLE_CLOSE_K']*close_unwieldiness(c,cfg)*(1.0 - getattr(c,'grip_position',0.0))
     t=max(cfg['TEMPO_FLOOR'],t)
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
 # ---------- stamina ----------
-def stamina_max(c): 
-    import r8_parity_harness as r8; return r8.stamina_max(c.end,c.spirit)
+def stamina_max(c):
+    return c.stamina_max          # the combatant HOSTS its derived figures; thin accessor (back-compat)
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*(c.weight=='heavy')+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
-    return cfg['CONC_FOCUS']*c.focus + cfg['CONC_SPIRIT']*c.spirit   # 3*Focus + 2*Spirit (Jordan 2026-06-04, canonical ED-902; corrects prior Cog-driven form)
+    c.derive_stats(cfg); return c.conc_max   # the combatant HOSTS it (3F+2S, ED-902); thin accessor (back-compat)
 def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
-    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*(w['wt']=='heavy')+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)
+    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)   # DERIVED g-aware heft (Stage 2b)
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
@@ -68,22 +86,75 @@ def balance_eff(c, fat, cfg):
     # to the engine's balance-neutral (3), so a default fighter's substrate is unchanged. Still 1.0× at full poise.
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
+def recoverability_factor(c, cfg):
+    """IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis, made physical and
+    GRIP-AWARE (Phase-3 Stage 2, grounded). Reads the DERIVED dynamics at the chosen grip-position (WP.at_grip):
+      - SWING arrest: sqrt of the re-pivoted MoI (energy-limited Δt=Iω/τ), GATED by the forward static moment so a
+        centre-balanced pole (a staff) is NOT mis-ranked as irrecoverable;
+      - THRUST retract: the forward static moment alone (it retracts along the line);
+      blended by point_concentration (CONTINUOUS head weight — a hand-balanced rapier retracts, a forward mace
+      'wants to continue'; no head NAME); a MoI-aware 1H/2H force-couple control credit; and the body-extension
+      (lunge) term — the lead, best-grounded axis (Silver true-times / Giganti). Normalized to a 2H cut-thrust
+      anchor (recoverability 1.0; the mirror is symmetric). Bounded below. Pure. The sqrt(I)/parallel-axis/couple
+      STRUCTURE is [ASSERTED — first-principles]; the gains are [FIAT/SIM-CALIBRATE]. See tasks/w811gujrg.output."""
+    w=c.w
+    g  = getattr(c, 'grip_position', 0.0)
+    ld = getattr(c, 'lunge_depth', 0.0)
+    a = WP.at_grip(w, g)
+    I_g, S_g = max(1e-9, a['I_g']), a['S_g']
+    I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
+    two = 1.0 if w['hands'] == 2 else 0.0
+    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
+    # (A) MODE commitment — both dimensionless vs the anchor, then blended by geometry
+    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref)
+    C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
+    C_mode   = pc * C_thrust + (1 - pc) * C_swing
+    # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
+    tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * WP.UNIT_M * two)
+    tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'] * WP.UNIT_M)
+    arrest  = (tau / sqrt(I_g)) / (tau_ref / sqrt(I_ref))                       # >1 = more controllable than the anchor
+    ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
+    # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
+    lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
+    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
+def close_unwieldiness(c, cfg):
+    """How poorly a weapon serves IN THE CLOSE — DERIVED from its reach (a long weapon's business end is past the
+    fight at grappling distance and slow to bring back to bear). 0 for a short/handy weapon. No closes_poorly flag:
+    pure morphology (reach = length + head + hands)."""
+    return max(0.0, reach_base(c,cfg) - cfg['CLOSE_REACH_REF'])
+def can_choke(c, cfg):
+    """Can the fighter gather in (regrip toward the centre)? DERIVED from the grippable length — a long shaft/grip
+    yes, a short hilt or a block-headed club no. Thin bool over WP.grip_choke_max (the continuous primitive)."""
+    return WP.grip_choke_max(c.w) > 0.0
+def grip_target(c, closed, cfg):
+    """The CONTINUOUS grip-position g* in [0,1] the fighter adopts (The Approach — footwork & stance), fully DERIVED
+    from morphology — replaces the discrete adopt_stance string ('choke' was g>0, 'normal' g=0). Once the measure is
+    CLOSED, a fighter GATHERS IN (g>0) in proportion to how unwieldy the weapon is in the close (close_unwieldiness),
+    bounded by how far it can regrip (WP.grip_choke_max): a pole gathers up the haft; a rapier (short hilt) cannot
+    and just suffers. At open measure g=0 (full reach). Pure (returns g; the wrapper writes grip_position)."""
+    if not closed:
+        return 0.0
+    drive = min(1.0, close_unwieldiness(c, cfg) / cfg['CHOKE_DRIVE_REF'])     # 0..1: the more unwieldy in the close, the more you gather
+    return WP.grip_choke_max(c.w) * drive
+def lunge_quality(c, cfg):
+    """How well a weapon LUNGES (an extended-body thrust) — DERIVED, CONTINUOUS (Phase-3 Stage 2). A light, hand-
+    balanced, point-concentrated weapon lunges well; the hard head-NAME gate ('point'/'cut_thrust') becomes the
+    CONTINUOUS point_concentration weight (a blunt/cut head -> ~0, never an exact-0 category). Hand-balance is the
+    DERIVED forward static moment (no hand-set pob_frac). Propensity in [0,1]; the wrapper rolls against it. Pure."""
+    w=c.w
+    pc      = w['geometry']['point_concentration']                                          # CONTINUOUS thrust-ness (was the head-name gate)
+    light   = (cfg['LUNGE_REF_MASS']/max(0.2,w.get('mass',1.0)))**cfg['MOMENT_MASS_EXP']    # NON-LINEAR lightness
+    handbal = max(0.0, 1.0 - WP.derive(w)['PoB_frac'])                                       # DERIVED hand-balance (forward-balanced = poor lunge recovery)
+    onehand = cfg['LUNGE_1H_BONUS'] if w['hands']==1 else cfg['LUNGE_2H_FACTOR']            # the classical lunge is one-handed
+    return max(0.0, min(1.0, pc*light*handbal*onehand))
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
-# ---------- defense modes (parry/dodge/wind) ----------
-GATE={
- 'rapier':{'parry':1.0,'dodge':0.8,'wind':0.4},'arming':{'parry':0.9,'dodge':0.8,'wind':0.7},
- 'longsword':{'parry':0.9,'dodge':0.7,'wind':1.0},'greatsword':{'parry':0.7,'dodge':0.6,'wind':0.9},
- 'sabre':{'parry':0.9,'dodge':0.9,'wind':0.6},'dagger':{'parry':0.6,'dodge':0.9,'wind':0.5},
- 'paired_short':{'parry':1.0,'dodge':0.9,'wind':0.4},'spear':{'parry':0.8,'dodge':0.9,'wind':0.8},
- 'staff':{'parry':0.9,'dodge':0.8,'wind':0.8},'mace':{'parry':0.7,'dodge':0.7,'wind':0.7},
- 'poleaxe':{'parry':0.8,'dodge':0.5,'wind':1.0},
- 'longsword_halfsword':{'parry':1.0,'dodge':0.5,'wind':1.0},
-}
-
-# fail-fast: the three hand-maintained weapon dicts must stay key-synchronised (a missing GATE key -> KeyError at
-# mode_sigma; a missing GEOMETRY key -> silent stale gap). Catch drift at import, not mid-fight.
-assert set(GATE)>=set(WEAPONS), f"GATE missing weapons: {set(WEAPONS)-set(GATE)}"
+# ---------- defense modes (parry/dodge/wind) — DERIVED, no per-weapon table ----------
+# The hand-authored per-weapon GATE parry/dodge/wind table is RETIRED (the worst primitive-law leak: defence
+# behaviour authored per weapon name in engine code). The {parry,dodge,wind} caps now DERIVE from geometry + dynamics
+# via WP.defense_affinities: parry from hand_guard x agility (a guarded, handy weapon parries fast); dodge from
+# agility x one-handedness (light + free hand voids); wind from blade_guard x rigidity(cross_section) x bind-leverage
+# (MoI) x edge-length. So a rapier's parry-1.0 EMERGES from its hand_guard, a poleaxe's wind from its blade-leverage.
 assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
 def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
@@ -91,7 +162,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
     ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
-    cap=GATE[defender.weapon][mode]
+    cap=WP.defense_affinities(defender.w)[mode]   # DERIVED from geometry+dynamics (retired the hand GATE table)
     if mode=='parry':
         sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill('parry')
         # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
@@ -102,51 +173,84 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
         sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
-    if mode=='parry' and commit>=4: sig-=0.25
-    if mode=='dodge' and commit>=4: sig+=0.10
-    if mode=='dodge' and commit<=2: sig-=0.10
+    _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
+    _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
+    if mode=='parry': sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
+    if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
+def adef_cap(w, cfg):
+    """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
+    can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
+    deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
+    concentrated beak/spike that pierces plate — the poleaxe queue); both DERIVED (Phase-3b retires hand-set
+    `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
+    mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
+    cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
+    cutter collapses (ADEF_CUT). NOTE: the poleaxe's derived percussion_authority (~6.4) sits below the mace's (~7.5)
+    because the energy-limited p_auth form omits the 2H/long-lever energy credit — flagged joint-calibration item
+    (ties to the 2H commitment/recovery question)."""
+    head=w['head']
+    if head=='blunt':
+        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w)/cfg['ADEF_PERC_REF']),
+                   cfg['ADEF_POINT']*(WP.puncture_pressure(w)/cfg['ADEF_PERC_REF']))
+    if head=='point':      return cfg['ADEF_POINT']*w['gap']
+    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*w['gap'])   # cut OR half-sword gap-thrust
+    return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
+
 def armor_defeat_sigma(aggressor, defender, cfg):
-    """In armour, the weapon that CAN defeat the armour controls the exchange (reference 'lethality-in-state' term,
-    and the reach->armour-defeat rotation). Returns a net-sigma adjustment for the aggressor vs the defender's armour:
-    blunt/percussion and gap-thrust gain; pure cut COLLAPSES as armour rises. Zero unarmoured."""
+    """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor
+    vs the defender's armour: capability ABOVE the per-tier threshold = control (+); below = the armour SHIELDS (−).
+    The threshold RISES with armour (monotonically harder). Zero unarmoured (ADEF_W['none']=0)."""
     a=cfg['ADEF_W'][defender.armor]
     if a==0.0: return 0.0
-    head=aggressor.w['head']
-    # capability = the BEST mode available to this head vs armour. A cut-and-thrust sword may CUT or half-sword to a
-    # gap-thrust POINT; it uses whichever is more effective — so a defender taking MORE armour never flips the
-    # attacker into a suddenly-stronger mode (removes the light->medium cliff). Pure cutters cut; points thrust.
-    if head=='blunt':
-        # blunt armour-defeat scales with PERCUSSION AUTHORITY (§4): a steel hammer/beak (mace/poleaxe, perc 8)
-        # defeats plate; a wooden quarterstaff (perc 4) does not — wood transmits little through plate. Reference =
-        # perc 8 (full credit); lower percussion weapons get proportionally less armour-defeat.
-        cap=cfg['ADEF_BLUNT']*(aggressor.w.get('percussion',8)/8.0)
-    elif head=='point':
-        cap=cfg['ADEF_POINT']*aggressor.w['gap']
-    elif head=='cut_thrust':
-        cut_cap=cfg['ADEF_CUT']
-        point_cap=cfg['ADEF_POINT']*aggressor.w['gap']     # half-sword gap-thrust (precision-scaled)
-        cap=max(cut_cap, point_cap)                         # take the better of cut vs half-sword at THIS armour level
-    else:                                                   # straight/curved pure cut
-        cap=cfg['ADEF_CUT']
-    # RELATIVE to a per-state threshold: capability above the bar = control (+); below = the defender's armour
-    # SHIELDS against you (−). The threshold RISES with armour, so more armour is monotonically harder to defeat.
-    return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
+    return a*(adef_cap(aggressor.w, cfg) - cfg['ADEF_THRESHOLD'][defender.armor])
+
+def reach_threat(longer, defender, cfg):
+    """FIX-1 — the factor by which a LONGER weapon's structural-reach advantage DECAYS when it CANNOT defeat the
+    defender's armour: a head that can't threaten the harness can't hold a closing armoured man off — he walks
+    through the reach (the differential reference's 'armour forces the fight down the reach-ladder'). DERIVED from
+    the armour-defeat capability vs the tier threshold; A0-SAFE BY CONSTRUCTION (ADEF_W['none']=0 -> factor 1.0, so
+    unarmoured reach is untouched with no special-case). A weapon that CAN defeat the tier (mace/poleaxe/dagger-gap)
+    clears the threshold -> deficit 0 -> factor 1. Returns a factor in [REACH_THREAT_FLOOR, 1]. REACH_DECAY_K is
+    [FIAT — designer-set; tightened to avoid triple-counting REACH_W + ADEF_CUT]."""
+    aw=cfg['ADEF_W'][defender.armor]
+    if aw==0.0: return 1.0
+    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - adef_cap(longer.w, cfg))
+    return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
 def leverage(c, cfg):
-    """Lever-arm primitive: capacity to redirect/bind/displace another weapon, from grip BEHIND the contact vs head
-    AHEAD of it (mechanical advantage). Long grip + compact head (poleaxe/longsword/staff) = high; long head/point on
-    short grip (spear) or tiny weapon (dagger) = low. Two hands add control. Nominal scale ~ -1..+1 around a sword."""
+    """Lever-arm primitive: capacity to redirect/bind/displace another weapon. EXPLICIT hand-to-contact lever arm
+    (Phase-3 grounding fix): the ABSOLUTE lever behind the controlling hand (grip_len) minus a fraction of the load
+    AHEAD of the contact (head_len). A long-gripped pole (poleaxe/staff/half-sword) commands high leverage; a COMPACT
+    weapon does NOT score spuriously high — the prior grip/(grip+head) RATIO rewarded short heads and let a dagger
+    out-bind a spear (the verified HEMA inversion: dagger 0.140 > spear -0.066). Two hands add control. Nominal scale
+    ~ -0.1..+0.6 around a sword. LEVER_HEAD_K/LEVER_REF/LEVER_2H are [SIM-CALIBRATE] (the lever-arm STRUCTURE is
+    grounded; the magnitudes fit the bind win-rate in the re-baseline)."""
     w=c.w
-    ratio = w['grip_len']/(w['grip_len']+w['head_len'])      # fraction of the weapon that is grip (lever behind hand)
-    lev = cfg['LEVER_K']*(ratio - cfg['LEVER_REF'])           # vs a reference sword ratio
-    if w['hands']==2: lev += cfg['LEVER_2H']                  # two hands = more control over the lever
+    lever = w['grip_len'] - cfg['LEVER_HEAD_K']*w['head_len']   # absolute lever behind the hand minus the load ahead
+    lev = cfg['LEVER_K']*(lever - cfg['LEVER_REF'])             # vs a reference one-hand sword's net lever
+    if w['hands']==2: lev += cfg['LEVER_2H']                    # two hands = more control over the lever
     return lev
 
+def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
+    """WS-4/WS-5 imposition (section C, flag-gated): a tradition biases the exchange toward its PREFERRED node,
+    DECOUPLED from channel magnitude (fixed normalized rates, not eff_cw — the repair the gate-reconciliation
+    requires: the magnitude must not drive imposition). German (bind-seeker) imposes the crossing; the
+    bind-refusers (Italian/English/Spanish counter/measure schools) slip a forming bind into a counter
+    (cavazione/disengage). A landed hit is never re-routed. Pure (reads rng); returns (bind, riposte)."""
+    if hit > 0:
+        return bind, riposte
+    pa = TR.preferred(aggressor.tradition); pd = TR.preferred(defender.tradition)
+    if pa == 'bind' and not bind and rng.random() < cfg['IMPOSE_BIND_BOOST']:
+        bind = True                                  # German forces the crossing onto an unwilling opponent
+    if pd in ('counter', 'measure') and bind and rng.random() < cfg['IMPOSE_REFUSE_P']:
+        bind = False; riposte = True                 # the refuser slips the bind into a single-time counter
+    return bind, riposte
+
+
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
-HALFSWORD_FORM = {'longsword':'longsword_halfsword'}
-HALFSWORD_BASE = {'longsword_halfsword':'longsword'}
+# HALFSWORD_FORM / HALFSWORD_BASE are weapon DATA (single source in weapons.py, inverse derived); imported above.
 
 def halfsword_target(c, closed, opp_armor):
     """PURE predicate: the weapon-form a half-sword-capable fighter SHOULD be in for the current range/armour
@@ -188,23 +292,8 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
         legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
     else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
-    if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
+    legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     return legib
-
-def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
-    """Decide/resolve a feint. Pure (reads rng): returns dict {do, debuff, new_streak, beat_cost, stamina_cost}.
-    A fooled defender's real-attack defence/read is degraded; a defender who READS it gains a small counter-edge.
-    Capped at FEINT_MAX_STREAK; short phase; costs stamina. Wrapper applies the state changes."""
-    do = (cfg['FEINT_ENABLE'] and feint_streak < cfg['FEINT_MAX_STREAK']
-          and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
-    if not do:
-        return dict(do=False, debuff=0.0, new_streak=0, beat_cost=0.0, stamina_cost=0.0)
-    feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.eff_cw(aggressor, 'tempo')
-    def_read = reading(defender,cfg)*TR.eff_cw(defender, 'visual')*TR.eff_cw(defender, 'precommit')*(1-0.4*mental_fat_d)
-    read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
-    debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
-    return dict(do=True, debuff=debuff, new_streak=feint_streak+1,
-                beat_cost=cfg['FEINT_BEAT_COST'], stamina_cost=cfg['FEINT_STAMINA'])
 
 def approach_displace(shorter, longer, cfg):
     """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,
@@ -214,14 +303,15 @@ def approach_displace(shorter, longer, cfg):
     rd=(reading(shorter,cfg)-reading(longer,cfg))
     return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
 
-def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
+def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
-    denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
+    denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability).
+    RR-02: takes the longer fighter's actual fatigue (was hardcoded 0). RR-03: normalises by REACH_W['none']."""
     id_read = reading(longer,cfg)*TR.eff_cw(longer, 'visual')
     deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
     read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
-    foot = balance_eff(longer,0,cfg)/3
-    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
+    foot = balance_eff(longer,fat_longer,cfg)/3
+    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W']['none']
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
     return min(cfg['REOPEN_MAX'], p)
 
@@ -251,6 +341,66 @@ def initiative_sigma(aggressor, defender, cfg):
     aggressor role: a DEFENDER holding the Vor produces a NEGATIVE term against the acting aggressor — realising
     'hold the Vor while defending'. Pure, tanh-bounded (cannot exceed INIT_SIGMA_K)."""
     return cfg['INIT_SIGMA_K']*tanh((aggressor.initiative - defender.initiative)/cfg['INIT_SCALE'])
+
+# ---------- net-σ ASSEMBLY (moved out of the wrapper: the orchestrator sequences, the systems layer does the math) ----------
+def defence_sigma(defender, mode_msig, mental_fat_d, fat_d, cfg):
+    """The defender's δσ for the chosen mode: its mode_sigma (mental-fatigue-scaled) - handling + stance stability. Pure."""
+    return mode_msig*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d) - handling_penalty(defender,fat_d,cfg) + stance_stability(defender,fat_d,cfg)
+
+def attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg):
+    """The aggressor's raw attack σ: commit-depth power + initiative emphasis - out-of-stamina penalty - handling + consistency. Pure."""
+    return cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - handling_penalty(aggressor,fat_a,cfg) + consistency_a
+
+def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg):
+    """The net σ the core resolves against: attack - defence - reach + armour-defeat + Vor-edge + attacker-bias +
+    bilateral wound-Ob. Pure; the wrapper SEQUENCES the contributions, this owns the arithmetic. Mirror stays 50."""
+    return (atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']
+            + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
+
+def commit_depth(aggressor, defender, cfg, rng, TR):
+    """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
+    lean + WARINESS (vs an unread tradition the aggressor commits shallower) skew a Beta over the range; the 0.25
+    param floor is the spread-floor (never collapses to a spike). Consumes one rng.beta draw (kept here so the
+    wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean)."""
+    ln=disp_lean(aggressor)
+    wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
+    g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
+    ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
+    commit=2.0+3.0*float(rng.beta(ba,bb))
+    return commit, ba, bb, ln
+
+def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
+    """The defender's READ of the attack + the resulting mode selection. read_d (visual+precommit, familiarity-
+    and legibility-scaled) vs read_a -> read_win (logistic). If the read wins, the defender picks the BEST mode;
+    else it guesses. Consumes rng.random (the read) then rng.integers ONLY on a missed read — the same order as the
+    inline version, so byte-identical. Pure resolution+selection logic moved out of the orchestrator. Returns a dict."""
+    fam=TR.familiarity(defender.tradition, aggressor.tradition)
+    legib=legibility(aggressor, commit, cfg, defender.armor)
+    read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
+    read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
+    p_read=1/(1+exp(-(read_d-read_a)/1.0))
+    read_win=rng.random() < p_read
+    modes=['parry','dodge','wind']
+    msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
+    mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+    return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
+
+def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
+    """The Indes / sen-no-sen initiative-steal AMOUNT: a defender who out-read a deep commit steals the Vor, scaled
+    by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
+    indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
+                    (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
+    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, TR)*indes_scale
+
+def counter_select(defender, cfg, rng, TR):
+    """Whether the defender reaches for the single-time counter (tempo-driven SELECTION; SUCCESS is gated later, a
+    miss punished). Consumes one rng.random."""
+    return rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+
+def overcommit_exposure(aggressor, commit, fat_a, cfg, TR):
+    """The aggressor's exposure to the riposte from over-committing: commit-depth x irrecoverability, minus the
+    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0. The wrapper applies the loss."""
+    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)) - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
 
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""

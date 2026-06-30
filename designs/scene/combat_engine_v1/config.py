@@ -1,8 +1,14 @@
 """All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
 CFG = dict(
   # reach (continuous, derived from weapon vector)
-  L0=4.0, LONG=2.0, HANDS2=0.8, HEADR=1.0, HEAD_REACH={'point':1.0,'straight_cut':0.5,'curved_cut':0.5,'cut_thrust':0.5,'blunt':0.0},
+  L0=4.0, HANDS2=0.8,   # L0: live reach_base anchor; HANDS2: build-only reach() term. (LONG/HEADR/HEAD_REACH retired Phase-3b — reach is geometry-derived; head is a primitive, not a categorical reach table.)
+
   REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
+  # Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' + HEAD_REACH + the reach_adj triple-duty).
+  # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
+  # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
+  # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HEADR/HEAD_REACH retired here; L0/HANDS2 stay (build-only reach()).
+  REACH_GEOM_SCALE=0.635, REACH_2H_K=0.4,
   # reach as a standing per-exchange advantage (reference structure): keep most of the gap, weight it high
   # unarmoured and let it FALL with armour (the reach->clinch rotation). Tuned so reach governs A0 across the roster.
   REACH_FRAC=0.82,
@@ -14,24 +20,35 @@ CFG = dict(
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
   LEGIB_SWING=1.25, LEGIB_THRUST=0.80, LEGIB_COMMIT_K=0.10, LEGIB_LUNGE=0.25,
-  # lever-arm primitive: redirect/bind capacity from grip-vs-head length (LEVER_REF ~ a one-hand sword's grip ratio)
-  LEVER_K=2.2, LEVER_REF=0.30, LEVER_2H=0.20,
+  # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
+  # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
+  # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
+  LEVER_K=0.22, LEVER_HEAD_K=0.2, LEVER_REF=0.32, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
   DISPLACE_LEV_GAP=0.15, DISPLACE_P=0.55, DISPLACE_PULLBACK_GRAZE=0.30, APPROACH_DISPLACE_K=0.7, APPROACH_DISPLACE_MAX=0.6,
-  # feinting: a non-existent action that degrades a FOOLED defender's real-attack defence/read; capped at 3 in a row,
-  # short phase, costs stamina, readable (a defender who reads it gains a small counter-edge). Tuned not-overpowered.
-  FEINT_ENABLE=True, FEINT_P=0.30, FEINT_MAX_STREAK=3, FEINT_BEAT_COST=0.3, FEINT_STAMINA=1.0,
-  FEINT_DEBUFF=0.30, FEINT_PUNISH=0.12,
+  # (feint config removed 2026-06-29: the feint is dissolved into the attack — WS-5 — so FEINT_*/feint_eval are gone.)
   # hilt/guard primitive: blade_guard (cross/quillons/rings) catches the blade in the bind & enhances winding;
   # hand_guard protects the hand in the parry ("don't parry with your hands"). Modulated around a neutral cross.
   BIND_GUARD_K=0.55, PARRY_GUARD_K=0.45, WIND_GUARD_K=0.40, GUARD_NEUTRAL=0.45,
   ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.0, ADEF_CUT=-0.9,
+  ADEF_PERC_REF=8.0,   # [SIM-CALIBRATE] derived-percussion-authority reference (a steel hammer ~8) for blunt armour-defeat (Phase-3b)
+  # FIX-1 (reach-threat decay): a long weapon that CANNOT defeat the closer's armour loses its reach/approach edge —
+  # the armoured man walks through a threat that can't hurt him. Derived from adef_cap vs the tier threshold; 0-effect
+  # unarmoured by construction. REACH_DECAY_K [FIAT — designer-set; deliberately LOW to avoid triple-counting REACH_W
+  # + ADEF_CUT, which already remove most cut-vs-plate reach value]. FLOOR keeps a residual (an armoured man still works to close).
+  REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
   ADEF_THRESHOLD={'none':0.0,'light':0.70,'medium':0.45,'heavy':0.72},
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
   # tempo
   BASE_TEMPO=2.0, SPEED_K=0.6, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
+  # WS-2 req4: continuous weapon morphology (weight=2.7kg, not weight="heavy"). HEFT_MODE binary|continuous.
+  # continuous adds a WITHIN-CLASS mass term on top of the binary class anchor (so cross-class balance — which the
+  # binary `wt` encodes as wieldiness, not raw kg — is preserved) -> a 2.7kg greatsword reads heavier than a 1.4kg
+  # longsword at every heft site (tempo, stamina cost, str-demand, cut/thrust impact). HEFT_MODE='binary' is
+  # byte-identical to pre-WS-2. One calibrated gain (HEFT_MASS_K), per the recovered WP-2 recommendation.
+  HEFT_MODE='continuous', HEFT_MASS_K=0.15,   # K=0.15: greatsword(2.7kg) heft 1.20 vs longsword(1.4kg) 1.00 — clear within-class ordering at a roster shift ~= the N=300 noise floor. Raise toward 0.30 (poleaxe -8pp) only with a full re-sweep.
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
   CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Focus + 2*Spirit (Jordan 2026-06-03; was 3*Foc+1*Spi)
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
@@ -47,6 +64,36 @@ CFG = dict(
   # outcome-mapping (audit C-2: neutralize is a fixed per-mode shape, not dsig-scaled)
   NEUTRALIZE_PARRY=0.55, NEUTRALIZE_DODGE=0.62, NEUTRALIZE_WIND=0.50, NEUTRALIZE_OVERWHELM_DROP=0.45,
   RIPOSTE_ON_FAIL=0.32, COMMIT_EXPOSE_K=0.06,
+  # COMMITMENT = (im)RECOVERABILITY (the physical axis): to commit IS to give up recovery, so the overcommit cost
+  # scales with how hard the action is to terminate/retract — the weapon's static turning moment (mass*pob_frac:
+  # a forward-heavy mace "wants to continue" and can't be stopped; a hand-balanced rapier retracts instantly,
+  # which is WHY a rapier can feint and a mace can't) plus footwork (lunge = extended body = low recovery; choke
+  # = gathered = recoverable). Weight is NON-LINEAR in recovery: the forward moment and the lunge cost scale as
+  # mass**MOMENT_MASS_EXP, so a heavy weapon is disproportionately hard to arrest (a longsword lunge != a rapier
+  # lunge). REF is the longsword anchor recomputed for the exponent (1.4**1.5 * 0.14 = 0.232) so it stays mult 1.0.
+  EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=(1.4**1.5)*0.14, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
+  MOMENT_MASS_EXP=1.5, LUNGE_REF_MASS=1.4,
+  # ── recovery model (Phase-3 Stage 2): commitment=recovery, GRIP-AWARE, normalized to a 2H cut-thrust anchor.
+  # recoverability_factor reads WP.at_grip(I_g,S_g) + point_concentration + hands at the chosen grip-position. The
+  # STRUCTURE (sqrt(I) swing-arrest / parallel-axis / the 1H-2H force-couple) is [ASSERTED — first-principles;
+  # validate vs motion-capture, NOT the engine's own config]; the anchor refs + gains are [SIM-CALIBRATE/FIAT].
+  # Leads with body-extension (lunge), the best-grounded axis (Silver true-times / Giganti). See tasks/w811gujrg.output.
+  REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.85,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len (~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
+  REC_S_FLOOR=0.3, REC_THRUST_BASE=1.0, REC_W2=0.6, REC_K_COUPLE=0.9, REC_CTRL_K=0.3, RECOVER_FLOOR=0.3,   # [FIAT] swing static-moment floor / thrust anchor / 2H-couple gains / control-credit / lower bound
+  CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over LUNGE_COMMIT for a full-depth lunge
+  # WIELDING heft (tempo/stamina/strength COST) — DERIVED from the g-aware swing inertia (WP.at_grip I_g), a
+  # COMPRESSED power-law (like agility) so the ~1000x MoI range maps to a sane spread; anchored at REC_I_REF so the
+  # 2H cut-thrust reference ~= 1.0 (the old heavy heft). Retires the binary wt class for the COST path; the half-
+  # sword's tiny MoI now reads LIGHT (fixes longsword-vs-plate at root). The damage-impact path keeps heft_resp (a
+  # separate wt de-leak). [SIM-CALIBRATE] exponent. EXP shared with agility (Cross/Fleisig handle-axis, [ASSERTED]).
+  WIELD_HEFT_EXP=0.3,
+  # Grip/stance DERIVED from morphology: a closing fighter GATHERS (grip_position 0->1) in proportion to how unwieldy
+  # the weapon is in the close, bounded by WP.grip_choke_max (a rapier's short hilt cannot gather; a pole regrips up
+  # the haft). 'choke'/'normal'/'lunge' strings are RETIRED -> continuous grip_position + lunge_depth on the Combatant.
+  CLOSE_REACH_REF=6.5, CHOKE_GRIP_MIN=1.0, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
+  # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
+  # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
+  RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
@@ -88,7 +135,16 @@ CFG = dict(
   # instead; (3) the INITIATIVE LEVER — aggressive drifts the Vor UP (pressing builds Vor), cautious DOWN (cedes it), so
   # BOTH poles cost: aggression risks overcommit (its deep commits raise existing exposure), caution bleeds the Vor. At
   # lean=0 every hook is a no-op (default fighters unchanged). Anchored to the German Vor/Nach doctrine (S2).
-  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10,
+  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10, WARINESS_K=1.5,   # WARINESS_K (WS-5): commit-caution vs an UNREAD tradition (familiarity<1 -> shallow bias), spread-floored; 0 = off
+  # CONTINUOUS commitment (the commitment-recovery axis is a SPECTRUM, not 4 rungs): commit ~ 2 + 3*Beta(a,b),
+  # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
+  # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
+  COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_COMMIT=4.0,   # LUNGE_COMMIT: a THRUST committed at/above this depth IS a lunge (the body extends — reach+commitment, low recovery, more readable)
+  # WS-4/WS-5 imposition gate (section C EXPERIMENT, default OFF): a tradition imposes/refuses its PREFERRED node
+  # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
+  # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
+  # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
+  IMPOSITION_GATE=True, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,   # ON by default (WS-4 dissolution): with the affinity budget it beats the keep-bias baseline on spread + none-fairness + qualitative differentiation (section C). Toggle off to compare.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )

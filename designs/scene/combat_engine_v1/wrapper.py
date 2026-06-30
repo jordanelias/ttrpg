@@ -6,9 +6,22 @@ from math import exp
 import core, systems as S, tradition as TR
 from config import CFG
 
+# ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
+# _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost
+# and CANNOT change behavior (no rng draw, no state mutation). The workbench sets wrapper._TRACE to a
+# callable(event: dict) before a run and resets it to None after. Events carry the INPUTS each decision
+# node consumed (read margins, the commit distribution, the roll's pool/net_sigma) so the narrator and
+# the branch explorer can reconstruct the local probability of every alternate branch without re-deriving
+# engine internals. The engine emits facts; probability math lives in the workbench (probabilities.py).
+_TRACE = None
+def _emit(kind, **data):
+    if _TRACE is not None:
+        _TRACE(dict(kind=kind, **data))
+
 def _init_live(c, cfg):
-    c.stamina_max=S.stamina_max(c); c.stamina=float(c.stamina_max)
-    c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
+    c.derive_stats(cfg)                  # the combatant computes its cfg-dependent figures (conc_max); stamina_max/health set at build
+    c.stamina=float(c.stamina_max)       # reset live state from the combatant's own held maxima
+    c.conc=c.conc_max
     c.ready=0.0
     c.initiative=0.0
     c.poise=1.0
@@ -31,7 +44,10 @@ def engagement(A, B, first, cfg, rng):
     ready={A:0.0,B:0.0}
     beats=0; exchanges=0; soft=8
     reopen_moment=False; push_avail=False   # distance-creating-moment state for re-opening (corrections 1+3)
-    feint_streak=0                           # feints-in-a-row counter (capped at FEINT_MAX_STREAK)
+    # (feint_streak removed — feint dissolved into the attack, WS-5)
+    _emit('engagement_start', aggressor=first.label, defender=(B if first is A else A).label,
+          longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
+          reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
     while beats < soft*3:
         beats+=1
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
@@ -47,6 +63,9 @@ def engagement(A, B, first, cfg, rng):
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
         A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(A.focus-3))*(1-A.poise), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03)
         B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(B.focus-3))*(1-B.poise), cfg)
+        for c in (A,B):
+            c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
+            c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -57,31 +76,36 @@ def engagement(A, B, first, cfg, rng):
         # withdrawal needs FOOTWORK; and the attempt is READABLE — the shorter weapon's own read can deny it.
         if closed and beats>1 and reopen_moment:
             base_gap=er[longer]-er[shorter]
-            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
+            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, ffat[longer], push_avail, cfg, TR)*S.reach_threat(longer, shorter, cfg):
                 closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}
                 reopen_moment=False; push_avail=False
                 continue
-        reopen_moment=False   # the moment is fleeting; consumed/expires each beat unless re-created below
+        reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
         # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
         if not closed:
+            rt = S.reach_threat(longer, shorter, cfg)               # FIX-1: a long weapon that can't defeat the closer's armour loses its reach edge (1.0 unarmoured by construction)
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
-            close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,0,cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2
-            close_rate *= (1+displ)                                  # displacing the point lets you close faster
+            close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,ffat[shorter],cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2  # TA-02: a fatigued closer closes slower (was hardcoded fatigue=0)
+            close_rate *= (1+displ) * (2.0-rt)                      # displacing the point + walking through an un-threatening reach (FIX-1) -> close faster
             measure_gap=max(0.0, measure_gap-close_rate)
             just_closed = (measure_gap<=0.3)
             if just_closed:
                 closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
-            stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
+            stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
+            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
+                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE'] + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
                 deg, net = core.resolve(pool, nsig, rng)
+                _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
+                      pool=pool, net_sigma=round(nsig,3), net=round(net,2), degree=deg)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
             if not closed:
-                if A.stamina<=-4 or B.stamina<=-4: return None
+                if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
                 continue
         # ----- CLOSED: tempo-gated exchange -----
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
@@ -91,19 +115,19 @@ def engagement(A, B, first, cfg, rng):
         else:
             aggressor = actors[0]
         defender = B if aggressor is A else A
+        _agg0=aggressor.label; _def0=defender.label   # frozen for the outcome emit (roles may flip on riposte)
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
-        # DISPOSITION (commit skew): aggressive leans deep (4,5), cautious shallow (2,3); neutral = uniform {2,3,4,5}.
-        _ln=S.disp_lean(aggressor)
-        if abs(_ln)<1e-9:
-            commit=int(rng.integers(2,6))
-        else:
-            _k=cfg['DISP_COMMIT_K']*_ln
-            _w=[max(0.05,1-_k), max(0.05,1-0.5*_k), max(0.05,1+0.5*_k), max(0.05,1+_k)]
-            _s=sum(_w); commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
+        # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
+        # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).
+        commit, _ba, _bb, _ln = S.commit_depth(aggressor, defender, cfg, rng, TR)
+        _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
+        if commit>=cfg['LUNGE_COMMIT'] and rng.random() < S.lunge_quality(aggressor, cfg):
+            aggressor.lunge_depth = min(1.0, (commit-cfg['LUNGE_COMMIT'])/cfg['LUNGE_DEPTH_SCALE'])   # a deep thrust BECOMES a lunge (gated stochastically by lunge_quality: rapier readily, a cutter never) — its DEPTH scales with commit (CONTINUOUS); the extended body -> lower recovery (recoverability_factor) + more readable (legibility)
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
+        ready[aggressor]-=cfg['RECOVERY_TEMPO_K']*(commit-2.0)*S.recoverability_factor(aggressor,cfg)   # TEMPO is coupled to RECOVERY: a deep, hard-to-recover commit (a heavy or lunged blow) leaves you SLOWER to act again — the next action waits on the recovery; a feint (commit~2, full recovery) costs no tempo. Non-linear in weight via recoverability_factor.
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))
         cfrac_d=defender.conc/max(1,defender.conc_max)
@@ -116,51 +140,44 @@ def engagement(A, B, first, cfg, rng):
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
         init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
         consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.conc/5.0 - 3)   # Concentration tracker (3F+2S, depletes), not static Focus (Jordan #12)
-        # feinting (module): wrapper applies the state changes the pure evaluator returns.
-        fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
-        feint_debuff=fv['debuff']; feint_streak=fv['new_streak']
-        if fv['do']:
-            beats += fv['beat_cost']; aggressor.stamina -= fv['stamina_cost']
+        # FEINT DISSOLVED INTO THE ATTACK (WS-5): there is no separate feint maneuver. Deception is intrinsic to
+        # HOW one attacks — the micro-read carried by commit-depth, head, grip and disguise — already modelled by
+        # legibility() + the read contest below (the soccer-stepover principle: twitching the body/blade IS part of
+        # attacking). Removes the old feint_eval double-machinery and its streak/triple-debuff bugs (RF-01/04).
         # VISUAL read (pre-contact anticipation; temporal-spatial). Weighted by tradition's visual emphasis, DEGRADED
         # vs an unfamiliar aggressor (knowledge-of-others), and MODULATED BY MOVEMENT LEGIBILITY (correction 4):
         # large/lateral movement is easier to perceive than in-line motion. A thrust (in-line, point/high-gap) is
         # HARD to read; a swing/cut (lateral arc) is EASY; and a deeper commit / lunge = more biomechanical action =
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
-        fam = TR.familiarity(td, ta)
-        legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
-        read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
-        read_a=S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
-        read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
-        modes=['parry','dodge','wind']
-        msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
-        mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+        # READ CONTEST + mode selection — computed in systems.read_contest; the wrapper sequences + emits.
+        _rc=S.read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR)
+        read_win=_rc['read_win']; read_d=_rc['read_d']; read_a=_rc['read_a']; mode=_rc['mode']; msig=_rc['msig']
+        _emit('read', defender=_def0, read_d=round(read_d,3), read_a=round(read_a,3),
+              p_read_win=round(_rc['p_read'],3), read_win=read_win)
+        _emit('mode', defender=_def0, mode=mode, msig={m:round(v,3) for m,v in msig.items()}, chosen_by=('read' if read_win else 'random'))
         # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
         # via balance_eff — no separate blanket multiply here (would double-count the stance term).
-        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
-        atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
+        # net-σ ASSEMBLY — the wrapper SEQUENCES the contributions; systems owns the arithmetic (no formula in the orchestrator).
+        dsig=S.defence_sigma(defender, msig[mode], mental_fat_d, fat_d, cfg)   # WS-5: feint_debuff removed (feint dissolved into the attack)
+        atk_sig=S.attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg)
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
-        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS'] + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds  # first-mover/Vor edge (bounded; mirror stays 50 — aggressor alternates)
+        net_sigma=S.assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg)
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
+        # INDES STEAL — systems computes the steal AMOUNT + the counter selection; the wrapper APPLIES the mutation.
         counter_attempt=False
         if read_win and commit>=4:
-            # steal scales with commit-DEPTH x read-MARGIN (a deep commit read cleanly -> near-complete flip), bounded.
-            indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
-                            (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
-            steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)*indes_scale
+            steal=S.indes_steal_amount(defender, mode=='wind', commit, read_d, read_a, cfg, TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
-            # SINGLE-TIME COUNTER (a tier of the unified counter): reading a committed aggressor opens a counter IN THE
-            # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
-            # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
-            # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
-            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+            counter_attempt=S.counter_select(defender, cfg, rng, TR)
         pool=max(1, core.resolution_pool(aggressor.history))
         deg, net = core.resolve(pool, net_sigma, rng)
+        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
-        # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
-        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
+        # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
+        overcommit_exposure = S.overcommit_exposure(aggressor, commit, fat_a, cfg, TR)
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
@@ -196,13 +213,22 @@ def engagement(A, B, first, cfg, rng):
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
                 hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
+        if cfg.get('IMPOSITION_GATE'):   # WS-4/WS-5 section-C experiment (flag, default off): tradition imposes/refuses its node
+            bind, riposte = S.impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR)
         sim=(hit>0 and riposte)
-        # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
-        # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the
-        # thruster is committed — collapsing measure in the defender's favour. CAVEAT (Jordan): the thruster's
-        # pull-back/recovery can still graze. Needs the defender to win the read (already gated) and leverage edge.
-        if (aggressor.w['head']=='point' and commit>=4 and not hit and read_win
-                and S.leverage(defender,cfg) > S.leverage(aggressor,cfg)+cfg['DISPLACE_LEV_GAP']):
+        # DISPLACE-AND-STEP-INSIDE (manual technique): a COMMITTED THRUST (point head, deep commit) is exploitable by
+        # TWO DISTINCT routes on DISTINCT primitives (M3 decoupling — the two were conflated under bind-leverage, so
+        # the leverage re-grounding wrongly suppressed the short-fighter counter):
+        #   (a) BEAT IT ASIDE — a strong-LEVERAGE weapon (poleaxe/staff/long-grip) sets the point offline with grip+mass.
+        #   (b) SLIP INSIDE — a SHORTER, quicker fighter ducks inside the over-extended point: the close-fighter's
+        #       canonical answer to a thrust (the dagger inside the rapier lunge). Driven by REACH (being shorter = having
+        #       inside to step into) + REFLEX, NOT leverage. [Phase-5 contact axis elaborates this into the close.]
+        # Either route needs the defender to win the read (gated) + the thruster committed deep; the thruster's
+        # pull-back/recovery can still graze (commitment=recovery: the deep thrust IS the exposure).
+        beat_aside  = S.leverage(defender,cfg) > S.leverage(aggressor,cfg)+cfg['DISPLACE_LEV_GAP']
+        slip_inside = (S.reach_base(defender,cfg) < S.reach_base(aggressor,cfg)
+                       and S.reflex(defender,cfg) >= S.reflex(aggressor,cfg))
+        if (aggressor.w['head']=='point' and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
             if rng.random() < cfg['DISPLACE_P']:
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender
@@ -259,6 +285,9 @@ def engagement(A, B, first, cfg, rng):
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
+        _emit('outcome', aggressor=_agg0, defender=_def0, mode=mode, degree=deg,
+              hit=int(hit), bind=bool(bind), riposte=bool(riposte),
+              A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)
         exchanges+=1
         # TURN = one approach -> burst -> separation (Jordan 2026-06-03). The burst is a SMALL EMERGENT run of
         # exchanges, gated by TEMPO (who re-reaches ACT_THRESHOLD via close_tempo), NOT by ripostes: a faster fighter
@@ -267,10 +296,10 @@ def engagement(A, B, first, cfg, rng):
         # measure breaks (the floor: one swing, one dodge, separate = 1 exchange). A landed hit, a riposte (role flip),
         # or a bind CONTINUES the pressing. Felling / stamina-collapse exits are handled above. Combat = many such
         # turns; wounds persist across them, so equal fighters take several turns to resolve (emergent, not enforced).
-        if A.stamina<=-4 or B.stamina<=-4: return None
-        if exchanges >= cfg['BURST_MAX']: return None
-        if not (hit>0 or riposte or bind): return None
-    return None
+        if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
+        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None
+        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None
+    _emit('separation', reason='beat_exhaustion'); return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
     import numpy as np
@@ -280,10 +309,14 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     # defaults — corrupting wi, health_full, and every derived health value from bout 2 onward. Pass spirit/strength.
     A.wt.__init__(A.end, spirit=A.spirit, strength=A.strength); B.wt.__init__(B.end, spirit=B.spirit, strength=B.strength)
     _init_live(A,cfg); _init_live(B,cfg)
+    _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
+          armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         first = A if rng.random()<0.5 else B
+        _emit('turn_start', turn=turn+1, first=first.label)
         loser = engagement(A,B,first,cfg,rng)
+        _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None))
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
@@ -297,4 +330,5 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     # symmetric in form, so an X% raw win-rate is clamped toward [UPSET_FLOOR, 1-UPSET_FLOOR].
     if result!=0 and rng.random()<cfg['UPSET_FLOOR']:
         result = -result
+    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None))
     return result

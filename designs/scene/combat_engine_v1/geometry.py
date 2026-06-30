@@ -57,13 +57,25 @@ def can_halfsword_thrust(curvature, point_concentration):
 
 def bake(params):
     """Precompute the combat-coefficient surface for one weapon from its geometry. Build-time only; the engine reads
-    the returned dict. Returns the derived {gap, thrust, cut, perc_conc, halfsword} coefficients."""
+    the returned dict. Returns the RAW geometric primitives {curvature, point_concentration, cross_section,
+    edge_keenness, strike_concentration} PASSED THROUGH alongside the DERIVED {gap, thrust, cut, perc_conc,
+    halfsword} coefficients — so `geo` is the single complete surface and a derivation that needs a raw input (e.g.
+    weapon_physics.puncture_pressure needs raw strike_concentration; defense_affinities needs raw cross_section)
+    reads it from one place rather than missing the key and silently defaulting. The raw passthrough adds no runtime
+    cost (build-time only) and the derived `perc_conc`/`gap`/… keep their transformed meaning unchanged."""
     cv = params.get('curvature', 0.0)
     pc = params.get('point_concentration', 0.0)
     cs = params.get('cross_section', 0.5)
     ek = params.get('edge_keenness', 0.0)
     sc = params.get('strike_concentration', 0.0)
     return dict(
+        # raw geometric primitives (passthrough — the single surface for consumers that need the raw input)
+        curvature           = cv,
+        point_concentration = pc,
+        cross_section       = cs,
+        edge_keenness       = ek,
+        strike_concentration= sc,
+        # derived combat coefficients
         gap            = gap_precision(pc, cs),
         thrust         = thrust_factor(pc, cs, cv),
         cut            = cut_factor(cv, ek),
