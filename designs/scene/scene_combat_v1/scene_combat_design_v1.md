@@ -112,8 +112,8 @@ catches an inert scene transition.
 
 ## Open decisions (Jordan) — gate the build
 
-- **ED-911:** retain group combat on the old `combat_v30` dice chassis (a), or build this engine extension (b)?
-  This doc assumes (b); confirm before building.
+- **ED-911 (decision pending):** retain group combat on the old `combat_v30` dice chassis (a), or build this
+  scene engine out for groups (b)? This doc assumes (b); confirm before building.
 - The outnumber lever (extra-bout-only vs + transient init seed).
 - Simultaneity (initiative-ordered sequential [recommended] vs discrete simultaneous rounds).
 - `designs/scene/scene_combat_v1/` location (sibling, recommended) vs inside `combat_engine_v1/`.
