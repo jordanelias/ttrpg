@@ -4,6 +4,11 @@ CFG = dict(
   L0=4.0, LONG=2.0, HANDS2=0.8, HEADR=1.0, HEAD_REACH={'point':1.0,'straight_cut':0.5,'curved_cut':0.5,'cut_thrust':0.5,'blunt':0.5},   # PRIMITIVE-AUDIT [C]: blunt 0.0->0.5 — a blunt pole-end still reaches; shared fix retires the per-weapon reach_adj fudges on staff/mace/poleaxe
 
   REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
+  # Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' + HEAD_REACH + the reach_adj triple-duty).
+  # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
+  # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
+  # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HANDS2/HEADR/HEAD_REACH now unused by reach_base.
+  REACH_GEOM_SCALE=0.635, REACH_2H_K=0.4,
   # reach as a standing per-exchange advantage (reference structure): keep most of the gap, weight it high
   # unarmoured and let it FALL with armour (the reach->clinch rotation). Tuned so reach governs A0 across the roster.
   REACH_FRAC=0.82,

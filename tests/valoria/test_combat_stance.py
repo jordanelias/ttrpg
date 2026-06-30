@@ -15,8 +15,12 @@ from config import CFG  # noqa: E402
 
 
 def test_closing_pole_chokes_up():
+    # A BUTT-gripped reach pole (spear: head_len >> grip_len) is unwieldy in the close, so it CHOKES UP — slides the
+    # hands toward the centre to fight in the close (becoming staff-like). Phase-3b grip-position insight.
     assert S.adopt_stance(Combatant('x', weapon='spear'), True, CFG) == 'choke'
-    assert S.adopt_stance(Combatant('x', weapon='staff'), True, CFG) == 'choke'
+    # A CENTRE-gripped pole (staff: head_len == grip_len) is ALREADY close-capable (derived reach < CLOSE_REACH_REF),
+    # so it does NOT need to choke — its two-ended centre grip already fights in the close.
+    assert S.adopt_stance(Combatant('x', weapon='staff'), True, CFG) == 'normal'
 
 
 def test_open_or_non_pole_is_grounded():

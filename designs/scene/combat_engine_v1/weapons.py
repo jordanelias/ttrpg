@@ -26,7 +26,7 @@ WEAPONS = {
    geometry=dict(curvature=0.05, point_concentration=0.6, cross_section=0.72, edge_keenness=0.8, strike_concentration=0.0),
    reach='long', wt='light', spd=1.5, percussion=2, pob_frac=0.12, hand='Standard'),
  'longsword': dict(
-   mass=1.4, head_len=2.8, grip_len=0.85, hands=2, head='cut_thrust', clinch=6, hand_guard=0.45, blade_guard=0.85, reach_adj=-0.6,   # PRIMITIVE-AUDIT [G,T1/T2]: grip_len 1.6->0.85 (real longsword grip ~25cm, not 48cm=greatsword hilt); reach_adj -0.9->-0.6 coupled to hold reach
+   mass=1.4, head_len=2.8, grip_len=0.85, hands=2, head='cut_thrust', clinch=6, hand_guard=0.45, blade_guard=0.85, reach_adj=0.0,   # PRIMITIVE-AUDIT [G,T1/T2]: grip_len 1.6->0.85 (real grip ~25cm, not 48cm=greatsword hilt); reach_adj zeroed once reach went geometry-derived (was -0.9 categorical-scale debt)
    wclass='bladed', hilt='simple', pommel_kg=0.30,   # PRIMITIVE-AUDIT [G,T2]: pommel 0.14->0.30 (real wheel/pear pommels 0.2-0.4kg; 0.14 < arming 0.234 was backwards for a 2H weapon, a band-aid vs the phantom grip)
    geometry=dict(curvature=0.0, point_concentration=0.8, cross_section=0.9, edge_keenness=0.8, strike_concentration=0.1),
    reach='long', wt='heavy', spd=0.5, percussion=4, pob_frac=0.14, hand='Standard'),

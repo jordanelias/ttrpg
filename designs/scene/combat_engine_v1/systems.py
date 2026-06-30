@@ -10,9 +10,15 @@ from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg):
+    """Standing reach = body/arm offset (L0) + the weapon's forward extent DERIVED from geometry (Phase-3b: retires
+    the categorical reach=='long' + HEAD_REACH[head] + the per-weapon reach_adj triple-duty). Forward extent =
+    head_len (the blade/shaft forward of the lead hand) + a 2H rear-hand setback (REACH_2H_K*grip_len). So a
+    CENTRE-gripped pole (staff, head_len≈grip_len) reaches LESS than a BUTT-gripped one (spear, head_len≫grip_len),
+    and a long blade (greatsword) more than a short one — the grip-position insight, emergent. reach_adj is now a
+    SMALL per-weapon residual, not the dominant term."""
     w=c.w
-    return (cfg['L0']+cfg['LONG']*(w['reach']=='long')+cfg['HANDS2']*(w['hands']==2)
-            +cfg['HEADR']*cfg['HEAD_REACH'][w['head']] + w.get('reach_adj',0.0))
+    geom = w['head_len'] + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
+    return cfg['L0'] + cfg['REACH_GEOM_SCALE']*geom + w.get('reach_adj',0.0)
 
 # ---------- tempo ----------
 def weapon_tempo(c, cfg, fatigue=0.0):
