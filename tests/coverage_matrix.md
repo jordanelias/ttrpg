@@ -372,3 +372,12 @@ Archived entries in tests/coverage_matrix_archive.md
   citations to 19 pre-existing uncited code constants in orchestration.py (§A.4 discipline/morale tiers, §B.2
   troop stats, §A.7 turn caps, §A.3b octagon, wing-width tier tables flagged as F2 derive-targets) — comment-only,
   byte-exact. orchestration.py now scans clean (0 violations), unblocking further extraction.
+
+## 2026-06-30 — Stage 1b (re-architecture): extract core/state.py (behaviour-frozen) [byte-exact]
+- EXTRACTED the morale/discipline/rout state-transition phase hooks (morale_check_phase, rout_resolution,
+  discipline_check_phase) from orchestration.py into core/state.py — the resolver layer's sole state-mutation
+  site alongside core/exchange. orchestration re-imports via `from mass_battle.core.state import *` (phase_boundary
+  and the stress-test imports unchanged); engine.py adds core.state to its surface + _resolve scan.
+- G1 import-direction: core/state imports config+math only; calls Subunit/Unit methods duck-typed (erode_morale,
+  derive_rout, degrade_discipline) — no up-DAG import, no cycle.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; mechanics_selftest green.
