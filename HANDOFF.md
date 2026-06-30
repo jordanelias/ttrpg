@@ -11,20 +11,29 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
-  - **Committed: `297458d7` — Phase-3 foundation** (re-grounded the weapon-physics FORMS from a 21-agent adversarial
-    lit-review): LIVE = leverage→explicit lever-arm (fixes dagger>spear bind inversion), FIX-1b (blunt plate-transmit
-    scales with percussion authority, FIAT), M3 (step-inside decoupled from bind-leverage onto reach+reflex). BUILD-ONLY
-    = half-sword geometry repaired (PoB −12.9→+6.6cm via a `gripped` derive() branch), agility→power-law MoI^−0.25,
-    2H-reach→grip-proportional, geo raw-primitive passthrough. Every constant flagged [SIM-CALIBRATE]/[FIAT]; 26/26
-    tests; 8-agent antagonistic audit (all survived). Two [WIRING HAZARD] notes in-code (agility cap, reach scale).
-  - **UNCOMMITTED WIP** (do not lose): step-1 wiring (`armor_defeat_sigma`→derived percussion_authority + spike-puncture)
-    + FIX-1 (reach_threat decay, A0-safe) in systems.py/wrapper.py/config.py. Held pending the primitive re-audit.
-  - **RUNNING: roster-wide adversarial primitive re-audit** (Jordan's directive — every weapon's morphology + typology +
-    **practitioner handling/grip**, evidence-tiered T0–T3). Triggered by the insight that **a staff is a pointless spear
-    gripped centrally** (poles = one class; grip = a choice, not baked) — see memory `weapon-primitive-grip-handling`.
-    The staff's vs-plate over-dominance is the un-wired categorical reach. Audit gates the rest of the wiring.
-  - **Next (Jordan's calls):** the 2H/thrust recovery refinement (`recoverability_factor` credits neither today);
-    grip-as-state (Phase-5 contact axis); then resume the wiring + joint re-baseline → Gate-1 sign-off → merge.
+  - **Committed Phase-3 chain:** `297458d7` (foundation: leverage→lever-arm, FIX-1b, M3, half-sword geometry) →
+    `210dd1b4` (armor_defeat→derived percussion + FIX-1 reach-threat) → `360325d0` (Tier-2/3 primitives) →
+    `d069be7c` (**reach wired to geometry — the grip insight: a centre-gripped staff reaches less than a butt-gripped
+    spear, emergent; staff now close-capable**) → `d5a25cc3` (**primitive-law purge Wave 1, behaviour-identical:**
+    retired `is_poleaxe`→`butt_kg` primitive, the `longsword_halfsword` name-filter→derived, dead `HEAD_REACH`) →
+    `877c8a06` (**recovery/grip FOUNDATION, build-only**).
+  - **Two Ultracode assessments banked (this session):** (1) **weapon-name leak audit** (11 agents) — register in
+    `tasks/wclbz78ux.output`; worst leak = `systems.GATE` (per-weapon parry/dodge/wind table keyed by `defender.weapon`),
+    deferred because the derived `defense_affinities` does NOT yet reproduce it (parry rank-ρ 0.56, wind 0.33; needs the
+    agility-clamp fix + band recalibration in the re-baseline). (2) **recovery+grip grounding** (HEMA+physics, survived
+    its own adversarial refute — killed an extrapolated swing-exponent + a FABRICATED citation) — formulation in
+    `tasks/w811gujrg.output`. Leads with body-extension/lunge (Silver+Giganti, best-grounded); mode-split secondary
+    (exponent flagged [ASSERTED]); physics flagged [ASSERTED — first-principles].
+  - **Spear decision (Jordan, 2026-06-30): option A — butt-weighted war spear.** Delivered at the mass-model layer in
+    `877c8a06`: sauroter `butt_kg=0.25` + `haft_d=0.035` (35mm shaft) → real 0.40kg head; retracts free when gripped at
+    balance (the grip-position model). Grip-position derivations (`grip_choke_max`/`grip_travel_max`/`at_grip`,
+    parallel-axis, build-only) validated: gather monotone-down to the CoM, spear→balance, mace flat (a club, not a pole).
+  - **NEXT — recovery/grip STAGE 2 (behaviour-changing):** rewrite `recoverability_factor` to read `at_grip` I_g/S_g/
+    point_concentration/hands; `lunge_quality_continuous` (point_concentration not head-name); replace `combatant.grip`
+    enum {normal,choke,lunge} with continuous `grip_position` + the wrapper `g*` ramp (collapses adopt_stance/can_choke/
+    close_unwieldiness — the Category-B de-leak); rewire heft/agility/tempo/str-demand + `agility()` onto `I_g`;
+    `bind_sigma`←`tau` couple. Then validate the 7 invariant falsifiers (mirror≈50 chief) + the joint re-baseline
+    (incl. GATE→defense_affinities once its band is fixed) → Gate-1 adversarial audit → ED entries → merge.
 
 ## Decisions
 
