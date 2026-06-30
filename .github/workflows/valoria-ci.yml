@@ -302,6 +302,25 @@ jobs:
         run: pip install pyyaml pytest
       - run: python -m pytest tests/valoria -q
 
+  sim-regression:
+    name: Sim Reference Regression
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test deps
+        run: pip install pyyaml pytest
+      # Deterministic seeded oracle for the sim/ reference the Godot port validates
+      # against (ED-1053). Before this, sim/ had zero tests and never ran in CI, so a
+      # degenerate-balance regression could land unflagged. ~20s.
+      - run: python -m pytest sim/tests -q
+
   integrity:
     name: Repository Integrity
     runs-on: ubuntu-latest
@@ -376,6 +395,7 @@ jobs:
       - sim-fabrication-check
       - vetting-check
       - unit-tests
+      - sim-regression
       - integrity
       - compliance-check
       - ed-citations
