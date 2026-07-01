@@ -102,6 +102,37 @@ re-introduced under a new name. Any single hit blocks the stage.
   engine already ignores them); reconcile A.5 Command weighting to the engine's Charisma-primary form
   (ED-899); reframe general-death → capture (`mb_engine_workplan.md` P-B). G6 is the focus.
 
+## 2A. Confirmed inserted tracks (2026-06-30)
+
+Confirmed by Jordan as part of this workplan; they slot into the staged sequence above.
+
+### Track F — Fidelity critique + 3×3 hierarchy (fidelity-FIRST; after Stage 1, runs with Stage 2)
+Anchor + reconciliation: `../2026-06-23-mb-fidelity-critique/README.md`. **Phase 0** critique → NERS →
+reconcile (read-only; produces `register.md` / `ners_verdict.md` / `reconciliation.md`). **Phase 1**
+fidelity fixes **D1 → D2 → D4 → D3**: D1 zone+actor-gate the charge-recoil (`orchestration.py:728-730` +
+`resolution._wall_prep:77`); D2 gate cavalry high-lethality on regime (flank/rear OR shaken OR completed
+envelopment — `orchestration.py:681-730`, `resolution._charge_shock_sigma:83`); D4 revive the **dead**
+`MORALE_PHASE_CAP`/`MORALE_EROSION_DAMP` into a concentration→morale-erosion→rout channel
+(`core/state.py:38` hard-codes `min(loss,3.0)`); D3 formation upside via the D4 channel, **NOT**
+`PC_ENVELOP_SIGMA`. **Phase 2** the FORCE/SHAPE/DIRECTIVE 3×3 (`Unit.formation`/`strategy`,
+`Subunit.tactic` first-class; `ROLE_SPEC`→`TACTIC_SPEC`), all new state **byte-exact-defaulted**. Gates
+G1–G6 + a NERS Stage-4 re-test; **G4 = the `gauge_mb.py` bands, never lowered**.
+*Reconciliation (in the README):* the directive's `file:line` predate the Stage-1 split (re-anchored
+there); its `tests/sim/massbattle_battery/` harnesses + `FINDINGS_2026-06-23.md` **do not exist** —
+verification is rebuilt on `gauge_mb.py` + `bat.py`; and Phase 0 must adjudicate the *engine-defect vs
+gauge-construction* tension between the 2026-06-23 and 2026-06-30 analyses.
+
+### Track M — Movement-substrate review (a DECISION gate feeding Stage 2b + Stage 3)
+An adversarial review of the unit/subunit/cell movement geometry **and the grid itself**: *does a cell
+need to occupy a specific integer grid cell, or only hold correct relative distance on a coordinate
+field?* The current substrate is a **hybrid** — integer `cell_offsets` + Chebyshev king-distance +
+round-to-grid + same-cell `resolve_internal_collisions`, with a float `_node_pos` path that snaps back to
+the grid (`int(round(...))`). Deliverable: `06_movement_substrate_review.md` (findings + a recommendation:
+keep-grid / coordinate-field / hybrid / review-first) — a **decision** the red-team must stress before any
+substrate change, honouring the byte-exact invariant (parallel substrate behind a toggle; gauge
+re-baseline recorded). Feeds the `cell_speed`/`_node_advance` work in **Stage 2b** and the granularity
+dial in **Stage 3**.
+
 ## 3. Critical path & dependencies
 
 ```
