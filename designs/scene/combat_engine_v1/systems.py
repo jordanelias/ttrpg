@@ -239,7 +239,6 @@ def afforded_heads(w):
         heads[head]=(0.0, core.HEAD_MODE.get(head, 'shear'))
     return heads
 
-_HEAD2DMG={'blunt':'percussion','point':'puncture','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
 def select_mode(c, defender_armor, closed, cfg):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
     then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
@@ -272,7 +271,7 @@ def select_mode(c, defender_armor, closed, cfg):
         # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
         dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
     else:
-        dm=_HEAD2DMG.get(h, core.HEAD_MODE.get(h,'shear'))
+        dm=core.HEAD_MODE.get(h, 'shear')
     return dm, h
 
 def armor_defeat_sigma(aggressor, defender, cfg):

@@ -191,19 +191,28 @@ def agility(w):
 
 
 def authority(w):
-    """Impact authority (cut/thrust/blunt): forward momentum sqrt(mass)*forwardness. Head-specific delivery stays
-    in core.coupling; this is the raw force the heft term reads."""
+    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Impact authority
+    (cut/thrust/blunt): forward momentum sqrt(mass)*forwardness. Head-specific delivery stays in core.coupling;
+    this is the raw force the heft term reads. Live resolution gets impact force from percussion_authority (blunt)
+    + core.coupling's DELIVERY/strength terms (edged) instead. Gate-1 audit flagged authority()/reach() as one horn
+    of a Jordan-gated single-source-target decision (HANDOFF Pending item 6 / forward_roadmap Track 2 / ED-1080
+    residual) — kept + explicitly labeled rather than deleted pending that ratification; only consumed by this
+    module's own __main__ self-test."""
     pob = derive(w)['PoB_frac']
     return (w['mass'] ** 0.5) * (0.30 + pob)
 
 
 def reach(w):
-    """Effective forward reach (replaces the categorical reach=='long' + HEAD_REACH[head]). GROUNDED REVISION
-    (HEMA measure-grammar): a two-handed weapon's extra reach comes from the HANDLE LENGTH / rear-hand setback, NOT
-    from hand-count — a longsword thrusts as far as a rapier because of its longer grip, and a one-handed extension
-    reaches equal-or-farther. So the prior flat `+0.8 if 2H` is replaced by K_GRIP_REACH·grip_len for 2H weapons.
-    reach_adj is the per-weapon [SIM-CALIBRATE] correction (git eb5535eb tuned it to A0–A3 sim error; it is the
-    dominant per-weapon term and is flagged NOT grounded). The standing arm+lunge offset lives in L0 (the consumer)."""
+    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Effective forward reach
+    (replaces the categorical reach=='long' + HEAD_REACH[head]). GROUNDED REVISION (HEMA measure-grammar): a
+    two-handed weapon's extra reach comes from the HANDLE LENGTH / rear-hand setback, NOT from hand-count — a
+    longsword thrusts as far as a rapier because of its longer grip, and a one-handed extension reaches
+    equal-or-farther. So the prior flat `+0.8 if 2H` is replaced by K_GRIP_REACH·grip_len for 2H weapons. reach_adj
+    is the per-weapon [SIM-CALIBRATE] correction (git eb5535eb tuned it to A0–A3 sim error; it is the dominant
+    per-weapon term and is flagged NOT grounded). The standing arm+lunge offset lives in L0 (the consumer). Live
+    resolution gets reach from systems.reach_base (grip-aware) instead — see the authority() docstring above for
+    why this function is kept-but-labeled rather than deleted; only consumed by this module's own __main__
+    self-test."""
     twohand = K_GRIP_REACH * w['grip_len'] if w['hands'] == 2 else 0.0
     return w['head_len'] + twohand + w.get('reach_adj', 0.0)
 
@@ -288,15 +297,14 @@ if __name__ == '__main__':
         pass
     from combatant import WEAPONS
 
-    print("STAGE 1 — composite PoB vs the (retiring) hand-set pob_frac [does the iron-on-wood model reproduce it?]:")
-    print(f"{'weapon':12} {'PoB_cm':>7} {'PoB_frac':>9} {'hand_pob':>9} {'dpob':>6} {'MoI':>7} {'m_head':>7}")
-    worst = 0.0
+    print("STAGE 1 — composite PoB (mass-model derivation):")
+    print(f"{'weapon':12} {'PoB_cm':>7} {'PoB_frac':>9} {'MoI':>7} {'m_head':>7}")
     for n, w in WEAPONS.items():
-        d = derive(w); hp = w.get('pob_frac', 0.0); dd = abs(d['PoB_frac'] - hp); worst = max(worst, dd)
-        print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {hp:9.3f} {dd:6.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
-    print(f"  max |PoB_frac - hand pob_frac| = {worst:.3f}\n")
+        d = derive(w)
+        print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
+    print()
 
-    print("STAGE 2/3 — derived authority/agility/reach + percussion + defence affinities:")
+    print("STAGE 2/3 — derived authority/agility/reach (build-only diagnostic) + percussion + defence affinities:")
     print(f"{'weapon':12} {'auth':>5} {'agil':>5} {'reach':>6} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18}")
     for n, w in WEAPONS.items():
         a = defense_affinities(w)
