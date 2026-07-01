@@ -152,6 +152,28 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       build-forward (abilities-as-access, §C, contact axis, WS-7) remains design-gated — full detail recovered in
       `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` (the Phase 4a game-theoretic layer, Phase 4b access
       catalogue, Phase 4c §C fix, Phase 5 contact axis — none of this was previously committed to the repo).
+    - **Decision-prep packets for both Track-2 residuals, built 2026-07-01 (no code flipped, no recommendation
+      made):** `designs/audit/2026-07-01-scene-combat-track2-decision-prep/` — `wt_spd_deleak_report.md` (measured
+      before/after, revised to ground the tempo candidate properly — see below) and
+      `wp_reach_authority_comparison.md` (tabulates what `WP.reach()`/`authority()` vs their live counterparts
+      currently compute — not a constant scale factor apart, and `WP.authority()` overlaps TWO different live
+      concepts depending on head type, not one). Both reproducible via the `.py` harnesses in that folder.
+      **wt/spd findings:** the damage-path `wt→wield_heft`-reuse candidate roughly **doubles the spear's
+      damage** across every armour tier (+10 to +14 flat), likely compounding the already-known spear-dominance
+      problem. The tempo-path candidate went through a revision: a first draft (bare `agility()` substitution)
+      was rejected as under-grounded — it captures only swing-inertia, missing balance/hands/thrust-vs-swing.
+      The corrected candidate reuses `systems.recoverability_factor` (the engine's own commitment=recovery
+      model, which already blends weight+balance+hands+thrust-vs-swing) at baseline. It first surfaces a
+      grounding validation: current `spd` already correlates with `1/recoverability_factor` at **r=+0.878**
+      (vs only +0.359 with thrust-vs-swing alone) — the hand-tuned constants seem to already approximate this
+      physics informally. Under the corrected candidate, the **staff** (not the spear) is the largest mover
+      (+1.137 tempo, nearly doubling — correctly centre-balanced/low static-moment, matching the recovery/grip
+      model's "gathered pole" finding), while the **spear's tempo move shrinks to +0.075** (vs +0.409 in the
+      rejected draft) — `recoverability_factor` correctly weighs the spear's large static moment against its
+      thrust-favoring geometry, narrowing the earlier compounding concern for tempo specifically (the damage
+      concern stands on its own). **Caveat, unresolved:** the tempo candidate double-counts weight/hands against
+      `weapon_tempo`'s existing `pen` term (which already penalises both via `wield_heft`) — de-duplicating
+      that overlap is itself a design call, not resolved by this packet.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
