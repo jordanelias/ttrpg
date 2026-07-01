@@ -43,7 +43,7 @@ accrues debt, which is the real input to this roadmap.
 ### Track 1 — CLOSE the combat re-baseline (finish what's in flight) — *highest priority*
 - **1a. adef-consistency lever** — unify `adef_cap`'s point branch with the gap-seeking so the spike's *control* matches
   its *damage* (Lesson 5). Grounded + guarded. Jordan-gated (it strengthens point weapons vs plate).
-- **1b. File ED-1055+** for the grounded re-baseline (the deferred formal record; the designer-set flags travel with it).
+- **1b. File ED-1080+** for the grounded re-baseline (the deferred formal record; the designer-set flags travel with it).
 - **1c. Test guards** the audit found missing (Lesson 1): a **heavy-tier** mirror case (the gap-game exposed a latent
   draw-driven heavy-mirror artifact `test_mirror_fairness` never caught); a wrapper-purity / single-source guard.
 

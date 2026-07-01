@@ -9,6 +9,24 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Pending
 
+- **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
+  of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
+  actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
+  games (Agôn/Negotiation/Inquiry/Consensus), close J-36 seams, drive to settled canon (T-25 + sim-validation).
+  Plan: `C:\Users\Jordan\.claude\plans\this-is-a-broader-nested-mountain.md`. Runs stage-by-stage via the Workflow
+  tool (Opus agonist/antagonist/judge + Haiku scribe), Jordan ratifies each gate; cadence = auto-advance, interrupt
+  only for design-authority forks.
+  - **Stage 0 (Foundation) DONE + Gate 0 RATIFIED (2026-06-30).** Reconciliation contract + decisions:
+    `designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md` (+ raw map + gate packet). Three ratified
+    forks: **D0-1** appeal ethos/pathos/logos = build both multiplicative+additive behind a flag, decide by seeded
+    A/B (player-win-rate vs venue-identity-spread); **D0-2** σ-leverage → new numpy-free `sim/autoload/sigma_leverage.py`
+    sibling (retires the test-dir/numpy/sys.path-hack + the two-σ-kernels debt); **D0-3** TN6/7/8 divergence + Jordan's
+    fractional-Ob idea → contest stays δσ TN7 (unaffected), open a substrate probe (reopens CR6 uniformity), non-blocking.
+    Good news: `faction.py` already has BG-Vote/Succession/committee-band → Consensus mostly promote-existing.
+    IDs reserved: `contest_rebuild` = ED 1055-1079 / PP 800-809.
+  - **NEXT: Stage 1** — build `sigma_leverage.py` + parity; promote the 9-module kernel to `sim/personal/contest/`
+    re-skinned + `build_contest`/`resolve_contest` wrapper; propagate CR1/CR2/CR3; golden-trace + 151-test parity → Gate A.
+
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
   - **Committed Phase-3 chain:** `297458d7` (foundation: leverage→lever-arm, FIX-1b, M3, half-sword geometry) →
@@ -72,7 +90,7 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       light-weapon dodge/parry — emergence partly cosmetic); (4) `ADEF_THRESHOLD` non-monotonicity + the
       `combat_config.gd` port-corrects-oracle drift (**ED-1050**); (5) abilities-as-ACCESS (Phase-4; `eff_cw` is a
       near-no-op threaded through ~18 sites as dormant scaffolding); (6) the `WP.reach()`/`authority()` vs
-      `systems.reach_base`/`wield_heft` single-source target. **Allocate ED-1055+ (block D) for these on Jordan's call.**
+      `systems.reach_base`/`wield_heft` single-source target. **Allocate ED-1080+ (block D) for these on Jordan's call.**
   - **GROUNDED PERCUSSION/ARMOUR/USE-MODE RE-BASELINE — BUILT + committed (2026-06-30).** The percussion single-source
     (ED-1050 cluster) grew, on Jordan's direction, into a full evidence-grounded weapon×armour×technique model — 4
     adversarial workflows (treatise `w4h8gl48w`, biomech `wpwi3b9qf`, armour `wht7pkx1c`, use-mode `w4bekmb5e`),
@@ -96,7 +114,7 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       win; plate win-rate 88.6→90; rondel strengthened; grounded ranking holds); 1c **heavy-mirror guard DONE**
       (`e4da1f04`, 73→78 tests — symmetry + non-degeneracy, catches an armour-defeat draw-stalemate regression the
       light-only test missed).
-    - **Track 1 DONE** (`b79615f4` adef · `64bc95dc` ED-1055 · `e4da1f04` heavy-mirror guard). **Track 2 substantially
+    - **Track 1 DONE** (`b79615f4` adef · `64bc95dc` ED-1080, filed as 1055 · `e4da1f04` heavy-mirror guard). **Track 2 substantially
       done:** agility FIAT clamp fixed (`2cbd8b1c` — emergent light-weapon dodge/parry spread restored); **the pre-merge
       re-audit** (ultracode Workflow `wi4q11myc`, 4 lenses, 28 confirmed) CLEARED the branch as architecturally sound
       (no name-table / emergence real / concussion single-sourced / RESIST grounded — all survived adversarial trace)
@@ -140,7 +158,7 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
   priority, data→Godot pipeline, port state, known-defect callouts). Filed the report under
   `designs/audit/` and the Top-5 as ED-1050..1054. **Re-blocked IDs** (`references/id_reservations.yaml`
   v2: round-1 A/B/C exhausted+overrun to ED-1042; round-2 block D = ED 1050-1099 / PP 800-829, next_free
-  ED-1055). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
+  ED-1081, after contest_rebuild reserved 1055-1079 + combat at 1080). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
   (`ci_register_size_check.py` 20k→policy 15k; register is ~5k); RETIRED banners on
   `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md`; flipped
   `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `designs/godot/*.md`

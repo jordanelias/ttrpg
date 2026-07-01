@@ -48,7 +48,7 @@ extends Resource
 # ── armour-defeat (systems.armor_defeat_sigma) ──
 @export var adef_w: Dictionary = {"none": 0.0, "light": 0.4, "medium": 1.0, "heavy": 1.7}
 @export var adef_blunt: float = 1.3
-@export var adef_point: float = 1.2   # re-exported from config.py (the adef-consistency lever, ED-1055): a gap-thrust's armour-defeat CONTROL matches its damage
+@export var adef_point: float = 1.2   # re-exported from config.py (the adef-consistency lever, ED-1080): a gap-thrust's armour-defeat CONTROL matches its damage
 @export var adef_cut: float = -0.9
 ## ADEF_THRESHOLD — per-armour difficulty bar, RE-EXPORTED FROM THE ORACLE config.py (ED-1050 resolved,
 ## Jordan 2026-06-30): the Python canon was re-swept to a MONOTONE {light:0.30, medium:0.45, heavy:0.72}

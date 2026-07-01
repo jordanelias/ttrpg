@@ -30,7 +30,7 @@ CFG = dict(
   # hilt/guard primitive: blade_guard (cross/quillons/rings) catches the blade in the bind & enhances winding;
   # hand_guard protects the hand in the parry ("don't parry with your hands"). Modulated around a neutral cross.
   BIND_GUARD_K=0.55, PARRY_GUARD_K=0.45, WIND_GUARD_K=0.40, GUARD_NEUTRAL=0.45,
-  ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.2, ADEF_CUT=-0.9,   # ADEF_POINT 1.0->1.2 [SIM-CALIBRATE, reach-ladder frame; ED-1055]: the gap-thrust is a strong armour-defeater (the reliable armoured KILL — Le Jeu de la Hache / Harnischfechten), so a SELECTED spike's exchange-CONTROL (armor_defeat_sigma) now matches its DAMAGE — unifying the sigma path with the gap-game damage path (the adef-consistency lever). Set so the poleaxe spike adef ~= its hammer.
+  ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.2, ADEF_CUT=-0.9,   # ADEF_POINT 1.0->1.2 [SIM-CALIBRATE, reach-ladder frame; ED-1080]: the gap-thrust is a strong armour-defeater (the reliable armoured KILL — Le Jeu de la Hache / Harnischfechten), so a SELECTED spike's exchange-CONTROL (armor_defeat_sigma) now matches its DAMAGE — unifying the sigma path with the gap-game damage path (the adef-consistency lever). Set so the poleaxe spike adef ~= its hammer.
   ADEF_PERC_REF=8.0,   # [SIM-CALIBRATE] derived-percussion-authority reference (a steel hammer ~8) for blunt armour-defeat (Phase-3b)
   # FIX-1 (reach-threat decay): a long weapon that CANNOT defeat the closer's armour loses its reach/approach edge —
   # the armoured man walks through a threat that can't hurt him. Derived from adef_cap vs the tier threshold; 0-effect

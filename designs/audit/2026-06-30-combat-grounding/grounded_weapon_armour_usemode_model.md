@@ -143,7 +143,7 @@ A_HANDS=0.25/B_ARC=0.04. `core.py`: the 4 RESIST cells + the designer-set CI fla
 **Validation gates (WS-8):** non-blunt-vs-non-blunt cells byte-identical (bounded change); the full weapon×armour matchup
 matrix matches the grounded ranking (poleaxe>mace>staff vs plate via the selected mode; mail strong-vs-cut/weak-vs-blunt;
 plate near-immune-cut/vulnerable-concussion); mirror-50 + determinism (`test_combat_balance_guard.py`); no-one-shot;
-`pytest tests/valoria`. File ED-1055+ with the designer-set values flagged.
+`pytest tests/valoria`. File ED-1080+ with the designer-set values flagged.
 
 ## Provenance
 Adversarially fact-checked Workflows (this session): biomech `wpwi3b9qf`, armour `wht7pkx1c`, use-mode `w4bekmb5e`;
