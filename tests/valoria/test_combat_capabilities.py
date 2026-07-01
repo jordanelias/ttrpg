@@ -31,7 +31,7 @@ def test_halfsword_matches_engine_form_switch():
 def test_gap_thrust_matches_puncture_path():
     for n in NAMES:
         head = WEAPONS[n]['head']
-        puncture = (core.HEAD_MODE.get(head) == 'puncture') or head == 'cut_thrust'
+        puncture = (core.HEAD_MODE.get(head) == 'puncture') or head == 'cut_thrust' or 'point' in S.afforded_heads(WEAPONS[n])
         assert puncture == C.allowed('gap_thrust', n), n
 
 

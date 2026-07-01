@@ -121,14 +121,31 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       with **exactly one merge gate**, now CLOSED: `d9fd1f1a` **ADEF_THRESHOLD monotone re-sweep (ED-1050 RESOLVED)** +
       re-exported `combat_config.gd` from the oracle (retired the port's §6 private [AUDIT-FIX]); `e1fc0686` **architecture-
       invariant guards** (no-name-table ast scan + single-source + emergent-selection + gap-game — 84 tests).
-    - **→ THE BRANCH IS RATIFY-READY — PR #40 OPEN** (`design/scene-combat-v1`→`main`, 75 commits;
-      https://github.com/jordanelias/ttrpg/pull/40) awaiting Jordan's review + merge. Then the fuller `.gd` module re-export
-      (RESIST/GAP_EXPOSURE/gap-game logic — deferred behind the non-compilable skeleton, Key-log parity known-red).
-    - **Deferrable Track-2 polish (post- or pre-merge, none blocking):** the `wt`/`spd` cost-path single-source de-leaks
-      (re-baseline, need before/after; `spd` now unblocked since the agility clamp landed); Phase-A cleanups (`_HEAD2DMG`
-      dedup, dead `pob_frac`/`percussion` WEAPONS fields, dead `WP.reach()`/`authority()`, `capabilities.py`→`afforded_heads`);
-      the greedy-comparator-vs-damage docstring (Jordan-gated); the displace/reach `sel_head` consistency (D-1/D-2). Full
-      confirmed list: `tasks/wi4q11myc.output`. **Track 4** build-forward (abilities-as-access, §C, contact axis, WS-7).
+    - **→ THE BRANCH IS RATIFY-READY — PR #40 CLEAN/MERGEABLE** (`design/scene-combat-v1`→`main`, 78 commits;
+      https://github.com/jordanelias/ttrpg/pull/40). Three catch-up merges landed (main's #32/#35/#38/#39/#41/#42 —
+      confirmed `#32` shared lineage with this branch, so the branch is the authoritative superset; one real ID
+      collision resolved, combat re-baseline renumbered **ED-1055→ED-1080** after `contest_rebuild` formally reserved
+      1055-1079). All 16 CI checks green, 0 behind main, awaiting Jordan's merge click. Then the fuller `.gd` module
+      re-export (RESIST/GAP_EXPOSURE/gap-game logic — deferred behind the non-compilable skeleton, Key-log parity known-red).
+    - **Phase-A cleanups DONE (2026-07-01, agonist/antagonist Workflow + 2 solo-verified agent pairs, uncommitted):**
+      `_HEAD2DMG` dedup (systems.py, proven byte-identical — exhaustive case analysis, not spot-check); dead
+      `pob_frac`/`percussion` WEAPONS fields removed (weapons.py + weapon_physics.py's STAGE-1 self-test retired —
+      the stale spear comment claiming `recoverability_factor` still reads `pob_frac` was itself wrong, corrected);
+      `capabilities.py`→`afforded_heads` resync (a real bug: the state-graph doc generator reported the poleaxe unable
+      to gap-thrust, contradicting the engine's own tested gap-game behavior — fixed the `gap_thrust` predicate +
+      its test's independent cross-check; exactly one cell changed, hand-verified against all three blunt weapons'
+      point_concentration, not just the poleaxe). **`WP.reach()`/`authority()` deletion was attempted and CORRECTLY
+      CAUGHT by adversarial review** — "zero callers" is not the same as "safe to unilaterally delete" when the
+      Gate-1 audit already reserved this exact fork (item 6 below) for Jordan; reverted the deletion, instead
+      labeled both functions `[BUILD-ONLY/DIAGNOSTIC]` in their docstrings (no functional change) per the review's
+      offered safe option — the single-source-target decision stays open. All 92 tests green throughout; not yet
+      committed.
+    - **Still open, explicitly Jordan-gated (NOT touched this pass):** the `wt`/`spd` cost-path single-source de-leak
+      (would shift damage output across the whole roster — needs a measured before/after presented for sign-off, not
+      folded into an autonomous batch); the `WP.reach()`/`authority()` vs `systems.reach_base`/`wield_heft` canonical-
+      home decision (see above — now safely deferred rather than silently resolved); the greedy-comparator-vs-damage
+      docstring; the displace/reach `sel_head` consistency (D-1/D-2). **Track 4** build-forward (abilities-as-access,
+      §C, contact axis, WS-7) remains design-gated.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
