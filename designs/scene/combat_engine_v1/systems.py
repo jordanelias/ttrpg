@@ -179,7 +179,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
-def adef_cap(w, cfg):
+def adef_cap(w, cfg, head=None):
     """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
     can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
     deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
@@ -187,10 +187,14 @@ def adef_cap(w, cfg):
     `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
     mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
     cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
-    cutter collapses (ADEF_CUT). NOTE: the poleaxe's derived percussion_authority (~6.4) sits below the mace's (~7.5)
-    because the energy-limited p_auth form omits the 2H/long-lever energy credit — flagged joint-calibration item
-    (ties to the 2H commitment/recovery question)."""
-    head=w['head']
+    cutter collapses (ADEF_CUT).
+
+    `head` (the SELECTED mode-head from select_mode) overrides w['head'] when the wielder has committed to a specific
+    mode this exchange: a poleaxe whose select_mode chose 'point' (the spike) is scored on the spike's gap-thrust, not
+    the better-of-blunt max. head=None keeps the native head (the per-head max over the weapon's intrinsic modes) — so
+    every existing caller is byte-identical. percussion_authority now carries the §1 energy-credit (poleaxe 5.83 < mace
+    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode)."""
+    head = head if head is not None else w['head']
     if head=='blunt':
         return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w)/cfg['ADEF_PERC_REF']),
                    cfg['ADEF_POINT']*(WP.puncture_pressure(w)/cfg['ADEF_PERC_REF']))
@@ -198,13 +202,85 @@ def adef_cap(w, cfg):
     if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*w['gap'])   # cut OR half-sword gap-thrust
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
 
+# ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
+# grounded_weapon_armour_usemode_model.md §3-4 (tasks wht7pkx1c / w4bekmb5e). There is NO per-weapon mode table:
+# the AFFORDED modes + their effectiveness DERIVE from each weapon's existing geometry primitives, so poleaxe/mace/
+# staff are just bundles of primitives, never a name-keyed list (the L0 primitive-law). The modes are the UNIVERSAL
+# set {thrust, cut, percuss, puncture}; each maps to one of the engine's existing head TOKENS (so the downstream
+# coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
+# head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
+# blunt max(concussion,puncture) from 2 modes to N. Pure.
+SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
+                          #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
+SELECT_PC_MIN = 0.10      # [DESIGN] raw point_concentration below which a head has NO thrusting point (a blunt FACE
+                          #   that concentrates percussion but cannot pierce a gap): mace 0.02 -> no spike; poleaxe
+                          #   0.78 / spear 0.78 -> a real point. Reads the raw primitive the design names, so the
+                          #   mace-vs-poleaxe spike distinction EMERGES from morphology, not a weapon name.
+
+def afforded_heads(w):
+    """The set of head TOKENS this weapon can fight in, DERIVED from its geometry primitives (NOT a per-weapon list).
+    Each maps token -> (derived effectiveness, damage_mode). A natively-versatile cut_thrust head stays ATOMIC (the
+    engine's coupling/adef/legibility already resolve its cut<->gap-thrust internally) so its current behaviour is
+    preserved exactly. A blunt head additionally affords the 'point' spike-thrust IFF it has a real piercing point
+    (point_concentration > PC_MIN) — the poleaxe's beak emerges, the mace's flat face does not. Pure."""
+    geo=w['geo']; head=w['head']; pc=geo['point_concentration']
+    heads={}
+    if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
+        heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture')
+    elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
+        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear')
+    elif head=='point':                                              # pure point
+        if geo['gap']>SELECT_EPS and pc>SELECT_PC_MIN: heads['point']=(geo['gap'], 'puncture')
+    elif head=='blunt':                                              # striking head
+        if WP.percussion_authority(w)>SELECT_EPS: heads['blunt']=(WP.percussion_authority(w), 'percussion')
+        if pc>SELECT_PC_MIN and geo['gap']>SELECT_EPS:               # a beak/spike: a real point ON a blunt haft
+            heads['point']=(geo['gap'], 'puncture')
+    if not heads:                                                    # degenerate fallback: never strip all modes
+        heads[head]=(0.0, core.HEAD_MODE.get(head, 'shear'))
+    return heads
+
+_HEAD2DMG={'blunt':'percussion','point':'puncture','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
+def select_mode(c, defender_armor, closed, cfg):
+    """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
+    then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
+    armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
+    N'). Reproduces every single-mode weapon's current head (rapier->point, sabre->curved_cut, arming/longsword/
+    dagger->cut_thrust, mace/staff->blunt) and the poleaxe (the one weapon that affords >1 head: blunt+spike). NOTE
+    [2026-06-30 finding]: under the grounded credited authority (poleaxe 5.83, a strong concussor) + the §2 RESIST
+    table (plate.percussion .30 < plate.puncture .70, i.e. plate is modelled MORE vulnerable to concussion than to
+    the spike), the greedy comparator selects the poleaxe's BLUNT mode at every armour tier — its concussion out-
+    couples its spike vs plate (0.93 vs 0.44). The spike is AFFORDED and ready but not selected; flipping it would
+    require re-tuning the frozen §2 RESIST / ADEF constants (out of scope). Returns (damage_mode, eff_head): eff_head
+    is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved 'percussion'/
+    'shear'/'puncture'. The wrapper writes both onto the combatant (mutation stays wrapper-owned, like grip_position)."""
+    w=c.w
+    heads=afforded_heads(w)
+    if len(heads)==1:                                                # single afforded mode: no choice (the common case)
+        h=next(iter(heads))
+    else:
+        # greedy: the mode delivering the most damage-coupling THROUGH this armour (perc carries the blunt authority
+        # so a high-authority hammer's through-plate transmit competes with a spike's gap-thrust on the same scale).
+        h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
+                  perc=WP.percussion_authority(w) if hd=='blunt' else core.PERC_AUTH_REF))
+    if h=='cut_thrust':
+        # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
+        # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
+        # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
+        # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
+        dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
+    else:
+        dm=_HEAD2DMG.get(h, core.HEAD_MODE.get(h,'shear'))
+    return dm, h
+
 def armor_defeat_sigma(aggressor, defender, cfg):
     """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor
     vs the defender's armour: capability ABOVE the per-tier threshold = control (+); below = the armour SHIELDS (−).
-    The threshold RISES with armour (monotonically harder). Zero unarmoured (ADEF_W['none']=0)."""
+    The threshold RISES with armour (monotonically harder). Zero unarmoured (ADEF_W['none']=0). Reads the aggressor's
+    SELECTED mode-head (sel_head, set by the wrapper from select_mode) so the armour-defeat path scores the mode the
+    wielder actually committed to; falls back to the native head when unset (byte-identical)."""
     a=cfg['ADEF_W'][defender.armor]
     if a==0.0: return 0.0
-    return a*(adef_cap(aggressor.w, cfg) - cfg['ADEF_THRESHOLD'][defender.armor])
+    return a*(adef_cap(aggressor.w, cfg, getattr(aggressor,'sel_head',None)) - cfg['ADEF_THRESHOLD'][defender.armor])
 
 def reach_threat(longer, defender, cfg):
     """FIX-1 — the factor by which a LONGER weapon's structural-reach advantage DECAYS when it CANNOT defeat the
@@ -281,16 +357,23 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
 def legibility(aggressor, commit, cfg, opp_armor='none'):
     """Read-legibility multiplier on the DEFENDER's visual read: a THRUST (in-line) is hard to read; a SWING/CUT
     (lateral arc) and a percussive BLUNT blow are easy; deeper commit/lunge = more readable. Legibility follows the
-    MODE the head actually fights in vs this armour (the cut->half-sword-thrust shift `coupling` models): a cut-and-
-    thrust sword swings (easy) unarmoured but thrusts to gaps (hard) vs plate. Pure."""
-    ah=aggressor.w['head']
-    if ah=='point':                       legib=cfg['LEGIB_THRUST']      # always a thrust
-    elif ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']   # pure cutters always swing
-    elif ah=='blunt':                     legib=cfg['LEGIB_SWING']       # percussive arc, easy to read
-    elif ah=='cut_thrust':
-        # shifts to a controlled gap-thrust vs plate (hard to read), otherwise cuts (easy) — matches coupling's mode-shift
-        legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
-    else:                                 legib=1.0
+    MODE the wielder ACTUALLY fights in this exchange — the SELECTED damage-mode (sel_dmg, written by the wrapper from
+    select_mode): puncture/thrust read HARD, shear/percuss read EASY. This is the one real use-mode wiring change (the
+    fixed-head logic only ever inferred the mode from head+armour; now it reads the selected mode directly). Falls
+    back to the prior head+armour inference when sel_dmg is unset, so it is byte-identical for every existing caller
+    (a cut_thrust sword's sel_dmg is 'shear' unarmoured -> swing, 'puncture' vs plate -> thrust, matching coupling). Pure."""
+    dm=getattr(aggressor,'sel_dmg',None)
+    if dm is not None:
+        legib = cfg['LEGIB_THRUST'] if dm=='puncture' else cfg['LEGIB_SWING']   # thrust hard; cut/percuss easy
+    else:
+        ah=aggressor.w['head']
+        if ah=='point':                       legib=cfg['LEGIB_THRUST']      # always a thrust
+        elif ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']   # pure cutters always swing
+        elif ah=='blunt':                     legib=cfg['LEGIB_SWING']       # percussive arc, easy to read
+        elif ah=='cut_thrust':
+            # shifts to a controlled gap-thrust vs plate (hard to read), otherwise cuts (easy) — matches coupling's mode-shift
+            legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
+        else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     return legib

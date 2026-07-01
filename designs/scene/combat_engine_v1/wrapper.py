@@ -65,6 +65,8 @@ def engagement(A, B, first, cfg, rng):
         for c in (A,B):
             c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
+            opp = B if c is A else A
+            c.sel_dmg, c.sel_head = S.select_mode(c, opp.armor, closed, cfg)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Refreshed after the half-sword form-switch below.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -117,6 +119,9 @@ def engagement(A, B, first, cfg, rng):
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
+        # re-select the use-mode on the (possibly just-switched) form, so sel_head/sel_dmg match the current weapon
+        aggressor.sel_dmg, aggressor.sel_head = S.select_mode(aggressor, defender.armor, closed, cfg)
+        defender.sel_dmg,  defender.sel_head  = S.select_mode(defender, aggressor.armor, closed, cfg)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
         # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).

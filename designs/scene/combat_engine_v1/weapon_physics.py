@@ -50,6 +50,24 @@ PERC_EXP = 0.30
 PERC_CAP = 8.0
 HEAVY_BLUNT_THRESHOLD = 6.0
 
+# ── concussion energy-credit (2H grip + arc/haft-length) — GROUNDED biomechanics ──
+# designs/audit/2026-06-30-combat-grounding/grounded_weapon_armour_usemode_model.md §1 (task wpwi3b9qf,
+# adversarially fact-checked). A two-handed grip raises the EFFECTIVE MASS behind the blow (not tip speed), and a
+# longer haft adds a little more but saturates (you lose ω as ~I^-0.28). The credit multiplies INSIDE the
+# (sqrt(mass)*PoB_frac)**PERC_EXP authority term, so it compounds at the authority exponent, not linearly.
+PERC_2H_HANDS = 0.25    # GROUNDED: measured 2H/1H force ratio ~=1.25 (Oh et al. 2022 within-subject crossover, S1;
+                        #   corroborated IASTM compact-tool 1.24-1.28). So 1 + PERC_2H_HANDS = R_F = 1.25 per extra hand.
+PERC_2H_ARC = 0.04      # [SIM-CALIBRATE band 0.02-0.06]: bat-MOI rate penalty / haft-length swing-weight gain
+                        #   (Nathan 2003 constant-power regime, S1; capped at the Cross-Nathan swing-weight optimum).
+PERC_GRIP_1H = 0.7      # the 1H reference grip_len (= the mace's grip_len): the arc credit accrues only for haft
+                        #   LONGER than a one-handed grip. GROUNDED as the 1H anchor (the mace is the 1H percussor).
+
+def energy_credit(w):
+    """The 2H/arc energy multiplier on percussion authority (grounded §1). (1 + A_HANDS*(hands-1)) for the extra
+    hand's effective-mass credit, times (1 + B_ARC*max(0, grip_len - 1H_ref)) for the saturating haft-length gain.
+    A 1H weapon at the reference grip credits 1.0 (no change). Pure; consumes only {hands, grip_len}."""
+    return (1.0 + PERC_2H_HANDS * (w['hands'] - 1)) * (1.0 + PERC_2H_ARC * max(0.0, w['grip_len'] - PERC_GRIP_1H))
+
 # ── engine-scale mapping gains — [SIM-CALIBRATE] starting values, fit in the Phase-3 re-baseline ──
 MOI_AGILITY_K = 6.0     # LIVE [SIM-CALIBRATE]: the bind-leverage normaliser in defense_affinities.wind (reaches the
                         # engine via systems.mode_sigma's 'wind' cap). The agility POWER LAW below replaced this
@@ -118,12 +136,15 @@ def derive(w):
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
 def percussion_authority(w):
-    """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac). Saturating; 0 for a
-    non-blunt head. Reproduces the validated anchors mace=8, poleaxe=8, staff=4."""
+    """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
+    energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
+    no percussion — the edge-no-percuss caveat is THIS gate, emergent). Grounded anchors (2026-06-30 re-baseline,
+    credited): mace 7.45 > poleaxe 5.83 > staff 2.52 — the poleaxe sits BELOW the mace in pure concussion (correct:
+    its plate primacy is the beak/spike puncture mode, NOT concussion — see puncture_pressure + systems.select_mode)."""
     if w['head'] != 'blunt':
         return 0.0
     pob = derive(w)['PoB_frac']
-    return min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob) ** PERC_EXP)
+    return min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
 
 
 def puncture_pressure(w):

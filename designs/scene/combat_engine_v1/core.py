@@ -1,9 +1,13 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
 Wraps canonical r1/r8/m1 so every subsystem resolves identically. No A/B knowledge here."""
 import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
+sys.path.insert(0, os.path.dirname(__file__))
 from math import tanh
 import r1_sigma_resolution as r1, r8_parity_harness as r8, m1_dice_sigma_core as m1
-from math import sqrt as _sqrt
+import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
+                              # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
+                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math
+                              # at module scope (cycle-free), so this import is safe.
 
 DECISIVE_OB = r8.DECISIVE_OB
 TN = r8.TN_STANDARD
@@ -30,12 +34,6 @@ def resolve(pool, net_sigma, rng):
     bands (overwhelming trivialised by the Ob-floor). Returns (deg, net)."""
     net = roll_net(pool, rng) + m1.soft_cap(net_sigma) * m1.sigma_n(pool)
     return degree(net, DECISIVE_OB), net
-
-def p_auth(w):
-    """Derived percussion authority: min(8, 9.5*(sqrt(mass)*pob_frac)**0.30). Replaces the hand-set per-weapon
-    'percussion'; pob_frac & mass were dead weapon inputs and this is their consumer (combat_residuals_pob_f5 §2).
-    Read only in core's blunt branch, so non-blunt heads are unaffected (their hand-set percussion was dead data)."""
-    return min(8.0, 9.5 * (_sqrt(max(0.0, w.get('mass', 1.0))) * w.get('pob_frac', 0.15)) ** 0.30)
 
 # ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
 # Adopts the ground-up linear damage model [damage_model.py / damage_model_design, Jordan 2026-05-30,
@@ -131,5 +129,6 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
         z=max(0.0,(net-2*DECISIVE_OB)/m1.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
-    return damage(deg, heft_resp(attacker.w, cfg), attacker.head, attacker.strength, defender.armor, close,
-                  attacker.w['gap'], p_auth(attacker.w), q=q)
+    head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
+    return damage(deg, heft_resp(attacker.w, cfg), head, attacker.strength, defender.armor, close,
+                  attacker.w['gap'], WP.percussion_authority(attacker.w), q=q)
