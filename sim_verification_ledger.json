@@ -126,6 +126,13 @@
       "canonical_source": "sim_verification_ledger.json",
       "section": "CALIBRATED -- Stage-5 debt (contact-fraction damage floor)",
       "quoted_text": "CALIBRATED, not derived. orchestration.py contact_fraction damage scaling (~L1147): result[dmg_key] *= max(0.2, opp_frac). Floor prevents a barely-engaged front (opp_frac -> 0) from dealing near-zero damage (degenerate never-resolving stalemates in the v20 engagement-fraction rescale). Free magnitude tuned to hold the mass-battle gauge bands; retire to a derived minimum-frontage-lethality term. NO canonical doc backs this value -- do not fabricate one."
+    },
+    {
+      "sim_variable": "PC_FACING_SLEW_BASE",
+      "value": 60,
+      "canonical_source": "sim_verification_ledger.json",
+      "section": "CALIBRATED -- Stage-5 debt (facing-physics slew rate, F2 DEFAULT-OFF)",
+      "quoted_text": "CALIBRATED, ungrounded placeholder. units.py _slew_facing: max facing turn per resolution tick = PC_FACING_SLEW_BASE * disc_mult degrees, gating the anti-hyper-reactivity facing model (PC_FACING_MODEL). DEFAULT-OFF and NOT ratified -- the magnitude is a first-cut guess pending ground-vs-drill-manual wheel-rate calibration and Jordan sign-off. Retire to a derived body pivot rate. NO canonical doc backs this value -- do not fabricate one."
     }
   ]
 }

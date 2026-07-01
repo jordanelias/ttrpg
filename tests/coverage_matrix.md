@@ -306,3 +306,21 @@ Archived entries in tests/coverage_matrix_archive.md
 - G5 byte-exact OFF both modes (unit 7be8499b / cell 1c5b2851). Inert for the current bat.py battery
   (ranged matchup approaches orthogonally, Chebyshev==Euclidean); activates on diagonal approaches +
   the field-ON path (gauge / later stages). Coordinate-migration plan S2.
+
+## 2026-07-01 — Migration C0+COL+G+H+F2+P: coordinate-field flip [FIELD_MOVEMENT+PC_NODE_COHESION; byte-exact OFF]
+- The full remaining coordinate-field sequence, each behind a default-OFF toggle, implemented from the
+  adversarially-verified coordinate-field-impl-spec (worktree agent; byte-exact-gated per increment):
+  C0 (contact scaffolding: Subunit.cells_float + FIELD_CONTACT find_contacts split, contact sets) · COL
+  (float→file quantizer, COL_WIDTH=1.0) · G (geometry._oriented_abs_map rebuilt from _node_pos on ON —
+  the biggest hazard) · H (halt-loop + contention collect + _momentum_speed float consistency) · F2
+  (PC_FACING_MODEL anti-hyper-reactivity facing layer, DEFAULT-OFF; PC_FACING_SLEW_BASE=60 = calibrated
+  debt, ledger+provenance) · P (delete the int(round()) snap in _node_cells on ON — the coordinated flip).
+- Toggles module-local in units.py (config.py left untouched — 43 pre-existing uncited constants). Enforced
+  FIELD_MOVEMENT ⇒ PC_NODE_COHESION (assert at run_battle setup; the invalid combo fails loudly). CONTACT_REACH=0.0
+  (ON contact ≡ OFF adjacency, pending Jordan's radius). role_at_contact (dead code) + iter_cells (pre-existing skew) left alone.
+- G5 byte-exact OFF both modes at every increment (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+- FIELD-ON CANDIDATE (Jordan ratifies; nothing fitted): ON digests unit 337ed92c / cell 38c5395b; runs to
+  completion (exit 0). Gauge (via a scratchpad shim — gauge_mb.py is DEAD, hardcoded /home/claude path):
+  OFF 5/13 → ON 4/13; H8 newly in-band, H2/H9 newly diverge to hard win-outs, draw rates collapse. NOT
+  ratified — the gauge needs porting to the package before the ON path can be a validated contract.
+  Coordinate-migration plan C0–P; open decisions: contact radius, facing magnitudes, gauge port, band ratification.

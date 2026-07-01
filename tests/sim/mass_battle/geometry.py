@@ -237,7 +237,22 @@ def _oriented_abs_map(atom):
     _rotate_defender_facing / _atom_avg_facing each open-coded as an O(n^2) scan. Byte-exact (same
     first-match). [movement-substrate review 06 — findings 4/8: this abs->orig reverse-lookup is the hard
     grid dependency; centralizing it is the step toward threading the cell identity from the source.]"""
+    # [movement-substrate review 06 — findings 4/8: G] On the coordinate field the atom's live cells come
+    # from _node_pos (floats), file-binned as cells()/_node_cells does: (int(round(r)), int(round(c/COL_WIDTH))).
+    # The legacy cell_offsets lattice diverges from _node_pos under node cohesion, so amap MUST be keyed from
+    # _node_pos on ON or every consumer (cells_to_orig_coords / support_engage_frac / _rotate_defender_facing /
+    # _atom_avg_facing / octagon) would look up float cells against integer keys and silently drop them.
+    # Toggles read at call time from hierarchy.units (units imports geometry -> no top-level cycle). OFF branch
+    # is the verbatim prior cell_offsets build.
+    import mass_battle.hierarchy.units as _u
     amap = {}
+    if _u.FIELD_MOVEMENT and _u.PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+        for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
+            _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+            abs_r = int(round(_pr))
+            abs_c = int(round(_pc / _u.COL_WIDTH))
+            amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the file-binned cells() keys
+        return amap
     for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
         abs_r = (atom.starting_position[0] + or_r
                  + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
