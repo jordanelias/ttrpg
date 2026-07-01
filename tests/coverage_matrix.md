@@ -284,3 +284,16 @@ Archived entries in tests/coverage_matrix_archive.md
   identity from find_contacts (deleting the lookup entirely) once the contact path is refactored.
 - G5 byte-exact both modes (unit 7be8499b / cell 1c5b2851 unchanged): the map preserves the old
   break-on-first semantics exactly, so results are identical. No behaviour change.
+
+## 2026-07-01 — Migration DEBT-0: orchestration.py fabrication-debt resolution [byte-exact]
+- Prerequisite for the coordinate-migration ON-path edits to orchestration.py (the whole-file fabrication
+  scan surfaces every uncited constant the moment the file is staged). Resolved its 4 flagged constants
+  HONESTLY:
+  - 3× octagon -1.5 (L703/716/719): inline [canonical:] citing config.py:65 ANGLE_DEF_MOD zone midpoints
+    (GREEN 0 / YELLOW -1 / RED -2; -0.5=mid(0,-1), -1.5=mid(-1,-2)) — genuinely derived.
+  - 0.2 engagement-fraction damage floor (L1147, max(0.2, opp_frac)): recorded as CALIBRATED in the
+    repo-root sim_verification_ledger.json (CONTACT_FRACTION_DAMAGE_FLOOR) + a provenance.py 'calibrated'
+    Prov row (Stage-5 debt). NO canonical source fabricated ("do not fabricate one").
+- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851); comments + data only. Fabrication
+  gate: orchestration.py 4→0. Spec + verification from the coordinate-field-impl-spec workflow (13 agents;
+  the debt agent applied + bat.py-verified this exact resolution). Coordinate-migration plan DEBT-0.

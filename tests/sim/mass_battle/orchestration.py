@@ -700,7 +700,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 # facing-vs-charger (b_angle_mod for B: GREEN 0 / YELLOW -1 / RED -2 via ANGLE_DEF_MOD).
                 if PER_CELL:
                     if a_pen > 0:
-                        _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")
+                        _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
                         ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
                     elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
@@ -713,10 +713,10 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
                         ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
                     if b_pen > 0:
-                        _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")
+                        _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
                     elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
-                        _za = "YELLOW" if a_angle_mod > -1.5 else "RED"
+                        _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
