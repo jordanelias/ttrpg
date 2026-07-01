@@ -233,17 +233,22 @@ def _find_contacts_standoff(unit_a, unit_b):
         for atom_b in unit_b.subunits:
             fb, rb = bf[id(atom_b)]
             sd = _u.standoff_from_reach(ra, rb)
-            contact_cells_a, contact_cells_b, contact_cols = [], [], set()
+            # Sets, not lists: the standoff radius (>=2.0) is wide enough that one cell can be within
+            # range of several enemy cells at once, which would otherwise append the SAME snapped
+            # identity multiple times -- confirmed by adversarial review to silently over-count stamina
+            # drain downstream (orchestration.py sums len(a_cells) directly, uncounted duplicates
+            # inflate it). Converted to sorted lists at the end for deterministic output.
+            contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
             for (ar, ac) in fa:
                 for (br, bc) in fb:
                     if math.hypot(ar - br, ac - bc) <= sd:
-                        contact_cells_a.append((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
-                        contact_cells_b.append((int(round(br)), int(round(bc / _u.COL_WIDTH))))
+                        contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
+                        contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
                         contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))
             if contact_cols:
                 pairs.append({"atom_a": atom_a, "atom_b": atom_b,
-                               "a_cells": contact_cells_a, "b_cells": contact_cells_b,
-                               "cols": list(contact_cols)})
+                               "a_cells": sorted(contact_cells_a), "b_cells": sorted(contact_cells_b),
+                               "cols": sorted(contact_cols)})
     return pairs
 
 
