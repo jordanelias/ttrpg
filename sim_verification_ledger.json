@@ -119,6 +119,13 @@
       "canonical_source": "tests/sim/sim_mb_06_handoff_2026-05-12.md",
       "section": "Jordan three-part design for tension F \u2014 (2) Puncture mechanism",
       "quoted_text": "Attacker gets +1D per (attacker_momentum - defender_momentum)"
+    },
+    {
+      "sim_variable": "CONTACT_FRACTION_DAMAGE_FLOOR",
+      "value": 0.2,
+      "canonical_source": "sim_verification_ledger.json",
+      "section": "CALIBRATED -- Stage-5 debt (contact-fraction damage floor)",
+      "quoted_text": "CALIBRATED, not derived. orchestration.py contact_fraction damage scaling (~L1147): result[dmg_key] *= max(0.2, opp_frac). Floor prevents a barely-engaged front (opp_frac -> 0) from dealing near-zero damage (degenerate never-resolving stalemates in the v20 engagement-fraction rescale). Free magnitude tuned to hold the mass-battle gauge bands; retire to a derived minimum-frontage-lethality term. NO canonical doc backs this value -- do not fabricate one."
     }
   ]
 }

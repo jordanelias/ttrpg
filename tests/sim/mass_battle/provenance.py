@@ -145,6 +145,14 @@ PROVENANCE = {
         derives_from="fraction of a cell's frontage the attack angle exposes",
         gauge_rows=("C4", "C7"), retire_to="derived"),
 
+    # Pre-existing calibrated floor surfaced by the coordinate-migration whole-file fabrication scan (DEBT-0).
+    "CONTACT_FRACTION_DAMAGE_FLOOR": Prov(
+        "CONTACT_FRACTION_DAMAGE_FLOOR", "0.2", "orchestration.py:1147", "calibrated",
+        law="engagement-fraction lethality — damage scales with the opponent's contact fraction (v20), floored so a thinly-engaged front is not near-inert",
+        derives_from="minimum-frontage lethality (subsumed once the Lanchester linear term carries numbers-in-contact end-to-end)",
+        gauge_rows=(), toggle="(always-on when not LANCHESTER_ENABLED)", retire_to="derived",
+        note="Stage-5 debt; free magnitude, ledger entry CONTACT_FRACTION_DAMAGE_FLOOR. NO canonical doc backs it — do not fabricate one."),
+
     # Laws that are correctly grounded and must be PRESERVED (academic-law rows; no magnitude here)
     "law.lanchester": Prov(
         "Lanchester linear/square law", "n/a", "core/attrition.py (target)", "academic-law",
