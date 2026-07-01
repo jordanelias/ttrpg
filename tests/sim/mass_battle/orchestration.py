@@ -1099,16 +1099,40 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             if atom.target_atom:
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
+
+        def _cells_float_of(unit):
+            return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
+
+        # [Stage A] Standoff-clamp enemy-float snapshot -- deliberately NOT the v21 both-sides-frozen
+        # pattern above. cached_centroids freezes both sides' TARGET (direction) before either moves,
+        # which is right for fairness (a *soft* concern: ~10% first-arg bias in which centroid gets
+        # aimed at). The standoff clamp enforces a *hard* invariant (cells never closer than
+        # standoff()), and freezing BOTH sides' positions at pre-move produces a real correctness bug:
+        # each side independently caps its own advance against the OTHER's stale pre-move position, so
+        # if both close simultaneously the two caps compound and the cells can still end up nearer than
+        # standoff (confirmed empirically -- min separation collapsed to 1.0 against an intended 2.0
+        # before this fix). Since run_battle already moves unit_a's subunits fully before unit_b's (a
+        # real sequential order, not a simulated simultaneity), the correct fix is for each side's
+        # clamp to see the OTHER side's TRUE CURRENT positions at the moment it moves: b_cells_float is
+        # built here (unit_b genuinely hasn't moved yet, so this doubles as its pre-move snapshot);
+        # a_cells_float is built AFTER unit_a's loop below, once unit_a's positions are final for this
+        # tick, so unit_b's clamp sees where unit_a actually ended up, not where it started. A true
+        # joint-simultaneous solve (splitting the closing budget between both sides) would remove the
+        # resulting first-mover asymmetry entirely; flagged as a possible refinement, not required for
+        # the correctness guarantee (no co-location) this stage exists to deliver. None when
+        # FIELD_MOVEMENT is off -> zero cost and byte-exact on the legacy/grid path.
+        b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
         for atom in unit_a.subunits:
             if atom.target_atom:
                 # per-subunit formation-hold: each subunit advances on its OWN Discipline
                 # (single-subunit inherits -> == unit.discipline -> byte-exact)
                 atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=b_cells_set)
+                                   enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
+        a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
         for atom in unit_b.subunits:
             if atom.target_atom:
                 atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=a_cells_set)
+                                   enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
         for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)

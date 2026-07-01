@@ -50,7 +50,27 @@ PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (
 PC_FACING_ROUT = (_hu_os.environ.get('PC_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
 
 __all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
-           'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT']
+           'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT',
+           'CELL_RADIUS', 'standoff_from_reach', 'standoff']
+
+# [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
+# (a whole-FORMATION bounding radius used by the FIELD_CONTACT centroid bound). Grounded the same way
+# that function already is: half the existing COL_WIDTH=1.0 lattice pitch.
+CELL_RADIUS = 0.5
+
+
+def standoff_from_reach(reach_a, reach_b):
+    """[Stage A] Stand-off distance (lattice units) from two already-resolved PP-290 reach values
+    (troop_types.registry.reach_for). Symmetric by construction."""
+    return (CELL_RADIUS + reach_a) + (CELL_RADIUS + reach_b)
+
+
+def standoff(troop_type_a, troop_type_b):
+    """[Stage A] True-adjacency stand-off distance (lattice units) between a cell of troop_type_a and
+    a cell of troop_type_b: (CELL_RADIUS + reach(a)) + (CELL_RADIUS + reach(b)). Two Short-Reach cells
+    stand off 2.0 lattice units apart; Long vs Short, 3.0. Used by find_contacts (core/contact.py) and
+    _node_advance's halt below — the SAME radius for both, so contact and halt never drift out of sync."""
+    return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
 
 
 def _slew_facing(cur, desired, discipline):
@@ -383,12 +403,21 @@ class Subunit:
                 out.append((int(round(r)), int(round(c))))  # OFF: exact prior snap
         return out
 
-    def _node_advance(self, discipline, target_centroid, enemy_cells=None):
+    def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
         body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
         (anchor + rel) by a discipline-gated cohesion factor, so the formation holds together while
         contention/edges can dent it. No wheel yet (facing points at the target).
-        [arch: relational cohesion replaces the re-imposed shape pattern.]"""
+        [arch: relational cohesion replaces the re-imposed shape pattern.]
+
+        enemy_cells_float: [Stage A, additive, None by default -> byte-exact] list of (r, c, reach)
+        true-float enemy-cell triples (r,c from cells_float(), reach from troop_types.registry.
+        reach_for on that cell's owning atom) -- built by the caller in the SAME synchronized block as
+        cached_centroids (orchestration.py) so both sides see each other's PRE-MOVE true positions.
+        When FIELD_MOVEMENT is on and this is supplied, the halt below clamps to the standoff() ring
+        against these true floats instead of the rank/file-SNAPPED enemy_cells -- the correction that
+        actually delivers "never co-located" (a clamp against snapped cells targets a stale integer
+        position, not the enemy's true float)."""
         if self.stance == "hold":
             return
         self._node_prev_pos = {cid: p for cid, p in self._node_pos.items()}
@@ -408,7 +437,19 @@ class Subunit:
             dc = target_centroid[1] - ac
             if self.stance == "retreat":
                 dr, dc = -dr, -dc
-            if enemy_cells:
+            if FIELD_MOVEMENT and enemy_cells_float:
+                # [Stage A] True-adjacency anchor pre-cap: dmin against the enemy's TRUE FLOAT
+                # positions (cells_float(), not the rank/file-SNAPPED _node_cells()/cells()), capped
+                # to standoff() per nearest true-float pair -- not a flat "-1". This is what actually
+                # delivers "never co-located": a clamp against snapped cells targets a stale integer
+                # position, not where the enemy really is.
+                mine = self.cells_float()
+                if mine:
+                    my_reach = reach_for(self.troop_type)
+                    allowed = min(math.hypot(mr - er, mc - ec) - standoff_from_reach(my_reach, erch)
+                                  for (mr, mc) in mine for (er, ec, erch) in enemy_cells_float)
+                    step = min(step, max(0, allowed))
+            elif enemy_cells:
                 mine = self._node_cells()
                 if mine:
                     dmin = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
@@ -449,12 +490,35 @@ class Subunit:
             cr, cc = self._node_pos.setdefault((orig_r, orig_c), self._node_anchor)  # [canonical: continuous-mode seed: unseen cell defaults to anchor]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
-            # [migration P] OFF = verbatim int(round) grid-membership probe; ON = file-binned probe matching
-            # the file-indexed enemy cells() keys (row rank-snapped, column /COL_WIDTH). On the field the exact
-            # match is coarse — real blocking is handled by the contact/adjacency cluster (find_contacts).
-            _probe = (int(round(nr)), int(round(nc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(nr)), int(round(nc)))
-            if enemy_cells and _probe in enemy_cells:
-                nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
+            if FIELD_MOVEMENT and enemy_cells_float:
+                # [Stage A] Per-cell clamp, continuous: pull a candidate that would land WITHIN
+                # standoff() of a true-float enemy cell back to exactly the standoff ring, along the
+                # axis from that enemy cell to the candidate -- shape-preserving (post-hoc; never
+                # touches _node_rel), unlike the OFF/legacy exact-equality test this replaces. If
+                # several enemy cells are violated, clamp against the single worst (nearest-relative-
+                # to-its-own-standoff) violator -- a reasonable, symmetric-per-pair approximation
+                # rather than exact multi-body constraint solving.
+                my_reach = reach_for(self.troop_type)
+                worst = None  # (violation, er, ec, sd, dist)
+                for (er, ec, erch) in enemy_cells_float:
+                    sd = standoff_from_reach(my_reach, erch)
+                    dist = math.hypot(nr - er, nc - ec)
+                    violation = dist - sd
+                    if violation < 0 and (worst is None or violation < worst[0]):
+                        worst = (violation, er, ec, sd, dist)
+                if worst is not None:
+                    _, er, ec, sd, dist = worst
+                    if dist > 1e-9:
+                        nr, nc = er + (nr - er) / dist * sd, ec + (nc - ec) / dist * sd
+                    else:
+                        nr, nc = cr, cc  # degenerate exact-overlap: hold at prior position
+            elif enemy_cells:
+                # [migration P] OFF = verbatim int(round) grid-membership probe; ON (no float data supplied,
+                # i.e. FIELD_MOVEMENT off but PC_NODE_COHESION on) = file-binned probe matching the
+                # file-indexed enemy cells() keys (row rank-snapped, column /COL_WIDTH).
+                _probe = (int(round(nr)), int(round(nc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(nr)), int(round(nc)))
+                if _probe in enemy_cells:
+                    nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
             # (a) attention (facing model): face the ENGAGED target; else keep the WHEEL-slewed body facing.
             # The node path already has a disc-gated WHEEL slew (L392), so do NOT double-slew here.
             if PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
@@ -473,15 +537,17 @@ class Subunit:
         if not c: return self.starting_position
         return (sum(r for r, x in c) / len(c), sum(x for r, x in c) / len(c))
 
-    def advance_cells(self, discipline, target_centroid, enemy_cells=None):
+    def advance_cells(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """
         enemy_cells: set of abs (r,c) positions of all enemy cells.
+        enemy_cells_float: [Stage A, additive] list of (r,c,reach) true-float enemy-cell triples --
+        see _node_advance's docstring. Ignored on the legacy (non-node) path below.
         v11: cap each cell's advance to bring it to adjacency (distance=1) but not past
         the nearest enemy cell. Prevents over-run that produces paradoxical angles.
         [canonical: Jordan design — vector halt at first adjacency]
         """
         if PC_NODE_COHESION and hasattr(self, '_node_pos'):
-            return self._node_advance(discipline, target_centroid, enemy_cells)
+            return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
         if self.stance == "hold": return
         # KITING (§13): a ranged unit with the 'kite' instruction regulates its distance to stay in
         # the volley band [VOLLEY_MIN_RANGE, VOLLEY_MAX_RANGE] instead of closing to melee. Distance

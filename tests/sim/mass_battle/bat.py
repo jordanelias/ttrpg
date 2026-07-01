@@ -95,11 +95,29 @@ def trial_vector(ua, ub, r):
 EXPECTED = {
     'unit': '7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725',
     'cell': '1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7',
+    # [Stage A, 2026-07-01] The coordinate-field candidate's OWN golden digests (FIELD_MOVEMENT=1 +
+    # PC_NODE_COHESION=1 -- required by run_battle's own assert). NOT byte-exact with the grid digests
+    # above by construction (Chebyshev->Euclidean + the true-adjacency standoff halt are intended
+    # behaviour changes, not a refactor) -- this is the field path's own regression anchor, recorded
+    # once the co-location bug (Stage A) was fixed and confirmed (min cell separation == standoff()
+    # exactly, 2.0 for two Short-Reach cells, across sampled matchups). Update ONLY on an intentional
+    # field-path behaviour change, same discipline as the grid digests.
+    'unit_field': 'dcc2bdf3b8c189d48e2072add6939b69f8d1653c9dee50fca9e92f649404091b',
+    'cell_field': '4a07e5c2f5f814e686cc00b073442ef5f5d421282af1a79ddddd61fe23bb4adc',
 }
 
 
 def compute():
-    mode = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
+    """mode key: 'cell'/'unit' (grid, PER_CELL selects) or '..._field' when FIELD_MOVEMENT is on. Read
+    at CALL TIME so the reported mode always matches what this process actually ran, not just PER_CELL
+    -- [Stage A] before this, mode was PER_CELL-only, so a FIELD_MOVEMENT default-flip would silently
+    run the field path but report/check it as plain 'unit'/'cell', comparing against the WRONG
+    (grid-path) golden digest. The comparison would still fail loud (a real behaviour difference), but
+    the mismatch would misleadingly read as a regression rather than "you're on the field path, check
+    against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
+    base = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
+    import mass_battle.hierarchy.units as _u
+    mode = base + '_field' if _u.FIELD_MOVEMENT else base
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
         if (sa, TIER) not in ANCHOR_MAP or (sb, TIER) not in ANCHOR_MAP:
