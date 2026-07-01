@@ -9,6 +9,7 @@ Rationale: D0-2 (designs/audit/2026-06-30-contest-stage0-reconciliation/DECISION
 Coverage:
     sigma_n / sigma_N      — both combat and contest aliases
     soft_cap / eff_sigma   — both aliases
+    sigma_space_ob_shift   — raw sigma-space Ob shift (net_sigma * sigma_n)
     net_boost              — TN 6, 7, 8; capped=True and False
     eff_ob / effective_ob  — both call signatures
     p_success              — full closed-form probability
@@ -176,6 +177,36 @@ class TestSoftCap:
     def test_soft_cap_odd_zero(self):
         """Zero in → zero out (tanh(0)=0)."""
         assert SL.soft_cap(0.0) == 0.0
+
+
+# ---------------------------------------------------------------------------
+# Tests: sigma_space_ob_shift
+# ---------------------------------------------------------------------------
+
+class TestSigmaSpaceObShift:
+    """sigma_space_ob_shift(net_sigma, pool) — raw sigma-space Ob shift, pre-soft-cap.
+
+    Defined as net_sigma * sigma_n(pool); the sqrt(N) cancels in the z-score
+    (the F1 uniform-modifier-impact property). Byte-identical to the numpy
+    original m1_dice_sigma_core.sigma_space_ob_shift (verified divergence 0.0).
+    """
+
+    @pytest.mark.parametrize("ns", NET_SIGMA_GRID)
+    @pytest.mark.parametrize("pool", POOL_GRID)
+    def test_sigma_space_ob_shift_vs_numpy(self, ns, pool):
+        if not _numpy_available:
+            pytest.skip("numpy not available")
+        got = SL.sigma_space_ob_shift(ns, pool)
+        want = _m1_ref("sigma_space_ob_shift", ns, pool)
+        _assert_close(got, want, f"sigma_space_ob_shift(net_sigma={ns}, pool={pool})")
+
+    @pytest.mark.parametrize("ns", NET_SIGMA_GRID)
+    @pytest.mark.parametrize("pool", POOL_GRID)
+    def test_sigma_space_ob_shift_identity(self, ns, pool):
+        """sigma_space_ob_shift(ns, pool) == ns * sigma_n(pool) (exact — same float ops)."""
+        assert SL.sigma_space_ob_shift(ns, pool) == ns * SL.sigma_n(pool), (
+            f"sigma_space_ob_shift != ns*sigma_n at ns={ns} pool={pool}"
+        )
 
 
 # ---------------------------------------------------------------------------
