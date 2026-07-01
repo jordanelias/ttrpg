@@ -19,15 +19,20 @@ shaken foot) are expected to resolve.
 
 Two granularities: single (one engagement-turn) and multi (the resolving mode). Single
 mode currently returns all-draws at the tick cap for every engine config -- a tick-cap
-artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine file
-is argv[1], exec'd into namespace, so the same gauge runs against any engine variant.
+artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine is
+the live mass_battle package (tests/sim/mass_battle/engine.py), imported directly -- this
+gauge runs against whatever engine config the environment toggles (PER_CELL, FIELD_MOVEMENT,
+PC_NODE_COHESION, ...) select, not a frozen snapshot file.
 
 Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
 import sys, os, random, statistics
 
-ENGINE = sys.argv[1] if len(sys.argv) > 1 else '/home/claude/sim_v22.py'
-exec(open(ENGINE).read())
+# import the package exactly as bat.py (the G5 digest harness) does
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
+from mass_battle.engine import (  # noqa: E402
+    Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
+    run_battle, run_multi_turn_battle, build_unit, resolve_battle)
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
     ('Line',1):11,('Line',2):10,('Line',3):9,('Line',4):8,                       # [canonical: mass_battle_v30.md §deployment]
@@ -37,7 +42,7 @@ ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns
     ('RefusedFlank',1):11,('RefusedFlank',2):10,('RefusedFlank',3):9,            # [canonical: mass_battle_v30.md §deployment]
 }
 
-def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, morale=6,
+def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4/D5/M6, same baseline as make_unit's defaults below]
                     morale_start=None, dr=1, stance='balanced', speed='Standard'):
     """Build a MULTI-subunit Unit with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
@@ -52,7 +57,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
     subs = []
     for i, sp in enumerate(specs):
         sp = dict(sp)
-        pos = sp.pop('starting_position', (10 + i * 4, 15))
+        pos = sp.pop('starting_position', (10 + i * 4, 15))  # deployment-layout convenience default (not historically cited); staggers un-positioned subunits down the battlefield
         tt = sp.pop('troop_type', 'infantry')
         # build typed subunits via Subunit.of_type so a canonical troop type draws its
         # §B.2 Power/Discipline/Morale presets (the taxonomy stat home, ED-1018). Only forward the
@@ -94,16 +99,16 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     #     (a unit that has LOST morale), not a low absolute ceiling -> a shaken line
     #     needs morale<morale_start, which make_unit's old morale_start==morale
     #     could not express.
-    advance_dir = -1 if faction == 'A' else 1
-    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    # Delegates to the wrapper's faction->unit ADAPTER (engine.build_unit): resolve the
+    # deployment anchor_col from THIS gauge's own ANCHOR_MAP (its table differs from
+    # bat.py's), then hand off the identical single-subunit build (advance_dir/start_row
+    # computation, Subunit(...), Unit(...), dr=1 default) that used to be inlined here.
+    # build_unit is proven byte-exact-transparent by bat.py's digest gate.
     anchor_col = ANCHOR_MAP.get((shape, tier), 10)
-    su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
-                 starting_position=(start_row, anchor_col),
-                 advance_dir=advance_dir, unit_type=unit_type, instructions=tuple(instructions))
-    return Unit(name=name, faction=faction, power=power, command=command,
-                discipline=discipline, discipline_start=discipline,
-                morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=[su], dr=1, stance=stance, speed=speed)
+    return build_unit(shape, tier, name, faction, anchor_col, troop_type=troop_type,
+                       unit_type=unit_type, power=power, command=command,
+                       discipline=discipline, morale=morale, morale_start=morale_start,
+                       stance=stance, speed=speed, instructions=instructions, dr=1)
 
 # (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp[, metric])
 #   (lo,hi)  = band, % [history-grounded]. metric (optional, default 'decA') selects what (lo,hi) bounds:
@@ -179,16 +184,16 @@ CAV_TESTS = [
 def winner_of(r):
     return r.get('winner','draw')
 
-def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: mass_battle_gauge_grounding.md §1 — n sample (SE~5pp), deterministic seed]
+def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directive 2026-07-01: n 120->60 for runtime; SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp at p=0.5, vs the grounding doc's cited n=120/SE~5pp basis (mass_battle_gauge_grounding.md §1)]
     aw=bw=dr=0; turns=[]; a_cas=[]; b_cas=[]
     for s in range(n):
         random.seed(s+seed_base)
         ua=make_unit(sa,3,'A','A',**ka); ub=make_unit(sb,3,'B','B',**kb)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
         a0,b0 = ua.hp_max, ub.hp_max
         if mode=='single':
-            r=run_battle(ua,ub,max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
+            r=resolve_battle(ua,ub,kind='single',max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
         else:
-            r=run_multi_turn_battle(ua,ub,sa,sb,ANCHOR_MAP,max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
+            r=resolve_battle(ua,ub,sa,sb,ANCHOR_MAP,kind='multi',max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
         w=winner_of(r)
         if w=='A':aw+=1
         elif w=='B':bw+=1
@@ -199,8 +204,8 @@ def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: ma
                 decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]
                 t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas))
 
-def run(mode, tests=TESTS, n=120):  # [canonical: mass_battle_gauge_grounding.md §1 — default sample]
-    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]})  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
+def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sample n 120->60 for runtime — see matchup()]
+    print(f"\n----- MODE: {mode}  (engine: mass_battle package)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
     print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'val':>5} {'band':>7} {'dexp':>4} {'m':>4} verdict")
     nb=0
     for t in tests:
@@ -229,4 +234,4 @@ if __name__=='__main__':
     _tests = TESTS + (CAV_TESTS if _pc else [])
     s=run('single', _tests); m=run('multi', _tests)
     n=len(_tests)
-    print(f"\n==== {ENGINE.split('/')[-1]}: single={s}/{n}  multi={m}/{n} (multi is the resolving mode) ====")
+    print(f"\n==== mass_battle package: single={s}/{n}  multi={m}/{n} (multi is the resolving mode) ====")

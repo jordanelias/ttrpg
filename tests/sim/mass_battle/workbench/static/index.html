@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mass-Battle Workbench — tick-by-tick visualizer</title>
+<style>
+:root {
+  --bg: #14181f; --panel: #1b212b; --ink: #e7ecf3; --muted: #8a94a6; --rule: #2a3241;
+  --a: #4f8fe8; --b: #e0654f; --accent: #c9a34e; --green: #3fae5a; --yellow: #c9a34e; --red: #d1495b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+.app { display: grid; grid-template-columns: 300px 1fr 320px; grid-template-rows: 1fr auto; height: 100vh; }
+.panel { background: var(--panel); border-right: 1px solid var(--rule); overflow-y: auto; padding: 14px; }
+.panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+.panel h2:first-child { margin-top: 0; }
+label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 2px; }
+select, input, button { width: 100%; background: #10141b; color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; font-size: 13px; }
+button { cursor: pointer; background: #232b3a; margin-top: 8px; }
+button:hover { background: #2c3648; }
+button.primary { background: var(--accent); color: #10141b; font-weight: 600; border-color: var(--accent); }
+.row { display: flex; gap: 6px; }
+.row > * { flex: 1; }
+#mode-banner { font-size: 12px; color: var(--muted); padding: 8px; border: 1px solid var(--rule); border-radius: 4px; margin-bottom: 12px; line-height: 1.5; }
+#mode-banner b { color: var(--accent); }
+.stage { position: relative; display: flex; align-items: center; justify-content: center; background: #0c0f14; overflow: hidden; }
+#field { background: #171c24; box-shadow: 0 0 0 1px var(--rule); }
+.controls { grid-column: 1 / -1; background: var(--panel); border-top: 1px solid var(--rule); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+.controls input[type=range] { flex: 1; }
+.controls button { width: auto; padding: 6px 14px; margin-top: 0; }
+#step-label { font-size: 12px; color: var(--muted); min-width: 130px; text-align: right; }
+.side { padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.side .name { font-weight: 600; }
+.side.a .name { color: var(--a); }
+.side.b .name { color: var(--b); }
+.bar { height: 6px; border-radius: 3px; background: #10141b; overflow: hidden; margin-top: 4px; }
+.bar > div { height: 100%; }
+.side.a .bar > div { background: var(--a); }
+.side.b .bar > div { background: var(--b); }
+.stat { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.event-log { font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; }
+.event-log .melee { color: var(--accent); }
+.event-log .volley { color: #7fd0d8; }
+#winner-banner { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #10141b; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; display: none; }
+.legend { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+.legend span { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel" id="left">
+    <h2>Scenario</h2>
+    <div id="mode-banner">loading mode…</div>
+    <label>Preset</label>
+    <select id="preset"></select>
+    <h2>Side A</h2>
+    <label>Shape</label>
+    <select id="a-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
+    <label>Troop type</label>
+    <select id="a-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
+    <h2>Side B</h2>
+    <label>Shape</label>
+    <select id="b-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
+    <label>Troop type</label>
+    <select id="b-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
+    <div class="row">
+      <div><label>Seed</label><input id="seed" type="number" value="0"></div>
+      <div><label>Max battle-turns</label><input id="maxturns" type="number" value="8"></div>
+    </div>
+    <button class="primary" id="run">Run traced battle</button>
+    <div class="legend">
+      <div><span style="background:var(--green)"></span>GREEN facing (frontal)</div>
+      <div><span style="background:var(--yellow)"></span>YELLOW facing (flank)</div>
+      <div><span style="background:var(--red)"></span>RED facing (rear)</div>
+      <div><span style="background:var(--a)"></span>Side A &nbsp; <span style="background:var(--b)"></span>Side B</div>
+      <div>Arrow = facing vector · dot size ∝ troops in cell</div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div id="winner-banner"></div>
+    <canvas id="field" width="760" height="760"></canvas>
+  </div>
+
+  <div class="panel" id="right">
+    <h2>Battle state</h2>
+    <div class="side a">
+      <div class="name" id="a-name">A</div>
+      <div class="bar"><div id="a-hpbar" style="width:100%"></div></div>
+      <div class="stat" id="a-stat"></div>
+    </div>
+    <div class="side b">
+      <div class="name" id="b-name">B</div>
+      <div class="bar"><div id="b-hpbar" style="width:100%"></div></div>
+      <div class="stat" id="b-stat"></div>
+    </div>
+    <h2>Tick events</h2>
+    <div class="event-log" id="event-log">Run a battle to see per-tick events.</div>
+  </div>
+
+  <div class="controls">
+    <button id="play">▶ Play</button>
+    <button id="prev">◀</button>
+    <button id="next">▶</button>
+    <input type="range" id="scrub" min="0" max="0" value="0">
+    <span id="step-label">step 0 / 0</span>
+    <select id="speed" style="width:90px"><option value="500">0.5x</option><option value="250" selected>1x</option><option value="100">2x</option><option value="40">5x</option></select>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('field');
+const ctx = canvas.getContext('2d');
+let mode = { battlefield_size: 50 };
+let frames = [];      // one entry per 'positions' trace event (a full spatial snapshot)
+let events = [];      // full raw event list (for the tick log panel)
+let cursor = 0;
+let playing = null;
+
+async function loadMode() {
+  const r = await fetch('/api/mode'); mode = await r.json();
+  document.getElementById('mode-banner').innerHTML =
+    `<b>PER_CELL</b>=${mode.per_cell}  <b>FIELD_MOVEMENT</b>=${mode.field_movement}  <b>PC_NODE_COHESION</b>=${mode.pc_node_cohesion}<br>` +
+    (mode.field_movement
+      ? 'Running the COORDINATE-FIELD candidate. Positions are continuous floats.'
+      : 'Running the INTEGER GRID baseline. To visualize the field candidate, restart the server with FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1.');
+}
+
+async function loadPresets() {
+  const r = await fetch('/api/presets'); const presets = await r.json();
+  const sel = document.getElementById('preset');
+  sel.innerHTML = '<option value="">— custom —</option>' +
+    presets.map((p, i) => `<option value="${i}">${p.id} — ${p.label}</option>`).join('');
+  sel.onchange = () => {
+    if (sel.value === '') return;
+    const p = presets[parseInt(sel.value)];
+    document.getElementById('a-shape').value = p.a.shape;
+    document.getElementById('a-troop').value = p.a.troop_type || 'infantry';
+    document.getElementById('b-shape').value = p.b.shape;
+    document.getElementById('b-troop').value = p.b.troop_type || 'infantry';
+  };
+}
+
+function buildSpec(prefix) {
+  const shape = document.getElementById(prefix + '-shape').value;
+  const troop = document.getElementById(prefix + '-troop').value;
+  const spec = { shape };
+  if (troop === 'cavalry') { spec.troop_type = 'cavalry'; spec.speed = 'Fast'; }
+  return spec;
+}
+
+async function runBattle() {
+  document.getElementById('run').textContent = 'Running…';
+  document.getElementById('winner-banner').style.display = 'none';
+  const body = {
+    a: buildSpec('a'), b: buildSpec('b'),
+    seed: parseInt(document.getElementById('seed').value) || 0,
+    max_battle_turns: parseInt(document.getElementById('maxturns').value) || 8,
+    kind: 'multi',
+  };
+  const r = await fetch('/api/trace', { method: 'POST', body: JSON.stringify(body) });
+  const result = await r.json();
+  document.getElementById('run').textContent = 'Run traced battle';
+  if (result.error) { alert(result.error); return; }
+
+  events = result.events;
+  frames = events.filter(e => e.cat === 'positions');
+  document.getElementById('a-name').textContent = result.a.name + ' (' + result.a.shape + ')';
+  document.getElementById('b-name').textContent = result.b.name + ' (' + result.b.shape + ')';
+  cursor = 0;
+  document.getElementById('scrub').max = Math.max(0, frames.length - 1);
+  document.getElementById('scrub').value = 0;
+
+  if (result.winner && result.winner !== 'draw') {
+    const banner = document.getElementById('winner-banner');
+    banner.textContent = 'Winner: ' + result.winner;
+    banner.style.display = 'block';
+  }
+  render();
+}
+
+function facingColor(halted, angleClass) {
+  return angleClass === 'red' ? 'var(--red)' : angleClass === 'yellow' ? 'var(--yellow)' : null;
+}
+
+function drawUnit(side, color) {
+  for (const su of side.subunits) {
+    for (const cell of su.cells) {
+      const [r, c] = cell.pos;
+      const x = (c / mode.battlefield_size) * canvas.width;
+      const y = (r / mode.battlefield_size) * canvas.height;
+      const radius = Math.max(2, Math.sqrt(cell.troops) * 0.8);
+      ctx.beginPath();
+      ctx.fillStyle = su.routed ? '#555c68' : color;
+      ctx.globalAlpha = cell.halted ? 1.0 : 0.9;
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+      // facing arrow
+      const [fr, fc] = cell.facing;
+      const mag = Math.hypot(fr, fc) || 1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + (fc / mag) * (radius + 5), y + (fr / mag) * (radius + 5));
+      ctx.stroke();
+    }
+  }
+}
+
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#171c24';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const step = frames[cursor];
+  document.getElementById('step-label').textContent = frames.length
+    ? `tick ${step.t}  ·  step ${cursor + 1} / ${frames.length}` : 'step 0 / 0';
+  if (!step) return;
+
+  drawUnit(step.a, getComputedStyle(document.documentElement).getPropertyValue('--a').trim());
+  drawUnit(step.b, getComputedStyle(document.documentElement).getPropertyValue('--b').trim());
+
+  document.getElementById('a-hpbar').style.width = (100 * step.a.hp / step.a.hp_max).toFixed(1) + '%';
+  document.getElementById('b-hpbar').style.width = (100 * step.b.hp / step.b.hp_max).toFixed(1) + '%';
+  document.getElementById('a-stat').textContent =
+    `HP ${step.a.hp.toFixed(0)}/${step.a.hp_max}  ·  morale ${step.a.morale}  ·  ${step.a.routed ? 'ROUTED' : step.a.broken ? 'BROKEN' : 'holding'}`;
+  document.getElementById('b-stat').textContent =
+    `HP ${step.b.hp.toFixed(0)}/${step.b.hp_max}  ·  morale ${step.b.morale}  ·  ${step.b.routed ? 'ROUTED' : step.b.broken ? 'BROKEN' : 'holding'}`;
+
+  // event log: everything up to and including this tick's marker
+  const idx = events.indexOf(step);
+  const windowStart = Math.max(0, idx - 12);
+  const lines = events.slice(windowStart, idx + 1).filter(e => e.cat !== 'positions').map(e => {
+    if (e.cat === 'tick') return `— tick ${e.t} —`;
+    if (e.cat === 'melee') return `  melee  a_pool=${e.a_pool} b_pool=${e.b_pool}  ${e.a_deg} vs ${e.b_deg}`;
+    if (e.cat === 'volley') return `  volley shooter=${e.shooter} d=${e.d} loss=${e.loss}`;
+    return JSON.stringify(e);
+  });
+  document.getElementById('event-log').textContent = lines.join('\n') || '(no events yet)';
+}
+
+document.getElementById('scrub').oninput = (e) => { cursor = parseInt(e.target.value); render(); };
+document.getElementById('next').onclick = () => { cursor = Math.min(frames.length - 1, cursor + 1); document.getElementById('scrub').value = cursor; render(); };
+document.getElementById('prev').onclick = () => { cursor = Math.max(0, cursor - 1); document.getElementById('scrub').value = cursor; render(); };
+document.getElementById('run').onclick = runBattle;
+document.getElementById('play').onclick = () => {
+  if (playing) { clearInterval(playing); playing = null; document.getElementById('play').textContent = '▶ Play'; return; }
+  document.getElementById('play').textContent = '⏸ Pause';
+  const speed = () => parseInt(document.getElementById('speed').value);
+  playing = setInterval(() => {
+    if (cursor >= frames.length - 1) { clearInterval(playing); playing = null; document.getElementById('play').textContent = '▶ Play'; return; }
+    cursor++; document.getElementById('scrub').value = cursor; render();
+  }, speed());
+};
+
+loadMode();
+loadPresets();
+</script>
+</body>
+</html>

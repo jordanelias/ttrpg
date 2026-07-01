@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
@@ -26,13 +26,18 @@ def trace_event(cat, **kw):
 def get_trace():
     """Return a copy of the recorded events."""
     return list(_battle_trace)
+def tracing_on():
+    """True iff mechanical tracing is currently enabled. Lets a caller (e.g. an expensive per-tick
+    snapshot builder in orchestration.py) skip its work entirely when tracing is off, instead of
+    computing-then-discarding via trace_event's own no-op branch. Query-only; no engine effect."""
+    return _trace_on
 
-def roll_pool(n, tn=7):
+def roll_pool(n, tn=7):  # [canonical: params/core.md §TN Values — TN 7 standard]
     net = 0
     for _ in range(max(1, n)):
         f = random.randint(1, 10)
         if f == 1:         net -= 1
-        elif tn <= f <= 9: net += 1
+        elif tn <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
         elif f == 10:      net += 2
     return net
 
@@ -115,6 +120,6 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None):
 
 def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
     return m * math.tanh(x / m)
-def _sigma_net_boost(net_sigma, pool, tn=7):  # mu-shift; [canonical: params/core.md continuous engine; modifier_system_spec §2.1]
+def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md continuous engine; modifier_system_spec §2.1] mu-shift
     _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # [canonical: params/core.md EV table] sigma per die at TN
     return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))

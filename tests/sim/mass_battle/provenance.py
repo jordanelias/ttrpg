@@ -153,6 +153,14 @@ PROVENANCE = {
         gauge_rows=(), toggle="(always-on when not LANCHESTER_ENABLED)", retire_to="derived",
         note="Stage-5 debt; free magnitude, ledger entry CONTACT_FRACTION_DAMAGE_FLOOR. NO canonical doc backs it — do not fabricate one."),
 
+    # Facing-physics slew rate surfaced by the coordinate-migration facing cluster (F2, DEFAULT-OFF, not ratified).
+    "PC_FACING_SLEW_BASE": Prov(
+        "PC_FACING_SLEW_BASE", "60", "hierarchy/units.py (_slew_facing)", "calibrated",
+        law="anti-hyper-reactivity — a committed body pivots at a bounded, discipline-gated rate rather than snapping facing each tick",
+        derives_from="ground vs drill-manual body wheel rate (deg per resolution tick)",
+        gauge_rows=(), toggle="PC_FACING_MODEL", retire_to="derived",
+        note="Stage-5 debt; ungrounded placeholder, F2 ships DEFAULT-OFF and NOT enabled. Ledger entry PC_FACING_SLEW_BASE. NO canonical doc backs it — do not fabricate one."),
+
     # Laws that are correctly grounded and must be PRESERVED (academic-law rows; no magnitude here)
     "law.lanchester": Prov(
         "Lanchester linear/square law", "n/a", "core/attrition.py (target)", "academic-law",

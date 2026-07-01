@@ -306,3 +306,70 @@ Archived entries in tests/coverage_matrix_archive.md
 - G5 byte-exact OFF both modes (unit 7be8499b / cell 1c5b2851). Inert for the current bat.py battery
   (ranged matchup approaches orthogonally, Chebyshev==Euclidean); activates on diagonal approaches +
   the field-ON path (gauge / later stages). Coordinate-migration plan S2.
+
+## 2026-07-01 — Migration C0+COL+G+H+F2+P: coordinate-field flip [FIELD_MOVEMENT+PC_NODE_COHESION; byte-exact OFF]
+- The full remaining coordinate-field sequence, each behind a default-OFF toggle, implemented from the
+  adversarially-verified coordinate-field-impl-spec (worktree agent; byte-exact-gated per increment):
+  C0 (contact scaffolding: Subunit.cells_float + FIELD_CONTACT find_contacts split, contact sets) · COL
+  (float→file quantizer, COL_WIDTH=1.0) · G (geometry._oriented_abs_map rebuilt from _node_pos on ON —
+  the biggest hazard) · H (halt-loop + contention collect + _momentum_speed float consistency) · F2
+  (PC_FACING_MODEL anti-hyper-reactivity facing layer, DEFAULT-OFF; PC_FACING_SLEW_BASE=60 = calibrated
+  debt, ledger+provenance) · P (delete the int(round()) snap in _node_cells on ON — the coordinated flip).
+- Toggles module-local in units.py (config.py left untouched — 43 pre-existing uncited constants). Enforced
+  FIELD_MOVEMENT ⇒ PC_NODE_COHESION (assert at run_battle setup; the invalid combo fails loudly). CONTACT_REACH=0.0
+  (ON contact ≡ OFF adjacency, pending Jordan's radius). role_at_contact (dead code) + iter_cells (pre-existing skew) left alone.
+- G5 byte-exact OFF both modes at every increment (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+- FIELD-ON CANDIDATE (Jordan ratifies; nothing fitted): ON digests unit 337ed92c / cell 38c5395b; runs to
+  completion (exit 0). Gauge (via a scratchpad shim — gauge_mb.py is DEAD, hardcoded /home/claude path):
+  OFF 5/13 → ON 4/13; H8 newly in-band, H2/H9 newly diverge to hard win-outs, draw rates collapse. NOT
+  ratified — the gauge needs porting to the package before the ON path can be a validated contract.
+  Coordinate-migration plan C0–P; open decisions: contact radius, facing magnitudes, gauge port, band ratification.
+
+## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend
+- PORTED gauge_mb.py off the dead `exec('/home/claude/sim_v22.py')` mechanism onto a direct
+  `from mass_battle.engine import ...` (agonist-antagonist adversarial workflow: 1 implement + 1
+  independent re-verify). make_unit/matchup() now delegate to engine.build_unit/resolve_battle (the
+  wrapper contract bat.py already proved byte-exact-transparent) instead of raw Subunit/Unit/run_battle
+  construction; make_mixed_unit stays on raw construction (build_unit is single-subunit only). No band,
+  citation, or metric changed. LIVE re-verified (not the prior scratchpad shim): OFF baseline multi-mode
+  5/13 (H1,H2,H7,H9,R1) — matches the shim's prior report exactly.
+- Jordan directive 2026-07-01: default sample n 120->60 (runtime). SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp
+  at p=0.5 vs the grounding doc's cited n=120 basis; VERIFIED n=60 reproduces the IDENTICAL n=120 pass-set
+  (5/13, same 5 rows) on the OFF baseline. Ledger entry `n=60` (calibrated/methodology, not historical).
+- Fabrication-debt resolution (whole-file scan, files touched by the above): resolution.py's roll_pool
+  TN=7 / face-rule 7-9=+1 cited to params/core.md; _sigma_net_boost's pre-existing citation reformatted
+  to satisfy the checker's `# [canonical: ...]`-immediately-after-`#` regex (same source, position fix
+  only). gauge_mb.py's make_mixed_unit P4/C4/D5/M6 defaults cited (same T3 baseline as make_unit); its
+  starting_position row-stagger (4) ledger-recorded as a non-historical layout convenience.
+- ADDED the tick-by-tick VISUALIZER trace-capture backend (Jordan directive 2026-07-01): extends the
+  existing observe-only trace seam (resolution.start_trace/trace_event/get_trace, "no-op unless ON ->
+  byte-exact") with resolution.tracing_on() (a public predicate so callers can skip expensive capture
+  entirely when tracing is off, not just discard it) and orchestration._cell_snapshot/_subunit_snapshot/
+  _unit_snapshot + one gated `if tracing_on(): trace_event('positions', ...)` call at the end of each
+  run_battle tick. Uses atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally
+  and is NOT field-aware) zipped against _oriented(atom)'s stable ids — correct on both the integer-grid
+  and coordinate-field paths. Zero cost when tracing is off (the capture functions are never called, not
+  merely discarded) — provably byte-exact since no existing caller (bat.py, gauge_mb.py) enables tracing.
+- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+
+## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
+- ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
+  designs/scene/combat_engine_v1/workbench's pattern: a tiny stdlib HTTP server, no external deps, no
+  build step). trace.run_traced_battle() runs ONE battle via engine.build_unit/resolve_battle (the
+  wrapper contract, never reaches past it) with tracing on, returning the full 'tick'/'melee'/
+  'volley'/'positions' event stream. server.py serves a canvas SPA with playback controls (scrub/play/
+  step), a preset picker mirroring gauge_mb.py's named matchups, and per-tick HP/morale/rout/event-log
+  panels. VERIFIED end-to-end live (not just imported): all 4 endpoints (GET /, /api/mode, /api/presets,
+  POST /api/trace) tested via a running server instance in both PER_CELL=0 (grid) and
+  FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 (coordinate-field) modes.
+- IMPORTANT (documented in server.py): PER_CELL/FIELD_MOVEMENT/PC_NODE_COHESION are read from
+  os.environ once at import time and star-imported as independent copies into every consumer — a
+  running server's mode is FIXED at process start (no live toggle); comparing grid vs field means two
+  server instances. GET /api/mode reports the actual running config.
+- FINDING from using the tool (not a bug): confirmed by reading _node_cells() (hierarchy/units.py) that
+  the coordinate-field candidate keeps ROW positions integer-rank-snapped by design ("ranks are integer
+  bins" — a real military structure) and only bins COLUMNS to their file; positions are not yet fully
+  continuous floats end-to-end. Accurately reflected by the visualizer, not a rendering defect.
+- Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
+  7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
+  non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.

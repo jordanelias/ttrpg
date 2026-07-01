@@ -398,7 +398,9 @@ def _momentum_speed(atom, contact_abs_cells):
                       + atom.cell_offsets_c.get((orig_r, orig_c), 0))
             if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
                 _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                comp_r, comp_c = int(round(_pr)), int(round(_pc))
+                # [migration H] file-bin the column on ON so comp matches the file-binned cells()/contact
+                # cells; OFF = verbatim int(round). FIELD_MOVEMENT/COL_WIDTH via units star-import.
+                comp_r, comp_c = (int(round(_pr)), int(round(_pc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(_pr)), int(round(_pc)))
             if (comp_r, comp_c) == (abs_r, abs_c):
                 speeds.append(atom.cell_last_speed.get((orig_r, orig_c), 0))
                 break
@@ -590,6 +592,10 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     pinned = False
                     for a in atk_sorted:
                         _z, _a = octagon_angle(a, d_pos, facing)
+                        # (c) FOV blind arc GATES reaction: a threat in the rear blind arc cannot be perceived,
+                        # so it cannot pin. Reuses FOV_HALF_DEG; no-op unless the facing model is enabled.
+                        if PC_FACING_MODEL and PC_FACING_FOV_GATE and _a > FOV_HALF_DEG:
+                            continue
                         if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
                                 and _a < 45.0):  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
                             pinned = True; break
@@ -979,6 +985,38 @@ def volley_phase(unit_a, unit_b):
             "ordered_a": ordered_a, "ordered_b": ordered_b}
 
 
+# ─── WORKBENCH TRACE SNAPSHOTS (read-only; gated by tracing_on(), zero cost when tracing is off) ──
+# [tick-by-tick visualizer, Jordan directive 2026-07-01] Extends the existing observe-only trace seam
+# (resolution.start_trace/trace_event/get_trace) with a spatial 'positions' event per tick. Uses
+# atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally and is NOT
+# field-aware) zipped against _oriented(atom)'s stable (orig_r,orig_c) ids — both iterate in the
+# SAME order (cells()/_node_cells() are themselves built by iterating _oriented(self)), so this is a
+# correct pairing on BOTH the integer-grid and coordinate-field paths. Callers gate on tracing_on()
+# so this construction (and its cost) is skipped entirely for every normal battle run.
+def _cell_snapshot(atom):
+    ids = [(o_r, o_c) for o_r, o_c, _, _ in _oriented(atom)]
+    cells = []
+    for cid, pos in zip(ids, atom.cells()):
+        fr, fc = atom.get_cell_facing(*cid)
+        cells.append({'id': list(cid), 'pos': [pos[0], pos[1]],
+                       'troops': round(atom.cell_troops.get(cid, 0.0), 1),
+                       'facing': [fr, fc], 'halted': cid in atom.halted_cells})
+    return cells
+
+def _subunit_snapshot(atom):
+    return {'shape': atom.shape, 'troop_type': atom.troop_type, 'unit_type': atom.unit_type,
+            'role': atom.role, 'instructions': list(atom.instructions),
+            'routed': atom.routed, 'broken': atom.broken, 'stance': atom.stance,
+            'cells': _cell_snapshot(atom)}
+
+def _unit_snapshot(unit):
+    return {'name': unit.name, 'faction': unit.faction,
+            'hp': round(unit.hp, 1), 'hp_max': unit.hp_max,
+            'morale': unit.morale, 'discipline': unit.discipline, 'stance': unit.stance,
+            'routed': unit.routed, 'broken': unit.broken,
+            'subunits': [_subunit_snapshot(a) for a in unit.subunits]}
+
+
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
@@ -991,6 +1029,14 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     Returns:
       {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
     """
+    # [movement-substrate review 06 — coordinate-field migration] The continuous COORDINATE FIELD requires
+    # the node float path: field-ON stores/emits true floats only via _node_pos (PC_NODE_COHESION). A
+    # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch, no floats, but the
+    # fractional-speed accumulator active) -> a degenerate integer 'field' run. Enforce the implication at
+    # setup so the invalid combination fails loudly instead of producing a corrupt result. No-op when
+    # FIELD_MOVEMENT is OFF (byte-exact).
+    assert (not FIELD_MOVEMENT) or PC_NODE_COHESION, \
+        "FIELD_MOVEMENT=1 requires PC_NODE_COHESION=1 (the coordinate field runs on the node float path)"
     turns = 0
     current_phase = 0
     for t in range(1, max_turns + 1):
@@ -1008,24 +1054,38 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             atom.halted_cells = set()
         for p in pre_pairs:
-            op_a = _oriented(p["atom_a"])
+            # [migration H] recompute abs from _node_pos (file-binned) on ON so it matches find_contacts'
+            # (file-binned) cells; OFF = verbatim cell_offsets build. Otherwise the == misses on the node
+            # path and halted_cells stays empty -> pre-contact halt silently disabled on the field path.
+            _atom_a = p["atom_a"]; _atom_b = p["atom_b"]
+            _fld_a = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_a, '_node_pos')
+            _fld_b = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_b, '_node_pos')
+            op_a = _oriented(_atom_a)
             for cell in p["a_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_a:
-                    abs_r = (p["atom_a"].starting_position[0] + or_r
-                             + p["atom_a"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_a"].advance_dir)
-                    abs_c = (p["atom_a"].starting_position[1] + or_c
-                             + p["atom_a"].cell_offsets_c.get((orig_r,orig_c), 0))
+                    if _fld_a:
+                        _pr, _pc = _atom_a._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
+                    else:
+                        abs_r = (_atom_a.starting_position[0] + or_r
+                                 + _atom_a.cell_offsets.get((orig_r,orig_c), 0) * _atom_a.advance_dir)
+                        abs_c = (_atom_a.starting_position[1] + or_c
+                                 + _atom_a.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_a"].halted_cells.add((orig_r, orig_c)); break
-            op_b = _oriented(p["atom_b"])
+                        _atom_a.halted_cells.add((orig_r, orig_c)); break
+            op_b = _oriented(_atom_b)
             for cell in p["b_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_b:
-                    abs_r = (p["atom_b"].starting_position[0] + or_r
-                             + p["atom_b"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_b"].advance_dir)
-                    abs_c = (p["atom_b"].starting_position[1] + or_c
-                             + p["atom_b"].cell_offsets_c.get((orig_r,orig_c), 0))
+                    if _fld_b:
+                        _pr, _pc = _atom_b._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
+                    else:
+                        abs_r = (_atom_b.starting_position[0] + or_r
+                                 + _atom_b.cell_offsets.get((orig_r,orig_c), 0) * _atom_b.advance_dir)
+                        abs_c = (_atom_b.starting_position[1] + or_c
+                                 + _atom_b.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_b"].halted_cells.add((orig_r, orig_c)); break
+                        _atom_b.halted_cells.add((orig_r, orig_c)); break
         assign_targets(unit_a, unit_b)
         b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
         a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
@@ -1209,6 +1269,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+        if tracing_on():
+            trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else
               "B" if not unit_b.routed and unit_a.routed else "draw")
     tick_in_phase = turns % TICKS_PER_PHASE if turns else 0

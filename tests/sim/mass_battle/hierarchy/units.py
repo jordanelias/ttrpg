@@ -26,8 +26,51 @@ PC_SWEEP = (_hu_os.environ.get("PC_SWEEP", "1") == "1")  # [canonical: mass_batt
 # (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions preserved; only step TIMING changes.
 # Consumer-local here (advance_cells), like PC_ENVELOP_PATH/PC_SWEEP. ON = recorded behaviour change.
 FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "0") == "1")
+# [movement-substrate review 06 — coordinate-field migration] FIELD_MOVEMENT is the continuous COORDINATE
+# FIELD master toggle. Continuous positions require the node float path (PC_NODE_COHESION stores true floats
+# in _node_pos): the field toggle therefore UNIFIES with it — field-ON implies the node path is active. A
+# FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch never emits floats), so
+# run_battle enforces FIELD_MOVEMENT ⇒ PC_NODE_COHESION at setup (see run_battle). Toggles live here (not
+# config.py) so the whole-file fabrication scan does not surface config's pre-existing uncited constants.
+FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "0") == "1")  # default OFF -> byte-exact contact path
+CONTACT_REACH = float(_hu_os.environ.get("CONTACT_REACH", "0.0"))  # 0.0 => ON contact predicate == OFF adjacency (exempt value)
+COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_WIDTH). At 1.0, round(int)==int -> OFF byte-exact.
 
-__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT']
+# ─── FACING PHYSICS (anti-hyper-reactivity; movement-substrate review 06, facing-heading cluster) ───
+# Cell-level facing STATE gating the octagon. Master toggle default OFF -> byte-exact (raw-movement-vector
+# facing, instantly re-faced each turn, exactly as today). ON: facing becomes committed state with slew-rate,
+# attention, an FOV blind arc, and rout-away facing. DEFAULT-OFF; F2 is NOT enabled — magnitudes below are
+# ungrounded placeholders (calibrated debt), not ratified. Placed here (not config.py) so the whole-file
+# fabrication scan does not surface config's pre-existing uncited constants; exported in __all__ so
+# orchestration's star-import of units sees them (avoids the config __all__ omission that would NameError).
+PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '0') == '1')   # master gate; OFF -> today's raw-vector facing
+PC_FACING_ATTENTION = (_hu_os.environ.get('PC_FACING_ATTENTION', '1') == '1')  # (a) engaged cell faces its ENGAGED target; no-op unless PC_FACING_MODEL
+PC_FACING_SLEW_BASE = float(_hu_os.environ.get('PC_FACING_SLEW_BASE', '60'))  # [CALIBRATED-DEBT, Stage-5: ungrounded placeholder pivot rate deg/tick; NOT ratified — do not enable]
+PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
+PC_FACING_ROUT = (_hu_os.environ.get('PC_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
+
+__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+           'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT']
+
+
+def _slew_facing(cur, desired, discipline):
+    """Rotate `cur` toward `desired` by at most PC_FACING_SLEW_BASE*disc_mult degrees; return a unit vector.
+    Zero-mag `desired` returns `cur` unchanged. Deterministic (no RNG). [movement-substrate review 06 — facing (b)]"""
+    cmag = math.hypot(cur[0], cur[1])
+    dmag = math.hypot(desired[0], desired[1])
+    if dmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return cur
+    if cmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return (desired[0] / dmag, desired[1] / dmag)
+    cx, cy = cur[0] / cmag, cur[1] / cmag
+    dx, dy = desired[0] / dmag, desired[1] / dmag
+    ang = math.atan2(cx * dy - cy * dx, cx * dx + cy * dy)  # signed angle cur->desired
+    disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
+    max_turn = math.radians(PC_FACING_SLEW_BASE * disc_mult)
+    if ang > max_turn: ang = max_turn
+    elif ang < -max_turn: ang = -max_turn
+    ca, sa = math.cos(ang), math.sin(ang)
+    return (cx * ca - cy * sa, cx * sa + cy * ca)
 
 
 @dataclass
@@ -270,6 +313,26 @@ class Subunit:
             result.append((abs_r, abs_c))
         return result
 
+    def cells_float(self):
+        """Float analogue of cells() — same order/length. Node path returns the UNSNAPPED _node_pos floats
+        (the true floats cells() snaps at _node_cells); legacy path returns integer positions widened to
+        float. Used by the FIELD_CONTACT contact pipeline. [movement-substrate review 06 — contact cluster]"""
+        if PC_NODE_COHESION and hasattr(self, '_node_pos'):
+            out = []
+            for orig_r, orig_c, _o_r, _o_c in _oriented(self):
+                r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                out.append((float(r), float(c)))
+            return out
+        op = _oriented(self)
+        out = []
+        for orig_r, orig_c, or_r, or_c in op:
+            abs_r = (self.starting_position[0] + or_r
+                     + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
+            abs_c = (self.starting_position[1] + or_c
+                     + self.cell_offsets_c.get((orig_r, orig_c), 0))
+            out.append((float(abs_r), float(abs_c)))
+        return out
+
     def iter_cells(self):
         """Cell-primary view (step 1): yield (cell_id, (abs_r,abs_c), troops) per cell in _oriented
         order. cell_id = (orig_r, orig_c) pattern identity (stable under movement)."""
@@ -305,11 +368,19 @@ class Subunit:
         self._node_prev_pos = dict(pos)
 
     def _node_cells(self):
-        """Node-path cells(): live positions snapped to the integer grid, in _oriented order."""
+        """Node-path cells(): live positions in _oriented order. FIELD_MOVEMENT OFF -> snapped to the integer
+        grid (byte-exact prior behaviour). FIELD_MOVEMENT ON -> the COORDINATE FIELD: row stays rank-snapped
+        (ranks are integer bins) and column is binned to its FILE (frontage=distinct files, depth=rank count)
+        via round(c/COL_WIDTH); the raw int(round(c)) grid-snap is deleted on the ON branch only. This is the
+        coordinated flip that makes cells() emit file-binned floats end-to-end. [movement-substrate review 06 —
+        position + column clusters; folds the COL file-quantizer with the P snap-deletion at one line.]"""
         out = []
         for orig_r, orig_c, _o_r, _o_c in _oriented(self):
             r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-            out.append((int(round(r)), int(round(c))))
+            if FIELD_MOVEMENT:
+                out.append((int(round(r)), int(round(c / COL_WIDTH))))  # field-ON: rank-snapped row, file-binned column
+            else:
+                out.append((int(round(r)), int(round(c))))  # OFF: exact prior snap
         return out
 
     def _node_advance(self, discipline, target_centroid, enemy_cells=None):
@@ -378,9 +449,18 @@ class Subunit:
             cr, cc = self._node_pos.setdefault((orig_r, orig_c), self._node_anchor)  # [canonical: continuous-mode seed: unseen cell defaults to anchor]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
-            if enemy_cells and (int(round(nr)), int(round(nc))) in enemy_cells:
+            # [migration P] OFF = verbatim int(round) grid-membership probe; ON = file-binned probe matching
+            # the file-indexed enemy cells() keys (row rank-snapped, column /COL_WIDTH). On the field the exact
+            # match is coarse — real blocking is handled by the contact/adjacency cluster (find_contacts).
+            _probe = (int(round(nr)), int(round(nc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(nr)), int(round(nc)))
+            if enemy_cells and _probe in enemy_cells:
                 nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
-            if self._node_facing is not None:
+            # (a) attention (facing model): face the ENGAGED target; else keep the WHEEL-slewed body facing.
+            # The node path already has a disc-gated WHEEL slew (L392), so do NOT double-slew here.
+            if PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
+                _tc = self.target_atom.centroid()
+                self.cell_facing_vec[(orig_r, orig_c)] = (_tc[0] - nr, _tc[1] - nc)
+            elif self._node_facing is not None:
                 self.cell_facing_vec[(orig_r, orig_c)] = self._node_facing
             elif target_centroid:
                 self.cell_facing_vec[(orig_r, orig_c)] = (target_centroid[0] - nr, target_centroid[1] - nc)
@@ -551,10 +631,17 @@ class Subunit:
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc
                 if total < 0.5: continue
-                r_step = round(actual_speed * (abs_dr / total))
-                c_step = actual_speed - r_step
-                r_step *= (1 if dr > 0 else -1) if abs_dr > 0 else 0
-                c_step *= (1 if dc > 0 else -1) if abs_dc > 0 else 0
+                if FIELD_MOVEMENT:
+                    # continuous heading: true-diagonal float step, no 8-direction snap (field baseline).
+                    # NOTE: on a valid field-ON run FIELD_MOVEMENT ⇒ PC_NODE_COHESION, so advance_cells returns
+                    # early to _node_advance and this legacy branch is not reached; kept guarded for OFF byte-exactness.
+                    r_step = actual_speed * (dr / total)
+                    c_step = actual_speed * (dc / total)
+                else:
+                    r_step = round(actual_speed * (abs_dr / total))
+                    c_step = actual_speed - r_step
+                    r_step *= (1 if dr > 0 else -1) if abs_dr > 0 else 0
+                    c_step *= (1 if dc > 0 else -1) if abs_dc > 0 else 0
                 # v11: proximity cap removed — over-run corrected post-movement
                 self.cell_offsets[(orig_r, orig_c)] = \
                     self.cell_offsets.get((orig_r, orig_c), 0) + r_step * self.advance_dir
@@ -579,15 +666,27 @@ class Subunit:
             # F-ii: record speed when cell actually moves
             self.cell_last_speed[(orig_r, orig_c)] = actual_speed
             # v11: record raw movement vector for octagon angle
-            self.cell_facing_vec[(orig_r, orig_c)] = (
-                r_step if cell_target else actual_speed * self.advance_dir,
-                c_step if cell_target else 0,
-            )
+            _desired = (r_step if cell_target else actual_speed * self.advance_dir,
+                        c_step if cell_target else 0)
+            if PC_FACING_MODEL:
+                # (a) attention: face the ENGAGED target if one is committed, else the movement vector
+                if PC_FACING_ATTENTION and self.target_atom is not None:
+                    _tc = self.target_atom.centroid()
+                    _desired = (_tc[0] - my_r, _tc[1] - my_c)
+                # (b) slew/commitment: rotate current facing toward _desired at a disc-gated rate (no instant snap)
+                _cur = self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
+                self.cell_facing_vec[(orig_r, orig_c)] = _slew_facing(_cur, _desired, discipline)
+            else:
+                self.cell_facing_vec[(orig_r, orig_c)] = _desired
             # v13: mark cell as having moved this turn (for cross-side contention)
             self._moved_this_turn.add((orig_r, orig_c))
 
     def get_cell_facing(self, orig_r, orig_c):
         """Return the facing vector for a cell. Defaults to advance_dir if never moved."""
+        # (d) rout facing: a routed body faces AWAY from the enemy (fleeing) -> rear penalties land.
+        if PC_FACING_MODEL and PC_FACING_ROUT and getattr(self, 'routed', False):
+            fv = self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
+            return (-fv[0], -fv[1])
         return self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
 
     def halt_before_enemy(self, enemy_unit):

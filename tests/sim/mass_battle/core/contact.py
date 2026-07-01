@@ -112,7 +112,12 @@ def resolve_cross_side_contention(unit_a, unit_b):
                       + su.cell_offsets_c.get((orig_r, orig_c), 0))
                 if PC_NODE_COHESION and hasattr(su, '_node_pos'):
                     _pr, _pc = su._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                    ar, ac = int(round(_pr)), int(round(_pc))
+                    # [migration H] file-bin the column on ON so the contested-set intersection tests
+                    # co-location on the SAME file-cell grid as cells()/find_contacts (the ratified
+                    # 'contested grid cell = unit of contested ground' model), not raw-float equality
+                    # (which almost never coincides). OFF = verbatim int(round). Toggles at call time.
+                    import mass_battle.hierarchy.units as _u
+                    ar, ac = (int(round(_pr)), int(round(_pc / _u.COL_WIDTH))) if _u.FIELD_MOVEMENT else (int(round(_pr)), int(round(_pc)))
                 # Contention speed: only counts if cell moved this turn
                 speed = (su.cell_last_speed.get((orig_r, orig_c), 0)
                          if (orig_r, orig_c) in su._moved_this_turn
@@ -161,20 +166,72 @@ def resolve_cross_side_contention(unit_a, unit_b):
 
 
 def find_contacts(unit_a, unit_b):
+    # Toggles read at CALL TIME (not import-bound) so a runtime flag flip stays consistent across modules
+    # and to avoid a units->contact import cycle. [movement-substrate review 06 — contact cluster]
+    import mass_battle.hierarchy.units as _u
+    if not _u.FIELD_CONTACT:
+        pairs = []
+        a_cells = {id(a): set(a.cells()) for a in unit_a.subunits}
+        b_cells = {id(b): set(b.cells()) for b in unit_b.subunits}
+        for atom_a in unit_a.subunits:
+            for atom_b in unit_b.subunits:
+                ca = a_cells[id(atom_a)]
+                cb = b_cells[id(atom_b)]
+                contact_cells_a, contact_cells_b, contact_cols = [], [], set()
+                for (ra, c) in ca:
+                    for (rb, cb_) in cb:
+                        if abs(ra-rb) <= 1 and abs(c-cb_) <= 1:
+                            contact_cells_a.append((ra, c))
+                            contact_cells_b.append((rb, cb_))
+                            contact_cols.add((c + cb_) // 2)
+                if contact_cols:
+                    pairs.append({"atom_a": atom_a, "atom_b": atom_b,
+                                   "a_cells": contact_cells_a, "b_cells": contact_cells_b,
+                                   "cols": list(contact_cols)})
+        return pairs
+    return _find_contacts_field(unit_a, unit_b)
+
+
+def _cell_radius(atom):
+    """Half the max lattice extent of an atom's footprint (min 0.5) — a per-atom contact radius for the
+    FIELD_CONTACT centroid bound. [movement-substrate review 06 — contact cluster]"""
+    op = _oriented(atom)
+    rows = [r for r, c, _o, _p in op]
+    cols = [c for r, c, _o, _p in op]
+    if not rows:
+        return 0.5
+    ext = max(max(rows) - min(rows), max(cols) - min(cols)) + 1
+    return max(0.5, ext / 2.0)
+
+
+def _find_contacts_field(unit_a, unit_b):
+    """FIELD_CONTACT ON: contact on the promoted floats. Each atom's cells_float() is snapped to int(round())
+    here (NOT pre-snapped at cells()), then the SAME append-per-adjacent-pair Chebyshev<=1 loop runs on the
+    snapped cells — so the contacting SET reconstruction is identical IN KIND to the OFF path. ca_snap/cb_snap
+    are SETS (matching OFF's set(a.cells()) dedup) so round-colliding float cells do not multiply-count.
+    At CONTACT_REACH=0.0 this reduces exactly to OFF adjacency. [movement-substrate review 06 — contact cluster]
+    NOTE: reach>0 widening of the SET predicate is UNSPECIFIED and pending Jordan; ships reach=0.0 only."""
+    import mass_battle.hierarchy.units as _u
+    _reach = _u.CONTACT_REACH  # exercised only when a ratified non-zero reach lands; 0.0 => OFF adjacency
     pairs = []
-    a_cells = {id(a): set(a.cells()) for a in unit_a.subunits}
-    b_cells = {id(b): set(b.cells()) for b in unit_b.subunits}
+    af = {id(a): a.cells_float() for a in unit_a.subunits}
+    bf = {id(b): b.cells_float() for b in unit_b.subunits}
     for atom_a in unit_a.subunits:
+        fa = af[id(atom_a)]
+        ca_snap = set((int(round(r)), int(round(c))) for (r, c) in fa)
         for atom_b in unit_b.subunits:
-            ca = a_cells[id(atom_a)]
-            cb = b_cells[id(atom_b)]
+            fb = bf[id(atom_b)]
+            cb_snap = set((int(round(r)), int(round(c))) for (r, c) in fb)
             contact_cells_a, contact_cells_b, contact_cols = [], [], set()
-            for (ra, c) in ca:
-                for (rb, cb_) in cb:
+            for (ra, c) in ca_snap:
+                for (rb, cb_) in cb_snap:
                     if abs(ra-rb) <= 1 and abs(c-cb_) <= 1:
                         contact_cells_a.append((ra, c))
                         contact_cells_b.append((rb, cb_))
-                        contact_cols.add((c + cb_) // 2)
+                        if _u.FIELD_MOVEMENT:
+                            contact_cols.add(round(((c + cb_) / 2.0) / _u.COL_WIDTH))  # file index of the meeting column
+                        else:
+                            contact_cols.add((c + cb_) // 2)
             if contact_cols:
                 pairs.append({"atom_a": atom_a, "atom_b": atom_b,
                                "a_cells": contact_cells_a, "b_cells": contact_cells_b,
