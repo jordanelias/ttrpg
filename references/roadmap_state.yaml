@@ -26,7 +26,7 @@ updated: 2026-06-28
 # Reserved-ID blocks (id_reservations.yaml A 890-939/B 940-969/C 970-999) are EXHAUSTED
 # (ED past 1000) -> re-block queued as workplan-v5 LB-21. Phase counters below are the
 # pre-v3 audit track, carried forward by the lanes (not re-mapped here).
-source_workplan: "designs/audit/2026-06-28-recent-work-orchestration/valoria_master_workplan_v5.md (v5 post-v4 reconciliation — CANON-PROPOSED, Jordan-vetoable; supersedes v4 2026-06-11-orchestration, retaining its register/docket/lanes)"
+source_workplan: "designs/workplans/valoria_master_workplan_v5.md (v5 post-v4 reconciliation — CANON-PROPOSED, Jordan-vetoable; supersedes v4 2026-06-11-orchestration, retaining its register/docket/lanes; relocated 2026-07-01 from designs/audit/2026-06-28-recent-work-orchestration/, see designs/workplans/README.md)"
 current_phase: 2
 
 phases:

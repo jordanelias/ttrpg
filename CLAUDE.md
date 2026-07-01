@@ -60,11 +60,11 @@ are more "current state" files than there should be; trust them in this strict p
 | Directory | Contents |
 |---|---|
 | `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
-| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/` |
+| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
 | `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md` document **retired** machinery as if live — ignore them. |
-| `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. |
-| `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). |
+| `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
+| `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
 | `engine/` | Sigma-leverage engine armature + audit harness. ⚠️ `engine_audit_harness.py` is **dead** (hardcoded `/home/claude` paths) — do not invoke. |
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once. Some tools are dead or GitHub-dependent — §6. |
 | `archives/`, `deprecated/` | History; not canonical. |
@@ -149,10 +149,11 @@ Do not represent the skeleton as a runnable head-start.
   partly stubbed (~19 `NotImplementedError`), with self-asserted `[PROVISIONAL]`/`[CANONICAL]` docstrings.
   Its `sim/README.md`/`CONVENTIONS.md` say "all modules are stubs" — **that is stale**; many modules are
   real and `mc_v18` runs campaigns.
-- **The sim has no tests and is never run in CI.** No `sim/tests/` exists; no CI job executes `mc_v18`.
-  A seeded batch currently yields a degenerate win-share (one faction ~87%, two at 0%) that **nothing
-  flags.** If you tune balance numbers for Godot, you have no regression oracle — **add a deterministic
-  seeded smoke assertion before trusting any sim output.**
+- **The sim's own balance output has no regression oracle beyond the §8 smoke test.** `sim/tests/` now
+  exists (a deterministic seeded regression + parity test — see §8's ED-1053 resolution), but no CI job
+  executes full `mc_v18` campaigns. A seeded batch currently yields a degenerate win-share (one faction
+  ~87%, two at 0%) that **nothing flags.** If you tune balance numbers for Godot, treat that gap as open —
+  **add a deterministic seeded smoke assertion before trusting any full-campaign sim output.**
 - **The anti-fabrication gate is leaky.** `tools/ci_sim_fabrication_check.py` whitelists constants by bare
   integer value globally and splits floats into integer tokens, so a fabricated constant can pass if its
   digits collide with any ledger value; it also only scans the changeset. **Do not rely on it to catch a

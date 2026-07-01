@@ -251,6 +251,18 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
   retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
   and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
+- 2026-07-01 — **Workplan sprawl cleanup.** `designs/workplans/` was dead (both files pre-dated v3/v4)
+  while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
+  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `designs/workplans/` (now the
+  one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
+  `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
+  commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
+  `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling
+  audit artifacts and CURRENT.md already documents them as frozen records, not lost ones. Separately,
+  flagged (not moved) the `sim/` vs `tests/sim/` vs `tests/sim_framework/` naming collision — three
+  distinct-purpose directories, not duplicates; disambiguated via README notes in each rather than a
+  path rename, since `tests/sim/` is path-matched by `ci_sim_fabrication_check.py`/`atomization_rules.yaml`/
+  `lane_assignments.yaml` and a rename would need to update all three.
 
 ## Next actions
 
