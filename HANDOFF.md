@@ -85,11 +85,15 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       + `select_mode` — modes derive from geometry primitives, retiring the head-collapse; poleaxe the only weapon
       affording >1 head, emergent; every other weapon byte-identical). 73 tests, mirror ~50, no one-shot, grounded
       ranking holds (poleaxe>mace>staff vs plate).
-    - **OPEN DECISION (Jordan) — the poleaxe's plate default:** under the grounded §2 RESIST (plate more vulnerable to
-      concussion .30 than face-on puncture .70, Williams) the poleaxe SELECTS its hammer, not its spike, vs a covered
-      plate opponent (beats the mace via REACH); the spike is afforded + wins vs exposed gaps. Treatise narrative (Le
-      Jeu de la Hache) vs materials physics point different ways for the DEFAULT mode. Accept the grounded outcome, or
-      re-tune §2 to favour the spike.
+    - **RESOLVED (Jordan) — the poleaxe's plate default = the SITUATIONAL GAP GAME** (`f7f7596f`). A thrust now SEEKS
+      gaps: its plate-defeat = max(through-material, GAP_EXPOSURE[mat]·gap_precision), scaled by the weapon's derived
+      gap_precision (emergent, no weapon name). The poleaxe now SPIKES the reach-ladder vs plate (Le Jeu de la Hache);
+      the rondel dagger comes alive as the armour-gap weapon (dagger>mace vs plate 12→69%); the mace hammers (no
+      point); the staff stays weak; the whippy rapier is mediocre. GAP_EXPOSURE [SIM-CALIBRATE, reach-ladder frame].
+      **Remaining lever (Jordan-gated):** a damage-vs-sigma tension — the spike out-DAMAGES but adef_cap scores its
+      CONTROL lower than the hammer's, so the greedy selector picks a higher-damage/lower-control mode. Unifying
+      adef_cap's point branch with the gap-seeking (making the spike a net-control win) further strengthens point
+      weapons vs plate — deferred as a calibration decision.
     - **Still to do:** file ED-1055+ (the re-baseline + designer-set flags); the remaining Gate-1 residuals (agility
       clamp, ADEF monotonicity + `combat_config.gd` oracle drift, abilities-as-access).
 
