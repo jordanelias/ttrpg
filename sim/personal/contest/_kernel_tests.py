@@ -676,5 +676,97 @@ ck(f"golden-trace: resolved band == final-beat track banding ({_g_res} @ track {
 ck("golden-trace: resolved outcome is a canonical band", _g_res in _BANDS)
 
 
+# ═════════════════════════════════════════════════════════════════════════════
+# STAGE 1d — CR3 THREE-TRACKER MODEL (RATIFIED_2026-06-01.md CR3): Concentration
+# (stamina) + Face (contest-local ethos) + Persuasion Track (merits, preserved);
+# Composure RETIRED. These assert the canonical CR3 names are wired over the existing
+# groundup primitives (Face=Standing, Concentration=Reserve) with NO behaviour change —
+# the 222 checks above stay green — and that Composure is absent as a kernel primitive.
+print("== CR3 three trackers (Concentration + Face + Persuasion; Composure retired) ==")
+from .primitives import (Face as _Face, Standing as _Standing, Reserve as _Reserve,
+                         TRACKERS as _TRK, RETIRED_TRACKERS as _RETIRED)
+from .resolver import Bout as _Bout2, Contestant as _Con2, Venue as _V2, TallyAtClose as _TAC2
+# Face IS Standing (canonical alias — same identity, so no code path special-cases Face)
+ck("CR3: Face is the canonical alias of the kernel Standing primitive (same class)", _Face is _Standing)
+# The three-tracker registry names exactly Concentration + Face + Persuasion Track
+ck("CR3: the three trackers are exactly {Concentration, Face, PersuasionTrack}",
+   set(_TRK) == {"Face", "Concentration", "PersuasionTrack"})
+ck("CR3: Face binds to Standing; Concentration binds to Reserve (the stamina pool)",
+   _TRK["Face"]["binds"] is _Standing and _TRK["Concentration"]["binds"] is _Reserve)
+ck("CR3: Face + Concentration are per-side; the Persuasion Track is shared (two-pole)",
+   _TRK["Face"]["per_side"] and _TRK["Concentration"]["per_side"] and not _TRK["PersuasionTrack"]["per_side"])
+# Composure is RETIRED — it is NOT a kernel primitive and must not reappear as one.
+ck("CR3: Composure is retired (listed in RETIRED_TRACKERS, absent from the live TRACKERS)",
+   "Composure" in _RETIRED and "Composure" not in _TRK)
+import sim.personal.contest.primitives as _prim_mod
+ck("CR3: no 'Composure' primitive exists in the contest kernel (retired, not a class)",
+   not hasattr(_prim_mod, "Composure"))
+# The per-side runtime exposes the canonical CR3 accessors, bound to the real primitives.
+_bt3 = _Bout2(_Con2(4, standing_start=6), _Con2(4), _V2(win=_TAC2()))
+ck("CR3: _Side.face accessor returns the side's Standing (contest-local ethos tracker)",
+   isinstance(_bt3.c[A].face, _Standing) and _bt3.c[A].face is _bt3.c[A].standing)
+ck("CR3: _Side.concentration accessor returns the side's Reserve (stamina pool)",
+   isinstance(_bt3.c[A].concentration, _Reserve) and _bt3.c[A].concentration is _bt3.c[A].reserve)
+# Face is LIVE, not cosmetic: an ethos move BUILDS Face (Standing.v rises), and Face frac feeds
+# readiness/leak. Concentration DEPLETES on a spend and REFILLS on regroup (support/pass regroup).
+_face0 = _bt3.c[A].face.v
+_bt3._apply(A, Move("support"))          # support builds ethos (Face) by 1 and regroups reserve
+ck("CR3: Face is a LIVE tracker — an ethos-building move raises it (Standing.v increases)",
+   _bt3.c[A].face.v > _face0)
+_c0 = _bt3.c[B].concentration.cur
+_bt3._apply(B, Move("advance", appeal=Appeal.LOGOS, ground=_bt3.live))  # spends reserve (stamina)
+ck("CR3: Concentration is a LIVE stamina pool — an argue move depletes it",
+   _bt3.c[B].concentration.cur < _c0)
+# The wrapper MECHANICS registry vouches for the CR3 rows as WIRED.
+from .wrapper import MECHANICS as _MECH3, mechanics_selftest as _MST3
+ck("CR3: MECHANICS registers face_tracker + three_trackers as WIRED",
+   _MECH3["face_tracker"]["status"] == "WIRED" and _MECH3["three_trackers"]["status"] == "WIRED")
+_ok3, _miss3 = _MST3()
+ck(f"CR3: wrapper self-test still green with the CR3 rows added (missing {_miss3})", _ok3)
+
+# GATE-A FACE SCALE-BINDING (ED-1056, resolved 2026-07-01): Face_max = Charisma x 3 (unchanged
+# v30-surface ceiling formula); Face_current = round(Standing / 10 x Face_max) (Standing, unchanged,
+# sets POSITION within that ceiling). These assert the formula itself (both the static FaceScale
+# helper and the _Side.face_max()/face_current() accessors), including the two boundary cases the
+# Gate-A resolution explicitly called for: Standing=0 -> Face_current=0, Standing=10 -> Face_current
+# = Face_max. Standing.v must be provably untouched by reading these derived accessors.
+print("== Gate-A Face scale-binding (FaceScale: Face_max = Cha x3, Face_current = Standing-scaled) ==")
+from .primitives import FaceScale as _FS
+ck("FaceScale.face_max: Face_max = Charisma x 3 (unchanged v30 ceiling formula)",
+   _FS.face_max(7) == 21 and _FS.face_max(1) == 3 and _FS.face_max(0) == 0)
+# Boundary case: Standing at its floor (0) -> Face_current is 0 regardless of Face_max.
+ck("FaceScale.face_current boundary: Standing=0 -> Face_current=0",
+   _FS.face_current(_Standing(0), 7) == 0 and _FS.face_current(_Standing(0), 1) == 0)
+# Boundary case: Standing at its ceiling (10, i.e. Standing.HI) -> Face_current == Face_max exactly.
+ck("FaceScale.face_current boundary: Standing=10 (Standing.HI) -> Face_current=Face_max",
+   _FS.face_current(_Standing(_Standing.HI), 7) == _FS.face_max(7) == 21)
+# Midpoint + rounding: Standing=5 (half of HI=10) with Cha=7 (Face_max=21) -> round(5/10*21)=round(10.5)=10
+# (Python banker's rounding: round(10.5) == 10) — pins the exact rounding rule, not just monotonicity.
+ck("FaceScale.face_current midpoint: Standing=5, Cha=7 -> round(10.5)=10 (banker's rounding pinned)",
+   _FS.face_current(_Standing(5), 7) == 10 == round(10.5))
+# Accepts a bare float/int as well as a Standing instance (both code paths in face_current).
+ck("FaceScale.face_current accepts a bare numeric Standing-value, not only a Standing instance",
+   _FS.face_current(5, 7) == _FS.face_current(_Standing(5), 7))
+# The _Side accessors delegate to FaceScale against the side's own (unchanged) Face/Standing.
+_bt4 = _Bout2(_Con2(4, standing_start=0, charisma=7), _Con2(4, standing_start=_Standing.HI, charisma=7),
+             _V2(win=_TAC2()))
+ck("_Side.face_max(): delegates to FaceScale.face_max(charisma)",
+   _bt4.c[A].face_max() == 21 and _bt4.c[B].face_max() == 21)
+ck("_Side.face_current() boundary A: Standing=0 at construction -> face_current()=0",
+   _bt4.c[A].face_current() == 0)
+ck("_Side.face_current() boundary B: Standing=Standing.HI at construction -> face_current()=face_max()",
+   _bt4.c[B].face_current() == _bt4.c[B].face_max() == 21)
+# Reading face_current()/face_max() must not mutate Standing.v (derived VIEW, not new state).
+_std_before_A, _std_before_B = _bt4.c[A].face.v, _bt4.c[B].face.v
+_ = (_bt4.c[A].face_current(), _bt4.c[A].face_max(), _bt4.c[B].face_current(), _bt4.c[B].face_max())
+ck("Gate-A: reading face_current()/face_max() does not mutate the underlying Standing.v",
+   _bt4.c[A].face.v == _std_before_A and _bt4.c[B].face.v == _std_before_B)
+# Building ethos (the existing, unchanged Standing.build path) changes face_current() derived from
+# it, proving the derived accessor tracks live Standing rather than being frozen at construction.
+_fc_before = _bt4.c[A].face_current()
+_bt4._apply(A, Move("support"))   # support builds ethos (Standing.v) by 1, unchanged CR3 behaviour
+ck("Gate-A: face_current() tracks Standing live (rises after an ethos-building move, same as Face)",
+   _bt4.c[A].face_current() > _fc_before)
+
 print(f"\nRESULT: {P} passed, {Fc} failed")
 sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

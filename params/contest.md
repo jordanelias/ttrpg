@@ -101,25 +101,34 @@ Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: GM-set (typical: 5).
 Audience resistance: average Stability of factions (round up) − 1, minimum 0. Announced once at contest start; place resistance token on Persuasion Track. (PP-235)
 
-## Derived Values
-| Value | Formula | Range |
-|-------|---------|-------|
-| Composure | Charisma × 3 | 3–21 |
-| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 |
-| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 |
-| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 |
-| Appraise pool | Attunement + Recall | 2–14 |
+## Derived Values (CR3 — three trackers; ED-1056)
+CR3 (RATIFIED 2026-06-01) retires **Composure** as the social-contest tracker and splits it into **Concentration** (stamina) + **Face** (contest-local ethos/standing). The Persuasion Track (merits clock) is preserved. Composure-retirement is SCOPED to the social-contest tracker only (unrelated Composure references in knots/combat/conviction are untouched — Jordan CONFIRMED scoped-rename-only at Gate A; see social_contest_v30 §8).
 
-## Composure and Rattled
-At strain ≥ Composure: Rattled mark (Composure resets; excess carries over). [Composure = Cha × 3 per ED-694]
+| Value | Formula | Range | Note |
+|-------|---------|-------|------|
+| Face | Face_max = Charisma × 3 (ceiling); Face_current = round(Standing ÷ 10 × Face_max) | 3–21 | Contest-local ethos/standing buffer (the retired Composure magnitude, re-homed as transient standing; CR3/ED-1056; scale-binding resolved Gate A 2026-07-01 — see below). Face ≠ Disposition/Reputation. |
+| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | ×3 scaling unchanged by CR3 (matches the Face buffer). |
+| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | — |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
+| Appraise pool | Attunement + Recall | 2–14 | — |
+
+## Face and Rattled (CR3 — formerly "Composure"; ED-1056) [UNREACHABLE UNTIL STAGE 3]
+> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]** This §Face-and-Rattled surface defines Face as a **Charisma × 3 (3–21) strain-buffer** consumed by the Rattled channel (below) — this is now **Face_max**, an unchanged build-time ceiling (player-controlled via Charisma). The sim kernel (`sim/personal/contest/primitives.py`) binds `Face = Standing`, a **0–10, START 5, ethos-built** tracker feeding Readiness/leak — Standing itself is UNCHANGED by this resolution. Jordan resolved the scale-binding as a combo formula: **Face_current = round(Standing ÷ 10 × Face_max)** — Standing (earned through play) sets position within the Charisma-set ceiling (fixed at build time). Implemented as `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) + `_Side.face_max()`/`_Side.face_current()` (resolver.py), added on top of the unchanged Standing — no new invented constants, no change to currently-tested Standing/Readiness behaviour. **What is STILL not wired this pass:** the strip/strain-consumption channel below — the kernel has **no strip/strain channel wired** (Standing.strip() is never called), so the Rattled behaviour below is a v30-surface spec not yet realized in code. Face_current is now a real, well-defined value (Standing-derived, Charisma-scaled) but strain does not yet consume it; that wiring is Stage-3 (CR5 rhetoric-armature) scope, honestly flagged, not silently claimed as wired. See social_contest_v30 §4 Step 6 / §8.
+
+At strain ≥ **Face**: Rattled mark (Face resets; excess carries over). [Face = Cha × 3 — the retired Composure magnitude re-homed onto the Face tracker per CR3/ED-1056; ED-694 scaling.]
 −1D per Rattled level to Argue pool (cumulative; honors PP-716 channel reservation: actor-state degradation → Pool, not Ob). 2 marks = socially incapacitated. Pool minimum 1D. [Decision-B 2026-05-15: Rattled converted from +Ob to −1D for channel consistency with wounds/Spent.]
-Recovery: 1 mark/scene of non-social activity. Composure restores at scene change.
-Knot buffer: redirect damage to Knot (+1 strain/use).
+Recovery: 1 mark/scene of non-social activity. Face restores at scene change.
+Knot buffer: redirect **Face** damage to Knot (+1 strain/use). [CR3/ED-1056: Composure-retirement is scoped to the contest tracker; knots_v30 §4.2 still names this the "Knot-as-Composure-buffer" — Jordan CONFIRMED scoped-rename-only at Gate A (social_contest_v30 §8); the corpus-wide Composure→Face rename was considered and not taken.]
 
 ## Concentration and Spent
 Depletes −5/exchange, −5 additional on loss. [ED-890/DEP: rescaled −1 → −5 to match social_contest §4 and keep Spent reachable under the (3 × Focus) + (2 × Spirit) 5–35 range; the prior −1 left Spent inert.]
 At 0: Spent (−2D next exchange; opponent +1D). Resets to max after.
 Rattled + Spent: cumulative. Pool minimum 1D.
+
+## CR1 / CR2 Substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d / ED-1055 provisional, pending Gate-A)
+- **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper (`sim/personal/contest/wrapper.py`) that ADAPTS + ROUTES but resolves nothing (`build_contest` adapter + `resolve_contest` router). The stochastic surface is the reception roll only; all else is deterministic accounting. Already realized (Stage 1c); Stage 1d cites, does not re-build.
+- **CR2 — resolution substrate migration to δσ.** Social resolution is no longer success-counting; it is the shared sigma-leverage net engine (per-die −1/0/+1/+2, δσ μ-shift, TN7), single-sourced with combat/core via `sim/autoload/sigma_leverage.py` (D0-2). CR2 = the resolution substrate ("what the roll is"); CR6 = the leverage-accumulation half ("how setup advantages enter the roll" — δσ, tanh soft-capped, +0.191 uniform across 5D–26D). Contest stays δσ at TN7 (D0-3); the fractional-Ob face is display-only (D0-3 HYBRID). Both realized Stage 1a/1b + D0-3; Stage 1d cites, does not re-build.
+- **CR3 — three trackers.** Concentration (stamina, above) + Face (contest-local ethos/standing, §Face and Rattled) + Persuasion Track (merits, §Persuasion Track). Composure retired → split into Concentration + Face (ED-1056).
 
 ## Forfeit Actions
 | Action | Strain | Track Effect | Benefit |
@@ -206,7 +215,7 @@ Judge result informs Argue roll orientation selection.
 ## Contest Stalemate — Forced Resolution (PP-255)
 Maximum 10 exchanges per Contest session.
 After 10 consecutive exchanges without resolution: forced Unmask fires.
-Loser = orator whose track is closer to their losing threshold (lower Composure on tie).
+Loser = orator whose track is closer to their losing threshold (lower **Face** on tie). [CR3/ED-1056: "Composure" tiebreak re-homed onto Face.]
 
 ## Hybrid Debate CI Clamp (PP-256)
 In Hybrid mode Contest: CI restricted to range 4–6 at session start regardless of BG lobbying.

@@ -21,7 +21,7 @@ traces to params/contest.md + social_contest_v30.md §2/§3.
 from __future__ import annotations
 
 from .contract import A, B, Adjudicator, Panel
-from .primitives import Stasis, Standing, Dossier, EvidenceItem
+from .primitives import Stasis, Standing, Face, Dossier, EvidenceItem, TRACKERS, RETIRED_TRACKERS
 from .resolver import (Bout, Contestant, Venue, run, PersuasionTrack, TallyAtClose,
                        ThresholdRace, ProofBar, GraceThreshold, VoteAtClose)
 from .modes import (ContestedMode, PROCEEDINGS, CANONICAL_PROCEEDINGS, CANONICAL_ADJUDICATORS,
@@ -209,6 +209,8 @@ _SYMBOLS = {
     "PersuasionTrack": PersuasionTrack, "TallyAtClose": TallyAtClose,
     "ProofBar": ProofBar, "GraceThreshold": GraceThreshold, "VoteAtClose": VoteAtClose,
     "Bout": Bout, "_derive_resistance": _derive_resistance,
+    # CR3 three-tracker model (RATIFIED_2026-06-01.md CR3)
+    "Face": Face, "TRACKERS": TRACKERS,
 }
 def _resolve(sym):
     return _SYMBOLS.get(sym)
@@ -225,6 +227,19 @@ MECHANICS = {
     "adjudicator_primary": {"fn":"ADJUDICATOR_PRIMARY",    "toggle":None, "source":"social_contest_v30 §3 Argue Pool (Cognition/Charisma/Attunement)", "status":"WIRED"},
     # persuasion-track banding + resistance
     "persuasion_track":    {"fn":"PersuasionTrack",  "toggle":None, "source":"params/contest.md §Persuasion Track (>=9/>=7/4-6/<=3/<=1 bands)", "status":"WIRED"},
+    # CR3 three-tracker model: Concentration (stamina) + Face (contest-local ethos) + Persuasion (merits).
+    # Composure retired -> split into Concentration+Face (RATIFIED_2026-06-01.md CR3; DECISIONS.md reconc row).
+    # `Face` is the canonical CR3 name bound to the kernel Standing primitive (built by ethos moves; feeds
+    # Readiness+leak). WIRED is scope-honest: it resolves to a real symbol AND the underlying Standing is
+    # live in resolution (Standing drives readiness/leak in _advance). SCOPE (Stage 1d, judge-upheld
+    # honesty): the Face NAME + three-tracker registry are established as a tracked primitive + test surface;
+    # what is NOT wired is the STRIP/STRAIN half — Standing.strip() is never called in the contest kernel
+    # (Face is monotonic-up), so the prose "strain -> Rattled -> -1D Argue pool" and the RATIFIED line-20
+    # stamina/standing/merits two-sided tradeoff / CR5 Face-attack are Stage-3 scope, NOT realized here. The
+    # WIRED status vouches for the live-Standing half only. See social_contest_v30 §8 honesty note + ED-1056.
+    # Persuasion+Concentration are the persuasion_track + agon_bout rows above.
+    "face_tracker":        {"fn":"Face",             "toggle":None, "source":"social_contest_v30 §4/§8 (CR3: Composure retired -> Concentration+Face); binds kernel Standing", "status":"WIRED"},
+    "three_trackers":      {"fn":"TRACKERS",         "toggle":None, "source":"RATIFIED_2026-06-01.md CR3 (Concentration+Face+Persuasion; Composure retired)", "status":"WIRED"},
     # F10 (judge-upheld): the derived value is computed and carried on Contest.resistance but is NOT yet
     # plumbed into resolution (the resolver has zero 'resistance' references; Venue.base_ob is never set
     # from it). It is metadata-only this stage. Downgraded WIRED->PARTIAL so mechanics_selftest does not

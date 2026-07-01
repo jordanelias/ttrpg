@@ -46,6 +46,119 @@ class Reserve:
     def regroup(self):     self.cur = min(self.max, self.cur + self.REGAIN)
 
 # ---------------------------------------------------------------------------
+# CR3 — THE THREE TRACKERS (RATIFIED_2026-06-01.md CR3; DECISIONS.md reconciliation
+# row "Standing/Reserve/Room/Readiness | Composure/Concentration | CR3 | three
+# trackers: Concentration+Face+Persuasion; Composure retired").
+#
+# CR3 retires the single Composure buffer and splits its two conflated roles onto two
+# distinct per-side trackers, alongside the preserved Persuasion merits clock:
+#
+#   canonical CR3 name    role (CR3)                 kernel primitive it BINDS TO
+#   ------------------    ----------------------     ----------------------------
+#   Face                  contest-local ethos /      Standing (per-side; built by
+#                         standing (TRANSIENT)       ethos moves; feeds Readiness+leak)
+#   Concentration         stamina (per-exchange      Reserve (per-side; spent per move;
+#                         depletion; regroup refills) regroup() refills)
+#   Persuasion Track      merits clock (PRESERVED)    ContestState.adv -> PersuasionTrack
+#                         0-10 banded, two-pole       (resolver.py; canonical bands)
+#
+# CR3 is a NAMING + role binding over the ALREADY-BUILT groundup primitives — NOT a new
+# mechanic and NOT a special case: `Face` IS `Standing` (the exact same Python class), exposed
+# under its canonical CR3 name so the v30 surface and the tests can address the tracker by the
+# ratified name. The mechanical substrate is unchanged (Stage 1d is behaviour-preserving); the
+# change is that the contest now has a NAMED Face tracker where canon previously had "Composure".
+#
+# SCOPE HONESTY (Stage 1d, judge-upheld): what is established here is the NAME + registry + test
+# surface, NOT a fully realized two-sided resource. The underlying Standing IS live in resolution
+# (ethos-build raises it; it feeds Readiness + leak), but Standing.strip() is NEVER called in the
+# contest kernel — Face has NO strip/strain channel wired, so it is monotonic-up. The v30-surface
+# "strain -> Rattled -> -1D Argue pool" behaviour and the RATIFIED_2026-06-01 omega line-20
+# stamina/standing/merits two-sided tradeoff (+ CR5 Face-attack/self-backfire) are NOT realized
+# here; they are Stage-3 (rhetoric-armature) scope. Do not read `Face = Standing` as a claim that
+# the v30 Charisma*3 (3-21) strain-buffer and this 0-10 ethos-built scale are the same magnitude —
+# they are two representations of "Face" whose scale-binding is an OPEN DECISION for Jordan (see
+# social_contest_v30 §4 Step 6 "two representations of Face" note).
+#
+# Composure-retirement blast radius: SCOPED TO THE SOCIAL-CONTEST TRACKER ONLY (per the
+# Stage-1d scope guardrail; CR3 targets "Composure-as-buffer" in the contest). The kernel
+# never modelled a "Composure" primitive, so nothing here touches Composure references in
+# unrelated systems (knots / combat / conviction) — see the OPEN-DECISION note on the
+# Knot-as-Composure-buffer coupling in social_contest_v30.md §4/§8.
+#
+# The D0-minor formula note: CR3's inline "Focus*3" for Concentration is the PRE-supersession
+# form; the canonical Concentration magnitude is (3*Focus)+(2*Spirit) per the ED-901 (STRUCK
+# Focus*3) + ED-902 (corrected coefficients + Cognition->Focus engine fix) + ED-933 (params
+# propagation) chain. The kernel's Reserve is an ABSTRACT per-move stamina pool ([SEED] MAX=12,
+# per-move COST) — it does not hard-code any attribute formula; the (3*Focus)+(2*Spirit)
+# magnitude is the v30-surface value the wrapper/params carry, not a kernel literal.
+
+# Face IS Standing: the canonical CR3 name for the contest-local ethos/standing tracker.
+# (Alias, not a subclass — same identity, so isinstance/behaviour are bit-identical and no
+# code path is special-cased for "Face" vs "Standing".)
+Face = Standing
+
+# ---------------------------------------------------------------------------
+# FACE SCALE-BINDING (Gate-A RESOLVED, 2026-07-01; ED-1056 update): a combo formula, not a
+# straight rescale either direction. Standing itself (its 0–10 representation, its ethos-build
+# mechanics via .build()/.strip(), and its existing feed into Readiness/leak) is UNCHANGED by
+# this resolution — FaceScale only ADDS a derived accessor on top of it:
+#
+#   Face_max     = Charisma × 3            (unchanged v30-surface formula, params/contest.md
+#                                            §Derived Values / ED-127; the retired Composure
+#                                            magnitude, range 3–21) — a build-time attribute,
+#                                            in player control (Charisma is chosen at creation).
+#   Face_current = round(Standing / 10 × Face_max)
+#                                            Standing (the kernel 0–10 ethos-built value, earned
+#                                            through play, NOT directly in player control
+#                                            moment-to-moment) determines POSITION WITHIN that
+#                                            ceiling.
+#
+# No new invented constants: this reuses the existing Cha×3 formula (already canonical) and the
+# existing 0–10 Standing range (Standing.LO..Standing.HI, already canonical) — it only combines
+# them. Charisma is NOT kernel state (the contest kernel has no Charisma attribute; `faculty` is
+# an abstract pool-size parameter, not Charisma) — FaceScale is a pure function taking Charisma
+# as an argument, so it adds a derived VIEW, not new mutable state, and Standing.v is never
+# touched by it.
+class FaceScale:
+    """Derived Face_current accessor over an unchanged Standing (Gate-A Face scale-binding,
+       ED-1056). Standing stays the single source of truth (0–10, ethos-built, feeds
+       Readiness/leak, untouched); FaceScale only reads it and re-expresses it within the
+       Charisma-set ceiling."""
+    @staticmethod
+    def face_max(charisma):
+        """Face_max = Charisma × 3 (unchanged v30-surface ceiling formula; params/contest.md
+           §Derived Values, ED-127). Build-time attribute — set by the player at creation,
+           not by moment-to-moment play."""
+        return charisma * 3
+    @staticmethod
+    def face_current(standing, charisma):
+        """Face_current = round(Standing / 10 × Face_max). `standing` is the kernel 0–10 value
+           (a Standing instance or a bare float/int .v); Standing.HI (10) is the fixed divisor
+           per the existing kernel range — Standing itself is read-only here, never mutated."""
+        v = standing.v if isinstance(standing, Standing) else standing
+        return round(v / Standing.HI * FaceScale.face_max(charisma))
+
+# The CR3 tracker registry: canonical name -> (kernel primitive it binds to, role, whether
+# it is per-side, provenance). Read by the surface/tests to assert the three-tracker model is
+# wired and that Composure is absent (retired) as a kernel primitive.
+TRACKERS = {
+    "Face":            {"binds": Standing,      "role": "contest-local ethos/standing (transient)",
+                        "per_side": True,  "source": "CR3 (RATIFIED_2026-06-01.md)"},
+    "Concentration":   {"binds": Reserve,       "role": "stamina (per-exchange depletion; regroup refills)",
+                        "per_side": True,  "source": "CR3 (RATIFIED_2026-06-01.md); Reserve is a [SEED] "
+                                                       "abstract per-move pool (MAX=12, per-move COST), NOT a "
+                                                       "hard-coded attribute formula — the v30-surface "
+                                                       "(3×Focus)+(2×Spirit) magnitude (ED-901/ED-902/ED-933) is "
+                                                       "carried by params/contest.md + wrapper.py, not this class"},
+    "PersuasionTrack": {"binds": "ContestState.adv -> PersuasionTrack",
+                        "role": "merits clock (0-10 banded, two-pole; PRESERVED)",
+                        "per_side": False, "source": "CR3 (preserved) + params/contest.md §Persuasion Track"},
+}
+# Composure is RETIRED as a contest tracker (CR3). It is NOT a kernel primitive and must not
+# reappear as one; the guard below is asserted by the kernel suite.
+RETIRED_TRACKERS = ("Composure",)
+
+# ---------------------------------------------------------------------------
 # Rhetorical–Temporal matrix — the combinatorial cross of the three appeals
 # with the three temporal registers (Aristotle Rhet. I.3; verified 2026-06-05).
 # Each entry is a MODIFIER centred on 1.0 (row sums = 3.0, so neutral temporal

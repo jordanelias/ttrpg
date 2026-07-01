@@ -154,7 +154,7 @@ Direct contest within the same temporal horizon.
 - If margin > resistance → Persuasion Track moves (margin − resistance) toward winner's position.
 - If margin ≤ resistance → 0 movement.
 - Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage minimum 0. Focus defence can fully absorb strain just as armour can fully absorb damage.]
-- Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) × 3 → Cha 1–3: +0; Cha 4–5: +3; Cha 6–7: +6. [ED-891: ×3-scaled to match Composure ×3 and derived_stats §5.1; resolves the prior unscaled-0–2 vs scaled-0–6 strain-math ambiguity.]
+- Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) × 3 → Cha 1–3: +0; Cha 4–5: +3; Cha 6–7: +6. [ED-891: ×3-scaled to match the ×3 Face/standing buffer (CR3/ED-1056; formerly "Composure ×3") and derived_stats §5.1; resolves the prior unscaled-0–2 vs scaled-0–6 strain-math ambiguity. The ×3 scaling is unchanged by CR3 — only the buffer's role-name (Composure → Face) changed.]
 - Focus defence: floor(Focus ÷ 2) × 3 → Foc 1: 0; Foc 2–3: 3; Foc 4–5: 6; Foc 6–7: 9. [ED-891: ×3-scaled to match derived_stats §5.1.]
 
 **REINFORCE** (same genre, same orientation):
@@ -186,16 +186,34 @@ Both orators push in the same direction within the same temporal horizon.
 - **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max ((3 × Focus) + (2 × Spirit)).
 - **Concede a Point:** Forfeit exchange. Take 1 strain. Persuasion Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
 
-**Step 6 — Strain and Concentration:**
+**Step 6 — Strain, Face, and Concentration (CR3 — three trackers):**
 
-**Composure = Charisma × 3.** Range 3–21. Social damage buffer before Rattled. [ED-127 resolved, ED-694 updated. Single attribute × multiplier. Strain, Charisma modifier, and Focus defence all scaled ×3 to match. Equipment (attire, regalia) adds flat Composure.]
+**CR3 (RATIFIED 2026-06-01):** the single **Composure** buffer is **RETIRED as the social-contest tracker** and split into the two distinct trackers whose roles it conflated (Lesson-1 repair: one variable, one role). The contest now carries **three** trackers:
 
-- Strain accumulates toward Composure threshold.
+| Tracker | Role | Formula / range | Provenance |
+|---|---|---|---|
+| **Concentration** | Stamina — depletes per exchange, gates Spent | (3 × Focus) + (2 × Spirit), range 5–35 | ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation) |
+| **Face** | Contest-local ethos / standing — **transient** standing within the contest; distinct from persistent Disposition/Reputation | Face_max = Charisma × 3, range 3–21 (the retired Composure magnitude, unchanged — a build-time ceiling); Face_current = round(Standing ÷ 10 × Face_max), where Standing is the unchanged kernel 0–10 ethos-built value | CR3 (RATIFIED 2026-06-01); ED-1056 (three-tracker/Face-primitive fold-in + Gate-A scale-binding resolution — provisional, pending Gate-A ratification) |
+| **Persuasion Track** | The merits clock (PRESERVED) | 0–10, banded (§2 Step 4) | preserved (CR3) |
+
+**Face** is the social analogue of standing/composure: it is the transient credibility an orator holds *in this proceeding*. Its kernel representation (Standing, 0–10) is built by Revealing/ethos-bearing argument and support; its surface representation (Face_current, 3–21) rises and falls with Standing inside the Charisma-set ceiling. **Face ≠ Disposition and Face ≠ Reputation:** Disposition/Reputation are persistent cross-scene relationship stats; Face is a within-contest tracker that resets at contest end.
+
+- Strain accumulates against **Face** (the standing buffer). At strain ≥ Face threshold: take a **Rattled** mark (Face resets to full, excess strain carries over).
 - All subsequent contest rolls: −1D per Rattled level (cumulative). [ED-892: actor-state degradation is a Pool penalty, not Ob, per the channel reservation (Decision-B 2026-05-15 / PP-716). Supersedes the prior "+1 Ob".]
 - Rattled recovery: 1 mark clears per full scene of non-social activity or rest.
-- Composure recovery: full restore at scene change (new location, new interlocutors).
+- Face recovery: full restore at scene change (new location, new interlocutors). Equipment (attire, regalia) adds flat Face.
+- **Honesty note (still true after the Gate-A scale-binding resolution):** the strip/strain-consumption channel above (the Rattled mark being triggered *by strain against Face*, and Face being *stripped* by Indirect Face-attacks, CR5) is **still not wired this pass**. What Gate A resolves is the SCALE formula only — Face_current is now a real, well-defined value (Standing-derived, Charisma-scaled), not an arbitrary or undefined one — but strain does not yet consume it in code. The strip/strain-consumption wiring stays an honestly-flagged near-term gap (CR5, Stage 3 rhetoric-armature scope), not silently claimed as wired.
 
-**Concentration = (3 × Focus) + (2 × Spirit).** Range 5–35. (Canonical per derived_stats_v30 §14.1, ED-902 2026-06-04; supersedes the struck Focus × 3.) Depletes by 5 per exchange, −5 additional on exchange loss. [ED-890 / DEP: depletion rescaled −3 → −5 so Spent stays reachable mid-contest under the larger 5–35 range — an average Focus 4 / Spirit 3 = 18 reaches Spent by exchange 3–4, faster for the loser.] (ED-694: Recall removed from Concentration — Recall's role is the +2D citation bonus in Argue and the Appraise pool, not sustained focus.)
+[ED-1056 — CR3 Composure retirement, SCOPED to the social-contest tracker only. The Charisma×3 buffer, the Charisma modifier (§4 Step 4), and the Focus defence keep their ×3 scaling and their mechanical behaviour verbatim — this is a RENAME of the contest buffer's *role* (Composure → Face-as-standing), not a mechanical re-point. **Composure references in unrelated systems (knots, combat, conviction) are NOT touched by CR3** (see §8 OPEN-DECISION note on the Knot-as-Composure-buffer coupling).]
+
+> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]**
+> "Face" denotes two representations that Stage 1d established but did not reconcile; Jordan has now resolved the scale-binding as a **combo formula**, not a straight rescale either direction:
+> 1. **Face_max = Charisma × 3** (unchanged v30-surface formula, range 3–21 — the retired Composure magnitude). A **build-time ceiling**: Charisma is a player-controlled attribute set at creation, so Face_max is fixed for a given character and is in the player's control.
+> 2. **Face_current = round(Standing ÷ 10 × Face_max).** Standing is the **unchanged** kernel 0–10 ethos-built value (`sim/personal/contest/primitives.py` `Standing`/`Face = Standing`) — its internal representation, its `.build()`/`.strip()` ethos-build mechanics, and its existing feed into Readiness/leak are **not modified** by this resolution. Standing determines Face's **position within** the Charisma-set ceiling; it is earned through play, not directly in the player's moment-to-moment control.
+> This is implemented as a pure derived accessor (`FaceScale.face_max` / `FaceScale.face_current`, and `_Side.face_max()` / `_Side.face_current()`) added ON TOP OF the existing Standing primitive — no new invented constants (it reuses the existing Cha×3 formula and the existing 0–10 Standing range) and no change to any currently-tested Standing/Readiness behaviour. See `sim/personal/contest/primitives.py` (`FaceScale`) and `sim/personal/contest/resolver.py` (`_Side.face_max`/`_Side.face_current`).
+> The strip/strain-consumption channel (Rattled-by-strain, CR5 Face-attacks) remains unwired — see the honesty note above; that is a separate, still-open near-term gap, not resolved by this scale-binding decision.
+
+**Concentration = (3 × Focus) + (2 × Spirit).** Range 5–35. (Canonical per derived_stats_v30 §14.1: ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation); supersedes the struck Focus × 3.) Depletes by 5 per exchange, −5 additional on exchange loss. [ED-890 / DEP: depletion rescaled −3 → −5 so Spent stays reachable mid-contest under the larger 5–35 range — an average Focus 4 / Spirit 3 = 18 reaches Spent by exchange 3–4, faster for the loser.] (ED-694: Recall removed from Concentration — Recall's role is the +2D citation bonus in Argue and the Appraise pool, not sustained focus.)
 - At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
   **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to (3 × Focus) + (2 × Spirit) after the penalty exchange resolves.
 - If both Rattled and Spent active: penalties cumulative. Pool minimum 1D per core engine.
@@ -418,14 +436,32 @@ The 4-6 season duration window gives the player time to:
 
 ## §8 DERIVED VALUES SUMMARY
 
+**CR3 — three trackers (RATIFIED 2026-06-01; ED-1056 provisional, pending Gate-A): Concentration (stamina) + Face (contest-local ethos/standing) + Persuasion Track (merits, preserved). Composure retired → split into Concentration + Face.**
+
 | Value | Formula | Range | Parallel |
 |---|---|---|---|
-| Composure | Charisma × 3 | 3–21 | Vitality = Endurance × 10 (ED-694) |
+| Face | Face_max = Charisma × 3 (ceiling); Face_current = round(Standing ÷ 10 × Face_max) | 3–21 | Contest-local ethos/standing buffer (the retired Composure magnitude, re-homed as transient standing; CR3/ED-1056; scale-binding resolved Gate A — §4 Step 6). Face ≠ Disposition/Reputation. |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | — |
 | Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | Armour Rating (damage reduction), scaled ×3 |
-| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Maximum = (3 × Focus) + (2 × Spirit) (Regroup restores to max). Depletes 5/exchange, −5 on loss (ED-890/DEP). Recall removed from Concentration (ED-694); formula per derived_stats §14.1 (ED-902). |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Maximum = (3 × Focus) + (2 × Spirit) (Regroup restores to max). Depletes 5/exchange, −5 on loss (ED-890/DEP). Recall removed from Concentration (ED-694); formula per ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
 | Appraise pool | Attunement + Recall | 2–14 | Ob = opponent Cha ÷ 2 (round up, min 1); PP-614 (ED-893) |
 | Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
+
+**CR1/CR2 substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d):**
+- **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper that ADAPTS + ROUTES but RESOLVES NOTHING (`sim/personal/contest/wrapper.py`: `build_contest` adapter + `resolve_contest` router, mirroring `tests/sim/mass_battle/engine.py`). The venue/adjudicator/proceeding specs and win-conditions are the modules; the stochastic surface is the reception roll only, all else deterministic accounting. **Already realized (Stage 1c); Stage 1d confirms + cites.**
+- **CR2 — substrate migration to δσ.** Social resolution no longer counts successes; it resolves on the **shared sigma-leverage net engine** (per-die −1/0/+1/+2, δσ μ-shift, TN7), single-sourced with combat/core via `sim/autoload/sigma_leverage.py` (D0-2). This is the deep Smoothness fix — one substrate for both systems. **CR2 governs the resolution substrate; CR6 (leverage-as-δσ, the +0.191-uniform lever accumulation) is the leverage-accumulation half of the same migration — CR2 = "what the roll is", CR6 = "how setup advantages enter it". Both already realized (Stage 1a/1b + D0-3 HYBRID, ED-1055 substrate confirmation); Stage 1d confirms + cites, does not re-build.** Contest stays δσ at TN7 per D0-3; the fractional-Ob representation is display-only (D0-3 HYBRID, ED-1055).
+
+**[CR3 Face — scope-honest status of the code binding (Stage 1d, scale-binding resolved Gate A)]** Stage 1d establishes Face as a **named, canonical tracker + test surface**, not a fully-realized two-sided resource. Precisely what is and is not wired in `sim/personal/contest/`:
+> - **Established:** `Face` is a canonical *alias* of the kernel `Standing` primitive (same Python class, no special-casing); a `TRACKERS` registry ({Face→Standing, Concentration→Reserve, PersuasionTrack→adv}) and `RETIRED_TRACKERS=('Composure',)` name the three-tracker model; `_Side.face`/`_Side.concentration` accessors expose the canonical names; the underlying **Standing IS live in resolution** (ethos-build raises it; it feeds Readiness + leak). **Gate-A addition:** `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) and `_Side.face_max()`/`_Side.face_current()` (resolver.py) give Face a real, legible scale-binding (Face_max = Charisma × 3; Face_current = round(Standing ÷ 10 × Face_max)) — a pure derived accessor added on top of the unchanged Standing, not a new mechanic.
+> - **NOT wired this stage:** Standing has **no strip/strain channel** in the contest kernel (`.strip()` is never called; Face is monotonic-*up*). The prose "strain → Rattled → −1D Argue pool" behaviour above (§4 Step 6) is therefore **unimplemented in code** — Gate A resolves the SCALE formula only, not the strip/strain-consumption wiring, which remains an honestly-flagged near-term gap. The RATIFIED_2026-06-01 omega line-20 **stamina/standing/merits tradeoff** (and CR5 F7 self-gating) is **NOT yet realized** — the two-sided "spend Face to attack, risk your own Face" dynamic is Stage 3 (rhetoric-armature) scope. The MECHANICS `face_tracker=WIRED` row is defensible **only** because the underlying Standing is live in resolution; the *Face-attack / strain / Rattled* half is not.
+> This is a representational-honesty statement, not a promise of new mechanics at Stage 1d. See ED-1056.
+
+> **[RESOLVED — Composure-retirement blast radius / Knot coupling (Gate A, 2026-07-01)]**
+> CR3 retires Composure *as the social-contest tracker* and re-homes its buffer role onto **Face**. Per the Stage-1d scope guardrail this retirement is **scoped to the social-contest system only** — Composure references in **knots** (`designs/personal/knots_v30.md` §4.2 "Knot-as-Composure-buffer"; social_contest_v30_infill §4), **combat**, and **conviction** are deliberately NOT rewritten here, because RATIFIED_2026-06-01.md CR3 names only "Composure-as-buffer" in the contest and is silent on corpus-wide retirement.
+> **The coupling:** the Knot-as-Composure-buffer (infill §4 Step 6 / knots_v30 §4.2) lets a Knot partner absorb "Composure damage" *dealt in a social contest*. With the contest buffer renamed Face, that absorption now targets **Face** in-contest — but the knots/threadwork docs still say "Composure". Two candidate resolutions were flagged:
+> (a) **Scoped rename only** (implemented here): in-contest, the Knot absorbs *Face* damage; knots_v30/threadwork keep "Composure" as their own cross-system strain currency, and a single bridging note maps "Composure damage in a contest = Face strain". Minimal blast radius.
+> (b) **Corpus-wide rename** Composure→Face everywhere it denotes social/standing strain (knots, threadwork strain rows, glossary, conviction cross-refs). Larger blast radius, cleaner single name — but exceeds what CR3 ratified and touches unrelated systems.
+> **CONFIRMED by Jordan (Gate A): (a) scoped-rename-only.** No further change made — knots/combat/conviction are NOT touched. This item is closed.
 
 ---
 
@@ -447,7 +483,7 @@ Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 **Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §4.1 (Evidence Track / Findings), §4.3 (+2D Documentary citation).
 
 ### §9.2 Multi-Party Contest — Coalition Structure
-Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (3 × Focus) + (2 × Spirit) at contest setup. [ED-894: Recall removed to match solo Concentration (ED-694); the coalition pool now mirrors the solo formula.] Each exchange depletes the shared pool by 5 (plus 5 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). **Face** and Rattled tracked individually. [CR3/ED-1056: "Composure" re-homed onto the per-orator Face tracker; each coalition member carries their own Face + Rattled.] **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (3 × Focus) + (2 × Spirit) at contest setup. [ED-894: Recall removed to match solo Concentration (ED-694); the coalition pool now mirrors the solo formula.] Each exchange depletes the shared pool by 5 (plus 5 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
 
 ### §9.3 Practitioner Weaving in Contests (R-65)
 A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.
@@ -568,7 +604,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 ### Resolved by this version (PP-234)
 | Item | Resolution |
 |---|---|
-| ED-127 (Composure redesign) | Composure = Charisma × 3 (range 3–21). [ED-898: prior "Charisma + 6" was the pre-ED-694 value; §6/§8 govern with ×3.] |
+| ED-127 (Composure redesign) | Composure = Charisma × 3 (range 3–21). [ED-898: prior "Charisma + 6" was the pre-ED-694 value; §6/§8 govern with ×3.] **[CR3 re-homes this buffer's role onto the Face tracker (ED-1056 provisional, pending Gate-A) — the Charisma×3 buffer is retained but "Composure" as the social-contest tracker name is retired; see §4 Step 6 / §8.]** |
 | Three-genre system | Turfed. Two genres (Memory/Projection). |
 | Faction boost system | Four options (Memory/Projection/Revealing/Obscuring), one per faction. |
 | Fractional multipliers | Replaced with integer bonus dice (+1D primary, +1D audience boost). |

@@ -54,8 +54,9 @@ from .contract import (  # noqa: F401
     A, B, other, Move, FaultState, Adjudicator, Panel, ContestView, Pressure,
 )
 from .primitives import (  # noqa: F401
-    Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
+    Stasis, Appeal, Standing, Face, Reserve, Pool, SelfGating, Leverage, Room,
     Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier, RhetoricalWeights,
+    TRACKERS, RETIRED_TRACKERS, FaceScale,
 )
 from .resolver import (  # noqa: F401
     Bout, Contestant, Venue, run,
@@ -85,8 +86,9 @@ __all__ = [
     "RESISTANCE_DEFAULT", "CONTEST_FATIGUE_PENALTY",
     # kernel surface
     "A", "B", "other", "Move", "FaultState", "Adjudicator", "Panel", "ContestView", "Pressure",
-    "Stasis", "Appeal", "Standing", "Reserve", "Pool", "SelfGating", "Leverage", "Room",
+    "Stasis", "Appeal", "Standing", "Face", "Reserve", "Pool", "SelfGating", "Leverage", "Room",
     "Resonance", "Readiness", "DefeatCatalogue", "EvidenceItem", "Dossier", "RhetoricalWeights",
+    "TRACKERS", "RETIRED_TRACKERS", "FaceScale",
     "Bout", "Contestant", "Venue", "run", "ContestState", "WinCondition", "ThresholdRace",
     "TallyAtClose", "ProofBar", "GraceThreshold", "PersuasionTrack", "VoteAtClose",
     "ContestedMode", "VENUES", "INSTITUTIONAL_MODES", "CROSS_CULTURAL_VENUES",

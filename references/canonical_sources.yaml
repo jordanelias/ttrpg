@@ -161,17 +161,26 @@ systems:
     canonical_sha__designs__provincial__mass_battle_v30_infill_md: "c4639775db4bd15257a01682c37cb4fc1fa98b5e"
     params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
+  # social_debate SHA-pins refreshed 2026-07-01 for the contest Stage 1d / Gate A
+  # CR1/CR2/CR3 fold-in (ED-1055/ED-1056, provisional — pending Jordan Gate-A
+  # ratification). Pins are the git blob OIDs (LF-normalized, as committed),
+  # computed via `git hash-object <file>` — identical to what freshness_gate.py
+  # --update produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs.
+  # social_contest_v30_index.md was REGENERATED this stage (doc_index_gen.py) so its
+  # Line column + token counts track the CR3 §4 Step 6 insertion; its pin below is the
+  # regenerated file's git-hash-object OID (59b011a0…). The canonical v30 pin (5e6ebc8b…)
+  # also moved this stage — the Finding-4 ED-901+ED-902+ED-933 citation fix at §4 Step 6.
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
+    canonical_sha__params__contest_md: "c407b5a70102d3999d88988a942d2dffdf97bda0"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "e3683a1215a6ba5eaf8020e3017a2081ceabbc4a"
+    canonical_sha__designs__scene__social_contest_v30_md: "5e6ebc8bb704716b18412b522cb3ce8ce8be79c3"
     social_contest_index: designs/scene/social_contest_v30_index.md
-    canonical_sha__designs__scene__social_contest_v30_index_md: "601365398399b133b2592b4ae94d1ab61df5445a"
+    canonical_sha__designs__scene__social_contest_v30_index_md: "59b011a0ce7785b633c0b1a6d38585ef7d63659f"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
-    canonical_sha__designs__scene__social_contest_v30_infill_md: "02fd3d7252e6935a18d1790fd349ac48b605fcd8"
+    canonical_sha__designs__scene__social_contest_v30_infill_md: "3878b630d374b2288e7668e1cf468f3a55234b63"
     params: params/contest.md
-    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
+    canonical_sha__params__contest_md: "c407b5a70102d3999d88988a942d2dffdf97bda0"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"

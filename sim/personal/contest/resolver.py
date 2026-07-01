@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from .contract import A, B, other, Move, ContestView, FaultState, Adjudicator, Pressure
 from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier,
-                        RhetoricalWeights)
+                        RhetoricalWeights, FaceScale)
 # Stage 1b: rewired to the ONE canonical σ-kernel (sim.autoload.sigma_leverage), replacing the
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
 # byte-identical at TN7 (parity-tested). roll_net is wrapped below to preserve the kernel's
@@ -149,12 +149,18 @@ class Contestant:
     """Immutable SPEC: faculty, starting standing, reserve cap, evidence items. The Bout builds a fresh
        per-bout runtime (`_Side`) from this and never mutates the spec, so a Contestant is safely reusable
        across bouts. Accepts `dossier=` (its items become the spec) or `evidence=[items]`."""
-    def __init__(self, faculty, standing_start=Standing.START, reserve_max=Reserve.MAX, dossier=None, evidence=None):
+    def __init__(self, faculty, standing_start=Standing.START, reserve_max=Reserve.MAX, dossier=None,
+                evidence=None, charisma=None):
         self.faculty = faculty
         self.standing_start = standing_start
         self.reserve_max = reserve_max
         items = evidence if evidence is not None else (dossier.items if dossier is not None else [])
         self.evidence = tuple(items)
+        # Gate-A Face scale-binding (ED-1056): Charisma is a BUILD-TIME attribute (in player
+        # control), used only to derive Face_current's ceiling (FaceScale.face_max). Optional —
+        # None leaves face_max/face_current unavailable without changing any existing behaviour
+        # (Standing/Reserve/readiness/leak are untouched either way).
+        self.charisma = charisma
 
 class _Side:
     """Per-bout MUTABLE runtime for one contestant, instantiated from a Contestant spec.
@@ -172,9 +178,30 @@ class _Side:
         self.reserve  = Reserve(spec.reserve_max)
         self.fault    = FaultState()
         self.dossier  = Dossier(list(spec.evidence))
+        self.charisma = spec.charisma   # Gate-A Face scale-binding (ED-1056); optional, build-time
     def cred_frac(self):      return (self.credit if self.split else self.standing).frac()
     def rank_v(self):         return (self.rank   if self.split else self.standing).v
     def build_ethos(self, m): (self.credit if self.split else self.standing).build(m)
+    # ── CR3 canonical tracker accessors (RATIFIED_2026-06-01.md CR3) ──────────────────────
+    # Face = the contest-local ethos/standing tracker; canonically it is the fused Standing
+    # (or, when split, the earned Credit — the ethos-built component, NOT ascribed Rank).
+    # Concentration = the per-move stamina pool (Reserve). These are canonical NAMES over the
+    # existing primitives — no new state, so the fused path is bit-identical.
+    @property
+    def face(self):           return self.credit if self.split else self.standing
+    @property
+    def concentration(self):  return self.reserve
+    # ── Gate-A Face scale-binding (ED-1056, resolved 2026-07-01) ───────────────────────────
+    # Derived accessors ON TOP OF the unchanged Face(=Standing) above — they do not read or
+    # write Standing.v differently, they only re-express its existing 0–10 value within the
+    # Charisma-set ceiling. Standing/Readiness/leak behaviour is bit-identical either way.
+    def face_max(self):
+        """Face_max = Charisma × 3 (build-time ceiling; unchanged v30-surface formula)."""
+        return FaceScale.face_max(self.charisma)
+    def face_current(self):
+        """Face_current = round(Standing / 10 × Face_max) — Standing (unchanged) determines
+           position within the Charisma-set ceiling."""
+        return FaceScale.face_current(self.face, self.charisma)
 
 class Bout:
     def __init__(self, ca, cb, venue, adjudicator=None, record=False):

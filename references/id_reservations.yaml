@@ -47,7 +47,7 @@ reservations:
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:
-    ED: { block: "1055-1079", next_free: 1055 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement
+    ED: { block: "1055-1079", next_free: 1057 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement; 1055 (CR1/CR2 + D0-3 HYBRID substrate confirmation) + 1056 (CR3 three-tracker / Face primitive) filed Stage 1d 2026-07-01
     PP: { block: "800-809", next_free: 800 }
 
 # When all three lanes exhaust their blocks, the integration seam allocates the next

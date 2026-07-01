@@ -28,9 +28,9 @@ If the question does not clearly favour one genre, the GM assigns whichever is m
 **Step 2 — Choose:** Each orator selects genre (Memory or Projection) and orientation (Revealing or Obscuring). [ED-897: canonical genre/orientation names; "Past/Future" and "Direct/Indirect" are the pre-PP-234 labels retained only in the rationale above.]
 One orator invokes what has been (Past); the other projects what could become (Future). The fundamental rhetorical collision.
 **OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
-- At strain ≥ Composure: take a **Rattled** mark (Composure resets to full, excess strain carries over).
+- At strain ≥ **Face**: take a **Rattled** mark (Face resets to full, excess strain carries over). [CR3/ED-1056: the Charisma×3 buffer is retained but re-homed onto the Face tracker; "Composure" as the contest-tracker name is retired. See skeleton §4 Step 6 / §8.]
 - At 2 Rattled marks: socially incapacitated — cannot participate in formal social scenes until recovered. Informal conversation still possible.
-- Knot as Composure buffer: redirect Composure damage to a Knot (+1 strain per use). Prevents Rattled but accelerates Knot decay.
+- Knot as Face buffer: redirect **Face** damage (the contest-local standing strain) to a Knot (+1 strain per use). Prevents Rattled but accelerates Knot decay. [CR3/ED-1056: knots_v30 §4.2 still names this the "Knot-as-Composure-buffer"; Composure-retirement is scoped to the contest tracker, so the knots doc is NOT rewritten here — the Knot buffer absorbs *Face* strain when the damage is dealt in a contest. Corpus-wide Composure→Face rename vs scoped-rename-only was an open decision; Jordan CONFIRMED scoped-rename-only at Gate A (skeleton §8 note) — closed, no further change made.]
 ## §5 INITIATIVE
 - Institutional override: in asymmetric proceedings, the institution determines who proposes regardless of Attunement.
 ## §6 POST-CONTEST RESOLUTION
