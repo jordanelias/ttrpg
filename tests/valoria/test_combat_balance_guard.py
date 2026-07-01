@@ -70,3 +70,31 @@ def test_mirror_fairness(weapon):
             a_wins += 1
     rate = a_wins / n
     assert 0.40 <= rate <= 0.60, f"mirror {weapon} A-winrate {rate:.3f} outside [0.40,0.60] — role-symmetry break?"
+
+
+@pytest.mark.parametrize("weapon", ['dagger', 'spear', 'poleaxe', 'longsword', 'mace'])
+def test_heavy_mirror_fair_and_decisive(weapon):
+    """HEAVY-armour mirror — symmetry AND non-degeneracy. The Gate-1 audit + the gap game (2026-06-30) exposed a latent
+    artifact the light-only `test_mirror_fairness` never covered: pre-gap-game, pure-thrust weapons vs plate produced
+    ~65-80% DRAWS (no mode could defeat the harness), so the tiny decided population was first-mover-dominated and a
+    naive mirror read far from 50. This guards BOTH: (a) win-share among decided fights ~50/50 (role-symmetry), and
+    (b) the DECIDED fraction stays healthy (>=0.40) — a regression that re-breaks armour-defeat (every mode failing vs
+    plate -> draw-stalemate) trips (b). Seeded -> deterministic. Current engine decides ~0.98-1.00; the old broken
+    state was ~0.17-0.35 — the 0.40 floor sits robustly between."""
+    np, C, W, CFG = _engine()
+    rng = np.random.default_rng(20260630)
+    n = 300
+    a_wins = decided = 0
+    for _ in range(n):
+        a = C.Combatant('A', weapon=weapon, armor='heavy')
+        b = C.Combatant('B', weapon=weapon, armor='heavy')
+        r = W.fight(a, b, CFG, rng)
+        if r != 0:
+            decided += 1
+            a_wins += (r == 1)
+    frac_decided = decided / n
+    win_share = a_wins / decided if decided else 0.5
+    assert frac_decided >= 0.40, (
+        f"heavy mirror {weapon}: only {frac_decided:.2f} decided — draw-stalemate (armour-defeat broken vs plate?)")
+    assert 0.38 <= win_share <= 0.62, (
+        f"heavy mirror {weapon} A win-share {win_share:.3f} outside [0.38,0.62] — role-symmetry break?")
