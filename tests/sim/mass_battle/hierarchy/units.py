@@ -443,11 +443,26 @@ class Subunit:
                 # to standoff() per nearest true-float pair -- not a flat "-1". This is what actually
                 # delivers "never co-located": a clamp against snapped cells targets a stale integer
                 # position, not where the enemy really is.
+                #
+                # [Stage A, REVISED] enemy_cells_float is now a SYNCHRONIZED both-sides-frozen pre-move
+                # snapshot (orchestration.py), not the enemy's true current position -- so HALVE the
+                # allowed closing distance: each side may claim at most half of the pre-move excess
+                # distance beyond standoff. If both sides independently (each blind to the other's this-
+                # tick move) claim their full half, the combined closure exactly consumes the excess and
+                # the post-move gap is guaranteed >= standoff -- with neither side able to "go first" and
+                # claim the whole budget (the confirmed cause of a severe mirror-matchup first-mover bias
+                # in the unhalved, sequential-snapshot version of this fix). Uniform halving here
+                # (unlike the per-cell clamp below): this is an AGGREGATE cap on the whole subunit's
+                # anchor advance, not a per-violator correction, and letting it move at full speed
+                # toward any halted neighbour let the whole body (and, via rotation, cells that were not
+                # near that neighbour) swing into range of OTHER, non-halted enemies -- confirmed
+                # empirically to make total violations worse, not better. The per-cell clamp below is
+                # the right (localized) place to special-case halted enemies.
                 mine = self.cells_float()
                 if mine:
                     my_reach = reach_for(self.troop_type)
                     allowed = min(math.hypot(mr - er, mc - ec) - standoff_from_reach(my_reach, erch)
-                                  for (mr, mc) in mine for (er, ec, erch) in enemy_cells_float)
+                                  for (mr, mc) in mine for (er, ec, erch, ehalted) in enemy_cells_float) / 2.0
                     step = min(step, max(0, allowed))
             elif enemy_cells:
                 mine = self._node_cells()
@@ -492,26 +507,46 @@ class Subunit:
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
             if FIELD_MOVEMENT and enemy_cells_float:
                 # [Stage A] Per-cell clamp, continuous: pull a candidate that would land WITHIN
-                # standoff() of a true-float enemy cell back to exactly the standoff ring, along the
-                # axis from that enemy cell to the candidate -- shape-preserving (post-hoc; never
-                # touches _node_rel), unlike the OFF/legacy exact-equality test this replaces. If
-                # several enemy cells are violated, clamp against the single worst (nearest-relative-
-                # to-its-own-standoff) violator -- a reasonable, symmetric-per-pair approximation
-                # rather than exact multi-body constraint solving.
+                # standoff() of a true-float enemy cell back toward the standoff ring, along the axis
+                # from that enemy cell to the candidate -- shape-preserving (post-hoc; never touches
+                # _node_rel), unlike the OFF/legacy exact-equality test this replaces. If several enemy
+                # cells are violated, clamp against the single worst (nearest-relative-to-its-own-
+                # standoff) violator -- a reasonable, symmetric-per-pair approximation rather than exact
+                # multi-body constraint solving.
+                #
+                # [Stage A, REVISED] enemy_cells_float is the synchronized both-sides-frozen pre-move
+                # snapshot (orchestration.py) -- HALVE the correction against each violator (pull back
+                # only halfway to the standoff ring, not all the way): each side independently corrects
+                # against the other's pre-move position, so a FULL pull-back double-corrects when both
+                # sides do it, which is exactly what reintroduced co-location (confirmed empirically)
+                # when only the anchor cap was halved.
+                #
+                # ITERATE, don't single-shot: correcting against only the single worst violator can
+                # still leave the candidate within standoff of a SECOND violator (confirmed empirically
+                # -- a rotating envelop maneuver, dense with nearby enemy cells, still showed rare
+                # violations with a single-shot worst-violator correction). Re-find and re-correct the
+                # worst remaining violator up to a few passes; a bounded loop, not exact multi-body
+                # constraint solving, but converges in practice for the small violator counts a single
+                # cell actually faces.
+                #
                 my_reach = reach_for(self.troop_type)
-                worst = None  # (violation, er, ec, sd, dist)
-                for (er, ec, erch) in enemy_cells_float:
-                    sd = standoff_from_reach(my_reach, erch)
-                    dist = math.hypot(nr - er, nc - ec)
-                    violation = dist - sd
-                    if violation < 0 and (worst is None or violation < worst[0]):
-                        worst = (violation, er, ec, sd, dist)
-                if worst is not None:
+                for _pass in range(4):
+                    worst = None  # (violation, er, ec, sd, dist)
+                    for (er, ec, erch, ehalted) in enemy_cells_float:
+                        sd = standoff_from_reach(my_reach, erch)
+                        dist = math.hypot(nr - er, nc - ec)
+                        violation = dist - sd
+                        if violation < 0 and (worst is None or violation < worst[0]):
+                            worst = (violation, er, ec, sd, dist)
+                    if worst is None:
+                        break
                     _, er, ec, sd, dist = worst
                     if dist > 1e-9:  # [canonical: epsilon: float magnitude guard]
-                        nr, nc = er + (nr - er) / dist * sd, ec + (nc - ec) / dist * sd
+                        _half_sd = (dist + sd) / 2.0
+                        nr, nc = er + (nr - er) / dist * _half_sd, ec + (nc - ec) / dist * _half_sd
                     else:
                         nr, nc = cr, cc  # degenerate exact-overlap: hold at prior position
+                        break
             elif enemy_cells:
                 # [migration P] OFF = verbatim int(round) grid-membership probe; ON (no float data supplied,
                 # i.e. FIELD_MOVEMENT off but PC_NODE_COHESION on) = file-binned probe matching the
