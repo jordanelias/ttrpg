@@ -297,3 +297,12 @@ Archived entries in tests/coverage_matrix_archive.md
 - G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851); comments + data only. Fabrication
   gate: orchestration.py 4→0. Spec + verification from the coordinate-field-impl-spec workflow (13 agents;
   the debt agent applied + bat.py-verified this exact resolution). Coordinate-migration plan DEBT-0.
+
+## 2026-07-01 — Migration S2: Euclidean distance on the field [FIELD_MOVEMENT; byte-exact OFF]
+- `_atom_distance` (orchestration, now DEBT-0-clean), node vector-halt + kite (units) use `math.hypot`
+  when FIELD_MOVEMENT is ON (Chebyshev `max()` when OFF) → circular range rings, retiring the √2
+  "free diagonal" bias (movement review 06, finding 1). Wiring verified: OFF (0,0)-(3,4)=4 Chebyshev,
+  ON=5.0 Euclidean. Adversarially SOUND (impl-spec workflow distance verdict).
+- G5 byte-exact OFF both modes (unit 7be8499b / cell 1c5b2851). Inert for the current bat.py battery
+  (ranged matchup approaches orthogonally, Chebyshev==Euclidean); activates on diagonal approaches +
+  the field-ON path (gauge / later stages). Coordinate-migration plan S2.
