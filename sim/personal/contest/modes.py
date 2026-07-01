@@ -13,7 +13,8 @@ are identical across them; only the imposed conditions differ.
 Genuinely different sub-systems (dyadic counsel, negotiation, ceremonial) remain scaffolds.
 """
 from .contract import Adjudicator, Panel
-from .resolver import Contestant, Venue, run, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, VoteAtClose
+from .resolver import (Contestant, Venue, run, ThresholdRace, TallyAtClose, ProofBar,
+                       GraceThreshold, VoteAtClose, PersuasionTrack)
 from .primitives import Stasis, Standing, DefeatCatalogue
 
 def court_venue(**o):
@@ -287,3 +288,192 @@ class NegotiationMode:
 class CeremonialMode:
     """SCAFFOLD. Nothing at issue (the corpus's point); builds/spends standing; win = acclamation. To build."""
     def play(self, *a, **k): raise NotImplementedError("ceremonial is a separate sub-system — scaffold only")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# CANONICAL v30 RE-SKIN (Stage 1c) — the 8 canonical PROCEEDINGS + 4 canonical
+# ADJUDICATOR types, read verbatim from params/contest.md (§Proceeding Types table)
+# + social_contest_v30.md §2 (GM Setup) / §3 (Argue Pool). This is a SURFACE re-skin
+# over the groundup mechanical substrate above. Every CANONICAL parameter — the 8
+# proceedings' {exchanges, roles, resistance modifier, adjudicator type, track start}
+# and the 4 adjudicator→primary-attribute mappings — traces to a cited canonical row.
+# BUT canon fixes ONLY those; it does NOT specify any adjudicator discipline or
+# proof/character profile (social_contest_v30 §2 Step 1 / §3 fix the primary ATTRIBUTE
+# only). The discipline/char_* literals in the adjudicator constructors below are
+# therefore NOT canonical — they are [SEED] calibration values (Jordan to set), tagged
+# as such at each constructor, exactly as the groundup presets above are. The generic
+# groundup presets (court / disputation / assembly / appeal / institutional /
+# cross-cultural) stay UNTOUCHED as the mechanical library; these are the named
+# canonical faces the game exposes.
+#
+# GM-REMOVAL: canon says "GM SETUP" (§2) but there is no GM in Valoria — the ENGINE
+# resolves. The §2 "GM setup" choices (adjudicator type, exchange count, resistance
+# modifier, track start) become VENUE-INTRINSIC parameters here, fixed by the named
+# proceeding, so the wrapper (wrapper.py) sets them from the proceeding, never a GM.
+#
+# MAPPING (canonical name  <-  groundup mechanism it re-skins):
+#   Adjudicator types (social_contest_v30 §2 Step 1 / §3 Argue Pool):
+#     Expert Judge    -> single Adjudicator, primary attribute COGNITION
+#     Crowd           -> Panel (collective), primary attribute CHARISMA
+#     No Adjudicator  -> single Adjudicator (the parties themselves), primary ATTUNEMENT
+#     Panel           -> Panel, primary attribute COGNITION (ED-137 provisional: use Expert Judge)
+#   Proceedings (params/contest.md §Proceeding Types  +  social_contest_v30 §2 Step 5):
+#     see PROCEEDINGS table below; each carries {exchanges, roles, resistance_mod, adjudicator, track_start}.
+#
+# Win-condition: ALL canonical proceedings that use the tracker resolve on the canonical
+# Persuasion Track banding (params/contest.md §Persuasion Track: >=9 A_total, >=7 A_decisive,
+# 4-6 committee, <=3 B_decisive, <=1 B_total). The remainder fall back to exchange-majority
+# TallyAtClose (social_contest_v30 §2 Step 4: "If not used, winner determined by exchange majority").
+#
+# TRACKER TRI-STATE (social_contest_v30 §2 Step 4/5 distinguishes THREE cases; the params/contest.md
+# §Proceeding Types table collapses the last two to a bare "N/A", so this reads §2 which carries the
+# distinction — scope item 1 mandates reading BOTH sources):
+#   "required" — Formal/Grand Contest, Royal Audience, Church Tribunal, Guild Arbitration: the
+#                Persuasion Track is always used (adjudicated proceedings).
+#   "none"     — Casual Dispute: social_contest_v30:87 "N/A (no tracker)" — the track is never used;
+#                always exchange-majority TallyAtClose.
+#   "optional" — Private Negotiation, Personal Appeal: social_contest_v30:88-89 "N/A (tracker optional)"
+#                + :76 "With no adjudicator (private negotiation, personal appeal): Persuasion Track is
+#                optional." The track is AVAILABLE but OFF BY DEFAULT — DEFAULTS to exchange-majority
+#                TallyAtClose (so behavior is unchanged), and a caller may opt IN to the tracker via the
+#                use_tracker= build param (proceeding_venue/proceeding_mode/build_contest).
+# `tracker` (bool) is the DEFAULT-ACTIVE flag the venue builder reads (True => PersuasionTrack by
+# default; False => TallyAtClose by default). `tracker_mode` names the canonical tri-state above; only
+# "optional" proceedings honour the use_tracker opt-in.
+
+# ── Canonical adjudicator types (social_contest_v30 §2 Step 1 + §3 Argue Pool) ──
+# ADJUDICATOR_PRIMARY: the primary attribute the Argue pool doubles, per adjudicator type
+# (social_contest_v30 §3 Argue Pool table). This mapping IS canonical. The wrapper reads it
+# to build (PrimaryAttr×2)+H.
+#
+# ⚠ CANON BOUNDARY: canon fixes the primary ATTRIBUTE per adjudicator type and NOTHING ELSE
+# about the adjudicator — social_contest_v30 §2 Step 1 (adjudicator table) + §3 (Argue Pool
+# table) define no discipline value and no proof/character (ethos/pathos/logos) weighting.
+# The `discipline=` and `char_*=` literals in the four constructors below are LIVE in the
+# agon resolution path (resolver reads adj.discipline + adj.character()), so they are NOT
+# cosmetic — but they are [SEED] calibration values, NOT canon. Each is tagged [SEED] at its
+# constructor; Jordan calibrates. (These mirror the discipline/character shape of the groundup
+# presets above, which are likewise [SEED].)
+ADJUDICATOR_PRIMARY = {
+    "expert_judge":   "Cognition",   # §3: "Judge evaluates logical structure"
+    "crowd":          "Charisma",    # §3: "Crowd responds to delivery and authority"
+    "no_adjudicator": "Attunement",  # §3: "You must read the other party and calibrate"
+    "panel":          "Cognition",   # §3 [PROVISIONAL — ED-137: use Expert Judge until designed]
+}
+
+def expert_judge(**o):
+    """Canonical 'Expert judge' (§2 Step 1): a single authority evaluating on merits; Cognition-primary
+       (the ONLY canonical fact — see ADJUDICATOR_PRIMARY). Re-skins a single learned Adjudicator.
+       [SEED] discipline=0.75, char_logos/ethos/pathos=0.55/0.25/0.20 (logos-leaning: evaluates logical
+       structure) are calibration values, NOT canon — Jordan to set. LIVE in resolution."""
+    return Adjudicator(learned=True, discipline=0.75, char_logos=0.55, char_ethos=0.25, char_pathos=0.20, **o)
+
+def crowd(size=15, **o):
+    """Canonical 'Crowd' (§2 Step 1): a collective audience reacting to delivery/force; Charisma-primary
+       (the ONLY canonical fact). Re-skins a Panel (collective) of pathos/ethos-leaning members.
+       [SEED] size=15, discipline=0.30, char_pathos/ethos/logos=0.55/0.30/0.15 are calibration values,
+       NOT canon — Jordan to set. LIVE in resolution (shapes the resolved band distribution)."""
+    return Panel(tuple(Adjudicator(learned=False, discipline=0.30,
+                                   char_pathos=0.55, char_ethos=0.30, char_logos=0.15, **o)
+                       for _ in range(size)))
+
+def no_adjudicator(**o):
+    """Canonical 'No adjudicator' (§2 Step 1): the parties themselves decide; Attunement-primary
+       (the ONLY canonical fact). Re-skins a single low-discipline neutral Adjudicator (character
+       leaks — the counterpart is read). [SEED] discipline=0.30, char_ethos/pathos/logos=neutral
+       0.34/0.33/0.33 are calibration values, NOT canon — Jordan to set. LIVE in resolution."""
+    return Adjudicator(learned=True, discipline=0.30, char_ethos=0.34, char_pathos=0.33, char_logos=0.33, **o)
+
+def panel(size=5, **o):
+    """Canonical 'Panel' (§2 Step 1): multiple individual judges deliberating; Cognition-primary
+       (the ONLY canonical fact). ED-137 provisional: mechanically use the Expert-Judge profile per
+       juror (a bench of expert judges) — so the [SEED] profile is expert_judge's, inherited. [SEED]
+       size=5 is a calibration value, NOT canon — Jordan to set. LIVE in resolution."""
+    return Panel(tuple(expert_judge(**o) for _ in range(size)))
+
+CANONICAL_ADJUDICATORS = {
+    "expert_judge":   expert_judge,
+    "crowd":          crowd,
+    "no_adjudicator": no_adjudicator,
+    "panel":          panel,
+}
+
+# ── Canonical Persuasion-Track resistance (params/contest.md §Persuasion Track) ──
+# "Audience resistance: average Stability of factions (round up) − 1, minimum 0." The proceeding's
+# resistance MODIFIER (Standard / Halved / N/A) scales the base; here it is carried as a proceeding
+# attribute (PROCEEDINGS[...]['resistance']) for the wrapper — the numeric resistance is derived from
+# world Stability at build_contest time, not fabricated here.
+CANONICAL_TRACK_START = 5.0   # params/contest.md §Persuasion Track: "Starting position ... (typical: 5)."
+CHURCH_TRIBUNAL_TRACK_START = 6.0  # social_contest_v30 §7: "Persuasion Track starts biased at 6" (accused disadvantaged).
+
+# PROCEEDINGS: the 8 canonical proceeding specs. Every field cites params/contest.md §Proceeding Types
+# (Exchanges / Roles / Resistance Mod / Adjudicator) + social_contest_v30 §2 Step 4-5 (track start).
+# `exchanges` is a (min, max) pair; the venue budget uses max (the Bout runs up to budget exchanges,
+# resolving early on a clinch/threshold). `tracker` (bool) is the DEFAULT-ACTIVE flag (True =>
+# PersuasionTrack by default; False => TallyAtClose by default). `tracker_mode` names the canonical
+# tri-state ("required"/"none"/"optional" — see header): "optional" proceedings are tracker-OFF by
+# default (tracker=False) but honour the use_tracker= opt-in.
+PROCEEDINGS = {
+    "formal_contest": dict(       # params/contest.md: "Formal Contest | 3 | Alternating | Standard | Crowd"
+        exchanges=(3, 3), roles="alternating", resistance="standard",
+        adjudicator="crowd", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
+    "grand_contest": dict(        # "Grand Contest | 5 | Alternating | Standard | Crowd"
+        exchanges=(5, 5), roles="alternating", resistance="standard",
+        adjudicator="crowd", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
+    "royal_audience": dict(       # "Royal Audience | 3 | Crown objects | Halved for petitioner | Expert Judge"
+        exchanges=(3, 3), roles="crown_objects", resistance="halved_petitioner",
+        adjudicator="expert_judge", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
+    "church_tribunal": dict(      # "Church Tribunal | 1–5 | Inquisitor proposes | Halved for accused | Expert Judge"
+        exchanges=(1, 5), roles="inquisitor_proposes", resistance="halved_accused",
+        adjudicator="expert_judge", track_start=CHURCH_TRIBUNAL_TRACK_START, tracker=True,
+        tracker_mode="required"),  # §7: track starts biased at 6
+    "guild_arbitration": dict(    # "Guild Arbitration | 3 | Symmetric | Standard | Expert Judge"
+        exchanges=(3, 3), roles="symmetric", resistance="standard",
+        adjudicator="expert_judge", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
+    "casual_dispute": dict(       # "Casual Dispute | 1 | Initiator proposes | N/A | No Adjudicator"
+        exchanges=(1, 1), roles="initiator_proposes", resistance="none",  # social_contest_v30:87 "N/A (no tracker)"
+        adjudicator="no_adjudicator", track_start=CANONICAL_TRACK_START, tracker=False, tracker_mode="none"),
+    "private_negotiation": dict(  # "Private Negotiation | 1–3 | Symmetric | N/A | No Adjudicator"
+        exchanges=(1, 3), roles="symmetric", resistance="none",  # social_contest_v30:88 "N/A (tracker optional)"
+        adjudicator="no_adjudicator", track_start=CANONICAL_TRACK_START, tracker=False, tracker_mode="optional"),
+    "personal_appeal": dict(      # "Personal Appeal | 1 | Appealer proposes | N/A | No Adjudicator"
+        exchanges=(1, 1), roles="appealer_proposes", resistance="none",  # social_contest_v30:89 "N/A (tracker optional)"
+        adjudicator="no_adjudicator", track_start=CANONICAL_TRACK_START, tracker=False, tracker_mode="optional"),
+}
+
+def _use_tracker(spec, use_tracker):
+    """Resolve the tri-state tracker choice for a proceeding (social_contest_v30 §2 Step 4/5).
+       DEFAULT (use_tracker=None) preserves behavior: `tracker` bool decides (True=>track, False=>tally).
+       For a "optional" proceeding (Private Negotiation / Personal Appeal — §2:88-89 "N/A (tracker
+       optional)"), a caller may pass use_tracker=True to opt IN to the Persuasion Track, or =False to
+       force the exchange-majority fallback. "none" (Casual Dispute — §2:87 "N/A (no tracker)") and
+       "required" proceedings reject the opt-in: the tracker is fixed by canon, not the caller."""
+    mode = spec.get("tracker_mode", "required" if spec["tracker"] else "none")
+    if use_tracker is None:
+        return spec["tracker"]                        # behavior-preserving default
+    if mode != "optional":
+        raise ValueError(f"use_tracker is only honoured by 'optional' proceedings "
+                         f"(social_contest_v30 §2:88-89); this proceeding is tracker_mode={mode!r}")
+    return bool(use_tracker)
+
+def proceeding_venue(name, *, use_tracker=None, **o):
+    """Build the Venue for a canonical proceeding. Exchange count -> venue budget (max of the range).
+       Tracker choice is the canonical tri-state (social_contest_v30 §2 Step 4/5): "required" => always
+       PersuasionTrack; "none" => always exchange-majority TallyAtClose; "optional" (Private Negotiation
+       / Personal Appeal) => TallyAtClose BY DEFAULT, or PersuasionTrack when the caller opts in via
+       use_tracker=True. Proof/temporal registers are NOT re-invented — a proceeding inherits the
+       groundup default register unless a caller overrides. RESOLVES NOTHING."""
+    spec = PROCEEDINGS[name]
+    budget = spec["exchanges"][1]
+    win = PersuasionTrack(start=spec["track_start"]) if _use_tracker(spec, use_tracker) else TallyAtClose()
+    return Venue(budget=budget, win=win, **o)
+
+def proceeding_mode(name, *, use_tracker=None, **o):
+    """ContestedMode for a canonical proceeding, pairing its Venue with its canonical adjudicator type.
+       `use_tracker` opts an "optional" proceeding in to the Persuasion Track (see proceeding_venue)."""
+    adj_key = PROCEEDINGS[name]["adjudicator"]
+    adj = CANONICAL_ADJUDICATORS[adj_key]()
+    return ContestedMode(venue=proceeding_venue(name, use_tracker=use_tracker, **o), adjudicator=adj)
+
+# The registry the wrapper routes canonical proceeding names through.
+CANONICAL_PROCEEDINGS = {name: (lambda n=name, **o: proceeding_mode(n, **o)) for name in PROCEEDINGS}

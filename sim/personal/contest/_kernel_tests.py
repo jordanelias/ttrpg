@@ -450,5 +450,231 @@ for _s in range(_N):
     if NAR.summarize(_b.log, _w, _y).shape == "SPLIT_DECISION": _sp += 1
 ck(f"ballotta: secret_council yields SPLIT_DECISION verdicts ({_sp/_N:.3f})", 0.03 < _sp/_N < 0.40)
 
+# ═════════════════════════════════════════════════════════════════════════════
+# STAGE 1c — CANONICAL v30 RE-SKIN: the 8 proceedings + 4 adjudicator types, wired
+# to the Persuasion-Track banding, and the build_contest/resolve_contest wrapper.
+# These are ADDED checks (the 151 above are behavior-preserved verbatim); every
+# assertion below is a surface check on the re-skin, no new mechanic.
+print("== canonical adjudicator re-skin (social_contest_v30 §2 Step 1 / §3) ==")
+from .modes import (CANONICAL_ADJUDICATORS, ADJUDICATOR_PRIMARY, PROCEEDINGS,
+                    CANONICAL_PROCEEDINGS, proceeding_venue, proceeding_mode)
+from .resolver import PersuasionTrack, TallyAtClose
+from .contract import Adjudicator as _Adj, Panel as _Pan
+ck("canon adjudicators are exactly the four (Expert Judge/Crowd/No Adjudicator/Panel)",
+   set(CANONICAL_ADJUDICATORS) == {"expert_judge", "crowd", "no_adjudicator", "panel"})
+ck("canon adjudicator primary-attribute map (Cognition/Charisma/Attunement/Cognition)",
+   ADJUDICATOR_PRIMARY == {"expert_judge":"Cognition","crowd":"Charisma",
+                           "no_adjudicator":"Attunement","panel":"Cognition"})
+ck("Expert Judge is a single learned adjudicator", isinstance(CANONICAL_ADJUDICATORS["expert_judge"](), _Adj))
+ck("Crowd is a collective (Panel)", isinstance(CANONICAL_ADJUDICATORS["crowd"](), _Pan))
+ck("No Adjudicator is a single adjudicator (the parties themselves)", isinstance(CANONICAL_ADJUDICATORS["no_adjudicator"](), _Adj))
+ck("Panel is a collective (Panel)", isinstance(CANONICAL_ADJUDICATORS["panel"](), _Pan))
+# ── CANON-BOUNDARY GUARD (revision, judge-upheld finding) ──────────────────────
+# Canon (social_contest_v30 §2 Step 1 / §3) fixes ONLY the primary-attribute mapping per
+# adjudicator type; it defines NO discipline or proof/character profile. The discipline/char_*
+# literals in the four constructors ARE live in resolution, so they must be tagged [SEED] (not
+# canon), and the re-skin header must NOT claim "NO number is invented". These assertions read
+# the source of modes.py to enforce both — so the fabrication cannot silently return.
+import inspect as _inspect, re as _re
+from . import modes as _modes_mod
+_src = _inspect.getsource(_modes_mod)
+_reskin = _src[_src.index("CANONICAL v30 RE-SKIN (Stage 1c)"):]
+for _fn in ("expert_judge", "crowd", "no_adjudicator"):
+    _body = _inspect.getsource(getattr(_modes_mod, _fn))
+    _has_profile = ("discipline=" in _body) and ("char_" in _body)
+    ck(f"adjudicator '{_fn}' carries a live discipline/character profile", _has_profile)
+    ck(f"adjudicator '{_fn}' [SEED]-tags its non-canonical profile", "[SEED]" in _body)
+ck("re-skin header no longer claims 'NO number is invented' (the discipline profiles are [SEED])",
+   "NO number is invented" not in _reskin)
+ck("re-skin header states canon fixes ONLY the primary attribute (canon boundary is explicit)",
+   "primary attribute" in _reskin.lower() and "[SEED]" in _reskin)
+
+print("== canonical proceeding re-skin (params/contest.md §Proceeding Types) ==")
+ck("canon proceedings are exactly the eight",
+   set(PROCEEDINGS) == {"formal_contest","grand_contest","royal_audience","church_tribunal",
+                        "guild_arbitration","casual_dispute","private_negotiation","personal_appeal"})
+# Exchange counts (params/contest.md §Proceeding Types Exchanges column -> venue budget = max of range)
+ck("Formal Contest = 3 exchanges, Crowd, tracked",
+   proceeding_venue("formal_contest").budget == 3 and PROCEEDINGS["formal_contest"]["adjudicator"]=="crowd"
+   and isinstance(proceeding_venue("formal_contest").win, PersuasionTrack))
+ck("Grand Contest = 5 exchanges, Crowd, tracked",
+   proceeding_venue("grand_contest").budget == 5 and PROCEEDINGS["grand_contest"]["adjudicator"]=="crowd")
+ck("Royal Audience = 3 exchanges, Expert Judge, halved-petitioner resistance",
+   proceeding_venue("royal_audience").budget == 3 and PROCEEDINGS["royal_audience"]["adjudicator"]=="expert_judge"
+   and PROCEEDINGS["royal_audience"]["resistance"]=="halved_petitioner")
+ck("Church Tribunal = 1-5 exchanges (budget 5), Expert Judge, track starts biased at 6 (§7)",
+   proceeding_venue("church_tribunal").budget == 5 and PROCEEDINGS["church_tribunal"]["adjudicator"]=="expert_judge"
+   and proceeding_venue("church_tribunal").win.start == 6.0)
+ck("Guild Arbitration = 3 exchanges, Expert Judge, Symmetric",
+   proceeding_venue("guild_arbitration").budget == 3 and PROCEEDINGS["guild_arbitration"]["adjudicator"]=="expert_judge"
+   and PROCEEDINGS["guild_arbitration"]["roles"]=="symmetric")
+ck("Casual Dispute = 1 exchange, No Adjudicator, tracker_mode='none' (default exchange-majority TallyAtClose)",
+   proceeding_venue("casual_dispute").budget == 1 and PROCEEDINGS["casual_dispute"]["adjudicator"]=="no_adjudicator"
+   and PROCEEDINGS["casual_dispute"]["tracker_mode"]=="none"
+   and isinstance(proceeding_venue("casual_dispute").win, TallyAtClose))
+ck("Private Negotiation = 1-3 exchanges (budget 3), No Adjudicator, tracker_mode='optional' (default TallyAtClose)",
+   proceeding_venue("private_negotiation").budget == 3 and PROCEEDINGS["private_negotiation"]["adjudicator"]=="no_adjudicator"
+   and PROCEEDINGS["private_negotiation"]["tracker_mode"]=="optional"
+   and isinstance(proceeding_venue("private_negotiation").win, TallyAtClose))
+ck("Personal Appeal = 1 exchange, No Adjudicator, tracker_mode='optional' (default TallyAtClose)",
+   proceeding_venue("personal_appeal").budget == 1 and PROCEEDINGS["personal_appeal"]["adjudicator"]=="no_adjudicator"
+   and PROCEEDINGS["personal_appeal"]["tracker_mode"]=="optional"
+   and isinstance(proceeding_venue("personal_appeal").win, TallyAtClose))
+# ── Tracker TRI-STATE (F: judge-upheld) — social_contest_v30 §2 Step 4/5 distinguishes THREE cases,
+# collapsed to bare "N/A" only in params/contest.md; §2:87 "N/A (no tracker)" vs :88-89 "N/A (tracker
+# optional)" + :76. The re-skin must carry the distinction, not flatten optional -> none. ──
+ck("tracker_mode is exactly the canonical tri-state over the 8 proceedings",
+   {PROCEEDINGS[p]["tracker_mode"] for p in PROCEEDINGS} == {"required","none","optional"})
+ck("only Private Negotiation + Personal Appeal are tracker_mode='optional' (§2:88-89)",
+   {p for p in PROCEEDINGS if PROCEEDINGS[p]["tracker_mode"]=="optional"}
+   == {"private_negotiation","personal_appeal"})
+ck("only Casual Dispute is tracker_mode='none' (§2:87 'no tracker')",
+   {p for p in PROCEEDINGS if PROCEEDINGS[p]["tracker_mode"]=="none"} == {"casual_dispute"})
+# behavior-preserving DEFAULT: optional proceedings default to exchange-majority TallyAtClose (unchanged)
+ck("F: optional proceeding DEFAULTS to TallyAtClose (behavior-preserving)",
+   isinstance(proceeding_venue("private_negotiation").win, TallyAtClose)
+   and isinstance(proceeding_venue("personal_appeal").win, TallyAtClose))
+# opt-IN: use_tracker=True on an optional proceeding wires the Persuasion Track at its track_start
+ck("F: optional proceeding OPTS IN to the Persuasion Track via use_tracker=True (§2:76)",
+   isinstance(proceeding_venue("private_negotiation", use_tracker=True).win, PersuasionTrack)
+   and proceeding_venue("private_negotiation", use_tracker=True).win.start == 5.0)
+ck("F: optional proceeding use_tracker=False forces the exchange-majority fallback",
+   isinstance(proceeding_venue("personal_appeal", use_tracker=False).win, TallyAtClose))
+# canon boundary: 'none' and 'required' proceedings REJECT the opt-in (tracker fixed by canon, not caller)
+def _rejects_opt_in(_name):
+    try: proceeding_venue(_name, use_tracker=True); return False
+    except ValueError: return True
+ck("F: Casual Dispute ('none') rejects use_tracker (tracker fixed by canon, §2:87)",
+   _rejects_opt_in("casual_dispute"))
+ck("F: Formal Contest ('required') rejects use_tracker (tracker fixed by canon)",
+   _rejects_opt_in("formal_contest"))
+# every tracked proceeding resolves into a canonical Persuasion-Track band; untracked into a/b/draw
+_BANDS = {"A_total","A_decisive","committee","B_decisive","B_total"}
+for _pn in PROCEEDINGS:
+    random.seed(11); _w, _ = proceeding_mode(_pn).play(5, 4, LOG, LOG)
+    if PROCEEDINGS[_pn]["tracker"]:
+        ck(f"proceeding {_pn} resolves to a canonical Persuasion-Track band", _w in _BANDS)
+    else:
+        ck(f"untracked proceeding {_pn} resolves to exchange-majority verdict", _w in ("a","b","draw"))
+
+print("== wrapper: build_contest ADAPTER + resolve_contest ROUTER (RESOLVES NOTHING) ==")
+from .wrapper import (build_contest as BC, resolve_contest as RC, GAMES as GM,
+                      MECHANICS as MECH, mechanics_selftest as MST, Contest as _Contest)
+_ok, _missing = MST()
+ck(f"wrapper MECHANICS self-test: every WIRED mechanic resolves (missing {_missing})", _ok)
+# F10 (judge-upheld): audience_resistance is DERIVED but NOT plumbed into resolution, so it must NOT
+# claim WIRED (that over-claimed a live mechanic). It is PARTIAL — metadata-only — until the reserved
+# ED stub (contest_rebuild, ED-1055..1079) wires it into the tracker/Venue.base_ob.
+ck("F10: audience_resistance is PARTIAL (derived, not yet plumbed) — not over-claimed as WIRED",
+   MECH["audience_resistance"]["status"] == "PARTIAL")
+import inspect as _inspect
+from . import resolver as _resolver_mod
+ck("F10: the resolver genuinely reads no 'resistance' (metadata-only claim is truthful)",
+   "resistance" not in _inspect.getsource(_resolver_mod))
+# build_contest is an adapter: it builds a Contest spec, resolves nothing
+_bc = BC(4, 4, venue="formal_contest", world={"stabilities":[3,4]})
+ck("build_contest returns an unresolved Contest spec", isinstance(_bc, _Contest))
+ck("build_contest folds §2 setup into the proceeding (adjudicator=crowd, primary=Charisma)",
+   _bc.adjudicator_type == "crowd" and _bc.primary_attribute == "Charisma")
+ck("build_contest carries the proceeding exchange count as venue budget", _bc.venue.budget == 3)
+ck("build_contest track_start is the canonical neutral 5", _bc.track_start == 5.0)
+# audience resistance derived from world Stability: ceil((3+4)/2)-1 = 3 (params/contest.md §Persuasion Track)
+ck("build_contest derives audience resistance from world Stability (avg round-up −1)", _bc.resistance == 3)
+# halved-modifier proceeding halves it (ROUND UP per social_contest_v30 §7:320): ceil(6.5)-1=6, ceil(6/2)=3
+_bh = BC(4,4, venue="royal_audience", world={"stabilities":[6,7]})
+ck("build_contest halves resistance for a halved-modifier proceeding (Royal Audience)", _bh.resistance == 3)
+# F1 regression (judge-upheld): ODD base must round UP, not floor. stabilities=[3,4] -> base=ceil(3.5)-1=3;
+# canon "halved (round up)" => ceil(3/2)=2 (floor would wrongly give 1). Masked before because the only
+# halved test used base=6 where floor==ceil.
+_bodd = BC(4,4, venue="royal_audience", world={"stabilities":[3,4]})
+ck("F1: halved resistance ROUNDS UP for odd base ([3,4]->base3->2, not floor 1)", _bodd.resistance == 2)
+_bodd2 = BC(4,4, venue="church_tribunal", world={"stabilities":[2,2]})
+ck("F1: halved resistance ROUNDS UP, base 1 -> 1 (not floor 0)", _bodd2.resistance == 1)
+# untracked proceeding has no derived resistance
+ck("untracked proceeding carries no audience resistance (N/A)", BC(4,4,venue="casual_dispute").resistance is None)
+# F (judge-upheld): build_contest threads the tracker tri-state opt-in for OPTIONAL proceedings.
+# Default is behavior-preserving (TallyAtClose); use_tracker=True opts into the Persuasion Track.
+ck("F: build_contest optional proceeding DEFAULTS to TallyAtClose (behavior-preserving)",
+   isinstance(BC(4,4,venue="private_negotiation").venue.win, TallyAtClose))
+ck("F: build_contest use_tracker=True opts an optional proceeding into the Persuasion Track",
+   isinstance(BC(4,4,venue="personal_appeal", use_tracker=True).venue.win, PersuasionTrack))
+def _bc_rejects(**kw):
+    try: BC(4,4, **kw); return False
+    except ValueError: return True
+ck("F: build_contest rejects use_tracker on a 'none' proceeding (Casual Dispute)",
+   _bc_rejects(venue="casual_dispute", use_tracker=True))
+ck("F: build_contest rejects use_tracker on a 'required' proceeding (Formal Contest)",
+   _bc_rejects(venue="formal_contest", use_tracker=True))
+ck("F: build_contest rejects use_tracker with a prebuilt Venue (tri-state lives on the proceeding)",
+   _bc_rejects(venue=proceeding_venue("guild_arbitration"), use_tracker=True))
+# resolve_contest is a router: agon wired, others stubbed
+random.seed(101); (_res, _bt) = RC(_bc, game="agon", policy_a="logos", policy_b="logos")
+ck("resolve_contest(game='agon') resolves to a Persuasion-Track band", _res[0] in _BANDS)
+ck("resolve_contest returns ((band,reason), bout)", isinstance(_res, tuple) and hasattr(_bt, "state"))
+ck("GAMES table: agon WIRED; consensus/negotiation/inquiry STUB",
+   GM["agon"]["status"]=="WIRED" and all(GM[g]["status"]=="STUB" for g in ("consensus","negotiation","inquiry")))
+for _g in ("consensus","negotiation","inquiry"):
+    try: RC(_bc, game=_g); ck(f"resolve_contest(game={_g!r}) is a stub (raises)", False)
+    except NotImplementedError: ck(f"resolve_contest(game={_g!r}) is a stub (raises)", True)
+# adapter coerces heterogeneous side specs (Contestant / int / dict-with-evidence)
+_bd = BC({"faculty":5,"standing_start":6}, 3, venue="grand_contest")
+ck("build_contest adapts int + dict side specs", _bd.side_a.faculty == 5 and _bd.side_b.faculty == 3)
+# a prebuilt Venue passes through the router unchanged
+_bv = BC(4,4, venue=proceeding_venue("guild_arbitration"), adjudicator="expert_judge")
+random.seed(5); (_rv,_) = RC(_bv, game="agon")
+ck("build_contest accepts a prebuilt Venue + named adjudicator type", _rv[0] in _BANDS and _bv.adjudicator_type=="expert_judge")
+
+print("== golden-trace parity: fixed seed+policy => PINNED per-exchange track sequence ==")
+# F4/F7 fix (judge-upheld): the parity gate must assert against a PINNED expected sequence, not against
+# a second self-computed run (which only checks determinism and lets any agôn-path number drift — a
+# MERIT_SCALE change — slip through). GOLDEN_TRACE below is the canonical per-exchange (advA,advB,track)
+# literal captured at seed 20260630 / policy logos-vs-logos on the 'grand_contest' proceeding. Any silent
+# drift in the re-skinned agôn path now flips this assertion red. Regenerate ONLY via a ledger-cited
+# mechanic change (never edit the literal to make a drift pass).
+GOLDEN_TRACE_SEED = 20260630
+GOLDEN_TRACE_PROC = "grand_contest"
+GOLDEN_TRACE_RES  = "committee"
+GOLDEN_TRACE = (
+    (0.448341, 0.0,      5.672511),
+    (0.448341, 0.482663, 4.948517),
+    (1.117326, 0.482663, 5.951995),
+    (1.117326, 0.931129, 5.279295),
+    (1.570162, 0.931129, 5.958549),
+    (1.570162, 1.419577, 5.225878),
+    (1.570162, 1.419577, 5.225878),
+    (1.570162, 1.419577, 5.225878),
+    (2.053478, 1.419577, 5.950852),
+    (2.053478, 1.879483, 5.260993),
+)
+def _golden_trace(seed, proc="grand_contest"):
+    random.seed(seed)
+    ct = BC(4, 4, venue=proc)
+    (res, bout) = RC(ct, game="agon", policy_a="logos", policy_b="logos", record=True)
+    pt = bout.v.win if isinstance(bout.v.win, PersuasionTrack) else PersuasionTrack(start=5.0)
+    seq = []
+    for beat in bout.log:
+        s = ContestState(); s.adv[A] = beat["advA"]; s.adv[B] = beat["advB"]
+        seq.append((round(beat["advA"], 6), round(beat["advB"], 6), round(pt.track(s), 6)))
+    return res[0], tuple(seq)
+_g_res, _g_seq = _golden_trace(GOLDEN_TRACE_SEED, GOLDEN_TRACE_PROC)
+# THE parity assertion: the live per-exchange sequence must equal the pinned canonical literal exactly.
+# (This is what catches a MERIT_SCALE / any agôn-number drift — a self-comparison could not.)
+ck("golden-trace: live per-exchange (advA,advB,track) sequence == PINNED GOLDEN_TRACE literal",
+   _g_seq == GOLDEN_TRACE)
+ck("golden-trace: resolved band == PINNED GOLDEN_TRACE_RES", _g_res == GOLDEN_TRACE_RES)
+ck("golden-trace: the pinned sequence is a non-trivial multi-beat trace", len(GOLDEN_TRACE) >= 6)
+ck("golden-trace: every pinned track value stays within the canonical 0-10 range",
+   all(0.0 <= t <= 10.0 for (_a,_b,t) in GOLDEN_TRACE))
+ck("golden-trace: the track actually moves off the neutral 5.0 start",
+   any(t != 5.0 for (_a,_b,t) in GOLDEN_TRACE))
+# the resolved band must equal the band the FINAL-beat track value falls into (closing read is consistent)
+_final_track = GOLDEN_TRACE[-1][2]
+_expected_band = ("A_total" if _final_track >= 9 else "A_decisive" if _final_track >= 7
+                  else "committee" if _final_track > 3 else "B_decisive" if _final_track > 1 else "B_total")
+ck(f"golden-trace: resolved band == final-beat track banding ({_g_res} @ track {_final_track:.3f})",
+   _g_res == _expected_band)
+ck("golden-trace: resolved outcome is a canonical band", _g_res in _BANDS)
+
+
 print(f"\nRESULT: {P} passed, {Fc} failed")
 sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

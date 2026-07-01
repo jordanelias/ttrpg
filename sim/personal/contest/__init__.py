@@ -64,6 +64,12 @@ from .resolver import (  # noqa: F401
 )
 from .modes import (  # noqa: F401
     ContestedMode, VENUES, INSTITUTIONAL_MODES, CROSS_CULTURAL_VENUES,
+    # Stage 1c canonical v30 re-skin:
+    PROCEEDINGS, CANONICAL_PROCEEDINGS, CANONICAL_ADJUDICATORS, ADJUDICATOR_PRIMARY,
+    proceeding_venue, proceeding_mode,
+)
+from .wrapper import (  # noqa: F401  (Stage 1c: build/resolve adapter+router)
+    build_contest, resolve_contest, Contest, GAMES, MECHANICS, mechanics_selftest,
 )
 from . import policy      # noqa: F401
 from . import faction     # noqa: F401
@@ -84,5 +90,9 @@ __all__ = [
     "Bout", "Contestant", "Venue", "run", "ContestState", "WinCondition", "ThresholdRace",
     "TallyAtClose", "ProofBar", "GraceThreshold", "PersuasionTrack", "VoteAtClose",
     "ContestedMode", "VENUES", "INSTITUTIONAL_MODES", "CROSS_CULTURAL_VENUES",
+    # Stage 1c canonical re-skin + wrapper:
+    "PROCEEDINGS", "CANONICAL_PROCEEDINGS", "CANONICAL_ADJUDICATORS", "ADJUDICATOR_PRIMARY",
+    "proceeding_venue", "proceeding_mode",
+    "build_contest", "resolve_contest", "Contest", "GAMES", "MECHANICS", "mechanics_selftest",
     "policy", "faction", "narrative", "POLICIES",
 ]
