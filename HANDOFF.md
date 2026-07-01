@@ -96,10 +96,21 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       win; plate win-rate 88.6→90; rondel strengthened; grounded ranking holds); 1c **heavy-mirror guard DONE**
       (`e4da1f04`, 73→78 tests — symmetry + non-degeneracy, catches an armour-defeat draw-stalemate regression the
       light-only test missed).
-    - **Still to do:** 1b file ED-1055+ (the re-baseline + designer-set flags); **Track 2** single-source/primitive-law
-      purge (agility FIAT clamp, `wt`/`spd` legacy reads, `WP.reach()`/`authority()` parallel derivations, ADEF
-      monotonicity + `combat_config.gd` oracle drift); **Track 3 = ratify + merge** (Jordan's call) then re-export the
-      port config; **Track 4** build-forward (abilities-as-access, §C, contact axis, WS-7).
+    - **Track 1 DONE** (`b79615f4` adef · `64bc95dc` ED-1055 · `e4da1f04` heavy-mirror guard). **Track 2 substantially
+      done:** agility FIAT clamp fixed (`2cbd8b1c` — emergent light-weapon dodge/parry spread restored); **the pre-merge
+      re-audit** (ultracode Workflow `wi4q11myc`, 4 lenses, 28 confirmed) CLEARED the branch as architecturally sound
+      (no name-table / emergence real / concussion single-sourced / RESIST grounded — all survived adversarial trace)
+      with **exactly one merge gate**, now CLOSED: `d9fd1f1a` **ADEF_THRESHOLD monotone re-sweep (ED-1050 RESOLVED)** +
+      re-exported `combat_config.gd` from the oracle (retired the port's §6 private [AUDIT-FIX]); `e1fc0686` **architecture-
+      invariant guards** (no-name-table ast scan + single-source + emergent-selection + gap-game — 84 tests).
+    - **→ THE BRANCH IS RATIFY-READY** (per the audit verdict, the one gate is discharged). **Track 3 = ratify + merge is
+      JORDAN'S CALL** (deliberately not merged unilaterally), then the fuller `.gd` module re-export
+      (RESIST/GAP_EXPOSURE/gap-game logic — deferred behind the non-compilable skeleton, Key-log parity known-red).
+    - **Deferrable Track-2 polish (post- or pre-merge, none blocking):** the `wt`/`spd` cost-path single-source de-leaks
+      (re-baseline, need before/after; `spd` now unblocked since the agility clamp landed); Phase-A cleanups (`_HEAD2DMG`
+      dedup, dead `pob_frac`/`percussion` WEAPONS fields, dead `WP.reach()`/`authority()`, `capabilities.py`→`afforded_heads`);
+      the greedy-comparator-vs-damage docstring (Jordan-gated); the displace/reach `sel_head` consistency (D-1/D-2). Full
+      confirmed list: `tasks/wi4q11myc.output`. **Track 4** build-forward (abilities-as-access, §C, contact axis, WS-7).
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
