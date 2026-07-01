@@ -43,7 +43,7 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1055 }   # 1050-1054 filed: ecosystem-review Top-5 (ED-1050..1054)
+    ED: { block: "1050-1099", next_free: 1056 }   # 1050-1054 ecosystem Top-5; 1055 grounded combat re-baseline (percussion/armour/use-mode/gap-game)
     PP: { block: "800-829", next_free: 800 }
 
 # When all three lanes exhaust their blocks, the integration seam allocates the next
