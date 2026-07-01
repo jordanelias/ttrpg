@@ -2,6 +2,8 @@
 sim/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
 
 Canon source: modifier_system_spec.md (the implementation-pass rewrite)
+Params source: params/core.md, modifier_system_spec.md
+Game Design constraints applicable: none — σ-space resolution math (GD-1..3 govern game-layer mechanics, not dice math)
 Rationale:    D0-2 (designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md)
 Status:       [CANONICAL — Stage 1a port 2026-06-30]
 
@@ -38,6 +40,22 @@ Functions added (contest surface, designs/audit/2026-06-03-contest-groundup/engi
   • sigma_N (alias: contest engine names it sigma_N not sigma_n)
   • eff_sigma (alias for soft_cap, with contest naming)
   • effective_ob (display-only Ob shift, per contest engine's signature)
+  • level (single modifier-level → σ lookup; engine.py:21 `def level(name): return LEVEL[name]`)
+
+Entry points:
+  - sigma_n(pool: float) -> float
+  - sigma_N(pool: float) -> float  (contest alias of sigma_n)
+  - soft_cap(net_sigma: float) -> float
+  - eff_sigma(net_sigma: float) -> float  (contest alias of soft_cap)
+  - sigma_space_ob_shift(net_sigma: float, pool: float) -> float
+  - eff_ob(base_ob: float, pool: float, net_sigma: float) -> float
+  - effective_ob(base_ob: float, net_dsigma: float, pool: float) -> float  (contest arg-order alias of eff_ob)
+  - net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool = True) -> float
+  - level(name: str) -> float  (contest modifier-level → σ lookup)
+  - levels_to_net_sigma(aggressor: Sequence[str] | None = None, defender: Sequence[str] | None = None) -> float
+  - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
+  - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
+  - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
 """
 from __future__ import annotations
 
@@ -174,16 +192,18 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
 
 
 # ---------------------------------------------------------------------------
-# Level aggregation
+# Level lookup + aggregation
 # ---------------------------------------------------------------------------
 
 def level(name: str) -> float:
-    """σ-value for a named modifier level (minor/moderate/strong/major).
+    """σ-value for a named modifier level (minor/moderate/strong/major) — contest surface.
 
-    Contest-surface accessor (designs/audit/2026-06-03-contest-groundup/engine.py
-    named this level()). Single-sources LEVEL_SIGMA so combat (levels_to_net_sigma)
-    and contest (Leverage.ONGROUND = level("moderate")) share one table.
-    Stage-1a finding 1a: this accessor was missing from the port.
+    Ported from designs/audit/2026-06-03-contest-groundup/engine.py:21
+    (`def level(name): return LEVEL[name]`); that engine's LEVEL dict is this module's
+    LEVEL_SIGMA (byte-identical: minor 0.25 / moderate 0.50 / strong 0.75 / major 1.00).
+    Single-sources LEVEL_SIGMA so combat (levels_to_net_sigma) and contest
+    (Leverage.ONGROUND = level("moderate"), groundup primitives.py:9 at import time)
+    share one table. Stage-1a finding 1a: this accessor was missing from the port.
     [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]
     """
     return LEVEL_SIGMA[name]

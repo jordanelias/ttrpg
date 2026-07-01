@@ -48,14 +48,15 @@ extends Resource
 # ── armour-defeat (systems.armor_defeat_sigma) ──
 @export var adef_w: Dictionary = {"none": 0.0, "light": 0.4, "medium": 1.0, "heavy": 1.7}
 @export var adef_blunt: float = 1.3
-@export var adef_point: float = 1.0
+@export var adef_point: float = 1.2   # re-exported from config.py (the adef-consistency lever, ED-1080): a gap-thrust's armour-defeat CONTROL matches its damage
 @export var adef_cut: float = -0.9
-## ADEF_THRESHOLD — per-armour difficulty bar. [AUDIT-FIX] the Python values were
-## {none:0.0, light:0.70, medium:0.45, heavy:0.72} — NON-MONOTONIC (medium < light), which made
-## mail the *easiest* tier to defeat for point/cut weapons and contradicted the docstring's
-## "threshold RISES with armour". Corrected to monotone-rising (cloth < mail < plate).
-## CLASS-C / Jordan-vetoable: a parity re-sweep is required before this ships.
-@export var adef_threshold: Dictionary = {"none": 0.0, "light": 0.45, "medium": 0.60, "heavy": 0.72}
+## ADEF_THRESHOLD — per-armour difficulty bar, RE-EXPORTED FROM THE ORACLE config.py (ED-1050 resolved,
+## Jordan 2026-06-30): the Python canon was re-swept to a MONOTONE {light:0.30, medium:0.45, heavy:0.72}
+## (a gambeson is soft/easily defeated, mail harder, plate hardest). This RETIRES the port's earlier private
+## [AUDIT-FIX] in-place correction (CLAUDE.md §6 — the port must never correct its oracle; fix canon, re-export).
+## (Fuller re-export of RESIST / GAP_EXPOSURE / the gap-game logic to weapon_resource.gd + strike_module.gd is
+## the deferred module port; combat_config.gd remains a non-compilable skeleton, Key-log parity known-red.)
+@export var adef_threshold: Dictionary = {"none": 0.0, "light": 0.30, "medium": 0.45, "heavy": 0.72}
 
 # ── standing reach advantage (systems.reach_sigma) ──
 @export var reach_frac: float = 0.82

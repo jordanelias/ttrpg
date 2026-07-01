@@ -1,9 +1,13 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
 Wraps canonical r1/r8/m1 so every subsystem resolves identically. No A/B knowledge here."""
 import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
+sys.path.insert(0, os.path.dirname(__file__))
 from math import tanh
 import r1_sigma_resolution as r1, r8_parity_harness as r8, m1_dice_sigma_core as m1
-from math import sqrt as _sqrt
+import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
+                              # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
+                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math
+                              # at module scope (cycle-free), so this import is safe.
 
 DECISIVE_OB = r8.DECISIVE_OB
 TN = r8.TN_STANDARD
@@ -30,12 +34,6 @@ def resolve(pool, net_sigma, rng):
     bands (overwhelming trivialised by the Ob-floor). Returns (deg, net)."""
     net = roll_net(pool, rng) + m1.soft_cap(net_sigma) * m1.sigma_n(pool)
     return degree(net, DECISIVE_OB), net
-
-def p_auth(w):
-    """Derived percussion authority: min(8, 9.5*(sqrt(mass)*pob_frac)**0.30). Replaces the hand-set per-weapon
-    'percussion'; pob_frac & mass were dead weapon inputs and this is their consumer (combat_residuals_pob_f5 §2).
-    Read only in core's blunt branch, so non-blunt heads are unaffected (their hand-set percussion was dead data)."""
-    return min(8.0, 9.5 * (_sqrt(max(0.0, w.get('mass', 1.0))) * w.get('pob_frac', 0.15)) ** 0.30)
 
 # ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
 # Adopts the ground-up linear damage model [damage_model.py / damage_model_design, Jordan 2026-05-30,
@@ -65,12 +63,36 @@ OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5-
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
 DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
-RESIST={'none': {'percussion':0,  'shear':0,  'puncture':0},        # [damage_model — material resistance per mode in [0,1]]
-        'cloth':{'percussion':.10,'shear':.35,'puncture':.15},
-        'mail': {'percussion':.20,'shear':.80,'puncture':.45},
-        'plate':{'percussion':.30,'shear':.95,'puncture':.70}}
+# Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
+# and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/. CHANGED 4 cells: cloth.shear .35->.45
+# (a 16-30 layer jack sheds a ~60-130 J cut); cloth.puncture .15->.12 (a point stops at only ~50 J vs ~80 J cut — the
+# documented cut>>point asymmetry); cloth.percussion .10->.12 (modest standalone blunt absorption); mail.shear .80->.85
+# (cutting riveted mail is "functionally impossible," >130 J ceiling). Plate row + mail perc/punc KEEP (well-pinned).
+# [CI — DESIGNER-SET/UNSOURCED: the cloth fractions are a designer normalisation of Williams' joules onto the 0-1 scale,
+#  NOT a Williams figure.]  [PACKAGE: plate.percussion .30 is honest ONLY with the FIX-1b authority gate below — never
+#  tune one without the other (ungated, an honest plate-vs-blunt resist is ~.55-.65).]  Assumes RIVETED mail + HARDENED
+# ~2mm plate (butted mail / wrought iron are far weaker — not modelled).
+RESIST={'none': {'percussion':0,   'shear':0,   'puncture':0},
+        'cloth':{'percussion':.12, 'shear':.45, 'puncture':.12},
+        'mail': {'percussion':.20, 'shear':.85, 'puncture':.45},
+        'plate':{'percussion':.30, 'shear':.95, 'puncture':.70}}
 TIER2MAT={'none':'none','light':'cloth','medium':'mail','heavy':'plate'}  # [armour_axes presets — tier->material]
 COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_model — gap/bare-zone exposure]
+# ── SITUATIONAL GAP GAME (2026-06-30) — a thrust/puncture is GAP-SEEKING ─────────────────────────────────────────
+# grounded_weapon_armour_usemode_model.md + Williams (The Knight and the Blast Furnace, 2003): a point does NOT punch
+# through plate — it SEEKS the reach-ladder gaps (visor/armpit/groin/palm). Its plate-defeat effectiveness is the
+# fraction of the target that is thrust-accessible gaps (GAP_EXPOSURE, per material) SCALED BY the weapon's derived
+# gap_precision (w['gap'] = point_concentration x cross_section rigidity — a stiff concentrated point finds+holds the
+# gap; a whippy point deflects). This de-vestigialises w['gap'], which damage() already carried but ignored. The
+# armoured-combat treatises (Le Jeu de la Hache / Harnischfechten) make the thrust-to-gap the PRIMARY armoured kill —
+# so a poleaxe spikes vs harness, a rondel excels at the gaps, a rapier's whippy point is mediocre, all EMERGENT from
+# the derived gap_precision (never a weapon name).
+# [SIM-CALIBRATE within the reach-ladder frame]: plate is well-covered but a skilled stiff-point thrust ALWAYS reaches
+# the visor/armpit/groin/palm gaps; mail exposes more (open weave/edges); cloth/none are mostly accessible. The plate
+# value is set at ~the poleaxe hammer->spike flip (systems.select_mode) so the reach-ladder truth holds; the
+# orchestrator tunes the final magnitudes. GROUNDING (direction): Williams (puncture succeeds at gaps/weak-points).
+GAP_EXPOSURE={'none':1.0,'cloth':0.85,'mail':0.90,'plate':0.90}     # [SIM-CALIBRATE] thrust-accessible gap fraction / material (reach-ladder)
+GAP_PREC_REF=0.65                                                   # neutral gap_precision default for the puncture path (a mid-roster point) — the LIVE combat path always THREADS the weapon's real w['gap'] (systems.select_mode / core.strike), so this default only guards a hypothetical unthreaded caller.
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:
 # percussion transmitted through RIGID armour (mail/plate) scales with the blow's percussion AUTHORITY — a steel
 # hammer (p_auth 8) overwhelms the armour's impact-spread; a wooden staff (p_auth ~4) is largely absorbed. The TRANSMIT
@@ -81,35 +103,48 @@ COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_mo
 # is a damage-LETHALITY reduction only — it does NOT touch the sigma/reach/control path that drives the staff's
 # vs-plate WIN-RATE (that is FIX-1's job); the staff-vs-arming heavy win-rate is ~flat under this change alone.
 PERC_AUTH_REF=8.0; PERC_TRANSMIT_FLOOR=0.35
-def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF):
+def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
     t=1.0-RESIST[mat][mode]
-    if mode=='puncture': return max(t, COVERAGE_GAP[coverage])      # thrust takes through-material OR the gap
+    if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
+        # material OR the reach-ladder gap it seeks. The gap term is GAP-SEEKING: the material's thrust-accessible gap
+        # fraction (GAP_EXPOSURE) scaled by the WEAPON's derived gap_precision (a stiff concentrated point finds+holds
+        # the gap; a whippy point deflects). Replaces the old fixed COVERAGE_GAP floor — plate is no longer a flat 0.15
+        # for every point; the poleaxe spike / rondel now beat the through-material 0.30, the rapier's whippy point does
+        # not. Emergent in gap_prec (= w['gap']); no weapon name.
+        return max(t, GAP_EXPOSURE[mat]*gap_prec)
     if mode=='percussion' and mat in ('mail','plate'):             # FIX-1b: rigid armour spreads blunt -> authority-scaled
         t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/PERC_AUTH_REF))
     if mat!='none':
         g=COVERAGE_GAP[coverage]; return t*(1-g)+1.0*g             # some blows reach a bare zone
     return t
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF):
+def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
-    `perc` (percussion authority) scales the blunt transmit vs rigid armour (FIX-1b); ignored for non-blunt heads."""
+    `perc` (percussion authority) scales the blunt transmit vs rigid armour (FIX-1b); ignored for non-blunt heads.
+    `gap_prec` (the weapon's derived gap_precision, w['gap']) makes the PUNCTURE/thrust path GAP-SEEKING (the situational
+    gap game): a stiff concentrated point defeats plate at the gaps, a whippy one is deflected. Threaded for every
+    thrusting head (point + the cut_thrust half-sword thrust); percussion/shear ignore it (a broad blow/cut does not
+    gap-seek). Defaults to a neutral point (GAP_PREC_REF); the live path threads the real w['gap']."""
     mat=TIER2MAT[armor]
     if head=='cut_thrust':
         return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
-                   DELIVERY['point']*_transmit('puncture',mat,coverage))
-    return DELIVERY.get(head,1.5)*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc)
-def damage(deg, heft_units, weapon_head, strength, armor, close, gap=0.65, perc=8, q=None):
+                   DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec))
+    return DELIVERY.get(head,1.5)*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec)
+def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
-    entries they read). gap retained for signature compat — still vestigial here (per-weapon gap-skill folds
-    into the 2b puncture work)."""
+    entries they read). `gap` (the weapon's derived gap_precision, w['gap']) is now LIVE — it threads into coupling's
+    puncture path (the situational gap game): the SELECTED thrust's plate-defeat scales with how well the point finds+
+    holds a gap (a stiff spike/rondel defeats plate at the gaps; a whippy point is deflected). Non-thrusting heads
+    ignore it (percussion/shear do not gap-seek), so it is inert for a blunt/cut blow — de-vestigialised, not just
+    plumbed."""
     if deg not in ('graze','success','overwhelming'): return 0
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # WS-2: continuous cut/thrust heft (binary mode -> heft_units in {0,1} reproduces HEFT['light'/'heavy'])
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour
+    return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps)
 
 def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
@@ -122,5 +157,6 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
         z=max(0.0,(net-2*DECISIVE_OB)/m1.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
-    return damage(deg, heft_resp(attacker.w, cfg), attacker.head, attacker.strength, defender.armor, close,
-                  attacker.w['gap'], p_auth(attacker.w), q=q)
+    head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
+    return damage(deg, heft_resp(attacker.w, cfg), head, attacker.strength, defender.armor, close,
+                  attacker.w['gap'], WP.percussion_authority(attacker.w), q=q)

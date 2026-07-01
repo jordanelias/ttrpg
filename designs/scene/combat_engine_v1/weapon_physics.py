@@ -10,15 +10,25 @@ PRIMITIVES consumed (per weapon, from combatant.WEAPONS):
   hilt{compound,simple,none}, hands, hand_guard, blade_guard, reach_adj, head, + geometry geo{cut,thrust,perc_conc}
   and the raw geometry {cross_section, strike_concentration, ...} on combatant.GEOMETRY.
 
-DERIVED (the single basis every consumer wires to):
+DERIVED (the intended single basis; wiring is PARTIAL — see WIRING STATUS):
   STAGE 1 composite mass -> PoB, m_head, MoI, static_moment   (recovered weapon_physics 2026-06-22, self-tested 0.05cm)
   STAGE 2 PoB+mass -> percussion authority, puncture pressure, armour-defeat mode   (recovered percussion_authority)
   STAGE 3 dynamics -> agility, authority(impact), reach, the {parry,dodge,wind} defence affinities
-  STAGE 4 the five categorical->continuous consumer terms (reach_term/heft_term/tempo_penalty/strdemand_term)
+
+WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; nothing live reads STAGE 3/4" claim,
+which is now FALSE):
+  · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
+    percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
+  · NOT YET WIRED — the live engine derives these in PARALLEL elsewhere (the open single-source debt): reach()
+    [live path = systems.reach_base], authority() and armour_defeat_mode() [diagnostic-only]. Consolidating the
+    parallel derivations onto this module is the deferred single-source RE-BASELINE (Gate-1 finding; it changes
+    balance numbers, so it is Jordan-gated — the percussion-authority split core.p_auth vs WP.percussion_authority,
+    which read DIFFERENT inputs (hand-set pob_frac vs derived PoB_frac), is the sharpest case).
+  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) were DELETED 2026-06-30 —
+    a dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
 
 CALIBRATION: the composite constants are physically sourced; the engine-scale K_* gains are [SIM-CALIBRATE] —
-fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted. This module is BUILD-ONLY until Phase 3 wires
-its outputs into the consumers; today nothing live reads STAGE 3/4 (the engine still uses the hand tables).
+fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 """
 import math
 
@@ -40,13 +50,40 @@ PERC_EXP = 0.30
 PERC_CAP = 8.0
 HEAVY_BLUNT_THRESHOLD = 6.0
 
+# ── concussion energy-credit (2H grip + arc/haft-length) — GROUNDED biomechanics ──
+# designs/audit/2026-06-30-combat-grounding/grounded_weapon_armour_usemode_model.md §1 (task wpwi3b9qf,
+# adversarially fact-checked). A two-handed grip raises the EFFECTIVE MASS behind the blow (not tip speed), and a
+# longer haft adds a little more but saturates (you lose ω as ~I^-0.28). The credit multiplies INSIDE the
+# (sqrt(mass)*PoB_frac)**PERC_EXP authority term, so it compounds at the authority exponent, not linearly.
+PERC_2H_HANDS = 0.25    # GROUNDED: measured 2H/1H force ratio ~=1.25 (Oh et al. 2022 within-subject crossover, S1;
+                        #   corroborated IASTM compact-tool 1.24-1.28). So 1 + PERC_2H_HANDS = R_F = 1.25 per extra hand.
+PERC_2H_ARC = 0.04      # [SIM-CALIBRATE band 0.02-0.06]: bat-MOI rate penalty / haft-length swing-weight gain
+                        #   (Nathan 2003 constant-power regime, S1; capped at the Cross-Nathan swing-weight optimum).
+PERC_GRIP_1H = 0.7      # the 1H reference grip_len (= the mace's grip_len): the arc credit accrues only for haft
+                        #   LONGER than a one-handed grip. GROUNDED as the 1H anchor (the mace is the 1H percussor).
+
+def energy_credit(w):
+    """The 2H/arc energy multiplier on percussion authority (grounded §1). (1 + A_HANDS*(hands-1)) for the extra
+    hand's effective-mass credit, times (1 + B_ARC*max(0, grip_len - 1H_ref)) for the saturating haft-length gain.
+    A 1H weapon at the reference grip credits 1.0 (no change). Pure; consumes only {hands, grip_len}."""
+    return (1.0 + PERC_2H_HANDS * (w['hands'] - 1)) * (1.0 + PERC_2H_ARC * max(0.0, w['grip_len'] - PERC_GRIP_1H))
+
 # ── engine-scale mapping gains — [SIM-CALIBRATE] starting values, fit in the Phase-3 re-baseline ──
-K_REACH = 2.05; K_HEFT = 5.2; K_TEMPO = 1.5; K_STRD = 0.55
-MOI_AGILITY_K = 6.0     # (legacy rational form; superseded by the power law below — kept until the wiring deletes it)
+MOI_AGILITY_K = 6.0     # LIVE [SIM-CALIBRATE]: the bind-leverage normaliser in defense_affinities.wind (reaches the
+                        # engine via systems.mode_sigma's 'wind' cap). The agility POWER LAW below replaced this
+                        # rational form FOR AGILITY only; this constant is still load-bearing here — NOT dead.
+                        # (The dead STAGE-4 gains K_REACH/K_HEFT/K_TEMPO/K_STRD were removed with STAGE-4, 2026-06-30.)
 # agility power law (Phase-3 grounding): EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
 # mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1). Replaces 1/(1+K·MoI).
 AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
-AGILITY_REF = 0.088     # [SIM-CALIBRATE] anchor MoI (a handy arming sword) where agility≈1.0; fit in the re-baseline
+# [SIM-CALIBRATE] anchor MoI. RE-ANCHORED 2026-06-30 (Track-2 primitive-law purge, gate1_audit agility-fiat-clamp):
+# set JUST BELOW the lightest weapon's swing inertia (~0.9× the dagger's MoI 0.0024) so AGILITY_REF/MoI ≤ 1 for the
+# WHOLE roster — nothing pins to the min(1.0) cap, which becomes an inert safety guard. The prior 0.088 (an arming
+# sword's MoI) put ~5 light weapons ABOVE the anchor, so the cap flat-topped dagger=paired=sabre=arming=half-sword to
+# agility 1.0 and ERASED the emergent light-weapon dodge/parry ordering. With this anchor agility ∈ (0,1] emerges
+# strictly from MoI (dagger highest → spear lowest). Chosen so the dodge/parry _band spread (renormalised below to the
+# compressed range) reproduces the previously-calibrated spread — a re-baseline that restores emergence, not a re-tune.
+AGILITY_REF = 0.00215
 # 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
 K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
 # [WIRING HAZARD — Phase-3b] weapon_physics.reach() spans ~0.7–6.0 (head_len-based); the LIVE systems.reach_base it
@@ -106,12 +143,15 @@ def derive(w):
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
 def percussion_authority(w):
-    """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac). Saturating; 0 for a
-    non-blunt head. Reproduces the validated anchors mace=8, poleaxe=8, staff=4."""
+    """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
+    energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
+    no percussion — the edge-no-percuss caveat is THIS gate, emergent). Grounded anchors (2026-06-30 re-baseline,
+    credited): mace 7.45 > poleaxe 5.83 > staff 2.52 — the poleaxe sits BELOW the mace in pure concussion (correct:
+    its plate primacy is the beak/spike puncture mode, NOT concussion — see puncture_pressure + systems.select_mode)."""
     if w['head'] != 'blunt':
         return 0.0
     pob = derive(w)['PoB_frac']
-    return min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob) ** PERC_EXP)
+    return min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
 
 
 def puncture_pressure(w):
@@ -138,13 +178,15 @@ def agility(w):
     agility ∝ MoI^(−AGILITY_EXP), EXP≈0.25 (Cross & Nathan 2009 / Fleisig 2002 — handle-axis bat/racket/golf swing
     studies, mass-independent, exponent 0.20–0.28). Replaces the prior 1/(1+K·MoI), whose LOCAL exponent climbed
     0.1→0.9 across the roster and over-penalised heavy weapons ~2× (greatsword 0.22 vs the power-law ~0.6). Anchored
-    at AGILITY_REF (a handy arming sword's MoI) where agility≈1, capped at 1.0 for lighter weapons. The exponent is
-    grounded; AGILITY_REF is [SIM-CALIBRATE] (sets the spread, fit in the Phase-3 re-baseline). In (0,1].
-    [FIAT/WIRING-HAZARD] Below AGILITY_REF the literature fit (Cross & Nathan, sampled MoI≈0.2–0.6) is EXTRAPOLATED
-    and the min(1.0,…) CLAMP is a FIAT cap, not grounded — it collapses the whole light-weapon spread (dagger 0.002,
-    arming 0.088, half-sword 0.025 all pin to 1.0), erasing the dagger>paired>sabre tempo ordering. MUST be resolved
-    when agility is wired live in Phase-3b (re-anchor AGILITY_REF at/below the lightest MoI, or drop the cap and
-    renormalise the consumer to (0,k]) — the power law itself is correct uncapped."""
+    at AGILITY_REF (set just BELOW the lightest weapon's MoI), so the whole roster sits at agility ≤ 1 and the spread
+    EMERGES strictly from MoI: dagger highest (~0.97) → spear lowest (~0.18). The exponent is grounded; AGILITY_REF is
+    [SIM-CALIBRATE]. In (0,1].
+    FIAT-CLAMP RESOLVED (2026-06-30, Track-2 / gate1_audit agility-fiat-clamp): the anchor now sits below the lightest
+    MoI (AGILITY_REF ≈ 0.9× dagger), so AGILITY_REF/MoI ≤ 1 for EVERY weapon and the min(1.0,…) NEVER binds — it is an
+    inert safety guard, not the spread-destroying flat-top it was at the old 0.088 anchor (which pinned dagger, paired,
+    sabre, arming and the half-sword all to 1.0). The light-weapon dodge/parry ordering (dagger>paired>sabre>arming) is
+    restored; the consumers (defense_affinities' dodge _band window + the parry agility-pivot) were renormalised to the
+    compressed agility range so the OUTPUT affinity spread matches the previously-calibrated one — see defense_affinities."""
     return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
 
 
@@ -179,11 +221,18 @@ def defense_affinities(w):
     onehand = 1.0 if w['hands'] == 1 else 0.78
     wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 3.0))
     dodge = ag * onehand
-    parry = (0.45 + 0.55 * w.get('hand_guard', 0.4)) * (0.55 + 0.45 * min(1.0, ag / 0.6))
+    # AGILITY-PIVOT (was ag/0.6): agility() was re-anchored below the lightest MoI (capless), so its live range
+    # COMPRESSED (a handy 1H sword now reads ag≈0.4, not the old flat-topped 1.0). The parry saturation pivot is
+    # renormalised to that new range so the parry-affinity spread reproduces the previously-calibrated one.
+    # [SIM-CALIBRATE 0.39] — fit to the pre-re-anchor parry spread; travels with the AGILITY_REF re-baseline.
+    parry = (0.45 + 0.55 * w.get('hand_guard', 0.4)) * (0.55 + 0.45 * min(1.0, ag / 0.39))
 
-    def _band(x, lo, hi):                                         # into the old GATE's ~[0.4,1.0] band
+    def _band(x, lo, hi):                                         # remap into the ~[0.4,1.0] affinity band
         return round(0.4 + 0.6 * max(0.0, min(1.0, (x - lo) / (hi - lo))), 2)
-    return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.2, 0.95), wind=_band(wind, 0.05, 0.45))
+    # DODGE _band window RENORMALISED (was [0.2,0.95]) to the compressed capless-agility range so the dodge spread
+    # reproduces the previously-calibrated one (dagger 1.0 > paired > sabre > arming > … > heavies at the 0.4 floor)
+    # rather than flat-topping at 1.0. [SIM-CALIBRATE 0.19,0.54] — fit to the pre-re-anchor dodge spread.
+    return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.19, 0.54), wind=_band(wind, 0.05, 0.45))
 
 
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
@@ -229,23 +278,6 @@ def at_grip(w, g):
     d_g = PoB - u                                              # CoM-to-working-hand distance after the slide
     return dict(I_g=I_cm + m * d_g ** 2,                       # MINIMUM (= I_cm) when u reaches the CoM
                 S_g=m * abs(d_g), d_g=d_g, u=u)
-
-
-# ════════════════════ STAGE 4 — the five categorical->continuous consumer terms (Phase-3 wiring) ════════════════════
-def reach_term(w, cfg):
-    return cfg['L0'] + K_REACH * (derive(w)['fwd_extent_m']) + cfg['HANDS2'] * (w['hands'] == 2) + w.get('reach_adj', 0.0)
-
-
-def heft_term(w):
-    return max(0.0, min(4.0, K_HEFT * derive(w)['MoI']))
-
-
-def tempo_penalty(w):
-    return K_TEMPO * derive(w)['MoI']
-
-
-def strdemand_term(w):
-    return K_STRD * derive(w)['static_moment']
 
 
 if __name__ == '__main__':

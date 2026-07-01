@@ -9,6 +9,7 @@ Rationale: D0-2 (designs/audit/2026-06-30-contest-stage0-reconciliation/DECISION
 Coverage:
     sigma_n / sigma_N      — both combat and contest aliases
     soft_cap / eff_sigma   — both aliases
+    sigma_space_ob_shift   — raw sigma-space Ob shift (net_sigma * sigma_n)
     net_boost              — TN 6, 7, 8; capped=True and False
     eff_ob / effective_ob  — both call signatures
     p_success              — full closed-form probability
@@ -179,6 +180,36 @@ class TestSoftCap:
 
 
 # ---------------------------------------------------------------------------
+# Tests: sigma_space_ob_shift
+# ---------------------------------------------------------------------------
+
+class TestSigmaSpaceObShift:
+    """sigma_space_ob_shift(net_sigma, pool) — raw sigma-space Ob shift, pre-soft-cap.
+
+    Defined as net_sigma * sigma_n(pool); the sqrt(N) cancels in the z-score
+    (the F1 uniform-modifier-impact property). Byte-identical to the numpy
+    original m1_dice_sigma_core.sigma_space_ob_shift (verified divergence 0.0).
+    """
+
+    @pytest.mark.parametrize("ns", NET_SIGMA_GRID)
+    @pytest.mark.parametrize("pool", POOL_GRID)
+    def test_sigma_space_ob_shift_vs_numpy(self, ns, pool):
+        if not _numpy_available:
+            pytest.skip("numpy not available")
+        got = SL.sigma_space_ob_shift(ns, pool)
+        want = _m1_ref("sigma_space_ob_shift", ns, pool)
+        _assert_close(got, want, f"sigma_space_ob_shift(net_sigma={ns}, pool={pool})")
+
+    @pytest.mark.parametrize("ns", NET_SIGMA_GRID)
+    @pytest.mark.parametrize("pool", POOL_GRID)
+    def test_sigma_space_ob_shift_identity(self, ns, pool):
+        """sigma_space_ob_shift(ns, pool) == ns * sigma_n(pool) (exact — same float ops)."""
+        assert SL.sigma_space_ob_shift(ns, pool) == ns * SL.sigma_n(pool), (
+            f"sigma_space_ob_shift != ns*sigma_n at ns={ns} pool={pool}"
+        )
+
+
+# ---------------------------------------------------------------------------
 # Tests: net_boost
 # ---------------------------------------------------------------------------
 
@@ -309,6 +340,40 @@ class TestPSuccess:
         avg = sum(impacts) / len(impacts)
         assert round(spread * 100, 1) == 0.0, f"F1 uniformity failed: spread={spread*100:.2f}pp"
         assert round(avg * 100, 1) == 25.8, f"F1 magnitude wrong: mean={avg*100:.1f}pp"
+
+
+# ---------------------------------------------------------------------------
+# Tests: level (single-lookup contest accessor)
+# ---------------------------------------------------------------------------
+
+class TestLevel:
+    """level(name) — contest-surface accessor ported from
+    designs/audit/2026-06-03-contest-groundup/engine.py:21
+    (`def level(name): return LEVEL[name]`). The groundup LEVEL dict is this
+    module's LEVEL_SIGMA, so level(name) must equal LEVEL_SIGMA[name].
+
+    No numpy counterpart: level() is a contest-only surface addition (not in
+    m1_dice_sigma_core), so parity is against LEVEL_SIGMA — as the task specifies."""
+
+    EXPECTED = {"minor": 0.25, "moderate": 0.50, "strong": 0.75, "major": 1.00}
+
+    @pytest.mark.parametrize("name,value", list(EXPECTED.items()))
+    def test_level_matches_level_sigma(self, name, value):
+        """SL.level(name) == LEVEL_SIGMA[name] == the ratified σ value, for all four names."""
+        assert SL.level(name) == SL.LEVEL_SIGMA[name]
+        assert SL.level(name) == value
+
+    def test_level_covers_all_names(self):
+        """Every LEVEL_SIGMA key resolves through level(), and the roster is exactly the four
+        names (guards against LEVEL_SIGMA drifting out from under this accessor)."""
+        assert set(self.EXPECTED) == set(SL.LEVEL_SIGMA)
+        for name in SL.LEVEL_SIGMA:
+            assert SL.level(name) == SL.LEVEL_SIGMA[name]
+
+    def test_level_unknown_raises(self):
+        """Unknown name raises KeyError — same contract as the dict lookup and the groundup engine."""
+        with pytest.raises(KeyError):
+            SL.level("catastrophic")
 
 
 # ---------------------------------------------------------------------------

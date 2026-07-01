@@ -20,8 +20,14 @@ import os as _hu_os
 # module). Kept here, not config, to stay within the touched-file set during the Stage-1 extraction.
 PC_ENVELOP_PATH = (_hu_os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — directed envelop maneuver toggle]
 PC_SWEEP = (_hu_os.environ.get("PC_SWEEP", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — lateral sweep maneuver toggle]
+# [movement-substrate review 06 — finding 2] Continuous-speed toggle. Default OFF -> byte-exact (the OFF
+# branch in advance_cells is the exact prior floor() code). ON: a per-cell fractional-speed accumulator,
+# so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0 each turn
+# (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions preserved; only step TIMING changes.
+# Consumer-local here (advance_cells), like PC_ENVELOP_PATH/PC_SWEEP. ON = recorded behaviour change.
+FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "0") == "1")
 
-__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP']
+__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT']
 
 
 @dataclass
@@ -64,6 +70,9 @@ class Subunit:
     # Used by resolve_cross_side_contention to distinguish moving vs static cells.
     # Reset at top of advance_cells. [canonical: Jordan design 2026-05-12 — speed priority]
     _moved_this_turn: Set[Tuple[int, int]] = field(default_factory=set)
+    # [field-movement, default OFF] per-cell fractional-speed carry for FIELD_MOVEMENT (continuous speed).
+    # Empty and untouched on the default (floor) path -> byte-exact. [movement-substrate review 06 — finding 2]
+    _speed_accum: Dict[Tuple[int, int], float] = field(default_factory=dict)
     # P-C scaffold (INERT): role drawn from the troop_type-gated menu (FM position→role) + the
     # instruction package the role applies. Not consumed yet — wiring instructions to primitives
     # (brace→+density, etc.) is the behaviour-cascading next step (design §3.5/§9.1).
@@ -331,8 +340,8 @@ class Subunit:
             if enemy_cells:
                 mine = self._node_cells()
                 if mine:
-                    dmin = min(max(abs(mr - er), abs(mc - ec))
-                               for (mr, mc) in mine for (er, ec) in enemy_cells)
+                    dmin = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
+                               for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field; Chebyshev on the grid (byte-exact OFF)
                     step = min(step, max(0, dmin - 1))   # vector-halt: stop at adjacency, not past
             mag = abs(dr) + abs(dc)
             if mag >= 0.5 and step > 0:
@@ -402,7 +411,7 @@ class Subunit:
         if PC_KITE_ENABLED and self.unit_type == 'ranged' and 'kite' in self.instructions and enemy_cells:
             mine = self.cells()
             if mine:
-                d = min(max(abs(mr - er), abs(mc - ec)) for (mr, mc) in mine for (er, ec) in enemy_cells)
+                d = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)
                 if d < PC_KITE_STANDOFF:     kite_mode = 'away'    # too close -> open the gap (retreat vector)
                 elif d > VOLLEY_MAX_RANGE:   kite_mode = 'toward'  # out of range -> close into the band
                 else:                        return                # in band -> hold position, keep volleying
@@ -426,12 +435,27 @@ class Subunit:
             if (orig_r, orig_c) in self.halted_cells: continue
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
-            actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
-            if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
-                # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
-                # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
-                # cavalry speed x2 — basis: shock cavalry close far faster than infantry. Class-B, vetoable.]
-                actual_speed = int(math.floor(actual_speed * PC_CAVALRY_SPEED_MULT))
+            if FIELD_MOVEMENT:
+                # [field-movement, default OFF — movement-substrate review 06, finding 2] CONTINUOUS speed:
+                # accumulate the fractional discipline-scaled velocity and step by its whole part, carrying
+                # the remainder, so a degraded body advances at its TRUE average rate instead of flooring to
+                # 0 every turn (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions are
+                # preserved; only the per-turn step TIMING changes. The cavalry multiplier scales the float
+                # velocity (not a re-floored integer). ON path is a recorded behaviour change (own baseline).
+                vel = base_speed * disc_mult
+                if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+                    vel *= PC_CAVALRY_SPEED_MULT
+                acc = self._speed_accum.get((orig_r, orig_c), 0.0) + vel
+                whole = math.floor(acc)
+                self._speed_accum[(orig_r, orig_c)] = acc - whole
+                actual_speed = max(0, int(whole) + stance_mod)
+            else:
+                actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
+                if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
+                    # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
+                    # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
+                    # cavalry speed x2 — basis: shock cavalry close far faster than infantry. Class-B, vetoable.]
+                    actual_speed = int(math.floor(actual_speed * PC_CAVALRY_SPEED_MULT))
             if actual_speed == 0: continue
             if TIP_SUPPORT_ENABLED and base_speed > min_speed:
                 current_offset = self.cell_offsets.get((orig_r, orig_c), 0)
