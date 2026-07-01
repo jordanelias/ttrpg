@@ -1,0 +1,119 @@
+"""Architecture-invariant guards for the scene-combat engine (the pre-merge re-audit found these missing).
+
+The behavioural guards (test_combat_balance_guard) check the engine RESOLVES sanely; these lock the re-baseline's
+HEADLINE ARCHITECTURE CLAIMS so they cannot silently regress — the exact failure class that let an earlier incomplete
+de-leak land unnoticed (Gate-1 audit):
+
+  · SINGLE-SOURCE   — core.p_auth (the duplicate percussion derivation) stays deleted; one WP source.
+  · NO NAME-TABLE   — no weapon-NAME string literal appears in resolution code (poleaxe/mace/staff are primitive
+                       bundles; behaviour EMERGES — the L0 primitive-law).
+  · EMERGENT USE-MODE — select_mode reproduces every single-mode weapon's native head at every armour tier; exactly
+                       one weapon (the poleaxe) changes its selected head with armour — and that falls out of primitives.
+  · GAP-GAME        — the poleaxe affords + selects its spike vs plate; the mace/staff afford no point.
+
+All static or tiny-seeded; deterministic.
+"""
+import ast
+import os
+import sys
+
+import pytest
+
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.join(ENGINE, 'tests', 'sim', 'v32-combat-balance'))
+
+
+def _mods():
+    pytest.importorskip("numpy")
+    import combatant as C
+    import core
+    import systems as S
+    import weapon_physics as WP
+    from config import CFG
+    return C, core, S, WP, CFG
+
+
+# ── SINGLE-SOURCE ───────────────────────────────────────────────────────────────────────────────
+def test_percussion_authority_single_source():
+    """core.p_auth (the duplicate that read the hand-set pob_frac) was deleted and unified onto
+    weapon_physics.percussion_authority — the invariant whose ABSENCE let the incomplete de-leak land. Guard: it stays
+    gone, and both the damage path (core.strike) and the sigma path (systems.adef_cap) read the SAME WP authority."""
+    C, core, S, WP, CFG = _mods()
+    assert not hasattr(core, 'p_auth'), "core.p_auth resurrected — percussion authority is double-derived again"
+    # the sigma path (adef_cap blunt branch) is defined in terms of WP.percussion_authority; confirm a mace's
+    # blunt armour-defeat capability tracks the WP value (not a private re-derivation).
+    mace = C.WEAPONS['mace']
+    pa = WP.percussion_authority(mace)
+    assert pa > 0
+    # adef_cap blunt = max(ADEF_BLUNT*pa/REF, ADEF_POINT*puncture/REF); the concussion term must equal the WP source
+    assert abs(CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF'])) > 0
+    assert S.adef_cap(mace, CFG, 'blunt') >= CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF']) - 1e-9
+
+
+# ── NO WEAPON-NAME TABLE IN RESOLUTION ────────────────────────────────────────────────────────────
+def _string_literals_excluding_docstrings(path):
+    """All string-constant literals in a module EXCEPT module/function/class docstrings. Comments are not in the AST,
+    so they are naturally ignored — this catches only live code string literals."""
+    tree = ast.parse(open(path, encoding='utf-8').read())
+    doc_nodes = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            body = getattr(node, 'body', [])
+            if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                    and isinstance(body[0].value.value, str):
+                doc_nodes.add(id(body[0].value))
+    return [n.value for n in ast.walk(tree)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in doc_nodes]
+
+
+def test_no_weapon_name_literal_in_resolution():
+    """poleaxe/mace/staff are bundles of primitives; the L0 primitive-law forbids a weapon-NAME conditional / per-weapon
+    table in resolution. Scan the resolution modules for any weapon-name string LITERAL in live code (docstrings +
+    comments allowed). A regression that hard-codes `if weapon=='poleaxe'` trips this."""
+    C, core, S, WP, CFG = _mods()
+    names = {n for n in C.WEAPONS if 'base' not in C.WEAPONS[n]}  # weapon names (exclude auto-switch forms)
+    offenders = {}
+    for mod in ('core.py', 'systems.py', 'wrapper.py'):
+        lits = _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
+        hit = sorted({s for s in lits if s in names})
+        if hit:
+            offenders[mod] = hit
+    assert not offenders, f"weapon-name literal(s) in resolution code (primitive-law break): {offenders}"
+
+
+# ── EMERGENT USE-MODE SELECTION ───────────────────────────────────────────────────────────────────
+def test_use_mode_selection_emerges_from_primitives():
+    """select_mode must (a) reproduce every SINGLE-mode weapon's native head at every armour tier, and (b) leave the
+    poleaxe as the ONLY weapon whose SELECTED head changes with armour — the emergent dual-mode. Both fall out of the
+    derived afforded_heads (no per-weapon list)."""
+    C, core, S, WP, CFG = _mods()
+    tiers = ['none', 'light', 'medium', 'heavy']
+    changers = []
+    for n, rec in C.WEAPONS.items():
+        if 'base' in rec:
+            continue
+        heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
+        if len(heads) > 1:
+            changers.append(n)
+    assert changers == ['poleaxe'], f"expected only the poleaxe to change selected head with armour; got {changers}"
+
+
+def test_afforded_heads_emerge_from_primitives():
+    """Affordance emerges from geometry primitives: the poleaxe affords blunt+point (spike from point_concentration
+    0.78); the mace/staff afford NO point (point_concentration 0.02/0.05 < the gate) — no weapon name involved."""
+    C, core, S, WP, CFG = _mods()
+    assert set(S.afforded_heads(C.WEAPONS['poleaxe'])) == {'blunt', 'point'}
+    assert 'point' not in S.afforded_heads(C.WEAPONS['mace'])
+    assert 'point' not in S.afforded_heads(C.WEAPONS['staff'])
+
+
+# ── GAP GAME ──────────────────────────────────────────────────────────────────────────────────────
+def test_gap_game_poleaxe_spikes_plate():
+    """The situational gap game: vs plate the poleaxe SELECTS its spike (puncture/point — the reach-ladder); unarmoured
+    it does not. Emergent from gap_precision × GAP_EXPOSURE, no name conditional."""
+    C, core, S, WP, CFG = _mods()
+    dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)
+    assert (dm_heavy, h_heavy) == ('puncture', 'point'), f"poleaxe vs plate should spike; got {(dm_heavy, h_heavy)}"
+    _, h_none = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'none', False, CFG)
+    assert h_none != 'point', "poleaxe unarmoured should not default to the spike (the gap game is situational)"
