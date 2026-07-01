@@ -1,6 +1,22 @@
 # sim/ — Valoria simulation armature
 
-**Status:** scaffold (Pass 2l, 2026-05-17). All modules are stubs.
+**Status:** scaffold (Pass 2l, 2026-05-17). All modules are stubs. **Stale caveat (see CLAUDE.md §7):**
+this understates progress — many modules are real and `mc_v18.py` runs full campaigns.
+
+## Not the same as tests/sim/ or tests/sim_framework/
+
+Three directories collide on the word "sim" but are not duplicates — don't move content between them
+without checking which one you actually mean:
+
+- **`sim/`** (here) — the canonical Python Monte-Carlo reference implementation the GDScript port is
+  built from. Its own regression tests live at `sim/tests/` (pytest, wired into CI — see CLAUDE.md §8).
+- **`tests/sim/`** — unrelated to this package. It's a frozen archive of historical sim-*run* output
+  (reports + one-off scripts from specific past simulation runs, e.g. `sim_mass_battle_SIM-MB-05.md`).
+  This directory predates `sim/` — it held the prior monolithic `mc_v17.py` orchestrator that `sim/`
+  replaced (see below). It's load-bearing for tooling: `ci_sim_fabrication_check.py`,
+  `atomization_rules.yaml`, and `lane_assignments.yaml` all path-match on the literal `tests/sim/` prefix.
+- **`tests/sim_framework/`** — a separate, earlier sim-harness attempt (its own `engine.py`/`state.py`),
+  not consumed by `sim/` or by `mc_v18.py`.
 
 ## Purpose
 

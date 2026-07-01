@@ -26,7 +26,7 @@ the head of its lineage; predecessors are archived._
 | **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
-| **Master workplan** | `designs/audit/2026-06-28-recent-work-orchestration/valoria_master_workplan_v5.md` (CANON-PROPOSED 2026-06-28; supersedes v4, which stays the frozen 06-11/06-22 record) |
+| **Master workplan** | `designs/workplans/valoria_master_workplan_v5.md` (CANON-PROPOSED 2026-06-28; supersedes v4, which stays the frozen 06-11/06-22 record; relocated 2026-07-01 from `designs/audit/2026-06-28-recent-work-orchestration/` — `designs/workplans/` is now the one live home, see its `README.md`) |
 | **Godot conversion** | `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
 | **Board game** | `params/board_game.md` + `params/bg/*` governing tables |
 | **Dice / resolution** | `params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |

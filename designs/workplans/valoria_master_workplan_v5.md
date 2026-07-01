@@ -120,7 +120,7 @@ v4 §8 carries unchanged (Deferred/Triggered/Dropped sets; the three process pri
 - **Lane B (WIP=1):** the two quick-wins are done; remaining new spine — **LB-21 (re-block, at the next integration pause)** → LB-24 (ci_political read-routing, ungated) → LB-22 (vector-audit rewrite → ci_hooks_verifier flip) → **K-2 (solo)** → LB-23 (freshness/ED-citation flips). LB-22's deprecation-enforcement + supersession-wiring ride the K-budget.
 - **Lane A:** LA-19 fires after J-31's extended sitting; the ED-912 consumer tail is already propagated.
 - **Lane C:** the social-contest builds + Key-bus wiring are gated (J-31 / J-36); the contest.py sim triage is the ungated prerequisite that unblocks the deferred J-31 sim edit.
-- **Commit path for this orchestration:** quick-wins (`tools/`+`references/` + 12 `skills/`) → this workplan under `designs/audit/2026-06-28-recent-work-orchestration/` → repoint `roadmap_state.yaml` + `lane_assignments.yaml` source to v5 → update `HANDOFF.md`. Banner v4 superseded on commit.
+- **Commit path for this orchestration:** quick-wins (`tools/`+`references/` + 12 `skills/`) → this workplan under `designs/audit/2026-06-28-recent-work-orchestration/` → repoint `roadmap_state.yaml` + `lane_assignments.yaml` source to v5 → update `HANDOFF.md`. Banner v4 superseded on commit. **[RELOCATED 2026-07-01: moved to `designs/workplans/`, now the one live home for the master workplan — see its `README.md`. This file's own path references above describe where it was originally committed, not where it lives now.]**
 
 ---
 
