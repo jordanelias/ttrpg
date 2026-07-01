@@ -103,8 +103,8 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       with **exactly one merge gate**, now CLOSED: `d9fd1f1a` **ADEF_THRESHOLD monotone re-sweep (ED-1050 RESOLVED)** +
       re-exported `combat_config.gd` from the oracle (retired the port's §6 private [AUDIT-FIX]); `e1fc0686` **architecture-
       invariant guards** (no-name-table ast scan + single-source + emergent-selection + gap-game — 84 tests).
-    - **→ THE BRANCH IS RATIFY-READY** (per the audit verdict, the one gate is discharged). **Track 3 = ratify + merge is
-      JORDAN'S CALL** (deliberately not merged unilaterally), then the fuller `.gd` module re-export
+    - **→ THE BRANCH IS RATIFY-READY — PR #40 OPEN** (`design/scene-combat-v1`→`main`, 75 commits;
+      https://github.com/jordanelias/ttrpg/pull/40) awaiting Jordan's review + merge. Then the fuller `.gd` module re-export
       (RESIST/GAP_EXPOSURE/gap-game logic — deferred behind the non-compilable skeleton, Key-log parity known-red).
     - **Deferrable Track-2 polish (post- or pre-merge, none blocking):** the `wt`/`spd` cost-path single-source de-leaks
       (re-baseline, need before/after; `spd` now unblocked since the agility clamp landed); Phase-A cleanups (`_HEAD2DMG`
