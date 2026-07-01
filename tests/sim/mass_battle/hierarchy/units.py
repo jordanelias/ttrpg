@@ -520,10 +520,17 @@ class Subunit:
                 if _probe in enemy_cells:
                     nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
             # (a) attention (facing model): face the ENGAGED target; else keep the WHEEL-slewed body facing.
-            # The node path already has a disc-gated WHEEL slew (L392), so do NOT double-slew here.
+            # [Stage B] The prior "don't double-slew, the node path already has a disc-gated WHEEL slew"
+            # reasoning didn't actually hold once this branch fires: it OVERWRITES cell_facing_vec with
+            # a fresh, instantaneous target-direction vector, discarding whatever latency the WHEEL slew
+            # (a body-level heading, a different quantity) had built up -- zero rate-limiting, the exact
+            # hyper-reactive instant-snap this facing model exists to prevent. Slewed here too, reusing
+            # _slew_facing (the same function the legacy path already uses for this), gated identically.
             if PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
                 _tc = self.target_atom.centroid()
-                self.cell_facing_vec[(orig_r, orig_c)] = (_tc[0] - nr, _tc[1] - nc)
+                _desired = (_tc[0] - nr, _tc[1] - nc)
+                _cur = self.cell_facing_vec.get((orig_r, orig_c), self._node_facing or (self.advance_dir, 0))
+                self.cell_facing_vec[(orig_r, orig_c)] = _slew_facing(_cur, _desired, discipline)
             elif self._node_facing is not None:
                 self.cell_facing_vec[(orig_r, orig_c)] = self._node_facing
             elif target_centroid:
