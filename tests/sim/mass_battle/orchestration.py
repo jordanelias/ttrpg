@@ -839,7 +839,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
 #  Damage recorded in Phase 2 but APPLIED at Phase 6 Step 1 (simultaneous with engagement).]
 
 def _atom_distance(atom_a, atom_b):
-    """Chebyshev (king-move) distance between nearest cells of two atoms."""
+    """Nearest-cell distance between two atoms. Chebyshev (king-move) on the integer grid; EUCLIDEAN on the
+    coordinate field (FIELD_MOVEMENT) so a diagonal approach is not counted 'free' — circular range rings
+    (movement-substrate review 06, finding 1 / migration S2). Byte-exact OFF (the Chebyshev branch)."""
     cells_a = atom_a.cells()
     cells_b = atom_b.cells()
     if not cells_a or not cells_b:
@@ -847,7 +849,7 @@ def _atom_distance(atom_a, atom_b):
     best = float('inf')
     for (ra, ca) in cells_a:
         for (rb, cb) in cells_b:
-            d = max(abs(ra - rb), abs(ca - cb))
+            d = math.hypot(ra - rb, ca - cb) if FIELD_MOVEMENT else max(abs(ra - rb), abs(ca - cb))
             if d < best:
                 best = d
                 if best == 0:

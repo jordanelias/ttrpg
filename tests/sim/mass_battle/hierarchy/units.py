@@ -340,8 +340,8 @@ class Subunit:
             if enemy_cells:
                 mine = self._node_cells()
                 if mine:
-                    dmin = min(max(abs(mr - er), abs(mc - ec))
-                               for (mr, mc) in mine for (er, ec) in enemy_cells)
+                    dmin = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
+                               for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field; Chebyshev on the grid (byte-exact OFF)
                     step = min(step, max(0, dmin - 1))   # vector-halt: stop at adjacency, not past
             mag = abs(dr) + abs(dc)
             if mag >= 0.5 and step > 0:
@@ -411,7 +411,7 @@ class Subunit:
         if PC_KITE_ENABLED and self.unit_type == 'ranged' and 'kite' in self.instructions and enemy_cells:
             mine = self.cells()
             if mine:
-                d = min(max(abs(mr - er), abs(mc - ec)) for (mr, mc) in mine for (er, ec) in enemy_cells)
+                d = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)
                 if d < PC_KITE_STANDOFF:     kite_mode = 'away'    # too close -> open the gap (retreat vector)
                 elif d > VOLLEY_MAX_RANGE:   kite_mode = 'toward'  # out of range -> close into the band
                 else:                        return                # in band -> hold position, keep volleying
