@@ -508,7 +508,7 @@ class Subunit:
                         worst = (violation, er, ec, sd, dist)
                 if worst is not None:
                     _, er, ec, sd, dist = worst
-                    if dist > 1e-9:
+                    if dist > 1e-9:  # [canonical: epsilon: float magnitude guard]
                         nr, nc = er + (nr - er) / dist * sd, ec + (nc - ec) / dist * sd
                     else:
                         nr, nc = cr, cc  # degenerate exact-overlap: hold at prior position

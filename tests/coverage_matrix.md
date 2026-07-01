@@ -373,3 +373,21 @@ Archived entries in tests/coverage_matrix_archive.md
 - Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
   7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
   non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
+
+## 2026-07-01 — mass_battle Stage A: true-adjacency stand-off halt (FIELD_MOVEMENT)
+- FIXED the coordinate-field magical-co-location bug: the halt clamp compared against SNAPPED enemy
+  positions with a flat "-1" margin, not true floats/a real stand-off. New `standoff()` primitive
+  (`hierarchy/units.py`: `CELL_RADIUS` + PP-290 reach class via `troop_types.registry.reach_for`).
+  `_node_advance`'s pre-cap + per-cell clamp now use `cells_float()` vs. `standoff()`, gated
+  `FIELD_MOVEMENT`, prior code kept as fallback (byte-exact OFF unaffected).
+- Bug found+fixed mid-implementation: freezing both sides' enemy positions pre-move let two closing
+  sides compound past standoff (run_battle moves unit_a fully before unit_b). Fixed by snapshotting
+  unit_a AFTER its own move. Verified: min separation holds at exactly `standoff()` (2.0).
+- `find_contacts` gets a standoff-radius field path; `resolve_cross_side_contention` is a documented
+  FIELD_MOVEMENT no-op. Review found+fixed a duplicate-cell stamina-drain over-count (dedup via sets).
+- CI gap closed: `bat.py`'s golden-digest harness existed but nothing ran it — new
+  `tests/valoria/test_mass_battle_byte_exact.py` wires grid-mode checks into CI; field digests recorded.
+- `gauge_mb.py`: grid/OFF unchanged (12/20, matches historical 5/13); field path passes 4/20 —
+  measured, not fitted; likely needs Stage B (facing/reaction, not yet built), not a magnitude tune.
+- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file
+  clean. Default stays OFF; default-flip remains Jordan-gated.

@@ -60,8 +60,8 @@ def stats_for(troop_type):
 #  Applies to most melee weapons." / "Long Reach: extended melee (polearms, spears; <=3 metres)."]
 # The 3x ratio is applied to the movement lattice's own pitch (COL_WIDTH=1.0, hierarchy/units.py)
 # rather than injecting an unratified meters-per-lattice-unit conversion.
-REACH_SHORT = 0.5
-REACH_LONG = 1.5
+REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
+REACH_LONG = 1.5   # [canonical: params/core.md §Reach Terminology (PP-290) — "Long Reach... <=3 metres", 3x ratio]
 
 # No TROOP_TYPE_STATS key today is textually a polearm/spear unit (PP-290's literal Long-Reach
 # examples). cavalry/knights_templar plausibly carry lances, but PP-290's cited text does not
