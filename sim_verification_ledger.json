@@ -133,6 +133,20 @@
       "canonical_source": "sim_verification_ledger.json",
       "section": "CALIBRATED -- Stage-5 debt (facing-physics slew rate, F2 DEFAULT-OFF)",
       "quoted_text": "CALIBRATED, ungrounded placeholder. units.py _slew_facing: max facing turn per resolution tick = PC_FACING_SLEW_BASE * disc_mult degrees, gating the anti-hyper-reactivity facing model (PC_FACING_MODEL). DEFAULT-OFF and NOT ratified -- the magnitude is a first-cut guess pending ground-vs-drill-manual wheel-rate calibration and Jordan sign-off. Retire to a derived body pivot rate. NO canonical doc backs this value -- do not fabricate one."
+    },
+    {
+      "sim_variable": "n",
+      "value": 60,
+      "canonical_source": "sim_verification_ledger.json",
+      "section": "CALIBRATED -- Jordan directive 2026-07-01 (gauge_mb.py matchup/run sample size)",
+      "quoted_text": "Jordan directive 2026-07-01: gauge_mb.py's per-matchup trial count n reduced 120->60 for runtime. SE~sqrt(0.25/n) rises from ~4.6pp (n=120, the grounding doc's cited basis, mass_battle_gauge_grounding.md Sec1) to ~6.5pp (n=60) at p=0.5. Verified statistically consistent: n=60 reproduces the identical n=120 pass-set (H1,H2,H7,H9,R1 = 5/13 multi-mode) on the OFF baseline. Design/methodology tradeoff, not historically cited -- do not fabricate a canonical source."
+    },
+    {
+      "sim_variable": "starting_position_stagger",
+      "value": 4,
+      "canonical_source": "sim_verification_ledger.json",
+      "section": "CALIBRATED -- gauge_mb.py make_mixed_unit deployment-layout convenience default",
+      "quoted_text": "make_mixed_unit's starting_position fallback (10 + i*4, 15): each un-positioned subunit in a spec list is staggered 4 rows apart so a caller does not need to supply explicit starting_position for every subunit. Design convenience, not historically cited -- do not fabricate a canonical source."
     }
   ]
 }

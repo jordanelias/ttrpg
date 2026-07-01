@@ -324,3 +324,31 @@ Archived entries in tests/coverage_matrix_archive.md
   OFF 5/13 → ON 4/13; H8 newly in-band, H2/H9 newly diverge to hard win-outs, draw rates collapse. NOT
   ratified — the gauge needs porting to the package before the ON path can be a validated contract.
   Coordinate-migration plan C0–P; open decisions: contact radius, facing magnitudes, gauge port, band ratification.
+
+## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend
+- PORTED gauge_mb.py off the dead `exec('/home/claude/sim_v22.py')` mechanism onto a direct
+  `from mass_battle.engine import ...` (agonist-antagonist adversarial workflow: 1 implement + 1
+  independent re-verify). make_unit/matchup() now delegate to engine.build_unit/resolve_battle (the
+  wrapper contract bat.py already proved byte-exact-transparent) instead of raw Subunit/Unit/run_battle
+  construction; make_mixed_unit stays on raw construction (build_unit is single-subunit only). No band,
+  citation, or metric changed. LIVE re-verified (not the prior scratchpad shim): OFF baseline multi-mode
+  5/13 (H1,H2,H7,H9,R1) — matches the shim's prior report exactly.
+- Jordan directive 2026-07-01: default sample n 120->60 (runtime). SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp
+  at p=0.5 vs the grounding doc's cited n=120 basis; VERIFIED n=60 reproduces the IDENTICAL n=120 pass-set
+  (5/13, same 5 rows) on the OFF baseline. Ledger entry `n=60` (calibrated/methodology, not historical).
+- Fabrication-debt resolution (whole-file scan, files touched by the above): resolution.py's roll_pool
+  TN=7 / face-rule 7-9=+1 cited to params/core.md; _sigma_net_boost's pre-existing citation reformatted
+  to satisfy the checker's `# [canonical: ...]`-immediately-after-`#` regex (same source, position fix
+  only). gauge_mb.py's make_mixed_unit P4/C4/D5/M6 defaults cited (same T3 baseline as make_unit); its
+  starting_position row-stagger (4) ledger-recorded as a non-historical layout convenience.
+- ADDED the tick-by-tick VISUALIZER trace-capture backend (Jordan directive 2026-07-01): extends the
+  existing observe-only trace seam (resolution.start_trace/trace_event/get_trace, "no-op unless ON ->
+  byte-exact") with resolution.tracing_on() (a public predicate so callers can skip expensive capture
+  entirely when tracing is off, not just discard it) and orchestration._cell_snapshot/_subunit_snapshot/
+  _unit_snapshot + one gated `if tracing_on(): trace_event('positions', ...)` call at the end of each
+  run_battle tick. Uses atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally
+  and is NOT field-aware) zipped against _oriented(atom)'s stable ids — correct on both the integer-grid
+  and coordinate-field paths. Zero cost when tracing is off (the capture functions are never called, not
+  merely discarded) — provably byte-exact since no existing caller (bat.py, gauge_mb.py) enables tracing.
+  Next: workbench/server.py + a browser frontend (canvas replay + playback controls), not yet built.
+- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.

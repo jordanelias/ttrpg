@@ -985,6 +985,38 @@ def volley_phase(unit_a, unit_b):
             "ordered_a": ordered_a, "ordered_b": ordered_b}
 
 
+# ─── WORKBENCH TRACE SNAPSHOTS (read-only; gated by tracing_on(), zero cost when tracing is off) ──
+# [tick-by-tick visualizer, Jordan directive 2026-07-01] Extends the existing observe-only trace seam
+# (resolution.start_trace/trace_event/get_trace) with a spatial 'positions' event per tick. Uses
+# atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally and is NOT
+# field-aware) zipped against _oriented(atom)'s stable (orig_r,orig_c) ids — both iterate in the
+# SAME order (cells()/_node_cells() are themselves built by iterating _oriented(self)), so this is a
+# correct pairing on BOTH the integer-grid and coordinate-field paths. Callers gate on tracing_on()
+# so this construction (and its cost) is skipped entirely for every normal battle run.
+def _cell_snapshot(atom):
+    ids = [(o_r, o_c) for o_r, o_c, _, _ in _oriented(atom)]
+    cells = []
+    for cid, pos in zip(ids, atom.cells()):
+        fr, fc = atom.get_cell_facing(*cid)
+        cells.append({'id': list(cid), 'pos': [pos[0], pos[1]],
+                       'troops': round(atom.cell_troops.get(cid, 0.0), 1),
+                       'facing': [fr, fc], 'halted': cid in atom.halted_cells})
+    return cells
+
+def _subunit_snapshot(atom):
+    return {'shape': atom.shape, 'troop_type': atom.troop_type, 'unit_type': atom.unit_type,
+            'role': atom.role, 'instructions': list(atom.instructions),
+            'routed': atom.routed, 'broken': atom.broken, 'stance': atom.stance,
+            'cells': _cell_snapshot(atom)}
+
+def _unit_snapshot(unit):
+    return {'name': unit.name, 'faction': unit.faction,
+            'hp': round(unit.hp, 1), 'hp_max': unit.hp_max,
+            'morale': unit.morale, 'discipline': unit.discipline, 'stance': unit.stance,
+            'routed': unit.routed, 'broken': unit.broken,
+            'subunits': [_subunit_snapshot(a) for a in unit.subunits]}
+
+
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
@@ -1237,6 +1269,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+        if tracing_on():
+            trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else
               "B" if not unit_b.routed and unit_a.routed else "draw")
     tick_in_phase = turns % TICKS_PER_PHASE if turns else 0
