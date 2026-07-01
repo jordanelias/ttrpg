@@ -10,44 +10,27 @@ Usage:
     python3 tools/patch_propagation_checker.py --from PP-200 # check PP-200+
     python3 tools/patch_propagation_checker.py --fix-report  # output fixable list
 
-Requires: GITHUB_PAT environment variable
+ED-1053: ported off the GitHub API to the LOCAL WORKING TREE. It used to read the
+patch register + params files from remote `main` and required GITHUB_PAT; it now
+reads the checkout directly — no PAT, no network — so it validates the diff under
+test rather than remote main.
+
 Exit codes:
     0 = all patches propagated to their listed params files
     1 = one or more patches missing from params headers
 """
 
-import os, sys, re, json, base64, urllib.request, argparse
+import os, sys, re, argparse
 
-REPO_OWNER = "jordanelias"
-REPO_NAME  = "ttrpg"
-BRANCH     = "main"
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-# ── GitHub helpers ─────────────────────────────────────────────────────────────
-
-def _headers():
-    pat = os.environ.get("GITHUB_PAT", "")
-    if not pat:
-        raise RuntimeError("GITHUB_PAT not set")
-    return {"Authorization": f"token {pat}", "Accept": "application/vnd.github.v3+json"}
-
-def _graphql(query, variables=None):
-    payload = json.dumps({"query": query, "variables": variables or {}}).encode()
-    req = urllib.request.Request(
-        "https://api.github.com/graphql",
-        data=payload,
-        headers={**_headers(), "Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
+# ── File access (working tree) ──────────────────────────────────────────────────
 
 def read_file(path):
-    """Read a single file from GitHub via REST."""
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}?ref={BRANCH}"
-    req = urllib.request.Request(url, headers=_headers())
+    """Read a single file from the working tree (repo-relative path). None if missing."""
     try:
-        with urllib.request.urlopen(req) as r:
-            data = json.loads(r.read())
-            return base64.b64decode(data["content"]).decode("utf-8")
+        with open(os.path.join(REPO_ROOT, path), encoding='utf-8') as f:
+            return f.read()
     except Exception as e:
         print(f"[ERROR] Cannot read {path}: {e}")
         return None

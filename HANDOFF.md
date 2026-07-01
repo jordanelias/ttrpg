@@ -116,12 +116,24 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
   harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
   resolvers, Gate-0 spine unbuilt — **needs_jordan**); ED-1052 typed engine-params layer for Godot ingestion;
-  ED-1053 integrity gates validate `main` not the diff + leaky fabrication guard + untested sim;
   ED-1054 navigation surface (partially done this pass). Full report:
   `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
+  **ED-1053 RESOLVED 2026-06-30** (see Decisions). Residual: 12 stale `canonical_sha__` pins surfaced
+  by the now-local freshness gate — refresh via `python3 tools/freshness_gate.py --update`, then flip
+  the freshness CI step off `continue-on-error`.
 
 ## Decisions
 
+- 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the three
+  "integrity" gates off the GitHub API to the working tree (no PAT/network): `broken_dependency_checker`
+  and `patch_propagation_checker` now `os.walk`/read locally (both green against the checkout);
+  `freshness_gate` computes git blob SHAs locally (verified identical to `git hash-object`) and checks
+  119/131 `canonical_sha__` pins (12 stale → report-only). Dropped `GITHUB_PAT` from the CI integrity job.
+  Hardened `ci_sim_fabrication_check`: full float-literal capture + `(variable,value)` matching close the
+  value-collision / float-split holes (corpus blast kept to +~200 latent, changeset-scoped; `tools/`
+  excluded from sim-classification). Added the first `sim/` test — `sim/tests/test_mc_v18_regression.py`
+  (deterministic seeded `run_batch(n=2,seed=0)`: determinism + golden + bounded smoke) — and a new
+  'Sim Reference Regression' CI job wired into All-Gates-Green. Updated CLAUDE.md §8.
 - 2026-06-30 — **Adversarial ecosystem review + safe fixes.** Ran a 72-agent verification workflow
   (6 audit dimensions × 2 skeptical lenses); 24 findings survived, headline items hand-spot-checked.
   Rewrote `CLAUDE.md` into a Claude-Code-optimized operating manual (numbered sections, currency

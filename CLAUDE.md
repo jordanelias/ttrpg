@@ -176,15 +176,19 @@ Do not represent the skeleton as a runnable head-start.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
-- **Some "integrity" gates re-fetch from GitHub** (`broken_dependency_checker.py`,
-  `patch_propagation_checker.py`, `freshness_gate.py`) — they validate remote `main` and require
-  `GITHUB_PAT`, not the working tree. This is the unfinished API→working-tree port.
 - **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
   `deprecated/`, or hardcode `/home/claude`): `compliance_check`, `extract_values`, `extract_proper_nouns`,
-  `freshness_gate`, `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
+  `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
   They fail opaquely — don't assume "tool exists ⇒ rule enforced."
-- **Token-size limits are enforced twice** with drifted thresholds (`ci_register_size_check.py` hardcoded
-  dict vs `references/atomization_rules.yaml`).
+
+*Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
+`patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
+no network), validating the checkout under test; `freshness_gate` computes blob SHAs locally
+(`git hash-object`-equivalent) and is no longer dead. The duplicated token-size cap was single-sourced
+from `references/atomization_rules.yaml`. The `sim/` reference now has a deterministic seeded CI test
+(`sim/tests/`), and the sim-fabrication guard matches constants by `(variable, value)` and captures
+full float literals. Residual: ~12 stale `canonical_sha__` pins surfaced by the now-local freshness
+gate (refresh with `python3 tools/freshness_gate.py --update`); freshness stays report-only until then.
 
 Run the unit tests locally: `pip install pyyaml pytest && python -m pytest tests/valoria -q`.
 
@@ -218,3 +222,34 @@ driver; superseded by the Claude Code-native model).
 → read the subsystem head and its `## Status:` line → make the change in the working tree → run the
 relevant `tools/` validator and `pytest tests/valoria` → commit with the `[scope]` format and any
 `PP-NNN`/`ED-NNN` citation. When a number must cross into Godot, follow §5; when porting, follow §6/§7.
+
+---
+
+## 10. Model tiering for orchestrated / multi-agent work
+
+When you fan work out across subagents — the **Agent** tool, or `agent()` calls in a **Workflow** script
+— set the model **per task**. Subagents inherit the session model by default, so an un-annotated fan-out
+on an Opus session runs Opus *everywhere*, which is slow and costly for work that doesn't need it.
+Actively tier down; reserve Opus for genuine judgment. (This revives the retired orchestrator's routing
+discipline — `deprecated/skills/valoria-orchestrator/references/model_routing_table.md` — updated for the
+Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
+
+| Tier | Use for | Repo examples |
+|---|---|---|
+| **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
+| **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
+| **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
+
+**Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
+`haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
+competing philosophical/design considerations, or synthesizing across dispersed docs? → `opus`. When
+genuinely unsure, omit the override and inherit — but flag the stages above where a cheaper tier clearly
+fits, rather than defaulting the whole fan-out to Opus.
+
+**How to set it:**
+- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus"` (e.g. `Explore`/`general-purpose`
+  file-finding on `haiku`–`sonnet`; reserve `opus` for `Plan` and adjudication agents).
+- **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
+  mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
+  `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
+  Opus verifier/synthesizer.**

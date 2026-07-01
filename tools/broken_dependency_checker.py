@@ -1,67 +1,44 @@
 """
 broken_dependency_checker.py — Valoria repository integrity scanner.
 Scans the propagation map and canonical_sources for references to files
-that do not exist in the repository. Runs against live GitHub tree.
+that do not exist in the repository.
+
+ED-1053: ported off the GitHub API to the LOCAL WORKING TREE. It used to fetch the
+recursive tree + file contents from remote `main` and required GITHUB_PAT, so it
+validated remote main rather than the diff under test (and broke without a PAT). It
+now reads the checkout directly — no PAT, no network — so a PR that adds or fixes a
+reference is validated against its own changes. This is the working-tree integrity
+model mandated by CLAUDE.md.
 
 Usage:
-    python3 broken_dependency_checker.py
-
-Requires: GITHUB_PAT environment variable
+    python3 tools/broken_dependency_checker.py
 Output: prints broken dependencies; exits 1 if any found.
 """
 
-import os, sys, json, re, urllib.request
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
+import os, sys, re
 
-REPO_OWNER = "jordanelias"
-REPO_NAME  = "ttrpg"
-BRANCH     = "main"
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-def get_headers():
-    pat = os.environ.get("GITHUB_PAT", "")
-    if not pat:
-        raise RuntimeError("GITHUB_PAT not set")
-    return {"Authorization": f"token {pat}", "Accept": "application/vnd.github.v3+json"}
+# Trees that are not part of the live corpus for ref-resolution purposes.
+_IGNORE_DIRS = {'.git'}
 
-def graphql(query, variables=None):
-    payload = json.dumps({"query": query, "variables": variables or {}}).encode()
-    req = urllib.request.Request(
-        "https://api.github.com/graphql",
-        data=payload,
-        headers={**get_headers(), "Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
 
 def get_all_repo_files():
-    """Return set of all file paths in the repo via GraphQL tree."""
-    q = """
-    query($owner: String!, $name: String!) {
-      repository(owner: $owner, name: $name) {
-        object(expression: "HEAD:") {
-          ... on Tree {
-            entries { name type object { ... on Tree { entries { name type } } } }
-          }
-        }
-      }
-    }
-    """
-    # Use REST for recursive tree — simpler
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/git/trees/{BRANCH}?recursive=1"
-    req = urllib.request.Request(url, headers=get_headers())
-    with urllib.request.urlopen(req) as r:
-        data = json.loads(r.read())
-    return {item["path"] for item in data.get("tree", []) if item["type"] == "blob"}
+    """Return the set of all repo-relative file paths in the working tree."""
+    files = set()
+    for root, dirs, names in os.walk(REPO_ROOT):
+        dirs[:] = [d for d in dirs if d not in _IGNORE_DIRS]
+        for n in names:
+            rel = os.path.relpath(os.path.join(root, n), REPO_ROOT).replace(os.sep, '/')
+            files.add(rel)
+    return files
+
 
 def read_file(path):
-    """Read a file from GitHub."""
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}?ref={BRANCH}"
-    req = urllib.request.Request(url, headers=get_headers())
+    """Read a file from the working tree (repo-relative path). None if missing/unreadable."""
     try:
-        with urllib.request.urlopen(req) as r:
-            import base64
-            data = json.loads(r.read())
-            return base64.b64decode(data["content"]).decode()
+        with open(os.path.join(REPO_ROOT, path), encoding='utf-8') as f:
+            return f.read()
     except Exception:
         return None
 
@@ -116,9 +93,9 @@ def check_editorial_ledger(all_files):
     return broken, []
 
 def main():
-    print("Fetching repository file tree...")
+    print("Scanning working tree...")
     all_files = get_all_repo_files()
-    print(f"Found {len(all_files)} files in repo")
+    print(f"Found {len(all_files)} files in working tree")
 
     broken = {}
     errors = []
