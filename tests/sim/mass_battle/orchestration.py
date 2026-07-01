@@ -1101,21 +1101,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
 
         def _cells_float_of(unit):
-            # 4th field: is this enemy cell HALTED (frozen for the rest of the battle, per the
-            # pre-contact halt block above)? A halted cell will never reciprocally close the other
-            # half of the standoff gap, so the mover's clamp must correct the FULL violation against
-            # it, not half -- confirmed empirically: halving against a halted cell left a mover resting
-            # at exactly half the standoff distance (1.414 instead of 2.0) indefinitely, since the
-            # static cell never "does its share." cells_float() and _oriented(sub) iterate in the same
-            # order (both walk _oriented(self) internally), so zipping them pairs each float position
-            # with its (orig_r, orig_c) id for the halted_cells membership check.
-            out = []
-            for sub in unit.subunits:
-                rch = reach_for(sub.troop_type)
-                ids = [(o_r, o_c) for o_r, o_c, _, _ in _oriented(sub)]
-                for cid, (r, c) in zip(ids, sub.cells_float()):
-                    out.append((r, c, rch, cid in sub.halted_cells))
-            return out
+            return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
 
         # [Stage A, REVISED — see the mirror-matchup bias finding below] Standoff-clamp enemy-float
         # snapshot. An earlier version of this fix built b_cells_float pre-move but a_cells_float AFTER

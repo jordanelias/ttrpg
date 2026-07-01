@@ -451,18 +451,21 @@ class Subunit:
                 # tick move) claim their full half, the combined closure exactly consumes the excess and
                 # the post-move gap is guaranteed >= standoff -- with neither side able to "go first" and
                 # claim the whole budget (the confirmed cause of a severe mirror-matchup first-mover bias
-                # in the unhalved, sequential-snapshot version of this fix). Uniform halving here
-                # (unlike the per-cell clamp below): this is an AGGREGATE cap on the whole subunit's
-                # anchor advance, not a per-violator correction, and letting it move at full speed
-                # toward any halted neighbour let the whole body (and, via rotation, cells that were not
-                # near that neighbour) swing into range of OTHER, non-halted enemies -- confirmed
-                # empirically to make total violations worse, not better. The per-cell clamp below is
-                # the right (localized) place to special-case halted enemies.
+                # in the unhalved, sequential-snapshot version of this fix).
+                #
+                # Uniform halving, no exception for an already-halted (frozen) enemy cell: a variant
+                # that let this cap move at full speed toward a halted neighbour was tried (a halted
+                # cell never reciprocally closes its own half, so it seemed safe to take the whole
+                # gap) and made total violations WORSE, not better -- letting the whole body (and, via
+                # rotation, cells not even near that neighbour) swing further, into range of OTHER,
+                # still-moving enemies that the per-cell clamp below then couldn't fully correct for.
+                # Reverted in favor of this smaller, uniform-halving residual (see the per-cell clamp's
+                # own note on the accepted sqrt(2)-vs-2.0 gap this leaves in dense/rotating geometries).
                 mine = self.cells_float()
                 if mine:
                     my_reach = reach_for(self.troop_type)
                     allowed = min(math.hypot(mr - er, mc - ec) - standoff_from_reach(my_reach, erch)
-                                  for (mr, mc) in mine for (er, ec, erch, ehalted) in enemy_cells_float) / 2.0
+                                  for (mr, mc) in mine for (er, ec, erch) in enemy_cells_float) / 2.0
                     step = min(step, max(0, allowed))
             elif enemy_cells:
                 mine = self._node_cells()
@@ -526,15 +529,36 @@ class Subunit:
                 # -- a rotating envelop maneuver, dense with nearby enemy cells, still showed rare
                 # violations with a single-shot worst-violator correction). Re-find and re-correct the
                 # worst remaining violator up to a few passes; a bounded loop, not exact multi-body
-                # constraint solving, but converges in practice for the small violator counts a single
-                # cell actually faces.
+                # constraint solving.
                 #
+                # TRACK THE BEST POSITION SEEN, don't just take the last pass's result: for a cell
+                # flanked by two violators on roughly opposite sides (a real pincer/envelopment
+                # geometry), correcting against one violator can swing the candidate directly toward
+                # the other, and back again -- an adversarial review reproduced this concretely: with
+                # an even pass budget the naive last-pass-wins version can cycle back to the ORIGINAL,
+                # fully-violating position, undoing every correction. Guard against this by keeping
+                # whichever candidate this loop has seen with the smallest (least negative) worst
+                # violation, and using THAT at the end regardless of which pass produced it.
                 my_reach = reach_for(self.troop_type)
-                for _pass in range(4):
-                    worst = None  # (violation, er, ec, sd, dist)
-                    for (er, ec, erch, ehalted) in enemy_cells_float:
+
+                def _worst_violation(pr, pc):
+                    w = 0.0
+                    for (er, ec, erch) in enemy_cells_float:
                         sd = standoff_from_reach(my_reach, erch)
-                        dist = math.hypot(nr - er, nc - ec)
+                        v = math.hypot(pr - er, pc - ec) - sd
+                        if v < w:
+                            w = v
+                    return w
+
+                best_nr, best_nc, best_worst = nr, nc, _worst_violation(nr, nc)
+                cand_r, cand_c = nr, nc
+                for _pass in range(4):
+                    if best_worst >= 0:
+                        break
+                    worst = None  # (violation, er, ec, sd, dist)
+                    for (er, ec, erch) in enemy_cells_float:
+                        sd = standoff_from_reach(my_reach, erch)
+                        dist = math.hypot(cand_r - er, cand_c - ec)
                         violation = dist - sd
                         if violation < 0 and (worst is None or violation < worst[0]):
                             worst = (violation, er, ec, sd, dist)
@@ -543,10 +567,13 @@ class Subunit:
                     _, er, ec, sd, dist = worst
                     if dist > 1e-9:  # [canonical: epsilon: float magnitude guard]
                         _half_sd = (dist + sd) / 2.0
-                        nr, nc = er + (nr - er) / dist * _half_sd, ec + (nc - ec) / dist * _half_sd
+                        cand_r, cand_c = er + (cand_r - er) / dist * _half_sd, ec + (cand_c - ec) / dist * _half_sd
                     else:
-                        nr, nc = cr, cc  # degenerate exact-overlap: hold at prior position
-                        break
+                        cand_r, cand_c = cr, cc  # degenerate exact-overlap: hold at prior position
+                    cand_worst = _worst_violation(cand_r, cand_c)
+                    if cand_worst > best_worst:
+                        best_nr, best_nc, best_worst = cand_r, cand_c, cand_worst
+                nr, nc = best_nr, best_nc
             elif enemy_cells:
                 # [migration P] OFF = verbatim int(round) grid-membership probe; ON (no float data supplied,
                 # i.e. FIELD_MOVEMENT off but PC_NODE_COHESION on) = file-binned probe matching the
