@@ -76,7 +76,14 @@ MOI_AGILITY_K = 6.0     # LIVE [SIM-CALIBRATE]: the bind-leverage normaliser in 
 # agility power law (Phase-3 grounding): EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
 # mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1). Replaces 1/(1+K·MoI).
 AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
-AGILITY_REF = 0.088     # [SIM-CALIBRATE] anchor MoI (a handy arming sword) where agility≈1.0; fit in the re-baseline
+# [SIM-CALIBRATE] anchor MoI. RE-ANCHORED 2026-06-30 (Track-2 primitive-law purge, gate1_audit agility-fiat-clamp):
+# set JUST BELOW the lightest weapon's swing inertia (~0.9× the dagger's MoI 0.0024) so AGILITY_REF/MoI ≤ 1 for the
+# WHOLE roster — nothing pins to the min(1.0) cap, which becomes an inert safety guard. The prior 0.088 (an arming
+# sword's MoI) put ~5 light weapons ABOVE the anchor, so the cap flat-topped dagger=paired=sabre=arming=half-sword to
+# agility 1.0 and ERASED the emergent light-weapon dodge/parry ordering. With this anchor agility ∈ (0,1] emerges
+# strictly from MoI (dagger highest → spear lowest). Chosen so the dodge/parry _band spread (renormalised below to the
+# compressed range) reproduces the previously-calibrated spread — a re-baseline that restores emergence, not a re-tune.
+AGILITY_REF = 0.00215
 # 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
 K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
 # [WIRING HAZARD — Phase-3b] weapon_physics.reach() spans ~0.7–6.0 (head_len-based); the LIVE systems.reach_base it
@@ -171,13 +178,15 @@ def agility(w):
     agility ∝ MoI^(−AGILITY_EXP), EXP≈0.25 (Cross & Nathan 2009 / Fleisig 2002 — handle-axis bat/racket/golf swing
     studies, mass-independent, exponent 0.20–0.28). Replaces the prior 1/(1+K·MoI), whose LOCAL exponent climbed
     0.1→0.9 across the roster and over-penalised heavy weapons ~2× (greatsword 0.22 vs the power-law ~0.6). Anchored
-    at AGILITY_REF (a handy arming sword's MoI) where agility≈1, capped at 1.0 for lighter weapons. The exponent is
-    grounded; AGILITY_REF is [SIM-CALIBRATE] (sets the spread, fit in the Phase-3 re-baseline). In (0,1].
-    [FIAT/WIRING-HAZARD] Below AGILITY_REF the literature fit (Cross & Nathan, sampled MoI≈0.2–0.6) is EXTRAPOLATED
-    and the min(1.0,…) CLAMP is a FIAT cap, not grounded — it collapses the whole light-weapon spread (dagger 0.002,
-    arming 0.088, half-sword 0.025 all pin to 1.0), erasing the dagger>paired>sabre tempo ordering. MUST be resolved
-    when agility is wired live in Phase-3b (re-anchor AGILITY_REF at/below the lightest MoI, or drop the cap and
-    renormalise the consumer to (0,k]) — the power law itself is correct uncapped."""
+    at AGILITY_REF (set just BELOW the lightest weapon's MoI), so the whole roster sits at agility ≤ 1 and the spread
+    EMERGES strictly from MoI: dagger highest (~0.97) → spear lowest (~0.18). The exponent is grounded; AGILITY_REF is
+    [SIM-CALIBRATE]. In (0,1].
+    FIAT-CLAMP RESOLVED (2026-06-30, Track-2 / gate1_audit agility-fiat-clamp): the anchor now sits below the lightest
+    MoI (AGILITY_REF ≈ 0.9× dagger), so AGILITY_REF/MoI ≤ 1 for EVERY weapon and the min(1.0,…) NEVER binds — it is an
+    inert safety guard, not the spread-destroying flat-top it was at the old 0.088 anchor (which pinned dagger, paired,
+    sabre, arming and the half-sword all to 1.0). The light-weapon dodge/parry ordering (dagger>paired>sabre>arming) is
+    restored; the consumers (defense_affinities' dodge _band window + the parry agility-pivot) were renormalised to the
+    compressed agility range so the OUTPUT affinity spread matches the previously-calibrated one — see defense_affinities."""
     return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
 
 
@@ -212,11 +221,18 @@ def defense_affinities(w):
     onehand = 1.0 if w['hands'] == 1 else 0.78
     wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 3.0))
     dodge = ag * onehand
-    parry = (0.45 + 0.55 * w.get('hand_guard', 0.4)) * (0.55 + 0.45 * min(1.0, ag / 0.6))
+    # AGILITY-PIVOT (was ag/0.6): agility() was re-anchored below the lightest MoI (capless), so its live range
+    # COMPRESSED (a handy 1H sword now reads ag≈0.4, not the old flat-topped 1.0). The parry saturation pivot is
+    # renormalised to that new range so the parry-affinity spread reproduces the previously-calibrated one.
+    # [SIM-CALIBRATE 0.39] — fit to the pre-re-anchor parry spread; travels with the AGILITY_REF re-baseline.
+    parry = (0.45 + 0.55 * w.get('hand_guard', 0.4)) * (0.55 + 0.45 * min(1.0, ag / 0.39))
 
-    def _band(x, lo, hi):                                         # into the old GATE's ~[0.4,1.0] band
+    def _band(x, lo, hi):                                         # remap into the ~[0.4,1.0] affinity band
         return round(0.4 + 0.6 * max(0.0, min(1.0, (x - lo) / (hi - lo))), 2)
-    return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.2, 0.95), wind=_band(wind, 0.05, 0.45))
+    # DODGE _band window RENORMALISED (was [0.2,0.95]) to the compressed capless-agility range so the dodge spread
+    # reproduces the previously-calibrated one (dagger 1.0 > paired > sabre > arming > … > heavies at the 0.4 floor)
+    # rather than flat-topping at 1.0. [SIM-CALIBRATE 0.19,0.54] — fit to the pre-re-anchor dodge spread.
+    return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.19, 0.54), wind=_band(wind, 0.05, 0.45))
 
 
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
