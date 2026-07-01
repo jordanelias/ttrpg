@@ -245,23 +245,26 @@ def select_mode(c, defender_armor, closed, cfg):
     then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
     armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
     N'). Reproduces every single-mode weapon's current head (rapier->point, sabre->curved_cut, arming/longsword/
-    dagger->cut_thrust, mace/staff->blunt) and the poleaxe (the one weapon that affords >1 head: blunt+spike). NOTE
-    [2026-06-30 finding]: under the grounded credited authority (poleaxe 5.83, a strong concussor) + the §2 RESIST
-    table (plate.percussion .30 < plate.puncture .70, i.e. plate is modelled MORE vulnerable to concussion than to
-    the spike), the greedy comparator selects the poleaxe's BLUNT mode at every armour tier — its concussion out-
-    couples its spike vs plate (0.93 vs 0.44). The spike is AFFORDED and ready but not selected; flipping it would
-    require re-tuning the frozen §2 RESIST / ADEF constants (out of scope). Returns (damage_mode, eff_head): eff_head
-    is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved 'percussion'/
-    'shear'/'puncture'. The wrapper writes both onto the combatant (mutation stays wrapper-owned, like grip_position)."""
+    dagger->cut_thrust, mace/staff->blunt) and the poleaxe (the one weapon that affords >1 head: blunt+spike). SITUATIONAL
+    GAP GAME [2026-06-30]: the greedy comparator threads the weapon's derived gap_precision (w['gap']) into the puncture
+    path (core.coupling gap_prec=), so it SEES the gap-thrust's real GAP-SEEKING effectiveness vs the armour. The poleaxe
+    now SELECTS its spike vs plate (the reach-ladder — the historically-correct armoured kill: thrust to the visor/
+    armpit/groin), because its stiff concentrated point (gap 0.78) out-couples its own hammer at the gaps; a rondel-type
+    (gap 0.84) selects the spike even harder; a mace (blunt-only, no afforded point) still hammers; a staff (weak point,
+    weak authority) stays weak. All EMERGENT from the derived gap_precision — no weapon name. Returns (damage_mode,
+    eff_head): eff_head is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved
+    'percussion'/'shear'/'puncture'. The wrapper writes both onto the combatant (mutation stays wrapper-owned)."""
     w=c.w
     heads=afforded_heads(w)
     if len(heads)==1:                                                # single afforded mode: no choice (the common case)
         h=next(iter(heads))
     else:
-        # greedy: the mode delivering the most damage-coupling THROUGH this armour (perc carries the blunt authority
-        # so a high-authority hammer's through-plate transmit competes with a spike's gap-thrust on the same scale).
+        # greedy: the mode delivering the most damage-coupling THROUGH this armour. perc carries the blunt authority (a
+        # high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING plate-defeat (the
+        # situational gap game), so the poleaxe's hammer and its spike are compared on the same coupling scale — and the
+        # spike wins vs harness. gap_prec=w['gap'] is passed uniformly (percussion/shear ignore it; only puncture reads it).
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
-                  perc=WP.percussion_authority(w) if hd=='blunt' else core.PERC_AUTH_REF))
+                  perc=WP.percussion_authority(w) if hd=='blunt' else core.PERC_AUTH_REF, gap_prec=w['gap']))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
