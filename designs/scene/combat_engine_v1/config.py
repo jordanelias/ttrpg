@@ -37,7 +37,7 @@ CFG = dict(
   # unarmoured by construction. REACH_DECAY_K [FIAT — designer-set; deliberately LOW to avoid triple-counting REACH_W
   # + ADEF_CUT, which already remove most cut-vs-plate reach value]. FLOOR keeps a residual (an armoured man still works to close).
   REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
-  ADEF_THRESHOLD={'none':0.0,'light':0.70,'medium':0.45,'heavy':0.72},
+  ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72},   # MONOTONE (ED-1050 resolved, Jordan 2026-06-30): the armour-defeat threshold RISES with armour — a gambeson (light) is soft/easily defeated, mail (medium) harder, plate (heavy) hardest. light 0.70->0.30 fixes the backwards inversion (light>medium) that systems.armor_defeat_sigma's docstring forbids; medium/heavy KEPT (calibrated). Re-swept in canon + re-exported to combat_config.gd (retiring the port's private [AUDIT-FIX], CLAUDE.md §6). [SIM-CALIBRATE] values within the grounded monotone frame; validated (mirror-50, light matchups sane).
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
   # tempo
   BASE_TEMPO=2.0, SPEED_K=0.6, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4

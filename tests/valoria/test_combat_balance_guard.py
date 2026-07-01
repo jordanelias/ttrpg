@@ -72,7 +72,7 @@ def test_mirror_fairness(weapon):
     assert 0.40 <= rate <= 0.60, f"mirror {weapon} A-winrate {rate:.3f} outside [0.40,0.60] — role-symmetry break?"
 
 
-@pytest.mark.parametrize("weapon", ['dagger', 'spear', 'poleaxe', 'longsword', 'mace'])
+@pytest.mark.parametrize("weapon", ['dagger', 'spear', 'poleaxe', 'longsword', 'mace', 'arming'])
 def test_heavy_mirror_fair_and_decisive(weapon):
     """HEAVY-armour mirror — symmetry AND non-degeneracy. The Gate-1 audit + the gap game (2026-06-30) exposed a latent
     artifact the light-only `test_mirror_fairness` never covered: pre-gap-game, pure-thrust weapons vs plate produced
