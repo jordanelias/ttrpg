@@ -43,8 +43,12 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1055 }   # 1050-1054 filed: ecosystem-review Top-5 (ED-1050..1054)
-    PP: { block: "800-829", next_free: 800 }
+    ED: { block: "1050-1099", next_free: 1080 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild
+    PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
+  # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
+  contest_rebuild:
+    ED: { block: "1055-1079", next_free: 1055 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement
+    PP: { block: "800-809", next_free: 800 }
 
 # When all three lanes exhaust their blocks, the integration seam allocates the next
 # round of disjoint blocks (extend each by the same stride) and bumps `version`.
