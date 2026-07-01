@@ -273,3 +273,14 @@ Archived entries in tests/coverage_matrix_archive.md
   (unit 4c5943c1…); NOT yet gauge-re-baselined — the field path's validation is the gated Track-M
   G-decision (06_movement_substrate_review.md). Heading-continuous + cid-threading deferred (need the
   float substrate / a contact-path refactor).
+  (Note: the toggle actually lives in hierarchy/units.py beside PC_ENVELOP_PATH/PC_SWEEP, not config.py —
+  config.py carries pre-existing uncited constants the whole-file fabrication scan would flag.)
+
+## 2026-07-01 — Track M: centralize the abs→orig reverse-lookup [byte-exact refactor]
+- ADDED geometry._oriented_abs_map(atom) (a FIRST-wins {abs:(orig)} map); refactored cells_to_orig_coords,
+  _rotate_defender_facing, _atom_avg_facing to use it — retiring three open-coded O(n²) reverse scans.
+  This centralizes the pattern-identity round-trip that is the engine's HARD grid dependency
+  (movement-substrate review 06, findings 4/8) into ONE place — the step toward threading the cell
+  identity from find_contacts (deleting the lookup entirely) once the contact path is refactored.
+- G5 byte-exact both modes (unit 7be8499b / cell 1c5b2851 unchanged): the map preserves the old
+  break-on-first semantics exactly, so results are identical. No behaviour change.

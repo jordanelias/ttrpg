@@ -230,19 +230,28 @@ def atom_max_width(shape, tier):
 
 # ─── F-i: CELL SUPPORT STACKING ──────────────────────────────────────────────
 
+def _oriented_abs_map(atom):
+    """{ (abs_r,abs_c): (orig_r,orig_c) } for an atom's live cells — the abs->orig (pattern-identity)
+    recovery, built ONCE, FIRST-wins in oriented_pattern order (exactly matching the historical
+    break-on-first reverse-lookup). Centralizes the identity round-trip that cells_to_orig_coords /
+    _rotate_defender_facing / _atom_avg_facing each open-coded as an O(n^2) scan. Byte-exact (same
+    first-match). [movement-substrate review 06 — findings 4/8: this abs->orig reverse-lookup is the hard
+    grid dependency; centralizing it is the step toward threading the cell identity from the source.]"""
+    amap = {}
+    for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
+        abs_r = (atom.starting_position[0] + or_r
+                 + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+        abs_c = (atom.starting_position[1] + or_c
+                 + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+        amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the old break-on-first
+    return amap
+
+
 def cells_to_orig_coords(atom, abs_cells):
-    op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
-    orig_coords = []
-    for abs_r, abs_c in abs_cells:
-        for orig_r, orig_c, or_r, or_c in op:
-            comp_r = (atom.starting_position[0] + or_r
-                      + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
-            comp_c = (atom.starting_position[1] + or_c
-                      + atom.cell_offsets_c.get((orig_r, orig_c), 0))
-            if (comp_r, comp_c) == (abs_r, abs_c):
-                orig_coords.append((orig_r, orig_c))
-                break
-    return orig_coords
+    """orig (pattern-identity) coords for each of abs_cells that belongs to this atom, in abs_cells
+    order. Byte-exact refactor of the old per-cell reverse scan via the centralized abs->orig map."""
+    amap = _oriented_abs_map(atom)
+    return [amap[(r, c)] for (r, c) in abs_cells if (r, c) in amap]
 
 def support_engage_frac(atom, contact_abs_cells):
     """F-i: support-stack-adjusted engage_frac.
@@ -287,20 +296,17 @@ def _rotate_defender_facing(defender_atom, defender_abs_cells, attacker_abs_cell
         return
     att_r = sum(c[0] for c in attacker_abs_cells) / len(attacker_abs_cells)
     att_c = sum(c[1] for c in attacker_abs_cells) / len(attacker_abs_cells)
-    op = oriented_pattern(defender_atom.shape, defender_atom.tier, defender_atom.advance_dir)
+    amap = _oriented_abs_map(defender_atom)
     for abs_r, abs_c in defender_abs_cells:
-        for orig_r, orig_c, or_r, or_c in op:
-            comp_r = (defender_atom.starting_position[0] + or_r
-                      + defender_atom.cell_offsets.get((orig_r, orig_c), 0) * defender_atom.advance_dir)
-            comp_c = (defender_atom.starting_position[1] + or_c
-                      + defender_atom.cell_offsets_c.get((orig_r, orig_c), 0))
-            if (comp_r, comp_c) == (abs_r, abs_c):
-                dr = att_r - abs_r
-                dc = att_c - abs_c
-                mag = max(1e-9, (dr*dr + dc*dc)**0.5)  # [canonical: epsilon: float magnitude guard]
-                dynamic_facings[_cell_facing_key(defender_atom, orig_r, orig_c)] = \
-                    (round(dr / mag), round(dc / mag))
-                break
+        oc = amap.get((abs_r, abs_c))
+        if oc is None:
+            continue
+        orig_r, orig_c = oc
+        dr = att_r - abs_r
+        dc = att_c - abs_c
+        mag = max(1e-9, (dr*dr + dc*dc)**0.5)  # [canonical: epsilon: float magnitude guard]
+        dynamic_facings[_cell_facing_key(defender_atom, orig_r, orig_c)] = \
+            (round(dr / mag), round(dc / mag))
 
 def _init_dynamic_facings(unit_a, unit_b):
     df = {}
@@ -313,18 +319,14 @@ def _init_dynamic_facings(unit_a, unit_b):
 
 def _atom_avg_facing(atom, contact_abs_cells, dynamic_facings):
     """Compute average facing for an atom's contact cells from dynamic_facings."""
-    op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
+    amap = _oriented_abs_map(atom)
     facings = []
     for abs_r, abs_c in contact_abs_cells:
-        for orig_r, orig_c, or_r, or_c in op:
-            comp_r = (atom.starting_position[0] + or_r
-                      + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
-            comp_c = (atom.starting_position[1] + or_c
-                      + atom.cell_offsets_c.get((orig_r, orig_c), 0))
-            if (comp_r, comp_c) == (abs_r, abs_c):
-                key = _cell_facing_key(atom, orig_r, orig_c)
-                facings.append(dynamic_facings.get(key, cell_facing(atom.advance_dir)))
-                break
+        oc = amap.get((abs_r, abs_c))
+        if oc is None:
+            continue
+        key = _cell_facing_key(atom, oc[0], oc[1])
+        facings.append(dynamic_facings.get(key, cell_facing(atom.advance_dir)))
     if not facings:
         return cell_facing(atom.advance_dir)
     return (sum(f[0] for f in facings) / len(facings),
