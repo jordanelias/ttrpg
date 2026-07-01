@@ -77,6 +77,14 @@ SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier
 # Contest engine surface constants (designs/audit/2026-06-03-contest-groundup/engine.py)
 OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
 
+# Contest-surface per-die stats (params/core.md §Expected Value): TN7 μ/σ per die.
+# The contest degree() Overwhelming bar is pool-aware (see degree() below).
+MU_PER_DIE = 0.40       # [canonical: params/core.md §Expected Value (per die), TN7]
+SD_PER_DIE = 0.80       # [canonical: params/core.md §Expected Value (per die), TN7]
+# De-saturation bar (contest diagnostic Lesson 2, groundup engine.py): live degree-3 bar
+# = pool mean + OVERWHELM_SIGMA·σ, holding the Overwhelming rate ~uniform across pool sizes.
+OVERWHELM_SIGMA = 0.85  # [canonical: designs/audit/2026-06-03-contest-groundup/engine.py §degree]
+
 
 # ---------------------------------------------------------------------------
 # Core σ-leverage primitives
@@ -169,6 +177,18 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
 # Level aggregation
 # ---------------------------------------------------------------------------
 
+def level(name: str) -> float:
+    """σ-value for a named modifier level (minor/moderate/strong/major).
+
+    Contest-surface accessor (designs/audit/2026-06-03-contest-groundup/engine.py
+    named this level()). Single-sources LEVEL_SIGMA so combat (levels_to_net_sigma)
+    and contest (Leverage.ONGROUND = level("moderate")) share one table.
+    Stage-1a finding 1a: this accessor was missing from the port.
+    [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]
+    """
+    return LEVEL_SIGMA[name]
+
+
 def levels_to_net_sigma(
     aggressor: Sequence[str] | None = None,
     defender: Sequence[str] | None = None,
@@ -235,3 +255,37 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
     """
     effective_pool = max(1, int(round(pool)))       # [canonical: params/core.md §Pool Floor (all systems)]
     return dice_engine.continuous_engine_sample(pool=float(effective_pool), tn=tn, rng=rng)
+
+
+# ---------------------------------------------------------------------------
+# Contest-surface degree (pool-aware integer bands)
+# ---------------------------------------------------------------------------
+
+def degree(net: float, ob: float, pool: float | None = None) -> int:
+    """Contest-surface degree bands: 0 Failure / 1 Partial / 2 Success / 3 Overwhelming.
+
+    RECONCILIATION NOTE (Stage 1b, degree carry-across — NOT a fork):
+    This is a DISTINCT contract from dice_engine.degree_from_net (which returns a
+    Degree enum with a 2*Ob Overwhelming bar for the COMBAT surface). The social
+    contest kernel needs (a) INTEGER bands it uses as a numeric magnitude in
+    _advance, and (b) a POOL-AWARE Overwhelming bar (pool mean + OVERWHELM_SIGMA·σ)
+    that de-saturates the degree-3 rate to ~uniform across pool sizes (diagnostic
+    Lesson 2). These are contest-specific reception semantics, so the pool-aware
+    integer degree lives here on the contest surface rather than overwriting the
+    combat enum degree. Ported verbatim from
+    designs/audit/2026-06-03-contest-groundup/engine.py §degree; the 151 groundup
+    tests are the behavior-preserving guard. TN7-only (D0-3): contest is unaffected
+    by the TN6/8 boost divergence.
+
+    With `pool` given (live reception): Overwhelming requires clearing a σ-scaled
+    bar. Pool-less calls keep the legacy 2·ob bar (unit tests only).
+    [canonical: designs/audit/2026-06-03-contest-groundup/engine.py §degree]
+    """
+    if net <= 0:                       return 0
+    if net < ob:                       return 1
+    if pool is not None:
+        thresh = MU_PER_DIE * pool + OVERWHELM_SIGMA * SD_PER_DIE * math.sqrt(max(1, pool))
+        if net >= thresh and net >= max(3, ob): return 3
+        return 2
+    if net >= 2 * ob and net >= 3:     return 3   # legacy, pool-less unit tests only
+    return 2

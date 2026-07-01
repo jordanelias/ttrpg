@@ -396,6 +396,70 @@ class TestRollNetContinuous:
 # regression pins when running in a numpy-free environment.
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Tests: level() accessor + pool-aware degree() — contest-surface additions
+# (Stage 1b, designs/audit/2026-06-30-contest-stage0-reconciliation).
+# Parity target is the groundup engine.py original, which these carry across
+# verbatim (single-sourced so the promoted contest kernel no longer needs a
+# local engine.py — the "third σ-kernel" hazard).
+# ---------------------------------------------------------------------------
+
+_GROUNDUP_DIR = os.path.join(_REPO_ROOT, 'designs', 'audit', '2026-06-03-contest-groundup')
+_groundup_engine = None
+try:
+    if _GROUNDUP_DIR not in sys.path:
+        sys.path.insert(0, _GROUNDUP_DIR)
+    import engine as _groundup_engine  # noqa: E402
+except ImportError:
+    _groundup_engine = None
+
+
+class TestLevelAccessor:
+    """level(name) — Stage-1a finding 1a: the accessor was missing from the port."""
+
+    @pytest.mark.parametrize("name", ["minor", "moderate", "strong", "major"])
+    def test_level_returns_sigma(self, name):
+        assert SL.level(name) == SL.LEVEL_SIGMA[name]
+
+    @pytest.mark.parametrize("name", ["minor", "moderate", "strong", "major"])
+    def test_level_vs_groundup(self, name):
+        if _groundup_engine is None:
+            pytest.skip("groundup engine.py not importable")
+        _assert_close(SL.level(name), _groundup_engine.level(name), f"level({name})")
+
+
+class TestPoolAwareDegree:
+    """degree(net, ob, pool) — pool-aware INTEGER bands (contest surface), distinct
+    from dice_engine.degree_from_net (combat enum, 2*Ob bar). Carried across from
+    the groundup engine.py verbatim; the 151 groundup tests are the behavior guard."""
+
+    def test_bands_basic(self):
+        # tests.py row: (degree(0,3), degree(3,3), degree(6,3)) == (0,2,3)
+        assert (SL.degree(0, 3), SL.degree(3, 3), SL.degree(6, 3)) == (0, 2, 3)
+
+    def test_failure_and_partial(self):
+        assert SL.degree(0, 3) == 0
+        assert SL.degree(-2, 3) == 0
+        assert SL.degree(1, 3) == 1
+        assert SL.degree(2, 3) == 1
+
+    def test_legacy_pool_less_overwhelming(self):
+        # pool=None → legacy 2*ob bar (net>=2*ob and net>=3)
+        assert SL.degree(6, 3, None) == 3
+        assert SL.degree(5, 3, None) == 2
+        assert SL.degree(2, 1, None) == 2   # net<3 blocks legacy Overwhelming
+
+    @pytest.mark.parametrize("net", [-3, 0, 1, 2, 3, 5, 6, 8, 12, 20])
+    @pytest.mark.parametrize("ob", [1.0, 2.0, 3.0])
+    @pytest.mark.parametrize("pool", [None, 2, 5, 9, 16, 25])
+    def test_degree_vs_groundup(self, net, ob, pool):
+        if _groundup_engine is None:
+            pytest.skip("groundup engine.py not importable")
+        assert SL.degree(net, ob, pool) == _groundup_engine.degree(net, ob, pool), (
+            f"degree(net={net}, ob={ob}, pool={pool})"
+        )
+
+
 _HARDCODED = {
     # (fn_name, *args): expected_value
     # sigma_n
