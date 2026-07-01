@@ -24,8 +24,18 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     fractional-Ob idea → contest stays δσ TN7 (unaffected), open a substrate probe (reopens CR6 uniformity), non-blocking.
     Good news: `faction.py` already has BG-Vote/Succession/committee-band → Consensus mostly promote-existing.
     IDs reserved: `contest_rebuild` = ED 1055-1079 / PP 800-809.
-  - **NEXT: Stage 1** — build `sigma_leverage.py` + parity; promote the 9-module kernel to `sim/personal/contest/`
-    re-skinned + `build_contest`/`resolve_contest` wrapper; propagate CR1/CR2/CR3; golden-trace + 151-test parity → Gate A.
+  - **Stage 1a DONE + committed (d64e2ffe).** `sim/autoload/sigma_leverage.py` — numpy-free σ sibling, byte-identical
+    to the oracle, 623 tests green; two-σ-kernels debt retired.
+  - **Stage 1b DONE + committed.** 9-module kernel promoted to `sim/personal/contest/`, rewired onto the σ sibling
+    (no third kernel); `degree` = clean carry-across (pool-aware integer degree added to sigma_leverage, distinct from
+    `dice_engine.Degree` combat enum); old stub → `contest_legacy_stub.py`; 815 sim tests + both importers green.
+  - **D0-3 RESOLVED → HYBRID** (present-as-Ob display over the δσ substrate; CR6 upheld, not reopened). Memo:
+    `designs/audit/2026-06-30-contest-fractional-ob-probe/MEMO.md`; decision → ED-1055 (pending filing). Probe also
+    surfaced a LIVE combat bug (`dice_engine.roll_pool` ignores `tn`; TN5/6/8 weapons rolled at TN7 rate) → spun out
+    as a combat-lane task (out of contest scope).
+  - **NEXT: Stage 1c (Gate A)** — v30 re-skin of venue/primitive names + `build_contest`/`resolve_contest` wrapper
+    (mirror `tests/sim/mass_battle/engine.py`) + appeal multiplicative/additive flag (D0-1, seeded A/B) + CR1/CR2/CR3
+    propagation; golden-trace parity. First human ratification gate.
 
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
