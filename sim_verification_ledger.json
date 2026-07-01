@@ -147,6 +147,13 @@
       "canonical_source": "sim_verification_ledger.json",
       "section": "CALIBRATED -- gauge_mb.py make_mixed_unit deployment-layout convenience default",
       "quoted_text": "make_mixed_unit's starting_position fallback (10 + i*4, 15): each un-positioned subunit in a spec list is staggered 4 rows apart so a caller does not need to supply explicit starting_position for every subunit. Design convenience, not historically cited -- do not fabricate a canonical source."
+    },
+    {
+      "sim_variable": "DEFAULT_PORT",
+      "value": 8766,
+      "canonical_source": "sim_verification_ledger.json",
+      "section": "CALIBRATED -- workbench/server.py arbitrary local dev port",
+      "quoted_text": "An arbitrary unused local TCP port for the mass-battle workbench's dev HTTP server (scene-combat's workbench uses 8765; 8766 avoids collision if both run concurrently). Tooling convenience, not historically cited -- do not fabricate a canonical source."
     }
   ]
 }

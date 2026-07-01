@@ -350,5 +350,26 @@ Archived entries in tests/coverage_matrix_archive.md
   and is NOT field-aware) zipped against _oriented(atom)'s stable ids — correct on both the integer-grid
   and coordinate-field paths. Zero cost when tracing is off (the capture functions are never called, not
   merely discarded) — provably byte-exact since no existing caller (bat.py, gauge_mb.py) enables tracing.
-  Next: workbench/server.py + a browser frontend (canvas replay + playback controls), not yet built.
 - G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+
+## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
+- ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
+  designs/scene/combat_engine_v1/workbench's pattern: a tiny stdlib HTTP server, no external deps, no
+  build step). trace.run_traced_battle() runs ONE battle via engine.build_unit/resolve_battle (the
+  wrapper contract, never reaches past it) with tracing on, returning the full 'tick'/'melee'/
+  'volley'/'positions' event stream. server.py serves a canvas SPA with playback controls (scrub/play/
+  step), a preset picker mirroring gauge_mb.py's named matchups, and per-tick HP/morale/rout/event-log
+  panels. VERIFIED end-to-end live (not just imported): all 4 endpoints (GET /, /api/mode, /api/presets,
+  POST /api/trace) tested via a running server instance in both PER_CELL=0 (grid) and
+  FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 (coordinate-field) modes.
+- IMPORTANT (documented in server.py): PER_CELL/FIELD_MOVEMENT/PC_NODE_COHESION are read from
+  os.environ once at import time and star-imported as independent copies into every consumer — a
+  running server's mode is FIXED at process start (no live toggle); comparing grid vs field means two
+  server instances. GET /api/mode reports the actual running config.
+- FINDING from using the tool (not a bug): confirmed by reading _node_cells() (hierarchy/units.py) that
+  the coordinate-field candidate keeps ROW positions integer-rank-snapped by design ("ranks are integer
+  bins" — a real military structure) and only bins COLUMNS to their file; positions are not yet fully
+  continuous floats end-to-end. Accurately reflected by the visualizer, not a rendering defect.
+- Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
+  7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
+  non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
