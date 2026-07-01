@@ -73,6 +73,25 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       `combat_config.gd` port-corrects-oracle drift (**ED-1050**); (5) abilities-as-ACCESS (Phase-4; `eff_cw` is a
       near-no-op threaded through ~18 sites as dormant scaffolding); (6) the `WP.reach()`/`authority()` vs
       `systems.reach_base`/`wield_heft` single-source target. **Allocate ED-1055+ (block D) for these on Jordan's call.**
+  - **GROUNDED PERCUSSION/ARMOUR/USE-MODE RE-BASELINE — BUILT + committed (2026-06-30).** The percussion single-source
+    (ED-1050 cluster) grew, on Jordan's direction, into a full evidence-grounded weapon×armour×technique model — 4
+    adversarial workflows (treatise `w4h8gl48w`, biomech `wpwi3b9qf`, armour `wht7pkx1c`, use-mode `w4bekmb5e`),
+    consolidated in `designs/audit/2026-06-30-combat-grounding/`. **Jordan's principle (memory
+    `combat-grounding-methodology`): DERIVE constants from physics/biomechanics/treatises/materials — never pick or
+    floor to a sim-fit; and modes must EMERGE from primitives, not a per-weapon table.**
+    - **Committed:** `80a3a077` armour RESIST (4 Williams cells + the primitive-emergent doc correction); `66a7c5ec`
+      concussion single-source (`core.p_auth`→`WP.percussion_authority` with the biomech energy_credit A_HANDS=0.25/
+      B_ARC=0.04; mace 7.45/poleaxe 5.83/staff 2.51) + PRIMITIVE-EMERGENT use-mode selection (`systems.afforded_heads`
+      + `select_mode` — modes derive from geometry primitives, retiring the head-collapse; poleaxe the only weapon
+      affording >1 head, emergent; every other weapon byte-identical). 73 tests, mirror ~50, no one-shot, grounded
+      ranking holds (poleaxe>mace>staff vs plate).
+    - **OPEN DECISION (Jordan) — the poleaxe's plate default:** under the grounded §2 RESIST (plate more vulnerable to
+      concussion .30 than face-on puncture .70, Williams) the poleaxe SELECTS its hammer, not its spike, vs a covered
+      plate opponent (beats the mace via REACH); the spike is afforded + wins vs exposed gaps. Treatise narrative (Le
+      Jeu de la Hache) vs materials physics point different ways for the DEFAULT mode. Accept the grounded outcome, or
+      re-tune §2 to favour the spike.
+    - **Still to do:** file ED-1055+ (the re-baseline + designer-set flags); the remaining Gate-1 residuals (agility
+      clamp, ADEF monotonicity + `combat_config.gd` oracle drift, abilities-as-access).
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
