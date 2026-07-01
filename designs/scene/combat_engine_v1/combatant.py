@@ -21,6 +21,8 @@ class Combatant:
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip_position=0.0               # CONTINUOUS grip-position in [0,1]: 0=as-issued (full reach), 1=gathered to the working balance (close control). Retires the choke/normal/lunge strings; derived per-beat by the wrapper from grip_target.
         self.lunge_depth=0.0                  # CONTINUOUS body-extension in [0,1] of an in-progress lunge (set at the attack; 0 = no lunge). Reads into recoverability_factor / weapon_tempo / legibility.
+        self.sel_head=None                    # SELECTED use-mode head token for this exchange (systems.select_mode); None = use the native weapon head. Set per-beat by the wrapper (mirrors grip_position); routes into core.strike / adef_cap / legibility.
+        self.sel_dmg=None                     # SELECTED damage-mode ('percussion'/'shear'/'puncture') for this exchange; read by systems.legibility (thrust hard / cut+percuss easy). None = head-inferred fallback.
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
@@ -41,11 +43,9 @@ class Combatant:
     @property
     def w(self): return WEAPONS[self.weapon]
     @property
-    def reach(self): return WEAPONS[self.weapon]['reach']
-    @property
     def head(self): return WEAPONS[self.weapon]['head']
-    @property
-    def weight(self): return WEAPONS[self.weapon]['wt']
+    # (.reach / .weight categorical accessors removed 2026-06-30 — dead vestigial; reach derives via
+    #  systems.reach_base, heft via systems.wield_heft / core.heft_resp; no live consumer read these.)
     # ---- derived-figure host (the combatant computes its own; consumers import these, never recompute) ----
     def derive_stats(self, cfg):
         """Compute the cfg-dependent derived figures and store them on self (called once at bout reset). Keeps the
