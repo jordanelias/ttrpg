@@ -343,6 +343,40 @@ class TestPSuccess:
 
 
 # ---------------------------------------------------------------------------
+# Tests: level (single-lookup contest accessor)
+# ---------------------------------------------------------------------------
+
+class TestLevel:
+    """level(name) — contest-surface accessor ported from
+    designs/audit/2026-06-03-contest-groundup/engine.py:21
+    (`def level(name): return LEVEL[name]`). The groundup LEVEL dict is this
+    module's LEVEL_SIGMA, so level(name) must equal LEVEL_SIGMA[name].
+
+    No numpy counterpart: level() is a contest-only surface addition (not in
+    m1_dice_sigma_core), so parity is against LEVEL_SIGMA — as the task specifies."""
+
+    EXPECTED = {"minor": 0.25, "moderate": 0.50, "strong": 0.75, "major": 1.00}
+
+    @pytest.mark.parametrize("name,value", list(EXPECTED.items()))
+    def test_level_matches_level_sigma(self, name, value):
+        """SL.level(name) == LEVEL_SIGMA[name] == the ratified σ value, for all four names."""
+        assert SL.level(name) == SL.LEVEL_SIGMA[name]
+        assert SL.level(name) == value
+
+    def test_level_covers_all_names(self):
+        """Every LEVEL_SIGMA key resolves through level(), and the roster is exactly the four
+        names (guards against LEVEL_SIGMA drifting out from under this accessor)."""
+        assert set(self.EXPECTED) == set(SL.LEVEL_SIGMA)
+        for name in SL.LEVEL_SIGMA:
+            assert SL.level(name) == SL.LEVEL_SIGMA[name]
+
+    def test_level_unknown_raises(self):
+        """Unknown name raises KeyError — same contract as the dict lookup and the groundup engine."""
+        with pytest.raises(KeyError):
+            SL.level("catastrophic")
+
+
+# ---------------------------------------------------------------------------
 # Tests: levels_to_net_sigma
 # ---------------------------------------------------------------------------
 

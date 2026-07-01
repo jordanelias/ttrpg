@@ -40,6 +40,7 @@ Functions added (contest surface, designs/audit/2026-06-03-contest-groundup/engi
   • sigma_N (alias: contest engine names it sigma_N not sigma_n)
   • eff_sigma (alias for soft_cap, with contest naming)
   • effective_ob (display-only Ob shift, per contest engine's signature)
+  • level (single modifier-level → σ lookup; engine.py:21 `def level(name): return LEVEL[name]`)
 
 Entry points:
   - sigma_n(pool: float) -> float
@@ -50,6 +51,7 @@ Entry points:
   - eff_ob(base_ob: float, pool: float, net_sigma: float) -> float
   - effective_ob(base_ob: float, net_dsigma: float, pool: float) -> float  (contest arg-order alias of eff_ob)
   - net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool = True) -> float
+  - level(name: str) -> float  (contest modifier-level → σ lookup)
   - levels_to_net_sigma(aggressor: Sequence[str] | None = None, defender: Sequence[str] | None = None) -> float
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
   - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
@@ -182,8 +184,25 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
 
 
 # ---------------------------------------------------------------------------
-# Level aggregation
+# Level lookup + aggregation
 # ---------------------------------------------------------------------------
+
+def level(name: str) -> float:
+    """Single modifier-level → σ-value lookup (contest surface).
+
+    Ported from designs/audit/2026-06-03-contest-groundup/engine.py:21
+    (`def level(name): return LEVEL[name]`). That engine's LEVEL dict is this
+    module's LEVEL_SIGMA (byte-identical values: minor 0.25 / moderate 0.50 /
+    strong 0.75 / major 1.00), so this completes the contest surface the Stage-1a
+    port began alongside sigma_N / eff_sigma / effective_ob.
+
+    Consumer: designs/audit/2026-06-03-contest-groundup/primitives.py:9
+    (`from engine import level`) evaluates `Leverage.ONGROUND = level('moderate')`
+    at class-body import time; when that kernel is promoted into
+    sim/personal/contest/ (Stage 1b) and re-pointed here, the name must resolve.
+    """
+    return LEVEL_SIGMA[name]
+
 
 def levels_to_net_sigma(
     aggressor: Sequence[str] | None = None,
