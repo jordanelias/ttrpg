@@ -30,12 +30,37 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     (no third kernel); `degree` = clean carry-across (pool-aware integer degree added to sigma_leverage, distinct from
     `dice_engine.Degree` combat enum); old stub → `contest_legacy_stub.py`; 815 sim tests + both importers green.
   - **D0-3 RESOLVED → HYBRID** (present-as-Ob display over the δσ substrate; CR6 upheld, not reopened). Memo:
-    `designs/audit/2026-06-30-contest-fractional-ob-probe/MEMO.md`; decision → ED-1055 (pending filing). Probe also
-    surfaced a LIVE combat bug (`dice_engine.roll_pool` ignores `tn`; TN5/6/8 weapons rolled at TN7 rate) → spun out
-    as a combat-lane task (out of contest scope).
-  - **NEXT: Stage 1c (Gate A)** — v30 re-skin of venue/primitive names + `build_contest`/`resolve_contest` wrapper
-    (mirror `tests/sim/mass_battle/engine.py`) + appeal multiplicative/additive flag (D0-1, seeded A/B) + CR1/CR2/CR3
-    propagation; golden-trace parity. First human ratification gate.
+    `designs/audit/2026-06-30-contest-fractional-ob-probe/MEMO.md`; decision → ED-1055. Probe also surfaced a LIVE
+    combat bug (`dice_engine.roll_pool` ignores `tn`; TN5/6/8 weapons rolled at TN7 rate) → spun out as a
+    combat-lane task (`task_210994b7`, out of contest scope).
+  - **Stage 1c DONE + merged into main (PR #44, all CI green).** v30 re-skin (8 proceedings, Persuasion Track
+    banding, 4 adjudicator types) + `build_contest`/`resolve_contest` wrapper + MECHANICS registry, mirroring
+    `tests/sim/mass_battle/engine.py`. 888 tests green.
+  - **Stage 1d / Gate A DONE — 3 forks ratified by Jordan (2026-07-01).** Propagated CR1 (wrapper, confirmed
+    already-realized)/CR2 (σ-substrate, confirmed already-realized)/CR3 (three trackers: Concentration+Face+
+    Persuasion, Composure retired — contest-scope only) into prose (`social_contest_v30.md` §4/§8 + co-files,
+    `params/contest.md`) + code (`sim/personal/contest/` Face primitive) + ledger (ED-1055, ED-1056). Packet:
+    `designs/audit/2026-07-01-contest-gate-a-packet/GATE_A_packet.md`. **Ratified:** (1) Face scale-binding =
+    combo formula, not a straight rescale — `Face_max = Charisma×3` (ceiling, player-build-controlled) +
+    `Face_current = round(Standing/10 × Face_max)` (position within ceiling, earned through play, Standing's
+    kernel math/Readiness/leak feed untouched); (2) Composure retirement scoped to the contest tracker only
+    (knots/combat/conviction untouched, confirmed); (3) provisional EDs use non-basis citation phrasing until
+    ratified (standing policy). A small Sonnet-tier finalize pass is applying the resolved formula + 4 agreed
+    nits (dead imports, ED-1056 recitation, prose wording, TRACKERS sourcing); that pass also caught the ratified
+    Face formula shipped with zero test coverage and added 10 targeted kernel checks (boundary cases, midpoint
+    round-half-to-even, non-mutation, live-tracking). **Committed (884cf89a).** 1041 sim+valoria + 244 kernel
+    checks green. Push to `claude/happy-shaw-da0f1d` updates the open tracking PR ([ttrpg#44]) — Jordan merges,
+    not this session.
+  - **NEW standing requirement (decision 5, 2026-07-01): the player-interaction model is a concrete deliverable,
+    not a late audit.** First-draft walkthrough seeded ahead of Stage 6 so every later stage designs toward it:
+    `designs/audit/2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md` — setup screen,
+    the exchange loop (Appraise / style-choice cards / roll-and-resolve / Face+Concentration bars), the
+    resolution screen, and how Negotiation/Inquiry/Consensus should each look different from Agôn's track meter
+    so Stage 4 doesn't converge them onto one UI. Stage 2 now owns authoring the Style/Venue flavor text; Stage 3
+    now owns the Appraise-reveal boundary for `armature_position`; Stage 4 now owns each game's interaction
+    shape; Stage 6 finalizes+ratifies the model this seeds. Plan file amended accordingly.
+  - **NEXT: finish the Gate A finalize pass → commit → Stage 2** (contest/venue/adjudicator dictionaries +
+    Style/Venue flavor text, per decision 5).
 
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
