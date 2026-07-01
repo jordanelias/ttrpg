@@ -90,12 +90,16 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       gap_precision (emergent, no weapon name). The poleaxe now SPIKES the reach-ladder vs plate (Le Jeu de la Hache);
       the rondel dagger comes alive as the armour-gap weapon (dagger>mace vs plate 12→69%); the mace hammers (no
       point); the staff stays weak; the whippy rapier is mediocre. GAP_EXPOSURE [SIM-CALIBRATE, reach-ladder frame].
-      **Remaining lever (Jordan-gated):** a damage-vs-sigma tension — the spike out-DAMAGES but adef_cap scores its
-      CONTROL lower than the hammer's, so the greedy selector picks a higher-damage/lower-control mode. Unifying
-      adef_cap's point branch with the gap-seeking (making the spike a net-control win) further strengthens point
-      weapons vs plate — deferred as a calibration decision.
-    - **Still to do:** file ED-1055+ (the re-baseline + designer-set flags); the remaining Gate-1 residuals (agility
-      clamp, ADEF monotonicity + `combat_config.gd` oracle drift, abilities-as-access).
+    - **Forward roadmap:** `designs/audit/2026-06-30-combat-grounding/forward_roadmap.md` (WS + REARCHITECTURE + Gate-1
+      folded; strategy = CONSOLIDATE before building). **Track 1 progress:** 1a **adef-consistency lever DONE**
+      (`b79615f4`, ADEF_POINT 1.0→1.2 — the gap-thrust's CONTROL now matches its DAMAGE, so the poleaxe's spike is a net
+      win; plate win-rate 88.6→90; rondel strengthened; grounded ranking holds); 1c **heavy-mirror guard DONE**
+      (`e4da1f04`, 73→78 tests — symmetry + non-degeneracy, catches an armour-defeat draw-stalemate regression the
+      light-only test missed).
+    - **Still to do:** 1b file ED-1055+ (the re-baseline + designer-set flags); **Track 2** single-source/primitive-law
+      purge (agility FIAT clamp, `wt`/`spd` legacy reads, `WP.reach()`/`authority()` parallel derivations, ADEF
+      monotonicity + `combat_config.gd` oracle drift); **Track 3 = ratify + merge** (Jordan's call) then re-export the
+      port config; **Track 4** build-forward (abilities-as-access, §C, contact axis, WS-7).
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
