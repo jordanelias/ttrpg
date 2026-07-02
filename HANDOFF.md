@@ -270,6 +270,25 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine
+  ratified; J-38 propagation spec ratified (ED-1093).** Jordan: merging a PR ratifies its
+  PROPOSED/provisional contents by default unless the PR body explicitly holds an item back
+  for separate review — closes a real recurring gap where PR #55 was reviewed and merged but
+  `holonic_container_doctrine_v1.md` (ED-1083) sat PROPOSED in `main` afterward because the
+  prior convention required a distinct explicit ratification step nothing forced to happen.
+  Applied same-day: ED-1083 flipped provisional → ratified; doctrine `## Status:` line
+  PROPOSED → **CANONICAL**; `CURRENT.md` gained an Architecture/Holonic-doctrine row;
+  `decision_queue.md` item 20 struck resolved; `CLAUDE.md` §2 documents the standing rule.
+  **Applied a second time to J-38 itself, same PR (#58):** rather than land the propagation
+  spec as PROPOSED and rely on "ratifies on merge" text (which would repeat the exact ED-1083
+  failure mode this convention exists to close), the flip to CANONICAL was pre-staged in the
+  PR — `designs/architecture/propagation_spec_v1.md` `## Status:` line PROPOSED → **CANONICAL**,
+  ED-1093 ledger entry `status` → `ratified`, `decision_queue.md` item 18 struck resolved. A
+  whole-session Fable review (triggered after the ED-1088 ID-collision reconciliation) caught
+  this risk plus stale cross-references before merge. Scope: governs future PRs; does not
+  retroactively reopen closed decisions or ratify anything a PR explicitly holds back and flags
+  loudly as such.
+
 - 2026-07-01 — **Month-overview + architecture-consolidation session executed** (this branch;
   12+ commits, ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item
   Jordan decision queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`).
@@ -419,15 +438,20 @@ verified live max, allocated ED 1081–1087 to the month-overview consolidation 
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
 per the file's protocol; never max+1.)_
 
-- **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
-  review, the consolidation execution/reconciliation logs, and the **single consolidated
-  23-item Jordan decision queue** live at
-  `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see `decision_queue.md`
-  first — every gated item below is indexed there). Highest-leverage queued decisions:
-  **doctrine ratification** (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`),
-  **J-38 propagation-spec authorship** (workplan v5 §3 — unblocks conversion register #1 +
-  `engine_clock`/ED-1051), Track-2 residuals (below), field-ON, the values_master
-  regenerate-vs-retire call, and the duplicate compilation homes.
+- **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec now
+  RATIFIED (2026-07-02).** The month's comprehensive review, the consolidation
+  execution/reconciliation logs, and the **single consolidated 23-item Jordan decision queue**
+  live at `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see
+  `decision_queue.md` first — every gated item below is indexed there). **Doctrine ratification**
+  (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`) and **J-38 propagation-spec
+  authorship** (ED-1093, `designs/architecture/propagation_spec_v1.md` — supplies `engine_clock`'s
+  candidate home doc; the `doc:null`/[ASSUMPTION] grade stays unflipped until ED-1051 is
+  separately resolved) are both **CANONICAL** as of PR #58 (ED-1094 merge-ratifies-by-default).
+  The propagation spec's own §5 carries its ranked open items (OF-7/OF-B1 amendments, D.6/OF-D6
+  double-count, `decay()` spec, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) — ratification
+  did not resolve these, only fixed the spec's home-doc status. Remaining highest-leverage queued
+  decisions: Track-2 residuals (below), field-ON, the values_master regenerate-vs-retire call,
+  the duplicate compilation homes, and item 19 (Agent-Teams/subagent-roster adoption).
 - **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59);
   this file previously had zero record of any of it — closing that continuity gap now.** Coordinate-field
   true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
