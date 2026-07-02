@@ -615,8 +615,29 @@ class Subunit:
         ar, ac = self._node_anchor
         nar, nac = ar, ac
         if target_centroid and step > 0:
+            # [movement audit fix-plan step 4, ED-1097] Lateral file-holding: a v12 mechanism that
+            # existed only on the legacy grid path (orchestration.py:99-104 header;
+            # geometry/units.py's per-cell cell_target) and regressed to pre-v12 pure-centroid
+            # convergence on the node path (confirmed, movement audit finding 1.3) -- a plain
+            # advance with no active goal steered every subunit's column at the SAME enemy-centroid
+            # column, so wide-placed wings collapsed inward before any maneuver could even begin.
+            # Restored here as the column-target default: a subunit that is one of several siblings
+            # in a multi-subunit Unit holds its OWN deployment file (self._spawn_position's column)
+            # while its row still closes on the target -- it marches straight down its own lane
+            # instead of angling toward the centroid. A solo subunit (single-subunit Unit, e.g. a
+            # bare build_unit Line) is UNCHANGED -- it still steers its column at the target, since
+            # there is no sibling file to hold and a laterally-offset lone enemy must still be
+            # closed on directly (this is exactly the case Stage A/B's existing maneuver tests
+            # exercise). This is the "no active goal" fallback only -- fix-plan step 7's waypoint
+            # primitive supplies its own explicit column target when a maneuver is in progress,
+            # superseding this default.
+            _siblings = getattr(getattr(self, '_unit', None), 'subunits', None)
+            if _siblings is not None and len(_siblings) > 1:
+                col_target = self._spawn_position[1]
+            else:
+                col_target = target_centroid[1]
             dr = target_centroid[0] - ar
-            dc = target_centroid[1] - ac
+            dc = col_target - ac
             if self.stance == "retreat":
                 dr, dc = -dr, -dc
             if not toi_deferred and enemy_cells:
