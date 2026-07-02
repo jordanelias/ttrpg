@@ -672,11 +672,28 @@ class Subunit:
                 if self._node_facing is None:
                     self._node_facing = (ftr, ftc); self._node_facing0 = (ftr, ftc)
                 else:
+                    # [movement audit fix-plan step 5, ED-1097] Rotation-based facing update,
+                    # replacing the prior lerp-normalize (fr0 + kw*(ftr-fr0), then re-normalize).
+                    # The lerp degenerates to the zero vector when current and desired facing are
+                    # EXACTLY anti-parallel at full discipline (kw=0.5: 0.5*fr0 + 0.5*(-fr0) = 0),
+                    # and is numerically unstable approaching that point (dividing a near-zero
+                    # vector by its own near-zero magnitude amplifies rounding noise into an
+                    # effectively random direction) -- exactly the 180-degree reversal a
+                    # wheel-to-rear maneuver needs to pass through cleanly. Same wheel rate `kw`
+                    # (disc-gated, no new magnitude), reused as an ANGULAR fraction of the
+                    # remaining turn instead of a linear vector blend fraction -- for small angles
+                    # the two are nearly identical (sin(theta)~=theta), so ordinary (non-180)
+                    # wheeling is not meaningfully perturbed; at 180 degrees the rotation is
+                    # well-defined and non-degenerate for any kw>0.
                     kw = disc_mult * 0.5            # wheel rate (disc-gated, slower than the cohesion snap)
                     fr0, fc0 = self._node_facing
-                    lr, lc = fr0 + kw * (ftr - fr0), fc0 + kw * (ftc - fc0)
-                    lmag = math.hypot(lr, lc)
-                    if lmag > 0: self._node_facing = (lr / lmag, lc / lmag)
+                    theta_cur = math.atan2(fc0, fr0)
+                    theta_tgt = math.atan2(ftc, ftr)
+                    delta = math.atan2(math.sin(theta_tgt - theta_cur), math.cos(theta_tgt - theta_cur))  # wrap to (-pi, pi]
+                    if abs(delta) >= math.pi - 1e-9:
+                        delta = math.pi  # deterministic tie-break: exact/near-exact reversal always turns the same way
+                    theta_new = theta_cur + kw * delta
+                    self._node_facing = (math.cos(theta_new), math.sin(theta_new))
                 f0r, f0c = self._node_facing0; fr, fc = self._node_facing
                 rc_w = f0r * fr + f0c * fc          # cos of rotation f0 -> f
                 rs_w = f0r * fc - f0c * fr          # sin of rotation f0 -> f
