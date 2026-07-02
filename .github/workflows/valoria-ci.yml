@@ -411,7 +411,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: PER_CELL=1 DUMP_TRIALS=1 python3 tests/sim/mass_battle/bat.py --check || true
+      - run: PER_CELL=1 DUMP_TRIALS=1 TARGET_TRIAL=mirror:2 python3 tests/sim/mass_battle/bat.py --check || true
 
   sim-regression:
     name: Sim Reference Regression

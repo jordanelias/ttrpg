@@ -135,6 +135,9 @@ def compute():
             line = label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n'
             if os.environ.get('DUMP_TRIALS') == '1':  # [TEMP DEBUG, see PR] cross-env divergence hunt
                 sys.stdout.write('TRIAL ' + line)
+            if os.environ.get('TARGET_TRIAL') == f'{label}:{s}':  # [TEMP DEBUG, see PR] per-turn trace
+                for entry in r.get('log', []):
+                    sys.stdout.write(f'TURN {label}#{s} ' + repr(entry) + '\n')
             h.update(line.encode())
     return mode, h.hexdigest()
 
