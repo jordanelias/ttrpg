@@ -212,10 +212,16 @@ def adef_cap(w, cfg, head=None):
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
 SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
                           #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
-SELECT_PC_MIN = 0.10      # [DESIGN] raw point_concentration below which a head has NO thrusting point (a blunt FACE
-                          #   that concentrates percussion but cannot pierce a gap): mace 0.02 -> no spike; poleaxe
-                          #   0.78 / spear 0.78 -> a real point. Reads the raw primitive the design names, so the
-                          #   mace-vs-poleaxe spike distinction EMERGES from morphology, not a weapon name.
+# SELECT_PC_MIN RETIRED (morphology-rearch Phase B3, 2026-07-02). It was a magnitude THRESHOLD on point_concentration
+# standing in for a fact the engine didn't yet have: whether a blunt haft's assembly HAS a real thrusting point at
+# all (mace 0.02 -> no; poleaxe 0.78, modeled as ONE whole-weapon blunt token -> yes, smuggled in via this same
+# token). Phase B2 gave every point-capable composite (poleaxe, bec_de_corbin, lucerne_hammer, ji, goedendag,
+# guisarme, kama_yari, voulge) its own EXPLICIT point-tokened mode_element — the fact is now data, not inferred
+# from a magnitude gate. "Affords a point iff it HAS a point-element" (the plan's own phrasing): a 'point' token in
+# element_afforded now needs only geo['gap']>SELECT_EPS, same as every other mode. Verified byte-identical for the
+# WHOLE roster at retirement time — no point-headed weapon without mode_elements had point_concentration<=0.10, and
+# no blunt-headed weapon without mode_elements had point_concentration>0.10 (i.e. nothing was relying on either
+# side of the old gate), so this changes no weapon's affordance, only how the affordance is DERIVED.
 
 def _mode_elements(w):
     """The weapon's MODE-ELEMENTS — the located striking elements whose geometry affords fight-modes. Morphology-
@@ -234,27 +240,28 @@ def _mode_elements(w):
 
 def element_afforded(el, w):
     """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
-    [PHASE-B3 PENDING] the SELECT_PC_MIN gate below still applies to explicit point-tokened mode_elements (every
-    authored element in the roster today comfortably clears it, so nothing is filtered YET), but the plan calls for
-    retiring the threshold in favour of "affords a point iff it HAS a point-element" once this is coupled with the
-    real composites landed in B2 — TODO B3. percussion authority also stays WHOLE-WEAPON here (a lucerne_hammer's
-    two blunt elements both read the same weapon-level percussion_authority(w) rather than their own individual
-    mass+position) — a precision gap, not a correctness bug (it is the same formula every single-mode blunt weapon
-    already uses); per-element percussion authority is a B3/B6 item (the plan's re-source table row for core.py's
-    `strike`)."""
-    geo=el['geo']; head=el['head']; pc=geo['point_concentration']
+    Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
+    every other mode — no separate point_concentration THRESHOLD (SELECT_PC_MIN, retired above). Being tokened
+    'point' at all (a B2 authoring judgment call, grounded per-element) is now the affordance signal; the old
+    threshold stood in for that fact before composites had explicit point-elements. The 'blunt' branch no longer
+    smuggles in a secondary point-affordance from its OWN point_concentration — every weapon that needs a blunt-
+    plus-point split (poleaxe, bec_de_corbin, lucerne_hammer, goedendag, guisarme's cousin-shape) now expresses it
+    as a SEPARATE point-tokened mode_element (B2), not a magnitude reading on the blunt token.
+    [PHASE-B6 PENDING] percussion authority still stays WHOLE-WEAPON here (a lucerne_hammer's two blunt elements
+    both read the same weapon-level percussion_authority(w) rather than their own individual mass+position) — a
+    precision gap, not a correctness bug (it is the same formula every single-mode blunt weapon already uses);
+    per-element percussion authority is a B6 item (the plan's re-source table row for core.py's `strike`)."""
+    geo=el['geo']; head=el['head']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
         heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture')
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
         if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear')
-    elif head=='point':                                              # pure point
-        if geo['gap']>SELECT_EPS and pc>SELECT_PC_MIN: heads['point']=(geo['gap'], 'puncture')
+    elif head=='point':                                              # a real point (element-tokened, not inferred)
+        if geo['gap']>SELECT_EPS: heads['point']=(geo['gap'], 'puncture')
     elif head=='blunt':                                              # striking head
         pa=WP.percussion_authority(w)
         if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion')
-        if pc>SELECT_PC_MIN and geo['gap']>SELECT_EPS:               # a beak/spike: a real point ON a blunt haft
-            heads['point']=(geo['gap'], 'puncture')
     return heads
 
 def afforded_heads(w):
