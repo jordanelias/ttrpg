@@ -102,6 +102,21 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     persisted; a follow-up Sonnet-tier verification pass (the first antagonist check that actually ran)
     caught and fixed one real minor defect (stale provisional language in one field of `CR5_SELF_GATING`).
     1041 sim+valoria + 385 kernel tests green; freshness gate clean.
+  - **Reconciled with `main` post-Gate-C (`715c5c3e`).** `main` had advanced substantially (mass-battle LC-8,
+    a month-overview architecture consolidation, ~10 new EDs) while Gate C was in flight. Two real conflicts:
+    `canon/editorial_ledger.jsonl` (both sides appended new entries — kept both, ascending ED order) and
+    `references/canonical_sources.yaml` (both sides had independently run a full `freshness_gate.py --update`
+    regeneration, so the whole file conflicted at the line level even though the content barely differed —
+    resolved by regenerating fresh from the merged working tree rather than hand-patching). The merge also
+    tripped `ci_register_size_check.py`: the combined ledger hit 150,949 tokens (cap 150,000). Fixed properly,
+    not bypassed — split the ledger for the first time: archived the 216 oldest resolved/struck/superseded/
+    applied entries (ED-001..ED-330) to new `canon/editorial_ledger_archive.jsonl` (live ledger now ~130k
+    tokens, ~20k headroom), registered its own cap in `ci_register_size_check.py`, and extended
+    `tools/validate_ed_citations.py` (`ARCHIVE_JSONL_PATHS`) to scan `.jsonl` archives — its existing
+    `ARCHIVE_GLOBS` scanner only recognized the older pre-2026-05-28 YAML archive convention, so without this
+    fix any doc citing one of the 216 archived EDs would have started reading as a broken citation. Verified:
+    `validate_ed_citations.py` → 818 ids loaded, 0 citation-integrity violations; 1054 sim+valoria tests + 1
+    skipped, unaffected. PR #63 open, CI running.
   - **NEXT: Stage 4** (the four deliberative games — Agôn/Negotiation/Inquiry/Consensus — parallel fan-out,
     reading the source-research trilogy directly per the Stage-3 grounding pattern: the `liberum veto` as a
     self-undermining equilibrium for Consensus's frivolous-block antibody, Dowlen's weighted lottery for
