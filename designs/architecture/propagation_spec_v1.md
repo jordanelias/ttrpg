@@ -1,24 +1,27 @@
 # Cross-Scale Propagation Spec — v1
 
-## Status: PROPOSED (Jordan-vetoable throughout) — filed 2026-07-02, ED-1089
+## Status: CANONICAL — ratified 2026-07-02 (Jordan, per ED-1090 merge-ratifies-by-default; ED-1089)
 
-Per the merge-ratifies-by-default convention (ED-1090): merging the PR that carries this
-document ratifies it — no separate step required. Ratification covers this document's text
-exactly as written, including its own honest scope markers: it PROVES per-tick and
-per-cascade termination; it does NOT prove cross-tick convergence; it PROPOSES two cited
-amendments to `key_substrate_v30.md` §4.1 step 4/5 (OF-7, OF-B1) as proposals recorded here,
-not as edits already applied to that file; several items (D.6 double-count, `decay()`,
-cap constants, ORD-3/ORD-4) are explicitly left open within the document itself. Canonizing
-this document canonizes those distinctions along with everything else — it does not resolve
-them.
+Filed and ratified in the same PR (flip pre-staged here per CLAUDE.md §2's "as part of the
+same merge, not a separate later step" rule — the gap that left the holonic doctrine, ED-1083,
+stranded PROPOSED after PR #55 merged). Ratification covers this document's text exactly as
+written, including its own honest scope markers: it PROVES per-tick and per-cascade
+termination; it does NOT prove cross-tick convergence; it PROPOSES two cited amendments to
+`key_substrate_v30.md` §4.1 step 4/5 (OF-7, OF-B1) as proposals recorded here, not as edits
+already applied to that file; several items (the D.6 double-count, `decay()`, cap constants,
+RNG-MODEL-COLLISION, OF-HYSTERESIS-AUDIT, ORD-3/ORD-4) are explicitly left open within the
+document itself. Ratifying this document ratifies those distinctions along with everything
+else — it does not resolve them.
 
 **What this is.** Workplan v5 §3 docket item **J-38**: the cross-scale propagation contract the
 holonic container doctrine (`holonic_container_doctrine_v1.md`, ED-1083, CANONICAL) named as
 "the highest-value unauthored canon" and explicitly declined to author itself. This document
 supplies the aggregate-up transform, the distribute-down transform, the ordering/determinism
-spine (doubling as `engine_clock`'s missing home doc, ED-1051), and a termination guarantee —
-closing conversion register #1 (downward Key delivery, ED-1006) and retiring `engine_clock`'s
-`doc: null` / `[ASSUMPTION]` grade.
+spine, and a termination guarantee — closing conversion register #1 (downward Key delivery,
+ED-1006) and supplying `engine_clock`'s candidate home doc. It does **not** by itself retire
+`engine_clock`'s `doc: null` / `[ASSUMPTION]` grade in `module_contracts.yaml` — that flip
+waits on ED-1051 (module-contract closure priority), a separate still-open editorial item this
+ratification does not resolve.
 
 **Authorship discipline.** Every mechanical claim below is grounded in cited canon or code —
 `key_substrate_v30.md`, `scale_transitions_v30.md`, the conversion strategy's IV.2 directional
@@ -36,7 +39,7 @@ first-draft.
 
 # 1. Ordering & Determinism (engine_clock)
 
-> This section formalizes existing ruled canon and doubles as engine_clock's home doc, retiring its doc:null/[ASSUMPTION] grade. Most of it restates ruled canon or states ordering rules the tick structure already implies (SSI-1..4, ORD-1..4); the tick-scoped scheduler itself (O.2's "tick scheduler" state, `cascade_depth`) is genuinely new engine apparatus — legitimized by §4's OF-B1 amendment, not by this section alone.
+> This section formalizes existing ruled canon and supplies engine_clock's candidate home doc; the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved (see the doc's own Status header and Relationship section). Most of this section restates ruled canon or states ordering rules the tick structure already implies (SSI-1..4, ORD-1..4); the tick-scoped scheduler itself (O.2's "tick scheduler" state, `cascade_depth`) is genuinely new engine apparatus — legitimized by §4's OF-B1 amendment, not by this section alone.
 
 ## O.1 The clock model: season is the tick
 
@@ -366,12 +369,12 @@ This machinery is the temporal spine's responsibility: engine_clock owns the tic
 
 ---
 
-## 5. Consolidated decision queue (this document contributes to decision_queue.md item 18)
+# 5. Consolidated decision queue (this document contributes to decision_queue.md item 18)
 
 Nothing below is decided by this document. Ranked roughly by how much downstream work each unblocks:
 
 1. **OF-7 / OF-B1 (PROPOSED canon amendments)** — extend §4.1 step-4 to allow a deferred-apply target; tighten §4.1 step-5 to forbid synchronous re-entry. Both cited, both needed for this spec's own mechanism to be soundly ratifiable. Natural first ruling: without these two, the termination guarantee has no legal footing in the substrate as currently worded.
-2. **D.6 double-count (HIGH PRIORITY)** — are down-targeted settlement `stat_deltas` disjoint from `AGGREGATE_s`'s basis? Confirmed live driver of non-convergence by adversarial review; blocks the convergence story even once `decay()` is specified.
+2. **D.6 double-count / OF-D6 (HIGH PRIORITY)** — are down-targeted settlement `stat_deltas` disjoint from `AGGREGATE_s`'s basis? Confirmed live driver of non-convergence by adversarial review; blocks the convergence story even once `decay()` is specified.
 3. **OF-3 — decay() specification** — needed for any cross-tick convergence claim; must be a pure function of `key.emitted_at`, calibration-grade, not fabricated here.
 4. **~~OF-PERPETUAL~~ — RETIRED, not a Jordan decision.** `scale_transitions_v30.md` §4.3.2 already rules Stability Crisis's perpetual-scene risk via ED-749 hysteresis (edge-triggered, 2-Accounting re-arm, player's faction only); `sim/cross_scale/scene_dispatch.py:49-61` doesn't yet comply (level-triggered, no hysteresis state, all factions). This is a sim bug to fix, not a ruling to make. Residual: **OF-HYSTERESIS-AUDIT** — do the *other* level-conditioned §4.3.2 triggers (e.g. Settlement Revolt, ED-750) have an ED-749-equivalent hysteresis rule? A hygiene audit, not this spec's decision.
 5. **RNG-MODEL-COLLISION (§1, O.5, new)** — this spec's single-global-stream RNG contract (RNG-1/2/3) is not reconciled against `key_substrate_v30.md` §6.1's per-emission-seed contract, nor against the conversion strategy's named-draw-service proposal. Three RNG models currently coexist unreconciled in the corpus; disposing of this is a precondition for treating §1's determinism claims as settled.
@@ -388,4 +391,4 @@ Nothing below is decided by this document. Ranked roughly by how much downstream
 - `designs/architecture/scale_transitions_v30.md` §12 (J-1/ED-1038) — the downward-delivery ruling this document builds on, not reopens.
 - `references/module_contracts.yaml` — the `engine_clock` entry (ED-1051, open — awaiting Jordan) carries a gap_notes pointer at this document as the candidate home doc; `doc: null` stays unflipped until Jordan resolves ED-1051.
 - `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` — conversion register #1 (downward Key delivery, ED-1006) and the IV.2 directional laws this document formalizes.
-- `CURRENT.md` — indexes this doc under Architecture once ratified.
+- `CURRENT.md` — indexes this doc under Architecture as of this ratification (ED-1090 merge-ratifies-by-default).

@@ -46,7 +46,7 @@ are more "current state" files than there should be; trust them in this strict p
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
-  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix`.
+  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` in the description when applicable.
 - **Continuity = git history + `HANDOFF.md`.** No session-log/checkpoint machinery is in use (despite
   retired files lingering — §1). When you pause mid-task, capture next actions in `HANDOFF.md`; a
