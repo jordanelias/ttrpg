@@ -16,6 +16,12 @@ Endpoints (all JSON except GET /):
   GET  /              -> the single-page app (static/index.html)
   GET  /api/mode      -> {per_cell, field_movement, pc_node_cohesion} — this process's fixed config
   GET  /api/presets   -> named scenario presets (mirrors gauge_mb.py's TESTS/CAV_TESTS matchups)
+  GET  /api/roster-options -> {shapes, troop_types, roles_by_troop_type, subunit_cap, battlefield_size}
+                         — [Stage E] the live registries (geometry.CELL_PATTERN_FN,
+                         troop_types.TROOP_TYPE_STATS, roles_for per type, engine.SUBUNIT_CAP), so
+                         the Army Configuration Mode UI never hardcodes a second copy of a shape/role
+                         list that would drift out of sync with the engine (e.g. after a future LC-8-
+                         style shape retirement).
   POST /api/trace     -> {a:{...build_unit spec...}, b:{...}, seed, kind, max_battle_turns}
                          -> one traced battle: {winner, events, a:{summary}, b:{summary}}
 """
@@ -27,6 +33,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from trace import run_traced_battle
 from mass_battle import config as _cfg
 from mass_battle.hierarchy import units as _units
+from mass_battle import geometry as _geo
+from mass_battle.troop_types import registry as _troop_registry
+from mass_battle.engine import SUBUNIT_CAP
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
 
@@ -96,6 +105,25 @@ def do_mode():
             'battlefield_size': _cfg.BATTLEFIELD_SIZE}
 
 
+# [Stage E] Troop types the Army Configuration Mode UI offers — the canonical §B.2 taxonomy
+# (TROOP_TYPE_STATS) plus the two generic legacy types ('infantry'/'cavalry') every existing preset
+# and gauge row already uses. Not just TROOP_TYPE_STATS.keys() alone: those two generics carry no
+# stat preset (they inherit the Unit's own power/discipline/morale, exactly as build_unit's own
+# troop_type='infantry' default does) but are real, load-bearing options a deployer should be able
+# to pick — omitting them would make the UI strictly less capable than the API it drives.
+_ROSTER_TROOP_TYPES = sorted(set(_troop_registry.TROOP_TYPE_STATS) | {'infantry', 'cavalry'})
+
+
+def do_roster_options():
+    return {
+        'shapes': sorted(_geo.CELL_PATTERN_FN.keys()),
+        'troop_types': _ROSTER_TROOP_TYPES,
+        'roles_by_troop_type': {tt: _troop_registry.roles_for(tt) for tt in _ROSTER_TROOP_TYPES},
+        'subunit_cap': SUBUNIT_CAP,
+        'battlefield_size': _cfg.BATTLEFIELD_SIZE,
+    }
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -116,6 +144,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(HTTP_OK, do_mode())
         if self.path == '/api/presets':
             return self._send(HTTP_OK, PRESETS)
+        if self.path == '/api/roster-options':
+            return self._send(HTTP_OK, do_roster_options())
         return self._send(HTTP_NOT_FOUND, {'error': 'not found'})
 
     def do_POST(self):

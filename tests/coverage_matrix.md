@@ -332,3 +332,29 @@ Archived entries in tests/coverage_matrix_archive.md
   enveloping-cavalry-vs-braced-hold-line scenario shows the gate suppressing ~26% of firings
   (804 vs 1088 over 8 seeds) — exactly the flank/rear hits. Gauge row C7 can now legitimately gain a
   braced+enveloped variant on the next gauge pass.
+
+## 2026-07-02 — Stage E: Army Configuration Mode (deployment UI)
+- `engine.py`: `SUBUNIT_CAP` (11, ED-1090) hoisted from a local inside `build_army` to module scope
+  and exported via `_WRAPPER_API`, so any other caller — this UI, the future in-game deployment
+  screen — reads the single source instead of duplicating the literal.
+- `workbench/server.py`: new `GET /api/roster-options` endpoint exposing the live registries
+  (`geometry.CELL_PATTERN_FN` keys, `troop_types.TROOP_TYPE_STATS` + the two generic legacy types,
+  `roles_for` per troop type, `engine.SUBUNIT_CAP`) — the frontend never hardcodes a second copy of
+  a shape/role list that would drift after a future LC-8-style retirement.
+- `workbench/static/index.html`: new "Deploy Army" tab alongside the existing "Quick Match" tab
+  (additive — Quick Match untouched). Click-to-place deployment: pick shape/troop_type/role
+  (role-menu gated per troop type via `/api/roster-options`)/tier/troop-count, click the field (or
+  "Place at default position") to add a subunit to the active side's roster; roster list with
+  per-entry remove and a live cap counter (client-side cap enforcement mirrors `SUBUNIT_CAP=11`,
+  with the server's own `ValueError` as the authoritative backstop). "Start Battle" assembles both
+  rosters into the SAME `{'preset':'army','specs':[...]}` spec `trace._build_side` already
+  dispatches to `engine.build_army` (zero new backend battle-running path) and hands off to the
+  existing replay canvas/scrub/play controls — one rendering surface for both placement and replay,
+  per the Stage E decomposition ("the same canvas in a placement state instead of a replay state").
+- Verified via a Playwright-driven run: placed 3 heavy_infantry (Line) for side A and 2 cavalry
+  (role=Shock) for side B by canvas click, confirmed `Horseshoe` is absent from the shape options
+  (LC-8) and `Shock` appears in cavalry's role menu but not e.g. artillery's, started the battle
+  (112 replay frames produced, winner determined), confirmed switching back to the Deploy tab
+  restores the placement schematic rather than staying on the replay, and confirmed the cap: adding
+  an 11th side-A subunit succeeds, a 12th is blocked client-side with the ED-1090-citing alert
+  matching the server's own message text.
