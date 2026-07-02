@@ -60,21 +60,13 @@ def resolve(pool, net_sigma, rng):
 #              cut/thrust heft is weight-class (continuous-mass cut-impact deferred, plan #9).
 #   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
-HEFT={'light':0,'heavy':3}                                          # [damage_model — additive weight heft] (binary anchor)
-HEFT_HEAVY=3.0                                                      # heavy-class cut/thrust heft (= HEFT['heavy'])
-HEFT_REF_LIGHT=1.0; HEFT_REF_HEAVY=1.4                              # kg class-reference masses (longsword = heavy anchor)
+HEFT_HEAVY=3.0                                                      # heavy-class cut/thrust heft scale (unchanged — the multiplier below anchors on the SAME 2H cut-thrust reference WP.heft() normalises to 1.0)
 def heft_resp(w, cfg):
-    """WS-2 req4 — continuous weapon heft response (heft-units). The binary `wt` CLASS is the anchor (it encodes
-    wieldiness/blade-presence, NOT raw kg — spear 2.0kg is 'light', mace 1.2kg 'heavy'), so cross-class balance is
-    preserved; a WITHIN-CLASS mass term then makes a 2.7kg greatsword read heavier than a 1.4kg longsword at every
-    heft site. HEFT_MODE='binary' returns exactly {heavy:1.0, light:0.0} — byte-identical to the pre-WS-2 booleans.
-    One calibrated gain (HEFT_MASS_K), per the recovered WP-2 recommendation (not the MoI/pommel machinery)."""
-    heavy = (w.get('wt') == 'heavy')
-    if cfg.get('HEFT_MODE', 'binary') == 'binary':
-        return 1.0 if heavy else 0.0
-    base = 1.0 if heavy else 0.0
-    ref = HEFT_REF_HEAVY if heavy else HEFT_REF_LIGHT
-    return max(0.0, base + cfg.get('HEFT_MASS_K', 0.0) * (w.get('mass', ref) - ref))
+    """Continuous weapon heft response (heft-units) — morphology-rearch Phase B6: DERIVED from weapon_physics.heft()
+    (striking mass × forward-balance, normalised so the longsword anchor reads 1.0), replacing the binary
+    wt{light,heavy} class outright. No more HEFT_MODE toggle — there is no fiat category left to reproduce in
+    'binary' mode. `cfg` is kept for call-site compatibility (unused; the derivation is pure)."""
+    return WP.heft(w)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
@@ -158,7 +150,7 @@ def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_RE
     ignore it (percussion/shear do not gap-seek), so it is inert for a blunt/cut blow — de-vestigialised, not just
     plumbed."""
     if deg not in ('graze','success','overwhelming'): return 0
-    heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # WS-2: continuous cut/thrust heft (binary mode -> heft_units in {0,1} reproduces HEFT['light'/'heavy'])
+    heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
     return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps)

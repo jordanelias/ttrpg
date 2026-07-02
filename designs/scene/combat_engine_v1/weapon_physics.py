@@ -86,10 +86,10 @@ AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
 AGILITY_REF = 0.00215
 # 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
 K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
-# [WIRING HAZARD — Phase-3b] weapon_physics.reach() spans ~0.7–6.0 (head_len-based); the LIVE systems.reach_base it
-# replaces spans ~4.5–7.8 (L0=4.0-based). CLOSE_REACH_REF=6.5 + close_unwieldiness assume the 4.5–7.8 band, so wiring
-# reach() in UNSCALED zeroes the long-weapon close penalty (spear 5.98 < 6.5). Wire via an affine remap, or re-tune
-# CLOSE_REACH_REF/reach_adj/the gap-normalisation together in the same pass. Do NOT wire reach() raw.
+# [RESOLVED — Phase B6] weapon_physics.reach() (the head_len-based diagnostic, ~0.7-6.0 span) is DELETED; the LIVE
+# systems.reach_base (grip-aware, ~4.5-7.8 span, CLOSE_REACH_REF-compatible) remains the sole reach source, so the
+# once-live wiring hazard (unscaled reach() zeroing the long-weapon close penalty) no longer applies — there is no
+# second reach function left to accidentally wire in raw.
 
 
 # ════════════════════ STAGE 1 — located-part mass model -> balance & inertia ════════════════════
@@ -260,31 +260,11 @@ def agility(w):
     return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
 
 
-def authority(w):
-    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Impact authority
-    (cut/thrust/blunt): forward momentum sqrt(mass)*forwardness. Head-specific delivery stays in core.coupling;
-    this is the raw force the heft term reads. Live resolution gets impact force from percussion_authority (blunt)
-    + core.coupling's DELIVERY/strength terms (edged) instead. Gate-1 audit flagged authority()/reach() as one horn
-    of a Jordan-gated single-source-target decision (HANDOFF Pending item 6 / forward_roadmap Track 2 / ED-1080
-    residual) — kept + explicitly labeled rather than deleted pending that ratification; only consumed by this
-    module's own __main__ self-test."""
-    pob = derive(w)['PoB_frac']
-    return (w['mass'] ** 0.5) * (0.30 + pob)
-
-
-def reach(w):
-    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Effective forward reach
-    (replaces the categorical reach=='long' + HEAD_REACH[head]). GROUNDED REVISION (HEMA measure-grammar): a
-    two-handed weapon's extra reach comes from the HANDLE LENGTH / rear-hand setback, NOT from hand-count — a
-    longsword thrusts as far as a rapier because of its longer grip, and a one-handed extension reaches
-    equal-or-farther. So the prior flat `+0.8 if 2H` is replaced by K_GRIP_REACH·grip_len for 2H weapons. reach_adj
-    is the per-weapon [SIM-CALIBRATE] correction (git eb5535eb tuned it to A0–A3 sim error; it is the dominant
-    per-weapon term and is flagged NOT grounded). The standing arm+lunge offset lives in L0 (the consumer). Live
-    resolution gets reach from systems.reach_base (grip-aware) instead — see the authority() docstring above for
-    why this function is kept-but-labeled rather than deleted; only consumed by this module's own __main__
-    self-test."""
-    twohand = K_GRIP_REACH * w['grip_len'] if w['hands'] == 2 else 0.0
-    return w['head_len'] + twohand + w.get('reach_adj', 0.0)
+# authority()/reach() DELETED (morphology-rearch Phase B6, 2026-07-02, Gate-1's single-source-target decision
+# resolved): both were BUILD-ONLY diagnostics, never wired into live resolution (which gets impact force from
+# percussion_authority/heft/core.coupling and reach from systems.reach_base), kept-but-labeled pending this
+# ratification. No remaining consumer anywhere in the corpus (verified) — deleted outright rather than carried
+# further; systems.reach_base and weapon_physics.heft() are the sole live sources for reach and impact force.
 
 
 def defense_affinities(w):
@@ -392,6 +372,70 @@ def edge_vibration(w):
     return math.tanh(VIBRATION_K * amp)
 
 
+# ════════════════════ STAGE 3e — HEFT / TEMPO_SHAPE / HANDLING: the wt/spd/hand de-leak (Phase B6) ════════════════
+# The three remaining fiat aggregates — wt{light,heavy}, spd (a bare per-weapon tempo bonus), hand{Forgiving,
+# Standard,Demanding} — replaced with derivations off the SAME real per-part mass model every other Phase-B stage
+# already reads. All three are DIFFERENT physical quantities (impact force is a static moment, tempo is a shape
+# ratio, control demand is a balance/guard composite) that happen to share one mass model as their common source —
+# "de-leaked" means grounded in the same data, not literally the same scalar (verified: reusing wield_heft's own
+# MoI-based swing-inertia formula for the IMPACT path violates the plan's own falsifiable spear<arming<longsword<
+# greatsword ordering — a spear's swing-inertia about the working hand is LARGE even though its striking mass is
+# small, which is exactly the COST/IMPACT distinction wield_heft's own docstring already draws).
+HEFT_REF = 0.1545336822851806  # [ANCHOR] the 2H cut-thrust reference's (longsword) own m_head*PoB_frac, so
+                    #   heft(longsword)==1.0 exactly — core.damage's HEFT_HEAVY*heft_units then reproduces the old
+                    #   ~3.0 class magnitude at the SAME anchor weapon, so DMG_SCALE (calibrated against the old
+                    #   heft scale) is undisturbed.
+
+def heft(w):
+    """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
+    harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac
+    is floored at 0 before use: a HAND-ON-BLADE grip (longsword_halfsword/estoc_halfsword) has its centre of mass
+    BEHIND the working hand for CONTROL purposes (weapon_physics.derive's STAGE-1 docstring), but the strike itself
+    still delivers real forward force — a negative "lever" would wrongly read as negative impact, not merely
+    reduced. Read ONLY by the cut/thrust/point damage path (core.heft_resp); a BLUNT head's impact force already
+    derives independently from percussion_authority. FALSIFIABLE ACCEPTANCE (verified at authoring time): spear <
+    arming < longsword < greatsword, greatsword not collapsed onto longsword. Pure."""
+    d = derive(w)
+    return (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
+
+TEMPO_THRUST_K = 2.0   # [SIM-CALIBRATE] weight on point_concentration (a thrust-oriented profile recovers along
+                        #   its own line quickly)
+TEMPO_HEADFRAC_K = 1.0 # [SIM-CALIBRATE] weight on the head/total-length RATIO (not raw head_len — a long-gripped
+                        #   weapon with a proportionally short head is not penalised the way a forward-loaded one is)
+
+def tempo_shape(w):
+    """Cadence shape — DERIVED from how thrust-oriented (point_concentration) and how forward-loaded BY LENGTH
+    RATIO (head_len / total_len, not raw magnitude — the plan's explicit correction against re-smuggling weight)
+    the weapon's profile is. A thrust-oriented weapon resets along its own line quickly; a broad, forward-heavy
+    profile commits further per swing. Deliberately a SHAPE ratio, decorrelated from the mass-based wield_heft/
+    heft terms (empirically low correlation vs wield_heft's MoI at authoring time — the same weapon_tempo() call
+    already applies wield_heft as its own separate weight penalty; this must not re-derive that same signal).
+    Pure."""
+    pc = w['geometry']['point_concentration']
+    Lt = w['head_len'] + w['grip_len']
+    head_frac = w['head_len'] / Lt if Lt > 1e-9 else 0.0
+    return TEMPO_THRUST_K * pc - TEMPO_HEADFRAC_K * head_frac
+
+HANDLING_POB_K = 1.00    # [SIM-CALIBRATE] PoB_frac contribution (forward-loaded balance demands more correction)
+HANDLING_GUARD_K = 0.50  # [SIM-CALIBRATE] hand_guard REDUCES demand (a guarded grip is more forgiving to hold)
+
+def handling(w):
+    """Physical control-demand GAP — DERIVED from PoB_frac (forward-loaded balance demands more correction) and
+    hand_guard (reduces demand — a guarded grip is more forgiving to hold); PHYSICAL ONLY. Scoped narrowly to
+    the two NEW physical facts the retired `hand` category didn't already have a dedicated term for elsewhere —
+    systems.str_demand ALREADY carries MoI (via wield_heft) and 2H (its own D_2H term) as separate summands, so
+    this does not re-derive them (no double-count). The retired `hand` category (Forgiving/Standard/Demanding)
+    was NOT purely physical — it encoded a weapon-TRADITION's skill-ceiling (a spear reads 'Forgiving' for its
+    simple point-and-thrust technique despite a high PoB_frac; a rapier reads 'Demanding' for its sophisticated
+    fencing system despite a guarded hilt) — verified at authoring time to have no meaningful correlation with
+    PoB_frac/hand_guard across the roster, confirming the old category was skill-driven, not control-driven. That
+    skill-ceiling axis is EXPLICITLY NOT reconstructed here (plan decision 4/6): it relocates to the future
+    fighter/tradition competence layer. str_demand's resulting shift for skill-driven weapons is the accepted
+    interim (decision 6). Non-negative. Pure."""
+    d = derive(w)
+    return max(0.0, HANDLING_POB_K * d['PoB_frac'] - HANDLING_GUARD_K * w.get('hand_guard', 0.0))
+
+
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
 # Grip is MORPHOLOGY, not a named state. Where the working hand sits on the shaft is a CONTINUOUS choice, bounded by
 # the weapon's own geometry: a long shaft/grip slides (butt<->centre), a short hilt cannot. "Choke" = grip-position
@@ -452,9 +496,10 @@ if __name__ == '__main__':
         print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
     print()
 
-    print("STAGE 2/3 — derived authority/agility/reach (build-only diagnostic) + percussion + defence affinities:")
-    print(f"{'weapon':12} {'auth':>5} {'agil':>5} {'reach':>6} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18}")
+    print("STAGE 2/3 — derived agility/percussion/defence affinities + Phase-B6 heft/tempo_shape/handling:")
+    print(f"{'weapon':12} {'agil':>5} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18} {'heft':>6} {'tempo':>6} {'handl':>6}")
     for n, w in WEAPONS.items():
         a = defense_affinities(w)
-        print(f"  {n:10} {authority(w):5.2f} {agility(w):5.2f} {reach(w):6.2f} {percussion_authority(w):5.2f} "
-              f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f}")
+        print(f"  {n:10} {agility(w):5.2f} {percussion_authority(w):5.2f} "
+              f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f} "
+              f"{heft(w):6.2f} {tempo_shape(w):6.2f} {handling(w):6.2f}")

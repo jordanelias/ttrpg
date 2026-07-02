@@ -48,12 +48,9 @@ CFG = dict(
   BASE_TEMPO=2.0, SPEED_K=0.6, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
-  # WS-2 req4: continuous weapon morphology (weight=2.7kg, not weight="heavy"). HEFT_MODE binary|continuous.
-  # continuous adds a WITHIN-CLASS mass term on top of the binary class anchor (so cross-class balance — which the
-  # binary `wt` encodes as wieldiness, not raw kg — is preserved) -> a 2.7kg greatsword reads heavier than a 1.4kg
-  # longsword at every heft site (tempo, stamina cost, str-demand, cut/thrust impact). HEFT_MODE='binary' is
-  # byte-identical to pre-WS-2. One calibrated gain (HEFT_MASS_K), per the recovered WP-2 recommendation.
-  HEFT_MODE='continuous', HEFT_MASS_K=0.15,   # K=0.15: greatsword(2.7kg) heft 1.20 vs longsword(1.4kg) 1.00 — clear within-class ordering at a roster shift ~= the N=300 noise floor. Raise toward 0.30 (poleaxe -8pp) only with a full re-sweep.
+  # WS-2 req4 heft: HEFT_MODE/HEFT_MASS_K RETIRED (morphology-rearch Phase B6, 2026-07-02) — core.heft_resp now
+  # reads weapon_physics.heft() unconditionally (mass x forward-balance, real per-part data); there is no fiat
+  # binary/continuous toggle left to select between.
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
   CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Focus + 2*Spirit (Jordan 2026-06-03; was 3*Foc+1*Spi)
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
@@ -157,4 +154,5 @@ CFG = dict(
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
-HANDLE_RANK={'Forgiving':0,'Standard':1,'Demanding':2}
+# HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
+# handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

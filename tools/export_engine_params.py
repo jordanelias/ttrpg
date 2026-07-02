@@ -67,7 +67,8 @@ def derive():
         "canonical_status": "CANONICAL combat_engine_v1 (ED-900; re-ratified ED-904)",
         "sections": {
             "cfg": _typed(config.CFG),
-            "handle_rank": _typed(config.HANDLE_RANK),
+            # handle_rank RETIRED (morphology-rearch Phase B6, 2026-07-02): config.HANDLE_RANK is gone —
+            # systems.str_demand reads weapon_physics.handling() (real per-part data) instead.
         },
     }
     return payload

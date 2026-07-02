@@ -87,8 +87,6 @@
    "GUARD_NEUTRAL": 0.45,
    "HANDLE_K": 0.1,
    "HANDS_COMMIT": 0.5,
-   "HEFT_MASS_K": 0.15,
-   "HEFT_MODE": "continuous",
    "IMPOSE_BIND_BOOST": 0.5,
    "IMPOSE_REFUSE_P": 0.5,
    "IMPOSITION_GATE": true,
@@ -197,11 +195,6 @@
    "WIND_K": 0.9,
    "WOUND_ATK_OB": 0.15,
    "WOUND_DEF_OB": 0.25
-  },
-  "handle_rank": {
-   "Demanding": 2,
-   "Forgiving": 0,
-   "Standard": 1
   }
  },
  "source": "designs/scene/combat_engine_v1/config.py"
