@@ -269,6 +269,32 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-02 — **ED-<LANE>-NNNN lane-tagged editorial namespace created (ED-IN-0001, PR #67,
+  open/unmerged); D1-D5 adjudication docket reconciled (ED-IN-0002, PR stacked on #67, also
+  unmerged).** PR #58 hit two same-session concurrent-allocation collisions on the flat
+  `ED-NNNN` sequence within one PR (`ED-1088`→`1090`; then `1089`/`1090`→`1093`/`1094` — see
+  `ED-1094`'s own entry). Jordan: new EDs use `ED-<LANE>-NNNN` (9 lanes: `MB` mass battle,
+  `PC` personal combat, `FI` field investigation, `SC` social contest, `FA` faction actions,
+  `WR` world, `IN` infrastructure, `GO` godot, `SE` settlements — `SC`/`PC` deliberately
+  disambiguated after a first draft proposed `SC` for both; a proposed `PY` python lane was
+  dropped as not a real subsystem). Flat `ED-NNNN` is FROZEN at `ED-1094`, permanently valid,
+  never retrofitted. `references/id_reservations.yaml` gained per-lane `next_free` counters;
+  `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py` extended to
+  recognize both formats; `CLAUDE.md` §3 documents the format plus a new, not-yet-CI-enforced
+  session-lane-scoping convention. **Separately, Jordan pasted an uncommitted local
+  adjudication docket (D1-D5, drawn from the 2026-06-30 ecosystem review's `needs_jordan`
+  subset) for relevance-checking against the current tree.** Verified each against the
+  working tree rather than trusting the docket's dated framing: D1 (ED-1050 ADEF_THRESHOLD)
+  and D5 (freshness-gate blocking flip) confirmed RESOLVED, struck; D2 (ED-1051) and D3
+  (ED-1052) confirmed still open but with materially changed context (engine_clock now has a
+  candidate home doc; an oracle-export precedent exists for typed params without deciding the
+  broader question); D4 (ED-1054) confirmed partially done, narrowed to its two still-open
+  parts. Applied: ED-1050's stale `needs_jordan` flag cleared; dated addenda appended to
+  ED-1051/1052/1054 (not silent rewrites — the append-only convention holds); `decision_queue.md`
+  items 5/12 annotated, items 24/25 added; this entry. **Both PRs pending merge — not yet
+  ratified under the merge-ratifies-by-default convention; status fields are pre-staged, same
+  pattern as ED-1083/ED-1093 in PR #55/#58.**
+
 - 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine
   ratified; J-38 propagation spec ratified (ED-1093).** Jordan: merging a PR ratifies its
   PROPOSED/provisional contents by default unless the PR body explicitly holds an item back
