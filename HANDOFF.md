@@ -493,6 +493,22 @@ per the file's protocol; never max+1.)_
   see the session for `designs/audit/2026-07-02-*movement*` or similar once filed. Do not trust prior
   "Cannae pattern confirmed" claims in this file or the plan without re-verifying against whichever
   path was actually active.
+  **Two further Jordan rulings (2026-07-02, during the audit) binding on the fix:** (1) **Path-length
+  budget** for the forthcoming waypoint/node-placement path primitive — verbatim: *"use a formula
+  based upon like 0.5\*speed\*maximum-ticks-in-battle that determines the maximum length of the
+  pathing route that is allowed to be determined with node placements"* — undeliverable paths are
+  rejected at design time, never silently truncated. Formula shape + the 0.5 factor are Jordan-ruled;
+  operands must derive from existing primitives (`TICKS_PER_PHASE=6` × 3 phases = 18 ticks per
+  engagement turn, `max_battle_turns=8`, `cell_speed`, `PC_CAVALRY_SPEED_MULT=2.0` — which emergently
+  gives cavalry double the path budget, correct historically, preserve it). Open sub-decision: which T
+  the formula uses — `reset_positions` currently teleports subunits to spawn at every engagement-turn
+  boundary, so the continuous window is 18 ticks; extending it requires a Jordan-gated reset-semantics
+  change. Jordan also ruled the maneuver shapes in his two annotated screenshots (wide-out-then-cut-in
+  from flank; wheel-from-behind to an interior point between friendly bodies) are GENERAL pathing
+  capabilities the system must support, not Cannae-specific scripts. (2) **Model routing:** the path
+  formula and design-authorship nodes are *"probably a fable proposal but sonnet 5 write"* — Fable
+  authors the design contract, Sonnet 5 implements; and *"if fable unavailable, btw, use opus 4.8 max
+  effort"* for those nodes.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
