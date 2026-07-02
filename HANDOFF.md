@@ -500,10 +500,26 @@ per the file's protocol; never max+1.)_
   rejected at design time, never silently truncated. Formula shape + the 0.5 factor are Jordan-ruled;
   operands must derive from existing primitives (`TICKS_PER_PHASE=6` × 3 phases = 18 ticks per
   engagement turn, `max_battle_turns=8`, `cell_speed`, `PC_CAVALRY_SPEED_MULT=2.0` — which emergently
-  gives cavalry double the path budget, correct historically, preserve it). Open sub-decision: which T
-  the formula uses — `reset_positions` currently teleports subunits to spawn at every engagement-turn
-  boundary, so the continuous window is 18 ticks; extending it requires a Jordan-gated reset-semantics
-  change. Jordan also ruled the maneuver shapes in his two annotated screenshots (wide-out-then-cut-in
+  gives cavalry double the path budget, correct historically, preserve it). **T operand — CONFIRMED
+  BUG, not an open sub-decision (correction 2026-07-02):** `orchestration.reset_positions` currently
+  teleports every subunit back to spawn at the top of EVERY engagement turn inside
+  `run_multi_turn_battle` (`orchestration.py:1478-1484`) — the WITHIN-battle turn boundary. Jordan
+  confirmed this is wrong: *"I thought we have decided before that an army only has subunits reset
+  to initial positions... at the start of a new battle. it is nonsensical for them to return to
+  starting positions within the same battle... the point of having turns here is for the player to
+  be able to assess how things are going and issue commands that dynamically adjust what subunits
+  are doing"* (Football Manager analogy — in-match instructions, not a reset). The codebase already
+  draws exactly this within-turn vs. between-battles distinction correctly for morale/discipline via
+  two separate functions (`between_turn_recovery`, orchestration.py:1411, "the WITHIN-battle turn
+  boundary"; `reset_morale_between_battles`, orchestration.py:1424, "the battle-to-battle boundary...
+  NOT within a single battle") — `reset_positions` never got the same treatment and is called at the
+  wrong scope. Fix: retire/rescope the `run_multi_turn_battle` call site (and check whether
+  `run_multi_unit_battle`'s own `reset_positions` call, ~orchestration.py:1706-1707, has the same
+  bug or is correctly campaign-boundary-scoped). Once fixed, the TRUE continuous-movement window is
+  the full multi-turn battle (up to 8×18=144 ticks), not 18 — use that as the formula's default T.
+  This reset-every-turn bug is also very likely a major contributor to "paths never develop" on its
+  own, independent of the dead-`_node_advance`-steering findings — folded into the running audit's
+  synthesis phase. Jordan also ruled the maneuver shapes in his two annotated screenshots (wide-out-then-cut-in
   from flank; wheel-from-behind to an interior point between friendly bodies) are GENERAL pathing
   capabilities the system must support, not Cannae-specific scripts. (2) **Model routing:** the path
   formula and design-authorship nodes are *"probably a fable proposal but sonnet 5 write"* — Fable
