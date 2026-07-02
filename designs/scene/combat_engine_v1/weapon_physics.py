@@ -92,53 +92,70 @@ K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fract
 # CLOSE_REACH_REF/reach_adj/the gap-normalisation together in the same pass. Do NOT wire reach() raw.
 
 
-# ════════════════════ STAGE 1 — composite mass -> balance & inertia ════════════════════
+# ════════════════════ STAGE 1 — located-part mass model -> balance & inertia ════════════════════
+# RE-ARCHITECTURE 2026-07-02 (Phase A): a weapon's balance/inertia is the SUM over LOCATED PARTS about the
+# working-hand axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + rod_Lᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. HEAD parts
+# are the schema-exposed morphology (w['elements']); grip/pommel/guard (bladed) or shaft/butt (hafted) are
+# internal derived parts. This RETIRES the single-C_HEAD-centroid head LUMP (a compound head's mass is now the
+# sum of its located elements, not one point at wclass's centroid). Phase A is byte-identical: when a weapon
+# carries no explicit `elements`, a single REPRODUCTION element is synthesized at the old C_HEAD centroid, so
+# PoB/MoI/m_head reproduce the pre-rearchitecture values exactly (parity-harness-proven). Phase B populates real
+# multi-element per-part masses and deletes C_HEAD.
+def _head_elements(w):
+    """The head's located mass-elements. Phase A reproduction: no explicit `elements` → one element at the old
+    C_HEAD centroid (pos_frac) carrying the whole head mass (mass_share 1.0). Phase B: explicit multi-element lists."""
+    els = w.get('elements')
+    if els:
+        return els
+    return [dict(pos_frac=C_HEAD[w.get('wclass', 'bladed')], mass_share=1.0)]
+
 def derive(w):
-    """Composite iron-on-wood mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB is DERIVED, not hand-set.
-    Pure; consumes the primitive set {mass, head_len, grip_len, pommel_kg, wclass, hilt}."""
+    """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Consumes
+    {mass, head_len, grip_len, pommel_kg, wclass, hilt, haft_d, butt_kg, gripped, elements}."""
     hl, gl = w['head_len'], w['grip_len']
     m, cls = w['mass'], w.get('wclass', 'bladed')
     Lg, Lh = gl * UNIT_M, hl * UNIT_M
     Lt = Lg + Lh
-    ch = C_HEAD[cls]
     if w.get('gripped'):
-        # HAND-ON-BLADE form (half-sword): the held span (grip_len) is STEEL — the gripped lower blade — NOT a
-        # low-density wood grip. The standard bladed branch mis-reads grip_len as wood and yields a NON-PHYSICAL
-        # negative PoB (recovered defect: longsword_halfsword derived PoB = -12.9 cm, MoI 0.184 > the full form's
-        # 0.169). LUMPED model: the forward WORKING segment (head_len ahead of the forward hand) is approximated as
-        # the steel fraction of the bar ahead of the hand; the pommel + rear grip are neglected in the swing inertia
-        # (two-handed point work braced by the rear hand, not a free swing). The long grip behind feeds leverage
-        # (systems.leverage). The forward end is light -> small +PoB and LOW swing-MoI (high close control). Build-only
-        # (nothing live reads STAGE-1 derive() for the half-sword yet); the lumped approximation is calibration-grade,
-        # not exact. Pure.
+        # HAND-ON-BLADE (half-sword) lumped-rod special case — the held span is STEEL, not a wood grip; the
+        # forward working segment is approximated as a uniform steel rod. Kept verbatim (byte-identical);
+        # reconciled to the element model in Phase B. See recovered defect note (negative-PoB) in git history.
+        ch = C_HEAD[cls]
         m_lin = m / Lt                                  # ~uniform steel mass per unit length (you grip the blade)
         m_fwd = m_lin * Lh                              # steel forward of the working hand — loads the point
-        c_fwd = ch * Lh                                 # centroid of the forward working segment ahead of the hand
-        moment = m_fwd * c_fwd                          # forward moment of the light working end
-        moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0   # working-segment swing inertia about the hand (low)
-        m_head = m_fwd
+        c_fwd = ch * Lh
+        moment = m_fwd * c_fwd
+        moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0
         PoB = moment / m
-        return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
+        return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_fwd,
                     MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
+    parts = []  # (mass, x_from_working_hand, rod_length)
     if cls == 'bladed':
         m_grip = _A_GRIP * Lg * RHO_SWORD_GRIP
         m_pom = w.get('pommel_kg', 0.0)
         m_g = GUARD.get(w.get('hilt', 'none'), 0.0)
-        m_head = m - m_grip - m_pom - m_g
-        moment = m_head * (ch * Lh) - m_grip * (Lg / 2) - m_pom * Lg
-        moi = m_head * (ch * Lh) ** 2 + m_grip * (Lg / 2) ** 2 + m_pom * (Lg ** 2)
+        head_mass = m - m_grip - m_pom - m_g            # Phase A: head is the residual (grip/pommel/guard derived)
+        parts.append((m_grip, -Lg / 2, 0.0))
+        parts.append((m_pom, -Lg, 0.0))
+        parts.append((m_g, 0.0, 0.0))                   # guard sits at the working hand (x=0)
     else:
-        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2    # per-weapon shaft cross-section: a spear shaft (~35mm) is thinner than the staff/poleaxe-calibrated D_HAFT (40mm)
+        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2    # per-weapon shaft cross-section (spear ~35mm < staff/poleaxe 40mm)
         m_shaft = min(a_haft * Lt * RHO_WOOD, m)
-        butt = w.get('butt_kg', 0.0)            # rear queue/spike counterweight (kg); generalises the retired is_poleaxe flag — ANY rear-weighted haft counterweights for free
-        m_iron = max(0.0, m - m_shaft - butt)
-        shaft_c = (Lt / 2) - Lg
-        moment = m_iron * (ch * Lh) + m_shaft * shaft_c - butt * Lg
-        moi = m_iron * (ch * Lh) ** 2 + m_shaft * (shaft_c ** 2 + Lt ** 2 / 12) + butt * (Lg ** 2)
-        m_head = m_iron
-    PoB = moment / m
+        butt = w.get('butt_kg', 0.0)                    # rear queue/spike counterweight (kg)
+        head_mass = max(0.0, m - m_shaft - butt)        # m_iron
+        parts.append((m_shaft, (Lt / 2) - Lg, Lt))      # shaft as a distributed ROD of length Lt
+        parts.append((butt, -Lg, 0.0))
+    m_head = 0.0
+    for e in _head_elements(w):                         # HEAD elements — the schema-exposed morphology
+        me = e['mass_share'] * head_mass
+        parts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
+        m_head += me
+    m_total = sum(p[0] for p in parts)
+    moment = sum(p[0] * p[1] for p in parts)
+    moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+    PoB = moment / m_total
     return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
-                MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
+                MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
 
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
