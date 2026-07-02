@@ -19,15 +19,19 @@ from mass_battle.equipment.armour import ARMOURY
 # (weapon/armour physics -> speed / DR / lethality) is still being worked out. A troop type is thus a
 # "dictionary definition" that points at equipment entries — the decoupling this split enables.
 TROOP_LOADOUT = {
-    "levy":            ("light_cut",   "none"),
-    "light_infantry":  ("light_cut",   "light"),
-    "heavy_infantry":  ("heavy_cut",   "medium"),
-    "cavalry":         ("heavy_cut",   "heavy"),
-    "archers":         ("bow",         "light"),
-    "crossbow":        ("crossbow",    "light"),
-    "sling":           ("sling",       "light"),
-    "artillery":       ("siege",       "none"),
-    "knights_templar": ("heavy_blunt", "heavy"),
+    "levy":             ("light_cut",   "none"),
+    "light_infantry":   ("light_cut",   "light"),
+    "heavy_infantry":   ("heavy_cut",   "medium"),
+    "cavalry":          ("heavy_cut",   "heavy"),
+    "archers":          ("bow",         "light"),
+    "crossbow":         ("crossbow",    "light"),
+    "sling":            ("sling",       "light"),
+    "artillery":        ("siege",       "none"),
+    "knights_templar":  ("heavy_blunt", "heavy"),
+    # [ED-1097, gate 2] mounted_archers isn't a §B.2 troop type -- added by ED-1095/T4 (Jordan
+    # 2026-07-02) with no loadout entry yet. Same weapon as archers (a bow), light armour to keep
+    # it mobile -- the whole point of the troop type is speed + range, not endurance.
+    "mounted_archers":  ("bow",         "light"),
 }
 
 

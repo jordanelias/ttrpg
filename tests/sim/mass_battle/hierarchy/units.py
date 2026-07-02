@@ -741,18 +741,34 @@ class Subunit:
         if PC_NODE_COHESION and hasattr(self, '_node_pos'):
             return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
         if self.stance == "hold": return
-        # KITING (§13): a ranged unit with the 'kite' instruction regulates its distance to stay in
-        # the volley band [VOLLEY_MIN_RANGE, VOLLEY_MAX_RANGE] instead of closing to melee. Distance
-        # metric matches volley's _atom_distance (Chebyshev, nearest cells) so "in band" == "can shoot".
+        # KITING (§13): a unit with the 'kite' instruction regulates its distance to stay in a
+        # standoff band instead of closing to melee. Distance metric matches volley's
+        # _atom_distance (Chebyshev, nearest cells) so "in band" == "can shoot" for a ranged kiter.
         # INERT without the 'kite' instruction -> byte-exact for every existing scenario.
+        #
+        # [movement audit gate 2, ED-1097, Jordan-ruled 2026-07-02: "Kite is a behaviour of
+        # attacking an opponent then fleeing upon countering, which means that it is BEST done
+        # with ranged weapons like a bow but can still be executed by cavalry with spears/lances."]
+        # No longer gated on unit_type=='ranged' -- kite is weapon-independent steering; ONLY
+        # volley fire itself (a separate gate, orchestration.volley_phase) requires a ranged
+        # weapon. The "far" edge of the band still uses VOLLEY_MAX_RANGE for a ranged kiter
+        # (unchanged, exact prior behaviour), but for a melee kiter (a lance/spear cavalry
+        # executing a hit-and-run) VOLLEY_MAX_RANGE would be meaningless -- reuses the already-
+        # grounded PP-290 reach_for(troop_type) primitive instead (troop_types.registry) rather
+        # than inventing a new melee-standoff magnitude: hover just past where its own weapon
+        # can no longer threaten, not a volley-specific distance. NOTE: this whole block is
+        # currently unreachable on the default node/field path (the early return above fires
+        # first) -- it only ever ran, and only ever will run until fix-plan step 7 ports kiting
+        # to the live path, when PC_NODE_COHESION is off.
         kite_mode = None
-        if PC_KITE_ENABLED and self.unit_type == 'ranged' and 'kite' in self.instructions and enemy_cells:
+        if PC_KITE_ENABLED and 'kite' in self.instructions and enemy_cells:
+            far_bound = VOLLEY_MAX_RANGE if self.unit_type == 'ranged' else reach_for(self.troop_type)
             mine = self.cells()
             if mine:
                 d = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)
-                if d < PC_KITE_STANDOFF:     kite_mode = 'away'    # too close -> open the gap (retreat vector)
-                elif d > VOLLEY_MAX_RANGE:   kite_mode = 'toward'  # out of range -> close into the band
-                else:                        return                # in band -> hold position, keep volleying
+                if d < PC_KITE_STANDOFF: kite_mode = 'away'    # too close -> open the gap (retreat vector)
+                elif d > far_bound:      kite_mode = 'toward'  # out of range -> close into the band
+                else:                    return                # in band -> hold position, keep volleying
         # v13: snapshot offsets and facings before advance, used to revert any cell
         # whose new position would collide with another cell of this subunit (and
         # the discipline check passes — formation held). Without snapshot, we can't

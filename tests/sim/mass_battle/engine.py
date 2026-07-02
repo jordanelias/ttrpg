@@ -99,7 +99,7 @@ def mechanics_selftest():
 SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
 
 
-def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
+def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type=None,
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                speed='Standard', instructions=(), dr=1, role=None):
     """Faction→unit ADAPTER: construct a single-subunit Unit. The canonical public constructor — the
@@ -111,10 +111,20 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
     troop_types.registry.role_allowed(troop_type, role) — raises ValueError on a disallowed combo —
     and stored on the Subunit; unlike build_army, shape/instructions here stay caller-controlled (both
     are already required/explicit in this single-subunit constructor's own signature, so there is no
-    role->shape defaulting ambiguity to resolve)."""
+    role->shape defaulting ambiguity to resolve).
+
+    [movement audit gate 2, ED-1097, Jordan-ruled 2026-07-02: "Ranged is troop type as per the
+    weapon assigned to troop."] `unit_type` now defaults to None and, when not explicitly given by
+    the caller, derives from troop_type's assigned weapon via troop_types.registry.unit_type_for
+    (TROOP_LOADOUT/loadout_for) instead of the prior hardcoded 'melee'. An unmapped troop_type
+    (e.g. the 'infantry' default) resolves to 'melee' either way, so every existing call site that
+    relies on the default is byte-exact; only troop_type='archers'/'crossbow'/'sling'/'artillery'/
+    'mounted_archers' (or a future loadout-mapped type) with no explicit unit_type now change."""
     if role is not None and not role_allowed(troop_type, role):
         raise ValueError(f"role {role!r} not allowed for troop_type {troop_type!r} "
                           f"(allowed: {roles_for(troop_type)})")
+    if unit_type is None:
+        unit_type = unit_type_for(troop_type)
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
@@ -213,7 +223,11 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         instructions = sp.pop('instructions', None)
         if instructions is None:
             instructions = role_spec['instructions'] if role_spec is not None else ()
-        kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
+        # [movement audit gate 2, ED-1097] unit_type derives from tt's assigned weapon
+        # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
+        # still always wins. See build_unit's docstring for the byte-exact-preservation argument
+        # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
+        kw = dict(unit_type=sp.pop('unit_type', unit_type_for(tt)), stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
                   'troops', 'concentration', 'orders'):

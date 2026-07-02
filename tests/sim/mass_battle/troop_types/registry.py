@@ -5,9 +5,11 @@ per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only — no up-DA
 Re-imported by orchestration via star-import (Subunit.of_type and the stress-test imports unchanged).
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from mass_battle.config import *
+from mass_battle.equipment import loadout_for
 
 __all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
-           'REACH_SHORT', 'REACH_LONG', 'TROOP_TYPE_REACH', 'reach_for']
+           'REACH_SHORT', 'REACH_LONG', 'TROOP_TYPE_REACH', 'reach_for',
+           'unit_type_for']
 
 
 def roles_for(troop_type):
@@ -78,3 +80,25 @@ def reach_for(troop_type):
     case-insensitive, matching stats_for."""
     cls = TROOP_TYPE_REACH.get(str(troop_type).strip().lower()) if troop_type else None
     return REACH_LONG if cls == 'long' else REACH_SHORT
+
+
+# ─── unit_type (movement audit gate 2, ED-1097) ──────────────────────────────
+# [canonical: Jordan-ruled 2026-07-02, verbatim: "Ranged is troop type as per the weapon assigned
+#  to troop."] unit_type ('ranged'/'melee') must derive from the troop's ASSIGNED WEAPON, not from
+# its role -- ED-1095/T4's mistake was defaulting a mounted_archers spec to role='Kite' without
+# this half, so the unit never actually got unit_type='ranged' (role='Kite' carries no unit_type
+# of its own; ROLE_SPEC never has). The primitive already existed and was already "NOT YET WIRED
+# into resolution" per its own docstring: mass_battle.equipment.loadout_for(troop_type) returns
+# (weapon_record, armour_record) from the provisional TROOP_LOADOUT table (mass_battle_v30 §B.2 +
+# the mounted_archers extension added alongside this fix); a weapon record's `reach` field is
+# already exactly 'melee'/'ranged' (equipment/weapons.py ARSENAL). This wires that existing,
+# previously-inert mapping -- no new primitive invented.
+def unit_type_for(troop_type):
+    """'ranged'/'melee' derived from troop_type's assigned weapon (TROOP_LOADOUT/loadout_for). An
+    unmapped troop type (no loadout entry -- e.g. bare 'infantry', a real call-site default that is
+    not a TROOP_TYPE_STATS/TROOP_LOADOUT key) falls through to 'melee', preserving every existing
+    call site's byte-exact default. Lookup is case-insensitive, matching stats_for/reach_for."""
+    weapon, _armour = loadout_for(troop_type)
+    if weapon is None:
+        return 'melee'
+    return weapon.get('reach', 'melee')
