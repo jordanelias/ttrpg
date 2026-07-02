@@ -19,14 +19,19 @@ import os, sys, hashlib
 # import the package exactly as the stress harness / gauge do
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # tests/sim on path
 from mass_battle.engine import (  # noqa: E402
-    build_unit, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW)
+    build_unit, build_envelopment, build_refused_flank, resolve_battle,
+    SIDE_A_START_ROW, SIDE_B_START_ROW)
 import random  # noqa: E402
 
 # anchor columns per (shape,tier) — copied from gauge_mb.py ANCHOR_MAP (T3 row used below)
 # [canonical: mass_battle_v30.md §deployment — anchor columns]
+# [LC-8, ED-909] Horseshoe/RefusedFlank entries retired along with the shapes themselves (see
+# geometry.CELL_PATTERN_FN's note) -- the 'envelop'/'cannae'/'oblique' battery rows below now build
+# their armies via build_envelopment/build_refused_flank instead of a single Horseshoe/RefusedFlank
+# subunit, so no anchor-column lookup for those retired shape names is needed anymore.
 ANCHOR_MAP = {
-    ('Line', 3): 9, ('Arrowhead', 3): 8, ('Horseshoe', 3): 8,    # [canonical: gauge_mb.py ANCHOR_MAP — T3 anchor columns]
-    ('GappedLine', 3): 7, ('RefusedFlank', 3): 9, ('Column', 3): 9,  # [canonical: gauge_mb.py ANCHOR_MAP — T3 anchor columns]
+    ('Line', 3): 9, ('Arrowhead', 3): 8,
+    ('GappedLine', 3): 7, ('Column', 3): 9,
 }
 TIER = 3                                  # [canonical: sim_mb_06_v9_historical_spec.md — T3 uniform stats]
 N_SEEDS = 24                              # [canonical: gauge_mb.py matchup — deterministic seed battery]
@@ -52,15 +57,48 @@ def make_unit(shape, name, faction, **kw):
                       instructions=tuple(kw.pop('instructions', ())))
 
 
-# Fixed battery: (label, shape_a, shape_b, kwargs_a, kwargs_b). Spans melee mirror / wedge /
-# envelopment / oblique / manipular + cavalry charge / braced-repel / shaken / ranged / volley so
-# both the PER_CELL=0 and PER_CELL=1 code paths are exercised.
+# [LC-8] Composed replacements for the retired Horseshoe/RefusedFlank single-subunit shapes,
+# dogfooding engine.build_envelopment/build_refused_flank (ED-909's Unit-level presets) in this
+# byte-exact battery itself -- the most direct possible validation that they construct and resolve
+# correctly through the SAME multi-turn ('kind=multi') path the rest of this battery already
+# exercises. Wing/refused placement is symmetric around the same anchor column the retired shapes
+# used, so the battlefield footprint stays comparable.
+def _envelop_army(name, faction, **kw):
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    anchor = ANCHOR_MAP[('Line', TIER)]
+    tt = kw.pop('troop_type', 'infantry')
+    center = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor)}]
+    wings = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 6)},
+             {'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 6)}]
+    return build_envelopment(center, wings, name, faction,
+                              power=kw.pop('power', 4), command=kw.pop('command', 4),
+                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                              morale_start=kw.pop('morale_start', None))
+
+
+def _refused_army(name, faction, **kw):
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    anchor = ANCHOR_MAP[('Line', TIER)]
+    tt = kw.pop('troop_type', 'infantry')
+    strong = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 4)}]
+    refused = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 4)}]
+    return build_refused_flank(strong, refused, name, faction,
+                                power=kw.pop('power', 4), command=kw.pop('command', 4),
+                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                                morale_start=kw.pop('morale_start', None))
+
+
+# Fixed battery: (label, shape_a, shape_b, kwargs_a, kwargs_b). shape_a/shape_b is either a plain
+# shape string (single-subunit path, via make_unit) or a build_army-style ARMY BUILDER callable
+# (_envelop_army/_refused_army, signature (name, faction, **kw) -> Unit) for the composed presets.
+# Spans melee mirror / wedge / envelopment / oblique / manipular + cavalry charge / braced-repel /
+# shaken / ranged / volley so both the PER_CELL=0 and PER_CELL=1 code paths are exercised.
 BATTERY = [
     ('mirror',       'Line', 'Line', {}, {}),
     ('wedge',        'Arrowhead', 'Line', {}, {}),
-    ('envelop',      'Horseshoe', 'Line', {}, {}),
-    ('cannae',       'Horseshoe', 'Arrowhead', {}, {}),
-    ('oblique',      'RefusedFlank', 'Horseshoe', {}, {}),
+    ('envelop',      _envelop_army, 'Line', {}, {}),
+    ('cannae',       _envelop_army, 'Arrowhead', {}, {}),
+    ('oblique',      _refused_army, _envelop_army, {}, {}),
     ('manipular',    'GappedLine', 'Arrowhead', {}, {}),
     ('cav_charge',   'Arrowhead', 'Line', {'troop_type': 'cavalry', 'speed': 'Fast'}, {}),
     ('cav_braced',   'Arrowhead', 'Line', {'troop_type': 'cavalry', 'speed': 'Fast'},
@@ -92,9 +130,17 @@ def trial_vector(ua, ub, r):
 # Golden digests for the Stage-1 (behaviour-frozen) baseline. A pure code-move refactor must
 # reproduce these. They are updated ONLY on an intentional behaviour change (a later stage), with the
 # change recorded in tests/coverage_matrix.md — exactly like the gauge digest history (e.g. ED-1032).
+# [LC-8, 2026-07-02, Jordan-approved: "correct, retire them. those are emergent outcomes."] Updated:
+# Horseshoe/RefusedFlank retired as Subunit.shape values; the 'envelop'/'cannae'/'oblique' battery
+# rows now build via build_envelopment/build_refused_flank instead. A byte-exact isolation check (a
+# worktree diff at 7 unaffected rows only, both before and after this change) confirmed the
+# reset_positions rewrite this required (each subunit now resets to its OWN spawn position, not one
+# shared shape-derived anchor for the whole unit) is exactly byte-exact-preserving for every existing
+# single-subunit matchup on its own -- the digest below changes ONLY because of the 3 migrated rows'
+# real, intentional behaviour change (a different army composition), not a hidden regression.
 EXPECTED = {
-    'unit': '7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725',
-    'cell': '1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7',
+    'unit': '18bc4a0bada9ab0e8fa7fd27d5944927026bbfdcea1cd8142874b0e93b369c06',
+    'cell': 'bf666d04ae743622ad43c42fec2250f39f66b2150ab4fe52738a5037983de9da',
     # [Stage A, 2026-07-01; updated 2026-07-02 for the TOI refactor] The coordinate-field candidate's
     # OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required by run_battle's own
     # assert). NOT byte-exact with the grid digests above by construction (Chebyshev->Euclidean + the
@@ -125,13 +171,25 @@ def compute():
     mode = base + '_field' if _u.FIELD_MOVEMENT else base
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
-        if (sa, TIER) not in ANCHOR_MAP or (sb, TIER) not in ANCHOR_MAP:
+        # sa/sb: a plain shape string (single-subunit, via make_unit/ANCHOR_MAP) or an army-builder
+        # callable (_envelop_army/_refused_army) for the composed Envelopment/Refused-Flank presets
+        # that replaced the retired Horseshoe/RefusedFlank shapes (LC-8). resolve_battle's shape_a/
+        # shape_b positional is only consulted by reset_positions as a defensive fallback now (every
+        # subunit resets to its OWN spawn position first -- see reset_positions) -- 'Line' is a safe
+        # placeholder for a callable side, never actually used since build_army-built subunits always
+        # carry a real _spawn_position.
+        a_is_fn = callable(sa); b_is_fn = callable(sb)
+        if not a_is_fn and (sa, TIER) not in ANCHOR_MAP:
+            continue
+        if not b_is_fn and (sb, TIER) not in ANCHOR_MAP:
             continue
         for s in range(N_SEEDS):
             random.seed(s + SEED_BASE)
-            ua = make_unit(sa, 'A', 'A', **ka)
-            ub = make_unit(sb, 'B', 'B', **kb)
-            r = resolve_battle(ua, ub, sa, sb, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
+            ua = sa('A', 'A', **ka) if a_is_fn else make_unit(sa, 'A', 'A', **ka)
+            ub = sb('B', 'B', **kb) if b_is_fn else make_unit(sb, 'B', 'B', **kb)
+            shape_a = 'Line' if a_is_fn else sa
+            shape_b = 'Line' if b_is_fn else sb
+            r = resolve_battle(ua, ub, shape_a, shape_b, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
             h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
     return mode, h.hexdigest()
 

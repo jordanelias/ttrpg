@@ -82,7 +82,9 @@ PROVENANCE = {
 
     # F5 — min discipline -> derive from shape complexity
     "MIN_DISCIPLINE": Prov(
-        "MIN_DISCIPLINE", "{Line:1..Horseshoe:5}", "config.py:61", "calibrated",
+        # [LC-8, 2026-07-02] Horseshoe retired as a Subunit.shape (config.py's table now maxes at
+        # GappedLine:5); Envelopment is a Unit-level composition of Line subunits, not a shape key here.
+        "MIN_DISCIPLINE", "{Line:1..GappedLine:5}", "config.py:61", "calibrated",
         law="ED-815 — shape complexity => drill requirement",
         derives_from="shape complexity (cell-count / aspect irregularity)", retire_to="derived"),
 

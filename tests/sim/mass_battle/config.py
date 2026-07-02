@@ -60,7 +60,10 @@ PC_VOLLEY_DENSITY_CAP = float(_sigma_os.environ.get('PC_VOLLEY_DENSITY_CAP', '2.
 # depth-damping, support vectors, facing/angle. A formation template is a SHAPE, not a bonus carrier.
 MIN_DISCIPLINE = {
     # [canonical: mass_battle_v30.md §ED-815 shape discipline — min disc required by shape]
-    "Line": 1, "Arrowhead": 4, "Horseshoe": 5, "GappedLine": 5, "RefusedFlank": 3, "Column": 3
+    # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
+    # the shapes themselves (geometry.CELL_PATTERN_FN's note) -- they are now Unit-level, multi-body
+    # emergent compositions, not a single Subunit.shape this per-shape table can key on.
+    "Line": 1, "Arrowhead": 4, "GappedLine": 5, "Column": 3
 }
 ANGLE_DEF_MOD = {
     # v11: per-cell octagon. GREEN < 45° = 0D; YELLOW 45-90° = -1D; RED ≥ 90° = -2D.
