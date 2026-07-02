@@ -171,6 +171,29 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       close-combat penalty, its core archetype); `authority()`'s only plausible target is `heft_resp`, i.e. the
       *other* residual — deciding it here would resolve that residual by the back door. Three explicit
       "Jordan design taste" questions (not settled by the record) are listed in the memo's final sections.
+    - **Polearm close-quarters grounding (2026-07-01), a NEW gap found while investigating the spear-dominance
+      anomaly — Jordan's overhang/choke-handling critique confirmed as real, unmodeled physics.** Full record:
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/polearm_close_quarters_grounding.md`
+      (4 research angles + engine verification + synthesis + independent skeptic re-check of every source +
+      reconciliation). Two claims tested: **(A) choking up on an asymmetric pole carries a real handling cost
+      beyond a scalar MoI reduction** — form-only grounded (T2/T3 consensus: ARMA "difficult to turn the butt
+      end of a spear around if you're surrounded"; Escamilla & Fleisig 2009 *J. Appl. Biomech.* confirms
+      choke-up measurably lowers implement velocity via trailing-mass drag, not a free win) — no source gives a
+      magnitude. **(B) a thrust degrades to a shaft/butt strike at close range/high choke** — well-grounded,
+      directly attested: *Le Jeu de la Hache*'s **"demy-hache"** (independently re-verified this session, not
+      just trusted) names the exact shaft zone between the hands used to strike/push when the head can't be
+      brought to bear; Fiore's *Zogho Stretto* and Winn's *Broadsword & Singlestick* corroborate. **Confirmed
+      against actual code (not just suspected): neither exists anywhere in the engine.** `WP.at_grip` is a
+      single forward-only pivot with no trailing-mass/rear-overhang term; `select_mode`/`afforded_heads` never
+      read `grip_position` at all, so nothing ever converts a thrust to a shaft-strike. `grip_choke_max=1.0`
+      for the spear (identical to the staff) is the specific numeric root of the 94-96% win-rate anomaly — the
+      engine currently grants a choked-up spear free, unlimited regrip with no asymmetry tax and no thrust-range
+      floor. **Ready to greenlight as a concrete build task:** a new `overhang_penalty(c,cfg)` (trailing-mass
+      moment `m_trail*L_behind²` feeding `recoverability_factor`) + an `available_extension` hard gate in
+      `select_mode` that substitutes a shaft-strike coupling at high choke/close range, + a matching
+      `lunge_quality` consistency check (a skeptic-flagged addition, folded in). **Jordan's call, not settled by
+      the record:** the `K_OVERHANG`/`MIN_POINT_CLEARANCE` magnitudes — no source of any tier gives a number;
+      both are [FIAT]/[SIM-CALIBRATE], to be set by playtesting against the 94-96% anomaly this targets.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
