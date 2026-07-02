@@ -94,9 +94,9 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "875d40e19093f7bf8749aaa99fd149f53306ea15"
+    canonical_sha__designs__architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
     params: params/core.md
-    canonical_sha__params__core_md: "8f13946bf39f15016867d593c597213ebe31dfd0"
+    canonical_sha__params__core_md: "8024d051ae81d172989f93df0999eca3964ffefa"
     bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
@@ -163,15 +163,15 @@ systems:
     canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
+    canonical_sha__params__contest_md: "f5f8d2666369d80934297ef049c13981bbcce570"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "e3683a1215a6ba5eaf8020e3017a2081ceabbc4a"
+    canonical_sha__designs__scene__social_contest_v30_md: "b25a87a6c330471634b90fefb50a1561ccaa8064"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "601365398399b133b2592b4ae94d1ab61df5445a"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
     canonical_sha__designs__scene__social_contest_v30_infill_md: "02fd3d7252e6935a18d1790fd349ac48b605fcd8"
     params: params/contest.md
-    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
+    canonical_sha__params__contest_md: "f5f8d2666369d80934297ef049c13981bbcce570"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
@@ -403,7 +403,7 @@ systems:
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
     design_doc: designs/npcs/companion_specification_v30.md
-    canonical_sha__designs__npcs__companion_specification_v30_md: "d6ef0cc1fccb6ff358224148d53ca88f7b000184"
+    canonical_sha__designs__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"
   edeyja_npc:
     design_doc: designs/npcs/edeyja_npc.md
     canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
@@ -419,7 +419,7 @@ systems:
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "273cfba8cae1f2c234d8728d2de182dddfb369d0"
+    canonical_sha__designs__scene__fieldwork_v30_md: "e8eaa2875e0e6cf249db832c06bc98d1ae985a71"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md

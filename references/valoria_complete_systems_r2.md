@@ -1,8 +1,17 @@
 # VALORIA — Complete Game Systems Reference (Revision 2)
+## Status: PARTIALLY SUPERSEDED (combat sections) + DUPLICATE COPY — banner added 2026-07-01 (ED-1084)
 ## Supersedes: valoria_complete_systems.md (Revision 1)
 ## Companion to: valoria_canonical_definitive_r2.md
 ## All issues resolved. All proposals accepted. Recency prioritized.
 ## Date: 2026-04-15
+
+> ⚠️ **DUPLICATE COPY (2026-07-01, ED-1084).** This file duplicates
+> `designs/architecture/complete_systems_reference.md` (same Revision-2 compilation in two
+> homes). Its PART 2 combat core (pool `(Agi×2)+H+3`, TN 7, versus initiative) predates the
+> d+σ resolver and is **no longer canon** — the head is `designs/scene/combat_engine_v1/`
+> (pool `max(5, History+6)`, ED-901, ED-900/904). Resolve currency via `CURRENT.md`. Which
+> home is retained (and which retires to `archives/`) is queued for Jordan — see the
+> 2026-07-01 decision queue.
 
 ---
 

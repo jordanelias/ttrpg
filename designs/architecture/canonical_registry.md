@@ -1,7 +1,16 @@
 # VALORIA — Canonical Registry (Definitive, Revision 2)
+## Status: PARTIALLY SUPERSEDED (combat rows) — banner added 2026-07-01 (ED-1084)
 ## Supersedes: valoria_canonical_definitive.md (Revision 1)
 ## All corrections from cross-conversation review and simulation inventory applied
 ## Date: 2026-04-15
+
+> ⚠️ **PARTIALLY SUPERSEDED (2026-07-01, ED-1084).** This 2026-04-15 registry predates the
+> d+σ resolver: its Combat Pool rows (`(Agi×2) + Hist + 3`) and the cross-system Pool
+> comparison row are **no longer canon** — combat's pool is `max(5, History + 6)`,
+> Agility-independent (ED-901, ED-900/904; head `designs/scene/combat_engine_v1/`). Resolve
+> combat numbers via `CURRENT.md`. A near-duplicate copy exists at
+> `references/valoria_canonical_definitive_r2.md` (duplicate-home resolution queued for
+> Jordan — see the 2026-07-01 decision queue).
 
 ---
 

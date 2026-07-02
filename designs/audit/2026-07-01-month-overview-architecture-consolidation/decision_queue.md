@@ -75,3 +75,14 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
 
 21. **Stale merged branches** (`design/scene-combat-v1`, `origin/scene-combat-track2-cleanup`)
     — deletion offered, not performed.
+22. **Duplicate compilation homes** (found during the ED-1084 Combat Pool sweep): the
+    Revision-2 (2026-04-15) compilations exist twice each —
+    `designs/architecture/canonical_registry.md` ≡ `references/valoria_canonical_definitive_r2.md`
+    and `designs/architecture/complete_systems_reference.md` ≡
+    `references/valoria_complete_systems_r2.md`. All four now carry PARTIALLY
+    SUPERSEDED banners (their combat sections predate d+σ); decide which home each pair
+    keeps and which copy retires to `archives/`.
+23. **Live ledger entries carrying pre-restructure paths** (ED-640/644/648/649/650/651/658):
+    the revived dependency checker resolves them via `references/restructure_ledger.md`
+    (INFO, not violations); rewriting the entries' `affects` paths in the append-only ledger
+    is a canon edit reserved for Jordan.

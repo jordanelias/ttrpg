@@ -27,7 +27,12 @@ TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Pl
 ## 1. COMBAT POOL
 
 **TTRPG:**
-Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
+Combat Pool = max(5, Relevant History + 6)
+
+> ⚠️ Formula updated 2026-07-01 (ED-1084 propagation): the original draft's
+> `(Agility × 2) + Relevant History + 3` was STRUCK by the 2026-05-29 R1 ratification
+> (ED-901; re-ratified ED-900/904) — the resolution pool is **Agility-independent**.
+> Single source: `designs/scene/combat_engine_v1/`.
 
 Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed.
 
