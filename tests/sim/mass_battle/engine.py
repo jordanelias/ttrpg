@@ -227,7 +227,18 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
         # still always wins. See build_unit's docstring for the byte-exact-preservation argument
         # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
-        kw = dict(unit_type=sp.pop('unit_type', unit_type_for(tt)), stance=sp.pop('stance', stance),
+        #
+        # [2026-07-02 adversarial-review finding, ED-1097] `sp.pop('unit_type', unit_type_for(tt))`
+        # only falls back to derivation when the 'unit_type' KEY is absent from the spec dict -- an
+        # explicit `{'unit_type': None, ...}` (the same None sentinel build_unit's own signature
+        # uses to mean "derive it") would pop back None verbatim instead of deriving, inconsistent
+        # with build_unit's `if unit_type is None: unit_type = unit_type_for(troop_type)` for the
+        # identical sentinel. Matched to build_unit's own semantics here so both constructors treat
+        # None the same way; no current spec anywhere sets unit_type=None explicitly, so this is a
+        # latent-inconsistency fix, not a behavior change for any existing call site.
+        spec_unit_type = sp.pop('unit_type', None)
+        kw = dict(unit_type=spec_unit_type if spec_unit_type is not None else unit_type_for(tt),
+                  stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
                   'troops', 'concentration', 'orders'):

@@ -50,8 +50,17 @@ def _movement_toggles():
     # NOT set just by validators._set_movement_path('grid'). This test process's own pytest
     # environment does not set PER_CELL=1 (unlike validators.py's documented `Run:` line for a
     # manual script invocation), so force it here for the duration of every test in this file.
+    #
+    # [2026-07-02 adversarial-review finding, ED-1097] PC_ENVELOP_PATH/PC_SWEEP were missing from
+    # this save/restore set even though every test here (via v_envelop/v_sweep's on/off comparison)
+    # mutates hierarchy.units' copies directly and always leaves them at False when a test function
+    # returns (the off-arm runs last) -- contradicting this docstring's own claim to restore
+    # everything. Added here so a future in-process test added later in this suite that constructs
+    # a Subunit with an 'envelop'/'sweep' instruction doesn't silently inherit a disabled maneuver
+    # from whatever ran before it in the same pytest session -- exactly the class of silent-failure
+    # this whole audit exists to catch.
     saved = {(mod, name): getattr(mod, name) for mod in (_hu, _orch)
-             for name in ('FIELD_MOVEMENT', 'PC_NODE_COHESION', 'PER_CELL')}
+             for name in ('FIELD_MOVEMENT', 'PC_NODE_COHESION', 'PER_CELL', 'PC_ENVELOP_PATH', 'PC_SWEEP')}
     _hu.PER_CELL = True
     try:
         yield

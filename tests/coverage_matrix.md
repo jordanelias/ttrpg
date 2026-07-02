@@ -17,32 +17,11 @@ Archived entries in tests/coverage_matrix_archive.md
   S2 (Euclidean distance on the field); Migration C0+COL+G+H+F2+P (the full coordinate-field sequence,
   byte-exact OFF throughout). Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend
-- PORTED gauge_mb.py off the dead `exec('/home/claude/sim_v22.py')` mechanism onto a direct
-  `from mass_battle.engine import ...` (agonist-antagonist adversarial workflow: 1 implement + 1
-  independent re-verify). make_unit/matchup() now delegate to engine.build_unit/resolve_battle (the
-  wrapper contract bat.py already proved byte-exact-transparent) instead of raw Subunit/Unit/run_battle
-  construction; make_mixed_unit stays on raw construction (build_unit is single-subunit only). No band,
-  citation, or metric changed. LIVE re-verified (not the prior scratchpad shim): OFF baseline multi-mode
-  5/13 (H1,H2,H7,H9,R1) — matches the shim's prior report exactly.
-- Jordan directive 2026-07-01: default sample n 120->60 (runtime). SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp
-  at p=0.5 vs the grounding doc's cited n=120 basis; VERIFIED n=60 reproduces the IDENTICAL n=120 pass-set
-  (5/13, same 5 rows) on the OFF baseline. Ledger entry `n=60` (calibrated/methodology, not historical).
-- Fabrication-debt resolution (whole-file scan, files touched by the above): resolution.py's roll_pool
-  TN=7 / face-rule 7-9=+1 cited to params/core.md; _sigma_net_boost's pre-existing citation reformatted
-  to satisfy the checker's `# [canonical: ...]`-immediately-after-`#` regex (same source, position fix
-  only). gauge_mb.py's make_mixed_unit P4/C4/D5/M6 defaults cited (same T3 baseline as make_unit); its
-  starting_position row-stagger (4) ledger-recorded as a non-historical layout convenience.
-- ADDED the tick-by-tick VISUALIZER trace-capture backend (Jordan directive 2026-07-01): extends the
-  existing observe-only trace seam (resolution.start_trace/trace_event/get_trace, "no-op unless ON ->
-  byte-exact") with resolution.tracing_on() (a public predicate so callers can skip expensive capture
-  entirely when tracing is off, not just discard it) and orchestration._cell_snapshot/_subunit_snapshot/
-  _unit_snapshot + one gated `if tracing_on(): trace_event('positions', ...)` call at the end of each
-  run_battle tick. Uses atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally
-  and is NOT field-aware) zipped against _oriented(atom)'s stable ids — correct on both the integer-grid
-  and coordinate-field paths. Zero cost when tracing is off (the capture functions are never called, not
-  merely discarded) — provably byte-exact since no existing caller (bat.py, gauge_mb.py) enables tracing.
-- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend (archived — condensed)
+- gauge_mb.py ported off the dead exec-shim onto live engine.build_unit/resolve_battle (byte-exact
+  reproduces prior OFF baseline 5/13); n=120->60 (Jordan directive, verified identical pass-set);
+  fabrication-debt resolved; tick-by-tick trace-capture backend added (zero-cost when off). G5
+  byte-exact both modes unchanged. Full detail: `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
 - ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
@@ -371,8 +350,11 @@ and step 7, the waypoint primitive itself, still pending):
   margin constant, not a new magnitude). `validators.py`'s `v_envelop`/`v_sweep` were also missing
   `seeds`/`turns` forwarding, which had been silently masking the fix behind an absorbed `TypeError`
   inside `xfail` — found by re-verifying the mechanism directly instead of trusting "still xfailed."
-  Both node tests now pass for real (no longer `xfail`); grid arm unaffected; full suite 81
-  passed/10 skipped/0 xfailed.
+  Both node tests now pass for real (no longer `xfail`); grid arm unaffected; full suite 85
+  passed/10 skipped/0 xfailed (the 81-baseline + these 4 maneuver tests, all now passing;
+  [2026-07-02 adversarial-review correction] an earlier version of this line stale-copied the
+  pre-session 81 baseline itself as if it were the new total — verified by checking out this
+  step's own commit and re-running the suite).
 - **Decision gate 4 — `PER_CELL` default flip to `'1'`.** `config.py:86` default `'0'`→`'1'`, same
   ED-1089 precedent (grid oracle = explicit pin, already the case in `bat.py`/
   `test_mass_battle_byte_exact.py`, so no CI-pin gap). Found and fixed two independently-defaulted
@@ -400,8 +382,13 @@ and step 7, the waypoint primitive itself, still pending):
   separate from the frontal fight's own clock) is flagged for whoever next works PER_CELL=1 combat
   balance, out of this movement/pathing fix's scope.
 - **Task #77 full verification.** Field digests re-recorded (`unit_field b1963d03.../cell_field
-  1f0742c5...`), isolated to step 7 (unit_field pins PER_CELL='0', so gate 4 cannot reach it, and
-  it had already diverged before gate 4 landed). All 4 digest modes re-confirmed byte-exact against
+  1f0742c5...`). [2026-07-02 adversarial-review correction] An earlier version of this entry claimed
+  the change was "isolated to step 7" — WRONG, per a direct worktree bisection (see `bat.py`'s
+  EXPECTED-dict comment for the full commit-by-commit digest trail): steps 1, 4, 5, AND 7 each
+  independently changed `unit_field`, not step 7 alone. The one claim that DOES hold: gate 4's
+  `PER_CELL` default flip contributes zero ADDITIONAL divergence on top of those four steps, since
+  this measurement pins `PER_CELL='0'` explicitly and cannot be reached by that flip. All 4 digest
+  modes re-confirmed byte-exact against
   their (2 unchanged, 2 re-recorded) baselines. Functional probe via `workbench/trace.py`
   (default toggles, no validator-forced overrides): a `build_envelopment` wing tracked tick-by-tick
   wheeled from its start (row 36, col 21) to row 14.4, col 32.8 — genuinely wrapping past and behind
@@ -416,6 +403,38 @@ and step 7, the waypoint primitive itself, still pending):
   Recorded, not chased — per this session's (and this repo's) standing discipline against
   retuning magnitudes to fit a band; the underlying combat-balance/pacing question is the same
   open follow-up flagged in the gate-4 finding above, not a new one.
-- **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); an adversarial
-  review pass over steps 1-7 + gate 4 before landing; re-producing the Cannae visualization to
-  confirm the fix end-to-end (task #78).
+- **Task #79 adversarial review (5-dimension Workflow, sonnet finders + opus verify) — 6
+  CONFIRMED findings, all fixed same session, not deferred:**
+  1. **Kite never ported to the node path (critical).** Step 7 built `_envelop_goal`/`_sweep_goal`
+     but no `_kite_goal` — a mounted_archers subunit (gate 2 correctly gives it
+     `instructions=('kite',...)`) fell through to plain centroid steering and closed to melee on
+     the live default path, the exact bug class this audit exists to fix, for a 4th instruction
+     the first pass missed. Fixed: new `Subunit._kite_goal` wired into `_resolve_maneuver_goal`,
+     reusing `PC_KITE_STANDOFF`/`VOLLEY_MAX_RANGE`/`reach_for` verbatim (no new magnitude), matching
+     the legacy block's exact toward/away/in-band semantics. Verified: a mounted_archers subunit
+     now holds standoff distance 6.5-8.3 against a Line (inside the [5,8] band) instead of closing
+     to melee.
+  2. **Escort column-override (moderate).** Step 4's sibling-column-holding fallback overrode
+     ANY escort's live-tracking column with its fixed spawn file the instant the escorted unit's
+     column diverged (e.g. on envelop/sweep/wheel) — defeating Stage C's own escort machinery.
+     Fixed: `escort_of is not None` checked before the sibling-count branch.
+  3. **Test fixture leak (moderate).** `_movement_toggles`'s save/restore omitted
+     `PC_ENVELOP_PATH`/`PC_SWEEP`, contradicting its own docstring — latent today (no other
+     in-process test consumes it yet) but real. Fixed: added to the saved/restored set.
+  4. **`_rekey_node_state`'s dead `new_ids` param (minor, PLAUSIBLE not CONFIRMED — harmless today,
+     fixed anyway).** Never read; silently re-derived from `_oriented(self)`. Fixed: now asserts
+     `new_ids` matches, converting a silent future trap into a loud failure.
+  5. **`build_army`'s `unit_type=None` sentinel (minor, latent).** `sp.pop('unit_type',
+     unit_type_for(tt))` only derives when the key is ABSENT, unlike `build_unit`'s `if unit_type
+     is None: derive`. Fixed to match `build_unit`'s semantics.
+  6. **Documentation provenance (moderate+minor).** `bat.py`'s "step 7 alone" digest-provenance
+     claim and this file's "isolated to step 7"/"81 passed" lines were factually wrong (direct
+     bisection: steps 1/4/5/7 all independently changed the digest; true count was 85 not 81) —
+     corrected above and in `bat.py`.
+  One REFUTED (bat.py battery has no weapon-mapped-troop_type regression coverage — real gap, not
+  a concrete defect per the review's own bar; not fixed, flagged as a future coverage item, not
+  silently dropped). All 4 digest modes byte-exact after every fix (kite/escort fixes are provably
+  inert against the existing battery — neither a kite-instructed nor an escort_of subunit exists in
+  it); full suite 84 passed/10 skipped/1 xfailed unchanged.
+- **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); re-producing the
+  Cannae visualization to confirm the fix end-to-end — done (task #78, delivered as an Artifact).

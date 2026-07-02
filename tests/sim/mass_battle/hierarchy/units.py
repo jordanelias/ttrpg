@@ -545,8 +545,22 @@ class Subunit:
         pattern's own (or_r,or_c) local layout centered on its own mean -- starting_position
         cancels out of a relative-offset computation identically either way), just anchored to
         self._node_anchor's live value instead of starting_position. Facing is preserved
-        untouched -- a formation reorganizing does not reset which way it's looking."""
+        untouched -- a formation reorganizing does not reset which way it's looking.
+
+        [2026-07-02 adversarial-review finding, ED-1097] `new_ids` must equal self's CURRENT
+        _oriented() id set -- it exists only for the caller to assert against, not as an
+        alternative offset source (_oriented(self) is the sole source of the (or_r, or_c) offset
+        geometry a bare id tuple cannot carry). Verified below rather than silently accepted: a
+        caller computing new_ids from stale or differently-derived state would otherwise re-key to
+        the wrong ids with no error -- this was previously a latent, unenforced trap (the sole
+        existing call site, check_drift, always passes a freshly-matching set, so this assertion
+        changes nothing for it)."""
         offs = {(orig_r, orig_c): (float(or_r), float(or_c)) for orig_r, orig_c, or_r, or_c in _oriented(self)}
+        assert set(offs) == set(new_ids), (
+            f"_rekey_node_state: new_ids {sorted(new_ids)} doesn't match self's current "
+            f"_oriented() id set {sorted(offs)} -- new_ids must be freshly derived from self's "
+            f"CURRENT shape/tier/troops immediately before this call, not stale or independently "
+            f"computed state.")
         if not offs:
             self._node_pos = {}; self._node_rel = {}; self._node_prev_pos = {}
             return
@@ -612,6 +626,8 @@ class Subunit:
             return self._envelop_goal(enemy_cells)
         if PC_SWEEP and 'sweep' in self.instructions:
             return self._sweep_goal(enemy_cells)
+        if PC_KITE_ENABLED and 'kite' in self.instructions:
+            return self._kite_goal(enemy_cells)
         return None
 
     def _envelop_goal(self, enemy_cells):
@@ -672,6 +688,41 @@ class Subunit:
             return (ar, swgoal_c)    # phase 1: shift laterally toward the flank column, hold row
         return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)  # phase 2: at the flank -> drive in
 
+    def _kite_goal(self, enemy_cells):
+        """[2026-07-02 adversarial-review finding, ED-1097] Standoff-band regulation ('kite'
+        instruction), ported to anchor granularity -- matching _envelop_goal/_sweep_goal's own
+        established pattern. Closes a real gap: fix-plan step 7 ported envelop/sweep to the node
+        path but never kite, so a mounted_archers subunit (gate 2 correctly gives it
+        instructions=('kite', 'shoot_move')) fell through to plain target_centroid steering and
+        closed to melee on the live default path -- exactly the class of bug this whole audit
+        exists to fix, just for a fourth instruction the first pass missed.
+
+        A kiter attacks then flees on countering (Jordan's gate-2 ruling, verbatim: 'Kite is a
+        behaviour of attacking an opponent then fleeing upon countering'). Reuses PC_KITE_STANDOFF/
+        VOLLEY_MAX_RANGE/reach_for exactly as the legacy per-cell block does (advance_cells
+        ~L903-910) -- no new magnitude.
+
+        Matches the legacy 'toward'/'away'/in-band semantics precisely, not just approximately:
+        the legacy block never redirects 'toward' to a specific enemy cell -- it leaves cell_target
+        as whatever the ALREADY-computed plain approach resolved to (kite_mode='toward' is a no-op
+        on dr/dc) -- so 'too far' here returns None, falling through to _node_advance's own step-4
+        default exactly as if kite weren't active, rather than inventing a 'drive at the nearest
+        cell' behaviour the legacy never had. 'Too close' reflects the nearest enemy point through
+        the anchor (goal = 2*anchor - nearest), producing a flee delta -- the anchor-level
+        equivalent of the legacy's dr,dc = -dr,-dc inversion. In-band returns the anchor's own
+        current position (zero resulting delta downstream), matching the legacy's early `return`
+        (hold position entirely, keep volleying) rather than the plain step-4 default (which would
+        still close in row)."""
+        ar, ac = self._node_anchor
+        nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
+        d = math.hypot(nearest[0] - ar, nearest[1] - ac)
+        far_bound = VOLLEY_MAX_RANGE if self.unit_type == 'ranged' else reach_for(self.troop_type)
+        if d < PC_KITE_STANDOFF:
+            return (2 * ar - nearest[0], 2 * ac - nearest[1])  # too close -> flee (reflect through anchor)
+        if d > far_bound:
+            return None  # too far -> close in via the plain default approach (matches legacy 'toward')
+        return (ar, ac)  # in band -> hold position, keep volleying (matches legacy early return)
+
     def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
         body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
@@ -731,8 +782,22 @@ class Subunit:
                 # its row still closes on the target; a solo subunit is unchanged (steers its
                 # column at the target directly -- Stage A/B's existing maneuver tests exercise
                 # this case).
+                #
+                # [2026-07-02 adversarial-review finding, ED-1097] An ESCORT atom (escort_of set)
+                # must be checked FIRST, before the sibling-count fallback below: Stage C's
+                # orchestration.py already computes an escort-relative target_centroid[1] each tick
+                # (the escorted unit's live column + its rotated escort_offset -- see
+                # orchestration.py's cached_centroids pass, "so screening survives the escorted
+                # unit wheeling/enveloping/sweeping"). An escort is always one of >1 siblings in its
+                # Unit by construction, so without this check the sibling branch below silently
+                # overwrote that live-tracking column with the escort's own fixed spawn file the
+                # moment the escorted unit's column diverged from it -- confirmed via direct
+                # reproduction: an escort's anchor column moved TOWARD its spawn file instead of
+                # its tracked target the instant this fix-plan step landed.
                 _siblings = getattr(getattr(self, '_unit', None), 'subunits', None)
-                if _siblings is not None and len(_siblings) > 1:
+                if self.escort_of is not None:
+                    goal_c = target_centroid[1]
+                elif _siblings is not None and len(_siblings) > 1:
                     goal_c = self._spawn_position[1]
                 else:
                     goal_c = target_centroid[1]
