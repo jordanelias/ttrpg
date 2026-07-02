@@ -6,7 +6,8 @@ Re-imported by orchestration via star-import (Subunit.of_type and the stress-tes
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from mass_battle.config import *
 
-__all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for']
+__all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
+           'REACH_SHORT', 'REACH_LONG', 'TROOP_TYPE_REACH', 'reach_for']
 
 
 def roles_for(troop_type):
@@ -52,3 +53,28 @@ def stats_for(troop_type):
         return None
     preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())
     return dict(preset) if preset is not None else None
+
+
+# ─── REACH (Stage A — true-adjacency stand-off primitive) ───────────────────
+# [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach: melee contact (<=1 metre).
+#  Applies to most melee weapons." / "Long Reach: extended melee (polearms, spears; <=3 metres)."]
+# The 3x ratio is applied to the movement lattice's own pitch (COL_WIDTH=1.0, hierarchy/units.py)
+# rather than injecting an unratified meters-per-lattice-unit conversion.
+REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
+REACH_LONG = 1.5   # [canonical: params/core.md §Reach Terminology (PP-290) — "Long Reach... <=3 metres", 3x ratio]
+
+# No TROOP_TYPE_STATS key today is textually a polearm/spear unit (PP-290's literal Long-Reach
+# examples). cavalry/knights_templar plausibly carry lances, but PP-290's cited text does not
+# actually say "lances" -- that would be an inference beyond the citation, not licensed by it. Left
+# empty (every type falls through to Short) rather than fabricating an assignment; extend this table
+# when a troop type explicitly wielding a polearm/spear is added, or Jordan rules on cavalry/lances.
+TROOP_TYPE_REACH = {}
+
+
+def reach_for(troop_type):
+    """PP-290 reach class for a troop type, in lattice units (COL_WIDTH=1.0 pitch). Unmapped types,
+    including bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through
+    to Short Reach -- stated here as intended, not an implicit side effect. Lookup is
+    case-insensitive, matching stats_for."""
+    cls = TROOP_TYPE_REACH.get(str(troop_type).strip().lower()) if troop_type else None
+    return REACH_LONG if cls == 'long' else REACH_SHORT

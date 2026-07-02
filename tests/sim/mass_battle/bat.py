@@ -95,11 +95,34 @@ def trial_vector(ua, ub, r):
 EXPECTED = {
     'unit': '7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725',
     'cell': '1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7',
+    # [Stage A, 2026-07-01; updated 2026-07-02 for the TOI refactor] The coordinate-field candidate's
+    # OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required by run_battle's own
+    # assert). NOT byte-exact with the grid digests above by construction (Chebyshev->Euclidean + the
+    # true-adjacency standoff halt are intended behaviour changes, not a refactor) -- this is the field
+    # path's own regression anchor. Updated 2026-07-02: the halved-anchor-precap + iterated
+    # worst-violator per-cell clamp was replaced with an exact time-of-impact (continuous-collision)
+    # solve, plus reach-and-facing-asymmetric closing-budget throttling -- an intentional behaviour
+    # change (a different, more precise halt trajectory), reconfirmed against the true-float standoff
+    # invariant (min cell separation == standoff() exactly, zero violations, across the same sampled
+    # matchups) and the reach-advantage mechanic (a monkeypatched Long-vs-Short-reach matchup holds
+    # standoff exactly at the reach-summed distance). Update ONLY on an intentional field-path
+    # behaviour change, same discipline as the grid digests.
+    'unit_field': '5f19addcb9f2739fa9438e4f4fff1a1ed720ee05c203bc10eaa3621bf699e604',
+    'cell_field': 'd41d5cf41bbc67aa29993a95f2bab17c1adb4c4c05341142dd9315b01c838912',
 }
 
 
 def compute():
-    mode = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
+    """mode key: 'cell'/'unit' (grid, PER_CELL selects) or '..._field' when FIELD_MOVEMENT is on. Read
+    at CALL TIME so the reported mode always matches what this process actually ran, not just PER_CELL
+    -- [Stage A] before this, mode was PER_CELL-only, so a FIELD_MOVEMENT default-flip would silently
+    run the field path but report/check it as plain 'unit'/'cell', comparing against the WRONG
+    (grid-path) golden digest. The comparison would still fail loud (a real behaviour difference), but
+    the mismatch would misleadingly read as a regression rather than "you're on the field path, check
+    against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
+    base = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
+    import mass_battle.hierarchy.units as _u
+    mode = base + '_field' if _u.FIELD_MOVEMENT else base
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
         if (sa, TIER) not in ANCHOR_MAP or (sb, TIER) not in ANCHOR_MAP:
