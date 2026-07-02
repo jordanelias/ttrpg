@@ -28,12 +28,11 @@ are more "current state" files than there should be; trust them in this strict p
 
 **Ignore for currency** — these are stale or retired, do not resume from them:
 - `README.md` — outdated navigational pointers; defers to the three files above.
-- `session_log_current.md`, `session_log_archive.md`, `session-handoff-2026-05-06.md`,
-  `session_logs/`, `handoffs/`, `canon/session_checkpoint.md` — **retired session-log/checkpoint
-  machinery still present in the tree** (one even carries `status: active`). They are NOT
-  authoritative; **`HANDOFF.md` is the only live continuity surface.** Do not write into them and do
-  not resume from `canon/session_checkpoint.md`. *(Recommended cleanup, not yet done: move these under
-  `deprecated/`.)*
+- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`, `handoffs/`,
+  `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
+  — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
+  **`HANDOFF.md` is the only live continuity surface.** Do not write into or resume from anything
+  under `deprecated/session_machinery/`.
 - `archives/`, `deprecated/` — history only, never canonical.
 
 ---
@@ -62,7 +61,7 @@ are more "current state" files than there should be; trust them in this strict p
 | `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
-| `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md` document **retired** machinery as if live — ignore them. |
+| `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
 | `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
 | `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
 | `engine/` | Sigma-leverage engine armature + audit harness. ⚠️ `engine_audit_harness.py` is **dead** (hardcoded `/home/claude` paths) — do not invoke. |

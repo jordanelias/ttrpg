@@ -398,7 +398,7 @@ systems:
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "f05c86ab45810361b41d5c41969420f23916110d"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "96b9e30471d6953c364860d3398964ed65c2e6f2"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:

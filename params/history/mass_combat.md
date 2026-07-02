@@ -1,6 +1,6 @@
 # params_mass_combat — Patch History
 ## Container: references/params_mass_combat.md
-## Auto-maintained by valoria-orchestrator
+## Maintained by hand on patch application (former auto-maintainer valoria-orchestrator retired 2026-06-28, LB-22 — ED-1084)
 
 ---
 
