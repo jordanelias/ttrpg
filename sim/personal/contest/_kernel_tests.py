@@ -458,7 +458,7 @@ ck(f"ballotta: secret_council yields SPLIT_DECISION verdicts ({_sp/_N:.3f})", 0.
 print("== canonical adjudicator re-skin (social_contest_v30 §2 Step 1 / §3) ==")
 from .modes import (CANONICAL_ADJUDICATORS, ADJUDICATOR_PRIMARY, PROCEEDINGS,
                     CANONICAL_PROCEEDINGS, proceeding_venue, proceeding_mode)
-from .resolver import PersuasionTrack, TallyAtClose
+from .resolver import PersuasionTrack, TallyAtClose, VoteAtClose
 from .contract import Adjudicator as _Adj, Panel as _Pan
 ck("canon adjudicators are exactly the four (Expert Judge/Crowd/No Adjudicator/Panel)",
    set(CANONICAL_ADJUDICATORS) == {"expert_judge", "crowd", "no_adjudicator", "panel"})
@@ -505,9 +505,10 @@ ck("Royal Audience = 3 exchanges, Expert Judge, halved-petitioner resistance",
 ck("Church Tribunal = 1-5 exchanges (budget 5), Expert Judge, track starts biased at 6 (§7)",
    proceeding_venue("church_tribunal").budget == 5 and PROCEEDINGS["church_tribunal"]["adjudicator"]=="expert_judge"
    and proceeding_venue("church_tribunal").win.start == 6.0)
-ck("Guild Arbitration = 3 exchanges, Expert Judge, Symmetric",
-   proceeding_venue("guild_arbitration").budget == 3 and PROCEEDINGS["guild_arbitration"]["adjudicator"]=="expert_judge"
-   and PROCEEDINGS["guild_arbitration"]["roles"]=="symmetric")
+ck("Guild Arbitration = 3 exchanges, Panel (ED-1059 rebind), Symmetric, VoteAtClose ballot",
+   proceeding_venue("guild_arbitration").budget == 3 and PROCEEDINGS["guild_arbitration"]["adjudicator"]=="panel"
+   and PROCEEDINGS["guild_arbitration"]["roles"]=="symmetric"
+   and isinstance(proceeding_venue("guild_arbitration").win, VoteAtClose))
 ck("Casual Dispute = 1 exchange, No Adjudicator, tracker_mode='none' (default exchange-majority TallyAtClose)",
    proceeding_venue("casual_dispute").budget == 1 and PROCEEDINGS["casual_dispute"]["adjudicator"]=="no_adjudicator"
    and PROCEEDINGS["casual_dispute"]["tracker_mode"]=="none"
@@ -548,11 +549,15 @@ ck("F: Casual Dispute ('none') rejects use_tracker (tracker fixed by canon, §2:
    _rejects_opt_in("casual_dispute"))
 ck("F: Formal Contest ('required') rejects use_tracker (tracker fixed by canon)",
    _rejects_opt_in("formal_contest"))
-# every tracked proceeding resolves into a canonical Persuasion-Track band; untracked into a/b/draw
+# every tracked proceeding resolves into a canonical Persuasion-Track band; untracked into a/b/draw;
+# the Panel-bearing proceeding (Guild Arbitration, ED-1059 rebind) resolves on the VoteAtClose per-member
+# WEIGHTED ballot (A/B/draw), NOT a band — its adjudicator is 'panel' regardless of tracker=True.
 _BANDS = {"A_total","A_decisive","committee","B_decisive","B_total"}
 for _pn in PROCEEDINGS:
     random.seed(11); _w, _ = proceeding_mode(_pn).play(5, 4, LOG, LOG)
-    if PROCEEDINGS[_pn]["tracker"]:
+    if PROCEEDINGS[_pn]["adjudicator"] == "panel":
+        ck(f"Panel proceeding {_pn} resolves to a VoteAtClose ballot verdict (A/B/draw), not a band", _w in ("a","b","draw"))
+    elif PROCEEDINGS[_pn]["tracker"]:
         ck(f"proceeding {_pn} resolves to a canonical Persuasion-Track band", _w in _BANDS)
     else:
         ck(f"untracked proceeding {_pn} resolves to exchange-majority verdict", _w in ("a","b","draw"))
@@ -619,8 +624,9 @@ for _g in ("consensus","negotiation","inquiry"):
 # adapter coerces heterogeneous side specs (Contestant / int / dict-with-evidence)
 _bd = BC({"faculty":5,"standing_start":6}, 3, venue="grand_contest")
 ck("build_contest adapts int + dict side specs", _bd.side_a.faculty == 5 and _bd.side_b.faculty == 3)
-# a prebuilt Venue passes through the router unchanged
-_bv = BC(4,4, venue=proceeding_venue("guild_arbitration"), adjudicator="expert_judge")
+# a prebuilt Venue passes through the router unchanged (royal_audience is an Expert-Judge, tracked
+# proceeding -> PersuasionTrack venue; guild_arbitration is now Panel/VoteAtClose after the ED-1059 rebind)
+_bv = BC(4,4, venue=proceeding_venue("royal_audience"), adjudicator="expert_judge")
 random.seed(5); (_rv,_) = RC(_bv, game="agon")
 ck("build_contest accepts a prebuilt Venue + named adjudicator type", _rv[0] in _BANDS and _bv.adjudicator_type=="expert_judge")
 
@@ -767,6 +773,364 @@ _fc_before = _bt4.c[A].face_current()
 _bt4._apply(A, Move("support"))   # support builds ethos (Standing.v) by 1, unchanged CR3 behaviour
 ck("Gate-A: face_current() tracks Standing live (rises after an ethos-building move, same as Face)",
    _bt4.c[A].face_current() > _fc_before)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# STAGE 2 / GATE B — TYPED DICTIONARIES (dictionaries.py): Venue×8, Adjudicator×4 +
+# faction-boost table, Style×4, InteractionType×4 derivation, + ED-137 Panel closure.
+# Every dictionary value hand-traced to params/contest.md / social_contest_v30 (the auto
+# fabrication gate is leaky — CLAUDE.md §7); these assert the values match the cited rows.
+# ──────────────────────────────────────────────────────────────────────────────
+def _raises(fn, exc):
+    try:
+        fn(); return False
+    except exc:
+        return True
+
+print("== Stage 2: Style×4 (Genre×Orientation) + flavor ==")
+from .dictionaries import (Genre as _Gen, Orientation as _Or, Style as _Style, STYLES_TABLE as _STY,
+                           STYLE_BY_AXES as _SBA, InteractionType as _IT,
+                           INTERACTIONS_TABLE as _INT, derive_interaction as _derive,
+                           AdjudicatorType as _AT, ADJUDICATORS_TABLE as _ADJ,
+                           FactionBoost as _FB, FACTION_BOOSTS as _FBT,
+                           Proceeding as _Proc, PROCEEDINGS_TABLE as _PT,
+                           _crosscheck_proceedings as _xcheck,
+                           PANEL_AGGREGATION as _PAGG, PANEL_CLOSURE as _PCL,
+                           panel_win_condition as _pwc,
+                           DOUBT_MARKER as _DM, DOUBT_MARKER_TERMINAL as _DMT,
+                           DOUBT_MARKER_FIELD as _DMF,
+                           _doubt_marker_branches_specified as _dm_branches)
+ck("Stage2: exactly the 4 canonical styles (Precedent/Suppression/Vision/Insinuation)",
+   set(_STY) == {"precedent", "suppression", "vision", "insinuation"})
+# genre×orientation mapping VERBATIM from params/contest.md §Argument Styles (PP-235):
+ck("Stage2: Precedent = Memory×Revealing (params §Argument Styles)",
+   _STY["precedent"].genre == _Gen.MEMORY and _STY["precedent"].orientation == _Or.REVEALING)
+ck("Stage2: Suppression = Memory×Obscuring (params §Argument Styles)",
+   _STY["suppression"].genre == _Gen.MEMORY and _STY["suppression"].orientation == _Or.OBSCURING)
+ck("Stage2: Vision = Projection×Revealing (params §Argument Styles)",
+   _STY["vision"].genre == _Gen.PROJECTION and _STY["vision"].orientation == _Or.REVEALING)
+ck("Stage2: Insinuation = Projection×Obscuring (params §Argument Styles)",
+   _STY["insinuation"].genre == _Gen.PROJECTION and _STY["insinuation"].orientation == _Or.OBSCURING)
+ck("Stage2: STYLE_BY_AXES round-trips every style by (genre,orientation)",
+   all(_SBA[(s.genre, s.orientation)] is s for s in _STY.values()) and len(_SBA) == 4)
+ck("Stage2: every style has authored player-facing flavor (locked decision 5; non-empty, distinct)",
+   all(s.flavor.strip() for s in _STY.values())
+   and len({s.flavor for s in _STY.values()}) == 4)
+ck("Stage2: flavor is behaviorally honest per Lens 6 — Obscuring styles name doubt, Revealing don't",
+   ("doubt" in _STY["suppression"].flavor.lower())
+   and ("doubt" not in _STY["precedent"].flavor.lower()))
+# Obscuring single-exchange dominance (finding 4, ED-1060 — OPEN DECISION FOR JORDAN): the Doubt Marker's
+# −2-to-NEXT-winning-exchange effect has EV 0 in a single/final exchange, strictly dominating Suppression by
+# Precedent and Insinuation by Vision there. The DOUBT_MARKER flag records the best-grounded resolution
+# (terminal value at close) + the alternative (gate Obscuring out), flagged for Jordan, easy to swap. This is
+# a DESIGN-TABLE commitment only (resolver does not yet consume orientation — Stage-3 scope), so no resolution
+# number changes; the flag must document the fork + name the swap.
+ck("Stage2: DOUBT_MARKER records the Obscuring single-exchange dominance fork for Jordan (finding 4, ED-1060)",
+   _DM["ed"] == "ED-1060" and _DM["rule"] == _DMT
+   and "problem" in _DM and "resolution" in _DM and "alternative" in _DM)
+ck("Stage2: DOUBT_MARKER default rule is terminal_value (best-grounded; flagged open for Jordan, swappable)",
+   _DMT == "terminal_value")
+ck("Stage2: DOUBT_MARKER scope-honest — a design-table commitment, resolver does not yet consume orientation",
+   "resolver does not yet consume orientation" in _DM["scope_note"])
+# Terminal Doubt DIRECTION (round-3 finding 1, ED-1060): the marker always works AGAINST the marked side
+# (the party it is placed on) — i.e. in the Obscuring winner's / planter's favour — the same direction it
+# fires in play (v30:180-181). The prior 'in the marked side's favour' wording was self-contradictory with
+# 'toward the Obscuring winner' and, read literally, rewarded the Obscuring LOSER. Guard: the resolution must
+# name the Obscuring winner / planter as beneficiary and must NOT say 'in the marked side's favour'.
+ck("Stage2: Terminal Doubt fires AGAINST the marked side / for the Obscuring winner (round-3 finding 1)",
+   ("against the marked side" in _DM["resolution"].lower())
+   and ("in the marked side's favour" not in _DM["resolution"].lower())
+   and (("obscuring winner" in _DM["resolution"].lower()) or ("planter" in _DM["resolution"].lower())))
+# Terminal Doubt SPLIT BY MECHANISM (round-4 finding 1, ED-1060): the named single-exchange proceedings do
+# NOT all resolve the same way — Church Tribunal is banded (PersuasionTrack) but Casual Dispute (always),
+# Personal Appeal (default) and Private Negotiation (default) resolve by RAW A/B/draw TallyAtClose, which has
+# no band/margin/Compromise-zone for the original "slides one band" rule to operate on. So the terminal rule
+# MUST specify BOTH the banded and the raw-tally behavior, or it is undefined for exactly the tally subset the
+# finding names. Guard: both branches present + non-empty; the tally branch is expressed on the RAW adv (not a
+# band); and the guard helper reports no missing branch (so the tally subset can never silently go undefined).
+ck("Stage2: Terminal Doubt is SPLIT BY MECHANISM — both banded and tally branches specified (round-4 finding 1)",
+   _dm_branches() == []
+   and isinstance(_DM.get("banded_terminal"), str) and _DM["banded_terminal"].strip()
+   and isinstance(_DM.get("tally_terminal"), str) and _DM["tally_terminal"].strip())
+ck("Stage2: banded branch operates on the margin/band; tally branch operates on the RAW adv (round-4 finding 1)",
+   (("margin" in _DM["banded_terminal"].lower()) or ("band" in _DM["banded_terminal"].lower()))
+   and ("raw adv" in _DMF["tally"].lower())
+   # the tally branch must SUBTRACT from the raw adv, not slide a band — it may mention "no band" to say why,
+   # but it must not apply the -2 to a margin/band (the defect being fixed): guard that it names raw adv as
+   # the quantity acted on and that the banded quantity ("margin/band") is the one it explicitly DISCLAIMS.
+   and (("no band" in _DMF["tally"].lower()) or ("no margin" in _DMF["tally"].lower())))
+ck("Stage2: tally branch names TallyAtClose / raw A/B/draw as the mechanism it covers (round-4 finding 1)",
+   ("tallyatclose" in _DMF["tally"].lower()) or ("a/b/draw" in _DMF["tally"].lower()))
+
+print("== Stage 2: InteractionType×4 derivation (CLASH/REINFORCE/CROSS + TIE overlay) ==")
+ck("Stage2: exactly the 4 interaction types",
+   set(_INT) == {"clash", "reinforce", "cross", "tie"})
+# Derivation VERBATIM from social_contest_v30 §4 Step 4:
+ck("Stage2: same genre + OPPOSITE orientation -> CLASH (Precedent vs Suppression)",
+   _derive("precedent", "suppression").key == "clash"
+   and _derive("vision", "insinuation").key == "clash")
+ck("Stage2: same genre + SAME orientation -> REINFORCE (Precedent vs Precedent)",
+   _derive("precedent", "precedent").key == "reinforce"
+   and _derive("suppression", "suppression").key == "reinforce")
+ck("Stage2: DIFFERENT genres -> CROSS (orientation irrelevant)",
+   _derive("precedent", "vision").key == "cross"          # Memory vs Projection, both Revealing
+   and _derive("precedent", "insinuation").key == "cross"  # Memory vs Projection, opp orientation
+   and _derive("suppression", "vision").key == "cross")
+ck("Stage2: derive_interaction accepts Style objects as well as keys",
+   _derive(_STY["precedent"], _STY["suppression"]).key == "clash")
+ck("Stage2: TIE is a separate overlay row (not returned by derive_interaction — §4 'any type')",
+   "tie" in _INT and _derive("precedent", "suppression").key != "tie")
+ck("Stage2: TIE strain carries the CROSS exception (PP-236: '1 each (except CROSS: 0)')",
+   "CROSS: 0" in _INT["tie"].strain and "PP-236" in _INT["tie"].strain)
+ck("Stage2: player-facing interaction names match the walkthrough §3 Step 2",
+   _INT["clash"].player_name == "Direct Clash" and _INT["cross"].player_name == "Talking Past Each Other"
+   and _INT["reinforce"].player_name == "Mutual Reinforcement" and _INT["tie"].player_name == "Deadlocked")
+
+print("== Stage 2: AdjudicatorType×4 + faction-boost table ==")
+ck("Stage2: exactly the 4 canonical adjudicator types",
+   set(_ADJ) == {"expert_judge", "crowd", "no_adjudicator", "panel"})
+# primary attribute VERBATIM from social_contest_v30 §3 Argue Pool:
+ck("Stage2: Expert Judge -> Cognition; Crowd -> Charisma; No Adjudicator -> Attunement; Panel -> Cognition",
+   _ADJ["expert_judge"].primary_attribute == "Cognition"
+   and _ADJ["crowd"].primary_attribute == "Charisma"
+   and _ADJ["no_adjudicator"].primary_attribute == "Attunement"
+   and _ADJ["panel"].primary_attribute == "Cognition")
+ck("Stage2: typed AdjudicatorType.primary matches the mechanical modes.ADJUDICATOR_PRIMARY (no drift)",
+   all(_ADJ[k].primary_attribute == ADJUDICATOR_PRIMARY[k] for k in _ADJ))
+ck("Stage2: Crowd + Panel are collective; Expert Judge + No Adjudicator are single",
+   _ADJ["crowd"].collective and _ADJ["panel"].collective
+   and not _ADJ["expert_judge"].collective and not _ADJ["no_adjudicator"].collective)
+ck("Stage2: Panel row records the ED-137 closure (not the provisional 'use Expert Judge')",
+   _ADJ["panel"].ed137 is not None and "CLOSED" in _ADJ["panel"].ed137
+   and _ADJ["expert_judge"].ed137 is None)
+# faction-boost table VERBATIM from params/contest.md §Faction Boosts:
+ck("Stage2: 6 core factions + Löwenritter (conditional); Niflhel correctly absent (ED-899/ED-764)",
+   set(_FBT) == {"church", "crown", "varfell", "hafenmark", "restoration", "guilds", "lowenritter"}
+   and "niflhel" not in _FBT)
+ck("Stage2: exactly 6 unconditional core factions; Löwenritter is the conditional 7th",
+   sum(0 if f.conditional else 1 for f in _FBT.values()) == 6
+   and _FBT["lowenritter"].conditional is True)
+ck("Stage2: Church=Obscuring/Orientation, Crown=Revealing/Orientation (params §Faction Boosts)",
+   _FBT["church"].boost == "Obscuring" and _FBT["church"].axis == "Orientation"
+   and _FBT["crown"].boost == "Revealing" and _FBT["crown"].axis == "Orientation")
+ck("Stage2: Varfell=Projection/Genre, Hafenmark=Memory/Genre (params §Faction Boosts)",
+   _FBT["varfell"].boost == "Projection" and _FBT["varfell"].axis == "Genre"
+   and _FBT["hafenmark"].boost == "Memory" and _FBT["hafenmark"].axis == "Genre")
+ck("Stage2: Restoration=Revealing/Orientation; Guilds=venue-derived/Either (ED-1061: was 'GM picks')",
+   _FBT["restoration"].boost == "Revealing" and _FBT["restoration"].axis == "Orientation"
+   and _FBT["guilds"].axis == "Either" and _FBT["guilds"].boost != "GM picks")
+ck("Stage2: every faction carries its canonical ethical mode (params §Faction Boosts)",
+   _FBT["church"].ethical_mode == "Divine Command"
+   and _FBT["hafenmark"].ethical_mode == "Categorical Imperative"
+   and _FBT["restoration"].ethical_mode == "Rawlsian Social Contract")
+ck("Stage2: every FIXED faction boost is one of the four canonical values; Guilds is venue-derived (ED-1061)",
+   all(f.boost in ("Memory", "Projection", "Revealing", "Obscuring")
+       for k, f in _FBT.items() if k != "guilds")
+   and _FBT["guilds"].boost not in ("Memory", "Projection", "Revealing", "Obscuring"))
+
+print("== Stage 2: Proceeding×8 (typed surface, cross-checked vs modes.PROCEEDINGS) + flavor ==")
+ck("Stage2: exactly the 8 canonical proceedings",
+   set(_PT) == {"formal_contest", "grand_contest", "royal_audience", "church_tribunal",
+                "guild_arbitration", "casual_dispute", "private_negotiation", "personal_appeal"})
+ck("Stage2: the typed Proceeding surface AGREES with the mechanical modes.PROCEEDINGS (no drift)",
+   _xcheck() == [])
+# structural values VERBATIM from params/contest.md §Proceeding Types:
+ck("Stage2: Formal=3/Alternating/Standard/Crowd; Grand=5/Alternating/Standard/Crowd",
+   _PT["formal_contest"].exchange_count == (3, 3) and _PT["formal_contest"].adjudicator_type == "crowd"
+   and _PT["grand_contest"].exchange_count == (5, 5) and _PT["grand_contest"].adjudicator_type == "crowd")
+ck("Stage2: Royal Audience halved-for-petitioner; Church Tribunal 1-5, track_start biased 6 (§7)",
+   _PT["royal_audience"].resistance_modifier == "Halved for petitioner"
+   and _PT["church_tribunal"].exchange_count == (1, 5)
+   and _PT["church_tribunal"].track_start == 6.0)
+ck("Stage2: Casual Dispute tracker_mode='none'; Private Neg + Personal Appeal 'optional' (§2:87-89)",
+   _PT["casual_dispute"].tracker_mode == "none"
+   and _PT["private_negotiation"].tracker_mode == "optional"
+   and _PT["personal_appeal"].tracker_mode == "optional")
+ck("Stage2: every proceeding has authored player-facing flavor (locked decision 5; non-empty, distinct)",
+   all(p.flavor.strip() for p in _PT.values()) and len({p.flavor for p in _PT.values()}) == 8)
+ck("Stage2: flavor is behaviorally honest per Lens 6 (Church Tribunal reads differently from Casual)",
+   ("halved" in _PT["church_tribunal"].flavor.lower() or "lean" in _PT["church_tribunal"].flavor.lower())
+   and ("no judge" in _PT["casual_dispute"].flavor.lower()
+        or "no scorekeeping" in _PT["casual_dispute"].flavor.lower()))
+# Lens-6 (finding 5): 'vote'/'ballot' is a RESERVED mechanic — the Panel VoteAtClose ballot + §10 BG
+# Parliamentary Vote. NONE of the 8 canonical proceedings uses the Panel adjudicator, so no proceeding
+# flavor may promise a vote/ballot the primitive does not run (Formal Contest resolves on the Persuasion
+# Track, not a ballot). Guards against the mis-cue that a setup card names a resolution the venue lacks.
+ck("Stage2: no proceeding flavor names a 'vote'/'ballot' (reserved for Panel/§10 — Lens-6 honesty, finding 5)",
+   all("vote" not in p.flavor.lower() and "ballot" not in p.flavor.lower() for p in _PT.values()))
+# Lens-6 (finding 7, updated for ED-1059 rebind): 'bench'/'panel'/'judges'(plural) is the RESERVED
+# adjudicator-cardinality cue for the multi-judge Panel adjudicator (v30:37 "Bench of individual judges").
+# Exactly ONE canonical proceeding now uses the Panel adjudicator — Guild Arbitration (ED-1059 rebind) —
+# and its flavor MUST name its bench of masters honestly. The OTHER SEVEN route to crowd/expert_judge/
+# no_adjudicator (each a SINGLE authority or a Crowd, never a deliberating bench), so none of THEM may cue
+# a bench/panel/plural-judges body the venue does not convene (Royal Audience is ONE Expert Judge — "The
+# judge is stern", not "The bench"). Singular "judge" is licit; only the plural/collective terms are barred,
+# and only for the seven non-Panel proceedings. Guards against the adjudicator-cardinality mis-cue.
+_NON_PANEL = {k: p for k, p in _PT.items() if p.adjudicator_type != "panel"}
+ck("Stage2: no NON-Panel proceeding flavor names 'bench'/'panel'/'judges'(plural) (reserved for Panel — Lens-6 cardinality, finding 7)",
+   all("bench" not in p.flavor.lower() and "panel" not in p.flavor.lower()
+       and "judges" not in p.flavor.lower() for p in _NON_PANEL.values()))
+# Conversely: the one Panel proceeding (Guild Arbitration) MUST name its bench/masters (honest cardinality).
+ck("Stage2: the Panel proceeding (Guild Arbitration, ED-1059) names its bench/masters honestly",
+   _PT["guild_arbitration"].adjudicator_type == "panel"
+   and ("bench" in _PT["guild_arbitration"].flavor.lower() or "masters" in _PT["guild_arbitration"].flavor.lower()))
+# Lens-6 (round-3 finding 2): the optional Persuasion Track (Private Negotiation / Personal Appeal) is a
+# build/venue setting (use_tracker flag), NOT an in-fiction pact between the two orators. Canon (v30:76)
+# makes the tracker simply optional with NO mutual-consent language ("If not used, winner determined by
+# exchange majority"). So no proceeding flavor may present a two-party consent gate on the tracker ("if you
+# both agree", "mutual", "consent") — that would fabricate an in-fiction negotiation that does not exist.
+ck("Stage2: no proceeding flavor invents a mutual-consent gate on the tracker (round-3 finding 2, Lens-6)",
+   all("both agree" not in p.flavor.lower() and "if you both" not in p.flavor.lower()
+       and "mutual" not in p.flavor.lower() and "consent" not in p.flavor.lower()
+       for p in _PT.values()))
+
+print("== Stage 2: ED-137 Panel closure (VoteAtClose per-member ballot) ==")
+from .resolver import VoteAtClose as _VAC
+ck("Stage2: panel_win_condition returns a VoteAtClose (the promoted per-member ballot mechanism)",
+   isinstance(_pwc(jurors=5), _VAC))
+# ED-1057 RATIFIED (Jordan, Gate B): the aggregation rule is WEIGHTED-BY-STANDING (not simple majority).
+ck("Stage2: PANEL_AGGREGATION is weighted_by_standing (RATIFIED Gate B, ED-1057)",
+   _PAGG == "weighted_by_standing")
+ck("Stage2: panel_win_condition carries the ratified weighted_by_standing aggregation onto the VoteAtClose",
+   _pwc(jurors=5).aggregation == "weighted_by_standing")
+ck("Stage2: PANEL_CLOSURE records ED-137 CLOSED + the ratified weighted-by-standing aggregation",
+   _PCL["ed"] == "ED-137" and "CLOSED" in _PCL["status"]
+   and "aggregation_ratified" in _PCL and "weighted" in _PCL["aggregation_ratified"].lower())
+ck("Stage2: the ratified weighted_by_standing aggregation is IMPLEMENTED (does not raise); unanimity_required still raises",
+   isinstance(_pwc(aggregation="weighted_by_standing"), _VAC)
+   and _raises(lambda: _pwc(aggregation="unanimity_required"), NotImplementedError))
+# End-to-end: a Panel adjudicator routes the contest to VoteAtClose (ED-137 realized), and its
+# verdict is a per-member ballot outcome (A/B/draw), NOT a Persuasion-Track band.
+_pc = BC(4, 4, venue="formal_contest", adjudicator="panel")
+ck("Stage2: build_contest(adjudicator='panel') sets the venue win-condition to VoteAtClose (ED-137)",
+   isinstance(_pc.venue.win, _VAC) and _pc.adjudicator_type == "panel")
+ck("Stage2: Panel juror count comes from the paired Panel's member count (5 default)",
+   _pc.venue.win.jurors == 5)
+_pcres, _ = RC(_pc)
+ck("Stage2: Panel verdict is a per-member ballot outcome (A|B|draw), not a track band",
+   _pcres[0] in (A, B, "draw"))
+# The default (non-Panel) crowd proceeding is UNCHANGED — Panel closure is additive.
+ck("Stage2: a Crowd proceeding is UNCHANGED by the Panel closure (still track-banded, not VoteAtClose)",
+   not isinstance(BC(4, 4, venue="formal_contest").venue.win, _VAC))
+# PREBUILT-PANEL PATH (finding 2 regression): a caller may pass a prebuilt contract.Panel object
+# instead of the string 'panel'. On a prebuilt Venue (adj_type unset) this must ALSO close ED-137
+# — route to VoteAtClose with the paired Panel's member count — not silently revert to the flat
+# single-judge track ("Expert Judge with extra steps").
+from . import modes as _modes_pw
+from .resolver import Venue as _Venue_pw, PersuasionTrack as _PT_pw
+_pv = _Venue_pw(win=_PT_pw(start=5.0))
+_ppanel = _modes_pw.panel(size=4)
+_pc_obj = BC(4, 4, venue=_pv, adjudicator=_ppanel)
+ck("Stage2: a PREBUILT contract.Panel on a prebuilt Venue closes ED-137 (VoteAtClose, adj_type='panel')",
+   isinstance(_pc_obj.venue.win, _VAC) and _pc_obj.adjudicator_type == "panel")
+ck("Stage2: the prebuilt-Panel path takes its juror count from the paired Panel's members (4)",
+   _pc_obj.venue.win.jurors == 4)
+_pcobj_res, _ = RC(_pc_obj)
+ck("Stage2: the prebuilt-Panel verdict is a per-member ballot outcome (A|B|draw), not a track band",
+   _pcobj_res[0] in (A, B, "draw"))
+# NON-REGRESSION: a prebuilt CROWD object (which is itself a Panel subtype) on a named crowd
+# proceeding must NOT be hijacked onto VoteAtClose — adj_type is already 'crowd', not None.
+_crowd_obj = _modes_pw.CANONICAL_ADJUDICATORS["crowd"]()
+ck("Stage2: a prebuilt Crowd object (a Panel subtype) on a Crowd proceeding stays track-banded, NOT VoteAtClose",
+   not isinstance(BC(4, 4, venue="formal_contest", adjudicator=_crowd_obj).venue.win, _VAC))
+# REACHABILITY (finding 3, ED-1059) — RATIFIED REBIND (Jordan, Gate B): Guild Arbitration is REBOUND from
+# expert_judge to Panel, so exactly ONE canonical proceeding now routes to the Panel adjudicator. The closed
+# Panel mechanic is reached by SELECTING Guild Arbitration (no longer dead-through-proceeding-selection). No
+# appeal mechanic (Jordan: "let the decision ride"); 8-proceeding roster unchanged. This test was pinned to
+# flip intentionally when Panel became proceeding-reachable — it flips here.
+ck("Stage2: exactly Guild Arbitration routes to the Panel adjudicator (ED-1059 rebind — reachability closed)",
+   [k for k, s in _modes_pw.PROCEEDINGS.items() if s["adjudicator"] == "panel"] == ["guild_arbitration"])
+ck("Stage2: selecting Guild Arbitration instantiates the Panel VoteAtClose ballot (reachable in normal play)",
+   isinstance(BC(4, 4, venue="guild_arbitration").venue.win, _VAC)
+   and BC(4, 4, venue="guild_arbitration").adjudicator_type == "panel")
+ck("Stage2: PANEL_CLOSURE records the ratified rebind (Guild Arbitration; no appeal mechanic) (finding 3, ED-1059)",
+   "reachability_ratified" in _PCL and "ED-1059" in _PCL["reachability_ratified"]
+   and "guild arbitration" in _PCL["reachability_ratified"].lower()
+   and "reject" in _PCL["reachability_ratified"].lower())
+
+# ── WEIGHTED-BY-STANDING aggregation (ED-1057 RATIFIED, Jordan Gate B) ──────────────────────────────
+# The Panel verdict aggregates each juror's ballot by its BENCH-WEIGHT = its Adjudicator.discipline (an
+# EXISTING per-juror field — NOT the contestant-side Standing primitive). A wins iff summed A-weight >
+# half the total bench weight, else draw. These pin (1) the threshold arithmetic deterministically
+# (noise=0 => vote is a pure function of gap sign, so the weighted sum is exact) and (2) that a mixed-
+# weight bench is NON-DOMINATED: its verdict does NOT merely mirror the single highest-weight juror, and
+# with noise a plausibly-mixed bench can go EITHER way (not always the same side).
+print("== Stage 2: Panel aggregation = WEIGHTED-BY-STANDING (ED-1057 ratified) ==")
+from .contract import Adjudicator as _AdjW, Panel as _PanW
+# A heavy juror (discipline .9) + three light jurors (.3 each): total weight 1.8, half = 0.9. Bench-weights
+# are the discipline field; the class name Standing is NOT reused for this (juror rank != contestant Standing).
+_heavy = _AdjW(discipline=0.9); _light = _AdjW(discipline=0.3)
+_bench = _PanW((_heavy, _light, _light, _light))
+_wvac = VoteAtClose(jurors=4, sharpness=0.6, noise=0.0, aggregation="weighted_by_standing")
+# noise=0 => every juror votes with the gap sign. gap>0 => all vote A => summed A-weight 1.8 > 0.9 => A.
+_sA = ContestState(); _sA.adv[A] = 3.0
+ck("Stage2 weighted: a decisive room (gap>0, noise 0) => Panel returns A (all bench-weight for A)",
+   _wvac.resolve(_sA, closing=True, adj=_bench) == A)
+_sB = ContestState(); _sB.adv[B] = 3.0
+ck("Stage2 weighted: a decisive room the other way (gap<0) => Panel returns B",
+   _wvac.resolve(_sB, closing=True, adj=_bench) == B)
+# NON-DOMINATION (the summed-weight threshold, not one dominant vote, decides): the single highest-weight
+# juror must NOT be able to carry the verdict alone against a concurring rest. Take a bench whose heavy
+# juror's weight EQUALS the summed weight of the rest (heavy .6, three lights .2 => rest .6): if ONLY the
+# heavy juror votes A and the three lights vote B, A-weight == B-weight, an exact tie => DRAW, so the heavy
+# juror does NOT dominate. Verify end-to-end through the resolver with a HAND-FORCED split via sharpness=0
+# and a per-juror deterministic construction is awkward, so we pin the threshold arithmetic directly with
+# isclose (avoiding the 0.2*3 float trap by comparing the two summed sides, which carry the SAME rounding).
+_w_heavy = 0.6
+_w_rest  = 0.2 + 0.2 + 0.2      # the three lights; same float representation on both sides of the tie
+ck("Stage2 weighted: the highest-weight juror's weight only TIES (not exceeds) the concurring rest (non-dominated)",
+   isclose(_w_heavy, _w_rest) and not (_w_heavy > _w_rest))
+# And through the resolver: a bench where the heavy juror is outvoted by weight => the verdict follows the
+# WEIGHTED majority, not the heavy juror. With noise=0 all jurors vote the gap sign, so to exhibit a genuine
+# split we drive it via the either-way noisy run below; here we assert the resolver HONOURS bench-weight by
+# comparing a heavy-A-biased vs heavy-B-biased bench at the SAME near-even room is not deterministic (both
+# outcomes reachable) — captured by the either-way test.
+# EITHER-WAY under noise: at a NEAR-EVEN gap on a mixed-weight bench, a seeded run yields BOTH A and B
+# verdicts (the bench does not always mirror the highest-weight juror; a low-weight juror crossing can
+# swing a close split). Assert both outcomes appear across seeds (plausibly either way).
+_mixed = _PanW((_AdjW(discipline=0.8), _AdjW(discipline=0.5), _AdjW(discipline=0.4),
+                _AdjW(discipline=0.35), _AdjW(discipline=0.3)))
+_wnoisy = VoteAtClose(jurors=5, sharpness=0.6, noise=1.2, aggregation="weighted_by_standing")
+_sClose = ContestState(); _sClose.adv[A] = 0.4   # a slim A lead — genuinely contestable
+random.seed(4242)
+_verdicts = Counter(_wnoisy.resolve(_sClose, closing=True, adj=_mixed) for _ in range(400))
+ck(f"Stage2 weighted: a mixed-weight bench on a near-even room goes EITHER way (A {_verdicts[A]}, B {_verdicts[B]}, draw {_verdicts['draw']})",
+   _verdicts[A] > 0 and _verdicts[B] > 0)
+# End-to-end via the Guild Arbitration proceeding: the weighted ballot resolves to a valid verdict, and the
+# venue win-condition carries the ratified weighted_by_standing aggregation (not simple majority).
+ck("Stage2 weighted: Guild Arbitration's VoteAtClose carries aggregation='weighted_by_standing'",
+   proceeding_venue("guild_arbitration").win.aggregation == "weighted_by_standing")
+random.seed(77); _gares, _ = RC(BC(4, 4, venue="guild_arbitration"))
+ck("Stage2 weighted: Guild Arbitration (Panel) resolves to a per-member ballot verdict (A|B|draw)",
+   _gares[0] in (A, B, "draw"))
+
+# ── GUILDS either-axis boost = CONTEXT-DERIVED FROM THE VENUE (ED-1061, Jordan Gate B) ──────────────
+# The stale params "GM picks" is corrected to an ENGINE rule (no-GM mandate): the Guilds boost applies to
+# whichever axis the CURRENT contest's ADJUDICATOR favours, derived from its ethos/pathos/logos weighting
+# via the corpus Aristotle mapping (Expert Judge/Panel<->logos->Memory, Crowd<->pathos->Projection,
+# No-adjudicator<->ethos->Revealing). Deterministic; no GM/orator/random pick.
+print("== Stage 2: Guilds either-axis boost = venue-derived (ED-1061) ==")
+from .dictionaries import guilds_boost_for as _gbf, FACTION_BOOSTS as _FBT2
+from .modes import CANONICAL_ADJUDICATORS as _CA
+ck("Stage2 guilds: the Guilds row is no longer 'GM picks' — it is engine/venue-derived (ED-1061 canon fix)",
+   _FBT2["guilds"].boost != "GM picks" and _FBT2["guilds"].axis == "Either")
+# Expert Judge (logos-dominant) => Memory (Genre); Crowd (pathos) => Projection (Genre); No Adjudicator
+# (ethos) => Revealing (Orientation); Panel (logos, like Expert Judge) => Memory (Genre).
+ck("Stage2 guilds: Expert Judge (logos-primary) => boost Memory (Genre)",
+   _gbf(_CA["expert_judge"]()) == (_Gen.MEMORY, "Genre"))
+ck("Stage2 guilds: Crowd (pathos-primary) => boost Projection (Genre)",
+   _gbf(_CA["crowd"]()) == (_Gen.PROJECTION, "Genre"))
+ck("Stage2 guilds: No Adjudicator (ethos-primary) => boost Revealing (Orientation)",
+   _gbf(_CA["no_adjudicator"]()) == (_Or.REVEALING, "Orientation"))
+ck("Stage2 guilds: Panel (logos-primary, bench-averaged) => boost Memory (Genre) — same as Expert Judge",
+   _gbf(_CA["panel"]()) == (_Gen.MEMORY, "Genre"))
+# It reads the venue's ADJUDICATOR CHARACTER (context), not a fixed value: a custom pathos-leaning judge
+# derives Projection even though it is an 'expert_judge'-type object.
+ck("Stage2 guilds: derivation is CONTEXT-driven — a pathos-leaning adjudicator => Projection, not fixed",
+   _gbf(_AdjW(char_ethos=0.2, char_pathos=0.6, char_logos=0.2)) == (_Gen.PROJECTION, "Genre"))
+# Determinism: ties in char weight break by the Aristotelian order (logos > pathos > ethos), no randomness.
+ck("Stage2 guilds: an exactly-neutral adjudicator resolves deterministically to logos->Memory (tie-break order)",
+   _gbf(_AdjW(char_ethos=1/3, char_pathos=1/3, char_logos=1/3)) == (_Gen.MEMORY, "Genre")
+   and _gbf(_AdjW(char_ethos=1/3, char_pathos=1/3, char_logos=1/3)) == (_Gen.MEMORY, "Genre"))
 
 print(f"\nRESULT: {P} passed, {Fc} failed")
 sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

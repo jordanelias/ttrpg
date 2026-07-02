@@ -31,10 +31,10 @@
 
 | Type | Who decides | Examples | Primary attribute |
 |---|---|---|---|
-| Expert judge | A single authority evaluates arguments on merits | Royal Audience, Church Tribunal, Guild Arbitration | Cognition |
+| Expert judge | A single authority evaluates arguments on merits | Royal Audience, Church Tribunal | Cognition |
 | Crowd | A collective audience reacts to delivery and force | Parliamentary session, public forum, street crowd | Charisma |
 | No adjudicator | The parties themselves are the decision-makers | Private negotiation, personal appeal | Attunement |
-| Panel | Multiple individual judges deliberating | [EDITORIAL: ED-137 — panel mechanics not yet designed. Use Expert Judge as provisional.] | Cognition |
+| Panel | Multiple individual judges deliberating | **Guild Arbitration** (a bench of guild masters — ED-1059 rebind); appellate bench, high tribunal, magisterial college [ED-1059: Guild Arbitration REBOUND from Expert Judge to Panel, so Panel is proceeding-reachable in normal play; the mechanism is per-member VoteAtClose ballot aggregated WEIGHTED-BY-STANDING — ED-137 CLOSED, ED-1057; see params/contest.md §Panel Adjudicator] | Cognition |
 
 The adjudicator type determines the primary attribute for the Argue pool (§4, Step 3). The adjudicator type is **fixed for the duration of a contest.** If circumstances change enough to shift the adjudicator type (a private negotiation goes public), the current contest ends and a new contest begins under the new type.
 
@@ -61,8 +61,12 @@ Audience boost: the dominant faction's boost adds +1D to any argument matching t
 | Varfell | Consequentialism | Projection | Genre |
 | Hafenmark | Categorical Imperative | Memory | Genre |
 | Restoration | Rawlsian Social Contract | Revealing | Orientation |
-| Guilds | Moral Relativism | GM picks one | Either |
+| Guilds | Moral Relativism | Venue-derived (engine) | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
+
+The Guilds either-axis boost is **resolved by the engine, not picked (ED-1061)**: with no GM, the boost applies to whichever axis (a genre or an orientation) the **current contest's adjudicator already favours** — derived from the adjudicator's ethos/pathos/logos weighting (Expert Judge / Panel ↔ logos → Memory; Crowd ↔ pathos → Projection; No Adjudicator ↔ ethos → Revealing). Not an orator pick, not random, not a GM pick; deterministic (ties break by the Aristotelian order logos > pathos > ethos). See `dictionaries.guilds_boost_for()`.
+
+<!-- ED-1061 (2026-07-01, Jordan Gate B): Guilds boost was "GM picks one" — a defect under the no-GM mandate. Corrected to the engine rule (context-derived from the venue's adjudicator) above. -->
 <!-- Niflhel boost row STRUCK (ED-899 / ED-764): Niflhel cannot participate in Formal/Grand Contests (§9.7), so a parliamentary boost row is incoherent. -->
 
 An orator's total bonus dice from genre + audience: maximum +2D (primary genre +1D AND audience boost matches on the other axis +1D). Minimum +0D (non-primary genre, audience boost doesn't match).
@@ -83,7 +87,7 @@ These dice are added to the Argue pool at Step 3 of each exchange. They are fixe
 | Grand Contest (faction-defining) | 5 | Alternating | Standard |
 | Royal Audience | 3 | Crown objects throughout | Halved for petitioner |
 | Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused |
-| Guild Arbitration | 3 | Symmetric before arbiter | Standard |
+| Guild Arbitration | 3 | Symmetric before bench (Panel — ED-1059) | Standard |
 | Casual Dispute | 1 | Initiator proposes | N/A (no tracker) |
 | Private Negotiation | 1–3 | Symmetric | N/A (tracker optional) |
 | Personal Appeal | 1 | Appealer proposes | N/A (tracker optional) |
@@ -106,7 +110,7 @@ The primary attribute for the Argue roll shifts based on the adjudicator type.
 | Expert judge | Cognition | Judge evaluates logical structure |
 | Crowd | Charisma | Crowd responds to delivery and authority |
 | No adjudicator | Attunement | You must read the other party and calibrate |
-| Panel | Cognition | [PROVISIONAL — ED-137: panel mechanics not yet designed; use Expert Judge until designed. Not fully specified.] |
+| Panel | Cognition | Panel DESIGNED (ED-137 CLOSED, ED-1057): Cognition-primary as Expert Judge for the Argue pool; verdict by per-member VoteAtClose ballot aggregated WEIGHTED-BY-STANDING (each juror's ballot counts by its bench-weight = discipline). Reached via Guild Arbitration (ED-1059 rebind). — params/contest.md §Panel Adjudicator. |
 
 TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 Desperate) apply as normal.
 
@@ -181,6 +185,10 @@ Both orators push in the same direction within the same temporal horizon.
 - Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
 - Only one Doubt Marker active at a time. New replaces old.
 - Consumed on use.
+- **Terminal Doubt (Gate B; ED-1060 — OPEN DECISION FOR JORDAN; flagged, pending Jordan's ratification):** an unconsumed Doubt Marker still on the board when the contest CLOSES (a single-exchange proceeding — Casual Dispute, Personal Appeal — or the final exchange of any proceeding, where there is no "next winning exchange" for it to fire on) is applied **once, terminally, against the marked side** (i.e. in the Obscuring winner's / planter's favour — the marker always works against the party it was placed on, exactly as it fires in play: it is placed *on the opponent* (line 180) and reduces *that side's* winning margin (line 181), so its terminal application does likewise; minimum 0). **How it applies is split by the closing proceeding's resolution mechanism**, because banded and raw-tally proceedings expose different quantities and the named single-exchange proceedings do not all resolve the same way:
+  - **(i) Banded** (the Persuasion Track is used — among the single-exchange-capable cases only **Church Tribunal** at length 1): the −2 is subtracted from the closing **margin/band** against the marked side (a Compromise-zone contest slides one step toward the Obscuring winner; cannot flip a decisive band it does not reach).
+  - **(ii) Raw-tally** (no tracker → exchange-majority — **Casual Dispute** always, **Personal Appeal** / **Private Negotiation** by default when run at length 1): there is **no band or margin** to slide (the tally returns raw A / B / draw). Instead the −2 is subtracted from the **marked side's raw exchange advantage** before the majority comparison (minimum 0). A close raw tally can flip toward the Obscuring winner or fall to a draw; the marker can never *manufacture* a lead the planter did not earn — it only removes up to 2 of the marked side's own advantage. *(Tally-scoped alternative: gate Obscuring out of the raw-tally single-exchange proceedings specifically.)*
+  - **Rationale:** without this an Obscuring win in a single/final exchange forgoes *all* track movement for a marker whose sole effect (−2 to a *next* winning exchange) has EV exactly 0 when there is no next exchange — so Suppression is strictly dominated by Precedent and Insinuation by Vision in every single-exchange contest, a dead/dominated choice (churn axiom: every style must be correct *somewhere*). Splitting the rule by mechanism gives the marker a non-zero terminal value in **both** banded and raw-tally proceedings — the original single-clause "margin/band" wording was well-defined only for the banded Church Tribunal and left the raw-tally Casual Dispute / Personal Appeal (the motivating cases) undefined, so Obscuring stayed dominated exactly there. **Alternative (b):** gate Obscuring style-selection out of single-exchange proceedings entirely and document why. Implemented as the terminal-value rule (a); it is a *table/design commitment* only — the resolver does **not** yet consume orientation (Stage-3 CR5 rhetoric-armature scope), so no resolution number changes this pass. Flagged provisional / needs_jordan; couples to the Obscuring flavor (Suppression/Insinuation) which is only behaviorally honest once this is resolved.
 
 **Step 5 — Forfeit actions:**
 - **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max ((3 × Focus) + (2 × Spirit)).
@@ -621,7 +629,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 | ID | Description | Priority |
 |---|---|---|
 | ED-136 | System rename: "Debate" → "Contest" (or alternative). Pending user decision. | P1 |
-| ED-137 | Panel adjudicator type not yet designed. Using Expert Judge as provisional. | P2 |
+| ED-137 | Panel adjudicator type. **CLOSED (Stage 2 / Gate B; ED-1057 aggregation + ED-1059 reachability, both RATIFIED by Jordan):** Panel = bench of individual judges deliberating to a terminal per-member VoteAtClose ballot, aggregated WEIGHTED-BY-STANDING (each juror's ballot counts by its bench-weight = discipline); Cognition-primary as Expert Judge. Reachable in normal play via Guild Arbitration (rebound Expert Judge → Panel; no appeal mechanic). See params/contest.md §Panel Adjudicator. | Resolved |
 | ED-138 | Social first-to-speak deterministic vs rolled. **Resolved (ED-581):** Changed to rolled (Attunement vs Attunement, TN 7, Ob 1). See §5. | Resolved |
 
 ### Carried forward

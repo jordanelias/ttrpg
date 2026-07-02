@@ -101,13 +101,43 @@ class VoteAtClose(WinCondition):
        decides. Models the secret-ballot court that deliberately severs the room from the outcome
        (Athenian dikasteria; thorubos vs the counted vote — research 2026-06-04). `noise` = how independent
        the jury is (low: tracks the room; high: can upset it). Default venues do NOT use this; the fused
-       ThresholdRace/TallyAtClose remain the baseline."""
-    def __init__(self, jurors=7, sharpness=0.6, noise=0.8):
+       ThresholdRace/TallyAtClose remain the baseline.
+
+       AGGREGATION (`aggregation`, ED-1057 — Panel ratification): how the individual ballots combine.
+         'simple_majority'    — one-juror-one-vote; A wins iff votesA*2 > n (the historical default; the
+                                cross-cultural / institutional VoteAtClose venues keep this unchanged).
+         'weighted_by_standing' — each juror's ballot counts in proportion to that juror's BENCH-WEIGHT,
+                                the juror's institutional rank/rigor on this bench. A juror's bench-weight
+                                is its EXISTING Adjudicator.discipline (0–1) — the already-carried per-juror
+                                rigor field — NOT the contestant-side Standing primitive (a different
+                                concept: in-contest credibility). A wins iff the summed weight of the
+                                A-ballots > half the total bench weight, else draw. Ratified for the Panel
+                                adjudicator (Gate B, ED-1057 weighted-by-standing); a heterogeneous bench
+                                need not mirror its highest-weight juror (a low-weight juror crossing the
+                                room can still swing a near-even split, and the summed-weight threshold — not
+                                a single dominant vote — decides)."""
+    def __init__(self, jurors=7, sharpness=0.6, noise=0.8, aggregation="simple_majority"):
         self.jurors = jurors; self.k = sharpness; self.noise = noise
+        self.aggregation = aggregation
     def resolve(self, s, closing, adj=None):
         if not closing: return None
         gap = s.adv[A] - s.adv[B]
         members = getattr(adj, "members", None)
+        if self.aggregation == "weighted_by_standing":
+            # Weighted majority (ED-1057): each juror's ballot counts by its bench-weight (= its
+            # Adjudicator.discipline, the existing per-juror institutional rigor field). No new per-juror
+            # state is invented. A wins iff summed A-weight > half total weight; equal split => draw.
+            if members:
+                weights = [max(0.0, float(getattr(m, "discipline", 0.0))) for m in members]
+            else:
+                weights = [1.0] * self.jurors            # unpaired fallback: uniform => reduces to simple majority
+            total = sum(weights)
+            if total <= 0.0:                             # degenerate all-zero bench => no verdict basis => draw
+                return "draw"
+            wA = sum(w for w in weights if self.k * gap + random.gauss(0, self.noise) > 0)
+            if wA * 2 > total: return A
+            if wA * 2 < total: return B
+            return "draw"
         n = len(members) if members else self.jurors
         votesA = sum(1 for _ in range(n) if self.k * gap + random.gauss(0, self.noise) > 0)
         if votesA * 2 > n: return A

@@ -96,7 +96,7 @@ systems:
     design_doc: designs/architecture/complete_systems_reference.md
     canonical_sha__designs__architecture__complete_systems_reference_md: "875d40e19093f7bf8749aaa99fd149f53306ea15"
     params: params/core.md
-    canonical_sha__params__core_md: "8f13946bf39f15016867d593c597213ebe31dfd0"
+    canonical_sha__params__core_md: "d9bea5cfe524c8c65147bc443f2eea719d71f7de"
     bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
@@ -113,7 +113,7 @@ systems:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "8f44b90d20c7d3c9084f211ea6405c4b615ca712"
+    canonical_sha__params__threadwork_md: "28b36491dc50672faca8e36e0eac8c3efbb4f453"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
@@ -161,26 +161,27 @@ systems:
     canonical_sha__designs__provincial__mass_battle_v30_infill_md: "c4639775db4bd15257a01682c37cb4fc1fa98b5e"
     params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
-  # social_debate SHA-pins refreshed 2026-07-01 for the contest Stage 1d / Gate A
-  # CR1/CR2/CR3 fold-in (ED-1055/ED-1056, provisional — pending Jordan Gate-A
-  # ratification). Pins are the git blob OIDs (LF-normalized, as committed),
-  # computed via `git hash-object <file>` — identical to what freshness_gate.py
-  # --update produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs.
-  # social_contest_v30_index.md was REGENERATED this stage (doc_index_gen.py) so its
-  # Line column + token counts track the CR3 §4 Step 6 insertion; its pin below is the
-  # regenerated file's git-hash-object OID (59b011a0…). The canonical v30 pin (5e6ebc8b…)
-  # also moved this stage — the Finding-4 ED-901+ED-902+ED-933 citation fix at §4 Step 6.
+  # social_debate SHA-pins current as of 2026-07-01 (Contest Stage 2 / Gate B closeout).
+  # Detailed per-round rationale lives in the ED chain, not here (ED-1055/1056 Gate A CR1/CR2/CR3
+  # fold-in; ED-1057 Panel aggregation=weighted-by-standing; ED-1058 Stage-2 dictionaries;
+  # ED-1059 Panel reachability via Guild Arbitration rebind; ED-1060 Terminal Doubt
+  # banded/tally split; ED-1061 Guilds boost=context-derived-from-venue) — all ratified except
+  # where an ED text says otherwise. Pins are git blob OIDs (LF-normalized, as committed),
+  # computed via `git hash-object <file>` — identical to what freshness_gate.py --update
+  # produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs. social_contest_v30_index.md is
+  # REGENERATED (doc_index_gen.py) from the design doc, not hand-edited — re-run the generator
+  # after any structural edit to the design doc, then re-pin both.
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "c407b5a70102d3999d88988a942d2dffdf97bda0"
+    canonical_sha__params__contest_md: "79984a9a4ca32f996ac43589767f55ad1fa2aa23"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "5e6ebc8bb704716b18412b522cb3ce8ce8be79c3"
+    canonical_sha__designs__scene__social_contest_v30_md: "814b0e14370a91965fba235e2ab974b4ed38683d"
     social_contest_index: designs/scene/social_contest_v30_index.md
-    canonical_sha__designs__scene__social_contest_v30_index_md: "59b011a0ce7785b633c0b1a6d38585ef7d63659f"
+    canonical_sha__designs__scene__social_contest_v30_index_md: "5b6977a1507fd0bb82757e6f0fca71deab06ce86"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
-    canonical_sha__designs__scene__social_contest_v30_infill_md: "3878b630d374b2288e7668e1cf468f3a55234b63"
+    canonical_sha__designs__scene__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
     params: params/contest.md
-    canonical_sha__params__contest_md: "c407b5a70102d3999d88988a942d2dffdf97bda0"
+    canonical_sha__params__contest_md: "79984a9a4ca32f996ac43589767f55ad1fa2aa23"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
@@ -228,7 +229,7 @@ systems:
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
     related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "4657f2464a8b35094c0d27d68f82e5ee6660864e"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
@@ -318,7 +319,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "22248bc6b2f0ce3678d494cf314a142c56e595db"
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "8f3c206223622b5816a3a8764416ec5d0468503f"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   conviction_taxonomy:
@@ -390,7 +391,7 @@ systems:
   # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
   arc_expansion:
     design_doc: designs/arcs/arc_expansion_v30.md
-    canonical_sha__designs__arcs__arc_expansion_v30_md: "db91bb86b33c2f37ea3b8e580549c577f5ed0c49"
+    canonical_sha__designs__arcs__arc_expansion_v30_md: "0f3fb011914a0d0908ee0118cab64df16a134dc3"
     index: designs/arcs/arc_expansion_v30_index.md
     canonical_sha__designs__arcs__arc_expansion_v30_index_md: "5f2e99014ee3e06e1e9da6b337f5a9ffdd8e4fd6"
   calamity_radiation:
@@ -418,7 +419,7 @@ systems:
     canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
   faction_politics:
     design_doc: designs/provincial/faction_politics_v30.md
-    canonical_sha__designs__provincial__faction_politics_v30_md: "4e6b5785bf455aecd6095335ff0e6f5ab60c68eb"
+    canonical_sha__designs__provincial__faction_politics_v30_md: "488d6cc8535c65f3cdcbc8eac215eac1becdefb3"
     index: designs/provincial/faction_politics_v30_index.md
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
   investigation:
@@ -442,7 +443,7 @@ systems:
     hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
     editorial: designs/scene/fieldwork_editorial.md
-    canonical_sha__designs__scene__fieldwork_editorial_md: "be85006ea0c15a23f5ea1ae69d87fd3e32c15933"
+    canonical_sha__designs__scene__fieldwork_editorial_md: "4a2003cec32e0e0f4d878cfa1c6ea1e4ac0b9867"
     exploration: designs/scene/fieldwork_exploration.md
     canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
     exposure: designs/scene/fieldwork_exposure.md
@@ -476,7 +477,7 @@ systems:
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
   throughline_resolutions:
     design_doc: designs/arcs/throughline_resolutions_v30.md
-    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "3b90b9ab9ce2a99158dea3bc5637fd2e37de7acf"
+    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "ca4c04179f90a157b2f9b19762a06cb2a3905d9f"
     index: designs/arcs/throughline_resolutions_v30_index.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "5dc526993ff1549be2948f316940be39035b5633"
   ui_ux:
@@ -490,14 +491,14 @@ systems:
     canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
   npc_behavior:
     design_doc: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "4657f2464a8b35094c0d27d68f82e5ee6660864e"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
     npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
-    canonical_sha__designs__npcs__npc_behavior_v30_index_md: "479c32aba5078cc590a1f452249b1c06741e98b1"
+    canonical_sha__designs__npcs__npc_behavior_v30_index_md: "d71b538d8a88bae5937494beb63e43595673f6ff"
     npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "97b9a436114f7504ee789b8662c3252b64e7d617"
+    canonical_sha__references__module_contracts_yaml: "244ae0c7c6cd2c1854188ed2cd175a8a81e65ac6"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

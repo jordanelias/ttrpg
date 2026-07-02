@@ -101,7 +101,10 @@ def build_contest(side_a, side_b, *, venue, adjudicator=None, stakes=None, world
     """Faction/side → Contest ADAPTER (the wrapper's adapter duty). `venue` names a canonical proceeding
        (a key of modes.PROCEEDINGS, e.g. 'formal_contest') OR is a prebuilt Venue. `adjudicator` names a
        canonical adjudicator type (a key of CANONICAL_ADJUDICATORS) OR is a prebuilt Adjudicator/Panel OR
-       None (defaults to the proceeding's canonical adjudicator). `use_tracker` is the tracker tri-state
+       None (defaults to the proceeding's canonical adjudicator). A prebuilt contract.Panel that is NOT
+       already bound to a proceeding's canonical adjudicator is treated as the 'panel' type, so it too
+       closes ED-137 via the VoteAtClose ballot (a named proceeding's own adjudicator is never
+       overridden). `use_tracker` is the tracker tri-state
        opt-in (social_contest_v30 §2:88-89): None keeps the proceeding's canonical default (Private
        Negotiation / Personal Appeal default to exchange-majority TallyAtClose); True opts an "optional"
        proceeding IN to the Persuasion Track. Derives audience resistance from `world` Stability per
@@ -143,9 +146,37 @@ def build_contest(side_a, side_b, *, venue, adjudicator=None, stakes=None, world
         the_adj = CANONICAL_ADJUDICATORS[adjudicator]()
     else:
         the_adj = adjudicator  # prebuilt Adjudicator | Panel
+        # A caller may pass a prebuilt contract.Panel object instead of the string 'panel'. Tag it so
+        # the ED-137 closure below fires — but ONLY when adj_type is still None (a proceeding that
+        # already carries a canonical adjudicator, e.g. the crowd-proceeding path, keeps its type).
+        # NB crowd is itself a Panel subtype (isinstance(crowd, Panel) is True), so guarding on
+        # adj_type is None is what keeps a Crowd proceeding on PersuasionTrack rather than VoteAtClose.
+        if isinstance(adjudicator, Panel) and adj_type is None:
+            adj_type = "panel"
 
     primary = ADJUDICATOR_PRIMARY.get(adj_type) if adj_type else None
     resistance = _derive_resistance(proc_name, world) if proc_name else None
+
+    # ── ED-137 CLOSURE (Gate B, ED-1057): a Panel adjudicator deliberates to a terminal per-member
+    # VoteAtClose ballot (dictionaries.panel_win_condition), NOT the flat single-judge track. This is
+    # the promoted groundup mechanism realizing "multiple individual judges deliberating"
+    # (social_contest_v30 §2 Step 1). ADDITIVE: none of the 8 canonical PROCEEDINGS map to the `panel`
+    # adjudicator, so this fires ONLY when a caller selects the Panel adjudicator — either by
+    # adjudicator='panel' (string), or by passing a prebuilt contract.Panel object that isn't already
+    # bound to a proceeding's canonical adjudicator (the adj_type-is-None tag set above). A named
+    # proceeding's own adjudicator (e.g. crowd, which is itself a Panel subtype) is NOT overridden, so
+    # no existing proceeding's win-condition changes. The aggregation rule (weighted-by-standing) is
+    # RATIFIED (Jordan, Gate B, ED-1057); see dictionaries.PANEL_CLOSURE.
+    if adj_type == "panel":
+        from .dictionaries import panel_win_condition
+        import dataclasses as _dc
+        # Bench size = the paired Panel's actual member count; None => panel_win_condition falls back to
+        # its cited default (modes.panel bench size). No re-typed literal here.
+        n_jurors = len(the_adj.members) if isinstance(the_adj, Panel) else None
+        # Rebuild the venue with the VoteAtClose deliberation win-condition (a Venue is a dataclass;
+        # replace only `win`, leaving every other venue parameter — proof/temporal weights, budget,
+        # faults — as the proceeding/prebuilt venue set them).
+        the_venue = _dc.replace(the_venue, win=panel_win_condition(jurors=n_jurors))
 
     return Contest(side_a=ca, side_b=cb, venue=the_venue, adjudicator=the_adj,
                    game="agon", proceeding=proc_name, adjudicator_type=adj_type,
@@ -212,6 +243,15 @@ _SYMBOLS = {
     # CR3 three-tracker model (RATIFIED_2026-06-01.md CR3)
     "Face": Face, "TRACKERS": TRACKERS,
 }
+# Stage 2 / Gate B typed dictionaries (imported lazily to avoid a cycle: dictionaries imports modes,
+# which the wrapper already imports; the dictionaries import resolver, already imported above).
+from . import dictionaries as _dict
+_SYMBOLS.update({
+    "STYLES_TABLE": _dict.STYLES_TABLE, "INTERACTIONS_TABLE": _dict.INTERACTIONS_TABLE,
+    "derive_interaction": _dict.derive_interaction, "ADJUDICATORS_TABLE": _dict.ADJUDICATORS_TABLE,
+    "FACTION_BOOSTS": _dict.FACTION_BOOSTS, "PROCEEDINGS_TABLE": _dict.PROCEEDINGS_TABLE,
+    "panel_win_condition": _dict.panel_win_condition, "PANEL_CLOSURE": _dict.PANEL_CLOSURE,
+})
 def _resolve(sym):
     return _SYMBOLS.get(sym)
 
@@ -248,6 +288,15 @@ MECHANICS = {
     # excluded from the WIRED self-test's liveness assertion.
     "audience_resistance": {"fn":"_derive_resistance","toggle":None, "source":"params/contest.md §Persuasion Track (avg Stability round up −1, min 0) — DERIVED but not yet plumbed into resolution (ED-1055..1079)", "status":"PARTIAL"},
     "exchange_majority":   {"fn":"TallyAtClose",     "toggle":None, "source":"social_contest_v30 §2 Step 4 (untracked -> exchange majority)", "status":"WIRED"},
+    # ── Stage 2 / Gate B: typed dictionaries (dataclasses; NO Godot YAML per locked decision 3) ──
+    "styles_table":        {"fn":"STYLES_TABLE",       "toggle":None, "source":"params/contest.md §Argument Styles (PP-235) — Style×4 + flavor (locked decision 5)", "status":"WIRED"},
+    "interaction_types":   {"fn":"INTERACTIONS_TABLE", "toggle":None, "source":"params/contest.md §Interaction Types; social_contest_v30 §4 Step 4 — InteractionType×4", "status":"WIRED"},
+    "derive_interaction":  {"fn":"derive_interaction", "toggle":None, "source":"social_contest_v30 §4 Step 4 (genre/orientation -> CLASH/REINFORCE/CROSS) — canonical typed lookup", "status":"WIRED"},
+    "adjudicators_table":  {"fn":"ADJUDICATORS_TABLE", "toggle":None, "source":"social_contest_v30 §2 Step 1 / §3 Argue Pool — AdjudicatorType×4 (typed surface)", "status":"WIRED"},
+    "faction_boosts":      {"fn":"FACTION_BOOSTS",     "toggle":None, "source":"params/contest.md §Faction Boosts — 6 core factions + Löwenritter (conditional)", "status":"WIRED"},
+    "proceedings_table":   {"fn":"PROCEEDINGS_TABLE",  "toggle":None, "source":"params/contest.md §Proceeding Types — Proceeding×8 + flavor (locked decision 5); cross-checked vs modes.PROCEEDINGS", "status":"WIRED"},
+    # ── Stage 2 / Gate B: ED-137 Panel closure (VoteAtClose per-member ballot) ──
+    "panel_deliberation":  {"fn":"panel_win_condition","toggle":None, "source":"social_contest_v30 §2 Step 1 (Panel) — ED-137 CLOSED (ED-1057): VoteAtClose per-member ballot", "status":"WIRED"},
     # resolution core (the promoted kernel this wrapper routes to)
     "agon_bout":           {"fn":"Bout",             "toggle":None, "source":"promoted groundup kernel (Persuasion-Track agôn path)", "status":"WIRED"},
     # other games — registered STUB rows for later stages

@@ -72,6 +72,13 @@ from .modes import (  # noqa: F401
 from .wrapper import (  # noqa: F401  (Stage 1c: build/resolve adapter+router)
     build_contest, resolve_contest, Contest, GAMES, MECHANICS, mechanics_selftest,
 )
+from .dictionaries import (  # noqa: F401  (Stage 2 / Gate B: typed dictionaries + flavor + ED-137 closure)
+    Genre, Orientation, Style, STYLES_TABLE, STYLE_BY_AXES,
+    InteractionType, INTERACTIONS_TABLE, derive_interaction,
+    AdjudicatorType, ADJUDICATORS_TABLE, FactionBoost, FACTION_BOOSTS,
+    Proceeding, PROCEEDINGS_TABLE, _crosscheck_proceedings,
+    PANEL_AGGREGATION, PANEL_CLOSURE, panel_win_condition,
+)
 from . import policy      # noqa: F401
 from . import faction     # noqa: F401
 from . import narrative   # noqa: F401
@@ -97,4 +104,10 @@ __all__ = [
     "proceeding_venue", "proceeding_mode",
     "build_contest", "resolve_contest", "Contest", "GAMES", "MECHANICS", "mechanics_selftest",
     "policy", "faction", "narrative", "POLICIES",
+    # Stage 2 / Gate B typed dictionaries + flavor + ED-137 Panel closure:
+    "Genre", "Orientation", "Style", "STYLES_TABLE", "STYLE_BY_AXES",
+    "InteractionType", "INTERACTIONS_TABLE", "derive_interaction",
+    "AdjudicatorType", "ADJUDICATORS_TABLE", "FactionBoost", "FACTION_BOOSTS",
+    "Proceeding", "PROCEEDINGS_TABLE",
+    "PANEL_AGGREGATION", "PANEL_CLOSURE", "panel_win_condition",
 ]

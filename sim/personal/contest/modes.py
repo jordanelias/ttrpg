@@ -427,9 +427,14 @@ PROCEEDINGS = {
         exchanges=(1, 5), roles="inquisitor_proposes", resistance="halved_accused",
         adjudicator="expert_judge", track_start=CHURCH_TRIBUNAL_TRACK_START, tracker=True,
         tracker_mode="required"),  # §7: track starts biased at 6
-    "guild_arbitration": dict(    # "Guild Arbitration | 3 | Symmetric | Standard | Expert Judge"
+    "guild_arbitration": dict(    # "Guild Arbitration | 3 | Symmetric | Standard | Panel"
+        # ED-1059 REBIND (Jordan, Gate B): adjudicator expert_judge -> PANEL. Closes the original ED-137
+        # note ("Panel not yet designed; use Expert Judge as provisional") exactly as it always pointed —
+        # Guild Arbitration's canon flavor already says "Masters arbitrate" (plural = a seated bench). No
+        # appeal mechanic (Jordan: "let the decision ride"); 8-proceeding roster unchanged. Panel routes to
+        # the VoteAtClose weighted-by-standing ballot via build_contest's panel branch (wrapper.py).
         exchanges=(3, 3), roles="symmetric", resistance="standard",
-        adjudicator="expert_judge", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
+        adjudicator="panel", track_start=CANONICAL_TRACK_START, tracker=True, tracker_mode="required"),
     "casual_dispute": dict(       # "Casual Dispute | 1 | Initiator proposes | N/A | No Adjudicator"
         exchanges=(1, 1), roles="initiator_proposes", resistance="none",  # social_contest_v30:87 "N/A (no tracker)"
         adjudicator="no_adjudicator", track_start=CANONICAL_TRACK_START, tracker=False, tracker_mode="none"),
@@ -462,10 +467,24 @@ def proceeding_venue(name, *, use_tracker=None, **o):
        PersuasionTrack; "none" => always exchange-majority TallyAtClose; "optional" (Private Negotiation
        / Personal Appeal) => TallyAtClose BY DEFAULT, or PersuasionTrack when the caller opts in via
        use_tracker=True. Proof/temporal registers are NOT re-invented — a proceeding inherits the
-       groundup default register unless a caller overrides. RESOLVES NOTHING."""
+       groundup default register unless a caller overrides. RESOLVES NOTHING.
+
+       ED-137/ED-1057/ED-1059 PANEL CLOSURE: a proceeding whose adjudicator is 'panel' (Guild Arbitration,
+       rebound Gate B) resolves on the terminal per-member VoteAtClose ballot (weighted-by-standing), NOT
+       the Persuasion-Track band — so ANY entry point (proceeding_mode here, build_contest in the wrapper)
+       yields a coherent Panel venue. The bench-size default is dictionaries.PANEL_DEFAULT_JURORS; at
+       resolve time VoteAtClose reads the paired Panel's actual members for count + per-juror weights. Lazy
+       import breaks the dictionaries<->modes cycle (dictionaries imports modes)."""
     spec = PROCEEDINGS[name]
     budget = spec["exchanges"][1]
-    win = PersuasionTrack(start=spec["track_start"]) if _use_tracker(spec, use_tracker) else TallyAtClose()
+    tracker_on = _use_tracker(spec, use_tracker)   # also validates: required/none proceedings reject opt-in
+    if spec["adjudicator"] == "panel":
+        from .dictionaries import panel_win_condition
+        win = panel_win_condition()   # weighted-by-standing VoteAtClose (ED-1057); reads members at resolve
+    elif tracker_on:
+        win = PersuasionTrack(start=spec["track_start"])
+    else:
+        win = TallyAtClose()
     return Venue(budget=budget, win=win, **o)
 
 def proceeding_mode(name, *, use_tracker=None, **o):
