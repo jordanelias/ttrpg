@@ -22,7 +22,13 @@ RECORD SCHEMA (per weapon):
              · pommel/butt={x_m, mass_kg} (omitted when absent). All positions in METRES, x=0 at the working hand,
              +toward the tip, −toward the butt (weapon_physics.derive()'s axis).
   GEOMETRY   geometry=dict(curvature, point_concentration, cross_section, edge_keenness, strike_concentration) -> bake
-             (whole-weapon combat-shape primitives; per-element mode geometry for composites is a later Phase-B step)
+             (whole-weapon combat-shape primitives — the default every weapon reads unless it has mode_elements)
+  MODES      mode_elements=[{head, geometry}] (Phase B2, 8 weapons only: poleaxe, bec_de_corbin, lucerne_hammer,
+             ji, goedendag, guisarme, kama_yari, voulge) — the striking elements that afford GENUINELY DIFFERENT
+             fight-modes (swing the hammer face vs thrust the spike), each with its own head token + per-element
+             geometry, grounded against Phase 0 specimen research and independently adversarially verified. This
+             is a PARALLEL view onto the mass-model `elements` (a composite can have multiple mass elements
+             without multiple modes, e.g. flamberge's forte/tip/ricasso — one continuous edge, no mode_elements).
   LEGACY (derived in weapon_physics; live until the wt/spd/hand de-leak lands): reach{long/short} · wt{light/heavy} ·
              spd · hand{Forgiving/Standard/Demanding}.  `gap`/`geo` are DERIVED by the bake below.
 """
@@ -162,6 +168,11 @@ WEAPONS = {
    haft=dict(x_m=0.0, mass_kg=1.013, extent_m=1.8),
    butt=dict(x_m=-0.9, mass_kg=0.22),
    geometry=dict(curvature=0.0, point_concentration=0.78, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.85),
+   mode_elements=[
+     dict(head='blunt', geometry=dict(curvature=0.00, point_concentration=0.02, cross_section=0.85, edge_keenness=0.00, strike_concentration=0.75)),  # hammer face (front, blunt square/pyramidal-studded striking face)
+     dict(head='point', geometry=dict(curvature=0.25, point_concentration=0.60, cross_section=0.80, edge_keenness=0.00, strike_concentration=0.00)),  # beak/fluke (rear-facing curved spike/hook, opposite the hammer)
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.85, cross_section=0.90, edge_keenness=0.00, strike_concentration=0.00)),  # top spike (langet-mounted, forward-thrusting point above the hammer/beak)
+    ],
    reach='long', wt='heavy', spd=-0.5, hand='Demanding'),
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form.
  'longsword_halfsword': dict(
@@ -199,6 +210,11 @@ WEAPONS = {
     ],
    haft=dict(x_m=0.743, mass_kg=0.9897, extent_m=2.0001),
    geometry=dict(curvature=0.1, point_concentration=0.8, cross_section=0.78, edge_keenness=0.42, strike_concentration=0.0),
+   mode_elements=[
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.85, cross_section=0.80, edge_keenness=0.32, strike_concentration=0.00)),  # main_point
+     dict(head='curved_cut', geometry=dict(curvature=0.55, point_concentration=0.10, cross_section=0.45, edge_keenness=0.65, strike_concentration=0.00)),  # cross_blade_left
+     dict(head='curved_cut', geometry=dict(curvature=0.55, point_concentration=0.10, cross_section=0.45, edge_keenness=0.65, strike_concentration=0.00)),  # cross_blade_right
+    ],
    reach='long', wt='light', spd=0, hand='Demanding'),
  'dangpa': dict(
    mass=1.8392, head_len=6.4933, grip_len=1.1397, hands=2, head='point', clinch=2, hand_guard=0.05, blade_guard=0.55,
@@ -341,6 +357,10 @@ WEAPONS = {
     ],
    haft=dict(x_m=0.85, mass_kg=1.15, extent_m=2.0),
    geometry=dict(curvature=0.1, point_concentration=0.55, cross_section=0.65, edge_keenness=0.8, strike_concentration=0.1),
+   mode_elements=[
+     dict(head='cut_thrust', geometry=dict(curvature=0.15, point_concentration=0.30, cross_section=0.65, edge_keenness=0.80, strike_concentration=0.00)),  # cleaver_blade
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.68, cross_section=0.78, edge_keenness=0.15, strike_concentration=0.00)),  # thrusting_heel_spike
+    ],
    reach='long', wt='heavy', spd=0, hand='Standard'),
  'guisarme': dict(
    mass=1.8663, head_len=3.4557, grip_len=3.5443, hands=2, head='cut_thrust', clinch=2, hand_guard=0.15, blade_guard=0.35,
@@ -352,6 +372,10 @@ WEAPONS = {
    haft=dict(x_m=-0.0133, mass_kg=1.4963, extent_m=2.1),
    butt=dict(x_m=-1.0633, mass_kg=0.12),
    geometry=dict(curvature=0.2, point_concentration=0.55, cross_section=0.68, edge_keenness=0.55, strike_concentration=0.0),
+   mode_elements=[
+     dict(head='cut_thrust', geometry=dict(curvature=0.35, point_concentration=0.30, cross_section=0.55, edge_keenness=0.60, strike_concentration=0.00)),  # hooked cutting blade
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.80, cross_section=0.85, edge_keenness=0.00, strike_concentration=0.00)),  # reverse thrusting spike
+    ],
    reach='long', wt='light', spd=0.0, hand='Standard'),
  'ji': dict(
    mass=2.1, head_len=3.8483, grip_len=4.1517, hands=2, head='cut_thrust', clinch=3, hand_guard=0.25, blade_guard=0.75,
@@ -363,6 +387,10 @@ WEAPONS = {
    haft=dict(x_m=-0.0455, mass_kg=1.71, extent_m=2.4),
    butt=dict(x_m=-1.2455, mass_kg=0.1),
    geometry=dict(curvature=0.2, point_concentration=0.62, cross_section=0.72, edge_keenness=0.55, strike_concentration=0.0),
+   mode_elements=[
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.75, cross_section=0.80, edge_keenness=0.40, strike_concentration=0.00)),  # straight spearhead (thrusting point)
+     dict(head='curved_cut', geometry=dict(curvature=0.45, point_concentration=0.05, cross_section=0.62, edge_keenness=0.75, strike_concentration=0.05)),  # perpendicular crescent (yueyadao) blade
+    ],
    reach='long', wt='light', spd=0.0, hand='Standard'),
  'bec_de_corbin': dict(
    mass=2.4534, head_len=2.8723, grip_len=3.1277, hands=2, head='blunt', clinch=8, hand_guard=0.3, blade_guard=0.15, reach_adj=-0.05,
@@ -379,6 +407,11 @@ WEAPONS = {
    haft=dict(x_m=-0.0383, mass_kg=1.5834, extent_m=1.8),
    butt=dict(x_m=-0.9383, mass_kg=0.2),
    geometry=dict(curvature=0.0, point_concentration=0.86, cross_section=0.9, edge_keenness=0.25, strike_concentration=0.8),
+   mode_elements=[
+     dict(head='blunt', geometry=dict(curvature=0.00, point_concentration=0.02, cross_section=0.88, edge_keenness=0.00, strike_concentration=0.50)),  # hammer face
+     dict(head='point', geometry=dict(curvature=0.55, point_concentration=0.62, cross_section=0.75, edge_keenness=0.00, strike_concentration=0.00)),  # curved beak (bec de corbin)
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.88, cross_section=0.85, edge_keenness=0.00, strike_concentration=0.00)),  # top spike
+    ],
    reach='long', wt='heavy', spd=-0.5, hand='Standard'),
  'lucerne_hammer': dict(
    mass=2.4834, head_len=2.8717, grip_len=3.1283, hands=2, head='blunt', clinch=7, hand_guard=0.05, blade_guard=0.15, reach_adj=-0.05,
@@ -391,6 +424,11 @@ WEAPONS = {
    haft=dict(x_m=-0.0385, mass_kg=1.5834, extent_m=1.8),
    butt=dict(x_m=-0.9385, mass_kg=0.2),
    geometry=dict(curvature=0.0, point_concentration=0.8, cross_section=0.9, edge_keenness=0.2, strike_concentration=0.62),
+   mode_elements=[
+     dict(head='blunt', geometry=dict(curvature=0.00, point_concentration=0.02, cross_section=0.90, edge_keenness=0.00, strike_concentration=0.45)),  # hammer face (4-tine fluke, striking side)
+     dict(head='blunt', geometry=dict(curvature=0.00, point_concentration=0.08, cross_section=0.90, edge_keenness=0.00, strike_concentration=0.62)),  # 3-4 tine fluke (rear beak)
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.80, cross_section=0.88, edge_keenness=0.00, strike_concentration=0.00)),  # top spike
+    ],
    reach='long', wt='heavy', spd=-0.5, hand='Demanding'),
  'goedendag': dict(
    mass=1.796, head_len=3.3333, grip_len=0.6667, hands=2, head='blunt', clinch=4, hand_guard=0.1, blade_guard=0.15,
@@ -401,6 +439,10 @@ WEAPONS = {
     ],
    haft=dict(x_m=0.4, mass_kg=1.336, extent_m=1.2),
    geometry=dict(curvature=0.0, point_concentration=0.25, cross_section=0.55, edge_keenness=0.1, strike_concentration=0.3),
+   mode_elements=[
+     dict(head='blunt', geometry=dict(curvature=0.00, point_concentration=0.03, cross_section=0.60, edge_keenness=0.00, strike_concentration=0.35)),  # tapering club body (extended wooden mass element)
+     dict(head='point', geometry=dict(curvature=0.00, point_concentration=0.75, cross_section=0.88, edge_keenness=0.00, strike_concentration=0.00)),  # iron spike (tanged, thrusting point)
+    ],
    reach='short', wt='heavy', spd=0.0, hand='Forgiving'),
  'katana': dict(
    mass=1.025, head_len=2.1467, grip_len=1.0863, hands=2, head='curved_cut', clinch=5, hand_guard=0.35, blade_guard=0.28,
@@ -692,6 +734,15 @@ for _w, _rec in WEAPONS.items():
     _b = _geo.bake(_rec['geometry'])
     _rec['gap'] = _b['gap']
     _rec['geo'] = _b   # full baked surface available to modules
+
+# Bake each MULTI-MODE composite's per-element combat geometry ONCE at import (morphology-rearch Phase B2:
+# the located mass elements now have a parallel combat-geometry view for weapons whose parts afford genuinely
+# different fight-modes — a bec de corbin's hammer face vs beak vs spike — grounded per-element against Phase 0
+# geom_notes, see designs/audit/2026-07-02-morphology-rearch-phase0/. Single-mode weapons carry no
+# `mode_elements` key; systems._mode_elements() already defaults them to the whole-weapon head+geo.
+for _w, _rec in WEAPONS.items():
+    for _me in _rec.get('mode_elements', ()):
+        _me['geo'] = _geo.bake(_me.pop('geometry'))
 
 # Bake the derive() mass-family statistics ONCE at import (honors the bake-once contract — derive() was
 # recomputed many times per beat via agility/at_grip/defense_affinities/percussion_authority; the record's

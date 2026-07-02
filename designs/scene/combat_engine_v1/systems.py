@@ -218,22 +218,30 @@ SELECT_PC_MIN = 0.10      # [DESIGN] raw point_concentration below which a head 
                           #   mace-vs-poleaxe spike distinction EMERGES from morphology, not a weapon name.
 
 def _mode_elements(w):
-    """The weapon's MODE-ELEMENTS — the located striking elements whose geometry affords fight-modes. Phase A
-    (re-architecture 2026-07-02) reproduction: with no explicit `mode_elements` list, ONE element is synthesized
-    carrying the weapon's own head token + baked geo surface, so the element-union below reproduces the prior
-    whole-weapon logic byte-identically (parity-harness-proven). Phase B populates real multi-element lists
-    (bec de corbin = hammer + beak + spike, each with its own geom) — the mirror of weapon_physics._head_elements
-    on the mass side. Pure."""
+    """The weapon's MODE-ELEMENTS — the located striking elements whose geometry affords fight-modes. Morphology-
+    rearch Phase B2 (2026-07-02) populated real multi-element `mode_elements` lists for the 8 weapons whose parts
+    afford genuinely different fight-modes (bec de corbin = hammer/blunt + beak/point + spike/point, each with its
+    own per-element geometry grounded against Phase 0 specimen research — see designs/audit/2026-07-02-morphology-
+    rearch-phase0/). A weapon with no explicit `mode_elements` (everything else — including composites whose extra
+    mass elements are a mass-model subdivision only, e.g. flamberge's forte/tip/ricasso, or catching hardware like
+    a partisan's wing-lugs) synthesizes ONE element carrying its own whole-weapon head token + baked geo, so the
+    element-union below is the weapon's existing single-mode behaviour unchanged. Mirrors weapon_physics.
+    _head_elements on the mass side. Pure."""
     els = w.get('mode_elements')
     if els:
         return els
     return [dict(head=w['head'], geo=w['geo'])]
 
 def element_afforded(el, w):
-    """The afforded head TOKENS of ONE striking element — the per-element scope of the prior whole-weapon branch
-    logic, unchanged (including the SELECT_PC_MIN emergent-spike gate, retained through Phase A; Phase B retires it
-    by giving composites REAL point-elements). percussion authority stays whole-weapon in Phase A (per-element mass
-    arrives with Phase B's physical part masses). Pure."""
+    """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
+    [PHASE-B3 PENDING] the SELECT_PC_MIN gate below still applies to explicit point-tokened mode_elements (every
+    authored element in the roster today comfortably clears it, so nothing is filtered YET), but the plan calls for
+    retiring the threshold in favour of "affords a point iff it HAS a point-element" once this is coupled with the
+    real composites landed in B2 — TODO B3. percussion authority also stays WHOLE-WEAPON here (a lucerne_hammer's
+    two blunt elements both read the same weapon-level percussion_authority(w) rather than their own individual
+    mass+position) — a precision gap, not a correctness bug (it is the same formula every single-mode blunt weapon
+    already uses); per-element percussion authority is a B3/B6 item (the plan's re-source table row for core.py's
+    `strike`)."""
     geo=el['geo']; head=el['head']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
@@ -251,10 +259,11 @@ def element_afforded(el, w):
 
 def afforded_heads(w):
     """The set of head TOKENS this weapon can fight in — the UNION over its mode-elements of each element's
-    afforded tokens (best effectiveness per token). RE-ARCHITECTURE 2026-07-02 (Phase A): restructured from a
-    single whole-weapon branch to element-union so a multi-element head (Phase B) affords each element's modes;
-    with the Phase-A synthesized single element this is byte-identical to the prior logic. Each token maps to
-    (derived effectiveness, damage_mode); no per-weapon list, no name/kind branching (the L0 primitive-law). Pure."""
+    afforded tokens (best effectiveness per token). Element-union structure so a multi-element head (bec de
+    corbin, lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, poleaxe) affords each of its elements'
+    modes; a single-mode weapon's synthesized one-element list reproduces its prior whole-weapon behaviour
+    unchanged. Each token maps to (derived effectiveness, damage_mode); no per-weapon list, no name/kind
+    branching (the L0 primitive-law). Pure."""
     heads={}
     for el in _mode_elements(w):
         for tok,(eff,dm) in element_afforded(el, w).items():

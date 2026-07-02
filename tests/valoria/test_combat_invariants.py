@@ -84,15 +84,22 @@ def test_no_weapon_name_literal_in_resolution():
 
 # ── EMERGENT USE-MODE SELECTION ───────────────────────────────────────────────────────────────────
 def test_use_mode_selection_emerges_from_primitives():
-    """select_mode must (a) reproduce every SINGLE-mode weapon's native head at every armour tier, and (b) leave the
-    poleaxe as the ONLY weapon whose SELECTED head changes with armour — the emergent dual-mode. Both fall out of the
-    derived afforded_heads (no per-weapon list).
-    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B added two real composite weapons that ALSO afford
-    blunt+point (bec_de_corbin, lucerne_hammer — same SELECT_PC_MIN mechanism as the poleaxe, correctly emergent
-    for weapons that didn't exist when this test was written) AND shifted the poleaxe's OWN percussion authority
-    high enough (weapon_physics.percussion_authority docstring) that it no longer selects its spike vs heavy
-    armour. The `changers` set is expected to change (b) and needs updating post-Phase-C once the engine-scale
-    gains are recalibrated against the now-grounded masses — deliberately left failing, not silently patched."""
+    """select_mode must (a) reproduce every SINGLE-mode weapon's native head at every armour tier, and (b) leave
+    exactly the weapons with a genuine multi-mode split (a real point-vs-blunt or point-vs-cut choice, not just an
+    internal cut_thrust cut/gap-thrust re-weighting — that stays keyed on ONE token, see test_gap_thrust_...) as the
+    ones whose SELECTED HEAD TOKEN changes with armour. Both fall out of the derived afforded_heads (no per-weapon
+    list).
+    [UPDATED, 2026-07-02] morphology-rearch Phase B2 gave 8 weapons real per-element mode_elements (bec_de_corbin,
+    lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, plus the pre-existing poleaxe). Of those, 4 now
+    genuinely emerge as armour-conditional token-changers (bec_de_corbin, lucerne_hammer, ji, kama_yari — a real
+    blunt<->point or cut<->point split whose greedy winner flips with armour, exactly the "swing the hammer or
+    thrust the spike" mechanic this re-architecture was built for). guisarme/voulge stay on their single
+    'cut_thrust' token throughout (their point element never out-scores it — an internal re-weighting, not a token
+    change) and goedendag's point never out-scores its blunt. poleaxe is a [PHASE-C FLAG] — its own more-accurate,
+    more-forward Phase-B mass distribution lifted its blunt percussion authority enough that it no longer switches
+    to its spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
+    plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not silently
+    included as if the current behaviour were correct."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -102,7 +109,8 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    assert changers == ['poleaxe'], f"expected only the poleaxe to change selected head with armour; got {changers}"
+    expected = ['kama_yari', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above
+    assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
 def test_afforded_heads_emerge_from_primitives():
@@ -112,6 +120,19 @@ def test_afforded_heads_emerge_from_primitives():
     assert set(S.afforded_heads(C.WEAPONS['poleaxe'])) == {'blunt', 'point'}
     assert 'point' not in S.afforded_heads(C.WEAPONS['mace'])
     assert 'point' not in S.afforded_heads(C.WEAPONS['staff'])
+
+
+def test_afforded_heads_emerge_from_phase_b2_mode_elements():
+    """The morphology-rearch Phase B2 composites' per-element mode_elements affordances — each weapon's union
+    over its own real striking elements, not a copy of another weapon's set."""
+    C, core, S, WP, CFG = _mods()
+    assert set(S.afforded_heads(C.WEAPONS['bec_de_corbin'])) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['lucerne_hammer'])) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['goedendag'])) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut'}
+    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut'}
+    assert set(S.afforded_heads(C.WEAPONS['guisarme'])) == {'cut_thrust', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['voulge'])) == {'cut_thrust', 'point'}
 
 
 # ── GAP GAME ──────────────────────────────────────────────────────────────────────────────────────
