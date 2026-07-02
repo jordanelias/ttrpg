@@ -86,9 +86,26 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     Padgett robust action; Putnam two-level bargaining) is not yet in the code. Plan amended: Stage 3 (armature)
     and Stage 4 (four games) agonists must now READ the source-research trilogy directly, not just the critique
     distillation, so this commissioned scholarship actually reaches the implementation.
-  - **NEXT: Stage 3** (rhetoric grounding + adjudicator armature — CR4 stasis, CR5 self-gating, the
-    Style×Conviction dot-product aimed at the judge — reading the source-research trilogy per above,
-    not just the critique distillation).
+  - **Stage 3 / Gate C DONE + committed (54d04250).** CR4 (Ciceronian 6-rung stasis ladder now drives the
+    genre +1D; the reachability gap — every proceeding opened Quality-default, so the conjectural/Memory
+    stasis was unreachable in all 8 — fixed by opening Church Tribunal at Fact) and CR5 (a failed Obscuring
+    move now strips the mover's own Face, standing-bounded, kept together with the Gate-B Doubt Marker as
+    the full realization) are now mechanical, not nominal. New adjudicator **armature**: a continuous
+    4-axis (Evidence/Consequence/Authority/Insinuation) Style×Conviction dot-product entering resolution
+    as a δσ leverage shift (not a rounded pool die), gated off in asymmetric proceedings, revealed only
+    PARTIALLY via Appraise (grounded in Greif/Padgett from the source-research trilogy — the style choice
+    stays a bet, not a solved lookup). New modules: `sim/personal/contest/{armature,rhetoric,appraise}.py`.
+    Four Jordan-ratified decisions filed directly as ED-1062 (armature keeps Insinuation as a deliberate
+    new 4th axis, not canon's Solidarity; 2-genre epideictic compression accepted as-is; CR5 keeps both
+    halves together; reachability fixed via Church Tribunal only). The finalize pass crashed on a session
+    limit mid-flight but its tool-call side effects (the reachability fix, full canon propagation, ED-1062)
+    persisted; a follow-up Sonnet-tier verification pass (the first antagonist check that actually ran)
+    caught and fixed one real minor defect (stale provisional language in one field of `CR5_SELF_GATING`).
+    1041 sim+valoria + 385 kernel tests green; freshness gate clean.
+  - **NEXT: Stage 4** (the four deliberative games — Agôn/Negotiation/Inquiry/Consensus — parallel fan-out,
+    reading the source-research trilogy directly per the Stage-3 grounding pattern: the `liberum veto` as a
+    self-undermining equilibrium for Consensus's frivolous-block antibody, Dowlen's weighted lottery for
+    `WeightedLot`/alea, Putnam two-level bargaining for Negotiation's ZOPA).
 
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
