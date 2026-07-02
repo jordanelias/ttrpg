@@ -217,13 +217,24 @@ SELECT_PC_MIN = 0.10      # [DESIGN] raw point_concentration below which a head 
                           #   0.78 / spear 0.78 -> a real point. Reads the raw primitive the design names, so the
                           #   mace-vs-poleaxe spike distinction EMERGES from morphology, not a weapon name.
 
-def afforded_heads(w):
-    """The set of head TOKENS this weapon can fight in, DERIVED from its geometry primitives (NOT a per-weapon list).
-    Each maps token -> (derived effectiveness, damage_mode). A natively-versatile cut_thrust head stays ATOMIC (the
-    engine's coupling/adef/legibility already resolve its cut<->gap-thrust internally) so its current behaviour is
-    preserved exactly. A blunt head additionally affords the 'point' spike-thrust IFF it has a real piercing point
-    (point_concentration > PC_MIN) — the poleaxe's beak emerges, the mace's flat face does not. Pure."""
-    geo=w['geo']; head=w['head']; pc=geo['point_concentration']
+def _mode_elements(w):
+    """The weapon's MODE-ELEMENTS — the located striking elements whose geometry affords fight-modes. Phase A
+    (re-architecture 2026-07-02) reproduction: with no explicit `mode_elements` list, ONE element is synthesized
+    carrying the weapon's own head token + baked geo surface, so the element-union below reproduces the prior
+    whole-weapon logic byte-identically (parity-harness-proven). Phase B populates real multi-element lists
+    (bec de corbin = hammer + beak + spike, each with its own geom) — the mirror of weapon_physics._head_elements
+    on the mass side. Pure."""
+    els = w.get('mode_elements')
+    if els:
+        return els
+    return [dict(head=w['head'], geo=w['geo'])]
+
+def element_afforded(el, w):
+    """The afforded head TOKENS of ONE striking element — the per-element scope of the prior whole-weapon branch
+    logic, unchanged (including the SELECT_PC_MIN emergent-spike gate, retained through Phase A; Phase B retires it
+    by giving composites REAL point-elements). percussion authority stays whole-weapon in Phase A (per-element mass
+    arrives with Phase B's physical part masses). Pure."""
+    geo=el['geo']; head=el['head']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
         heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture')
@@ -232,11 +243,26 @@ def afforded_heads(w):
     elif head=='point':                                              # pure point
         if geo['gap']>SELECT_EPS and pc>SELECT_PC_MIN: heads['point']=(geo['gap'], 'puncture')
     elif head=='blunt':                                              # striking head
-        if WP.percussion_authority(w)>SELECT_EPS: heads['blunt']=(WP.percussion_authority(w), 'percussion')
+        pa=WP.percussion_authority(w)
+        if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion')
         if pc>SELECT_PC_MIN and geo['gap']>SELECT_EPS:               # a beak/spike: a real point ON a blunt haft
             heads['point']=(geo['gap'], 'puncture')
+    return heads
+
+def afforded_heads(w):
+    """The set of head TOKENS this weapon can fight in — the UNION over its mode-elements of each element's
+    afforded tokens (best effectiveness per token). RE-ARCHITECTURE 2026-07-02 (Phase A): restructured from a
+    single whole-weapon branch to element-union so a multi-element head (Phase B) affords each element's modes;
+    with the Phase-A synthesized single element this is byte-identical to the prior logic. Each token maps to
+    (derived effectiveness, damage_mode); no per-weapon list, no name/kind branching (the L0 primitive-law). Pure."""
+    heads={}
+    for el in _mode_elements(w):
+        for tok,(eff,dm) in element_afforded(el, w).items():
+            if tok not in heads or eff>heads[tok][0]:
+                heads[tok]=(eff,dm)
     if not heads:                                                    # degenerate fallback: never strip all modes
-        heads[head]=(0.0, core.HEAD_MODE.get(head, 'shear'))
+        h=w['head']
+        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'))
     return heads
 
 def select_mode(c, defender_armor, closed, cfg):

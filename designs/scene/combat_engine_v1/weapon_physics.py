@@ -111,7 +111,12 @@ def _head_elements(w):
 
 def derive(w):
     """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Consumes
-    {mass, head_len, grip_len, pommel_kg, wclass, hilt, haft_d, butt_kg, gripped, elements}."""
+    {mass, head_len, grip_len, pommel_kg, wclass, hilt, haft_d, butt_kg, gripped, elements}. Roster records
+    carry a bake-once '_derived' cache (weapons.py import loop) — mutation after bake is out of contract,
+    same as the baked geo/gap; synthetic dicts without the key compute fresh."""
+    cached = w.get('_derived')
+    if cached is not None:
+        return cached
     hl, gl = w['head_len'], w['grip_len']
     m, cls = w['mass'], w.get('wclass', 'bladed')
     Lg, Lh = gl * UNIT_M, hl * UNIT_M

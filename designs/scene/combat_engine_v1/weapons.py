@@ -86,6 +86,15 @@ for _w, _rec in WEAPONS.items():
     _rec['gap'] = _b['gap']
     _rec['geo'] = _b   # full baked surface available to modules
 
+# Bake the derive() mass-family statistics ONCE at import (re-architecture 2026-07-02 Phase A: honors the
+# bake-once contract — derive() was recomputed many times per beat via agility/at_grip/defense_affinities/
+# percussion_authority; the record's located parts are static, so the result is too). weapon_physics.derive
+# returns the cached '_derived' when present; a record mutated after bake is OUT OF CONTRACT, exactly as it
+# already is for the baked geo/gap above. Cycle-free: weapon_physics imports only math at module scope.
+import weapon_physics as _wp
+for _w, _rec in WEAPONS.items():
+    _rec['_derived'] = _wp.derive(_rec)
+
 # Back-compat view: GEOMETRY as a name-keyed map onto each record's nested geometry (consumers: the systems
 # key-sync assert, weapon_physics docstring). The single source is WEAPONS[w]['geometry'].
 GEOMETRY = {_w: _rec['geometry'] for _w, _rec in WEAPONS.items()}
