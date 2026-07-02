@@ -258,15 +258,14 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       the record:** the `K_OVERHANG`/`MIN_POINT_CLEARANCE` magnitudes — no source of any tier gives a number;
       both are [FIAT]/[SIM-CALIBRATE], to be set by playtesting against the 94-96% anomaly this targets.
 
-- **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
-  ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
-  harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
-  resolvers, Gate-0 spine unbuilt — **needs_jordan**); ED-1052 typed engine-params layer for Godot ingestion;
-  ED-1054 navigation surface (partially done this pass). Full report:
-  `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
-  **ED-1053 RESOLVED 2026-06-30** (see Decisions). Residual: 12 stale `canonical_sha__` pins surfaced
-  by the now-local freshness gate — refresh via `python3 tools/freshness_gate.py --update`, then flip
-  the freshness CI step off `continue-on-error`.
+- **Ecosystem-review open items → ADJUDICATION DOCKET for the Month work-overview & architecture session:**
+  `designs/audit/2026-06-30-open-items-adjudication-docket.md`. Five decisions parked there, awaiting Jordan:
+  **D1** ED-1050 combat parity oracle (`needs_jordan` — resolve *through* the scene-combat re-baseline, not a
+  standalone sweep); **D2** ED-1051 module-contract gaps (`needs_jordan` — author `engine_clock` first);
+  **D3** ED-1052 typed engine-params *direction* (the PR-#37 attempt was reverted for adjudicating Combat Pool —
+  scope must be Jordan-fenced to settled non-combat values); **D4** ED-1054 navigation residual (file moves,
+  go-ahead); **D5** refresh the 12 stale `canonical_sha__` pins + flip freshness to blocking (go-ahead).
+  ED-1053 RESOLVED. Full findings: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
 
 ## Decisions
 
