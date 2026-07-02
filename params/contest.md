@@ -19,7 +19,7 @@
 | Argue (Expert Judge) | (Cognition × 2) + History bonus | 7 | Judge evaluates logical structure |
 | Argue (Crowd) | (Charisma × 2) + History bonus | 7 | Crowd responds to delivery/authority |
 | Argue (No Adjudicator) | (Attunement × 2) + History bonus | 7 | Must read and calibrate to counterpart |
-| Argue (Panel) | (Cognition × 2) + History bonus | 7 | [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit] |
+| Argue (Panel) | (Cognition × 2) + History bonus | 7 | Bench of individual judges deliberating; Cognition-primary as Expert Judge. Panel mechanics DESIGNED (ED-137 CLOSED, ED-1057): verdict by per-member VoteAtClose ballot aggregated WEIGHTED-BY-STANDING (each juror's ballot counts by its bench-weight = discipline). Reached via Guild Arbitration (ED-1059 rebind). See §Panel Adjudicator below. |
 | Appraise | Attunement + Recall | 7 | Ob = opponent Charisma ÷ 2 (round up), min 1. Once per exchange. PP-614: consolidates Read/Judge/Appraise into single canonical entry. |
 | Recall bonus | +2D | — | Citing specific named verifiable claim. Binary. Either genre. |
 | Pre-contest prep | Attunement + History | 7 Ob 1 | Requires 1+ hour. Rushed: TN 8. |
@@ -42,6 +42,19 @@ Genre + orientation presented as a single choice per exchange:
 | Insinuation | Projection + Obscuring | Implying unstated consequences |
 
 Interaction type derived: same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS.
+
+### Player-facing style flavor (Stage 2 / Gate B — locked decision 5; ED-1058)
+The "Flavour" column above is the terse internal descriptor. The player-facing UI-card copy (authored
+once here, not per-implementation — walkthrough §2 Step 2) is below. Sentence-case, verb-first, CDS
+voice; behaviorally honest (Lens 6 — Obscuring styles name the *doubt* they plant, Revealing styles do
+not). Single-sourced in `sim/personal/contest/dictionaries.py` `STYLES_TABLE[...].flavor`.
+
+| Style | Player-facing card text |
+|-------|-------------------------|
+| Precedent | Put the record on the table. Name the fact, cite the source, and let it stand. |
+| Suppression | Steer the room away from the part of the record that hurts you. Leave a doubt where their next point should land. |
+| Vision | Argue the future out loud. Show the room what you would build, and make them want it. |
+| Insinuation | Let the threat go unspoken. Imply what follows if they win, and let the room finish the sentence. |
 ## Genre and Orientation Bonus Dice
 | Source | Bonus | Condition |
 |--------|-------|-----------|
@@ -57,8 +70,12 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 | Varfell | Consequentialism | Projection | Genre |
 | Hafenmark | Categorical Imperative | Memory | Genre |
 | Restoration | Rawlsian Social Contract | Revealing | Orientation |
-| Guilds | Moral Relativism | GM picks | Either |
+| Guilds | Moral Relativism | Venue-derived (engine) | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
+
+**Guilds either-axis boost — resolved by the engine, not chosen (ED-1061):** the Guilds are the one faction whose boosted axis is not fixed. There is no GM (the engine resolves everything), so the boost is **context-derived from the venue**: it applies to whichever axis — a genre or an orientation — the **current contest's adjudicator already favours**, derived from the adjudicator's ethos/pathos/logos weighting (the corpus Aristotle mapping: Expert Judge / Panel ↔ logos, Crowd ↔ pathos, No Adjudicator ↔ ethos). The adjudicator's dominant appeal maps to the boosted value: **logos → Memory** (forensic/past genre), **pathos → Projection** (deliberative/future genre), **ethos → Revealing** (the ethos-bearing orientation). It is not an orator pick, not a random pick, and not a GM pick. Deterministic (a tie in the adjudicator's weights breaks by the Aristotelian order logos > pathos > ethos). Implemented as `sim/personal/contest/dictionaries.py guilds_boost_for(adjudicator)`.
+
+<!-- ED-1061 (2026-07-01, Jordan Gate B): Guilds boost was "GM picks" — a defect under the no-GM mandate. Corrected to the engine rule (context-derived from the venue's adjudicator) above. -->
 <!-- ED-899/ED-897: ethical-mode labels aligned to social_contest §2 skeleton set (Divine Command / Virtue Ethics / Rawlsian Social Contract); orientation Indirect/Direct → Obscuring/Revealing. Niflhel row already struck (ED-764, above). -->
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. Was: ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. -->
 
@@ -94,6 +111,13 @@ Step 7 — GM records.
 
 Obscuring win: no track movement; place a Doubt Marker on the opponent (−2 to opponent's next winning margin; one active at a time; consumed on use). [ED-897: "Indirect"→"Obscuring", "Doubt Marker"→"Doubt Marker" to match social_contest §4.]
 
+**Terminal Doubt (Gate B; ED-1060 — OPEN DECISION FOR JORDAN; flagged, pending Jordan's ratification).** A Doubt Marker still unconsumed when the contest CLOSES (a single-exchange proceeding — Casual Dispute / Personal Appeal — or the final exchange of any proceeding: no "next winning exchange" remains) is applied **once, terminally**, **against the marked side** (i.e. in the Obscuring winner's / planter's favour — the marker always works against the party it is placed on, exactly as it fires in play: v30:180-181 places it *on the opponent* and reduces *that side's* winning margin; minimum 0). **How it applies is split by the closing proceeding's resolution mechanism** — because banded and raw-tally proceedings expose different quantities, and the named single-exchange proceedings do not all resolve the same way:
+
+- **(i) Banded proceedings** (tracker used → Persuasion Track; among the single-exchange-capable cases, only **Church Tribunal** at length 1): the −2 is subtracted from the closing **margin/band** against the marked side — slides a Compromise-zone result one step toward the Obscuring winner, cannot reach a decisive band it does not otherwise reach.
+- **(ii) Raw-tally proceedings** (no tracker → exchange-majority; **Casual Dispute** always, **Personal Appeal** / **Private Negotiation** by default when run at length 1): there is **no band or margin** to slide — the tally returns raw A/B/draw. Instead the −2 is subtracted from the **marked side's raw exchange advantage** before the majority comparison (minimum 0). A close raw tally can therefore flip toward the Obscuring winner or fall to a draw; the marker can never *manufacture* a lead the planter did not earn (it only removes up to 2 of the marked side's own advantage). *(Tally-scoped alternative: gate Obscuring out of the raw-tally single-exchange proceedings specifically.)*
+
+**Why:** otherwise an Obscuring win in a single/final exchange forgoes all track movement for a marker with EV exactly 0 when there is no next exchange — so **Suppression is strictly dominated by Precedent, and Insinuation by Vision, in every single-exchange contest** (Casual Dispute (1,1), Personal Appeal (1,1); Church Tribunal (1,5) / Private Negotiation (1,3) at length 1). The churn axiom requires every style be correct *somewhere*; this restores a non-zero terminal value **in both banded and raw-tally proceedings** (the original single-clause "margin/band" rule was well-defined only for the banded Church Tribunal and left the raw-tally Casual Dispute / Personal Appeal — the finding's own motivating cases — undefined). **Alternative (b):** gate Obscuring out of single-exchange proceedings and document why. Implemented as (a). This is a **design-table commitment only** — the resolver does not yet consume orientation (Stage-3 CR5 rhetoric-armature scope), so no resolution number changes this pass; the Obscuring flavor (Suppression/Insinuation) is only behaviorally honest once Jordan confirms this. Flagged as an open decision, filed provisional / needs_jordan (ED-1060).
+
 **Coalition Push (clarification, ED-897):** not a separate interaction type — it denotes a REINFORCE (same genre, same orientation) executed by a coalition (§9.2), whose shared pool yields the larger movement noted in ED-297. The interaction types are CLASH / REINFORCE / CROSS / TIE.
 
 ## Persuasion Track
@@ -101,25 +125,34 @@ Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: GM-set (typical: 5).
 Audience resistance: average Stability of factions (round up) − 1, minimum 0. Announced once at contest start; place resistance token on Persuasion Track. (PP-235)
 
-## Derived Values
-| Value | Formula | Range |
-|-------|---------|-------|
-| Composure | Charisma × 3 | 3–21 |
-| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 |
-| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 |
-| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 |
-| Appraise pool | Attunement + Recall | 2–14 |
+## Derived Values (CR3 — three trackers; ED-1056)
+CR3 (RATIFIED 2026-06-01) retires **Composure** as the social-contest tracker and splits it into **Concentration** (stamina) + **Face** (contest-local ethos/standing). The Persuasion Track (merits clock) is preserved. Composure-retirement is SCOPED to the social-contest tracker only (unrelated Composure references in knots/combat/conviction are untouched — Jordan CONFIRMED scoped-rename-only at Gate A; see social_contest_v30 §8).
 
-## Composure and Rattled
-At strain ≥ Composure: Rattled mark (Composure resets; excess carries over). [Composure = Cha × 3 per ED-694]
+| Value | Formula | Range | Note |
+|-------|---------|-------|------|
+| Face | Face_max = Charisma × 3 (ceiling); Face_current = round(Standing ÷ 10 × Face_max) | 3–21 | Contest-local ethos/standing buffer (the retired Composure magnitude, re-homed as transient standing; CR3/ED-1056; scale-binding resolved Gate A 2026-07-01 — see below). Face ≠ Disposition/Reputation. |
+| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | ×3 scaling unchanged by CR3 (matches the Face buffer). |
+| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | — |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
+| Appraise pool | Attunement + Recall | 2–14 | — |
+
+## Face and Rattled (CR3 — formerly "Composure"; ED-1056) [UNREACHABLE UNTIL STAGE 3]
+> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]** This §Face-and-Rattled surface defines Face as a **Charisma × 3 (3–21) strain-buffer** consumed by the Rattled channel (below) — this is now **Face_max**, an unchanged build-time ceiling (player-controlled via Charisma). The sim kernel (`sim/personal/contest/primitives.py`) binds `Face = Standing`, a **0–10, START 5, ethos-built** tracker feeding Readiness/leak — Standing itself is UNCHANGED by this resolution. Jordan resolved the scale-binding as a combo formula: **Face_current = round(Standing ÷ 10 × Face_max)** — Standing (earned through play) sets position within the Charisma-set ceiling (fixed at build time). Implemented as `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) + `_Side.face_max()`/`_Side.face_current()` (resolver.py), added on top of the unchanged Standing — no new invented constants, no change to currently-tested Standing/Readiness behaviour. **What is STILL not wired this pass:** the strip/strain-consumption channel below — the kernel has **no strip/strain channel wired** (Standing.strip() is never called), so the Rattled behaviour below is a v30-surface spec not yet realized in code. Face_current is now a real, well-defined value (Standing-derived, Charisma-scaled) but strain does not yet consume it; that wiring is Stage-3 (CR5 rhetoric-armature) scope, honestly flagged, not silently claimed as wired. See social_contest_v30 §4 Step 6 / §8.
+
+At strain ≥ **Face**: Rattled mark (Face resets; excess carries over). [Face = Cha × 3 — the retired Composure magnitude re-homed onto the Face tracker per CR3/ED-1056; ED-694 scaling.]
 −1D per Rattled level to Argue pool (cumulative; honors PP-716 channel reservation: actor-state degradation → Pool, not Ob). 2 marks = socially incapacitated. Pool minimum 1D. [Decision-B 2026-05-15: Rattled converted from +Ob to −1D for channel consistency with wounds/Spent.]
-Recovery: 1 mark/scene of non-social activity. Composure restores at scene change.
-Knot buffer: redirect damage to Knot (+1 strain/use).
+Recovery: 1 mark/scene of non-social activity. Face restores at scene change.
+Knot buffer: redirect **Face** damage to Knot (+1 strain/use). [CR3/ED-1056: Composure-retirement is scoped to the contest tracker; knots_v30 §4.2 still names this the "Knot-as-Composure-buffer" — Jordan CONFIRMED scoped-rename-only at Gate A (social_contest_v30 §8); the corpus-wide Composure→Face rename was considered and not taken.]
 
 ## Concentration and Spent
 Depletes −5/exchange, −5 additional on loss. [ED-890/DEP: rescaled −1 → −5 to match social_contest §4 and keep Spent reachable under the (3 × Focus) + (2 × Spirit) 5–35 range; the prior −1 left Spent inert.]
 At 0: Spent (−2D next exchange; opponent +1D). Resets to max after.
 Rattled + Spent: cumulative. Pool minimum 1D.
+
+## CR1 / CR2 Substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d / ED-1055 provisional, pending Gate-A)
+- **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper (`sim/personal/contest/wrapper.py`) that ADAPTS + ROUTES but resolves nothing (`build_contest` adapter + `resolve_contest` router). The stochastic surface is the reception roll only; all else is deterministic accounting. Already realized (Stage 1c); Stage 1d cites, does not re-build.
+- **CR2 — resolution substrate migration to δσ.** Social resolution is no longer success-counting; it is the shared sigma-leverage net engine (per-die −1/0/+1/+2, δσ μ-shift, TN7), single-sourced with combat/core via `sim/autoload/sigma_leverage.py` (D0-2). CR2 = the resolution substrate ("what the roll is"); CR6 = the leverage-accumulation half ("how setup advantages enter the roll" — δσ, tanh soft-capped, +0.191 uniform across 5D–26D). Contest stays δσ at TN7 (D0-3); the fractional-Ob face is display-only (D0-3 HYBRID). Both realized Stage 1a/1b + D0-3; Stage 1d cites, does not re-build.
+- **CR3 — three trackers.** Concentration (stamina, above) + Face (contest-local ethos/standing, §Face and Rattled) + Persuasion Track (merits, §Persuasion Track). Composure retired → split into Concentration + Face (ED-1056).
 
 ## Forfeit Actions
 | Action | Strain | Track Effect | Benefit |
@@ -145,10 +178,61 @@ Thread co-movement: Memory win → MS +1 (retention invoked). Projection win →
 | Grand Contest | 5 | Alternating | Standard | Crowd |
 | Royal Audience | 3 | Crown objects | Halved for petitioner | Expert Judge |
 | Church Tribunal | 1–5 | Inquisitor proposes | Halved for accused | Expert Judge |
-| Guild Arbitration | 3 | Symmetric | Standard | Expert Judge |
+| Guild Arbitration | 3 | Symmetric | Standard | Panel |
 | Casual Dispute | 1 | Initiator proposes | N/A | No Adjudicator |
 | Private Negotiation | 1–3 | Symmetric | N/A | No Adjudicator |
 | Personal Appeal | 1 | Appealer proposes | N/A | No Adjudicator |
+
+### Player-facing proceeding flavor (Stage 2 / Gate B — locked decision 5; ED-1058)
+Player-facing setup-screen copy for each proceeding (walkthrough §1). Behaviorally honest per Lens 6 —
+each card reads the way the proceeding mechanically differs (a Church Tribunal names its bias + halved
+resistance; a Casual Dispute names its absence of judge and tracker). Single-sourced in
+`sim/personal/contest/dictionaries.py` `PROCEEDINGS_TABLE[...].flavor`.
+
+| Proceeding | Player-facing card text |
+|-----------|-------------------------|
+| Formal Contest | Three rounds before the assembly. Take turns, win the room, and let the track fall where the argument lands. |
+| Grand Contest | Five rounds, and the faction's course rides on them. Pace yourself; a citation spent early cannot be spent again. |
+| Royal Audience | You petition; the Crown objects at every turn. The judge is stern, but the throne's resistance is halved for the one who comes asking. |
+| Church Tribunal | The Inquisitor sets the terms and speaks first, and the room already leans against you. Halved resistance is the only mercy; every doubt they plant is meant to stick. |
+| Guild Arbitration | A fair table before a bench of guild masters. Both sides stand equal; three rounds, and the masters weigh the stronger case among themselves. |
+| Casual Dispute | One exchange, no judge, no scorekeeping. Make your point, hear theirs, and the stronger showing settles it on the spot. |
+| Private Negotiation | Just the two of you, up to three rounds, no judge and no fixed scorekeeping. Read them well, because failing to agree is its own answer. |
+| Personal Appeal | One plea, one chance, no one to referee it. Read the person in front of you and make it count the first time. |
+
+## Panel Adjudicator (ED-137 CLOSED — Stage 2 / Gate B; ED-1057)
+ED-137 ("Panel adjudicator type not yet designed — use Expert Judge as provisional") is **CLOSED**. A
+**Panel** is a bench of *individual* judges who deliberate to a **terminal per-member ballot**, not a
+single fused scalar. The mechanism is the promoted groundup `VoteAtClose` (`sim/personal/contest/resolver.py`):
+
+- **Running momentum vs verdict are un-fused.** The Persuasion-Track advancement is the *room's momentum*
+  (it drives each juror's lean), but the **verdict is a separate terminal secret ballot** at close.
+- **Per-member ballot.** Each juror votes for Side A iff `sharpness × (adv_A − adv_B) + per-juror noise > 0`.
+  A juror can cross *against* the room: a lopsided room is near-unanimous, a close room is near a coin-flip.
+- **Aggregation rule — WEIGHTED BY STANDING** (RATIFIED, Jordan Gate B; ED-1057). Each juror's ballot
+  counts in proportion to that juror's **bench-weight** — its institutional rank/rigor on this bench —
+  not one-juror-one-vote. Side A wins iff the **summed bench-weight of the A-ballots > half the total
+  bench weight**, else draw. A juror's bench-weight reuses an **existing** primitive — the per-juror
+  `Adjudicator.discipline` (0–1) the bench already carries — **not** the contestant-side `Standing`
+  primitive (a different concept: in-contest credibility, not bench rank; the name is deliberately not
+  reused to avoid a collision). A mixed-weight bench does **not** merely mirror its highest-weight juror
+  (a low-weight juror crossing the room can still swing a near-even split, since the summed-weight
+  threshold — not one dominant vote — decides), so Panel stays **non-dominated** vs a single Expert Judge.
+  Alternatives recorded but not chosen: **simple majority** (one-juror-one-vote; the §7.2 Crown "majority
+  Disposition" is the lone plain-majority-of-individuals analogue) and **unanimity-required** (would make
+  Panel strictly harder to win than Expert Judge). Swap point: `dictionaries.panel_win_condition()`.
+- **Primary attribute:** Cognition (as Expert Judge — §Pools).
+- Panel size and the ballot `sharpness`/`noise` are **[SEED]** calibration values (Jordan to set), not canon.
+
+**Reachability — RESOLVED by REBIND (RATIFIED, Jordan Gate B; ED-1059).** ED-137's original note ("Panel
+not yet designed — use Expert Judge as provisional") is now closed exactly as it always pointed:
+**Guild Arbitration's adjudicator is rebound from Expert Judge to Panel** (see §Proceeding Types), so the
+closed Panel mechanic is reached by **selecting an existing canonical proceeding** — no longer dead in
+normal play. Guild Arbitration's canon flavor already read "Masters arbitrate" (plural = a seated bench),
+so this is a **closure of the provisional stand-in, not a new proceeding or an appeal step**. An
+appeal/escalation mechanic was **explicitly rejected** ("appeals should not be a thing — let the decision
+ride"). The **8-proceeding roster is unchanged** — this is a one-field rebind on an existing proceeding.
+Selecting Guild Arbitration now routes to the Panel `VoteAtClose` weighted-by-standing ballot.
 
 <!-- §Niflhel Social Toolkit deleted 2026-04-30 — was struck per CR-STRIKE-2026-04-19 / ED-764. Replacement: settlement-level intelligence-broker NPCs (settlement_layer §4.7-4.9) use individual social interaction patterns per npc_behavior §1. -->
 
@@ -206,7 +290,7 @@ Judge result informs Argue roll orientation selection.
 ## Contest Stalemate — Forced Resolution (PP-255)
 Maximum 10 exchanges per Contest session.
 After 10 consecutive exchanges without resolution: forced Unmask fires.
-Loser = orator whose track is closer to their losing threshold (lower Composure on tie).
+Loser = orator whose track is closer to their losing threshold (lower **Face** on tie). [CR3/ED-1056: "Composure" tiebreak re-homed onto Face.]
 
 ## Hybrid Debate CI Clamp (PP-256)
 In Hybrid mode Contest: CI restricted to range 4–6 at session start regardless of BG lobbying.
