@@ -477,54 +477,26 @@ per the file's protocol; never max+1.)_
   **CRITICAL — newly discovered 2026-07-02, NOT yet fixed:** the `'envelop'`/`'sweep'` instructions and
   the overhang `'wheel'` maneuver (the actual "go wide around the flank, cross past the enemy's depth,
   turn in from the rear" logic, `hierarchy/units.py` `advance_cells` ~L802-861) are gated `if PER_CELL
-  and ...` and live ONLY on the legacy grid path (`advance_cells`) — `_node_advance` (the coordinate-
-  field path, DEFAULT since ED-1089, and `PC_NODE_COHESION` also defaults ON so `advance_cells` almost
-  always returns early into `_node_advance` regardless of `PER_CELL`) has **zero** envelop/sweep/wheel
-  steering: every subunit's anchor just walks a straight line toward the enemy centroid. This means
-  the flagship H4/Cannae scenario's "wings wrap around" claims made earlier this session (Stage C.4's
-  acceptance test, Stage D/E's Playwright verification) were accurate for the grid+`PER_CELL` path but
-  the DEFAULT path a user actually sees has never had real encirclement — confirmed by Jordan's own
-  visual inspection of a traced Cannae battle ("the wings just go straight to the opponent... there is
-  no wheeling/circling"). A direct empirical retest of the SAME H4 composition on the legacy grid+
-  `PER_CELL=1` path (2026-07-02) additionally showed **zero movement across 144 ticks/8 turns** (both
-  sides frozen, ended `draw`) — an unexplained second issue (possibly a `stance='hold'`/order-firing/
-  multi-turn interaction) that needs its own root-cause, not yet found. A Fable-5-tier movement/pathing
-  audit was requested and is in flight (or check its findings if this session already completed) —
-  see the session for `designs/audit/2026-07-02-*movement*` or similar once filed. Do not trust prior
-  "Cannae pattern confirmed" claims in this file or the plan without re-verifying against whichever
-  path was actually active.
-  **Two further Jordan rulings (2026-07-02, during the audit) binding on the fix:** (1) **Path-length
-  budget** for the forthcoming waypoint/node-placement path primitive — verbatim: *"use a formula
-  based upon like 0.5\*speed\*maximum-ticks-in-battle that determines the maximum length of the
-  pathing route that is allowed to be determined with node placements"* — undeliverable paths are
-  rejected at design time, never silently truncated. Formula shape + the 0.5 factor are Jordan-ruled;
-  operands must derive from existing primitives (`TICKS_PER_PHASE=6` × 3 phases = 18 ticks per
-  engagement turn, `max_battle_turns=8`, `cell_speed`, `PC_CAVALRY_SPEED_MULT=2.0` — which emergently
-  gives cavalry double the path budget, correct historically, preserve it). **T operand — CONFIRMED
-  BUG, not an open sub-decision (correction 2026-07-02):** `orchestration.reset_positions` currently
-  teleports every subunit back to spawn at the top of EVERY engagement turn inside
-  `run_multi_turn_battle` (`orchestration.py:1478-1484`) — the WITHIN-battle turn boundary. Jordan
-  confirmed this is wrong: *"I thought we have decided before that an army only has subunits reset
-  to initial positions... at the start of a new battle. it is nonsensical for them to return to
-  starting positions within the same battle... the point of having turns here is for the player to
-  be able to assess how things are going and issue commands that dynamically adjust what subunits
-  are doing"* (Football Manager analogy — in-match instructions, not a reset). The codebase already
-  draws exactly this within-turn vs. between-battles distinction correctly for morale/discipline via
-  two separate functions (`between_turn_recovery`, orchestration.py:1411, "the WITHIN-battle turn
-  boundary"; `reset_morale_between_battles`, orchestration.py:1424, "the battle-to-battle boundary...
-  NOT within a single battle") — `reset_positions` never got the same treatment and is called at the
-  wrong scope. Fix: retire/rescope the `run_multi_turn_battle` call site (and check whether
-  `run_multi_unit_battle`'s own `reset_positions` call, ~orchestration.py:1706-1707, has the same
-  bug or is correctly campaign-boundary-scoped). Once fixed, the TRUE continuous-movement window is
-  the full multi-turn battle (up to 8×18=144 ticks), not 18 — use that as the formula's default T.
-  This reset-every-turn bug is also very likely a major contributor to "paths never develop" on its
-  own, independent of the dead-`_node_advance`-steering findings — folded into the running audit's
-  synthesis phase. Jordan also ruled the maneuver shapes in his two annotated screenshots (wide-out-then-cut-in
-  from flank; wheel-from-behind to an interior point between friendly bodies) are GENERAL pathing
-  capabilities the system must support, not Cannae-specific scripts. (2) **Model routing:** the path
-  formula and design-authorship nodes are *"probably a fable proposal but sonnet 5 write"* — Fable
-  authors the design contract, Sonnet 5 implements; and *"if fable unavailable, btw, use opus 4.8 max
-  effort"* for those nodes.
+  and ...` and live ONLY on the legacy grid path — this was confirmed root cause. **Full ratified
+  audit at `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/README.md` (ED-1094) — READ
+  THAT DOC, not this paragraph, before touching movement code.** Summary: `_node_advance` (the
+  coordinate-field path, DEFAULT since ED-1089) is a pure straight-line centroid attractor that never
+  reads `instructions`/`role` — envelop/sweep/wheel/kite all exist but are unreachable on the default
+  path. Ten further findings (critical: `reset_positions` is a no-op on node state, so multi-turn
+  battles freeze at the turn-1 contact line for turns 2-8; ED-1093's mounted-archer kiting fix is NOT
+  effective — `role='Kite'` never sets `unit_type='ranged'`). **Two corrections to earlier same-
+  session claims, both now resolved in the audit doc:** the "144-tick total freeze" finding is
+  REFUTED (does not reproduce; likely a measurement bug reading cell `id` instead of `pos`); the
+  `reset_positions` "teleports to spawn every turn" characterization was imprecise — it's a no-op on
+  the node path (freezes wherever it ended, doesn't reset), matching Jordan's Football-Manager-analogy
+  correction that positions should only reset at true battle boundaries, not between turns. Do not
+  trust prior "Cannae pattern confirmed" claims without re-verifying against the ratified audit.
+  8-step dependency-ordered fix plan + 4 Jordan decision gates + the path-length-budget formula
+  (`0.5×speed×max-ticks`, Jordan-ruled) are all in the audit doc. **Model routing ruling (binding
+  going forward):** design-authorship nodes are *"probably a fable proposal but sonnet 5 write"* —
+  Fable proposes, Sonnet 5 implements; *"if fable unavailable... use opus 4.8 max effort"* as fallback.
+  **Implementation NOT started** — next action is resolving the 4 decision gates with Jordan, then
+  Sonnet executing the 8-step fix plan in order.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
