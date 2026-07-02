@@ -35,6 +35,7 @@ def main(argv):
         ('ci_sim_fabrication_check.py', [mode_flag], True),
         ('ci_supersession_check.py',    [mode_flag], False),  # warn-only churn guard
         ('ci_generation_consistency.py', [],         False),  # warn-only v40 currency gate
+        ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

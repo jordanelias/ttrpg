@@ -204,6 +204,27 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_names_check.py
 
+  module-shape-check:
+    name: Module Shape / Container Hygiene (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): flags cross-container reach-ins in
+    # runtime code — sys.path hacks into tests/ trees and tests-package imports (the ED-1085
+    # failure class, holonic doctrine ED-1083 §3). Flip to blocking after a green baseline
+    # cycle. INFO tier surfaces untagged module-scope constants (fabrication gate owns
+    # constant-value provenance; this only lists drift candidates).
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No container reach-ins in engine/sim runtime code
+        run: python3 tools/ci_module_shape_check.py
+
   sim-fabrication-check:
     name: Sim Anti-Fabrication
     runs-on: ubuntu-latest
