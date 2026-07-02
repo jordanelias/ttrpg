@@ -1127,7 +1127,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             else:
                 fr, fc = sub.advance_dir, 0
             mag = math.hypot(fr, fc)
-            return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)
+            return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)  # [canonical: epsilon: float magnitude guard]
 
         for atom in unit_a.subunits + unit_b.subunits:
             if (atom.escort_of is not None and atom.escort_engage_on_contact

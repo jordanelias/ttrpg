@@ -1133,3 +1133,56 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   future canonical decision; not pursued.)
 | r1_sigma_resolution + r8_parity_harness | F4 μ-shift resolution (base Ob + net_boost; eff_ob DISPLAY-ONLY) | mirror 49.9/50.0 · str6v4 59.5/40.5 · hist7v4 61.7/38.2 · agi6v4 65.6/34.4 (N=3000) · atom MC≡p_success | ED-934 | 2026-06-12 |
 
+
+## 2026-06-30 — Stage 1a (re-architecture): extract core/exchange.py (behaviour-frozen) [byte-exact]
+- EXTRACTED the pool-assembly primitives (derive_command, command_base_pool, subunit_combat_pool,
+  _stamina_pool_penalty) from orchestration.py into a new resolver layer tests/sim/mass_battle/core/
+  (core/__init__.py + core/exchange.py). orchestration.py re-imports them via `from mass_battle.core.exchange
+  import *` so every call site is unchanged; engine.py adds core.exchange to its public surface + _resolve scan.
+  G1 import-direction: core/exchange imports config+math only (no up-DAG import; no cycle).
+- BYTE-EXACT: bat.py --check passes both modes (unit 7be8499b…, cell 1c5b2851… unchanged); stress S1-S18 ALL PASS;
+  mechanics_selftest green. A pure code move — identical call graph.
+- GATE FIX (tools/ci_sim_fabrication_check.py): masks multi-line triple-quoted docstrings before the line scan
+  (docstring prose numerals were false positives; real in-code constants still caught). Cited 19 pre-existing
+  uncited constants in orchestration.py (§A.4/§B.2/§A.7/§A.3b) — comment-only; orchestration scans clean.
+
+## 2026-06-30 — Stage 1b (re-architecture): extract core/state.py (behaviour-frozen) [byte-exact]
+- EXTRACTED the morale/discipline/rout state-transition phase hooks (morale_check_phase, rout_resolution,
+  discipline_check_phase) from orchestration.py into core/state.py — the resolver layer's sole state-mutation
+  site alongside core/exchange. orchestration re-imports via `from mass_battle.core.state import *` (phase_boundary
+  and the stress-test imports unchanged); engine.py adds core.state to its surface + _resolve scan.
+- G1 import-direction: core/state imports config+math only; calls Subunit/Unit methods duck-typed (erode_morale,
+  derive_rout, degrade_discipline) — no up-DAG import, no cycle.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; mechanics_selftest green.
+
+## 2026-06-30 — Stage 1c (re-architecture): extract core/attrition.py (behaviour-frozen) [byte-exact]
+- EXTRACTED _lanchester_strength (the linear-law contact-frontage attrition term) from orchestration.py into
+  core/attrition.py. (coeffs injected, not authored). G1 clean; BYTE-EXACT both modes + stress.
+
+## 2026-06-30 — Stage 1d (re-architecture): extract core/contact.py + _oriented->geometry [byte-exact]
+- EXTRACTED the targeting/contact-detection cluster (assign_targets, resolve_cross_side_contention,
+  find_contacts, count_engagements_per_atom) from orchestration.py into core/contact.py.
+- RELOCATED _oriented (the oriented-footprint helper — pure geometry: footprint_for + oriented_pattern) from
+  orchestration.py into geometry.py (its proper cells/geometry home; added to geometry __all__). Its ~16 callers
+  (Subunit/Unit methods + the contact fns) resolve it via the existing geometry star-import.
+- G1: core/contact imports config+geometry+math only; geometry imports config only — no up-DAG import, no cycle.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
+  geometry exposes _oriented; orchestration re-exports the contact fns. orchestration.py: 2,740 -> 2,549 lines.
+
+## 2026-06-30 — Stage 1e (re-architecture): extract troop_types/registry.py [byte-exact]
+- EXTRACTED the troop-type module (TROOP_TYPE_STATS canonical §B.2 stat presets + stats_for / roles_for /
+  role_allowed gated-role accessors) from orchestration.py into troop_types/registry.py — the user-requested
+  "troop types module". Depends on config (TROOP_TYPE_ROLES) only. orchestration re-imports via star
+  (Subunit.of_type + stress-test imports unchanged); engine.py adds troop_types.registry to its surface.
+- G1: no up-DAG import, no cycle. This also unblocks the hierarchy/units (Subunit/Unit) move — stats_for was
+  the only orchestration-internal module dependency of those dataclasses' methods.
+- BYTE-EXACT (G5): bat.py --check both modes match baseline; stress S1-S18 ALL PASS; selftest green;
+  stats_for('cavalry') correct. orchestration.py: 2,549 -> 2,505 lines.
+
+## 2026-06-30 — Stage 1f (re-architecture): extract hierarchy/units.py (Subunit/Unit) [byte-exact]
+- MOVED the Subunit/Unit dataclasses from orchestration.py to hierarchy/units.py (deps all lower-layer; no cycle). Fixed: restored orchestration's resolution import; moved PC_ENVELOP_PATH/PC_SWEEP toggles to the consumer; repointed validators. BYTE-EXACT both modes + stress ALL PASS. orchestration.py: 2,899 -> 1,705.
+
+## 2026-06-30 — Stage 1g (re-architecture): engine.py true wrapper (build_unit + resolve_battle) [byte-exact]
+- ADDED the wrapper's two non-resolution duties to engine.py: build_unit (faction→unit adapter) + resolve_battle
+  (router dispatching single/multi/multi_unit). Wrapper resolves nothing (P1 seam). Dogfooded: bat.py builds+routes
+  via them; BYTE-EXACT both modes (digests unchanged) → provably transparent; stress S1-S18 ALL PASS.
