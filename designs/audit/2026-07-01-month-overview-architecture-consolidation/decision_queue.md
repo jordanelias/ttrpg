@@ -18,6 +18,9 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
 4. **ED-1042** — wound-model spec-vs-code drift ruling (open since 2026-06-24).
 5. **ED-1050 residual** — re-export RESIST/GAP_EXPOSURE/gap-game logic to
    `weapon_resource.gd`/`strike_module.gd`; Key-log parity stays known-red until done.
+   (2026-07-02 docket adjudication, ED-IN-0002: this is the ONLY still-open part of
+   ED-1050 — the ADEF_THRESHOLD monotonicity question is separately RESOLVED, config.py
+   and combat_config.gd verified byte-identical monotonic; don't re-raise it as a decision.)
 
 ## Mass battle / simulation
 
@@ -42,8 +45,14 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
     dockets. All unruled as of 2026-07-01.
 11. **Gate-0 preconditions** — KeyStore v2 (valoria-game frozen since 05-04), spine base
     classes, RNG service, K8 performance verdict. None executed.
-12. **ED-1051** — module-contract closure priorities: 10/27 modules doc:null (start with
-    `engine_clock`, the temporal spine), 11/27 resolvers [ASSUMPTION]-grade.
+12. **ED-1051** — module-contract closure priorities: 11/27 modules doc:null (start with
+    `engine_clock`, the temporal spine), 13/27 resolvers [ASSUMPTION]-grade (both counts
+    grew since 2026-06-30 — re-measured 2026-07-02, docket adjudication ED-IN-0002). The
+    top-priority module now has a head start: `engine_clock` has a CANDIDATE home doc
+    (`designs/architecture/propagation_spec_v1.md`, ED-1093, CANONICAL) — its `gap_notes`
+    explicitly keep `doc: null` unflipped until this item is ruled. Authoring is
+    effectively done for `engine_clock`; only ratification/ordering remains for it, and
+    the other ~10 modules + 13 resolvers are untouched.
 
 ## Canon / editorial
 
@@ -106,3 +115,25 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
     the revived dependency checker resolves them via `references/restructure_ledger.md`
     (INFO, not violations); rewriting the entries' `affects` paths in the append-only ledger
     is a canon edit reserved for Jordan.
+
+## Docket adjudication (2026-07-02, ED-IN-0002)
+
+24. **ED-1052's broader question — typed params layer scope/fence** (distinct from item 17,
+    which is narrowly about `values_master.yaml`'s own successor). Still fully open: whether
+    to build a typed, Godot-ingestible layer over `params/*.md` prose, and if so, whether to
+    fence it to genuinely-settled non-combat values only (the original recommendation) or
+    another scope. `tools/export_engine_params.py` (this session) is NOT that layer — it
+    mechanically mirrors the live `config.py` Class-C oracle, sidestepping the settled-vs-
+    in-flux dilemma entirely rather than resolving it, and by its own docstring does not
+    parse `params/*.md` prose at all. Worth using as the template for whatever comes next,
+    but the scope decision itself is untouched.
+25. **ED-1054's residual, narrowed** — retired-session-file relocation (part iii of the
+    original residual) is DONE via ED-1084 (`deprecated/session_machinery/`). Still open:
+    (a) relocate the ~850KB of narrative markdown mislabeled as tests
+    (`tests/emergent_arc_skeleton_test_2026-04-17_batch*.md`,
+    `tests/sim_framework/session_audit_2026-04-19.md`) to `designs/audit/` or `archives/`;
+    (b) regenerate `sim/README.md` (currently self-flags stale rather than being rewritten
+    accurate), `sim/CONVENTIONS.md` (still `[PROVISIONAL — Pass 2l armature scaffold
+    2026-05-17]`, describes stub anatomy the package has outgrown), and `tools/README.md`
+    (missing `currency_consistency_check.py`, `ci_module_shape_check.py`,
+    `export_engine_params.py`, `validate_ed_citations.py`).

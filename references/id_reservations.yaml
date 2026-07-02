@@ -99,7 +99,7 @@ lane_ids:
     SC: { name: "Social contest",      next_free: 1 }
     FA: { name: "Faction actions",     next_free: 1 }
     WR: { name: "World",               next_free: 1 }
-    IN: { name: "Infrastructure",      next_free: 2 }   # ED-IN-0001 allocated to this cutover itself
+    IN: { name: "Infrastructure",      next_free: 3 }   # ED-IN-0001 this cutover itself; ED-IN-0002 the D1-D5 docket adjudication
     GO: { name: "Godot",               next_free: 1 }
     SE: { name: "Settlements",         next_free: 1 }
 
