@@ -1155,38 +1155,49 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         def _cells_float_of(unit):
             return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
 
-        # [Stage A, REVISED — see the mirror-matchup bias finding below] Standoff-clamp enemy-float
-        # snapshot. An earlier version of this fix built b_cells_float pre-move but a_cells_float AFTER
-        # unit_a's loop (so unit_b's clamp saw unit_a's true post-move position) — this DID eliminate
-        # co-location, but introduced a severe, confirmed, deterministic first-mover bias: unit_a always
-        # gets first claim on the shared "closing budget" whenever both sides are near standoff (its
-        # clamp sees unit_b's not-yet-moved position and can consume the full remaining gap), leaving
-        # unit_b's later clamp — now measured against unit_a's already-advanced position — with nothing
-        # left. A mirror matchup (Cav vs Cav, identical both sides) read ~50/50 on the grid path but
-        # 98-100% one-sided on the field path before this revision (confirmed via a worktree bisect
-        # against the pre-Stage-A commit, where the same matchup read 11-8-1). Fixed by going back to a
-        # SYNCHRONIZED both-sides-frozen snapshot (built here, alongside cached_centroids, before either
-        # side moves) and HALVING the per-tick closing budget in _node_advance's anchor pre-cap
-        # (standoff.py: allowed = (dmin - standoff) / 2.0) — if both sides independently claim at most
-        # half of the pre-move excess-over-standoff distance, their combined closure can never exceed
-        # the full excess, so the post-move gap is guaranteed >= standoff even though neither side knows
-        # what the other did this tick. Verified: the mirror matchup returns to ~50/50 (see coverage
-        # matrix / gauge re-run). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
+        # [TOI refactor] b_cells_float/a_cells_float are now consulted by _node_advance ONLY for
+        # truthiness -- a non-empty list signals "defer to the cross-side TOI resolve rather than
+        # commit immediately" (see _node_advance's toi_deferred). The actual cross-side standoff
+        # computation (reach- and facing-asymmetric, exact time-of-impact) now runs once, after both
+        # sides have proposed, in resolve_toi_and_commit below -- replacing the old sequential,
+        # halved-closing-budget anchor pre-cap this comment used to describe (see git history: that
+        # design fixed a real first-mover bias but only approximately, and was retired once the bias's
+        # true fix -- exact per-pair TOI -- was designed properly instead of adopted under time
+        # pressure). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
         b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
         a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
         # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
         # even with target_atom=None, using the escort centroid computed above. Every existing
         # scenario's `if atom.target_atom:` case is untouched (escort_of defaults to None).
-        for atom in unit_a.subunits:
-            if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged):
-                # per-subunit formation-hold: each subunit advances on its OWN Discipline
-                # (single-subunit inherits -> == unit.discipline -> byte-exact)
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
-        for atom in unit_b.subunits:
-            if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged):
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
+        moving_a = [atom for atom in unit_a.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        moving_b = [atom for atom in unit_b.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        for atom in moving_a:
+            # per-subunit formation-hold: each subunit advances on its OWN Discipline
+            # (single-subunit inherits -> == unit.discipline -> byte-exact)
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
+        for atom in moving_b:
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
+        # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED
+        # (uncapped) end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being
+        # non-empty (b_cells_float/a_cells_float, built above) signals _node_advance to defer rather
+        # than commit. Resolve the cross-side continuous-collision time-of-impact ONCE, across both
+        # sides together (not per-atom, not sequential), and commit final positions now. Replaces the
+        # old per-atom halved-anchor-precap + iterated per-cell pull-back entirely.
+        #
+        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit
+        # with no target yet (a reserve, or gated by target_delay_ticks/target_condition) never called
+        # advance_cells and so has no pending proposal, but its cells are real, occupied positions that
+        # the OTHER side's moving cells must still treat as obstacles -- resolve_toi_and_commit reads
+        # such atoms' current true positions directly (adversarial-review-caught: an earlier version
+        # passed only moving_a/moving_b, silently dropping idle/reserve subunits as obstacles for a
+        # tick, a regression versus the pre-refactor enemy_cells_float, which was always built from
+        # ALL of a unit's subunits unconditionally).
+        if FIELD_MOVEMENT:
+            resolve_toi_and_commit(unit_a.subunits, unit_b.subunits)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
         for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)

@@ -95,15 +95,20 @@ def trial_vector(ua, ub, r):
 EXPECTED = {
     'unit': '7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725',
     'cell': '1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7',
-    # [Stage A, 2026-07-01] The coordinate-field candidate's OWN golden digests (FIELD_MOVEMENT=1 +
-    # PC_NODE_COHESION=1 -- required by run_battle's own assert). NOT byte-exact with the grid digests
-    # above by construction (Chebyshev->Euclidean + the true-adjacency standoff halt are intended
-    # behaviour changes, not a refactor) -- this is the field path's own regression anchor, recorded
-    # once the co-location bug (Stage A) was fixed and confirmed (min cell separation == standoff()
-    # exactly, 2.0 for two Short-Reach cells, across sampled matchups). Update ONLY on an intentional
-    # field-path behaviour change, same discipline as the grid digests.
-    'unit_field': 'dcc2bdf3b8c189d48e2072add6939b69f8d1653c9dee50fca9e92f649404091b',
-    'cell_field': '4a07e5c2f5f814e686cc00b073442ef5f5d421282af1a79ddddd61fe23bb4adc',
+    # [Stage A, 2026-07-01; updated 2026-07-02 for the TOI refactor] The coordinate-field candidate's
+    # OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required by run_battle's own
+    # assert). NOT byte-exact with the grid digests above by construction (Chebyshev->Euclidean + the
+    # true-adjacency standoff halt are intended behaviour changes, not a refactor) -- this is the field
+    # path's own regression anchor. Updated 2026-07-02: the halved-anchor-precap + iterated
+    # worst-violator per-cell clamp was replaced with an exact time-of-impact (continuous-collision)
+    # solve, plus reach-and-facing-asymmetric closing-budget throttling -- an intentional behaviour
+    # change (a different, more precise halt trajectory), reconfirmed against the true-float standoff
+    # invariant (min cell separation == standoff() exactly, zero violations, across the same sampled
+    # matchups) and the reach-advantage mechanic (a monkeypatched Long-vs-Short-reach matchup holds
+    # standoff exactly at the reach-summed distance). Update ONLY on an intentional field-path
+    # behaviour change, same discipline as the grid digests.
+    'unit_field': '5f19addcb9f2739fa9438e4f4fff1a1ed720ee05c203bc10eaa3621bf699e604',
+    'cell_field': 'd41d5cf41bbc67aa29993a95f2bab17c1adb4c4c05341142dd9315b01c838912',
 }
 
 
