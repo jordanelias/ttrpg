@@ -316,10 +316,16 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     the literal reading re-manufactures the reach-dominance symptom, the first correction collapses thrust
     damage to zero, and the plan's default (grip-invariant thrust, keyed on the selected strike element's
     mode, not a weapon class) needs Jordan's ratification before I2 is implemented.
-  - **Plan file:** `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` — approved via
-    `ExitPlanMode` this session. **Next action is R2** (implement I0→I8 in verified increments); see Next
-    actions below. The JD-1…JD-9 decisions should be resolved (or explicitly deferred per-increment, since
-    several are increment-specific — e.g. JD-9 only gates I3) before or during the increments that need them.
+  - **Plan file (canonical, plan-mode storage, outside any repo/worktree):**
+    `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` — approved via `ExitPlanMode`
+    this session. **A byte-exact copy, plus the full research/audit trail, is also committed IN this repo**
+    at `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/` (start with that folder's
+    `README.md`) — use the in-repo copy (`plan_r1_RATIFIED.md`) as the durable reference; the plans-storage
+    path can be cleaned up by the OS/tooling independently of this repo and a session in a different
+    directory/branch cannot see it. **Next action is R2** (implement I0→I8 in verified increments); see
+    Next actions below. The JD-1…JD-9 decisions should be resolved (or explicitly deferred per-increment,
+    since several are increment-specific — e.g. JD-9 only gates I3) before or during the increments that
+    need them.
   - **Process note for future sessions:** `model: 'fable'` hit its weekly metering cap TWICE this session
     (a first Fable audit before this entry's work began, and the initial R1 Fable-5 audit request) — both
     times the workflow hung silently rather than failing cleanly, burning real wall-clock before being
@@ -475,26 +481,23 @@ verified live max, allocated ED 1081–1087 to the month-overview consolidation 
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
 per the file's protocol; never max+1.)_
 
-- **START HERE (branch `scene-combat-morphology-rearch` only) — R2: implement the ratified
-  closing-distance/facing/grip redesign.** Plan file:
-  `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` (see the 2026-07-02 Decisions
-  entry above for how it was built). Work the 10-increment sequence **I0 → I1 → I2 → I3 → I4 → I5 → I6 →
-  I7a → I7b → I8** in order — I3→I4→I5 is an explicit dependent chain, I7 is split (I7a rear_clearance,
-  I7b the new `contact.py` grab/pin subsystem). Each increment: implement, `pytest tests/valoria -q`
-  (no NEW red beyond the plan's enumerated 8-red accepted set), targeted acceptance checks per the plan's
-  falsifiable criteria, `python workbench/balance.py weapon 400` / `armour` matrix at I3/I5/I8, commit.
-  **Before I2:** ratify JD-1 (the damage-model/`I_g` tension — the highest-stakes fork) and JD-8 (partisan/
-  spetum swing-vs-thrust). **Before I3:** ratify JD-2, JD-6, and **JD-9** (a genuinely new grip↔reach
-  feedback-oscillator fix found by the plan's own capstone verification — do not skip it, D3 is unsafe to
-  implement without it). JD-3/4/5/7 gate narrower increments (I2/I4, I2, I0, I7b respectively) — the plan
-  file states exactly which. **This is a large, multi-week implementation effort — a fresh session is the
-  right place to start it** (this session's context is heavily loaded with the design/audit work itself,
-  which is now fully captured in the plan file and this entry; nothing is lost by starting clean). R0's raw
-  research artifacts (`combined_brief.md`, `flags.json`, the 6 audit-lens JSONs, the capstone punch-list)
-  currently live only in session scratch, not the repo — if a future session wants them preserved past this
-  scratch directory's lifetime, copy them into `designs/audit/2026-07-02-scene-combat-closing-distance/` or
-  similar before they're lost; they are not required to execute the plan (the plan file is self-contained)
-  but are useful provenance for auditing the *how* later.
+- **START HERE (branch `scene-combat-morphology-rearch`, worktree `C:/Github/ttrpg-morph-rearch` — NOT
+  the default `C:/Github/ttrpg` checkout, which is on a different branch and has none of this) — R2:
+  implement the ratified closing-distance/facing/grip redesign.** Plan file (durable, in-repo):
+  `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md` (that folder's
+  `README.md` indexes the full design/audit trail; the canonical plan-mode copy is
+  `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` if it still exists, but treat
+  the in-repo copy as authoritative if they ever diverge). Work the 10-increment sequence
+  **I0 → I1 → I2 → I3 → I4 → I5 → I6 → I7a → I7b → I8** in order — I3→I4→I5 is an explicit dependent chain,
+  I7 is split (I7a rear_clearance, I7b the new `contact.py` grab/pin subsystem). Each increment: implement,
+  `pytest tests/valoria -q` (no NEW red beyond the plan's enumerated 8-red accepted set), targeted
+  acceptance checks per the plan's falsifiable criteria, `python workbench/balance.py weapon 400` / `armour`
+  matrix at I3/I5/I8, commit. **Before I2:** ratify JD-1 (the damage-model/`I_g` tension — the
+  highest-stakes fork) and JD-8 (partisan/spetum swing-vs-thrust). **Before I3:** ratify JD-2, JD-6, and
+  **JD-9** (a genuinely new grip↔reach feedback-oscillator fix found by the plan's own capstone
+  verification — do not skip it, D3 is unsafe to implement without it). JD-3/4/5/7 gate narrower increments
+  (I2/I4, I2, I0, I7b respectively) — the plan file states exactly which. **This is a large, multi-week
+  implementation effort — a fresh session is the right place to start it.**
 - **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
   review, the consolidation execution/reconciliation logs, and the **single consolidated
   23-item Jordan decision queue** live at

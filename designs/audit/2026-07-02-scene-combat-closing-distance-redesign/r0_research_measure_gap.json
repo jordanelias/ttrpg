@@ -1,0 +1,232 @@
+{
+  "purpose": "Fact-gathering (not proposal) for Valoria's scene-combat engine measure/closing gap. Grounds physical/HEMA/biomechanical facts about how a shorter fighter closes on a longer weapon, how deflection physically works, what happens to the longer weapon once distance is closed, and whether treatises attest a minimum-distance/full-power-strike relationship.",
+  "engine_baseline_already_present": {
+    "note": "Read verbatim from designs/scene/combat_engine_v1/systems.py and wrapper.py (C:/Github/ttrpg-morph-rearch checkout) before researching, per instructions. Listed so the research below is not re-proposed under a new name.",
+    "existing_mechanisms": [
+      {
+        "name": "approach_displace(shorter, longer, cfg)",
+        "file": "systems.py:444-450",
+        "what_it_does": "On the approach, a higher-leverage SHORTER weapon sets aside a THRUSTING longer weapon's point (only fires if longer.w['head']=='point' and the shorter's leverage() exceeds the longer's), suppressing the longer weapon's stop-hit and speeding the close. Scaled by the shorter's read-margin over the longer."
+      },
+      {
+        "name": "close_rate(shorter, ...)",
+        "file": "systems.py:614-618",
+        "what_it_does": "Measure-domain closing rate for the shorter weapon: athletic close-speed (balance x cadence) sped up by (1+displ) and by walking through an unthreatening reach (2.0-reach_threat)."
+      },
+      {
+        "name": "leverage(c, cfg)",
+        "file": "systems.py:360-372",
+        "what_it_does": "grip_len - LEVER_HEAD_K*head_len (an EXPLICIT hand-to-contact lever arm), minus a reference, plus a flat 2H bonus. Comment states the prior grip/(grip+head) RATIO wrongly let a dagger out-bind a spear; the current absolute-difference form was adopted to fix that inversion. Config: LEVER_K=0.22, LEVER_HEAD_K=0.2, LEVER_REF=0.32, LEVER_2H=0.20 (all flagged [SIM-CALIBRATE])."
+      },
+      {
+        "name": "grip_target / can_choke / close_unwieldiness",
+        "file": "systems.py:138-156",
+        "what_it_does": "Once closed, a fighter GATHERS IN (grip_position 0->1) proportional to how unwieldy its weapon is in the close, bounded by WP.grip_choke_max (a pole gathers up the haft toward centre-grip; a rapier's short hilt cannot). This is the engine's existing half-staff/choke-up equivalent."
+      },
+      {
+        "name": "close_tempo / close_unwieldiness",
+        "file": "systems.py:56-66, 138-142",
+        "what_it_does": "A long two-handed pole is SLOW to recover cadence once inside its own reach, unless it gathers in (grip_position reduces the penalty proportionally). Reach-derived, continuous, no discrete flag."
+      },
+      {
+        "name": "recoverability_factor / _recovery_mode_commitment / at_grip",
+        "file": "systems.py:96-137",
+        "what_it_does": "Grip-position-aware moment-of-inertia (I_g) and static-moment (S_g) physics blend a swing-arrest mode and a thrust-retract mode by point_concentration, to model how readily a weapon regains a ready position after a committed action. Explicitly cites Silver true-times / Giganti as the best-grounded axis for the LUNGE/body-extension term specifically (line 119-121, 136); the sqrt(I)/parallel-axis/couple STRUCTURE is marked [ASSERTED - first-principles], the gains [FIAT/SIM-CALIBRATE]."
+      },
+      {
+        "name": "beat_aside / slip_inside (displace-and-step-inside)",
+        "file": "wrapper.py:220-240",
+        "what_it_does": "Two DISTINCT routes for a defender to exploit a committed thrust, decoupled onto distinct primitives per an M3 fix: (a) beat_aside — a strong-LEVERAGE weapon (leverage(defender)>leverage(aggressor)+gap) sets the point offline with grip+mass; (b) slip_inside — a SHORTER, quicker fighter (lower reach_base + reflex>=aggressor's) ducks inside the over-extended point, driven by reach+reflex NOT leverage. Comment explicitly frames (b) as 'the dagger inside the rapier lunge.'"
+      },
+      {
+        "name": "reach_threat(longer, defender, cfg)",
+        "file": "systems.py:347-358",
+        "what_it_does": "FIX-1: a longer weapon's reach edge decays if it cannot defeat the closing defender's armour (armour lets the closer 'walk through the reach-ladder'). A0-safe (unarmoured factor=1.0)."
+      },
+      {
+        "name": "halfsword_target / HALFSWORD_FORM",
+        "file": "systems.py:393-401",
+        "what_it_does": "PURE predicate: a half-sword-capable fighter switches to the shortened form (mit dem kurzen Schwert) when closed AND facing medium/heavy armour. Currently gated on ARMOUR, not on raw closed-measure against a longer weapon generically, and currently only wired for sword-family HALFSWORD_FORM/HALFSWORD_BASE weapons (need to check combatant.py for whether any polearm has an equivalent shortened form registered)."
+      },
+      {
+        "name": "reach_sigma / reach_base",
+        "file": "systems.py:409-417, 11-20",
+        "what_it_does": "Standing reach is DERIVED (L0 + geometry: head_len + 2H rear-hand setback), not categorical. reach_sigma is the standing-measure sigma the defender's reach imposes on the aggressor, proportional to gap, weighted high unarmoured and falling with armour."
+      }
+    ],
+    "gap_the_task_describes": "Despite all of the above, polearm-class weapons reportedly win 84-96% of matchups against an arming sword in the current engine. The mechanisms exist but their MAGNITUDES/gating apparently don't yet reproduce the historically-attested outcome that closing measure against a longer weapon is a live, frequently-successful tactic for a shorter/quicker fighter once skill and voiding are applied — not a formula-design question this task answers, but flagged as the visible symptom motivating the research."
+  },
+  "findings": [
+    {
+      "topic": "footwork_for_closing_distance_against_a_thrusting_weapon",
+      "facts": [
+        {
+          "claim": "Fiore dei Liberi's Armizare divides all combat into two measures with fundamentally different technique sets: Zogho Largo (wide play) at a distance where neither combatant can yet strike, used with long weapons (sword, spear, axe) via edge/point work and binds/grabs of the weapon's head; and Zogho Stretto (close/narrow play), the range at which grappling (abrazare) and dagger work occur, and where — even fighting with a long weapon — the applicable techniques shift to hilt/shaft strikes, grabs of the opponent's weapon-arm/body/head, and body-to-body throws. Grabs 'will not reach any deeper than the opponent's elbow' at Zogho Largo (i.e. cannot reach the weapon's grip at that range); by Zogho Stretto that constraint is gone.",
+          "source": "Fiore dei Liberi, Fior di Battaglia (Armizare), as summarized in HEMA Penzance 'Zogho Largo and Zogho Stretto: Fiore's Two Measures of the Longsword' and the Chicago Swordplay Guild glossary entries for both terms; corroborated by longsword.fandom.com/wiki/Zogho_Largo and Zogho_Stretto (Wikifiore).",
+          "confidence": "well-corroborated across multiple independent secondary sources describing the same primary framework; exact folio citations not retrieved in this pass."
+        },
+        {
+          "claim": "In the spear section of Fior di Battaglia, the documented first defence against an opposing spear thrust is: slide the front foot off to the side (off the centerline) and beat the opposing spear's point to the side, WHILE passing the back foot to the front — i.e. the void/beat and the closing step are the SAME motion, not sequential. This is described as the common opening defence 'all spears and relatively short weapons' share.",
+          "source": "Fiore de'i Liberi, Fior di Battaglia, Posta Mezza Porta di Ferro (spear), fol. 39r (folio cited in the fightlikefiore.wordpress.com translation, 'Spear – Posta Mezza Porta di Ferro (Middle Iron Gate)'); play text: 'I am positioned in Mezza Porta di Ferro... With a short spear or staff, the beat with a step will not fail to wound, and all guards which step off line with short spear and short sword are enough when facing any long hand held weapon... Slide your front foot off to the side. Beat the opposing spear point to the side while passing your back foot to the front. You will now be able to deliver a counter thrust of your own.'",
+          "confidence": "high — direct translated play text with folio citation from a dedicated Fiore-translation source, and independently corroborated in general terms by the selohaar.org 'Spear of Fiore dei Liberi' summary describing the same 'front foot off to the side / beat the spear / pass the back foot forward' pattern."
+        },
+        {
+          "claim": "This Fiore passage explicitly generalizes the tactic beyond the spear-vs-spear case: 'all guards which step off line with short spear and short sword are enough when facing any long hand held weapon' — i.e. Fiore states as doctrine that an off-line stepping guard, held with a SHORT weapon, suffices against ANY long weapon, not just spear-vs-spear.",
+          "source": "Same fol. 39r translation as above.",
+          "confidence": "high (verbatim quote), but note this is Fiore's own claim/doctrine, not an independently verified biomechanical fact — flagged per instructions where a treatise makes a strong general claim."
+        },
+        {
+          "claim": "George Silver (Paradoxes of Defence, 1599) states as a general principle of 'true fight' that true times are 'whatsoever is done with the hand before the foot or feet' (Paradox 14 region) — hand-motion must lead foot-motion for an action to be 'true' (safe/efficient); reversing this order (foot before hand) is 'false fight.' Silver uses this principle to explain why closing with a long weapon (which needs the feet to travel a greater distance to bring the point back in line — 'to win the place') is inherently SLOWER-timed than a short weapon's hand-led response.",
+          "source": "George Silver, Paradoxes of Defence (1599), the 'true times / false times' paradox, transcribed at pbm.com/~lindahl/paradoxes.html (a standard scholarly online transcription of the 1599 original).",
+          "confidence": "medium-high — quote structure matches independently-known HEMA-community descriptions of Silver's true-times doctrine (cross-checked against a second, independent WebSearch summary describing 'hand first' as Silver's true-times definition), but exact paradox numbering was not independently verified against a facsimile scan in this pass."
+        },
+        {
+          "claim": "Silver states the short staff/half-pike gains its advantage over two-sword-and-dagger or rapier-and-poniard pairs, and the long staff/Morris pike, via 'the strength & narrowness of space in his four wards of defence' — i.e. the short staff's guards physically deny (narrow) the angles by which the longer weapon can find an opening, forcing the long weapon's user into unsafe (untimed) actions to attack or defend once distance is closed.",
+          "source": "George Silver, Paradoxes of Defence, the short-staff-vs-long-staff/Morris-pike paradox (commonly cited as within paradoxes 26-29 in secondary HEMA discussion); phrase 'strength & narrowness of space in his four wards' located via WebSearch of the primary EEBO/pbm.com text.",
+          "confidence": "medium — phrase located and appears to be a genuine period quote, but full surrounding paragraph and exact paradox number were not independently re-confirmed against a second transcription in this pass; treat the exact wording as provisional pending direct facsimile check."
+        },
+        {
+          "claim": "Meyer's Kunst des Fechtens (1570) structures the longsword fight into three temporal divisions — Zufechten (the Onset/approach), Handtarbeit (the Handwork/close exchange), and Abzug (the Withdrawal) — and his footwork vocabulary for moving between them includes gathering steps (Nachsetzen/Zutritt-type incremental steps that do not cross the feet), passing steps (Passen, which do cross the feet and cover more ground per step), and triangular/offline steps used to angle away from an opponent's line while closing or retreating. Meyer's polearm (Stange/halberd/pike) chapter is explicitly noted to reuse the same underlying footwork/mechanical principles taught in the longsword chapter, rather than a separate footwork system.",
+          "source": "Joachim Meyer, Gründtliche Beschreibung der... Kunst des Fechtens (1570); secondary synthesis from HROARR 'A key to Meyer's mechanics & footwork', Scholar Victoria 'Back to Basics 1 – Fundamentals and Footwork in Meyer', and grauenwolf.wordpress.com's 'Meyer's Longsword – Divisions of the Fight'.",
+          "confidence": "medium — the three-division structure (Zufechten/Handtarbeit/Abzug) and gathering-vs-passing step vocabulary are well-attested across multiple independent secondary Meyer-scholarship sources; a direct primary-text quote for the polearm-vs-longsword footwork crossover was not retrieved (the PDF compilation exceeded fetch size limits) and should be verified against Meyer's Stange chapter directly before being treated as settled."
+        },
+        {
+          "claim": "The Liechtenauer tradition (Ringeck's gloss and related texts) organizes the longsword fight around three temporal/tactical concepts — Vor (before/initiative), Nach (after/reaction), and Indes (the instant 'in-between' — acting within the opponent's own tempo) — plus Fühlen ('feeling'/tactile sensing of pressure once blades are in contact) and Winden (winding, the bind-manipulation technique). Fühlen and Indes are described in the secondary literature as 'inherently connected... in one single concept': the tactile read in a bind and the instantaneous exploitation of an opening are treated as a single skill, not two.",
+          "source": "Sigmund Ringeck's gloss on Liechtenauer's Recital (ca. 1440s), general Liechtenauer-tradition secondary synthesis (medievalswordschool.co.uk, ernstfechten.wordpress.com).",
+          "confidence": "medium — this is well-established general Liechtenauer-tradition doctrine independently corroborated across sources, but a direct primary quote specifically addressing closing against a SPEAR/polearm (gegen den Spieß) was not located in this research pass; flagged as a gap rather than asserted."
+        }
+      ]
+    },
+    {
+      "topic": "deflection_technique_against_a_thrusting_point_and_leverage_morphology",
+      "facts": [
+        {
+          "claim": "In German longsword doctrine the blade is divided into 'strong' (stark/forte) — from the cross to roughly the blade's midpoint — and 'weak' (schwach/foible) — from midpoint to the tip. The standard parry doctrine is to engage the opponent's weak with your own strong, because this is where the parrying sword has the greatest MECHANICAL LEVERAGE (the contact point is closer to the parrier's hand/pivot, so a given hand-force produces more torque/control there than the same force applied further from the hand) — this is stated as basic lever physics, not a stylistic preference.",
+          "source": "German Longsword Fighting synthesis (historicaleuropeanmartialarts.com), Path of the Sword 'Longsword Leverage, Dexterity and Power', and the Wikipedia 'Forte (fencing)' article, which states: 'the strong part of the blade nearest the hilt... provides structural strength for defensive actions... the closer to the hilt (pivot point) a parry occurs, the greater the mechanical advantage.'",
+          "confidence": "high — this is uncontroversial rigid-body lever mechanics (torque = force x moment arm from the hand/pivot) independently stated across multiple sources in near-identical terms; treat the underlying physics claim (not the citation of any single source) as effectively load-bearing fact."
+        },
+        {
+          "claim": "Deflection of an incoming blow (including a thrust) is physically achieved by a force applied PERPENDICULAR to the line of the attack, not by direct opposition/blocking: a comparatively small lateral (perpendicular) force is sufficient to redirect the point off the target line, because the deflector only needs to add a sideways velocity component, not stop the weapon's forward momentum outright. This is presented as the general physical mechanism underlying HEMA parrying (both cut and thrust defences), distinguishing 'redirection' parries from 'opposition' (block) parries which do require force comparable to or exceeding the incoming blow's momentum.",
+          "source": "hema101.com 'An Introduction to Parrying', cross-referenced against the mechanical-advantage forte/foible sources above.",
+          "confidence": "medium-high — the physics (perpendicular force redirects a moving point with less force than a head-on stop) is a straightforward vector-mechanics fact; the specific secondary source is a HEMA-pedagogy blog rather than a peer-reviewed biomechanics paper, so treat the underlying physics as solid but the specific numeric claims (if any) as illustrative, not measured."
+        },
+        {
+          "claim": "Fiore's spear plays document a hand-guard-independent deflection method distinct from a sword's cross: from Posta di Fenestra (window guard) with the spear, 'one can beat aside and obstruct every thrust, and exchange the thrust, and beat to the ground' — the SPEAR ITSELF (not a sword's cross) is the deflecting instrument used against another spear/polearm's thrust, executed with a beat (percussive lateral displacement of the opposing shaft) rather than a static block.",
+          "source": "Fiore dei Liberi, Fior di Battaglia, spear section, Posta di Fenestra play, as summarized via fightencyclopedia.com 'Polearm' and fightlikefiore.wordpress.com spear-tag entries.",
+          "confidence": "medium — general claim corroborated across two independent secondary sources describing the same play, but exact folio/play-number citation not independently re-verified against a primary facsimile in this pass."
+        },
+        {
+          "claim": "Beyond weapon-on-weapon deflection, a well-attested alternative to redirecting a spear/polearm's point is seizing the shaft directly with the free (off) hand once inside — 'with a spear you can more easily grab the shaft and control the weapon' (a function of the shaft being a graspable cylinder, unlike a cross-sectioned/edged sword blade) — documented in Paulus Hector Mair's grappling-with-the-polearm material and echoed in general polearm-combat surveys. This is a DIFFERENT mechanism from a sword's forte-leverage deflection: it is direct manual seizure/control of the opposing shaft, available specifically because a haft (unlike a sword's edged blade) can be safely gripped.",
+          "source": "Paulus Hector Mair (16th c. compilation of polearm/wrestling-at-the-halberd material), summarized via fightencyclopedia.com 'Polearm'.",
+          "confidence": "medium — the underlying physical fact (a round/square wooden haft is grippable where a sword's edge is not) is self-evidently true and the Mair attribution is corroborated by general HEMA-polearm literature, but the specific Mair folio was not retrieved in this pass."
+        },
+        {
+          "claim": "The engine's leverage() primitive (systems.py:360-372) computes grip_len - LEVER_HEAD_K*head_len as an 'EXPLICIT hand-to-contact lever arm,' with the code comment explaining this specific form was adopted to FIX a documented inversion where the prior grip/(grip+head) RATIO let a dagger (short grip, tiny head) out-score a spear (long grip, long head) in leverage — 'the verified HEMA inversion: dagger 0.140 > spear -0.066.' This matches the forte/foible mechanical-advantage fact above (leverage scales with the ABSOLUTE distance from the controlling hand to the point of contact, not a length ratio) — i.e. the current formula's STRUCTURE (grip_len minus a load term, not a ratio) appears consistent with the treatise-and-physics evidence that leverage is about hand-to-contact distance, not proportional geometry.",
+          "source": "Direct code read, designs/scene/combat_engine_v1/systems.py:360-372 and config.py:28-31 (C:/Github/ttrpg-morph-rearch checkout), cross-referenced against the forte/foible lever-arm sources above.",
+          "confidence": "high on the code-reading; the cross-reference judgment (does the STRUCTURE match treatise physics) is offered as an observation, not a formula recommendation, per the task's scope constraint."
+        },
+        {
+          "claim": "GAP OBSERVED: none of the sources retrieved in this pass describe forte/foible leverage as a function of grip_len alone (distance from hand to the OPPONENT's contact point on their own weapon) — the treatise/physics sources describe leverage as a property of WHERE ALONG YOUR OWN BLADE the contact occurs relative to YOUR hand (a within-weapon distinction: contact near your hilt = strong, contact near your tip = weak), not primarily a function of your weapon's total grip length or the opposing weapon's head length. This is a distinct fact from what leverage() currently encodes (a whole-weapon scalar comparing two combatants' grip/head geometry) and may be worth flagging: the treatise concept of forte/foible is a WITHIN-EXCHANGE, contact-point-dependent quantity (where on my blade did the bind land), not a fixed per-weapon scalar. Both spear-morphology facts (long grip favors leverage) and the forte/foible facts (contact-point-on-my-own-blade matters) are independently attested; the current single scalar may only capture the former.",
+          "source": "Synthesis/observation across the forte/foible sources above and the code read; explicitly a FLAGGED GAP, not a claim from any single source.",
+          "confidence": "this is an analytical observation about coverage, not itself a factual claim requiring a confidence rating — flagged per the task's instruction to note where 'something [may be] missing.'"
+        }
+      ]
+    },
+    {
+      "topic": "consequences_for_the_longer_weapon_once_distance_is_closed",
+      "facts": [
+        {
+          "claim": "Half-swording (Halbschwert / mit dem kurzen Schwert) is documented across multiple German longsword treatises (attributed to the Liechtenauer tradition, transmitted via Ringeck and others) as the standard adaptation once a longsword fight closes to grappling/close range against an armoured opponent: the off-hand grips partway down the BLADE itself (not the hilt), converting the weapon into a short, rigid, spear-like implement for precise, high-leverage thrusts into armour gaps (visor, armpit, groin). Most period treatises show armoured combat as PRIMARILY conducted at the half-sword, with cuts/slices being described as 'virtually useless against iron or steel plate.'",
+          "source": "Wikipedia 'Half-sword' (summarizing Ringeck Fechtbuch material and general Kunst des Fechtens/Liechtenauer-tradition scholarship); corroborated independently by grokipedia.com/page/Half-sword and multiple further secondary sources.",
+          "confidence": "high — well-attested and consistent across independent sources; this is standard, uncontroversial HEMA scholarship."
+        },
+        {
+          "claim": "The engine already models a direct analogue: HALFSWORD_FORM/HALFSWORD_BASE (combatant.py, referenced systems.py:390-401) provides a shortened-form switch, and halfsword_target() switches a capable weapon to its half-sword form specifically when closed AND facing medium/heavy armour ('vs ARMOUR in the CLOSE'). This is gated on armour tier, not on raw closed-measure against a longer opponent generically — worth noting as a scope question (not a proposal) since the treatise evidence for half-swording is specifically an ARMOURED-combat adaptation, so the current gate condition (closed AND armoured) appears to match the historical use-case rather than under- or over-generalizing it.",
+          "source": "Direct code read, systems.py:393-401, cross-referenced against the half-sword sources above.",
+          "confidence": "high on the code reading; the gate-condition matching judgment is an observation."
+        },
+        {
+          "claim": "For POLEARM-class weapons specifically (as opposed to swords), the documented close-range grip adaptation is choking up on / gripping the middle of the haft — described in modern HEMA-polearm terminology as a 'staff' or 'Robin Hood' grip, hands at roughly the one-third points with thumbs inward, 'allowing one to strike easily with either end at closer range.' This is functionally the polearm equivalent of half-swording (shortening the effective lever to regain control at close range) but uses BOTH ends of the weapon (spike/axe-head end AND butt-spike end) rather than converting to a single short point.",
+          "source": "grauenwolf.wordpress.com 'Proposed Terminology for Gripping the Staff, Spear, and Similar Weapons'; corroborated by general polearm-combat surveys (fightencyclopedia.com 'Polearm', lostkingdom.net) describing poleaxe combat as requiring 'full body strength and both hands' with 'sophisticated fighting techniques based on quarterstaff fighting.'",
+          "confidence": "medium — the grip-terminology source is a HEMA-community blog rather than a primary or peer-reviewed source, but the underlying claim (polearms have a documented centre-grip/staff-grip mode for close use, distinct from the extended butt/head-forward grip for reach) is corroborated by the general Fiore pollax half-staffing material below and matches the engine's own grip_target/can_choke primitive."
+        },
+        {
+          "claim": "Fiore's pollax (poleaxe) section documents 'half-staffing' — gripping the weapon at or near its middle — specifically enabling BOTH offensive striking with either end AND grappling/hooking/tripping applications, used in close armoured combat. This is presented as a standard, named technique class within Fiore's pollax plays, not an improvised fallback.",
+          "source": "Multiple independent secondary summaries of Fior di Battaglia's pollax section (thearma.org ARMA study guide references, general Fiore-scholarship synthesis); the specific term 'half-staffing' for this grip is a modern HEMA-community rendering rather than Fiore's own period Italian terminology, which was not independently retrieved in this pass.",
+          "confidence": "medium — the technique class (centre-grip for close pollax work enabling both-end striking and grappling) is corroborated across sources, but the exact period terminology and folio citation were not retrieved; treat 'half-staffing' as a modern descriptive label, not a period term, pending further verification."
+        },
+        {
+          "claim": "A butt-spike (present on many polearms, including poleaxes) is documented as usable once the primary head cannot be brought to bear — described in general polearm surveys as either 'a finishing move for someone who's already fallen, or as a secondary weapon if the spear head has broken and you can't withdraw [the primary point in time].' This directly documents the historical existence of a fallback strike mode for when the primary (long) end of the weapon cannot be recovered/retracted in time.",
+          "source": "General polearm-combat survey material (search-aggregated from multiple sources including lostkingdom.net and Wikipedia 'Poleaxe'); this is a lower-confidence, generalist claim rather than a specific treatise citation.",
+          "confidence": "low-medium — plausible and consistent with the weapon's morphology (many historical polearms are physically fitted with a butt-spike specifically for this reason), but not tied to a specific named treatise play in this research pass; flagged as needing primary-source confirmation (e.g. a specific Talhoffer or Fiore pollax play) before being treated as settled."
+        },
+        {
+          "claim": "George Silver states directly that once forced to fight at a range shorter than its optimal length, a long weapon's own excess length becomes a physical liability rather than a neutral or reducible-benefit factor: 'the length of his staff that will lie behind him, will hinder him to strike, thrust, ward, or go back in due time' (paraphrasing/quoting the short-staff-vs-long-staff paradox) — i.e. the portion of the weapon extending BEHIND the hands at close range is not inert; it actively impedes all four of strike, thrust, ward (parry), and retreat, because it must be swung/repositioned as dead weight/moment-of-inertia within the same confined space.",
+          "source": "George Silver, Paradoxes of Defence (1599), short-staff paradox (cited region: paradoxes ~26-29), transcribed at pbm.com/~lindahl/paradoxes.html.",
+          "confidence": "medium-high — quote content is consistent with the mechanical-advantage/leverage physics established elsewhere in this research (a longer moment arm behind the hand increases the moment of inertia that must be overcome to reposition the weapon), but exact paradox number and full surrounding text were not independently cross-checked against a second transcription in this pass."
+        },
+        {
+          "claim": "Silver separately states that a long rapier, once its point/cross is displaced or crossed by an opponent's short sword at close range, 'cannot be undone... without going back with their feet' — i.e. RECOVERING/UNCROSSING a long weapon at close range requires a FOOTWORK response (stepping back to regain the room the weapon's length needs), not merely a hand/arm motion, and Silver's true-times doctrine (hand before foot = true; foot before hand = false) classifies a foot-led recovery as inherently SLOWER-timed than the short sword's hand-led continuation of the attack.",
+          "source": "George Silver, Paradoxes of Defence (1599), paradox ~35 region (rapier length/crossing paradox), transcribed at pbm.com/~lindahl/paradoxes.html.",
+          "confidence": "medium — consistent internal logic with Silver's independently-corroborated true-times doctrine, but the specific paradox-35 attribution was not independently cross-verified against a second transcription."
+        }
+      ]
+    },
+    {
+      "topic": "minimum_distance_for_full_power_strike_vs_checked_close_strikes",
+      "facts": [
+        {
+          "claim": "Modern fencing-lunge biomechanics research documents that the lunge is a DISTANCE-ADAPTIVE motion: as target distance increases, fencers measurably increase rear-leg knee flexion early in the movement, followed by enhanced hip extension and greater plantar-flexion velocity, to extend reach and maintain stability — i.e. the body's kinetic chain for a thrusting action is quantifiably reconfigured (not merely 'stopped short') depending on available distance. A modern competitive fencing lunge can cover distance 'up to 1.5 times the fencer's height' in a single motion, with the arm's acceleration leading the movement, followed by explosive rear-leg extension, finishing when the point touches before the front foot lands.",
+          "source": "Peer-reviewed/academic biomechanics literature identified via WebSearch: 'Influence of Target Width and Distance on Postural Adjustments in a Fencing Lunge' (PMC10203838), 'Novel Lunge Biomechanics in Modern Sabre Fencing' (ScienceDirect/academia.edu), and 'A biomechanical approach to study lunge in fence athletes' (ScienceDirect).",
+          "confidence": "high — these are peer-reviewed/academic sources (PMC-indexed and ScienceDirect), the strongest-tier evidence retrieved in this research pass; note this is MODERN SPORT FENCING biomechanics (thin blade, no armour, different weapon mass/moment-of-inertia than a longsword/spear), so the quantitative reach figure (1.5x height) should not be transferred directly to HEMA weapons without adjustment, but the QUALITATIVE fact — that thrust mechanics measurably reconfigure with available distance — is solid and general to any weapon-thrust biomechanics."
+        },
+        {
+          "claim": "In striking-implement biomechanics generally (documented in baseball-bat swing mechanics), 'choking up' on a bat/haft — gripping closer to the striking end, i.e. shortening the effective radius from the hand/pivot to the mass being swung — measurably reduces the moment of inertia that must be overcome to initiate or arrest the swing ('the more closely concentrated the mass is to the axis of rotation, the easier it is to swing it... the more mass is positioned away from the axis, the more difficult it is to initiate or stop angular motion'). This is a direct physical mechanism (not a HEMA-specific claim) explaining WHY gathering-in/choking-up on a long weapon at close range trades reach for recoverability: it is a rotational-inertia (moment of inertia = mass x radius²) fact, independent of weapon type.",
+          "source": "General sports-biomechanics literature on bat-swing mechanics (search-aggregated), cross-referenced against the physics-of-martial-arts angular-momentum paper: 'Physics of martial arts: Incorporation of angular momentum to model body motion and strikes' (PLOS ONE / PMC8354461).",
+          "confidence": "high — this is standard, uncontroversial rigid-body rotational mechanics (I = mr² for a point mass, or the parallel-axis theorem for a distributed mass); the engine's own at_grip()/I_g computation (referenced in systems.py's recoverability_factor and wield_heft) already appears to implement exactly this physics, per the 'grip-aware swing inertia' and 'sqrt of the re-pivoted MoI' language in the code comments."
+        },
+        {
+          "claim": "Fiore's Zogho Largo/Zogho Stretto framework independently encodes a version of the 'minimum distance for full technique' fact as a STRUCTURAL claim about which techniques are even AVAILABLE, not merely how hard they land: at Zogho Largo, grabs 'will not reach any deeper than the opponent's elbow; body-to-body contact is not possible' — i.e. Fiore treats certain classes of technique (deep grabs, throws, body contact) as physically UNAVAILABLE above a certain distance, the inverse framing of 'a long weapon cannot fully function below a certain distance.' The secondary literature also notes Fiore observed that a longsword bind ('crossing') is not uniform: 'sometimes the swords meet at their tips, a long way apart. Sometimes they meet at the hilts, a hand's breadth from each other's faces' and 'what you can do next depends entirely on which of those crossings you are in' — i.e. Fiore explicitly ties available follow-up technique to the PHYSICAL DISTANCE/position of the contact point, not just an abstract measure category.",
+          "source": "HEMA Penzance 'Zogho Largo and Zogho Stretto: Fiore's Two Measures of the Longsword' (secondary synthesis of Fior di Battaglia).",
+          "confidence": "medium-high — the underlying two-measure framework is well-corroborated across independent sources (see footwork section above); the specific 'elbow depth' and 'crossing at tips vs hilts' details come from a single secondary-source article and were not independently cross-checked against a second source or the primary facsimile in this pass."
+        },
+        {
+          "claim": "George Silver states that 'a full blow upon the head or face with a short sharp sword, is most commonly death' — using the word 'full' to distinguish a completely-executed blow from a lesser one, implying the existence of a non-full (partial/checked) blow as a recognized, named alternative category in period fencing vocabulary, though the located quote does not itself specify the distance/space required to achieve a 'full' blow versus a checked one.",
+          "source": "George Silver, Paradoxes of Defence (1599), paradox ~13 region, transcribed at pbm.com/~lindahl/paradoxes.html.",
+          "confidence": "low-medium — the quote itself is plausible period phrasing, but it establishes only that 'full' vs implicitly lesser blows were a recognized distinction, NOT a specific minimum-distance claim; flagged explicitly as NOT strong evidence for a quantified minimum-distance requirement, despite being the closest textual hit found for that specific sub-question."
+        },
+        {
+          "claim": "GAP: no source retrieved in this research pass provides a quantified, treatise-attested or biomechanically-measured MINIMUM distance (e.g. in cm or as a fraction of weapon length) below which a specific weapon class (longsword, spear, greatsword) cannot deliver a full-power swing or thrust. The fencing-lunge biomechanics research (above) demonstrates that thrust mechanics ADAPT continuously to available distance (not a hard cutoff), and the rotational-inertia physics (choking up) demonstrates that a shortened grip changes both reach AND achievable angular velocity, but no source directly measures or states a hard minimum-distance threshold analogous to the '50cm' intuition in the task prompt. This should be treated as UNSUPPORTED BY THE SOURCES RETRIEVED, not as a fact — the underlying physical intuition (a weapon needs room to accelerate before a strike lands) is consistent with the mechanics found (moment of inertia, kinetic-chain sequencing in the lunge), but no source quantifies it.",
+          "source": "Explicit gap flag per the task's instruction to say so when a claim is uncertain or unsupported, rather than picking a number silently.",
+          "confidence": "N/A — this is a statement of absence of evidence, not a claim."
+        }
+      ]
+    }
+  ],
+  "cross_cutting_observations": [
+    "Multiple treatise traditions (Fiore's Zogho Largo/Stretto, Silver's true-times, the Liechtenauer Vor/Nach/Indes) independently converge on the same structural claim: closing measure against a longer weapon is not modeled by these masters as a single continuous 'gap' variable alone — it is treated as crossing a DISCRETE regime boundary where an entirely different technique repertoire becomes available/unavailable (grapples become reachable at Zogho Stretto; half-swording becomes the norm; the long weapon's behind-the-hands length becomes a liability rather than inert). This is a genuine cross-source convergence, not a single author's idiosyncratic framing.",
+    "Every source describing the SHORT weapon's success against a LONG one after closing attributes it to a SPECIFIC PHYSICAL MECHANISM available to the closer fighter (footwork voiding the line + closing simultaneously; hand-seizure of a graspable haft; a mechanically-favourable near-hilt deflection point; the long weapon's own moment-of-inertia working against its wielder in confined space) — none of the sources attribute the short weapon's success to it simply being 'faster' or 'more agile' in the abstract. This suggests the treatise evidence favours grounding any fix in a SPECIFIC mechanism (e.g. shaft-seizure as a distinct action from a beat/deflection, or the moment-of-inertia cost of recovering a long weapon at close range) rather than a general multiplier.",
+    "The strongest quantitative/peer-reviewed evidence retrieved (fencing-lunge biomechanics, rotational-inertia/choking-up physics) both independently support the general shape of two things the engine ALREADY models (at_grip's grip-position-aware I_g, and recoverability_factor's swing-arrest-vs-thrust-retract blend) — this research did not surface a documented physical mechanism that is completely ABSENT from the engine's existing primitives. The clearest candidate gap is the forte/foible distinction (leverage as a function of WHERE ALONG THE BLADE contact occurs, which is inherently an in-exchange/contact-point fact) versus the engine's leverage() as a fixed per-weapon scalar — flagged above, not resolved, since resolving it would mean proposing a formula, which is out of scope for this pass."
+  ],
+  "sources_consulted": [
+    {"title": "Paradoxes of Defence, by George Silver (1599)", "url": "http://www.pbm.com/~lindahl/paradoxes.html", "type": "primary text transcription"},
+    {"title": "Spear – Posta Mezza Porta di Ferro (Middle Iron Gate) – Fight like Fiore", "url": "https://fightlikefiore.wordpress.com/2020/01/19/spear-posta-mezza-porta-di-ferro-middle-iron-gate/", "type": "primary-text translation with folio citation"},
+    {"title": "The Spear of Fiore dei Liberi (Gregory D. Mele, Chicago Swordplay Guild)", "url": "https://www.selohaar.org/CW2010/The_Spear_of_Fiore_dei_Liberi.pdf", "type": "secondary scholarship"},
+    {"title": "Zogho Largo and Zogho Stretto: Fiore's Two Measures of the Longsword — HEMA Penzance", "url": "https://hemapenzance.com/blog/zogho-largo-and-zogho-stretto-fiores-two-measures", "type": "secondary scholarship"},
+    {"title": "Zogho Largo / Zogho Stretto — Chicago Swordplay Guild glossary", "url": "https://www.chicagoswordplayguild.com/t/zogho-largo", "type": "secondary scholarship"},
+    {"title": "Understanding the Nature of Wide and Close Play in the Martial Tradition of Fiore dei Liberi", "url": "https://www.historicalfencingmalta.org/papers/wide-and-close-play-in-the-tradition-of-fiore-dei-liberi/", "type": "secondary scholarship"},
+    {"title": "A key to Meyer's mechanics & footwork - part 1 — HROARR", "url": "https://hroarr.com/article/a-key-to-meyers-mechanics-footwork-part-1/", "type": "secondary scholarship"},
+    {"title": "Meyer's Longsword – Divisions of the Fight — Grauenwolf's Study of Western Martial Arts", "url": "https://grauenwolf.wordpress.com/2012/01/07/meyers-longsword-divisions-of-the-fight/", "type": "secondary scholarship"},
+    {"title": "Half-sword — Wikipedia", "url": "https://en.wikipedia.org/wiki/Half-sword", "type": "secondary/tertiary reference"},
+    {"title": "Proposed Terminology for Gripping the Staff, Spear, and Similar Weapons — Grauenwolf's Study of Western Martial Arts", "url": "https://grauenwolf.wordpress.com/2015/03/15/proposed-terminology-for-gripping-the-staff-spear-and-similar-weapons/", "type": "secondary scholarship"},
+    {"title": "Forte (fencing) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Forte_(fencing)", "type": "secondary/tertiary reference"},
+    {"title": "Longsword Leverage, Dexterity and Power – Path of the Sword", "url": "https://pathofthesword.com/longsword-leverage-dexterity-and-power/", "type": "secondary scholarship"},
+    {"title": "An Introduction to Parrying — hema101.com", "url": "https://www.hema101.com/post/an-introduction-to-parrying-or-making-it-simple-for-our-stupid-brains", "type": "secondary/pedagogical"},
+    {"title": "Influence of Target Width and Distance on Postural Adjustments in a Fencing Lunge", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10203838/", "type": "peer-reviewed biomechanics"},
+    {"title": "Novel Lunge Biomechanics in Modern Sabre Fencing", "url": "https://www.sciencedirect.com/science/article/pii/S1877705815014769", "type": "peer-reviewed biomechanics"},
+    {"title": "Determination of loading in the lower limb joints during step-forward lunge in fencing", "url": "https://www.researchgate.net/publication/331480862_Determination_of_loading_in_the_lower_limb_joints_during_step-forward_lunge_in_fencing", "type": "peer-reviewed biomechanics"},
+    {"title": "Physics of martial arts: Incorporation of angular momentum to model body motion and strikes", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8354461/", "type": "peer-reviewed biomechanics/physics"},
+    {"title": "How to defeat the spear? (and other polearms) — ARMA forum", "url": "https://www.thearma.org/forum/viewtopic.php?t=24634&start=30", "type": "practitioner discussion (lower-confidence tier)"},
+    {"title": "The School of Battle: Striking With A Spear (Talhoffer)", "url": "http://talhoffer.blogspot.com/2012/11/striking-with-spear.html", "type": "secondary scholarship, not independently fetched in depth this pass"}
+  ]
+}
