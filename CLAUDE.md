@@ -241,6 +241,7 @@ Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
 | **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
 | **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
 | **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
+| **`fable`** | The rare top-of-stack judgment nodes (added 2026-07-01, ED-1086 — availability restored 2026-07-01) | canonical-contract & **propagation-spec authorship** (the aggregate-up/distribute-down + termination artifact — doctrine ED-1083 §4), the emergence audit (seeded-sim + ablation verdicts, once runnable), deepest cross-corpus synthesis. Caveats: subscription metering (~50% weekly cap through 2026-07-07 — verify current terms); **no zero-data-retention** → use `opus` for retention-sensitive content; the safety classifier is irrelevant to game-design content. `fable` is an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. |
 
 **Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
 `haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
@@ -249,9 +250,28 @@ genuinely unsure, omit the override and inherit — but flag the stages above wh
 fits, rather than defaulting the whole fan-out to Opus.
 
 **How to set it:**
-- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus"` (e.g. `Explore`/`general-purpose`
-  file-finding on `haiku`–`sonnet`; reserve `opus` for `Plan` and adjudication agents).
+- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus" | "fable"` (e.g. `Explore`/`general-purpose`
+  file-finding on `haiku`–`sonnet`; reserve `opus`+ for `Plan` and adjudication agents).
 - **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
   mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
   `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
   Opus verifier/synthesizer.**
+
+**Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
+`designs/architecture/holonic_container_doctrine_v1.md` for the doctrine side):
+- **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
+  dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
+  orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
+  more independent. Make independence structural: critic gets read-only tools.
+- **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
+  binding constraint is.
+- **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
+  lanes return **fixed-format summaries**, not raw context — synthesis binds on the orchestrator's
+  window.
+- **Guardrails binding on every infill lane** (doctrine ED-1083 §2): implement the local rule only;
+  declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
+  scale-local interface dialect (**shape divergence**).
+- **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
+  *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
+  watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
+  are runnable) an emergence-auditor — see the 2026-07-01 decision queue.
