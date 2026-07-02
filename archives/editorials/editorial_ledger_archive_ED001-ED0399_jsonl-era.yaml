@@ -2,7 +2,9 @@
 # =====================================================================================
 # Editorial ledger archive: ED-001 through ED-399 (minus the exclusion
 # list below), split from canon/editorial_ledger.jsonl on 2026-07-02 when the live ledger
-# exceeded its 150,000-token CI cap (tools/ci_register_size_check.py) after ED-1093.
+# exceeded its 150,000-token CI cap (tools/ci_register_size_check.py) after this branch's
+# T1-T4 charge-recoil ruling (later renumbered ED-1093 -> ED-1095 -- see id_reservations.yaml --
+# after a cross-lane ID collision with origin/main's independently-merged ED-1093).
 #
 # NOT a duplicate of the older archives/editorials/editorial_ledger_archive_001_200.yaml /
 # _201_400.yaml or the deprecated/canon/editorial_ledger_archive*.yaml snapshots

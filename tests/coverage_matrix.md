@@ -359,7 +359,7 @@ Archived entries in tests/coverage_matrix_archive.md
   an 11th side-A subunit succeeds, a 12th is blocked client-side with the ED-1090-citing alert
   matching the server's own message text.
 
-## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1093)
+## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1095)
 - **T1 (actor-gate).** New `PC_RECOIL_CHARGER_GATE` (config.py, default ON): the reciprocal
   charge-recoil (`PC_CHARGE_RECOIL`) now additionally requires the charging atom's
   `troop_type == 'cavalry'` literally — a defender no longer recoils a charger just for having

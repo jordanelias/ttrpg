@@ -1,6 +1,6 @@
 # Mass-battle movement/pathing audit — 2026-07-02
 
-**Status:** Findings ratified (ED-1094). Implementation NOT started — this is the audit + fix-plan
+**Status:** Findings ratified (ED-1096). Implementation NOT started — this is the audit + fix-plan
 deliverable; the fix plan below is what a future Sonnet-tier pass executes, gated on the four
 decision gates in §4.
 
@@ -77,11 +77,11 @@ rather than left standing:
 | # | Finding | Severity | Verdict |
 |---|---|---|---|
 | 1.1 | `reset_positions` is a positional no-op on the node/field path — turns 2-8 of a multi-turn battle are welded to the turn-1 contact line (126 of 144 ticks show zero movement) | **critical** | CONFIRMED |
-| 1.2 | ED-1093 (mounted-archer kiting) is **not effective**: implicit `role='Kite'` never sets `unit_type='ranged'`; the unit neither kites, nor volleys, nor gets a speed edge, on any path | **critical** | CONFIRMED |
+| 1.2 | ED-1095 (mounted-archer kiting) is **not effective**: implicit `role='Kite'` never sets `unit_type='ranged'`; the unit neither kites, nor volleys, nor gets a speed edge, on any path | **critical** | CONFIRMED |
 | 1.3 | v12 column-local targeting is dead on the node path — pure centroid attraction, wings converge inward during approach | **high** | PARTIALLY_CONFIRMED (correction: a single `GappedLine` subunit's own internal gap is NOT affected — rigid translation preserves it; convergence is a cross-subunit/wing phenomenon only) |
 | 1.4 | The envelop/sweep acceptance validators (`validators.py`) are measuring the dead legacy-path arm since ED-1089 and are wired into no CI — "Stage C.4 passed" claims from earlier this session are true only of the legacy grid | **high** | CONFIRMED |
 | 1.5 | Formation drift (`check_drift`) corrupts node state on shape change — cells can teleport to `(0,0)` or stack at the anchor | **high** | CONFIRMED |
-| 1.6 | `PER_CELL` still defaults OFF — charge shock, brace recoil, cavalry speed, fatigue, and the ED-1091/ED-1093 gates are all compiled out of the default/visualized configuration | **medium** | CONFIRMED |
+| 1.6 | `PER_CELL` still defaults OFF — charge shock, brace recoil, cavalry speed, fatigue, and the ED-1091/ED-1095 gates are all compiled out of the default/visualized configuration | **medium** | CONFIRMED |
 | 1.7 | `build_army` silently discards unknown per-subunit spec keys (e.g. the workbench's own `'speed':'Fast'` cavalry-wing spec) | **medium** | CONFIRMED |
 | 1.8 | Node-path movement is direction-dependent (L1-normalized): diagonal moves ~29% slower than axis-aligned | **low** | CONFIRMED |
 | 1.9 | 12 of 15 `ROLE_SPEC` instruction tokens are consumed nowhere (not "10 of 14" as first reported) | **low** | PARTIALLY_CONFIRMED (count + "pure labels" framing corrected — `shape` fields ARE consumed) |
@@ -98,7 +98,7 @@ Full per-finding evidence, citations, and the complete adversarial-verification 
    battle? Governs both the `reset_positions` fix (step 2) and the once-per-battle order behavior
    (finding 1.10).
 2. **Where `unit_type='ranged'` lives** for the Kite role — a `unit_type` field in `ROLE_SPEC`
-   entries, or a `ranged` flag on the troop type. Gates fix step 3 (ED-1093 repair).
+   entries, or a `ranged` flag on the troop type. Gates fix step 3 (ED-1095 repair).
 3. **Waypoint transit facing policy.** During a wide-out leg, does the body face its movement
    goal, the enemy, or slew between them? The current WHEEL conflates steering target and facing
    target; Image 1's arc makes them differ for many ticks.
@@ -110,7 +110,7 @@ Full per-finding evidence, citations, and the complete adversarial-verification 
 1. **Fix `check_drift` node-state re-keying** — independent, low-risk, do first (prevents a
    discipline-degrading wing from corrupting `cells()` mid-maneuver and poisoning every later test).
 2. **Teach `reset_positions` to reset node state** — gated on decision gate 1.
-3. **Wire ED-1093's `unit_type='ranged'` via `ROLE_SPEC` data** (no entity special-casing) — gated
+3. **Wire ED-1095's `unit_type='ranged'` via `ROLE_SPEC` data** (no entity special-casing) — gated
    on decision gate 2. Note: fixes only the DATA half; actual kiting/standoff steering still
    requires step 7.
 4. **Restore a lateral file-holding term in `_node_advance`** (port v12) — prerequisite for Image 1.

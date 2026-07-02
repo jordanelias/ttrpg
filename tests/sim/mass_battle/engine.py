@@ -167,7 +167,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     Zero existing call site touched (role defaults to None -> every existing spec dict, which never set
     it, is byte-exact); net-new function, byte-exact by construction.
 
-    [ED-1093, Jordan-ruled 2026-07-02] A spec with troop_type='mounted_archers' and NO explicit role
+    [ED-1095, Jordan-ruled 2026-07-02] A spec with troop_type='mounted_archers' and NO explicit role
     AND no explicit shape/instructions implicitly defaults role to 'Kite' (kiting/stand-off posture
     instead of closing to melee) -- verified no existing call site anywhere in this package uses
     'mounted_archers', so this is a pure gap-fill, not a behavior change to any live spec. An explicit
@@ -190,7 +190,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
         tt = sp.pop('troop_type', 'infantry')
         role = sp.pop('role', None)
-        # [ED-1093, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
+        # [ED-1095, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
         # they should be flying by and taking advantage of their range advantage with their bows."]
         # A mounted_archers spec with NO explicit role AND no explicit shape/instructions defaults to
         # the Kite role (kiting/stand-off posture) instead of silently closing to melee like any other

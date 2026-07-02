@@ -58,7 +58,7 @@ def _morale_sigma(u, atom=None):
     frac = max(0.0, min(1.0, morale / morale_start))
     return MORALE_SIGMA_SCALE * (frac - 1.0)
 def _brace_setup_ok(atom, t):
-    """[ED-1093, Jordan-ruled 2026-07-02] True iff `atom`'s brace has been held continuously since
+    """[ED-1095, Jordan-ruled 2026-07-02] True iff `atom`'s brace has been held continuously since
     a tick strictly before `t` (>=1 full tick of setup). -1 means not currently braced (never true).
     A subunit deployed already braced is stamped 0 at construction (exempt from the delay -- it had
     time to set up before the battle began). PC_RECOIL_FRONTAL-style safety net: t=None -> caller

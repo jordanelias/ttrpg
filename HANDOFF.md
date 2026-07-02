@@ -465,7 +465,7 @@ per the file's protocol; never max+1.)_
   2026-07-02 (ED-1092):** speed-differential puncture and depth-absorption were already done; fidelity
   D2 (cavalry lethality gated by regime) verified already-correct by direct probe; fidelity D1's zone
   half shipped as ED-1091, its actor half was Jordan-gated (no canonical actor-gate predicate existed).
-  **T1–T4 charge-recoil ruling EXECUTED 2026-07-02 (ED-1093)**, closing D1's actor half plus three
+  **T1–T4 charge-recoil ruling EXECUTED 2026-07-02 (ED-1095)**, closing D1's actor half plus three
   further parts from Jordan's own multi-clause ruling: T1 actor-gate (`PC_RECOIL_CHARGER_GATE` —
   charger must literally be `troop_type=='cavalry'`), T2 brace-setup delay (`PC_BRACE_SETUP_DELAY` +
   `Subunit._brace_since_tick` — brace needs ≥1 full tick of setup, stamped by `check_orders`), T3
@@ -478,12 +478,12 @@ per the file's protocol; never max+1.)_
   the overhang `'wheel'` maneuver (the actual "go wide around the flank, cross past the enemy's depth,
   turn in from the rear" logic, `hierarchy/units.py` `advance_cells` ~L802-861) are gated `if PER_CELL
   and ...` and live ONLY on the legacy grid path — this was confirmed root cause. **Full ratified
-  audit at `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/README.md` (ED-1094) — READ
+  audit at `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/README.md` (ED-1096) — READ
   THAT DOC, not this paragraph, before touching movement code.** Summary: `_node_advance` (the
   coordinate-field path, DEFAULT since ED-1089) is a pure straight-line centroid attractor that never
   reads `instructions`/`role` — envelop/sweep/wheel/kite all exist but are unreachable on the default
   path. Ten further findings (critical: `reset_positions` is a no-op on node state, so multi-turn
-  battles freeze at the turn-1 contact line for turns 2-8; ED-1093's mounted-archer kiting fix is NOT
+  battles freeze at the turn-1 contact line for turns 2-8; ED-1095's mounted-archer kiting fix is NOT
   effective — `role='Kite'` never sets `unit_type='ranged'`). **Two corrections to earlier same-
   session claims, both now resolved in the audit doc:** the "144-tick total freeze" finding is
   REFUTED (does not reproduce; likely a measurement bug reading cell `id` instead of `pos`); the

@@ -479,7 +479,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
     F-ii: puncture bonus from momentum differential.
     dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
     t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
-    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1093]"""
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
     # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
@@ -738,7 +738,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
                     # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
                     # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
                     # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
-                    # [ED-1093, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
+                    # [ED-1095, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
                     # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
                     # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
                     # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
@@ -814,7 +814,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     Later sub-phases see FLANK/REAR angles on already-rotated cells.
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
     Arrowhead rows are simultaneously adjacent to Line cells.
-    t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1093]"""
+    t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1095]"""
     if not CASCADING_ENABLED:
         return resolve_engagements(unit_a, unit_b, pairs, t=t)
 
