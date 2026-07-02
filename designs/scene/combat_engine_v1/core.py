@@ -1,26 +1,43 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
-Wraps canonical r1/r8/m1 so every subsystem resolves identically. No A/B knowledge here."""
-import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
+Resolves the sigma kernel through sim.autoload.sigma_leverage (the numpy-free single source,
+Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
+
+[ED-1085 container de-leak, 2026-07-01] This module previously reached into the FROZEN
+tests/sim/v32-combat-balance/ validation station via a sys.path hack (r1/r8/m1 imports),
+dragging numpy into the engine runtime. The sigma math now comes from sigma_leverage
+(parity-tested against the numpy originals at 1e-9 — sim/tests/test_sigma_leverage_parity.py);
+the engine's own combat-state constants live here / in combatant.py. NOTE the RNG contract
+changed with the substrate: `rng` is a stdlib random.Random (rng.gauss), no longer a numpy
+Generator (rng.normal). The continuous engine's distribution is unchanged
+(Normal(mu*N, sigma*sqrt(N)), same per-die TN table)."""
+import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh
-import r1_sigma_resolution as r1, r8_parity_harness as r8, m1_dice_sigma_core as m1
+from sim.autoload import sigma_leverage as SL
 import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
                               # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math
                               # at module scope (cycle-free), so this import is safe.
 
-DECISIVE_OB = r8.DECISIVE_OB
-TN = r8.TN_STANDARD
+DECISIVE_OB = 3    # [canonical: combat_v30 §5 degree band centre (decisive sub-action Ob); relocated verbatim from the frozen r8 harness, ED-1085]
+TN = SL.TN_STANDARD
+POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
+BASE_POOL = 6      # [class-C: armature — History-driven pool base; pool = max(5, History+6), ED-901; relocated verbatim from r1, ED-1085]
 
-def resolution_pool(history): return r8.resolution_pool(history)
-def effective_ob(pool, net_sigma): return r1.effective_ob(DECISIVE_OB, pool, net_sigma)
-def roll_net(pool, rng): return r8.roll_net_continuous(pool, TN, rng=rng)
+def resolution_pool(history):
+    """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, History + 6)."""
+    return max(POOL_FLOOR, int(round(history)) + BASE_POOL)
+def effective_ob(pool, net_sigma): return SL.eff_ob(DECISIVE_OB, pool, net_sigma)
+def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
 def degree(net, ob):
     """Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
     §Continuous Engine, commit a3d3888 — landed in canon TEXT, never propagated to engine CODE until now).
     The continuous net approximates a sum of integer per-die effects, so each integer degree threshold k is
     read at the k-0.5 boundary; without it the continuous read ran 5-9pp LOW across the whole 5-13D combat
-    band (NERS R+S fail, 2026-06-23 critique). Self-contained here (NOT routed through r1.degree_of_success)
+    band (NERS R+S fail, 2026-06-23 critique). Self-contained here (NOT routed through the harness degree_of_success)
     so the DISCRETE/TTRPG path r1 serves stays exactly net>=k. [AUDIT-FIX — re-sweep Class-C calibration.]"""
     if net < 0.5: return 'fail'                                   # discrete net <= 0
     if net >= 2*ob - 0.5 and net >= 2.5: return 'overwhelming'    # discrete net >= 2*ob AND net >= 3
@@ -30,9 +47,9 @@ def degree(net, ob):
 def resolve(pool, net_sigma, rng):
     """Canonical mu-shift resolution (sigma_leverage_handoff §1): base Ob fixed at DECISIVE_OB; the sigma-leverage
     boosts the ROLL (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
-    r1.effective_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
+    SL.eff_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
     bands (overwhelming trivialised by the Ob-floor). Returns (deg, net)."""
-    net = roll_net(pool, rng) + m1.soft_cap(net_sigma) * m1.sigma_n(pool)
+    net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)
     return degree(net, DECISIVE_OB), net
 
 # ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
@@ -155,7 +172,7 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     move into config."""
     q=None
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
-        z=max(0.0,(net-2*DECISIVE_OB)/m1.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
+        z=max(0.0,(net-2*DECISIVE_OB)/SL.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
     return damage(deg, heft_resp(attacker.w, cfg), head, attacker.strength, defender.armor, close,

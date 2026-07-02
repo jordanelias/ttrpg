@@ -111,7 +111,7 @@ def engagement(A, B, first, cfg, rng):
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
-            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.integers(2)]
+            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.randrange(2)]   # stdlib uniform int (ED-1085)
         else:
             aggressor = actors[0]
         defender = B if aggressor is A else A
@@ -303,8 +303,8 @@ def engagement(A, B, first, cfg, rng):
     _emit('separation', reason='beat_exhaustion'); return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
-    import numpy as np
-    cfg=cfg or CFG; rng=rng or np.random.default_rng()
+    import random
+    cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
     # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
     # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those
     # defaults — corrupting wi, health_full, and every derived health value from bout 2 onward. Pass spirit/strength.

@@ -44,8 +44,8 @@ PATCH_REGISTER_LIMIT = yaml_max_tokens("canon/patch_register_active.yaml") or 15
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
-    "session_log_current.md":                  2_000,
-    "session_logs/index.md":                   2_000,
+    # session_log_current.md / session_logs/index.md entries removed 2026-07-01 (ED-1084):
+    # the retired session-log machinery moved to deprecated/session_machinery/ and is frozen.
     # editorial store + file index moved to JSONL/SQL (2026-05-28 cutover);
     # editorial_ledger.jsonl is checked soft below; valoria_index.sql is generated.
     # Interim: bumped 5_000 -> 12_000 to match the sanctioned interim cap in

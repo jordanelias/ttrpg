@@ -1,6 +1,7 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 724
+# Next PP number: 727 (header reconciled 2026-07-01 — body already held PP-724..726; new PPs
+# allocate from reserved blocks, see references/id_reservations.yaml)
 # 2026-05-02: Renumbered mass-battle PP-684..688 → PP-711..715 to resolve register collision
 # with 2026-05-01 architecture-session ratification set (which retains canonical PP-684..688 as
 # the primary semantic owner — 50+ downstream files). Mass-battle entries below carry MB-03/04/06/02/07

@@ -14,6 +14,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import numpy as np
+import random
 import zlib
 import wrapper, config
 
@@ -24,6 +25,7 @@ def _seed(key):
     return zlib.crc32(repr(key).encode()) % 9999
 from combatant import Combatant
 import presets
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 
 WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
@@ -44,7 +46,7 @@ def _wilson(w, n, z=r8.WILSON_Z):
 
 def winrate(specA, specB, cfg, n, seed=0):
     """Position-swapped decisive win-rate of A vs B (cancels first-mover). Returns (p, lo, hi, decided, draws)."""
-    rng = np.random.default_rng(seed)
+    rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
     aw = dec = draws = 0
     half = n // 2
     for i in range(n):

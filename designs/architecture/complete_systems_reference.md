@@ -1,9 +1,17 @@
 # VALORIA — Complete Game Systems Reference (Revision 2)
-## Status: CANONICAL
+## Status: PARTIALLY SUPERSEDED (combat sections) — banner added 2026-07-01 (ED-1084)
 ## Supersedes: valoria_complete_systems.md (Revision 1)
 ## Companion to: valoria_canonical_definitive_r2.md
 ## All issues resolved. All proposals accepted. Recency prioritized.
 ## Date: 2026-04-15
+
+> ⚠️ **PARTIALLY SUPERSEDED (2026-07-01, ED-1084).** This 2026-04-15 compilation predates the
+> d+σ resolver and the combat re-ratification: its PART 2 combat core (pool `(Agi×2)+H+3`,
+> TN 7, versus initiative, multiplicative damage) is **no longer canon** — the current head is
+> `designs/scene/combat_engine_v1/` (pool `max(5, History+6)`, d_sigma resolution, ED-900/904,
+> ED-1041 wounds). Resolve any combat number via `CURRENT.md`, never from this file. A near-
+> duplicate copy of this compilation exists at `references/valoria_complete_systems_r2.md`
+> (duplicate-home resolution queued for Jordan — see the 2026-07-01 decision queue).
 
 ---
 

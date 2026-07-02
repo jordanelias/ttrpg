@@ -94,9 +94,9 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "875d40e19093f7bf8749aaa99fd149f53306ea15"
+    canonical_sha__designs__architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
     params: params/core.md
-    canonical_sha__params__core_md: "d9bea5cfe524c8c65147bc443f2eea719d71f7de"
+    canonical_sha__params__core_md: "8024d051ae81d172989f93df0999eca3964ffefa"
     bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
@@ -173,15 +173,15 @@ systems:
   # after any structural edit to the design doc, then re-pin both.
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "79984a9a4ca32f996ac43589767f55ad1fa2aa23"
+    canonical_sha__params__contest_md: "bcd1e7d3c551e8421f671c1d09362bf4f3c3571c"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "814b0e14370a91965fba235e2ab974b4ed38683d"
+    canonical_sha__designs__scene__social_contest_v30_md: "39b7874e9564e145e794720c9fa78dfa5bd4705c"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "5b6977a1507fd0bb82757e6f0fca71deab06ce86"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
     canonical_sha__designs__scene__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
     params: params/contest.md
-    canonical_sha__params__contest_md: "79984a9a4ca32f996ac43589767f55ad1fa2aa23"
+    canonical_sha__params__contest_md: "bcd1e7d3c551e8421f671c1d09362bf4f3c3571c"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
@@ -408,12 +408,12 @@ systems:
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "f05c86ab45810361b41d5c41969420f23916110d"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "96b9e30471d6953c364860d3398964ed65c2e6f2"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
     design_doc: designs/npcs/companion_specification_v30.md
-    canonical_sha__designs__npcs__companion_specification_v30_md: "d6ef0cc1fccb6ff358224148d53ca88f7b000184"
+    canonical_sha__designs__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"
   edeyja_npc:
     design_doc: designs/npcs/edeyja_npc.md
     canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
@@ -429,7 +429,7 @@ systems:
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "273cfba8cae1f2c234d8728d2de182dddfb369d0"
+    canonical_sha__designs__scene__fieldwork_v30_md: "e8eaa2875e0e6cf249db832c06bc98d1ae985a71"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md
@@ -498,7 +498,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "244ae0c7c6cd2c1854188ed2cd175a8a81e65ac6"
+    canonical_sha__references__module_contracts_yaml: "a0987067c2534596ce8e6d0cfc2ae45eef6e32d3"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

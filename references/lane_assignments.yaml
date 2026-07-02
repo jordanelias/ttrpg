@@ -8,6 +8,12 @@
 # A session DECLARES its lane via:  env VALORIA_LANE=<A|B|C>   OR   file /home/claude/.valoria_lane
 # The bootstrap Status Block then prints that lane's line (github_ops.report_lane).
 #
+# ⚠️ RETIRED-MACHINERY NOTE (2026-07-01, ED-1084): the handoffs/*.yaml + session_logs/
+# per-lane continuity machinery referenced below was retired with the orchestrator (LB-22)
+# and relocated to deprecated/session_machinery/. HANDOFF.md is the ONLY live continuity
+# surface (CLAUDE.md §1-2). Lane OWNS-globs and reserved-ID ranges here remain live;
+# launch_protocol steps that mention github_ops/g.* or handoffs/*.yaml are historical.
+#
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1

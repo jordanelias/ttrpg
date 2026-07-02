@@ -204,6 +204,100 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_names_check.py
 
+  currency-consistency:
+    name: Currency Consistency (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): the self-updating recency gate
+    # (ED-1087) — CURRENT.md stamp vs head commit dates, ID ceilings vs the ledger,
+    # register headers vs bodies, dead "maintained by" pointers, HANDOFF banner heading.
+    # The drift class that rotted the currency surfaces during 2026-06 (PR #50 failure
+    # class). Flip to blocking after a green baseline cycle.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # commit dates per head file
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Stamps, ceilings, registers, maintainers current
+        run: python3 tools/currency_consistency_check.py
+
+  contract-conformance:
+    name: Module-Contract Conformance (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only: the EXISTING design-side conformance scan (contract_adjudicator A1-A12,
+    # the valoria-module-adjudicator skill's machine checks — reused, not re-implemented;
+    # holonic doctrine ED-1083: conformance is deterministic, make it cheap and standing).
+    # Current tree carries ~21 pre-existing violations / ~64 warnings — the ED-1051 backlog
+    # (doc:null modules, cross-scale edges without transitions, unregistered Key types).
+    # STEP-level continue-on-error (the freshness-gate precedent): the job stays green while
+    # the log carries the standing count — a permanently red X for a known, docketed backlog
+    # trains alarm-blindness. Remove the step flag (blocking) when ED-1051 triage reaches zero.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Contracts conform to the Key Type Registry + canonical sources (report-only)
+        continue-on-error: true
+        run: |
+          python3 skills/valoria-module-adjudicator/scripts/contract_adjudicator.py \
+            --contracts references/module_contracts.yaml \
+            --registry  designs/architecture/key_type_registry_v30.md \
+            --sources   references/canonical_sources.yaml
+
+  engine-params-roundtrip:
+    name: Engine-Params Round-Trip (oracle → export)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # BLOCKING from day one: deterministic and self-consistent (no external pins).
+    # references/engine_params/combat_engine_v1.json is GENERATED from the canonical
+    # combat oracle (config.py, ED-900/904). If config.py changes, regenerate with
+    # tools/export_engine_params.py and commit both together — the port regenerates
+    # from the export and never hand-edits (ED-1050 discipline; ED-1052 typed-params seed).
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Committed JSON matches config.py
+        run: python3 tools/export_engine_params.py --check
+
+  module-shape-check:
+    name: Module Shape / Container Hygiene (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): flags cross-container reach-ins in
+    # runtime code — sys.path hacks into tests/ trees and tests-package imports (the ED-1085
+    # failure class, holonic doctrine ED-1083 §3). Flip to blocking after a green baseline
+    # cycle. INFO tier surfaces untagged module-scope constants (fabrication gate owns
+    # constant-value provenance; this only lists drift candidates).
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No container reach-ins in engine/sim runtime code
+        run: python3 tools/ci_module_shape_check.py
+
   sim-fabrication-check:
     name: Sim Anti-Fabrication
     runs-on: ubuntu-latest
@@ -339,13 +433,12 @@ jobs:
         run: python3 tools/broken_dependency_checker.py
       - name: Patch propagation check
         run: python3 tools/patch_propagation_checker.py
-      # Report-only: freshness now compares each canonical doc's working-tree git blob
-      # SHA to its canonical_sha__ pin. It flags pre-existing pin drift (~12 stale pins,
-      # the canonical_sha content work — roadmap K-2 / LB-6) — real debt, not this
-      # change's scope. Drop continue-on-error once those pins are refreshed
-      # (python3 tools/freshness_gate.py --update). See HANDOFF.md.
-      - name: Freshness gate check (report-only)
-        continue-on-error: true
+      # BLOCKING since 2026-07-01 (LB-23 residual closed, month-overview consolidation):
+      # the ~12 stale pins were refreshed via `freshness_gate.py --update` after the
+      # consolidation's doc edits, so every canonical_sha__ pin matches its working-tree
+      # blob. If you edit a pinned doc, refresh its pin in the same commit (the pre-commit
+      # co-file rule prompts this; bulk refresh: python3 tools/freshness_gate.py --update).
+      - name: Freshness gate check
         run: python3 tools/freshness_gate.py
       - name: Upload failure report on error
         if: failure()
@@ -389,6 +482,7 @@ jobs:
       - editorial-check
       - naming-check
       - names-consistency
+      - engine-params-roundtrip
       - sim-fabrication-check
       - vetting-check
       - unit-tests

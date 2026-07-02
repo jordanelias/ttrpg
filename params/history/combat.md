@@ -1,6 +1,6 @@
 # params_combat — Patch History
 ## Container: references/params_combat.md
-## Auto-maintained — appended by valoria-orchestrator on patch application
+## Maintained by hand on patch application (former auto-maintainer valoria-orchestrator retired 2026-06-28, LB-22 — ED-1084)
 ## Do not read this file in simulations — it is history, not values
 
 ---

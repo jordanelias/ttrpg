@@ -2,6 +2,27 @@
 # Auto-extracted from params/*.md by tools/extract_values.py
 # Each entry records a named mechanical value with its source location.
 # Conflicts (same name, different values across files) surfaced below.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⚠️ QUARANTINED — STALE SNAPSHOT, DO NOT CITE AS CANONICAL (2026-07-01, ED-1084;
+#    documented by ED-1052).
+#
+# This file has not been regenerated since its generator went dead
+# (tools/extract_values.py imports the retired orchestrator's github_ops — CLAUDE.md §8
+# dead-tools list). Known rot, verified 2026-07-01:
+#   * ~70 entries are filed under "params/combat.md" — that file DOES NOT EXIST; those
+#     entries carry the STRUCK pre-ED-901 Combat Pool formula ((Agility×2)+History+3).
+#     Canonical pool is max(5, History+6) — designs/scene/combat_engine_v1/.
+#   * 8 entries are extracted from params/threadwork_superseded.md — a deliberately
+#     superseded source feeding this "master" registry as a live conflict side.
+#   * formula fields are free-text English, not typed data (see CLAUDE.md §5).
+#
+# When you need a number: resolve the subsystem head via CURRENT.md and read the prose
+# param/design doc. Typed, CI-round-trip-checked exports are the successor discipline —
+# first artifact: references/engine_params/combat_engine_v1.json (ED-1052).
+# The regenerate-vs-retire decision for this registry is queued for Jordan
+# (2026-07-01 decision queue, item 17).
+# ═══════════════════════════════════════════════════════════════════════════════
 
 version: 1
 total_values: 464

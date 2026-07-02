@@ -3,6 +3,10 @@
 
 > **Historical batches archived.** Sections from 2026-05-02 (Mandate audit ED-784, Register cap ED-786, ED-784 Phase 2 sweep commits A–D) moved to `archives/propagation/propagation_map_archive_2026_05_02.md` (this archival sweep). Earlier batches: `references/propagation_map_archive_2026-05-10.md` (root-level), `archives/propagation/propagation_map_archive_2026_05_01*.md` (4 batches). Active file tracks 2026-05-09 onwards.
 
+## Register-header reconcile (2026-07-01, ED-1082)
+**Class E; applied this commit.** Patch-register header `Next PP number: 724` was stale vs
+its own body (PP-726 present); reconciled to 727. No mechanical propagation.
+
 ## PP-716 — Wound mechanic correction (2026-05-09)
 **Source:** Jordan canonical clarification.
 **Files patched:** designs/scene/derived_stats_v30.md (§4.1 authoritative), designs/scene/combat_v30.md (L253-378 wound spec + thread interface), designs/threadwork/threadwork_v30.md (Leap/Weaving/Pulling/Mending/FR pool penalty), params/combat.md (Health formula + Thread interface), params/mass_combat.md (CF Zoom-In).

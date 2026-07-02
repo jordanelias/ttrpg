@@ -114,7 +114,12 @@ The primary attribute for the Argue roll shifts based on the adjudicator type.
 
 TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 Desperate) apply as normal.
 
-This follows the same pool construction pattern as combat: Combat Pool = (Agility × 2) + weapon proficiency History + 3. The doubled attribute makes the primary attribute the dominant factor, with History providing depth of experience. The +3 constant from combat and general skill rolls is included in the History bonus formula (History bonus = points + 3, per §4.1 of Stage 2).
+This originally followed the combat pool's construction pattern. ⚠️ The combat analogy is
+**historical** (ED-1084): the combat pool was re-ratified Agility-independent —
+`max(5, Relevant History + 6)` (ED-901, ED-900/904; single source
+`designs/scene/combat_engine_v1/`) — so the doubled-attribute pattern here is now native to
+the social contest, not borrowed from combat. The +3 constant remains embedded in the History
+bonus formula (History bonus = points + 3, per §4.1 of Stage 2).
 
 The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator type. Appraising the audience or opponent is always an act of empathetic perception. (PP-278)
 
@@ -453,7 +458,7 @@ The 4-6 season duration window gives the player time to:
 | Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | Armour Rating (damage reduction), scaled ×3 |
 | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Maximum = (3 × Focus) + (2 × Spirit) (Regroup restores to max). Depletes 5/exchange, −5 on loss (ED-890/DEP). Recall removed from Concentration (ED-694); formula per ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
 | Appraise pool | Attunement + Recall | 2–14 | Ob = opponent Cha ÷ 2 (round up, min 1); PP-614 (ED-893) |
-| Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
+| Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = max(5, History + 6) — Agility-independent (ED-901; comparison column, not a shared formula) |
 
 **CR1/CR2 substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d):**
 - **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper that ADAPTS + ROUTES but RESOLVES NOTHING (`sim/personal/contest/wrapper.py`: `build_contest` adapter + `resolve_contest` router, mirroring `tests/sim/mass_battle/engine.py`). The venue/adjudicator/proceeding specs and win-conditions are the modules; the stochastic surface is the reception roll only, all else deterministic accounting. **Already realized (Stage 1c); Stage 1d confirms + cites.**

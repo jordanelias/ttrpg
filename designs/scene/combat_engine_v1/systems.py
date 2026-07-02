@@ -445,19 +445,19 @@ def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, def
 def commit_depth(aggressor, defender, cfg, rng, TR):
     """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
     lean + WARINESS (vs an unread tradition the aggressor commits shallower) skew a Beta over the range; the 0.25
-    param floor is the spread-floor (never collapses to a spike). Consumes one rng.beta draw (kept here so the
+    param floor is the spread-floor (never collapses to a spike). Consumes one rng.betavariate draw (kept here so the
     wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean)."""
     ln=disp_lean(aggressor)
     wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
     g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
     ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
-    commit=2.0+3.0*float(rng.beta(ba,bb))
+    commit=2.0+3.0*float(rng.betavariate(ba,bb))   # stdlib Beta draw (ED-1085 numpy de-leak; same distribution)
     return commit, ba, bb, ln
 
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
     """The defender's READ of the attack + the resulting mode selection. read_d (visual+precommit, familiarity-
     and legibility-scaled) vs read_a -> read_win (logistic). If the read wins, the defender picks the BEST mode;
-    else it guesses. Consumes rng.random (the read) then rng.integers ONLY on a missed read — the same order as the
+    else it guesses. Consumes rng.random (the read) then rng.randrange ONLY on a missed read — the same order as the
     inline version, so byte-identical. Pure resolution+selection logic moved out of the orchestrator. Returns a dict."""
     fam=TR.familiarity(defender.tradition, aggressor.tradition)
     legib=legibility(aggressor, commit, cfg, defender.armor)
@@ -467,7 +467,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     read_win=rng.random() < p_read
     modes=['parry','dodge','wind']
     msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
-    mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
+    mode=max(msig,key=msig.get) if read_win else modes[rng.randrange(3)]   # stdlib uniform int (ED-1085)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 
 def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):

@@ -83,13 +83,61 @@ def check_canonical_sources(all_files):
 # orchestrator was retired (2026-06-24). Claude Code now discovers skills by
 # name + description (see CLAUDE.md), so there is no live registry to validate.
 
+def _load_restructure_map():
+    """Old→new path mapping from references/restructure_ledger.md — the sanctioned
+    registry of repo-restructure moves. Lets live ledger entries that predate the
+    restructure resolve without rewriting the append-only ledger itself."""
+    content = read_file("references/restructure_ledger.md")
+    mapping = {}
+    if content:
+        for m in re.finditer(r'^\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|', content, re.M):
+            mapping[m.group(1).strip()] = m.group(2).strip()
+    return mapping
+
+
+# Statuses whose entries are still live obligations; resolved/struck/superseded
+# entries are historical record and legitimately cite paths that have since moved.
+LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
+
+
 def check_editorial_ledger(all_files):
-    """Check editorial_ledger.yaml propagation_targets for broken paths."""
-    content = read_file("canon/editorial_ledger.yaml")
-    if not content:
-        return [], []
-    refs = extract_file_refs(content, "editorial_ledger.yaml")
-    broken = [r for r in refs if r not in all_files]
+    """Check LIVE entries of canon/editorial_ledger.jsonl for broken paths.
+
+    ED-1081: this check was silently dead since inception — it read
+    canon/editorial_ledger.yaml, which never existed (the ledger is JSONL), and
+    the missing-file branch returned clean. It now reads the real file; validates
+    only live-status entries; and resolves pre-restructure paths through
+    references/restructure_ledger.md (a live ref whose mapped new home exists is
+    an INFO line, not a violation — migrating the entry text is a canon edit that
+    stays with Jordan)."""
+    import json
+    content = read_file("canon/editorial_ledger.jsonl")
+    if content is None:
+        return [], ["canon/editorial_ledger.jsonl not found"]
+    remap = _load_restructure_map()
+    broken, infos = [], []
+    for line in content.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+            status = str(entry.get('status', '')).lower()
+            ed_id = entry.get('id', '?')
+        except (ValueError, AttributeError):
+            status, ed_id = 'open', '?'  # unparseable line: treat as live, surface its refs
+        if not status.startswith(LIVE_STATUSES):
+            continue
+        for ref in extract_file_refs(line, "editorial_ledger.jsonl"):
+            if ref in all_files:
+                continue
+            new_home = remap.get(ref)
+            if new_home and new_home in all_files:
+                infos.append(f"{ed_id}: {ref} -> {new_home} (pre-restructure path; mapped home exists)")
+            else:
+                broken.append(f"{ref} (live entry {ed_id})")
+    for note in sorted(infos):
+        print(f"  [INFO] {note}")
     return broken, []
 
 def main():
@@ -103,7 +151,7 @@ def main():
     checks = [
         ("propagation_map.md",    check_propagation_map),
         ("canonical_sources.yaml", check_canonical_sources),
-        ("editorial_ledger.yaml", check_editorial_ledger),
+        ("editorial_ledger.jsonl", check_editorial_ledger),
     ]
 
     for name, fn in checks:

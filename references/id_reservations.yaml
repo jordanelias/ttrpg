@@ -17,14 +17,14 @@
 #      bump it themselves within their reserved range and let CollisionError-retry serialize.
 #   Reserved blocks are disjoint, so step-3 races are append-safe (retryable, never a real clash).
 # =====================================================================================
-version: 2
-updated: "2026-06-30"
-source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review)"
+version: 3
+updated: "2026-07-01"
+source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review); round-3 re-block 2026-07-01 (LB-21, month-overview consolidation)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 1042                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-06-30)
+  ED: 1087                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-01 — after this session's ED-1081..1087 filings)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
-  verified_on: "2026-06-30"
+  verified_on: "2026-07-01"
 
 # Round-1 blocks A/B/C (ED 890-999) were exhausted and overrun to ED-1042 in the unreserved
 # 1000-1042 overflow — exactly the collision class this file exists to prevent. Round 2 below
@@ -43,12 +43,18 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1081 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game)
+    ED: { block: "1050-1099", next_free: 1088 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session)
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:
     ED: { block: "1055-1079", next_free: 1062 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement; 1055 (CR1/CR2 + D0-3 HYBRID substrate confirmation) + 1056 (CR3 three-tracker / Face primitive) filed Stage 1d 2026-07-01; 1057 (ED-137 Panel closure / VoteAtClose) + 1058 (Stage-2 typed dictionaries + flavor) filed Stage 2 / Gate B 2026-07-01; 1059 (Panel proceeding-reachability, finding 3) + 1060 (Obscuring single-exchange dominance / Doubt Marker terminal value, finding 4) filed Stage 2 / Gate B round-2 revision 2026-07-01; 1061 (Guilds either-axis boost context-derived-from-venue, no-GM canon fix) filed Stage 2 / Gate B FINAL ratification 2026-07-01
     PP: { block: "800-809", next_free: 800 }
+  # ── Round 3 (2026-07-01, LB-21) — pre-provisioned; ACTIVATE when D exhausts ──
+  # Disjoint from every prior block; opened at the integration pause per exhaustion_policy
+  # so no future lane has to re-block mid-flight (the A/B/C overrun failure class).
+  E:
+    ED: { block: "1100-1149", next_free: 1100 }
+    PP: { block: "830-849", next_free: 830 }
 
 # When all three lanes exhaust their blocks, the integration seam allocates the next
 # round of disjoint blocks (extend each by the same stride) and bumps `version`.

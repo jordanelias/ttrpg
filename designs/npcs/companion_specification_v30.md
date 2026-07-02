@@ -70,7 +70,10 @@ When eligibility is reached: Priority 1 Scene Slate entry fires. Player may atte
 | Charisma | 2 | Functional but not exceptional |
 | Spirit | 2 | Grounded |
 
-**Combat Pool = (Agility × 2) + History bonus + 3.** History: Combat/Military 2 pts = +2D. Pool at Military 4 faction: (2×2)+2+3 = 9D.
+**Combat Pool = max(5, Relevant History + 6)** [EDITORIAL: ED-1084 — mechanical propagation
+only, 2026-07-01; Agility-independent per ED-901, ED-900/904; single source
+`designs/scene/combat_engine_v1/`]. History: Combat/Military 2 pts. Pool at Military 4
+faction: max(5, 2+6) = **8D**.
 
 **Wound Interval = Endurance + 6.** At Endurance 3: WI = 9. Max Wounds = 2. Fragile by PC standards — correct for a companion who should feel vulnerable.
 

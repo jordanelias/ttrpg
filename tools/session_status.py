@@ -30,6 +30,16 @@ def main():
     else:
         print("working tree: clean")
 
+    # currency drift (ED-1087): one line from the self-updating recency gate — stamps,
+    # ID ceilings, register headers, dead maintainers. Import (one rule, one home);
+    # never allowed to break session start.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import currency_consistency_check as ccc
+        print(ccc.summary_line())
+    except Exception:
+        pass
+
     if os.path.exists('HANDOFF.md'):
         try:
             with open('HANDOFF.md', encoding='utf-8', errors='replace') as f:
