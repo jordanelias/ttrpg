@@ -1,0 +1,280 @@
+{
+  "weapons": {
+    "podao": {
+      "total_mass_kg": 2.6,
+      "total_length_m": 1.82,
+      "mass_grade": "S2",
+      "mass_source": "Composite calibration anchored to a full-tang replica specimen [G, 182cm OaL / 112cm handle / 70cm blade / 3.1kg total] and corroborated by modern forged-steel podao/pudao replicas (Raven Studios, KarateMart, Hanwei) clustering 1.8-2.4 kg at 63-66cm blade / 170-200cm overall. The engine's 2.6kg sits inside this replica band, below the single anchor specimen (which the priors judged over-weight for a museum-typical piece). Typology-typical, not a single accessioned specimen.",
+      "head_elements": [
+        {
+          "label": "dao_blade",
+          "mass_kg_est": 1.45,
+          "x_m": 0.85,
+          "orient_deg": 15,
+          "extent_m": 1.494,
+          "material": "steel",
+          "geom_notes": "Broad single-edged curved cleaver blade (sabre-family dao profile), moderate recurve, thin chopping cross-section widening toward a steep clip-point tip; the clip point permits an opportunistic thrust but is not a designed thrusting geometry. Convex edge only, spine thick and unsharpened. No fuller documented.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.032,
+        "material": "wood (ash/oak-class)",
+        "notes": "Round-section wooden haft/handle, socketed or tanged into the blade root; no wrap or cross-guard documented for the type. Grip is the rear ~0.33m of the weapon behind the working hand, per the glaive-style rear-grip fraction (not a centre-balanced axe grip)."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.45,
+        "sum_guards_kg": 0.0,
+        "sum_pommel_butt_kg": 0.0,
+        "shaft_grip_estimate_kg": 1.03,
+        "sum_all_kg": 2.48,
+        "total_mass_kg": 2.6,
+        "residual_pct": -4.6,
+        "residual_note": "shaft_grip_estimate_kg here is NOT just the 0.33m rear grip segment -- it is the full-length wood haft/core running the whole 1.82m weapon (32mm diameter, ~1.03kg), since the dao blade is tanged/socketed onto a wood core that continues under the blade's own length, not a bare-metal blade root. Using only the grip-segment length (0.33m -> ~0.19kg) understates the true wood mass and produced a -36.9% residual in an earlier pass; the full-length-core figure brings the budget to -4.6%, within tolerance. Modeling note for Phase B: this cluster's hafted-tip weapons need the shaft/haft part sized to total_length_m, not grip_len_m alone."
+      },
+      "provenance": {
+        "citations": [
+          "Replica specimen: 182cm OaL / 112cm handle / 70cm blade / 3.1kg (cited in prior cluster calibration, [G])",
+          "Great Ming Military blog, 'Po Dao' entry (Peter Dekker / Mandarin Mansion typology articles)",
+          "Chinese Sword Academy, 'The Miaodao & Its Cousins'",
+          "Modern forged replicas: Raven Studios Wooden Podao (25in blade / 68-78in OaL, ~1.8kg); KarateMart Hand Forged Pudao (25in blade, ~2.3kg); Hanwei Pudao 69in (26in blade / 41.25in handle, ~2.4kg)",
+          "designs/scene/combat_engine_v1/weapons.py podao record (mass=2.6, head_len=4.98, grip_len=1.09, haft_d=0.032)"
+        ],
+        "confidence_tier": "S2"
+      }
+    },
+    "fauchard": {
+      "total_mass_kg": 2.2,
+      "total_length_m": 2.2,
+      "mass_grade": "S2",
+      "mass_source": "Venetian-style reproduction (By The Sword Inc. commercial repro, ~1.72m haft / 22.5in blade / 2.3kg total, close analog to the engine's 2.2kg) and a distinct fauchard specimen record (22.5in blade, 28.625in blade+socket, 5lb 3.2oz = ~2.36kg). Both cluster around 2.2-2.4kg, supporting the engine value. Typology-typical.",
+      "head_elements": [
+        {
+          "label": "fauchard_blade",
+          "mass_kg_est": 0.65,
+          "x_m": 0.95,
+          "orient_deg": 20,
+          "extent_m": 1.803,
+          "material": "steel",
+          "geom_notes": "Single-edged, pronounced CONCAVE (sickle/scythe-descended) blade -- the edge is on the concave inner curve, unlike a convex sabre-family cutter. Blunt-ish/hook-prone tip (low point concentration), thin cross-section optimized for draw-cuts and hooking pulls rather than thrusting. Long socketed root running most of the shaft's forward length (Metropolitan Museum specimen: rosettes/damascening on ceremonial examples, but plain functional pieces are unadorned).",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "back_hook_spike",
+          "mass_kg_est": 0.08,
+          "x_m": 0.55,
+          "orient_deg": 90,
+          "extent_m": 0.10,
+          "material": "steel",
+          "geom_notes": "Rear spike/wing/hook attested on the 'composite glaive' fauchard variant (Tzouriadis staff-weapons typology) -- a small forged lug or spike opposite the main edge, used for catching/controlling an opponent's weapon, limb, or a rider's body/harness for a dismounting pull. Not present on the plainest single-edge fauchard forms; attested for the developed composite type only."
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.035,
+        "material": "wood (ash-class)",
+        "notes": "Plain round wooden haft, no wrap or cross-guard hardware documented. Long haft (~1.8m functional length behind the blade socket per the Venetian reproduction) gives the weapon its long two-handed reach; grip is not fixed to one spot -- Silver's distance-keeping doctrine implies the hand slides along the haft."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.73,
+        "sum_guards_kg": 0.0,
+        "sum_pommel_butt_kg": 0.0,
+        "shaft_grip_estimate_kg": 1.30,
+        "sum_all_kg": 2.03,
+        "total_mass_kg": 2.2,
+        "residual_pct": -7.7,
+        "residual_note": "shaft_grip_estimate_kg here uses the full 2.2m wood core at 35mm diameter (~1.48kg theoretical max, trimmed to 1.30kg to leave room for socket-fitting metal not separately itemized). Residual -7.7% is within the +/-10% coherence band."
+      },
+      "provenance": {
+        "citations": [
+          "By The Sword Inc., Venetian Medieval Fauchard reproduction (~1.72m haft, 22.5in blade, 2.3kg)",
+          "Fauchard specimen: 22.5in blade / 28.625in blade+socket / 5lb 3.2oz (~2.36kg)",
+          "Metropolitan Museum of Art, Fauchard - Italian, Venice (accession search, decorative ceremonial example)",
+          "Tzouriadis, staff-weapons typology (composite glaive/fauchard variant hardware: rear spikes/wings/hooks) [S2]",
+          "George Silver, Paradoxes of Defence (1599) [S1] -- 'perfect length' weapon-class distance doctrine",
+          "designs/scene/combat_engine_v1/weapons.py fauchard record (mass=2.2, head_len=6.01, grip_len=1.32, haft_d=0.035)"
+        ],
+        "confidence_tier": "S2"
+      }
+    },
+    "bardiche": {
+      "total_mass_kg": 2.6,
+      "total_length_m": 1.8,
+      "mass_grade": "S1",
+      "mass_source": "Cleveland Museum of Art specimen 1916.1563 ('Bardiche (Pole Axe)', cited directly in prior cluster audit) plus Worcester Art Museum specimen 2014.241 (Northern European, possibly Swedish, 1500s-1600s: 138.4cm x 48.3cm, blade 48.3cm long x ~22cm wide, weight ~1.9kg -- a SHORTER-haft variant than the engine's 1.8m total). Royal Armouries object-32545 (late 15th c.) documents a head length of 76.6cm, max width 14.25cm; a related 16th-c. Eastern European crescentic blade measures 74.9cm long. General typology: blade >60cm, total length 180-230cm, weight 1.5-2.5kg, haft ~1.5m. Engine's 2.6kg sits at or slightly above the typical upper band for the longest-bladed examples.",
+      "head_elements": [
+        {
+          "label": "crescent_blade",
+          "cluster_note_applied": true,
+          "mass_kg_est": 1.75,
+          "x_m": 0.85,
+          "orient_deg": 25,
+          "extent_m": 1.476,
+          "material": "steel",
+          "geom_notes": "One extended crescent axe-blade attaching to the haft at TWO points (upper socket near the tip-ward end of the blade run + lower socket/langet near the grip) per the cluster note -- modeled as ONE element spanning the full head_len (1.476m) rather than two separate elements, since it is mechanically a single continuous blade with two haft-attachment points, not two distinct heads. Broad, thin, gently curved (not deeply recurved) axe-bit; edge runs nearly the full length of the element as a sweeping concave-to-straight arc. Essentially no dedicated thrusting point (blunt-ish leading corner), though period sources document opportunistic spear-fashion stabbing with the tip/leading corner through light armor. Cross-section thin and broad (execution-style mass-driven cutting geometry), not a rigid thrusting spike.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [
+        {
+          "label": "lower_socket_langet",
+          "type": "langet",
+          "extent_m": 0.12,
+          "material": "steel",
+          "x_m": 0.05,
+          "orient_deg": 0,
+          "mass_kg_est": 0.06,
+          "notes": "Strap/langet securing the blade's lower attachment point to the haft near the grip -- structural (anti-shear) hardware, not a hand-protecting guard. Handling research explicitly found no documented hand-protection or bind/catch technique for this feature; it is modeled here purely as the physical strap that realizes the cluster note's 'two-point attachment.'"
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.038,
+        "material": "wood (ash/oak-class)",
+        "notes": "Unusually SHORT haft relative to blade length (rarely >1.52m of exposed shaft even though total engine length is 1.8m with the blade folded into that span) -- the shortest haft-to-blade ratio of the cluster. Plain round haft, no wrap, no cross-guard. Doubled as a firearm rest/bipod for Streltsy matchlocks (well-documented non-combat handling fact, out of scope for combat primitives but physically real)."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.75,
+        "sum_guards_kg": 0.06,
+        "sum_pommel_butt_kg": 0.0,
+        "shaft_grip_estimate_kg": 0.80,
+        "sum_all_kg": 2.61,
+        "total_mass_kg": 2.6,
+        "residual_pct": 0.4,
+        "residual_note": "shaft_grip_estimate_kg uses the full 1.8m wood core at 38mm diameter tapered down from the theoretical max (~1.43kg) to 0.80kg, since a large fraction of the haft's nominal length is displaced/overlapped by the long two-point-mounted blade running alongside it. Residual well within the +/-10% band."
+      },
+      "provenance": {
+        "citations": [
+          "Cleveland Museum of Art, Bardiche (Pole Axe), accession 1916.1563",
+          "Worcester Art Museum, Bardiche (Berdysh), accession 2014.241 (138.4 x 48.3cm, blade 48.3cm, ~1.9kg)",
+          "Royal Armouries, Bardiche - late 15th century, object-32545 (head length 76.6cm, max width 14.25cm)",
+          "Streltsy military-organizational sources / general military history (Wikipedia 'Streltsy', 'Bardiche'; Grokipedia 'Bardiche')",
+          "designs/scene/combat_engine_v1/weapons.py bardiche record (mass=2.6, head_len=4.92, grip_len=1.08, haft_d=0.038)"
+        ],
+        "confidence_tier": "S1"
+      }
+    },
+    "sparr_axe": {
+      "total_mass_kg": 2.3,
+      "total_length_m": 1.5,
+      "mass_grade": "S2",
+      "mass_source": "Identified per prior audit as the sparth axe -- the large two-handed Dano-Irish/Hiberno-Norse (gallowglass) broad-axe, Dane-axe-descended (no distinct period 'spar axe' nomenclature found). Wikipedia Dane-axe cross-check: haft 'upwards of 150cm'. Mass estimated from the mid-low war-axe band for this bit size/haft length; no single accessioned specimen weight located in this pass -- treated as typology-typical, weighted toward the low end since the type is documented as a broad THIN bit (execution/cleaving geometry) rather than a thick wedge.",
+      "head_elements": [
+        {
+          "label": "broad_axe_bit",
+          "mass_kg_est": 1.15,
+          "x_m": 0.75,
+          "orient_deg": 30,
+          "extent_m": 1.23,
+          "material": "steel",
+          "geom_notes": "Broad, thin, gently curved-to-triangular crescent bit (less elongated/recurved than the bardiche's blade it evolved into) -- Dane-axe-descended cleaving geometry. No point, no back-spike, no secondary feature; a single-function chopping edge. Thin cross-section for a wide cutting arc, consistent with felling/cleaving blows against men, horses, and mail described in the Anglo-Saxon Chronicle and Bayeux Tapestry record of its ancestor.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.038,
+        "material": "wood (ash-class)",
+        "notes": "Plain round haft, no rondel, no langets, no cross-guard -- handling research confirms bare-haft construction throughout the type's documented and reconstructed record. Shortest weapon of the cluster (1.5m total)."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.15,
+        "sum_guards_kg": 0.0,
+        "sum_pommel_butt_kg": 0.0,
+        "shaft_grip_estimate_kg": 1.10,
+        "sum_all_kg": 2.25,
+        "total_mass_kg": 2.3,
+        "residual_pct": -2.2,
+        "residual_note": "shaft_grip_estimate_kg uses the full 1.5m wood core at 38mm diameter (theoretical max ~1.19kg, trimmed slightly to 1.10kg for taper toward the grip end). Residual within the +/-10% band."
+      },
+      "provenance": {
+        "citations": [
+          "Wikipedia, 'Dane axe' (sparth haft length 'upwards of 150cm')",
+          "Anglo-Saxon Chronicle + Bayeux Tapestry (documented ancestor use) [S1]",
+          "Thompson, Grosse, Pfrenger, Gustitis -- Scorners of Death: Fighting Skills of the Medieval Gaelic Warrior (Fallen Rook Publishing, 2018) [S2]",
+          "designs/scene/combat_engine_v1/weapons.py sparr_axe record (mass=2.3, head_len=4.1, grip_len=0.9, haft_d=0.038)"
+        ],
+        "confidence_tier": "S3"
+      }
+    },
+    "voulge": {
+      "total_mass_kg": 2.2,
+      "total_length_m": 2.0,
+      "mass_grade": "S2",
+      "mass_source": "Modern functional replicas and typology sources converge on shaft length 1.5-2m (military voulge ~180cm), blade 50-80cm, matching the engine's 2.0m total. Weight sources diverge more: some accounts give ~5lb (~2.3kg) for a complete piece, while an isolated head-only reconstruction weighs 0.74kg for a 460mm blade -- the engine's 2.2kg total (head+haft) is consistent with the ~5lb whole-weapon figure, not the head-only figure. No handling/treatise research was available for this weapon in the prior pass (primary_sources empty) -- physical facts here rest on typology/replica sources only, not technique-attested specimens.",
+      "head_elements": [
+        {
+          "label": "cleaver_blade",
+          "mass_kg_est": 0.85,
+          "x_m": 1.10,
+          "orient_deg": 30,
+          "extent_m": 1.50,
+          "material": "steel",
+          "geom_notes": "Broad, roughly straight-backed cleaving edge (Wikipedia/typology: 'broad blade meant for hacking', distinguishing it from the glaive's narrower cutting blade) mounted by binding the lower two-thirds of the blade to the side of the pole (not a true socket the way a spearhead is socketed) -- a documented attachment-method distinct from the fauchard/bardiche's socket-based mounting. Slight curvature toward the tip. Point present but blunt/utilitarian relative to a spear.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "thrusting_heel_spike",
+          "mass_kg_est": 0.10,
+          "x_m": 1.55,
+          "orient_deg": 5,
+          "extent_m": 0.14,
+          "material": "steel",
+          "geom_notes": "Reinforced thrusting point/heel at the forward-most tip, distinct from the cleaving edge proper -- the calibration's basis for the weapon's cut_thrust (rather than pure straight_cut) classification: a broad cleaver PLUS a reinforced point, not a single-mode edge. Roughly in-line with the haft axis for thrust delivery (orient_deg near 0, vs the blade's swing-presented ~30deg)."
+        },
+        {
+          "label": "rear_fluke",
+          "mass_kg_est": 0.08,
+          "x_m": 0.65,
+          "orient_deg": 100,
+          "extent_m": 0.08,
+          "material": "steel",
+          "geom_notes": "Small rearward spur/fluke opposite the main edge, documented in the calibration audit note as a minor concentrated feature (captured in the deterministic-physics layer as strike_concentration=0.10). Not large enough to reclassify the head away from cut_thrust; functions as an incidental hook/catch point rather than a designed hammer or beak.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.036,
+        "material": "wood (ash-class)",
+        "notes": "Round wooden haft/pole with the blade's lower two-thirds bound alongside it (strap/socket-hybrid mounting per typology sources), rather than a pure end-socket. No cross-guard or wrap documented. No handling research available to confirm choke-up/grip-shift technique -- grip dynamics here are inferred from geometry alone (flagged lower-confidence)."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.03,
+        "sum_guards_kg": 0.0,
+        "sum_pommel_butt_kg": 0.0,
+        "shaft_grip_estimate_kg": 1.15,
+        "sum_all_kg": 2.18,
+        "total_mass_kg": 2.2,
+        "residual_pct": -0.9,
+        "residual_note": "shaft_grip_estimate_kg uses the full 2.0m wood core at 36mm diameter (theoretical max ~1.43kg, trimmed to 1.15kg since roughly the lower two-thirds of the blade is bound alongside/overlapping the shaft rather than adding pure new wood length). Residual well within the +/-10% band."
+      },
+      "provenance": {
+        "citations": [
+          "Wikipedia, 'Voulge' (shaft 1.5-2m; military voulge 180cm; blade 50-80cm; binding attachment of lower two-thirds of blade to shaft, distinguishing it from the glaive)",
+          "Malevus, 'Voulge: This Weapon Created the First Regular French Army'",
+          "Medieval Depot / Knights Edge, 14th Century Voulge Polearm functional replicas",
+          "NOTE: no dedicated period fencing treatise or technique-attested specimen located for the voulge in either the prior research pass or this one -- physical facts rest on general typology/replica sources only, the weakest-attested weapon in this batch",
+          "designs/scene/combat_engine_v1/weapons.py voulge record (key 'voulege', display_name corrected to Voulge; mass=2.2, head_len=5.47, grip_len=1.2, haft_d=0.036)"
+        ],
+        "confidence_tier": "S3"
+      }
+    }
+  },
+  "cluster_notes": "bardiche: modeled per the cluster instruction as ONE extended crescent-blade element (mass_kg_est 1.75, extent_m 1.476 = the full head_len) rather than two separate elements at the upper/lower socket points, since the two attachment points are mounting hardware for a single continuous blade, not two distinct striking heads; the lower attachment is instead represented as a small 'lower_socket_langet' guard-type element (structural strap, not hand protection) to physically realize the two-point mounting without double-counting blade mass. fauchard: the back-hook/spike is attested only for the developed 'composite glaive' fauchard variant (Tzouriadis typology, S2), not for the plainest single-edge forms, and is included here as a small distinct element per the instruction to model a back-hook if attested. Weakest-confidence weapon in this batch is voulge (S3): the prior research pass returned NO handling/treatise sources for it at all (primary_sources empty, all handling fields placeholder), so its element geometry and mass split rest on typology/replica sources gathered in this pass rather than any technique-attested specimen. sparr_axe is also S3 despite a coherent physical picture: no single accessioned specimen mass was located for the 'sparth axe' identity (a modern typological label for the Dano-Irish/Hiberno-Norse Dane-axe descendant), so its total_mass_kg and head-element mass remain typology-interpolated rather than specimen-measured. bardiche is the strongest-grounded weapon in the batch (S1) on the strength of three independent museum/collection specimens (Cleveland 1916.1563, Worcester 2014.241, Royal Armouries object-32545) that corroborate the engine's length and mass register directly."
+}

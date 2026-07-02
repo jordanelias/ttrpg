@@ -1,0 +1,321 @@
+{
+ "weapons": {
+  "katana": {
+   "total_mass_kg": 1.1,
+   "total_mass_grade": "S2",
+   "total_length_m": 0.9699,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.333 units x UNIT_M 0.30 = 0.6999 m blade-side extent from x=0 (working hand); grip_len 0.9 units = 0.2700 m tsuka behind x=0. Matches specimen nagasa-to-tsuka ratio (~70cm:27cm, tsuka ~1/3 nagasa).",
+   "head_elements": [
+    {
+     "label": "blade (nagasa)",
+     "mass_kg_est": 0.76,
+     "x_m": 0.294,
+     "orient_deg": 0,
+     "extent_m": 0.70,
+     "material": "steel",
+     "geom_notes": "Single-edge curved blade (shinogi-zukuri cross-section: ridgeline dividing a convex edge-side bevel from a flatter back), differentially hardened (hamon visible at edge). Tapered point (kissaki) of moderate length (chu-kissaki typical), acute enough for a genuine thrust but not needle-like. Sori (curvature) concentrated toward the tsuba-to-monouchi region for a katana mounted edge-up (uchigatana style), averaging ~1.5cm deflection over the ~70cm chord (~2%), shallower than a cavalry sabre. Centroid placed at 42% of blade length from the guard (x=0.294m of a 0.70m blade) reflecting mass concentrated in the wider, thicker proximal 2/3 (moto-haba/moto-kasane), tapering to a thin, light distal section (saki-haba/saki-kasane).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "tsuba",
+     "type": "disc",
+     "extent_m": 0.078,
+     "material": "steel/iron (occasionally shakudo/copper-alloy for high-status pieces)",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.10
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "wood (ho wood/magnolia) core, wrapped in same-skin (rayskin/samegawa) and silk or cotton ito cord in a criss-cross wrap",
+    "notes": "Slight forward-to-rear taper; core is a two-piece wood shell around the tang (nakago), pinned with one or two bamboo mekugi pegs; ito wrap adds surface grip texture, not a structural diameter change."
+   },
+   "pommel": {
+    "label": "kashira",
+    "mass_kg_est": 0.025,
+    "x_m": -0.27
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.76,
+    "guards_sum_kg": 0.10,
+    "pommel_kg": 0.025,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.14,
+    "sum_kg": 1.025,
+    "total_mass_kg": 1.1,
+    "residual_pct": 6.8
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_japanese_chinese_long_A.json): nagasa ~70cm avg, tsuka ~27cm (~1/3 nagasa), mass 1.1kg (mid of attested 1.1-1.5kg range) -- S2 typology-typical",
+     "Tsuba mass: MET Museum specimens (19th c. iron tsuba 136g; copper-alloy late 16th-early17th c. 119.1g; late 16th c. 71g; 18th c. 90.7g) -- S1 specimen-measured, averaged/rounded to 100g as a representative iron-tsuba value for this record",
+     "Kashira/fuchi-kashira as counterweight cap, typically horn or shakudo/shibuichi metal alloy, small mass relative to tsuba -- S2 typology description (no gram-level specimen found; estimated at ~1/4 tsuba mass)",
+     "Blade cross-section (shinogi-zukuri), differential hardening (hamon), chu-kissaki point convention -- S2 general nihonto typology"
+    ],
+    "confidence_tier": "S2 (typology-typical; tsuba masses S1-specimen-grounded, blade/kashira masses estimated from typical nihonto proportions, no single fully-published whole-sword mass breakdown located)"
+   }
+  },
+  "tachi": {
+   "total_mass_kg": 1.2,
+   "total_mass_grade": "S2",
+   "total_length_m": 1.0599,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.6 units x 0.30 = 0.7800 m blade extent; grip_len 0.933 units = 0.2799 m tsuka. Matches specimen tachi nagasa range 70-80cm (0.78m taken as mid-representative) with proportionally slightly longer tsuka than katana for two-hand use afoot.",
+   "head_elements": [
+    {
+     "label": "blade (nagasa)",
+     "mass_kg_est": 0.82,
+     "x_m": 0.328,
+     "orient_deg": 0,
+     "extent_m": 0.78,
+     "material": "steel",
+     "geom_notes": "Single-edge curved blade, shinogi-zukuri cross-section, differentially hardened. Deeper sori than a katana -- curvature concentrated nearer the tang/koshi-zori style (curve set low, closer to the guard), consistent with an edge-down horseback mount favoring a sweeping draw-cut. Attested sori on tachi specimens runs roughly 3cm over a 78cm chord (~4%), roughly double the katana's. Point is typically narrower/more tapered (smaller kissaki, greater taper from moto-haba to saki-haba) than a katana per tachi-vs-katana typology descriptions (built more for cutting through/past armor lamellae than for a broad cutting edge). Centroid placed at 42% of blade length from guard.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "tsuba",
+     "type": "disc",
+     "extent_m": 0.078,
+     "material": "steel/iron (earlier tachi fittings often plainer/simpler than later elaborate koshirae; high-status ceremonial tachi carry gilt-bronze kazari-tachi mounts, excluded here as non-combat)",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.10
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.030,
+    "material": "wood (ho wood) core, samegawa (rayskin) wrap, ito cord binding",
+    "notes": "Tachi koshirae carries two hangers (ashi) on the scabbard for edge-down horizontal suspension -- a scabbard-mount detail, not part of the tsuka itself. Grip proportionally similar taper to katana, slightly longer to suit two-handed use when fought on foot."
+   },
+   "pommel": {
+    "label": "kashira",
+    "mass_kg_est": 0.025,
+    "x_m": -0.28
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.82,
+    "guards_sum_kg": 0.10,
+    "pommel_kg": 0.025,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.16,
+    "sum_kg": 1.105,
+    "total_mass_kg": 1.2,
+    "residual_pct": 7.9
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration: tachi blade ~78cm vs katana 70cm, tsuka 28cm, mass 1.2kg -- S2 typology-typical, correlated against katana",
+     "Nagasa range 70-80cm (28-31in) for authentic tachi -- S2 (multiple sword-typology sources converge on this range; no single named accessioned specimen with full mass breakdown located)",
+     "Tachi described as heftier than katana in absolute terms but lighter in proportion to length, with greater taper hilt-to-point and smaller point area than katana -- S2 typology comparison",
+     "Two-hanger (ashi) edge-down scabbard suspension as the tachi's defining mounting convention -- S2",
+     "Tsuba mass carried over from katana's S1 MET specimen range (see katana provenance), same order of magnitude assumed absent tachi-specific tsuba mass data"
+    ],
+    "confidence_tier": "S2 (typology-typical; no accession-numbered whole-sword specimen with published mass found in this pass)"
+   }
+  },
+  "odachi": {
+   "total_mass_kg": 2.2,
+   "total_mass_grade": "S2",
+   "total_length_m": 1.56,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 4.0 units x 0.30 = 1.2000 m blade extent; grip_len 1.2 units = 0.3600 m tsuka. Represents a COMBAT-practical odachi/nodachi (~120cm blade), deliberately NOT the votive/oversized outliers (Atsuta Shrine specimen 221.5cm blade/4.5kg total, or 15th-c. Norimitsu odachi ~2.2m cutting edge/14.5kg) which are ceremonial/display or exceptional-strength-gated pieces, not representative combat weapons.",
+   "head_elements": [
+    {
+     "label": "blade (nagasa)",
+     "mass_kg_est": 1.70,
+     "x_m": 0.516,
+     "orient_deg": 0,
+     "extent_m": 1.20,
+     "material": "steel",
+     "geom_notes": "Scaled-up katana-family blade geometry: same shinogi-zukuri cross-section and curvature register as a katana (shallow sori, ~2% deflection ratio) rather than the deeper tachi curve, per the harmonized calibration's finding that odachi blade geometry sits in the katana family, not scaled toward a straighter/blunter profile. Retains a usable kissaki (point) sufficient for a real if secondary thrust. Centroid placed slightly further forward (43%) than katana/tachi reflecting the longer blade's proportionally larger distal mass at this scale.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "tsuba",
+     "type": "disc",
+     "extent_m": 0.082,
+     "material": "steel/iron",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.115
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.032,
+    "material": "wood core, samegawa wrap, ito cord binding (same construction family as katana/tachi, scaled up)",
+    "notes": "Long two-hand tsuka (36cm) to manage the greater swing inertia; some specimens documented as requiring a scabbard-bearer or a specialized partial-draw technique due to overall length, a logistics/handling fact rather than a grip-geometry one."
+   },
+   "pommel": {
+    "label": "kashira",
+    "mass_kg_est": 0.03,
+    "x_m": -0.36
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 1.70,
+    "guards_sum_kg": 0.115,
+    "pommel_kg": 0.03,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.23,
+    "sum_kg": 2.075,
+    "total_mass_kg": 2.2,
+    "residual_pct": 5.7
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration: blade ~120cm (representative combat-odachi, distinct from 150cm+ nodachi/377cm votive outliers), tsuka 36cm, mass 2.2kg -- S2/S3 typology-typical for the combat-representative size class",
+     "Atsuta Shrine odachi: 221.5cm total length, 4.5kg -- S1 specimen-attested but flagged as an oversized/votive outlier, NOT used as the mass anchor for this record",
+     "Norimitsu Odachi (forged 1446, Osafune Norimitsu): cutting edge >2.2m, ~14.5kg -- S1 specimen-attested exceptional/display piece, excluded as non-representative",
+     "Blade geometry held in the katana family (shallow sori, usable kissaki) rather than scaled toward a straighter greatsword-like profile -- S2 reasoning from the harmonized calibration cross-checked against odachi/katana typology continuity"
+    ],
+    "confidence_tier": "S3 (the combat-representative ~120cm/2.2kg class has no single named accessioned specimen at exactly this size in this research pass; anchored by interpolation between katana-family proportions and the attested oversized specimens, which bound but do not pin the combat-typical figure)"
+   }
+  },
+  "tsurugi": {
+   "total_mass_kg": 0.65,
+   "total_mass_grade": "S1",
+   "total_length_m": 0.8802,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.267 units x 0.30 = 0.6801 m blade extent (matches the specimen's 68.4cm blade directly); grip_len 0.667 units = 0.2001 m. The specimen's own hilt/collar fitting (7.5cm) is a scabbard-collar, too short to grip a 68cm one-handed blade -- grip rescaled to an arming-sword-proportion 20cm for a fightable reconstruction.",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.43,
+     "x_m": 0.299,
+     "orient_deg": 0,
+     "extent_m": 0.684,
+     "material": "steel/iron (chokuto-era ferrous forging, pre-dating classic differential-hardening nihonto technique)",
+     "geom_notes": "Straight, double-edged blade (no sori/curvature) of continental (jian-influenced) chokuto design, predating the curved nihonto tradition. Both edges sharpened along the full length, symmetric cross-section (no single-bevel shinogi ridge), tapering to a acute thrusting point. Centroid placed at 44% of blade length reflecting a straight blade's flatter mass taper vs a curved blade.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "guard (simple cross/collar-type, pre-tsuba chokuto fitting)",
+     "type": "cross",
+     "extent_m": 0.06,
+     "material": "bronze/iron",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.065
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.026,
+    "material": "wood core (possible horn or metal binding on higher-status pieces)",
+    "notes": "Reconstructed grip length (20cm) exceeds the specimen's 7.5cm scabbard-collar fitting; the 7.5cm figure is a mounting/collar dimension, not a gripped-hilt length, per the audit note on this specimen."
+   },
+   "pommel": {
+    "label": "pommel cap (light jian-family cap, not a European counterweight disc)",
+    "mass_kg_est": 0.02,
+    "x_m": -0.20
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.43,
+    "guards_sum_kg": 0.065,
+    "pommel_kg": 0.02,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.09,
+    "sum_kg": 0.605,
+    "total_mass_kg": 0.65,
+    "residual_pct": 6.9
+   },
+   "provenance": {
+    "citations": [
+     "Late-Kofun-period straight chokuto specimen: 527g total mass, 68.4cm blade, 7.5cm hilt/scabbard-collar fitting, 92.1cm scabbard -- S1 specimen-measured (the primary anchor for this record; total_mass_kg of 0.65 is rounded UP from the 527g specimen to represent a combat, not funerary/grave-good, exemplar per the original calibration's stated reasoning)",
+     "Yayoi-period bronze tsurugi mass-production (c. 200 BCE) attested via multiple excavated sites -- S2 (establishes the type's long production history, not a mass source for this later iron/steel record)",
+     "Eta-Funayama kofun inscribed iron tsurugi (5th c., Kumamoto), silver-inlaid grave good of a regional chieftain -- S1 existence-attested, no published mass located",
+     "Continental (jian-influenced) straight double-edged chokuto design as tsurugi's defining pre-nihonto morphology -- S2 general typology"
+    ],
+    "confidence_tier": "S1 for blade length and total-mass anchor (the 527g/68.4cm specimen is the load-bearing figure); S2/S3 for grip, guard and pommel component masses (no fitting-level mass breakdown found for this or any comparable chokuto specimen -- WEAKEST-CONFIDENCE weapon in this batch on componentry, though the whole-sword mass anchor itself is S1)"
+    }
+  },
+  "changdao": {
+   "total_mass_kg": 1.6,
+   "total_mass_grade": "S2",
+   "total_length_m": 1.95,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 4.233 units x 0.30 = 1.2699 m blade extent; grip_len 2.267 units = 0.6801 m -- an unusually long tsuka (~35% of total length) matching Qi Jiguang's Jixiao Xinshu specification of a ~40cm primary handle extended by a ~33cm bronze collar/grip-extension for an effective ~0.73m two-hand span, here folded into the single grip_len figure.",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.95,
+     "x_m": 0.546,
+     "orient_deg": 0,
+     "extent_m": 1.27,
+     "material": "steel",
+     "geom_notes": "Single-edge curved blade, shallower sori than a tachi but visibly curved (attested as intermediate between odachi and tachi curvature registers in period descriptions of the type -- Qi Jiguang modeled the changdao directly on a captured Japanese long sword). Retains a functional point for the documented 'stab and withdraw' thrust technique (dao held flat, edge vertical) alongside its primary cutting use. Centroid at 43% of blade length from the guard.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "wenxu crossguard",
+     "type": "cross",
+     "extent_m": 0.09,
+     "material": "iron/bronze",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.095
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.030,
+    "material": "wood core, cord-wrapped, with a bronze collar/grip-extension fitting documented in Qi Jiguang's specification",
+    "notes": "Unusually long two-hand grip (~0.68m, ~35% of total length vs the katana-family's ~25%) explicitly documented as composed of a primary wood handle (~0.40m) plus a secondary bronze collar/extension (~0.33m) for enhanced two-hand leverage and hand-sliding room during the off-hand weapon-control plays documented in Dan Dao Fa Xuan."
+   },
+   "pommel": {
+    "label": "pommel cap",
+    "mass_kg_est": 0.03,
+    "x_m": -0.68
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.95,
+    "guards_sum_kg": 0.095,
+    "pommel_kg": 0.03,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.40,
+    "sum_kg": 1.475,
+    "total_mass_kg": 1.6,
+    "residual_pct": 7.8
+   },
+   "provenance": {
+    "citations": [
+     "Qi Jiguang, Jixiao Xinshu / Xinyoudaofa (1561/1584): total length 1.95m, handle ~1/3 of total (~0.68m composed of ~0.40m primary handle + ~0.33m bronze collar/grip-extension), blade ~1.2-1.5m (this record uses 1.27m, the value implied by total-length-minus-grip under the engine's calibration), overall weight ~1.5kg for the prescribed military version -- S1 primary treatise specification (the load-bearing source for this entire record)",
+     "Cheng Zongyou, Dan Dao Fa Xuan (1621): documents the 'stab and withdraw' thrust (dao flat, edge vertical) and off-hand engagement against an opponent's spear shaft using the long grip's hand-sliding room -- S1, corroborates the long-grip morphology's combat function",
+     "Wenxu crossguard described as a plain, minimal iron/bronze cross, explicitly contrasted by period/secondary sources with the more elaborate Japanese tsuba it superficially resembles, deliberately restrained 'to reduce entanglement' -- S1/S2",
+     "Mass rounded to 1.6kg for this record (vs Qi's ~1.5kg prescribed figure) per the original calibration's combat-exemplar rounding; blade curvature registered as intermediate between odachi and tachi, consistent with its direct derivation from a captured Japanese long sword -- S2 typology reasoning"
+    ],
+    "confidence_tier": "S1 for total length and grip proportions (directly specified in Qi Jiguang's treatise); S2 for the blade/guard/pommel component mass split (no fitting-level breakdown in the treatise itself, estimated from the katana-family construction analogy and the S1 total-mass figure)"
+   }
+  }
+ },
+ "cluster_notes": "All five weapons are single-blade weapons per the cluster convention: one blade head_element (extent = blade length, centroid at 42-44% of blade length from the guard, consistent with the 40-45% band specified for this profile) plus one guard (tsuba/wenxu-crossguard) and one pommel (kashira/cap). No tassels, plumes, or other adornments are attested for any of these five types in period combat mountings -- decorative kazari-tachi ceremonial mounts and votive/temple-offering swords (e.g. the Atsuta Shrine and Norimitsu odachi) are noted where relevant as excluded non-combat outliers, not as adornment sources. Mass budgets close within 5.7-7.9% residual for all five records (all under the 10% ASSERT threshold), with the shortfall in each case attributable to unmodeled minor hardware (mekugi pegs, ito/samegawa wrap mass beyond the grip-core estimate, saya-adjacent fittings not carried on the weapon itself). Weakest-confidence componentry is tsurugi (S1 whole-sword mass/blade-length anchor from a single named Kofun specimen, but S2/S3 fitting-level masses with no comparable chokuto fitting breakdown located) and odachi (S3 for the combat-representative 120cm/2.2kg size class specifically, since the only S1-specimen-attested odachi masses found -- Atsuta Shrine 4.5kg/221.5cm and the Norimitsu odachi ~14.5kg -- are both oversized votive/display outliers explicitly excluded as non-representative, leaving the combat-typical figure interpolated rather than specimen-pinned). Katana, tachi and changdao sit on firmer ground: katana/tachi via S1-specimen tsuba masses (MET-accessioned, 71-136g range) layered onto S2 typology-typical blade/tsuka proportions, and changdao via Qi Jiguang's S1 primary-treatise dimensional specification (the strongest total-length/grip-proportion source in the batch, though still S2 for the internal component-mass split)."
+}
