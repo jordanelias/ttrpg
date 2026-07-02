@@ -168,8 +168,15 @@ def compute():
     (grid-path) golden digest. The comparison would still fail loud (a real behaviour difference), but
     the mismatch would misleadingly read as a regression rather than "you're on the field path, check
     against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
-    base = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
     import mass_battle.hierarchy.units as _u
+    # Read the RESOLVED config value, not a second, independently-defaulted os.environ.get -- the
+    # latter drifted out of sync with config.PER_CELL's own default the moment gate 4 (ED-1097)
+    # flipped PER_CELL's default '0'->'1': a bare invocation would have run the (now-default) 'cell'
+    # path while this line's own stale '0' fallback kept reporting/checking it as 'unit', silently
+    # comparing against the WRONG EXPECTED entry. Same failure shape the FIELD_MOVEMENT mode-key
+    # fix above already guards against -- fixed the same way, by reading the module's own resolved
+    # toggle instead of re-deriving it.
+    base = 'cell' if _u.PER_CELL else 'unit'
     mode = base + '_field' if _u.FIELD_MOVEMENT else base
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
