@@ -1,8 +1,11 @@
 # VALORIA GLOSSARY
 ## Terms, Abbreviations, and Acronyms
-## Last updated: 2026-04-30
+## Last updated: 2026-07-01 (maintenance pointer repaired — ED-1084; content last swept 2026-04-30, PP-691)
 ## Authority: This file is the canonical reference for all term expansions project-wide.
-## Maintained by: valoria-orchestrator skill (update on any commit that introduces a new term)
+## Maintained by: hand, in the same commit as any file that introduces or retires a term
+## (the former maintainer, the valoria-orchestrator skill, was retired to deprecated/skills/
+## on 2026-06-28 — LB-22. Definition display names live in references/names_index.yaml;
+## this glossary covers expansions and abbreviations.)
 
 ---
 
@@ -268,4 +271,5 @@ DR contribution to Health per Size means heavily armoured units accumulate Healt
 - **2026-04-30 (PP-691):** P0 propagation pass following terminology vector-audit. CI thresholds reconciled to ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic / 65 / 80 / 100). Added Disposition + Domain Action (Mode D cascade sinks). Added new Part Eleven for top-level systems (Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A hubs). Old Part Twelve (UNRESOLVED) replaced by new Part Thirteen (DEPRECATED / RESOLVED) reflecting alias_registry deprecated_abbreviations. Old Part Eleven (collision table) renumbered to Part Twelve. Added VG-target preamble and Game Master engine-resolution note. RS legacy entry added to collision table. Coherence vs Intelligibility disambiguation. TT/MS opposite-direction note. CE relationship to Stamina clarified. Inspiration/Belief/History distinction added.
 - 2026-04-24 (PP-678): Game Master full-phrase corpus sweep. Cardinal naming reconciled. Earlier glossary touchpoints.
 
-*Glossary maintained by valoria-orchestrator. Update in the same commit as any file that introduces or retires a term.*
+*Glossary maintained by hand (the valoria-orchestrator skill was retired 2026-06-28, LB-22).
+Update in the same commit as any file that introduces or retires a term. (ED-1084)*

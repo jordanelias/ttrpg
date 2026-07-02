@@ -1,6 +1,15 @@
 # Mass-Battle Shape-Echelon Revamp — Scoping Plan
 
-**Status:** open (proposal) · **Date:** 2026-06-09 · **Scope:** mass-battle engine (`tests/sim/mass_battle/`) + canon (ED-816, ED-909)
+**Status:** PARTIALLY EXECUTED (updated 2026-07-02) · **Date:** 2026-06-09 · **Scope:** mass-battle engine (`tests/sim/mass_battle/`) + canon (ED-816, ED-909)
+
+> **2026-07-02 update:** this scoping doc's "Headline: this is a build, not a deletion" section below —
+> Horseshoe/RefusedFlank moving from `Subunit.shape` to `Unit`-level emergent presets — is now BUILT
+> (`engine.build_envelopment`/`build_refused_flank`, Stage D 2026-07-01; the literal `Subunit.shape`
+> retirement itself, LC-8, executed 2026-07-02 per ED-1088). The role/doctrine layer (`Unit.doctrine`,
+> the allocation grid, `role` gating) landed too (ED-907 L1/L3), per `HANDOFF.md`'s mass-battle entry.
+> **Not built:** the full player-facing allocation-grid UI and Cohesion-priority toggle (ED-907's own
+> ratification note explicitly defers these to Stage E videogame-UI, "not gaps"). Treat this doc as a
+> scoping reference for what was decided, not as an open task.
 
 Implements **ED-909** (formation-taxonomy reconciliation; supersedes ED-816 in part), building on **ED-907** (FM three-level command architecture) and **ED-908** (echelon mapping: Unit = battalion = army / Subunit = company / cell = squad).
 

@@ -1,516 +1,516 @@
-# Canonical Sources
-# Tracks which docs are authoritative for which systems.
-# 2026-05-02: All 'Last touched: ...' breadcrumb comments removed (now 7 stripped); editorial history lives in ED entries + propagation_log. ED-770 SHA-follow-up status preserved. Cap raised 5000 → 8000 per ED-786.
-# Entries here supersede any other documentation they conflict with.
-
-sources:
-  # ── Struck canon (2026-04-19) ──────────────────────────────────────────
-  # The following mechanics are NO LONGER CANONICAL. See canon/supersession_register.yaml.
-  # Any doc referencing these mechanics has [SUPERSEDED 2026-04-19] marker at top of file.
-  struck:
-    - id: "VTM"
-      name: "Vaynard Thread Mastery"
-      reason: "Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural Reformation pool but never defined. Struck per Jordan 2026-04-19."
-      eds: [ED-706]
-      replacement: "Pending editorial rewrite of Varfell victory paths."
-      commits: [f7aa0ed, 297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
-    - id: "PP-650"
-      name: "Cultural Reformation"
-      reason: "Varfell Colonist card territorial conversion action. Incompatible with Vaynard's military-conqueror identity (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically. Varfell expansion is purely military. Struck per Jordan 2026-04-19."
-      eds: [ED-707]
-      replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
-      commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
-
-    - id: "FACTION-SPECIFIC-VICTORY-PATHS"
-      name: "All faction-specific victory conditions (8 alternates + Partition co-victory)"
-      reason: "STRUCK by GD-1 (canon/02_canon_constraints.md §B, canonized 2026-05-17). Peninsular Sovereignty (11/15 territories sustained 2 seasons) is the sole victory condition. Includes: Altonian Theocracy (PP-414), Hollow Victory (PP-415), Southernmost Dominion (PP-417 Path B including all conditional and calamity-healed variants), Thread Supremacy as victory path (PP-417 Path C — first-mover advantage in threadwork remains as tactical lever toward universal victory), Co-Victory Varfell+RM (PP-418), Hafenmark Dynastic Assertion, Church Theocratic Bid, Löwenritter Military Regency, Partition Co-Victory."
-      eds: ["pending-batch-Pass-2k"]
-      replacement: "Universal Peninsular Sovereignty (designs/provincial/victory_v30.md §0). Faction-specific tactical content (territorial actions, faction levers, Mandate-gain actions, mass-battle outcomes) remains valid as approach-to-universal-victory; only victory-trigger language is struck. The faction-unique advantages (Crown Treaty network, Church Mass Seizure, Hafenmark Charter of Liberties + Altonian Reinforcements + equipment, Varfell threadwork first-mover + Einhir Revival, RM extra-parliamentary emergence) are tactical leverage toward the universal goal, not alternate paths to it."
-      commits: ["fe367105 (GD-1 canonization Pass 2b)", "pending (Pass 2c propagation in this commit)"]
-      gd_constraint: "GD-1"
-      date: "2026-05-17"
-
-
-# ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
-  faction_systems_overview:
-    design_doc: designs/factions/faction_systems_overview_v30.md
+# Canonical Sources
+# Tracks which docs are authoritative for which systems.
+# 2026-05-02: All 'Last touched: ...' breadcrumb comments removed (now 7 stripped); editorial history lives in ED entries + propagation_log. ED-770 SHA-follow-up status preserved. Cap raised 5000 → 8000 per ED-786.
+# Entries here supersede any other documentation they conflict with.
+
+sources:
+  # ── Struck canon (2026-04-19) ──────────────────────────────────────────
+  # The following mechanics are NO LONGER CANONICAL. See canon/supersession_register.yaml.
+  # Any doc referencing these mechanics has [SUPERSEDED 2026-04-19] marker at top of file.
+  struck:
+    - id: "VTM"
+      name: "Vaynard Thread Mastery"
+      reason: "Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural Reformation pool but never defined. Struck per Jordan 2026-04-19."
+      eds: [ED-706]
+      replacement: "Pending editorial rewrite of Varfell victory paths."
+      commits: [f7aa0ed, 297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
+    - id: "PP-650"
+      name: "Cultural Reformation"
+      reason: "Varfell Colonist card territorial conversion action. Incompatible with Vaynard's military-conqueror identity (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically. Varfell expansion is purely military. Struck per Jordan 2026-04-19."
+      eds: [ED-707]
+      replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
+      commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
+
+    - id: "FACTION-SPECIFIC-VICTORY-PATHS"
+      name: "All faction-specific victory conditions (8 alternates + Partition co-victory)"
+      reason: "STRUCK by GD-1 (canon/02_canon_constraints.md §B, canonized 2026-05-17). Peninsular Sovereignty (11/15 territories sustained 2 seasons) is the sole victory condition. Includes: Altonian Theocracy (PP-414), Hollow Victory (PP-415), Southernmost Dominion (PP-417 Path B including all conditional and calamity-healed variants), Thread Supremacy as victory path (PP-417 Path C — first-mover advantage in threadwork remains as tactical lever toward universal victory), Co-Victory Varfell+RM (PP-418), Hafenmark Dynastic Assertion, Church Theocratic Bid, Löwenritter Military Regency, Partition Co-Victory."
+      eds: ["pending-batch-Pass-2k"]
+      replacement: "Universal Peninsular Sovereignty (designs/provincial/victory_v30.md §0). Faction-specific tactical content (territorial actions, faction levers, Mandate-gain actions, mass-battle outcomes) remains valid as approach-to-universal-victory; only victory-trigger language is struck. The faction-unique advantages (Crown Treaty network, Church Mass Seizure, Hafenmark Charter of Liberties + Altonian Reinforcements + equipment, Varfell threadwork first-mover + Einhir Revival, RM extra-parliamentary emergence) are tactical leverage toward the universal goal, not alternate paths to it."
+      commits: ["fe367105 (GD-1 canonization Pass 2b)", "pending (Pass 2c propagation in this commit)"]
+      gd_constraint: "GD-1"
+      date: "2026-05-17"
+
+
+# ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
+  faction_systems_overview:
+    design_doc: designs/factions/faction_systems_overview_v30.md
     canonical_sha__designs__factions__faction_systems_overview_v30_md: "b56962522ab7f71fd82ac63abfae21c539679855"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2 follow-up"
-
-  v18_integration_plan:
-    design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2 follow-up"
+
+  v18_integration_plan:
+    design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
     canonical_sha__designs__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2m"
-    declares_pass_2_content_complete: true
-
-  insurgency_pipeline_v30:
-    design_doc: designs/world/insurgency_pipeline_v30.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2m"
+    declares_pass_2_content_complete: true
+
+  insurgency_pipeline_v30:
+    design_doc: designs/world/insurgency_pipeline_v30.md
     canonical_sha__designs__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2i"
-    gd_binding: ["GD-1", "GD-2", "GD-3"]
-
-  parliamentary_transfer_v18:
-    design_doc: designs/provincial/parliamentary_transfer_v30.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2i"
+    gd_binding: ["GD-1", "GD-2", "GD-3"]
+
+  parliamentary_transfer_v18:
+    design_doc: designs/provincial/parliamentary_transfer_v30.md
     canonical_sha__designs__provincial__parliamentary_transfer_v30_md: "3029e6a2faeb81fabb1233c3ef420a7a4b7610cd"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2h"
-
-  treaty_expiration_v18:
-    design_doc: designs/provincial/treaty_expiration_v30.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2h"
+
+  treaty_expiration_v18:
+    design_doc: designs/provincial/treaty_expiration_v30.md
     canonical_sha__designs__provincial__treaty_expiration_v30_md: "acd5560ede45a95c83abf3ffeff6d338581371c1"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2h"
-    related_eds:
-      - ED-840 (closed in this commit; Royal Progress Ob iteration)
-
-  knots_unified:
-    design_doc: designs/personal/knots_v30.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2h"
+    related_eds:
+      - ED-840 (closed in this commit; Royal Progress Ob iteration)
+
+  knots_unified:
+    design_doc: designs/personal/knots_v30.md
     canonical_sha__designs__personal__knots_v30_md: "017ce385b0d4909ca6cee83605be47e675930690"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2g"
-    contradictions_pending:
-      - TIER-DRIFT-001
-      - COMPOSURE-DRIFT-001
-      - TRUNC-DRIFT-001
-
-
-  mass_battle_integration_v18:
-    design_doc: designs/provincial/mass_battle_integration_v30.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2g"
+    contradictions_pending:
+      - TIER-DRIFT-001
+      - COMPOSURE-DRIFT-001
+      - TRUNC-DRIFT-001
+
+
+  mass_battle_integration_v18:
+    design_doc: designs/provincial/mass_battle_integration_v30.md
     canonical_sha__designs__provincial__mass_battle_integration_v30_md: "2664b9e09392a85f063819045582d604d3edaf1b"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2n"
-
-# Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
-
-
-# ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
-# Populated for sim_gate(full_stack) readiness. Each system maps to its
-# authoritative design_doc and (where applicable) its params file. The sim
-# verification ledger must cite these paths. See valoria_hooks.SIM_CANONICAL_PRESETS.
-
-systems:
-  core_engine:
-    design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "875d40e19093f7bf8749aaa99fd149f53306ea15"
-    params: params/core.md
-    canonical_sha__params__core_md: "d9bea5cfe524c8c65147bc443f2eea719d71f7de"
-    bg_params: params/bg/core.md
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2n"
+
+# Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
+
+
+# ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
+# Populated for sim_gate(full_stack) readiness. Each system maps to its
+# authoritative design_doc and (where applicable) its params file. The sim
+# verification ledger must cite these paths. See valoria_hooks.SIM_CANONICAL_PRESETS.
+
+systems:
+  core_engine:
+    design_doc: designs/architecture/complete_systems_reference.md
+    canonical_sha__designs__architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
+    params: params/core.md
+    canonical_sha__params__core_md: "8024d051ae81d172989f93df0999eca3964ffefa"
+    bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
-  combat:
-    design_doc: designs/scene/combat_v30.md
+  combat:
+    design_doc: designs/scene/combat_v30.md
     canonical_sha__designs__scene__combat_v30_md: "77718315a5f99b3da82db773bdae201270e55f20"
-    # params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
-    # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
-    # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
-    # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/
-    # tradition. config.py = live Class-C parameter source. SHA-track via freshness_gate.py --update.
-    resolution_engine: "designs/scene/combat_engine_v1/"
-    resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
-  threadwork:
-    design_doc: designs/threadwork/threadwork_v30.md
+    # params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
+    # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
+    # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
+    # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/
+    # tradition. config.py = live Class-C parameter source. SHA-track via freshness_gate.py --update.
+    resolution_engine: "designs/scene/combat_engine_v1/"
+    resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
+  threadwork:
+    design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
-    params: params/threadwork.md
+    params: params/threadwork.md
     canonical_sha__params__threadwork_md: "28b36491dc50672faca8e36e0eac8c3efbb4f453"
-  clocks:
-    design_doc: params/bg/clocks.md
+  clocks:
+    design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
-    params: params/bg/clocks.md
+    params: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
-  factions:
-    design_doc: designs/provincial/factions_personal_v30.md
+  factions:
+    design_doc: designs/provincial/factions_personal_v30.md
     canonical_sha__designs__provincial__factions_personal_v30_md: "1d7d217a3d722e974817188144392733ff86605a"
-    params: params/factions.md
+    params: params/factions.md
     canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
-    stats: params/factions/stats_1_7_scale.md
+    stats: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
-  victory:
-    design_doc: designs/provincial/victory_v30.md
+  victory:
+    design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
-    params: params/bg/victory.md
+    params: params/bg/victory.md
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
-  territories:
-    design_doc: designs/territory/settlement_layer_v30.md
+  territories:
+    design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "f78e32c2a4bc47d6e2434f3ac56ed9d9ca62a54c"
-    political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
+    political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
-    settlement_layer_index: designs/territory/settlement_layer_v30_index.md
+    settlement_layer_index: designs/territory/settlement_layer_v30_index.md
     canonical_sha__designs__territory__settlement_layer_v30_index_md: "a0c84f286189ca3fb822d7d2afbdc2f75fa5cb30"
-    adjacency: designs/territory/settlement_adjacency_v30.md
+    adjacency: designs/territory/settlement_adjacency_v30.md
     canonical_sha__designs__territory__settlement_adjacency_v30_md: "0155129ef56f66d70f0e01ab71eac5b09cb56c9b"
-    fractional: designs/provincial/fractional_province_ownership_v30.md
+    fractional: designs/provincial/fractional_province_ownership_v30.md
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "b36ac24910ceaf54bdadf29be899d3d085d9778b"
-    geographic_data: designs/territory/valoria_geography_v30.yaml
+    geographic_data: designs/territory/valoria_geography_v30.yaml
     canonical_sha__designs__territory__valoria_geography_v30_yaml: "cce4fdb626a0c2b84e510aece9733602941245ef"
-    geographic_map: designs/territory/valoria_map_v30.svg
+    geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "570bde5ccfb7cd0cada8f326cbb79360b47e6b0b"
-    geographic_design_doc: designs/world/geography_v30.md
+    geographic_design_doc: designs/world/geography_v30.md
     canonical_sha__designs__world__geography_v30_md: "c1fc7ffd2547bf08e924fe4e6cde612f25dbadab"
-    geographic_design_doc_infill: designs/world/geography_v30_infill.md
+    geographic_design_doc_infill: designs/world/geography_v30_infill.md
     canonical_sha__designs__world__geography_v30_infill_md: "18197bd570a375490fb71d9e0b545e0dd56a7b9d"
-    march_layer_skeleton: designs/territory/march_layer_v30.md
+    march_layer_skeleton: designs/territory/march_layer_v30.md
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
-  mass_combat:
-    design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "29c83166973f90df145279ac2aed134a430adb23"
-    mass_battle_index: designs/provincial/mass_battle_v30_index.md
+  mass_combat:
+    design_doc: designs/provincial/mass_battle_v30.md
+    canonical_sha__designs__provincial__mass_battle_v30_md: "8b21e342284aa764f451390020917dc51d84d5d4"
+    mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
-    mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
+    mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
     canonical_sha__designs__provincial__mass_battle_v30_infill_md: "c4639775db4bd15257a01682c37cb4fc1fa98b5e"
-    params: params/mass_combat.md
+    params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
-  # social_debate SHA-pins current as of 2026-07-01 (Contest Stage 2 / Gate B closeout).
-  # Detailed per-round rationale lives in the ED chain, not here (ED-1055/1056 Gate A CR1/CR2/CR3
-  # fold-in; ED-1057 Panel aggregation=weighted-by-standing; ED-1058 Stage-2 dictionaries;
-  # ED-1059 Panel reachability via Guild Arbitration rebind; ED-1060 Terminal Doubt
-  # banded/tally split; ED-1061 Guilds boost=context-derived-from-venue) — all ratified except
-  # where an ED text says otherwise. Pins are git blob OIDs (LF-normalized, as committed),
-  # computed via `git hash-object <file>` — identical to what freshness_gate.py --update
-  # produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs. social_contest_v30_index.md is
-  # REGENERATED (doc_index_gen.py) from the design doc, not hand-edited — re-run the generator
-  # after any structural edit to the design doc, then re-pin both.
-  social_debate:
-    design_doc: params/contest.md
-    canonical_sha__params__contest_md: "b81c23c7bfe1741ff3e3d55a22f0922e98c13e67"
-    social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "cb63ee05784e8b3a305e99abd57f85f5623ecec2"
-    social_contest_index: designs/scene/social_contest_v30_index.md
+  # social_debate SHA-pins current as of 2026-07-01 (Contest Stage 2 / Gate B closeout).
+  # Detailed per-round rationale lives in the ED chain, not here (ED-1055/1056 Gate A CR1/CR2/CR3
+  # fold-in; ED-1057 Panel aggregation=weighted-by-standing; ED-1058 Stage-2 dictionaries;
+  # ED-1059 Panel reachability via Guild Arbitration rebind; ED-1060 Terminal Doubt
+  # banded/tally split; ED-1061 Guilds boost=context-derived-from-venue) — all ratified except
+  # where an ED text says otherwise. Pins are git blob OIDs (LF-normalized, as committed),
+  # computed via `git hash-object <file>` — identical to what freshness_gate.py --update
+  # produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs. social_contest_v30_index.md is
+  # REGENERATED (doc_index_gen.py) from the design doc, not hand-edited — re-run the generator
+  # after any structural edit to the design doc, then re-pin both.
+  social_debate:
+    design_doc: params/contest.md
+    canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
+    social_contest_design: designs/scene/social_contest_v30.md
+    canonical_sha__designs__scene__social_contest_v30_md: "0a32025ec8f7f4b026493e013f6a8442e3b947c4"
+    social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
-    social_contest_infill: designs/scene/social_contest_v30_infill.md
+    social_contest_infill: designs/scene/social_contest_v30_infill.md
     canonical_sha__designs__scene__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
-    params: params/contest.md
-    canonical_sha__params__contest_md: "b81c23c7bfe1741ff3e3d55a22f0922e98c13e67"
-  scale_transitions:
-    design_doc: designs/architecture/scale_transitions_v30.md
+    params: params/contest.md
+    canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
+  scale_transitions:
+    design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
-    params: params/scale_transitions.md
+    params: params/scale_transitions.md
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
-  faction_layer:
-    design_doc: designs/provincial/faction_layer_v30.md
+  faction_layer:
+    design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "ee7571c228fa1c9897d1931a9d5686a7692da97b"
-  military_layer:
-    design_doc: designs/provincial/military_layer_v30.md
+  military_layer:
+    design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
-  tc_political:
-    design_doc: designs/provincial/ci_political_v30.md
+  tc_political:
+    design_doc: designs/provincial/ci_political_v30.md
     canonical_sha__designs__provincial__ci_political_v30_md: "32b30e19e986dcbda51f54ffddc0057a52fb5acc"
-  peninsular_strain:
-    design_doc: designs/provincial/peninsular_strain_v30.md
+  peninsular_strain:
+    design_doc: designs/provincial/peninsular_strain_v30.md
     canonical_sha__designs__provincial__peninsular_strain_v30_md: "01097df17fa52083779a0611c73270db73913fd8"
-    peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
+    peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
     canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
-  settlement_layer:
-    note__lps2d: "LPS-2d (2026-05-30) final residual close: remaining faction-level Church/target-L degree effects -> per-territory Legitimacy (Excommunication/Heresy/Baralta-suppression, magnitude-preserving) OR Mandate −1 (Seizure FAILURE, authoritative faction_layer §2.7) in stats_1_7_scale + faction_canon. Broadened same-line sweep = 0 faction-level L/PS across 11 docs; faction system verified end-to-end."
-    note__lps2c: "LPS-2c functional reconciliation (2026-05-30): CI-60 Seizure aligned to AUTHORITATIVE faction_layer §2.7 (Influence+floor(CI/15) vs Ob 7−PT; Fail->Mandate−1) in faction_canon §9+Church sheet+stats_1_7_scale (FCN-SEIZURE-DRIFT closed); Excommunication degree effects (faction L +-1) -> per-territory Legitimacy (magnitude-preserving); Restoration PS clarified community-level per FSA §6/PP-460. §1.8 zero-territory refined (Lowenritter embedded vs Restoration community). Detail: master."
-    note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
-    note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
-    design_doc: designs/territory/settlement_layer_v30.md
+  settlement_layer:
+    note__lps2d: "LPS-2d (2026-05-30) final residual close: remaining faction-level Church/target-L degree effects -> per-territory Legitimacy (Excommunication/Heresy/Baralta-suppression, magnitude-preserving) OR Mandate −1 (Seizure FAILURE, authoritative faction_layer §2.7) in stats_1_7_scale + faction_canon. Broadened same-line sweep = 0 faction-level L/PS across 11 docs; faction system verified end-to-end."
+    note__lps2c: "LPS-2c functional reconciliation (2026-05-30): CI-60 Seizure aligned to AUTHORITATIVE faction_layer §2.7 (Influence+floor(CI/15) vs Ob 7−PT; Fail->Mandate−1) in faction_canon §9+Church sheet+stats_1_7_scale (FCN-SEIZURE-DRIFT closed); Excommunication degree effects (faction L +-1) -> per-territory Legitimacy (magnitude-preserving); Restoration PS clarified community-level per FSA §6/PP-460. §1.8 zero-territory refined (Lowenritter embedded vs Restoration community). Detail: master."
+    note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
+    note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
+    design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "f78e32c2a4bc47d6e2434f3ac56ed9d9ca62a54c"
-  campaign_architecture:
-    design_doc: designs/architecture/campaign_architecture_v30.md
+  campaign_architecture:
+    design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
-    campaign_architecture_index: designs/architecture/campaign_architecture_v30_index.md
+    campaign_architecture_index: designs/architecture/campaign_architecture_v30_index.md
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
-  derived_stats:
-    design_doc: designs/scene/derived_stats_v30.md
+  derived_stats:
+    design_doc: designs/scene/derived_stats_v30.md
     canonical_sha__designs__scene__derived_stats_v30_md: "1b5f300f97130b4fedca25c30fa4a9d489085cc0"
-    supplemental: params/factions/stats_1_7_scale.md
+    supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
-
-# ── Supporting param specs (referenced by multiple systems) ──────────────
-  conviction_track:
-    design_doc: designs/scene/conviction_track_v30.md
+
+# ── Supporting param specs (referenced by multiple systems) ──────────────
+  conviction_track:
+    design_doc: designs/scene/conviction_track_v30.md
     canonical_sha__designs__scene__conviction_track_v30_md: "07a7279e59bbb70433ccf88a4917c4895022cf75"
-    conviction_track_index: designs/scene/conviction_track_v30_index.md
+    conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
-    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
-    params: params/factions/npc_stance_triangles.md
+    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
+    params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
-    related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
+    related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
     canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
-  faction_succession_split:
-    design_doc: designs/provincial/faction_succession_split_v30.md
+  faction_succession_split:
+    design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
-  royal_assassination_fuse:
-    design_doc: params/bg/royal_assassination.md
+  royal_assassination_fuse:
+    design_doc: params/bg/royal_assassination.md
     canonical_sha__params__bg__royal_assassination_md: "0388ed54ad203d5a5c3632b00c9e4fc8e0400432"
-    source: conflict_architecture_proposal.md
-  tensions_deck:
-    design_doc: params/bg/tensions_deck.md
+    source: conflict_architecture_proposal.md
+  tensions_deck:
+    design_doc: params/bg/tensions_deck.md
     canonical_sha__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
-    source: conflict_architecture_proposal.md
-  conflict_architecture:
-    design_doc: designs/architecture/conflict_architecture_proposal.md
+    source: conflict_architecture_proposal.md
+  conflict_architecture:
+    design_doc: designs/architecture/conflict_architecture_proposal.md
     canonical_sha__designs__architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
-  throughlines_framework:
-    design_doc: references/throughlines_meta.md
+  throughlines_framework:
+    design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "816e0980955c7277d25121313b2c220d82fdb5da"
-    infill: references/throughlines_meta_infill.md
+    infill: references/throughlines_meta_infill.md
     canonical_sha__references__throughlines_meta_infill_md: "ec86873295dccfd96f154e7d1b90ae28c5d945b9"
-
-# ── World trajectory ───────────────────────────────────────────────────
-  ms_trajectory:
-    design_doc: designs/world/ms_trajectory_v1.md
+
+# ── World trajectory ───────────────────────────────────────────────────
+  ms_trajectory:
+    design_doc: designs/world/ms_trajectory_v1.md
     canonical_sha__designs__world__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
-
-# ── Foundations amendments (canonical philosophy) ──────────────────────
-  leap_mechanism:
-    design_doc: canon/02_foundations_amendment_leap_mechanism.md
+
+# ── Foundations amendments (canonical philosophy) ──────────────────────
+  leap_mechanism:
+    design_doc: canon/02_foundations_amendment_leap_mechanism.md
     canonical_sha__canon__02_foundations_amendment_leap_mechanism_md: "c7c416a570de69b5fb32dbafba2625ac7a4d17fe"
-  self_rendering:
-    design_doc: canon/01_foundations_amendment_self_rendering.md
+  self_rendering:
+    design_doc: canon/01_foundations_amendment_self_rendering.md
     canonical_sha__canon__01_foundations_amendment_self_rendering_md: "4f0a67e15cae6ce7c8864527ab2000f31fbfc951"
-
-# ────────────────────────────────────────────────────────────────────────
-# All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
-# verification ledger is built at /home/claude/sim_verification_ledger.json
-# citing these paths. See valoria_hooks.sim_gate() for requirements.
-
-# ── D-3 + D-6 + D-7 propagation (2026-04-22) ─────────────────────────────
-# D-3 (ED-724): Solmund dissolution site — specific, contested, off-map.
-#   Propagated canon/03_canonical_timeline.md §Solmund.
-# D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
-#   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
-# D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
-#   Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
-  # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
-  # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
-  narrative_voice_canon:
-    design_doc: designs/world/narrative_voice_canon_v30.md
+
+# ────────────────────────────────────────────────────────────────────────
+# All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
+# verification ledger is built at /home/claude/sim_verification_ledger.json
+# citing these paths. See valoria_hooks.sim_gate() for requirements.
+
+# ── D-3 + D-6 + D-7 propagation (2026-04-22) ─────────────────────────────
+# D-3 (ED-724): Solmund dissolution site — specific, contested, off-map.
+#   Propagated canon/03_canonical_timeline.md §Solmund.
+# D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
+#   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
+# D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
+#   Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
+  # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
+  # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
+  narrative_voice_canon:
+    design_doc: designs/world/narrative_voice_canon_v30.md
     canonical_sha__designs__world__narrative_voice_canon_v30_md: "f163a7e1872a9b432fc33110f47b567c7801b4cb"
-    status: provisional
-    added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
-  solmund_voice:
-    design_doc: designs/world/solmund_voice_v30.md
+    status: provisional
+    added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
+  solmund_voice:
+    design_doc: designs/world/solmund_voice_v30.md
     canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
-    status: provisional
-    added: '2026-04-25 Stage 4; 2026-05-02 ED-784 Phase 2: Mandate→L+PS migration applied (38 refs reclassified per audit §2.1; Ethical Framework Modifiers + Löwenritter PP-246 sections SUPERSEDED per PP-686 v2)'
-  solmund_philosophy:
-    design_doc: designs/world/solmund_philosophy_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4; 2026-05-02 ED-784 Phase 2: Mandate→L+PS migration applied (38 refs reclassified per audit §2.1; Ethical Framework Modifiers + Löwenritter PP-246 sections SUPERSEDED per PP-686 v2)'
+  solmund_philosophy:
+    design_doc: designs/world/solmund_philosophy_v30.md
     canonical_sha__designs__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"
-    status: provisional
-    added: '2026-04-25 Stage 4'
-  solmund:
-    design_doc: designs/world/solmund_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4'
+  solmund:
+    design_doc: designs/world/solmund_v30.md
     canonical_sha__designs__world__solmund_v30_md: "27f8e4eeee7b2640cee645a4006c9b46ca017064"
-    status: provisional
-    added: '2026-04-25 Stage 4'
-  solmund_artifacts:
-    design_doc: designs/world/solmund_artifacts_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4'
+  solmund_artifacts:
+    design_doc: designs/world/solmund_artifacts_v30.md
     canonical_sha__designs__world__solmund_artifacts_v30_md: "393eb32b1c9e0bdb829420928cdc06476059ba7b"
-    status: provisional
-    added: '2026-04-25 Stage 4'
-  miraculous_event:
-    design_doc: designs/scene/miraculous_event_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4'
+  miraculous_event:
+    design_doc: designs/scene/miraculous_event_v30.md
     canonical_sha__designs__scene__miraculous_event_v30_md: "bfa6783cf65894a8b36ac71dfc0db68d68f5fa9c"
-    status: provisional
-    added: '2026-04-25 Stage 4'
-  baralta:
-    design_doc: designs/npcs/baralta_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4'
+  baralta:
+    design_doc: designs/npcs/baralta_v30.md
     canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
-    status: provisional
-    added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
-  key_substrate:
-    design_doc: designs/architecture/key_substrate_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
+  key_substrate:
+    design_doc: designs/architecture/key_substrate_v30.md
     canonical_sha__designs__architecture__key_substrate_v30_md: "8971e9c201d60abaf0aa3f512c0bac0dbc6670b6"
-    status: canonical
-    added: '2026-05-01 PP-687 ratification — universal Key substrate'
-  key_type_registry:
-    design_doc: designs/architecture/key_type_registry_v30.md
+    status: canonical
+    added: '2026-05-01 PP-687 ratification — universal Key substrate'
+  key_type_registry:
+    design_doc: designs/architecture/key_type_registry_v30.md
     canonical_sha__designs__architecture__key_type_registry_v30_md: "8f3c206223622b5816a3a8764416ec5d0468503f"
-    status: canonical
-    added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
-  conviction_taxonomy:
-    design_doc: designs/personal/conviction_taxonomy_v30.md
+    status: canonical
+    added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
+  conviction_taxonomy:
+    design_doc: designs/personal/conviction_taxonomy_v30.md
     canonical_sha__designs__personal__conviction_taxonomy_v30_md: "cb112f39d0cdbcf522d617a4b28e95ea6dbe8fb0"
-    status: canonical
-    added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
-  conviction_migration_roster:
-    design_doc: designs/personal/conviction_migration_roster_v30.md
+    status: canonical
+    added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
+  conviction_migration_roster:
+    design_doc: designs/personal/conviction_migration_roster_v30.md
     canonical_sha__designs__personal__conviction_migration_roster_v30_md: "af7eac17f3551746dc7cc2b2d924d672d6030fd1"
-    status: canonical
-    added: '2026-05-01 PP-685 ratification — Conviction migration roster'
-  faction_behavior:
-    note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
-    design_doc: designs/provincial/faction_behavior_v30.md
+    status: canonical
+    added: '2026-05-01 PP-685 ratification — Conviction migration roster'
+  faction_behavior:
+    note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
+    design_doc: designs/provincial/faction_behavior_v30.md
     canonical_sha__designs__provincial__faction_behavior_v30_md: "830e92d62e2dd872cd3ed1122c688cc0049dc91a"
-    status: canonical
-    added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
-  articulation_layer:
-    design_doc: designs/articulation/articulation_layer_v30.md
+    status: canonical
+    added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
+  articulation_layer:
+    design_doc: designs/articulation/articulation_layer_v30.md
     canonical_sha__designs__articulation__articulation_layer_v30_md: "e38d1a92586784e6c50026fc4e9a422637e7a6e2"
-    status: canonical
-    added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
-  conviction_axis_matrix:
-    design_doc: designs/personal/conviction_axis_matrix_v30.md
+    status: canonical
+    added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
+  conviction_axis_matrix:
+    design_doc: designs/personal/conviction_axis_matrix_v30.md
     canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "34381c8ec44955910deadae3293f75610ee919a7"
-    status: canonical
-    added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
-  faction_state_authoring:
-    design_doc: designs/provincial/faction_state_authoring_v30.md
+    status: canonical
+    added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
+  faction_state_authoring:
+    design_doc: designs/provincial/faction_state_authoring_v30.md
     canonical_sha__designs__provincial__faction_state_authoring_v30_md: "fbad9f30bf97e522de4918112d65dc5d62cdb6fa"
-    status: provisional
-    added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'
-  territory_temperaments:
-    design_doc: designs/territory/territory_temperaments_v30.md
+    status: provisional
+    added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'
+  territory_temperaments:
+    design_doc: designs/territory/territory_temperaments_v30.md
     canonical_sha__designs__territory__territory_temperaments_v30_md: "a3e31c73ae1baabef823f8ab716fed9aacb82568"
-    status: provisional
-    added: '2026-05-01 PP-686 v2 Phase B Stage 6 — per-territory temperament (17 provinces)'
-  political_dynamics_keys_migration:
-    design_doc: designs/provincial/political_dynamics_keys_migration_v30.md
+    status: provisional
+    added: '2026-05-01 PP-686 v2 Phase B Stage 6 — per-territory temperament (17 provinces)'
+  political_dynamics_keys_migration:
+    design_doc: designs/provincial/political_dynamics_keys_migration_v30.md
     canonical_sha__designs__provincial__political_dynamics_keys_migration_v30_md: "9e75d1f7c15be1744161fb45860adb24e79625af"
-    status: provisional
-    added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
-
-  character_canon_consolidation:
-    design_doc: designs/npcs/character_canon_v30.md
+    status: provisional
+    added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
+
+  character_canon_consolidation:
+    design_doc: designs/npcs/character_canon_v30.md
     canonical_sha__designs__npcs__character_canon_v30_md: "cc3779b981dbc228f61c87e96bb82c8a7053f019"
-    status: provisional
-    added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
-  faction_canon_consolidation:
-    note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
-    design_doc: designs/provincial/faction_canon_v30.md
+    status: provisional
+    added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
+  faction_canon_consolidation:
+    note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
+    design_doc: designs/provincial/faction_canon_v30.md
     canonical_sha__designs__provincial__faction_canon_v30_md: "0c55fda67160acc88f8b4c298b03c17766730c7b"
-    status: provisional
-    added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
-
-  character_generation_questionnaire:
-    design_doc: designs/personal/character_generation_questionnaire_v30.md
+    status: provisional
+    added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
+
+  character_generation_questionnaire:
+    design_doc: designs/personal/character_generation_questionnaire_v30.md
     canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "2689abd282ced34a94156fc320015b0c7afc1ec8"
-    status: design-direction
-    added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
-
-  npc_relational_graph:
-    design_doc: designs/npcs/npc_relational_graph_v30.md
+    status: design-direction
+    added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
+
+  npc_relational_graph:
+    design_doc: designs/npcs/npc_relational_graph_v30.md
     canonical_sha__designs__npcs__npc_relational_graph_v30_md: "9e67cd7122cbf3f46d3966a60af90e949eee0e9f"
-    pp: PP-724
-    status: provisional
-
-  # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
-  arc_expansion:
-    design_doc: designs/arcs/arc_expansion_v30.md
+    pp: PP-724
+    status: provisional
+
+  # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
+  arc_expansion:
+    design_doc: designs/arcs/arc_expansion_v30.md
     canonical_sha__designs__arcs__arc_expansion_v30_md: "0f3fb011914a0d0908ee0118cab64df16a134dc3"
-    index: designs/arcs/arc_expansion_v30_index.md
+    index: designs/arcs/arc_expansion_v30_index.md
     canonical_sha__designs__arcs__arc_expansion_v30_index_md: "5f2e99014ee3e06e1e9da6b337f5a9ffdd8e4fd6"
-  calamity_radiation:
-    design_doc: designs/world/calamity_radiation_v30.md
+  calamity_radiation:
+    design_doc: designs/world/calamity_radiation_v30.md
     canonical_sha__designs__world__calamity_radiation_v30_md: "7f5cbeba85265051f18e15686d2cf596d9e17890"
-    infill: designs/world/calamity_radiation_v30_infill.md
+    infill: designs/world/calamity_radiation_v30_infill.md
     canonical_sha__designs__world__calamity_radiation_v30_infill_md: "b1d24c136acb6542f073685ac23a37a37222df5d"
-  character_histories:
-    design_doc: designs/world/character_histories_v30.md
+  character_histories:
+    design_doc: designs/world/character_histories_v30.md
     canonical_sha__designs__world__character_histories_v30_md: "6bfd1c76ba5c6b7b29748cca92fff99be0760552"
-    index: designs/world/character_histories_v30_index.md
+    index: designs/world/character_histories_v30_index.md
     canonical_sha__designs__world__character_histories_v30_index_md: "87ef6d969a39903521360fcab05195809807887e"
-    infill: designs/world/character_histories_v30_infill.md
+    infill: designs/world/character_histories_v30_infill.md
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
-  clock_registry:
-    design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "f05c86ab45810361b41d5c41969420f23916110d"
-    infill: designs/provincial/clock_registry_v30_infill.md
+  clock_registry:
+    design_doc: designs/provincial/clock_registry_v30.md
+    canonical_sha__designs__provincial__clock_registry_v30_md: "96b9e30471d6953c364860d3398964ed65c2e6f2"
+    infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
-  companion_spec:
-    design_doc: designs/npcs/companion_specification_v30.md
-    canonical_sha__designs__npcs__companion_specification_v30_md: "d6ef0cc1fccb6ff358224148d53ca88f7b000184"
-  edeyja_npc:
-    design_doc: designs/npcs/edeyja_npc.md
+  companion_spec:
+    design_doc: designs/npcs/companion_specification_v30.md
+    canonical_sha__designs__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"
+  edeyja_npc:
+    design_doc: designs/npcs/edeyja_npc.md
     canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
-  faction_politics:
-    design_doc: designs/provincial/faction_politics_v30.md
+  faction_politics:
+    design_doc: designs/provincial/faction_politics_v30.md
     canonical_sha__designs__provincial__faction_politics_v30_md: "488d6cc8535c65f3cdcbc8eac215eac1becdefb3"
-    index: designs/provincial/faction_politics_v30_index.md
+    index: designs/provincial/faction_politics_v30_index.md
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
-  investigation:
-    design_doc: designs/scene/investigation_systems_v30.md
+  investigation:
+    design_doc: designs/scene/investigation_systems_v30.md
     canonical_sha__designs__scene__investigation_systems_v30_md: "f5265bc470c5c0e80a24c514654314a0bd3c77be"
-    index: designs/scene/investigation_systems_v30_index.md
+    index: designs/scene/investigation_systems_v30_index.md
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
-  fieldwork:
-    design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "273cfba8cae1f2c234d8728d2de182dddfb369d0"
-    index: designs/scene/fieldwork_v30_index.md
+  fieldwork:
+    design_doc: designs/scene/fieldwork_v30.md
+    canonical_sha__designs__scene__fieldwork_v30_md: "e8eaa2875e0e6cf249db832c06bc98d1ae985a71"
+    index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
-    infill: designs/scene/fieldwork_v30_infill.md
+    infill: designs/scene/fieldwork_v30_infill.md
     canonical_sha__designs__scene__fieldwork_v30_infill_md: "47a2a78ffb2ff8fef741d5a0ad24c07ead41b630"
-    bg: designs/scene/fieldwork_bg_v30.md
+    bg: designs/scene/fieldwork_bg_v30.md
     canonical_sha__designs__scene__fieldwork_bg_v30_md: "ecd05c6b4732a203243f1f05d682df90a91eb3d8"
-    bg_infill: designs/scene/fieldwork_bg_v30_infill.md
+    bg_infill: designs/scene/fieldwork_bg_v30_infill.md
     canonical_sha__designs__scene__fieldwork_bg_v30_infill_md: "270a77ed20d7b445e2ec3d46833ee0e7ac515804"
-    hybrid: designs/scene/fieldwork_hybrid_v30.md
+    hybrid: designs/scene/fieldwork_hybrid_v30.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_md: "e7415ea1233c72a7f38a98bdce62e716d28f5fc8"
-    hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
+    hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
-    editorial: designs/scene/fieldwork_editorial.md
+    editorial: designs/scene/fieldwork_editorial.md
     canonical_sha__designs__scene__fieldwork_editorial_md: "4a2003cec32e0e0f4d878cfa1c6ea1e4ac0b9867"
-    exploration: designs/scene/fieldwork_exploration.md
+    exploration: designs/scene/fieldwork_exploration.md
     canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
-    exposure: designs/scene/fieldwork_exposure.md
+    exposure: designs/scene/fieldwork_exposure.md
     canonical_sha__designs__scene__fieldwork_exposure_md: "b8ce2c4c1e0f10e207c3c017ef75b465bb420eee"
-    godot: designs/scene/fieldwork_godot.md
+    godot: designs/scene/fieldwork_godot.md
     canonical_sha__designs__scene__fieldwork_godot_md: "c827744afe2480d6fc60c61d30c723ef113f4c5b"
-    investigation: designs/scene/fieldwork_investigation.md
+    investigation: designs/scene/fieldwork_investigation.md
     canonical_sha__designs__scene__fieldwork_investigation_md: "a1604b831b505e2e2b58eae62976e19983452482"
-    rationale: designs/scene/fieldwork_rationale.md
+    rationale: designs/scene/fieldwork_rationale.md
     canonical_sha__designs__scene__fieldwork_rationale_md: "25b8893296466e9909357e267b998e3c0c9b6df3"
-    socializing: designs/scene/fieldwork_socializing.md
+    socializing: designs/scene/fieldwork_socializing.md
     canonical_sha__designs__scene__fieldwork_socializing_md: "99a4b811d5fe49cb2ded09d0f61294309bd2b424"
-    summary: designs/scene/fieldwork_summary.md
+    summary: designs/scene/fieldwork_summary.md
     canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
-  npc_roster:
-    design_doc: designs/npcs/npc_roster_v30.md
+  npc_roster:
+    design_doc: designs/npcs/npc_roster_v30.md
     canonical_sha__designs__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
-    index: designs/npcs/npc_roster_v30_index.md
+    index: designs/npcs/npc_roster_v30_index.md
     canonical_sha__designs__npcs__npc_roster_v30_index_md: "42da7a6787bd19acfd70c863f8b31d7618412005"
-    infill: designs/npcs/npc_roster_v30_infill.md
+    infill: designs/npcs/npc_roster_v30_infill.md
     canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
-  player_agency:
-    design_doc: designs/architecture/player_agency_v30.md
+  player_agency:
+    design_doc: designs/architecture/player_agency_v30.md
     canonical_sha__designs__architecture__player_agency_v30_md: "db286678adf29a015b968bc2705fc37d11718027"
-    index: designs/architecture/player_agency_v30_index.md
+    index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
-  thread_horizontal_integration:
-    design_doc: designs/threadwork/thread_horizontal_integration_spec.md
+  thread_horizontal_integration:
+    design_doc: designs/threadwork/thread_horizontal_integration_spec.md
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
-    index: designs/threadwork/thread_horizontal_integration_spec_index.md
+    index: designs/threadwork/thread_horizontal_integration_spec_index.md
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
-  throughline_resolutions:
-    design_doc: designs/arcs/throughline_resolutions_v30.md
+  throughline_resolutions:
+    design_doc: designs/arcs/throughline_resolutions_v30.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_md: "ca4c04179f90a157b2f9b19762a06cb2a3905d9f"
-    index: designs/arcs/throughline_resolutions_v30_index.md
+    index: designs/arcs/throughline_resolutions_v30_index.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "5dc526993ff1549be2948f316940be39035b5633"
-  ui_ux:
-    design_doc: designs/ui/valoria_ui_ux_v4.md
+  ui_ux:
+    design_doc: designs/ui/valoria_ui_ux_v4.md
     canonical_sha__designs__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
-    valoria_ui_ux_1: designs/ui/valoria_ui_ux_v4_1.md
-  videogame_mode_spec:
-    design_doc: designs/architecture/videogame_mode_spec.md
+    valoria_ui_ux_1: designs/ui/valoria_ui_ux_v4_1.md
+  videogame_mode_spec:
+    design_doc: designs/architecture/videogame_mode_spec.md
     canonical_sha__designs__architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
-    index: designs/architecture/videogame_mode_spec_index.md
+    index: designs/architecture/videogame_mode_spec_index.md
     canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
-  npc_behavior:
-    design_doc: designs/npcs/npc_behavior_v30.md
+  npc_behavior:
+    design_doc: designs/npcs/npc_behavior_v30.md
     canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
-    npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
+    npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
     canonical_sha__designs__npcs__npc_behavior_v30_index_md: "d71b538d8a88bae5937494beb63e43595673f6ff"
-    npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
+    npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
-  module_contracts:
-    design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "244ae0c7c6cd2c1854188ed2cd175a8a81e65ac6"
-    canonized: "2026-06-10"
-    canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
-    note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
-
-# LPS-2e (2026-05-30): settlement_layer_v30 §1.8 re-grained — L/PS per-settlement (was faction-level); Mandate = size-weighted saturating aggregate, W=base(Type)+Prosperity+FacilityTier, K=6; geography "territory" (T1-T17)=province-tier, retained.
-# LPS-2+ consumer wiring (2026-05-30): faction_behavior/faction_canon/faction_state_authoring/stats_1_7_scale/derived_stats wired to settlement-grain + size-weighted Mandate; settlement_layer §1.8 (LPS-2e) is authoritative for Weight + formula.
-# LPS-2+ wiring follow-up (2026-05-30): faction_behavior §3.4/§3.5/§3.6 terminology territory->settlement (root PP-686 doc fully consistent with §1.8).
-# LPS-2e audit-patch (2026-05-30): completed settlement re-grain across all consumers (faction_behavior §4 Mandate block, faction_canon 6-stat resolution + Excommunication, stats_1_7_scale Church L-strip + seizure->§2.7); Church L-strip effects now PER-SETTLEMENT (Jordan ruling); flagged Mandate x20 / 0-7 meter calibration.
-# Mandate x20 meter resolved (2026-05-30, mechanical-tier): NOT a defect -- per derived_stats §3 multipliers are per-system (Treasury x100, Reputation x15, Discipline x10, Legitimacy x20), no 0-100 master scale; sigma engine governs Mandate RESOLUTION (d+sigma resolver) not the meter buffer. Removed the speculative 0-100 flag.
-# F-RESID migration (2026-05-30, ED-885 — pending ledger entry; ratification ID to confirm, likely ED-874): 4 bare-stat Unique Actions (Royal Decree, Excommunication, Private Collection, Economic Leverage) migrated to the d+sigma resolver (D=max(1,(O-1)*2); contested=target stat). Hafenmark Doctrine flagged, not migrated.
-# Comprehensive all-directions NERS audit of LPS-2e + size-weighted Mandate + F-RESID migration (2026-05-30): designs/audit/2026-05-30-lps-mandate-ners-audit/. Verdict NERS-compliant as built; 2 Jordan intent/data confirmations (hugeness-premium, Weight redundancy) + 1 elegance reservation; no hard mechanical defect.
-
-# ─── 2026-06-04 term-propagation co-file note ───
-# settlement_layer_v30.md: "Public Support" → "Popular Support" (Jordan 2026-05-30 ruling).
-# Term-level change only; canonical source authority for the settlement layer is unchanged.
+  module_contracts:
+    design_doc: references/module_contracts.yaml
+    canonical_sha__references__module_contracts_yaml: "a0987067c2534596ce8e6d0cfc2ae45eef6e32d3"
+    canonized: "2026-06-10"
+    canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
+    note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
+
+# LPS-2e (2026-05-30): settlement_layer_v30 §1.8 re-grained — L/PS per-settlement (was faction-level); Mandate = size-weighted saturating aggregate, W=base(Type)+Prosperity+FacilityTier, K=6; geography "territory" (T1-T17)=province-tier, retained.
+# LPS-2+ consumer wiring (2026-05-30): faction_behavior/faction_canon/faction_state_authoring/stats_1_7_scale/derived_stats wired to settlement-grain + size-weighted Mandate; settlement_layer §1.8 (LPS-2e) is authoritative for Weight + formula.
+# LPS-2+ wiring follow-up (2026-05-30): faction_behavior §3.4/§3.5/§3.6 terminology territory->settlement (root PP-686 doc fully consistent with §1.8).
+# LPS-2e audit-patch (2026-05-30): completed settlement re-grain across all consumers (faction_behavior §4 Mandate block, faction_canon 6-stat resolution + Excommunication, stats_1_7_scale Church L-strip + seizure->§2.7); Church L-strip effects now PER-SETTLEMENT (Jordan ruling); flagged Mandate x20 / 0-7 meter calibration.
+# Mandate x20 meter resolved (2026-05-30, mechanical-tier): NOT a defect -- per derived_stats §3 multipliers are per-system (Treasury x100, Reputation x15, Discipline x10, Legitimacy x20), no 0-100 master scale; sigma engine governs Mandate RESOLUTION (d+sigma resolver) not the meter buffer. Removed the speculative 0-100 flag.
+# F-RESID migration (2026-05-30, ED-885 — pending ledger entry; ratification ID to confirm, likely ED-874): 4 bare-stat Unique Actions (Royal Decree, Excommunication, Private Collection, Economic Leverage) migrated to the d+sigma resolver (D=max(1,(O-1)*2); contested=target stat). Hafenmark Doctrine flagged, not migrated.
+# Comprehensive all-directions NERS audit of LPS-2e + size-weighted Mandate + F-RESID migration (2026-05-30): designs/audit/2026-05-30-lps-mandate-ners-audit/. Verdict NERS-compliant as built; 2 Jordan intent/data confirmations (hugeness-premium, Weight redundancy) + 1 elegance reservation; no hard mechanical defect.
+
+# ─── 2026-06-04 term-propagation co-file note ───
+# settlement_layer_v30.md: "Public Support" → "Popular Support" (Jordan 2026-05-30 ruling).
+# Term-level change only; canonical source authority for the settlement layer is unchanged.

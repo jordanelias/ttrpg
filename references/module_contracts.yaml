@@ -795,8 +795,9 @@ modules:
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: designs/scene/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
     godot_home: designs/godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
+    typed_params: references/engine_params/combat_engine_v1.json   # GENERATED from config.py (tools/export_engine_params.py, schema v1); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
-    resolver: d_sigma   # sigma-leverage continuous (r1/m1): pool=max(5,History+6), base Ob 3 FIXED, advantage = mu-shift on the ROLL. NOT v30 dice_pool (Agi×2 / TN-7).
+    resolver: d_sigma   # sigma-leverage continuous (sim.autoload.sigma_leverage since ED-1085; parity-tested vs the r1/m1 originals): pool=max(5,History+6), base Ob 3 FIXED, advantage = mu-shift on the ROLL. NOT v30 dice_pool (Agi×2 / TN-7).
     consumes:
       - {type: "scene.combat_strike", from: [scene_slate, player_input]}
       - {type: "scene.combat_hit", from: [personal_combat]}   # intra-engine: Strike emits, Wound consumes

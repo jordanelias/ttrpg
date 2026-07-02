@@ -36,7 +36,7 @@ accrues debt, which is the real input to this roadmap.
 | **REARCHITECTURE Phase 1-5** | P1-P3 (L0 single-source + de-leak + wire) largely done incl. this session; **P4 (L5 abilities-as-ACCESS) not started** (live model is still the +/* modulator; `eff_cw` dormant); **P5 (contact axis) not started** (dead `clinch` primitive). |
 | **Gate-1 audit** | de-leak completed, cleanup landed, the grounded percussion/armour/use-mode re-baseline built; **residuals open** (below). |
 | **Port bridge (§6)** | the combat slice is the one ported module and it **disagrees with its oracle** (`combat_config.gd` adef_threshold, ED-1050); needs re-export after the oracle stabilises. |
-| **Branch** | `design/scene-combat-v1` **UNMERGED** — a large grounded body of work awaiting ratification. |
+| **Branch** | **MERGED** (PR #40 `d4bf2af3` 2026-07-01T04:46Z; Track-2 cleanup PR #47 `8fbc4b66` 2026-07-01T06:48Z) — see `HANDOFF.md`. `design/scene-combat-v1` is now redundant. |
 
 ## The roadmap — prioritized tracks
 
@@ -54,18 +54,36 @@ accrues debt, which is the real input to this roadmap.
   **`ADEF_THRESHOLD` non-monotonicity** (ED-1050).
 
 ### Track 3 — RATIFY + MERGE scene-combat-v1, then RE-EXPORT the port config — *the consolidation gate*
-- Once Tracks 1-2 leave the oracle grounded + single-sourced + guarded: **ratify and merge** (bank the work; stop the
-  branch drifting). Then **re-export `combat_config.gd` from the canonical oracle** (close the ED-1050 drift) — the
-  port's one module finally matches. *Do this before building new layers (Lesson 5: the oracle must be consistent).*
+- **Merge half DONE** (PR #40 `d4bf2af3` + PR #47 `8fbc4b66`, 2026-07-01 — bank the work, stop the branch drifting).
+  Still open: **re-export `combat_config.gd` from the canonical oracle** (close the ED-1050 drift) — the port's one
+  module finally matches. *Do this before building new layers (Lesson 5: the oracle must be consistent).* Low
+  priority per CLAUDE.md §6 (the skeleton covers 1/27 modules and can't compile regardless).
 
 ### Track 4 — BUILD FORWARD (on the stabilised, grounded foundation) — design-gated, Jordan's calls
-- **REARCHITECTURE P4 — abilities-as-ACCESS** (= WS-4's other half): replace the +/* modulator with access-not-modifier,
-  the 7 phase-slots, the point-buy affinity budget, the learning-gate ("can't half-sword/compás untrained"); this also
-  resolves the dormant `eff_cw`. Emergent (Lesson 3).
-- **WS-4/WS-5 §C residual** — the channel-leverage calibration so each paradigm is decisive in *its* context (currently
-  spanish broad-strong / chinese broad-weak). Design-laden.
-- **REARCHITECTURE P5 — contact axis** (clinch/disengage/choke; consumes the dead `clinch`).
-- **WS-7 multi-combatant envelope** — ratify ED-911, then build the `resolve_scene` wrapper.
+
+**Full detail (Workstream-0 grounding spine, 7 review lenses, 3 named principles, per-phase gates) lives in
+`designs/scene/combat_engine_v1/phase4_5_plan_v1.md` — recovered 2026-07-01 from a local-only plan file that
+this roadmap's own Lesson 6 claimed to have captured but hadn't (the compressed summary below had silently
+dropped Phase 4a's entire game-theoretic layer). Read that doc before starting any of Track 4; the bullets
+below are pointers, not the spec.**
+
+- **Phase 4a — game-theoretic psychological layer** (`phase4_5_plan_v1.md` §4a): formalize read/feint/initiative
+  as Bayesian signaling / mixed strategy / Stackelberg timing, plus two new within-fight dynamics (struck →
+  adaptive defensive bias; concentration lapse → wrong-option error). **Never built; not previously documented
+  in the repo.**
+- **Phase 4b — abilities-as-ACCESS** (`phase4_5_plan_v1.md` §4b; = WS-4's other half / REARCHITECTURE P4):
+  replace the +/* modulator with access-not-modifier, the 7 phase-slots, the point-buy affinity budget, the
+  learning-gate ("can't half-sword/compás untrained"); resolves the dormant `eff_cw`. Emergent (Lesson 3).
+- **Phase 4c — the §C contextual-differentiation residual** (`phase4_5_plan_v1.md` §4c; = WS-4/WS-5 §C): the
+  channel-leverage calibration so each paradigm is decisive in *its* context (currently spanish broad-strong /
+  chinese broad-weak). Design-laden.
+- **Phase 5 — contact axis** (`phase4_5_plan_v1.md` Phase 5; = REARCHITECTURE P5): clinch/disengage/choke;
+  consumes the dead `clinch` primitive.
+- **WS-7 multi-combatant envelope** — ratify ED-911, then build the `resolve_scene` wrapper (design doc:
+  `designs/scene/scene_combat_v1/scene_combat_design_v1.md`).
+
+Each of Phase 4a/4b/4c/5 gates behind its own adversarial audit (Gate 3 for Phase 4, Gate 2 for Phase 5) per
+`phase4_5_plan_v1.md` — do not treat the one-line bullets above as sufficient to start building from.
 
 ## Recommended sequence (the strategic through-line)
 

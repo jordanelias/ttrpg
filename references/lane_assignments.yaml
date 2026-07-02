@@ -8,11 +8,17 @@
 # A session DECLARES its lane via:  env VALORIA_LANE=<A|B|C>   OR   file /home/claude/.valoria_lane
 # The bootstrap Status Block then prints that lane's line (github_ops.report_lane).
 #
+# ⚠️ RETIRED-MACHINERY NOTE (2026-07-01, ED-1084): the handoffs/*.yaml + session_logs/
+# per-lane continuity machinery referenced below was retired with the orchestrator (LB-22)
+# and relocated to deprecated/session_machinery/. HANDOFF.md is the ONLY live continuity
+# surface (CLAUDE.md §1-2). Lane OWNS-globs and reserved-ID ranges here remain live;
+# launch_protocol steps that mention github_ops/g.* or handoffs/*.yaml are historical.
+#
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1
 updated: "2026-06-28"
-source: "designs/audit/2026-06-28-recent-work-orchestration/valoria_master_workplan_v5.md — §1 operating model (lineage: v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs/lanes unchanged, queues carried to v5 LA-/LB-/LC- IDs)"
+source: "designs/workplans/valoria_master_workplan_v5.md — §1 operating model (lineage: v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs/lanes unchanged, queues carried to v5 LA-/LB-/LC- IDs; relocated 2026-07-01 from designs/audit/2026-06-28-recent-work-orchestration/, see designs/workplans/README.md)"
 # RESERVED-ID EXHAUSTION (workplan v5 §0a, 2026-06-28): the reserved ED/PP blocks in
 # references/id_reservations.yaml (A 890-939/940-969/970-999 etc.) are EXHAUSTED — the live
 # ED ceiling is 1042, past every block. Re-blocking the next disjoint round is queued as

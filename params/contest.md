@@ -273,7 +273,10 @@ CROSS interaction + equal successes: no strain to either orator. CROSS no-strain
 Shared pool = sum of all coalition members' (3×Focus)+(2×Spirit) at setup. Depletes 5/exchange (+5 on loss) regardless of Lead rotation. Spent at 0; resets to setup total. [ED-894: Recall removed (ED-694); mirrors solo Concentration.]
 
 ## History bonus note (PP-234 era)
-History bonus = history points + 3 (per Stage 2 §4.1). Pool (PrimaryAttr×2)+H is equivalent to combat pool (Agi×2)+H+3. The +3 is embedded in H.
+History bonus = history points + 3 (per Stage 2 §4.1). The +3 is embedded in H.
+[Historical note, superseded 2026-07-01 (ED-1084): the "equivalent to combat pool
+(Agi×2)+H+3" analogy no longer holds — combat's pool was re-ratified Agility-independent as
+max(5, History + 6) (ED-901, ED-900/904). The contest pool construction stands on its own.]
 
 ## PP-257 — Corroboration Knot relaxed
 Any declared coalition member can corroborate (Knot not required). Knot-sharing = Ob 1; non-Knot coalition member = Ob 2. Asymmetric proceedings: all disadvantaged-party corroborators use Ob 2.

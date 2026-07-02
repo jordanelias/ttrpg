@@ -3,9 +3,13 @@
 
 # params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing)
 
-## Pool Formula (confirmed ×2 per PP-615)
+## Pool Formula (PP-615 heritage; combat analogy retired 2026-07-01, ED-1084)
 Fieldwork Pool = (Primary Attribute × 2) + History bonus
 History bonus = relevant History points + 3
+[Note (ED-1084): PP-615's "confirmed ×2" ruling was made by analogy to the combat pool of its
+era. Combat has since been re-ratified Agility-independent — max(5, History + 6), ED-901 /
+ED-900/904 — so the ×2 construction is now fieldwork-native (like the social contest's), not
+combat-derived. The fieldwork formula itself is unchanged.]
 TN: 7 (Standard) | 6 (Controlled) | 8 (Desperate)
 Pool minimum: 5D (Attribute 1, no History: (1×2) + 3 = 5)
 Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)

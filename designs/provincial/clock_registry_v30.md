@@ -113,7 +113,8 @@ Per-contest and contest-generated trackers (social_contest_v30.md). Per-characte
 
 ---
 
-*Registry maintained by valoria-orchestrator. Update in same commit as any clock/track creation or modification.*
+*Registry maintained by hand (the valoria-orchestrator skill was retired 2026-06-28, LB-22 —
+ED-1084). Update in same commit as any clock/track creation or modification.*
 
 ## Player Tracks (Throughline T2, T7)
 

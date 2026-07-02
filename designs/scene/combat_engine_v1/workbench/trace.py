@@ -6,6 +6,7 @@ repeating the fight. For win-rates over many fights use the montecarlo path (wor
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import numpy as np
+import random
 import wrapper
 import config
 
@@ -18,7 +19,7 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12):
     prev = wrapper._TRACE
     wrapper._TRACE = events.append
     try:
-        rng = np.random.default_rng(seed)
+        rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
         result = wrapper.fight(A, B, cfg, rng, max_bouts=max_bouts)
     finally:
         wrapper._TRACE = prev

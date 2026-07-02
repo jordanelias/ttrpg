@@ -1,8 +1,16 @@
 # Mass Battle Redesign Workplan v1.1
 ## Implementation plan for ED-811..820 + propagation of ED-800..808
 
+> **⚠️ STALE / SUPERSEDED (flagged 2026-07-02, mass-battle orphaned-proposal audit).** This 2026-05-11
+> plan (ED-811..820, the pre-rearchitecture compositional-grid/shape-template design) is fully
+> superseded by the 2026-06-30 bottom-up rearchitecture
+> (`designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md`, ED-1043) and the Stage
+> 1a-g/A-D/LC-8 execution that actually shipped (a materially different module-split methodology —
+> see `designs/provincial/mass_battle_v30.md` §A.6's ED-909 banner and `HANDOFF.md`'s mass-battle
+> entry for current state). Do not resume work from this doc; it is retained for provenance only.
+
 **Date:** 2026-05-11
-**Status:** Ratified. Phase 1 execution begins this session.
+**Status:** SUPERSEDED (was: Ratified. Phase 1 execution begins this session.)
 **Companion:** `references/simulation_workplan_v1.md` (parent), `tests/coverage_matrix.md`, `tests/sim/sim_mass_battle_SIM-MB-04.md`
 **Scope:** Mass battle system overhaul — compositional grid, shape templates, Discipline redesign, degree-gated damage. Specific subproject within the broader simulation campaign.
 **Surface:** Valoria is a videogame (Godot 4.6) only. All mechanics target the videogame execution layer.

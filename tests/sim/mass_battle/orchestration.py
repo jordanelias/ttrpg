@@ -398,7 +398,9 @@ def _momentum_speed(atom, contact_abs_cells):
                       + atom.cell_offsets_c.get((orig_r, orig_c), 0))
             if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
                 _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                comp_r, comp_c = int(round(_pr)), int(round(_pc))
+                # [migration H] file-bin the column on ON so comp matches the file-binned cells()/contact
+                # cells; OFF = verbatim int(round). FIELD_MOVEMENT/COL_WIDTH via units star-import.
+                comp_r, comp_c = (int(round(_pr)), int(round(_pc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(_pr)), int(round(_pc)))
             if (comp_r, comp_c) == (abs_r, abs_c):
                 speeds.append(atom.cell_last_speed.get((orig_r, orig_c), 0))
                 break
@@ -590,6 +592,10 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     pinned = False
                     for a in atk_sorted:
                         _z, _a = octagon_angle(a, d_pos, facing)
+                        # (c) FOV blind arc GATES reaction: a threat in the rear blind arc cannot be perceived,
+                        # so it cannot pin. Reuses FOV_HALF_DEG; no-op unless the facing model is enabled.
+                        if PC_FACING_MODEL and PC_FACING_FOV_GATE and _a > FOV_HALF_DEG:
+                            continue
                         if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
                                 and _a < 45.0):  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
                             pinned = True; break
@@ -979,6 +985,38 @@ def volley_phase(unit_a, unit_b):
             "ordered_a": ordered_a, "ordered_b": ordered_b}
 
 
+# ─── WORKBENCH TRACE SNAPSHOTS (read-only; gated by tracing_on(), zero cost when tracing is off) ──
+# [tick-by-tick visualizer, Jordan directive 2026-07-01] Extends the existing observe-only trace seam
+# (resolution.start_trace/trace_event/get_trace) with a spatial 'positions' event per tick. Uses
+# atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally and is NOT
+# field-aware) zipped against _oriented(atom)'s stable (orig_r,orig_c) ids — both iterate in the
+# SAME order (cells()/_node_cells() are themselves built by iterating _oriented(self)), so this is a
+# correct pairing on BOTH the integer-grid and coordinate-field paths. Callers gate on tracing_on()
+# so this construction (and its cost) is skipped entirely for every normal battle run.
+def _cell_snapshot(atom):
+    ids = [(o_r, o_c) for o_r, o_c, _, _ in _oriented(atom)]
+    cells = []
+    for cid, pos in zip(ids, atom.cells()):
+        fr, fc = atom.get_cell_facing(*cid)
+        cells.append({'id': list(cid), 'pos': [pos[0], pos[1]],
+                       'troops': round(atom.cell_troops.get(cid, 0.0), 1),
+                       'facing': [fr, fc], 'halted': cid in atom.halted_cells})
+    return cells
+
+def _subunit_snapshot(atom):
+    return {'shape': atom.shape, 'troop_type': atom.troop_type, 'unit_type': atom.unit_type,
+            'role': atom.role, 'instructions': list(atom.instructions),
+            'routed': atom.routed, 'broken': atom.broken, 'stance': atom.stance,
+            'cells': _cell_snapshot(atom)}
+
+def _unit_snapshot(unit):
+    return {'name': unit.name, 'faction': unit.faction,
+            'hp': round(unit.hp, 1), 'hp_max': unit.hp_max,
+            'morale': unit.morale, 'discipline': unit.discipline, 'stance': unit.stance,
+            'routed': unit.routed, 'broken': unit.broken,
+            'subunits': [_subunit_snapshot(a) for a in unit.subunits]}
+
+
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
@@ -991,6 +1029,14 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     Returns:
       {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
     """
+    # [movement-substrate review 06 — coordinate-field migration] The continuous COORDINATE FIELD requires
+    # the node float path: field-ON stores/emits true floats only via _node_pos (PC_NODE_COHESION). A
+    # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch, no floats, but the
+    # fractional-speed accumulator active) -> a degenerate integer 'field' run. Enforce the implication at
+    # setup so the invalid combination fails loudly instead of producing a corrupt result. No-op when
+    # FIELD_MOVEMENT is OFF (byte-exact).
+    assert (not FIELD_MOVEMENT) or PC_NODE_COHESION, \
+        "FIELD_MOVEMENT=1 requires PC_NODE_COHESION=1 (the coordinate field runs on the node float path)"
     turns = 0
     current_phase = 0
     for t in range(1, max_turns + 1):
@@ -1008,27 +1054,48 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             atom.halted_cells = set()
         for p in pre_pairs:
-            op_a = _oriented(p["atom_a"])
+            # [migration H] recompute abs from _node_pos (file-binned) on ON so it matches find_contacts'
+            # (file-binned) cells; OFF = verbatim cell_offsets build. Otherwise the == misses on the node
+            # path and halted_cells stays empty -> pre-contact halt silently disabled on the field path.
+            _atom_a = p["atom_a"]; _atom_b = p["atom_b"]
+            _fld_a = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_a, '_node_pos')
+            _fld_b = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_b, '_node_pos')
+            op_a = _oriented(_atom_a)
             for cell in p["a_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_a:
-                    abs_r = (p["atom_a"].starting_position[0] + or_r
-                             + p["atom_a"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_a"].advance_dir)
-                    abs_c = (p["atom_a"].starting_position[1] + or_c
-                             + p["atom_a"].cell_offsets_c.get((orig_r,orig_c), 0))
+                    if _fld_a:
+                        _pr, _pc = _atom_a._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
+                    else:
+                        abs_r = (_atom_a.starting_position[0] + or_r
+                                 + _atom_a.cell_offsets.get((orig_r,orig_c), 0) * _atom_a.advance_dir)
+                        abs_c = (_atom_a.starting_position[1] + or_c
+                                 + _atom_a.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_a"].halted_cells.add((orig_r, orig_c)); break
-            op_b = _oriented(p["atom_b"])
+                        _atom_a.halted_cells.add((orig_r, orig_c)); break
+            op_b = _oriented(_atom_b)
             for cell in p["b_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_b:
-                    abs_r = (p["atom_b"].starting_position[0] + or_r
-                             + p["atom_b"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_b"].advance_dir)
-                    abs_c = (p["atom_b"].starting_position[1] + or_c
-                             + p["atom_b"].cell_offsets_c.get((orig_r,orig_c), 0))
+                    if _fld_b:
+                        _pr, _pc = _atom_b._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
+                    else:
+                        abs_r = (_atom_b.starting_position[0] + or_r
+                                 + _atom_b.cell_offsets.get((orig_r,orig_c), 0) * _atom_b.advance_dir)
+                        abs_c = (_atom_b.starting_position[1] + or_c
+                                 + _atom_b.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_b"].halted_cells.add((orig_r, orig_c)); break
-        assign_targets(unit_a, unit_b)
+                        _atom_b.halted_cells.add((orig_r, orig_c)); break
+        # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
+        # target_condition/target_delay_ticks/stance/instructions, so orders must land first. Hoisting
+        # a_cells_set/b_cells_set up here (they were computed just after assign_targets) is a pure,
+        # behavior-preserving reorder: both are recomputed fresh from current cell positions with no
+        # side effects, so moving the computation 3 lines earlier changes nothing else.
         b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
         a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
+        check_orders(unit_a, t, b_cells_set)
+        check_orders(unit_b, t, a_cells_set)
+        assign_targets(unit_a, unit_b)
         # v21: SIMULTANEOUS RESOLUTION — cache all target centroids BEFORE any
         # atom moves. Without this, unit_a advances toward unit_b's pre-move
         # centroid, but unit_b advances toward unit_a's POST-move centroid,
@@ -1039,16 +1106,98 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             if atom.target_atom:
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
-        for atom in unit_a.subunits:
-            if atom.target_atom:
-                # per-subunit formation-hold: each subunit advances on its OWN Discipline
-                # (single-subunit inherits -> == unit.discipline -> byte-exact)
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=b_cells_set)
-        for atom in unit_b.subunits:
-            if atom.target_atom:
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=a_cells_set)
+
+        # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
+        # archers"). A screening subunit (escort_of set) has no enemy target yet, so it was never in
+        # cached_centroids above and the movement gate below (`if atom.target_atom:`) never fired for
+        # it — confirmed dead code in an earlier draft. Two additive fixes, computed here (same
+        # synchronized pre-move point as cached_centroids, preserving the v21 simultaneity discipline):
+        # latch the one-shot engage-on-contact switch now that assign_targets has run (a just-acquired
+        # real target_atom takes over targeting immediately, not one tick late), then give any
+        # still-escorting atom a centroid to advance toward -- the escorted subunit's live centroid
+        # plus escort_offset ROTATED into its current facing frame (not the static spawn-time
+        # advance_dir), so screening survives the escorted unit wheeling/enveloping/sweeping.
+        def _escort_facing(sub):
+            if PC_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
+                fr, fc = sub._node_facing
+            elif sub.cell_facing_vec:
+                _vecs = list(sub.cell_facing_vec.values())
+                fr = sum(v[0] for v in _vecs) / len(_vecs)
+                fc = sum(v[1] for v in _vecs) / len(_vecs)
+            else:
+                fr, fc = sub.advance_dir, 0
+            mag = math.hypot(fr, fc)
+            return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)  # [canonical: epsilon: float magnitude guard]
+
+        for atom in unit_a.subunits + unit_b.subunits:
+            if (atom.escort_of is not None and atom.escort_engage_on_contact
+                    and not atom._escort_engaged and atom.target_atom is not None):
+                atom._escort_engaged = True
+            # NOTE: the escort centroid overrides cached_centroids whenever escorting-and-not-yet-
+            # engaged, regardless of target_atom -- assign_targets' default 'nearest' condition sets
+            # target_atom to SOME enemy unconditionally the instant one exists (it is not gated on
+            # range), so gating this override on "target_atom is None" (an earlier version of this
+            # fix did) left it dead in every ordinary scenario: target_atom becomes non-None almost
+            # immediately, long before real contact, and the escort would silently start chasing the
+            # enemy directly instead of holding its screening position -- confirmed empirically (a
+            # screen with escort_engage_on_contact=False still switched to chasing the enemy on tick
+            # 1). "Screen IS the front line" (the False default) means movement is governed by the
+            # escort relationship until the one-shot latch above actually fires; a caller wanting
+            # real range-gated engagement should set target_condition='in_range:D' on the escorting
+            # subunit (an existing primitive) rather than relying on target_atom's mere presence.
+            if atom.escort_of is not None and not atom._escort_engaged:
+                _esc = atom.escort_of
+                _fr, _fc = _escort_facing(_esc)
+                _ex, _ey = _esc.centroid()
+                _dr, _dc = atom.escort_offset
+                cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
+
+        def _cells_float_of(unit):
+            return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
+
+        # [TOI refactor] b_cells_float/a_cells_float are now consulted by _node_advance ONLY for
+        # truthiness -- a non-empty list signals "defer to the cross-side TOI resolve rather than
+        # commit immediately" (see _node_advance's toi_deferred). The actual cross-side standoff
+        # computation (reach- and facing-asymmetric, exact time-of-impact) now runs once, after both
+        # sides have proposed, in resolve_toi_and_commit below -- replacing the old sequential,
+        # halved-closing-budget anchor pre-cap this comment used to describe (see git history: that
+        # design fixed a real first-mover bias but only approximately, and was retired once the bias's
+        # true fix -- exact per-pair TOI -- was designed properly instead of adopted under time
+        # pressure). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
+        b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
+        a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
+        # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
+        # even with target_atom=None, using the escort centroid computed above. Every existing
+        # scenario's `if atom.target_atom:` case is untouched (escort_of defaults to None).
+        moving_a = [atom for atom in unit_a.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        moving_b = [atom for atom in unit_b.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        for atom in moving_a:
+            # per-subunit formation-hold: each subunit advances on its OWN Discipline
+            # (single-subunit inherits -> == unit.discipline -> byte-exact)
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
+        for atom in moving_b:
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
+        # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED
+        # (uncapped) end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being
+        # non-empty (b_cells_float/a_cells_float, built above) signals _node_advance to defer rather
+        # than commit. Resolve the cross-side continuous-collision time-of-impact ONCE, across both
+        # sides together (not per-atom, not sequential), and commit final positions now. Replaces the
+        # old per-atom halved-anchor-precap + iterated per-cell pull-back entirely.
+        #
+        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit
+        # with no target yet (a reserve, or gated by target_delay_ticks/target_condition) never called
+        # advance_cells and so has no pending proposal, but its cells are real, occupied positions that
+        # the OTHER side's moving cells must still treat as obstacles -- resolve_toi_and_commit reads
+        # such atoms' current true positions directly (adversarial-review-caught: an earlier version
+        # passed only moving_a/moving_b, silently dropping idle/reserve subunits as obstacles for a
+        # tick, a regression versus the pre-refactor enemy_cells_float, which was always built from
+        # ALL of a unit's subunits unconditionally).
+        if FIELD_MOVEMENT:
+            resolve_toi_and_commit(unit_a.subunits, unit_b.subunits)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
         for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)
@@ -1209,6 +1358,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+        if tracing_on():
+            trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else
               "B" if not unit_b.routed and unit_a.routed else "draw")
     tick_in_phase = turns % TICKS_PER_PHASE if turns else 0
@@ -1270,11 +1421,28 @@ def reset_morale_between_battles(unit):
 
 
 def reset_positions(unit, shape, anchor_map):
-    """Reset subunit positions for re-engagement after disengagement.
-    Units return to their starting rows for fresh approach."""
+    """Reset subunit positions for re-engagement after disengagement. Units return to their
+    starting rows for fresh approach.
+
+    [Fix, 2026-07-02] Each subunit now returns to its OWN spawn column (Subunit._spawn_position,
+    snapshotted once at construction) rather than a single shape-keyed anchor shared by every
+    subunit in the unit. The old behaviour was byte-exact-correct only by coincidence for a
+    single-subunit unit built via build_unit (whose one subunit's spawn position IS exactly
+    anchor_map[(shape,tier)] -- so this change reproduces identical results for every such case,
+    confirmed via bat.py's byte-exact battery, which exercises exactly this path). It was silently
+    WRONG for a multi-subunit army (build_army/build_envelopment/build_refused_flank): resetting
+    EVERY subunit to one shared anchor column collapsed any wide-placed wing/escort back onto the
+    center on every subsequent battle-turn, discovered while dogfooding build_envelopment/
+    build_refused_flank through the multi-turn ('multi'/"resolving mode") path for the first time
+    -- Stage C's own verification only ever exercised kind='single', which never calls this
+    function, so the gap went unexercised until now. `shape`/`anchor_map` stay as parameters (no
+    call-site signature change) and are used only as a defensive fallback for a subunit that
+    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__)."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
-    anchor_col = anchor_map.get((shape, unit.subunits[0].tier), 10)
+    fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
+        spawn = getattr(atom, '_spawn_position', None)
+        anchor_col = spawn[1] if spawn is not None else fallback_col
         atom.starting_position = (start_row, anchor_col)
         atom.cell_offsets = {}
         atom.cell_offsets_c = {}

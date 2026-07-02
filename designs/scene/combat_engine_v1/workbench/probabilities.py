@@ -11,9 +11,10 @@ change to the engine flows through automatically and the sim-fabrication discipl
 Degree banding mirrors core.degree() exactly (the ER-2 continuity-corrected k-0.5 thresholds)."""
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 from math import erf, sqrt, exp
-import core                      # importing core also puts the r1/r8/m1 substrate dir on sys.path
-import m1_dice_sigma_core as m1  # so this resolves without re-adding the path
+import core                      # engine kernel (numpy-free since ED-1085)
+import m1_dice_sigma_core as m1  # frozen-harness constants (PER_DIE table) — resolved via the insert above
 
 
 def _phi(z):

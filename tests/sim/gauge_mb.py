@@ -19,25 +19,32 @@ shaken foot) are expected to resolve.
 
 Two granularities: single (one engagement-turn) and multi (the resolving mode). Single
 mode currently returns all-draws at the tick cap for every engine config -- a tick-cap
-artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine file
-is argv[1], exec'd into namespace, so the same gauge runs against any engine variant.
+artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine is
+the live mass_battle package (tests/sim/mass_battle/engine.py), imported directly -- this
+gauge runs against whatever engine config the environment toggles (PER_CELL, FIELD_MOVEMENT,
+PC_NODE_COHESION, ...) select, not a frozen snapshot file.
 
 Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
 import sys, os, random, statistics
 
-ENGINE = sys.argv[1] if len(sys.argv) > 1 else '/home/claude/sim_v22.py'
-exec(open(ENGINE).read())
+# import the package exactly as bat.py (the G5 digest harness) does
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
+from mass_battle.engine import (  # noqa: E402
+    Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
+    run_battle, run_multi_turn_battle, build_unit, build_envelopment, build_refused_flank,
+    resolve_battle)
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
+    # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
+    # the shapes themselves -- _envelop_army/_refused_army below reference ('Line', tier) instead,
+    # since those Unit-level presets are now built from Line-shaped center/wing/refused subunits.
     ('Line',1):11,('Line',2):10,('Line',3):9,('Line',4):8,                       # [canonical: mass_battle_v30.md §deployment]
     ('Arrowhead',1):11,('Arrowhead',2):10,('Arrowhead',3):8,('Arrowhead',4):7,   # [canonical: mass_battle_v30.md §deployment]
-    ('Horseshoe',1):11,('Horseshoe',2):10,('Horseshoe',3):8,('Horseshoe',4):7,   # [canonical: mass_battle_v30.md §deployment]
     ('GappedLine',1):11,('GappedLine',2):9,('GappedLine',3):7,                   # [canonical: mass_battle_v30.md §deployment]
-    ('RefusedFlank',1):11,('RefusedFlank',2):10,('RefusedFlank',3):9,            # [canonical: mass_battle_v30.md §deployment]
 }
 
-def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, morale=6,
+def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4/D5/M6, same baseline as make_unit's defaults below]
                     morale_start=None, dr=1, stance='balanced', speed='Standard'):
     """Build a MULTI-subunit Unit with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
@@ -52,7 +59,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
     subs = []
     for i, sp in enumerate(specs):
         sp = dict(sp)
-        pos = sp.pop('starting_position', (10 + i * 4, 15))
+        pos = sp.pop('starting_position', (10 + i * 4, 15))  # deployment-layout convenience default (not historically cited); staggers un-positioned subunits down the battlefield
         tt = sp.pop('troop_type', 'infantry')
         # build typed subunits via Subunit.of_type so a canonical troop type draws its
         # §B.2 Power/Discipline/Morale presets (the taxonomy stat home, ED-1018). Only forward the
@@ -94,16 +101,53 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     #     (a unit that has LOST morale), not a low absolute ceiling -> a shaken line
     #     needs morale<morale_start, which make_unit's old morale_start==morale
     #     could not express.
-    advance_dir = -1 if faction == 'A' else 1
-    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    # Delegates to the wrapper's faction->unit ADAPTER (engine.build_unit): resolve the
+    # deployment anchor_col from THIS gauge's own ANCHOR_MAP (its table differs from
+    # bat.py's), then hand off the identical single-subunit build (advance_dir/start_row
+    # computation, Subunit(...), Unit(...), dr=1 default) that used to be inlined here.
+    # build_unit is proven byte-exact-transparent by bat.py's digest gate.
     anchor_col = ANCHOR_MAP.get((shape, tier), 10)
-    su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
-                 starting_position=(start_row, anchor_col),
-                 advance_dir=advance_dir, unit_type=unit_type, instructions=tuple(instructions))
-    return Unit(name=name, faction=faction, power=power, command=command,
-                discipline=discipline, discipline_start=discipline,
-                morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=[su], dr=1, stance=stance, speed=speed)
+    return build_unit(shape, tier, name, faction, anchor_col, troop_type=troop_type,
+                       unit_type=unit_type, power=power, command=command,
+                       discipline=discipline, morale=morale, morale_start=morale_start,
+                       stance=stance, speed=speed, instructions=instructions, dr=1)
+
+
+def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
+    """[LC-8, ED-909] Composed replacement for the retired Horseshoe shape: a held center + two
+    wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Unit-level
+    Envelopment preset. Mirrors make_unit's kwarg surface closely enough to drop straight into
+    matchup()'s (sa,tier,name,faction,**k) call convention."""
+    anchor = ANCHOR_MAP.get(('Line', tier), 10)
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    center = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+               'starting_position': (start_row, anchor)}]
+    # wing offset: [canonical: sim_verification_ledger.json — CALIBRATED, matches bat.py's _envelop_army spacing, not historically cited]
+    wings = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+              'starting_position': (start_row, anchor - 6)},  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
+             {'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+              'starting_position': (start_row, anchor + 6)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
+    return build_envelopment(center, wings, name, faction,
+                              power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                              morale_start=kw.pop('morale_start', None))
+
+
+def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
+    """[LC-8, ED-909] Composed replacement for the retired RefusedFlank shape: a strong wing +
+    a withheld/refused wing released only once directly threatened -- ED-909's Unit-level Refused
+    Flank preset."""
+    anchor = ANCHOR_MAP.get(('Line', tier), 10)
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    strong = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+               'starting_position': (start_row, anchor - 4)}]
+    refused = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+                'starting_position': (start_row, anchor + 4)}]
+    return build_refused_flank(strong, refused, name, faction,
+                                power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                                morale_start=kw.pop('morale_start', None))
+
 
 # (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp[, metric])
 #   (lo,hi)  = band, % [history-grounded]. metric (optional, default 'decA') selects what (lo,hi) bounds:
@@ -117,15 +161,15 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
 TESTS = [
     ('H1','Line vs Line (mirror)','Line','Line',{},{},42,58,'high'),                       # [canonical: mass_battle_gauge_grounding.md §3 — H1 mirror symmetry]
     ('H2','Arrowhead(wedge) vs Line','Arrowhead','Line',{},{},48,62,'high'),               # [canonical: mass_battle_gauge_grounding.md §3 — H2 modest wedge edge]
-    ('H3','Horseshoe(envelop) vs Line','Horseshoe','Line',{},{},55,72,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H3 full envelopment]
-    ('H4','Horseshoe vs Arrowhead (Cannae)','Horseshoe','Arrowhead',{},{},45,62,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H4 Cannae proper]
-    ('H5','RefusedFlank vs Horseshoe','RefusedFlank','Horseshoe',{},{},48,62,'high'),       # [canonical: mass_battle_gauge_grounding.md §3 — H5 oblique counter]
-    ('H6','RefusedFlank vs Line','RefusedFlank','Line',{},{},48,60,'high'),                 # [canonical: mass_battle_gauge_grounding.md §3 — H6 oblique order]
+    ('H3','Envelopment vs Line',_envelop_army,'Line',{},{},55,72,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H3 full envelopment]
+    ('H4','Envelopment vs Arrowhead (Cannae)',_envelop_army,'Arrowhead',{},{},45,62,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H4 Cannae proper]
+    ('H5','RefusedFlank vs Envelopment',_refused_army,_envelop_army,{},{},48,62,'high'),       # [canonical: mass_battle_gauge_grounding.md §3 — H5 oblique counter]
+    ('H6','RefusedFlank vs Line',_refused_army,'Line',{},{},48,60,'high'),                 # [canonical: mass_battle_gauge_grounding.md §3 — H6 oblique order]
     ('H7','GappedLine(manip) vs Line','GappedLine','Line',{},{},48,62,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H7 manipular flex]
     ('H8','GappedLine vs Arrowhead','GappedLine','Arrowhead',{},{},50,65,'high'),           # [canonical: mass_battle_gauge_grounding.md §3 — H8 maniples absorb wedge]
     ('H9','Line vs Arrowhead (rev H2)','Line','Arrowhead',{},{},38,52,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H9 inverse H2]
-    ('H10','Line vs Horseshoe (rev H3)','Line','Horseshoe',{},{},28,45,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H10 inverse H3]
-    ('H11','Arrowhead vs Horseshoe (rev H4)','Arrowhead','Horseshoe',{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4]
+    ('H10','Line vs Envelopment (rev H3)','Line',_envelop_army,{},{},28,45,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H10 inverse H3]
+    ('H11','Arrowhead vs Envelopment (rev H4)','Arrowhead',_envelop_army,{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4]
     ('R1','Ranged vs Line (open field)','Line','Line',
         {'unit_type':'ranged','stance':'hold'},{},0,30,'low'),                             # [canonical: mass_battle_gauge_grounding.md §3 — R1 ranged loses open field]
     ('R3','Ranged vs Ranged (mirror)','Line','Line',
@@ -150,7 +194,7 @@ CAV_TESTS = [
     # C3: cavalry mirror -- side-symmetry control of the charge/momentum path. Even.
     ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',dict(CAV),dict(CAV),42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — C3 cav mirror]
     # C4: mounted ENVELOPMENT of a line -- flank/rear is devastating (Cannae; Adrianople; Boddy 2015).
-    ('C4','Cav flank/envelopment vs Line','Horseshoe','Line',dict(CAV),{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
+    ('C4','Cav flank/envelopment vs Line',_envelop_army,'Line',dict(CAV),{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
     # C5: cavalry vs a genuinely SHAKEN line -- morale 2 of a start-6 unit (cohesion eroded 2/3 BELOW
     # start; "shaken" is RELATIVE, du Picq, not a low absolute ceiling). The shaken-amplifier
     # (PC_SHOCK_SHAKEN_GAIN) + _morale_sigma fire: the wavering line breaks under the charge --
@@ -173,22 +217,31 @@ CAV_TESTS = [
     # instruction, deliberately -- the reciprocal charge-recoil (orchestration ~L1647) does NOT
     # zone-gate, so a braced+enveloped unit would WRONGLY fire the recoil from the rear. [FLAG: latent
     # engine issue -- the recoil should fire frontally only; out of scope here, see grounding §4.]
-    ('C7','Cav envelop vs holding Line (hold+d8)','Horseshoe','Line',dict(CAV),{'stance':'hold','discipline':8},65,100,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace; Cannae-total ceiling]
+    ('C7','Cav envelop vs holding Line (hold+d8)',_envelop_army,'Line',dict(CAV),{'stance':'hold','discipline':8},65,100,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace; Cannae-total ceiling]
 ]
 
 def winner_of(r):
     return r.get('winner','draw')
 
-def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: mass_battle_gauge_grounding.md §1 — n sample (SE~5pp), deterministic seed]
+def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directive 2026-07-01: n 120->60 for runtime; SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp at p=0.5, vs the grounding doc's cited n=120/SE~5pp basis (mass_battle_gauge_grounding.md §1)]
+    # sa/sb: a plain shape string (single-subunit, via make_unit) or an army-builder callable
+    # (_envelop_army/_refused_army) for the composed Envelopment/Refused-Flank presets that replaced
+    # the retired Horseshoe/RefusedFlank shapes (LC-8). resolve_battle's shape_a/shape_b positional
+    # is only consulted by reset_positions as a defensive fallback now (every subunit resets to its
+    # OWN spawn position first) -- 'Line' is a safe placeholder for a callable side.
+    a_is_fn = callable(sa); b_is_fn = callable(sb)
     aw=bw=dr=0; turns=[]; a_cas=[]; b_cas=[]
     for s in range(n):
         random.seed(s+seed_base)
-        ua=make_unit(sa,3,'A','A',**ka); ub=make_unit(sb,3,'B','B',**kb)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
+        ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
+        ub = sb('B','B',**kb) if b_is_fn else make_unit(sb,3,'B','B',**kb)
         a0,b0 = ua.hp_max, ub.hp_max
+        shape_a = 'Line' if a_is_fn else sa
+        shape_b = 'Line' if b_is_fn else sb
         if mode=='single':
-            r=run_battle(ua,ub,max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
+            r=resolve_battle(ua,ub,kind='single',max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
         else:
-            r=run_multi_turn_battle(ua,ub,sa,sb,ANCHOR_MAP,max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
+            r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
         w=winner_of(r)
         if w=='A':aw+=1
         elif w=='B':bw+=1
@@ -199,8 +252,8 @@ def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: ma
                 decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]
                 t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas))
 
-def run(mode, tests=TESTS, n=120):  # [canonical: mass_battle_gauge_grounding.md §1 — default sample]
-    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]})  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
+def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sample n 120->60 for runtime — see matchup()]
+    print(f"\n----- MODE: {mode}  (engine: mass_battle package)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
     print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'val':>5} {'band':>7} {'dexp':>4} {'m':>4} verdict")
     nb=0
     for t in tests:
@@ -229,4 +282,4 @@ if __name__=='__main__':
     _tests = TESTS + (CAV_TESTS if _pc else [])
     s=run('single', _tests); m=run('multi', _tests)
     n=len(_tests)
-    print(f"\n==== {ENGINE.split('/')[-1]}: single={s}/{n}  multi={m}/{n} (multi is the resolving mode) ====")
+    print(f"\n==== mass_battle package: single={s}/{n}  multi={m}/{n} (multi is the resolving mode) ====")

@@ -8,7 +8,45 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
+__all__ = ['check_orders', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
+
+
+def check_orders(unit, t, enemy_cells):
+    """[Stage C] Fire each subunit's pending orders (Subunit.orders, a Tuple[Order,...]) whose trigger
+    condition is met this tick. Called once per tick per side, BEFORE assign_targets (an order's
+    behavior dict may itself set target_condition/target_delay_ticks/etc., so orders must land first).
+    Orders fire in sequence -- a later order cannot fire before an earlier one's trigger is satisfied.
+    Reuses the exact 'kind:value' trigger-parsing idiom already in production for target_condition's
+    'in_range:N' (see assign_targets, immediately below) -- no new parsing pattern.
+
+    Triggers: 'immediate' | 'tick:N' (t >= N) | 'enemy_range:D' (within D of the nearest enemy cell) |
+    'ally_at:D' (within D of order.waypoint_ref's centroid -- the allied Subunit to watch).
+
+    Byte-exact: Subunit.orders defaults to () -- the while loop body never executes for any existing
+    Subunit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
+    for sub in unit.subunits:
+        while sub._order_idx < len(sub.orders):
+            order = sub.orders[sub._order_idx]
+            fired = False
+            if order.trigger == 'immediate':
+                fired = True
+            elif order.trigger.startswith('tick:'):
+                fired = t >= int(order.trigger.split(':', 1)[1])
+            elif order.trigger.startswith('enemy_range:'):
+                D = float(order.trigger.split(':', 1)[1])
+                if enemy_cells:
+                    my = sub.centroid()
+                    fired = min(math.hypot(my[0] - er, my[1] - ec) for (er, ec) in enemy_cells) <= D
+            elif order.trigger.startswith('ally_at:'):
+                D = float(order.trigger.split(':', 1)[1])
+                if order.waypoint_ref is not None:
+                    my = sub.centroid(); wp = order.waypoint_ref.centroid()
+                    fired = math.hypot(my[0] - wp[0], my[1] - wp[1]) <= D
+            if not fired:
+                break
+            for k, v in order.behavior.items():
+                setattr(sub, k, v)
+            sub._order_idx += 1
 
 
 def assign_targets(unit_a, unit_b):
@@ -100,6 +138,14 @@ def resolve_cross_side_contention(unit_a, unit_b):
 
     Citation: see preceding canonical comment.
     """
+    import mass_battle.hierarchy.units as _u
+    if _u.FIELD_MOVEMENT:
+        # [Stage A] Co-location is now geometrically impossible on the field path: _node_advance halts
+        # every cell at standoff() before it can ever reach an enemy cell's true position, so there is
+        # nothing left for this function to resolve. Kept (not deleted) as a documented no-op; the OFF/
+        # grid path below is untouched and still does the full speed-priority resolution.
+        return 0
+
     def collect(unit):
         """abs_pos -> [(subunit, orig_coord, contention_speed)]"""
         result = {}
@@ -112,7 +158,12 @@ def resolve_cross_side_contention(unit_a, unit_b):
                       + su.cell_offsets_c.get((orig_r, orig_c), 0))
                 if PC_NODE_COHESION and hasattr(su, '_node_pos'):
                     _pr, _pc = su._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                    ar, ac = int(round(_pr)), int(round(_pc))
+                    # [migration H] file-bin the column on ON so the contested-set intersection tests
+                    # co-location on the SAME file-cell grid as cells()/find_contacts (the ratified
+                    # 'contested grid cell = unit of contested ground' model), not raw-float equality
+                    # (which almost never coincides). OFF = verbatim int(round). Toggles at call time.
+                    import mass_battle.hierarchy.units as _u
+                    ar, ac = (int(round(_pr)), int(round(_pc / _u.COL_WIDTH))) if _u.FIELD_MOVEMENT else (int(round(_pr)), int(round(_pc)))
                 # Contention speed: only counts if cell moved this turn
                 speed = (su.cell_last_speed.get((orig_r, orig_c), 0)
                          if (orig_r, orig_c) in su._moved_this_turn
@@ -161,20 +212,112 @@ def resolve_cross_side_contention(unit_a, unit_b):
 
 
 def find_contacts(unit_a, unit_b):
+    # Toggles read at CALL TIME (not import-bound) so a runtime flag flip stays consistent across modules
+    # and to avoid a units->contact import cycle. [movement-substrate review 06 — contact cluster]
+    import mass_battle.hierarchy.units as _u
+    if _u.FIELD_MOVEMENT:
+        # [Stage A] The continuous-field halt (_node_advance) now stops cells at standoff() -- not at
+        # Chebyshev<=1 -- so contact must fire at the SAME radius, or cells halt at 2-3 lattice units
+        # while contact still only fires at <=1 (out of sync). Takes priority over FIELD_CONTACT (a
+        # narrower, separate int-round-snap refinement that predates this fix and is untouched here).
+        return _find_contacts_standoff(unit_a, unit_b)
+    if not _u.FIELD_CONTACT:
+        pairs = []
+        a_cells = {id(a): set(a.cells()) for a in unit_a.subunits}
+        b_cells = {id(b): set(b.cells()) for b in unit_b.subunits}
+        for atom_a in unit_a.subunits:
+            for atom_b in unit_b.subunits:
+                ca = a_cells[id(atom_a)]
+                cb = b_cells[id(atom_b)]
+                contact_cells_a, contact_cells_b, contact_cols = [], [], set()
+                for (ra, c) in ca:
+                    for (rb, cb_) in cb:
+                        if abs(ra-rb) <= 1 and abs(c-cb_) <= 1:
+                            contact_cells_a.append((ra, c))
+                            contact_cells_b.append((rb, cb_))
+                            contact_cols.add((c + cb_) // 2)
+                if contact_cols:
+                    pairs.append({"atom_a": atom_a, "atom_b": atom_b,
+                                   "a_cells": contact_cells_a, "b_cells": contact_cells_b,
+                                   "cols": list(contact_cols)})
+        return pairs
+    return _find_contacts_field(unit_a, unit_b)
+
+
+def _cell_radius(atom):
+    """Half the max lattice extent of an atom's footprint (min 0.5) — a per-atom contact radius for the
+    FIELD_CONTACT centroid bound. [movement-substrate review 06 — contact cluster]"""
+    op = _oriented(atom)
+    rows = [r for r, c, _o, _p in op]
+    cols = [c for r, c, _o, _p in op]
+    if not rows:
+        return 0.5
+    ext = max(max(rows) - min(rows), max(cols) - min(cols)) + 1
+    return max(0.5, ext / 2.0)
+
+
+def _find_contacts_standoff(unit_a, unit_b):
+    """[Stage A] FIELD_MOVEMENT ON: contact fires at the same standoff() radius the halt uses, on true
+    floats (cells_float(), no snapping) -- so contact and halt never drift out of sync. Returned
+    a_cells/b_cells are snapped to the same (rank, file) convention _node_advance/orchestration.py
+    already use for halted_cells matching (int(round(r)), int(round(c/COL_WIDTH))) -- only the contact
+    PREDICATE is continuous; the reported cell identities stay on the existing snap convention."""
+    import mass_battle.hierarchy.units as _u
     pairs = []
-    a_cells = {id(a): set(a.cells()) for a in unit_a.subunits}
-    b_cells = {id(b): set(b.cells()) for b in unit_b.subunits}
+    af = {id(a): (a.cells_float(), _u.reach_for(a.troop_type)) for a in unit_a.subunits}
+    bf = {id(b): (b.cells_float(), _u.reach_for(b.troop_type)) for b in unit_b.subunits}
     for atom_a in unit_a.subunits:
+        fa, ra = af[id(atom_a)]
         for atom_b in unit_b.subunits:
-            ca = a_cells[id(atom_a)]
-            cb = b_cells[id(atom_b)]
+            fb, rb = bf[id(atom_b)]
+            sd = _u.standoff_from_reach(ra, rb)
+            # Sets, not lists: the standoff radius (>=2.0) is wide enough that one cell can be within
+            # range of several enemy cells at once, which would otherwise append the SAME snapped
+            # identity multiple times -- confirmed by adversarial review to silently over-count stamina
+            # drain downstream (orchestration.py sums len(a_cells) directly, uncounted duplicates
+            # inflate it). Converted to sorted lists at the end for deterministic output.
+            contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
+            for (ar, ac) in fa:
+                for (br, bc) in fb:
+                    if math.hypot(ar - br, ac - bc) <= sd:
+                        contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
+                        contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
+                        contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))
+            if contact_cols:
+                pairs.append({"atom_a": atom_a, "atom_b": atom_b,
+                               "a_cells": sorted(contact_cells_a), "b_cells": sorted(contact_cells_b),
+                               "cols": sorted(contact_cols)})
+    return pairs
+
+
+def _find_contacts_field(unit_a, unit_b):
+    """FIELD_CONTACT ON: contact on the promoted floats. Each atom's cells_float() is snapped to int(round())
+    here (NOT pre-snapped at cells()), then the SAME append-per-adjacent-pair Chebyshev<=1 loop runs on the
+    snapped cells — so the contacting SET reconstruction is identical IN KIND to the OFF path. ca_snap/cb_snap
+    are SETS (matching OFF's set(a.cells()) dedup) so round-colliding float cells do not multiply-count.
+    At CONTACT_REACH=0.0 this reduces exactly to OFF adjacency. [movement-substrate review 06 — contact cluster]
+    NOTE: reach>0 widening of the SET predicate is UNSPECIFIED and pending Jordan; ships reach=0.0 only."""
+    import mass_battle.hierarchy.units as _u
+    _reach = _u.CONTACT_REACH  # exercised only when a ratified non-zero reach lands; 0.0 => OFF adjacency
+    pairs = []
+    af = {id(a): a.cells_float() for a in unit_a.subunits}
+    bf = {id(b): b.cells_float() for b in unit_b.subunits}
+    for atom_a in unit_a.subunits:
+        fa = af[id(atom_a)]
+        ca_snap = set((int(round(r)), int(round(c))) for (r, c) in fa)
+        for atom_b in unit_b.subunits:
+            fb = bf[id(atom_b)]
+            cb_snap = set((int(round(r)), int(round(c))) for (r, c) in fb)
             contact_cells_a, contact_cells_b, contact_cols = [], [], set()
-            for (ra, c) in ca:
-                for (rb, cb_) in cb:
+            for (ra, c) in ca_snap:
+                for (rb, cb_) in cb_snap:
                     if abs(ra-rb) <= 1 and abs(c-cb_) <= 1:
                         contact_cells_a.append((ra, c))
                         contact_cells_b.append((rb, cb_))
-                        contact_cols.add((c + cb_) // 2)
+                        if _u.FIELD_MOVEMENT:
+                            contact_cols.add(round(((c + cb_) / 2.0) / _u.COL_WIDTH))  # file index of the meeting column
+                        else:
+                            contact_cols.add((c + cb_) // 2)
             if contact_cols:
                 pairs.append({"atom_a": atom_a, "atom_b": atom_b,
                                "a_cells": contact_cells_a, "b_cells": contact_cells_b,

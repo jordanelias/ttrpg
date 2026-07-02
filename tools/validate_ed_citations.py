@@ -79,6 +79,12 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 ARCHIVE_GLOBS = ('archives/editorial/', 'archives/editorials/', 'deprecated/canon/')
 
+# JSONL archive siblings of the active ledger (canon/editorial_ledger.jsonl's own overflow
+# chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the
+# patch_register_active.yaml / patch_register_archive.yaml co-location convention, not the
+# older ARCHIVE_GLOBS directories which predate the 2026-05-28 JSONL migration).
+ARCHIVE_JSONL_PATHS = ('canon/editorial_ledger_archive.jsonl',)
+
 
 # ── Pure core (network-free; unit-tested) ─────────────────────────────────────
 
@@ -240,7 +246,7 @@ def _walk_repo_files():
 
 
 def load_ed_universe(warn=True) -> dict:
-    """Active JSONL ledger + editorial archive YAMLs on disk -> {canon_id: status}.
+    """Active JSONL ledger + editorial archive YAMLs/JSONLs on disk -> {canon_id: status}.
 
     The active ledger is AUTHORITATIVE. Archive entries are loaded FIRST and the
     active JSONL LAST, so that build_status_map's last-write-wins ordering lets a
@@ -271,6 +277,21 @@ def load_ed_universe(warn=True) -> dict:
                 archive_entries.extend(salvaged)
                 continue
             archive_entries.extend(parsed)
+    for ap in ARCHIVE_JSONL_PATHS:
+        raw = _read(ap)
+        if not raw:
+            continue
+        bad_lines = 0
+        for ln in raw.splitlines():
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                archive_entries.append(json.loads(ln))
+            except Exception:
+                bad_lines += 1
+        if warn and bad_lines:
+            dropped.append((ap, f"{bad_lines} malformed JSONL line(s)", 0))
     active_entries = []
     led = _read('canon/editorial_ledger.jsonl') or ''
     for ln in led.splitlines():

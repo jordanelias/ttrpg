@@ -15,6 +15,18 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
 
+def _affords_point(w):
+    """Local import (systems.py sits above this module in the dependency order — importing it at module
+    scope would create a cycle, per the module docstring's "pure data; no systems/core at module scope").
+    True iff the weapon's DERIVED afforded-heads set (systems.afforded_heads — primitive-emergent, not the
+    static `head` field) includes a real 'point' token. Catches the poleaxe: its static head is 'blunt', but
+    its beak/spike primitive (point_concentration=0.78 > SELECT_PC_MIN) affords a genuine point, and
+    systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the situational gap
+    game) — so the static-head-only check under-reports this capability for it."""
+    import systems as S
+    return 'point' in S.afforded_heads(w)
+
+
 # Each capability: the state-graph node it gates, a pure predicate over (name, weapon-dict), and the human
 # "needs" string. Predicates are seeded to match current engine behavior exactly (verified in __main__).
 CAPABILITIES = {
@@ -25,8 +37,8 @@ CAPABILITIES = {
     },
     'gap_thrust': {
         'node': 'closed.coupling / armour-defeat (core.coupling puncture path)',
-        'pred': lambda name, w: w['head'] in ('point', 'cut_thrust'),
-        'needs': "a thrusting point (point head, or a cut-and-thrust blade that can half-sword to one)",
+        'pred': lambda name, w: w['head'] in ('point', 'cut_thrust') or _affords_point(w),
+        'needs': "a thrusting point (point head, or a cut-and-thrust blade that can half-sword to one), or a blunt weapon whose beak/spike affords a real point (e.g. the poleaxe)",
     },
     'percussive_blow': {
         'node': 'closed.coupling / armour-defeat (blunt percussion mode)',
@@ -89,11 +101,12 @@ if __name__ == '__main__':
             a_ok = False; print(f"    MISMATCH halfsword {n}: engine={switches} pred={allowed('halfsword', n)}")
     checks.append(a_ok); print(f"(a) halfsword pred == halfsword_target switch: {'OK' if a_ok else 'FAIL'}")
 
-    # (b) gap_thrust predicate matches core.coupling's puncture availability (point or cut_thrust)
+    # (b) gap_thrust predicate matches core.coupling's puncture availability (point or cut_thrust), OR the
+    # DERIVED afforded_heads set (catches the poleaxe's emergent beak/spike point — see _affords_point)
     b_ok = True
     for n in names:
         head = WEAPONS[n]['head']
-        puncture_capable = (core.HEAD_MODE.get(head) == 'puncture') or head == 'cut_thrust'  # cut_thrust = max(shear,puncture)
+        puncture_capable = (core.HEAD_MODE.get(head) == 'puncture') or head == 'cut_thrust' or 'point' in S.afforded_heads(WEAPONS[n])  # cut_thrust = max(shear,puncture)
         if puncture_capable != allowed('gap_thrust', n):
             b_ok = False; print(f"    MISMATCH gap_thrust {n}: engine={puncture_capable} pred={allowed('gap_thrust', n)}")
     checks.append(b_ok); print(f"(b) gap_thrust pred == coupling puncture path: {'OK' if b_ok else 'FAIL'}")

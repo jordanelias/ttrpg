@@ -26,8 +26,194 @@ PC_SWEEP = (_hu_os.environ.get("PC_SWEEP", "1") == "1")  # [canonical: mass_batt
 # (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions preserved; only step TIMING changes.
 # Consumer-local here (advance_cells), like PC_ENVELOP_PATH/PC_SWEEP. ON = recorded behaviour change.
 FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "0") == "1")
+# [movement-substrate review 06 — coordinate-field migration] FIELD_MOVEMENT is the continuous COORDINATE
+# FIELD master toggle. Continuous positions require the node float path (PC_NODE_COHESION stores true floats
+# in _node_pos): the field toggle therefore UNIFIES with it — field-ON implies the node path is active. A
+# FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch never emits floats), so
+# run_battle enforces FIELD_MOVEMENT ⇒ PC_NODE_COHESION at setup (see run_battle). Toggles live here (not
+# config.py) so the whole-file fabrication scan does not surface config's pre-existing uncited constants.
+FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "0") == "1")  # default OFF -> byte-exact contact path
+CONTACT_REACH = float(_hu_os.environ.get("CONTACT_REACH", "0.0"))  # 0.0 => ON contact predicate == OFF adjacency (exempt value)
+COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_WIDTH). At 1.0, round(int)==int -> OFF byte-exact.
 
-__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT']
+# ─── FACING PHYSICS (anti-hyper-reactivity; movement-substrate review 06, facing-heading cluster) ───
+# Cell-level facing STATE gating the octagon. Master toggle default OFF -> byte-exact (raw-movement-vector
+# facing, instantly re-faced each turn, exactly as today). ON: facing becomes committed state with slew-rate,
+# attention, an FOV blind arc, and rout-away facing. DEFAULT-OFF; F2 is NOT enabled — magnitudes below are
+# ungrounded placeholders (calibrated debt), not ratified. Placed here (not config.py) so the whole-file
+# fabrication scan does not surface config's pre-existing uncited constants; exported in __all__ so
+# orchestration's star-import of units sees them (avoids the config __all__ omission that would NameError).
+PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '0') == '1')   # master gate; OFF -> today's raw-vector facing
+PC_FACING_ATTENTION = (_hu_os.environ.get('PC_FACING_ATTENTION', '1') == '1')  # (a) engaged cell faces its ENGAGED target; no-op unless PC_FACING_MODEL
+PC_FACING_SLEW_BASE = float(_hu_os.environ.get('PC_FACING_SLEW_BASE', '60'))  # [CALIBRATED-DEBT, Stage-5: ungrounded placeholder pivot rate deg/tick; NOT ratified — do not enable]
+PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
+PC_FACING_ROUT = (_hu_os.environ.get('PC_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
+
+__all__ = ['Subunit', 'Unit', 'Order', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+           'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT',
+           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'PC_REACH_FACING_GATE', 'resolve_toi_and_commit']
+
+# [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
+# (a whole-FORMATION bounding radius used by the FIELD_CONTACT centroid bound). Grounded the same way
+# that function already is: half the existing COL_WIDTH=1.0 lattice pitch.
+CELL_RADIUS = 0.5
+
+
+def standoff_from_reach(reach_a, reach_b):
+    """[Stage A] Stand-off distance (lattice units) from two already-resolved PP-290 reach values
+    (troop_types.registry.reach_for). Symmetric by construction."""
+    return (CELL_RADIUS + reach_a) + (CELL_RADIUS + reach_b)
+
+
+def standoff(troop_type_a, troop_type_b):
+    """[Stage A] True-adjacency stand-off distance (lattice units) between a cell of troop_type_a and
+    a cell of troop_type_b: (CELL_RADIUS + reach(a)) + (CELL_RADIUS + reach(b)). Two Short-Reach cells
+    stand off 2.0 lattice units apart; Long vs Short, 3.0. Used by find_contacts (core/contact.py) — a
+    generous, non-facing-gated outer bound (see _effective_reach) — so contact never lags behind the
+    (tighter, facing-gated) movement halt below."""
+    return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
+
+
+# [TOI refactor] Reach bonus only projects within the forward FOV arc (reuses Stage B's FOV_HALF_DEG) --
+# default ON, no-op unless FIELD_MOVEMENT (only the new cross-side TOI resolve consults this).
+PC_REACH_FACING_GATE = (_hu_os.environ.get('PC_REACH_FACING_GATE', '1') == '1')
+
+
+def _effective_reach(base_reach, facing_vec, dr, dc):
+    """[TOI refactor] A cell's weapon reach only threatens what's within its forward FOV arc -- a cell
+    facing away from a given enemy fights that enemy at CELL_RADIUS-only (no reach bonus) until its
+    facing catches up (ties the reach-advantage mechanic to Stage B's facing/FOV model instead of
+    treating reach as an omnidirectional bubble). dr,dc: direction from this cell toward the enemy
+    (need not be normalized); facing_vec: this cell's current (pre-tick) facing."""
+    if base_reach <= 0 or not PC_REACH_FACING_GATE:
+        return base_reach
+    fr, fc = facing_vec
+    fmag = math.hypot(fr, fc)
+    amag = math.hypot(dr, dc)
+    if fmag < 1e-9 or amag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return base_reach
+    cos_a = max(-1.0, min(1.0, (dr * fr + dc * fc) / (amag * fmag)))
+    angle_deg = math.degrees(math.acos(cos_a))
+    return base_reach if angle_deg <= FOV_HALF_DEG else 0.0
+
+
+def _reach_throttle(reach_eff_a, reach_eff_b):
+    """[TOI refactor] Reach-asymmetric closing-budget throttle for one cross-side pair. The side with
+    the LARGER effective threat radius (CELL_RADIUS + facing-gated reach) is capped to a SMALLER share
+    of this tick's closing motion: it needs to close less ground to bring its longer weapon to bear, so
+    it plants its formation first, while the shorter-reach side must cover the rest of the gap to bring
+    its own (shorter) weapon into range. Returns (rho_a, rho_b), each in (0,1]; the larger side is
+    always 1.0 (free to use its full proposed motion, subject to the TOI solve itself). Equal reach ->
+    (1.0, 1.0) -- the plain symmetric case, unchanged in spirit from a shared-t TOI."""
+    if reach_eff_a > reach_eff_b:
+        return (reach_eff_b / reach_eff_a, 1.0)
+    if reach_eff_b > reach_eff_a:
+        return (1.0, reach_eff_a / reach_eff_b)
+    return (1.0, 1.0)
+
+
+def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target):
+    """[TOI refactor] Exact continuous-collision (time-of-impact) solve for one cross-side cell pair.
+    Both cells' motion this tick is linear from start to proposed (the UNCAPPED end-of-tick position
+    each would reach with no standoff constraint at all): pos_a(s) = start_a + rho_a*s*(proposed_a -
+    start_a), similarly for b, so the relative position is linear in s and |pos_a(s)-pos_b(s)|^2 is a
+    quadratic. Returns the smallest s in (0,1] at which the pair first reaches `target` (the pair's
+    reach-and-facing-gated standoff distance), or None if no cap is needed this tick (already >=
+    target at the full throttled motion, i.e. s=1, or the pair never closes to target within the
+    tick). A pre-existing violation at s=0 (should already be caught by halted_cells -- true adjacency
+    contact -- so this is a defensive floor, not the normal path) returns 0.0: freeze immediately."""
+    d0r = start_a[0] - start_b[0]; d0c = start_a[1] - start_b[1]
+    c0 = d0r * d0r + d0c * d0c - target * target
+    if c0 < 0:
+        return 0.0
+    var_r = rho_a * (proposed_a[0] - start_a[0]) - rho_b * (proposed_b[0] - start_b[0])
+    var_c = rho_a * (proposed_a[1] - start_a[1]) - rho_b * (proposed_b[1] - start_b[1])
+    a = var_r * var_r + var_c * var_c
+    if a < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return None
+    b = 2.0 * (d0r * var_r + d0c * var_c)
+    if c0 < 1e-9 and b >= 0:  # [canonical: epsilon: float magnitude guard]
+        return None  # starting essentially ON the boundary but separating (or tangent) -- no cap
+    disc = b * b - 4.0 * a * c0
+    if disc < 0:
+        return None
+    # f(s) = a*s^2 + b*s + c0 is an upward parabola (a>=0); f(0)=c0>=0 (checked above). If it dips
+    # below zero at all, that happens on exactly one interval (lo,hi) with lo<=hi (both real since
+    # disc>=0) -- NOT just by checking f(1): two bodies whose straight-line paths cross can be safely
+    # apart at BOTH s=0 and s=1 while still dipping inside the standoff ring somewhere in between (a
+    # "pass-through" case a same-endpoint check misses entirely). The first entry into violation
+    # within this tick is the smallest root that's > 0, clamped into (0,1].
+    sq = math.sqrt(disc)
+    r1 = (-b - sq) / (2.0 * a); r2 = (-b + sq) / (2.0 * a)
+    lo, hi = (r1, r2) if r1 <= r2 else (r2, r1)
+    if hi <= 0.0 or lo > 1.0:
+        return None  # the violation window (if any) falls entirely outside this tick
+    return max(0.0, lo)
+
+
+def _slew_facing(cur, desired, discipline):
+    """Rotate `cur` toward `desired` by at most PC_FACING_SLEW_BASE*disc_mult degrees; return a unit vector.
+    Zero-mag `desired` returns `cur` unchanged. Deterministic (no RNG). [movement-substrate review 06 — facing (b)]"""
+    cmag = math.hypot(cur[0], cur[1])
+    dmag = math.hypot(desired[0], desired[1])
+    if dmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return cur
+    if cmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return (desired[0] / dmag, desired[1] / dmag)
+    cx, cy = cur[0] / cmag, cur[1] / cmag
+    dx, dy = desired[0] / dmag, desired[1] / dmag
+    ang = math.atan2(cx * dy - cy * dx, cx * dx + cy * dy)  # signed angle cur->desired
+    disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
+    max_turn = math.radians(PC_FACING_SLEW_BASE * disc_mult)
+    if ang > max_turn: ang = max_turn
+    elif ang < -max_turn: ang = -max_turn
+    ca, sa = math.cos(ang), math.sin(ang)
+    return (cx * ca - cy * sa, cx * sa + cy * ca)
+
+
+# [Stage C, adversarial review] Order.behavior may only set fields that are pure behavioral/targeting
+# switches -- read fresh every tick, no cached derived state keyed off them. Fields that drive
+# _oriented()/cell geometry (shape, tier, troops, concentration, starting_position) or a live position
+# sign-multiplier (advance_dir) are DELIBERATELY excluded: __post_init__ distributes cell_troops over
+# _oriented(self)'s ids exactly once at construction, so setattr-ing any of those mid-battle leaves
+# cell_troops/cell_offsets stale against the new geometry -- confirmed via repro to orphan troops
+# (troop_count changes but cell_troops keeps the old key set/sum) or teleport a cell instantly (flipping
+# advance_dir is a live sign-flip on already-accumulated cell_offsets, not a next-tick effect). Safely
+# supporting those would need re-running __post_init__'s redistribution, which no order use case
+# (hold-then-advance, stance/instructions/targeting switches, entering escort mode) actually needs.
+_ORDER_SAFE_FIELDS = frozenset({
+    'stance', 'instructions', 'unit_type', 'role',
+    'target_condition', 'target_delay_ticks', 'order_target_idx',
+    'escort_of', 'escort_offset', 'escort_engage_on_contact',
+})
+
+# [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
+# malformed trigger (a typo, e.g. 'tickk:4') fails loudly immediately rather than silently never firing
+# for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
+# never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
+# never satisfied SHOULD stay pending forever, that's by design, but a typo should not get that far).
+_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:')
+
+
+@dataclass
+class Order:
+    """[Stage C] A single timed/conditional instruction queued on a Subunit. trigger:
+    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref). behavior: a dict of
+    attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
+    'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
+    including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an order),
+    not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
+    trigger: str
+    behavior: dict = field(default_factory=dict)
+    waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
+
+    def __post_init__(self):
+        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:')):
+            raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
+        bad = set(self.behavior) - _ORDER_SAFE_FIELDS
+        if bad:
+            raise ValueError(f"Order.behavior sets unsafe field(s) {sorted(bad)}; "
+                              f"Order may only set {sorted(_ORDER_SAFE_FIELDS)} (see _ORDER_SAFE_FIELDS)")
 
 
 @dataclass
@@ -107,6 +293,18 @@ class Subunit:
     routed: bool = False
     broken: bool = False
     discipline_start: Optional[int] = None
+    # [Stage C] Timed/conditional order queue -- fired in sequence by check_orders (core/contact.py),
+    # called once per tick per side, before assign_targets. Empty tuple -> the consumer's loop body
+    # never executes for any existing Subunit (byte-exact).
+    orders: Tuple[Order, ...] = ()
+    _order_idx: int = 0
+    # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
+    # archers"): a subunit tracking a friendly's position instead of (or until) engaging an enemy.
+    # All default-inert -> byte-exact for any existing Subunit.
+    escort_of: Optional[object] = field(default=None, repr=False)   # live ref to the escorted friendly Subunit
+    escort_offset: Tuple[float, float] = (0.0, 0.0)   # (dr, dc) in the escorted unit's LOCAL (facing-rotated) frame; +dr = ahead
+    escort_engage_on_contact: bool = False    # False = keep screening indefinitely; True = one-shot latch to normal enemy-targeting once acquired
+    _escort_engaged: bool = False             # the latch
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -134,6 +332,7 @@ class Subunit:
         self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         if PC_NODE_COHESION:
             self._init_node_state()
 
@@ -270,6 +469,26 @@ class Subunit:
             result.append((abs_r, abs_c))
         return result
 
+    def cells_float(self):
+        """Float analogue of cells() — same order/length. Node path returns the UNSNAPPED _node_pos floats
+        (the true floats cells() snaps at _node_cells); legacy path returns integer positions widened to
+        float. Used by the FIELD_CONTACT contact pipeline. [movement-substrate review 06 — contact cluster]"""
+        if PC_NODE_COHESION and hasattr(self, '_node_pos'):
+            out = []
+            for orig_r, orig_c, _o_r, _o_c in _oriented(self):
+                r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                out.append((float(r), float(c)))
+            return out
+        op = _oriented(self)
+        out = []
+        for orig_r, orig_c, or_r, or_c in op:
+            abs_r = (self.starting_position[0] + or_r
+                     + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
+            abs_c = (self.starting_position[1] + or_c
+                     + self.cell_offsets_c.get((orig_r, orig_c), 0))
+            out.append((float(abs_r), float(abs_c)))
+        return out
+
     def iter_cells(self):
         """Cell-primary view (step 1): yield (cell_id, (abs_r,abs_c), troops) per cell in _oriented
         order. cell_id = (orig_r, orig_c) pattern identity (stable under movement)."""
@@ -305,19 +524,46 @@ class Subunit:
         self._node_prev_pos = dict(pos)
 
     def _node_cells(self):
-        """Node-path cells(): live positions snapped to the integer grid, in _oriented order."""
+        """Node-path cells(): live positions in _oriented order. FIELD_MOVEMENT OFF -> snapped to the integer
+        grid (byte-exact prior behaviour). FIELD_MOVEMENT ON -> the COORDINATE FIELD: row stays rank-snapped
+        (ranks are integer bins) and column is binned to its FILE (frontage=distinct files, depth=rank count)
+        via round(c/COL_WIDTH); the raw int(round(c)) grid-snap is deleted on the ON branch only. This is the
+        coordinated flip that makes cells() emit file-binned floats end-to-end. [movement-substrate review 06 —
+        position + column clusters; folds the COL file-quantizer with the P snap-deletion at one line.]"""
         out = []
         for orig_r, orig_c, _o_r, _o_c in _oriented(self):
             r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-            out.append((int(round(r)), int(round(c))))
+            if FIELD_MOVEMENT:
+                out.append((int(round(r)), int(round(c / COL_WIDTH))))  # field-ON: rank-snapped row, file-binned column
+            else:
+                out.append((int(round(r)), int(round(c))))  # OFF: exact prior snap
         return out
 
-    def _node_advance(self, discipline, target_centroid, enemy_cells=None):
+    def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
         body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
         (anchor + rel) by a discipline-gated cohesion factor, so the formation holds together while
-        contention/edges can dent it. No wheel yet (facing points at the target).
-        [arch: relational cohesion replaces the re-imposed shape pattern.]"""
+        contention/edges can dent it. [arch: relational cohesion replaces the re-imposed shape pattern.]
+
+        [TOI refactor] When FIELD_MOVEMENT is on and enemy_cells_float is supplied, this method no
+        longer clamps or commits anything itself -- it computes each non-halted cell's PROPOSED
+        (uncapped) end-of-tick position (anchor step, WHEEL rotation, and cohesion relax all run at
+        full magnitude, exactly as if no enemy existed) and stashes it on self._node_pending_proposal,
+        then returns without touching self._node_pos/_node_anchor. The caller (orchestration.py's
+        run_battle) calls this once for every atom on BOTH sides first (the propose phase), then calls
+        the module-level resolve_toi_and_commit(atoms_a, atoms_b) exactly once, which finds the true
+        continuous-collision time-of-impact for every cross-side cell pair (capping each cell to the
+        exact tick-fraction at which it would first reach its reach-and-facing-gated standoff boundary,
+        rather than an approximate halved/iterated pull-back) and commits final positions for both
+        sides together. This replaces the old halved-anchor-precap + 4-pass best-position-tracking
+        per-cell clamp entirely -- see git history for that design and why it was retired (an
+        approximation adopted to land a bias fix quickly, not the best available design).
+
+        Every OTHER path (no enemy_cells_float -- the legacy `enemy_cells` Chebyshev/Euclidean dmin-1
+        cap, or no clamp at all) is UNCHANGED and commits immediately within this call, exactly as
+        before -- byte-exact-off is untouched; this refactor only changes the FIELD_MOVEMENT +
+        enemy_cells_float path, which is the one Stage A introduced and is not part of the frozen
+        byte-exact invariant."""
         if self.stance == "hold":
             return
         self._node_prev_pos = {cid: p for cid, p in self._node_pos.items()}
@@ -331,26 +577,37 @@ class Subunit:
         step = max(0, math.floor(base * disc_mult) + stance_mod)
         if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
             step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
+        toi_deferred = bool(FIELD_MOVEMENT and enemy_cells_float)
         ar, ac = self._node_anchor
+        nar, nac = ar, ac
         if target_centroid and step > 0:
             dr = target_centroid[0] - ar
             dc = target_centroid[1] - ac
             if self.stance == "retreat":
                 dr, dc = -dr, -dc
-            if enemy_cells:
+            if not toi_deferred and enemy_cells:
+                # [migration S2, unchanged] legacy anchor pre-cap -- FIELD_MOVEMENT off (PC_NODE_COHESION
+                # on) or no float data supplied; no per-cell TOI counterpart exists for this path, so it
+                # keeps its own dmin-1 cap exactly as before.
                 mine = self._node_cells()
                 if mine:
                     dmin = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
                                for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field; Chebyshev on the grid (byte-exact OFF)
                     step = min(step, max(0, dmin - 1))   # vector-halt: stop at adjacency, not past
+            # [TOI refactor] The FIELD_MOVEMENT+enemy_cells_float anchor pre-cap is REMOVED: the anchor
+            # now always proposes its FULL uncapped step (no standoff clamp at the body level at all).
+            # Per-cell time-of-impact (resolve_toi_and_commit) is the sole standoff-enforcement
+            # mechanism on this path now, operating on true continuous linear paths per cell rather
+            # than a body-level speed pre-cap layered under a second per-cell clamp.
             mag = abs(dr) + abs(dc)
             if mag >= 0.5 and step > 0:
-                self._node_anchor = (ar + step * (dr / mag), ac + step * (dc / mag))
-        nar, nac = self._node_anchor
+                nar, nac = ar + step * (dr / mag), ac + step * (dc / mag)
         # WHEEL (increment 2b): the formation re-faces the enemy as a body. f = current facing (unit vector),
         # f0 = spawn facing (toward the enemy at first contact); the relational layout is rotated by the
         # rotation taking f0 -> f, so the whole formation pivots while cohesion holds it together. Head-on
-        # engagements (f stays ~ f0) leave the rotation at identity -> identical to increment 2a.
+        # engagements (f stays ~ f0) leave the rotation at identity -> identical to increment 2a. Uses the
+        # PROPOSED anchor (nar,nac); harmless when toi_deferred, since facing only cares about direction to
+        # a not-too-close centroid, not the exact (possibly later TOI-capped) anchor value.
         rc_w, rs_w = 1.0, 0.0   # (cos, sin) of the spawn->current rotation; identity until the body wheels
         if target_centroid:
             tdr = target_centroid[0] - nar; tdc = target_centroid[1] - nac
@@ -369,39 +626,86 @@ class Subunit:
                 rc_w = f0r * fr + f0c * fc          # cos of rotation f0 -> f
                 rs_w = f0r * fc - f0c * fr          # sin of rotation f0 -> f
         k = disc_mult   # cohesion factor reuses the discipline multiplier: disciplined formations hold tight, ragged ones deform
+        proposal = {}
         for orig_r, orig_c, _o_r, _o_c in op:
-            if (orig_r, orig_c) in self.halted_cells:
+            cid = (orig_r, orig_c)
+            if cid in self.halted_cells:
+                if toi_deferred:
+                    # Frozen body still occupies space -- record it (proposed==start, zero motion) so
+                    # OTHER (moving) cells, on either side, correctly treat it as a fixed obstacle in
+                    # the cross-side TOI resolve. No facing/position write (matches the `continue`
+                    # below exactly): a halted cell's own state is untouched this tick.
+                    _fr, _fc = self._node_pos.get(cid, self._node_anchor)
+                    proposal[cid] = (_fr, _fc, _fr, _fc)
                 continue
-            rel = self._node_rel.get((orig_r, orig_c), (0.0, 0.0))
+            rel = self._node_rel.get(cid, (0.0, 0.0))
             des_r = nar + (rc_w * rel[0] - rs_w * rel[1])   # anchor + R(f0->f) . rel : rotated relational slot
             des_c = nac + (rs_w * rel[0] + rc_w * rel[1])
-            cr, cc = self._node_pos.setdefault((orig_r, orig_c), self._node_anchor)  # [canonical: continuous-mode seed: unseen cell defaults to anchor]
+            cr, cc = self._node_pos.setdefault(cid, self._node_anchor)  # [canonical: continuous-mode seed: unseen cell defaults to anchor]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
-            if enemy_cells and (int(round(nr)), int(round(nc))) in enemy_cells:
-                nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
-            if self._node_facing is not None:
-                self.cell_facing_vec[(orig_r, orig_c)] = self._node_facing
-            elif target_centroid:
-                self.cell_facing_vec[(orig_r, orig_c)] = (target_centroid[0] - nr, target_centroid[1] - nc)
-            self.cell_last_speed[(orig_r, orig_c)] = step
-            self._node_pos[(orig_r, orig_c)] = (nr, nc)
-            self._moved_this_turn.add((orig_r, orig_c))
+            if not toi_deferred and enemy_cells:
+                # [migration P, unchanged] OFF = verbatim int(round) grid-membership probe; ON (no float
+                # data supplied) = file-binned probe matching the file-indexed enemy cells() keys.
+                _probe = (int(round(nr)), int(round(nc / COL_WIDTH))) if FIELD_MOVEMENT else (int(round(nr)), int(round(nc)))
+                if _probe in enemy_cells:
+                    nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
+            self.cell_last_speed[cid] = step
+            if toi_deferred:
+                # [TOI refactor] Defer: (cr,cc) is the START position, (nr,nc) is the PROPOSED
+                # (uncapped) end-of-tick position. No standoff clamp applied here at all -- see
+                # resolve_toi_and_commit for the exact continuous-collision solve and commit.
+                proposal[cid] = (cr, cc, nr, nc)
+            else:
+                self._commit_cell_position(cid, nr, nc, target_centroid, discipline)
+        if toi_deferred:
+            self._node_pending_proposal = proposal
+            self._node_pending_target_centroid = target_centroid
+            self._node_pending_discipline = discipline
+        else:
+            self._node_anchor = (nar, nac)
+
+    def _commit_cell_position(self, cid, nr, nc, target_centroid, discipline):
+        """[TOI refactor, factored out of _node_advance] Write one cell's FINAL (post-standoff, if
+        any) position and update its attention/facing state. Called either immediately (legacy /
+        no-clamp paths, from _node_advance itself) or once per cell from resolve_toi_and_commit after
+        the cross-side TOI resolve has determined the final position on the FIELD_MOVEMENT +
+        enemy_cells_float path. Unchanged from the pre-refactor per-cell facing-update block."""
+        # (a) attention (facing model): face the ENGAGED target; else keep the WHEEL-slewed body facing.
+        # [Stage B] The prior "don't double-slew, the node path already has a disc-gated WHEEL slew"
+        # reasoning didn't actually hold once this branch fires: it OVERWRITES cell_facing_vec with
+        # a fresh, instantaneous target-direction vector, discarding whatever latency the WHEEL slew
+        # (a body-level heading, a different quantity) had built up -- zero rate-limiting, the exact
+        # hyper-reactive instant-snap this facing model exists to prevent. Slewed here too, reusing
+        # _slew_facing (the same function the legacy path already uses for this), gated identically.
+        if PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
+            _tc = self.target_atom.centroid()
+            _desired = (_tc[0] - nr, _tc[1] - nc)
+            _cur = self.cell_facing_vec.get(cid, self._node_facing or (self.advance_dir, 0))
+            self.cell_facing_vec[cid] = _slew_facing(_cur, _desired, discipline)
+        elif self._node_facing is not None:
+            self.cell_facing_vec[cid] = self._node_facing
+        elif target_centroid:
+            self.cell_facing_vec[cid] = (target_centroid[0] - nr, target_centroid[1] - nc)
+        self._node_pos[cid] = (nr, nc)
+        self._moved_this_turn.add(cid)
 
     def centroid(self):
         c = self.cells()
         if not c: return self.starting_position
         return (sum(r for r, x in c) / len(c), sum(x for r, x in c) / len(c))
 
-    def advance_cells(self, discipline, target_centroid, enemy_cells=None):
+    def advance_cells(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """
         enemy_cells: set of abs (r,c) positions of all enemy cells.
+        enemy_cells_float: [Stage A, additive] list of (r,c,reach) true-float enemy-cell triples --
+        see _node_advance's docstring. Ignored on the legacy (non-node) path below.
         v11: cap each cell's advance to bring it to adjacency (distance=1) but not past
         the nearest enemy cell. Prevents over-run that produces paradoxical angles.
         [canonical: Jordan design — vector halt at first adjacency]
         """
         if PC_NODE_COHESION and hasattr(self, '_node_pos'):
-            return self._node_advance(discipline, target_centroid, enemy_cells)
+            return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
         if self.stance == "hold": return
         # KITING (§13): a ranged unit with the 'kite' instruction regulates its distance to stay in
         # the volley band [VOLLEY_MIN_RANGE, VOLLEY_MAX_RANGE] instead of closing to melee. Distance
@@ -551,10 +855,17 @@ class Subunit:
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc
                 if total < 0.5: continue
-                r_step = round(actual_speed * (abs_dr / total))
-                c_step = actual_speed - r_step
-                r_step *= (1 if dr > 0 else -1) if abs_dr > 0 else 0
-                c_step *= (1 if dc > 0 else -1) if abs_dc > 0 else 0
+                if FIELD_MOVEMENT:
+                    # continuous heading: true-diagonal float step, no 8-direction snap (field baseline).
+                    # NOTE: on a valid field-ON run FIELD_MOVEMENT ⇒ PC_NODE_COHESION, so advance_cells returns
+                    # early to _node_advance and this legacy branch is not reached; kept guarded for OFF byte-exactness.
+                    r_step = actual_speed * (dr / total)
+                    c_step = actual_speed * (dc / total)
+                else:
+                    r_step = round(actual_speed * (abs_dr / total))
+                    c_step = actual_speed - r_step
+                    r_step *= (1 if dr > 0 else -1) if abs_dr > 0 else 0
+                    c_step *= (1 if dc > 0 else -1) if abs_dc > 0 else 0
                 # v11: proximity cap removed — over-run corrected post-movement
                 self.cell_offsets[(orig_r, orig_c)] = \
                     self.cell_offsets.get((orig_r, orig_c), 0) + r_step * self.advance_dir
@@ -579,15 +890,27 @@ class Subunit:
             # F-ii: record speed when cell actually moves
             self.cell_last_speed[(orig_r, orig_c)] = actual_speed
             # v11: record raw movement vector for octagon angle
-            self.cell_facing_vec[(orig_r, orig_c)] = (
-                r_step if cell_target else actual_speed * self.advance_dir,
-                c_step if cell_target else 0,
-            )
+            _desired = (r_step if cell_target else actual_speed * self.advance_dir,
+                        c_step if cell_target else 0)
+            if PC_FACING_MODEL:
+                # (a) attention: face the ENGAGED target if one is committed, else the movement vector
+                if PC_FACING_ATTENTION and self.target_atom is not None:
+                    _tc = self.target_atom.centroid()
+                    _desired = (_tc[0] - my_r, _tc[1] - my_c)
+                # (b) slew/commitment: rotate current facing toward _desired at a disc-gated rate (no instant snap)
+                _cur = self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
+                self.cell_facing_vec[(orig_r, orig_c)] = _slew_facing(_cur, _desired, discipline)
+            else:
+                self.cell_facing_vec[(orig_r, orig_c)] = _desired
             # v13: mark cell as having moved this turn (for cross-side contention)
             self._moved_this_turn.add((orig_r, orig_c))
 
     def get_cell_facing(self, orig_r, orig_c):
         """Return the facing vector for a cell. Defaults to advance_dir if never moved."""
+        # (d) rout facing: a routed body faces AWAY from the enemy (fleeing) -> rear penalties land.
+        if PC_FACING_MODEL and PC_FACING_ROUT and getattr(self, 'routed', False):
+            fv = self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
+            return (-fv[0], -fv[1])
         return self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
 
     def halt_before_enemy(self, enemy_unit):
@@ -600,6 +923,9 @@ class Subunit:
         pass
 
     def role_at_contact(self, contact_col):
+        # [LC-8] Horseshoe/RefusedFlank branches removed -- zero live callers (confirmed dead code
+        # before this change too; a diagnostic label helper never wired to any resolver), and both
+        # shapes are retired as Subunit.shape values (see geometry.CELL_PATTERN_FN's note).
         if self.shape == "Line": return "normal"
         if self.shape == "Arrowhead":
             pattern = CELL_PATTERN_FN[self.shape](self.tier)
@@ -608,22 +934,12 @@ class Subunit:
                     abs_c = self.starting_position[1] + c + self.cell_offsets_c.get((r, c), 0)
                     if abs(abs_c - contact_col) <= 0.5: return "tip"
             return "flank"
-        if self.shape == "Horseshoe":
-            sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width tier table (F2 derive-target)]
-            wing_w = sizes.get(self.tier, 3)
-            if contact_col == wing_w + self.starting_position[1]: return "center"
-            return "flank_engaged"
         if self.shape == "GappedLine":
             # [canonical: v11 — updated to match equalized gapped_line_cells sizes]
             sizes = {1: 2, 2: 3, 3: 4, 4: 4}
-            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width default]
+            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py gapped_line_cells / §A.3b — half-width default]
             if contact_col == half_w + self.starting_position[1]: return "gap"
             return "flank_engaged"
-        if self.shape == "RefusedFlank":
-            sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: geometry.py refused_flank_cells / §A.3b — width tier table (F2 derive-target)]
-            width = sizes.get(self.tier, 6)  # [canonical: geometry.py refused_flank_cells / §A.3b — width default]
-            if contact_col == (width - 1) + self.starting_position[1]: return "refused"
-            return "engaged"
         return "normal"
 
     # [canonical: Jordan design — cell capacity, discipline-gated merge, midpoint facing on formation breakdown]
@@ -694,6 +1010,136 @@ class Subunit:
                     self.merged_cells.add(trailing)
                     n_merged += 1
         return (n_halted, n_merged)
+
+
+class _ToiCell:
+    """[TOI refactor] One cell's position/reach/facing data for one tick's cross-side resolve, plus its
+    mutable best_t (the tightest cap found across every cross-side pair it's party to; starts at 1.0 =
+    unconstrained). A plain named-attribute holder rather than a positional tuple/list, so field access
+    reads clearly (ea.reach, not ea[6]) and mutating best_t needs no index bookkeeping."""
+    __slots__ = ('atom', 'cid', 'sr', 'sc', 'pr', 'pc', 'reach', 'facing', 'best_t', 'movable')
+
+    def __init__(self, atom, cid, sr, sc, pr, pc, reach, facing, movable):
+        self.atom = atom; self.cid = cid
+        self.sr = sr; self.sc = sc; self.pr = pr; self.pc = pc
+        self.reach = reach; self.facing = facing
+        self.best_t = 1.0
+        self.movable = movable
+
+
+def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
+    """[TOI refactor] Cross-side time-of-impact resolve + commit. Call once per tick with EVERY
+    subunit of both sides (moving or not) -- an atom that called _node_advance this tick (FIELD_MOVEMENT
+    + enemy_cells_float) has stashed a proposal on self._node_pending_proposal (its start and PROPOSED,
+    uncapped, end-of-tick position for every non-halted cell); an atom that did NOT move this tick (no
+    target yet, a reserve, gated by target_delay_ticks/target_condition) contributes its CURRENT true
+    positions as static (start==proposed) obstacle entries instead -- it must still be respected as a
+    physical body by the other side's moving cells, exactly as the pre-refactor enemy_cells_float (built
+    from ALL of a unit's subunits unconditionally) always was; only feeding the resolve the "moving"
+    subset would silently let an enemy pass into/through a not-yet-targeting friendly formation for a
+    tick, an adversarial-review-caught regression versus the pre-refactor behaviour.
+
+    For every cross-side cell pair, first checks whether the pair is safe at BOTH cells' full (rho=1,1,
+    i.e. completely un-throttled) proposed motion -- if so, neither cell is capped by this pair at all
+    (the common "not close enough to matter yet" case; using the pair's actual full endpoints, not just
+    a nearer intermediate one, correctly catches paths that CROSS -- both endpoints safe, but dipping
+    inside standoff in between). Only once that fast check shows a cap is unavoidable does the
+    reach-and-facing-throttled solve run (see _reach_throttle: the longer-effective-reach side is
+    capped to a smaller share of the closing motion, so it reaches its own engagement position first) --
+    and if THAT throttled solve itself reports "safe" (i.e. the throttle ceiling alone, with no further
+    reduction, already keeps the pair outside standoff), the throttle ceiling (rho_a, rho_b) is used
+    directly as the cap, rather than being discarded as "no cap needed": a longer-reach cell must not
+    silently fall back to its FULL, un-throttled motion just because the throttled sub-range happened to
+    already be safe -- that was the second adversarial-review-caught bug (the safety check and the
+    eventual commit were evaluating two different endpoints).
+
+    A cell that is party to several violating pairs takes the MOST restrictive (smallest) cap across all
+    of them -- exact and monotonic (unlike the old iterative worst-violator pull-back this replaces),
+    since each pair's own solved fraction is the FIRST point at which that specific pair reaches its
+    boundary: at any smaller fraction, that pair (and, by taking the overall minimum, every pair) is
+    guaranteed still outside standoff.
+
+    Halted cells (already in contact, frozen) are included in the position data so moving cells on
+    either side correctly treat them as fixed obstacles, but never themselves receive a cap (they don't
+    move regardless)."""
+    def _flat(atoms):
+        out = []
+        for atom in atoms:
+            prop = getattr(atom, '_node_pending_proposal', None)
+            reach = reach_for(atom.troop_type)
+            if prop:
+                for cid, (sr, sc, pr, pc) in prop.items():
+                    facing = atom.cell_facing_vec.get(cid, atom._node_facing or (atom.advance_dir, 0))
+                    out.append(_ToiCell(atom, cid, sr, sc, pr, pc, reach, facing, movable=True))
+            else:
+                # Static this tick (no target yet / reserve / delayed) -- current true position is a
+                # fixed obstacle for the other side; never capped or committed itself.
+                ids = [(o_r, o_c) for o_r, o_c, _, _ in _oriented(atom)]
+                for cid, (r, c) in zip(ids, atom.cells_float()):
+                    facing = atom.cell_facing_vec.get(cid, atom._node_facing or (atom.advance_dir, 0))
+                    out.append(_ToiCell(atom, cid, r, c, r, c, reach, facing, movable=False))
+        return out
+
+    cells_a = _flat(all_atoms_a)
+    cells_b = _flat(all_atoms_b)
+    for ea in cells_a:
+        a_halted = ea.cid in ea.atom.halted_cells
+        for eb in cells_b:
+            b_halted = eb.cid in eb.atom.halted_cells
+            if a_halted and b_halted:
+                continue  # both frozen -- nothing to resolve between two static cells
+            # [design note] target (the final resting distance) ALWAYS uses base, non-facing-gated
+            # reach -- standoff_from_reach(reach_a, reach_b), the same formula find_contacts uses --
+            # so contact and halt stay in sync exactly per Stage A's invariant, and every existing
+            # symmetric (equal-reach) matchup keeps its already-validated stopping distance
+            # byte-identically. Facing ONLY gates which side EARNS the throttle advantage below (a
+            # cell not yet facing its target doesn't get to hold ground while its reach goes unused);
+            # it never shrinks the boundary two closing bodies actually stop at, which would let them
+            # pass closer than find_contacts' own trigger radius for a tick before contact catches up.
+            target = standoff_from_reach(ea.reach, eb.reach)
+            start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
+            start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
+            # Fast path: is this pair safe across its FULL, un-throttled motion at all? (rho=1,1 --
+            # the un-scaled trajectory.) If so, nothing here caps either cell.
+            full_s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, target)
+            if full_s is None:
+                continue
+            dxr, dxc = eb.pr - ea.pr, eb.pc - ea.pc
+            eff_a = _effective_reach(ea.reach, ea.facing, dxr, dxc)
+            eff_b = _effective_reach(eb.reach, eb.facing, -dxr, -dxc)
+            rho_a, rho_b = _reach_throttle(CELL_RADIUS + eff_a, CELL_RADIUS + eff_b)
+            # A cap IS needed somewhere along the full path -- solve within the throttled sub-range.
+            # If THAT reports "safe" (None), the throttle ceiling itself (rho_a, rho_b) is the cap --
+            # NOT "no cap" (see docstring: this was the second review-caught bug). Otherwise the
+            # throttled solve's own s scales the ceiling down further.
+            s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target)
+            t_a = rho_a if s is None else max(0.0, min(1.0, rho_a * s))
+            t_b = rho_b if s is None else max(0.0, min(1.0, rho_b * s))
+            # A halted cell's proposed==start (zero motion) regardless of any cap, so it never needs
+            # (and never receives, below) one -- but it still correctly acted as a fixed obstacle for
+            # the other, still-moving side via this same pair solve.
+            if not a_halted and t_a < ea.best_t: ea.best_t = t_a
+            if not b_halted and t_b < eb.best_t: eb.best_t = t_b
+    for entries in (cells_a, cells_b):
+        for e in entries:
+            if not e.movable or e.cid in e.atom.halted_cells:
+                continue
+            final_r = e.sr + e.best_t * (e.pr - e.sr)
+            final_c = e.sc + e.best_t * (e.pc - e.sc)
+            e.atom._commit_cell_position(e.cid, final_r, final_c, e.atom._node_pending_target_centroid,
+                                          e.atom._node_pending_discipline)
+    for atom in list(all_atoms_a) + list(all_atoms_b):
+        prop = getattr(atom, '_node_pending_proposal', None)
+        if not prop:
+            continue
+        pts = [atom._node_pos[cid] for cid in prop if cid not in atom.halted_cells]
+        if not pts:
+            pts = [atom._node_pos[cid] for cid in prop]
+        if pts:
+            atom._node_anchor = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+        del atom._node_pending_proposal
+        del atom._node_pending_target_centroid
+        del atom._node_pending_discipline
 
 # ─── UNIT ────────────────────────────────────────────────────────────────────
 

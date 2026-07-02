@@ -24,17 +24,19 @@
 
 **Derived:**
 - Health = End + 6
-- Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
+- Combat Pool = max(5, Relevant History + 6) — Agility-INDEPENDENT (ED-901, re-ratified
+  ED-900/904; supersedes the struck (Agility × 2) + History + 3 form). Single source:
+  `designs/scene/combat_engine_v1/` + `params/core.md` §Derived. (ED-1084 propagation)
 - Stamina = Endurance + Relevant History + 1 (modified by armour — see Armour table)
 
 **Proficiency → History points:**
 
-| Level | Points | Pool contribution ((Agi×2) + points + 3) |
+| Level | Points | Pool contribution (max(5, points + 6)) |
 |---|---|---|
-| Untrained | 0 | (Agi×2) + 3 |
-| Beginner | 1 | (Agi×2) + 4 |
-| Competent | 2 | (Agi×2) + 5 |
-| Veteran | 3 | (Agi×2) + 6 |
+| Untrained | 0 | 6 |
+| Beginner | 1 | 7 |
+| Competent | 2 | 8 |
+| Veteran | 3 | 9 |
 
 ---
 

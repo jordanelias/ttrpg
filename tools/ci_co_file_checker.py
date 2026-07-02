@@ -53,7 +53,13 @@ if register_writes and 'references/propagation_map.md' not in changed:
     )
 
 # ── Rule 3: sim output → coverage_matrix.md ──────────────────────────────────
-sim_outputs = [f for f in changed if f.startswith('tests/sim/') or f.startswith('tests/audit/')]
+# README.md is directory-level housekeeping, not a sim run output — exclude it so
+# adding/updating a folder README doesn't false-positive this rule.
+sim_outputs = [
+    f for f in changed
+    if (f.startswith('tests/sim/') or f.startswith('tests/audit/'))
+    and os.path.basename(f) != 'README.md'
+]
 if sim_outputs and 'tests/coverage_matrix.md' not in changed:
     violations.append(
         f"SIMULATION OUTPUT added but coverage_matrix.md not updated.\n"

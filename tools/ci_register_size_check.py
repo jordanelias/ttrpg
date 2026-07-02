@@ -44,8 +44,8 @@ PATCH_REGISTER_LIMIT = yaml_max_tokens("canon/patch_register_active.yaml") or 15
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
-    "session_log_current.md":                  2_000,
-    "session_logs/index.md":                   2_000,
+    # session_log_current.md / session_logs/index.md entries removed 2026-07-01 (ED-1084):
+    # the retired session-log machinery moved to deprecated/session_machinery/ and is frozen.
     # editorial store + file index moved to JSONL/SQL (2026-05-28 cutover);
     # editorial_ledger.jsonl is checked soft below; valoria_index.sql is generated.
     # Interim: bumped 5_000 -> 12_000 to match the sanctioned interim cap in
@@ -69,6 +69,12 @@ THRESHOLDS = {
     # These are large by design; alert when year-split is needed
     "canon/patch_register_archive.yaml":     100_000,
     "canon/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
+    # Overflow chunk for canon/editorial_ledger.jsonl (2026-07-02, first split — settled
+    # resolved/struck/superseded/applied entries ED-001..ED-330). Mirrors the
+    # patch_register_active/archive co-location convention. Recognized by
+    # tools/validate_ed_citations.py ARCHIVE_JSONL_PATHS so archived-ED citations still
+    # resolve. Soft limit matches the active ledger's own cap.
+    "canon/editorial_ledger_archive.jsonl": 150_000,
     "archives/session/session_log_archive_part_7.md": 100_000,
     "canon/patch_register_index.md":         20_000,
 }

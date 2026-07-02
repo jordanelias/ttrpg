@@ -28,12 +28,11 @@ are more "current state" files than there should be; trust them in this strict p
 
 **Ignore for currency** — these are stale or retired, do not resume from them:
 - `README.md` — outdated navigational pointers; defers to the three files above.
-- `session_log_current.md`, `session_log_archive.md`, `session-handoff-2026-05-06.md`,
-  `session_logs/`, `handoffs/`, `canon/session_checkpoint.md` — **retired session-log/checkpoint
-  machinery still present in the tree** (one even carries `status: active`). They are NOT
-  authoritative; **`HANDOFF.md` is the only live continuity surface.** Do not write into them and do
-  not resume from `canon/session_checkpoint.md`. *(Recommended cleanup, not yet done: move these under
-  `deprecated/`.)*
+- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`, `handoffs/`,
+  `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
+  — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
+  **`HANDOFF.md` is the only live continuity surface.** Do not write into or resume from anything
+  under `deprecated/session_machinery/`.
 - `archives/`, `deprecated/` — history only, never canonical.
 
 ---
@@ -60,11 +59,11 @@ are more "current state" files than there should be; trust them in this strict p
 | Directory | Contents |
 |---|---|
 | `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
-| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/` |
+| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
-| `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md` document **retired** machinery as if live — ignore them. |
-| `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. |
-| `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). |
+| `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
+| `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
+| `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
 | `engine/` | Sigma-leverage engine armature + audit harness. ⚠️ `engine_audit_harness.py` is **dead** (hardcoded `/home/claude` paths) — do not invoke. |
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once. Some tools are dead or GitHub-dependent — §6. |
 | `archives/`, `deprecated/` | History; not canonical. |
@@ -128,17 +127,19 @@ Do not represent the skeleton as a runnable head-start.
 - **Skeleton is non-compilable.** `designs/godot/skeleton/` covers only **1 of 27** modules
   (`personal_combat`) and `extends`/calls a spine (`BaseEngine`, `EngineModule`, `Key`, `KeyBus`,
   `GameState`, `Resolver`) **defined nowhere in the corpus**. It cannot be opened and run in Godot 4.6.
-- **The one ported module already disagrees with its oracle.** `combat_config.gd` hand-edits
-  `adef_threshold` away from the canonical Python oracle (`designs/scene/combat_engine_v1/config.py`),
-  with an inline `[AUDIT-FIX]` note — so Key-log parity (the master validation gate) cannot go green.
-  **Never let a port "correct" its oracle in-place;** fix `config.py` in canon via the editorial ledger,
-  then re-export.
+- **Port↔oracle discipline (ED-1050, resolved 2026-06-30).** `combat_config.gd` once hand-edited
+  `adef_threshold` away from the canonical Python oracle with an inline `[AUDIT-FIX]`; Jordan resolved it
+  by re-sweeping the oracle (`config.py`, monotone ADEF_THRESHOLD) and re-exporting — port and oracle now
+  match. The rule stands: **never let a port "correct" its oracle in-place** — fix canon via the ledger,
+  then re-export. Key-log parity is still known-red, but only because RESIST/GAP_EXPOSURE/gap-game logic
+  has not yet been re-exported to `weapon_resource.gd`/`strike_module.gd` (ED-1050 residual).
 - **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 10/27 modules
   have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
   are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
   with `engine_clock`).
-- **The four `designs/godot/*.md` docs are stale (all 2026-04-18) with no supersession banner** and encode
-  the pre-`d+σ` model. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
+- **The four `designs/godot/*.md` docs are stale (all 2026-04-18)** and encode the pre-`d+σ` model —
+  each now carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner (flagged 2026-06-30, ED-1054) pointing at
+  the strategy doc. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
   settlements). Do not implement from them; defer to the strategy doc + Key substrate.
 
 ---
@@ -149,10 +150,11 @@ Do not represent the skeleton as a runnable head-start.
   partly stubbed (~19 `NotImplementedError`), with self-asserted `[PROVISIONAL]`/`[CANONICAL]` docstrings.
   Its `sim/README.md`/`CONVENTIONS.md` say "all modules are stubs" — **that is stale**; many modules are
   real and `mc_v18` runs campaigns.
-- **The sim has no tests and is never run in CI.** No `sim/tests/` exists; no CI job executes `mc_v18`.
-  A seeded batch currently yields a degenerate win-share (one faction ~87%, two at 0%) that **nothing
-  flags.** If you tune balance numbers for Godot, you have no regression oracle — **add a deterministic
-  seeded smoke assertion before trusting any sim output.**
+- **The sim's own balance output has no regression oracle beyond the §8 smoke test.** `sim/tests/` now
+  exists (a deterministic seeded regression + parity test — see §8's ED-1053 resolution), but no CI job
+  executes full `mc_v18` campaigns. A seeded batch currently yields a degenerate win-share (one faction
+  ~87%, two at 0%) that **nothing flags.** If you tune balance numbers for Godot, treat that gap as open —
+  **add a deterministic seeded smoke assertion before trusting any full-campaign sim output.**
 - **The anti-fabrication gate is leaky.** `tools/ci_sim_fabrication_check.py` whitelists constants by bare
   integer value globally and splits floats into integer tokens, so a fabricated constant can pass if its
   digits collide with any ledger value; it also only scans the changeset. **Do not rely on it to catch a
@@ -177,9 +179,12 @@ Do not represent the skeleton as a runnable head-start.
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
 - **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
-  `deprecated/`, or hardcode `/home/claude`): `compliance_check`, `extract_values`, `extract_proper_nouns`,
+  `deprecated/`, or hardcode `/home/claude`): `extract_values`, `extract_proper_nouns`,
   `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
-  They fail opaquely — don't assume "tool exists ⇒ rule enforced."
+  They fail opaquely — don't assume "tool exists ⇒ rule enforced." (`compliance_check` is
+  half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
+  BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
+  compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
@@ -239,6 +244,7 @@ Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
 | **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
 | **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
 | **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
+| **`fable`** | The rare top-of-stack judgment nodes (added 2026-07-01, ED-1086 — availability restored 2026-07-01) | canonical-contract & **propagation-spec authorship** (the aggregate-up/distribute-down + termination artifact — doctrine ED-1083 §4), the emergence audit (seeded-sim + ablation verdicts, once runnable), deepest cross-corpus synthesis. Caveats: subscription metering (~50% weekly cap through 2026-07-07 — verify current terms); **no zero-data-retention** → use `opus` for retention-sensitive content; the safety classifier is irrelevant to game-design content. `fable` is an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. |
 
 **Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
 `haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
@@ -247,9 +253,28 @@ genuinely unsure, omit the override and inherit — but flag the stages above wh
 fits, rather than defaulting the whole fan-out to Opus.
 
 **How to set it:**
-- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus"` (e.g. `Explore`/`general-purpose`
-  file-finding on `haiku`–`sonnet`; reserve `opus` for `Plan` and adjudication agents).
+- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus" | "fable"` (e.g. `Explore`/`general-purpose`
+  file-finding on `haiku`–`sonnet`; reserve `opus`+ for `Plan` and adjudication agents).
 - **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
   mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
   `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
   Opus verifier/synthesizer.**
+
+**Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
+`designs/architecture/holonic_container_doctrine_v1.md` for the doctrine side):
+- **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
+  dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
+  orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
+  more independent. Make independence structural: critic gets read-only tools.
+- **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
+  binding constraint is.
+- **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
+  lanes return **fixed-format summaries**, not raw context — synthesis binds on the orchestrator's
+  window.
+- **Guardrails binding on every infill lane** (doctrine ED-1083 §2): implement the local rule only;
+  declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
+  scale-local interface dialect (**shape divergence**).
+- **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
+  *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
+  watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
+  are runnable) an emergence-auditor — see the 2026-07-01 decision queue.

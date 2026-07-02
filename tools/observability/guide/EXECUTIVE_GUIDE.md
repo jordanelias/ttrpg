@@ -202,8 +202,9 @@ values. Ethical stance is *why* the small scale is worldly.
 
 ### 4.3 Personal combat — a fight
 
-**What it is.** Round-by-round melee/ranged combat. Your pool is roughly **(Agility × 2) + skill**,
-rolled against a target number; net hits + Strength + weapon − armor = damage.
+**What it is.** Round-by-round melee/ranged combat. Your pool is **max(5, skill + 6)** —
+skill-driven, Agility-independent (ED-901); resolution is the d+σ sigma-leverage model of
+`designs/scene/combat_engine_v1/`, not a fixed target number.
 
 **What you do.** Each round you split your pool between **offense and defense** and pick an action:
 Strike, Feint, Disarm, Rescue an ally, Full Guard, Take a Breath, and more. Wounds each cost you
@@ -211,7 +212,7 @@ dice; run out of Health and you’re felled (in ~4–6 solid hits between equals
 
 ```mermaid
 flowchart LR
-  POOL["pool = (Agi×2)+skill"] --> SPLIT["split offense / defense"]
+  POOL["pool = max(5, skill+6)"] --> SPLIT["split offense / defense"]
   SPLIT --> ACT["choose action<br/>(Strike, Feint, Rescue…)"]
   ACT --> ROLL["resolve vs opponent"]
   ROLL --> DMG["damage → wounds → Health"]

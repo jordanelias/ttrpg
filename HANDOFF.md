@@ -107,8 +107,10 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     self-undermining equilibrium for Consensus's frivolous-block antibody, Dowlen's weighted lottery for
     `WeightedLot`/alea, Putnam two-level bargaining for Negotiation's ZOPA).
 
-- **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
-  L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
+- **Scene-combat engine v1 — MERGED to `main`** (`d4bf2af3`, PR #40, 2026-07-01T04:46Z; Track-2 cleanup
+  `8fbc4b66`, PR #47, 2026-07-01T06:48Z). `design/scene-combat-v1` is now fully redundant — its history is
+  the same work under different SHAs, confirmed byte-for-byte against `main`'s squash. `pytest tests/valoria -q`
+  → 92 passed on `main`. Superseded text below kept as build provenance; see "Still open" for what's left.
   - **Committed Phase-3 chain:** `297458d7` (foundation: leverage→lever-arm, FIX-1b, M3, half-sword geometry) →
     `210dd1b4` (armor_defeat→derived percussion + FIX-1 reach-threat) → `360325d0` (Tier-2/3 primitives) →
     `d069be7c` (**reach wired to geometry — the grip insight: a centre-gripped staff reaches less than a butt-gripped
@@ -201,14 +203,77 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       with **exactly one merge gate**, now CLOSED: `d9fd1f1a` **ADEF_THRESHOLD monotone re-sweep (ED-1050 RESOLVED)** +
       re-exported `combat_config.gd` from the oracle (retired the port's §6 private [AUDIT-FIX]); `e1fc0686` **architecture-
       invariant guards** (no-name-table ast scan + single-source + emergent-selection + gap-game — 84 tests).
-    - **→ THE BRANCH IS RATIFY-READY — PR #40 OPEN** (`design/scene-combat-v1`→`main`, 75 commits;
-      https://github.com/jordanelias/ttrpg/pull/40) awaiting Jordan's review + merge. Then the fuller `.gd` module re-export
-      (RESIST/GAP_EXPOSURE/gap-game logic — deferred behind the non-compilable skeleton, Key-log parity known-red).
-    - **Deferrable Track-2 polish (post- or pre-merge, none blocking):** the `wt`/`spd` cost-path single-source de-leaks
-      (re-baseline, need before/after; `spd` now unblocked since the agility clamp landed); Phase-A cleanups (`_HEAD2DMG`
-      dedup, dead `pob_frac`/`percussion` WEAPONS fields, dead `WP.reach()`/`authority()`, `capabilities.py`→`afforded_heads`);
-      the greedy-comparator-vs-damage docstring (Jordan-gated); the displace/reach `sel_head` consistency (D-1/D-2). Full
-      confirmed list: `tasks/wi4q11myc.output`. **Track 4** build-forward (abilities-as-access, §C, contact axis, WS-7).
+    - **→ MERGED — PR #40** (`design/scene-combat-v1`→`main`, 78 commits, squash `d4bf2af3`, 2026-07-01T04:46Z;
+      https://github.com/jordanelias/ttrpg/pull/40). Three catch-up merges landed pre-merge (main's #32/#35/#38/
+      #39/#41/#42 — confirmed `#32` shared lineage with this branch, so the branch was the authoritative superset;
+      one real ID collision resolved, combat re-baseline renumbered ED-1055→ED-1080 after `contest_rebuild`
+      formally reserved 1055-1079). All 16 CI checks green at merge. The fuller `.gd` module re-export
+      (RESIST/GAP_EXPOSURE/gap-game logic) remains deferred behind the non-compilable skeleton, Key-log parity
+      known-red — low priority per CLAUDE.md §6 (skeleton covers 1/27 modules, can't compile regardless).
+    - **Phase-A cleanups DONE + MERGED (`8fbc4b66`, PR #47, 2026-07-01T06:48Z):** `_HEAD2DMG` dedup (systems.py,
+      proven byte-identical — exhaustive case analysis, not spot-check); dead `pob_frac`/`percussion` WEAPONS
+      fields removed (weapons.py + weapon_physics.py's STAGE-1 self-test retired — the stale spear comment claiming
+      `recoverability_factor` still reads `pob_frac` was itself wrong, corrected); `capabilities.py`→`afforded_heads`
+      resync (a real bug: the state-graph doc generator reported the poleaxe unable to gap-thrust, contradicting the
+      engine's own tested gap-game behavior — fixed the `gap_thrust` predicate + its test's independent cross-check;
+      exactly one cell changed, hand-verified against all three blunt weapons' point_concentration, not just the
+      poleaxe). **`WP.reach()`/`authority()` deletion was attempted and CORRECTLY CAUGHT by adversarial review** —
+      "zero callers" is not the same as "safe to unilaterally delete" when the Gate-1 audit already reserved this
+      exact fork (item 6 below) for Jordan; reverted the deletion, instead labeled both functions
+      `[BUILD-ONLY/DIAGNOSTIC]` in their docstrings (no functional change) per the review's offered safe option —
+      the single-source-target decision stays open. All 92 tests green on `main` post-merge.
+    - **Still open on `main`, explicitly Jordan-gated:** the `wt`/`spd` cost-path single-source de-leak
+      (`core.py:55` `heft_resp`, `systems.py:46` `weapon_tempo` — would shift damage/tempo output across the whole
+      roster; needs a measured before/after presented for sign-off, not folded into an autonomous batch); the
+      `WP.reach()`/`authority()` (`weapon_physics.py:193,205`) vs `systems.reach_base`/`wield_heft` canonical-home
+      decision (both sides already docstring-labeled `[BUILD-ONLY/DIAGNOSTIC]`, safely deferred rather than silently
+      resolved); the greedy-comparator-vs-damage docstring; the displace/reach `sel_head` consistency (D-1/D-2).
+      Forward-roadmap reference: `designs/audit/2026-06-30-combat-grounding/forward_roadmap.md` Track 2. **Track 4**
+      build-forward (abilities-as-access, §C, contact axis, WS-7) remains design-gated — full detail recovered in
+      `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` (the Phase 4a game-theoretic layer, Phase 4b access
+      catalogue, Phase 4c §C fix, Phase 5 contact axis — none of this was previously committed to the repo).
+    - **Track-2 residuals now carry RECONCILED RECOMMENDATIONS (2026-07-01), awaiting Jordan's ratification —
+      not yet applied to any code.** Full record (measurement packets + an agonist/antagonist debate, synthesis,
+      adversarial skeptic pass, and reconciliation for each residual — every stage independently re-verified
+      the prior stage's citations against actual source, not just trusted them):
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/track2_residual_recommendations.md` (+
+      `wt_spd_deleak_report.md`, `wp_reach_authority_comparison.md`, and the two reproducible `.py` harnesses).
+      **wt/spd cost-path de-leak — split by path:** damage-path (`core.heft_resp`→`wield_heft`-reuse) is
+      **ready for ratification** for every weapon *except the spear* (doubles its damage +10 to +14 flat,
+      compounding the already-known spear-dominance problem — carve it out, re-measure once the separate
+      approach-phase fix lands). Tempo-path (`weapon_tempo`'s `spd`→`recoverability_factor`) is **NOT ready** —
+      confirmed structural double-counting against `pen`'s existing `wield_heft` weight/hands terms (not a
+      style question); needs a decomposed candidate isolating the thrust-vs-swing shape from the weight/hands
+      magnitude before it's even measurable. **`WP.reach()`/`authority()` canonical-home — ready for
+      ratification, in the "do nothing structural" direction:** retire both docstrings' "pending decision"
+      framing to "retired diagnostic, not a live candidate" (no functional change) — `reach()` fails on its own
+      evidence (non-affine, non-monotonic ratio to the live path; wiring it unscaled would zero the spear's
+      close-combat penalty, its core archetype); `authority()`'s only plausible target is `heft_resp`, i.e. the
+      *other* residual — deciding it here would resolve that residual by the back door. Three explicit
+      "Jordan design taste" questions (not settled by the record) are listed in the memo's final sections.
+    - **Polearm close-quarters grounding (2026-07-01), a NEW gap found while investigating the spear-dominance
+      anomaly — Jordan's overhang/choke-handling critique confirmed as real, unmodeled physics.** Full record:
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/polearm_close_quarters_grounding.md`
+      (4 research angles + engine verification + synthesis + independent skeptic re-check of every source +
+      reconciliation). Two claims tested: **(A) choking up on an asymmetric pole carries a real handling cost
+      beyond a scalar MoI reduction** — form-only grounded (T2/T3 consensus: ARMA "difficult to turn the butt
+      end of a spear around if you're surrounded"; Escamilla & Fleisig 2009 *J. Appl. Biomech.* confirms
+      choke-up measurably lowers implement velocity via trailing-mass drag, not a free win) — no source gives a
+      magnitude. **(B) a thrust degrades to a shaft/butt strike at close range/high choke** — well-grounded,
+      directly attested: *Le Jeu de la Hache*'s **"demy-hache"** (independently re-verified this session, not
+      just trusted) names the exact shaft zone between the hands used to strike/push when the head can't be
+      brought to bear; Fiore's *Zogho Stretto* and Winn's *Broadsword & Singlestick* corroborate. **Confirmed
+      against actual code (not just suspected): neither exists anywhere in the engine.** `WP.at_grip` is a
+      single forward-only pivot with no trailing-mass/rear-overhang term; `select_mode`/`afforded_heads` never
+      read `grip_position` at all, so nothing ever converts a thrust to a shaft-strike. `grip_choke_max=1.0`
+      for the spear (identical to the staff) is the specific numeric root of the 94-96% win-rate anomaly — the
+      engine currently grants a choked-up spear free, unlimited regrip with no asymmetry tax and no thrust-range
+      floor. **Ready to greenlight as a concrete build task:** a new `overhang_penalty(c,cfg)` (trailing-mass
+      moment `m_trail*L_behind²` feeding `recoverability_factor`) + an `available_extension` hard gate in
+      `select_mode` that substitutes a shaft-strike coupling at high choke/close range, + a matching
+      `lunge_quality` consistency check (a skeptic-flagged addition, folded in). **Jordan's call, not settled by
+      the record:** the `K_OVERHANG`/`MIN_POINT_CLEARANCE` magnitudes — no source of any tier gives a number;
+      both are [FIAT]/[SIM-CALIBRATE], to be set by playtesting against the 94-96% anomaly this targets.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
@@ -222,6 +287,43 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-01 — **Month-overview + architecture-consolidation session executed** (this branch;
+  12+ commits, ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item
+  Jordan decision queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`).
+  Landed: LB-21 round-3 ID re-block · two silently-dead enforcement pieces revived
+  (`broken_dependency_checker` ledger check; non-executable tracked pre-commit hook) · CLAUDE.md
+  §6 falsified claims corrected (ED-1050/ED-1054 states) · holonic container doctrine v1
+  **PROPOSED** (`designs/architecture/holonic_container_doctrine_v1.md`, ED-1083 — Jordan-vetoable)
+  from the ingested 2026-07-01 workflow spec · Combat Pool collapsed to `max(5, History+6)` across
+  every live stale site (ED-1084) · `values_master.yaml` QUARANTINED · names_index v2 (proper-noun
+  fold; mirror 23→83) · session-log machinery → `deprecated/session_machinery/` · combat engine
+  runtime **numpy-free** (σ-kernel via `sim.autoload.sigma_leverage`; state kernel engine-owned;
+  ED-1085) with new container-hygiene guard · **first typed Godot params artifact**
+  (`references/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
+  contract-conformance CI (report-only; ED-1051 backlog surfaced per-PR) · CLAUDE.md §10 fable
+  tier + relay patterns; workplan **J-38** (propagation-spec authorship) docketed ·
+  `currency_consistency_check` self-updating recency gate (CI + SessionStart banner; ED-1087) ·
+  freshness pins refreshed + gate flipped **blocking** (LB-23 residual closed). Three scope
+  defaults adopted Jordan-vetoable (values_master quarantine-not-regenerate; Godot seed included;
+  freshness flip). Rulings made: **none** — everything gated sits in the decision queue.
+
+- 2026-07-01 — **Scene-combat engine v1 merged to `main`; lost Phase 4/5 provenance recovered.** PR #40
+  (`d4bf2af3`, 78 commits, 2026-07-01T04:46:19Z) merged the ratify-ready branch; PR #47 (`8fbc4b66`,
+  2026-07-01T06:48:32Z) merged the Phase-A Track-2 cleanup (HEAD_MODE dedup, dead `pob_frac`/`percussion`
+  field retirement, `capabilities.py` resync). `pytest tests/valoria -q` → 92 passed on `main`.
+  `design/scene-combat-v1` is now fully redundant (its 4-commits-ahead-of-`origin/main` delta is the
+  identical work, already squash-merged under different SHAs) — candidate for deletion pending Jordan's
+  confirmation (see Next actions). Separately, tracing "the workplan" back to its source (per Jordan's
+  request to review prior scene-combat sessions) found the actual master workplan existed only as two
+  **local, never-committed** Claude Code plan files: the v4 master plan (WS-0..WS-8, the three co-equal
+  access gates, §C) and a Phase 3/4/5 completion plan (Workstream-0 grounding spine, 7 review lenses,
+  3 named principles, Phase 4a game-theoretic layer, Phase 4b abilities-as-access, Phase 4c §C residual,
+  Phase 5 contact axis) — and that `forward_roadmap.md`'s "Track 4" summary had silently dropped the
+  entire Phase 4a game-theoretic layer plus the grounding-ledger deliverables in compressing it. Recovered
+  the full Phase 3/4/5 plan verbatim (with status annotations) into
+  `designs/scene/combat_engine_v1/phase4_5_plan_v1.md`; repointed `forward_roadmap.md` Track 4 and this
+  file's Next actions at it. Two Track-2 residuals remain open and Jordan-gated: `wt`/`spd` damage-path
+  de-leak, `WP.reach()`/`authority()` vs `systems.reach_base`/`wield_heft` single-source decision.
 - 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the three
   "integrity" gates off the GitHub API to the working tree (no PAT/network): `broken_dependency_checker`
   and `patch_propagation_checker` now `os.walk`/read locally (both green against the checkout);
@@ -314,24 +416,89 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
   retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
   and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
+- 2026-07-01 — **Workplan sprawl cleanup.** `designs/workplans/` was dead (both files pre-dated v3/v4)
+  while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
+  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `designs/workplans/` (now the
+  one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
+  `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
+  commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
+  `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling
+  audit artifacts and CURRENT.md already documents them as frozen records, not lost ones. Separately,
+  flagged (not moved) the `sim/` vs `tests/sim/` vs `tests/sim_framework/` naming collision — three
+  distinct-purpose directories, not duplicates; disambiguated via README notes in each rather than a
+  path rename, since `tests/sim/` is path-matched by `ci_sim_fabrication_check.py`/`atomization_rules.yaml`/
+  `lane_assignments.yaml` and a rename would need to update all three.
 
 ## Next actions
 
-_(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
-allocation: workplan-v5 **LB-21**, at the next integration pause.)_
+_(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
+verified live max, allocated ED 1081–1087 to the month-overview consolidation from
+block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
+per the file's protocol; never max+1.)_
 
-- **Scene-combat (`design/scene-combat-v1`) — awaiting Jordan, then merge:**
-  1. **Close the channel-leverage residual (the §C remainder).** The affinity budget fixed total-competence but
-     not per-channel leverage → spanish broad-strong, chinese broad-weak, only 2 niches. The fix is the
-     **effectiveness-functions calibration**: measure each channel's marginal win-leverage, then normalise so each
-     paradigm is decisive in *its* context (chinese-burst should win a fast/light-weapon context; german-bind the
-     longsword context — currently it doesn't). **Design-laden** (how strong each paradigm should be = Jordan).
+- **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
+  review, the consolidation execution/reconciliation logs, and the **single consolidated
+  23-item Jordan decision queue** live at
+  `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see `decision_queue.md`
+  first — every gated item below is indexed there). Highest-leverage queued decisions:
+  **doctrine ratification** (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`),
+  **J-38 propagation-spec authorship** (workplan v5 §3 — unblocks conversion register #1 +
+  `engine_clock`/ED-1051), Track-2 residuals (below), field-ON, the values_master
+  regenerate-vs-retire call, and the duplicate compilation homes.
+- **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59);
+  this file previously had zero record of any of it — closing that continuity gap now.** Coordinate-field
+  true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
+  (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/
+  `build_refused_flank` Unit-level presets (Stage D, ED-907/908/909) are all merged. **LC-8 executed
+  2026-07-02 (ED-1088):** `Horseshoe`/`RefusedFlank` retired as `Subunit.shape` values per Jordan's
+  go-ahead ("those are emergent outcomes") — only Line/Arrowhead/GappedLine/Column remain valid
+  subunit shapes; envelopment/refused-flank exist only as the Unit-level presets above.
+  `bat.py`'s grid-mode golden digests were deliberately re-baselined (approved behavior change).
+  The workbench (`tests/sim/mass_battle/workbench/`) was extended to visualize the new multi-subunit
+  presets — see `tests/coverage_matrix.md`'s 2026-07-02 entries for what shipped and two real bugs
+  found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
+  bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
+  the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Still open, Jordan-gated:**
+  the `FIELD_MOVEMENT=1` default-flip (Stage A step 7 — byte-exact grid path stays the oracle either
+  way); Stage E (Army Configuration Mode / deployment UI) and Stage F (charge/depth/equipment physics)
+  are scoped but not started; a flagged-not-fixed pre-existing gap in the reciprocal charge-recoil
+  (fires from the rear on an enveloped+braced unit — `gauge_mb.py` C7's own comment, out of scope for
+  LC-8). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
+  marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
+  that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+- **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
+  1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
+     "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
+     autonomous before/after measurement harness can be prepped (roster-wide damage/tempo delta report) without
+     flipping the live code; (b) `WP.reach()`/`authority()` vs `systems.reach_base`/`wield_heft` canonical-home
+     fork (`weapon_physics.py:193,205`) — a short comparison doc of what each side currently computes and where
+     they diverge can be prepped without touching code. Neither decision itself is agent-actionable.
+  2. **Close the channel-leverage residual (the §C remainder, Phase 4c).** The affinity budget fixed
+     total-competence but not per-channel leverage → spanish broad-strong, chinese broad-weak, only 2 niches. The
+     fix is the **effectiveness-functions calibration**: measure each channel's marginal win-leverage, then
+     normalise so each paradigm is decisive in *its* context (chinese-burst should win a fast/light-weapon
+     context; german-bind the longsword context — currently it doesn't). **Design-laden** (how strong each
+     paradigm should be = Jordan). Full detail: `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` §4c.
      Re-measure with `python designs/scene/combat_engine_v1/workbench/balance.py context`.
-  2. **The abilities-as-access depth** (WS-4's other half): the 7 phase-slots + techniques-as-permission + the
-     learning-gate ("can't bind-and-wind / Spanish footwork without having trained it"). Carries the open
-     decisions the plan flags as Jordan's: affinity full-point-buy vs thin, the cyclic node relation, naming.
-  3. **Tunable magnitudes** (Class-C, workbench-adjustable): `RECOVERY_TEMPO_K` (0.15), `LUNGE_*`, `CLOSE_REACH_REF`.
-  4. **Ratify → merge to main** (squash; the branch is self-contained under `designs/scene/` + `tests/valoria/`).
+  3. **The abilities-as-access depth** (Phase 4b / REARCHITECTURE P4 / WS-4's other half): the 7 phase-slots +
+     techniques-as-permission + the learning-gate ("can't bind-and-wind / Spanish footwork without having
+     trained it"); resolves the dormant `eff_cw`. Carries open decisions flagged Jordan's: affinity
+     full-point-buy vs thin, the cyclic node relation, naming. **Also gated: Phase 4a**, the full
+     game-theoretic psychological layer (Bayesian-signaling reads, mixed-strategy feints, Stackelberg-timing
+     initiative, two within-fight dynamics) — never built, and previously undocumented in the repo. Full detail:
+     `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` §Phase 4.
+  4. **Tunable magnitudes** (Class-C, workbench-adjustable): `RECOVERY_TEMPO_K` (0.15), `LUNGE_*`,
+     `CLOSE_REACH_REF`.
+  5. **Phase 5 contact axis** (clinch/disengage/choke; consumes the dead `clinch` primitive) — full detail
+     `phase4_5_plan_v1.md` §Phase 5 — and **WS-7 multi-combatant envelope** (gated on ED-911 ratification)
+     remain design-gated, no immediate action.
+  6. **Stale-branch cleanup (needs Jordan's confirmation before deletion):** `design/scene-combat-v1`
+     (local+remote) and `origin/scene-combat-track2-cleanup` are fully merged and redundant. Do not delete
+     unilaterally — switch the working branch to `main`, confirm no uncommitted work, then offer deletion as
+     a separate explicitly-confirmed step.
 - **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired to
   `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier` Check 4 blocking
   for `skills/`). Earlier passes already landed the coverage_matrix single-source + 12-skill boilerplate
@@ -341,11 +508,12 @@ allocation: workplan-v5 **LB-21**, at the next integration pause.)_
   (`freshness_gate`, `broken_dependency_checker`, `compliance_check`, `extract_*`, `valoria_collator`,
   `valoria_bulk_fix`). `valoria-orchestrator`'s old `tests/registry/test_descriptor_registry.py` import
   is dead (reads `/home/claude/…`, not CI-collected) — left as-is.
-- **CI debt blocking-flips (LB-23):** after the **K-2 SHA-split** (115 `canonical_sha` fields out of
-  `canonical_sources.yaml` → `references/canonical_freshness.yaml`), flip `freshness_gate`'s
-  stale-canonical step back to blocking; flip `validate_ed_citations` (tool `sys.exit(1)`s but the CI job
-  pins `continue-on-error: true` → non-blocking) once its count is triaged toward 0 — **now 315 violations
-  / 190 open-ref info live** (was 748/788; #20's validator-precision pass dropped it). Solo / K-2 / LB-6.
+- **CI debt blocking-flips (LB-23) — reconciled 2026-07-01 (ED-1082):** `validate_ed_citations`
+  is **already blocking** (since 2026-06-29, 0 genuine violations — the old "flip once triaged"
+  action here was stale). `freshness_gate`'s remaining report-only step is being closed by the
+  month-overview consolidation itself (pin refresh + blocking flip as its final commit); the
+  optional K-2 SHA-split (115 `canonical_sha` fields → `references/canonical_freshness.yaml`)
+  is a refactor that can follow independently, no longer a precondition.
 - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 (index-routes).
 - **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
   and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the
