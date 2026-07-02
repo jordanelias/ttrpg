@@ -482,3 +482,26 @@ per the file's protocol; never max+1.)_
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19) and the new **J-36** (Key-bus closure for the 6 off-bus writers, row #40 — gated on
   the distillation report's deferred adversarial pass).
+- **Mass-battle coordinate-field engine — Stages A–D merged (2026-07-02, PRs #52/#56); next up, all
+  Jordan-gated.** Detailed continuity/history lives in the staged plan file (session-local, not in the
+  repo tree): `using-opus-4-8-ultracode-floating-tiger.md`. All four stages are `FIELD_MOVEMENT=1`
+  opt-in only — the grid path (`FIELD_MOVEMENT=0`, every existing scenario's default) stayed byte-exact
+  throughout (`bat.py`'s frozen `unit`/`cell` digests unchanged across every commit in both PRs).
+  - **A** — true-adjacency stand-off halt + an exact time-of-impact (continuous-collision) resolver
+    (replacing an earlier halved-clamp heuristic), plus a reach-and-facing-asymmetric closing-budget
+    throttle (a longer-reach, correctly-facing body "sets into formation" before a shorter-reach one).
+  - **B** — facing/attention/reaction physics (anti-hyper-reactivity) on the field path.
+  - **C** — command layer: `engine.build_army` (multi-subunit armies), a timed/conditional `Order`
+    queue, and `escort_of`/formation-relative positioning.
+  - **D** — wires the previously-inert `Subunit.role` (gated by `role_allowed`); new
+    `engine.build_envelopment`/`build_refused_flank` realize ED-909's Unit-level "Envelopment"/"Refused
+    Flank" postures as compositions of existing primitives (no new movement/combat mechanic).
+  - **Open, Jordan-gated:** (1) **LC-8** — literally retiring `Horseshoe`/`RefusedFlank` as
+    `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) would break the frozen
+    `bat.py` grid digests (its own battery uses `Horseshoe` directly), so it needs an explicit
+    sign-off + a deliberate re-baseline — deferred, not done in Stage D. (2) Stage E (Army
+    Configuration Mode UI) needs a ruling on whether the videogame keeps the TTRPG's Command-rating
+    subunit-cap hard limit of 3 or lifts it (`mass_battle_v30.md` §A.5) before it can be built; Stage E
+    is also a genuinely different kind of work (frontend/UI over the now-complete engine primitives),
+    not a natural default-continue from A–D. (3) Stage F (charge/depth/equipment physics) is only
+    scoped at a high level in the plan — needs real design work before implementation.
