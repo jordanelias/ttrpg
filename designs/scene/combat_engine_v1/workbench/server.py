@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import numpy as np
+import random
 import wrapper
 from combatant import Combatant
 import presets, probabilities as P, narrate
@@ -66,7 +67,7 @@ def do_montecarlo(req):
     trials = int(req.get('trials', 1000))
     seed = int(req.get('seed', 0))
     specA, specB = req['scenario']['A'], req['scenario']['B']
-    rng = np.random.default_rng(seed)
+    rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
     a_wins = decided = draws = 0
     half = trials // 2
     for i in range(trials):

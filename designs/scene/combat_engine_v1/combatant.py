@@ -1,12 +1,90 @@
 """Combatant — built ONCE at init; identity (which fighter) never changes. The wrapper passes a Combatant
 to every subsystem as `aggressor` or `defender`; no subsystem ever sees raw 'A'/'B'. This is the structural
 fix for the frame-mapping bug class: roles are objects, not positional/dict keys."""
-import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
-import r8_parity_harness as r8
 
 # The weapons DICTIONARY + GEOMETRY live in weapons.py (the data layer); the DERIVATION in weapon_physics.py.
 # Re-exported here so existing `from combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
 from weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F401  (data lives in weapons.py)
+
+# ---- COMBAT-STATE KERNEL (relocated verbatim, ED-1085 container de-leak 2026-07-01) ----
+# Previously imported from the FROZEN tests/sim/v32-combat-balance/ harness (r2_consequence_wounds /
+# r5_strength_stamina via r8_parity_harness) through a sys.path hack that dragged numpy into the
+# engine runtime. The live engine owns its state kernel (holonic doctrine §3); the frozen harness
+# keeps its historical copies for its own archived runs. Formulas and constants are byte-identical
+# to the r2/r5 originals; provenance tags carried over.
+
+WOUND_POOL_PENALTY = 1       # [canonical: derived_stats_v30 §4.1 (each wound: -1D to Pools; no Ob penalty)]
+SPI_WI_W = 0.4               # [D-A noise, Jordan 2026-06-18: Spirit at low weight increases the Wound Interval -> reduces uniformity]
+STR_HEALTH_W = 0.25          # [D-A noise, Jordan 2026-06-18: Strength at very low weight, proportional to Endurance, into Health -> reduces uniformity]
+WOUND_INTERVAL_BASE = 4      # [D-A recalib, Jordan 2026-06-18: flat base lowered 6->4; 2 pts moved into Spirit/Strength terms, conserving avg Health=40]
+MAXWOUNDS_DIV = 2            # [canonical: derived_stats_v30 §4.1 (floor(Endurance / 2))]
+MAXWOUNDS_ADD = 1            # [canonical: derived_stats_v30 §4.1 (+1)]
+MAXWOUNDS_CAP = 3            # [canonical: derived_stats_v30 §4.1 (Max Wounds capped at 3, PP-717)]
+STAMINA_PER_END = 3          # [canonical: derived_stats §4.2 — proposed-canon replacement; End contribution to Stamina; replaces Endurance x5; sim-tunable]
+STAMINA_PER_SPIRIT = 2       # [canonical: derived_stats §4.2 — proposed-canon replacement; Spirit contribution to Stamina (energy reserves); sim-tunable]
+
+
+def max_wounds(end):
+    """Max Wounds (derived_stats_v30 §4.1, authoritative): min(floor(End/2)+1, cap)."""
+    return min(end // MAXWOUNDS_DIV + MAXWOUNDS_ADD, MAXWOUNDS_CAP)
+
+
+def wound_interval(end, spirit=3):
+    """Wound Interval (derived_stats_v30 §4.1): End + base + low-weight Spirit (D-A, Jordan 2026-06-18)."""
+    return round(end + WOUND_INTERVAL_BASE + SPI_WI_W*spirit)
+
+
+def health_full(end, spirit=3, strength=4):
+    """Full Health (derived_stats_v30 §4.1): WI x (MaxWounds+1) + low-weight Strength*Endurance (D-A, Jordan 2026-06-18)."""
+    return round(wound_interval(end, spirit) * (max_wounds(end) + 1) + STR_HEALTH_W*strength*end)
+
+
+def stamina_max(end, spirit):
+    """Recomposed Stamina reserve = f(End, Spirit). Replaces canonical Endurance x 5 (Jordan decision)."""
+    return STAMINA_PER_END * int(round(end)) + STAMINA_PER_SPIRIT * int(round(spirit))
+
+
+class WoundTracker:
+    """The authoritative non-resetting wound-gate tracker (derived_stats_v30 §4.1).
+    Health depletes; every WI of cumulative damage is a wound gate; a single hit larger than WI
+    crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
+    Each wound = -1D to Pools (queried via pool_penalty); no Ob penalty, ever. Persists between
+    encounters (cleared only at session end, per canon)."""
+
+    def __init__(self, end, equipment_health=0, spirit=3, strength=4):
+        self.end = end; self.spirit = spirit; self.strength = strength
+        self.wi = wound_interval(end, spirit)
+        self.max_wounds = max_wounds(end)
+        self.health_full = health_full(end, spirit, strength) + equipment_health
+        self.cumulative_damage = 0
+
+    @property
+    def health_remaining(self):
+        return max(0, self.health_full - self.cumulative_damage)
+
+    @property
+    def wounds(self):
+        """Wounds accrued = floor(cumulative_damage / WI), capped at MW+1 (felled)."""
+        return min(self.cumulative_damage // self.wi, self.max_wounds + 1)
+
+    @property
+    def felled(self):
+        """Incapacitated at Health depletion (cumulative damage >= Health). Health carries a low-weight
+        Strength buffer (D-A reshape, Jordan-ratified), so Strength now buys survivability; coincides with the
+        old MW+1-wound rule when that buffer is zero. Pool penalty still caps at MW+1 wounds (-1D each)."""
+        return self.cumulative_damage >= self.health_full
+
+    def pool_penalty(self):
+        """-1D per wound to all Pools (capped at felled). No Ob penalty (canon)."""
+        return min(self.wounds, self.max_wounds + 1) * WOUND_POOL_PENALTY
+
+    def apply(self, damage):
+        """Apply a strike's damage. Returns (new_wounds_inflicted, felled). A hit > WI inflicts
+        multiple wounds at once -- the decisive blow crossing several gates."""
+        before = self.wounds
+        self.cumulative_damage += max(0, int(damage))
+        inflicted = self.wounds - before
+        return inflicted, self.felled
 
 
 class Combatant:
@@ -27,11 +105,11 @@ class Combatant:
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
         self.pool=max(5, history+6)                          # resolution pool (History)
-        self.wt=r8.WoundTracker(end, spirit=self.spirit, strength=self.strength)
+        self.wt=WoundTracker(end, spirit=self.spirit, strength=self.strength)
         self.health_full=self.wt.health_full                 # total Health (End+Spirit+Str buffer)
         self.wound_interval=self.wt.wi                       # damage per wound-gate (WI)
         self.max_wounds=self.wt.max_wounds                   # wound-gate cap (felled beyond)
-        self.stamina_max=r8.stamina_max(end, self.spirit)    # max stamina from Endurance+Spirit (cfg-free)
+        self.stamina_max=stamina_max(end, self.spirit)       # max stamina from Endurance+Spirit (cfg-free)
         self.conc_max=0.0                                    # max concentration (3*Focus+2*Spirit) — set in derive_stats(cfg)
         # ---- live state (reset/managed by the wrapper each bout) ----
         self.stamina=0.0
