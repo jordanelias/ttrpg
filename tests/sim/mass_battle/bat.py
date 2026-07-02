@@ -155,8 +155,21 @@ EXPECTED = {
     # block is PER_CELL-gated) and the battery's one braced row is frontal, so the grid 'cell' digest
     # above was verified byte-identical after the gate landed. Update ONLY on an intentional field-path
     # behaviour change, same discipline as the grid digests.
-    'unit_field': 'c79577521010ebfd796124d1634478c200349e298e9983002abcea2168bbe006',
-    'cell_field': 'dd08552124cdaf2c41dec191bef74d9db769dc779a5fa5227d48547d7ade0139',
+    #
+    # [Movement/pathing audit, ED-1096/1097, re-recorded 2026-07-02] Re-recorded again for the fix-plan
+    # steps 1-7 + decision gates 2/4 landed this session: check_drift/reset_positions node-state
+    # corruption fixes, weapon-derived unit_type wiring, restored lateral file-holding, the node WHEEL
+    # facing-stall fix, and -- the dominant driver of this particular digest change -- fix-plan step 7's
+    # waypoint primitive (Subunit._resolve_maneuver_goal/_envelop_goal/_sweep_goal), which is the first
+    # change to give _node_advance real steering for the 'envelop'/'sweep' instructions at all (every
+    # prior recording predates step 7 and reflects the straight-line-only centroid attractor these
+    # instructions previously reduced to). Isolated step 7's contribution from gate 4's: 'unit_field'
+    # (PER_CELL explicitly pinned '0', so gate 4's flip cannot reach it) already diverged from its
+    # PRE-this-session value before gate 4 ever landed -- proving step 7 alone drives this digest
+    # change, with gate 4 contributing no separately-attributable divergence on top. Deliberate,
+    # disclosed behaviour changes throughout -- not a regression.
+    'unit_field': 'b1963d03d20559ff2868173e6f45750a7618ec3eee1bd3f01b58d04f792d9ce4',
+    'cell_field': '1f0742c59066d4f9839bc230f681edd50555bf8d280e0e50e7c729e58da7f4fc',
 }
 
 
