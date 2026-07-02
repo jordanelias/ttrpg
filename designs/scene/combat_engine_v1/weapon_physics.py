@@ -358,6 +358,40 @@ def blade_guard(w):
     return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
 
 
+# ════════════════════ STAGE 3c — DISTRACTION: adornment motion degrades the defender's read (Phase B5) ════════════
+# "a feather and ring distract eyes which makes it harder to read intent" (the design brief this re-architecture
+# was built for). A weapon's `adornments` — a tassel, streamer, or plume attested for its type (Phase 0 physical
+# facts, designs/audit/2026-07-02-morphology-rearch-phase0/) — adds visual clutter near the striking motion. Empty
+# adornments (the overwhelming majority of the roster) -> distraction()==0 -> legibility() is byte-identical to
+# before this function existed (the plan's "empty ⇒ identity" requirement).
+DISTRACT_K = 2.0  # [SIM-CALIBRATE] saturating-sum gain on Σ count·extent_m; the 3 roster examples (ranseur/guandao/
+                   #   jian tassels, each a single ~0.15-0.35m attachment) are ALL period-documented as a
+                   #   ceremonial-phase feature, not a primary combat design element — deliberately kept small.
+
+def distraction(w):
+    """Saturating sum over the weapon's adornments (count × extent, position-independent — any motion near the
+    weapon draws the eye). In [0,1); 0 for the (typical) weapon with no adornments field. Pure."""
+    total = sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
+    return math.tanh(DISTRACT_K * total)
+
+
+# ════════════════════ STAGE 3d — EDGE VIBRATION: a wavy/serrated edge degrades the OPPONENT's tactile read (Phase B5) ═
+# "a wavy/serrated/irregular blade can cause vibrations for opponent... which would affect the effectiveness of
+# riposting/winding" (the design brief). The vibration is felt by whoever is BOUND AGAINST the irregular edge — the
+# wielder is used to their own weapon's feel, the opponent is not — so this degrades the OPPONENT's tactile read in
+# a bind, not the wielder's own. Only flamberge currently carries edge_undulation (amplitude/period on its flame-
+# ground element); every other weapon's elements default amplitude_mm=0 -> edge_vibration()==0 -> identity.
+VIBRATION_K = 0.04  # [SIM-CALIBRATE] per mm of edge-undulation amplitude; flamberge's 15mm amplitude -> ~0.45, a
+                     #   real but not dominant tactile disruption (bind_sigma's tac term is one of five summands).
+
+def edge_vibration(w):
+    """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
+    extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);
+    0 for the (typical) plain-edged weapon. Pure."""
+    amp = max((e.get('edge_undulation', {}).get('amplitude_mm', 0.0) for e in w.get('elements', ())), default=0.0)
+    return math.tanh(VIBRATION_K * amp)
+
+
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
 # Grip is MORPHOLOGY, not a named state. Where the working hand sits on the shaft is a CONTINUOUS choice, bounded by
 # the weapon's own geometry: a long shaft/grip slides (butt<->centre), a short hilt cannot. "Choke" = grip-position

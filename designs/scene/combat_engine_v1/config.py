@@ -20,6 +20,11 @@ CFG = dict(
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
   LEGIB_SWING=1.25, LEGIB_THRUST=0.80, LEGIB_COMMIT_K=0.10, LEGIB_LUNGE=0.25,
+  # morphology-rearch Phase B5: a feathered/tasselled/ringed weapon's ornament motion adds visual clutter that
+  # degrades the defender's read regardless of the attack's own mode legibility. [SIM-CALIBRATE] — the 3 roster
+  # weapons with attested adornments (ranseur/guandao/jian) are period-documented as ceremonial-phase features,
+  # so this is deliberately a SMALL knock, not a primary legibility axis. See weapon_physics.distraction().
+  LEGIB_DISTRACT_K=0.15,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
@@ -96,6 +101,10 @@ CFG = dict(
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
+  # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
+  # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.
+  # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
+  BIND_VIBRATION_K=0.5,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
   STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
   RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4,

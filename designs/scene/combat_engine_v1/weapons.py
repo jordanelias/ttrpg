@@ -32,6 +32,12 @@ RECORD SCHEMA (per weapon):
              geometry, grounded against Phase 0 specimen research and independently adversarially verified. This
              is a PARALLEL view onto the mass-model `elements` (a composite can have multiple mass elements
              without multiple modes, e.g. flamberge's forte/tip/ricasso — one continuous edge, no mode_elements).
+  READ       adornments=[{count, extent_m}] (Phase B5, 3 weapons only: ranseur/guandao/jian tassels — degrades the
+             opponent's read via weapon_physics.distraction(), wired into systems.legibility) · elements[].
+             edge_undulation={amplitude_mm, period_mm} (1 weapon: flamberge's flame-ground blade — degrades the
+             OPPONENT's tactile read in a bind via weapon_physics.edge_vibration(), wired into systems.bind_sigma/
+             init_steal_factor). Absent/zero on every other weapon -> both DERIVE to 0 (identity, no behaviour
+             change).
   LEGACY (derived in weapon_physics; live until the wt/spd/hand de-leak lands): reach{long/short} · wt{light/heavy} ·
              spd · hand{Forgiving/Standard/Demanding}.  `gap`/`geo` are DERIVED by the bake below.
 """
@@ -262,6 +268,9 @@ WEAPONS = {
     ],
    haft=dict(x_m=0.832, mass_kg=1.4963, extent_m=2.1),
    geometry=dict(curvature=0.0, point_concentration=0.9, cross_section=0.85, edge_keenness=0.3, strike_concentration=0.15),
+   adornments=[
+     dict(count=1, extent_m=0.15),  # tassel/streamer at the socket/wing junction (S3, later ceremonial/guard-phase ranseurs)
+    ],
    reach='long', wt='light', spd=0, hand='Standard'),
  'spetum': dict(
    mass=1.8, head_len=5.8667, grip_len=1.4633, hands=2, head='cut_thrust', clinch=2, hand_guard=0.2, blade_guard=0.4,
@@ -326,6 +335,9 @@ WEAPONS = {
    haft=dict(x_m=0.825, mass_kg=1.55, extent_m=2.4),
    butt=dict(x_m=-0.375, mass_kg=0.2),
    geometry=dict(curvature=0.6, point_concentration=0.3, cross_section=0.78, edge_keenness=0.85, strike_concentration=0.15),
+   adornments=[
+     dict(count=1, extent_m=0.15),  # silk or horsehair tassel at the blade/socket junction (S2, ornamented/ceremonial specimens)
+    ],
    reach='long', wt='heavy', spd=-0.5, hand='Demanding'),
  'podao': dict(
    mass=2.48, head_len=5.3233, grip_len=0.7433, hands=2, head='curved_cut', clinch=1, hand_guard=0.1, blade_guard=0.1,
@@ -566,6 +578,9 @@ WEAPONS = {
    haft=dict(x_m=-0.12, mass_kg=0.1, extent_m=0.24),
    pommel=dict(x_m=-0.24, mass_kg=0.1),
    geometry=dict(curvature=0.0, point_concentration=0.7, cross_section=0.68, edge_keenness=0.75, strike_concentration=0.0),
+   adornments=[
+     dict(count=1, extent_m=0.35),  # pommel tassel (jianshui) — civilian/taijijian practice tradition, S2
+    ],
    reach='long', wt='light', spd=1.8, hand='Demanding'),
  'scimitar': dict(
    mass=0.95, head_len=2.7073, grip_len=0.8427, hands=1, head='curved_cut', clinch=2, hand_guard=0.4, blade_guard=0.15, reach_adj=-0.05,

@@ -420,6 +420,7 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
         else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
+    legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
     return legib
 
 def approach_displace(shorter, longer, cfg):
@@ -445,13 +446,18 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
 def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
-    excels) + TACTILE read (Fuhlen); Strength minor. +ve favours the aggressor winning the bind. Pure."""
+    excels) + TACTILE read (Fuhlen, degraded by the OPPONENT's edge vibration — morphology-rearch Phase B5: a
+    wavy/flame-ground edge is felt as unfamiliar noise by whoever is bound against it, not its own wielder);
+    Strength minor. +ve favours the aggressor winning the bind. Pure."""
     lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           * (TR.eff_cw(aggressor, 'leverage')/TR.eff_cw(defender, 'leverage'))
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
-    tac = (reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
-           - reading(defender,cfg)*TR.eff_cw(defender, 'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
+    agg_read = reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition) \
+               * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(defender.w))   # the DEFENDER's wavy edge disrupts the aggressor's read
+    def_read = reading(defender,cfg)*TR.eff_cw(defender, 'tactile')*TR.familiarity(defender.tradition,aggressor.tradition) \
+               * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
+    tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
     return lev + catch + tac + strq + wound
@@ -517,7 +523,7 @@ def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
     by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
     indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
                     (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
-    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, TR)*indes_scale
+    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, cfg, TR)*indes_scale
 
 def counter_select(defender, cfg, rng, TR):
     """Whether the defender reaches for the single-time counter (tempo-driven SELECTION; SUCCESS is gated later, a
@@ -537,11 +543,15 @@ def clamp_initiative(x, cfg):
 # A pure layer on top of the substrate: each tradition's signature initiative ability is just its existing channel
 # weight multiplying the relevant substrate magnitude. No tradition-name branches; neutral tradition = 1.0 everywhere
 # (so default fighters are unaffected and every invariant holds by construction).
-def init_steal_factor(stealer, bind_active, TR):
+def init_steal_factor(stealer, bind_active, cfg, TR):
     """WHO steals the Vor best. In a BIND (winding), the steal scales with tactile+leverage — German Fühlen /
-    Stärke-Schwäche. In the OPEN, with tempo — Italian contratempo (the single-time counter). Neutral = 1.0."""
+    Stärke-Schwäche, boosted by the stealer's OWN edge vibration (morphology-rearch Phase B5: a wavy/flame-ground
+    edge disrupts whoever is bound against it, giving the wielder an easier read to exploit — 0 for the typical
+    plain-edged weapon, identity). In the OPEN, with tempo — Italian contratempo (the single-time counter).
+    Neutral = 1.0."""
     if bind_active:
-        return (TR.eff_cw(stealer, 'tactile') + TR.eff_cw(stealer, 'leverage'))/2
+        return (TR.eff_cw(stealer, 'tactile') + TR.eff_cw(stealer, 'leverage'))/2 \
+               * (1 + cfg['BIND_VIBRATION_K']*WP.edge_vibration(stealer.w))
     return TR.eff_cw(stealer, 'tempo')
 
 def init_hold_decay(holder, cfg, TR):
