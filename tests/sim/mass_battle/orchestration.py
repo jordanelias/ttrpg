@@ -729,10 +729,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    # [ED-1091, Jordan-approved 2026-07-02] PC_RECOIL_FRONTAL zone-gates the recoil to the
+                    # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
+                    # (Burkholder 2007), so a flank/rear charge into a braced wall is no longer wrongly
+                    # recoiled (the latent flag mass_battle_gauge_grounding.md §4.3 carried since 2026-06-16;
+                    # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
+                    # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
+                    # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b):
+                        if a_mom > b_mom and _subunit_braced(atom_b) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                        elif b_mom > a_mom and _subunit_braced(atom_a) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D

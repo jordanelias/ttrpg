@@ -20,12 +20,15 @@ import os as _hu_os
 # module). Kept here, not config, to stay within the touched-file set during the Stage-1 extraction.
 PC_ENVELOP_PATH = (_hu_os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — directed envelop maneuver toggle]
 PC_SWEEP = (_hu_os.environ.get("PC_SWEEP", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — lateral sweep maneuver toggle]
-# [movement-substrate review 06 — finding 2] Continuous-speed toggle. Default OFF -> byte-exact (the OFF
-# branch in advance_cells is the exact prior floor() code). ON: a per-cell fractional-speed accumulator,
-# so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0 each turn
-# (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions preserved; only step TIMING changes.
-# Consumer-local here (advance_cells), like PC_ENVELOP_PATH/PC_SWEEP. ON = recorded behaviour change.
-FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "0") == "1")
+# [movement-substrate review 06 — finding 2] Continuous-speed toggle. ON: a per-cell fractional-speed
+# accumulator, so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0
+# each turn (floor(1*0.7)=0 freezes a slow degraded unit). Consumer-local here (advance_cells), like
+# PC_ENVELOP_PATH/PC_SWEEP.
+# [ED-1089, Jordan-ratified 2026-07-02: "yes, field movement is default."] DEFAULT FLIPPED 0 -> 1
+# (Stage A step 7 executed): the coordinate field is now what runs by default; the integer grid remains
+# available (FIELD_MOVEMENT=0 PC_NODE_COHESION=0) and stays the frozen byte-exact regression oracle —
+# bat.py's grid digests are still checked in CI with those toggles pinned explicitly OFF.
+FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "1") == "1")
 # [movement-substrate review 06 — coordinate-field migration] FIELD_MOVEMENT is the continuous COORDINATE
 # FIELD master toggle. Continuous positions require the node float path (PC_NODE_COHESION stores true floats
 # in _node_pos): the field toggle therefore UNIFIES with it — field-ON implies the node path is active. A

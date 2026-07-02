@@ -154,7 +154,7 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "8b21e342284aa764f451390020917dc51d84d5d4"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "f3f492696e210a099d27d33d930dc963658ba443"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
@@ -324,12 +324,12 @@ systems:
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
     design_doc: designs/architecture/holonic_container_doctrine_v1.md
-    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "feca48229c628e4d96a755ee5ec78591b65d7f3f"
+    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "772ba621b19f5afb8d56ea236c34a423958ce71b"
     status: canonical
     added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
   propagation_spec:
     design_doc: designs/architecture/propagation_spec_v1.md
-    canonical_sha__designs__architecture__propagation_spec_v1_md: "cecc6f52dddcf7a63e91d17697eef9fa826d84d7"
+    canonical_sha__designs__architecture__propagation_spec_v1_md: "9bb900829bf647f7cab633f3adb88288a72dc96a"
     status: canonical
     added: '2026-07-02 ED-1093/ED-1094 ratification (pre-staged) — ordering/determinism, aggregate-up, distribute-down, termination transforms (TERMINATION-ONLY; cross-tick convergence NOT proven); supplies engine_clock candidate home doc (ED-1051, open — awaiting Jordan; doc:null stays unflipped until then)'
   conviction_taxonomy:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "5e6ef58cc7d09188daa4a143867dfe452625c688"
+    canonical_sha__references__module_contracts_yaml: "c5e628d7c909e58b9c3207cea0053f240a3cedca"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
