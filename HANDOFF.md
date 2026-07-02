@@ -152,28 +152,25 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       build-forward (abilities-as-access, §C, contact axis, WS-7) remains design-gated — full detail recovered in
       `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` (the Phase 4a game-theoretic layer, Phase 4b access
       catalogue, Phase 4c §C fix, Phase 5 contact axis — none of this was previously committed to the repo).
-    - **Decision-prep packets for both Track-2 residuals, built 2026-07-01 (no code flipped, no recommendation
-      made):** `designs/audit/2026-07-01-scene-combat-track2-decision-prep/` — `wt_spd_deleak_report.md` (measured
-      before/after, revised to ground the tempo candidate properly — see below) and
-      `wp_reach_authority_comparison.md` (tabulates what `WP.reach()`/`authority()` vs their live counterparts
-      currently compute — not a constant scale factor apart, and `WP.authority()` overlaps TWO different live
-      concepts depending on head type, not one). Both reproducible via the `.py` harnesses in that folder.
-      **wt/spd findings:** the damage-path `wt→wield_heft`-reuse candidate roughly **doubles the spear's
-      damage** across every armour tier (+10 to +14 flat), likely compounding the already-known spear-dominance
-      problem. The tempo-path candidate went through a revision: a first draft (bare `agility()` substitution)
-      was rejected as under-grounded — it captures only swing-inertia, missing balance/hands/thrust-vs-swing.
-      The corrected candidate reuses `systems.recoverability_factor` (the engine's own commitment=recovery
-      model, which already blends weight+balance+hands+thrust-vs-swing) at baseline. It first surfaces a
-      grounding validation: current `spd` already correlates with `1/recoverability_factor` at **r=+0.878**
-      (vs only +0.359 with thrust-vs-swing alone) — the hand-tuned constants seem to already approximate this
-      physics informally. Under the corrected candidate, the **staff** (not the spear) is the largest mover
-      (+1.137 tempo, nearly doubling — correctly centre-balanced/low static-moment, matching the recovery/grip
-      model's "gathered pole" finding), while the **spear's tempo move shrinks to +0.075** (vs +0.409 in the
-      rejected draft) — `recoverability_factor` correctly weighs the spear's large static moment against its
-      thrust-favoring geometry, narrowing the earlier compounding concern for tempo specifically (the damage
-      concern stands on its own). **Caveat, unresolved:** the tempo candidate double-counts weight/hands against
-      `weapon_tempo`'s existing `pen` term (which already penalises both via `wield_heft`) — de-duplicating
-      that overlap is itself a design call, not resolved by this packet.
+    - **Track-2 residuals now carry RECONCILED RECOMMENDATIONS (2026-07-01), awaiting Jordan's ratification —
+      not yet applied to any code.** Full record (measurement packets + an agonist/antagonist debate, synthesis,
+      adversarial skeptic pass, and reconciliation for each residual — every stage independently re-verified
+      the prior stage's citations against actual source, not just trusted them):
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/track2_residual_recommendations.md` (+
+      `wt_spd_deleak_report.md`, `wp_reach_authority_comparison.md`, and the two reproducible `.py` harnesses).
+      **wt/spd cost-path de-leak — split by path:** damage-path (`core.heft_resp`→`wield_heft`-reuse) is
+      **ready for ratification** for every weapon *except the spear* (doubles its damage +10 to +14 flat,
+      compounding the already-known spear-dominance problem — carve it out, re-measure once the separate
+      approach-phase fix lands). Tempo-path (`weapon_tempo`'s `spd`→`recoverability_factor`) is **NOT ready** —
+      confirmed structural double-counting against `pen`'s existing `wield_heft` weight/hands terms (not a
+      style question); needs a decomposed candidate isolating the thrust-vs-swing shape from the weight/hands
+      magnitude before it's even measurable. **`WP.reach()`/`authority()` canonical-home — ready for
+      ratification, in the "do nothing structural" direction:** retire both docstrings' "pending decision"
+      framing to "retired diagnostic, not a live candidate" (no functional change) — `reach()` fails on its own
+      evidence (non-affine, non-monotonic ratio to the live path; wiring it unscaled would zero the spear's
+      close-combat penalty, its core archetype); `authority()`'s only plausible target is `heft_resp`, i.e. the
+      *other* residual — deciding it here would resolve that residual by the back door. Three explicit
+      "Jordan design taste" questions (not settled by the record) are listed in the memo's final sections.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
