@@ -86,7 +86,13 @@ def test_no_weapon_name_literal_in_resolution():
 def test_use_mode_selection_emerges_from_primitives():
     """select_mode must (a) reproduce every SINGLE-mode weapon's native head at every armour tier, and (b) leave the
     poleaxe as the ONLY weapon whose SELECTED head changes with armour — the emergent dual-mode. Both fall out of the
-    derived afforded_heads (no per-weapon list)."""
+    derived afforded_heads (no per-weapon list).
+    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B added two real composite weapons that ALSO afford
+    blunt+point (bec_de_corbin, lucerne_hammer — same SELECT_PC_MIN mechanism as the poleaxe, correctly emergent
+    for weapons that didn't exist when this test was written) AND shifted the poleaxe's OWN percussion authority
+    high enough (weapon_physics.percussion_authority docstring) that it no longer selects its spike vs heavy
+    armour. The `changers` set is expected to change (b) and needs updating post-Phase-C once the engine-scale
+    gains are recalibrated against the now-grounded masses — deliberately left failing, not silently patched."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -111,7 +117,11 @@ def test_afforded_heads_emerge_from_primitives():
 # ── GAP GAME ──────────────────────────────────────────────────────────────────────────────────────
 def test_gap_game_poleaxe_spikes_plate():
     """The situational gap game: vs plate the poleaxe SELECTS its spike (puncture/point — the reach-ladder); unarmoured
-    it does not. Emergent from gap_precision × GAP_EXPOSURE, no name conditional."""
+    it does not. Emergent from gap_precision × GAP_EXPOSURE, no name conditional.
+    [PHASE-C FLAG, 2026-07-02] see weapon_physics.percussion_authority's docstring — morphology-rearch Phase B's
+    real poleaxe mass distribution lifts its percussion authority above the mace's, so it now selects its hammer
+    face (percussion) instead of the spike (puncture) vs heavy armour. Deliberately left failing pending Phase C's
+    engine-scale recalibration against the grounded masses, not silently patched to accept the new selection."""
     C, core, S, WP, CFG = _mods()
     dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)
     assert (dm_heavy, h_heavy) == ('puncture', 'point'), f"poleaxe vs plate should spike; got {(dm_heavy, h_heavy)}"

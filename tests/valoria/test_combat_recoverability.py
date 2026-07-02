@@ -31,7 +31,12 @@ def test_recoverability_ordering_by_static_moment():
 
 def test_anchor_is_near_one():
     """The 2H cut-thrust anchor (a ~1.4kg longsword-class blade) sets the scale -> recoverability ~1.0. The refs
-    (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0."""
+    (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0.
+    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real per-part longsword MoI (grip/pommel/guard at
+    their true measured positions, not the old formula's residual-lump) reads meaningfully higher than the
+    Phase-A reproduction, pushing this anchor to ~1.29. The ordering test above (still green) shows the STRUCTURE
+    survives; REC_I_REF/REC_S_REF need Phase C's balance-harness re-tune against the now-grounded MoI, not a
+    per-weapon mass fudge."""
     assert abs(_r('longsword') - 1.0) < 0.03
 
 

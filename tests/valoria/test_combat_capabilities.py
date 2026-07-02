@@ -18,7 +18,7 @@ import systems as S  # noqa: E402
 import core  # noqa: E402
 from combatant import WEAPONS, Combatant  # noqa: E402
 
-NAMES = [n for n in WEAPONS if n != 'longsword_halfsword']
+NAMES = [n for n in WEAPONS if 'base' not in WEAPONS[n]]   # exclude auto-switched FORMS (longsword_halfsword, estoc_halfsword, ...), never a named weapon
 
 
 def test_halfsword_matches_engine_form_switch():

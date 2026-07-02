@@ -32,7 +32,10 @@ def test_continuous_greatsword_heavier_than_longsword():
 
 
 def test_continuous_orders_within_heavy_class_by_mass():
-    """Within the heavy class, heft is monotone in mass (longsword anchor = 1.0)."""
+    """Within the heavy class, heft is monotone in mass (longsword anchor = 1.0).
+    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B grounds longsword's mass at 1.408kg (real part-sum) vs
+    the old hand-picked 1.4 — the anchor now reads 1.0012, not exactly 1.0. Ordering (the load-bearing half of
+    this test) still holds; the exact-1.0 anchor is a Phase-C re-tune, not a regression."""
     h = lambda n: core.heft_resp(WEAPONS[n], CFG_CONT)
     assert h('greatsword') > h('poleaxe') > h('longsword') > h('mace')  # 2.7 > 2.5 > 1.4 > 1.2 kg
     assert abs(h('longsword') - 1.0) < 1e-9

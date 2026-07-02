@@ -93,71 +93,110 @@ K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fract
 
 
 # ════════════════════ STAGE 1 — located-part mass model -> balance & inertia ════════════════════
-# RE-ARCHITECTURE 2026-07-02 (Phase A): a weapon's balance/inertia is the SUM over LOCATED PARTS about the
-# working-hand axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + rod_Lᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. HEAD parts
-# are the schema-exposed morphology (w['elements']); grip/pommel/guard (bladed) or shaft/butt (hafted) are
-# internal derived parts. This RETIRES the single-C_HEAD-centroid head LUMP (a compound head's mass is now the
-# sum of its located elements, not one point at wclass's centroid). Phase A is byte-identical: when a weapon
-# carries no explicit `elements`, a single REPRODUCTION element is synthesized at the old C_HEAD centroid, so
-# PoB/MoI/m_head reproduce the pre-rearchitecture values exactly (parity-harness-proven). Phase B populates real
-# multi-element per-part masses and deletes C_HEAD.
+# RE-ARCHITECTURE 2026-07-02: a weapon's balance/inertia is the SUM over LOCATED PARTS about the working-hand
+# axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + extentᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. This RETIRES the
+# single-C_HEAD-centroid head LUMP: every physical part (head elements, guards, haft/grip, pommel, butt) is a
+# named located mass in the roster record (w['elements']/['guards']/['haft']/['pommel']/['butt']), sourced from
+# specimen/typology physical facts (designs/audit/2026-07-02-morphology-rearch-phase0/), not a formula split by
+# weapon-class centroid. A compound head's mass is the sum of its located elements, not one point at wclass's
+# centroid — the bec de corbin's hammer/beak/spike each carry their own measured mass and position. Phase A
+# (2026-07-02, byte-identical scaffold) synthesized a single reproduction element per weapon; Phase B (below)
+# replaced every roster weapon's synthesized element with its real Phase-0 part list, so the Phase-A fallback
+# path is now LIVE ONLY for a record with no explicit `elements` (a hypothetical un-migrated/synthetic record —
+# none remain in the roster; kept for generality/safety, not exercised by weapons.py today).
 def _head_elements(w):
-    """The head's located mass-elements. Phase A reproduction: no explicit `elements` → one element at the old
-    C_HEAD centroid (pos_frac) carrying the whole head mass (mass_share 1.0). Phase B: explicit multi-element lists."""
+    """Phase-A fallback: no explicit `elements` → one synthetic element at the old C_HEAD centroid (pos_frac)
+    carrying the whole head-mass residual (mass_share 1.0). Not exercised by any current roster weapon."""
     els = w.get('elements')
     if els:
         return els
     return [dict(pos_frac=C_HEAD[w.get('wclass', 'bladed')], mass_share=1.0)]
 
+def _all_parts(w):
+    """The weapon's full located-mass part list (Phase B): head elements + guards + haft/grip + pommel + butt,
+    each as (mass_kg, x_m, extent_m) about the working-hand axis (x=0, +toward tip, −toward butt — the SAME
+    axis convention Phase 0 collected under). A guard flagged `dual_role_element` is also a head element (e.g.
+    the hook_sword's crescent, which both catches AND strikes) — its mass is carried by the element entry only,
+    so it is excluded here to avoid double-counting. Empty when the record carries no explicit parts (the
+    Phase-A single-element fallback below covers that case). Pure."""
+    parts = []
+    for e in w.get('elements', ()):
+        parts.append((e['mass_kg'], e['x_m'], e.get('extent_m', 0.0)))
+    for g in w.get('guards', ()):
+        if not g.get('dual_role_element'):
+            parts.append((g['mass_kg'], g['x_m'], g.get('extent_m', 0.0)))
+    haft = w.get('haft')
+    if haft:
+        parts.append((haft['mass_kg'], haft['x_m'], haft.get('extent_m', 0.0)))
+    pommel = w.get('pommel')
+    if pommel:
+        parts.append((pommel['mass_kg'], pommel['x_m'], 0.0))
+    butt = w.get('butt')
+    if butt:
+        parts.append((butt['mass_kg'], butt['x_m'], 0.0))
+    return parts
+
 def derive(w):
-    """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Consumes
-    {mass, head_len, grip_len, pommel_kg, wclass, hilt, haft_d, butt_kg, gripped, elements}. Roster records
-    carry a bake-once '_derived' cache (weapons.py import loop) — mutation after bake is out of contract,
-    same as the baked geo/gap; synthetic dicts without the key compute fresh."""
+    """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Roster weapons
+    carry the real Phase-0 part list (elements/guards/haft/pommel/butt); derive() is a positional sum over it —
+    no per-weapon-class formula. Records without explicit parts fall back to the Phase-A C_HEAD-centroid
+    reproduction (kept for generality; not exercised by the live roster). Roster records carry a bake-once
+    '_derived' cache (weapons.py import loop) — mutation after bake is out of contract, same as the baked
+    geo/gap; synthetic dicts without the key compute fresh."""
     cached = w.get('_derived')
     if cached is not None:
         return cached
     hl, gl = w['head_len'], w['grip_len']
+    Lh, Lg = hl * UNIT_M, gl * UNIT_M
+    Lt = Lh + Lg
+    parts = _all_parts(w)
+    if parts:
+        m_total = sum(p[0] for p in parts)
+        moment = sum(p[0] * p[1] for p in parts)
+        moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+        PoB = moment / m_total
+        m_head = sum(e['mass_kg'] for e in w.get('elements', ()))
+        return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
+                    MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
+    # ── Phase-A fallback (byte-identical reproduction; not exercised by the live roster) ──
     m, cls = w['mass'], w.get('wclass', 'bladed')
-    Lg, Lh = gl * UNIT_M, hl * UNIT_M
-    Lt = Lg + Lh
     if w.get('gripped'):
-        # HAND-ON-BLADE (half-sword) lumped-rod special case — the held span is STEEL, not a wood grip; the
-        # forward working segment is approximated as a uniform steel rod. Kept verbatim (byte-identical);
-        # reconciled to the element model in Phase B. See recovered defect note (negative-PoB) in git history.
+        # HAND-ON-BLADE (half-sword) lumped-rod special case — kept for any un-migrated synthetic record; the
+        # live roster's half-sword forms (longsword_halfsword/estoc_halfsword) carry real Phase-0 parts instead
+        # (a shifted-origin part list), which reproduces this same physics without the uniform-rod approximation.
         ch = C_HEAD[cls]
-        m_lin = m / Lt                                  # ~uniform steel mass per unit length (you grip the blade)
-        m_fwd = m_lin * Lh                              # steel forward of the working hand — loads the point
+        m_lin = m / Lt
+        m_fwd = m_lin * Lh
         c_fwd = ch * Lh
         moment = m_fwd * c_fwd
         moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0
         PoB = moment / m
         return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_fwd,
                     MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
-    parts = []  # (mass, x_from_working_hand, rod_length)
+    fparts = []  # (mass, x_from_working_hand, rod_length)
     if cls == 'bladed':
         m_grip = _A_GRIP * Lg * RHO_SWORD_GRIP
         m_pom = w.get('pommel_kg', 0.0)
         m_g = GUARD.get(w.get('hilt', 'none'), 0.0)
-        head_mass = m - m_grip - m_pom - m_g            # Phase A: head is the residual (grip/pommel/guard derived)
-        parts.append((m_grip, -Lg / 2, 0.0))
-        parts.append((m_pom, -Lg, 0.0))
-        parts.append((m_g, 0.0, 0.0))                   # guard sits at the working hand (x=0)
+        head_mass = m - m_grip - m_pom - m_g
+        fparts.append((m_grip, -Lg / 2, 0.0))
+        fparts.append((m_pom, -Lg, 0.0))
+        fparts.append((m_g, 0.0, 0.0))
     else:
-        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2    # per-weapon shaft cross-section (spear ~35mm < staff/poleaxe 40mm)
+        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2
         m_shaft = min(a_haft * Lt * RHO_WOOD, m)
-        butt = w.get('butt_kg', 0.0)                    # rear queue/spike counterweight (kg)
-        head_mass = max(0.0, m - m_shaft - butt)        # m_iron
-        parts.append((m_shaft, (Lt / 2) - Lg, Lt))      # shaft as a distributed ROD of length Lt
-        parts.append((butt, -Lg, 0.0))
+        butt = w.get('butt_kg', 0.0)
+        head_mass = max(0.0, m - m_shaft - butt)
+        fparts.append((m_shaft, (Lt / 2) - Lg, Lt))
+        fparts.append((butt, -Lg, 0.0))
     m_head = 0.0
-    for e in _head_elements(w):                         # HEAD elements — the schema-exposed morphology
+    for e in _head_elements(w):
         me = e['mass_share'] * head_mass
-        parts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
+        fparts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
         m_head += me
-    m_total = sum(p[0] for p in parts)
-    moment = sum(p[0] * p[1] for p in parts)
-    moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+    m_total = sum(p[0] for p in fparts)
+    moment = sum(p[0] * p[1] for p in fparts)
+    moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
     PoB = moment / m_total
     return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                 MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
@@ -167,9 +206,18 @@ def derive(w):
 def percussion_authority(w):
     """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
     energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
-    no percussion — the edge-no-percuss caveat is THIS gate, emergent). Grounded anchors (2026-06-30 re-baseline,
-    credited): mace 7.45 > poleaxe 5.83 > staff 2.52 — the poleaxe sits BELOW the mace in pure concussion (correct:
-    its plate primacy is the beak/spike puncture mode, NOT concussion — see puncture_pressure + systems.select_mode)."""
+    no percussion — the edge-no-percuss caveat is THIS gate, emergent).
+    [PHASE-C FLAG, 2026-07-02] The 2026-06-30 anchors below (mace 7.45 > poleaxe 5.83 > staff 2.52, poleaxe BELOW
+    the mace in pure concussion) were tuned against the Phase-A whole-weapon-lump PoB. Morphology-rearch Phase B's
+    located-part mass model gives the poleaxe a materially more forward, more accurate PoB_frac (0.091->0.206 —
+    its real steel hammer/beak/spike assembly is heavier and sits further forward than the old formula's uniform-
+    wood-shaft residual assumed), which lifts its percussion_authority to ~7.48 — ABOVE the mace's own 7.45. This
+    flips the poleaxe's select_mode choice vs heavy armour from its spike (puncture) to its hammer face
+    (percussion) — test_gap_game_poleaxe_spikes_plate and test_use_mode_selection_emerges_from_primitives now fail
+    on this, DELIBERATELY left red (not silently patched): the underlying mass is more physically correct, but the
+    [SIM-CALIBRATE] engine-scale gains here (PERC_SCALE/PERC_EXP, ADEF_BLUNT/ADEF_POINT) were fit to the OLD PoB
+    and need Phase C's balance-harness recalibration pass to restore the intended plate-defeat tier-list under the
+    now-accurate physics — not a per-weapon mass fudge to force the old numbers back."""
     if w['head'] != 'blunt':
         return 0.0
     pob = derive(w)['PoB_frac']
