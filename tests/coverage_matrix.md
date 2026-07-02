@@ -399,6 +399,23 @@ and step 7, the waypoint primitive itself, still pending):
   question (numerically-dominant vs. thin-and-yielding pinning force; a maneuver time-budget
   separate from the frontal fight's own clock) is flagged for whoever next works PER_CELL=1 combat
   balance, out of this movement/pathing fix's scope.
-- **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); the batched
-  field-digest/gauge re-baseline (task #77); an adversarial review pass over steps 1-7 + gate 4
-  before landing; re-producing the Cannae visualization to confirm the fix end-to-end.
+- **Task #77 full verification.** Field digests re-recorded (`unit_field b1963d03.../cell_field
+  1f0742c5...`), isolated to step 7 (unit_field pins PER_CELL='0', so gate 4 cannot reach it, and
+  it had already diverged before gate 4 landed). All 4 digest modes re-confirmed byte-exact against
+  their (2 unchanged, 2 re-recorded) baselines. Functional probe via `workbench/trace.py`
+  (default toggles, no validator-forced overrides): a `build_envelopment` wing tracked tick-by-tick
+  wheeled from its start (row 36, col 21) to row 14.4, col 32.8 — genuinely wrapping past and behind
+  the defender (col ~20.6), not walking a straight line; `sweep` similarly displaced its subunit
+  laterally (col 10.0→8.0) toward the flank. Both confirm step 7's mechanism works in a real,
+  default-toggle multi-subunit battle, not just the validator harness.
+  `gauge_mb.py` re-run under the new PER_CELL=1 default (per gate 4's own text): single=2/20,
+  multi=4/20 (H1, C7, C2, C6 pass). Confirms the SAME interaction already diagnosed and disclosed
+  above at battle-composition scale: H3/H4(Cannae)/H5/H6 — the actual historical Envelopment/
+  RefusedFlank matchups — lose 0-13% instead of the expected 45-72% band, consistent with an
+  envelopment composition's pinning center routing before its wings complete their maneuver.
+  Recorded, not chased — per this session's (and this repo's) standing discipline against
+  retuning magnitudes to fit a band; the underlying combat-balance/pacing question is the same
+  open follow-up flagged in the gate-4 finding above, not a new one.
+- **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); an adversarial
+  review pass over steps 1-7 + gate 4 before landing; re-producing the Cannae visualization to
+  confirm the fix end-to-end (task #78).
