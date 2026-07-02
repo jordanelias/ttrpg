@@ -219,3 +219,32 @@ Archived entries in tests/coverage_matrix_archive.md
   true-float standoff invariant zero violations (Horseshoe-cav/Line/Arrowhead/mirror-cav); reviewer's
   own two repro cases now cap correctly. Field golden digests re-recorded (intentional behaviour
   change). Mirror cav-vs-cav (30 seeds) now 0-0-30 — fully balanced, no first-mover skew.
+
+## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets
+- `engine.build_army`/`build_unit` now WIRE the previously-inert `Subunit.role`: a spec's `role` is
+  gated by `role_allowed(troop_type, role)` (raises `ValueError` on a disallowed combo — a levy can't
+  take `Shock`), and, in `build_army`, defaults `shape`/`instructions` from `ROLE_SPEC[role]` when the
+  spec doesn't explicitly set them (explicit spec fields still win). Zero existing call site touched
+  (`role` defaults to `None`).
+- New `engine.build_envelopment`/`build_refused_flank` (ED-909's Unit-level "Envelopment"/"Refused
+  Flank" allocation-grid presets): compose `build_army` + Stage C's timed-order queue + the
+  pre-existing, UNMODIFIED `envelop` instruction — center/strong subunits built as given; wing/refused
+  subunits get `stance='hold'` + an auto-queued release order (`tick:N` into `envelop`, or
+  `enemy_range:N` for refused-flank) unless the spec already supplies its own orders. Zero new
+  flanking mechanic, matching Stage C.4's own finding.
+- **Deliberately deferred, not part of this change**: the literal LC-8 retirement of `Horseshoe`/
+  `RefusedFlank` as `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) — the
+  frozen byte-exact grid golden digests were computed against battles using `Horseshoe` directly as a
+  `Subunit.shape` (`bat.py`'s own battery), so removing it would break that non-negotiable invariant.
+  This lands ED-909's Unit-level INTENT (envelopment as an emergent composition) without that break;
+  the legacy `Subunit.shape` values remain valid, now understood as legacy options. Flagged for
+  Jordan's explicit sign-off before any literal removal + re-baseline.
+- `Unit.doctrine`/Aggression: NOT built as new data — Jordan's own ED-907 ratification note already
+  names `stance` as engine-realized Aggression; adding a parallel `doctrine.aggression` field would
+  duplicate it (NERS-N/E, no unneeded apparatus). Cohesion-priority/the allocation-grid UI/intervention
+  cadence are explicitly Jordan-deferred to Stage E — not built here either.
+- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851) — every change is additive
+  (new functions, new optional kwargs defaulting to `None`). `tests/valoria` 55 passed/24 skipped
+  unchanged. Functional: role defaulting/rejection verified directly; `build_envelopment`/
+  `build_refused_flank` construct correctly and a traced battle confirms the wing's order fires
+  (releases from `hold` into `envelop` at the queued tick).
