@@ -91,19 +91,146 @@ rather than left standing:
 Full per-finding evidence, citations, and the complete adversarial-verification transcript are in
 `findings_full.json` (the raw Workflow output) alongside this README.
 
-## 4. Decision gates — Jordan rulings needed before the code below can land
+## 4. Decision gates — RESOLVED (Jordan, 2026-07-02)
 
-1. **Multi-turn re-arm semantics.** Does each engagement turn re-hold stance / re-arm orders /
-   reset instructions for a fresh approach each turn, or do turn-1 releases latch for the whole
-   battle? Governs both the `reset_positions` fix (step 2) and the once-per-battle order behavior
-   (finding 1.10).
-2. **Where `unit_type='ranged'` lives** for the Kite role — a `unit_type` field in `ROLE_SPEC`
-   entries, or a `ranged` flag on the troop type. Gates fix step 3 (ED-1095 repair).
-3. **Waypoint transit facing policy.** During a wide-out leg, does the body face its movement
-   goal, the enemy, or slew between them? The current WHEEL conflates steering target and facing
-   target; Image 1's arc makes them differ for many ticks.
-4. **Should `PER_CELL` flip to `'1'` alongside ED-1089's field flip?** Independent of the maneuver
-   chain, but decides what the flagship visualization actually shows.
+All four gates answered. **Gates 1 and 3 are not parameter choices — they specify new mechanics
+beyond the original 8-step fix plan's scope.** Recorded verbatim, then translated into concrete
+implementation notes. Where Jordan specified a *relationship* but not a *magnitude*, that magnitude
+is marked **PROPOSED, not ratified** — per this repo's evidentiary-primitive discipline, a formula
+gets proposed and confirmed, never silently invented and shipped.
+
+### Gate 1 — Command/Discipline-gated conditional tactics (NEW SYSTEM)
+
+> "Army configuration allows you to set roles and tactics for subunits. Battle turns allow you to
+> issue directives to change to a new role or tactic, but (a) the speed at which the changes occur
+> is affected by command rating, (b) the effectiveness of following new role/instructions is
+> affected by subunit's discipline. The further you deviate from the originally assigned role and
+> instructions, the worse the performance overall for that subunit. Note that we need to allow for
+> conditional tactics/roles so that a bulwark block can reorganize into an arrowhead under certain
+> conditions, mounted archers can transition from holding a block into kiting, etc. The number of
+> options for alternate roles/instructions should be gated by command rating as well, ie if you
+> have poor command your subunits can only do one role/instruction as trained well but if you have
+> high command your subunits could do three different variants."
+
+**Reframes fix-plan step 2 and finding 1.10 entirely** — this is not "does `reset_positions` reset
+or not," it's "what does a mid-battle directive actually cost and how well is it executed." A
+subunit has an **assigned (trained) role/instruction package** set at Army Configuration, plus up to
+N **conditional variants** (Command-gated count) each with its own trigger predicate — this
+generalizes the existing `Order(trigger, behavior)` primitive (`hierarchy/units.py:~203`,
+`core/contact.check_orders`) rather than inventing a new one: "conditional tactics" = pre-declared
+`Order`s; "directive mid-battle" = a player-issued `Order` inserted live. Two NEW effects layer on
+top of what `Order`/`check_orders` already do:
+
+- **(a) Transition speed, gated by Command.** A role/instruction change is not instantaneous —
+  it takes T ticks to complete, T decreasing with Command. **PROPOSED formula** (derived only from
+  the already-ratified Command clamp bounds, `derive_command` → 1..7, ED-899/PP-504 — no new
+  constant invented): `transition_ticks = max(1, 8 - Command)` (Command 1 → 7 ticks; Command 7 →
+  1 tick). Mirrors the existing `PC_BRACE_SETUP_DELAY` "N ticks of continuous state before it
+  counts" pattern (ED-1095/T2), generalized from a fixed 1-tick delay to a Command-scaled one.
+- **(b) Effectiveness during transition, gated by Discipline.** While *actively transitioning* (the
+  T-tick window above), the subunit executes at reduced effectiveness — not the trained role's full
+  performance, not yet the new role's either. **PROPOSED**: a multiplicative combat-pool penalty
+  during the transition window, scaled by `(1 - discipline/DISCIPLINE_MAX)` — reuses the existing
+  discipline-as-0..N-scale convention (`TROOP_TYPE_STATS` discipline values already range ~1-6) and
+  the existing multiplicative-pool-penalty idiom (`_stamina_pool_penalty`, `core/exchange.py`)
+  rather than a new mechanism class. Effectiveness returns to full once the transition completes —
+  this is a **temporary** cost, not a permanent one; "the further you deviate... the worse the
+  performance" is read as "the bigger the transition (return-to-trained-role vs. a never-before-
+  used variant), the more this penalty bites," not as a permanent debuff.
+- **(c) Variant-slot count, gated by Command.** Max number of conditional variants (including the
+  trained default) a subunit may carry. **PROPOSED**, using only the ratified 1..7 Command range
+  split into thirds: Command 1-3 → 1 slot (trained role only, no conditionals); Command 4-5 → 2
+  slots; Command 6-7 → 3 slots.
+- Explicit design examples confirmed in scope: a bulwark-block subunit reorganizing into an
+  Arrowhead under a condition (a shape-changing conditional — composes with fix-plan step 1's
+  `check_drift` node-state fix, since a shape change mid-battle is exactly what that step protects);
+  mounted archers transitioning from a holding block into kiting (a role/instruction-changing
+  conditional, not a shape change).
+
+**Status: mechanism design captured; the three PROPOSED formulas above need Jordan confirmation
+before implementation** (this is new design surface, not a bug fix — treating it with the same
+"propose, don't fabricate" discipline as Stage F's D1 actor-gate earlier this session).
+
+### Gate 2 — `ranged` derives from the troop's assigned weapon; `kite` is weapon-independent
+
+> "Ranged is troop type as per the weapon assigned to troop. Kite is a behaviour of attacking an
+> opponent then fleeing upon countering, which means that it is BEST done with ranged weapons like
+> a bow but can still be executed by cavalry with spears/lances."
+
+**Fully specified, ready to implement, corrects the originally-proposed fix.** Two separate things,
+previously conflated:
+- `unit_type` ('ranged'/'melee') must derive from the troop type's **assigned weapon**, not from the
+  role. `tests/sim/mass_battle/equipment/weapons.py` already has exactly this primitive —
+  `ARSENAL` entries carry a `reach` field valued `'melee'`/`'ranged'` (`weapons.py:23,34-40`) — and
+  its own docstring says "NOT YET WIRED into resolution." Fix: add a `TROOP_TYPE_WEAPON` mapping in
+  `troop_types/registry.py` (e.g. `archers→bow`, `crossbow→crossbow`, `sling→sling`,
+  `artillery→siege`, everyone else → a melee weapon), and derive `unit_type` from
+  `weapons.get(TROOP_TYPE_WEAPON[troop_type]).reach` in `build_army`/`build_unit` when not
+  explicitly overridden by the caller (same override-precedence pattern already used everywhere
+  else in `build_army`).
+- The `kite` **instruction's steering/behavior must not hard-require `unit_type=='ranged'`** — a
+  lance-armed cavalry subunit can execute the same attack-then-flee-on-counter pattern. The
+  `unit_type=='ranged'` gate (`units.py:727`) stays as a gate on **volley fire during the kite**
+  (only a ranged weapon shoots while disengaging), not on whether `kite` steering itself functions.
+
+### Gate 3 — Body facing follows the movement path; attention/FOV target-locks (facing/FOV SPLIT)
+
+> "The unit's face their movement path, but their field of vision is turned towards their target.
+> So this means that while they are very responsive to adjust subformation/movement
+> pattern/whatever if archers launch an attack at them, their sides are still exposed."
+
+**Splits a currently-unified vector into two.** Confirmed by direct read: `_node_facing`/
+`cell_facing_vec` (`units.py:522,629-637,696-699`) is today the SAME vector driving both (i) the
+octagon zone / damage-vulnerability calc and (ii) the FOV gate on reach (`_effective_reach`,
+`units.py:100`, reusing Stage B's `FOV_HALF_DEG`/`REAR_BLIND_DEG`). Jordan's ruling requires two
+separate vectors:
+- **Body/movement facing** (existing `_node_facing`/`cell_facing_vec`, mostly unchanged) — follows
+  the direction of travel (the waypoint-primitive's current goal vector, once fix step 7 lands),
+  NOT the target. This is what the octagon zone reads for flank/rear vulnerability — so a subunit
+  moving sideways-to-a-threat is exposed on its actual side, matching "their sides are still
+  exposed."
+- **Attention/target-lock** (NEW — e.g. `_node_attention`) — turns toward the current
+  target/threat, "very responsive" (i.e. effectively unslewed / near-instantaneous re-lock, in
+  contrast to body facing's existing discipline-gated `_slew_facing` rate). This is what
+  `_effective_reach`'s FOV gate and any future reaction-speed mechanic should read — it governs
+  whether a subunit CAN perceive/respond to a threat quickly, decoupled from whether its BODY is
+  oriented to defend against that threat's direction.
+- Net effect (confirmed as the intended emergent outcome, not just a side effect): a subunit moving
+  laterally can react fast to archer fire (attention locks on immediately) but its body — still
+  facing its movement direction — presents flank, so the octagon zone reads YELLOW/exposed even
+  though the subunit "saw it coming." This is the mechanism that makes flank/rear vulnerability
+  meaningful even against attentive, disciplined troops — a body cannot face two directions.
+
+**Status: mechanism fully specified; needs a slew-rate choice for the new attention vector** (fully
+instantaneous, or a very fast but still discipline-gated `_slew_facing` at a much higher rate than
+body facing — Jordan's "very responsive" reads as functionally instantaneous, proposed as the
+default; flag if a rate is wanted instead).
+
+**SEQUENCING RULING (Jordan, 2026-07-02): Gates 1 and 3 are explicitly DEFERRED until AFTER
+envelopment/pincer/wheeling pathing is confirmed working.** Do not build the conditional-tactics
+system or the facing/attention split on top of movement mechanics that aren't yet proven. Concrete
+effect on the fix plan below: step 2 (`reset_positions`) proceeds now in its MINIMAL form only —
+stop the node-state no-op / turn-boundary corruption so positions correctly continue across turns
+(the direct fix for finding 1.1 and Jordan's core "nonsensical to reset mid-battle" complaint) —
+without yet layering gate 1's Command-gated transition-speed / Discipline-scaled effectiveness /
+variant-slot-count mechanism on top; step 5 (WHEEL 180° stall) proceeds using the EXISTING unified
+facing vector (fixes the stall itself, a real bug independent of the facing/FOV split) rather than
+building gate 3's new attention vector first. Gates 1 and 3 return as follow-up work once fix-plan
+step 7 (the waypoint primitive) is built, validated against step 6's re-pointed acceptance gate, and
+Jordan confirms envelopment/pincer/wheeling reads correctly in a re-run visualization.
+
+### Gate 4 — `PER_CELL` flips to default ON
+
+> "Yes, all options/modules must be turned on."
+
+**Fully specified, matches the ED-1089 precedent exactly.** `PER_CELL` (`config.py:86`) flips
+`'0'`→`'1'` default, same treatment as `FIELD_MOVEMENT`/`PC_NODE_COHESION` under ED-1089: `OFF`
+must keep reproducing the frozen grid digests byte-for-byte (an explicit `PER_CELL=0` pin, not an
+ambient default, per the same `bat.py`/CI-pin discipline ED-1089 established); `ON`-path field
+digests need a deliberate re-record (already required by fix-plan steps 2/4/5/7 above, so this
+folds into the same re-baseline pass rather than adding a second one); `gauge_mb.py` needs a
+re-run under the new default. This unblocks charge shock, brace recoil, cavalry speed, fatigue, and
+the ED-1091/ED-1095 gates in the default/visualized configuration (finding 1.6).
 
 ## 5. Fix plan (dependency-ordered; Sonnet-executable once gates above are answered)
 
