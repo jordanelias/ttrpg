@@ -332,6 +332,7 @@ class Subunit:
         self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         if PC_NODE_COHESION:
             self._init_node_state()
 
@@ -922,6 +923,9 @@ class Subunit:
         pass
 
     def role_at_contact(self, contact_col):
+        # [LC-8] Horseshoe/RefusedFlank branches removed -- zero live callers (confirmed dead code
+        # before this change too; a diagnostic label helper never wired to any resolver), and both
+        # shapes are retired as Subunit.shape values (see geometry.CELL_PATTERN_FN's note).
         if self.shape == "Line": return "normal"
         if self.shape == "Arrowhead":
             pattern = CELL_PATTERN_FN[self.shape](self.tier)
@@ -930,22 +934,12 @@ class Subunit:
                     abs_c = self.starting_position[1] + c + self.cell_offsets_c.get((r, c), 0)
                     if abs(abs_c - contact_col) <= 0.5: return "tip"
             return "flank"
-        if self.shape == "Horseshoe":
-            sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width tier table (F2 derive-target)]
-            wing_w = sizes.get(self.tier, 3)
-            if contact_col == wing_w + self.starting_position[1]: return "center"
-            return "flank_engaged"
         if self.shape == "GappedLine":
             # [canonical: v11 — updated to match equalized gapped_line_cells sizes]
             sizes = {1: 2, 2: 3, 3: 4, 4: 4}
-            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width default]
+            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py gapped_line_cells / §A.3b — half-width default]
             if contact_col == half_w + self.starting_position[1]: return "gap"
             return "flank_engaged"
-        if self.shape == "RefusedFlank":
-            sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: geometry.py refused_flank_cells / §A.3b — width tier table (F2 derive-target)]
-            width = sizes.get(self.tier, 6)  # [canonical: geometry.py refused_flank_cells / §A.3b — width default]
-            if contact_col == (width - 1) + self.starting_position[1]: return "refused"
-            return "engaged"
         return "normal"
 
     # [canonical: Jordan design — cell capacity, discipline-gated merge, midpoint facing on formation breakdown]

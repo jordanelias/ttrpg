@@ -48,11 +48,14 @@ def _run_bat(per_cell):
     for k in _PINNED_OFF:
         env.pop(k, None)
     env['PER_CELL'] = '1' if per_cell else '0'
-    # The underlying compute() finishes in well under a second (confirmed by direct invocation); the
-    # generous timeout absorbs nested-subprocess-spawn overhead observed in some sandboxed dev shells
-    # (a python parent shelling out to a python child), not slowness in bat.py itself.
+    # [LC-8, 2026-07-02] Three of bat.py's ten battery rows now build multi-subunit armies
+    # (build_envelopment/build_refused_flank, replacing the retired single-subunit Horseshoe/
+    # RefusedFlank shapes) -- confirmed via direct timing this raised the grid-mode battery's own
+    # runtime to ~100s (from well under a second single-subunit-only), so the timeout is bumped with
+    # real headroom rather than the previous "absorbs subprocess-spawn overhead" framing, which is no
+    # longer the dominant cost.
     return subprocess.run(['python3', BAT_PY, '--check'], cwd=REPO_ROOT, env=env,
-                          capture_output=True, text=True, timeout=90)
+                          capture_output=True, text=True, timeout=180)
 
 
 def test_byte_exact_unit_mode():

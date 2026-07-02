@@ -39,11 +39,27 @@ DEFAULT_PORT = 8766  # arbitrary local dev port (scene-combat's workbench uses 8
 
 # Named presets mirroring gauge_mb.py's TESTS/CAV_TESTS (a convenience subset, not a re-export —
 # gauge_mb.py is a sibling harness script, not a package module this workbench depends on).
+#
+# [LC-8, ED-909, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+# 'Horseshoe'/'RefusedFlank' are retired as Subunit.shape values; H4/C4 below now build the real
+# Unit-level 'Envelopment' composition (a held center + two wide-placed wings released into 'envelop'
+# on a timer — trace._build_side's 'preset':'envelopment' dispatch, mirroring bat.py's/gauge_mb.py's
+# own _envelop_army helper) instead of a single subunit stamped with a fixed Horseshoe cell pattern.
+_R = _cfg.SIDE_A_START_ROW  # [canonical: config.py SIDE_A_START_ROW]
+_ENVELOP_CENTER = [{'shape': 'Line', 'starting_position': (_R, 9)}]
+_ENVELOP_WINGS = [{'shape': 'Line', 'starting_position': (_R, 3)}, {'shape': 'Line', 'starting_position': (_R, 15)}]
+_ENVELOP_WINGS_CAV = [{'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 3)},
+                      {'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 15)}]
+
 PRESETS = [
     {'id': 'H1', 'label': 'Line vs Line (mirror)', 'a': {'shape': 'Line'}, 'b': {'shape': 'Line'}},
-    {'id': 'H4', 'label': 'Horseshoe vs Arrowhead (Cannae)', 'a': {'shape': 'Horseshoe'}, 'b': {'shape': 'Arrowhead'}},
+    {'id': 'H4', 'label': 'Envelopment vs Arrowhead (Cannae)',
+     'a': {'preset': 'envelopment', 'center': _ENVELOP_CENTER, 'wings': _ENVELOP_WINGS},
+     'b': {'shape': 'Arrowhead'}},
     {'id': 'H7', 'label': 'GappedLine vs Line (manipular)', 'a': {'shape': 'GappedLine'}, 'b': {'shape': 'Line'}},
-    {'id': 'C4', 'label': 'Cavalry envelop vs Line', 'a': {'shape': 'Horseshoe', 'troop_type': 'cavalry', 'speed': 'Fast'}, 'b': {'shape': 'Line'}},
+    {'id': 'C4', 'label': 'Cavalry envelop vs Line',
+     'a': {'preset': 'envelopment', 'center': _ENVELOP_CENTER, 'wings': _ENVELOP_WINGS_CAV},
+     'b': {'shape': 'Line'}},
     {'id': 'C2', 'label': 'Cavalry vs braced Line (repel)', 'a': {'shape': 'Arrowhead', 'troop_type': 'cavalry', 'speed': 'Fast'},
      'b': {'shape': 'Line', 'stance': 'hold', 'discipline': 8, 'instructions': ['brace']}},  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels; raw cav-a LOW]
     {'id': 'R1', 'label': 'Ranged vs Line (open field)', 'a': {'shape': 'Line', 'unit_type': 'ranged', 'stance': 'hold'}, 'b': {'shape': 'Line'}},

@@ -195,10 +195,10 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
                        power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                        speed='Standard'):
     """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
-    ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes (LC-8) and re-realizes them as
-    emergent, multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits —
-    "why is Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question.
-    This is that composition, built entirely from EXISTING, already-verified primitives: build_army
+    ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes and re-realizes them as emergent,
+    multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits — "why is
+    Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question. This
+    is that composition, built entirely from EXISTING, already-verified primitives: build_army
     (placement) + Stage C's timed Order queue + the pre-existing, UNMODIFIED 'envelop' instruction
     (units.py's phase-1/phase-2 wrap logic) — confirmed in Stage C.4's acceptance test to need no new
     flanking mechanic at all.
@@ -210,15 +210,13 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     'envelop' — holding the "bow" while the center absorbs contact, then wheeling wide to close behind
     the enemy line, matching the historical sequencing this preset is named for.
 
-    [Deferred, NOT done here] The literal LC-8 removal of 'Horseshoe'/'RefusedFlank' as Subunit.shape
-    values (retiring them from geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) is NOT part of this
-    change: bat.py's frozen byte-exact golden digests (the grid path's non-negotiable regression
-    oracle) were computed against battles that use 'Horseshoe' as a direct Subunit.shape, so removing
-    it would break that invariant and needs Jordan's explicit sign-off + a deliberate re-baseline, not
-    a default execution of "LC-8 is not a fresh design decision." This preset delivers ED-909's INTENT
-    (envelopment as a Unit-level composition) without that byte-exact-breaking step; the legacy shape
-    values remain available, now understood as legacy/subunit-only options rather than the canonical
-    way to build an envelopment.
+    [LC-8, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+    'Horseshoe'/'RefusedFlank' are now fully retired as Subunit.shape values (removed from
+    geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) — this preset, not a literal shape choice, is the
+    only way to build an envelopment. bat.py's grid-mode byte-exact golden digests were re-baselined
+    for this change (a deliberate, verified behavior change, not a regression): three battery rows now
+    build multi-subunit armies via this function/build_refused_flank instead of a single Horseshoe-
+    shaped subunit.
     [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]"""
     specs = [dict(sp) for sp in center_specs]
     n_center = len(specs)
@@ -246,7 +244,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     order releasing into stance='balanced' — the refused wing does not advance or chase, but will fight
     once an enemy actually closes to that range, matching the historical "declines general engagement,
     holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
-    mechanic. Same LC-8 deferral note as build_envelopment (see its docstring) applies here."""
+    mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
     specs = [dict(sp) for sp in strong_specs]
     n_strong = len(specs)
     for sp in refused_specs:
