@@ -87,6 +87,18 @@ def mechanics_selftest():
 # lower layers (hierarchy.units for the data model, orchestration for the loop) — no resolution logic
 # lives here. This is the P1 seam: engine.py = adapter + router + I/O, never an outcome computation.
 
+# [ED-1090, Jordan-ruled 2026-07-02: "subunits can be as high as 11."] Videogame hard ceiling on
+# simultaneously-commanded subunits — LIFTS the TTRPG hard cap of 3 (mass_battle_v30.md §A.5 Command
+# Rating: "Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)", PP-504/ED-899 — a
+# tabletop-bookkeeping limit a digital UI does not need). Command remains the span-of-control governor
+# per §A.5; this is the absolute ceiling above it. Module-level (not local to build_army) so any other
+# caller — notably the Army Configuration Mode UI (Stage E, workbench) — reads the single source
+# instead of duplicating the literal. NOTE (flagged, not resolved): the ratified Command formula clamps
+# to 1..7, so reaching 11 commanded subunits implies some future Command-exceeding mechanism (e.g.
+# subordinate officers) — that reconciliation is queued for canon, not silently invented here.
+SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
+
+
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                speed='Standard', instructions=(), dr=1, role=None):
@@ -156,15 +168,8 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     it, is byte-exact); net-new function, byte-exact by construction.
     [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
     TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
-    # [ED-1090, Jordan-ruled 2026-07-02: "subunits can be as high as 11."] Videogame hard ceiling on
-    # simultaneously-commanded subunits — LIFTS the TTRPG hard cap of 3 (mass_battle_v30.md §A.5
-    # Command Rating: "Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)",
-    # PP-504/ED-899 — a tabletop-bookkeeping limit a digital UI does not need). Command remains the
-    # span-of-control governor per §A.5; this is the absolute ceiling above it. NOTE (flagged, not
-    # resolved here): the ratified Command formula clamps to 1..7, so reaching 11 commanded subunits
-    # implies some future Command-exceeding mechanism (e.g. subordinate officers) — that reconciliation
-    # is queued for canon, not silently invented in this constructor.
-    SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
+    # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
+    # (Army Configuration Mode's UI) read the single source rather than duplicating the literal.
     if len(specs) > SUBUNIT_CAP:
         raise ValueError(f"build_army: {len(specs)} subunits exceeds the videogame cap of "
                           f"{SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
@@ -287,7 +292,7 @@ def resolve_battle(*args, kind='multi', **kwargs):
     raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
 
 
-_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle"}
+_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle", "SUBUNIT_CAP"}
 
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)
