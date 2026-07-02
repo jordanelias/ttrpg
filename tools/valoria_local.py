@@ -37,6 +37,7 @@ def main(argv):
         ('ci_generation_consistency.py', [],         False),  # warn-only v40 currency gate
         ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
+        ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

@@ -204,6 +204,29 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_names_check.py
 
+  currency-consistency:
+    name: Currency Consistency (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): the self-updating recency gate
+    # (ED-1087) — CURRENT.md stamp vs head commit dates, ID ceilings vs the ledger,
+    # register headers vs bodies, dead "maintained by" pointers, HANDOFF banner heading.
+    # The drift class that rotted the currency surfaces during 2026-06 (PR #50 failure
+    # class). Flip to blocking after a green baseline cycle.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # commit dates per head file
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Stamps, ceilings, registers, maintainers current
+        run: python3 tools/currency_consistency_check.py
+
   contract-conformance:
     name: Module-Contract Conformance (report-only)
     runs-on: ubuntu-latest
