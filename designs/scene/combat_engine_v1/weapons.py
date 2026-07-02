@@ -40,9 +40,11 @@ RECORD SCHEMA (per weapon):
              change).
 DERIVED, NOT STORED (morphology-rearch Phase B6, 2026-07-02 — the last fiat aggregates retired): `reach` — dead,
 superseded by systems.reach_base. `wt` — superseded by weapon_physics.heft() (striking mass × forward-balance),
-read by core.heft_resp. `spd` — superseded by weapon_physics.tempo_shape() (thrustiness − forward-load ratio),
-read by systems.weapon_tempo. `hand` — superseded by weapon_physics.handling() (PoB_frac/hand_guard), read by
-systems.str_demand; the skill-ceiling half of the old category relocates to the future competence layer (plan
+read by core.heft_resp. `spd` — superseded by systems._recovery_mode_commitment (the SAME grip-aware point-of-
+balance/head-mass/how-it's-held physics recoverability_factor models — point of balance, head mass, and grip
+position all matter to balance recovery, not a static geometry ratio), read by systems.weapon_tempo. `hand` —
+superseded by weapon_physics.handling() (PoB_frac/hand_guard), read by systems.str_demand; the skill-ceiling
+half of the old category relocates to the future competence layer (plan
 decision 4/6), not reconstructed here. `gap`/`geo` are DERIVED by the bake below.
 """
 

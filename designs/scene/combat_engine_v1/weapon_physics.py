@@ -398,23 +398,11 @@ def heft(w):
     d = derive(w)
     return (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
 
-TEMPO_THRUST_K = 2.0   # [SIM-CALIBRATE] weight on point_concentration (a thrust-oriented profile recovers along
-                        #   its own line quickly)
-TEMPO_HEADFRAC_K = 1.0 # [SIM-CALIBRATE] weight on the head/total-length RATIO (not raw head_len — a long-gripped
-                        #   weapon with a proportionally short head is not penalised the way a forward-loaded one is)
-
-def tempo_shape(w):
-    """Cadence shape — DERIVED from how thrust-oriented (point_concentration) and how forward-loaded BY LENGTH
-    RATIO (head_len / total_len, not raw magnitude — the plan's explicit correction against re-smuggling weight)
-    the weapon's profile is. A thrust-oriented weapon resets along its own line quickly; a broad, forward-heavy
-    profile commits further per swing. Deliberately a SHAPE ratio, decorrelated from the mass-based wield_heft/
-    heft terms (empirically low correlation vs wield_heft's MoI at authoring time — the same weapon_tempo() call
-    already applies wield_heft as its own separate weight penalty; this must not re-derive that same signal).
-    Pure."""
-    pc = w['geometry']['point_concentration']
-    Lt = w['head_len'] + w['grip_len']
-    head_frac = w['head_len'] / Lt if Lt > 1e-9 else 0.0
-    return TEMPO_THRUST_K * pc - TEMPO_HEADFRAC_K * head_frac
+# tempo_shape() RETIRED at authoring time (a shallow point_concentration/head-length-ratio proxy, corrected before
+# commit): tempo's balance-recovery component is NOT a static geometry ratio — it is the SAME grip-aware physics
+# recoverability_factor already models (point of balance, head mass, and how the weapon is HELD, via WP.at_grip's
+# I_g/S_g at the chosen grip-position). systems.weapon_tempo now reads systems._recovery_mode_commitment (the
+# shared swing-arrest/thrust-retract core, extracted from recoverability_factor) directly instead.
 
 HANDLING_POB_K = 1.00    # [SIM-CALIBRATE] PoB_frac contribution (forward-loaded balance demands more correction)
 HANDLING_GUARD_K = 0.50  # [SIM-CALIBRATE] hand_guard REDUCES demand (a guarded grip is more forgiving to hold)
@@ -496,10 +484,11 @@ if __name__ == '__main__':
         print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
     print()
 
-    print("STAGE 2/3 — derived agility/percussion/defence affinities + Phase-B6 heft/tempo_shape/handling:")
-    print(f"{'weapon':12} {'agil':>5} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18} {'heft':>6} {'tempo':>6} {'handl':>6}")
+    print("STAGE 2/3 — derived agility/percussion/defence affinities + Phase-B6 heft/handling (tempo's balance-")
+    print("recovery term now lives in systems._recovery_mode_commitment — Combatant/cfg-aware, not shown here):")
+    print(f"{'weapon':12} {'agil':>5} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18} {'heft':>6} {'handl':>6}")
     for n, w in WEAPONS.items():
         a = defense_affinities(w)
         print(f"  {n:10} {agility(w):5.2f} {percussion_authority(w):5.2f} "
               f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f} "
-              f"{heft(w):6.2f} {tempo_shape(w):6.2f} {handling(w):6.2f}")
+              f"{heft(w):6.2f} {handling(w):6.2f}")
