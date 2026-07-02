@@ -358,3 +358,37 @@ Archived entries in tests/coverage_matrix_archive.md
   restores the placement schematic rather than staying on the replay, and confirmed the cap: adding
   an 11th side-A subunit succeeds, a 12th is blocked client-side with the ED-1090-citing alert
   matching the server's own message text.
+
+## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1093)
+- **T1 (actor-gate).** New `PC_RECOIL_CHARGER_GATE` (config.py, default ON): the reciprocal
+  charge-recoil (`PC_CHARGE_RECOIL`) now additionally requires the charging atom's
+  `troop_type == 'cavalry'` literally — a defender no longer recoils a charger just for having
+  marginally higher per-tick momentum than a braced wall. `mounted_archers` explicitly excluded
+  (see T4 — they should never be closing to melee at all).
+- **T2 (brace-setup delay).** New `PC_BRACE_SETUP_DELAY` (config.py, default ON) +
+  `Subunit._brace_since_tick` (hierarchy/units.py: stamped `0` at construction for a subunit
+  deployed already braced; stamped to the firing tick by `core/contact.check_orders` when an
+  `Order` adds `'brace'` mid-battle; reset to `-1` on removal). `resolution._subunit_braced`/
+  `_unit_braced` are now `t`-parameterized (`t=None` preserves the old instantaneous check) and
+  require ≥1 full tick of continuous brace before treating a subunit as braced, for either the
+  charge-shock defensive benefit or the reciprocal recoil. `t` threaded through
+  `resolve_engagements`/`resolve_engagements_cascading`/`run_battle`'s call site.
+- **T3 (reach-gate, structural only).** `PC_RECOIL_CHARGER_GATE` additionally requires the
+  defender's `reach_for(troop_type) >= ` the charger's (`troop_types.registry.reach_for`, the
+  existing Stage-A primitive) — a charger with genuinely longer reach can strike a wall whose
+  weapons can't reach back, so the wall can't retaliate. `TROOP_TYPE_REACH` stays deliberately
+  empty (everyone defaults `REACH_SHORT`), so this half is a no-op today pending a separate
+  troop-type-to-reach-class ruling — not populated speculatively.
+- **T4 (mounted-archer default kiting).** `engine.build_army`: a spec with
+  `troop_type == 'mounted_archers'` and no explicit role/shape/instructions implicitly defaults
+  `role='Kite'` instead of silently closing to melee. Any explicit caller choice of role, shape,
+  or instructions always wins over this default. `build_unit` unchanged (no "unspecified shape"
+  case exists there — its `shape` parameter is a required positional).
+- Verified: `bat.py --check` byte-exact across all 4 digest modes (`unit`/`cell`/`unit_field`/
+  `cell_field`) against the frozen baselines; `tests/valoria` pytest suite 81 passed, 10 skipped.
+- **Also discovered, NOT fixed here (flagged in HANDOFF.md):** the `'envelop'`/`'sweep'`
+  instructions and the overhang `'wheel'` maneuver (`hierarchy/units.py` `advance_cells`
+  ~L802-861) are gated `if PER_CELL and ...` and only exist on the legacy grid path —
+  `_node_advance` (the coordinate-field path, DEFAULT since ED-1089) has no equivalent steering at
+  all, so every subunit currently just walks a straight line toward the enemy centroid on the path
+  actually used by default. Under investigation.
