@@ -237,9 +237,9 @@ jobs:
     # holonic doctrine ED-1083: conformance is deterministic, make it cheap and standing).
     # Current tree carries ~21 pre-existing violations / ~64 warnings — the ED-1051 backlog
     # (doc:null modules, cross-scale edges without transitions, unregistered Key types).
-    # This surfaces the count on every PR so the backlog can only shrink knowingly; flip to
-    # blocking when ED-1051 triage reaches zero.
-    continue-on-error: true
+    # STEP-level continue-on-error (the freshness-gate precedent): the job stays green while
+    # the log carries the standing count — a permanently red X for a known, docketed backlog
+    # trains alarm-blindness. Remove the step flag (blocking) when ED-1051 triage reaches zero.
     permissions:
       contents: read
     steps:
@@ -249,7 +249,8 @@ jobs:
           python-version: '3.11'
       - name: Install PyYAML
         run: pip install pyyaml
-      - name: Contracts conform to the Key Type Registry + canonical sources
+      - name: Contracts conform to the Key Type Registry + canonical sources (report-only)
+        continue-on-error: true
         run: |
           python3 skills/valoria-module-adjudicator/scripts/contract_adjudicator.py \
             --contracts references/module_contracts.yaml \

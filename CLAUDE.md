@@ -179,9 +179,12 @@ Do not represent the skeleton as a runnable head-start.
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
 - **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
-  `deprecated/`, or hardcode `/home/claude`): `compliance_check`, `extract_values`, `extract_proper_nouns`,
+  `deprecated/`, or hardcode `/home/claude`): `extract_values`, `extract_proper_nouns`,
   `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
-  They fail opaquely — don't assume "tool exists ⇒ rule enforced."
+  They fail opaquely — don't assume "tool exists ⇒ rule enforced." (`compliance_check` is
+  half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
+  BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
+  compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
