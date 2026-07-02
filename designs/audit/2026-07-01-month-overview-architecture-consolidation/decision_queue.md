@@ -1,6 +1,6 @@
 # Jordan Decision Queue — 2026-07-01
 
-## Status: LIVE — the single consolidated list of gated decisions as of this session
+## Status: FROZEN at PR open (2026-07-01) — the consolidated list of gated decisions as of this session; HANDOFF.md "Next actions" points here
 
 Everything below is **surfaced, not decided**. The consolidation session touched none of
 these outcomes. Ordered roughly by how much downstream work each unblocks.

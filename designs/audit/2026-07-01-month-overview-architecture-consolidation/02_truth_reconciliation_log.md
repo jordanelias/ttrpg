@@ -1,6 +1,6 @@
 # Truth Reconciliation Log — 2026-07-01
 
-## Status: LIVE during the consolidation session; FROZEN at PR open
+## Status: FROZEN at PR open (2026-07-01) — all 14 rows executed; see 01_consolidation_execution.md for commits
 
 Every stale/falsified claim found by the month-overview exploration, with its fix. All were
 verified against the working tree before fixing (never from memory or a filename).

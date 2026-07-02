@@ -187,6 +187,26 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-01 — **Month-overview + architecture-consolidation session executed** (this branch;
+  12+ commits, ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item
+  Jordan decision queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`).
+  Landed: LB-21 round-3 ID re-block · two silently-dead enforcement pieces revived
+  (`broken_dependency_checker` ledger check; non-executable tracked pre-commit hook) · CLAUDE.md
+  §6 falsified claims corrected (ED-1050/ED-1054 states) · holonic container doctrine v1
+  **PROPOSED** (`designs/architecture/holonic_container_doctrine_v1.md`, ED-1083 — Jordan-vetoable)
+  from the ingested 2026-07-01 workflow spec · Combat Pool collapsed to `max(5, History+6)` across
+  every live stale site (ED-1084) · `values_master.yaml` QUARANTINED · names_index v2 (proper-noun
+  fold; mirror 23→83) · session-log machinery → `deprecated/session_machinery/` · combat engine
+  runtime **numpy-free** (σ-kernel via `sim.autoload.sigma_leverage`; state kernel engine-owned;
+  ED-1085) with new container-hygiene guard · **first typed Godot params artifact**
+  (`references/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
+  contract-conformance CI (report-only; ED-1051 backlog surfaced per-PR) · CLAUDE.md §10 fable
+  tier + relay patterns; workplan **J-38** (propagation-spec authorship) docketed ·
+  `currency_consistency_check` self-updating recency gate (CI + SessionStart banner; ED-1087) ·
+  freshness pins refreshed + gate flipped **blocking** (LB-23 residual closed). Three scope
+  defaults adopted Jordan-vetoable (values_master quarantine-not-regenerate; Godot seed included;
+  freshness flip). Rulings made: **none** — everything gated sits in the decision queue.
+
 - 2026-07-01 — **Scene-combat engine v1 merged to `main`; lost Phase 4/5 provenance recovered.** PR #40
   (`d4bf2af3`, 78 commits, 2026-07-01T04:46:19Z) merged the ratify-ready branch; PR #47 (`8fbc4b66`,
   2026-07-01T06:48:32Z) merged the Phase-A Track-2 cleanup (HEAD_MODE dedup, dead `pob_frac`/`percussion`
@@ -312,10 +332,19 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 ## Next actions
 
 _(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
-verified live max ED-1080, allocated ED 1081–1087 to the month-overview consolidation from
+verified live max, allocated ED 1081–1087 to the month-overview consolidation from
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
 per the file's protocol; never max+1.)_
 
+- **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
+  review, the consolidation execution/reconciliation logs, and the **single consolidated
+  23-item Jordan decision queue** live at
+  `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see `decision_queue.md`
+  first — every gated item below is indexed there). Highest-leverage queued decisions:
+  **doctrine ratification** (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`),
+  **J-38 propagation-spec authorship** (workplan v5 §3 — unblocks conversion register #1 +
+  `engine_clock`/ED-1051), Track-2 residuals (below), field-ON, the values_master
+  regenerate-vs-retire call, and the duplicate compilation homes.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
