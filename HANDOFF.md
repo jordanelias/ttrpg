@@ -440,6 +440,30 @@ per the file's protocol; never max+1.)_
   **J-38 propagation-spec authorship** (workplan v5 §3 — unblocks conversion register #1 +
   `engine_clock`/ED-1051), Track-2 residuals (below), field-ON, the values_master
   regenerate-vs-retire call, and the duplicate compilation homes.
+- **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59);
+  this file previously had zero record of any of it — closing that continuity gap now.** Coordinate-field
+  true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
+  (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/
+  `build_refused_flank` Unit-level presets (Stage D, ED-907/908/909) are all merged. **LC-8 executed
+  2026-07-02 (ED-1088):** `Horseshoe`/`RefusedFlank` retired as `Subunit.shape` values per Jordan's
+  go-ahead ("those are emergent outcomes") — only Line/Arrowhead/GappedLine/Column remain valid
+  subunit shapes; envelopment/refused-flank exist only as the Unit-level presets above.
+  `bat.py`'s grid-mode golden digests were deliberately re-baselined (approved behavior change).
+  The workbench (`tests/sim/mass_battle/workbench/`) was extended to visualize the new multi-subunit
+  presets — see `tests/coverage_matrix.md`'s 2026-07-02 entries for what shipped and two real bugs
+  found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
+  bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
+  the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Still open, Jordan-gated:**
+  the `FIELD_MOVEMENT=1` default-flip (Stage A step 7 — byte-exact grid path stays the oracle either
+  way); Stage E (Army Configuration Mode / deployment UI) and Stage F (charge/depth/equipment physics)
+  are scoped but not started; a flagged-not-fixed pre-existing gap in the reciprocal charge-recoil
+  (fires from the rear on an enveloped+braced unit — `gauge_mb.py` C7's own comment, out of scope for
+  LC-8). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
+  marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
+  that landed — don't conflate "Envelopment shipped" with "Path B shipped."
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an

@@ -55,12 +55,15 @@ button.primary { background: var(--accent); color: #10141b; font-weight: 600; bo
     <select id="preset"></select>
     <h2>Side A</h2>
     <label>Shape</label>
-    <select id="a-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
+    <!-- [LC-8, ED-909] Horseshoe/RefusedFlank retired as Subunit.shape values -- only Line/Arrowhead/
+         GappedLine/Column remain valid single-subunit shapes; Envelopment/RefusedFlank now exist only
+         as Unit-level presets (see the composed-army option below and the Preset dropdown). -->
+    <select id="a-shape"><option value="__composed__" disabled>— composed army (see preset) —</option><option>Line</option><option>Arrowhead</option><option>GappedLine</option><option>Column</option></select>
     <label>Troop type</label>
     <select id="a-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
     <h2>Side B</h2>
     <label>Shape</label>
-    <select id="b-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
+    <select id="b-shape"><option value="__composed__" disabled>— composed army (see preset) —</option><option>Line</option><option>Arrowhead</option><option>GappedLine</option><option>Column</option></select>
     <label>Troop type</label>
     <select id="b-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
     <div class="row">
@@ -116,6 +119,10 @@ let frames = [];      // one entry per 'positions' trace event (a full spatial s
 let events = [];      // full raw event list (for the tick log panel)
 let cursor = 0;
 let playing = null;
+// The currently selected preset's raw spec (if any) — a multi-subunit preset side (one with a
+// 'preset' key: army/envelopment/refused_flank) can't be represented by the Shape/Troop dropdowns
+// at all, so runBattle() must use this directly rather than always rebuilding from the dropdowns.
+let selectedPreset = null;
 
 async function loadMode() {
   const r = await fetch('/api/mode'); mode = await r.json();
@@ -126,18 +133,44 @@ async function loadMode() {
       : 'Running the INTEGER GRID baseline. To visualize the field candidate, restart the server with FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1.');
 }
 
+function setSideFieldsEnabled(prefix, enabled, placeholderLabel) {
+  const shapeSel = document.getElementById(prefix + '-shape');
+  const troopSel = document.getElementById(prefix + '-troop');
+  shapeSel.disabled = !enabled;
+  troopSel.disabled = !enabled;
+  shapeSel.title = enabled ? '' : (placeholderLabel || 'multi-subunit preset — see label');
+  // Show the explicit placeholder rather than leaving a stale shape name from a PRIOR preset
+  // selected-but-greyed-out, which would misleadingly claim this side is e.g. "GappedLine" when it's
+  // actually a composed multi-subunit army built from the preset's own spec.
+  if (!enabled) shapeSel.value = '__composed__';
+}
+
 async function loadPresets() {
   const r = await fetch('/api/presets'); const presets = await r.json();
   const sel = document.getElementById('preset');
   sel.innerHTML = '<option value="">— custom —</option>' +
     presets.map((p, i) => `<option value="${i}">${p.id} — ${p.label}</option>`).join('');
   sel.onchange = () => {
-    if (sel.value === '') return;
+    if (sel.value === '') {
+      selectedPreset = null;
+      setSideFieldsEnabled('a', true); setSideFieldsEnabled('b', true);
+      return;
+    }
     const p = presets[parseInt(sel.value)];
-    document.getElementById('a-shape').value = p.a.shape;
-    document.getElementById('a-troop').value = p.a.troop_type || 'infantry';
-    document.getElementById('b-shape').value = p.b.shape;
-    document.getElementById('b-troop').value = p.b.troop_type || 'infantry';
+    selectedPreset = p;
+    // A multi-subunit side (army/envelopment/refused_flank) has no single 'shape' — the dropdown
+    // can't represent it, so disable it rather than silently showing a stale/wrong value.
+    const aCustom = !p.a.preset, bCustom = !p.b.preset;
+    setSideFieldsEnabled('a', aCustom, 'composed army — see preset label');
+    setSideFieldsEnabled('b', bCustom, 'composed army — see preset label');
+    if (aCustom) {
+      document.getElementById('a-shape').value = p.a.shape;
+      document.getElementById('a-troop').value = p.a.troop_type || 'infantry';
+    }
+    if (bCustom) {
+      document.getElementById('b-shape').value = p.b.shape;
+      document.getElementById('b-troop').value = p.b.troop_type || 'infantry';
+    }
   };
 }
 
@@ -152,8 +185,12 @@ function buildSpec(prefix) {
 async function runBattle() {
   document.getElementById('run').textContent = 'Running…';
   document.getElementById('winner-banner').style.display = 'none';
+  // A selected preset's multi-subunit side (has its own 'preset' key) is used verbatim — the
+  // dropdowns cannot express it; a plain-shape side still comes from the dropdowns (so the two can
+  // mix, e.g. Envelopment (preset) vs Arrowhead (dropdown), as several presets below actually do).
   const body = {
-    a: buildSpec('a'), b: buildSpec('b'),
+    a: (selectedPreset && selectedPreset.a.preset) ? selectedPreset.a : buildSpec('a'),
+    b: (selectedPreset && selectedPreset.b.preset) ? selectedPreset.b : buildSpec('b'),
     seed: parseInt(document.getElementById('seed').value) || 0,
     max_battle_turns: parseInt(document.getElementById('maxturns').value) || 8,
     kind: 'multi',

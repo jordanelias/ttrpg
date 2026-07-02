@@ -89,16 +89,25 @@ def mechanics_selftest():
 
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
-               speed='Standard', instructions=(), dr=1):
+               speed='Standard', instructions=(), dr=1, role=None):
     """Faction→unit ADAPTER: construct a single-subunit Unit. The canonical public constructor — the
     wrapper's adapter duty. Deployment follows the engine convention (faction A faces −row from
     SIDE_A_START_ROW; B faces +row from SIDE_B_START_ROW); `anchor_col` is the deployment column. Draws
-    the data model from hierarchy.units and stats as given; resolution stays in core/. No outcome logic."""
+    the data model from hierarchy.units and stats as given; resolution stays in core/. No outcome logic.
+
+    [Stage D, ED-907 L3] `role` (default None, byte-exact for every existing call) is validated via
+    troop_types.registry.role_allowed(troop_type, role) — raises ValueError on a disallowed combo —
+    and stored on the Subunit; unlike build_army, shape/instructions here stay caller-controlled (both
+    are already required/explicit in this single-subunit constructor's own signature, so there is no
+    role->shape defaulting ambiguity to resolve)."""
+    if role is not None and not role_allowed(troop_type, role):
+        raise ValueError(f"role {role!r} not allowed for troop_type {troop_type!r} "
+                          f"(allowed: {roles_for(troop_type)})")
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
                  starting_position=(start_row, anchor_col), advance_dir=advance_dir,
-                 unit_type=unit_type, instructions=tuple(instructions))
+                 unit_type=unit_type, instructions=tuple(instructions), role=role)
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
@@ -112,12 +121,12 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     subunits, but that constructor is gauge-harness-local; this is the public, workbench-facing
     equivalent (mirrors its spec-dict-list shape). `build_unit` (single-subunit) is untouched.
 
-    specs: list of dicts, one per subunit. Each may set shape (required), tier (default 3), troop_type
-    (default 'infantry'), unit_type (default 'melee'), starting_position (default: staggered down the
-    battlefield from this faction's start row — mirrors make_mixed_unit's own deployment-layout
-    convenience default; CALIBRATED, not historically cited, see sim_verification_ledger.json), stance,
-    instructions, troops, concentration, and per-subunit power/discipline/morale/morale_start/dr/
-    stamina/stamina_max overrides.
+    specs: list of dicts, one per subunit. Each may set shape (required UNLESS role is given — see
+    below), tier (default 3), troop_type (default 'infantry'), unit_type (default 'melee'),
+    starting_position (default: staggered down the battlefield from this faction's start row — mirrors
+    make_mixed_unit's own deployment-layout convenience default; CALIBRATED, not historically cited,
+    see sim_verification_ledger.json), stance, instructions, troops, concentration, and per-subunit
+    power/discipline/morale/morale_start/dr/stamina/stamina_max overrides.
 
     A canonical troop type (TROOP_TYPE_STATS) draws its §B.2 Power/Discipline/Morale presets via
     Subunit.of_type unless the spec overrides them; a non-canonical type (e.g. bare 'infantry')
@@ -132,8 +141,21 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     starting_position (the whole point of exposing placement here) must still advance toward the enemy
     on its own side's correct axis on the legacy (non-FIELD_MOVEMENT) path.
 
-    Zero existing call site touched — net-new function, byte-exact by construction.
-    [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors]"""
+    [Stage D, ED-907 L3] `role` WIRES the previously-inert Subunit.role: a spec may set `role` (one of
+    ROLE_SPEC's keys, e.g. 'ShieldWall'/'Skirmish'/'Shock') instead of `shape`, gated by
+    troop_types.registry.role_allowed(troop_type, role) — a role not in that troop type's menu
+    (TROOP_TYPE_ROLES) raises ValueError at construction time (fails loud, matching the Order trigger
+    validation precedent) rather than silently building an incoherent army. When role is given and
+    `shape`/`instructions` are NOT also explicitly set in the spec, both default from ROLE_SPEC[role]
+    ('the FM position->role model': a role names a typical shape + instruction package). An explicit
+    shape/instructions in the spec always wins over the role's defaults. role is also stored on the
+    resulting Subunit (build_army/build_unit never set it before this — the reason it was confirmed
+    inert: nothing ever populated it outside ad-hoc test scripts).
+
+    Zero existing call site touched (role defaults to None -> every existing spec dict, which never set
+    it, is byte-exact); net-new function, byte-exact by construction.
+    [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
+    TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     subs = []
@@ -141,12 +163,24 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         sp = dict(sp)
         pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
         tt = sp.pop('troop_type', 'infantry')
-        shape = sp.pop('shape')
+        role = sp.pop('role', None)
+        if role is not None and not role_allowed(tt, role):
+            raise ValueError(f"role {role!r} not allowed for troop_type {tt!r} "
+                              f"(allowed: {roles_for(tt)})")
+        role_spec = ROLE_SPEC.get(role) if role is not None else None
+        shape = sp.pop('shape', None)
+        if shape is None:
+            if role_spec is None:
+                raise ValueError("build_army spec needs 'shape' or a 'role' present in ROLE_SPEC")
+            shape = role_spec['shape']
         tier = sp.pop('tier', 3)
+        instructions = sp.pop('instructions', None)
+        if instructions is None:
+            instructions = role_spec['instructions'] if role_spec is not None else ()
         kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
-                  instructions=tuple(sp.pop('instructions', ())), advance_dir=advance_dir)
+                  instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
-                  'troops', 'concentration'):
+                  'troops', 'concentration', 'orders'):
             if k in sp:
                 kw[k] = sp.pop(k)
         subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
@@ -154,6 +188,75 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
                 subunits=subs, dr=dr, stance=stance, speed=speed)
+
+
+def build_envelopment(center_specs, wing_specs, name, faction, *,
+                       release_tick=4,  # [canonical: sim_verification_ledger.json — CALIBRATED, mirrors Stage C.4's acceptance-test hold duration, not independently historically cited]
+                       power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
+                       speed='Standard'):
+    """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
+    ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes and re-realizes them as emergent,
+    multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits — "why is
+    Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question. This
+    is that composition, built entirely from EXISTING, already-verified primitives: build_army
+    (placement) + Stage C's timed Order queue + the pre-existing, UNMODIFIED 'envelop' instruction
+    (units.py's phase-1/phase-2 wrap logic) — confirmed in Stage C.4's acceptance test to need no new
+    flanking mechanic at all.
+
+    center_specs/wing_specs: build_army-style per-subunit spec lists. Centers are placed and tasked
+    exactly as given (typically a hold/anvil role at the front). Wings additionally get stance='hold'
+    (a spec's own explicit stance still wins) and, UNLESS the spec already queues its own `orders`, a
+    `tick:{release_tick}` order that releases them into stance='balanced' + instructions including
+    'envelop' — holding the "bow" while the center absorbs contact, then wheeling wide to close behind
+    the enemy line, matching the historical sequencing this preset is named for.
+
+    [LC-8, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+    'Horseshoe'/'RefusedFlank' are now fully retired as Subunit.shape values (removed from
+    geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) — this preset, not a literal shape choice, is the
+    only way to build an envelopment. bat.py's grid-mode byte-exact golden digests were re-baselined
+    for this change (a deliberate, verified behavior change, not a regression): three battery rows now
+    build multi-subunit armies via this function/build_refused_flank instead of a single Horseshoe-
+    shaped subunit.
+    [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]"""
+    specs = [dict(sp) for sp in center_specs]
+    n_center = len(specs)
+    for sp in wing_specs:
+        sp = dict(sp)
+        sp.setdefault('stance', 'hold')
+        specs.append(sp)
+    unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
+                       morale=morale, morale_start=morale_start, dr=dr, speed=speed)
+    for atom in unit.subunits[n_center:]:
+        if not atom.orders:
+            released = tuple(dict.fromkeys(atom.instructions + ('envelop',)))  # de-dup, order-preserving
+            atom.orders = (Order(f'tick:{release_tick}', {'stance': 'balanced', 'instructions': released}),)
+    return unit
+
+
+def build_refused_flank(strong_specs, refused_specs, name, faction, *,
+                         refuse_range=3,  # [canonical: sim_verification_ledger.json — CALIBRATED, reuses the existing PC_PIN_REACH adjacency-scale convention, not independently historically cited]
+                         power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
+                         speed='Standard'):
+    """[Stage D, ED-909] Unit-level 'Refused Flank' allocation-grid preset (Leuctra 371 BC /
+    Leuthen 1757): the other emergent army posture ED-909 names alongside Envelopment. strong_specs
+    (the attacking wing/center) are placed and tasked as given; refused_specs (the withheld wing) get
+    stance='hold' and, UNLESS the spec already queues its own `orders`, an 'enemy_range:{refuse_range}'
+    order releasing into stance='balanced' — the refused wing does not advance or chase, but will fight
+    once an enemy actually closes to that range, matching the historical "declines general engagement,
+    holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
+    mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
+    specs = [dict(sp) for sp in strong_specs]
+    n_strong = len(specs)
+    for sp in refused_specs:
+        sp = dict(sp)
+        sp.setdefault('stance', 'hold')
+        specs.append(sp)
+    unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
+                       morale=morale, morale_start=morale_start, dr=dr, speed=speed)
+    for atom in unit.subunits[n_strong:]:
+        if not atom.orders:
+            atom.orders = (Order(f'enemy_range:{refuse_range}', {'stance': 'balanced'}),)
+    return unit
 
 
 def resolve_battle(*args, kind='multi', **kwargs):
@@ -172,7 +275,7 @@ def resolve_battle(*args, kind='multi', **kwargs):
     raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
 
 
-_WRAPPER_API = {"build_unit", "build_army", "resolve_battle"}
+_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle"}
 
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)

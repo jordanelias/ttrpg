@@ -219,3 +219,89 @@ Archived entries in tests/coverage_matrix_archive.md
   true-float standoff invariant zero violations (Horseshoe-cav/Line/Arrowhead/mirror-cav); reviewer's
   own two repro cases now cap correctly. Field golden digests re-recorded (intentional behaviour
   change). Mirror cav-vs-cav (30 seeds) now 0-0-30 — fully balanced, no first-mover skew.
+
+## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets
+- `engine.build_army`/`build_unit` now WIRE the previously-inert `Subunit.role`: a spec's `role` is
+  gated by `role_allowed(troop_type, role)` (raises `ValueError` on a disallowed combo — a levy can't
+  take `Shock`), and, in `build_army`, defaults `shape`/`instructions` from `ROLE_SPEC[role]` when the
+  spec doesn't explicitly set them (explicit spec fields still win). Zero existing call site touched
+  (`role` defaults to `None`).
+- New `engine.build_envelopment`/`build_refused_flank` (ED-909's Unit-level "Envelopment"/"Refused
+  Flank" allocation-grid presets): compose `build_army` + Stage C's timed-order queue + the
+  pre-existing, UNMODIFIED `envelop` instruction — center/strong subunits built as given; wing/refused
+  subunits get `stance='hold'` + an auto-queued release order (`tick:N` into `envelop`, or
+  `enemy_range:N` for refused-flank) unless the spec already supplies its own orders. Zero new
+  flanking mechanic, matching Stage C.4's own finding.
+- **Deliberately deferred, not part of this change**: the literal LC-8 retirement of `Horseshoe`/
+  `RefusedFlank` as `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) — the
+  frozen byte-exact grid golden digests were computed against battles using `Horseshoe` directly as a
+  `Subunit.shape` (`bat.py`'s own battery), so removing it would break that non-negotiable invariant.
+  This lands ED-909's Unit-level INTENT (envelopment as an emergent composition) without that break;
+  the legacy `Subunit.shape` values remain valid, now understood as legacy options. Flagged for
+  Jordan's explicit sign-off before any literal removal + re-baseline.
+- `Unit.doctrine`/Aggression: NOT built as new data — Jordan's own ED-907 ratification note already
+  names `stance` as engine-realized Aggression; adding a parallel `doctrine.aggression` field would
+  duplicate it (NERS-N/E, no unneeded apparatus). Cohesion-priority/the allocation-grid UI/intervention
+  cadence are explicitly Jordan-deferred to Stage E — not built here either.
+- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851) — every change is additive
+  (new functions, new optional kwargs defaulting to `None`). `tests/valoria` 55 passed/24 skipped
+  unchanged. Functional: role defaulting/rejection verified directly; `build_envelopment`/
+  `build_refused_flank` construct correctly and a traced battle confirms the wing's order fires
+  (releases from `hold` into `envelop` at the queued tick).
+- Adversarial review found one real bug, fixed: `build_army` never popped/forwarded an `orders` key
+  from a spec dict, so the two presets' documented "unless the spec already supplies its own orders"
+  escape hatch was dead code — a caller-supplied custom order was silently dropped and always
+  overwritten by the auto-queued release order. Fixed by adding `orders` to `build_army`'s forwarded
+  per-subunit override keys. Re-verified: a spec-supplied order now survives; the auto-release still
+  fires when no custom orders are given. Byte-exact and pytest unaffected (both re-confirmed).
+
+## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909)
+- Jordan-approved 2026-07-02 ("correct, retire them. those are emergent outcomes."): executes the LC-8
+  retirement Stage D deliberately deferred. `Horseshoe`/`RefusedFlank` removed from
+  `geometry.CELL_PATTERN_FN` and `config.MIN_DISCIPLINE`; only `Line`/`Arrowhead`/`GappedLine`/`Column`
+  remain valid subunit-level shapes. Envelopment/refused-flank now exist ONLY as Unit-level
+  compositions via `engine.build_envelopment`/`build_refused_flank` (Stage D).
+- `hierarchy/units.py`: dead `Horseshoe`/`RefusedFlank` branches removed from `role_at_contact` (zero
+  live callers, confirmed before/after); each `Subunit` now snapshots its spawn position at
+  construction (`_spawn_position`).
+- `orchestration.reset_positions` fixed: previously reset EVERY subunit in a Unit to one shared
+  shape-derived anchor column each battle-turn — silently correct only for single-subunit units, but
+  wrong for any multi-subunit army (collapsed wide-placed wings/escorts back to center every
+  re-engagement turn). Now restores each subunit to its OWN spawn column. Verified byte-exact-
+  preserving for every existing single-subunit matchup via git-worktree diff.
+- `bat.py`/`gauge_mb.py`: grid-mode battery/gauge rows using the retired shapes migrated to
+  `build_envelopment`/`build_refused_flank` army-builder callables; new golden digests recorded and
+  verified byte-exact (`unit`/`cell` both). `test_mass_battle_byte_exact.py`'s CI subprocess timeout
+  bumped 90s→180s (multi-subunit battery rows measurably slow the grid-mode digest run).
+- `workbench/trace.py`: `run_traced_battle` gains a `'preset'` spec dispatch (`army`/`envelopment`/
+  `refused_flank`), so the visualizer can build real multi-subunit Unit-level compositions.
+  `workbench/server.py`'s `H4`/`C4` presets rebuilt on the Envelopment composition.
+- G5 byte-exact both grid modes pass against re-baselined digests. `tests/valoria` 81 passed/10 skipped.
+  `gauge_mb.py`'s migrated rows and all workbench presets (grid and `FIELD_MOVEMENT=1`) run without
+  error.
+
+## 2026-07-02 — mass_battle workbench: multi-subunit preset dispatch + visualization battery
+- `workbench/trace.py`'s `run_traced_battle`/`_build_side` extended to accept a `'preset'` spec key
+  (`army`/`envelopment`/`refused_flank`) dispatching to `engine.build_army`/`build_envelopment`/
+  `build_refused_flank`, alongside the existing single-subunit `build_unit` spec shape — the
+  visualizer can now show real multi-subunit Unit-level compositions, not just single-subunit shapes.
+- **Adversarial finding during dogfooding, fixed:** `static/index.html`'s preset-selection JS only
+  ever populated the simple Shape/Troop dropdowns and always rebuilt the POST body from THEM in
+  `runBattle()` — it had no way to represent a multi-subunit preset spec (no `.shape` key) at all.
+  Selecting a multi-subunit preset (H4/C4 and the two new ones below) and clicking Run would have
+  silently run whatever stale shape values were left in the dropdowns, not the actual preset. Fixed:
+  `runBattle()` now uses a selected preset's multi-subunit side verbatim (`selectedPreset.a`/`.b`)
+  when it carries a `'preset'` key, and the dropdown is disabled + shown as `— composed army (see
+  preset) —` instead of a misleading stale shape name. Also removed `Horseshoe`/`RefusedFlank` from
+  the Shape dropdown's `<option>` list entirely (LC-8 retired them as `Subunit.shape` values —
+  selecting either would have raised `ValueError` at construction).
+- `workbench/server.py`: two new PRESETS exercising genuinely symmetric multi-subunit-vs-multi-subunit
+  battles (both sides field 3+ independently-tasked subunits at once, not just an attacker vs a
+  lone-subunit defender) — `M3` (Envelopment vs Envelopment, mirror) and `OBL` (RefusedFlank vs
+  Envelopment, mirrors `bat.py`'s "oblique" battery row).
+- Verified via a Playwright-driven run through all 8 presets in both `FIELD_MOVEMENT=1
+  PC_NODE_COHESION=1 PER_CELL=1` and the integer-grid baseline: each preset's deployment frame shows
+  the correct subunit count/placement, the fixed dropdown correctly reflects composed-army sides, and
+  H4 (Envelopment vs Arrowhead) visibly reproduces the Cannae pattern (B routed, HP 131/400, A's wings
+  wrapped around B's remaining position) by the final frame. `tools/ci_sim_fabrication_check.py` clean
+  on both changed files (one new literal in `server.py`'s `_REFUSED_REFUSED` cited).
