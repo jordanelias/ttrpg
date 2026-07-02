@@ -24,8 +24,71 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     fractional-Ob idea → contest stays δσ TN7 (unaffected), open a substrate probe (reopens CR6 uniformity), non-blocking.
     Good news: `faction.py` already has BG-Vote/Succession/committee-band → Consensus mostly promote-existing.
     IDs reserved: `contest_rebuild` = ED 1055-1079 / PP 800-809.
-  - **NEXT: Stage 1** — build `sigma_leverage.py` + parity; promote the 9-module kernel to `sim/personal/contest/`
-    re-skinned + `build_contest`/`resolve_contest` wrapper; propagate CR1/CR2/CR3; golden-trace + 151-test parity → Gate A.
+  - **Stage 1a DONE + committed (d64e2ffe).** `sim/autoload/sigma_leverage.py` — numpy-free σ sibling, byte-identical
+    to the oracle, 623 tests green; two-σ-kernels debt retired.
+  - **Stage 1b DONE + committed.** 9-module kernel promoted to `sim/personal/contest/`, rewired onto the σ sibling
+    (no third kernel); `degree` = clean carry-across (pool-aware integer degree added to sigma_leverage, distinct from
+    `dice_engine.Degree` combat enum); old stub → `contest_legacy_stub.py`; 815 sim tests + both importers green.
+  - **D0-3 RESOLVED → HYBRID** (present-as-Ob display over the δσ substrate; CR6 upheld, not reopened). Memo:
+    `designs/audit/2026-06-30-contest-fractional-ob-probe/MEMO.md`; decision → ED-1055. Probe also surfaced a LIVE
+    combat bug (`dice_engine.roll_pool` ignores `tn`; TN5/6/8 weapons rolled at TN7 rate) → spun out as a
+    combat-lane task (`task_210994b7`, out of contest scope).
+  - **Stage 1c DONE + merged into main (PR #44, all CI green).** v30 re-skin (8 proceedings, Persuasion Track
+    banding, 4 adjudicator types) + `build_contest`/`resolve_contest` wrapper + MECHANICS registry, mirroring
+    `tests/sim/mass_battle/engine.py`. 888 tests green.
+  - **Stage 1d / Gate A DONE — 3 forks ratified by Jordan (2026-07-01).** Propagated CR1 (wrapper, confirmed
+    already-realized)/CR2 (σ-substrate, confirmed already-realized)/CR3 (three trackers: Concentration+Face+
+    Persuasion, Composure retired — contest-scope only) into prose (`social_contest_v30.md` §4/§8 + co-files,
+    `params/contest.md`) + code (`sim/personal/contest/` Face primitive) + ledger (ED-1055, ED-1056). Packet:
+    `designs/audit/2026-07-01-contest-gate-a-packet/GATE_A_packet.md`. **Ratified:** (1) Face scale-binding =
+    combo formula, not a straight rescale — `Face_max = Charisma×3` (ceiling, player-build-controlled) +
+    `Face_current = round(Standing/10 × Face_max)` (position within ceiling, earned through play, Standing's
+    kernel math/Readiness/leak feed untouched); (2) Composure retirement scoped to the contest tracker only
+    (knots/combat/conviction untouched, confirmed); (3) provisional EDs use non-basis citation phrasing until
+    ratified (standing policy). A small Sonnet-tier finalize pass is applying the resolved formula + 4 agreed
+    nits (dead imports, ED-1056 recitation, prose wording, TRACKERS sourcing); that pass also caught the ratified
+    Face formula shipped with zero test coverage and added 10 targeted kernel checks (boundary cases, midpoint
+    round-half-to-even, non-mutation, live-tracking). **Committed (884cf89a).** 1041 sim+valoria + 244 kernel
+    checks green. Push to `claude/happy-shaw-da0f1d` updates the open tracking PR ([ttrpg#44]) — Jordan merges,
+    not this session.
+  - **NEW standing requirement (decision 5, 2026-07-01): the player-interaction model is a concrete deliverable,
+    not a late audit.** First-draft walkthrough seeded ahead of Stage 6 so every later stage designs toward it:
+    `designs/audit/2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md` — setup screen,
+    the exchange loop (Appraise / style-choice cards / roll-and-resolve / Face+Concentration bars), the
+    resolution screen, and how Negotiation/Inquiry/Consensus should each look different from Agôn's track meter
+    so Stage 4 doesn't converge them onto one UI. Stage 2 now owns authoring the Style/Venue flavor text; Stage 3
+    now owns the Appraise-reveal boundary for `armature_position`; Stage 4 now owns each game's interaction
+    shape; Stage 6 finalizes+ratifies the model this seeds. Plan file amended accordingly.
+  - **Gate A committed (`884cf89a` mechanics + `98ecdf41` player-model), PR #44 all-green.**
+  - **Stage 2 / Gate B (dictionaries) DONE + committed.** Built Venue×8 / Adjudicator×4 / Style×4 /
+    InteractionType×4 typed dicts (`sim/personal/contest/dictionaries.py`, new module) + Style/Venue
+    flavor text; closed ED-137 (Panel adjudicator). Packet:
+    `designs/audit/2026-07-01-contest-gate-b-packet/` (pre-ratification snapshot + the authoritative
+    `GATE_B_closeout_audit.md`). **Ratified and independently re-verified in actual code (not just ledger
+    text):** Panel votes weighted-by-standing (ED-1057; reuses the existing `Adjudicator.discipline` field,
+    NOT the contestant `Standing` name — no new state invented); Panel reachability = rebind Guild
+    Arbitration's adjudicator → Panel (ED-1059; NO appeals — "let the decision ride"; roster stays 8);
+    Terminal Doubt = terminal-value-everywhere, banded (PersuasionTrack) + tally (TallyAtClose) branches
+    both specified (ED-1060); Guilds "GM picks" boost = context-derived from the venue's dominant
+    ethos/pathos/logos via the existing `Appeal` machinery (ED-1061; literal "GM picks" text removed from
+    both prose heads). ED-1055/1056/1058 flipped to `status: ratified` (a bookkeeping fix — they were left
+    `provisional` only because two earlier finalize-workflow attempts were killed by infrastructure
+    issues — API 401/529 errors and a background-task stop, unrelated to the work itself — before
+    flipping their own metadata; the ratifications themselves happened earlier via Jordan's answers).
+    1041 sim+valoria + 319 kernel tests green; freshness gate clean (5/5 fresh); no scope drift (grep
+    confirmed knots/combat/conviction untouched, Composure retirement still contest-scoped).
+  - **SOURCE-RESEARCH GROUNDING (found 2026-07-01 via files13.zip → already in repo, NOT orphaned).** The
+    deliberation-critique source research
+    `designs/audit/2026-06-28-social-contest-deliberation-critique/source-research/` (a 3-part
+    Renaissance-deliberation / machination-games-lens / model-testing trilogy) is READ-AND-CITED-BUT-NOT-APPLIED:
+    it shaped the plan's four-games / alea / consensus / commitment-store / armature *shape* via `critique.md`,
+    but its rich detail (Dowlen small-pool weighted lottery; `liberum veto` as self-undermining equilibrium;
+    Padgett robust action; Putnam two-level bargaining) is not yet in the code. Plan amended: Stage 3 (armature)
+    and Stage 4 (four games) agonists must now READ the source-research trilogy directly, not just the critique
+    distillation, so this commissioned scholarship actually reaches the implementation.
+  - **NEXT: Stage 3** (rhetoric grounding + adjudicator armature — CR4 stasis, CR5 self-gating, the
+    Style×Conviction dot-product aimed at the judge — reading the source-research trilogy per above,
+    not just the critique distillation).
 
 - **Scene-combat engine v1 — MERGED to `main`** (`d4bf2af3`, PR #40, 2026-07-01T04:46Z; Track-2 cleanup
   `8fbc4b66`, PR #47, 2026-07-01T06:48Z). `design/scene-combat-v1` is now fully redundant — its history is
@@ -152,28 +215,48 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       build-forward (abilities-as-access, §C, contact axis, WS-7) remains design-gated — full detail recovered in
       `designs/scene/combat_engine_v1/phase4_5_plan_v1.md` (the Phase 4a game-theoretic layer, Phase 4b access
       catalogue, Phase 4c §C fix, Phase 5 contact axis — none of this was previously committed to the repo).
-    - **Decision-prep packets for both Track-2 residuals, built 2026-07-01 (no code flipped, no recommendation
-      made):** `designs/audit/2026-07-01-scene-combat-track2-decision-prep/` — `wt_spd_deleak_report.md` (measured
-      before/after, revised to ground the tempo candidate properly — see below) and
-      `wp_reach_authority_comparison.md` (tabulates what `WP.reach()`/`authority()` vs their live counterparts
-      currently compute — not a constant scale factor apart, and `WP.authority()` overlaps TWO different live
-      concepts depending on head type, not one). Both reproducible via the `.py` harnesses in that folder.
-      **wt/spd findings:** the damage-path `wt→wield_heft`-reuse candidate roughly **doubles the spear's
-      damage** across every armour tier (+10 to +14 flat), likely compounding the already-known spear-dominance
-      problem. The tempo-path candidate went through a revision: a first draft (bare `agility()` substitution)
-      was rejected as under-grounded — it captures only swing-inertia, missing balance/hands/thrust-vs-swing.
-      The corrected candidate reuses `systems.recoverability_factor` (the engine's own commitment=recovery
-      model, which already blends weight+balance+hands+thrust-vs-swing) at baseline. It first surfaces a
-      grounding validation: current `spd` already correlates with `1/recoverability_factor` at **r=+0.878**
-      (vs only +0.359 with thrust-vs-swing alone) — the hand-tuned constants seem to already approximate this
-      physics informally. Under the corrected candidate, the **staff** (not the spear) is the largest mover
-      (+1.137 tempo, nearly doubling — correctly centre-balanced/low static-moment, matching the recovery/grip
-      model's "gathered pole" finding), while the **spear's tempo move shrinks to +0.075** (vs +0.409 in the
-      rejected draft) — `recoverability_factor` correctly weighs the spear's large static moment against its
-      thrust-favoring geometry, narrowing the earlier compounding concern for tempo specifically (the damage
-      concern stands on its own). **Caveat, unresolved:** the tempo candidate double-counts weight/hands against
-      `weapon_tempo`'s existing `pen` term (which already penalises both via `wield_heft`) — de-duplicating
-      that overlap is itself a design call, not resolved by this packet.
+    - **Track-2 residuals now carry RECONCILED RECOMMENDATIONS (2026-07-01), awaiting Jordan's ratification —
+      not yet applied to any code.** Full record (measurement packets + an agonist/antagonist debate, synthesis,
+      adversarial skeptic pass, and reconciliation for each residual — every stage independently re-verified
+      the prior stage's citations against actual source, not just trusted them):
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/track2_residual_recommendations.md` (+
+      `wt_spd_deleak_report.md`, `wp_reach_authority_comparison.md`, and the two reproducible `.py` harnesses).
+      **wt/spd cost-path de-leak — split by path:** damage-path (`core.heft_resp`→`wield_heft`-reuse) is
+      **ready for ratification** for every weapon *except the spear* (doubles its damage +10 to +14 flat,
+      compounding the already-known spear-dominance problem — carve it out, re-measure once the separate
+      approach-phase fix lands). Tempo-path (`weapon_tempo`'s `spd`→`recoverability_factor`) is **NOT ready** —
+      confirmed structural double-counting against `pen`'s existing `wield_heft` weight/hands terms (not a
+      style question); needs a decomposed candidate isolating the thrust-vs-swing shape from the weight/hands
+      magnitude before it's even measurable. **`WP.reach()`/`authority()` canonical-home — ready for
+      ratification, in the "do nothing structural" direction:** retire both docstrings' "pending decision"
+      framing to "retired diagnostic, not a live candidate" (no functional change) — `reach()` fails on its own
+      evidence (non-affine, non-monotonic ratio to the live path; wiring it unscaled would zero the spear's
+      close-combat penalty, its core archetype); `authority()`'s only plausible target is `heft_resp`, i.e. the
+      *other* residual — deciding it here would resolve that residual by the back door. Three explicit
+      "Jordan design taste" questions (not settled by the record) are listed in the memo's final sections.
+    - **Polearm close-quarters grounding (2026-07-01), a NEW gap found while investigating the spear-dominance
+      anomaly — Jordan's overhang/choke-handling critique confirmed as real, unmodeled physics.** Full record:
+      `designs/audit/2026-07-01-scene-combat-track2-decision-prep/polearm_close_quarters_grounding.md`
+      (4 research angles + engine verification + synthesis + independent skeptic re-check of every source +
+      reconciliation). Two claims tested: **(A) choking up on an asymmetric pole carries a real handling cost
+      beyond a scalar MoI reduction** — form-only grounded (T2/T3 consensus: ARMA "difficult to turn the butt
+      end of a spear around if you're surrounded"; Escamilla & Fleisig 2009 *J. Appl. Biomech.* confirms
+      choke-up measurably lowers implement velocity via trailing-mass drag, not a free win) — no source gives a
+      magnitude. **(B) a thrust degrades to a shaft/butt strike at close range/high choke** — well-grounded,
+      directly attested: *Le Jeu de la Hache*'s **"demy-hache"** (independently re-verified this session, not
+      just trusted) names the exact shaft zone between the hands used to strike/push when the head can't be
+      brought to bear; Fiore's *Zogho Stretto* and Winn's *Broadsword & Singlestick* corroborate. **Confirmed
+      against actual code (not just suspected): neither exists anywhere in the engine.** `WP.at_grip` is a
+      single forward-only pivot with no trailing-mass/rear-overhang term; `select_mode`/`afforded_heads` never
+      read `grip_position` at all, so nothing ever converts a thrust to a shaft-strike. `grip_choke_max=1.0`
+      for the spear (identical to the staff) is the specific numeric root of the 94-96% win-rate anomaly — the
+      engine currently grants a choked-up spear free, unlimited regrip with no asymmetry tax and no thrust-range
+      floor. **Ready to greenlight as a concrete build task:** a new `overhang_penalty(c,cfg)` (trailing-mass
+      moment `m_trail*L_behind²` feeding `recoverability_factor`) + an `available_extension` hard gate in
+      `select_mode` that substitutes a shaft-strike coupling at high choke/close range, + a matching
+      `lunge_quality` consistency check (a skeptic-flagged addition, folded in). **Jordan's call, not settled by
+      the record:** the `K_OVERHANG`/`MIN_POINT_CLEARANCE` magnitudes — no source of any tier gives a number;
+      both are [FIAT]/[SIM-CALIBRATE], to be set by playtesting against the 94-96% anomaly this targets.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a

@@ -1,0 +1,281 @@
+﻿[
+    {
+        "round":  1,
+        "verdicts":  [
+                         {
+                             "claim":  "social_contest_v30.md (a non-infill _v30 design doc) changed but references/canonical_sources.yaml is NOT in the changeset; ci_co_file_checker.py Rule 1 (lines 37-44) hard-fails on commit. The RATIFIED propagation list itself demands \u0027register the redesigned doc\u0027.",
+                             "ruling":  "upheld",
+                             "severity":  "blocker",
+                             "reason":  "Verified: git diff --name-only origin/main shows designs/scene/social_contest_v30.md but NOT references/canonical_sources.yaml (which does track the doc + its blob-SHA pin at lines 167-172). ci_co_file_checker.py Rule 1 unconditionally requires canonical_sources.yaml whenever any designs/*_v30.md (non-infill) changes; it fires in CI mode on the committed diff. The local \u0027all rules satisfied\u0027 pass is a false pass because ci_common diffs origin/main...HEAD and nothing is committed yet. Gate A requires a committable/mergeable proposal, so this is a real blocker. Fix is cheap (add the canonical_sources.yaml SHA-pin refresh to the changeset) and does not need Jordan.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The prose cites provisional ED-1055 with basis language (\u0027superseded by\u0027/\u0027ratified\u0027/\u0027re-homed per\u0027) on 4 lines, taking tools/validate_ed_citations.py (authoritative CI gate) from 0 to 4 OPEN_AS_BASIS violations, exit 1 on commit.",
+                             "ruling":  "upheld",
+                             "severity":  "blocker",
+                             "reason":  "I ran PYTHONIOENCODING=utf-8 python tools/validate_ed_citations.py: EXIT=1, \u00274 citation-integrity violation(s)\u0027 at social_contest_v30.md:196/431/594 and params/contest.md:126, all citing ED-1055 (status=provisional). _is_resolved() (lines 96-99) excludes \u0027provisional\u0027. These 4 citations are entirely diff-introduced (0 at HEAD). Green-to-red on an authoritative gate; blocks a committable Gate-A proposal. The immediate reword fix (add a non-basis marker like \u0027provisional, pending Gate-A\u0027) is available without Jordan; the deeper policy question (should provisional-canon-of-record EDs be citable-as-basis, given RATIFIED_2026-06-01 and ED-1080 are both \u0027provisional\u0027) is a Jordan call surfaced in open_decisions.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "social_contest_v30.md line 208, inside the agonist-rewritten Â§4/Step-6 block, cites the Concentration-formula supersession as \u0027ED-902 2026-06-04\u0027 ALONE, violating the D0-minor discipline (must cite ED-901 + ED-902 + ED-933); the same block at line 195 correctly cites the full chain, so the doc now cites the same supersession two ways.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "Verified: line 208 reads \u0027(Canonical per derived_stats_v30 Â§14.1, ED-902 2026-06-04; supersedes the struck Focus Ã— 3.)\u0027 while line 195 (same edited Â§4 block) reads \u0027ED-901 (STRUCK FocusÃ—3) + ED-902 (coefficients + Cognitionâ†’Focus engine fix) + ED-933 (params propagation)\u0027. This is the exact D0-minor item (DECISIONS.md lines 52-55) already caught once in Stage 0; it sits inside content the agonist rewrote, so it is in-scope to fix. Mis-cited ED chain in edited content -- not overrulable.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "params/prose define Face as CharismaÃ—3 (3-21) Rattled strain-buffer (verbatim rename of the retired Composure magnitude), while the kernel binds Face==Standing (0-10, START 5, ethos-built, feeds Readiness/leak). Two mechanically incompatible things share one name; the draft\u0027s own claim \u0027Face IS Standing, byte-identical\u0027 is contradicted by its own params row.",
+                             "ruling":  "upheld",
+                             "severity":  "major",
+                             "reason":  "Verified: params/contest.md line 109 \u0027Face | Charisma Ã— 3 | 3â€“21 | Contest-local ethos/standing buffer\u0027 and \u0027At strain â‰¥ Face: Rattled mark\u0027 vs primitives.py:31-37 Standing(LO=0,HI=10,START=5, build/strip by degree) with primitives.py:88 \u0027Face = Standing\u0027. Ranges (3-21 vs 0-10), drivers (Rattled strain vs ethos-build), and consumers (âˆ’1D Argue pool vs Readiness/leak) all differ. This is the CLAUDE.md Â§5 \u0027defined N ways\u0027 pipeline hazard instantiated for Face, and it is a genuine proseâ†”code binding defect, not a naming nicety. The params ChaÃ—3 magnitude being deliberately unbound from the kernel Standing scale is itself a design question that should be flagged to Jordan (open decision), but the internal-contradiction defect (asserting byte-identity while the params row says otherwise) must be corrected regardless.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The CR3 Face tracker is decorative in resolution: nothing in the resolution path reads _Side.face/_Side.concentration; Standing.strip() is never called in the contest kernel (Face is monotonic-up, no strip/strain channel); the prose \u0027strainâ†’Rattledâ†’âˆ’1D Argue pool\u0027 behaviour is unimplemented. face_tracker WIRED over-states the CR3 binding, and the omega-vetted stamina/standing/merits tradeoff is NOT realized.",
+                             "ruling":  "upheld",
+                             "severity":  "major",
+                             "reason":  "Verified by grep: no \u0027.strip(\u0027 anywhere in sim/personal/contest/*.py (only narrative.py string .strip()); \u0027.face\u0027/\u0027.concentration\u0027 read ONLY by _kernel_tests.py; resolution (_advance/_reception) reads c.standing/c.cred_frac() directly, never the Face name; Rattled/âˆ’1D/strain absent from code. face_tracker=\u0027WIRED\u0027 is technically defensible ONLY because the underlying Standing IS live in resolution -- but the Face NAME and the CR3 two-sided tradeoff are not. The fix is representational honesty, not new mechanics this stage (CR5 attack/strip is explicitly Stage-3 scope per the brief): ED-1056 and the Gate-A report must state Face is established as a NAMED alias + test surface, that Standing has no strip/strain channel wired, and that the RATIFIED_2026-06-01 line-20 stamina/standing/merits tradeoff is NOT yet realized. As drafted the ED-1056 language (\u0027established as a tracked primitive... its interaction with the kernel\u0027) slightly over-claims a two-sided resource. Upheld as major on the honesty-of-representation + missing-strip-channel grounds; this is a scope-honesty fix, not a demand to build CR5.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "MECHANICS row three_trackers-\u003eTRACKERS is marked WIRED, but TRACKERS is a pure documentation dict with zero resolution consumers (read only in _kernel_tests.py + the registry self-reference), inconsistent with the author\u0027s own standard that downgraded audience_resistance to PARTIAL for the identical \u0027derived/documented but not plumbed\u0027 character.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "Verified by grep: TRACKERS is read only in primitives.py (def), the resolver/wrapper imports, wrapper.py:213/236 registry self-reference, and _kernel_tests.py. No resolution path consumes it, exactly like audience_resistance which the author honestly downgraded to PARTIAL (wrapper.py:243). three_trackers is the lone WIRED registry row with no resolution consumer, over-claiming relative to the registry\u0027s own accuracy standard. Downgrade to PARTIAL (or DOC) and adjust the _kernel_tests.py CR3 assertion at 722-723. Note face_tracker-\u003eFace-\u003eStanding legitimately stays WIRED (Standing is live). Minor consistency defect.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "Dead wiring: resolver.py:15-17 imports Face, TRACKERS, RETIRED_TRACKERS from .primitives but uses none of them; wrapper.py:24 imports RETIRED_TRACKERS unused; the _Side.face/.concentration accessors are referenced only by tests.",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "Verified: resolver.py references Face only in a comment (line 179), TRACKERS/RETIRED_TRACKERS never; wrapper.py imports RETIRED_TRACKERS but never uses it. Harmless dead imports (not the special-cased-branch anti-pattern -- Face is a clean alias-primitive). Drop the unused imports; keep the accessors as canonical-name surface if a future stage will consume them. Nit.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "Face creates no NEW reachable player decision beyond the pre-existing Standing/ethos choice; building Face is the same Appeal.ETHOS/support move that already built Standing, with no Face-specific decision, no holding cost, and no opponent pressure -- failing the repo \u0027every decision generates churn\u0027 axiom.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "Verified: policy.py build-ethos is unchanged; ContestView exposes no \u0027face\u0027 field; since Face only rises (no strip) and the opponent cannot pressure it, no Face-vs-Concentration-vs-Persuasion tradeoff is surfaced to any decision point this stage. This is acceptable AS scoped IF the report is honest the CR5 attack channel (which makes Face two-sided) is deferred to Stage 3 -- but then the claim \u0027establishes Face as a TRACKED RESOURCE that can bind and change outcomes\u0027 must be downgraded to \u0027establishes the Face name/registry entry; the reachable Face decision arrives with the CR5 attack channel\u0027. Same honesty fix as the decorative-Face finding; upheld as minor.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "In the split-standing PROTOTYPE, _Side.face returns Credit (earned ethos) rather than Rank (ascribed station), silently deciding a design question the ratified text left open -- the params Face=ChaÃ—3 magnitude is an ascribed-attribute-derived value that reads closer to Rank than to earned Credit.",
+                             "ruling":  "deferred",
+                             "severity":  "minor",
+                             "reason":  "Verified: resolver.py:184 \u0027def face: return self.credit if self.split else self.standing\u0027. split_standing is an opt-in PROTOTYPE (Venue.split_standing default False) and CR3 does not ratify the split, so binding Face to one arm (Credit) of an unratified prototype pre-commits a fork the ratified text leaves open. Low blast radius (default-off path), so DEFERRED with an ED stub: mark the split-case binding \u0027[ASSUMPTION: Face-\u003eearned Credit, not ascribed Rank]\u0027 or leave it undefined this stage. Fold the annotation into ED-1056\u0027s residual notes; not a Gate-A blocker.",
+                             "spawns_ed":  "Annotate the split-standing Face-\u003eCredit binding (resolver.py:184) as an [ASSUMPTION] or defer it; record in ED-1056 residuals."
+                         },
+                         {
+                             "claim":  "(behavior_regression lens, duplicate of the ED-citation finding) validate_ed_citations.py fails exit 1 with 4 OPEN_AS_BASIS violations -- a green-to-red regression on an authoritative gate, all from the draft\u0027s own ED-1055 basis citations.",
+                             "ruling":  "upheld",
+                             "severity":  "blocker",
+                             "reason":  "Same defect and same gate as the ED-1055 blocker above (I ran the validator: EXIT=1, 4 violations). Upheld but NOT counted as an additional distinct blocker -- it is the regression-lens view of the one ED-citation gate failure. Recording it so the fix (reword to non-basis marker, or flip ED-1055/1056 to a terminal status if Jordan ratifies) is tracked once.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "(behavior_regression lens, duplicate of the co-file finding) ci_co_file_checker.py Rule 1 fails on commit because canonical_sources.yaml is absent from the changeset -- a false local pass masks a green-to-red co-file regression.",
+                             "ruling":  "upheld",
+                             "severity":  "blocker",
+                             "reason":  "Same defect and same gate as the canonical_sources.yaml co-file blocker above. Upheld but NOT double-counted as a distinct blocker -- the regression-lens restatement of the one co-file failure. Fix: add references/canonical_sources.yaml (SHA-pin refresh for social_contest_v30 design+infill) to the worktree changeset.",
+                             "spawns_ed":  null
+                         }
+                     ],
+        "tests_green":  true,
+        "open_decisions":  [
+                               "Composure-retirement blast radius (the guardrail item, correctly flagged by the agonist and NOT resolved by fiat). RATIFIED_2026-06-01 CR3 names only \u0027Composure-as-buffer\u0027 in the contest and is silent corpus-wide. The draft implemented the SCOPED retirement (social-contest tracker only), leaving knots_v30 Â§4.2 \u0027Knot-as-Composure-buffer\u0027, combat, conviction, and the glossary untouched. Residual coupling: the Knot buffer absorbs \u0027Composure damage\u0027 dealt IN a contest, which is now Face strain, but knots/threadwork still say \u0027Composure\u0027. Choose: (a) scoped-rename-only [implemented, minimal blast radius, recommended by the draft] vs (b) corpus-wide Composure-\u003eFace rename [single clean name but exceeds what CR3 ratified].",
+                               "Should provisional-canon-of-record EDs be citable AS BASIS? The proposal cites ED-1055 (status=provisional) with \u0027superseded by\u0027/\u0027ratified\u0027 basis phrasing, which tools/validate_ed_citations.py rejects (exit 1, 4 violations) because _is_resolved() excludes \u0027provisional\u0027. This is a genuine tension: RATIFIED_2026-06-01 is itself \u0027provisional canon-of-record\u0027 and ED-1080 (the combat re-baseline) is also filed \u0027provisional\u0027. Either (a) the fold-in EDs get reworded to non-basis/forward-pointer phrasing (works today, no policy change), (b) ED-1055/1056 flip to a terminal status (\u0027ratified\u0027/\u0027resolved\u0027) the moment Jordan ratifies at Gate A -- which is what Gate A is for, or (c) the validator\u0027s accepted-basis set is broadened to include \u0027provisional\u0027. (a)/(b) unblock Gate A without changing gate policy; (c) is the standing policy call. Note: Gate-A ratification (flipping ED-1055/1056 to a terminal status) is the natural resolution and would clear all 4 gate violations at once.",
+                               "Face magnitude binding: params/prose keep Face at CharismaÃ—3 (range 3-21, the re-homed Composure/Rattled magnitude) while the kernel binds Face==Standing (range 0-10, ethos-built). Confirm whether the two \u0027Face\u0027 scales are DELIBERATELY different surfaces (v30-surface ChaÃ—3 buffer vs abstract kernel Standing) with an explicit paramsâ†”code binding note, or whether they should be reconciled to one scale. As drafted the prose asserts \u0027Face IS Standing byte-identical\u0027 while the params row says ChaÃ—3/3-21 -- that internal contradiction must be corrected regardless of which way you decide."
+                           ],
+        "escalate":  null
+    },
+    {
+        "round":  2,
+        "verdicts":  [
+                         {
+                             "claim":  "The four social_debate SHA pins in references/canonical_sources.yaml are raw-CRLF-byte hashes, not the git blob OIDs that will be committed; they pass freshness ONLY on this Windows CRLF worktree and read STALE on any LF/Linux/CI checkout, AND the agonist overwrote the CORRECT, unchanged pin for social_contest_v30_index.md with a wrong value. (merged canon_fidelity + code_architecture majors -- same defect.)",
+                             "ruling":  "upheld",
+                             "severity":  "major",
+                             "reason":  "REPRODUCED. `git hash-object params/contest.md` = c407b5a7 (LF, what git commits) but the pin is 475ee6e7 = sha1 of raw CRLF disk bytes (verified: crlf present True, rawblob sha1 == 475ee6e7). Every OTHER pin in the file follows the hash-object convention (mass_battle_infill pin c4639775 == git hash-object exactly; mass_combat 4ea8793e == git hash-object exactly). freshness_gate.py:47 reads open(path,\u0027rb\u0027).read() so it passes on THIS CRLF checkout ([GATE PASSED], 5 FRESH) while its own docstring lines 37-38 claim the SHA is \u0027Identical to the blob OID GitHub stores\u0027 -- false for these pins. git diff --stat on the index is EMPTY (unmodified; co-file check confirms it was never edited), its original pin 601365398 already == git hash-object, yet the agonist changed it to 4806d3a5 claiming to \u0027correct CRLF-drift\u0027 -- it INTRODUCED drift into a clean pin. NOT a blocker: freshness runs report-only in CI (.github/workflows/valoria-ci.yml:347-349 continue-on-error:true), so this fails no gate -- but it defeats the very integrity signal the co-file fix established, will read STALE post-commit, and corrupts an unmodified file\u0027s pin. Remedy (I verified the target OIDs via git hash-object): contest.md=c407b5a7..., v30=a36bd81b..., infill=3878b630..., and REVERT index to 601365398... .",
+                             "spawns_ed":  "ED stub (contest_rebuild block): before Gate-A ratification, replace the four social_debate canonical_sha pins with git-hash-object (LF-normalized) OIDs -- contest.md=c407b5a70102d3999d88988a942d2dffdf97bda0, social_contest_v30.md=a36bd81ba6c570d722c72489479bccf76a37577f, social_contest_v30_infill.md=3878b630d374b2288e7668e1cf468f3a55234b63 -- and REVERT the unmodified social_contest_v30_index.md pin to its correct original 601365398399b133b2592b4ae94d1ab61df5445a. Generate via `git hash-object \u003cfile\u003e` or `freshness_gate.py --update` on an LF checkout, never by hashing raw CRLF bytes. Also fix the freshness_gate.py:37-38 docstring, which falsely claims the raw-bytes SHA is \u0027identical to the blob OID GitHub stores\u0027."
+                         },
+                         {
+                             "claim":  "social_contest_v30.md line 214 (the primary prose Concentration definition, directly under the new CR3 table) still cites ED-902 ALONE, while the new CR3 table (line 195) and the new Â§8 summary (line 444) both carry the full ED-901+ED-902+ED-933 chain -- reintroducing the exact \u0027ED-902 alone\u0027 pattern D0-minor flagged.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "CONFIRMED by direct read: line 214 = \u0027Canonical per derived_stats_v30 Â§14.1, ED-902 2026-06-04; supersedes the struck Focus x 3\u0027 -- no ED-901, no ED-933. DECISIONS.md D0-minor: \u0027The CR3 Focus x3 supersession must cite the full chain: ED-901 + ED-902 + ED-933. Not ED-902 alone.\u0027 The agonist added the CR3 table (195) and Â§8 row (444) with the full chain but left the adjacent pre-existing line-214 definition citing ED-902 alone, so the same doc now cites the same formula two ways. NOT a CI failure -- validate_ed_citations.py reports 0 violations because ED-902 is a valid existing ED (the checker validates citation integrity, not intra-doc chain-completeness). Real hygiene inconsistency; one-line fix (append the chain to line 214).",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The \u0027two representations of Face\u0027 open-decision note is really a THREE-representation situation: in split-standing mode resolver.py _Side.face returns Credit (earned ethos, excludes ascribed Rank), a third distinct object the note does not mention.",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "VERIFIED empirically: with split=True, s.face is s.credit (True) and the side has no .standing; with split=False, s.face is s.standing. resolver.py:184 `return self.credit if self.split else self.standing`. The prose note and the Face=Standing alias only reconcile Cha x3 buffer vs fused Standing, omitting that split mode binds .face to Credit. Cosmetic completeness on an already-flagged open decision; folds into the Face scale-binding item for Jordan.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "resolver.py imports Face, TRACKERS, RETIRED_TRACKERS (lines 15-17) and wrapper.py imports RETIRED_TRACKERS (line 24) but none are referenced in the module bodies -- dead imports. (merged code_architecture nit + bottom_up nit.)",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "CONFIRMED by grep: in resolver.py Face/TRACKERS/RETIRED_TRACKERS appear only on the import lines 15-17 and a comment (line 179); resolution uses .standing/.credit/.reserve directly. wrapper.py imports RETIRED_TRACKERS but only TRACKERS/Face are used (in MECHANICS/_SYMBOLS). Trivial, no behaviour/test impact -- drop the unused names from the imports. Non-blocking.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The two representations of Face are OPPOSITELY SIGNED: the v30-surface buffer (Cha x3) is consumed downward (strain accumulates toward it, depletion triggers Rattled = failure), while the kernel Standing is built upward (higher = advantage, .strip() never called, monotonic-up), so a future rescale-onto-kernel binding would silently invert the strain-\u003eRattled channel unless the sign flip is called out now.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "VERIFIED: grep \u0027.strip(\u0027 in resolver.py = 0 hits (Standing.build only raises v; monotonic-up confirmed). The params/contest.md Â§Face-and-Rattled surface treats Face as a strain-buffer consumed downward (\u0027At strain \u003e= Face: Rattled mark\u0027), while the kernel Standing feeds Readiness/leak upward. This is a genuine, non-decorative refinement to the EXISTING open-decision note -- it is NOT a code defect (both directions are honestly disclosed as an OPEN DECISION FOR JORDAN in social_contest_v30 Â§4 Step 6 and ED-1056, which is the correct Gate-A disposition). Upheld only as a clause the agonist should add to the Face scale-binding open-decision note (whichever binding Jordan picks must reconcile the SIGN, not just the range/driver/consumer).",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The CR3 Face layer (Face alias, TRACKERS/RETIRED_TRACKERS registries, _Side.face/.concentration accessors) is a pure naming/registry/test veneer with ZERO resolution consumer -- no resolution path reads .face/.concentration/TRACKERS; live outcome-binding is entirely the pre-existing Standing/Reserve primitives. CR3-as-code is behaviour-preserving renaming, and a reader could over-read face_tracker=WIRED as a new live mechanic.",
+                             "ruling":  "overruled",
+                             "severity":  "minor",
+                             "reason":  "The observation is factually correct (the underlying Standing IS live -- built by ethos, feeds Readiness/leak -- while the Face NAME/registry/accessors are a veneer over it), but this is NOT a defect: it is exactly what Stage 1d was scoped to deliver per the harness (\u0027establish the primitive and its interaction with the existing kernel ... not the complete CR5 mechanic\u0027) and it is honestly disclosed everywhere -- ED-1056 SCOPE HONESTY, primitives.py SCOPE-HONESTY comment, wrapper face_tracker WIRED comment (\u0027vouches for the live-Standing half ONLY\u0027), and social_contest_v30 Â§8 honesty note. Face is a genuine primitive (canonical same-class alias over live Standing), not a bolted-on non-primitive implementation. The panel\u0027s own remedy says \u0027Accept as-is for Gate A\u0027. No-defect; the substrate is emergent and the veneer\u0027s inertness is disclosed, which is the correct Gate-A honesty.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "Symbol-level asymmetry: Face is a real module-level alias symbol (Face=Standing, exported/importable) but Concentration exists only as a string key in the TRACKERS dict (binds Reserve) -- there is no Concentration=Reserve alias, so the three trackers are not uniformly first-class at the symbol level.",
+                             "ruling":  "overruled",
+                             "severity":  "nit",
+                             "reason":  "NO DEFECT. The asymmetry is intentional and defensible: Face needs a real symbol because CR5\u0027s Face-attack references it by name (Stage 3), whereas Concentration does not yet; tests assert the binding via TRACKERS[\u0027Concentration\u0027][\u0027binds\u0027] is Reserve, so it is first-class where it matters. The panel itself rates it \u0027Defensible as-is ... Not a blocker.\u0027 Overruled -- no change required (optionally document the intentional asymmetry, but that is taste, not a fix).",
+                             "spawns_ed":  null
+                         }
+                     ],
+        "tests_green":  true,
+        "open_decisions":  [
+                               "Face scale-binding (Gate-A design call): \u0027Face\u0027 denotes two mechanically different, OPPOSITELY-SIGNED objects -- the v30-surface Charisma x3 (3-21) strain-buffer consumed downward by the Rattled channel, vs the sim-kernel 0-10 START-5 ethos-built Standing built upward feeding Readiness/leak (and, in split mode, .face binds to earned Credit, a third sub-component). Choose: (a) rescale surface Cha x3 onto 0-10 Standing, (b) rescale kernel Standing onto Cha x3, or (c) keep two coupled sub-tracks under the Face umbrella. Whichever binding is chosen must reconcile the SIGN and specify which sub-component Face names when Standing is split -- not just the range. Stage 1d deliberately did not decide this (CLAUDE.md Â§5 \u0027defined N ways\u0027 hazard). Flagged in ED-1056 + social_contest_v30 Â§4 Step 6.",
+                               "Composure-retirement blast radius: RATIFIED_2026-06-01 CR3 names only \u0027Composure-as-buffer\u0027 in the contest and is silent on corpus-wide retirement. The draft scoped the retirement to the social-contest tracker ONLY (knots/combat/conviction Composure references left untouched, per the Stage-1d scope guardrail), leaving the Knot-as-Composure-buffer coupling (knots_v30 Â§4.2 / social_contest_v30_infill Â§4) still naming \u0027Composure\u0027. Choose: (a) scoped-rename-only [implemented, agonist-recommended -- a bridging note maps \u0027Composure damage in a contest = Face strain\u0027] or (b) corpus-wide Composure-\u003eFace rename (knots, threadwork, glossary, conviction cross-refs -- larger blast radius, exceeds what CR3 ratified). This is a genuine design-authority fork the ratified text does not resolve.",
+                               "Provisional-ED citability policy: ED-1055 and ED-1056 are both status:provisional / needs_jordan:true, yet they are cited as basis in the folded-in prose (params/contest.md, social_contest_v30). Whether provisional canon-of-record EDs may be cited as basis before Gate-A ratification is a policy call surfaced by the citation rewording; the draft avoided the OPEN_AS_BASIS violation by marking the citations non-basis but flagged the underlying policy for Jordan."
+                           ],
+        "escalate":  null
+    },
+    {
+        "round":  3,
+        "verdicts":  [
+                         {
+                             "claim":  "Finding 4 (behavior_regression): social_contest_v30.md:214 cites \u0027ED-902 2026-06-04\u0027 ALONE for the Concentration formula, omitting ED-901 + ED-933, inside the rewritten Â§4 Step 6 block â€” violating the D0-minor citation discipline the DECISIONS.md contract and Stage-1d prompt explicitly forbid, while sibling lines 195 and 444 in the same file carry the full chain.",
+                             "ruling":  "upheld",
+                             "severity":  "major",
+                             "reason":  "Personally verified: grep shows line 214 = \u0027Canonical per derived_stats_v30 Â§14.1, ED-902 2026-06-04\u0027 with no ED-901/ED-933; git diff confirms it is unmodified CONTEXT directly beneath the \u0027@@ -186,14 +186,30\u0027 rewritten CR3 block; lines 195 and 444 carry the full \u0027ED-901 (STRUCK FocusÃ—3) + ED-902 (coefficients + Cognitionâ†’Focus engine fix) + ED-933 (params propagation)\u0027 chain, proving the agonist knew the correct form and missed one occurrence. This is a mis-cited ED chain â€” the prompt\u0027s HARD RULE forbids overruling one, and D0-minor names this exact error as already-caught-once. validate_ed_citations.py passes (0 violations) because it checks ED existence, not the mandated supersession chain, so it ships green. Citation-text fix only, no mechanical change; agonist ledger claims the ED chain is \u0027cited throughout\u0027 which line 214 falsifies.",
+                             "spawns_ed":  "ED stub: correct social_contest_v30.md:214 to the full ED-901 + ED-902 + ED-933 chain matching lines 195/444; pure citation-text fix, no mechanical change (unblocks D0-minor contract compliance)."
+                         },
+                         {
+                             "claim":  "Finding 1 (canon_fidelity): the co-filed social_contest_v30_index.md was left unmodified while ~140 lines were inserted into social_contest_v30.md, leaving the index Line column and token counts stale (index says Â§8 @ line 293 / Â§9 @ 306; actual are 435 / 466), breaking g.read_sections-by-line-index and violating the Stage-1d guardrail \u0027if you edit the main doc structure/headings, update _index.md to match\u0027. CI co-file checker does not catch it.",
+                             "ruling":  "upheld",
+                             "severity":  "major",
+                             "reason":  "Personally verified: index line 34 records Â§8 @ 293, grep shows actual Â§8 @ 435 (off 142); index Â§9 @ 306, actual @ 466; git diff --stat confirms the index is NOT in the changeset (unmodified). Read ci_co_file_checker.py: Rule 1 only requires canonical_sources.yaml co-change when a _v30.md changes â€” it never checks the _index.md pair at all, let alone line/token accuracy, so the stale index passes green (co-file check exits 0). Calibrated as major not because it breaks the engine (it doesn\u0027t) but because the Stage-1d prompt explicitly named this guardrail. Scope confirmed narrower than the finding\u0027s wording: git diff shows NO new ## / ### headings were added (CR3 content went into tables/blockquotes under existing Â§4 Step 6 and Â§8), so the heading-list ROWS are correct â€” only the Line column and token counts need regeneration, and the canonical_sha pin re-pinned to the regenerated OID.",
+                             "spawns_ed":  "ED stub: regenerate social_contest_v30_index.md Line column + Section-Sizes token counts from the edited social_contest_v30.md (heading rows unchanged â€” no new headings), then re-pin its canonical_sha in canonical_sources.yaml to the new git-hash-object OID."
+                         },
+                         {
+                             "claim":  "Finding 2 (code_architecture): resolver.py imports Face, TRACKERS, RETIRED_TRACKERS (lines 15-17) but none are used â€” dead imports; the CR3 layer belongs in __init__/wrapper re-exports and _kernel_tests, not resolver.py.",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "Personally verified via AST load-name analysis: all three of Face/TRACKERS/RETIRED_TRACKERS are absent from resolver.py\u0027s Load-context names (unused). Pure cleanliness â€” resolution uses Standing/.standing directly; removing the three names from the import is behavior-neutral (tests reference these via primitives/wrapper/__init__). Correctly rated a nit; not blocking. Keep the .face/.concentration accessors (intended test surface).",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "Finding 3 (bottom_up_primitives): the params-side Face (ChaÃ—3 strain-buffer + full Rattled channel now in params/contest.md) is unreachable in the kernel and semantically OPPOSITE to the kernel Face (0â€“10 ethos-built, monotonic-up), so \u0027Face as a tracked resource\u0027 is only half-realized â€” the downward strain/loss half CR5 depends on has zero reachability.",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "Personally verified: params/contest.md diff ships a concrete \u0027## Face and Rattled\u0027 channel (âˆ’1D/Rattled level, 2 marks incapacitated) with hard ChaÃ—3 numbers; grep of primitives.py confirms Standing.strip() is never called in the kernel and the strain/Rattled path is comment-only (\u0027NOT wired\u0027, lines 73-78) â€” Face is monotonic-up. BUT this is exactly the scope boundary the prompt sets (\u0027establish the primitive... NOT the complete CR5 mechanic; that is Stage 3\u0027) and it is honestly disclosed by the draft\u0027s \u0027TWO REPRESENTATIONS OF FACE\u0027 note in BOTH the params doc (line 32) and social_contest_v30 Â§4 (line 212). So it is not a hidden bolt-on and not a defect to fix at Gate A â€” the real content is two design-authority calls surfaced for Jordan, not resolved by fiat. Upheld as a registered gap, minor.",
+                             "spawns_ed":  "ED stub (Stage 3, non-blocking): wire the downward Face channel (Standing.strip/strain â†’ Rattled â†’ âˆ’1D Argue) so the CR3 anti-dominance \u0027standing you can lose\u0027 rationale and CR5 Face-attack become reachable; until then tag the params \u0027## Face and Rattled\u0027 block with an explicit \u0027[UNREACHABLE UNTIL STAGE 3]\u0027 marker so it is not mined as a live spec."
+                         }
+                     ],
+        "tests_green":  true,
+        "open_decisions":  [
+                               "Face scale-binding: \u0027Face\u0027 names two mechanically different objects â€” the v30-surface CharismaÃ—3 (3â€“21) Rattled strain-buffer (params/contest.md, social_contest_v30 Â§4 Step 6) vs the kernel 0â€“10 START-5 ethos-built Standing (sim/personal/contest/primitives.py, Face = Standing). Different range, driver (strain vs ethos-build), and consumer (âˆ’1D Argue vs Readiness/leak). Choose: (a) rescale the surface ChaÃ—3 buffer onto the 0â€“10 kernel Standing scale; (b) rescale the kernel Standing onto ChaÃ—3; or (c) keep two coupled sub-tracks under the Face umbrella. Stage 1d deliberately did not decide this (CLAUDE.md Â§5 \u0027defined N ways\u0027 hazard).",
+                               "Composure-retirement blast radius: CR3 in RATIFIED_2026-06-01.md retires Composure only as \u0027Composure-as-buffer\u0027 in the social contest and is silent corpus-wide. The draft scoped the retirement to the contest tracker only [implemented, recommended] and left knots_v30 Â§4.2 \u0027Knot-as-Composure-buffer\u0027, combat, and conviction references untouched (verified: no knot/combat/conviction files modified). Confirm scoped-to-contest-tracker-only, OR direct a corpus-wide Composureâ†’Face rename. Prompt guardrail correctly forbade unilaterally deciding this.",
+                               "Provisional-ED citability policy: ED-1055 and ED-1056 are filed status:provisional with needs_jordan:true (canon-of-record, pending this Gate-A ratification). Confirm whether provisional EDs may be cited as the supersession basis for the CR1/CR2/CR3 fold-in before ratification, or whether downstream stages must wait for Gate-A sign-off to cite them.",
+                               "Ratify the CR1/CR2/CR3 fold-in itself (Gate A): the uncommitted worktree diff establishes CR1 (wrapper â€” cite-only, already Stage 1c), CR2 (Î´Ïƒ substrate â€” cite-only, already Stage 1a/1b) and CR3 (three trackers: Concentration + Face + Persuasion; Composure retired) plus the D0-3 HYBRID ED-1055 that the fractional-Ob MEMO proposed but never appended. resolve_contest(game=\u0027agon\u0027) parity held (kernel 234 passed; golden-trace parity). This is the first human design-authority gate â€” Jordan reviews the diff, nothing is committed."
+                           ],
+        "escalate":  null
+    },
+    {
+        "round":  4,
+        "verdicts":  [
+                         {
+                             "claim":  "face_tracker=WIRED vs audience_resistance=PARTIAL applies the WIRED rule inconsistently (Finding 1)",
+                             "ruling":  "overruled",
+                             "severity":  "minor",
+                             "reason":  "No-repro against the actual code. mechanics_selftest (wrapper.py:263-265) asserts WIRED rows resolve to a symbol; the author\u0027s WIRED/PARTIAL boundary is \u0027bound primitive is LIVE in resolution\u0027 vs \u0027derived value never read\u0027. For face_tracker the bound Standing IS live (resolver._advance build_ethos raises it, feeds Readiness+leak); for audience_resistance Contest.resistance is genuinely never read by resolver.py (verified: zero \u0027resistance\u0027 refs). The two rows differ on a real, consistently-applied axis, and the inline comments already disclose that only the Face BUILD half is wired. Not a defect.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "ED-1055 is stamped on the CR3/Face/three-tracker/Composure-retirement definition rows, but the ledger defines ED-1056 as the CR3/Face-primitive ED and ED-1055\u0027s own body says \u0027CR3 fold-in: see ED-1056\u0027 (Finding 7)",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "CONFIRMED against the real ledger + prose. editorial_ledger.jsonl ED-1055 = CR1/CR2/D0-3 substrate and explicitly delegates CR3 to ED-1056; ED-1056 = the CR3 three-tracker/Face-primitive ED. Yet social_contest_v30.md (196,437,441,484,605) and params/contest.md (104,109,115,118,121,218) cite ED-1055 alone on the Face/three-tracker/Composure-retirement rows, while params:116 already co-cites ED-1055/ED-1056 -- internally inconsistent. This is exactly the ED-citation-discipline error the Stage-0 contract emphasizes (D0-minor precedent); the leaky validate_ed_citations passes because both EDs exist. Mechanically harmless text-alignment but the ratifiable diff must be self-consistent with its own ledger: cite ED-1056 (or co-cite ED-1055/ED-1056) on the CR3/Face rows, keep ED-1055 on the CR1/CR2/D0-3 substrate rows (e.g. Â§8 line 450, params Â§CR1/CR2).",
+                             "spawns_ed":  "Re-cite the CR3/Face/three-tracker/Composure-retirement definition rows in social_contest_v30.md (196,437,441,484,605) and params/contest.md (104,109,115,118,121,218) to ED-1056 (the CR3/Face-primitive ED per the ledger) or co-cite ED-1055/ED-1056; leave ED-1055 on the CR1/CR2/D0-3 substrate rows. Pure citation-text alignment, no mechanical change; re-pin blob OIDs and re-run freshness+ED-citation gates."
+                         },
+                         {
+                             "claim":  "Surface-layer Face is described as \u0027built and stripped\u0027 / \u0027built by argument and support\u0027 (social_contest_v30 lines 196,199) but no surface build mechanic exists and line 210 classifies the surface representation as monotonic-DOWN under strain (Finding 4)",
+                             "ruling":  "upheld",
+                             "severity":  "minor",
+                             "reason":  "CONFIRMED: grep finds no surface Face-build rule; the only surface Face dynamics are strain-accumulation (monotonic-down), Rattled reset, scene-recovery, and equipment-flat-add. Line 210 (the two-representations note) explicitly calls the surface \u0027driven by strain, consumed by Rattled. Monotonic-down under strain\u0027, directly contradicting 196/199\u0027s \u0027built by argument and support\u0027. The genuinely-built behavior lives only in the kernel representation (Face=Standing). A surface implementer reading 196/199 would chase a nonexistent build rule. In-scope prose cleanup for the CR3 fold-in; the transparency note at 208-212 mitigates the \u0027silently misleading\u0027 charge so this is minor, not blocking. Remedy: scope the \u0027built\u0027 language to the kernel representation; state the surface Face is a Cha*3 strain-buffer (built only as a derived attribute value, depleted by strain-\u003eRattled) and defer the ethos-built clause to the kernel/Stage-3.",
+                             "spawns_ed":  "Reword social_contest_v30.md line 196 role cell and line 199 so the SURFACE Face reads as a Charisma*3 strain-buffer (built only as a derived attribute value, depleted by strain-\u003eRattled), attributing the ethos-BUILT dynamic to the kernel representation pending the deferred scale-binding; align with the monotonic-down classification at line 210."
+                         },
+                         {
+                             "claim":  "Three dead imports introduced this stage: resolver.py imports Face, TRACKERS, RETIRED_TRACKERS (0 uses); wrapper.py imports RETIRED_TRACKERS (0 uses) (Findings 2 and 5)",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "CONFIRMED via AST scan: resolver.py has 0 Name-node uses of Face/TRACKERS/RETIRED_TRACKERS (the CR3 accessors use self.standing/self.reserve directly; Face appears only in a comment); wrapper.py uses Face+TRACKERS in _SYMBOLS but RETIRED_TRACKERS is unused. No flake8/pyflakes/ruff/F401 gate in CI, so this will not break the build -- pure un-reused cruft added alongside the CR3 wiring. Drop Face/TRACKERS/RETIRED_TRACKERS from the resolver.py import and RETIRED_TRACKERS from the wrapper.py import (RETIRED_TRACKERS is consumed only by _kernel_tests.py, which imports it directly).",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The TRACKERS Concentration row source \u0027CR3 + ED-901/ED-902/ED-933 formula chain\u0027 over-attributes a formula the bound primitive (abstract [SEED] Reserve, MAX=12, no attribute inputs) does not carry (Finding 3)",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "CONFIRMED: primitives.py Reserve is an abstract per-move stamina pool with a fixed COST dict and no (3*Focus)+(2*Spirit) inputs; the adjacent comment (lines 88-93) already discloses \u0027the kernel\u0027s Reserve is an ABSTRACT per-move stamina pool ([SEED] MAX=12) -- it does not hard-code any attribute formula\u0027. The registry row reads as if Reserve implements the chain. Soften the row\u0027s source to name Reserve as an abstract [SEED] stamina pool and cite the ED-901/902/933 chain as the v30-SURFACE magnitude carried by params/prose, matching the disclosure already present in the adjacent comment. Cosmetic provenance-string precision.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "The CR3 code surface (.face/.concentration accessors, TRACKERS/RETIRED_TRACKERS registry) is exercised only by the tests written to assert it exists; no production resolution path consumes it -- the decorative-primitive / tautology-test smell (Finding 6)",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "CONFIRMED: the only callers of .face/.concentration and the registry are in _kernel_tests.py; the 12 added checks assert identity/registry-membership plus that support/advance move the underlying Reserve/Standing. HOWEVER the underlying Standing/Reserve ARE exercised in resolution (build_ethos raises Standing which feeds Readiness+leak; reserve.spend depletes stamina), and the finding self-concedes this is \u0027Acceptable for a name-establishing stage IF the ledger/prose keep framing it as name+registry+test-surface (they do)\u0027. Stage 1d\u0027s chartered scope is exactly to ESTABLISH the primitive+name, not build the CR5 mechanic, and the ledger/prose are scrupulously honest about the test-surface framing. Nit-level with the recommended hardening (a resolution-outcome test that binds Face through run/resolve, e.g. an ethos-building policy vs a merits policy under an adjudicator whose character opposes the venue role-weight) deferred, not required to pass Gate A.",
+                             "spawns_ed":  "Add at least one kernel check that binds Face through a resolution OUTCOME (a policy that builds ethos vs one that argues merits, under an adjudicator character opposing the venue role-weight) so the tracker is exercised via run/resolve rather than only direct-attribute assertions -- retires the decorative-primitive smell. Deferred enhancement."
+                         }
+                     ],
+        "tests_green":  true,
+        "open_decisions":  [
+                               "Face scale-binding: \u0027Face\u0027 currently denotes two mechanically different objects -- the v30-surface Charisma*3 (3-21) Rattled strain-buffer (strain-driven, monotonic-down, consumed by the -1D Rattled channel) vs the sim-kernel 0-10 START-5 ethos-built Standing (ethos-driven, monotonic-up, feeds Readiness/leak). Stage 1d establishes both as the named tracker but does NOT reconcile the scale. Choose: (a) rescale the surface Cha*3 onto the 0-10 kernel Standing, (b) rescale the kernel Standing onto Cha*3, or (c) keep two coupled sub-tracks under the Face umbrella. (Flagged in social_contest_v30 Â§4 Step 6 two-representations note, params/contest.md:116, ledger ED-1056.)",
+                               "Composure-retirement blast radius: CR3/RATIFIED_2026-06-01 names only \u0027Composure-as-buffer\u0027 in the contest and is silent corpus-wide. Stage 1d scoped the retirement to the social-contest tracker ONLY (recommended; implemented) and deliberately left \u0027Composure\u0027 naming intact in unrelated systems -- notably the Knot-as-Composure-buffer coupling (knots_v30 Â§4.2 / social_contest_v30_infill Â§4), and combat/conviction references. Confirm scoped-rename-only, OR direct a corpus-wide Composure-\u003eFace rename. (knots_v30.md was verified untouched this stage.)",
+                               "Provisional-ED citability policy: ED-1055 and ED-1056 are both status=provisional with needs_jordan=true (they encode this very Gate-A proposal). The prose/params fold-in rows cite these not-yet-ratified EDs as their basis. Confirm whether provisional canon-of-record EDs may serve as citation basis in the ratifiable diff, or whether citations should be conditioned on Gate-A ratification."
+                           ],
+        "escalate":  null
+    },
+    {
+        "round":  5,
+        "verdicts":  [
+                         {
+                             "claim":  "CR3 face_tracker/three_trackers MECHANICS rows marked WIRED but meet the PARTIAL criterion (the strip/strain-\u003eRattled half is not live in resolution), inconsistent with the audience_resistance WIRED-\u003ePARTIAL precedent 8 lines above.",
+                             "ruling":  "overruled",
+                             "severity":  "minor",
+                             "reason":  "No-repro as a defect. The agonist added an explicit disambiguating comment (wrapper.py:233-239) documenting that these rows are WIRED-on-symbol-resolution AND that the underlying Standing IS live in resolution (Face = Standing exactly; ethos-build raises it, it feeds Readiness+leak in _advance). That is precisely the \u0027alternative\u0027 remedy the finding itself offers and accepts (\u0027if WIRED = the alias symbol resolves is the intended semantics... add one sentence... documenting\u0027). Unlike audience_resistance (which is derived-but-entirely-unread by the resolver), Face\u0027s build half is genuinely live, so WIRED-for-the-live-half is defensible, not an over-claim. The taxonomy choice (document-WIRED vs downgrade-PARTIAL) is a defensible labeling call, and the finding\u0027s own alternative was taken. No test/gate impact (1041+234 green).",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "resolver.py:15-17 imports Face, TRACKERS, RETIRED_TRACKERS which are never referenced in the module body -- three dead imports introduced by this exact diff.",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "Independently confirmed via AST walk: all three are UNUSED (Face appears only in a comment at line 179; TRACKERS/RETIRED_TRACKERS appear nowhere). They are re-exported from __init__.py and imported where used in wrapper.py, so dropping them from resolver.py is safe. Real cleanliness regression introduced by this stage\u0027s diff; no CI lint gate exists so it breaks nothing (1041 full-suite + 234 kernel green), hence nit, not blocker. Non-gating for Gate A -- fix inline or via a trivial cleanup follow-up.",
+                             "spawns_ed":  null
+                         },
+                         {
+                             "claim":  "social_contest_v30.md:199 asserts Face is \u0027built by...and stripped by strain and by Indirect Face-attacks\u0027 in present tense, describing a strip/decay channel the kernel does not implement (Standing.strip() is never called; Face is monotonic-up).",
+                             "ruling":  "upheld",
+                             "severity":  "nit",
+                             "reason":  "Confirmed: grep shows Standing.strip() has no call site in sim/personal/contest; Face is monotonic-up. Line 199\u0027s present-tense \u0027stripped by strain\u0027 overstates the wired state. Mitigated (not eliminated) by the same line\u0027s parenthetical and the line-208-212 TWO-REPRESENTATIONS note both disclosing the strip half is Stage-3/unwired, so it is disclosure-adjacent. A real, cheaply-fixed editorial overstatement consistent with the doc\u0027s own honesty discipline; purely editorial, no mechanical change. Non-gating for Gate A.",
+                             "spawns_ed":  null
+                         }
+                     ],
+        "tests_green":  true,
+        "open_decisions":  [
+                               "Face scale-binding: \u0027Face\u0027 denotes two mechanically different objects -- the v30-surface Charisma*3 (3-21) Rattled strain-buffer (driver: strain; consumer: -1D Argue; monotonic-down) vs the sim-kernel 0-10 START-5 ethos-built Standing (driver: ethos-build; consumer: Readiness/leak; monotonic-up). Stage 1d establishes both trackers but deliberately does NOT reconcile the scale. Choose: (a) rescale surface Cha*3 onto 0-10 Standing, (b) rescale kernel Standing onto Cha*3, or (c) keep two coupled sub-tracks under the Face umbrella. Surfaced in social_contest_v30.md Â§4 Step 6 TWO-REPRESENTATIONS note + ED-1056, not decided by fiat.",
+                               "Composure-retirement blast radius: CR3 (RATIFIED_2026-06-01) names only \u0027Composure-as-buffer\u0027 in the contest and is silent corpus-wide. Stage 1d scoped the retirement to the social-contest tracker ONLY (recommended, implemented) and left Composure references in knots (knots_v30 Â§4.2 Knot-as-Composure-buffer), combat, and conviction untouched. Confirm scoped-rename-only vs a corpus-wide Composure-\u003eFace rename. Surfaced in ED-1056 + social_contest_v30.md Â§8, not decided unilaterally.",
+                               "Provisional-ED citability policy: ED-1055 and ED-1056 are both filed with needs_jordan:true (provisional, pending Gate-A ratification). Whether provisional canon-of-record EDs may be cited as the basis for downstream fold-ins is a Jordan call; the CR1/CR2/CR3 propagation currently cites them as provisional-pending-ratification.",
+                               "Two upheld nits (resolver.py dead imports; social_contest_v30.md:199 present-tense \u0027stripped by strain\u0027 overstatement) are non-blocking cleanliness/editorial items introduced this stage; not addressed by the agonist\u0027s revision pass (which fixed a prior round\u0027s ED-chain + index findings). Jordan may accept Gate A as-is and fold these into a trivial cleanup, or request them fixed before ratifying the diff."
+                           ],
+        "escalate":  null
+    }
+]

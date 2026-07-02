@@ -12,8 +12,15 @@ each canonical doc's blob OID from remote `main` via GraphQL (and re-sync pins F
 GitHub on --update), requiring GITHUB_PAT — so it validated remote main, not the
 checkout, directly contradicting CLAUDE.md's working-tree rule, and its --update path
 was dead (hardcoded /home/claude github_ops). It now computes the git blob OID of the
-local file — sha1(b"blob <len>\\0" + bytes), identical to the OID GitHub stores — and
---update rewrites the pins from local SHAs in place (no commit; the caller commits).
+local file and --update rewrites the pins from local SHAs in place (no commit; the
+caller commits).
+
+EOL normalization (2026-07-01): the blob OID is computed over LF-normalized bytes
+(CRLF→LF, honoring core.autocrlf) so it equals the OID git actually commits and stores,
+regardless of whether the working-tree checkout has CRLF line endings (Windows) or LF
+(Linux/CI). Earlier this hashed the raw on-disk bytes, so a CRLF checkout produced a
+CRLF-byte SHA that only matched a pin generated on that same CRLF checkout — and read
+STALE on any LF/CI checkout. Pins must be git-hash-object OIDs; do not hash raw CRLF.
 
 Usage:
     python3 tools/freshness_gate.py                      # check all systems
@@ -33,11 +40,30 @@ CANONICAL_SOURCES_PATH = "references/canonical_sources.yaml"
 
 # ── Working-tree blob SHA (git hash-object equivalent) ──────────────────────────
 
+def _looks_binary(data: bytes) -> bool:
+    """git treats a blob with a NUL byte as binary and does NOT EOL-normalize it."""
+    return b"\0" in data
+
+
+def _normalize_eol(data: bytes) -> bytes:
+    """CRLF→LF normalization matching git's autocrlf-on-commit behavior for text blobs.
+    Binary blobs (containing NUL) are left byte-exact, as git does."""
+    if _looks_binary(data):
+        return data
+    return data.replace(b"\r\n", b"\n")
+
+
 def _blob_sha_bytes(data: bytes) -> str:
-    """git blob SHA-1 of raw bytes: sha1(b'blob <len>\\0' + data). Identical to the
-    blob OID GitHub stores, so it is directly comparable to the canonical_sha__ pins."""
+    """git blob OID of the given bytes: sha1(b'blob <len>\\0' + LF-normalized data).
+
+    LF-normalizes first (CRLF→LF for text) so the result equals the blob OID git
+    actually commits and `git hash-object` reports — on both CRLF (Windows) and LF
+    (Linux/CI) checkouts. It is therefore directly comparable to the canonical_sha__
+    pins, which are git-hash-object OIDs. Do NOT feed raw CRLF disk bytes to git's
+    blob-header formula; that yields a checkout-specific SHA that reads STALE on CI."""
+    norm = _normalize_eol(data)
     h = hashlib.sha1()
-    h.update(b"blob " + str(len(data)).encode() + b"\0" + data)
+    h.update(b"blob " + str(len(norm)).encode() + b"\0" + norm)
     return h.hexdigest()
 
 
