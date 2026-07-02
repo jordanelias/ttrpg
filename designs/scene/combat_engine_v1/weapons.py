@@ -10,8 +10,11 @@ whole-weapon lump at a wclass-centroid. weapon_physics.derive() sums them; see i
 RECORD SCHEMA (per weapon):
   PHYSICAL   mass(kg, = Σ part masses) · head_len · grip_len (length-units, UNIT_M=0.30m each) · hands(1/2) ·
              head{point,cut_thrust,straight_cut,curved_cut,blunt} (native/default combat mode — afforded_heads
-             derives the full afforded SET) · clinch(grappling affinity) · hand_guard(0-1) · blade_guard(0-1) ·
-             reach_adj
+             derives the full afforded SET) · clinch(grappling affinity) · reach_adj. `hand_guard`/`blade_guard`
+             ARE WRITTEN IN EACH RECORD BELOW AS PLAIN LITERALS FOR READABILITY, but the bake loop at the bottom
+             of this file OVERWRITES both from weapon_physics.hand_guard()/blade_guard() (a saturating sum over
+             the record's own located `guards` — morphology-rearch Phase B4) — the literal here is a stale
+             pre-Phase-B4 pre-image, not the live value; do not hand-edit it expecting an effect.
   COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none}
   PARTS      elements=[{x_m, mass_kg, extent_m, [edge_undulation]}] (the located striking element(s) — one for a
              plain blade/point/haft-tip, several for a composite head like the bec de corbin's hammer+beak+spike;
@@ -208,6 +211,10 @@ WEAPONS = {
      dict(x_m=1.36, mass_kg=0.085, extent_m=0.13),  # cross_blade_left
      dict(x_m=1.36, mass_kg=0.085, extent_m=0.13),  # cross_blade_right
     ],
+   guards=[
+     dict(x_m=1.36, mass_kg=0.0, extent_m=0.13, dual_role_element=True),  # cross_blade_left (documented hook/bind/catch use, Muyedobotongji)
+     dict(x_m=1.36, mass_kg=0.0, extent_m=0.13, dual_role_element=True),  # cross_blade_right
+    ],
    haft=dict(x_m=0.743, mass_kg=0.9897, extent_m=2.0001),
    geometry=dict(curvature=0.1, point_concentration=0.8, cross_section=0.78, edge_keenness=0.42, strike_concentration=0.0),
    mode_elements=[
@@ -223,6 +230,10 @@ WEAPONS = {
      dict(x_m=1.823, mass_kg=0.32, extent_m=0.25),  # center_prong
      dict(x_m=1.71, mass_kg=0.115, extent_m=0.16),  # flank_tine_left
      dict(x_m=1.71, mass_kg=0.115, extent_m=0.16),  # flank_tine_right
+    ],
+   guards=[
+     dict(x_m=1.71, mass_kg=0.0, extent_m=0.16, dual_role_element=True),  # flank_tine_left (documented catch/hook function, Muyedobotongji dangpa chongbo)
+     dict(x_m=1.71, mass_kg=0.0, extent_m=0.16, dual_role_element=True),  # flank_tine_right
     ],
    haft=dict(x_m=0.803, mass_kg=1.2892, extent_m=2.2899),
    geometry=dict(curvature=0.0, point_concentration=0.75, cross_section=0.78, edge_keenness=0.3, strike_concentration=0.0),
@@ -260,6 +271,10 @@ WEAPONS = {
      dict(x_m=1.02, mass_kg=0.03, extent_m=0.16),  # left side prong/wing (forward-curving flange)
      dict(x_m=1.02, mass_kg=0.03, extent_m=0.16),  # right side prong/wing (forward-curving flange)
     ],
+   guards=[
+     dict(x_m=1.02, mass_kg=0.0, extent_m=0.16, dual_role_element=True),  # left side prong/wing (documented bind-catching surface, Monte)
+     dict(x_m=1.02, mass_kg=0.0, extent_m=0.16, dual_role_element=True),  # right side prong/wing
+    ],
    haft=dict(x_m=0.6605, mass_kg=1.42, extent_m=2.199),
    geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.72, edge_keenness=0.55, strike_concentration=0.0),
    reach='long', wt='light', spd=0.0, hand='Standard'),
@@ -270,6 +285,10 @@ WEAPONS = {
      dict(x_m=1.45, mass_kg=0.82, extent_m=0.629),  # central ox-tongue blade (broad triangular/leaf main blade)
      dict(x_m=0.9, mass_kg=0.1, extent_m=0.2),  # left wing-lug (basal flange)
      dict(x_m=0.9, mass_kg=0.1, extent_m=0.2),  # right wing-lug (basal flange)
+    ],
+   guards=[
+     dict(x_m=0.9, mass_kg=0.0, extent_m=0.2, dual_role_element=True),  # left wing-lug (documented active trap-and-bind catching surface, Manciolino)
+     dict(x_m=0.9, mass_kg=0.0, extent_m=0.2, dual_role_element=True),  # right wing-lug
     ],
    haft=dict(x_m=0.614, mass_kg=1.55, extent_m=2.301),
    geometry=dict(curvature=0.0, point_concentration=0.5, cross_section=0.68, edge_keenness=0.7, strike_concentration=0.0),
@@ -302,6 +321,7 @@ WEAPONS = {
     ],
    guards=[
      dict(x_m=0.05, mass_kg=0.05, extent_m=0.03),  # socket collar/washer
+     dict(x_m=0.55, mass_kg=0.0, extent_m=0.12, dual_role_element=True),  # rear spike/hook notch (documented hooking/catching feature)
     ],
    haft=dict(x_m=0.825, mass_kg=1.55, extent_m=2.4),
    butt=dict(x_m=-0.375, mass_kg=0.2),
@@ -322,6 +342,9 @@ WEAPONS = {
    elements=[
      dict(x_m=0.95, mass_kg=0.65, extent_m=1.803),  # fauchard_blade
      dict(x_m=0.55, mass_kg=0.08, extent_m=0.1),  # back_hook_spike
+    ],
+   guards=[
+     dict(x_m=0.55, mass_kg=0.0, extent_m=0.1, dual_role_element=True),  # back_hook_spike (documented catching/controlling lug, "composite glaive" typology)
     ],
    haft=dict(x_m=0.7515, mass_kg=1.3, extent_m=2.2),
    geometry=dict(curvature=0.55, point_concentration=0.25, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.0),
@@ -355,6 +378,9 @@ WEAPONS = {
      dict(x_m=1.55, mass_kg=0.1, extent_m=0.14),  # thrusting_heel_spike
      dict(x_m=0.65, mass_kg=0.08, extent_m=0.08),  # rear_fluke
     ],
+   guards=[
+     dict(x_m=0.65, mass_kg=0.0, extent_m=0.08, dual_role_element=True),  # rear_fluke (documented incidental hook/catch point)
+    ],
    haft=dict(x_m=0.85, mass_kg=1.15, extent_m=2.0),
    geometry=dict(curvature=0.1, point_concentration=0.55, cross_section=0.65, edge_keenness=0.8, strike_concentration=0.1),
    mode_elements=[
@@ -368,6 +394,9 @@ WEAPONS = {
    elements=[
      dict(x_m=0.6958, mass_kg=0.19, extent_m=0.32),  # hooked cutting blade
      dict(x_m=0.9867, mass_kg=0.06, extent_m=0.1),  # reverse thrusting spike
+    ],
+   guards=[
+     dict(x_m=0.6958, mass_kg=0.0, extent_m=0.32, dual_role_element=True),  # hooked cutting blade (the hook itself is the weapon's namesake catching feature)
     ],
    haft=dict(x_m=-0.0133, mass_kg=1.4963, extent_m=2.1),
    butt=dict(x_m=-1.0633, mass_kg=0.12),
@@ -383,6 +412,9 @@ WEAPONS = {
    elements=[
      dict(x_m=1.0345, mass_kg=0.15, extent_m=0.24),  # straight spearhead (thrusting point)
      dict(x_m=0.7586, mass_kg=0.14, extent_m=0.22),  # perpendicular crescent (yueyadao) blade
+    ],
+   guards=[
+     dict(x_m=0.7586, mass_kg=0.0, extent_m=0.22, dual_role_element=True),  # perpendicular crescent (documented hooking surface used to unhorse cavalry/catch shields)
     ],
    haft=dict(x_m=-0.0455, mass_kg=1.71, extent_m=2.4),
    butt=dict(x_m=-1.2455, mass_kg=0.1),
@@ -752,6 +784,16 @@ for _w, _rec in WEAPONS.items():
 import weapon_physics as _wp
 for _w, _rec in WEAPONS.items():
     _rec['_derived'] = _wp.derive(_rec)
+
+# Bake hand_guard/blade_guard ONCE at import (morphology-rearch Phase B4): OVERWRITES the field with the DERIVED
+# value from the record's located `guards` (weapon_physics.hand_guard/blade_guard — a saturating sum over
+# physical catch hardware, not a hand-authored scalar). Every consumer (systems.mode_sigma's parry/wind terms,
+# systems.bind_sigma's catch term, weapon_physics.defense_affinities' parry/wind) already reads w['hand_guard']/
+# w['blade_guard'] as a plain field, so this bake needs no consumer-side changes — only the SOURCE of the value
+# moves from authored-by-hand to derived-then-baked, the same shift `geo`/`gap`/`_derived` already made.
+for _w, _rec in WEAPONS.items():
+    _rec['hand_guard'] = round(_wp.hand_guard(_rec), 4)
+    _rec['blade_guard'] = round(_wp.blade_guard(_rec), 4)
 
 # Back-compat view: GEOMETRY as a name-keyed map onto each record's nested geometry (consumers: the systems
 # key-sync assert, weapon_physics docstring). The single source is WEAPONS[w]['geometry'].

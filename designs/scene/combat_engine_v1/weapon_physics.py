@@ -314,6 +314,50 @@ def defense_affinities(w):
     return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.19, 0.54), wind=_band(wind, 0.05, 0.45))
 
 
+# ════════════════════ STAGE 3a — LOCATED-GUARD CATCH: hand_guard / blade_guard, DERIVED (morphology-rearch Phase B4) ═══
+# The plan's aggregation-operator discipline: catch is a SATURATING SUM over a weapon's located `guards` (physical
+# extent, x_m position) — not a placeless hand-authored 0-1 scalar. Two DIFFERENT physical questions share the same
+# guards list: hand_guard asks "does hardware sit AT the working hand, shielding it from a sliding cut" (a guard far
+# out on the head does nothing for your own grip — proximity-weighted); blade_guard asks "does the weapon have a
+# catching/binding surface at all, wherever the bind lands" (a wing-lug or reverse hook two feet up a polearm still
+# catches an opposing blade in the bind just fine — position-independent). A `dual_role_element` guard (a hook,
+# prong, tine, or fluke that is ALSO a striking element, e.g. the guisarme's hook or the dangpa's flanking tines —
+# Phase 0 documents these explicitly as catching/binding hardware, not decoration) contributes to catch exactly like
+# dedicated hardware (a cross-guard, a tsuba); its mass is already counted once via `elements` (mass_kg=0 here).
+GUARD_HAND_SCALE = 0.25  # [SIM-CALIBRATE] metres — proximity half-life-ish decay for hand-guard relevance; a guard at
+                          #   this distance from the working hand counts ~37% toward hand_guard, negligibly beyond ~3x it.
+HILT_CATCH_MULT = {'compound': 3.0, 'simple': 1.0, 'none': 1.0}  # [SIM-CALIBRATE] a compound hilt (basket/swept/
+                          #   rings) covers far more than its own bar-length extent suggests; a plain cross or a
+                          #   hafted weapon's incidental catch-hardware does not get this multiplier.
+GUARD_HAND_K = 3.0       # [SIM-CALIBRATE] fit against the pre-Phase-B4 authored hand_guard ladder (rough — Phase C
+                          #   recalibrates against the balance harness, not this static-table fit)
+GUARD_BLADE_K = 2.0      # [SIM-CALIBRATE] ditto, blade_guard ladder
+
+def _guard_catch_raw(w, proximity):
+    """Σ guard extent, each guard's contribution optionally decayed by distance from the working hand (x=0).
+    proximity=False -> position-independent (blade_guard's bind-catch); proximity=True -> exp(-|x|/GUARD_HAND_SCALE)
+    weighted (hand_guard's own-hand coverage). Pure."""
+    total = 0.0
+    for g in w.get('guards', ()):
+        wgt = math.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
+        total += g['extent_m'] * wgt
+    return total
+
+def hand_guard(w):
+    """Own-hand protection, DERIVED: a saturating function of guard hardware AT the working hand (proximity-
+    weighted), scaled by hilt complexity (a swept/basket hilt covers the hand far more than a plain cross of the
+    same bar length). In [0,1). A bare haft (spear, staff, mace — no guards) -> 0. Pure."""
+    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    return math.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
+
+def blade_guard(w):
+    """Bind-catch capability, DERIVED: a saturating function of ALL located catching surfaces (guards AND
+    dual-role catching elements — hooks/prongs/tines/lugs), position-independent (a bind can land anywhere along
+    a long polearm's reach, not just at the hand), scaled by hilt complexity. In [0,1). Pure."""
+    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
+
+
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
 # Grip is MORPHOLOGY, not a named state. Where the working hand sits on the shaft is a CONTINUOUS choice, bounded by
 # the weapon's own geometry: a long shaft/grip slides (butt<->centre), a short hilt cannot. "Choke" = grip-position
