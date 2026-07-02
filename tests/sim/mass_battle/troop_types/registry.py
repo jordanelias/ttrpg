@@ -82,7 +82,7 @@ def reach_for(troop_type):
     return REACH_LONG if cls == 'long' else REACH_SHORT
 
 
-# ─── unit_type (movement audit gate 2, ED-1097) ──────────────────────────────
+# ─── unit_type (movement audit gate 2, ED-MB-0001) ──────────────────────────────
 # [canonical: Jordan-ruled 2026-07-02, verbatim: "Ranged is troop type as per the weapon assigned
 #  to troop."] unit_type ('ranged'/'melee') must derive from the troop's ASSIGNED WEAPON, not from
 # its role -- ED-1095/T4's mistake was defaulting a mounted_archers spec to role='Kite' without

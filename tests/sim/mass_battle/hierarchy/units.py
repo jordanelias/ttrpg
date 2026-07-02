@@ -547,7 +547,7 @@ class Subunit:
         self._node_anchor's live value instead of starting_position. Facing is preserved
         untouched -- a formation reorganizing does not reset which way it's looking.
 
-        [2026-07-02 adversarial-review finding, ED-1097] `new_ids` must equal self's CURRENT
+        [2026-07-02 adversarial-review finding, ED-MB-0001] `new_ids` must equal self's CURRENT
         _oriented() id set -- it exists only for the caller to assert against, not as an
         alternative offset source (_oriented(self) is the sole source of the (or_r, or_c) offset
         geometry a bare id tuple cannot carry). Verified below rather than silently accepted: a
@@ -588,7 +588,7 @@ class Subunit:
         return out
 
     def _resolve_maneuver_goal(self, enemy_cells):
-        """[movement audit fix-plan step 7, ED-1097 -- the waypoint primitive] Per-subunit maneuver
+        """[movement audit fix-plan step 7, ED-MB-0001 -- the waypoint primitive] Per-subunit maneuver
         goal for the ANCHOR (not per-cell -- the node path's relational cohesion, self._node_rel,
         already carries every cell along together as the anchor moves, so a single anchor-level
         goal is sufficient; no per-cell goal list is needed the way the legacy grid path required
@@ -689,7 +689,7 @@ class Subunit:
         return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)  # phase 2: at the flank -> drive in
 
     def _kite_goal(self, enemy_cells):
-        """[2026-07-02 adversarial-review finding, ED-1097] Standoff-band regulation ('kite'
+        """[2026-07-02 adversarial-review finding, ED-MB-0001] Standoff-band regulation ('kite'
         instruction), ported to anchor granularity -- matching _envelop_goal/_sweep_goal's own
         established pattern. Closes a real gap: fix-plan step 7 ported envelop/sweep to the node
         path but never kite, so a mounted_archers subunit (gate 2 correctly gives it
@@ -765,7 +765,7 @@ class Subunit:
         ar, ac = self._node_anchor
         nar, nac = ar, ac
         if target_centroid and step > 0:
-            # [movement audit fix-plan step 7, ED-1097] Maneuver goal resolution: an instruction-
+            # [movement audit fix-plan step 7, ED-MB-0001] Maneuver goal resolution: an instruction-
             # driven goal (envelop/sweep) takes priority over the plain target_centroid steering.
             # Falls back to fix-plan step 4's lateral file-holding default (see _resolve_maneuver_
             # goal's docstring) when no maneuver instruction is active or resolvable.
@@ -783,7 +783,7 @@ class Subunit:
                 # column at the target directly -- Stage A/B's existing maneuver tests exercise
                 # this case).
                 #
-                # [2026-07-02 adversarial-review finding, ED-1097] An ESCORT atom (escort_of set)
+                # [2026-07-02 adversarial-review finding, ED-MB-0001] An ESCORT atom (escort_of set)
                 # must be checked FIRST, before the sibling-count fallback below: Stage C's
                 # orchestration.py already computes an escort-relative target_centroid[1] each tick
                 # (the escorted unit's live column + its rotated escort_offset -- see
@@ -838,7 +838,7 @@ class Subunit:
                 if self._node_facing is None:
                     self._node_facing = (ftr, ftc); self._node_facing0 = (ftr, ftc)
                 else:
-                    # [movement audit fix-plan step 5, ED-1097] Rotation-based facing update,
+                    # [movement audit fix-plan step 5, ED-MB-0001] Rotation-based facing update,
                     # replacing the prior lerp-normalize (fr0 + kw*(ftr-fr0), then re-normalize).
                     # The lerp degenerates to the zero vector when current and desired facing are
                     # EXACTLY anti-parallel at full discipline (kw=0.5: 0.5*fr0 + 0.5*(-fr0) = 0),
@@ -856,7 +856,7 @@ class Subunit:
                     theta_cur = math.atan2(fc0, fr0)
                     theta_tgt = math.atan2(ftc, ftr)
                     delta = math.atan2(math.sin(theta_tgt - theta_cur), math.cos(theta_tgt - theta_cur))  # wrap to (-pi, pi]
-                    if abs(delta) >= math.pi - 1e-9:
+                    if abs(delta) >= math.pi - 1e-9:  # [canonical: epsilon: float angle-wrap tolerance guard]
                         delta = math.pi  # deterministic tie-break: exact/near-exact reversal always turns the same way
                     theta_new = theta_cur + kw * delta
                     self._node_facing = (math.cos(theta_new), math.sin(theta_new))
@@ -950,7 +950,7 @@ class Subunit:
         # _atom_distance (Chebyshev, nearest cells) so "in band" == "can shoot" for a ranged kiter.
         # INERT without the 'kite' instruction -> byte-exact for every existing scenario.
         #
-        # [movement audit gate 2, ED-1097, Jordan-ruled 2026-07-02: "Kite is a behaviour of
+        # [movement audit gate 2, ED-MB-0001, Jordan-ruled 2026-07-02: "Kite is a behaviour of
         # attacking an opponent then fleeing upon countering, which means that it is BEST done
         # with ranged weapons like a bow but can still be executed by cavalry with spears/lances."]
         # No longer gated on unit_type=='ranged' -- kite is weapon-independent steering; ONLY

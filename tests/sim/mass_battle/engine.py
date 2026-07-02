@@ -113,7 +113,7 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
     are already required/explicit in this single-subunit constructor's own signature, so there is no
     role->shape defaulting ambiguity to resolve).
 
-    [movement audit gate 2, ED-1097, Jordan-ruled 2026-07-02: "Ranged is troop type as per the
+    [movement audit gate 2, ED-MB-0001, Jordan-ruled 2026-07-02: "Ranged is troop type as per the
     weapon assigned to troop."] `unit_type` now defaults to None and, when not explicitly given by
     the caller, derives from troop_type's assigned weapon via troop_types.registry.unit_type_for
     (TROOP_LOADOUT/loadout_for) instead of the prior hardcoded 'melee'. An unmapped troop_type
@@ -223,12 +223,12 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         instructions = sp.pop('instructions', None)
         if instructions is None:
             instructions = role_spec['instructions'] if role_spec is not None else ()
-        # [movement audit gate 2, ED-1097] unit_type derives from tt's assigned weapon
+        # [movement audit gate 2, ED-MB-0001] unit_type derives from tt's assigned weapon
         # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
         # still always wins. See build_unit's docstring for the byte-exact-preservation argument
         # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
         #
-        # [2026-07-02 adversarial-review finding, ED-1097] `sp.pop('unit_type', unit_type_for(tt))`
+        # [2026-07-02 adversarial-review finding, ED-MB-0001] `sp.pop('unit_type', unit_type_for(tt))`
         # only falls back to derivation when the 'unit_type' KEY is absent from the spec dict -- an
         # explicit `{'unit_type': None, ...}` (the same None sentinel build_unit's own signature
         # uses to mean "derive it") would pop back None verbatim instead of deriving, inconsistent

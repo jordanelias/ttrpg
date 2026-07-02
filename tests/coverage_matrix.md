@@ -286,7 +286,7 @@ Archived entries in tests/coverage_matrix_archive.md
   all, so every subunit currently just walks a straight line toward the enemy centroid on the path
   actually used by default. Under investigation.
 
-## 2026-07-02 — Movement/pathing audit (ED-1096) fix plan execution, in progress (ED-1097)
+## 2026-07-02 — Movement/pathing audit (ED-1096) fix plan execution, in progress (ED-MB-0001)
 Fable-led audit (ED-1096) confirmed the root cause flagged above and 10 further findings; Jordan
 answered all 4 decision gates, deferring gates 1 (Command/Discipline-gated conditional tactics) and
 3 (facing/attention split) until envelopment/pincer/wheeling pathing is confirmed working. This

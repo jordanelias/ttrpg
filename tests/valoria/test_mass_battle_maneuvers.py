@@ -51,7 +51,7 @@ def _movement_toggles():
     # environment does not set PER_CELL=1 (unlike validators.py's documented `Run:` line for a
     # manual script invocation), so force it here for the duration of every test in this file.
     #
-    # [2026-07-02 adversarial-review finding, ED-1097] PC_ENVELOP_PATH/PC_SWEEP were missing from
+    # [2026-07-02 adversarial-review finding, ED-MB-0001] PC_ENVELOP_PATH/PC_SWEEP were missing from
     # this save/restore set even though every test here (via v_envelop/v_sweep's on/off comparison)
     # mutates hierarchy.units' copies directly and always leaves them at False when a test function
     # returns (the off-arm runs last) -- contradicting this docstring's own claim to restore
@@ -85,7 +85,7 @@ def test_sweep_displaces_laterally_grid():
 
 
 @pytest.mark.xfail(
-    reason="[gate 4, ED-1097, 2026-07-02] Known, diagnosed combat-PACING interaction, not a "
+    reason="[gate 4, ED-MB-0001, 2026-07-02] Known, diagnosed combat-PACING interaction, not a "
     "movement/pathing regression -- see investigation below. Left as a loud, tracked xfail "
     "(not silently skipped, not band-fit by tuning fixture magnitudes) pending Jordan's call on "
     "the underlying combat-balance question, which is out of this fix plan's scope.",

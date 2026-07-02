@@ -193,7 +193,7 @@ def compute():
     against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
     import mass_battle.hierarchy.units as _u
     # Read the RESOLVED config value, not a second, independently-defaulted os.environ.get -- the
-    # latter drifted out of sync with config.PER_CELL's own default the moment gate 4 (ED-1097)
+    # latter drifted out of sync with config.PER_CELL's own default the moment gate 4 (ED-MB-0001)
     # flipped PER_CELL's default '0'->'1': a bare invocation would have run the (now-default) 'cell'
     # path while this line's own stale '0' fallback kept reporting/checking it as 'unit', silently
     # comparing against the WRONG EXPECTED entry. Same failure shape the FIELD_MOVEMENT mode-key

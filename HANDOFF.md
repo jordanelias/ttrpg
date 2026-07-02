@@ -523,29 +523,51 @@ per the file's protocol; never max+1.)_
   mounted-archer default kiting (`build_army` implicitly defaults `role='Kite'` for `mounted_archers`
   with no explicit role/shape/instructions). All four additive/toggle-gated, byte-exact-off preserved
   (verified all 4 `bat.py` digest modes + `tests/valoria` 81 passed/10 skipped).
-  **CRITICAL — newly discovered 2026-07-02, NOT yet fixed:** the `'envelop'`/`'sweep'` instructions and
-  the overhang `'wheel'` maneuver (the actual "go wide around the flank, cross past the enemy's depth,
-  turn in from the rear" logic, `hierarchy/units.py` `advance_cells` ~L802-861) are gated `if PER_CELL
-  and ...` and live ONLY on the legacy grid path — this was confirmed root cause. **Full ratified
-  audit at `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/README.md` (ED-1096) — READ
-  THAT DOC, not this paragraph, before touching movement code.** Summary: `_node_advance` (the
-  coordinate-field path, DEFAULT since ED-1089) is a pure straight-line centroid attractor that never
-  reads `instructions`/`role` — envelop/sweep/wheel/kite all exist but are unreachable on the default
-  path. Ten further findings (critical: `reset_positions` is a no-op on node state, so multi-turn
-  battles freeze at the turn-1 contact line for turns 2-8; ED-1095's mounted-archer kiting fix is NOT
-  effective — `role='Kite'` never sets `unit_type='ranged'`). **Two corrections to earlier same-
-  session claims, both now resolved in the audit doc:** the "144-tick total freeze" finding is
-  REFUTED (does not reproduce; likely a measurement bug reading cell `id` instead of `pos`); the
-  `reset_positions` "teleports to spawn every turn" characterization was imprecise — it's a no-op on
-  the node path (freezes wherever it ended, doesn't reset), matching Jordan's Football-Manager-analogy
-  correction that positions should only reset at true battle boundaries, not between turns. Do not
-  trust prior "Cannae pattern confirmed" claims without re-verifying against the ratified audit.
-  8-step dependency-ordered fix plan + 4 Jordan decision gates + the path-length-budget formula
-  (`0.5×speed×max-ticks`, Jordan-ruled) are all in the audit doc. **Model routing ruling (binding
-  going forward):** design-authorship nodes are *"probably a fable proposal but sonnet 5 write"* —
-  Fable proposes, Sonnet 5 implements; *"if fable unavailable... use opus 4.8 max effort"* as fallback.
-  **Implementation NOT started** — next action is resolving the 4 decision gates with Jordan, then
-  Sonnet executing the 8-step fix plan in order.
+  **RESOLVED 2026-07-02 (ED-MB-0001) — the movement/pathing fix-plan (ED-1096's root-cause finding)
+  is EXECUTED, adversarially reviewed, and verified.** `envelop`/`sweep`/wheel/kite are now real on
+  the live default node path, not just the legacy grid path. All 8 fix-plan steps + decision gates 2
+  and 4 landed on `claude/mass-battle-audit-5c6nih`: `Subunit._rekey_node_state` fixes check_drift's
+  node-state corruption; `reset_positions` is a deliberate no-op for node-path atoms; weapon-derived
+  `unit_type` (`troop_types.registry.unit_type_for`) wired into `build_unit`/`build_army`, kite
+  decoupled from `unit_type=='ranged'`; lateral file-holding restored (siblings hold their own
+  deployment file); the node WHEEL's 180° facing-lerp stall replaced with a rotation-based update;
+  the maneuver acceptance validators (`validators.py`'s `v_envelop`/`v_sweep`) re-pointed at the node
+  path via a new `path` parameter, landed as `tests/valoria/test_mass_battle_maneuvers.py`; the
+  waypoint primitive (`Subunit._resolve_maneuver_goal`/`_envelop_goal`/`_sweep_goal`) gives
+  `_node_advance` real per-tick steering for `envelop`/`sweep`, modeled on the legacy per-cell
+  two-state machine at anchor granularity; `PER_CELL`'s default flipped `0`→`1` (gate 4, "yes, all
+  options/modules must be turned on") unlocking fatigue/charge-shock/brace-recoil/cavalry-speed by
+  default. **Decision gates 1 (Command/Discipline-gated conditional tactics) and 3 (facing/attention
+  split) remain explicitly DEFERRED** per Jordan's own sequencing ruling ("gates 1 and 3 are to occur
+  AFTER we confirm that envelopment/pincer/wheeling/etc with pathing/routing is confirmed to work") —
+  not built, by design, not a gap. A 5-dimension adversarial-review Workflow (sonnet finders + opus
+  verify) found and fixed 6 more real bugs the same session, the most significant being that kite
+  steering had NOT actually been ported to the node path in the first pass either (step 7 built
+  `_envelop_goal`/`_sweep_goal` but no `_kite_goal` — mounted_archers still closed to melee) — closed
+  via a new `_kite_goal`, verified holding standoff distance 6.5-8.3 against a Line. **Verified:** all
+  4 `bat.py` digest modes byte-exact (2 unchanged grid, 2 deliberately re-recorded field, isolated via
+  bisection to steps 1/4/5/7); full `tests/valoria` suite green (88 passed/10 skipped/1 xfailed); a
+  `build_envelopment` wing tracked tick-by-tick under default toggles genuinely wheels from row 36 to
+  row 19 — past the defender's own settled row — not a straight walk-in; delivered to Jordan as an
+  interactive Artifact re-tracing the exact H4 (Envelopment vs Arrowhead) scenario shown broken
+  earlier in the engagement. **One combat-balance finding disclosed, NOT chased (out of this fix's
+  scope, per this repo's standing discipline against retuning magnitudes to fit a band):** enabling
+  `PER_CELL`'s previously-inert fatigue/attrition/envelopment-sigma mechanics makes a frontal
+  engagement resolve faster than a wide envelopment detour can complete in some compositions —
+  confirmed via direct isolation to be a combat-*pacing* interaction, not a movement regression (a
+  single-subunit control fight at the same troop ratio favors the attacker 14-0-6/20 seeds; forcing
+  `orchestration.PER_CELL=False` alone restores the affected test's pass). Visible at battle scale in
+  `gauge_mb.py`'s re-run (H3/H4(Cannae)/H5/H6 lose 0-13% instead of the 45-72% expected band) — landed
+  as a loud, documented `xfail(strict=False)` on `test_envelop_reaches_rear_node`, not silently
+  patched. **Next action for whoever picks this up:** the underlying combat-balance/pacing question
+  (numerically-dominant vs. thin-and-yielding pinning force; a maneuver time-budget separate from the
+  frontal fight's own clock) is open and needs either Jordan's design call or a dedicated combat-
+  balance pass — then decision gates 1/3 (Command/Discipline-gated conditional tactics; facing/
+  attention split) can proceed per the sequencing ruling above. Full detail: `tests/coverage_matrix.md`'s
+  2026-07-02 movement/pathing-audit entries; `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/
+  README.md`; ledger entry `ED-MB-0001` (canon/editorial_ledger.jsonl) — the first allocation under the
+  new `ED-<LANE>-NNNN` namespace (ED-IN-0001, origin/main cutover) that superseded in-progress
+  in-code citations of the now-frozen flat `ED-1097`.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
