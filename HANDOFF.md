@@ -59,8 +59,36 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     so Stage 4 doesn't converge them onto one UI. Stage 2 now owns authoring the Style/Venue flavor text; Stage 3
     now owns the Appraise-reveal boundary for `armature_position`; Stage 4 now owns each game's interaction
     shape; Stage 6 finalizes+ratifies the model this seeds. Plan file amended accordingly.
-  - **NEXT: finish the Gate A finalize pass → commit → Stage 2** (contest/venue/adjudicator dictionaries +
-    Style/Venue flavor text, per decision 5).
+  - **Gate A committed (`884cf89a` mechanics + `98ecdf41` player-model), PR #44 all-green.**
+  - **Stage 2 / Gate B (dictionaries) DONE + committed.** Built Venue×8 / Adjudicator×4 / Style×4 /
+    InteractionType×4 typed dicts (`sim/personal/contest/dictionaries.py`, new module) + Style/Venue
+    flavor text; closed ED-137 (Panel adjudicator). Packet:
+    `designs/audit/2026-07-01-contest-gate-b-packet/` (pre-ratification snapshot + the authoritative
+    `GATE_B_closeout_audit.md`). **Ratified and independently re-verified in actual code (not just ledger
+    text):** Panel votes weighted-by-standing (ED-1057; reuses the existing `Adjudicator.discipline` field,
+    NOT the contestant `Standing` name — no new state invented); Panel reachability = rebind Guild
+    Arbitration's adjudicator → Panel (ED-1059; NO appeals — "let the decision ride"; roster stays 8);
+    Terminal Doubt = terminal-value-everywhere, banded (PersuasionTrack) + tally (TallyAtClose) branches
+    both specified (ED-1060); Guilds "GM picks" boost = context-derived from the venue's dominant
+    ethos/pathos/logos via the existing `Appeal` machinery (ED-1061; literal "GM picks" text removed from
+    both prose heads). ED-1055/1056/1058 flipped to `status: ratified` (a bookkeeping fix — they were left
+    `provisional` only because two earlier finalize-workflow attempts were killed by infrastructure
+    issues — API 401/529 errors and a background-task stop, unrelated to the work itself — before
+    flipping their own metadata; the ratifications themselves happened earlier via Jordan's answers).
+    1041 sim+valoria + 319 kernel tests green; freshness gate clean (5/5 fresh); no scope drift (grep
+    confirmed knots/combat/conviction untouched, Composure retirement still contest-scoped).
+  - **SOURCE-RESEARCH GROUNDING (found 2026-07-01 via files13.zip → already in repo, NOT orphaned).** The
+    deliberation-critique source research
+    `designs/audit/2026-06-28-social-contest-deliberation-critique/source-research/` (a 3-part
+    Renaissance-deliberation / machination-games-lens / model-testing trilogy) is READ-AND-CITED-BUT-NOT-APPLIED:
+    it shaped the plan's four-games / alea / consensus / commitment-store / armature *shape* via `critique.md`,
+    but its rich detail (Dowlen small-pool weighted lottery; `liberum veto` as self-undermining equilibrium;
+    Padgett robust action; Putnam two-level bargaining) is not yet in the code. Plan amended: Stage 3 (armature)
+    and Stage 4 (four games) agonists must now READ the source-research trilogy directly, not just the critique
+    distillation, so this commissioned scholarship actually reaches the implementation.
+  - **NEXT: Stage 3** (rhetoric grounding + adjudicator armature — CR4 stasis, CR5 self-gating, the
+    Style×Conviction dot-product aimed at the judge — reading the source-research trilogy per above,
+    not just the critique distillation).
 
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
