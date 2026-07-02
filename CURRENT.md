@@ -18,7 +18,7 @@ the head of its lineage; predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
-| **Personal combat** | `designs/scene/combat_engine_v1/` (resolver package; ED-900–904, re-ratified ED-904; D1–D9 ED-1029) |
+| **Personal combat** | `designs/scene/combat_engine_v1/` (resolver package; ED-900–904, re-ratified ED-904; D1–D9 ED-1029). Typed Class-C export: `references/engine_params/combat_engine_v1.json` — GENERATED from `config.py` via `tools/export_engine_params.py`, round-trip-checked blocking in CI (ED-1052 seed); the Godot port regenerates from it, never hand-edits |
 | **Mass battle** | `designs/provincial/mass_battle_v30.md` (+ `mass_battle_integration_v30.md`) |
 | **Social contest** | `designs/scene/social_contest_v30.md` (+ `_index`, `_infill`; `params/contest.md`) — ⚠️ a staged **contest_rebuild** is in flight (Gate 0 ratified 2026-06-30; reserved ED 1055–1079 / PP 800–809; Stage 1a σ-kernel landed as `sim/autoload/sigma_leverage.py`); this row remains the head until a rebuild stage supersedes it |
 | **Faction / political** | `designs/provincial/faction_canon_v30.md` + `faction_layer_v30.md` + `faction_behavior_v30.md` + `faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`) |

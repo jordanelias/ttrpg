@@ -204,6 +204,26 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_names_check.py
 
+  engine-params-roundtrip:
+    name: Engine-Params Round-Trip (oracle → export)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # BLOCKING from day one: deterministic and self-consistent (no external pins).
+    # references/engine_params/combat_engine_v1.json is GENERATED from the canonical
+    # combat oracle (config.py, ED-900/904). If config.py changes, regenerate with
+    # tools/export_engine_params.py and commit both together — the port regenerates
+    # from the export and never hand-edits (ED-1050 discipline; ED-1052 typed-params seed).
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Committed JSON matches config.py
+        run: python3 tools/export_engine_params.py --check
+
   module-shape-check:
     name: Module Shape / Container Hygiene (report-only)
     runs-on: ubuntu-latest
@@ -410,6 +430,7 @@ jobs:
       - editorial-check
       - naming-check
       - names-consistency
+      - engine-params-roundtrip
       - sim-fabrication-check
       - vetting-check
       - unit-tests
