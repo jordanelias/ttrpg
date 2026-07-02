@@ -105,6 +105,57 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
                 subunits=[su], dr=dr, stance=stance, speed=speed)
 
 
+def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit]
+               morale_start=None, dr=1, stance='balanced', speed='Standard'):
+    """Faction→ARMY adapter: construct a MULTI-subunit Unit from a list of per-subunit spec dicts.
+    `gauge_mb.make_mixed_unit` already proves the data model supports independently-placed/typed/tasked
+    subunits, but that constructor is gauge-harness-local; this is the public, workbench-facing
+    equivalent (mirrors its spec-dict-list shape). `build_unit` (single-subunit) is untouched.
+
+    specs: list of dicts, one per subunit. Each may set shape (required), tier (default 3), troop_type
+    (default 'infantry'), unit_type (default 'melee'), starting_position (default: staggered down the
+    battlefield from this faction's start row — mirrors make_mixed_unit's own deployment-layout
+    convenience default; CALIBRATED, not historically cited, see sim_verification_ledger.json), stance,
+    instructions, troops, concentration, and per-subunit power/discipline/morale/morale_start/dr/
+    stamina/stamina_max overrides.
+
+    A canonical troop type (TROOP_TYPE_STATS) draws its §B.2 Power/Discipline/Morale presets via
+    Subunit.of_type unless the spec overrides them; a non-canonical type (e.g. bare 'infantry')
+    inherits the parent Unit's fallbacks below — same behavior as build_unit/make_mixed_unit.
+
+    troops/concentration ARE forwarded here (make_mixed_unit's own 2-line omission — it never popped
+    these two keys from its per-subunit spec dict, so a caller-supplied density silently vanished).
+
+    Each subunit's advance_dir is set from faction (matching build_unit's convention) rather than left
+    at the dataclass default of 1 for every subunit regardless of side (make_mixed_unit does not set
+    this at all) — a deliberate correction, not a mirroring gap: a subunit placed wide via
+    starting_position (the whole point of exposing placement here) must still advance toward the enemy
+    on its own side's correct axis on the legacy (non-FIELD_MOVEMENT) path.
+
+    Zero existing call site touched — net-new function, byte-exact by construction.
+    [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors]"""
+    advance_dir = -1 if faction == 'A' else 1
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    subs = []
+    for i, sp in enumerate(specs):
+        sp = dict(sp)
+        pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
+        tt = sp.pop('troop_type', 'infantry')
+        shape = sp.pop('shape')
+        tier = sp.pop('tier', 3)
+        kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
+                  instructions=tuple(sp.pop('instructions', ())), advance_dir=advance_dir)
+        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
+                  'troops', 'concentration'):
+            if k in sp:
+                kw[k] = sp.pop(k)
+        subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
+    return Unit(name=name, faction=faction, power=power, command=command,
+                discipline=discipline, discipline_start=discipline,
+                morale=morale, morale_start=(morale if morale_start is None else morale_start),
+                subunits=subs, dr=dr, stance=stance, speed=speed)
+
+
 def resolve_battle(*args, kind='multi', **kwargs):
     """Battle-type ROUTER — the wrapper's routing duty. Transparently dispatches to the loop in
     orchestration; it computes no outcome itself. Kinds:
@@ -121,7 +172,7 @@ def resolve_battle(*args, kind='multi', **kwargs):
     raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
 
 
-_WRAPPER_API = {"build_unit", "resolve_battle"}
+_WRAPPER_API = {"build_unit", "build_army", "resolve_battle"}
 
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)

@@ -49,7 +49,7 @@ PC_FACING_SLEW_BASE = float(_hu_os.environ.get('PC_FACING_SLEW_BASE', '60'))  # 
 PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
 PC_FACING_ROUT = (_hu_os.environ.get('PC_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
 
-__all__ = ['Subunit', 'Unit', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+__all__ = ['Subunit', 'Unit', 'Order', 'PC_ENVELOP_PATH', 'PC_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff']
 
@@ -91,6 +91,51 @@ def _slew_facing(cur, desired, discipline):
     elif ang < -max_turn: ang = -max_turn
     ca, sa = math.cos(ang), math.sin(ang)
     return (cx * ca - cy * sa, cx * sa + cy * ca)
+
+
+# [Stage C, adversarial review] Order.behavior may only set fields that are pure behavioral/targeting
+# switches -- read fresh every tick, no cached derived state keyed off them. Fields that drive
+# _oriented()/cell geometry (shape, tier, troops, concentration, starting_position) or a live position
+# sign-multiplier (advance_dir) are DELIBERATELY excluded: __post_init__ distributes cell_troops over
+# _oriented(self)'s ids exactly once at construction, so setattr-ing any of those mid-battle leaves
+# cell_troops/cell_offsets stale against the new geometry -- confirmed via repro to orphan troops
+# (troop_count changes but cell_troops keeps the old key set/sum) or teleport a cell instantly (flipping
+# advance_dir is a live sign-flip on already-accumulated cell_offsets, not a next-tick effect). Safely
+# supporting those would need re-running __post_init__'s redistribution, which no order use case
+# (hold-then-advance, stance/instructions/targeting switches, entering escort mode) actually needs.
+_ORDER_SAFE_FIELDS = frozenset({
+    'stance', 'instructions', 'unit_type', 'role',
+    'target_condition', 'target_delay_ticks', 'order_target_idx',
+    'escort_of', 'escort_offset', 'escort_engage_on_contact',
+})
+
+# [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
+# malformed trigger (a typo, e.g. 'tickk:4') fails loudly immediately rather than silently never firing
+# for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
+# never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
+# never satisfied SHOULD stay pending forever, that's by design, but a typo should not get that far).
+_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:')
+
+
+@dataclass
+class Order:
+    """[Stage C] A single timed/conditional instruction queued on a Subunit. trigger:
+    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref). behavior: a dict of
+    attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
+    'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
+    including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an order),
+    not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
+    trigger: str
+    behavior: dict = field(default_factory=dict)
+    waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
+
+    def __post_init__(self):
+        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:')):
+            raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
+        bad = set(self.behavior) - _ORDER_SAFE_FIELDS
+        if bad:
+            raise ValueError(f"Order.behavior sets unsafe field(s) {sorted(bad)}; "
+                              f"Order may only set {sorted(_ORDER_SAFE_FIELDS)} (see _ORDER_SAFE_FIELDS)")
 
 
 @dataclass
@@ -170,6 +215,18 @@ class Subunit:
     routed: bool = False
     broken: bool = False
     discipline_start: Optional[int] = None
+    # [Stage C] Timed/conditional order queue -- fired in sequence by check_orders (core/contact.py),
+    # called once per tick per side, before assign_targets. Empty tuple -> the consumer's loop body
+    # never executes for any existing Subunit (byte-exact).
+    orders: Tuple[Order, ...] = ()
+    _order_idx: int = 0
+    # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
+    # archers"): a subunit tracking a friendly's position instead of (or until) engaging an enemy.
+    # All default-inert -> byte-exact for any existing Subunit.
+    escort_of: Optional[object] = field(default=None, repr=False)   # live ref to the escorted friendly Subunit
+    escort_offset: Tuple[float, float] = (0.0, 0.0)   # (dr, dc) in the escorted unit's LOCAL (facing-rotated) frame; +dr = ahead
+    escort_engage_on_contact: bool = False    # False = keep screening indefinitely; True = one-shot latch to normal enemy-targeting once acquired
+    _escort_engaged: bool = False             # the latch
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic

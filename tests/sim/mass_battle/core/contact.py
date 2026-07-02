@@ -8,7 +8,45 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
+__all__ = ['check_orders', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
+
+
+def check_orders(unit, t, enemy_cells):
+    """[Stage C] Fire each subunit's pending orders (Subunit.orders, a Tuple[Order,...]) whose trigger
+    condition is met this tick. Called once per tick per side, BEFORE assign_targets (an order's
+    behavior dict may itself set target_condition/target_delay_ticks/etc., so orders must land first).
+    Orders fire in sequence -- a later order cannot fire before an earlier one's trigger is satisfied.
+    Reuses the exact 'kind:value' trigger-parsing idiom already in production for target_condition's
+    'in_range:N' (see assign_targets, immediately below) -- no new parsing pattern.
+
+    Triggers: 'immediate' | 'tick:N' (t >= N) | 'enemy_range:D' (within D of the nearest enemy cell) |
+    'ally_at:D' (within D of order.waypoint_ref's centroid -- the allied Subunit to watch).
+
+    Byte-exact: Subunit.orders defaults to () -- the while loop body never executes for any existing
+    Subunit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
+    for sub in unit.subunits:
+        while sub._order_idx < len(sub.orders):
+            order = sub.orders[sub._order_idx]
+            fired = False
+            if order.trigger == 'immediate':
+                fired = True
+            elif order.trigger.startswith('tick:'):
+                fired = t >= int(order.trigger.split(':', 1)[1])
+            elif order.trigger.startswith('enemy_range:'):
+                D = float(order.trigger.split(':', 1)[1])
+                if enemy_cells:
+                    my = sub.centroid()
+                    fired = min(math.hypot(my[0] - er, my[1] - ec) for (er, ec) in enemy_cells) <= D
+            elif order.trigger.startswith('ally_at:'):
+                D = float(order.trigger.split(':', 1)[1])
+                if order.waypoint_ref is not None:
+                    my = sub.centroid(); wp = order.waypoint_ref.centroid()
+                    fired = math.hypot(my[0] - wp[0], my[1] - wp[1]) <= D
+            if not fired:
+                break
+            for k, v in order.behavior.items():
+                setattr(sub, k, v)
+            sub._order_idx += 1
 
 
 def assign_targets(unit_a, unit_b):

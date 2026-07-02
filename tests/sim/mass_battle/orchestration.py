@@ -1086,9 +1086,16 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                                  + _atom_b.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
                         _atom_b.halted_cells.add((orig_r, orig_c)); break
-        assign_targets(unit_a, unit_b)
+        # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
+        # target_condition/target_delay_ticks/stance/instructions, so orders must land first. Hoisting
+        # a_cells_set/b_cells_set up here (they were computed just after assign_targets) is a pure,
+        # behavior-preserving reorder: both are recomputed fresh from current cell positions with no
+        # side effects, so moving the computation 3 lines earlier changes nothing else.
         b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
         a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
+        check_orders(unit_a, t, b_cells_set)
+        check_orders(unit_b, t, a_cells_set)
+        assign_targets(unit_a, unit_b)
         # v21: SIMULTANEOUS RESOLUTION — cache all target centroids BEFORE any
         # atom moves. Without this, unit_a advances toward unit_b's pre-move
         # centroid, but unit_b advances toward unit_a's POST-move centroid,
@@ -1099,6 +1106,51 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             if atom.target_atom:
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
+
+        # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
+        # archers"). A screening subunit (escort_of set) has no enemy target yet, so it was never in
+        # cached_centroids above and the movement gate below (`if atom.target_atom:`) never fired for
+        # it — confirmed dead code in an earlier draft. Two additive fixes, computed here (same
+        # synchronized pre-move point as cached_centroids, preserving the v21 simultaneity discipline):
+        # latch the one-shot engage-on-contact switch now that assign_targets has run (a just-acquired
+        # real target_atom takes over targeting immediately, not one tick late), then give any
+        # still-escorting atom a centroid to advance toward -- the escorted subunit's live centroid
+        # plus escort_offset ROTATED into its current facing frame (not the static spawn-time
+        # advance_dir), so screening survives the escorted unit wheeling/enveloping/sweeping.
+        def _escort_facing(sub):
+            if PC_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
+                fr, fc = sub._node_facing
+            elif sub.cell_facing_vec:
+                _vecs = list(sub.cell_facing_vec.values())
+                fr = sum(v[0] for v in _vecs) / len(_vecs)
+                fc = sum(v[1] for v in _vecs) / len(_vecs)
+            else:
+                fr, fc = sub.advance_dir, 0
+            mag = math.hypot(fr, fc)
+            return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)
+
+        for atom in unit_a.subunits + unit_b.subunits:
+            if (atom.escort_of is not None and atom.escort_engage_on_contact
+                    and not atom._escort_engaged and atom.target_atom is not None):
+                atom._escort_engaged = True
+            # NOTE: the escort centroid overrides cached_centroids whenever escorting-and-not-yet-
+            # engaged, regardless of target_atom -- assign_targets' default 'nearest' condition sets
+            # target_atom to SOME enemy unconditionally the instant one exists (it is not gated on
+            # range), so gating this override on "target_atom is None" (an earlier version of this
+            # fix did) left it dead in every ordinary scenario: target_atom becomes non-None almost
+            # immediately, long before real contact, and the escort would silently start chasing the
+            # enemy directly instead of holding its screening position -- confirmed empirically (a
+            # screen with escort_engage_on_contact=False still switched to chasing the enemy on tick
+            # 1). "Screen IS the front line" (the False default) means movement is governed by the
+            # escort relationship until the one-shot latch above actually fires; a caller wanting
+            # real range-gated engagement should set target_condition='in_range:D' on the escorting
+            # subunit (an existing primitive) rather than relying on target_atom's mere presence.
+            if atom.escort_of is not None and not atom._escort_engaged:
+                _esc = atom.escort_of
+                _fr, _fc = _escort_facing(_esc)
+                _ex, _ey = _esc.centroid()
+                _dr, _dc = atom.escort_offset
+                cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
 
         def _cells_float_of(unit):
             return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
@@ -1122,14 +1174,17 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # matrix / gauge re-run). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
         b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
         a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
+        # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
+        # even with target_atom=None, using the escort centroid computed above. Every existing
+        # scenario's `if atom.target_atom:` case is untouched (escort_of defaults to None).
         for atom in unit_a.subunits:
-            if atom.target_atom:
+            if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged):
                 # per-subunit formation-hold: each subunit advances on its OWN Discipline
                 # (single-subunit inherits -> == unit.discipline -> byte-exact)
                 atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
                                    enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
         for atom in unit_b.subunits:
-            if atom.target_atom:
+            if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged):
                 atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
                                    enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
