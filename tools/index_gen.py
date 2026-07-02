@@ -126,6 +126,9 @@ def generate_editorial_index(active_yaml: str, archive_yamls: dict[str, str] = N
     output is no longer consumed by any hook/gate. Retained (not deleted) because
     deleting generator code is a separate call; do NOT wire this back to a live path
     without first repointing it at the JSONL store. See canon/editorial_ledger_migration_2026-05-28.md.
+    Also note: this generator's r'ED-\d+' id_pattern predates the ED-<LANE>-NNNN
+    namespace (2026-07-02) and does not recognize lane-tagged ids — one more reason
+    not to revive it without an update pass first.
     """
     entries = _collect_ed_entries(active_yaml, archive_yamls or {})
     lines = [
