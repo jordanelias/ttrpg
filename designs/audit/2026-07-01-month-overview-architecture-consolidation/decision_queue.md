@@ -21,8 +21,13 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
 
 ## Mass battle / simulation
 
-6. **Coordinate-field flip (field-ON)** — unratified candidate behind default-OFF toggles;
-   gauge OFF 5/13 → ON 4/13 with new H2/H9 divergences (PR #45).
+6. **Coordinate-field flip (field-ON)** — ~~unratified candidate behind default-OFF toggles;
+   gauge OFF 5/13 → ON 4/13 with new H2/H9 divergences (PR #45).~~ **RESOLVED — Jordan-ratified
+   2026-07-02 ("yes, field movement is default."), executed as ED-1089:** FIELD_MOVEMENT/
+   PC_NODE_COHESION now default ON; grid stays the byte-exact oracle via explicit `=0` pins (CI
+   gate updated accordingly); field golden digests re-recorded post-LC-8. The gauge-band gap was
+   known and accepted at ratification (attributed to unbuilt control-hierarchy depth, not the
+   substrate).
 7. **`orchestration.py` decomposition Stages 3-6** (ED-1043) — each stage gated.
 8. **Sim degenerate win-share** — a seeded batch yields one faction ~87%, two at 0%, and
    nothing flags it; balance tuning + a wider regression oracle are design calls.

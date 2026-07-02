@@ -129,8 +129,8 @@ async function loadMode() {
   document.getElementById('mode-banner').innerHTML =
     `<b>PER_CELL</b>=${mode.per_cell}  <b>FIELD_MOVEMENT</b>=${mode.field_movement}  <b>PC_NODE_COHESION</b>=${mode.pc_node_cohesion}<br>` +
     (mode.field_movement
-      ? 'Running the COORDINATE-FIELD candidate. Positions are continuous floats.'
-      : 'Running the INTEGER GRID baseline. To visualize the field candidate, restart the server with FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1.');
+      ? 'Running the COORDINATE FIELD (the default since the ED-1089 flip). Positions are continuous floats.'
+      : 'Running the legacy INTEGER-GRID oracle (explicitly requested via FIELD_MOVEMENT=0 PC_NODE_COHESION=0). Restart without those env vars for the default coordinate field.');
 }
 
 function setSideFieldsEnabled(prefix, enabled, placeholderLabel) {

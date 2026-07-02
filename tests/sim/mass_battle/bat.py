@@ -142,20 +142,21 @@ def trial_vector(ua, ub, r):
 EXPECTED = {
     'unit': '18bc4a0bada9ab0e8fa7fd27d5944927026bbfdcea1cd8142874b0e93b369c06',
     'cell': 'bf666d04ae743622ad43c42fec2250f39f66b2150ab4fe52738a5037983de9da',
-    # [Stage A, 2026-07-01; updated 2026-07-02 for the TOI refactor] The coordinate-field candidate's
-    # OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required by run_battle's own
-    # assert). NOT byte-exact with the grid digests above by construction (Chebyshev->Euclidean + the
+    # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
+    # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
+    # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
+    # NOT byte-exact with the grid digests above by construction (Chebyshev->Euclidean + the
     # true-adjacency standoff halt are intended behaviour changes, not a refactor) -- this is the field
-    # path's own regression anchor. Updated 2026-07-02: the halved-anchor-precap + iterated
-    # worst-violator per-cell clamp was replaced with an exact time-of-impact (continuous-collision)
-    # solve, plus reach-and-facing-asymmetric closing-budget throttling -- an intentional behaviour
-    # change (a different, more precise halt trajectory), reconfirmed against the true-float standoff
-    # invariant (min cell separation == standoff() exactly, zero violations, across the same sampled
-    # matchups) and the reach-advantage mechanic (a monkeypatched Long-vs-Short-reach matchup holds
-    # standoff exactly at the reach-summed distance). Update ONLY on an intentional field-path
+    # path's own regression anchor. Re-recorded 2026-07-02 (a deliberate, Jordan-ratified behaviour
+    # change bundle, NOT a regression): (1) the LC-8 battery migration -- three rows now build
+    # multi-subunit armies via build_envelopment/build_refused_flank; the prior field digests predated
+    # that migration and were stale against the current battery; (2) ED-1091's frontal-only recoil
+    # zone-gate (PC_RECOIL_FRONTAL, default ON) -- affects cell_field only in principle (the recoil
+    # block is PER_CELL-gated) and the battery's one braced row is frontal, so the grid 'cell' digest
+    # above was verified byte-identical after the gate landed. Update ONLY on an intentional field-path
     # behaviour change, same discipline as the grid digests.
-    'unit_field': '5f19addcb9f2739fa9438e4f4fff1a1ed720ee05c203bc10eaa3621bf699e604',
-    'cell_field': 'd41d5cf41bbc67aa29993a95f2bab17c1adb4c4c05341142dd9315b01c838912',
+    'unit_field': 'c79577521010ebfd796124d1634478c200349e298e9983002abcea2168bbe006',
+    'cell_field': 'dd08552124cdaf2c41dec191bef74d9db769dc779a5fa5227d48547d7ade0139',
 }
 
 

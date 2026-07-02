@@ -2,8 +2,9 @@
 (Mirrors designs/scene/combat_engine_v1/workbench/server.py's pattern.)
 
 Run:  python tests/sim/mass_battle/workbench/server.py   then open http://localhost:8766
-      PER_CELL=1 FIELD_MOVEMENT=1 PC_NODE_COHESION=1 python tests/sim/mass_battle/workbench/server.py
-      to visualize the coordinate-field candidate instead of the integer grid.
+      A bare run now visualizes the COORDINATE FIELD — FIELD_MOVEMENT/PC_NODE_COHESION default ON
+      since the ED-1089 flip (Jordan-ratified 2026-07-02). To visualize the legacy integer-grid
+      oracle instead: FIELD_MOVEMENT=0 PC_NODE_COHESION=0 python tests/sim/mass_battle/workbench/server.py
 
 IMPORTANT — mode is fixed at process start. PER_CELL / FIELD_MOVEMENT / PC_NODE_COHESION are read
 from os.environ once at import time and star-imported into every consumer module as INDEPENDENT
