@@ -51,6 +51,15 @@ _ENVELOP_WINGS = [{'shape': 'Line', 'starting_position': (_R, 3)}, {'shape': 'Li
 _ENVELOP_WINGS_CAV = [{'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 3)},
                       {'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 15)}]
 
+# Side-B mirrors, for genuinely symmetric multi-subunit-vs-multi-subunit scenarios (both sides field
+# 3 independently-tasked subunits at once, not just an attacker with a lone-subunit defender) — this
+# is what actually exercises the Unit-level command layer (build_army/orders/escort) on both sides.
+_RB = _cfg.SIDE_B_START_ROW  # [canonical: config.py SIDE_B_START_ROW]
+_ENVELOP_CENTER_B = [{'shape': 'Line', 'starting_position': (_RB, 9)}]
+_ENVELOP_WINGS_B = [{'shape': 'Line', 'starting_position': (_RB, 3)}, {'shape': 'Line', 'starting_position': (_RB, 15)}]
+_REFUSED_STRONG = [{'shape': 'Line', 'starting_position': (_R, 5)}]
+_REFUSED_REFUSED = [{'shape': 'Line', 'starting_position': (_R, 13)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, workbench deployment spacing, not historically cited]
+
 PRESETS = [
     {'id': 'H1', 'label': 'Line vs Line (mirror)', 'a': {'shape': 'Line'}, 'b': {'shape': 'Line'}},
     {'id': 'H4', 'label': 'Envelopment vs Arrowhead (Cannae)',
@@ -63,6 +72,12 @@ PRESETS = [
     {'id': 'C2', 'label': 'Cavalry vs braced Line (repel)', 'a': {'shape': 'Arrowhead', 'troop_type': 'cavalry', 'speed': 'Fast'},
      'b': {'shape': 'Line', 'stance': 'hold', 'discipline': 8, 'instructions': ['brace']}},  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels; raw cav-a LOW]
     {'id': 'R1', 'label': 'Ranged vs Line (open field)', 'a': {'shape': 'Line', 'unit_type': 'ranged', 'stance': 'hold'}, 'b': {'shape': 'Line'}},
+    {'id': 'M3', 'label': 'Envelopment vs Envelopment (symmetric, 3v3 subunits)',
+     'a': {'preset': 'envelopment', 'center': _ENVELOP_CENTER, 'wings': _ENVELOP_WINGS},
+     'b': {'preset': 'envelopment', 'center': _ENVELOP_CENTER_B, 'wings': _ENVELOP_WINGS_B}},
+    {'id': 'OBL', 'label': 'RefusedFlank vs Envelopment (oblique order, 2v3 subunits)',
+     'a': {'preset': 'refused_flank', 'strong': _REFUSED_STRONG, 'refused': _REFUSED_REFUSED},
+     'b': {'preset': 'envelopment', 'center': _ENVELOP_CENTER_B, 'wings': _ENVELOP_WINGS_B}},
 ]
 
 
