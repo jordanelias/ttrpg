@@ -51,7 +51,7 @@ are more "current state" files than there should be; trust them in this strict p
 - **Continuity = git history + `HANDOFF.md`.** No session-log/checkpoint machinery is in use (despite
   retired files lingering — §1). When you pause mid-task, capture next actions in `HANDOFF.md`; a
   commit *is* the session close.
-- **Merging a PR ratifies its PROPOSED contents by default (ED-1088, 2026-07-02).** If a PR lands a
+- **Merging a PR ratifies its PROPOSED contents by default (ED-1090, 2026-07-02).** If a PR lands a
   design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
   that PR *is* the ratification — flip the doc's `## Status:` line, the ED ledger `status`/`needs_jordan`
   fields, and `CURRENT.md` as part of the same merge, not as a separate later step nobody triggers.

@@ -270,7 +270,7 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
-- 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1088); ED-1083 doctrine
+- 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1090); ED-1083 doctrine
   ratified.** Jordan: merging a PR ratifies its PROPOSED/provisional contents by default
   unless the PR body explicitly holds an item back for separate review — closes a real
   recurring gap where PR #55 was reviewed and merged but `holonic_container_doctrine_v1.md`

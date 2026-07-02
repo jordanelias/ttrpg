@@ -65,7 +65,7 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
     explicitly TERMINATION-ONLY (cross-tick convergence NOT proven, conditional on an
     unspecified `decay()` + the D.6 double-count ruling). Went through one full adversarial
     round (3 independent critics found real holes; repair pass closed them; 2 independent
-    re-verifications confirmed the repair). Governed by ED-1088 like any other PR — merging
+    re-verifications confirmed the repair). Governed by ED-1090 like any other PR — merging
     ratifies it as written; that includes its own explicit PROVEN-vs-NOT-PROVEN scope markers
     and open flags, which merging does not itself resolve. See the doc's own §5 consolidated
     decision queue for the ranked open items (OF-7/OF-B1 amendments first, then the D.6
@@ -75,7 +75,7 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
     created this session. Decide if/when a standing conformance-scanner or emergence-auditor
     role has recurred enough to earn a definition.
 20. **~~Doctrine ratification~~ — RESOLVED 2026-07-02.** `holonic_container_doctrine_v1.md`
-    ratified (ED-1083, ED-1088) via the newly-adopted merge-ratifies-by-default convention:
+    ratified (ED-1083, ED-1090) via the newly-adopted merge-ratifies-by-default convention:
     Jordan's approval + merge of PR #55 (which contained the doctrine) constitutes
     ratification of its PROPOSED contents. This does NOT ratify the propagation-spec
     transform the doctrine defers (item 18/J-38 remains open, gated on its own review).

@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED (Jordan-vetoable throughout) — filed 2026-07-02, ED-1089
 
-Per the merge-ratifies-by-default convention (ED-1088): merging the PR that carries this
+Per the merge-ratifies-by-default convention (ED-1090): merging the PR that carries this
 document ratifies it — no separate step required. Ratification covers this document's text
 exactly as written, including its own honest scope markers: it PROVES per-tick and
 per-cascade termination; it does NOT prove cross-tick convergence; it PROPOSES two cited
