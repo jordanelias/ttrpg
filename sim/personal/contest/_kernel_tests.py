@@ -567,15 +567,25 @@ from .wrapper import (build_contest as BC, resolve_contest as RC, GAMES as GM,
                       MECHANICS as MECH, mechanics_selftest as MST, Contest as _Contest)
 _ok, _missing = MST()
 ck(f"wrapper MECHANICS self-test: every WIRED mechanic resolves (missing {_missing})", _ok)
-# F10 (judge-upheld): audience_resistance is DERIVED but NOT plumbed into resolution, so it must NOT
-# claim WIRED (that over-claimed a live mechanic). It is PARTIAL — metadata-only — until the reserved
-# ED stub (contest_rebuild, ED-1055..1079) wires it into the tracker/Venue.base_ob.
-ck("F10: audience_resistance is PARTIAL (derived, not yet plumbed) — not over-claimed as WIRED",
+# F10 (judge-upheld): the FLAT audience_resistance SCALAR (avg-Stability−1, Contest.resistance) is
+# DERIVED but NOT plumbed into resolution, so it must NOT claim WIRED (that over-claimed a live
+# mechanic). It stays PARTIAL — metadata-only — until the reserved ED stub wires the flat scalar in.
+# NB (Stage 3 / Gate C, revised): the ADJUDICATOR ARMATURE (ED-1062) adds a Style×armature_position
+# CONTINUOUS δσ leverage to the net_boost μ-shift term in _reception when a Bout carries an armature (judge
+# finding 5) — the ONE live armature channel, NOT a resistance/resonance mechanism and NOT the flat
+# audience_resistance scalar. The flat scalar is still metadata-only, and the armature is opt-in. So F10
+# remains truthful for the FLAT scalar; the guard below checks the flat scalar (the Contest.resistance
+# attribute / _derive_resistance output) is not read, rather than a bare 'resistance' substring (which
+# Stage-3 armature comments legitimately mention).
+ck("F10: audience_resistance is PARTIAL (flat scalar derived, not yet plumbed) — not over-claimed as WIRED",
    MECH["audience_resistance"]["status"] == "PARTIAL")
 import inspect as _inspect
 from . import resolver as _resolver_mod
-ck("F10: the resolver genuinely reads no 'resistance' (metadata-only claim is truthful)",
-   "resistance" not in _inspect.getsource(_resolver_mod))
+_resolver_src = _inspect.getsource(_resolver_mod)
+# The flat audience_resistance scalar is read iff the resolver references the Contest.resistance
+# attribute or calls _derive_resistance — neither should appear (the flat scalar stays metadata-only).
+ck("F10: the resolver reads no FLAT audience_resistance scalar (no .resistance attr / _derive_resistance call)",
+   ".resistance" not in _resolver_src and "_derive_resistance" not in _resolver_src)
 # build_contest is an adapter: it builds a Contest spec, resolves nothing
 _bc = BC(4, 4, venue="formal_contest", world={"stabilities":[3,4]})
 ck("build_contest returns an unresolved Contest spec", isinstance(_bc, _Contest))
@@ -1131,6 +1141,499 @@ ck("Stage2 guilds: derivation is CONTEXT-driven — a pathos-leaning adjudicator
 ck("Stage2 guilds: an exactly-neutral adjudicator resolves deterministically to logos->Memory (tie-break order)",
    _gbf(_AdjW(char_ethos=1/3, char_pathos=1/3, char_logos=1/3)) == (_Gen.MEMORY, "Genre")
    and _gbf(_AdjW(char_ethos=1/3, char_pathos=1/3, char_logos=1/3)) == (_Gen.MEMORY, "Genre"))
+
+# ══════════════════════════════════════════════════════════════════════════════════════════
+# STAGE 3 / GATE C — RHETORIC GROUNDING (CR4 stasis × genre, CR5 orientation self-gating) +
+# THE ADJUDICATOR ARMATURE (Style × armature_position dot-product → resistance delta) + the
+# Appraise-reveal boundary. These assert the grounding is BEHAVIORAL, not nominal (Lens 6): CR4
+# stasis actually changes which genre is primary; CR5's failed-Obscuring move actually costs Face;
+# the armature actually MOVES the verdict (adjudicator-conviction-sensitive); the flat scalar is the
+# zero-vector row; the asymmetric-proceeding gate turns it off; Appraise reveals partially, not fully.
+print("== Stage 3 / Gate C: CR4 Ciceronian stasis × genre (terrain sets stance, behavioral) ==")
+from .rhetoric import (STASIS_PRIMARY_GENRE as _SPG, primary_genre_for as _pgf,
+                       is_pre_merits as _prem, is_higher_order_reframe as _hor,
+                       EPIDEICTIC_COMPRESSION as _EPI, orientation_channel as _ochan,
+                       cr5_self_backfire as _cr5, CR5_SELF_GATING as _CR5G,
+                       CR5_BACKFIRE_MAGNITUDE as _CR5M,
+                       genre_of_ground as _gog, genre_of_style as _gos,
+                       primary_genre_pool_bonus as _pgpb,
+                       CR4_PRIMARY_GENRE_POOL_BONUS as _CR4B)
+from .primitives import Stasis as _Stasis3
+from .dictionaries import Genre as _Gen3, Orientation as _Or3
+# CR4: stasis is TERRAIN and sets the PRIMARY GENRE (stance), keyed on the GROUND per reconciliation_map
+# §1.2 (NOT on TENSE). conjectural/FACT → Memory (§1.2 res(2)); definitional/DEFINITION → None — a
+# HIGHER-ORDER REFRAME operator, NOT a genre (§1.2 res(3): "NOT Memory … never collapsed to a genre";
+# RATIFIED CR4: "definitional = higher-order reframe via the authored Present-rendering", Present not Memory).
+ck("CR4 (§1.2 res(2)/res(3), judge findings 1/2): conjectural (FACT) → Memory; definitional (DEFINITION) → None (a REFRAME operator, NOT Memory/a genre)",
+   _pgf(_Stasis3.FACT) == _Gen3.MEMORY and _pgf(_Stasis3.DEFINITION) is None)
+ck("CR4: deliberative future grounds (CONSEQUENCE/FEASIBILITY) → Projection",
+   _pgf(_Stasis3.CONSEQUENCE) == _Gen3.PROJECTION and _pgf(_Stasis3.FEASIBILITY) == _Gen3.PROJECTION)
+# CR4 lookup: stasis actually CHANGES which genre is primary — a FACT contest rewards Memory, a
+# CONSEQUENCE contest rewards Projection; the SAME style is primary in one and non-primary in the other.
+ck("CR4 lookup: changing the live stasis changes which genre is primary (terrain drives stance, not a label)",
+   _pgf(_Stasis3.FACT) != _pgf(_Stasis3.CONSEQUENCE)
+   and _pgf(_Stasis3.FACT) == _Gen3.MEMORY and _pgf(_Stasis3.CONSEQUENCE) == _Gen3.PROJECTION)
+# CR4 +1D primary-genre POOL BONUS — the BEHAVIORAL CONSUMER (judge findings 1/2/5). params/contest.md
+# §Genre and Orientation Bonus Dice: "Orator's CHOSEN GENRE matches primary genre". primary_genre_pool_bonus
+# is now keyed on the orator's CHOSEN GENRE (genre_of_style — the genre of the Style-card the orator picks),
+# NOT the move ground (judge finding 1: the resolver forces mv.ground == live via Stasis.relevant, so keying
+# on the ground's genre was a TAUTOLOGY that dropped the Style choice). genre_of_ground still maps a ground
+# to its genre for the terrain, but the CR4 CONSUMER reads the chosen Style's genre.
+ck("CR4 consumer: genre_of_ground is keyed on the GROUND per §1.2 — FACT→Memory, CONSEQUENCE→Projection, QUALITY→None, and DEFINITION→None (a reframe operator, NOT Memory; §1.2 res(3)/judge findings 1/2)",
+   _gog(_Stasis3.FACT) == _Gen3.MEMORY and _gog(_Stasis3.CONSEQUENCE) == _Gen3.PROJECTION
+   and _gog(_Stasis3.QUALITY) is None and _gog(_Stasis3.DEFINITION) is None)
+# §1.2 (judge finding 2): the genre map must NOT be keyed on TENSE. DEFINITION and FACT share TENSE=='past',
+# yet they map to DIFFERENT genres (FACT→Memory, DEFINITION→None) — proving the map is ground-keyed, not
+# tense-keyed (a tense-keyed map would give them the SAME genre).
+ck("CR4 (§1.2, judge finding 2): the genre map is keyed on GROUND not TENSE — FACT and DEFINITION share tense 'past' but map to different genres (Memory vs None)",
+   _Stasis3.tense(_Stasis3.FACT) == _Stasis3.tense(_Stasis3.DEFINITION) == "past"
+   and _gog(_Stasis3.FACT) != _gog(_Stasis3.DEFINITION)
+   and _SPG[_Stasis3.DEFINITION] is None)
+# genre_of_style: the orator's CHOSEN GENRE = the chosen Style-card's genre (judge finding 1). Precedent/
+# Suppression → Memory; Vision/Insinuation → Projection; None (no style chosen) → None.
+ck("CR4 (finding 1): genre_of_style reads the orator's CHOSEN GENRE off the Style card — Precedent/Suppression→Memory, Vision/Insinuation→Projection, None→None",
+   _gos("precedent") == _Gen3.MEMORY and _gos("suppression") == _Gen3.MEMORY
+   and _gos("vision") == _Gen3.PROJECTION and _gos("insinuation") == _Gen3.PROJECTION
+   and _gos(None) is None)
+# THE ANTI-TAUTOLOGY PROOF (judge finding 1): the +1D keys on the orator's CHOSEN GENRE vs the live-stasis
+# primary genre — so on a Memory-primary FACT stasis a Memory-chosen style (Precedent) earns +1D but a
+# Projection-chosen style (Vision) earns 0; and it FLIPS on a Projection-primary CONSEQUENCE stasis. The
+# orator's Style choice is LOAD-BEARING (not a terrain-determined constant), which the prior ground-keyed
+# version — genre_of_ground(mv.ground)==primary_genre_for(live), always true after Stasis.relevant — was not.
+ck("CR4 consumer (finding 1): the +1D keys on the CHOSEN GENRE, not the ground — Memory-chosen (Precedent) earns +1D on a FACT stasis, Projection-chosen (Vision) earns 0 on the SAME stasis",
+   _pgpb(_Gen3.MEMORY, _Stasis3.FACT) == _CR4B and _CR4B == 1.0
+   and _pgpb(_Gen3.PROJECTION, _Stasis3.FACT) == 0.0)
+ck("CR4 consumer (finding 1): the reward FLIPS with the terrain — on a Projection-primary CONSEQUENCE stasis, Projection-chosen (Vision) earns +1D and Memory-chosen (Precedent) earns 0",
+   _pgpb(_Gen3.PROJECTION, _Stasis3.CONSEQUENCE) == _CR4B
+   and _pgpb(_Gen3.MEMORY, _Stasis3.CONSEQUENCE) == 0.0)
+ck("CR4 consumer: no chosen genre (no Style / armature) → no CR4 bonus (there is no 'chosen genre' to match; finding 1 — armature=None parity)",
+   _pgpb(None, _Stasis3.FACT) == 0.0 and _pgpb(None, _Stasis3.CONSEQUENCE) == 0.0)
+ck("CR4 consumer: a present-tense/pre-merits live stasis (Qualitative/Translative) has no primary genre, so NO chosen genre earns the bonus",
+   _pgpb(_Gen3.MEMORY, _Stasis3.QUALITY) == 0.0 and _pgpb(_Gen3.PROJECTION, _Stasis3.JURISDICTION) == 0.0)
+# CR4: definitional = higher-order reframe (closes F5); translative = pre-merits jurisdiction, the Stay
+# (closes F6) with NO primary genre until settled.
+ck("CR4: definitional is a HIGHER-ORDER reframe (F5); it is up the stasis ladder from fact",
+   _hor(_Stasis3.DEFINITION) and _Stasis3.stronger_than(_Stasis3.DEFINITION, _Stasis3.FACT))
+ck("CR4: translative (JURISDICTION) is PRE-MERITS (the Stay, F6) with NO primary genre until settled",
+   _prem(_Stasis3.JURISDICTION) and _pgf(_Stasis3.JURISDICTION) is None)
+ck("CR4: qualitative (QUALITY, present-tense) has no genre label (epideictic terrain, not a stance)",
+   _pgf(_Stasis3.QUALITY) is None and _Stasis3.tense(_Stasis3.QUALITY) == "present")
+# EPIDEICTIC question (scope item 1): addressed, not silently ignored — present-tense survives as terrain
+# + the RhetoricalWeights *_present column; only the genre LABEL compresses 3→2. RATIFIED (Jordan, Gate
+# C, 2026-07-02): the 2-genre compression is ACCEPTED as-is (ED-1062).
+from .primitives import RhetoricalWeights as _RW3
+ck("CR4 epideictic: the question is documented + answered (not silently dropped) + the compression is RATIFIED",
+   "question" in _EPI and "answer" in _EPI and "decision_for_jordan" in _EPI
+   and "NOT SILENTLY" in _EPI["answer"] and "RATIFIED" in _EPI["decision_for_jordan"])
+ck("CR4 epideictic: the present/epideictic register genuinely survives in the substrate (ethos_present is the epideictic home)",
+   _RW3().weight("ethos", "present") > _RW3().weight("ethos", "past")
+   and _RW3().weight("ethos", "present") > _RW3().weight("ethos", "future"))
+# CR4 BEHAVIORAL — the RESOLUTION-OUTCOME proof (judge finding 2): CR4 must change HOW A CONTEST
+# RESOLVES, not just a lookup. The +1D primary-genre bonus enters the reception POOL (resolver
+# ._reception), so it raises the mean reception DEGREE — which is exactly the quantity _advance turns
+# into track movement. We isolate the +1D CLEANLY (no confound with tense-weights or stasis choice):
+# SAME seed, SAME contestant — only the pool_bonus toggles (0 vs the CR4 +1D). This is the mechanism CR4
+# plumbs into resolution; a higher mean degree ⇒ more track movement ⇒ the verdict moves.
+from .resolver import (Bout as _B4, Contestant as _C4, Venue as _V4, PersuasionTrack as _PT4,
+                       roll_net as _rn4)
+from .contract import Adjudicator as _Adj4
+from sim.autoload.sigma_leverage import net_boost as _nb4
+from .primitives import Pool as _Pool4, Leverage as _Lev4
+def _mean_net(pool_bonus, faculty=5, seed_base=0, N=800):
+    """Mean reception NET (roll_net + net_boost) of an argue move under `pool_bonus` extra pool dice,
+       everything else fixed (same seeds, same faculty). This is exactly what resolver._reception rolls
+       before banding to a degree — the +1D primary-genre bonus (CR4) enters the pool here. A higher mean
+       net is the direct, unconfounded signal that the +1D makes the argument land harder (the pool-aware
+       degree bands can absorb it via the de-saturation bar, so NET — not the integer band — is the clean
+       measure of the mechanic's effect on resolution)."""
+    tot = 0.0
+    lev = _Lev4.net(faculty, on_ground=True)
+    for s in range(N):
+        random.seed(seed_base + s)
+        pool = _Pool4.size(faculty) + pool_bonus
+        tot += _rn4(pool) + _nb4(lev, pool)
+    return tot / N
+_net_no_bonus = _mean_net(0.0)      # CR4 bonus absent (chosen genre ≠ primary, or no chosen style)
+_net_cr4      = _mean_net(_CR4B)    # CR4 +1D primary-genre bonus present (chosen genre == primary)
+ck(f"CR4 BEHAVIORAL (resolution outcome): the +1D primary-genre bonus raises the mean reception NET — the roll _advance converts to track movement ({_net_cr4:.3f} > {_net_no_bonus:.3f})",
+   _net_cr4 > _net_no_bonus + 0.05)
+# And end-to-end (judge finding 1): a full bout where side A argues a MEMORY-chosen Style (Precedent) on a
+# Memory-primary FACT stasis (chosen genre == primary → CR4 +1D fires) resolves to a DIFFERENT mean outcome
+# than the SAME bout where A argues a PROJECTION-chosen Style (Vision) on the SAME FACT stasis (chosen genre
+# ≠ primary → NO +1D). The ONLY difference between the two arms is the orator's CHOSEN GENRE (the Style card;
+# the move, ground, seeds, contestants, venue, judge are all identical) — so the mean outcome MOVING with the
+# Style choice proves (a) CR4 reaches the verdict, not just the reception, AND (b) the Style CHOICE is
+# LOAD-BEARING (the anti-tautology fix; the prior ground-keyed version made the +1D a terrain-determined
+# constant that the Style choice could not touch). We assert the choice MOVES the outcome (directionally
+# neutral): CR4's +1D raises the reception NET (proven in the isolation test above), but the pool-aware
+# de-saturation bar means a bigger pool does not monotonically raise the banded DEGREE — so the honest
+# end-to-end claim is that the CHOSEN GENRE changes the verdict, not that Memory strictly out-scores
+# Projection. Armature carries the chosen Style but a ZERO armature_position, so ONLY the CR4 +1D fires (no
+# armature δσ). Neutral-register venue (proof_* default 1.0) isolates the +1D from tense-weighting.
+from .policy import logos_spammer as _LOG4b
+from .armature import ArmatureConfig as _AC4, ArmaturePosition as _AP4
+def _cr4_choice_adv(style, seed_base=7000, N=1200):
+    v = _V4(proof_logos=.34, proof_ethos=.33, proof_pathos=.33, start_ground=_Stasis3.FACT, win=_PT4(start=5.0))
+    adj = _Adj4()
+    ac = _AC4(styles={A: style}, positions={id(adj): _AP4.zero()})   # zero armature → only CR4 fires
+    tot = 0.0
+    for s in range(N):
+        random.seed(seed_base + s)
+        b = _B4(_C4(5, standing_start=6), _C4(4), v, adj, armature=ac)
+        b.resolve(_LOG4b, _LOG4b)
+        tot += b.state.adv[A]
+    return tot / N
+_cr4_memory     = _cr4_choice_adv("precedent")   # chosen genre Memory == FACT-primary Memory → +1D fires
+_cr4_projection = _cr4_choice_adv("vision")       # chosen genre Projection ≠ FACT-primary Memory → NO +1D
+ck(f"CR4 BEHAVIORAL (end-to-end, finding 1): the orator's CHOSEN GENRE (Style card) MOVES the mean verdict — a Memory-chosen Style (Precedent, +1D fires) resolves DIFFERENTLY from a Projection-chosen Style (Vision, no +1D) on the identical FACT stasis+seeds; the Style choice is load-bearing, not a terrain-determined constant (Δadv {abs(_cr4_memory - _cr4_projection):.3f}) ({_cr4_memory:.3f} vs {_cr4_projection:.3f})",
+   abs(_cr4_memory - _cr4_projection) > 0.05)
+
+print("== Stage 3 / Gate C: CR4 REACHABILITY FIX — Church Tribunal starts at FACT (ED-1062) ==")
+# Before the fix: resolver.Venue.start_ground defaults to Stasis.QUALITY, and modes.proceeding_venue()
+# built every one of the 8 canonical PROCEEDINGS with no start_ground override -> all 8 inherited
+# QUALITY. Since stasis only shifts UPWARD (resolver._advance gates on Stasis.stronger_than, and FACT
+# sits BELOW QUALITY on the Stasis.LADDER), FACT could never be reached in ANY shipped proceeding ->
+# CR4's Memory-primary +1D (which only fires on a FACT-ground live stasis) was DEAD in real play. The
+# fix sets Church Tribunal's start_ground to FACT (modes.CHURCH_TRIBUNAL_START_GROUND); the other 7
+# proceedings are UNCHANGED (still default to QUALITY).
+from .wrapper import build_contest as _BC4r
+_all_proc_names = set(PROCEEDINGS)
+ck("CR4 reachability: church_tribunal now starts at Stasis.FACT (was QUALITY — the reachability gap)",
+   proceeding_venue("church_tribunal").start_ground == _Stasis3.FACT)
+_other_six_start_quality = all(
+    proceeding_venue(_name).start_ground == _Stasis3.QUALITY
+    for _name in _all_proc_names - {"church_tribunal", "guild_arbitration"})
+ck("CR4 reachability: the other proceedings (excl. church_tribunal) are UNCHANGED — still start at the Venue default Stasis.QUALITY",
+   _other_six_start_quality and len(_all_proc_names - {"church_tribunal", "guild_arbitration"}) == 6)
+ck("CR4 reachability: guild_arbitration (Panel win-condition) is ALSO unchanged — still Stasis.QUALITY (not touched by the church_tribunal-only fix)",
+   proceeding_venue("guild_arbitration").start_ground == _Stasis3.QUALITY)
+ck("CR4 reachability: church_tribunal's OTHER fields (exchanges/roles/resistance/adjudicator/track_start) are unchanged by the fix",
+   PROCEEDINGS["church_tribunal"]["exchanges"] == (1, 5)
+   and PROCEEDINGS["church_tribunal"]["roles"] == "inquisitor_proposes"
+   and PROCEEDINGS["church_tribunal"]["resistance"] == "halved_accused"
+   and PROCEEDINGS["church_tribunal"]["adjudicator"] == "expert_judge"
+   and PROCEEDINGS["church_tribunal"]["track_start"] == 6.0)
+
+# END-TO-END, VIA THE NORMAL wrapper.build_contest PATH (not a synthetic Venue that bypasses the
+# proceeding-derived stasis start): build a real church_tribunal Contest, confirm its proceeding-derived
+# venue already carries start_ground=FACT, then play a real Bout on THAT venue/adjudicator (armature
+# carries the chosen Style, zero armature_position so ONLY the CR4 +1D is isolated) — a Precedent
+# (Memory-chosen) orator earns +1D on the FACT-primary terrain; a Vision (Projection-chosen) orator on
+# the SAME church_tribunal venue does not.
+_ct_contest = _BC4r(5, 4, venue="church_tribunal")
+ck("CR4 reachability (build_contest path): the Contest's proceeding-derived venue carries start_ground=FACT",
+   _ct_contest.venue.start_ground == _Stasis3.FACT and _ct_contest.proceeding == "church_tribunal")
+
+def _cr4_church_tribunal_adv(style, seed_base=9000, N=1200):
+    """Real Bout on the church_tribunal Contest's own venue/adjudicator (built_contest path) — proves the
+       FACT-ground reachability fix actually lets CR4's Memory-primary +1D fire in a shipped proceeding,
+       not merely in a synthetic test Venue."""
+    ct = _BC4r(5, 4, venue="church_tribunal")
+    ac = _AC4(styles={A: style}, positions={id(ct.adjudicator): _AP4.zero()})  # zero armature -> only CR4 fires
+    tot = 0.0
+    for s in range(N):
+        random.seed(seed_base + s)
+        b = _B4(ct.side_a, ct.side_b, ct.venue, ct.adjudicator, armature=ac)
+        b.resolve(_LOG4b, _LOG4b)
+        tot += b.state.adv[A]
+    return tot / N
+_ct_memory     = _cr4_church_tribunal_adv("precedent")  # Memory-chosen; church_tribunal live ground FACT -> primary Memory -> +1D fires
+_ct_projection = _cr4_church_tribunal_adv("vision")      # Projection-chosen; FACT-primary is Memory -> no +1D
+ck(f"CR4 reachability BEHAVIORAL (build_contest path, real Church Tribunal proceeding): Precedent (Memory-chosen) now earns its CR4 +1D and resolves DIFFERENTLY from Vision (Projection-chosen) on the SAME live proceeding (Δadv {abs(_ct_memory - _ct_projection):.3f}) ({_ct_memory:.3f} vs {_ct_projection:.3f})",
+   abs(_ct_memory - _ct_projection) > 0.05)
+# Direct check the +1D actually applies at the pool level on this proceeding's own live ground.
+ck("CR4 reachability: on church_tribunal's live ground (FACT), a Precedent (Memory) orator's chosen genre matches the primary genre -> the +1D fires; a Vision (Projection) orator's does not",
+   _pgpb(_gos("precedent"), _ct_contest.venue.start_ground) == _CR4B
+   and _pgpb(_gos("vision"), _ct_contest.venue.start_ground) == 0.0)
+
+print("== Stage 3 / Gate C: CR5 orientation self-gating (Direct->Persuasion / Indirect self-Face backfire) ==")
+# CR5 orientation channel — a DESIGN-TABLE LOOKUP naming the ratified intent (judge finding 7). Revealing
+# (Direct) → the merits Persuasion Track (REALIZED). Obscuring (Indirect) → "face_attack" is the RATIFIED
+# CR5 intent (attack the opponent's Face): RATIFIED (Jordan, Gate C, 2026-07-02; ED-1062) as realized by
+# the Gate-B Doubt Marker (a landed Obscuring move — the resolver does NOT strip the opponent's Face
+# directly; the marker degrades the marked opponent's eventual margin, ED-1060) TOGETHER WITH the
+# self-Face backfire on a deg==0 foul (below) — both pieces together ARE the full CR5 realization, not
+# two conflicting mechanics. This test asserts the DESIGN-TABLE lookup value.
+ck("CR5 DESIGN-TABLE lookup (judge finding 7 — a label naming ratified intent): Revealing→'persuasion_track' (REALIZED); Obscuring→'face_attack' (RATIFIED: realized via the Doubt Marker + self-Face backfire together)",
+   _ochan(_Or3.REVEALING) == "persuasion_track" and _ochan(_Or3.OBSCURING) == "face_attack")
+# CR5 SCOPE — RATIFIED (Jordan, Gate C, 2026-07-02; ED-1062): the self-gating record documents the Doubt
+# Marker + self-Face backfire as kept TOGETHER as the full CR5 realization (not the opponent-Face-attack
+# left open as a still-pending replacement).
+ck("CR5 (finding 7 / RATIFIED Gate C): CR5_SELF_GATING documents the Doubt Marker + self-Face backfire as kept TOGETHER as the full CR5 realization (ED-1062), not left open",
+   "RATIFIED" in _CR5G["scope"] and "TOGETHER" in _CR5G["scope"]
+   and "RESOLVED" in _CR5G["open_forks_for_jordan"] and "TOGETHER" in _CR5G["open_forks_for_jordan"])
+# CR5_SELF_GATING is a single dict — guard the OTHER two fields (status/rule) against the same
+# stale-hedge drift the scope/open_forks_for_jordan fields were caught with (they were fixed one
+# ratification sweep after status/rule were left behind reading "provisional"/"DEFERRED" — Gate C
+# closeout finding).
+ck("CR5 (Gate C closeout finding): CR5_SELF_GATING['status'] and ['rule'] are RATIFIED, not left reading provisional/DEFERRED",
+   "RATIFIED" in _CR5G["status"] and "provisional" not in _CR5G["status"].lower()
+   and "RATIFIED" in _CR5G["rule"] and "DEFERRED" not in _CR5G["rule"])
+# CR5 BACKFIRE — the Nyāya nigrahasthāna self-gating (judge finding 7): the backfire fires ONLY on a
+# GENUINE FOUL — an Obscuring move that LANDS NOWHERE (deg==0, landed=False). A LANDED Obscuring move
+# (deg>=1, landed=True — including a deg==1 partial that ADVANCED the mover's own track) is NOT a foul
+# and does NOT backfire (the cost must not attach to a partial success that helped the mover). A
+# Revealing move NEVER backfires. Magnitude anchored to the Doubt Marker −2 (applied to the 0–10 Face
+# stat — a magnitude precedent, a DIFFERENT quantity than the marker's track-margin −2), BOUNDED by the
+# mover's own standing (judge finding 4).
+ck("CR5 magnitude = the Doubt Marker −2 anchor (params §Interaction Types precedent, not a fresh number)",
+   _CR5M == 2.0)
+ck("CR5 (finding 7): a FOUL Obscuring move that LANDS NOWHERE (landed=False) backfires the −2 anchor onto own Face when standing suffices (nigrahasthāna)",
+   _cr5("suppression", landed=False) == 2.0 and _cr5("insinuation", landed=False) == 2.0)
+ck("CR5 (finding 7): a LANDED Obscuring move (landed=True — incl. a deg==1 partial that helped the mover) does NOT backfire",
+   _cr5("suppression", landed=True) == 0.0 and _cr5("insinuation", landed=True) == 0.0)
+ck("CR5: a Revealing (Direct) move NEVER backfires — landed OR not (it is the merits path, untouched)",
+   _cr5("precedent", landed=False) == 0.0 and _cr5("precedent", landed=True) == 0.0
+   and _cr5("vision", landed=False) == 0.0)
+# JUDGE FINDING 4 (STANDING-BOUNDED — "obstruction is bounded by your own standing"): the backfire is now
+# a FUNCTION of the mover's own Face (my_standing), not a flat −2. min(−2, my_Face): a high-standing orator
+# (Face ≥ 2) risks the full −2; a low-standing orator (Face < 2) risks only what it holds; Face 0 → 0. This
+# realizes the RATIFIED CR5 carry-across "gated by SelfGating.licit — your own Face caps your obstruction"
+# (reconciliation_map §1.3) / research §5.3/§9.1. The prior flat −2 (no standing arg) did NOT realize it.
+ck("CR5 (finding 4): the backfire is BOUNDED BY THE MOVER'S OWN STANDING — Face≥2 risks the full −2, Face<2 risks only what it holds (min(−2, own Face))",
+   _cr5("suppression", landed=False, my_standing=8.0) == 2.0
+   and _cr5("suppression", landed=False, my_standing=2.0) == 2.0
+   and _cr5("suppression", landed=False, my_standing=1.0) == 1.0
+   and _cr5("suppression", landed=False, my_standing=0.0) == 0.0)
+ck("CR5 (finding 4): standing-dependence is monotone (more standing risked = larger absolute self-cost, capped at the −2 anchor)",
+   _cr5("insinuation", landed=False, my_standing=0.5) < _cr5("insinuation", landed=False, my_standing=1.5)
+   and _cr5("insinuation", landed=False, my_standing=1.5) < _cr5("insinuation", landed=False, my_standing=5.0)
+   and _cr5("insinuation", landed=False, my_standing=5.0) == _CR5M)
+ck("CR5 (finding 4): a LANDED / Revealing move never backfires REGARDLESS of standing (the standing bound only shapes the foul-side cost)",
+   _cr5("suppression", landed=True, my_standing=9.0) == 0.0
+   and _cr5("precedent", landed=False, my_standing=9.0) == 0.0)
+ck("CR5: the self-gating record documents trigger + magnitude + Nyaya grounding + open forks for Jordan",
+   _CR5G["cr"] == "CR5" and "nigrahasth" in _CR5G["grounding"].lower()   # 'nigrahasth(ana)' — accent-agnostic substring
+   and "trigger" in _CR5G and "magnitude" in _CR5G and "open_forks_for_jordan" in _CR5G)
+# CR5 WIRED in the resolver (opt-in): a deg==0 Obscuring FOUL strips the mover's Face; a Direct move
+# does not; and — judge finding 7 — a move that LANDED (advanced the mover's own track) NEVER strips
+# Face. Assert against the LIVE resolver, not just the pure function.
+from .resolver import Bout as _B5, Contestant as _C5, Venue as _V5, TallyAtClose as _TAC5, roll_net as _rn5
+from .armature import ArmatureConfig as _AC5
+from .contract import Adjudicator as _Adj5, Move as _Mv5
+from .primitives import Stasis as _St5
+def _obscuring_probe(style, N=120, standing_start=8):
+    """Run N seeded single Obscuring argue moves in the LIVE resolver (armature carries the style + cr5,
+       no armature_position so ONLY the CR5 backfire is exercised). Return (n_stripped,
+       n_stripped_after_landing, realized_deltas): how many moves stripped the mover's Face, how many
+       stripped Face on a move that ALSO advanced the mover's own track (the finding-7 guard — must be
+       ZERO), and the set of REALIZED Face deltas observed on strips. With standing_start=8 the −2 never
+       floor-clamps (finding-3 guard: realized delta == 2.0); with a LOW standing_start the strip is
+       BOUNDED by the mover's Face (finding-4 guard: realized delta == min(2, Face))."""
+    ac = _AC5(styles={A: style}, cr5=True)
+    n_stripped = 0
+    n_stripped_after_landing = 0
+    realized_deltas = set()
+    for s in range(N):
+        random.seed(3000 + s)
+        bb = _B5(_C5(4, standing_start=standing_start), _C5(4), _V5(start_ground=_St5.FACT, win=_TAC5()), _Adj5(), armature=ac)
+        f_before = bb.c[A].face.v
+        adv_before = bb.state.adv[A]
+        bb._apply(A, _Mv5("advance", appeal="logos", ground=_St5.FACT))
+        landed = bb.state.adv[A] > adv_before        # deg>=1 advanced the track
+        stripped = bb.c[A].face.v < f_before
+        if stripped:
+            n_stripped += 1
+            realized_deltas.add(round(f_before - bb.c[A].face.v, 6))
+            if landed:
+                n_stripped_after_landing += 1
+    return n_stripped, n_stripped_after_landing, realized_deltas
+_sup_stripped, _sup_stripped_landed, _sup_deltas = _obscuring_probe("suppression")
+ck("CR5 WIRED: a deg==0 Obscuring (Suppression) foul strips the mover's Face in the LIVE resolver",
+   _sup_stripped > 0)
+ck("CR5 WIRED (finding 7): NO Face strip ever coincides with a move that LANDED (advanced the track) — the cost attaches only to the deg==0 foul, never to a partial success",
+   _sup_stripped_landed == 0)
+# JUDGE FINDING 3 (cited==applied anti-fabrication): with ample standing (Face 8) the REALIZED Face delta
+# equals the CITED anchor (−2) exactly, not the STRIP-scaled −1.6 that strip(2.0) applied before the fix.
+ck("CR5 WIRED (finding 3): with ample standing the REALIZED Face delta on a foul equals the cited −2 anchor EXACTLY (strip_points, not STRIP-scaled −1.6)",
+   _sup_deltas == {round(_CR5M, 6)} and _CR5M == 2.0)
+# JUDGE FINDING 4 (STANDING-BOUNDED, in the LIVE resolver): a LOW-standing mover (Face 1) strips only what
+# it holds — the realized delta is min(−2, Face) == 1.0, NOT the full −2. This proves the "obstruction is
+# bounded by your own standing" invariant is behavioral end-to-end, not just in the pure function.
+_lowsup_stripped, _, _lowsup_deltas = _obscuring_probe("suppression", standing_start=1)
+ck("CR5 WIRED (finding 4): a LOW-standing mover (Face 1) strips only min(−2, Face) == 1.0 — the backfire is bounded by its own standing in the LIVE resolver, not a flat −2",
+   _lowsup_stripped > 0 and _lowsup_deltas == {1.0})
+def _face_after_failed_obscuring(style, force_fail=True):
+    """Back-compat shim for the Revealing-never-strips assertion below: count Face strips across seeds."""
+    n, _, _ = _obscuring_probe(style)
+    return n
+ck("CR5 WIRED: a Revealing (Precedent) argue move NEVER strips the mover's Face (merits path untouched)",
+   _face_after_failed_obscuring("precedent", True) == 0)
+
+print("== Stage 3 / Gate C: STYLE_AXIS 4x4 projection + the armature dot-product (continuous dsigma) ==")
+from .armature import (STYLE_AXIS as _SAX, ArmatureAxis as _AX, ArmaturePosition as _AP,
+                       style_axis_alignment as _align, style_axis_dsigma as _pbonus,
+                       position_of as _posof, ArmatureConfig as _ACfg,
+                       ARMATURE_MAX_DSIGMA as _AMB,
+                       STYLE_AXIS_PRIMARY as _SAP, STYLE_AXIS_OFFAXIS as _SAO)
+# STYLE_AXIS: exactly the 4 styles × 4 axes. THREE styles' PRIMARY axis is the CANONICAL Style→
+# vulnerability map (npc_behavior_v30.md §1.3 HEAD table, lines 32-42 — the head table IS populated;
+# only the co-filed INFILL §1.3 is a stub, which the prior test misattributed as "§1.3 empty" — judge
+# finding 5); the 4th (Insinuation) is RATIFIED (Jordan, Gate C, 2026-07-02) as a deliberate NEW 4th
+# axis for the adjudicator-armature (canon's 4th type is Solidarity, Knot-gated + relational — NOT
+# Insinuation, and does not fit a third-party adjudicator), asserted separately below as ratified, not
+# as a §1.3-canonical mapping. ED-1062.
+ck("Stage3: STYLE_AXIS is the 4 canonical styles × 4 armature axes",
+   set(_SAX) == {"precedent", "suppression", "vision", "insinuation"}
+   and all(set(_SAX[s]) == set(_AX.ALL) for s in _SAX))
+ck("Stage3 (finding 5): the 3 CANONICALLY-grounded styles' PRIMARY axis is the npc_behavior_v30.md §1.3 head-table (lines 32-42) vulnerability (Precedent→Evidence, Vision→Consequence, Suppression→Authority)",
+   _SAX["precedent"][_AX.EVIDENCE] == _SAP and _SAX["vision"][_AX.CONSEQUENCE] == _SAP
+   and _SAX["suppression"][_AX.AUTHORITY] == _SAP)
+# JUDGE FINDING 5 / RATIFIED Gate C: do NOT assert Insinuation→Insinuation as a canonical §1.3 mapping —
+# the canon's 4th Resonant-Style type is SOLIDARITY (Any+Revealing, Knot-gated), not Insinuation. The
+# code's Insinuation axis is RATIFIED (Jordan, Gate C, 2026-07-02) as its own deliberate NEW 4th axis
+# for the adjudicator-armature, not a reuse of Solidarity. This test asserts the CODE's structure (the
+# row exists + is documented as ratified) WITHOUT claiming §1.3 provenance for it.
+ck("Stage3 (finding 5 / RATIFIED Gate C): the Insinuation→Insinuation row is the coded 4th axis, and it is DOCUMENTED as RATIFIED (a deliberate NEW axis, not a reuse of Solidarity) — NOT asserted as §1.3-canonical",
+   _SAX["insinuation"][_AX.INSINUATION] == _SAP
+   and "ratified" in _AX.__doc__.lower() and "solidarity" in _AX.__doc__.lower())
+ck("Stage3: off-axis cells carry the [SEED] partial-overlap weight (= RES_FLOOR value, reused not fresh)",
+   _SAX["precedent"][_AX.CONSEQUENCE] == _SAO and _SAO == 0.15)
+# The dot-product: a style aligned with a judge's dominant axis scores high; a misaligned style low.
+_ev_judge = _AP(evidence=1.0)                 # a judge moved by Evidence (verifiable facts)
+_con_judge = _AP(consequence=1.0)             # a judge moved by Consequence (projected outcomes)
+ck("Stage3 dot-product: Precedent aligns with an Evidence-judge > with a Consequence-judge",
+   _align("precedent", _ev_judge) > _align("precedent", _con_judge))
+ck("Stage3 dot-product: Vision aligns with a Consequence-judge > with an Evidence-judge",
+   _align("vision", _con_judge) > _align("vision", _ev_judge))
+# The δσ LEVERAGE μ-shift (the ONE live armature channel; judge findings 3/4/6 + judge finding 5): a
+# perfectly-aligned style buys the full ARMATURE_MAX_DSIGMA (0.50σ = level("moderate"), the cited magnitude);
+# a zero armature buys 0 (the degenerate flat-scalar row); a misaligned style buys less (never negative). No
+# resistance-delta, no resonance-uplift — those parallel channels are DELETED. This is a CONTINUOUS δσ (not
+# the integer pool die), so a sub-die alignment is NOT rounded away (judge finding 5).
+ck("Stage3 δσ: perfect alignment buys the full ARMATURE_MAX_DSIGMA (0.50σ = level('moderate'), modifier_system_spec.md §2.3 cited)",
+   isclose(_pbonus("precedent", _ev_judge), _AMB) and isclose(_AMB, 0.5))
+ck("Stage3 δσ: the DEGENERATE zero-armature case buys 0 (the flat scalar is the zero-vector row)",
+   _pbonus("precedent", _AP.zero()) == 0.0)
+ck("Stage3 δσ: a misaligned style buys LESS than a perfectly-aligned one, but STRICTLY MORE THAN ZERO (off-axis 0.15 is a real, non-rounded partial δσ — judge finding 5, continuous not categorical)",
+   0.0 < _pbonus("vision", _ev_judge) < _pbonus("precedent", _ev_judge)
+   and isclose(_pbonus("vision", _ev_judge), _AMB * _SAO))
+# ONE ARMATURE CHANNEL (judge findings 3/4/6): the deleted dead subtractive path (resistance_delta /
+# armature_resistance / eroded_resistance / ARMATURE_MAX_DELTA) and the deleted uncited multiplicative
+# resonance_uplift (ARMATURE_RES_GAIN) must be GONE from the module — plus the prior fractional-POOL
+# ARMATURE_MAX_POOL_BONUS / style_axis_pool_bonus / ArmatureConfig.pool_bonus (judge finding 5: replaced by
+# the continuous δσ). The ONLY live armature magnitude is the cited δσ. Assert the dead symbols are gone.
+import sim.personal.contest.armature as _armmod
+ck("Stage3 ONE CHANNEL: the dead subtractive path + uncited resonance twin + the rounded pool-bonus channel are DELETED (no resistance_delta / armature_resistance / eroded_resistance / ARMATURE_MAX_DELTA / ARMATURE_RES_GAIN / ARMATURE_MAX_POOL_BONUS / style_axis_pool_bonus)",
+   not any(hasattr(_armmod, s) for s in
+           ("resistance_delta", "armature_resistance", "eroded_resistance",
+            "ARMATURE_MAX_DELTA", "ARMATURE_RES_GAIN",
+            "ARMATURE_MAX_POOL_BONUS", "style_axis_pool_bonus"))
+   and not hasattr(_ACfg, "resonance_uplift") and not hasattr(_ACfg, "pool_bonus"))
+# CR6 SEPARATION (judge finding 5): the armature is a CONTINUOUS δσ LEVERAGE (0.50σ = level('moderate')),
+# a DISTINCT channel from CR4's INTEGER +1D pool die (CR6 separates the retired flat-dice stack from δσ
+# leverage). They are NOT the same magnitude and NOT the same channel — that separation is the finding-5 fix.
+ck("Stage3 CR6 SEPARATION: the armature δσ (0.50σ) and CR4's +1D pool die are DISTINCT channels/magnitudes (δσ leverage ≠ the integer pool die; CR6)",
+   isclose(_AMB, 0.5) and _CR4B == 1.0 and not isclose(_AMB, _CR4B))
+_stable_adj = _Adj5()
+
+print("== Stage 3 / Gate C: asymmetric-proceeding GATE-OFF (no double-count with opponent Resonant Style) ==")
+# When adjudicator == opponent (Royal Audience Crown-objects, Church Tribunal Inquisitor-proposes), the
+# armature is GATED OFF (returns zero → δσ 0) to avoid double-counting the existing opponent-aimed
+# Resonant Style (critique adjudicator FG-2). Tested via position_of + ArmatureConfig.dsigma (the live path).
+ck("Stage3 gate: position_of returns the zero vector when opponent_is_adjudicator (asymmetric proceeding)",
+   _posof(_stable_adj, opponent_is_adjudicator=True,
+          armature_positions={id(_stable_adj): _ev_judge}).is_zero())
+_gate_on  = _ACfg(styles={A: "precedent"}, positions={id(_stable_adj): _ev_judge}, opponent_is_adjudicator=True)
+_gate_off = _ACfg(styles={A: "precedent"}, positions={id(_stable_adj): _ev_judge}, opponent_is_adjudicator=False)
+ck("Stage3 gate: the δσ with the gate ON is 0 (no armature δσ in an asymmetric proceeding)",
+   _gate_on.dsigma(A, _stable_adj) == 0.0)
+ck("Stage3 gate: with the gate OFF the SAME judge+style DOES buy the δσ (gate is load-bearing)",
+   _gate_off.dsigma(A, _stable_adj) > _gate_on.dsigma(A, _stable_adj)
+   and isclose(_gate_off.dsigma(A, _stable_adj), _AMB))
+# A Panel's armature_position is the MEAN of its members' positions (mirrors Panel.character()).
+from .contract import Panel as _Pan5
+_m1 = _Adj5(); _m2 = _Adj5()
+_panel5 = _Pan5((_m1, _m2))
+_panel_pos = _posof(_panel5, armature_positions={id(_m1): _AP(evidence=1.0), id(_m2): _AP(evidence=0.0)})
+ck("Stage3: a Panel's armature_position is the MEAN of its members' positions (0.5 evidence here)",
+   isclose(_panel_pos.evidence, 0.5))
+
+print("== Stage 3 / Gate C: THE VERDICT IS ADJUDICATOR-CONVICTION-SENSITIVE (seeded; closes SIM-DEBT-04) ==")
+# THE GATE-C DELIVERABLE: a seeded test showing the armature MOVES OUTCOMES — the same contestants,
+# same seed, same everything EXCEPT the judge's armature_position (its Convictions) resolve DIFFERENTLY.
+# This is the proof the verdict emerges from argument-meets-judge's-conviction, not a flat scalar
+# (critique §2.1 central bottom-up violation; closes SIM-DEBT-04 adjudicator-type pool variation).
+from .resolver import PersuasionTrack as _PT3
+from .policy import logos_spammer as _LOG3
+def _armature_track(judge_pos, style, seed_base=0, N=400):
+    """Mean final Persuasion Track over N seeded bouts where side A argues `style` before a judge with
+       armature_position `judge_pos`. Everything else fixed; only the judge's Convictions vary."""
+    adj = _Adj5()
+    ac = _AC5(styles={A: style}, positions=({id(adj): judge_pos} if judge_pos is not None else {}))
+    v = _V5(proof_logos=.5, proof_ethos=.3, proof_pathos=.2, start_ground=_St5.FACT, win=_PT3(start=5.0))
+    tot = 0.0
+    for s in range(N):
+        random.seed(seed_base + s)
+        b = _B5(_C5(5, standing_start=6), _C5(4), v, adj, armature=ac)
+        b.resolve(_LOG3, _LOG3)
+        tot += b.v.win.track(b.state)
+    return tot / N
+# A judge whose armature ALIGNS with side A's style (Precedent→Evidence) should let A's argument land
+# BETTER (higher mean track toward A) than a judge whose armature is MISALIGNED (Consequence) or FLAT.
+_aligned   = _armature_track(_AP(evidence=1.0),     "precedent")   # judge moved by Evidence; A argues Precedent (aligned)
+_misaligned = _armature_track(_AP(consequence=1.0), "precedent")   # judge moved by Consequence; A argues Precedent (misaligned; off-axis 0.15 partial overlap)
+_flat       = _armature_track(None,                 "precedent")   # flat-scalar judge (no armature) -- the degenerate row
+ck(f"Gate C: an ALIGNED judge's armature moves A's track HIGHER than a MISALIGNED judge ({_aligned:.3f} > {_misaligned:.3f})",
+   _aligned > _misaligned + 0.05)
+ck(f"Gate C: the FLAT (no-armature) judge is the degenerate baseline; the ALIGNED judge beats it ({_aligned:.3f} > {_flat:.3f})",
+   _aligned > _flat + 0.02)
+# A MISALIGNED style still buys the OFF-AXIS partial-overlap uplift (STYLE_AXIS_OFFAXIS=0.15, not 0 --
+# an argument is rarely purely one register). JUDGE FINDING 5: this must now hold STRICTLY at the resolver
+# level — flat < misaligned < aligned, with flat STRICTLY BELOW misaligned. The prior fractional POOL bonus
+# rounded away (roll_net's max(1,int(round(pool))) floor), so misaligned was BYTE-IDENTICAL to flat and the
+# `<=` was load-bearing (the two were equal). Routing the alignment through the CONTINUOUS δσ channel (not
+# the pool) makes the off-axis 0.15 a REAL, non-rounded boost, so flat < misaligned holds STRICTLY — the
+# armature is genuinely continuous, not a 0.5-threshold categorical step.
+ck(f"Gate C (finding 5): ordering is flat < misaligned < aligned, with flat STRICTLY below misaligned (the off-axis 0.15 δσ is continuous, not rounded away — no longer flat==misaligned) ({_flat:.3f} < {_misaligned:.3f} < {_aligned:.3f})",
+   _flat < _misaligned < _aligned)
+# THE conviction-sensitivity headline: the verdict distribution genuinely MOVES with the judge's
+# Convictions — the same seeds, same contestants, different judge armature => different mean outcome.
+ck("Gate C (SIM-DEBT-04): the verdict is adjudicator-conviction-sensitive — the judge's armature_position moves the mean track",
+   abs(_aligned - _misaligned) > 0.05)
+
+print("== Stage 3 / Gate C: armature OFF vs empty-config are identical (opt-in armature preserved) ==")
+# The armature is OPT-IN: a Bout with armature=None and a Bout with an EMPTY ArmatureConfig (no styles)
+# must resolve identically — the armature adds nothing when no style is chosen. (NB judge finding 1: CR4's
+# +1D also keys on the CHOSEN Style genre, and an empty config chooses NO style, so CR4 fires in NEITHER
+# arm — the empty-config bout is byte-identical to the armature=None bout, and this is ALSO the golden-trace
+# parity guarantee restored by the finding-1 fix: no chosen Style ⇒ no CR4 bonus ⇒ pre-Stage-3 behaviour.)
+def _same_off(seed):
+    v = _V5(proof_logos=.5, start_ground=_St5.FACT, win=_PT3(start=5.0)); adj = _Adj5()
+    random.seed(seed); b1 = _B5(_C5(5), _C5(4), v, adj); b1.resolve(_LOG3, _LOG3); o1 = b1.v.win.track(b1.state)
+    random.seed(seed); b2 = _B5(_C5(5), _C5(4), v, adj, armature=_AC5()); b2.resolve(_LOG3, _LOG3); o2 = b2.v.win.track(b2.state)
+    return isclose(o1, o2)
+ck("Gate C: armature=None and an empty ArmatureConfig resolve byte-identically (opt-in, degenerate row; CR4 also off with no chosen style — finding 1 parity)",
+   all(_same_off(s) for s in range(40)))
+
+print("== Stage 3 / Gate C: the Appraise-reveal boundary for armature_position (PARTIAL, on the 4-band ladder) ==")
+from .appraise import (appraise_armature as _appr, APPRAISE_REVEAL_BOUNDARY as _ARB,
+                       APPRAISE_FAILURE as _AF, APPRAISE_PARTIAL as _APt, APPRAISE_SUCCESS as _ASc,
+                       APPRAISE_OVERWHELMING as _AOv)
+_judge_ev = _AP(evidence=0.9, consequence=0.2)   # a judge strongly moved by Evidence
+# The boundary decision is PARTIAL reveal on the existing 4-band ladder, documented + flagged for Jordan.
+ck("Appraise-reveal: the decision is PARTIAL reveal, on the existing 4-band ladder, flagged for Jordan",
+   "PARTIAL REVEAL" in _ARB["decision"] and "open_fork_for_jordan" in _ARB and "hidden_is_legitimate" in _ARB)
+# Failure: a MISLEADING read (a wrong axis), never null.
+_f = _appr(_judge_ev, _AF)
+ck("Appraise-reveal: FAILURE gives a misleading (wrong-axis) read, never null (the cost of a bad Appraise)",
+   _f["band"] == "failure" and _f["misleading"] is True and _f["read"] != _AX.EVIDENCE)
+# Partial: the register only (Revealing vs Obscuring) — the coarsest true signal.
+_p = _appr(_judge_ev, _APt)
+ck("Appraise-reveal: PARTIAL reveals only the register (Evidence-dominant judge → Revealing register)",
+   _p["band"] == "partial" and _p["register"] == "Revealing")
+# Success: the dominant axis (enough to pick a plausibly-aligned style).
+_s = _appr(_judge_ev, _ASc)
+ck("Appraise-reveal: SUCCESS reveals the dominant armature axis (Evidence), not the full vector",
+   _s["band"] == "success" and _s["dominant_axis"] == _AX.EVIDENCE and "consequence" not in _s)
+# Overwhelming: dominant axis + a COARSE strength band — but NEVER the exact per-axis weights.
+_o = _appr(_judge_ev, _AOv)
+ck("Appraise-reveal: OVERWHELMING reveals dominant axis + a COARSE band (high), never the exact weights",
+   _o["band"] == "overwhelming" and _o["dominant_axis"] == _AX.EVIDENCE and _o["strength"] == "high"
+   and "evidence" not in _o and 0.9 not in _o.values())
+# The residual (exact vector) is HIDDEN by design at every band — legitimate tension, not an opacity bug.
+ck("Appraise-reveal: no band ever exposes the exact per-axis weight 0.9 (hidden residual = legitimate tension)",
+   all(0.9 not in _appr(_judge_ev, d).values() for d in (_AF, _APt, _ASc, _AOv)))
 
 print(f"\nRESULT: {P} passed, {Fc} failed")
 sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

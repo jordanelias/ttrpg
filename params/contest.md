@@ -58,9 +58,11 @@ not). Single-sourced in `sim/personal/contest/dictionaries.py` `STYLES_TABLE[...
 ## Genre and Orientation Bonus Dice
 | Source | Bonus | Condition |
 |--------|-------|-----------|
-| Primary genre | +1D | Orator's chosen genre matches GM-set primary genre |
+| Primary genre | +1D | Orator's chosen genre matches the **stasis-derived** primary genre (CR4, below — was GM-set) |
 | Audience boost | +1D | Orator's chosen genre OR orientation matches audience faction's boosted axis |
 | Maximum combined | +2D | Both conditions met |
+
+**CR4 — Ciceronian stasis × genre (RATIFIED_2026-06-01.md CR4; ED-1062; Stage 3 / Gate C).** The primary genre is no longer a GM pick — it is a **function of the proceeding's live classical stasis** (conjectural / definitional / qualitative / translative). Only a conjectural (FACT) stasis sets Memory primary; only a deliberative (CONSEQUENCE/FEASIBILITY) stasis sets Projection primary; qualitative (present-tense terrain) and translative (pre-merits jurisdiction, the Stay) carry no primary genre; definitional is a higher-order reframe, not a genre. See social_contest_v30 §2 Step 2 for the full stasis→genre table. **CR4 reachability fix (ED-1062):** stasis only ever shifts UPWARD during play, and every canonical proceeding previously opened on the qualitative default, so the conjectural FACT stasis was unreachable and this +1D was DEAD in every shipped proceeding. **Church Tribunal now opens at the conjectural (FACT) stasis** (see §Proceeding Types below) — the one proceeding whose thematic shape (an Inquisitor investigating whether the accused committed an act) is genuinely conjectural. The other 7 proceedings are unchanged (still open qualitative).
 
 ## Faction Boosts (single axis per faction)
 | Faction | Ethical Mode | Boost | Axis |
@@ -118,6 +120,8 @@ Obscuring win: no track movement; place a Doubt Marker on the opponent (−2 to 
 
 **Why:** otherwise an Obscuring win in a single/final exchange forgoes all track movement for a marker with EV exactly 0 when there is no next exchange — so **Suppression is strictly dominated by Precedent, and Insinuation by Vision, in every single-exchange contest** (Casual Dispute (1,1), Personal Appeal (1,1); Church Tribunal (1,5) / Private Negotiation (1,3) at length 1). The churn axiom requires every style be correct *somewhere*; this restores a non-zero terminal value **in both banded and raw-tally proceedings** (the original single-clause "margin/band" rule was well-defined only for the banded Church Tribunal and left the raw-tally Casual Dispute / Personal Appeal — the finding's own motivating cases — undefined). **Alternative (b):** gate Obscuring out of single-exchange proceedings and document why. Implemented as (a). This is a **design-table commitment only** — the resolver does not yet consume orientation (Stage-3 CR5 rhetoric-armature scope), so no resolution number changes this pass; the Obscuring flavor (Suppression/Insinuation) is only behaviorally honest once Jordan confirms this. Flagged as an open decision, filed provisional / needs_jordan (ED-1060).
 
+**CR5 — self-Face backfire on a failed Obscuring move (RATIFIED_2026-06-01.md CR5; ED-1062; Stage 3 / Gate C).** The Doubt Marker above is the Obscuring orientation's WIN-side consequence. CR5 adds the FAIL-side consequence: an Obscuring (Indirect) argue move that lands nowhere — wins nothing, plants no marker — strips **min(2, own current Face)** from the mover's own Face (the Doubt Marker's −2 as a magnitude precedent, bounded by the mover's own standing so a low-Face mover cannot lose more than they hold). A move that lands (including a partial success that still advanced the mover's own track) is not a foul and does not backfire. **RATIFIED (Jordan, Gate C, 2026-07-02): the Doubt Marker (landed) and this self-Face backfire (failed) are kept TOGETHER as the full CR5 realization** — not two conflicting mechanics; Obscuring is a genuine two-sided bet. Grounded in the Nyāya *nigrahasthāna* self-gating principle (a rule-violating/over-reaching move that fails outright is a point of defeat against the one who attempted it — eristic has a cost, not pure upside). Wired in `sim/personal/contest/rhetoric.py` `cr5_self_backfire` (opt-in via `Bout(armature=…, cr5=True)`).
+
 **Coalition Push (clarification, ED-897):** not a separate interaction type — it denotes a REINFORCE (same genre, same orientation) executed by a coalition (§9.2), whose shared pool yields the larger movement noted in ED-297. The interaction types are CLASH / REINFORCE / CROSS / TIE.
 
 ## Persuasion Track
@@ -136,8 +140,10 @@ CR3 (RATIFIED 2026-06-01) retires **Composure** as the social-contest tracker an
 | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
 | Appraise pool | Attunement + Recall | 2–14 | — |
 
-## Face and Rattled (CR3 — formerly "Composure"; ED-1056) [UNREACHABLE UNTIL STAGE 3]
-> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]** This §Face-and-Rattled surface defines Face as a **Charisma × 3 (3–21) strain-buffer** consumed by the Rattled channel (below) — this is now **Face_max**, an unchanged build-time ceiling (player-controlled via Charisma). The sim kernel (`sim/personal/contest/primitives.py`) binds `Face = Standing`, a **0–10, START 5, ethos-built** tracker feeding Readiness/leak — Standing itself is UNCHANGED by this resolution. Jordan resolved the scale-binding as a combo formula: **Face_current = round(Standing ÷ 10 × Face_max)** — Standing (earned through play) sets position within the Charisma-set ceiling (fixed at build time). Implemented as `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) + `_Side.face_max()`/`_Side.face_current()` (resolver.py), added on top of the unchanged Standing — no new invented constants, no change to currently-tested Standing/Readiness behaviour. **What is STILL not wired this pass:** the strip/strain-consumption channel below — the kernel has **no strip/strain channel wired** (Standing.strip() is never called), so the Rattled behaviour below is a v30-surface spec not yet realized in code. Face_current is now a real, well-defined value (Standing-derived, Charisma-scaled) but strain does not yet consume it; that wiring is Stage-3 (CR5 rhetoric-armature) scope, honestly flagged, not silently claimed as wired. See social_contest_v30 §4 Step 6 / §8.
+## Face and Rattled (CR3 — formerly "Composure"; ED-1056) [PARTIALLY REACHABLE — Stage 3 / Gate C, ED-1062]
+> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]** This §Face-and-Rattled surface defines Face as a **Charisma × 3 (3–21) strain-buffer** consumed by the Rattled channel (below) — this is now **Face_max**, an unchanged build-time ceiling (player-controlled via Charisma). The sim kernel (`sim/personal/contest/primitives.py`) binds `Face = Standing`, a **0–10, START 5, ethos-built** tracker feeding Readiness/leak — Standing itself is UNCHANGED by this resolution. Jordan resolved the scale-binding as a combo formula: **Face_current = round(Standing ÷ 10 × Face_max)** — Standing (earned through play) sets position within the Charisma-set ceiling (fixed at build time). Implemented as `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) + `_Side.face_max()`/`_Side.face_current()` (resolver.py), added on top of the unchanged Standing — no new invented constants, no change to currently-tested Standing/Readiness behaviour.
+>
+> **[STAGE 3 / GATE C UPDATE, ED-1062]** CR5's self-Face backfire (§Interaction Types, above) IS a real strip/strain-consumption channel, now wired: a failed Obscuring move calls `Standing.strip_points` (via `Face.strip_points`, `Face = Standing`) on the mover's own Face — the first strip channel the contest kernel has ever fired. **What is STILL not wired**: this is a narrow, single-trigger strip (a failed Obscuring move only) — the general **strain ≥ Face → Rattled** threshold-and-mark mechanic below (from ordinary CLASH/REINFORCE strain accumulation) remains a v30-surface spec not yet realized in code; no CLASH/REINFORCE strain call reaches `Standing.strip()`/`.strip_points()` for the general case. So Face's strip channel is no longer categorically absent, but the Rattled-mark accounting itself (the −1D-per-mark cascade, the 2-mark incapacitation, the Knot-buffer redirect) is still spec-only. See social_contest_v30 §4 Step 6 / §8.
 
 At strain ≥ **Face**: Rattled mark (Face resets; excess carries over). [Face = Cha × 3 — the retired Composure magnitude re-homed onto the Face tracker per CR3/ED-1056; ED-694 scaling.]
 −1D per Rattled level to Argue pool (cumulative; honors PP-716 channel reservation: actor-state degradation → Pool, not Ob). 2 marks = socially incapacitated. Pool minimum 1D. [Decision-B 2026-05-15: Rattled converted from +Ob to −1D for channel consistency with wounds/Spent.]
@@ -149,10 +155,14 @@ Depletes −5/exchange, −5 additional on loss. [ED-890/DEP: rescaled −1 → 
 At 0: Spent (−2D next exchange; opponent +1D). Resets to max after.
 Rattled + Spent: cumulative. Pool minimum 1D.
 
-## CR1 / CR2 Substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d / ED-1055 provisional, pending Gate-A)
+## CR1 / CR2 / CR3 / CR4 / CR5 Substrate + Adjudicator Armature (RATIFIED 2026-06-01; realized in code Stage 1a–3 / Gate C, ED-1062)
 - **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper (`sim/personal/contest/wrapper.py`) that ADAPTS + ROUTES but resolves nothing (`build_contest` adapter + `resolve_contest` router). The stochastic surface is the reception roll only; all else is deterministic accounting. Already realized (Stage 1c); Stage 1d cites, does not re-build.
 - **CR2 — resolution substrate migration to δσ.** Social resolution is no longer success-counting; it is the shared sigma-leverage net engine (per-die −1/0/+1/+2, δσ μ-shift, TN7), single-sourced with combat/core via `sim/autoload/sigma_leverage.py` (D0-2). CR2 = the resolution substrate ("what the roll is"); CR6 = the leverage-accumulation half ("how setup advantages enter the roll" — δσ, tanh soft-capped, +0.191 uniform across 5D–26D). Contest stays δσ at TN7 (D0-3); the fractional-Ob face is display-only (D0-3 HYBRID). Both realized Stage 1a/1b + D0-3; Stage 1d cites, does not re-build.
 - **CR3 — three trackers.** Concentration (stamina, above) + Face (contest-local ethos/standing, §Face and Rattled) + Persuasion Track (merits, §Persuasion Track). Composure retired → split into Concentration + Face (ED-1056).
+- **CR4 — Ciceronian stasis × genre + the reachability fix.** See §Genre and Orientation Bonus Dice and §Proceeding Types above. Stage 3 / Gate C makes the primary genre a function of the live classical stasis rather than a GM pick, and fixes the reachability gap that left the conjectural (Memory-primary) stasis unreachable in every canonical proceeding by opening Church Tribunal at Conjectural instead of the Qualitative default. ED-1062.
+- **CR5 — self-Face backfire, together with the Doubt Marker.** See §Interaction Types above. A failed Obscuring move now strips the mover's own Face (min(2, own Face)), joining the existing landed-Obscuring-move Doubt Marker as the two halves of the single ratified CR5 mechanic. ED-1062.
+- **The Adjudicator Armature.** A continuous Style × adjudicator-Conviction dot-product (four axes: Evidence, Consequence, Authority, Insinuation) that enters resolution as a continuous δσ-leverage shift — the CR6 "setup advantage accumulates as δσ, tanh soft-capped" channel (same channel as Recall/Face/corroboration/prep/commit-spend), not a rounded bonus die. **RATIFIED (Jordan, Gate C, 2026-07-02): the 4th axis, Insinuation, is a deliberate NEW axis for this third-party-adjudicator mechanism, not a reuse of canon's Solidarity type** (Knot-gated/relational, does not fit a third-party judge/crowd/panel). Gated off in asymmetric proceedings (Royal Audience, Church Tribunal) to avoid double-counting the existing opponent-aimed Resonant Style targeting. Revealed via the Appraise PARTIAL-reveal boundary on the existing 4-band ladder (§Exchange Structure, Step 1) — Partial reveals only the coarse register, Success the dominant axis, Overwhelming the dominant axis plus a coarse strength band; no band ever reveals the exact per-axis weights. Implemented in `sim/personal/contest/armature.py` (`ArmaturePosition`, `STYLE_AXIS`, `style_axis_dsigma`, `ArmatureConfig`). ED-1062.
+- **Epideictic compression — RATIFIED.** The 2-genre (Memory/Projection) compression (PP-234, 3→2) is accepted as-is: epideictic survives only via the ethos-dominant praise/blame register (the *_present temporal weighting), not as a first-class genre. `sim/personal/contest/rhetoric.py` `EPIDEICTIC_COMPRESSION`. ED-1062.
 
 ## Forfeit Actions
 | Action | Strain | Track Effect | Benefit |
@@ -172,16 +182,18 @@ Rattled + Spent: cumulative. Pool minimum 1D.
 Thread co-movement: Memory win → MS +1 (retention invoked). Projection win → MS +1 if Thread-sensitive.
 
 ## Proceeding Types
-| Type | Exchanges | Roles | Resistance Mod | Adjudicator |
-|------|-----------|-------|---------------|-------------|
-| Formal Contest | 3 | Alternating | Standard | Crowd |
-| Grand Contest | 5 | Alternating | Standard | Crowd |
-| Royal Audience | 3 | Crown objects | Halved for petitioner | Expert Judge |
-| Church Tribunal | 1–5 | Inquisitor proposes | Halved for accused | Expert Judge |
-| Guild Arbitration | 3 | Symmetric | Standard | Panel |
-| Casual Dispute | 1 | Initiator proposes | N/A | No Adjudicator |
-| Private Negotiation | 1–3 | Symmetric | N/A | No Adjudicator |
-| Personal Appeal | 1 | Appealer proposes | N/A | No Adjudicator |
+| Type | Exchanges | Roles | Resistance Mod | Adjudicator | Stasis Start (CR4; ED-1062) |
+|------|-----------|-------|---------------|-------------|------------------------------|
+| Formal Contest | 3 | Alternating | Standard | Crowd | Qualitative |
+| Grand Contest | 5 | Alternating | Standard | Crowd | Qualitative |
+| Royal Audience | 3 | Crown objects | Halved for petitioner | Expert Judge | Qualitative |
+| Church Tribunal | 1–5 | Inquisitor proposes | Halved for accused | Expert Judge | **Conjectural** (CR4 reachability fix — the one proceeding off the qualitative default) |
+| Guild Arbitration | 3 | Symmetric | Standard | Panel | Qualitative |
+| Casual Dispute | 1 | Initiator proposes | N/A | No Adjudicator | Qualitative |
+| Private Negotiation | 1–3 | Symmetric | N/A | No Adjudicator | Qualitative |
+| Personal Appeal | 1 | Appealer proposes | N/A | No Adjudicator | Qualitative |
+
+**CR4 reachability (ED-1062):** stasis only ever shifts UPWARD during play (per the classical stasis ladder), so a proceeding that opens qualitative can never reach the conjectural stasis, and a proceeding that opens conjectural can still shift up to any of the higher stases as play re-terrains the argument. Church Tribunal is the single, surgical exception: an Inquisitor investigating whether the accused committed an act is thematically conjectural from the outset ("did X happen? was X done?" — the same question-shape that sets Memory primary, per §Genre and Orientation Bonus Dice above), so it opens there rather than at the qualitative default every other proceeding uses. No other proceeding field changes, and no new down-shift mechanic is introduced.
 
 ### Player-facing proceeding flavor (Stage 2 / Gate B — locked decision 5; ED-1058)
 Player-facing setup-screen copy for each proceeding (walkthrough §1). Behaviorally honest per Lens 6 —
