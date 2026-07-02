@@ -68,8 +68,11 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
     prescribes promoting recurring roles into `.claude/agents/` only on recurrence; none
     created this session. Decide if/when a standing conformance-scanner or emergence-auditor
     role has recurred enough to earn a definition.
-20. **Doctrine ratification** — `holonic_container_doctrine_v1.md` itself is PROPOSED,
-    Jordan-vetoable.
+20. **~~Doctrine ratification~~ — RESOLVED 2026-07-02.** `holonic_container_doctrine_v1.md`
+    ratified (ED-1083, ED-1088) via the newly-adopted merge-ratifies-by-default convention:
+    Jordan's approval + merge of PR #55 (which contained the doctrine) constitutes
+    ratification of its PROPOSED contents. This does NOT ratify the propagation-spec
+    transform the doctrine defers (item 18/J-38 remains open, gated on its own review).
 
 ## Housekeeping
 

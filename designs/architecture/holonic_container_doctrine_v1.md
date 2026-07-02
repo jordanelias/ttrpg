@@ -1,6 +1,14 @@
 # Holonic Container / Wrapper Doctrine — v1
 
-## Status: PROPOSED (Jordan-vetoable throughout) — filed 2026-07-01, ED-1083
+## Status: CANONICAL — ratified 2026-07-02 (Jordan, PR #55 merge-approval; ED-1083, ED-1088)
+
+Filed PROPOSED 2026-07-01; ratified under the merge-approval-ratifies-by-default convention
+adopted the same day (ED-1088) — merging a PR ratifies its PROPOSED contents unless the PR
+body explicitly holds an item back. This doctrine did not hold anything back at filing.
+Ratification covers the cross-map and the two named guardrails (§2); it does NOT itself
+author the propagation spec (§4 — deferred to workplan v5 J-38, a separate authorship task
+gated on its own review) and does not ratify the attribute roster or any other item this
+doctrine explicitly deferred.
 
 **What this is.** The architectural doctrine extracted from the 2026-07-01 workflow spec
 (ingested verbatim at `designs/audit/2026-07-01-month-overview-architecture-consolidation/inputs/claude_code_emergent_game_workflow_spec.md`)
