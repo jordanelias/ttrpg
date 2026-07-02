@@ -22,7 +22,7 @@ updated: "2026-07-01"
 source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review); round-3 re-block 2026-07-01 (LB-21, month-overview consolidation)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 1088                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — ED-1088 merge-ratifies convention)
+  ED: 1089                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — ED-1089 J-38 propagation-spec authorship)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
   verified_on: "2026-07-02"
 
@@ -43,7 +43,7 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1089 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 merge-ratifies-by-default convention
+    ED: { block: "1050-1099", next_free: 1090 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 merge-ratifies-by-default convention; 1089 -> 2026-07-02 J-38 propagation-spec authorship (PROPOSED, held back from merge-ratification)
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:

@@ -58,12 +58,18 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
 
 ## Orchestration / workflow (new this session)
 
-18. **Propagation-spec authorship** — the holonic doctrine
-    (`designs/architecture/holonic_container_doctrine_v1.md`, PROPOSED) names the
-    cross-scale propagation contract (aggregate-up/distribute-down transform, ordering &
-    determinism, termination/convergence guarantee) as the highest-value unauthored canon:
-    it feeds conversion-register #1 (downward Key delivery) and the `engine_clock` gap
-    (ED-1051). Top-tier judgment work; needs a Jordan go + lane slot (workplan v5 §3 docket).
+18. **~~Propagation-spec authorship~~ — DRAFTED, ratifies on merge (2026-07-02).**
+    `designs/architecture/propagation_spec_v1.md` (ED-1089, PROPOSED) now exists —
+    aggregate-up transform, distribute-down transform, ordering/determinism spine
+    (doubles as `engine_clock`'s home doc, ED-1051), and a termination guarantee that is
+    explicitly TERMINATION-ONLY (cross-tick convergence NOT proven, conditional on an
+    unspecified `decay()` + the D.6 double-count ruling). Went through one full adversarial
+    round (3 independent critics found real holes; repair pass closed them; 2 independent
+    re-verifications confirmed the repair). Governed by ED-1088 like any other PR — merging
+    ratifies it as written; that includes its own explicit PROVEN-vs-NOT-PROVEN scope markers
+    and open flags, which merging does not itself resolve. See the doc's own §5 consolidated
+    decision queue for the ranked open items (OF-7/OF-B1 amendments first, then the D.6
+    double-count, decay() spec, the perpetual-scene ruling, cap constants, ORD-3/ORD-4).
 19. **Agent-Teams / subagent-roster adoption** — the ingested workflow spec (§6-§7)
     prescribes promoting recurring roles into `.claude/agents/` only on recurrence; none
     created this session. Decide if/when a standing conformance-scanner or emergence-auditor
