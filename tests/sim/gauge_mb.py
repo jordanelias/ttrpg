@@ -113,7 +113,7 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
                        stance=stance, speed=speed, instructions=instructions, dr=1)
 
 
-def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):
+def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired Horseshoe shape: a held center + two
     wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Unit-level
     Envelopment preset. Mirrors make_unit's kwarg surface closely enough to drop straight into
@@ -122,17 +122,18 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     center = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
                'starting_position': (start_row, anchor)}]
+    # wing offset: [canonical: sim_verification_ledger.json — CALIBRATED, matches bat.py's _envelop_army spacing, not historically cited]
     wings = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
-              'starting_position': (start_row, anchor - 6)},
+              'starting_position': (start_row, anchor - 6)},  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
              {'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
-              'starting_position': (start_row, anchor + 6)}]
+              'starting_position': (start_row, anchor + 6)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
     return build_envelopment(center, wings, name, faction,
-                              power=kw.pop('power', 4), command=kw.pop('command', 4),
-                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                              power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                               morale_start=kw.pop('morale_start', None))
 
 
-def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):
+def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired RefusedFlank shape: a strong wing +
     a withheld/refused wing released only once directly threatened -- ED-909's Unit-level Refused
     Flank preset."""
@@ -143,8 +144,8 @@ def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     refused = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
                 'starting_position': (start_row, anchor + 4)}]
     return build_refused_flank(strong, refused, name, faction,
-                                power=kw.pop('power', 4), command=kw.pop('command', 4),
-                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                                power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                                 morale_start=kw.pop('morale_start', None))
 
 

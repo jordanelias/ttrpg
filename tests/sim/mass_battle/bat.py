@@ -30,8 +30,8 @@ import random  # noqa: E402
 # their armies via build_envelopment/build_refused_flank instead of a single Horseshoe/RefusedFlank
 # subunit, so no anchor-column lookup for those retired shape names is needed anymore.
 ANCHOR_MAP = {
-    ('Line', 3): 9, ('Arrowhead', 3): 8,
-    ('GappedLine', 3): 7, ('Column', 3): 9,
+    ('Line', 3): 9, ('Arrowhead', 3): 8,                    # [canonical: mass_battle_v30.md §deployment — anchor columns]
+    ('GappedLine', 3): 7, ('Column', 3): 9,                  # [canonical: mass_battle_v30.md §deployment — anchor columns]
 }
 TIER = 3                                  # [canonical: sim_mb_06_v9_historical_spec.md — T3 uniform stats]
 N_SEEDS = 24                              # [canonical: gauge_mb.py matchup — deterministic seed battery]
@@ -68,11 +68,12 @@ def _envelop_army(name, faction, **kw):
     anchor = ANCHOR_MAP[('Line', TIER)]
     tt = kw.pop('troop_type', 'infantry')
     center = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor)}]
-    wings = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 6)},
-             {'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 6)}]
+    # wing offset: [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
+    wings = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 6)},  # [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
+             {'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 6)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
     return build_envelopment(center, wings, name, faction,
-                              power=kw.pop('power', 4), command=kw.pop('command', 4),
-                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                              power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                              discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                               morale_start=kw.pop('morale_start', None))
 
 
@@ -83,8 +84,8 @@ def _refused_army(name, faction, **kw):
     strong = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 4)}]
     refused = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 4)}]
     return build_refused_flank(strong, refused, name, faction,
-                                power=kw.pop('power', 4), command=kw.pop('command', 4),
-                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),
+                                power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
+                                discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                                 morale_start=kw.pop('morale_start', None))
 
 

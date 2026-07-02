@@ -108,7 +108,7 @@ if __name__ == '__main__':
     import json
     result = run_traced_battle(
         {'preset': 'envelopment',
-         'center': [{'shape': 'Line', 'tier': 3, 'starting_position': (SIDE_A_START_ROW, 9)}],
+         'center': [{'shape': 'Line', 'tier': 3, 'starting_position': (SIDE_A_START_ROW, _anchor_for('Line', 3))}],
          'wings': [{'shape': 'Line', 'tier': 3, 'troop_type': 'cavalry', 'speed': 'Fast',
                     'starting_position': (SIDE_A_START_ROW, 3)},
                    {'shape': 'Line', 'tier': 3, 'troop_type': 'cavalry', 'speed': 'Fast',

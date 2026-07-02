@@ -45,10 +45,11 @@ DEFAULT_PORT = 8766  # arbitrary local dev port (scene-combat's workbench uses 8
 # Unit-level 'Envelopment' composition (a held center + two wide-placed wings released into 'envelop'
 # on a timer — trace._build_side's 'preset':'envelopment' dispatch, mirroring bat.py's/gauge_mb.py's
 # own _envelop_army helper) instead of a single subunit stamped with a fixed Horseshoe cell pattern.
-_ENVELOP_CENTER = [{'shape': 'Line', 'starting_position': (34, 9)}]  # [canonical: config.py SIDE_A_START_ROW=34]
-_ENVELOP_WINGS = [{'shape': 'Line', 'starting_position': (34, 3)}, {'shape': 'Line', 'starting_position': (34, 15)}]
-_ENVELOP_WINGS_CAV = [{'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (34, 3)},
-                      {'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (34, 15)}]
+_R = _cfg.SIDE_A_START_ROW  # [canonical: config.py SIDE_A_START_ROW]
+_ENVELOP_CENTER = [{'shape': 'Line', 'starting_position': (_R, 9)}]
+_ENVELOP_WINGS = [{'shape': 'Line', 'starting_position': (_R, 3)}, {'shape': 'Line', 'starting_position': (_R, 15)}]
+_ENVELOP_WINGS_CAV = [{'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 3)},
+                      {'shape': 'Line', 'troop_type': 'cavalry', 'speed': 'Fast', 'starting_position': (_R, 15)}]
 
 PRESETS = [
     {'id': 'H1', 'label': 'Line vs Line (mirror)', 'a': {'shape': 'Line'}, 'b': {'shape': 'Line'}},

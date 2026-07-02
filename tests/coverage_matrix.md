@@ -254,3 +254,28 @@ Archived entries in tests/coverage_matrix_archive.md
   overwritten by the auto-queued release order. Fixed by adding `orders` to `build_army`'s forwarded
   per-subunit override keys. Re-verified: a spec-supplied order now survives; the auto-release still
   fires when no custom orders are given. Byte-exact and pytest unaffected (both re-confirmed).
+
+## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909)
+- Jordan-approved 2026-07-02 ("correct, retire them. those are emergent outcomes."): executes the LC-8
+  retirement Stage D deliberately deferred. `Horseshoe`/`RefusedFlank` removed from
+  `geometry.CELL_PATTERN_FN` and `config.MIN_DISCIPLINE`; only `Line`/`Arrowhead`/`GappedLine`/`Column`
+  remain valid subunit-level shapes. Envelopment/refused-flank now exist ONLY as Unit-level
+  compositions via `engine.build_envelopment`/`build_refused_flank` (Stage D).
+- `hierarchy/units.py`: dead `Horseshoe`/`RefusedFlank` branches removed from `role_at_contact` (zero
+  live callers, confirmed before/after); each `Subunit` now snapshots its spawn position at
+  construction (`_spawn_position`).
+- `orchestration.reset_positions` fixed: previously reset EVERY subunit in a Unit to one shared
+  shape-derived anchor column each battle-turn — silently correct only for single-subunit units, but
+  wrong for any multi-subunit army (collapsed wide-placed wings/escorts back to center every
+  re-engagement turn). Now restores each subunit to its OWN spawn column. Verified byte-exact-
+  preserving for every existing single-subunit matchup via git-worktree diff.
+- `bat.py`/`gauge_mb.py`: grid-mode battery/gauge rows using the retired shapes migrated to
+  `build_envelopment`/`build_refused_flank` army-builder callables; new golden digests recorded and
+  verified byte-exact (`unit`/`cell` both). `test_mass_battle_byte_exact.py`'s CI subprocess timeout
+  bumped 90s→180s (multi-subunit battery rows measurably slow the grid-mode digest run).
+- `workbench/trace.py`: `run_traced_battle` gains a `'preset'` spec dispatch (`army`/`envelopment`/
+  `refused_flank`), so the visualizer can build real multi-subunit Unit-level compositions.
+  `workbench/server.py`'s `H4`/`C4` presets rebuilt on the Envelopment composition.
+- G5 byte-exact both grid modes pass against re-baselined digests. `tests/valoria` 81 passed/10 skipped.
+  `gauge_mb.py`'s migrated rows and all workbench presets (grid and `FIELD_MOVEMENT=1`) run without
+  error.
