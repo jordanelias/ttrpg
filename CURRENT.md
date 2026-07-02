@@ -12,9 +12,10 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-01 (month-overview + architecture consolidation; previous reconcile
-2026-06-28, deprecation & currency sweep + v40 generation declaration). Every row is
-the head of its lineage; predecessors are archived._
+_Last reconciled: 2026-07-02 (ED-1083 doctrine ratification + ED-1088 merge-ratifies convention;
+previous reconcile 2026-07-01 month-overview + architecture consolidation; 2026-06-28 deprecation
+& currency sweep + v40 generation declaration). Every row is the head of its lineage;
+predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
@@ -25,6 +26,7 @@ the head of its lineage; predecessors are archived._
 | **Settlement / territory** | `designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `designs/world/geography_v30.md`) |
 | **Threadwork** | `designs/threadwork/threadwork_v30.md` (+ `thread_horizontal_integration_spec.md`) |
 | **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) |
+| **Architecture / Holonic doctrine** | `designs/architecture/holonic_container_doctrine_v1.md` — CANONICAL (ratified 2026-07-02, ED-1083/ED-1088); cross-maps the container/wrapper/propagation vocabulary onto module_contracts/sim-ladder/Key-substrate/Key-log-parity. Does NOT itself author the propagation-spec transform (workplan v5 J-38, separate authorship task) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
 | **Master workplan** | `designs/workplans/valoria_master_workplan_v5.md` (CANON-PROPOSED 2026-06-28; supersedes v4, which stays the frozen 06-11/06-22 record; relocated 2026-07-01 by PR #49 from its since-dissolved 06-28 audit-session folder — `designs/workplans/` is now the one live home, see its `README.md`) |

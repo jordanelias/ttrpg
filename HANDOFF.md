@@ -270,6 +270,18 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1088); ED-1083 doctrine
+  ratified.** Jordan: merging a PR ratifies its PROPOSED/provisional contents by default
+  unless the PR body explicitly holds an item back for separate review — closes a real
+  recurring gap where PR #55 was reviewed and merged but `holonic_container_doctrine_v1.md`
+  (ED-1083) sat PROPOSED in `main` afterward because the prior convention required a distinct
+  explicit ratification step nothing forced to happen. Applied same-day: ED-1083 flipped
+  provisional → ratified; doctrine `## Status:` line PROPOSED → **CANONICAL**; `CURRENT.md`
+  gained an Architecture/Holonic-doctrine row; `decision_queue.md` item 20 struck resolved;
+  `CLAUDE.md` §2 documents the standing rule. Scope: governs future PRs; does not retroactively
+  reopen closed decisions or ratify anything a PR explicitly deferred (J-38 propagation-spec
+  authorship remains its own gated task, per the doctrine's own §4).
+
 - 2026-07-01 — **Month-overview + architecture-consolidation session executed** (this branch;
   12+ commits, ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item
   Jordan decision queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`).
