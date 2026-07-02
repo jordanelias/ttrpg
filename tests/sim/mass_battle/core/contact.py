@@ -46,6 +46,15 @@ def check_orders(unit, t, enemy_cells):
                 break
             for k, v in order.behavior.items():
                 setattr(sub, k, v)
+            # [ED-1093] Track when 'brace' most recently BECAME present via an order (vs. having been
+            # present since construction, stamped 0 in __post_init__) -- resolution._subunit_braced
+            # requires a full tick since this stamp before treating the subunit as braced. Reset to -1
+            # on removal so a later re-brace gets its own fresh delay rather than reusing a stale stamp.
+            if 'brace' in sub.instructions:
+                if sub._brace_since_tick < 0:
+                    sub._brace_since_tick = t
+            else:
+                sub._brace_since_tick = -1
             sub._order_idx += 1
 
 

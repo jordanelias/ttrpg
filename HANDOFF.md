@@ -455,13 +455,44 @@ per the file's protocol; never max+1.)_
   historical-validity condition verified against `mass_battle_gauge_grounding.md` §4.3/Burkholder
   before executing, per Jordan's "c7 if it is historically valid"); gauge row C7 can now legitimately
   add a braced+enveloped variant (grounding doc §4.3/§5.7 still says "flagged, not fixed" — update on
-  the next gauge pass). **Still open:** Stage E (Army Configuration Mode / deployment UI — its one
-  blocking ruling, the cap, is now resolved) and Stage F (charge/depth/equipment physics) are scoped
-  but not started. **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  the next gauge pass). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
   mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
   marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
   ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
   that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+  **Stage E (Army Configuration Mode) shipped 2026-07-02** (MVP: click-to-place deployment tab in the
+  workbench, `GET /api/roster-options`, `engine.SUBUNIT_CAP` client-enforced). **Stage F investigated
+  2026-07-02 (ED-1092):** speed-differential puncture and depth-absorption were already done; fidelity
+  D2 (cavalry lethality gated by regime) verified already-correct by direct probe; fidelity D1's zone
+  half shipped as ED-1091, its actor half was Jordan-gated (no canonical actor-gate predicate existed).
+  **T1–T4 charge-recoil ruling EXECUTED 2026-07-02 (ED-1093)**, closing D1's actor half plus three
+  further parts from Jordan's own multi-clause ruling: T1 actor-gate (`PC_RECOIL_CHARGER_GATE` —
+  charger must literally be `troop_type=='cavalry'`), T2 brace-setup delay (`PC_BRACE_SETUP_DELAY` +
+  `Subunit._brace_since_tick` — brace needs ≥1 full tick of setup, stamped by `check_orders`), T3
+  reach-gate (structural only — wires `troop_types.registry.reach_for` into the recoil condition, does
+  **not** populate `TROOP_TYPE_REACH`, which stays deliberately empty pending a separate ruling), T4
+  mounted-archer default kiting (`build_army` implicitly defaults `role='Kite'` for `mounted_archers`
+  with no explicit role/shape/instructions). All four additive/toggle-gated, byte-exact-off preserved
+  (verified all 4 `bat.py` digest modes + `tests/valoria` 81 passed/10 skipped).
+  **CRITICAL — newly discovered 2026-07-02, NOT yet fixed:** the `'envelop'`/`'sweep'` instructions and
+  the overhang `'wheel'` maneuver (the actual "go wide around the flank, cross past the enemy's depth,
+  turn in from the rear" logic, `hierarchy/units.py` `advance_cells` ~L802-861) are gated `if PER_CELL
+  and ...` and live ONLY on the legacy grid path (`advance_cells`) — `_node_advance` (the coordinate-
+  field path, DEFAULT since ED-1089, and `PC_NODE_COHESION` also defaults ON so `advance_cells` almost
+  always returns early into `_node_advance` regardless of `PER_CELL`) has **zero** envelop/sweep/wheel
+  steering: every subunit's anchor just walks a straight line toward the enemy centroid. This means
+  the flagship H4/Cannae scenario's "wings wrap around" claims made earlier this session (Stage C.4's
+  acceptance test, Stage D/E's Playwright verification) were accurate for the grid+`PER_CELL` path but
+  the DEFAULT path a user actually sees has never had real encirclement — confirmed by Jordan's own
+  visual inspection of a traced Cannae battle ("the wings just go straight to the opponent... there is
+  no wheeling/circling"). A direct empirical retest of the SAME H4 composition on the legacy grid+
+  `PER_CELL=1` path (2026-07-02) additionally showed **zero movement across 144 ticks/8 turns** (both
+  sides frozen, ended `draw`) — an unexplained second issue (possibly a `stance='hold'`/order-firing/
+  multi-turn interaction) that needs its own root-cause, not yet found. A Fable-5-tier movement/pathing
+  audit was requested and is in flight (or check its findings if this session already completed) —
+  see the session for `designs/audit/2026-07-02-*movement*` or similar once filed. Do not trust prior
+  "Cannae pattern confirmed" claims in this file or the plan without re-verifying against whichever
+  path was actually active.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an

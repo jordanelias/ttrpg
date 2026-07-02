@@ -166,6 +166,15 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
 
     Zero existing call site touched (role defaults to None -> every existing spec dict, which never set
     it, is byte-exact); net-new function, byte-exact by construction.
+
+    [ED-1093, Jordan-ruled 2026-07-02] A spec with troop_type='mounted_archers' and NO explicit role
+    AND no explicit shape/instructions implicitly defaults role to 'Kite' (kiting/stand-off posture
+    instead of closing to melee) -- verified no existing call site anywhere in this package uses
+    'mounted_archers', so this is a pure gap-fill, not a behavior change to any live spec. An explicit
+    shape, explicit instructions, or explicit role in the spec always wins over this implicit default
+    (same precedence as the role->shape/instructions defaulting above). build_unit intentionally does
+    NOT get this same treatment -- its shape parameter is a required positional with no default, so
+    there is no "unspecified shape" case there to fill (see its own docstring).
     [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
     TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
     # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
@@ -181,6 +190,16 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
         tt = sp.pop('troop_type', 'infantry')
         role = sp.pop('role', None)
+        # [ED-1093, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
+        # they should be flying by and taking advantage of their range advantage with their bows."]
+        # A mounted_archers spec with NO explicit role AND no explicit shape/instructions defaults to
+        # the Kite role (kiting/stand-off posture) instead of silently closing to melee like any other
+        # troop type. Checked BEFORE 'shape'/'instructions' are popped below so an explicit caller
+        # choice of either is detected and always wins (matches every other precedence rule in this
+        # function: explicit beats default). Mirrors the existing role->shape/instructions defaulting
+        # immediately below, just with an implicit role instead of a caller-supplied one.
+        if role is None and tt == 'mounted_archers' and 'shape' not in sp and 'instructions' not in sp:
+            role = 'Kite'
         if role is not None and not role_allowed(tt, role):
             raise ValueError(f"role {role!r} not allowed for troop_type {tt!r} "
                               f"(allowed: {roles_for(tt)})")

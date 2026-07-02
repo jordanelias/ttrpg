@@ -308,6 +308,14 @@ class Subunit:
     escort_offset: Tuple[float, float] = (0.0, 0.0)   # (dr, dc) in the escorted unit's LOCAL (facing-rotated) frame; +dr = ahead
     escort_engage_on_contact: bool = False    # False = keep screening indefinitely; True = one-shot latch to normal enemy-targeting once acquired
     _escort_engaged: bool = False             # the latch
+    # [ED-1093, Jordan-ruled 2026-07-02: "Bracing is not something that can be done instantaneously,
+    # but must be prepared ahead of time and intentionally set."] Tick this subunit's 'brace'
+    # instruction has been continuously present since -- -1 = not currently braced. Stamped 0 at
+    # construction for a subunit deployed ALREADY braced (it had time to set up before the battle
+    # began); stamped to the firing tick by check_orders when an Order adds 'brace' mid-battle (see
+    # resolution._subunit_braced, which requires >=1 full tick since this stamp before treating the
+    # subunit as braced).
+    _brace_since_tick: int = -1
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -336,6 +344,7 @@ class Subunit:
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
+        self._brace_since_tick = 0 if 'brace' in self.instructions else -1  # [ED-1093] prepared before the battle if deployed already braced
         if PC_NODE_COHESION:
             self._init_node_state()
 

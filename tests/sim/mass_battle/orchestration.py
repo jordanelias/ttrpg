@@ -473,11 +473,13 @@ PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
-    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
+    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
+    t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1093]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
     # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
@@ -707,7 +709,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 if PER_CELL:
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
@@ -717,13 +719,13 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
                         # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
                         _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
@@ -736,10 +738,21 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
                     # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
                     # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
+                    # [ED-1093, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
+                    # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
+                    # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
+                    # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
+                    # back, so the wall cannot retaliate/recoil it). reach_for is structural only today
+                    # (TROOP_TYPE_REACH is deliberately empty -> everyone is REACH_SHORT -> this half of the
+                    # gate is a no-op until reach assignments are separately ratified).
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5):
+                        if (a_mom > b_mom and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
+                                                                     and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5):
+                        elif (b_mom > a_mom and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
+                                                                     and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
@@ -792,7 +805,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     a_deg=a_deg, b_deg=b_deg)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
-def resolve_engagements_cascading(unit_a, unit_b, pairs):
+def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
     [canonical: Jordan handoff §(3)]
 
@@ -800,9 +813,10 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
     one depth group, then rotates engaged cells' facings toward their attacker.
     Later sub-phases see FLANK/REAR angles on already-rotated cells.
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
-    Arrowhead rows are simultaneously adjacent to Line cells."""
+    Arrowhead rows are simultaneously adjacent to Line cells.
+    t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1093]"""
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -834,7 +848,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -1241,9 +1255,9 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                             cic += len(p.get('b_cells', []))
                     if cic > 0:
                         atom.drain_stamina(cic * STAMINA_DRAIN_PER_CONTACT_CELL)
-        result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
+        result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
-                  else resolve_engagements(unit_a, unit_b, pairs))
+                  else resolve_engagements(unit_a, unit_b, pairs, t=t))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
