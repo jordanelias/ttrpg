@@ -432,13 +432,12 @@ jobs:
         run: python3 tools/broken_dependency_checker.py
       - name: Patch propagation check
         run: python3 tools/patch_propagation_checker.py
-      # Report-only: freshness now compares each canonical doc's working-tree git blob
-      # SHA to its canonical_sha__ pin. It flags pre-existing pin drift (~12 stale pins,
-      # the canonical_sha content work — roadmap K-2 / LB-6) — real debt, not this
-      # change's scope. Drop continue-on-error once those pins are refreshed
-      # (python3 tools/freshness_gate.py --update). See HANDOFF.md.
-      - name: Freshness gate check (report-only)
-        continue-on-error: true
+      # BLOCKING since 2026-07-01 (LB-23 residual closed, month-overview consolidation):
+      # the ~12 stale pins were refreshed via `freshness_gate.py --update` after the
+      # consolidation's doc edits, so every canonical_sha__ pin matches its working-tree
+      # blob. If you edit a pinned doc, refresh its pin in the same commit (the pre-commit
+      # co-file rule prompts this; bulk refresh: python3 tools/freshness_gate.py --update).
+      - name: Freshness gate check
         run: python3 tools/freshness_gate.py
       - name: Upload failure report on error
         if: failure()
