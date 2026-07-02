@@ -132,7 +132,10 @@ def compute():
             ua = make_unit(sa, 'A', 'A', **ka)
             ub = make_unit(sb, 'B', 'B', **kb)
             r = resolve_battle(ua, ub, sa, sb, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
-            h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
+            line = label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n'
+            if os.environ.get('DUMP_TRIALS') == '1':  # [TEMP DEBUG, see PR] cross-env divergence hunt
+                sys.stdout.write('TRIAL ' + line)
+            h.update(line.encode())
     return mode, h.hexdigest()
 
 

@@ -396,6 +396,23 @@ jobs:
         run: pip install pyyaml pytest
       - run: python -m pytest tests/valoria -q
 
+  debug-digest-dump:
+    # [TEMP, throwaway diagnostic -- see debug/mass-battle-cell-digest-dump PR] Dumps every trial
+    # vector for PER_CELL=1 so it can be diffed against the same dump on a non-Linux/non-3.11 dev box
+    # to find exactly where test_byte_exact_cell_mode's digest first diverges. Remove before merge.
+    name: DEBUG cell-mode trial dump
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: PER_CELL=1 DUMP_TRIALS=1 python3 tests/sim/mass_battle/bat.py --check || true
+
   sim-regression:
     name: Sim Reference Regression
     runs-on: ubuntu-latest
