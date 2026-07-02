@@ -9,99 +9,13 @@ Archived entries in tests/coverage_matrix_archive.md
   change, Jordan-approved); PP-683 intentionally left unwired (would double-count encirclement lethality
   already delivered via PC_ENVELOP_SHOCK + Lanchester overlap). Full detail: tests/coverage_matrix_archive.md.
 
-## 2026-06-30 — Mass-battle bottom-up audit: provenance registry seed (ED-1043) [additive, data-only, byte-exact]
-- ADDED `tests/sim/mass_battle/provenance.py`: a primitive-provenance registry SEED (the `Prov` schema +
-  `PROVENANCE` rows for the 9 anti-pattern findings F1-F9 + the 3 grounded laws). Pure data record — it does
-  NOT import or touch the engine, so the gauge digest is UNCHANGED (byte-exact). All `value` fields are stored
-  as strings (a record of a constant, not a live constant), so it adds no mechanical literal to the engine.
-- PURPOSE: machine-readable grounding tier per constant (derived / academic-law / historical / calibrated /
-  ungrounded), enforcing the "no asserted value" bar. Seed counts: 3 academic-law, calibrated + ungrounded =
-  the retirement worklist (target zero). Audit: `designs/audit/2026-06-30-massbattle-bottomup/`.
-- NO regression test (data-only, no behavior); CI cross-check (provenance pass on ci_sim_fabrication_check)
-  is roadmap Stage 0/5, not this pass.
-
-## 2026-06-30 — Stage 1 (re-architecture): committed byte-exact DIGEST gate (bat.py)
-- ADDED `tests/sim/mass_battle/bat.py`: the deterministic golden-digest harness the matrix previously
-  referenced but that was never committed. Fixed battery (10 matchups × 24 seeds, per-trial seed) hashing full per-trial end state; `--check` asserts baseline, exit 1 on drift.
-- BASELINE (HEAD 4d970a0, pre-refactor): unit=7be8499b4fe6a047a4c01e925719e11d5214ae0c124c784f929bc69ad6511725 ;
-  cell=1c5b2851b75761e35cf8d54283af82269383e5c70b894d021eaed981c716d4a7. These are the G5 gate for the
-  Stage-1 wrapper/core split (behaviour-frozen) and update ONLY on an intentional behaviour change in a
-  later stage (recorded here, like the ED-1032 digest change above).
-
-## 2026-06-30 — Stage 1a-1g (re-architecture): wrapper/core split, complete [byte-exact]
-- EXTRACTED orchestration.py's monolith into core/{exchange,state,attrition,contact}.py (pool assembly,
-  morale/discipline/rout hooks, Lanchester attrition, targeting/contact) + troop_types/registry.py +
-  hierarchy/units.py (Subunit/Unit) + engine.py (true wrapper: build_unit + resolve_battle router,
-  resolves nothing). Each extraction G1-clean (no up-DAG import, no cycle) and BYTE-EXACT (bat.py both
-  modes unchanged; stress S1-S18 ALL PASS every step). orchestration.py: 2,899 → 1,705 lines. Full
-  per-sub-stage detail (exact functions moved, line-count deltas, the docstring-masking fabrication-gate
-  fix) archived to `coverage_matrix_archive.md` to stay under this file's 10k-token cap.
-
-## 2026-06-30 — Stage 2 (re-architecture): standalone weapons + armour modules [additive, byte-exact]
-- ADDED equipment/ package (weapons.py ARSENAL, armour.py ARMOURY, _base.py EquipmentRecord+Registry, __init__ TROOP_LOADOUT): weapons/armour split out of troop_types into their own dynamic/adaptable registries (open records + runtime register/override/variant) so the equipment model can be re-mapped onto scene-combat without disturbing the troop taxonomy. Descriptive axes only (no primitive grounding yet); a troop type NAMES a weapon+armour. NOT wired into resolution.
-- G5 byte-exact: bat.py --check both modes match baseline (unit 7be8499b, cell 1c5b2851); sim-fabrication gate clean (only canonical DR literals). Co-file: the oldest 2026-06-05/06 build-log sections were archived to coverage_matrix_archive.md to stay under the 10k cap.
-
-## 2026-06-30 — Stage 2 / Track M: FIELD_MOVEMENT continuous-speed toggle [default OFF → byte-exact]
-- ADDED config.FIELD_MOVEMENT (default OFF) + Subunit._speed_accum; advance_cells uses a per-cell
-  fractional-speed accumulator when ON, so a discipline-degraded body advances at its TRUE average rate
-  instead of flooring to 0 every turn (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions
-  preserved; only per-turn step TIMING changes. [movement-substrate review 06 — finding 2]
-- G5: bat.py --check both modes byte-exact with the toggle OFF (unit 7be8499b / cell 1c5b2851 unchanged,
-  the OFF branch is the exact prior code). ON is a recorded behaviour change carrying its own digest
-  (unit 4c5943c1…); NOT yet gauge-re-baselined — the field path's validation is the gated Track-M
-  G-decision (06_movement_substrate_review.md). Heading-continuous + cid-threading deferred (need the
-  float substrate / a contact-path refactor).
-  (Note: the toggle actually lives in hierarchy/units.py beside PC_ENVELOP_PATH/PC_SWEEP, not config.py —
-  config.py carries pre-existing uncited constants the whole-file fabrication scan would flag.)
-
-## 2026-07-01 — Track M: centralize the abs→orig reverse-lookup [byte-exact refactor]
-- ADDED geometry._oriented_abs_map(atom) (a FIRST-wins {abs:(orig)} map); refactored cells_to_orig_coords,
-  _rotate_defender_facing, _atom_avg_facing to use it — retiring three open-coded O(n²) reverse scans.
-  This centralizes the pattern-identity round-trip that is the engine's HARD grid dependency
-  (movement-substrate review 06, findings 4/8) into ONE place — the step toward threading the cell
-  identity from find_contacts (deleting the lookup entirely) once the contact path is refactored.
-- G5 byte-exact both modes (unit 7be8499b / cell 1c5b2851 unchanged): the map preserves the old
-  break-on-first semantics exactly, so results are identical. No behaviour change.
-
-## 2026-07-01 — Migration DEBT-0: orchestration.py fabrication-debt resolution [byte-exact]
-- Prerequisite for the coordinate-migration ON-path edits to orchestration.py (the whole-file fabrication
-  scan surfaces every uncited constant the moment the file is staged). Resolved its 4 flagged constants
-  HONESTLY:
-  - 3× octagon -1.5 (L703/716/719): inline [canonical:] citing config.py:65 ANGLE_DEF_MOD zone midpoints
-    (GREEN 0 / YELLOW -1 / RED -2; -0.5=mid(0,-1), -1.5=mid(-1,-2)) — genuinely derived.
-  - 0.2 engagement-fraction damage floor (L1147, max(0.2, opp_frac)): recorded as CALIBRATED in the
-    repo-root sim_verification_ledger.json (CONTACT_FRACTION_DAMAGE_FLOOR) + a provenance.py 'calibrated'
-    Prov row (Stage-5 debt). NO canonical source fabricated ("do not fabricate one").
-- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851); comments + data only. Fabrication
-  gate: orchestration.py 4→0. Spec + verification from the coordinate-field-impl-spec workflow (13 agents;
-  the debt agent applied + bat.py-verified this exact resolution). Coordinate-migration plan DEBT-0.
-
-## 2026-07-01 — Migration S2: Euclidean distance on the field [FIELD_MOVEMENT; byte-exact OFF]
-- `_atom_distance` (orchestration, now DEBT-0-clean), node vector-halt + kite (units) use `math.hypot`
-  when FIELD_MOVEMENT is ON (Chebyshev `max()` when OFF) → circular range rings, retiring the √2
-  "free diagonal" bias (movement review 06, finding 1). Wiring verified: OFF (0,0)-(3,4)=4 Chebyshev,
-  ON=5.0 Euclidean. Adversarially SOUND (impl-spec workflow distance verdict).
-- G5 byte-exact OFF both modes (unit 7be8499b / cell 1c5b2851). Inert for the current bat.py battery
-  (ranged matchup approaches orthogonally, Chebyshev==Euclidean); activates on diagonal approaches +
-  the field-ON path (gauge / later stages). Coordinate-migration plan S2.
-
-## 2026-07-01 — Migration C0+COL+G+H+F2+P: coordinate-field flip [FIELD_MOVEMENT+PC_NODE_COHESION; byte-exact OFF]
-- The full remaining coordinate-field sequence, each behind a default-OFF toggle, implemented from the
-  adversarially-verified coordinate-field-impl-spec (worktree agent; byte-exact-gated per increment):
-  C0 (contact scaffolding: Subunit.cells_float + FIELD_CONTACT find_contacts split, contact sets) · COL
-  (float→file quantizer, COL_WIDTH=1.0) · G (geometry._oriented_abs_map rebuilt from _node_pos on ON —
-  the biggest hazard) · H (halt-loop + contention collect + _momentum_speed float consistency) · F2
-  (PC_FACING_MODEL anti-hyper-reactivity facing layer, DEFAULT-OFF; PC_FACING_SLEW_BASE=60 = calibrated
-  debt, ledger+provenance) · P (delete the int(round()) snap in _node_cells on ON — the coordinated flip).
-- Toggles module-local in units.py (config.py left untouched — 43 pre-existing uncited constants). Enforced
-  FIELD_MOVEMENT ⇒ PC_NODE_COHESION (assert at run_battle setup; the invalid combo fails loudly). CONTACT_REACH=0.0
-  (ON contact ≡ OFF adjacency, pending Jordan's radius). role_at_contact (dead code) + iter_cells (pre-existing skew) left alone.
-- G5 byte-exact OFF both modes at every increment (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
-- FIELD-ON CANDIDATE (Jordan ratifies; nothing fitted): ON digests unit 337ed92c / cell 38c5395b; runs to
-  completion (exit 0). Gauge (via a scratchpad shim — gauge_mb.py is DEAD, hardcoded /home/claude path):
-  OFF 5/13 → ON 4/13; H8 newly in-band, H2/H9 newly diverge to hard win-outs, draw rates collapse. NOT
-  ratified — the gauge needs porting to the package before the ON path can be a validated contract.
-  Coordinate-migration plan C0–P; open decisions: contact radius, facing magnitudes, gauge port, band ratification.
+## 2026-06-30/07-01 — Re-architecture Stages 1-2 + coordinate-migration DEBT-0/S2/C0-P (archived — condensed)
+- Provenance registry seed (ED-1043); bat.py byte-exact digest gate committed (baseline unit=7be8499b/
+  cell=1c5b2851); Stage 1a-1g wrapper/core split complete (byte-exact); Stage 2 standalone equipment/
+  package (not yet wired into resolution); FIELD_MOVEMENT continuous-speed toggle; abs→orig reverse-
+  lookup centralized; Migration DEBT-0 (fabrication-debt resolved honestly, no fabrication); Migration
+  S2 (Euclidean distance on the field); Migration C0+COL+G+H+F2+P (the full coordinate-field sequence,
+  byte-exact OFF throughout). Full detail: `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend
 - PORTED gauge_mb.py off the dead `exec('/home/claude/sim_v22.py')` mechanism onto a direct
@@ -392,3 +306,63 @@ Archived entries in tests/coverage_matrix_archive.md
   `_node_advance` (the coordinate-field path, DEFAULT since ED-1089) has no equivalent steering at
   all, so every subunit currently just walks a straight line toward the enemy centroid on the path
   actually used by default. Under investigation.
+
+## 2026-07-02 — Movement/pathing audit (ED-1096) fix plan execution, in progress (ED-1097)
+Fable-led audit (ED-1096) confirmed the root cause flagged above and 10 further findings; Jordan
+answered all 4 decision gates, deferring gates 1 (Command/Discipline-gated conditional tactics) and
+3 (facing/attention split) until envelopment/pincer/wheeling pathing is confirmed working. This
+entry covers the fix-plan steps landed so far (steps 1, 2, 4, 5, 6 of 8 + decision gate 2; gate 4
+and step 7, the waypoint primitive itself, still pending):
+- **Step 1 — `check_drift` node-state fix.** ED-1032's re-key on formation drift only ever covered
+  `cell_troops`; node-path position state (`_node_pos`/`_node_rel`) was never included, so a drift
+  left the old shape's ids behind and cells teleported to `(0,0)` or stacked on the anchor. New
+  `Subunit._rekey_node_state(new_ids)` rebuilds node state for the new pattern around the CURRENT
+  live anchor (not spawn) — the subunit reorganizes in place. Gated `PC_NODE_COHESION and
+  hasattr(a, '_node_pos')`; legacy path untouched.
+- **Step 2 — `reset_positions` node-state no-op (minimal form).** `reset_positions` wrote only the
+  legacy grid fields, inert on the node path but a stale-data landmine for future code reading
+  `starting_position`. Node-path atoms are now explicitly skipped — position genuinely does not
+  reset between engagement turns within a battle (Jordan: "nonsensical for them to return to
+  starting positions within the same battle"). The full Command-gated conditional-tactics layer
+  (decision gate 1) is deferred; this step only stops the corruption.
+- **Decision gate 2 — weapon-derived `unit_type`.** `unit_type` now derives from the troop's
+  assigned weapon (`mass_battle.equipment.TROOP_LOADOUT`/`loadout_for`, previously unwired) via new
+  `troop_types.registry.unit_type_for`, wired into `build_unit`/`build_army` (unmapped types still
+  resolve `'melee'`, byte-exact for every existing call site). Corrects ED-1095/T4: a
+  `mounted_archers` spec got `role='Kite'` but no `unit_type`, so it neither kited nor volleyed on
+  any path. Added a `mounted_archers` entry to `TROOP_LOADOUT` (bow/light). `kite`'s STEERING gate
+  no longer requires `unit_type=='ranged'` (Jordan: kite is weapon-independent, best with a bow but
+  executable by lance cavalry) — only volley fire itself still requires ranged; the far edge of the
+  kite band uses `reach_for(troop_type)` for a melee kiter instead of inventing a new magnitude.
+- **Step 4 — lateral file-holding in `_node_advance` (v12 port).** `_node_advance` was a pure
+  centroid attractor — every subunit's column steered at the SAME enemy-centroid column, collapsing
+  wide-placed wings inward before any maneuver began. A subunit that is one of several siblings in
+  a multi-subunit Unit now holds its own deployment file (`_spawn_position`'s column) while its row
+  still closes on the enemy; a solo subunit is unchanged. Confirmed via an H4-composition trace:
+  wings now hold within ~1-2 columns of their spawn file across the approach, versus collapsing
+  from cols 3/17 to ~9.6/13.0 before this fix.
+- **Step 5 — node WHEEL 180-degree facing stall.** The facing update was a lerp-normalize that
+  degenerates to the zero vector at an exact 180-degree reversal (full discipline), freezing the
+  formation's facing forever — exactly the case a wheel-to-rear maneuver needs. Replaced with a
+  rotation-based update (same disc-gated rate `kw`, applied as an angular fraction instead of a
+  linear vector blend) with a deterministic tie-break at the boundary. Confirmed: a full-discipline
+  subunit facing south, target flipped to due north, now smoothly rotates instead of freezing.
+- **Step 6 — maneuver acceptance validators re-pointed at the node path.** `validators.py`'s
+  `Run:` line only ever pinned `PER_CELL`, leaving `FIELD_MOVEMENT`/`PC_NODE_COHESION` at the
+  ambient (node, since ED-1089) default — so V-ENVELOP/V-SWEEP silently measured the dead legacy
+  arm whenever anyone actually pinned toggles to make them pass, and measured nothing meaningful
+  otherwise. New `validators._set_movement_path('grid'|'node')` + a `path` parameter on
+  `v_envelop`/`v_sweep`/`_envelop_reach`/`_sweep_disp`. New
+  `tests/valoria/test_mass_battle_maneuvers.py`: grid-path tests are real regression tests (green,
+  the mechanism still works there); node-path tests are `xfail(strict=True)` acceptance targets —
+  expected red until step 7 lands, and `strict=True` means an unexpected pass is itself a failure,
+  so this cannot silently rot into permanent xfail once the fix ships.
+- Verified throughout: `bat.py --check` byte-exact across all 4 digest modes unchanged after every
+  step; `tests/valoria` pytest suite 81 passed/10 skipped unchanged (plus the 2 new grid-regression
+  tests passing and 2 new node-acceptance tests correctly xfailing). Field digests (`unit_field`/
+  `cell_field`) intentionally drift as real node-path bugs are fixed — re-record deferred to a
+  single batched pass once the remaining steps (waypoint primitive, `PER_CELL` default flip) land.
+- **Remaining, not yet done:** step 7 (the waypoint primitive itself — the actual envelopment/
+  pincer/wheeling capability); decision gate 4 (`PER_CELL` default flip to `'1'`); step 8
+  (lower-severity hardening); the batched field-digest/gauge re-baseline; an adversarial review pass
+  over all of the above before landing.
