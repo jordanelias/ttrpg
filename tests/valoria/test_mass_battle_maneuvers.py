@@ -5,17 +5,18 @@ finding 1.4, fix-plan step 6).
 Before this file: `validators.py`'s `Run:` docstring pinned only PER_CELL, leaving
 FIELD_MOVEMENT/PC_NODE_COHESION at the ambient default. Since ED-1089 flipped that default ON,
 every bare invocation of V-ENVELOP/V-SWEEP silently measured the DEAD node-path arm — the two
-maneuver instructions ('envelop'/'sweep') are confirmed to exist only on the legacy grid path — so
-past "Stage C.4 passed" / "the maneuver works" claims were true only of a path nothing runs by
-default anymore. This file makes both arms explicit and checked:
+maneuver instructions ('envelop'/'sweep') were confirmed (this session) to exist only on the
+legacy grid path — so past "Stage C.4 passed" / "the maneuver works" claims were true only of a
+path nothing runs by default anymore. This file makes both arms explicit and checked:
 
   - test_*_grid: the LEGACY path, where the underlying mechanism is real. A genuine regression
     test — if this goes red, a real mechanic broke.
   - test_*_node: the LIVE default path Jordan actually watches (the workbench, traced battles).
-    Marked xfail(strict=True) FOR NOW — it is expected to fail today (the maneuvers are confirmed
-    unreachable there) and MUST start passing once fix-plan step 7 (the waypoint primitive) lands.
-    strict=True means an unexpected PASS is itself a failure, so this file cannot silently rot into
-    "xfail forever" once the fix ships — remove the marker at that point, not before.
+    Landed RED first (xfail(strict=True), commit 50247b1) as the acceptance target for fix-plan
+    step 7 (the waypoint primitive, hierarchy/units.py Subunit._resolve_maneuver_goal). Step 7
+    landed the same session and both flipped GREEN for real (not just "no longer erroring" --
+    verified the xfail was hiding a real bug in v_envelop/v_sweep's own seeds/turns forwarding
+    before trusting the green). Now real regression tests, same standing as the grid arm.
 
 Toggled via validators._set_movement_path, which mutates the already-imported module-level
 FIELD_MOVEMENT/PC_NODE_COHESION on hierarchy.units and orchestration at runtime (not the
@@ -25,9 +26,9 @@ grid state into whatever test runs next in the same pytest session."""
 import os
 import sys
 
-import pytest
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
+
+import pytest  # noqa: E402
 
 from mass_battle import validators as _val  # noqa: E402
 import mass_battle.hierarchy.units as _hu  # noqa: E402
@@ -61,8 +62,8 @@ def _movement_toggles():
 
 def test_envelop_reaches_rear_grid():
     """Regression: the legacy path's 'envelop' instruction still wraps a wide-placed detachment
-    to the enemy's rear (V-ENVELOP, validators.py) -- this is the mechanism fix-plan step 7 will
-    port to the live path, so it must keep working while that happens."""
+    to the enemy's rear (V-ENVELOP, validators.py) -- the mechanism fix-plan step 7 ported to the
+    live path, so this must keep working alongside it."""
     r = _val.v_envelop(path='grid')
     assert r.passed, f"V-ENVELOP (grid) regressed: measured={r.measured} expected={r.expected}"
 
@@ -74,24 +75,17 @@ def test_sweep_displaces_laterally_grid():
     assert r.passed, f"V-SWEEP (grid) regressed: measured={r.measured} expected={r.expected}"
 
 
-@pytest.mark.xfail(reason="movement audit finding 1.1-1.4 (ED-1096): 'envelop' is unreachable on "
-                           "the default node path -- fix-plan step 7 (waypoint primitive) closes "
-                           "this. Remove the xfail marker once it does, do not leave it stacked.",
-                    strict=True)
 def test_envelop_reaches_rear_node():
-    """Acceptance target: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan
-    actually watches in the workbench. Currently fails (on==off, the instruction has zero effect)
-    because _node_advance never reads Subunit.instructions at all."""
+    """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
+    watches in the workbench. Subunit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
+    _node_advance an anchor-level goal, modeled on the legacy per-cell two-state machine, when the
+    'envelop' instruction is active and PC_ENVELOP_PATH is on."""
     r = _val.v_envelop(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-ENVELOP (node) measured={r.measured} expected={r.expected}"
 
 
-@pytest.mark.xfail(reason="movement audit finding 1.1-1.4 (ED-1096): 'sweep' is unreachable on "
-                           "the default node path -- fix-plan step 7 (waypoint primitive) closes "
-                           "this. Remove the xfail marker once it does, do not leave it stacked.",
-                    strict=True)
 def test_sweep_displaces_laterally_node():
-    """Acceptance target: V-SWEEP on the LIVE default (node/field) path. Currently fails for the
-    same reason as test_envelop_reaches_rear_node."""
+    """Acceptance: V-SWEEP on the LIVE default (node/field) path -- Subunit._resolve_maneuver_goal/
+    _sweep_goal (fix-plan step 7), same mechanism as test_envelop_reaches_rear_node."""
     r = _val.v_sweep(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-SWEEP (node) measured={r.measured} expected={r.expected}"

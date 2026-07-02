@@ -573,6 +573,105 @@ class Subunit:
                 out.append((int(round(r)), int(round(c))))  # OFF: exact prior snap
         return out
 
+    def _resolve_maneuver_goal(self, enemy_cells):
+        """[movement audit fix-plan step 7, ED-1097 -- the waypoint primitive] Per-subunit maneuver
+        goal for the ANCHOR (not per-cell -- the node path's relational cohesion, self._node_rel,
+        already carries every cell along together as the anchor moves, so a single anchor-level
+        goal is sufficient; no per-cell goal list is needed the way the legacy grid path required
+        one). Modeled directly on the legacy 'envelop'/'sweep' two-state per-cell machines
+        (advance_cells, ~L890-937) -- same phase logic and the same clearance/rear-margin
+        magnitudes (ported, not reinvented), lifted to anchor granularity. Resolved FRESH every
+        tick from LIVE enemy extent (never frozen coordinates -- a frozen goal goes stale against a
+        moving enemy, this repo's own established discipline, already followed by the legacy
+        version this ports). Returns (goal_r, goal_c) if a maneuver instruction is active and
+        resolvable, else None (falls through to fix-plan step 4's lateral file-holding default).
+
+        Jordan's "crossed past the enemy" test (2026-07-02, verbatim: "if this grid is 0,0 at
+        bottom left, then the wings to encircle must literally be at a smaller x than their
+        opponent") is exactly the existing `_past` predicate below -- already implemented in the
+        legacy version this ports, not a new mechanic.
+
+        Path-length budget (Jordan-ruled 2026-07-02: "use a formula based upon like
+        0.5*speed*maximum-ticks-in-battle") is NOT enforced here -- this resolver computes a goal
+        POINT each tick from live geometry, it does not pre-plan a multi-waypoint ROUTE with a
+        total length to budget. The two maneuvers here (envelop/sweep) are each a bounded 2-phase
+        state machine, not an open-ended path, so there is no route length to validate against the
+        budget; that formula applies to a genuinely free-form waypoint list, which is a further
+        extension beyond what this step builds (Image 2's asymmetric per-wing / interior-strike-
+        point case) -- not built in this pass, flagged as follow-up, not silently dropped."""
+        if not enemy_cells:
+            return None
+        # Gated behind the SAME toggles the legacy per-cell version uses (PC_ENVELOP_PATH/
+        # PC_SWEEP) -- not a new gate: this preserves a real kill switch for the new node-path
+        # behavior (matching every other additive change this session), and without it V-ENVELOP/
+        # V-SWEEP's on/off comparison would be meaningless on the node path (both arms would
+        # exercise the maneuver, since 'envelop'/'sweep' stay in Subunit.instructions regardless of
+        # the toggle -- confirmed the hard way: this was missing on the first pass and made
+        # on==off on the node path even though the mechanism itself was already working).
+        if PC_ENVELOP_PATH and 'envelop' in self.instructions:
+            return self._envelop_goal(enemy_cells)
+        if PC_SWEEP and 'sweep' in self.instructions:
+            return self._sweep_goal(enemy_cells)
+        return None
+
+    def _envelop_goal(self, enemy_cells):
+        """Two-phase wrap-to-rear, ported from the legacy per-cell version verbatim (same
+        clearance/rear-margin magnitudes: +2 frontage clearance, +/-2 rear margin -- ported, not
+        reinvented). Phase 1 (not yet past the enemy's depth): steer wide of the nearer flank and
+        beyond the enemy's far row edge -- go AROUND, not into the front. Phase 2 (past the
+        enemy's depth -- Jordan's "smaller x than their opponent" crossing test): turn in to the
+        nearest enemy cell, now a REAR cell."""
+        ar, ac = self._node_anchor
+        er_rows = [er for (er, _ec) in enemy_cells]
+        ec_cols = [ec for (_er, ec) in enemy_cells]
+        emin_r, emax_r = min(er_rows), max(er_rows)
+        emin_c, emax_c = min(ec_cols), max(ec_cols)
+        cen_c = (emin_c + emax_c) / 2.0
+        ew = (emax_c - emin_c) + 2   # [ported from advance_cells L903] clearance >= enemy frontage, stays out of contact range
+        wide_c = (emin_c - ew) if ac < cen_c else (emax_c + ew)
+        if self.advance_dir < 0:
+            rear_r = emin_r - 2      # [ported from advance_cells L907]
+            past = ar <= rear_r
+        else:
+            rear_r = emax_r + 2      # [ported from advance_cells L910]
+            past = ar >= rear_r
+        # [anchor-level adjustment, not present in the ported legacy version -- see docstring]
+        # `past` requires REACHING the rear_r depth itself, not merely crossing the enemy's near
+        # edge (the legacy per-cell test, `my_r < _emin_r` with no margin). Reuses the SAME
+        # existing `2` constant already established for rear_r -- no new magnitude. Necessary
+        # because this goal is a SINGLE anchor-level decision for the whole body (one flip point),
+        # whereas the legacy version lets each of a subunit's many cells flip independently at
+        # its own row -- naturally producing a range of penetration depths across the body, some
+        # deeper than others. A single anchor flipping at the bare edge (like the legacy per-cell
+        # test) turns the WHOLE body in almost immediately upon crossing, converging on a much
+        # shallower rear position than the per-cell average; matching rear_r itself as the
+        # threshold is the minimal, non-fabricated fix -- confirmed to close this gap in the
+        # V-ENVELOP node-path acceptance measurement (see fix-plan step 6/7 verification).
+        if not past:
+            return (rear_r, wide_c)  # phase 1: around the flank, past the depth
+        return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)  # phase 2: turn in to the (now rear) cells
+
+    def _sweep_goal(self, enemy_cells):
+        """Lateral flank-march then frontal engagement, ported from the legacy per-cell version.
+        Phase 1: shift the anchor laterally toward the nearer enemy flank COLUMN, holding the
+        current row (a pure sideways march, matching the legacy "hold row, step column" per-cell
+        behaviour) -- the anchor's own existing step-distance scaling (in _node_advance's caller)
+        handles the per-tick rate, so the goal is the flank column itself, not a one-step-ahead
+        increment the way the legacy per-cell version needed. Phase 2 (at the flank): drive in to
+        the nearest enemy cell."""
+        ar, ac = self._node_anchor
+        swc = [ec for (_er, ec) in enemy_cells]
+        swmin, swmax = min(swc), max(swc)
+        swcen = (swmin + swmax) / 2.0
+        # UNIT-level flank direction (from the subunit's deploy column, not the live anchor column)
+        # so the whole body commits to ONE flank coherently -- matches the legacy per-cell version's
+        # own reasoning (advance_cells ~L929-931: "per-cell choice would tear the unit toward both").
+        swsign = -1 if self._spawn_position[1] < swcen else 1
+        swgoal_c = swmin if swsign < 0 else swmax
+        if (swsign < 0 and ac > swgoal_c) or (swsign > 0 and ac < swgoal_c):
+            return (ar, swgoal_c)    # phase 1: shift laterally toward the flank column, hold row
+        return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)  # phase 2: at the flank -> drive in
+
     def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
         body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
@@ -615,29 +714,31 @@ class Subunit:
         ar, ac = self._node_anchor
         nar, nac = ar, ac
         if target_centroid and step > 0:
-            # [movement audit fix-plan step 4, ED-1097] Lateral file-holding: a v12 mechanism that
-            # existed only on the legacy grid path (orchestration.py:99-104 header;
-            # geometry/units.py's per-cell cell_target) and regressed to pre-v12 pure-centroid
-            # convergence on the node path (confirmed, movement audit finding 1.3) -- a plain
-            # advance with no active goal steered every subunit's column at the SAME enemy-centroid
-            # column, so wide-placed wings collapsed inward before any maneuver could even begin.
-            # Restored here as the column-target default: a subunit that is one of several siblings
-            # in a multi-subunit Unit holds its OWN deployment file (self._spawn_position's column)
-            # while its row still closes on the target -- it marches straight down its own lane
-            # instead of angling toward the centroid. A solo subunit (single-subunit Unit, e.g. a
-            # bare build_unit Line) is UNCHANGED -- it still steers its column at the target, since
-            # there is no sibling file to hold and a laterally-offset lone enemy must still be
-            # closed on directly (this is exactly the case Stage A/B's existing maneuver tests
-            # exercise). This is the "no active goal" fallback only -- fix-plan step 7's waypoint
-            # primitive supplies its own explicit column target when a maneuver is in progress,
-            # superseding this default.
-            _siblings = getattr(getattr(self, '_unit', None), 'subunits', None)
-            if _siblings is not None and len(_siblings) > 1:
-                col_target = self._spawn_position[1]
+            # [movement audit fix-plan step 7, ED-1097] Maneuver goal resolution: an instruction-
+            # driven goal (envelop/sweep) takes priority over the plain target_centroid steering.
+            # Falls back to fix-plan step 4's lateral file-holding default (see _resolve_maneuver_
+            # goal's docstring) when no maneuver instruction is active or resolvable.
+            goal = self._resolve_maneuver_goal(enemy_cells)
+            if goal is not None:
+                goal_r, goal_c = goal
             else:
-                col_target = target_centroid[1]
-            dr = target_centroid[0] - ar
-            dc = col_target - ac
+                # [step 4] Lateral file-holding: a v12 mechanism that existed only on the legacy
+                # grid path and regressed to pure-centroid convergence on the node path (finding
+                # 1.3) -- a plain advance with no active goal steered every subunit's column at the
+                # SAME enemy-centroid column, so wide-placed wings collapsed inward before any
+                # maneuver could even begin. A subunit that is one of several siblings in a multi-
+                # subunit Unit holds its OWN deployment file (self._spawn_position's column) while
+                # its row still closes on the target; a solo subunit is unchanged (steers its
+                # column at the target directly -- Stage A/B's existing maneuver tests exercise
+                # this case).
+                _siblings = getattr(getattr(self, '_unit', None), 'subunits', None)
+                if _siblings is not None and len(_siblings) > 1:
+                    goal_c = self._spawn_position[1]
+                else:
+                    goal_c = target_centroid[1]
+                goal_r = target_centroid[0]
+            dr = goal_r - ar
+            dc = goal_c - ac
             if self.stance == "retreat":
                 dr, dc = -dr, -dc
             if not toi_deferred and enemy_cells:

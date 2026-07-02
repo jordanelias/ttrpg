@@ -243,7 +243,7 @@ def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     return diffs
 
 
-def v_envelop(path='grid'):
+def v_envelop(path='grid', seeds=_SEEDS, turns=_TURNS):
     """GOAL (build C): a detachment ordered to ENVELOP reaches the enemy's REAR. With the maneuver it
     paths around the flank and ends at/behind the enemy (positioned to strike the rear -- the RED shock);
     without it, the detachment advances straight and never gets behind. Capability test via the
@@ -253,10 +253,9 @@ def v_envelop(path='grid'):
     [movement audit fix-plan step 6] `path` ('grid'|'node', default 'grid') selects which movement
     path is measured -- see _set_movement_path/_envelop_reach. Default 'grid' preserves this
     validator's original, still-working regression semantics; tests/valoria/
-    test_mass_battle_maneuvers.py calls this with path='node' as the live-path acceptance gate,
-    expected RED until fix-plan step 7 (the waypoint primitive) lands."""
-    on = _envelop_reach(True, path=path)
-    off = _envelop_reach(False, path=path)
+    test_mass_battle_maneuvers.py calls this with path='node' as the live-path acceptance gate."""
+    on = _envelop_reach(True, path=path, seeds=seeds, turns=turns)
+    off = _envelop_reach(False, path=path, seeds=seeds, turns=turns)
     on_m = statistics.mean(on); off_m = statistics.mean(off)
     on_behind = sum(1 for x in on if x < -1.0)
     off_behind = sum(1 for x in off if x < -1.0)
@@ -390,7 +389,7 @@ def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     return out
 
 
-def v_sweep(path='grid'):
+def v_sweep(path='grid', seeds=_SEEDS, turns=_TURNS):
     """GOAL (build E, lateral half): a unit ordered to SWEEP marches laterally to the enemy's flank and
     concentrates there, instead of holding its deployed column. With the maneuver the body displaces sideways
     toward a flank; without it (column-local advance) it stays in its file. Capability test via the unit's
@@ -399,8 +398,8 @@ def v_sweep(path='grid'):
 
     [movement audit fix-plan step 6] `path` ('grid'|'node', default 'grid') -- see v_envelop's
     docstring for the same convention."""
-    on = _sweep_disp(True, path=path)
-    off = _sweep_disp(False, path=path)
+    on = _sweep_disp(True, path=path, seeds=seeds, turns=turns)
+    off = _sweep_disp(False, path=path, seeds=seeds, turns=turns)
     on_m = statistics.mean(on); off_m = statistics.mean(off)
     worse = sum(1 for x, y in zip(on, off) if x < y)
     passed = (on_m > off_m + 1.0) and (worse == 0)
