@@ -1442,8 +1442,8 @@ def reset_morale_between_battles(unit):
 
 
 def reset_positions(unit, shape, anchor_map):
-    """Reset subunit positions for re-engagement after disengagement. Units return to their
-    starting rows for fresh approach.
+    """Reset subunit positions for re-engagement after disengagement -- LEGACY GRID PATH ONLY.
+    Units return to their starting rows for fresh approach.
 
     [Fix, 2026-07-02] Each subunit now returns to its OWN spawn column (Subunit._spawn_position,
     snapshotted once at construction) rather than a single shape-keyed anchor shared by every
@@ -1458,10 +1458,30 @@ def reset_positions(unit, shape, anchor_map):
     -- Stage C's own verification only ever exercised kind='single', which never calls this
     function, so the gap went unexercised until now. `shape`/`anchor_map` stay as parameters (no
     call-site signature change) and are used only as a defensive fallback for a subunit that
-    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__)."""
+    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__).
+
+    [Fix, 2026-07-02, movement audit finding 1.1 / ED-1096] Node-path atoms are now explicitly
+    SKIPPED, not silently corrupted. This function writes only starting_position/cell_offsets/
+    cell_offsets_c -- the legacy grid fields -- which _node_cells()/cells() never reads once
+    PC_NODE_COHESION is on (node position lives in _node_pos). The old code wrote these fields
+    unconditionally anyway: a harmless no-op for the node path's OWN rendering, but a landmine for
+    any OTHER code that reads Subunit.starting_position post-construction expecting it to track a
+    node-path atom's live position (it never has) -- most immediately the forthcoming waypoint
+    primitive (fix-plan step 7), which must not inherit a stale "reset to spawn" value. Per
+    Jordan's ruling (2026-07-02, verbatim): "an army only has subunits reset to initial
+    positions... at the start of a new battle. it is nonsensical for them to return to starting
+    positions within the same battle" -- the correct node-path behaviour for a within-battle
+    re-engagement turn is to do NOTHING to position at all, continuing exactly where the subunit
+    currently is. (The separate question of whether/how a subunit can be mid-battle REDIRECTED to
+    a new position or role once already committed -- e.g. disengaging from contact -- is gate 1's
+    Command/Discipline-gated conditional-tactics system, explicitly deferred until
+    envelopment/pincer/wheeling pathing is confirmed working.) Legacy-path atoms are completely
+    unaffected -- this is an additive skip, not a behavior change to the branch that fires."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
     fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
+        if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+            continue
         spawn = getattr(atom, '_spawn_position', None)
         anchor_col = spawn[1] if spawn is not None else fallback_col
         atom.starting_position = (start_row, anchor_col)
