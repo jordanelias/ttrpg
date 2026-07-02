@@ -535,6 +535,28 @@ class Subunit:
         self._node_pos = dict(pos)
         self._node_prev_pos = dict(pos)
 
+    def _rekey_node_state(self, new_ids):
+        """Mid-battle re-key of node state to a new pattern id set (movement audit finding 1.5,
+        ED-1096) -- called by check_drift right after a shape change, mirroring the existing
+        cell_troops re-key. Unlike _init_node_state (which lays a FRESH formation out at
+        starting_position, i.e. spawn), this re-forms the new pattern's cells AROUND THE CURRENT
+        LIVE ANCHOR -- the sub-unit re-organizes in place, it does not teleport back to spawn.
+        The relational-offset math is identical to _init_node_state's (offsets are the new
+        pattern's own (or_r,or_c) local layout centered on its own mean -- starting_position
+        cancels out of a relative-offset computation identically either way), just anchored to
+        self._node_anchor's live value instead of starting_position. Facing is preserved
+        untouched -- a formation reorganizing does not reset which way it's looking."""
+        offs = {(orig_r, orig_c): (float(or_r), float(or_c)) for orig_r, orig_c, or_r, or_c in _oriented(self)}
+        if not offs:
+            self._node_pos = {}; self._node_rel = {}; self._node_prev_pos = {}
+            return
+        mr = sum(p[0] for p in offs.values()) / len(offs)
+        mc = sum(p[1] for p in offs.values()) / len(offs)
+        ar, ac = self._node_anchor
+        self._node_rel = {cid: (o[0] - mr, o[1] - mc) for cid, o in offs.items()}
+        self._node_pos = {cid: (ar + rel[0], ac + rel[1]) for cid, rel in self._node_rel.items()}
+        self._node_prev_pos = dict(self._node_pos)
+
     def _node_cells(self):
         """Node-path cells(): live positions in _oriented order. FIELD_MOVEMENT OFF -> snapped to the integer
         grid (byte-exact prior behaviour). FIELD_MOVEMENT ON -> the COORDINATE FIELD: row stays rank-snapped
@@ -1299,6 +1321,16 @@ class Unit:
                 new_ids = [(o_r, o_c) for o_r, o_c, _a2, _b2 in _oriented(a)]
                 per = total / len(new_ids) if new_ids else 0.0
                 a.cell_troops = {pid: per for pid in new_ids}
+                # [movement audit finding 1.5, ED-1096] ED-1032's re-key above only ever covered
+                # cell_troops -- the node-path position state (_node_pos/_node_rel, keyed by pattern
+                # id) was never included, so a drift on the node path left the OLD shape's ids in
+                # _node_pos: _node_cells()/_node_advance's per-cell lookups (keyed by the NEW ids)
+                # then fall through to their (0.0,0.0)/anchor setdefaults -- cells teleport to the
+                # battlefield corner or collapse onto the anchor. Only reachable/relevant when node
+                # state exists at all (PC_NODE_COHESION); the legacy grid path has no _node_pos and
+                # is untouched (byte-exact-off preserved by construction, not by a toggle check).
+                if PC_NODE_COHESION and hasattr(a, '_node_pos'):
+                    a._rekey_node_state(new_ids)
 
 # ─── DICE ────────────────────────────────────────────────────────────────────
 
