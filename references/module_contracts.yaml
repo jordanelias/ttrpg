@@ -699,7 +699,7 @@ modules:
     accounting_phase: [season_tick, accounting_boundary]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
-      - "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1089, CANONICAL per ED-1090 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+      - "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"

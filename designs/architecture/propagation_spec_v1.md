@@ -1,6 +1,6 @@
 # Cross-Scale Propagation Spec — v1
 
-## Status: CANONICAL — ratified 2026-07-02 (Jordan, per ED-1090 merge-ratifies-by-default; ED-1089)
+## Status: CANONICAL — ratified 2026-07-02 (Jordan, per ED-1094 merge-ratifies-by-default; ED-1093)
 
 Filed and ratified in the same PR (flip pre-staged here per CLAUDE.md §2's "as part of the
 same merge, not a separate later step" rule — the gap that left the holonic doctrine, ED-1083,
@@ -391,4 +391,4 @@ Nothing below is decided by this document. Ranked roughly by how much downstream
 - `designs/architecture/scale_transitions_v30.md` §12 (J-1/ED-1038) — the downward-delivery ruling this document builds on, not reopens.
 - `references/module_contracts.yaml` — the `engine_clock` entry (ED-1051, open — awaiting Jordan) carries a gap_notes pointer at this document as the candidate home doc; `doc: null` stays unflipped until Jordan resolves ED-1051.
 - `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` — conversion register #1 (downward Key delivery, ED-1006) and the IV.2 directional laws this document formalizes.
-- `CURRENT.md` — indexes this doc under Architecture as of this ratification (ED-1090 merge-ratifies-by-default).
+- `CURRENT.md` — indexes this doc under Architecture as of this ratification (ED-1094 merge-ratifies-by-default).

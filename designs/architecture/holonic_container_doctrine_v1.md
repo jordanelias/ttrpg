@@ -1,9 +1,9 @@
 # Holonic Container / Wrapper Doctrine — v1
 
-## Status: CANONICAL — ratified 2026-07-02 (Jordan, PR #55 merge-approval; ED-1083, ED-1090)
+## Status: CANONICAL — ratified 2026-07-02 (Jordan, PR #55 merge-approval; ED-1083, ED-1094)
 
 Filed PROPOSED 2026-07-01; ratified under the merge-approval-ratifies-by-default convention
-adopted the same day (ED-1090) — merging a PR ratifies its PROPOSED contents unless the PR
+adopted the same day (ED-1094) — merging a PR ratifies its PROPOSED contents unless the PR
 body explicitly holds an item back. This doctrine did not hold anything back at filing.
 Ratification covers the cross-map and the two named guardrails (§2); it does NOT itself
 author the propagation spec (§4 — deferred to workplan v5 J-38, a separate authorship task

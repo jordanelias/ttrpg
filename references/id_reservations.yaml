@@ -22,7 +22,7 @@ updated: "2026-07-01"
 source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review); round-3 re-block 2026-07-01 (LB-21, month-overview consolidation)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 1090                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — merge of mass-battle LC-8 (ED-1088, origin/main) with this branch's ED-1089/1090, renumbered off the ED-1088 collision)
+  ED: 1094                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — second collision this session: origin/main independently landed ED-1088-1092 (mass-battle LC-8 + three Jordan rulings + Stage F investigation, PRs #59/#62/#64/#65) while this branch held its own ED-1089 (propagation spec) + ED-1090 (merge-ratifies convention, itself already renumbered once from ED-1088); this branch's two colliding IDs renumbered again to ED-1093/ED-1094)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
   verified_on: "2026-07-02"
 
@@ -43,7 +43,7 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1091 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 mass-battle LC-8 execution (origin/main); 1089 -> 2026-07-02 J-38 propagation-spec authorship (PROPOSED, governed by ED-1090); 1090 -> 2026-07-02 merge-ratifies-by-default convention (RENUMBERED from ED-1088 on collision with mass-battle LC-8 -- concurrent-allocation race, see ED-1090's own entry)
+    ED: { block: "1050-1099", next_free: 1095 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 mass-battle LC-8 execution (origin/main; consistent on both branches, no divergence); 1089 -> 2026-07-02 origin/main FIELD_MOVEMENT default-flip ruling (PR #62); 1090 -> 2026-07-02 origin/main subunit-cap-11 ruling (PR #62); 1091 -> 2026-07-02 origin/main frontal charge-recoil gate ruling (PR #62); 1092 -> 2026-07-02 origin/main Stage F investigation + D2 fidelity-fix verification (PR #65); 1093 -> 2026-07-02 J-38 propagation-spec authorship, CANONICAL (RENUMBERED from ED-1089 -- second collision, origin/main independently claimed 1089-1092 for mass-battle rulings while this branch held it); 1094 -> 2026-07-02 merge-ratifies-by-default convention, CANONICAL (RENUMBERED from ED-1090, itself originally ED-1088 -- this ID has now been renumbered twice by the same concurrent-allocation race; see the "ED tag namespace" decision-queue item this incident motivated)
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:
