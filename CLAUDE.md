@@ -46,11 +46,21 @@ are more "current state" files than there should be; trust them in this strict p
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
-  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix`.
+  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` in the description when applicable.
 - **Continuity = git history + `HANDOFF.md`.** No session-log/checkpoint machinery is in use (despite
   retired files lingering — §1). When you pause mid-task, capture next actions in `HANDOFF.md`; a
   commit *is* the session close.
+- **Merging a PR ratifies its PROPOSED contents by default (ED-1094, 2026-07-02).** If a PR lands a
+  design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
+  that PR *is* the ratification — flip the doc's `## Status:` line, the ED ledger `status`/`needs_jordan`
+  fields, and `CURRENT.md` as part of the same merge, not as a separate later step nobody triggers.
+  **The exception must be loud, not silent:** if something in the PR genuinely needs separate,
+  explicit sign-off beyond ordinary merge review, call it out prominently in the PR body as *held
+  back* — never bundle a hard design call into a routine-work PR and rely on an unprompted follow-up
+  to ratify it later. (This closes a real recurring failure: ED-1083's doctrine sat PROPOSED in `main`
+  after PR #55 was reviewed and merged, because the prior convention required a distinct explicit
+  ratification step that nothing forced to happen.)
 
 ---
 

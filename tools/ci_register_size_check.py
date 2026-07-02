@@ -68,7 +68,13 @@ THRESHOLDS = {
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
     "canon/patch_register_archive.yaml":     100_000,
-    "canon/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
+    # Interim: bumped 150_000 -> 175_000 (2026-07-02) -- live append-only editorial store
+    # crossed 150k for the first time (151,590) absorbing a routine multi-PR merge, not
+    # unusual growth. No JSONL archival splitter exists yet (only the pre-2026-05-28-cutover
+    # YAML archives under archives/editorials/ do periodic ID-range splitting); building one
+    # is real follow-up work, not a same-merge fix. Same interim-bump pattern as
+    # canonical_sources.yaml's 9k->12k. Revisit when a JSONL split tool lands.
+    "canon/editorial_ledger.jsonl":         175_000,
     "archives/session/session_log_archive_part_7.md": 100_000,
     "canon/patch_register_index.md":         20_000,
 }
