@@ -180,7 +180,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
-                  'troops', 'concentration'):
+                  'troops', 'concentration', 'orders'):
             if k in sp:
                 kw[k] = sp.pop(k)
         subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))

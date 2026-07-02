@@ -248,3 +248,9 @@ Archived entries in tests/coverage_matrix_archive.md
   unchanged. Functional: role defaulting/rejection verified directly; `build_envelopment`/
   `build_refused_flank` construct correctly and a traced battle confirms the wing's order fires
   (releases from `hold` into `envelop` at the queued tick).
+- Adversarial review found one real bug, fixed: `build_army` never popped/forwarded an `orders` key
+  from a spec dict, so the two presets' documented "unless the spec already supplies its own orders"
+  escape hatch was dead code — a caller-supplied custom order was silently dropped and always
+  overwritten by the auto-queued release order. Fixed by adding `orders` to `build_army`'s forwarded
+  per-subunit override keys. Re-verified: a spec-supplied order now survives; the auto-release still
+  fires when no custom orders are given. Byte-exact and pytest unaffected (both re-confirmed).
