@@ -171,6 +171,52 @@ def test_same_line_basis_still_caught():
     assert 'OPEN_AS_BASIS' in _kinds(v, 'ED-701')
 
 
+def test_lane_tagged_id_normalises_padding():
+    m = vec.build_status_map([{'id': 'ED-MB-0001', 'status': 'ratified'},
+                              {'id': 'ED-SC-12', 'status': 'open'},
+                              {'id': 'ED-17', 'status': 'resolved'}])
+    assert m == {'ED-MB-1': 'ratified', 'ED-SC-12': 'open', 'ED-17': 'resolved'}
+
+
+def test_lane_tagged_citation_resolved_is_clean():
+    docs = {'d.md': 'Formation rule is CANONICAL per ED-MB-1, ratified 2026-07-02.'}
+    v = vec.audit_citations(docs, {'ED-MB-1': 'ratified'})
+    assert _kinds(v, 'ED-MB-1') == set()
+
+
+def test_lane_tagged_citation_nonexistent_flagged():
+    docs = {'d.md': 'Cites ED-MB-99 (never filed).'}
+    v = vec.audit_citations(docs, {})
+    assert 'NONEXISTENT' in _kinds(v, 'ED-MB-99')
+
+
+def test_lane_tagged_citation_open_as_basis_flagged():
+    docs = {'d.md': 'Venue rule is CANONICAL per ED-SC-3, ratified.'}
+    v = vec.audit_citations(docs, {'ED-SC-3': 'open'})
+    assert 'OPEN_AS_BASIS' in _kinds(v, 'ED-SC-3')
+
+
+def test_flat_and_lane_tagged_ids_never_collide():
+    # ED-17 (flat) and a hypothetical ED-MB-17 (lane-tagged) are different keys —
+    # confirms the lane branch doesn't fold into the flat namespace.
+    m = vec.build_status_map([{'id': 'ED-17', 'status': 'resolved'},
+                              {'id': 'ED-MB-17', 'status': 'open'}])
+    assert m['ED-17'] == 'resolved'
+    assert m['ED-MB-17'] == 'open'
+    assert len(m) == 2
+
+
+def test_unrecognised_two_letter_token_not_treated_as_lane():
+    # A two-uppercase-letter token outside LANE_CODES must not be parsed as a lane tag —
+    # it should fail to match the lane branch and fall through to NONEXISTENT on the
+    # bare numeric citation instead of silently being treated as unlaned.
+    docs = {'d.md': 'See ED-XX-5 for details.'}
+    v = vec.audit_citations(docs, {})
+    ids = {row['id'] for row in v}
+    assert 'ED-XX-5' not in ids   # XX isn't a real lane, so the whole token doesn't match CITE_RE as lane-tagged
+    assert 'ED-5' not in ids     # and it must not silently degrade to citing bare ED-5 either
+
+
 def test_reproduces_p1_resolver_incident():
     # Mirrors params/factions/stats_1_7_scale.md L56/L92/L95/L101.
     doc = (

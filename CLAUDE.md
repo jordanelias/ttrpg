@@ -91,9 +91,22 @@ are more "current state" files than there should be; trust them in this strict p
   **combat** head is `designs/scene/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
   *PARTIALLY SUPERSEDED*. Always resolve combat via `CURRENT.md`, never by the `_v30` suffix.
 - **ID systems.** `PP-NNN` patches (`canon/patch_register_active.yaml`), `ED-NNN` editorial items
-  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. Reserved-ID blocks are tracked and
-  currently **exhausted** (ED ceiling 1042) — re-block before allocating new IDs
-  (`references/id_reservations.yaml` + `HANDOFF.md`).
+  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
+  is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
+  **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
+  at `ED-1094` (no new allocations, but permanently valid for existing citations), and all NEW EDs
+  use the lane-tagged `ED-<LANE>-NNNN` format (e.g. `ED-MB-0001`), zero-padded to 4 digits. Lanes:
+  `MB` mass battle, `PC` personal combat, `FI` field investigation, `SC` social contest,
+  `FA` faction actions, `WR` world, `IN` infrastructure/cross-cutting, `GO` godot, `SE` settlements.
+  Motivated by two same-session concurrent-allocation collisions on the flat sequence in one PR
+  (see `ED-1094`'s ledger entry) — a lane tag makes cross-lane collision impossible by
+  construction, not just by allocation discipline. Both formats resolve through the same
+  citation-audit path (`tools/validate_ed_citations.py`) and currency gate
+  (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
+  **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
+  lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
+  to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
+  cross-cutting `IN` work (like this namespace itself) or resolving a cross-lane collision.
 - **Naming gate.** Canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
   `tools/ci_naming_check.py` (CI + pre-commit) and an edit-time nudge. Definition naming is centralized
   in `references/names_index.yaml`.

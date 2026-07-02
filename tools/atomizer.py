@@ -3,6 +3,14 @@ atomizer.py — Splitting engine for Valoria file atomization.
 
 Pure data transformation: given content + rule, returns new file set.
 No GitHub I/O. Deterministic: same input → same output.
+
+KNOWN GAP (2026-07-02): the id_regex sites below (r'ED-(\\d+)' / r'PP-(\\d+)') assume
+flat, purely-numeric IDs for range-based archive chunking and filename generation. The
+ED-<LANE>-NNNN namespace (references/id_reservations.yaml) is not handled — a
+lane-tagged id like 'ED-MB-0001' won't match these anchored patterns and is silently
+excluded from range-string computation. Not fixed here: the namespace is brand new and
+per-lane volume won't approach chunking thresholds for a long time. If/when it does,
+this chunker needs a per-lane range dimension, not a single flat numeric one.
 """
 
 import re
