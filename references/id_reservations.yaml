@@ -22,7 +22,7 @@ updated: "2026-07-01"
 source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review); round-3 re-block 2026-07-01 (LB-21, month-overview consolidation)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 1088                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — after ED-1088, mass-battle LC-8)
+  ED: 1091                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — after ED-1089/1090/1091, the three Jordan rulings)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
   verified_on: "2026-07-02"
 
@@ -43,7 +43,7 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1089 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 mass-battle LC-8 execution
+    ED: { block: "1050-1099", next_free: 1092 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 mass-battle LC-8 execution; 1089-1091 -> 2026-07-02 Jordan rulings (field default flip / subunit cap 11 / recoil frontal zone-gate)
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:

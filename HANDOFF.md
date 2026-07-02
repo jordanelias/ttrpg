@@ -442,12 +442,22 @@ per the file's protocol; never max+1.)_
   found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
   bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
   the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
-  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Still open, Jordan-gated:**
-  the `FIELD_MOVEMENT=1` default-flip (Stage A step 7 — byte-exact grid path stays the oracle either
-  way); Stage E (Army Configuration Mode / deployment UI) and Stage F (charge/depth/equipment physics)
-  are scoped but not started; a flagged-not-fixed pre-existing gap in the reciprocal charge-recoil
-  (fires from the rear on an enveloped+braced unit — `gauge_mb.py` C7's own comment, out of scope for
-  LC-8). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Three Jordan rulings landed
+  2026-07-02 (all executed same day):** (1) **ED-1089** — `FIELD_MOVEMENT=1`/`PC_NODE_COHESION=1` are
+  now the DEFAULTS (Stage A step 7 executed; "yes, field movement is default."); the grid stays the
+  byte-exact oracle via explicit `FIELD_MOVEMENT=0 PC_NODE_COHESION=0` pins (the CI gate was updated
+  from env.pop to explicit '0' pins — load-bearing, see test_mass_battle_byte_exact.py), and bat.py's
+  field digests were re-recorded (they had gone stale vs the LC-8 battery). (2) **ED-1090** — videogame
+  sub-unit cap is **11** ("subunits can be as high as 11."), lifting the TTRPG hard cap of 3; enforced
+  in `engine.build_army`; open reconciliation flagged: Command clamps 1–7, so >7 commanded subunits
+  needs a future Command-exceeding mechanism (subordinate officers?) — future ED. (3) **ED-1091** —
+  the charge-recoil now zone-gates to the frontal (GREEN) arc (`PC_RECOIL_FRONTAL`, default ON;
+  historical-validity condition verified against `mass_battle_gauge_grounding.md` §4.3/Burkholder
+  before executing, per Jordan's "c7 if it is historically valid"); gauge row C7 can now legitimately
+  add a braced+enveloped variant (grounding doc §4.3/§5.7 still says "flagged, not fixed" — update on
+  the next gauge pass). **Still open:** Stage E (Army Configuration Mode / deployment UI — its one
+  blocking ruling, the cap, is now resolved) and Stage F (charge/depth/equipment physics) are scoped
+  but not started. **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
   mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
   marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
   ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`

@@ -271,6 +271,14 @@ Command governs:
 3. Morale starting value and floor (= 1 while general present)
 4. Tactic execution (Command dice vs Ob per tactic)
 
+> **ED-1090 (videogame sub-unit cap — Jordan-ruled 2026-07-02):** the TTRPG hard cap of 3 was a
+> tabletop-bookkeeping limit; the **videogame cap is 11** ("subunits can be as high as 11"), enforced
+> at construction by `engine.build_army` (`tests/sim/mass_battle/engine.py`). Command remains the
+> span-of-control governor (max simultaneous commanded = Command) *within* that ceiling. **Open
+> reconciliation (flagged, not resolved):** the ratified Command formula clamps to 1–7, so fielding
+> more than 7 commanded sub-units implies a future Command-exceeding mechanism (e.g. subordinate
+> officers / lieutenancy) — that design is queued for a future ED, not implied by the cap itself.
+
 **Non-Player Character generals:** Command assigned directly (1–7) as a narrative stat without
 Cha+Cog derivation. *[Command-P2-02]*
 
