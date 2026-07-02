@@ -311,8 +311,10 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Next actions
 
-_(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
-allocation: workplan-v5 **LB-21**, at the next integration pause.)_
+_(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
+verified live max ED-1080, allocated ED 1081–1087 to the month-overview consolidation from
+block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
+per the file's protocol; never max+1.)_
 
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
@@ -353,11 +355,12 @@ allocation: workplan-v5 **LB-21**, at the next integration pause.)_
   (`freshness_gate`, `broken_dependency_checker`, `compliance_check`, `extract_*`, `valoria_collator`,
   `valoria_bulk_fix`). `valoria-orchestrator`'s old `tests/registry/test_descriptor_registry.py` import
   is dead (reads `/home/claude/…`, not CI-collected) — left as-is.
-- **CI debt blocking-flips (LB-23):** after the **K-2 SHA-split** (115 `canonical_sha` fields out of
-  `canonical_sources.yaml` → `references/canonical_freshness.yaml`), flip `freshness_gate`'s
-  stale-canonical step back to blocking; flip `validate_ed_citations` (tool `sys.exit(1)`s but the CI job
-  pins `continue-on-error: true` → non-blocking) once its count is triaged toward 0 — **now 315 violations
-  / 190 open-ref info live** (was 748/788; #20's validator-precision pass dropped it). Solo / K-2 / LB-6.
+- **CI debt blocking-flips (LB-23) — reconciled 2026-07-01 (ED-1082):** `validate_ed_citations`
+  is **already blocking** (since 2026-06-29, 0 genuine violations — the old "flip once triaged"
+  action here was stale). `freshness_gate`'s remaining report-only step is being closed by the
+  month-overview consolidation itself (pin refresh + blocking flip as its final commit); the
+  optional K-2 SHA-split (115 `canonical_sha` fields → `references/canonical_freshness.yaml`)
+  is a refactor that can follow independently, no longer a precondition.
 - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 (index-routes).
 - **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
   and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the

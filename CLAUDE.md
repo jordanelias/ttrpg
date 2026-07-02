@@ -128,17 +128,19 @@ Do not represent the skeleton as a runnable head-start.
 - **Skeleton is non-compilable.** `designs/godot/skeleton/` covers only **1 of 27** modules
   (`personal_combat`) and `extends`/calls a spine (`BaseEngine`, `EngineModule`, `Key`, `KeyBus`,
   `GameState`, `Resolver`) **defined nowhere in the corpus**. It cannot be opened and run in Godot 4.6.
-- **The one ported module already disagrees with its oracle.** `combat_config.gd` hand-edits
-  `adef_threshold` away from the canonical Python oracle (`designs/scene/combat_engine_v1/config.py`),
-  with an inline `[AUDIT-FIX]` note — so Key-log parity (the master validation gate) cannot go green.
-  **Never let a port "correct" its oracle in-place;** fix `config.py` in canon via the editorial ledger,
-  then re-export.
+- **Port↔oracle discipline (ED-1050, resolved 2026-06-30).** `combat_config.gd` once hand-edited
+  `adef_threshold` away from the canonical Python oracle with an inline `[AUDIT-FIX]`; Jordan resolved it
+  by re-sweeping the oracle (`config.py`, monotone ADEF_THRESHOLD) and re-exporting — port and oracle now
+  match. The rule stands: **never let a port "correct" its oracle in-place** — fix canon via the ledger,
+  then re-export. Key-log parity is still known-red, but only because RESIST/GAP_EXPOSURE/gap-game logic
+  has not yet been re-exported to `weapon_resource.gd`/`strike_module.gd` (ED-1050 residual).
 - **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 10/27 modules
   have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
   are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
   with `engine_clock`).
-- **The four `designs/godot/*.md` docs are stale (all 2026-04-18) with no supersession banner** and encode
-  the pre-`d+σ` model. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
+- **The four `designs/godot/*.md` docs are stale (all 2026-04-18)** and encode the pre-`d+σ` model —
+  each now carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner (flagged 2026-06-30, ED-1054) pointing at
+  the strategy doc. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
   settlements). Do not implement from them; defer to the strategy doc + Key substrate.
 
 ---
