@@ -257,6 +257,12 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       `lunge_quality` consistency check (a skeptic-flagged addition, folded in). **Jordan's call, not settled by
       the record:** the `K_OVERHANG`/`MIN_POINT_CLEARANCE` magnitudes — no source of any tier gives a number;
       both are [FIAT]/[SIM-CALIBRATE], to be set by playtesting against the 94-96% anomaly this targets.
+    - **SUPERSEDED (2026-07-02) by the full R0+R1 closing-distance/facing/grip redesign** (see Decisions
+      above) — this bullet's `overhang_penalty`/`available_extension` sketch is now `D1`'s `rear_clearance`
+      + `D3`'s grip-aware reach in the ratified plan at
+      `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md`, developed with a full
+      6-lens adversarial audit + 4-round repair loop rather than as a standalone build task. Do not
+      greenlight this bullet's task in isolation; implement via the plan's I0→I8 sequence instead.
 
 - **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
   ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
@@ -270,6 +276,56 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-07-02 — **Scene-combat closing-distance/facing/grip redesign (R0+R1) — plan RATIFIED by Jordan,
+  ready for R2 implementation.** Branch `scene-combat-morphology-rearch` (this worktree,
+  `C:/Github/ttrpg-morph-rearch`). Jordan's diagnosis (confirmed by re-running the weapon×armour sweep
+  against all 51 primitive-composed weapons, not just the original 11 — see the balance-harness commit
+  just above this entry): Phase B derived every combat quantity for the IDEAL circumstance only; nothing
+  degrades under real circumstances (closed range, altered grip, poor facing, shallow commitment), and
+  spear/polearm-class weapons won 84–96% vs an arming sword as a result. Jordan additionally identified
+  several specific unmodeled physics gaps mid-session: grip-change cascades (a spear held at the point vs.
+  choked up affords different swings/thrusts/damage), closing-distance mechanics (deflection/leverage,
+  grabbing/pinning, buckler use), thrust-commitment depth, range-utilization (a greatsword can't fully swing
+  at 50cm), facing (square vs. bladed), and rearward weapon overhang when choking up (the butt extends
+  behind the new grip, causing self-interference distinct from the mass/inertia effect, which was already
+  correctly modeled via `at_grip`'s parallel-axis math).
+  - **R0 (HEMA/biomechanics research, done):** 4 parallel sonnet research clusters (measure/closing footwork,
+    facing/stance, commitment-depth/range-utilization, grappling) + an opus cross-check synthesis, grounded
+    in named treatises (Fiore, Meyer, Silver, Capoferro/Fabris, Ringeck) and peer-reviewed biomechanics.
+    Output: `combined_brief.md` + `flags.json` (5 labeled contradiction/grounding flags, C1–C5) —
+    preserved under the session's scratch directory; not yet copied into the repo (see Next actions).
+  - **R1 (design, done — 3 escalating passes):** (1) two independent opus design lenses (regime-gated vs.
+    continuous-physics) converged on the same core architecture; (2) a first Fable-5 audit attempt hung on
+    the account's weekly Fable metering cap (a recurring failure mode this session — see the "model
+    tiering" note below) and was replaced by **6 independent opus-tier audit lenses** (physics/kinematics,
+    primitive-schema sufficiency, geometry/bake/mode coherence, consumer-coupling half-switch risk,
+    architecture/sequencing/orphan-check, and an exhaustive all-53-weapon pipeline trace) — together they
+    surfaced that the first-pass damage-model repair (a swing-moment-ratio grip degradation, `Φ_grip =
+    S_g(g)/S_g(0)`) was itself physically wrong (collapses closed-quarters thrust damage to ~0, and a staff
+    NaN); (3) a 4-round opus-max **agonist/antagonist repair loop** (22 agents total) iteratively fixed the
+    design until the adversarial panel stopped finding BLOCKER-class defects, followed by a 3-lens **capstone
+    verification pass** that independently re-derived and confirmed one more genuine BLOCKER (a grip↔reach
+    feedback oscillator D3 would otherwise introduce — a choked spear would flip its grip/reach every beat,
+    forever) plus 3 smaller precision fixes, all folded in.
+  - **Result: the final plan carries 10 revised design decisions (D0–D12, schema-restoration through
+    verification-infra), a re-staged 10-increment sequence (I0→I8, each independently pytest-verified +
+    balance-harness-checked + committed), a complete orphan cross-check table, and 9 explicit
+    Jordan-decisions (JD-1…JD-9)** — each stated as a fork with its concrete evidence and the plan's
+    reasoned default, not an invented resolution. The single highest-stakes fork (JD-1) is the damage-model
+    / `I_g` tension: Jordan asked the damage side to read the same `I_g` bundle the cost side already reads;
+    the literal reading re-manufactures the reach-dominance symptom, the first correction collapses thrust
+    damage to zero, and the plan's default (grip-invariant thrust, keyed on the selected strike element's
+    mode, not a weapon class) needs Jordan's ratification before I2 is implemented.
+  - **Plan file:** `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` — approved via
+    `ExitPlanMode` this session. **Next action is R2** (implement I0→I8 in verified increments); see Next
+    actions below. The JD-1…JD-9 decisions should be resolved (or explicitly deferred per-increment, since
+    several are increment-specific — e.g. JD-9 only gates I3) before or during the increments that need them.
+  - **Process note for future sessions:** `model: 'fable'` hit its weekly metering cap TWICE this session
+    (a first Fable audit before this entry's work began, and the initial R1 Fable-5 audit request) — both
+    times the workflow hung silently rather than failing cleanly, burning real wall-clock before being
+    caught and killed via `TaskStop`. Until Anthropic ships a clean-failure path for a metered-out Fable
+    call, prefer `opus` at `effort: 'max'` for adversarial/audit work of this weight — it delivered the
+    entire 6-lens audit + 4-round repair + capstone at full rigor with no metering risk.
 - 2026-07-01 — **Month-overview + architecture-consolidation session executed** (this branch;
   12+ commits, ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item
   Jordan decision queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`).
@@ -419,6 +475,26 @@ verified live max, allocated ED 1081–1087 to the month-overview consolidation 
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
 per the file's protocol; never max+1.)_
 
+- **START HERE (branch `scene-combat-morphology-rearch` only) — R2: implement the ratified
+  closing-distance/facing/grip redesign.** Plan file:
+  `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` (see the 2026-07-02 Decisions
+  entry above for how it was built). Work the 10-increment sequence **I0 → I1 → I2 → I3 → I4 → I5 → I6 →
+  I7a → I7b → I8** in order — I3→I4→I5 is an explicit dependent chain, I7 is split (I7a rear_clearance,
+  I7b the new `contact.py` grab/pin subsystem). Each increment: implement, `pytest tests/valoria -q`
+  (no NEW red beyond the plan's enumerated 8-red accepted set), targeted acceptance checks per the plan's
+  falsifiable criteria, `python workbench/balance.py weapon 400` / `armour` matrix at I3/I5/I8, commit.
+  **Before I2:** ratify JD-1 (the damage-model/`I_g` tension — the highest-stakes fork) and JD-8 (partisan/
+  spetum swing-vs-thrust). **Before I3:** ratify JD-2, JD-6, and **JD-9** (a genuinely new grip↔reach
+  feedback-oscillator fix found by the plan's own capstone verification — do not skip it, D3 is unsafe to
+  implement without it). JD-3/4/5/7 gate narrower increments (I2/I4, I2, I0, I7b respectively) — the plan
+  file states exactly which. **This is a large, multi-week implementation effort — a fresh session is the
+  right place to start it** (this session's context is heavily loaded with the design/audit work itself,
+  which is now fully captured in the plan file and this entry; nothing is lost by starting clean). R0's raw
+  research artifacts (`combined_brief.md`, `flags.json`, the 6 audit-lens JSONs, the capstone punch-list)
+  currently live only in session scratch, not the repo — if a future session wants them preserved past this
+  scratch directory's lifetime, copy them into `designs/audit/2026-07-02-scene-combat-closing-distance/` or
+  similar before they're lost; they are not required to execute the plan (the plan file is self-contained)
+  but are useful provenance for auditing the *how* later.
 - **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
   review, the consolidation execution/reconciliation logs, and the **single consolidated
   23-item Jordan decision queue** live at
