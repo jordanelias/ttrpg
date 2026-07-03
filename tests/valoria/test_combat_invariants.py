@@ -272,3 +272,64 @@ def test_select_mode_sel_fields_track_swap_window():
     w = C.WEAPONS['longsword_halfsword']
     assert sg == w['gap'] or sg == w['geo']['gap']
     assert spc == w['geometry']['point_concentration']
+
+
+# ── I3 GRIP-AWARE REACH + TWO-RECOMPUTE ER CONTRACT + JD-9 (D3, 2026-07-03) ──────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_reach_base_byte_identical_at_grip_zero():
+    """D3 gate #2: Refresh #1 at grip=0 (no swap) reproduces today's frozen er EXACTLY (reach_base was grip-blind
+    pre-I3, so grip=0 == today) — verified for the whole roster."""
+    C, core, S, WP, CFG = _mods()
+    for n, w in C.WEAPONS.items():
+        c = C.Combatant('x', weapon=n)
+        old = CFG['L0'] + CFG['REACH_GEOM_SCALE'] * (w['head_len'] + CFG['REACH_2H_K'] * w['grip_len'] * (w['hands'] == 2)) + w.get('reach_adj', 0.0)
+        new = S.reach_base(c, CFG, grip=0.0)
+        assert abs(old - new) < 1e-9, n
+
+
+def test_reach_corrected_anchors_stay_above_l0():
+    """D3 gate #6: a full choke reduces reach by exactly the forward geometry lost, and reach stays > L0 for every
+    pole at max realistic choke, matching the plan's measured post-floor targets."""
+    C, core, S, WP, CFG = _mods()
+    targets = {'spear': 4.940, 'glaive': 5.465, 'poleaxe': 5.347, 'staff': 5.346, 'guisarme': 5.535}
+    for n, target in targets.items():
+        c = C.Combatant('x', weapon=n)
+        r = S.reach_base(c, CFG, grip=1.0)
+        assert abs(r - target) < 0.01, (n, r, target)
+        assert r > CFG['L0'], n
+
+
+def test_jd9_grip_target_converges_no_oscillation():
+    """JD-9 (capstone finding M1): grip_target's drive term is fixed to grip=0.0, so it no longer depends on its
+    own prior output — verified NON-OSCILLATING (in fact single-step) and matching the plan's own converged g*
+    table exactly for every gathering pole."""
+    C, core, S, WP, CFG = _mods()
+    targets = {'spear': 0.865, 'yari': 1.0, 'glaive': 0.467, 'guisarme': 0.396, 'bardiche': 0.627}
+    for n, target in targets.items():
+        c = C.Combatant('x', weapon=n)
+        g1 = S.grip_target(c, True, CFG)
+        c.grip_position = g1
+        g2 = S.grip_target(c, True, CFG)   # a second call, as if grip_position had been fed back — must NOT move
+        assert g1 == g2, (n, g1, g2)
+        assert abs(g1 - target) < 0.001, (n, g1, target)
+
+
+def test_halfsword_form_reach_shorter_post_swap():
+    """D3 gate #4: for a form-switching weapon, the post-swap reach reflects the SHORTER half-sword form —
+    reach_base on longsword_halfsword < reach_base on longsword."""
+    C, core, S, WP, CFG = _mods()
+    c_full = C.Combatant('x', weapon='longsword')
+    c_half = C.Combatant('x', weapon='longsword_halfsword')
+    assert S.reach_base(c_half, CFG, grip=0.0) < S.reach_base(c_full, CFG, grip=0.0)
+
+
+def test_engagement_reach_derivation_runs_clean():
+    """Smoke test: a full engagement (grip-aware reach, the two-recompute er contract, JD-9 fixed-grip drive) runs
+    to completion with no exception, for a gathering-pole matchup (the exact case JD-9 exists to fix)."""
+    import random
+    C, core, S, WP, CFG = _mods()
+    import wrapper
+    A = C.Combatant('A', weapon='spear')
+    B = C.Combatant('B', weapon='arming')
+    for seed in range(5):
+        wrapper.fight(A, B, cfg=CFG, rng=random.Random(seed))

@@ -8,15 +8,23 @@ import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authori
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
-def reach_base(c, cfg):
+def reach_base(c, cfg, grip=None):
     """Standing reach = body/arm offset (L0) + the weapon's forward extent DERIVED from geometry (Phase-3b: retires
     the categorical reach=='long' + HEAD_REACH[head] + the per-weapon reach_adj triple-duty). Forward extent =
     head_len (the blade/shaft forward of the lead hand) + a 2H rear-hand setback (REACH_2H_K*grip_len). So a
     CENTRE-gripped pole (staff, head_len≈grip_len) reaches LESS than a BUTT-gripped one (spear, head_len≫grip_len),
     and a long blade (greatsword) more than a short one — the grip-position insight, emergent. reach_adj is now a
-    SMALL per-weapon residual, not the dominant term."""
+    SMALL per-weapon residual, not the dominant term.
+    GRIP-AWARE (I3, D3, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+    plan_r1_RATIFIED.md): the forward extent is reduced by the FLOORED geometric slide (WP.at_circumstance's
+    `geom_slide`, D1) at the given grip — a gathered-up pole reaches less. `grip=None` (the default) reads the
+    combatant's LIVE `c.grip_position`; an explicit override is used ONLY by grip_target's own drive input
+    (JD-9 — see close_unwieldiness/grip_target) to break the grip<->reach feedback loop D3 would otherwise close.
+    At grip=0 this is byte-identical to the pre-I3 return for every weapon (geom_slide(w,0)==0 always)."""
     w=c.w
-    geom = w['head_len'] + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
+    g = getattr(c, 'grip_position', 0.0) if grip is None else grip
+    geom_slide = WP.at_circumstance(w, g, 1.0)['geom_slide']
+    geom = (w['head_len'] - geom_slide) + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
     return cfg['L0'] + cfg['REACH_GEOM_SCALE']*geom + w.get('reach_adj',0.0)
 
 # ---------- wielding heft (DERIVED, g-aware — the COST of swinging; replaces the binary wt class) ----------
@@ -135,11 +143,12 @@ def recoverability_factor(c, cfg):
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
     return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
-def close_unwieldiness(c, cfg):
+def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE — DERIVED from its reach (a long weapon's business end is past the
     fight at grappling distance and slow to bring back to bear). 0 for a short/handy weapon. No closes_poorly flag:
-    pure morphology (reach = length + head + hands)."""
-    return max(0.0, reach_base(c,cfg) - cfg['CLOSE_REACH_REF'])
+    pure morphology (reach = length + head + hands). `grip` forwards to reach_base (I3, D3, JD-9) — None (default)
+    reads the combatant's LIVE grip_position; grip_target passes an explicit 0.0 for its OWN drive input (below)."""
+    return max(0.0, reach_base(c,cfg,grip=grip) - cfg['CLOSE_REACH_REF'])
 def can_choke(c, cfg):
     """Can the fighter gather in (regrip toward the centre)? DERIVED from the grippable length — a long shaft/grip
     yes, a short hilt or a block-headed club no. Thin bool over WP.grip_choke_max (the continuous primitive)."""
@@ -149,10 +158,18 @@ def grip_target(c, closed, cfg):
     from morphology — replaces the discrete adopt_stance string ('choke' was g>0, 'normal' g=0). Once the measure is
     CLOSED, a fighter GATHERS IN (g>0) in proportion to how unwieldy the weapon is in the close (close_unwieldiness),
     bounded by how far it can regrip (WP.grip_choke_max): a pole gathers up the haft; a rapier (short hilt) cannot
-    and just suffers. At open measure g=0 (full reach). Pure (returns g; the wrapper writes grip_position)."""
+    and just suffers. At open measure g=0 (full reach). Pure (returns g; the wrapper writes grip_position).
+    JD-9 FIXED-GRIP DRIVE INPUT (I3, D3, capstone finding M1, 2026-07-03 — designs/audit/2026-07-02-scene-combat-
+    closing-distance-redesign/plan_r1_RATIFIED.md): once D3 makes reach_base grip-aware, this function's OWN drive
+    term would otherwise read close_unwieldiness at the CURRENT grip_position — but grip_position THIS beat is
+    exactly what this function is computing, closing a per-beat feedback loop (grip_position(n) depends on
+    reach_base(grip_position(n-1)), the prior beat's own output) that iterates to a HARD, PERMANENT 2-cycle for
+    every gathering pole (verified: spear flips 0<->0.865 every beat, forever). The drive term is pinned to
+    grip=0.0 (open-measure reach) — a dedicated fixed-grip read used ONLY here; reach_base stays grip-aware for
+    every OTHER consumer (str_demand/slip_inside/reach_sigma/close_tempo/reopen — the actual point of D3)."""
     if not closed:
         return 0.0
-    drive = min(1.0, close_unwieldiness(c, cfg) / cfg['CHOKE_DRIVE_REF'])     # 0..1: the more unwieldy in the close, the more you gather
+    drive = min(1.0, close_unwieldiness(c, cfg, grip=0.0) / cfg['CHOKE_DRIVE_REF'])     # 0..1: the more unwieldy in the close, the more you gather; FIXED grip=0.0 input (JD-9)
     return WP.grip_choke_max(c.w) * drive
 def lunge_quality(c, cfg):
     """How well a weapon LUNGES (an extended-body thrust) — DERIVED, CONTINUOUS (Phase-3 Stage 2). A light, hand-
