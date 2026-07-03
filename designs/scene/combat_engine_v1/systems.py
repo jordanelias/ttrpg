@@ -252,6 +252,37 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
 SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
                           #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
+# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
+# quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
+# throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
+# ablation-gated, not load-bearing, per D4].
+CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
+                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
+CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
+                          #   room never fully collapses a broad element's affordance.
+
+def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
+    """The close-efficacy factor (D5): 1 - (1-pc)*f(measure_gap, range_avail). `pc` is the CANDIDATE element's own
+    point_concentration (a pure-point element, pc~1, is barely touched; a broad-arc cutter, pc~0, is degraded up
+    to the floor). `head=='point'` is grip-INVARIANT (returns 1.0 unconditionally) — the SAME rigid-body reasoning
+    D2's phi_grip already applies to thrust-protection (R-3: a whole-weapon pc scalar does not cleanly separate
+    arc-vs-thrust — bear_spear's whole-weapon pc is a moderate 0.55 despite being a pure-point weapon with NO
+    authored mode_elements, so pc alone would wrongly degrade it; gating on the SELECTED head, not just pc,
+    closes the same R-3 gap here). f is EXACTLY 0 — not approximate — at open measure (closed=False), when
+    measure_gap is unknown (None, the default for any caller that hasn't wired a real measure — preserves
+    byte-identical behaviour for every pre-I4 call site), or when measure_gap>=CLOSE_EFF_GAP_REF, so the lever is
+    inert until the fight is genuinely in the close AND a real measure is threaded; f rises toward CLOSE_EFF_FLOOR
+    as measure_gap shrinks toward 0 OR range_avail shrinks toward 0 (whichever is more constraining — either
+    being crowded-in or having no swing room degrades a broad arc). Pure."""
+    if head == 'point':
+        return 1.0
+    if not closed or measure_gap is None:
+        return 1.0
+    gap_term = max(0.0, 1.0 - measure_gap / CLOSE_EFF_GAP_REF)
+    room_term = max(0.0, 1.0 - range_avail)
+    f = CLOSE_EFF_FLOOR * max(gap_term, room_term)
+    return 1.0 - (1.0 - pc) * f
 # SELECT_PC_MIN RETIRED (morphology-rearch Phase B3, 2026-07-02). It was a magnitude THRESHOLD on point_concentration
 # standing in for a fact the engine didn't yet have: whether a blunt haft's assembly HAS a real thrusting point at
 # all (mace 0.02 -> no; poleaxe 0.78, modeled as ONE whole-weapon blunt token -> yes, smuggled in via this same
@@ -348,7 +379,7 @@ def afforded_heads(w, grip=0.0, room=1.0):
         heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None)
     return heads
 
-def select_mode(c, defender_armor, closed, cfg):
+def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
     then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
     armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
@@ -366,19 +397,25 @@ def select_mode(c, defender_armor, closed, cfg):
     `c.grip_position`/`c.range_avail` (default 0.0/1.0 — I1 scaffold) into afforded_heads so the SELECTION itself
     (not just the eventual damage) reflects the wielder's current circumstance. `eff_head` is the head TOKEN
     routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved 'percussion'/'shear'/'puncture'.
-    The wrapper writes all five onto the combatant at BOTH call sites (mutation stays wrapper-owned)."""
+    The wrapper writes all five onto the combatant at BOTH call sites (mutation stays wrapper-owned).
+    CLOSE-EFFICACY (I4, D5): `measure_gap` (None default — behaviour-preserving for every caller that hasn't wired
+    a real measure) now genuinely reaches the comparator via close_efficacy, weighted by each CANDIDATE's own
+    point_concentration — a broad arc-requiring swing collapses in tight quarters; a point-selected thrust barely
+    degrades. `closed`/`measure_gap`/`range_avail` were previously received (`closed`) and ignored."""
     w=c.w
     grip=getattr(c,'grip_position',0.0); room=getattr(c,'range_avail',1.0)
     heads=afforded_heads(w, grip=grip, room=room)
     if len(heads)==1:                                                # single afforded mode: no choice (the common case)
         h=next(iter(heads))
     else:
-        # greedy: the mode delivering the most damage-coupling THROUGH this armour. perc carries the blunt authority (a
-        # high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING plate-defeat (the
-        # situational gap game), so the poleaxe's hammer and its spike are compared on the same coupling scale — and the
-        # spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02), not the whole-weapon scalar.
+        # greedy: the mode delivering the most damage-coupling THROUGH this armour, weighted by close-efficacy (D5:
+        # a broad arc that cannot fully develop in the close is discounted, a thrust barely). perc carries the blunt
+        # authority (a high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING
+        # plate-defeat (the situational gap game), so the poleaxe's hammer and its spike are compared on the same
+        # coupling scale — and the spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02).
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
-                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2]))
+                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2])
+              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
@@ -413,7 +450,7 @@ def reach_threat(longer, defender, cfg):
     [FIAT — designer-set; tightened to avoid triple-counting REACH_W + ADEF_CUT]."""
     aw=cfg['ADEF_W'][defender.armor]
     if aw==0.0: return 1.0
-    cap=adef_cap(longer.w, cfg, gap=getattr(longer,'sel_gap',None),
+    cap=adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
                  grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
     deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
@@ -504,9 +541,12 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
 
 def approach_displace(shorter, longer, cfg):
     """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,
-    suppressing its stop-hit and speeding the close. Returns a fraction in [0, APPROACH_DISPLACE_MAX]. Pure."""
+    suppressing its stop-hit and speeding the close. Returns a fraction in [0, APPROACH_DISPLACE_MAX]. Pure.
+    I4/D5: reads the longer weapon's SELECTED head (sel_head, set every beat regardless of closed — the wrapper
+    runs select_mode during the approach too), native fallback only when unset."""
     lever_edge = leverage(shorter,cfg) - leverage(longer,cfg)
-    if longer.w['head']!='point' or lever_edge<=0: return 0.0
+    longer_head = getattr(longer,'sel_head',None) or longer.w['head']
+    if longer_head!='point' or lever_edge<=0: return 0.0
     rd=(reading(shorter,cfg)-reading(longer,cfg))
     return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
 

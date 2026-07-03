@@ -89,21 +89,25 @@ def test_use_mode_selection_emerges_from_primitives():
     internal cut_thrust cut/gap-thrust re-weighting — that stays keyed on ONE token, see test_gap_thrust_...) as the
     ones whose SELECTED HEAD TOKEN changes with armour. Both fall out of the derived afforded_heads (no per-weapon
     list).
-    [UPDATED, 2026-07-03, I2/D2b/R-7 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-    plan_r1_RATIFIED.md] The R-7/M-02 object-confusion fix widens select_mode's greedy comparator to read each
+    [UPDATED, 2026-07-03, I2/I4/D2b/D5/R-7/JD-5 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+    plan_r1_RATIFIED.md] The R-7/M-02 object-confusion fix (I2) widens select_mode's greedy comparator to read each
     candidate head's OWN gap_precision/percussion (the winning mode_element's, via the widened afforded_heads
     5-tuple) instead of the whole-weapon w['gap']/percussion_authority(w) scalar. guisarme/voulge's point elements
     (thrusting spike / thrusting_heel_spike) carry a materially HIGHER gap_precision than their whole-weapon
     average — under the old whole-weapon-gap comparator this was invisible, so they never out-coupled their
     cut_thrust cleaver; under the corrected per-element gap they NOW correctly win the puncture path vs medium/
     heavy armour (exactly the reach-ladder gap-game mechanic bec_de_corbin/ji/kama_yari/lucerne_hammer already
-    modelled) — DELIBERATELY REGENERATED, not silently patched: verified via direct select_mode() sweep this pass
-    that both flip cut_thrust->point at medium/heavy, none/light unchanged. goedendag's point still never
-    out-scores its blunt. poleaxe is a [PHASE-C FLAG] — its own more-accurate, more-forward Phase-B mass
-    distribution lifted its blunt percussion authority enough that it no longer switches to its spike vs heavy
-    armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_plate); left OUT of
-    the expected set here until Phase C's engine-scale recalibration restores it, not silently included as if the
-    current behaviour were correct."""
+    modelled). goedendag's point still never out-scores its blunt. I4/JD-5 then authors the deferred mode_elements
+    for guandao (rear spike/hook notch) and fauchard (back-hook spike) — both DELIBERATELY REGENERATED here, not
+    silently patched: verified via direct select_mode() sweep this pass that both flip curved_cut->point at
+    light/medium/heavy (their point element's higher gap_precision wins as soon as any armour is present), none
+    unchanged. hook_sword's authored blunt crescent (JD-5) never clears SELECT_EPS against any tier under the
+    current [SIM-CALIBRATE] gains — a real but currently-inert affordance (same class as goedendag's point), so
+    hook_sword does NOT become a changer. poleaxe is a [PHASE-C FLAG] — its own more-accurate, more-forward
+    Phase-B mass distribution lifted its blunt percussion authority enough that it no longer switches to its
+    spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
+    plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not
+    silently included as if the current behaviour were correct."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -113,7 +117,7 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    expected = ['kama_yari', 'voulge', 'guisarme', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above; voulge/guisarme added I2/R-7 — see docstring
+    expected = ['kama_yari', 'guandao', 'fauchard', 'voulge', 'guisarme', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above; voulge/guisarme added I2/R-7, guandao/fauchard added I4/JD-5 — see docstring
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -333,3 +337,58 @@ def test_engagement_reach_derivation_runs_clean():
     B = C.Combatant('B', weapon='arming')
     for seed in range(5):
         wrapper.fight(A, B, cfg=CFG, rng=random.Random(seed))
+
+
+# ── I4 MODE/MEASURE COUPLING — CLOSE-EFFICACY (D5, 2026-07-03) ──────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_close_efficacy_identity_at_open_measure():
+    """D5 gate: close_efficacy is EXACTLY 1.0 (not merely approximate) at open measure (closed=False) or when
+    measure_gap is unset — the lever is inert until the fight is genuinely in the close."""
+    C, core, S, WP, CFG = _mods()
+    assert S.close_efficacy(0.0, None, 1.0, True) == 1.0
+    assert S.close_efficacy(0.0, 0.0, 1.0, False) == 1.0
+    assert S.close_efficacy(0.0, 6.5, 1.0, True) == 1.0
+
+
+def test_close_efficacy_arc_vs_thrust_from_selected_element():
+    """D5 gate #4: a low-per-element-pc cutter (guandao's cleaver, pc=0.30) degrades in the close, while a
+    point-selected thrust barely does. bear_spear is the R-3 case: its WHOLE-WEAPON pc is a moderate 0.55
+    (it has no authored mode_elements), which would wrongly degrade a pc-only formula — close_efficacy is gated
+    on the SELECTED HEAD (head=='point' -> 1.0 unconditionally, mirroring D2's phi_grip thrust-protection), not
+    pc alone, so bear_spear is correctly untouched despite its moderate whole-weapon pc."""
+    C, core, S, WP, CFG = _mods()
+    guandao_pc = C.WEAPONS['guandao']['mode_elements'][0]['geo']['point_concentration']
+    assert S.close_efficacy(guandao_pc, 0.0, 1.0, True, head='curved_cut') < 0.9
+    c = C.Combatant('x', weapon='bear_spear')
+    dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
+    assert h == 'point'
+    assert spc == C.WEAPONS['bear_spear']['geometry']['point_concentration'] == 0.55, "bear_spear has no mode_elements; its moderate whole-weapon pc is the R-3 trap"
+    assert S.close_efficacy(spc, 0.0, 1.0, True, head=h) == 1.0, "gated on the SELECTED HEAD, not pc alone"
+
+
+def test_close_efficacy_shifts_selection_in_tight_quarters():
+    """D5: guandao's afforded point element (rear spike, I4/JD-5) out-couples its degraded cleaver once quarters
+    are tight enough, even unarmoured — a real, measurable selection shift, not just a magnitude tweak."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('x', weapon='guandao')
+    h_open = S.select_mode(c, 'none', False, CFG, measure_gap=None)[1]
+    h_close = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)[1]
+    assert h_open == 'curved_cut'
+    assert h_close == 'point'
+
+
+def test_sel_head_routes_to_reach_threat_and_approach_displace():
+    """I4/D5: reach_threat's adef_cap call and approach_displace both now read the SELECTED head (sel_head),
+    native fallback only when unset — verified they accept and use the override without raising."""
+    C, core, S, WP, CFG = _mods()
+    longer = C.Combatant('longer', weapon='poleaxe')
+    shorter = C.Combatant('shorter', weapon='dagger')
+    defender = C.Combatant('def', weapon='arming', armor='heavy')
+    longer.sel_head = 'point'
+    rt_point = S.reach_threat(longer, defender, CFG)
+    longer.sel_head = 'blunt'
+    rt_blunt = S.reach_threat(longer, defender, CFG)
+    assert isinstance(rt_point, float) and isinstance(rt_blunt, float)
+    longer.sel_head = 'point'
+    d = S.approach_displace(shorter, longer, CFG)
+    assert d >= 0.0

@@ -345,13 +345,16 @@ WEAPONS = {
    geometry=dict(curvature=0.6, point_concentration=0.3, cross_section=0.78, edge_keenness=0.85, strike_concentration=0.15),
    adornments=[
      dict(count=1, extent_m=0.15),  # silk or horsehair tassel at the blade/socket junction (S2, ornamented/ceremonial specimens)
+    ],
+   # JD-5 (I4, D0/D5, 2026-07-03): authored — the rear spike/hook notch is a genuine strike alternative (a reverse
+   # thrusting/hooking point), not merely a catch lug; DEFERRED here from I0/I2 (adding mode_elements activates
+   # afforded_heads/select_mode immediately, which their byte-identical/data-only contracts forbade) — I4 is where
+   # test_use_mode_selection_emerges_from_primitives' expected set is explicitly sanctioned to change. The
+   # main-blade mode mirrors the whole-weapon geometry exactly (native mode unchanged).
+   mode_elements=[
+     dict(head='curved_cut', element_ref=0, geometry=dict(curvature=0.60, point_concentration=0.30, cross_section=0.78, edge_keenness=0.85, strike_concentration=0.15)),  # main dao blade
+     dict(head='point', element_ref=1, geometry=dict(curvature=0.35, point_concentration=0.55, cross_section=0.72, edge_keenness=0.10, strike_concentration=0.10)),  # rear spike/hook notch
     ]),
- # JD-5 (I0, D0): guandao's rear spike/hook notch is a genuine strike alternative (a reverse thrusting/hooking
- # point) and the plan default is to author it as a mode_element — DEFERRED to I4 (D5), not built at I0: adding
- # mode_elements activates afforded_heads/select_mode immediately (verified: introduces a new red on
- # test_use_mode_selection_emerges_from_primitives), which I0's byte-identical/data-only contract forbids. I4's
- # own acceptance criteria explicitly sanction updating that test's expected set — author guandao's
- # mode_elements there, in the same commit as the emergent-set update.
  'podao': dict(
    mass=2.48, head_len=5.3233, grip_len=0.7433, hands=2, head='curved_cut', clinch=1, hand_guard=0.1, blade_guard=0.1,
    wclass='hafted_tip', hilt='none',
@@ -371,13 +374,15 @@ WEAPONS = {
      dict(x_m=0.55, mass_kg=0.0, extent_m=0.1, type='lug', orient_deg=90, material='steel', dual_role_element=True),  # back_hook_spike (documented catching/controlling lug, "composite glaive" typology)
     ],
    haft=dict(x_m=0.7515, mass_kg=1.3, extent_m=2.2),
-   geometry=dict(curvature=0.55, point_concentration=0.25, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.0)),
- # JD-5 (I0, D0): fauchard's back-hook spike is a genuine strike alternative (a reverse hooking/thrusting point)
- # and the plan default is to author it as a mode_element — DEFERRED to I4 (D5), not built at I0: adding
- # mode_elements activates afforded_heads/select_mode immediately (verified: introduces a new red on
- # test_use_mode_selection_emerges_from_primitives), which I0's byte-identical/data-only contract forbids. I4's
- # own acceptance criteria explicitly sanction updating that test's expected set — author fauchard's
- # mode_elements there, in the same commit as the emergent-set update.
+   geometry=dict(curvature=0.55, point_concentration=0.25, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.0),
+   # JD-5 (I4, D0/D5, 2026-07-03): authored — the back-hook spike is a genuine strike alternative (a reverse
+   # hooking/thrusting point), not merely a catch lug; DEFERRED here from I0/I2 for the same byte-identical-
+   # contract reason as guandao (see its record). The main-blade mode mirrors the whole-weapon geometry exactly
+   # (native mode unchanged).
+   mode_elements=[
+     dict(head='curved_cut', element_ref=0, geometry=dict(curvature=0.55, point_concentration=0.25, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.00)),  # fauchard_blade
+     dict(head='point', element_ref=1, geometry=dict(curvature=0.40, point_concentration=0.60, cross_section=0.75, edge_keenness=0.05, strike_concentration=0.05)),  # back_hook_spike
+    ]),
  'bardiche': dict(
    mass=2.61, head_len=5.2933, grip_len=0.7067, hands=2, head='straight_cut', clinch=2, hand_guard=0.1, blade_guard=0.05, reach_adj=-0.1,
    wclass='hafted_tip', hilt='none',
@@ -762,13 +767,15 @@ WEAPONS = {
     ],
    haft=dict(x_m=-0.075, mass_kg=0.18, extent_m=0.15),
    pommel=dict(x_m=-0.15, mass_kg=0.05),
-   geometry=dict(curvature=0.22, point_concentration=0.55, cross_section=0.65, edge_keenness=0.6, strike_concentration=0.0)),
- # JD-5 (I0, D0): hook_sword's crescent hand-guard is a genuine strike alternative (a percussive/hooking blow
- # with the crescent, distinct from the blade's cut) and the plan default is to author it as a mode_element —
- # DEFERRED to I4 (D5), not built at I0: adding mode_elements activates afforded_heads/select_mode immediately
- # (verified: introduces a new red on test_use_mode_selection_emerges_from_primitives), which I0's
- # byte-identical/data-only contract forbids. I4's own acceptance criteria explicitly sanction updating that
- # test's expected set — author hook_sword's mode_elements there, in the same commit as the emergent-set update.
+   geometry=dict(curvature=0.22, point_concentration=0.55, cross_section=0.65, edge_keenness=0.6, strike_concentration=0.0),
+   # JD-5 (I4, D0/D5, 2026-07-03): authored — the crescent hand-guard is a genuine strike alternative (a
+   # percussive/hooking blow with the crescent, distinct from the blade's cut), not merely incidental hand
+   # protection; DEFERRED here from I0/I2 for the same byte-identical-contract reason as guandao/fauchard (see
+   # their records). The blade mode mirrors the whole-weapon geometry exactly (native mode unchanged).
+   mode_elements=[
+     dict(head='curved_cut', element_ref=0, geometry=dict(curvature=0.22, point_concentration=0.55, cross_section=0.65, edge_keenness=0.60, strike_concentration=0.00)),  # blade_with_hooked_tip
+     dict(head='blunt', element_ref=1, geometry=dict(curvature=0.60, point_concentration=0.05, cross_section=0.70, edge_keenness=0.05, strike_concentration=0.40)),  # crescent_hand_guard_striking_element
+    ]),
 }
 
 # Bake the geometry coefficient surface ONCE at import (zero runtime cost): geometry derives `gap` (and
