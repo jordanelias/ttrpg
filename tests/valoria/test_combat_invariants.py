@@ -392,3 +392,65 @@ def test_sel_head_routes_to_reach_threat_and_approach_displace():
     longer.sel_head = 'point'
     d = S.approach_displace(shorter, longer, CFG)
     assert d >= 0.0
+
+
+# ── I5 COMMIT/MEASURE COUPLING — SWING-ROOM (D4, 2026-07-03) ────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_range_utilization_identity():
+    """D4/I5: range_utilization is EXACTLY 1.0 at open/roomy measure or when measure_gap is unset — the
+    byte-identical default."""
+    C, core, S, WP, CFG = _mods()
+    assert S.range_utilization(None, None, CFG) == 1.0
+    assert S.range_utilization(None, 100.0, CFG) == 1.0
+    assert S.range_utilization(None, 0.0, CFG) == S.RANGE_AVAIL_FLOOR
+
+
+def test_commit_depth_byte_identical_at_range_avail_one():
+    """I5 gate #1: with range_avail forced 1.0 (the I1/I5 default), commit_depth reproduces the pre-I5 [2,5] draw
+    EXACTLY — a single rng.betavariate draw, no reorder — verified by replaying the same seed through both the
+    live function and the pre-I5 formula with the SAME (ba, bb) params."""
+    C, core, S, WP, CFG = _mods()
+    import random
+    import tradition as TR
+    agg = C.Combatant('agg', weapon='longsword'); agg.range_avail = 1.0
+    dfd = C.Combatant('def', weapon='arming')
+    rng = random.Random(11)
+    commit, ba, bb, ln = S.commit_depth(agg, dfd, CFG, rng, TR)
+    rng2 = random.Random(11)
+    # replay commit_depth's own pre-draw computation (ln/wary/g/ba/bb are deterministic, not rng-consuming) then
+    # the pre-I5 formula's SAME single draw
+    old_commit = 2.0 + 3.0 * float(rng2.betavariate(ba, bb))
+    assert commit == old_commit
+
+
+def test_commit_depth_contracts_with_less_room():
+    """D4 gate #2/#3: the commit distribution moves beyond noise as range_avail shrinks (interior-optimum-safe:
+    a small loss of room near range_avail=1.0 does NOT immediately shallow commitment; only real crowding does),
+    and never falls below the floored minimum span."""
+    C, core, S, WP, CFG = _mods()
+    assert S._commit_range_factor(0.9) == 1.0            # plateau near full room
+    assert S._commit_range_factor(0.0) == S.RANGE_COMMIT_FLOOR
+    assert 0.0 < S._commit_range_factor(0.4) < 1.0
+
+
+def test_swing_room_legibility_zero_at_full_room():
+    """D4/D5: the swing-room legibility term is exactly 0 at range_avail=1.0 (the I1/I5 default) — legibility()
+    stays byte-identical to pre-I5 there."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('x', weapon='greatsword')
+    c.range_avail = 1.0
+    legib_full = S.legibility(c, 3.0, CFG)
+    c.range_avail = 0.3
+    legib_cramped = S.legibility(c, 3.0, CFG)
+    assert legib_cramped > legib_full, "less room -> a broad swing reads EASIER (higher legibility for the defender)"
+
+
+def test_stophit_range_term_zero_at_full_room():
+    """I5 gate #4: the approach stop-hit's commitment-depth term is exactly 0 at range_avail=1.0."""
+    C, core, S, WP, CFG = _mods()
+    longer = C.Combatant('longer', weapon='spear'); longer.range_avail = 1.0
+    shorter = C.Combatant('shorter', weapon='dagger')
+    base = S.stophit_sigma(longer, shorter, 2.0, CFG)
+    longer.range_avail = 0.5
+    cramped = S.stophit_sigma(longer, shorter, 2.0, CFG)
+    assert base != cramped

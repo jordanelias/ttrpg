@@ -283,6 +283,44 @@ def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
     room_term = max(0.0, 1.0 - range_avail)
     f = CLOSE_EFF_FLOOR * max(gap_term, room_term)
     return 1.0 - (1.0 - pc) * f
+
+# ── swing-room (I5, D4, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+# plan_r1_RATIFIED.md): the AVAILABLE room to develop a swing this beat, derived from how close the exchange is.
+# Two non-monotone-safe consumers, both reaching a channel int(round) cannot erase (C4 — never a heft multiply):
+# commit_depth's Beta upper-support contraction and a swing-room legibility term (weighted by (1-sel_pc), a
+# thrust unaffected). Never adds/reorders an rng draw.
+RANGE_AVAIL_FLOOR = 0.3    # [SIM-CALIBRATE] floor on range_avail itself — even the tightest melee retains some room.
+RANGE_COMMIT_PEAK = 0.85   # [SIM-CALIBRATE] range_avail fraction above which the commit-window stays at its FULL
+                           #   upper bound (the C4 interior-optimum plateau: a little lost room doesn't shallow
+                           #   commitment; only real crowding does — never a monotone-from-the-start ramp).
+RANGE_COMMIT_FLOOR = 0.5   # [SIM-CALIBRATE] floor on the commit-window contraction factor.
+LEGIB_SWING_ROOM_K = 0.3   # [SIM-CALIBRATE] swing-room legibility gain — weakly grounded (the brief flags the
+                           #   absence of a treatise passage for cut-arc truncation); ships small, ablation-gated.
+STOPHIT_RANGE_K = 0.3      # [SIM-CALIBRATE] the approach stop-hit's commitment-depth term (I5 gate #4) — a
+                           #   stop-hit thrown with full extension threatens more than one snapped into a
+                           #   cramped, rapidly-closing gap.
+
+def range_utilization(c, measure_gap, cfg):
+    """The AVAILABLE swing-room this beat, in [0,1], derived from how close the exchange is (measure_gap). 1.0 at
+    open/roomy measure (measure_gap>=CLOSE_EFF_GAP_REF) or when measure_gap is unknown (None — preserves
+    byte-identical behaviour for any caller that hasn't wired a real measure); floored (never truly zero — some
+    minimal room always exists in melee) as measure_gap vanishes. Feeds c.range_avail (I1 scaffold; the wrapper
+    writes it once per beat, pre-swap — range_avail is measure-derived, not form-derived, so it needs no
+    post-swap refresh the way er/sel_* do). Pure."""
+    if measure_gap is None:
+        return 1.0
+    return RANGE_AVAIL_FLOOR + (1.0 - RANGE_AVAIL_FLOOR) * max(0.0, min(1.0, measure_gap / CLOSE_EFF_GAP_REF))
+
+def _commit_range_factor(range_avail):
+    """The commit-window's Beta upper-support contraction factor (D4) — an interior-optimum-SAFE plateau: stays at
+    1.0 (today's full [2,5] window) for range_avail>=RANGE_COMMIT_PEAK, so range_avail=1.0 (the I1/I5 default) is
+    byte-identical; only degrades once room genuinely vanishes below the peak, floored. Never monotone from the
+    very first unit of lost room (C4)."""
+    r = max(0.0, min(1.0, range_avail))
+    if r >= RANGE_COMMIT_PEAK:
+        return 1.0
+    return RANGE_COMMIT_FLOOR + (1.0 - RANGE_COMMIT_FLOOR) * (r / RANGE_COMMIT_PEAK)
+
 # SELECT_PC_MIN RETIRED (morphology-rearch Phase B3, 2026-07-02). It was a magnitude THRESHOLD on point_concentration
 # standing in for a fact the engine didn't yet have: whether a blunt haft's assembly HAS a real thrusting point at
 # all (mace 0.02 -> no; poleaxe 0.78, modeled as ONE whole-weapon blunt token -> yes, smuggled in via this same
@@ -537,6 +575,14 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
+    # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
+    # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
+    # unaffected) and by how little room is left (1-range_avail). Exactly 0 at range_avail=1.0 (the I1/I5
+    # default) — the greatsword's "needs swing room" cramped-quarters cure routes through here + the commit-
+    # window above, never a heft multiply (C4).
+    range_avail=getattr(aggressor,'range_avail',1.0)
+    pc_sel=getattr(aggressor,'sel_pc',None); pc_sel=pc_sel if pc_sel is not None else aggressor.w['geometry']['point_concentration']
+    legib += LEGIB_SWING_ROOM_K*(1.0-range_avail)*(1.0-pc_sel)
     return legib
 
 def approach_displace(shorter, longer, cfg):
@@ -613,12 +659,17 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
     lean + WARINESS (vs an unread tradition the aggressor commits shallower) skew a Beta over the range; the 0.25
     param floor is the spread-floor (never collapses to a spike). Consumes one rng.betavariate draw (kept here so the
-    wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean)."""
+    wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean).
+    SWING-ROOM (I5, D4): the Beta's UPPER SUPPORT is contracted by range_avail's _commit_range_factor (a swing you
+    cannot fully develop commits shallower) — reshapes the Beta PARAMS/window only, never adds or reorders the
+    single draw (seeded determinism). At range_avail>=RANGE_COMMIT_PEAK (the I1/I5 default, 1.0) this is
+    byte-identical to the pre-I5 [2,5] window."""
     ln=disp_lean(aggressor)
     wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
     g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
     ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
-    commit=2.0+3.0*float(rng.betavariate(ba,bb))   # stdlib Beta draw (ED-1085 numpy de-leak; same distribution)
+    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0))
+    commit=2.0+span*float(rng.betavariate(ba,bb))   # stdlib Beta draw (ED-1085 numpy de-leak; same distribution)
     return commit, ba, bb, ln
 
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
@@ -708,9 +759,14 @@ def clamp_poise(x, cfg):
 # ============================================================================
 def stophit_sigma(longer, shorter, measure_gap, cfg):
     """The APPROACH-path stop-hit net-sigma (the longer weapon threatening across the closing gap). The analog of
-    assemble_net_sigma for the approach: reach-disadvantage by gap + base + bilateral wound-Ob. Pure."""
+    assemble_net_sigma for the approach: reach-disadvantage by gap + base + bilateral wound-Ob. I5/D4: gains a
+    commitment-depth term — a stop-hit thrown with full room to extend threatens more than one snapped off into a
+    rapidly-closing, cramped gap, the SAME range_avail the closed exchange's commit-window reads (I5's gate #4).
+    Exactly 0 at range_avail=1.0 (the I1/I5 default). Pure."""
+    range_avail=getattr(longer,'range_avail',1.0)
     return (cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
-            + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds)
+            + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
+            + STOPHIT_RANGE_K*(range_avail-1.0))
 
 def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),
