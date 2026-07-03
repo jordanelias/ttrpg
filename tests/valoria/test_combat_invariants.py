@@ -15,6 +15,7 @@ All static or tiny-seeded; deterministic.
 """
 import ast
 import os
+import re
 import sys
 
 import pytest
@@ -150,7 +151,12 @@ def test_gap_game_poleaxe_spikes_plate():
     [PHASE-C FLAG, 2026-07-02] see weapon_physics.percussion_authority's docstring — morphology-rearch Phase B's
     real poleaxe mass distribution lifts its percussion authority above the mace's, so it now selects its hammer
     face (percussion) instead of the spike (puncture) vs heavy armour. Deliberately left failing pending Phase C's
-    engine-scale recalibration against the grounded masses, not silently patched to accept the new selection."""
+    engine-scale recalibration against the grounded masses, not silently patched to accept the new selection.
+    [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (I0->I8, the closing-distance/facing/grip/contact redesign) is
+    now complete and did NOT touch this root cause — it's the SAME Phase-B mass-model debt I8's own balance
+    sweep found driving the whole reach-class roster (spear/yari/guisarme/poleaxe) above the plan's ~55-75%
+    contested target band, see i8_capstone_audit.md item 1. Still correctly deferred to Phase C, now with a
+    wider measured scope; not a regression from R2."""
     C, core, S, WP, CFG = _mods()
     dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)[:2]
     assert (dm_heavy, h_heavy) == ('puncture', 'point'), f"poleaxe vs plate should spike; got {(dm_heavy, h_heavy)}"
@@ -607,3 +613,102 @@ def test_contact_insertion_point_after_riposte_before_outcome_emit():
     contact_check = src.index('CT.grab_available(')
     outcome_emit = src.index("_emit('outcome',")
     assert riposte_flip < contact_check < outcome_emit
+
+
+# ── I8 STANDING ANTI-ORPHAN TEST (D11b, 2026-07-03) ──────────────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+CIRCUMSTANCE_FIELDS = ('grip_position', 'lunge_depth', 'sel_head', 'sel_dmg',
+                       'sel_gap', 'sel_perc', 'sel_pc', 'range_avail', 'facing')
+
+
+def test_every_circumstance_field_has_a_live_reader():
+    """D11b: every per-beat circumstance field the wrapper writes onto a Combatant (the I1 scaffold's
+    grip_position/lunge_depth/sel_head/sel_dmg/sel_gap/sel_perc/sel_pc/range_avail/facing) has AT LEAST
+    ONE live reader in a consumer layer (core.py/systems.py/contact.py) — never just written by wrapper.py
+    (L3, the mutator) and read nowhere. Catches an orphan window left open past its closing increment.
+    Source-scans for either direct attribute access (`.field`) or the getattr(...,'field',...) fallback
+    idiom core.strike/systems use for these optional fields."""
+    consumers_src = "".join(open(os.path.join(ENGINE, mod), encoding='utf-8').read()
+                             for mod in ('core.py', 'systems.py', 'contact.py'))
+    orphans = []
+    for f in CIRCUMSTANCE_FIELDS:
+        if not re.search(rf"\.{f}\b|'{f}'|\"{f}\"", consumers_src):
+            orphans.append(f)
+    assert not orphans, f"circumstance field(s) with NO reader in core.py/systems.py/contact.py: {orphans}"
+
+
+# ── I8 ABLATION GATES (D11b/JD-1, 2026-07-03) — every lever must move outcomes beyond noise or be cut ──
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md, I8 acceptance #5.
+# swing-Φ_grip is already gated by test_damage_retention_worst_case_material_lever (I2's worst-case-STR
+# bar); range_avail by test_commit_depth_contracts_with_less_room / test_swing_room_legibility_zero_at_
+# full_room (both already assert a nonzero, beyond-noise delta) / test_stophit_range_term_zero_at_full_
+# room; rear_clearance by test_rear_clearance_penalty_moves_close_tempo_and_str_demand (I7a). The two
+# levers below had no explicit ablation gate yet.
+def test_phi_room_percussion_ablation_clears_noise_floor():
+    """Percussion-Φ_room (D2b): a synthetic zero-degradation ablation (PERC_ROOM_FLOOR patched to 1.0, so
+    phi_room_percussion is identically 1.0 regardless of room) is compared against the live floored
+    degradation at a cramped room — the live lever must differ by more than a noise-floor 2%."""
+    C, core, S, WP, CFG = _mods()
+    w = C.WEAPONS['mace']
+    live = WP.percussion_authority(w, room=0.3)
+    old_floor = WP.PERC_ROOM_FLOOR
+    try:
+        WP.PERC_ROOM_FLOOR = 1.0
+        ablated = WP.percussion_authority(w, room=0.3)
+    finally:
+        WP.PERC_ROOM_FLOOR = old_floor
+    assert live != ablated
+    assert abs(live - ablated) / ablated > 0.02, (live, ablated)
+
+
+def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
+    """Facing void/profile terms (D6): a synthetic zero-gain ablation (the consumer-side FACING_VOID_GAIN
+    in close_rate / FACING_PROFILE_K in reach_sigma patched to 0 — NOT facing_target's own FACING_VOID_K,
+    which governs the producer, already gated by test_facing_near_neutral_small) is compared against the
+    live terms at a real (nonzero, near-neutral) facing value — close_rate and reach_sigma must both move."""
+    C, core, S, WP, CFG = _mods()
+    import tradition as TR
+    shorter = C.Combatant('s', weapon='dagger'); shorter.facing = 0.1
+    agg = C.Combatant('agg', weapon='longsword'); agg.facing = 0.1
+    dfd = C.Combatant('def', weapon='arming'); dfd.facing = -0.05
+    er = {agg: 6.0, dfd: 5.0}
+    live_cr = S.close_rate(shorter, 0.0, 0.2, 0.9, CFG)
+    live_rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, CFG, TR)
+    old_void_gain, old_profile_k = S.FACING_VOID_GAIN, S.FACING_PROFILE_K
+    try:
+        S.FACING_VOID_GAIN = 0.0; S.FACING_PROFILE_K = 0.0
+        ablated_cr = S.close_rate(shorter, 0.0, 0.2, 0.9, CFG)
+        ablated_rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, CFG, TR)
+    finally:
+        S.FACING_VOID_GAIN, S.FACING_PROFILE_K = old_void_gain, old_profile_k
+    assert live_cr != ablated_cr
+    assert live_rs != ablated_rs
+
+
+def test_reach_class_beats_arming_not_inverted():
+    """I8 acceptance #1: the reach-class weapons (spear/yari/guisarme/poleaxe) must still decisively beat a
+    uniform arming-sword baseline at every armour tier — R2's new grip/room/facing/rear_clearance/contact
+    degradation levers must not INVERT the reach advantage into a loss. (The plan's tighter ~55-75%
+    CONTESTED band is a separate, NOT-yet-met finding — see i8_capstone_audit.md item 1; it traces to a
+    pre-existing Phase-B mass-model calibration debt shared with the accepted test_gap_game_poleaxe_spikes_
+    plate red, out of this redesign's scope. This test only guards against an actual inversion.)"""
+    import random
+    import zlib
+    import wrapper
+    C, core, S, WP, CFG = _mods()
+    for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
+        for armor in ('none', 'light', 'medium', 'heavy'):
+            # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
+            # workbench/balance.py's _seed() docstring for the same rationale.
+            rng = random.Random(zlib.crc32(repr((w, armor)).encode()) % 9999)
+            wins = dec = 0
+            for i in range(60):
+                swap = i >= 30
+                A = C.Combatant('A', weapon=(w if not swap else 'arming'), armor=armor)
+                B = C.Combatant('B', weapon=('arming' if not swap else w), armor=armor)
+                r = wrapper.fight(A, B, CFG, rng)
+                if swap: r = -r
+                if r == 1: wins += 1; dec += 1
+                elif r == -1: dec += 1
+            assert dec > 0, (w, armor)
+            assert wins / dec > 0.5, f"{w} vs arming at {armor}: reach class INVERTED ({wins}/{dec})"

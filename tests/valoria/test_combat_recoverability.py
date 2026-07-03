@@ -36,7 +36,10 @@ def test_anchor_is_near_one():
     their true measured positions, not the old formula's residual-lump) reads meaningfully higher than the
     Phase-A reproduction, pushing this anchor to ~1.29. The ordering test above (still green) shows the STRUCTURE
     survives; REC_I_REF/REC_S_REF need Phase C's balance-harness re-tune against the now-grounded MoI, not a
-    per-weapon mass fudge."""
+    per-weapon mass fudge.
+    [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (the closing-distance/facing/grip/contact redesign, I0->I8) is
+    complete and did not touch REC_I_REF/REC_S_REF or this anchor; still correctly deferred to Phase C — see
+    designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md item 7."""
     assert abs(_r('longsword') - 1.0) < 0.03
 
 

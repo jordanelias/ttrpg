@@ -74,6 +74,13 @@ def test_injection_points_reference_defined_states():
         assert v['node'] in valid, f"injection point {k} -> undefined state {v['node']}"
 
 
+def test_injection_points_carry_no_stale_site_string():
+    """D12b (I8): the per-point 'site' line-range strings were DROPPED (had already drifted across I2..I7b) —
+    pin their absence so a future edit can't silently reintroduce an unread, driftable line reference."""
+    for k, v in G.INJECTION_POINTS.items():
+        assert 'site' not in v, f"injection point {k} carries a dropped 'site' key"
+
+
 def test_known_dead_branch_is_documented():
     """The collapse (stamina<=-4) separation reason is empirically dead — assert it's a DECLARED reason (so the
     harness can flag it) rather than silently absent. This pins the finding; a future fix can remove it from

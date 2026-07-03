@@ -64,32 +64,36 @@ ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}
 # FEINT-NODE ABSORB: there is deliberately no separate Feint state — the feint/micro-read lives inside
 # Exchange.read (feint-as-attack), so the graph already reflects the dissolved structure; WS-5 removes the
 # separate feint_eval CODE, not a graph node.
+# D12b (I8, 2026-07-03): the per-point `site` line-range strings are DROPPED (not tested) — they had already
+# drifted across I2..I7b (every increment that touched wrapper.py shifted the ranges) and re-testing a line
+# range as "still holds the logic" is a losing maintenance game for a plain string. The node name is the
+# stable, checked reference (test_injection_points_reference_defined_states verifies it against STATES).
 INJECTION_POINTS = {
-    'approach.measure':    {'node': 'Approach',  'site': 'wrapper.py:66-74',
+    'approach.measure':    {'node': 'Approach',
                             'generic': 'shorter closes / longer stop-hits',
                             'injects': 'measure-control: Spanish circulo / Italian misura bias close_rate + preferred measure'},
-    'reopen.measure':      {'node': 'AwaitTempo', 'site': 'wrapper.py:58-64',
+    'reopen.measure':      {'node': 'AwaitTempo',
                             'generic': 'reopen vs stay closed (reopen_prob)',
                             'injects': 'reach/measure-hold: Spanish/Reach impose re-opening (the geometric Vor hold)'},
-    'exchange.commit':     {'node': 'Exchange',  'site': 'wrapper.py:98-105',
+    'exchange.commit':     {'node': 'Exchange',
                             'generic': 'commit depth 2-5, disposition-skewed',
                             'injects': 'Stance posture (The Approach) + wariness vs unread tradition (WS-5)'},
-    'exchange.read':       {'node': 'Exchange',  'site': 'wrapper.py:131-133',
+    'exchange.read':       {'node': 'Exchange',
                             'generic': 'read_win logistic',
                             'injects': 'precommit (Japanese sen-sen-no-sen) + the FEINT/micro-read manipulation (feint-as-attack, WS-5)'},
-    'exchange.mode':       {'node': 'Exchange',  'site': 'wrapper.py:135-136',
+    'exchange.mode':       {'node': 'Exchange',
                             'generic': 'parry/dodge/wind by mode_sigma',
                             'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
-    'exchange.bind_entry': {'node': 'Bind',      'site': 'wrapper.py:178-180',
+    'exchange.bind_entry': {'node': 'Bind',
                             'generic': 'bind on wind/partial',
                             'injects': 'German IMPOSE the bind (Winden); Italian/English REFUSE it (cavazione/disengage) — the contact axis'},
-    'exchange.counter':    {'node': 'Riposte',   'site': 'wrapper.py:147-158',
+    'exchange.counter':    {'node': 'Riposte',
                             'generic': 'single-time counter select',
                             'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},
-    'burst.continuation':  {'node': 'AwaitTempo', 'site': 'wrapper.py:272',
+    'burst.continuation':  {'node': 'AwaitTempo',
                             'generic': 'continue burst vs separate (clean defence)',
                             'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
-    'contact.axis':        {'node': 'Contact',   'site': 'contact.py (grab_available/grab_sigma/grab_outcome) + wrapper.py outcome tail',
+    'contact.axis':        {'node': 'Contact',
                             'generic': 'strength+leverage grab affinity; a flat branching menu (disarm/throw/pin/control/foot_pin/escape)',
                             'injects': 'German Ringen imposes/prefers the bind-entry grab; Italian/English favour the disengage/escape branch — BUILT (I7b, D8/D9), tradition-weighting of the menu is a FUTURE increment, not yet wired'},
 }
@@ -97,10 +101,10 @@ INJECTION_POINTS = {
 
 def injection_markdown():
     out = ["### Tradition injection points (where each methodology biases the state graph)",
-           "| point | state | engine site | generic choice today | what a tradition injects |",
-           "|---|---|---|---|---|"]
+           "| point | state | generic choice today | what a tradition injects |",
+           "|---|---|---|---|"]
     for k, v in INJECTION_POINTS.items():
-        out.append(f"| `{k}` | {v['node']} | `{v['site']}` | {v['generic']} | {v['injects']} |")
+        out.append(f"| `{k}` | {v['node']} | {v['generic']} | {v['injects']} |")
     return "\n".join(out)
 
 

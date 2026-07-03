@@ -35,6 +35,9 @@ def test_lunge_quality_is_weapon_derived_continuous():
     # [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real rapier pommel/guard/grip positions shift
     # PoB_frac slightly (hand-balance term), so q('rapier') now reads 0.963, just under the 1.0 cap — a Phase-C
     # re-tune item (MOMENT_MASS_EXP / the cap floor), not a regression; the ordering below is unaffected.
+    # [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (I0->I8) is complete and did not touch MOMENT_MASS_EXP or the
+    # cap floor; still correctly deferred to Phase C — see the closing-distance-redesign folder's
+    # i8_capstone_audit.md item 7.
     q = lambda w: S.lunge_quality(Combatant('x', weapon=w), CFG)
     assert q('rapier') == 1.0                        # light, hand-balanced, one-handed, point-concentrated: lunges freely (capped)
     assert q('greatsword') < 0.25                    # heavy forward cutter: a poor lunge (LOW via mass+balance, not a hard-0 head gate)

@@ -1,8 +1,11 @@
 # Scene-combat closing-distance/facing/grip redesign — design & audit trail (2026-07-02)
 
-**Start here if you're picking up R2 implementation (or auditing how R1 was designed).**
+**R2 implementation is COMPLETE (I0→I8, 2026-07-03) — see `i8_capstone_audit.md` for the capstone
+measurement + findings record, and PR #72 for the commit-by-commit implementation history. Start here if
+you're auditing how R1 was designed, or picking up the one open finding (a Phase-C-deferred roster-balance
+recalibration, i8_capstone_audit.md item 1).**
 
-## The one file you actually need to implement R2
+## The one file that defined R2's implementation
 
 **`plan_r1_RATIFIED.md`** — the final, Jordan-approved plan. Self-contained: context, 10 revised design
 decisions (D0–D12), the re-staged I0→I8 increment sequence with falsifiable acceptance criteria, a complete
@@ -16,6 +19,14 @@ should be re-synced from it, not edited independently.**
 Also see `HANDOFF.md`'s 2026-07-02 Decisions entry and "START HERE" Next-actions bullet — this branch is
 `scene-combat-morphology-rearch` in the isolated worktree `C:/Github/ttrpg-morph-rearch` (**not** the default
 `C:/Github/ttrpg` checkout, which is on a different branch and does not have any of this work).
+
+## `i8_capstone_audit.md` — the R2 completion record
+
+I8's per-acceptance-criterion measurement + findings, written at the close of implementation (2026-07-03):
+the balance.py armour-matrix sweep, the ablation-gate results for every new lever, confirmation the standing
+anti-orphan test and per-weapon heft/percussion snapshot are in place, and the disposition of the 3
+pre-existing `[PHASE-C FLAG]` reds. Read this first if you want the "is R2 actually done and sound" answer
+without re-deriving it from the plan + test suite yourself.
 
 ## Everything else here is provenance, not a dependency
 
