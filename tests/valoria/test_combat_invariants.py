@@ -505,3 +505,74 @@ def test_facing_no_orient_deg_arc_thrust_gate():
     C, core, S, WP, CFG = _mods()
     src = inspect.getsource(S.facing_target) + inspect.getsource(S.close_rate) + inspect.getsource(S.reach_sigma)
     assert 'orient_deg' not in src
+
+
+# ── I7a REAR-CLEARANCE CLOSE PENALTY (D7, 2026-07-03) ────────────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_rear_clearance_spear_less_than_guisarme():
+    """I7a gate #1: rear_clearance(spear) < rear_clearance(guisarme) at open grip."""
+    C, core, S, WP, CFG = _mods()
+    assert WP.at_circumstance(C.WEAPONS['spear'], 0.0)['rear_clearance'] < WP.at_circumstance(C.WEAPONS['guisarme'], 0.0)['rear_clearance']
+
+
+def test_rear_clearance_halfsword_forms_exceed_base():
+    """I7a gate #1: both half-sword forms' rear_clearance exceeds their base form's (the trailing blade/pommel
+    swings further behind the working hand once gripped mid-blade)."""
+    C, core, S, WP, CFG = _mods()
+    for base, half in (('longsword', 'longsword_halfsword'), ('estoc', 'estoc_halfsword')):
+        rc_base = WP.at_circumstance(C.WEAPONS[base], 0.0)['rear_clearance']
+        rc_half = WP.at_circumstance(C.WEAPONS[half], 0.0)['rear_clearance']
+        assert rc_half > rc_base, (base, half, rc_base, rc_half)
+
+
+def test_rear_clearance_from_parts_not_length_m():
+    """I7a gate #2: rear_clearance is computed from _all_parts, never derive()['length_m'] — a code-level check
+    that the two quantities genuinely differ for at least one half-sword composite (where they diverge, M-19)."""
+    C, core, S, WP, CFG = _mods()
+    w = C.WEAPONS['longsword_halfsword']
+    rc = WP.at_circumstance(w, 0.0)['rear_clearance']
+    length_m = WP.derive(w)['length_m']
+    assert rc != length_m
+
+
+def test_rear_clearance_monotone_non_decreasing():
+    """I7a gate #3: rear_clearance(g) is monotone non-decreasing in grip for the WHOLE roster — gathering in
+    never shortens what trails behind the hand."""
+    C, core, S, WP, CFG = _mods()
+    for n, w in C.WEAPONS.items():
+        prev = None
+        for g in (0.0, 0.25, 0.5, 0.75, 1.0):
+            rc = WP.at_circumstance(w, g)['rear_clearance']
+            if prev is not None:
+                assert rc >= prev - 1e-9, (n, g, rc, prev)
+            prev = rc
+
+
+def test_rear_clearance_staff_changes_with_grip_despite_zero_u():
+    """I7a gate #4 (M-20): the staff's rear_clearance changes with grip even though its inertia u stays 0
+    (perfectly centre-balanced) — driven by geom_slide, decoupled from the CoM-clamped u."""
+    C, core, S, WP, CFG = _mods()
+    w = C.WEAPONS['staff']
+    a0 = WP.at_circumstance(w, 0.0)
+    a1 = WP.at_circumstance(w, 1.0)
+    assert a0['u'] == 0.0 and a1['u'] == 0.0
+    assert a1['rear_clearance'] > a0['rear_clearance']
+
+
+def test_rear_clearance_penalty_moves_close_tempo_and_str_demand():
+    """I7a gate #5: a live weapon (nonzero rear_clearance) reads a real close_tempo/str_demand penalty relative to
+    a synthetic zero-rear-clearance ablation (patching REAR_CLEARANCE_*_K to 0 reproduces the pre-I7a values)."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('x', weapon='guisarme'); c.grip_position = 0.5
+    live_tempo = S.close_tempo(c, CFG)
+    live_str = S.str_demand(c, CFG)
+    old_tempo_k, old_str_k = S.REAR_CLEARANCE_TEMPO_K, S.REAR_CLEARANCE_STR_K
+    try:
+        S.REAR_CLEARANCE_TEMPO_K = 0.0
+        S.REAR_CLEARANCE_STR_K = 0.0
+        ablated_tempo = S.close_tempo(c, CFG)
+        ablated_str = S.str_demand(c, CFG)
+    finally:
+        S.REAR_CLEARANCE_TEMPO_K, S.REAR_CLEARANCE_STR_K = old_tempo_k, old_str_k
+    assert live_tempo != ablated_tempo
+    assert live_str != ablated_str

@@ -61,15 +61,30 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
+REAR_CLEARANCE_TEMPO_K = 0.3   # [SIM-CALIBRATE] close_tempo penalty per metre of rear clearance (I7a, D7) — the
+                               #   counterweight that makes choking up a real tradeoff (Silver: the length behind
+                               #   the hands "will hinder him to strike, thrust, ward, or go back").
+REAR_CLEARANCE_STR_K = 0.15    # [SIM-CALIBRATE] str_demand penalty per metre of rear clearance (I7a, D7) —
+                               #   general handling difficulty, not close-scoped (unlike the tempo term above).
+
+def rear_clearance(c, cfg):
+    """The length trailing behind the working hand AT THE COMBATANT'S CURRENT GRIP (I7a, D7 — designs/audit/
+    2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md; consumes D1/I2's at_circumstance,
+    unread until now). Pure."""
+    return WP.at_circumstance(c.w, getattr(c,'grip_position',0.0))['rear_clearance']
+
 def close_tempo(c, cfg, fatigue=0.0):
     """Cadence IN THE CLOSE — conditional (fatigue/grip). A long two-handed pole (spear/staff) is SLOW to recover
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
-    toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs)."""
+    toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs).
+    I7a/D7: gathering in also LENGTHENS what trails behind the hand — a real close-quarters footwork penalty
+    that makes choking up a genuine tradeoff against the reach it buys (D3), not a free lunch."""
     t=weapon_tempo(c,cfg,fatigue)
     # a weapon UNWIELDY in the close (DERIVED from reach — long business-end) is slow to recover once a handier
     # weapon is inside; GATHERING IN (grip_position) reduces the penalty in proportion (a fully-gathered pole pays
     # none). Pure morphology, CONTINUOUS in grip_position (no choke string, no closes_poorly flag).
     t -= cfg['POLE_CLOSE_K']*close_unwieldiness(c,cfg)*(1.0 - getattr(c,'grip_position',0.0))
+    t -= REAR_CLEARANCE_TEMPO_K*rear_clearance(c,cfg)
     t=max(cfg['TEMPO_FLOOR'],t)
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
@@ -87,7 +102,8 @@ def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cf
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
-    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*WP.handling(w)+cfg['D_2H']*(w['hands']==2)   # DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category
+    w=c.w; return (cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*WP.handling(w)
+                    +cfg['D_2H']*(w['hands']==2)+REAR_CLEARANCE_STR_K*rear_clearance(c,cfg))   # DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category. I7a/D7: general handling difficulty from what trails behind the hand.
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat

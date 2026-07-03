@@ -557,11 +557,15 @@ def at_circumstance(w, grip=0.0, room=1.0):
     extends the prior at_grip(w,g) with two NEW members, both PURE weapon+scalar functions (no Combatant — L0
     purity, a structural test asserts this): `rear_clearance` — length trailing behind the working hand, from
     LOCATED parts (`_all_parts`, never `derive()['length_m']` — M-19: the full length is wrong for exactly the
-    half-sword composites this is for), gathered-in via +u(g). `geom_slide` — a geometric forward hand-offset
-    (metres), FLOORED and decoupled from the CoM-bounded inertia slide `u` (M-04/M-20); scaled by the SAME `grip`
-    fraction as `u`. `room` is accepted for the L0 bundle's future consumers (D4/I5's swing-room term) but is
-    UNUSED here — no member of THIS bundle degrades with room (that lever lives in commit_depth/legibility/
-    percussion, never in the static kinematics)."""
+    half-sword composites this is for), gathered-in via the geometric slide (below), NOT the CoM-bounded inertia
+    slide `u` — a fighter's hand genuinely moves forward by `geom_slide` regardless of whether that motion buys
+    any inertia benefit, and the rear overhang is a direct geometric consequence of THAT motion (M-20: a centre-
+    balanced staff's `u` is clamped to 0 since it is already at the inertial optimum, but its rear_clearance must
+    still lengthen as the grip slides forward — I7a's own acceptance gate). `geom_slide` — a geometric forward
+    hand-offset (metres), FLOORED and decoupled from the CoM-bounded inertia slide `u` (M-04/M-20); scaled by the
+    SAME `grip` fraction as `u`. `room` is accepted for the L0 bundle's future consumers (D4/I5's swing-room
+    term) but is UNUSED here — no member of THIS bundle degrades with room (that lever lives in commit_depth/
+    legibility/percussion, never in the static kinematics)."""
     d = derive(w)
     m, PoB, I0 = w['mass'], d['PoB_m'], d['MoI']
     I_cm = max(0.0, I0 - m * PoB ** 2)                          # back out CoM inertia (same axis => valid, >=0)
@@ -569,8 +573,8 @@ def at_circumstance(w, grip=0.0, room=1.0):
     gf = max(0.0, min(1.0, grip))
     u = gf * u_max                                              # forward hand-slide (m)
     d_g = PoB - u                                               # CoM-to-working-hand distance after the slide
-    rear_clearance = -min((x - extent / 2.0) for (_mass, x, extent) in _all_parts(w)) + u
     geom_slide = gf * max(0.0, _geom_slide_max_lu(w))
+    rear_clearance = -min((x - extent / 2.0) for (_mass, x, extent) in _all_parts(w)) + geom_slide * UNIT_M
     return dict(I_g=I_cm + m * d_g ** 2,                        # MINIMUM (= I_cm) when u reaches the CoM
                 S_g=m * abs(d_g), d_g=d_g, u=u,
                 rear_clearance=rear_clearance, geom_slide=geom_slide)
