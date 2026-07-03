@@ -271,6 +271,14 @@ Command governs:
 3. Morale starting value and floor (= 1 while general present)
 4. Tactic execution (Command dice vs Ob per tactic)
 
+> **ED-1090 (videogame sub-unit cap — Jordan-ruled 2026-07-02):** the TTRPG hard cap of 3 was a
+> tabletop-bookkeeping limit; the **videogame cap is 11** ("subunits can be as high as 11"), enforced
+> at construction by `engine.build_army` (`tests/sim/mass_battle/engine.py`). Command remains the
+> span-of-control governor (max simultaneous commanded = Command) *within* that ceiling. **Open
+> reconciliation (flagged, not resolved):** the ratified Command formula clamps to 1–7, so fielding
+> more than 7 commanded sub-units implies a future Command-exceeding mechanism (e.g. subordinate
+> officers / lieutenancy) — that design is queued for a future ED, not implied by the cap itself.
+
 **Non-Player Character generals:** Command assigned directly (1–7) as a narrative stat without
 Cha+Cog derivation. *[Command-P2-02]*
 
@@ -325,7 +333,7 @@ execution rolls. A 2-wound general has tactic success probability halved.
 | Feigned Retreat | — | — | See Tactics |
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
-> **ED-909 (formation taxonomy — Jordan-adjudicated 2026-06-09):** The *geometric* formation set is ratified as — **Subunit shapes:** Line, Arrowhead/Wedge, GappedLine; **Unit-level manoeuvres:** Envelopment (Cannae), Refused Flank (Leuctra/Leuthen). Horseshoe and RefusedFlank were removed from the Subunit shape set (engine re-architecture = LC-8). The mapping between this A.6 **dice-modifier** formation set (Shield Wall, Wedge, Skirmish, Column, Feigned Retreat, Reserve) and that geometric set is an orthogonal-axes question **PARKED as an ED-909 follow-up** — the dice-modifier table above is unchanged pending that decision. The live engine’s `CELL_PATTERN_FN`/`MIN_DISCIPLINE` still list Horseshoe/RefusedFlank; their removal is tracked under LC-8, not here.
+> **ED-909 (formation taxonomy — Jordan-adjudicated 2026-06-09, LC-8 executed 2026-07-02 per ED-1088):** The *geometric* formation set is ratified as — **Subunit shapes:** Line, Arrowhead/Wedge, GappedLine, Column; **Unit-level manoeuvres:** Envelopment (Cannae), Refused Flank (Leuctra/Leuthen). Horseshoe and RefusedFlank were removed from the Subunit shape set (engine re-architecture = LC-8, executed — `geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE` no longer list them; realized instead as `engine.build_envelopment`/`build_refused_flank` Unit-level presets, ED-1088). The mapping between this A.6 **dice-modifier** formation set (Shield Wall, Wedge, Skirmish, Column, Feigned Retreat, Reserve) and that geometric set is an orthogonal-axes question **PARKED as an ED-909 follow-up** — the dice-modifier table above is unchanged pending that decision.
 
 > **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is incapacitated/captured): pursuing side pursues normally and suffers the Discipline check."
 

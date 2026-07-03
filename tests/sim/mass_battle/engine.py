@@ -87,6 +87,18 @@ def mechanics_selftest():
 # lower layers (hierarchy.units for the data model, orchestration for the loop) — no resolution logic
 # lives here. This is the P1 seam: engine.py = adapter + router + I/O, never an outcome computation.
 
+# [ED-1090, Jordan-ruled 2026-07-02: "subunits can be as high as 11."] Videogame hard ceiling on
+# simultaneously-commanded subunits — LIFTS the TTRPG hard cap of 3 (mass_battle_v30.md §A.5 Command
+# Rating: "Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)", PP-504/ED-899 — a
+# tabletop-bookkeeping limit a digital UI does not need). Command remains the span-of-control governor
+# per §A.5; this is the absolute ceiling above it. Module-level (not local to build_army) so any other
+# caller — notably the Army Configuration Mode UI (Stage E, workbench) — reads the single source
+# instead of duplicating the literal. NOTE (flagged, not resolved): the ratified Command formula clamps
+# to 1..7, so reaching 11 commanded subunits implies some future Command-exceeding mechanism (e.g.
+# subordinate officers) — that reconciliation is queued for canon, not silently invented here.
+SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
+
+
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                speed='Standard', instructions=(), dr=1, role=None):
@@ -156,6 +168,11 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     it, is byte-exact); net-new function, byte-exact by construction.
     [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
     TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
+    # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
+    # (Army Configuration Mode's UI) read the single source rather than duplicating the literal.
+    if len(specs) > SUBUNIT_CAP:
+        raise ValueError(f"build_army: {len(specs)} subunits exceeds the videogame cap of "
+                          f"{SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     subs = []
@@ -195,10 +212,10 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
                        power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                        speed='Standard'):
     """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
-    ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes (LC-8) and re-realizes them as
-    emergent, multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits —
-    "why is Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question.
-    This is that composition, built entirely from EXISTING, already-verified primitives: build_army
+    ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes and re-realizes them as emergent,
+    multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits — "why is
+    Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question. This
+    is that composition, built entirely from EXISTING, already-verified primitives: build_army
     (placement) + Stage C's timed Order queue + the pre-existing, UNMODIFIED 'envelop' instruction
     (units.py's phase-1/phase-2 wrap logic) — confirmed in Stage C.4's acceptance test to need no new
     flanking mechanic at all.
@@ -210,15 +227,13 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     'envelop' — holding the "bow" while the center absorbs contact, then wheeling wide to close behind
     the enemy line, matching the historical sequencing this preset is named for.
 
-    [Deferred, NOT done here] The literal LC-8 removal of 'Horseshoe'/'RefusedFlank' as Subunit.shape
-    values (retiring them from geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) is NOT part of this
-    change: bat.py's frozen byte-exact golden digests (the grid path's non-negotiable regression
-    oracle) were computed against battles that use 'Horseshoe' as a direct Subunit.shape, so removing
-    it would break that invariant and needs Jordan's explicit sign-off + a deliberate re-baseline, not
-    a default execution of "LC-8 is not a fresh design decision." This preset delivers ED-909's INTENT
-    (envelopment as a Unit-level composition) without that byte-exact-breaking step; the legacy shape
-    values remain available, now understood as legacy/subunit-only options rather than the canonical
-    way to build an envelopment.
+    [LC-8, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+    'Horseshoe'/'RefusedFlank' are now fully retired as Subunit.shape values (removed from
+    geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) — this preset, not a literal shape choice, is the
+    only way to build an envelopment. bat.py's grid-mode byte-exact golden digests were re-baselined
+    for this change (a deliberate, verified behavior change, not a regression): three battery rows now
+    build multi-subunit armies via this function/build_refused_flank instead of a single Horseshoe-
+    shaped subunit.
     [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]"""
     specs = [dict(sp) for sp in center_specs]
     n_center = len(specs)
@@ -246,7 +261,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     order releasing into stance='balanced' — the refused wing does not advance or chase, but will fight
     once an enemy actually closes to that range, matching the historical "declines general engagement,
     holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
-    mechanic. Same LC-8 deferral note as build_envelopment (see its docstring) applies here."""
+    mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
     specs = [dict(sp) for sp in strong_specs]
     n_strong = len(specs)
     for sp in refused_specs:
@@ -277,7 +292,7 @@ def resolve_battle(*args, kind='multi', **kwargs):
     raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
 
 
-_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle"}
+_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle", "SUBUNIT_CAP"}
 
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)

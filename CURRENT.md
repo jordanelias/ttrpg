@@ -12,9 +12,10 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-01 (month-overview + architecture consolidation; previous reconcile
-2026-06-28, deprecation & currency sweep + v40 generation declaration). Every row is
-the head of its lineage; predecessors are archived._
+_Last reconciled: 2026-07-02 (ED-1083 doctrine ratification + ED-1093 propagation-spec
+ratification + ED-1094 merge-ratifies convention; previous reconcile 2026-07-01 month-overview +
+architecture consolidation; 2026-06-28 deprecation & currency sweep + v40 generation declaration).
+Every row is the head of its lineage; predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
@@ -25,6 +26,8 @@ the head of its lineage; predecessors are archived._
 | **Settlement / territory** | `designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `designs/world/geography_v30.md`) |
 | **Threadwork** | `designs/threadwork/threadwork_v30.md` (+ `thread_horizontal_integration_spec.md`) |
 | **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) |
+| **Architecture / Holonic doctrine** | `designs/architecture/holonic_container_doctrine_v1.md` — CANONICAL (ratified 2026-07-02, ED-1083/ED-1094); cross-maps the container/wrapper/propagation vocabulary onto module_contracts/sim-ladder/Key-substrate/Key-log-parity. Does NOT itself author the propagation-spec transform — see next row |
+| **Architecture / Propagation spec** | `designs/architecture/propagation_spec_v1.md` — CANONICAL (ratified 2026-07-02, ED-1093/ED-1094; workplan v5 J-38). Ordering/determinism, aggregate-up, distribute-down, and termination (TERMINATION-ONLY — cross-tick convergence NOT proven) transforms; supplies `engine_clock`'s candidate home doc, but the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved. Open flags tracked in the doc's own §5 (OF-7/OF-B1, D.6/OF-D6, `decay()`, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
 | **Master workplan** | `designs/workplans/valoria_master_workplan_v5.md` (CANON-PROPOSED 2026-06-28; supersedes v4, which stays the frozen 06-11/06-22 record; relocated 2026-07-01 by PR #49 from its since-dissolved 06-28 audit-session folder — `designs/workplans/` is now the one live home, see its `README.md`) |

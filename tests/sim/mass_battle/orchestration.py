@@ -729,10 +729,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    # [ED-1091, Jordan-approved 2026-07-02] PC_RECOIL_FRONTAL zone-gates the recoil to the
+                    # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
+                    # (Burkholder 2007), so a flank/rear charge into a braced wall is no longer wrongly
+                    # recoiled (the latent flag mass_battle_gauge_grounding.md §4.3 carried since 2026-06-16;
+                    # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
+                    # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
+                    # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b):
+                        if a_mom > b_mom and _subunit_braced(atom_b) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                        elif b_mom > a_mom and _subunit_braced(atom_a) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
@@ -1421,11 +1428,28 @@ def reset_morale_between_battles(unit):
 
 
 def reset_positions(unit, shape, anchor_map):
-    """Reset subunit positions for re-engagement after disengagement.
-    Units return to their starting rows for fresh approach."""
+    """Reset subunit positions for re-engagement after disengagement. Units return to their
+    starting rows for fresh approach.
+
+    [Fix, 2026-07-02] Each subunit now returns to its OWN spawn column (Subunit._spawn_position,
+    snapshotted once at construction) rather than a single shape-keyed anchor shared by every
+    subunit in the unit. The old behaviour was byte-exact-correct only by coincidence for a
+    single-subunit unit built via build_unit (whose one subunit's spawn position IS exactly
+    anchor_map[(shape,tier)] -- so this change reproduces identical results for every such case,
+    confirmed via bat.py's byte-exact battery, which exercises exactly this path). It was silently
+    WRONG for a multi-subunit army (build_army/build_envelopment/build_refused_flank): resetting
+    EVERY subunit to one shared anchor column collapsed any wide-placed wing/escort back onto the
+    center on every subsequent battle-turn, discovered while dogfooding build_envelopment/
+    build_refused_flank through the multi-turn ('multi'/"resolving mode") path for the first time
+    -- Stage C's own verification only ever exercised kind='single', which never calls this
+    function, so the gap went unexercised until now. `shape`/`anchor_map` stay as parameters (no
+    call-site signature change) and are used only as a defensive fallback for a subunit that
+    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__)."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
-    anchor_col = anchor_map.get((shape, unit.subunits[0].tier), 10)
+    fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
+        spawn = getattr(atom, '_spawn_position', None)
+        anchor_col = spawn[1] if spawn is not None else fallback_col
         atom.starting_position = (start_row, anchor_col)
         atom.cell_offsets = {}
         atom.cell_offsets_c = {}

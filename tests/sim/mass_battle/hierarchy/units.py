@@ -20,12 +20,15 @@ import os as _hu_os
 # module). Kept here, not config, to stay within the touched-file set during the Stage-1 extraction.
 PC_ENVELOP_PATH = (_hu_os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — directed envelop maneuver toggle]
 PC_SWEEP = (_hu_os.environ.get("PC_SWEEP", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — lateral sweep maneuver toggle]
-# [movement-substrate review 06 — finding 2] Continuous-speed toggle. Default OFF -> byte-exact (the OFF
-# branch in advance_cells is the exact prior floor() code). ON: a per-cell fractional-speed accumulator,
-# so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0 each turn
-# (floor(1*0.7)=0 freezes a slow degraded unit). Integer positions preserved; only step TIMING changes.
-# Consumer-local here (advance_cells), like PC_ENVELOP_PATH/PC_SWEEP. ON = recorded behaviour change.
-FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "0") == "1")
+# [movement-substrate review 06 — finding 2] Continuous-speed toggle. ON: a per-cell fractional-speed
+# accumulator, so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0
+# each turn (floor(1*0.7)=0 freezes a slow degraded unit). Consumer-local here (advance_cells), like
+# PC_ENVELOP_PATH/PC_SWEEP.
+# [ED-1089, Jordan-ratified 2026-07-02: "yes, field movement is default."] DEFAULT FLIPPED 0 -> 1
+# (Stage A step 7 executed): the coordinate field is now what runs by default; the integer grid remains
+# available (FIELD_MOVEMENT=0 PC_NODE_COHESION=0) and stays the frozen byte-exact regression oracle —
+# bat.py's grid digests are still checked in CI with those toggles pinned explicitly OFF.
+FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "1") == "1")
 # [movement-substrate review 06 — coordinate-field migration] FIELD_MOVEMENT is the continuous COORDINATE
 # FIELD master toggle. Continuous positions require the node float path (PC_NODE_COHESION stores true floats
 # in _node_pos): the field toggle therefore UNIFIES with it — field-ON implies the node path is active. A
@@ -332,6 +335,7 @@ class Subunit:
         self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         if PC_NODE_COHESION:
             self._init_node_state()
 
@@ -922,6 +926,9 @@ class Subunit:
         pass
 
     def role_at_contact(self, contact_col):
+        # [LC-8] Horseshoe/RefusedFlank branches removed -- zero live callers (confirmed dead code
+        # before this change too; a diagnostic label helper never wired to any resolver), and both
+        # shapes are retired as Subunit.shape values (see geometry.CELL_PATTERN_FN's note).
         if self.shape == "Line": return "normal"
         if self.shape == "Arrowhead":
             pattern = CELL_PATTERN_FN[self.shape](self.tier)
@@ -930,22 +937,12 @@ class Subunit:
                     abs_c = self.starting_position[1] + c + self.cell_offsets_c.get((r, c), 0)
                     if abs(abs_c - contact_col) <= 0.5: return "tip"
             return "flank"
-        if self.shape == "Horseshoe":
-            sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width tier table (F2 derive-target)]
-            wing_w = sizes.get(self.tier, 3)
-            if contact_col == wing_w + self.starting_position[1]: return "center"
-            return "flank_engaged"
         if self.shape == "GappedLine":
             # [canonical: v11 — updated to match equalized gapped_line_cells sizes]
             sizes = {1: 2, 2: 3, 3: 4, 4: 4}
-            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py horseshoe_cells / §A.3b — wing-width default]
+            half_w = sizes.get(self.tier, 4)  # [canonical: geometry.py gapped_line_cells / §A.3b — half-width default]
             if contact_col == half_w + self.starting_position[1]: return "gap"
             return "flank_engaged"
-        if self.shape == "RefusedFlank":
-            sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: geometry.py refused_flank_cells / §A.3b — width tier table (F2 derive-target)]
-            width = sizes.get(self.tier, 6)  # [canonical: geometry.py refused_flank_cells / §A.3b — width default]
-            if contact_col == (width - 1) + self.starting_position[1]: return "refused"
-            return "engaged"
         return "normal"
 
     # [canonical: Jordan design — cell capacity, discipline-gated merge, midpoint facing on formation breakdown]

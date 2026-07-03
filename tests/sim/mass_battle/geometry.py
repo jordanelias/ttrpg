@@ -4,7 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented']
 
 def arrowhead_cells(tier):
     cells = []
@@ -30,20 +30,6 @@ def column_cells(tier):
     #  width's edge is envelopment. A deployable deep-narrow form lets that choice exist.]
     return [(c, r) for (r, c) in line_cells(tier)]
 
-def horseshoe_cells(tier):
-    sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}  # [canonical: geometry horseshoe_cells tier table (F2 derive-target); §A.3b]
-    wing_w, depth = sizes.get(tier, (3, 4))  # [canonical: horseshoe_cells default (F2 derive-target)]
-    full_width = wing_w * 2 + 1
-    cells = []
-    for r in range(depth):
-        for c in range(wing_w):
-            cells.append((r, c))
-        for c in range(wing_w + 1, full_width):
-            cells.append((r, c))
-    for c in range(full_width):
-        cells.append((depth, c))
-    return cells
-
 def gapped_line_cells(tier):
     # [canonical: v10 — sized to match Line cell count at each tier so advantage
     #  emerges from arrangement (the gap), not extra troops. Was 56 cells T3, now 24.]
@@ -57,25 +43,13 @@ def gapped_line_cells(tier):
             cells.append((r, c))
     return cells
 
-def refused_flank_cells(tier):
-    # [canonical: v10 — sized to match Line cell count at each tier. Engaging-side
-    #  block is (width-1) × depth, plus 1 cell at front of refused column.
-    #  The refused side withdraws troops from contact (geometric concentration on engaging side),
-    #  not from total. Was 21 cells T3, now 25.]
-    sizes = {1: (3, 4), 2: (4, 5), 3: (5, 6), 4: (6, 7)}  # [canonical: geometry refused_flank_cells tier table (F2 derive-target); §A.3b]
-    width, depth = sizes.get(tier, (6, 7))  # [canonical: refused_flank_cells default (F2 derive-target)]
-    cells = []
-    for r in range(depth):
-        for c in range(width - 1):
-            cells.append((r, c))
-    # One forward cell in the refused column at the front row
-    cells.append((depth, width - 1))
-    return cells
-
 CELL_PATTERN_FN = {
-    "Line": line_cells, "Arrowhead": arrowhead_cells,
-    "Horseshoe": horseshoe_cells, "GappedLine": gapped_line_cells,
-    "RefusedFlank": refused_flank_cells,
+    # [LC-8, ED-909, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+    # Horseshoe/RefusedFlank are RETIRED here as Subunit-level shapes -- envelopment and refused-flank
+    # are now Unit-level, multi-body, emergent compositions (engine.build_envelopment/
+    # build_refused_flank), not a single subunit's cell pattern. Only Line/Arrowhead/GappedLine/Column
+    # remain valid Subunit.shape values, per ED-909's taxonomy.
+    "Line": line_cells, "Arrowhead": arrowhead_cells, "GappedLine": gapped_line_cells,
     "Column": column_cells,
 }
 
@@ -92,30 +66,18 @@ def _cells_arrowhead(depth):
         w = 2 * r + 1; start = (depth - 1) - r
         cells += [(r, c) for c in range(start, start + w)]
     return cells
-def _cells_horseshoe(wing_w, depth):
-    full = wing_w * 2 + 1; cells = []
-    for r in range(depth):
-        cells += [(r, c) for c in range(wing_w)]
-        cells += [(r, c) for c in range(wing_w + 1, full)]
-    cells += [(depth, c) for c in range(full)]
-    return cells
 def _cells_gapped_line(half_w, depth):
     cells = []
     for r in range(depth):
         cells += [(r, c) for c in range(half_w)]
         cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
     return cells
-def _cells_refused_flank(width, depth):
-    cells = [(r, c) for r in range(depth) for c in range(width - 1)]
-    cells.append((depth, width - 1))
-    return cells
 
+# [LC-8] Horseshoe/RefusedFlank retired here too -- see CELL_PATTERN_FN's note.
 _SHAPE_BUILD = {
     "Line":         (lambda s: dict(width=max(1, round(LINE_ASPECT * s)), depth=s), _cells_line),
     "Arrowhead":    (lambda s: dict(depth=s),                                       _cells_arrowhead),
-    "Horseshoe":    (lambda s: dict(wing_w=s, depth=s),                             _cells_horseshoe),
     "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
-    "RefusedFlank": (lambda s: dict(width=s, depth=s),                              _cells_refused_flank),
     "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
 }
 
@@ -350,33 +312,15 @@ def _atom_avg_facing(atom, contact_abs_cells, dynamic_facings):
 # ─── PER-CELL SPEED ──────────────────────────────────────────────────────────
 
 def cell_speed(shape, tier, local_r, local_c):
+    # [LC-8] Horseshoe/RefusedFlank per-cell speed tables retired along with the shapes themselves
+    # (see CELL_PATTERN_FN's note) -- their differential-speed behaviour (wing tips faster than the
+    # center; an engaged front rank faster than a refused column) now emerges from the Unit-level
+    # build_envelopment/build_refused_flank presets' own timed-order release + per-subunit stance,
+    # not a per-cell lookup table keyed to a retired shape name.
     if shape == "Line":    return 1
     if shape == "Column":  return 1
     if shape == "Arrowhead": return 2 if local_r == 0 else 1
-    if shape == "Horseshoe":
-        sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: cell_speed shape table (F1 derive-target); precedents_warfare Leuctra]
-        wing_w = sizes.get(tier, 3)
-        depth_sizes = {1: 2, 2: 3, 3: 3, 4: 4}  # [canonical: cell_speed depth table (F1 derive-target)]
-        depth = depth_sizes.get(tier, 4)  # [canonical: cell_speed depth default (F1 derive-target)]
-        if local_r == depth:    return 0
-        elif local_c != wing_w: return 2
-        return 1
     if shape == "GappedLine": return 1
-    if shape == "RefusedFlank":
-        sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: cell_speed refused table (F1 derive-target)]
-        width = sizes.get(tier, 6)  # [canonical: cell_speed refused default (F1 derive-target)]
-        # v12: front row of engaged side at speed 2 (oblique-order charge).
-        # The "phalanx push" was led by the front rank at battle pace, with
-        # deeper ranks following at marching pace. Whole-column speed 2 over-tunes
-        # vs Line (H6); front-2-rows still over-tunes; front-row-only is the
-        # partial momentum bonus that helps against wide formations (HS) without
-        # dominating same-width opposition (Line).
-        # Refused cell at width-1 holds at speed 0.
-        # [canonical: references/historical/precedents_warfare.md — Leuctra 371 BC,
-        #  Theban front rank advanced at battle pace; depth followed]
-        if local_c == width - 1: return 0
-        if local_r == 0: return 2
-        return 1
     return 1
 
 

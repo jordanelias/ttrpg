@@ -14,7 +14,11 @@ CHECKS
   2. ID-ceiling consistency — references/id_reservations.yaml `verified_live_max.ED`, every
      active block's bounds/next_free, and any literal "ED ceiling NNNN" in HANDOFF.md are
      compared to the ACTUAL max ED in canon/editorial_ledger.jsonl (the drift that overran
-     reserved blocks A–C).
+     reserved blocks A–C). Also covers the ED-<LANE>-NNNN namespace (2026-07-02, ED-IN-0001):
+     each lane's `lane_ids.<LANE>.next_free` is compared to that lane's actual max in the
+     ledger. The flat ED-NNNN sequence is FROZEN at cutover — no new flat allocations, so
+     lane and flat ceilings never need reconciling against each other, only against their
+     own ledger entries.
   3. Patch-register header vs body — "Next PP number: N" must exceed the register's max PP.
   4. Dead maintenance pointers — "maintained by <skill>" lines naming a skill that lives
      under deprecated/skills/ (unless the line itself says it is retired/former).
@@ -87,6 +91,23 @@ def _ledger_max_ed():
     return max(ids) if ids else 0
 
 
+# Lane roster for the ED-<LANE>-NNNN namespace (2026-07-02) — mirrors
+# validate_ed_citations.LANE_CODES / references/id_reservations.yaml.
+LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+
+
+def _ledger_lane_max():
+    """{'MB': 3, 'SC': 1, ...} — max per-lane numeric suffix seen in the live ledger.
+    A flat 'ED-NNNN' id never matches (no letters after the dash), so this is naturally
+    disjoint from _ledger_max_ed() and requires no coordination with it."""
+    text = _read('canon/editorial_ledger.jsonl') or ''
+    out = {}
+    for lane, num in re.findall(r'"id":\s*"ED-([A-Z]{2})-(\d+)"', text):
+        if lane in LANE_CODES:
+            out[lane] = max(out.get(lane, 0), int(num))
+    return out
+
+
 def check_current_stamp(drift):
     text = _read('CURRENT.md')
     if text is None:
@@ -137,6 +158,26 @@ def check_id_ceilings(drift):
     hm = re.search(r'ED ceiling\s+(\d+)', hand)
     if hm and int(hm.group(1)) < live_max:
         drift.append(f"HANDOFF.md quotes 'ED ceiling {hm.group(1)}' but ledger max is ED-{live_max}")
+
+
+def check_lane_id_ceilings(drift):
+    """Per-lane counterpart to check_id_ceilings for the ED-<LANE>-NNNN namespace.
+    No-ops cleanly if no lane-tagged IDs exist yet (nothing to check) or the
+    lane_ids section is absent (id_reservations.yaml missing is already flagged
+    by check_id_ceilings)."""
+    lane_max = _ledger_lane_max()
+    if not lane_max:
+        return
+    res_text = _read('references/id_reservations.yaml')
+    if res_text is None:
+        return
+    for lane, live in sorted(lane_max.items()):
+        m = re.search(rf'\b{lane}:\s*\{{[^}}]*next_free:\s*(\d+)', res_text)
+        if not m:
+            drift.append(f"id_reservations lane_ids has no entry for lane {lane}, but ED-{lane}-{live} exists in the ledger")
+            continue
+        if int(m.group(1)) <= live:
+            drift.append(f"id_reservations lane_ids.{lane}.next_free {m.group(1)} <= actual ledger max ED-{lane}-{live} — bump before allocating")
 
 
 def check_patch_register_header(drift):
@@ -197,6 +238,7 @@ def run_checks():
     check_current_stamp(drift)
     check_current_paths_exist(drift)
     check_id_ceilings(drift)
+    check_lane_id_ceilings(drift)
     check_patch_register_header(drift)
     check_dead_maintainers(drift)
     check_handoff_heading(drift)
