@@ -74,7 +74,7 @@ def test_no_weapon_name_literal_in_resolution():
     C, core, S, WP, CFG = _mods()
     names = {n for n in C.WEAPONS if 'base' not in C.WEAPONS[n]}  # weapon names (exclude auto-switch forms)
     offenders = {}
-    for mod in ('core.py', 'systems.py', 'wrapper.py'):
+    for mod in ('core.py', 'systems.py', 'wrapper.py', 'contact.py'):   # I7b: contact.py joins the scanned resolution modules
         lits = _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
         hit = sorted({s for s in lits if s in names})
         if hit:
@@ -576,3 +576,34 @@ def test_rear_clearance_penalty_moves_close_tempo_and_str_demand():
         S.REAR_CLEARANCE_TEMPO_K, S.REAR_CLEARANCE_STR_K = old_tempo_k, old_str_k
     assert live_tempo != ablated_tempo
     assert live_str != ablated_str
+
+
+# ── I7b CONTACT AXIS (D8/D9, M-11, 2026-07-03) ───────────────────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_contact_check_only_in_closed_exchange_tail():
+    """I7b acceptance #1 (no grapple path from open measure): the contact.grab_available call sits
+    textually AFTER the '----- CLOSED: tempo-gated exchange -----' marker — the Approach branch always
+    `continue`s before this point, so it is structurally unreachable from open measure."""
+    src = open(os.path.join(ENGINE, 'wrapper.py'), encoding='utf-8').read()
+    closed_tail_start = src.index('----- CLOSED: tempo-gated exchange -----')
+    contact_check = src.index('CT.grab_available(')
+    assert contact_check > closed_tail_start
+
+
+def test_opening_created_wired_at_all_three_precondition_sites():
+    """D8: a unified opening_created flag is set at all three precondition sites (bind entry; the
+    beaten-aside/slip-inside DISPLACE success; the deep-commit reopen section's 3 sub-clauses) — NOT
+    three parallel grab checks each re-deriving their own opening. Reset once per beat."""
+    src = open(os.path.join(ENGINE, 'wrapper.py'), encoding='utf-8').read()
+    assert src.count('opening_created=False') == 1   # reset once per beat
+    assert src.count('opening_created=True') == 5    # displace success + 3 reopen sub-clauses + bind entry
+
+
+def test_contact_insertion_point_after_riposte_before_outcome_emit():
+    """D8: ONE insertion point in the outcome tail, after hit/bind/riposte all resolve, before the
+    'outcome' trace emit — not scattered across the three precondition sites."""
+    src = open(os.path.join(ENGINE, 'wrapper.py'), encoding='utf-8').read()
+    riposte_flip = src.index("aggressor, defender = defender, aggressor   # role flip")
+    contact_check = src.index('CT.grab_available(')
+    outcome_emit = src.index("_emit('outcome',")
+    assert riposte_flip < contact_check < outcome_emit

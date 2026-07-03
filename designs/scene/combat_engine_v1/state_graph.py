@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
-    'commit', 'read', 'mode', 'roll', 'outcome', 'separation', 'engagement_end', 'fight_result',
+    'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
 }
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
@@ -34,11 +34,15 @@ STATES = {
     # ---- inner loop (engagement), per beat ----
     'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit'], 'site': 'wrapper.engagement:66-85'},
     'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach'], 'emits': [], 'site': 'wrapper.engagement:58-88'},
-    'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'AwaitTempo', 'Felled', 'Separation'],
+    'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'Contact', 'AwaitTempo', 'Felled', 'Separation'],
                        'emits': ['commit', 'read', 'mode', 'roll', 'outcome'], 'site': 'wrapper.engagement:86-262'},
-    'Bind':           {'to': ['HitLanded', 'Riposte', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:233-252'},
-    'Riposte':        {'to': ['AwaitTempo', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
-    'HitLanded':      {'to': ['AwaitTempo', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:226-232'},
+    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:233-252'},
+    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
+    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:226-232'},
+    # ---- contact axis (I7b, D8/D9): a real Contact node — BUILT, not activated (M-11). Reachable from Exchange
+    # directly (the deep-commit reopen precondition needs neither Bind/Riposte/HitLanded) as well as from all
+    # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
+    'Contact':        {'to': ['AwaitTempo', 'Separation'], 'emits': ['contact'], 'site': 'wrapper.engagement (outcome tail, contact-axis block)'},
     # ---- engagement terminals -> back to the outer loop ----
     'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement:82,212,232,250,259'},
     'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement:84,270-273'},
@@ -85,9 +89,9 @@ INJECTION_POINTS = {
     'burst.continuation':  {'node': 'AwaitTempo', 'site': 'wrapper.py:272',
                             'generic': 'continue burst vs separate (clean defence)',
                             'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
-    'contact.axis':        {'node': 'Bind',      'site': '(WS-5, unbuilt)',
-                            'generic': '(no contact pole today)',
-                            'injects': 'clinch / disengage / choke (German Ringen, Italian cavazione) — the genuinely-missing distinction'},
+    'contact.axis':        {'node': 'Contact',   'site': 'contact.py (grab_available/grab_sigma/grab_outcome) + wrapper.py outcome tail',
+                            'generic': 'strength+leverage grab affinity; a flat branching menu (disarm/throw/pin/control/foot_pin/escape)',
+                            'injects': 'German Ringen imposes/prefers the bind-entry grab; Italian/English favour the disengage/escape branch — BUILT (I7b, D8/D9), tradition-weighting of the menu is a FUTURE increment, not yet wired'},
 }
 
 
@@ -131,6 +135,7 @@ def fired_states_from_events(events):
             if e['hit'] > 0: fired.add('HitLanded')
             if e['bind']: fired.add('Bind')
             if e['riposte']: fired.add('Riposte')
+        elif k == 'contact': fired.add('Contact')
         elif k == 'separation': fired.add('Separation'); fired.add('InterTurn')
         elif k == 'engagement_end':
             fired.add('Felled' if e['felled'] else 'Separation')
