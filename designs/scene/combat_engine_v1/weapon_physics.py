@@ -256,8 +256,14 @@ def agility(w):
     inert safety guard, not the spread-destroying flat-top it was at the old 0.088 anchor (which pinned dagger, paired,
     sabre, arming and the half-sword all to 1.0). The light-weapon dodge/parry ordering (dagger>paired>sabre>arming) is
     restored; the consumers (defense_affinities' dodge _band window + the parry agility-pivot) were renormalised to the
-    compressed agility range so the OUTPUT affinity spread matches the previously-calibrated one — see defense_affinities."""
-    return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
+    compressed agility range so the OUTPUT affinity spread matches the previously-calibrated one — see defense_affinities.
+    MIGRATED (I1, D11a, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): reads
+    at_grip(w,0.0)['I_g'] instead of derive(w)['MoI'] directly — the SAME grip-adjusted MoI wield_heft/
+    _recovery_mode_commitment/recoverability_factor already read (at grip=0 today; a future increment may thread
+    a real grip here). Proven byte-identical across the full roster (at_grip(w,0)['I_g'] reconstructs derive(w)
+    ['MoI'] to within float round-trip noise, <2e-17 absolute, on 3/53 weapons — see I1 commit note; every other
+    weapon is EXACT)."""
+    return min(1.0, (AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g'])) ** AGILITY_EXP)
 
 
 # authority()/reach() DELETED (morphology-rearch Phase B6, 2026-07-02, Gate-1's single-source-target decision
@@ -271,12 +277,14 @@ def defense_affinities(w):
     """The {parry, dodge, wind} affinities the hand GATE table encodes — DERIVED from geometry + dynamics.
     wind: meet+dominate the bind — blade-catching guard x rigidity x bind-leverage x edge-length.
     dodge: void with footwork — lightness (agility) x one-handedness.
-    parry: deflect safely — a guarded hand commits the parry; a handy weapon parries fast."""
-    d = derive(w)
+    parry: deflect safely — a guarded hand commits the parry; a handy weapon parries fast.
+    MIGRATED (I1, D11a): lever_norm reads at_grip(w,0.0)['I_g'] instead of derive(w)['MoI'] directly — the SAME
+    grip-adjusted MoI source agility()/wield_heft/_recovery_mode_commitment/recoverability_factor all read."""
+    I_g0 = at_grip(w, 0.0)['I_g']
     cross_section = w.get('geo', {}).get('cross_section', 0.6)   # raw primitive via geometry.bake (geo is complete)
     rigidity = 0.30 + 0.70 * cross_section
     ag = agility(w)
-    lever_norm = d['MoI'] / (1.0 / MOI_AGILITY_K + d['MoI'])      # bind-leverage in (0,1): heavy/forward dominates
+    lever_norm = I_g0 / (1.0 / MOI_AGILITY_K + I_g0)              # bind-leverage in (0,1): heavy/forward dominates
     onehand = 1.0 if w['hands'] == 1 else 0.78
     wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 3.0))
     dodge = ag * onehand
