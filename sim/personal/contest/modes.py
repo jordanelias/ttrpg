@@ -17,6 +17,50 @@ from .resolver import (Contestant, Venue, run, ThresholdRace, TallyAtClose, Proo
                        GraceThreshold, VoteAtClose, PersuasionTrack)
 from .primitives import Stasis, Standing, DefeatCatalogue
 
+# ══════════════════════════════════════════════════════════════════════════════════════════
+# CR4 REACHABILITY FIX (Stage 3 / Gate C; ED-1062) — Church Tribunal starts at Stasis.FACT
+# ══════════════════════════════════════════════════════════════════════════════════════════
+# Every canonical Venue defaults start_ground to Stasis.QUALITY (resolver.Venue.start_ground default),
+# and stasis only shifts UPWARD during play (Stasis.stronger_than gates resolver._advance's live-ground
+# shift to a STRONGER ground than the current one — primitives.Stasis.LADDER order FACT < DEFINITION <
+# QUALITY < JURISDICTION < CONSEQUENCE < FEASIBILITY). Before this fix, proceeding_venue() built every
+# one of the 8 canonical PROCEEDINGS with NO start_ground override, so all 8 inherited the QUALITY
+# default — and because FACT sits BELOW QUALITY on the ladder, a live stasis can never shift DOWN to
+# FACT in ANY shipped proceeding. rhetoric.STASIS_PRIMARY_GENRE maps FACT -> Memory (the ONLY ground
+# that sets Memory primary), so CR4's Memory-primary +1D (rhetoric.primary_genre_pool_bonus, keyed to a
+# Precedent/Suppression orator's chosen genre) was DEAD in every real proceeding — reachable only via a
+# synthetic Venue(start_ground=Stasis.FACT) built outside the canonical registry (as the CR4 kernel
+# tests already do). This is the CR4 REACHABILITY GAP (Gate C task item 4).
+#
+# THE FIX (minimal, surgical, single proceeding): Church Tribunal is the strongest thematic match for
+# the conjectural/FACT stasis ("an sit — did it happen?", rhetoric.py CR4 docstring) among the 8
+# canonical proceedings, verified against both canonical descriptions, not assumed:
+#   • params/contest.md §Proceeding Types: "Church Tribunal | 1-5 | Inquisitor proposes | Halved for
+#     accused | Expert Judge" — an ACCUSATORIAL proceeding (an Inquisitor vs an accused), not a
+#     deliberative or petitionary one.
+#   • social_contest_v30.md §7 "Church Tribunal specifics: Accused has no corroboration... Church boosts
+#     Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry
+#     institutional weight" — the proceeding's whole thematic shape is an Inquisitor INVESTIGATING
+#     WHETHER THE ACCUSED COMMITTED AN ACT (an evidentiary/conjectural question: "did X happen? was X
+#     done?" — social_contest_v30 §2 Step 2's own Memory-genre question shape), not judging the wisdom
+#     of an already-settled matter (that is QUALITY terrain, e.g. Royal Audience's petition-for-favour or
+#     Guild Arbitration's dispute-among-equals). wrapper.py's own GAMES registry independently corroborates
+#     this reading: the future 'inquiry' game cites "Church Tribunal / Inquisition (author-new — later
+#     stage)" as its canonical source — Church Tribunal is ALREADY understood elsewhere in this codebase
+#     as the fact-finding/investigative proceeding.
+#   The other 7 proceedings were checked and rejected: Formal/Grand Contest (parliamentary persuasion,
+#   no accusatorial "did it happen" question), Royal Audience (a petition FOR something, not a finding
+#   OF something), Guild Arbitration (a dispute between equals before a bench — "the masters weigh the
+#   stronger case", not an evidentiary inquiry), Casual Dispute/Private Negotiation/Personal Appeal
+#   (informal, no institutional fact-finding role).
+#
+# SCOPE: this changes ONLY Church Tribunal's start_ground (QUALITY -> FACT). It does NOT invent a new
+# down-shift mechanic (stasis still only shifts UPWARD during play, per resolver._advance's existing
+# Stasis.stronger_than gate — untouched) and does NOT touch any of the other 7 proceedings' start_ground
+# (they remain the resolver.Venue default, QUALITY) or any other Church Tribunal field (exchanges,
+# roles, resistance, adjudicator, track_start — all unchanged from Stage 1c/Gate A/Gate B).
+CHURCH_TRIBUNAL_START_GROUND = Stasis.FACT  # ED-1062 CR4 reachability fix — see block comment above
+
 def court_venue(**o):
     return Venue(proof_ethos=.25, proof_pathos=.20, proof_logos=.55, start_ground=Stasis.FACT,
                  proof_past=.60, proof_present=.30, proof_future=.10,   # forensic register: past-weighted (Rhet I.3)
@@ -426,7 +470,10 @@ PROCEEDINGS = {
     "church_tribunal": dict(      # "Church Tribunal | 1–5 | Inquisitor proposes | Halved for accused | Expert Judge"
         exchanges=(1, 5), roles="inquisitor_proposes", resistance="halved_accused",
         adjudicator="expert_judge", track_start=CHURCH_TRIBUNAL_TRACK_START, tracker=True,
-        tracker_mode="required"),  # §7: track starts biased at 6
+        tracker_mode="required",  # §7: track starts biased at 6
+        start_ground=CHURCH_TRIBUNAL_START_GROUND),  # ED-1062 CR4 reachability fix (see block comment above):
+                                                       # an Inquisitor investigating "did the accused commit an
+                                                       # act" is a conjectural/FACT question, not QUALITY.
     "guild_arbitration": dict(    # "Guild Arbitration | 3 | Symmetric | Standard | Panel"
         # ED-1059 REBIND (Jordan, Gate B): adjudicator expert_judge -> PANEL. Closes the original ED-137
         # note ("Panel not yet designed; use Expert Judge as provisional") exactly as it always pointed —
@@ -485,6 +532,13 @@ def proceeding_venue(name, *, use_tracker=None, **o):
         win = PersuasionTrack(start=spec["track_start"])
     else:
         win = TallyAtClose()
+    # ED-1062 CR4 reachability fix: a proceeding may carry its own start_ground (currently only
+    # church_tribunal -> Stasis.FACT; see CHURCH_TRIBUNAL_START_GROUND block comment above). Absent ->
+    # the resolver.Venue default (Stasis.QUALITY), unchanged for the other 7 proceedings. A caller's
+    # explicit start_ground= override (via **o) still wins (dict, not Venue-default, so passing it
+    # twice would TypeError; only set the kwarg when the caller didn't already supply one).
+    if "start_ground" in spec and "start_ground" not in o:
+        o["start_ground"] = spec["start_ground"]
     return Venue(budget=budget, win=win, **o)
 
 def proceeding_mode(name, *, use_tracker=None, **o):
