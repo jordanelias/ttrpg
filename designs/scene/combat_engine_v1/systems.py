@@ -300,6 +300,24 @@ STOPHIT_RANGE_K = 0.3      # [SIM-CALIBRATE] the approach stop-hit's commitment-
                            #   stop-hit thrown with full extension threatens more than one snapped into a
                            #   cramped, rapidly-closing gap.
 
+# ── facing (I6, D6, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+# plan_r1_RATIFIED.md): per-beat Combatant state, near-neutral (register-SOUND — no repair needed, a scaffolding
+# increment). Keyed ONLY on stance/measure/grip (C2 — NEVER weapon class); ships small because C1 (polearm
+# facing direction) is UNRESOLVED, so this must not become load-bearing. Two consumers: a lateral-void
+# contribution into closing (Fiore fol. 39r) and a small profile term in reach_sigma (`[FIAT — C1]`).
+FACING_VOID_K = 0.08       # [SIM-CALIBRATE] small lateral-void closing contribution.
+FACING_PROFILE_K = 0.03    # [FIAT — C1 unresolved] small profile term in reach_sigma.
+FACING_VOID_GAIN = 0.15    # [SIM-CALIBRATE] how much facing speeds the close (close_rate multiplier).
+
+def facing_target(c, closed, cfg):
+    """The per-beat facing state (I6, D6) — keyed ONLY on stance (closed/not) and grip_position, NEVER weapon
+    class (C2: a test asserts two weapons with identical stance/measure/grip get identical facing). Ships
+    near-neutral: C1 (polearm facing direction) is unresolved, so this stays a small, non-load-bearing signal — a
+    fighter angles slightly off-line (a partial void), more so once engaged and more gathered-in. Pure (returns
+    facing; the wrapper writes c.facing)."""
+    base = FACING_VOID_K * (1.0 if closed else 0.5)
+    return base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
+
 def range_utilization(c, measure_gap, cfg):
     """The AVAILABLE swing-room this beat, in [0,1], derived from how close the exchange is (measure_gap). 1.0 at
     open/roomy measure (measure_gap>=CLOSE_EFF_GAP_REF) or when measure_gap is unknown (None — preserves
@@ -544,13 +562,16 @@ def halfsword_target(c, closed, opp_armor):
 
 def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
-    high unarmoured, falling with armour). +ve lowers the attacker's net. Pure."""
+    high unarmoured, falling with armour). +ve lowers the attacker's net. I6/D6: a small facing PROFILE term
+    (`[FIAT — C1]`) — a defender presenting more profile (higher facing) is a slightly easier standing target;
+    exactly 0 at neutral facing (0.0, the pre-I6 default). Pure."""
     gap=er[defender]-er[aggressor]
     foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender, 'balance')
                                      - balance_eff(aggressor,fat_a,cfg)*TR.eff_cw(aggressor, 'balance'))
     meas_w = TR.eff_cw(defender, 'measure')/TR.eff_cw(aggressor, 'measure')
     reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
-    return cfg['REACH_W'][defender.armor]*reach_edge
+    profile = FACING_PROFILE_K*(getattr(defender,'facing',0.0) - getattr(aggressor,'facing',0.0))
+    return cfg['REACH_W'][defender.armor]*reach_edge + profile
 
 def legibility(aggressor, commit, cfg, opp_armor='none'):
     """Read-legibility multiplier on the DEFENDER's visual read: a THRUST (in-line) is hard to read; a SWING/CUT
@@ -770,8 +791,11 @@ def stophit_sigma(longer, shorter, measure_gap, cfg):
 
 def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),
-    sped by displacing a thrusting point (displ) and by walking through an un-threatening reach (2.0-rt). Pure."""
+    sped by displacing a thrusting point (displ) and by walking through an un-threatening reach (2.0-rt). I6/D6:
+    a small lateral-void contribution (Fiore fol. 39r) — angling off-line aids the close; exactly 0 at neutral
+    facing (0.0, the pre-I6 default). Pure."""
     cr = cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
+    cr *= (1.0 + FACING_VOID_GAIN*getattr(shorter,'facing',0.0))
     return cr*(1+displ)*(2.0-rt)
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):

@@ -454,3 +454,54 @@ def test_stophit_range_term_zero_at_full_room():
     longer.range_avail = 0.5
     cramped = S.stophit_sigma(longer, shorter, 2.0, CFG)
     assert base != cramped
+
+
+# ── I6 FACING STATE + LATERAL-VOID CLOSING (D6, 2026-07-03) ─────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_facing_never_reads_weapon_class():
+    """I6 gate #3 (C2): two weapons with identical stance/measure/grip get IDENTICAL facing — facing_target is
+    keyed ONLY on closed/grip_position, never weapon class."""
+    C, core, S, WP, CFG = _mods()
+    c1 = C.Combatant('a', weapon='spear'); c1.grip_position = 0.4
+    c2 = C.Combatant('b', weapon='mace'); c2.grip_position = 0.4
+    assert S.facing_target(c1, True, CFG) == S.facing_target(c2, True, CFG)
+    assert S.facing_target(c1, False, CFG) == S.facing_target(c2, False, CFG)
+
+
+def test_facing_near_neutral_small():
+    """I6 gate #2: facing_target is a real but SMALL close contribution — never approaches a large fraction of the
+    quantities it feeds into."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('x', weapon='longsword'); c.grip_position = 1.0
+    assert 0.0 < S.facing_target(c, True, CFG) < 0.15
+
+
+def test_facing_neutral_byte_identical_to_i5():
+    """I6 gate #1: with facing forced to neutral (0.0) for both roles, close_rate and reach_sigma reproduce their
+    pre-I6 formulas EXACTLY."""
+    C, core, S, WP, CFG = _mods()
+    import tradition as TR
+    agg = C.Combatant('agg', weapon='longsword'); agg.facing = 0.0
+    dfd = C.Combatant('def', weapon='arming'); dfd.facing = 0.0
+    er = {agg: 6.0, dfd: 5.0}
+    rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, CFG, TR)
+    gap = er[dfd] - er[agg]
+    foot_meas = CFG['FOOT_MEASURE_K']*(S.balance_eff(dfd,0.0,CFG)*TR.eff_cw(dfd,'balance') - S.balance_eff(agg,0.0,CFG)*TR.eff_cw(agg,'balance'))
+    meas_w = TR.eff_cw(dfd,'measure')/TR.eff_cw(agg,'measure')
+    old_reach_edge = (gap*CFG['REACH_FRAC']+foot_meas)*meas_w
+    assert rs == CFG['REACH_W'][dfd.armor]*old_reach_edge
+
+    shorter = C.Combatant('s', weapon='dagger'); shorter.facing = 0.0
+    cr = S.close_rate(shorter, 0.0, 0.2, 0.9, CFG)
+    old_cr = CFG['CLOSE_RATE_K']*S.balance_eff(shorter,0.0,CFG)/3 * S.weapon_tempo(shorter,CFG,0.0)/2
+    assert cr == old_cr*(1+0.2)*(2.0-0.9)
+
+
+def test_facing_no_orient_deg_arc_thrust_gate():
+    """I6 gate #4: no code path reads orient_deg for an arc-vs-thrust gate — facing_target and its consumers never
+    reference orient_deg at all in R1 (ships as a pure stance/measure/grip signal; only a FUTURE weapon-shape
+    promotion would key on orient_deg, and only as fore/aft)."""
+    import inspect
+    C, core, S, WP, CFG = _mods()
+    src = inspect.getsource(S.facing_target) + inspect.getsource(S.close_rate) + inspect.getsource(S.reach_sigma)
+    assert 'orient_deg' not in src
