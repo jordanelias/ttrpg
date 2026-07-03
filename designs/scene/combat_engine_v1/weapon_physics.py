@@ -203,7 +203,52 @@ def derive(w):
 
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
-def percussion_authority(w):
+# ── circumstance degradation (I2, D2/D2b, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-
+# redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
+# percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
+SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
+PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
+
+def grip_swing_ratio(w, grip):
+    """rho(g) = S_g(g)/S_g(0), the swing-moment retention at grip g relative to open measure. NaN-GUARDED: rho:=1.0
+    when S_g(0)<=eps (a centre-balanced staff, S_g near-zero at every grip — closes the biomech BLOCKER-class NaN
+    finding, D2). rho(0)==1.0 always, by construction. Pure."""
+    S0 = at_circumstance(w, 0.0)['S_g']
+    if S0 <= 1e-9:
+        return 1.0
+    return at_circumstance(w, grip)['S_g'] / S0
+
+def phi_grip(w, grip, sel_head, sel_pc=None):
+    """The circumstance-degraded impact multiplier (D2) — mode-split on the SELECTED element's strike mode, never a
+    whole-weapon point_concentration blend (R-3: whole-weapon pc bands overlap in the wrong order, e.g. bear_spear
+    pc=0.55 < greatsword pc=0.62). A `point`-headed strike is grip-INVARIANT (Phi_thrust==1.0 — axial thrust mass
+    is delivered independent of hand position on a rigid shaft, `[ASSERTED — rigid-body first principles]`).
+    Every OTHER head (cut_thrust/straight_cut/curved_cut/cut/blunt) degrades its swing fraction by a FLOORED
+    S_g-ratio (Phi_swing, SWING_FLOOR `[SIM-CALIBRATE]`), THEN blends by the SELECTED element's OWN
+    point_concentration (`sel_pc`, sourced from c.sel_pc — D2b/I2; None falls back to the native whole-weapon
+    point_concentration): Phi_grip = pc_sel*1.0 + (1-pc_sel)*Phi_swing — the within-mode thrust-ness a pure cutter
+    still carries (guandao pc=0.30) as well as a genuinely versatile cut_thrust blade (JD-8: partisan/spetum
+    retain their swing degradation weighted by their own low pc). Verified against the plan's own measured
+    fixed-pc table: guandao (curved_cut, pc=0.30, g=1.0) -> 0.650 exact; bardiche (straight_cut, pc=0.18, g=0.627)
+    -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
+    head — the byte-identical default. Pure."""
+    if sel_head == 'point':
+        return 1.0
+    rho = grip_swing_ratio(w, grip)
+    phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
+    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']
+    return pc * 1.0 + (1.0 - pc) * phi_swing
+
+def phi_room_percussion(room):
+    """Percussion's room degradation (D2b) — floored, monotone-increasing to the room=1.0 (r*) identity peak; a
+    monotone-DOWN shape is FORBIDDEN (C4: force-vs-distance is non-monotone, no lever collapses linearly/
+    quadratically with lost room). Stays on the percussion path only (unlike heft — Phi_room is CUT there,
+    JD-1(d)); reaches the armour-defeat sigma path via adef_cap/puncture_pressure/reach_threat, so it is not
+    cosmetic. `[SIM-CALIBRATE]`. Pure."""
+    r = max(0.0, min(1.0, room))
+    return PERC_ROOM_FLOOR + (1.0 - PERC_ROOM_FLOOR) * r
+
+def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
     energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
     no percussion — the edge-no-percuss caveat is THIS gate, emergent).
@@ -217,18 +262,42 @@ def percussion_authority(w):
     on this, DELIBERATELY left red (not silently patched): the underlying mass is more physically correct, but the
     [SIM-CALIBRATE] engine-scale gains here (PERC_SCALE/PERC_EXP, ADEF_BLUNT/ADEF_POINT) were fit to the OLD PoB
     and need Phase C's balance-harness recalibration pass to restore the intended plate-defeat tier-list under the
-    now-accurate physics — not a per-weapon mass fudge to force the old numbers back."""
-    if w['head'] != 'blunt':
+    now-accurate physics — not a per-weapon mass fudge to force the old numbers back.
+    CIRCUMSTANCE-DEGRADED (I2, D2b): grip/room-threaded via the SAME mode-split Phi_grip as heft (JD-4: percussion
+    is grip-aware too, avoiding the M-08 blunt/cut asymmetry) PLUS a floored Phi_room (D2b — retained here, unlike
+    heft). `sel_head` overrides w['head'] for the affordance gate (None = native). At grip=0/room=1.0 this is
+    byte-identical to the pre-I2 return for every weapon (both Phi terms are 1.0 there)."""
+    head = sel_head if sel_head is not None else w['head']
+    if head != 'blunt':
         return 0.0
     pob = derive(w)['PoB_frac']
-    return min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
+    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
+    return base * phi_grip(w, grip, 'blunt', sel_pc) * phi_room_percussion(room)
 
 
-def puncture_pressure(w):
+def puncture_pressure(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     """Concentrated-blunt pierce: same authority delivered through a beak/pick (strike_concentration) -> pressure
-    that defeats plate; a broad face -> 0 (concussion, not puncture)."""
+    that defeats plate; a broad face -> 0 (concussion, not puncture). Grip/room-threaded through percussion_
+    authority (I2/D2b) — byte-identical at grip=0/room=1.0."""
     sc = w.get('geo', {}).get('strike_concentration', 0.0)   # raw primitive, passed through by geometry.bake (geo is complete)
-    return percussion_authority(w) * sc
+    return percussion_authority(w, grip=grip, room=room, sel_head=sel_head, sel_pc=sel_pc) * sc
+
+
+def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
+    """Per-element application of the percussion_authority FORM (I2, D2b — capstone finding M4 correction: this is
+    a per-element percussion_authority variant, NOT `at_circumstance`, which returns {I_g,S_g,d_g,u,...} and
+    computes no percussion value at all). Uses THIS striking element's own mass_kg + its x_m as the moment-arm
+    FRACTION of the weapon's total length (the per-element analogue of percussion_authority's whole-weapon
+    sqrt(mass)*PoB_frac), with the whole-weapon `energy_credit` (a 2H/arc credit is a property of how the WHOLE
+    weapon is gripped, not of one striking element). Distinguishes multi-blunt composites (lucerne_hammer's
+    hammer face vs its rear 3-4 tine fluke) that, pre-I2, both read the SAME whole-weapon percussion_authority(w).
+    Degraded by the SAME grip/room Phi as the whole-weapon percussion_authority (D2/D2b) — a property of the grip/
+    room circumstance, not of which element is striking. Pure."""
+    Lt = derive(w)['length_m']
+    if Lt <= 1e-9:
+        return 0.0
+    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * (abs(elem_x) / Lt) * energy_credit(w)) ** PERC_EXP)
+    return base * phi_grip(w, grip, 'blunt', None) * phi_room_percussion(room)
 
 
 def armour_defeat_mode(w):
@@ -394,7 +463,7 @@ HEFT_REF = 0.1545336822851806  # [ANCHOR] the 2H cut-thrust reference's (longswo
                     #   ~3.0 class magnitude at the SAME anchor weapon, so DMG_SCALE (calibrated against the old
                     #   heft scale) is undisturbed.
 
-def heft(w):
+def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
     harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac
     is floored at 0 before use: a HAND-ON-BLADE grip (longsword_halfsword/estoc_halfsword) has its centre of mass
@@ -402,9 +471,18 @@ def heft(w):
     still delivers real forward force — a negative "lever" would wrongly read as negative impact, not merely
     reduced. Read ONLY by the cut/thrust/point damage path (core.heft_resp); a BLUNT head's impact force already
     derives independently from percussion_authority. FALSIFIABLE ACCEPTANCE (verified at authoring time): spear <
-    arming < longsword < greatsword, greatsword not collapsed onto longsword. Pure."""
+    arming < longsword < greatsword, greatsword not collapsed onto longsword.
+    CIRCUMSTANCE-DEGRADED (I2, D2, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/):
+    the ideal-circumstance ceiling above is UNCHANGED; grip enters ONLY through the mode-split, thrust-protected,
+    floored, NaN-guarded phi_grip multiplier — NEVER through a room term (Phi_room is explicitly CUT from the heft
+    path, JD-1(d): a monotone heft-room multiply violates C4). `sel_head` is the SELECTED use-mode head (None =
+    native w['head']); `sel_pc` is the selected element's own point_concentration (None = native whole-weapon
+    point_concentration). At grip=0 this is byte-identical to the pre-I2 return for EVERY weapon (phi_grip(w,0,
+    ...)==1.0 always, by construction — see phi_grip). Pure."""
     d = derive(w)
-    return (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
+    base = (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
+    head = sel_head if sel_head is not None else w['head']
+    return base * phi_grip(w, grip, head, sel_pc)
 
 # tempo_shape() RETIRED at authoring time (a shallow point_concentration/head-length-ratio proxy, corrected before
 # commit): tempo's balance-recovery component is NOT a static geometry ratio — it is the SAME grip-aware physics
@@ -459,22 +537,49 @@ def grip_choke_max(w):
     Lu = _gather_len(w) / UNIT_M
     return max(0.0, min(1.0, (Lu - GRIP_SHORT) / (GRIP_LONG - GRIP_SHORT)))
 
-def at_grip(w, g):
-    """Re-derive the working-pivot dynamics at grip-position g ∈ [0,1] (0 = held as issued; 1 = gathered to the
-    working BALANCE — the hand slides forward toward the CoM, stopping AT it, since the CoM is the inertia minimum;
-    you gather for control, you do not slide past it). The lunge/extension (reach side) is a BODY term handled in
-    recoverability, not a hand-slide. EXACT parallel-axis off the LEAD-HAND axis (the axis derive() already uses).
-    Returns {I_g, S_g, d_g, u}. GROUNDED (parallel-axis theorem); the gather REACH is morphology-bounded ([FIAT] GRIP_*).
-    A POLE regrips up the whole haft toward balance (the spear gathers to a short staff); a HILT slides within its
-    grip only, gated by grip_len (a short hilt cannot gather — its half-sword form, not a slide, is its mid-blade grip)."""
+def _geom_slide_max_lu(w):
+    """The MAXIMUM geometric forward hand-offset, in length-units, floored so the forward head extent kept ahead
+    of the working hand never drops below GRIP_MIN_WORKING (M-04 underflow fix, D1): min(grip_travel_max(w)/UNIT_M,
+    head_len - GRIP_MIN_WORKING/UNIT_M). A pure geometric bound — decoupled from the CoM-clamped inertia slide u,
+    so a centre-balanced staff's reach/rear-clearance still change with grip though its u==0 (M-20)."""
+    return min(grip_travel_max(w) / UNIT_M, w['head_len'] - GRIP_MIN_WORKING / UNIT_M)
+
+def at_circumstance(w, grip=0.0, room=1.0):
+    """Re-derive the working-pivot dynamics at grip-position `grip` in [0,1] (0 = held as issued; 1 = gathered to
+    the working BALANCE — the hand slides forward toward the CoM, stopping AT it, since the CoM is the inertia
+    minimum; you gather for control, you do not slide past it). The lunge/extension (reach side) is a BODY term
+    handled in recoverability, not a hand-slide. EXACT parallel-axis off the LEAD-HAND axis (the axis derive()
+    already uses). Returns {I_g, S_g, d_g, u, rear_clearance, geom_slide}. GROUNDED (parallel-axis theorem); the
+    gather REACH is morphology-bounded ([FIAT] GRIP_*). A POLE regrips up the whole haft toward balance (the spear
+    gathers to a short staff); a HILT slides within its grip only, gated by grip_len (a short hilt cannot gather —
+    its half-sword form, not a slide, is its mid-blade grip).
+    L0 CIRCUMSTANCE BUNDLE (I2, D1, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/):
+    extends the prior at_grip(w,g) with two NEW members, both PURE weapon+scalar functions (no Combatant — L0
+    purity, a structural test asserts this): `rear_clearance` — length trailing behind the working hand, from
+    LOCATED parts (`_all_parts`, never `derive()['length_m']` — M-19: the full length is wrong for exactly the
+    half-sword composites this is for), gathered-in via +u(g). `geom_slide` — a geometric forward hand-offset
+    (metres), FLOORED and decoupled from the CoM-bounded inertia slide `u` (M-04/M-20); scaled by the SAME `grip`
+    fraction as `u`. `room` is accepted for the L0 bundle's future consumers (D4/I5's swing-room term) but is
+    UNUSED here — no member of THIS bundle degrades with room (that lever lives in commit_depth/legibility/
+    percussion, never in the static kinematics)."""
     d = derive(w)
     m, PoB, I0 = w['mass'], d['PoB_m'], d['MoI']
     I_cm = max(0.0, I0 - m * PoB ** 2)                          # back out CoM inertia (same axis => valid, >=0)
     u_max = grip_choke_max(w) * max(0.0, min(PoB, grip_travel_max(w)))   # gather TOWARD the CoM, gated by regrip freedom; never past the inertia minimum
-    u = max(0.0, min(1.0, g)) * u_max                          # forward hand-slide (m)
-    d_g = PoB - u                                              # CoM-to-working-hand distance after the slide
-    return dict(I_g=I_cm + m * d_g ** 2,                       # MINIMUM (= I_cm) when u reaches the CoM
-                S_g=m * abs(d_g), d_g=d_g, u=u)
+    gf = max(0.0, min(1.0, grip))
+    u = gf * u_max                                              # forward hand-slide (m)
+    d_g = PoB - u                                               # CoM-to-working-hand distance after the slide
+    rear_clearance = -min((x - extent / 2.0) for (_mass, x, extent) in _all_parts(w)) + u
+    geom_slide = gf * max(0.0, _geom_slide_max_lu(w))
+    return dict(I_g=I_cm + m * d_g ** 2,                        # MINIMUM (= I_cm) when u reaches the CoM
+                S_g=m * abs(d_g), d_g=d_g, u=u,
+                rear_clearance=rear_clearance, geom_slide=geom_slide)
+
+def at_grip(w, g):
+    """Thin alias onto at_circumstance's original {I_g,S_g,d_g,u} members — kept so every existing caller stays
+    byte-identical (D1, I2). New code should call at_circumstance directly."""
+    a = at_circumstance(w, g, 1.0)
+    return dict(I_g=a['I_g'], S_g=a['S_g'], d_g=a['d_g'], u=a['u'])
 
 
 if __name__ == '__main__':

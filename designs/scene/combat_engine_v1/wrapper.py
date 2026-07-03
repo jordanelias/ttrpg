@@ -66,7 +66,7 @@ def engagement(A, B, first, cfg, rng):
             c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
             opp = B if c is A else A
-            c.sel_dmg, c.sel_head = S.select_mode(c, opp.armor, closed, cfg)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Refreshed after the half-sword form-switch below.
+            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc = S.select_mode(c, opp.armor, closed, cfg)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2): the SELECTED element's own gap/percussion/point_concentration, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). Refreshed after the half-sword form-switch below.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -119,9 +119,12 @@ def engagement(A, B, first, cfg, rng):
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
-        # re-select the use-mode on the (possibly just-switched) form, so sel_head/sel_dmg match the current weapon
-        aggressor.sel_dmg, aggressor.sel_head = S.select_mode(aggressor, defender.armor, closed, cfg)
-        defender.sel_dmg,  defender.sel_head  = S.select_mode(defender, aggressor.armor, closed, cfg)
+        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (I2/D2b:
+        # BOTH call sites must write all five sel_* fields — c.w flips at :120 above, so a partial thread would
+        # leave a post-swap c.w resolved against a pre-swap-selected element, the same object-confusion bug R-7
+        # closed for select_mode's own return).
+        aggressor.sel_dmg, aggressor.sel_head, aggressor.sel_gap, aggressor.sel_perc, aggressor.sel_pc = S.select_mode(aggressor, defender.armor, closed, cfg)
+        defender.sel_dmg,  defender.sel_head,  defender.sel_gap,  defender.sel_perc,  defender.sel_pc  = S.select_mode(defender, aggressor.armor, closed, cfg)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
         # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).

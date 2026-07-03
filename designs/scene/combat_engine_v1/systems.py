@@ -197,7 +197,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
-def adef_cap(w, cfg, head=None):
+def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
     can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
     deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
@@ -211,13 +211,18 @@ def adef_cap(w, cfg, head=None):
     mode this exchange: a poleaxe whose select_mode chose 'point' (the spike) is scored on the spike's gap-thrust, not
     the better-of-blunt max. head=None keeps the native head (the per-head max over the weapon's intrinsic modes) — so
     every existing caller is byte-identical. percussion_authority now carries the §1 energy-credit (poleaxe 5.83 < mace
-    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode)."""
+    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode).
+    CIRCUMSTANCE-DEGRADED (I2, D2b): `gap` overrides w['gap'] (None = native fallback — the sel_gap object-
+    confusion fix, M-02); `grip`/`room` thread the SAME mode-split/room-floored Phi as the damage path into the
+    blunt branch's percussion_authority/puncture_pressure, so armour-defeat capability and reach_threat resolve
+    the SAME grip as core.strike (D2b). Byte-identical at grip=0/room=1.0/gap=None for every weapon."""
     head = head if head is not None else w['head']
+    gap = gap if gap is not None else w['gap']
     if head=='blunt':
-        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w)/cfg['ADEF_PERC_REF']),
-                   cfg['ADEF_POINT']*(WP.puncture_pressure(w)/cfg['ADEF_PERC_REF']))
-    if head=='point':      return cfg['ADEF_POINT']*w['gap']
-    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*w['gap'])   # cut OR half-sword gap-thrust
+        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
+                   cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
+    if head=='point':      return cfg['ADEF_POINT']*gap
+    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap)   # cut OR half-sword gap-thrust
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
 
 # ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
@@ -256,7 +261,19 @@ def _mode_elements(w):
         return els
     return [dict(head=w['head'], geo=w['geo'])]
 
-def element_afforded(el, w):
+def _element_mass_x(w, el):
+    """The mass+position of a mode_element's SOURCE mass element, via its D0 `element_ref` (an explicit index into
+    w['elements'], NOT list order — I0). Returns (mass_kg, x_m). Falls back to (0.0, 0.0) for the synthesized
+    single-element case (_mode_elements' whole-weapon default, no element_ref) — never read (percussion_element_
+    authority is only called on a real `element_ref`; the whole-weapon path uses WP.percussion_authority(w)
+    directly)."""
+    ref = el.get('element_ref')
+    if ref is None:
+        return 0.0, 0.0
+    e = w['elements'][ref]
+    return e['mass_kg'], e['x_m']
+
+def element_afforded(el, w, grip=0.0, room=1.0):
     """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
     Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
     every other mode — no separate point_concentration THRESHOLD (SELECT_PC_MIN, retired above). Being tokened
@@ -265,38 +282,53 @@ def element_afforded(el, w):
     smuggles in a secondary point-affordance from its OWN point_concentration — every weapon that needs a blunt-
     plus-point split (poleaxe, bec_de_corbin, lucerne_hammer, goedendag, guisarme's cousin-shape) now expresses it
     as a SEPARATE point-tokened mode_element (B2), not a magnitude reading on the blunt token.
-    [PHASE-B6 PENDING] percussion authority still stays WHOLE-WEAPON here (a lucerne_hammer's two blunt elements
-    both read the same weapon-level percussion_authority(w) rather than their own individual mass+position) — a
-    precision gap, not a correctness bug (it is the same formula every single-mode blunt weapon already uses);
-    per-element percussion authority is a B6 item (the plan's re-source table row for core.py's `strike`)."""
+    WIDENED RETURN (I2, D2b, R-7 + capstone M2, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-
+    distance-redesign/): each token now maps to a 5-tuple `(eff, dm, gap, perc, pc)` — the winning element's OWN
+    baked `geo['gap']`/`geo['point_concentration']` (never the whole-weapon scalar, R-3/M-02) and its PERCUSSION
+    (a per-element application of the percussion_authority FORM via `_element_mass_x`'s D0 `element_ref` mass
+    lookup — closes the `[PHASE-B6 PENDING]` precision gap: a lucerne_hammer's two blunt elements now read their
+    OWN mass+position, not the same whole-weapon value). Both `perc` and the blunt token's `eff` are grip/room-
+    degraded (the SAME mode-split Phi as D2's heft, JD-4); every other token's `eff`/`gap` stay the STATIC
+    per-element primitives (gap/cut do not degrade with grip in R1 — only the swing-moment-bearing quantities
+    do). `element_ref` is carried separately by the caller (afforded_heads), not in this tuple."""
     geo=el['geo']; head=el['head']
+    gap=geo['gap']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
-        heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture')
+        heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture', gap, None, pc)
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
-        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear')
+        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear', gap, None, pc)
     elif head=='point':                                              # a real point (element-tokened, not inferred)
-        if geo['gap']>SELECT_EPS: heads['point']=(geo['gap'], 'puncture')
+        if geo['gap']>SELECT_EPS: heads['point']=(geo['gap'], 'puncture', gap, None, pc)
     elif head=='blunt':                                              # striking head
-        pa=WP.percussion_authority(w)
-        if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion')
+        ref = el.get('element_ref')
+        em, ex = _element_mass_x(w, el) if ref is not None else (0.0, 0.0)
+        if em > 1e-9:                                                 # a real located mass element (D0 element_ref)
+            pa=WP.percussion_element_authority(w, em, ex, grip=grip, room=room)
+        else:                                                         # no element_ref, OR a zero-mass geometric marker
+            pa=WP.percussion_authority(w, grip=grip, room=room)       # (e.g. goedendag's club-body element carries
+                                                                        # its striking mass on the haft record, not
+                                                                        # itself) — whole-weapon fallback, unchanged
+        if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion', gap, pa, pc)
     return heads
 
-def afforded_heads(w):
+def afforded_heads(w, grip=0.0, room=1.0):
     """The set of head TOKENS this weapon can fight in — the UNION over its mode-elements of each element's
     afforded tokens (best effectiveness per token). Element-union structure so a multi-element head (bec de
     corbin, lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, poleaxe) affords each of its elements'
     modes; a single-mode weapon's synthesized one-element list reproduces its prior whole-weapon behaviour
-    unchanged. Each token maps to (derived effectiveness, damage_mode); no per-weapon list, no name/kind
-    branching (the L0 primitive-law). Pure."""
+    unchanged. Each token maps to (derived effectiveness, damage_mode, gap, perc, point_concentration,
+    element_ref) — WIDENED I2/D2b (R-7 + capstone M2): the winning element's own gap/perc/pc + its identity, so
+    select_mode can emit them (sel_gap/sel_perc/sel_pc). No per-weapon list, no name/kind branching (the L0
+    primitive-law). Pure."""
     heads={}
     for el in _mode_elements(w):
-        for tok,(eff,dm) in element_afforded(el, w).items():
+        for tok,(eff,dm,gap,perc,pc) in element_afforded(el, w, grip=grip, room=room).items():
             if tok not in heads or eff>heads[tok][0]:
-                heads[tok]=(eff,dm)
+                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'))
     if not heads:                                                    # degenerate fallback: never strip all modes
         h=w['head']
-        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'))
+        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None)
     return heads
 
 def select_mode(c, defender_armor, closed, cfg):
@@ -305,25 +337,31 @@ def select_mode(c, defender_armor, closed, cfg):
     armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
     N'). Reproduces every single-mode weapon's current head (rapier->point, sabre->curved_cut, arming/longsword/
     dagger->cut_thrust, mace/staff->blunt) and the poleaxe (the one weapon that affords >1 head: blunt+spike). SITUATIONAL
-    GAP GAME [2026-06-30]: the greedy comparator threads the weapon's derived gap_precision (w['gap']) into the puncture
-    path (core.coupling gap_prec=), so it SEES the gap-thrust's real GAP-SEEKING effectiveness vs the armour. The poleaxe
-    now SELECTS its spike vs plate (the reach-ladder — the historically-correct armoured kill: thrust to the visor/
-    armpit/groin), because its stiff concentrated point (gap 0.78) out-couples its own hammer at the gaps; a rondel-type
-    (gap 0.84) selects the spike even harder; a mace (blunt-only, no afforded point) still hammers; a staff (weak point,
-    weak authority) stays weak. All EMERGENT from the derived gap_precision — no weapon name. Returns (damage_mode,
-    eff_head): eff_head is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved
-    'percussion'/'shear'/'puncture'. The wrapper writes both onto the combatant (mutation stays wrapper-owned)."""
+    GAP GAME [2026-06-30]: the greedy comparator threads the SELECTED element's own derived gap_precision into the
+    puncture path (core.coupling gap_prec=), so it SEES the gap-thrust's real GAP-SEEKING effectiveness vs the armour.
+    The poleaxe now SELECTS its spike vs plate (the reach-ladder — the historically-correct armoured kill: thrust to
+    the visor/armpit/groin), because its stiff concentrated point (gap 0.78) out-couples its own hammer at the gaps;
+    a rondel-type (gap 0.84) selects the spike even harder; a mace (blunt-only, no afforded point) still hammers; a
+    staff (weak point, weak authority) stays weak. All EMERGENT from the derived gap_precision — no weapon name.
+    WIDENED RETURN (I2, D2b, R-7 + capstone M2): a 5-tuple `(dm, h, sel_gap, sel_perc, sel_pc)` — the three extra
+    fields default to the whole-weapon w['gap']/WP.percussion_authority(w)/whole-weapon point_concentration for a
+    single-mode weapon (behaviour-preserving until intended; verified at I2's acceptance gate #5). Threads
+    `c.grip_position`/`c.range_avail` (default 0.0/1.0 — I1 scaffold) into afforded_heads so the SELECTION itself
+    (not just the eventual damage) reflects the wielder's current circumstance. `eff_head` is the head TOKEN
+    routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved 'percussion'/'shear'/'puncture'.
+    The wrapper writes all five onto the combatant at BOTH call sites (mutation stays wrapper-owned)."""
     w=c.w
-    heads=afforded_heads(w)
+    grip=getattr(c,'grip_position',0.0); room=getattr(c,'range_avail',1.0)
+    heads=afforded_heads(w, grip=grip, room=room)
     if len(heads)==1:                                                # single afforded mode: no choice (the common case)
         h=next(iter(heads))
     else:
         # greedy: the mode delivering the most damage-coupling THROUGH this armour. perc carries the blunt authority (a
         # high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING plate-defeat (the
         # situational gap game), so the poleaxe's hammer and its spike are compared on the same coupling scale — and the
-        # spike wins vs harness. gap_prec=w['gap'] is passed uniformly (percussion/shear ignore it; only puncture reads it).
+        # spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02), not the whole-weapon scalar.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
-                  perc=WP.percussion_authority(w) if hd=='blunt' else core.PERC_AUTH_REF, gap_prec=w['gap']))
+                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2]))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
@@ -332,17 +370,21 @@ def select_mode(c, defender_armor, closed, cfg):
         dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
-    return dm, h
+    _eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
+    return dm, h, sel_gap, sel_perc, sel_pc
 
 def armor_defeat_sigma(aggressor, defender, cfg):
     """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor
     vs the defender's armour: capability ABOVE the per-tier threshold = control (+); below = the armour SHIELDS (−).
     The threshold RISES with armour (monotonically harder). Zero unarmoured (ADEF_W['none']=0). Reads the aggressor's
     SELECTED mode-head (sel_head, set by the wrapper from select_mode) so the armour-defeat path scores the mode the
-    wielder actually committed to; falls back to the native head when unset (byte-identical)."""
+    wielder actually committed to; falls back to the native head when unset (byte-identical). CIRCUMSTANCE-DEGRADED
+    (I2, D2b): also threads sel_gap/grip_position/range_avail so this resolves the SAME grip/gap as core.strike."""
     a=cfg['ADEF_W'][defender.armor]
     if a==0.0: return 0.0
-    return a*(adef_cap(aggressor.w, cfg, getattr(aggressor,'sel_head',None)) - cfg['ADEF_THRESHOLD'][defender.armor])
+    cap=adef_cap(aggressor.w, cfg, getattr(aggressor,'sel_head',None), gap=getattr(aggressor,'sel_gap',None),
+                 grip=getattr(aggressor,'grip_position',0.0), room=getattr(aggressor,'range_avail',1.0))
+    return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
 
 def reach_threat(longer, defender, cfg):
     """FIX-1 — the factor by which a LONGER weapon's structural-reach advantage DECAYS when it CANNOT defeat the
@@ -354,7 +396,9 @@ def reach_threat(longer, defender, cfg):
     [FIAT — designer-set; tightened to avoid triple-counting REACH_W + ADEF_CUT]."""
     aw=cfg['ADEF_W'][defender.armor]
     if aw==0.0: return 1.0
-    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - adef_cap(longer.w, cfg))
+    cap=adef_cap(longer.w, cfg, gap=getattr(longer,'sel_gap',None),
+                 grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
+    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
 def leverage(c, cfg):

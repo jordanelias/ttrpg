@@ -89,17 +89,21 @@ def test_use_mode_selection_emerges_from_primitives():
     internal cut_thrust cut/gap-thrust re-weighting — that stays keyed on ONE token, see test_gap_thrust_...) as the
     ones whose SELECTED HEAD TOKEN changes with armour. Both fall out of the derived afforded_heads (no per-weapon
     list).
-    [UPDATED, 2026-07-02] morphology-rearch Phase B2 gave 8 weapons real per-element mode_elements (bec_de_corbin,
-    lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, plus the pre-existing poleaxe). Of those, 4 now
-    genuinely emerge as armour-conditional token-changers (bec_de_corbin, lucerne_hammer, ji, kama_yari — a real
-    blunt<->point or cut<->point split whose greedy winner flips with armour, exactly the "swing the hammer or
-    thrust the spike" mechanic this re-architecture was built for). guisarme/voulge stay on their single
-    'cut_thrust' token throughout (their point element never out-scores it — an internal re-weighting, not a token
-    change) and goedendag's point never out-scores its blunt. poleaxe is a [PHASE-C FLAG] — its own more-accurate,
-    more-forward Phase-B mass distribution lifted its blunt percussion authority enough that it no longer switches
-    to its spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
-    plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not silently
-    included as if the current behaviour were correct."""
+    [UPDATED, 2026-07-03, I2/D2b/R-7 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+    plan_r1_RATIFIED.md] The R-7/M-02 object-confusion fix widens select_mode's greedy comparator to read each
+    candidate head's OWN gap_precision/percussion (the winning mode_element's, via the widened afforded_heads
+    5-tuple) instead of the whole-weapon w['gap']/percussion_authority(w) scalar. guisarme/voulge's point elements
+    (thrusting spike / thrusting_heel_spike) carry a materially HIGHER gap_precision than their whole-weapon
+    average — under the old whole-weapon-gap comparator this was invisible, so they never out-coupled their
+    cut_thrust cleaver; under the corrected per-element gap they NOW correctly win the puncture path vs medium/
+    heavy armour (exactly the reach-ladder gap-game mechanic bec_de_corbin/ji/kama_yari/lucerne_hammer already
+    modelled) — DELIBERATELY REGENERATED, not silently patched: verified via direct select_mode() sweep this pass
+    that both flip cut_thrust->point at medium/heavy, none/light unchanged. goedendag's point still never
+    out-scores its blunt. poleaxe is a [PHASE-C FLAG] — its own more-accurate, more-forward Phase-B mass
+    distribution lifted its blunt percussion authority enough that it no longer switches to its spike vs heavy
+    armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_plate); left OUT of
+    the expected set here until Phase C's engine-scale recalibration restores it, not silently included as if the
+    current behaviour were correct."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -109,7 +113,7 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    expected = ['kama_yari', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above
+    expected = ['kama_yari', 'voulge', 'guisarme', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above; voulge/guisarme added I2/R-7 — see docstring
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -144,7 +148,127 @@ def test_gap_game_poleaxe_spikes_plate():
     face (percussion) instead of the spike (puncture) vs heavy armour. Deliberately left failing pending Phase C's
     engine-scale recalibration against the grounded masses, not silently patched to accept the new selection."""
     C, core, S, WP, CFG = _mods()
-    dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)
+    dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)[:2]
     assert (dm_heavy, h_heavy) == ('puncture', 'point'), f"poleaxe vs plate should spike; got {(dm_heavy, h_heavy)}"
-    _, h_none = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'none', False, CFG)
+    h_none = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'none', False, CFG)[1]
     assert h_none != 'point', "poleaxe unarmoured should not default to the spike (the gap game is situational)"
+
+
+# ── I2 CIRCUMSTANCE DEGRADATION (D1/D2/D2b/D5, 2026-07-03) ──────────────────────────────────────────
+# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
+def test_at_circumstance_is_l0_pure():
+    """D1: at_circumstance takes only a weapon dict + scalar grip/room — no Combatant, no measure_gap. A structural
+    guard against L0/L2 layer-discipline drift (the plan's own binding rule)."""
+    import inspect
+    C, core, S, WP, CFG = _mods()
+    params = list(inspect.signature(WP.at_circumstance).parameters)
+    assert params == ['w', 'grip', 'room'], params
+    for p in params[1:]:
+        assert 'combatant' not in p.lower() and 'measure_gap' not in p.lower()
+
+
+def test_heft_percussion_ordering_at_ideal():
+    """D2 falsifiable acceptance gate #1: spear < arming < longsword < greatsword at grip=0, greatsword not
+    collapsed onto longsword."""
+    C, core, S, WP, CFG = _mods()
+    h = {n: WP.heft(C.WEAPONS[n]) for n in ('spear', 'arming', 'longsword', 'greatsword')}
+    assert h['spear'] < h['arming'] < h['longsword'] < h['greatsword'], h
+
+
+def test_thrust_protection_grip_invariant():
+    """D2 gate #2: a point-selected strike is grip-INVARIANT (Phi_grip>=0.9, effectively 1.0) — bear_spear/spear/
+    yari all select 'point' and must not collapse when fully gathered."""
+    C, core, S, WP, CFG = _mods()
+    for n in ('bear_spear', 'spear', 'yari'):
+        c = C.Combatant('x', weapon=n)
+        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        assert h == 'point', f"{n} did not select point: {h}"
+        phi = WP.phi_grip(C.WEAPONS[n], 1.0, h, spc)
+        assert phi >= 0.9, f"{n} thrust-protection failed at full gather: {phi}"
+
+
+def test_phi_grip_nan_guard_staff():
+    """D2 gate #4: a centre-balanced staff (S_g(0)<=eps) never NaNs; Phi_grip stays finite (guarded to 1.0) at
+    every grip position."""
+    import math
+    C, core, S, WP, CFG = _mods()
+    w = C.WEAPONS['staff']
+    for g in (0.0, 0.3, 0.7, 1.0):
+        phi = WP.phi_grip(w, g, 'blunt', None)
+        assert math.isfinite(phi), (g, phi)
+
+
+def test_heft_percussion_byte_identical_at_grip_zero():
+    """I2 gate #7: at grip=0/room=1.0, heft AND percussion are byte-identical to the pre-I2 ideal-circumstance
+    value for the WHOLE roster (Phi==1 everywhere at open measure)."""
+    C, core, S, WP, CFG = _mods()
+    for n, w in C.WEAPONS.items():
+        assert abs(WP.heft(w) - WP.heft(w, grip=0.0, sel_head=w['head'])) < 1e-9, n
+        assert abs(WP.percussion_authority(w) - WP.percussion_authority(w, grip=0.0, room=1.0)) < 1e-9, n
+
+
+def test_damage_retention_worst_case_material_lever():
+    """D2/I2 gate #3: full-damage retention through core.damage (armour=none, success), WORST-CASE across STR
+    2/4/6/8, clears the plan's material-lever bar: guandao <=0.76, voulge/bardiche <=0.88 (borderline, JD-1)."""
+    C, core, S, WP, CFG = _mods()
+
+    def worst_retention(name, grip_star):
+        w = C.WEAPONS[name]
+        c = C.Combatant('x', weapon=name)
+        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        gap = sg if sg is not None else w['gap']
+        perc = sp if sp is not None else WP.percussion_authority(w)
+        worst = 0.0
+        for STR in (2, 4, 6, 8):
+            heft_open = core.heft_resp(w, CFG, grip=0.0, sel_head=h, sel_pc=spc)
+            heft_closed = core.heft_resp(w, CFG, grip=grip_star, sel_head=h, sel_pc=spc)
+            dmg_open = core.damage('success', heft_open, h, STR, 'none', False, gap, perc)
+            dmg_closed = core.damage('success', heft_closed, h, STR, 'none', False, gap, perc)
+            worst = max(worst, dmg_closed / dmg_open if dmg_open else 0.0)
+        return worst
+
+    assert worst_retention('guandao', 1.0) <= 0.76
+    assert worst_retention('voulge', 1.0) <= 0.88
+    assert worst_retention('bardiche', 0.627) <= 0.88
+
+
+def test_room_no_lever_falls_monotone_down():
+    """C4 / D2b: percussion's room degradation is monotone-INCREASING in room (never monotone-down); a thrust
+    stays at 0 percussion regardless of room (percussion is blunt-only by construction)."""
+    C, core, S, WP, CFG = _mods()
+    w = C.WEAPONS['mace']
+    vals = [WP.percussion_authority(w, room=r) for r in (0.0, 0.25, 0.5, 0.75, 1.0)]
+    assert all(vals[i] <= vals[i + 1] + 1e-9 for i in range(len(vals) - 1)), vals
+    w2 = C.WEAPONS['rapier']
+    assert all(WP.percussion_authority(w2, room=r) == 0.0 for r in (0.0, 0.5, 1.0))
+
+
+def test_select_mode_open_measure_identity_single_mode_weapons():
+    """I2 gate #5 (BLOCKER-2 + contract equivalence): at open measure (grip=0), select_mode's 5-tuple returns
+    sel_gap==w['gap'], sel_perc==percussion_authority(w), sel_pc==the whole-weapon point_concentration for every
+    SINGLE-MODE weapon (no mode_elements) — behaviour-preserving until intended."""
+    C, core, S, WP, CFG = _mods()
+    for n, w in C.WEAPONS.items():
+        if 'base' in w or w.get('mode_elements'):
+            continue
+        c = C.Combatant('x', weapon=n)
+        dm, h, sg, sp, spc = S.select_mode(c, 'none', False, CFG)
+        assert sg == w['gap'], (n, sg, w['gap'])
+        assert spc == w['geometry']['point_concentration'], (n, spc)
+        if h == 'blunt':
+            # sp is None for a weapon whose percussion authority is exactly 0 (e.g. staff — perfectly centre-
+            # balanced, PoB_m==0, so the blunt token never clears SELECT_EPS and afforded_heads' degenerate
+            # fallback fires); the native-fallback semantics still converge to the same value.
+            resolved = sp if sp is not None else WP.percussion_authority(w)
+            assert resolved == WP.percussion_authority(w), (n, sp)
+
+
+def test_select_mode_sel_fields_track_swap_window():
+    """I2 gate #5: within the closed exchange, every sel_* field resolves the SAME (post-swap) weapon/element —
+    probes the longsword->longsword_halfsword swap window (M-02/R-7's object-confusion class)."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('x', weapon='longsword_halfsword')
+    dm, h, sg, sp, spc = S.select_mode(c, 'heavy', True, CFG)
+    w = C.WEAPONS['longsword_halfsword']
+    assert sg == w['gap'] or sg == w['geo']['gap']
+    assert spc == w['geometry']['point_concentration']
