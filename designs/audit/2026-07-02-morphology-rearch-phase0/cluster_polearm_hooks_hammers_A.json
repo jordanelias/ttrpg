@@ -1,0 +1,341 @@
+{
+ "weapons": {
+  "guisarme": {
+   "total_mass_kg": 1.9,
+   "total_length_m": 2.10,
+   "grade": "S2",
+   "grip_split_note": "Engine calibration: head_len 5.7u + grip_len 1.3u (UNIT_M=0.30) = 2.10m total; grip fraction 0.186 (~spear's 0.18). Working-hand grip point taken at x_m=0, located 0.39m from the butt end.",
+   "head_elements": [
+    {
+     "label": "hooked cutting blade",
+     "mass_kg_est": 0.19,
+     "x_m": 0.55,
+     "orient_deg": 60,
+     "extent_m": 0.32,
+     "material": "steel",
+     "geom_notes": "Single-edged, forward-curving hook blade riveted/socketed to the haft, shallow concave curvature on the inner (hook) edge, convex cutting edge on the outer face; point at the extreme tip is drawn out for a weak secondary thrust. Cross-section is a flattened wedge, thinner and lighter than a full spearhead — the museum-replica consensus this batch's calibration cites gives a curved head roughly 30 cm long. Edge present along the full outer curve; inner hook face is typically unsharpened or only lightly honed (its job is catching, not cutting).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "reverse thrusting spike",
+     "mass_kg_est": 0.06,
+     "x_m": 0.78,
+     "orient_deg": 0,
+     "extent_m": 0.10,
+     "material": "steel",
+     "geom_notes": "Short straight spike mounted opposite the hook, in-line with the haft axis, for the weapon's secondary thrust action; described in sources as an 'afterthought' relative to the main hook blade — slender, square or diamond cross-section, sharply pointed.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [],
+   "haft_or_grip": {
+    "diameter_m": 0.036,
+    "material": "ash/oak",
+    "notes": "Long, uniform-taper round haft (spear-typical), no octagonal facets documented; full length grippable/gatherable (grip_choke_max=1.0 per engine calibration) since the hook sits only at the very tip."
+   },
+   "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "butt": {"mass_kg_est": 0.12, "x_m": -0.39},
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.25,
+    "guards_sum_kg": 0.0,
+    "pommel_kg": 0.0,
+    "butt_kg": 0.12,
+    "shaft_estimate_kg": 1.4963,
+    "sum_kg": 1.8663,
+    "total_mass_kg": 1.9,
+    "residual_pct": -1.77
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, 15th-c. Italian guisarme, curved steel head ~75cm class attribution (search-derived, no accession number pinned) — S2",
+     "Royal Armouries Tower of London arsenal 16th-c. guisarme-type examples — S2, typology only",
+     "This batch's cluster prior (polearm_hooks_hammers_A.json): museum-replica + typical-length consensus, total length 2.10m / mass 1.9kg anchor — S2",
+     "Wikipedia/Grokipedia Guisarme synthesis — S3, cross-check only"
+    ],
+    "confidence_tier": "S2 — typology-typical length/mass anchor is reasonably solid (multiple independent replica/typology sources converge near 2.0-2.1m and a curved hook head of comparable proportions), but per-element mass split between hook blade and reverse spike is an S3 engineering estimate (no specimen gives a per-part mass breakdown)."
+   }
+  },
+  "ji": {
+   "total_mass_kg": 2.1,
+   "total_length_m": 2.40,
+   "grade": "S2",
+   "grip_split_note": "Engine calibration: head_len 6.5u + grip_len 1.5u (UNIT_M=0.30) = 2.40m total; grip fraction 0.188. Working-hand grip point at x_m=0, located 0.45m from the butt end. Sources describe a 'Combat Ji' shaft near 2.3m and 'Battalion Ji' longer for formation use; 2.40m sits at the upper end of the combat-length band.",
+   "head_elements": [
+    {
+     "label": "straight spearhead (thrusting point)",
+     "mass_kg_est": 0.15,
+     "x_m": 0.75,
+     "orient_deg": 0,
+     "extent_m": 0.24,
+     "material": "steel",
+     "geom_notes": "Single-piece forge-welded (Han-era T-shaped ji) leaf/willow-leaf-profile spearhead in-line with the haft axis, socketed onto the shaft; comparable LK Chen swallow-tail spearhead components run ~150g at ~23.6cm length for a spear-only head, consistent with this element's estimate. Sharp thrusting point, diamond or lenticular cross-section, edges present but the point is the primary engaged feature.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "perpendicular crescent (yueyadao) blade",
+     "mass_kg_est": 0.14,
+     "x_m": 0.55,
+     "orient_deg": 90,
+     "extent_m": 0.22,
+     "material": "steel",
+     "geom_notes": "Crescent/dagger-axe-style blade mounted perpendicular (or slightly angled) below the spearhead, riveted to a single forged piece in the Han T-shaped ji. Outer curve is a cutting edge (chop/slash action); inner curve is the hooking surface used to unhorse cavalry, catch shields, or disarm — described across S1 sources as a coequal offensive structure, not a guard. Curved profile, moderate curvature, edge along the full outer arc.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "crescent horns (incidental hand-catching)",
+     "type": "crescent-guard",
+     "extent_m": 0.22,
+     "material": "steel",
+     "x_m": 0.55,
+     "orient_deg": 90,
+     "mass_kg_est": 0.0,
+     "geom_notes": "Not a separate mass element — the crescent blade itself (listed under head_elements) doubles as the weapon's only guard-like structure, providing incidental hand protection during binds per S2 synthesis sources. No dedicated hilt-level guard hardware exists on this weapon; recorded here for completeness of the catching-structure inventory, mass already counted under the crescent head element (not double-counted in the mass budget)."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.036,
+    "material": "ash/oak (Han-era shafts also attested in bamboo-laminate/hardwood composite)",
+    "notes": "Long uniform round haft; full length grippable/gatherable (grip_choke_max=1.0) — the crescent sits at the tip, outside the gather zone."
+   },
+   "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "butt": {"mass_kg_est": 0.10, "x_m": -0.45},
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.29,
+    "guards_sum_kg": 0.0,
+    "pommel_kg": 0.0,
+    "butt_kg": 0.10,
+    "shaft_estimate_kg": 1.7100,
+    "sum_kg": 2.10,
+    "total_mass_kg": 2.1,
+    "residual_pct": 0.0
+   },
+   "provenance": {
+    "citations": [
+     "Cheng Ziyi, Wu Bei Yao Lue, Halberd (戟) and Long Shaft Axe (長柄斧) chapters — S1, morphology/technique only",
+     "Qi Jiguang, Ji Xiao Xin Shu, 1560s/1584 eds. — S1, morphology/technique only",
+     "LK Chen 'Han Ji' T-shaped reconstruction (1:1 replica of a Ji from the royal tomb of the King of Qi); Terra Prime Fighting Words 'Recreating the Han Ji pole arm' 2023 — S2",
+     "LK Chen swallow-tail spearhead component specs (~150g/23.6cm) used as a cross-check anchor for the spearhead element mass — S2",
+     "Wikipedia/Grokipedia Ji (polearm) synthesis; Great Ming Military 'Telling apart Chinese polearms' — S2/S3"
+    ],
+    "confidence_tier": "S2 — total mass/length anchored to typology consensus (Combat Ji ~2.3m class) and the LK Chen reconstruction program's stated fidelity; per-element spearhead/crescent mass split is an S3 engineering estimate cross-checked against a comparable standalone spearhead's mass, not a per-part specimen breakdown."
+   }
+  },
+  "bec_de_corbin": {
+   "total_mass_kg": 2.4,
+   "total_length_m": 1.80,
+   "grade": "S1",
+   "grip_split_note": "Engine calibration: head_len 3.0u + grip_len 3.0u (UNIT_M=0.30), 50/50 centre-grip split = 1.80m total, matching the direct poleaxe analog. Working-hand grip point (nominal, mid-haft per half-shafting doctrine) at x_m=0, located 0.90m from the butt end. Met specimen (see citations) runs longer overall (202.9cm) at a heavier total mass (2.6-3.4kg by source) — the engine's 1.80m/2.4kg anchor sits toward the lighter/shorter end of the attested specimen range; treated as within typology variance, not overridden.",
+   "head_elements": [
+    {
+     "label": "hammer face",
+     "mass_kg_est": 0.22,
+     "x_m": 0.28,
+     "orient_deg": 90,
+     "extent_m": 0.06,
+     "material": "steel",
+     "geom_notes": "Flat or lightly-pyramided square/rectangular striking face mounted perpendicular to the haft, opposite the beak, for blunt concussive strikes to the helm. Documented (Fiore, Le Jeu de la Hache, Talhoffer) as the secondary striking mode relative to the beak on this particular typological variant ('used primarily with the beak instead of the hammer' per this cluster's own audit note). Squat, blocky cross-section; no edge.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "curved beak (bec de corbin)",
+     "mass_kg_est": 0.26,
+     "x_m": 0.30,
+     "orient_deg": -90,
+     "extent_m": 0.09,
+     "material": "steel",
+     "geom_notes": "Sharply down-curving, tapering beak/pick opposite the hammer face — the weapon's namesake and primary documented striking element on this variant. Function is hooking/tearing/puncturing mail and gaps rather than a clean edge-cut (no cutting edge documented); thick at the root, drawn to a point at the tip, pronounced downward curvature ('crow's beak' profile).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "top spike",
+     "mass_kg_est": 0.10,
+     "x_m": 0.42,
+     "orient_deg": 0,
+     "extent_m": 0.08,
+     "material": "steel",
+     "geom_notes": "Straight spike projecting from the crown of the head, in-line with the haft axis, for controlled thrusts into visor slits, armpits, and joints at half-shaft range. Slender, square or diamond cross-section, sharp point; documented as the weapon's dedicated 'point' function (distinct from the beak's hook/tear role).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "rondel disc",
+     "type": "disc",
+     "extent_m": 0.09,
+     "material": "steel",
+     "x_m": 0.05,
+     "orient_deg": 90,
+     "mass_kg_est": 0.05,
+     "geom_notes": "Small circular steel disc fitted just below the head, documented on period poleaxes of this class to protect the leading hand from a sliding strike down the haft. Passive/structural, not an actively-worked parrying surface."
+    },
+    {
+     "label": "langets",
+     "type": "langet",
+     "extent_m": 0.25,
+     "material": "steel",
+     "x_m": 0.17,
+     "orient_deg": 0,
+     "mass_kg_est": 0.04,
+     "geom_notes": "Two or four narrow steel straps running down the haft from the head socket, riveted flush to the wood. Documented function is reinforcing the haft against being cut through in a bind, not weapon-catching."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.040,
+    "material": "ash/oak",
+    "notes": "Round-to-octagonal haft (period poleaxe hafts are frequently faceted for grip); full length grippable (grip_choke_max=1.0), consistent with documented half-shafting (grip sliding to mid-haft for close-range bind work)."
+   },
+   "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "butt": {"mass_kg_est": 0.20, "x_m": -0.90},
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.58,
+    "guards_sum_kg": 0.09,
+    "pommel_kg": 0.0,
+    "butt_kg": 0.20,
+    "shaft_estimate_kg": 1.5834,
+    "sum_kg": 2.4534,
+    "total_mass_kg": 2.4,
+    "residual_pct": 2.23
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art (via Arms & Armor Tumblr transcription), 15th-c. Italian pollaxe/Lucerne-hammer/bec-de-corbin-class specimen: OaL 79.9 in / 202.9 cm, head length 8.5 in / 21.6 cm, head width 9.6 in / 24.5 cm, weight 7.5 lb / 3.40 kg — S1 (specimen-measured, exact accession number not independently pinned in this pass)",
+     "Metropolitan Museum of Art, French War Hammer/bec-de-corbin-class, ca. 1450, 25 3/4 in overall length — S1, morphology cross-check",
+     "Fiore dei Liberi, Fior di Battaglia (Getty MS Ludwig XV 13, Pisani-Dossi MS, Morgan M.383), azza section — S1, morphology/technique",
+     "Le Jeu de la Hache (MS Français 1996, BnF) — S1, morphology/technique",
+     "Hans Talhoffer, Fechtbücher (MS Thott.290.2°, 1459, and others 1443-1467) — S1, morphology/technique",
+     "This batch's cluster prior: poleaxe-analog calibration (3.0u/3.0u split, 1.80m, haft_d 0.040m) — S2"
+    ],
+    "confidence_tier": "S1 for total specimen mass/length range and head morphology (Met specimen gives a solid three-element head silhouette: hammer, beak, spike); S2/S3 for the specific per-element mass split among hammer/beak/spike, which is an engineering apportionment (no specimen source gives per-part weights) grounded in the documented functional emphasis (beak-primary, per this cluster's own audit note)."
+   }
+  },
+  "lucerne_hammer": {
+   "total_mass_kg": 2.6,
+   "total_length_m": 1.80,
+   "grade": "S1",
+   "grip_split_note": "Engine calibration: head_len 3.0u + grip_len 3.0u (UNIT_M=0.30), 50/50 centre-grip split = 1.80m total, same poleaxe-analog split as bec_de_corbin. Working-hand grip point (nominal, half-shaft) at x_m=0, located 0.90m from the butt end. Met specimen (ca. 1520) gives total_length_m=1.392 at 2.66kg (5 lb 14 oz) — noticeably shorter than the engine's 1.80m anchor; treated as typology variance (a documented shorter-hafted Lucerne-hammer form exists alongside the longer poleaxe-length forms this cluster models), and the engine's calibrated length is retained per the poleaxe-sibling harmonization instruction rather than overridden to the Met specimen's shorter haft.",
+   "head_elements": [
+    {
+     "label": "hammer face (4-tine fluke, striking side)",
+     "mass_kg_est": 0.20,
+     "x_m": 0.26,
+     "orient_deg": 90,
+     "extent_m": 0.06,
+     "material": "steel",
+     "geom_notes": "Flat or lightly-domed square striking face opposite the fluke, for blunt concussive blows. Met specimen head measures 18 7/8 in / 48 cm long by 8 in / 20.4 cm wide overall (hammer+fluke+spike combined) — this element is the compact striking-face sub-portion of that head. No edge; blocky cross-section.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "3-4 tine fluke (rear beak)",
+     "mass_kg_est": 0.35,
+     "x_m": 0.32,
+     "orient_deg": -90,
+     "extent_m": 0.11,
+     "material": "steel",
+     "geom_notes": "Distinctive multi-pronged (typically 3-4 tine) fluke opposite the hammer face — the Lucerne hammer's namesake feature, distinguishing it from the bec de corbin's single curved beak. Documented (Wikipedia/HandWiki/Met) as a broader, less concentrated striking/hooking structure than a single beak: the tines spread the strike over a wider area (this cluster's own audit note: strike_concentration 0.62, below bec_de_corbin's 0.80). Each tine tapers to a blunt-to-lightly-pointed tip; no continuous cutting edge.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "top spike",
+     "mass_kg_est": 0.15,
+     "x_m": 0.44,
+     "orient_deg": 0,
+     "extent_m": 0.09,
+     "material": "steel",
+     "geom_notes": "Straight spike projecting from the crown, in-line with the haft axis; documented across Le Jeu de la Hache and Fiore's azza plays as the weapon's primary thrust-delivery element (estocq favored over swinging tour de bras strikes) — thrust-primary per handling research, though the engine represents this via elevated point_concentration within a 'blunt' composite head rather than a head-token change (per the harmonization note preserving the poleaxe-sibling model). Slender, square or diamond cross-section, sharp point.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [],
+   "haft_or_grip": {
+    "diameter_m": 0.040,
+    "material": "ash/oak",
+    "notes": "Round-to-octagonal haft; no rondel/langet hardware documented for this specific typological class in the reviewed corpus (distinct from bec_de_corbin, where rondel/langet protection is attested) — the handling research explicitly flags this as the one guard field where the two poleaxe siblings should NOT match. Full length grippable (grip_choke_max=1.0), consistent with documented half-shafting."
+   },
+   "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "butt": {"mass_kg_est": 0.20, "x_m": -0.90},
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.70,
+    "guards_sum_kg": 0.0,
+    "pommel_kg": 0.0,
+    "butt_kg": 0.20,
+    "shaft_estimate_kg": 1.5834,
+    "sum_kg": 2.4834,
+    "total_mass_kg": 2.6,
+    "residual_pct": -4.48
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, Lucerne Hammer, Swiss, ca. 1520, steel and wood (ash): length 94 1/8 in / 239.1 cm [NOTE: search summary reported 139.2cm for shaft but 94 1/8in converts to 239.1cm — flagged discrepancy, treated as a unit-conversion ambiguity in the source summary, not resolved to a single figure this pass], head 18 7/8 in / 48 cm long x 8 in / 20.4 cm wide, weight 5 lb 14 oz / 2.66 kg — S1 (specimen-measured; accession page metmuseum.org/art/collection/search/26670)",
+     "Metropolitan Museum of Art, War Hammer or Pollaxe (German) — S1, morphology cross-check",
+     "Le Jeu de la Hache (MS Français 1996, Burgundian, c. 1460-1485) — S1, morphology/technique",
+     "Fiore dei Liberi, Fior di Battaglia, azza section — S1, morphology/technique",
+     "Hans Talhoffer, Fechtbuch (Cod.icon. 394a, 1467) — S1, morphology/technique",
+     "This batch's cluster prior: poleaxe-analog calibration, sibling to bec_de_corbin — S2"
+    ],
+    "confidence_tier": "S1 for total specimen mass and head overall dimensions (Met accession gives a directly measured weight matching the engine's 2.6kg anchor closely); S1 length figure carries an unresolved unit-conversion flag (94 1/8in vs the 139.2cm the search summary also reported — these are inconsistent; do not treat the shaft length as fully pinned) — downgrade length specifically to S2. Per-element hammer/fluke/spike mass split is S3 engineering apportionment, grounded in the documented functional ordering (fluke broadest, spike dedicated point, hammer secondary) but not sourced from a per-part specimen breakdown."
+   }
+  },
+  "goedendag": {
+   "total_mass_kg": 1.8,
+   "total_length_m": 1.20,
+   "grade": "S2",
+   "grip_split_note": "Engine calibration: head_len 3.0u + grip_len 1.0u (UNIT_M=0.30) = 1.20m total; grip_len is a SMALL REAR INSET (25% of length, not a centre-split) — wclass='hafted_block', the mass IS the tapering club body. Working-hand grip point at x_m=0, located 0.30m from the butt end (the thin/light gripping end); the thick club body extends forward from there.",
+   "head_elements": [
+    {
+     "label": "tapering club body (extended wooden mass element)",
+     "mass_kg_est": 0.0,
+     "x_m": 0.55,
+     "orient_deg": 0,
+     "extent_m": 0.90,
+     "material": "wood",
+     "geom_notes": "Per the CLUSTER NOTES instruction, the club body's mass is modeled as the extended wooden shaft/haft element (see haft_or_grip and shaft_estimate below), not as a separate head_elements entry — there is no discrete striking head distinct from the shaft on this weapon type; the mass IS the body. This entry is a placeholder documenting geometry only (mass_kg_est=0, captured instead in shaft_estimate_kg to avoid double-counting): a thick wooden shaft roughly 5-10 cm in diameter at the working end, tapering down toward the grip, iron-bound (banded with iron rings/straps) at the thick striking end per sources, giving the club its documented mace-like concussive authority. No edge; blunt, wide-diameter round cross-section at the business end.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "iron spike (tanged, thrusting point)",
+     "mass_kg_est": 0.46,
+     "x_m": 0.85,
+     "orient_deg": 0,
+     "extent_m": 0.10,
+     "material": "iron",
+     "geom_notes": "Square- or facet-sectioned iron spike set into the thick end of the club body by a tang, in-line with the haft axis, giving the weapon its documented dual spear-thrust/club-crush capability (Guiart's account: 'the iron as one meets a wild boar' describes an initial spear-like reception of a charge). Sharp point, no cutting edge along the shank.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [],
+   "haft_or_grip": {
+    "diameter_m": 0.045,
+    "material": "ash/oak",
+    "notes": "Thick tapering club body, roughly 5-10 cm diameter at the wide/striking end narrowing toward the grip (documented range across sources: overall shaft length 90-150 cm, diameter 5-10 cm); the engine's 0.045m is a mid-shaft representative diameter, not the peak width at the club head. Not grippable/gatherable along its length (grip_choke_max=0.0) — held at a fixed thick/light balance split and swung committed, unlike a spear or poleaxe haft; no octagonal faceting or leather wrap documented, plain round tapering wood, iron-banded at the striking end."
+   },
+   "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "butt": {"mass_kg_est": 0.0, "x_m": -0.30},
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.46,
+    "guards_sum_kg": 0.0,
+    "pommel_kg": 0.0,
+    "butt_kg": 0.0,
+    "shaft_estimate_kg": 1.3360,
+    "sum_kg": 1.7960,
+    "total_mass_kg": 1.8,
+    "residual_pct": -0.22
+   },
+   "provenance": {
+    "citations": [
+     "Guillaume Guiart, contemporary chronicle of the Battle of the Golden Spurs (Courtrai, 11 July 1302) — S1, primary-source attestation of use-mode ('the iron as one meets a wild boar'), no dimensions given",
+     "Wikipedia/Grokipedia/HandWiki Goedendag synthesis: staff 90-150cm long, 5-10cm diameter, iron-bound striking end with tanged spike — S2/S3, typology only, no specimen mass given",
+     "This batch's cluster prior: hafted_block/mace-analog calibration, total length 1.20m / mass 1.8kg anchor derived from a 0.045m-diameter/1.2m wood shaft (~1.6kg) plus ~0.46kg reinforcing iron/spike — S2/S3"
+    ],
+    "confidence_tier": "S2/S3 — no surviving specimen with a directly measured mass was located in this pass (the goedendag does not have well-attested museum specimens comparable to the poleaxe family); length/diameter ranges are typology-consensus from secondary synthesis sources, and the iron-spike mass is an S3 engineering estimate. Weakest-grounded weapon in this batch alongside guisarme."
+   }
+  }
+ },
+ "cluster_notes": "Five polearms collected per the CLUSTER NOTES instruction. bec_de_corbin and lucerne_hammer are modeled as THREE-element compound heads (hammer face + hook/beak-or-fluke + top spike), matching the instruction and consistent with Met Museum specimen morphology for both (Met accession 26670 for the Lucerne hammer gives directly measured mass 2.66kg closely matching the engine's 2.6kg anchor; a Tumblr-transcribed Met listing for a pollaxe/Lucerne-hammer/bec-de-corbin-class specimen gives 3.40kg at 202.9cm, used as a morphology/upper-bound cross-check for bec_de_corbin). ji is modeled as a two-element head (straight spearhead + perpendicular crescent), with the crescent doing double duty as head element and incidental guard per the S1 handling research already in this batch's cluster prior — no separate guard mass was added to avoid double-counting. guisarme mirrors ji's two-element pattern (hook blade + reverse spike) but at S2/S3 confidence since its handling research stream in the cluster prior is empty/placeholder. goedendag is modeled per the explicit instruction as an extended wooden shaft element (mass folded into shaft_estimate_kg, not head_elements, to avoid double-counting) plus a small iron spike — the mass IS the body, consistent with its hafted_block engine classification. All five mass budgets close within +/-5% residual (guisarme -1.8%, ji 0.0%, bec_de_corbin +2.2%, lucerne_hammer -4.5%, goedendag -0.2%). WEAKEST CONFIDENCE: goedendag and guisarme are both S2/S3 overall — goedendag has no located museum specimen with a directly measured total mass (only typology-consensus dimension ranges and a single primary-source combat-use quote with no numbers), and guisarme's handling-research stream in the prior cluster file is entirely placeholder, so its per-element hook-blade/reverse-spike mass split rests on typology consensus and engineering apportionment rather than any specimen breakdown. lucerne_hammer's length figure carries an unresolved unit-conversion discrepancy in the Met search summary (94 1/8in vs 139.2cm reported inconsistently) and should be re-verified directly against the Met accession page (object 26670) before being treated as fully pinned, though its mass figure is solid."
+}

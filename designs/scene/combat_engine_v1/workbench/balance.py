@@ -29,7 +29,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/si
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 
 WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
-           "paired_short", "spear", "staff", "mace", "poleaxe"]
+           "paired_short", "spear", "staff", "mace", "poleaxe",
+           # morphology-rearch Phase C (2026-07-02): the 40 weapons added by the catalogue expansion, now
+           # primitive-composed (elements/guards/mode_elements — see designs/scene/combat_engine_v1/weapons.py).
+           # longsword_halfsword/estoc_halfsword excluded — auto-switch FORMS, never a starting loadout (matches
+           # the existing exclusion note above for the original 11).
+           "yari", "kama_yari", "dangpa", "bear_spear", "ranseur", "spetum", "partisan", "naginata", "glaive",
+           "guandao", "podao", "fauchard", "bardiche", "sparr_axe", "voulge", "guisarme", "ji", "bec_de_corbin",
+           "lucerne_hammer", "goedendag", "katana", "tachi", "odachi", "tsurugi", "changdao", "nandao", "jian",
+           "scimitar", "pulwar", "shamshir", "szabla", "cinquedea", "flamberge", "estoc", "falchion", "rondel",
+           "main_gauche", "stiletto", "misericorde", "hook_sword"]
 TRADITIONS = ["none", "german", "italian", "spanish", "japanese", "chinese", "filipino", "english"]
 ATTRS = ["strength", "agi", "end", "cog", "att", "spirit", "focus", "history", "disp"]
 

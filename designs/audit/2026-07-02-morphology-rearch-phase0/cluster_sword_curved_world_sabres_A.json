@@ -1,0 +1,332 @@
+{
+ "weapons": {
+  "nandao": {
+   "total_mass_kg": 1.3,
+   "total_mass_grade": "S2",
+   "total_length_m": 1.095,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.9 units x UNIT_M 0.30 = 0.8700 m blade extent from x=0 (working hand); grip_len 0.75 units = 0.2250 m two-hand-assisting grip behind x=0. Matches the historical southern-dao (niuweidao-lineage) anchor of ~0.89m blade at ~1.36kg the prior calibration cites, rounded to the harmonized 0.87m/1.3kg pair; longer grip than a one-hand sabre (0.7u) but shorter than a true two-hand greatsword (1.3u), reflecting nandao's assisting-off-hand (not full two-hand) use.",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.95,
+     "x_m": 0.3828,
+     "orient_deg": 0,
+     "extent_m": 0.87,
+     "material": "steel",
+     "geom_notes": "Flattened-triangle, single-edge broadening blade descended from the Qing-dynasty niuweidao (oxtail saber) profile: thick, minimally-tapered spine for chopping mass, widening toward a broadening, rounded-to-blunt tip rather than an acute thrusting point (point_concentration graded low in the prior calibration -- geometry supports a usable but non-primary point, not a fine thrust tip). Moderate belly curvature concentrated in the distal half. Cross-section is thick and wedge-like (high cross_section 0.60 in the prior calibration) built for edge-first chopping momentum, not fine bind control. Centroid placed at 44% of blade length reflecting the forward-broadening, spine-thick chopper geometry.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "S-shaped integrated guard",
+     "type": "lug",
+     "extent_m": 0.05,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.05
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "wood or rattan core, cord- or leather-wrapped",
+    "notes": "Grip is proportionally longer than a one-hand sabre's to permit an assisting off-hand for extra chopping torque (per IWUF nandao specification and Hong Ga/Nanquan curriculum descent), but shorter than a committed two-hand greatsword grip -- this is a one-hand-primary, off-hand-assisted weapon, not a true two-hander. Slight taper toward the pommel for hand security during twining/figure-8 actions."
+   },
+   "pommel": {
+    "label": "ring pommel",
+    "mass_kg_est": 0.15,
+    "x_m": -0.225
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.95,
+    "guards_sum_kg": 0.05,
+    "pommel_kg": 0.15,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.09,
+    "sum_kg": 1.24,
+    "total_mass_kg": 1.3,
+    "residual_pct": -4.62
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_curved_world_sabres_A.json audit note): historical southern dao ~0.89m blade at ~1.36kg anchor; harmonized to 0.87m/1.3kg for this record -- S2 typology-typical",
+     "CLUSTER NOTE (this task): ring-pommel is a POMMEL feature (mass concentrated at x<0, the butt end), not a spine ring -- confirmed here; the ring sits at the grip's rear terminus per Dao_(Chinese_sword) and wushu-equipment descriptions of the S-guard-plus-ring-pommel southern-dao hilt convention -- S2",
+     "IWUF (International Wushu Federation) Taolu Competition Rules, Nandao section -- governs modern sport dimensions (blade ~48-60cm, overall ~80-90cm, ~445-500g for competition-flexible practice blades); this record uses the HEAVIER combat/historical-typology anchor (0.87m/1.3kg), not the lightweight sport-practice figure, consistent with the prior calibration's explicit rejection of the flexible wushu prop as the design anchor -- S2/S3 distinction preserved",
+     "Niuweidao (oxtail dao) as nandao's direct historical/blade-shape ancestor -- one-handed civilian/militia forward-weighted chopper with S-guard and ring-pommel hilt furniture -- S2 (Mandarin Mansion arms-scholarship synthesis)",
+     "No period military manual documents nandao specifically (it is a 1980s-1992/1999 IWUF sport invention per the prior calibration's handling research); blade/hilt morphology facts here are drawn from the niuweidao lineage and modern wushu-equipment typology, not a historical fencing treatise"
+    ],
+    "confidence_tier": "S2/S3 (blade/mass anchor is S2 typology-typical via the niuweidao lineage; the specific combat-weight nandao as a historical artifact class is thin -- the weapon's own direct documentation is a modern sport ruleset, not a period specimen corpus, so total_mass and componentry are graded S2 for the general dao-family proportions and S3 for the specific nandao combat-weight class)"
+   }
+  },
+  "jian": {
+   "total_mass_kg": 0.9,
+   "total_mass_grade": "S2",
+   "total_length_m": 0.945,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.5 units x UNIT_M 0.30 = 0.7500 m blade extent from x=0 (working hand); grip_len 0.65 units = 0.1950 m slim one-hand hilt behind x=0. Matches the classic Ming/Qing one-handed civilian/officer's jian anchor (~75cm blade, 700-900g) the prior calibration cites; grip is shorter than the arming-sword analog's 0.8u (a slimmer one-hand hilt, not built for a rear-hand-extended grip).",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.6,
+     "x_m": 0.33,
+     "orient_deg": 0,
+     "extent_m": 0.75,
+     "material": "steel",
+     "geom_notes": "Perfectly straight, double-edged blade (curvature 0.0 in the prior calibration -- the jian's defining trait), stiff diamond or hexagonal cross-section, thinner and more tapered than a European arming sword's for handling speed. Both edges sharpened along most of the length, tapering to a fine, acute thrusting point (point_concentration 0.70, higher than arming's 0.6, reflecting the jian's prized point control). Mass is distributed relatively evenly along a gentle taper rather than concentrated forward like a chopping blade, consistent with a cut-and-thrust hybrid rather than a pure cutter. Centroid placed at 44% of blade length, matching the straight-blade flatter-taper convention used for tsurugi in the sibling batch.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "disc guard",
+     "type": "disc",
+     "extent_m": 0.055,
+     "material": "steel/bronze",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.035
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.024,
+    "material": "wood core, often wrapped in cord, ray-skin, or lacquered; higher-status pieces use jade, horn, or metal-banded fittings",
+    "notes": "Slim one-hand hilt, slight barrel or oval cross-section for orientation-by-feel (helping the wielder sense edge alignment without looking), tapering gently toward the pommel."
+   },
+   "pommel": {
+    "label": "discoid counterweight pommel",
+    "mass_kg_est": 0.1,
+    "x_m": -0.195
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [
+    {
+     "label": "pommel tassel",
+     "count": 1,
+     "extent_m": 0.35,
+     "attachment_x_m": -0.195,
+     "attested": "S2 (civilian/scholar tradition; tassel (jianshui/jian sui) is a widely-attested attachment through the pommel loop on civilian and taijijian-practice jian, functioning as both a status/ritual marker and a visual-flourish/distraction element in solo forms; not documented as a combat-functional element in the direct military sources -- Wubei Zhi's Chaoxian Shipu and Yu Dayou's Jianjing describe blade technique only, not tassel use)"
+    }
+   ],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.6,
+    "guards_sum_kg": 0.035,
+    "pommel_kg": 0.1,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.1,
+    "sum_kg": 0.835,
+    "total_mass_kg": 0.9,
+    "residual_pct": -7.22
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_curved_world_sabres_A.json audit note): classic Ming/Qing one-handed civilian/officer's jian, ~75cm blade, 700-900g -- S2 typology-typical anchor used directly for this record",
+     "LK Chen Ming-dynasty disc-guard cutting jian (modern reproduction, representative of the historical disc-guard subtype): complete sword mass ~939g, consistent with the 0.9kg total used here -- S2/S3 (modern reproduction cross-check, not an accessioned period specimen, but proportion-consistent)",
+     "Guard/pommel combined-mass research (LK Chen 'Weight of Han Jian' component study): five sampled pommels averaged 26.68g each, with combined pommel+guard well under 50g for lighter jian classes -- used here as a floor reference; this record's heavier discoid COUNTERWEIGHT pommel (0.10kg) is scaled up from that floor to reflect the jian's documented need for a real balancing mass given its forward point-heavy thrust-capable profile, not a light decorative cap -- S2/S3 inference",
+     "CLUSTER NOTE (this task): tassel at the pommel recorded per instruction -- attested for the civilian/taijijian tradition specifically (S2), not for the two-handed Wubei Zhi Chaoxian Shipu military form, where no tassel is described",
+     "Yu Dayou, Jianjing (c. 1550) and Mao Yuanyi, Wubei Zhi / Chaoxian Shipu (1621) -- morphology-adjacent only (blade technique sources, not hilt-componentry sources); cross-section/point-concentration facts here are drawn from general jian typology, not these treatises directly"
+    ],
+    "confidence_tier": "S2 (whole-sword mass and blade length anchored to a converging typology range plus a modern disc-guard reproduction cross-check; componentry -- guard, pommel, tassel -- is S2/S3, no single published period specimen with a full mass breakdown located)"
+   }
+  },
+  "scimitar": {
+   "total_mass_kg": 1.0,
+   "total_mass_grade": "S1",
+   "total_length_m": 1.065,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.85 units x UNIT_M 0.30 = 0.8550 m blade extent from x=0 (working hand); grip_len 0.7 units = 0.2100 m one-hand cavalry-sabre-pattern hilt behind x=0. Matches the documented Ottoman kilij-pattern specimen (~79.5cm blade at 1.21kg) the prior calibration cites, harmonized to the 0.855m/1.0kg engine-scale pair -- the engine record trims mass slightly below the single cited specimen to sit at the cluster's calibrated anchor point, not a literal 1:1 specimen copy.",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.68,
+     "x_m": 0.3847,
+     "orient_deg": 0,
+     "extent_m": 0.855,
+     "material": "steel",
+     "geom_notes": "Kilij-pattern blade: pronounced distal-third curve terminating in a flared yalman (false-edge widening near the tip) that concentrates mass and edge presentation at the terminal portion of a draw-cut. T-back spine cross-section for rigidity behind the yalman (cross_section 0.55 in the prior calibration). Proximal blade (near the guard) is documented as straighter than a shamshir's, preserving a real but secondary thrust option. Single edge; edge_keenness graded very high (0.90) consistent with a razor draw-cut optimized blade. Centroid placed at 45% of blade length -- the highest of the batch, reflecting the yalman's deliberate forward mass concentration.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "cross-guard with langets",
+     "type": "cross",
+     "extent_m": 0.09,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.06
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.027,
+    "material": "wood or horn grip scales (occasionally ivory/bone on higher-status pieces), riveted to the tang, sometimes wire-bound",
+    "notes": "Simple one-hand cavalry-sabre-pattern hilt with a pistol-grip-adjacent curve toward the pommel; no full knucklebow on the Ottoman pattern (partial hand protection only, per the prior calibration's hand_guard 0.4, below the sabre anchor's 0.52 full-knucklebow value)."
+   },
+   "pommel": {
+    "label": "cap pommel",
+    "mass_kg_est": 0.12,
+    "x_m": -0.21
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.68,
+    "guards_sum_kg": 0.06,
+    "pommel_kg": 0.12,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.09,
+    "sum_kg": 0.95,
+    "total_mass_kg": 1.0,
+    "residual_pct": -5.0
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_curved_world_sabres_A.json audit note): documented Ottoman kilij-pattern specimen ~79.5cm blade at 1.21kg -- S1 specimen-measured anchor; total_mass_kg here (1.0) is the harmonized engine-scale figure, trimmed below the single cited specimen to seat correctly in the curved-cutter cross-cluster ladder (curvature/MoI/gap monotonicity) rather than a literal reproduction of that one specimen's mass",
+     "Yalman (flared false-edge tip) as the kilij's defining terminal-mass feature -- widely attested arms-and-armor scholarship (Kilij Wikipedia entry, Seven Swords/Brute de Forge weapons-history treatments) -- S2",
+     "Furusiyya corpus (al-Aqsara'i Nihayat al-Su'l, Munyatu'l-Ghuzat, Ibn Qayyim al-Jawziyya Kitab al-Furusiyya) -- morphology-adjacent only, situates swordsmanship within mounted-warrior training, not a hilt-componentry source -- S2",
+     "No surviving dedicated Ottoman kilij fencing treatise; total-length/blade specimen figure is the load-bearing S1 anchor, componentry (guard/pommel/grip masses) is S2/S3 estimated from general cavalry-sabre hilt-construction typology, since no single published kilij specimen with a full mass breakdown was located in this pass"
+    ],
+    "confidence_tier": "S1 for the blade-length/total-mass anchor (a documented specimen); S2/S3 for guard, pommel, and grip componentry (no fitting-level mass breakdown found for this or a directly comparable kilij specimen)"
+   }
+  },
+  "pulwar": {
+   "total_mass_kg": 0.95,
+   "total_mass_grade": "S2",
+   "total_length_m": 0.975,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.6 units x UNIT_M 0.30 = 0.7800 m blade extent from x=0 (working hand); grip_len 0.65 units = 0.1950 m compact all-steel disc-hilt behind x=0. Matches the attested Afghan/Pashtun 18th-19th c. pulwar blade range (70-80cm, this record uses the 78cm upper-middle of that range) with a shorter, more compact hilt than the scimitar/shamshir cousins, reflecting the pulwar's distinctive all-steel disc/cup-pommel hilt construction (no separate wood/horn grip scales).",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.64,
+     "x_m": 0.3354,
+     "orient_deg": 0,
+     "extent_m": 0.78,
+     "material": "steel",
+     "geom_notes": "Broad, moderately-to-deeply curved single-edge blade (curvature 0.60 in the prior calibration, between the scimitar and shamshir), less tapered/more broad-bodied than either cousin (point_concentration 0.25, the lowest of the three high-curvature sabres), sometimes described in the collector record as carrying a false edge or double-edged section near the tip -- but hilt ergonomics (the cramped disc-pommel grip) are documented as suppressing thrust use regardless of this tip geometry. Edge_keenness graded very high (0.90). Centroid placed at 43% of blade length, the middle of the curved-cutter cluster.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "downturned quillon cross-guard with langets",
+     "type": "quillon",
+     "extent_m": 0.075,
+     "material": "steel (all-steel hilt construction, integral with the guard and pommel)",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.05
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.026,
+    "material": "steel (all-steel hilt, no separate wood/horn grip scales -- distinct from the scimitar/shamshir's composite hilts)",
+    "notes": "Cramped, wrist-locking grip geometry documented (Hutton 1897/98; hilt-mechanics scholarship) as the mechanical cause of the pulwar's thrust-suppressed, draw-cut-dominant use pattern -- the disc/cup pommel presses into the wrist and prevents the arm extension/rotation a controlled thrust requires. This is a physical/ergonomic fact about the hilt's shape, not a technique judgment."
+   },
+   "pommel": {
+    "label": "disc/cup pommel (hollow, sometimes pierced and filled with jingling metal pieces)",
+    "mass_kg_est": 0.09,
+    "x_m": -0.195
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.64,
+    "guards_sum_kg": 0.05,
+    "pommel_kg": 0.09,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.08,
+    "sum_kg": 0.86,
+    "total_mass_kg": 0.95,
+    "residual_pct": -9.47
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_curved_world_sabres_A.json audit note): pulwar, Afghan/Pashtun 18th-19th c., blade 70-80cm -- S2 typology range; 78cm/0.95kg used as the harmonized engine-scale pair, seating pulwar correctly as the middle of the three high-curvature 1H sabres (curvature, MoI, gap all between scimitar and shamshir)",
+     "Bygone Blades / Helgot / usmanswords.com collector-catalog specimens: consistent description of a steel hilt with downturned (Makara-head-style) quillons, pointed langets, and a hollow disc/cup pommel pierced with holes and filled with jingling metal pieces, capped by a domed finial -- S2 (multiple independent dealer/collector catalog entries converge on this hilt construction; no single accession-numbered museum specimen with a published gram-level mass breakdown was located)",
+     "Alfred Hutton, The Swordsman (1897/98), appendix 'The Grips and Closes -- Defence Against an Uncivilised Enemy' -- S1 for the documented ergonomic claim that the disc-pommel hilt suppresses thrust use ('the point is never used, but a drawing cut invariably given'), used here to ground the haft_or_grip notes field; not a mass/dimension source",
+     "Wilbraham Egerton, A Description of Indian and Oriental Armour (1880) -- S2 general typology source for hilt/blade construction conventions",
+     "Specimen dimension data points found in this pass (e.g. a 78cm multi-fullered blade at 91cm overall; a 750mm blade with 126mm upper false edge) corroborate the 70-80cm blade-length band but did not include mass figures -- S2"
+    ],
+    "confidence_tier": "S2 (blade-length range and hilt-construction typology are well-corroborated across multiple collector/catalog sources; no single specimen in this pass carried a published gram-level total or componentry mass, so total_mass and all component masses are typology-typical estimates, not specimen-measured)"
+   }
+  },
+  "shamshir": {
+   "total_mass_kg": 0.85,
+   "total_mass_grade": "S2",
+   "total_length_m": 1.005,
+   "grip_head_split_note": "Engine calibration (harmonized): head_len 2.7 units x UNIT_M 0.30 = 0.8100 m blade extent from x=0 (working hand); grip_len 0.65 units = 0.1950 m slim cross-guard-plus-pistol-grip hilt behind x=0. Matches the attested Persian shamshir specimen range (0.76-0.85kg, 75-90cm blade) the prior calibration cites, using 0.81m/0.85kg as the lightest weapon in the curved-cutter family.",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.58,
+     "x_m": 0.3321,
+     "orient_deg": 0,
+     "extent_m": 0.81,
+     "material": "steel",
+     "geom_notes": "The most extremely curved blade in the batch (curvature 0.70, grounded above the sabre anchor's 0.42 per the prior calibration's in-file note) and the thinnest, most minimally-tapered cross-section (0.42, lowest of the cluster) -- a purpose-built slicing profile. Point_concentration is near-zero (0.08), described in the prior handling research as 'functionally no usable thrusting point': the deep arc actively works against thrust alignment. Edge_keenness is the highest in the entire roster (0.95), optimized for a razor draw-cut. Centroid placed at 41% of blade length, the lowest (most rearward) of the batch, reflecting the blade's thin, evenly-tapered slicing geometry rather than a forward-broadened chopper mass distribution.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "plain cross-guard",
+     "type": "cross",
+     "extent_m": 0.08,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.04
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.025,
+    "material": "horn, ivory, or wood grip scales riveted to the tang; higher-status pieces use jade or metal-mounted grips",
+    "notes": "Distinctive 'pistol-grip' hilt shape: the grip curves downward and the pommel extends rearward/downward to brace the heel of the hand, supporting a wrist-led draw-cut rather than a thrust-aligned extension. Some higher-status specimens carry a downturned animal-form (e.g. ram-head) pommel terminal."
+   },
+   "pommel": {
+    "label": "pistol-grip pommel (often downturned/animal-form on high-status pieces)",
+    "mass_kg_est": 0.07,
+    "x_m": -0.195
+   },
+   "butt": {
+    "mass_kg_est": 0.0,
+    "x_m": 0.0
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.58,
+    "guards_sum_kg": 0.04,
+    "pommel_kg": 0.07,
+    "butt_kg": 0.0,
+    "grip_estimate_kg": 0.08,
+    "sum_kg": 0.77,
+    "total_mass_kg": 0.85,
+    "residual_pct": -9.41
+   },
+   "provenance": {
+    "citations": [
+     "Prior cluster calibration (sword_curved_world_sabres_A.json audit note): shamshir, Persian classic, specimens 0.76-0.85kg, blade 75-90cm -- S2 typology range; 0.81m/0.85kg used as the harmonized engine-scale pair, the lightest weapon in the curved-cutter family with curvature 0.70 (roster maximum) and edge_keenness 0.95 (roster maximum)",
+     "Manouchehr Moshtagh Khorasani, Persian Archery and Swordsmanship: Historical Martial Arts of Iran (2013) and Analysis of the Persian Shamshir (2015) -- S2, primary scholarly source for shamshir mechanics and construction, used for the pistol-grip/downturned-pommel hilt description",
+     "Pitt Rivers Museum shamshir entry (1902.87.10) and period-dealer specimen descriptions (e.g. a 76cm curved blade with pointed langets, cross-guard, horn-mounted grip and curved pommel, 90cm overall) -- S2 (museum-catalog and dealer-catalog convergence on hilt construction and blade-length range; no gram-level mass breakdown by component located)",
+     "Downturned animal-form (ram-head) pommel terminals documented on higher-status 19th-c. specimens -- S2 (dealer/collector-catalog description), noted here as a status variant, not the universal baseline hilt",
+     "Ibn Qayyim al-Jawziyya, Al-Furusiyya (c. 1350) -- morphology-adjacent only (cutting-drill doctrine source, not a hilt-componentry source)"
+    ],
+    "confidence_tier": "S2 (blade-length and whole-sword mass range corroborated across multiple museum/dealer specimen descriptions and Khorasani's scholarly synthesis; no single accession-numbered specimen in this pass published a full gram-level componentry breakdown, so guard/pommel/grip masses are typology-typical estimates)"
+   }
+  }
+ },
+ "cluster_notes": "All five weapons are single-blade curved-or-straight cutters/cut-thrust hybrids per the cluster convention: one blade head_element plus one guard and one pommel/butt-cap. Per the task's cluster instructions: jian carries an attested pommel tassel (S2, civilian/taijijian tradition) as its one adornment; no other weapon in this batch has an attested adornment (nandao's ring-pommel and pulwar's pierced/jingling disc-pommel are POMMEL mass-bearing features at x<0, not spine adornments, per the cluster note distinguishing pommel features from spine rings -- no ring-back or spine-ring feature is recorded on any of these five, consistent with the prior research's misattribution finding). Mass budgets close within -4.6% to -9.5% residual for all five records (all under the 10% ASSERT threshold, all negative -- i.e. modeled elements slightly under-total the specimen mass, attributable to unmodeled minor hardware: rivets, wire-binding, scabbard-mount fittings not carried on the weapon itself, and fuller/hollow-grind material removal not separately budgeted). The curved-cutter geometry ladder from the prior calibration (curvature: shamshir 0.70 > pulwar 0.60 > scimitar 0.55; edge_keenness: shamshir 0.95 > pulwar/scimitar 0.90; centroid x_m fraction: scimitar 45% > nandao 44% = jian 44% > pulwar 43% > shamshir 41%) is preserved and reflected in this batch's per-element geom_notes and centroid placements. Weakest-confidence weapons in this batch are pulwar and shamshir on componentry specifically (both -9.4% to -9.5% residual, near the 10% ceiling): both have well-corroborated blade-length/curvature/hilt-TYPE data across multiple museum and dealer-catalog sources, but no single specimen in either case published a gram-level breakdown of guard/pommel/grip mass, so those component figures are typology-typical estimates rather than specimen-measured (S2, not S1). Nandao is weakest on total-class confidence (S2/S3) rather than componentry: it is a 20th-century sport-invented weapon with no organic historical specimen corpus of its own, so its combat-typical mass/dimensions are grounded via the niuweidao ancestor lineage by analogy rather than a nandao-specific accessioned artifact. Scimitar sits on the firmest ground (S1 for the blade-length/mass anchor itself, a documented specimen), though its componentry is likewise S2/S3 estimated."
+}

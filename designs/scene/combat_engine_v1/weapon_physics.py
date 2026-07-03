@@ -86,68 +86,138 @@ AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
 AGILITY_REF = 0.00215
 # 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
 K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
-# [WIRING HAZARD — Phase-3b] weapon_physics.reach() spans ~0.7–6.0 (head_len-based); the LIVE systems.reach_base it
-# replaces spans ~4.5–7.8 (L0=4.0-based). CLOSE_REACH_REF=6.5 + close_unwieldiness assume the 4.5–7.8 band, so wiring
-# reach() in UNSCALED zeroes the long-weapon close penalty (spear 5.98 < 6.5). Wire via an affine remap, or re-tune
-# CLOSE_REACH_REF/reach_adj/the gap-normalisation together in the same pass. Do NOT wire reach() raw.
+# [RESOLVED — Phase B6] weapon_physics.reach() (the head_len-based diagnostic, ~0.7-6.0 span) is DELETED; the LIVE
+# systems.reach_base (grip-aware, ~4.5-7.8 span, CLOSE_REACH_REF-compatible) remains the sole reach source, so the
+# once-live wiring hazard (unscaled reach() zeroing the long-weapon close penalty) no longer applies — there is no
+# second reach function left to accidentally wire in raw.
 
 
-# ════════════════════ STAGE 1 — composite mass -> balance & inertia ════════════════════
+# ════════════════════ STAGE 1 — located-part mass model -> balance & inertia ════════════════════
+# RE-ARCHITECTURE 2026-07-02: a weapon's balance/inertia is the SUM over LOCATED PARTS about the working-hand
+# axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + extentᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. This RETIRES the
+# single-C_HEAD-centroid head LUMP: every physical part (head elements, guards, haft/grip, pommel, butt) is a
+# named located mass in the roster record (w['elements']/['guards']/['haft']/['pommel']/['butt']), sourced from
+# specimen/typology physical facts (designs/audit/2026-07-02-morphology-rearch-phase0/), not a formula split by
+# weapon-class centroid. A compound head's mass is the sum of its located elements, not one point at wclass's
+# centroid — the bec de corbin's hammer/beak/spike each carry their own measured mass and position. Phase A
+# (2026-07-02, byte-identical scaffold) synthesized a single reproduction element per weapon; Phase B (below)
+# replaced every roster weapon's synthesized element with its real Phase-0 part list, so the Phase-A fallback
+# path is now LIVE ONLY for a record with no explicit `elements` (a hypothetical un-migrated/synthetic record —
+# none remain in the roster; kept for generality/safety, not exercised by weapons.py today).
+def _head_elements(w):
+    """Phase-A fallback: no explicit `elements` → one synthetic element at the old C_HEAD centroid (pos_frac)
+    carrying the whole head-mass residual (mass_share 1.0). Not exercised by any current roster weapon."""
+    els = w.get('elements')
+    if els:
+        return els
+    return [dict(pos_frac=C_HEAD[w.get('wclass', 'bladed')], mass_share=1.0)]
+
+def _all_parts(w):
+    """The weapon's full located-mass part list (Phase B): head elements + guards + haft/grip + pommel + butt,
+    each as (mass_kg, x_m, extent_m) about the working-hand axis (x=0, +toward tip, −toward butt — the SAME
+    axis convention Phase 0 collected under). A guard flagged `dual_role_element` is also a head element (e.g.
+    the hook_sword's crescent, which both catches AND strikes) — its mass is carried by the element entry only,
+    so it is excluded here to avoid double-counting. Empty when the record carries no explicit parts (the
+    Phase-A single-element fallback below covers that case). Pure."""
+    parts = []
+    for e in w.get('elements', ()):
+        parts.append((e['mass_kg'], e['x_m'], e.get('extent_m', 0.0)))
+    for g in w.get('guards', ()):
+        if not g.get('dual_role_element'):
+            parts.append((g['mass_kg'], g['x_m'], g.get('extent_m', 0.0)))
+    haft = w.get('haft')
+    if haft:
+        parts.append((haft['mass_kg'], haft['x_m'], haft.get('extent_m', 0.0)))
+    pommel = w.get('pommel')
+    if pommel:
+        parts.append((pommel['mass_kg'], pommel['x_m'], 0.0))
+    butt = w.get('butt')
+    if butt:
+        parts.append((butt['mass_kg'], butt['x_m'], 0.0))
+    return parts
+
 def derive(w):
-    """Composite iron-on-wood mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB is DERIVED, not hand-set.
-    Pure; consumes the primitive set {mass, head_len, grip_len, pommel_kg, wclass, hilt}."""
+    """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Roster weapons
+    carry the real Phase-0 part list (elements/guards/haft/pommel/butt); derive() is a positional sum over it —
+    no per-weapon-class formula. Records without explicit parts fall back to the Phase-A C_HEAD-centroid
+    reproduction (kept for generality; not exercised by the live roster). Roster records carry a bake-once
+    '_derived' cache (weapons.py import loop) — mutation after bake is out of contract, same as the baked
+    geo/gap; synthetic dicts without the key compute fresh."""
+    cached = w.get('_derived')
+    if cached is not None:
+        return cached
     hl, gl = w['head_len'], w['grip_len']
-    m, cls = w['mass'], w.get('wclass', 'bladed')
-    Lg, Lh = gl * UNIT_M, hl * UNIT_M
-    Lt = Lg + Lh
-    ch = C_HEAD[cls]
-    if w.get('gripped'):
-        # HAND-ON-BLADE form (half-sword): the held span (grip_len) is STEEL — the gripped lower blade — NOT a
-        # low-density wood grip. The standard bladed branch mis-reads grip_len as wood and yields a NON-PHYSICAL
-        # negative PoB (recovered defect: longsword_halfsword derived PoB = -12.9 cm, MoI 0.184 > the full form's
-        # 0.169). LUMPED model: the forward WORKING segment (head_len ahead of the forward hand) is approximated as
-        # the steel fraction of the bar ahead of the hand; the pommel + rear grip are neglected in the swing inertia
-        # (two-handed point work braced by the rear hand, not a free swing). The long grip behind feeds leverage
-        # (systems.leverage). The forward end is light -> small +PoB and LOW swing-MoI (high close control). Build-only
-        # (nothing live reads STAGE-1 derive() for the half-sword yet); the lumped approximation is calibration-grade,
-        # not exact. Pure.
-        m_lin = m / Lt                                  # ~uniform steel mass per unit length (you grip the blade)
-        m_fwd = m_lin * Lh                              # steel forward of the working hand — loads the point
-        c_fwd = ch * Lh                                 # centroid of the forward working segment ahead of the hand
-        moment = m_fwd * c_fwd                          # forward moment of the light working end
-        moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0   # working-segment swing inertia about the hand (low)
-        m_head = m_fwd
-        PoB = moment / m
+    Lh, Lg = hl * UNIT_M, gl * UNIT_M
+    Lt = Lh + Lg
+    parts = _all_parts(w)
+    if parts:
+        m_total = sum(p[0] for p in parts)
+        moment = sum(p[0] * p[1] for p in parts)
+        moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+        PoB = moment / m_total
+        m_head = sum(e['mass_kg'] for e in w.get('elements', ()))
         return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
+                    MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
+    # ── Phase-A fallback (byte-identical reproduction; not exercised by the live roster) ──
+    m, cls = w['mass'], w.get('wclass', 'bladed')
+    if w.get('gripped'):
+        # HAND-ON-BLADE (half-sword) lumped-rod special case — kept for any un-migrated synthetic record; the
+        # live roster's half-sword forms (longsword_halfsword/estoc_halfsword) carry real Phase-0 parts instead
+        # (a shifted-origin part list), which reproduces this same physics without the uniform-rod approximation.
+        ch = C_HEAD[cls]
+        m_lin = m / Lt
+        m_fwd = m_lin * Lh
+        c_fwd = ch * Lh
+        moment = m_fwd * c_fwd
+        moi = m_fwd * c_fwd ** 2 + m_fwd * Lh ** 2 / 12.0
+        PoB = moment / m
+        return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_fwd,
                     MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
+    fparts = []  # (mass, x_from_working_hand, rod_length)
     if cls == 'bladed':
         m_grip = _A_GRIP * Lg * RHO_SWORD_GRIP
         m_pom = w.get('pommel_kg', 0.0)
         m_g = GUARD.get(w.get('hilt', 'none'), 0.0)
-        m_head = m - m_grip - m_pom - m_g
-        moment = m_head * (ch * Lh) - m_grip * (Lg / 2) - m_pom * Lg
-        moi = m_head * (ch * Lh) ** 2 + m_grip * (Lg / 2) ** 2 + m_pom * (Lg ** 2)
+        head_mass = m - m_grip - m_pom - m_g
+        fparts.append((m_grip, -Lg / 2, 0.0))
+        fparts.append((m_pom, -Lg, 0.0))
+        fparts.append((m_g, 0.0, 0.0))
     else:
-        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2    # per-weapon shaft cross-section: a spear shaft (~35mm) is thinner than the staff/poleaxe-calibrated D_HAFT (40mm)
+        a_haft = math.pi * (w.get('haft_d', D_HAFT) / 2) ** 2
         m_shaft = min(a_haft * Lt * RHO_WOOD, m)
-        butt = w.get('butt_kg', 0.0)            # rear queue/spike counterweight (kg); generalises the retired is_poleaxe flag — ANY rear-weighted haft counterweights for free
-        m_iron = max(0.0, m - m_shaft - butt)
-        shaft_c = (Lt / 2) - Lg
-        moment = m_iron * (ch * Lh) + m_shaft * shaft_c - butt * Lg
-        moi = m_iron * (ch * Lh) ** 2 + m_shaft * (shaft_c ** 2 + Lt ** 2 / 12) + butt * (Lg ** 2)
-        m_head = m_iron
-    PoB = moment / m
+        butt = w.get('butt_kg', 0.0)
+        head_mass = max(0.0, m - m_shaft - butt)
+        fparts.append((m_shaft, (Lt / 2) - Lg, Lt))
+        fparts.append((butt, -Lg, 0.0))
+    m_head = 0.0
+    for e in _head_elements(w):
+        me = e['mass_share'] * head_mass
+        fparts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
+        m_head += me
+    m_total = sum(p[0] for p in fparts)
+    moment = sum(p[0] * p[1] for p in fparts)
+    moi = sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
+    PoB = moment / m_total
     return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
-                MoI=moi, static_moment=m * PoB, fwd_extent_m=Lh, length_m=Lt)
+                MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
 
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
 def percussion_authority(w):
     """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
     energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
-    no percussion — the edge-no-percuss caveat is THIS gate, emergent). Grounded anchors (2026-06-30 re-baseline,
-    credited): mace 7.45 > poleaxe 5.83 > staff 2.52 — the poleaxe sits BELOW the mace in pure concussion (correct:
-    its plate primacy is the beak/spike puncture mode, NOT concussion — see puncture_pressure + systems.select_mode)."""
+    no percussion — the edge-no-percuss caveat is THIS gate, emergent).
+    [PHASE-C FLAG, 2026-07-02] The 2026-06-30 anchors below (mace 7.45 > poleaxe 5.83 > staff 2.52, poleaxe BELOW
+    the mace in pure concussion) were tuned against the Phase-A whole-weapon-lump PoB. Morphology-rearch Phase B's
+    located-part mass model gives the poleaxe a materially more forward, more accurate PoB_frac (0.091->0.206 —
+    its real steel hammer/beak/spike assembly is heavier and sits further forward than the old formula's uniform-
+    wood-shaft residual assumed), which lifts its percussion_authority to ~7.48 — ABOVE the mace's own 7.45. This
+    flips the poleaxe's select_mode choice vs heavy armour from its spike (puncture) to its hammer face
+    (percussion) — test_gap_game_poleaxe_spikes_plate and test_use_mode_selection_emerges_from_primitives now fail
+    on this, DELIBERATELY left red (not silently patched): the underlying mass is more physically correct, but the
+    [SIM-CALIBRATE] engine-scale gains here (PERC_SCALE/PERC_EXP, ADEF_BLUNT/ADEF_POINT) were fit to the OLD PoB
+    and need Phase C's balance-harness recalibration pass to restore the intended plate-defeat tier-list under the
+    now-accurate physics — not a per-weapon mass fudge to force the old numbers back."""
     if w['head'] != 'blunt':
         return 0.0
     pob = derive(w)['PoB_frac']
@@ -190,31 +260,11 @@ def agility(w):
     return min(1.0, (AGILITY_REF / max(1e-6, derive(w)['MoI'])) ** AGILITY_EXP)
 
 
-def authority(w):
-    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Impact authority
-    (cut/thrust/blunt): forward momentum sqrt(mass)*forwardness. Head-specific delivery stays in core.coupling;
-    this is the raw force the heft term reads. Live resolution gets impact force from percussion_authority (blunt)
-    + core.coupling's DELIVERY/strength terms (edged) instead. Gate-1 audit flagged authority()/reach() as one horn
-    of a Jordan-gated single-source-target decision (HANDOFF Pending item 6 / forward_roadmap Track 2 / ED-1080
-    residual) — kept + explicitly labeled rather than deleted pending that ratification; only consumed by this
-    module's own __main__ self-test."""
-    pob = derive(w)['PoB_frac']
-    return (w['mass'] ** 0.5) * (0.30 + pob)
-
-
-def reach(w):
-    """[BUILD-ONLY / DIAGNOSTIC — not wired into live resolution; do not add a call site]. Effective forward reach
-    (replaces the categorical reach=='long' + HEAD_REACH[head]). GROUNDED REVISION (HEMA measure-grammar): a
-    two-handed weapon's extra reach comes from the HANDLE LENGTH / rear-hand setback, NOT from hand-count — a
-    longsword thrusts as far as a rapier because of its longer grip, and a one-handed extension reaches
-    equal-or-farther. So the prior flat `+0.8 if 2H` is replaced by K_GRIP_REACH·grip_len for 2H weapons. reach_adj
-    is the per-weapon [SIM-CALIBRATE] correction (git eb5535eb tuned it to A0–A3 sim error; it is the dominant
-    per-weapon term and is flagged NOT grounded). The standing arm+lunge offset lives in L0 (the consumer). Live
-    resolution gets reach from systems.reach_base (grip-aware) instead — see the authority() docstring above for
-    why this function is kept-but-labeled rather than deleted; only consumed by this module's own __main__
-    self-test."""
-    twohand = K_GRIP_REACH * w['grip_len'] if w['hands'] == 2 else 0.0
-    return w['head_len'] + twohand + w.get('reach_adj', 0.0)
+# authority()/reach() DELETED (morphology-rearch Phase B6, 2026-07-02, Gate-1's single-source-target decision
+# resolved): both were BUILD-ONLY diagnostics, never wired into live resolution (which gets impact force from
+# percussion_authority/heft/core.coupling and reach from systems.reach_base), kept-but-labeled pending this
+# ratification. No remaining consumer anywhere in the corpus (verified) — deleted outright rather than carried
+# further; systems.reach_base and weapon_physics.heft() are the sole live sources for reach and impact force.
 
 
 def defense_affinities(w):
@@ -242,6 +292,136 @@ def defense_affinities(w):
     # reproduces the previously-calibrated one (dagger 1.0 > paired > sabre > arming > … > heavies at the 0.4 floor)
     # rather than flat-topping at 1.0. [SIM-CALIBRATE 0.19,0.54] — fit to the pre-re-anchor dodge spread.
     return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.19, 0.54), wind=_band(wind, 0.05, 0.45))
+
+
+# ════════════════════ STAGE 3a — LOCATED-GUARD CATCH: hand_guard / blade_guard, DERIVED (morphology-rearch Phase B4) ═══
+# The plan's aggregation-operator discipline: catch is a SATURATING SUM over a weapon's located `guards` (physical
+# extent, x_m position) — not a placeless hand-authored 0-1 scalar. Two DIFFERENT physical questions share the same
+# guards list: hand_guard asks "does hardware sit AT the working hand, shielding it from a sliding cut" (a guard far
+# out on the head does nothing for your own grip — proximity-weighted); blade_guard asks "does the weapon have a
+# catching/binding surface at all, wherever the bind lands" (a wing-lug or reverse hook two feet up a polearm still
+# catches an opposing blade in the bind just fine — position-independent). A `dual_role_element` guard (a hook,
+# prong, tine, or fluke that is ALSO a striking element, e.g. the guisarme's hook or the dangpa's flanking tines —
+# Phase 0 documents these explicitly as catching/binding hardware, not decoration) contributes to catch exactly like
+# dedicated hardware (a cross-guard, a tsuba); its mass is already counted once via `elements` (mass_kg=0 here).
+GUARD_HAND_SCALE = 0.25  # [SIM-CALIBRATE] metres — proximity half-life-ish decay for hand-guard relevance; a guard at
+                          #   this distance from the working hand counts ~37% toward hand_guard, negligibly beyond ~3x it.
+HILT_CATCH_MULT = {'compound': 3.0, 'simple': 1.0, 'none': 1.0}  # [SIM-CALIBRATE] a compound hilt (basket/swept/
+                          #   rings) covers far more than its own bar-length extent suggests; a plain cross or a
+                          #   hafted weapon's incidental catch-hardware does not get this multiplier.
+GUARD_HAND_K = 3.0       # [SIM-CALIBRATE] fit against the pre-Phase-B4 authored hand_guard ladder (rough — Phase C
+                          #   recalibrates against the balance harness, not this static-table fit)
+GUARD_BLADE_K = 2.0      # [SIM-CALIBRATE] ditto, blade_guard ladder
+
+def _guard_catch_raw(w, proximity):
+    """Σ guard extent, each guard's contribution optionally decayed by distance from the working hand (x=0).
+    proximity=False -> position-independent (blade_guard's bind-catch); proximity=True -> exp(-|x|/GUARD_HAND_SCALE)
+    weighted (hand_guard's own-hand coverage). Pure."""
+    total = 0.0
+    for g in w.get('guards', ()):
+        wgt = math.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
+        total += g['extent_m'] * wgt
+    return total
+
+def hand_guard(w):
+    """Own-hand protection, DERIVED: a saturating function of guard hardware AT the working hand (proximity-
+    weighted), scaled by hilt complexity (a swept/basket hilt covers the hand far more than a plain cross of the
+    same bar length). In [0,1). A bare haft (spear, staff, mace — no guards) -> 0. Pure."""
+    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    return math.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
+
+def blade_guard(w):
+    """Bind-catch capability, DERIVED: a saturating function of ALL located catching surfaces (guards AND
+    dual-role catching elements — hooks/prongs/tines/lugs), position-independent (a bind can land anywhere along
+    a long polearm's reach, not just at the hand), scaled by hilt complexity. In [0,1). Pure."""
+    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
+
+
+# ════════════════════ STAGE 3c — DISTRACTION: adornment motion degrades the defender's read (Phase B5) ════════════
+# "a feather and ring distract eyes which makes it harder to read intent" (the design brief this re-architecture
+# was built for). A weapon's `adornments` — a tassel, streamer, or plume attested for its type (Phase 0 physical
+# facts, designs/audit/2026-07-02-morphology-rearch-phase0/) — adds visual clutter near the striking motion. Empty
+# adornments (the overwhelming majority of the roster) -> distraction()==0 -> legibility() is byte-identical to
+# before this function existed (the plan's "empty ⇒ identity" requirement).
+DISTRACT_K = 2.0  # [SIM-CALIBRATE] saturating-sum gain on Σ count·extent_m; the 3 roster examples (ranseur/guandao/
+                   #   jian tassels, each a single ~0.15-0.35m attachment) are ALL period-documented as a
+                   #   ceremonial-phase feature, not a primary combat design element — deliberately kept small.
+
+def distraction(w):
+    """Saturating sum over the weapon's adornments (count × extent, position-independent — any motion near the
+    weapon draws the eye). In [0,1); 0 for the (typical) weapon with no adornments field. Pure."""
+    total = sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
+    return math.tanh(DISTRACT_K * total)
+
+
+# ════════════════════ STAGE 3d — EDGE VIBRATION: a wavy/serrated edge degrades the OPPONENT's tactile read (Phase B5) ═
+# "a wavy/serrated/irregular blade can cause vibrations for opponent... which would affect the effectiveness of
+# riposting/winding" (the design brief). The vibration is felt by whoever is BOUND AGAINST the irregular edge — the
+# wielder is used to their own weapon's feel, the opponent is not — so this degrades the OPPONENT's tactile read in
+# a bind, not the wielder's own. Only flamberge currently carries edge_undulation (amplitude/period on its flame-
+# ground element); every other weapon's elements default amplitude_mm=0 -> edge_vibration()==0 -> identity.
+VIBRATION_K = 0.04  # [SIM-CALIBRATE] per mm of edge-undulation amplitude; flamberge's 15mm amplitude -> ~0.45, a
+                     #   real but not dominant tactile disruption (bind_sigma's tac term is one of five summands).
+
+def edge_vibration(w):
+    """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
+    extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);
+    0 for the (typical) plain-edged weapon. Pure."""
+    amp = max((e.get('edge_undulation', {}).get('amplitude_mm', 0.0) for e in w.get('elements', ())), default=0.0)
+    return math.tanh(VIBRATION_K * amp)
+
+
+# ════════════════════ STAGE 3e — HEFT / TEMPO_SHAPE / HANDLING: the wt/spd/hand de-leak (Phase B6) ════════════════
+# The three remaining fiat aggregates — wt{light,heavy}, spd (a bare per-weapon tempo bonus), hand{Forgiving,
+# Standard,Demanding} — replaced with derivations off the SAME real per-part mass model every other Phase-B stage
+# already reads. All three are DIFFERENT physical quantities (impact force is a static moment, tempo is a shape
+# ratio, control demand is a balance/guard composite) that happen to share one mass model as their common source —
+# "de-leaked" means grounded in the same data, not literally the same scalar (verified: reusing wield_heft's own
+# MoI-based swing-inertia formula for the IMPACT path violates the plan's own falsifiable spear<arming<longsword<
+# greatsword ordering — a spear's swing-inertia about the working hand is LARGE even though its striking mass is
+# small, which is exactly the COST/IMPACT distinction wield_heft's own docstring already draws).
+HEFT_REF = 0.1545336822851806  # [ANCHOR] the 2H cut-thrust reference's (longsword) own m_head*PoB_frac, so
+                    #   heft(longsword)==1.0 exactly — core.damage's HEFT_HEAVY*heft_units then reproduces the old
+                    #   ~3.0 class magnitude at the SAME anchor weapon, so DMG_SCALE (calibrated against the old
+                    #   heft scale) is undisturbed.
+
+def heft(w):
+    """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
+    harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac
+    is floored at 0 before use: a HAND-ON-BLADE grip (longsword_halfsword/estoc_halfsword) has its centre of mass
+    BEHIND the working hand for CONTROL purposes (weapon_physics.derive's STAGE-1 docstring), but the strike itself
+    still delivers real forward force — a negative "lever" would wrongly read as negative impact, not merely
+    reduced. Read ONLY by the cut/thrust/point damage path (core.heft_resp); a BLUNT head's impact force already
+    derives independently from percussion_authority. FALSIFIABLE ACCEPTANCE (verified at authoring time): spear <
+    arming < longsword < greatsword, greatsword not collapsed onto longsword. Pure."""
+    d = derive(w)
+    return (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
+
+# tempo_shape() RETIRED at authoring time (a shallow point_concentration/head-length-ratio proxy, corrected before
+# commit): tempo's balance-recovery component is NOT a static geometry ratio — it is the SAME grip-aware physics
+# recoverability_factor already models (point of balance, head mass, and how the weapon is HELD, via WP.at_grip's
+# I_g/S_g at the chosen grip-position). systems.weapon_tempo now reads systems._recovery_mode_commitment (the
+# shared swing-arrest/thrust-retract core, extracted from recoverability_factor) directly instead.
+
+HANDLING_POB_K = 1.00    # [SIM-CALIBRATE] PoB_frac contribution (forward-loaded balance demands more correction)
+HANDLING_GUARD_K = 0.50  # [SIM-CALIBRATE] hand_guard REDUCES demand (a guarded grip is more forgiving to hold)
+
+def handling(w):
+    """Physical control-demand GAP — DERIVED from PoB_frac (forward-loaded balance demands more correction) and
+    hand_guard (reduces demand — a guarded grip is more forgiving to hold); PHYSICAL ONLY. Scoped narrowly to
+    the two NEW physical facts the retired `hand` category didn't already have a dedicated term for elsewhere —
+    systems.str_demand ALREADY carries MoI (via wield_heft) and 2H (its own D_2H term) as separate summands, so
+    this does not re-derive them (no double-count). The retired `hand` category (Forgiving/Standard/Demanding)
+    was NOT purely physical — it encoded a weapon-TRADITION's skill-ceiling (a spear reads 'Forgiving' for its
+    simple point-and-thrust technique despite a high PoB_frac; a rapier reads 'Demanding' for its sophisticated
+    fencing system despite a guarded hilt) — verified at authoring time to have no meaningful correlation with
+    PoB_frac/hand_guard across the roster, confirming the old category was skill-driven, not control-driven. That
+    skill-ceiling axis is EXPLICITLY NOT reconstructed here (plan decision 4/6): it relocates to the future
+    fighter/tradition competence layer. str_demand's resulting shift for skill-driven weapons is the accepted
+    interim (decision 6). Non-negative. Pure."""
+    d = derive(w)
+    return max(0.0, HANDLING_POB_K * d['PoB_frac'] - HANDLING_GUARD_K * w.get('hand_guard', 0.0))
 
 
 # ════════════════════ STAGE 3b — GRIP-POSITION: continuous hand-slide (retires the choke/normal/lunge strings) ════════════════════
@@ -304,9 +484,11 @@ if __name__ == '__main__':
         print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
     print()
 
-    print("STAGE 2/3 — derived authority/agility/reach (build-only diagnostic) + percussion + defence affinities:")
-    print(f"{'weapon':12} {'auth':>5} {'agil':>5} {'reach':>6} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18}")
+    print("STAGE 2/3 — derived agility/percussion/defence affinities + Phase-B6 heft/handling (tempo's balance-")
+    print("recovery term now lives in systems._recovery_mode_commitment — Combatant/cfg-aware, not shown here):")
+    print(f"{'weapon':12} {'agil':>5} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18} {'heft':>6} {'handl':>6}")
     for n, w in WEAPONS.items():
         a = defense_affinities(w)
-        print(f"  {n:10} {authority(w):5.2f} {agility(w):5.2f} {reach(w):6.2f} {percussion_authority(w):5.2f} "
-              f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f}")
+        print(f"  {n:10} {agility(w):5.2f} {percussion_authority(w):5.2f} "
+              f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f} "
+              f"{heft(w):6.2f} {handling(w):6.2f}")

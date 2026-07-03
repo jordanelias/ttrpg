@@ -262,7 +262,7 @@ def engagement(A, B, first, cfg, rng):
             # contact — once, at bind entry, scaled by their tactile+leverage. Not gated on the visual read.
             bsig0 = S.bind_sigma(aggressor, defender, cfg, TR)
             bw, bl = (aggressor, defender) if bsig0>=0 else (defender, aggressor)
-            g=cfg['INIT_STEAL_INDES']*S.init_steal_factor(bw, True, TR)
+            g=cfg['INIT_STEAL_INDES']*S.init_steal_factor(bw, True, cfg, TR)
             bw.initiative=S.clamp_initiative(bw.initiative+g, cfg)
             bl.initiative=S.clamp_initiative(bl.initiative-g, cfg)
             # KUZUSHI: the bind winner breaks the loser's balance through the bind, scaled by leverage (Stärke-Schwäche).

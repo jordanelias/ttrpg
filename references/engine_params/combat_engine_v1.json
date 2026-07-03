@@ -34,6 +34,7 @@
    "BIND_STR_K": 0.0156,
    "BIND_TACTILE_K": 0.04,
    "BIND_TECH_K": 0.06,
+   "BIND_VIBRATION_K": 0.5,
    "BURST_MAX": 4,
    "CHOKE_BIND_K": 0.3,
    "CHOKE_DRIVE_REF": 1.5,
@@ -86,8 +87,6 @@
    "GUARD_NEUTRAL": 0.45,
    "HANDLE_K": 0.1,
    "HANDS_COMMIT": 0.5,
-   "HEFT_MASS_K": 0.15,
-   "HEFT_MODE": "continuous",
    "IMPOSE_BIND_BOOST": 0.5,
    "IMPOSE_REFUSE_P": 0.5,
    "IMPOSITION_GATE": true,
@@ -108,6 +107,7 @@
    "INIT_STEAL_INDES": 0.36,
    "L0": 4.0,
    "LEGIB_COMMIT_K": 0.1,
+   "LEGIB_DISTRACT_K": 0.15,
    "LEGIB_LUNGE": 0.25,
    "LEGIB_SWING": 1.25,
    "LEGIB_THRUST": 0.8,
@@ -179,13 +179,14 @@
    "RESIDUAL_REACH_FRAC": 0.3,
    "RIPOSTE_ON_FAIL": 0.32,
    "RIPOSTE_ON_NEUTRALIZE": 0.2,
-   "SPEED_K": 0.6,
    "STAMINA_REF": 18.0,
    "STOPHIT_CHANCE": 0.75,
    "STOPHIT_FULL_GAP": 3.0,
    "STOPHIT_NSIG_BASE": 0.4,
    "TEMPO_FATIGUE_K": 0.25,
    "TEMPO_FLOOR": 0.7,
+   "TEMPO_RECOVER_K": 0.4,
+   "TEMPO_RECOVER_SHAPE": 0.35,
    "UPSET_FLOOR": 0.05,
    "WARINESS_K": 1.5,
    "WEIGHT_PEN": 0.8,
@@ -195,11 +196,6 @@
    "WIND_K": 0.9,
    "WOUND_ATK_OB": 0.15,
    "WOUND_DEF_OB": 0.25
-  },
-  "handle_rank": {
-   "Demanding": 2,
-   "Forgiving": 0,
-   "Standard": 1
   }
  },
  "source": "designs/scene/combat_engine_v1/config.py"

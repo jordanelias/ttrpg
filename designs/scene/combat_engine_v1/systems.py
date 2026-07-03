@@ -3,7 +3,6 @@ NO subsystem touches raw A/B — they receive Combatant objects in role. This is
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp, tanh, sqrt
-from config import HANDLE_RANK
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
@@ -36,14 +35,21 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     """General cadence — CONDITIONAL on grip/stance/fatigue (correction 2), not a static weapon property. Heavy
     weapons are slower but NOT tempo-dead (penalty bounded). Fatigue reduces cadence (a tiring fighter acts less
     often). A choked grip trades cadence for close-quarters control; a lunge/extended grip trades repeat-speed for
-    reach (handled at the call site via grip state)."""
+    reach (handled at the call site via grip state). BALANCE-RECOVERY (morphology-rearch Phase B6, corrected):
+    how readily a fighter regains a ready position after a swing/thrust is NOT a static weapon-geometry ratio —
+    it is the SAME grip-aware physics recoverability_factor models (point of balance, head mass, and how the
+    weapon is HELD, via _recovery_mode_commitment's swing-arrest/thrust-retract blend at the CURRENT grip-
+    position), replacing the retired per-weapon `spd` scalar. A weapon that commits MORE than the anchor
+    (>1.0) recovers slower -> costs cadence; one that commits less recovers faster -> gains a little."""
     w=c.w
+    g=getattr(c,'grip_position',0.0)
     _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
-    pen += cfg['CHOKE_TEMPO_PEN']*getattr(c,'grip_position',0.0)   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
+    pen += cfg['CHOKE_TEMPO_PEN']*g   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
     pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
-    t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
+    pen += cfg['TEMPO_RECOVER_K']*tanh(cfg['TEMPO_RECOVER_SHAPE']*(_recovery_mode_commitment(w,g,cfg)-1.0))   # balance-recovery, relative to the 2H cut-thrust anchor's neutral commitment=1.0; tanh-SATURATING (raw commitment spans ~0.2 to ~68 across the roster — a long pole's swing-arrest MoI at grip 0 is enormous — so a linear term would either flatten short weapons or blow the long ones straight to the floor; the tanh keeps the common 0.2-3 range well-differentiated while bounding the extreme-polearm tail)
+    t=cfg['BASE_TEMPO']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
@@ -73,7 +79,7 @@ def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cf
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
-    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*HANDLE_RANK[w['hand']]+cfg['D_2H']*(w['hands']==2)   # DERIVED g-aware heft (Stage 2b)
+    w=c.w; return cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*WP.handling(w)+cfg['D_2H']*(w['hands']==2)   # DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
@@ -86,29 +92,41 @@ def balance_eff(c, fat, cfg):
     # to the engine's balance-neutral (3), so a default fighter's substrate is unchanged. Still 1.0× at full poise.
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
-def recoverability_factor(c, cfg):
-    """IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis, made physical and
-    GRIP-AWARE (Phase-3 Stage 2, grounded). Reads the DERIVED dynamics at the chosen grip-position (WP.at_grip):
-      - SWING arrest: sqrt of the re-pivoted MoI (energy-limited Δt=Iω/τ), GATED by the forward static moment so a
-        centre-balanced pole (a staff) is NOT mis-ranked as irrecoverable;
-      - THRUST retract: the forward static moment alone (it retracts along the line);
-      blended by point_concentration (CONTINUOUS head weight — a hand-balanced rapier retracts, a forward mace
-      'wants to continue'; no head NAME); a MoI-aware 1H/2H force-couple control credit; and the body-extension
-      (lunge) term — the lead, best-grounded axis (Silver true-times / Giganti). Normalized to a 2H cut-thrust
-      anchor (recoverability 1.0; the mirror is symmetric). Bounded below. Pure. The sqrt(I)/parallel-axis/couple
-      STRUCTURE is [ASSERTED — first-principles]; the gains are [FIAT/SIM-CALIBRATE]. See tasks/w811gujrg.output."""
-    w=c.w
-    g  = getattr(c, 'grip_position', 0.0)
-    ld = getattr(c, 'lunge_depth', 0.0)
+
+def _recovery_mode_commitment(w, g, cfg):
+    """The mode-blended balance-recovery commitment at grip-position g — the shared physical core BOTH
+    recoverability_factor and weapon_tempo's own balance-recovery term read: SWING arrest (sqrt of the re-
+    pivoted MoI, GATED by the forward static moment so a centre-balanced pole is not mis-ranked as
+    irrecoverable) vs THRUST retract (the forward static moment alone — it retracts along the line), blended by
+    point_concentration (a hand-balanced rapier retracts; a forward mace 'wants to continue'). Reads point of
+    balance, head mass, AND how the weapon is held (all folded into WP.at_grip's I_g/S_g at THIS g) — the three
+    facts a weapon's balance-recovery genuinely depends on. Dimensionless vs the 2H cut-thrust anchor (1.0 =
+    neutral). Extracted so weapon_tempo can reuse this core WITHOUT recoverability_factor's own 1H/2H-control-
+    credit and lunge terms, which weapon_tempo already applies as its own separate, differently-scoped cadence
+    penalties (re-applying them here would double-count). Pure."""
     a = WP.at_grip(w, g)
     I_g, S_g = max(1e-9, a['I_g']), a['S_g']
     I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
-    two = 1.0 if w['hands'] == 2 else 0.0
     pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
-    # (A) MODE commitment — both dimensionless vs the anchor, then blended by geometry
     C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref)
     C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
-    C_mode   = pc * C_thrust + (1 - pc) * C_swing
+    return pc * C_thrust + (1 - pc) * C_swing
+
+def recoverability_factor(c, cfg):
+    """IRRECOVERABILITY multiplier on the overcommit cost — the commitment=recovery axis, made physical and
+    GRIP-AWARE (Phase-3 Stage 2, grounded). Layers a MoI-aware 1H/2H force-couple control credit and the body-
+    extension (lunge) term — the lead, best-grounded axis (Silver true-times / Giganti) — on top of
+    _recovery_mode_commitment's shared swing-arrest/thrust-retract core. Normalized to a 2H cut-thrust anchor
+    (recoverability 1.0; the mirror is symmetric). Bounded below. Pure. The sqrt(I)/parallel-axis/couple
+    STRUCTURE is [ASSERTED — first-principles]; the gains are [FIAT/SIM-CALIBRATE]. See tasks/w811gujrg.output."""
+    w=c.w
+    g  = getattr(c, 'grip_position', 0.0)
+    ld = getattr(c, 'lunge_depth', 0.0)
+    I_g = max(1e-9, WP.at_grip(w, g)['I_g'])
+    I_ref = cfg['REC_I_REF']
+    two = 1.0 if w['hands'] == 2 else 0.0
+    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
+    C_mode = _recovery_mode_commitment(w, g, cfg)
     # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
     tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * WP.UNIT_M * two)
     tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'] * WP.UNIT_M)
@@ -212,31 +230,73 @@ def adef_cap(w, cfg, head=None):
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
 SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
                           #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
-SELECT_PC_MIN = 0.10      # [DESIGN] raw point_concentration below which a head has NO thrusting point (a blunt FACE
-                          #   that concentrates percussion but cannot pierce a gap): mace 0.02 -> no spike; poleaxe
-                          #   0.78 / spear 0.78 -> a real point. Reads the raw primitive the design names, so the
-                          #   mace-vs-poleaxe spike distinction EMERGES from morphology, not a weapon name.
+# SELECT_PC_MIN RETIRED (morphology-rearch Phase B3, 2026-07-02). It was a magnitude THRESHOLD on point_concentration
+# standing in for a fact the engine didn't yet have: whether a blunt haft's assembly HAS a real thrusting point at
+# all (mace 0.02 -> no; poleaxe 0.78, modeled as ONE whole-weapon blunt token -> yes, smuggled in via this same
+# token). Phase B2 gave every point-capable composite (poleaxe, bec_de_corbin, lucerne_hammer, ji, goedendag,
+# guisarme, kama_yari, voulge) its own EXPLICIT point-tokened mode_element — the fact is now data, not inferred
+# from a magnitude gate. "Affords a point iff it HAS a point-element" (the plan's own phrasing): a 'point' token in
+# element_afforded now needs only geo['gap']>SELECT_EPS, same as every other mode. Verified byte-identical for the
+# WHOLE roster at retirement time — no point-headed weapon without mode_elements had point_concentration<=0.10, and
+# no blunt-headed weapon without mode_elements had point_concentration>0.10 (i.e. nothing was relying on either
+# side of the old gate), so this changes no weapon's affordance, only how the affordance is DERIVED.
 
-def afforded_heads(w):
-    """The set of head TOKENS this weapon can fight in, DERIVED from its geometry primitives (NOT a per-weapon list).
-    Each maps token -> (derived effectiveness, damage_mode). A natively-versatile cut_thrust head stays ATOMIC (the
-    engine's coupling/adef/legibility already resolve its cut<->gap-thrust internally) so its current behaviour is
-    preserved exactly. A blunt head additionally affords the 'point' spike-thrust IFF it has a real piercing point
-    (point_concentration > PC_MIN) — the poleaxe's beak emerges, the mace's flat face does not. Pure."""
-    geo=w['geo']; head=w['head']; pc=geo['point_concentration']
+def _mode_elements(w):
+    """The weapon's MODE-ELEMENTS — the located striking elements whose geometry affords fight-modes. Morphology-
+    rearch Phase B2 (2026-07-02) populated real multi-element `mode_elements` lists for the 8 weapons whose parts
+    afford genuinely different fight-modes (bec de corbin = hammer/blunt + beak/point + spike/point, each with its
+    own per-element geometry grounded against Phase 0 specimen research — see designs/audit/2026-07-02-morphology-
+    rearch-phase0/). A weapon with no explicit `mode_elements` (everything else — including composites whose extra
+    mass elements are a mass-model subdivision only, e.g. flamberge's forte/tip/ricasso, or catching hardware like
+    a partisan's wing-lugs) synthesizes ONE element carrying its own whole-weapon head token + baked geo, so the
+    element-union below is the weapon's existing single-mode behaviour unchanged. Mirrors weapon_physics.
+    _head_elements on the mass side. Pure."""
+    els = w.get('mode_elements')
+    if els:
+        return els
+    return [dict(head=w['head'], geo=w['geo'])]
+
+def element_afforded(el, w):
+    """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
+    Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
+    every other mode — no separate point_concentration THRESHOLD (SELECT_PC_MIN, retired above). Being tokened
+    'point' at all (a B2 authoring judgment call, grounded per-element) is now the affordance signal; the old
+    threshold stood in for that fact before composites had explicit point-elements. The 'blunt' branch no longer
+    smuggles in a secondary point-affordance from its OWN point_concentration — every weapon that needs a blunt-
+    plus-point split (poleaxe, bec_de_corbin, lucerne_hammer, goedendag, guisarme's cousin-shape) now expresses it
+    as a SEPARATE point-tokened mode_element (B2), not a magnitude reading on the blunt token.
+    [PHASE-B6 PENDING] percussion authority still stays WHOLE-WEAPON here (a lucerne_hammer's two blunt elements
+    both read the same weapon-level percussion_authority(w) rather than their own individual mass+position) — a
+    precision gap, not a correctness bug (it is the same formula every single-mode blunt weapon already uses);
+    per-element percussion authority is a B6 item (the plan's re-source table row for core.py's `strike`)."""
+    geo=el['geo']; head=el['head']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
         heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture')
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
         if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear')
-    elif head=='point':                                              # pure point
-        if geo['gap']>SELECT_EPS and pc>SELECT_PC_MIN: heads['point']=(geo['gap'], 'puncture')
+    elif head=='point':                                              # a real point (element-tokened, not inferred)
+        if geo['gap']>SELECT_EPS: heads['point']=(geo['gap'], 'puncture')
     elif head=='blunt':                                              # striking head
-        if WP.percussion_authority(w)>SELECT_EPS: heads['blunt']=(WP.percussion_authority(w), 'percussion')
-        if pc>SELECT_PC_MIN and geo['gap']>SELECT_EPS:               # a beak/spike: a real point ON a blunt haft
-            heads['point']=(geo['gap'], 'puncture')
+        pa=WP.percussion_authority(w)
+        if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion')
+    return heads
+
+def afforded_heads(w):
+    """The set of head TOKENS this weapon can fight in — the UNION over its mode-elements of each element's
+    afforded tokens (best effectiveness per token). Element-union structure so a multi-element head (bec de
+    corbin, lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, poleaxe) affords each of its elements'
+    modes; a single-mode weapon's synthesized one-element list reproduces its prior whole-weapon behaviour
+    unchanged. Each token maps to (derived effectiveness, damage_mode); no per-weapon list, no name/kind
+    branching (the L0 primitive-law). Pure."""
+    heads={}
+    for el in _mode_elements(w):
+        for tok,(eff,dm) in element_afforded(el, w).items():
+            if tok not in heads or eff>heads[tok][0]:
+                heads[tok]=(eff,dm)
     if not heads:                                                    # degenerate fallback: never strip all modes
-        heads[head]=(0.0, core.HEAD_MODE.get(head, 'shear'))
+        h=w['head']
+        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'))
     return heads
 
 def select_mode(c, defender_armor, closed, cfg):
@@ -378,6 +438,7 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
         else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
+    legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
     return legib
 
 def approach_displace(shorter, longer, cfg):
@@ -403,13 +464,18 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
 def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
-    excels) + TACTILE read (Fuhlen); Strength minor. +ve favours the aggressor winning the bind. Pure."""
+    excels) + TACTILE read (Fuhlen, degraded by the OPPONENT's edge vibration — morphology-rearch Phase B5: a
+    wavy/flame-ground edge is felt as unfamiliar noise by whoever is bound against it, not its own wielder);
+    Strength minor. +ve favours the aggressor winning the bind. Pure."""
     lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           * (TR.eff_cw(aggressor, 'leverage')/TR.eff_cw(defender, 'leverage'))
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
-    tac = (reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
-           - reading(defender,cfg)*TR.eff_cw(defender, 'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
+    agg_read = reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition) \
+               * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(defender.w))   # the DEFENDER's wavy edge disrupts the aggressor's read
+    def_read = reading(defender,cfg)*TR.eff_cw(defender, 'tactile')*TR.familiarity(defender.tradition,aggressor.tradition) \
+               * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
+    tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
     return lev + catch + tac + strq + wound
@@ -475,7 +541,7 @@ def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
     by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
     indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
                     (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
-    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, TR)*indes_scale
+    return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, cfg, TR)*indes_scale
 
 def counter_select(defender, cfg, rng, TR):
     """Whether the defender reaches for the single-time counter (tempo-driven SELECTION; SUCCESS is gated later, a
@@ -495,11 +561,15 @@ def clamp_initiative(x, cfg):
 # A pure layer on top of the substrate: each tradition's signature initiative ability is just its existing channel
 # weight multiplying the relevant substrate magnitude. No tradition-name branches; neutral tradition = 1.0 everywhere
 # (so default fighters are unaffected and every invariant holds by construction).
-def init_steal_factor(stealer, bind_active, TR):
+def init_steal_factor(stealer, bind_active, cfg, TR):
     """WHO steals the Vor best. In a BIND (winding), the steal scales with tactile+leverage — German Fühlen /
-    Stärke-Schwäche. In the OPEN, with tempo — Italian contratempo (the single-time counter). Neutral = 1.0."""
+    Stärke-Schwäche, boosted by the stealer's OWN edge vibration (morphology-rearch Phase B5: a wavy/flame-ground
+    edge disrupts whoever is bound against it, giving the wielder an easier read to exploit — 0 for the typical
+    plain-edged weapon, identity). In the OPEN, with tempo — Italian contratempo (the single-time counter).
+    Neutral = 1.0."""
     if bind_active:
-        return (TR.eff_cw(stealer, 'tactile') + TR.eff_cw(stealer, 'leverage'))/2
+        return (TR.eff_cw(stealer, 'tactile') + TR.eff_cw(stealer, 'leverage'))/2 \
+               * (1 + cfg['BIND_VIBRATION_K']*WP.edge_vibration(stealer.w))
     return TR.eff_cw(stealer, 'tempo')
 
 def init_hold_decay(holder, cfg, TR):

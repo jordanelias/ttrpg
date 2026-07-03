@@ -1,0 +1,153 @@
+{
+  "research_topic": "Thrust/strike commitment depth (force/recovery tradeoff) and range-utilization (weapon room to develop its full strike)",
+  "prior_engine_scan": {
+    "purpose": "Confirm what commit_depth/lunge_depth/grip_target already model before proposing anything new",
+    "files_read": [
+      "C:/Github/ttrpg-morph-rearch/designs/scene/combat_engine_v1/wrapper.py",
+      "C:/Github/ttrpg-morph-rearch/designs/scene/combat_engine_v1/systems.py"
+    ],
+    "already_modeled": [
+      {
+        "mechanic": "commit_depth (systems.py commit_depth)",
+        "description": "Continuous commitment depth drawn from a Beta distribution over [2,5] each closed-exchange beat. Skewed by aggressor disposition-lean (aggressive vs cautious) and by WARINESS toward an unfamiliar tradition (shallower commit vs unread opponent). Feeds attack_sigma (power: COMMIT_SIGMA*(commit-3)), the recovery-tempo penalty (RECOVERY_TEMPO_K*(commit-2.0)*recoverability_factor), overcommit_exposure (riposte vulnerability), and legibility (deeper commit = more readable)."
+      },
+      {
+        "mechanic": "lunge_depth (wrapper.engagement + systems.lunge_quality/recoverability_factor)",
+        "description": "A thrust committed at/above LUNGE_COMMIT (4.0 of 5) stochastically BECOMES a lunge (gated by lunge_quality, itself derived from point_concentration, weapon lightness, hand-balance, and one-handedness -- a rapier lunges well, a blunt/2H weapon poorly/never). lunge_depth scales continuously with how far commit exceeds the threshold. Lunge increases legibility (LEGIB_LUNGE), increases tempo penalty (LUNGE_TEMPO_PEN), and lowers recoverability_factor via an EXPOSE_LUNGE_K term scaled by weapon mass -- i.e. the engine ALREADY models 'a deep committed strike costs more recovery/exposure, especially with a heavier weapon.'"
+      },
+      {
+        "mechanic": "grip_target / at_grip / grip_choke_max (systems.py + weapon_physics.py)",
+        "description": "A CLOSED-measure fighter gathers grip_position continuously toward grip_choke_max, DRIVEN BY close_unwieldiness (how much the weapon's reach exceeds CLOSE_REACH_REF) -- i.e. the engine already models choking up a long weapon specifically because it is unwieldy at close range, reducing its swing-arrest MoI (I_g) and its close-range tempo penalty (POLE_CLOSE_K). This is the existing 'half-staff' analog."
+      }
+    ],
+    "confirmed_gap": "commit_depth and lunge_depth are driven ONLY by aggressor disposition/wariness (disp_lean, familiarity) -- NEVER by the actual current measure_gap / range-to-target. There is no existing mechanic coupling 'how much room the weapon's strike geometry has to develop before it reaches the target' to attack power or commit depth. This is the specific gap the requested research addresses. grip_target is driven by unwieldiness-in-the-close, not by an explicit 'shortened effective arc' concept -- the two are related but not identical, and treatise evidence on which is the historically-attested response is captured below."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "claim": "Fencing treatises document an explicit graded system of MEASURE (distance) tied to which action can be delivered from it, not a binary in/out-of-range state.",
+      "detail": "Capoferro's Gran Simulacro (1610) defines multiple named measures: misura larga ('wide measure' -- can strike head or torso with a step-lunge, or the sword-arm with a leaning-lunge/fixed-foot inclination), misura stretta in pie fermo ('narrow measure of the fixed foot' -- can hit just by inclining body and legs without stepping). Later pedagogical elaborations (not in the 17th-c. originals) add misura larghissima (widest -- requires a full passing step to reach) and misura strettissima (narrowest -- a hit lands even while retreating). Capoferro states 'the end of the tempo of wide measure is the beginning of the tempo of narrow measure' -- i.e. the motion that closes to lunge-distance and the motion that delivers the strike are treated as two distinct, sequential actions gated by distance.",
+      "sources": [
+        {"author": "Ridolfo Capoferro", "work": "Gran Simulacro dell'Arte e dell'Uso della Scherma (1610)", "location": "Chapter IV (Of Measure) / Chapter XI (How to Seek Measure)", "via": "Wiktenauer translation, discussed at thetavernknight.wordpress.com/2020/12/04 and /2020/12/18 and /2020/12/24, and grauenwolf.wordpress.com/2012/05/29"}
+      ],
+      "confidence": "high -- multiple independent secondary sources quoting/translating the same primary chapter consistently",
+      "caveat": "The exact wording 'misura larghissima'/'strettissima' as four-tier system is a MODERN pedagogical extension (attributed to Academie Duello and similar schools), not present verbatim in Capoferro, Fabris, Alfieri, or Giganti's own texts, which use fewer named gradations. Treat the two-tier larga/stretta distinction as the primary-source-attested core; the four-tier scheme as a later teaching gloss on the same underlying concept."
+    },
+    {
+      "id": "F2",
+      "claim": "The lunge (affondo/passata) is documented as a distinct, deeper, less recoverable action than a standing/leaning thrust, driven by weight transfer from the back foot and front-foot extension.",
+      "detail": "In Capoferro's system the lunge is executed as a single tempo: weight is thrown from the back foot to the front foot, with the front foot already positioned far enough forward that the body can move into the strike without the foot needing to leave the ground first (i.e. the extension is driven by a weight-transfer/body-drop, not merely an arm reach). This is described as mechanically distinct from the misura-stretta 'fixed-foot' strike, which is delivered by inclining the body/legs alone without the stepping/weight-throw component.",
+      "sources": [
+        {"author": "Ridolfo Capoferro", "work": "Gran Simulacro (1610)", "location": "Ch. IV / lunge mechanics", "via": "Practical Capo Ferro workbook (amhebatesta.fr PDF); swordfight.uk Rapier Workbook v1.0"}
+      ],
+      "confidence": "medium-high -- consistent across multiple secondary HEMA-instructional sources paraphrasing the primary text; exact folio-level primary citation not independently verified in this pass"
+    },
+    {
+      "id": "F3",
+      "claim": "Fabris and related Italian rapier sources document graduated/partial committal actions distinct from a full passata: a passata (passing lunge, weight fully committed forward onto the front foot) versus lesser body-evasion/probe actions.",
+      "detail": "Fabris's 'Lo Schermo, overo Scienza d'Arme' (1606) documents the passata sotto ('pass beneath') as a full passing-step lunge combined with a body-drop evasion, arm straightened at the point of the strike -- an extreme, fully committed, low-recovery action explicitly paired with an evasive function (the depth of commitment does double duty: maximizes reach/power AND removes the body from the opponent's line). Capoferro's Plate 13 depicts the 'scannatura' as a passing-step thrust to the flank executed specifically when the opponent disengages -- i.e. a committed passing action taken opportunistically against an opponent's own tempo, not from a neutral position.",
+      "sources": [
+        {"author": "Salvator Fabris", "work": "Lo Schermo, overo Scienza d'Arme (1606)", "location": "passata sotto plates", "via": "justinswordfit.com/2025/05/09 (6 Passata Sotto Variations); benersonlittle.com/2017/07/24"},
+        {"author": "Ridolfo Capoferro", "work": "Gran Simulacro (1610)", "location": "Plate 13 (Scannatura)", "via": "swordschool.com/wiki/index.php/Plate_13:_Scannatura"}
+      ],
+      "confidence": "medium -- technique names and general description corroborated across sources, but I did not independently confirm folio/plate-number citations against a primary facsimile in this pass"
+    },
+    {
+      "id": "F4",
+      "claim": "Recovery from a full lunge is documented as a distinct, reversed motion (not instantaneous), during which the fencer is off-balance and exposed -- this is the structural basis for the riposte/counter-time family of actions.",
+      "detail": "Classical/modern fencing pedagogy (tracing directly to the historical masters' tempo-based systems that Capoferro/Fabris formalized) describes lunge recovery as reversing the lunging motions in sequence, with the extended arm recovered LAST -- i.e. the point stays extended/committed even as the body begins withdrawing, prolonging exposure. Both feet must return close together before the fencer is considered 're-armed.' The riposte and the single-time counter (contratempo) are explicitly built to exploit this window: the attacker's extended arm and forward-committed body cannot simultaneously defend.",
+      "sources": [
+        {"author": "modern fencing pedagogy synthesizing historical tempo doctrine", "work": "multiple", "location": "n/a", "via": "Grokipedia 'Lunge (fencing)'; Wikipedia 'Fencing tactics'; swordandpen.substack.com 'The Late Counterattack'"}
+      ],
+      "confidence": "medium -- this is well-attested general fencing-pedagogy consensus rather than a single treatise citation; the underlying tempo-vulnerability logic (Nach following an over-extended Vor) is the same principle the engine's own comments already invoke for German longsword (Indes/Nach), so it generalizes across traditions"
+    },
+    {
+      "id": "F5",
+      "claim": "George Silver (English backsword/staff tradition) explicitly documents a SHORTENED-GRIP response for long polearms/staffs to regain effective fighting distance and control at close range -- the direct historical analog to the engine's grip_target/grip_choke_max mechanic.",
+      "detail": "Silver's Paradoxes of Defence (1599) prescribes the 'short staff' at 8-9 feet (measured by the wielder's own reach: standing with the staff held upright, reaching as high as possible with the free hand, plus a hand-span allowance) as superior in a fight to a longer 12-18 foot staff/pike, PRECISELY because the short staff's grip is chosen so both hands can be set for striking, thrusting, and warding at the ranges the fight actually occurs at. Separately, Silver's 'true fight' doctrine (four grounds: judgment, distance, time, place) treats DISTANCE explicitly as something the fighter actively manages moment-to-moment, and documents that against an adversary who keeps two hands on a long grip, a fighter can win the 'place' (advantageous position) by releasing one hand and thrusting to outreach -- a grip-position change used tactically to alter effective reach in the moment, not just weapon selection.",
+      "sources": [
+        {"author": "George Silver", "work": "Paradoxes of Defence (1599)", "location": "staff-length passage; 'four grounds' doctrine", "via": "pbm.com/~lindahl/paradoxes.html (full text); thearma.org/Manuals/GSilver.htm"}
+      ],
+      "confidence": "high for the staff-length/grip passage (direct paraphrase of primary text consistently reproduced across sources); the specific 'short staff' passage is about WEAPON SELECTION (choosing an 8-9ft staff over a longer pike) more than a live in-fight grip-choke, so it supports the STRUCTURAL principle (grip/effective-length is chosen to match fighting range) but is NOT the same claim as 'choking up mid-fight on a weapon you already hold.'",
+      "caveat_important": "The clearest DIRECT primary-source evidence for a mid-fight regrip-to-shorten-reach is the German/Italian LONGSWORD half-sword tradition (see F6), not Silver's staff doctrine, which is closer to pre-fight weapon-length selection. Do not conflate the two."
+    },
+    {
+      "id": "F6",
+      "claim": "Half-swording (mit dem kurzen Schwert / 'with the shortened sword') is a well-documented, named, in-fight technique of gripping partway down one's own blade to convert a longsword into a short-spear-like weapon, used specifically at close range and against armour.",
+      "detail": "Multiple 14th-16th century Fechtbucher (Talhoffer 1467 and others) depict grasping the blade with the off-hand (sometimes both hands on the blade) to deliver short, forceful, precisely-targeted thrusts into armour gaps (visor, armpit, groin) that a full-length two-hand grip could not control as precisely at short range. Some longswords were built with a ricasso (unsharpened blade section) specifically to make this grip safe/practical. This is a genuine EFFECTIVE-RANGE-RECOVERY technique: shortening the grip trades reach for control and thrust-force-delivery precision at a range where the full-length weapon's normal mechanics (a long lever arm, hard to aim precisely, harder to muscle through armour at short range) don't serve. This is the direct historical analog to the project's existing WP.grip_choke_max / grip_target mechanic, and the project's own halfsword_target function is explicitly modeling exactly this (already implemented, not a gap).",
+      "sources": [
+        {"author": "Hans Talhoffer and others", "work": "Fechtbucher (German combat manuals), 15th-16th c.", "location": "n/a (survey)", "via": "Wikipedia 'Half-sword'; Grokipedia 'Half-sword'; battlewares.com/half-swording"}
+      ],
+      "confidence": "high -- half-swording is one of the best-attested HEMA techniques, depicted repeatedly across multiple independent period manuscripts",
+      "distinct_from_fiore_mezza_spada": "NOTE: Fiore dei Liberi's own term 'mezza spada' ('half-sword' in his Italian tradition) is used differently -- in Fiore it denotes a MEASURE/RANGE (the distance at which both combatants' blades cross in the middle when both throw the same strike simultaneously), i.e. Fiore's 'mezza spada' is a distance-band name analogous to Capoferro's misura stretta, NOT primarily the grip-the-blade technique. Fiore's own grip-the-blade-for-leverage/armoured-thrust techniques are treated under his 'close play' (zogho stretto) material rather than being called 'mezza spada.' Do not conflate Fiore's mezza-spada-as-measure with the German mit-dem-kurzen-Schwert grip technique -- they share an English gloss ('half-sword') but are different concepts in the two traditions."
+    },
+    {
+      "id": "F7",
+      "claim": "The staff/pole tradition documents an alternative 'shortened effective reach' response distinct from choking the grip: fighting from a CENTRE grip ('half-staff') as opposed to an end grip, trading maximum reach for balanced two-way striking/thrusting/warding control.",
+      "detail": "Historical quarterstaff practice (English tradition, associated with George Silver's staff doctrine) describes a 'half-staff' hold -- gripping at or near the centre of the staff -- as a distinct, named grip mode from an end-grip ('like a pike') hold, prized for balanced offense/defense rather than maximum reach. This is evidence that the historical response to needing control/short-range effectiveness with a long weapon could be a DIFFERENT grip POSITION choice (centre vs end) made as a stance/mode selection, not necessarily a live mid-exchange regrip.",
+      "sources": [
+        {"author": "George Silver tradition / staff-fighting pedagogy", "work": "Paradoxes of Defence and derivative quarterstaff instruction", "location": "n/a", "via": "ejmas.com/jwma 'A Brief History of the Quarterstaff'; Grokipedia 'Quarterstaff'"}
+      ],
+      "confidence": "medium -- the 'half-staff' term and its center-grip meaning is corroborated across sources, but I could not independently verify a specific primary-text passage instructing a live in-fight transition FROM end-grip TO half-staff grip specifically to regain lost effective range at close quarters (as opposed to it being a starting stance choice). This weakens direct support for 'mid-fight staff choking' as opposed to 'pre-fight staff-grip mode selection.'"
+    },
+    {
+      "id": "F8",
+      "claim": "Boxing/karate biomechanics studies document a strong, statistically-established positive relationship between JOINT EXTENSION / kinetic-chain completion (hip rotation, knee extension, elbow extension, ground-reaction-force transfer through the legs) and strike force -- i.e. a strike that cannot complete its kinetic chain delivers measurably less force.",
+      "detail": "Rinaldi et al. (2018) measured the karate Junzuki (lunge) punch directly: mean punch force 181.2 N, with SIGNIFICANT POSITIVE CORRELATIONS between punch force and both right/left knee flexion-extension range of motion (1.13 and 0.82 rad) and right/left leg ground-reaction force (550.2 N and 425.1 N); elbow joint range of motion measured at 1.49 rad with an impact angle of 1.19 rad (~68 degrees from full extension at the moment of impact -- i.e. the strike was measured as not fully locking out even at 'full' extension, which is itself informative: even a maximal committed strike retains some elbow flexion at contact for injury-safety/follow-through reasons). A companion finding: punch force correlated NEGATIVELY with peak trunk angular acceleration, suggesting force depends on a full, unrushed sequential kinetic chain rather than a fast but truncated one.",
+      "numbers": {
+        "mean_punch_force_N": 181.2,
+        "knee_ROM_correlated_with_force_rad": [1.13, 0.82],
+        "leg_ground_reaction_force_N": [550.2, 425.1],
+        "elbow_ROM_rad": 1.49,
+        "elbow_angle_at_impact_rad": 1.19
+      },
+      "sources": [
+        {"author": "M. Rinaldi et al.", "work": "Biomechanical characterization of the Junzuki karate punch: indexes of performance", "venue": "European Journal of Sport Science, 2018, 22 citations", "url": "https://consensus.app/papers/details/b0f5956a2ceb58559b7f87b506aaf749/?utm_source=claude_desktop"}
+      ],
+      "confidence": "high -- peer-reviewed instrumented biomechanics study with direct force-plate/kinematic measurement, not a review or self-report"
+    },
+    {
+      "id": "F9",
+      "claim": "Multiple independent boxing biomechanics studies confirm lower-body force/kinetic-chain contribution (hip/leg drive, ground reaction force, weight transfer) is a primary determinant of punch impact force, and that fatigue or shoulder-only (truncated-chain) mechanics reduce force -- direct biomechanical support for 'a strike relying on full weight transfer/body extension delivers more force than an arm-only/truncated one.'",
+      "detail": "Dinu et al. (2020) found Elite boxers systematically produced MORE force and higher velocity than Junior boxers across cross/hook/uppercut punches, and that Juniors showed a HIGHER relative contribution from the shoulder alone (i.e. less-developed lower-body/kinetic-chain sequencing correlates with a truncated, more arm-driven, lower-force strike). The same study measured a front-vs-rear-foot ground-reaction-force IMBALANCE specifically in the cross punch (the punch that most involves forward weight transfer), at 60.6% front / 39.4% rear in Elites -- i.e. the committed straight punch measurably shifts weight onto the front foot as part of delivering force. Beattie & Ruddock's 2022 review further found lower-body maximal AND explosive strength (not upper-body strength) differentiates high-impact-force boxers, and Dunn et al. (2021) found intense lower-body/trunk fatigue significantly reduced punch force in ALL punch types, with the effect LARGER in punches involving more trunk rotation (cross, hook) than in the jab (which relies predominantly on arm extension alone) -- i.e. removing the leg/trunk contribution (whether via fatigue or technique) collapses toward the weaker, arm-only force level.",
+      "sources": [
+        {"author": "D. Dinu et al.", "work": "Biomechanical Analysis of the Cross, Hook, and Uppercut in Junior vs. Elite Boxers", "venue": "Frontiers in Sports and Active Living, 2020, 37 citations", "url": "https://consensus.app/papers/details/1cfbd9ff1bc75b5bb75d4429142c8151/?utm_source=claude_desktop"},
+        {"author": "Kris Beattie, A. Ruddock", "work": "The Role of Strength on Punch Impact Force in Boxing", "venue": "Journal of Strength and Conditioning Research, 2022, 28 citations", "url": "https://consensus.app/papers/details/2c2e9bde343b58e9a5daceb231a8423f/?utm_source=claude_desktop"},
+        {"author": "Emily C. Dunn et al.", "work": "The effect of fatiguing lower-body exercise on punch forces in highly-trained boxers", "venue": "European Journal of Sport Science, 2021, 20 citations", "url": "https://consensus.app/papers/details/c41584d463465fac8ae9d07416886bf3/?utm_source=claude_desktop"}
+      ],
+      "confidence": "high -- consistent, converging findings across three independent instrumented studies with different boxer populations"
+    },
+    {
+      "id": "F10",
+      "claim": "At least one instrumented martial-arts biomechanics study has directly tested striking FORCE as a function of TARGET DISTANCE, finding force/momentum-transfer effects tied to distance, though the reported relationship is not a simple monotonic 'closer is always weaker.'",
+      "detail": "Bolander, Neto & Bir (2009) directly compared Kung Fu punch and palm strikes delivered from different distances (and heights) using a load cell, accelerometers, and high-speed video. They report that force generally increased with an increase in distance (consistent with the deep-commitment/full-extension hypothesis), BUT specifically note the middle-distance strike produced GREATER pendulum-target acceleration than the long-distance strike for the chest-level palm strike -- i.e. the force-vs-distance relationship in their data is not perfectly monotonic; there appears to be an effective/optimal distance rather than 'longer is strictly better,' plausibly because a strike thrown from maximum distance sacrifices some accuracy/solidity of contact or overextends past the ideal point of a limb's force-velocity curve.",
+      "sources": [
+        {"author": "R. Bolander, O. Neto, C. Bir", "work": "The effects of height and distance on the force production and acceleration in martial arts strikes", "venue": "Journal of Sports Science & Medicine, 2009 (Vol 8, CSSI3, pp. 47-52), 47 citations", "url": "https://consensus.app/papers/details/9bd7d0fa16b95e7e86fe08c95119290b/?utm_source=claude_desktop", "also": "PubMed 24474886"}
+      ],
+      "confidence": "medium -- the general direction (force increases with distance) is corroborated, but the specific 'middle beat long for chest palm strike' finding indicates a non-monotonic/optimum-distance relationship that I could not fully verify against the primary paper's full results table in this pass (search snippets only, not the full PDF); flagging as the single most load-bearing and least-triple-verified numeric claim in this file",
+      "important_for_project": "This is the most directly relevant EMPIRICAL (not treatise) evidence bearing on 'range-utilization': it is a study that manipulates distance-to-target directly and measures force, which is exactly the mechanism the requested research asks about. But note it studies UNARMED strikes (punches/palms), not a bladed/hafted weapon's swing or thrust arc -- transferring it to weapon mechanics is an inference, not a direct citation of weapon research."
+    },
+    {
+      "id": "F11",
+      "claim": "No treatise or biomechanics source found in this pass explicitly discusses a weapon-swing 'checked/half blow' as a named, separate technique category analogous to the checked/full-extension punch distinction in boxing -- the fencing-treatise material speaks in terms of MEASURE (distance bands with named actions appropriate to each) rather than a single action's force being degraded when thrown from inside its optimal range.",
+      "detail": "The treatises reviewed (Capoferro, Fabris, Fiore, Silver) structure their teaching around 'what action is available/appropriate at this measure' (e.g. misura stretta = strike by inclining only, no lunge) rather than 'this same lunge thrown from too close will not develop its full force.' This is a meaningfully different framing from the boxing/karate biomechanical framing (a single strike's force scales with how much of its kinetic chain/joint-extension it completes). The treatise framing implies fighters SWITCH to a different, shorter action appropriate to close range (an inclination-strike instead of a lunge) rather than attempting the same full lunge and having it arrive 'weakened' -- this is closer to the engine's existing commit_depth/lunge_depth continuous-selection model (choosing how deep to commit) than to a strict 'same action, degraded' model.",
+      "sources": [],
+      "confidence": "low-medium -- this is a negative/absence finding (I did not find explicit treatise language for a 'checked blow that cannot complete its arc'), which is weaker evidence than a positive citation; a deeper pass specifically targeting German Kunst des Fechtens terms for interrupted/withheld cuts (e.g. discussions of the 'Zwerchhau' or half-cuts in Meyer/Ringeck), or Filipino/Silat short-range striking treatises, might surface more direct treatise evidence and should be flagged as an open research item rather than treated as settled",
+      "flag_for_next_phase": true
+    },
+    {
+      "id": "F12",
+      "claim": "Meyer's longsword pedagogy documents committed vs. withheld/feigned strikes as a deliberate tactical choice gated on whether the fighter is CONFIDENT they can both land AND recover safely -- directly analogous to the engine's existing commit-depth/recoverability coupling, and supporting that commitment-depth is properly modeled as a chosen spectrum rather than a fixed weapon property.",
+      "detail": "Joachim Meyer's system (1570) categorizes fighter types partly by their commitment discipline: a disciplined fighter 'doesn't strike unless sure they can both land the blow and recover safely.' Meyer's feint doctrine explicitly instructs AVOIDING full steps when feinting -- using half-steps or leaving the foot un-planted -- specifically so the fighter retains the option to abort before fully committing. This is treatise evidence for commitment as a continuously graded, tactically-chosen depth (full step/full commitment vs half-step/reversible) rather than a binary attack/no-attack choice, and for recovery-safety being the explicit cost side of the tradeoff the fighter weighs before committing deeper.",
+      "sources": [
+        {"author": "Joachim Meyer", "work": "Gründtliche Beschreibung der ... Kunst des Fechtens (1570), longsword section", "location": "n/a", "via": "hroarr.com/article/teaching-progressions-in-meyers-longsword-1; okanagancombatguild.com Four Types of Combatants article"}
+      ],
+      "confidence": "medium -- consistent secondary-source paraphrase of Meyer's text; I did not verify against a page-numbered primary translation in this pass"
+    }
+  ],
+  "open_questions_for_next_phase": [
+    "Whether a documented treatise passage exists describing a CUT/SWING (not thrust) specifically failing to develop full force when thrown from inside its optimal arc-radius (this pass found strong evidence for thrusts/lunges being measure-gated, and strong biomechanical evidence for punches, but did not find an explicit swing-arc-truncation treatise passage).",
+    "Whether Filipino Kali/Escrima or Chinese short-weapon (dao/jian) treatises, which fight extensively at trapping/close range, have more explicit doctrine on force-at-short-range than the European long-weapon-focused sources surveyed here.",
+    "Whether the Bolander et al. (2009) distance-force relationship is confirmed non-monotonic (an optimal distance, not simply 'more distance = more force') across all their strike types, or whether the one exception noted (chest-level palm strike) is an outlier -- would need the full paper, not just search snippets, to confirm."
+  ]
+}

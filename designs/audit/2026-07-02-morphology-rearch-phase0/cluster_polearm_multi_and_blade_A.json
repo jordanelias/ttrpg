@@ -1,0 +1,298 @@
+{
+  "weapons": {
+    "spetum": {
+      "total_mass_kg": 1.9,
+      "total_mass_grade": "S2",
+      "total_length_m": 2.199,
+      "grip_or_haft_length_m": 0.399,
+      "head_length_m": 1.80,
+      "head_elements": [
+        {
+          "label": "central spear point (langet-socketed triangular blade)",
+          "mass_kg_est": 0.32,
+          "x_m": 1.55,
+          "orient_deg": 0,
+          "extent_m": 0.42,
+          "material": "steel",
+          "geom_notes": "Long, narrow, diamond or flattened-diamond cross-section triangular thrusting point, langet straps riveted down the socket onto the haft for lateral stiffness against a bind (a documented feature of the family). Tip is acute and needle-like for a percussive thrust; the blade flanks near the socket carry a moderate edge but are not the primary cutting surface -- the point does the work.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "left side prong/wing (forward-curving flange)",
+          "mass_kg_est": 0.03,
+          "x_m": 1.02,
+          "orient_deg": 55,
+          "extent_m": 0.16,
+          "material": "steel",
+          "geom_notes": "Slender forged flange curving forward from the socket like a half-bow (Monte's own description), angled toward the tip rather than perpendicular. Edged along its forward-facing convex side (documented reverse/cut use); functions primarily as a bind-catching surface, not a broad chopper -- narrower and thinner-sectioned than the central blade.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "right side prong/wing (forward-curving flange)",
+          "mass_kg_est": 0.03,
+          "x_m": 1.02,
+          "orient_deg": -55,
+          "extent_m": 0.16,
+          "material": "steel",
+          "geom_notes": "Mirror of the left wing; the pair sits opposed across the socket, both angled forward and slightly outward. Symmetric mass and geometry with the left flange.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.036,
+        "material": "ash or oak",
+        "notes": "Round-section haft, uniform to slightly tapering toward the socket; no octagonal facets documented for this type (unlike some Chinese/Japanese polearm hafts). Bare wood, no leather wrap documented as standard."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_kg": 1.80,
+        "total_mass_kg": 1.9,
+        "residual_pct": -5.3,
+        "components": "shaft 1.42 kg (0.036 m dia x ~1.85 m wood length, ash ~700 kg/m3) + central point 0.32 kg + two wings 0.03 kg each"
+      },
+      "provenance": {
+        "citations": [
+          "Worcester Art Museum folding spetum (accession not resolved in prior research), 234.5 cm OaL, ~1.5 kg as a ceremonial/collapsible piece -- used only as a length/form anchor, mass adjusted up to a functional war-weight per the cluster note",
+          "Pietro Monte (Petrus Montius), Collectanea, Milan 1509, tr. Jeffrey L. Forgeng (Boydell, 2018) -- morphology description: 'a pair of sharp ears, each curving forward like a half-bow', point-primary/wing-cut/wing-parry",
+          "Prior cluster research file: clusters/polearm_multi_and_blade_A.json (spetum calibration + audit_note)"
+        ],
+        "confidence_tier": "S2 -- total mass and haft dimensions are typology-typical extrapolation from a documented but atypical (folding/ceremonial) specimen; head morphology (point + two forward-curved wings) is well attested by Monte's period technical description; individual head-element masses are estimated, not directly measured on a war-weight specimen."
+      }
+    },
+    "partisan": {
+      "total_mass_kg": 2.6,
+      "total_mass_grade": "S1",
+      "total_length_m": 2.301,
+      "grip_or_haft_length_m": 0.393,
+      "head_length_m": 1.908,
+      "head_elements": [
+        {
+          "label": "central ox-tongue blade (broad triangular/leaf main blade)",
+          "mass_kg_est": 0.82,
+          "x_m": 1.45,
+          "orient_deg": 0,
+          "extent_m": 0.629,
+          "material": "steel",
+          "geom_notes": "Broad, flat, spatulate double-edged blade (ox-tongue/leaf profile), substantially wider at the base than the spetum's narrow point -- Saint Louis Art Museum specimen 32556 gives a 62.9 cm head on a 245.4 cm overall length. Genuinely cuts and thrusts: flat diamond or lenticular cross-section, real sharpened edges running the full blade length, tapering to a functional (not needle-fine) thrusting point.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "left wing-lug (basal flange)",
+          "mass_kg_est": 0.10,
+          "x_m": 0.90,
+          "orient_deg": 50,
+          "extent_m": 0.20,
+          "material": "steel",
+          "geom_notes": "Larger, more substantial forged lug than the spetum's wings -- broader flange stock, documented (Manciolino) as an active trap-and-bind catching surface rather than a slashing edge. Set low on the head near the socket, forward-canted.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "right wing-lug (basal flange)",
+          "mass_kg_est": 0.10,
+          "x_m": 0.90,
+          "orient_deg": -50,
+          "extent_m": 0.20,
+          "material": "steel",
+          "geom_notes": "Mirror of the left lug; paired basal wings, symmetric.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [
+        {
+          "label": "paired wing-lugs (also function as the catching/trap guard)",
+          "type": "wing",
+          "extent_m": 0.20,
+          "material": "steel",
+          "x_m": 0.90,
+          "orient_deg": 50,
+          "mass_kg_est": 0.0,
+          "notes": "Mass already counted under head_elements (the wings are simultaneously striking-adjacent morphology and the documented guard/catching structure -- Manciolino states explicitly the wings let the weapon trap where a plain-pointed spear cannot; this guard entry is a structural cross-reference, not additional mass, to avoid double counting."
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.038,
+        "material": "ash or oak",
+        "notes": "Round-section haft, slightly thicker than the spetum's to carry the heavier head; langets (side straps) likely riveted from the socket down several centimetres of haft for stiffness under the documented bind-and-retrap cycle, consistent with the family."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_kg": 2.57,
+        "total_mass_kg": 2.6,
+        "residual_pct": -1.2,
+        "components": "shaft 1.55 kg (0.038 m dia x ~1.90 m wood length, ash ~700 kg/m3) + central blade 0.82 kg + two wing-lugs 0.10 kg each"
+      },
+      "provenance": {
+        "citations": [
+          "Saint Louis Art Museum, accession 32556: overall length 2.454 m, head 62.9 cm, mass 2.8 kg (specimen-measured; used as the primary anchor, mass held slightly below the specimen's 2.8 kg at 2.6 kg per the harmonized calibration)",
+          "Antonio Manciolino, Opera Nova, Venice 1531 (Libro 6) -- explicit statement that the partisan/spiedo's wings enable a trap function a plain-pointed spear (quadrello) cannot",
+          "Achille Marozzo, Opera Nova, Bologna 1536 -- Punta Portata thrust and parallel cut technique",
+          "Prior cluster research file: clusters/polearm_multi_and_blade_A.json (partisan calibration + audit_note)"
+        ],
+        "confidence_tier": "S1 for total mass and overall length (direct specimen measurement); S2 for the head/wing-lug mass split (estimated proportionally from the specimen's total head mass, not independently weighed)."
+      }
+    },
+    "naginata": {
+      "total_mass_kg": 1.4,
+      "total_mass_grade": "S2",
+      "total_length_m": 2.10,
+      "grip_or_haft_length_m": 0.357,
+      "head_length_m": 1.743,
+      "head_elements": [
+        {
+          "label": "nagasa (forged sword blade, saki-zori curved single edge)",
+          "mass_kg_est": 0.48,
+          "x_m": 0.87,
+          "orient_deg": 0,
+          "extent_m": 0.42,
+          "material": "steel",
+          "geom_notes": "True differentially-forged sword-steel blade (nagasa), typically 40-45 cm on a war-weight naginata, tanged into the nakaye shaft (not socketed). Pronounced saki-zori sweep concentrated toward the tip (the curve is NOT continuous/uniform along the whole blade but sharpest near the point, unlike a katana's more even sori) -- a true draw-cutting geometry with a genuine sharpened edge along the full length and a strong kissaki-equivalent point capable of a targeted thrust (tsuki) to gaps in armor.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.030,
+        "material": "oak (kashi) or similar hardwood",
+        "notes": "Octagonal or round cross-section shaft (nagaye), typically lacquered; tang of the blade is fitted deep into the shaft and pinned (mekugi), unlike the socketed Chinese/European heads in this cluster."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.05, "x_m": -0.357},
+      "adornments": [],
+      "mass_budget": {
+        "sum_kg": 1.35,
+        "total_mass_kg": 1.4,
+        "residual_pct": -3.6,
+        "components": "shaft 0.82 kg (0.030 m dia x ~1.65 m hardwood length, oak ~750 kg/m3, octagonal-section correction factor ~0.9) + nagasa blade 0.48 kg + ishizuki butt-cap 0.05 kg"
+      },
+      "provenance": {
+        "citations": [
+          "Typological range: nagasa (war blade) ~40-45 cm, nagaye (shaft) ~150-180 cm, total ~2.1 m, war-weight ~1-2 kg -- standard koryu/museum typological convention, not a single named accessioned specimen",
+          "Tendo-ryu naginatajutsu (koryu founded 1582) -- 120-kata corpus performed in yoroi, technique pivoting to tsuki/gap-targeted cuts against armor",
+          "Toda-ha Buko-ryu naginatajutsu (Ellis Amdur, Koryu.com) -- ishizuki butt-strikes and one-handed shinshikake documented",
+          "Prior cluster research file: clusters/polearm_multi_and_blade_A.json (naginata calibration + audit_note)"
+        ],
+        "confidence_tier": "S2 -- typology-typical dimensions and mass are well-established convention across koryu/museum sources, but no single named accessioned specimen with calipers-and-scale measurement was cited in prior research; blade-vs-shaft mass split is estimated."
+      }
+    },
+    "glaive": {
+      "total_mass_kg": 1.9,
+      "total_mass_grade": "S2",
+      "total_length_m": 2.10,
+      "grip_or_haft_length_m": 0.357,
+      "head_length_m": 1.743,
+      "head_elements": [
+        {
+          "label": "leaf-shaped single-edge blade (socketed)",
+          "mass_kg_est": 0.82,
+          "x_m": 0.87,
+          "orient_deg": 0,
+          "extent_m": 0.50,
+          "material": "steel",
+          "geom_notes": "Broad single-edged leaf/falchion-like blade, socket-mounted (langet straps riveted down the haft, typical of European polearm sockets -- heavier iron construction than a tanged Japanese nakago). Curvature is slight and concentrated near the tip (mostly-straight spine with a curved cutting tip), deliberately less swept than the naginata's continuous saki-zori. Thicker, less whippy cross-section than the naginata's forged sword blade -- built as an axe-style chopping/cutting head rather than a fine-edged sword blade.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.034,
+        "material": "ash",
+        "notes": "Round-section haft, socket-mounted head with langets. No rear counterweight documented for the European form (unlike the naginata's ishizuki)."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "adornments": [],
+      "mass_budget": {
+        "sum_kg": 1.84,
+        "total_mass_kg": 1.9,
+        "residual_pct": -3.2,
+        "components": "shaft 1.02 kg (0.034 m dia x ~1.55 m ash length, ~700 kg/m3) + leaf blade 0.82 kg"
+      },
+      "provenance": {
+        "citations": [
+          "Typological range: European single-edge glaive, blade 45-60 cm leaf head, shaft ~120-180 cm, ~2-3.5 kg total -- generic museum-typology convention, no named accessioned specimen cited in prior research",
+          "Prior cluster research file: clusters/polearm_multi_and_blade_A.json (glaive calibration + audit_note) -- flagged there as the weakest-evidenced entry: handling research returned only a single S3 placeholder with no usable primary sources"
+        ],
+        "confidence_tier": "S3 -- no period treatise or named accessioned specimen was located in prior research; dimensions and mass rest on generic typological convention and family analogy to the naginata (matched total length and head/grip split, discriminated by mass and curvature only). This is the weakest-confidence weapon in this batch and should be revisited if a genuine glaive-specific specimen or treatise source surfaces."
+      }
+    },
+    "guandao": {
+      "total_mass_kg": 3.8,
+      "total_mass_grade": "S1",
+      "total_length_m": 2.40,
+      "grip_or_haft_length_m": 0.36,
+      "head_length_m": 2.04,
+      "head_elements": [
+        {
+          "label": "main dao blade (deep reclining-moon crescent, single edge)",
+          "mass_kg_est": 1.75,
+          "x_m": 1.53,
+          "orient_deg": 0,
+          "extent_m": 0.99,
+          "material": "steel",
+          "geom_notes": "Massive, deeply curved single-edged dao-type cutting blade (Royal Armouries specimen: 253 cm overall, 99 cm blade). Pronounced 'reclining moon' crescent curvature, thick spine tapering to a real but secondary point at the very tip (documented as NOT used as a primary thrusting feature in any period source -- purely a byproduct of the cutting-edge geometry). Cross-section is thick and heavy near the spine (built for sustained chopping impact, unlike a thin fencing blade), edge ground along the full concave face.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        },
+        {
+          "label": "rear spike/hook notch (spine feature at the blade's socket end)",
+          "mass_kg_est": 0.25,
+          "x_m": 0.55,
+          "orient_deg": 100,
+          "extent_m": 0.12,
+          "material": "steel",
+          "geom_notes": "A short, stout backward/upward-projecting spike integrated into the blade's spine near the socket, forming a notch between it and the main blade. Documented (S2 typological reasoning) as a hooking/catching feature for controlling an opponent's weapon, shield, or limb -- not a thrusting point, no source documents it as a percussive or piercing striking feature in its own right, purely a catch/hook.",
+          "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+        }
+      ],
+      "guards": [
+        {
+          "label": "socket collar/washer",
+          "type": "lug",
+          "extent_m": 0.03,
+          "material": "steel",
+          "x_m": 0.05,
+          "orient_deg": 0,
+          "mass_kg_est": 0.05,
+          "notes": "Small decorative/structural collar or washer at the socket-to-haft junction, sometimes shaped as a stylized beast face on ornate specimens. Not documented as a hand-protecting guard structure in any source -- purely a socket-reinforcement/decorative fitting, distinct in function from a European cross-guard."
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.038,
+        "material": "hardwood (often waxwood/gun or similar dense wood), sometimes iron-shod",
+        "notes": "Thick, often octagonal-faceted shaft to resist the torque of the heavy forward-loaded head; grip position sits close to the butt (per the harmonized grip fraction 0.150) to maximize rear-hand leverage against the forward mass."
+      },
+      "pommel": {"mass_kg_est": 0.0, "x_m": 0.0},
+      "butt": {"mass_kg_est": 0.20, "x_m": -0.36},
+      "adornments": [
+        {
+          "label": "silk or horsehair tassel at the blade/socket junction",
+          "count": 1,
+          "extent_m": 0.15,
+          "attachment_x_m": 0.05,
+          "attested": "S2 -- widely attested in period illustrations (e.g. Wujing Zongyao and later Ming/Qing military manual woodcuts) and on surviving Qing-dynasty ceremonial/examination specimens, but not universal on plain military-issue heads; treated as a genuine, attested type-feature for ornamented/ceremonial and higher-status martial specimens rather than every plain field weapon."
+        }
+      ],
+      "mass_budget": {
+        "sum_kg": 3.80,
+        "total_mass_kg": 3.8,
+        "residual_pct": 0.0,
+        "components": "shaft 1.60 kg (0.038 m dia x ~2.05 m hardwood length, ~750 kg/m3, octagonal-section correction ~0.9) + main blade 1.75 kg + rear spike/notch 0.25 kg + socket collar 0.05 kg + butt counterweight 0.20 kg"
+      },
+      "provenance": {
+        "citations": [
+          "Royal Armouries specimen: 253 cm overall length, 99 cm blade (mid-19th-century) -- specimen-measured, primary length/proportion anchor for this cluster",
+          "Historical war-weight range ~3-4.5 kg for field/martial specimens, distinct from the legendary/apocryphal 18-48 kg 'Guan Yu weapon' and the graduated 48-83 kg Qing wuju examination-lift specimens (strength-test implements, not combat weapons)",
+          "Qi Jiguang, Ji Xiao Xin Shu, 1560/1584 editions -- standardized infantry formation inclusion",
+          "Wujing Zongyao, c. 1040-1044, Song dynasty -- illustrated weapon-type entry, earliest attestation",
+          "Prior cluster research file: clusters/polearm_multi_and_blade_A.json (guandao calibration + audit_note)"
+        ],
+        "confidence_tier": "S1 for overall length/blade-length proportion (direct Royal Armouries specimen measurement); S2 for the head-element mass split (rear spike and socket collar masses are typological estimates, not independently weighed) and for the tassel adornment (attested in period illustration and on ceremonial specimens, not confirmed universal on plain war-weight examples)."
+      }
+    }
+  },
+  "cluster_notes": "All five weapons' single-lump mass/length/haft-diameter primitives are held IDENTICAL to the harmonized calibration in final_weapons.json (spetum 1.9kg/2.199m, partisan 2.6kg/2.301m, naginata 1.4kg/2.10m, glaive 1.9kg/2.10m, guandao 3.8kg/2.40m) -- this batch only decomposes those totals into located, materialed parts per the Phase 0 brief; it does not re-litigate the harmonized totals themselves. Working-hand axis convention: x=0 at the lead-hand grip point (as issued, i.e. the harmonized grip_len from the butt), positive x toward the tip, matching weapon_physics.derive(). All five are two-handed hafted-tip polearms with hilt='none' -- no cross-guard/quillon family exists in this cluster; every 'guard' function present (spetum/partisan wings, guandao rear spike) is carried on the HEAD, not at the hand, which is why every hand_guard token in the harmonized calibration sits low (0.15-0.2) while blade_guard varies by documented catching function. Mass-budget residuals were tuned to fall within +/-10% of total_mass_kg for all five (spetum -5.3%, partisan -1.2%, naginata -3.6%, glaive -3.2%, guandao 0.0%) by adjusting shaft-length assumptions and head-element proportions within specimen-plausible bounds; no total_mass_kg was altered to force convergence. CONFIDENCE ORDERING (strongest to weakest): guandao and partisan carry S1 specimen-measured length/mass anchors (Royal Armouries; Saint Louis Art Museum 32556) plus S1 treatise handling research; spetum and naginata rest on S2 typological convention with strong treatise-documented morphology (Monte's S1 description for spetum; Tendo-ryu/Toda-ha Buko-ryu S1 kata-corpus evidence for naginata) but no single named accessioned war-weight specimen; glaive is the weakest entry in the batch -- no period treatise or named specimen was found in prior research (a single S3 placeholder), so its head-element mass, curvature discriminator (0.22 vs naginata's 0.50), and total mass rest entirely on generic European-typology convention and family analogy to the naginata, and should be revisited first if better sourcing becomes available."
+}

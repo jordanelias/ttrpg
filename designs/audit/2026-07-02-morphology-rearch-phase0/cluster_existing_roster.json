@@ -1,0 +1,778 @@
+{
+  "weapons": {
+    "rapier": {
+      "total_mass_kg": 1.3,
+      "mass_grade": "S2",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.62,
+          "x_m": 0.48,
+          "orient_deg": 0,
+          "extent_m": 0.96,
+          "material": "steel",
+          "geom_notes": "narrow hexagonal/diamond cross-section thrusting blade, stiff ricasso (period specimens run ricasso thickness >=8.3mm near the guard, tapering to an acute point); edge present but secondary — a fuller or ridged flat runs part of the length on many swept-hilt examples; point is the primary striking feature (near-uniform taper to a fine point).",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "swept hilt (compound guard: knucklebow + multiple sweeping bars + ring/side-rings)",
+          "type": "shell",
+          "extent_m": 0.1,
+          "material": "steel",
+          "x_m": 0.02,
+          "orient_deg": 90,
+          "mass_kg_est": 0.3
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.028,
+        "material": "wood core (wire-bound) with pommel-nut tang",
+        "notes": "wire-wrapped wooden grip core, oval cross-section for hand orientation; grip_len 0.18m matches a real ~18-20cm swept-hilt rapier grip",
+        "mass_kg_est": 0.1
+      },
+      "pommel": {
+        "mass_kg_est": 0.348,
+        "x_m": -0.18
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.62,
+        "sum_guards_kg": 0.3,
+        "pommel_kg": 0.348,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.1,
+        "sum_est_kg": 1.368,
+        "total_mass_kg": 1.3,
+        "residual_pct": 5.23
+      },
+      "provenance": {
+        "citations": [
+          "Oakeshott Collection Spanish rapier (Alonzo de Sahagun blade, 1596; hilt ~1550s), total 1010g, blade 101cm, blade 5.6mm thick x 3cm wide at base, grip 9cm, CoM 3.175cm from crossguard (virtusmartialis.substack.com An Oakeshott Collection Spanish Rapier) — used for hilt/blade mass split ratio",
+          "Wallace Collection swept-hilt rapiers (A. series) — typology for swept-hilt guard mass fraction (compound wire/bar guards commonly 250-350g on a full swept hilt)",
+          "weapons.py anchor: pommel_kg=0.348 (already the calibrated canonical pommel mass), head_len 3.2 units = 0.96m, grip_len 0.6 units = 0.18m"
+        ],
+        "confidence_tier": "S2 typology-typical (blade/guard split proportioned from the Oakeshott specimen ratio (hilt+guard ~=390g of 1010g total =~39%) applied to the anchor mass; pommel is the canonical anchor value, not independently measured)"
+      },
+      "notes": "Rapier total is heavier than the Oakeshott exemplar (1.3kg vs 1.01kg) — period rapiers span a wide mass range (military/duelling forms run 0.9-1.3kg); the anchor sits at the upper end. Guard mass scaled up proportionally for a fuller swept/cup hybrid."
+    },
+    "arming": {
+      "total_mass_kg": 1.2,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.78,
+          "x_m": 0.36,
+          "orient_deg": 0,
+          "extent_m": 0.72,
+          "material": "steel",
+          "geom_notes": "straight double-edged Oakeshott-type blade (Type XIV/XVIIIa family), flattened diamond or lenticular cross-section with a central fuller on many specimens, tapering to a usable point; both cut and thrust capable — the canonical cut_thrust head. Comparable to Wallace Collection A460 (Oakeshott Type XVIIIa, ~0.9-1.0m blade, ~1.1-1.3kg complete sword).",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "straight cross/quillon guard",
+          "type": "cross",
+          "extent_m": 0.16,
+          "material": "steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.09
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.026,
+        "material": "wood core wrapped in leather or cord",
+        "notes": "waisted/barrel grip, single-hand width (~24cm, unusually long for 1H but within documented range for a two-hand-capable arming sword)",
+        "mass_kg_est": 0.096
+      },
+      "pommel": {
+        "mass_kg_est": 0.234,
+        "x_m": -0.24
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.78,
+        "sum_guards_kg": 0.09,
+        "pommel_kg": 0.234,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.096,
+        "sum_est_kg": 1.2,
+        "total_mass_kg": 1.2,
+        "residual_pct": 0.0
+      },
+      "provenance": {
+        "citations": [
+          "Oakeshott typology Type XIV/XVIIIa arming swords, complete-sword mass range 1.0-1.3kg (Records of the Medieval Sword; Wallace Collection A460 and similar)",
+          "weapons.py anchor: pommel_kg=0.234 (canonical), head_len 2.4 units = 0.72m, grip_len 0.8 units = 0.24m",
+          "Standard cross-guard mass for a simple straight quillon guard, ~80-120g (typology-typical across surviving arming-sword hilts)"
+        ],
+        "confidence_tier": "S2 typology-typical"
+      },
+      "notes": ""
+    },
+    "longsword": {
+      "total_mass_kg": 1.4,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.87,
+          "x_m": 0.42,
+          "orient_deg": 0,
+          "extent_m": 0.84,
+          "material": "steel",
+          "geom_notes": "straight double-edged blade, Oakeshott Type XVIIIa/XVIIIb family, flattened diamond cross-section (sometimes fullered proximal third), tapering to an acute point for cut-and-thrust use in both true grip and half-sword; specimen-comparable to Wallace A460 (1.1kg complete) and the well-documented Fiore-tradition longsword corpus.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "straight cross guard (occasionally slightly curved quillons)",
+          "type": "cross",
+          "extent_m": 0.2,
+          "material": "steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.12
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.03,
+        "material": "wood core wrapped in leather over cord risers",
+        "notes": "two-hand grip, ~25cm (grip_len 0.85 units = 25.5cm matches real longsword grips of 20-28cm)",
+        "mass_kg_est": 0.118
+      },
+      "pommel": {
+        "mass_kg_est": 0.3,
+        "x_m": -0.255
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.87,
+        "sum_guards_kg": 0.12,
+        "pommel_kg": 0.3,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.118,
+        "sum_est_kg": 1.408,
+        "total_mass_kg": 1.4,
+        "residual_pct": 0.57
+      },
+      "provenance": {
+        "citations": [
+          "Oakeshott Type XVIIIa/XVIIIb longsword corpus, complete-sword mass 1.2-1.6kg typical (Records of the Medieval Sword)",
+          "weapons.py PRIMITIVE-AUDIT note [G,T1/T2]: grip_len corrected to 0.85 units (~25cm) matching real longsword grip length (was previously 1.6, a phantom-grip defect); pommel_kg=0.30 corrected from 0.14 to match real wheel/pear pommel mass range 0.2-0.4kg",
+          "Fiore dei Liberi Fior di Battaglia (treatise, morphology only — two-hand grip, half-sword capable form)"
+        ],
+        "confidence_tier": "S1 specimen-grounded (anchor mass/pommel already corrected against real specimen ranges per the cited PRIMITIVE-AUDIT)"
+      },
+      "notes": ""
+    },
+    "greatsword": {
+      "total_mass_kg": 2.7,
+      "mass_grade": "S2",
+      "head_elements": [
+        {
+          "label": "blade (with ricasso, often flanked by parrying lugs)",
+          "mass_kg_est": 1.75,
+          "x_m": 0.63,
+          "orient_deg": 0,
+          "extent_m": 1.26,
+          "material": "steel",
+          "geom_notes": "long straight double-edged blade (Zweihander/montante family), flattened hexagonal or diamond cross-section, broad ricasso section near the guard (often leather-covered, sometimes flanked by small parrying lugs) enabling a choked half-sword-style secondary grip; blunt ricasso, sharp distal 2/3 of blade tapering to a point.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "cross guard with recurved/S-shaped quillons",
+          "type": "cross",
+          "extent_m": 0.26,
+          "material": "steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.19
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.032,
+        "material": "wood core wrapped in leather (long two-hand grip)",
+        "notes": "long two-hand hilt, grip_len 1.3 units = 0.39m; the grip fraction (~0.24 of total length) matches the documented Zweihander/montante hilt-fraction range 0.17-0.25 per the weapons.py PRIMITIVE-AUDIT note",
+        "mass_kg_est": 0.263
+      },
+      "pommel": {
+        "mass_kg_est": 0.548,
+        "x_m": -0.39
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.75,
+        "sum_guards_kg": 0.19,
+        "pommel_kg": 0.548,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.263,
+        "sum_est_kg": 2.751,
+        "total_mass_kg": 2.7,
+        "residual_pct": 1.89
+      },
+      "provenance": {
+        "citations": [
+          "Zweihander/montante typology — complete-sword mass typically 2.5-3.2kg for war forms (ceremonial/parade Zweihanders run heavier, 3.5-6kg, excluded here as a different weapon class)",
+          "weapons.py PRIMITIVE-AUDIT [G,T0+T2]: head_len/grip_len set to 4.2/1.3 units (grip fraction ~0.24) matching documented Zweihander/montante hilt-fraction 0.17-0.25",
+          "Solingen/Passau two-hand sword workshop tradition (typology for ricasso + parrying-lug construction)"
+        ],
+        "confidence_tier": "S2 typology-typical"
+      },
+      "notes": ""
+    },
+    "sabre": {
+      "total_mass_kg": 0.9,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.53,
+          "x_m": 0.39,
+          "orient_deg": 0,
+          "extent_m": 0.78,
+          "material": "steel",
+          "geom_notes": "curved single-edged blade (1796 Pattern light cavalry sabre family), moderate curvature, broad fuller on each side, false edge near the point on some patterns; blade length specimen-attested 83-84cm, curvature moderate (not a deep shamshir/scimitar sweep) — matches weapons.py curvature=0.42 flagged as [NO SPECIMEN DATA] LOW-CONF for the exact figure but the curved-cut morphology itself is well attested.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "stirrup hilt: single iron knucklebow + quillon",
+          "type": "knucklebow",
+          "extent_m": 0.14,
+          "material": "iron/steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.095
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.027,
+        "material": "wood grip wrapped in leather with wire binding",
+        "notes": "single-hand grip ~21cm (0.7 units); simple stirrup-hilt design deliberately kept light per period doctrine (troop usability over elite finish)",
+        "mass_kg_est": 0.08
+      },
+      "pommel": {
+        "mass_kg_est": 0.195,
+        "x_m": -0.21
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.53,
+        "sum_guards_kg": 0.095,
+        "pommel_kg": 0.195,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.08,
+        "sum_est_kg": 0.9,
+        "total_mass_kg": 0.9,
+        "residual_pct": 0.0
+      },
+      "provenance": {
+        "citations": [
+          "1796 Pattern Light Cavalry Sabre: trooper blade weight ~0.96kg complete, blade 83-84cm, hilt \"simple stirrup form with a single iron knucklebow and quillon, so as to be free of unnecessary weight\", overall length ~95-98cm, hilt ~13-14cm of that (antique-swords.co.uk \"How Much Do 1796 Pattern Light Cavalry Sabres Weigh?\"; Wikipedia Pattern 1796 light cavalry sabre)",
+          "weapons.py anchor: pommel_kg=0.195, hand_guard=0.52 reduced from 0.7 per PRIMITIVE-AUDIT [G, 1796-stirrup]: \"a single knucklebow guards the knuckles only... not a cup hilt\""
+        ],
+        "confidence_tier": "S1 specimen-grounded for total mass/blade length (1796 Pattern); guard/grip mass split is S2 typology-typical proportioning"
+      },
+      "notes": "Weakest-confidence element: exact blade curvature magnitude — the engine flags this itself [NO SPECIMEN DATA] LOW-CONF; the sabre analysed here (1796 Pattern) is a specific, well-documented anchor but the canonical \"sabre\" key is meant to represent the broader curved-cut military sabre class, so curvature/mass could shift somewhat depending on which regional pattern is taken as type."
+    },
+    "dagger": {
+      "total_mass_kg": 0.3,
+      "mass_grade": "S2",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.16,
+          "x_m": 0.105,
+          "orient_deg": 0,
+          "extent_m": 0.21,
+          "material": "steel",
+          "geom_notes": "straight double- or single-edged blade (war-dagger/rondel-adjacent family), stiff triangular or diamond cross-section giving high rigidity for an edged blade (weapons.py PRIMITIVE-AUDIT corrected cross_section down from 0.97 [edgeless-rondel rigidity] to 0.84 to stay consistent with edge_keenness=0.8 — this is an EDGED war-dagger, not a pure edgeless punch-spike), short overall length prioritizing thrust but genuinely edged for cutting.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "small cross guard / disc guard",
+          "type": "cross",
+          "extent_m": 0.05,
+          "material": "steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.025
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.022,
+        "material": "wood or horn scales riveted to the tang",
+        "notes": "short single-hand grip ~12cm",
+        "mass_kg_est": 0.068
+      },
+      "pommel": {
+        "mass_kg_est": 0.021,
+        "x_m": -0.12
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.16,
+        "sum_guards_kg": 0.025,
+        "pommel_kg": 0.021,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.068,
+        "sum_est_kg": 0.274,
+        "total_mass_kg": 0.3,
+        "residual_pct": -8.67
+      },
+      "provenance": {
+        "citations": [
+          "Medieval war-dagger / rondel-dagger typology, complete-weapon mass typically 0.2-0.4kg (Wallace Collection dagger corpus; Oakeshott-adjacent dagger typology)",
+          "weapons.py PRIMITIVE-AUDIT [G]: cross_section 0.97->0.84 note establishing this is an edged war-dagger, not an edgeless rondel spike — used here to justify a real (non-trivial) edge on the blade element rather than a pure point-spike morphology"
+        ],
+        "confidence_tier": "S2 typology-typical"
+      },
+      "notes": ""
+    },
+    "paired_short": {
+      "total_mass_kg": 0.7,
+      "mass_grade": "S3",
+      "head_elements": [
+        {
+          "label": "blade",
+          "mass_kg_est": 0.36,
+          "x_m": 0.21,
+          "orient_deg": 0,
+          "extent_m": 0.42,
+          "material": "steel",
+          "geom_notes": "short single- or double-edged cut-thrust blade (short-sword / main-gauche-adjacent-but-full-fighting-length family, as opposed to a pure parrying dagger); moderate rigidity, edged for cutting with a usable thrusting point — per weapons.py this key represents ONE unit of a same-side-pair (dual-wield is modeled via tempo, not doubled reach/mass); this record is per-weapon (single blade), not the pair.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "D-guard / simple knuckle-guard hilt",
+          "type": "knucklebow",
+          "extent_m": 0.11,
+          "material": "steel",
+          "x_m": 0.0,
+          "orient_deg": 90,
+          "mass_kg_est": 0.075
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.025,
+        "material": "wood grip wrapped in leather or cord",
+        "notes": "short single-hand grip ~15cm",
+        "mass_kg_est": 0.061
+      },
+      "pommel": {
+        "mass_kg_est": 0.202,
+        "x_m": -0.15
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.36,
+        "sum_guards_kg": 0.075,
+        "pommel_kg": 0.202,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.061,
+        "sum_est_kg": 0.698,
+        "total_mass_kg": 0.7,
+        "residual_pct": -0.29
+      },
+      "provenance": {
+        "citations": [
+          "Side-sword / cut-thrust short-sword typology (e.g. Italian sidesword forms used in main-gauche pairs), complete-weapon mass 0.6-0.9kg typical for a genuinely fighting-length short blade",
+          "weapons.py PRIMITIVE-AUDIT [G]: hilt none->simple \"consistency with the attested D-guard (hand_guard 0.55); GUARD mass sits at the hand\" — establishes the D-guard as a real hardware feature that must carry guard mass, not a bare tang"
+        ],
+        "confidence_tier": "S3 estimated — this key is a COMPOSITE reference (no single named historical weapon called \"paired_short\"; it stands in for the class of full-length single-hand cut-thrust swords used in a same-side pair). Numbers are typology-typical for that class, not a specific specimen."
+      },
+      "notes": "Lower-confidence key: \"paired_short\" is a design abstraction (a same-side-pair fighting sword), not a single attested historical type, so element masses are typological estimates rather than a specimen-anchored breakdown."
+    },
+    "spear": {
+      "total_mass_kg": 2.0,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "spearhead (leaf-shaped socketed point)",
+          "mass_kg_est": 0.4,
+          "x_m": 0.1,
+          "orient_deg": 0,
+          "extent_m": 0.28,
+          "material": "steel/iron",
+          "geom_notes": "socketed leaf-shaped or narrow lozenge point, central rib/midrib for stiffness, sharpened edges along the leaf for a secondary cutting capability, socket accepts the ash haft; per weapons.py SPEAR-BALANCE note [Jordan A, 2026-06-30]: a 40mm-wide head gave an impossible 0.23kg head under the old model, so head mass is set at a real S1 value (~0.35-0.45kg for a war-spear leaf head) and the balance is corrected via the sauroter butt-spike instead of inflating the head.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.035,
+        "material": "ash (occasionally oak) — straight-grained tapered haft",
+        "notes": "full 2.01m haft is ash at ~35mm diameter; the \"grip\" is a working point along the haft, not a distinct hilt component — the whole shaft is grippable/regrippable (grip_choke_max derives from this)",
+        "mass_kg_est": 1.354
+      },
+      "pommel": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "butt": {
+        "mass_kg_est": 0.25,
+        "x_m": -0.36,
+        "label": "sauroter (bronze/iron butt-spike counterweight)"
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.4,
+        "sum_guards_kg": 0,
+        "pommel_kg": 0.0,
+        "butt_kg": 0.25,
+        "shaft_or_grip_est_kg": 1.354,
+        "sum_est_kg": 2.004,
+        "total_mass_kg": 2.0,
+        "residual_pct": 0.2
+      },
+      "provenance": {
+        "citations": [
+          "Greek dory / medieval war-spear typology — bronze/iron sauroter butt-spikes attested from Greek hoplite spears onward as a doubled function (secondary point + rear counterweight for balance); weapons.py butt_kg=0.25 is the already-recorded canonical sauroter mass per this batch's cluster notes",
+          "weapons.py SPEAR-BALANCE [Jordan A, 2026-06-30]: haft_d=0.035 (35mm ash), the balance-correction rationale for using the sauroter rather than an oversized head",
+          "Ash haft density ~700 kg/m^3 (standard timber reference for spear-shaft species)"
+        ],
+        "confidence_tier": "S1 specimen-grounded for haft diameter/material and butt-spike mass (already canon-fixed in weapons.py); head mass is S2 typology-typical (leaf-head war-spear range)"
+      },
+      "notes": "Mass budget note: at 35mm/700kg-m^3/2.01m the raw cylindrical shaft would be ~1.35kg BEFORE tapering; a real haft tapers (thicker at the grip, thinner toward the head) so true wood mass runs lower than the untapered cylinder — see mass_budget residual below; the residual is absorbed as taper/turning loss."
+    },
+    "staff": {
+      "total_mass_kg": 1.5,
+      "mass_grade": "S2",
+      "head_elements": [
+        {
+          "label": "working tip (blunt, no metal fitting — bare wood end)",
+          "mass_kg_est": 0.0,
+          "x_m": 0.84,
+          "orient_deg": 0,
+          "extent_m": 0.0,
+          "material": "wood",
+          "geom_notes": "blunt bare-wood striking end, no head element distinct from the shaft — a quarterstaff has no separate \"head,\" the whole rod is the striking body; recorded as a zero-mass point element purely to mark the working tip location for the strike_concentration=0.15 (broad-body impact, not concentrated) primitive.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.04,
+        "material": "ash or oak, straight-grained, sometimes octagonal in cross-section",
+        "notes": "uniform-diameter rod (no distinct head/grip split — head_len and grip_len are equal at 0.84m each, i.e. the \"grip\" is just the rear working half of the same stave); D_HAFT=0.040m is explicitly back-solved from the quarterstaff in weapon_physics.py",
+        "mass_kg_est": 1.478
+      },
+      "pommel": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.0,
+        "sum_guards_kg": 0,
+        "pommel_kg": 0.0,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 1.478,
+        "sum_est_kg": 1.478,
+        "total_mass_kg": 1.5,
+        "residual_pct": -1.47
+      },
+      "provenance": {
+        "citations": [
+          "weapon_physics.py: \"D_HAFT = 0.040 m haft diameter (staff back-solve)\" — the 40mm diameter is explicitly derived FROM the staff's known total mass/length, making this the calibration source rather than an independent check",
+          "English quarterstaff typology (Silver-tradition), ~2.0m ash/oak stave, typically 1.3-1.8kg complete"
+        ],
+        "confidence_tier": "S2 typology-typical (the 40mm diameter is a back-solved calibration constant already in the engine, not an independently sourced specimen measurement — flagged as circular if used to \"verify\" the mass anchor)"
+      },
+      "notes": ""
+    },
+    "mace": {
+      "total_mass_kg": 1.2,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "flanged head (6-8 flanges, solid steel/iron block)",
+          "mass_kg_est": 0.95,
+          "x_m": 0.486,
+          "orient_deg": 90,
+          "extent_m": 0.14,
+          "material": "steel/iron",
+          "geom_notes": "solid flanged striking block (6-8 radiating steel flanges around a central haft-socket), blunt/concussive — no edge; the flanges concentrate impact along their narrow edges (this is the strike_concentration=0.45 primitive: partly concentrated via flange edges, not a fully broad face nor a fully concentrated spike); comparable to Met Museum mace (mid-15th/early-16thC, France?) at 850g total complete weapon, head 14cm long, and Wallace/period flanged-mace specimens generally 0.7-1.3kg complete.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [],
+      "haft_or_grip": {
+        "diameter_m": 0.028,
+        "material": "steel haft (faceted/octagonal) or wood core with steel langets",
+        "notes": "single-hand haft ~21cm to the head; many period maces are ALL-STEEL from head to haft (no wood component) which is why the head can be such a large mass fraction of a comparatively short weapon",
+        "mass_kg_est": 0.25
+      },
+      "pommel": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": -0.21,
+        "label": "small pommel-cap / hand-stop (integral to the steel haft, not a separate counterweight)"
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.95,
+        "sum_guards_kg": 0,
+        "pommel_kg": 0.0,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.25,
+        "sum_est_kg": 1.2,
+        "total_mass_kg": 1.2,
+        "residual_pct": 0.0
+      },
+      "provenance": {
+        "citations": [
+          "Metropolitan Museum of Art mace (possibly French, mid-15th-early 16thC), steel, thin faceted shaft, short head with pierced triangular flanges, total length 53.5cm, head length 14cm, total weight 850g (metmuseum.org \"Mace - possibly French\")",
+          "Cleveland Museum of Art, Seven-Flanged Mace (clevelandart.org 1916.1589) — typology for flange count",
+          "weapons.py anchor mass=1.2kg sits at the heavier end of the attested complete-mace range (0.85-1.3kg), consistent with a war mace rather than a lighter parade/ceremonial piece"
+        ],
+        "confidence_tier": "S1 specimen-grounded (Met Museum specimen for proportions; anchor total mass at the upper end of, but within, the attested range)"
+      },
+      "notes": ""
+    },
+    "poleaxe": {
+      "total_mass_kg": 2.5,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "hammer face (front, blunt square/pyramidal-studded striking face)",
+          "mass_kg_est": 0.55,
+          "x_m": 0.85,
+          "orient_deg": 90,
+          "extent_m": 0.06,
+          "material": "steel",
+          "geom_notes": "square or rectangular blunt hammer face, often pyramidal-studded (\"toothed\") for grip on plate, mounted on one side of the head opposite the beak/fluke; concussive delivery.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        },
+        {
+          "label": "beak/fluke (rear-facing curved spike/hook, opposite the hammer)",
+          "mass_kg_est": 0.35,
+          "x_m": 0.85,
+          "orient_deg": 180,
+          "extent_m": 0.08,
+          "material": "steel",
+          "geom_notes": "curved beak or fluke, opposite the hammer face on the same head — the primary plate-puncturing element (concentrated point impact); often slightly hooked for a catch/pull function against an opponent's harness or weapon.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        },
+        {
+          "label": "top spike (langet-mounted, forward-thrusting point above the hammer/beak)",
+          "mass_kg_est": 0.28,
+          "x_m": 1.02,
+          "orient_deg": 0,
+          "extent_m": 0.2,
+          "material": "steel",
+          "geom_notes": "forward-projecting straight spike mounted above the hammer/beak assembly along the thrust axis, socketed and reinforced by langets running down the haft; per the Wallace A925 specimen the top spike measures ~8.75in (22.2cm) — used to size extent_m here.",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "steel langets (metal straps reinforcing the haft below the head, incidental hand protection)",
+          "type": "langet",
+          "extent_m": 0.45,
+          "material": "steel",
+          "x_m": 0.6,
+          "orient_deg": 0,
+          "mass_kg_est": 0.12
+        },
+        {
+          "label": "small hand-guard disc/rondel below the head",
+          "type": "disc",
+          "extent_m": 0.1,
+          "material": "steel",
+          "x_m": 0.65,
+          "orient_deg": 90,
+          "mass_kg_est": 0.05
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.032,
+        "material": "ash haft, langet-reinforced, centre-gripped, running the FULL weapon length (the head assembly is mounted onto/around the continuing haft, not a separate steel-only extension)",
+        "notes": "2H centre-grip haft; per weapons.py PRIMITIVE-AUDIT [G,T0/T2] the total length was corrected to 1.8m (50/50 head/grip split) against Art Institute (177.8cm) and Royal Armouries VII.1510 (236.7cm) specimens. Mass estimated as a full-length (1.8m) 32mm-diameter ash cylinder at 700 kg/m^3 = 1.013kg, matching weapon_physics.derive()'s own shaft convention for hafted_tip weapons (the shaft rod spans the FULL length Lt = head_len+grip_len, not just the grip_len region — see derive() line \"parts.append((m_shaft, (Lt/2)-Lg, Lt))\")",
+        "mass_kg_est": 1.013
+      },
+      "pommel": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "butt": {
+        "mass_kg_est": 0.22,
+        "x_m": -0.9,
+        "label": "rear queue/spike (counterweight + secondary rear point)"
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 1.18,
+        "sum_guards_kg": 0.17,
+        "pommel_kg": 0.0,
+        "butt_kg": 0.22,
+        "shaft_or_grip_est_kg": 1.013,
+        "sum_est_kg": 2.583,
+        "total_mass_kg": 2.5,
+        "residual_pct": 3.32
+      },
+      "provenance": {
+        "citations": [
+          "Wallace Collection A925 (c.1430, probably German): overall length ~74in (~1.88m), top spike 8.75in (22.2cm), blade/hammer element 6.6in (16.8cm), total weight ~5.25lb (~2.38kg) (davisreproductions.com Wallace Poleaxe entry, myArmoury.com The Medieval Poleaxe)",
+          "weapons.py PRIMITIVE-AUDIT [G,T0/T2]: length corrected to 1.8m against Art Institute (177.8cm) and Royal Armouries VII.1510 (236.7cm) specimens; butt_kg=0.22 already the canonical rear queue mass",
+          "Fiore dei Liberi Fior di Battaglia / Le Jeu de la Hache (treatise corpus, morphology + composite-head functional description only — hammer/beak/spike three-part head is the standard documented form)"
+        ],
+        "confidence_tier": "S1 specimen-grounded (Wallace A925 total mass close to anchor at 2.38kg vs 2.5kg; individual head-element split between hammer/beak/spike is S2 typology-typical since surviving catalogue records rarely give a per-element mass breakdown)"
+      },
+      "notes": ""
+    },
+    "longsword_halfsword": {
+      "total_mass_kg": 1.4,
+      "mass_grade": "S1",
+      "head_elements": [
+        {
+          "label": "blade tip segment (forward of the new working-hand point — the working point in half-sword grip)",
+          "mass_kg_est": 0.435,
+          "x_m": 0.21,
+          "orient_deg": 0,
+          "extent_m": 0.42,
+          "material": "steel",
+          "geom_notes": "SAME physical blade as the longsword record (identical part, identical taper/section) — this element is just the FORWARD segment of that one blade, now measured from the shifted working- hand origin. The lead hand has moved from the hilt down onto the (blunt-ish/ricasso-adjacent or gloved) blade itself, per weapons.py: \"the held span is STEEL, not a wood grip\" (gripped=True flag). x_m/extent_m here describe only the portion of the blade still ahead of the new grip point (head_len=1.4 units=0.42m).",
+          "edge_undulation": {
+            "amplitude_mm": 0,
+            "period_mm": 0
+          }
+        }
+      ],
+      "guards": [
+        {
+          "label": "cross guard (the SAME cross as the longsword record — now trailing BEHIND the working hand, inert as a guard in this grip, sitting within the \"grip_len\" span)",
+          "type": "cross",
+          "extent_m": 0.2,
+          "material": "steel",
+          "x_m": -0.42,
+          "orient_deg": 90,
+          "mass_kg_est": 0.12
+        }
+      ],
+      "haft_or_grip": {
+        "diameter_m": 0.03,
+        "material": "steel blade (rear/aft segment only, now the gripped span) + original wood/leather hilt grip, trailing behind the new working hand",
+        "notes": "the \"grip_len\"=2.6 units=0.78m span here is NOT a wood grip — it is the REST of the longsword (rear blade segment 0.435kg + original grip 0.118kg) now trailing behind the shifted working hand; the cross guard and pommel are reported as their own entries below (same masses as the longsword record) so the four entries partition the SAME 1.4kg total rather than re-deriving it; weapon_physics.derive() treats the whole FORWARD segment as one uniform steel rod per its gripped=True special case (a modelling simplification) — this record gives the fuller physical picture the model collapses",
+        "mass_kg_est": 0.553
+      },
+      "pommel": {
+        "mass_kg_est": 0.3,
+        "x_m": -0.675,
+        "label": "the SAME pommel as the longsword record, now further behind the new working-hand origin (original pommel position -0.255m from hilt, minus the 0.42m origin shift = -0.675m from the new origin)"
+      },
+      "butt": {
+        "mass_kg_est": 0.0,
+        "x_m": 0.0
+      },
+      "adornments": [],
+      "mass_budget": {
+        "sum_head_elements_kg": 0.435,
+        "sum_guards_kg": 0.12,
+        "pommel_kg": 0.3,
+        "butt_kg": 0.0,
+        "shaft_or_grip_est_kg": 0.553,
+        "sum_est_kg": 1.408,
+        "total_mass_kg": 1.4,
+        "residual_pct": 0.57
+      },
+      "provenance": {
+        "citations": [
+          "Same specimen basis as the longsword record above (Oakeshott Type XVIIIa/XVIIIb longsword corpus) — half-swording is a GRIP CHANGE on the identical physical object, not a different weapon",
+          "Fiore dei Liberi Fior di Battaglia (\"mit dem kurzen Schwert\" / posta di vera croce family plays) — treatise attestation of the half-sword grip and its tactical use (armoured thrust-fighting), morphology-only citation (no numeric facts taken from the treatise)",
+          "weapon_physics.py derive(): documents the gripped=True special case treating the forward segment as a \"uniform steel rod... you grip the blade\" — the modelling convention this record must match"
+        ],
+        "confidence_tier": "S1 (same physical specimen as longsword; only the working-hand reference point differs)"
+      },
+      "notes": "CLUSTER-NOTE COMPLIANCE: this is NOT a new weapon — same parts as longsword (blade/cross/grip/pommel), reported with x_m shifted so x=0 sits at the new mid-blade working-hand point (0.42m forward of the original hilt, i.e. 0.42m back from the original tip). mass_budget residual below is expected to be small since total_mass_kg is unchanged from the longsword (1.4kg) and the same five physical masses (blade fwd + blade aft/cross/grip/pommel, decomposed differently) sum to it."
+    }
+  },
+  "cluster_notes": "Canonical-12 batch. All positions x_m measured from the WORKING HAND per weapon_physics.derive() convention (x=0 at working hand, +x toward tip, -x toward butt/pommel), in metres; head_len/grip_len unit-conversion is UNIT_M=0.30 m per length-unit as fixed in weapon_physics.py. longsword_halfsword is reported as the identical longsword part-set (same blade/cross/grip/pommel) with the working-hand origin shifted 0.42m forward along the blade (i.e. to head_len=1.4 units=0.42m from the new hand position, matching the canonical record) — see its own notes field for the full origin-shift derivation. poleaxe is decomposed into its three head elements (hammer face, beak/fluke, top spike) plus two guard-adjacent hardware elements (langets, hand-guard disc) plus the rear queue/spike (butt). mace head is reported as a single flanged striking block (the flanges are a surface/geometry feature of the one head casting, not separate mass elements, consistent with mace being wclass='hafted_block' with a single blunt head token in weapons.py). spear butt_kg=0.25 (sauroter) is used as-given per the batch instructions; its head mass (0.40kg) and haft mass are back-derived to balance against the anchor total. All 'guards' entries for hafted weapons (spear/staff/mace) are empty except poleaxe, which genuinely carries langets/a hand-guard disc per specimen photographs — spear/staff/mace have no cross/quillon structure and this is reported as a fact (empty list), not an omission."
+}

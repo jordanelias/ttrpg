@@ -20,6 +20,11 @@ CFG = dict(
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
   LEGIB_SWING=1.25, LEGIB_THRUST=0.80, LEGIB_COMMIT_K=0.10, LEGIB_LUNGE=0.25,
+  # morphology-rearch Phase B5: a feathered/tasselled/ringed weapon's ornament motion adds visual clutter that
+  # degrades the defender's read regardless of the attack's own mode legibility. [SIM-CALIBRATE] — the 3 roster
+  # weapons with attested adornments (ranseur/guandao/jian) are period-documented as ceremonial-phase features,
+  # so this is deliberately a SMALL knock, not a primary legibility axis. See weapon_physics.distraction().
+  LEGIB_DISTRACT_K=0.15,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
@@ -40,15 +45,12 @@ CFG = dict(
   ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72},   # MONOTONE (ED-1050 resolved, Jordan 2026-06-30): the armour-defeat threshold RISES with armour — a gambeson (light) is soft/easily defeated, mail (medium) harder, plate (heavy) hardest. light 0.70->0.30 fixes the backwards inversion (light>medium) that systems.armor_defeat_sigma's docstring forbids; medium/heavy KEPT (calibrated). Re-swept in canon + re-exported to combat_config.gd (retiring the port's private [AUDIT-FIX], CLAUDE.md §6). [SIM-CALIBRATE] values within the grounded monotone frame; validated (mirror-50, light matchups sane).
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
   # tempo
-  BASE_TEMPO=2.0, SPEED_K=0.6, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
+  BASE_TEMPO=2.0, TEMPO_RECOVER_K=0.4, TEMPO_RECOVER_SHAPE=0.35, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02): scales systems._recovery_mode_commitment's grip-aware balance-recovery delta from the anchor (tanh-saturating — the raw commitment spans ~0.2 to ~68 across the roster), replacing the retired per-weapon `spd` scalar. [SIM-CALIBRATE] both. AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
-  # WS-2 req4: continuous weapon morphology (weight=2.7kg, not weight="heavy"). HEFT_MODE binary|continuous.
-  # continuous adds a WITHIN-CLASS mass term on top of the binary class anchor (so cross-class balance — which the
-  # binary `wt` encodes as wieldiness, not raw kg — is preserved) -> a 2.7kg greatsword reads heavier than a 1.4kg
-  # longsword at every heft site (tempo, stamina cost, str-demand, cut/thrust impact). HEFT_MODE='binary' is
-  # byte-identical to pre-WS-2. One calibrated gain (HEFT_MASS_K), per the recovered WP-2 recommendation.
-  HEFT_MODE='continuous', HEFT_MASS_K=0.15,   # K=0.15: greatsword(2.7kg) heft 1.20 vs longsword(1.4kg) 1.00 — clear within-class ordering at a roster shift ~= the N=300 noise floor. Raise toward 0.30 (poleaxe -8pp) only with a full re-sweep.
+  # WS-2 req4 heft: HEFT_MODE/HEFT_MASS_K RETIRED (morphology-rearch Phase B6, 2026-07-02) — core.heft_resp now
+  # reads weapon_physics.heft() unconditionally (mass x forward-balance, real per-part data); there is no fiat
+  # binary/continuous toggle left to select between.
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
   CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Focus + 2*Spirit (Jordan 2026-06-03; was 3*Foc+1*Spi)
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
@@ -96,6 +98,10 @@ CFG = dict(
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
+  # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
+  # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.
+  # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
+  BIND_VIBRATION_K=0.5,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
   STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
   RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4,
@@ -148,4 +154,5 @@ CFG = dict(
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
-HANDLE_RANK={'Forgiving':0,'Standard':1,'Demanding':2}
+# HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
+# handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

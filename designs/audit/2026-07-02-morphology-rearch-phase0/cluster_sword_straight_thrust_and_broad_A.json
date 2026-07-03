@@ -1,0 +1,370 @@
+{
+ "weapons": {
+  "szabla": {
+   "total_mass_kg": 0.95,
+   "total_length_m": 1.05,
+   "grip_length_m": 0.201,
+   "head_length_m": 0.849,
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.52,
+     "x_m": 0.42,
+     "orient_deg": 0,
+     "extent_m": 0.849,
+     "material": "steel",
+     "geom_notes": "Moderately curved single-edge blade (curvature shallower than a 1796-pattern sabre or shamshir), T-spine (thickened rhomboid/flattened-diamond spine) stiffening the back third to support a genuine thrust despite the curve; distal ~15-17cm foible carries a false (back) edge, enabling immediate point recovery after a cut; edge continuous and keen along the full cutting edge; centroid placed near mid-blade reflecting a blade that is not tip-heavy (cut-and-thrust balance, not a chopper).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "knucklebow / cross-hilt with quillons",
+     "type": "knucklebow",
+     "extent_m": 0.12,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.05
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "wood (horn/bone scales on later hussar-pattern hilts)",
+    "notes": "Short single-hand grip, often with a distinctive forward-canted (angled) profile on hussar-pattern hilts; grip scales riveted to a full or partial tang; earlier open Hungarian-Polish hilts sometimes fitted with a bolt-on safety chain from cross to pommel, a documented admission the open guard alone gave inadequate hand coverage."
+   },
+   "pommel": {"mass_kg_est": 0.21, "x_m": -0.201},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 0.95,
+    "total_mass_kg": 0.95,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 0.52, "guards_kg": 0.05, "pommel_kg": 0.21, "butt_kg": 0.0, "grip_estimate_kg": 0.17}
+   },
+   "provenance": {
+    "citations": [
+     "Typology: hussar-pattern szabla, blade ~85 cm (S2 typology-typical, per general Polish-Hungarian sabre literature/Wikipedia synthesis)",
+     "Reproduction/replica mass range 0.77-0.92 kg unsheathed for 70-85 cm blades (Swordier SWM-1032 ~0.77 kg; Kult of Athena hussar szabla ~0.85 kg with 85 cm blade) (S3 replica-grounded)",
+     "Polish Military Museum, Warsaw — hussar sabre reproduction based on an original specimen (S2, typology reference, no published mass)",
+     "Foible/false-edge length (15-17 cm) per general szabla typology descriptions (S2)"
+    ],
+    "confidence_tier": "S2-S3 (typology-typical mass interpolated from modern replica range bracketing period specimens; no single accession-numbered museum specimen with published mass was located in this pass)"
+   }
+  },
+
+  "cinquedea": {
+   "total_mass_kg": 0.8,
+   "total_length_m": 0.585,
+   "grip_length_m": 0.135,
+   "head_length_m": 0.45,
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.40,
+     "x_m": 0.135,
+     "orient_deg": 0,
+     "extent_m": 0.45,
+     "material": "steel",
+     "geom_notes": "Very broad, flat, symmetrical double-edged triangular blade, extremely wide at the base (base width attested up to ~8-16 cm across specimens, roughly a 'five-finger' span at the ricasso) tapering steadily and rapidly to an acute point; thick wedge cross-section at the base gives high rigidity; mass concentrated low/near the guard because of the extreme base width, tapering off quickly toward the point (a base-heavy, point-light distribution unlike a uniform-taper arming sword); some specimens etched/engraved on both faces (decorative, not structural — negligible mass).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "simple curved guard-bar",
+     "type": "lug",
+     "extent_m": 0.09,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.02
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.03,
+    "material": "horn or bone scales (sometimes ivory on presentation pieces), riveted to a flat tang",
+    "notes": "Short, compact integral grip, often flares slightly toward a small pommel cap; grip is proportionally shorter than a dagger's per-hand allowance, consistent with the blade doing most of the weapon's length."
+   },
+   "pommel": {"mass_kg_est": 0.23, "x_m": -0.135},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 0.8,
+    "total_mass_kg": 0.8,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 0.40, "guards_kg": 0.02, "pommel_kg": 0.23, "butt_kg": 0.0, "grip_estimate_kg": 0.15}
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, Cinquedea (Italian, possibly Emilia, ca. 1500), accession 22374: length 58.42 cm, weight 907 g (S1 specimen-measured)",
+     "Metropolitan Museum of Art, Cinquedea (Italian, Venice, 1510-30), accession 33531: overall length 49.8 cm, blade length 34.7 cm, blade width 8.9 cm, blade thickness 0.3 cm, weight 739.9 g (S1 specimen-measured)",
+     "Note: a widely-cited ~200g/30cm Met piece flagged in prior cluster research as an outlier/mismeasured entry — not used as an anchor here; the two accession-numbered specimens above (740-907 g, 50-58 cm) are treated as the representative range, giving 0.80 kg as a mid-range S2 typology-typical estimate"
+    ],
+    "confidence_tier": "S1-S2 (two accession-numbered Met specimens bracket 740-908 g at 50-58 cm overall length; 0.80 kg total_mass_kg sits within that measured band as a typology-typical midpoint)"
+   }
+  },
+
+  "flamberge": {
+   "total_mass_kg": 2.7,
+   "total_length_m": 1.65,
+   "grip_length_m": 0.39,
+   "head_length_m": 1.26,
+   "head_elements": [
+    {
+     "label": "blade (flame-ground section, forte-to-mid)",
+     "mass_kg_est": 1.05,
+     "x_m": 0.30,
+     "orient_deg": 0,
+     "extent_m": 0.75,
+     "material": "steel",
+     "geom_notes": "The wavy/flame-ground section: alternating concave-convex undulations ground into both edges over roughly the proximal two-thirds of the blade (forte through mid-blade), leaving the distal third a plain straight edge (see 'blade tip' element below); flat hexagonal or lenticular cross-section typical of the Zweihander/spadone family; the wave is a lateral edge-grinding pattern, not a change to the blade's overall lateral curvature (which remains straight/zero, matching the greatsword baseline) — it does not alter cut or thrust geometry per the documented technical corpus, which treats the flamberge identically to a straight-bladed Zweihander in use.",
+     "edge_undulation": {"amplitude_mm": 15, "period_mm": 90}
+    },
+    {
+     "label": "blade tip (plain distal section + Parierhaken zone)",
+     "mass_kg_est": 0.55,
+     "x_m": 0.98,
+     "orient_deg": 0,
+     "extent_m": 0.45,
+     "material": "steel",
+     "geom_notes": "Distal third of the blade, ground plain/straight (undulation stops before the tip on documented specimens), tapering to an acute point; on many surviving Zweihander/flamberge specimens a pair of Parierhaken (hooked side-lugs) is mounted at the base of this section, just above the ricasso, projecting laterally to catch an opponent's polearm shaft in a bind.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "ricasso (blunted forward gripping section)",
+     "mass_kg_est": 0.20,
+     "x_m": 0.0,
+     "orient_deg": 0,
+     "extent_m": 0.18,
+     "material": "steel",
+     "geom_notes": "Deliberately dulled/unsharpened blade section immediately forward of the main guard, meant to be gripped bare- or gauntlet-handed for half-swording (Halbschwert) at close range; rectangular/flattened cross-section, not part of the cutting edge.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "main cross-guard with quillons",
+     "type": "cross",
+     "extent_m": 0.30,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.35
+    },
+    {
+     "label": "Parierhaken (hooked side-lugs)",
+     "type": "lug",
+     "extent_m": 0.10,
+     "material": "steel",
+     "x_m": 0.75,
+     "orient_deg": 60,
+     "mass_kg_est": 0.15
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.032,
+    "material": "wood core, leather-wrapped",
+    "notes": "Long two-handed grip proportioned for the Doppelsoldner two-hand-plus-ricasso hold; grip is wood-cored (unlike the ricasso, which is steel and counted in the head elements above); often slightly waisted or figure-8 profiled for hand security during wide cuts."
+   },
+   "pommel": {"mass_kg_est": 0.548, "x_m": -0.39},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 2.7,
+    "total_mass_kg": 2.7,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 1.80, "guards_kg": 0.50, "pommel_kg": 0.548, "butt_kg": 0.0, "grip_estimate_kg": 0.352}
+   },
+   "cluster_note_response": "Wave amplitude ~15mm / period ~90mm chosen as specimen-bracketed midpoints (see provenance) — no single accession-numbered specimen in this pass published a laser-measured wave profile, so this is graded S2/S3 (typology-typical, bracketed from general flame-blade literature and comparative measurement of published detail photographs of Landsknecht Flammenschwert blades, not a direct caliper reading). Flagged as the weakest-confidence numeric estimate in this batch.",
+   "provenance": {
+    "citations": [
+     "General Flammenschwert/Landsknecht typology: blade 120-150 cm, overall length 160-200 cm, weight 2.5-3.5 kg (S2 typology-typical; Wikipedia 'Flame-bladed sword' synthesis of period sources) — total_mass_kg=2.7 kg sits at the low-to-mid end of this band, consistent with the cluster's deliberate re-skin of the calibrated greatsword record",
+     "Wave amplitude/period: no accession-numbered specimen with published caliper measurements was located in this pass; amplitude_mm=15/period_mm=90 are S3 estimates bracketed from comparative examination of published Landsknecht/Zweihander flame-blade photographs against known blade widths (typically full waves span roughly one blade-width-and-a-half), within the cluster-note-specified 10-20mm amplitude / 60-120mm period range",
+     "Meyer (1570) and Marozzo (1536), Zweihander/spadone technical corpus — confirms morphology only (ricasso half-sword grip, Parierhaken function); no distinct flamberge-specific measurements",
+     "Modern HEMA reconstruction scholarship on Doppelsoldner Zweihander/Bidenhander construction (S2) — ricasso and Parierhaken placement"
+    ],
+    "confidence_tier": "S2 for gross mass/length (typology-typical, consistent with calibrated greatsword parity); S3 for wave amplitude/period (bracketed estimate, no specimen laser/caliper measurement located)"
+   }
+  },
+
+  "estoc": {
+   "total_mass_kg": 2.0,
+   "total_length_m": 1.569,
+   "grip_length_m": 0.42,
+   "head_length_m": 1.149,
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 1.15,
+     "x_m": 0.55,
+     "orient_deg": 0,
+     "extent_m": 1.149,
+     "material": "steel",
+     "geom_notes": "Long, straight, entirely edgeless blade; triangular, square, rhomboid, or flattened-hexagonal cross-section (rigid by design, the roster-max cross_section coefficient), built to resist deflection when the point is driven into a mail or plate-armor gap; tapers gradually and acutely to a needle-like point; near-uniform mass distribution along its length rather than tip- or base-heavy, since rigidity (not cutting geometry) drives the section.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "cruciform guard with long quillons",
+     "type": "cross",
+     "extent_m": 0.24,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.18
+    },
+    {
+     "label": "finger rings / side rings",
+     "type": "ring",
+     "extent_m": 0.05,
+     "material": "steel",
+     "x_m": 0.03,
+     "orient_deg": 0,
+     "mass_kg_est": 0.04
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.03,
+    "material": "wood core, leather- or cord-wrapped",
+    "notes": "Cruciform two-handed grip long enough for a rear-hand-behind-pommel hold, per Fiore's spada en arme construction; some specimens carry a deliberately dulled ricasso immediately forward of the guard for a bare-hand or gauntleted half-sword grip during binds."
+   },
+   "pommel": {"mass_kg_est": 0.45, "x_m": -0.42},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 2.0,
+    "total_mass_kg": 2.0,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 1.15, "guards_kg": 0.22, "pommel_kg": 0.45, "butt_kg": 0.0, "grip_estimate_kg": 0.18}
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, Estoc (German, Saxony), accession 27434: blade length 106.9 cm, weight 1615.9 g (S1 specimen-measured — a shorter/lighter specimen than this record's roster anchor)",
+     "General estoc typology: blade 91-132 cm, average mass ~1.8 kg, no specimen exceeding 2.7 kg (S2 typology-typical synthesis, Wikipedia/Grokipedia 'Estoc')",
+     "Fiore dei Liberi, Fior di Battaglia (Getty Ms. Ludwig XV 13, c.1400-1409) — spada en arme section: morphology only (cruciform hilt, hooking cross/pommel, dulled ricasso construction), no numeric dimensions",
+     "Hans Talhoffer, Fechtbuch tradition — armored plates depicting the weapon-class morphology"
+    ],
+    "confidence_tier": "S2 (typology-typical mass/length interpolated between the lighter Met Saxony specimen at 106.9cm/1.62kg and the upper end of the published 91-132cm/up-to-2.7kg specimen band; this record's 115cm/2.0kg sits centrally within that measured range, not itself a single specimen reading)"
+   }
+  },
+
+  "estoc_halfsword": {
+   "note": "FORM sharing estoc's parts under a shifted grip origin, per the cluster instruction (mirrors longsword_halfsword's construction pattern in weapons.py). The physical steel is identical to estoc — only the working-hand origin (x=0) moves forward along the blade to a bare-blade grip point, shortening the free working point and lengthening the gripped span. No new mass is added; parts below are the SAME physical elements as estoc, relabeled with x_m recomputed from the new origin.",
+   "total_mass_kg": 2.0,
+   "total_length_m": 1.569,
+   "grip_length_m": 1.17,
+   "head_length_m": 0.399,
+   "origin_shift_m": 0.75,
+   "head_elements": [
+    {
+     "label": "free blade tip (forward of the new hand-on-blade grip point)",
+     "mass_kg_est": 0.40,
+     "x_m": 0.20,
+     "orient_deg": 0,
+     "extent_m": 0.399,
+     "material": "steel",
+     "geom_notes": "The same rigid edgeless blade as estoc's head element, but only the forward ~35% of it (the free working point beyond the new hand-on-blade grip) is counted here; the remainder of the physical blade now lies within the gripped span (see haft_or_grip note) and behind the new origin.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "cruciform guard with long quillons (now behind the working hand)",
+     "type": "cross",
+     "extent_m": 0.24,
+     "material": "steel",
+     "x_m": -0.75,
+     "orient_deg": 90,
+     "mass_kg_est": 0.18
+    },
+    {
+     "label": "finger rings / side rings",
+     "type": "ring",
+     "extent_m": 0.05,
+     "material": "steel",
+     "x_m": -0.72,
+     "orient_deg": 0,
+     "mass_kg_est": 0.04
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.025,
+    "material": "steel (bare blade / dulled ricasso, hand-on-blade grip — NOT a wood/leather grip in this form)",
+    "notes": "The 'grip' in this form is the bare or ricasso-dulled blade itself, gripped one-handed forward of the guard while the rear hand holds the original hilt behind the working-hand origin; matches the longsword_halfsword `gripped=true` handling in weapon_physics.py (held span is steel, approximated as a uniform rod for MoI purposes, not a wood-grip material)."
+   },
+   "pommel": {"mass_kg_est": 0.45, "x_m": -1.17},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 2.0,
+    "total_mass_kg": 2.0,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 0.40, "guards_kg": 0.22, "pommel_kg": 0.45, "butt_kg": 0.0, "grip_estimate_kg (rear hilt grip + gripped blade span)": 0.93},
+    "note": "Same total steel/hilt mass as estoc (2.0 kg); this budget re-partitions it across the shifted origin rather than adding/removing material. 'grip_estimate_kg' here absorbs the physical blade steel now lying within the gripped span plus the original wood/leather rear grip, consistent with the gripped=true treatment in weapon_physics.derive()."
+   },
+   "provenance": {
+    "citations": [
+     "Fiore dei Liberi, Fior di Battaglia — spada en arme half-sword (mezza spada) grip construction, dulled ricasso for bare-hand gripping (S1, morphology only)",
+     "Cluster instruction: mirrors longsword_halfsword's shifted-origin FORM pattern in weapons.py (same base weapon, gripped=true, head_len/grip_len re-split around a forward hand-on-blade origin)"
+    ],
+    "confidence_tier": "S2 (derived form, not a separately attested specimen — physical facts are the parent estoc's, repartitioned per the documented half-sword grip technique)"
+   }
+  },
+
+  "falchion": {
+   "total_mass_kg": 1.0,
+   "total_length_m": 1.026,
+   "grip_length_m": 0.225,
+   "head_length_m": 0.801,
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.65,
+     "x_m": 0.44,
+     "orient_deg": 0,
+     "extent_m": 0.801,
+     "material": "steel",
+     "geom_notes": "Single-edged cleaver-profile blade, straight to only slightly curved along the spine, that widens (rather than narrows) toward the distal third before curving down to a comparatively blunt, low-angle point (broad point_concentration well below a thrusting sword's); thicker, flatter stock than a diamond-section arming sword; the widening distal profile shifts mass distally relative to a uniform-taper blade, giving the cleaver its committed-chop authority; back edge unsharpened (single true edge) on the archaeological quillon-hilted (Conyers/Thorpe) type this record is keyed to.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "simple cross-guard with quillons (baseline archaeological quillon-hilted form)",
+     "type": "cross",
+     "extent_m": 0.14,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.07
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "wood, leather-wrapped, or horn/bone scales",
+    "notes": "Single-hand grip, straight or slightly waisted; the quillon-hilted archaeological type (Conyers/Thorpe) this record is keyed to carries a standard crossguard baseline, not the Nagel (hand-stop nail projection) of the related but hilt-distinct langes Messer knife-hilt construction — see cluster/audit note distinguishing the two hilt lineages."
+   },
+   "pommel": {"mass_kg_est": 0.20, "x_m": -0.225},
+   "butt": {"mass_kg_est": 0.0, "x_m": 0.0},
+   "adornments": [],
+   "mass_budget": {
+    "sum_kg": 1.0,
+    "total_mass_kg": 1.0,
+    "residual_pct": 0.0,
+    "components": {"head_elements_kg": 0.65, "guards_kg": 0.07, "pommel_kg": 0.20, "butt_kg": 0.0, "grip_estimate_kg": 0.08}
+   },
+   "provenance": {
+    "citations": [
+     "Thorpe Falchion (Royal Armouries, England, c.1270-1300): blade ~72 cm / overall ~95.6 cm, mass ~0.9 kg cited in prior cluster calibration research (S2, specimen-anchored typology reference)",
+     "Conyers Falchion (Durham Cathedral, England, 13th c.): comparable broad cleaver-profile quillon-hilted specimen used as morphology anchor for the 'archaeological falchion' type distinguished from the langes Messer knife-hilt lineage (S2)",
+     "General falchion typology: broad single-edged cleaver blade, widening toward the point, ~1.0 kg class for a ~80cm-blade one-handed sidearm (S2 typology-typical, consistent with the prior cluster's arming-sword-parity calibration)"
+    ],
+    "confidence_tier": "S2 (typology-typical, anchored to the Thorpe/Conyers archaeological quillon-hilted specimens; no direct caliper/scale reading of an accession-numbered specimen performed in this pass)"
+   }
+  }
+ },
+ "cluster_notes": "flamberge: modeled as three head elements to capture the flame-ground section explicitly — a wavy forte-to-mid segment (amplitude 15mm, period 90mm, bracketed mid-range of the cluster-specified 10-20mm/60-120mm band from comparative photograph examination, S3), a plain distal tip (undulation stops before the point on documented specimens), and a dulled ricasso (steel, at the working hand, distinct material-use from the wood grip) — plus a Parierhaken guard element separate from the main cross, since the hooked lugs sit forward of the guard proper and are a distinct catching structure per the handling research. estoc_halfsword: built by mirroring longsword_halfsword's shifted-origin FORM pattern exactly as instructed — same physical parts as estoc, re-expressed with x=0 moved ~0.75m forward to the new hand-on-blade grip point (origin_shift_m=0.75, i.e. roughly 65% of the original head_length), shrinking the free working point to head_length_m=0.399 and growing the grip span to grip_length_m=1.17; total mass is unchanged from the parent estoc (no steel added or removed, only repartitioned across the shifted axis), consistent with weapon_physics.py's gripped=true treatment of the held span as a steel rod rather than a wood grip. cinquedea: modeled as mass-concentrated-low per the cluster note — the head element's geom_notes describe a base-heavy, rapidly-tapering distribution (base width up to ~9cm on the Met's larger specimen), and centroid x_m is placed near the proximal third of the blade span (0.135m of a 0.45m head) rather than at blade-midpoint, reflecting that concentration.",
+ "batch_provenance_summary": "All five records reconcile against both the sword_straight_thrust_and_broad_A cluster JSON (calibration + handling audit) and the harmonized final_weapons.json entries, which carry identical mass/head_len/grip_len primitives — used as the anchor for total_mass_kg and total_length_m (length_m = (head_len+grip_len)*0.30 per UNIT_M in weapon_physics.py). Per-part locations, materials, and geom_notes are new physical-fact extractions for this Phase-0 pass, cross-checked against WebSearch results for szabla (replica mass range 0.77-0.92kg for 70-85cm blades), cinquedea (Met accessions 22374 and 33531: 740-908g at 50-58cm), estoc (Met accession 27434: 106.9cm/1616g; general typology 91-132cm/avg ~1.8kg/max 2.7kg), and flamberge (general Landsknecht Flammenschwert typology: 120-150cm blade, 160-200cm overall, 2.5-3.5kg)."
+}

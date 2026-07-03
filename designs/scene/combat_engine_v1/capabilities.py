@@ -20,9 +20,9 @@ def _affords_point(w):
     scope would create a cycle, per the module docstring's "pure data; no systems/core at module scope").
     True iff the weapon's DERIVED afforded-heads set (systems.afforded_heads — primitive-emergent, not the
     static `head` field) includes a real 'point' token. Catches the poleaxe: its static head is 'blunt', but
-    its beak/spike primitive (point_concentration=0.78 > SELECT_PC_MIN) affords a genuine point, and
-    systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the situational gap
-    game) — so the static-head-only check under-reports this capability for it."""
+    its spike mode_element (an explicit point-tokened striking element, morphology-rearch Phase B2) affords a
+    genuine point, and systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the
+    situational gap game) — so the static-head-only check under-reports this capability for it."""
     import systems as S
     return 'point' in S.afforded_heads(w)
 

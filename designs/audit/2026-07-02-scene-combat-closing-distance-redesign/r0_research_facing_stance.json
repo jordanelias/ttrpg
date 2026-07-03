@@ -1,0 +1,216 @@
+{
+  "research_topic": "Historical FACING/STANCE conventions (square vs bladed/oblique) across European and Asian sword/polearm traditions, and their relationship to footwork/gap-management and available grip-changes/strikes",
+  "purpose_note": "Grounding facts only for a later design phase on Valoria's scene-combat engine gap-management redesign. No effectiveness numbers, no 0-1 scalars, no proposed formulas included here.",
+  "prior_engine_state_checked": {
+    "files_read": [
+      "designs/scene/combat_engine_v1/wrapper.py (engagement() state machine, approach ~line 85-109, closed exchange ~line 110-270)",
+      "designs/scene/combat_engine_v1/systems.py (reach_base, close_rate, approach_displace, leverage, commit_depth, recoverability_factor, grip_target, lunge_quality, defense_affinities/mode_sigma, reopen_prob)"
+    ],
+    "confirmed_existing_mechanics_not_to_duplicate": [
+      "reach_base(c,cfg): standing reach derived from body/arm offset + weapon geometry (head_len + 2H rear-hand setback). Purely a SCALAR reach number, not body-orientation-dependent.",
+      "grip_position (0..1, via grip_target()): a CLOSING pole 'gathers in' along its own haft (chokes up) once measure is closed; this is a GRIP-SLIDE mechanic, not a body-facing mechanic.",
+      "close_rate()/approach_displace(): the shorter weapon's linear closing speed across the measure gap, sped by lever-displacing a longer weapon's point and by 'walking through' a reach that can't threaten the armour (reach_threat). This is the engine's only 'closing the gap' mechanic today and it is purely linear/scalar (a 1D measure_gap shrinking over beats), no lateral/angular component.",
+      "leverage(c,cfg): lever-arm capacity to bind/displace/redirect (grip_len minus head_len fraction, +2H bonus). Used for approach_displace and bind_sigma, and for the 'beat_aside' route in the displace-and-step-inside logic.",
+      "commit_depth()/lunge_quality()/lunge_depth: a Beta-distributed continuous commitment depth [2,5]; lunge_quality is DERIVED from point_concentration x lightness x hand-balance x one-handedness (pc*light*handbal*onehand), i.e. the engine ALREADY encodes 'a light, hand-balanced, point-concentrated one-handed weapon lunges well' as a physical derivation. This is the closest existing analogue to a 'stance affordance' mechanic, but it is keyed to weapon morphology, not to body facing.",
+      "recoverability_factor()/_recovery_mode_commitment(): swing-arrest vs thrust-retract recovery blended by point_concentration, plus a 1H/2H force-couple control credit and a lunge body-extension penalty. Models HOW FAST you recover from a committed action, not WHICH strikes/grips are reachable from a given facing.",
+      "'displace-and-step-inside' logic (wrapper.py ~220-240): a committed THRUST from a longer weapon can be answered by (a) beat_aside [leverage edge] or (b) slip_inside [shorter reach + equal/better reflex]. This is the engine's only existing 'shorter fighter closes past a longer weapon's point' mechanic, and it is reach/reflex/leverage-driven, NOT facing/footwork-geometry-driven.",
+      "reopen_moment / reopen_prob(): the LONGER weapon re-opens distance only when a 'moment' exists (opponent overcommitted, defender's defensive win, or a freed-hand shove from a 2H weapon), gated by balance_eff/foot and a read contest. No lateral/circling component exists; re-opening is purely 'walk straight back'.",
+      "mode_sigma() defense modes {parry, dodge, wind}: 'dodge' is DERIVED from agility x one-handedness ('a free hand voids') via WP.defense_affinities — dodge is treated as ONE uniform void mode with no distinction between voiding by pivoting on the spot vs voiding by lateral/circular stepping vs voiding by linear retreat.",
+      "There is NO existing concept anywhere in wrapper.py/systems.py/weapon_physics.py/combatant.py of body FACING or stance ORIENTATION (square-to-opponent vs bladed/profiled). 'bladed' in this codebase (wclass='bladed') denotes the weapon's edged-vs-hafted CLASS, unrelated to body orientation. Grep of the whole combat_engine_v1 tree for facing/bladed-stance/square-stance/oblique/lateral/circling/void/angulat/profile turned up nothing describing body orientation."
+    ]
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "claim": "Fiore dei Liberi's Posta di Donna (the 'Lady's Guard', longsword) is an explicitly bladed/turned stance: the left shoulder is presented toward the opponent while the sword is chambered over the right shoulder, wound back so the point trails behind the left knee.",
+      "tradition": "Italian - Fiore dei Liberi, Fior di Battaglia / Flos Duellatorum (c. 1409)",
+      "weapon_class": "longsword (2H, one-and-a-half-hand blade), also appears in the abrazare/dagger sections",
+      "facing_type": "bladed/oblique",
+      "citation": "Fiore dei Liberi, Fior di Battaglia, longsword guards section (Wiktenauer 'Fiore de'i Liberi/Sword in Two Hands'); corroborated by secondary HEMA commentary (fightlikefiore.wordpress.com, 'Longsword posta' category) describing Posta di Donna: 'your left shoulder faces your opponent... wound so far back that the point is in line with your left knee.'",
+      "confidence": "well-attested — multiple independent HEMA-practitioner secondary sources describe this guard identically; the manuscript's own illustrations (Getty/Pisani-Dossi/Morgan MSS) show the turned-body chambered posture",
+      "notes": "A variant, Posta di Donna Soprano, raises the lead elbow to look under the arm rather than over the shoulder — a different chambering, same turned/bladed body orientation."
+    },
+    {
+      "id": "F2",
+      "claim": "Fiore's Posta Longa (Long Guard) holds the blade on the centreline with arms extended as if just having thrust to the face; it is classified among the instabile (unstable) guards, is weak against lateral displacement of the blade but strong against vertical (up/down) displacement because of hand position.",
+      "tradition": "Italian - Fiore dei Liberi",
+      "weapon_class": "longsword (2H)",
+      "facing_type": "point-forward/centreline (a thrust-oriented guard; sources describing it do not explicitly state shoulders-square vs shoulders-turned, only that the arms/point are on the centreline)",
+      "citation": "Fiore dei Liberi, Fior di Battaglia; secondary description via zoboko.com 'From Medieval Manuscript to Modern Practice' Ch.36 context and general HEMA guard commentary aggregated from web search.",
+      "confidence": "moderate — the centreline/instabile/lateral-vs-vertical-strength characterization is corroborated across sources, but explicit shoulder-orientation language for Longa specifically was not found in the sources retrieved this session",
+      "notes": "Flag: this claim about vertical vs lateral displacement strength is stated by secondary commentary, not verified against a direct manuscript quote in this pass."
+    },
+    {
+      "id": "F3",
+      "claim": "German Liechtenauer-tradition Vom Tag (longsword, 2H) is described by HEMA practitioner sources as squared to the opponent: 'the hips and torso are faced forward toward the opponent,' with feet shoulder-width apart diagonally (one foot forward) rather than a strongly turned/profiled torso.",
+      "tradition": "German - Liechtenauer tradition (as taught/interpreted by Meyer, Ringeck, and modern HEMA reconstructionists)",
+      "weapon_class": "longsword (2H)",
+      "facing_type": "square (hips/torso forward), asymmetric foot placement (one foot leads) but torso not strongly bladed",
+      "citation": "historicaleuropeanmartialarts.com 'German Long Sword Fighting Techniques in HEMA' and corroborating description found via web search of Vom Tag/Ochs/Pflug guard mechanics",
+      "confidence": "moderate — this is a secondary/practitioner characterization (not a direct manuscript quote), but it is corroborated independently by the Meyer footwork search ('hips and shoulders are aligned and toward the target, not held at an angle... the back and hips are one unit') and by the modern chudan-no-kamae Wikipedia entry's description of a comparable 2H squared stance ('hips are straight forward,' 'both feet facing forward in parallel') used for Japanese 2H blades (see F8) — an independent tradition converging on the same square-stance-for-2H-weapon pattern.",
+      "notes": "Contrast with F1 (Fiore's Posta di Donna): both are 2H longsword guards, but Fiore's Donna is explicitly bladed/chambered while the German Vom Tag/Pflug family reads as more squared. This suggests facing is guard-specific WITHIN a tradition and weapon class, not solely determined by weapon class — see F9 for the general caution against a strict 1H-bladed/2H-square rule."
+    },
+    {
+      "id": "F4",
+      "claim": "Fabris' rapier posture (1H) uses a forward lean at the hips (not the back), sword arm held maximally extended so as to form 'a direct line between the shoulder and the point,' with a slight elbow bend, feet close together (approx. one to one-and-a-half foot-lengths apart heel-to-heel), and the torso/shoulders profiled to reduce the frontal target area, refusing the lower torso as a target preferentially over the upper torso.",
+      "tradition": "Italian rapier - Salvator Fabris, Lo Schermo, overo Scienza d'Arme (1606)",
+      "weapon_class": "rapier (1H)",
+      "facing_type": "bladed/oblique (profiled), forward-leaning variant",
+      "citation": "Secondary analysis paper 'Fabris' Rapier Posture' by K. Lanham (klanham2018 PDF, hosted at swordsandfluff.wordpress.com), which cites Fabris' own instruction to 'keep the arm extended as much as possible, and hold the sword straight so as to form a direct line between the shoulder and the point.'",
+      "confidence": "well-attested — this is a documented secondary academic-style analysis directly quoting Fabris' text; consistent across multiple retrieved sources (swordsandfluff.wordpress.com, eastkingdomgazette.org comparison piece)",
+      "notes": "The 'quasi-rigid body' (arm+sword as one rigid unit with minimal elbow/wrist articulation during the lunge) is explicitly stated by this source as a Fabris characteristic, contrasted with Capoferro (F5) who shows wrist-bend."
+    },
+    {
+      "id": "F5",
+      "claim": "Capoferro's rapier stance uses a backward lean of the torso with weight shifted slightly backward in the legs, refusing the chest and head as targets (rather than Fabris' preference for refusing the lower torso). Capoferro's lunge shows a measurable loss of height (the fencer ends lower to the ground) and wrist-bend at full extension, which the analysis states reduces the strength/directness of the attack compared to Fabris' straight-line, no-height-loss lunge.",
+      "tradition": "Italian rapier - Ridolfo Capoferro, Gran Simulacro dell'Arte e dell'Uso della Scherma (1610)",
+      "weapon_class": "rapier (1H)",
+      "facing_type": "bladed/oblique, backward-leaning variant",
+      "citation": "eastkingdomgazette.org, 'A Small Comparison of the Rapier Styles of Ridolfo Capo Ferro and Salvator Fabris' (SCA Arts & Sciences research paper #3), cross-referenced against the Fabris posture analysis paper for the comparative claims.",
+      "confidence": "moderate-high — the comparative claims (lean direction, height loss, wrist mechanics) are consistently reported across both retrieved secondary sources, but neither source was read as a direct primary-text quote of Capoferro in this pass (both are modern comparative/academic HEMA papers)."
+    },
+    {
+      "id": "F6",
+      "claim": "Both Fabris and Capoferro achieve target-profile reduction via shoulder rotation, but describe the mechanism differently: Fabris rotates via raising/rolling the elbow upward, Capoferro by flinging the trailing (left) arm back.",
+      "tradition": "Italian rapier - both Fabris and Capoferro",
+      "weapon_class": "rapier (1H)",
+      "facing_type": "bladed/oblique — both traditions",
+      "citation": "eastkingdomgazette.org comparative paper (as above)",
+      "confidence": "moderate — single-source claim, not independently cross-checked against a second source in this pass"
+    },
+    {
+      "id": "F7",
+      "claim": "George Silver's English tradition (Paradoxes of Defence, 1599; Brief Instructions) is characterized by HEMA secondary sources as advocating a 'square-footed stance' for the 'true guard,' with four primary wards described for one-handed weapons and eight for two-handed weapons, intended to support both offense and defense from multiple angles rather than a profiled/bladed presentation.",
+      "tradition": "English - George Silver",
+      "weapon_class": "backsword / sword-and-buckler / two-hand sword (1H and 2H covered)",
+      "facing_type": "square (per secondary characterization)",
+      "citation": "Secondary web summary drawing on Wiktenauer's George Silver page and Grokipedia's George Silver page; footwork specifics ('gathering' and 'passing' steps, progressing/regressing/traversing/treading, and the maxim 'whatsoever is done with the hand before the foot or feet is true fight') are drawn from the same aggregated secondary sources.",
+      "confidence": "low-moderate — this claim rests on AI-aggregated secondary summaries of Wiktenauer/Grokipedia rather than a directly quoted primary passage from Paradoxes of Defence or Brief Instructions; the primary text (pbm.com/~lindahl/paradoxes.html) was located but not directly read in this pass. FLAG: verify 'square-footed stance' against Silver's actual wording before treating as settled — it may be a modern paraphrase rather than Silver's own term.",
+      "notes": "Silver's system spans both 1H (backsword, sword-and-buckler) and 2H (two-hand sword) with a single stance philosophy per this summary, which if accurate would be a data point AGAINST a strict '1H-weapons-bladed / 2H-weapons-square' rule — but given the low confidence, treat as provisional."
+    },
+    {
+      "id": "F8",
+      "claim": "Chudan-no-kamae, the common 'middle guard' used across Japanese kendo, naginata, and kenjutsu (including 2H long-weapon arts), is described (per a tertiary/Wikipedia-level source) as squared: 'hips are straight forward,' 'both feet are facing forward in parallel.' A distinct variant used in some kenjutsu/aikido contexts instead employs hanmi-dachi ('half-body stance'), which is explicitly a more angled/bladed body position, and is noted as reducing the chance of a simultaneous mutual strike (ai-uchi).",
+      "tradition": "Japanese - kendo/naginata-do/kenjutsu (chudan-no-kamae) vs kenjutsu/aikido variant (hanmi-dachi)",
+      "weapon_class": "katana/bokken and naginata (mixed 1H-capable and 2H, and pole weapon)",
+      "facing_type": "square (chudan-no-kamae, standard) vs bladed/half-facing (hanmi-dachi variant)",
+      "citation": "en.wikipedia.org/wiki/Ch%C5%ABdan-no-kamae (tertiary source — flagged accordingly)",
+      "confidence": "low-moderate — Wikipedia-level tertiary source, not a primary-tradition text or scholarly HEMA-equivalent analysis; useful as a cross-cultural corroboration point (independent tradition converging on 'square for the common 2H/long-weapon guard, bladed variant exists and is named separately and explicitly tied to a different tactical rationale — avoiding simultaneous exchange, not reach/target-profile') but should be verified against a stronger source before being treated as settled fact.",
+      "notes": "The naginata (2H pole-and-blade weapon) is explicitly named as using chudan-no-kamae ('mid-guard position') per this source, i.e. the SQUARE variant, which — if accurate — is a data point consistent with F3's German 2H-longsword-square pattern and worth flagging as a possible (not proven) 2H-tends-square tendency. Treat as a tendency, not a rule: F1 (Fiore's Donna, 2H) contradicts a strict version of this."
+    },
+    {
+      "id": "F9",
+      "claim": "There is NOT a clean, source-attested 1H-bladed / 2H-square rule. Evidence for correlation exists (F3 German Vom Tag squared + F8 chudan-no-kamae squared, both 2H/long weapons; F4/F5 Fabris/Capoferro rapier bladed, both 1H), but Fiore's Posta di Donna (F1, explicitly bladed/turned, 2H longsword) and the hanmi-dachi variant used in some 2H kenjutsu (F8 note) are direct counterexamples within the SAME weapon class. The determinant appears to be the SPECIFIC GUARD/technique being executed at that instant, not a fixed rule tied to one-handed-vs-two-handed grip alone.",
+      "tradition": "cross-tradition synthesis",
+      "weapon_class": "cross-weapon-class",
+      "facing_type": "mixed — guard-dependent, not weapon-class-determined alone",
+      "citation": "synthesized from F1, F3, F4, F5, F7, F8 above",
+      "confidence": "this is an explicit statement of DISAGREEMENT/uncertainty across sources, not a single-source claim — flagged per task instructions to state disagreement explicitly rather than silently pick a side",
+      "notes": "A single fighter within ONE tradition and ONE weapon typically holds MULTIPLE guards across an exchange (e.g. Fiore's fighter can be in Donna [bladed] then transition to Longa [centreline] then to a half-sword bind [see F11]), so 'this weapon class uses this facing' is very likely the wrong level of abstraction for a mechanics model — facing is closer to a per-guard/per-moment property than a per-weapon-class constant, per the sources retrieved this session."
+    },
+    {
+      "id": "F10",
+      "claim": "In modern boxing (NOT a HEMA/sword source — included as a cross-domain biomechanical corroboration only, per task's biomechanics allowance), a bladed stance is characterized in secondary coaching literature as: body positioned side-on to the opponent, keeping a smaller target profile against linear attacks, lead hand closer to opponent (more reach on the lead side) at the cost of rear-hand reach, favoring straight-line/linear mobility and stronger linear (straight) attacks, but described as harder to move laterally 'in and out.' A squared stance is characterized as: larger target profile, more even reach split between both hands, favoring circular movement and circular/hook-type attacks and greater ease of quick pivots, at a described cost of some straight-line mobility efficiency.",
+      "tradition": "Modern Western boxing (cross-domain, non-weapon, corroborative only)",
+      "weapon_class": "unarmed",
+      "facing_type": "bladed vs squared, both named and contrasted explicitly",
+      "citation": "myboxingcoach.com 'Perfect Your Boxing Stance – Bladed or Squared?' and martialtheory.substack.com 'Bladed vs. Squared Stance' (Parts 1 & 2) — both modern boxing-coaching secondary sources, aggregated via web search summary",
+      "confidence": "low as HEMA evidence (different discipline, unarmed, modern sport-coaching literature not a historical treatise) — included ONLY as a biomechanical corroboration of the general reach/profile/mobility trade-off logic, per the task's allowance for 'biomechanically measurable facts.' Should NOT be cited as HEMA-attested; label clearly as cross-domain if used downstream.",
+      "notes": "This is the clearest single-source articulation of the REACH vs LATERAL-MOBILITY vs TARGET-PROFILE trade-off the user's question (1) explicitly asks about, but it comes from a non-weapon, modern-sport, secondary-coaching source, not a treatise or measured study. Flag for downstream design use as directional/illustrative only, not evidentiary for HEMA weapon combat."
+    },
+    {
+      "id": "F11",
+      "claim": "In Fiore's system, the crossing at mezza spada (half-sword / half-blade measure) is described as 'both the divider and unifier' of zogho largo (wide/open play) and zogho stretto (close play): at this measure a fighter can use plays from EITHER wide or close play, and pressing closer transitions the fight progressively into stretto (grappling/wrestling range), where the half-sword grip (one hand on the grip, one on the blade) becomes a lever for throws, joint locks, and disarms — e.g. hooking the pommel/handle around the neck to unbalance and throw after a bind.",
+      "tradition": "Italian - Fiore dei Liberi",
+      "weapon_class": "longsword (2H)",
+      "facing_type": "not directly addressed by this source (the claim is about MEASURE/RANGE and GRIP transition, not body facing per se)",
+      "citation": "'Understanding the Nature of Wide and Close Play in the Martial Tradition of Fiore dei Liberi' (chivalricfighting.wordpress.com PDF / historicalfencingmalta.org / Chicago Swordplay Guild republication) — a recognized HEMA scholarly analysis of Fiore's wide/close play structure",
+      "confidence": "moderate-high — this wide/close/mezza-spada framework is a well-established and widely cross-referenced piece of Fiore scholarship (multiple independent HEMA organizations host the same analysis), though this pass read only the search-engine summary, not the full primary PDF text",
+      "notes": "DIRECTLY RELEVANT to the user's question (3) about which grip changes are available from a given range: this establishes that GRIP CHANGE (full-sword to half-sword) is measure-triggered in Fiore's system, i.e. tied to closing distance, not (per this source) explicitly tied to body facing. This corroborates — via an independent tradition/source — the same measure-triggered half-sword grip-shift the combat engine ALREADY models via HALFSWORD_FORM/halfsword_target() in the existing wrapper.py code (closed AND opponent armoured -> half-sword), meaning the engine's existing grip-shift trigger (measure+armour) is consistent with this HEMA source's trigger (measure), not something to duplicate as a NEW mechanic."
+    },
+    {
+      "id": "F12",
+      "claim": "The Liechtenauer/German longsword tradition explicitly prescribes NOT stepping straight into an opponent's strike, but stepping to the side or circling around it, so as to arrive at the opponent's flank/side where 'better advantage' is available than fighting from directly in front.",
+      "tradition": "German - Liechtenauer tradition (Ringeck/Meyer glosses)",
+      "weapon_class": "longsword (2H)",
+      "facing_type": "N/A (footwork claim; stance is squared per F3, but footwork is explicitly NOT purely linear)",
+      "citation": "Secondary HEMA summary aggregating Liechtenauer glosses via web search (specific manuscript/gloss line not individually verified in this pass — flagged)",
+      "confidence": "moderate — the 'do not step straight into the strike, step to the sides or circle' principle is a commonly cited Liechtenauer maxim across multiple HEMA secondary sources, but this pass did not trace it to a specific primary manuscript line/folio",
+      "notes": "IMPORTANT DISAGREEMENT WITH A NAIVE 'square-stance-implies-only-linear-footwork' MODEL: the German 2H longsword tradition is squared in stance (F3) but explicitly prescribes lateral/circular footwork as doctrine, not merely linear passing steps. This directly complicates the user's hypothesis (2) that 'squared = lateral/circling, bladed = linear' as a clean mapping — the German case is squared stance WITH prescribed lateral/circular stepping."
+    },
+    {
+      "id": "F13",
+      "claim": "Manciolino's (Bolognese Italian) traverse step (passo alla traversa) is a lateral/sideways step used for radical redirection to strike an open target, described as: step horizontally sideways away from the lead foot, then the first-moved foot steps again, making a corrective 'compass step' behind the leading foot.",
+      "tradition": "Italian (Bolognese) - Antonio Manciolino",
+      "weapon_class": "single sword / sword-and-buckler / sword-and-cape (1H, Bolognese tradition, distinct from later Italian rapier)",
+      "facing_type": "N/A (footwork claim)",
+      "citation": "renfence.com.au 'The Basic Footwork,' summarizing Manciolino's system, via aggregated web search",
+      "confidence": "moderate — single secondary source, not cross-checked against a second independent source in this pass",
+      "notes": "Demonstrates that LATERAL/circular footwork also exists within a 1H Italian sword tradition (Bolognese), predating and distinct from the later, more linear rapier lunge-based systems (F4/F5). This is a second, independent complication of a clean 'bladed=linear only' mapping — see F14 for the Spanish rapier case, which is the strongest counter-example."
+    },
+    {
+      "id": "F14",
+      "claim": "Spanish rapier fencing (La Verdadera Destreza) explicitly combines a BLADED/profiled stance with SYSTEMATIC CIRCULAR footwork: destreza's core spatial model is the 'Spanish Circle' (a circle constructed from the line between the two fencers' lead feet), and its curved, transverse, and mixed steps are described as ending with the fencer 'in profile facing the adversary' (i.e., bladed) while moving along curved/lateral/angular paths around the circle. Secondary analysis explicitly states that circular stepping DOES close distance despite appearing lateral ('a common misconception that such [circular] movement doesn't gain measure... demonstrably incorrect'), contrasting with the Italian rapier's Line-of-Direction + lunge model (F4/F5), which is linear/discrete (a single committed forward step).",
+      "tradition": "Spanish rapier - La Verdadera Destreza (Jerónimo Sánchez de Carranza, Luis Pacheco de Narváez, and successors)",
+      "weapon_class": "rapier (1H)",
+      "facing_type": "bladed/profiled STANCE combined with CIRCULAR footwork — a direct counter-example to any strict 'bladed implies linear-only footwork' rule",
+      "citation": "puckandmary.com/blog_puck/2009/08/spanish-fencing-notation-part-2-footwork-and-the-circle — a secondary HEMA-practitioner analysis of destreza notation/footwork",
+      "confidence": "moderate — single secondary source read via WebFetch in this pass (not cross-checked against a second independent source), but internally detailed and specific enough (naming the Diameter, the circle construction, and directly rebutting a common misconception) to suggest direct familiarity with primary destreza texts",
+      "notes": "THIS IS THE STRONGEST SINGLE PIECE OF EVIDENCE AGAINST A CLEAN 'bladed-stance -> linear-footwork-only' RULE. Destreza is bladed (profiled) AND uses systematic circular footwork as its PRIMARY (not secondary/occasional) footwork model, unlike Italian rapier's comparatively linear lunge-and-passing-step approach. State this disagreement explicitly rather than resolving it: the sources retrieved this session support a correlation (bladed stances, esp. Italian rapier, lean linear; squared 2H stances, esp. German longsword, prescribe lateral/circular voiding as doctrine) but NOT a strict biomechanical necessity — Spanish destreza (bladed) and Bolognese sword (1H, F13) both use lateral/circular stepping, and Manciolino's is 1H."
+    },
+    {
+      "id": "F15",
+      "claim": "Italian rapier footwork (Capoferro/Fabris tradition) is predominantly a 'gathering step' pattern (front foot advances, rear foot follows to re-set the stance; reverse for retreat) plus the lunge (a single discrete forward extension of the lead foot while the rear foot and rear leg remain planted, driven by rear-leg extension) as the characteristic ATTACK footwork. The passing step (rear foot passes fully in front of the lead foot, or vice versa) is used 'sparingly,' notably to retreat two steps quickly following a lunge.",
+      "tradition": "Italian rapier (Capoferro/Fabris tradition, as codified in modern HEMA teaching)",
+      "weapon_class": "rapier (1H)",
+      "facing_type": "bladed/oblique (see F4, F5)",
+      "citation": "hema101.com 'Rapier 101 - part 1: Terms and basic theory,' and the Fabris posture analysis paper (klanham2018), both retrieved via web search/fetch",
+      "confidence": "moderate-high — consistent across two independently retrieved secondary sources",
+      "notes": "Directly answers part of user question (2): the ATTACK footwork (the lunge) in the bladed rapier stance is a single linear, discrete, committed action (lead foot only advances; rear foot/leg is the power source and stays planted), distinct from a continuous walking gait. Contrast with F12's German circular-stepping-as-doctrine and F14's destreza circular model — Italian rapier is the source in this set that most cleanly supports a 'bladed -> linear advance/lunge' characterization, but this is a tradition-specific finding, not a universal bladed-stance law."
+    },
+    {
+      "id": "F16",
+      "claim": "Modern competitive fencing lunge biomechanics (an epee/foil/sabre sport-fencing lineage descended from the same lunge mechanic as F4/F5/F15's rapier lunge, but NOT itself a historical/HEMA source) measures a full-extension lunge distance as approximately 1.5x the fencer's standing height, with one study reporting a mean final lunge distance of 260.0 +/- 9.8 cm across its sample; 3D motion-capture studies show the rear hip and knee extending and the rear ankle plantar-flexing through the lunge, with peak center-of-mass velocity increasing as target distance increases.",
+      "tradition": "Modern Olympic/sport fencing (cross-domain corroboration only, NOT a HEMA/historical source)",
+      "weapon_class": "epee/foil/sabre (1H sport weapons, structurally analogous to rapier's linear lunge mechanic)",
+      "facing_type": "bladed (modern sport fencing en-garde is bladed/profiled, side-on)",
+      "citation": "MDPI 'Effects of Different Target Distances on the Kinematics of Hip, Knee, and Ankle Joints in the Fencing Lunge' (2024) and related ResearchGate/PMC biomechanics papers surfaced via web search",
+      "confidence": "moderate as a MEASURED biomechanical fact (peer-reviewed sport-science literature with 3D motion capture) but LOW as direct HEMA/historical evidence — modern sport fencing rules, blade weight, and footwork conventions differ from rapier/longsword combat. Included per the task's explicit allowance for 'a joint-extension distance... a biomechanically measurable fact.'",
+      "notes": "This is the one genuinely MEASURED (not treatise-described) biomechanical figure retrieved this session: a concrete lunge-distance figure (~1.5x height, ~260cm sampled mean) and a joint-kinematics description (rear hip/knee extension, ankle plantarflexion) for the linear lunge that is the mechanical descendant of the Fabris/Capoferro lunge (F4/F5). Flag clearly downstream as modern-sport-fencing-derived, not historical-rapier-measured, if used as a grounding number."
+    }
+  ],
+  "explicit_disagreements_and_uncertainties": [
+    "Whether facing correlates with weapon handedness (1H vs 2H) at all: F3 (German Vom Tag, 2H, square) and F8 (chudan-no-kamae, 2H/pole, square) both point toward '2H tends square,' while F1 (Fiore's Posta di Donna, 2H longsword, explicitly bladed) is a direct counter-example within the same weapon class and even the same tradition-family (medieval European longsword). No source retrieved this session resolves this cleanly — see F9's explicit synthesis.",
+    "Whether bladed stance implies linear-only footwork: F14 (Spanish destreza, bladed + systematic circular footwork) and F13 (Bolognese Manciolino, 1H + lateral traverse step) both contradict a strict version of this; F15 (Italian rapier gathering-step + lunge) and the general boxing corroboration (F10) support the correlation only within THOSE specific traditions. Treat as a loose tendency across the sources found, not a rule.",
+    "Whether squared stance implies lateral/circular-only footwork: F12 (German Liechtenauer doctrine explicitly prescribes lateral/circular stepping despite F3's squared stance) supports circling being available/prescribed from a squared 2H stance, but this pass found no source claiming squared stances CANNOT also execute linear passing steps (indeed ARMA's stance-transitions source describes 'passing forward the rear foot or passing back the front foot' for German guard transitions) — so squared stances appear to retain BOTH linear and lateral footwork options, per the sources found, rather than being lateral-exclusive.",
+    "George Silver's 'square-footed stance' claim (F7) rests on secondary/tertiary aggregated summaries (Wiktenauer/Grokipedia paraphrase), not a directly read primary-text quote from Paradoxes of Defence — flagged as the single lowest-confidence claim in this set and recommended for direct primary-source verification (pbm.com/~lindahl/paradoxes.html was located but not read word-for-word this session) before being treated as settled.",
+    "No source was found this session that directly and explicitly states a polearm/greatsword (2H, both hands committed to the haft) stance is 'more square' than a 1H blade-leading stance as a general morphological rule. F3 and F8 offer converging but independent circumstantial support (German longsword squared; Japanese naginata/kenjutsu chudan squared) for LONG 2H weapons specifically, but at least one web-search-summarized source (from a Quora-sourced secondary aggregation, not independently verified — see search result under 'HEMA polearm halberd pollaxe stance') asserted the OPPOSITE for European AND Japanese polearm traditions generally ('both Japanese and European polearm traditions use a side-on or angled stance that reduces target profile and enables better hip rotation for powerful cuts') — this directly CONTRADICTS F3/F8's square-2H pattern and was NOT independently corroborated or refuted by a second source in this session. State both claims and flag the direct contradiction rather than picking a side; this specific question (polearm/greatsword facing) is the LEAST well-grounded of the three sub-questions asked and needs a follow-up pass reading a primary polearm treatise (e.g. Fiore's spear/pollaxe sections, or Meyer's staff section) directly rather than relying on aggregated secondary web summaries."
+  ],
+  "sources_attempted_but_unreadable": [
+    {
+      "url": "https://www.hroarr.com/manuals/fiore/omsg_lanza.pdf",
+      "issue": "PDF is image-based (scanned/embedded fonts), not machine-extractable text; would need OCR or a transcribed/translated companion text to use as a primary source for Fiore's spear (lanza) stance specifically.",
+      "relevance_if_read": "Would have directly addressed the polearm/spear facing question (user's part 1 sub-question on greatsword/polearm stance) with a primary Fiore source rather than secondary aggregation."
+    },
+    {
+      "url": "https://www.thearma.org/essays/Fiore/FioreDeiLiberi_StudyGuide.v3.6.pdf",
+      "issue": "Exceeded WebFetch's 10MB content-length limit.",
+      "relevance_if_read": "Likely would have had ARMA's own analysis of Fiore's guards including spear/pollaxe, useful for the polearm sub-question."
+    },
+    {
+      "url": "https://hroarr.com/article/a-key-to-meyers-mechanics-footwork-part-1/",
+      "issue": "Request timed out (60s).",
+      "relevance_if_read": "Would have given a detailed primary-adjacent breakdown of Meyer's Leger/footwork mechanics, which this pass only covered via search-summary aggregation, not a direct fetch."
+    },
+    {
+      "url": "https://www.quora.com/What-are-the-guards-stances-taught-with-spears-and-polearms-in-HEMA",
+      "issue": "HTTP 403 Forbidden (Quora blocks the fetch tool).",
+      "relevance_if_read": "This is the source of the polearm-contradiction claim in explicit_disagreements_and_uncertainties above; only the search-engine's own summary of it was obtained, not the underlying answer text, so that claim's provenance is weaker than a directly-read source."
+    }
+  ],
+  "recommended_follow_up_before_design_phase": [
+    "Directly read (not just search-summarize) a translated primary Fiore spear (lancia) or pollaxe section, and Meyer's or Fiore's staff/two-handed-pole guard descriptions, to resolve the F3/F8-vs-Quora-summary contradiction on polearm facing (currently the weakest-grounded of the three user sub-questions).",
+    "Directly read George Silver's Paradoxes of Defence / Brief Instructions primary text (both located at pbm.com/~lindahl/) to verify or correct the 'square-footed stance' characterization in F7, which currently rests on secondary/tertiary paraphrase only.",
+    "If the design phase wants a 'grip changes available from a given facing/range' fact set beyond F11's Fiore wide/close/mezza-spada framework, a direct read of the full chivalricfighting.wordpress.com wide-and-close-play PDF (only its search-summary was used here) would strengthen that citation from moderate-high to well-attested."
+  ]
+}
