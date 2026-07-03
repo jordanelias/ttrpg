@@ -154,7 +154,7 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "29c83166973f90df145279ac2aed134a430adb23"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "f3f492696e210a099d27d33d930dc963658ba443"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
@@ -173,15 +173,15 @@ systems:
   # after any structural edit to the design doc, then re-pin both.
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "bcd1e7d3c551e8421f671c1d09362bf4f3c3571c"
+    canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "39b7874e9564e145e794720c9fa78dfa5bd4705c"
+    canonical_sha__designs__scene__social_contest_v30_md: "0a32025ec8f7f4b026493e013f6a8442e3b947c4"
     social_contest_index: designs/scene/social_contest_v30_index.md
-    canonical_sha__designs__scene__social_contest_v30_index_md: "5b6977a1507fd0bb82757e6f0fca71deab06ce86"
+    canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
     canonical_sha__designs__scene__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
     params: params/contest.md
-    canonical_sha__params__contest_md: "bcd1e7d3c551e8421f671c1d09362bf4f3c3571c"
+    canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
@@ -322,6 +322,16 @@ systems:
     canonical_sha__designs__architecture__key_type_registry_v30_md: "8f3c206223622b5816a3a8764416ec5d0468503f"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
+  holonic_container_doctrine:
+    design_doc: designs/architecture/holonic_container_doctrine_v1.md
+    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "772ba621b19f5afb8d56ea236c34a423958ce71b"
+    status: canonical
+    added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
+  propagation_spec:
+    design_doc: designs/architecture/propagation_spec_v1.md
+    canonical_sha__designs__architecture__propagation_spec_v1_md: "9bb900829bf647f7cab633f3adb88288a72dc96a"
+    status: canonical
+    added: '2026-07-02 ED-1093/ED-1094 ratification (pre-staged) — ordering/determinism, aggregate-up, distribute-down, termination transforms (TERMINATION-ONLY; cross-tick convergence NOT proven); supplies engine_clock candidate home doc (ED-1051, open — awaiting Jordan; doc:null stays unflipped until then)'
   conviction_taxonomy:
     design_doc: designs/personal/conviction_taxonomy_v30.md
     canonical_sha__designs__personal__conviction_taxonomy_v30_md: "cb112f39d0cdbcf522d617a4b28e95ea6dbe8fb0"
@@ -498,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "a0987067c2534596ce8e6d0cfc2ae45eef6e32d3"
+    canonical_sha__references__module_contracts_yaml: "c5e628d7c909e58b9c3207cea0053f240a3cedca"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

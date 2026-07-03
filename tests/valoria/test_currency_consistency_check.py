@@ -56,6 +56,58 @@ def test_ledger_max_and_ceiling_logic(tmp_path, monkeypatch):
     assert 'next_free 1085 <= live max ED-1090' in joined  # in-block overrun flagged
 
 
+def test_ledger_lane_max_ignores_flat_ids():
+    text = ('{"id": "ED-100", "status": "resolved"}\n'
+            '{"id": "ED-MB-0001", "status": "ratified"}\n'
+            '{"id": "ED-MB-0003", "status": "open"}\n'
+            '{"id": "ED-SC-0012", "status": "open"}\n')
+    import re
+    out = {}
+    for lane, num in re.findall(r'"id":\s*"ED-([A-Z]{2})-(\d+)"', text):
+        if lane in ccc.LANE_CODES:
+            out[lane] = max(out.get(lane, 0), int(num))
+    assert out == {'MB': 3, 'SC': 12}   # ED-100 (flat) never contributes
+
+
+def test_lane_id_ceiling_drift_flagged(tmp_path, monkeypatch):
+    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'references').mkdir()
+    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+        '{"id": "ED-MB-0005", "status": "ratified"}\n', encoding='utf-8')
+    (tmp_path / 'references' / 'id_reservations.yaml').write_text(
+        'lane_ids:\n  lanes:\n    MB: { name: "Mass battle", next_free: 3 }\n',
+        encoding='utf-8')
+    monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
+    drift = []
+    ccc.check_lane_id_ceilings(drift)
+    joined = '\n'.join(drift)
+    assert 'lane_ids.MB.next_free 3 <= actual ledger max ED-MB-5' in joined
+
+
+def test_lane_id_ceiling_missing_lane_flagged(tmp_path, monkeypatch):
+    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'references').mkdir()
+    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+        '{"id": "ED-SE-0001", "status": "ratified"}\n', encoding='utf-8')
+    (tmp_path / 'references' / 'id_reservations.yaml').write_text(
+        'lane_ids:\n  lanes:\n    MB: { name: "Mass battle", next_free: 3 }\n',
+        encoding='utf-8')
+    monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
+    drift = []
+    ccc.check_lane_id_ceilings(drift)
+    assert any('no entry for lane SE' in d for d in drift)
+
+
+def test_lane_id_ceiling_clean_when_no_lane_ids_yet(tmp_path, monkeypatch):
+    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+        '{"id": "ED-100", "status": "resolved"}\n', encoding='utf-8')
+    monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
+    drift = []
+    ccc.check_lane_id_ceilings(drift)
+    assert drift == []   # no lane-tagged IDs in the ledger -> nothing to check
+
+
 def test_patch_register_header_check(tmp_path, monkeypatch):
     (tmp_path / 'canon').mkdir()
     (tmp_path / 'canon' / 'patch_register_active.yaml').write_text(

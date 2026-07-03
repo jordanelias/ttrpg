@@ -473,11 +473,13 @@ PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
-    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
+    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
+    t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
     # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
@@ -707,7 +709,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 if PER_CELL:
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
@@ -717,22 +719,40 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
                         # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
                         _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    # [ED-1091, Jordan-approved 2026-07-02] PC_RECOIL_FRONTAL zone-gates the recoil to the
+                    # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
+                    # (Burkholder 2007), so a flank/rear charge into a braced wall is no longer wrongly
+                    # recoiled (the latent flag mass_battle_gauge_grounding.md §4.3 carried since 2026-06-16;
+                    # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
+                    # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
+                    # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
+                    # [ED-1095, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
+                    # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
+                    # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
+                    # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
+                    # back, so the wall cannot retaliate/recoil it). reach_for is structural only today
+                    # (TROOP_TYPE_REACH is deliberately empty -> everyone is REACH_SHORT -> this half of the
+                    # gate is a no-op until reach assignments are separately ratified).
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b):
+                        if (a_mom > b_mom and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
+                                                                     and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                        elif (b_mom > a_mom and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
+                                                                     and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
@@ -785,7 +805,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     a_deg=a_deg, b_deg=b_deg)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
-def resolve_engagements_cascading(unit_a, unit_b, pairs):
+def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
     [canonical: Jordan handoff §(3)]
 
@@ -793,9 +813,10 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
     one depth group, then rotates engaged cells' facings toward their attacker.
     Later sub-phases see FLANK/REAR angles on already-rotated cells.
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
-    Arrowhead rows are simultaneously adjacent to Line cells."""
+    Arrowhead rows are simultaneously adjacent to Line cells.
+    t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1095]"""
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -827,7 +848,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -1234,9 +1255,9 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                             cic += len(p.get('b_cells', []))
                     if cic > 0:
                         atom.drain_stamina(cic * STAMINA_DRAIN_PER_CONTACT_CELL)
-        result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
+        result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
-                  else resolve_engagements(unit_a, unit_b, pairs))
+                  else resolve_engagements(unit_a, unit_b, pairs, t=t))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
@@ -1421,11 +1442,48 @@ def reset_morale_between_battles(unit):
 
 
 def reset_positions(unit, shape, anchor_map):
-    """Reset subunit positions for re-engagement after disengagement.
-    Units return to their starting rows for fresh approach."""
+    """Reset subunit positions for re-engagement after disengagement -- LEGACY GRID PATH ONLY.
+    Units return to their starting rows for fresh approach.
+
+    [Fix, 2026-07-02] Each subunit now returns to its OWN spawn column (Subunit._spawn_position,
+    snapshotted once at construction) rather than a single shape-keyed anchor shared by every
+    subunit in the unit. The old behaviour was byte-exact-correct only by coincidence for a
+    single-subunit unit built via build_unit (whose one subunit's spawn position IS exactly
+    anchor_map[(shape,tier)] -- so this change reproduces identical results for every such case,
+    confirmed via bat.py's byte-exact battery, which exercises exactly this path). It was silently
+    WRONG for a multi-subunit army (build_army/build_envelopment/build_refused_flank): resetting
+    EVERY subunit to one shared anchor column collapsed any wide-placed wing/escort back onto the
+    center on every subsequent battle-turn, discovered while dogfooding build_envelopment/
+    build_refused_flank through the multi-turn ('multi'/"resolving mode") path for the first time
+    -- Stage C's own verification only ever exercised kind='single', which never calls this
+    function, so the gap went unexercised until now. `shape`/`anchor_map` stay as parameters (no
+    call-site signature change) and are used only as a defensive fallback for a subunit that
+    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__).
+
+    [Fix, 2026-07-02, movement audit finding 1.1 / ED-1096] Node-path atoms are now explicitly
+    SKIPPED, not silently corrupted. This function writes only starting_position/cell_offsets/
+    cell_offsets_c -- the legacy grid fields -- which _node_cells()/cells() never reads once
+    PC_NODE_COHESION is on (node position lives in _node_pos). The old code wrote these fields
+    unconditionally anyway: a harmless no-op for the node path's OWN rendering, but a landmine for
+    any OTHER code that reads Subunit.starting_position post-construction expecting it to track a
+    node-path atom's live position (it never has) -- most immediately the forthcoming waypoint
+    primitive (fix-plan step 7), which must not inherit a stale "reset to spawn" value. Per
+    Jordan's ruling (2026-07-02, verbatim): "an army only has subunits reset to initial
+    positions... at the start of a new battle. it is nonsensical for them to return to starting
+    positions within the same battle" -- the correct node-path behaviour for a within-battle
+    re-engagement turn is to do NOTHING to position at all, continuing exactly where the subunit
+    currently is. (The separate question of whether/how a subunit can be mid-battle REDIRECTED to
+    a new position or role once already committed -- e.g. disengaging from contact -- is gate 1's
+    Command/Discipline-gated conditional-tactics system, explicitly deferred until
+    envelopment/pincer/wheeling pathing is confirmed working.) Legacy-path atoms are completely
+    unaffected -- this is an additive skip, not a behavior change to the branch that fires."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
-    anchor_col = anchor_map.get((shape, unit.subunits[0].tier), 10)
+    fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
+        if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+            continue
+        spawn = getattr(atom, '_spawn_position', None)
+        anchor_col = spawn[1] if spawn is not None else fallback_col
         atom.starting_position = (start_row, anchor_col)
         atom.cell_offsets = {}
         atom.cell_offsets_c = {}

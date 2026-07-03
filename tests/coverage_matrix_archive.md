@@ -1373,3 +1373,33 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - orchestration.py base_combat_pool: the [canonical:] comment cited the legacy min(Size,Command)+Command; updated to the live Command*(1+cohesion) (ED-899/ED-1013), consistent with the now-propagated §A.4. Comment-only -> byte-exact (gauge digest 1f8c05a9 unchanged).
 - PP-683 (encirclement -3 morale-cap removal) intentionally NOT wired: the engine delivers encirclement via PC_ENVELOP_SHOCK + Lanchester contact-overlap; a second cap-removal term double-counts and breaks H4 Cannae (same reason _envelopment_sigma is held dormant, NERS-N/E: no unneeded apparatus). The -3 cap (L314 min(loss,3.0)) stays in force; encirclement lethality is the shock + overlap. Doc PP-683 note added in the matching editorial commit.
 
+
+## 2026-06-30/07-01 — Re-architecture Stages 1-2 + coordinate-migration DEBT-0/S2/C0-P (archived — condensed)
+- Provenance registry seed (ED-1043, data-only); committed bat.py byte-exact digest gate (Stage 1,
+  baseline unit=7be8499b/cell=1c5b2851); Stage 1a-1g wrapper/core split complete (orchestration.py
+  2,899→1,705 lines, byte-exact throughout); Stage 2 standalone equipment/ package (weapons.py
+  ARSENAL, armour.py ARMOURY, TROOP_LOADOUT — descriptive only, not yet wired into resolution);
+  FIELD_MOVEMENT continuous-speed toggle (default OFF, byte-exact); abs→orig reverse-lookup
+  centralized (geometry._oriented_abs_map); Migration DEBT-0 (orchestration.py fabrication-debt
+  resolved honestly, 4→0 uncited constants); Migration S2 (Euclidean distance on the field, retiring
+  the √2 diagonal bias); Migration C0+COL+G+H+F2+P (the full coordinate-field sequence behind
+  default-OFF toggles: contact scaffolding, float→file quantizer, geometry rebuild from _node_pos,
+  halt-loop float consistency, anti-hyper-reactivity facing layer, the int(round()) snap deletion).
+  All byte-exact OFF throughout; FIELD-ON candidate digests recorded but not yet ratified at this
+  point (see later entries for ED-1089's eventual default flip). Full detail: this file, prior
+  revision (git history).
+
+## 2026-07-01 — gauge_mb.py LIVE port + n=60 + tick-by-tick trace-capture backend
+- Ported gauge_mb.py off the dead `exec('/home/claude/sim_v22.py')` mechanism onto
+  `from mass_battle.engine import ...` (make_unit/matchup delegate to build_unit/resolve_battle);
+  LIVE re-verified OFF baseline multi-mode 5/13 (H1,H2,H7,H9,R1), matching the prior shim exactly.
+  No band/citation/metric changed.
+- Jordan directive: default sample n 120->60; verified n=60 reproduces the identical n=120 5/13
+  pass-set on the OFF baseline. Ledger entry `n=60` (calibrated/methodology).
+- Fabrication-debt resolution across touched files (roll_pool TN=7/face-rule, _sigma_net_boost
+  citation format, gauge_mb.py's make_mixed_unit P4/C4/D5/M6 defaults + row-stagger).
+- Added the tick-by-tick VISUALIZER trace-capture backend: resolution.tracing_on() +
+  orchestration._cell_snapshot/_subunit_snapshot/_unit_snapshot + one gated `positions` trace_event
+  call per tick, using atom.cells() (field-aware) zipped against _oriented(atom)'s stable ids.
+  Zero cost when tracing is off (never called, not merely discarded).
+- G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.

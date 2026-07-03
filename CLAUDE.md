@@ -19,8 +19,12 @@ are more "current state" files than there should be; trust them in this strict p
 1. **`CURRENT.md`** — the **single human-readable index** of the live canonical head per subsystem.
    When unsure whether a doc is current, this is the authority. Last reconciled by hand (2026-06-28),
    so treat it as fresher than any filename or in-file version string.
-2. **`HANDOFF.md`** — the **single live continuity surface**: pending work, decisions, next actions.
-   The SessionStart banner (`tools/session_status.py`) reads its "Next actions" section.
+2. **`HANDOFF.md`** — the **continuity index**: root file pointing to lane-scoped
+   `handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
+   GO, SE`) plus genuinely cross-cutting pending work/decisions/next actions. Split 2026-07-02 to
+   reduce concurrent-session merge-collision surface on one shared file, the same motivation
+   behind the ID namespace itself. The SessionStart banner (`tools/session_status.py`) reads root
+   `HANDOFF.md`'s "Next actions" section only — check your lane's file too.
 3. **`references/canonical_sources.yaml`** + **`canon/mechanics_index.yaml`** — machine-readable
    indices. ⚠️ The `canonical_sha__*` pins in `canonical_sources.yaml` are **not verified against the
    working tree** (the only tooling re-syncs them *from* GitHub, which contradicts the working-tree
@@ -28,11 +32,13 @@ are more "current state" files than there should be; trust them in this strict p
 
 **Ignore for currency** — these are stale or retired, do not resume from them:
 - `README.md` — outdated navigational pointers; defers to the three files above.
-- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`, `handoffs/`,
+- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`,
+  `deprecated/session_machinery/handoffs/` — old per-lane-A/B/C `.yaml` files, a **different,
+  retired thing** from the live root-level `handoffs/*.md` directory below, do not confuse them —
   `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
   — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
-  **`HANDOFF.md` is the only live continuity surface.** Do not write into or resume from anything
-  under `deprecated/session_machinery/`.
+  **`HANDOFF.md` + `handoffs/HANDOFF_<LANE>.md` are the only live continuity surface.** Do not
+  write into or resume from anything under `deprecated/session_machinery/`.
 - `archives/`, `deprecated/` — history only, never canonical.
 
 ---
@@ -46,11 +52,22 @@ are more "current state" files than there should be; trust them in this strict p
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
-  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix`.
+  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` in the description when applicable.
-- **Continuity = git history + `HANDOFF.md`.** No session-log/checkpoint machinery is in use (despite
-  retired files lingering — §1). When you pause mid-task, capture next actions in `HANDOFF.md`; a
-  commit *is* the session close.
+- **Continuity = git history + `HANDOFF.md`/`handoffs/HANDOFF_<LANE>.md`.** No session-log/checkpoint
+  machinery is in use (despite retired files lingering — §1). When you pause mid-task, capture next
+  actions in your lane's `handoffs/HANDOFF_<LANE>.md` (or root `HANDOFF.md` only for genuinely
+  cross-cutting items); a commit *is* the session close.
+- **Merging a PR ratifies its PROPOSED contents by default (ED-1094, 2026-07-02).** If a PR lands a
+  design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
+  that PR *is* the ratification — flip the doc's `## Status:` line, the ED ledger `status`/`needs_jordan`
+  fields, and `CURRENT.md` as part of the same merge, not as a separate later step nobody triggers.
+  **The exception must be loud, not silent:** if something in the PR genuinely needs separate,
+  explicit sign-off beyond ordinary merge review, call it out prominently in the PR body as *held
+  back* — never bundle a hard design call into a routine-work PR and rely on an unprompted follow-up
+  to ratify it later. (This closes a real recurring failure: ED-1083's doctrine sat PROPOSED in `main`
+  after PR #55 was reviewed and merged, because the prior convention required a distinct explicit
+  ratification step that nothing forced to happen.)
 
 ---
 
@@ -59,6 +76,7 @@ are more "current state" files than there should be; trust them in this strict p
 | Directory | Contents |
 |---|---|
 | `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
+| `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
 | `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
@@ -81,9 +99,22 @@ are more "current state" files than there should be; trust them in this strict p
   **combat** head is `designs/scene/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
   *PARTIALLY SUPERSEDED*. Always resolve combat via `CURRENT.md`, never by the `_v30` suffix.
 - **ID systems.** `PP-NNN` patches (`canon/patch_register_active.yaml`), `ED-NNN` editorial items
-  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. Reserved-ID blocks are tracked and
-  currently **exhausted** (ED ceiling 1042) — re-block before allocating new IDs
-  (`references/id_reservations.yaml` + `HANDOFF.md`).
+  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
+  is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
+  **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
+  at `ED-1094` (no new allocations, but permanently valid for existing citations), and all NEW EDs
+  use the lane-tagged `ED-<LANE>-NNNN` format (e.g. `ED-MB-0001`), zero-padded to 4 digits. Lanes:
+  `MB` mass battle, `PC` personal combat, `FI` field investigation, `SC` social contest,
+  `FA` faction actions, `WR` world, `IN` infrastructure/cross-cutting, `GO` godot, `SE` settlements.
+  Motivated by two same-session concurrent-allocation collisions on the flat sequence in one PR
+  (see `ED-1094`'s ledger entry) — a lane tag makes cross-lane collision impossible by
+  construction, not just by allocation discipline. Both formats resolve through the same
+  citation-audit path (`tools/validate_ed_citations.py`) and currency gate
+  (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
+  **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
+  lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
+  to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
+  cross-cutting `IN` work (like this namespace itself) or resolving a cross-lane collision.
 - **Naming gate.** Canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
   `tools/ci_naming_check.py` (CI + pre-commit) and an edit-time nudge. Definition naming is centralized
   in `references/names_index.yaml`.
@@ -223,8 +254,9 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
 driver; superseded by the Claude Code-native model).
 
-**General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` for in-flight/next actions
-→ read the subsystem head and its `## Status:` line → make the change in the working tree → run the
+**General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
+`handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
+line → make the change in the working tree → run the
 relevant `tools/` validator and `pytest tests/valoria` → commit with the `[scope]` format and any
 `PP-NNN`/`ED-NNN` citation. When a number must cross into Godot, follow §5; when porting, follow §6/§7.
 

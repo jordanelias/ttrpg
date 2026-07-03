@@ -20,7 +20,20 @@ documented here so the bands below are read honestly:
     into the rear or flank forms NO contact pair, so envelopment emerges only via the
     frontal mass spilling around a fixed defender (the scenario used below).
 
-Run:  PER_CELL=1 PYTHONHASHSEED=0 python3 -m mass_battle.validators
+Run:  PER_CELL=1 FIELD_MOVEMENT=0 PC_NODE_COHESION=0 PYTHONHASHSEED=0 python3 -m mass_battle.validators
+
+[movement audit fix-plan step 6, ED-1096/1097] The `Run:` line above now pins FIELD_MOVEMENT/
+PC_NODE_COHESION explicitly rather than leaving them at the ambient default (movement-audit
+finding 1.4: since ED-1089 flipped that default to ON, a bare invocation silently measured the
+DEAD node-path arm for V-ENVELOP/V-SWEEP -- the only two validators here that exercise a movement
+INSTRUCTION ('envelop'/'sweep') rather than a combat mechanic. `_envelop_reach`/`_sweep_disp` below
+now accept an explicit `path` ('grid'|'node') and toggle FIELD_MOVEMENT/PC_NODE_COHESION in-process
+for that measurement (same "toggle in-process" idiom already used for PC_ENVELOP_PATH/PC_SWEEP);
+v_envelop/v_sweep report BOTH arms, gating pass/fail on the grid arm (a real, currently-working
+regression test) while the node arm is tracked separately -- see
+tests/valoria/test_mass_battle_maneuvers.py, which lands the node arm as an executable, initially-
+RED (xfail) CI gate: the measurement instrument fix-plan step 7 (the waypoint primitive) must turn
+green, so "the maneuver works now" is never claimed again without something actually checking it.
 """
 import statistics
 import random
@@ -194,10 +207,31 @@ def _attacker_envelop():
     return _unit('A', 'A', [main, det], 'balanced')
 
 
-def _envelop_reach(path_on, seeds=_SEEDS, turns=_TURNS):
+def _set_movement_path(path):
+    """[movement audit fix-plan step 6, ED-1096/1097] Toggle which movement path new Subunits
+    constructed AFTER this call will run on. 'grid' = the legacy integer path (where 'envelop'/
+    'sweep' are actually implemented); 'node' = the coordinate-field path (the live default since
+    ED-1089, where they are confirmed dead -- movement audit findings 1.1-1.4). Sets the module-
+    level booleans on every module that star-imported its own bound copy and is read at a relevant
+    call site: hierarchy.units (Subunit.__post_init__'s _init_node_state gate, advance_cells'
+    early-return) and orchestration (run_battle's FIELD_MOVEMENT=>PC_NODE_COHESION assert, the
+    pre-contact halt's node/legacy branch). Must be called BEFORE constructing the Subunits being
+    measured -- PC_NODE_COHESION is read once at construction (__post_init__) to decide whether
+    node state is initialized at all; flipping it back after construction cannot retroactively
+    add node state to an atom built without it."""
+    node_on = (path == 'node')
+    for mod in (_hu, _orch):
+        mod.FIELD_MOVEMENT = node_on
+        mod.PC_NODE_COHESION = node_on
+
+
+def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     """Per-seed signed (detachment_row - defender_row). Negative => the detachment is BEHIND the
     defender (its rear, since the defender faces +row). PC_ENVELOP_PATH toggled in-process; the
-    detachment always carries the 'envelop' instruction, so off = the maneuver disabled."""
+    detachment always carries the 'envelop' instruction, so off = the maneuver disabled. `path`
+    ('grid'|'node') selects which movement path the constructed Subunits run on -- see
+    _set_movement_path."""
+    _set_movement_path(path)
     _orch.PC_ENVELOP_PATH = path_on; _hu.PC_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
     diffs = []
     for s in range(seeds):
@@ -209,14 +243,19 @@ def _envelop_reach(path_on, seeds=_SEEDS, turns=_TURNS):
     return diffs
 
 
-def v_envelop():
+def v_envelop(path='grid', seeds=_SEEDS, turns=_TURNS):
     """GOAL (build C): a detachment ordered to ENVELOP reaches the enemy's REAR. With the maneuver it
     paths around the flank and ends at/behind the enemy (positioned to strike the rear -- the RED shock);
     without it, the detachment advances straight and never gets behind. Capability test via the
     detachment's final position relative to the defender (public).
-    [canonical: Cannae 216 BC double-envelopment; Khalid at Walaja; A.8 Envelopment -- the wrap to the rear.]"""
-    on = _envelop_reach(True)
-    off = _envelop_reach(False)
+    [canonical: Cannae 216 BC double-envelopment; Khalid at Walaja; A.8 Envelopment -- the wrap to the rear.]
+
+    [movement audit fix-plan step 6] `path` ('grid'|'node', default 'grid') selects which movement
+    path is measured -- see _set_movement_path/_envelop_reach. Default 'grid' preserves this
+    validator's original, still-working regression semantics; tests/valoria/
+    test_mass_battle_maneuvers.py calls this with path='node' as the live-path acceptance gate."""
+    on = _envelop_reach(True, path=path, seeds=seeds, turns=turns)
+    off = _envelop_reach(False, path=path, seeds=seeds, turns=turns)
     on_m = statistics.mean(on); off_m = statistics.mean(off)
     on_behind = sum(1 for x in on if x < -1.0)
     off_behind = sum(1 for x in off if x < -1.0)
@@ -332,10 +371,12 @@ def _attacker_sweep():
     return _unit('A', 'A', [su], 'balanced')
 
 
-def _sweep_disp(sweep_on, seeds=_SEEDS, turns=_TURNS):
+def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     """Per-seed lateral column displacement |end_col - start_col| of the sweeping unit's centroid. PC_SWEEP
     toggled in-process; the unit always carries 'sweep', so off = the maneuver disabled (straight column-local
-    advance, which holds the file)."""
+    advance, which holds the file). `path` ('grid'|'node') selects the movement path -- see
+    _set_movement_path."""
+    _set_movement_path(path)
     _orch.PC_SWEEP = sweep_on; _hu.PC_SWEEP = sweep_on  # consumer (advance_cells) lives in hierarchy.units
     out = []
     for s in range(seeds):
@@ -348,14 +389,17 @@ def _sweep_disp(sweep_on, seeds=_SEEDS, turns=_TURNS):
     return out
 
 
-def v_sweep():
+def v_sweep(path='grid', seeds=_SEEDS, turns=_TURNS):
     """GOAL (build E, lateral half): a unit ordered to SWEEP marches laterally to the enemy's flank and
     concentrates there, instead of holding its deployed column. With the maneuver the body displaces sideways
     toward a flank; without it (column-local advance) it stays in its file. Capability test via the unit's
     lateral column displacement (public), on every seed.
-    [canonical: oblique order / flank march -- Leuctra (Epaminondas); Leuthen 1757.]"""
-    on = _sweep_disp(True)
-    off = _sweep_disp(False)
+    [canonical: oblique order / flank march -- Leuctra (Epaminondas); Leuthen 1757.]
+
+    [movement audit fix-plan step 6] `path` ('grid'|'node', default 'grid') -- see v_envelop's
+    docstring for the same convention."""
+    on = _sweep_disp(True, path=path, seeds=seeds, turns=turns)
+    off = _sweep_disp(False, path=path, seeds=seeds, turns=turns)
     on_m = statistics.mean(on); off_m = statistics.mean(off)
     worse = sum(1 for x, y in zip(on, off) if x < y)
     passed = (on_m > off_m + 1.0) and (worse == 0)

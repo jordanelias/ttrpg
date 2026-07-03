@@ -234,7 +234,7 @@ class _Side:
         return FaceScale.face_current(self.face, self.charisma)
 
 class Bout:
-    def __init__(self, ca, cb, venue, adjudicator=None, record=False):
+    def __init__(self, ca, cb, venue, adjudicator=None, record=False, armature=None):
         self.c = {A: _Side(ca, venue.split_standing), B: _Side(cb, venue.split_standing)}
         self.v = venue
         self.adj = adjudicator or Adjudicator()
@@ -243,6 +243,17 @@ class Bout:
         self.room = Room()
         self.state = ContestState()
         self.log = [] if record else None   # opt-in beat trace for narrative.summarize; None => no recording
+        # ── Stage 3 / Gate C — the ADJUDICATOR ARMATURE (opt-in; None => armature adds nothing) ──
+        # `armature` is an ArmatureConfig (armature.py) carrying, per side, the chosen Contest Style and
+        # the judge's armature_position(s). When present, _apply adds (a) the Style×armature_position
+        # CONTINUOUS δσ leverage to the net_boost μ-shift term (the σ-space channel, not the rounded pool —
+        # judge finding 5), and (b) the CR4 +1D primary-genre POOL die when the chosen Style's genre matches
+        # the live stasis's primary genre; and fires the CR5 self-Face backfire on a deg==0 Obscuring foul.
+        # None (the default) leaves BOTH the armature AND CR4 contributing nothing — CR4 keys on the orator's
+        # CHOSEN GENRE (the Style card), which lives on the armature, so with no armature there is no 'chosen
+        # genre' to match (judge finding 1). This makes the armature=None golden-trace agôn path byte-
+        # identical to the pre-Stage-3 engine (parity restored — see _kernel_tests).
+        self.armature = armature
 
     def _view(self, side, i):
         c, opp = self.c[side], self.c[other(side)]
@@ -255,10 +266,25 @@ class Bout:
             audience_learned=self.adj.learned, audience_hostile=self.adj.hostile,
             evidence_available=len(c.dossier.available(self.live)))
 
-    def _reception(self, side):
+    def _reception(self, side, pool_bonus=0.0, dsigma_bonus=0.0):
         c = self.c[side]
-        pool = Pool.size(c.faculty)
-        lev = Leverage.net(c.faculty, on_ground=True)
+        # ── Stage 3 / Gate C: TWO distinct additive channels, per CR6 (POOL die vs δσ leverage) ──
+        # `pool_bonus` — the CR4 primary-genre +1D (rhetoric.primary_genre_pool_bonus): an INTEGER POOL
+        #   die (params/contest.md §Genre and Orientation Bonus Dice "+1D"), added to the Argue pool BEFORE
+        #   the roll. CR4 is a whole die, so the pool (rounded to an integer die count) is its correct home.
+        # `dsigma_bonus` — the ARMATURE alignment (armature.ArmatureConfig.dsigma): a CONTINUOUS δσ-LEVERAGE
+        #   μ-shift, added to the net_boost leverage term (the σ-space channel), NOT the pool. CR6 SPECIFIES
+        #   δσ for setup/audience-boost advantages ("audience boost … accumulate as δσ, tanh soft-capped,
+        #   uniform probability impact"); the armature is such an advantage. Routing it through δσ (not the
+        #   pool) is the judge-finding-5 fix: a fractional pool bonus rounds away in roll_net's
+        #   max(1,int(round(pool))) floor (making the wired armature a 0.5-threshold CATEGORICAL step),
+        #   whereas net_boost's μ-shift is NOT rounded, so off-axis 0.15 alignment produces a real, non-zero,
+        #   continuous net boost (flat < misaligned < aligned holds behaviorally).
+        # Both default 0.0 → byte-identical to Stages 0-2 (evidence and rebut receptions pass no bonus; a
+        # bonus-less argue is unchanged). Neither is a resonance/resistance multiplier; the two prior
+        # parallel armature channels are deleted (judge findings 3/4/6).
+        pool = Pool.size(c.faculty) + max(0.0, pool_bonus)
+        lev = Leverage.net(c.faculty, on_ground=True) + max(0.0, dsigma_bonus)   # armature δσ enters the CR6 leverage term (continuous μ-shift, not the rounded pool)
         net = roll_net(pool) + net_boost(lev, pool)             # σ-leverage as mu-shift (ED-884/934): base_ob untouched, Ob floor never breached
         return degree(net, self.v.base_ob, pool)                # pool-aware degree -> σ-gated Overwhelming; effective_ob now display-only
 
@@ -279,6 +305,12 @@ class Bout:
                    + self.pr.public * PUBLIC_LEAK)
         venue_w = self.v.joint_weight(appeal, tense)          # rhetorical × temporal × venue-role — combined
         res = max(RES_FLOOR, (1 - leak) * venue_w + leak * self.adj.character().get(appeal, 0.0))
+        # NB (Stage 3 / Gate C): the adjudicator armature and the CR4 primary-genre bonus do NOT touch
+        # `res` here. CR4's +1D enters the POOL and the armature's δσ enters the net_boost leverage term,
+        # both in _reception — two distinct additive channels per CR6 (an integer pool die vs a continuous
+        # δσ leverage; judge finding 5), not a resonance multiplier on `res`. The prior multiplicative
+        # res *= (1 + resonance_uplift) armature path was a SECOND, uncited channel and has been removed
+        # (judge findings 3/4/6); the prior fractional-pool armature was rounded away (judge finding 5).
         rdy = Readiness.of(c.cred_frac(), self.room.frac(side)) if readiness else 1.0
         gain = MERIT_SCALE * magnitude * res * rdy * random.uniform(1 - JITTER, 1 + JITTER) * self._bias(side)
         self.state.adv[side] += gain
@@ -328,9 +360,63 @@ class Bout:
             raise ValueError(f"advance/hard requires a valid ground, got {mv.ground!r}")
         if not Stasis.relevant(mv.ground, self.live):
             c.fault.evasion += 1; c.fault.reason = "argued off the live issue (arthantara)"; return
-        deg = self._reception(side)
+        # ── Stage 3 / Gate C: TWO distinct additive channels (CR6: an integer POOL die vs a δσ leverage) ──
+        # Computed here and passed to _reception so they enter resolution BEFORE the roll.
+        #   CR4 (pool_bonus — an INTEGER +1D pool die; params/contest.md §Genre and Orientation Bonus Dice):
+        #        +1D when the orator's CHOSEN GENRE (the genre of the Style-card the orator picked —
+        #        rhetoric.genre_of_style; NOT the move's ground, which the resolver forces onto the live
+        #        issue) matches the LIVE stasis's primary genre (rhetoric.primary_genre_pool_bonus). Keying
+        #        on the CHOSEN genre (not the ground) is the judge-finding-1 fix: because Stasis.relevant
+        #        already forces mv.ground == self.live, keying the +1D on genre_of_ground(mv.ground) was a
+        #        TAUTOLOGY (the ground's genre == its own primary genre) that erased the orator's Style
+        #        choice. CR4's strategic half IS that choice — pick a Memory (Precedent/Suppression) or
+        #        Projection (Vision/Insinuation) stance and be rewarded iff it matches what the terrain makes
+        #        primary. So CR4 is now armature-gated (no chosen Style → no 'chosen genre' → no +1D), which
+        #        also restores byte-identical parity on the armature=None golden-trace path.
+        #   ARMATURE (dsigma_bonus — a CONTINUOUS δσ leverage μ-shift; opt-in, only with an armature):
+        #        Style×armature_position alignment (armature.ArmatureConfig.dsigma), gated off in asymmetric
+        #        proceedings. Routed through the net_boost δσ term (NOT the pool) so sub-die alignment is not
+        #        rounded away (judge finding 5).
+        from .rhetoric import primary_genre_pool_bonus, genre_of_style, cr5_self_backfire
+        pool_bonus = 0.0
+        dsigma_bonus = 0.0
+        if self.armature is not None:
+            chosen_genre = genre_of_style(self.armature.style_of(side))   # CR4 'chosen genre' = the chosen Style's genre
+            pool_bonus = primary_genre_pool_bonus(chosen_genre, self.live)
+            dsigma_bonus = self.armature.dsigma(side, self.adj)
+        deg = self._reception(side, pool_bonus=pool_bonus, dsigma_bonus=dsigma_bonus)
         if deg >= 1:                                         # partial (1) gives a small gain; 0=failure still nothing
             self._advance(side, deg, mv.appeal, mv.ground)
+        # ── Stage 3 / Gate C: CR5 self-Face BACKFIRE on a deg==0 Obscuring FOUL (nigrahasthāna) ──
+        # (RATIFIED_2026-06-01.md CR5; Nyāya nigrahasthāna self-gating.) A LANDED Obscuring move (deg>=1,
+        # including a deg==1 partial that ADVANCED the mover's own track above) advances/plants as before
+        # (params/contest.md §Interaction Types Doubt Marker, ratified Gate B ED-1060) — no self-cost. An
+        # Obscuring move that lands NOWHERE (deg==0 — a genuine argumentative foul, a nigrahasthāna)
+        # strips the mover's OWN Face by min(−2, its own Face) (rhetoric.CR5_BACKFIRE_MAGNITUDE, anchored
+        # to the Doubt Marker −2 but applied to the 0–10 Face stat AND BOUNDED BY THE MOVER'S STANDING —
+        # judge finding 4). Judge finding 7: the cost attaches ONLY to the deg==0 foul, NOT to a partial
+        # success that helped the mover. Eristic-has-a-cost self-gating: obstruction is BOUNDED BY YOUR OWN
+        # STANDING (Nyāya §5.3; reconciliation_map §1.3 "gated by SelfGating.licit") — the strip cannot
+        # exceed the Face you hold, so a low-standing orator's foul costs proportionally less. Touches ONLY
+        # the failed-foul side — the Direct-vs-Direct CLASH/REINFORCE/CROSS/TIE merits path is untouched
+        # (scope item 2). Opt-in: fires only when the Bout carries an armature with cr5 enabled and an
+        # Obscuring style this side.
+        if self.armature is not None and self.armature.cr5:
+            style_key = self.armature.style_of(side)
+            if style_key is not None:
+                # STANDING-BOUNDED backfire (judge finding 4): pass the mover's OWN Face so the strip is
+                # bounded by its standing (Nyāya "obstruction is bounded by your own standing", F7
+                # self-gating; reconciliation_map §1.3 "gated by SelfGating.licit"). A high-standing orator
+                # risks the full −2; a low-standing orator (Face < 2) risks only what it holds.
+                backfire = cr5_self_backfire(style_key, landed=(deg >= 1), my_standing=c.face.v)
+                if backfire > 0.0:
+                    # strip_points (NOT strip): a FIXED-point penalty, so the REALIZED Face delta equals
+                    # the standing-bounded magnitude exactly (judge finding 3: strip(2.0) scaled by
+                    # STRIP=0.8 applied only −1.6, a cited≠applied anti-fabrication violation). The
+                    # magnitude is already bounded by the mover's Face (judge finding 4), and strip_points
+                    # floor-clamps at 0. Face == Standing; the CR3 strip channel, wired here (CR5).
+                    c.face.strip_points(backfire)
+                    c.fault.reason = "eristic recoiled — a failed obscuring move landed nowhere and cost your own face (nigrahasthana)"
 
     def resolve(self, polA, polB):
         pol = {A: polA, B: polB}

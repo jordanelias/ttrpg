@@ -22,9 +22,9 @@ updated: "2026-07-01"
 source: "valoria_master_workplan_v2_2026-05-31 (item 5.10); round-2 re-block 2026-06-30 (ecosystem review); round-3 re-block 2026-07-01 (LB-21, month-overview consolidation)"
 
 verified_live_max:                 # measured from the live store this session
-  ED: 1087                         # canon/editorial_ledger.jsonl (max ED referenced, 2026-07-01 — after this session's ED-1081..1087 filings)
+  ED: 1096                         # FROZEN 2026-07-02 (ED-IN-0001 cutover, origin/main) — 1094 was the FINAL flat ED-NNNN value AS OF THAT CUTOVER; no new flat allocations from here on. This branch's own ED-1095/ED-1096 (T1-T4 charge-recoil ruling; movement/pathing audit ratification) were filed on the mass-battle lane BEFORE this branch learned of the cutover, using the old flat scheme, and do not collide with anything origin/main claimed (origin/main jumped straight from 1094 to ED-IN-0001/0002) — so 1095/1096 stand as valid, permanent flat IDs, just filed after the nominal freeze point. Any FURTHER new ED from this point on uses the ED-<LANE>-NNNN namespace below, not a flat number. Full incident history (three same-session collisions on this one block): canon/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — origin/main's concurrent month-overview-consolidation lane independently claimed ED-1093/1094 for its own content (J-38 propagation-spec + merge-ratifies-by-default convention, itself already twice-renumbered on that lane) while this branch held ED-1093 (T1-T4 charge-recoil ruling) + ED-1094 (movement/pathing audit ratification) — this branch's two colliding IDs renumbered to ED-1095/ED-1096 before merging origin/main in, which itself had independently landed ED-1088-1092 (mass-battle LC-8 + three Jordan rulings + Stage F investigation, PRs #59/#62/#64/#65) against this branch's own now-renumbered ED-1089/1090 — two same-session collisions on origin/main's side plus this branch's own third motivated the ED-<LANE>-NNNN namespace below)
   PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
-  verified_on: "2026-07-01"
+  verified_on: "2026-07-02"
 
 # Round-1 blocks A/B/C (ED 890-999) were exhausted and overrun to ED-1042 in the unreserved
 # 1000-1042 overflow — exactly the collision class this file exists to prevent. Round 2 below
@@ -43,11 +43,11 @@ reservations:
     PP: { block: "780-799", next_free: 780 }
   # ── Round 2 (2026-06-30) — ACTIVE ─────────────────────────────────────────
   D:
-    ED: { block: "1050-1099", next_free: 1088 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session)
+    ED: { block: "1050-1099", next_free: 1097 }   # 1050-1054 ecosystem Top-5; 1055-1079 reserved -> contest_rebuild; 1080 grounded combat re-baseline (percussion/armour/use-mode/gap-game); 1081-1087 -> 2026-07-01 month-overview consolidation (LB-21 session); 1088 -> 2026-07-02 mass-battle LC-8 execution (shared ancestry, consistent on both branches); 1089-1091 -> 2026-07-02 Jordan rulings (field default flip / subunit cap 11 / recoil frontal zone-gate), PR #62 (shared ancestry); 1092 -> 2026-07-02 Stage F investigation + D2 fidelity-fix verification, PR #65 (shared ancestry); 1093 -> 2026-07-02 origin/main month-overview-consolidation lane: J-38 propagation-spec authorship (RENUMBERED twice on that lane, see its own history); 1094 -> 2026-07-02 origin/main month-overview-consolidation lane: merge-ratifies-by-default governance convention (RENUMBERED twice on that lane); 1095 -> 2026-07-02 THIS branch: T1-T4 charge-recoil actor/timing/reach ruling (renumbered from this branch's own original ED-1093 -- third collision, see verified_live_max note above); 1096 -> 2026-07-02 THIS branch: movement/pathing audit ratification, Fable-led/Opus-verified (renumbered from this branch's own original ED-1094)
     PP: { block: "800-829", next_free: 810 }       # 800-809 reserved -> contest_rebuild
   # ── contest_rebuild sub-block (2026-06-30) — social-contest staged rebuild Stage 0..7 ──
   contest_rebuild:
-    ED: { block: "1055-1079", next_free: 1062 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement; 1055 (CR1/CR2 + D0-3 HYBRID substrate confirmation) + 1056 (CR3 three-tracker / Face primitive) filed Stage 1d 2026-07-01; 1057 (ED-137 Panel closure / VoteAtClose) + 1058 (Stage-2 typed dictionaries + flavor) filed Stage 2 / Gate B 2026-07-01; 1059 (Panel proceeding-reachability, finding 3) + 1060 (Obscuring single-exchange dominance / Doubt Marker terminal value, finding 4) filed Stage 2 / Gate B round-2 revision 2026-07-01; 1061 (Guilds either-axis boost context-derived-from-venue, no-GM canon fix) filed Stage 2 / Gate B FINAL ratification 2026-07-01
+    ED: { block: "1055-1079", next_free: 1063 }    # CR1-CR7 fold-in, armature, 4 games, seam-closure, probes, settlement; 1055 (CR1/CR2 + D0-3 HYBRID substrate confirmation) + 1056 (CR3 three-tracker / Face primitive) filed Stage 1d 2026-07-01; 1057 (ED-137 Panel closure / VoteAtClose) + 1058 (Stage-2 typed dictionaries + flavor) filed Stage 2 / Gate B 2026-07-01; 1059 (Panel proceeding-reachability, finding 3) + 1060 (Obscuring single-exchange dominance / Doubt Marker terminal value, finding 4) filed Stage 2 / Gate B round-2 revision 2026-07-01; 1061 (Guilds either-axis boost context-derived-from-venue, no-GM canon fix) filed Stage 2 / Gate B FINAL ratification 2026-07-01; 1062 (Stage 3 / Gate C FINAL ratification: armature 4th axis, epideictic compression, CR5 scope, CR4 reachability fix + canon propagation) filed 2026-07-02
     PP: { block: "800-809", next_free: 800 }
   # ── Round 3 (2026-07-01, LB-21) — pre-provisioned; ACTIVATE when D exhausts ──
   # Disjoint from every prior block; opened at the integration pause per exhaustion_policy
@@ -59,6 +59,49 @@ reservations:
 # When all three lanes exhaust their blocks, the integration seam allocates the next
 # round of disjoint blocks (extend each by the same stride) and bumps `version`.
 exhaustion_policy: "at integration: assign the next disjoint blocks per lane; never overlap a prior block; bump version."
+
+# =====================================================================================
+# ED-<LANE>-NNNN LANE-TAGGED NAMESPACE (2026-07-02, ED-IN-0001)
+# =====================================================================================
+# Motivated by TWO same-session concurrent-allocation collisions on the flat ED-NNNN
+# sequence above (ED-1088 collided with mass-battle LC-8, renumbered to 1090; ED-1089/
+# 1090 then collided AGAIN with three more mass-battle EDs, renumbered to 1093/1094 —
+# see ED-1094's ledger entry for the full incident). The A-E reservation-block scheme
+# above only prevents collision through allocation DISCIPLINE (read next_free before
+# allocating); two sessions in the same numeric block that both skip that step, or read
+# next_free before the other commits, can still collide. A lane tag makes CROSS-LANE
+# collision impossible BY CONSTRUCTION — two sessions in different lanes can never
+# collide, full stop. Same-lane collisions are still possible (two sessions both doing
+# mass-battle work concurrently) but are a much narrower, already-expected case, and
+# the existing CollisionError-retry append-safety still applies within a lane.
+#
+# FORMAT: ED-<LANE>-NNNN, zero-padded to 4 digits (e.g. ED-<LANE>-0001). Citation matching
+# (tools/validate_ed_citations.py) normalises padding away, same as the flat format.
+#
+# MIGRATION: NEW IDS ONLY. The flat ED-NNNN sequence above is FROZEN as of this cutover
+# — no new flat allocations — but remains permanently valid; none of the ~1094 existing
+# entries are retrofitted. Both formats resolve through the same ledger/citation-audit
+# path forever.
+#
+# ALLOCATION PROTOCOL: identical to the flat protocol at the top of this file, but per
+# lane — take lane_ids.lanes.<LANE>.next_free, form the entry, increment next_free,
+# co-commit this file. A session should declare which lane(s) its work belongs to (via
+# the ED-<LANE> ids it allocates) and keep its commits/PRs scoped to that lane — see
+# CLAUDE.md section 3 for the convention. Cross-cutting repo-governance/tooling work
+# (like this namespace itself) uses IN.
+lane_ids:
+  updated: "2026-07-02"
+  cutover_ed: "ED-IN-0001"   # the entry that created this namespace; first-ever lane-tagged ED
+  lanes:
+    MB: { name: "Mass battle",         next_free: 2 }   # ED-MB-0001: movement/pathing audit (ED-1096) fix-plan execution + adversarial review, 2026-07-02
+    PC: { name: "Personal combat",     next_free: 1 }
+    FI: { name: "Field investigation", next_free: 1 }
+    SC: { name: "Social contest",      next_free: 1 }
+    FA: { name: "Faction actions",     next_free: 1 }
+    WR: { name: "World",               next_free: 1 }
+    IN: { name: "Infrastructure",      next_free: 3 }   # ED-IN-0001 this cutover itself; ED-IN-0002 the D1-D5 docket adjudication
+    GO: { name: "Godot",               next_free: 1 }
+    SE: { name: "Settlements",         next_free: 1 }
 
 wiring_status:
   file_live: true

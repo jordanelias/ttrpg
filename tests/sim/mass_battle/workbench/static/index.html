@@ -44,6 +44,21 @@ button.primary { background: var(--accent); color: #10141b; font-weight: 600; bo
 #winner-banner { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #10141b; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; display: none; }
 .legend { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
 .legend span { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.tabs button { margin-top: 0; flex: 1; background: #10141b; }
+.tabs button.active { background: var(--accent); color: #10141b; font-weight: 600; }
+.side-toggle-row { display: flex; gap: 4px; margin: 8px 0; }
+.side-toggle-row button { margin-top: 0; }
+.side-toggle-row button.active.side-a { background: var(--a); color: #10141b; font-weight: 600; }
+.side-toggle-row button.active.side-b { background: var(--b); color: #10141b; font-weight: 600; }
+.hint { font-size: 11px; color: var(--muted); margin: 6px 0; line-height: 1.5; }
+.roster-item { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--rule); }
+.roster-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.roster-item .desc { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roster-item button { width: auto; margin: 0; padding: 2px 7px; background: #2c2020; }
+.cap-line { font-size: 12px; color: var(--muted); margin: 6px 0 2px; }
+.cap-line.over { color: var(--red); }
+#deploy-panel h2:first-child { margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -51,18 +66,55 @@ button.primary { background: var(--accent); color: #10141b; font-weight: 600; bo
   <div class="panel" id="left">
     <h2>Scenario</h2>
     <div id="mode-banner">loading mode…</div>
-    <label>Preset</label>
-    <select id="preset"></select>
-    <h2>Side A</h2>
-    <label>Shape</label>
-    <select id="a-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
-    <label>Troop type</label>
-    <select id="a-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
-    <h2>Side B</h2>
-    <label>Shape</label>
-    <select id="b-shape"><option>Line</option><option>Arrowhead</option><option>Horseshoe</option><option>GappedLine</option><option>RefusedFlank</option><option>Column</option></select>
-    <label>Troop type</label>
-    <select id="b-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
+    <div class="tabs">
+      <button id="tab-quick" class="tab active">Quick Match</button>
+      <button id="tab-deploy" class="tab">Deploy Army</button>
+    </div>
+
+    <div id="quickmatch-panel">
+      <label>Preset</label>
+      <select id="preset"></select>
+      <h2>Side A</h2>
+      <label>Shape</label>
+      <!-- [LC-8, ED-909] Horseshoe/RefusedFlank retired as Subunit.shape values -- only Line/Arrowhead/
+           GappedLine/Column remain valid single-subunit shapes; Envelopment/RefusedFlank now exist only
+           as Unit-level presets (see the composed-army option below and the Preset dropdown). -->
+      <select id="a-shape"><option value="__composed__" disabled>— composed army (see preset) —</option><option>Line</option><option>Arrowhead</option><option>GappedLine</option><option>Column</option></select>
+      <label>Troop type</label>
+      <select id="a-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
+      <h2>Side B</h2>
+      <label>Shape</label>
+      <select id="b-shape"><option value="__composed__" disabled>— composed army (see preset) —</option><option>Line</option><option>Arrowhead</option><option>GappedLine</option><option>Column</option></select>
+      <label>Troop type</label>
+      <select id="b-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
+    </div>
+
+    <!-- [Stage E, Army Configuration Mode] Click-to-place deployment: build a real multi-subunit
+         roster per side (shape/troop_type/role/tier/troop-count), then hand the whole roster to
+         engine.build_army via the SAME /api/trace 'preset':'army' spec dispatch trace.py's
+         _build_side already supports (no new backend battle-running path — this only assembles the
+         request body a human would otherwise have to hand-write as JSON). -->
+    <div id="deploy-panel" style="display:none">
+      <div class="side-toggle-row">
+        <button id="deploy-side-a" class="side-a active">Side A</button>
+        <button id="deploy-side-b" class="side-b">Side B</button>
+      </div>
+      <label>Shape</label>
+      <select id="d-shape"></select>
+      <label>Troop type</label>
+      <select id="d-troop"></select>
+      <label>Role (optional — overrides shape + sets instructions)</label>
+      <select id="d-role"><option value="">— none —</option></select>
+      <div class="row">
+        <div><label>Tier</label><input id="d-tier" type="number" value="3" min="1" max="4"></div>
+        <div><label>Troops (blank = tier default)</label><input id="d-troops" type="number" min="1"></div>
+      </div>
+      <div class="hint">Click the field to place this subunit for the active side, or use the button below for a quick default-column placement.</div>
+      <button id="d-place-default">Place at default position</button>
+      <h2>Roster <span id="roster-count-label"></span></h2>
+      <div id="roster-list"></div>
+    </div>
+
     <div class="row">
       <div><label>Seed</label><input id="seed" type="number" value="0"></div>
       <div><label>Max battle-turns</label><input id="maxturns" type="number" value="8"></div>
@@ -117,13 +169,184 @@ let events = [];      // full raw event list (for the tick log panel)
 let cursor = 0;
 let playing = null;
 
+// [Stage E, Army Configuration Mode] --------------------------------------------------------
+let rosterOptions = { shapes: [], troop_types: [], roles_by_troop_type: {}, subunit_cap: 11 };
+let roster = { A: [], B: [] };        // each entry: {id, shape, troop_type, role, tier, troops, row, col}
+let activeDeploySide = 'A';
+let nextRosterId = 1;
+let activeTab = 'quick';              // 'quick' | 'deploy' — which LEFT-PANEL form is showing
+let canvasMode = 'empty';             // 'empty' | 'deploy' | 'replay' — what the CENTER CANVAS draws
+
+async function loadRosterOptions() {
+  const r = await fetch('/api/roster-options'); rosterOptions = await r.json();
+  const shapeSel = document.getElementById('d-shape');
+  shapeSel.innerHTML = rosterOptions.shapes.map(s => `<option>${s}</option>`).join('');
+  const troopSel = document.getElementById('d-troop');
+  troopSel.innerHTML = rosterOptions.troop_types.map(t => `<option value="${t}">${t}</option>`).join('');
+  troopSel.value = 'infantry';
+  refreshRoleOptions();
+  troopSel.onchange = refreshRoleOptions;
+}
+
+function refreshRoleOptions() {
+  const tt = document.getElementById('d-troop').value;
+  const roles = rosterOptions.roles_by_troop_type[tt] || [];
+  document.getElementById('d-role').innerHTML =
+    '<option value="">— none —</option>' + roles.map(r => `<option>${r}</option>`).join('');
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-quick').classList.toggle('active', tab === 'quick');
+  document.getElementById('tab-deploy').classList.toggle('active', tab === 'deploy');
+  document.getElementById('quickmatch-panel').style.display = tab === 'quick' ? '' : 'none';
+  document.getElementById('deploy-panel').style.display = tab === 'deploy' ? '' : 'none';
+  // Clicking the Deploy tab always shows the placement schematic (a cheap "back to deployment
+  // view" control — see runDeployedBattle, which switches canvasMode to 'replay' without leaving
+  // this tab so the just-built army's fight is immediately visible without an extra click).
+  canvasMode = tab === 'deploy' ? 'deploy' : (frames.length ? 'replay' : 'empty');
+  redraw();
+}
+
+function setActiveDeploySide(side) {
+  activeDeploySide = side;
+  document.getElementById('deploy-side-a').classList.toggle('active', side === 'A');
+  document.getElementById('deploy-side-b').classList.toggle('active', side === 'B');
+}
+
+function addRosterEntry(side, row, col) {
+  const cap = rosterOptions.subunit_cap || 11;
+  if (roster[side].length >= cap) { alert(`Side ${side} is already at the cap of ${cap} subunits (ED-1090).`); return; }
+  const troops = document.getElementById('d-troops').value;
+  roster[side].push({
+    id: nextRosterId++,
+    shape: document.getElementById('d-shape').value,
+    troop_type: document.getElementById('d-troop').value,
+    role: document.getElementById('d-role').value || null,
+    tier: parseInt(document.getElementById('d-tier').value) || 3,
+    troops: troops ? parseInt(troops) : null,
+    row, col,
+  });
+  renderRosterList();
+  if (canvasMode === 'deploy') drawDeployment();
+}
+
+function removeRosterEntry(side, id) {
+  roster[side] = roster[side].filter(e => e.id !== id);
+  renderRosterList();
+  if (canvasMode === 'deploy') drawDeployment();
+}
+
+function renderRosterList() {
+  const cap = rosterOptions.subunit_cap || 11;
+  document.getElementById('roster-count-label').textContent =
+    `(A: ${roster.A.length}/${cap} · B: ${roster.B.length}/${cap})`;
+  const rows = (side, colorVar) => roster[side].map(e => `
+    <div class="roster-item">
+      <span class="swatch" style="background:var(${colorVar})"></span>
+      <span class="desc">${side} · ${e.shape}${e.role ? ' · ' + e.role : ''} · ${e.troop_type} · T${e.tier}${e.troops ? ' · ' + e.troops + 'tr' : ''} @ (${e.row},${e.col})</span>
+      <button data-side="${side}" data-id="${e.id}" class="roster-remove">×</button>
+    </div>`).join('');
+  document.getElementById('roster-list').innerHTML = rows('A', '--a') + rows('B', '--b');
+  document.querySelectorAll('.roster-remove').forEach(btn => {
+    btn.onclick = () => removeRosterEntry(btn.dataset.side, parseInt(btn.dataset.id));
+  });
+}
+
+function canvasClickToRowCol(evt) {
+  const rect = canvas.getBoundingClientRect();
+  const x = (evt.clientX - rect.left) / rect.width * canvas.width;
+  const y = (evt.clientY - rect.top) / rect.height * canvas.height;
+  const col = Math.max(0, Math.min(mode.battlefield_size - 1, Math.round(x / canvas.width * mode.battlefield_size)));
+  const row = Math.max(0, Math.min(mode.battlefield_size - 1, Math.round(y / canvas.height * mode.battlefield_size)));
+  return { row, col };
+}
+
+function drawDeployment() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#171c24';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const colorFor = (side) => getComputedStyle(document.documentElement).getPropertyValue(side === 'A' ? '--a' : '--b').trim();
+  for (const side of ['A', 'B']) {
+    const color = colorFor(side);
+    for (const e of roster[side]) {
+      const x = (e.col / mode.battlefield_size) * canvas.width;
+      const y = (e.row / mode.battlefield_size) * canvas.height;
+      ctx.fillStyle = color;
+      ctx.fillRect(x - 5, y - 5, 10, 10);
+      ctx.fillStyle = '#e7ecf3';
+      ctx.font = '10px ui-monospace, monospace';
+      ctx.fillText(e.role ? e.role.slice(0, 3) : e.shape.slice(0, 3), x + 7, y + 3);
+    }
+  }
+  document.getElementById('step-label').textContent = 'deployment view — click the field to place';
+}
+
+function redraw() {
+  if (canvasMode === 'deploy') { drawDeployment(); return; }
+  if (canvasMode === 'replay' && frames.length) { renderReplayFrame(); return; }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#171c24';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+async function runDeployedBattle() {
+  if (roster.A.length === 0 || roster.B.length === 0) {
+    alert('Both Side A and Side B need at least one placed subunit before starting the battle.');
+    return;
+  }
+  const toSpecs = (side) => roster[side].map(e => {
+    const sp = { shape: e.shape, troop_type: e.troop_type, tier: e.tier, starting_position: [e.row, e.col] };
+    if (e.role) sp.role = e.role;   // role's own shape/instructions defaults apply UNLESS overridden
+                                      // above (this UI always sends an explicit shape — matching
+                                      // engine.build_army's own documented precedence, "an explicit
+                                      // shape/instructions in the spec always wins over the role's
+                                      // defaults" — so role here only ever supplies instructions).
+    if (e.troops) sp.troops = e.troops;
+    return sp;
+  });
+  document.getElementById('run').textContent = 'Running…';
+  document.getElementById('winner-banner').style.display = 'none';
+  const body = {
+    a: { preset: 'army', specs: toSpecs('A') },
+    b: { preset: 'army', specs: toSpecs('B') },
+    seed: parseInt(document.getElementById('seed').value) || 0,
+    max_battle_turns: parseInt(document.getElementById('maxturns').value) || 8,
+    kind: 'multi',
+  };
+  const r = await fetch('/api/trace', { method: 'POST', body: JSON.stringify(body) });
+  const result = await r.json();
+  document.getElementById('run').textContent = 'Run traced battle';
+  if (result.error) { alert(result.error); return; }
+  applyTraceResult(result);
+  canvasMode = 'replay';   // stay on the Deploy tab (you built this army — watch it fight without
+                            // an extra click), but the canvas now shows the replay, not the roster.
+  redraw();
+}
+// The currently selected preset's raw spec (if any) — a multi-subunit preset side (one with a
+// 'preset' key: army/envelopment/refused_flank) can't be represented by the Shape/Troop dropdowns
+// at all, so runBattle() must use this directly rather than always rebuilding from the dropdowns.
+let selectedPreset = null;
+
 async function loadMode() {
   const r = await fetch('/api/mode'); mode = await r.json();
   document.getElementById('mode-banner').innerHTML =
     `<b>PER_CELL</b>=${mode.per_cell}  <b>FIELD_MOVEMENT</b>=${mode.field_movement}  <b>PC_NODE_COHESION</b>=${mode.pc_node_cohesion}<br>` +
     (mode.field_movement
-      ? 'Running the COORDINATE-FIELD candidate. Positions are continuous floats.'
-      : 'Running the INTEGER GRID baseline. To visualize the field candidate, restart the server with FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1.');
+      ? 'Running the COORDINATE FIELD (the default since the ED-1089 flip). Positions are continuous floats.'
+      : 'Running the legacy INTEGER-GRID oracle (explicitly requested via FIELD_MOVEMENT=0 PC_NODE_COHESION=0). Restart without those env vars for the default coordinate field.');
+}
+
+function setSideFieldsEnabled(prefix, enabled, placeholderLabel) {
+  const shapeSel = document.getElementById(prefix + '-shape');
+  const troopSel = document.getElementById(prefix + '-troop');
+  shapeSel.disabled = !enabled;
+  troopSel.disabled = !enabled;
+  shapeSel.title = enabled ? '' : (placeholderLabel || 'multi-subunit preset — see label');
+  // Show the explicit placeholder rather than leaving a stale shape name from a PRIOR preset
+  // selected-but-greyed-out, which would misleadingly claim this side is e.g. "GappedLine" when it's
+  // actually a composed multi-subunit army built from the preset's own spec.
+  if (!enabled) shapeSel.value = '__composed__';
 }
 
 async function loadPresets() {
@@ -132,12 +355,26 @@ async function loadPresets() {
   sel.innerHTML = '<option value="">— custom —</option>' +
     presets.map((p, i) => `<option value="${i}">${p.id} — ${p.label}</option>`).join('');
   sel.onchange = () => {
-    if (sel.value === '') return;
+    if (sel.value === '') {
+      selectedPreset = null;
+      setSideFieldsEnabled('a', true); setSideFieldsEnabled('b', true);
+      return;
+    }
     const p = presets[parseInt(sel.value)];
-    document.getElementById('a-shape').value = p.a.shape;
-    document.getElementById('a-troop').value = p.a.troop_type || 'infantry';
-    document.getElementById('b-shape').value = p.b.shape;
-    document.getElementById('b-troop').value = p.b.troop_type || 'infantry';
+    selectedPreset = p;
+    // A multi-subunit side (army/envelopment/refused_flank) has no single 'shape' — the dropdown
+    // can't represent it, so disable it rather than silently showing a stale/wrong value.
+    const aCustom = !p.a.preset, bCustom = !p.b.preset;
+    setSideFieldsEnabled('a', aCustom, 'composed army — see preset label');
+    setSideFieldsEnabled('b', bCustom, 'composed army — see preset label');
+    if (aCustom) {
+      document.getElementById('a-shape').value = p.a.shape;
+      document.getElementById('a-troop').value = p.a.troop_type || 'infantry';
+    }
+    if (bCustom) {
+      document.getElementById('b-shape').value = p.b.shape;
+      document.getElementById('b-troop').value = p.b.troop_type || 'infantry';
+    }
   };
 }
 
@@ -149,11 +386,36 @@ function buildSpec(prefix) {
   return spec;
 }
 
+// Shared by both battle-launch paths (Quick Match's runBattle and Deploy Army's
+// runDeployedBattle) — parses a /api/trace response into the frame/event state the scrub bar and
+// renderReplayFrame() consume. Does NOT touch canvasMode (each caller decides whether the replay
+// should take over the canvas immediately or wait for a tab switch).
+function applyTraceResult(result) {
+  events = result.events;
+  frames = events.filter(e => e.cat === 'positions');
+  document.getElementById('a-name').textContent = result.a.name + ' (' + result.a.shape + ')';
+  document.getElementById('b-name').textContent = result.b.name + ' (' + result.b.shape + ')';
+  cursor = 0;
+  document.getElementById('scrub').max = Math.max(0, frames.length - 1);
+  document.getElementById('scrub').value = 0;
+  const banner = document.getElementById('winner-banner');
+  if (result.winner && result.winner !== 'draw') {
+    banner.textContent = 'Winner: ' + result.winner;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
 async function runBattle() {
   document.getElementById('run').textContent = 'Running…';
   document.getElementById('winner-banner').style.display = 'none';
+  // A selected preset's multi-subunit side (has its own 'preset' key) is used verbatim — the
+  // dropdowns cannot express it; a plain-shape side still comes from the dropdowns (so the two can
+  // mix, e.g. Envelopment (preset) vs Arrowhead (dropdown), as several presets below actually do).
   const body = {
-    a: buildSpec('a'), b: buildSpec('b'),
+    a: (selectedPreset && selectedPreset.a.preset) ? selectedPreset.a : buildSpec('a'),
+    b: (selectedPreset && selectedPreset.b.preset) ? selectedPreset.b : buildSpec('b'),
     seed: parseInt(document.getElementById('seed').value) || 0,
     max_battle_turns: parseInt(document.getElementById('maxturns').value) || 8,
     kind: 'multi',
@@ -162,21 +424,9 @@ async function runBattle() {
   const result = await r.json();
   document.getElementById('run').textContent = 'Run traced battle';
   if (result.error) { alert(result.error); return; }
-
-  events = result.events;
-  frames = events.filter(e => e.cat === 'positions');
-  document.getElementById('a-name').textContent = result.a.name + ' (' + result.a.shape + ')';
-  document.getElementById('b-name').textContent = result.b.name + ' (' + result.b.shape + ')';
-  cursor = 0;
-  document.getElementById('scrub').max = Math.max(0, frames.length - 1);
-  document.getElementById('scrub').value = 0;
-
-  if (result.winner && result.winner !== 'draw') {
-    const banner = document.getElementById('winner-banner');
-    banner.textContent = 'Winner: ' + result.winner;
-    banner.style.display = 'block';
-  }
-  render();
+  applyTraceResult(result);
+  canvasMode = 'replay';
+  redraw();
 }
 
 function facingColor(halted, angleClass) {
@@ -209,7 +459,7 @@ function drawUnit(side, color) {
   }
 }
 
-function render() {
+function renderReplayFrame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#171c24';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -240,22 +490,46 @@ function render() {
   document.getElementById('event-log').textContent = lines.join('\n') || '(no events yet)';
 }
 
-document.getElementById('scrub').oninput = (e) => { cursor = parseInt(e.target.value); render(); };
-document.getElementById('next').onclick = () => { cursor = Math.min(frames.length - 1, cursor + 1); document.getElementById('scrub').value = cursor; render(); };
-document.getElementById('prev').onclick = () => { cursor = Math.max(0, cursor - 1); document.getElementById('scrub').value = cursor; render(); };
-document.getElementById('run').onclick = runBattle;
+// The scrub bar / prev / next / play controls always operate on the loaded replay frames
+// regardless of which tab is active — but only actually draw when the canvas is showing the
+// replay (canvasMode 'replay'); scrubbing while parked on the deployment schematic still advances
+// `cursor` (harmless) without visibly doing anything until the user switches canvasMode back.
+function renderIfReplay() { if (canvasMode === 'replay') renderReplayFrame(); }
+document.getElementById('scrub').oninput = (e) => { cursor = parseInt(e.target.value); renderIfReplay(); };
+document.getElementById('next').onclick = () => { cursor = Math.min(frames.length - 1, cursor + 1); document.getElementById('scrub').value = cursor; renderIfReplay(); };
+document.getElementById('prev').onclick = () => { cursor = Math.max(0, cursor - 1); document.getElementById('scrub').value = cursor; renderIfReplay(); };
+document.getElementById('run').onclick = () => { activeTab === 'deploy' ? runDeployedBattle() : runBattle(); };
 document.getElementById('play').onclick = () => {
   if (playing) { clearInterval(playing); playing = null; document.getElementById('play').textContent = '▶ Play'; return; }
   document.getElementById('play').textContent = '⏸ Pause';
   const speed = () => parseInt(document.getElementById('speed').value);
   playing = setInterval(() => {
     if (cursor >= frames.length - 1) { clearInterval(playing); playing = null; document.getElementById('play').textContent = '▶ Play'; return; }
-    cursor++; document.getElementById('scrub').value = cursor; render();
+    cursor++; document.getElementById('scrub').value = cursor; renderIfReplay();
   }, speed());
 };
 
+document.getElementById('tab-quick').onclick = () => switchTab('quick');
+document.getElementById('tab-deploy').onclick = () => switchTab('deploy');
+document.getElementById('deploy-side-a').onclick = () => setActiveDeploySide('A');
+document.getElementById('deploy-side-b').onclick = () => setActiveDeploySide('B');
+document.getElementById('d-place-default').onclick = () => {
+  // A quick keyboard-only placement: this side's start row, staggered a few columns per existing
+  // roster count — mirrors engine.build_army's own convenience-default stagger (col 15+4i off the
+  // start row), so a UI-placed and a manually-scripted army default to a similar-looking spread.
+  const row = activeDeploySide === 'A' ? Math.round(mode.battlefield_size * 0.68) : Math.round(mode.battlefield_size * 0.3);
+  const col = Math.min(mode.battlefield_size - 1, 15 + roster[activeDeploySide].length * 4);
+  addRosterEntry(activeDeploySide, row, col);
+};
+canvas.addEventListener('click', (evt) => {
+  if (activeTab !== 'deploy') return;
+  const { row, col } = canvasClickToRowCol(evt);
+  addRosterEntry(activeDeploySide, row, col);
+});
+
 loadMode();
 loadPresets();
+loadRosterOptions();
 </script>
 </body>
 </html>

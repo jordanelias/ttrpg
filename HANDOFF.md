@@ -7,7 +7,7 @@ surfaces the "Next actions" section below, alongside `git status` / last commit.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## Pending
+## Lane-tagged handoffs (2026-07-02)
 
 - **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
   of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
@@ -86,9 +86,46 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     Padgett robust action; Putnam two-level bargaining) is not yet in the code. Plan amended: Stage 3 (armature)
     and Stage 4 (four games) agonists must now READ the source-research trilogy directly, not just the critique
     distillation, so this commissioned scholarship actually reaches the implementation.
-  - **NEXT: Stage 3** (rhetoric grounding + adjudicator armature — CR4 stasis, CR5 self-gating, the
-    Style×Conviction dot-product aimed at the judge — reading the source-research trilogy per above,
-    not just the critique distillation).
+  - **Stage 3 / Gate C DONE + committed (54d04250).** CR4 (Ciceronian 6-rung stasis ladder now drives the
+    genre +1D; the reachability gap — every proceeding opened Quality-default, so the conjectural/Memory
+    stasis was unreachable in all 8 — fixed by opening Church Tribunal at Fact) and CR5 (a failed Obscuring
+    move now strips the mover's own Face, standing-bounded, kept together with the Gate-B Doubt Marker as
+    the full realization) are now mechanical, not nominal. New adjudicator **armature**: a continuous
+    4-axis (Evidence/Consequence/Authority/Insinuation) Style×Conviction dot-product entering resolution
+    as a δσ leverage shift (not a rounded pool die), gated off in asymmetric proceedings, revealed only
+    PARTIALLY via Appraise (grounded in Greif/Padgett from the source-research trilogy — the style choice
+    stays a bet, not a solved lookup). New modules: `sim/personal/contest/{armature,rhetoric,appraise}.py`.
+    Four Jordan-ratified decisions filed directly as ED-1062 (armature keeps Insinuation as a deliberate
+    new 4th axis, not canon's Solidarity; 2-genre epideictic compression accepted as-is; CR5 keeps both
+    halves together; reachability fixed via Church Tribunal only). The finalize pass crashed on a session
+    limit mid-flight but its tool-call side effects (the reachability fix, full canon propagation, ED-1062)
+    persisted; a follow-up Sonnet-tier verification pass (the first antagonist check that actually ran)
+    caught and fixed one real minor defect (stale provisional language in one field of `CR5_SELF_GATING`).
+    1041 sim+valoria + 385 kernel tests green; freshness gate clean.
+  - **Reconciled with `main` post-Gate-C (`715c5c3e`).** `main` had advanced substantially (mass-battle LC-8,
+    a month-overview architecture consolidation, ~10 new EDs) while Gate C was in flight. Two real conflicts:
+    `canon/editorial_ledger.jsonl` (both sides appended new entries — kept both, ascending ED order) and
+    `references/canonical_sources.yaml` (both sides had independently run a full `freshness_gate.py --update`
+    regeneration, so the whole file conflicted at the line level even though the content barely differed —
+    resolved by regenerating fresh from the merged working tree rather than hand-patching). The merge also
+    tripped `ci_register_size_check.py`: the combined ledger hit 150,949 tokens (cap 150,000). Fixed properly,
+    not bypassed — split the ledger for the first time: archived the 216 oldest resolved/struck/superseded/
+    applied entries (ED-001..ED-330) to new `canon/editorial_ledger_archive.jsonl` (live ledger now ~130k
+    tokens, ~20k headroom), registered its own cap in `ci_register_size_check.py`, and extended
+    `tools/validate_ed_citations.py` (`ARCHIVE_JSONL_PATHS`) to scan `.jsonl` archives — its existing
+    `ARCHIVE_GLOBS` scanner only recognized the older pre-2026-05-28 YAML archive convention, so without this
+    fix any doc citing one of the 216 archived EDs would have started reading as a broken citation. Verified:
+    `validate_ed_citations.py` → 818 ids loaded, 0 citation-integrity violations; 1054 sim+valoria tests + 1
+    skipped, unaffected. PR #63 open, CI running.
+  - **NEXT: Stage 4** (the four deliberative games — Agôn/Negotiation/Inquiry/Consensus — parallel fan-out,
+    reading the source-research trilogy directly per the Stage-3 grounding pattern: the `liberum veto` as a
+    self-undermining equilibrium for Consensus's frivolous-block antibody, Dowlen's weighted lottery for
+    `WeightedLot`/alea, Putnam two-level bargaining for Negotiation's ZOPA).
+Per-lane continuity now lives in `handoffs/HANDOFF_<LANE>.md`, using the same 9 lane codes as
+the `ED-<LANE>-NNNN` editorial namespace (`ED-IN-0001`, `CLAUDE.md` §3). This file is the
+**index** plus genuinely cross-cutting items — read the lane file(s) relevant to your session
+before starting work, and keep your own updates scoped to your lane's file (or this one, only
+for cross-cutting items).
 
 - **Scene-combat engine v1 — MERGED to `main`** (`d4bf2af3`, PR #40, 2026-07-01T04:46Z; Track-2 cleanup
   `8fbc4b66`, PR #47, 2026-07-01T06:48Z). `design/scene-combat-v1` is now fully redundant — its history is
@@ -263,18 +300,34 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md`, developed with a full
       6-lens adversarial audit + 4-round repair loop rather than as a standalone build task. Do not
       greenlight this bullet's task in isolation; implement via the plan's I0→I8 sequence instead.
+| Lane | Subsystem | File |
+|---|---|---|
+| `MB` | Mass battle | `handoffs/HANDOFF_MB.md` |
+| `PC` | Personal / scene combat | `handoffs/HANDOFF_PC.md` |
+| `FI` | Field investigation | `handoffs/HANDOFF_FI.md` |
+| `SC` | Social contest | `handoffs/HANDOFF_SC.md` |
+| `FA` | Faction actions | `handoffs/HANDOFF_FA.md` |
+| `WR` | World | `handoffs/HANDOFF_WR.md` |
+| `IN` | Infrastructure / cross-cutting | `handoffs/HANDOFF_IN.md` |
+| `GO` | Godot conversion | `handoffs/HANDOFF_GO.md` |
+| `SE` | Settlements | `handoffs/HANDOFF_SE.md` |
 
-- **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
-  ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
-  harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
-  resolvers, Gate-0 spine unbuilt — **needs_jordan**); ED-1052 typed engine-params layer for Godot ingestion;
-  ED-1054 navigation surface (partially done this pass). Full report:
-  `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
-  **ED-1053 RESOLVED 2026-06-30** (see Decisions). Residual: 12 stale `canonical_sha__` pins surfaced
-  by the now-local freshness gate — refresh via `python3 tools/freshness_gate.py --update`, then flip
-  the freshness CI step off `continue-on-error`.
+**Why the split:** the ID-collision incidents that motivated `ED-<LANE>-NNNN` (two same-session
+concurrent-allocation collisions on the flat sequence within one PR — see `ED-1094`'s ledger
+entry) are the same failure class that makes one shared `HANDOFF.md` a merge-collision magnet
+once multiple lane-sessions run concurrently. This is a **partial, deliberate exception** to the
+repo's earlier "one continuity surface" consolidation (`deprecated/session_machinery/` retired
+per-topic session-log files because they rotted independently) — the difference is this split is
+keyed to the SAME lane taxonomy the ID system already enforces, not an ad-hoc per-topic split,
+and this root file remains the one stable SessionStart entry point.
 
-## Decisions
+**Note on `designs/audit/2026-06-30-open-items-adjudication-docket.md`:** that file (PR #68,
+filed concurrently by a different session while this session was independently adjudicating the
+same five items from a pasted copy) is now **ADJUDICATED, not still pending** — see its own
+updated status header. Verdicts: D1/D5 resolved and struck, D2/D3 still open with materially
+changed context, D4 partially done and narrowed. Detail lives in `handoffs/HANDOFF_PC.md` (D1),
+`handoffs/HANDOFF_IN.md` (D2/D3/D4/D5), and `decision_queue.md` items 5/12/24/25 — not repeated
+here.
 
 - 2026-07-02 — **Scene-combat closing-distance/facing/grip redesign (R0+R1) — plan RATIFIED by Jordan,
   ready for R2 implementation.** Branch `scene-combat-morphology-rearch` (this worktree,
@@ -473,6 +526,8 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
   distinct-purpose directories, not duplicates; disambiguated via README notes in each rather than a
   path rename, since `tests/sim/` is path-matched by `ci_sim_fabrication_check.py`/`atomization_rules.yaml`/
   `lane_assignments.yaml` and a rename would need to update all three.
+**Full detail on the split itself, and every historical decision predating it, is filed at
+`handoffs/HANDOFF_IN.md`'s Decisions log** — this root file does not duplicate that history.
 
 ## Next actions
 
@@ -501,6 +556,115 @@ per the file's protocol; never max+1.)_
 - **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
   review, the consolidation execution/reconciliation logs, and the **single consolidated
   23-item Jordan decision queue** live at
+- **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec now
+  RATIFIED (2026-07-02).** The month's comprehensive review, the consolidation
+  execution/reconciliation logs, and the **single consolidated 23-item Jordan decision queue**
+  live at `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see
+  `decision_queue.md` first — every gated item below is indexed there). **Doctrine ratification**
+  (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`) and **J-38 propagation-spec
+  authorship** (ED-1093, `designs/architecture/propagation_spec_v1.md` — supplies `engine_clock`'s
+  candidate home doc; the `doc:null`/[ASSUMPTION] grade stays unflipped until ED-1051 is
+  separately resolved) are both **CANONICAL** as of PR #58 (ED-1094 merge-ratifies-by-default).
+  The propagation spec's own §5 carries its ranked open items (OF-7/OF-B1 amendments, D.6/OF-D6
+  double-count, `decay()` spec, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) — ratification
+  did not resolve these, only fixed the spec's home-doc status. Remaining highest-leverage queued
+  decisions: Track-2 residuals (below), field-ON, the values_master regenerate-vs-retire call,
+  the duplicate compilation homes, and item 19 (Agent-Teams/subagent-roster adoption).
+- **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59);
+  this file previously had zero record of any of it — closing that continuity gap now.** Coordinate-field
+  true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
+  (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/
+  `build_refused_flank` Unit-level presets (Stage D, ED-907/908/909) are all merged. **LC-8 executed
+  2026-07-02 (ED-1088):** `Horseshoe`/`RefusedFlank` retired as `Subunit.shape` values per Jordan's
+  go-ahead ("those are emergent outcomes") — only Line/Arrowhead/GappedLine/Column remain valid
+  subunit shapes; envelopment/refused-flank exist only as the Unit-level presets above.
+  `bat.py`'s grid-mode golden digests were deliberately re-baselined (approved behavior change).
+  The workbench (`tests/sim/mass_battle/workbench/`) was extended to visualize the new multi-subunit
+  presets — see `tests/coverage_matrix.md`'s 2026-07-02 entries for what shipped and two real bugs
+  found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
+  bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
+  the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Three Jordan rulings landed
+  2026-07-02 (all executed same day):** (1) **ED-1089** — `FIELD_MOVEMENT=1`/`PC_NODE_COHESION=1` are
+  now the DEFAULTS (Stage A step 7 executed; "yes, field movement is default."); the grid stays the
+  byte-exact oracle via explicit `FIELD_MOVEMENT=0 PC_NODE_COHESION=0` pins (the CI gate was updated
+  from env.pop to explicit '0' pins — load-bearing, see test_mass_battle_byte_exact.py), and bat.py's
+  field digests were re-recorded (they had gone stale vs the LC-8 battery). (2) **ED-1090** — videogame
+  sub-unit cap is **11** ("subunits can be as high as 11."), lifting the TTRPG hard cap of 3; enforced
+  in `engine.build_army`; open reconciliation flagged: Command clamps 1–7, so >7 commanded subunits
+  needs a future Command-exceeding mechanism (subordinate officers?) — future ED. (3) **ED-1091** —
+  the charge-recoil now zone-gates to the frontal (GREEN) arc (`PC_RECOIL_FRONTAL`, default ON;
+  historical-validity condition verified against `mass_battle_gauge_grounding.md` §4.3/Burkholder
+  before executing, per Jordan's "c7 if it is historically valid"); gauge row C7 can now legitimately
+  add a braced+enveloped variant (grounding doc §4.3/§5.7 still says "flagged, not fixed" — update on
+  the next gauge pass). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
+  marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
+  that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+  **Stage E (Army Configuration Mode) shipped 2026-07-02** (MVP: click-to-place deployment tab in the
+  workbench, `GET /api/roster-options`, `engine.SUBUNIT_CAP` client-enforced). **Stage F investigated
+  2026-07-02 (ED-1092):** speed-differential puncture and depth-absorption were already done; fidelity
+  D2 (cavalry lethality gated by regime) verified already-correct by direct probe; fidelity D1's zone
+  half shipped as ED-1091, its actor half was Jordan-gated (no canonical actor-gate predicate existed).
+  **T1–T4 charge-recoil ruling EXECUTED 2026-07-02 (ED-1095)**, closing D1's actor half plus three
+  further parts from Jordan's own multi-clause ruling: T1 actor-gate (`PC_RECOIL_CHARGER_GATE` —
+  charger must literally be `troop_type=='cavalry'`), T2 brace-setup delay (`PC_BRACE_SETUP_DELAY` +
+  `Subunit._brace_since_tick` — brace needs ≥1 full tick of setup, stamped by `check_orders`), T3
+  reach-gate (structural only — wires `troop_types.registry.reach_for` into the recoil condition, does
+  **not** populate `TROOP_TYPE_REACH`, which stays deliberately empty pending a separate ruling), T4
+  mounted-archer default kiting (`build_army` implicitly defaults `role='Kite'` for `mounted_archers`
+  with no explicit role/shape/instructions). All four additive/toggle-gated, byte-exact-off preserved
+  (verified all 4 `bat.py` digest modes + `tests/valoria` 81 passed/10 skipped).
+  **RESOLVED 2026-07-02 (ED-MB-0001) — the movement/pathing fix-plan (ED-1096's root-cause finding)
+  is EXECUTED, adversarially reviewed, and verified.** `envelop`/`sweep`/wheel/kite are now real on
+  the live default node path, not just the legacy grid path. All 8 fix-plan steps + decision gates 2
+  and 4 landed on `claude/mass-battle-audit-5c6nih`: `Subunit._rekey_node_state` fixes check_drift's
+  node-state corruption; `reset_positions` is a deliberate no-op for node-path atoms; weapon-derived
+  `unit_type` (`troop_types.registry.unit_type_for`) wired into `build_unit`/`build_army`, kite
+  decoupled from `unit_type=='ranged'`; lateral file-holding restored (siblings hold their own
+  deployment file); the node WHEEL's 180° facing-lerp stall replaced with a rotation-based update;
+  the maneuver acceptance validators (`validators.py`'s `v_envelop`/`v_sweep`) re-pointed at the node
+  path via a new `path` parameter, landed as `tests/valoria/test_mass_battle_maneuvers.py`; the
+  waypoint primitive (`Subunit._resolve_maneuver_goal`/`_envelop_goal`/`_sweep_goal`) gives
+  `_node_advance` real per-tick steering for `envelop`/`sweep`, modeled on the legacy per-cell
+  two-state machine at anchor granularity; `PER_CELL`'s default flipped `0`→`1` (gate 4, "yes, all
+  options/modules must be turned on") unlocking fatigue/charge-shock/brace-recoil/cavalry-speed by
+  default. **Decision gates 1 (Command/Discipline-gated conditional tactics) and 3 (facing/attention
+  split) remain explicitly DEFERRED** per Jordan's own sequencing ruling ("gates 1 and 3 are to occur
+  AFTER we confirm that envelopment/pincer/wheeling/etc with pathing/routing is confirmed to work") —
+  not built, by design, not a gap. A 5-dimension adversarial-review Workflow (sonnet finders + opus
+  verify) found and fixed 6 more real bugs the same session, the most significant being that kite
+  steering had NOT actually been ported to the node path in the first pass either (step 7 built
+  `_envelop_goal`/`_sweep_goal` but no `_kite_goal` — mounted_archers still closed to melee) — closed
+  via a new `_kite_goal`, verified holding standoff distance 6.5-8.3 against a Line. **Verified:** all
+  4 `bat.py` digest modes byte-exact (2 unchanged grid, 2 deliberately re-recorded field, isolated via
+  bisection to steps 1/4/5/7); full `tests/valoria` suite green (88 passed/10 skipped/1 xfailed); a
+  `build_envelopment` wing tracked tick-by-tick under default toggles genuinely wheels from row 36 to
+  row 19 — past the defender's own settled row — not a straight walk-in; delivered to Jordan as an
+  interactive Artifact re-tracing the exact H4 (Envelopment vs Arrowhead) scenario shown broken
+  earlier in the engagement. **One combat-balance finding disclosed, NOT chased (out of this fix's
+  scope, per this repo's standing discipline against retuning magnitudes to fit a band):** enabling
+  `PER_CELL`'s previously-inert fatigue/attrition/envelopment-sigma mechanics makes a frontal
+  engagement resolve faster than a wide envelopment detour can complete in some compositions —
+  confirmed via direct isolation to be a combat-*pacing* interaction, not a movement regression (a
+  single-subunit control fight at the same troop ratio favors the attacker 14-0-6/20 seeds; forcing
+  `orchestration.PER_CELL=False` alone restores the affected test's pass). Visible at battle scale in
+  `gauge_mb.py`'s re-run (H3/H4(Cannae)/H5/H6 lose 0-13% instead of the 45-72% expected band) — landed
+  as a loud, documented `xfail(strict=False)` on `test_envelop_reaches_rear_node`, not silently
+  patched. **Next action for whoever picks this up:** the underlying combat-balance/pacing question
+  (numerically-dominant vs. thin-and-yielding pinning force; a maneuver time-budget separate from the
+  frontal fight's own clock) is open and needs either Jordan's design call or a dedicated combat-
+  balance pass — then decision gates 1/3 (Command/Discipline-gated conditional tactics; facing/
+  attention split) can proceed per the sequencing ruling above. Full detail: `tests/coverage_matrix.md`'s
+  2026-07-02 movement/pathing-audit entries; `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/
+  README.md`; ledger entry `ED-MB-0001` (canon/editorial_ledger.jsonl) — the first allocation under the
+  new `ED-<LANE>-NNNN` namespace (ED-IN-0001, origin/main cutover) that superseded in-progress
+  in-code citations of the now-frozen flat `ED-1097`.
+- **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec
+  RATIFIED (2026-07-02); HANDOFF split into per-lane files (2026-07-02).** The month's
+  comprehensive review, the consolidation execution/reconciliation logs, and the single
+  consolidated Jordan decision queue live at
   `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see `decision_queue.md`
   first — every gated item below is indexed there). Highest-leverage queued decisions:
   **doctrine ratification** (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`),
@@ -561,3 +725,34 @@ per the file's protocol; never max+1.)_
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19) and the new **J-36** (Key-bus closure for the 6 off-bus writers, row #40 — gated on
   the distillation report's deferred adversarial pass).
+- **Mass-battle coordinate-field engine — Stages A–D merged (2026-07-02, PRs #52/#56); next up, all
+  Jordan-gated.** Detailed continuity/history lives in the staged plan file (session-local, not in the
+  repo tree): `using-opus-4-8-ultracode-floating-tiger.md`. All four stages are `FIELD_MOVEMENT=1`
+  opt-in only — the grid path (`FIELD_MOVEMENT=0`, every existing scenario's default) stayed byte-exact
+  throughout (`bat.py`'s frozen `unit`/`cell` digests unchanged across every commit in both PRs).
+  - **A** — true-adjacency stand-off halt + an exact time-of-impact (continuous-collision) resolver
+    (replacing an earlier halved-clamp heuristic), plus a reach-and-facing-asymmetric closing-budget
+    throttle (a longer-reach, correctly-facing body "sets into formation" before a shorter-reach one).
+  - **B** — facing/attention/reaction physics (anti-hyper-reactivity) on the field path.
+  - **C** — command layer: `engine.build_army` (multi-subunit armies), a timed/conditional `Order`
+    queue, and `escort_of`/formation-relative positioning.
+  - **D** — wires the previously-inert `Subunit.role` (gated by `role_allowed`); new
+    `engine.build_envelopment`/`build_refused_flank` realize ED-909's Unit-level "Envelopment"/"Refused
+    Flank" postures as compositions of existing primitives (no new movement/combat mechanic).
+  - **Open, Jordan-gated:** (1) **LC-8** — literally retiring `Horseshoe`/`RefusedFlank` as
+    `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) would break the frozen
+    `bat.py` grid digests (its own battery uses `Horseshoe` directly), so it needs an explicit
+    sign-off + a deliberate re-baseline — deferred, not done in Stage D. (2) Stage E (Army
+    Configuration Mode UI) needs a ruling on whether the videogame keeps the TTRPG's Command-rating
+    subunit-cap hard limit of 3 or lifts it (`mass_battle_v30.md` §A.5) before it can be built; Stage E
+    is also a genuinely different kind of work (frontend/UI over the now-complete engine primitives),
+    not a natural default-continue from A–D. (3) Stage F (charge/depth/equipment physics) is only
+    scoped at a high level in the plan — needs real design work before implementation.
+  first — every gated cross-lane item is indexed there). For subsystem-specific continuity,
+  go to your lane's file in the table above; `handoffs/HANDOFF_IN.md` carries the full
+  cross-cutting/governance narrative (doctrine ratification, ED-<LANE>-NNNN namespace creation,
+  merge-ratifies-by-default convention, ecosystem-review residuals not owned by another lane).
+- **Reserved-ID state:** the flat `ED-NNNN` sequence is FROZEN at `ED-1094` (2026-07-02
+  cutover, `ED-IN-0001`). All NEW EDs use `ED-<LANE>-NNNN` — `references/id_reservations.yaml`'s
+  `lane_ids` section is the live allocation source; read `next_free` for your lane, allocate,
+  bump, co-commit. Never max+1.

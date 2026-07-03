@@ -34,6 +34,16 @@ class Standing:
     def __init__(self, start=START): self.v = start
     def build(self, deg): self.v = min(self.HI, self.v + self.BUILD * deg)
     def strip(self, deg): self.v = max(self.LO, self.v - self.STRIP * deg)
+    def strip_points(self, points):
+        """Strip a FIXED number of Standing/Face POINTS directly (0–10 scale), NOT a degree scaled by
+           STRIP. `strip(deg)` scales a degree-of-success by STRIP (0.8) — a per-move argue channel;
+           `strip_points(p)` subtracts p Face points as-applied, so the REALIZED delta equals p exactly
+           (judge finding 3: the CR5 backfire's cited −2 magnitude must equal the applied Face delta —
+           passing 2.0 to strip(deg) applied only 0.8×2=1.6). Floor-clamped at LO. Returns the realized
+           (clamped) delta so the caller/tests can assert cited == applied."""
+        before = self.v
+        self.v = max(self.LO, self.v - points)
+        return before - self.v
     def frac(self):       return min(1.0, max(0.0, (self.v - self.START) / (self.HI - self.START)))
 
 class Reserve:
