@@ -1,8 +1,14 @@
 # Mass-battle movement/pathing audit — 2026-07-02
 
-**Status:** Findings ratified (ED-1096). Implementation NOT started — this is the audit + fix-plan
-deliverable; the fix plan below is what a future Sonnet-tier pass executes, gated on the four
-decision gates in §4.
+**Status:** Findings ratified (ED-1096). **Fix plan EXECUTED (ED-MB-0001, 2026-07-02, PR #66) —
+steps 1-7 + decision gates 2 and 4 below are DONE and adversarially reviewed** (`envelop`/`sweep`/
+wheel/kite now steer real maneuvers on the live default coordinate-field path). **Decision gates 1
+(Command/Discipline-gated conditional tactics) and 3 (facing/attention split) remain explicitly
+DEFERRED** per Jordan's own sequencing ruling ("gates 1 and 3 are to occur AFTER we confirm that
+envelopment/pincer/wheeling/etc with pathing/routing is confirmed to work") — their PROPOSED
+formulas below are still unbuilt design, not yet ratified or implemented. See
+`tests/coverage_matrix.md`'s 2026-07-02 entries and ledger entry `ED-MB-0001` for the full
+execution/verification record, including one disclosed-not-chased combat-pacing finding.
 
 **Trigger.** Jordan watched a tick-by-tick visualization of the H4 preset (Envelopment vs
 Arrowhead, the engine's Cannae-pattern scenario) and observed: *"the wings just go straight to
