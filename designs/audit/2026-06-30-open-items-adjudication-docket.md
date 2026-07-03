@@ -1,12 +1,32 @@
-## Status: CURRENT — adjudication docket (open, awaiting the Month work-overview & architecture session)
+## Status: ADJUDICATED 2026-07-02 (ED-IN-0002) — see verdicts below; this doc is now a historical record, not an open docket
 
 # Open items for adjudication — Month work-overview & architecture session
 
 Decision docket carrying the open items from the 2026-06-30 ecosystem review
-(`designs/audit/2026-06-30-ecosystem-adversarial-review.md`) that need Jordan's call before further
-tooling/porting work proceeds. Each item states the **question**, the **context**, the **options**,
-a **recommendation** (advisory only), and the **artifacts** it touches. Nothing here has been decided
-or applied — that is this session's job.
+(`designs/audit/2026-06-30-ecosystem-adversarial-review.md`). Filed as this committed docket via
+PR #68; **independently, the same five items were pasted directly to a concurrent session and
+adjudicated against the working tree the same day (ED-IN-0002)** — a real content collision
+between two parallel sessions doing the same task, caught and reconciled rather than left
+silently duplicated. Verdicts below; each item's own section is left as the original
+question/context/options/recommendation for the historical record, but is no longer "open."
+
+**Verdicts (2026-07-02, ED-IN-0002 — full detail: `canon/editorial_ledger.jsonl` entries
+ED-1050/1051/1052/1054, `decision_queue.md` items 5/12/24/25, `handoffs/HANDOFF_PC.md`,
+`handoffs/HANDOFF_IN.md`):**
+- **D1 (ED-1050) — RESOLVED, struck.** `config.py`/`combat_config.gd` confirmed byte-identical
+  monotonic. Not "resolve through the re-baseline" as recommended below — it was already resolved
+  2026-06-30, independently of this docket.
+- **D2 (ED-1051) — still open, `needs_jordan` accurate, context changed.** `doc:null`/
+  `[ASSUMPTION]` counts grew (11/13, not 10/11 as stated below); `engine_clock` now has a
+  candidate home doc (`propagation_spec_v1.md`, ED-1093) — the authoring half of "start with
+  `engine_clock`" (option a below) is effectively done, only ratification remains.
+- **D3 (ED-1052) — still open, narrower path found.** No scope/fence decision made (options
+  below remain live), but `tools/export_engine_params.py`'s oracle-export precedent sidesteps
+  the settled-vs-in-flux dilemma without deciding the broader `params/*.md`-prose question.
+- **D4 (ED-1054) — partially done, narrowed.** Part (ii) below (retired session files →
+  `deprecated/`) is DONE via ED-1084. Parts (i) and (iii) remain open.
+- **D5 — RESOLVED, struck.** Pins refreshed, freshness gate flipped blocking 2026-07-01
+  (LB-23 closure) — independently of this docket.
 
 Two of these (D1, D2) carry `needs_jordan` in the ledger; D3 is a *scope* decision that a prior pass
 got wrong and reverted; D4/D5 are low-stakes go-aheads.

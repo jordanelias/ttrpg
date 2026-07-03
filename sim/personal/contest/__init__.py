@@ -79,6 +79,20 @@ from .dictionaries import (  # noqa: F401  (Stage 2 / Gate B: typed dictionaries
     Proceeding, PROCEEDINGS_TABLE, _crosscheck_proceedings,
     PANEL_AGGREGATION, PANEL_CLOSURE, panel_win_condition,
 )
+from .armature import (  # noqa: F401  (Stage 3 / Gate C: the adjudicator armature — Style×Conviction dot-product)
+    ArmatureAxis, ArmaturePosition, ArmatureConfig, STYLE_AXIS,
+    style_axis_alignment, style_axis_dsigma, position_of,
+    ARMATURE_MAX_DSIGMA,
+)
+from .rhetoric import (  # noqa: F401  (Stage 3 / Gate C: CR4 stasis × genre + CR5 orientation self-gating)
+    STASIS_PRIMARY_GENRE, STASIS_ROLE, primary_genre_for, is_pre_merits, is_higher_order_reframe,
+    genre_of_ground, genre_of_style, primary_genre_pool_bonus, CR4_PRIMARY_GENRE_POOL_BONUS,
+    EPIDEICTIC_COMPRESSION, orientation_channel, cr5_self_backfire, CR5_SELF_GATING,
+    CR5_BACKFIRE_MAGNITUDE, CR5_ORIENTATION_CHANNEL,
+)
+from .appraise import (  # noqa: F401  (Stage 3 / Gate C: the Appraise-reveal boundary for armature_position)
+    appraise_armature, APPRAISE_REVEAL_BOUNDARY,
+)
 from . import policy      # noqa: F401
 from . import faction     # noqa: F401
 from . import narrative   # noqa: F401
@@ -110,4 +124,12 @@ __all__ = [
     "AdjudicatorType", "ADJUDICATORS_TABLE", "FactionBoost", "FACTION_BOOSTS",
     "Proceeding", "PROCEEDINGS_TABLE",
     "PANEL_AGGREGATION", "PANEL_CLOSURE", "panel_win_condition",
+    # Stage 3 / Gate C — the adjudicator armature + CR4 stasis + CR5 self-gating + Appraise-reveal:
+    "ArmatureAxis", "ArmaturePosition", "ArmatureConfig", "STYLE_AXIS",
+    "style_axis_alignment", "style_axis_dsigma", "position_of", "ARMATURE_MAX_DSIGMA",
+    "STASIS_PRIMARY_GENRE", "STASIS_ROLE", "primary_genre_for", "is_pre_merits", "is_higher_order_reframe",
+    "genre_of_ground", "genre_of_style", "primary_genre_pool_bonus", "CR4_PRIMARY_GENRE_POOL_BONUS",
+    "EPIDEICTIC_COMPRESSION", "orientation_channel", "cr5_self_backfire", "CR5_SELF_GATING",
+    "CR5_BACKFIRE_MAGNITUDE", "CR5_ORIENTATION_CHANNEL",
+    "appraise_armature", "APPRAISE_REVEAL_BOUNDARY",
 ]
