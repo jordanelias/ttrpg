@@ -26,6 +26,12 @@ discuss open work) and reported only at INFO level (--info).
 SCOPE (v1): ED citations only. PP/patch-register support is a follow-on (needs the
 active + archived patch registers loaded the same way). See checked_prefixes.
 
+LANE-TAGGED IDS (2026-07-02, ED-IN-0001): new EDs use ED-<LANE>-NNNN (e.g. ED-MB-0001)
+alongside the flat ED-NNNN format, which is FROZEN (no new allocations) but stays
+permanently valid for existing citations. See references/id_reservations.yaml for the
+lane roster and allocation protocol, CLAUDE.md section 3 for the format contract. Both
+formats resolve through the same universe/audit path below.
+
 USAGE (reads the local working tree — no PAT, no network):
     python3 tools/validate_ed_citations.py                     # full scan, exit 1 on violations
     python3 tools/validate_ed_citations.py --path PATH ...     # scan only these repo paths
@@ -38,8 +44,18 @@ import os, re, sys, json, argparse
 
 REPO = 'jordanelias/ttrpg'
 
-# Captures compact groups (ED-865/874) and inclusive ranges (ED-844-856 / ED-844–856).
-CITE_RE = re.compile(r'\b(ED|PP)-(\d{1,4}(?:/\d{1,4})*(?:[-–]\d{1,4})?)\b')
+# Lane roster for the ED-<LANE>-NNNN namespace (references/id_reservations.yaml is the
+# source of truth for allocation; kept here too since the regex needs the closed set).
+LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+_LANE_ALT = '|'.join(LANE_CODES)
+
+# Captures compact groups (ED-865/874) and inclusive ranges (ED-844-856 / ED-844–856),
+# with an optional lane tag (ED-MB-0001) restricted to the closed LANE_CODES set so a
+# stray two-uppercase-letter token elsewhere never false-positives as a lane. The
+# numeric grammar (group 3) is IDENTICAL whether or not a lane tag is present, so
+# _expand_nums / range handling below is untouched by the lane-tag addition.
+CITE_RE = re.compile(
+    rf'\b(ED|PP)-(?:({_LANE_ALT})-)?(\d{{1,4}}(?:/\d{{1,4}})*(?:[-–]\d{{1,4}})?)\b')
 
 # Words that turn a citation into a *claim of authority* on the citing doc.
 BASIS_KEYWORDS = (
@@ -88,8 +104,11 @@ ARCHIVE_JSONL_PATHS = ('canon/editorial_ledger_archive.jsonl',)
 
 # ── Pure core (network-free; unit-tested) ─────────────────────────────────────
 
-def _canon_id(prefix: str, num: str) -> str:
-    """Normalise ED-017 / ED-17 -> 'ED-17' so zero-padding never mismatches."""
+def _canon_id(prefix: str, num: str, lane: str = None) -> str:
+    """Normalise ED-017 / ED-17 -> 'ED-17' (flat) or ED-MB-0001 / ED-MB-1 -> 'ED-MB-1'
+    (lane-tagged) so zero-padding never mismatches either format."""
+    if lane:
+        return f"{prefix}-{lane}-{int(num)}"
     return f"{prefix}-{int(num)}"
 
 
@@ -144,9 +163,9 @@ def build_status_map(entries) -> dict:
         i = (e or {}).get('id')
         if not i:
             continue
-        m = re.match(r'^(ED|PP)-(\d+)$', str(i).strip())
+        m = re.match(rf'^(ED|PP)-(?:({_LANE_ALT})-)?(\d+)$', str(i).strip())
         if m:
-            out[_canon_id(m.group(1), m.group(2))] = e.get('status')
+            out[_canon_id(m.group(1), m.group(3), m.group(2))] = e.get('status')
     return out
 
 
@@ -164,6 +183,7 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
             prefix = m.group(1)
             if prefix not in checked:
                 continue
+            lane = m.group(2)
             line = text.count('\n', 0, m.start()) + 1
             ctx = text[max(0, m.start() - CONTEXT): m.end() + CONTEXT].replace('\n', ' ').strip()
             # Basis detection uses the citation's OWN line only — a 90-char window
@@ -173,9 +193,9 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
             ls = text.rfind('\n', 0, m.start()) + 1
             le = text.find('\n', m.end())
             ctx_l = text[ls:(le if le != -1 else len(text))].lower()
-            for num in _expand_nums(m.group(2)):
-                raw = f"{prefix}-{num}"
-                key = _canon_id(prefix, num)
+            for num in _expand_nums(m.group(3)):
+                raw = f"{prefix}-{lane}-{num}" if lane else f"{prefix}-{num}"
+                key = _canon_id(prefix, num, lane)
                 if key not in status_map:
                     out.append({'path': path, 'line': line, 'id': raw, 'kind': 'NONEXISTENT', 'ctx': ctx})
                 elif not _is_resolved(status_map[key]):
@@ -192,9 +212,10 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
 # ── Local working-tree layer (default; no network, no PAT) ───────────────────
 
 def _walk_entries(obj):
-    """Yield dicts that look like ledger entries ({'id': 'ED-..'}) anywhere in a YAML structure."""
+    """Yield dicts that look like ledger entries ({'id': 'ED-..'} or {'id': 'ED-MB-..'})
+    anywhere in a YAML structure."""
     if isinstance(obj, dict):
-        if 'id' in obj and re.match(r'^(ED|PP)-\d+$', str(obj.get('id')).strip()):
+        if 'id' in obj and re.match(rf'^(ED|PP)-(?:(?:{_LANE_ALT})-)?\d+$', str(obj.get('id')).strip()):
             yield obj
         for v in obj.values():
             yield from _walk_entries(v)
@@ -212,6 +233,8 @@ def _read(path):
 
 
 # id + (optionally) nearby status, tolerant of malformed/garbled YAML indentation.
+# Flat ED-\d+ only, by design: archives under ARCHIVE_GLOBS predate the lane-tagged
+# namespace (2026-07-02) and can never contain an ED-<LANE>-NNNN id.
 _SALVAGE_ID = re.compile(r'(?:^|[\s"\'-])id["\']?\s*:\s*["\']?(ED-\d+)', re.M)
 _SALVAGE_STATUS = re.compile(r'status["\']?\s*:\s*["\']?([A-Za-z][\w-]*)')
 

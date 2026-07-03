@@ -18,10 +18,12 @@ subprocess.TimeoutExpired rather than a digest mismatch. See _run_bat's timeout 
 The FIELD_MOVEMENT=1 golden digests (bat.py EXPECTED['unit_field']/['cell_field']) are NOT checked
 here — a full battery run under FIELD_MOVEMENT=1 takes ~80-110s per PER_CELL mode (nested float
 distance checks are costlier than the grid's integer Chebyshev test), and this suite's CI job has a
-5-minute overall budget shared with every other tests/valoria file. Run them manually instead:
+5-minute overall budget shared with every other tests/valoria file. Run them manually instead — since
+the ED-1089 default flip, a bare invocation IS the field path (the explicit env below is optional
+belt-and-braces):
 
-    FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=0 python3 tests/sim/mass_battle/bat.py --check
-    FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 python3 tests/sim/mass_battle/bat.py --check
+    PER_CELL=0 python3 tests/sim/mass_battle/bat.py --check
+    PER_CELL=1 python3 tests/sim/mass_battle/bat.py --check
 
 Each mode is run as an isolated subprocess with an explicit, controlled environment (not the ambient
 one) — bat.py's toggles are read at import time, so a clean env per mode is the only way to test both
@@ -63,7 +65,14 @@ BAT_PY = os.path.join(REPO_ROOT, 'tests', 'sim', 'mass_battle', 'bat.py')
 # load-bearing for performance; stripping it is not worth the risk). Explicit pins are what actually
 # make this test mean anything: without them, an ambient FIELD_MOVEMENT=1 in the CI runner's own
 # environment would silently make this "OFF-mode" check exercise the field path instead.
-_PINNED_OFF = ('FIELD_MOVEMENT', 'PC_NODE_COHESION', 'FIELD_CONTACT', 'PC_FACING_MODEL', 'CONTACT_REACH')
+#
+# [ED-1089, 2026-07-02] FIELD_MOVEMENT/PC_NODE_COHESION now DEFAULT ON (Jordan-ratified flip), so
+# pinning OFF must SET each toggle's byte-exact-OFF value explicitly — the previous env.pop() approach
+# would now leave the flipped ON default in force and silently run this grid-oracle check on the field
+# path against grid digests (exactly the failure mode this test exists to prevent). CONTACT_REACH is a
+# float env; its OFF value is '0.0'.
+_PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': '0',
+               'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0'}
 
 
 def _run_bat(per_cell):
@@ -74,8 +83,7 @@ def _run_bat(per_cell):
     to an interpreter/environment that is dramatically slower for this workload for unrelated reasons
     (matching this repo's own documented invocation, `python3 tests/sim/mass_battle/bat.py`)."""
     env = dict(os.environ)
-    for k in _PINNED_OFF:
-        env.pop(k, None)
+    env.update(_PINNED_OFF)
     env['PER_CELL'] = '1' if per_cell else '0'
     # compute() genuinely takes tens of seconds to ~2 minutes (10 matchups x 24 seeds x up to 20
     # battle-turns of real engine work; 'cell' mode's finer per-subunit granularity runs longest) --
