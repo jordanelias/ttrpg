@@ -99,7 +99,7 @@ def mechanics_selftest():
 SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
 
 
-def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type='melee',
+def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type=None,
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                speed='Standard', instructions=(), dr=1, role=None):
     """Faction→unit ADAPTER: construct a single-subunit Unit. The canonical public constructor — the
@@ -111,10 +111,20 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
     troop_types.registry.role_allowed(troop_type, role) — raises ValueError on a disallowed combo —
     and stored on the Subunit; unlike build_army, shape/instructions here stay caller-controlled (both
     are already required/explicit in this single-subunit constructor's own signature, so there is no
-    role->shape defaulting ambiguity to resolve)."""
+    role->shape defaulting ambiguity to resolve).
+
+    [movement audit gate 2, ED-MB-0001, Jordan-ruled 2026-07-02: "Ranged is troop type as per the
+    weapon assigned to troop."] `unit_type` now defaults to None and, when not explicitly given by
+    the caller, derives from troop_type's assigned weapon via troop_types.registry.unit_type_for
+    (TROOP_LOADOUT/loadout_for) instead of the prior hardcoded 'melee'. An unmapped troop_type
+    (e.g. the 'infantry' default) resolves to 'melee' either way, so every existing call site that
+    relies on the default is byte-exact; only troop_type='archers'/'crossbow'/'sling'/'artillery'/
+    'mounted_archers' (or a future loadout-mapped type) with no explicit unit_type now change."""
     if role is not None and not role_allowed(troop_type, role):
         raise ValueError(f"role {role!r} not allowed for troop_type {troop_type!r} "
                           f"(allowed: {roles_for(troop_type)})")
+    if unit_type is None:
+        unit_type = unit_type_for(troop_type)
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
@@ -166,6 +176,15 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
 
     Zero existing call site touched (role defaults to None -> every existing spec dict, which never set
     it, is byte-exact); net-new function, byte-exact by construction.
+
+    [ED-1095, Jordan-ruled 2026-07-02] A spec with troop_type='mounted_archers' and NO explicit role
+    AND no explicit shape/instructions implicitly defaults role to 'Kite' (kiting/stand-off posture
+    instead of closing to melee) -- verified no existing call site anywhere in this package uses
+    'mounted_archers', so this is a pure gap-fill, not a behavior change to any live spec. An explicit
+    shape, explicit instructions, or explicit role in the spec always wins over this implicit default
+    (same precedence as the role->shape/instructions defaulting above). build_unit intentionally does
+    NOT get this same treatment -- its shape parameter is a required positional with no default, so
+    there is no "unspecified shape" case there to fill (see its own docstring).
     [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
     TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
     # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
@@ -181,6 +200,16 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
         tt = sp.pop('troop_type', 'infantry')
         role = sp.pop('role', None)
+        # [ED-1095, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
+        # they should be flying by and taking advantage of their range advantage with their bows."]
+        # A mounted_archers spec with NO explicit role AND no explicit shape/instructions defaults to
+        # the Kite role (kiting/stand-off posture) instead of silently closing to melee like any other
+        # troop type. Checked BEFORE 'shape'/'instructions' are popped below so an explicit caller
+        # choice of either is detected and always wins (matches every other precedence rule in this
+        # function: explicit beats default). Mirrors the existing role->shape/instructions defaulting
+        # immediately below, just with an implicit role instead of a caller-supplied one.
+        if role is None and tt == 'mounted_archers' and 'shape' not in sp and 'instructions' not in sp:
+            role = 'Kite'
         if role is not None and not role_allowed(tt, role):
             raise ValueError(f"role {role!r} not allowed for troop_type {tt!r} "
                               f"(allowed: {roles_for(tt)})")
@@ -194,7 +223,22 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         instructions = sp.pop('instructions', None)
         if instructions is None:
             instructions = role_spec['instructions'] if role_spec is not None else ()
-        kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
+        # [movement audit gate 2, ED-MB-0001] unit_type derives from tt's assigned weapon
+        # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
+        # still always wins. See build_unit's docstring for the byte-exact-preservation argument
+        # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
+        #
+        # [2026-07-02 adversarial-review finding, ED-MB-0001] `sp.pop('unit_type', unit_type_for(tt))`
+        # only falls back to derivation when the 'unit_type' KEY is absent from the spec dict -- an
+        # explicit `{'unit_type': None, ...}` (the same None sentinel build_unit's own signature
+        # uses to mean "derive it") would pop back None verbatim instead of deriving, inconsistent
+        # with build_unit's `if unit_type is None: unit_type = unit_type_for(troop_type)` for the
+        # identical sentinel. Matched to build_unit's own semantics here so both constructors treat
+        # None the same way; no current spec anywhere sets unit_type=None explicitly, so this is a
+        # latent-inconsistency fix, not a behavior change for any existing call site.
+        spec_unit_type = sp.pop('unit_type', None)
+        kw = dict(unit_type=spec_unit_type if spec_unit_type is not None else unit_type_for(tt),
+                  stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
                   'troops', 'concentration', 'orders'):

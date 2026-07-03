@@ -161,6 +161,116 @@ here.
 
 ## Next actions
 
+_(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
+verified live max, allocated ED 1081–1087 to the month-overview consolidation from
+block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
+per the file's protocol; never max+1.)_
+
+- **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec now
+  RATIFIED (2026-07-02).** The month's comprehensive review, the consolidation
+  execution/reconciliation logs, and the **single consolidated 23-item Jordan decision queue**
+  live at `designs/audit/2026-07-01-month-overview-architecture-consolidation/` (see
+  `decision_queue.md` first — every gated item below is indexed there). **Doctrine ratification**
+  (ED-1083, `designs/architecture/holonic_container_doctrine_v1.md`) and **J-38 propagation-spec
+  authorship** (ED-1093, `designs/architecture/propagation_spec_v1.md` — supplies `engine_clock`'s
+  candidate home doc; the `doc:null`/[ASSUMPTION] grade stays unflipped until ED-1051 is
+  separately resolved) are both **CANONICAL** as of PR #58 (ED-1094 merge-ratifies-by-default).
+  The propagation spec's own §5 carries its ranked open items (OF-7/OF-B1 amendments, D.6/OF-D6
+  double-count, `decay()` spec, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) — ratification
+  did not resolve these, only fixed the spec's home-doc status. Remaining highest-leverage queued
+  decisions: Track-2 residuals (below), field-ON, the values_master regenerate-vs-retire call,
+  the duplicate compilation homes, and item 19 (Agent-Teams/subagent-roster adoption).
+- **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59);
+  this file previously had zero record of any of it — closing that continuity gap now.** Coordinate-field
+  true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
+  (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/
+  `build_refused_flank` Unit-level presets (Stage D, ED-907/908/909) are all merged. **LC-8 executed
+  2026-07-02 (ED-1088):** `Horseshoe`/`RefusedFlank` retired as `Subunit.shape` values per Jordan's
+  go-ahead ("those are emergent outcomes") — only Line/Arrowhead/GappedLine/Column remain valid
+  subunit shapes; envelopment/refused-flank exist only as the Unit-level presets above.
+  `bat.py`'s grid-mode golden digests were deliberately re-baselined (approved behavior change).
+  The workbench (`tests/sim/mass_battle/workbench/`) was extended to visualize the new multi-subunit
+  presets — see `tests/coverage_matrix.md`'s 2026-07-02 entries for what shipped and two real bugs
+  found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
+  bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
+  the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread). **Three Jordan rulings landed
+  2026-07-02 (all executed same day):** (1) **ED-1089** — `FIELD_MOVEMENT=1`/`PC_NODE_COHESION=1` are
+  now the DEFAULTS (Stage A step 7 executed; "yes, field movement is default."); the grid stays the
+  byte-exact oracle via explicit `FIELD_MOVEMENT=0 PC_NODE_COHESION=0` pins (the CI gate was updated
+  from env.pop to explicit '0' pins — load-bearing, see test_mass_battle_byte_exact.py), and bat.py's
+  field digests were re-recorded (they had gone stale vs the LC-8 battery). (2) **ED-1090** — videogame
+  sub-unit cap is **11** ("subunits can be as high as 11."), lifting the TTRPG hard cap of 3; enforced
+  in `engine.build_army`; open reconciliation flagged: Command clamps 1–7, so >7 commanded subunits
+  needs a future Command-exceeding mechanism (subordinate officers?) — future ED. (3) **ED-1091** —
+  the charge-recoil now zone-gates to the frontal (GREEN) arc (`PC_RECOIL_FRONTAL`, default ON;
+  historical-validity condition verified against `mass_battle_gauge_grounding.md` §4.3/Burkholder
+  before executing, per Jordan's "c7 if it is historically valid"); gauge row C7 can now legitimately
+  add a braced+enveloped variant (grounding doc §4.3/§5.7 still says "flagged, not fixed" — update on
+  the next gauge pass). **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
+  marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
+  that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+  **Stage E (Army Configuration Mode) shipped 2026-07-02** (MVP: click-to-place deployment tab in the
+  workbench, `GET /api/roster-options`, `engine.SUBUNIT_CAP` client-enforced). **Stage F investigated
+  2026-07-02 (ED-1092):** speed-differential puncture and depth-absorption were already done; fidelity
+  D2 (cavalry lethality gated by regime) verified already-correct by direct probe; fidelity D1's zone
+  half shipped as ED-1091, its actor half was Jordan-gated (no canonical actor-gate predicate existed).
+  **T1–T4 charge-recoil ruling EXECUTED 2026-07-02 (ED-1095)**, closing D1's actor half plus three
+  further parts from Jordan's own multi-clause ruling: T1 actor-gate (`PC_RECOIL_CHARGER_GATE` —
+  charger must literally be `troop_type=='cavalry'`), T2 brace-setup delay (`PC_BRACE_SETUP_DELAY` +
+  `Subunit._brace_since_tick` — brace needs ≥1 full tick of setup, stamped by `check_orders`), T3
+  reach-gate (structural only — wires `troop_types.registry.reach_for` into the recoil condition, does
+  **not** populate `TROOP_TYPE_REACH`, which stays deliberately empty pending a separate ruling), T4
+  mounted-archer default kiting (`build_army` implicitly defaults `role='Kite'` for `mounted_archers`
+  with no explicit role/shape/instructions). All four additive/toggle-gated, byte-exact-off preserved
+  (verified all 4 `bat.py` digest modes + `tests/valoria` 81 passed/10 skipped).
+  **RESOLVED 2026-07-02 (ED-MB-0001) — the movement/pathing fix-plan (ED-1096's root-cause finding)
+  is EXECUTED, adversarially reviewed, and verified.** `envelop`/`sweep`/wheel/kite are now real on
+  the live default node path, not just the legacy grid path. All 8 fix-plan steps + decision gates 2
+  and 4 landed on `claude/mass-battle-audit-5c6nih`: `Subunit._rekey_node_state` fixes check_drift's
+  node-state corruption; `reset_positions` is a deliberate no-op for node-path atoms; weapon-derived
+  `unit_type` (`troop_types.registry.unit_type_for`) wired into `build_unit`/`build_army`, kite
+  decoupled from `unit_type=='ranged'`; lateral file-holding restored (siblings hold their own
+  deployment file); the node WHEEL's 180° facing-lerp stall replaced with a rotation-based update;
+  the maneuver acceptance validators (`validators.py`'s `v_envelop`/`v_sweep`) re-pointed at the node
+  path via a new `path` parameter, landed as `tests/valoria/test_mass_battle_maneuvers.py`; the
+  waypoint primitive (`Subunit._resolve_maneuver_goal`/`_envelop_goal`/`_sweep_goal`) gives
+  `_node_advance` real per-tick steering for `envelop`/`sweep`, modeled on the legacy per-cell
+  two-state machine at anchor granularity; `PER_CELL`'s default flipped `0`→`1` (gate 4, "yes, all
+  options/modules must be turned on") unlocking fatigue/charge-shock/brace-recoil/cavalry-speed by
+  default. **Decision gates 1 (Command/Discipline-gated conditional tactics) and 3 (facing/attention
+  split) remain explicitly DEFERRED** per Jordan's own sequencing ruling ("gates 1 and 3 are to occur
+  AFTER we confirm that envelopment/pincer/wheeling/etc with pathing/routing is confirmed to work") —
+  not built, by design, not a gap. A 5-dimension adversarial-review Workflow (sonnet finders + opus
+  verify) found and fixed 6 more real bugs the same session, the most significant being that kite
+  steering had NOT actually been ported to the node path in the first pass either (step 7 built
+  `_envelop_goal`/`_sweep_goal` but no `_kite_goal` — mounted_archers still closed to melee) — closed
+  via a new `_kite_goal`, verified holding standoff distance 6.5-8.3 against a Line. **Verified:** all
+  4 `bat.py` digest modes byte-exact (2 unchanged grid, 2 deliberately re-recorded field, isolated via
+  bisection to steps 1/4/5/7); full `tests/valoria` suite green (88 passed/10 skipped/1 xfailed); a
+  `build_envelopment` wing tracked tick-by-tick under default toggles genuinely wheels from row 36 to
+  row 19 — past the defender's own settled row — not a straight walk-in; delivered to Jordan as an
+  interactive Artifact re-tracing the exact H4 (Envelopment vs Arrowhead) scenario shown broken
+  earlier in the engagement. **One combat-balance finding disclosed, NOT chased (out of this fix's
+  scope, per this repo's standing discipline against retuning magnitudes to fit a band):** enabling
+  `PER_CELL`'s previously-inert fatigue/attrition/envelopment-sigma mechanics makes a frontal
+  engagement resolve faster than a wide envelopment detour can complete in some compositions —
+  confirmed via direct isolation to be a combat-*pacing* interaction, not a movement regression (a
+  single-subunit control fight at the same troop ratio favors the attacker 14-0-6/20 seeds; forcing
+  `orchestration.PER_CELL=False` alone restores the affected test's pass). Visible at battle scale in
+  `gauge_mb.py`'s re-run (H3/H4(Cannae)/H5/H6 lose 0-13% instead of the 45-72% expected band) — landed
+  as a loud, documented `xfail(strict=False)` on `test_envelop_reaches_rear_node`, not silently
+  patched. **Next action for whoever picks this up:** the underlying combat-balance/pacing question
+  (numerically-dominant vs. thin-and-yielding pinning force; a maneuver time-budget separate from the
+  frontal fight's own clock) is open and needs either Jordan's design call or a dedicated combat-
+  balance pass — then decision gates 1/3 (Command/Discipline-gated conditional tactics; facing/
+  attention split) can proceed per the sequencing ruling above. Full detail: `tests/coverage_matrix.md`'s
+  2026-07-02 movement/pathing-audit entries; `designs/audit/2026-07-02-mass-battle-movement-pathing-audit/
+  README.md`; ledger entry `ED-MB-0001` (canon/editorial_ledger.jsonl) — the first allocation under the
+  new `ED-<LANE>-NNNN` namespace (ED-IN-0001, origin/main cutover) that superseded in-progress
+  in-code citations of the now-frozen flat `ED-1097`.
 - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec
   RATIFIED (2026-07-02); HANDOFF split into per-lane files (2026-07-02).** The month's
   comprehensive review, the consolidation execution/reconciliation logs, and the single

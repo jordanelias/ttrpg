@@ -155,8 +155,31 @@ EXPECTED = {
     # block is PER_CELL-gated) and the battery's one braced row is frontal, so the grid 'cell' digest
     # above was verified byte-identical after the gate landed. Update ONLY on an intentional field-path
     # behaviour change, same discipline as the grid digests.
-    'unit_field': 'c79577521010ebfd796124d1634478c200349e298e9983002abcea2168bbe006',
-    'cell_field': 'dd08552124cdaf2c41dec191bef74d9db769dc779a5fa5227d48547d7ade0139',
+    #
+    # [Movement/pathing audit, ED-1096/1097, re-recorded 2026-07-02] Re-recorded again for the fix-plan
+    # steps 1-7 + decision gates 2/4 landed this session: check_drift/reset_positions node-state
+    # corruption fixes, weapon-derived unit_type wiring, restored lateral file-holding, the node WHEEL
+    # facing-stall fix, and fix-plan step 7's waypoint primitive (Subunit._resolve_maneuver_goal/
+    # _envelop_goal/_sweep_goal), which is the first change to give _node_advance real steering for the
+    # 'envelop'/'sweep' instructions at all (every prior recording predates step 7 and reflects the
+    # straight-line-only centroid attractor these instructions previously reduced to).
+    #
+    # [2026-07-02 adversarial-review correction] An earlier version of this comment claimed step 7
+    # "alone" drove this digest change -- WRONG, contradicted by a direct worktree bisection across
+    # every fix-plan commit (unit_field mode, FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=0):
+    # pre-session baseline c79577521010...; step 1/check_drift (c58c03f) -> 7c055cedaf07...; step
+    # 4/lateral-file-holding (d143403) -> d547940f9710...; step 5/WHEEL-facing-stall (b5066a4) ->
+    # a89def5570bb... (unchanged through step 6); step 7/waypoint-primitive (2911f84) -> the final
+    # b1963d03d205... below. FOUR separate steps (1, 4, 5, 7) each independently changed this digest,
+    # not step 7 alone -- steps 1/4/5 fix real, pre-existing node-path corruption/regressions
+    # (finding 1.5's check_drift bug, the v12 file-holding regression, the WHEEL lerp-degeneracy),
+    # each its own deliberate, disclosed behaviour change. The one claim that DOES hold (verified
+    # separately, not by this bisection): gate 4's PER_CELL default flip contributes ZERO additional
+    # divergence on top of steps 1-7's, since this specific measurement pins PER_CELL='0' explicitly
+    # and cannot be reached by that flip. All five changes (steps 1/4/5/7 + gate 4's non-contribution)
+    # are deliberate, disclosed behaviour changes -- not a regression.
+    'unit_field': 'b1963d03d20559ff2868173e6f45750a7618ec3eee1bd3f01b58d04f792d9ce4',
+    'cell_field': '1f0742c59066d4f9839bc230f681edd50555bf8d280e0e50e7c729e58da7f4fc',
 }
 
 
@@ -168,8 +191,15 @@ def compute():
     (grid-path) golden digest. The comparison would still fail loud (a real behaviour difference), but
     the mismatch would misleadingly read as a regression rather than "you're on the field path, check
     against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
-    base = 'cell' if os.environ.get('PER_CELL', '0') not in ('0', '', 'false', 'False') else 'unit'
     import mass_battle.hierarchy.units as _u
+    # Read the RESOLVED config value, not a second, independently-defaulted os.environ.get -- the
+    # latter drifted out of sync with config.PER_CELL's own default the moment gate 4 (ED-MB-0001)
+    # flipped PER_CELL's default '0'->'1': a bare invocation would have run the (now-default) 'cell'
+    # path while this line's own stale '0' fallback kept reporting/checking it as 'unit', silently
+    # comparing against the WRONG EXPECTED entry. Same failure shape the FIELD_MOVEMENT mode-key
+    # fix above already guards against -- fixed the same way, by reading the module's own resolved
+    # toggle instead of re-deriving it.
+    base = 'cell' if _u.PER_CELL else 'unit'
     mode = base + '_field' if _u.FIELD_MOVEMENT else base
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:

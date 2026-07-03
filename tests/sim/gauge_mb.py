@@ -277,8 +277,14 @@ def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sampl
     return nb
 
 if __name__=='__main__':
-    # Cavalry rows are PER_CELL=1-only (engine gates charge_pen + speed mult on PER_CELL).
-    _pc = os.environ.get('PER_CELL','0') not in ('0','','false','False','no','No')
+    # Cavalry rows are PER_CELL=1-only (engine gates charge_pen + speed mult on PER_CELL). Read the
+    # RESOLVED config value (mass_battle.config.PER_CELL), not a second, independently-defaulted
+    # os.environ.get -- the latter drifted out of sync with config.PER_CELL's own default the moment
+    # gate 4 (ED-MB-0001) flipped PER_CELL's default '0'->'1': a bare invocation now runs the engine
+    # with PER_CELL=True, but a locally re-derived '0' fallback here would still silently exclude
+    # CAV_TESTS, exactly the mode-key mismatch bat.py's compute() was fixed for at the same time.
+    import mass_battle.config as _mb_cfg
+    _pc = _mb_cfg.PER_CELL
     _tests = TESTS + (CAV_TESTS if _pc else [])
     s=run('single', _tests); m=run('multi', _tests)
     n=len(_tests)
