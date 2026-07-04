@@ -661,23 +661,32 @@ per the file's protocol; never max+1.)_
   README.md`; ledger entry `ED-MB-0001` (canon/editorial_ledger.jsonl) — the first allocation under the
   new `ED-<LANE>-NNNN` namespace (ED-IN-0001, origin/main cutover) that superseded in-progress
   in-code citations of the now-frozen flat `ED-1097`.
-  **START HERE — the "next action" above now has a completed audit, PROPOSED and awaiting Jordan's
-  ratification (2026-07-04, not yet ED-numbered):** `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
+  **START HERE — the "next action" above is RATIFIED and its two blocking decision gates are RULED
+  (2026-07-04, ED-MB-0002, merged via PR #73):** `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
   README.md`, produced by a Fable-led four-lens adversarial diagnose→critique→reconcile Workflow, synthesized
-  into a Sonnet-authored fix plan. **The combat-pacing question above turned out to be the wrong frame —
-  demoted, not confirmed:** "two racing clocks" is refuted at gauge scale (C7's genuinely multi-subunit
-  envelopment passes; a frozen-vs-wheeling-wings ablation is proposed in the new plan's §2 step 4 to settle
-  it definitively). The actual ranked root cause is **composition-coupling defects in the pool/morale
-  accounting layer** (RC-1, VERY HIGH confidence: a composed subunit's combat pool is scaled down per-pair
-  while a single-subunit opponent rolls full pool into every simultaneous engagement; two subunits'
-  independent morale triggers double-erode one shared parent pool; PER_CELL's casualty-fraction triggers use
+  into a Sonnet-authored fix plan, then ratified by Jordan's merge (ED-1094 merge-ratifies-by-default).
+  **The combat-pacing question above turned out to be the wrong frame — demoted, not confirmed:** "two
+  racing clocks" is refuted at gauge scale (C7's genuinely multi-subunit envelopment passes; a
+  frozen-vs-wheeling-wings ablation, §2 step 4, is proposed to settle it definitively but not yet run).
+  The actual ranked root cause is **composition-coupling defects in the pool/morale accounting layer**
+  (RC-1, VERY HIGH confidence: a composed subunit's combat pool is scaled down per-pair while a
+  single-subunit opponent rolls full pool into every simultaneous engagement; two subunits' independent
+  morale triggers double-erode one shared parent pool; PER_CELL's casualty-fraction triggers use
   subunit-scale denominators) — and **the old PER_CELL=0 baseline that used to pass H3-H6 was itself an
-  invincibility-bug artifact (RC-2, HIGH confidence), not a working model to restore.** Five decision gates
-  (DG-1 through DG-5, `README.md` §3) need Jordan's ruling before the actual fix can be built — the new
-  plan's own §2 is bug-fixes-and-measurement only, explicitly not the fix itself. Do NOT allocate
-  `ED-MB-0002` or treat any part of the new doc as executed until Jordan has reviewed it (its own Status
-  line says so). A separate, undiagnosed residual (RC-5) also surfaced: 9 of 20 gauge rows fail for reasons
-  unrelated to composition coupling at all — flagged as its own not-yet-opened lane item.
+  invincibility-bug artifact (RC-2, HIGH confidence), not a working model to restore.**
+  **DG-3 and DG-4 RULED the same day (README.md §3 addendum):** DG-3 = split the defender's pool
+  symmetrically across pairs (Jordan's own criterion — long-term integrity/fidelity to reality, not just
+  the smallest diff); DG-4 = a blend of per-subunit and whole-unit morale ("Morale is blend of per-subunit
+  as well as whole unit," Jordan verbatim), operationalized by wiring `agg_morale()`/`derive_rout()`/
+  `cascade_morale_hit()` — already-existing, currently-inert machinery in `hierarchy/units.py` — rather
+  than authoring new state; the actual gap is that `build_army`/`build_envelopment`/`build_refused_flank`
+  never populate a subunit's own `morale` at construction, so every subunit falls through to the shared
+  parent pool. **DG-1, DG-2, DG-5 remain OPEN**, gated on this fix landing and the gauge being re-measured.
+  **Next action: implement §2's two independent bug fixes + ablation harness, then the DG-3/DG-4
+  accounting fix, re-run the gauge (all 20 rows, both modes), full digest re-record where it moves, and
+  adversarial review** — not yet started as of this entry. A separate, undiagnosed residual (RC-5) also
+  surfaced: 9 of 20 gauge rows fail for reasons unrelated to composition coupling at all — flagged as its
+  own not-yet-opened lane item, do not fold into this fix.
 - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec
   RATIFIED (2026-07-02); HANDOFF split into per-lane files (2026-07-02).** The month's
   comprehensive review, the consolidation execution/reconciliation logs, and the single
