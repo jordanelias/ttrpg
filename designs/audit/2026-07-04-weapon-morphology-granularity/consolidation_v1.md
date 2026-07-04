@@ -3,9 +3,9 @@
 **Adjudicator:** Fable-tier senior adjudication node (CLAUDE.md §10) · **Date:** 2026-07-04
 **Inputs:** (A) `/root/.claude/plans/fuzzy-toasting-wombat.md` (R3, 9 increments, post-R2 base);
 (B) `designs/audit/2026-07-04-weapon-morphology-granularity/audit_v1.md` (P1–P4/T1–T5, merged to main as PR #74, commit 861ab393 → squash 4ce17709).
-**Verified against:** the live working tree = `claude/scene-combat-closing-distance-mg18pq` (R2 complete, PR #72 open), pytest baseline re-run, engine self-reports re-run.
+**Verified against:** the live working tree at adjudication time (R2 complete, PR #72 then open), pytest baseline re-run, engine self-reports re-run. R2 (PR #72) is now **MERGED to main** (squash `ba382d1b`, 2026-07-04); this plan lands on post-#72 main as its §5 ruling directs.
 
-**Status: PROPOSED plan-of-record for the PC lane** (Jordan-vetoable; nothing here edits engine code).
+**Status: RATIFIED** — plan-of-record for the PC lane, ratified by merge of PR #72 per ED-1094 (2026-07-04). Nothing here edits engine code; it is the agreed implementation path (sequence U0→U9 + T-P2 + T5). **The eight forks JD-1…JD-8 (§6) remain OPEN, loudly held-back items** — each gates a specific increment and needs Jordan's ruling before that increment's constants/data land; ratification of the *plan* does not pre-decide them. Supersedes-in-part `audit_v1.md`'s T1–T5 (reconciled into §4).
 
 ---
 
