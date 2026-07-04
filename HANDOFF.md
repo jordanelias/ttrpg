@@ -715,7 +715,10 @@ per the file's protocol; never max+1.)_
   the engine has no state between "eroding" and "routed") are the better-evidenced remaining levers, not
   a bug in this fix.** `test_envelop_reaches_rear_node`'s xfail reason/docstring updated to match (the
   old racing-clocks narrative retired, replaced with this finding). Verified: all 4 `bat.py` digests
-  byte-exact against their (twice, for cell_field) re-recorded values; `tests/valoria` 87 passed/17
+  byte-exact against their re-recorded values (`cell`/`cell_field` needed a second re-record after the
+  adversarial-review fixes; CI's reference-env-gated `test_byte_exact_cell_mode` caught a `cell`-mode
+  drift local dev couldn't see, since that test only hard-fails in CI and silently skips elsewhere —
+  a real process gap, now noted in `bat.py`'s own comment for next time); `tests/valoria` 87 passed/17
   skipped/1 xfailed. A real perf regression was found and fixed along the way (a redundant cell-
   coordinate conversion doubling per-pair cost) — profiling confirmed the DOMINANT remaining cost is
   pre-existing Stage-A TOI physics, not this fix; multi-subunit field-path battles now take ~1-4 min

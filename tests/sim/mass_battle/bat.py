@@ -157,7 +157,16 @@ def trial_vector(ua, ub, r):
 # 2026-07-04 entry.
 EXPECTED = {
     'unit': 'bf7f6d175d526b412a590318f6f07f109c5de153cea56af87aa84e5a53c7de6e',
-    'cell': 'a6f4cc903e8d69c1cc1098330570ad11ed16fcbf5245e30dc7e220cb5f1a43e0',
+    # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
+    # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
+    # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
+    # inside _in_reference_env() (GITHUB_ACTIONS + Linux) and silently SKIPS elsewhere (a documented,
+    # legitimate carve-out for genuine cross-platform float non-portability -- but it also means a
+    # local dev sandbox can't tell "digest moved, needs re-recording" apart from "still matches" for
+    # this one mode). Confirmed NOT a portability artifact: re-running bat.py directly in this same
+    # sandbox reproduces CI's exact new hash. Re-verify 'cell' with a direct `bat.py --check` call
+    # (not just the pytest suite) after any future orchestration.py/core.exchange/core.state change.
+    'cell': '73ac6c19a85cde2e93bb0dbdddcc10cbbd95be485a237c9189b9abc47a101cce',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).

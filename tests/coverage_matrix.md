@@ -401,12 +401,16 @@ and step 7, the waypoint primitive itself, still pending):
      (explicit `if kw.get('morale') is None:` check, matching this file's own `unit_type` precedent).
 - **Verified:** all 4 `bat.py` digests changed from the pre-DG-3/DG-4 baseline and re-recorded (expected
   — touches shared, non-gated combat-resolution code). Re-checked after the 4 adversarial-review fixes
-  above: `unit`/`cell`/`unit_field` stayed byte-identical to their first re-record (the current
-  battery/gauge doesn't happen to exercise those bugs on those 3 modes); `cell_field` alone moved
-  AGAIN and was re-recorded a second time — its `PER_CELL=1`+`FIELD_MOVEMENT=1` combination
-  (continuous-scale subunits, multi-subunit rows, real morale/rout timing) is exactly what Findings
-  1-3 touch. `tests/valoria` 87 passed/17 skipped/1 xfailed (neither pytest byte-exact test covers
-  field modes — only `bat.py --check` run by hand catches `cell_field`'s movement).
+  above: `unit`/`unit_field` stayed byte-identical to their first re-record; **`cell` and `cell_field`
+  BOTH moved again** and were re-recorded a second time. **Process gap, caught by CI not locally:**
+  `test_byte_exact_cell_mode` only hard-fails inside `_in_reference_env()` (GITHUB_ACTIONS+Linux) and
+  silently SKIPS elsewhere — a real pytest pass count locally can hide a genuine `cell`-mode digest
+  drift. Confirmed NOT a portability artifact (this sandbox reproduces CI's exact new hash directly via
+  `bat.py --check`) — a real movement from the same fixes, just invisible to `pytest`'s local summary.
+  Lesson recorded in `bat.py`'s own comment: always re-verify `cell` with a direct `bat.py --check`
+  call, not just the pytest suite, after any core.exchange/core.state/orchestration change.
+  `tests/valoria` 87 passed/17 skipped/1 xfailed either way (neither byte-exact pytest test covers the
+  two field modes at all — manual `bat.py --check` is the only check for those).
 - **Gauge re-run (n=20, reduced from the standard 60 for turnaround — `gauge_mb.py`'s own `__main__`
   hardcodes n=60 with no CLI override, confirmed by reading it):** **honest result: the fix did NOT
   close the targeted gap.** Aggregate counts are unchanged from the pre-fix baseline (single 2/20, multi
