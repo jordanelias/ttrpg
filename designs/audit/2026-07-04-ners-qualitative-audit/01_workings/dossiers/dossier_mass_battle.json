@@ -1,0 +1,247 @@
+{
+ "subsystem": "mass_battle",
+ "core_loop": "Muster\u2192March\u21927-phase Battle Turn (Strategy Declaration\u2192Volley\u2192Manoeuvre\u2192Offensive Thread\u2192Engagement\u2192Cascade\u2192Reform, repeated) \u2192Part D aftermath scene + named-officer fallout\u2192Part E faction/settlement consequences\u2192between-battle reinforcement/Discipline persistence.",
+ "decision_points": [
+  {
+   "where": "Phase 1 Strategy Declaration (formation\u00d7split\u00d7tactic\u00d7Thread intent per sub-unit)",
+   "options": "6 tactics with counters, 7 formations, Off/Def split, Thread intent",
+   "meaningful": "moderate",
+   "note": "real counter-web but tempered by Command-dominance axiom"
+  },
+  {
+   "where": "\u00a7A.8 splitting vs concentration doctrine",
+   "options": "split across engagements vs concentrate fire",
+   "meaningful": "moderate",
+   "note": "doctrine's own cited win-rate evidence now suspect, see findings"
+  },
+  {
+   "where": "Phase 6 General action: Personal combat (General Duel, \u00a73.7)",
+   "options": "Rally/Reinforce Discipline/Support Threadweave/Personal combat/Stabilise",
+   "meaningful": "moderate",
+   "note": "real risk-reward but thin follow-through, no Thread option"
+  },
+  {
+   "where": "\u00a7A.10 Thread ops in battle",
+   "options": "rear-safe vs frontline-risky Leap; Coherence spend toward Severance",
+   "meaningful": "rich",
+   "note": "genuine attrition-vs-payoff gamble"
+  },
+  {
+   "where": "Part D \u00a7D.1 post-battle aftermath scene",
+   "options": "Tend wounded / Survey damage / Address population",
+   "meaningful": "rich",
+   "note": "strongest decision point in the lane, distinct payoffs incl. hidden Finding"
+  },
+  {
+   "where": "Army composition (Levy vs Professional, \u00a7A.14b/c)",
+   "options": "cheap defensive Levy vs costly mobile Professional under Campaign Supply attrition",
+   "meaningful": "rich",
+   "note": "campaign-shaping strategic trade-off"
+  },
+  {
+   "where": "\u00a73.8 Scene\u2192Mass bonus consumption",
+   "options": "n/a \u2014 inbound modifier only",
+   "meaningful": "degenerate",
+   "note": "never hooked in mass_battle_v30.md's own turn structure"
+  }
+ ],
+ "north_star": {
+  "choice_density": "moderate",
+  "collision_feed": "General Duel and the aftermath scene are the two designed personal\u2194strategic collision points (officer capture/disposition, settlement Order, hidden Findings); both well-built but General Duel is Thread-blind and Scene\u2192Mass is unconsumed, narrowing the actual feed below what's designed.",
+  "verdict": "Points at the North Star strongly in its strategic/consequence layer (aftermath scene, campaign composition, faction/settlement fallout) but its turn-by-turn tactical layer is narrower than its apparent complexity once Command-dominance and contaminated splitting evidence are accounted for."
+ },
+ "nq": [
+  {
+   "criterion": "Q-robust",
+   "observation": "\u00a7A.1's explicit axiom \"Command=7 vs Command=1 produces a near-certain outcome before a die is rolled\" is DELIBERATE but tensions with the three-viable-approaches test and \u03a9 non-dominance.",
+   "cite": "mass_battle_v30.md \u00a7A.1"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "ED-1019+ per-sub-unit continuous-Morale/aggregate/cascade model is deep; the Army Morale composite is the only legible player-facing surface over it \u2014 depth-vs-legibility gap worth checking for HUD parity.",
+   "cite": "mass_battle_v30.md \u00a7A.4, Army Morale composite (derived_stats_v1 \u00a78.2)"
+  },
+  {
+   "criterion": "N",
+   "observation": "Campaign Supply / Levy Restriction model real historical military-political dynamics with one-sentence rules and real strategic bite \u2014 solid N grounding.",
+   "cite": "mass_battle_v30.md \u00a7A.14b/\u00a7A.14c"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "\u00a7A.10 Thread ops in mass battle (Ob/Coherence-cost table by scale)",
+   "status": "present",
+   "evidence": "mass_battle_v30.md \u00a7A.10; scale_transitions_v30.md \u00a73.6"
+  },
+  {
+   "juncture": "General Duel (\u00a73.7) practitioner-general Leap option during personal-combat exchange",
+   "status": "absent-plausible",
+   "evidence": "scale_transitions_v30.md \u00a73.7 has no Thread option; inherits combat_engine_v1's zero-threadwork state, ED-911 (open, P1)"
+  },
+  {
+   "juncture": "\u00a73.8 Scene\u2192Mass bonus: Thread-scene win channel",
+   "status": "absent-plausible",
+   "evidence": "scale_transitions_v30.md \u00a73.8 covers Social/Investigation/Combat wins only, no Thread-scene win, despite Thread being the densest personal-scale action in \u00a7A.10"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "Whose-position-at-risk: yes, via Army Morale composite + persistent Discipline. What-happens-if-no-one-acts: yes, via Campaign Supply/Prosperity-0 attrition/idle-army Morale loss (all explicit). What-each-actor-wants: no \u2014 no motive/goal field exists in this subsystem's own state; imported from faction/NPC layers."
+ },
+ "degenerate_candidates": [
+  "\u00a7A.8 splitting-dominates-concentration doctrine (+9% to +45% win-rate) \u2014 mass_battle_v30.md \u00a7A.8",
+  "\u00a7A.1 \"Generalship dominates\" stated design axiom \u2014 mass_battle_v30.md \u00a7A.1"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "Faction (Muster, Command formula)",
+   "mechanism": "\u00a7A.5 Command=clamp(round((2\u00b7Cha+Cog)/3))",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "Faction/Settlement (consequences, Mandate, Military)",
+   "mechanism": "Part E / \u00a7A.13",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "Settlement (aftermath scene, officer-as-governor)",
+   "mechanism": "Part D",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "Thread (\u00a7A.10)",
+   "mechanism": "scale-tiered Coherence cost table",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "Personal combat (General Duel, \u00a73.7)",
+   "mechanism": "Command suspension, 1 exchange/turn; Thread-blind (ED-911)",
+   "status": "divergent"
+  },
+  {
+   "dir": "in",
+   "other": "Scene (\u00a73.8 Social/Investigation/Combat win bonus)",
+   "mechanism": "+1D/free Reform, 1-turn duration; no hook in mass_battle_v30.md",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "Geography (\u00a7A.9 terrain derivation, ED-780)",
+   "mechanism": "terrain polygon query at battle coords",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "Sim engine (config.py/gauge_mb.py)",
+   "mechanism": "leading-canon numeric authority; geometry (\u00a7A.3b) and splitting-doctrine numbers flagged superseded/contaminated",
+   "status": "divergent"
+  }
+ ],
+ "directions": {
+  "top-down": "The Command-dominance axiom is philosophy-consistent with \"generalship is the battle\" but strains \u03a9 non-dominance as literally written.",
+  "bottom-up": "The sim engine (config.py/orchestration.py) is leading canon and has moved past this doc's geometry/pool formulas in several banner-flagged places; ED-MB-0002 (2026-07-04) shows the doc's own cited splitting-doctrine simulation evidence may be contaminated by an invincibility-bug baseline.",
+  "lateral": "General Duel and Scene\u2192Mass are the sibling-subsystem hooks into mass battle; both are thinner in practice than mass battle's own rich Thread integration.",
+  "diagonal": "The aftermath scene plus named-officer system is the strongest cross-scale narrative payoff mechanism in this lane.",
+  "forwards": "LC-8/ED-MB-0001/ED-MB-0002 show active, disciplined engine work in flight; design-doc battlefield geometry (\u00a7A.3b) is explicitly marked superseded pending LC-8 re-derivation.",
+  "backwards": "\u00a7A.3b geometry and \u00a7A.8 splitting-doctrine numbers both carry acknowledged supersession/contamination risk already flagged in-repo."
+ },
+ "findings": [
+  {
+   "id": "general-duel-thread-blind",
+   "subsystem": "mass_battle",
+   "claim": "The General Duel (\u00a73.7), the single richest personal-scale collision point in mass battle, has no Thread/Leap option for a practitioner-general and so inherits combat_engine_v1's zero-threadwork state.",
+   "cite": "scale_transitions_v30.md \u00a73.7; ED-911 (open, P1)",
+   "criterion": "P-philosophy",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911",
+   "threadwork": true
+  },
+  {
+   "id": "scene-mass-bonus-unconsumed",
+   "subsystem": "mass_battle",
+   "claim": "The \u00a73.8 Scene\u2192Mass bonus table (Social/Investigation/Combat win modifiers) is declared in scale_transitions_v30.md but never referenced or hooked anywhere in mass_battle_v30.md's own 7-phase turn structure.",
+   "cite": "scale_transitions_v30.md \u00a73.8; mass_battle_v30.md \u00a7A.7 (no PP-261/ED-151 reference found)",
+   "criterion": "Q-smooth",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "splitting-doctrine-contaminated",
+   "subsystem": "mass_battle",
+   "claim": "\u00a7A.8's splitting-dominates-concentration doctrine cites simulation win-rate evidence (+9% to +45%) of exactly the kind ED-MB-0002's RC-2 shows was measured against a fictitious invincibility-bug baseline (frozen multi-subunit cohesion under PER_CELL=0), so the design doc's own stated rationale for discouraging concentration may rest on contaminated numbers.",
+   "cite": "mass_battle_v30.md \u00a7A.8; designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md RC-2",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-MB-0002 (new scope: implicates this doc's own cited evidence, not just the engine)",
+   "threadwork": false
+  },
+  {
+   "id": "generalship-dominance-axiom",
+   "subsystem": "mass_battle",
+   "claim": "The stated design axiom \"Command=7 vs Command=1 produces a near-certain outcome before a die is rolled\" is DELIBERATE but sits in direct tension with the charter's \u03a9 non-dominance clause and the Q-robust three-viable-approaches test.",
+   "cite": "mass_battle_v30.md \u00a7A.1",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "legibility-motive-gap",
+   "subsystem": "mass_battle",
+   "claim": "From mass_battle_v30.md/integration_v30.md state alone, there is no field for a named general's or faction's goal/motive, so the dramatic-legibility question \"what does each named actor want\" cannot be answered from this subsystem in isolation.",
+   "cite": "mass_battle_v30.md (whole doc, no motive/goal field); scale_transitions_v30.md \u00a73.7-\u00a73.8",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "scene-bonus-magnitude-trivial",
+   "subsystem": "mass_battle",
+   "claim": "Even where consumed, the \u00a73.8 Scene\u2192Mass bonus (+1D one unit, 1 turn, or a free Reform) is a small, single-turn modifier that is mechanically negligible against the Command-dominance axiom it would need to offset, undercutting the narrative payoff of winning the antecedent scene.",
+   "cite": "scale_transitions_v30.md \u00a73.8; mass_battle_v30.md \u00a7A.1",
+   "criterion": "Q-elegant",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "thread-integration-asymmetry",
+   "subsystem": "mass_battle",
+   "claim": "Mass battle's own Thread integration (\u00a7A.10) is unusually mature (full scale-tiered Ob/Coherence table, positioning rules) while the personal-combat layer it hands off to for General Duel is Thread-blind, an asymmetry that compounds ED-911's severity rather than being a separate defect.",
+   "cite": "mass_battle_v30.md \u00a7A.10 vs scale_transitions_v30.md \u00a73.7",
+   "criterion": "Q-smooth",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911",
+   "threadwork": true
+  },
+  {
+   "id": "subunit-morale-legibility-depth",
+   "subsystem": "mass_battle",
+   "claim": "The ED-1019+ per-sub-unit continuous (float) Morale/aggregate/cascade model is mechanically deep but has no player-facing surface besides the single Army Morale composite; if the videogame HUD doesn't expose per-sub-unit state, the depth is invisible and if it does, the composite's legibility value is undercut by exposing raw floats.",
+   "cite": "mass_battle_v30.md \u00a7A.4 (ED-1019/1022/1024/1026/1027); Army Morale composite (derived_stats_v1 \u00a78.2)",
+   "criterion": "Q-elegant",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/dossier_mass_battle.md"
+}

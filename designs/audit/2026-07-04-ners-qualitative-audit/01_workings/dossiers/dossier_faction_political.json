@@ -1,0 +1,242 @@
+{
+ "subsystem": "faction_political",
+ "core_loop": "Each season a faction spends Domain Action slots across 7 turn priorities (Domain: govern/muster/conquest/transfer; Social: Parliament/Treaty; Special: 1 signature action/faction), then 10-step Accounting applies stat deltas, Stability/collapse checks, CI/RS/IP clocks, Turmoil/Accord, and victory check (GD-1: 11+ territories, 2 seasons). Underneath, a 4-component engine (Mission/Cascade/Public Expectation/Legitimacy+PS) computes disposition via named-coefficient formulas each season, feeding Mandate \u2014 the headline stat gating each faction's one signature action.",
+ "decision_points": [
+  {
+   "where": "Domain Action selection (govern/muster/conquest/transfer + 1 signature action)",
+   "options": "a handful of named verbs, each a single roll vs Ob with 2-4 rung degree ladder",
+   "meaningful": "thin",
+   "note": "faction_layer_v30 \u00a77; faction_canon_v30 \u00a79"
+  },
+  {
+   "where": "Parliamentary Motion + coalition/veto play",
+   "options": "10 fixed motions, Mandate-weighted votes, Church veto cadence, Rebuttal math",
+   "meaningful": "moderate",
+   "note": "faction_layer_v30 \u00a75.3-\u00a75.5"
+  },
+  {
+   "where": "Treaty negotiation (3-phase)",
+   "options": "Positioning + Concession bargaining",
+   "meaningful": "moderate",
+   "note": "faction_layer_v30 \u00a73.3"
+  },
+  {
+   "where": "Mandate/Legitimacy/Popular Support management",
+   "options": "none directly \u2014 formula-computed via \u03b1/\u03b2/\u03b3/\u03bb coefficients + cosine cascade fidelity",
+   "meaningful": "degenerate",
+   "note": "faction_behavior_v30 \u00a73.2-\u00a73.5"
+  },
+  {
+   "where": "NPC faction voting (Guilds, Niflhel)",
+   "options": "literally GM-adjudicated; Guilds reduced to 3 hardcoded if/then rules",
+   "meaningful": "degenerate",
+   "note": "faction_layer_v30 \u00a75.8"
+  },
+  {
+   "where": "Cascade root selection (single vs multi-root)",
+   "options": "all 6 factions default single-root, deferred to Stage 10",
+   "meaningful": "thin",
+   "note": "faction_behavior_v30 \u00a73.2.2"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "Feeds the collision engine mainly via Standing/CB/Conviction-Scar accumulation, Mandate-gated signature actions, and Foil/Axis positioning (good seeding for cross-faction collisions like Excommunication chains, Consecration Triangle) \u2014 but a large share of 'faction behavior' is accounting output, not player choice.",
+  "verdict": "Points at the North Star narratively (rich faction sheets/arcs/foils) but the mechanical decision surface it actually offers per season is narrow, and its autonomous-world claim is undermined by an explicit GM-controlled NPC-vote instruction."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "faction_layer_v30 \u00a75.8 states 'GM controls NPC faction votes (Guilds, Niflhel...)' \u2014 directly conflicts with the no-GM engine premise (Omega clause c, autonomous world) and CLAUDE.md's 'there is no GM' framing.",
+   "cite": "faction_layer_v30 \u00a75.8"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Dramatic-legibility partial: Mission/Doctrine Notes answer 'what does each actor want' cleanly, but 'whose position is at risk' requires cross-referencing 5 Stability Triggers with no single surfaced threshold line.",
+   "cite": "faction_canon_v30 Part B; faction_layer_v30 \u00a71.2"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "The 4-component behavioral engine (Mission/Cascade/Public Expectation/L+PS, with temperament typology and cosine-similarity fidelity) is heavy machinery whose sole player-visible output is one 0-7 Mandate scalar gating one action/season \u2014 thin depth-to-payoff ratio.",
+   "cite": "faction_behavior_v30 \u00a73; faction_canon_v30 \u00a75.1, \u00a79"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Thread op as Domain Action / conviction_track PT drift declared into faction turn sequence",
+   "status": "present",
+   "evidence": "scale_transitions_v30 \u00a73.5/\u00a73.6/\u00a75.6 (ED-673); conviction_track_v30 \u00a71.3b (ED-676); faction_layer_v30 \u00a77 Priority-5 Thread slot"
+  },
+  {
+   "juncture": "Thread state feeding the actual Cascade/Legitimacy/PS computation engine",
+   "status": "absent-plausible",
+   "evidence": "faction_behavior_v30 \u00a73.2-\u00a73.5 formulas take only env.* shock terms and da_outcome Keys \u2014 no Coherence/Calamity/Leap input; matches grounding-doc-03's corpus note but scoped here specifically to this engine's own math"
+  },
+  {
+   "juncture": "Deliberate thread exclusion from faction behavior",
+   "status": "absent-deliberate",
+   "evidence": "no citation found asserting intentional exclusion \u2014 treated as gap, not design choice"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "Mission text answers 'what does each actor want' cleanly and machine-readably; 'whose position is at risk' and 'what happens if no one acts' require reconstructing across scattered Stability Triggers / Accounting steps rather than one citable line."
+ },
+ "degenerate_candidates": [
+  "Institutional Consolidation passive recovery: 'no Trigger 1-5 fired \u2192 Stability+1, Accord+1' rewards inaction, a turtle-and-wait line (faction_layer_v30 \u00a71.3, cap in \u00a78.2)",
+  "Single-root Cascade default for all 6 factions (faction_behavior_v30 \u00a73.2.2) collapses the many-actor conviction-blending mechanic to one leader-stat lookup"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "settlement_layer",
+   "mechanism": "Mandate = size-weighted saturating aggregate of settlement L/PS",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "personal/scene (Domain Echo)",
+   "mechanism": "Debate\u2192Mandate, Tribunal\u2192Standing",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "threadwork",
+   "mechanism": "conviction_track PT drift, Priority-5 Thread slot",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "peninsular_strain",
+   "mechanism": "temperament drift toward outcomes-only under Strain",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "settlement_layer",
+   "mechanism": "Mandate mean-reverts settlement L/PS \u00b11/season",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "victory (GD-1)",
+   "mechanism": "11+ territories, 2 seasons sustained",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "faction_politics/faction_state",
+   "mechanism": "succession/coup/standing dual-emit",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "mass_battle",
+   "mechanism": "Military/Stability feed",
+   "status": "implemented"
+  }
+ ],
+ "directions": {
+  "top-down": "Omega(c) autonomous-world is contradicted at the letter by faction_layer_v30 \u00a75.8's 'GM controls NPC faction votes.'",
+  "bottom-up": "The accounting substrate (named coefficients, cosine similarity) is heavy and precise but surfaces almost no direct player choice.",
+  "lateral": "Faction sheets are narratively thick while the L/PS mechanic they cite lives one layer down in settlement_layer \u2014 identity is prose bolted onto borrowed numbers.",
+  "diagonal": "Thread and Domain Echo are the designed cross-scale levers, but Thread's hook into faction_behavior's own math is only incidental.",
+  "forwards": "Faction systems carry ~80% of Pass 2's forward-flag load and 0/6 modules appear in the Godot skeleton \u2014 the largest unresolved cluster toward Godot.",
+  "backwards": "The faction stat lineup (6-stat vs 7-stat, L/PS scope) has been re-litigated at least three times in one file without yet reaching a typed engine surface."
+ },
+ "findings": [
+  {
+   "id": "gm-controls-npc-votes",
+   "subsystem": "faction_political",
+   "claim": "faction_layer_v30 \u00a75.8 explicitly delegates NPC faction voting to a human GM, contradicting the no-GM engine premise and Omega clause (c) autonomous world.",
+   "cite": "designs/provincial/faction_layer_v30.md \u00a75.8",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "faction-politics-doc-null-mismatch",
+   "subsystem": "faction_political",
+   "claim": "module_contracts.yaml marks faction_politics doc:null/home-doc-GAP despite a 1115-line CANONICAL faction_politics_v30.md (rank ladders, succession, caste) existing under a matching name in the working tree.",
+   "cite": "references/module_contracts.yaml (faction_politics entry); designs/provincial/faction_politics_v30.md",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "faction_politics/faction_state boundary '[OPEN \u2014 Jordan]' (module_contracts gap_notes)"
+  },
+  {
+   "id": "deterministic-engine-no-player-choice",
+   "subsystem": "faction_political",
+   "claim": "The 4-component Mission/Cascade/PublicExpectation/L+PS engine that determines faction disposition is entirely formula-computed with no player decision point, thinning the myriad-decisions goal beneath a narrow Domain Action menu.",
+   "cite": "designs/provincial/faction_behavior_v30.md \u00a73.2-\u00a73.5",
+   "criterion": "N",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "[ASSUMPTION]-grade deterministic-accounting cluster, ED-1051 backlog"
+  },
+  {
+   "id": "thread-absent-from-faction-engine-math",
+   "subsystem": "faction_political",
+   "claim": "The faction behavior engine's own \u03b1/\u03b2/\u03b3/\u03bb formulas take no Thread/Coherence/Calamity input, only generic env.* shocks \u2014 P-14 inseparability is unmet at the mechanism level here specifically, not just generally.",
+   "cite": "designs/provincial/faction_behavior_v30.md \u00a73.4.2",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": true
+  },
+  {
+   "id": "single-root-cascade-default",
+   "subsystem": "faction_political",
+   "claim": "All 6 canonical factions default to single-root Cascade, collapsing the many-actor conviction-blending mechanic into one leader-stat lookup at scenario init.",
+   "cite": "designs/provincial/faction_behavior_v30.md \u00a73.2.2",
+   "criterion": "Q-elegant",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "institutional-consolidation-turtle",
+   "subsystem": "faction_political",
+   "claim": "Institutional Consolidation passive recovery grants Stability+1/Accord+1 for doing nothing a season, a candidate turtle-and-wait degenerate line.",
+   "cite": "designs/provincial/faction_layer_v30.md \u00a71.3",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "mass-seizure-3-source-drift",
+   "subsystem": "faction_political",
+   "claim": "Church's core win-path mechanic (Mass Seizure) still has 3 non-reconciled canon formulas live simultaneously, undermining legibility of the Church's central threat.",
+   "cite": "designs/factions/faction_systems_overview_v30.md \u00a74.4",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "reconciliation pending Pass 2f (overview \u00a74.4)"
+  },
+  {
+   "id": "stat-lineup-churn-no-engine-surface",
+   "subsystem": "faction_political",
+   "claim": "The faction stat lineup (6-stat vs 7-stat, L/PS scope) has been re-litigated three times via sequential Jordan rulings but still has no typed engine-params surface for Godot to consume.",
+   "cite": "designs/provincial/faction_canon_v30.md \u00a75.1-\u00a75.3, \u00a712 (D3, D7)",
+   "criterion": "Q-smooth",
+   "direction": "forwards",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "CLAUDE.md \u00a75 typed engine-params gap"
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/dossier_faction_political.md"
+}

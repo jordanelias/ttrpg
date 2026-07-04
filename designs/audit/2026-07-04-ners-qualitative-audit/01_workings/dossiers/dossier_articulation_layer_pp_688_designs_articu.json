@@ -1,0 +1,182 @@
+{
+ "subsystem": "Articulation Layer (PP-688) \u2014 designs/articulation/articulation_layer_v30.md",
+ "core_loop": "Engine emits Keys \u2192 articulation subscribes to the full stream (wildcard consume) \u2192 Tier 1 continuously reframes UI (Concern queue, Memory salience, Bonds/Knot/Belief/Inspiration); Tier 2 matches a Key against 10 trigger conditions, scores significance, fires a 5-15s cut scene or else accumulates \"unarticulated weight\"; Tier 3 fires annually, selecting top-N Keys peninsula-wide into a chronicle. Pure sink: emits nothing back into mechanics (module_contracts.yaml emits: []).",
+ "decision_points": [
+  {
+   "where": "\u00a72.4 Belief/Inspiration authorship (chargen + revision)",
+   "options": "player writes 3-5 Belief truth-statements + Inspiration arcs, later revises them",
+   "meaningful": "moderate",
+   "note": "real authorial choice; engagement adds +2/+1 significance (\u00a73.5), shaping what gets rendered"
+  },
+  {
+   "where": "\u00a72.5 Chronicle search-bar",
+   "options": "query 'what happened in [territory/period]'",
+   "meaningful": "thin",
+   "note": "pure retrieval, no state change"
+  },
+  {
+   "where": "\u00a72.1-2.3 Concern queue / Memory salience / Bonds register",
+   "options": "none \u2014 read-only awareness UI",
+   "meaningful": "degenerate",
+   "note": "informs choices made in OTHER subsystems (fieldwork/DA); this layer generates zero decisions of its own here, which is appropriate for a renderer but should not be miscounted as a choice surface"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "Nothing goes back into mechanics (emits: [] per module_contracts L769) \u2014 pure narrative sink. Value is legibility service to OTHER subsystems' collisions (faction/succession/combat coverage is dense and sim-verified), not generation of new choice space here.",
+  "verdict": "Points at the North Star unevenly: strong rendering of faction/political/personal-combat collisions, but silent on Thread collisions and self-contradictory on siege/battle-conclusion coverage \u2014 exactly the flagship moments a renderer of emergence exists to catch."
+ },
+ "nq": [
+  {
+   "criterion": "Q-elegant",
+   "observation": "significance() formula restates cleanly after one read; second-order consequence (cut-scene length by score band) is predictable.",
+   "cite": "articulation_layer_v30.md \u00a73.2"
+  },
+  {
+   "criterion": "Q-smooth",
+   "observation": "Declared as O(1)/queue-based universal subscriber (composes cleanly) but \u00a76.4's claim that scene.battle_concluded 'already triggers Tier 2' is not backed by the \u00a73.1 table \u2014 a smoothness violation between two sections of the same canonical doc.",
+   "cite": "articulation_layer_v30.md \u00a75, \u00a76.4 vs \u00a73.1"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Stage 10 sim (A1-A6) passed 6/6 including determinism (hash match) and cross-faction clustering decision support; this is real verification, not just declared.",
+   "cite": "designs/audit/2026-05-01-stage-10-validation/02_articulation_evaluation.md \u00a72"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Rendering Crisis / Gap manifestation / Dissolution witnessing surfaced as cut scenes",
+   "status": "absent-plausible",
+   "evidence": "Zero Thread/Coherence/Calamity/Gap/Dissolution mentions in the file (full-text grep); matches grounding 03's flagged silent juncture verbatim; no dedicated ED ticket found for this specific gap (searched editorial_ledger.jsonl 'articulation' hits: ED-785/841/842/936/1030, none address it) \u2014 tag KNOWN-UNTRACKED, not the combat-resolver ED-911."
+  },
+  {
+   "juncture": "Victory-condition era transitions (Post-Calamity, Phased Occupation, Anarchy) rendered as chronicle/cut-scene beats",
+   "status": "absent-deliberate",
+   "evidence": "module_contracts.yaml L679: era transitions are UNKEYED, 'articulation is blind to era changes via the Key stream' \u2014 tracked as ED-1006 (open, registry SS10 candidate); I add the sharper framing that this specifically breaks the renderer's own mandate at the game's endgame-adjacent moments."
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "For factions/NPCs whose Keys intersect one of the 10 \u00a73.1 triggers, Tier 1+2+3 state answers whose-position-at-risk / what-actors-want reasonably well. For actors whose Keys never match a trigger (starvation-accumulator gap, \u00a73.3) or for Thread/Calamity-adjacent threats (zero surfacing), the question 'what happens if no one acts next season' cannot be answered from this subsystem's state alone."
+ },
+ "degenerate_candidates": [
+  "\u00a73.1 trigger table + \u00a75 gating: a Bonded NPC whose Keys never match one of the 10 explicit trigger conditions accumulates unarticulated_weight indefinitely with no code path that forces emission \u2014 the anti-starvation promise in \u00a73.3 is unbacked by the actual mechanism, so some NPCs are structurally invisible to Tier 2 forever."
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "engine / Key substrate (PP-687)",
+   "mechanism": "universal wildcard subscription to full Key stream",
+   "cite": "module_contracts.yaml L768; articulation_layer_v30.md \u00a75",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "mass_battle (scene.battle_concluded)",
+   "mechanism": "registry-declared consumer; \u00a76.4 claims default Tier-2 trigger",
+   "cite": "key_type_registry_v30.md \u00a77 L699; articulation_layer_v30.md \u00a76.4",
+   "status": "divergent"
+  },
+  {
+   "dir": "in",
+   "other": "faction_politics/npc_behavior (coup, succession, covert_betrayal, strain_shock, cascade_cluster, belief_revised)",
+   "mechanism": "explicit \u00a73.1 trigger table entries, sim-verified",
+   "cite": "articulation_layer_v30.md \u00a73.1",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "victory_v30 (era transitions)",
+   "mechanism": "no Key type exists; declared unreachable",
+   "cite": "module_contracts.yaml L679, ED-1006",
+   "status": "declared-only"
+  },
+  {
+   "dir": "out",
+   "other": "mechanics / world-state (any subsystem)",
+   "mechanism": "none \u2014 emits: [] ",
+   "cite": "module_contracts.yaml L769",
+   "status": "declared-only"
+  }
+ ],
+ "directions": {
+  "top-down": "P-14 requires inseparability expressed in every play mode; the narrative-surfacing layer's total silence on Thread/Calamity events is the sharpest instance of that requirement going unmet.",
+  "bottom-up": "The significance()/accumulator primitives are well-formed in isolation, but the wiring between them (\u00a73.3's promise vs \u00a75's actual gate) doesn't compose into the claimed anti-starvation behavior.",
+  "lateral": "Sibling collision-generating subsystems (faction, combat, social) are well covered by the 10-trigger table; siege/battle-conclusion and investigation-verdict Keys, though registry-declared consumers, are not.",
+  "diagonal": "Cross-scale: peninsula-scale era transitions (GD-1 victory-adjacent) are invisible to the layer whose job is cross-scale narrative rendering.",
+  "forwards": "Stage 10 sim (6/6 PASS) is real validation infrastructure worth reusing as the model for a future battery covering battle_concluded/investigation_resolved/thread events once those triggers are authored.",
+  "backwards": "The file carries four disagreeing status markers (CANONICAL x2 vs PROVISIONAL x3) unresolved by CURRENT.md's un-annotated listing \u2014 a currency ambiguity in the doc's own header, distinct from any prior ED."
+ },
+ "findings": [
+  {
+   "id": "articulation-battle-concluded-trigger-gap",
+   "subsystem": "articulation_layer_v30",
+   "claim": "The canonical \u00a73.1 10-trigger ruleset omits scene.battle_concluded and scene.investigation_resolved despite both being registry-declared consumed types, and \u00a76.4 falsely asserts battle_concluded already triggers Tier 2 by an unstated rule.",
+   "cite": "articulation_layer_v30.md \u00a73.1, \u00a76.4; key_type_registry_v30.md \u00a77 L682-703, L705-722",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-starvation-mechanism-unwired",
+   "subsystem": "articulation_layer_v30",
+   "claim": "\u00a73.3's anti-narrative-starvation claim is not implemented by the \u00a75 pseudocode: unarticulated_weight only inflates significance of an already-firing trigger, it cannot itself force a cut scene, so non-trigger-matching Bonded NPCs are permanently un-rendered.",
+   "cite": "articulation_layer_v30.md \u00a73.3, \u00a75 (L256-261), \u00a73.2",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-thread-silence",
+   "subsystem": "articulation_layer_v30",
+   "claim": "Zero Thread/Coherence/Calamity/Gap/Rendering-Crisis/Dissolution hooks anywhere in the narrative-surfacing layer, despite these being explicitly narratively load-bearing (ED-681); no dedicated ED tracks this specific gap.",
+   "cite": "articulation_layer_v30.md (full-text absence); grounding 03_threadwork_surface.md \u00a73",
+   "criterion": "P-philosophy",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "grounding 03 \u00a73 (no dedicated ED found; distinct from combat-resolver ED-911)",
+   "threadwork": true
+  },
+  {
+   "id": "articulation-victory-era-blind",
+   "subsystem": "articulation_layer_v30 / victory_v30",
+   "claim": "Victory-condition era transitions (Post-Calamity, Phased Occupation, Anarchy) are UNKEYED, making the renderer of emergence blind to the game's own endgame-adjacent collision moments.",
+   "cite": "references/module_contracts.yaml L679; victory_v30.md \u00a75",
+   "criterion": "N",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-1006 (open)",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-zero-mechanical-emission",
+   "subsystem": "articulation_layer_v30",
+   "claim": "Articulation emits nothing back into mechanics (chronicle/legend never feeds NPC Renown/memory); a plausible loop exists (npc_behavior Renown/Standing track) with no documented rationale for rejecting it \u2014 intent UNDETERMINED.",
+   "cite": "references/module_contracts.yaml L769 (emits: []); designs/npcs/npc_behavior_v30.md Renown/Standing table",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "grounding 02_interdependency_map.md edge #11",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-status-self-contradiction",
+   "subsystem": "articulation_layer_v30",
+   "claim": "The file carries four disagreeing status markers (CANONICAL x2, PROVISIONAL x3 incl. footer) and CURRENT.md lists it with no disambiguating annotation, unlike sibling rows.",
+   "cite": "articulation_layer_v30.md L1,2,6,9,363; CURRENT.md L33",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/articulation/dossier_articulation.md"
+}

@@ -1,0 +1,107 @@
+{
+ "lens": "sequence_lineage",
+ "verdict": "The build order does NOT sequence cleanly toward the Godot North Star: the one ported slice (personal combat, 1/27) got two more deep passes at/after the Gate-0 freeze (R2 merged 07-04, R3 in flight, morphology audit), while Gate-0's blocking preconditions \u2014 Key v1\u2192v2 migration, three-doc reconciliation, engine_clock authoring \u2014 stay unexecuted, and no surface names a playable-season milestone. Lineage fidelity is mostly sound (4/5 sampled supersessions faithful) but ED-912 carries a stale recheck path and the register is frozen ~1 week pre-HEAD (no GD-1, no mass-battle ED-MB). The steering layer is NOT one surface: workplan v5 and roadmap_state contradict CURRENT.md/decision_queue on J-38's status and on \"where are we.\" Only CURRENT.md is fresh-and-authoritative.",
+ "key_points": [
+  "Gate-0 (Key v2 migration, three-doc reconciliation, Key-type registrations) is the blocking precondition to any module port beyond combat and is entirely unexecuted (godot_conversion_strategy_v1.md VI.1, D1/R1/R3 = P1).",
+  "Combat (1/27 ported) is being deepened out of order \u2014 R2 merged 2026-07-04, R3 (PR#76) + morphology audit (PR#74) \u2014 while Gate-0 stayed frozen; the ported slice grows, the unblocking precondition does not.",
+  "engine_clock home doc is still 'unlocated [GAP]' (strategy L67); propagation_spec_v1 supplies only a candidate, module_contracts doc:null unflipped pending ED-1051.",
+  "No steering doc defines a playable-season / first end-to-end slice milestone.",
+  "3 highest-leverage moves: execute Gate-0; author engine_clock; reconcile steering + name a playable milestone.",
+  "BACKWARDS sample 5/5: 4 faithful (combat_v30\u2192ED-900, VTM/CR-STRIKE, godot impl_sequence, PP-687); ED-912 recheck path designs/scene/articulation_layer_v30.md does not exist (moved to designs/articulation/).",
+  "supersession_register.yaml is frozen at ED-912/2026-06-28: no GD-1 entry (corroborates peninsular_strain Partition drift), no mass-battle ED-MB/FIELD_MOVEMENT flips, no propagation/contest supersessions.",
+  "Steering surfaces disagree: workplan v5 \u00a73 J-38 = open 'PROPOSED design doc'; CURRENT.md L32 + decision_queue item 18 = CANONICAL/RATIFIED \u2014 direct contradiction.",
+  "roadmap_state.yaml updated 2026-06-28, current_phase 2 'Document undocumented subsystems' items_done 0 \u2014 describes a May track divorced from live work; self-indicts as a stale-log-class defect.",
+  "Only CURRENT.md's hand-reconciliation (2026-07-04) holds the surface together \u2014 single-point-of-truth fragility that CLAUDE.md \u00a71 already concedes."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "gate0-frozen-combat-polished",
+   "subsystem": "godot_sequence",
+   "claim": "The Godot critical path (Gate-0: Key v1\u2192v2 migration, three-doc reconciliation, engine_clock, Key-type registrations) is unexecuted while personal combat \u2014 the single ported slice (1/27) \u2014 received two more deep passes (R2 merged 2026-07-04, R3 PR#76, morphology audit PR#74) at/after the Gate-0 freeze; the ported slice is deepened, the precondition unblocking all other slices is not.",
+   "cite": "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md \u00a7VI.1 (G0.1/G0.2/G0.4, D1/R1/R3 P1) vs CURRENT.md L24 (R2/R3/PR#72/#74/#76)",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "charter calibration (Gate-0 unexecuted, CLAUDE.md \u00a76) \u2014 new scope: two combat passes landed 07-02/07-04 against the frozen gate",
+   "threadwork": false
+  },
+  {
+   "id": "engine-clock-still-homeless",
+   "subsystem": "godot_sequence",
+   "claim": "engine_clock \u2014 the temporal spine every system's Accounting cadence hangs off \u2014 still has an unlocated home doc; propagation_spec_v1 supplies only a candidate transform and module_contracts doc:null stays unflipped, so the highest-leverage architecture authoring after combat has not started.",
+   "cite": "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md module row 8 (L67) 'home doc unlocated [GAP]'; CURRENT.md L32; module_contracts ED-1051",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-1051 / workplan v5 J-38",
+   "threadwork": false
+  },
+  {
+   "id": "steering-not-one-surface",
+   "subsystem": "steering_surface",
+   "claim": "The four steering surfaces are not one: workplan v5 \u00a73 frames J-38 propagation-spec as an OPEN decision 'lands as its own PROPOSED design doc' while CURRENT.md L32 and decision_queue item 18 both mark propagation_spec_v1 CANONICAL/RATIFIED (ED-1093/1094) \u2014 a direct status contradiction a resuming session hits immediately.",
+   "cite": "designs/workplans/valoria_master_workplan_v5.md \u00a73 L74 vs CURRENT.md L32 vs designs/audit/2026-07-01-month-overview-architecture-consolidation/decision_queue.md L75,L100-101",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "roadmap-state-stale-may-track",
+   "subsystem": "steering_surface",
+   "claim": "roadmap_state.yaml (updated 2026-06-28, current_phase 2 'Document undocumented subsystems', items_done 0) describes a May audit track wholly divorced from the live combat/contest/architecture work; its own header declares stale roadmap a defect of the same class as a stale session log, so it is self-indicted.",
+   "cite": "references/roadmap_state.yaml L10-11,L18,L30,L46-58",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "ed912-stale-recheck-path",
+   "subsystem": "supersession_lineage",
+   "claim": "The ED-912 supersession entry's files_to_recheck cites designs/scene/articulation_layer_v30.md \u00a72.4, a path that no longer exists (live head moved to designs/articulation/articulation_layer_v30.md), so a session honoring the ED-912 Disposition/Knot \u00b15 propagation cannot follow the register to the actual articulation head that reads Bonds.",
+   "cite": "canon/supersession_register.yaml L238-247 vs ls designs/articulation/articulation_layer_v30.md (\u00a72.3/\u00a72.4 Bonds register)",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "supersession-register-frozen",
+   "subsystem": "supersession_lineage",
+   "claim": "supersession_register.yaml is frozen at ED-912/2026-06-28: it has no GD-1 entry (so peninsular_strain_v30 \u00a76.3 Partition co-victory drift is invisible to the register), no mass-battle ED-MB/FIELD_MOVEMENT/PER_CELL default-flips, and no propagation-spec/contest-rebuild supersessions \u2014 supersession authority stops ~1 week before HEAD.",
+   "cite": "canon/supersession_register.yaml (full read, last entry ED-912; zero GD-1/mass_battle/FIELD_MOVEMENT hits)",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "corroborates registers_graphs massbattle-no-backpropagation + victory peninsular-strain-partition-unmarked",
+   "threadwork": false
+  },
+  {
+   "id": "no-playable-milestone",
+   "subsystem": "godot_sequence",
+   "claim": "No steering surface defines a playable-season or first end-to-end playable slice; the conversion strategy sequences module ports but names no integration milestone, so 'progress toward Godot' has no legible finish line to sequence against.",
+   "cite": "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md \u00a7VI (port sequencing, no milestone); references/roadmap_state.yaml (phase table, no Godot milestone)",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_sequence_lineage.md"
+}

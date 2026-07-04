@@ -1,0 +1,104 @@
+[
+ {
+  "id": "settlement-governance-thin-loop",
+  "subsystem": "settlement_territory",
+  "claim": "The ratified seasonal governance loop is a single stat-pump verb-pick with no political tradeoff, self-diagnosed by the corpus's own redesign proposal as collapsing to 'roll one die a season' \u2014 and Valoria has no GM to compensate.",
+  "cite": "designs/territory/settlement_layer_v30.md \u00a73.2; designs/territory/governance_play_redesign_v1.md (problem statement)",
+  "criterion": "Q-robust",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "KNOWN-UNTRACKED",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "dossier:settlement_territory",
+  "refute": {
+   "finding_id": "settlement-governance-thin-loop",
+   "verdict": "CONFIRMED",
+   "intent": "NOT-INTENDED",
+   "revised_severity": "P2",
+   "evidence": "Tried to refute; the core claim holds. settlement_layer_v30.md \u00a73.2 gives the player-governor ONE mandatory free governance action/season over four stat-pumps (Develop/Fortify/Pacify/Administer, each a +1 to a stat; Administer also reveals a Conviction) \u2014 a single-pick with no faction-empowerment/method fork. governance_play_redesign_v1.md line 4 self-diagnoses verbatim: \"four stat-pumps... governing collapses toward 'roll one die a season and watch numbers' unless a GM carries it\" \u2014 and CLAUDE.md confirms no GM exists. Currency confirms \u00a73.2 is the LIVE ratified loop: CURRENT.md \u00a728 lists settlement_layer_v30.md as the head (not the redesign); the redesign is Status: PROPOSAL (2026-06-22); \u00a73.2 carries no supersession banner. So \"ratified thin loop\" is accurate.\n\nIntent = NOT-INTENDED: the corpus itself authored a full replacement (redesign + goldenfurt_slice/{npc_cast, 28-card event_deck, sim_build_spec, verification_findings}) \u2014 an acknowledged interim defect, the opposite of a safeguarded deliberate choice. Two sibling lenses of this same audit already call it an \"orphaned proposal\" (lens_cohesion_interdependency.md:35) / \"unratified\" (lens_playability_legibility.md:74). Its self-gate (audit G1) was reportedly closed (month_overview stream C, PRs #6/#8/#9) yet the doc stays un-flipped = drift, not a live hold.\n\nTracking: KNOWN-UNTRACKED confirmed \u2014 no ED (ledger grep empty), HANDOFF_SE.md says \"Pending: (none)/Next actions: (none)\", not in the frozen decision_queue.md, no supersession entry, not on the charter calibration list. No duplicate_of (sibling audit lenses are peer working files, not a tracking artifact).\n\nSeverity trimmed P1\u2192P2 on two genuine grounds: (1) \"no political tradeoff\" overstates at the layer scale \u2014 \u00a73.1 dual authority, \u00a73.3 subnational grant/revoke/contest, \u00a71.4.3 capacity pressure (exile/succession), \u00a71.8 L/PS\u2192Mandate are real politics; the redesign itself says the politics is \"held one tier up\" and only the per-season verb menu is thin (a bounded surface). (2) The fix is fully authored and partially built (G1 closed), i.e. de-risked debt, not an open void. This \"materially narrows the player-governor decision surface\" (P2). P1 remains defensible (no GM; degenerate play in the settlement\u2192national progression pillar; the charter's master question names degenerate play as a North-Star failure) \u2014 a genuine P1/P2 boundary case; as adversarial skeptic I land P2."
+  },
+  "second": null
+ },
+ {
+  "id": "collision-engine-has-no-engine",
+  "subsystem": "collision_engine / throughlines",
+  "claim": "The corpus's self-named 'emergent narrative engine' (Convergence Markers) has no runtime home: the 8 collisions exist only as hand-authored trigger+payload annotations in one reference doc, and no Key type, module_contract, sim module, or resolver detects trigger-coincidence or applies the combined payload \u2014 so the flagship emergence mechanism is aspirational prose, not a mechanic.",
+  "cite": "references/arcs/arc_register_events.md \u00a7VI (L23-60); references/throughlines_complete.md \u00a7T-24 L200; module_contracts.yaml grep convergence/COLLISION (only L231/L442, unrelated); sim/ grep (numerical only)",
+  "criterion": "N",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "lens:emergent_narrative",
+  "refute": {
+   "finding_id": "collision-engine-has-no-engine",
+   "verdict": "CONFIRMED",
+   "intent": "UNDETERMINED",
+   "revised_severity": "P2",
+   "evidence": "I tried hard to refute and could not. Text verified directly: arc_register_events.md \u00a7VI (L23-63) is 8 hand-authored markers whose header (L25) states the combined pressure \"is not predictable from the constituent vectors\" and each specifies a bespoke, non-summative COMBINED payload (e.g. COLLISION A adds \"TC generation pauses\") \u2014 so an applier is genuinely required, not emergent from running vectors independently. throughlines_complete.md T-24 (L197-200) names these \"the game's emergent narrative engine\" yet the entry uniquely has NO Implementation-status line, and the summary-table \"Fully specified\" (L290) has System-Doc-Coverage = bare \"arc_register\" (definition coverage, not a runtime detector).\n\nAll refutation angles failed: (1) collision_registry.yaml is attribute_mechanic_collisions (name hygiene), unrelated \u2014 finder was right. (2) \"emergent-by-construction\" is refuted by \u00a7VI's own non-summative text. (3) No generic event/trigger engine exists to host them: I grepped all 27 module: entries in module_contracts.yaml \u2014 no arc_register/events/trigger/convergence module; no contract references convergence (only L231 name-collision, L442 numerical). (4) sim/ hits are physics collision (massbattle.py L1206) and numerical convergence (restoration_movement.py) \u2014 finder's \"numerical only\" holds.\n\nNot a duplicate: ledger \"convergence\" = ED-479/412 arc-40 timeline compression and ED-1085/1093 numerical kernel convergence; HANDOFF hits = ID/RNG/physics collisions; decision queue = cross-tick numerical convergence. None track a convergence-marker runtime detector, and it is absent from the charter calibration list. Genuinely NEW/untracked.\n\nIntent UNDETERMINED: no safeguard artifact (no ED, no \"illustrative-only\" tag) scopes the markers as deliberately-unimplemented; the doc is self-contradictory (calls them emergent yet hand-authors 8 bespoke entries). A deliberate \"authored highlights riding a future event engine\" reading is possible but unsupported and would still be deliberate-WITHOUT-safeguard \u2014 so it does not refute the defect.\n\nSeverity revised P1->P2: base emergence has independent channels (T-23 NPC Arc Emergence is \"Fully implemented\"; vectors/clocks carry emergence), so \"flagship emergence is aspirational\" overstates \u2014 the markers are a curated dramatic surface, not the whole substrate. Real, bounded defect: 8 marquee combined-pressure crises never render for lack of a detector+applier, materially narrowing the designed emergent-crisis surface and dramatic legibility.\n\nscratch_file: /home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/refute_collision-engine-has-no-engine.md"
+  },
+  "second": null
+ },
+ {
+  "id": "ui-spec-stranded-off-index",
+  "subsystem": "player-facing legibility layer",
+  "claim": "The only comprehensive player-facing spec (UI/UX v4.1, CANONICAL) predates the entire current generation, is absent from CURRENT.md, and its 20-P1 repair workplan (v4.2) was never executed \u2014 leaving the 'from the screen' North Star bar with no maintained home and the DRAFT one-subsystem contest walkthrough as the only current-era interaction artifact.",
+  "cite": "designs/ui/valoria_ui_ux_v4_1.md header (CANONICAL, 2026-04-16, deps='19 v30 docs'+combat_v30); CURRENT.md (no designs/ui or player_agency row); designs/ui/valoria_ui_ux_v4_2_workplan.md (69 findings/20 P1, target v4.2 absent from dir)",
+  "criterion": "Q-robust",
+  "direction": "backwards",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "lens:playability_legibility",
+  "refute": {
+   "finding_id": "ui-spec-stranded-off-index",
+   "verdict": "PLAUSIBLE",
+   "intent": "UNDETERMINED",
+   "evidence": "Factual core VERIFIED, cannot refute. valoria_ui_ux_v4_1.md header: CANONICAL, 2026-04-16, deps \"19 v30 docs + combat_v30 ED-548\" (combat_v30 now PARTIALLY SUPERSEDED). CURRENT.md: 15 subsystem rows, none UI/player-facing. valoria_ui_ux_v4_2_workplan.md: \"awaiting Jordan's approval before execution begins\"; target valoria_ui_ux_v4_2.md ABSENT from designs/ui/ (dir listing). DRAFT player_interaction_walkthrough_v1.md confirmed as the only current-era interaction artifact.\n\nIntent hunt did NOT refute \u2014 it strengthened the factual core: v4.1 NOT in supersession_register.yaml (stale-CANONICAL, unflagged); ZERO ui/player/legibility hits in workplan_v5, roadmap_state.yaml, or the 23-item decision queue; ledger has only OLD UI EDs (697/544/548) plus ED-1058 (contest dicts), nothing tracking v4.1 staleness or v4.2 non-execution. NEW confirmed \u2014 absent from calibration list too.\n\nCOUNTER-evidence that downgrades, not refutes: HANDOFF_SC.md \u00a752-53 + HANDOFF.md \u00a755-56 show the contest walkthrough was \"seeded ahead of Stage 6 so every later stage designs toward it\" \u2014 a DELIBERATE bottom-up per-subsystem legibility method; its header states nothing yet answers \"what the player sees.\" So the corpus method is per-subsystem walkthroughs as subsystems finalize, not a monolith.\n\nTwo overstatements in the finding: (1) \"only comprehensive player-facing spec\" \u2014 v4.1 is a structural SUPPLEMENT; its own header says \"v4 remains authoritative for content-level UI specification\" (v4.md, 161KB, is the larger content spec). Thrust survives (both predate current gen) but singular framing imprecise. (2) P1/\"actively undermines North Star\" is inflated: game is pre-implementation (Godot 1/27, Gate-0 unexecuted); the dramatic-legibility bar is applied per-subsystem by the audit and the SC lane; authoring a UI monolith mid mechanic-churn (combat R3, social rebuild Stage 4) would be premature. Real drift hazard remains \u2014 CANONICAL v4.1 renders superseded combat_v30, and the layer sits on no currency/sequencing artifact \u2014 but this is forward-debt narrowing legibility coverage, not an emergence blocker today.\n\nIntent UNDETERMINED: a plausible deliberate deferral rationale exists (per-subsystem method) but is UNDOCUMENTED for the corpus-wide layer, and v4.1's stale-CANONICAL status is affirmatively unmanaged \u2014 neither cleanly safeguarded nor cleanly accidental. Notes: designs/audit/2026-07-04-ners-qualitative-audit/refutation_notes/refute_ui-spec-stranded-off-index.md",
+   "revised_severity": "P2"
+  },
+  "second": null
+ },
+ {
+  "id": "articulation-battle-concluded-trigger-gap",
+  "subsystem": "articulation_layer_v30",
+  "claim": "The canonical \u00a73.1 10-trigger ruleset omits scene.battle_concluded and scene.investigation_resolved despite both being registry-declared consumed types, and \u00a76.4 falsely asserts battle_concluded already triggers Tier 2 by an unstated rule.",
+  "cite": "articulation_layer_v30.md \u00a73.1, \u00a76.4; key_type_registry_v30.md \u00a77 L682-703, L705-722",
+  "criterion": "Q-smooth",
+  "direction": "lateral",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:Articulation Layer (PP-688) \u2014 designs/articulation/articulation_layer_v30.md",
+  "refute": {
+   "finding_id": "articulation-battle-concluded-trigger-gap",
+   "verdict": "CONFIRMED",
+   "intent": "NOT-INTENDED",
+   "revised_severity": "P2",
+   "evidence": "Every factual leg holds; I could not refute it. (1) articulation_layer_v30.md \u00a73.1 (L83-92) lists exactly 10 triggers \u2014 scar/coup/succession/mission_shift/covert_betrayal/knot_formed/knot_ruptured/peninsular_strain_shock/cascade_cluster/belief_revised \u2014 none is scene.battle_concluded or scene.investigation_resolved (nor combat_resolved). (2) key_type_registry_v30.md \u00a77 declares articulation as a consuming_system for scene.battle_concluded (L699) and scene.investigation_resolved (L721). (3) \u00a76.4 (L296) states verbatim \"scene.battle_concluded (existing) already triggers Tier 2\" with no \u00a73.1 backing \u2014 a real internal contradiction.\n\nRefutations attempted and defeated: significance (\u00a73.2) is computed only AFTER matches_trigger_ruleset in the \u00a75 callback (L254-262), so a non-matching Key never renders; \u00a73.3 accumulated weight is a boost, not a trigger; and the \"\u00a76 by-default is the mechanism\" defense is refuted by the doc's OWN precedent \u2014 belief_revised carried the identical \u00a76.3 \"Tier 2 by default\" language, yet Stage 10 \u00a74.1 (\u00a73.1 L114-123) found such a Key \"does not produce a cut scene\" without a co-firing trigger, forcing trigger #10 to be ADDED to \u00a73.1. That proves \u00a76 defaults are not self-executing and \u00a73.1 is the exhaustive ruleset; battle_concluded/investigation_resolved/combat_resolved simply were never wired.\n\nIntent: NOT-INTENDED. Ledger grep shows ED-935/936/937 (2026-06-14) handle registration/naming/consumer-wiring, not the trigger. ED-936 AUTHORED the \u00a76.4 line under delegated, ASSUMPTION-flagged, Jordan-vetoable authority; \u00a76.4 itself carries a [ASSUMPTION\u2026Jordan-vetoable] comment (L298). So \u00a76.4 is a delegated assertion that contradicts \u00a73.1 \u2014 not a safeguarded deliberate omission.\n\nNovelty NEW/untracked: the file's carry-forward P2 (header) is belief_revised, now closed; no ED, decision-queue item (2026-07-01 overview), or HANDOFF lane tracks this trigger gap. Corroborated only within this audit session (dossier_articulation.md L23-26; lens_emergent_narrative \u00a7L73; lens_cohesion \u00a7L50-51) \u2014 emerging audit consensus, not a prior tracking artifact, so no duplicate_of.\n\nSeverity P2 (not P1): articulation is the renderer of emergence; a decisive battle/trial verdict getting no Tier-2 cut scene is a real dramatic-legibility/cohesion hit, but the annual Tier-3 chronicle (\u00a74.4) still captures it, so it is degradation not total loss. Lateral direction confirmed. Scope note: gap also covers scene.combat_resolved. Scratch: designs/audit/2026-07-04-ners-qualitative-audit/refutation/refute_articulation-battle-concluded-trigger-gap.md"
+  },
+  "second": null
+ },
+ {
+  "id": "peninsular-strain-partition-unmarked",
+  "subsystem": "peninsular_strain",
+  "claim": "peninsular_strain_v30.md \u00a76.3 Peninsular Partition co-victory remains live, unmarked canonical text despite GD-1 explicitly striking Partition co-victory; sibling victory_v30.md \u00a70.1 got the [SUPERSEDED-BY: GD-1] banner but peninsular_strain_v30.md did not, because GD-1's propagation cross-reference list never names this file.",
+  "cite": "designs/provincial/peninsular_strain_v30.md \u00a76.3; canon/02_canon_constraints.md \u00a7B (propagation list); references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS",
+  "criterion": "Q-smooth",
+  "direction": "lateral",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:victory_strategic (Peninsular Sovereignty / peninsular_strain Accord-Turmoil / GD-3 insurgency pipeline / player_agency strategic layer)",
+  "refute": {
+   "finding_id": "peninsular-strain-partition-unmarked",
+   "verdict": "CONFIRMED",
+   "intent": "NOT-INTENDED",
+   "evidence": "Text facts all verify; I could not refute. canon/02_canon_constraints.md \u00a7B GD-1 (L38, L56) strikes \"Partition co-victory\" and its audit-check FAILs if \"any co-victory mechanic exists\"; its propagation list (L54-56) names only conviction_track_v30.md + complete_systems_reference.md, NOT peninsular_strain. victory_v30.md \u00a70.1 (L52) carries the [SUPERSEDED-BY: GD-1] banner; peninsular_strain_v30.md \u00a76.3 (L438-457) does not \u2014 and the whole doc (Status L2, 2026-04-14) predates GD-1 (2026-05-17) and was never swept. Scope is BROADER than the finding said: live co-victory refs also at L129, L220, L310, L457, L493 (\"Co-Victory checked simultaneously\" + \"faction-specific conditions \u00a76.2\"), L571, L590 \u2014 ~8 sites, no GD-1 banner anywhere. Genuine drift, accidental omission.\n\nBUT it is already tracked, not NEW: references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS (L24-30) explicitly lists \"Partition Co-Victory\" as STRUCK-by-GD-1 with eds: [pending-batch-Pass-2k] and commits: [pending Pass 2c] \u2014 the exact entry the finder cited yet labelled NEW. victory_v30 \u00a70.1 was swept in Pass 2c; peninsular_strain is a residual un-propagated site of that same tracked pending batch. ED-1031 shows GD-1 propagation is an actively-worked lane. So: KNOWN-TRACKED (pending-batch-Pass-2k) with genuinely new scope evidence (whole-doc un-swept, 8 sites), not a novel discovery. Safeguard exists: GD-1 is the authoritative top-of-stack constraint (canon-guard/CI reader is protected; the dead mechanic cannot fire) and the sibling victory_v30 \u00a70 is correct.",
+   "revised_severity": "P3"
+  },
+  "second": null
+ }
+]

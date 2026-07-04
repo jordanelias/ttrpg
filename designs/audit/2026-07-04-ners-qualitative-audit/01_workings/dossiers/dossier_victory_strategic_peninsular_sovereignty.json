@@ -1,0 +1,199 @@
+{
+ "subsystem": "victory_strategic (Peninsular Sovereignty / peninsular_strain Accord-Turmoil / GD-3 insurgency pipeline / player_agency strategic layer)",
+ "core_loop": "All factions share one endpoint: hold all 15 territories, Accord\u22652, Turmoil\u22646, sustained 2 Accountings (GD-1). Four faction toolkits (Treaty/Seizure/Proclamation/Martial Governance; Varfell=military-only) reach Accord\u22652 cheaper than conquest (Accord 1). Battle costs MS; held-instability (not battle-occurrence) drives Turmoil/IP. Neglected territory auto-decays to Uncontrolled, triggering GD-3 Insurgency formation, which is itself GD-1 victory-eligible.",
+ "decision_points": [
+  {
+   "where": "Per-target acquisition method (military vs faction toolkit)",
+   "options": "conquest / Treaty / Seizure / Proclamation / Martial Governance, each with distinct Accord/Turmoil/MS/CB cost",
+   "meaningful": "rich",
+   "note": "faction-differentiated, legible tradeoffs"
+  },
+  {
+   "where": "Accord/Turmoil budget management",
+   "options": "garrison, Govern, tolerate decay",
+   "meaningful": "moderate",
+   "note": "reactive bookkeeping once thresholds trip"
+  },
+  {
+   "where": "Endgame shape",
+   "options": "only total-hegemony (15/15) remains live; Partition/co-victory struck by GD-1",
+   "meaningful": "thin",
+   "note": "one victory shape post-GD-1"
+  },
+  {
+   "where": "player_agency Scene Slate",
+   "options": "3-9 opportunities vs 3-5 scene actions, Conviction vs Duty triage",
+   "meaningful": "rich",
+   "note": "explicit unpursued-consequence table"
+  },
+  {
+   "where": "Engaging an emergent Insurgency",
+   "options": "suppress via GD-2 mandatory response vs tolerate/negotiate",
+   "meaningful": "moderate",
+   "note": "mechanically real but little authored political texture"
+  }
+ ],
+ "north_star": {
+  "choice_density": "moderate",
+  "collision_feed": "Accord/Turmoil world-state (revolt, insurgency emergence) intersecting faction toolkits and player Convictions/Duties is a solid autonomous-world generator; weaker on producing genuinely different endings.",
+  "verdict": "Points at the North Star tactically (rich toolkit/personal-layer choice) but only partially at the strategic-shape level, since GD-1 collapsed 9 distinct endgame shapes into 1."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "Four-pressure design (Accord/Turmoil/MS/IP) is a genuine anti-rush, non-dominance device \u2014 military conquest structurally punished vs political toolkits.",
+   "cite": "peninsular_strain_v30.md Design Principle, \u00a72-4"
+  },
+  {
+   "criterion": "Q-smooth",
+   "observation": "GD-1 canon text names the track 'Political Stability'; every design doc/sim calls it 'Turmoil' \u2014 only an inline sim comment aliases them.",
+   "cite": "canon/02_canon_constraints.md \u00a7B GD-1; sim/autoload/victory.py"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "sim/autoload/victory.py correctly hardcodes all-15 threshold uniformly, matching victory_v30/peninsular_strain (the sole-victory-function is sound at the code layer).",
+   "cite": "sim/autoload/victory.py VICTORY_THRESHOLD=15"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Battle \u2192 MS substrate cost",
+   "status": "present",
+   "evidence": "peninsular_strain_v30.md \u00a73.1: MS -1/-2 per battle type on Valorian soil"
+  },
+  {
+   "juncture": "Community Weaving (PT mechanic) as Thread operation",
+   "status": "present",
+   "evidence": "victory_v30_infill.md: 'Community Weaving is a Thread operation... Co-Movement card draw... P-01 auto-effects'"
+  },
+  {
+   "juncture": "Insurgency formation (territorial neglect/Uncontrolled) \u2192 Gap/Knot substrate event",
+   "status": "absent-plausible",
+   "evidence": "insurgency_pipeline_v30.md \u00a74.1 formation trigger cites only adjacency/Uncontrolled status, no Gap/Knot/calamity_radiation citation despite the natural fit"
+  }
+ ],
+ "legibility": {
+  "answerable": "yes",
+  "note": "Whose position at risk: legible via per-territory Accord/Turmoil. What actors want: well-differentiated toolkits per faction. What happens if no one acts: mechanically explicit auto-Revolt/auto-Insurgency/GD-2 mandatory response."
+ },
+ "degenerate_candidates": [
+  "Total-hegemony-only endgame \u2014 GD-1 struck all alternates/Partition, so all factions converge to the identical terminal shape (15/15+Accord2+Turmoil\u22646); 'myriad paths' delivered tactically, not in ending variety.",
+  "Insurgency doc-stated '11+ territory' win threshold (insurgency_pipeline_v30.md \u00a77/\u00a77.1) vs actual sim/canon 'all 15' \u2014 if ever implemented as written, a structurally easier win path for emergent factions than for established ones."
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "mass_battle_v30",
+   "mechanism": "Battle resolution \u2192 MS/Accord/Turmoil consequences",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "restoration_movement/conviction_track",
+   "mechanism": "PT decay \u2192 Latent RM \u2192 Insurgency stages 1-2",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "GD-2 mandatory-action pass",
+   "mechanism": "Accord thresholds trigger mandatory Muster/Govern",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "parliamentary_transfer/social_contest",
+   "mechanism": "non-parliamentary/extra-parliamentary vote/transfer gates",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "player_agency Scene Slate",
+   "mechanism": "Accord-0/mass-battle territory = Priority-0 mandatory scenes",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "peninsular_strain_v30.md \u00a76.3 (sibling doc)",
+   "mechanism": "GD-1 Partition-strike propagation",
+   "status": "divergent"
+  }
+ ],
+ "directions": {
+  "top-down": "GD-1 philosophy (non-dominance) sits in tension with GD-1's own mechanic (single victory shape); the pressure system mitigates but doesn't resolve it.",
+  "bottom-up": "sim/autoload/victory.py correctly implements 'all 15,' contradicting insurgency_pipeline_v30's doc-level '11+' citation \u2014 sim is the trustworthy layer here.",
+  "lateral": "peninsular_strain_v30.md missed the GD-1 propagation pass that its sibling victory_v30.md received.",
+  "diagonal": "Battle\u2192MS coupling ties the strategic layer directly to the Thread-crisis scale.",
+  "forwards": "GD-3 sim modules are named but several marked 'pending Pass 2l' in canon cross-references \u2014 verify landing before treating insurgency as implementation-ready.",
+  "backwards": "victory_v30.md still cites a stale open item ('pending Varfell Path B decision, ED-311') even though GD-1 already struck all Path B variants."
+ },
+ "findings": [
+  {
+   "id": "insurgency-11-vs-15-threshold",
+   "subsystem": "insurgency_pipeline / victory",
+   "claim": "insurgency_pipeline_v30.md \u00a77/\u00a77.1 states Promoted Factions win at '11+ territories sustained 2 seasons,' contradicting GD-1's and victory_v30/peninsular_strain's 'all 15' and the actual sim (VICTORY_THRESHOLD=15 applied uniformly); same wrong figure recurs in canonical_sources.yaml.",
+   "cite": "designs/world/insurgency_pipeline_v30.md \u00a77, \u00a77.1; sim/autoload/victory.py; references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "peninsular-strain-partition-unmarked",
+   "subsystem": "peninsular_strain",
+   "claim": "peninsular_strain_v30.md \u00a76.3 Peninsular Partition co-victory remains live, unmarked canonical text despite GD-1 explicitly striking Partition co-victory; sibling victory_v30.md \u00a70.1 got the [SUPERSEDED-BY: GD-1] banner but peninsular_strain_v30.md did not, because GD-1's propagation cross-reference list never names this file.",
+   "cite": "designs/provincial/peninsular_strain_v30.md \u00a76.3; canon/02_canon_constraints.md \u00a7B (propagation list); references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "unowned-ms-clock-era-blindness",
+   "subsystem": "victory",
+   "claim": "MS is an unowned clock at the victory era-transition gates and world-state era transitions (Post-Calamity/Occupation/Anarchy) are unkeyed, meaning the Key/articulation stream is blind to the game's most consequential world-state shifts.",
+   "cite": "references/module_contracts.yaml victory module gap_notes",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "module_contracts.yaml victory gap_notes (charter calibration list: 'victory (unowned MS clock)')",
+   "threadwork": false
+  },
+  {
+   "id": "political-stability-naming-drift",
+   "subsystem": "victory",
+   "claim": "GD-1 canon text names the threshold track 'Political Stability'; no design doc defines that name \u2014 it is Turmoil everywhere else, aliased only via an unlabeled sim comment.",
+   "cite": "canon/02_canon_constraints.md \u00a7B GD-1; sim/autoload/victory.py",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "stale-varfell-path-b-citation",
+   "subsystem": "victory",
+   "claim": "victory_v30.md header still cites 'pending Varfell Path B user decision (ED-311)' as open, though GD-1 already struck all Southernmost Dominion/Path B variants.",
+   "cite": "designs/provincial/victory_v30.md header line 18; references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "total-hegemony-only-endgame",
+   "subsystem": "victory",
+   "claim": "GD-1's replacement of 8 faction-specific victories + Partition with one universal conquest endpoint narrows distinct victory shapes from ~9 to 1, in tension with the 'myriad options' North Star at the strategic-shape level even though tactical path variety is preserved.",
+   "cite": "canon/02_canon_constraints.md \u00a7B GD-1; designs/provincial/peninsular_strain_v30.md \u00a76.2",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/dossier_victory_strategic.md"
+}

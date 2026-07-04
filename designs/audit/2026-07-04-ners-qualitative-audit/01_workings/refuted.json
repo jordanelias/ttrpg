@@ -1,0 +1,497 @@
+[
+ {
+  "id": "pc-no-player-input-hook",
+  "subsystem": "personal_combat",
+  "claim": "wrapper.engagement() and the entire per-beat state graph have no player-decision parameter or input hook; commit depth, mode selection, grip-choke, and retreat-vs-press are all engine/RNG-resolved, so personal combat is a build-time-loadout-plus-autoresolve system rather than a per-exchange decision space.",
+  "cite": "designs/scene/combat_engine_v1/wrapper.py engagement() signature (A,B,first,cfg,rng); state_graph.py STATES/INJECTION_POINTS (all engine-internal); references/module_contracts.yaml personal_combat consumes: scene.combat_strike declared but unwired",
+  "criterion": "Omega",
+  "direction": "bottom-up",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:personal_combat",
+  "refute": {
+   "finding_id": "pc-no-player-input-hook",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P3",
+   "evidence": "scratch_file: /tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/refute_pc-no-player-input-hook.md\n\nThe code observation is literally true \u2014 wrapper.py:28 engagement(A,B,first,cfg,rng) has no player param, and commit/mode/grip/press are all engine+RNG (state_graph.py INJECTION_POINTS). But the finding's INTERPRETATION is refuted on three independent grounds:\n\n(1) Category error. This artifact is the balance ORACLE, not the shipping combat UI. wrapper.py:352 self-identifies: \"fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.\" CLAUDE.md \u00a77 confirms combat_engine_v1 is \"the 1:1 Python reference the GDScript port is built from.\" A Monte-Carlo win-rate harness cannot accept per-beat human input by construction \u2014 autoresolution is what an oracle IS, not a defect.\n\n(2) The finder's own third cite is FALSE. module_contracts.yaml:803 (the personal_combat consumes list) reads: {type: \"scene.combat_strike\", from: [scene_slate, player_input]}. scene.combat_strike is explicitly sourced FROM player_input \u2014 the per-exchange input hook IS declared at the contract layer, contradicting \"declared but unwired.\" combat.strike is module 1 of the canonical 11-action set (:827-838).\n\n(3) Design intent is explicit and opposite. designs/architecture/player_agency_v30.md:15: \"The player has 14 combat actions, 6 fieldwork actions, 7 Thread operations, 4 contest styles.\" Personal combat is designed AS a 14-action per-exchange decision space (also :330 \"player's choice\", :458 combat exchange as a scene interaction). state_graph.py:59-99 enumerates the decision nodes (exchange.commit/.read/.mode/.bind_entry/.counter/burst.continuation/contact.axis) as pluggable injection points where selection is imposed \u2014 the architecture is decision-node-aware, not hard-coded RNG.\n\nIntent DELIBERATE: the oracle autoresolves by design; the player-decision surface lives at the Key/contract + player_agency layer, which exists and is cited.\n\nResidual real gap: mapping the 14 design actions onto the wrapper's internal nodes and wiring player selection into the Godot port is not yet built (combat slice ports 2 of 11 modules, :828-838). That is the KNOWN Godot-port incompleteness (CLAUDE.md \u00a76; adjacent ED-911) \u2014 at most P3 tracked debt, not a novel \u03a9-collapse. Not a strict duplicate of a single tracked defect, so no duplicate_of; the candidate as framed (P1 \u03a9 autoresolve) does not survive."
+  }
+ },
+ {
+  "id": "gm-controls-npc-votes",
+  "subsystem": "faction_political",
+  "claim": "faction_layer_v30 \u00a75.8 explicitly delegates NPC faction voting to a human GM, contradicting the no-GM engine premise and Omega clause (c) autonomous world.",
+  "cite": "designs/provincial/faction_layer_v30.md \u00a75.8",
+  "criterion": "Omega",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:faction_political",
+  "refute": {
+   "finding_id": "gm-controls-npc-votes",
+   "verdict": "REFUTED",
+   "intent": "NOT-INTENDED",
+   "revised_severity": "P3",
+   "duplicate_of": "",
+   "evidence": "The literal string is real (faction_layer_v30.md \u00a75.8 L490: \"GM controls NPC faction votes\"), but the load-bearing framing \u2014 P1 Omega/autonomous-world contradiction, NEW \u2014 does not hold up.\n\n(1) Engine autonomy is materially satisfied: the SAME \u00a75.8 supplies a fully deterministic \"Guilds AI vote rule\" (against Blockade/Combined/Outlawry, for Subsidy, else reduce highest-Mandate faction; +ED-752 broker shift) \u2014 engine-resolvable. Niflhel is STRUCK (L494) and does not vote. So the only live seated NPC-only faction has an autonomous rule; the \"GM controls\" line is a vestigial header, not a functional handoff.\n\n(2) Multi-mode context: the doc is explicitly tri-mode (\u00a78 BG/TTRPG/Hybrid); \u00a78.2 TTRPG mode has a GM by construction. \"GM controls NPC votes\" is correct for TTRPG mode; the no-GM mandate targets the engine build, for which \u00a75.8 already ships the AI rule. The finding reads a TTRPG-mode line as the engine spec. Sibling residue (L345 \"Players/GM declare\", L362 \"GM adjudicates\") shows systemic dual-mode authoring residue, not a bespoke \u00a75.8 delegation.\n\n(3) Safeguarded by declared process: designs/architecture/videogame_mode_spec.md \u00a73 L171 (\"each design doc should be audited for 'GM' references and resolved during Godot extraction\") and \u00a74 L185 (\"GM adjudication \u2192 Engine handles all resolution. NPC AI + authored content + deterministic rules\") give a canonical, corpus-wide translation plan for exactly this residue. Per charter, a safeguarded artifact is not a standalone defect.\n\n(4) Not NEW: canon/editorial_ledger.jsonl ED-1061 (ratified 2026-07-01) fixed the identical \"GM picks\" Guilds defect at another site (params/contest.md / social_contest \u00a72 Step 3), explicitly labelling it \"a stale no-GM defect\" and treating it as a routine P2-class prose scrub (CANON-LEADS-CODE-FOLLOWS). \u00a75.8 is a sibling instance of that class ED-1061 did not sweep \u2014 cite ED-1061 as the class/tracking ref; tag KNOWN-UNTRACKED for this specific site, not NEW.\n\nSeverity vs North Star: fixing this widens no meaningful choice \u2014 the Guilds competitive-commercial voting dynamic already exists and is deterministic; scrubbing the sentence and porting the rule changes no decision space. Residual genuine debt: \"any other NPC-only factions\" (Schoenland/Altonia, \u00a78.1) lack an explicit vote rule, but they read as external powers whose Parliamentary seating is unstated \u2014 thin P3 debt, not choice-collapse. P1 overstated. Verdict: REFUTED as framed; honest residual is a P3 prose-scrub/port item covered by an existing standing process (videogame_mode_spec \u00a73) and ratified precedent (ED-1061). Full notes: /home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/refutations/refute_gm-controls-npc-votes.md"
+  }
+ },
+ {
+  "id": "sim-conviction-taxonomy-stale",
+  "subsystem": "conviction_track / sim",
+  "claim": "sim/personal/conviction.py's CONVICTIONS constant still implements the legacy 9-Conviction taxonomy rather than PP-684/PP-718's ratified 13-Conviction structured-concentration set, so the Godot-validating reference has not been migrated despite the design-level vetting passing.",
+  "cite": "sim/personal/conviction.py lines ~40-46",
+  "criterion": "Q-robust",
+  "direction": "bottom-up",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:npc_behavior (designs/npcs/npc_behavior_v30.md + designs/personal/conviction_track_v1.md)",
+  "refute": {
+   "finding_id": "sim-conviction-taxonomy-stale",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "scratch_file: /home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/refutations/refute_sim-conviction-taxonomy-stale.md\n\nLiteral fact TRUE but finding-as-framed fails. sim/personal/conviction.py L46-49 CONVICTIONS is the legacy 9-set (ED-641: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden); canonical is 13 (taxonomy_v30 \u00a72). Refutation:\n\n(1) Sim is faithful to its still-canonical source section. conviction_track_v1.md header (line 2) supersedes ONLY \u00a71 taxonomy; \u00a72 Scar table + \u00a73 Thread-Operation matrix \"remain canonical pending PP-718 review.\" The \u00a73 matrix (L70-77) \u2014 which the sim implements and its comment (L44-45) explicitly says it tracks \u2014 STILL uses legacy column names (Reason/Autonomy/Continuity). Sim adds Community+Warden = 9. It mirrors un-migrated-but-canonical \u00a73, not stale-vs-canon.\n\n(2) Causal story inverted: \"vetting passing\" = taxonomy_v30 \u00a77 vetting of the doc, not the \u00a73 Scar matrix, which canon has NOT migrated to 13. Upstream canon-authoring gap, not a sim porting failure; fixing the tuple in place would violate ED-1050 port\u2194oracle discipline (fix canon \u2192 re-export).\n\n(3) Safeguard present \u2192 DELIBERATE: comment L42-45 documents the legacy/superseded relationship and states the choice to track \u00a73 names. First-line \"Canonical 13-Conviction set\" is sloppy (then lists 9) but non-load-bearing.\n\n(4) Root is KNOWN-TRACKED: ED-1006 (open) flags the 3-way piety/conviction_track name collision and conviction_track_v1 canonical-sources absence \u2014 the true upstream cause. Finding cites neither ED-1006 nor PP-718.\n\n(5) Severity P1 overstated: conviction.py is a cyclic-pair stub (module-level state, [ASSUMPTION] markers, not wired into mc_v18); Godot port is 1/27 modules (personal_combat only, CLAUDE.md \u00a76) so \"Godot-validating reference\" is aspirational and the gap is inert today.\n\nResidual real debt (P3, preserved): once \u00a73 migrates, L189 no-ops Scars on Honor/Virtue/etc (Honor load-bearing per taxonomy_v30 \u00a78 D1), suppressing crisis\u2192arc-transition (\u03a9 personal-transformation). But blocked on canon \u00a73 authoring; module inert now. Fixing the tuple alone widens no choice and would desync from canonical \u00a73.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "articulation-thread-silence",
+  "subsystem": "articulation_layer_v30",
+  "claim": "Zero Thread/Coherence/Calamity/Gap/Rendering-Crisis/Dissolution hooks anywhere in the narrative-surfacing layer, despite these being explicitly narratively load-bearing (ED-681); no dedicated ED tracks this specific gap.",
+  "cite": "articulation_layer_v30.md (full-text absence); grounding 03_threadwork_surface.md \u00a73",
+  "criterion": "P-philosophy",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "KNOWN-UNTRACKED",
+  "tracked_ref": "grounding 03 \u00a73 (no dedicated ED found; distinct from combat-resolver ED-911)",
+  "threadwork": true,
+  "source": "dossier:Articulation Layer (PP-688) \u2014 designs/articulation/articulation_layer_v30.md",
+  "refute": {
+   "finding_id": "articulation-thread-silence",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "Notes: designs/audit/2026-07-04-ners-qualitative-audit/refute_articulation-thread-silence.md\n\nLiteral token-absence VERIFIED: grep of articulation_layer_v30.md shows zero Thread/Coherence/Calamity/Rendering-Crisis/Dissolution/Gap tokens; \u00a73.1's 10-trigger ruleset has no thread trigger. But the finder's INTERPRETATION (silence = inert/unsurfaced load-bearing narrative) is refuted by architecture:\n\n1. The layer is deliberately event-type-AGNOSTIC. \u00a75 Integration: \"subscribes to ALL Key emissions.\" \u00a73.2 significance operates on generic fields (stakes_weight from Key.scale_signature, no event-type gate). Thread Keys flow through the universal path with no dedicated hook by design.\n\n2. INTENT is explicit and safeguarded: ED-936 (resolved 2026-06-14, Jordan-delegated, logged for review) item (4): \"scene_event new types (thread_operation/\u2026) already consumed GENERICALLY by Procedure D scene_event; \u2026 articulation UNIVERSAL.\" That states, in the ledger, that thread ops need no thread-specific articulation hook. Jordan-vetoable \u2192 DELIBERATE.\n\n3. Thread events DO reach articulation: scene.thread_operation is a registered Key type (ED-935; PP-687 proposal 2026-04-30 \u00a7504 \"thread operations emit scene.thread_operation Keys; consumers read them\"). Sibling audit lens_threadwork_applicability.md line 38 calls it \"present but [STUB] payload \u2014 thin, NOT absent,\" directly contradicting the \"zero hooks/absence\" framing.\n\n4. Peninsula-scale thread calamities ARE surfaced: trigger #8 (env.peninsular_strain_shock severe/crisis) fires a cut scene; Tier 3 chronicle \u00a74.4 bullet 1 explicitly harvests env.crisis / peninsular_strain_shock=crisis for the opening paragraph.\n\n5. TRACKED, contra \"no dedicated ED\": the only genuine residual \u2014 thin scene.thread_operation payload \u2014 is tracked as DECISIONS.md item 29 / open_decisions KC-2 (ED-935 payload ratification, P3), per 2026-06-11-orchestration/...v4.md line 74 and 2026-06-28-distillation-coherence/verification_addendum.md A7. Not a duplicate of ED-911 (combat-resolver gap, different subsystem), but the topic is not untracked.\n\nNorth-Star re-severity: dedicated thread triggers would only marginally SHARPEN which thread beats guarantee a cut scene; thread ops already surface via (a) universal generic consumption, (b) trigger #8 + Tier 3 for calamity scale, (c) \u00a73.5 K/B/I significance bumps. The lone true residual \u2014 a personal-scale Rendering Crisis with no co-firing scar/belief/knot Key relying on accumulated-weight rather than a guaranteed cut scene \u2014 is Stage-8c calibration/payload debt, not a P1 blocker. Fixing it does not materially widen meaningful choice or emergence. P3.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "four-games-collapse-one-pattern",
+  "subsystem": "social_contest",
+  "claim": "The four adjudicator games reduce to one venue-invariant optimum (coalition + Revealing-matching-known-boost + Recall-spam, skip Appraise/Obscuring/defense); only the doubled attribute varies, so the subsystem has a solvable strategy.",
+  "cite": "params/contest.md \u00a7Pools + composite of the five lines above (hunt_social_minmax.md L-A..L-F)",
+  "criterion": "Omega",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "hunt:social_minmax",
+  "refute": {
+   "finding_id": "four-games-collapse-one-pattern",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P2",
+   "duplicate_of": "workplan #39 / J-31-extended \u2192 LA-19 (critique 2026-06-28); components ED-297, ED-1060",
+   "evidence": "scratch_file: designs/audit/2026-07-04-ners-qualitative-audit/verify/refute_four-games-collapse-one-pattern.md\n\nREFUTED as framed on two independent grounds.\n\n(1) \"Venue-invariant\" is factually false. params/contest.md \u00a7Pools (L19-22): the Argue primary attribute VARIES by venue \u2014 Expert Judge/Panel = Cognition\u00d72, Crowd = Charisma\u00d72, No Adjudicator = Attunement\u00d72. \u00a7Proceeding Types (L185-196): Church Tribunal opens Conjectural stasis (Memory primary) while the other 7 open Qualitative (NO primary genre), so the \"match stasis-primary genre\" step also differs by venue. Proceedings are institutionally imposed (Church Tribunal on investigation, Royal Audience on petition, asymmetric roles); the hunt's own note L76-77 concedes venue-shopping needs the player to \"control proceeding type,\" which is often false \u2014 so you cannot always deploy your doubled attribute, and a versatile build/diverse coalition IS required = meaningful choice, not a solved strategy. The armature (\u00a7CR6 L164) is venue-specific and buys the full ARMATURE_MAX_DSIGMA = 0.50\u03c3 (\"moderate\", confirmed sim/personal/contest/_kernel_tests.py L1500-1504, armature.py L67) \u2014 a real leverage comparable to Recall, not the negligible nudge the finding dismisses. It is the Stage-3 differentiator that just landed.\n\n(2) NOT NEW / NOT P1 \u2014 this is a re-report of a tracked, already-adjudicated design lane. designs/workplans/valoria_master_workplan_v5.md row #39 (J-31-extended \u2192 LA-19) states the identical headline: the contest is a \"mature ag\u00f4n that collapses the other three deliberative functions (bargain/truth/unity) and three Caillois families (alea/mimicry/ilinx) onto the single zero-sum Persuasion Track,\" backed by the 38-finding critique 2026-06-28-social-contest-deliberation-critique/critique.md (0 refuted) and explicitly ruled \"design-tier (mostly P2/P3 seam-closure; NO new P1).\" The corpus's own name for the fix is literally \"four games\": HANDOFF_SC.md L60-88 shows contest rebuild Stages 0-3 DONE with Stage 4 (\"four games\") the NEXT unbuilt stage (venue differentiation via Dowlen lottery / liberum-veto consensus / Putnam two-level). The charter calibration list says exactly \"Stages 0-3 done, Stage 4 next.\" Auditing pre-Stage-4 flatness as a novel Omega P1 is the charter's named audit-failure.\n\nIntent DELIBERATE and safeguarded: coalition dominance is RATIFIED as intended (params L367, ED-297, parliamentary-politics / N-Necessity); Obscuring-domination is tracked-open with the Terminal Doubt fix specified (ED-1060, params L116-121); Face/Rattled inertness is a transient not-yet-wired Stage state (params L146), not a design defect. The composite is a ratification-gated sequencing choice, not an accidental degenerate collapse.\n\nResidual genuinely-new: L-A (no GLOBAL bonus cap while genre/boost ARE capped at +2D, params L63) and L-B (the +1D boost is a memorizable 7-row public lookup). Real, untracked, but P2 tuning/legibility \u2014 they do NOT establish subsystem solvability and belong as a separate narrow finding, not as support for a P1 venue-invariance collapse. Revised severity P2, matching the corpus's own ruling on the identical phenomenon."
+  }
+ },
+ {
+  "id": "massbattle-general-duel-decap",
+  "subsystem": "mass_battle / scale-transition (Mass\u2194Personal)",
+  "claim": "A combat-optimised PC can risk-free-decapitate any enemy army via repeated General Duels \u2014 ED-898's PC no-death guarantee removes all downside while incapacitating the enemy general zeroes their Command and floors their whole army, so 'the general is the battle' becomes a dominant mass-layer bypass that flattens all of Part A.",
+  "cite": "scale_transitions_v30.md \u00a73.7; mass_battle_v30.md \u00a7A.1 axiom, \u00a7A.5 (ED-898), \u00a7A.6/PP-273",
+  "criterion": "Omega",
+  "direction": "diagonal",
+  "severity": "P1",
+  "novelty": "NEW",
+  "tracked_ref": "",
+  "threadwork": false,
+  "source": "hunt:massbattle_minmax",
+  "refute": {
+   "finding_id": "massbattle-general-duel-decap",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The claimed dominant bypass does not exist as described. Five text-grounded errors: (a) NO forcing mechanism \u2014 grep of mass_battle_v30, scale_transitions_v30, designs/scene/ for single-combat/challenge/must-accept returns nothing; a duel requires BOTH generals to enter personal combat (bilateral, PP-506 \u00a7A.5), and a unilateral entry merely PAUSES the whole battle (\u00a7A.5), so a command-dominant enemy general \u2014 the exact Command=7 case the axiom targets \u2014 simply declines and keeps commanding. \"Decapitate ANY enemy army\" is false: the target must consent. (b) Symmetric self-penalty \u2014 \u00a7A.5 \"General in personal combat: suspends all Command effects\" applies to the PC too; a bilateral duel drops BOTH armies to the PP-273 1D floor / Line / no-tactics for up to 5 turns, so the PC surrenders their own generalship, the opposite of a free lever. (c) \"Risk-free\" conflates ED-898's no-DEATH with no-DOWNSIDE: the PC must WIN the personal combat, and losing means the PC is incapacitated and, if their side loses the field, CAPTURED (world-layer ransom/imprisonment) \u2014 ED-898's ledger entry deliberately keeps capture as the worst outcome. (d) Not instant-zero: \u00a7A.5 Stage 1 only HALVES Command (min 1); Stage 2 (Command 0) fires only the FOLLOWING turn's Phase 5 and only if the enemy fails a Medicine Ob 2 stabilise save. (e) Floored \u2260 destroyed: at Command 0 units fight at the PP-273 1D floor (still fighting, rout/cascade still resolve), and ED-898's symmetry means the PC cannot kill the enemy general either, with capture-if-field-lost requiring the PC's side to actually win the field. Intent is clearly DELIBERATE: \"the general is the battle\" is an explicit design axiom (\u00a7A.1); ED-898 is an explicit Jordan directive 2026-06-01 (ledger); and PP-232/PP-506/PP-273/1-exchange-per-turn/max-5/Ob-2-re-establish form a stack of deliberate safeguards, with ED-441 specifically closing the bilateral case. Not tracked because there is no defect to track. Residual is thin: a low-Command/high-personal-combat champion trading own-command to neutralise a command-strong foe is a bounded, consent-gated, dramatically-legible design space (empty \u00a73.7 infill leaves enemy-AI-decline behaviour unspecced \u2014 a minor Godot spec gap), not a \u03a9-collapsing dominant strategy. Full notes: /home/user/ttrpg/undefined/refute_massbattle-general-duel-decap.md",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "hegemony-accord-exemption-solves-gd1",
+  "subsystem": "faction/victory (GD-1)",
+  "claim": "GD-1 is dominated by a treaty-hegemony line: qualifying treaties make rival territory count toward the 15, exempt it from Accord>=2, AND lower Turmoil, so 'sign 3-4 treaties + hold one province' strictly beats conquer-and-govern and makes the settlement/Accord/Govern game optional for victory.",
+  "cite": "peninsular_strain_v30.md \u00a76 L432 (Accord exemption) + L351 (treaty territory counts) + ED-791; victory_v30.md \u00a70 effective hegemony; strain \u00a74.2 (treaties reduce Strain)",
+  "criterion": "Omega",
+  "direction": "diagonal",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "hunt:faction_minmax",
+  "refute": {
+   "finding_id": "hegemony-accord-exemption-solves-gd1",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P3",
+   "evidence": "The three mechanical legs are individually TRUE: treaty-bound rival land counts toward the 15 (peninsular_strain_v30 \u00a76.1 L425); it is exempt from the hegemon's Accord\u22652 win-check (\u00a76.1 L432); treaty pairs decay Strain \u22121 each, cap \u22122/season (\u00a74.2 L309). But the dominance SYNTHESIS fails on four safeguards the finder missed.\n\n(1) Turmoil \u22646 is GLOBAL: \u00a74.1 L296 advances Strain +1 \"per territory at Accord \u22641 controlled by ANY playable faction.\" The \u00a76.1 exemption removes only the hegemon's win-check duty over subordinate land \u2014 not that land's contribution to global Turmoil. \u00a76.1 L432 itself says \"the legitimacy question belongs to the subordinate.\" So Govern is not optional, it is delegated: subordinates either govern (a legitimate Pax victory) or Turmoil breaches 6 and blocks the win.\n\n(2) Treaty decay cannot outrun instability: \u22122/season cap (\u00a74.2) vs +3/season territory-instability (\u00a74.1); the finder's own cited \u00a74.2 L312 example nets +1 Strain even with 3 treaty pairs when land is ungoverned.\n\n(3) ED-791 (ledger line 271) is a SAFEGUARD the finder mis-cited: it restricts qualifying treaties to genuine-subordination types because \"only subordination-treaties create effective sovereignty.\" Capitulation requires the rival at Stability \u22641 OR having lost \u226550% of territories (faction_layer_v30 \u00a71.2 L105); institutional-domination needs rival Mandate \u22641 / hegemon \u22655. A qualifying treaty presupposes the rival was already subjugated \u2014 \"sign 3\u20134 treaties\" is the capstone of conquest/dominance, not a cheap substitute. (Doc text \u00a76.1 L430 over-lists Peace/Alliance vs ED-791's narrower resolution \u2014 a real but SEPARATE propagation-drift bug that cuts against the finding.)\n\n(4) Treaties are breachable at survivable cost (\u00a71.2 L108: Mandate \u22122, Stability \u22121, Casus Belli), and the hegemon's own province still needs Accord\u22652 (\u00a76.1 L423).\n\nIntent DELIBERATE: ED-306 deprecation (ledger line 7) states victory is \"eliminate all rival factions OR subjugate them via diplomacy/treaties\"; \u00a74.2 frames treaties as \"the Roman Pax expressed mechanically.\" Diplomatic subjugation is an intended first-class avenue that WIDENS choice, with non-dominance protected by safeguards 1\u20133. Not tracked as a defect anywhere (no decision-queue/HANDOFF_FA/ledger item); not a duplicate.\n\nResidual (P3, Q-robust iterate-not-reject): IF NPC subordinates self-govern reliably, a hegemon could inherit a governed peninsula cheaply \u2014 an AI/balance-tuning question, not a spec dominance flaw, speculative without the sim. scratch_file: /home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/findings/refute_hegemony-accord-exemption-solves-gd1.md"
+  }
+ },
+ {
+  "id": "autonomous-world-gm-hole",
+  "subsystem": "faction_political / autonomous-world clause",
+  "claim": "The autonomous-world Omega clause has a literal hole: faction_layer_v30.md delegates NPC faction voting and partial-ratification adjudication to a human GM inside an explicitly no-GM engine, so under zero player input the NPC-only-faction Parliamentary votes have no autonomous resolver.",
+  "cite": "designs/provincial/faction_layer_v30.md L490 ('GM controls NPC faction votes'), L362 ('GM adjudicates')",
+  "criterion": "Omega",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "KNOWN-UNTRACKED",
+  "tracked_ref": "surfaced in faction_political dossier this session; no ED",
+  "threadwork": false,
+  "source": "lens:emergent_narrative",
+  "refute": {
+   "finding_id": "autonomous-world-gm-hole",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "Both cited lines exist verbatim: faction_layer_v30.md \u00a75.8 L490 (\"GM controls NPC faction votes\") and \u00a73.3 Phase 3 L362 (\"Partial | ... GM adjudicates\"). But the core claim \u2014 NPC-only-faction votes have \"no autonomous resolver\" \u2014 is FALSE. \u00a75.8 L492, the line immediately after L490, supplies a fully DETERMINISTIC Guilds AI vote rule (\"Always votes against Blockade/Combined Embargo+Blockade; Votes for Subsidy; Votes against Outlawry; Otherwise votes to reduce the highest-Mandate faction's power\") plus a deterministic settlement-broker \u00b11 shift (ED-752). Guilds is the primary NPC voter; the other named NPC faction, Niflhel, is STRUCK (L494: \"do not hold Parliamentary seats and do not vote\"). So every concrete NPC voter the doc names is resolved autonomously \u2014 the \"literal hole\" is refuted.\n\nIntent is DELIBERATE with a tracked remediation path, not an accidental hole. The \"GM\" language is valid TTRPG-mode content: \u00a78.2 TTRPG Mode is an explicit human-GM tabletop mode in a TTRPG/BG/videogame fusion. The no-GM videogame conversion is a KNOWN, tracked work stream: designs/godot/gm_to_engine_conversion.md (\"deterministic engine rules for every 'GM' action in videogame mode\") is a Conversion Registry already covering contest/combat/threadwork/fieldwork/investigation, stale-banner \"Tracked by ED-1054,\" governed by godot_conversion_strategy_v1.md. ED-1061 (ratified 2026-07-01) is an executed instance of exactly this sweep \u2014 the contest \"GM picks\" Guilds boost was flagged \"a genuine defect under the no-GM mandate\" and converted to a deterministic context-derived rule (prose first, then code), establishing the precedent for closing any residual GM reference.\n\nThe only genuine residual is the faction-agnostic \"GM adjudicates\" partial-ratification clause (L362) and the open-ended \"any other NPC-only factions\" tail (no live faction occupies it \u2014 \u00a78.1 NPC factions Guilds/pre-coup L\u00f6wenritter/Schoenland/Altonia lack defined Parliament-seat vote rules). This is stale-GM conversion debt of the ED-1054/ED-1061 class, trivially closable by the ED-1061 pattern (derive a deterministic tie-break), not a structural autonomous-world blocker.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "no-interaction-model-6of7-scales",
+  "subsystem": "cross-scale player interaction",
+  "claim": "Only Ag\u00f4n contest has a current-era player-interaction model; combat, domain/settlement governance, faction strategic, thread ops, mass battle, and season-close/articulation have none and no live index entry commissioning one, so the GM-removal mandate the walkthrough exists to satisfy is unmet for ~6 of 7 scales.",
+  "cite": "designs/audit/2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md (scoped to 'the one game fully built'); CURRENT.md (no player-interaction rows for other scales)",
+  "criterion": "Q-robust",
+  "direction": "top-down",
+  "severity": "P1",
+  "novelty": "NEW",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "lens:playability_legibility",
+  "refute": {
+   "finding_id": "no-interaction-model-6of7-scales",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "Scratch: designs/audit/2026-07-04-ners-qualitative-audit/refutations/refute_no-interaction-model-6of7-scales.md. The literal fact holds \u2014 player_interaction_walkthrough_v1.md is DRAFT, explicitly scoped to \"the one game that is fully built (Ag\u00f4n)\" (\u00a7intro L12-13), so only Ag\u00f4n has a current-era walkthrough. But the finding's two load-bearing claims fail: (1) \"6 of 7 scales have NONE\" is FALSE \u2014 designs/ui/valoria_ui_ux_v4_1.md is a CANONICAL \"Godot-development-ready interface specification,\" 14 parts + appendices, each Part carrying a \"What the player sees\" surface, rendering all 19 v30 design docs (combat, settlement, faction, thread, etc.) \u2014 a player-facing/GM-removal surface for every scale; it is pre-d+\u03c3 (2026-04-16) hence stale, but not a void. (2) \"No live index entry commissioning one\" is FALSE \u2014 references/canonical_sources.yaml \u00a7ui_ux (L493-496) registers it as a live canonical source, not in supersession_register, not retired. The finder's own lens doc (lens_playability_legibility.md \u00a711,28-29) narrowed to \"current-era\" to sidestep the UI spec, but the FILED finding drops that qualifier and asserts an absolute void. Intent is DELIBERATE and safeguarded: decision 5 (2026-07-01, HANDOFF.md/HANDOFF_SC.md L54-61) makes the player-interaction model a NEW standing deliverable deliberately piloted on the one fully-built game first, with Stage 4 owning per-game divergence and \u00a74/\u00a75 of the walkthrough explicitly building for generalization; even within contest only 1 of 4 games is built (Stage 4 next per charter); the Godot player-facing surface is PROPOSED/Gate-0-unexecuted/1-of-27-modules by design (CLAUDE.md \u00a76). CLAUDE.md \u00a710/holonic doctrine \"promote a role only after it recurred\" is exactly this pilot-then-generalize discipline. So this is deliberate-WITH-safeguard, not accidental or unsafeguarded \u2014 fails the CONFIRMED gate. Not a ledger duplicate (no ED tracks a cross-scale player-model gap; decision 5 is contest-scoped).",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "tw-articulation-no-render-path",
+  "subsystem": "articulation_layer_v30",
+  "claim": "The sole narrative-surfacing layer has literally zero Thread/Coherence/Calamity/Gap/Rendering hits, so the corpus's densest collision feed (thread\u2192faction/settlement/NPC per ED-673/675/676) computes but never reaches the player; ED-681 authored 4 thread narrative beats explicitly for the videogame with no consuming trigger.",
+  "cite": "designs/articulation/articulation_layer_v30.md (grep: 0 hits); grounding 03 \u00a73",
+  "criterion": "P-philosophy",
+  "direction": "diagonal",
+  "severity": "P1",
+  "novelty": "KNOWN-UNTRACKED",
+  "tracked_ref": "",
+  "threadwork": true,
+  "source": "lens:threadwork_applicability",
+  "refute": {
+   "finding_id": "tw-articulation-no-render-path",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The literal grep is true \u2014 articulation_layer_v30.md has 0 thread-substrate word hits \u2014 but that is load-shifting: the layer names NO subsystem's mechanics because it is deliberately Key-type-agnostic. \u00a75 states it \"subscribes to all Key emissions\" (PP-687 \u00a74.1 step 5); the callback runs for every Key. Thread state therefore surfaces through generic paths: \u00a72.2 Memory salience (top-10 by recency\u00d7salience, all keys), \u00a72.1 Concern queue, \u00a73.3 accumulated_narrative_weight (accumulates for every key's targets), and \u00a74.3 Tier 3 chronicle universal track (top-N across ALL keys). Thread ops DO emit Keys and articulation is a DECLARED consumer: key_type_registry_v30.md has scene.thread_operation (L129) and meta.thread_woven (L841) emitted by threadwork; the key type at L405 carries a coherence_cost field and L410 lists consuming_systems:[scene_timer, articulation, audit] \u2014 articulation is EXPLICITLY a consumer of a Coherence-bearing Key. \"articulation\" appears in consuming_systems 41\u00d7 in the registry. So \"computes but never reaches the player / inert\" is false. On ED-681: threadwork_v30 \u00a73.7 \"Rendering Crisis \u2014 Narrative Structure (ED-681)\" (L715-727) is the PROTAGONIST's own first-person played scene arc (4 beats with rolls, Companion Commentary, Coherence deltas \u2014 \"their existential season\"), whereas Tier 2 cut scenes are by definition for NON-protagonist events (\u00a72/\u00a73). A played protagonist arc needs no cut-scene trigger \u2014 it is maximally surfaced, the opposite of inert; \"no consuming trigger\" is a category error. (Ledger aside: ED-681 in editorial_ledger.jsonl is the RM Presence/Community-Organizing item; a _migration_alt already flags \"rendering crisis narrative structure\" as an ID-CONFLICT for Jordan \u2014 the cited number is itself ambiguous.) The all-emissions subscription is a deliberate architecture, hence DELIBERATE. Residual truth, much narrower: \u00a73.1's 10-trigger Tier 2 whitelist lacks a DEDICATED trigger for a non-protagonist NPC practitioner's Rendering Crisis / Dissolution / Gap-manifestation \u2014 but those still reach the player via accumulated weight + chronicle + salience, so not inert, only lacking a guaranteed cut scene. The whitelist is a sim-grown curated list (belief_revised carry-forward header; triggers 9/10 added via Stage-8b/Stage-10); a thread trigger is addable the same way. That residual is a Q-smooth legibility refinement, not a North-Star-blocking gap. Not a duplicate of ED-911 (combat-specific); no articulation-thread ED exists, and the residual doesn't warrant P1. Full notes: /tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/refute_tw-articulation-no-render-path.md",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "pc-legibility-fails",
+  "subsystem": "personal_combat",
+  "claim": "The dramatic-legibility test fails from this subsystem's state alone \u2014 no goal/intent field, no political-stake naming, no season-clock hook; the fight resolves as a synchronous numeric event.",
+  "cite": "designs/scene/scene_combat_v1/scene_combat_design_v1.md \u00a7Roll-up; designs/scene/combat_engine_v1/wrapper.py (no disposition/intent surfaced as narration)",
+  "criterion": "Q-robust",
+  "direction": "top-down",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:personal_combat",
+  "refute": {
+   "finding_id": "pc-legibility-fails",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The claim misapplies the criterion and is factually wrong on its core assertions.\n\n(1) Criterion misapplication. The dramatic-legibility test is a GAME-STATE/screen-level bar (\"a human and a screen,\" workplan_v2_throughline_2026-04-26 \u00a75; 01_criteria \u00a7(a),(e)), not a per-subsystem-isolation gate. Judging the innermost 1v1 tactical resolver \"from this subsystem's state alone\" is a category error \u2014 season-clock hooks and political-stake NAMING belong to the wrapping layers (scene-slate, faction, articulation = universal sink, 02_interdependency edge 11), not the dice engine. 01_criteria \u00a7(e) cites 2026-05-08-meta-audit-immersion: a system \"can pass N/E/R/S and still destroy immersion if it surfaces too much of itself.\" A resolver deliberately not narrating its internals is a virtue, not a defect.\n\n(2) \"no goal/intent field\" \u2014 FALSE. wrapper.py models disposition/intent live: disp_lean / DISP_INIT_K (aggressive drifts Vor up, cautious cedes, lines 59-61), tradition channel-weights (line 146), commit_depth skewed by disposition+wariness (line 135).\n\n(3) \"no disposition/intent surfaced as narration\" \u2014 FALSE. The TRACE SEAM (wrapper.py lines 8-15) exists explicitly so \"the narrator and the branch explorer can reconstruct\" every branch; each decision node _emit()s its inputs. Narration is a deliberately separate layer (\"the engine emits facts; probability math lives in the workbench\").\n\n(4) \"resolves as a synchronous numeric event\" \u2014 correct-by-design and NOT inert. scene_combat_design_v1.md \u00a7Roll-up emits scene.combat_resolved{outcome,participants,casualties,wounds_inflicted} + per-bout scene.combat_felled{by_actor}. \u00a7Churn-positivity is an explicit axiom: by_actor\u2192NPC grudges, outnumber\u2192swarm lethality, rout/withdrawal\u2192faction ripples, wounds\u2192scars \u2014 safeguarded by the WS-1 coverage harness flagging any inert transition.\n\nIntent: DELIBERATE. Wrap-never-fork (\u00a7Architectural stance) + articulation-as-sink is an intentional scale separation; the trace seam is a purpose-built narration hook.\n\nGenuine residual: combat's out-edge does not yet reach the political layer \u2014 scene.combat_resolved is declared-but-unconsumed (02_interdependency edge 2; module_contracts personal_combat gap_notes) and combat lacks a threadwork interface (ED-911, KNOWN P1, charter calibration list). That known wiring gap, not a NEW Q-robust legibility failure, is all that survives \u2014 and re-badging it as novel is the calibration failure the charter forbids. Not a clean duplicate_of ED-911 (that is resolution-scope, ranged/group/thread), so left unset. Revised severity P3: debt on wiring an existing, already-tracked out-edge.\n\nscratch_file: designs/audit/2026-07-04-ners-qualitative-audit/refute_pc-legibility-fails.md",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "scene-mass-bonus-unconsumed",
+  "subsystem": "mass_battle",
+  "claim": "The \u00a73.8 Scene\u2192Mass bonus table (Social/Investigation/Combat win modifiers) is declared in scale_transitions_v30.md but never referenced or hooked anywhere in mass_battle_v30.md's own 7-phase turn structure.",
+  "cite": "scale_transitions_v30.md \u00a73.8; mass_battle_v30.md \u00a7A.7 (no PP-261/ED-151 reference found)",
+  "criterion": "Q-smooth",
+  "direction": "diagonal",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:mass_battle",
+  "refute": {
+   "finding_id": "scene-mass-bonus-unconsumed",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "Literal fact verified: mass_battle_v30.md \u00a7A.7 (L362-456) never cross-cites \u00a73.8/PP-261/ED-151. But the DEFECT characterization (\"unconsumed / hooked nowhere\") is refuted on three grounds. (1) Correct source-of-truth locality: scale_transitions_v30 is the canonical home for all eight cross-scale handoffs \u2014 its coverage table (L315) reads \"the eight handoffs (\u00a73.1-\u00a73.8) | covered.\" \u00a73.6 Thread\u2192Mass works identically: spec lives in scale_transitions, forward-references INTO mass_battle \u00a7A.10; the engine doc is not expected to re-declare incoming inputs, and duplicating would violate CLAUDE.md \u00a78 \"every rule lives once.\" (2) Not orphan state \u2014 the three modifiers land on named quantities the \u00a7A.7 engine already computes: Command (Phase 1/Phase 5 Effective Pool, L440-443), first Volley (Phase 2, L379), Reform action (Reform Phase, L185). A standard modifier on standard quantities, applied by the transition layer. (3) It IS carried in integration surfaces: params/scale_transitions.md L27 restates the full table; references/mechanical_terms_index.md L1308 indexes \u00a73.8 \u2014 contradicting \"never referenced anywhere.\" Intent evidence: the eight-handoff single-source architecture is deliberate and safeguarded (mirrors \u00a73.6). The transition's genuinely-open facet (modifier-value calibration + whether unresolved combat carries across phases) is already TRACKED: tests/sim/sim_h01_to_h07 L300/468/509 flag ED-151 as PROVISIONAL / P1-BLOCKER; params/factions.md L21 + riskbreakers_identity.md L88 carry \"ED-151 Resolution \u2014 Scene\u2192Mass [FLAGGED].\" Two genuine residuals exist but are DISTINCT from the finder's claim and not P2: \"most relevant unit\" is under-adjudicated for a no-GM engine (this is the ED-151 calibration question, not \"never hooked\"); and a backwards-axis patch-citation collision \u2014 PP-261 corpus-wide means the Coherence-0\u2192NPC threadwork transition (knots_v30 L242, ED-1011), while ED-151's backing conflicts across PP-328/PP-244/PP-261. The North Star cross-scale incentive (win a social scene \u2192 army fights better) is already live and specified where it belongs; fixing the finder's stated item widens no choice-space. Full notes: /home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lanes/refute_scene-mass-bonus-unconsumed.md",
+   "revised_severity": "P3",
+   "duplicate_of": "ED-151"
+  }
+ },
+ {
+  "id": "generalship-dominance-axiom",
+  "subsystem": "mass_battle",
+  "claim": "The stated design axiom \"Command=7 vs Command=1 produces a near-certain outcome before a die is rolled\" is DELIBERATE but sits in direct tension with the charter's \u03a9 non-dominance clause and the Q-robust three-viable-approaches test.",
+  "cite": "mass_battle_v30.md \u00a7A.1",
+  "criterion": "Omega",
+  "direction": "top-down",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:mass_battle",
+  "refute": {
+   "finding_id": "generalship-dominance-axiom",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "Axiom text verified: mass_battle_v30.md \u00a7A.1 (L36-38) states generalship dominates and 7-vs-1 Command produces a near-certain outcome; \"intentional\"/\"axiom\" \u2192 DELIBERATE. The claimed \u03a9 tension is a category error against the corpus's OWN definition. throughlines_meta_infill.md \u00a7Dominant-strategy (L376): a dominant strategy is \"A choice that pays more than alternatives in all situations... dominance requires context-independence.\" Generalship dominance fails all prongs: (a) Command is not a free choice \u2014 it is a derived stat (\u00a7A.5, from Charisma+Cognition, clamp 1-7) or narratively assigned, scarce and paid for; (b) not context-independent \u2014 7-vs-1 is the maximum gap; at parity Command the outcome is decided by formations (\u00a7A.6 \"No formation is universally dominant\"), splitting with counters (\u00a7A.8 PP-508), terrain (\u00a7A.9), composition (\u00a7A.2), threadwork (\u00a7A.10); (c) \"every action pays what it buys\" holds \u2014 a better general is paid for. A legible resource asymmetry is what \u03a9-a (traceable consequence) wants, not what \u03a9-d forbids. The Q-robust three-viable-approaches exemplar (throughlines_meta_infill.md L239, \"bypass/assault/siege\") is a strategic-layer test the finder mis-scopes onto a single stat axis; those approaches are untouched, and within-battle approaches persist at parity Command. Deliberate AND safeguarded (fails the CONFIRMED bar): \u00a7A.7 ED-753 explicitly ranks generalship dominant \"while preserving tactical relevance\"; N-Necessity is grounded bottom-up in ledger ED-1014 (\"generalship>numbers, Biddle 2004\"; formation-alone weak at equal command, Burkholder 2007) and ledger ED-875 (Jordan resolve-all 2026-06-20, high low-Command leverage kept \"as intended,\" citing Total War/Field of Glory). No HANDOFF lane or the 23-item decision queue frames this as an \u03a9 conflict (grep empty), so it is neither a defect nor a duplicate. Re-judged vs North Star: flattening command would shrink the general-as-protagonist's narrative weight (\u03a9-b) and reduce dramatic legibility \u2014 the foregone conclusion is the very signal that drives strategic-layer choice (avoid/maneuver/replace). The axiom supports emergence rather than collapsing it. Full notes: scratch_file.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "orientation-payoff-unwired",
+  "subsystem": "social_contest",
+  "claim": "Orientation (Revealing/Obscuring) only structurally derives CLASH/REINFORCE/CROSS in code; the CR5 Doubt-Marker/self-Face-backfire payoff that gives Obscuring its risk/reward shape is a design-table commitment the resolver does not yet consume.",
+  "cite": "sim/personal/contest/dictionaries.py ~171-228 (scope_note), asserted at _kernel_tests.py:842-843",
+  "criterion": "Q-robust",
+  "direction": "bottom-up",
+  "severity": "P2",
+  "novelty": "KNOWN-UNTRACKED",
+  "threadwork": false,
+  "tracked_ref": "overlaps ED-1060 (Terminal Doubt, still open) but the general resolver-non-consumption is only a code scope_note, no dedicated ED",
+  "source": "dossier:social_contest",
+  "refute": {
+   "finding_id": "orientation-payoff-unwired",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The core claim \u2014 that the CR5 self-Face-backfire payoff is \"a design-table commitment the resolver does not yet consume\" \u2014 is false. rhetoric.py (header \"Stage 3 / Gate C\") defines cr5_self_backfire, and resolver.py:380 imports it and resolver.py:404-419 CALLS it on the resolution path: backfire = cr5_self_backfire(style_key, landed=(deg>=1), my_standing=c.face.v) \u2192 c.face.strip_points(backfire). The ED-1062 ledger entry's own words describe \"the now-WIRED CR5 self-Face strip channel\" (ratified Jordan, Gate C, 2026-07-02). So the self-Face backfire \u2014 the RISK half of the payoff the finding names \u2014 is implemented and consumed.\n\nThe finding's cited scope_note (dictionaries.py:228, \"resolver does not yet consume orientation\") is a Stage-2-era note scoped narrowly to the DOUBT_MARKER TERMINAL-at-close behavior, whose remit is explicitly \"for Stage 3 to implement.\" Stage 3 has since landed. _kernel_tests.py:842-843 only asserts that string is present in the flag \u2014 it is a self-consistency check, not evidence of global non-wiring. The scope_note now reads stale (P3 doc debt).\n\nThe one genuinely-unconsumed residual is the Doubt Marker's terminal-at-close \u22122, which is exactly ED-1060 (\"Terminal Doubt\"), status \"OPEN DECISION FOR JORDAN (provisional pending ratification)\" (dictionaries.py:200-234). This is TRACKED: handoffs/HANDOFF_SC.md:68-69 records the Terminal-Doubt design in the SC lane; ED-1060 appears 3\u00d7 in editorial_ledger.jsonl. The finding's own tracked_ref concedes the overlap, so KNOWN-UNTRACKED is mislabeled \u2014 it is KNOWN-TRACKED (ED-1060).\n\nIntent is DELIBERATE and safeguarded: opt-in armature gating (self.armature.cr5) preserves Stage-0..2 byte-parity (armature.py:407 \"bit-for-bit unchanged\"); ED-1062 ratified keeping both CR5 halves together by explicit decision; ED-1060 flagged open-for-Jordan with a documented fork and swap. Nothing accidental.\n\nSeverity: Obscuring's risk/reward choice architecture already exists and is wired behind an opt-in flag; the merits path (Revealing\u2192Persuasion) is live. Fixing \"this finding\" does not materially widen meaningful choice \u2014 the choice is present; only a staged rollout flag plus one tracked terminal micro-decision (ED-1060) remain. Not P2. Residual is P3 (stale scope_note comment + already-tracked open decision). See scratch notes for full citations.",
+   "revised_severity": "P3",
+   "duplicate_of": "ED-1060"
+  }
+ },
+ {
+  "id": "thread-absent-from-faction-engine-math",
+  "subsystem": "faction_political",
+  "claim": "The faction behavior engine's own \u03b1/\u03b2/\u03b3/\u03bb formulas take no Thread/Coherence/Calamity input, only generic env.* shocks \u2014 P-14 inseparability is unmet at the mechanism level here specifically, not just generally.",
+  "cite": "designs/provincial/faction_behavior_v30.md \u00a73.4.2",
+  "criterion": "P-philosophy",
+  "direction": "diagonal",
+  "severity": "P2",
+  "novelty": "KNOWN-UNTRACKED",
+  "threadwork": true,
+  "source": "dossier:faction_political",
+  "refute": {
+   "finding_id": "thread-absent-from-faction-engine-math",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The surface observation is TRUE: faction_behavior_v30 \u00a73.2.3/\u00a73.4/\u00a73.5 \u03b1/\u03b2/\u03b3/\u03bb formulas carry no Thread/Coherence/Calamity term, and \u00a73.4.2 consumes only generic env.peninsular_strain_shock. But the finding's DEFECT framing is refuted on three grounds.\n\n(1) P-14 misread. canon/02_canon_constraints.md P-14 FAIL test governs whether \"thread OPERATIONS\" fire three-dimensional co-movement in every play mode \u2014 NOT whether a subsystem's scalar update reads Thread state. The faction accounting engine performs no thread operations, so P-14 is not triggered here; when thread ops occur, co-movement fires (threadwork_v30 \u00a74). The finding conflates \"no Thread term in \u0394PS\" with \"P-14 unmet,\" which the constraint's own text does not support.\n\n(2) Thread\u2192Faction coupling exists and is deliberately located in the Key/Echo substrate, not the formula: scale_transitions \u00a73.5 (\"the thread op IS the Domain Action\"), \u00a75.6 Thread Domain Echo, faction_behavior \u00a75.2 ED-936 note (scene/thread\u2192faction via Domain Echo at Sufficient Scope). This is the holonic doctrine working as intended \u2014 CLAUDE.md \u00a710 / ED-1083 \u00a72 guardrail: \"implement the local rule only; declared I/O only; never grow a scale-local interface dialect.\" A faction engine reaching directly into Coherence/Thread scalars would VIOLATE that doctrine (shape divergence). \u00a73.4.2's env-shock shape IS the sanctioned cross-scale pattern; Calamity reaches it via calamity_radiation\u2192strain.\n\n(3) Intent evidence: ED-936 (resolved 2026-06-14) deliberately authored the scene/thread\u2192faction Domain-Echo wiring. ED-777 (Jordan 2026-05-09) dissolved Niflhel \u2014 \"not a faction\u2026 not threadwork-related\" \u2014 and ED-679's Thread-Warfare NPC-AI doctrine (its target) was never propagated. Jordan actively removed the thread\u2194faction-AI coupling this finding wants.\n\nTracking: no pre-existing defect ED; grounding 03 \u00a73 already notes the \"no mechanical hook into faction AI\" observation, but that is the audit's own map. No duplicate ED.\n\nNorth Star: the thread\u2192faction consequence channel already exists via DA/Echo (world thread-state also reaches strategy via RS/MS clock \u2192 victory \u00a75.2). Injecting Thread terms into faction scalars would not widen meaningful choice and would break holonic separation \u2014 no material gain.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "governance-redesign-orphaned",
+  "subsystem": "settlement_territory",
+  "claim": "governance_play_redesign_v1.md is a well-aimed fix for the P1 loop above but is absent from CURRENT.md's settlement/territory head list and from HANDOFF_SE.md's pending items (which log 'none'), risking permanent orphan status alongside its unbuilt G1 prerequisite.",
+  "cite": "CURRENT.md (settlement/territory row); handoffs/HANDOFF_SE.md; designs/territory/governance_play_redesign_v1.md \u00a75.2",
+  "criterion": "GD",
+  "direction": "forwards",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "dossier:settlement_territory",
+  "refute": {
+   "finding_id": "governance-redesign-orphaned",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The claim's two load-bearing premises are false against the working tree. (1) \"Unbuilt G1 prerequisite\": FALSE. `sim/territory/registry.py` (docstring \"Settlement registry (closes audit gap G1)\") and `sim/territory/ledger.py` exist, with `tests/sim/territory_registry/test_registry_ledger.py` \u2014 goldenfurt README \u00a779 records 6 passing tests. G1, the thing \u00a75.2 gates everything on, is built. (2) \"Permanent orphan status\": FALSE. `designs/territory/goldenfurt_slice/` is a 5-artifact interlocking build OF this redesign (README, npc_cast, event_deck 28 cards, sim_build_spec, verification_findings), ran an adversarial verification pass (32 findings), and carries a staged S0\u2013S6 roadmap with S0\u2013S1 landed. That is the opposite of orphaned.\n\nThe literally-true parts (governance_play_redesign_v1.md not in CURRENT.md line 28; HANDOFF_SE.md pending=\"(none)\") do not support the finding. The doc's own Status line is \"PROPOSAL \u2014 drafted 2026-06-22\" (\u00a7Status). CURRENT.md (lines 10-13) indexes only what is LIVE/canonical; a PROPOSAL is correctly excluded until ratified. Under the ED-1094 merge-ratifies convention it would gain a CURRENT.md row when its PR merges \u2014 it hasn't, so exclusion is the currency gate working as designed, not accidental neglect. Hence intent DELIBERATE/safeguarded.\n\nIntent hunt: canon/editorial_ledger.jsonl has no ED against this doc (ED-682/ED-723 governance hits are unrelated); the redesign self-gates (\u00a75.2) and its slice README states it is \"content+spec only until the sim stages land\" \u2014 a sequenced pre-ratification proposal. Sibling audit lenses already surface it (lens_cohesion_interdependency.md line 35 \"orphaned proposal\"; lens_playability_legibility.md line 74 \"unratified\") without treating it as a tracked P2 risk, so the observation is not even novel to this audit.\n\nResidual true kernel: HANDOFF_SE logging \"(none)\" while S2\u2013S6 slice work is in flight is minor continuity-hygiene debt \u2014 but CLAUDE.md \u00a72 defines continuity as git-history + HANDOFF, and the slice README + sim_build_spec \u00a77 roadmap already serve as the working continuity surface. P3 at most; no orphaning threat.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "thread-exploitation-faucet",
+  "subsystem": "settlement_territory",
+  "claim": "Thread Exploitation Sites are an uncapped, uncontested income tap (Wealth+1/RS-0.5 per season) once discovered, with no depletion or rival-actor contest specified \u2014 a degenerate line and a missed collision-engine opportunity.",
+  "cite": "designs/territory/settlement_layer_v30.md \u00a74.9",
+  "criterion": "Q-robust",
+  "direction": "diagonal",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": true,
+  "tracked_ref": "",
+  "source": "dossier:settlement_territory",
+  "refute": {
+   "finding_id": "thread-exploitation-faucet",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P3",
+   "evidence": "\u00a74.9 numbers are accurate (Wealth+1 / RS\u22120.5/harvest/season; discovery gated behind Investigation + RS visibility, threadwork_v30 \u00a75.6). But every load-bearing sub-claim fails against the design record. INTENT: the cited source, conflict_architecture_proposal.md \u00a7Niflhel Dissolution (line 111), states the payoff is \"moral hazard \u2014 the tragedy of the commons, not a conspiracy.\" RS is a SHARED peninsula-level survival track: throughlines_complete.md T-21 (line 176) \"Shared RS track \u2192 any faction's Thread aggression damages all factions\u2026 Thread exploitation sites (settlement-level RS damage as tragedy-of-the-commons),\" and line 178 \"Lock-and-cede, brinksmanship, Harvest\u2026 are not exploits \u2014 they are coherent doctrines that the shared RS track generates.\" So (a) \"uncontested\" is false \u2014 open-access harvest (\"any faction/actor\"), a shared-RS externality against all factions incl. the harvester (ceilinged by Rupture / WC survival spine, T-20), and standing Warden interdiction (npc_behavior_v30 \u00a78 line 886 / npc_priority_trees.md:129 \"intercept operatives\"); (b) \"no depletion\" is false \u2014 RS\u22120.5 on a shared track IS the cost/commons-degradation, tested as T-03 Inseparability \"peninsula-level RS affected by site-level harvest\" (tests/sim/settlement_mgmt_stress_01/module_10_report.md); (c) \"missed collision-engine opportunity\" is backwards \u2014 it is a TAKEN cross-scale collision serving T-21. DUPLICATION: within this audit, lens_throughlines_tree.md:85-86 already adjudicates \u00a74.9 \u2014 \"NOT trunkless \u2014 it serves T-21 (tragedy-of-commons) but is implemented as a degenerate inert faucet\" \u2014 agreeing the concept is a proper collision and isolating the real residual to implementation prose, not a degenerate line. No ED/HANDOFF tracks it (grep of editorial_ledger.jsonl + handoffs/ empty). SURVIVING RESIDUAL: \u00a74.9's prose is terse and omits the shared-RS / tragedy-of-commons / Warden framing that lives in the proposal doc + T-21 + npc_behavior, so a reader of \u00a74.9 alone cannot see the collision \u2014 a propagation / dramatic-legibility thinness (P3), fixable by cross-linking \u00a74.9 to T-21 and the shared-RS cost, already noted by the sibling lens. The P2 \"degenerate uncapped uncontested faucet / missed opportunity\" claim does not survive. scratch_file: /tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/refute_thread-exploitation-faucet.md"
+  }
+ },
+ {
+  "id": "legibility-partial-settlement-tier",
+  "subsystem": "settlement_territory",
+  "claim": "Two of the three dramatic-legibility questions (whose position is at risk; what each actor wants) cannot be answered from ratified settlement-tier state alone \u2014 only the third (what happens if no one acts) can.",
+  "cite": "designs/territory/settlement_layer_v30.md \u00a73.2/\u00a74.3/\u00a74.5 (Local Actors, one Conviction, no ambition field)",
+  "criterion": "Q-robust",
+  "direction": "lateral",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "tracked_ref": "",
+  "source": "dossier:settlement_territory",
+  "refute": {
+   "finding_id": "legibility-partial-settlement-tier",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "scratch_file: /home/user/ttrpg/undefined/refute_legibility-partial-settlement-tier.md\n\nThree independent refutations of the claim as framed (\"two of three unanswerable; NEW; P2\"):\n\n1) NOVELTY FALSE \u2014 self-duplicate. This audit's own lens_playability_legibility.md (DRAMATIC-LEGIBILITY WALK \u2192 \"Domain action (settlement governance)\") already states verbatim: \"only 'what happens if no one acts' is cleanly answerable (Prosperity 0\u2192famine, Order 0\u2192revolt). Local Actors carry one Conviction but no ambition/goal field, so 'what does each actor want' is unanswerable.\" Same evidence, same source dossier. Re-reporting it as NEW is the audit-failure pattern the charter warns against.\n\n2) ALREADY DIAGNOSED + FIX DRAFTED. designs/territory/governance_play_redesign_v1.md (PROPOSAL, 2026-06-22) exists precisely to close this: \u00a7Status \"adds the NPC-ambition substrate behind PART 4\"; \u00a73.1 adds `ambition: # NEW \u2014 what they are actively trying to achieve` to every significant NPC incl. Local Actors (\u00a74.5); \u00a73.2 ambition engine makes wants first-class. Its G1 prereq is BUILT (sim/territory/registry.py + passing tests, per refute_governance-redesign-orphaned) with a full goldenfurt_slice worked example. In-flight, safeguarded provisional \u2014 not an accidental hole.\n\n3) \"WHOSE POSITION IS AT RISK\" IS ANSWERABLE from settlement state, so \"two of three\" overclaims. settlement_layer_v30 \u00a74.3 (Order 0 \u2192 \"Governor expelled unless garrison present\"; Defense 0+hostile \u2192 mandatory siege), \u00a71.4.3 (Capacity Pressure puts a claimant's Wing/standing at risk \u2192 revert to Std 5), \u00a75.1 (siege \u2192 Order decay \u2192 controller surrenders) all render governor/controller tenure risk off Order/Defense trend. Even the audit's own lens substantiates only the \"actor wants\" failure, not this one. At most ONE question is thin, and it is softened by the governor NPC priority tree (\u00a73.2: prioritize Order\u22652 \u2192 Prosperity \u2192 Defense = fully legible load-bearing-actor wants) and Conviction as a want-proxy (\u00a74.5 \"fulfills Conviction relevant to settlement: +1\" drives scenes).\n\nINTENT: DELIBERATE + safeguarded. \u00a74.5 specifies Local Actors as \"lightweight non-faction NPCs representing the population\" \u2014 minimal profile by design; the acknowledged-thin v30 loop has a drafted successor under the ED-1094 merge-ratifies gate. Ledger grep: no ED against this (ED-682/723 unrelated). Fails the CONFIRMED gate (not accidental; not deliberate-without-safeguard).\n\nReduced true kernel (v30 Local-Actor want-legibility is thin) is real but KNOWN, in-flight, P3 debt \u2014 not a novel P2 structural narrowing.",
+   "revised_severity": "P3",
+   "duplicate_of": ""
+  }
+ },
+ {
+  "id": "articulation-zero-thread",
+  "subsystem": "threadwork x articulation",
+  "claim": "articulation_layer_v30, the sole narrative-surfacing sink, has zero Thread/Gap/Rendering-Crisis hooks despite ED-681 authoring 4 dedicated narrative beats explicitly 'for videogame implementation' \u2014 the richest scripted Thread narrative content has no rendering path.",
+  "cite": "threadwork_v30.md Rendering Crisis beats (ED-681 embedded text); grounding 03 \u00a73",
+  "criterion": "P-philosophy",
+  "direction": "diagonal",
+  "severity": "P2",
+  "novelty": "KNOWN-UNTRACKED",
+  "threadwork": true,
+  "tracked_ref": "grounding 03 \u00a73 lists this absence; no ED exists \u2014 adding severity assessment since ED-681's content is explicitly VG-targeted",
+  "source": "dossier:threadwork (Coherence/MS-RS/Calamity risk economy, Knots, calamity radiation, horizontal integration spec)",
+  "refute": {
+   "finding_id": "articulation-zero-thread",
+   "verdict": "REFUTED",
+   "intent": "UNDETERMINED",
+   "evidence": "Notes: designs/audit/2026-07-04-ners-qualitative-audit/articulation/refute_articulation-zero-thread.md. The finding's load-bearing claim \u2014 that ED-681's beats are \"the richest scripted Thread narrative content with no rendering path\" \u2014 is REFUTED by threadwork_v30.md \u00a73.7 \"Rendering Crisis \u2014 Narrative Structure (ED-681)\". That section IS the rendering path: four fully authored beats (Withdrawal/Knot Anchoring/Place Anchoring/The Choice), each with scene structure AND rolls (Spirit checks TN7 Ob1/2, resolution roll), headed \"For videogame implementation, the mechanical checklist above unfolds as four designed beats.\" These are protagonist-facing PLAYED scenes rendered by the scene/threadwork engine directly. articulation_layer_v30 \u00a73 defines Tier-2 explicitly as showing a NON-protagonist event; Rendering Crisis is the protagonist's \"existential season\", so routing it through the cut-scene sink would be category-inappropriate. The finding conflates \"articulation lacks a thread trigger\" with \"thread narrative is unrendered\" \u2014 the second does not follow. Part (a) is literally true (grep of articulation_layer_v30: zero thread/coherence/rendering-crisis/gap/dissolution triggers in \u00a73.1's 10-item ruleset), but articulation \u00a75 is a universal Key subscriber (module_contracts L768 consumes:{type:\"*\"}); Tier-3 chronicle \u00a74.4 pt4 renders \"Knot formations and ruptures, Belief revisions\" (Knots are thread-bonded), and Tier-1 indexes every Key \u2014 so thread content is NOT wholly unrendered. Intent: dossier + my recheck found no ED considering-and-rejecting a thread trigger (ED-911=combat resolver; ED-1006=victory eras; neither this); ruleset was sim-calibrated (Stage 8b/10) and extensible; grounding 03 \u00a73 lists it as silent with no safeguard flag \u2192 simply un-authored, UNDETERMINED, not a proven accident nor a documented deliberate exclusion. Surviving kernel: a narrow, category-different gap \u2014 no Tier-2 trigger for off-screen NON-protagonist thread events (Dissolution/Gap witnessed at range); dossier \u00a77 confirms this legibility blind spot. That is friction/debt, not the P2 \"no rendering path\" crisis. Not tracked by any ED (KNOWN-UNTRACKED per grounding 03 \u00a73 confirmed).",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "mechanics-index-wrong-file",
+  "subsystem": "npc_behavior/conviction_track",
+  "claim": "canon/mechanics_index.yaml's conviction_scar entry cites designs/scene/conviction_track_v30.md#section-1 (the unrelated per-territory Piety-stat BG mechanic) instead of designs/personal/conviction_track_v1.md, contradicting module_contracts.yaml's correct piety_track entry and npc_behavior_v30's own explicit redirect.",
+  "cite": "canon/mechanics_index.yaml line 305",
+  "criterion": "Q-smooth",
+  "direction": "backwards",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:npc_behavior (designs/npcs/npc_behavior_v30.md + designs/personal/conviction_track_v1.md)",
+  "refute": {
+   "finding_id": "mechanics-index-wrong-file",
+   "verdict": "REFUTED",
+   "intent": "UNDETERMINED",
+   "evidence": "The raw citation IS cross-wired (verified): canon/mechanics_index.yaml \u00a7conviction_scar (lines 302-308; scale personal, sim/personal/conviction.py) cites designs/scene/conviction_track_v30.md#section-1 \u2014 but that file is the TERRITORIAL \"BG Piety Track & Church Victory Redesign\" (PP-406-418), \u00a71 = per-territory 0\u20135 Piety stat, and `grep -i scar` on it returns ZERO hits. The personal Conviction-Scar mechanic's home is designs/personal/conviction_track_v1.md \u00a72/\u00a73, correctly cited by module_contracts.yaml \u00a7piety_track (line 200). So the finding's factual core holds.\n\nBut the finding is REFUTED as framed (NEW, P2) on two grounds. (1) NOVELTY: the miscitation is a downstream symptom of the KNOWN-TRACKED \"3-way piety/conviction_track name collision (substrate SS8.4 vs conviction_track_v1 vs conviction_track_v30)\" \u2014 explicitly ledgered OPEN under ED-1006 and ED-1009 (both pending Jordan), flagged in module_contracts.yaml gap_note line 231 \"[OPEN \u2014 Jordan]\", with the rename deliberately deferred by ED-644. ED-1006 is live in handoffs/HANDOFF_GO.md line 27. It is not a novel discovery; duplicate_of ED-1006. (Genuine added scope: mechanics_index.yaml is a surface not in the ED-1006 inventory, and its own note line 308 reinforces the territorial mapping unflagged \u2014 added scope on a tracked item, not a new finding.) (2) SEVERITY: mechanics_index.yaml is an advisory machine-readable index (CLAUDE.md \u00a71), NOT a canonical home; the authoritative contract surface (module_contracts) already cites the correct doc, so consumers resolving via contracts are unaffected. No collapse of choice, no inert state, no fragmentation, no play-surface legibility loss \u2014 pure index cross-reference hygiene, Q-smooth debt at most. Fixing it does not materially widen meaningful choice/emergence/legibility. Revised P3.\n\nINTENT is honestly UNDETERMINED for the specific line (accidental conflation vs byproduct of the deliberately-deferred collision); the root collision itself is deliberate-deferred and safeguarded by the open Jordan-gated ledger entries.",
+   "revised_severity": "P3",
+   "duplicate_of": "ED-1006"
+  }
+ },
+ {
+  "id": "deterministic-priority-trees",
+  "subsystem": "npc_behavior BG mode",
+  "claim": "All 9 faction Priority Trees are fixed deterministic if-then ladders with no stochastic branching beyond embedded contest rolls, letting a player who has read the corpus predict faction action every season \u2014 tension with Omega non-dominance.",
+  "cite": "designs/npcs/npc_behavior_v30.md \u00a78.1-\u00a78.10",
+  "criterion": "Omega",
+  "direction": "top-down",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:npc_behavior (designs/npcs/npc_behavior_v30.md + designs/personal/conviction_track_v1.md)",
+  "refute": {
+   "finding_id": "deterministic-priority-trees",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P3",
+   "evidence": "Notes: /home/user/ttrpg/undefined/refute_deterministic-priority-trees.md\n\nThe finding's structural read is right (\u00a78.1\u2013\u00a78.10 ARE ordered if-then ladders) but its core factual premise \u2014 \"no stochastic branching beyond embedded contest rolls\" \u2014 is FALSE against current canon. GD-2 (canon/02_canon_constraints.md \u00a7B line 39) is titled \"Deterministic threat response PRECEDES stochastic action selection\": the canonical faction-AI cycle runs a mandatory deterministic pass THEN \"stochastic candidate generation\" (Jordan hard rule HR-9, 2026-05-17). ED-874 (2026-05-31, Jordan-ratified) sets the faction resolver to \"aggregate / deterministic+stochastic.\" npc_behavior_v30 is 2026-04-13; the finding reads \u00a78 as the whole engine and misses the supervening GD-2/ED-874 canon \u2014 a backwards-direction staleness error.\n\nEven within npc_behavior_v30, the trees only rank candidate TYPES; they consume state that is hidden and stochastically/emergently mutated: hidden stats (Tribune Investigate \"highest hidden stats\" \u00a78.5; Vaynard/Haelgrund hidden TS \u00a77.10), the Royal Assassination sub-roll 1\u20136 reshaping Almud Arcs D/E/F (\u00a72.8/\u00a75.2, not a contest roll), Torben Conviction-emergence window ED-618 (\u00a72.8), arc-trigger mutation (\"Belief Scar \u2192 Priority 2 trigger updates immediately,\" \u00a79.3), Framework Drift (\u00a77), Constrained sub-arc ED-586, Coherence gate ED-665, and the Scar\u22652 Conviction-crisis d6 (\u00a74.1). GD-3 injects entirely new emergent factions mid-campaign. A corpus-literate player cannot predict faction action every season.\n\nIntent DELIBERATE + safeguarded: ED-693 (AUD-NPC-03) states \"Church repetition (Assert) is intentional \u2014 correct single-minded institutional behavior. Cross-faction reactivity confirmed\" \u2014 legible per-faction behavior is ratified design; emergence lives in cross-faction collision (the charter's \"collisions are the emergent narrative engine\"). ED-865/874 re-justify the model on CK3/EU/Stellaris/KoDP/Six Ages precedent \u2014 acclaimed non-dominance-robust games all use legible deterministic-priority AI.\n\nCategory error on Omega: non-dominance (throughlines_meta PP-672/674) is \"no solvable PLAYER strategy,\" a property of the player's strategy space, not NPC-AI stochasticity. Legible actors are a charter VIRTUE \u2014 the dramatic-legibility bar requires answering \"what happens if no one acts next season,\" which needs predictable-ish factions. The implied fix (randomize NPC choice) would HARM legibility, cutting against the North Star. Not a duplicate of a single tracked item, so REFUTED rather than KNOWN-TRACKED; ED-693/GD-2/ED-874 are the governing intent evidence. Residual (out of the finding's scope): \u00a78 predates and doesn't cite GD-2 \u2014 trivial doc-currency debt (backwards direction), the only reason severity isn't dropped to null; set P3."
+  }
+ },
+ {
+  "id": "resonant-style-lookup-collapse",
+  "subsystem": "npc_behavior contest integration",
+  "claim": "Each named NPC has exactly one fixed Primary (and usually Secondary) Resonant Style, and the stacking Wrong-Style Penalty (\u00a76.4.3) punishes any other choice, so contest tactics collapse from a 4-style system into 'look up the NPC's answer key.'",
+  "cite": "designs/npcs/npc_behavior_v30.md \u00a71.3, \u00a76.4",
+  "criterion": "Q-robust",
+  "direction": "lateral",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:npc_behavior (designs/npcs/npc_behavior_v30.md + designs/personal/conviction_track_v1.md)",
+  "refute": {
+   "finding_id": "resonant-style-lookup-collapse",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The claim mis-reads npc_behavior_v30.md on every load-bearing point. (1) NPCs have TWO Resonant Styles, not one: every \u00a72 stance triangle lists Primary AND Secondary; \u00a73.2 revises on \"primary OR secondary\"; \u00a76.3 rewards either. (2) Styles are player-mutable, not fixed: \u00a75.1 transition triggers activate Solidarity on Knot\u2265Intimate, flip Primary\u2192Authority at Certainty 0, intensify Evidence on TS-threshold crossing, suppress all styles on faction elimination; arcs rewrite them (Almud Arc B \u2192 Authority-only \u00a75.2; Edeyja Arc D adds Authority L648). (3) \u00a76.4 is NOT a universal punisher \u2014 its header names it \"Church Martyrdom Extension,\" its trigger is \"Church Stability +1 (PP-259 Martyrdom),\" and it explicitly scopes to \"engaging Church NPCs\"; \u00a76.4.3 stacking compounds Church Stability only, capped +2/season by the Domain-Action stat cap. It does not touch resolution against non-Church NPCs. (4) It fires only on a LOSS: \u00a76.4.2 shows Total Victory \u22659 and Decisive 7\u20138 \u2192 penalty does NOT fire (\"Conviction overcame mismatch\"), so a strong pool wins with the wrong style at zero cost. (5) RS is one +1D lever: \u00a76.5 stacks RS/genre/audience/Recall to +5D positional; RS is ~+1D of a full contest engine, not a gate. (6) The vulnerability must be DISCOVERED (\u00a73.1 Appraise/intel/observation) \u2014 \u00a76.4 states the goal openly: \"makes intelligence strategically essential\" \u2014 so per-NPC differentiated vulnerabilities are the field-investigation loop, not degenerate collapse. Intent is deliberate and safeguarded: ED-516 confirms the 4-style taxonomy sufficient; ED-519 SIM-validated the +3D stack as \"not degenerate\" (the exact Q-robust worry, already cleared); ED-521 confirms revision \"intentionally hard\"; ED-680 gates Solidarity behind a Knot; ED-742/ED-739 use Consequence-RS as a rich Wager negotiation lever. Ledger/handoff/decision-queue greps show no tracked defect. See scratch file.",
+   "revised_severity": "P3"
+  }
+ },
+ {
+  "id": "articulation-starvation-mechanism-unwired",
+  "subsystem": "articulation_layer_v30",
+  "claim": "\u00a73.3's anti-narrative-starvation claim is not implemented by the \u00a75 pseudocode: unarticulated_weight only inflates significance of an already-firing trigger, it cannot itself force a cut scene, so non-trigger-matching Bonded NPCs are permanently un-rendered.",
+  "cite": "articulation_layer_v30.md \u00a73.3, \u00a75 (L256-261), \u00a73.2",
+  "criterion": "Q-robust",
+  "direction": "bottom-up",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:Articulation Layer (PP-688) \u2014 designs/articulation/articulation_layer_v30.md",
+  "refute": {
+   "finding_id": "articulation-starvation-mechanism-unwired",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "revised_severity": "P3",
+   "evidence": "The finder's narrow Tier-2 read is textually correct: articulation_layer_v30.md \u00a75 (L253-268) fires a cut scene only `if matches_trigger_ruleset(key)`, and \u00a73.3's `accumulated_narrative_weight` feeds only \u00a73.2's significance (scene-length tier), so it cannot itself force a Tier-2 cut. But the CONCLUSION \u2014 non-trigger-matching Bonded NPCs \"permanently un-rendered\" \u2014 is false on three surfaces. (1) Tier 1 \u00a72.3/\u00a72.4: the Bonds register renders every Bonded NPC continuously (Bond level, Knot, Belief/Inspiration counts) \u2014 they are never un-rendered. (2) Tier 3 \u00a74.3/\u00a74.4 item 3: `significance_universal` includes accumulated_weight, and \"Notable individuals \u2014 top-N named NPCs BY ACCUMULATED WEIGHT\" is the exact wired consumer of the starvation accumulator; since \u00a75 resets weight only on Tier-2 fire, a starved NPC's weight grows monotonically and is guaranteed selection into the annual chronicle. (3) The mechanism is executed and validated: designs/audit/2026-05-01-stage-10-validation/sims/stage10_articulation_sim.py L415-423 implements top-by-accumulated-weight for the chronicle (and L325 the Tier-2 term), and stage10_articulation_sim_output.txt L43-85 literally renders starved-but-notable actors (\"haf_leader accumulated narrative weight 153 this year\"). So the accumulator is wired to a rendering surface, not unwired. This is a deliberate three-tier architecture (\u00a71): pacing boost at Tier 2 + guaranteed selection at Tier 3 + continuous presence at Tier 1; 04_post_promotion_NERS.md L43/L102 treats the three-tier answer as the intended legibility solution. The finder collapsed a multi-tier design into a Tier-2-only gap. Residual: \u00a73.3's phrase \"a routine Key triggers a higher-significance cut scene\" is loosely worded (weight boosts the next trigger's length, not firing) \u2014 at most a P3 wording tightening with no North-Star loss, since starved Bonded NPCs remain legible via Tier 1 + Tier 3. Not tracked in editorial_ledger.jsonl/patch register/handoffs (ED-807's \"starvation\" is unrelated siege mechanics); not a duplicate, but not a genuine defect either."
+  }
+ },
+ {
+  "id": "key-vocabulary-enum-fork",
+  "subsystem": "architecture_spine",
+  "claim": "Three Class-B Key types declare permanence/time_horizon values (\"structural\", \"medium\") outside the substrate's own canonical enum, so the Key vocabulary is demonstrably not one language across producers.",
+  "cite": "key_type_registry_v30.md:933-934,977-978,997-998 vs key_substrate_v30.md \u00a72.2",
+  "criterion": "Q-smooth",
+  "direction": "lateral",
+  "severity": "P2",
+  "novelty": "NEW",
+  "tracked_ref": "",
+  "threadwork": false,
+  "source": "dossier:architecture_spine",
+  "refute": {
+   "finding_id": "key-vocabulary-enum-fork",
+   "verdict": "REFUTED",
+   "intent": "NOT-INTENDED",
+   "evidence": "The underlying fact is real but the finding-as-submitted is refuted on its two load-bearing claims: novelty=NEW and severity=P2.\n\nFact holds: key_substrate_v30.md \u00a72.2 (lines 71-72) fixes the enums permanence={transient|persistent|indelible}, time_horizon={immediate|near|far}; key_type_registry_v30.md:933-934,977-978,997-998 declares \"structural\"/\"medium\" on three PP-687 Phase B Stage 1 Class-B keys (opinion_revised, gossip, concern_resolved). Genuine bug: \u00a74.5 compute_salience (lines 303-304) does {immediate:1.5,near:1.0,far:0.5}[time_horizon] \u2014 a dict lookup that KeyErrors on \"medium\". Intent=NOT-INTENDED: the migration spec political_dynamics_keys_migration_v30.md defines no extended vocabulary (zero mentions of these tokens); it is authoring drift, not a safeguarded design choice (\u00a72.3 invariants don't even enum-check these fields).\n\nREFUTED because it is NOT new. It is tracked as KC-1, dated 2026-06-28 (six days before this audit): open_decisions.md:18 names the exact three keys and prescribes the exact fix \"structural\u2192persistent, medium\u2192near\"; distillation_coherence_report.md:99 states the identical \"Enum mismatch ... not in the substrate canonical enums.\" Umbrella tracking also open in the ledger: ED-1006 (\"registry SS10 extensions for the 3 F2-class types\") and ED-1009 (\"NERS R FAIL: unregistered types\"), both pending Jordan. Re-reporting KC-1 as a novel NEW discovery is precisely the calibration failure the charter (\u00a772-76) forbids.\n\nSeverity inflated: the \"vocabulary is demonstrably not one language across producers\" framing overstates a two-token relabel localized to one un-ratified migration batch. Against the North Star, fixing it widens no meaningful choice, emergence, or legibility \u2014 it is pure schema-hygiene debt. KC-1 itself files it among deferred enum relabels, not a design decision. Correct level is P3.\n\nVerdict: REFUTED as a novel P2 finding; duplicate of KC-1 (2026-06-28-distillation-coherence/open_decisions.md). The real, accidental defect is already tracked at hygiene grade. Notes: scratch_file below.",
+   "revised_severity": "P3",
+   "duplicate_of": "KC-1 (designs/audit/2026-06-28-distillation-coherence/open_decisions.md:18; umbrella ED-1006/ED-1009)"
+  }
+ },
+ {
+  "id": "insurgency-11-vs-15-threshold",
+  "subsystem": "insurgency_pipeline / victory",
+  "claim": "insurgency_pipeline_v30.md \u00a77/\u00a77.1 states Promoted Factions win at '11+ territories sustained 2 seasons,' contradicting GD-1's and victory_v30/peninsular_strain's 'all 15' and the actual sim (VICTORY_THRESHOLD=15 applied uniformly); same wrong figure recurs in canonical_sources.yaml.",
+  "cite": "designs/world/insurgency_pipeline_v30.md \u00a77, \u00a77.1; sim/autoload/victory.py; references/canonical_sources.yaml FACTION-SPECIFIC-VICTORY-PATHS",
+  "criterion": "Q-robust",
+  "direction": "bottom-up",
+  "severity": "P2",
+  "novelty": "NEW",
+  "threadwork": false,
+  "source": "dossier:victory_strategic (Peninsular Sovereignty / peninsular_strain Accord-Turmoil / GD-3 insurgency pipeline / player_agency strategic layer)",
+  "refute": {
+   "finding_id": "insurgency-11-vs-15-threshold",
+   "verdict": "REFUTED",
+   "intent": "DELIBERATE",
+   "evidence": "The \"11 vs 15\" gap is real in text but is a TRACKED, RATIFIED decision, not a novel P2 defect, and the finding's core predicate is false.\n\nVerified text: insurgency_pipeline_v30.md \u00a77/\u00a77.1 does say \"11+ territories.\" victory_v30.md \u00a70/\u00a73 (lines 43,61,180,313), peninsular_strain_v30.md \u00a76 (line 446), and sim/autoload/victory.py (VICTORY_THRESHOLD=15) say \"all 15.\" canonical_sources.yaml:26 says \"11/15.\"\n\nRefutation 1 \u2014 predicate false: the finding asserts \"the actual sim (VICTORY_THRESHOLD=15 applied uniformly).\" It is NOT uniform. sim/mc_v18.py:41 sets `'VICTORY_THRESHOLD': 11` and sim/provincial/mass_seizure.py:17 says \"11+.\" The campaign driver (mc_v18) still runs 11; victory.py=15 is the freshly-updated outlier. The finding inverts which side is anomalous.\n\nRefutation 2 \u2014 duplicate, mislabeled NEW: canon/editorial_ledger.jsonl ED-1031 (2026-06-19, Jordan J-22, P1, RESOLVED): \"GD-1 victory threshold ratified ALL 15 (was 11+ of 15) ... Resolves the GD-1 number contradiction (canon/02 '11+' vs victory_v30 'all 15') in favor of all-15.\" The 11-vs-15 contradiction is precisely ED-1031's subject; the finding cites no tracking ref and tags novelty NEW \u2014 a calibration failure. The threshold is a Jordan-ratified, safeguarded design choice (DELIBERATE-with-safeguard), not an accident or unsafeguarded gap.\n\nRefutation 3 \u2014 correct category: the stale \"11\" in insurgency \u00a77, canonical_sources:26, params/bg/core.md, mc_v18:41, mass_seizure:17 are residual sites ED-1031's propagation list (canon/02, mechanics_index, victory.py) did not sweep. That is backwards-direction editorial/propagation-lag debt under the parent ED-1031, not a bottom-up \"sim contradicts design\" mechanic defect.\n\nSeverity: fixing the stale 11s widens no meaningful choice, emergence, or legibility \u2014 the canon-authoritative binding value is 15 (canon/02, victory_v30, victory.py). mc_v18=11 is a sim-config fidelity sliver, still tracing to ED-1031's incomplete sweep. \u2192 P3, not P2.\n\nGenuinely-new sliver worth a cleanup note: the residual stale sites (esp. mc_v18.py, insurgency_pipeline, canonical_sources) are outside ED-1031's listed files, so an ED-1031 propagation-close is warranted \u2014 but that does not sustain the finding as framed.\n\nNotes: /tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/refute_insurgency-11-vs-15-threshold.md",
+   "revised_severity": "P3",
+   "duplicate_of": "ED-1031"
+  }
+ }
+]

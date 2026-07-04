@@ -8,6 +8,21 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan review (PR #77,
+  branch `claude/ners-audit-fable5-9cpfdz`).** Corpus-wide qualitative audit (playability /
+  cohesiveness / interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent
+  adversarial workflow (12 dossiers + 5 degenerate-play hunters + 7 lenses; every carried finding
+  refuted-or-confirmed with an intent gate). Deliverables at
+  `designs/audit/2026-07-04-ners-qualitative-audit/`: `ners_qualitative_audit_v1.md`
+  (verdict-first, throughlines-tree organized; 5 confirmed findings F-1..F-5 + 2 corpus signals
+  S-1 register back-propagation blindness / S-2 steering-surface fragmentation),
+  `strategic_judgments.md` (J-1..J-15: playable-season milestone, Gate-0-before-more-combat-depth,
+  transport-seam closure, collision-engine detector, anti-drift + roadmap governance),
+  `ed_options.md` (E-1..E-12 drafted candidates, **deliberately NOT filed** — Jordan picks and
+  allocates per id_reservations protocol; merging PR #77 ratifies nothing). Follow-ups if adopted:
+  E-2/E-3/E-7 are the recommended first three; GAP-1 = investigation lane never audited (E-12);
+  32 deferred-unverified P2 candidates in `01_workings/deferred_unverified.json`.
+
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).
   ED-1050 (combat parity oracle) lives in `handoffs/HANDOFF_PC.md` (RESOLVED, one residual

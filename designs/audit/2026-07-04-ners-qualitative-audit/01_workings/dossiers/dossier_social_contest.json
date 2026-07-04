@@ -1,0 +1,227 @@
+{
+ "subsystem": "social_contest",
+ "core_loop": "Setup fixes venue/adjudicator/genre/stakes; per exchange: Appraise (read audience/judge, partial-reveal ladder) -> pick Style (Genre x Orientation) -> Argue roll (pool + genre/audience/Recall/armature bonuses) -> resolve CLASH/REINFORCE/CROSS/TIE -> Persuasion Track moves, Face/Concentration deplete -> repeat -> Decisive/Compromise/Total outcome -> Domain Echo + Obligation + Thread co-movement.",
+ "decision_points": [
+  {
+   "where": "Step 2 Style pick (Genre x Orientation, 4 cards)",
+   "options": "Precedent/Suppression/Vision/Insinuation",
+   "meaningful": "moderate",
+   "note": "genre half wired via CR4 stasis; orientation's CR5 risk/reward (Doubt Marker + self-Face backfire) is design-table only, not resolver-consumed yet"
+  },
+  {
+   "where": "Step 1 Appraise + armature-informed style choice",
+   "options": "choose style against a coarsely-revealed adjudicator conviction vector",
+   "meaningful": "rich",
+   "note": "continuous delta-sigma leverage, never a lookup table"
+  },
+  {
+   "where": "Step 5 Forfeit",
+   "options": "Regroup / Concede a Point / keep arguing",
+   "meaningful": "moderate"
+  },
+  {
+   "where": "which of the four games to engage (Agon/Negotiation/Inquiry/Consensus)",
+   "options": "proceeding type implies a game",
+   "meaningful": "degenerate",
+   "note": "only Agon is wired; the other three raise NotImplementedError (Stage 4 not yet built) - KNOWN-TRACKED"
+  },
+  {
+   "where": "\u00a76.1 Obligation naming (winner)",
+   "options": "any specific, verifiable commitment",
+   "meaningful": "rich"
+  },
+  {
+   "where": "Step 2b Corroborate",
+   "options": "declare support, risk 1 strain on fail",
+   "meaningful": "moderate"
+  },
+  {
+   "where": "Recall citation (+2D)",
+   "options": "cite a source or not",
+   "meaningful": "thin",
+   "note": "near-costless in per-exchange (Formal) form; degenerate-leaning"
+  },
+  {
+   "where": "proceeding/venue selection",
+   "options": "context-determined, not really player-chosen",
+   "meaningful": "thin"
+  }
+ ],
+ "north_star": {
+  "choice_density": "moderate",
+  "collision_feed": "Feeds the collision engine via Obligations (durable, verifiable, cross-scale commitments), Domain Echo (Mandate/Domain-Action bonuses), Conviction Scars, and Chain Contests (deferred tension -> next-season scene). These are real narrative hooks once fired - but 3 of 4 game shapes that should diversify how contests play don't exist yet.",
+  "verdict": "Points at the North Star in design (a well-theorized bet-under-uncertainty armature, cross-scale Obligations) but the executable slice is currently one game wearing eight venue skins, so today's realized choice density is narrower than the design promises."
+ },
+ "nq": [
+  {
+   "criterion": "Q-robust",
+   "observation": "Adjudicator Armature: continuous 4-axis Style-vs-conviction dot product via delta-sigma leverage, Appraise reveals only coarse bands - genuine bet under uncertainty, never solved to a single dominant style.",
+   "cite": "sim/personal/contest/armature.py header; social_contest_v30.md \u00a74 Step 3"
+  },
+  {
+   "criterion": "Q-smooth",
+   "observation": "Contest and combat/core now share one sigma-leverage substrate (CR2/CR6) - real cross-system Smoothness win.",
+   "cite": "social_contest_v30.md \u00a78 CR2/CR6"
+  },
+  {
+   "criterion": "Omega",
+   "observation": "Terminal Doubt (ED-1060, open) exists because Obscuring was strictly dominated in every single-exchange proceeding without it - a caught non-dominance violation, not yet ratified.",
+   "cite": "social_contest_v30.md \u00a74 Step 4"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Weaving in Contests (TS-gated bonus dice + Coherence check)",
+   "status": "present",
+   "evidence": "social_contest_v30.md \u00a79.3 (R-65); archived audit calls social 'clean' vs combat's structural gap"
+  },
+  {
+   "juncture": "Thread Ops Between Exchanges + Temporal Axis Conflict routing to Track co-movement",
+   "status": "present",
+   "evidence": "social_contest_v30.md \u00a79.4 (PP-351, explicitly 'preserves P-14')"
+  },
+  {
+   "juncture": "Adjudicator Thread Response (Certainty-indexed C5-C0 table + visibility gate)",
+   "status": "present",
+   "evidence": "social_contest_v30.md \u00a79.4b (ED-667)"
+  },
+  {
+   "juncture": "Any threadwork/Leap/Weaving code in the rebuilt sim kernel",
+   "status": "absent-plausible",
+   "evidence": "grep across sim/personal/contest/*.py finds zero thread hooks; the 'clean' archived verdict (2026-06-11) predates this Stage 0-3 rebuild and assessed the design doc, not this kernel - doc-present/code-absent gap, likely just not-yet-scheduled rather than deliberate"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "Yes for an Agon-shaped proceeding: Persuasion Track + Face/Concentration show risk, armature+faction-boost+targeting show wants, Obligations/Chain Contests show next-season consequence. No for Negotiation/Inquiry/Consensus - those game states don't exist yet (NotImplementedError), so the test can't be run against them."
+ },
+ "degenerate_candidates": [
+  "Recall +2D citation bonus - near-costless, near-always-take per-exchange in Formal Contest - social_contest_v30.md \u00a74 Step 3",
+  "Agon-only game space - 8 proceeding skins currently resolve through one mechanical shape - sim/personal/contest/wrapper.py GAMES table (KNOWN-TRACKED, Stage 4 next)",
+  "Orientation choice's risk/reward not resolver-consumed, so nothing yet stops Obscuring from drifting back toward dominance/irrelevance outside the still-open ED-1060 fix - dictionaries.py DOUBT_MARKER scope_note"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "npc_behavior (Resonant Style +1D targeting)",
+   "mechanism": "categorical Style-vs-Conviction match, opponent-aimed",
+   "status": "implemented",
+   "cite": "npc_behavior_v30.md \u00a71.3/\u00a76.3; armature.py contrast"
+  },
+  {
+   "dir": "out",
+   "other": "npc_behavior 2-cycle",
+   "mechanism": "scene.contest_resolved/state.opinion_revised",
+   "status": "divergent",
+   "cite": "grounding doc 02(a)6 - npc_behavior-side dampers unconfirmed [OPEN-Jordan]"
+  },
+  {
+   "dir": "out",
+   "other": "faction (Domain Echo, Mandate)",
+   "mechanism": "Memory/Projection decisive-win Mandate+1 or Domain-Action bonus",
+   "status": "declared-only",
+   "cite": "social_contest_v30.md \u00a76; wrapper.py notes faction.py is Stage-4 scope"
+  },
+  {
+   "dir": "out",
+   "other": "threadwork (MS/RS co-movement)",
+   "mechanism": "\u00a76 Thread co-movement table, \u00a79.3/9.4/9.4b junctures",
+   "status": "divergent",
+   "cite": "present in design doc; zero hooks in sim/personal/contest/"
+  },
+  {
+   "dir": "in",
+   "other": "fieldwork (Evidence Track Findings)",
+   "mechanism": "+1D per cited Finding, cap +2D, contest prep",
+   "status": "declared-only",
+   "cite": "social_contest_v30.md \u00a79.1; no fieldwork import in sim package"
+  },
+  {
+   "dir": "out",
+   "other": "faction_politics/domain_actions",
+   "mechanism": "Obligation blocks NPC actions that would violate it",
+   "status": "declared-only",
+   "cite": "social_contest_v30.md \u00a76.1; faction_politics doc:null per module_contracts"
+  }
+ ],
+ "directions": {
+  "top-down": "The Adjudicator Armature is philosophy-grounded (Padgett-Ansell robust-action/multivocality) theory landing cleanly in a concrete, testable mechanic.",
+  "bottom-up": "The sim kernel is narrower than the design doc on two fronts at once right now (only Agon wired; orientation payoff and Face-strain unconsumed) - a deliberate staged gap, not silent drift.",
+  "lateral": "Contest's continuous armature is more sophisticated than npc_behavior's flat categorical Resonant-Style +1D at the same job (hidden-preference targeting) - a live asymmetry armature.py itself flags as a future Jordan reconciliation.",
+  "diagonal": "Obligations bridge personal-scale contest outcomes to faction Mandate/Stability and settlement-scoped conditions - a clean cross-scale throughline.",
+  "forwards": "Stage 4 (Negotiation/Inquiry/Consensus) is this lane's single highest-leverage next step; the walkthrough doc already specifies genuinely divergent UI shapes for it.",
+  "backwards": "MS/RS naming drift and the '\u00a73 combat-pool historical analogy only' note show the corpus correctly self-annotating supersession rather than silently carrying stale references."
+ },
+ "findings": [
+  {
+   "id": "four-games-one-wired",
+   "subsystem": "social_contest",
+   "claim": "Only 'agon' is a WIRED resolver in the GAMES router; consensus/negotiation/inquiry are STUB rows that raise NotImplementedError, so today's contest system is one mechanical shape across 8 venue skins.",
+   "cite": "sim/personal/contest/wrapper.py lines ~187-213",
+   "criterion": "Q-robust",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "CLAUDE.md calibration 'social-contest rebuild Stages 0-3 done (Stage 4 next)'; walkthrough_v1 \u00a74 staged plan"
+  },
+  {
+   "id": "orientation-payoff-unwired",
+   "subsystem": "social_contest",
+   "claim": "Orientation (Revealing/Obscuring) only structurally derives CLASH/REINFORCE/CROSS in code; the CR5 Doubt-Marker/self-Face-backfire payoff that gives Obscuring its risk/reward shape is a design-table commitment the resolver does not yet consume.",
+   "cite": "sim/personal/contest/dictionaries.py ~171-228 (scope_note), asserted at _kernel_tests.py:842-843",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": false,
+   "tracked_ref": "overlaps ED-1060 (Terminal Doubt, still open) but the general resolver-non-consumption is only a code scope_note, no dedicated ED"
+  },
+  {
+   "id": "face-strain-unwired",
+   "subsystem": "social_contest",
+   "claim": "Face's strip/strain-consumption channel (strain->Rattled->-1D) is prose-only; Standing is monotonic-up in the kernel, so the CR3 'spend Face to attack, risk your own Face' tradeoff isn't yet an experienced consequence.",
+   "cite": "social_contest_v30.md \u00a74 Step 6 honesty note, \u00a78 CR3 Face scope-honest status",
+   "criterion": "Q-smooth",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "self-flagged as Stage 3 rhetoric-armature scope gap"
+  },
+  {
+   "id": "sim-kernel-no-thread-hooks",
+   "subsystem": "social_contest",
+   "claim": "The rebuilt sim/personal/contest/ package has zero threadwork/Leap/Weaving code despite \u00a79.3/9.4/9.4b being well-specified in the design doc; the archived 'clean' threadwork verdict predates this rebuild and assessed prose, not this kernel.",
+   "cite": "grep of sim/personal/contest/*.py (no hits); archives/audit/2026-06-11-threadwork-resolution-diagnostic/",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": true
+  },
+  {
+   "id": "armature-quality",
+   "subsystem": "social_contest",
+   "claim": "The Stage-3 Adjudicator Armature (continuous 4-axis dot product, delta-sigma leverage, partial-reveal Appraise bands) is a strong genuine-uncertainty bet mechanic, notably more sophisticated than the sibling npc_behavior categorical Resonant-Style +1D it deliberately does not duplicate.",
+   "cite": "sim/personal/contest/armature.py header; social_contest_v30.md \u00a74 Step 3",
+   "criterion": "Q-elegant",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "recall-near-costless",
+   "subsystem": "social_contest",
+   "claim": "The +2D Recall citation bonus is available in either genre with no real opportunity cost besides prep, making it a near-always-take checkbox rather than a bet in per-exchange (Formal Contest) form.",
+   "cite": "social_contest_v30.md \u00a74 Step 3 Recall bonus",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_social_contest.md"
+}

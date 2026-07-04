@@ -1,0 +1,116 @@
+{
+ "lens": "emergent_narrative",
+ "verdict": "The collision engine \u2014 the corpus's self-named \"emergent narrative engine\" \u2014 is NOT real as an engine. Its 8 collisions live only as hand-authored annotations in one reference doc (arc_register_events.md \u00a7VI), whose own header admits the combined payload is \"not predictable from the constituent vectors\"; no Key type, module_contract, sim module, or resolver detects trigger-coincidence or applies the payload. Independent vectors make the WHEN plausibly emergent, but the WHAT is scripted and nothing fires it. The autonomous world genuinely ticks (RS/TC/IP/Turmoil clocks, deterministic priority trees, neglect-driven insurgency), so a returning player finds a changed world \u2014 but the changes trend to a solved single-winner, and the richest stories (Thread/Calamity, the \"world is dying\" clock) have no render path. Personal transformation is the best-served Omega clause; non-dominance has multiple live violations under repair.",
+ "key_points": [
+  "The 'emergent narrative engine' (throughlines \u00a7T-24) has no engine: 8 Convergence Markers live only in references/arcs/arc_register_events.md \u00a7VI as hand-authored trigger+payload annotations; grep of module_contracts.yaml, sim/, and the Key registry finds NO firer.",
+  "arc_register_events.md \u00a7VI header itself admits markers exist 'because the combined pressure is not predictable from the constituent vectors' \u2014 i.e. the payload is authored, not derived. throughlines_complete.md \u00a7T-24 misrepresents the same fact as 'not designed \u2014 they are structural.'",
+  "COLLISION C \u2014 the charter's own worked example of emergence \u2014 is anchored on an UNNAMED, unresolved ritual (ARC-T04 '[UNNAMED \u2014 ED-416]').",
+  "Articulation, the sole narrative-surfacing layer, is blind to \u00a7T-04 RS-decay/Calamity ('the world is dying' \u2014 the game's #1 clock throughline) and to victory-era transitions (ED-1006). Political emergence renders; Thread emergence does not.",
+  "Autonomous-world thought experiment: the world DOES change over 4 seasons (clocks + priority trees + insurgency-from-neglect are real) \u2014 a genuine strength \u2014 but change trends toward a degenerate ~87% single-winner (CLAUDE.md \u00a77).",
+  "Literal no-GM violation: faction_layer_v30.md L490 'GM controls NPC faction votes' and L362 'GM adjudicates', inside an explicitly no-GM engine.",
+  "Cross-scale consequence propagates one hop up (Domain Echo, strong) but does not COMPOUND \u2014 the missing collision engine + unproven cross-tick convergence (propagation_spec \u00a74.3) mean multi-echo qualitatively-new pressure is never computed.",
+  "Personal transformation is the best-served clause (Scars, arc state machines, Rendering Crisis, Belief revision) but is absent in the highest-frequency vector, combat (ED-911), and arc destinations are authored menus not emergent trajectories."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "collision-engine-has-no-engine",
+   "subsystem": "collision_engine / throughlines",
+   "claim": "The corpus's self-named 'emergent narrative engine' (Convergence Markers) has no runtime home: the 8 collisions exist only as hand-authored trigger+payload annotations in one reference doc, and no Key type, module_contract, sim module, or resolver detects trigger-coincidence or applies the combined payload \u2014 so the flagship emergence mechanism is aspirational prose, not a mechanic.",
+   "cite": "references/arcs/arc_register_events.md \u00a7VI (L23-60); references/throughlines_complete.md \u00a7T-24 L200; module_contracts.yaml grep convergence/COLLISION (only L231/L442, unrelated); sim/ grep (numerical only)",
+   "criterion": "N",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "convergence-marker-misrepresentation",
+   "subsystem": "throughlines / arc_register",
+   "claim": "Two canonical docs draw opposite conclusions from the same fact: arc_register_events.md \u00a7VI says a marker is authored 'because the combined pressure is not predictable from the constituent vectors,' while throughlines_complete.md \u00a7T-24 calls that same non-derivability proof the moments are 'not designed \u2014 they are structural' \u2014 a legibility/honesty gap that overstates how emergent the collision layer is.",
+   "cite": "references/arcs/arc_register_events.md \u00a7VI L25 vs references/throughlines_complete.md \u00a7T-24 L200",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "collision-c-anchored-on-ed416",
+   "subsystem": "collision_engine",
+   "claim": "COLLISION C \u2014 the charter's and T-24's own worked example of emergence (RS+8/IP+2/TC+2) \u2014 is triggered by ARC-T04 'Southernmost Ritual [UNNAMED \u2014 ED-416]', an unnamed and unresolved design item, so the canonical illustration of the emergent engine rests on a design hole.",
+   "cite": "references/arcs/arc_register_events.md \u00a7VI L37-39 (COLLISION C trigger)",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-blind-to-central-clock",
+   "subsystem": "articulation x threadwork",
+   "claim": "The sole narrative-surfacing layer has zero Thread/Coherence/Calamity hooks, so \u00a7T-04 RS-decay ('the world is dying', the game's #1 autonomous clock throughline) has no render path \u2014 the renderer of emergence is blind to the setting's central story, compounding ED-1006 (era transitions unkeyed).",
+   "cite": "designs/articulation/articulation_layer_v30.md (full-text absence); references/throughlines_complete.md \u00a7T-04 L38-43; 00_grounding/03_threadwork_surface.md \u00a73",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "grounding 03 \u00a73 / ED-1006 (era transitions); new scope: framed as articulation-blind-to-the-#1-clock-throughline",
+   "threadwork": true
+  },
+  {
+   "id": "autonomous-world-gm-hole",
+   "subsystem": "faction_political / autonomous-world clause",
+   "claim": "The autonomous-world Omega clause has a literal hole: faction_layer_v30.md delegates NPC faction voting and partial-ratification adjudication to a human GM inside an explicitly no-GM engine, so under zero player input the NPC-only-faction Parliamentary votes have no autonomous resolver.",
+   "cite": "designs/provincial/faction_layer_v30.md L490 ('GM controls NPC faction votes'), L362 ('GM adjudicates')",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "surfaced in faction_political dossier this session; no ED",
+   "threadwork": false
+  },
+  {
+   "id": "autonomy-collapses-to-solvable",
+   "subsystem": "faction/npc/sim",
+   "claim": "The autonomous world runs but trends to a solved end: all 9 faction priority trees are deterministic if-then ladders and the seeded sim converges to a degenerate ~87%/0%/0% win-share, so 'autonomous' collapses toward 'predictable/solvable', in direct tension with the non-dominance clause the same world is meant to serve.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a78.1-\u00a78.10; CLAUDE.md \u00a77 (degenerate win-share, no regression oracle)",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "CLAUDE.md \u00a77 sim win-share; charter calibration",
+   "threadwork": false
+  },
+  {
+   "id": "consequence-one-hop-not-compounding",
+   "subsystem": "architecture / cross-scale clause",
+   "claim": "Cross-scale consequence propagates one hop up well (Domain Echo) but never COMPOUNDS: with no collision-marker firer (see collision-engine-has-no-engine) and cross-tick convergence explicitly unproven, the qualitatively-new multi-echo pressure that T-24 promises is never actually computed \u2014 the cross-scale clause is delivered at the edge but not at the composition that makes it narrative.",
+   "cite": "designs/architecture/scale_transitions_v30.md \u00a75-\u00a77; propagation_spec_v1.md \u00a74.3 (cross-tick convergence unproven); references/throughlines_complete.md \u00a7T-24",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec \u00a75 item 18 (cross-tick convergence); architecture dossier",
+   "threadwork": false
+  },
+  {
+   "id": "transformation-strong-but-fast-layer-absent",
+   "subsystem": "npc/threadwork/combat",
+   "claim": "Personal-transformation is the best-served Omega clause (Conviction Scars, \u00a7T-23 arc state machines, Rendering Crisis perma -1 TS, \u00a7T-22 Belief revision) but is absent in the highest-frequency vector, combat (ED-911), and arc destinations are authored menus rather than emergent trajectories \u2014 so transformation is rich only where play is slow.",
+   "cite": "references/throughlines_complete.md \u00a7T-22/\u00a7T-23; designs/npcs/npc_behavior_v30.md \u00a75.2 (arc maps); ED-911",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911; npc dossier arc-destination-menu finding",
+   "threadwork": true
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_emergent_narrative.md"
+}
