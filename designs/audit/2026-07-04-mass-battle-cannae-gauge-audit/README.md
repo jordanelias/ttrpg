@@ -1,12 +1,11 @@
 # Mass-battle Cannae gauge-band failure — root-cause audit and fix plan — 2026-07-04
 
-**Status:** Findings PROPOSED — **not yet ratified.** This document is the audit + fix-plan
-deliverable only; nothing below has been executed. Per this repo's evidentiary discipline, an
-agent does not ratify its own findings — Jordan's review is the ratification event (CLAUDE.md
-§2, ED-1094 convention). If ratified as-is, this would allocate `ED-MB-0002`
-(`references/id_reservations.yaml`'s `lane_ids.lanes.MB.next_free` as of 2026-07-04) — **do not
-allocate that ID until Jordan has actually reviewed this**, and do not treat any part of this doc
-as executed just because it is written down.
+**Status:** **RATIFIED (ED-MB-0002, 2026-07-04)** — merged via PR #73 (ED-1094 merge-ratifies-by-default:
+Jordan's review-and-merge of this PROPOSED doc is the ratification event). Findings (§1) and fix plan
+(§2) stand as adjudicated. **DG-3 and DG-4 (§3) are RESOLVED** per Jordan's rulings the same day —
+see the addendum at the end of §3 for the exact rulings and their operationalization. DG-1, DG-2, and
+DG-5 remain OPEN, per their own stated sequencing (they depend on the DG-3/DG-4 fix landing and the
+gauge being re-measured before they can be judged on real data).
 
 **Trigger.** ED-MB-0001 (2026-07-02, the movement/pathing fix plan) landed real `envelop`/`sweep`/
 `wheel`/`kite` steering on the live default node path and disclosed-but-did-not-chase one finding:
@@ -316,6 +315,46 @@ the following be weighed:
   ratified-worthy point survives the rest of its critique — the coupling between the center's
   endurance and the wings' travel time *is* Cannae's historical content, not an implementation
   accident to engineer away.
+
+### Addendum — DG-3/DG-4 rulings (Jordan, 2026-07-04, recorded verbatim + operationalized)
+
+**DG-3 = Option A (split the defender's pool symmetrically across pairs).** Jordan's directive was to
+weigh options "in terms of long-term integrity and fidelity to reality"; Option A was recommended and
+adopted on that basis: it extends the pool-split mechanism composed subunits already use to apply
+symmetrically to whoever else is fighting on multiple fronts, rather than inventing an underived
+engage-fraction formula (Option B) or a band-fit magnitude bump (Option C) — and it is the physically
+correct model besides: a force fighting on two fronts genuinely cannot commit full effectiveness to
+both, which is the entire mechanism that makes envelopment dangerous in the first place. Its accepted
+cost is a full, deliberate digest re-record across every gauge row/mirror matchup with >1 simultaneous
+pair — the same kind of one-time cost this repo has paid for Stage A's TOI refactor, LC-8, and the
+`PER_CELL` default flip.
+
+**DG-4 = a blend of per-subunit and whole-unit morale** ("Morale is blend of per-subunit as well as
+whole unit," Jordan, 2026-07-04) — **operationalized by wiring already-existing, currently-inert
+machinery, not by authoring new state:**
+- `hierarchy/units.py` already has everything the blend needs: `Subunit.agg_morale()`/`derive_rout()`
+  (~L1460-1481) compute a troop-weighted aggregate of subunits' own `eff_morale` for whole-unit rout,
+  and `cascade_morale_hit()` (~L1482-1491) already exists for genuine army-wide contagion events
+  (general death, flank collapse) that sap every subunit's own morale simultaneously. Both are real,
+  already-wired mechanisms — not something this fix needs to design.
+- The reason none of it activates for composed armies today: `engine.build_army` (confirmed by direct
+  read, `engine.py:243-246`) only forwards a per-subunit `morale` override when the CALLER explicitly
+  sets it in that subunit's spec dict. No existing composed-army spec (gauge rows, `build_envelopment`,
+  `build_refused_flank`) does this, so every subunit's `morale` stays the dataclass default `None`, and
+  `eff_morale`/`erode_morale` (units.py:384-386, 424-431) fall through to the shared parent `Unit.morale`
+  for every subunit — this is the exact mechanism behind RC-1(b)'s double-count (two subunits' independent
+  §A.4 triggers both writing to the one shared fallback pool).
+- **The fix: default each subunit to its own real starting morale value at `build_army`/
+  `build_envelopment`/`build_refused_flank` construction time**, closing the double-count by construction
+  (each subunit's own trigger now erodes only its own pool) — no new dataclass field, no new cascade
+  design. The "whole unit" half of the blend is not deleted; it emerges from the same aggregate/cascade
+  machinery already in place, exactly matching this codebase's "no flat bonus, effects emerge" discipline.
+  This also directly unblocks RC-4/DG-1's "center breaks, wings fight on" case, since a subunit with its
+  own real morale can now independently rout while `derive_rout()`'s troop-weighted aggregate still
+  governs whole-army collapse.
+
+Both rulings unblock RC-1's actual fix; they do not resolve DG-1/DG-2/DG-5, which remain open and
+gated on the re-measured gauge per their own stated dependencies.
 
 ---
 

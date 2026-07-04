@@ -130,7 +130,8 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     return build_envelopment(center, wings, name, faction,
                               power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                               discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
-                              morale_start=kw.pop('morale_start', None))
+                              morale_start=kw.pop('morale_start', None),
+                              freeze_wings=kw.pop('freeze_wings', False))  # [ED-MB-0002 §2 step 4, measurement only]
 
 
 def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]

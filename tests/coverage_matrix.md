@@ -23,130 +23,31 @@ Archived entries in tests/coverage_matrix_archive.md
   fabrication-debt resolved; tick-by-tick trace-capture backend added (zero-cost when off). G5
   byte-exact both modes unchanged. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
-- ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
-  designs/scene/combat_engine_v1/workbench's pattern: a tiny stdlib HTTP server, no external deps, no
-  build step). trace.run_traced_battle() runs ONE battle via engine.build_unit/resolve_battle (the
-  wrapper contract, never reaches past it) with tracing on, returning the full 'tick'/'melee'/
-  'volley'/'positions' event stream. server.py serves a canvas SPA with playback controls (scrub/play/
-  step), a preset picker mirroring gauge_mb.py's named matchups, and per-tick HP/morale/rout/event-log
-  panels. VERIFIED end-to-end live (not just imported): all 4 endpoints (GET /, /api/mode, /api/presets,
-  POST /api/trace) tested via a running server instance in both PER_CELL=0 (grid) and
-  FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 (coordinate-field) modes.
-- IMPORTANT (documented in server.py): PER_CELL/FIELD_MOVEMENT/PC_NODE_COHESION are read from
-  os.environ once at import time and star-imported as independent copies into every consumer — a
-  running server's mode is FIXED at process start (no live toggle); comparing grid vs field means two
-  server instances. GET /api/mode reports the actual running config.
-- FINDING from using the tool (not a bug): confirmed by reading _node_cells() (hierarchy/units.py) that
-  the coordinate-field candidate keeps ROW positions integer-rank-snapped by design ("ranks are integer
-  bins" — a real military structure) and only bins COLUMNS to their file; positions are not yet fully
-  continuous floats end-to-end. Accurately reflected by the visualizer, not a rendering defect.
-- Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
-  7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
-  non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
+## 2026-07-01 — mass_battle workbench + Stage A: visualizer + true-adjacency stand-off halt (archived — condensed)
+- Tick-by-tick visualizer (server + frontend, workbench/) verified live in both grid and field modes;
+  Stage A fixed the coordinate-field co-location bug with a new `standoff()` primitive + synchronized
+  snapshot (a first-mover-bias bug found and fixed mid-implementation); wired `bat.py`'s golden-digest
+  gate into CI. G5 byte-exact both grid modes unchanged throughout. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-01 — mass_battle Stage A: true-adjacency stand-off halt (FIELD_MOVEMENT)
-- FIXED the coordinate-field magical-co-location bug: the halt clamp compared against SNAPPED enemy
-  positions with a flat "-1" margin, not true floats/a real stand-off. New `standoff()` primitive
-  (`hierarchy/units.py`: `CELL_RADIUS` + PP-290 reach class via `troop_types.registry.reach_for`).
-  `_node_advance`'s pre-cap + per-cell clamp now use `cells_float()` vs. `standoff()`, gated
-  `FIELD_MOVEMENT`, prior code kept as fallback (byte-exact OFF unaffected).
-- Bug found+fixed mid-implementation: freezing both sides' enemy positions pre-move let two closing
-  sides compound past standoff (run_battle moves unit_a fully before unit_b). Fixed by snapshotting
-  unit_a AFTER its own move. Verified: min separation holds at exactly `standoff()` (2.0).
-- `find_contacts` gets a standoff-radius field path; `resolve_cross_side_contention` is a documented
-  FIELD_MOVEMENT no-op. Review found+fixed a duplicate-cell stamina-drain over-count (dedup via sets).
-- CI gap closed: `bat.py`'s golden-digest harness existed but nothing ran it — new
-  `tests/valoria/test_mass_battle_byte_exact.py` wires grid-mode checks into CI; field digests recorded.
-- `gauge_mb.py`: grid/OFF unchanged (12/20, matches historical 5/13); field path passes 4/20 —
-  measured, not fitted; likely needs Stage B (facing/reaction, not yet built), not a magnitude tune.
-- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file
-  clean. Default stays OFF; default-flip remains Jordan-gated.
+## 2026-07-01/02 — mass_battle Stage B + bias fix + Stage C (archived — condensed)
+- Stage B ported facing-slew to the field path; a mirror-matchup first-mover bias was found and fixed
+  (synchronized snapshot + halved closing distance); Stage C landed `engine.build_army`, `Order`/
+  `check_orders` timed sequencing, and escort/formation-relative positioning (Cannae acceptance test
+  verified real lateral wheel movement, zero new flanking mechanics). G5 byte-exact both grid modes
+  unchanged throughout. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-01/02 — mass_battle Stage B + bias fix + Stage C: facing, first-mover bias, command layer
-- STAGE B: ported the existing facing-slew mechanism (`PC_FACING_MODEL`, already wired on the legacy
-  path) onto the FIELD_MOVEMENT path — `_node_advance`'s attention branch was overwriting facing with
-  an instantaneous target-direction vector, zero rate-limiting, discarding a stale "don't double-slew"
-  rationale that no longer held once that branch fired. Reuses `_slew_facing` unchanged.
-- MIRROR-BIAS BUG found + fixed: `gauge_mb.py`'s Cav-vs-Cav mirror matchup (should read ~50/50) read
-  98.3/0.0 on the field path — traced via a git-worktree bisect to Stage A's standoff clamp itself
-  (confirmed absent, 11-8-1, on the pre-Stage-A commit). Root cause: the clamp's sequential-snapshot
-  design gave unit_a persistent first claim on the shared closing budget every tick both sides neared
-  standoff. Fixed by reverting to a synchronized both-sides-frozen snapshot and HALVING the allowed
-  closing distance at both the anchor and per-cell level. A follow-up review caught and fixed a genuine
-  oscillation bug in the per-cell clamp's multi-violator iteration (best-position tracking, not
-  last-pass-wins). Verified: mirror matchup back to 2-1-27 (30 seeds); gauge `C3` now OK (5.0/6.7/88.3,
-  was 98.3/0.0). One small accepted residual remains (~5% of ticks in one dense rotating scenario rest
-  at 1.414 vs the intended 2.0, against an already-halted neighbour) — a fix attempt made it worse via
-  WHEEL-rotation interaction, reverted in favor of the smaller gap.
-- STAGE C: `engine.build_army` (public multi-subunit constructor, mirrors `gauge_mb.make_mixed_unit`,
-  fixes its troops/concentration-forwarding omission + its never-set-advance_dir gap, confirmed inert on
-  that helper — zero live callers); `Order`/`check_orders` (timed/conditional order queue, 'immediate'/
-  'tick:N'/'enemy_range:D'/'ally_at:D' triggers, run before `assign_targets`); `escort_of`/
-  `escort_offset`/`escort_engage_on_contact` (formation-relative positioning, live-facing-rotated,
-  computed at the synchronized pre-move point alongside `cached_centroids`). Cannae acceptance test
-  (wide-placed wings held then released by a `tick:4` order into the pre-existing `envelop`
-  instruction) produces real lateral wheel movement — zero new flanking mechanics. Review found+fixed
-  two gaps before landing: `Order.behavior`'s plain `setattr` was unrestricted (risked corrupting cell/
-  troop/position accounting if an order set a geometry field) — now an explicit `_ORDER_SAFE_FIELDS`
-  allowlist; a malformed trigger string failed silently forever — now validated eagerly at construction.
-- G5 byte-exact both grid modes unchanged throughout (unit 7be8499b / cell 1c5b2851) — every change
-  gated behind FIELD_MOVEMENT/PC_FACING_MODEL or additive with all-inert defaults. Fabrication clean
-  (epsilon-guard citations added where flagged). Default stays OFF; default-flip remains Jordan-gated.
+## 2026-07-02 — mass_battle: TOI refactor (archived — condensed)
+- Jordan-directed replacement of Stage A/B's halving hack with exact time-of-impact collision solving
+  (`resolve_toi_and_commit`) plus reach/facing-gated throttling; 5 real bugs found+fixed. G5 byte-exact
+  both grid modes unchanged; mirror cav-vs-cav fully balanced (0-0-30). Full detail:
+  `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — mass_battle: TOI refactor (halving hack replaced with exact time-of-impact)
-- Jordan-directed complete replacement of Stage A/B's halved-anchor-precap + iterated worst-violator
-  clamp with real continuous-collision detection: `_node_advance` now proposes each cell's UNCAPPED
-  end-of-tick position (no clamp at all); new `resolve_toi_and_commit` (`units.py`) solves the exact
-  per-pair quadratic TOI across BOTH sides together, once per tick, capping each cell to the smallest
-  root over all its cross-side pairs — exact, no iteration, no oscillation guard needed.
-- Reach + facing: `target` (final standoff) always uses base reach (matches `find_contacts`, keeps
-  contact/halt in sync, byte-preserves every equal-reach matchup); `_effective_reach` gates a cell's
-  reach to zero outside its forward FOV (reuses Stage B's `FOV_HALF_DEG`) for THROTTLE purposes only;
-  `_reach_throttle` gives the longer-(facing-gated)-reach side a smaller share of the tick's closing
-  motion, so it "sets into formation" before the shorter-reach side closes the rest of the gap.
-- 5 real bugs found+fixed (2 via an independent adversarial-review agent): halted-cell obstacle
-  exclusion, s=0 root filter, pass-through endpoint-only shortcut, throttled-safe-vs-full-motion
-  endpoint mismatch, idle/reserve subunits dropped as obstacles. See plan file for detail.
-- Verified: G5 byte-exact both grid modes unchanged; `tests/valoria` 55 passed/24 skipped unchanged;
-  true-float standoff invariant zero violations (Horseshoe-cav/Line/Arrowhead/mirror-cav); reviewer's
-  own two repro cases now cap correctly. Field golden digests re-recorded (intentional behaviour
-  change). Mirror cav-vs-cav (30 seeds) now 0-0-30 — fully balanced, no first-mover skew.
-
-## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets
-- `engine.build_army`/`build_unit` now WIRE the previously-inert `Subunit.role`: a spec's `role` is
-  gated by `role_allowed(troop_type, role)` (raises `ValueError` on a disallowed combo — a levy can't
-  take `Shock`), and, in `build_army`, defaults `shape`/`instructions` from `ROLE_SPEC[role]` when the
-  spec doesn't explicitly set them (explicit spec fields still win). Zero existing call site touched
-  (`role` defaults to `None`).
-- New `engine.build_envelopment`/`build_refused_flank` (ED-909's Unit-level "Envelopment"/"Refused
-  Flank" allocation-grid presets): compose `build_army` + Stage C's timed-order queue + the
-  pre-existing, UNMODIFIED `envelop` instruction — center/strong subunits built as given; wing/refused
-  subunits get `stance='hold'` + an auto-queued release order (`tick:N` into `envelop`, or
-  `enemy_range:N` for refused-flank) unless the spec already supplies its own orders. Zero new
-  flanking mechanic, matching Stage C.4's own finding.
-- **Deliberately deferred, not part of this change**: the literal LC-8 retirement of `Horseshoe`/
-  `RefusedFlank` as `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) — the
-  frozen byte-exact grid golden digests were computed against battles using `Horseshoe` directly as a
-  `Subunit.shape` (`bat.py`'s own battery), so removing it would break that non-negotiable invariant.
-  This lands ED-909's Unit-level INTENT (envelopment as an emergent composition) without that break;
-  the legacy `Subunit.shape` values remain valid, now understood as legacy options. Flagged for
-  Jordan's explicit sign-off before any literal removal + re-baseline.
-- `Unit.doctrine`/Aggression: NOT built as new data — Jordan's own ED-907 ratification note already
-  names `stance` as engine-realized Aggression; adding a parallel `doctrine.aggression` field would
-  duplicate it (NERS-N/E, no unneeded apparatus). Cohesion-priority/the allocation-grid UI/intervention
-  cadence are explicitly Jordan-deferred to Stage E — not built here either.
-- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851) — every change is additive
-  (new functions, new optional kwargs defaulting to `None`). `tests/valoria` 55 passed/24 skipped
-  unchanged. Functional: role defaulting/rejection verified directly; `build_envelopment`/
-  `build_refused_flank` construct correctly and a traced battle confirms the wing's order fires
-  (releases from `hold` into `envelop` at the queued tick).
-- Adversarial review found one real bug, fixed: `build_army` never popped/forwarded an `orders` key
-  from a spec dict, so the two presets' documented "unless the spec already supplies its own orders"
-  escape hatch was dead code — a caller-supplied custom order was silently dropped and always
-  overwritten by the auto-queued release order. Fixed by adding `orders` to `build_army`'s forwarded
-  per-subunit override keys. Re-verified: a spec-supplied order now survives; the auto-release still
-  fires when no custom orders are given. Byte-exact and pytest unaffected (both re-confirmed).
+## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets (archived — condensed)
+- Wired the previously-inert `Subunit.role`; new `engine.build_envelopment`/`build_refused_flank`
+  (ED-909 Unit-level presets, composed from existing primitives, zero new flanking mechanic). LC-8's
+  literal shape retirement deliberately deferred pending Jordan sign-off (executed in the next entry).
+  One real bug found+fixed (adversarial review): `orders` key not forwarded by `build_army`. G5
+  byte-exact unchanged. Full detail: `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909)
 - Jordan-approved 2026-07-02 ("correct, retire them. those are emergent outcomes."): executes the LC-8
@@ -438,3 +339,103 @@ and step 7, the waypoint primitive itself, still pending):
   it); full suite 84 passed/10 skipped/1 xfailed unchanged.
 - **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); re-producing the
   Cannae visualization to confirm the fix end-to-end — done (task #78, delivered as an Artifact).
+
+## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented
+- **ED-MB-0002 ratified** (PR #73 merge = ratification, ED-1094 convention); DG-3/DG-4 ruled by Jordan
+  same day in chat, recorded as an addendum in `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
+  README.md` (PR #75). Two independent bug fixes landed first: `validators.py`'s `_attacker_envelop`
+  ghost-cell construction bug (`starting_position` assigned after `__post_init__` already ran — added a
+  `col=` param to `_line()` instead); `orchestration.py`'s float-epsilon pool-floor bug (`math.floor(x)`
+  → `math.floor(x + 1e-9)`).
+- **DG-3 implemented, bottom-up (Jordan's own correction of a first-pass eng_counts-division attempt —
+  "misleading... should be per-cell troop density... bottom-up... solves multiple engagements"):** new
+  `core/exchange.pair_pool_contribution()` redistributes a subunit's unchanged combat-score
+  (`subunit_combat_pool`) across a specific contact pair by ACTUAL troop density in the engaged cells
+  (`cell_troops`) plus depth-weighted support (reusing `support_engage_frac`'s `SUPPORT_WEIGHTS` falloff)
+  — replaces the flat divide-by-simultaneous-pair-count with an exact troop-weighted split.
+  `a_troops_frac` (a separate, pre-existing multi-SUBUNIT Command-sharing dampener) kept as an outer
+  multiplier, orthogonal to this fix. Known accepted residual, same discipline as Stage A's TOI
+  multi-body approximation: a cell simultaneously adjacent to 2+ enemy atoms double-contributes its
+  troop share (dogpile edge case, not solved).
+- **DG-4 implemented ("a blend of per-subunit as well as whole unit... more likely to wilt if other
+  subunits losing, more likely to rally if other subunits winning"):** `build_army` now defaults every
+  subunit to its own real starting morale (closing RC-1(b)'s double-count by construction — no new
+  state); new `Subunit.pull_morale()` + a continuous per-phase term in `core/state.morale_check_phase`
+  pulls each subunit's morale toward its LIVING SIBLINGS' troop-weighted aggregate (new
+  `MORALE_SIBLING_PULL=0.15`, tagged Class-B/Jordan-vetoable — the mechanic is ruled, the magnitude is
+  not derived from any existing primitive). RC-1(c) (subunit-scale casualty trigger vs shared pool)
+  auto-resolves as a side effect — both sides of that mismatch are now subunit-scale.
+- **Perf finding, fixed:** `support_engage_frac` was still called unconditionally for every pair even
+  though C-ii no longer reads its result — duplicated the same abs→orig cell-coordinate conversion
+  `pair_pool_contribution` does internally. Made conditional on `POOL_VARIANT != "C-ii"`. Profiling
+  (cProfile on an envelop-army trial) showed the DOMINANT remaining cost is pre-existing Stage-A TOI
+  physics (`resolve_toi_and_commit`/`_pair_toi_scale`, 679K calls, ~2.2s of 4.7s), not this fix's own
+  code (`resolve_engagements` ~0.6s) — multi-subunit field-path battles are inherently more expensive
+  under the existing TOI system; `bat.py`'s full battery now takes ~1-4 min per mode instead of
+  seconds (disclosed, not a hang — confirmed by direct profiling and isolated single-trial timing).
+- **Adversarial review (general-purpose agent) — 4 findings, all fixed, none moved the recorded
+  digests (confirmed by re-running `bat.py --check` all 4 modes post-fix — all still match):**
+  1. **(HIGH)** `pair_pool_contribution` recomputed the cell layout from `CELL_PATTERN_FN[shape](tier)`
+     (the legacy tier-only pattern) instead of iterating `atom.cell_troops` directly — silently
+     zeroed the whole pool for any continuous-scale (`troops=`/`concentration=`) subunit whose real
+     footprint (`footprint_for`) extends beyond that small legacy rectangle (confirmed by repro: a
+     tier=4/troops=8000 Line's real 70-cell footprint vs. the tier's own 35-cell pattern — pool
+     contribution was silently 0.0, now correctly non-zero). Fixed: iterate `cell_troops.items()`
+     directly (the same authoritative, footprint-aware source `cells()`/`check_drift` already use).
+     Masked in the current battery only by coincidence (existing fixture troop counts happen to stay
+     inside the legacy rectangle).
+  2. **(HIGH)** The sibling-morale pull ran AFTER this-phase's own casualty/exhaustion erosion, so a
+     healthy sibling's pull could retroactively rescue a subunit from a same-phase rout its own
+     casualties would have caused, before `rout_resolution` ever saw the eroded value — a materially
+     stronger mechanic than "more likely to rally," and an unintended side effect of call ordering.
+     Fixed: reordered so the sibling-pull (using a phase-start snapshot) applies BEFORE self-erosion —
+     a sibling's state can soften/harden the morale a subunit ENTERS its own erosion with, but can no
+     longer erase that erosion's result; self-erosion keeps the final say on this-phase rout.
+  3. **(MEDIUM)** Siblings were aggregated from already-mutated live values within the same per-atom
+     loop (Gauss-Seidel order-dependency, biased toward whichever subunit iterates first) rather than
+     a fixed phase-start snapshot. Fixed as part of the same reorder above (one snapshot dict built
+     once per unit before the loop).
+  4. **(LOW, dormant)** `build_army`'s `kw.setdefault('morale', morale)` no-ops if a spec explicitly
+     sets `'morale': None` (key present, not absent) — silently keeps that one subunit on the
+     shared-pool double-erosion path DG-4 exists to close. No current caller does this, but fixed
+     (explicit `if kw.get('morale') is None:` check, matching this file's own `unit_type` precedent).
+- **Verified:** all 4 `bat.py` digests changed from the pre-DG-3/DG-4 baseline and re-recorded (expected
+  — touches shared, non-gated combat-resolution code). Re-checked after the 4 adversarial-review fixes
+  above: `unit`/`unit_field` stayed byte-identical to their first re-record; **`cell` and `cell_field`
+  BOTH moved again** and were re-recorded a second time. **Process gap, caught by CI not locally:**
+  `test_byte_exact_cell_mode` only hard-fails inside `_in_reference_env()` (GITHUB_ACTIONS+Linux) and
+  silently SKIPS elsewhere — a real pytest pass count locally can hide a genuine `cell`-mode digest
+  drift. Confirmed NOT a portability artifact (this sandbox reproduces CI's exact new hash directly via
+  `bat.py --check`) — a real movement from the same fixes, just invisible to `pytest`'s local summary.
+  Lesson recorded in `bat.py`'s own comment: always re-verify `cell` with a direct `bat.py --check`
+  call, not just the pytest suite, after any core.exchange/core.state/orchestration change.
+  `tests/valoria` 87 passed/17 skipped/1 xfailed either way (neither byte-exact pytest test covers the
+  two field modes at all — manual `bat.py --check` is the only check for those).
+- **Gauge re-run (n=20, reduced from the standard 60 for turnaround — `gauge_mb.py`'s own `__main__`
+  hardcodes n=60 with no CLI override, confirmed by reading it):** **honest result: the fix did NOT
+  close the targeted gap.** Aggregate counts are unchanged from the pre-fix baseline (single 2/20, multi
+  4/20) but the COMPOSITION shifted: multi-mode H1 (mirror Line-vs-Line, previously passing) now reads
+  60/40 (WIN-OUT, band 42-58) while C1 (previously failing) now reads 45/55 (OK, band 35-55) — a
+  trade, not a net gain. **H3, H5, H6 (three of the four actual Cannae-pattern target rows) remain
+  UNRESOLVED (100% draws) in both single and multi mode** — worse than the pre-fix "0-13% losses"
+  framing in one sense (that at least resolved decisively, if in the wrong direction) and better in
+  another (no longer a rout, just a stalemate) — either way, not inside the historical band. **H4
+  (Cannae proper)** improved from a decisive loss to `WIN-OUT` (0/10, 90% draw) — still fails, still
+  undershoots. **C4** improved from the disclosed 0-13% range to 66.7% (`WIN-OUT`, 75-95 band, 70%
+  draw) — real movement toward the band, still short. This is disclosed, not hidden: RC-1's
+  accounting-layer fix was never proven (RC-3 was explicitly "confounded, not proven") to be
+  gauge-scale-sufficient on its own, and this n=20 read is the first real evidence on that question —
+  it looks like RC-1 alone is necessary but not sufficient; DG-1/DG-2 (composition/yield-mechanic, both
+  still open) are the more likely remaining levers, not a bug in this fix.
+- **Frozen-wings ablation (§2 step 4) — CLOSES DG-5 cleanly:** H3/H4/H5/H6 read byte-identical
+  A%/decA%/draw% whether wings wheel normally or are frozen in place for the whole battle (`n=30`
+  each). **No maneuver-timing race exists** — confirms the fixture-scale finding generalizes to gauge
+  scale. DG-5 is not a live question; the bottleneck is entirely elsewhere (most likely DG-1's
+  composition question, given H3/H5/H6's total non-resolution above).
+- **C4-vs-C7 trace (§2 step 5) — single-mechanism, fully explained:** varying only the defender's
+  `stance`/`discipline` (`n=30` each): baseline 16.7%; `+discipline=8` alone: 16.7% (zero effect);
+  `+stance='hold'` alone: 76.7% (the entire gap); `+both` (=C7): 76.7% (no additional discipline
+  contribution). **`stance='hold'` alone fully accounts for the C4→C7 divergence** — discipline plays
+  no role.
+- **Not yet done:** `test_envelop_reaches_rear_node`'s xfail re-evaluation (next); DG-1/DG-2 remain
+  open and are now the better-evidenced next lever given the gauge results above.

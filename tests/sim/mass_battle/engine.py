@@ -244,6 +244,27 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   'troops', 'concentration', 'orders'):
             if k in sp:
                 kw[k] = sp.pop(k)
+        # [DG-4, ED-MB-0002, 2026-07-04 ruling: "Morale is blend of per-subunit as well as whole
+        # unit."] Default every subunit to its OWN real starting morale (unless the spec already
+        # overrode it above) instead of leaving it at the Subunit dataclass default of None. A None
+        # morale falls through to the shared parent Unit.morale (eff_morale/erode_morale,
+        # hierarchy/units.py:384-386,424-431) -- harmless for a single subunit, but for a composed
+        # army it meant every subunit's own §A.4 casualty-fraction trigger independently wrote to
+        # the SAME shared pool, double-eroding it (RC-1(b)). Giving each subunit its own copy closes
+        # that double-count by construction -- no new state. The "whole unit" half of the blend is
+        # NOT deleted: it emerges from Unit.agg_morale()/derive_rout() (~L1460-1481, a troop-weighted
+        # aggregate of subunits' own eff_morale already used for whole-unit rout) and
+        # cascade_morale_hit() (~L1482-1491, already-existing army-wide contagion), both of which
+        # only activate meaningfully once subunits carry real values instead of None.
+        # [2026-07-04 adversarial-review fix] `setdefault` only fires when the key is ABSENT -- a
+        # spec that explicitly sets `'morale': None` (as opposed to omitting the key) would pop that
+        # None into kw above and silently defeat this fix, leaving that one subunit back on the
+        # shared-pool double-erosion path DG-4 exists to close. Explicit None-check instead, matching
+        # this file's own `if unit_type is None: derive` precedent immediately above.
+        if kw.get('morale') is None:
+            kw['morale'] = morale
+        if kw.get('morale_start') is None:
+            kw['morale_start'] = kw['morale'] if morale_start is None else morale_start
         subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
@@ -254,7 +275,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
 def build_envelopment(center_specs, wing_specs, name, faction, *,
                        release_tick=4,  # [canonical: sim_verification_ledger.json — CALIBRATED, mirrors Stage C.4's acceptance-test hold duration, not independently historically cited]
                        power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
-                       speed='Standard'):
+                       speed='Standard', freeze_wings=False):
     """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
     ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes and re-realizes them as emergent,
     multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits — "why is
@@ -278,7 +299,16 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     for this change (a deliberate, verified behavior change, not a regression): three battery rows now
     build multi-subunit armies via this function/build_refused_flank instead of a single Horseshoe-
     shaped subunit.
-    [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]"""
+    [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]
+
+    [ED-MB-0002 §2 step 4, measurement only] `freeze_wings=True` (default False, zero effect on any
+    existing call site/digest) skips attaching the release order entirely, leaving wing subunits
+    permanently at `stance='hold'` for the whole battle instead of releasing into 'envelop' at
+    `release_tick`. `stance == 'hold'` is an immediate early-return at the top of BOTH `_node_advance`
+    and the legacy `advance_cells` (confirmed by direct read, hierarchy/units.py) -- fully sufficient
+    to freeze position, no separate position-pinning mechanism needed. Used by the frozen-vs-wheeling
+    gauge ablation to settle DG-5 (is a genuine maneuver-timing race live, or was RC-1's accounting
+    layer sufficient on its own) -- an instrumentation-only toggle, not a design change."""
     specs = [dict(sp) for sp in center_specs]
     n_center = len(specs)
     for sp in wing_specs:
@@ -287,10 +317,11 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
         specs.append(sp)
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
-    for atom in unit.subunits[n_center:]:
-        if not atom.orders:
-            released = tuple(dict.fromkeys(atom.instructions + ('envelop',)))  # de-dup, order-preserving
-            atom.orders = (Order(f'tick:{release_tick}', {'stance': 'balanced', 'instructions': released}),)
+    if not freeze_wings:
+        for atom in unit.subunits[n_center:]:
+            if not atom.orders:
+                released = tuple(dict.fromkeys(atom.instructions + ('envelop',)))  # de-dup, order-preserving
+                atom.orders = (Order(f'tick:{release_tick}', {'stance': 'balanced', 'instructions': released}),)
     return unit
 
 

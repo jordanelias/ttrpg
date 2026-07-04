@@ -139,9 +139,34 @@ def trial_vector(ua, ub, r):
 # shared shape-derived anchor for the whole unit) is exactly byte-exact-preserving for every existing
 # single-subunit matchup on its own -- the digest below changes ONLY because of the 3 migrated rows'
 # real, intentional behaviour change (a different army composition), not a hidden regression.
+#
+# [DG-3/DG-4, ED-MB-0002, 2026-07-04, ALL FOUR MODES RE-RECORDED] Two deliberate accounting-layer
+# changes touch shared combat-resolution code (NOT gated behind FIELD_MOVEMENT/PER_CELL, unlike every
+# prior mass-battle fix in this lane -- see the Verification section of designs/audit/
+# 2026-07-04-mass-battle-cannae-gauge-audit/README.md for why this one moves all 4 digests): (1) the
+# multi-front combat-pool formula (orchestration.py POOL_VARIANT="C-ii" branch) replaced with a
+# bottom-up, per-cell troop-density-weighted redistribution (core/exchange.py's
+# pair_pool_contribution()) instead of a flat per-pair split -- Jordan's DG-3 ruling ("Combat pool for
+# a subunit is misleading. It should be based upon combat pool per cell as per troop type/quality/
+# density... bottom-up... solves issues with multiple engagements"); (2) a continuous per-phase
+# sibling-morale coupling (core/state.py's morale_check_phase, hierarchy/units.py's new
+# Subunit.pull_morale) -- Jordan's DG-4 ruling ("Subunit morale combination of own morale and overall
+# morale; more likely to wilt if other subunits losing, more likely to rally if other subunits
+# winning"). Both are additive/structural, not magnitude tuning to fit a band. Full rationale,
+# verification (bat.py all 4 modes, tests/valoria, gauge_mb.py re-run) in coverage_matrix.md's
+# 2026-07-04 entry.
 EXPECTED = {
-    'unit': '18bc4a0bada9ab0e8fa7fd27d5944927026bbfdcea1cd8142874b0e93b369c06',
-    'cell': 'bf666d04ae743622ad43c42fec2250f39f66b2150ab4fe52738a5037983de9da',
+    'unit': 'bf7f6d175d526b412a590318f6f07f109c5de153cea56af87aa84e5a53c7de6e',
+    # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
+    # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
+    # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
+    # inside _in_reference_env() (GITHUB_ACTIONS + Linux) and silently SKIPS elsewhere (a documented,
+    # legitimate carve-out for genuine cross-platform float non-portability -- but it also means a
+    # local dev sandbox can't tell "digest moved, needs re-recording" apart from "still matches" for
+    # this one mode). Confirmed NOT a portability artifact: re-running bat.py directly in this same
+    # sandbox reproduces CI's exact new hash. Re-verify 'cell' with a direct `bat.py --check` call
+    # (not just the pytest suite) after any future orchestration.py/core.exchange/core.state change.
+    'cell': '73ac6c19a85cde2e93bb0dbdddcc10cbbd95be485a237c9189b9abc47a101cce',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -178,8 +203,14 @@ EXPECTED = {
     # divergence on top of steps 1-7's, since this specific measurement pins PER_CELL='0' explicitly
     # and cannot be reached by that flip. All five changes (steps 1/4/5/7 + gate 4's non-contribution)
     # are deliberate, disclosed behaviour changes -- not a regression.
-    'unit_field': 'b1963d03d20559ff2868173e6f45750a7618ec3eee1bd3f01b58d04f792d9ce4',
-    'cell_field': '1f0742c59066d4f9839bc230f681edd50555bf8d280e0e50e7c729e58da7f4fc',
+    'unit_field': '810faf81be6cd98f9bff3fbf92658dd6372173dbdcf5d00b3572c77237b87144',
+    # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
+    # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
+    # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
+    # first-round re-record, meaning the current battery/gauge doesn't happen to exercise those bugs
+    # on those 3 modes, but cell_field's PER_CELL=1+FIELD_MOVEMENT=1 combination (continuous-scale
+    # subunits, multi-subunit envelop/cannae/oblique rows, real morale/rout timing) does.
+    'cell_field': '69d7f3a165265438f7746bc1032514f9d603528a73ad00e2cb99dd921d61b7af',
 }
 
 

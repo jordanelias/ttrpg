@@ -85,10 +85,16 @@ def test_sweep_displaces_laterally_grid():
 
 
 @pytest.mark.xfail(
-    reason="[gate 4, ED-MB-0001, 2026-07-02] Known, diagnosed combat-PACING interaction, not a "
-    "movement/pathing regression -- see investigation below. Left as a loud, tracked xfail "
-    "(not silently skipped, not band-fit by tuning fixture magnitudes) pending Jordan's call on "
-    "the underlying combat-balance question, which is out of this fix plan's scope.",
+    reason="[ED-MB-0002, 2026-07-04, UPDATED -- see docstring] The original 'two racing clocks' "
+    "theory below is REFUTED, not just diagnosed: a gauge-scale frozen-vs-wheeling-wings ablation "
+    "(H3-H6, this session) shows byte-identical outcomes whether wings wheel normally or are frozen "
+    "in place all battle -- there is no maneuver-timing race. RC-1's composition-coupling pool/morale "
+    "accounting fix (DG-3/DG-4) was implemented and adversarially reviewed clean, but did NOT close "
+    "this fixture -- gauge rows H3/H5/H6 remain fully UNRESOLVED (100% draws) even after the fix. "
+    "The likely remaining lever is DG-1 (should a Cannae-style pinning force be numerically-dominant-"
+    "and-holding vs thin-and-yielding -- the current symmetric-thirds composition was never "
+    "historically ratified) and/or DG-2 (a fighting-withdrawal/yield mechanic), both explicitly still "
+    "open pending Jordan's ruling. Left as a loud, tracked xfail, not silently skipped or band-fit.",
     strict=False)
 def test_envelop_reaches_rear_node():
     """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
@@ -96,40 +102,41 @@ def test_envelop_reaches_rear_node():
     _node_advance an anchor-level goal, modeled on the legacy per-cell two-state machine, when the
     'envelop' instruction is active and PC_ENVELOP_PATH is on.
 
-    [Gate 4 finding, 2026-07-02] This passed reliably (16/20 seeds behind) at the moment step 7
-    landed, with PER_CELL still at its OLD default (config default was '0'; the test's own fixture
-    only ever forced hierarchy.units.PER_CELL=True, never orchestration.PER_CELL). Flipping
-    PER_CELL's config default to '1' (gate 4, this same commit) turned orchestration.PER_CELL True
-    too, and THAT flip alone reproduces this failure (isolated directly: forcing
-    orchestration.PER_CELL=False while node-path movement stays on restores the pass; forcing it
-    True reproduces the fail -- confirmed independent of every movement-path change in this file).
+    [Gate 4 finding, 2026-07-02, SUPERSEDED -- see 2026-07-04 update below] This passed reliably
+    (16/20 seeds) at the moment step 7 landed, with PER_CELL still at its OLD default. Flipping
+    PER_CELL's config default to '1' (gate 4) reproduced this failure, and the ORIGINAL diagnosis
+    (recorded here for history, not because it's still believed) was: PER_CELL wires in previously-
+    inert combat mechanics that make the fixture's pinning main body resolve (route) around turn
+    44-56, BEFORE a separate detachment's real physics-timed wide detour can complete -- a "two
+    racing clocks" theory, with several isolation checks that seemed to confirm it at fixture scope.
 
-    Root cause, diagnosed not guessed: PER_CELL wires in previously-fully-inert combat mechanics
-    (Increment 3 fatigue drain, Increment 6 envelopment-sigma, charge shock) that make a prolonged,
-    UNSUPPORTED frontal engagement resolve far faster (and far more volatile/seed-sensitive) than
-    the OLD combat model ever did. This fixture's "pinning main body" (_attacker_envelop) fights
-    the defender ALONE for as long as needed while a SEPARATE detachment travels a wide detour to
-    the rear -- under the old model this frontal fight never routed either side within the 60-turn
-    cap (it just ran to the cap every time), incidentally giving the detachment unlimited real time
-    to complete its detour. Under PER_CELL=1 the frontal fight now resolves (usually via the main
-    body routing) around turn 44-56 -- BEFORE the detachment, on a real physics-timed detour, can
-    complete it. Confirmed NOT a movement bug: (1) the same detachment reliably gets behind when
-    orchestration.PER_CELL is held False (mechanism intact); (2) an isolated single-subunit A(4000)
-    vs B(3000,hold,disc4) fight the SAME size as the main body alone reliably favors A (14-0-6 over
-    20 seeds) under PER_CELL=1 -- so the failure is not "PER_CELL always favors this defender
-    profile," it is specific to this two-subunit composition's timing; (3) varying the detachment's
-    deployment column (42/36/33/31, i.e. its travel distance) barely moved the outcome, while the
-    battle's own turn-of-resolution stayed clustered at 44-56 regardless -- the bottleneck is the
-    frontal fight's NOW-FASTER clock, not the detour's length.
+    [2026-07-04 update, ED-MB-0002] A dedicated Fable-led root-cause audit
+    (designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md) REFUTES the racing-clocks
+    theory as a general account: gauge row C7 (a genuinely multi-subunit cavalry envelopment) passes
+    its historical band, which a pure clock-race can't explain. The audit traced the real defect to
+    RC-1 -- composition-coupling bugs in the pool/morale accounting layer (a composed subunit's
+    combat pool scaled down per simultaneous-engagement pair while a single-subunit opponent rolled
+    full pool into every pair; two subunits' morale triggers double-eroding one shared parent pool).
+    Jordan ruled DG-3 (bottom-up per-cell pool redistribution) and DG-4 (per-subunit + sibling-
+    coupled morale) the same day; both were implemented, adversarially reviewed (4 real bugs found
+    and fixed), and verified byte-exact/regression-clean.
 
-    Explicitly NOT fixed by retuning _envelop_goal's geometry (that would be exactly the
-    band-fitting this repo's discipline forbids -- the steering mechanism is proven correct) and
-    NOT fixed by picking new fixture troop counts/positions (tried several; none reliably restored
-    a pass across seeds -- see the investigation log in coverage_matrix.md). This is a genuine,
-    disclosed combat-balance/pacing question (should a Cannae-style pinning force be modeled as
-    numerically dominant-and-holding, or thin-and-yielding per the actual historical tactic; should
-    envelopment maneuvers get a time allowance separate from the frontal fight's own clock) that
-    belongs to whoever next works combat balance under PER_CELL=1, not to this movement/pathing fix."""
+    THIS FIXTURE STILL FAILS after that fix -- and a frozen-vs-wheeling-wings ablation this same
+    session (H3-H6, n=30, gauge scale) settles WHY it isn't a timing race: frozen and wheeling wings
+    produce statistically indistinguishable outcomes. So the bottleneck is not (and, per this
+    ablation, never really was, at gauge scale) about the detachment arriving too late -- it's that
+    the underlying engagement, even with composition-coupling now fixed, still doesn't resolve the
+    way the historical band expects. The two live candidates, per the audit's own decision gates, are
+    DG-1 (this fixture's/these gauge rows' pinning-force composition was never historically ratified
+    -- it passed only under a since-confirmed invincibility-bug artifact, RC-2) and DG-2 (the engine
+    has no state between "eroding" and "routed," so a historically-correct thin-and-yielding center
+    that trades ground in ordered withdrawal is currently inexpressible). Both remain open, gated on
+    Jordan's ruling -- not something this test or a future movement-path change can fix on its own.
+
+    Explicitly NOT fixed by retuning _envelop_goal's geometry (the steering mechanism is proven
+    correct, confirmed again by this session's frozen-wings ablation) and NOT fixed by picking new
+    fixture troop counts/positions -- see designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
+    README.md and tests/coverage_matrix.md's 2026-07-04 entry for the full investigation."""
     r = _val.v_envelop(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-ENVELOP (node) measured={r.measured} expected={r.expected}"
 
