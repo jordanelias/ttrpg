@@ -6,6 +6,23 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
+  (PROPOSED, 2026-07-04).** Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
+  (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
+  cut/thrust/percussion + wiring the dead `thrust_factor`, edge-count, half-sword-from-primitives,
+  counterbalance, retreat-default, weapon-class facing) **×** the weapon-morphology granularity audit
+  (`audit_v1.md`, merged to `main` as PR #74 — P1 edges / P2 transverse profile / P3 grippable half-sword /
+  P4 guard axis + the silhouette renderer). Output = one non-colliding sequence **U0→U9 + T-P2 + T5**, ED-PC
+  ids allocated at implementation (`next_free=1`). Key rulings: adopt the audit's `edges={sides,false_edge_frac}`
+  encoding (this session's 53-weapon table is the migration data); adopt attested-`grippable` half-sword +
+  this session's derived-form generator; one channel per edge-effect (edge-lines→legibility, spine→bind_sigma,
+  grab-hazard→contact, drop the double-counts); forced high-risk ordering **PoB → modes+percussion → capstone
+  → P2-c cross_section swap**; **U2+U9 ARE the Phase-C percussion enactment — no separate future Phase C
+  remains.** Base = post-#72 `main` (merge PR #72 first; the other branch `claude/weapon-morphology-viz-7wmfvq`
+  is content-identical to #74 and can be deleted). Open Jordan forks JD-1…JD-8 in §6. Action items: recover the
+  never-committed `render_weapons.py` (F5); add a "superseded-in-part by consolidation_v1 §4" header note to
+  `audit_v1.md` (on `main`) when the branches unite.
+
 - **Scene-combat engine v1 — MERGED to `main`** (`d4bf2af3`, PR #40, 2026-07-01T04:46Z; Track-2 cleanup
   `8fbc4b66`, PR #47, 2026-07-01T06:48Z). `design/scene-combat-v1` is now fully redundant — its history is
   the same work under different SHAs, confirmed byte-for-byte against `main`'s squash. `pytest tests/valoria -q`
