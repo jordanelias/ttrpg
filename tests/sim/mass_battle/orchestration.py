@@ -506,9 +506,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
         a_base = subunit_combat_pool(unit_a, atom_a)   # per-subunit pool (shared command; per-subunit discipline+cohesion)
         b_base = subunit_combat_pool(unit_b, atom_b)
 
-        # F-i: support-stack-adjusted engage_frac
-        a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
-        b_engage_frac = support_engage_frac(atom_b, p["b_cells"])
+        # F-i: support-stack-adjusted engage_frac -- only computed for the variants that actually
+        # use it (baseline/C-i). [ED-MB-0002 perf fix] C-ii's bottom-up pair_pool_contribution()
+        # does its own abs->orig cell-coordinate conversion (cells_to_orig_coords) internally;
+        # unconditionally also calling support_engage_frac here duplicated that same conversion for
+        # a value C-ii never reads, roughly doubling per-pair cost for no reason (measured: a
+        # multi-subunit field-path battery went from ~seconds to ~3 minutes before this fix).
+        if POOL_VARIANT != "C-ii":
+            a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
+            b_engage_frac = support_engage_frac(atom_b, p["b_cells"])
 
         if POOL_VARIANT == "baseline":
             a_pool_raw = a_base * a_troops_frac * a_engage_frac
@@ -517,15 +523,35 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
             a_pool_raw = a_base * a_engage_frac
             b_pool_raw = b_base * b_engage_frac
         elif POOL_VARIANT == "C-ii":
-            a_pool_raw = max(a_base * a_engage_frac * 0.5,
-                             a_base * a_troops_frac * a_engage_frac)
-            b_pool_raw = max(b_base * b_engage_frac * 0.5,
-                             b_base * b_troops_frac * b_engage_frac)
+            # [DG-3, ED-MB-0002, 2026-07-04 Jordan ruling: "Combat pool for a subunit is
+            # misleading. It should be based upon combat pool per cell as per troop type/quality/
+            # density, and the overall combat pool for a subunit is actually just a combat score
+            # for the subunit. This is bottom-up, and it solves issues with multiple engagements."]
+            # `a_base`/`b_base` (subunit_combat_pool) stay exactly what Jordan calls them: the
+            # subunit's aggregate COMBAT SCORE -- unchanged formula, not touched here.
+            # `pair_pool_contribution` (core/exchange.py) is the bottom-up piece: it redistributes
+            # that score across THIS specific pair by actual troop density in the cells engaged with
+            # THIS enemy (`p["a_cells"]`/`p["b_cells"]`, already pair-scoped by find_contacts), plus
+            # depth-weighted support from ranks behind — replacing a flat "divide by how many
+            # simultaneous pairs" approximation (an earlier version of this fix used exactly that,
+            # via eng_counts/count_engagements_per_atom; corrected same-session per Jordan's
+            # feedback that it was still top-down, not bottom-up) with an exact per-pair troop-
+            # weighted split. `a_troops_frac`/`b_troops_frac` is kept as an outer multiplier — a
+            # SEPARATE, pre-existing concern (dampening a multi-SUBUNIT army's shared Command-driven
+            # score so 3 subunits don't each roll a full-strength pool off the same Command value),
+            # orthogonal to RC-1(a)'s multi-FRONT (multi-enemy) asymmetry this fix targets.
+            a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base * a_troops_frac)
+            b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base * b_troops_frac)
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
-        a_pool = max(1, math.floor(a_pool_raw))
-        b_pool = max(1, math.floor(b_pool_raw))
+        # [ED-MB-0002 §2 step 2] Guard against float accumulation error dropping a whole die when
+        # a pool value should land exactly on an integer boundary (e.g. a_pool_raw == 3.0 stored as
+        # 2.9999999999999996). Confirmed to touch all 4 bat.py digest modes, not just field-path --
+        # this variable is shared combat-resolution code, unlike every prior mass-battle fix in this
+        # lane, which lived entirely inside the FIELD_MOVEMENT-gated node path.
+        a_pool = max(1, math.floor(a_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
+        b_pool = max(1, math.floor(b_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
 
         # v11: Per-cell octagon angle — replace centroid-to-centroid with per-cell raw vectors
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]

@@ -58,3 +58,43 @@ namespace and are folded into Next actions below, which carries the full narrati
   marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
   ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
   that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+
+## Catch-up (2026-07-04) — this file fell behind; see root HANDOFF.md for the fuller narrative
+
+This lane file wasn't kept in sync since the entries above (predates ED-MB-0001). Condensed summary of
+what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-battle block and
+`tests/coverage_matrix.md`'s dated entries:
+
+- **T1-T4 charge-recoil ruling (ED-1095)** executed; **movement/pathing audit (ED-1096)** found
+  `envelop`/`sweep`/`wheel`/`kite` only worked on the legacy grid path, unreachable on the live default
+  node path since ED-1089's field-movement flip.
+- **ED-MB-0001 (2026-07-02, PR #66, merged):** the movement/pathing fix-plan executed end-to-end —
+  waypoint primitive gives `_node_advance` real per-tick steering for `envelop`/`sweep`; `PER_CELL`
+  default flipped 0→1 (gate 4). Disclosed, not chased: enabling `PER_CELL`'s fatigue/attrition mechanics
+  made the H3-H6 Cannae-pattern gauge rows collapse (0-13% losses vs. a 45-72% expected band) — landed
+  as a loud `xfail` on `test_envelop_reaches_rear_node`, flagged as the next investigation.
+- **ED-MB-0002 (2026-07-04, PR #73 audit + PR #75 ratification):** a Fable-led Workflow diagnosed the
+  H3-H6 collapse as composition-coupling defects in the pool/morale accounting layer (RC-1), not the
+  "two racing clocks" theory the xfail's own docstring proposed (refuted by gauge row C7). Jordan ruled
+  DG-3 (bottom-up per-cell pool split — corrected mid-session from an initial flat-divide attempt per
+  Jordan's own "per-cell troop density... bottom-up" feedback) and DG-4 (a blend of per-subunit and
+  whole-unit morale, with continuous sibling-pull, wiring already-existing `agg_morale`/`derive_rout`/
+  `cascade_morale_hit` machinery). Both implemented on `claude/mass-battle-cannae-gauge-dg-rulings`; all
+  4 `bat.py` digests re-recorded (expected — touches shared, non-gated combat-resolution code);
+  `tests/valoria` 87 passed/17 skipped/1 xfailed (after an adversarial review found and fixed 4 real
+  bugs: a pool-zeroing bug for continuous-scale subunits; a same-phase-rout-masking ordering bug and a
+  Gauss-Seidel sibling-aggregation bug in the new morale pull, both fixed by snapshotting siblings and
+  running self-erosion last; a dormant `morale: None` footgun in `build_army`). **DG-5 CLOSED**: a
+  frozen-vs-wheeling-wings gauge ablation (H3-H6) shows byte-identical outcomes — no maneuver-timing
+  race exists at all, refuting the original "two racing clocks" theory outright, not just narrowly.
+  C4-vs-C7's gap is fully explained by `stance='hold'` alone (discipline contributes nothing).
+  **Honest result: the DG-3/DG-4 fix did NOT close the targeted gap.** Gauge re-run (n=20): aggregate
+  pass counts unchanged (single 2/20, multi 4/20) but composition shifted (H1 newly fails, C1 newly
+  passes); H3/H5/H6 remain fully unresolved (100% draws); H4/C4 show real but insufficient movement
+  toward their bands. RC-1's accounting fix looks necessary but not sufficient — DG-1 (was the
+  pinning-force composition ever historically ratified, given it only passed under the now-confirmed
+  RC-2 invincibility artifact) and DG-2 (a fighting-withdrawal/yield mechanic) are the better-evidenced
+  remaining levers. `test_envelop_reaches_rear_node`'s xfail reason/docstring updated to retire the
+  superseded racing-clocks narrative and record this finding instead. **Next action: this is now a
+  Jordan-ruling unblock (DG-1/DG-2), not further engine implementation.** RC-5 (9/20 gauge rows failing
+  for unrelated reasons) remains a separate, not-yet-opened lane item.

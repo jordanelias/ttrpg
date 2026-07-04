@@ -674,19 +674,56 @@ per the file's protocol; never max+1.)_
   morale triggers double-erode one shared parent pool; PER_CELL's casualty-fraction triggers use
   subunit-scale denominators) — and **the old PER_CELL=0 baseline that used to pass H3-H6 was itself an
   invincibility-bug artifact (RC-2, HIGH confidence), not a working model to restore.**
-  **DG-3 and DG-4 RULED the same day (README.md §3 addendum):** DG-3 = split the defender's pool
-  symmetrically across pairs (Jordan's own criterion — long-term integrity/fidelity to reality, not just
-  the smallest diff); DG-4 = a blend of per-subunit and whole-unit morale ("Morale is blend of per-subunit
-  as well as whole unit," Jordan verbatim), operationalized by wiring `agg_morale()`/`derive_rout()`/
-  `cascade_morale_hit()` — already-existing, currently-inert machinery in `hierarchy/units.py` — rather
-  than authoring new state; the actual gap is that `build_army`/`build_envelopment`/`build_refused_flank`
-  never populate a subunit's own `morale` at construction, so every subunit falls through to the shared
-  parent pool. **DG-1, DG-2, DG-5 remain OPEN**, gated on this fix landing and the gauge being re-measured.
-  **Next action: implement §2's two independent bug fixes + ablation harness, then the DG-3/DG-4
-  accounting fix, re-run the gauge (all 20 rows, both modes), full digest re-record where it moves, and
-  adversarial review** — not yet started as of this entry. A separate, undiagnosed residual (RC-5) also
-  surfaced: 9 of 20 gauge rows fail for reasons unrelated to composition coupling at all — flagged as its
-  own not-yet-opened lane item, do not fold into this fix.
+  **DG-3 and DG-4 RULED the same day (README.md §3 addendum) — AND IMPLEMENTED 2026-07-04, on
+  `claude/mass-battle-cannae-gauge-dg-rulings` (PR #75):** DG-3's first implementation attempt (a flat
+  divide-by-simultaneous-pair-count) was corrected same-session by Jordan's own follow-up feedback: "Combat
+  pool for a subunit is misleading. It should be based upon combat pool per cell as per troop type/
+  quality/density... bottom-up... solves issues with multiple engagements." Rebuilt as `core/exchange.
+  pair_pool_contribution()` — redistributes a subunit's unchanged combat-SCORE across a specific contact
+  pair by ACTUAL troop density in the engaged cells, plus depth-weighted support (reusing
+  `support_engage_frac`'s falloff), instead of a flat post-hoc divide. DG-4 ("Subunit morale combination
+  of own morale and overall morale; more likely to wilt if other subunits losing, more likely to rally if
+  other subunits winning," Jordan verbatim) implemented as: `build_army` now defaults every subunit to its
+  own real starting morale (closing the double-count by construction, reusing already-existing
+  `agg_morale()`/`derive_rout()`/`cascade_morale_hit()` for whole-unit behavior); PLUS a new continuous
+  per-phase sibling-pull term (`Subunit.pull_morale()` + `core/state.morale_check_phase`,
+  `MORALE_SIBLING_PULL=0.15` tagged Class-B/Jordan-vetoable) that pulls each subunit's morale toward its
+  living siblings' troop-weighted aggregate every phase. **Adversarial review (general-purpose agent)
+  found 4 real bugs, all fixed:** `pair_pool_contribution` silently zeroed the pool for any
+  continuous-scale (`troops=`/`concentration=`) subunit (recomputed the wrong, legacy tier-only cell
+  pattern instead of iterating `cell_troops` directly — fixed); the sibling-morale pull could
+  retroactively rescue a subunit from a same-phase rout its own casualties would have caused (reordered
+  so self-erosion runs LAST, after a phase-start-snapshot-based pull, giving self-damage the final say);
+  the same pull read already-mutated sibling values within one loop pass (Gauss-Seidel order bias — fixed
+  via the snapshot); `build_army`'s morale-defaulting silently no-op'd on an explicit `morale: None` spec
+  (dormant today, fixed). None of the 4 fixes moved 3 of the 4 `bat.py` digests; `cell_field` alone moved
+  again and was re-recorded a second time.
+  **DG-5 CLOSED — frozen-wings ablation (H3-H6, n=30, gauge scale):** wheeling and permanently-frozen
+  wings produce statistically indistinguishable outcomes. **No maneuver-timing race exists, full stop**
+  — the original "two racing clocks" theory this whole investigation started from is refuted at gauge
+  scale, not just narrowly-surviving at fixture scope as the audit doc first suggested.
+  **C4-vs-C7 fully explained:** varying only the defender's stance/discipline, `stance='hold'` alone
+  accounts for the entire ~60-point gap; discipline contributes nothing.
+  **Honest headline result — the DG-3/DG-4 fix did NOT close the targeted gap.** Gauge re-run (n=20):
+  aggregate counts unchanged from the pre-fix baseline (single 2/20, multi 4/20), but the composition
+  shifted (H1 newly fails at 60/40 vs its 42-58 band; C1 newly passes) — a trade, not a net gain. **H3,
+  H5, H6 remain fully UNRESOLVED (100% draws)**; H4 (Cannae proper) improved from a decisive loss to a
+  90%-draw non-resolution — still fails; C4 moved from the disclosed 0-13% toward 66.7% (still short of
+  its 75-95 band, real but insufficient progress). **Reading: RC-1's accounting fix looks necessary but
+  not sufficient — DG-1 (was the pinning-force composition ever historically ratified? it passed only
+  under the now-confirmed RC-2 invincibility artifact) and DG-2 (a fighting-withdrawal/yield mechanic —
+  the engine has no state between "eroding" and "routed") are the better-evidenced remaining levers, not
+  a bug in this fix.** `test_envelop_reaches_rear_node`'s xfail reason/docstring updated to match (the
+  old racing-clocks narrative retired, replaced with this finding). Verified: all 4 `bat.py` digests
+  byte-exact against their (twice, for cell_field) re-recorded values; `tests/valoria` 87 passed/17
+  skipped/1 xfailed. A real perf regression was found and fixed along the way (a redundant cell-
+  coordinate conversion doubling per-pair cost) — profiling confirmed the DOMINANT remaining cost is
+  pre-existing Stage-A TOI physics, not this fix; multi-subunit field-path battles now take ~1-4 min
+  instead of seconds in `bat.py`'s own battery, disclosed not hidden.
+  **Next action: Jordan's ruling on DG-1/DG-2 is the actual unblock — implementation work on this lane
+  is otherwise done for this pass.** A separate, undiagnosed residual (RC-5) also surfaced: 9 of 20 gauge
+  rows fail for reasons unrelated to composition coupling at all — flagged as its own not-yet-opened lane
+  item, do not fold into this fix.
 - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec
   RATIFIED (2026-07-02); HANDOFF split into per-lane files (2026-07-02).** The month's
   comprehensive review, the consolidation execution/reconciliation logs, and the single

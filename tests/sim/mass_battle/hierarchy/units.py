@@ -429,6 +429,23 @@ class Subunit:
         else:
             u = self._u()
             if u is not None: u.morale = new
+    def pull_morale(self, delta):
+        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of own morale
+        # and overall morale; more likely to wilt if other subunits losing, more likely to rally if
+        # other subunits winning."] A CONTINUOUS, signed coupling toward siblings' state (called
+        # from core/state.py's morale_check_phase every phase) -- distinct from erode_morale (a
+        # one-directional casualty/exhaustion penalty) and cascade_morale_hit (a discrete, one-time
+        # army-wide contagion event). delta>0 rallies (siblings trending better than this atom),
+        # delta<0 wilts (siblings trending worse). Same own-else-inherited-Unit write routing as
+        # erode_morale/degrade_discipline. Capped at eff_morale_start on the rally side (siblings'
+        # strength cannot rally a subunit ABOVE its own pristine ceiling); no floor on the wilt
+        # side, matching erode_morale's own unbounded-negative convention (rout is a <=0 threshold
+        # check elsewhere, not enforced here).
+        new = min(self.eff_morale_start, self.eff_morale + delta)
+        if self.morale is not None: self.morale = new
+        else:
+            u = self._u()
+            if u is not None: u.morale = new
     def degrade_discipline(self):
         # -1 discipline toward floor 0 (formation degradation); own-else-inherited-Unit write routing.
         new = max(0, self.eff_discipline - 1)

@@ -1403,3 +1403,128 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   call per tick, using atom.cells() (field-aware) zipped against _oriented(atom)'s stable ids.
   Zero cost when tracing is off (never called, not merely discarded).
 - G5 byte-exact both modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file clean.
+
+## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
+- ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
+  designs/scene/combat_engine_v1/workbench's pattern: a tiny stdlib HTTP server, no external deps, no
+  build step). trace.run_traced_battle() runs ONE battle via engine.build_unit/resolve_battle (the
+  wrapper contract, never reaches past it) with tracing on, returning the full 'tick'/'melee'/
+  'volley'/'positions' event stream. server.py serves a canvas SPA with playback controls (scrub/play/
+  step), a preset picker mirroring gauge_mb.py's named matchups, and per-tick HP/morale/rout/event-log
+  panels. VERIFIED end-to-end live (not just imported): all 4 endpoints (GET /, /api/mode, /api/presets,
+  POST /api/trace) tested via a running server instance in both PER_CELL=0 (grid) and
+  FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 (coordinate-field) modes.
+- IMPORTANT (documented in server.py): PER_CELL/FIELD_MOVEMENT/PC_NODE_COHESION are read from
+  os.environ once at import time and star-imported as independent copies into every consumer — a
+  running server's mode is FIXED at process start (no live toggle); comparing grid vs field means two
+  server instances. GET /api/mode reports the actual running config.
+- FINDING from using the tool (not a bug): confirmed by reading _node_cells() (hierarchy/units.py) that
+  the coordinate-field candidate keeps ROW positions integer-rank-snapped by design ("ranks are integer
+  bins" — a real military structure) and only bins COLUMNS to their file; positions are not yet fully
+  continuous floats end-to-end. Accurately reflected by the visualizer, not a rendering defect.
+- Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
+  7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
+  non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
+
+## 2026-07-01 — mass_battle Stage A: true-adjacency stand-off halt (FIELD_MOVEMENT)
+- FIXED the coordinate-field magical-co-location bug: the halt clamp compared against SNAPPED enemy
+  positions with a flat "-1" margin, not true floats/a real stand-off. New `standoff()` primitive
+  (`hierarchy/units.py`: `CELL_RADIUS` + PP-290 reach class via `troop_types.registry.reach_for`).
+  `_node_advance`'s pre-cap + per-cell clamp now use `cells_float()` vs. `standoff()`, gated
+  `FIELD_MOVEMENT`, prior code kept as fallback (byte-exact OFF unaffected).
+- Bug found+fixed mid-implementation: freezing both sides' enemy positions pre-move let two closing
+  sides compound past standoff (run_battle moves unit_a fully before unit_b). Fixed by snapshotting
+  unit_a AFTER its own move. Verified: min separation holds at exactly `standoff()` (2.0).
+- `find_contacts` gets a standoff-radius field path; `resolve_cross_side_contention` is a documented
+  FIELD_MOVEMENT no-op. Review found+fixed a duplicate-cell stamina-drain over-count (dedup via sets).
+- CI gap closed: `bat.py`'s golden-digest harness existed but nothing ran it — new
+  `tests/valoria/test_mass_battle_byte_exact.py` wires grid-mode checks into CI; field digests recorded.
+- `gauge_mb.py`: grid/OFF unchanged (12/20, matches historical 5/13); field path passes 4/20 —
+  measured, not fitted; likely needs Stage B (facing/reaction, not yet built), not a magnitude tune.
+- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851). Fabrication + co-file
+  clean. Default stays OFF; default-flip remains Jordan-gated.
+
+## 2026-07-01/02 — mass_battle Stage B + bias fix + Stage C: facing, first-mover bias, command layer
+- STAGE B: ported the existing facing-slew mechanism (`PC_FACING_MODEL`, already wired on the legacy
+  path) onto the FIELD_MOVEMENT path — `_node_advance`'s attention branch was overwriting facing with
+  an instantaneous target-direction vector, zero rate-limiting, discarding a stale "don't double-slew"
+  rationale that no longer held once that branch fired. Reuses `_slew_facing` unchanged.
+- MIRROR-BIAS BUG found + fixed: `gauge_mb.py`'s Cav-vs-Cav mirror matchup (should read ~50/50) read
+  98.3/0.0 on the field path — traced via a git-worktree bisect to Stage A's standoff clamp itself
+  (confirmed absent, 11-8-1, on the pre-Stage-A commit). Root cause: the clamp's sequential-snapshot
+  design gave unit_a persistent first claim on the shared closing budget every tick both sides neared
+  standoff. Fixed by reverting to a synchronized both-sides-frozen snapshot and HALVING the allowed
+  closing distance at both the anchor and per-cell level. A follow-up review caught and fixed a genuine
+  oscillation bug in the per-cell clamp's multi-violator iteration (best-position tracking, not
+  last-pass-wins). Verified: mirror matchup back to 2-1-27 (30 seeds); gauge `C3` now OK (5.0/6.7/88.3,
+  was 98.3/0.0). One small accepted residual remains (~5% of ticks in one dense rotating scenario rest
+  at 1.414 vs the intended 2.0, against an already-halted neighbour) — a fix attempt made it worse via
+  WHEEL-rotation interaction, reverted in favor of the smaller gap.
+- STAGE C: `engine.build_army` (public multi-subunit constructor, mirrors `gauge_mb.make_mixed_unit`,
+  fixes its troops/concentration-forwarding omission + its never-set-advance_dir gap, confirmed inert on
+  that helper — zero live callers); `Order`/`check_orders` (timed/conditional order queue, 'immediate'/
+  'tick:N'/'enemy_range:D'/'ally_at:D' triggers, run before `assign_targets`); `escort_of`/
+  `escort_offset`/`escort_engage_on_contact` (formation-relative positioning, live-facing-rotated,
+  computed at the synchronized pre-move point alongside `cached_centroids`). Cannae acceptance test
+  (wide-placed wings held then released by a `tick:4` order into the pre-existing `envelop`
+  instruction) produces real lateral wheel movement — zero new flanking mechanics. Review found+fixed
+  two gaps before landing: `Order.behavior`'s plain `setattr` was unrestricted (risked corrupting cell/
+  troop/position accounting if an order set a geometry field) — now an explicit `_ORDER_SAFE_FIELDS`
+  allowlist; a malformed trigger string failed silently forever — now validated eagerly at construction.
+- G5 byte-exact both grid modes unchanged throughout (unit 7be8499b / cell 1c5b2851) — every change
+  gated behind FIELD_MOVEMENT/PC_FACING_MODEL or additive with all-inert defaults. Fabrication clean
+  (epsilon-guard citations added where flagged). Default stays OFF; default-flip remains Jordan-gated.
+
+## 2026-07-02 — mass_battle: TOI refactor (halving hack replaced with exact time-of-impact)
+- Jordan-directed complete replacement of Stage A/B's halved-anchor-precap + iterated worst-violator
+  clamp with real continuous-collision detection: `_node_advance` now proposes each cell's UNCAPPED
+  end-of-tick position (no clamp at all); new `resolve_toi_and_commit` (`units.py`) solves the exact
+  per-pair quadratic TOI across BOTH sides together, once per tick, capping each cell to the smallest
+  root over all its cross-side pairs — exact, no iteration, no oscillation guard needed.
+- Reach + facing: `target` (final standoff) always uses base reach (matches `find_contacts`, keeps
+  contact/halt in sync, byte-preserves every equal-reach matchup); `_effective_reach` gates a cell's
+  reach to zero outside its forward FOV (reuses Stage B's `FOV_HALF_DEG`) for THROTTLE purposes only;
+  `_reach_throttle` gives the longer-(facing-gated)-reach side a smaller share of the tick's closing
+  motion, so it "sets into formation" before the shorter-reach side closes the rest of the gap.
+- 5 real bugs found+fixed (2 via an independent adversarial-review agent): halted-cell obstacle
+  exclusion, s=0 root filter, pass-through endpoint-only shortcut, throttled-safe-vs-full-motion
+  endpoint mismatch, idle/reserve subunits dropped as obstacles. See plan file for detail.
+- Verified: G5 byte-exact both grid modes unchanged; `tests/valoria` 55 passed/24 skipped unchanged;
+  true-float standoff invariant zero violations (Horseshoe-cav/Line/Arrowhead/mirror-cav); reviewer's
+  own two repro cases now cap correctly. Field golden digests re-recorded (intentional behaviour
+  change). Mirror cav-vs-cav (30 seeds) now 0-0-30 — fully balanced, no first-mover skew.
+
+## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets
+- `engine.build_army`/`build_unit` now WIRE the previously-inert `Subunit.role`: a spec's `role` is
+  gated by `role_allowed(troop_type, role)` (raises `ValueError` on a disallowed combo — a levy can't
+  take `Shock`), and, in `build_army`, defaults `shape`/`instructions` from `ROLE_SPEC[role]` when the
+  spec doesn't explicitly set them (explicit spec fields still win). Zero existing call site touched
+  (`role` defaults to `None`).
+- New `engine.build_envelopment`/`build_refused_flank` (ED-909's Unit-level "Envelopment"/"Refused
+  Flank" allocation-grid presets): compose `build_army` + Stage C's timed-order queue + the
+  pre-existing, UNMODIFIED `envelop` instruction — center/strong subunits built as given; wing/refused
+  subunits get `stance='hold'` + an auto-queued release order (`tick:N` into `envelop`, or
+  `enemy_range:N` for refused-flank) unless the spec already supplies its own orders. Zero new
+  flanking mechanic, matching Stage C.4's own finding.
+- **Deliberately deferred, not part of this change**: the literal LC-8 retirement of `Horseshoe`/
+  `RefusedFlank` as `Subunit.shape` values (`geometry.CELL_PATTERN_FN`/`config.MIN_DISCIPLINE`) — the
+  frozen byte-exact grid golden digests were computed against battles using `Horseshoe` directly as a
+  `Subunit.shape` (`bat.py`'s own battery), so removing it would break that non-negotiable invariant.
+  This lands ED-909's Unit-level INTENT (envelopment as an emergent composition) without that break;
+  the legacy `Subunit.shape` values remain valid, now understood as legacy options. Flagged for
+  Jordan's explicit sign-off before any literal removal + re-baseline.
+- `Unit.doctrine`/Aggression: NOT built as new data — Jordan's own ED-907 ratification note already
+  names `stance` as engine-realized Aggression; adding a parallel `doctrine.aggression` field would
+  duplicate it (NERS-N/E, no unneeded apparatus). Cohesion-priority/the allocation-grid UI/intervention
+  cadence are explicitly Jordan-deferred to Stage E — not built here either.
+- G5 byte-exact both grid modes unchanged (unit 7be8499b / cell 1c5b2851) — every change is additive
+  (new functions, new optional kwargs defaulting to `None`). `tests/valoria` 55 passed/24 skipped
+  unchanged. Functional: role defaulting/rejection verified directly; `build_envelopment`/
+  `build_refused_flank` construct correctly and a traced battle confirms the wing's order fires
+  (releases from `hold` into `envelop` at the queued tick).
+- Adversarial review found one real bug, fixed: `build_army` never popped/forwarded an `orders` key
+  from a spec dict, so the two presets' documented "unless the spec already supplies its own orders"
+  escape hatch was dead code — a caller-supplied custom order was silently dropped and always
+  overwritten by the auto-queued release order. Fixed by adding `orders` to `build_army`'s forwarded
+  per-subunit override keys. Re-verified: a spec-supplied order now survives; the auto-release still
+  fires when no custom orders are given. Byte-exact and pytest unaffected (both re-confirmed).

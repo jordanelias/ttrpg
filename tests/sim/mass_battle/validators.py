@@ -68,9 +68,9 @@ _VULN_DISC = 4         # [canonical: class-B test-fixture: a typical (un-braced)
 _DET_WIDE_COL = 42     # [canonical: class-B test-fixture: detachment deploy column, wide past the defender's flank (for the envelop maneuver)]
 
 
-def _line(faction, row, advance_dir, troops, stance):
+def _line(faction, row, advance_dir, troops, stance, col=_COL):
     return Subunit(shape='Line', troop_type='infantry', tier=_TIER,
-                   starting_position=(row, _COL), advance_dir=advance_dir,
+                   starting_position=(row, col), advance_dir=advance_dir,
                    unit_type='melee', stance=stance, troops=troops, concentration=_CONC)
 
 
@@ -199,10 +199,18 @@ def v_brace():
 
 def _attacker_envelop():
     """Main body fixing the front + a detachment deployed WIDE (past the flank) carrying the
-    'envelop' instruction -- the build-C maneuver routes it around to the enemy's rear."""
+    'envelop' instruction -- the build-C maneuver routes it around to the enemy's rear.
+
+    [2026-07-04 fix, ED-MB-0002 §2 step 1] The wide column must be supplied to _line() at
+    CONSTRUCTION time, not assigned to .starting_position afterward -- Subunit.__post_init__
+    already initializes node state (_node_pos/_node_anchor) from starting_position, and
+    reassigning the attribute post-construction does not retroactively move that state. The
+    detachment previously deployed (and simulated) at _COL every time, silently making its own
+    'wide detour' a no-op on the node path -- confirmed as a ghost-cell construction bug, not a
+    movement-mechanism defect (RC-1, designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
+    README.md)."""
     main = _line('A', _MAIN_ROW, _BACK, _MAIN_TROOPS, 'balanced')
-    det = _line('A', _MAIN_ROW, _BACK, _DET_TROOPS, 'balanced')
-    det.starting_position = (_MAIN_ROW, _DET_WIDE_COL)
+    det = _line('A', _MAIN_ROW, _BACK, _DET_TROOPS, 'balanced', col=_DET_WIDE_COL)
     det.instructions = ('envelop',)
     return _unit('A', 'A', [main, det], 'balanced')
 
