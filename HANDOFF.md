@@ -536,23 +536,21 @@ verified live max, allocated ED 1081–1087 to the month-overview consolidation 
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
 per the file's protocol; never max+1.)_
 
-- **START HERE (branch `scene-combat-morphology-rearch`, worktree `C:/Github/ttrpg-morph-rearch` — NOT
-  the default `C:/Github/ttrpg` checkout, which is on a different branch and has none of this) — R2:
-  implement the ratified closing-distance/facing/grip redesign.** Plan file (durable, in-repo):
-  `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md` (that folder's
-  `README.md` indexes the full design/audit trail; the canonical plan-mode copy is
-  `C:\Users\Jordan\.claude\plans\things-like-a-feather-compressed-rivest.md` if it still exists, but treat
-  the in-repo copy as authoritative if they ever diverge). Work the 10-increment sequence
-  **I0 → I1 → I2 → I3 → I4 → I5 → I6 → I7a → I7b → I8** in order — I3→I4→I5 is an explicit dependent chain,
-  I7 is split (I7a rear_clearance, I7b the new `contact.py` grab/pin subsystem). Each increment: implement,
-  `pytest tests/valoria -q` (no NEW red beyond the plan's enumerated 8-red accepted set), targeted
-  acceptance checks per the plan's falsifiable criteria, `python workbench/balance.py weapon 400` / `armour`
-  matrix at I3/I5/I8, commit. **Before I2:** ratify JD-1 (the damage-model/`I_g` tension — the
-  highest-stakes fork) and JD-8 (partisan/spetum swing-vs-thrust). **Before I3:** ratify JD-2, JD-6, and
-  **JD-9** (a genuinely new grip↔reach feedback-oscillator fix found by the plan's own capstone
-  verification — do not skip it, D3 is unsafe to implement without it). JD-3/4/5/7 gate narrower increments
-  (I2/I4, I2, I0, I7b respectively) — the plan file states exactly which. **This is a large, multi-week
-  implementation effort — a fresh session is the right place to start it.**
+- **R2 (closing-distance/facing/grip/contact redesign) — I0→I8 COMPLETE (2026-07-03), PR #72
+  (branch `claude/scene-combat-closing-distance-mg18pq`), awaiting review/merge.** Implemented the full
+  ratified plan (`designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md`) per
+  its own per-increment discipline (implement → `pytest tests/valoria -q` at the enumerated 8-red baseline,
+  zero new red at every increment → targeted acceptance checks → `capabilities.py`/`state_graph.py`
+  self-tests → commit). All 9 Jordan-decisions (JD-1..JD-9) taken at the plan's own stated default per this
+  session's task framing (a fresh session picking up an already-ratified plan). I8's capstone measurement +
+  findings record: `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md` —
+  **the one open finding**: the plan's ~55-75%/~30-45% reach-class/dagger CONTESTED-balance target is
+  **not yet met** (reach-class weapons run 75-93% vs arming; not inverted, but above the band), traced to
+  the SAME pre-existing Phase-B mass-model calibration debt already carried by the 3 accepted `[PHASE-C
+  FLAG]` reds (`test_gap_game_poleaxe_spikes_plate`/`test_anchor_is_near_one`/`test_lunge_quality_...`) —
+  explicitly out of R2's scope, deferred to Phase C's engine-scale re-tune (re-annotated, not silently
+  patched). **Next action, if a Phase C recalibration effort starts:** read the capstone audit doc's item 1
+  table first — it's the widest-scope measurement of the drift to date.
 - **START HERE — month-overview + consolidation (2026-07-01).** The month's comprehensive
   review, the consolidation execution/reconciliation logs, and the **single consolidated
   23-item Jordan decision queue** live at

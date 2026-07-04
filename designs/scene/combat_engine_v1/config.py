@@ -153,6 +153,15 @@ CFG = dict(
   IMPOSITION_GATE=True, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,   # ON by default (WS-4 dissolution): with the affinity budget it beats the keep-bias baseline on spread + none-fairness + qualitative differentiation (section C). Toggle off to compare.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
+  # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
+  # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
+  # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_LU
+  # is a PRIMITIVE threshold (head_len, length-units, UNIT_M=0.30m), not a name check: it clears the
+  # roster's dagger-class (head_len<=1.2) and excludes the next-shortest non-dagger record (paired_short
+  # / half-sworded 2H forms, head_len>=1.33) — the open-contact exemption for a weapon already
+  # functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
+  # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
+  GRAB_SHORT_REACH_LU=1.25, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25,
 )
 # HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
 # handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

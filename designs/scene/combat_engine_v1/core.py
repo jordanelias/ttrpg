@@ -61,12 +61,14 @@ def resolve(pool, net_sigma, rng):
 #   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
 HEFT_HEAVY=3.0                                                      # heavy-class cut/thrust heft scale (unchanged — the multiplier below anchors on the SAME 2H cut-thrust reference WP.heft() normalises to 1.0)
-def heft_resp(w, cfg):
+def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
     """Continuous weapon heft response (heft-units) — morphology-rearch Phase B6: DERIVED from weapon_physics.heft()
     (striking mass × forward-balance, normalised so the longsword anchor reads 1.0), replacing the binary
     wt{light,heavy} class outright. No more HEFT_MODE toggle — there is no fiat category left to reproduce in
-    'binary' mode. `cfg` is kept for call-site compatibility (unused; the derivation is pure)."""
-    return WP.heft(w)
+    'binary' mode. `cfg` is kept for call-site compatibility (unused; the derivation is pure).
+    CIRCUMSTANCE-DEGRADED (I2, D2): threads grip/sel_head/sel_pc into WP.heft's mode-split Phi_grip — byte-
+    identical at grip=0 (the default) for every weapon."""
+    return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
@@ -161,11 +163,20 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
     subsystem contract. `cfg` is retained as the engine-config handle at this single damage chokepoint — no longer
     read here now that DMG_SCALE is the lone scaling constant, but it is the wiring point should a damage knob ever
-    move into config."""
+    move into config.
+    CIRCUMSTANCE-DEGRADED (I2, D2/D2b/D5 — BLOCKER-2 + M-02 fixes): `gap`/`perc` now read the SELECTED element's
+    OWN sel_gap/sel_perc (systems.select_mode's widened 5-tuple, threaded onto the attacker by the wrapper),
+    native whole-weapon fallback only when unset — the canonical single source of truth (fixes the sel-vs-native
+    object-confusion: a composite routed to a blunt sub-element is now damaged on THAT element's percussion, not
+    the whole-weapon value). `heft_resp` reads the attacker's current grip_position + the selected head/pc so the
+    thrust-protected, mode-split Phi_grip degrades the SAME grip the wielder actually holds."""
     q=None
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
         z=max(0.0,(net-2*DECISIVE_OB)/SL.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
-    return damage(deg, heft_resp(attacker.w, cfg), head, attacker.strength, defender.armor, close,
-                  attacker.w['gap'], WP.percussion_authority(attacker.w), q=q)
+    gap=getattr(attacker, 'sel_gap', None); gap = gap if gap is not None else attacker.w['gap']
+    perc=getattr(attacker, 'sel_perc', None); perc = perc if perc is not None else WP.percussion_authority(attacker.w)
+    grip=getattr(attacker, 'grip_position', 0.0); sel_pc=getattr(attacker, 'sel_pc', None)
+    return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
+                  defender.armor, close, gap, perc, q=q)

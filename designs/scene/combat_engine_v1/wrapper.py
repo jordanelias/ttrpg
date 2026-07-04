@@ -2,7 +2,7 @@
 beat and passes Combatant objects to every subsystem. Initialization is the only toggle. This is the structural
 cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import core, systems as S, tradition as TR
+import core, systems as S, tradition as TR, contact as CT
 from config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
@@ -64,9 +64,12 @@ def engagement(A, B, first, cfg, rng):
         B.poise=S.clamp_poise(S.poise_regen(B,cfg), cfg)
         for c in (A,B):
             c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
+            c.range_avail=S.range_utilization(c, measure_gap, cfg)   # SWING-ROOM (I5, D4): measure-derived, not form-derived — a single per-beat write suffices (no post-swap refresh needed, unlike er/sel_*). Shapes commit_depth's Beta window + the swing-room legibility term + the approach stop-hit; also threaded into THIS beat's select_mode/afforded_heads below (percussion's Phi_room).
+            c.facing=S.facing_target(c, closed, cfg)   # FACING (I6, D6): near-neutral per-beat state, keyed ONLY on stance/measure/grip (C2 — never weapon class). Feeds the lateral-void close_rate term + reach_sigma's small profile term.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
             opp = B if c is A else A
-            c.sel_dmg, c.sel_head = S.select_mode(c, opp.armor, closed, cfg)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Refreshed after the half-sword form-switch below.
+            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2): the SELECTED element's own gap/percussion/point_concentration, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). I4/D5: measure_gap threads the close-efficacy factor into the greedy comparator. Refreshed after the half-sword form-switch below.
+            er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -119,9 +122,13 @@ def engagement(A, B, first, cfg, rng):
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
-        # re-select the use-mode on the (possibly just-switched) form, so sel_head/sel_dmg match the current weapon
-        aggressor.sel_dmg, aggressor.sel_head = S.select_mode(aggressor, defender.armor, closed, cfg)
-        defender.sel_dmg,  defender.sel_head  = S.select_mode(defender, aggressor.armor, closed, cfg)
+        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (I2/D2b:
+        # BOTH call sites must write all five sel_* fields — c.w flips at :120 above, so a partial thread would
+        # leave a post-swap c.w resolved against a pre-swap-selected element, the same object-confusion bug R-7
+        # closed for select_mode's own return).
+        aggressor.sel_dmg, aggressor.sel_head, aggressor.sel_gap, aggressor.sel_perc, aggressor.sel_pc = S.select_mode(aggressor, defender.armor, closed, cfg, measure_gap=measure_gap)
+        defender.sel_dmg,  defender.sel_head,  defender.sel_gap,  defender.sel_perc,  defender.sel_pc  = S.select_mode(defender, aggressor.armor, closed, cfg, measure_gap=measure_gap)
+        er[aggressor]=S.reach_base(aggressor,cfg); er[defender]=S.reach_base(defender,cfg)   # er REFRESH #2 (I3, D3): re-derives er for aggressor/defender on the grip+FORM-aware POST-SWAP weapon — so a half-sworded longsword reads its shorter reach everywhere in the closed exchange (reach_sigma below), not the frozen pre-swap #1 value. Consistency-proven: at open measure (grip=0, no swap) this equals #1 exactly.
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
         # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).
@@ -217,6 +224,10 @@ def engagement(A, B, first, cfg, rng):
         if cfg.get('IMPOSITION_GATE'):   # WS-4/WS-5 section-C experiment (flag, default off): tradition imposes/refuses its node
             bind, riposte = S.impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR)
         sim=(hit>0 and riposte)
+        # CONTACT AXIS (I7b, D8/D9): a unified opening_created flag, set by all three precondition sites below
+        # (DISPLACE, deep-commit reopen, bind) — NOT three parallel grab checks. Consumed once, in THIS beat's
+        # outcome tail (after riposte resolves, below); never carries across beats (unlike reopen_moment/push_avail).
+        opening_created=False
         # DISPLACE-AND-STEP-INSIDE (manual technique): a COMMITTED THRUST (point head, deep commit) is exploitable by
         # TWO DISTINCT routes on DISTINCT primitives (M3 decoupling — the two were conflated under bind-leverage, so
         # the leverage re-grounding wrongly suppressed the short-fighter counter):
@@ -229,8 +240,10 @@ def engagement(A, B, first, cfg, rng):
         beat_aside  = S.leverage(defender,cfg) > S.leverage(aggressor,cfg)+cfg['DISPLACE_LEV_GAP']
         slip_inside = (S.reach_base(defender,cfg) < S.reach_base(aggressor,cfg)
                        and S.reflex(defender,cfg) >= S.reflex(aggressor,cfg))
-        if (aggressor.w['head']=='point' and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
+        agg_head = getattr(aggressor,'sel_head',None) or aggressor.w['head']   # I4/D5: the SELECTED head, native fallback only when unset
+        if (agg_head=='point' and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
             if rng.random() < cfg['DISPLACE_P']:
+                opening_created=True   # CONTACT AXIS precondition site 1: the point set aside / the defender inside
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
@@ -242,14 +255,14 @@ def engagement(A, B, first, cfg, rng):
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
         #     recovering balance -> the longer weapon can make distance next beat.
         if closed and aggressor is shorter and commit>=4:
-            reopen_moment=True
+            reopen_moment=True; opening_created=True   # CONTACT AXIS precondition site 2: the over-committed shorter fighter is exposed
         # (b) the longer weapon, defending, won a defensive maneuver (bind/parry/deflect) this exchange -> a gap opens.
         if closed and defender is longer and (bind or (deg in ('fail','partial') and not hit)):
-            reopen_moment=True
+            reopen_moment=True; opening_created=True   # CONTACT AXIS precondition site 2 (cont.): the same defensive win opens contact
         # (c) freed-hand shove: a long TWO-HANDED weapon at the close can briefly free a hand to push (grappling
         #     manuals) -> a chance to create the moment itself. Available when the longer weapon is 2H and closed.
         if closed and longer.w['hands']==2 and rng.random()<cfg['PUSH_AVAIL_P']:
-            push_avail=True; reopen_moment=True
+            push_avail=True; reopen_moment=True; opening_created=True   # a freed hand IS a contact precondition
         if hit>0:
             defender.apply_wound(hit); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
@@ -258,6 +271,7 @@ def engagement(A, B, first, cfg, rng):
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             if defender.felled: return defender
         if bind:
+            opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
             # contact — once, at bind entry, scaled by their tactile+leverage. Not gated on the visual read.
             bsig0 = S.bind_sigma(aggressor, defender, cfg, TR)
@@ -286,6 +300,28 @@ def engagement(A, B, first, cfg, rng):
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
+        # CONTACT AXIS (I7b, D8/D9): the ONE insertion point, after hit/bind/riposte all resolve — reads the
+        # unified opening_created flag set above (NOT three parallel grab checks). grab_available itself gates
+        # non-dagger/unarmed weapon-wielders on opening_created (no grapple path from open measure — this whole
+        # tail only runs closed — and none without a real opening this beat); dagger/unarmed are open-contact
+        # exempt. A single one-shot resolution (contact.grab_outcome never loops), so it cannot re-enter the
+        # bind inner loop's `beats` mutation above.
+        if CT.grab_available(aggressor, defender, opening_created, cfg):
+            gsig = CT.grab_sigma(aggressor, defender, cfg)
+            contact_outcome = CT.grab_outcome(gsig, rng, cfg)
+            _emit('contact', aggressor=_agg0, defender=_def0, actor=aggressor.label, opponent=defender.label,
+                  outcome=contact_outcome, gsig=round(gsig,3))
+            # branch effects reuse the existing structure/initiative vocabulary (poise/initiative only — a
+            # grapple is not a strike: no wound/stamina channel). 'escape' is a no-op (the attempt is voided).
+            if contact_outcome=='disarm':
+                defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_BIND']*2.0, cfg)
+            elif contact_outcome in ('throw','pin'):
+                defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_BIND']*3.0, cfg)
+                aggressor.initiative=S.clamp_initiative(aggressor.initiative + cfg['INIT_GAIN_HIT'], cfg)
+            elif contact_outcome=='foot_pin':
+                defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_OVERCOMMIT'], cfg)
+            elif contact_outcome=='control':
+                aggressor.initiative=S.clamp_initiative(aggressor.initiative + cfg['INIT_STEAL_INDES']*0.5, cfg)
         _emit('outcome', aggressor=_agg0, defender=_def0, mode=mode, degree=deg,
               hit=int(hit), bind=bool(bind), riposte=bool(riposte),
               A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)

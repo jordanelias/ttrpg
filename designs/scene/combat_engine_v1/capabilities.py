@@ -14,6 +14,7 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
+from config import CFG   # pure data (GRAB_SHORT_REACH_LU); no cycle risk
 
 def _affords_point(w):
     """Local import (systems.py sits above this module in the dependency order — importing it at module
@@ -45,10 +46,20 @@ CAPABILITIES = {
         'pred': lambda name, w: w['head'] == 'blunt',
         'needs': "a blunt striking head — an edge or point delivers no percussion mode",
     },
+    'open_contact': {
+        'node': 'Contact (contact.grab_available)',
+        'pred': lambda name, w: w['head_len'] <= CFG['GRAB_SHORT_REACH_LU'],
+        'needs': "a short enough head_len (dagger/unarmed-class) to already be functionally at grapple range — every other weapon needs a real prior opening this beat (bind / beaten-aside / deep-commit) before a grab is available",
+    },
 }
 # NOTE the discipline: armour-defeat EFFECTIVENESS (a point's gap-precision, a blunt's percussion vs the
 # armour threshold) is CONTINUOUS scaling in systems.armor_defeat_sigma, NOT a gate — a low-gap rapier or a
 # low-percussion staff bounce off plate by degree, not by prohibition. Only mode/form AVAILABILITY is gated.
+# `open_contact` is the ONE static morphology fact the contact axis (I7b, D8/D9) gates: whether a weapon needs
+# an opening at all before a grab. disarm/throw/pin/control/foot_pin/escape are NOT separate gates — they are
+# branches of the universal contact.grab_outcome menu, reachable for every weapon once contact.grab_available
+# is True (no morphology excludes any weapon from EVER ending up in contact — only from open-contact grabbing
+# without an opening first).
 
 
 def allowed(key, name):
@@ -84,9 +95,9 @@ if __name__ == '__main__':
     except Exception:
         pass
     from combatant import Combatant
-    from config import CFG
     import systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
     import core
+    import contact as CT
     checks, rule = [], '=' * 64
     print("capabilities.py — affordance gates verified against the live engine"); print(rule)
 
@@ -121,6 +132,34 @@ if __name__ == '__main__':
         if percussion_mode != allowed('percussive_blow', n):
             c_ok = False; print(f"    MISMATCH percussive_blow {n}: engine={percussion_mode} pred={allowed('percussive_blow', n)}")
     checks.append(c_ok); print(f"(c) percussive_blow pred == coupling percussion mode: {'OK' if c_ok else 'FAIL'}")
+
+    # (d) open_contact predicate matches contact.grab_available with NO opening (opening_created=False) — the
+    # exemption is the only case where the predicate is discriminating (WITH an opening every weapon is available).
+    d_ok = True
+    for n in names:
+        c = Combatant('x', weapon=n); opp = Combatant('y', weapon='arming')
+        exempt = CT.grab_available(c, opp, False, CFG)
+        if exempt != allowed('open_contact', n):
+            d_ok = False; print(f"    MISMATCH open_contact {n}: engine={exempt} pred={allowed('open_contact', n)}")
+    checks.append(d_ok); print(f"(d) open_contact pred == grab_available(opening_created=False): {'OK' if d_ok else 'FAIL'}")
+
+    # (e) the branching grab_outcome menu is reachable across seeds (D8 acceptance 2) — draw many times at a
+    # fixed dominance edge and confirm every declared outcome token fires at least once.
+    import random
+    seen_outcomes = set()
+    rng = random.Random(0)
+    for _ in range(4000):
+        seen_outcomes.add(CT.grab_outcome(rng.uniform(-1.5, 1.5), rng, CFG))
+    e_ok = seen_outcomes == set(CT.GRAB_OUTCOMES)
+    checks.append(e_ok)
+    print(f"(e) grab_outcome menu reachable across seeds ({sorted(seen_outcomes)}): {'OK' if e_ok else 'FAIL — missing ' + str(set(CT.GRAB_OUTCOMES)-seen_outcomes)}")
+
+    # (f) no hollow pull_capable/hook data boolean was introduced anywhere in weapons.py (the explicit guard
+    # against the D9/JD-7 workaround the plan forbids — invisible to test_no_weapon_name_literal_in_resolution).
+    weapons_src = open(os.path.join(os.path.dirname(__file__), 'weapons.py'), encoding='utf-8').read()
+    f_ok = ('pull_capable' not in weapons_src) and ('hook_affordance' not in weapons_src) and ('clinch=' not in weapons_src)
+    checks.append(f_ok)
+    print(f"(f) no pull_capable/hook_affordance/clinch data field in weapons.py: {'OK' if f_ok else 'FAIL'}")
 
     print("\n" + markdown_table())
     print("\n" + rule)

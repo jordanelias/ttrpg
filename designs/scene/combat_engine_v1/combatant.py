@@ -101,6 +101,14 @@ class Combatant:
         self.lunge_depth=0.0                  # CONTINUOUS body-extension in [0,1] of an in-progress lunge (set at the attack; 0 = no lunge). Reads into recoverability_factor / weapon_tempo / legibility.
         self.sel_head=None                    # SELECTED use-mode head token for this exchange (systems.select_mode); None = use the native weapon head. Set per-beat by the wrapper (mirrors grip_position); routes into core.strike / adef_cap / legibility.
         self.sel_dmg=None                     # SELECTED damage-mode ('percussion'/'shear'/'puncture') for this exchange; read by systems.legibility (thrust hard / cut+percuss easy). None = head-inferred fallback.
+        # ---- circumstance-degradation scaffold (I1, D11a, closing-distance redesign — designs/audit/2026-07-02-
+        # scene-combat-closing-distance-redesign/) — all default to IDEAL so the added surface is byte-identical
+        # until a later increment wires a live reader. ----
+        self.sel_gap=None                     # SELECTED element's own geo['gap'] (systems.select_mode's widened 5-tuple, I2/D2b); None = native w['gap'] fallback. Canonical gap source for core.strike/adef_cap/the select_mode comparator (fixes M-02's object confusion).
+        self.sel_perc=None                    # SELECTED element's own percussion (I2/D2b); None = native WP.percussion_authority(w) fallback. Canonical perc source for core.strike (fixes BLOCKER-2).
+        self.sel_pc=None                      # SELECTED element's own point_concentration (I2/D2b, capstone M2 fix); None = native whole-weapon point_concentration fallback. Sources D2's cut_thrust Φ_grip blend (I2), D5's close_efficacy (I4), D4's swing-room legibility term (I5).
+        self.range_avail=1.0                  # CONTINUOUS swing-room available in [0,1] (I5/D4, systems.range_utilization); 1.0 = full room (ideal, identity). Reshapes commit_depth's Beta draw + the swing-room legibility term; never adds/reorders a draw.
+        self.facing=0.0                       # CONTINUOUS facing state (I6/D6, systems.facing_target); 0.0 = neutral (identity). Feeds a lateral-void closing term + a small profile term in reach_sigma/legibility; keyed on stance/measure/grip only (C2), never weapon class.
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
-    'commit', 'read', 'mode', 'roll', 'outcome', 'separation', 'engagement_end', 'fight_result',
+    'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
 }
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
@@ -34,11 +34,15 @@ STATES = {
     # ---- inner loop (engagement), per beat ----
     'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit'], 'site': 'wrapper.engagement:66-85'},
     'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach'], 'emits': [], 'site': 'wrapper.engagement:58-88'},
-    'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'AwaitTempo', 'Felled', 'Separation'],
+    'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'Contact', 'AwaitTempo', 'Felled', 'Separation'],
                        'emits': ['commit', 'read', 'mode', 'roll', 'outcome'], 'site': 'wrapper.engagement:86-262'},
-    'Bind':           {'to': ['HitLanded', 'Riposte', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:233-252'},
-    'Riposte':        {'to': ['AwaitTempo', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
-    'HitLanded':      {'to': ['AwaitTempo', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:226-232'},
+    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:233-252'},
+    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
+    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:226-232'},
+    # ---- contact axis (I7b, D8/D9): a real Contact node — BUILT, not activated (M-11). Reachable from Exchange
+    # directly (the deep-commit reopen precondition needs neither Bind/Riposte/HitLanded) as well as from all
+    # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
+    'Contact':        {'to': ['AwaitTempo', 'Separation'], 'emits': ['contact'], 'site': 'wrapper.engagement (outcome tail, contact-axis block)'},
     # ---- engagement terminals -> back to the outer loop ----
     'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement:82,212,232,250,259'},
     'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement:84,270-273'},
@@ -60,43 +64,47 @@ ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}
 # FEINT-NODE ABSORB: there is deliberately no separate Feint state — the feint/micro-read lives inside
 # Exchange.read (feint-as-attack), so the graph already reflects the dissolved structure; WS-5 removes the
 # separate feint_eval CODE, not a graph node.
+# D12b (I8, 2026-07-03): the per-point `site` line-range strings are DROPPED (not tested) — they had already
+# drifted across I2..I7b (every increment that touched wrapper.py shifted the ranges) and re-testing a line
+# range as "still holds the logic" is a losing maintenance game for a plain string. The node name is the
+# stable, checked reference (test_injection_points_reference_defined_states verifies it against STATES).
 INJECTION_POINTS = {
-    'approach.measure':    {'node': 'Approach',  'site': 'wrapper.py:66-74',
+    'approach.measure':    {'node': 'Approach',
                             'generic': 'shorter closes / longer stop-hits',
                             'injects': 'measure-control: Spanish circulo / Italian misura bias close_rate + preferred measure'},
-    'reopen.measure':      {'node': 'AwaitTempo', 'site': 'wrapper.py:58-64',
+    'reopen.measure':      {'node': 'AwaitTempo',
                             'generic': 'reopen vs stay closed (reopen_prob)',
                             'injects': 'reach/measure-hold: Spanish/Reach impose re-opening (the geometric Vor hold)'},
-    'exchange.commit':     {'node': 'Exchange',  'site': 'wrapper.py:98-105',
+    'exchange.commit':     {'node': 'Exchange',
                             'generic': 'commit depth 2-5, disposition-skewed',
                             'injects': 'Stance posture (The Approach) + wariness vs unread tradition (WS-5)'},
-    'exchange.read':       {'node': 'Exchange',  'site': 'wrapper.py:131-133',
+    'exchange.read':       {'node': 'Exchange',
                             'generic': 'read_win logistic',
                             'injects': 'precommit (Japanese sen-sen-no-sen) + the FEINT/micro-read manipulation (feint-as-attack, WS-5)'},
-    'exchange.mode':       {'node': 'Exchange',  'site': 'wrapper.py:135-136',
+    'exchange.mode':       {'node': 'Exchange',
                             'generic': 'parry/dodge/wind by mode_sigma',
                             'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
-    'exchange.bind_entry': {'node': 'Bind',      'site': 'wrapper.py:178-180',
+    'exchange.bind_entry': {'node': 'Bind',
                             'generic': 'bind on wind/partial',
                             'injects': 'German IMPOSE the bind (Winden); Italian/English REFUSE it (cavazione/disengage) — the contact axis'},
-    'exchange.counter':    {'node': 'Riposte',   'site': 'wrapper.py:147-158',
+    'exchange.counter':    {'node': 'Riposte',
                             'generic': 'single-time counter select',
                             'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},
-    'burst.continuation':  {'node': 'AwaitTempo', 'site': 'wrapper.py:272',
+    'burst.continuation':  {'node': 'AwaitTempo',
                             'generic': 'continue burst vs separate (clean defence)',
                             'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
-    'contact.axis':        {'node': 'Bind',      'site': '(WS-5, unbuilt)',
-                            'generic': '(no contact pole today)',
-                            'injects': 'clinch / disengage / choke (German Ringen, Italian cavazione) — the genuinely-missing distinction'},
+    'contact.axis':        {'node': 'Contact',
+                            'generic': 'strength+leverage grab affinity; a flat branching menu (disarm/throw/pin/control/foot_pin/escape)',
+                            'injects': 'German Ringen imposes/prefers the bind-entry grab; Italian/English favour the disengage/escape branch — BUILT (I7b, D8/D9), tradition-weighting of the menu is a FUTURE increment, not yet wired'},
 }
 
 
 def injection_markdown():
     out = ["### Tradition injection points (where each methodology biases the state graph)",
-           "| point | state | engine site | generic choice today | what a tradition injects |",
-           "|---|---|---|---|---|"]
+           "| point | state | generic choice today | what a tradition injects |",
+           "|---|---|---|---|"]
     for k, v in INJECTION_POINTS.items():
-        out.append(f"| `{k}` | {v['node']} | `{v['site']}` | {v['generic']} | {v['injects']} |")
+        out.append(f"| `{k}` | {v['node']} | {v['generic']} | {v['injects']} |")
     return "\n".join(out)
 
 
@@ -131,6 +139,7 @@ def fired_states_from_events(events):
             if e['hit'] > 0: fired.add('HitLanded')
             if e['bind']: fired.add('Bind')
             if e['riposte']: fired.add('Riposte')
+        elif k == 'contact': fired.add('Contact')
         elif k == 'separation': fired.add('Separation'); fired.add('InterTurn')
         elif k == 'engagement_end':
             fired.add('Felled' if e['felled'] else 'Separation')

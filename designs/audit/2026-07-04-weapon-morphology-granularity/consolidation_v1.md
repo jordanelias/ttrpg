@@ -1,0 +1,159 @@
+# PC-Lane Consolidation Adjudication — R3 plan (A) × Weapon-Morphology Audit (B)
+
+**Adjudicator:** Fable-tier senior adjudication node (CLAUDE.md §10) · **Date:** 2026-07-04
+**Inputs:** (A) `/root/.claude/plans/fuzzy-toasting-wombat.md` (R3, 9 increments, post-R2 base);
+(B) `designs/audit/2026-07-04-weapon-morphology-granularity/audit_v1.md` (P1–P4/T1–T5, merged to main as PR #74, commit 861ab393 → squash 4ce17709).
+**Verified against:** the live working tree = `claude/scene-combat-closing-distance-mg18pq` (R2 complete, PR #72 open), pytest baseline re-run, engine self-reports re-run.
+
+**Status: PROPOSED plan-of-record for the PC lane** (Jordan-vetoable; nothing here edits engine code).
+
+---
+
+## 0. Branch topology (established fact, not claim)
+
+- **origin/main HEAD = 4ce17709 = PR #74 (the audit, doc-only — 2 files, no engine code).** The audit is *already merged*; per ED-1094 its analysis is ratified-by-merge, with its explicitly held-back T5/Jordan-gated items still gated.
+- **PR #72 (this session's R2, 11 commits of engine code) is OPEN, not merged.** Both branches fork from 9dcda9cb (PR #71).
+- **Therefore (B) was authored against the PRE-R2 engine** (9dcda9cb), while (A) was authored against the POST-R2 engine. Several of (B)'s code claims are stale against the tree the work will actually land on (§1, findings F1/F2).
+- There is **no textual merge conflict today** — (B) contributed zero engine-code lines. The "collision" is entirely prospective (both plans would edit `weapons.py`/`geometry.py`, add an edge primitive, and retire `HALFSWORD_FORM`). This adjudication removes it by producing one sequence.
+
+---
+
+## 1. Verified-facts pass
+
+Every load-bearing claim was checked by direct read of the working tree, by running `weapon_physics.py`'s self-report, and by running the full pytest suite.
+
+### 1.1 Claims that verify (both plans)
+
+| # | Claim | Verdict |
+|---|---|---|
+| V1 | `thrust_factor`/`geo['thrust']` is dead (computed at `geometry.bake:80`, zero readers anywhere) | **TRUE** — grep-confirmed corpus-wide |
+| V2 | `geo['halfsword']`/`can_halfsword_thrust` is dead (baked at `geometry.py:83`, zero readers) | **TRUE** — see F3 for (B)'s slight misstatement |
+| V3 | `HALFSWORD_FORM` is a 2-name dict `{'longsword','estoc'}` (`weapons.py:837`), read by `systems.halfsword_target:563` + `capabilities.py:36` | **TRUE** |
+| V4 | `systems.element_afforded` (systems.py:396–433) head-token-gates the mode SET per element (`cut_thrust`/pure-cut/`point`/`blunt` cascade) — rapier (head=`point`, ek 0.30) is never offered a cut; greatsword/katana/sabre never a thrust; non-blunt never percussion | **TRUE** — the cascade is exactly as (A) describes |
+| V5 | `percussion_authority` self-gates `if head != 'blunt': return 0.0` (WP:271) and caps at `PERC_CAP=8.0` (WP:274) | **TRUE** |
+| V6 | Live percussion values: **mace = 8.00 (pinned at the cap), poleaxe = 7.48** — (A)'s "poleaxe(7.48) < mace(8.0) cap inversion" | **TRUE** (self-report re-run). Note: the WP docstring's "poleaxe 7.48 ABOVE mace 7.45" narrative is **stale vs the live tree** (F4) |
+| V7 | (A)'s PoB bias table: arming 17.8 / longsword 19.4 / rapier 17.0 / greatsword 30.4 / bec_de_corbin 5.1 / lucerne 7.2 / **cinquedea −1.8** cm | **TRUE — every figure exact** against the live `derive()` output |
+| V8 | Test baseline `8 failed, 166 passed, 1 xfailed`, with exactly (A)'s named D12a set | **TRUE** (re-run, 168s) |
+| V9 | `cut_factor` has the 0.45 base floor (`geometry.py:46`); `UNIT_M=0.30` indirection at every site (A) lists (`derive`, `_gather_len`, `grip_choke_max`, `_geom_slide_max_lu` ×2, `at_circumstance:577`, `REC_GRIP_REF`/`LEVER_*`/`PERC_GRIP_1H`/`GRIP_*`, `GRAB_SHORT_REACH_LU=1.25` in config:164) | **TRUE** |
+| V10 | `HILT_CATCH_MULT {'compound': 3.0, ...}` fiat multiplier (WP:386); `hand_guard`/`blade_guard` baked-derived (Phase B4) | **TRUE** |
+| V11 | `edge_undulation` flamberge-only → `bind_sigma` + `init_steal_factor`; `adornments` 3 weapons → `legibility`; both absent⇒0 identity | **TRUE** |
+| V12 | Flamberge stores its ricasso as a mass element (`weapons.py:663`, x_m=0.0, 0.169 kg) the engine cannot see as grippable; greatsword's record comment even attests "with ricasso, often flanked by parrying lugs" (line 111) | **TRUE** — strengthens the grippable-expansion Jordan question |
+| V13 | `_gather_len` grants forward regrip wholesale by `wclass=='hafted_tip'` (WP:527) | **TRUE** |
+| V14 | (B)'s edgeless-consistency invariant already conforms: estoc ek .05, rondel .05, stiletto .02, misericorde .10 — all ≤ 0.1 | **TRUE** |
+| V15 | The wrapper's reopen path is longer-fighter-only, moment-gated, `base_gap>0.3`, risk-free (`wrapper.py:81–87`); `test_facing_never_reads_weapon_class` exists (test_combat_invariants.py:467); contact.py/`grab_sigma` has no morphology term today | **TRUE** — (A)'s I5/I6/I2a-reader-3 premises hold |
+| V16 | PC lane `next_free: 1` in `references/id_reservations.yaml` — neither session has allocated ED-PC ids | **TRUE** |
+
+### 1.2 Findings — misreads / staleness (all in B; A has one bookkeeping slip)
+
+- **F1 (B, staleness):** (B)'s §1.1 inventory lists `clinch` as a live stored primitive. **`clinch` was deleted by R2 I7b** (weapons.py docstring, 2026-07-03). Harmless to B's proposals, but proof the audit's code claims are pinned to the pre-R2 tree.
+- **F2 (B, material misread — re-scopes P4):** G4(a) claims `guards[].extent_m` "means transverse span," one field name with two axis meanings and no disambiguator. **True at B's base commit; false on the tree the work lands on.** R2-I0 (schema restoration) added `orient_deg` + `type` + `material` to every guard entry: a cross reads `orient_deg=90` (transverse), a **langet reads `orient_deg=0` (axial — poleaxe, bec_de_corbin, bardiche)**. Two consequences: (i) the axis is already machine-readable per guard; (ii) B's proposed mechanical rename `extent_m→span_m` would be **wrong for langets**, whose extent runs along the haft. P4's first pass is re-scoped in §4 (document + validate axis-from-`orient_deg`; add optional `depth_m`; **no rename**).
+- **F3 (B, minor):** "`geometry.can_halfsword_thrust` exists but only gates, never grants" — in the live tree it neither gates nor grants: `geo['halfsword']` has **zero readers**. Does not change P3's design (which calls the function directly); noted for accuracy.
+- **F4 (engine docstring, both plans' context):** `WP.percussion_authority`'s Phase-C flag narrative ("poleaxe ~7.48 ABOVE the mace's own 7.45") is stale — the live mace prints **8.00, pinned at PERC_CAP**. (A)'s framing (cap-flattening + inversion) is the correct live description; the docstring should be corrected in U2.
+- **F5 (B, continuity risk):** the silhouette renderer (`render_weapons.py`) that *triggered* the audit was **never committed** — PR #74 contains only README + audit_v1.md, and no copy exists anywhere in the repo. If the other session's scratchpad is gone, the P2-a diagnostic surface must be rebuilt. Flagged as an action item (§5).
+- **F6 (A, bookkeeping):** (A)'s plan text assigns ED-PC-0004 to both R3-I2a and R3-I3 (with a "+1 shift" note). The unified sequence renumbers cleanly (§4).
+
+**Net:** (A)'s engine claims verify 100%, including every number. (B)'s architecture and proposals verify, but its code snapshot is pre-R2; F2 materially re-scopes P4, and everything B lands must rebase onto the post-#72 tree.
+
+---
+
+## 2. Per-overlap verdicts
+
+### 2.1 Edge-primitive encoding — **ADOPT (B): `elements[].edges = {sides∈{0,1,2}, false_edge_frac}`; A's authored table is the migration data**
+
+Reasons, in order of consequence:
+1. **`sides=0` resolves the estoc/needle "N/A" ambiguity by construction.** (A)'s scalar `back_edge∈[0,1]` cannot distinguish "edgeless" from "single-edged plain spine" (both would sit at meaningless values; A had to declare a hand-annotated N/A class — a category living outside the primitive).
+2. **Element scoping resolves (A)'s composite FLAGs by construction.** ji / kama_yari / dangpa ("spear-point symmetric + single-edged side blade") stop being a judgment call: the point element carries `sides=2` (or 0), the side blade `sides=1`. A whole-weapon scalar can never say this.
+3. `false_edge_frac` is a **caliper/treatise-measurable fraction** (S1/S2-gradeable), where A's "~0.2 clip" is a stylized magnitude.
+4. (B)'s validation invariants (`sides==0 ⇒ edge_keenness ≤ 0.1`; `false_edge_frac>0 ⇒ sides==1`) are CI-shaped and already conform on the live roster (V14).
+
+**(A)'s contribution stands:** its 53-weapon authored table (with FLAGs) is the only existing migration dataset. Transcode: `back_edge 1.0 → sides=2`; `~0.2 → sides=1, false_edge_frac≈0.2 (source per record)`; `0.0 → sides=1, false_edge_frac=0`; `N/A point-only → sides=0`; `N/A blunt → key absent`. All of A's FLAG rows (tsurugi, yari, paired_short, falchion clip magnitude, katana/tachi/odachi kissaki, composites, estoc-edgeless confirm) carry over as the Jordan data sign-off (JD-2). A's "poleaxe axe blade" FLAG is **moot** — the roster poleaxe is hammer+beak+spike, no axe element.
+
+### 2.2 Half-sword — **ADOPT (B)'s P3 `grippable` attested-practice flag as the affordance; ADOPT (A)'s derived-form generator as the expansion mechanism; REJECT (A)'s threshold-tuned geometry predicate**
+
+- (A)'s predicate ("tune thresholds so the set is {longsword, estoc, greatsword, bastard/war swords} and EXCLUDES …") is **a whitelist smuggled through thresholds** — reverse-engineering four constants to reproduce a target membership list is the per-weapon-table shape by other means, and it silently *expands* the anti-plate capability set (greatsword) inside a routine increment. That is exactly the "hard design call bundled into routine work" ED-1094 forbids.
+- (B)'s `affords_halfsword(w) = (∃ grippable element) ∧ can_halfsword_thrust(curvature, point_concentration)` is a physical/attested fact per record (same landing pattern as `edge_undulation`/`adornments`), lands **byte-identical** (derived set == {longsword, estoc} exactly), de-vestigialises the dead `can_halfsword_thrust`, and pushes every expansion (flamberge's attested ricasso, greatsword's attested ricasso — V12) to a **loud Jordan decision** (JD-3).
+- (A)'s genuinely new machinery — `halfsword_target` returning a **derived** transformed form (grip slides to mid-blade; reach shortens, leverage rises, head→point), validated against the two hand-authored form records as calibration anchors — is what makes any Jordan-approved expansion executable without hand-authoring a new `<weapon>_halfsword` record. Land the generator + parity assertion against the two anchors in the same increment; it *activates* new forms only when Jordan flips a record's `grippable`.
+- Both plans agree edge-count and half-sword are decoupled. Confirmed and kept.
+
+### 2.3 Edge-effect channel wiring — one channel per physical fact
+
+The two plans wired **four distinct physical facts** into **six proposed channels**, with two genuine double-count collisions. Ruling table:
+
+| Physical fact | (A)'s channel | (B)'s channel | **Ruling** | Double-count audit |
+|---|---|---|---|---|
+| **Cut-line entropy** (a double/false edge affords off-line/return cuts → intent is harder to read) | Reader 1: a new afforded "return cut" line + tempo advantage (`RETURN_CUT_K`) → changes `afforded_heads` (re-baseline) | `WP.edge_lines` → `systems.legibility` (`LEGIB_EDGELINE_K`), identity-default | **(B)'s legibility channel ONLY. Drop `RETURN_CUT_K` and the afforded-set change.** | The mechanical payload of a back-swing cut *is* the unreadable return line; the read/riposte tempo game already resolves through `legibility` → `read_contest`. A separate tempo constant would count the same fact twice. Post-U2 (graded modes), every double-edged weapon already *affords* cut from `edge_keenness` — a second cut token adds no information. Does NOT touch `cut_factor` (keenness owns single-swing cut quality — B's audit, correct). **Consequence: the edges increment becomes fully identity-default (no fixture regen at all)** — strictly cleaner than A's partial re-baseline. Jordan ruled the back-swing effect exists; this implements it via legibility — confirm the framing (JD-5). |
+| **Spine as bearing surface** (single edge → rigid non-cutting contact face; hand-high spine-press) | Reader 2: `bind_sigma += BIND_SPINE_K·(1−back_edge)·⟨leverage⟩`, K=0-gated | `WP.has_spine` → `(1+SPINE_WIND_K·has_spine)` inside `defense_affinities.wind` | **(A)'s `bind_sigma` channel ONLY. Drop `SPINE_WIND_K`.** | Same surface, two sinks = double count if both land. `bind_sigma` wins on three grounds: (i) **identity-default** — B's wind multiplier is bonus-only and shifts the roster wind band, forcing the `_band` re-centre re-baseline B itself flags; the bind term is K=0 ⇒ byte-identical until turned on; (ii) the spine-press *mechanic* (hand high on the blade for a long lever — Fühlen/winden) is the **bind contest**, which is where `leverage`/`catch`/`tactile` already resolve; (iii) `defense_affinities.wind` already reads `cross_section` rigidity — once P2-c re-sources `cross_section`, a spine term in wind would entangle two new primitives in one sink and destroy separate ablation-falsifiability. Wire off the graded `edges` (e.g. `spine = (sides==1)·(1−false_edge_frac)`), continuous, not B's binary. |
+| **Grab hazard** (a live double edge resists being seized; unskilled/ill-timed grab self-injures) | Reader 3: `contact.grab_sigma −= GRAB_EDGE_K·hazard·(1−grab_skill)` + `GRAB_EDGE_INJURY` failure branch, gated by I7b's `opening_created` | *(absent — B missed it)* | **(A)'s contact channel, ADOPT.** New pure `WP.grab_hazard(w)` from `edges` (e.g. `max over blade elements of (sides + (sides==1)·false_edge_frac)/2` — 0 edgeless, 0.5 plain single, 1.0 double), S-derivable, no name branch. | `grab_sigma` currently has **no** weapon-morphology term (V15) — no overlap. Skill mitigation + injury branch are Jordan-ruled; keep. K=0-gated. |
+| **Thrust trueness** (single-edge point rides off mid-axis by ~`width_tip/2`) | *(absent)* | P1-3: offset penalty in `geometry.thrust_factor`, only where curvature doesn't already carry the offset; **deferred behind P2** | **(B)'s deferred plan, ADOPT — with one added gate: it must also land after U2**, because U2 is what *wires* `thrust_factor` at all; landing an offset term in a dead coefficient is unfalsifiable. | Curvature already penalises thrust in `thrust_factor` — B's "only where curvature does not carry it" scoping (the straight-single falchion case) is the correct anti-double-count and is kept verbatim. Distinct from `gap` (plate-defeat) per A's I2 flesh-vs-armour channel split. |
+| **Section stiffness** (wedge vs lens/fuller) | *(absent)* | P2-b/c derived rigidity → `cross_section` | **(B) ONLY.** | B's own scoping — spine credit is bearing-surface only, never stiffness — is kept and now trivially satisfied since the spine credit lives in `bind_sigma`, not the rigidity-bearing wind term. |
+| **Single-swing cut quality** | `edge_keenness` (unchanged) | `edge_keenness` (unchanged) | Unchanged — both agree. | `sides` never touches `cut_factor`. Note: `sides==0 ⇒ ek≤0.1 < MODE_EDGE_MIN≈0.15`, so U2's keenness gate **subsumes** edgelessness for cut affordance — no extra conjunct needed, backed by the CI invariant. |
+
+**The Jordan-ruled trade-off survives intact with exactly one channel per fact:** a double edge buys read-difficulty (legibility) + grab-resist (contact); a single edge buys the spine-press (bind). No fact is counted twice; every lever is separately K=0-ablatable.
+
+---
+
+## 3. Complement integration (what fits where, no stepping)
+
+- **(B) entirely missed** — and (A) supplies: the **mode-affordance retirement** (U2 — the single highest-fidelity-impact item in either plan: ~22 mis-boxed weapons, `thrust_factor` wired live, percussion self-gate/cap fixed), the **units honesty** (U0), the **PoB recalibration** (U1 — root cause of 2 accepted reds), the three **mechanics threads** (counterbalance U5, retreat U6, facing U7), and the **grab-resist** edge effect.
+- **(A) entirely missed** — and (B) supplies: the **transverse-geometry program** (P2: profile data + mass-closure anti-fabrication loop + derived rigidity + the Jordan-gated `cross_section` swap), the **grippable/attested-practice** half-sword footing, the **renderer-as-diagnostic** pipeline, and the guard-schema hygiene residue (`depth_m`, `HILT_CATCH_MULT` retirement path).
+- **Interaction points, resolved:** edges×modes (invariant subsumption, §2.3 last row); edges×half-sword (decoupled, both agree); P1-3×U2 (added gate, §2.3); P2-c×Phase-C (§4 ordering); U0×facing constants (A already flags `GL_POLE`/`POB_POLE` re-validation after metre conversion — kept); P4×R2-I0 (re-scoped, F2); U5 counterbalance × I7a rear-clearance (different channels — A's [ADV] audit, verified against `systems.py:64–89`); retreat consumes the verified reopen contract (`wrapper.py:81–87`).
+
+---
+
+## 4. The unified PC-lane increment sequence
+
+**Process wrapper (every increment):** allocate the ED-PC id at implementation time from `id_reservations.yaml` (`next_free` currently **1** — verified; read/allocate/bump/co-commit), `pytest tests/valoria -q` at the accepted-red baseline (zero *new* red), OLD-vs-NEW identity sweep vs `r3_identity_golden.json` for every byte-identical claim (A's mechanism, built once pre-edit on the post-#72 tree), `capabilities.py`/`state_graph.py` self-tests, `[scope]` commit citing the ED. Config-touching increments re-export `references/engine_params/combat_engine_v1.json` (blocking CI). Research tiers tagged per A's convention.
+
+Baseline to hold: **8 failed / 166 passed / 1 xfailed** (verified); U1 retires 2 reds, U1/U2 deliberately regenerate the 5 parity fixtures.
+
+| # | ED | Increment (source) | Files/functions | Default contract | Acceptance ordering (falsifiable) |
+|---|---|---|---|---|---|
+| **U0** | ED-PC-0001 | **Units honesty** (A:I0, unchanged) | `weapons.py` (×0.30 on `head_len`/`grip_len`/`reach_adj`), `weapon_physics.py` (delete UNIT_M sites, rescale `GRIP_*`,`LEVER_*`,`PERC_GRIP_1H`,`REC_GRIP_REF`, wind `/0.90`), `systems.reach_base` (`REACH_GEOM_SCALE` absorbs ÷0.30), `config.GRAB_SHORT_REACH_LU` ×0.30 + **re-export** | Byte-identical (proven by sweep, 1e-9) | `test_units_refactor_byte_identical`; parity reds unchanged at exactly 5 |
+| **U1** | ED-PC-0002 | **PoB recalibration** (A:I1, unchanged; gated on JD-1 band sign-off) | `weapons.py` data only (pommel/butt masses, flagged blades) | **Re-baseline** — regenerate `golden_element_parity.json` + heft/percussion snapshot with recorded reasons | `test_pob_within_realistic_range`; `test_anchor_is_near_one` + `test_lunge_quality_…` flip green (accepted-red set → 6); reach-class guard holds |
+| **U2** | ED-PC-0003 | **Graded mode affordance + Phase-C percussion enactment** (A:I2, unchanged; + fix the stale F4 docstring) | `geometry.py` (drop `cut_factor` 0.45 floor), `systems.element_afforded` (per-primitive gates: `MODE_EDGE_MIN`/`MODE_TIP_MIN`/`MODE_PERC_MIN`, wire `geo['thrust']`), `weapon_physics.percussion_authority` (drop blunt self-gate; fix the 8.0 cap & mace-pin inversion — V6) | **Re-baseline** — regenerate mode fixtures, recorded reasons | `test_rapier_affords_cut`, `test_greatsword_katana_sabre_afford_thrust`, `test_needle_class_no_cut`, `test_mace_staff_no_thrust`, `test_sword_pommel_weak_percussion` (JD-4 ships weak), `test_thrust_factor_is_wired`; ablation: flipping `head` leaves the afforded SET unchanged; primary-mode dominance verified |
+| **U3** | ED-PC-0004 | **Edges primitive** (B:P1 encoding + A's table transcoded per §2.1; readers per §2.3: `edge_lines`→legibility, spine→`bind_sigma`, `grab_hazard`→`contact.grab_sigma`; **no** `RETURN_CUT_K`, **no** `SPINE_WIND_K`; P1-3 deferred) | `weapons.py` (per-element `edges`, S-graded source notes; JD-2 FLAGs), `geometry.bake` passthrough, new pure `WP.edge_lines`/`WP.spine`/`WP.grab_hazard`, `systems.legibility`, `systems.bind_sigma`, `contact.grab_sigma`; CI invariants report-only (`sides==0⇒ek≤0.1`, `false_edge>0⇒sides==1`) | **Fully byte-identical at K=0** (improvement over both plans — §2.3 row 1); constants flip in U9 | `test_edges_authored_full_roster`; B's ordering: `edge_lines`: arming(1.0) > sabre(frac) > falchion(0)=estoc(0); spine: katana=falchion on, arming/flamberge/estoc off; `test_double_edge_grab_resist_skill_mitigated` + injury branch; ablation: zero each K reproduces the golden fixture; estoc byte-identical everywhere |
+| **U4** | ED-PC-0005 | **Half-sword from attested grip** (B:P3 affordance + A's derived-form generator, per §2.2) | `weapons.py` (`grippable=True` on longsword/estoc forward zones only; retire `HALFSWORD_FORM`/`HALFSWORD_BASE` as gates), new `WP/geometry.affords_halfsword`, A's `halfsword_target` derived-form transform validated vs the 2 authored anchors, `capabilities.py` gate repointed, delete dead `geo['halfsword']` | **Byte-identical at parity** (derived set == {longsword, estoc} exactly); any expansion = JD-3, loud | `test_halfsword_set_at_parity` (dagger/rapier/sabre/spear/flamberge excluded), `test_derived_form_matches_authored_anchors` (reach↓ leverage↑ head→point), `test_no_dead_halfsword_predicate`; `capabilities.py` self-test |
+| **U5** | ED-PC-0006 | **Polearm choke counterbalance** (A:I4, unchanged — reuses rear-clearance delta; half-sword exemption automatic) | `systems.py` (`choke_counterbalance` → accuracy/legibility channel), `WP.phi_grip` (floored shallow thrust term) | Byte-identical at grip=0 (sweep) | `test_pole_choke_degrades_accuracy_and_thrust`, `test_halfsword_counterbalance_exempt`, `test_thrust_degrades_less_than_swing`; ablation K=0 |
+| **U6** | ED-PC-0007 | **Retreat-as-default with cost** (A:I5 with all [ADV] fixes, unchanged) | `wrapper.engagement` (gated block pre-`grip_target` loop), `systems` (`retreat_prob` single-sources `reopen_prob`, `retreat_trip_loss`, `choke_over_retreat`), `config.CFG` RETREAT_* + **re-export**, `state_graph` text | Byte-identical at `RETREAT_GATE=False` (skeleton commit), then flip | `test_retreat_is_default_not_choke`, `test_retreat_terminates_no_forced_loop` (STREAK_CAP=3 terminator), `test_retreat_xor_committed_attack`, trip-rises test, mirror-50, reach-class guard |
+| **U7** | ED-PC-0008 | **Weapon-class-aware facing** (A:I6, unchanged; C2 reversal is Jordan-resolved; constants revalidated post-U0 metres) | `WP.facing_pref` (signed, reuses U4's `two_contact_gate`), `systems.facing_target` (multiplicative, K=0 inert), `reach_sigma` docstring fix | Byte-identical at `FACING_REGIME_K=0`, ship 0.6 | Replace `test_facing_never_reads_weapon_class` (recorded-reason regen) with regime-separation + hands-separates-twins (sabre +1.0 vs longsword −0.985) |
+| **U8** | ED-PC-0009 | **Guard-schema hygiene, re-scoped per F2** (B:P4 minus the rename) | `weapons.py` schema docs + validator: guard axis is derived from `orient_deg` (90=transverse span, 0=axial langet); optional `guards[].depth_m` (default 0 ⇒ identity); exporter/renderer read the typed axis. **No `extent_m→span_m` rename** (wrong for langets). `HILT_CATCH_MULT` retirement stays a later parity-gated T5 item | Byte-identical (schema/doc only) | Numeric byte-identity of every baked `hand_guard`/`blade_guard`/`_derived`; validator green on full roster |
+| **U9** | ED-PC-0010 | **Joint recalibration + capstone** (A:I7 + flip U3/U5 constants here, ablation-gate every lever) | `workbench/balance.py` high-N matrix; ablation-gate: graded-mode shift, thrust wiring, percussion, edges (legibility/bind/grab), counterbalance, retreat trip, facing; anti-orphan standing test (zero new Combatant fields — verified: A reuses `grip_position`, wrapper-local dicts, `facing`); regenerate heft/percussion snapshot; capstone audit doc records the new accepted-red set (≤6) | — | Reach-class contested-not-inverted, toward ~55–75%; mirror ~50; any lever that doesn't move outcomes beyond noise is cut |
+| **T-P2** (parallel lane) | ED-PC-0011 | **Profile data campaign + parity, report-only** (B:P2-a/b verbatim; may start any time after U0; Haiku/Sonnet extraction + Opus adversarial check per §10; scope per JD-6) | `weapons.py` `elements[].profile` (opt-in), mass-closure CI report (±20% initial, justified from S1 subset), `WP.rigidity_derived` parity table (ED-1050-style: disagreements are findings, never hand-corrections), renderer switched profile-first | **Zero engine consumption** — absent ⇒ identity; `mass_kg` stays authoritative | Closure within band for all migrated elements; falsifiable rigidity ordering (estoc > longsword > arming > sabre > shamshir; rapier below arming despite section depth) |
+| **T5** (strictly after U9 + Jordan sign-off) | ED-PC-0012+ | **The gated re-baselines** (B:T5): P2-c `cross_section` swap; P1-3 thrust-trueness offset (now doubly gated: post-P2 **and** post-U2); `HILT_CATCH_MULT` → `span×f(depth)` coverage derivation (parity-gated like B4) | `geometry.bake`, `thrust_factor`, `WP.hand_guard` | Deliberate re-baselines, Phase-C pattern (documented reds, never per-weapon fudges); re-export to the GDScript port only after ratification (ED-1050 rule) | Parity report → Jordan sign-off → swap → recalibrate → re-export |
+
+### Ordering ruling on the three high-balance-risk items vs the pending Phase-C percussion recalibration
+
+**PoB (U1) → graded modes + percussion (U2) → capstone joint recal (U9) → P2-c swap (T5). This order is forced, not preferential:**
+
+1. **U1 (PoB) must come first** because `percussion_authority` reads `PoB_frac` directly and `heft`/recoverability read the same mass family — Phase-C's [SIM-CALIBRATE] gains (PERC_SCALE/EXP, ADEF_*) must be re-fit against masses that are *final*. Recalibrating percussion before correcting the systematic PoB bias fits gains to inputs known to be wrong and about to move (~17 weapons).
+2. **U2 *is* the Phase-C percussion enactment**, not something that waits for it: the three `[PHASE-C FLAG]` reds (anchor, lunge-quality, poleaxe-spikes-plate) are resolved at source by U1+U2, and U9 is the joint gain re-fit. There is no separate future "Phase C" left after U9 — the unified plan should say so explicitly and retire the pending-Phase-C language.
+3. **P2-c strictly after U9** (B's own rule, upheld, with the reason sharpened): P2-c re-sources `cross_section` → `gap_precision` → `w['gap']` → `adef_cap`/`core.coupling` — the plate-defeat tier list. `ADEF_THRESHOLD`/`GAP_EXPOSURE` can only be re-fit against **one** moving surface at a time; running the swap concurrently with U2/U9's mode+percussion re-baseline makes any tier-list shift unattributable between the two causes and un-ablatable. Jordan's JD-7 confirm: do **not** fold them into one combined pass (B's Q1 alternative) — the attribution argument rules it out.
+
+Dependency spine: U0 ⊣ nothing; U1 ⊣ U0+JD-1; U2 ⊣ U1; U3 ⊣ U2 (invariant subsumption) + JD-2; U4 ⊣ U2 (form rides the mode system); U5 ⊣ U4 (exemption verified against half-sword forms); U6 ⊣ U4/U5 (HS-capability predicate + choke interplay); U7 ⊣ U4 (`two_contact_gate`) + U0 (metre constants); U8 ⊣ nothing (anywhere); U9 last; T-P2 ∥ (post-U0); T5 ⊣ U9 + T-P2 + Jordan.
+
+---
+
+## 5. Branch / collision-avoidance ruling
+
+1. **Consolidation base = `claude/scene-combat-closing-distance-mg18pq` via merging PR #72 to main first.** The R2 code is the engine both plans must land on; (B) is already on main as a doc. Merge #72 (CI-green per A) → the unified work branches **from post-#72 main**, which then contains R2 code + the #74 audit doc. There is nothing to merge *from* `claude/weapon-morphology-viz-7wmfvq` — its sole commit (861ab393) is content-identical to #74's squash (verified); the branch can be deleted.
+2. **No engine-file conflict exists or will exist**: (B) shipped no code; every code change flows through the single unified sequence above on one branch lineage. `HALFSWORD_FORM` is retired exactly once (U4); the edge primitive lands exactly once (U3); `weapons.py`/`geometry.py` are touched only by unified increments.
+3. **This adjudication becomes the plan-of-record**: land it (or its ratified form) under `designs/audit/2026-07-04-weapon-morphology-granularity/` as `consolidation_v1.md` next to the audit, with a pointer from the R3 audit folder and from `handoffs/HANDOFF_PC.md`; audit_v1's T1–T5 are superseded-in-part by §4 (note in its header, don't rewrite history).
+4. **ED-PC allocation**: single owner, single sequence — ED-PC-0001…0010 for U0–U9, 0011 for T-P2, 0012+ for T5, allocated at implementation time from `next_free` (currently 1; both sessions correctly deferred). This kills the concurrent-allocation collision by construction.
+5. **Renderer**: (a) **immediate** — recover `render_weapons.py` from the other session's scratchpad if it still exists and commit it under the audit folder (it is the audit's triggering evidence and currently exists nowhere — F5); (b) **promotion to `tools/`** happens at T-P2 landing, when it becomes the P2 diagnostic surface (profile-first width with labelled stylization fallback), per B's own framing — not before (it would ship reading stylized widths as if diagnostic).
+
+---
+
+## 6. Open forks for Jordan (deduped, ranked by consequence)
+
+| JD | Question | Source | Gates | Default if unanswered |
+|---|---|---|---|---|
+| **JD-1** | **PoB target bands** (rapier 3–11 cm, greatsword 8–20, 1H 6–14, poleaxes 20–55 forward, staff ~0) — confirm/adjust; shifts sword handling game-wide | A:JD-C | U1 | Plan bands (arms-scholarship ranges) |
+| **JD-2** | **Edges data table FLAG rows**: tsurugi double (counter to "Japanese=single"), yari (symmetric vs edgeless ryō-shinogi), paired_short (jian- vs dao-pair), falchion clip magnitude, katana-family kissaki ≈0.15, estoc-edgeless confirm; composites now element-resolved (§2.1) so only genuinely disputed rows remain. (A's poleaxe-axe FLAG: moot, no axe element in the record.) | A's table + B's S-grading | U3 data | Land FLAG rows per A's table, marked provisional, S-source noted |
+| **JD-3** | **Half-sword roster expansion** (merged A:JD-A + B:Q2): after U4 lands at parity, which attested ricassos flip `grippable=True` — flamberge (ricasso already a mass element), greatsword (ricasso attested in its own record comment), bastard/war swords? Each grant is a **new anti-plate capability**. | both | post-U4 (nothing blocks) | Parity only ({longsword, estoc}); zero expansion |
+| **JD-4** | **Emergent pommel/Mordhau percussion ceiling** for swords (`MODE_PERC_MIN` height / efficacy) | A:JD-B | U2 tuning | Ships weak |
+| **JD-5** | **Back-swing-cut framing confirm**: the Jordan-ruled double-edge return-cut is implemented as the cut-line-entropy legibility channel (§2.3), not a distinct attack action or tempo constant. If a literal distinct return-cut *action* was intended, that is an escalation needing its own design. | this adjudication | U3 | Legibility channel |
+| **JD-6** | **P2 campaign scope**: all 53 vs blades-first (~30 bladed, polearm heads deferred) | B:Q3 | T-P2 | Blades-first (recommended — the rigidity/thrust consumers are blade-dominated) |
+| **JD-7** | **T5 sequencing confirm**: P2-c strictly behind U9 (adjudicated §4, attribution argument) — confirm, and reject the fold-into-one-pass alternative | B:Q1 | T5 | As adjudicated |
+| **JD-8** | **Renderer**: commit the scratchpad script now (F5 continuity risk) + promote to `tools/` at T-P2 | B:Q4 + F5 | T-P2 | Recover+commit under the audit folder; promote at T-P2 |
+
+Items adjudicated here that do **not** need Jordan (wiring choices within [SIM-CALIBRATE] scope, reversible pre-U9): the spine-credit sink (bind_sigma over wind — §2.3), dropping `SPINE_WIND_K`/`RETURN_CUT_K` as double-counts, the P4 rename rejection (F2 — a factual correction), and the U-sequence ordering (forced by dependency, §4).
