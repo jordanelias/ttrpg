@@ -1,6 +1,14 @@
 # Weapon-morphology granularity audit — more granular morphological characteristics for fidelity and variability
 
-## Status: PROPOSED (Jordan-vetoable throughout; nothing here edits canon)
+## Status: RATIFIED-by-merge (PR #74, ED-1094) · T1–T5 SUPERSEDED-IN-PART
+
+> **Superseded-in-part (2026-07-04):** this audit's analysis (P1–P4, the gap ranking, the anti-fabrication
+> discipline) stands and is ratified by the merge of PR #74. Its **T1–T5 tranche plan is reconciled into the
+> unified PC-lane sequence in `consolidation_v1.md` §4** (Fable-adjudicated against the post-R2 tree, which
+> re-scoped P4's guard-axis rename — F2). Implement from `consolidation_v1.md`; read this doc for the P1–P4
+> primitive rationale it supplies. (Original status line below, kept as provenance.)
+>
+> _Original: PROPOSED (Jordan-vetoable throughout; nothing here edits canon)._
 
 **Date:** 2026-07-04 · **Lane:** PC (personal combat) · **Authored at the Fable synthesis tier** (CLAUDE.md §10
 canonical-contract authorship node). ED-PC IDs are **not yet allocated** — see §8's allocation step; this doc
