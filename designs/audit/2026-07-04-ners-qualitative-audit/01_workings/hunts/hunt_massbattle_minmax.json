@@ -1,0 +1,98 @@
+{
+ "arena": "massbattle_minmax",
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lanes/hunt_massbattle_minmax.md",
+ "lines": [
+  {
+   "line": "Bring one spear-optimised PC and open every battle with a General Duel (scale_transitions \u00a73.7): my PC cannot die (ED-898, worst=recoverable capture) while the enemy NPC general I wound goes Stage1\u2192Stage2\u2192Command 0, dropping their whole army to the 1-die/Line/no-tactics floor. 'The general IS the battle' \u2014 I've won before formation, composition, thread or discipline ever mattered.",
+   "permitting_rules": "scale_transitions \u00a73.7 (Priority-8 duel every turn); mass_battle \u00a7A.1 axiom 'the general is the battle'; \u00a7A.5 ED-898 two-stage incap\u2192Command 0 + 'no mechanic kills a PC'; \u00a7A.6/PP-273 uncommanded 1-die floor",
+   "what_breaks": "Omega non-dominance (solvable strategy) + the entire Part A choice tree (formations \u00a7A.6, tactics \u00a7A.8, thread \u00a7A.10, composition \u00a7A.4) becomes optional flavour",
+   "confidence": "high"
+  },
+  {
+   "line": "Always split across all simultaneous engagements \u2014 canon itself says split beats concentration by up to 45%, and the only counter is holding a Narrow Pass. Concentration is a trap option.",
+   "permitting_rules": "mass_battle \u00a7A.8 PP-508/ED-358: 'Split dominates concentration by +9% to +45% win-rate ... suboptimal ONLY when Narrow Pass or Size=1'",
+   "what_breaks": "Omega non-dominance, admitted in-doc; the concentrate-vs-split tactical axis (\u00a7A.8 Concentration/Fibonacci) collapses to one answer",
+   "confidence": "high"
+  },
+  {
+   "line": "Fight Company-scale engagements not War-scale, so Thread ops cost 0 Coherence/op instead of \u22122 (and the \u22121/op cap text says War can't cost \u22122 anyway) \u2014 the same force-split that already wins militarily also zeroes my substrate cost.",
+   "permitting_rules": "mass_battle \u00a7A.10 scale table (Company 0/op, War \u22122/op) contradicted by the \u22121/op cap note + PP-501 1/turn example; scale set by force size \u00a7A.3; compounds PP-508",
+   "what_breaks": "Omega non-dominance + cross-scale consequence; the P-14 'risk the substrate?' thread juncture is void at small scale and self-contradicting at War",
+   "confidence": "medium"
+  },
+  {
+   "line": "Defender sits in Shield Wall behind Walls forever: +3 DR + +2D Def on every pool, no flanking possible, and the idle-army Morale penalty is explicitly waived for me \u2014 cost-free turtle whose only threat is Artillery my besieger bleeds Treasury to field.",
+   "permitting_rules": "\u00a7A.9 Walls (+3 DR, no flanking, Slow cannot advance); \u00a7A.6/PP-500 Shield Wall +2D Def blanket; \u00a7A.7 Phase-7 idle-clock terrain exception; \u00a7A.14b attacker Campaign Supply \u2212100/season",
+   "what_breaks": "besieged-defender decision tree collapses to a single no-downside 'hold'; N-grounded (siege realism) so flag-not-reject",
+   "confidence": "medium"
+  },
+  {
+   "line": "Before every battle I clear a soft social + investigation + combat scene to stack +1D Command, +1D first Volley, and a free Reform on turn 1 \u2014 free, uncapped in count, every single time.",
+   "permitting_rules": "scale_transitions \u00a73.8 (PP-261/ED-151): three distinct bonus channels, no cost, no feeder-scene cap, 'most relevant unit; 1 turn duration'",
+   "what_breaks": "mild non-dominance: scene-vs-battle tempo degenerates to a mandatory pre-battle farming ritual; bounded by +1D/1-turn so low magnitude",
+   "confidence": "medium"
+  }
+ ],
+ "findings": [
+  {
+   "id": "massbattle-general-duel-decap",
+   "subsystem": "mass_battle / scale-transition (Mass\u2194Personal)",
+   "claim": "A combat-optimised PC can risk-free-decapitate any enemy army via repeated General Duels \u2014 ED-898's PC no-death guarantee removes all downside while incapacitating the enemy general zeroes their Command and floors their whole army, so 'the general is the battle' becomes a dominant mass-layer bypass that flattens all of Part A.",
+   "cite": "scale_transitions_v30.md \u00a73.7; mass_battle_v30.md \u00a7A.1 axiom, \u00a7A.5 (ED-898), \u00a7A.6/PP-273",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "pp508-split-dominance",
+   "subsystem": "mass_battle tactics (\u00a7A.8)",
+   "claim": "Canon itself states splitting dominates concentration by +9\u201345% win-rate with the sole exceptions of Narrow Pass terrain or the Size=1 edge, so the headline concentrate-vs-split tactical axis is a solved (non-dominant-violating) choice \u2014 resolved in ED-358 as 'intended' without ever applying the Omega non-dominance lens.",
+   "cite": "mass_battle_v30.md \u00a7A.8 Splitting doctrine (PP-508, ED-358)",
+   "criterion": "Omega",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "ED-358",
+   "threadwork": false
+  },
+  {
+   "id": "thread-scale-cost-contradiction",
+   "subsystem": "mass_battle Thread ops (\u00a7A.10)",
+   "claim": "The \u00a7A.10 War-scale '\u22122/op' Coherence cost contradicts the adjacent '\u22121 per operation cap, no additional surcharge' note and PP-501's 1/turn worked example; simultaneously, keying substrate cost to battle scale lets a player split into Company-scale engagements for 0-cost thread ops, compounding PP-508 split-dominance into a double-dominant line.",
+   "cite": "mass_battle_v30.md \u00a7A.10 scale table + cap note + PP-501; \u00a7A.3 scale-by-force-size",
+   "criterion": "P-philosophy",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "siege-turtle-no-downside",
+   "subsystem": "mass_battle terrain/formation (\u00a7A.9/\u00a7A.6)",
+   "claim": "Walls (+3 DR, no flanking) \u00d7 Shield Wall (+2D Def blanket) \u00d7 the Phase-7 idle-Morale terrain waiver produces a cost-free defensive turtle whose besieged decision tree collapses to a single strictly-optimal 'hold' with no morale downside \u2014 N-grounded as siege realism, but the idle-waiver removes the 'sortie or rot' tension that would keep it a real choice.",
+   "cite": "mass_battle_v30.md \u00a7A.9 Walls, \u00a7A.6/PP-500 Shield Wall, \u00a7A.7 Phase-7 idle exception; \u00a7A.14b Campaign Supply",
+   "criterion": "N",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "scene-bonus-prebattle-farm",
+   "subsystem": "scale-transition Scene\u2192Mass (\u00a73.8)",
+   "claim": "\u00a73.8 grants three uncapped, cost-free, distinct pre-battle bonus channels (Social\u2192+1D Command, Investigation\u2192+1D Volley, Combat\u2192free Reform) with no per-battle feeder-scene cap, degenerating the scene-vs-battle tempo choice into a mandatory turn-1 farming ritual any optimal player performs \u2014 bounded but non-dominant-eroding.",
+   "cite": "scale_transitions_v30.md \u00a73.8 (PP-261, ED-151)",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  }
+ ]
+}

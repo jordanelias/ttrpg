@@ -1,0 +1,180 @@
+{
+ "subsystem": "registers_graphs (SHAPE lane: mechanics_index.yaml, canonical_sources.yaml, supersession_register.yaml, tools/observability/DECISIONS.md, tests/coverage_matrix.md)",
+ "core_loop": "Not a player loop \u2014 this lane audits corpus SHAPE artifacts (mechanics_index.yaml, canonical_sources.yaml, supersession_register.yaml, DECISIONS.md, coverage_matrix.md), the meta-layer that is supposed to tell designers/agents what's currently canonical and tested. Its \"loop\" is: author mechanic \u2192 canon doc \u2192 registry entry \u2192 (ideally) re-sync on change. That last step is the broken link this dossier documents.",
+ "decision_points": [
+  {
+   "where": "mechanics_index.yaml test_status field per mechanic",
+   "options": "not_implemented / provisional / validated_n* / canonical / superseded \u2014 a designer's read of 'does X exist'",
+   "meaningful": "degenerate",
+   "note": "Field is stale for at least 2 of the most active subsystems (mass_battle, social_contest); a reader cannot use it to decide anything reliably."
+  },
+  {
+   "where": "tools/observability/DECISIONS.md severity tag",
+   "options": "P1 (blocking) vs P2/P3 \u2014 meant to let a designer triage 957 open items",
+   "meaningful": "thin",
+   "note": "53% tagged P1; dominated by cosmetic naming collisions, so the tag barely discriminates real blockers from debt."
+  },
+  {
+   "where": "canonical_sources.yaml SHA pins vs sim/ ratified changes",
+   "options": "whether a ratified sim-level rule change gets back-written into the canon-doc pin",
+   "meaningful": "degenerate",
+   "note": "Currently a one-way gate with no enforced return path \u2014 mass_battle's entire re-architecture never round-tripped."
+  }
+ ],
+ "north_star": {
+  "choice_density": "degenerate",
+  "collision_feed": "This territory feeds the collision engine nothing directly (no player-facing state) \u2014 its job is to keep the OTHER lanes' currency claims trustworthy. When it drifts, downstream subsystems' choice-richness/legibility claims become unverifiable, which indirectly starves the collision engine of confidence rather than content.",
+  "verdict": "Points away from the North Star by omission: the registries meant to keep every subsystem's currency legible are themselves stale exactly where the corpus is most alive right now (mass_battle), undermining the audit's own method discipline (establish currency via registries first)."
+ },
+ "nq": [
+  {
+   "criterion": "Q-smooth",
+   "observation": "DECISIONS.md's P1/P2/P3 severity split fails to discriminate \u2014 507/957 items P1, dominated by cosmetic naming-collision flags \u2014 so the instrument doesn't actually smooth a designer's triage path.",
+   "cite": "tools/observability/DECISIONS.md:5-16"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "mechanics_index.yaml's test_status is not robust to subsystem velocity: last regenerated 2026-05-17, and the one entry (combat) hand-patched since then carries no marker distinguishing it from the ~59 stale ones.",
+   "cite": "canon/mechanics_index.yaml:12-14,205-218"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "Two registries with overlapping scope (mechanics_index.yaml mechanic-list vs module_contracts.yaml module-list) use divergent schemas (one has no orphan/staleness field, the other does) and never cross-reference \u2014 a corpus-shape inelegance.",
+   "cite": "canon/mechanics_index.yaml categories section vs designs/audit/.../02_interdependency_map.md \u00a7(b)"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "mechanics_index.yaml 'thread' scale section (11 mechanics: leap/weaving/pulling/locking/dissolution/mending/coherence_track/co_movement/rendering_stability/threadcut_beings)",
+   "status": "present",
+   "evidence": "canon/mechanics_index.yaml L356-464 \u2014 structurally accounted for as a first-class scale, but every entry test_status: not_implemented, and the index carries no field for cross-scale P-14 inseparability (that lives only in scale_transitions_v30.md, uncited here)."
+  },
+  {
+   "juncture": "supersession_register.yaml tracking a thread-mechanic supersession event",
+   "status": "absent-plausible",
+   "evidence": "ED-912 (2026-06-28, Knot/Disposition redesign) IS present in supersession_register.yaml \u2014 the register does track threadwork-adjacent supersessions when authored; the gap this dossier found is scope (mass_battle), not a threadwork-specific absence."
+  }
+ ],
+ "legibility": {
+  "answerable": "no",
+  "note": "These are meta/tooling artifacts with no in-fiction actors, stakes, or seasons \u2014 the three dramatic-legibility questions don't apply to this lane's subject matter."
+ },
+ "degenerate_candidates": [
+  "DECISIONS.md P1-inflation: 507/957 items tagged 'decide first' \u2014 tools/observability/DECISIONS.md:5 \u2014 when everything is P1 nothing is, a governance-triage degeneracy rather than a gameplay one.",
+  "mechanics_index.yaml as a trust source: zero enforcement gate requires regeneration on subsystem change, so its 'current state' claim can drift arbitrarily without CI/workflow consequence \u2014 canon/mechanics_index.yaml:11-14."
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "sim/provincial (mass_battle engine code + tests/coverage_matrix.md)",
+   "mechanism": "executable ratifications (ED-1089..1096, ED-MB-0001/0002) should flow back into canonical_sources.yaml SHA pins + supersession_register.yaml",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "designs/scene/combat_engine_v1 (2026-06-22/23 repointing, ED-1041)",
+   "mechanism": "hand-patch of a single mechanics_index.yaml entry without bumping file-level last_authored/drift_report",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "module_contracts.yaml",
+   "mechanism": "both claim to index 'what mechanics/modules exist'; no cross-reference field in either direction",
+   "status": "declared-only"
+  },
+  {
+   "dir": "out",
+   "other": "designs/scene/social_contest_v30.md + sim/personal/contest/ (rebuild Stages 0-3)",
+   "mechanism": "mechanics_index social_contest entry should reflect rebuild progress",
+   "status": "divergent"
+  }
+ ],
+ "directions": {
+  "top-down": "P-14 (inseparability everywhere) has no corresponding compliance field in mechanics_index.yaml or module_contracts.yaml \u2014 the philosophy has no shape-layer instrument checking it.",
+  "bottom-up": "Executable sim work (coverage_matrix.md's mass_battle log) has raced far ahead of the design-index layer meant to describe it, inverting the normal top-down authoring flow CLAUDE.md describes.",
+  "lateral": "Sibling registries (mechanics_index, module_contracts, canonical_sources, supersession_register, DECISIONS.md) don't cross-reference each other's staleness signals, so a reader must manually reconcile four documents to get one honest currency picture.",
+  "diagonal": "Sim-scale (code) ratifications never round-trip to canon-doc-scale (prose + SHA pins) \u2014 a diagonal drift class distinct from any single-scale problem.",
+  "forwards": "No workplan/queue item currently tracks 'regenerate mechanics_index.yaml' or 'back-propagate mass_battle ratifications to canon' as pending work \u2014 it's invisible to forward planning.",
+  "backwards": "A session trusting mechanics_index.yaml's mass_battle or social_contest entries would resume work from a materially false 'not built yet' baseline \u2014 exactly the resumed-from-superseded risk the charter warns against."
+ },
+ "findings": [
+  {
+   "id": "mechindex-massbattle-stale",
+   "subsystem": "mechanics_index.yaml / mass_battle",
+   "claim": "mechanics_index.yaml's mass_battle entry (test_status: not_implemented, '<5% of v22 feature surface') is falsified by tests/coverage_matrix.md's 3-week log of a mature, byte-exact-tested, Jordan-ratified engine (rally/rout/morale-pull, multi-unit orchestrator, envelopment/refused-flank compositions, TOI physics).",
+   "cite": "canon/mechanics_index.yaml:468-491 vs tests/coverage_matrix.md:1-441",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "massbattle-no-backpropagation",
+   "subsystem": "canonical_sources.yaml + supersession_register.yaml / mass_battle",
+   "claim": "None of the ratified mass-battle default-path/rule changes since 2026-06-30 (ED-1089..1096, ED-MB-0001/0002 \u2014 FIELD_MOVEMENT/PER_CELL default flips, subunit cap, recoil gating, DG-3/DG-4 pool math) are reflected in canonical_sources.yaml's SHA pins or logged in supersession_register.yaml, despite being supersession-shaped (which resolution path is canonically default changed).",
+   "cite": "references/canonical_sources.yaml:156-161; canon/supersession_register.yaml (zero grep hits for mass_battle/FIELD_MOVEMENT/PER_CELL/ED-108x/109x/ED-MB)",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "mechindex-internal-inconsistency",
+   "subsystem": "mechanics_index.yaml",
+   "claim": "The registry's combat entry was hand-patched post-generation (cites 2026-06-23/ED-1041) while file-level last_authored and drift_report.last_generation both still read 2026-05-17 with no marker distinguishing refreshed vs frozen entries.",
+   "cite": "canon/mechanics_index.yaml:12-14,215,218,949-957",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "mechindex-socialcontest-stale",
+   "subsystem": "mechanics_index.yaml / social_contest",
+   "claim": "social_contest entry ('v17 missing entirely, degenerate single-roll only') contradicts the charter's own calibration note that Stages 0-3 of the social-contest rebuild are done, Stage 4 next.",
+   "cite": "canon/mechanics_index.yaml:220-231 vs designs/audit/2026-07-04-ners-qualitative-audit/00_grounding/00_audit_charter.md:98",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "decisions-p1-inflation",
+   "subsystem": "tools/observability/DECISIONS.md",
+   "claim": "53% of all 957 open items are tagged P1, dominated by cosmetic naming-collision flags rather than load-bearing decisions, so the severity tag fails to triage \u2014 a designer cannot use 'is this P1' to decide what to work on next.",
+   "cite": "tools/observability/DECISIONS.md:5-16,49-63",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "coverage-matrix-title-drift",
+   "subsystem": "tests/coverage_matrix.md",
+   "claim": "The file's own title ('Weapon System v2 (Active)') no longer describes its content, which is entirely mass_battle engine coverage from 2026-06-15 onward \u2014 a shape artifact whose header has drifted from what it tracks.",
+   "cite": "tests/coverage_matrix.md:1",
+   "criterion": "Q-elegant",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "registry-schema-divergence",
+   "subsystem": "mechanics_index.yaml vs module_contracts.yaml",
+   "claim": "Two registries with overlapping scope (mechanic-list vs module-list) use divergent schemas \u2014 module_contracts.yaml tracks doc:null/[ASSUMPTION]/orphan status, mechanics_index.yaml has no equivalent staleness/orphan field at all \u2014 and neither cross-references the other.",
+   "cite": "canon/mechanics_index.yaml (categories section, no gap-tracking field) vs designs/audit/2026-07-04-ners-qualitative-audit/00_grounding/02_interdependency_map.md \u00a7(b)",
+   "criterion": "Q-elegant",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/dossier_registers_graphs.md"
+}

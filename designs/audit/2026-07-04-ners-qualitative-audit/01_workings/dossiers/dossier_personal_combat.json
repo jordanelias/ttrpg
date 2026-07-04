@@ -1,0 +1,193 @@
+{
+ "subsystem": "personal_combat",
+ "core_loop": "wrapper.fight() outer loop drives wrapper.engagement() per beat: Approach(close/stop-hit)\u2192AwaitTempo(reopen)\u2192Exchange(commit depth 2-5, mode select, sigma resolution via core.roll_net/degree)\u2192Bind/Riposte/HitLanded/Contact\u2192Felled/Separation. scene_combat_design_v1.md wraps N-vs-M bouts, emitting one scene.combat_resolved Key per scene. Resolution: pool=max(5,History+6), continuous sigma-leverage engine, bilateral-Ob wounds (ED-1041).",
+ "decision_points": [
+  {
+   "where": "pre-fight loadout: weapon + tradition/ability equip + armor tier",
+   "options": "53-weapon roster with per-element primitives, half-sword/grippable affordances, equippable tradition modulators",
+   "meaningful": "moderate",
+   "note": "rich substrate but amortized over a whole fight/campaign, not per-exchange"
+  },
+  {
+   "where": "mid-exchange: commit depth, mode select, grip-choke, retreat-vs-press",
+   "options": "physically these vary continuously (grip continuum, thrust-protection, choke counterbalance)",
+   "meaningful": "degenerate",
+   "note": "engine-resolved by disposition/physics/RNG in wrapper.engagement(A,B,first,cfg,rng) \u2014 no player-decision parameter exists anywhere in the per-beat loop or state_graph.py"
+  },
+  {
+   "where": "half-sword form-switch",
+   "options": "binary, weapon-gated to longsword/estoc",
+   "meaningful": "thin",
+   "note": "engine-triggered via halfsword_target, not player-toggled"
+  },
+  {
+   "where": "scene.combat_strike input Key",
+   "options": "declared from [scene_slate, player_input]",
+   "meaningful": "thin",
+   "note": "declared-only in module_contracts.yaml; no code path from this Key into engagement()'s actual decision surfaces"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "Near-nothing currently escapes the fight: scene.combat_resolved's schema carries only scene_id/outcome/participants/casualties/wounds_inflicted (a health-bar-shaped payload), and its declared consumers (npc_behavior/faction_layer/articulation) don't list it in their own consumes: contracts \u2014 a double bottleneck (thin payload, and even that isn't read downstream).",
+  "verdict": "The subsystem is an unusually rigorous physics simulation but resolves almost entirely autonomously \u2014 real per-exchange player agency and narrative payload are both thin, which works against a North Star built on myriad player decisions and collision-fed emergent narrative."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "Spear/polearm 84-96% dominance is a live non-dominance violation under active repair (R2 merged, R3 ratified but unexecuted); voulge/bardiche 81-88% retention still flagged borderline (JD-1), unresolved.",
+   "cite": "designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md D2 table"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Dramatic-legibility fails from this subsystem's state alone: Health/Wounds numbers carry no political stake, intent, or season-clock hook.",
+   "cite": "designs/scene/scene_combat_v1/scene_combat_design_v1.md \u00a7Roll-up"
+  },
+  {
+   "criterion": "Q-smooth",
+   "observation": "The R1/R3 plans show unusually strong scale-transition discipline \u2014 layer purity L0-L3, byte-identical defaults, ablation gates, forced dependency ordering \u2014 a model of engineering-smooth practice worth citing as a positive pattern for other lanes.",
+   "cite": "plan_r1_RATIFIED.md Layer discipline section; consolidation_v1.md \u00a74 dependency spine"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "Depth is straining simplicity: 5-tuple mode-select returns, per-element percussion, a grip-reach oscillator fix (JD-9) \u2014 the core rule is no longer restatable after one reading, a legitimate elegance cost of chasing biomechanical realism.",
+   "cite": "consolidation_v1.md D2b; plan_r1_RATIFIED.md D3/JD-9"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "combat_engine_v1 has zero threadwork integration",
+   "status": "absent-deliberate",
+   "evidence": "ED-911 (open, P1), KNOWN-TRACKED. New scope this pass: both plan_r1_RATIFIED.md (2026-07-02) and consolidation_v1.md (2026-07-04), authored AFTER ED-911 opened, contain zero Thread/Coherence/Leap mentions and no thread-related increment in the U0-U9 sequence \u2014 two consecutive major engineering passes have hardened the substrate's layering without scheduling the gap closed, compounding retrofit cost."
+  },
+  {
+   "juncture": "Coherence-state gating legibility or commit depth mid-exchange",
+   "status": "absent-plausible",
+   "evidence": "A mid-fight Leap would plausibly be a huge legibility tell, or a Coherence-spend could be a real commit-depth resource decision; no hook exists in systems.legibility or the commit-depth machinery in any read document."
+  },
+  {
+   "juncture": "combat_v30 \u00a710 Leap-in-combat (superseded layer)",
+   "status": "absent-deliberate",
+   "evidence": "03_threadwork_surface.md \u00a72 confirms the superseded combat_v30.md \u00a710 had Leap-during-combat text that never migrated to combat_engine_v1 \u2014 the gap is a regression from a prior design, not an original absence."
+  }
+ ],
+ "legibility": {
+  "answerable": "no",
+  "note": "Whose position is at risk is only partially answerable (Health/Wounds numerically ranks proximity to Felled, no political stake named); what each actor wants and what happens if no one acts next season are both unanswerable from this subsystem's state alone \u2014 combat resolves synchronously within a scene with no goal field or season-clock hook, and the Echo channel that would carry consequence upward is itself unconsumed on the receiving side."
+ },
+ "degenerate_candidates": [
+  "Spear/polearm 84-96% dominance pre-R2, still borderline post-R2 for voulge/bardiche (81-88%, JD-1 open) \u2014 plan_r1_RATIFIED.md D2 retention table",
+  "Retreat-as-default (U6) not yet implemented \u2014 until it lands, press-vs-retreat is a physics-derived tempo outcome, not a real player-held choice axis \u2014 consolidation_v1.md \u00a74 U6 row (PENDING)"
+ ],
+ "edges": [
+  {
+   "dir": "out",
+   "other": "npc_behavior / faction_layer / articulation",
+   "mechanism": "scene.combat_resolved Key, declared consumer list",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "faction (via Domain Echo, Sufficient Scope gate)",
+   "mechanism": "scale_transitions \u00a75/\u00a77 bullet 5",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "scene_slate / player_input",
+   "mechanism": "scene.combat_strike Key consumed by personal_combat",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "mass_battle (General Duel \u00a73.7)",
+   "mechanism": "engagement() invoked from mass-battle context",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "Godot combat_engine.gd (combat.strike/combat.wound modules)",
+   "mechanism": "module port, typed engine-params export",
+   "status": "implemented"
+  }
+ ],
+ "directions": {
+  "top-down": "Omega non-dominance is actively if incompletely served by the degrade-under-circumstance program; P-14 inseparability is not served at all \u2014 zero thread hooks.",
+  "bottom-up": "The weapon-physics/geometry substrate is unusually rigorous and provenance-honest ([ASSERTED]/[FIAT]/[SIM-CALIBRATE] labeling), a model for other lanes.",
+  "lateral": "Social contest and mass battle both have live threadwork junctures; personal combat is the one scale-sibling with none \u2014 a structural asymmetry, not a scale-specific reason.",
+  "diagonal": "The Domain Echo channel meant to carry combat outcomes upward is itself general (not combat-authored) and unconsumed on the receiving side \u2014 a cross-scale double gap.",
+  "forwards": "R3's U0-U9/T-P2/T5 sequence is internally well-ordered but reserves no slot for ED-911 (threadwork) or a player-input surface \u2014 both need net-new sequence entries.",
+  "backwards": "combat_v30.md \u00a710 (superseded) had Leap-in-combat text that never migrated to combat_engine_v1, confirming the thread gap is a regression, not an original absence."
+ },
+ "findings": [
+  {
+   "id": "pc-no-player-input-hook",
+   "subsystem": "personal_combat",
+   "claim": "wrapper.engagement() and the entire per-beat state graph have no player-decision parameter or input hook; commit depth, mode selection, grip-choke, and retreat-vs-press are all engine/RNG-resolved, so personal combat is a build-time-loadout-plus-autoresolve system rather than a per-exchange decision space.",
+   "cite": "designs/scene/combat_engine_v1/wrapper.py engagement() signature (A,B,first,cfg,rng); state_graph.py STATES/INJECTION_POINTS (all engine-internal); references/module_contracts.yaml personal_combat consumes: scene.combat_strike declared but unwired",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "pc-thread-gap-compounding",
+   "subsystem": "personal_combat",
+   "claim": "ED-911 (no threadwork in combat_engine_v1) is KNOWN, but two consecutive major post-opening engineering passes (R2, R3) hardened the substrate's layering without ever scheduling it, so the retrofit cost is compounding rather than static.",
+   "cite": "designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md (full text, zero Thread mentions); designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md \u00a74 U0-U9 (no thread increment)",
+   "criterion": "P-philosophy",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911",
+   "threadwork": true
+  },
+  {
+   "id": "pc-output-double-bottleneck",
+   "subsystem": "personal_combat",
+   "claim": "scene.combat_resolved's Key schema carries only scene_id/outcome/participants/casualties/wounds_inflicted (no scars/tradition-identity/narrative field), and its own declared consumers omit it from their consumes: contracts \u2014 narrative payload is both thin and unconsumed.",
+   "cite": "designs/scene/scene_combat_v1/scene_combat_design_v1.md \u00a7Roll-up into the scene.combat_resolved Key; references/module_contracts.yaml personal_combat gap_notes CONSUMER WIRING (A4)",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "module_contracts.yaml gap_notes A4 / 02_interdependency_map.md item 2",
+   "threadwork": false
+  },
+  {
+   "id": "pc-legibility-fails",
+   "subsystem": "personal_combat",
+   "claim": "The dramatic-legibility test fails from this subsystem's state alone \u2014 no goal/intent field, no political-stake naming, no season-clock hook; the fight resolves as a synchronous numeric event.",
+   "cite": "designs/scene/scene_combat_v1/scene_combat_design_v1.md \u00a7Roll-up; designs/scene/combat_engine_v1/wrapper.py (no disposition/intent surfaced as narration)",
+   "criterion": "Q-robust",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "pc-tradition-vacuum-balance-tension",
+   "subsystem": "personal_combat",
+   "claim": "Tradition/ability design deliberately normalizes every tradition to an equal affinity budget for anti-dominance, which narrows build-time differentiation exactly where the corpus wants meaningful choice.",
+   "cite": "designs/scene/combat_engine_v1/tradition_decomposition_v1.md (WS-4 dissolution: equal affinity budget, 6.8pp win-rate spread measured)",
+   "criterion": "Q-elegant",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "pc-elegance-drift",
+   "subsystem": "personal_combat",
+   "claim": "Successive biomechanical-fidelity passes (5-tuple mode-select return, per-element percussion, grip-reach oscillator fix) are eroding Q-elegant's 'restatable after one reading' bar even though each individual increment is well-gated.",
+   "cite": "designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md \u00a72.3/\u00a74 D2b; designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md D3/JD-9",
+   "criterion": "Q-elegant",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_personal_combat.md"
+}

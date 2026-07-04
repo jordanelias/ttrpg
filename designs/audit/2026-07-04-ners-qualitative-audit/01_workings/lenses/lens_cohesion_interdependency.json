@@ -1,0 +1,106 @@
+{
+ "lens": "cohesion_interdependency",
+ "verdict": "One delivery idiom (Key emit/observe), but the state riding it is not one language, and many of the richest cross-scale edges are declared-not-delivered. Consequence computes then dies at two structural seams \u2014 emitter-side (strategic Keys leave sub-scale targets[] unpopulated) and consumer-side (registry names consumers whose own consumes lists omit the type) \u2014 and finally at the terminal renderer, which subscribes to * yet fires no trigger for the flagship collisions (Thread, battle_concluded). The Key pipe is uniform; the fluid is not. doc:null/[ASSUMPTION] debt clusters on exactly the connective modules (domain_actions, engine_clock, npc_memory) the collision engine depends on, so emergent narrative rides declarations, not implementations.",
+ "key_points": [
+  "Flattened all dossier edges[] into declared-vs-implemented: DIVERGENT (declared consumer doesn't consume), DECLARED-ONLY (emitter never populates targets[]), IMPLEMENTED (mostly bottom-up + intra-provincial faction<->settlement).",
+  "CONFIRMED module_contracts.yaml L844 gap_note A4: scene.combat_resolved 'declared with consuming_systems [npc_behavior, faction_layer, articulation]... those modules' contract consumes lists do not yet name them' \u2014 flagship consequence-dies-in-transit.",
+  "CONFIRMED scale_transitions_v30 \u00a712.4 L331-332: 8 down-seams / 15 type-edges whose consume intent is registry-canonical but whose strategic emitters leave targets[] sparse \u2014 top-down consequence delivers blind.",
+  "CONFIRMED domain_actions doc:null, consumes:[] (module_contracts L470-475): the player's primary strategic verb is the least-specified module and the source of 3 down-seams.",
+  "CONFIRMED articulation consumes '*' (L768) emits [] (L769): renderer RECEIVES thread/combat Keys via wildcard but its 10-trigger ruleset fires no cut scene for them \u2014 terminal sink death.",
+  "Q-smooth corpus verdict: uniform at transport layer, NOT at vocabulary layer \u2014 MS/RS dual-naming, Turmoil vs Political-Stability, 3 enum-fork Key types, self-contradicting 2-cycle contract, faction_politics doc:null emitting shared Keys.",
+  "doc:null/[ASSUMPTION] debt is not evenly-distributed: it clusters on connective tissue (domain_actions, engine_clock, npc_memory) \u2014 the two modules most load-bearing for cross-scale consequence are the least authored.",
+  "Two structural death-points generalize the individual edge flags into a class: emitter-side sparse-targeting and consumer-side contract omission are the same defect in two directions."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "combat-resolved-double-bottleneck",
+   "subsystem": "personal_combat x npc_behavior/faction/articulation",
+   "claim": "scene.combat_resolved is the flagship consequence-dies-in-transit edge: an entire physics-rich subsystem's only output Key is both declared-but-unconsumed (its named consumers' contract consumes lists omit it) AND health-bar-shaped (scene_id/outcome/casualties/wounds, no scar/identity/stake), so personal combat's consequence escapes to nothing.",
+   "cite": "references/module_contracts.yaml L808/L823/L844 gap_note A4; scale_transitions_v30 \u00a73.4/\u00a712.3",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "module_contracts personal_combat gap_notes A4 / 02_interdependency_map (a)2",
+   "threadwork": false
+  },
+  {
+   "id": "domain-actions-down-seam-blind",
+   "subsystem": "architecture_spine x domain_actions",
+   "claim": "The player's primary strategic verb resolves at the faction-stat ledger and never reaches sub-scale: domain_actions is doc:null with consumes:[], and \u00a712.4 confirms it is the emitter for 3 of the 8 registry-canonical down-seams whose targets[] are unpopulated \u2014 top-down consequence delivers blind for the headline choice.",
+   "cite": "references/module_contracts.yaml L470-489; designs/architecture/scale_transitions_v30.md \u00a712.4 L331-332",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "charter calibration (doc:null domain_actions/engine_clock; ED-1051; ED-1038 \u00a712.4)",
+   "threadwork": false
+  },
+  {
+   "id": "thread-both-narrative-sinks-dead",
+   "subsystem": "threadwork x combat + articulation",
+   "claim": "The P-14 spine's richest cross-scale collision generator has BOTH its highest-narrative-value sinks structurally absent \u2014 combat_engine_v1 has zero thread interface (ED-911) and articulation renders zero thread events despite receiving them via wildcard \u2014 so Thread collisions compute across faction/settlement but cannot reach the player.",
+   "cite": "references/module_contracts.yaml L767-769 (articulation consumes */emits []); threadwork dossier + articulation dossier \u00a73.1 trigger table; ED-911",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911 (combat); grounding 03 \u00a73 (articulation, no dedicated ED)",
+   "threadwork": true
+  },
+  {
+   "id": "two-structural-death-points",
+   "subsystem": "architecture_spine (cross-cutting)",
+   "claim": "The individual divergent/declared-only edges are one defect class in two directions: emitter-side sparse targets[] (down-seams) and consumer-side contract-consumes omission (scene.combat_resolved) both mean a registry-canonical edge delivers to nothing; naming this as a class shows the corpus lacks any gate that a declared consumer actually consumes.",
+   "cite": "references/module_contracts.yaml L844 vs scale_transitions_v30 \u00a712.3-\u00a712.4; 02_interdependency_map (a)2/(a)6/(b)",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "one-pipe-many-dialects",
+   "subsystem": "architecture_spine (cross-cutting)",
+   "claim": "State does not cross boundaries in one idiom at the vocabulary layer even though it does at transport: same world-track dual-named MS/RS, same victory-track Turmoil vs Political-Stability, 3 Key types with permanence/time_horizon outside the substrate \u00a72.2 enum, and a 2-cycle whose two contract blocks disagree on resolution \u2014 a corpus-wide Q-smooth failure no shape-layer instrument gates.",
+   "cite": "params/threadwork.md L136-138 vs threadwork_v30 \u00a75; canon/02_canon_constraints.md \u00a7B GD-1; key_type_registry_v30 L933/977/997 vs key_substrate_v30 \u00a72.2; module_contracts ~L153 vs ~L442",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-428/731/772 (MS/RS); architecture dossier enum-fork; npc/social 2-cycle [OPEN-Jordan]",
+   "threadwork": true
+  },
+  {
+   "id": "connective-tissue-docnull-cost",
+   "subsystem": "module_contracts (doc:null/[ASSUMPTION] set)",
+   "claim": "The doc:null/[ASSUMPTION] debt is not evenly distributed debt but concentrates on the connective modules the collision engine most depends on (domain_actions, engine_clock, npc_memory), so the emergent-narrative inputs are authored while the wiring that would carry them cross-scale is [ASSUMPTION]-grade \u2014 the North-Star tax is inert state plus untraceable consequence, not merely unfinished specs.",
+   "cite": "references/module_contracts.yaml L179/344/370/389/408/472/611/688/709/746 (doc:null); 02_interdependency_map (b)",
+   "criterion": "N",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-1051 backlog; charter calibration list",
+   "threadwork": false
+  },
+  {
+   "id": "shape-layer-currency-drift",
+   "subsystem": "registers_graphs (mechanics_index/canonical_sources)",
+   "claim": "The meta-layer a session bootstraps the interdependency picture from is stale exactly where the corpus is most alive: mechanics_index marks mass_battle/social_contest not-built while both are mature, and no sim ratification round-trips back \u2014 a meta-cohesion break that makes every downstream edge-status claim unverifiable from the registries alone.",
+   "cite": "canon/mechanics_index.yaml L468-491 vs tests/coverage_matrix.md; references/canonical_sources.yaml L156-161",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "registers_graphs dossier findings mechindex-massbattle-stale / massbattle-no-backpropagation",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_cohesion_interdependency.md"
+}

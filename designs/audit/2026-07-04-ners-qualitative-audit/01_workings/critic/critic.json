@@ -1,0 +1,49 @@
+{
+ "gaps": [
+  {
+   "kind": "subsystem",
+   "description": "settlement_territory lane is effectively unaudited: no dossier, no hunt, no refute \u2014 only incidental mentions inside cross-lane lens files. It is the densest coupling edge (interdependency \u00a7a.1 Faction\u2194Settlement, Mandate=clamp(round(7T/(T+6))), LPS-2e math, mean-reverting L/PS drift) and the mass-battle location substrate (\u00a7a.9). Its threadwork junctures (grounding-03 \u00a72: settlement_layer \u00a74.4/\u00a74.9, governance_play Thread family) are named but verdicted by no lane. Weakest lane; needs an explicit [GAP:] in the report."
+  },
+  {
+   "kind": "subsystem",
+   "description": "7 of 12 lanes have no consolidated six-direction dossier (personal_combat, social_contest, threadwork, npc_behavior, architecture_spine, recent_infra, settlement_territory). The summary's missing_dossier_lanes:[] is misleading \u2014 these were touched via lens/hunt/refute fragments, not a per-subsystem six-direction pass. Lead subsystems personal_combat and threadwork (the two the charter foregrounds) have NO dossier; fragment quality is high but the six-direction discipline was not assembled per-subsystem."
+  },
+  {
+   "kind": "subsystem",
+   "description": "npc_behavior collapsed to refutations: both candidate findings (sim-conviction-taxonomy-stale, gm-controls-npc-votes) REFUTED, zero retained NEW findings, no positive dossier. conviction_track_v1.md (an explicit lane target) is examined only through the refuted taxonomy finding whose own root is KNOWN-TRACKED ED-1006/PP-718. No artifact shows the concern/opinion/project/arc engine or npc_memory writer was swept \u2014 absence-of-finding here is under-evidenced."
+  },
+  {
+   "kind": "artifact",
+   "description": "hunt_combat_minmax is missing (4 of 5 hunt arenas have files). Combat degenerate-play is deferred to the KNOWN spear-dominance calibration item, but that item describes the PRE-redesign exploit; R2 (closing-distance redesign, PR#72 merged) and R3 (weapon-model consolidation, PR#76) changed the model, and no fresh degenerate-play sweep against the new model was run. A new dominant line could exist unswept. KNOWN-TRACKED + new-scope evidence."
+  },
+  {
+   "kind": "direction",
+   "description": "top-down (philosophy\u2192mechanic) is thin at 20 findings across 12 lanes (<2/lane). N-Necessity (Renaissance-political grounding) and \u03a9-non-dominance (no solvable strategy) \u2014 tier-0/tier-1 instruments \u2014 appear concentrated in the throughlines/emergent lenses, not exercised as explicit P-01..15 / GD-1..3 top-down verdicts against each subsystem head. Several lanes likely carry no top-down verdict."
+  },
+  {
+   "kind": "direction",
+   "description": "forwards is the thinnest axis (15) and lives almost entirely in lens_sequence_lineage (Gate-0, engine_clock home, playable-season milestone). Per-dossier forwards reads (each subsystem's Godot end-state sequencing) are sparse for combat/social/faction. Fine if the sequence lens is declared the canonical forwards home, but the report should say so rather than imply each dossier carried a forwards axis."
+  },
+  {
+   "kind": "unread-source",
+   "description": "Charter \u00a73 first-class shape/sequence artifacts unevenly consulted. registers_graphs dossier is thin (519 words) and SKIMMED 03_canonical_timeline, patch_register_active (~150 lines), canonical_sources (first 120 lines+grep). NOT confirmed read anywhere: tools/observability/decisions.json (only DECISIONS.md), references/id_reservations.yaml, and per-lane handoffs/HANDOFF_<LANE>.md. The id_reservations/HANDOFF omission means in-flight lane work may be unreflected \u2014 a resumed-from-stale risk the audit itself could carry."
+  },
+  {
+   "kind": "juncture",
+   "description": "scene.combat_resolved down-seam under-verdicted. Interdependency \u00a7a.2 flags it declared-but-unconsumed (registry says npc_behavior/faction_layer/articulation consume it; their consumes: lists don't). refute_scene-mass-bonus covers only the scene\u2192mass side; the combat_resolved\u2192{npc,faction,articulation} diagonal seam is verdicted by no dossier, and with no personal_combat OR npc dossier, no lane owns it."
+  },
+  {
+   "kind": "juncture",
+   "description": "threadwork-at-every-juncture is unmet for the dossier-less lanes: settlement_territory (settlement_layer \u00a74.4/\u00a74.9 thread-exploitation sites), recent_infra, and the architecture spine seams have no present/absent/deliberate threadwork verdict from a lane owner. P-14 (inseparability in every play mode) is the charter bar and is only checked where a dossier exists."
+  },
+  {
+   "kind": "lens",
+   "description": "Surviving-signal synthesis not yet bound. Only 5 of 157 findings survived; cross-corroborating corpus-level signals are split across lanes without reconciliation: register back-propagation blindness appears in BOTH registers_graphs and sequence_lineage; steering-surface fragmentation (CURRENT.md vs workplan-v5 vs roadmap_state) is a sequence-lens finding that touches every lane's currency. A synthesis pass should name these as corpus-level, not lane-local."
+  },
+  {
+   "kind": "artifact",
+   "description": "Refutation files are scattered across 6 sibling subdirs (findings/, refutation/, refutations/, refutation_notes/, verify/, lanes/, articulation/, plus root) with no manifest. Synthesis-legibility hazard: a synthesizer globbing one directory will miss refuted candidates and could resurrect a refuted finding as novel. Needs a consolidated refutation index before synthesis."
+  }
+ ],
+ "overall": "The audit can be synthesized \u2014 refutation quality is high and well-grounded, and the 7-lens layer is complete (7/7). But coverage is structurally uneven and the summary's missing_dossier_lanes:[] overstates it. Only 5 of 12 lanes have a true consolidated six-direction dossier (mass_battle, faction_political, articulation, victory_strategic, registers_graphs); the other 7 are dispersed across lens/hunt/refute fragments. settlement_territory \u2014 the densest coupling edge and the mass-battle location substrate \u2014 is nearly unaudited (no dossier/hunt/refute, incidental mentions only) and must become an explicit [GAP:]. npc_behavior ran but returned empty (both findings refuted, no positive dossier). The combat min-max hunt has no artifact and defers to a calibration item that predates the R2/R3 combat redesign, so the new model went unswept. Top-down (20) and forwards (15) are thin per-subsystem, concentrated in lenses rather than exercised against each head. Several charter \u00a73 first-class artifacts (decisions.json, id_reservations.yaml, per-lane HANDOFFs) are unconfirmed-read, and registers_graphs only skimmed the timeline/patch/sources registers. Synthesis is viable provided the report carries explicit [GAP:] entries for settlement_territory, the six dossier-less lanes, the missing combat hunt, and the unread shape/sequence artifacts \u2014 and binds the cross-lane survivors (register back-propagation blindness, steering-surface fragmentation) as corpus-level rather than presenting flat 12-lane completeness."
+}

@@ -1,0 +1,77 @@
+{
+ "arena": "combat_minmax",
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/hunt_combat_minmax.md",
+ "lines": [
+  {
+   "line": "Always wear the heaviest armour available \u2014 it has zero downside to me (no tempo/stamina/mobility cost is modelled on the wearer) and strips ~2/3 of my opponent's reach edge (REACH_W) while turning any cutter they carry into negative sigma against me (ADEF_CUT -0.9).",
+   "permitting_rules": "systems.py \u00a7armor_defeat_sigma(502-513) a*(cap-THRESHOLD[def.armor]); \u00a7reach_sigma(590)/\u00a7reopen(644) REACH_W[def.armor]; combatant.py armor never read as self (equipment_health=0, unwired); config WEIGHT_PEN is weapon-only",
+   "what_breaks": "Omega non-dominance: armour-tier choice collapses to max-plate; also flattens weapon choice vs armour",
+   "confidence": "high"
+  },
+  {
+   "line": "Never play German/Chinese/Filipino \u2014 pick a counter/measure tradition (Italian/Spanish/Japanese/English): I get a free defence-to-offence riposte on 50% of any bind, a reward the bind/burst/flow schools never receive.",
+   "permitting_rules": "systems.py \u00a7impose_node(544-557) pd in ('counter','measure') -> bind=False,riposte=True vs pa=='bind' -> bind=True (neutral); traditions.py PREFERRED (41-42); IMPOSITION_GATE=True default",
+   "what_breaks": "Omega non-dominance across the tradition (lateral) choice tree; 4 of 7 traditions hold the strictly better imposition payoff",
+   "confidence": "medium"
+  },
+  {
+   "line": "Run a light hand-balanced weapon (rapier-class) with an aggressive disposition and the true_times ability: I commit to maximum depth every exchange for full attack power with literally zero overcommit exposure, and I always keep the aggressor role for its flat +0.12 bias.",
+   "permitting_rules": "systems.py \u00a7overcommit_exposure(740-743) floored product minus additive anti_overcommit + true_times(+0.25); \u00a7recoverability_factor(139-161) RECOVER_FLOOR 0.3 low for high-pc weapon; \u00a7assemble_net_sigma(689-693) ATTACKER_BIAS 0.12, WOUND_DEF_OB .25>WOUND_ATK_OB .15; DISP_INIT_K",
+   "what_breaks": "The stated core Omega tradeoff 'to commit IS to give up recovery' (config \u00a769-77) \u2014 the commit-depth decision tree collapses to always-deep for this build",
+   "confidence": "medium"
+  },
+  {
+   "line": "Once abilities are exposed, stack every multiplicative ability across all traditions at once (mezzo_tempo x1.40, misura x1.15, atajo x1.18, staerke x1.20, plus additive indes/true_times) \u2014 nothing enforces a budget or my own tradition.",
+   "permitting_rules": "ability_primitives.py ability_factor/ability_bonus iterate c.equipped with no cap, no tradition check; config.py \u00a7153 + tradition_decomposition_v1.md cite an 'affinity budget' that ability_primitives does not implement; REARCHITECTURE_v1 Phase 4 unbuilt",
+   "what_breaks": "The vacuum-balance the imposition gate is claimed to rest on; currently inert (default empty) so a forward hazard + a false config claim",
+   "confidence": "high"
+  }
+ ],
+ "findings": [
+  {
+   "id": "armor-no-encumbrance-pure-upside",
+   "subsystem": "combat_engine_v1/armor-meta",
+   "claim": "Heavy armour carries no wearer-side cost (no tempo/stamina/mobility/encumbrance term); it only ever modifies the opponent's exchange, so armour tier is a strictly dominant pick and its choice tree collapses.",
+   "cite": "systems.py \u00a7armor_defeat_sigma(502-513),\u00a7reach_sigma(590),\u00a7reopen(644); combatant.py \u00a7Combatant(no self-armor read, equipment_health=0)",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "imposition-refuse-riposte-asymmetry",
+   "subsystem": "combat_engine_v1/traditions",
+   "claim": "impose_node gives counter/measure traditions a bind->riposte offensive reward while bind/burst/flow schools get a neutral or no imposition, tilting the tradition choice tree toward the 4 refuser traditions.",
+   "cite": "systems.py \u00a7impose_node(544-557); traditions.py \u00a7PREFERRED(41-42); config.py \u00a7IMPOSITION_GATE(153)",
+   "criterion": "Omega",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "tradition_decomposition_v1.md \u00a7Why (6.8pp spread, pre-dissolution)",
+   "threadwork": false
+  },
+  {
+   "id": "commit-recovery-axis-nulled-light-weapon",
+   "subsystem": "combat_engine_v1/commitment",
+   "claim": "overcommit_exposure subtracts additive anti_overcommit + true_times from a floored multiplicative cost, driving net exposure to exactly 0 for a light hand-balanced weapon, removing the declared commit=give-up-recovery tradeoff.",
+   "cite": "systems.py \u00a7overcommit_exposure(740-743),\u00a7recoverability_factor(139-161),\u00a7assemble_net_sigma(689-693); config.py \u00a7commitment(69-77)",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "affinity-budget-vaporware",
+   "subsystem": "combat_engine_v1/abilities",
+   "claim": "The 'affinity budget' that config and the tradition-decomposition cite as balancing the imposition gate does not exist in code; ability_primitives enforces no budget and no tradition-gate, so future ability exposure permits unconstrained cross-tradition multiplicative stacking.",
+   "cite": "ability_primitives.py \u00a7ability_factor/ability_bonus(64-79); config.py \u00a7153 comment; REARCHITECTURE_v1.md \u00a7Phase 4 (unbuilt)",
+   "criterion": "Omega",
+   "direction": "forwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ]
+}

@@ -1,0 +1,221 @@
+{
+ "core_loop": "Architecture is delivery plumbing, not a choice surface: every subsystem emits/consumes Keys through one update rule; the loop it enables is player action \u2192 Key emission \u2192 observer interpretation \u2192 (maybe) cross-scale ripple \u2192 next player decision informed by consequence.",
+ "decision_points": [
+  {
+   "where": "Domain Echo trigger (scale_transitions \u00a75/\u00a77, Sufficient Scope)",
+   "options": "whether a personal-scene outcome escalates to a faction-level consequence",
+   "meaningful": "rich",
+   "note": "7 named triggers, capped amounts, deferred-apply timing \u2014 best-specified direction in the spine"
+  },
+  {
+   "where": "Strategic Domain Action \u2192 sub-scale ripple (\u00a712.4 down-seams)",
+   "options": "player commits a Domain Action expecting it to be felt by NPCs/settlements",
+   "meaningful": "thin",
+   "note": "registry says npc_behavior/piety_track/settlement_economy consume it; domain_actions emitter doesn't populate targets[] \u2014 consequence may not land"
+  },
+  {
+   "where": "Cross-tick echo persistence (propagation_spec \u00a74.3)",
+   "options": "whether acting vs not-acting on a strain/echo loop produces a settled, legible outcome",
+   "meaningful": "thin",
+   "note": "termination proven, convergence not \u2014 the loop can persist at bounded amplitude with no proven resolution"
+  },
+  {
+   "where": "\"Why?\" causal-chain diagnostic (key_substrate \u00a75.4)",
+   "options": "player queries backward from a Key to understand causation",
+   "meaningful": "moderate",
+   "note": "mechanism exists but UI is unbuilt (Phase 5a) and determinism is conditional on open ORD-3/ORD-4 flags"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "This lane supplies the only channel collisions can travel through (Key emit/observe, all six directions declared mechanism-complete). Its completeness gates whether cross-system collisions actually reach the player \u2014 currently the bottom-up (Domain Echo) path is rich, but the top-down/strategic path is proven-possible, not proven-delivered.",
+  "verdict": "Points at the North Star in design (a genuinely uniform, direction-neutral delivery mechanism) but under-delivers in practice: the modules most central to player strategic choice (domain_actions, engine_clock) are the least-specified, and several declared consumer edges are unpopulated or unconsumed."
+ },
+ "nq": [
+  {
+   "criterion": "Q-smooth",
+   "observation": "Key vocabulary is NOT one language across producers: 3 of 44 registered types (state.opinion_revised, scene.gossip, state.concern_resolved) declare default_permanence=\"structural\" / default_time_horizon=\"medium\", values outside the substrate's own \u00a72.2 enum {transient/persistent/indelible} / {immediate/near/far}.",
+   "cite": "key_type_registry_v30.md:933-934,977-978,997-998 vs key_substrate_v30.md \u00a72.2"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Termination (per-tick, per-cascade) is proven; cross-tick convergence is explicitly not, conditional on two open rulings (decay() contractivity, D.6 disjointness).",
+   "cite": "propagation_spec_v1.md \u00a74.3, \u00a75 item 2-3"
+  },
+  {
+   "criterion": "N",
+   "observation": "Domain Echo's Sufficient Scope list (7 named triggers) models a real Renaissance dynamic \u2014 personal acts of institutional visibility escalating to faction consequence \u2014 cleanly grounded.",
+   "cite": "scale_transitions_v30.md \u00a77"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "Direction-as-emergent-property (targets[]/scale_signature/visibility, not a channel-per-direction) is a genuinely elegant unification, explicitly ratified as closing the top-down gap without new apparatus.",
+   "cite": "scale_transitions_v30.md \u00a712.1-\u00a712.2"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Thread op as a registered Key type (scene.thread_operation, meta.thread_woven)",
+   "status": "present",
+   "evidence": "key_type_registry_v30.md \u00a72, \u00a78 \u2014 but scene.thread_operation payload flagged [STUB: payload inferred, not canon-specified]"
+  },
+  {
+   "juncture": "Thread Domain Echo \u2014 up-ripple distinct from Sufficient Scope",
+   "status": "present",
+   "evidence": "scale_transitions_v30.md \u00a75.6 (ED-673), three named fire conditions incl. Gap/Lock/Knot creation at Territorial+ scale"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "The substrate supplies the mechanism (targets/impact_vector/visibility, causes[] walk) to compute the three questions, but the player-facing surface (the \"Why?\" diagnostic) is unbuilt (Phase 5a), and its determinism is conditional on open ordering flags (ORD-3/ORD-4) \u2014 capability architected, not yet deliverable."
+ },
+ "degenerate_candidates": [
+  "Strategic Domain Actions resolve at the faction-stat ledger with no verified path to felt NPC/settlement consequence \u2014 scale_transitions_v30.md \u00a712.4 + module_contracts.yaml domain_actions entry (consumes:[], doc:null)",
+  "Cross-tick echo loop can persist at bounded-but-nonzero amplitude indefinitely with no proven settling point \u2014 propagation_spec_v1.md \u00a74.3"
+ ],
+ "edges": [
+  {
+   "dir": "out",
+   "other": "npc_behavior/piety_track/settlement_economy/settlement_layer",
+   "mechanism": "\u00a712.4 down-seam targets[] population",
+   "status": "declared-only",
+   "cite": "scale_transitions_v30.md \u00a712.4"
+  },
+  {
+   "dir": "out",
+   "other": "npc_behavior/faction_layer/articulation",
+   "mechanism": "scene.combat_resolved Key",
+   "status": "divergent",
+   "cite": "02_interdependency_map.md (b)"
+  },
+  {
+   "dir": "out",
+   "other": "scene_dispatch.py (sim)",
+   "mechanism": "domain_echo.py \u2192 zoom_out wiring",
+   "status": "divergent",
+   "cite": "propagation_spec_v1.md \u00a72 AU-5"
+  },
+  {
+   "dir": "out",
+   "other": "Godot Resource layer",
+   "mechanism": "Key-as-Resource (\u00a78.8)",
+   "status": "declared-only",
+   "cite": "key_substrate_v30.md \u00a78.8; CLAUDE.md \u00a76"
+  },
+  {
+   "dir": "in",
+   "other": "campaign runner for-loop",
+   "mechanism": "engine_clock root-of-causality, consumes:[]",
+   "status": "implemented",
+   "cite": "propagation_spec_v1.md \u00a71 O.2"
+  }
+ ],
+ "directions": {
+  "top-down": "\u00a712 proves top-down delivery mechanism-complete but 8 named down-seams remain emitter-unpopulated, so the guarantee is proven, not yet exercised.",
+  "bottom-up": "Domain Echo is the best-specified direction in the whole spine \u2014 capped, timed, and trigger-enumerated.",
+  "lateral": "Same-scale observer resolution is architecturally uniform, but the flagship lateral edge (scene.combat_resolved) is declared-but-unconsumed.",
+  "diagonal": "causes[] chaining is real but sparse (~15%) and now overloaded to also carry runtime re-entrancy parentage without a distinguishing field.",
+  "forwards": "Key\u2192Resource mapping is clean on paper but the Godot port is 1/27 modules and non-compilable \u2014 forward realization lags the spec.",
+  "backwards": "Unusually low lineage risk: each doc (substrate, doctrine, propagation spec) explicitly scopes what it does NOT prove, so supersession/staleness risk is self-flagged rather than silent."
+ },
+ "findings": [
+  {
+   "id": "cross-tick-convergence-unproven",
+   "subsystem": "architecture_spine",
+   "claim": "The propagation spec proves per-tick/per-cascade termination but explicitly not cross-tick convergence, leaving the up/down echo loop able to persist at bounded amplitude for the whole campaign with no determinate settling point.",
+   "cite": "propagation_spec_v1.md \u00a74.3, \u00a75 items 2-3",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec_v1 \u00a75 decision-queue item 18 (OF-3, OF-D6)",
+   "threadwork": false
+  },
+  {
+   "id": "domain-actions-central-and-unspecified",
+   "subsystem": "architecture_spine",
+   "claim": "domain_actions \u2014 the module implementing the player's primary strategic decision (Domain Actions) \u2014 is doc:null, [ASSUMPTION]-resolver-grade, and the source of 3 of the 8 unpopulated \u00a712.4 down-seams, so the headline player choice may resolve mechanically without ever reaching NPCs/settlements.",
+   "cite": "references/module_contracts.yaml:470-489; scale_transitions_v30.md \u00a712.4",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "charter calibration list (doc:null domain_actions/engine_clock; ED-1038 \u00a712.4)",
+   "threadwork": false
+  },
+  {
+   "id": "key-vocabulary-enum-fork",
+   "subsystem": "architecture_spine",
+   "claim": "Three Class-B Key types declare permanence/time_horizon values (\"structural\", \"medium\") outside the substrate's own canonical enum, so the Key vocabulary is demonstrably not one language across producers.",
+   "cite": "key_type_registry_v30.md:933-934,977-978,997-998 vs key_substrate_v30.md \u00a72.2",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "termination-caps-unbacked",
+   "subsystem": "architecture_spine",
+   "claim": "The runaway-cascade guard (CASCADE_DEPTH_MAX, EMISSIONS_PER_TICK_MAX) that makes the termination theorem meaningful consists of unbacked integers with no cited canonical_source, homed in a module (engine_clock) whose doc:null grade is itself unresolved.",
+   "cite": "propagation_spec_v1.md \u00a74.6, \u00a74 OF-CAP; references/module_contracts.yaml:701-702",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec_v1 OF-CAP / ED-1051",
+   "threadwork": false
+  },
+  {
+   "id": "rng-model-collision-legibility",
+   "subsystem": "architecture_spine",
+   "claim": "Three incompatible RNG contracts coexist unreconciled (substrate per-emission seed vs propagation spec single global stream vs conversion strategy's named-draw service); the player-facing \"Why?\" diagnostic depends on the replay determinism this collision puts in question.",
+   "cite": "propagation_spec_v1.md \u00a71 O.5, \u00a75 item 5; key_substrate_v30.md \u00a76.1",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec_v1 RNG-MODEL-COLLISION / decision-queue item 5",
+   "threadwork": false
+  },
+  {
+   "id": "scene-combat-resolved-divergent",
+   "subsystem": "architecture_spine",
+   "claim": "scene.combat_resolved is registered with declared consumers (npc_behavior, faction_layer, articulation) that do not actually list it in their own consumes:, so a lateral/up delivery edge the registry claims is covered is silently unreached.",
+   "cite": "02_interdependency_map.md (b) item 2",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "module_contracts personal_combat gap_notes",
+   "threadwork": false
+  },
+  {
+   "id": "causes-field-overload",
+   "subsystem": "architecture_spine",
+   "claim": "causes[] simultaneously carries authored provenance (cycle-checked) and runtime re-entrancy parentage (cascade depth reconstruction) with no field distinguishing the two, so replay-based depth reconstruction is ambiguous.",
+   "cite": "propagation_spec_v1.md \u00a74.4",
+   "criterion": "Q-elegant",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec_v1 \u00a74.4 residual (self-flagged low severity)",
+   "threadwork": false
+  },
+  {
+   "id": "thread-operation-payload-stub",
+   "subsystem": "architecture_spine",
+   "claim": "scene.thread_operation is a registered Key type but its payload is explicitly unratified stub content, so threadwork's substrate representation is present-but-thin rather than fully specified.",
+   "cite": "key_type_registry_v30.md \u00a72 scene.thread_operation [STUB]",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": true
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_architecture_spine.md",
+ "subsystem": "architecture_spine"
+}

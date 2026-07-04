@@ -1,0 +1,249 @@
+{
+ "subsystem": "npc_behavior (designs/npcs/npc_behavior_v30.md + designs/personal/conviction_track_v1.md)",
+ "core_loop": "Named NPCs hold Conviction(s)+Resonant Style+Certainty (npc_behavior_v30 \u00a71-\u00a72); players target vulnerabilities in Contest via RS-matching (\u00a76), NPCs accrue per-Conviction Scars from witnessed Thread ops (conviction_track_v1 \u00a73) or Contest losses, Scars gate Belief revision and fire authored per-NPC Arc branches (\u00a75.2). BG-mode Priority Trees (\u00a78) run deterministic 7-level faction decisions each season; Outreach/Demand (\u00a78.11) surfaces \u22643 NPC-initiated scenes/season to the player.",
+ "decision_points": [
+  {
+   "where": "Contest RS/genre declaration (\u00a76.2, \u00a76.4.1)",
+   "options": "Evidence/Consequence/Authority/Solidarity, locked before Exchange 1, no mid-Contest pivot",
+   "meaningful": "moderate",
+   "note": "tactically real but collapses to lookup once NPC's fixed RS is known (\u00a71.3 roster)"
+  },
+  {
+   "where": "Advisor Knot extraction vs public citation (\u00a73.5.3-3.5.4)",
+   "options": "extract privately (no cost) vs cite publicly (full rupture)",
+   "meaningful": "rich"
+  },
+  {
+   "where": "Recruitment incentive (\u00a79.5 Step 3)",
+   "options": "one of 5 fixed incentive types, max one, stacking = coercion",
+   "meaningful": "thin"
+  },
+  {
+   "where": "Outreach/Demand accept-refuse (\u00a78.11)",
+   "options": "binary accept/refuse per entry, capped 3/2 per season",
+   "meaningful": "thin"
+  },
+  {
+   "where": "Edeyja Wager content (Arc E, \u00a75.2)",
+   "options": "name a specific verifiable future condition",
+   "meaningful": "rich",
+   "note": "only one NPC has this open-ended authored mechanism"
+  },
+  {
+   "where": "Which authored Arc endpoint an NPC resolves to (\u00a75.2 Arc Maps)",
+   "options": "fixed small menu per NPC (Almud A-F, Himlensendt A-C, etc.), state-gated timing",
+   "meaningful": "moderate",
+   "note": "emergent timing, authored destination set"
+  }
+ ],
+ "north_star": {
+  "choice_density": "moderate",
+  "collision_feed": "Feeds Conviction/Scar/Disposition/priority-tree-fired state into Contest targeting, faction Cascade, and Outreach \u2014 genuine collision-engine substrate (T-23/T-24 chains per PP-718 vetting) \u2014 but feed quality is degraded by an unresolved 2-cycle damper dispute and a doc:null memory sink.",
+  "verdict": "Points at the North Star in structure (state-driven branching, strong dramatic legibility) but under-delivers on 'myriad options': RS choice collapses to lookup, faction AI is fully predictable, and arc destinations are authored menus rather than emergent trajectories."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "BG Priority Trees (\u00a78.2-\u00a78.10) are deterministic if-then ladders per faction with no stochastic branching beyond embedded rolls \u2014 a read player can predict faction action every season, in tension with the non-dominance clause.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a78.1-\u00a78.10"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Dramatic-legibility test passes well here: Stance Triangles give explicit Beliefs (who/what), Generic Transition Triggers + Priority Trees give deterministic no-action consequences.",
+   "cite": "npc_behavior_v30.md \u00a72.x, \u00a75.1"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "Core rule is not restatable after one reading: Conviction taxonomy + per-Conviction Scar + Certainty + Resonant Style + 7-level Priority Tree + Outreach/Demand + Arc trees stack into a large apparatus.",
+   "cite": "npc_behavior_v30.md \u00a71-\u00a78 overall shape"
+  },
+  {
+   "criterion": "N",
+   "observation": "PP-718 vetting grounds per-Conviction Scar in a specific Renaissance analogy (Catherine de' Medici multi-frame moral injury) \u2014 a strong, non-generic N argument.",
+   "cite": "conviction_track_v1_pp718_vetting.md N-1"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Thread Event -> Conviction Scar matrix",
+   "status": "present",
+   "evidence": "npc_behavior_v30.md \u00a73.4 -> conviction_track_v1.md \u00a73 (ED-663/664, resolved)"
+  },
+  {
+   "juncture": "NPC practitioner Coherence decision thresholds",
+   "status": "present",
+   "evidence": "npc_behavior_v30.md \u00a74.3 (ED-665, resolved), 6-tier table + Warden MS override"
+  },
+  {
+   "juncture": "Knot strain propagation from transforming NPC",
+   "status": "present",
+   "evidence": "npc_behavior_v30.md \u00a75.0b, explicit P-12 fix, Close/Distant strain by TS band"
+  },
+  {
+   "juncture": "Faction Priority Trees gated on Thread state",
+   "status": "absent-plausible",
+   "evidence": "Only Varfell \u00a78.5 (rows 2/2b) and Wardens \u00a78.10 (rows 1-3) have Thread-conditioned rows; Church/Crown/Hafenmark/Guilds/L\u00f6wenritter/RM trees (\u00a78.2-\u00a78.4,\u00a78.6,\u00a78.7,\u00a78.9) have zero, despite P-01 inseparability implying Thread events in their territories should shape institutional posture"
+  },
+  {
+   "juncture": "NPC memory of Thread witnessing (P-09 messy/costly/detectable)",
+   "status": "absent-plausible",
+   "evidence": "module_contracts.yaml npc_memory block: doc:null, schema only inside political_dynamics_keys_migration_v30 \u00a72.3, no standalone P-09 mechanical surface"
+  }
+ ],
+ "legibility": {
+  "answerable": "yes",
+  "note": "Stance Triangles + Beliefs (\u00a72.x) answer whose-position/what-they-want directly; \u00a75.1 Generic Transition Triggers and per-faction Priority Trees give deterministic next-season-if-no-action answers (e.g. Stability<=1 collapses to Autonomy; Almud's Arc A window closes permanently at Counter=2 while Certainty>=2, \u00a75.2)."
+ },
+ "degenerate_candidates": [
+  "Fully deterministic BG Priority Trees (\u00a78.1-\u00a78.10) \u2014 no randomization beyond embedded rolls, predictable per faction every season",
+  "Fixed 1:1 Resonant Style per NPC (\u00a71.3 + roster) + stacking Wrong-Style Penalty (\u00a76.4.3) collapses contest tactics to lookup-and-apply once NPC's RS is known"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "social_contest",
+   "mechanism": "scene.contest_resolved consumed by npc_behavior",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "social_contest",
+   "mechanism": "state.opinion_revised \u2014 2-cycle damper status contradicted between the two modules' own contract blocks",
+   "status": "divergent",
+   "cite": "module_contracts.yaml lines ~153 vs ~442"
+  },
+  {
+   "dir": "in",
+   "other": "threadwork/conviction_track",
+   "mechanism": "Thread Event x Conviction Scar matrix, Coherence thresholds",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "npc_memory",
+   "mechanism": "scene.gossip/interaction, state.concern_resolved/opinion_revised into a doc:null, [ASSUMPTION]-resolver sink",
+   "status": "declared-only"
+  },
+  {
+   "dir": "in",
+   "other": "domain_actions/mass_battle/fieldwork_knots",
+   "mechanism": "da.antinomian_action, meta.knot_ruptured, scene.battle_concluded feed piety_track scar accrual",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "faction Cascade (PP-686 \u00a73.2)",
+   "mechanism": "per-Conviction erosion aggregates to faction effective_convictions",
+   "status": "declared-only",
+   "cite": "conviction_track_v1_pp718_vetting.md M-4/M-5"
+  },
+  {
+   "dir": "out",
+   "other": "canon/mechanics_index.yaml",
+   "mechanism": "conviction_scar canon_sources citation",
+   "status": "divergent",
+   "cite": "mechanics_index.yaml line 305 cites wrong file vs module_contracts.yaml piety_track block"
+  }
+ ],
+ "directions": {
+  "top-down": "\u00a712 Canon Compliance table only rows P-01/02/06/12 and mostly reads 'not directly invoked' rather than demonstrating active compliance against the other 11 gates.",
+  "bottom-up": "sim/personal/conviction.py's CONVICTIONS constant still hardcodes the legacy 9-Conviction set the file's own comment calls superseded, not PP-684/718's ratified 13-set \u2014 the Godot-bound reference has not caught up to the passed vetting.",
+  "lateral": "Only 2 of 9 faction Priority Trees (Varfell, Wardens) have any Thread-conditioned row; siblings (Church, Crown, Hafenmark, Guilds, L\u00f6wenritter, RM) have none.",
+  "diagonal": "Per-Conviction Scar erosion is declared to propagate to faction-scale Cascade math (PP-686 \u00a73.2) per the PP-718 vetting doc, but no module_contracts edge confirms this is implemented.",
+  "forwards": "No workplan lane entry or HANDOFF reference found scheduling npc_behavior/conviction_track work next; this lane appears currently unowned in active continuity tracking.",
+  "backwards": "Two same-stem-named docs (designs/scene/conviction_track_v30.md vs designs/personal/conviction_track_v1.md) cover unrelated mechanics; canon/mechanics_index.yaml fell into exactly this citation trap while module_contracts.yaml did not."
+ },
+ "findings": [
+  {
+   "id": "contract-2cycle-self-contradiction",
+   "subsystem": "npc_behavior/social_contest",
+   "claim": "module_contracts.yaml's own two blocks for the identical social_contest<->npc_behavior 2-cycle disagree: social_contest's block asserts BOUNDED with a verification ref and explicit numeric bounds, while npc_behavior's block for the same loop asserts dampers unconfirmed/OPEN.",
+   "cite": "references/module_contracts.yaml ~line 153 (npc_behavior loops) vs ~line 442 (social_contest loops)",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "02_interdependency_map.md line 25 flags 'dampers unconfirmed [OPEN \u2014 Jordan]'; this finding adds the specific self-contradiction (one block claims resolved-and-bounded) as new severity evidence",
+   "threadwork": false
+  },
+  {
+   "id": "sim-conviction-taxonomy-stale",
+   "subsystem": "conviction_track / sim",
+   "claim": "sim/personal/conviction.py's CONVICTIONS constant still implements the legacy 9-Conviction taxonomy rather than PP-684/PP-718's ratified 13-Conviction structured-concentration set, so the Godot-validating reference has not been migrated despite the design-level vetting passing.",
+   "cite": "sim/personal/conviction.py lines ~40-46",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "mechanics-index-wrong-file",
+   "subsystem": "npc_behavior/conviction_track",
+   "claim": "canon/mechanics_index.yaml's conviction_scar entry cites designs/scene/conviction_track_v30.md#section-1 (the unrelated per-territory Piety-stat BG mechanic) instead of designs/personal/conviction_track_v1.md, contradicting module_contracts.yaml's correct piety_track entry and npc_behavior_v30's own explicit redirect.",
+   "cite": "canon/mechanics_index.yaml line 305",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "npc-memory-p09-gap",
+   "subsystem": "npc_memory",
+   "claim": "npc_memory is doc:null with only an [ASSUMPTION]-grade state_reader resolver and a schema buried in a different system's subsection, so P-09 (memory pulling must be messy/costly/detectable) has no discoverable mechanical surface for named-NPC memory despite npc_behavior emitting directly into it.",
+   "cite": "references/module_contracts.yaml npc_memory block (~lines 172-190)",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "CLAUDE.md \u00a76 / ED-1051 doc:null backlog (generic); P-09-specific angle is added scope",
+   "threadwork": true
+  },
+  {
+   "id": "deterministic-priority-trees",
+   "subsystem": "npc_behavior BG mode",
+   "claim": "All 9 faction Priority Trees are fixed deterministic if-then ladders with no stochastic branching beyond embedded contest rolls, letting a player who has read the corpus predict faction action every season \u2014 tension with Omega non-dominance.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a78.1-\u00a78.10",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "resonant-style-lookup-collapse",
+   "subsystem": "npc_behavior contest integration",
+   "claim": "Each named NPC has exactly one fixed Primary (and usually Secondary) Resonant Style, and the stacking Wrong-Style Penalty (\u00a76.4.3) punishes any other choice, so contest tactics collapse from a 4-style system into 'look up the NPC's answer key.'",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a71.3, \u00a76.4",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "thin-canon-compliance-table",
+   "subsystem": "npc_behavior",
+   "claim": "The \u00a712 Canon Compliance table addresses only 4 of 15 P-numbers and mostly with 'not directly invoked' rather than demonstrated compliance, leaving P-03/04/05/08/10/11/13/15 unaddressed even as N/A.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a712",
+   "criterion": "P-philosophy",
+   "direction": "top-down",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "thread-hook-asymmetry-faction-trees",
+   "subsystem": "npc_behavior BG mode",
+   "claim": "Only Varfell and Wardens Priority Trees have Thread-state-conditioned rows; Church, Crown, Hafenmark, Guilds, L\u00f6wenritter, and RM trees have none, despite P-01 inseparability implying Thread events in their territories should shape institutional posture.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a78.2-\u00a78.4, \u00a78.6, \u00a78.7, \u00a78.9 vs \u00a78.5/\u00a78.10",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": true
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_npc_behavior.md"
+}

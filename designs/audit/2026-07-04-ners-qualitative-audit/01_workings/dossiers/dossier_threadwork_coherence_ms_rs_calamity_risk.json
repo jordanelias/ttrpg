@@ -1,0 +1,228 @@
+{
+ "core_loop": "Practitioner (TS\u226530+Approach Training) Leaps (Spirit\u00d72+History+TPS, TN7) to suspend rendering, then performs one op (Weave/Pull/POP/Lock/Dissolve/Mend) at a Depth\u00d7Breadth\u00d7Distance Ob, paying personal Coherence (10\u21920) plus a world-track cost (named MS in threadwork_v30, RS in params/threadwork.md \u2014 same track). The world track's band \u00d7 node-distance-from-Askeheim sets ambient Gap/Shifting-Object/Ob pressure for everyone in-territory, practitioner or not.",
+ "decision_points": [
+  {
+   "where": "Op scale (threadwork_v30 \u00a72.4, params/threadwork.md Three-Axis Ob)",
+   "options": "Depth\u00d7Breadth\u00d7Distance combination vs Ob/Coherence/world-cost",
+   "meaningful": "rich"
+  },
+  {
+   "where": "threadwork_v30 \u00a72.4 Weave vs Pull",
+   "options": "build (brittle, Over-Actualisation) vs open (transient, snap-back Wound)",
+   "meaningful": "rich"
+  },
+  {
+   "where": "threadwork_v30 \u00a72.4 FR ops",
+   "options": "Lock (chronic freeze) vs Dissolution (acute tear, Gap always-on)",
+   "meaningful": "moderate"
+  },
+  {
+   "where": "threadwork_v30 \u00a72.3 concealment roll",
+   "options": "conceal (Cognition roll) vs risk Church Attention/CV drift",
+   "meaningful": "moderate"
+  },
+  {
+   "where": "threadwork_v30 \u00a73.3/\u00a73.7, knots_v30 \u00a78.3 Rendering Crisis",
+   "options": "gamble recovery (season withdrawal+3 Anchoring Scenes+roll, perma -1 TS) vs drift to NPC",
+   "meaningful": "rich"
+  },
+  {
+   "where": "threadwork_v30 \u00a72.4 Mending Seasonal Fatigue",
+   "options": "pace safe 0-Coherence Mending across season vs let Gaps accrue",
+   "meaningful": "moderate"
+  },
+  {
+   "where": "knots_v30 \u00a74-\u00a76 Knot use",
+   "options": "spend Knot benefits (Thread-Read, buffer, counsel) vs accrue rupture strain",
+   "meaningful": "rich"
+  },
+  {
+   "where": "threadwork_v30 \u00a72.5-\u00a72.6 Collective/Opposing ops",
+   "options": "Anchor+Helper dice-pool coalition vs contested-intentionality resolution",
+   "meaningful": "rich"
+  }
+ ],
+ "north_star": {
+  "choice_density": "rich",
+  "collision_feed": "Thread ops write Domain Echo to faction stats, CV drift, settlement Order, and NPC Conviction Scars (ED-673/675/676) \u2014 a genuine cross-scale collision generator. But two of the narrative sinks meant to render these collisions (combat_engine_v1, articulation) are structurally absent, so collisions compute but often can't surface.",
+  "verdict": "Points strongly at the North Star mechanically (rare non-dominant, multi-axis decision space) but is undercut by legibility debt (MS/RS split) and missing narrative sinks that prevent its rich collisions from actually reaching the player."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "Non-dominance protected by design: Structural/Foundational Mending intentionally ~22-58% even at max pool, preventing a solo-practitioner 'solve the Calamity' strategy.",
+   "cite": "params/threadwork.md \u00a7Probability reference"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "threadwork_v30 \u00a72.4 retains full STRUCK pre-PP-622 single-axis Ob tables inline for Weave/Pull/Lock/Dissolve, doubling live-vs-history parse cost against the 'restatable after one reading' bar.",
+   "cite": "threadwork_v30.md \u00a72.4 all four Ob-by-scale tables"
+  },
+  {
+   "criterion": "Q-smooth",
+   "observation": "Same world track carries two different canonical names (MS vs RS) across documents both treated as live canonical \u2014 a direct composability/naming failure.",
+   "cite": "params/threadwork.md L136-138 vs threadwork_v30.md \u00a75"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Faction (Domain Echo)",
+   "status": "present",
+   "evidence": "thread_horizontal_integration_spec.md ED-673/675/676"
+  },
+  {
+   "juncture": "Mass Battle",
+   "status": "present",
+   "evidence": "threadwork_v30.md \u00a7A.7/A.10 cross-refs, ST-TW-05"
+  },
+  {
+   "juncture": "Knots",
+   "status": "present",
+   "evidence": "knots_v30.md full unified spec, \u00a74-\u00a78"
+  },
+  {
+   "juncture": "combat_engine_v1 (ratified combat head)",
+   "status": "absent-plausible",
+   "evidence": "threadwork_v30.md cites only superseded combat_v30 \u00a710, never combat_engine_v1; ED-911 open P1"
+  },
+  {
+   "juncture": "articulation_layer_v30 (narrative sink)",
+   "status": "absent-plausible",
+   "evidence": "zero Thread/Gap/Rendering-Crisis hooks despite ED-681 authoring 4 narrative beats explicitly for videogame implementation"
+  },
+  {
+   "juncture": "Church faction AI",
+   "status": "absent-deliberate",
+   "evidence": "thread_horizontal_integration_spec.md ED-679: 'Church does not use Thread operations... Thread-resistant by design'"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "Whose-position/what-actors-want/what-happens-if-no-action are all answerable from calamity_radiation_v30's radiation matrix and threadwork's Coherence table \u2014 but a reader cannot state in one sentence which world track is actually failing without first resolving the live MS-vs-RS naming split across two documents both called canonical."
+ },
+ "degenerate_candidates": [
+  "threadwork_v30.md \u00a72.4 ST-TW-01: Object-scale Weaving in a protected combat round costs 0 Coherence and 0 world-track change on Success \u2014 self-flagged 'is this intended? See ED-046', and ED-046 does not exist in canon/editorial_ledger.jsonl (orphan, never adjudicated)."
+ ],
+ "edges": [
+  {
+   "dir": "out",
+   "other": "faction_state (Domain Echo)",
+   "mechanism": "Thread event -> faction stat +-1 via Domain Echo (ED-673)",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "settlement_layer (\u00a74.4)",
+   "mechanism": "territory-level radiation trigger -> settlement Order effect (ED-675)",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "npc_behavior faction AI priority trees",
+   "mechanism": "Thread-warfare doctrine amendments (ED-679)",
+   "status": "declared-only"
+  },
+  {
+   "dir": "out",
+   "other": "knots_v30 (personal-scale relational)",
+   "mechanism": "Coherence recovery, Knot strain from opposing ops, Rendering Crisis Anchoring beats",
+   "status": "implemented"
+  },
+  {
+   "dir": "in",
+   "other": "combat_engine_v1",
+   "mechanism": "none \u2014 only superseded combat_v30 \u00a710 has Leap-in-combat",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "articulation_layer_v30",
+   "mechanism": "none \u2014 Rendering Crisis beats (ED-681) have no consuming Key/trigger",
+   "status": "divergent"
+  }
+ ],
+ "directions": {
+  "top-down": "P-14 inseparability is honored broadly (faction/settlement/social/fieldwork) but fails at its two highest narrative-value sinks: combat and articulation.",
+  "bottom-up": "params/threadwork.md's Three-Axis Ob correctly supersedes threadwork_v30's retained pre-PP-622 tables, but the retention itself is a live parse cost, not just patch history.",
+  "lateral": "Knots and Threadwork compose cleanly and knots_v30 resolved its own internal contradictions (\u00a711) \u2014 an instructive contrast to threadwork's still-unresolved MS/RS naming question.",
+  "diagonal": "Thread's cross-scale wiring into faction/settlement/mass-battle is the richest collision feed in the corpus, but rarely reaches player-visible payoff since articulation doesn't consume it.",
+  "forwards": "A Godot typed-engine-params export (CLAUDE.md \u00a75) cannot bind a Resource field to this track until MS vs RS is resolved to one name.",
+  "backwards": "The MS/RS naming question has been relitigated at least three times in the ledger (ED-428 keep RS, ED-731 propagate MS, ED-772 continue MS sweep) and the sweep never reached params/threadwork.md, which still reads RS."
+ },
+ "findings": [
+  {
+   "id": "ms-rs-split-live",
+   "subsystem": "threadwork",
+   "claim": "The world risk track is named MS (Mending Stability) in threadwork_v30/calamity_radiation/knots_v30 but RS (Rendering Stability) in the newer canonical params/threadwork.md \u2014 same track, both docs treated as live canonical, and the 2026-04-20/04-30 MS-propagation sweep (ED-731/772) never reached params/threadwork.md.",
+   "cite": "params/threadwork.md L136-138; threadwork_v30.md \u00a75 MODE APPLICABILITY INDEX; canon/editorial_ledger.jsonl ED-428/731/772",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "ED-428, ED-731, ED-772 (naming flip-flop history); adds new evidence that the residual divergence is still live post-sweep"
+  },
+  {
+   "id": "combat-zero-thread-confirmed",
+   "subsystem": "threadwork x combat",
+   "claim": "combat_engine_v1, the ratified combat head, has zero threadwork surface \u2014 confirmed by direct read: threadwork_v30.md cites only the superseded combat_v30 \u00a710 layer.",
+   "cite": "threadwork_v30.md (absence of combat_engine_v1 citations); grounding 03 \u00a73",
+   "criterion": "P-philosophy",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "ED-911 (open, P1) \u2014 restated with direct textual confirmation only, not novel"
+  },
+  {
+   "id": "articulation-zero-thread",
+   "subsystem": "threadwork x articulation",
+   "claim": "articulation_layer_v30, the sole narrative-surfacing sink, has zero Thread/Gap/Rendering-Crisis hooks despite ED-681 authoring 4 dedicated narrative beats explicitly 'for videogame implementation' \u2014 the richest scripted Thread narrative content has no rendering path.",
+   "cite": "threadwork_v30.md Rendering Crisis beats (ED-681 embedded text); grounding 03 \u00a73",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": true,
+   "tracked_ref": "grounding 03 \u00a73 lists this absence; no ED exists \u2014 adding severity assessment since ED-681's content is explicitly VG-targeted"
+  },
+  {
+   "id": "orphan-ed-046",
+   "subsystem": "threadwork",
+   "claim": "threadwork_v30.md's own ST-TW-01 design note flags a candidate degenerate line (free Object-scale Weaving in protected combat rounds) and cites 'ED-046' for adjudication, but ED-046 does not exist anywhere in canon/editorial_ledger.jsonl \u2014 never registered, never resolved.",
+   "cite": "threadwork_v30.md \u00a72.4 ST-TW-01; canon/editorial_ledger.jsonl (grep confirms absence)",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "ed679-niflhel-struck",
+   "subsystem": "threadwork x npc AI",
+   "claim": "ED-679 (Thread Warfare NPC AI doctrine) resurrection cost is higher than 'never propagated': its Niflhel \u00a78.8 target section is independently STRUCK from npc_behavior_v30, so simple patch re-application is no longer possible \u2014 it needs re-authoring against the current faction roster.",
+   "cite": "thread_horizontal_integration_spec.md ED-679 (Niflhel \u00a78.8 Amendment); grounding 02(d) 'Niflhel STRUCK'",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "grounding 03 \u00a74 flags ED-679 never-propagated; adds new cost evidence (target faction gone)"
+  },
+  {
+   "id": "struck-ob-tables-retained",
+   "subsystem": "threadwork",
+   "claim": "threadwork_v30.md \u00a72.4 retains the full STRUCK pre-PP-622 single-axis Ob tables inline for Weave/Pull/Lock/Dissolve alongside canonical-pointer footnotes, doubling the live-vs-history parse burden against the Q-elegant 'restatable after one reading' bar.",
+   "cite": "threadwork_v30.md \u00a72.4 (four Ob-by-scale tables, each footnoted pre-PP-622)",
+   "criterion": "Q-elegant",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_threadwork.md",
+ "subsystem": "threadwork (Coherence/MS-RS/Calamity risk economy, Knots, calamity radiation, horizontal integration spec)"
+}
