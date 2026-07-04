@@ -10,7 +10,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 - **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan review (PR #77,
   branch `claude/ners-audit-fable5-9cpfdz`).** Corpus-wide qualitative audit (playability /
-  cohesion / interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent
+  cohesiveness / interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent
   adversarial workflow (12 dossiers + 5 degenerate-play hunters + 7 lenses; every carried finding
   refuted-or-confirmed with an intent gate). Deliverables at
   `designs/audit/2026-07-04-ners-qualitative-audit/`: `ners_qualitative_audit_v1.md`
