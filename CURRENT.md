@@ -12,14 +12,16 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-02 (ED-1083 doctrine ratification + ED-1093 propagation-spec
-ratification + ED-1094 merge-ratifies convention; previous reconcile 2026-07-01 month-overview +
-architecture consolidation; 2026-06-28 deprecation & currency sweep + v40 generation declaration).
-Every row is the head of its lineage; predecessors are archived._
+_Last reconciled: 2026-07-04 (scene-combat R2 closing-distance/facing/grip/contact redesign, I0–I8,
+MERGED PR #72; R3 weapon-model consolidation plan-of-record RATIFIED, PR #76 in flight; weapon-morphology
+granularity audit merged PR #74; previous reconcile 2026-07-02 ED-1083 doctrine + ED-1093 propagation-spec +
+ED-1094 merge-ratifies convention; 2026-07-01 month-overview + architecture consolidation; 2026-06-28
+deprecation & currency sweep + v40 generation declaration). Every row is the head of its lineage; predecessors
+are archived._
 
 | Subsystem | Current head |
 |---|---|
-| **Personal combat** | `designs/scene/combat_engine_v1/` (resolver package; ED-900–904, re-ratified ED-904; D1–D9 ED-1029). Typed Class-C export: `references/engine_params/combat_engine_v1.json` — GENERATED from `config.py` via `tools/export_engine_params.py`, round-trip-checked blocking in CI (ED-1052 seed); the Godot port regenerates from it, never hand-edits |
+| **Personal combat** | `designs/scene/combat_engine_v1/` (resolver package; ED-900–904, re-ratified ED-904; D1–D9 ED-1029). **R2 closing-distance/facing/grip/contact redesign (I0–I8) MERGED to main (PR #72, 2026-07-04)** per `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md` (+ `i8_capstone_audit.md`). **Next phase: R3 weapon-model consolidation — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md` (RATIFIED plan-of-record; U0→U9 + T-P2 + T5; JD-1…JD-8 open), implementing on PR #76.** Typed Class-C export: `references/engine_params/combat_engine_v1.json` — GENERATED from `config.py` via `tools/export_engine_params.py`, round-trip-checked blocking in CI (ED-1052 seed); the Godot port regenerates from it, never hand-edits |
 | **Mass battle** | `designs/provincial/mass_battle_v30.md` (+ `mass_battle_integration_v30.md`) |
 | **Social contest** | `designs/scene/social_contest_v30.md` (+ `_index`, `_infill`; `params/contest.md`) — ⚠️ a staged **contest_rebuild** is in flight (Gate 0 ratified 2026-06-30; reserved ED 1055–1079 / PP 800–809; Stage 1a σ-kernel landed as `sim/autoload/sigma_leverage.py`); this row remains the head until a rebuild stage supersedes it |
 | **Faction / political** | `designs/provincial/faction_canon_v30.md` + `faction_layer_v30.md` + `faction_behavior_v30.md` + `faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`) |
