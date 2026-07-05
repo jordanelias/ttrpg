@@ -335,6 +335,18 @@ OUTSIDE the Key log; its `consumes: [{type: mechanical.scene_entered, from: [gam
 **already** attributed to `game_director` — which is the alignment evidence for the scene_entered
 resolution, but is NOT by itself sufficient (S4.8). No edit to either.
 
+**ED-1009 (open — multi-emitter attribution of `scene.dialogue` / `state.belief_revised`): DEFERRED
+with a pointer, not touched.** ED-1009 flags the exact pair this section's contracts brush against —
+`scene_slate` here `emits: scene.dialogue` (S4.4), and `articulation` here consumes `belief_revised`
+as a significance input (the render trigger cluster, Q4.6.4/Q4.8). S4.8 resolves the **sibling**
+`mechanical.scene_entered` multi-emitter conflict with a loud fork; the `scene.dialogue` /
+`belief_revised` attribution is **structurally analogous** but is a distinct open item. **This
+design does NOT re-attribute `scene.dialogue` or `belief_revised`** — it leaves their existing
+emitter/consumer edges untouched and adds no new emitter for either. **Recommended disposition:
+defer-with-pointer** — flag ED-1009 as the governing open item for that pair, apply the *same
+single-emitter discipline* the scene_entered resolution establishes (S4.8, R5) if/when ED-1009 is
+taken up, but do not fold ED-1009 into this PR. Carried in S4.11.
+
 ---
 
 ## S4.5 New Key-type registry entries (verbatim-ready)
@@ -362,11 +374,11 @@ default_scale_signature: [territory, peninsula]
 default_permanence: persistent
 default_time_horizon: near
 emitting_systems: [game_director]
-consuming_systems: [game_director, articulation, scene_slate, chronicle]
+consuming_systems: [game_director, articulation (Tier-2 render), scene_slate, articulation (Tier-3 chronicle)]
 class: B
 declared_by: designs/audit/2026-07-05-emergent-narrative-engine (this effort; closes ED-IN-0003 render side)
 notes:
-  - game_director consumes for L3 booking; articulation for Tier-2/3 render; chronicle for the causes[] walk (Q3 queryable event).
+  - game_director consumes for L3 booking; articulation for Tier-2 render AND the Tier-3 chronicle causes[] walk (Q3 queryable event). "chronicle" is NOT a module — Tier-3 chronicle is an articulation function (articulation_layer_v30 §4); consumer is articulation, not a separate `chronicle` module.
   - Emission order is deterministic — deduped via an order-preserving container keyed by (convergence_id), sorted before emit (S4.2.4, R7). No set() gates emission order (ORD-2).
   - cosine_detected members carry NO pressure_effects (S4.3 provenance rule, R9).
 ```
@@ -374,7 +386,7 @@ notes:
 ```yaml
 ### meta.arc_state_changed  (add to §8 Family: system_meta)
 
-description: Emitted on an arc-vector lifecycle FSM transition (seeded -> active -> escalating -> converging -> resolved/dormant/abandoned). CONSUMED-INTO-STATE by game_director; retrospect input for chronicle; significance input for articulation. Label NEVER surfaces (C2). Foreclosure transitions additionally trigger a mandatory Tier-3 chronicle beat (S4.3, R8).
+description: Emitted on an arc-vector lifecycle FSM transition (seeded -> active -> escalating -> converging -> resolved/dormant/abandoned). CONSUMED-INTO-STATE by game_director; retrospect input for the articulation Tier-3 chronicle; significance input for articulation Tier-2. Label NEVER surfaces (C2). Foreclosure transitions additionally trigger a mandatory Tier-3 chronicle beat (S4.3, R8).
 required_payload_fields:
   - arc_vector_id             # ARC-S07 etc.
   - from_state                # prior lifecycle.state
@@ -389,10 +401,11 @@ default_scale_signature: [personal, territory, peninsula]
 default_permanence: persistent
 default_time_horizon: near
 emitting_systems: [game_director]
-consuming_systems: [game_director, articulation, scene_slate, chronicle]
+consuming_systems: [game_director, articulation (Tier-2 render), scene_slate, articulation (Tier-3 chronicle)]
 class: B
 declared_by: designs/audit/2026-07-05-emergent-narrative-engine (this effort)
 notes:
+  - "chronicle" is NOT a module — Tier-3 chronicle is an articulation function (articulation_layer_v30 §4); the retrospect consumer is articulation, not a separate `chronicle` module.
   - CONSUMED-INTO-STATE fate for game_director's own store; the emitted Key is the retrospect/render record, not the store itself.
   - A stakes_tags:[foreclosure] transition MUST also produce a Tier-3 chronicle beat (positive surfacing, R8) and may originate ONLY from edge_triggered_once/retryable/convergence (R8a).
 ```
@@ -412,7 +425,7 @@ accounting cross-check the charter requires for the engine itself (`00_engine_ch
 | # | Edge (producer → Key → consumer) | Declared | Implemented | Note / ordering |
 |---|---|---|---|---|
 | E1 | `game_director` → `meta.convergence_detected` → `articulation` | ✓ (S4.4/S4.5) | Stage 3 (detect) + Stage 5 (render) | Emit order order-preserving (R7); ACCOUNTING cadence |
-| E2 | `game_director` → `meta.convergence_detected` → `chronicle` | ✓ | Stage 5 | `causes[]` walk (backwards direction) |
+| E2 | `game_director` → `meta.convergence_detected` → `articulation` (Tier-3 chronicle) | ✓ | Stage 5 | `causes[]` walk (backwards direction); Tier-3 chronicle is an articulation function, not a separate `chronicle` module |
 | E3 | `game_director` → `meta.arc_state_changed` → `game_director` | ✓ | Stage 2 | CONSUMED-INTO-STATE self-edge; not a loop hazard (no re-emit) |
 | E4 | `game_director` → `meta.arc_state_changed` → `articulation` | ✓ | Stage 5 | significance input |
 | E5 | `game_director` → `mechanical.scene_entered` → `scene_timer` | ✓ (already, `module_contracts.yaml:392-395`) | EXISTS | single-emitter (R5); §8.5 edit pending (S4.8) |
@@ -461,7 +474,7 @@ flag it as a held-back hard call:
 - **Recommended default:** `game_director` single-sources `mechanical.scene_entered/exited/skipped`;
   `scene_slate` is demoted to a content-Key generator. Evidence: `scene_timer` **already** consumes
   scene_entered `from: [game_director]` (`module_contracts.yaml:392-395`), and the registry entry
-  already lists `emitting_systems: [game_director]` (`key_type_registry_v30.md:388`).
+  already lists `emitting_systems: [game_director]` (`key_type_registry_v30.md:383`).
 - **The contradiction the default must resolve in the SAME PR:** `key_substrate_v30 §8.5` L510 says
   verbatim "scene_slate: scene activation emits mechanical.scene_entered" — the SAME source
   `scene_slate`'s registry emit cites. The resolution is consistent with the registry but
@@ -480,6 +493,15 @@ flag it as a held-back hard call:
 Per `00_engine_charter.md:150-151`: a CI-checkable rule per invariant, each living once in `tools/`
 (the "every rule lives once" invariant, `CLAUDE.md §8`). Ten rules; the first six are the synthesis
 §10 suite, R7–R10 are the adversarial-hardening additions.
+
+> **Numbering authority:** the **R1–R10 scheme in this section is the CANONICAL conformance-rule
+> numbering for the whole spec** — the other sections (S3's named rules `beat-has-venue`,
+> `render-is-pure`, `total-order-selection`, `director-subtract-only`, etc.) **harmonize to it** by
+> name→R-number mapping, they do not introduce a parallel numbering. The scheme is internally
+> complete: R1–R10 each name a single `tools/` home (new or an explicit `extend …`), and the two
+> "same-rule-extended" items (gate-cites-ledger_cause → R2/R3; replay-determinism → key-log parity
+> harness) are called out as folds, not new numbers — so no invariant is left without exactly one
+> home.
 
 | # | Rule | Checks | `tools/` home |
 |---|---|---|---|
@@ -593,6 +615,16 @@ carry a default; none are silently resolved.
    `[OPEN — Jordan]`
 8. **pricing-over-gating audit + salience demotion player-protection** (S4.9 deferred gates) —
    defaults: add both. `K` (demotion-exempt window) `[OPEN — Jordan tuning]`.
+9. **Director tension-curve ownership — DROPPED to subtract-only** (S4.10) — S4.10 presents the
+   subtract-only reconciliation as "structure, binding on the substrate contract," but it
+   **REVERSES** the charter's explicit directive that the director "**owns the tension curve**"
+   (`00_engine_charter.md:128`), and the reversal is unanimous across all five sections. Per
+   CLAUDE.md §2 (ED-1094) an explicit-charter reversal must be forked, not asserted — so it is
+   carried here as an open fork. **Recommended default = subtract-only** (doc-10 §8.5 "no designed
+   dramatic timing" stands, `00_engine_charter.md:104-105`; a curve-shaping scheduler is the
+   over-orchestration C7 forbids and the doc-12 §0 veto targeted — S4.10). **Held-back hard call:
+   flag in the PR body**; the merge review must ratify the reversal deliberately (ED-1094), not
+   bundle it silently. Mirrors S3 Q4.11. `[OPEN — Jordan]`
 
 ---
 

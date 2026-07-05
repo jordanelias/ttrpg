@@ -243,6 +243,14 @@ boundary through the Church chronicler (Cert-5) selects `chronicle_paragraph` + 
 register (`solmund_voice_v30 §18` row 5) — same beat, different surface, different focalizer,
 NO new fragment authored per arc. Full end-to-end trace is the Stage-5 capstone deliverable.
 
+**Slot-type harmonization — `{foreign_power}` is `place`, not `place/faction`.** The ARC-S07 slot
+mapping in the S5 trace types `{foreign_power}` (Altonia) as `place/faction`
+(`s5_season_trace.md:104`). `faction` is **not** in the Q4.6.1 `slots[].type` enum above; the
+enum's `place` type is the canonical carrier for a named polity payload actor. Corrected type:
+**`{foreign_power}: place`** — S5's slot row must harmonize to this section's enum (this section
+owns the fragment schema; the trace binds to it). This is a schema-conformance nit, not a design
+change.
+
 ### Q4.6.2 — Runtime-executable coherence-tier table (closes `02_prose_render_stack.md (e).3`)
 
 `coherence-tiers.md` ships author-weight tables (Author × TS-band, per tier) plus the Spirit
@@ -254,6 +262,21 @@ the actor's live `(coherence_tier, ts_band, spirit)` against pre-tagged fragment
 deterministic tie-break (Q4.6.6). The table becomes a compile-time coverage manifest
 (6 tiers × 3 TS-bands × 12 authors = 216 weight cells, `dossier_content_economics`), consumed by
 the bake's coverage-closure CI gate, not evaluated live.
+
+**Third state→presentation spec — the UI corruption ladder (`designs/ui/valoria_ui_ux_v4_1.md §9.7`).**
+The coherence-tier table governs *prose* register; the Certainty register (Q4.6.3) governs
+*ecclesiastical vocabulary*; a third, **presentation-layer** spec governs the *interface chrome*.
+`valoria_ui_ux_v4_1.md §9.7` is the UI corruption ladder keyed to the SAME Coherence bands: 10–8
+Normal · 7–5 1-pixel jitter · 4–3 menu flicker + one-word dialogue displacement + minor color
+aberration · 2 heavy aberration + ghosted Beliefs · 1 menus rearrange between clicks + audio drop ·
+0 the TS-branched cutscene (P-15). This is the structural analogue of the prose weighting — the
+same 6-band ladder applied to chrome instead of prose — and the realizer's fragment band and the
+UI ladder MUST read from one Coherence source of truth so chrome-degradation and prose-degradation
+stay in lock-step. **Salvage-status per ED-IN-0005:** `valoria_ui_ux_v4_1.md` predates the venue
+matrix (Q4.2), so §9.7's per-band chrome behaviors are **salvaged** (harmonized, not re-authored
+here) into the ED-IN-0005 per-subsystem walkthrough policy that governs venue-specific interaction
+shapes — the UI ladder becomes the Thread-venue's interaction-shape row under that policy, not a
+separate parallel presentation system.
 
 ### Q4.6.3 — Runtime-executable Certainty-register table (closes `02_prose_render_stack.md (e).3`)
 
@@ -329,6 +352,24 @@ travel with its fork. `dossier_content_economics` §5's own verdict is **CONDITI
 ("only if two open items close" — the Certainty fork and the per-NPC line item); this section
 carries both conditions, not a stripped headline.
 
+**Existing input asset — the ~850KB prior emergent-arc drafting in `tests/` (decision-queue 25a).**
+Q4.6.4 counts the `gm_ref` corpus (~300KB) as *evidence the craft is achievable*; the bake volume
+should ALSO count the ~850KB `tests/emergent_arc_skeleton_test_2026-04-17_batch*` + `tests/sim/
+sim_arc_*` corpus as an EXISTING input that **offsets authored-unit totals**. Skimming one file's
+texture (`tests/emergent_arc_skeleton_test_2026-04-17_batch2.md`) settles *which* line it offsets:
+these are ASCII-flowchart **arc-mechanics skeletons** — named actors (Almud, Himlensendt), stakes,
+Obligation/clock cascades, branch outcomes, ledger deltas — **not authored player-facing prose**.
+So the corpus offsets the **arc-vector compile / scenario-seed / ~110 per-arc causal-sentence**
+authoring line (it is, in effect, a partial hand-draft of the `arc_vector` corpus and of the
+expected named-actor/stakes/outcome divergence the 5-seed regression asserts, Q4.9) — and it is
+ground-truth the S1 register-formalizability compile can lift directly. It does **NOT** offset the
+prose-fragment backbone, the per-NPC idiolect pool, or the arc-specific authored color (Q4.6.4 /
+Q4.9 Defense 1): those still require ERA-gated authored prose. **Net effect on the headline:** the
+`dossier_content_economics` ~110 per-arc causal-template line is materially pre-drafted by this
+corpus (reducing that sub-total), while the prose-band, Certainty, and per-NPC lines are unchanged
+— so the corpus lowers the *arc-authoring* cost, not the *prose-bake* cost, and the low-thousands
+(or ~350–450 fallback) prose headline stands.
+
 > **Fork 6 (restated from `synthesis.md §11.6`, adversarial B1):** bake key includes Certainty?
 > `[OPEN — Jordan]`. **Default per charter authority = include it** → low-thousands bake. Fallback
 > if the bake cost is prohibitive = Certainty as runtime lexicon-swap → ~350–450. The determinant
@@ -401,6 +442,126 @@ combined pressure would **fabricate unauthored deltas** (CLAUDE.md §5/§7 anti-
 > register line** (`arc_register_events.md §VI`), checked by the conformance suite. This keeps the
 > cosine backbone's generality (Q3 correlation-test) without either fabricating deltas or reducing
 > mechanically-real convergence to a hardcoded whitelist of 8.
+
+### Q4.6.8 — Worked thread-beat renders (C6 / P-14 discharge — the four ED-681 Rendering-Crisis beats)
+
+C6 (charter L38–39) requires the four ED-681 Rendering-Crisis beats (`threadwork_v30 §3.7`,
+L719–725) to *render*, not merely be triggered. Deliverable 1 (Q4.10 #1) adds the four beats as
+`§3.1` articulation trigger rows; this subsection carries each ONE step further — through the
+realizer pipeline to a concrete slot-typed fragment cell — so the discharge is real, not
+declarative. All four fire during the Coherence 0 Rendering-Crisis arc (`threadwork_v30 §648`,
+Coherence 0 row), so they render at the **coherence-tier low bands** (2 | 1 | 0, Q4.6.1); the
+Spirit axis is **audible** at every one of them (`coherence-tiers.md §Spirit Axis` — audible at
+Coherence ≤4), so each carries the Beckett-continuation (high Spirit) / Lispector-dissolution (low
+Spirit) split. `certainty_register` is `na` throughout — these beats are Coherence-driven, not
+ecclesiastical (Q4.6.3 orthogonality). The venue is the thread Rendering-Crisis beat itself
+(Q4.2 row 3, "the four Rendering-Crisis beats"), never a modal popup (C3/L116). **At Coherence 0
+focalization goes external** (`coherence-tiers.md §Coherence 0` — companion/chronicler/environmental;
+the being can no longer be focalized through) — Beat 4's failure path carries that focalizer shift.
+
+**Beat 1 — Withdrawal** (`threadwork_v30 §3.7` L719; "No rolls — pure narrative").
+- *Triggering Key/state:* `meta.arc_state_changed` on the practitioner's Rendering-Crisis arc → `active` (crisis onset at the Coherence-0 cross). Companion Commentary overlays if a companion is present (`bridge_part1_revisions B.3.3`).
+- *Trigger row (Deliverable 1):* `§3.1: thread.rendering_crisis.withdrawal → articulation`.
+- *Coherence band:* tier **1** (Severed) — the last sustained protagonist-focalized beat before C0.
+- *Focalizer:* `protagonist` (+ companion overlay).
+- *Spirit split:* high → the walking is still owned (Beckett); low → the body continues, the name recedes (Lispector).
+```
+fragment:
+  id: thread.rc.withdrawal.c1.hi
+  key_type: meta.arc_state_changed         # Rendering-Crisis arc → active
+  significance_band: scene                  # 10-15s, no roll (pure narrative)
+  band: {coherence_tier: 1, ts_band: 30-49, spirit: high}
+  certainty_register: na
+  focalizer: protagonist
+  slots:
+    - {name: pc_name, type: entity_name}
+    - {name: place,   type: place}          # lifepath withdrawal setting
+  text: "The color goes out of {place}. {pc_name} keeps walking. The walking is {pc_name}'s — {pc_name} holds it."
+  # low-Spirit variant closes: "the feet move; the color was."   (coherence-tiers.md §Coherence 1, low Spirit)
+```
+
+**Beat 2 — Knot Anchoring** (`threadwork_v30 §3.7` L721; Spirit check TN 7 Ob 1, success Coherence +1).
+- *Triggering Key/state:* `scene.thread_anchoring` — a Close Knot NPC arrives; the PC perceives them simultaneously as rendered person and thread-configuration. (Failure path: NPC gains Knot Strain +1 — its own outcome Key re-enters `causes[]`.)
+- *Trigger row (Deliverable 1):* `§3.1: thread.rendering_crisis.knot_anchor → articulation`.
+- *Coherence band:* tier **1** (Severed), climbing toward 2 on success.
+- *Focalizer:* `protagonist` (Close Knot NPC as `entity_name`); companion overlay never displaces the Knot.
+- *Spirit split:* high → the will grips the Knot; low → the Knot recedes to a located name.
+```
+fragment:
+  id: thread.rc.knot_anchor.c1.lo
+  key_type: scene.thread_anchoring          # Beat-2 venue: fieldwork socializing (Q4.2)
+  significance_band: scene
+  band: {coherence_tier: 1, ts_band: 30-49, spirit: low}
+  certainty_register: na
+  focalizer: protagonist
+  slots:
+    - {name: knot_npc, type: entity_name}
+    - {name: pronoun,  type: pronoun}
+  text: "{knot_npc} is at the door and also a knot of thread. The face was {knot_npc}'s. The name is for the thing the face belongs to."
+  # (coherence-tiers.md §Coherence 2, low Spirit: "Vael is — Vael is a name.")
+```
+
+**Beat 3 — Place Anchoring** (`threadwork_v30 §3.7` L723; place from `character_histories_v30` lifepath; Spirit check TN 7 Ob 2).
+- *Triggering Key/state:* `scene.thread_anchoring` (place variant) — the practitioner visits a lifepath-significant location whose familiar configuration provides a rendering reference. (Failure path: involuntary Thread-Read fires, co-movement applies.)
+- *Trigger row (Deliverable 1):* `§3.1: thread.rendering_crisis.place_anchor → articulation`.
+- *Coherence band:* tier **2** (Fractured).
+- *Focalizer:* `protagonist`; `place` slot bound to the lifepath location.
+- *Spirit split:* high → circular Beckett self-grounding; low → the place persists, the self does not.
+```
+fragment:
+  id: thread.rc.place_anchor.c2.hi
+  key_type: scene.thread_anchoring
+  significance_band: scene
+  band: {coherence_tier: 2, ts_band: 50+, spirit: high}
+  certainty_register: na
+  focalizer: protagonist
+  slots:
+    - {name: place,       type: place}      # lifepath-significant location
+    - {name: pc_name,     type: entity_name}
+    - {name: time_phrase, type: time_phrase}
+  text: "{place} is where it always was. {time_phrase} {pc_name} stood here, and the standing continued because the deciding-to-stand continued."
+  # (coherence-tiers.md §Coherence 2, high Spirit: "she continued because the deciding continued because she continued.")
+```
+
+**Beat 4 — The Choice** (`threadwork_v30 §3.7` L725; epistemic seduction A11; the resolution roll — Spirit + Focus, TN 7 Ob 2). This beat carries the **focalizer shift**: success keeps the protagonist frame (the will returns the rendering); failure tips to Coherence 0, where focalization goes external and the practitioner becomes an NPC.
+- *Triggering Key/state:* `meta.arc_state_changed` on the Rendering-Crisis arc → `resolved` (Overwhelming/Success) OR → `abandoned` (Failure → NPC). The **Failure path is a foreclosure** (PC→NPC), so it MUST emit a mandatory Tier-3 chronicle beat (`foreclosure-must-render`, Q4.5).
+- *Trigger row (Deliverable 1):* `§3.1: thread.rendering_crisis.choice → articulation`.
+- *Coherence band:* tier **0** (Rendering Crisis).
+- *Focalizer:* high-Spirit success → `protagonist` (last protagonist beat); low-Spirit failure → `companion` (external C0 focalization).
+- *Spirit split:* high → "she can't go on. She goes on." (Beckett continuation, returns to rendering); low → the unrecognizable, the work occurring as weather (Lispector dissolution).
+```
+fragment:                                   # SUCCESS — will returns the rendering
+  id: thread.rc.choice.c0.hi.resolved
+  key_type: meta.arc_state_changed          # arc → resolved
+  significance_band: scene
+  band: {coherence_tier: 0, ts_band: 30-49, spirit: high}
+  certainty_register: na
+  focalizer: protagonist
+  slots:
+    - {name: pc_name,           type: entity_name}
+    - {name: causal_connective, type: causal_connective}
+  text: "{pc_name} cannot return to the rendering. {causal_connective} {pc_name} returns to it."
+  # (coherence-tiers.md §Coherence 1, high Spirit: "she can't go on. She goes on.")
+
+fragment:                                   # FAILURE — foreclosure → NPC; mandatory Tier-3 chronicle (Q4.5)
+  id: thread.rc.choice.c0.lo.foreclosed
+  key_type: meta.arc_state_changed          # arc → abandoned (stakes_tags:[foreclosure])
+  significance_band: chronicle_paragraph
+  band: {coherence_tier: 0, ts_band: 30-49, spirit: low}
+  certainty_register: na
+  focalizer: companion                      # external C0 focalization (coherence-tiers.md §Coherence 0)
+  slots:
+    - {name: companion_name, type: entity_name}
+    - {name: pc_name,        type: entity_name}
+    - {name: place,          type: place}
+  text: "{companion_name} watched {pc_name} at {place}. The name was for the one who used to decide. The work was simply occurring, the way weather occurs."
+  # (coherence-tiers.md §Coherence 0, low Spirit "the unrecognizable")
+```
+
+These four fragment cells are the concrete C6 discharge: every ED-681 beat has a triggering Key,
+a `§3.1` trigger row (Deliverable 1), a low-band coherence cell, a Spirit variant, a focalizer, and
+a slot-typed fragment authored from the coherence-tier texture — no beat left as a declarative
+promise.
 
 ---
 
@@ -562,6 +723,17 @@ dimensions AND ERA (Defense 2) reports no clustered cell.
 - **`render-is-pure` form** `[OPEN — Jordan]`. Default = (a) zero-randomness; (b) render sub-stream
   only after RNG-3 lands. (Q4.6.6)
 - **`player-pursued-demotion-exempt` K-window** `[OPEN — Jordan tuning]`, default 3 seasons. (Q4.7)
+- **Director tension-curve ownership — DROPPED to subtract-only** `[OPEN — Jordan]`. Q4.7's
+  director contract, and every sibling section (S1 §Q2.5, S2 §Q3.7, S4 S4.10, S5 S5.7), adopt
+  **subtract-only rationing**, which **REVERSES** the charter's explicit directive that the
+  "director layer (articulation §7 D11) **owns the tension curve**" (charter Q4, L128). Reversing an
+  explicit charter directive unanimously across the effort is exactly the hard-call-bundled-into-
+  routine-work failure CLAUDE.md §2 (ED-1094) exists to prevent, so it is flagged here rather than
+  asserted as settled. **Recommended default = subtract-only** (doc-10 §8.5 "no designed dramatic
+  timing" stands, charter Q3 L104–105; a curve-shaping scheduler is the over-orchestration C7
+  forbids and the doc-12 §0 veto targeted — Q4.7). **Held back for explicit sign-off:** the merge
+  review must ratify the reversal deliberately, per ED-1094, not bundle it silently; flag it as a
+  held-back hard call in the PR body. (Q4.7; mirrored in S4 S4.11.)
 
 **Charter [OPEN — Jordan] this lane does NOT silently resolve (adversarial M6 + M15):**
 
