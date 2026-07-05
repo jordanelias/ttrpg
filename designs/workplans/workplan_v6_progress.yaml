@@ -1,0 +1,147 @@
+# Workplan v6 Progress Board — the ONE home for milestone/juncture-level rollup status.
+# (ED-IN-0010, 2026-07-05. Companion to valoria_master_workplan_v6.md §1; printed by
+# tools/workplan_status.py; owned + refreshed by skills/valoria-workplan-navigator.)
+#
+# RULES (anti-rot — this surface class killed roadmap_state.yaml, retired ED-IN-0006):
+#   1. Rollup ONLY. Lane detail stays in handoffs/HANDOFF_<LANE>.md; every row POINTS at
+#      its evidence (PR / ED / commit), it never restates lane narrative.
+#   2. Verify before trust: tools/workplan_status.py --check warns whenever
+#      workplan-relevant paths (designs/, handoffs/, canon/, sim/) changed since this
+#      file's last-touch commit (the machine freshness base; `as_of` below is the
+#      human-facing record). The navigator skill runs the check on EVERY read; stale
+#      board -> refresh rows from the handoffs/ledger FIRST, then answer.
+#   3. Refresh-on-use: any session that lands juncture/stage-relevant work updates the
+#      touched rows + appends one last_progress line + bumps as_of (skill Workflow C).
+#   4. States: not_started | in_progress | blocked | done. `blocked_on` names the gate
+#      (a §5 register fork / ED); `next` is the next concrete increment (one line).
+#
+# Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
+
+as_of:
+  sha: "1b052abd"
+  date: "2026-07-05"
+
+milestones:
+  M1:
+    label: "One playable season"
+    junctures:
+      - n: 1
+        label: "Strategic decision"
+        state: not_started
+        blocked_on: null
+        next: "FA decision-surface work (J-5) + author the domain_actions module home (v6 §2.3)"
+        evidence: []
+      - n: 2
+        label: "Domain action"
+        state: not_started
+        blocked_on: null
+        next: "domain_actions authoring (IN); echo render rides narrative Stage 0"
+        evidence: []
+      - n: 3
+        label: "Social contest"
+        state: not_started
+        blocked_on: null
+        next: "SC: fix the stage ambiguity (HANDOFF_SC vs root), then the four deliberative games + claim-grammar requirements input (v2 §5)"
+        evidence: []
+      - n: 4
+        label: "Personal combat"
+        state: not_started
+        blocked_on: null
+        next: "PC R3 U0 units-honesty (ready now); U1+ gated JD-1 (PoB bands)"
+        evidence: ["R3 plan-of-record RATIFIED 2026-07-04 (consolidation_v1.md)"]
+      - n: 5
+        label: "Thread operation"
+        state: not_started
+        blocked_on: null
+        next: "WR sweeps ED-WR-0001/0002 (cheap, unblocking); then thread preconditions ED-1010/1011"
+        evidence: []
+      - n: 6
+        label: "Season close"
+        state: blocked
+        blocked_on: "ED-1051 (engine_clock ratification; home candidate = propagation_spec_v1)"
+        next: "rule ED-1051, then ORD-3/ORD-4 ordering flags"
+        evidence: ["propagation_spec_v1 CANONICAL (ED-1093)"]
+      - n: 7
+        label: "Articulation render"
+        state: in_progress
+        blocked_on: null
+        next: "execute narrative Stage 0 (ED-IN-0004 render-gap close) — design PROPOSED, not yet implemented"
+        evidence: ["PR #78 narrative engine v1+v2 designs (Stage 0 spec'd)"]
+
+  M2:
+    label: "Any-seed story bar (fixtures F1 + F8 green)"
+    stages:
+      - key: "S0"
+        label: "Render-gap close"
+        state: in_progress
+        blocked_on: null
+        next: "implement ED-IN-0004 triggers + renders (ships first, J-7)"
+        evidence: ["PR #78 design"]
+      - key: "S1"
+        label: "Generator compile gate"
+        state: not_started
+        blocked_on: null
+        next: "execute the ratified fork-1 Coup-Counter remap + fork-2 ARC-T04 strike, then compile the 138+8 validation set"
+        evidence: ["forks 1/2/11 RATIFIED at defaults (ED-IN-0011)"]
+      - key: "S2"
+        label: "Store + tick"
+        state: not_started
+        blocked_on: null
+        next: "lifecycle FSMs (after S1; presumes Accounting substrate — Gate-0 honesty)"
+        evidence: []
+      - key: "S2.5"
+        label: "Forecast (Layer A for M1)"
+        state: not_started
+        blocked_on: null
+        next: "Layer A analytic horizons; Layer B stays hard-gated (stubs, deck, scene-EV flag, key-log spec + ORD-3/4, F7+F8)"
+        evidence: []
+      - key: "S3"
+        label: "Detect (discovery + priors)"
+        state: not_started
+        blocked_on: null
+        next: "build discovery under the ratified window (same-Accounting priors / 4-season cosine — ED-IN-0011); after S2/S2.5"
+        evidence: ["fork 3 RATIFIED at default (ED-IN-0011)"]
+      - key: "S4"
+        label: "Light + cast"
+        state: not_started
+        blocked_on: null
+        next: "build the light allocator under the RATIFIED F-F surface (subtract-only + weight-set-as-data, ED-IN-0011); after S2/S2.5"
+        evidence: ["F-F/fork-8 RATIFIED at default (ED-IN-0011)"]
+      - key: "S5"
+        label: "Substance + banks + fixtures"
+        state: blocked
+        blocked_on: "ERA instrument unbuilt (Stage-5 blocker)"
+        next: "scale-complete banks under the ratified fork-6 INCLUDE default (~1,200-2,700 units); build the ERA gate"
+        evidence: ["fork 6 RATIFIED at include-default (ED-IN-0011)"]
+
+  M3:
+    label: "Godot vertical slice"
+    stages:
+      - key: "G0"
+        label: "Gate-0 spine (G0.1-G0.5)"
+        state: blocked
+        blocked_on: "ED-1051 + strategy-doc register (queue 10-12)"
+        next: "G0.1 Key.gd v2 once ED-1051 ruled; valoria-game frozen since 2026-05-04"
+        evidence: []
+      - key: "GX"
+        label: "Typed engine-params exports"
+        state: blocked
+        blocked_on: "ED-1052 (scope/fence ruling)"
+        next: "extend the combat_engine_v1.json pattern to settled non-combat values"
+        evidence: ["combat_engine_v1.json round-trip gate live"]
+      - key: "GP"
+        label: "Generator corpus as data pack"
+        state: blocked
+        blocked_on: "M2 S1 (compile gate)"
+        next: "load the compiled pack via the v2 §7 wrapper"
+        evidence: []
+
+decisions_t0_open:
+  - "JD-1 — PoB bands (PC U1)"
+  - "ED-1051 — engine_clock ratification"
+
+last_progress:
+  - "2026-07-04: scene-combat R2 MERGED (PR #72); R3 weapon-model plan-of-record RATIFIED"
+  - "2026-07-05: NERS qualitative audit RATIFIED, 12 lane EDs filed (PR #77 merged)"
+  - "2026-07-05: narrative engine v1 + v2 Churn Engine (5-refuter pass applied) + workplan v6 + steering reconcile ED-IN-0006/0009 (PR #78)"
+  - "2026-07-05: Jordan RATIFIED ALL of PR #78 (ED-IN-0011) — incl. F-F/fork-8 at default; T0 wall shrank to JD-1 + ED-1051; fork 10 spun out as ED-FA-0001"

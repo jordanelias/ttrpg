@@ -8,20 +8,61 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan review (PR #77,
-  branch `claude/ners-audit-fable5-9cpfdz`).** Corpus-wide qualitative audit (playability /
-  cohesiveness / interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent
-  adversarial workflow (12 dossiers + 5 degenerate-play hunters + 7 lenses; every carried finding
-  refuted-or-confirmed with an intent gate). Deliverables at
-  `designs/audit/2026-07-04-ners-qualitative-audit/`: `ners_qualitative_audit_v1.md`
-  (verdict-first, throughlines-tree organized; 5 confirmed findings F-1..F-5 + 2 corpus signals
-  S-1 register back-propagation blindness / S-2 steering-surface fragmentation),
-  `strategic_judgments.md` (J-1..J-15: playable-season milestone, Gate-0-before-more-combat-depth,
-  transport-seam closure, collision-engine detector, anti-drift + roadmap governance),
-  `ed_options.md` (E-1..E-12 drafted candidates, **deliberately NOT filed** — Jordan picks and
-  allocates per id_reservations protocol; merging PR #77 ratifies nothing). Follow-ups if adopted:
-  E-2/E-3/E-7 are the recommended first three; GAP-1 = investigation lane never audited (E-12);
-  32 deferred-unverified P2 candidates in `01_workings/deferred_unverified.json`.
+- **Qualitative NERS audit (North-Star) — RATIFIED-AS-ACCEPTED 2026-07-05 (Jordan post-merge
+  instruction on PR #77).** Corpus-wide qualitative audit (playability / cohesiveness /
+  interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent adversarial
+  workflow. Deliverables at `designs/audit/2026-07-04-ners-qualitative-audit/` (all statuses now
+  RATIFIED): audit v1 (5 confirmed findings F-1..F-5 + corpus signals S-1/S-2),
+  `strategic_judgments.md` (J-1..J-15), `ed_options.md`. **All 12 ED options FILED 2026-07-05**
+  (forks resolved to audit defaults — E-1 adopt governance redesign; E-4 per-subsystem
+  walkthrough policy; E-8 MS wins MS/RS): `ED-SE-0001`, `ED-IN-0003..0008`, `ED-WR-0001/0002`,
+  `ED-PC-0001`, `ED-SC-0001`, `ED-FI-0001` (map in ed_options.md addendum; id_reservations
+  bumped). ED-IN-0003 (convergence detector) + ED-IN-0004 (articulation triggers) are acceptance
+  criteria of the **2026-07-05 emergent-narrative-engine design effort (IN FLIGHT, this branch)**
+  — see `designs/audit/2026-07-05-emergent-narrative-engine/` once landed. Remaining filed items
+  execute in their own lanes.
+
+- **Emergent Narrative Engine design v1 — DELIVERED 2026-07-05, awaiting Jordan review (PR #78).**
+  25-agent design workflow (4 dossiers → 3 architects → 3 judges + synthesis → 5 refuters → 5
+  spec sections → 3 capstone verifiers → critic) + full remediation. Result: **the Arc-Vector
+  Engine with a Subordinate Director** (B won all judge lenses; six layers,
+  detect-then-schedule-then-render), closing ED-IN-0003 (L2 convergence detector) + ED-IN-0004
+  (L5 render completion incl. the four ED-681 thread beats, worked) by construction. Deliverables
+  at `designs/audit/2026-07-05-emergent-narrative-engine/`: `narrative_engine_design_v1.md`
+  (head doc: architecture, staging, determinism, 9 open forks), `integration_with_ners_audit.md`
+  (crosswalk), `00_grounding/` (charter with Jordan's four key considerations + C1–C7),
+  `01_workings/spec_sections/s1..s5` (normative chapters incl. the ARC-S07 capstone trace,
+  factionless mini-trace, effect-bearing COLLISION-B trace). **9 [OPEN — Jordan] forks — esp.
+  fork 8 HELD BACK (director tension-curve subtract-only reverses charter language; not
+  self-ratified by merge)**; forks 1–2 (Coup-Counter remap; ARC-T04 strike-or-author) block
+  Stage 1. Corpus defects surfaced for follow-up: Coup Counter STRUCK but live in 6 register
+  entries; ARC-T04 dangling; Torben Loyalty range register-vs-clock_registry conflict.
+
+- **Narrative engine v2 "THE CHURN ENGINE" + Master Workplan v6 + steering reconciliation —
+  RATIFIED IN FULL 2026-07-05 (Jordan: "Ratify commit merge all"; ED-IN-0009/ED-IN-0011;
+  PR #78 merged). All stated fork defaults adopted incl. F-F/fork-8; fork 10's faction
+  count = ED-FA-0001 (open, needs_jordan). Originally delivered as:** v2
+  (`narrative_engine_design_v2_churn.md` + `spec/churn_amendments.md`, supersedes-in-part v1)
+  reorganizes the engine around Jordan's churn critique: generator-not-corpus (templates ×
+  binding, 138 register arcs = validation set), two-layer forecast (Layer A analytic — the M1
+  ship, hard gate; Layer B seeded ensemble behind named preconditions incl. F7/F8), **the
+  Light Function** (pruning-as-authorship; invariants i–iv; forecast severed from casting and
+  actor-invisible per the adversarial pass), claim-grammar interface (a requirements input
+  ADDING four SC sub-systems — shapes the SC lane's), load factorization (no runtime LLM;
+  bake headline ~1,200–2,700 units under fork-6 default), kernel/data/wrapper modularity
+  (nothing hard-baked; R-F1/R-F2/R-HB/R-CL/R-AI/R-RL). Five-refuter pass
+  (`01_workings/refute_v2_*.md`) fully applied; survivors = forks 10–11 + fixture F8. **⚠️
+  F-F/fork-8 (the Light-Function weight set + subtract-only discipline) is HELD BACK from
+  merge-ratification — needs explicit Jordan sign-off.** Grounded by two dossiers
+  (`01_workings/dossier_forecast_tractability.md`, `dossier_combinatorial_census.md`).
+  **Workplan v6** (`designs/workplans/valoria_master_workplan_v6.md`, ED-IN-0009): M1/M2/M3
+  milestones, IN spine, per-lane sequencing, tiered T0/T1/T2 decision register (no status
+  fields), governance incl. the ED-PC plan-text-label rule. **ED-IN-0006 EXECUTED**:
+  roadmap_state → `deprecated/references/` (banner), v5 → `archives/workplans/` (banner
+  fixing its J-38 contradiction), decision-queue items 1–3 refreshed + queue demoted to
+  dated snapshot, CURRENT.md rows updated (workplan v6 + new Narrative-engine row),
+  `lane_assignments.yaml` repointed. Next IN actions live in v6 §2. **⚠️ F-F/fork-8 note
+  below is superseded by the ratification above.**
 
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).

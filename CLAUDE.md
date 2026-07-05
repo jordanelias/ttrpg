@@ -245,6 +245,7 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | NERS resolver stress methodology | `valoria-resolution-diagnostic` |
 | Emergent-arc generation | `valoria-arc-generator` |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
+| "Where are we in the workplan?" / resume-with-options / progress board | `valoria-workplan-navigator` |
 | Index/infill doc hygiene | `valoria-atomizer` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |

@@ -1,6 +1,6 @@
 # Qualitative NERS Audit — Charter (read this first)
 
-## Status: PROPOSED (audit grounding — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — accepted as filed; post-merge instruction on PR #77)
 ## Date: 2026-07-04 · Lane: IN (cross-cutting) · Session branch: `claude/ners-audit-fable5-9cpfdz`
 
 ## THE NORTH STAR
