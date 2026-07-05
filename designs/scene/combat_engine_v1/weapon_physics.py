@@ -6,7 +6,7 @@ PRIMITIVES and EVERY combat quantity DERIVES here, once, as documented physics. 
 rises from the primitives, never from a per-weapon table.
 
 PRIMITIVES consumed (per weapon, from combatant.WEAPONS):
-  mass(kg), head_len, grip_len (length-units, UNIT_M m each), pommel_kg, wclass{bladed,hafted_tip,hafted_block},
+  mass(kg), head_len, grip_len (METRES — U0 units honesty, ED-PC-0001), pommel_kg, wclass{bladed,hafted_tip,hafted_block},
   hilt{compound,simple,none}, hands, hand_guard, blade_guard, reach_adj, head, + geometry geo{cut,thrust,perc_conc}
   and the raw geometry {cross_section, strike_concentration, ...} on combatant.GEOMETRY.
 
@@ -33,7 +33,11 @@ fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 import math
 
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
-UNIT_M = 0.30            # length-unit -> m   (length-validated: rapier 1.14m, spear 2.01m)
+# UNIT_M DELETED (U0 units honesty, ED-PC-0001, 2026-07-05 — consolidation_v1.md §4): head_len/grip_len/
+# the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are now all HONEST METRES
+# (the old length-unit was 0.30 m; every stored length ×0.30, every ÷/×UNIT_M site deleted, every
+# per-length-unit gain rescaled by /0.30). Proven byte-identical against tests/valoria/
+# r3_identity_golden.json (built pre-edit) at 1e-9.
 RHO_WOOD = 700.0        # kg/m^3 ash/oak
 RHO_IRON = 7860.0       # kg/m^3
 D_HAFT = 0.040          # m haft diameter (staff back-solve)
@@ -57,10 +61,12 @@ HEAVY_BLUNT_THRESHOLD = 6.0
 # (sqrt(mass)*PoB_frac)**PERC_EXP authority term, so it compounds at the authority exponent, not linearly.
 PERC_2H_HANDS = 0.25    # GROUNDED: measured 2H/1H force ratio ~=1.25 (Oh et al. 2022 within-subject crossover, S1;
                         #   corroborated IASTM compact-tool 1.24-1.28). So 1 + PERC_2H_HANDS = R_F = 1.25 per extra hand.
-PERC_2H_ARC = 0.04      # [SIM-CALIBRATE band 0.02-0.06]: bat-MOI rate penalty / haft-length swing-weight gain
-                        #   (Nathan 2003 constant-power regime, S1; capped at the Cross-Nathan swing-weight optimum).
-PERC_GRIP_1H = 0.7      # the 1H reference grip_len (= the mace's grip_len): the arc credit accrues only for haft
-                        #   LONGER than a one-handed grip. GROUNDED as the 1H anchor (the mace is the 1H percussor).
+PERC_2H_ARC = 0.04 / 0.30   # [SIM-CALIBRATE band 0.02-0.06 per old length-unit = 0.0667-0.20 per METRE]: bat-MOI
+                        #   rate penalty / haft-length swing-weight gain (Nathan 2003 constant-power regime, S1;
+                        #   capped at the Cross-Nathan swing-weight optimum). Rescaled /0.30 at U0 (grip_len is
+                        #   now metres) — same physical gain, honest unit.
+PERC_GRIP_1H = 0.21     # m — the 1H reference grip_len (= the mace's grip_len): the arc credit accrues only for
+                        #   haft LONGER than a one-handed grip. GROUNDED as the 1H anchor (the mace is the 1H percussor).
 
 def energy_credit(w):
     """The 2H/arc energy multiplier on percussion authority (grounded §1). (1 + A_HANDS*(hands-1)) for the extra
@@ -146,8 +152,7 @@ def derive(w):
     cached = w.get('_derived')
     if cached is not None:
         return cached
-    hl, gl = w['head_len'], w['grip_len']
-    Lh, Lg = hl * UNIT_M, gl * UNIT_M
+    Lh, Lg = w['head_len'], w['grip_len']   # metres (U0 units honesty — no unit conversion)
     Lt = Lh + Lg
     parts = _all_parts(w)
     if parts:
@@ -355,7 +360,7 @@ def defense_affinities(w):
     ag = agility(w)
     lever_norm = I_g0 / (1.0 / MOI_AGILITY_K + I_g0)              # bind-leverage in (0,1): heavy/forward dominates
     onehand = 1.0 if w['hands'] == 1 else 0.78
-    wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 3.0))
+    wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 0.90))   # 0.90 m = the old 3.0-lu edge-length saturation (U0)
     dodge = ag * onehand
     # AGILITY-PIVOT (was ag/0.6): agility() was re-anchored below the lightest MoI (capless), so its live range
     # COMPRESSED (a handy 1H sword now reads ag≈0.4, not the old flat-topped 1.0). The parry saturation pivot is
@@ -515,17 +520,16 @@ def handling(w):
 # the weapon's own geometry: a long shaft/grip slides (butt<->centre), a short hilt cannot. "Choke" = grip-position
 # toward the centre, EMERGENT from grip_len — never a category. reach / MoI / close-capability / recovery all derive
 # from g. (Grounded: the parallel-axis re-pivot. [FIAT]: the GRIP_* bounds, calibrated to the old CHOKE_GRIP_MIN.)
-GRIP_SHORT = 1.0        # [FIAT, = old CHOKE_GRIP_MIN] grip_len at/below which the hand cannot gather forward (short hilt)
-GRIP_LONG = 3.0         # [FIAT] grip_len at which the full gather range is available
-GRIP_MIN_WORKING = 0.30 # [FIAT] m of weapon kept ahead of the working hand (you must still have a weapon out front)
+GRIP_SHORT = 0.30       # [FIAT] m (= the old 1.0-lu CHOKE_GRIP_MIN) grippable length at/below which the hand cannot gather forward (short hilt)
+GRIP_LONG = 0.90        # [FIAT] m (= the old 3.0 lu) grippable length at which the full gather range is available
+GRIP_MIN_WORKING = 0.30 # [FIAT] m of weapon kept ahead of the working hand (you must still have a weapon out front — already metres pre-U0)
 
 def _gather_len(w):
     """Grippable length along the weapon, in metres — how far a hand can travel along it. A TIPPED pole's forward
     shaft is itself grippable (you regrip up the haft toward balance — the spear gathering to a short staff); a
     block-headed club or a hilted weapon offers only its grip (you cannot grip up a mace's head). Name-free: wclass
     selects which length primitives are grippable."""
-    L = w['grip_len'] + (w['head_len'] if w.get('wclass') == 'hafted_tip' else 0.0)
-    return L * UNIT_M
+    return w['grip_len'] + (w['head_len'] if w.get('wclass') == 'hafted_tip' else 0.0)
 
 def grip_travel_max(w):
     """Forward hand-slide available, in metres = the grippable length less the minimum weapon kept out front."""
@@ -534,15 +538,16 @@ def grip_travel_max(w):
 def grip_choke_max(w):
     """Regrip freedom in [0,1], DERIVED from the grippable length: a short hilt or a block-headed club -> 0 (cannot
     gather in), a long shaft -> 1. EMERGENT from morphology — never a weapon name or a 'can_choke' flag."""
-    Lu = _gather_len(w) / UNIT_M
-    return max(0.0, min(1.0, (Lu - GRIP_SHORT) / (GRIP_LONG - GRIP_SHORT)))
+    L = _gather_len(w)
+    return max(0.0, min(1.0, (L - GRIP_SHORT) / (GRIP_LONG - GRIP_SHORT)))
 
-def _geom_slide_max_lu(w):
-    """The MAXIMUM geometric forward hand-offset, in length-units, floored so the forward head extent kept ahead
-    of the working hand never drops below GRIP_MIN_WORKING (M-04 underflow fix, D1): min(grip_travel_max(w)/UNIT_M,
-    head_len - GRIP_MIN_WORKING/UNIT_M). A pure geometric bound — decoupled from the CoM-clamped inertia slide u,
-    so a centre-balanced staff's reach/rear-clearance still change with grip though its u==0 (M-20)."""
-    return min(grip_travel_max(w) / UNIT_M, w['head_len'] - GRIP_MIN_WORKING / UNIT_M)
+def _geom_slide_max(w):
+    """The MAXIMUM geometric forward hand-offset, in METRES (U0: was _geom_slide_max_lu, length-units), floored
+    so the forward head extent kept ahead of the working hand never drops below GRIP_MIN_WORKING (M-04 underflow
+    fix, D1): min(grip_travel_max(w), head_len - GRIP_MIN_WORKING). A pure geometric bound — decoupled from the
+    CoM-clamped inertia slide u, so a centre-balanced staff's reach/rear-clearance still change with grip though
+    its u==0 (M-20)."""
+    return min(grip_travel_max(w), w['head_len'] - GRIP_MIN_WORKING)
 
 def at_circumstance(w, grip=0.0, room=1.0):
     """Re-derive the working-pivot dynamics at grip-position `grip` in [0,1] (0 = held as issued; 1 = gathered to
@@ -573,8 +578,8 @@ def at_circumstance(w, grip=0.0, room=1.0):
     gf = max(0.0, min(1.0, grip))
     u = gf * u_max                                              # forward hand-slide (m)
     d_g = PoB - u                                               # CoM-to-working-hand distance after the slide
-    geom_slide = gf * max(0.0, _geom_slide_max_lu(w))
-    rear_clearance = -min((x - extent / 2.0) for (_mass, x, extent) in _all_parts(w)) + geom_slide * UNIT_M
+    geom_slide = gf * max(0.0, _geom_slide_max(w))
+    rear_clearance = -min((x - extent / 2.0) for (_mass, x, extent) in _all_parts(w)) + geom_slide
     return dict(I_g=I_cm + m * d_g ** 2,                        # MINIMUM (= I_cm) when u reaches the CoM
                 S_g=m * abs(d_g), d_g=d_g, u=u,
                 rear_clearance=rear_clearance, geom_slide=geom_slide)

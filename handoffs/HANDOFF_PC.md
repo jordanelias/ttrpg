@@ -7,7 +7,27 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 ## Pending
 
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
-  (PROPOSED, 2026-07-04).** Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
+  (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1…JD-8 remain OPEN, loudly held back).** Implementation
+  progress:
+  - **U0 (units honesty, ED-PC-0001) — DONE 2026-07-05** (branch `claude/begin-u0-arppwt`). head_len/grip_len →
+    honest metres (×0.30, all 53 records); `WP.UNIT_M` deleted; per-length gains /0.30 (`PERC_2H_ARC`, `LEVER_K`,
+    `REACH_GEOM_SCALE`); stored-length constants ×0.30 (`PERC_GRIP_1H`, `GRIP_SHORT/LONG`, `LEVER_REF`,
+    `REC_GRIP_REF`, `GRAB_SHORT_REACH_LU`→**`GRAB_SHORT_REACH_M`**=0.375, name-honesty rename); wind saturation
+    3.0 lu → 0.90 m; `_geom_slide_max_lu`→`_geom_slide_max` (the `at_circumstance` bundle's `geom_slide` member
+    now reports METRES). Built **`tests/valoria/r3_identity_golden.json` PRE-edit** (the §4 process wrapper's
+    OLD-vs-NEW sweep fixture, unit-invariant metres — REUSE it for U3/U4/U5/U6/U7/U8's byte-identical claims;
+    regenerate only at deliberate re-baselines U1/U2/U9 with recorded reasons). Acceptance met:
+    `test_units_refactor_byte_identical` green at 1e-9 (worst diff 1.8e-15); suite 8 failed / 168 passed /
+    1 xfailed — accepted-red set unchanged (5 parity + 3 named), zero new red; params JSON re-exported.
+    **Two documented deviations from the U0 row, both forced by its own byte-identity contract:** `reach_adj`
+    NOT rescaled (it is a reach-POINTS residual added outside `REACH_GEOM_SCALE`, not a stored length — scaling
+    it breaks identity and `test_reach_base_byte_identical_at_grip_zero`); `PERC_2H_ARC` rescaled though the
+    row omits it (identity forces it once grip_len is metres). See the ED-PC-0001 ledger entry.
+  - **NEXT: U1 (PoB recalibration, ED-PC-0002) — GATED on JD-1** (PoB target bands sign-off, consolidation_v1
+    §6; default = the plan's arms-scholarship bands if Jordan waves it through). U2 ⊣ U1. T-P2 may start any
+    time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is still outstanding.
+
+  Original adjudication summary: Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
   (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
   cut/thrust/percussion + wiring the dead `thrust_factor`, edge-count, half-sword-from-primitives,
   counterbalance, retreat-default, weapon-class facing) **×** the weapon-morphology granularity audit

@@ -152,8 +152,8 @@ def recoverability_factor(c, cfg):
     pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
     C_mode = _recovery_mode_commitment(w, g, cfg)
     # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
-    tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * WP.UNIT_M * two)
-    tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'] * WP.UNIT_M)
+    tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * two)               # grip_len in metres (U0)
+    tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'])               # REC_GRIP_REF in metres (U0)
     arrest  = (tau / sqrt(I_g)) / (tau_ref / sqrt(I_ref))                       # >1 = more controllable than the anchor
     ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth

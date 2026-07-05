@@ -18,12 +18,12 @@ import systems as S
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
 def _short_reach_exempt(c, cfg):
     """Primitive-derived open-contact exemption (dagger/unarmed-class): a weapon short enough
-    (head_len, length-units) offers no reach to lose by closing all the way to grapple range —
+    (head_len, METRES — U0/ED-PC-0001) offers no reach to lose by closing all the way to grapple range —
     GROUNDING: a physical threshold on the weapon's own head_len, never a name check. Clears the
-    roster's dagger-class (dagger/rondel/stiletto/main_gauche/misericorde/cinquedea, head_len<=1.2)
+    roster's dagger-class (dagger/rondel/stiletto/main_gauche/misericorde/cinquedea, head_len<=0.36)
     and excludes the next-shortest non-dagger record (paired_short / half-sworded 2H forms,
-    head_len>=1.33) — [SIM-CALIBRATE] threshold."""
-    return c.w['head_len'] <= cfg['GRAB_SHORT_REACH_LU']
+    head_len>=0.399) — [SIM-CALIBRATE] threshold."""
+    return c.w['head_len'] <= cfg['GRAB_SHORT_REACH_M']
 
 
 def grab_available(actor, opponent, opening_created, cfg):
