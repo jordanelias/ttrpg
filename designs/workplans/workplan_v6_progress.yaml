@@ -18,7 +18,7 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "1b052abd"
+  sha: "317b2bdd"
   date: "2026-07-05"
 
 milestones:
@@ -45,10 +45,10 @@ milestones:
         evidence: []
       - n: 4
         label: "Personal combat"
-        state: not_started
+        state: in_progress
         blocked_on: null
-        next: "PC R3 U0 units-honesty (ready now); U1+ gated JD-1 (PoB bands)"
-        evidence: ["R3 plan-of-record RATIFIED 2026-07-04 (consolidation_v1.md)"]
+        next: "PC R3 U1 PoB recalibration — gated JD-1; T-P2 may start now (post-U0)"
+        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)"]
       - n: 5
         label: "Thread operation"
         state: not_started
@@ -145,3 +145,4 @@ last_progress:
   - "2026-07-05: NERS qualitative audit RATIFIED, 12 lane EDs filed (PR #77 merged)"
   - "2026-07-05: narrative engine v1 + v2 Churn Engine (5-refuter pass applied) + workplan v6 + steering reconcile ED-IN-0006/0009 (PR #78)"
   - "2026-07-05: Jordan RATIFIED ALL of PR #78 (ED-IN-0011) — incl. F-F/fork-8 at default; T0 wall shrank to JD-1 + ED-1051; fork 10 spun out as ED-FA-0001"
+  - "2026-07-05: PC U0 units-honesty merged (PR #79, ED-PC-0002 — renumbered from a concurrent ED-PC-0001 at merge); juncture 4 in progress"

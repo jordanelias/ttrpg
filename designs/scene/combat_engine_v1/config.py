@@ -8,7 +8,11 @@ CFG = dict(
   # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
   # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
   # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HEADR/HEAD_REACH retired here; L0 stays.
-  REACH_GEOM_SCALE=0.635, REACH_2H_K=0.4,
+  # U0 (ED-PC-0002): head_len/grip_len are now METRES, so the scale absorbs the old 0.30 m length-unit
+  # (0.635 reach-pt/lu -> 0.635/0.30 reach-pt/m — same physical scale, honest unit). reach_adj stays a SMALL
+  # per-weapon residual in reach-POINTS (the same unit as reach_base's output, added OUTSIDE the geometric
+  # scale) — it is not a stored length and is deliberately NOT rescaled (byte-identity would break otherwise).
+  REACH_GEOM_SCALE=0.635/0.30, REACH_2H_K=0.4,
   # reach as a standing per-exchange advantage (reference structure): keep most of the gap, weight it high
   # unarmoured and let it FALL with armour (the reach->clinch rotation). Tuned so reach governs A0 across the roster.
   REACH_FRAC=0.82,
@@ -28,7 +32,9 @@ CFG = dict(
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
-  LEVER_K=0.22, LEVER_HEAD_K=0.2, LEVER_REF=0.32, LEVER_2H=0.20,
+  # U0 (ED-PC-0002): lever lengths now METRES — LEVER_K rescaled /0.30 (per-metre gain), LEVER_REF ×0.30
+  # (a stored length); LEVER_HEAD_K/LEVER_2H dimensionless, unchanged. Byte-identical.
+  LEVER_K=0.22/0.30, LEVER_HEAD_K=0.2, LEVER_REF=0.096, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
   DISPLACE_LEV_GAP=0.15, DISPLACE_P=0.55, DISPLACE_PULLBACK_GRAZE=0.30, APPROACH_DISPLACE_K=0.7, APPROACH_DISPLACE_MAX=0.6,
   # (feint config removed 2026-06-29: the feint is dissolved into the attack — WS-5 — so FEINT_*/feint_eval are gone.)
@@ -80,7 +86,7 @@ CFG = dict(
   # STRUCTURE (sqrt(I) swing-arrest / parallel-axis / the 1H-2H force-couple) is [ASSERTED — first-principles;
   # validate vs motion-capture, NOT the engine's own config]; the anchor refs + gains are [SIM-CALIBRATE/FIAT].
   # Leads with body-extension (lunge), the best-grounded axis (Silver true-times / Giganti). See tasks/w811gujrg.output.
-  REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.85,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len (~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
+  REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.255,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len in METRES (U0: 0.85 lu ×0.30 — ~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
   REC_S_FLOOR=0.3, REC_THRUST_BASE=1.0, REC_W2=0.6, REC_K_COUPLE=0.9, REC_CTRL_K=0.3, RECOVER_FLOOR=0.3,   # [FIAT] swing static-moment floor / thrust anchor / 2H-couple gains / control-credit / lower bound
   CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over LUNGE_COMMIT for a full-depth lunge
   # WIELDING heft (tempo/stamina/strength COST) — DERIVED from the g-aware swing inertia (WP.at_grip I_g), a
@@ -155,13 +161,14 @@ CFG = dict(
   UPSET_FLOOR=0.05,
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
   # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
-  # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_LU
-  # is a PRIMITIVE threshold (head_len, length-units, UNIT_M=0.30m), not a name check: it clears the
-  # roster's dagger-class (head_len<=1.2) and excludes the next-shortest non-dagger record (paired_short
-  # / half-sworded 2H forms, head_len>=1.33) — the open-contact exemption for a weapon already
-  # functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
+  # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
+  # (U0, ED-PC-0002: was GRAB_SHORT_REACH_LU=1.25 length-units; now 0.375 METRES — same threshold,
+  # honest unit + honest name) is a PRIMITIVE threshold (head_len, metres), not a name check: it clears
+  # the roster's dagger-class (head_len<=0.36) and excludes the next-shortest non-dagger record
+  # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon
+  # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
   # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
-  GRAB_SHORT_REACH_LU=1.25, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25,
+  GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25,
 )
 # HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
 # handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

@@ -94,7 +94,7 @@ lane_ids:
   cutover_ed: "ED-IN-0001"   # the entry that created this namespace; first-ever lane-tagged ED
   lanes:
     MB: { name: "Mass battle",         next_free: 3 }   # ED-MB-0001: movement/pathing audit (ED-1096) fix-plan execution + adversarial review, 2026-07-02; ED-MB-0002: Cannae gauge-band root-cause audit, ratified + DG-3/DG-4 ruled 2026-07-04
-    PC: { name: "Personal combat",     next_free: 2 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry)
+    PC: { name: "Personal combat",     next_free: 3 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry); ED-PC-0002 allocated 2026-07-05: U0 units-honesty record (renumbered from a concurrent ED-PC-0001 allocation at merge — see its ledger entry)
     FI: { name: "Field investigation", next_free: 2 }   # ED-FI-0001 allocated 2026-07-05: NERS-audit E-12/GAP-1 accepted work item (investigation-lane audit)
     SC: { name: "Social contest",      next_free: 2 }   # ED-SC-0001 allocated 2026-07-05: NERS-audit E-10 accepted work item (dominance sweeps)
     FA: { name: "Faction actions",     next_free: 2 }   # ED-FA-0001 allocated 2026-07-05: faction-count reconciliation work item (narrative-census fork 10)
