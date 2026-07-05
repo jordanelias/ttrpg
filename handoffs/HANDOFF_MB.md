@@ -117,7 +117,7 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   its band decisively in the attacker's favor** (except C7, still passing). Full 20-row gauge: 4/20 →
   5/20 (C1 newly passes; RC-5's 9 rows untouched). **New, deliberately undecided finding:**
   `subunit_combat_pool`'s Command-driven score may not scale by troop share, letting spatially-separated
-  attacking fronts each roll near-full combat power against one defender at once — genuine defect or
+  attacking fronts each roll near-full combat strength against one defender at once — genuine defect or
   historically-correct mechanism (with bands needing reconsideration)? Flagged, not silently tuned.
   DG-5 re-confirmed closed for a corrected reason (D2's bug, not a genuine non-race). All 4 `bat.py`
   digests re-recorded; `tests/valoria` 88 passed/16 skipped(numpy)/1 xfailed. See
