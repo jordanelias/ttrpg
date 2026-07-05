@@ -8,6 +8,20 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Edge-playability audit — DELIVERED 2026-07-05, awaiting Jordan review (branch
+  `claude/fable5-playability-audit-y5wj43`).** Seam-level complement to PR #77: playability /
+  gameplay experience at every edge/linkage among gameplay subsystems, all scales, all directions
+  (~60 edges; 8 sonnet evidence clusters, Fable-verified V1–V22, two agent claims reclassified
+  KNOWN-TRACKED). Deliverables at `designs/audit/2026-07-05-edge-playability-audit/`:
+  `edge_playability_audit_v1.md` (verdict: "the seams are the old GM's chair, still empty" —
+  11 P1 findings EP-1..EP-11 incl. GM-era adjudication residue at the handoffs, unfiled strategic
+  verb menu, 10-of-44 rendering coverage, unkeyed settlement events, stranded CI/IP presentation
+  beats, invisible enemy covert action, sealed NPC fabric, canonical-in-name-only investigation
+  layer (#77 GAP-1 closed), §5.5-vs-§2.7 stacking contradiction, stale BG victory params incl. a
+  struck path; ep-12..ep-31 P2/P3 register; SIG-1..4 corpus signals; §7 remediation menu
+  **deliberately NOT filed as EDs** — Jordan picks; merging ratifies nothing, per the #77
+  precedent). Full dossiers + verification log under `01_workings/`.
+
 - **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan review (PR #77,
   branch `claude/ners-audit-fable5-9cpfdz`).** Corpus-wide qualitative audit (playability /
   cohesiveness / interdependencies / emergent narrative / threadwork-at-every-juncture), 55-agent
