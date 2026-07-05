@@ -98,3 +98,28 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   superseded racing-clocks narrative and record this finding instead. **Next action: this is now a
   Jordan-ruling unblock (DG-1/DG-2), not further engine implementation.** RC-5 (9/20 gauge rows failing
   for unrelated reasons) remains a separate, not-yet-opened lane item.
+
+- **ED-MB-0003 (2026-07-05): follow-up Fable-5 audit found 4 more real defects; Jordan ruled all 3
+  gates; DG-2 captured as a workplan, not built.** The "RC-1 fully fixed" story was false — D1 (an
+  outer army-size dilution multiplier double-diluting a composed subunit's pool, removed per Jordan's
+  ratified "intensive/partition-invariant" semantics), D2/D2b (`_envelop_goal`'s hysteresis-free limit
+  cycle + `_node_advance`'s step-freeze bug, together the actual reason wings never reached contact —
+  both fixed), D3 (routed atoms resurrected to pool 1; first-pass fix was a no-op per adversarial
+  review, corrected to force `a_net`/`b_net=0` directly since `roll_pool`/`_sigma_net_boost` re-floor
+  pool internally), D4 (`distribute_casualties` cross-subunit column-leak, fixed via per-subunit
+  scoping), plus a harness force-ratio bug (`_envelop_army`/`_refused_army` fielding 3x/2x a
+  single-subunit opponent's troops, fixed via `total_troops` force parity). **Jordan's rulings
+  (AskUserQuestion): DG-3 completion = intensive pool semantics; DG-1 = symmetric-at-parity (infantry)
+  + majority-pin/cavalry-wing (C4/C7, Polybius/Livy order of battle); DG-2 = "create as workplan"** —
+  `designs/proposals/mass_battle_fighting_withdrawal_v1.md`, PROPOSED, NOT implemented. Independent
+  adversarial review caught 2 more real bugs (D3's no-op; `wing_speed` never reaching `Unit.speed`) —
+  both fixed. **Honest result: H3/H4/H5/H6/C4's draws are entirely GONE, but every row now OVERSHOOTS
+  its band decisively in the attacker's favor** (except C7, still passing). Full 20-row gauge: 4/20 →
+  5/20 (C1 newly passes; RC-5's 9 rows untouched). **New, deliberately undecided finding:**
+  `subunit_combat_pool`'s Command-driven score may not scale by troop share, letting spatially-separated
+  attacking fronts each roll near-full combat power against one defender at once — genuine defect or
+  historically-correct mechanism (with bands needing reconsideration)? Flagged, not silently tuned.
+  DG-5 re-confirmed closed for a corrected reason (D2's bug, not a genuine non-race). All 4 `bat.py`
+  digests re-recorded; `tests/valoria` 88 passed/16 skipped(numpy)/1 xfailed. See
+  `tests/coverage_matrix.md`'s 2026-07-05 entry + ED-MB-0003. **Next action: Jordan's ruling on the new
+  partition-invariance question and DG-2's build sequencing — not further unprompted implementation.**

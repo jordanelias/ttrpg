@@ -316,6 +316,13 @@ class Subunit:
     # resolution._subunit_braced, which requires >=1 full tick since this stamp before treating the
     # subunit as braced).
     _brace_since_tick: int = -1
+    # [D2 fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] `_envelop_goal`'s phase-1/
+    # phase-2 transition used the SAME threshold for entry and exit (no hysteresis) -- once past,
+    # turning toward a rear enemy cell re-crosses that same row and flips back to phase 1 every
+    # tick, a permanent limit cycle that never reaches contact. This latch commits the subunit to
+    # phase 2 the first time `past` is true. Default False -> byte-exact/inert for any subunit
+    # that never uses 'envelop'.
+    _envelop_committed: bool = False
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -680,7 +687,18 @@ class Subunit:
         # shallower rear position than the per-cell average; matching rear_r itself as the
         # threshold is the minimal, non-fabricated fix -- confirmed to close this gap in the
         # V-ENVELOP node-path acceptance measurement (see fix-plan step 6/7 verification).
-        if not past:
+        #
+        # [D2 fix, 2026-07-05] `past` alone is NOT safe to re-test every tick once phase 2 has
+        # begun: phase 2's own target (the nearest enemy cell) sits on the near side of `rear_r`
+        # from the wing's perspective, so driving toward it re-crosses `rear_r` and `past` flips
+        # back to False -- phase 1's goal then yanks the anchor back out to `wide_c`, which
+        # re-crosses `rear_r` again next tick, forever. Confirmed by direct trace: wings wheel to
+        # the rear_r line correctly, then jitter on it for the rest of the battle, never closing
+        # to contact. Fix: latch commitment the first time `past` is true (entry condition),
+        # rather than re-testing the same threshold as an exit condition every tick.
+        if past:
+            self._envelop_committed = True
+        if not self._envelop_committed:
             return (rear_r, wide_c)  # phase 1: around the flank, past the depth
         return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)  # phase 2: turn in to the (now rear) cells
 
@@ -838,8 +856,21 @@ class Subunit:
             # mechanism on this path now, operating on true continuous linear paths per cell rather
             # than a body-level speed pre-cap layered under a second per-cell clamp.
             mag = abs(dr) + abs(dc)
-            if mag >= 0.5 and step > 0:
-                nar, nac = ar + step * (dr / mag), ac + step * (dc / mag)
+            # [D2b fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] Was `if mag >= 0.5 and
+            # step > 0: nar,nac = ar + step*(dr/mag), ...` -- a fixed integer `step` that does not
+            # evenly divide the remaining distance can leave `mag` permanently inside [0, 0.5) of a
+            # maneuver waypoint (e.g. _envelop_goal's phase-1 (rear_r, wide_c)) without ever reaching
+            # it: since a full `step`-length move overshoots past a close-but-not-arrived goal, and
+            # the < 0.5 branch below took no action at all, the anchor froze there forever, unable to
+            # ever satisfy a waypoint's exact-threshold test. Capping the move at min(step, mag)
+            # instead closes the remaining gap exactly when within one step of the goal (no
+            # overshoot, no freeze) and reproduces the old behaviour bit-for-bit whenever mag >= step
+            # (the common, far-from-goal case) -- confirmed by direct trace: a maneuvering wing that
+            # previously stalled ~0.3 units short of its rear_r waypoint for the rest of the battle
+            # now reaches it exactly.
+            if step > 0 and mag > 1e-9:  # [canonical: epsilon: float magnitude guard]
+                eff = min(step, mag)
+                nar, nac = ar + eff * (dr / mag), ac + eff * (dc / mag)
         # WHEEL (increment 2b): the formation re-faces the enemy as a body. f = current facing (unit vector),
         # f0 = spawn facing (toward the enemy at first contact); the relational layout is rotated by the
         # rotation taking f0 -> f, so the whole formation pivots while cohesion holds it together. Head-on

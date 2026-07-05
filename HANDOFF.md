@@ -740,6 +740,40 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   is otherwise done for this pass.** A separate, undiagnosed residual (RC-5) also surfaced: 9 of 20 gauge
   rows fail for reasons unrelated to composition coupling at all — flagged as its own not-yet-opened lane
   item, do not fold into this fix.
+- **Mass battle — ED-MB-0003 (2026-07-05): 4 more real engine defects found+fixed, DG-1/DG-3 completed,
+  DG-2 captured as a workplan doc, NOT implemented.** A fresh Fable-5-led adversarial audit of the
+  already-shipped DG-3/DG-4 fix found the "RC-1 fully fixed, remaining gap is pure DG-1/DG-2" story was
+  false: D1 (an outer army-size dilution multiplier double-diluting a composed subunit's pool, fixed by
+  removing it per Jordan's ratified "intensive/partition-invariant" pool semantics), D2/D2b (a
+  hysteresis-free limit cycle in `_envelop_goal` plus a step-freeze bug in `_node_advance` that together
+  kept enveloping wings from ever actually reaching contact, both fixed), D3 (routed atoms resurrected to
+  combat pool 1, letting them keep dealing damage post-rout — a first-pass fix turned out to be a no-op,
+  since `roll_pool`/`_sigma_net_boost` both re-floor pool internally; corrected to force net=0 directly),
+  D4 (`distribute_casualties` letting an uninvolved wing absorb a different subunit's casualties by
+  column coincidence, fixed via per-subunit engagement scoping), plus a harness bug (`gauge_mb.py`'s
+  envelopment/refused-flank army-builders fielding 3x/2x a single-subunit opponent's troops, a side
+  effect of the LC-8 migration, fixed via force-parity `total_troops`). **Jordan ruled all 3 open gates
+  (AskUserQuestion): DG-3 completion = intensive pool semantics; DG-1 = symmetric-at-parity (infantry
+  rows) + majority-pin/cavalry-wing (C4/C7), matching Polybius/Livy order of battle; DG-2 = "create as
+  workplan"** — captured as `designs/proposals/mass_battle_fighting_withdrawal_v1.md` (PROPOSED, not
+  built). An independent adversarial-review pass caught 2 more real bugs (D3's no-op above; `wing_speed`
+  never reaching `Unit.speed` since `Subunit` has no speed field) — both fixed. **Honest result: draws
+  are entirely GONE across H3/H4/H5/H6/C4** (a genuine, dramatic change from the 100%-draw lock) **but
+  every one of those rows now OVERSHOOTS its band decisively in the attacker's favor** instead of landing
+  inside it (except C7, unaffected, still passing). Full 20-row gauge aggregate moved only marginally
+  (4/20 → 5/20, multi mode — C1 newly passes; every other previously-failing row, including RC-5's 9
+  untouched single-subunit rows, remains failing, now mostly via the same overshoot signature). **New,
+  deliberately undecided finding:** a controlled experiment suggests `subunit_combat_pool`'s
+  Command-driven score doesn't scale by a subunit's own troop share, so spatially-separated attacking
+  fronts (a center + 2 wings) can each roll close to a full combat score against one defender at once —
+  whether this is a genuine partition-invariance defect or the historically-correct mechanism for
+  devastating encirclements (with the bands needing reconsideration instead) is flagged for Jordan's
+  ruling, not silently tuned. DG-5 re-confirmed closed, for a corrected reason (the original ablation's
+  wings never reached contact due to the now-fixed D2 bug, not because there was no race). All 4 `bat.py`
+  digests re-recorded; `tests/valoria` 88 passed/16 skipped(numpy, unrelated)/1 xfailed. See
+  `tests/coverage_matrix.md`'s 2026-07-05 entry for the full numeric record and ED-MB-0003 in the
+  editorial ledger. **Next action: this is now a Jordan-ruling unblock on the new partition-invariance
+  question and on DG-2's build sequencing — not further unprompted engine implementation.**
 - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec
   RATIFIED (2026-07-02); HANDOFF split into per-lane files (2026-07-02).** The month's
   comprehensive review, the consolidation execution/reconciliation logs, and the single
