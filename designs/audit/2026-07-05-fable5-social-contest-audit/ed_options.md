@@ -1,13 +1,16 @@
-# ED Options — Candidate Ledger Entries (deliberately NOT filed)
+# ED Options — Candidate Ledger Entries (RATIFIED and FILED 2026-07-05)
 
-## Status: PROPOSED (candidates only — Jordan picks; nothing here is in the ledger)
+## Status: RATIFIED — all 11 candidates ACCEPTED and FILED 2026-07-05 (Jordan post-merge 'Ratify all' on PR #80).
+## ID map: ED-SC-A→ED-SC-0002 · B→0003 · C→0004 · D→0005 · E→0006 · F→0007 · G→0008 · H→0009 · I→0010 · ED-IN-J→ED-IN-0012 · K→ED-IN-0013.
+## The four P0 items (ED-SC-0002..0005) are filed as ACCEPTED work with the design fork itself still `needs_jordan` — no stated default existed (ED-IN-0011 convention).
 ## Date: 2026-07-05
 
-**These are candidates, not allocations.** Per the read-only mandate (charter) and the merge-ratifies
-convention (ED-1094), merging this PR ratifies the audit's *findings as findings* — it does **not**
-adopt any option below. To adopt one: read `references/id_reservations.yaml` `next_free`, allocate a
-lane-tagged `ED-SC-NNNN` (or `ED-IN-NNNN` where marked cross-cutting), bump, and co-commit per the
-file's protocol — never max+1. The `ED-SC-A`…`ED-SC-K` letters below are placeholders, not IDs.
+**Historical note (superseded by the ratification above):** as authored inside the read-only PR #80,
+this doc held candidates only, per the merge-ratifies convention (ED-1094) — merging ratified the
+*findings*, not the options. Jordan's explicit post-merge "Ratify all" (2026-07-05) then adopted all
+eleven; real IDs were allocated per the `id_reservations.yaml` protocol and filed in
+`canon/editorial_ledger.jsonl` (see the ID map in the header). The `ED-SC-A`…`ED-IN-K` letters in the
+tables below are the original placeholders, kept for provenance — cite the real IDs.
 
 Severity vocabulary follows PR #77 (P1 blocks a viability path; P2 significant; P3 hygiene).
 
