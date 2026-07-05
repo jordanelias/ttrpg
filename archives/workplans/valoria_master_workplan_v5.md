@@ -1,5 +1,12 @@
 # Valoria — Master Workplan v5 (post-v4 reconciliation, three-lane, single register)
-**2026-06-28 · status: CANON-PROPOSED — Jordan-vetoable; the active master on commit, supersedes v4. §3 is the live decision docket.**
+
+> ⚠️ **SUPERSEDED (2026-07-05, ED-IN-0009) — DO NOT RESUME FROM THIS FILE.** The live master
+> is `designs/workplans/valoria_master_workplan_v6.md`; its Appendix A accounts for every
+> open item below. Known defect this banner corrects (ED-IN-0006): §3's J-38 row below says
+> open/PROPOSED — **J-38 was RATIFIED 2026-07-02 (ED-1093/ED-1083/ED-1094)**; trust
+> CURRENT.md, never this file, for status. J-/LA-/LB-/LC- keys remain citable as history.
+
+**2026-06-28 · status: SUPERSEDED by v6 (was CANON-PROPOSED; the active master 2026-06-28 → 2026-07-05).**
 **as_of: live HEAD `d80d364` (#22; first written `as_of a3837d0`/#15 and de-staled this pass — see §10). Verified live: editorial ledger `canon/editorial_ledger.jsonl` = 713 entries / 0 duplicate IDs / ED ceiling 1042. v4's register and lanes are carried forward; this document folds the post-v4 work (06-12 → 06-28) that no prior workplan had reconciled, plus the six PRs (#16–#22) that landed at/after first write (§10).**
 
 **Supersedes (on commit):** `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md` — its §0 reconciliation, §1 operating model, §2 unified register (rows 1–38), §3 docket (J-1…J-35), and §4–§6 lane queues are RETAINED. v4 stays the frozen 06-11/06-22 record; J-/LA-/LB-/LC- IDs stay citable and are NOT renumbered. v5 extends and de-stales them with the month of work that landed since.

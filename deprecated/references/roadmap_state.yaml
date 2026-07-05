@@ -1,3 +1,12 @@
+# ⚠️ RETIRED (2026-07-05, ED-IN-0006 → ED-IN-0009) — NOT a live steering surface.
+# This file described the May/June bootstrap-era phase track and had drifted irrecoverably
+# from live work (updated 2026-06-28; phase counters frozen at a pre-v3 audit track with
+# items_done 0 while the tracked work landed elsewhere). Its "single source of truth"
+# claim below is FALSE as of retirement. The live steering surfaces are:
+#   CURRENT.md (currency) -> HANDOFF.md + handoffs/HANDOFF_<LANE>.md (status)
+#   -> designs/workplans/valoria_master_workplan_v6.md (sequencing + decision register).
+# Kept verbatim below for history; do not update, do not resume from it.
+#
 # Roadmap State — single source of truth for "where are we" at session start.
 #
 # Read by bootstrap (quick_bootstrap -> report_roadmap) and printed in the

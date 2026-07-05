@@ -1,4 +1,4 @@
-"""U0 — units honesty (ED-PC-0001; consolidation_v1.md §4, R3 unified sequence, first increment).
+"""U0 — units honesty (ED-PC-0002; consolidation_v1.md §4, R3 unified sequence, first increment).
 
 head_len/grip_len (and every derived grip/lever/reach threshold) converted from the 0.30 m
 "length-unit" to HONEST METRES: weapons.py stored lengths ×0.30, weapon_physics.UNIT_M deleted,

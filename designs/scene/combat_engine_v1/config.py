@@ -8,7 +8,7 @@ CFG = dict(
   # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
   # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
   # a butt-gripped one BY CONSTRUCTION (the grip insight). LONG/HEADR/HEAD_REACH retired here; L0 stays.
-  # U0 (ED-PC-0001): head_len/grip_len are now METRES, so the scale absorbs the old 0.30 m length-unit
+  # U0 (ED-PC-0002): head_len/grip_len are now METRES, so the scale absorbs the old 0.30 m length-unit
   # (0.635 reach-pt/lu -> 0.635/0.30 reach-pt/m — same physical scale, honest unit). reach_adj stays a SMALL
   # per-weapon residual in reach-POINTS (the same unit as reach_base's output, added OUTSIDE the geometric
   # scale) — it is not a stored length and is deliberately NOT rescaled (byte-identity would break otherwise).
@@ -32,7 +32,7 @@ CFG = dict(
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
-  # U0 (ED-PC-0001): lever lengths now METRES — LEVER_K rescaled /0.30 (per-metre gain), LEVER_REF ×0.30
+  # U0 (ED-PC-0002): lever lengths now METRES — LEVER_K rescaled /0.30 (per-metre gain), LEVER_REF ×0.30
   # (a stored length); LEVER_HEAD_K/LEVER_2H dimensionless, unchanged. Byte-identical.
   LEVER_K=0.22/0.30, LEVER_HEAD_K=0.2, LEVER_REF=0.096, LEVER_2H=0.20,
   # displace-and-step-inside vs a committed thrust (needs leverage edge + winning the read)
@@ -162,7 +162,7 @@ CFG = dict(
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
   # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
   # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
-  # (U0, ED-PC-0001: was GRAB_SHORT_REACH_LU=1.25 length-units; now 0.375 METRES — same threshold,
+  # (U0, ED-PC-0002: was GRAB_SHORT_REACH_LU=1.25 length-units; now 0.375 METRES — same threshold,
   # honest unit + honest name) is a PRIMITIVE threshold (head_len, metres), not a name check: it clears
   # the roster's dagger-class (head_len<=0.36) and excludes the next-shortest non-dagger record
   # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon

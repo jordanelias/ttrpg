@@ -8,7 +8,7 @@ Phase B (2026-07-02): every weapon's MASS DISTRIBUTION is now a positional sum o
 whole-weapon lump at a wclass-centroid. weapon_physics.derive() sums them; see its STAGE-1 docstring.
 
 RECORD SCHEMA (per weapon):
-  PHYSICAL   mass(kg, = Σ part masses) · head_len · grip_len (METRES — U0 units honesty, ED-PC-0001, 2026-07-05:
+  PHYSICAL   mass(kg, = Σ part masses) · head_len · grip_len (METRES — U0 units honesty, ED-PC-0002, 2026-07-05:
              the old 0.30m length-unit is retired; every stored length ×0.30, consumers rescaled, byte-identical
              vs tests/valoria/r3_identity_golden.json) · hands(1/2) ·
              head{point,cut_thrust,straight_cut,curved_cut,blunt} (native/default combat mode — afforded_heads

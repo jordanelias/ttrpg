@@ -1,6 +1,6 @@
 # ED Options — drafted candidates, NOT filed
 
-## Status: PROPOSED (options for Jordan to pick — deliberately NOT in the ledger)
+## Status: RATIFIED (Jordan, 2026-07-05 — ALL 12 accepted and FILED in the ledger; forks resolved to audit defaults. See ID map below.)
 ## Date: 2026-07-04
 
 **These entries are NOT in `canon/editorial_ledger.jsonl`.** Per the ED-1094 merge-ratifies
@@ -77,3 +77,28 @@ as source. Severity and lane are proposals. Numbers `NNNN` are placeholders — 
 together they make computed emergence arrive and render (the audit's bottom line), and they stop
 the register drift that caused F-5. E-1 is the largest single playability win. E-8 is the
 cheapest precondition-clearing pick before any Godot export work.*
+
+---
+
+## RATIFICATION ADDENDUM (2026-07-05)
+
+All 12 options were **accepted by Jordan** (post-merge instruction on PR #77) and are now FILED
+in `canon/editorial_ledger.jsonl` with lane IDs allocated per `references/id_reservations.yaml`.
+Internal forks resolved to the audit defaults: **E-1** adopt the governance-redesign path;
+**E-4** per-subsystem walkthrough method as standing policy; **E-8** MS (Mending Stability) wins.
+The "options, not filed" framing above is retained as the historical record of the hold-back.
+
+| Option | Filed as | Fork resolution |
+|---|---|---|
+| E-1 | `ED-SE-0001` | adopt redesign path |
+| E-2 | `ED-IN-0003` | — (execution vehicle: 2026-07-05 narrative-engine effort) |
+| E-3 | `ED-IN-0004` | — (execution vehicle: 2026-07-05 narrative-engine effort) |
+| E-4 | `ED-IN-0005` | per-subsystem walkthrough policy |
+| E-5 | `ED-WR-0001` | — |
+| E-6 | `ED-IN-0006` | — |
+| E-7 | `ED-IN-0007` | — |
+| E-8 | `ED-WR-0002` | MS wins |
+| E-9 | `ED-PC-0001` | — |
+| E-10 | `ED-SC-0001` | — |
+| E-11 | `ED-IN-0008` | — |
+| E-12 | `ED-FI-0001` | — |

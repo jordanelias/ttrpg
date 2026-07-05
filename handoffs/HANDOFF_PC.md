@@ -9,7 +9,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
   (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1…JD-8 remain OPEN, loudly held back).** Implementation
   progress:
-  - **U0 (units honesty, ED-PC-0001) — DONE 2026-07-05** (branch `claude/begin-u0-arppwt`). head_len/grip_len →
+  - **U0 (units honesty, ED-PC-0002) — DONE 2026-07-05** (branch `claude/begin-u0-arppwt`). head_len/grip_len →
     honest metres (×0.30, all 53 records); `WP.UNIT_M` deleted; per-length gains /0.30 (`PERC_2H_ARC`, `LEVER_K`,
     `REACH_GEOM_SCALE`); stored-length constants ×0.30 (`PERC_GRIP_1H`, `GRIP_SHORT/LONG`, `LEVER_REF`,
     `REC_GRIP_REF`, `GRAB_SHORT_REACH_LU`→**`GRAB_SHORT_REACH_M`**=0.375, name-honesty rename); wind saturation
@@ -22,8 +22,10 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     **Two documented deviations from the U0 row, both forced by its own byte-identity contract:** `reach_adj`
     NOT rescaled (it is a reach-POINTS residual added outside `REACH_GEOM_SCALE`, not a stored length — scaling
     it breaks identity and `test_reach_base_byte_identical_at_grip_zero`); `PERC_2H_ARC` rescaled though the
-    row omits it (identity forces it once grip_len is metres). See the ED-PC-0001 ledger entry.
-  - **NEXT: U1 (PoB recalibration, ED-PC-0002) — GATED on JD-1** (PoB target bands sign-off, consolidation_v1
+    row omits it (identity forces it once grip_len is metres). See the ED-PC-0002 ledger entry.
+  - **NEXT: U1 (PoB recalibration; its ED allocates at filing — plan-text labels are NOT IDs,
+    workplan v6 §6; U0's own label collided with #78's ED-PC-0001 and was renumbered to
+    ED-PC-0002 at merge) — GATED on JD-1** (PoB target bands sign-off, consolidation_v1
     §6; default = the plan's arms-scholarship bands if Jordan waves it through). U2 ⊣ U1. T-P2 may start any
     time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is still outstanding.
 

@@ -6,7 +6,7 @@ PRIMITIVES and EVERY combat quantity DERIVES here, once, as documented physics. 
 rises from the primitives, never from a per-weapon table.
 
 PRIMITIVES consumed (per weapon, from combatant.WEAPONS):
-  mass(kg), head_len, grip_len (METRES — U0 units honesty, ED-PC-0001), pommel_kg, wclass{bladed,hafted_tip,hafted_block},
+  mass(kg), head_len, grip_len (METRES — U0 units honesty, ED-PC-0002), pommel_kg, wclass{bladed,hafted_tip,hafted_block},
   hilt{compound,simple,none}, hands, hand_guard, blade_guard, reach_adj, head, + geometry geo{cut,thrust,perc_conc}
   and the raw geometry {cross_section, strike_concentration, ...} on combatant.GEOMETRY.
 
@@ -33,7 +33,7 @@ fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 import math
 
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
-# UNIT_M DELETED (U0 units honesty, ED-PC-0001, 2026-07-05 — consolidation_v1.md §4): head_len/grip_len/
+# UNIT_M DELETED (U0 units honesty, ED-PC-0002, 2026-07-05 — consolidation_v1.md §4): head_len/grip_len/
 # the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are now all HONEST METRES
 # (the old length-unit was 0.30 m; every stored length ×0.30, every ÷/×UNIT_M site deleted, every
 # per-length-unit gain rescaled by /0.30). Proven byte-identical against tests/valoria/

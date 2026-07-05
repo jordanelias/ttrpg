@@ -1,20 +1,24 @@
 # Jordan Decision Queue — 2026-07-01
 
-## Status: FROZEN at PR open (2026-07-01) — the consolidated list of gated decisions as of this session; HANDOFF.md "Next actions" points here
+## Status: SUPERSEDED AS A LIVE SURFACE (2026-07-05, ED-IN-0006 → ED-IN-0009) — dated snapshot; the live decision surface is workplan v6 §5 (`designs/workplans/valoria_master_workplan_v6.md`), whose tiered register carries every still-open item below with a pointer. Items 1–3 refreshed in place at supersession (they reflected pre-R2 combat physics); 6/18/20 were already struck.
 
 Everything below is **surfaced, not decided**. The consolidation session touched none of
 these outcomes. Ordered roughly by how much downstream work each unblocks.
 
 ## Scene combat (Track 2 + phases)
 
-1. **wt/spd cost-path de-leak** (`combat_engine_v1/core.py:55`, `systems.py:46`) — candidate
-   roughly doubles spear damage. Measurement harness + roster-wide before/after delta report
-   prepped in `designs/audit/2026-07-01-scene-combat-track2-decision-prep/` (PR #51).
-2. **`WP.reach()`/`WP.authority()` vs `systems.reach_base`/`wield_heft` single-source home**
-   (`weapon_physics.py:193,205`) — comparison doc of what each side computes prepped (PR #51).
-3. **Scene-combat Phase 4a (game-theoretic layer) / 4b (abilities-as-access) / 4c
-   (channel-leverage §C) / Phase 5 (contact axis) / WS-7** — full plan at
-   `designs/scene/combat_engine_v1/phase4_5_plan_v1.md`; none started; design-laden.
+1. ~~**wt/spd cost-path de-leak**~~ **REFRESHED 2026-07-05 (ED-IN-0009):** superseded by the
+   R2 closing-distance redesign (MERGED PR #72) + R3 weapon-model consolidation (RATIFIED
+   plan-of-record). The Track-2 residual survives in R3's terms: damage-path
+   ready-except-spear, tempo-path NOT ready (double-counting) — resolved through the R3
+   JD-1..8 decision set, sequenced in workplan v6 §4-PC.
+2. ~~**`WP.reach()`/`WP.authority()` single-source home**~~ **REFRESHED 2026-07-05:** the
+   prepped comparison stands; current recommendation post-R2/R3 is retire-docstrings
+   (workplan v6 §4-PC Track-2 residuals) — rule it with the R3 JDs, not as a standalone.
+3. ~~**Scene-combat Phase 4a/4b/4c / Phase 5 / WS-7**~~ **REFRESHED 2026-07-05:** context
+   superseded — phase4_5 is now explicitly sequenced AFTER the R3 U-series + player-input +
+   ED-911 slots (workplan v6 §4-PC; gated on ED-911 + WS-7); the plan file itself is
+   unchanged and still the content source.
 4. **ED-1042** — wound-model spec-vs-code drift ruling (open since 2026-06-24).
 5. **ED-1050 residual** — re-export RESIST/GAP_EXPOSURE/gap-game logic to
    `weapon_resource.gd`/`strike_module.gd`; Key-log parity stays known-red until done.
