@@ -6,7 +6,13 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
-(none currently tracked.)
+- **ED-WR-0003 (open) — ambient-fabric window + Appraise Revelation.** Filed 2026-07-05 from the
+  ratified edge-playability audit (PR #81, "Ratify all"; finding EP-7): `scene.interaction`/
+  `scene.gossip` are emitted with hard-coded `private_observers: [npc_a, npc_b]` (six sites in
+  doc-12 incl. visibility defaults) so the player can never overhear gossip about themselves; and
+  `npc_behavior_v30` §6.1/§6.1b "Appraise Revelation" are empty headers (npc_memory doc:null).
+  Two actions: an "overheard" rule (conditional player observer when the player shares the
+  scene) + write the §6.1/§6.1b revelation procedures. See the audit report §1 EP-7 / §7 item 10.
 
 ## Decisions
 

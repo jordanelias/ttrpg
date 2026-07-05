@@ -1,6 +1,6 @@
 # Fable 5 Social Contest Audit — Charter
 
-## Status: PROPOSED (audit findings — Jordan review)
+## Status: RATIFIED — 2026-07-05 (PR #80 merge + Jordan post-merge instruction 'Ratify all'; ED-1094 merge-ratifies convention). D6 sequencing adopted; candidates filed as ED-SC-0002..0010 + ED-IN-0012..0013 (see ed_options.md ID map).
 ## Date: 2026-07-05
 ## Lane: SC (social contest)
 ## Branch: `claude/fable5-social-contest-audit-oxibtb`

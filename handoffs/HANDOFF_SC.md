@@ -83,21 +83,55 @@ index; see it for cross-lane/global items.
     Padgett robust action; Putnam two-level bargaining) is not yet in the code. Plan amended: Stage 3 (armature)
     and Stage 4 (four games) agonists must now READ the source-research trilogy directly, not just the critique
     distillation, so this commissioned scholarship actually reaches the implementation.
-  - **NEXT: Stage 3** (rhetoric grounding + adjudicator armature — CR4 stasis, CR5 self-gating, the
-    Style×Conviction dot-product aimed at the judge — reading the source-research trilogy per above,
-    not just the critique distillation).
+  - **Stage 3 / Gate C DONE + RATIFIED (2026-07-02, ED-1062)** — rhetoric grounding + adjudicator
+    armature (CR4 stasis, CR5 self-gating, 4-axis Style×Conviction dot-product) landed; packets:
+    `designs/audit/2026-07-01-contest-gate-c-packet/` + `2026-07-02-contest-gate-c-packet/`.
+    *(This line corrects the previous "NEXT: Stage 3" — the handoff trailed the ratified state by one
+    stage; flagged as a currency observation by the 2026-07-05 audit below.)*
+- **Fable 5 subsystem audit RATIFIED (2026-07-05; PR #80 merge + Jordan post-merge "Ratify all").**
+  `designs/audit/2026-07-05-fable5-social-contest-audit/` — six-dimension audit (code architecture,
+  qualitative NERS, throughlines, playability, echo/emergence/prose interactions, viability). All 10
+  NEW findings critic-UPHELD. **Sequencing adopted: P0 spec-reconciliation → P1 consequence spine
+  (∥ P3-lite human-plays-Agôn slice) → Stage 4 → calibration** — i.e. the consequence spine (kernel
+  reachability + echo transport) now precedes the Stage-4 four-games build. All 11 ed_options
+  candidates filed: decision docket ED-SC-0002..0005 (forks, `needs_jordan`), work items
+  ED-SC-0006..0010, cross-cutting ED-IN-0012..0013.
+  - **NEXT: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
+    keying §5.4-band vs §6-genre vs composed; Piety/Persuasion tracker naming + canonical home;
+    kernel Argue-pool formula; Recall/Corroborate/Prep/Findings global cap). ED-SC-0002 and
+    ED-SC-0004 are P1 blockers (echo wiring; calibration/re-verdict/export).
+  - **THEN: P1 consequence spine (ED-SC-0006, ED-SC-0007)** — dispatch→kernel routing + party-derivation
+    bridge; Bout outcome → the already-built `domain_echo.py`; campaign-regression contest assertion.
+    In parallel: **P3-lite** — a minimal interactive Agôn harness over the existing kernel to run the
+    dramatic-legibility test with a human and measure the ~13-consult load (audit D4/N-7) before
+    Stage 4 multiplies interaction shapes.
+  - **Stage 4 entry criteria now include (ED-SC-0009):** Face/Rattled strain channel (KU-3) + §9.3–9.4b
+    thread junctures (P-14); plus ED-SC-0005's stack cap must land in prose before wiring; Chronicle
+    focalization (ED-SC-0010) before any player-facing narrative output.
 
 ## Decisions
 
+- 2026-07-05 — **"Ratify all" (PR #80):** the Fable 5 social-contest audit's findings + D6 sequencing
+  + all 11 ed_options candidates adopted; audit doc statuses flipped, IDs allocated
+  (ED-SC-0002..0010, ED-IN-0012..0013), CURRENT.md SC row refreshed, this handoff updated — per the
+  ED-1094 merge-ratifies convention and the ED-IN-0011 "Ratify all" precedent (forks with no stated
+  default stay `needs_jordan`).
 - 2026-06-26 — **J-31** social-contest docket recovered (ED-938/939/1042 + rule resolutions);
   22-doc cross-corpus reference + terminology repair landed (#13). `contest.py` sim edit deferred
   behind pre-existing sim-fabrication debt (19 uncited constants on `main`).
 
 ## Next actions
 
+- **P0 decision docket awaiting Jordan: ED-SC-0002..0005** (echo keying / tracker naming / pool
+  formula / bonus-stack cap — see the ratified-audit item above; ED-SC-0002 blocks ED-SC-0007,
+  ED-SC-0004 blocks calibration + ED-IN-0013 re-verdict).
+- **P1 consequence spine (ED-SC-0006/0007) + P3-lite Agôn harness** — next build work once the docket
+  lands (0006 and the harness are unblocked already; 0007 waits on ED-SC-0002).
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
-  row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`).
+  row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit
+  resequences Stage 4 *after* the consequence spine.
 - **`contest.py` fabrication-debt triage** — 19 uncited constants block the J-31 terminology
   propagation into code (also tracked at `decision_queue.md` item 16).
 - **contest_rebuild Stage 1+ gates** — each stage ratified individually (Gate 0 ratified
-  2026-06-30; ED 1055-1079 / PP 800-809 reserved; also tracked at `decision_queue.md` item 15).
+  2026-06-30; ED 1055-1079 / PP 800-809 reserved; Gates A–C ratified through 2026-07-02; also
+  tracked at `decision_queue.md` item 15).

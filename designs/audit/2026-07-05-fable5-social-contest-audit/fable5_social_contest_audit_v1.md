@@ -1,6 +1,6 @@
 # Fable 5 Audit — The Social Contest System
 
-## Status: PROPOSED (audit findings — Jordan review)
+## Status: RATIFIED — 2026-07-05 (PR #80 merge + Jordan post-merge instruction 'Ratify all'; ED-1094 merge-ratifies convention). D6 sequencing adopted; candidates filed as ED-SC-0002..0010 + ED-IN-0012..0013 (see ed_options.md ID map).
 ## Date: 2026-07-05
 ## Lane: SC · Branch: `claude/fable5-social-contest-audit-oxibtb`
 ## Method: 4 Sonnet evidence dossiers + 1 independent Sonnet critic; all verdicts rendered by Fable 5 (orchestrator). Read-only — no canon, params, code, ledger, or handoff edits. Evidence: `01_workings/`; criteria: `00_grounding/`.
@@ -291,6 +291,8 @@ in `ed_options.md`, not a decision — the sequencing is this audit's judgment; 
 
 Dossiers A–D (`01_workings/`): Sonnet, evidence-only, parallel, read-only tools. Critic E: Sonnet,
 independent (draft + charter only). Verdicts, reconciliation, and this synthesis: Fable 5. Finding
-novelty ledger: `finding_status.md`. Candidate ledger entries (deliberately unfiled): `ed_options.md`.
+novelty ledger: `finding_status.md`. Candidate ledger entries: `ed_options.md` — authored unfiled
+under the read-only mandate; all eleven RATIFIED-AS-ACCEPTED and filed as ED-SC-0002..0010 +
+ED-IN-0012..0013 on Jordan's post-merge "Ratify all" (2026-07-05).
 Currency-surface observations recorded, not fixed (read-only): `HANDOFF_SC.md` trails Gate C by one
 stage; `CURRENT.md`'s row still says "Stage 1a landed".

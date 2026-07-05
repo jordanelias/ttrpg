@@ -1,7 +1,12 @@
 # Valoria — Edge-Playability Audit v1 (every seam, every scale, every direction)
 
-## Status: PROPOSED (audit findings — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — "Ratify all", post-merge instruction on PR #81)
 ## Date: 2026-07-05 · Lane: IN (cross-cutting) · Branch: `claude/fable5-playability-audit-y5wj43`
+
+> **Ratification addendum (2026-07-05):** all findings (EP-1..EP-11, ep-12..ep-31, SIG-1..4)
+> stand as ratified audit findings, and the §7 remediation menu is **filed in full** as
+> lane-tagged EDs — see the §7 map. The P2/P3 register is ratified as findings; items not
+> covered by a §7 ED remain drawable for future allocations against this report.
 
 **Charter:** `00_grounding/00_charter.md` — the seam is the unit of analysis; the question at every
 edge is whether the *crossing itself* is good gameplay (moment · decision · feedback · latency ·
@@ -263,7 +268,14 @@ re-surface A-9 for a ruling · a canon-guard pass on §1.3b/§5.3 · the ep-20 t
 | temporal (cadence) | Slate/accounting rhythm well-specified; D.6 oscillation risk and dual-clock seams are the residue |
 | backwards (currency) | EP-10 + ep-14 + ep-23: the seams and their tables are where register drift concentrates |
 
-## 7 · Candidate remediation menu (NOT filed — Jordan picks; merging this PR ratifies nothing)
+## 7 · Remediation menu — RATIFIED IN FULL, FILED 2026-07-05
+
+_Originally delivered unfiled ("Jordan picks"); Jordan ratified all ten post-merge ("Ratify
+all", PR #81). Filed as: item 1 → **ED-IN-0012** · item 2 → **ED-IN-0013** · item 3 →
+**ED-IN-0014** · item 4 → **ED-SE-0002** (needs_jordan: the ruling itself) · item 5 →
+**ED-FA-0002** · item 6 → **ED-IN-0015** · item 7 → **ED-FI-0002** · item 8 → **ED-FA-0003** ·
+item 9 → **ED-IN-0016** · item 10 → **ED-WR-0003**. `id_reservations.yaml` bumped; lane
+handoffs cross-referenced._
 
 Ranked by leverage-per-effort at the seams; each is deliberately one bounded artifact.
 
