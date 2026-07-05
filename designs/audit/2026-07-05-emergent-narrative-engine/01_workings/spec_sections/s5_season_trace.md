@@ -64,7 +64,10 @@ arc_vector:
   trigger:
     predicate:
       - { field: clock.IP, op: ">=", value: 30 }          # IP 30 -> Tutoring Demand
-    resolves_via: dice_pool             # Covert Contact = Intel vs Ob 3 (per season)
+    resolves_via: null                  # the TRIGGER is a clock-threshold READ (IP>=30 via state_reader),
+                                        #  NOT a contest. dice_pool belongs to the Covert-Contact
+                                        #  pressure-effect CONDITION below (Intel vs Ob 3), not the trigger.
+                                        #  Agrees with s2 §Q3.10.
     temporal_window: same-Accounting    # [OPEN - Jordan] fork 3; general convergence uses 4-season cosine
   pressure_effects:
     - { target: track.Torben_Loyalty, delta: -1, cadence: per_season,
@@ -77,7 +80,11 @@ arc_vector:
         condition: "Torben_Loyalty <= 2" }
   payload:
     direction: "Altonian pressure converts the heir into a lever against the dynasty."
-    participating_actors: [Torben, Almud, Elske, Laskaris, Himmensendt, Ehrenwall]
+    participating_actors: [Torben, Almud, Elske, Laskaris, Baralta, Ehrenwall]
+      # +Baralta: grounded ARC-S07 edge — ARC-S45 "Deed Claim Activates" triggers on Torben Loyalty <= 3
+      #  (arc_register_factions.md:38). -Himmensendt: NO ARC-S07 edge (his arcs are Church consecration/
+      #  suppression, arc_register_factions.md:103-118 — not tied to the Torben Loyalty clock). Agrees
+      #  with s2 §Q3.10 participating_actors.
     stakes_tags: [pricing, foreclosure]  # extraction is PRICED; Altonian-oath is FORECLOSURE
     ledger_cause: { citation: "PP-498 (Torben track, params_board_game.md §Torben; clock_registry_v30.md:27)",
                     gate_of: retrieve_as_loyal_heir,
@@ -86,11 +93,20 @@ arc_vector:
     state: seeded                        # seeded -> active -> escalating -> converging -> resolved
     terminal: false
   cross_refs: [ARC-S20, ARC-T02, ARC-T13, ARC-S35, NPC-ARC-LAK, COLLISION-C]
+    # NPC-ARC-LAK is the SINGLE home for the Laskaris IP+3 flip (Elske Loyalty <= 2). It is carried
+    #  HERE as a cross_ref, NOT as an ARC-S07 pressure_effect — ARC-S07 does not write clock.IP; it
+    #  feeds the flip's condition. Agrees with s2 §Q3.10 (fix 8). See Beat 4.2 footnote.
   gaps:
     - { type: struck_mechanic, note: "Coup Counter STRUCK (ED-781); remap to Lowenritter Autonomy",
         cites: "params/factions_personal.md; synthesis fork 1" }         # [OPEN - Jordan]
     - { type: dangling_id, note: "COLLISION-C constituent ARC-T04 is dangling; marker non-firing",
         cites: "arc_register_events.md:37-39; synthesis fork 2" }        # [OPEN - Jordan]
+    - { type: open_number,
+        note: "Torben Loyalty RANGE CONFLICT: the register and sim use start-8 (8->0,
+          arc_register_factions.md:11, sim_arc_01:64) but clock_registry_v30.md:27 is canonical 0-7
+          start-3. THIS TRACE DEPENDS ON start-8 (Beat 2.1 opens at Loyalty 8). Not silently harmonized.",
+        cites: "arc_register_factions.md:11; clock_registry_v30.md:27; tests/sim/sim_arc_01_irrational_player_arcs.md:64" }
+        # [OPEN - Jordan: register vs clock_registry range conflict]
 ```
 
 **Template slots** (the realizer's L5 fragment schema, riding existing Key metadata only —
@@ -140,7 +156,10 @@ function, so it is not in the ~15% judgment-irreducible bucket.
   charter `:61`, carried to Beat 1.2).
 - **Keys out + accounting.**
   - `meta.arc_state_changed` (seeded→active) — **CONSUMED-INTO-STATE** (Class B, C2-internal).
-  - `state.tutoring_demand` — **RENDERED** (Tier-2 cut scene).
+  - `state.tutoring_demand` **[TRACE-ILLUSTRATIVE]** — **RENDERED** (Tier-2 cut scene). This is an
+    illustrative Key NAME for the trace, not a registered `key_type_registry_v30` type; the render
+    fires off the demand's *existing* strategic-Key emission, and Stage-0 §3.1 does **not** add a
+    `state.tutoring_demand` trigger (do not read this as a Stage-0 deliverable).
   - `env.crisis` seed Key (from `scenario_authoring`, `arc_register_events` BG lineage) —
     **CONSUMED-INTO-STATE** (triggers the lifecycle transition).
   - `env.trade_tariff_fluctuation` in T16 (routine seasonal noise) — **DISCARDED-with-reason:
@@ -148,8 +167,10 @@ function, so it is not in the ~15% judgment-irreducible bucket.
     (capstone #8 FAIL case — see S5.2 meaningfulness note).
 - **Surface + register.** Tier-2 cut scene. `{ significance: 10s (stakes 4 + protagonist_align 2,
   per articulation §3.2), coherence: 7–5 Dissonant, ts: 0–29, spirit: n/a (>4), certainty: n/a
-  (non-ecclesiastical), focalizer: protagonist }`. Trigger fired: articulation §3.1 — this is a
-  new **`state.tutoring_demand`** entry the Stage-0 §3.1 completion adds (ED-IN-0004 render root).
+  (non-ecclesiastical), focalizer: protagonist }`. The render rides an **existing** §3.1 render
+  trigger on the demand's strategic Key (the ED-IN-0004 render-gap close is about the *combat/
+  investigation/thread* beats, E9–E11 in s4 §S4.6); the `state.tutoring_demand` label above is
+  **[TRACE-ILLUSTRATIVE]** and is NOT claimed as a Stage-0 §3.1 additive trigger.
 
 **Meaningfulness note (capstone #8).** Test = durability × tie-proximity × identity-touch
 (charter Q3 `:83-88`; synthesis §3). The **tariff fluctuation FAILS**: it moves no slow variable,
@@ -212,6 +233,9 @@ silently dropped.
   - `da.covert_contact{outcome}` — **CONSUMED-INTO-STATE**: writes the Loyalty delta and enters
     ARC-S07's `causes[]` (Q1 `:45-48`, "outcome Keys enter the arc's causes[] chain").
   - `meta.arc_state_changed` (if the outcome flips a lifecycle edge) — **CONSUMED-INTO-STATE**.
+    _(Conditional, off-spine: this Key fires only on the outcome classes that cross a lifecycle edge —
+    e.g. fail→`escalating`; a hold that merely maintains `active` emits none. Not dropped: it is
+    absent by branch, and the S5.4 table rows it as the branch-conditional it is.)_
 - **Surface + register.** `{ significance: 10s, coherence: 7–5, ts: 0–29, focalizer: protagonist }`.
 
 **The player-shaped branch (capstone #3).** The outcome of *this participated scene* changes
@@ -243,8 +267,9 @@ success branch is S5.3 / S5.6._
   chronicle.
 - **Keys out + accounting.**
   - `meta.arc_state_changed` (active→escalating) — **CONSUMED-INTO-STATE**.
-  - `state.autonomy_increment` — **ACCUMULATED** (feeds ARC-S20's coup chain; Domain Echo
-    aggregate-up, §5.2/§5.3).
+  - `state.autonomy_increment` **[TRACE-ILLUSTRATIVE]** — **ACCUMULATED** (feeds ARC-S20's coup
+    chain; this arc→arc feed is **bottom-up substrate delivery (§12.1)**, NOT Domain Echo — "Domain
+    Echo" is reserved for the scene→faction cases of §5, per verifier N2).
   - Tier-2 cut scene Key — **RENDERED**.
 - **Register.** `{ significance: 10s, coherence: 7–5 → 4–3 as strain rises, ts: 0–29, spirit:
   audible if coherence ≤4 (High → Beckett; Low → Lispector, `02_prose_render_stack.md:18-20`),
@@ -278,6 +303,10 @@ Löwenritter). This is the charter-Q3 correlation test (shared targets, causes[]
 window, same-direction pressure on a shared stake, `:86-88`) — and it is genuine *emergence*, not
 one of the 8 hand-authored whitelist conjunctions.
 
+- **Casting / venue (ambient location, N5).** No forced scene. The convergence renders as a Tier-2
+  cut scene **at the T1 Crown court** — the ambient location where the succession/Autonomy pressure is
+  legible (the two crises "rhyme" in the same room the dynasty governs) — plus a chronicle line. No
+  modal popup: the beat renders AT a place (charter venue rule `:116`).
 - **Keys out + accounting.**
   - `meta.convergence_detected{pair: [ARC-S07, ARC-S20], kind: cosine}` — **RENDERED** (Tier-2
     cut scene + chronicle) and feeds the `causes[]` walk (Class B, C2-internal — the label
@@ -315,10 +344,12 @@ one of the 8 hand-authored whitelist conjunctions.
   from the same IP-30 trigger — Belief 1 (Altonian trade) vs Belief 3 (ethical doubt) collide.
 - **Engine state change.** ARC-T02 ticks autonomously; no player Key is consumed (Q1
   non-participation — "FSM steps with zero player Keys", synthesis L1).
-- **Casting / venue.** **Followed-only**: the PC is NOT in ARC-T02's `participating_actors` as a
-  playable role, and the salience budget routes it to **spectator channels only** — a **Tier-2 cut
-  scene of Almud alone** + a chronicle line. **No slate scene, no casting hook consumed.** Watching,
-  not participating (charter `:118-121`).
+- **Casting / venue (ambient location, N5).** **Followed-only**: the PC is NOT in ARC-T02's
+  `participating_actors` as a playable role, and the salience budget routes it to **spectator channels
+  only** — a **Tier-2 cut scene of Almud alone at the T1 Crown court** (his private chambers / the
+  chapel-adjacent study where his Belief crisis plays out) + a chronicle line. **No slate scene, no
+  casting hook consumed.** Watching, not participating (charter `:118-121`); the beat still renders AT a
+  named place (`:116`).
 - **Keys out + accounting.**
   - `state.belief_revised{actor: Almud}` — **RENDERED** (articulation §3.1 trigger 10,
     `articulation_layer_v30:92`, sig=7 mid-tier).
@@ -366,12 +397,17 @@ actor one edge from the PC's Bond), identity-touch (Belief/Conviction). Contrast
 
 - **Keys in.** Extraction failed / declined; `track.Torben_Loyalty = 2`, and `Crown_Mandate −2`
   cumulative has crossed (`arc_register_factions.md:11`).
-- **Engine state change.** An **EDGE-TRIGGERED arc event** fires — `state.altonian_oath_sworn` —
-  the "Torben Altonian" ending (`sim_arc_01:37,68`). This **permanently forecloses** the
+- **Engine state change.** An **EDGE-TRIGGERED arc event** fires — `state.altonian_oath_sworn`
+  **[TRACE-ILLUSTRATIVE]** (an illustrative Key name, not a registered type) — the "Torben Altonian"
+  ending (`sim_arc_01:37,68`). This **permanently forecloses** the
   `retrieve_as_loyal_heir` path (`payload.ledger_cause`). It also fires `Crown_Mandate −2`
   (Domain Echo aggregate-up, §5), feeding **ARC-S35 Succession Vacuum** (`:31-32`) and promoting
   **Elske** as the only viable heir (`sim_arc_01:68`), and it may flip **Laskaris** (NPC-ARC-LAK,
   `:312-313`, IP +3) if Elske Loyalty ≤ 2.
+  _(Conditional, off-spine: the Laskaris IP+3 is **NPC-ARC-LAK's own** pressure_effect fired on its own
+  condition — carried as an ARC-S07 cross_ref, never an ARC-S07 pressure_effect (S5.1 note, fix 8/13).
+  It fires only if Elske Loyalty ≤ 2; on the traced spine Elske is promoted but not yet ≤ 2, so it is
+  off-spine, not dropped.)_
 - **Casting / venue.** **Chronicle (Tier-3, mandatory)** + a final Tier-2 cut scene at T16.
 - **Keys out + accounting.**
   - `state.altonian_oath_sworn` — **RENDERED** (mandatory Tier-3 chronicle beat, see sidebar) +
@@ -407,9 +443,14 @@ coup chain; Church as antagonist) → **world** (Altonia / IP / peninsula). **Fo
 carried its beat on the same aggregate-up / distribute-down transport as state (charter `:69-73`).
 
 **Type-check against `scale_transitions_v30` §5/§12 (capstone #12).** ARC-S07 is
-transport-conformant: the Loyalty check (individual scale) meets Sufficient Scope and echoes to
-faction via **Domain Echo §5** (`:313` bottom-up); Loyalty≤3→Autonomy and Loyalty≤2→Mandate−2 are
-**aggregate-up §5.2/§5.3**; the Tutoring Demand strategic Key reaches Torben/Halden by **populating
+transport-conformant: the Loyalty check (individual scale) meets Sufficient Scope — specifically the
+**§7.1 sub-condition of a designated representative**: Torben acts as the Crown's **heir / designated
+representative**, so his personal-scale Loyalty outcome legitimately echoes to faction scale (not every
+personal act qualifies; this one does because the actor carries delegated dynastic standing) — and
+echoes to faction via **Domain Echo §5** (`:313` bottom-up). The Loyalty≤2→Mandate−2 delta is that
+same scene→faction **Domain Echo** consequence; the **Loyalty≤3→Autonomy** feed is arc→arc and is
+**bottom-up substrate delivery (§12.1)**, not Domain Echo (verifier N2 — "Domain Echo" reserved for the
+scene→faction cases). The Tutoring Demand strategic Key reaches Torben/Halden by **populating
 sub-scale `targets[]` per §12.3** (down-target), the exact discipline the §12.4 down-seam
 `scenario_authoring → settlement_layer` names; delivery is **all-directions §12.1** through the one
 substrate (no private channel, §12.2). No new mechanism is introduced — the arc rides existing
@@ -539,21 +580,26 @@ data layer.
 
 ## S5.7 Conformance rules the trace exercises (each lives once in `tools/`)
 
-| R | Rule | Beat that exercises it |
-|---|---|---|
-| R1 | `predicate-field-resolves` (dangling-ID / struck-mechanic) | 3.2 (COLLISION-C / ARC-T04); 3.1 (Coup Counter remap) |
-| R2 | `consumer-closure` (every emitted Key names ≥1 consumer) | S5.4 (both new Class B types) |
-| R3 | `total-accounting` (rendered/accumulated/consumed/discarded, no silent drop) | S5.4 |
-| R4 | `C2 literal-string lint` (no narratological label surfaces) | 3.2 ("convergence" never shown) |
-| R5 | `convergence-effect-traceability` (cosine-detected outside register = zero pressure_effects; every authored delta traces to a register line) | 3.2 |
-| R6 | `watching/participating` = **offered** windows, never taken | 4.1 |
-| R7 | `engagement-window-divergence` (≥2 outcome classes → ≥2 successor states) | 2.1 / S5.3 |
-| R8 | `scene_entered single-emitter` (game_director only) | 1.2, 4.1 (O-1) |
-| R9 | `foreclosure` = edge-triggered only + mandatory Tier-3 render | 4.2 |
-| R10 | `gating:pricing ratio` (gating vectors carry justification) | S5.4 note |
-| R-ORD | convergence emit-order preserving (no `set()` gates order) | 3.2 sidebar |
-| R-FP | replay-critical thresholds quantized to integer grid; port-pinned | 3.2 sidebar |
-| R-RND | realizer fragment selection is deterministic (see O-4) | all RENDERED beats |
+The `R` column below is this trace's **local** label; the canonical CI home and numbering is
+`s4_substrate.md §S4.9` (`R1–R10`). Where the local number differs from s4's, the **`= s4 R#`**
+cross-label is given (stated once here; in-text sidebar references use the local number). Local R1–R4
+and R6 coincide with s4; local R5/R7/R8/R9/R10 do **not** — read them through the cross-labels.
+
+| R (local) | s4 R# | Rule | Beat that exercises it |
+|---|---|---|---|
+| R1 | **s4 R1** | `predicate-field-resolves` (dangling-ID / struck-mechanic) | 3.2 (COLLISION-C / ARC-T04); 3.1 (Coup Counter remap) |
+| R2 | **s4 R2** | `consumer-closure` (every emitted Key names ≥1 consumer) | S5.4 (both new Class B types) |
+| R3 | **s4 R3** | `total-accounting` (rendered/accumulated/consumed/discarded, no silent drop) | S5.4 |
+| R4 | **s4 R4** | `C2 literal-string lint` (no narratological label surfaces) | 3.2 ("convergence" never shown) |
+| R5 | **s4 R9** | `convergence-effect-traceability` (cosine-detected outside register = zero pressure_effects; every authored delta traces to a register line) | 3.2 |
+| R6 | **s4 R6** | `watching/participating` = **offered** windows, never taken | 4.1 |
+| R7 | **s4 R10** | `engagement-window-divergence` (≥2 outcome classes → ≥2 successor states) | 2.1 / S5.3 |
+| R8 | **s4 R5** | `scene_entered single-emitter` (game_director only) | 1.2, 4.1 (O-1) |
+| R9 | **s4 R8** | `foreclosure` = edge-triggered only + mandatory Tier-3 render | 4.2 |
+| R10 | **s4 §S4.9 deferred gate** | `gating:pricing ratio` (gating vectors carry justification) | S5.4 note |
+| R-ORD | **s4 R7** | convergence emit-order preserving (no `set()` gates order) | 3.2 sidebar |
+| R-FP | **s4 §S4.2** | replay-critical thresholds quantized to integer grid; port-pinned | 3.2 sidebar |
+| R-RND | **s4 §S4.2.4** | realizer fragment selection is deterministic (see O-4) | all RENDERED beats |
 
 > **Scheduling / director sidebar (C7, applies to every RENDERED beat).** The L3 director is a
 > **stateless budget CEILING**, not a curve-shaper. It may only **SUBTRACT** — ration the 3–5
@@ -619,3 +665,142 @@ data layer.
 - **O-8 · GM-judgment-irreducible ~15% (fork 7).** ARC-S07 is not in this bucket, but the
   conformance suite must handle arcs that are (ARC-P05, ARC-S29): author a decision function vs
   declare non-firing in `gaps[]`. **Default: declare non-firing (honesty ledger).** `[OPEN — Jordan]`
+- **O-9 · Director tension-curve reversal.** The S5.7 scheduling sidebar (and CR-9 / `director-
+  subtract-only`) has the director adopt **subtract-only** rationing (RATION/DEMOTE only; never INSERT
+  / ADVANCE / reorder / delay / time-compress), which **reverses** the charter's "director … owns the
+  tension curve" (Q4 `:128-129`). **Default (recommended): subtract-only** — doc-10 §8.5 "no designed
+  dramatic timing" stands (charter `:104-105`); event timing stays fully emergent and any "tension
+  curve" is a read-only backward observation, never a steered target. This is a **hard design call
+  held back for explicit Jordan sign-off, flagged in the PR body**, not bundled as routine work
+  (CLAUDE.md §2 ED-1094). Shared with s1 fork 5, s2 §Q3.11 fork 7. `[OPEN — Jordan]`
+
+---
+
+## Appendix A — Factionless mini-trace (the charter's named acceptance test)
+
+_The charter's on-ramp acceptance test: **"a factionless PC gets playable seasons"** (charter Q2
+L67–68; s1 §Q2.3.c ladder). One season, a PC with **zero faction edges** — no Standing, no Duty, no
+`scope.faction` membership. The casting rule is the SAME one rule (s1 §Q2.1): with faction/Standing
+edges absent, the **Conviction edge** and the **location edge** do the casting (player_agency §4.2
+Steps 4 / 6 / 7 fire independent of faction membership). This is the first rung of the ladder —
+Conviction/location → settlement arc → Standing/Obligation proto-currency → Outreach._
+
+**The PC.** "Sef" — a factionless Thread-curious traveler currently in **T6 (Stillhelm)**. Standing 0
+with every faction; Renown 1. Conviction (player-authored, player_agency §2.3): *"I will preserve the
+**Einhir** folk-memory of the southern villages."* — "Einhir" is a Step-4 System keyword
+(player_agency §4.2:258), so it fires Conviction-aligned scenes with no faction edge required. The
+grounded, load-bearing part is the pair of edges `Conviction(Sef, Einhir-memory)` + `location(Sef, T6)`
+[UNGROUNDED — Sef is a trace vehicle].
+
+#### Beat A.1 — The village moot (casting via Conviction + location, NO faction edge)
+
+- **Keys in.** `TE-21` (Folklore Season, `arc_register_territory.md:61`, Restoration Movement | T6)
+  is active in T6; its settlement event surfaces a candidate. `game_director` reads the tie-graph:
+  no Standing/faction edge exists, but `Conviction(Einhir)` (Step 4) **and** `location(T6)` (Step 6,
+  Territorial) both match → Sef is cast. The matched edge IS the why-you (s1 §Q2.1): _"You have been
+  asking the old questions in Stillhelm; the elders noticed."_
+- **Engine state change.** A settlement arc-vector books a beat; no faction resolution involved (C3).
+- **Casting / venue.** **Settlement-governance venue** — a village moot over whether to record or
+  suppress the old rites (charter venue matrix `:113-116`) — a **slate scene** (participating). Ambient
+  location: the Stillhelm commons, T6.
+- **Player choice + alternatives.** Argue to preserve the folk-memory (social contest, Evidence-styled)
+  / stay silent (non-participation input; the moot resolves on the elders' own Disposition).
+- **Keys out + accounting.**
+  - `mechanical.scene_entered` — **RENDERED** (game_director single-source, O-1).
+  - `scene.dialogue` (the moot) — **RENDERED** (played slate scene).
+  - `state.obligation_incurred{to: village elder}` **[TRACE-ILLUSTRATIVE]** — **ACCUMULATED** into the
+    ledger-of-you (this is the proto-faction currency, s1 §Q2.3.c; not a faction Standing).
+- **Surface + register.** Slate scene. `{ significance: 10s, coherence: PC live band, ts: 0–29,
+  certainty: n/a, focalizer: protagonist }`.
+
+#### Beat A.2 — Standing/Obligation accrual (the proto-currency)
+
+- **Keys in.** Beat A.1 outcome Key re-enters the settlement arc's `causes[]`.
+- **Engine state change.** Conviction *pursued* (a genuine step, player_agency §2.3): **Renown +1**
+  (`player_agency §5.4` Renown source; cap +2/season) — Renown is the cross-faction proto-currency that
+  persists with no faction (`player_agency §5.3` Staying Independent). A **local Standing** with the
+  Stillhelm elders accrues as Disposition, not institutional Standing.
+- **Casting / venue.** No scene — a **Tier-1 ambient lens** update (the personal Renown/Obligation
+  tracker) + a **texture** line (the village now speaks of Sef).
+- **Keys out + accounting.**
+  - `Renown +1` — **ACCUMULATED** (ledger-of-you; §5.4).
+  - `state.local_standing{Stillhelm}` **[TRACE-ILLUSTRATIVE]** — **ACCUMULATED** (proto-faction
+    currency).
+- **Surface + register.** Tier-1 lens + texture. `{ significance: flash, focalizer: protagonist }`.
+
+#### Beat A.3 — The Outreach hook (next season)
+
+- **Keys in.** Next season's casting pass reads the tie-graph: the `Obligation(Stillhelm elder, Sef)`
+  edge from Beat A.1 is now the strongest edge to a live vector.
+- **Engine state change.** A Restoration-Movement organizer issues an **NPC Outreach**
+  (`npc_behavior §8.11`, ≤3/season; player_agency §4.2 Step 5) — **recruitment-as-arc**, the ladder's
+  next rung (s1 §Q2.3.c). Cast by the SAME one rule (s1 §Q2.1) on the Obligation edge.
+- **Casting / venue.** A **Tier-2 cut scene** (spectator surface carrying a casting hook, s3 §Q4.3)
+  that ends on a **next-season slate candidate** — "you could go there."
+- **Keys out + accounting.**
+  - `state.outreach_offered{from: Restoration organizer}` **[TRACE-ILLUSTRATIVE]** — **RENDERED**
+    (cut scene) + **ACCUMULATED** (the slate candidate carried to next season).
+- **Surface + register.** Tier-2 cut scene → slate candidate. `{ significance: 10s, focalizer:
+  protagonist }`.
+
+**Acceptance test met.** Sef had a playable season (a played moot), accrued proto-currency
+(Renown + Obligation) with zero faction edges, and leaves the season with an Outreach hook — the
+factionless on-ramp firing entirely on Conviction + location casting, exactly the ladder s1 §Q2.3.c
+builds. No beat required a faction Standing, and no beat was a modal popup (each rendered AT T6 or in
+the lens/texture, charter `:116`).
+
+---
+
+## Appendix B — Effect-bearing convergence mini-trace (COLLISION-B, register-authored)
+
+_Beat 3.2's convergence (ARC-S07↔ARC-S20) was **cosine-detected** and therefore **RENDER-ONLY, zero
+`pressure_effects`** (R5 / s4 R9). This appendix demonstrates the detector's **other** path — a
+**register-authored** COLLISION that CARRIES authored combined deltas as `pressure_effects`. We fire
+**COLLISION-B "Practitioner King"** (`arc_register_events.md:33-35`)._
+
+**Why COLLISION-B (least-blocked choice).** Its constituents are **ARC-S17** (Almud Discovery Event,
+TS 28→30), **ARC-S23** (Elske installed independently), and **ARC-S07** (Torben in Altonia — the
+spine's Beat 4.2 foreclosure outcome). **None of the three depends on the STRUCK Coup Counter**, so no
+fork-1 remap is needed to fire it. (COLLISION-F, by contrast, lists "Coup Counter ≥ 2" as one of its OR
+trigger paths, `arc_register_events.md:52` — it would ride the struck mechanic under the fork-1 default
+1:1 remap. COLLISION-B is the cleaner demonstration.) ARC-S07 feeds COLLISION-B directly via
+"Torben in Altonia," which the traced spine produced at Beat 4.2.
+
+#### Beat B.1 — COLLISION-B fires (register-authored → effect-bearing)
+
+- **Keys in (at the ACCOUNTING_BOUNDARY, over settled state).** Three constituent lifecycle states
+  co-occur: ARC-S17 `converging` (Almud's Discovery Event, ARC-S17 `arc_register_factions.md:16`),
+  ARC-S23 `resolved` (Elske installed, `arc_register_factions.md:22-23`), ARC-S07 foreclosed
+  (Torben Altonian, this trace's Beat 4.2).
+- **Engine state change.** The **Tier-A detector** matches the COLLISION-B conjunction
+  (`edge_triggered_once`, dedup by the ordered key `(COLLISION-B, sorted(actor_ids), season)` — R-ORD /
+  s4 R7, never a bare `set()`). Because COLLISION-B is one of the **8 register-authored** markers, it is
+  **effect-bearing**: it applies its authored combined deltas.
+- **Casting / venue.** A **Tier-2 cut scene at the T1 Crown court** + a Tier-3 chronicle line — the
+  three-bodied dynasty "distributed across three people in three states" (`arc_register_events.md:34`)
+  recognized, not played. The label "convergence" **never surfaces** (C2 / R4).
+- **Keys out + accounting.**
+  - `meta.convergence_detected{conjunction: COLLISION-B, provenance: register_authored}` —
+    **RENDERED** (Tier-2 + chronicle) + feeds the `causes[]` walk.
+  - `pressure_effect: clock.TC +3` — **CONSUMED-INTO-STATE**. **Traces to a register line**
+    (`arc_register_events.md:35` "TC +3 but RS improves"), so it PASSES R5 / s4 R9 provenance — the
+    delta is authored, not fabricated.
+  - `pressure_effect: RS improvement` (qualitative "RS improves", same register line) —
+    **CONSUMED-INTO-STATE**; traces to the same line.
+- **Contrast (the effect-bearing seam).** Unlike Beat 3.2's cosine S07↔S20 (zero `pressure_effects`,
+  render-only), COLLISION-B mutates clocks/stats **because it is register-authored**. Every delta here
+  traces to `arc_register_events.md §VI`; a cosine-detected marker attempting the same would be compiled
+  effect-free (R5 / s4 R9). This is the detector's two-path discrimination made concrete.
+
+**Accounting rows (Appendix B):**
+
+| Beat | Key | Class | Note |
+|---|---|---|---|
+| B.1 | `meta.convergence_detected{COLLISION-B, register_authored}` | RENDERED | Tier-2 + chronicle; deduped ordered key (R-ORD) |
+| B.1 | `clock.TC +3` (authored combined delta) | CONSUMED-INTO-STATE | traces `arc_register_events.md:35` (R5 / s4 R9 PASS) |
+| B.1 | `RS improvement` (authored, qualitative) | CONSUMED-INTO-STATE | same register line; effect-bearing |
+
+**Verdict.** COLLISION-B exercises the effect-bearing convergence path end-to-end: register-authored →
+authored deltas applied → every delta traced to a register line → total-accounting closed. It is the
+positive counterpart to Beat 3.2's render-only cosine case, and it fires with **no Coup-Counter
+dependency** (no fork-1 remap required).

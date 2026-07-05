@@ -233,6 +233,20 @@ expose **≥2 participated-outcome classes mapping to ≥2 distinct next `lifecy
 `pressure_effects` sets). A window whose outcomes collapse to one successor is flagged **illusory-choice
 at compile** — a build error, not a runtime surprise.
 
+**Reconciling CR-3 with the arc-generator emergence standard.** CR-3 (a participated window *must*
+change the arc's trajectory) sits against the arc-generator's hard rule that *"no single player decision
+caused this; it required multiple independent systems running simultaneously"*
+(`skills/valoria-arc-generator/SKILL.md:74`). These are not in tension once the player's role is stated
+precisely: **the player *selects among* already-emergent branches, and *accelerates or defers* an arc —
+the player never *authors* the arc.** An arc-vector exists, is seeded, and ticks because multiple
+independent vectors converged (the emergence standard); the participated outcome at an engagement window
+picks *which* pre-authored successor `lifecycle.state` the FSM steps to (CR-3), and can advance or delay
+its clock — but it cannot conjure a vector, invent a branch the register did not author, or make the arc
+about the player alone. The **±2/season stat cap** (`skills/valoria-arc-generator/SKILL.md:80`) and
+**multi-vector causation** both still hold: a single choice bounded at ±2/season and selecting among
+authored branches cannot *be* the arc's sole cause. So CR-3 guarantees the choice *matters* without
+demoting the arc to a plot hook — exactly the arc-generator's "plot hook vs emergent arc" line.
+
 **Foreclosure-via-clock ban (applies adversarial MAJOR "foreclosure fires silently via passive
 threshold").** `activity_mode` includes `clock_escalation` / `level_triggered` with ±2/season deltas; a
 passive clock crossing a foreclosure threshold with *no arc event* violates the charter's "foreclosure
@@ -406,6 +420,18 @@ L104–105, "doc-10 §8.5 NOT-list stands").
   will NOT improvise their selection logic.
 - **No guaranteed novelty** — the arc space is the compiled register; the engine cannot author a story
   outside its ~110 vectors + their convergences.
+- **No single-character heroic arc** (doc-10 §8.5 NOT-list) — the engine does not center a lone
+  protagonist as the causal engine of the world; arcs are multi-vector and multi-actor by construction
+  (the arc-generator emergence standard, `skills/valoria-arc-generator/SKILL.md:74`, "no single player
+  decision caused this"), and NPCs are co-protagonists on the same ledger (§Q3.7), never a supporting cast.
+- **No authored mystery / reveal arc** (doc-10 §8.5 NOT-list) — the engine does not withhold a
+  pre-authored secret to be "revealed" on a beat-sheet; what looks like a mystery is the `causes[]` walk
+  read *backwards* (§Q3.7 PLOT retrospect), assembled from mechanical provenance, not a scripted
+  concealment with a planted payoff.
+- **No failure-of-the-world model** (doc-10 §8.5 NOT-list) — there is no global "lose state" or authored
+  apocalypse the engine steers toward; the world persists and re-scopes (arcs fizzle to `dormant` /
+  `abandoned`, factions collapse into new pressure vectors, e.g. ARC-T13), and consequences are local
+  and mechanical, never a designed game-over curve.
 
 ---
 
@@ -511,6 +537,22 @@ fork 6, §Q3.11.
 | CR-11 | **meaningfulness-integer-arithmetic** — meaningfulness + cosine thresholds computed in fixed-point/integer; identical arithmetic pinned in the GDScript port + key-log parity harness | V4, ED-1050 port-parity class |
 | CR-12 | **consumer-closure** — every emitted Key (incl. `meta.convergence_detected`, `meta.arc_state_changed`) names ≥1 declaring consumer | substrate contract (L145–146) |
 
+**Harmonization with s4's `R1–R10` conformance scheme (stated once).** s4 (`s4_substrate.md §S4.9`) is
+the connective home for the CI rule set and numbers them `R1–R10`; this section's `CR-N` labels map onto
+it as follows (where a `CR` has no single s4 `R`, s4 folds it into another rule):
+
+| this file | s4 rule | this file | s4 rule |
+|---|---|---|---|
+| CR-1 convergence-dedup-ordered | **s4 R7** (no-set()-gates-convergence-order) | CR-7 C2-literal-string-lint | **s4 R4** (C2 literal-string lint) |
+| CR-2 convergence-effect-traces-register | **s4 R9** (convergence-effect-provenance) | CR-8 slow-write-attributed | folds into **s4 R2/R3** (consumer-closure + total-accounting `ledger_cause`) |
+| CR-3 engagement-window-divergence | **s4 R10** (engagement-window-divergence) | CR-9 director-subtract-only | **s4 §S4.10** (folds into R3/R4; no bare R#) |
+| CR-4 foreclosure-surfaces | **s4 R8** (foreclosure-mandatory-render) | CR-10 gating-priced-or-justified | **s4 §S4.9 deferred gate** (pricing-over-gating; no bare R#) |
+| CR-5 causes-populated | folds into **s4 R3** (total-accounting linter) | CR-11 meaningfulness-integer-arithmetic | **s4 §S4.2** replay-determinism (key-log parity harness; no bare R#) |
+| CR-6 rationing-total-order | **s4 §S4.2.4** Top-N total order (no bare R#) | CR-12 consumer-closure | **s4 R2** (consumer-closure) |
+
+s4's `R1` (predicate-field-resolves) and `R5` (scene_entered single-emitter) have no `CR-N` peer here —
+they belong to the compile/substrate lanes, not this section's Q3 detector/lifecycle surface.
+
 ---
 
 ## §Q3.10 — Worked compilation: ARC-S07 "Torben Loyalty Clock" (capstone #10, end-to-end)
@@ -550,13 +592,17 @@ arc_vector:
         condition: "3 consecutive successful Covert Contacts"
         # [GAP missing_field] per-vector consecutive-success streak counter; pattern exists
         #  (Thread Fatigue, module_contracts.yaml:280) but is not generalized. }
-    - { target: clock.IP, delta: "+3", cadence: immediate,
-        condition: "Laskaris flip: npc_track.Elske.Loyalty <= 2 (PROTECTIVE flaw,
-                     npc_roster_v30.md:179/141 Behavioral AI rule — NOT gm_judgment)" }
+    # NOTE: the Laskaris IP+3 flip (Elske Loyalty <= 2) is NOT an ARC-S07 pressure_effect — it is
+    #  its own vector NPC-ARC-LAK (arc_register_factions.md:312-313), carried below as a cross_ref
+    #  (single home, agrees with s5.1). ARC-S07 does not write clock.IP; it feeds the flip's condition.
   payload:
     direction: "Altonian pressure converts the heir into a lever against the dynasty."
     participating_actors: [Torben, Almud, Ehrenwall/Löwenritter, Laskaris, Elske, Baralta]
-    stakes_tags: [gating, pricing, pattern_response]
+    stakes_tags: [pricing, foreclosure]   # reconciled with s5.1: extraction is PRICED (Beat-2.1/4.1
+      #  ledger cause), the Altonian oath is FORECLOSURE (retrieve_as_loyal_heir permanently closes).
+      #  'gating' dropped — the one GATED *option* (Formal Crown Treaty) is an ARC-T17 diplomacy wall,
+      #  not an ARC-S07 transition; 'pattern_response' dropped as weakly grounded (no divergent-summons
+      #  edge is authored on this vector). Matches s5 stakes_tags exactly.
     ledger_cause: ["PP-498 (Torben track, params/board_game.md §Torben)"]
   lifecycle:
     state: escalating          # live value; enumerates:
@@ -567,12 +613,21 @@ arc_vector:
       #  → resolved (floor 6 reached) | abandoned (Loyalty 0 → ARC-T13 Crown-elimination branch,
       #    arc_register_factions.md:43-44)
     terminal: false
-  cross_refs: [ARC-S20, ARC-T02, ARC-T13, COLLISION-B, COLLISION-C, COLLISION-F]
+  cross_refs: [ARC-S20, ARC-T02, ARC-T13, ARC-S35, NPC-ARC-LAK, COLLISION-B, COLLISION-C, COLLISION-F]
+    # NPC-ARC-LAK = the Laskaris IP+3 flip's home vector (moved out of pressure_effects, above; agrees
+    #  with s5.1). ARC-S35 (Succession Vacuum) is fed by the foreclosure ending.
   gaps:
     - { type: struck_mechanic, note: "Coup Counter increment step (fork 1)",
         cites: ["params/factions_personal.md:68,103-107", "arc_register_factions.md:11"] }
     - { type: missing_field, note: "3-consecutive-success streak counter (ED-IN-0003 family)",
         cites: ["module_contracts.yaml:280"] }
+    - { type: open_number, note: "ED-609 (OPEN) — Torben Beliefs/Conviction emergence unspecified
+        (first faction to Disposition>=+2 in window sets Torben's initial Conviction). The Loyalty-clock
+        MECHANICS do NOT depend on it — ARC-S07 compiles and runs the 8->0 track regardless. It is
+        flagged because the meaningfulness identity-touch (§Q3.1) reads Torben's Conviction/Belief as a
+        slow variable, and that seeding is not yet formally specified. Disposition: compile leaves ED-609
+        OPEN (not a blocker); do not fabricate Torben's initial Conviction.",
+        cites: ["canon/editorial_ledger.jsonl (ED-609)", "designs/arcs/arc_expansion_v30.md:758"] }
 ```
 
 **End-to-end trace (the capstone story path):**
@@ -603,9 +658,14 @@ arc_vector:
    references it via the `causes[]` walk — recognized *backwards* as story (§Q3.7 PLOT).
 
 **Verdict:** machine-checkable-with-new-field. Every clock/stat is canonical (Torben Loyalty:
-`clock_registry_v30.md:27`, range 0–7 start 3 — the register's "8→0" is a looser gloss on the same range,
-not a contradiction). The two blockers (Coup Counter migration, streak counter) are **buildable, not
-GM-judgment** (`dossier_register_formalizability` §5).
+`clock_registry_v30.md:27`, range 0–7 start 3 — the register's "8→0" gloss is a **live range conflict the
+season trace depends on**, flagged `[OPEN — Jordan]` in s5 §S5.1, not silently harmonized). The two
+blockers (Coup Counter migration, streak counter) are **buildable, not GM-judgment**
+(`dossier_register_formalizability` §5). **ED-609 (OPEN) is a dependency the compile DOES NOT take on:**
+the Loyalty-clock mechanics run without Torben's Conviction-emergence spec; ED-609 is carried in `gaps[]`
+as an open-number item because the meaningfulness identity-touch reads Torben's Conviction as a slow
+variable whose *seeding* is unspecified — the arc compiles and fires, but the engine must not fabricate
+that initial Conviction (anti-fabrication, CLAUDE.md §5/§7).
 
 ---
 
@@ -633,6 +693,23 @@ GM-judgment** (`dossier_register_formalizability` §5).
    (`dossier_content_economics` §3 item 3, ~5–6× multiplier). Fallback if bake cost prohibitive = Certainty
    as a runtime lexicon-swap, which restores the ~350–450 figure. The section headline uses low-thousands
    under the default. `[OPEN — Jordan tuning-adjacent]`
+7. **Director tension-curve reversal.** CR-9 (`director-subtract-only`, §Q3.7/§Q3.9) has *all* sections
+   adopt **subtract-only** rationing (RATION/DEMOTE only; never INSERT / ADVANCE / reorder / delay /
+   time-compress), which **reverses** the charter's "director … owns the tension curve" (Q4 L128–129).
+   **Default (recommended): subtract-only** — doc-10 §8.5 "no designed dramatic timing" stands (charter Q3
+   L104–105); event timing stays fully emergent, and any "tension curve" is a backward *reading*, never a
+   steered target. This is a hard design call **held back for explicit Jordan sign-off and flagged in the
+   PR body**, not bundled as routine work (CLAUDE.md §2 ED-1094). Shared with s1 fork 5, s5 O-9.
+   `[OPEN — Jordan]`
+
+**Fork-numbering harmonization with s5's `O-1..O-8` scheme (stated once).** s5 (`s5_season_trace.md §S5.8`)
+labels the same open forks `O-N`; this section's forks map on as: **fork 1** (Coup Counter) = **s5 O-2** /
+synthesis fork 1; **fork 2** (ARC-T04/COLLISION-C) = **s5 O-3** / synthesis fork 2; **fork 3** (temporal_
+window) = **s5 O-5**; **fork 6** (Certainty bake axis) = **s5 O-6**; **fork 5** (GM-judgment ~15%) = **s5
+O-8**; the **held-back `scene_entered`** call below = **s5 O-1**; the new **fork 7** (director tension-curve)
+= **s5 O-9**. This section's **fork 4** (`lifecycle.state` ownership) has no s5 `O-` peer — it lives in the
+substrate lane (`s4_substrate.md §S4.11 fork 2`). s5's `O-4` (realizer fragment-selection determinism) and
+`O-7` (engine_clock/Gate-0) are render/staging-lane forks with no `Q3` fork peer here (see §Q3.12 seams).
 
 ### Held-back hard calls flagged for the PR body (NOT silently resolved — CLAUDE.md §2)
 
