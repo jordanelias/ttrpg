@@ -1,6 +1,6 @@
 # Edge inventory — the seams under audit
 
-## Status: PROPOSED (audit grounding — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — "Ratify all", with the report)
 _Assembled by the Fable orchestrator from `references/module_contracts.yaml` (27-module contract
 spine, schema-2), `designs/architecture/scale_transitions_v30.md` (§3 eight handoffs + §3.9
 fieldwork table + §4 zoom + §5 Domain Echo family + §12 all-directions rule), the key-type
