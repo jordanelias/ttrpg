@@ -44,13 +44,16 @@ Evidence: `01_workings/dossier_code_architecture.md` (agent A) + orchestrator re
 
 The 13-module kernel (`sim/personal/contest/`, 5,858 LOC) is the most disciplined code surface in
 `sim/`: near-every canonical constant carries an inline params/ED citation; the `MECHANICS` registry
-self-reports 16 WIRED / 1 PARTIAL / 3 STUB rather than over-claiming (`wrapper.py:270-338`); the
+self-reports 21 WIRED / 1 PARTIAL / 3 STUB across 25 rows rather than over-claiming
+(`wrapper.py:270-338`; count settled by orchestrator re-derivation after dossier A and the critic
+disagreed — critic.md bonus catch); the
 seeded oracle gates CI on an exact 385-check count (`sim/tests/test_contest_kernel.py:84`). Stubs are
 structurally honest — registered rows that raise loudly, not silent no-ops.
 
 Flags:
-- **78 `[SEED]` constants** (census: dossier A §5) — the entire balance surface beneath the structural
-  skeleton is provisional. Two calibration constants (`RES_FLOOR`, `REBUT_CAP`, `resolver.py:33,35`)
+- **78 `[SEED]` tags** (census: dossier A §5; tag-occurrence count re-verified by the orchestrator —
+  the critic's lower figure counted unique constants, several of which carry multiple tags) — the
+  entire balance surface beneath the structural skeleton is provisional. Two calibration constants (`RES_FLOOR`, `REBUT_CAP`, `resolver.py:33,35`)
   are of `[SEED]` character but lack the tag, weakening the census as a debt tracker.
 - **N-2 — two contradictory Argue-pool formulas are simultaneously live.** The deprecated stub
   implements canon verbatim — `(Primary×2)+History−Wounds+fatigue`, floor 1
@@ -172,8 +175,10 @@ agrees (KT-7 lineage). The walk simply cannot be run for ¾ of the design.
 
 One Agôn exchange requires **~13 recurring per-decision consultations** (pool, TN, genre bonus, boost
 table, armature reveal state, both Faces, Concentration, Track, Doubt Marker, interaction-type
-prediction, Recall availability, Momentum — dossier D §2), against the immersion audit's **3–4 ceiling
-for personal scenes** and above even its "7 at ceiling" strategic allowance. The walkthrough's screens
+prediction, Recall availability, Momentum — dossier D §2's enumeration; the critic notes the exact
+digit is not independently re-derivable, and the conclusion is robust to ±2 items), against the
+immersion audit's **3–4 ceiling for personal scenes** and above even its "7 at ceiling" strategic
+allowance. The walkthrough's screens
 compress three of these (bars, post-roll interaction naming, style-cards-as-single-pick) and leave ten.
 This is a *design-shape* problem, not a UI-polish problem: legibility-per-item is excellent, but the
 item count is triple the corpus's own stated budget, and no onboarding/complexity-gating doc exists
@@ -274,8 +279,11 @@ and it must precede Stage 4 because Stage 4 multiplies interaction shapes — bu
 on an interaction model that has never met a player risks quadrupling a known overrun. P2 then lands
 on a system where a new game-shape can be reached by a campaign, echoes into the world, and gets
 played by a human in the same week it is built. P4 last, once the formulas it would calibrate are
-chosen and reachable. Every step above is a candidate in `ed_options.md`, not a decision — the
-sequencing is this audit's judgment; the picks are Jordan's.
+chosen and reachable. The independent critic built the strongest available case for Stage-4-first
+(the ratified workplan's own ordering; the derivation bridge being open-ended design work) and
+concluded it does not survive contact: the workplan never weighed reachability, and Stage 4 built
+first still ships games nothing can reach (`01_workings/critic.md`). Every step above is a candidate
+in `ed_options.md`, not a decision — the sequencing is this audit's judgment; the picks are Jordan's.
 
 ---
 
