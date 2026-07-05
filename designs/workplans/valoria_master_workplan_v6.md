@@ -295,8 +295,17 @@ M1 · T1 blocks a named stage · T2 taste/tuning/housekeeping._
 
 - **Monthly reconcile (J-14, institutionalized):** checklist = re-verify ledger counts by
   scan → refresh §5 pointers (strike resolved rows, no status edits elsewhere) → confirm
-  CURRENT.md rows against heads → confirm handoff freshness per lane → dated-snapshot the
-  session inventory delta → one commit `[editorial]` citing this section.
+  CURRENT.md rows against heads → confirm handoff freshness per lane → refresh the
+  progress board (below) → dated-snapshot the session inventory delta → one commit
+  `[editorial]` citing this section.
+- **Progress board (ED-IN-0010):** `designs/workplans/workplan_v6_progress.yaml` is the
+  ONE designated home for milestone/juncture-level rollup status (a rollup nothing else
+  carries — lane detail stays in the handoffs; rows point at evidence). Rendered only by
+  `tools/workplan_status.py` (one-liner in the SessionStart banner; `--full` ASCII
+  diagram); owned and freshness-verified-on-every-read by the
+  `valoria-workplan-navigator` skill ("where are we?" / "resume from the workplan" →
+  position + options). A stale `as_of` is surfaced, never silently trusted — the
+  anti-rot answer to the retired roadmap_state.yaml.
 - **Register-touch rule (ED-IN-0007):** any edit to a compiled register surface must touch
   its runtime form in the same PR once narrative Stage 1 lands.
 - **ID protocol:** `references/id_reservations.yaml` is the allocation source (read
