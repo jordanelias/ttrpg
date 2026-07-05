@@ -38,6 +38,29 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   Stage 1. Corpus defects surfaced for follow-up: Coup Counter STRUCK but live in 6 register
   entries; ARC-T04 dangling; Torben Loyalty range register-vs-clock_registry conflict.
 
+- **Narrative engine v2 "THE CHURN ENGINE" + Master Workplan v6 + steering reconciliation —
+  DELIVERED 2026-07-05 (ED-IN-0009; PR #78), awaiting Jordan review.** v2
+  (`narrative_engine_design_v2_churn.md` + `spec/churn_amendments.md`, supersedes-in-part v1)
+  reorganizes the engine around Jordan's churn critique: generator-not-corpus (templates ×
+  binding, 138 register arcs = validation set), two-layer forecast (Layer A analytic — the M1
+  ship, hard gate; Layer B seeded ensemble behind named preconditions incl. F7/F8), **the
+  Light Function** (pruning-as-authorship; invariants i–iv; forecast severed from casting and
+  actor-invisible per the adversarial pass), claim-grammar interface (a requirements input
+  ADDING four SC sub-systems — shapes the SC lane's), load factorization (no runtime LLM;
+  bake headline ~1,200–2,700 units under fork-6 default), kernel/data/wrapper modularity
+  (nothing hard-baked; R-F1/R-F2/R-HB/R-CL/R-AI/R-RL). Five-refuter pass
+  (`01_workings/refute_v2_*.md`) fully applied; survivors = forks 10–11 + fixture F8. **⚠️
+  F-F/fork-8 (the Light-Function weight set + subtract-only discipline) is HELD BACK from
+  merge-ratification — needs explicit Jordan sign-off.** Grounded by two dossiers
+  (`01_workings/dossier_forecast_tractability.md`, `dossier_combinatorial_census.md`).
+  **Workplan v6** (`designs/workplans/valoria_master_workplan_v6.md`, ED-IN-0009): M1/M2/M3
+  milestones, IN spine, per-lane sequencing, tiered T0/T1/T2 decision register (no status
+  fields), governance incl. the ED-PC plan-text-label rule. **ED-IN-0006 EXECUTED**:
+  roadmap_state → `deprecated/references/` (banner), v5 → `archives/workplans/` (banner
+  fixing its J-38 contradiction), decision-queue items 1–3 refreshed + queue demoted to
+  dated snapshot, CURRENT.md rows updated (workplan v6 + new Narrative-engine row),
+  `lane_assignments.yaml` repointed. Next IN actions live in v6 §2.
+
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).
   ED-1050 (combat parity oracle) lives in `handoffs/HANDOFF_PC.md` (RESOLVED, one residual

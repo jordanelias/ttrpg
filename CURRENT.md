@@ -12,12 +12,14 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-04 (scene-combat R2 closing-distance/facing/grip/contact redesign, I0–I8,
-MERGED PR #72; R3 weapon-model consolidation plan-of-record RATIFIED, PR #76 in flight; weapon-morphology
-granularity audit merged PR #74; previous reconcile 2026-07-02 ED-1083 doctrine + ED-1093 propagation-spec +
-ED-1094 merge-ratifies convention; 2026-07-01 month-overview + architecture consolidation; 2026-06-28
-deprecation & currency sweep + v40 generation declaration). Every row is the head of its lineage; predecessors
-are archived._
+_Last reconciled: 2026-07-05 (NERS qualitative audit RATIFIED, 12 lane EDs filed, MERGED PR #77;
+narrative-engine v1 + v2 "Churn Engine" designs + master workplan v6 + steering reconciliation
+ED-IN-0006/ED-IN-0009 — roadmap_state retired to `deprecated/references/`, v5 archived, decision
+queue snapshotted — PR #78; previous reconcile 2026-07-04 scene-combat R2 MERGED PR #72 + R3
+plan-of-record RATIFIED; 2026-07-02 ED-1083 doctrine + ED-1093 propagation-spec + ED-1094
+merge-ratifies convention; 2026-07-01 month-overview + architecture consolidation; 2026-06-28
+deprecation & currency sweep + v40 generation declaration). Every row is the head of its lineage;
+predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
@@ -32,7 +34,8 @@ are archived._
 | **Architecture / Propagation spec** | `designs/architecture/propagation_spec_v1.md` — CANONICAL (ratified 2026-07-02, ED-1093/ED-1094; workplan v5 J-38). Ordering/determinism, aggregate-up, distribute-down, and termination (TERMINATION-ONLY — cross-tick convergence NOT proven) transforms; supplies `engine_clock`'s candidate home doc, but the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved. Open flags tracked in the doc's own §5 (OF-7/OF-B1, D.6/OF-D6, `decay()`, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
-| **Master workplan** | `designs/workplans/valoria_master_workplan_v5.md` (CANON-PROPOSED 2026-06-28; supersedes v4, which stays the frozen 06-11/06-22 record; relocated 2026-07-01 by PR #49 from its since-dissolved 06-28 audit-session folder — `designs/workplans/` is now the one live home, see its `README.md`) |
+| **Master workplan** | `designs/workplans/valoria_master_workplan_v6.md` (CANON-PROPOSED 2026-07-05, ED-IN-0009; supersedes v5 → `archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface, superseding the 2026-07-01 decision-queue snapshot) |
+| **Narrative engine** | `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (PROPOSED 2026-07-05; supersedes-in-part v1 in the same folder — v1 + spec chapters s1–s5 stay normative as amended by `spec/churn_amendments.md`. ⚠️ The F-F/fork-8 Light-Function decision is HELD BACK from merge-ratification — explicit Jordan sign-off required. Executes ED-IN-0003/0004; stages sequenced in workplan v6 §3) |
 | **Godot conversion** | `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
 | **Board game** | `params/board_game.md` + `params/bg/*` governing tables |
 | **Dice / resolution** | `params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |
