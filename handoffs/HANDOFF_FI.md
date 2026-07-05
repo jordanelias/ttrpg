@@ -10,7 +10,15 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
-(none.)
+- **ED-FI-0002 (open) — counter-espionage loop.** Filed 2026-07-05 from the ratified
+  edge-playability audit (PR #81, "Ratify all"; finding EP-6): enemy `da.covert_betrayal` reaches
+  the player only as a non-interactive cut scene when `exposed==true`; antinomian/economic covert
+  action produces no signal at all; no detection/response verb exists. Design the loop with
+  fieldwork as host (Exposure is the symmetric mechanic): investigable trail, exposure-flip path,
+  response surface. The one ratified §7 item that is new design, not wiring. Composes with
+  ED-FI-0001 (investigation-lane audit) and the audit's EP-8 (investigation_systems_v30
+  canonical-in-name-only; head conflict settles via ED-IN-0016's CURRENT.md row). See the audit
+  report §1 EP-6/EP-8 / §7 item 7.
 
 ## Decisions
 

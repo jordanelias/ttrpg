@@ -1,6 +1,6 @@
 # Edge-Playability Audit — Charter
 
-## Status: PROPOSED (audit grounding — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — "Ratify all", with the report)
 ## Date: 2026-07-05 · Lane: IN (cross-cutting) · Branch: `claude/fable5-playability-audit-y5wj43`
 
 ## Mandate

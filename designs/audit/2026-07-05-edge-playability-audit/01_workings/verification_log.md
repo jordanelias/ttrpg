@@ -1,6 +1,6 @@
 # Fable verification log — edge-playability audit
 
-## Status: PROPOSED (audit workings — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — "Ratify all", with the report)
 _Every headline claim carried into `../edge_playability_audit_v1.md` was independently re-checked
 by the Fable orchestrator against the working tree (commit `28be79c` + this branch), per the
 charter's relay discipline. Format: claim → check → outcome._
