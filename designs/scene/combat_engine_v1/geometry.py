@@ -19,7 +19,7 @@ Geometric parameters (all 0..1 unless noted):
   cross_section       whippy/thin (loses thrust vs hard plate) = 0 ... rigid thick diamond (estoc) = 1
   edge_keenness       blunt = 0 ... razor = 1                                (flesh-cutting)
   strike_concentration   broad face (mace flat / staff end) = 0 ... beak/pick = 1   (percussion focus; blunt heads)
-  head_len, grip_len  relative lengths (already used by the lever-arm module)
+  head_len, grip_len  absolute lengths in METRES (U0/ED-PC-0002; already used by the lever-arm module)
 """
 from math import tanh
 

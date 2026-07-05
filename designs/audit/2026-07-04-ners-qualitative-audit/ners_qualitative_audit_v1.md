@@ -1,6 +1,6 @@
 # Valoria — Qualitative NERS Audit v1 (North-Star)
 
-## Status: PROPOSED (audit findings — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — accepted as filed; post-merge instruction on PR #77)
 ## Date: 2026-07-04 · Lane: IN (cross-cutting) · Branch: `claude/ners-audit-fable5-9cpfdz`
 
 **Charter:** `00_grounding/00_audit_charter.md`. Criteria = the corpus's own instruments

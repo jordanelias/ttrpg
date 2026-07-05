@@ -25,12 +25,13 @@
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1
-updated: "2026-06-28"
-source: "designs/workplans/valoria_master_workplan_v5.md — §1 operating model (lineage: v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs/lanes unchanged, queues carried to v5 LA-/LB-/LC- IDs; relocated 2026-07-01 from designs/audit/2026-06-28-recent-work-orchestration/, see designs/workplans/README.md)"
-# RESERVED-ID EXHAUSTION (workplan v5 §0a, 2026-06-28): the reserved ED/PP blocks in
-# references/id_reservations.yaml (A 890-939/940-969/970-999 etc.) are EXHAUSTED — the live
-# ED ceiling is 1042, past every block. Re-blocking the next disjoint round is queued as
-# workplan-v5 LB-21 (do at an integration pause; per id_reservations.exhaustion_policy).
+updated: "2026-07-05"
+source: "designs/workplans/valoria_master_workplan_v6.md — §4 lane workstreams + §6 governance (lineage: v5 2026-06-28 -> v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs unchanged; the old A/B/C lane framing is generalized by the ED-<LANE>-NNNN session lane-scoping, CLAUDE.md §4)"
+# ID ALLOCATION (2026-07-05 note superseding the v5 §0a exhaustion warning): the flat ED
+# sequence is FROZEN (ED-IN-0001 cutover 2026-07-02); all new EDs allocate per-lane from
+# references/id_reservations.yaml `lane_ids` (read next_free, bump, co-commit). The old
+# shared-block exhaustion problem is structurally moot. roadmap_state.yaml (referenced in a
+# concurrency rule below) was RETIRED 2026-07-05 to deprecated/references/ (ED-IN-0006).
 
 boundary_rule: >
   A lane NEVER writes outside its owns: set. Need another lane's file changed? Read its

@@ -1,6 +1,6 @@
 # Grounding 1 — Qualitative NERS criteria lineage + audit-format precedent
 
-## Status: PROPOSED (audit grounding — Jordan review)
+## Status: RATIFIED (Jordan, 2026-07-05 — accepted as filed; post-merge instruction on PR #77)
 _Explorer output, 2026-07-04 planning phase (sonnet lane). Verified against the working tree at
 commit `cb227cf`._
 

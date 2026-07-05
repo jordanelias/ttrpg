@@ -40,6 +40,17 @@ def main():
     except Exception:
         pass
 
+    # workplan position (ED-IN-0010): one line from the progress board + staleness flag.
+    # Renderer lives once in workplan_status.py; never allowed to break session start.
+    try:
+        import workplan_status as wps
+        print(wps.summary_line())
+        warn = wps.staleness()
+        if warn:
+            print(warn)
+    except Exception:
+        pass
+
     if os.path.exists('HANDOFF.md'):
         try:
             with open('HANDOFF.md', encoding='utf-8', errors='replace') as f:

@@ -14,7 +14,7 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
-from config import CFG   # pure data (GRAB_SHORT_REACH_LU); no cycle risk
+from config import CFG   # pure data (GRAB_SHORT_REACH_M); no cycle risk
 
 def _affords_point(w):
     """Local import (systems.py sits above this module in the dependency order — importing it at module
@@ -48,7 +48,7 @@ CAPABILITIES = {
     },
     'open_contact': {
         'node': 'Contact (contact.grab_available)',
-        'pred': lambda name, w: w['head_len'] <= CFG['GRAB_SHORT_REACH_LU'],
+        'pred': lambda name, w: w['head_len'] <= CFG['GRAB_SHORT_REACH_M'],
         'needs': "a short enough head_len (dagger/unarmed-class) to already be functionally at grapple range — every other weapon needs a real prior opening this beat (bind / beaten-aside / deep-commit) before a grab is available",
     },
 }
