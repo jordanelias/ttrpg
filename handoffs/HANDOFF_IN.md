@@ -22,6 +22,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   — see `designs/audit/2026-07-05-emergent-narrative-engine/` once landed. Remaining filed items
   execute in their own lanes.
 
+- **Emergent Narrative Engine design v1 — DELIVERED 2026-07-05, awaiting Jordan review (PR #78).**
+  25-agent design workflow (4 dossiers → 3 architects → 3 judges + synthesis → 5 refuters → 5
+  spec sections → 3 capstone verifiers → critic) + full remediation. Result: **the Arc-Vector
+  Engine with a Subordinate Director** (B won all judge lenses; six layers,
+  detect-then-schedule-then-render), closing ED-IN-0003 (L2 convergence detector) + ED-IN-0004
+  (L5 render completion incl. the four ED-681 thread beats, worked) by construction. Deliverables
+  at `designs/audit/2026-07-05-emergent-narrative-engine/`: `narrative_engine_design_v1.md`
+  (head doc: architecture, staging, determinism, 9 open forks), `integration_with_ners_audit.md`
+  (crosswalk), `00_grounding/` (charter with Jordan's four key considerations + C1–C7),
+  `01_workings/spec_sections/s1..s5` (normative chapters incl. the ARC-S07 capstone trace,
+  factionless mini-trace, effect-bearing COLLISION-B trace). **9 [OPEN — Jordan] forks — esp.
+  fork 8 HELD BACK (director tension-curve subtract-only reverses charter language; not
+  self-ratified by merge)**; forks 1–2 (Coup-Counter remap; ARC-T04 strike-or-author) block
+  Stage 1. Corpus defects surfaced for follow-up: Coup Counter STRUCK but live in 6 register
+  entries; ARC-T04 dangling; Torben Loyalty range register-vs-clock_registry conflict.
+
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).
   ED-1050 (combat parity oracle) lives in `handoffs/HANDOFF_PC.md` (RESOLVED, one residual

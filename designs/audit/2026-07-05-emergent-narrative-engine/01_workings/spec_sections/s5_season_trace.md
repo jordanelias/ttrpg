@@ -716,16 +716,18 @@ grounded, load-bearing part is the pair of edges `Conviction(Sef, Einhir-memory)
 #### Beat A.2 — Standing/Obligation accrual (the proto-currency)
 
 - **Keys in.** Beat A.1 outcome Key re-enters the settlement arc's `causes[]`.
-- **Engine state change.** Conviction *pursued* (a genuine step, player_agency §2.3): **Renown +1**
-  (`player_agency §5.4` Renown source; cap +2/season) — Renown is the cross-faction proto-currency that
-  persists with no faction (`player_agency §5.3` Staying Independent). A **local Standing** with the
-  Stillhelm elders accrues as Disposition, not institutional Standing.
-- **Casting / venue.** No scene — a **Tier-1 ambient lens** update (the personal Renown/Obligation
+- **Engine state change.** Conviction *pursued* (a genuine step, player_agency §2.3): **+1 Momentum**
+  (pursuit reward, §2.3). The durable proto-currency accrued this season is the **Obligation** (Beat
+  A.1) + a **local Standing** with the Stillhelm elders (Disposition, not institutional Standing).
+  **Renown** is the cross-faction proto-currency that persists with no faction (`player_agency §5.3`
+  Staying Independent), and it takes **+1 when this Conviction resolves Fulfilled/Transformed**
+  (`player_agency §5.4`, cap +2/season) — the ladder's next-rung payoff, not this season's.
+- **Casting / venue.** No scene — a **Tier-1 ambient lens** update (the personal Obligation/Momentum
   tracker) + a **texture** line (the village now speaks of Sef).
 - **Keys out + accounting.**
-  - `Renown +1` — **ACCUMULATED** (ledger-of-you; §5.4).
+  - `+1 Momentum` (Conviction pursuit) — **ACCUMULATED** (ledger-of-you; §2.3).
   - `state.local_standing{Stillhelm}` **[TRACE-ILLUSTRATIVE]** — **ACCUMULATED** (proto-faction
-    currency).
+    currency; Disposition with the elders).
 - **Surface + register.** Tier-1 lens + texture. `{ significance: flash, focalizer: protagonist }`.
 
 #### Beat A.3 — The Outreach hook (next season)
@@ -762,7 +764,7 @@ _Beat 3.2's convergence (ARC-S07↔ARC-S20) was **cosine-detected** and therefor
 TS 28→30), **ARC-S23** (Elske installed independently), and **ARC-S07** (Torben in Altonia — the
 spine's Beat 4.2 foreclosure outcome). **None of the three depends on the STRUCK Coup Counter**, so no
 fork-1 remap is needed to fire it. (COLLISION-F, by contrast, lists "Coup Counter ≥ 2" as one of its OR
-trigger paths, `arc_register_events.md:52` — it would ride the struck mechanic under the fork-1 default
+trigger paths, `arc_register_events.md:50-52` — it would ride the struck mechanic under the fork-1 default
 1:1 remap. COLLISION-B is the cleaner demonstration.) ARC-S07 feeds COLLISION-B directly via
 "Torben in Altonia," which the traced spine produced at Beat 4.2.
 
