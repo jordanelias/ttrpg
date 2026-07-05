@@ -7,12 +7,15 @@ the chapter text conflict, the delta wins pending the chapters' next full revisi
 
 ## s1_q1_q2.md (Q1 player→world · Q2 world→player)
 
-- Casting gains a **forecast-informed imminence term**: summons carry the computed
-  stakes-preview ("what happens if no one acts" = the §3 horizon band rendered diegetically),
+- Casting SELECTION is unchanged (tie-graph + realized state only — v2 §4's forecast
+  severance; forecast terms never pick who is summoned). What changes is the summons'
+  RENDER: it carries a computed stakes-preview ("what happens if no one acts" = the §3
+  horizon rendered diegetically under v2 §6's never-a-meter / never-a-promise rules),
   replacing s1's authored-clock-text impulsion.
 - The four option-conditioning modes now cite **computed horizons**: gating/pricing/
-  foreclosure previews come from `stake_horizon` objects, and foreclosure warnings from
-  `foreclosure_countdown` — every gate still cites its ledger cause.
+  foreclosure previews come from `stake_horizon` objects (continuous-class per-lever only
+  for M1, v2 §3), and foreclosure warnings from `foreclosure_countdown` — rendered as
+  pressure, never as a countdown; every gate still cites its ledger cause.
 - The anti-railroad window test upgrades: window realness is verified against
   **option-conditional distributions** (a real window = the per-lever horizon measurably
   differs), not only post-hoc seed comparison.
@@ -42,12 +45,15 @@ the chapter text conflict, the delta wins pending the chapters' next full revisi
 ## s3_q4_render.md (Q4 presence)
 
 - The surface map gains the **forecast surfaces**: counsel/omen/rumor register
-  (Certainty-keyed), NPC anticipatory behavior (position-scoped access, F-C), Thread
-  perception as the native forecast query, stakes-preview lines on slate entries, sparing
-  chronicle counterfactual ghosts (F-D).
+  (Certainty-keyed), NPC anticipatory behavior (diegetic heuristics over observable state —
+  never engine forecast objects, R-AI; the F-C fork now scopes only which counsel/omen
+  RENDER surfaces a position sees), Thread perception as the native forecast query,
+  stakes-preview lines on slate entries, sparing chronicle counterfactual ghosts (F-D) —
+  all under v2 §6's never-a-meter / never-a-promise render rules.
 - The bake section gains: **bake directives as versioned data** (v2 §7); the author-weight
-  tables as bake parameters (v2 §6); the census-grounded unit numbers (230–450, fork-6 swing
-  to 1,200–2,700); the **scale-complete bank matrix** (character/family/faction/settlement/
+  tables as bake parameters (v2 §6); the census-grounded unit numbers (headline ~1,200–2,700
+  under fork-6's include-default; 230–450 only under the lexicon-swap fallback); the
+  **scale-complete bank matrix** (character/family/faction/settlement/
   territory/world with binding sources); aggregation templates as a bank class.
 - Anti-oatmeal restated as the **five-property theorem** (binding/consequence/scarcity/
   memory/range); the two-seed test generalizes to the any-seed regression (F1).
@@ -59,9 +65,15 @@ the chapter text conflict, the delta wins pending the chapters' next full revisi
   `convergence_candidate` / `foreclosure_countdown` / `option_distribution` stores, the
   light ledger (per-thread inertia + budget), projected-next-beat register.
 - **New conformance rules** (each one rule, one tools/ home; joining R1–R10): R-F1
-  forecast/live shared resolver code · R-F2 ensemble determinism (Key-log-hash seeds, sorted
-  iteration, integer basis-point marginals) · R-HB hard-bake AST hunt (no content literals in
-  kernel) · R-CL grammar-closure (no Key family without a render path).
+  forecast/live shared resolver code (incl. the flag-gated scene-EV sub-clause) · R-F2
+  ensemble determinism (sha256 over the canonical Key-log serialization, sorted iteration,
+  integer basis-point marginals, integer light-inertia decay) · R-HB hard-bake AST hunt (no
+  content literals in kernel) · R-CL grammar-closure (no Key family without a render path) ·
+  R-AI forecast actor-invisibility (no actor resolver reads a forecast object) · R-RL
+  re-light discipline (catch-up beats render-only + focalizer-cited).
+- **READS addendum**: once the SC lane declares its precedent + commitment stores (v2 §5 —
+  new stores, not existing substrate), the engine's render READS both — s4 §S4.1's READS
+  column grows accordingly; the engine still OWNS only its one store.
 - Module contracts annotated with the **kernel/data/wrapper tiers** (v2 §7); scenario_
   authoring's compile output declared a versioned data pack (starting conditions swappable).
 - Total-accounting classes unchanged; forecast outputs are CONSUMED-INTO-STATE; discarded
@@ -76,4 +88,5 @@ the chapter text conflict, the delta wins pending the chapters' next full revisi
   lit the beat) and **forecast** (the horizon band the beat's summons carried).
 - The three v2 authored mini-traces (ensemble-stats §9.1, zoom-coherence §9.2, claim-grammar
   §9.3) join the trace suite; Appendices A/B unchanged.
-- Build-time fixtures F1–F7 (v2 §9) are the Stage-5 regression set this trace seeds.
+- Build-time fixtures F1–F8 (v2 §9, incl. F8's anti-self-fulfillment control) are the
+  Stage-5 regression set this trace seeds.

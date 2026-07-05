@@ -14,6 +14,8 @@ directory up**; everything else here is how it was derived.
 | `judge_*.md` | 3 scoring judges (B won all lenses: 82/84/85) + graft lists. |
 | `synthesis.md` | The unified architecture ("Arc-Vector Engine with a Subordinate Director"). |
 | `refute_*.md` | 5 adversarial lenses (2 BLOCKER + 21 MAJOR findings, all applied or converted to forks). |
+| `refute_v2_*.md` | The v2 (churn) adversarial pass — 5 lenses: determinism/cost, C2-veto/C7-railroad, fabrication honesty, Light Function + any-seed theorem, claim-grammar interface reality. All REQUIRED_FIXes applied to `../narrative_engine_design_v2_churn.md` (2026-07-05); survivors became forks 10–11, fixture F8, and the M1 Layer-A hard gate. |
+| `dossier_forecast_tractability.md` · `dossier_combinatorial_census.md` | The two v2 gating dossiers (forecast branch-source census + cost envelope; the real permutation space + bake numbers). |
 | `verify_*.md` | 3 capstone verifiers (contract coherence · trace accounting · ARC-S07 round-trip — all PASS-WITH-FIXES; fixes applied). |
 | `critic.md` | Completeness critic (all gaps remediated in the follow-up pass or carried as forks). |
 | `draft_*.md` | Section drafters' working notes. |
