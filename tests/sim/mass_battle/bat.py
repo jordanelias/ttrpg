@@ -156,7 +156,14 @@ def trial_vector(ua, ub, r):
 # verification (bat.py all 4 modes, tests/valoria, gauge_mb.py re-run) in coverage_matrix.md's
 # 2026-07-04 entry.
 EXPECTED = {
-    'unit': 'bf7f6d175d526b412a590318f6f07f109c5de153cea56af87aa84e5a53c7de6e',
+    # [2026-07-05, Step 4 fix, mass-battle Cannae gauge follow-up audit, Jordan-ratified "intensive
+    # (per-troop, partition-invariant)"] re-recorded again, and for the FIRST time this changes
+    # 'unit' too (not just the field-path modes) -- this fix removes the outer troops_frac/army-size
+    # divisor from orchestration.py's POOL_VARIANT=="C-ii" branch, which is SHARED, non-gated
+    # combat-resolution code (like the DG-3/DG-4 landing before it), so all 4 digest modes move.
+    # Correction to the D2-fix comment below: that comment's "'unit' confirmed BYTE-IDENTICAL" claim
+    # was true for the D2 fix IN ISOLATION, not cumulatively once this Step-4 change stacks on top.
+    'unit': '204d4d738bb7ba1ef89e804779edd8f26994f8b7ec208c19912b0d62bcaccbee',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -166,7 +173,10 @@ EXPECTED = {
     # this one mode). Confirmed NOT a portability artifact: re-running bat.py directly in this same
     # sandbox reproduces CI's exact new hash. Re-verify 'cell' with a direct `bat.py --check` call
     # (not just the pytest suite) after any future orchestration.py/core.exchange/core.state change.
-    'cell': '73ac6c19a85cde2e93bb0dbdddcc10cbbd95be485a237c9189b9abc47a101cce',
+    #
+    # [2026-07-05, Step 4 fix, same as 'unit' above] re-recorded again -- same shared, non-gated
+    # combat-resolution code, so 'cell' moves too.
+    'cell': '84e606c045b68c0fcec605c9190a4450afa4914cc733a294e4d5ea9bb9f2f6ca',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -203,14 +213,51 @@ EXPECTED = {
     # divergence on top of steps 1-7's, since this specific measurement pins PER_CELL='0' explicitly
     # and cannot be reached by that flip. All five changes (steps 1/4/5/7 + gate 4's non-contribution)
     # are deliberate, disclosed behaviour changes -- not a regression.
-    'unit_field': '810faf81be6cd98f9bff3fbf92658dd6372173dbdcf5d00b3572c77237b87144',
+    #
+    # [2026-07-05, D2 fix, mass-battle Cannae gauge follow-up audit] re-recorded again: a Fable-5
+    # adversarial audit found `_envelop_goal`'s phase-1/phase-2 transition shared one threshold for
+    # entry and exit, producing a permanent limit cycle (wings wheel to the rear_r line, then jitter
+    # there forever, never closing to contact) -- confirmed by direct trace. Fixed with a one-shot
+    # commitment latch (`Subunit._envelop_committed`) in hierarchy/units.py. This battery's own
+    # Horseshoe-cavalry/envelop scenarios exercise the 'envelop' instruction on the field path, so
+    # this digest moving is expected and intentional -- wings that previously never reached contact
+    # now do. `unit` (grid, PER_CELL=0) confirmed BYTE-IDENTICAL for THIS fix in isolation (this fix
+    # only touches the FIELD_MOVEMENT-gated node path) -- see the Step-4 correction above: 'unit'
+    # moves again once the Step-4 pool-semantics fix stacks on top.
+    #
+    # [2026-07-05, Step 4 fix, same rationale as 'unit'/'cell' above] re-recorded again.
+    'unit_field': '79c19100d45be623769449a123a6d37c783f3632e9e3be61c7da4ea6ab1c743b',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
     # first-round re-record, meaning the current battery/gauge doesn't happen to exercise those bugs
     # on those 3 modes, but cell_field's PER_CELL=1+FIELD_MOVEMENT=1 combination (continuous-scale
     # subunits, multi-subunit envelop/cannae/oblique rows, real morale/rout timing) does.
-    'cell_field': '69d7f3a165265438f7746bc1032514f9d603528a73ad00e2cb99dd921d61b7af',
+    # [2026-07-05, D2 fix, same as unit_field above] re-recorded again for the same envelop-goal
+    # hysteresis-latch fix; 'cell' (grid, PER_CELL=1) confirmed BYTE-IDENTICAL, unaffected.
+    #
+    # [2026-07-05, Step 4 fix, same rationale as 'unit'/'cell'/'unit_field' above] re-recorded again.
+    #
+    # [2026-07-05, D3+D4 fixes, mass-battle Cannae gauge follow-up audit] re-recorded a final time --
+    # 'unit'/'cell'/'unit_field' all confirmed BYTE-IDENTICAL to the Step-4 recording above (D3's
+    # routed-atom pool-floor fix and D4's row-aware casualty-distribution fix don't happen to be
+    # exercised differently by this battery on those 3 modes); only 'cell_field' moves, since D4's
+    # `distribute_casualties` is PER_CELL-only code (percell.py) and D3's routed-atom pool fix is
+    # only reachable once PER_CELL's morale/rout mechanics are live -- same PER_CELL=1+FIELD_MOVEMENT=1
+    # exclusivity this mode's prior re-records have shown throughout this lane.
+    #
+    # [2026-07-05, D3 CORRECTION, adversarial-review finding] re-recorded again: an independent
+    # adversarial reviewer found the D3 fix above was a NO-OP as first written -- `roll_pool`/
+    # `_sigma_net_boost` (resolution.py) both independently re-floor their own `pool` argument to a
+    # minimum of 1 internally, so zeroing `a_pool`/`b_pool` for a dead atom never reached the actual
+    # dice/damage math (confirmed by the reviewer via a revert-and-diff test: byte-identical digest
+    # with or without the original fix). The real fix now forces `a_net`/`b_net` to exactly 0 directly
+    # for a routed/broken atom (both the SIGMA_HEAD and legacy pool-modifier branches), which correctly
+    # resolves to `compute_degree`'s "Failure" -> zero damage. `unit`/`cell`/`unit_field` all
+    # re-confirmed BYTE-IDENTICAL to the prior recording (the grid battery/this specific field-mode
+    # battery combination don't happen to exercise a mid-battle rout with a still-live opposing pair on
+    # those 3 modes); only `cell_field` moves.
+    'cell_field': 'c3de8306c1faa8159a7db129630555e898d01fa0ead8b205c49a11a40664c065',
 }
 
 

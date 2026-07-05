@@ -34,6 +34,7 @@ from mass_battle.engine import (  # noqa: E402
     Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_envelopment, build_refused_flank,
     resolve_battle)
+from mass_battle.config import TROOPS_PER_TIER  # noqa: E402
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
     # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
@@ -117,37 +118,91 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     """[LC-8, ED-909] Composed replacement for the retired Horseshoe shape: a held center + two
     wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Unit-level
     Envelopment preset. Mirrors make_unit's kwarg surface closely enough to drop straight into
-    matchup()'s (sa,tier,name,faction,**k) call convention."""
+    matchup()'s (sa,tier,name,faction,**k) call convention.
+
+    [2026-07-05 fix, mass-battle Cannae gauge follow-up audit, Jordan-ratified DG-1] Two corrections,
+    both empirically confirmed necessary (a Fable-5 adversarial audit + direct gauge measurement):
+
+    1. FORCE PARITY (the load-bearing part). Previously every subunit here independently drew a full
+       tier's troops (TROOPS_PER_TIER[tier] each via the legacy tier-keyed CELL_PATTERN_FN path), so a
+       3-subunit envelopment army silently fielded 3x its single-subunit opponent's troops -- a side
+       effect of the LC-8 migration from a single-subunit Horseshoe shape, never itself historically
+       ratified (the grounding doc's own bands assume "comparable forces"). `total_troops` (default
+       TROOPS_PER_TIER[tier], matching every other row's single-subunit baseline) is now the SAME total
+       split across center+wings via the continuous-scale troops/concentration path (footprint_for),
+       not the legacy tier path -- so this preset fields the same total strength as its opponent.
+    2. COMPOSITION (Jordan-ratified, "symmetric at parity + majority pin cavalry wing so long as
+       bottom-up emergent primitives approach"). `pin_frac` (default 1/3, symmetric-thirds) sets the
+       center's share of `total_troops`; the two wings split the remainder evenly. The infantry rows
+       (H3/H5/H6) keep this symmetric default. The cavalry rows (C4/C7) pass `pin_frac=2/3` +
+       `wing_troop_type='cavalry'` (see CAV_TESTS below) -- a majority INFANTRY pin with a minority
+       CAVALRY envelopment wing, matching the Polybius/Livy order of battle for Cannae-pattern
+       double-envelopments, built entirely from the existing build_army/build_envelopment primitives
+       (no new mechanic -- an army-composition choice fed into an already-verified constructor)."""
     anchor = ANCHOR_MAP.get(('Line', tier), 10)
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    center = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+    total_troops = kw.pop('total_troops', TROOPS_PER_TIER[tier])
+    pin_frac = kw.pop('pin_frac', 1.0 / 3)
+    wing_troop_type = kw.pop('wing_troop_type', troop_type)
+    wing_speed = kw.pop('wing_speed', speed)
+    conc = kw.pop('concentration', 100)  # mid-range density; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200 -- the valid per-cell troop-density band]
+    center_troops = total_troops * pin_frac
+    wing_troops = (total_troops - center_troops) / 2
+    # [2026-07-05 adversarial-review fix] `Subunit` has NO `speed` field at all -- a per-subunit
+    # 'speed' key in these spec dicts is silently dropped by `build_army` (it never pops one), so it
+    # was pure dead decoration. `Unit.speed` is the only real speed knob (checked whole-unit at
+    # post-rout pursuit, orchestration.py `routing_unit.speed == "Fast"`/`victor.speed == "Fast"`) --
+    # forwarded below via `build_envelopment(..., speed=wing_speed)` instead. For the infantry rows
+    # (H3/H5/H6) `wing_speed` defaults to `speed` ('Standard'), so this is a no-op there; for C4/C7's
+    # cavalry-wing composition it correctly marks the WHOLE composed army (which contains the fast
+    # pursuing wing) as Fast for pursuit purposes -- the coarsest expression the engine's current
+    # unit-level (not per-subunit) speed model allows.
+    center = [{'shape': 'Line', 'troop_type': troop_type,
+               'troops': center_troops, 'concentration': conc,
                'starting_position': (start_row, anchor)}]
     # wing offset: [canonical: sim_verification_ledger.json — CALIBRATED, matches bat.py's _envelop_army spacing, not historically cited]
-    wings = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+    wings = [{'shape': 'Line', 'troop_type': wing_troop_type,
+              'troops': wing_troops, 'concentration': conc,
               'starting_position': (start_row, anchor - 6)},  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
-             {'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+             {'shape': 'Line', 'troop_type': wing_troop_type,
+              'troops': wing_troops, 'concentration': conc,
               'starting_position': (start_row, anchor + 6)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, not historically cited]
     return build_envelopment(center, wings, name, faction,
                               power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                               discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
-                              morale_start=kw.pop('morale_start', None),
+                              morale_start=kw.pop('morale_start', None), speed=wing_speed,
                               freeze_wings=kw.pop('freeze_wings', False))  # [ED-MB-0002 §2 step 4, measurement only]
 
 
 def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired RefusedFlank shape: a strong wing +
     a withheld/refused wing released only once directly threatened -- ED-909's Unit-level Refused
-    Flank preset."""
+    Flank preset.
+
+    [2026-07-05 fix, same force-parity rationale as _envelop_army above] `total_troops` (default
+    TROOPS_PER_TIER[tier]) is split across strong+refused via the continuous-scale troops/
+    concentration path instead of each subunit independently drawing a full tier's troops (a 2x
+    dilution vs a single-subunit opponent) -- matches every other row's single-subunit baseline, and
+    matches _envelop_army's own total when the two face off (H5)."""
     anchor = ANCHOR_MAP.get(('Line', tier), 10)
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    strong = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+    total_troops = kw.pop('total_troops', TROOPS_PER_TIER[tier])
+    strong_frac = kw.pop('strong_frac', 0.5)
+    conc = kw.pop('concentration', 100)  # mid-range density; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200]
+    strong_troops = total_troops * strong_frac
+    refused_troops = total_troops - strong_troops
+    # [2026-07-05 adversarial-review fix, same rationale as _envelop_army above] per-subunit 'speed'
+    # keys are dead (Subunit has no speed field); the real Unit.speed is forwarded below instead.
+    strong = [{'shape': 'Line', 'troop_type': troop_type,
+               'troops': strong_troops, 'concentration': conc,
                'starting_position': (start_row, anchor - 4)}]
-    refused = [{'shape': 'Line', 'tier': tier, 'troop_type': troop_type, 'speed': speed,
+    refused = [{'shape': 'Line', 'troop_type': troop_type,
+                'troops': refused_troops, 'concentration': conc,
                 'starting_position': (start_row, anchor + 4)}]
     return build_refused_flank(strong, refused, name, faction,
                                 power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                                 discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
-                                morale_start=kw.pop('morale_start', None))
+                                morale_start=kw.pop('morale_start', None), speed=speed)
 
 
 # (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp[, metric])
@@ -195,7 +250,12 @@ CAV_TESTS = [
     # C3: cavalry mirror -- side-symmetry control of the charge/momentum path. Even.
     ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',dict(CAV),dict(CAV),42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — C3 cav mirror]
     # C4: mounted ENVELOPMENT of a line -- flank/rear is devastating (Cannae; Adrianople; Boddy 2015).
-    ('C4','Cav flank/envelopment vs Line',_envelop_army,'Line',dict(CAV),{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
+    # [2026-07-05 fix, DG-1 ratified: "majority pin cavalry wing"] Was dict(CAV) applied uniformly
+    # (the WHOLE _envelop_army fielded as cavalry) -- now a majority (2/3) INFANTRY pin with a
+    # minority (1/3, split across both wings) CAVALRY envelopment wing, matching the Polybius/Livy
+    # order of battle this row is named for, at force parity with the single-subunit Line defender.
+    ('C4','Cav flank/envelopment vs Line',_envelop_army,'Line',
+        {'pin_frac':2/3,'wing_troop_type':'cavalry','wing_speed':'Fast'},{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
     # C5: cavalry vs a genuinely SHAKEN line -- morale 2 of a start-6 unit (cohesion eroded 2/3 BELOW
     # start; "shaken" is RELATIVE, du Picq, not a low absolute ceiling). The shaken-amplifier
     # (PC_SHOCK_SHAKEN_GAIN) + _morale_sigma fire: the wavering line breaks under the charge --
@@ -218,7 +278,9 @@ CAV_TESTS = [
     # instruction, deliberately -- the reciprocal charge-recoil (orchestration ~L1647) does NOT
     # zone-gate, so a braced+enveloped unit would WRONGLY fire the recoil from the rear. [FLAG: latent
     # engine issue -- the recoil should fire frontally only; out of scope here, see grounding §4.]
-    ('C7','Cav envelop vs holding Line (hold+d8)',_envelop_army,'Line',dict(CAV),{'stance':'hold','discipline':8},65,100,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace; Cannae-total ceiling]
+    # [2026-07-05 fix, same DG-1 composition rationale as C4 above]
+    ('C7','Cav envelop vs holding Line (hold+d8)',_envelop_army,'Line',
+        {'pin_frac':2/3,'wing_troop_type':'cavalry','wing_speed':'Fast'},{'stance':'hold','discipline':8},65,100,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace; Cannae-total ceiling]
 ]
 
 def winner_of(r):

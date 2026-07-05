@@ -49,143 +49,41 @@ Archived entries in tests/coverage_matrix_archive.md
   One real bug found+fixed (adversarial review): `orders` key not forwarded by `build_army`. G5
   byte-exact unchanged. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909)
-- Jordan-approved 2026-07-02 ("correct, retire them. those are emergent outcomes."): executes the LC-8
-  retirement Stage D deliberately deferred. `Horseshoe`/`RefusedFlank` removed from
-  `geometry.CELL_PATTERN_FN` and `config.MIN_DISCIPLINE`; only `Line`/`Arrowhead`/`GappedLine`/`Column`
-  remain valid subunit-level shapes. Envelopment/refused-flank now exist ONLY as Unit-level
-  compositions via `engine.build_envelopment`/`build_refused_flank` (Stage D).
-- `hierarchy/units.py`: dead `Horseshoe`/`RefusedFlank` branches removed from `role_at_contact` (zero
-  live callers, confirmed before/after); each `Subunit` now snapshots its spawn position at
-  construction (`_spawn_position`).
-- `orchestration.reset_positions` fixed: previously reset EVERY subunit in a Unit to one shared
-  shape-derived anchor column each battle-turn — silently correct only for single-subunit units, but
-  wrong for any multi-subunit army (collapsed wide-placed wings/escorts back to center every
-  re-engagement turn). Now restores each subunit to its OWN spawn column. Verified byte-exact-
-  preserving for every existing single-subunit matchup via git-worktree diff.
-- `bat.py`/`gauge_mb.py`: grid-mode battery/gauge rows using the retired shapes migrated to
-  `build_envelopment`/`build_refused_flank` army-builder callables; new golden digests recorded and
-  verified byte-exact (`unit`/`cell` both). `test_mass_battle_byte_exact.py`'s CI subprocess timeout
-  bumped 90s→180s (multi-subunit battery rows measurably slow the grid-mode digest run).
-- `workbench/trace.py`: `run_traced_battle` gains a `'preset'` spec dispatch (`army`/`envelopment`/
-  `refused_flank`), so the visualizer can build real multi-subunit Unit-level compositions.
-  `workbench/server.py`'s `H4`/`C4` presets rebuilt on the Envelopment composition.
-- G5 byte-exact both grid modes pass against re-baselined digests. `tests/valoria` 81 passed/10 skipped.
-  `gauge_mb.py`'s migrated rows and all workbench presets (grid and `FIELD_MOVEMENT=1`) run without
-  error.
+## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909) (archived — condensed)
+- Jordan-approved retirement: `Horseshoe`/`RefusedFlank` removed from `geometry.CELL_PATTERN_FN`/
+  `config.MIN_DISCIPLINE`; only `Line`/`Arrowhead`/`GappedLine`/`Column` remain valid subunit-level
+  shapes; envelopment/refused-flank now exist only as Unit-level `build_envelopment`/`build_refused_flank`
+  compositions. `reset_positions` fixed (per-subunit own spawn column, was one shared shape anchor).
+  `bat.py`/`gauge_mb.py` battery migrated + re-baselined, byte-exact verified. `tests/valoria`
+  81 passed/10 skipped. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — mass_battle workbench: multi-subunit preset dispatch + visualization battery
-- `workbench/trace.py`'s `run_traced_battle`/`_build_side` extended to accept a `'preset'` spec key
-  (`army`/`envelopment`/`refused_flank`) dispatching to `engine.build_army`/`build_envelopment`/
-  `build_refused_flank`, alongside the existing single-subunit `build_unit` spec shape — the
-  visualizer can now show real multi-subunit Unit-level compositions, not just single-subunit shapes.
-- **Adversarial finding during dogfooding, fixed:** `static/index.html`'s preset-selection JS only
-  ever populated the simple Shape/Troop dropdowns and always rebuilt the POST body from THEM in
-  `runBattle()` — it had no way to represent a multi-subunit preset spec (no `.shape` key) at all.
-  Selecting a multi-subunit preset (H4/C4 and the two new ones below) and clicking Run would have
-  silently run whatever stale shape values were left in the dropdowns, not the actual preset. Fixed:
-  `runBattle()` now uses a selected preset's multi-subunit side verbatim (`selectedPreset.a`/`.b`)
-  when it carries a `'preset'` key, and the dropdown is disabled + shown as `— composed army (see
-  preset) —` instead of a misleading stale shape name. Also removed `Horseshoe`/`RefusedFlank` from
-  the Shape dropdown's `<option>` list entirely (LC-8 retired them as `Subunit.shape` values —
-  selecting either would have raised `ValueError` at construction).
-- `workbench/server.py`: two new PRESETS exercising genuinely symmetric multi-subunit-vs-multi-subunit
-  battles (both sides field 3+ independently-tasked subunits at once, not just an attacker vs a
-  lone-subunit defender) — `M3` (Envelopment vs Envelopment, mirror) and `OBL` (RefusedFlank vs
-  Envelopment, mirrors `bat.py`'s "oblique" battery row).
-- Verified via a Playwright-driven run through all 8 presets in both `FIELD_MOVEMENT=1
-  PC_NODE_COHESION=1 PER_CELL=1` and the integer-grid baseline: each preset's deployment frame shows
-  the correct subunit count/placement, the fixed dropdown correctly reflects composed-army sides, and
-  H4 (Envelopment vs Arrowhead) visibly reproduces the Cannae pattern (B routed, HP 131/400, A's wings
-  wrapped around B's remaining position) by the final frame. `tools/ci_sim_fabrication_check.py` clean
-  on both changed files (one new literal in `server.py`'s `_REFUSED_REFUSED` cited).
+## 2026-07-02 — mass_battle workbench: multi-subunit preset dispatch + visualization battery (archived — condensed)
+- Workbench extended to visualize real multi-subunit compositions (`army`/`envelopment`/
+  `refused_flank` preset dispatch); a real frontend preset-dispatch bug found+fixed (stale-dropdown
+  values silently overriding the actual multi-subunit preset). Two new symmetric multi-subunit-vs-
+  multi-subunit presets (`M3`, `OBL`). Verified via Playwright across all 8 presets, both movement
+  modes. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — three Jordan rulings executed: field default flip (ED-1089), subunit cap 11 (ED-1090), frontal recoil gate (ED-1091)
-- **ED-1089 (field default flip, Stage A step 7 executed).** `FIELD_MOVEMENT` (hierarchy/units.py) and
-  `PC_NODE_COHESION` (config.py) defaults flipped `0` → `1` — a bare engine invocation now runs the
-  coordinate field. The integer grid remains fully available via explicit `FIELD_MOVEMENT=0
-  PC_NODE_COHESION=0` and stays the frozen byte-exact oracle. **Load-bearing CI-gate fix:**
-  `tests/valoria/test_mass_battle_byte_exact.py`'s `_PINNED_OFF` converted from `env.pop()` (which
-  after the flip would leave the new ON default in force, silently running the grid-oracle check on
-  the field path) to explicit per-toggle OFF-value pins (`'0'`/`'0.0'`). Both grid digests re-verified
-  byte-identical under explicit pins (`unit 18bc4a0b…`, `cell bf666d04…`). `bat.py` field golden
-  digests re-recorded (`unit_field c7957752…`, `cell_field dd085521…`) — the prior values were STALE
-  (recorded before the LC-8 battery migration); the re-record also folds in ED-1091 below. Workbench
-  server/frontend mode-banner docs updated for the inverted defaults.
-- **ED-1090 (videogame sub-unit cap = 11).** `engine.build_army` now enforces a hard ceiling of 11
-  subunits (`ValueError` above it; verified 11 constructs / 12 raises), lifting the TTRPG
-  bookkeeping cap of 3 (`mass_battle_v30.md` §A.5 banner added). Command (1–7) remains the
-  span-of-control governor within the ceiling; the >7 reconciliation (subordinate officers?) is
-  flagged as a future ED, not invented here.
-- **ED-1091 (frontal-only charge-recoil).** New `PC_RECOIL_FRONTAL` toggle (default ON; OFF
-  reproduces prior any-direction recoil): the reciprocal charge-recoil fires only when the braced
-  wall's per-cell-averaged octagon zone vs the charger is GREEN — "a brace cannot repel what it
-  cannot face" (grounding §4.3, Burkholder 2007; the historical-validity condition Jordan attached
-  was verified against that doc before executing). Verified: grid `cell` digest byte-identical (the
-  battery's only braced row is frontal); a frontal braced charge still recoils (36 firings); an
-  enveloping-cavalry-vs-braced-hold-line scenario shows the gate suppressing ~26% of firings
-  (804 vs 1088 over 8 seeds) — exactly the flank/rear hits. Gauge row C7 can now legitimately gain a
-  braced+enveloped variant on the next gauge pass.
+## 2026-07-02 — three Jordan rulings executed: field default flip (ED-1089), subunit cap 11 (ED-1090), frontal recoil gate (ED-1091) (archived — condensed)
+- ED-1089: `FIELD_MOVEMENT`/`PC_NODE_COHESION` defaults flipped 0→1 (field is now the default engine
+  path); CI-gate `_PINNED_OFF` fix (env.pop→explicit pins) closed a real silent-regression risk.
+  ED-1090: videogame subunit cap = 11 (`build_army`). ED-1091: frontal-only charge-recoil
+  (`PC_RECOIL_FRONTAL`, "a brace cannot repel what it cannot face"). All grid digests byte-identical
+  under pins. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — Stage E: Army Configuration Mode (deployment UI)
-- `engine.py`: `SUBUNIT_CAP` (11, ED-1090) hoisted from a local inside `build_army` to module scope
-  and exported via `_WRAPPER_API`, so any other caller — this UI, the future in-game deployment
-  screen — reads the single source instead of duplicating the literal.
-- `workbench/server.py`: new `GET /api/roster-options` endpoint exposing the live registries
-  (`geometry.CELL_PATTERN_FN` keys, `troop_types.TROOP_TYPE_STATS` + the two generic legacy types,
-  `roles_for` per troop type, `engine.SUBUNIT_CAP`) — the frontend never hardcodes a second copy of
-  a shape/role list that would drift after a future LC-8-style retirement.
-- `workbench/static/index.html`: new "Deploy Army" tab alongside the existing "Quick Match" tab
-  (additive — Quick Match untouched). Click-to-place deployment: pick shape/troop_type/role
-  (role-menu gated per troop type via `/api/roster-options`)/tier/troop-count, click the field (or
-  "Place at default position") to add a subunit to the active side's roster; roster list with
-  per-entry remove and a live cap counter (client-side cap enforcement mirrors `SUBUNIT_CAP=11`,
-  with the server's own `ValueError` as the authoritative backstop). "Start Battle" assembles both
-  rosters into the SAME `{'preset':'army','specs':[...]}` spec `trace._build_side` already
-  dispatches to `engine.build_army` (zero new backend battle-running path) and hands off to the
-  existing replay canvas/scrub/play controls — one rendering surface for both placement and replay,
-  per the Stage E decomposition ("the same canvas in a placement state instead of a replay state").
-- Verified via a Playwright-driven run: placed 3 heavy_infantry (Line) for side A and 2 cavalry
-  (role=Shock) for side B by canvas click, confirmed `Horseshoe` is absent from the shape options
-  (LC-8) and `Shock` appears in cavalry's role menu but not e.g. artillery's, started the battle
-  (112 replay frames produced, winner determined), confirmed switching back to the Deploy tab
-  restores the placement schematic rather than staying on the replay, and confirmed the cap: adding
-  an 11th side-A subunit succeeds, a 12th is blocked client-side with the ED-1090-citing alert
-  matching the server's own message text.
+## 2026-07-02 — Stage E: Army Configuration Mode (deployment UI) (archived — condensed)
+- Click-to-place deployment UI ("Deploy Army" tab, additive to Quick Match): `SUBUNIT_CAP` hoisted to
+  module scope; new `/api/roster-options` endpoint (single source, no frontend drift); one shared
+  canvas for placement + replay. Verified via Playwright (cap enforcement, role gating, LC-8 shape
+  removal all correct). Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1095)
-- **T1 (actor-gate).** New `PC_RECOIL_CHARGER_GATE` (config.py, default ON): the reciprocal
-  charge-recoil (`PC_CHARGE_RECOIL`) now additionally requires the charging atom's
-  `troop_type == 'cavalry'` literally — a defender no longer recoils a charger just for having
-  marginally higher per-tick momentum than a braced wall. `mounted_archers` explicitly excluded
-  (see T4 — they should never be closing to melee at all).
-- **T2 (brace-setup delay).** New `PC_BRACE_SETUP_DELAY` (config.py, default ON) +
-  `Subunit._brace_since_tick` (hierarchy/units.py: stamped `0` at construction for a subunit
-  deployed already braced; stamped to the firing tick by `core/contact.check_orders` when an
-  `Order` adds `'brace'` mid-battle; reset to `-1` on removal). `resolution._subunit_braced`/
-  `_unit_braced` are now `t`-parameterized (`t=None` preserves the old instantaneous check) and
-  require ≥1 full tick of continuous brace before treating a subunit as braced, for either the
-  charge-shock defensive benefit or the reciprocal recoil. `t` threaded through
-  `resolve_engagements`/`resolve_engagements_cascading`/`run_battle`'s call site.
-- **T3 (reach-gate, structural only).** `PC_RECOIL_CHARGER_GATE` additionally requires the
-  defender's `reach_for(troop_type) >= ` the charger's (`troop_types.registry.reach_for`, the
-  existing Stage-A primitive) — a charger with genuinely longer reach can strike a wall whose
-  weapons can't reach back, so the wall can't retaliate. `TROOP_TYPE_REACH` stays deliberately
-  empty (everyone defaults `REACH_SHORT`), so this half is a no-op today pending a separate
-  troop-type-to-reach-class ruling — not populated speculatively.
-- **T4 (mounted-archer default kiting).** `engine.build_army`: a spec with
-  `troop_type == 'mounted_archers'` and no explicit role/shape/instructions implicitly defaults
-  `role='Kite'` instead of silently closing to melee. Any explicit caller choice of role, shape,
-  or instructions always wins over this default. `build_unit` unchanged (no "unspecified shape"
-  case exists there — its `shape` parameter is a required positional).
-- Verified: `bat.py --check` byte-exact across all 4 digest modes (`unit`/`cell`/`unit_field`/
-  `cell_field`) against the frozen baselines; `tests/valoria` pytest suite 81 passed, 10 skipped.
-- **Also discovered, NOT fixed here (flagged in HANDOFF.md):** the `'envelop'`/`'sweep'`
-  instructions and the overhang `'wheel'` maneuver (`hierarchy/units.py` `advance_cells`
-  ~L802-861) are gated `if PER_CELL and ...` and only exist on the legacy grid path —
-  `_node_advance` (the coordinate-field path, DEFAULT since ED-1089) has no equivalent steering at
-  all, so every subunit currently just walks a straight line toward the enemy centroid on the path
-  actually used by default. Under investigation.
+## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1095) (archived — condensed)
+- T1 actor-gate (recoil requires charger troop_type=='cavalry'); T2 brace-setup delay (≥1 tick before
+  braced counts); T3 reach-gate (structural, TROOP_TYPE_REACH stays empty pending a separate ruling);
+  T4 mounted-archer default kiting (`role='Kite'`). Byte-exact verified. Discovered but not fixed
+  here: `envelop`/`sweep`/`wheel` only exist on the legacy grid path, unreachable on the default node
+  path (led directly into the next entry's movement/pathing audit). Full detail:
+  `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-02 — Movement/pathing audit (ED-1096) fix plan execution, in progress (ED-MB-0001)
 Fable-led audit (ED-1096) confirmed the root cause flagged above and 10 further findings; Jordan
@@ -439,3 +337,112 @@ and step 7, the waypoint primitive itself, still pending):
   no role.
 - **Not yet done:** `test_envelop_reaches_rear_node`'s xfail re-evaluation (next); DG-1/DG-2 remain
   open and are now the better-evidenced next lever given the gauge results above.
+
+## 2026-07-05 — mass_battle: Cannae follow-up audit (ED-MB-0003) — 4 defects fixed, DG-1/DG-3 completed, DG-2 captured as workplan
+
+A fresh Fable-5-led adversarial audit of the already-shipped DG-3/DG-4 fix (ED-MB-0002) found the
+"RC-1 is fully fixed, remaining gap is pure DG-1/DG-2" story was **false** — 4 concrete engine defects
+survived that fix, plus a harness composition bug. Jordan ruled the 3 open decision gates
+(AskUserQuestion) the same session; all fixes + ratified decisions implemented, then independently
+adversarially reviewed (2 more real bugs found+fixed in that pass).
+
+**Defects found+fixed:**
+- **D1** — `orchestration.py`'s `POOL_VARIANT=="C-ii"` branch applied an outer `a_troops_frac`
+  (`troop_count/unit.total_troops()`) multiplier to `a_base` BEFORE `pair_pool_contribution`'s own
+  internal per-troop normalization — double-diluting a composed subunit's pool by army-size share on
+  top of its own troop density. **Fixed per Jordan's ratified "intensive" pool semantics: removed
+  entirely** (still computed/used by the untouched `baseline` variant).
+- **D2** — `hierarchy/units.py`'s `_envelop_goal` shared one threshold for its phase-1/phase-2
+  transition (no hysteresis) — a wing wheeling to its rear waypoint immediately re-crossed the same
+  threshold turning in, yanked back to phase 1, forever. **Fixed** with a one-shot `_envelop_committed`
+  latch. A second, related bug (**D2b**) in `_node_advance`'s step formula could freeze a body forever
+  within 0.5 combined units of ANY goal (a fixed step overshoots when close, and the old code took no
+  action below that threshold) — **fixed** by capping the step at `min(step, mag)`.
+- **D3** — `orchestration.py`'s `max(1, math.floor(a_pool_raw+1e-9))` floor resurrected a
+  routed/broken atom's pool to 1, letting it keep dealing damage post-rout (§A.12 violation). First-pass
+  fix (zeroing `a_pool`/`b_pool` for a dead atom) was **found to be a no-op by adversarial review** —
+  `roll_pool`/`_sigma_net_boost` (resolution.py) both independently re-floor their own `pool` arg to a
+  minimum of 1 internally, so the zeroed input never reached the actual dice math (confirmed by a
+  revert-and-diff test: byte-identical digest with/without the first-pass fix). **Corrected fix** forces
+  `a_net`/`b_net` to exactly 0 directly for a dead atom (both SIGMA_HEAD and legacy branches).
+- **D4** — `percell.py`'s `distribute_casualties` tracked engaged columns as ONE union across a whole
+  Unit, letting an uninvolved subunit (e.g. a wide-placed wing 20+ rows from any enemy) absorb a share
+  of a DIFFERENT subunit's (the center's) casualties purely by column coincidence. **Fixed** — engagement
+  now tracked per-subunit (`eng_by_sub`), with an `any_engaged` whole-unit fallback preserving the
+  original degenerate-case semantics.
+- **Harness composition bug** (not an engine defect) — `gauge_mb.py`'s `_envelop_army`/`_refused_army`
+  fielded a FULL tier's troops per subunit via the legacy tier path, so a 3-subunit envelopment army
+  silently fielded 3x (2x for `_refused_army`) its single-subunit opponent's troops — a side effect of
+  the LC-8 migration, making every DG-1 composition question untestable. **Fixed**: both now take a
+  `total_troops` param (default = the single-subunit baseline) split via the continuous-scale
+  troops/concentration path.
+
+**Jordan's rulings (AskUserQuestion, 2026-07-05), implemented:**
+- **DG-3 completion = "Intensive (per-troop, partition-invariant)"** — see D1 above.
+- **DG-1 = "symmetric at parity + majority pin cavalry wing so long as bottom-up emergent primitives
+  approach"** — `_envelop_army`/`_refused_army` rebuilt at force parity (§ above); infantry rows
+  (H3/H5/H6) keep the symmetric center+2-wings shape at parity (`pin_frac=1/3` default); cavalry rows
+  (C4/C7) rebuilt as majority (2/3) infantry pin + minority cavalry wings via `wing_troop_type`/
+  `pin_frac=2/3`, matching Polybius/Livy order of battle, built entirely from `engine.build_envelopment`
+  unmodified.
+- **DG-2 = "create as workplan"** — NOT implemented. Captured as
+  `designs/proposals/mass_battle_fighting_withdrawal_v1.md` (status PROPOSED): a per-subunit `yielding`
+  state, facing preserved toward the enemy (unlike rout), commanded-entry first via a discipline-gated
+  `'yield'` order, emergent auto-entry flagged default-off pending measurement, reuses `_kite_goal`'s
+  reflect vector + the TOI/halt substrate + ED-MB-0001 §6's path-budget formula (NOT the audit's
+  originally-proposed "recoil/knock-back idiom," confirmed to not exist as a displacement primitive).
+
+**Adversarial-review pass (independent) — 2 real bugs found+fixed, rest checked out clean:**
+1. D3's no-op (above).
+2. `wing_speed`/`speed` kwargs in `_envelop_army`/`_refused_army` never reached `Unit.speed` —
+   `Subunit` has no `speed` field at all (per-subunit `'speed'` spec keys were pure dead decoration,
+   silently dropped by `build_army`), and the Unit-level `speed` was never forwarded to
+   `build_envelopment`/`build_refused_flank`. Fixed: per-subunit `'speed'` keys removed (cleanup); real
+   `speed=` now forwarded at the Unit level (the only granularity the engine's pursuit-check logic,
+   `orchestration.py`'s `routing_unit.speed`/`victor.speed` checks, actually reads).
+3. Everything else checked out clean (D2/D2b, D4, Step-4/5's arithmetic, all 4 digests independently
+   re-verified).
+
+**Verification:** all 4 `bat.py` digest modes re-recorded across the sequence of fixes (this touches
+shared, non-gated combat-resolution code — same as ED-MB-0002's own landing); `unit`/`cell`/`unit_field`
+stayed byte-identical through D2/D3(part 2)/D4 (this battery doesn't happen to exercise those bugs on
+those 3 modes); only `cell_field` moved at each PER_CELL-gated step, plus `unit`+`cell`+`unit_field`+
+`cell_field` ALL moved once at the Step-4 pool-semantics change (shared, non-gated code). `tests/valoria`:
+88 passed, 16 skipped (all pre-existing `numpy`-unavailable skips, unrelated to this change), 1 xfailed
+(`test_envelop_reaches_rear_node` — its xfail reason/docstring rewritten to retract the now-falsified
+"steering mechanism proven correct" claim and record this session's findings).
+
+**Honest gauge result (multi mode, n=30, final/corrected numbers):**
+
+| Row | Before (ED-MB-0002 baseline) | After (this session) | Band | Verdict |
+|---|---|---|---|---|
+| H3 | 100% draws | 100/0/0 | 55-72 | WIN-OUT |
+| H4 | 90% draws | 86.7/6.7/6.7 (val 92.9) | 45-62 | WIN-OUT |
+| H5 | 100% draws | 83.3/0/16.7 (val 100) | 48-62 | WIN-OUT |
+| H6 | 100% draws | 96.7/3.3/0 | 48-60 | WIN-OUT |
+| C4 | 66.7% (val) | 100/0/0 | 75-95 | WIN-OUT |
+| C7 | passing (100) | 100/0/0 | 65-100 | OK |
+
+Draws are **entirely gone** — a real, dramatic change from the 100%-draw lock. But every row now
+**overshoots decisively in the attacker's favor** instead of landing in-band (except C7, unaffected by
+the composition change, which continues to pass). Full 20-row gauge aggregate: **4/20 → 5/20** passing
+(H1,C1,C2,C6,C7 — C1 newly passes; every other previously-failing row, including RC-5's 9 untouched
+single-subunit rows, remains failing, now mostly via the same overshoot signature rather than draws or
+mixed results). **Not a clean net win or loss — a change in which rows fail and how.**
+
+**New, unresolved finding (not decided, disclosed not chased):** a controlled experiment (co-located vs.
+spatially-separated equal-troop subunit splits, both vs. an identical single-subunit opponent) suggests
+why: `subunit_combat_pool`'s Command-driven score does not scale by a subunit's own troop share, so
+multiple SPATIALLY-SEPARATED attacking fronts (center + 2 wings hitting one defender from different
+angles) each roll close to a full, independent combat score at once, tempered only by a small
+`ENCIRCLEMENT_PENALTY` tax that falls on the *defender*, not the attacker. Co-located splits stayed
+roughly partition-invariant (13-16-1 vs a 14-16-0 mirror baseline); spatially-separated splits did not.
+Whether this is a genuine partition-invariance defect or the historically-correct mechanism for why real
+encirclements are devastating (bands needing reconsideration instead) is **explicitly left open** — a
+new architecture question beyond DG-1/DG-3's scope, needing its own Jordan ruling, not a silent tweak.
+**DG-5 correction:** the frozen-vs-wheeling ablation's "no race" null result is RE-CONFIRMED for a
+DIFFERENT reason — both configurations' wings never reached contact at all (the now-fixed D2 bug), not
+because there was genuinely no race.
+
+Branch `claude/mass-battle-cannae-gauge-dg-rulings`. Next: Jordan's ruling on the partition-invariance
+question and on DG-2's build sequencing (workplan doc §4).

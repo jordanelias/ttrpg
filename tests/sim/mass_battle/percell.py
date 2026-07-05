@@ -67,14 +67,37 @@ def distribute_casualties(unit, dmg, pairs):
     """Increment 2: apply `dmg` troop-casualties across the unit's ENGAGED front columns,
     proportional to each engaged column's current density. Keeps sum(col densities) == hp:
     the same total `dmg` run_battle subtracts from unit.hp is subtracted here across columns.
-    Transparent substrate — does NOT feed back into resolution yet (later increments read this state)."""
+    Transparent substrate — does NOT feed back into resolution yet (later increments read this state).
+
+    [D4 fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] The engaged-column filter is now
+    computed PER SUBUNIT, not unioned across the whole Unit. The prior whole-unit union let one
+    subunit's engaged column leak onto an UNRELATED, unengaged subunit's cells that merely happen to
+    share the same absolute column value -- confirmed by direct trace: a wide-placed wheeling wing
+    20+ rows from any enemy absorbed a share of the CENTER subunit's casualties purely because its
+    column briefly overlapped the center's engaged range. A subunit's own cells now only count as
+    engaged against THAT subunit's own contact columns."""
     if dmg <= 0:
         return
-    eng = _engaged_cols(unit, pairs)
+    eng_by_sub = {}
+    sub_ids = {id(a) for a in unit.subunits}
+    for p in pairs:
+        aid = id(p.get("atom_a"))
+        if aid in sub_ids:
+            eng_by_sub.setdefault(aid, set()).update(c for (_r, c) in p.get("a_cells", []))
+        bid = id(p.get("atom_b"))
+        if bid in sub_ids:
+            eng_by_sub.setdefault(bid, set()).update(c for (_r, c) in p.get("b_cells", []))
+    # `any_engaged` preserves the original degenerate-fallback semantics: if NOTHING in the whole
+    # Unit is in contact this tick (no pairs reference any of its subunits at all), spread dmg over
+    # every living cell exactly as before. Once ANYTHING is engaged, a subunit only contributes cells
+    # if IT SPECIFICALLY has contact this tick -- an uninvolved subunit contributes nothing, closing
+    # the cross-subunit column-leak this fix targets.
+    any_engaged = bool(eng_by_sub)
     cells = []   # (subunit, cell_id, troops) over the ENGAGED front
     for a in unit.subunits:
+        eng = eng_by_sub.get(id(a))
         for pid, (r, c), troops in a.iter_cells():
-            if troops > 0 and (not eng or c in eng):
+            if troops > 0 and (not any_engaged or (eng and c in eng)):
                 cells.append((a, pid, troops))
     if not cells:                                  # fallback: spread over all living cells
         for a in unit.subunits:

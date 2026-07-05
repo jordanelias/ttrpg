@@ -536,12 +536,25 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
             # simultaneous pairs" approximation (an earlier version of this fix used exactly that,
             # via eng_counts/count_engagements_per_atom; corrected same-session per Jordan's
             # feedback that it was still top-down, not bottom-up) with an exact per-pair troop-
-            # weighted split. `a_troops_frac`/`b_troops_frac` is kept as an outer multiplier — a
-            # SEPARATE, pre-existing concern (dampening a multi-SUBUNIT army's shared Command-driven
-            # score so 3 subunits don't each roll a full-strength pool off the same Command value),
-            # orthogonal to RC-1(a)'s multi-FRONT (multi-enemy) asymmetry this fix targets.
-            a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base * a_troops_frac)
-            b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base * b_troops_frac)
+            # weighted split.
+            #
+            # [2026-07-05 fix, mass-battle Cannae gauge follow-up audit, Jordan-ratified: "Intensive
+            # (per-troop, partition-invariant)"] `a_troops_frac`/`b_troops_frac` was PREVIOUSLY kept
+            # as an outer multiplier here on the theory that it was a separate, pre-existing concern
+            # (dampening a multi-subunit army's shared-Command-driven score). A Fable-5 adversarial
+            # audit found this reasoning didn't hold: `pair_pool_contribution` already normalizes
+            # per-troop internally (`base_pool / atom.cur_troops`), so multiplying `a_base` by
+            # `a_troops_frac` (== atom.troop_count / unit.total_troops()) BEFORE that division makes
+            # the pair's effectiveness scale with the subunit's share of the WHOLE ARMY's troops, not
+            # its own troop type/quality/density -- identical troops fought at 1/3 effectiveness
+            # merely because their army had 3 subunits instead of 1, an army-bookkeeping denominator
+            # Jordan's own DG-3 wording never asked for. Confirmed by direct trace: this was the
+            # dominant reason the H3/H5/H6 gauge rows locked into 100% draws even after DG-3/DG-4
+            # landed. Fixed by dropping the outer multiplier here -- a subunit's combat score is now
+            # partition-invariant (splitting one army into N subunits does not change its total
+            # output), matching the ratified "intensive" reading.
+            a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base)
+            b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base)
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
@@ -550,8 +563,25 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
         # 2.9999999999999996). Confirmed to touch all 4 bat.py digest modes, not just field-path --
         # this variable is shared combat-resolution code, unlike every prior mass-battle fix in this
         # lane, which lived entirely inside the FIELD_MOVEMENT-gated node path.
-        a_pool = max(1, math.floor(a_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
-        b_pool = max(1, math.floor(b_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
+        #
+        # [D3 fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] The `max(1, ...)` floor
+        # below existed to guarantee a live atom always rolls AT LEAST one die -- but it applied
+        # unconditionally, so a ROUTED/BROKEN atom (whose true a_pool_raw/b_pool_raw is exactly 0.0,
+        # from subunit_combat_pool's own `if unit.routed or ... atom.broken: return 0` gate) got
+        # resurrected to pool 1 and kept dealing real damage for many ticks after routing --
+        # contradicts §A.12 ("routing: cannot fight back") and confirmed by direct trace (a routed
+        # subunit dealt ~5-18 casualties/turn for 9 turns while flagged routed=True). `a_pool`/`b_pool`
+        # is forced to exactly 0 here for bookkeeping (trace_event, the ranged//3 and encirclement
+        # adjustments below) -- but see the SECOND part of this fix at `a_net`/`b_net` below:
+        # `roll_pool`/`_sigma_net_boost` BOTH independently re-floor their own `pool` argument to a
+        # minimum of 1 internally (`resolution.py`'s `range(max(1,n))` / `math.sqrt(max(1,pool))`), so
+        # zeroing `a_pool` here ALONE has zero effect on the actual dice/damage outcome -- confirmed by
+        # an adversarial reviewer's revert-and-diff test (byte-identical digest with vs without this
+        # zeroing). The real fix forces `a_net`/`b_net` to 0 directly, downstream of those calls.
+        a_dead = unit_a.routed or unit_a.broken or atom_a.routed or atom_a.broken
+        b_dead = unit_b.routed or unit_b.broken or atom_b.routed or atom_b.broken
+        a_pool = 0 if a_dead else max(1, math.floor(a_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
+        b_pool = 0 if b_dead else max(1, math.floor(b_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
 
         # v11: Per-cell octagon angle — replace centroid-to-centroid with per-cell raw vectors
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]
@@ -811,6 +841,16 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
             if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
             a_net = roll_pool(a_pool)
             b_net = roll_pool(b_pool)
+        # [D3 fix, part 2 -- 2026-07-05 adversarial-review correction] `roll_pool`/`_sigma_net_boost`
+        # BOTH independently floor their own pool argument to a minimum of 1 internally, so zeroing
+        # `a_pool`/`b_pool` above (for a routed/broken atom) has NO effect on `a_net`/`b_net` -- the
+        # dice/sigma-boost math never sees the zero. Force the net directly here instead: a dead atom
+        # always resolves to `compute_degree`'s `net<=0` -> "Failure" -> `DAMAGE_BY_DEGREE["Failure"]`
+        # = 0 damage, closing the gap the first pass of this fix only appeared to close (confirmed by
+        # the reviewer's revert-and-diff test: without this, the digest is byte-identical to no fix
+        # at all).
+        if a_dead: a_net = 0
+        if b_dead: b_net = 0
         a_deg = compute_degree(a_net, max(1, b_net))
         b_deg = compute_degree(b_net, max(1, a_net))
         if LANCHESTER_ENABLED:
