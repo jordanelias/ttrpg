@@ -1,6 +1,6 @@
 # 01_workings — audit provenance manifest
 
-## Status: PROPOSED (audit working record — not canonical design text)
+## Status: RATIFIED working record (Jordan, 2026-07-05 — accepted as filed; still not canonical design text)
 
 Raw structured outputs and working notes from the 2026-07-04 qualitative NERS audit workflow
 (55 agents: 12 dossiers + 5 hunters + 7 lenses + 30 refuters/verifiers + critic). The synthesized

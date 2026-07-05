@@ -1,6 +1,6 @@
 # Strategic Judgments — the path to the North Star
 
-## Status: PROPOSED (audit judgments — Jordan review; nothing here self-ratifies)
+## Status: RATIFIED (Jordan, 2026-07-05 — accepted as filed; post-merge instruction on PR #77)
 ## Date: 2026-07-04 · Companion to `ners_qualitative_audit_v1.md`
 
 The North Star: **a Godot emergent grand-strategy · tactical-management · political-simulation ·
