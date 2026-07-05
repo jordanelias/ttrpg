@@ -18,7 +18,7 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "58f19eb4"
+  sha: "1b052abd"
   date: "2026-07-05"
 
 milestones:
@@ -79,10 +79,10 @@ milestones:
         evidence: ["PR #78 design"]
       - key: "S1"
         label: "Generator compile gate"
-        state: blocked
-        blocked_on: "forks 1-2 (Coup-Counter remap; ARC-T04); fork 11 default"
-        next: "rule forks 1-2, then compile the 138+8 validation set"
-        evidence: []
+        state: not_started
+        blocked_on: null
+        next: "execute the ratified fork-1 Coup-Counter remap + fork-2 ARC-T04 strike, then compile the 138+8 validation set"
+        evidence: ["forks 1/2/11 RATIFIED at defaults (ED-IN-0011)"]
       - key: "S2"
         label: "Store + tick"
         state: not_started
@@ -97,22 +97,22 @@ milestones:
         evidence: []
       - key: "S3"
         label: "Detect (discovery + priors)"
-        state: blocked
-        blocked_on: "fork 3 (convergence window)"
-        next: "rule fork 3"
-        evidence: []
+        state: not_started
+        blocked_on: null
+        next: "build discovery under the ratified window (same-Accounting priors / 4-season cosine — ED-IN-0011); after S2/S2.5"
+        evidence: ["fork 3 RATIFIED at default (ED-IN-0011)"]
       - key: "S4"
         label: "Light + cast"
-        state: blocked
-        blocked_on: "F-F/fork-8 (HELD BACK — Jordan sign-off)"
-        next: "rule F-F/fork-8 (the one held-back decision)"
-        evidence: []
+        state: not_started
+        blocked_on: null
+        next: "build the light allocator under the RATIFIED F-F surface (subtract-only + weight-set-as-data, ED-IN-0011); after S2/S2.5"
+        evidence: ["F-F/fork-8 RATIFIED at default (ED-IN-0011)"]
       - key: "S5"
         label: "Substance + banks + fixtures"
         state: blocked
-        blocked_on: "fork 6 (Certainty-in-bake scoping); ERA instrument unbuilt"
-        next: "rule fork 6 before build scoping"
-        evidence: []
+        blocked_on: "ERA instrument unbuilt (Stage-5 blocker)"
+        next: "scale-complete banks under the ratified fork-6 INCLUDE default (~1,200-2,700 units); build the ERA gate"
+        evidence: ["fork 6 RATIFIED at include-default (ED-IN-0011)"]
 
   M3:
     label: "Godot vertical slice"
@@ -137,9 +137,6 @@ milestones:
         evidence: []
 
 decisions_t0_open:
-  - "F-F/fork-8 — the Light-Function decision (HELD BACK; v2 §4/§10)"
-  - "fork 1 — Coup-Counter remap"
-  - "fork 2 — ARC-T04"
   - "JD-1 — PoB bands (PC U1)"
   - "ED-1051 — engine_clock ratification"
 
@@ -147,3 +144,4 @@ last_progress:
   - "2026-07-04: scene-combat R2 MERGED (PR #72); R3 weapon-model plan-of-record RATIFIED"
   - "2026-07-05: NERS qualitative audit RATIFIED, 12 lane EDs filed (PR #77 merged)"
   - "2026-07-05: narrative engine v1 + v2 Churn Engine (5-refuter pass applied) + workplan v6 + steering reconcile ED-IN-0006/0009 (PR #78)"
+  - "2026-07-05: Jordan RATIFIED ALL of PR #78 (ED-IN-0011) — incl. F-F/fork-8 at default; T0 wall shrank to JD-1 + ED-1051; fork 10 spun out as ED-FA-0001"

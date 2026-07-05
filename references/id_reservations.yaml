@@ -97,9 +97,9 @@ lane_ids:
     PC: { name: "Personal combat",     next_free: 2 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry)
     FI: { name: "Field investigation", next_free: 2 }   # ED-FI-0001 allocated 2026-07-05: NERS-audit E-12/GAP-1 accepted work item (investigation-lane audit)
     SC: { name: "Social contest",      next_free: 2 }   # ED-SC-0001 allocated 2026-07-05: NERS-audit E-10 accepted work item (dominance sweeps)
-    FA: { name: "Faction actions",     next_free: 1 }
+    FA: { name: "Faction actions",     next_free: 2 }   # ED-FA-0001 allocated 2026-07-05: faction-count reconciliation work item (narrative-census fork 10)
     WR: { name: "World",               next_free: 3 }   # ED-WR-0001 + ED-WR-0002 allocated 2026-07-05: NERS-audit E-5 (peninsular_strain GD-1 sweep) + E-8 (MS/RS name sweep) accepted work items
-    IN: { name: "Infrastructure",      next_free: 11 }  # ED-IN-0001 cutover; ED-IN-0002 docket adjudication; ED-IN-0003..0008 allocated 2026-07-05: NERS-audit accepted work items E-2/E-3/E-4/E-6/E-7/E-11 (convergence detector, articulation triggers, walkthrough policy, steering reconcile, register back-propagation gate, naming unification); ED-IN-0009 allocated 2026-07-05: master workplan v6 + steering-reconciliation execution (ED-IN-0006 action); ED-IN-0010 allocated 2026-07-05: workplan navigator (progress board + skill + status renderer)
+    IN: { name: "Infrastructure",      next_free: 12 }  # ED-IN-0001 cutover; ED-IN-0002 docket adjudication; ED-IN-0003..0008 allocated 2026-07-05: NERS-audit accepted work items E-2/E-3/E-4/E-6/E-7/E-11 (convergence detector, articulation triggers, walkthrough policy, steering reconcile, register back-propagation gate, naming unification); ED-IN-0009 allocated 2026-07-05: master workplan v6 + steering-reconciliation execution (ED-IN-0006 action); ED-IN-0010 allocated 2026-07-05: workplan navigator (progress board + skill + status renderer); ED-IN-0011 allocated 2026-07-05: PR #78 sign-off record (see its ledger entry)
     GO: { name: "Godot",               next_free: 1 }
     SE: { name: "Settlements",         next_free: 2 }   # ED-SE-0001 allocated 2026-07-05: NERS-audit E-1 accepted work item (governance_play_redesign path)
 

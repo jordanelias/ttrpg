@@ -537,8 +537,8 @@ block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830�
 per the file's protocol; never max+1. Since the 2026-07-02 cutover (ED-IN-0001), new EDs
 allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
-- **START HERE — Master Workplan v6 is the live steering surface (2026-07-05, ED-IN-0009,
-  PR #78).** `designs/workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
+- **START HERE — Master Workplan v6 is the live steering surface, RATIFIED with the whole
+  of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `designs/workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
   playable season · M2 any-seed story bar · M3 Godot slice), per-lane workstreams (status
   stays in `handoffs/HANDOFF_<LANE>.md` — v6 only sequences), and the tiered T0/T1/T2
   Jordan-decision register (§5) that **supersedes the 2026-07-01 `decision_queue.md` as the
@@ -547,10 +547,10 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   `deprecated/references/`, workplan v5 archived with banner (its J-38 contradiction
   corrected), hierarchy adopted (CURRENT.md → lane handoffs → workplan-derived). Same PR:
   the **narrative engine v2 "Churn Engine"** (`designs/audit/2026-07-05-emergent-narrative-engine/
-  narrative_engine_design_v2_churn.md`, five-refuter adversarial pass applied) — ⚠️ **the
-  F-F/fork-8 Light-Function decision is HELD BACK from merge-ratification** (one surface:
-  subtract-only discipline + the weight set as Jordan's authorial parameters — needs explicit
-  sign-off; see v2 §4/§10 and v6 §5 T0).
+  narrative_engine_design_v2_churn.md`, five-refuter adversarial pass applied) — **RATIFIED
+  in full 2026-07-05 (ED-IN-0011), including F-F/fork-8 at its default** (subtract-only +
+  the weight set as versioned data; values revisable anytime). Remaining T0 wall: JD-1 (PC)
+  + ED-1051 (engine_clock); fork 10's faction count = ED-FA-0001 (needs_jordan).
 - **R2 (closing-distance/facing/grip/contact redesign) — I0→I8 COMPLETE (2026-07-03), PR #72
   (branch `claude/scene-combat-closing-distance-mg18pq`), awaiting review/merge.** Implemented the full
   ratified plan (`designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md`) per

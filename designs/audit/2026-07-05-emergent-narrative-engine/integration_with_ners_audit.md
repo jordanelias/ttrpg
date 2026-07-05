@@ -1,6 +1,6 @@
 # Integration Crosswalk — Narrative Engine ↔ the ratified 2026-07-04 NERS Audit
 
-## Status: PROPOSED (Jordan-vetoable; companion to narrative_engine_design_v1.md)
+## Status: RATIFIED (Jordan, 2026-07-05, PR #78; ED-IN-0011 — companion to the v1+v2 design docs)
 ## Date: 2026-07-05
 
 ## 1 · Audit findings → this design

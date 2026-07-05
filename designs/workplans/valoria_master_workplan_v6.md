@@ -1,7 +1,8 @@
 # Valoria — Master Workplan v6 (North-Star master: milestones, lanes, tiered decision register)
 
-**2026-07-05 · status: CANON-PROPOSED — Jordan-vetoable; the active master on merge (ED-1094
-merge-ratifies convention), supersedes v5. §5 is the live decision register.**
+**2026-07-05 · status: CANON — RATIFIED (Jordan, 2026-07-05: "Ratify commit merge all", PR #78;
+ED-IN-0011); the active master, supersedes v5. §5 is the live decision register (see its
+ratification update — the T0 wall shrank to JD-1 + ED-1051).**
 
 **as_of: HEAD `d31ac85a` (branch `claude/ners-audit-fable5-9cpfdz`, PR #78). Verified live:
 `canon/editorial_ledger.jsonl` = 581 lines / 580 distinct IDs / flat-ED ceiling ED-1096 /
@@ -81,8 +82,9 @@ the convergence surface, and no Layer-B ensemble.
 
 v2 §9's fixture F1 as a shippable milestone: 5+ seeds each yield a chronicle that is
 connected, continuous, rooted, live (invariants i–iv) and distinct in named actors, stakes,
-outcomes — plus the F8 anti-self-fulfillment control passing. Requires narrative Stages 1–4,
-the Light-Function decision (F-F/fork-8 — T0), and the Stage-1 compile gate (forks 1–2).
+outcomes — plus the F8 anti-self-fulfillment control passing. Requires narrative Stages 1–4
+under the ratified Light-Function surface (F-F/fork-8, ED-IN-0011) and the Stage-1 compile
+(fork-1 remap + fork-2 strike execution).
 
 ### M3 — GODOT VERTICAL SLICE
 
@@ -129,11 +131,11 @@ Head: `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_desig
 | Stage | Contents | Gate |
 |---|---|---|
 | 0 | Render-gap close (ED-IN-0004: combat_resolved / investigation_resolved / 4 ED-681 thread beats / 2 meta Keys; §6.4 correction) | none — ships first (J-7) |
-| 1 | Generator compile gate: template grammar + the 138+8 validation compile | forks 1–2 (T0); fork 11 default |
+| 1 | Generator compile gate: template grammar + the 138+8 validation compile | execute the ratified fork-1 remap + fork-2 strike; fork 11 ratified at default |
 | 2 | Store + tick (lifecycle FSMs) | Gate-0 honesty: Accounting substrate |
 | 2.5 | Forecast — **Layer A alone for M1 (hard gate)**; Layer B only after: sim stubs (`npc_ai`, `ip_track`, `rs_track`, ~8 provincial), event-deck first code, scene-EV flag path, `canonical_key_log` serialization spec + ORD-3/ORD-4, fixtures F7+F8 | the listed preconditions |
 | 3 | Detect (discovery + authored priors) | fork 3 window |
-| 4 | Light + cast (+ ORD-4 scene-queue fix, scene_entered single-sourcing) | **F-F/fork-8 (T0, HELD BACK)** |
+| 4 | Light + cast (+ ORD-4 scene-queue fix, scene_entered single-sourcing) | F-F/fork-8 RATIFIED (ED-IN-0011) — build gate only (after S2/S2.5) |
 | 5 | Substance interface + scale-complete banks + conformance suite + fixtures F1–F8 | fork 6 (bake scoping); ERA instrument build |
 
 Cross-lane handoff sequenced here: **v2 §5 (claim grammar) is a requirements input to the SC
@@ -232,13 +234,22 @@ _Rows: fork · default · blocks · home pointer. **No status column** — resol
 the ledger/handoffs; the monthly reconcile refreshes this table's pointers. Tier = T0 blocks
 M1 · T1 blocks a named stage · T2 taste/tuning/housekeeping._
 
+**Ratification update (2026-07-05, ED-IN-0011 — Jordan: "Ratify commit merge all"):** every
+fork in this register that carried a stated default is RATIFIED at that default — struck
+below where T0, adopted-in-place for T1/T2 (F-F/fork-8 incl. the subtract-only discipline;
+forks 1/2/3/6/7/9/11; v1 forks 4–5; F-A..F-G with F-G's numbers still Jordan's later).
+ExecUTION of ruled directions (fork-1 remap, fork-2 strike) remains scheduled work.
+Still genuinely open (no default existed): fork 10's faction COUNT (ED-FA-0001), JD-1..8,
+DG-1/DG-2, RC-5, ED-1090, ED-1042, ED-1051, ED-1052, ED-911/WS-7, attribute roster, the
+Godot register — cross-lane questions this PR never carried.
+
 ### T0 — block the M1 path
 
 | Fork | Default | Blocks | Home |
 |---|---|---|---|
-| **F-F/fork-8 — the Light-Function decision (HELD BACK from merge-ratification; explicit sign-off requested)** | subtract-only discipline + the §4 weight enumeration as authorial parameters | narrative Stage 4; M2 | v2 §4/§10 |
-| fork 1 — Coup-Counter remap (STRUCK ED-781, live in 6 register entries) | 1:1 remap onto Löwenritter Autonomy 4-stage | narrative Stage 1 compile | v2 §2; register defects |
-| fork 2 — ARC-T04 dangling ref | strike; COLLISION-C → 7-of-8 | Stage-1 validation set | v2 §2 |
+| ~~F-F/fork-8 — the Light-Function decision~~ **RATIFIED at default 2026-07-05 (ED-IN-0011)** | subtract-only + the §4 weight enumeration (values stay tunable data) | — | v2 §4/§10 |
+| ~~fork 1 — Coup-Counter remap~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | 1:1 remap onto Löwenritter Autonomy 4-stage | narrative Stage 1 compile (execution) | v2 §2 |
+| ~~fork 2 — ARC-T04~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | strike; COLLISION-C → 7-of-8 | Stage-1 validation set (execution) | v2 §2 |
 | JD-1 — PoB bands (PC U1) | per consolidation_v1 | the whole U-series chain → juncture 4 | R3 consolidation_v1 |
 | ED-1051 — engine_clock ratification | flip doc:null to propagation_spec_v1 | juncture 6; GO entry | decision queue 12; CURRENT.md L32 |
 
@@ -252,7 +263,7 @@ M1 · T1 blocks a named stage · T2 taste/tuning/housekeeping._
 | ED-1090 — Command-vs-cap-11 | keep TTRPG cap until ruled | MB Stage E | MB handoff |
 | fork 3 — convergence temporal window | same-Accounting priors; 4-season cosine discovery | narrative Stage 3 | v2 §10 |
 | fork 6 — Certainty-in-bake | include (headline ~1,200–2,700 units); fallback lexicon-swap (230–450) | Stage-5 build scoping | v2 §6/§10 |
-| fork 10 — faction-count reconciliation (4–8 across four docs) | needs its own ED + ruling | faction-scope banks/bindings | v2 §10; census §1.2 |
+| fork 10 — faction-count reconciliation (4–8 across four docs) | **ED-FA-0001 filed**; the count ruling itself is Jordan's (no default) | faction-scope banks/bindings | v2 §10; census §1.2 |
 | fork 11 — scenario_authoring authoring-vs-runtime | compile = authoring-time | Stage 1 compile home | v2 §10; module_contracts [OPEN] |
 | F-A — forecast fidelity per branch class | Layer A continuous / Layer B discrete; discrete per-lever deferred post-M1 | Stage 2.5 | v2 §3/§10 |
 | JD-2…JD-8 (PC) | per consolidation_v1 rows | the named U-steps / T-P2 / T5 | R3 consolidation_v1 |

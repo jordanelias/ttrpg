@@ -39,7 +39,9 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   entries; ARC-T04 dangling; Torben Loyalty range register-vs-clock_registry conflict.
 
 - **Narrative engine v2 "THE CHURN ENGINE" + Master Workplan v6 + steering reconciliation —
-  DELIVERED 2026-07-05 (ED-IN-0009; PR #78), awaiting Jordan review.** v2
+  RATIFIED IN FULL 2026-07-05 (Jordan: "Ratify commit merge all"; ED-IN-0009/ED-IN-0011;
+  PR #78 merged). All stated fork defaults adopted incl. F-F/fork-8; fork 10's faction
+  count = ED-FA-0001 (open, needs_jordan). Originally delivered as:** v2
   (`narrative_engine_design_v2_churn.md` + `spec/churn_amendments.md`, supersedes-in-part v1)
   reorganizes the engine around Jordan's churn critique: generator-not-corpus (templates ×
   binding, 138 register arcs = validation set), two-layer forecast (Layer A analytic — the M1
@@ -59,7 +61,8 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   roadmap_state → `deprecated/references/` (banner), v5 → `archives/workplans/` (banner
   fixing its J-38 contradiction), decision-queue items 1–3 refreshed + queue demoted to
   dated snapshot, CURRENT.md rows updated (workplan v6 + new Narrative-engine row),
-  `lane_assignments.yaml` repointed. Next IN actions live in v6 §2.
+  `lane_assignments.yaml` repointed. Next IN actions live in v6 §2. **⚠️ F-F/fork-8 note
+  below is superseded by the ratification above.**
 
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).

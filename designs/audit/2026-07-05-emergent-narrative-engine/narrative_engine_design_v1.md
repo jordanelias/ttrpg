@@ -1,6 +1,6 @@
 # Valoria — The Emergent Narrative Engine · Design v1
 
-## Status: PROPOSED (Jordan-vetoable throughout; open forks §5; held-back items flagged in the PR body)
+## Status: RATIFIED as amended by v2 (Jordan, 2026-07-05, PR #78; ED-IN-0011 — fork defaults adopted incl. fork 8 subtract-only; read with ../narrative_engine_design_v2_churn.md + spec/churn_amendments.md)
 ## Date: 2026-07-05 · Lane: IN (claims homes in the articulation/arcs/scene cluster) · Branch: `claude/ners-audit-fable5-9cpfdz`
 
 **What this is.** The design spec + module contract for the engine that does what Valoria's

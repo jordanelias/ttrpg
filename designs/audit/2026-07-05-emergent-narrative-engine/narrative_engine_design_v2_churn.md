@@ -1,6 +1,6 @@
 # Valoria — The Emergent Narrative Engine · Design v2: THE CHURN ENGINE
 
-## Status: PROPOSED (Jordan-vetoable throughout; supersedes-IN-PART design v1 — v1 stays as record; the F-F/fork-8 Light-Function decision is HELD BACK from merge-ratification)
+## Status: RATIFIED (Jordan, 2026-07-05 — "Ratify commit merge all", PR #78; record ED-IN-0011. Supersedes-IN-PART design v1 — v1 stays as record, ratified as amended. The previously held-back F-F/fork-8 Light-Function decision is RATIFIED at its stated default — subtract-only discipline + the weight set as exposed, versioned authorial parameters; the weight VALUES remain tunable data, revisable anytime without re-ratification)
 ## Date: 2026-07-05 · Lane: IN · Branch: `claude/ners-audit-fable5-9cpfdz` · Companion: `spec/churn_amendments.md` (per-chapter deltas to v1's s1–s5)
 
 **Why v2 exists.** v1 (the Arc-Vector Engine) answered *how detected story-moments reach the
@@ -274,13 +274,14 @@ central object and the game's authorial voice.
   forecast of convergence C, suppress player participation, verify realized P(C) does not
   exceed the forecast-blind control — if forecasting C raises P(C), the loop is live and the
   build fails.
-- **The authorial surface — HELD BACK as one decision (F-F/fork-8):** the weight set
+- **The authorial surface — RATIFIED at this default (F-F/fork-8, Jordan 2026-07-05, ED-IN-0011):** the weight set
   (identity-touch · durability · forecast mass · imminence · tie-proximity · scale
   allocation · inertia/decay constants · the anti-strobe floor · the attention-budget sizes
   and the exempt-cap/reserved-promotion-slice constants) IS Jordan's narrative voice —
   every tunable that shapes the light, enumerated here, none left in prose or inherited
-  config — exposed, versioned data (§7), presented for explicit sign-off together with the
-  subtract-only discipline. Merging this PR ratifies neither.
+  config — exposed, versioned data (§7). The subtract-only discipline + this enumerated
+  surface were ratified together; the weight VALUES stay data — Jordan revises them at any
+  time without re-ratification.
 
 ## §5 · THE SUBSTANCE — the claim-grammar interface (real arguments, not number-manipulation)
 
@@ -558,12 +559,13 @@ forecast-blind control — §4's severance, proven empirically).
 
 ## §10 · Open forks (consolidated; v1's forks 1–7 and 9 stand unchanged)
 
-**T0-class (block M1 path):** **F-F/fork-8 — the Light-Function decision (HELD BACK):**
+**T0-class (block M1 path):** **F-F/fork-8 — the Light-Function decision (RATIFIED at default, Jordan 2026-07-05, ED-IN-0011):**
 subtract-only discipline + the weight set as Jordan's authorial parameters (the full §4
 enumeration, including budget sizes, exempt-cap/promotion-slice, anti-strobe floor,
-durability, decay constants) — one surface, explicit sign-off requested. · fork 1
-Coup-Counter remap (blocks Stage 1) · fork 2 ARC-T04 (blocks COLLISION-C in the validation
-set).
+durability, decay constants) — one surface, signed off. · fork 1 Coup-Counter remap
+(RATIFIED at default: 1:1 remap onto Löwenritter Autonomy 4-stage — EXECUTION remains a
+Stage-1 work item) · fork 2 ARC-T04 (RATIFIED at default: strike; COLLISION-C → 7-of-8 —
+execution remains).
 **T1-class (block a named stage):** F-A forecast fidelity EV-vs-sampled per branch class
 (default: Layer A analytic for continuous, Layer B sampled for discrete — the dossier's
 shape; discrete PER-LEVER horizons deferred post-M1 outright, §3) · fork 3 convergence
@@ -571,10 +573,10 @@ temporal window (same-Accounting for authored priors; 4-season cosine for discov
 default) · fork 6 **Certainty-in-bake** (the census's single biggest swing: authored units
 ~1,200–2,700 under the include-default headline vs 230–450 under the lexicon-swap fallback;
 rule before build scoping) · **NEW fork 10 — faction-count reconciliation** (census: 4–8
-across four docs; blocks any faction-scope bank/binding table; needs its own ED + ruling) ·
+across four docs; blocks any faction-scope bank/binding table; ED-FA-0001 filed — the COUNT ruling itself stays open, no default exists) ·
 **NEW fork 11 — `scenario_authoring` authoring-vs-runtime classification** (module_contracts
-`[OPEN — Jordan]`; default = compile is authoring-time, its output packs seed runtime —
-surfaced here so the default is never ratified silently under routine merge).
+`[OPEN — Jordan]`; RATIFIED at default 2026-07-05: compile is authoring-time, its output
+packs seed runtime — ED-IN-0011).
 **T2-class (tuning/taste):** F-B horizon k + ensemble N · F-C forecast-RENDER access rules
 (which counsel/omen surfaces a position sees; position-scoped default; T-30 — NPC reads are
 barred outright by R-AI, not a fork) · F-D counterfactual-ghost budget (sparing) · F-E

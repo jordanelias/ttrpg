@@ -1,6 +1,6 @@
 # Churn Amendments — v2 deltas to the v1 normative chapters (s1–s5)
 
-## Status: PROPOSED (companion to ../narrative_engine_design_v2_churn.md; the chapters remain normative except where amended here)
+## Status: RATIFIED (Jordan, 2026-07-05, PR #78; ED-IN-0011 — companion to ../narrative_engine_design_v2_churn.md; the chapters remain normative except where amended here)
 
 Each v1 chapter stays in force; this file is the authoritative delta list. Where a delta and
 the chapter text conflict, the delta wins pending the chapters' next full revision.
