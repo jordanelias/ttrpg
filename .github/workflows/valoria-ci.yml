@@ -395,6 +395,9 @@ jobs:
       - name: Install test deps
         run: pip install pyyaml pytest
       - run: python -m pytest tests/valoria -q
+      # tests/contracts (the contract_adjudicator's own suite) was orphaned from CI
+      # until 2026-07-07 (unaddressed-areas audit, ED-IN-0017) — run it here too.
+      - run: python -m pytest tests/contracts -q
 
   sim-regression:
     name: Sim Reference Regression

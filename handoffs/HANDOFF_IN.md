@@ -8,6 +8,50 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Unaddressed-areas comprehensive audit — DELIVERED 2026-07-07 (ED-IN-0017, this PR;
+  deliverable 1 of 2).** 14 evidence clusters (incl. Jordan-directed pessimist NERS + pessimist
+  resolver reviews) + 4 gap-closure agents + 5 independent refuters; every cluster's Honest-gaps
+  section dispositioned per Jordan's directive. Deliverables at
+  `designs/audit/2026-07-07-unaddressed-areas-audit/` — verdict-first report, finding_status,
+  `ed_options.md` (17 candidates, **deliberately UNFILED — Jordan picks**; OPT-1/2/4/10/14 and
+  the armature §5 docket are needs_jordan), and **`resolution_plan_v1.md`** — the comprehensive
+  bottom-up + top-down resolution program (armature-FIRST sequencing override per Jordan;
+  contract deployment + enforcement ladder; v40 re-authoring license operationalized; ecosystem
+  tooling bindings; full finding→fix→lane→stratum→gate table). Headlines: the faction oracle implements the
+  pre-LPS-1 superseded model; threadwork is a total island; live contests resolve through the
+  deprecated raw-dice stub; the ~87% win-share is a small-n artifact riding an elimination
+  lockout (n=100: 56/36/7/1); the Turmoil victory gate is permanently vacuous; ED-871/fork-2/
+  ED-912/fork-11 rulings only partially executed; conviction_track_v30 still runs the superseded
+  CI-75 model (unpropagated supersession, refuter-upgraded).
+- **Key & Echo Armature v1 — DELIVERED 2026-07-07 (ED-IN-0018, this PR; deliverable 2 of 2,
+  needs_jordan = its §5 fork docket).** `designs/architecture/key_echo_armature_v1.md` (seam
+  contracts + Echo Matrix all-directions/all-scales + §3 registry deltas + A13-A16 conformance
+  specs + the consolidated §5 docket — **merge does NOT ratify §5**) + the first executable Key
+  substrate (`sim/substrate/keys.py`, 24 tests) + `tests/contracts` wired into CI. Staging:
+  PR-2 = flag-gated echo wiring + the F7 smoke oracle; PR-3+ = per-lane shaping waves (armature
+  §6.3). The §5 docket consolidates: OF-D6/OF-3/OF-7/OF-B1/RNG-COLLISION/ORD-3/ORD-4/OF-CAP,
+  ED-SC-0002, ED-SE-0002, the ED-IN-0012/0013 double-allocation renumber (ledger lines 597-600),
+  CI 75-vs-80, ER-2 band-discipline scope, contest live-dispatch.
+
+- **Unaddressed-areas audit + Key & Echo Armature — RATIFIED 2026-07-07 (Jordan: "Perform
+  consolidated ruling pass? I want to ratify all and get to work on this" — ED-IN-0026, same
+  branch/PR, before merge).** Rules the armature's full §5 fork docket (16 rows — see
+  `key_echo_armature_v1.md` §5 Ruling Log) and files all 17 `ed_options.md` candidates as EDs
+  (`ED-FA-0004/0005`, `ED-IN-0019/0020/0021/0022/0023/0024/0025`, `ED-WR-0004/0005/0006`,
+  `ED-FI-0003`, `ED-SE-0003/0004`, `ED-PC-0003/0004`, `ED-SC-0011`, `ED-MB-0004`; see
+  `ed_options.md`'s Disposition table for the design-call ruling baked into each). Headlines:
+  OF-7/OF-B1 ADOPTED — `sim/substrate/keys.py`'s `TickScheduler` now defaults both flags ON
+  (propagation_spec_v1.md and key_substrate_v30.md amended to record the ratification; 25/25
+  substrate tests + full 120-pass `tests/valoria` suite re-verified, no regressions); the
+  ED-IN-0012/0013 double-allocation (§5.10) EXECUTED via the `ED-IN-0019`/`ED-IN-0020` renumber;
+  the ER-2/Overwhelming band-discipline fork (§5.12, the one genuine no-default fork besides the
+  renumber) ruled toward the symmetric-unification direction, execution deferred to `ED-PC-0003`;
+  the A15 process extension (§5.16) landed in `key_type_registry_v30.md` §10, which also picked
+  up a header CANONICAL/PROVISIONAL split correction found while editing the same file.
+  `ED-SC-0002`/`ED-SE-0002` (§5.8/5.9) deliberately left unruled — pre-existing SC/SE-lane forks,
+  out of this IN-lane pass's scope per CLAUDE.md §4's session-lane-scoping convention. Citation
+  integrity + currency checks re-verified clean (`validate_ed_citations.py` 0 violations,
+  `currency_consistency_check.py` clean, adjudicator baseline unchanged at 21/65).
 - **Edge-playability audit — RATIFIED IN FULL 2026-07-05 (Jordan: "Ratify all", post-merge
   instruction on PR #81; merged as #81, ratification batch on the restarted branch).** Seam-level
   complement to PR #77: ~60 edges, 8 sonnet clusters, Fable-verified V1–V22. Deliverables at
@@ -15,7 +59,9 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   (verdict "the seams are the old GM's chair, still empty"; EP-1..EP-11 P1s, ep-12..ep-31 P2/P3
   register, SIG-1..4), grounding, dossiers + verification log. **All 10 §7 remediation items
   FILED 2026-07-05:** `ED-IN-0012` registry×rendering sweep · `ED-IN-0013` GM-token sweep of the
-  handoffs · `ED-IN-0014` key the silent emitters (settlement/ci_political/era) · `ED-IN-0015`
+  handoffs (**renumbered 2026-07-07 to `ED-IN-0019`/`ED-IN-0020` respectively — armature §5.10,
+  see the ratification entry below; `ED-IN-0012`/`ED-IN-0013` now mean the SC-audit batch content
+  only**) · `ED-IN-0014` key the silent emitters (settlement/ci_political/era) · `ED-IN-0015`
   seam-feedback authoring convention · `ED-IN-0016` index the joints (CURRENT.md rows +
   faction_politics doc:null flip) · `ED-SE-0002` Accord/Order stacking ruling (**needs_jordan**:
   the ruling itself) · `ED-FA-0002` strategic-turn surface / domain_actions home doc ·
@@ -130,6 +176,15 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Decisions
 
+- 2026-07-07 — **Consolidated ruling pass on the Key & Echo armature §5 docket + ed_options.md
+  (ED-IN-0026).** Jordan: "Perform consolidated ruling pass? I want to ratify all and get to work
+  on this" — exercising, before merge, the ratification authority PR #85's body had deliberately
+  held back. Per-row disposition lives in `key_echo_armature_v1.md` §5's Ruling Log (16 rows) and
+  `ed_options.md`'s Disposition table (17 filed EDs). Two rows were genuine no-default forks
+  needing an actual pick: the ED-IN-0012/0013 renumber (executed) and the ER-2/Overwhelming
+  band-discipline direction (ruled, execution deferred). Two rows (ED-SC-0002, ED-SE-0002) were
+  explicitly left to their owning lanes rather than ruled from this IN-lane pass. See the Pending
+  entry above for the full headline list.
 - 2026-07-02 — **HANDOFF.md split into per-lane files, matching the `ED-<LANE>-NNNN`
   nomenclature.** Jordan: "Handoffs need to have the same tagging nomenclature. There are
   different handoffs for different lanes." Root `HANDOFF.md` is now a thin index + genuinely

@@ -217,6 +217,17 @@ on_key_emitted(key):
         cause_key.awareness = clamp(cause_key.awareness + 0.1, 0, 1)
 ```
 
+**Amendment pointer (2026-07-07, RATIFIED — Jordan's consolidated "ratify all" ruling pass,
+ED-IN-0026; see `designs/architecture/propagation_spec_v1.md`'s OF-7/OF-B1 sections for the full
+text):** step 4 is amended to permit a deferred-apply target for the settlement-locus effect
+(OF-7 — the Key itself still logs live at step 2; only its `apply_state_changes`-equivalent
+settlement effect may defer to ACCOUNTING_BOUNDARY). Step 5 is amended to forbid synchronous
+re-entrant emission — a `subscribing_system.consume(key)` callback that wants to emit a new Key
+must route it through a `schedule_emission()`-equivalent queue rather than emitting directly
+(OF-B1). This pseudocode is left as originally written (a snapshot of the unamended rule); the
+executable oracle at `sim/substrate/keys.py`'s `TickScheduler` implements the amended form with
+both flags defaulted ON, per the ratification above.
+
 This rule is the *only* update path for engine state. All systems emit Keys; all systems read Keys.
 
 ### §4.2 Observer resolution

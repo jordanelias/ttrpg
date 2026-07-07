@@ -15,7 +15,15 @@ task here — the skeleton is illustrative, not buildable (covers 1/27 modules, 
 
 ## Pending
 
-(none.)
+- **GO/port-seam audit: DELIBERATELY DEFERRED (Jordan ruling, 2026-07-07 — unaddressed-areas
+  audit, ED-IN-0017).** The port seam (canon→GDScript parity incl. the ED-1050 key-log-parity
+  known-red residual, the CLAUDE.md §5 prose-params→typed-params data crossing, skeleton honesty
+  vs the 27-module contract spine, the strategy doc's open 8-item register) was identified as the
+  one surface no audit has ever scoped — deferred BY RULING, not by omission. **Trigger to
+  schedule: Gate-0 entry** (ED-1051 engine_clock ratification + strategy-register closure).
+  Scope when it runs: skeleton-vs-contracts-vs-oracle deltas · key-log parity status · §5
+  data-seam drift census. Note for that session: `sim/substrate/keys.py` (Key & Echo armature,
+  ED-IN-0018) is now the Python oracle for the G0.1 `Key.gd` v2 field set — port FROM it.
 
 ## Decisions
 

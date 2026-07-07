@@ -70,7 +70,10 @@ THRESHOLDS = {
     "canon/patch_register_archive.yaml":     100_000,
     "canon/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
     # Overflow chunk for canon/editorial_ledger.jsonl (2026-07-02, first split — settled
-    # resolved/struck/superseded/applied entries ED-001..ED-330). Mirrors the
+    # resolved/struck/superseded/applied entries ED-001..ED-330; 2026-07-07 second split,
+    # user-approved during the Key & Echo armature ratification pass — the active ledger had
+    # drifted to 152,202 tokens against the 150,000 cap, so the next batch of terminal-status
+    # flat entries, ED-331..ED-759, moved here to restore headroom). Mirrors the
     # patch_register_active/archive co-location convention. Recognized by
     # tools/validate_ed_citations.py ARCHIVE_JSONL_PATHS so archived-ED citations still
     # resolve. Soft limit matches the active ledger's own cap.

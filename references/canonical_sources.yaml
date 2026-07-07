@@ -314,12 +314,12 @@ systems:
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
   key_substrate:
     design_doc: designs/architecture/key_substrate_v30.md
-    canonical_sha__designs__architecture__key_substrate_v30_md: "8971e9c201d60abaf0aa3f512c0bac0dbc6670b6"
+    canonical_sha__designs__architecture__key_substrate_v30_md: "a818077829c0368a51b048a5fde40687753f1ece"
     status: canonical
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "8f3c206223622b5816a3a8764416ec5d0468503f"
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "a6fde2f469ba5585eb00a6ece8d30e3cd3b538e9"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
@@ -329,7 +329,7 @@ systems:
     added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
   propagation_spec:
     design_doc: designs/architecture/propagation_spec_v1.md
-    canonical_sha__designs__architecture__propagation_spec_v1_md: "9bb900829bf647f7cab633f3adb88288a72dc96a"
+    canonical_sha__designs__architecture__propagation_spec_v1_md: "dd574a9c34fb2d798b7ee2a3fb2fa5f4a0bb0ade"
     status: canonical
     added: '2026-07-02 ED-1093/ED-1094 ratification (pre-staged) — ordering/determinism, aggregate-up, distribute-down, termination transforms (TERMINATION-ONLY; cross-tick convergence NOT proven); supplies engine_clock candidate home doc (ED-1051, open — awaiting Jordan; doc:null stays unflipped until then)'
   conviction_taxonomy:
