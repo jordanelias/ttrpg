@@ -3,7 +3,8 @@
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §22, §23, §24, §25, §26, §27, §28, §29
-**Status:** PROVISIONAL — pending Jordan editorial review.
+<!-- Struck 2026-07-07 (ED-IN-0023, C-INJ-2): the leftover Stage-4-atomization boilerplate "**Status:** PROVISIONAL — pending Jordan editorial review." contradicted the live `## Status: CANONICAL` header at line 2 (the doc is cited as canonical corpus-wide — module_contracts.yaml, mechanics_index.yaml). Removed as a stale artifact, not a live provisional flag. -->
+
 
 <!-- atom: solmund_master_document__22__19-the-problem | section_index: 22 | source_section: "19. The Problem" -->
 

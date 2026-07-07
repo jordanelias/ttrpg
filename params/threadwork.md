@@ -272,7 +272,7 @@ Mending is not exclusively individual. The Edeyja (Warden collective) practices 
 **Collective Mending (2+ practitioners on same Gap):**
 - Each additional practitioner adds +1D to the primary's Mending pool (cap: +3D from assistants).
 - Assistants must be Competent tier or above. Novice assistants do not contribute dice.
-- All participants use the primary practitioner's Coherence track for the operation (Mending costs 0 Coherence per asymmetry — this is free for all participants).
+- All participants use the primary practitioner's Coherence track for the operation (Mending costs 0 Coherence per asymmetry — this is free for all participants; **ED-871** / canon/02 Amendment 3, restorative-operation type. This params value was already correct at 0; noted here for co-file provenance after the 2026-07-07 propagation that fixed threadwork_v30 §3.2's stale −1).
 - Seasonal fatigue Ob (+1 per consecutive Mending/season) applies independently per practitioner. An assistant fatigued from their own Mending still contributes +1D but the primary's fatigue is what governs the roll Ob.
 
 **Edeyja Mending Sanctuary (settlement-level):**

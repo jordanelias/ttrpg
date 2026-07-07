@@ -274,3 +274,60 @@ its rulings arrive. **Then:** Stratum D reach/agency in juncture order. **Last:*
 measurement against a machine that finally matches its canon. Enforcement ladder flips each
 check to blocking as its backlog zeroes. M1 = A+B+C complete, D through juncture 7; M2 adds the
 deck + narrative stages; M3 (GO) opens at Gate-0 with the v40 predicate green.
+
+---
+
+## §7 · Stratum-A execution log — first pass (2026-07-07)
+
+First Stratum-A execution pass, branch `claude/fable5-audit-resolution-plan-r6kzsa`. It executes the
+**pure doc / registry / ledger truth-reconciliation core** (the §0/§2 Stratum-A definition — "repairs
+that make the armature's own reads trustworthy") and defers behavior-changing sim edits + genuine
+design/needs-Jordan calls per the layering (sim behavior = Stratum B "oracle to canon"). Deferrals are
+flagged loud, never silently dropped (ED-1094 discipline).
+
+**Executed → EDs flipped `resolved`:**
+- **ED-FI-0003 (OPT-6):** knots ED-912 propagation completed across `knots_v30.md` §6.1/§6.2/§11/§13/§14
+  + `mechanics_index.yaml` knots primitives + `module_contracts.yaml` fieldwork_knots gap_note;
+  `fieldwork_bg_v30.md` co-file re-exported (RS→MS, PP-630).
+- **ED-IN-0022 (OPT-7):** registered `meta.cascade_cluster_event`; quoted the `scene.gossip` scalar
+  (strict-YAML fix); unified provenance naming → `causes[]`; reconciled the type count 44→48.
+- **ED-IN-0023 (OPT-8):** six ED-935 npc_behavior consumer edges + gap_note; fork-11 + miraculous_event
+  gap_notes; struck the stale PROVISIONAL boilerplate in `miraculous_event_v30.md`; corrected
+  ED-IN-0014's "registry §10" citation; added a `scenario_authoring` mechanics_index placeholder.
+- **ED-IN-0024 (OPT-14):** append-only intent-hygiene addenda on ED-PC-0001 + NERS-audit §7 (R-2 → UNDETERMINED).
+- **ED-IN-0025 (OPT-17):** C-VERIFY doc-notes — mechanics_index staleness ×3, three MB supersession
+  rows + the ED-912 path fix, Domain-Echo season-cap gap, glossary IN-FLUX, resonance_style
+  correction, Partition NO-RULE-CHANGE note.
+- **ED-SE-0004 (OPT-16):** executed ED-SE-0001's ordered CURRENT.md + HANDOFF_SE anti-orphaning updates.
+- **ED-PC-0004 (OPT-15):** flipped the ED-1042 steering surfaces (workplan v6 §5 ×2, decision_queue
+  item 4); re-filed the reverse-direction residual as **ED-PC-0005** (new, `open`).
+- **U-6 ruled-but-unexecuted, doc side:** CI-75→CI-100 supersession propagated into `conviction_track_v30.md`
+  (§3/§4.1/§8/§9/§10/§11.3) + a new `supersession_register.yaml` PP-421 row; **fork-2 (ARC-T04 strike)**
+  executed across `arc_register_events.md` (COLLISION-C → 7-of-8), `arc_register_territory.md`, `propagation_log.md`.
+- **U-11 process:** the ED-IN-0012/0013 → ED-IN-0019/0020 renumber was found only HALF-executed (the
+  ratification appended 0019/0020 but never re-id'd the old edge-playability rows — the exact
+  partial-execution class U-6/U-11 name). Disambiguated non-destructively: the old rows are now
+  `status: superseded` + `renumbered_to`, so id resolution is unambiguous; physical row-dedup left as
+  a mechanism choice for Jordan.
+
+**Banner-only → ED kept `open` (ruled "banner NOW"):**
+- **ED-FA-0004 (OPT-1):** `[PRE-LPS-1 / PORT-BLOCKING]` banners on six sim files + implementation-note
+  headers on two faction docs. The full LPS-1 sim implementation stays Stratum B.
+
+**Doc slice executed → ED kept `open` (remainder = Stratum B):**
+- **ED-WR-0005 (OPT-5):** ED-871 Mending cost 0 propagated to `threadwork_v30.md` §3.2. Remainder open:
+  `operations.py` still charges −1/−2 (entangled with the C-TW-3 blanket-penalty bug, no test coverage);
+  C-TW-3/4/6/8/10/11; knots.py rebuild (C-TW-12).
+
+**Deferred / flagged (NOT executed — deliberately):**
+- **Sim behavior changes (Stratum B):** `sim/thread/operations.py` (ED-871), `sim/peninsular/ci_track.py`
+  (dead `CI_PHASE_TRANSITION=75`), `sim/personal/knots.py` (ED-912 rebuild, C-TW-12), the dead
+  `WoundTracker.pool_penalty()` (ED-PC-0005) — each needs its own verified/lane-scoped PR.
+- **Genuine design / needs-Jordan calls (flagged in place, not decided):** the threadwork anchoring
+  cadence cap (never ruled — §3's "1/season/Knot" value is not canon); CI75-1 (the contested
+  per-territory Church-Seizure trigger value); CI75-11 (whether `02_canon_constraints.md`'s GD-1
+  checklist should add conviction_track §4.1 — editing a ratified checklist); the knots §6.2
+  Coherence-loss rule ([UNVERIFIED post-ED-912]); C-FI-4b (Survey Overwhelming outcome); C-INJ-1
+  (miraculous_event full contract footprint — Stratum C); C-VERIFY-5 (armor cost-free intent).
+
+**Next:** the deferred sim edits above (Stratum B entry) and Stratum C armature deployment per §2.

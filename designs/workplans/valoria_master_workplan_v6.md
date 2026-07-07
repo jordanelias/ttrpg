@@ -240,8 +240,11 @@ below where T0, adopted-in-place for T1/T2 (F-F/fork-8 incl. the subtract-only d
 forks 1/2/3/6/7/9/11; v1 forks 4–5; F-A..F-G with F-G's numbers still Jordan's later).
 ExecUTION of ruled directions (fork-1 remap, fork-2 strike) remains scheduled work.
 Still genuinely open (no default existed): fork 10's faction COUNT (ED-FA-0001), JD-1..8,
-DG-1/DG-2, RC-5, ED-1090, ED-1042, ED-1051, ED-1052, ED-911/WS-7, attribute roster, the
-Godot register — cross-lane questions this PR never carried.
+DG-1/DG-2, RC-5, ED-1090, ED-1051, ED-1052, ED-911/WS-7, attribute roster, the
+Godot register — cross-lane questions this PR never carried. (ED-1042 removed from this
+list 2026-07-07 per ED-PC-0004: it was STRUCK 2026-06-28, superseded_by ED-1021, so it was
+already stale when this line was written; the reverse-direction residual drift is re-filed
+as ED-PC-0005.)
 
 ### T0 — block the M1 path
 
@@ -269,7 +272,7 @@ Godot register — cross-lane questions this PR never carried.
 | JD-2…JD-8 (PC) | per consolidation_v1 rows | the named U-steps / T-P2 / T5 | R3 consolidation_v1 |
 | J-31 extended sitting (SC deliberative findings) | per critique §6 tags | SC next stage; LA-19 | v5 row 39; SC handoff |
 | J-36 — Key-bus closure (six off-bus writers) | on-bus, carve-outs explicit | Lane-C wiring; chronicle completeness | v5 row 40; [VERIFY] pass still deferred |
-| ED-1042 — wound-model spec-vs-code drift | — (open since 06-24) | PC coverage confidence | queue 4 |
+| ~~ED-1042 — wound-model spec-vs-code drift~~ **STRUCK in ledger 2026-06-28 (superseded_by ED-1021); reconciliation = ED-PC-0004; residual re-filed ED-PC-0005** | — | PC coverage confidence | queue 4 (superseded pointer) |
 | ED-1052 — typed-params layer scope (+ queue 17/24) | extend the combat_engine_v1.json pattern to settled non-combat values | M3 exports | queue 24 |
 | ED-911 (P1) + WS-7 | — | PC phase4_5 | PC handoff |
 | fork 9 — Torben Loyalty range (register/sim 8→0 vs clock_registry 0–7) | reconcile at Stage-1 compile | ARC-S07 fidelity | v2 §2 |

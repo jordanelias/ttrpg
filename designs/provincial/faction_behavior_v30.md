@@ -5,6 +5,8 @@
 # Faction Behavior Architecture (PP-686 v2)
 ## Status: CANONICAL
 
+> **⚙️ Implementation note (ED-FA-0004, 2026-07-07):** the `sim/` oracle (`sim/autoload/game_state.py` Faction = {L, Sta, W, I, Mil}) does NOT yet implement this model — no Mandate/PS/Treasury/αβγ engine, no `da.*` Key plumbing. This DOC is correct canon; the ORACLE lags it. Full LPS-1 sim implementation is scheduled Stratum-B work — do not treat `sim/` as this doc's canon-conformant reference until then.
+
 **Class:** A — strategic-layer system replacing legacy Ethical Framework Modifiers.
 **Status:** PROVISIONAL.
 **Sequencing:** consumes PP-687 substrate; reads PP-684 Conviction taxonomy.

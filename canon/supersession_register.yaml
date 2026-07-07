@@ -242,6 +242,58 @@ entries:
       - params/core.md (Bonds)
       - designs/personal/knots_v30.md
       - designs/architecture/complete_systems_reference.md Part 8
-      - designs/scene/articulation_layer_v30.md §2.4
+      - designs/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
       - designs/scene/investigation_systems_v30.md (Ontological Ledger)
       - designs/scene/fieldwork_socializing.md
+
+  # ── CI-75 ceiling supersession (added 2026-07-07, ED-IN-0025 / CI-75 propagation, CI75-10) ──
+  - superseded_id: "PP-421 (CI ceiling 75-freeze)"
+    scope: "CI ceiling 75 (freeze + territorial-seizure phase transition) as the Church phase-transition/victory model"
+    superseded_by: "ci_political_v30.md §0/§7.6 (PP-421) + canon/02_canon_constraints.md GD-1"
+    superseded_date: 2026-04-14
+    replacement: >
+      CI runs 0-100 with no freeze; milestones 40/55/65/80/100 (ci_political_v30 §2.1); Mass Seizure
+      one-shot at CI >= 60 (victory_v30 §3.2); Theocracy Unification Attempt at CI 100 (ci_political_v30
+      §2.2). The Church-specific Primary Victory (PP-413/414/415) is itself struck by GD-1/ED-NEW-CI-10
+      (no faction-specific victory; Peninsular Sovereignty is the sole win path).
+    files_to_recheck:
+      - designs/scene/conviction_track_v30.md    # propagated 2026-07-07 (§3/§4.1/§8/§9/§10/§11.3); residual: contested per-territory seizure trigger (CI75-1) + GD-1 §4.1 checklist gap (CI75-11)
+      - designs/provincial/ci_political_v30.md
+      - designs/provincial/victory_v30.md
+      - designs/provincial/peninsular_strain_v30.md §7c
+      - params/bg/ci_seizure.md
+      - params/board_game.md
+      - sim/peninsular/ci_track.py    # dead CI_PHASE_TRANSITION=75 constant (CI75-9, SIM-CODE, deferred to Stratum B)
+
+  # ── Mass-battle rulings back-propagation (added 2026-07-07, ED-IN-0025, C-VERIFY-2) ──
+  - superseded_id: "canon/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')"
+    scope: "Pre-audit mass-battle status: the engine treated as an unimplemented <5% stub"
+    superseded_by: "ED-MB-0001"
+    superseded_date: 2026-07-02
+    replacement: >
+      ED-MB-0001 executed the movement/pathing audit (ED-1096) fix-plan end-to-end plus a 5-dimension
+      adversarial review — envelop/sweep/kite work on the live default path. Live engine:
+      designs/provincial/mass_battle_v30.md + the Cannae gauge harness.
+    files_to_recheck:
+      - designs/provincial/mass_battle_v30.md
+      - canon/mechanics_index.yaml    # mass_battle entry flagged STALE 2026-07-07 (C-VERIFY-1); test_status needs re-survey
+      - tests/coverage_matrix.md
+  - superseded_id: "mass_battle Cannae-pattern gauge baseline (pre-ED-MB-0002)"
+    scope: "PER_CELL combat collapsing the H3-H6 Cannae historical gauge rows to 0-13% vs the 45-72% band"
+    superseded_by: "ED-MB-0002"
+    superseded_date: 2026-07-04
+    replacement: >
+      Cannae gauge-band root-cause audit RATIFIED (PR #73); DG-3/DG-4 (bottom-up pool + sibling morale)
+      ruled after a four-lens adversarial diagnosis.
+    files_to_recheck:
+      - designs/provincial/mass_battle_v30.md
+  - superseded_id: "mass_battle DG-3/DG-4 shipped code (pre-ED-MB-0003)"
+    scope: "DG-3/DG-4 (PR #75) did not close the H3-H6 gauge gap; four surviving engine defects (D1-D4)"
+    superseded_by: "ED-MB-0003"
+    superseded_date: 2026-07-05
+    replacement: >
+      ED-MB-0003 found+fixed D1-D4 (subunit pool dilution, envelop phase threshold, etc.), completed
+      DG-1/DG-3, and captured DG-2 as workplan work (PR #84).
+    files_to_recheck:
+      - designs/provincial/mass_battle_v30.md
+      - canon/mechanics_index.yaml    # mass_battle entry

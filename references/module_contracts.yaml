@@ -131,6 +131,15 @@ modules:
       - {type: "state.scar_acquired", from: [piety_track]}
       - {type: "state.standing_change", from: [faction_politics, faction_state]}
       - {type: "state.succession", from: [faction_politics]}
+      # ── ED-935-registered consumer edges added 2026-07-07 (ED-IN-0023 / C-KEY-6): key_type_registry_v30
+      #    consuming_systems already declares npc_behavior a consumer of these six; the consumes[] list had
+      #    never added the edges (four are self-loop consume↔emit with npc_behavior's own emits below). ──
+      - {type: "scene.thread_operation", from: [threadwork]}
+      - {type: "scene.draft_da", from: [domain_actions]}
+      - {type: "scene.displacement", from: [npc_behavior]}
+      - {type: "mechanical.project_advanced", from: [npc_behavior]}
+      - {type: "state.project_completed", from: [npc_behavior]}
+      - {type: "state.project_failed", from: [npc_behavior]}
     emits:
       - {type: "scene.witness", terminal: false}
       - {type: "state.concern_resolved", terminal: false}   # Procedure B (doc-12 §3, §7.4)
@@ -165,7 +174,7 @@ modules:
     accounting_phase: [B_concern, C_project, D_opinion, E_offscreen]
     gap_notes:
       - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
-      - "doc-12 §8 sequencing tree names FOUR Key types its own §7 never declares and the registry lacks: scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed — F2 class [registry §10 candidates]. Supersedes the v2 note \"Procedure C unkeyed\" (it IS keyed in §8, just unregistered)."
+      - "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 §9). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four — closed by this same commit's consumes[] additions above."
       - "Accounting sequence (doc-12 §8, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate §4.1 single-update rule processes emissions inline"
     status: extracted
     sources:
@@ -331,7 +340,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
-      - "knots_v30 §11 carries open canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001) [OPEN — Jordan, pre-existing]"
+      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
     sources:
       - "knots_v30 full [READ: 2026-06-10]"
@@ -736,7 +745,7 @@ modules:
     transitions: []
     loops: []
     gap_notes:
-      - "registry-derived; system-vs-event-source classification [OPEN — Jordan]; home doc [GAP]"
+      - "registry-derived; system-vs-event-source classification [OPEN — Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): designs/scene/miraculous_event_v30.md, ## Status: CANONICAL — the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -754,7 +763,7 @@ modules:
     transitions: []
     loops: []
     gap_notes:
-      - "registry-derived; authoring-time vs runtime classification [OPEN — Jordan]; home doc [GAP]"
+      - "registry-derived; authoring-time (compile-time) confirmed — fork 11 RATIFIED 2026-07-05 (ED-IN-0011): compile is authoring-time, its output packs seed runtime. Execution unbuilt (no Stage-1 compile tooling / template-pack format / settlement_layer injection wiring — C-INJ-5). Home doc still [GAP]: no dedicated scenario_authoring design doc exists (C-INJ-3). [ED-IN-0023]"
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"

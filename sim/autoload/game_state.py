@@ -3,6 +3,12 @@ sim/autoload/game_state.py — Global mutable state container — factions, terr
 
 Canon source: designs/architecture/complete_systems_reference.md; mc_v17.py starting state tables
 Status: [CANONICAL — Phase 1 implementation 2026-05-17]
+[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: the Faction dataclass below
+ (L/Sta/W/I/Mil; no Mandate / PS / Treasury / da.* Keys) implements the pre-LPS-1 SUPERSEDED
+ faction stat model — this is literally where "no Mandate" lives. The ratified LPS-1 model
+ (per-settlement L/PS, Mandate = 7T/(T+6), Treasury) is UNIMPLEMENTED. Do NOT port this schema
+ as canon-conformant until ED-FA-0004's Stratum-B reconciliation lands. See
+ designs/provincial/faction_canon_v30.md / faction_behavior_v30.md.]
 
 Dependencies:
   - none — root primitive

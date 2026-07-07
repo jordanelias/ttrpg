@@ -97,7 +97,7 @@ by_reference:
 # DEPRECATED.
 # ============================================================================
 deprecated:
-  - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan)."}
+  - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan). ⚠️ CORRECTION (ED-IN-0025, 2026-07-07, C-VERIFY-20): the 'never canonically enumerated' premise is factually FALSE — npc_behavior_v30.md §1.3's Resonant Style Taxonomy is CANONICAL (approved 2026-04-17) and player_agency_v30.md:71 treats it as live, bidirectional, load-bearing. Whether the retirement should stand given this is a Jordan design call (NEEDS-JORDAN), not re-litigated here; retirement status left unchanged."}
 
 # ============================================================================
 # NOT DESCRIPTORS -- computed/bounded runtime containers (derived_stats §14). Listed so consumers

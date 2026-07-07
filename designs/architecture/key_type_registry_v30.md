@@ -596,7 +596,7 @@ Non-actor-initiated events. `source_actor` is null.
 description: Peninsula-scale Strain delta event.
 required_payload_fields:
   - strain_delta              # signed int
-  - cause_keys                # [key_ids] of prior Keys contributing to shock
+  - causes                    # [key_ids] of prior Keys contributing to shock (unified provenance naming — was cause_keys; C-INJ-12/ED-IN-0022, converges on the universal key_substrate_v30 `causes[]`)
   - affected_territories      # [territory_ids]
 optional_payload_fields:
   - symbolic_register         # which Convictions feel the impact
@@ -617,7 +617,7 @@ required_payload_fields:
   - affected_territories      # [territory_ids]
 optional_payload_fields:
   - duration                  # seasons (estimate)
-  - origin_keys               # [key_ids]
+  - causes                    # [key_ids] (unified provenance naming — was origin_keys; C-INJ-12/ED-IN-0022, converges on the universal key_substrate_v30 `causes[]`)
 default_scale_signature: [peninsula]
 default_permanence: indelible
 default_time_horizon: far
@@ -859,6 +859,28 @@ emitting_systems: [threadwork]
 consuming_systems: [conviction_track, npc_behavior, articulation]
 ```
 
+### meta.cascade_cluster_event
+
+```yaml
+description: Cross-faction cascade cluster forms or dissolves (sustained ≥ 4 seasons of |cosine similarity| > 0.40 between two factions' cascade_fidelity_history). A CANONICAL articulation trigger (articulation_layer_v30 §3.1 #9) cited this type before it was ever registered per §10 — registered 2026-07-07 (ED-IN-0022, C-KEY-8).
+required_payload_fields:
+  - cluster_pair              # [faction_id_a, faction_id_b]
+  - similarity                # float cosine similarity of the two 4-season cascade_fidelity windows
+  - cluster_type              # aligned (sim > 0) | anti_aligned (sim < 0)
+  - sustained_seasons         # int regime-entry streak
+optional_payload_fields:
+  - regime_transition         # bool (refire on regime transition)
+default_scale_signature: [territorial]   # peninsular when abs(similarity) > 0.95 per the trigger-9 spec
+default_permanence: persistent
+default_time_horizon: far
+emitting_systems: [articulation]         # [PROVISIONAL] the trigger-9 evaluator lives in the articulation layer; confirm against the implementation section
+consuming_systems: [articulation]        # [PROVISIONAL] articulation renderer (cut-scene); confirm at implementation
+notes:
+  - RETROACTIVE registration (C-KEY-8 / ED-IN-0022, 2026-07-07) of a type a CANONICAL trigger (articulation §3.1 #9, "Trigger 9 specification") already cites — closes the dangling-type defect.
+  - Payload + scale rule per articulation_layer_v30 §3.1 (threshold ±0.40, Stage 10 A6 calibration).
+  - A15 rendering-disposition row (references/rendering_dispositions.yaml) is DEFERRED to the Stratum-C rendering wave — that datafile does not exist yet, so §10's A15 precondition is recorded here as pending rather than fabricated.
+```
+
 ### meta.miraculous_event
 
 ```yaml
@@ -979,7 +1001,7 @@ optional_payload_fields:
 default_scale_signature: [personal]
 default_permanence: structural
 default_time_horizon: medium
-default_visibility: semi_public_observers=propagation_observers (initial: principals only)
+default_visibility: "semi_public_observers=propagation_observers (initial: principals only)"
 emitting_systems: [npc_behavior / Procedure E]
 consuming_systems: [npc_memory, articulation]
 class: B
@@ -1018,11 +1040,11 @@ articulation_significance: stakes_weight 1-2 per affect magnitude
 | mechanical_event | 8 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate |
 | state_transition | 8 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
 | environmental | 4 |  |
-| scene_outcome | 4 |  |
-| system_meta | 5 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, plus meta.legacy_event) |  |
-| **Total** | **44** |  |
+| scene_outcome | 7 | +3 F3 combat subtypes physically present under §7 but previously uncounted: scene.combat_strike, scene.combat_hit, scene.combat_felled. Reconciled 2026-07-07 (ED-IN-0022) |
+| system_meta | 7 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, meta.legacy_event, + the retroactively-registered meta.cascade_cluster_event) | meta.legacy_event counted + meta.cascade_cluster_event added (C-KEY-8). ED-IN-0022 |
+| **Total** | **49** | reconciled to the physical `###` type-headers (ED-IN-0022, 2026-07-07): was 44; 48 after counting the 3 combat subtypes + legacy_event, then 49 with the newly registered meta.cascade_cluster_event (C-KEY-8, this same ED) |
 
-Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound. ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved — Total -> 44. (§9 family counts are logical groupings; some Class-B types are physically filed under §8 system_meta. The pre-existing declared-vs-parsed header drift, master item 11 / A9, is out of J-2 scope.)
+Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound. ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved — Total -> 44. (§9 family counts are logical groupings; some Class-B types are physically filed under §8 system_meta. The pre-existing declared-vs-parsed header drift, master item 11 / A9, is RECONCILED 2026-07-07 (ED-IN-0022): scene_outcome +3 (combat subtypes scene.combat_strike/hit/felled) and system_meta +1 (meta.legacy_event) bring the logical subtotals to 48; registering meta.cascade_cluster_event (below, C-KEY-8) then adds the 49th type, so both the declared total and the physical `###` count are 49.)
 
 ---
 

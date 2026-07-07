@@ -34,9 +34,8 @@ Combined: Church Stability −3; TC generation pauses (Cardinals competing, Stab
 Trigger: Almud Discovery Event (ARC-S17: TS 28→30) + Elske installed independently (ARC-S23) + Torben in Altonia (ARC-S07).
 Combined: the Crown dynasty distributes across three people in three states simultaneously; Almud's practitioner path opens while institutional succession is functionally resolved through Elske. The political implications (TC +3 but RS improves) are not predictable from any individual arc.
 
-**COLLISION C — Tutoring + Southernmost**
-Trigger: Torben Loyalty ≤ 3 (ARC-S07) coincides with Southernmost Ritual [UNNAMED — ED-416] failure (ARC-T04).
-Combined: RS +8, IP +2, TC +2 in a single season; if RS near 50, Southernmost cracking clock resets + RS +2/season; Ehrenwall Coup Counter may reach 3 from cascade alone. Players face three simultaneous crises with one practitioner incapacitated.
+**COLLISION C — Tutoring + Southernmost — [STRUCK: fork 2, ED-IN-0011 (ratified 2026-07-05); executed 2026-07-07]**
+~~Trigger: Torben Loyalty ≤ 3 (ARC-S07) coincides with Southernmost Ritual [UNNAMED — ED-416] failure (ARC-T04).~~ ARC-T04 (Southernmost Ritual) was struck entirely by PP-602 (2026-04-14); with no expedition arc to fail, this collision loses its second condition and is retired. **Collision count → 7-of-8.** (The original cascade — RS +8, IP +2, TC +2; cracking-clock reset; Coup-Counter escalation — is retained here for history only; if re-authored it becomes a fresh WR-lane arc.)
 
 **COLLISION D — Niflhel Weaponises**
 Trigger: Full Church-Niflhel exposure + 218 AG assassination perpetrator identified as Niflhel + Varfell Private Collection in Niflhel's hands.

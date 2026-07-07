@@ -41,6 +41,8 @@
 
 **Multiple Domain Echoes (same scene):** Fire in the order they occurred in the scene. Each applies independently; cap resets per stat per Echo (not per scene total). [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
+**Known gap (ED-IN-0025, 2026-07-07, C-VERIFY-12):** all Domain Echo caps here and in `scale_transitions_v30.md` §5 are *per-scene-per-faction* (PP-329); there is **no season-level aggregate ceiling**, so a faction generating many qualifying scenes in one season can stack Echoes without limit. Whether a season cap is warranted is not adjudicated — flagged for Stratum B/E balance review (mirrors the design-doc note).
+
 **Debate outcome → Domain Echo:** Piety Track ≥7 (winner) queues +1 to winner's faction in the contested axis (L for procedural debates, PS for populist debates per audit Q5). ≤3 queues −1 to loser's faction in the same axis. [PP-108]
 
 ## Mass→Personal Register Shift Rules (PP-111)

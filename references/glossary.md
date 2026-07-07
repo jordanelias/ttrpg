@@ -28,6 +28,8 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 
 ### Core Attributes
 
+⚠️ **IN FLUX** (ED-IN-0025, 2026-07-07, C-VERIFY-19/21): this 7-attribute roster conflicts with `references/descriptor_registry.yaml`'s 9-attribute roster (where Cognition/Presence/Spirit are aliases of Acuity/Charisma/Will). Neither file defers to the other, and `references/names_index.yaml`'s MIRRORS block omits this glossary, so `tools/ci_names_consistency.py` never flags the disagreement. Do not treat either table as settled. (Building a real glossary mirror into names_index + the consistency checker is a follow-on tooling change.)
+
 | Full Term | Abbr | Range | Description |
 |-----------|------|-------|-------------|
 | Agility | — | 1–7 | Physical speed and coordination. Combat pool base. |

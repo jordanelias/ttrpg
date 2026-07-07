@@ -621,7 +621,7 @@ Three or more practitioners with at least two genuinely opposing intentionalitie
 | Structural scale operation | −2 |
 | FR Lock or Dissolution (any scale) | −1 additional (Lock minimum total: −2; Dissolution minimum total: −2) |
 | Past-Oriented Pulling | −1 additional on top of standard Pulling cost |
-| Mending | −1 (substrate engagement is inherently deep regardless of Gap scale) |
+| Mending | 0 (restorative operation type — ED-871 / canon/02_foundations_amendment_leap_mechanism.md Amendment 3; operation-type, not scale, determines Coherence risk. Matches this doc's own §2.4 Mending degree table. Sim `sim/thread/operations.py` still charges −1/−2 — SIM-CODE fix deferred to Stratum B, entangled with the C-TW-3 blanket-penalty bug and lacking test coverage) |
 | Dissolution residue use (per use) | −1 additional (on top of operation cost) |
 | History Resonance risk die (shows 1) | −1 |
 | Practitioner Flashback anchoring (engine trigger) | −1 |

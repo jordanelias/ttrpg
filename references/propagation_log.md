@@ -408,7 +408,7 @@ Propagation targets:
 | From | To | Nature |
 |---|---|---|
 | TE-15 | ARC-S34 | Edeyja Coherence <= 5 at TE-15: Dissolution -> Rendering Crisis regardless of outcome |
-| TE-12 | ARC-S15, ARC-T04 | Varfell gate control during S15 cracking phase blocks Ceiral Ritual expedition |
+| ~~TE-12~~ | ~~ARC-S15, ARC-T04~~ | ~~Varfell gate control during S15 cracking phase blocks Ceiral Ritual expedition~~ — STRUCK (fork 2 / PP-602: ARC-T04 struck entirely; no expedition to block; executed 2026-07-07, ED-IN-0011) |
 | ARC-S44 | ARC-T17 | Both target AER via Schoenland; highest-roll success takes priority same season |
 | ARC-S56 | ARC-T26 | T26 resolves first (Leadership Deviation check); S56 resolves under result |
 | TE-09 | NPC-ARC-JAR | Jarnstal threat-assessment governs autonomous deployment trigger |
