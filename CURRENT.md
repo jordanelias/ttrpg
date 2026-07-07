@@ -12,14 +12,19 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-05 (NERS qualitative audit RATIFIED, 12 lane EDs filed, MERGED PR #77;
-narrative-engine v1 + v2 "Churn Engine" designs + master workplan v6 + steering reconciliation
-ED-IN-0006/ED-IN-0009 — roadmap_state retired to `deprecated/references/`, v5 archived, decision
-queue snapshotted — PR #78; previous reconcile 2026-07-04 scene-combat R2 MERGED PR #72 + R3
-plan-of-record RATIFIED; 2026-07-02 ED-1083 doctrine + ED-1093 propagation-spec + ED-1094
-merge-ratifies convention; 2026-07-01 month-overview + architecture consolidation; 2026-06-28
-deprecation & currency sweep + v40 generation declaration). Every row is the head of its lineage;
-predecessors are archived._
+_Last reconciled: 2026-07-07 (Key & Echo Armature v1 + unaddressed-areas audit, ED-IN-0017/0018,
+consolidated ruling pass ED-IN-0026 — "ratify all" — RULED on the same branch/PR before merge:
+OF-7/OF-B1 ADOPTED into `key_substrate_v30.md`/`propagation_spec_v1.md`, ED-IN-0012/0013 renumbered
+to ED-IN-0019/0020, A15 process extension landed in `key_type_registry_v30.md` §10, first
+executable Key substrate `sim/substrate/keys.py` shipped, `canonical_sources.yaml` re-synced via
+`freshness_gate.py --update`; previous reconcile 2026-07-05 NERS qualitative audit RATIFIED, 12
+lane EDs filed, MERGED PR #77; narrative-engine v1 + v2 "Churn Engine" designs + master workplan v6
++ steering reconciliation ED-IN-0006/ED-IN-0009 — roadmap_state retired to
+`deprecated/references/`, v5 archived, decision queue snapshotted — PR #78; 2026-07-04
+scene-combat R2 MERGED PR #72 + R3 plan-of-record RATIFIED; 2026-07-02 ED-1083 doctrine + ED-1093
+propagation-spec + ED-1094 merge-ratifies convention; 2026-07-01 month-overview + architecture
+consolidation; 2026-06-28 deprecation & currency sweep + v40 generation declaration). Every row is
+the head of its lineage; predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
@@ -29,9 +34,9 @@ predecessors are archived._
 | **Faction / political** | `designs/provincial/faction_canon_v30.md` + `faction_layer_v30.md` + `faction_behavior_v30.md` + `faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`) |
 | **Settlement / territory** | `designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `designs/world/geography_v30.md`) |
 | **Threadwork** | `designs/threadwork/threadwork_v30.md` (+ `thread_horizontal_integration_spec.md`) |
-| **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) |
+| **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) — **2026-07-07: first executable substrate landed** (`sim/substrate/keys.py` — Key/KeyLog/TickScheduler, 25 tests) via the Key & Echo Armature v1 (`designs/architecture/key_echo_armature_v1.md`, ED-IN-0018, RATIFIED — consolidated ruling pass ED-IN-0026). §4.1 steps 4/5 amended per OF-7/OF-B1 (now RATIFIED, see the doc's own pointer note); `key_type_registry_v30.md` §10 gained the A15 rendering-disposition precondition + a header CANONICAL/PROVISIONAL split correction |
 | **Architecture / Holonic doctrine** | `designs/architecture/holonic_container_doctrine_v1.md` — CANONICAL (ratified 2026-07-02, ED-1083/ED-1094); cross-maps the container/wrapper/propagation vocabulary onto module_contracts/sim-ladder/Key-substrate/Key-log-parity. Does NOT itself author the propagation-spec transform — see next row |
-| **Architecture / Propagation spec** | `designs/architecture/propagation_spec_v1.md` — CANONICAL (ratified 2026-07-02, ED-1093/ED-1094; workplan v5 J-38). Ordering/determinism, aggregate-up, distribute-down, and termination (TERMINATION-ONLY — cross-tick convergence NOT proven) transforms; supplies `engine_clock`'s candidate home doc, but the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved. Open flags tracked in the doc's own §5 (OF-7/OF-B1, D.6/OF-D6, `decay()`, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) |
+| **Architecture / Propagation spec** | `designs/architecture/propagation_spec_v1.md` — CANONICAL (ratified 2026-07-02, ED-1093/ED-1094; workplan v5 J-38). Ordering/determinism, aggregate-up, distribute-down, and termination (TERMINATION-ONLY — cross-tick convergence NOT proven) transforms; supplies `engine_clock`'s candidate home doc, but the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved. **2026-07-07: OF-7/OF-B1 RATIFIED** (consolidated ruling pass, ED-IN-0026 — §4.1 steps 4/5 amended; `sim/substrate/keys.py` defaults both flags ON). Remaining open flags tracked in the doc's own §5 (D.6/OF-D6, `decay()`, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
 | **Master workplan** | `designs/workplans/valoria_master_workplan_v6.md` (CANON — RATIFIED 2026-07-05, ED-IN-0009/ED-IN-0011; supersedes v5 → `archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface; progress board `workplan_v6_progress.yaml` + `valoria-workplan-navigator`) |
