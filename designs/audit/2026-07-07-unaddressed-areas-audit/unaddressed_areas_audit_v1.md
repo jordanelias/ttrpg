@@ -1,6 +1,6 @@
 # Valoria — Unaddressed-Areas Comprehensive Audit v1
 
-## Status: PROPOSED (Jordan-vetoable; `ed_options.md` deliberately UNFILED — merge ratifies neither the 17 options nor the armature §5 forks; ED-1094 exception clause, loud in the PR body)
+## Status: RATIFIED-AS-ACCEPTED 2026-07-07 (Jordan: "ratify all", consolidated ruling pass — ED-IN-0026; the 11 confirmed findings U-1..U-11 stand as delivered, `ed_options.md`'s 17 candidates are now filed EDs, see its Disposition table)
 ## Date: 2026-07-07 · Lane: IN (cross-cutting) · ED anchor: ED-IN-0017 · Branch: `claude/fable5-audit-coverage-gaps-22nz7i`
 ## Companion deliverable: `designs/architecture/key_echo_armature_v1.md` (ED-IN-0018 — deliverable 2, drawing from this audit's findings)
 

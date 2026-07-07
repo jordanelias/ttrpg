@@ -13,6 +13,17 @@ RNG-MODEL-COLLISION, OF-HYSTERESIS-AUDIT, ORD-3/ORD-4) are explicitly left open 
 document itself. Ratifying this document ratifies those distinctions along with everything
 else — it does not resolve them.
 
+**Amendment update (2026-07-07, Jordan's consolidated "ratify all" ruling pass, ED-IN-0026,
+armature §5.3/§5.4):** the two PROPOSED amendments named above, **OF-7 and OF-B1, are now
+RATIFIED.** `key_substrate_v30.md` §4.1 step 4 is amended to permit a deferred-apply target
+(OF-7); §4.1 step 5 is amended to forbid synchronous re-entry, routing new emissions through
+`schedule_emission()` instead (OF-B1). `sim/substrate/keys.py`'s `TickScheduler` now defaults
+both flags ON to match (still caller-toggleable). The other items left open by this document
+(D.6 double-count, `decay()`, cap constants, RNG-MODEL-COLLISION, OF-HYSTERESIS-AUDIT,
+ORD-3/ORD-4) remain open — this update rules OF-7/OF-B1 only. See the ruling log in
+`designs/architecture/key_echo_armature_v1.md` §5 for the full disposition of every fork this
+document raised.
+
 **What this is.** Workplan v5 §3 docket item **J-38**: the cross-scale propagation contract the
 holonic container doctrine (`holonic_container_doctrine_v1.md`, ED-1083, CANONICAL) named as
 "the highest-value unauthored canon" and explicitly declined to author itself. This document
@@ -365,7 +376,7 @@ assert deferred_echo_stat_deltas_applied_at_accounting_only(N)
 
 This machinery is the temporal spine's responsibility: engine_clock owns the tick-scoped scheduler, the `schedule_emission()` primitive, the `cascade_depth` counter, and the caps. **`engine_clock.schedule_emission()` is an ENGINE-INTERNAL routing/ordering primitive over the SAME §4.1 `emit()` path** — it is NOT a new cross-scale delivery channel (§12.2: no bespoke channel is added) and NOT a Key-type subscription. engine_clock's `consumes: []` stays empty and its "root of causality" framing stands: the scheduler primitive does not make engine_clock a consumer of any Key type; it routes emissions that still flow through the ordinary Single Update Rule. engine_clock's ownership of this state assumes ED-1051 lands it there (OF-OWN).
 
-**Open flags:** OF-CAP (CASCADE_DEPTH_MAX / EMISSIONS_PER_TICK_MAX unbacked — no cited canonical_source, assign from calibration before ratifying) · **OF-B1 (§4.1 step-5 tightening is a PROPOSED canon amendment needing a ledger/ED ticket)** · OF-3 (decay() unspecified — cross-tick CONVERGENCE proven only if decay() is strictly contractive; termination-only until then) · OF-D6 (cross-tick convergence CONDITIONAL on the D.6 double-count being ruled disjoint — HIGH PRIORITY, Jordan) · OF-HYSTERESIS-AUDIT (the flagship perpetual-scene risk, Stability Crisis, is already ruled by ED-749 hysteresis — a sim compliance bug, not an open decision; auditing the rest of §4.3.2's triggers for hysteresis coverage is a hygiene item, not a Jordan ruling) · OF-OWN (engine_clock ownership of the scheduler assumes ED-1051) · causes[]-overload ambiguity (§4.4, low severity — runtime-reentrancy vs authored-provenance edges not yet distinguished) · intra-drain determinism CONDITIONAL on ORD-3/ORD-4 (§1 O.6/O.7) landing; sequential-execution-only until ORD-4 · step-7 awareness-watcher synchronous-emit audit still needed · **RNG-MODEL-COLLISION (§1 O.5, new) — the single-stream contract here is not reconciled against key_substrate_v30.md §6.1's per-emission-seed contract; needs disposal before O.5/RNG-3 can be treated as settled.**
+**Open flags:** OF-CAP (CASCADE_DEPTH_MAX / EMISSIONS_PER_TICK_MAX unbacked — no cited canonical_source, assign from calibration; still pending) · ~~OF-B1~~ (§4.1 step-5 tightening — RULED 2026-07-07, no longer open, see item 1 below) · OF-3 (decay() unspecified — cross-tick CONVERGENCE proven only if decay() is strictly contractive; termination-only until then) · OF-D6 (cross-tick convergence CONDITIONAL on the D.6 double-count being ruled disjoint — HIGH PRIORITY, Jordan) · OF-HYSTERESIS-AUDIT (the flagship perpetual-scene risk, Stability Crisis, is already ruled by ED-749 hysteresis — a sim compliance bug, not an open decision; auditing the rest of §4.3.2's triggers for hysteresis coverage is a hygiene item, not a Jordan ruling) · OF-OWN (engine_clock ownership of the scheduler assumes ED-1051) · causes[]-overload ambiguity (§4.4, low severity — runtime-reentrancy vs authored-provenance edges not yet distinguished) · intra-drain determinism CONDITIONAL on ORD-3/ORD-4 (§1 O.6/O.7) landing; sequential-execution-only until ORD-4 · step-7 awareness-watcher synchronous-emit audit still needed · **RNG-MODEL-COLLISION (§1 O.5, new) — the single-stream contract here is not reconciled against key_substrate_v30.md §6.1's per-emission-seed contract; needs disposal before O.5/RNG-3 can be treated as settled.**
 
 ---
 
@@ -373,7 +384,7 @@ This machinery is the temporal spine's responsibility: engine_clock owns the tic
 
 Nothing below is decided by this document. Ranked roughly by how much downstream work each unblocks:
 
-1. **OF-7 / OF-B1 (PROPOSED canon amendments)** — extend §4.1 step-4 to allow a deferred-apply target; tighten §4.1 step-5 to forbid synchronous re-entry. Both cited, both needed for this spec's own mechanism to be soundly ratifiable. Natural first ruling: without these two, the termination guarantee has no legal footing in the substrate as currently worded.
+1. **~~OF-7 / OF-B1~~ — RULED 2026-07-07 (Jordan "ratify all", ED-IN-0026).** Both amendments RATIFIED: §4.1 step-4 now permits a deferred-apply target; §4.1 step-5 now forbids synchronous re-entry. Substrate defaults both ON (`sim/substrate/keys.py`).
 2. **D.6 double-count / OF-D6 (HIGH PRIORITY)** — are down-targeted settlement `stat_deltas` disjoint from `AGGREGATE_s`'s basis? Confirmed live driver of non-convergence by adversarial review; blocks the convergence story even once `decay()` is specified.
 3. **OF-3 — decay() specification** — needed for any cross-tick convergence claim; must be a pure function of `key.emitted_at`, calibration-grade, not fabricated here.
 4. **~~OF-PERPETUAL~~ — RETIRED, not a Jordan decision.** `scale_transitions_v30.md` §4.3.2 already rules Stability Crisis's perpetual-scene risk via ED-749 hysteresis (edge-triggered, 2-Accounting re-arm, player's faction only); `sim/cross_scale/scene_dispatch.py:49-61` doesn't yet comply (level-triggered, no hysteresis state, all factions). This is a sim bug to fix, not a ruling to make. Residual: **OF-HYSTERESIS-AUDIT** — do the *other* level-conditioned §4.3.2 triggers (e.g. Settlement Revolt, ED-750) have an ED-749-equivalent hysteresis rule? A hygiene audit, not this spec's decision.
@@ -387,7 +398,7 @@ Nothing below is decided by this document. Ranked roughly by how much downstream
 ## Relationship to other canonical surfaces
 
 - `designs/architecture/holonic_container_doctrine_v1.md` (ED-1083, CANONICAL) — names this document as the propagation-spec transform it explicitly deferred authoring. This document does not re-litigate the doctrine's cross-map; it fills the one cell the doctrine left open.
-- `designs/architecture/key_substrate_v30.md` — remains the canonical substrate spec. This document proposes two cited amendments to it (OF-7, OF-B1) rather than silently diverging; until ratified, treat §4.1 step 4/5 in `key_substrate_v30.md` as authoritative and this document's amendments as pending.
+- `designs/architecture/key_substrate_v30.md` — remains the canonical substrate spec. This document proposed two cited amendments to it (OF-7, OF-B1) rather than silently diverging; **both are now RATIFIED (2026-07-07, Jordan's consolidated "ratify all" ruling pass, ED-IN-0026)** — treat §4.1 step 4/5 in `key_substrate_v30.md` as amended per this document's OF-7/OF-B1 text (see that file's own pointer note).
 - `designs/architecture/scale_transitions_v30.md` §12 (J-1/ED-1038) — the downward-delivery ruling this document builds on, not reopens.
 - `references/module_contracts.yaml` — the `engine_clock` entry (ED-1051, open — awaiting Jordan) carries a gap_notes pointer at this document as the candidate home doc; `doc: null` stays unflipped until Jordan resolves ED-1051.
 - `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` — conversion register #1 (downward Key delivery, ED-1006) and the IV.2 directional laws this document formalizes.

@@ -1,6 +1,7 @@
 """Executable Key substrate v1 — Key, KeyLog, TypeRegistry, TickScheduler.
 
-Status: [PROVISIONAL — Key & Echo armature v1, ED-IN-0018, 2026-07-07]
+Status: [RATIFIED — Key & Echo armature v1, ED-IN-0018, 2026-07-07; §5 fork docket ruled by
+Jordan's consolidated "ratify all" pass, ED-IN-0026, same date]
 
 Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
   - designs/architecture/key_substrate_v30.md
@@ -17,16 +18,20 @@ Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
       re-entrancy meter `cascade_depth` lives on the tick-scoped scheduler and
       is NEVER a field on the logged Key) · §4.2 Level-B termination guard
       (cascade-depth cap + emissions-per-tick cap; Theorem B) · B1
-      no-synchronous-re-entry (PROPOSED, OF-B1 — flag-gated here, default ON)
-      · §2 AU-3.2 deferred-apply at ACCOUNTING_BOUNDARY (PROPOSED, OF-7 —
-      flag-gated here, default ON) · ORD-1/ORD-2 (insertion-ordered
+      no-synchronous-re-entry (RATIFIED 2026-07-07, OF-B1 — flag-gated,
+      default ON, still caller-toggleable) · §2 AU-3.2 deferred-apply at
+      ACCOUNTING_BOUNDARY (RATIFIED 2026-07-07, OF-7 — flag-gated, default
+      ON, still caller-toggleable) · ORD-1/ORD-2 (insertion-ordered
       containers throughout; no set() on any ordering path).
 
 Open-fork discipline (armature §5 docket; ED-1050 rule — the sim never
 silently corrects canon): OF-CAP is unresolved, so the two termination caps
 are REQUIRED constructor arguments with no default value — the caller chooses,
-and no fabricated constant enters the repo. OF-7 / OF-B1 behaviors are
-implemented at their propagation-spec proposed defaults behind explicit flags.
+and no fabricated constant enters the repo. OF-7 / OF-B1 were PROPOSED amendments
+to key_substrate_v30.md §4.1 steps 4/5; both are now RATIFIED (Jordan's
+consolidated ruling pass, 2026-07-07, ED-IN-0026 — see propagation_spec_v1.md's
+amended "Relationship to other canonical surfaces" section) and default ON here,
+while remaining ordinary caller-toggleable flags rather than hardcoded behavior.
 """
 
 from __future__ import annotations
@@ -379,13 +384,14 @@ class TickScheduler:
         *,
         cascade_depth_max: int,
         emissions_per_tick_max: int,
-        no_sync_reentry: bool = False,  # OF-B1 is a PROPOSED amendment — OFF by default:
-                                        # propagation_spec's ratified instruction says treat the
-                                        # unamended key_substrate §4.1 step 5 ("O(1) or async")
-                                        # as authoritative until OF-B1 is ruled. Opt IN to the
-                                        # proposed no-sync-re-entry semantics. (Armature critic C1.)
-        defer_apply: bool = False,      # OF-7 likewise PROPOSED — OFF by default; opt IN to
-                                        # deferred-apply. (Armature critic C1.)
+        no_sync_reentry: bool = True,   # OF-B1 RATIFIED 2026-07-07 (Jordan "ratify all" consolidated
+                                        # ruling pass, ED-IN-0026; armature §5.4). Amends key_substrate
+                                        # §4.1 step 5 ("O(1) or async") to forbid synchronous re-entry.
+                                        # Still caller-toggleable (opt OUT with no_sync_reentry=False)
+                                        # for callers that need the unamended semantics.
+        defer_apply: bool = True,       # OF-7 RATIFIED 2026-07-07 (same ruling pass; armature §5.3).
+                                        # Amends key_substrate §4.1 step 4 to allow a deferred-apply
+                                        # target. Still caller-toggleable (opt OUT with defer_apply=False).
     ):
         self.log = log
         self.cascade_depth_max = cascade_depth_max

@@ -1,5 +1,8 @@
 <!-- [CANONICAL: 2026-05-01 — PP-687 Key type registry; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)] -->
-<!-- STATUS: PROVISIONAL — Class A canonical document. Companion to key_substrate_v30.md. -->
+<!-- STATUS: CANONICAL — Class A canonical document. Companion to key_substrate_v30.md. (Corrected
+     2026-07-07, ED-IN-0026 ruling pass / OPT-7 header-split item: this comment lagged the
+     2026-05-01 promotion above and the live `## Status: CANONICAL` line below — never a live
+     PROVISIONAL state, just an unpropagated header.) -->
 <!-- AUTHORITY: PP-687 -->
 
 # Key Type Registry (PP-687)
@@ -1041,6 +1044,17 @@ Modifying required_payload_fields of an existing type:
 3. Migration path for existing Keys of that type (transformation rule or Phase-B-style wrapping).
 4. Patch register Class A entry.
 
+**Process extension (2026-07-07, RATIFIED — Jordan's consolidated "ratify all" ruling pass,
+ED-IN-0026, `key_echo_armature_v1.md` §5.16):** step 2 above gains a mandatory precondition —
+**no new Key type may be appended to this registry without a corresponding row in
+`references/rendering_dispositions.yaml`** (the A15 rendering-disposition datafile: RENDERED-RICH
+/ GENERIC / UNRENDERED / DELIBERATE-SILENT verdict, citing the deciding armature/audit finding).
+This closes the gap the armature's C-KEY sweep found — types entering the registry with no
+recorded answer to "how does the player ever see this?" A15 (`skills/valoria-module-adjudicator`)
+enforces it report-only against the existing 48-type roster first; it flips to blocking new
+entries once `rendering_dispositions.yaml` exists and the backlog is at zero (§4 of the armature,
+standard warn→block discipline).
+
 ---
 
-**End registry. PROVISIONAL pending ratification.**
+**End registry. CANONICAL — see the header-split correction above (2026-07-07).**

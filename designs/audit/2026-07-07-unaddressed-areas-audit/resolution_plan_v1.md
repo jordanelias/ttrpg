@@ -1,7 +1,10 @@
 # Resolution Plan v1 — every identified issue, bottom-up and top-down, under an armature-first program
 
-## Status: PROPOSED (sequencing + fix-shapes; files nothing, rules nothing — work routes through
-## `ed_options.md` picks and the armature §5 docket; ED-1094 exception clause applies)
+## Status: ACCEPTED 2026-07-07 (Jordan: "ratify all... get to work on this" — ED-IN-0026). The
+## `ed_options.md` picks and the armature §5 docket this plan routed through are now RULED (see
+## key_echo_armature_v1.md §5 Ruling Log and ed_options.md's Disposition table) — this plan's
+## sequencing (§0 armature-first override, §2 strata, §3 finding→fix table) is now the live
+## execution program, not a proposal awaiting a decision surface.
 ## Date: 2026-07-07 · Lane: IN · Anchors: ED-IN-0017 (audit) / ED-IN-0018 (armature)
 ## Jordan directives bound here: armature-built-FIRST · contract deployment + enforcement is the
 ## workplan's job · v40 re-authoring license · full ecosystem-tooling bindings · bottom-up AND
@@ -18,9 +21,9 @@ finding → concrete fix · artifacts · lane · stratum · gate) — under one 
 shaped by. Concretely:
 
 1. **Build (this PR + PR-2):** seam-contract spec + Echo Matrix (landed) · executable substrate
-   (landed, critic-corrected: canon-authoritative defaults, OF-7/OF-B1 opt-in) · PR-2 =
-   flag-gated echo wiring + the F7 smoke oracle + A14's runtime lint, so the harness can
-   *observe* every subsystem it will shape.
+   (landed, critic-corrected then ruled: OF-7/OF-B1 ADOPTED 2026-07-07 (ED-IN-0026), defaults now
+   ON and caller-toggleable) · PR-2 = flag-gated echo wiring + the F7 smoke oracle (ED-IN-0021) +
+   A14's runtime lint, so the harness can *observe* every subsystem it will shape.
 2. **Deploy (the §6.3 waves, re-scoped as contract deployment):** each wave takes the armature
    onto one subsystem surface — its seam rows become that subsystem's acceptance criteria; its
    §3 key types become that subsystem's emit clauses; `references/rendering_dispositions.yaml`

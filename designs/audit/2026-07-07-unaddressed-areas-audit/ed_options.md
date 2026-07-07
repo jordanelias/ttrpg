@@ -1,6 +1,12 @@
 # ED options — unaddressed-areas audit (2026-07-07)
 
-## Status: CANDIDATES — deliberately NOT filed (read-only audit half; the #77/#80/#81 precedent).
+## Status: FILED 2026-07-07 (Jordan: "Perform consolidated ruling pass? I want to ratify all and
+## get to work on this" — ED-IN-0026). All 17 candidates below are now filed EDs; see the
+## Disposition table at the end of this file for the id each landed at and the design-call
+## rulings baked into OPT-1/2/4/10/14/17. This table is kept verbatim as the historical proposal
+## surface the ruling pass worked from.
+
+## Superseded status line (as originally shipped, kept for history): CANDIDATES — deliberately NOT filed (read-only audit half; the #77/#80/#81 precedent).
 Jordan picks; allocation per `references/id_reservations.yaml` protocol at filing time (never
 trust a printed id). Items marked **needs_jordan** contain a genuine ruling, not just work.
 The armature's §5 fork docket (key_echo_armature_v1.md) is the companion decision surface —
@@ -26,5 +32,33 @@ options here are WORK candidates; §5 rows are RULINGS.
 | OPT-16 (SE) | **Execute ED-SE-0001's own ordered updates** (CURRENT.md settlement row + HANDOFF_SE pending item) — the F-1 orphaning recurred live after the remediation that was supposed to prevent it. | C-NERSPESS-4 |
 | OPT-17 (IN) | **C-VERIFY carry-forward batch**: file the confirmed-and-unowned items — register back-propagation instances (C-VERIFY-1..4, 22), armor pure-upside (C-VERIFY-5), Domain-Echo season cap (C-VERIFY-12), attr-roster/glossary authority (C-VERIFY-19/21), resonance_style false deprecation (C-VERIFY-20), Partition co-victory un-struck §6.3 (C-VERIFY-23 — needs_jordan, GD-1 propagation). | C-VERIFY table |
 
-**Held-back note (ED-1094 exception clause):** merging this PR files NONE of these and rules NONE
-of the armature §5 forks. The §5 docket + this table are the explicit decision surface.
+**Held-back note (ED-1094 exception clause), superseded 2026-07-07:** this PR originally shipped
+with the instruction that merging it files none of these and rules none of the armature §5 forks.
+Jordan's consolidated ruling pass (same branch, before merge) exercised that held-back authority
+directly instead of waiting for a post-merge follow-up — see the Disposition table below and
+`key_echo_armature_v1.md` §5's Ruling Log for the §5 docket.
+
+## Disposition (2026-07-07, ED-IN-0026 consolidated ruling pass)
+
+| # | Filed as | Design-call ruling baked in (if any) |
+|---|---|---|
+| OPT-1 | ED-FA-0004 | Sequencing ruled: banner NOW as pre-LPS-1/port-blocking; full LPS-1 implementation scheduled as Stratum B work, not done ad hoc. |
+| OPT-2 | ED-FA-0005 | Design call ruled: permanent elimination is NOT intended — author a comeback/mercy path (M2 any-seed bar is the deciding criterion). |
+| OPT-3 | ED-IN-0021 | Accepted as specified (lands with PR-2). |
+| OPT-4 | ED-WR-0004 | Design call ruled: wire Turmoil writes (peninsular_strain owns it) rather than re-spec the GD-1 gate. |
+| OPT-5 | ED-WR-0005 | Accepted as specified. |
+| OPT-6 | ED-FI-0003 | Accepted as specified. |
+| OPT-7 | ED-IN-0022 | Accepted; the header CANONICAL/PROVISIONAL split sub-item already corrected in this same pass. |
+| OPT-8 | ED-IN-0023 | Accepted as specified. |
+| OPT-9 | ED-SE-0003 | Accepted; the 80-vs-75 CI milestone sub-item routes to armature §5.11's ruling (data-driven, no pick needed). |
+| OPT-10 | ED-PC-0003 | Executes armature §5.12's ruling: ER-2 + pool-aware Overwhelming bars, symmetric-unification direction. Needs its own verified PR (balance-affecting). |
+| OPT-11 | ED-SC-0011 | Accepted as specified. |
+| OPT-12 | ED-WR-0006 | Accepted as specified. |
+| OPT-13 | ED-MB-0004 | Accepted as specified. |
+| OPT-14 | ED-IN-0024 | Approved as ADDENDUM-ONLY corrections — append a note, never rewrite the original ratified text. |
+| OPT-15 | ED-PC-0004 | Accepted as specified. |
+| OPT-16 | ED-SE-0004 | Accepted as specified. |
+| OPT-17 | ED-IN-0025 | Accepted; the Partition co-victory GD-1 sub-item (C-VERIFY-23) ruled NO RULE CHANGE — register as intentionally-unstruck documentation only, pending its own dedicated GD-1 design session. |
+
+All 17 are now open backlog work (status `open` in `canon/editorial_ledger.jsonl`), sequenced per
+`resolution_plan_v1.md`'s strata — filing is not execution.

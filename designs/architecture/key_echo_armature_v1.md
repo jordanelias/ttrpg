@@ -1,6 +1,9 @@
 # Key & Echo Armature v1 — seam contracts + the Echo Matrix, all directions, all scales
 
-## Status: PROPOSED (Jordan-vetoable throughout; §5 is a needs_jordan fork docket that merge does NOT ratify — ED-1094 exception clause, called out in the PR body)
+## Status: RATIFIED (Jordan, 2026-07-07, "ratify all" consolidated ruling pass — ED-IN-0026; §5 is now
+## a ruling log, not an open docket — see the Ruling Log after the table. Two rows were genuine
+## no-default forks and required an actual pick rather than "accept the stated default": 5.10
+## (executed) and 5.12 (direction ruled, execution deferred to OPT-10/ED-PC-0003).)
 ## Date: 2026-07-07 · Lane: IN · ED anchor: ED-IN-0018 · Branch: `claude/fable5-audit-coverage-gaps-22nz7i`
 ## Authored at the Fable synthesis tier (CLAUDE.md §10 canonical-contract & propagation-spec authorship node)
 
@@ -133,7 +136,7 @@ rules:
    detector ED-IN-0003) get the chain depth they need only if rules 1-2 hold — this is the
    emergent-narrative legibility spine, not decoration.
 
-### 2.5 Outward (rendering — the registry × rendering sweep EXECUTED as data; this is the sweep half of the edge-batch "ED-IN-0012", ledger line 599 — cite the line while §5.10's renumber is pending)
+### 2.5 Outward (rendering — the registry × rendering sweep EXECUTED as data; this is the sweep half of the edge-batch, renumbered to **ED-IN-0019** per §5.10)
 
 The normative table is the audit's **C-KEY Part 4 48-row sweep**
 (`designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-KEY.md`), adopted here by
@@ -237,7 +240,7 @@ tracked by gap_note A4 (sequenced-not-abandoned).
 
 ---
 
-## §5 · Consolidated fork docket (needs_jordan — merge does NOT ratify these; each row states the armature default it is written compatible with)
+## §5 · Consolidated fork docket — RULED 2026-07-07 (Jordan consolidated ruling pass, ED-IN-0026; table kept verbatim as the historical decision surface, ruling recorded per-row below the table)
 
 | # | Fork | Default the armature assumes (reversible) | Blocks |
 |---|---|---|---|
@@ -259,6 +262,29 @@ tracked by gap_note A4 (sequenced-not-abandoned).
 | 5.15 | **OF-OWN** — the §6.1 TickScheduler is engine_clock-shaped while engine_clock is doc:null pending ED-1051; the scheduler's ownership formalizes when ED-1051 flips | §6.1 stays substrate-internal until then | ED-1051 (already T0) |
 | 5.16 | **A15 process extension** — "no new type registers without a rendering-disposition row" adds a mandatory precondition to the registry's CANONICAL §10 process; flagged as a process-canon change needing explicit ratification, not slipped in as a checker rule (critic overreach-watch) | A15 runs report-only against existing types regardless | §4 A15 flip-to-blocking |
 
+### §5 Ruling Log (Jordan, 2026-07-07 — "ratify all" consolidated pass, ED-IN-0026)
+
+| # | Ruling | Basis |
+|---|---|---|
+| 5.1 | **ACCEPT default** (assume DISJOINT) as a working assumption, not a closed question. PR-2 must include an empirical disjointness check before any convergence claim relies on it. | HIGH-priority open item stays open in effect; only the interim posture is ratified. |
+| 5.2 | **ACCEPT default** (ships without `decay()`). Authorship of `decay()` deferred to when cross-tick convergence work actually starts (Stratum B+). | No convergence claim is being made yet; nothing forces this now. |
+| 5.3 | **ADOPTED.** OF-7 (deferred-apply, key_substrate_v30.md §4.1 step 4) is RATIFIED, not merely PROVISIONAL. `TickScheduler(defer_apply=...)` default flips to `True`. | propagation_spec_v1.md itself: "without these two, the termination guarantee has no legal footing in the substrate as currently worded" (§5 item 1). |
+| 5.4 | **ADOPTED.** OF-B1 (no-synchronous-re-entry, §4.1 step 5) is RATIFIED. `TickScheduler(no_sync_reentry=...)` default flips to `True`. | Same basis as 5.3 — the two amendments are cited as a pair needed for the spec's own mechanism. |
+| 5.5 | **DEFERRED to PR-2 kickoff**, not ruled now. No stochastic consumer exists yet in the substrate, so no live decision is forced; ruling this blind (three named contracts, none deeply investigated in this pass) risks a wrong replay-determinism commitment. Flagged as a PR-2 T0 item. | "must be ruled before any stochastic consumer lands" (row text) — that gate is PR-2, not this PR. |
+| 5.6 | **ACCEPT default** (ORD-3/`compute_observers` not implemented). Deferred to the rendering wave (§6.3 wave 4). | Determinism-completeness gap is already tracked there. |
+| 5.7 | **ACCEPT default** (caller-supplied caps; no fabricated constant). Revisit once PR-2 produces real campaign-loop tuning data. | Matches the repo's anti-fabrication discipline (CLAUDE.md §7) — no invented Theorem-B constant. |
+| 5.8 | **OUT OF SCOPE for this IN-lane pass — not ruled here.** ED-SC-0002 is a pre-existing SC-lane fork inside SC's own P0 decision docket (ED-SC-0002..0005, filed under PR #80). Ruling an SC P0 item from an IN ruling pass would violate CLAUDE.md §4's session-lane-scoping convention. The armature's band-neutral §2.1 Debate row stands regardless of how SC eventually rules. | CLAUDE.md §4: sessions keep commits/PRs scoped to their own lane except genuinely cross-cutting IN work; this is SC's call to make. |
+| 5.9 | **OUT OF SCOPE for this IN-lane pass — not ruled here.** ED-SE-0002 is a pre-existing SE-lane fork (filed under PR #81/edge-playability). Same lane-scoping reasoning as 5.8. The armature's cap-only §2.1 Accord row stands regardless. | Same as 5.8. |
+| 5.10 | **EXECUTED.** The edge-playability pair (registry×rendering sweep; GM-token sweep) is renumbered off the collided `ED-IN-0012`/`ED-IN-0013` ids to fresh **`ED-IN-0019`** / **`ED-IN-0020`**. `ED-IN-0012`/`ED-IN-0013` are retained, unedited, for the SC-audit batch content only (index-hygiene / diagnostic-hygiene) — matching how `handoffs/HANDOFF_SC.md` already cites them. Existing ledger lines are NOT rewritten (ED-306 precedent — append, never mutate); two new ledger entries record the renumber. | Jordan is the one ordering the execution now, which is exactly the reserved authority ED-306 names; citation integrity requires it before more work cites either id. |
+| 5.11 | **ACCEPT default** (thresholds carried as registry data, not as a hardcoded constant, so 75-vs-80 doesn't need a winner yet). The underlying conviction_track_v30/ci_political doc discrepancy is separate hygiene (OPT-9/ED-SE-0003). | Row was already written to not force this pick. |
+| 5.12 | **RULED — genuine no-default fork, direction picked.** Adopt the **symmetric option**: the ER-2 continuity correction and pool-aware Overwhelming-bar behavior both extend across the *shared* resolution substrate everywhere (contest's kernel gains ER-2; combat's fixed `2·Ob` bar is replaced with the pool-aware form) rather than leaving the two live kernels diverged. This is a **direction ruling, not an execution** — the actual resolver-math change is pending its own ED, OPT-10/ED-PC-0003, verified in its own PR, because it can shift live balance numbers and needs its own regression pass. | The armature draft itself named this as "the symmetric option" among the live alternatives — the only one that removes the divergence entirely rather than picking one kernel's convention over the other's. |
+| 5.13 | **ACCEPT default** (§2.1 rows bind to outcome degrees, formula-agnostic). The live-dispatch defect (contest resolves through the deprecated raw-dice stub) is already tracked and owned by ED-SC-0006/0007 + OPT-11/ED-SC-0011. | No new information from this pass changes that ownership. |
+| 5.14 | **ACCEPT default.** OF-6/OF-1 stay as propagation_spec's own "smaller, non-blocking" triage; the armature's settlement-locus assumption stands. | propagation_spec_v1.md §5 item 8 already triaged these as non-blocking; no reason to re-litigate here. |
+| 5.15 | **DEFERRED to ED-1051** (pre-existing T0 item; not re-litigated by this pass). The `TickScheduler` stays substrate-internal until ED-1051 resolves `engine_clock`'s doc:null status. | ED-1051 already has its own T0 ownership; this ruling pass doesn't reach into it. |
+| 5.16 | **ADOPTED.** The A15 process extension — "no new §3/§10 type registers without a rendering-disposition row" — is ratified as a mandatory precondition on `key_type_registry_v30.md` §10's Extension Process (amendment landed in this same commit). | Jordan's "ratify all" is exactly the explicit-ratification the critic's overreach-watch asked for before this could bind as process canon rather than a slipped-in checker rule. |
+
+**Note on 5.8/5.9:** deferring to the owning lane is itself a ruling (not a silent drop) — both rows are recorded here so a future SC/SE session sees the disposition without re-deriving it.
+
 **Ruled-but-unexecuted items are NOT forks** — they are §6.3 remediation with existing authority:
 ED-871 (Mending cost=0; doc fix never landed `[C-VERIFY-13]`), fork-2/ARC-T04 strike (ratified,
 unexecuted `[C-VERIFY-16]`), fork-11 contract-entry refresh `[C-INJ-4]`, ED-935 consumer edges
@@ -274,9 +300,10 @@ SSI-4) · `KeyLog` (append-order SSI assignment; §2.3 invariants 1-8 enforced a
 deterministic serialization + sha256 content hash — the R-F2 surface) · `TypeRegistry` (tolerant
 line-based parse of the canonical registry markdown — the registry stays the single source of
 truth) · `TickScheduler` (ORD-1/2 discipline; Theorem-B runtime asserts with caller-supplied caps
-[OF-CAP]; B1 schedule_emission + no-sync-re-entry flag [OF-B1]; OF-7 deferred-apply at
-accounting_boundary(); fan-out-width-is-not-depth per D.1). Tests:
-`tests/valoria/test_key_substrate.py` (24 cases incl. byte-identical replay). NOT implemented
+[OF-CAP]; B1 schedule_emission + no-sync-re-entry, **default ON** — OF-B1 RATIFIED §5.4; OF-7
+deferred-apply at accounting_boundary(), **default ON** — OF-7 RATIFIED §5.3; both remain
+caller-toggleable flags, not hardcoded); fan-out-width-is-not-depth per D.1). Tests:
+`tests/valoria/test_key_substrate.py` (25 cases incl. byte-identical replay). NOT implemented
 (docket-blocked): compute_observers/armature interpretation (ORD-3), decay() (OF-3), any RNG
 dependency (5.5). **No campaign-loop wiring in this PR** — goldens untouched.
 
@@ -301,7 +328,7 @@ guarded.
    refreshes `[C-INJ-2/4]`; faction_politics doc:null flip + citation sweep (ep-14/ED-IN-0016);
    A13-A16 implemented report-only.
 4. **Rendering wave (IN/WR):** §2.5 dispositions → articulation §3.1 rows + Tier-3 slots
-   (the remediation half of edge-batch "ED-IN-0012", ledger line 599 — §5.10 disambiguation);
+   (the remediation half of edge-batch, renumbered to **ED-IN-0019** per §5.10);
    zoom rows get type_id citations `[C-KEY-10]`; ships `references/rendering_dispositions.yaml`
    (A15's input datafile).
 5. **Ruled-but-unexecuted sweep (WR/PC):** ED-871 doc fix; fork-2 strike execution; knots

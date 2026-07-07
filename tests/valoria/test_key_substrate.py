@@ -182,24 +182,28 @@ def test_keylog_replay_byte_identical(registry):
 def _sched(registry, **kw):
     kw.setdefault("cascade_depth_max", 3)
     kw.setdefault("emissions_per_tick_max", 10)
-    # Tests exercise the PROPOSED OF-7/OF-B1 semantics explicitly (opt-in); the
-    # substrate DEFAULTS to the authoritative unamended key_substrate SS4.1
-    # behavior (both flags False) per the armature critic's C1 verdict —
-    # test_defaults_are_authoritative_canon pins that.
+    # OF-7/OF-B1 are RATIFIED (Jordan's 2026-07-07 consolidated "ratify all"
+    # ruling pass, ED-IN-0026 — armature §5.3/5.4) and default True on
+    # TickScheduler itself; restated explicitly here so these tests keep
+    # exercising them even if the class default ever changes.
+    # test_defaults_are_authoritative_canon pins the class default directly.
     kw.setdefault("no_sync_reentry", True)
     kw.setdefault("defer_apply", True)
     return TickScheduler(KeyLog(registry), **kw)
 
 
 def test_defaults_are_authoritative_canon(registry):
-    # OF-7 / OF-B1 are PROPOSED amendments; until ruled, the oracle's defaults
-    # follow the unamended canon: synchronous O(1) consumer emission is legal,
-    # and apply callbacks run live.
+    # OF-7 / OF-B1 are RATIFIED amendments (2026-07-07 ruling pass): the
+    # oracle's defaults now follow the amended canon — synchronous re-entry
+    # during a drain is forbidden, and apply callbacks defer to
+    # accounting_boundary() rather than running live.
     s = TickScheduler(KeyLog(registry), cascade_depth_max=3, emissions_per_tick_max=10)
-    assert s.no_sync_reentry is False and s.defer_apply is False
+    assert s.no_sync_reentry is True and s.defer_apply is True
     applied = []
     s.emit(make_key("k0"), apply=lambda k: applied.append(k.id))
-    assert applied == ["k0"]  # live apply, not deferred
+    assert applied == []  # deferred, not live
+    ran = s.accounting_boundary()
+    assert ran == 1 and applied == ["k0"]
 
 
 def test_emissions_per_tick_cap_fires(registry):
