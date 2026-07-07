@@ -168,7 +168,7 @@ Simplified: **Ob = 2 + Fort Level + max(0, 3 − PT)**
 
 **Replaces:** Flat passive +1/season + Piety Domain Action.
 
-**Starting CI:** 28 (canonical BG). **Phase transition:** CI 75.
+**Starting CI:** 28 (canonical BG). **No phase-transition freeze** — CI runs to 100 with no freeze (PP-421 superseded the CI-75 freeze; see ci_political_v30 §0/§2.1/§7.6). *(This doc lagged that supersession; propagated 2026-07-07.)*
 
 ### Seasonal CI Calculation
 
@@ -207,9 +207,9 @@ Early game (S1–S5): Church prominent in ~1–2 territories (T9 at PT 5). CI ga
 
 Mid game (S6–S12): Church expands prominence via Mandate growth, Preaching raises PT. Prominent in 3–5 territories, some at PT 4–5. CI gain ≈ +1 +2 −1 = +2/season. CI at S12 ≈ 47.
 
-Late game (S13–S20): Church at peak prominence, 5–8 territories, active Preaching. CI gain ≈ +1 +3 = +4/season (Hafenmark suppression may have ended). CI 75 reached ~S20.
+Late game (S13–S20): Church at peak prominence, 5–8 territories, active Preaching. CI gain ≈ +1 +3 = +4/season (Hafenmark suppression may have ended). ~~CI 75 reached ~S20.~~ **[STALE — assumes the superseded CI-75 freeze model (PP-421 struck); no canonical CI-100 pacing estimate exists yet.]**
 
-This gives a 20-season timeline to CI 75 under active Church play with moderate opposition — consistent with a full campaign.
+~~This gives a 20-season timeline to CI 75 under active Church play with moderate opposition — consistent with a full campaign.~~ **[STALE — the CI-75 endpoint is superseded by the CI-100 no-freeze model (PP-421); pacing needs re-derivation against CI-100.]**
 
 [GAP: CI pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]
 
@@ -219,11 +219,13 @@ This gives a 20-season timeline to CI 75 under active Church play with moderate 
 
 ### 4.1 Primary Victory — Territorial Consolidation
 
+> **⚠️ SUPERSEDED (2026-07-07, CI-75→CI-100 propagation).** This Church "Primary Victory — Territorial Consolidation" framing is superseded twice over: **(1) PP-421** — CI runs **0–100, no freeze** (the "Phase 2, CI capped at 75" model below is struck; milestones now 40/55/65/80/100 per ci_political_v30 §2.1; Mass Seizure is a one-shot at CI ≥ 60 per victory_v30 §3.2; a Theocracy Unification Attempt fires at CI 100 per ci_political_v30 §2.2); and **(2) GD-1 / ED-NEW-CI-10** — no faction-specific victory survives, **Peninsular Sovereignty is the sole win path** (ci_political_v30 §7.1), so this entire §4 Church-victory apparatus is historical. **ED-303 (freeze at 75?) — RESOLVED-BY-SUPERSESSION:** the shipped answer is "no freeze, CI runs to 100" (PP-421), the opposite of this note's original "Recommend freeze." NOTE: the GD-1 propagation checklist (canon/02_canon_constraints.md §B) lists §4.2/§4.3/§6.1/§6.2/§7 for [SUPERSEDED-BY: GD-1] strikes but omits §4.1 — whether §4.1 belongs on that ratified checklist is flagged (CI75-11) for a dedicated GD-1 session, not decided here.
+
+*Original Phase-1/Phase-2 text retained for history:*
+
 **Phase 1 — Accumulation (CI 0–74):** Church accumulates CI through institutional momentum, Conviction Yield, and Assert actions. This phase is passive/incremental.
 
 **Phase 2 — Consolidation (CI ≥ 75):** Church shifts to territorial seizure. CI stops advancing (capped at 75). The counter is no longer relevant — the game is now about holding territory.
-
-[EDITORIAL: ED-303 — Does CI freeze at 75 or continue advancing? Freezing creates cleaner phase transition. Continuing creates pressure for other factions to suppress even post-75. Recommend freeze.]
 
 
 **Territory Consolidation Values (user-confirmed):**
@@ -430,7 +432,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | ED | Resolution | Patch |
 |----|-----------|-------|
-| ED-110 | **Resolved.** Church victory is CI 75 phase transition → territorial consolidation (TCV ≥ 18 for 2 seasons). Alternate: Altonian Theocracy (AEA = 5). Hollow: Church + Hafenmark partition. | PP-413, PP-414, PP-415 |
+| ED-110 | **Resolved (historical) — [SUPERSEDED-BY: PP-421 + GD-1].** Church victory *was* CI 75 phase transition → territorial consolidation (TCV ≥ 18 for 2 seasons); Alternate Altonian Theocracy (AEA = 5); Hollow Church + Hafenmark partition. Superseded twice over: PP-421 (CI runs 0–100, no freeze) and GD-1/ED-NEW-CI-10 (no faction-specific victory — Peninsular Sovereignty is the sole win path, ci_political_v30 §7.1). | PP-413, PP-414, PP-415 (superseded) |
 | ED-112 | **Closed.** Hafenmark −1/season vs Church +1/season is a pacing concern under old system. Under new CI generation (Conviction Yield + Assert), the interaction is richer: Hafenmark suppression negates passive +1 but cannot touch Conviction Yield. No longer a deadlock risk. | — |
 | ED-111 | **Superseded** by PP-412 (CI generation redesign). Old Piety Domain Action dissolved; replaced by Conviction Yield + Assert. | PP-412 |
 
@@ -449,7 +451,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | Gap | Description |
 |-----|-------------|
-| [GAP: CI pacing — no simulation] | CI 75 timeline estimate (~S20) is analytical only. Needs simulation with faction AI to validate. Flag as SIM-DEBT. |
+| [GAP: CI pacing — no simulation] | ~~CI 75 timeline estimate (~S20)~~ superseded (PP-421: CI runs to 100, no freeze); no canonical CI-100 pacing estimate exists yet — OPEN against the CI-100 model. Needs simulation with faction AI. Flag as SIM-DEBT. |
 | [GAP: AEA pacing — no simulation] | Altonian Theocracy clock has 5 advancement conditions. Needs simulation to confirm it is achievable but not trivial. |
 | [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories PT ≤ 1, MS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
 | [GAP: Community Weaving dual effect] | Community Weaving now affects both MS and PT. Need to verify this does not create a positive feedback loop (low PT → more Weaving → lower PT → more RM power). |
@@ -470,7 +472,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | PP-410 | Track | Consecrated status — PT 5 via Consecrate action, floor of 4 while Church controls |
 | PP-411 | Seizure | Church Seizure Ob = 2 + Fort Level + max(0, 3 − PT). Prominence required. |
 | PP-412 | CI | CI generation redesign — passive +1, Conviction Yield, Assert, Suppress, Hafenmark structural |
-| PP-413 | Victory | Church Primary Victory — CI 75 phase transition, TCV ≥ 18 for 2 seasons |
+| PP-413 | Victory | ~~Church Primary Victory — CI 75 phase transition, TCV ≥ 18 for 2 seasons~~ **[SUPERSEDED — PP-421 (CI ceiling 0–100, no freeze) + GD-1/ED-NEW-CI-10 (sole Peninsular Sovereignty victory)]** |
 | PP-414 | Victory | Altonian Theocracy Path — AEA clock 0–5, victory at AEA 5 + CI ≥ 60 + hold T9 |
 | PP-415 | Victory | Hollow Victory — Church + Hafenmark partition, Crown Mandate ≤ 1 |
 | PP-416 | RM | RM Emergence — Warden's Accord track, triple-condition trigger, active NPC rules |
@@ -517,4 +519,4 @@ When the Church Influence (CI) crosses a milestone threshold, the change is visi
 | CI 40 | Church authority is becoming assertive. In Church-controlled territories: new construction (chapels, schools). In non-Church territories: Church envoys arrive with formal diplomatic proposals. |
 | CI 55 | Church is the dominant institutional force. Parliamentary debates increasingly reference Church doctrine. Crown officials are seen attending Church ceremonies. Trade guilds negotiate with Church officials directly. |
 | CI 65 | Church is approaching hegemony. Non-Church factions must actively resist or be absorbed. Suppress Heresy actions fire in border territories. The atmosphere shifts from institutional competition to institutional survival. |
-| CI 75 (phase transition) | Graduated Seizure eligible. The Church is no longer competing — it is consolidating. The question for every other faction is not "how do we win" but "how do we survive." |
+| CI 75 → *(milestone set superseded)* | **[STALE — pre-redesign milestone; PP-421 replaces the CI-75 freeze with the 40/55/65/80/100 milestone set. Exact table renumbering is deferred by ruling (armature §5.11, ratified via ED-IN-0026 — "doesn't need a winner yet"); not rewritten to specific new thresholds here.]** Graduated Seizure eligible. The Church is no longer competing — it is consolidating. The question for every other faction is not "how do we win" but "how do we survive." |

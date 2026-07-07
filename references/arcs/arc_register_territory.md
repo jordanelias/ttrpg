@@ -30,7 +30,7 @@ T12 Sigurdshelm non-Varfell: Intel −2 immediately; VTM resets to 0; Private Co
 
 **TE-12 — Collector's Chokehold** `Varfell | T12, T13, T6 | ALL`
 T12 + T13 both Varfell: Southernmost access gated by Varfell permission (Influence vs Ob = Varfell Mandate ÷ 2 + 1 to negotiate expedition passage). WC/WR cannot advance while Varfell has Military in T13. If Crown also controls T6: neither faction alone blocks the other; expedition requires both to cooperate or contest T13/T6 militarily.
-*If active during ARC-S15 cracking phase: ARC-T04 expedition becomes diplomatically blocked, creating an indirect terminal RS path. Cross-reference: ARC-S15.*
+*~~If active during ARC-S15 cracking phase: ARC-T04 expedition becomes diplomatically blocked, creating an indirect terminal RS path. Cross-reference: ARC-S15.~~ [STRUCK — fork 2 / PP-602: ARC-T04 (the Southernmost/Ceiral Ritual expedition) was struck entirely; no expedition exists to block. Executed 2026-07-07, ED-IN-0011.]*
 
 **TE-13 — Warden Threshold** `Wardens | T15 | ALL`
 Any faction places Military unit in T15: WC −1 immediately; non-Warden Thread operations in T15 +1 Ob; WC cannot advance while Military unit present. Terminates when Military units withdraw; WC resumes from reduced value (no recovery of lost point).

@@ -13,6 +13,7 @@ last_authored: "2026-05-17"
 authoring_pass: "Pass 2j armature index v1; renamed entries Pass 2 follow-up Option A 2026-05-17"
 generator: "tools/mechanics_index_gen.py"
 authoring_mode: "manual_v1"
+freshness_note: "⚠️ (ED-IN-0025, 2026-07-07, C-VERIFY-3): the 'combat' entry (~line 215) was hand-patched 2026-06-22/23 (ED-1041) WITHOUT a file-wide re-authoring pass — last_authored/drift_report above are stale for every OTHER entry. Do not trust them as a currency signal; verify per-entry against CURRENT.md."
 note: |
   Initial index population by Pass 2j manual authoring. Generator at v1 validates
   structure and cross-references; auto-population from canon-doc scanning is
@@ -224,8 +225,8 @@ mechanics:
       - "designs/scene/social_contest_v30.md"
       - "designs/architecture/complete_systems_reference.md#part-3"
     params: "params/contest.md"
-    sim_module: sim/personal/contest.py
-    test_status: not_implemented
+    sim_module: sim/personal/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
+    test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
     dependencies:
       mechanics: [die_rule_d10, conviction_scar, beliefs]
     notes: "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only)."
@@ -341,16 +342,16 @@ mechanics:
       - "designs/scene/derived_stats_v30.md#section-10-1"
     unified_canon_target: "designs/personal/knots_v30.md (Pass 2g canonized 2026-05-17)"
     sim_module: sim/personal/knots.py
-    pp: PP-632
+    pp: ED-912   # was PP-632 (struck); tier/gauge/rupture model reframed 2026-06-28 (ED-912/ED-841), propagated here 2026-07-07 (ED-FI-0003)
     test_status: not_implemented
     dependencies:
       mechanics: [coherence_track, disposition_track]
     primitives:
       pool: "(Bonds*2)+3"
       max: "floor(Bonds/2)+1"
-      tiers: {close: 5, medium: 2, loose: 1}
-      rupture: "Disposition -> -4"
-      loss: "Coherence -1 mandatory"
+      tiers: {distant: "-2..+5 (start 0)", close: "-5..+5 (start -2)"}   # ED-912 bidirectional bond-strain gauge; PP-632 Loose/Medium/Close point-cost model struck
+      rupture: "strain +5 (both tiers); betrayal-rupture Disposition -> -3 (revised from -4); -5 = Tempered (Close only)"
+      loss: "[UNVERIFIED post-ED-912 — see knots_v30 §6.2 / C-FI-5b-coherence]"
     notes: "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc."
 
   # ─── THREAD (sim/thread/) ────────────────────────────────────────────────
@@ -488,7 +489,7 @@ mechanics:
       - threadwork_check_hook
       - lethality_scale_restoration
     integration_plan_doc: "designs/provincial/mass_battle_integration_v30.md (Pass 2n canonized 2026-05-17)"
-    notes: "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage."
+    notes: "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. ⚠️ STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum — do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows)."
 
   units:
     scale: provincial
@@ -831,6 +832,14 @@ mechanics:
     canon_sources: ["designs/scene/miraculous_event_v30.md"]
     sim_module: sim/world/miraculous_event.py
     test_status: not_implemented
+
+  scenario_authoring:
+    scale: peninsula
+    faction: universal
+    canon_sources: []   # no home doc exists — doc:null in module_contracts.yaml (C-INJ-3/fork 11); compile = authoring-time (ED-IN-0011)
+    sim_module: null    # zero code presence anywhere in sim/ (C-INJ-3); Stage-1 compile build is Stratum C/D
+    test_status: not_implemented
+    notes: "Placeholder registered 2026-07-07 (ED-IN-0023, C-INJ-3): scenario_authoring had no mechanics_index entry despite carrying a module_contracts.yaml contract. Authoring-vs-runtime RATIFIED (fork 11, ED-IN-0011): compile is authoring-time; its output packs seed runtime."
 
   insurgency_pipeline:
     scale: world

@@ -5,6 +5,9 @@ Canon source: mc_v17.py faction_take_action; GD-2 (mandatory before stochastic)
 Game Design constraints applicable: GD-1, GD-2
 Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-unique
          dispatch wired 2026-05-17]
+[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: this module's scalar-L reads and
+ string-label da_outcome emission are the pre-LPS-1 SUPERSEDED oracle (no per-settlement L/PS,
+ no da.* Key plumbing — C-FA-1). Do NOT port as canon-conformant until ED-FA-0004 (Stratum B).]
 
 v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 30% faction-unique | 35% Conquest | 20% Muster | 15% Govern.

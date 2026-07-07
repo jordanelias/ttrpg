@@ -23,7 +23,7 @@
 | Resource | Prosperity +1 in this territory |
 | Secret | +1D on next military or intelligence action in this territory |
 | Remnant | Thread operation Ob −1 in this territory for 2 seasons; Thread Debt token placed |
-| Anomaly | RS −1 at this territory immediately; Warden Cooperation +1 eligible (if Warden Emergence active) |
+| Anomaly | MS −1 at this territory immediately; Warden Cooperation (WC) +1 eligible when Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as a steward). See params_board_game.md §Warden Cooperation and §Warden Recognition. (PP-630) |
 
 - **Effect on Failure:** No POI found. +1 Church Attention Pool in this territory if the survey targeted Depth ≥ 3 content.
 

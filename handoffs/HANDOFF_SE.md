@@ -21,6 +21,14 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   the NERS-audit ratification — composes; the edge audit's ep-31/E9 dual-authority seam notes
   feed that work.)
 
+- **ED-SE-0001 (ratified, work-ordered 2026-07-05; tracking executed 2026-07-07 via ED-SE-0004) —
+  Settlement governance-loop redesign tracking.** Filed from the ratified NERS qualitative audit
+  (PR #77, post-merge "Ratify all"). Ordered action: track `designs/territory/governance_play_redesign_v1.md`
+  staging toward canon ratification so it cannot orphan — the F-1 recurrence guard (C-NERSPESS-4 found
+  this ordered update had never been executed). G1 prerequisite already built: `sim/territory/registry.py`
+  + tests (per NERS refutation R-5). CURRENT.md's settlement row now carries the proposal pointer
+  (OPT-16). Source: `designs/audit/2026-07-04-ners-qualitative-audit/ners_qualitative_audit_v1.md` F-1.
+
 ## Decisions
 
 (none logged under this lane split.)

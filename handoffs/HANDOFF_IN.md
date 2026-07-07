@@ -8,6 +8,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-A truth-reconciliation FIRST PASS EXECUTED 2026-07-07 (this branch,
+  `claude/fable5-audit-resolution-plan-r6kzsa`).** Executes the doc/registry/ledger core of Stratum A;
+  `designs/audit/2026-07-07-unaddressed-areas-audit/resolution_plan_v1.md` §7 has the full
+  finding→fix execution log. EDs flipped `resolved`: ED-FI-0003 (OPT-6 knots ED-912 propagation),
+  ED-IN-0022 (OPT-7 registry hygiene), ED-IN-0023 (OPT-8 consumer closure), ED-IN-0024 (OPT-14
+  addenda), ED-IN-0025 (OPT-17 C-VERIFY notes), ED-SE-0004 (OPT-16 anti-orphaning), ED-PC-0004
+  (OPT-15 ED-1042 flips + the **ED-PC-0005** residual re-file). Kept `open` with a progress note:
+  ED-FA-0004 (OPT-1 — `[PRE-LPS-1/PORT-BLOCKING]` banners placed, LPS-1 sim impl = Stratum B),
+  ED-WR-0005 (OPT-5 — ED-871 doc side done, sim + C-TW-3.. = Stratum B). Also executed the U-6
+  CI-75→CI-100 supersession + fork-2 ARC-T04 strike (doc side), and DISAMBIGUATED the half-done
+  ED-IN-0012/0013→0019/0020 renumber (U-11 — the ratification appended the new rows but never re-id'd
+  the old edge-playability rows; now `status: superseded` + `renumbered_to`, physical row-dedup left
+  to Jordan). **Deferred (loud):** all behavior-changing sim edits (`operations.py`, `ci_track.py`,
+  `knots.py`, dead `pool_penalty`) = Stratum B; genuine needs-Jordan calls (anchoring cadence cap,
+  CI75-1 seizure trigger, CI75-11 GD-1 checklist, knots §6.2 Coherence-loss) flagged in place, not
+  decided. New id: **ED-PC-0005** (id_reservations PC next_free 5→6).
 - **Unaddressed-areas comprehensive audit — DELIVERED 2026-07-07 (ED-IN-0017, this PR;
   deliverable 1 of 2).** 14 evidence clusters (incl. Jordan-directed pessimist NERS + pessimist
   resolver reviews) + 4 gap-closure agents + 5 independent refuters; every cluster's Honest-gaps

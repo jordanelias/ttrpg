@@ -5,6 +5,8 @@
 # Valoria — Faction Canon (Consolidated)
 ## Status: CANONICAL
 ## Status: PROVISIONAL — pending ratification.
+
+> **⚙️ Implementation note (ED-FA-0004, 2026-07-07):** the `sim/` oracle (`sim/autoload/game_state.py` Faction = {L, Sta, W, I, Mil}) does NOT yet implement the LPS-2e 6-stat / per-settlement L-PS split this sheet authorizes — no Mandate/PS/Treasury engine, no `da.*` Keys. This DOC is correct canon; the ORACLE lags it. Full LPS-1 sim implementation is Stratum-B work — do not treat `sim/` as canon-conformant until then.
 ## Date: 2026-05-07
 ## Companion: `designs/npcs/character_canon_v30.md` (per-NPC sheets) — pending.
 ## Substrate: `designs/personal/conviction_taxonomy_v30.md` (PP-684 13-Conviction) + `designs/personal/conviction_axis_matrix_v30.md` — both files remain canonical and are referenced, not duplicated, here.

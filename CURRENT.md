@@ -12,7 +12,11 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-07 (Key & Echo Armature v1 + unaddressed-areas audit, ED-IN-0017/0018,
+_Last reconciled: 2026-07-07 (**Resolution-plan Stratum-A truth-reconciliation first pass** — the
+doc/registry/ledger core executed: ED-FI-0003/ED-IN-0022/ED-IN-0023/ED-IN-0024/ED-IN-0025/ED-SE-0004/
+ED-PC-0004 flipped `resolved`; ED-FA-0004/ED-WR-0005 doc-slice done with sim deferred to Stratum B;
+CI-75→CI-100 + fork-2 doc propagation; ED-PC-0005 filed; see `resolution_plan_v1.md` §7. Prior
+same-day: Key & Echo Armature v1 + unaddressed-areas audit, ED-IN-0017/0018,
 consolidated ruling pass ED-IN-0026 — "ratify all" — RULED on the same branch/PR before merge:
 OF-7/OF-B1 ADOPTED into `key_substrate_v30.md`/`propagation_spec_v1.md`, ED-IN-0012/0013 renumbered
 to ED-IN-0019/0020, A15 process extension landed in `key_type_registry_v30.md` §10, first
@@ -32,7 +36,7 @@ the head of its lineage; predecessors are archived._
 | **Mass battle** | `designs/provincial/mass_battle_v30.md` (+ `mass_battle_integration_v30.md`) |
 | **Social contest** | `designs/scene/social_contest_v30.md` (+ `_index`, `_infill`; `params/contest.md`) — ⚠️ a staged **contest_rebuild** is in flight (Gate 0 ratified 2026-06-30; reserved ED 1055–1079 / PP 800–809; **Stages 1a–3 / Gates A–C ratified through 2026-07-02, ED-1055–1062** — kernel at `sim/personal/contest/`; Stage 4 "four games" next); this row remains the head until a rebuild stage supersedes it. **2026-07-05: Fable 5 subsystem audit RATIFIED** (`designs/audit/2026-07-05-fable5-social-contest-audit/`, PR #80 + post-merge "Ratify all") — consequence-spine-first sequencing adopted (P0 → P1 ∥ P3-lite → Stage 4 → calibration); P0 decision docket **ED-SC-0002..0005 awaits Jordan's picks**; work items ED-SC-0006..0010 + ED-IN-0012..0013 filed |
 | **Faction / political** | `designs/provincial/faction_canon_v30.md` + `faction_layer_v30.md` + `faction_behavior_v30.md` + `faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`) |
-| **Settlement / territory** | `designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `designs/world/geography_v30.md`) |
+| **Settlement / territory** | `designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `designs/world/geography_v30.md`) — ⚠️ a **governance-play redesign** is in PROPOSAL (`designs/territory/governance_play_redesign_v1.md`, 2026-06-22; G1 prerequisite built: `sim/territory/registry.py` + tests). ED-SE-0001 ordered this tracking (ratified NERS audit, PR #77, 2026-07-05) until the first stage lands — executed 2026-07-07 (ED-SE-0004, OPT-16). |
 | **Threadwork** | `designs/threadwork/threadwork_v30.md` (+ `thread_horizontal_integration_spec.md`) |
 | **Architecture / Key substrate** | `designs/architecture/key_substrate_v30.md` (+ `key_type_registry_v30.md`) — **2026-07-07: first executable substrate landed** (`sim/substrate/keys.py` — Key/KeyLog/TickScheduler, 25 tests) via the Key & Echo Armature v1 (`designs/architecture/key_echo_armature_v1.md`, ED-IN-0018, RATIFIED — consolidated ruling pass ED-IN-0026). §4.1 steps 4/5 amended per OF-7/OF-B1 (now RATIFIED, see the doc's own pointer note); `key_type_registry_v30.md` §10 gained the A15 rendering-disposition precondition + a header CANONICAL/PROVISIONAL split correction |
 | **Architecture / Holonic doctrine** | `designs/architecture/holonic_container_doctrine_v1.md` — CANONICAL (ratified 2026-07-02, ED-1083/ED-1094); cross-maps the container/wrapper/propagation vocabulary onto module_contracts/sim-ladder/Key-substrate/Key-log-parity. Does NOT itself author the propagation-spec transform — see next row |

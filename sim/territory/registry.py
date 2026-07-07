@@ -57,6 +57,10 @@ class Settlement:
     fort_level: int = 0
     garrison: bool = False
     # §1.8 per-settlement political acceptance (0-7)
+    # [PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: legitimacy/popular_support are declared
+    #  but NEVER READ OR WRITTEN anywhere in sim/ (zero non-definition references) — an INERT LPS-1
+    #  schema stub, not a working per-settlement L/PS pipeline (R2's qualification to U-1). Wiring
+    #  them into a Mandate aggregate is ED-FA-0004 Stratum-B work.]
     legitimacy: int = 0
     popular_support: int = 0
     # §1.4 / governance economy

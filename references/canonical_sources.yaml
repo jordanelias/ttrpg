@@ -68,7 +68,7 @@ sources:
 
   knots_unified:
     design_doc: designs/personal/knots_v30.md
-    canonical_sha__designs__personal__knots_v30_md: "017ce385b0d4909ca6cee83605be47e675930690"
+    canonical_sha__designs__personal__knots_v30_md: "914888b53c6cec60203a87cf35e1b4be73437bf7"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
     contradictions_pending:
@@ -111,9 +111,9 @@ systems:
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "84ade4ce71a99e4fd86842fa6de99f71a70a75bd"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "28b36491dc50672faca8e36e0eac8c3efbb4f453"
+    canonical_sha__params__threadwork_md: "65a489d1c494b2238b49ec46a7c1780ffc1ca4a8"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
@@ -184,9 +184,9 @@ systems:
     canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "e1b25d2b3e114fcef0b265f351cd1699028c05d7"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
+    canonical_sha__params__scale_transitions_md: "fb16c8ee41067a43ae944ab88f97b5a747115a46"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "ee7571c228fa1c9897d1931a9d5686a7692da97b"
@@ -198,7 +198,7 @@ systems:
     canonical_sha__designs__provincial__ci_political_v30_md: "32b30e19e986dcbda51f54ffddc0057a52fb5acc"
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "01097df17fa52083779a0611c73270db73913fd8"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "6dd874b636ec25e638d067e76814facd424ce566"
     peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
     canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
   settlement_layer:
@@ -222,7 +222,7 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "07a7279e59bbb70433ccf88a4917c4895022cf75"
+    canonical_sha__designs__scene__conviction_track_v30_md: "0abc5d362995ec4c87e21ea36bea80eb437bc0dc"
     conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
@@ -304,7 +304,7 @@ systems:
     added: '2026-04-25 Stage 4'
   miraculous_event:
     design_doc: designs/scene/miraculous_event_v30.md
-    canonical_sha__designs__scene__miraculous_event_v30_md: "bfa6783cf65894a8b36ac71dfc0db68d68f5fa9c"
+    canonical_sha__designs__scene__miraculous_event_v30_md: "8ad342a3fe3075a77bc17aac356bb10a8c2d5c13"
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
@@ -319,7 +319,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "a6fde2f469ba5585eb00a6ece8d30e3cd3b538e9"
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "e63cf185eb924b0494eb3fca0018570dcce41a07"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
@@ -345,7 +345,7 @@ systems:
   faction_behavior:
     note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/provincial/faction_behavior_v30.md
-    canonical_sha__designs__provincial__faction_behavior_v30_md: "830e92d62e2dd872cd3ed1122c688cc0049dc91a"
+    canonical_sha__designs__provincial__faction_behavior_v30_md: "303d91f0e5a2ab3a999d8616143165213f57b751"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
@@ -382,7 +382,7 @@ systems:
   faction_canon_consolidation:
     note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/provincial/faction_canon_v30.md
-    canonical_sha__designs__provincial__faction_canon_v30_md: "0c55fda67160acc88f8b4c298b03c17766730c7b"
+    canonical_sha__designs__provincial__faction_canon_v30_md: "354544eaf759b483d55bbd3e3c98728cbaf2c761"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
 
@@ -445,7 +445,7 @@ systems:
     infill: designs/scene/fieldwork_v30_infill.md
     canonical_sha__designs__scene__fieldwork_v30_infill_md: "47a2a78ffb2ff8fef741d5a0ad24c07ead41b630"
     bg: designs/scene/fieldwork_bg_v30.md
-    canonical_sha__designs__scene__fieldwork_bg_v30_md: "ecd05c6b4732a203243f1f05d682df90a91eb3d8"
+    canonical_sha__designs__scene__fieldwork_bg_v30_md: "e4831b5a85fdefe9477054760c401c79d95a1402"
     bg_infill: designs/scene/fieldwork_bg_v30_infill.md
     canonical_sha__designs__scene__fieldwork_bg_v30_infill_md: "270a77ed20d7b445e2ec3d46833ee0e7ac515804"
     hybrid: designs/scene/fieldwork_hybrid_v30.md
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "c5e628d7c909e58b9c3207cea0053f240a3cedca"
+    canonical_sha__references__module_contracts_yaml: "2bc2cbebf87d02dcc0877983f4a1ca49e3220d8d"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

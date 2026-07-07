@@ -8,6 +8,9 @@ Canon source: designs/scene/conviction_track_v30.md §3 PP-412 (CI generation);
               designs/scene/investigation_systems_v30.md SYSTEM 1 (NPE).
 Status: [CANONICAL — Phase 2 2026-05-17; Deferred Migration Batch 2026-05-20;
                     insurgency + NPE wire-up 2026-05-20]
+[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: run_accounting() has NO Mandate-aggregation
+ or Treasury-accrual step; the LPS-1 per-settlement L/PS → Mandate pipeline is UNIMPLEMENTED
+ (C-FA-1). Do NOT treat this season-end pass as canon-conformant until ED-FA-0004 (Stratum B).]
 
 Composes per-season world-track updates and end-of-season state propagation.
 Track arithmetic lives in dedicated modules (ci_track, ms_track); insurgency

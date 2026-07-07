@@ -456,6 +456,8 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 
 Existing co-victory pairings from victory_v30.md §4 are retained as alternate co-victories with their existing (lower) thresholds, alongside the new Partition option.
 
+**Status note (ED-IN-0025 / C-VERIFY-23, 2026-07-07):** this §6.3 Peninsular Partition co-victory is un-struck despite GD-1's Violation Test ("any co-victory / shared-victory mechanic → FAIL") and its omission from the Pass-2c strike list (canon/02_canon_constraints.md §B, which strikes conviction_track_v30 and complete_systems_reference Part 7 but never names this file). **RULED: NO RULE CHANGE** — the section stays live, documented here as an intentionally-unstruck exception pending its own dedicated GD-1 propagation design session. Do not strike it as a mechanical fix.
+
 ### §6.4 World-State Transitions
 
 **No shared loss. No fade to black.**

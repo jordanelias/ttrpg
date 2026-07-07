@@ -232,6 +232,8 @@ Thread events produce Domain Echo to faction stats when they meet Thread Signifi
 
 **Timing:** Queued to Accounting. **Cap:** 1 Thread Domain Echo per scene per faction (PP-329). **Model:** Extends Epistemic CI Trigger (PP-182) to all factions. CI trigger fires independently. Thread Domain Echo and Accord Domain Echo (§5.5) may both fire from same scene on different stats.
 
+**Known gap (ED-IN-0025, 2026-07-07, C-VERIFY-12):** §5 caps each Domain Echo channel *per-scene-per-faction* (PP-329) but sets **no season-level aggregate ceiling** — a faction generating many qualifying scenes in one season (e.g. Debate-spam) can stack Echoes without limit. Whether a season cap is warranted is not adjudicated here; flagged for Stratum B/E balance review.
+
 ---
 
 ## §6 Mode Transition Procedures

@@ -177,21 +177,16 @@ Two end states: **break** (strain accumulation exceeds capacity) and **rupture**
 
 ### §6.1 Break (strain-capacity exceeded)
 
-Per fieldwork §5.6b. At Accounting, if strain exceeds tier capacity, Knot breaks.
+Per fieldwork §5.6b (ED-912, 2026-06-28). Strain runs on the bidirectional −5..+5 bond-strain gauge (see §2/§3.1): the old "capacity exceeded" is now a single shared threshold — **rupture at +5** (the wear-direction ceiling, both tiers). At Accounting, a Knot whose strain has reached **+5** breaks. **−5 = Tempered** (Close only): absorbs the next rupture trigger once, resetting strain to 0 instead of breaking.
 
-**Tier capacities [PROVISIONAL: TIER-DRIFT-001 — see §2]:**
+*(Superseded: the pre-ED-912 one-way 0→capacity accumulator with Distant-4 / Close-7 caps and the `[PROVISIONAL: TIER-DRIFT-001]` tag — TIER-DRIFT-001 was RESOLVED by ED-912/ED-841 six weeks before this propagation pass; see §2 and §11.)*
 
-| Tier (Option A) | Capacity |
-|---|---|
-| Distant Knot | 4 strain |
-| Close Knot | 7 strain |
-
-**Break consequences:**
-- **Disposition** drops to +2 (or current − 2, whichever is lower; floor at −3 per §3.5 Disposition range)
+**Break consequences (strain reaches +5):**
+- **Disposition** with the Knot partner drops to **−3** (Antagonistic; floor −5 per fieldwork_v30 §5.1 Disposition range — the flat −5..+5 range this doc's own §3.1 item 5 already states)
 - **Both partners take 4 Composure** (per A12-derived disorientation; the Thread previously connecting renderings releases force)
 - **All Knot-mediated benefits cease immediately**: shared Composure buffer, +1D social, P-12 contagion, Wager prerequisite, counsel extraction eligibility
 - **Knot count slot frees** — player may form new Knot per §3 in a subsequent season
-- **Close Knots broken at high strain (Option A: strain ≥ 6 of 7)**: Conviction Scar +1 to both partners (broken Knot leaves perceptual residue per A1/C1 Thread-binding inseparability)
+- **Close Knots that broke from positive strain**: Conviction Scar +1 to both partners (broken Knot leaves perceptual residue per A1/C1 Thread-binding inseparability)
 
 ### §6.2 Rupture (immediate, bypassing strain)
 
@@ -199,13 +194,13 @@ Per fieldwork §5.6b. Five triggers cause immediate rupture:
 
 | Trigger | Source | Mechanical effect |
 |---|---|---|
-| Public citation of private counsel | ED-664 §3.5.4 | Knot ruptures, Disposition → **−4** (per PP-632 rupture spec + §3.5.4) |
+| Public citation of private counsel | ED-664 §3.5.4 | Knot ruptures, Disposition → **−3** (Antagonistic) — the ED-912 betrayal-rupture value within the −5..+5 range, revised from the prior −4 |
 | Knot partner's death | Universal | Disposition becomes irrelevant; Knot partner enters Memory state. Knot-as-buffer can absorb final Composure damage per Last Stand rule (player_agency §X — TBD) |
 | FR Dissolution targeting Knot partner | threadwork §3.4 | Tears the Knot directly. Rupture-victim takes **+1 Wound** (no armour). |
 | Permanent Conviction shift to opposing Conviction | npc_behavior §5 | Knot tied to specific Conviction-state; opposing Conviction makes Thread-binding incompatible. |
 | Player explicit dissolution | Player choice | Player may dissolve a Knot at Accounting. Cost: **2 Composure** (one-sided release strain). Disposition unchanged (relationship persists at non-Knotted level). |
 
-**Coherence loss:** Per PP-632, rupture imposes mandatory **−1 Coherence** on the practitioner (cannot be voluntarily forgone). Rupture is structural damage at the Thread layer.
+**Coherence loss:** rupture imposes mandatory **−1 Coherence** on the practitioner (cannot be voluntarily forgone). Rupture is structural damage at the Thread layer. ⚠️ **[UNVERIFIED post-ED-912]** — this rule was originally cited to PP-632, which ED-912 struck (§2); no restatement of a mandatory −1-Coherence-on-rupture rule was found in the fieldwork_v30 §5.6 canon head or in ED-912's own resolution text. Retained provisionally pending a located live citation or a Jordan confirmation it was intentionally dropped (flagged by ED-FI-0003, C-FI-5b-coherence).
 
 ---
 
@@ -312,17 +307,17 @@ Per-year chronicle structure includes a "Knot/Belief inflections" paragraph: Kno
 
 ---
 
-## §11. Canon Contradiction Catalog (forward-flag to Pass 2k)
+## §11. Canon Contradiction Catalog — CLOSED (2026-06-28)
 
-Three contradictions surfaced during Pass 2g synthesis. Each requires Jordan resolution at editorial-ledger batch:
+Three contradictions surfaced during Pass 2g synthesis. **All three were RESOLVED by the 2026-06-28 editorial-ledger batch** (the "Pass 2k" this section forward-flagged); propagation of those rulings into §6.1/§6.2 and the registries was completed 2026-07-07 (ED-FI-0003):
 
-| ID | Description | Sources | Recommended resolution |
+| ID | Description | Sources | Resolution (RULED 2026-06-28) |
 |---|---|---|---|
-| **TIER-DRIFT-001** | Knot tier system disagrees across PP-632 (Loose/Medium/Close, 3 tiers, strain 1/2/5) vs ED-773 fieldwork §5.6b (Distant/Close, 2 tiers, strain 4/7) vs articulation §2.4 (uses PP-632 tier names but cites ED-773 for Composure cost) | complete_systems_reference Part 8; fieldwork §5.6b; articulation §2.4 | Option A — ED-773 supersedes PP-632 (chronological, with explicit gap-closing framing). Strike Loose/Medium tiers; canonize Distant/Close with strain 4/7. Update articulation §2.4 reference + register supersession in `canon/supersession_register.yaml` + amend PP-632 entry in complete_systems_reference. |
-| **COMPOSURE-DRIFT-001** | articulation §2.4 cites Composure damage "5 default per ED-773" but ED-773 in fieldwork §5.6b spec text says "4 Composure" | articulation §2.4; fieldwork §5.6b | Canonical value is **4** per spec text. Correct articulation §2.4 reference from "5 default" to "4 default" |
-| **TRUNC-DRIFT-001** | threadwork §3.3 Coherence-1 Severed row in source extract shows "All Knots +2 strain" but extract is truncated. Full canon text needs verification | threadwork §3.3 | Re-fetch full §3.3 and confirm the strain value for Coherence-1 |
+| **TIER-DRIFT-001** | Knot tier system disagrees across PP-632 (Loose/Medium/Close, 3 tiers, strain 1/2/5) vs ED-773 fieldwork §5.6b (Distant/Close, 2 tiers, strain 4/7) vs articulation §2.4 (uses PP-632 tier names but cites ED-773 for Composure cost) | complete_systems_reference Part 8; fieldwork §5.6b; articulation §2.4 | **RESOLVED — ED-841 / ED-912 (2026-06-28).** Option A adopted, then reframed onto a bidirectional **−5..+5 bond-strain gauge** (Distant −2..+5/start 0, Close −5..+5/start −2; rupture at +5 both tiers; −5 = Tempered). PP-632 Loose/Medium/Close point-cost model struck. See §2/§3.1/§6.1. |
+| **COMPOSURE-DRIFT-001** | articulation §2.4 cites Composure damage "5 default per ED-773" but ED-773 in fieldwork §5.6b spec text says "4 Composure" | articulation §2.4; fieldwork §5.6b | **RESOLVED — ED-842 / ED-912 (2026-06-28).** Canonical value is **4** per spec text. |
+| **TRUNC-DRIFT-001** | threadwork §3.3 Coherence-1 Severed row in source extract shows "All Knots +2 strain" but extract is truncated. Full canon text needs verification | threadwork §3.3 | **RESOLVED — ED-843 (2026-06-28, VERIFIED-APPLIED; Pass-2g truncation gone live).** |
 
-[FLAG: these are pre-existing canon contradictions, not introduced by Pass 2g. Pass 2g surfaces them; Pass 2k editorial-ledger batch resolves them under Jordan ratification.]
+*(These were pre-existing canon contradictions, not introduced by Pass 2g. Resolved 2026-06-28 by ED-841/842/843/912; the doc-side propagation to §6.1/§6.2 + the mechanics_index/module_contracts registries was completed 2026-07-07 under ED-FI-0003. The one residual is the §6.2 mandatory-Coherence-loss rule, marked [UNVERIFIED post-ED-912] pending a live citation.)*
 
 ---
 
@@ -359,14 +354,15 @@ Three contradictions surfaced during Pass 2g synthesis. Each requires Jordan res
 
 ## §13. Status Declaration
 
-This unified spec is **CANONICAL synthesis** of existing canon. No new mechanical content introduced. The Knot system was mechanically complete across its 9 source fragments; Pass 2g consolidates the dispersed specification into a single readable doc, surfaces three canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001, TRUNC-DRIFT-001) for Pass 2k resolution, and binds the unified spec to `sim/personal/knots.py` for implementation.
+This unified spec is **CANONICAL synthesis** of existing canon. No new mechanical content introduced. The Knot system was mechanically complete across its 9 source fragments; Pass 2g consolidated the dispersed specification into a single readable doc, surfaced three canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001, TRUNC-DRIFT-001), and binds the unified spec to `sim/personal/knots.py` for implementation. **All three contradictions were RESOLVED by the 2026-06-28 editorial-ledger batch (ED-841/842/843/912); see §11.**
 
-Where Pass 2g made interpretive choices in the presence of canon ambiguity (degree-table outcomes in §3.2 assuming Option A tier resolution; tier-named strain values in §6.1), those choices are marked **[PROVISIONAL: TIER-DRIFT-001]** and revert to whatever Jordan ratifies in Pass 2k.
+The interpretive choices Pass 2g marked **[PROVISIONAL: TIER-DRIFT-001]** (degree-table outcomes in §3.2, tier-named strain values in §6.1) are now RESOLVED: ED-912 canonized the bidirectional −5..+5 gauge, and §6.1 was rewritten to it 2026-07-07 (ED-FI-0003). `sim/personal/knots.py` still runs the pre-ED-912 constants (C-TW-12) — its rebuild onto the ED-912 gauge is tracked as Stratum-B work.
 
-[STATUS: CANONICAL synthesis — Pass 2g 2026-05-17. Three canon contradictions forward-flagged to Pass 2k. Interpretive choices marked PROVISIONAL pending Jordan ratification.]
+[STATUS: CANONICAL — Pass 2g 2026-05-17; three canon contradictions RESOLVED 2026-06-28 (ED-841/842/843/912); ruling propagation completed 2026-07-07 (ED-FI-0003). Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild (C-TW-12) = Stratum B.]
 
 ---
 
 ## §14. Changelog
 
+- **ED-FI-0003 propagation completion (2026-07-07):** the 2026-06-28 rulings (ED-841/842/843/912) that resolved TIER-DRIFT-001/COMPOSURE-DRIFT-001/TRUNC-DRIFT-001 had reached only fieldwork_v30 §5.6b; this pass propagated them into §6.1 (bidirectional −5..+5 gauge, rupture at +5, break Disposition −3), §6.2 (betrayal-rupture −4 → −3), §11 (catalog CLOSED), §13 (status), and the `canon/mechanics_index.yaml` knots block + `references/module_contracts.yaml` fieldwork_knots gap_note. Residual: §6.2 mandatory-Coherence-loss rule marked [UNVERIFIED post-ED-912]; `sim/personal/knots.py` rebuild (C-TW-12) deferred to Stratum B.
 - **v30 init (2026-05-17, Pass 2g):** Initial synthesis from 9 canon fragments. Unified Knot mechanic spec for sim/personal/knots.py target. Surfaces TIER-DRIFT-001 (PP-632 vs ED-773 tier-system contradiction), COMPOSURE-DRIFT-001 (articulation §2.4 cites wrong Composure value), TRUNC-DRIFT-001 (threadwork §3.3 Severed row needs verification). No new mechanics. Forward-flagged for Pass 2k editorial-ledger batch resolution.

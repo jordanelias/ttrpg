@@ -17,9 +17,11 @@ Dependencies:
 Entry points:
   - run_parliamentary_vote(motion: Motion, parties: list[VoteDeclaration], world, rng=None) -> VoteResult
 
-[ASSUMPTION: Mandate is stored as Faction.L — basis: crown_initiative.py Great Work pool
- (`int(crown.L)  # [canonical: §3.3 — Pool | Mandate]`). The L/PS re-grain (LPS-1..2e; Lane-C
- item 8.1) may relocate Legitimacy/Mandate per-territory/settlement; confirm at integration.]
+[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: Mandate is stored as the scalar Faction.L
+ (basis: crown_initiative.py Great Work pool `int(crown.L)`). LPS-1 IS ratified and DOES relocate
+ Legitimacy/Mandate per-settlement — so this Faction.L-as-Mandate-pool convention is the pre-LPS-1
+ SUPERSEDED scalar and must NOT be ported as canon-conformant until ED-FA-0004 closes (Stratum B).
+ (Upgrades the prior hedged [ASSUMPTION] note, which predated ED-FA-0004's ruling.)]
 [ASSUMPTION: GD-3 'extra-parliamentary' == Faction.parliamentary is False — basis: game_state
  Faction has a `parliamentary: bool`, no `parliamentary_status` string; canon GD-3 names a
  `parliamentary_status: extra` flag. Mapping is 1:1.]

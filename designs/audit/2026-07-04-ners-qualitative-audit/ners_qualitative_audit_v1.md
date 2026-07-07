@@ -305,6 +305,8 @@ Two refuted-as-duplicate items worth naming: `mechanics_index` conviction_scar c
 (cites the territorial Piety doc for the personal Scar mechanic — real, fold into S-1's register
 hygiene) and the insurgency "11+ vs 15" figure (tracked, ratified — sim is authoritative at 15).
 
+**ADDENDUM 2026-07-07 (ED-IN-0024, OPT-14, append-only intent-hygiene correction, C-NERSPESS-6):** the R-2 row's "deliberately Key-type-agnostic" framing correctly describes the wildcard/salience *architecture* (genuinely pre-ratified, PP-687), but the row conflates that with the *specific* thread-trigger-omission defect, whose own refutation record (`01_workings/refutations/refute_articulation-zero-thread.md`) rates that narrower intent **UNDETERMINED** ("not a documented deliberate exclusion … it was simply never authored"), not DELIBERATE. The wildcard-architecture intent stands as DELIBERATE/ratified; the missing-thread-cut-scene-trigger intent is corrected here to UNDETERMINED, matching this audit's own primary evidence. §4 item 2's P3 severity call is unaffected. (Per the OPT-14 ruling this is append-only — the R-2 row above is left unedited.)
+
 ---
 
 ## 8 · [GAP:] register (completeness critic, corrected)

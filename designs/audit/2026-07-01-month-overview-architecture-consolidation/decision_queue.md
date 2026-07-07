@@ -19,7 +19,7 @@ these outcomes. Ordered roughly by how much downstream work each unblocks.
    superseded — phase4_5 is now explicitly sequenced AFTER the R3 U-series + player-input +
    ED-911 slots (workplan v6 §4-PC; gated on ED-911 + WS-7); the plan file itself is
    unchanged and still the content source.
-4. **ED-1042** — wound-model spec-vs-code drift ruling (open since 2026-06-24).
+4. ~~**ED-1042**~~ **STRUCK 2026-06-28** (superseded_by ED-1021; ledger canon/editorial_ledger.jsonl) — reconciliation ticket ED-PC-0004; residual wound-Ob / dead pool_penalty drift re-filed as ED-PC-0005 (2026-07-07).
 5. **ED-1050 residual** — re-export RESIST/GAP_EXPOSURE/gap-game logic to
    `weapon_resource.gd`/`strike_module.gd`; Key-log parity stays known-red until done.
    (2026-07-02 docket adjudication, ED-IN-0002: this is the ONLY still-open part of
