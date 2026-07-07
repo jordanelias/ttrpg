@@ -1,0 +1,51 @@
+# Refuter R4 — keys/rendering/injectors claims
+
+_Archived verbatim from the agent's final message (2026-07-07)._
+
+# Refutation Record — Independent Refuter R4
+## Unaddressed-Areas Audit (2026-07-07) — Charter-only review, cluster dossiers not read
+
+Method note: I read only `00_charter.md` per instructions, then independently verified every claim against primary working-tree files (module_contracts.yaml, key_type_registry_v30.md, articulation_layer_v30.md, ci_political_v30.md, conviction_track_v30.md, sim/cross_scale/zoom_in_out.py, editorial_ledger.jsonl, id_reservations.yaml). I attempted a genuine refutation angle for each claim before accepting it. All nine survive as CONFIRMED on the facts; intent gates vary.
+
+---
+
+**Claim 1 — CONFIRMED**
+Evidence: `references/module_contracts.yaml:110-133` (npc_behavior `consumes:` list — none of the six types present); `designs/architecture/key_type_registry_v30.md:143,160,178,458,565,581` (each of the six types' `consuming_systems:` includes `npc_behavior`); `key_type_registry_v30.md:1022` ("ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved"); `module_contracts.yaml:168` (gap_note verbatim: "...the registry lacks: scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed"). Zero hits for "ED-935" anywhere in module_contracts.yaml.
+Intent gate: **NOT-INTENDED** — the gap_note is contradicted by the very registry it cites, and the contract file shows no trace of having been revisited post-ED-935. Sync/propagation failure, not a deliberate stance.
+
+**Claim 2 — CONFIRMED**
+Evidence: `designs/articulation/articulation_layer_v30.md:91,103` (trigger #9 cites `meta.cascade_cluster_event`); zero matches for "cascade_cluster" anywhere in `designs/architecture/key_type_registry_v30.md` (§2-§8 headers confirmed at lines 34,184,292,463,586,660,796); `key_type_registry_v30.md:1026-1035` (§10 Extension Process step 2 mandates "Append entry to this registry" for any new type).
+Intent gate: **NOT-INTENDED** — no registry entry exists despite the doc's own mandatory extension process; no note anywhere claims deliberate non-registration.
+
+**Claim 3 — CONFIRMED**
+Evidence: `articulation_layer_v30.md:79-92` (full 10-row §3.1 table — no dialogue/witness/gift/insult/threat row); zero hits for `scene.dialogue`/`scene.witness`/`scene.gift`/`scene.insult`/`scene.threat` anywhere in the file; §4.3/§4.4 (Tier 3, lines 207-229) confirm only a generic top-N-by-significance selection, no named category for these five; registry entries at `key_type_registry_v30.md:38-125` confirm all five list `articulation` as a consumer, so they are consumed only via the generic significance path (§3.2, lines 125-137) / accumulated-weight path (§3.3, lines 139-153).
+Intent gate: **DELIBERATE** — §3.3 (lines 141,148-153) explicitly designs the accumulated-narrative-weight mechanism as the stated handling for exactly this class of frequent, routine Keys, reserving named §3.1 triggers for structurally rare/singular events. This reads as architecture, not omission.
+
+**Claim 4 — CONFIRMED**
+Evidence: `key_type_registry_v30.md:923` (description literally: "Drives Articulation Tier 2 trigger evaluation"); zero hits for "opinion_revised" anywhere in `articulation_layer_v30.md`; the actual gate, `articulation_layer_v30.md:255-256` (`if matches_trigger_ruleset(key): ... emit_cut_scene`), requires §3.1 membership, which state.opinion_revised lacks. Comparison: three sibling Class-B entries with the same `articulation_significance:` field (`scene.interaction` L963, `scene.gossip` L984, `state.concern_resolved` L1004) do NOT claim to "drive Tier 2 trigger evaluation" in their prose — opinion_revised's wording is the outlier.
+Intent gate: **NOT-INTENDED** — overclaiming prose in the registry description, not matched by the actual `matches_trigger_ruleset` gate; reads as documentation drift.
+
+**Claim 5 — CONFIRMED**
+Evidence: `references/module_contracts.yaml:744-757` (scenario_authoring: `doc: null`, gap_note "registry-derived; authoring-time vs runtime classification [OPEN — Jordan]; home doc [GAP]"); `canon/editorial_ledger.jsonl:584` (ED-IN-0011, resolved 2026-07-05, explicitly lists "fork 11 (scenario_authoring compile = authoring-time)" among items RATIFIED); `designs/workplans/workplan_v6_progress.yaml:85` ("forks 1/2/11 RATIFIED at defaults (ED-IN-0011)"). Zero references to ED-IN-0011 anywhere in module_contracts.yaml; header still reads `generated: "2026-06-10"`.
+Intent gate: **NOT-INTENDED** — the exact question the gap_note calls "[OPEN — Jordan]" is precisely the question ED-IN-0011 ratified; this is an un-propagated ratification, the specific failure mode CLAUDE.md §2 itself calls out (cf. ED-1083 precedent) — not a held-back exception (no PR body flag exists for this).
+
+**Claim 6 — CONFIRMED**
+Evidence: `sim/cross_scale/zoom_in_out.py:44` (`WORLD_STATE_TRIGGER_PRIORITY = 1`); only functions in the file are `zoom_in`, `zoom_out`, `check_mandatory_triggers` (L72,99,141) — no `check_world_state_triggers`; `designs/architecture/scale_transitions_v30.md:142-152` confirms exactly 5 rows under §4.3.3 (Clock Band Transition, NPC Conviction Crisis, Treaty Proposed or Broken, Territory Control Change, Warden Emergency), none with a code counterpart. `references/module_contracts.yaml:342-347` confirms scene_slate `consumes: []`; cross-checked against `designs/architecture/player_agency_v30.md:179-227` (§4.2 Scene Slate generation is a direct season-start state poll, not Key consumption) and confirmed the contract's own gap_note (`module_contracts.yaml:361`, "home doc unlocated... [GAP]").
+Intent gate: **NOT-INTENDED** — the file's own docstring (L8) promises §4.3.3 coverage it doesn't deliver, and the priority constant is otherwise unused (dead code); no comment anywhere defers or excludes §4.3.3 deliberately.
+
+**Claim 7 — CONFIRMED**
+Evidence: `key_type_registry_v30.md:873` (`meta.miraculous_event` consuming_systems: `[faction_layer, npc_behavior, articulation]`); `references/module_contracts.yaml:70,119` (faction_state and npc_behavior consume it) vs `module_contracts.yaml:727-742` (miraculous_event module itself: `consumes: []`, only emits the one type); zero mentions of "miraculous" anywhere in `player_agency_v30.md` or `scale_transitions_v30.md` (grep across both files, no hits) — confirming no scene_slate step or zoom trigger (mandatory §4.3.2 or world-state §4.3.3) references it; articulation's consumption is the generic wildcard subscription (`articulation_layer_v30.md:251`, "subscribes to all Key emissions"), and `meta.miraculous_event` is not among the 10 named §3.1 triggers, so it receives only generic accumulation treatment, not a guaranteed cut scene.
+Intent gate: **NOT-INTENDED** — `designs/scene/miraculous_event_v30.md` §25 (lines 117-125) explicitly designs a witness-facing Conviction mechanic and the registry marks the type "Always public-visible... High significance contribution" (L874-876), showing design intent for player salience that was never wired into the later Scene-Slate/Zoom architecture. Reads as an unclosed integration seam between an older scene doc (2026-04-25) and later infrastructure, not a deliberate choice to withhold miracles from the player.
+
+**Claim 8 — CONFIRMED**
+Evidence: `references/module_contracts.yaml:628-646` (ci_political: `consumes: []`, `emits: []`, no `gates:` key present anywhere in the entry; gap_note self-states "ZERO Key integration in a CANONICAL doc — no registry entry names ci_political"); `module_contracts.yaml:537-570` (settlement_layer: three gates `g_ord0`/`g_def0`/`g_dv0` at L556-570, but exactly one `emits:` entry, `env.population_change`, at L545-546, not differentiated per gate).
+Intent gate: **NOT-INTENDED** (ci_political) — self-flagged as a gap by the doc's own gap_note, explicitly proposing a §10 registry-candidate fix. **NOT-INTENDED/UNDETERMINED** (settlement_layer) — no gap_note addresses the undifferentiated-emits pattern (its only gap_note, L603, is about index staleness); most plausibly an artifact of the bulk gate migration from `contract_flowchart.py` literals noted in the file's v3 changelog (L26-27) that wasn't extended to per-gate emit attribution.
+
+**Claim 9 — CONFIRMED (and understated in severity)**
+Evidence: `designs/provincial/ci_political_v30.md:78-85` (§2.1 table: CI 40/55/65/80/100); `designs/scene/conviction_track_v30.md:511-520` (§11.3 table: CI 40/55/65/75, ending at 75 — no 80 or 100 row). Deeper root cause found independently: `ci_political_v30.md:17,28` explicitly states, in its own §0 changelog, "CI 75 freeze (PP-421): **superseded**; CI runs to 100" — i.e. the CI-75 ceiling model is canonically retired. Yet `conviction_track_v30.md` still runs on CI-75 throughout — §11.3 (L520: "CI 75 (phase transition)"), L171 ("Phase transition: CI 75"), L210-212, L433, L473 (Church victory keyed to "CI 75 phase transition") — and §11.3 is not among that document's own explicitly-marked superseded sections (header L7 lists only §4.2/§4.3/§6/§7 as SUPERSEDED-BY GD-1). `CURRENT.md` has no row resolving which doc is canonical head for CI mechanics.
+Intent gate: **NOT-INTENDED** — this is a supersession that was never propagated: ci_political_v30.md self-documents replacing the CI-75 model, but conviction_track_v30.md's presentation table and victory-condition prose were never updated to match, and §11.3 wasn't caught by that document's own supersession markers.
+
+---
+
+### Summary
+9/9 CONFIRMED. Intent gates: 7× NOT-INTENDED (staleness/propagation-failure pattern — claims 1,2,4,5,6,7,9, plus half of 8), 1× DELIBERATE (claim 3 — generic-salience routing is architected, not missing), 1× NOT-INTENDED/UNDETERMINED (settlement_layer half of claim 8, no self-flag either way). No claim was refuted; each had precise, independently-reproducible file:line evidence and I found no primary-source counter-evidence surviving scrutiny for any of them. Claim 9's underlying defect is more severe than stated (an unpropagated supersession, not merely a numeric mismatch) — worth flagging to the orchestrator as an upgrade candidate during reconciliation.

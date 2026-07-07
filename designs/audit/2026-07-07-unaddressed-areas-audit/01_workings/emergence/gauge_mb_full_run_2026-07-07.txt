@@ -1,0 +1,40 @@
+  H8   GappedLine vs Arrowhead          0.0   0.0 100.0  50.0  50-65  high decA UNRESOLVED
+  H9   Line vs Arrowhead (rev H2)       0.0   0.0 100.0  50.0  38-52  high decA UNRESOLVED
+  H10  Line vs Envelopment (rev H3)     0.0   0.0 100.0  50.0  28-45  high decA UNRESOLVED
+  H11  Arrowhead vs Envelopment (rev    0.0   0.0 100.0  50.0  38-55  high decA UNRESOLVED
+  R1   Ranged vs Line (open field)      0.0   0.0 100.0  50.0   0-30   low decA UNRESOLVED
+  R3   Ranged vs Ranged (mirror)        0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C1   Cav vs steady unbraced Line      0.0   0.0 100.0  50.0  35-55  high decA UNRESOLVED
+  C2   Cav vs BRACED Line (hold+d8+br   0.0   0.0 100.0   0.0   0-30  high rawA REPELLED
+  C3   Cav vs Cav (mirror control)      0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C4   Cav flank/envelopment vs Line    0.0   0.0 100.0  50.0  75-95   low decA UNRESOLVED
+  C5   Cav vs SHAKEN Line (m2/start6)   0.0   0.0 100.0  50.0  65-98   low decA UNRESOLVED
+  C6   Cav vs BRACED-shallow Line (ho   0.0   0.0 100.0   0.0   0-30  high rawA REPELLED
+  C7   Cav envelop vs holding Line (h   0.0   0.0 100.0  50.0  65-100  low decA UNRESOLVED
+  => pass 2/20  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)
+
+----- MODE: multi  (engine: mass_battle package)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----
+  id   matchup                           A%    B%    D%   val    band dexp    m verdict
+  H1   Line vs Line (mirror)           53.3  46.7   0.0  53.3  42-58  high decA OK
+  H2   Arrowhead(wedge) vs Line       100.0   0.0   0.0 100.0  48-62  high decA WIN-OUT
+  H3   Envelopment vs Line            100.0   0.0   0.0 100.0  55-72  high decA WIN-OUT
+  H4   Envelopment vs Arrowhead (Cann  93.3   3.3   3.3  96.6  45-62  high decA WIN-OUT
+  H5   RefusedFlank vs Envelopment     85.0   1.7  13.3  98.1  48-62  high decA WIN-OUT
+  H6   RefusedFlank vs Line            96.7   3.3   0.0  96.7  48-60  high decA WIN-OUT
+  H7   GappedLine(manip) vs Line       76.7  23.3   0.0  76.7  48-62  high decA WIN-OUT
+  H8   GappedLine vs Arrowhead         41.7  58.3   0.0  41.7  50-65  high decA WIN-OUT
+  H9   Line vs Arrowhead (rev H2)      95.0   5.0   0.0  95.0  38-52  high decA WIN-OUT
+  H10  Line vs Envelopment (rev H3)     0.0 100.0   0.0   0.0  28-45  high decA WIN-OUT
+  H11  Arrowhead vs Envelopment (rev    0.0 100.0   0.0   0.0  38-55  high decA WIN-OUT
+  R1   Ranged vs Line (open field)     53.3  46.7   0.0  53.3   0-30   low decA WIN-OUT
+  R3   Ranged vs Ranged (mirror)        0.0   0.0 100.0  50.0  42-58  high decA UNRESOLVED
+  C1   Cav vs steady unbraced Line     51.7  46.7   1.7  52.5  35-55  high decA OK
+  C2   Cav vs BRACED Line (hold+d8+br   1.7  98.3   0.0   1.7   0-30  high rawA REPELLED
+  C3   Cav vs Cav (mirror control)     53.3  45.0   1.7  54.2  42-58  high decA OK
+  C4   Cav flank/envelopment vs Line  100.0   0.0   0.0 100.0  75-95   low decA WIN-OUT
+  C5   Cav vs SHAKEN Line (m2/start6) 100.0   0.0   0.0 100.0  65-98   low decA WIN-OUT
+  C6   Cav vs BRACED-shallow Line (ho   1.7  98.3   0.0   1.7   0-30  high rawA REPELLED
+  C7   Cav envelop vs holding Line (h 100.0   0.0   0.0 100.0  65-100  low decA OK
+  => pass 6/20  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)
+
+==== mass_battle package: single=2/20  multi=6/20 (multi is the resolving mode) ====
