@@ -512,8 +512,15 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 ## §13 — What Does NOT Change
 
 - Dice engine: d10, TN 6/7/8, integer pools, integer Ob, degree table
-- Combat Pool: (Agi × 2) + History + 3, split offense/defense
-- Wound Interval: End + 6
+- Combat Pool: **CORRECTED 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)** — this row stated the STRUCK
+  (Agi × 2) + History + 3 form as unchanged, contradicting this same document's own §14.4 STRUCK
+  notice a few sections below (exactly the re-transcription drift the coherence audit found,
+  C3-F10). Corrected to a pointer, not a restated number, so this note cannot go stale again:
+  **the unchanged thing is the offense/defense split; for the current formula see §14.4 below
+  (single source; do not restate the value here).**
+- Wound Interval: **CORRECTED 2026-07-08 (same basis)** — was a restated flat `End + 6` (the
+  pre-ED-1021 value). **See §4.1 above for the current formula (single source; do not restate the
+  value here).**
 - Wound penalty: fractional Ob per wound (cumulative; ED-PC-0005 — combat +0.15/+0.25 per ED-1041; non-combat (Thread/fieldwork/mass-battle Command) +0.15 per ED-PC-0006, resolved 2026-07-08 — supersedes PP-716's −1D)
 - DR / armor damage reduction tables
 - All faction stat → dice pool relationships
@@ -586,7 +593,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Thread Pool | `(Spirit × 2) + History + TPS`, min 5 | 5–17D+ | Thread Operations |
 | Fieldwork Pool | `(Primary × 2) + History + 3` | 5–17D | Fieldwork |
 | Knot Pool | `(Bonds × 2) + 3` | 5–17D | Knot Formation |
-| Mass Combat Pool | `min(Size, Command) + Command` | 2–14D | Mass Combat (unit) |
+| Mass Combat Pool | `min(Size, Command) + Command` — the off-path model the engine byte-reproduces at `COMMAND_SIGMA_ENABLED=0`. **CAVEAT ADDED 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): SUPERSEDED as the engine default (ED-899/ED-1013) — this row was the one uncaveated carrier of the legacy formula. For the live default, see `params/mass_combat.md`'s own ED-899 supersession banner (single source; not restated here to avoid a second copy going stale).** | 2–14D | Mass Combat (unit) |
 | Faction Domain Pool | bare faction stat | 1–7D | Faction action |
 
 ### §14.5 Scale-pool relationship — player-facing note (V-1, audit 2026-05-15)

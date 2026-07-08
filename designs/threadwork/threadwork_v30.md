@@ -967,7 +967,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
 | Thread operations | Weaving, Pulling, Mending, Lock, Dissolution — personal-scale | Weave, Mend, Investigate, Harvest — faction-scale | Personal Phase: TTRPG. Strategic Phase: board game. |
-| Gap closure | Mending (Att + Focus + Thread Pool Score) | Mend order | TTRPG Mending or Mend order |
+| Gap closure | Mending (pool per the "Mending — Repairing the Substrate" section above — not restated here to avoid a second copy going stale; corrected 2026-07-08, ED-IN-0029 docket OPT-AV-7, was the pre-PP-616/625 Attunement+Focus form) | Mend order | TTRPG Mending or Mend order |
 | Co-movement | Version C (temporal + epistemic auto, actual d6) | Co-Movement Cards (18) | Personal: Version C. Strategic: Cards. |
 | Practitioner degradation | Coherence 10→0 | Not tracked | Coherence during Personal Phase |
 | World stability | Mending Stability 100→0 at seasonal accounting | Mending Stability 100→0 at Accounting | Mending Stability at Cascade Phase Accounting |
@@ -1007,7 +1007,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 |---|---|---|
 | 1 | Simulate Coherence 10→0 degradation rates across archetype campaigns | Sonnet |
 | 2 | Simulate FR Lock chronic Mending Stability drift across 10-season campaigns | Sonnet |
-| 3 | Simulate Mending pool (Att + Focus + Thread Pool Score) probability curves | Sonnet |
+| 3 | Simulate Mending pool (per the "Mending — Repairing the Substrate" section's own definition, not restated here) probability curves | Sonnet |
 | 4 | Simulate over-actualisation impact on practitioner gameplay | Sonnet |
 | 5 | Stress test Diagnosis-before-Leap sequence (timing in combat) | Sonnet |
 | 6 | Stress test threadcut de-actualisation | Sonnet |

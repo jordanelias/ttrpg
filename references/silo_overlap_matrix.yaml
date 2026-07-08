@@ -1,6 +1,7 @@
 register: cross_silo_overlaps
 source: references/mechanical_terms_index.md §2
 extracted: '2026-05-10'
+disposition: "RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot, no live regeneration path."
 description: Terms appearing in 2+ vocabulary silos. Intentional polysemy, accidental duplicates, word-class violations.
 total_entries: 55
 entries:
