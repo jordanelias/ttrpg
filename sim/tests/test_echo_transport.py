@@ -4,14 +4,17 @@ sim/tests/test_echo_transport.py — echo-transport plumbing oracle (ED-IN-0028,
 Guards the flag-gated Key & Echo transport wired in this slice (key_echo_armature_v1.md §6.2):
   1. FLAG-OFF byte-exactness: ECHO_TRANSPORT off leaves the seed-42 F7 win-share golden and
      the seed-0-adjacent campaign untouched, and attaches no substrate (empty key_log_hash).
-  2. FLAG-ON for the pinned seed-42/n=8 F7 batch is EMPIRICALLY zero (win-share unchanged, no
+  2. FLAG-ON for the pinned seed-42/n=8 F7 batch emits no echo Keys (win-share unchanged, no
      keys emitted) — but, as of ED-SC-0006/ED-SC-0007 (2026-07-08), this is no longer
      architectural inertness: the SC context-derivation bridge and the emergency_council
-     echo-mapping have both landed (scene_dispatch.py). It is zero here only because Stability
-     Crisis does not happen to fire in any of these 8 particular campaigns (seed-dependent —
-     see test_mc_v18_resolves_at_least_one_contest, sim/tests/test_mc_v18_regression.py, for a
-     seed where it does). test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis
-     below demonstrates the now-live path end-to-end through the real campaign loop.
+     echo-mapping have both landed (scene_dispatch.py). As of ED-FA-0008/0011/0012 (2026-07-08)
+     the reconditioned FA action mix DOES now cross Stability Crisis within this batch (F7
+     scenes_resolved is non-zero — test_f7_smoke_oracle.py), yet the seed-42 single-campaign
+     probe below still emits zero echo Keys (that particular campaign's resolutions don't map to
+     an echo, and the batch win-share is unmoved by the flag). See
+     test_mc_v18_resolves_at_least_one_contest for a seed where contests resolve, and
+     test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis below for the seed
+     (seed=1) that drives the now-live echo path end-to-end through the real campaign loop.
   3. The transport PATH itself (exercised directly, the way the SC bridge drives it): a
      resolved scene carrying an `echo` block routes through domain_echo -> a valid
      scene.*_resolved Key -> an OF-7-deferred faction apply that lands at the accounting
@@ -27,7 +30,9 @@ from sim.cross_scale import echo_transport
 
 
 # The seed-42 n=8 F7 golden (test_f7_smoke_oracle.py) — the transport flag must not move it.
-_GOLDEN_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 87.5}
+# REGENERATED 2026-07-08 (ED-FA-0008/0011/0012): the FA-lane mechanics in faction_action.py moved the
+# F7 seed-42 win-share (was {Crown 12.5, Varfell 87.5}); mirrors test_f7_smoke_oracle.GOLDEN_WIN_SHARE.
+_GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
 _EMPTY_LOG_SHA256 = hashlib.sha256(b"").hexdigest()  # sha256("") — the born-empty KeyLog
 
 
@@ -44,9 +49,11 @@ def test_flag_off_is_byte_exact_and_attaches_no_substrate():
 # ── 2. Flag ON: empirically zero for the pinned F7 seed range, but no longer inert-by-design ──
 
 def test_flag_on_f7_batch_is_still_empirically_zero():
-    """ECHO_TRANSPORT on for the pinned seed-42/n=8 F7 batch: win-share unchanged and the KeyLog
-    stays empty — NOT because the path is architecturally inert (it isn't, since ED-SC-0006/0007),
-    but because Stability Crisis doesn't happen to fire in any of these 8 campaigns. See
+    """ECHO_TRANSPORT on for the pinned seed-42/n=8 F7 batch: win-share unchanged and the seed-42
+    single-campaign KeyLog stays empty — NOT because the path is architecturally inert (it isn't,
+    since ED-SC-0006/0007), and NOT (as of ED-FA-0008/0011/0012) because Stability Crisis never fires
+    in the batch (it now does — F7 scenes_resolved is non-zero), but because the seed-42 campaign's
+    own resolutions don't map to an echo Key and the flag leaves the batch win-share unmoved. See
     test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis for the live case."""
     on = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 1})
     assert on.win_share == _GOLDEN_WIN_SHARE, (

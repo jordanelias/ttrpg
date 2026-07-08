@@ -29,6 +29,15 @@ dead-in-campaign; see scene_dispatch._emergency_council_parties), consuming RNG 
 that used to never fire and moving this golden's win_share/all_winners/battles_mean.
 This is the intended flip, not a regression — see test_mc_v18_resolves_at_least_one_contest
 below.
+
+REGENERATED 2026-07-08 (ED-FA-0008/0011/0012 — FA-lane mechanics into faction_action.py):
+state-conditioned action mix (ED-FA-0011, retiring the fixed 30/35/20/15 M7_ASSUMPTION_SIX
+vector), Muster as a fiscal-military purchase (ED-FA-0008: W-1 up front, pool = Mil + floor(W/2)),
+the Terms-vs-Storm conquest fork (ED-FA-0012 a/b), and the Parliamentary-Censure fallback wired
+into the faction-unique slot. faction_take_action is reachable from EVERY live campaign, so these
+shift RNG consumption and moved this golden's win_share/all_winners/battles_mean — the expected,
+intended move each pin below anticipates (a surprise here means output moved for a DIFFERENT
+reason; investigate before regenerating).
 """
 import os
 import sys
@@ -40,13 +49,15 @@ if _REPO_ROOT not in sys.path:
 
 from sim.mc_v18 import run_batch, run_campaign  # noqa: E402
 
-# Golden batch, regenerated 2026-07-08 (ED-SC-0006 — see module docstring; deterministic,
-# verified stable across repeat runs).
+# Golden batch, regenerated 2026-07-08 (ED-FA-0008/0011/0012 — see module docstring; deterministic,
+# verified stable across repeat runs). Prior ED-SC-0006 values were {Crown 50, Varfell 50} /
+# {Crown 1, Varfell 1} / 30.0; the FA-lane action-mix + Muster + conquest-fork + Parliamentary
+# fallback shifted campaign RNG and moved them here.
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
-GOLDEN_WINNERS = {'Crown': 1, 'Varfell': 1}
-GOLDEN_BATTLES_MEAN = 30.0
+GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 100.0}
+GOLDEN_WINNERS = {'Varfell': 2}
+GOLDEN_BATTLES_MEAN = 35.0
 
 
 def test_mc_v18_batch_is_deterministic():

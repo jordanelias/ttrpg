@@ -105,6 +105,15 @@ def succession(a_fac, b_fac, body_adj, a_style=None, b_style=None,
     if band in ('A_total', 'B_total'):       return ('unified',  'a' if band == 'A_total' else 'b', None, round(t, 2))
     if band in ('A_decisive', 'B_decisive'): return ('decisive', 'a' if band == 'A_decisive' else 'b', None, round(t, 2))
     leader = 'a' if t >= 5 else 'b'
+    # Historical grounding (annotation only, ED-FA-0016 CP-1, 2026-07-08): the graduated
+    # 0.60/0.55/0.50 split ratios echo the Treaty of Verdun (843) three-way divisio of the
+    # Carolingian Empire along affinity/track-closeness lines, and the Western Schism's
+    # asymmetric obediences — historical partitions of a fractured polity produce durable but
+    # UNEQUAL successor shares (never a clean half-half split), which is what a track of 4/5/6
+    # (closer to decisive vs closer to unified) maps onto here. Citation grounds the mechanism
+    # (a graduated, non-50/50 split band) only; the specific 0.60/0.55/0.50 constants remain the
+    # existing sim-calibrated values (§7.2.1) and are not altered by this annotation. See
+    # designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md CP-1.
     ratio = {4: 0.60, 5: 0.55, 6: 0.50}[min(6, max(4, round(t)))]
     return ('split', leader, ratio, round(t, 2))
 

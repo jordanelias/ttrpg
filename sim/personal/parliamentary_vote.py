@@ -53,6 +53,16 @@ from sim.personal.contest import (
 BG_VOTE_TN = 7                              # [canonical: §10 — "Roll combined pool TN 7"]
 BG_VOTE_GENRE_BONUS = 1                     # [canonical: §10 — "+1D if the side's genre matches the primary genre"]
 BG_VOTE_AUDIENCE_BONUS = 1                  # [canonical: §10 — "+1D if the side's genre matches the Parliament's dominant faction boost"]
+# [CP-3 / ED-FA-0016, 2026-07-08 — historical precedent for the abstention-resistance + committee
+#  mechanism (grounds the MECHANISM, never the magnitude — CLAUDE.md §5/§7)]: the Venetian ballot
+#  distinguished the *non sinceri* — formal uncommitted / spoiled ballots — from the sincere yes/no
+#  count. A high non-sinceri tally was not noise but a recognised institutional signal: it withheld
+#  assent without opposing, and measures drawing many uncommitted ballots were sent back for
+#  redrafting rather than decided. That is exactly the shape modelled here: a high-Stability abstainer
+#  does not vote a side but raises the bar the active sides must clear (BG_VOTE_ABSTAIN_* resistance),
+#  and a field that fails to clear it is referred to committee (the §10 zero-zero branch below) — the
+#  Renaissance "committee referral" as institutional fact, composing with the *broglio* material mined
+#  by the 2026-06-28 social-contest deliberation source-research.
 BG_VOTE_ABSTAIN_STABILITY_THRESHOLD = 6    # [canonical: §10 — "If a faction with Stability >= 6 Abstains"]
 BG_VOTE_ABSTAIN_RESISTANCE_PER = 1         # [canonical: §10 — "+1 resistance"]
 BG_VOTE_RESISTANCE_MAX = 2                  # [canonical: §10 — "(max +2)"]

@@ -49,10 +49,15 @@ _SEED = 42
 _N = 8
 _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 
-# Pinned 2026-07-07 (deterministic; reproduced stable across repeat runs).
-GOLDEN_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 87.5}
-GOLDEN_WINNERS = {'Varfell': 7, 'Crown': 1}
-GOLDEN_BATTLES_MEAN = 33.0
+# Pinned 2026-07-07; REGENERATED 2026-07-08 (ED-FA-0008/0011/0012 — FA-lane mechanics into
+# faction_action.py: state-conditioned action mix, Muster-as-purchase, Terms-vs-Storm conquest fork,
+# Parliamentary-Censure fallback). faction_take_action is reachable from every campaign, so these
+# shifted seed-42 RNG and moved the win-share/winners/battles_mean off the 2026-07-07 artifact
+# (was {Crown 12.5, Varfell 87.5} / {Varfell 7, Crown 1} / 33.0). Still NOT balance signal at n=8 —
+# a guard against silent drift, not a target. (deterministic; reproduced stable across repeat runs.)
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
+GOLDEN_WINNERS = {'Crown': 4, 'Hafenmark': 2, 'Varfell': 2}
+GOLDEN_BATTLES_MEAN = 35.2
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -95,25 +100,38 @@ def test_f7_golden_win_share():
 
 
 def test_f7_named_zero_assertions_islands_unreachable():
-    """scenes_resolved / insurgencies_formed / npcs_generated are 0 — the islands never fire.
+    """insurgencies_formed / npcs_generated are still 0 — those islands never fire; scenes_resolved
+    is now LIVE.
 
-    When the derivation bridge (SC) + keying waves + NPE seeding land, these MUST become
-    non-zero: this test tripping is the SUCCESS signal, not a regression. Update the pins then.
+    2026-07-08 (ED-FA-0008/0011/0012): scenes_resolved is no longer 0 on seed-42. This is the
+    documented SUCCESS signal (the ED-SC-0006 party-derivation bridge finally reached in-campaign):
+    the FA-lane action-mix/Muster/conquest-fork/Parliamentary changes shifted seed-42 RNG so these
+    campaigns now cross the Stability Crisis and their Emergency Council contests resolve (126 across
+    the n=8 batch). It is pinned here as the new golden — NOT re-asserted to 0. insurgencies_formed
+    and npcs_generated remain built-but-unreachable islands (C-EMERGE-4/5), still guarded at 0; when
+    the insurgency pipeline / NPE seeding land, those pins trip next and get updated the same way.
     """
     campaigns = _campaigns42()
     scenes = sum(r.scenes_resolved for r in campaigns)
     insurgencies = sum(r.insurgencies_formed for r in campaigns)
     npcs = sum(r.npcs_generated for r in campaigns)
-    assert scenes == 0, f"scenes_resolved is no longer 0 ({scenes}) — the contest/scene bridge may have landed; update the golden"
+    assert scenes == 126, f"scenes_resolved drifted off the ED-FA-0008/0011/0012 golden ({scenes} != 126) — the FA action-mix/RNG moved again; investigate before regenerating"
     assert insurgencies == 0, f"insurgencies_formed is no longer 0 ({insurgencies}) — the insurgency pipeline may be reachable; update the golden"
     assert npcs == 0, f"npcs_generated is no longer 0 ({npcs}) — generate_npc may have live call sites; update the golden"
 
 
 def test_f7_hafenmark_elimination_lockout():
-    """Hafenmark never wins (one-way 0-territory lockout). KNOWN-TRACKED via ED-FA-0005."""
+    """Hafenmark wins 2/8 on seed-42 (2026-07-08, ED-FA-0008/0011/0012).
+
+    The one-way 0-territory lockout MECHANISM is intact — no comeback path was added (ED-FA-0005
+    remains open; parliamentary_transfer is still never called). Hafenmark's wins here are a
+    TRAJECTORY shift, not a comeback: the reconditioned FA action mix / Muster / conquest-fork /
+    Parliamentary fallback changed which factions survive to the 50-season horizon on these seeds, so
+    Hafenmark simply avoids elimination in 2 of the 8 and wins on territory. Pinned as the new golden;
+    a move here again means the FA-lane RNG shifted — investigate before regenerating."""
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    assert hafenmark_wins == 0, f"Hafenmark won {hafenmark_wins} — a comeback path may have landed (ED-FA-0005); update the golden"
+    assert hafenmark_wins == 2, f"Hafenmark won {hafenmark_wins} != 2 — FA-lane trajectory moved (or an ED-FA-0005 comeback path landed); investigate before regenerating"
 
 
 def test_f7_victory_threshold_is_a_dead_param():

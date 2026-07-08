@@ -384,6 +384,19 @@ Casus Belli (CB) is a formal standing right to act against a specific faction wi
 
 CB is consumed upon first use or after 1 season of non-use (expires). A faction may hold multiple CB (one per distinct source). Each is consumed separately.
 
+**Historical grounding (annotation only, ED-FA-0016 CP-4, 2026-07-08).** The formal-standing-right
+shape above echoes two real precedents for licit war-initiation: the Roman fetial procedure's
+*rerum repetitio* (a formal demand for redress, with a compliance window, that had to precede a
+religiously licit war) and the medieval *diffidatio* (a formal defiance/renunciation of fealty that
+had to dissolve the bond before hostilities could licitly begin) — in both cases, war required a
+declared, procedural trigger rather than simply attacking. This is grounding for the *mechanism*
+only (why CB exists as a formal-right gate at all); it does not change the effect table above. A
+possible "Demand Redress" step converting a CB into either compliance-extraction or a first-strike
+penalty was scoped alongside this annotation but is **needs_jordan** (deferred, not implemented
+here) — see
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+CP-4.
+
 ---
 
 ## §4 — NEGOTIATION MECHANICS (EXTENDED)
@@ -494,6 +507,68 @@ GM controls NPC faction votes (Guilds, Niflhel, and any other NPC-only factions)
 **Guilds AI vote rule:** Always votes against Blockade and Combined Embargo+Blockade (threatens Wealth). Votes for Subsidy. Votes against Outlawry (commercial unpredictability). Otherwise votes for whichever outcome reduces the highest Mandate faction's power (competitive commercial instinct). **Settlement-broker influence (ED-752):** Guild Council members operating in broker-influenced settlements (per settlement_layer_v30 §4.7-4.9) may shift Guilds' net vote by −1 per influenced settlement (max 2-vote shift), reflecting broker pressure on commercial leadership.
 
 **Niflhel — STRUCK** (per CR-STRIKE-2026-04-19 + PP-DISSOLVE). Settlement-broker NPCs (per settlement_layer §4.7-4.9) do not hold Parliamentary seats and do not vote. The prior Niflhel AI vote rule is dead — no replacement faction-level voting behavior exists for Niflhel. Niflhel's residual influence on Parliamentary outcomes operates through the Guilds settlement-broker mechanism above, not through direct vote. (ED-752)
+
+### §5.9 Fiscal Stance (PROPOSED — ED-FA-0007, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** This document's overall header above is CANONICAL; this
+subsection is a new addition and is not. It fills an admitted void: the corpus has no per-faction
+tax decision between settlement Prosperity and faction Wealth (`sim/provincial/faction_action.py`
+does not model one at all). Provenance and full research:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 FA-1.
+
+**Grounding.** Margaret Levi, *Of Rule and Revenue* (1988): rulers are revenue-maximizing but
+bounded by the cost of collection, and subjects render **quasi-voluntary compliance** — a mix of
+felt obligation and cost/benefit calculation that rises with perceived legitimacy of the ruler and
+fairness of the exchange. This subsection makes that coupling literal: collection *yield* is a
+function of settlement Legitimacy (L), not merely of the stated rate. James C. Scott, *The Moral
+Economy of the Peasant* (1976): the subsistence ethic treats the *invariance* of the tax burden
+across good and bad years — not its average level — as the mark of a just or unjust lord; a ruler
+who remits or eases extraction in a dearth season banks legitimacy disproportionate to the revenue
+foregone. John Brewer, *The Sinews of Power* (1989): collection efficiency is itself a function of
+fiscal-administrative capacity (a `FacilityTier`-style modifier is the natural home for this later,
+not specified here). Charles Tilly, *Coercion, Capital, and European States* (1990): extraction and
+the coercive apparatus that defends it are two ends of the same loop this subsection feeds into
+Wealth and, downstream, Muster.
+
+**Mechanic.** Each faction (or, if finer control is wanted, each province) declares a **Fiscal
+Stance** for its held settlements, one of:
+
+| Stance | `rate_mult` | Per-settlement effect |
+|---|---|---|
+| Light | ×0.75 | Settlement Popular Support (PS) **+1** in dearth seasons only (Scott 1976 — remission when it is felt, not a standing bonus) |
+| Standard | ×1.0 | No PS effect |
+| Extraction | ×1.5 | Settlement PS **−1 every season** while in effect; settlement Order decay (where otherwise suppressed) resumes |
+
+Per-settlement Treasury yield at Accounting:
+
+```
+yield(settlement) = Prosperity × k × rate_mult × compliance(L)
+compliance(L) = 0.5 + L/14        # L on the existing 0–7 scale → 50%–100%
+```
+
+`k` is the existing base extraction constant already implicit in Accounting's Prosperity→Treasury
+step (not reopened here). `compliance(L)` is Levi's quasi-voluntary compliance made literal: a
+settlement at L=0 renders only half the nominal yield (passive non-cooperation, evasion, the costs
+of coercing compliance out of an unwilling populace); a settlement at L=7 renders the full nominal
+yield. Extraction stance's ×1.5 multiplier is a *nominal-rate* increase — it does not bypass the
+compliance term, so a low-L settlement pushed to Extraction stance still under-yields relative to
+a high-L settlement, which is the intended pressure (raising the rate on an already-resentful
+population does not linearly raise revenue).
+
+**Interaction with Levy.** Where a `governance_play_redesign` Levy-type verb exists or is later
+added, Levy is a one-off spike layered *on top of* the standing stance for that Accounting only,
+not a replacement for it — a faction can be nominally "Light" and still Levy once under duress.
+
+**Scope discipline.** This subsection specifies the stance table and yield formula only. It does
+not itself change Accounting's existing Prosperity→Treasury base step (`k` and any prior rollup
+logic are unchanged except for the new `rate_mult × compliance(L)` factor), and it does not modify
+`§5.7`'s Wealth-zero consequences. The `compliance(L)` shape (`0.5 + L/14`) and the stance
+multipliers (`0.75/1.0/1.5`) are **shape proposals per the historical grounding, not sim-calibrated
+constants** — per CLAUDE.md §5/§7, run a seeded calibration pass before treating any of these
+numbers as canon. Consumers: `sim/territory/registry.py` (per-settlement `prosperity`/`legitimacy`
+fields already exist; this is their first Treasury-facing consumer) and the Accounting Treasury
+rollup step.
 
 ---
 

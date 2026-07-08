@@ -537,6 +537,15 @@ block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830�
 per the file's protocol; never max+1. Since the 2026-07-02 cutover (ED-IN-0001), new EDs
 allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
+- **JORDAN RULING NEEDED — ED-SC-0013 (Parliamentary total-victory Mandate stacking).** Filed
+  2026-07-08 building the FA/SE historical-precedent docket's unblocked items (see
+  `handoffs/HANDOFF_SC.md` Pending + `handoffs/HANDOFF_FA.md`): the §10 BG-Vote Total-Victory
+  Mandate rider (−1) and the new Parliamentary-Censure §5.4 target effect (−1) compose to −2 on
+  the same faction within one motion; currently implemented as stacking (the literal default) but
+  explicitly not ratified canon. This is the one item from that same-day build genuinely needing
+  Jordan's own call, not routine merge-ratification — everything else in that build (P3-lite Agôn
+  harness, Muster/action-mix/conquest-terms rework, 9 settlement/faction design-doc PROPOSED
+  sections) ratifies normally on merge per ED-1094.
 - **START HERE — Master Workplan v6 is the live steering surface, RATIFIED with the whole
   of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `designs/workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
   playable season · M2 any-seed story bar · M3 Godot slice), per-lane workstreams (status
