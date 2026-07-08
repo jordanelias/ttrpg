@@ -15,6 +15,8 @@ index; see it for cross-lane/global items.
   (Q-robust mono-solution flag for a second Gap-repair branch — **zero-cost/Amendment-3/ED-871 untouched**).
   Scene-Slate Steps kept as numbered anchors (physical renumber = a Scene-Slate rebuild); POP physical fold =
   Stratum-B C-TW-3/4/10/11. `params/threadwork.md` carries a doc-side co-file note (no values changed). No sim edits.
+  **Decision packet available** for the Mending second-branch question:
+  `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR-TW_mending_second_branch.md`.
 
 - **ED-WR-0003 (open) — ambient-fabric window + Appraise Revelation.** Filed 2026-07-05 from the
   ratified edge-playability audit (PR #81, "Ratify all"; finding EP-7): `scene.interaction`/

@@ -18,8 +18,8 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "317b2bdd"
-  date: "2026-07-05"
+  sha: "e6d8bd1"
+  date: "2026-07-08"
 
 milestones:
   M1:
@@ -29,32 +29,32 @@ milestones:
         label: "Strategic decision"
         state: not_started
         blocked_on: null
-        next: "FA decision-surface work (J-5) + author the domain_actions module home (v6 §2.3)"
-        evidence: []
+        next: "FA decision-surface work (J-5) + author the domain_actions module home (ED-FA-0002, still open)"
+        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc"]
       - n: 2
         label: "Domain action"
         state: not_started
         blocked_on: null
         next: "domain_actions authoring (IN); echo render rides narrative Stage 0"
-        evidence: []
+        evidence: ["ED-IN-0028 echo-transport substrate landed 2026-07-08 (sim/cross_scale/echo_transport.py, flag-gated) — cross-scale plumbing only, not domain_actions authoring itself"]
       - n: 3
         label: "Social contest"
-        state: not_started
+        state: in_progress
         blocked_on: null
-        next: "SC: fix the stage ambiguity (HANDOFF_SC vs root), then the four deliberative games + claim-grammar requirements input (v2 §5)"
-        evidence: []
+        next: "Stage 4 (four deliberative games) — gated on P0 docket ED-SC-0003/0004/0005 (all needs_jordan: Piety/Persuasion naming, canonical Argue-pool formula, bonus-die cap)"
+        evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration"]
       - n: 4
         label: "Personal combat"
         state: in_progress
         blocked_on: null
         next: "PC R3 U1 PoB recalibration — gated JD-1; T-P2 may start now (post-U0)"
-        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)"]
+        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)", "ED-PC-0005 wound ruling resolved+executed 2026-07-08 (combat scope only; non-combat calibration spun out as ED-PC-0006, open)"]
       - n: 5
         label: "Thread operation"
-        state: not_started
+        state: in_progress
         blocked_on: null
-        next: "WR sweeps ED-WR-0001/0002 (cheap, unblocking); then thread preconditions ED-1010/1011"
-        evidence: []
+        next: "WR sweeps ED-WR-0001/0002 (still open, cheap, unblocking); then thread preconditions ED-1010/1011"
+        evidence: ["Stratum-B 2026-07-07: ED-871 closed (Mending cost fix) + C-TW-12 closed (knots.py rebuilt onto ED-912 gauge), both with pinned regression tests", "ED-WR-0007 subtractive-action verdicts executed 2026-07-08 (threadwork Pulling/Mending prose distilled)"]
       - n: 6
         label: "Season close"
         state: blocked
@@ -146,3 +146,8 @@ last_progress:
   - "2026-07-05: narrative engine v1 + v2 Churn Engine (5-refuter pass applied) + workplan v6 + steering reconcile ED-IN-0006/0009 (PR #78)"
   - "2026-07-05: Jordan RATIFIED ALL of PR #78 (ED-IN-0011) — incl. F-F/fork-8 at default; T0 wall shrank to JD-1 + ED-1051; fork 10 spun out as ED-FA-0001"
   - "2026-07-05: PC U0 units-honesty merged (PR #79, ED-PC-0002 — renumbered from a concurrent ED-PC-0001 at merge); juncture 4 in progress"
+  - "2026-07-05: Fable 5 social-contest audit + edge-playability audit v1 RATIFIED in full (PR #80-82); ~21 lane EDs filed across SC/FA/WR/FI/SE"
+  - "2026-07-07: Key & Echo Armature v1 (ED-IN-0018) + unaddressed-areas audit (ED-IN-0017) RATIFIED (ED-IN-0026); first executable Key substrate sim/substrate/keys.py shipped"
+  - "2026-07-07/08: Resolution Plan Stratum-A (7 EDs resolved) + Stratum-B oracle-to-canon (ED-871, C-TW-12, ED-PC-0005 all resolved) + Stratum-C echo-transport (ED-IN-0028); ECHO_TRANSPORT default ON"
+  - "2026-07-08: Pessimist subtractive-action audit (ED-IN-0027) RATIFIED; FI/WR/FA/SE lane verdicts executed same day; PC deferred (stale target, ED-PC-0007); SC (ED-SC-0012) still open/unexecuted"
+  - "2026-07-08: SC consequence spine LIVE (ED-SC-0002/0006/0007 — kernel live in campaign + parliamentary vote/domain-echo composition); MB partition-invariance fix (ED-MB-0004) + DG-2 yield mechanic (ED-MB-0005) + Command decoupled from pool (ED-MB-0006); attribute/value coherence audit (ED-IN-0029) filed, held back for Jordan ratification"

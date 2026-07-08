@@ -1245,7 +1245,7 @@ Background NPCs exist only as canonical references. They have no tracked state. 
 
 ### §11.5 Inner-Circle NPCs
 
-Per faction_politics_expanded_v1 §§1–2, inner-circle NPCs (Crown 5, Hafenmark 4, Varfell 5, Church 5) and Cardinals (4) are **structurally Active** — they cannot be demoted below Passive while their faction is in play. If one is deposed, killed, or exiled, they are replaced per faction succession rules and the replacement enters Active tier.
+Per faction_politics_v30 §§1–2, inner-circle NPCs (Crown 5, Hafenmark 4, Varfell 5, Church 5) and Cardinals (4) are **structurally Active** — they cannot be demoted below Passive while their faction is in play. If one is deposed, killed, or exiled, they are replaced per faction succession rules and the replacement enters Active tier.
 
 ### §11.6 Companion App Display
 

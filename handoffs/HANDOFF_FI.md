@@ -20,6 +20,9 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   gets a build-gating requirement for a compact "why this NPC responded" readout (composed-system Q-elegant
   strain); the Lattice design + Certainty Gate are KEPT (ordinary finding, not a scope cut). `params/fieldwork.md`
   carries a doc-side co-file note (no values changed). No sim edits (investigation.py/fieldwork.py are stubs).
+  **Decision packet available** for the canonical-head governance question (which file's Status line
+  binds, Option B full-port vs Option C split-head):
+  `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI_interview_canonical_head.md`.
 
 - **ED-FI-0002 (open) — counter-espionage loop.** Filed 2026-07-05 from the ratified
   edge-playability audit (PR #81, "Ratify all"; finding EP-6): enemy `da.covert_betrayal` reaches

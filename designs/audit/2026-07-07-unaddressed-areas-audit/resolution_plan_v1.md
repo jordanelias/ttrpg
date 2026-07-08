@@ -453,3 +453,23 @@ wound fractional-Ob values) ·
 ED-SC-0011 (personal-scale contest dispatch onto the promoted kernel — distinct from the faction-scale
 vote just wired) · C-TW-3/4/6/8 under ED-WR-0005 · the armature keying/down-seam/rendering waves
 (§6.3 PR-3+). These are surfaced for Jordan rather than forced.
+
+**Seventh slice / Stratum-C §6.3 wave 3 (consumer/contract hygiene) 2026-07-08 — ED-IN-0016 closed,
+ED-IN-0030 filed.** Jordan picked "armature deployment waves" as the next slice (more mechanical, less
+design-authorship) and separately directed an agonist/antagonist pairing with an adversarial pass; both
+were honored — a producer agent executed, an independent read-only critic re-derived every claim against
+the actual files rather than trusting the producer's self-report. Executed ED-IN-0016 (already
+RATIFIED-AS-ACCEPTED, PR #81 "Ratify all") plus C-INJ-4: `module_contracts.yaml`'s stale
+`faction_politics doc: null` flipped to the CANONICAL `designs/provincial/faction_politics_v30.md`
+(PP-660); three `CURRENT.md` rows added/extended (faction_politics_v30, Scale transitions, Player
+agency, Fieldwork/Investigation — the last citing ED-FI-0004's EP-8 resolution); the dead
+`faction_politics_expanded_v1.md` filename (ep-14, ~30 live citations) repointed across 9 live canonical
+docs, each site verified against the promoted doc's actual section headers (one uncertain citation
+rewritten as a flagged prose pointer rather than guessed); historical snapshots under `designs/audit/`,
+`tests/sim/`, `archives/`, and `propagation_log.md` deliberately left untouched; `restructure_ledger.md`'s
+two stale PENDING rows closed out. The sweep surfaced one genuinely new defect — a "debt scene per §1"
+clause in `scale_transitions_v30` §4.3.2 citing a mechanic that doesn't exist in the promoted doc — filed
+as **ED-IN-0030** (open, needs_jordan) rather than authored or silently struck. The critic caught and
+corrected two minor drift issues (a co-file index line-number offset; a wrong line-citation) before
+landing. Gates green; full `pytest tests/valoria sim/tests` pass verified. See `handoffs/HANDOFF_IN.md`
+for the full account.
