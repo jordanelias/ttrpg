@@ -520,13 +520,16 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
     the visor/armpit/groin), because its stiff concentrated point (gap 0.78) out-couples its own hammer at the gaps;
     a rondel-type (gap 0.84) selects the spike even harder; a mace (blunt-only, no afforded point) still hammers; a
     staff (weak point, weak authority) stays weak. All EMERGENT from the derived gap_precision — no weapon name.
-    WIDENED RETURN (I2, D2b, R-7 + capstone M2): a 5-tuple `(dm, h, sel_gap, sel_perc, sel_pc)` — the three extra
-    fields default to the whole-weapon w['gap']/WP.percussion_authority(w)/whole-weapon point_concentration for a
-    single-mode weapon (behaviour-preserving until intended; verified at I2's acceptance gate #5). Threads
-    `c.grip_position`/`c.range_avail` (default 0.0/1.0 — I1 scaffold) into afforded_heads so the SELECTION itself
-    (not just the eventual damage) reflects the wielder's current circumstance. `eff_head` is the head TOKEN
-    routed downstream (core.strike/adef_cap/legibility), damage_mode the resolved 'percussion'/'shear'/'puncture'.
-    The wrapper writes all five onto the combatant at BOTH call sites (mutation stays wrapper-owned).
+    WIDENED RETURN (I2, D2b, R-7 + capstone M2; extended to 6 by U2/ED-PC-0011): `(dm, h, sel_gap, sel_perc, sel_pc,
+    sel_eff)` — the four extra fields default to the whole-weapon w['gap']/WP.percussion_authority(w)/whole-weapon
+    point_concentration/0.0 for a single-mode weapon (behaviour-preserving until intended; verified at I2's
+    acceptance gate #5). Threads `c.grip_position`/`c.range_avail` (default 0.0/1.0 — I1 scaffold) into
+    afforded_heads so the SELECTION itself (not just the eventual damage) reflects the wielder's current
+    circumstance. `eff_head` is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode
+    the resolved 'percussion'/'shear'/'puncture'. `sel_eff` is the winning element's own derived cut/thrust
+    magnitude — read by core.strike (as sel_eff) to scale core.coupling's 'cut' token DELIVERY (see CUT_AUTH_REF);
+    inert for every other head. The wrapper writes all six onto the combatant at BOTH call sites (mutation stays
+    wrapper-owned).
     CLOSE-EFFICACY (I4, D5): `measure_gap` (None default — behaviour-preserving for every caller that hasn't wired
     a real measure) now genuinely reaches the comparator via close_efficacy, weighted by each CANDIDATE's own
     point_concentration — a broad arc-requiring swing collapses in tight quarters; a point-selected thrust barely
@@ -543,7 +546,8 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         # plate-defeat (the situational gap game), so the poleaxe's hammer and its spike are compared on the same
         # coupling scale — and the spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02).
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
-                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2])
+                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
+                  eff=heads[hd][0])
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
@@ -553,8 +557,8 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
-    _eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
-    return dm, h, sel_gap, sel_perc, sel_pc
+    sel_eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
+    return dm, h, sel_gap, sel_perc, sel_pc, sel_eff
 
 def armor_defeat_sigma(aggressor, defender, cfg):
     """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor

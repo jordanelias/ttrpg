@@ -203,7 +203,7 @@ def test_thrust_protection_grip_invariant():
     C, core, S, WP, CFG = _mods()
     for n in ('bear_spear', 'spear', 'yari'):
         c = C.Combatant('x', weapon=n)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG)
         assert h == 'point', f"{n} did not select point: {h}"
         phi = WP.phi_grip(C.WEAPONS[n], 1.0, h, spc)
         assert phi >= 0.9, f"{n} thrust-protection failed at full gather: {phi}"
@@ -237,7 +237,7 @@ def test_damage_retention_worst_case_material_lever():
     def worst_retention(name, grip_star):
         w = C.WEAPONS[name]
         c = C.Combatant('x', weapon=name)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG)
         gap = sg if sg is not None else w['gap']
         perc = sp if sp is not None else WP.percussion_authority(w)
         worst = 0.0
@@ -274,7 +274,7 @@ def test_select_mode_open_measure_identity_single_mode_weapons():
         if 'base' in w or w.get('mode_elements'):
             continue
         c = C.Combatant('x', weapon=n)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', False, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', False, CFG)
         assert sg == w['gap'], (n, sg, w['gap'])
         assert spc == w['geometry']['point_concentration'], (n, spc)
         if h == 'blunt':
@@ -290,7 +290,7 @@ def test_select_mode_sel_fields_track_swap_window():
     probes the longsword->longsword_halfsword swap window (M-02/R-7's object-confusion class)."""
     C, core, S, WP, CFG = _mods()
     c = C.Combatant('x', weapon='longsword_halfsword')
-    dm, h, sg, sp, spc = S.select_mode(c, 'heavy', True, CFG)
+    dm, h, sg, sp, spc, se = S.select_mode(c, 'heavy', True, CFG)
     w = C.WEAPONS['longsword_halfsword']
     assert sg == w['gap'] or sg == w['geo']['gap']
     assert spc == w['geometry']['point_concentration']
@@ -378,7 +378,7 @@ def test_close_efficacy_arc_vs_thrust_from_selected_element():
     guandao_pc = C.WEAPONS['guandao']['mode_elements'][0]['geo']['point_concentration']
     assert S.close_efficacy(guandao_pc, 0.0, 1.0, True, head='curved_cut') < 0.9
     c = C.Combatant('x', weapon='bear_spear')
-    dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
+    dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
     assert h == 'point'
     assert spc == C.WEAPONS['bear_spear']['geometry']['point_concentration'] == 0.55, "bear_spear has no mode_elements; its moderate whole-weapon pc is the R-3 trap"
     assert S.close_efficacy(spc, 0.0, 1.0, True, head=h) == 1.0, "gated on the SELECTED HEAD, not pc alone"
