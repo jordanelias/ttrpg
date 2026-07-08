@@ -472,8 +472,96 @@ import os
 PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
+# [partition-invariance fix, 2026-07-08, Jordan-ruled "genuine defect -- fix it"] renormalizes a
+# convergence group -- >=2 of ONE side's atoms simultaneously, independently fully engaging the
+# SAME single opposing atom (e.g. a pinning body plus wings all converging on one Line defender)
+# -- back down to what ONE merged atom of the group's combined troops would contribute. Toggle OFF
+# reproduces the pre-fix (multiplicative-per-attacker) behaviour byte-exact, for ablation/compare.
+PC_CONVERGENCE_NORM = (os.environ.get("PC_CONVERGENCE_NORM", "1") == "1")
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
+
+def _convergence_scale(unit_a, unit_b, pairs):
+    """[partition-invariance fix] `subunit_combat_pool` is, by Jordan's own DG-3 characterization,
+    a per-atom COMBAT SCORE (Command + per-subunit discipline/cohesion/stamina) rather than a
+    per-troop rate -- deliberately (ED-899: "base driven SOLELY by Command"). `pair_pool_contribution`
+    correctly renormalizes when ONE atom is itself split across MULTIPLE enemies (an atom fighting on
+    two fronts gets its OWN score divided between them, by troop share). It does nothing for the
+    mirror case: when SEVERAL of one side's atoms each independently, fully engage the SAME single
+    opposing atom, each gets its own near-full base_pool with no reduction -- so splitting a fixed
+    total force into more simultaneously-converging atoms multiplies total dice against that one
+    shared target, purely from the split, not from any change in troops or quality. This is exactly
+    the mechanism the 2026-07-05 Cannae follow-up (`designs/proposals/mass_battle_fighting_withdrawal_v1.md`
+    §7) measured and flagged as a genuinely undecided architecture question; Jordan ruled it a
+    genuine defect (2026-07-08) rather than an intended encirclement bonus.
+
+    For every group of >=2 atoms on one side sharing one target atom on the other, this computes
+    the troop-weighted-mean base score across the group (`merged_base`) and the group's combined
+    own-troop count (`merged_troops`) and combined engaged troops (`total_wt`), then derives what
+    ONE merged atom of that combined size would contribute: `(merged_base / merged_troops) *
+    total_wt`. Dividing that by the naive (uncorrected) group sum gives a single scale factor
+    applied uniformly to every member's own pair contribution -- preserving each member's relative
+    share while capping the group's total at the merged-atom figure. A group of size 1 (the
+    overwhelming majority of pairs -- every single-subunit-vs-single-subunit gauge row has no other
+    shape) is mathematically a no-op (scale 1.0, verified: merged/naive collapse to the same ratio
+    algebraically) and is skipped outright below for clarity/speed. Dead atoms (routed/broken,
+    base_pool==0 by `subunit_combat_pool`'s own gate) are excluded from a group's aggregate --
+    they contribute 0 to `merged_base` already downstream (`a_dead`/`b_dead` zero their net outright),
+    so counting their troops in `merged_troops` would only dilute their live siblings' credit for no
+    reason.
+
+    Returns (a_scale, b_scale): dicts keyed by (id(atom_a), id(atom_b)) -> float. Missing key means
+    1.0 (no convergence for that pair on that side). Only meaningful for POOL_VARIANT=="C-ii" (the
+    live variant) -- callers gate application accordingly; this function itself is pure dict/float
+    math, safe to compute unconditionally."""
+    def _dead(unit, atom):
+        return unit.routed or unit.broken or atom.routed or atom.broken
+
+    def _group_and_scale(key_of, attacker_of, attacker_unit, cells_of, out):
+        """attacker_of(p)/cells_of(p) select the CONVERGING side's atom/contact-cells for pair p;
+        key_of(p) selects the shared TARGET atom the group is defined by. attacker_unit is that
+        side's Unit (fixed for the whole call -- unit_a for the a_scale pass, unit_b for b_scale)."""
+        groups = {}
+        for p in pairs:
+            groups.setdefault(id(key_of(p)), []).append(p)
+        for group in groups.values():
+            if len(group) < 2:
+                continue
+            infos = []
+            for p in group:
+                atk = attacker_of(p)
+                if _dead(attacker_unit, atk):
+                    continue
+                base = subunit_combat_pool(attacker_unit, atk)
+                wt = _pair_engaged_troops(atk, cells_of(p))
+                if base <= 0 or wt <= 0:
+                    continue
+                infos.append((p, atk, base, wt))
+            if len(infos) < 2:
+                continue
+            total_wt = sum(i[3] for i in infos)
+            merged_troops = sum(i[1].cur_troops for i in infos)
+            if total_wt <= 0 or merged_troops <= 0:
+                continue
+            merged_base = sum(i[2] * i[3] for i in infos) / total_wt
+            corrected_total = (merged_base / merged_troops) * total_wt
+            naive_total = sum((i[2] / i[1].cur_troops) * i[3] for i in infos)
+            if naive_total <= 0:
+                continue
+            factor = corrected_total / naive_total
+            for p, atk, base, wt in infos:
+                out[(id(p["atom_a"]), id(p["atom_b"]))] = factor
+
+    a_scale, b_scale = {}, {}
+    # Group by shared B-side target (>=2 atom_a's converging on one atom_b) -> corrects a_pool_raw
+    _group_and_scale(key_of=lambda p: p["atom_b"], attacker_of=lambda p: p["atom_a"],
+                      attacker_unit=unit_a, cells_of=lambda p: p["a_cells"], out=a_scale)
+    # Group by shared A-side target (>=2 atom_b's converging on one atom_a) -> corrects b_pool_raw
+    _group_and_scale(key_of=lambda p: p["atom_a"], attacker_of=lambda p: p["atom_b"],
+                      attacker_unit=unit_b, cells_of=lambda p: p["b_cells"], out=b_scale)
+    return a_scale, b_scale
+
+
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
@@ -482,6 +570,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
     threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
+    # [partition-invariance fix] conv_scale is precomputed ONCE per TICK on the FULL tick's pairs
+    # by the caller (run_battle, before any CASCADING_ENABLED sub-phase split -- see
+    # resolve_engagements_cascading) so a convergence group spanning multiple cascade sub-phases is
+    # still corrected as one group. A direct caller that never precomputes it (tests, or the
+    # non-cascading path where `pairs` already IS the full tick) gets it computed here instead --
+    # identical math either way, since resolve_engagements_cascading passes the SAME `pairs` this
+    # function would otherwise recompute from.
+    if conv_scale is None:
+        a_conv_scale, b_conv_scale = _convergence_scale(unit_a, unit_b, pairs)
+    else:
+        a_conv_scale, b_conv_scale = conv_scale
     # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
     # wheel as a body to face a SEPARATE detachment on its flank/rear -- so that detachment's hit lands
     # with the zone penalty (the envelopment of a fixed unit). "Fixed" is emergent from frontal contact
@@ -555,6 +654,14 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None):
             # output), matching the ratified "intensive" reading.
             a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base)
             b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base)
+            # [partition-invariance fix, 2026-07-08] The per-pair split above is exact for ONE atom
+            # split across several enemies; it does nothing when several of THIS side's atoms
+            # instead converge on the SAME single opposing atom (a_conv_scale/b_conv_scale key on
+            # (id(atom_a), id(atom_b)), 1.0 -- i.e. absent -- for every non-converging pair, so this
+            # is a no-op for the overwhelming majority of pairs, byte-exact).
+            if PC_CONVERGENCE_NORM:
+                a_pool_raw *= a_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
+                b_pool_raw *= b_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
@@ -881,8 +988,13 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
     Arrowhead rows are simultaneously adjacent to Line cells.
     t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1095]"""
+    # [partition-invariance fix] Compute the convergence scale ONCE on the FULL tick's pairs, before
+    # any cascading sub-phase split below -- a convergence group (e.g. a pinning body's pair resolves
+    # in an early sub-phase, a wing's pair in a later one) must be seen as a whole to be corrected
+    # correctly; splitting it across sub-phase calls would under-count each sub-phase's group size.
+    conv_scale = _convergence_scale(unit_a, unit_b, pairs)
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs, t=t)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -914,7 +1026,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -999,6 +1111,13 @@ def volley_phase(unit_a, unit_b):
         """Pick nearest in-range target atom, roll Power vs TN, return Size loss inflicted.
         Volley loss scales with the TARGET formation's density (_volley_density_mult)."""
         if shooter_atom.unit_type != "ranged":
+            return 0, None, False
+        # [DG-2 §2.3/2.5, Jordan-ruled "build it now" 2026-07-08] "No volleying while yielding" --
+        # a body actively repositioning doesn't also fire, matching the existing 'kite' precedent.
+        # `yield_active` is already melee-only-gated, so this only ever fires for a ranged atom in
+        # the (currently unreachable, by construction) case its unit_type somehow flips mid-battle;
+        # kept for defence-in-depth, not because it's expected to trigger today.
+        if shooter_atom.yield_active:
             return 0, None, False
         target_atoms = target_unit.subunits
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when

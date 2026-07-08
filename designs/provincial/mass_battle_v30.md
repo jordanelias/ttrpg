@@ -28,14 +28,37 @@ damage. Two stats unified in personal combat split here:
 **Effective Combat Pool = min(Size, Command) + Command** (PP-233)
 
 > **ED-899 (engine leads):** This is the legacy / OFF-path model. The live engine (`tests/sim/mass_battle/config.py`) sets the engagement pool base to `COMMAND_POOL_MULT × Command` (= 2 × Command), with **Size entering only through the Lanchester frontage exponent**, not the pool; it reproduces the `min(Size, Command) + Command` value here byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon and this doc follows. **ED-1013 (smooth pool, 2026-06-15):** the base is not flat — the live engine computes `Command × (1 + cohesion)` where `cohesion = current Size ÷ max Size` (hp/hp_max): 2 × Command at full strength, degrading smoothly to Command at annihilation, which holds the Lanchester exponent ~1 while letting own casualties dilute the Discipline term. [canonical: tests/sim/mass_battle/orchestration.py base_combat_pool / subunit_combat_pool, COMMAND_SIGMA path]
+>
+> **ED-MB-0006 SUPERSEDES the above for the base pool term (Jordan directive, 2026-07-08, verbatim:
+> "consider abandoning combat pools being related to the commander, and instead being solely derived
+> from the subunit troop type, quality and numbers").** The live engine's DEFAULT is now
+> `POOL_QUALITY_MODEL=1`: base pool = `eff_power × eff_size × POOL_QUALITY_SCALE`, where `eff_power`
+> is the troop-TYPE quality stat this section's own line 25-26 already names ("Power... determines
+> dice rolled" — §B.2's per-type table), `eff_size` is NUMBERS (current troops ÷ BLOCK_SIZE, the
+> same continuously-degrading quantity Size always was), and `POOL_QUALITY_SCALE=0.5` renormalizes
+> the product back to this section's own historical magnitude at the T3-infantry baseline. Command
+> is absent from the pool entirely — it still governs morale, formation-hold speed, order-issuing,
+> and `derive_rout`'s "Command 0 → unit routs" condition, just not the dice count. The
+> `COMMAND_SIGMA_ENABLED` branches above remain live and selectable (`POOL_QUALITY_MODEL=0`) for A/B
+> comparison, per this repo's standing ablation-toggle discipline. **Honest, disclosed residual:**
+> `lanchester_signature.py`'s strict trajectory-fit exponent check (melee should conserve p≤1.4) is
+> NOT met by either model as of this writing — the PRE-EXISTING Command-driven default already
+> measures p≈1.55 there (a previously-undetected gap, unrelated to this change), and the new model
+> measures p≈1.65-1.7 at any pool-magnitude scale tried (a uniform scale changes magnitude, not the
+> win/loss ratio the exponent test is sensitive to). Flagged as an open follow-up (likely needs the
+> degree/damage-tier discretization or the Lanchester coefficient's own interaction reconsidered),
+> not silently tuned to pass. Full record: `tests/coverage_matrix.md`'s 2026-07-08 entry.
 
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines
-whether you reach it.
+whether you reach it. **(Historical framing — see ED-MB-0006 above: the live default pool no longer
+reads Command at all; Power now caps nothing and instead multiplies directly with Size.)**
 
 **Design axiom: Generalship dominates.** Command asymmetry is intentional. A Command=7
 general versus a Command=1 general produces a near-certain outcome before a die is
-rolled. The general is the battle.
+rolled. The general is the battle. **(ED-MB-0006: this axiom described the Command-only COMBAT
+POOL specifically, which is now superseded — Command's remaining leverage is morale/formation/rout,
+not raw dice count.)**
 
 ---
 
