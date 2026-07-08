@@ -374,6 +374,15 @@ both are island/dead-code changes, so the F7 + seed-0 goldens are unmoved (verif
   are gone; the comment now points at the CI-100 no-freeze model (the doc side landed in the
   Stratum-A pass). `CI_CEILING = 100` (the live model) is untouched.
 
-**Next Stratum-B candidates:** the knots.py ED-912 rebuild (C-TW-12), the dead `WoundTracker.
-pool_penalty()` (ED-PC-0005), and the contest live-dispatch criterion (ED-SC-0011). The larger
-armature echo-wiring integration (PR-2 remainder) remains its own dedicated build.
+**Second slice (2026-07-08):**
+- **C-TW-12 CLOSED** — `sim/personal/knots.py` rebuilt onto the ED-912 bidirectional −5..+5 gauge
+  (`TIER_RANGE`/`TIER_START`; rupture at +5 both tiers; −5 Tempered Close-only absorb-once;
+  break/betrayal Disposition −3, floor −5; a positive-strain Close break scars), matching the doc
+  side (knots_v30 §6 / fieldwork_v30 §5.6b that landed in the Stratum-A pass). Pinned test
+  `sim/tests/test_knots_ed912.py` (7 cases; knots had zero coverage). Also closes ED-FI-0003's noted
+  sim residual. `knots/` is an island, so the F7 + seed-0 goldens are unmoved.
+
+**Next Stratum-B candidates:** the dead `WoundTracker.pool_penalty()` (ED-PC-0005) and the contest
+live-dispatch criterion (ED-SC-0011). ED-WR-0005 still carries C-TW-3 (the blanket penalty mis-hits
+Leap) + C-TW-4/6/8/10/11. The larger armature echo-wiring integration (PR-2 remainder) remains its
+own dedicated build.
