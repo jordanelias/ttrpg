@@ -26,6 +26,7 @@ Entry points:
 """
 from __future__ import annotations
 
+import os
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -42,6 +43,16 @@ DEFAULT_PARAMS = {
 }
 
 
+def _echo_transport_on(effective_params: dict) -> bool:
+    """ECHO_TRANSPORT flag (ED-IN-0028, Key & Echo Armature §6.2) — default OFF, byte-exact.
+    Mirrors the MB FIELD_MOVEMENT/ED-1089 CI-pin precedent: a `params['ECHO_TRANSPORT']`
+    override wins; otherwise read the env var (default '0'). When OFF, no substrate is
+    attached to the world and the scene phase is byte-identical to its pre-transport self."""
+    if 'ECHO_TRANSPORT' in effective_params:
+        return bool(effective_params['ECHO_TRANSPORT'])
+    return os.environ.get('ECHO_TRANSPORT', '0') == '1'
+
+
 @dataclass
 class CampaignResult:
     winner: str | None
@@ -51,6 +62,8 @@ class CampaignResult:
     scenes_resolved: int = 0        # F7 telemetry (ED-IN-0021): personal-scale scenes actually resolved
     insurgencies_formed: int = 0    # F7 telemetry: len(world.insurgencies)
     npcs_generated: int = 0         # F7 telemetry: world.npc_counter (generate_npc call-count proxy)
+    key_log_hash: str = ""          # ED-IN-0028: sha256 of the campaign's canonical KeyLog ("" when ECHO_TRANSPORT off)
+    keys_emitted: int = 0           # ED-IN-0028: len(world.key_log) — 0 while scenes defer (SC bridge pending)
     final_state: dict = field(default_factory=dict)
 
 
@@ -86,6 +99,15 @@ def _faction_actions_callback(world):
     _report = scene_dispatch.run_scene_phase(world, world.rng)
     world.scenes_resolved += _report["dispatch"]["resolved"]
 
+    # ACTION->ACCOUNTING boundary (ED-IN-0028, OF-7): any echo Keys emitted during the scene
+    # phase logged LIVE; their deferred faction/territory applies land here as accounting
+    # begins, then the per-tick emission counter resets for next season. No-op when
+    # ECHO_TRANSPORT is off (no scheduler) or while all scenes defer (empty queue).
+    _sched = getattr(world, "echo_scheduler", None)
+    if _sched is not None:
+        _sched.accounting_boundary()
+        _sched.next_tick()
+
 
 def run_campaign(seed: int | None = None, max_seasons: int = 50,
                  params: dict | None = None) -> CampaignResult:
@@ -101,6 +123,19 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
     if params:
         effective_params.update(params)
     max_s = effective_params.get('CAMPAIGN_SEASONS', max_seasons)
+
+    # ED-IN-0028 — attach the executable Key substrate to the world when ECHO_TRANSPORT is on.
+    # Its presence is the flag the scene phase reads; absence => byte-exact legacy path.
+    if _echo_transport_on(effective_params):
+        from sim.cross_scale import echo_transport
+        world.echo_scheduler = echo_transport.make_scheduler(
+            cascade_depth_max=effective_params.get(
+                'ECHO_CASCADE_DEPTH_MAX', echo_transport.DEFAULT_CASCADE_DEPTH_MAX),
+            emissions_per_tick_max=effective_params.get(
+                'ECHO_EMISSIONS_PER_TICK_MAX', echo_transport.DEFAULT_EMISSIONS_PER_TICK_MAX),
+        )
+        world.key_log = world.echo_scheduler.log
+        world._echo_key_seq = 0
 
     for _ in range(max_s):
         if world.winner:
@@ -132,6 +167,8 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
 
     surviving = sum(1 for f in world.factions.values() if len(f.territories) > 0)
 
+    _kl = getattr(world, "key_log", None)
+
     return CampaignResult(
         winner=world.winner,
         season=world.season,
@@ -140,6 +177,8 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         scenes_resolved=world.scenes_resolved,
         insurgencies_formed=len(world.insurgencies),
         npcs_generated=world.npc_counter,
+        key_log_hash=_kl.content_hash() if _kl is not None else "",
+        keys_emitted=len(_kl) if _kl is not None else 0,
         final_state=game_state.serialize_world(world),
     )
 

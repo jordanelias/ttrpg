@@ -432,7 +432,7 @@ Mid-phase Zoom In fires at next legal phase-lock point. Phase-5 trigger → Afte
 Pursuing-side Discipline check = Ob 1. P(hold | Discipline 4) ≈ 87%. P(hold | Discipline 1) ≈ 40%.
 
 ## ED-167 provisional — CF wound on Zoom Out
-CF wound during Zoom In → −1D to that commander's BG tactic Pool for remainder of current battle (per `designs/scene/derived_stats_v30.md` §4.1 universal wound-penalty rule; PP-716 supersedes prior +1 Ob framing).
+CF wound during Zoom In → a fractional Ob per wound on that commander's BG tactic rolls for remainder of current battle — NEVER a −1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification; the per-pool fractional-Ob value is a follow-on calibration, ED-PC-0006, combat reference ED-1041).
 
 ## ED-170 provisional — Coherence recovery in multi-day battle
 1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.

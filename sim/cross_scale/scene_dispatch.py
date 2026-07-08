@@ -112,8 +112,17 @@ def _resolve_slot(slot, world, rng):
     except Exception as e:
         out["reason"] = f"resolver raised: {e!r}"
         return out
-    # Feedback path wired; outcome->echo mapping left empty (flagged, no fabrication)
-    zo = zoom_in_out.zoom_out({}, world)
+    # Outcome->echo transport (ED-IN-0028, flag-gated by world.echo_scheduler presence).
+    # With NO scheduler attached (ECHO_TRANSPORT off) this is byte-identical to the historical
+    # zoom_out({}) no-echo path. With one attached AND ctx carrying an `echo` block, the
+    # resolved outcome routes through domain_echo -> substrate Key (deferred faction apply).
+    if getattr(world, "echo_scheduler", None) is not None:
+        from sim.cross_scale import echo_transport
+        scene_outcomes = echo_transport.emit_scene_echo(st, out["result"], ctx, world)
+        out["echo_fired"] = bool(scene_outcomes.get("other_echoes"))
+    else:
+        scene_outcomes = {}
+    zo = zoom_in_out.zoom_out(scene_outcomes, world)
     out["domain_echoes"] = zo.domain_echoes_queued
     return out
 

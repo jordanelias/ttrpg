@@ -115,15 +115,17 @@ def build_argue_pool(actor, position: Any = None) -> int:
     for pool math (Belief alignment is post-contest momentum per §9.5);
     kept in signature for future Belief-alignment dice bonuses.
 
-    [canonical: §3 — base formula. Wound penalty -1D per wound (PP-716)
-     applied per actor.wounds attr if present.]
+    [canonical: §3 — base formula. The wound penalty is NO LONGER a -1D pool cut
+     (Jordan ruling 2026-07-08, ED-PC-0005: wounds add a fractional Ob, never -1D;
+     reverses PP-716). The contest fractional-Ob-per-wound value is a follow-on
+     calibration (ED-PC-0006) belonging to the promoted sigma-kernel, not this
+     DEPRECATED stub — the -1D wound term was removed here to conform to the ruling.]
     """
     primary = getattr(actor, 'primary_attribute', 3)
     history = getattr(actor, 'history', 0)
-    wounds = getattr(actor, 'wounds', 0)
     fatigue_penalty = CONTEST_FATIGUE_PENALTY if getattr(actor, 'contest_fatigue', False) else 0
 
-    pool = (primary * 2) + history + (-1 * wounds) + fatigue_penalty
+    pool = (primary * 2) + history + fatigue_penalty
     return max(1, pool)
 
 

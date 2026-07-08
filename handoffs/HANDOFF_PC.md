@@ -221,6 +221,19 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Decisions
 
+- 2026-07-08 — **ED-PC-0005 RULED + executed: wounds never −1D, always a fractional Ob.** Jordan:
+  *"never −1D, always increase fractional Ob."* Wounds NEVER cut the pool −1D; each wound ALWAYS adds a
+  fractional Ob. ED-1041's bilateral wound-Ob channel (+0.15 Ob attacking / +0.25 defending per wound)
+  fully supersedes the −1D-to-Pools rule, **reversing PP-716's −1D unification.** Scope (AskUserQuestion) =
+  **"Combat now, flag rest."** COMBAT executed fully: `derived_stats_v30 §4.1` row + universality paragraph
+  rewritten (struck PP-716, SUPERSEDED marker); `combat_v30 §7/§10` + `combat_design_v1` rewritten;
+  `WOUND_POOL_PENALTY` + the dead `pool_penalty()` **deleted** from `combatant.py` (felled gate keys on
+  Health depletion, unaffected); `contest_legacy_stub` −1*wounds term removed. NON-COMBAT flagged not
+  valued: −1D stripped from Thread/`threadwork_v30`, fieldwork/`fieldwork_v30 §2.2`, mass-battle Command/
+  `params/mass_combat` ED-167 (+ `params/core`, `params/fieldwork` mirrors) → *"fractional Ob per wound,
+  value ED-PC-0006"* — **no invented numbers.** PP-716 superseded in `supersession_register.yaml`;
+  ED-PC-0005 → resolved (`needs_jordan: false`); **ED-PC-0006 filed (`open`)** for the non-combat
+  calibration. 387 sim / 90 combat+gate tests green; goldens unmoved.
 - 2026-07-01 — **Scene-combat engine v1 merged to `main`; lost Phase 4/5 provenance recovered.** PR #40
   (`d4bf2af3`, 78 commits, 2026-07-01T04:46:19Z) merged the ratify-ready branch; PR #47 (`8fbc4b66`,
   2026-07-01T06:48:32Z) merged the Phase-A Track-2 cleanup (HEAD_MODE dedup, dead `pob_frac`/`percussion`
@@ -264,6 +277,14 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Next actions
 
+- **ED-PC-0006 (`open`) — non-combat wound fractional-Ob calibration, follow-on to the ED-PC-0005 ruling.**
+  Direction is ruled (wounds add a fractional Ob, never −1D); only the per-pool VALUES remain. Sites now
+  reading *"fractional Ob per wound, value ED-PC-0006"* awaiting a number: Thread ops (`threadwork_v30`,
+  `combat_v30 §10`, `params/fieldwork`), physical fieldwork (`fieldwork_v30 §2.2`, `params/fieldwork`),
+  mass-battle Command (`params/mass_combat` ED-167). ACTION: sim-calibrate against the combat anchor
+  (ED-1041 +0.15/+0.25), reconcile the pre-ruling "+1 Ob to Leap Thread ops" datum, propagate + land a
+  verified PR (merge-ratifies). Also reconcile the two downstream narrative citations of the old −1D seed
+  (`designs/arcs/gm_ref/arcs_46_55.md` + `arcs_46_55_resolved.md`, PP-232 framing). No invented numbers.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an
