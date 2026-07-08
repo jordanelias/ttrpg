@@ -28,7 +28,9 @@ decisions.
 4. `finding_status.md` — tallies before/after the critic funnel, kind/calibration breakdowns,
    census stats, coverage notes.
 5. `02_census/quantity_census.{yaml,md}` — the 88-row quantity census (the seeded §1 table).
-6. `01_workings/` — 6 finder inventories, 7 dossiers, 7 critic passes.
+6. `01_workings/` — 7 finder inventories (F-GODOT backfilled same-day after a workflow finder
+   failure; its 10 findings are an uncritiqued addendum — see `finding_status.md` §5), 7 dossiers,
+   7 critic passes.
 
 ## Headline
 

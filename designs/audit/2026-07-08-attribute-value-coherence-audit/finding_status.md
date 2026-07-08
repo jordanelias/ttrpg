@@ -105,6 +105,19 @@ applied in the docket.
 
 ## 5. Coverage notes (inherited from finders + merge; not re-swept)
 
+- **F-GODOT finder failure + same-day backfill (disclosed, not silent):** the F-GODOT finder
+  failed structured-output in the workflow run, so the census merge and the C6 dossier ran on
+  6 finder inventories (C6 read the Godot surfaces directly regardless — its RESIST/exporter
+  findings stand). Backfilled standalone same-day as `01_workings/finder_F-GODOT.json` (42 items,
+  10 findings). **The backfill's findings did NOT pass the critic funnel** and are excluded from
+  the §1.3 confirmed register (82): 4 duplicate confirmed C6 rows (C6-M1/M2/F2/F3), **6 are
+  NEW-uncritiqued** — sharpest: F-GODOT-05 (P2, `tradition_resource.gd` + `german.tres` implement
+  the 7-channel tradition-weight model Jordan REMOVED from the oracle 2026-06-29 while the .gd
+  header claims "routing is complete"), F-GODOT-06 (P2, three Phase-B6-retired weapon fields
+  carried), F-GODOT-07 (P2, weapon `.tres` data drift: pre-U0 units, both `reach_adj` values wrong
+  vs oracle), F-GODOT-08/-10 (P3), and F-GODOT-09 (P3, a *correction* to C6 §3: `strike_module.gd:74-75`
+  already inlines OW_MAX/OW_Z and `:135` hardcodes PER_DIE[7], making the exported `tn_standard`
+  dead-in-port). These route with OPT-AV-15's re-export/port-annotation work (feeds PC/GO).
 - **Not swept:** module_contracts `doc: null` modules (F-C coverage note; ED-1051 territory);
   `sim/thread/*`, `sim/world/*` (F-SIM); fieldwork/npc-arc tables beyond cross-references
   (F-DESIGN). Any quantity all 6 finders missed is not in the census — residual risk inherited
