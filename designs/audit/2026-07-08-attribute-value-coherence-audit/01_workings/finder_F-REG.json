@@ -1,0 +1,420 @@
+{
+    "family": "F-REG",
+    "items": [
+        {
+            "name": "Strength",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:34, references/names_index.yaml:45",
+            "detail": "Scale 1-7. Aliases: []. Key: attr.body.strength. Canonical name carrier: descriptor_registry, names_index (enforce: warn)."
+        },
+        {
+            "name": "Endurance",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:35, references/names_index.yaml:46, references/glossary.md:38",
+            "detail": "Scale 1-7. Aliases: [Vitality]. Key: attr.body.endurance. Carries Stamina = Endurance x 5 derivation."
+        },
+        {
+            "name": "Agility",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:36, references/names_index.yaml:47",
+            "detail": "Scale 1-7. Aliases: [Dexterity]. Key: attr.body.agility. STRUCK from Combat Pool (ED-900/904)."
+        },
+        {
+            "name": "Focus",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:38, references/names_index.yaml:48",
+            "detail": "Scale 1-7. Key: attr.mind.focus. Lives in Concentration = 3xFocus + 2xSpirit (config.py:61)."
+        },
+        {
+            "name": "Acuity",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:39, references/names_index.yaml:49",
+            "detail": "Scale 1-7. Aliases: [Reasoning, Cognition]. Key: attr.mind.acuity. Glossary calls it Cognition; registry calls it Acuity."
+        },
+        {
+            "name": "Will",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:40, references/names_index.yaml:50",
+            "detail": "Scale 1-7. Aliases: [Spirit]. Key: attr.mind.will. Registry: Will primary; glossary: Spirit primary."
+        },
+        {
+            "name": "Attunement",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:42, references/names_index.yaml:51",
+            "detail": "Scale 1-7. Aliases: [Perception]. Key: attr.social.attunement."
+        },
+        {
+            "name": "Charisma",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:43, references/names_index.yaml:52",
+            "detail": "Scale 1-7. Aliases: [Influence, Presence]. Key: attr.social.charisma. Drives Composure = Charisma x 3."
+        },
+        {
+            "name": "Bonds",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/descriptor_registry.yaml:44, references/names_index.yaml:53",
+            "detail": "Scale 1-7. Aliases: [Sincerity, Affability]. Key: attr.social.bonds. NOT in glossary.md attribute table."
+        },
+        {
+            "name": "Body",
+            "kind_guess": "attribute_aggregate",
+            "surface": "references/descriptor_registry.yaml:49, references/names_index.yaml:56",
+            "detail": "Aggregate (placeholder, NOT wired). Computed: sum(Strength, Endurance, Agility). Key: agg.body. Status: placeholder."
+        },
+        {
+            "name": "Mind",
+            "kind_guess": "attribute_aggregate",
+            "surface": "references/descriptor_registry.yaml:50, references/names_index.yaml:57",
+            "detail": "Aggregate (placeholder). Computed: sum(Focus, Acuity, Will). Key: agg.mind. Status: placeholder."
+        },
+        {
+            "name": "Social",
+            "kind_guess": "attribute_aggregate",
+            "surface": "references/descriptor_registry.yaml:51, references/names_index.yaml:58",
+            "detail": "Aggregate (placeholder). Computed: sum(Attunement, Charisma, Bonds). Key: agg.social. Status: placeholder."
+        },
+        {
+            "name": "Influence",
+            "kind_guess": "faction_stat",
+            "surface": "references/descriptor_registry.yaml:65, references/names_index.yaml:61, references/glossary.md:105",
+            "detail": "Scale 1-7. Key: fac.influence. 'Social and cultural reach. Cannot drop below 1.'"
+        },
+        {
+            "name": "Wealth",
+            "kind_guess": "faction_stat",
+            "surface": "references/descriptor_registry.yaml:66, references/names_index.yaml:62, references/glossary.md:106",
+            "detail": "Scale 1-7. Key: fac.wealth. '0 = cannot Trade or fund Wealth-requiring actions.'"
+        },
+        {
+            "name": "Military",
+            "kind_guess": "faction_stat",
+            "surface": "references/descriptor_registry.yaml:67, references/names_index.yaml:63, references/glossary.md:107",
+            "detail": "Scale 1-7. Key: fac.military. '0 = cannot Muster.'"
+        },
+        {
+            "name": "Intel",
+            "kind_guess": "faction_stat",
+            "surface": "references/descriptor_registry.yaml:68, references/names_index.yaml:64, references/glossary.md:108",
+            "detail": "Scale 1-7. Key: fac.intel. 'Intelligence capacity.'"
+        },
+        {
+            "name": "Stability",
+            "kind_guess": "faction_stat",
+            "surface": "references/descriptor_registry.yaml:69, references/names_index.yaml:65, references/glossary.md:109",
+            "detail": "Scale 1-7. Key: fac.stability. '0 = Collapse trigger (P-15).'"
+        },
+        {
+            "name": "Legitimacy",
+            "kind_guess": "settlement_stat",
+            "surface": "references/descriptor_registry.yaml:78, references/names_index.yaml:68",
+            "detail": "Scale 0-7. Key: set.legitimacy. Component of Mandate derivation (two formulas exist)."
+        },
+        {
+            "name": "Popular Support",
+            "kind_guess": "settlement_stat",
+            "surface": "references/descriptor_registry.yaml:79, references/names_index.yaml:69",
+            "detail": "Scale 0-7. Key: set.popular_support. Component of Mandate derivation."
+        },
+        {
+            "name": "Prosperity",
+            "kind_guess": "settlement_stat",
+            "surface": "references/descriptor_registry.yaml:80, references/names_index.yaml:70",
+            "detail": "Scale 0-5. Key: set.prosperity. Enters Mandate size-weighting formula."
+        },
+        {
+            "name": "Defense",
+            "kind_guess": "settlement_stat",
+            "surface": "references/descriptor_registry.yaml:81, references/names_index.yaml:71",
+            "detail": "Scale 0-5. Key: set.defense."
+        },
+        {
+            "name": "Order",
+            "kind_guess": "settlement_stat",
+            "surface": "references/descriptor_registry.yaml:82, references/names_index.yaml:72",
+            "detail": "Scale 0-5. Key: set.order."
+        },
+        {
+            "name": "Combat Pool",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:212 (STRUCK), values_master.yaml:1150 (STALE), params/core.md:161 (CANONICAL)",
+            "detail": "CURRENT: max(5, Relevant History + 6) per params/core.md:161 (ED-900/904). STRUCK: (Agility x 2) + History + 3 still in values_master."
+        },
+        {
+            "name": "Stamina",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1122, params/core.md:161",
+            "detail": "Formula: Endurance x 5. Range 5-35. Combat resource."
+        },
+        {
+            "name": "Health",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1124, params/core.md:161",
+            "detail": "Formula: (Endurance + 6) x (max Wounds + 1). Wound track, never resets."
+        },
+        {
+            "name": "Coherence",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1192, params/core.md:161, glossary.md:49",
+            "detail": "Formula: 10 (starting); countdown to 0. Range 0-10. At 0: character becomes NPC (PP-261)."
+        },
+        {
+            "name": "Composure",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1136, params/core.md:161",
+            "detail": "Formula: Charisma x 3. Social endurance track. Debate resource."
+        },
+        {
+            "name": "Concentration",
+            "kind_guess": "derived_value",
+            "surface": "references/descriptor_registry.yaml (not listed), config.py:61",
+            "detail": "Formula: 3xFocus + 2xSpirit (Jordan 2026-06-03). Debate resource."
+        },
+        {
+            "name": "Thread Fatigue",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1164, params/core.md:161",
+            "detail": "Formula: Spirit x 5 (threshold). Range 5-35."
+        },
+        {
+            "name": "Thread Sensitivity",
+            "kind_guess": "practitioner_stat",
+            "surface": "glossary.md:60",
+            "detail": "Scale 0-100+. 'Perception depth and operation eligibility. Determines accessible operation scale.' UNREGISTERED in descriptor_registry."
+        },
+        {
+            "name": "Thread Pool Score",
+            "kind_guess": "derived_value",
+            "surface": "glossary.md:61",
+            "detail": "Formula: Thread Sensitivity / 10 (round down). 'Bonus dice added to Thread operation pools.' UNREGISTERED."
+        },
+        {
+            "name": "Resolve",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1206, params/core.md:1206",
+            "detail": "Formula: Spirit. Range 1-7."
+        },
+        {
+            "name": "Certainty",
+            "kind_guess": "derived_value",
+            "surface": "values_master.yaml:1178, params/core.md:161",
+            "detail": "Formula: 5 (starting, varies by background). Range 0-5. Cosmological worldview track."
+        },
+        {
+            "name": "Mending Stability",
+            "kind_guess": "clock",
+            "surface": "glossary.md:73, params/core.md:95",
+            "detail": "Range 100->0. Renamed from 'Rendering Stability' per ED-731. Baseline decay: -1 per in-game year (PP-255)."
+        },
+        {
+            "name": "Church Influence",
+            "kind_guess": "clock",
+            "surface": "glossary.md:74, params/campaign_modes.md:198",
+            "detail": "Range 0-100. Thresholds: 40=Assertive, 55=Reach, 60+=Seizure, 65=Dominant, 80=Ascendant, 100=Theocracy."
+        },
+        {
+            "name": "Institutional Pressure",
+            "kind_guess": "clock",
+            "surface": "glossary.md:75, params/campaign_modes.md:204",
+            "detail": "Range 0-100. 'Invasion threat tracker.' Start: 20. Threshold 75/80 = Altonian Vanguard (BG)."
+        },
+        {
+            "name": "Mandate",
+            "kind_guess": "derived_value",
+            "surface": "params/factions_personal.md:14 (LINEAR), module_contracts.yaml:600 (SATURATING)",
+            "detail": "LINEAR (params/factions_personal.md:14): round(0.5 x Legitimacy + 0.5 x Popular_Support). SATURATING (module_contracts.yaml:600): clamp(round(7T/(T+6)), 0-7) where T=sum W_s*(q_s/7), q_s=0.5L+0.5PS."
+        },
+        {
+            "name": "Piety Track",
+            "kind_guess": "track",
+            "surface": "glossary.md:86, descriptor_registry.yaml:108 (not_descriptors)",
+            "detail": "Range 0-10. Debate position tracker. 'Side A wins >=7; Side B <=3. Compromise 4-6.'"
+        },
+        {
+            "name": "Disposition",
+            "kind_guess": "track",
+            "surface": "glossary.md:160, descriptor_registry.yaml:108, mechanics_index.yaml:288",
+            "detail": "Range -5..+5 (flat, post-ED-912). 'NPC attitude state. Drives behaviour-tree branching.' Formerly Bonds-capped."
+        },
+        {
+            "name": "Renown",
+            "kind_guess": "track",
+            "surface": "descriptor_registry.yaml:108 (not_descriptors)",
+            "detail": "Listed in not_descriptors; NO DEFINITION exists."
+        },
+        {
+            "name": "Standing",
+            "kind_guess": "track",
+            "surface": "glossary.md:110, descriptor_registry.yaml:108",
+            "detail": "Range 0-10 (exception to 1-7 scale). 'Reputation track. No benefit above 7; 10 is cosmetic max.'"
+        },
+        {
+            "name": "Persuasion",
+            "kind_guess": "track",
+            "surface": "descriptor_registry.yaml:108 (not_descriptors)",
+            "detail": "Listed in not_descriptors; NO DEFINITION exists."
+        },
+        {
+            "name": "Evidence",
+            "kind_guess": "clock",
+            "surface": "descriptor_registry.yaml:109 (not_descriptors)",
+            "detail": "Listed as 'Evidence' in not_descriptors; carried in fieldwork_v30."
+        },
+        {
+            "name": "Combat",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors as 'Combat'), mechanics_index.yaml:206",
+            "detail": "Current formula: max(5, History+6) per params/core.md:161."
+        },
+        {
+            "name": "Argue",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors)",
+            "detail": "Listed in not_descriptors; formula in social_contest_v30."
+        },
+        {
+            "name": "Thread",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors)",
+            "detail": "Listed in not_descriptors; Thread-layer operations."
+        },
+        {
+            "name": "Fieldwork",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors)",
+            "detail": "Listed in not_descriptors; personal fieldwork scale."
+        },
+        {
+            "name": "Knot",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors), mechanics_index.yaml:350",
+            "detail": "Formula: (Bonds x 2) + 3 per mechanics_index.yaml:350. Tiers: distant -2..+5, close -5..+5."
+        },
+        {
+            "name": "MassCombat",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors)",
+            "detail": "Listed in not_descriptors; params/mass_combat.md carries content."
+        },
+        {
+            "name": "FactionDomain",
+            "kind_guess": "pool",
+            "surface": "descriptor_registry.yaml:110 (not_descriptors)",
+            "detail": "Listed in not_descriptors; faction-level action pool."
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-REG-001",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "Combat Pool triple-carried: values_master.yaml:212 lists (Agility x 2)+History+3 filed under nonexistent params/combat.md; values_master.yaml:1150 lists (Agility x 2)+weapon-History+3 filed under params/core.md; canonical params/core.md:161 specifies max(5, History+6) only.",
+            "evidence": "values_master.yaml:212 (pre-ED-901 struck formula, params/combat.md does not exist), values_master.yaml:1150 (stale source), params/core.md:161 (canonical: 'ratified 2026-05-29 R1 (ED-901; re-ratified ED-900/904)', 'Supersedes the struck (Agility x 2) + History + 3 form')"
+        },
+        {
+            "id": "F-REG-002",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "Mandate formula dual-carried, incompatible: params/factions_personal.md:14 carries linear round(0.5xLegitimacy + 0.5xPopular_Support); module_contracts.yaml:600 carries saturating clamp(round(7T/(T+6)), 0-7) where T is size-weighted settlement aggregate.",
+            "evidence": "params/factions_personal.md:14 ('backward-compat' note suggests linear is stale), module_contracts.yaml:563,600 ('Lesson-5 bound, saturating form, Stage-4 sim validated')"
+        },
+        {
+            "id": "F-REG-003",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Acuity vs Cognition: descriptor_registry.yaml:39 lists Acuity as primary (attr.mind.acuity, aliases: [Reasoning, Cognition]); glossary.md:37 lists Cognition as primary with no Acuity mention; names_index.yaml:49 marks Cognition as legacy alias (enforce: warn).",
+            "evidence": "descriptor_registry.yaml:39 (primary: Acuity), glossary.md:37 (primary: Cognition), ED-IN-0008 (documented conflict)"
+        },
+        {
+            "id": "F-REG-004",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Will vs Spirit: descriptor_registry.yaml:40 lists Will as primary (attr.mind.will, alias: Spirit); glossary.md:40 lists Spirit as primary; config.py:61 and params/core.md:247 use Spirit in live formulas (Concentration, Thread-Read pool).",
+            "evidence": "descriptor_registry.yaml:40 (primary: Will), glossary.md:40 (primary: Spirit), config.py:61 (CONC_SPIRIT=2.0), params/core.md:247 ('Spirit x 2 + History + TPS')"
+        },
+        {
+            "id": "F-REG-005",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Bonds absent from glossary.md attribute roster: glossary lists 7 attributes; descriptor_registry carries 9 (3 body + 3 mind + 3 social). Bonds is missing from glossary.",
+            "evidence": "glossary.md:27-41 (7-attribute table, no Bonds), descriptor_registry.yaml:30-44 (9-attribute roster, Bonds at line 44), glossary.md:31 (warning: 'conflicts with descriptor_registry's 9-attribute roster')"
+        },
+        {
+            "id": "F-REG-006",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Thread Sensitivity (TS) load-bearing practitioner stat (0-100+ scale, determines Thread operation eligibility, thresholds 30/50+) has no registry key: not in descriptor_registry, not in not_descriptors, not in names_index.",
+            "evidence": "glossary.md:60 (TS definition, live stat), mechanics_index.yaml:359 (thread_leap depends on TS), params/core.md:149 ('TS >= 30 Knot formation prerequisite')"
+        },
+        {
+            "id": "F-REG-007",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Thread Pool Score (TPS, formula TS/10) is derived bonus-dice source in live formulas (params/core.md:247 Thread-Read pool = Spirit x 2 + History + TPS) but unregistered: no key in descriptor_registry, not_descriptors, or names_index.",
+            "evidence": "glossary.md:61 (TPS definition), params/core.md:247 (TPS in live Thread-Read formula)"
+        },
+        {
+            "id": "F-REG-008",
+            "severity": "P3",
+            "kind": "orphan",
+            "calibration": "NEW",
+            "claim": "Renown listed in not_descriptors:tracks but never defined: descriptor_registry.yaml:108 lists it; no scale or formula anywhere.",
+            "evidence": "descriptor_registry.yaml:108 (not_descriptors tracks: [Piety, Disposition, Renown, Standing, Persuasion])"
+        },
+        {
+            "id": "F-REG-009",
+            "severity": "P3",
+            "kind": "orphan",
+            "calibration": "NEW",
+            "claim": "Persuasion listed in not_descriptors:tracks but never defined: descriptor_registry.yaml:108 lists it; no scale or formula.",
+            "evidence": "descriptor_registry.yaml:108 (not_descriptors tracks list)"
+        },
+        {
+            "id": "F-REG-010",
+            "severity": "P2",
+            "kind": "enforcement-gap",
+            "calibration": "NEW",
+            "claim": "not_descriptors uses abbreviations (CI, MS, IP) while glossary/names_index use full names; names_index.yaml MIRRORS block (line 28-32) omits not_descriptors, so tools/ci_names_consistency.py never validates abbreviation vs full-name consistency for clocks/pools/tracks.",
+            "evidence": "descriptor_registry.yaml:109 (not_descriptors: [... CI, ... MS, ... IP ...]), glossary.md:70-75 (full names: 'Church Influence', 'Mending Stability', 'Institutional Pressure'), names_index.yaml:28-32 (MIRRORS section lists attr/agg/fac/set only)"
+        },
+        {
+            "id": "F-REG-011",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "Rendering Stability (RS) name mismatch: glossary.md:73 correctly shows 'Renamed from Rendering Stability per ED-731'; values_master.yaml:190 header still references 'Rendering Stability (start)'; mechanics_index.yaml:778 still labels entry 'rs_track' as 'Rendering Stability world-track'.",
+            "evidence": "glossary.md:73 (current: Mending Stability, prior: Rendering Stability), values_master.yaml:190 (still says 'Rendering Stability (start)'), mechanics_index.yaml:778 (rs_track entry: 'Rendering Stability world-track')"
+        },
+        {
+            "id": "F-REG-012",
+            "severity": "P3",
+            "kind": "export-drift",
+            "calibration": "NEW",
+            "claim": "values_master.yaml quarantined-stale (ED-1084 banner): ~70 entries under nonexistent params/combat.md (struck Combat Pool formula), 8 entries leak from deliberately-superseded params/threadwork_superseded.md, generator tool (tools/extract_values.py) is dead (imports retired github_ops). No CI round-trip drift detection for prose.",
+            "evidence": "values_master.yaml:7-24 (QUARANTINED banner, documented rot: 70 entries + 8 entries + generator dead), CLAUDE.md \u00a75 (numbers live as prose, not typed data; no typed engine-params yet), tools/extract_values.py (dead)"
+        },
+        {
+            "id": "F-REG-013",
+            "severity": "P2",
+            "kind": "key-binding-gap",
+            "calibration": "NEW",
+            "claim": "Knot pool formula (Bonds x 2) + 3 lives in mechanics_index.yaml:350 and params prose but has no registry key: knots.pool not in key_type_registry_v30.md, knots mechanic module_contracts.yaml does not list pool in Key payload fields.",
+            "evidence": "mechanics_index.yaml:350 (primitives:pool: '(Bonds*2)+3'), key_type_registry_v30.md: zero knots.pool entry, module_contracts.yaml knots entry: lists impact_vector (strain) but not pool"
+        },
+        {
+            "id": "F-REG-014",
+            "severity": "P3",
+            "kind": "other",
+            "calibration": "NEW",
+            "claim": "descriptor_registry.yaml aggregates marked 'status: placeholder' (agg.body/mind/social lines 49-51) but no CI enforcement that they are not yet to be used; only a comment notes they are placeholders. names_index.yaml enforce: warn does not treat placeholders as blocked.",
+            "evidence": "descriptor_registry.yaml:49-51 (status: placeholder), CLAUDE.md \u00a78 (no rule enforcing placeholder-status blocks)"
+        }
+    ],
+    "coverage_notes": "SWEPT: descriptor_registry.yaml (all sections: attributes, aggregates, faction_stats, settlement_stats, by_reference, deprecated, not_descriptors); names_index.yaml (attr/agg/fac/set entries, proper-noun corpus noted but names not individually audited); glossary.md (Parts 1-8: attributes, derived stats, practitioner stats, world clocks, debate, combat, world/narrative, thread operations); values_master.yaml (header/schema/conflicts/full index sample for cross-file collisions); mechanics_index.yaml (schema + sample mechanics entries for quantity-bearing cross-references); canon sources: params/core.md (Pool Minimum, Attributes, Derived Scores, Combat Pool canon, MS Baseline Decay), params/factions_personal.md (Mandate formulas), params/campaign_modes.md (clock start values), module_contracts.yaml (Mandate saturating form, faction/settlement state scope, Knot pool). SKIPPED: (1) references/engine_params/combat_engine_v1.json (Class-C typed export; scope is prose registry layer only). (2) Proper-noun subfolders in names_index.yaml (world.* entries for NPCs/territories/factions \u2014 scope is attributes/quantities, not proper nouns). (3) Deprecated section resonance_style (ED-IN-0025 already tracked). (4) Full mechanics_index.yaml sweep (audit focused on quantity definitions, not all mechanic descriptions; only quantity-bearing entries sampled). (5) not_descriptors formula-lookup beyond registry lists (Argue, Thread, Fieldwork, MassCombat pools \u2014 formulas deferred to design-doc read). (6) by_reference entries (conv.*, axis.*, style.*, temp.* \u2014 structures sampled, canonical sources outside F-REG family). DETERMINISTIC EXTRACTION: All formulas verbatim with file:line citations; no interpretation or summarization."
+}
