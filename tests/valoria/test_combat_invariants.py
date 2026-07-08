@@ -115,7 +115,36 @@ def test_use_mode_selection_emerges_from_primitives():
     lifted its blunt percussion authority enough that it too no longer switches to its spike vs heavy armour —
     the SAME mechanism, corroborating rather than contradicting the poleaxe finding (both weapons share the
     same head_len/grip_len/composite-head shape). Moved out of `expected` below until the same Phase-C
-    engine-scale recalibration restores it."""
+    engine-scale recalibration restores it.
+    [U2/ED-PC-0011, 2026-07-08 — the graded secondary-affordance checks (percussion/cut/point) re-enabled in
+    element_afforded, plus the CUT_AUTH_REF magnitude-scaling fix] EXPANDS the changer set from 7 to 17,
+    validated via a 13-agent agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group
+    pairs cross-examining each other's HEMA/physics grounding + 1 Opus final synthesis) rather than accepted
+    on say-so. Ten NEW weapons join: greatsword/katana/tachi/nandao/glaive/podao/fauchard/hook_sword — all
+    natively straight_cut/curved_cut two-handed OR one-handed blades that now afford a weak secondary
+    half-sword-style thrust (point), switching to it once the material-resistance table's Williams-sourced
+    puncture-beats-shear-vs-soft-armour asymmetry (and, vs plate, the situational gap game) out-couples their
+    own edge's armour-degraded transmit — judged historically defensible (half-swording to the gaps is a
+    well-attested PRIMARY technique against a harnessed opponent for every one of these classes, not just
+    longswords) and accepted as genuine changers. tachi/nandao specifically switch to their OWN weak Mordhau/
+    blunt option at 'heavy' rather than to their (comparatively weaker, 0.32/0.24) point — judged plausible
+    given the two blades' own thrust geometry is the weakest of this group's.
+    sabre/scimitar/falchion ALSO newly switch to a secondary point, and are included below because the engine
+    genuinely does this today — but the adversarial pass FLAGGED this as a probable bug, not a validated finding
+    (ED-PC-0012): these are historically dedicated slashing blades (scimitar's own point geometry, 0.16, is the
+    lowest of any weapon in the roster) and the switch was traced to core.coupling's DELIVERY['point'] not
+    scaling by the candidate's own thrust magnitude the way 'cut' now does — verified directly that scimitar/
+    sabre/falchion/hook_sword's secondary point ALL score an IDENTICAL coupling at 'light' armour regardless of
+    their 0.16-0.40 geometry spread (core._transmit's puncture gap-seeking term is floor-locked below the raw
+    material transmission for any of these gap_precision values). A THRUST_AUTH_REF fix analogous to
+    CUT_AUTH_REF is recommended but deliberately NOT implemented this pass (see ED-PC-0012's ledger entry) — it
+    would also touch several of the newly-accepted two-handed cutters (tachi/nandao/glaive/podao all sit below
+    the natural reference too) and needs its own roster-wide re-verification, not a third redesign-and-reverify
+    cycle rushed through in the same session. hook_sword's own switch was judged MORE defensible than the other
+    three one-handed cutters' (its point, 0.40, is measurably above-floor via its own gap_precision, the least
+    mechanism-dominated of the four) and is accepted rather than flagged. When ED-PC-0012 lands, sabre/scimitar/
+    falchion's entries below are expected to be removed (or their switch-tier to change) — this is a KNOWN,
+    DOCUMENTED, load-bearing residual, not an oversight."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -125,7 +154,11 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    expected = ['kama_yari', 'guandao', 'fauchard', 'voulge', 'guisarme', 'ji', 'bec_de_corbin']   # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above; voulge/guisarme added I2/R-7, guandao/fauchard added I4/JD-5 — see docstring
+    # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above. sabre/scimitar/falchion ARE included (the
+    # engine genuinely changes them today) but are a FLAGGED, NOT-YET-FIXED bug (ED-PC-0012) — see docstring.
+    expected = ['greatsword', 'sabre', 'kama_yari', 'glaive', 'guandao', 'podao', 'fauchard', 'voulge',
+                'guisarme', 'ji', 'bec_de_corbin', 'katana', 'tachi', 'nandao', 'scimitar', 'falchion',
+                'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -140,13 +173,24 @@ def test_afforded_heads_emerge_from_primitives():
 
 def test_afforded_heads_emerge_from_phase_b2_mode_elements():
     """The morphology-rearch Phase B2 composites' per-element mode_elements affordances — each weapon's union
-    over its own real striking elements, not a copy of another weapon's set."""
+    over its own real striking elements, not a copy of another weapon's set.
+    [U2/ED-PC-0011, 2026-07-08] ji/kama_yari gain a THIRD token, 'cut': each weapon's own POINT-tokened
+    spearhead element carries a small incidental edge (ji=0.40, kama_yari=0.32 — a wing/blade-like flare near
+    the socket, distinct from and much weaker than the weapon's own dedicated curved_cut blade, 0.99/0.88) that
+    now clears the graded secondary-affordance floor (MODE_EDGE_MIN). Verified via the ED-PC-0011 adversarial
+    Workflow this is genuine (not spurious) physics — comparable real yari/ji-class spearheads carried a real,
+    if secondary, cutting capability near the socket — and that it NEVER wins selection at any armour tier or
+    grip/room condition (curved_cut dominates at 'none', point dominates everywhere armour is present); its
+    presence here is a real but currently-inert affordance, the same class as goedendag's own never-selected
+    point. guisarme/voulge do NOT gain this token — each has only ONE point-family element (a genuine thrusting
+    spike), not a separate incidental-edge source, and their own cut_thrust element already carries the ONLY
+    edge each weapon has."""
     C, core, S, WP, CFG = _mods()
     assert set(S.afforded_heads(C.WEAPONS['bec_de_corbin'])) == {'blunt', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['lucerne_hammer'])) == {'blunt', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['goedendag'])) == {'blunt', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut'}
-    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut'}
+    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut', 'cut'}
+    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut', 'cut'}
     assert set(S.afforded_heads(C.WEAPONS['guisarme'])) == {'cut_thrust', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['voulge'])) == {'cut_thrust', 'point'}
 

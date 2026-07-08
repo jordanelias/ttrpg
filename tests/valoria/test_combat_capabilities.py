@@ -52,9 +52,29 @@ def test_table_covers_full_roster():
 
 
 def test_pure_cutters_have_no_gates():
-    """A pure-cut weapon (greatsword / sabre) can neither half-sword, gap-thrust, nor deliver percussion."""
-    for n in ('greatsword', 'sabre'):
-        assert not any(C.capability_table()[n].values()), n
+    """[UPDATED 2026-07-08, U2/ED-PC-0011/ED-PC-0012] Originally asserted greatsword/sabre have NO alternate-
+    mode gates at all. The graded secondary-affordance checks (ED-PC-0011) gave both a real 'point' token, so
+    the ORIGINAL premise ("pure cutter" = zero alt-mode capability) is now split into two different cases,
+    validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/physics grounding:
+    - greatsword's secondary thrust (half-sword-to-the-gaps) is REAL, historically well-attested capability —
+      removed from this test entirely; it is no longer a "pure cutter" and correctly so (see
+      test_use_mode_selection_emerges_from_primitives for its accepted changer status).
+    - sabre's secondary thrust is a FLAGGED, NOT-YET-FIXED BUG (ED-PC-0012): its own point geometry is weak
+      (0.26, and scimitar/falchion share the same class at 0.16/0.23) but core.coupling's DELIVERY['point']
+      does not scale by it (unlike 'cut', fixed this session via CUT_AUTH_REF) — verified directly that
+      sabre/scimitar/falchion/hook_sword's secondary point ALL score an IDENTICAL coupling at 'light' armour
+      regardless of their wildly different geometry, a floor-locked artifact of core._transmit's puncture path,
+      not earned capability. sabre is KEPT in this test, deliberately left failing (not silently patched or
+      quietly dropped) until ED-PC-0012's THRUST_AUTH_REF fix lands and correctly suppresses this floor-locked
+      credit — matching this suite's existing convention (test_gap_game_poleaxe_spikes_plate,
+      test_falsifiable_heft_ordering) of a documented, intentionally-red assertion over a silently-adjusted one.
+    """
+    assert not any(C.capability_table()['sabre'].values()), (
+        "sabre should have zero alt-mode gates (a dedicated slashing sabre has no genuine thrust/percussion "
+        "capability) but currently shows gap_thrust=True — a KNOWN, FLAGGED bug (ED-PC-0012): core.coupling's "
+        "DELIVERY['point'] doesn't scale by the candidate's own thrust magnitude, so sabre's weak (0.26) "
+        "incidental point gets full credit. See this test's docstring."
+    )
 
 
 # ── I7b CONTACT AXIS (D8/D9, 2026-07-03) ───────────────────────────────────────────────────────────
