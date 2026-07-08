@@ -1,6 +1,6 @@
 # ed_options.md — Subtractive docket (Jordan-rulable)
 
-## Status: PROPOSED (2026-07-08) · one row per subtractive verdict · grouped by lane
+## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · one row per subtractive verdict · grouped by lane
 Columns: `action | lane | verdict | criterion | intent_gate | severity | retires_downstream | one_line`. KEEP verdicts (62) omitted here — they carry no docket action. Judge each row as-if-built.
 
 ---

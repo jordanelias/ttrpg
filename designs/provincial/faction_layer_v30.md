@@ -210,7 +210,7 @@ When a faction's Stability reaches 0 at Accounting end, the faction collapses. T
 
 **Step 1 — Attribute snapshot.** Mandate drops to 0 immediately (political legitimacy is gone). All other attributes (Military, Wealth, Influence) freeze at their current values. The Mandate drop occurs before the freeze.
 
-**Step 2 — Territory transition.** All territories controlled by the collapsed faction become Uncontrolled. Accord in those territories drops to 0 (Revolt state). Units in those territories become Masterless — they hold position but take no orders. Any faction may Claim Masterless units via Domain Action (Military Ob 2; Success: units transfer to claiming faction at current strength; Failure: units disband).
+**Step 2 — Territory transition.** All territories controlled by the collapsed faction become Uncontrolled. Accord in those territories drops to 0 (Revolt state). Units in those territories become Masterless — they hold position but take no orders. Any faction may Claim Masterless units via Domain Action (Military Ob 2; Success: units transfer to claiming faction at current strength; Failure: units disband). **[ED-FA-0006, 2026-07-08 — DISTILL]** This is not a separate mechanic: "Claim Masterless" is a **target-type variant of March/Conquest** (Action 4). A Masterless target resolves at Military Ob 2 with disband-on-failure instead of the standard battle-engine path — the player's decision (spend a Military-gated action to take a territory, accepting a stated failure risk) is Conquest's own target-selection, not a distinct §1.5 rule. Retained here as the collapse-aftermath *entry point*; the resolution folds into Conquest's target handling.
 
 **Step 3 — Officer and NPC fate.** Named officer NPCs of the collapsed faction enter Independent status. They retain their Conviction, Beliefs, and Disposition values. They may be recruited by other factions via Social Contest (Ob = Leadership Deviation Ob + 2). Unrecruited officers remain in their home settlement as unaffiliated NPCs and may initiate independent actions per npc_behavior_v30 §4.2.
 
@@ -437,14 +437,16 @@ If Church uses Sacred Veto to block a motion that protects Church interests: add
 
 ### §5.4 Parliamentary Actions
 
-| Action | Proposer min | Vote | Target effect | Proposer cost | Duration | Rescission |
+**[ED-FA-0006, 2026-07-08 — pessimist-action audit DISTILL] The five *punitive* motions below — Censure · Embargo · Blockade · Combined Embargo+Blockade · Outlawry — are one parameterized action, "Parliamentary Sanction," at ascending severity tiers, not five independent mechanics.** They share an identical decision structure — *propose* (at a minimum stat) → *vote* → *apply* a Stability/Wealth/Mandate penalty → *renew-or-lapse* — and differ only in the tier parameters shown in the table (proposer threshold, vote bar, penalty magnitude and duration) plus two tier-specific riders: **Blockade's Military-3 gate** and **Outlawry's "CB granted to all."** The player's choice among them is a severity dial ("how hard to hit this target"), not five qualitatively different moves. The tier names are retained because downstream rules key off them by name — the Sacred Veto eligibility list, the Casus Belli grants, the Guilds' AI vote rule, and the §5.6 Stability→Accord erosion rule all cite specific tiers; this reframe removes the authoring/balance/port cost of five discrete rules, not the tiers or their hooks. The *constructive* motions further down the table (Subsidy, War Authorisation, Treaty Ratification, Recognition Challenge, Succession Endorsement) remain genuinely distinct actions, each with its own object — they are **not** part of this parameterization.
+
+| Action (Parliamentary Sanction tier, then constructive motions) | Proposer min | Vote | Target effect | Proposer cost | Duration | Rescission |
 |---|---|---|---|---|---|---|
-| **Censure** | Mandate 2 | Majority | Stability −1; Mandate −1 | None | One-time | N/A |
-| **Embargo** | Mandate 3 | Majority | Wealth −1/season | Wealth −1/season | Until lifted | Majority |
-| **Blockade** | Military 3, Mandate 3 | Majority | Wealth −2/season; Stability −1 (once) | Military −1 (garrison) | Until lifted | Majority |
-| **Combined Embargo+Blockade** | Both | Supermajority | Wealth −2/season; Stability −1/season; Mandate −1 (once) | Wealth −1/season + Military −1 | Until lifted | Supermajority |
-| **Outlawry** | Mandate 5 | Supermajority | Mandate −2; Stability −2; CB granted to all | Mandate −1 | Permanent until petitioned | Supermajority; target Mandate ≥ 3 to petition |
-| **Subsidy** | Mandate 2 | Majority | Recipient Wealth +1 | Wealth −1 | One-time | N/A |
+| **Censure** *(Sanction — Mild)* | Mandate 2 | Majority | Stability −1; Mandate −1 | None | One-time | N/A |
+| **Embargo** *(Sanction — Trade)* | Mandate 3 | Majority | Wealth −1/season | Wealth −1/season | Until lifted | Majority |
+| **Blockade** *(Sanction — Naval; Military-3 gate)* | Military 3, Mandate 3 | Majority | Wealth −2/season; Stability −1 (once) | Military −1 (garrison) | Until lifted | Majority |
+| **Combined Embargo+Blockade** *(Sanction — Total)* | Both | Supermajority | Wealth −2/season; Stability −1/season; Mandate −1 (once) | Wealth −1/season + Military −1 | Until lifted | Supermajority |
+| **Outlawry** *(Sanction — Maximal; CB-to-all rider)* | Mandate 5 | Supermajority | Mandate −2; Stability −2; CB granted to all | Mandate −1 | Permanent until petitioned | Supermajority; target Mandate ≥ 3 to petition |
+| **Subsidy** *(constructive)* | Mandate 2 | Majority | Recipient Wealth +1 | Wealth −1 | One-time | N/A |
 | **War Authorisation** | Military 2 | Majority | Attacker: first military_advance vs target this season is free action (Casus Belli created) | None | 1 season | N/A |
 | **Treaty Ratification** | Any signatory | Majority | Treaty binding on all participating factions | None | Permanent until breach | Majority |
 | **Recognition Challenge** | Mandate 4 | Supermajority | Target: −1 TCV from victory calculation (no territory change) | Mandate −1 | Until rescinded | Majority |

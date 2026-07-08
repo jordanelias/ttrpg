@@ -215,11 +215,11 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Govern (Consul Inward) | floor(Prosperity / 2) + 1 | −1 own capital |
 | Trade (Consul Outward) | floor(Prosperity / 2) + 1 | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | floor(NPC Stability / 2) + 1 | — |
-| Diplomacy between players | Negotiated | Not a roll |
+| Diplomacy between players | — | **DISTILLED (ED-FA-0006):** not a separate Standard Action — free-form inter-player deal-making *is* Treaty's Concession-declaration step (`faction_layer_v30` §3.3 Phase 2). Use that; retired here to avoid double-cataloguing one beat. |
 | Formal Crown Treaty (Senator Outward) | floor(target L / 2) + 1 | Crown only. PP-512/513/514/523. See victory_v30.md §3.1. |
-| Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
+| Thread Operation (Pontifex/Weaver) | Ob 2 base | **Single-sourced to the TW lane (ED-FA-0006):** a Pontifex/Weaver card may spend its Domain-Action slot on a Threadwork operation, but the operation itself is defined once in `threadwork_v30 §2` / `sim/thread/operations.py` — not re-catalogued as an FA action. Slot-eligibility + PP-182 co-movement protocol stand. |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
-| Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |
+| Spy (Tribune Outward) | floor(target Intel / 2) + 1 | **Failure (ED-FA-0006):** the target learns it was probed and gains +1D on its next Intel-directed action against you — giving Spy the specified downside its sibling Survey already has (previously blank). |
 | Survey (Consul Inward) | (5 − Proximity Rating) + 1, min 1 | Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Pool: Influence. On Success: reveal 1 undiscovered POI (Resource: Prosperity +1; Secret: +1D next mil/intel action; Remnant: Thread op Ob −1 ×2 seasons + Thread Debt token; Anomaly: MS −1 immediately + Warden Cooperation +1 eligible). On Failure targeting Depth ≥ 3: +1 Church Attention Pool. See fieldwork_design_v1.md §8.1. (PP-628) |
 | Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |

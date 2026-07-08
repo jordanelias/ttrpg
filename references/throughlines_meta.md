@@ -198,6 +198,45 @@ Full definitions with concrete examples: infill §7.
 - Τ break → supersession log if intended; otherwise fix.
 - Q fail → iterate.
 
+### §8.2-A Subtractive disposition (ED-IN-0027, ratified 2026-07-08)
+
+§8.2 routes every *failed* check to a constructive disposition (build / wire / redesign / flag /
+iterate). It has no verdict for an *existing* action that should not exist, or should exist only as
+part of a more general one. §8.2-A supplies that half: the canonical mapping from N/Ω/Q + the §7
+Failure Lexicon to a **subtractive verdict**, so scope can be *reduced* upstream of realization, not
+only added to downstream of it.
+
+**Cardinal rule — judge as-if-built, never by build state.** Evaluate how an action *would*
+contribute if built as its design intends. Stub / unwired / unbuilt / Godot-unported status is
+orthogonal to the verdict (routing metadata only). A never-built action whose realized contribution
+is load-bearing is **KEEP**; a fully-built action that would be dominant or redundant even when
+realized is **CUT**. **Any subtractive verdict citing build-state as a reason is invalid by
+construction.**
+
+| Canonical signal (judged as-if-built) | Verdict |
+|---|---|
+| N-fail — not a load-bearing dynamic even realized (Fantasy imposition) | **CUT** |
+| Duplicate coverage — the same job even if both are built | **PRUNE** (re-home) / **MERGE** (in-lane) |
+| Abstractable / Edge-case — folds into a general rule, no lost decision | **DISTILL** |
+| Q-elegant fail — not restatable after one read even well-built | **REFINE** |
+| Dominant strategy (Ω-d, М-6) — a free win is not a choice | **CUT / PRUNE** |
+| Flavor-only (Ω, Μ-γ, М-3) — no decision the player weighs | **CUT / DISTILL** |
+| Passes N + Ω + Q as-if-built under adversarial attack | **KEEP** |
+
+**Verdict ladder** (least→most removed): `KEEP → REFINE → DISTILL → MERGE → PRUNE → CUT`. Prefer the
+weakest verdict that resolves the failure — REFINE/KEEP preserve the action; DISTILL/MERGE preserve
+the *decision* while dissolving the *packaging*; PRUNE/CUT remove both.
+
+**Intent gate** (on the design, never the code): DELIBERATE / NOT-INTENDED / UNDETERMINED. *"Not
+wired/built/ported yet"* is never a gate value — it routes to the additive resolution program.
+
+**Two binding guards.** (1) A subtractive verdict is a *scope reduction* only if it names the
+downstream work (resolution-plan Stratum/OPT or lane task) it retires or shrinks — otherwise it
+drops to an ordinary §8.2 finding. (2) No CUT/PRUNE/MERGE/DISTILL is final until an independent
+adversarial pass has **steelmanned the action** (argued, as-if-built, for KEEP) and *failed* against
+direct source. Full method + the 2026-07-08 corpus application (97 actions; 0 top-level CUTs, the
+disposition landed against real over-articulation): `designs/audit/2026-07-08-pessimist-action-audit/`.
+
 ### §8.3 Conflict resolution
 
 Higher tiers override lower. N precedes Ω — a proposal that passes Ω but fails N is rejected before Ω even applies.

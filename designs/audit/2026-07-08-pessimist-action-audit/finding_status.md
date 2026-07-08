@@ -1,6 +1,6 @@
 # finding_status.md — tallies, calibration, critic funnel
 
-## Status: PROPOSED (2026-07-08) · 97 action-objects across 8 lanes
+## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · 97 action-objects across 8 lanes
 
 ## 1 · Verdict tallies
 

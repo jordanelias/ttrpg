@@ -6,6 +6,18 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **ED-PC-0007 (DEFERRED 2026-07-08, Jordan: "Defer PC") — pessimist-audit PC verdicts do NOT execute now.**
+  The pessimist-action audit (ED-IN-0027) judged the discrete `combat_v30 §4` ACTIONS menu, but that menu is
+  **PARTIALLY SUPERSEDED** (ED-900): its resolution layer is replaced by the canonical continuous resolver
+  `designs/scene/combat_engine_v1/` (the ONLY up-to-date PC surface; `combat_v30 §4` and `sim/personal/combat.py`
+  are stale). `combat_engine_v1` has no discrete player-action menu yet, and it **already realizes** the
+  consolidations the audit recommended (continuous commit ⊇ Feint; Contact node I7b/D8-D9 ⊇ Disarm/Tie-Up/Retrieve;
+  base offence/defence split ⊇ Full-Guard/Dodge) — so the audit retroactively validated the move to
+  `combat_engine_v1` rather than finding live work. **No edits made to any stale doc.** The forward constraints
+  (don't re-introduce these as separate discrete verbs when a player layer is built; Rescue/Take-a-Breath/Stunt
+  refinements) attach to **ED-PC-0001** (the post-R3 player-input surface). Re-open only if `combat_engine_v1`
+  grows a discrete menu that reintroduces the over-articulation.
+
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
   (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1…JD-8 remain OPEN, loudly held back).** Implementation
   progress:
