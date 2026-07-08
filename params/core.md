@@ -1,7 +1,7 @@
 <!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 <!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-381, PP-383–386, PP-389, PP-551, PP-553, PP-610–611, PP-615, PP-617, PP-623, PP-627, PP-628, PP-629, PP-632, PP-633 -->
-<!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
+<!-- PP-247 (historical, superseded by ED-901/ED-900/ED-904 — see the Combat Pool row below for the live formula and citation; do not read this line as current) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
 
@@ -160,6 +160,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Composure | Charisma × 3 | 3–21 | Social damage buffer before Rattled. Strain scaled ×3. Equipment (attire, regalia) adds flat Composure. (ED-694, replaces Cha+6) |
 | Combat Pool | max(5, Relevant History + 6) | min 5 | **Agility-INDEPENDENT** resolution pool — ratified 2026-05-29 R1 (ED-901; re-ratified ED-900/904 with combat_engine_v1). Supersedes the struck (Agility × 2) + History + 3 form (PP-615/PP-247 era). Single source: `designs/scene/combat_engine_v1/` (see `references/module_contracts.yaml` personal_combat). ED-1084 propagation. |
 | Thread Fatigue | Spirit × 5 (threshold) | 5–35 | Thread action economy. Counts up from 0. Contact breaks at threshold. Variable operation costs (Pulling 5, Locking 7, Dissolution 10). Focus sets max operations per session (Focus − 1). (ED-694, replaces Contact Rounds = Focus) |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`designs/scene/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `designs/scene/derived_stats_v30.md` §4 as authoritative.** |
 | Certainty | 5 (starting, varies by background) | 0–5 | Cosmological worldview: Solmund orthodoxy (5) → Thread acceptance (0). See PP-551 section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |

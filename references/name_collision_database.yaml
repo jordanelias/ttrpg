@@ -10,6 +10,9 @@
 #
 # Last updated: 2026-05-08
 # Authority: vocabulary audit + silo cohesion analysis
+# Disposition (RATIFIED 2026-07-08, ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot,
+# no live regeneration path. Its rulings (e.g. Political Pool below) remain citable prior art even
+# though this file itself is not tool-consumed or actively re-audited.
 
 # ═══════════════════════════════════════════════════════════════
 # ABBREVIATION REGISTRY — one abbreviation, one owner, no exceptions
@@ -466,7 +469,7 @@ scrape_findings_2026_06_04:
     - {acr: CT, expands: "Piety Track", in: "faction docs", correct: PT}
     - {acr: CV, expands: "Conviction",  in: "faction docs", correct: PT}
   deprecated_term_residual:       # bare-term usage — current gate does NOT catch (Rule-3 gap)
-    - {term: "Public Support", at: "settlement_layer_v30 L631 (stat table)", correct: "Popular Support", note: "PS rename 2026-05-30 recorded in registry but not propagated into this table"}
+    - {term: "Public Support", at: "settlement_layer_v30 L631 (stat table)", correct: "Popular Support", note: "STALE CITATION, corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) -- that line already correctly reads Popular Support; the real, previously-untracked residual was references/mechanical_terms_index.md (two rows, now fixed same pass), carrying forward both the deprecated name AND the superseded pre-LPS-2e faction-level-accumulator model. This entry corrected in place rather than deleted (ED-306 precedent: append/correct, do not silently drop a tracked item)."}
     - {term: "Mandate Pool", at: "ci_political_v30 §7.2 (Political-Pool-vs-Mandate-Pool heading)", note: "likely explanatory/historical section — verify before sweep"}
   corrections_to_prior_assumptions:
     - {item: "Coup Counter", was: "assumed struck (stale chat memory)", actual: "LIVE Loewenritter coup-viability clock (derived_stats clock table; faction_layer 'Coup Counter = 4'); silo 12 — register as current, NOT deprecated"}

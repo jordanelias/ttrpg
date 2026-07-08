@@ -7,7 +7,15 @@
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied | Sections §4.2, §4.3, §6, §7 SUPERSEDED-BY GD-1 (2026-05-17 — peninsula-only victory)2026-04-17 (ED-643)
 ## Scope: Piety Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
-> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Piety Track (CT) is always written in full. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100;
+> renamed from **Theocracy Counter (TC)**). Piety Track (PT) is always written in full.
+> **Citation corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7):** this note previously read
+> "renamed from Church Influence per ED-782" — self-referential nonsense (fixed to name the actual
+> predecessor, TC) — and cited a second ID, "ED-756", that does not exist anywhere in
+> `canon/editorial_ledger.jsonl`. ED-782 itself IS a confirmed, already-flagged double-booked ID
+> (`_migration_flag: "ID-CONFLICT: multiple distinct descriptions — Jordan resolve"`, with an
+> `_migration_alt` note referencing exactly this TC→CI glossary rename) — not re-resolved here;
+> cited as the known-conflicted ID it is, not asserted as clean.
 
 ---
 

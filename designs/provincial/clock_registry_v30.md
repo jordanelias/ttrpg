@@ -24,7 +24,7 @@ Progress tracks (0-base; 0 = not yet developed):
 
 | Track | Owner | Range | Start | Source |
 |-------|-------|-------|-------|--------|
-| Torben Loyalty | Crown → Löwenritter | 0–7 | 3 | params_board_game.md §Torben (PP-498) |
+| Torben Loyalty | Crown → Löwenritter | 0–7 | 7 | `params/bg/core.md` §Starting Values (PP-599 supersedes PP-498's start=3; corrected 2026-07-08, ED-IN-0029 docket OPT-AV-7 — this page's own CANONICAL freshness claim was self-contradicted by carrying the superseded value) |
 | Elske Loyalty | Crown | 0–7 | 4 | params_board_game.md §Elske |
 | Löwenritter Autonomy | Crown-Löwenritter (public) | Loyal/Restless/Autonomous/Split | Loyal | conflict_architecture_proposal §Graduated Autonomy |
 | Popular Will (PW) | Shared (Hybrid only) | 0–5 | 0 | params_board_game.md §RM Founding [PROVISIONAL: ED-795 — staleness report says STRUCK per canonical_definitive_r2; verify] |
