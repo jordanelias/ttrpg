@@ -110,11 +110,16 @@ lane_ids:
   lanes:
     MB: { name: "Mass battle",         next_free: 7 }   # ED-MB-0001: movement/pathing audit (ED-1096) fix-plan execution + adversarial review, 2026-07-02; ED-MB-0002: Cannae gauge-band root-cause audit, ratified + DG-3/DG-4 ruled 2026-07-04; ED-MB-0003: D1-D4 defects found+fixed, DG-1/DG-3 completion + DG-2-as-workplan ruled+executed, 2026-07-05; ED-MB-0004: partition-invariance fix + RC-5 preliminary finding, resolved 2026-07-08; ED-MB-0005: DG-2 commanded-entry slice built, 2026-07-08; ED-MB-0006: Command abandoned for combat pool -- troop type/quality/numbers model (POOL_QUALITY_MODEL), 2026-07-08
     # ED-MB-0004 allocated 2026-07-07 (status open): unaddressed-areas ed_options OPT-13 (gauge triage continuation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    PC: { name: "Personal combat",     next_free: 12 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry); ED-PC-0002 allocated 2026-07-05: U0 units-honesty record (renumbered from a concurrent ED-PC-0001 allocation at merge — see its ledger entry)
+    PC: { name: "Personal combat",     next_free: 13 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry); ED-PC-0002 allocated 2026-07-05: U0 units-honesty record (renumbered from a concurrent ED-PC-0001 allocation at merge — see its ledger entry)
     # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     # ED-PC-0005 allocated 2026-07-07 (status open): ED-1042 residual wound-Ob prose drift, re-filed from ED-PC-0004/OPT-15 during the Stratum-A execution PR. NOTE: a plan-text label "ED-PC-0005" in designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md:115 (U4 item) is NOT an allocation and must renumber when actually filed (the ED-PC-0001 plan-label collision class). RESOLVED 2026-07-08 (Jordan ruling "never -1D, always fractional Ob").
     # ED-PC-0006 allocated 2026-07-08 (status resolved): non-combat wound fractional-Ob calibration — follow-on to the ED-PC-0005 ruling. RESOLVED 2026-07-08: adopted +0.15 Ob per wound (cumulative), reusing ED-1041's combat "attacking" magnitude, propagated to Thread ops/fieldwork/mass-battle Command + params mirrors (see ledger entry). next_free bumped 6→7.
-    # ED-PC-0007 allocated 2026-07-08 (status deferred): pessimist-audit PC action-consolidation work items, decision ratified by ED-IN-0027. DEFERRED 2026-07-08 (Jordan: "Defer PC") — the audited combat_v30 §4 ACTIONS menu is PARTIALLY SUPERSEDED (ED-900) by the canonical continuous resolver combat_engine_v1/, which has no discrete player-action surface yet; the subtractive consolidations are already realized/moot under combat_engine_v1's design. No edits to the stale surface; forward constraints attach to ED-PC-0001 (see ledger entry). next_free bumped 7→8.
+    # ED-PC-0007 allocated 2026-07-08 (status deferred): pessimist-audit PC action-consolidation work items.
+    # DEFERRED 2026-07-08 (Jordan: "Defer PC") — the audited combat_v30 §4 ACTIONS menu predates the current
+    # continuous resolver combat_engine_v1/, which has no discrete player-action surface yet; the subtractive
+    # consolidations are already realized/moot under combat_engine_v1's design. No edits to the stale surface.
+    # Forward constraints (see ledger entry for the full list) attach to the post-R3 player-input-surface item.
+    # next_free bumped 7→8.
     # ED-PC-0008 allocated 2026-07-08 (status open, needs_jordan): U2 scoping findings — attempted U2 (graded
     # mode affordance + Phase-C percussion enactment) this session and found it materially underspecified
     # relative to consolidation_v1.md's one-line description; three NEW forks surfaced (percussion self-gate
@@ -145,21 +150,35 @@ lane_ids:
     # entry numerically follows ED-PC-0008/0009 despite being chronologically first — file/allocation order
     # diverge here precisely because of the merge-time renumber, exactly as this file's own header docs warn
     # ("never max+1"; read next_free, allocate, bump). next_free bumped 10->11.
-    # ED-PC-0011 allocated 2026-07-08 (status: IN PROGRESS, not yet filed as a ledger entry): live mode-selection
-    # wiring for JD-4 (Mordhau reversed-grip percussion) + JD-9 (thrust_factor floor drop), the integration ED-
-    # PC-0009 explicitly deferred as a real architectural gap. core.py: FIX-1b's percussion-authority transmit
-    # scaling extended from `mat in ('mail','plate')` to every material (verified byte-identical for mace/
-    # poleaxe, whose perc sits at/near PERC_AUTH_REF so the ratio clamps to 1.0). systems.py: the three graded
-    # secondary-affordance checks (percussion/cut/point) re-enabled in element_afforded via dict.setdefault.
-    # A second, related gap found and being fixed under this same ED: core.coupling's DELIVERY constants for
-    # the 'cut'/'point' tokens don't scale with the candidate's own derived cut/thrust magnitude (only the
-    # blunt/percussion path does) — an incidental secondary 'cut' token (e.g. rapier) can outscore a weapon's
-    # own dedicated 'point' purely because DELIVERY['cut']=1.5 > DELIVERY['point']=1.45, regardless of how weak
-    # the incidental edge actually is. NOTE: this ID was drafted into in-progress code comments (core.py,
-    # systems.py) BEFORE the ED-PC-0007 merge collision above was discovered and U1 was renumbered to claim
-    # ED-PC-0010 first — comments originally said "ED-PC-0010" and were corrected to ED-PC-0011 to avoid a
-    # second collision on the same slot. Ledger entry to be filed once wiring + roster-wide adversarial
-    # validation + test updates land. next_free bumped 11->12.
+    # ED-PC-0011 allocated 2026-07-08 (status: resolved): live mode-selection wiring for JD-4 (Mordhau reversed-
+    # grip percussion) + JD-9 (thrust_factor floor drop), the integration ED-PC-0009 explicitly deferred as a
+    # real architectural gap. core.py: FIX-1b's percussion-authority transmit scaling extended from
+    # `mat in ('mail','plate')` to every material, with a dual-reference split (PERC_AUTH_REF=8.0 unchanged for
+    # mail/plate, PERC_AUTH_REF_SOFT=6.5 for none/cloth) found necessary by an adversarial review of a first
+    # attempt that collapsed both onto one reference and silently regressed poleaxe/bec_de_corbin/
+    # lucerne_hammer. systems.py: the three graded secondary-affordance checks (percussion/cut/point)
+    # re-enabled in element_afforded via dict.setdefault. Also fixes the related gap: core.coupling's
+    # DELIVERY['cut'] now scales by the candidate's own derived cut magnitude via CUT_AUTH_REF=0.70 (anchored
+    # on the weakest attested native cutter, hook_sword) — an incidental secondary 'cut' token (e.g. rapier)
+    # no longer outscores a weapon's own dedicated 'point' regardless of how weak the incidental edge is.
+    # Validated via a 13-agent agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group
+    # pairs + 1 Opus synthesis) against HEMA/physics grounding across the full roster. NOTE: this ID was
+    # drafted into in-progress code comments (core.py, systems.py) BEFORE the ED-PC-0007 merge collision above
+    # was discovered and U1 was renumbered to claim ED-PC-0010 first — comments originally said "ED-PC-0010"
+    # and were corrected to ED-PC-0011 to avoid a second collision on the same slot. next_free bumped 11->12.
+    # ED-PC-0012 allocated 2026-07-08 (status: open): a SECOND, structurally identical gap to the one ED-PC-0011
+    # fixed for 'cut', found by the same adversarial Workflow, this time on 'point' — DELIVERY['point']=1.45 is
+    # NOT scaled by the candidate's own derived thrust magnitude, and the puncture transmit path is floor-
+    # locked (verified: scimitar/sabre/falchion/hook_sword's secondary point ALL score the identical coupling
+    # at 'light' armour regardless of their wildly different point geometry, 0.16-0.40). Judged by the
+    # adversarial pass to matter concretely for the one-handed sabre-class roster (sabre/scimitar/falchion —
+    # FLAG-AS-FORK, their historically-attested pure-slashing identity makes this switch a floor-locked
+    # artifact, not earned capability) but NOT for the two-handed cutter roster (their switches are historically
+    # defensible regardless). Deliberately NOT implemented this pass — a THRUST_AUTH_REF fix analogous to
+    # CUT_AUTH_REF would also touch several two-handed cutters (tachi/nandao/glaive/podao, whose own point sits
+    # below the proposed reference too) and needs its own roster-wide re-verification before landing, not a
+    # third redesign-and-reverify cycle rushed through in the same session. See ledger entry for the full
+    # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 5 }   # ED-FI-0004 allocated 2026-07-08: pessimist-audit FI work items — Interview merge, Dialogue-Lattice refine — execution pending (decision ED-IN-0027). ED-FI-0001 allocated 2026-07-05: NERS-audit E-12/GAP-1 accepted work item (investigation-lane audit); ED-FI-0002 allocated 2026-07-05: edge-playability §7 item 7 (counter-espionage loop), edge-playability §7 batch (PR #81)
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     SC: { name: "Social contest",      next_free: 14 }  # ED-SC-0013 allocated 2026-07-08: Auto/Manual Resolution Duality doctrine (PROPOSED) — reframes ED-SC-0011 as the zoom-in expansion; forks A-D needs_jordan; next_free 13→14. ED-SC-0012 allocated 2026-07-08: pessimist-audit SC work items — Recall/Prep cap, Appraise, Wager — execution pending (decision ED-IN-0027). ED-SC-0001 allocated 2026-07-05: NERS-audit E-10 accepted work item (dominance sweeps); ED-SC-0002..0010 allocated 2026-07-05: Fable 5 social-contest audit acceptance sweep (PR #80, Jordan post-merge instruction) — P0 decision docket 0002-0005 (echo keying / tracker naming / pool formula / bonus-stack cap; forks awaiting Jordan's picks, needs_jordan), consequence-spine work 0006-0007, contract refresh 0008, Stage-4 entry criteria 0009, Chronicle focalization+consumer 0010

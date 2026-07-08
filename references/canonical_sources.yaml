@@ -113,7 +113,7 @@ systems:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "3f1f16ae17d92534d04dd13329612fd29793b726"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "8961f2ed6d2ac16203812c33d121f0dfbb09b11c"
+    canonical_sha__params__threadwork_md: "4be763afc7633d1db6322438d3c66174e310e9e2"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
