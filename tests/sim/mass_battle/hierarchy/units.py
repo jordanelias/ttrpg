@@ -188,6 +188,10 @@ _ORDER_SAFE_FIELDS = frozenset({
     'stance', 'instructions', 'unit_type', 'role',
     'target_condition', 'target_delay_ticks', 'order_target_idx',
     'escort_of', 'escort_offset', 'escort_engage_on_contact',
+    # [DG-2, Jordan-ruled "build it now" 2026-07-08] `yielding` is a pure behavioural switch (like
+    # `stance`), read fresh every tick via `yield_active` -- no cached derived state keyed off it,
+    # same reasoning as every other field in this set.
+    'yielding',
 })
 
 # [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
@@ -296,6 +300,15 @@ class Subunit:
     routed: bool = False
     broken: bool = False
     discipline_start: Optional[int] = None
+    # [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md, Jordan-ruled "build it now"
+    # 2026-07-08] A yielding subunit gives ground under pressure but keeps FIGHTING and keeps FACING
+    # the threat -- the mechanical distinction from `routed` (which turns away and stops fighting).
+    # Default False -> inert/byte-exact for every existing Subunit; entry is commanded-only this
+    # pass (a 'yield' order's `behavior` dict sets this True directly via check_orders' existing
+    # generic setattr application -- no new order-primitive code needed), gated on
+    # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
+    # entry -- ordering a too-disordered subunit to yield is simply a no-op, not a special case.
+    yielding: bool = False
     # [Stage C] Timed/conditional order queue -- fired in sequence by check_orders (core/contact.py),
     # called once per tick per side, before assign_targets. Empty tuple -> the consumer's loop body
     # never executes for any existing Subunit (byte-exact).
@@ -387,6 +400,15 @@ class Subunit:
     @property
     def eff_discipline(self):
         return self.discipline if self.discipline is not None else (self._u().discipline if self._u() else 5)
+    @property
+    def yield_active(self):
+        """[DG-2 §2.5 anti-abuse, Jordan-ruled "build it now" 2026-07-08] The single, shared gate
+        every yield consumption site (movement, facing-lock, combat-pool malus, no-volley) checks --
+        discipline-gated (a too-disordered subunit's yield order is a no-op, not honored) and
+        melee-only ("ranged troop types already have kite; yielding is not a second kiting mechanic
+        for archers to exploit for permanent standoff"). One property, not five repeated inline
+        conditions, so the gate can't drift out of sync between call sites."""
+        return self.yielding and self.eff_discipline >= D_YIELD and self.unit_type != 'ranged'
     @property
     def eff_morale(self):
         if self.morale is not None: return self.morale
@@ -652,6 +674,11 @@ class Subunit:
             return self._sweep_goal(enemy_cells)
         if PC_KITE_ENABLED and 'kite' in self.instructions:
             return self._kite_goal(enemy_cells)
+        # [DG-2, Jordan-ruled "build it now" 2026-07-08] Discipline-gated at the CONSUMPTION site
+        # (not at entry) -- a subunit ordered to yield below D_YIELD simply falls through to the
+        # plain default steering below, exactly as if `yielding` were never set.
+        if self.yield_active:
+            return self._yield_goal(enemy_cells)
         return None
 
     def _envelop_goal(self, enemy_cells):
@@ -758,6 +785,19 @@ class Subunit:
             return None  # too far -> close in via the plain default approach (matches legacy 'toward')
         return (ar, ac)  # in band -> hold position, keep volleying (matches legacy early return)
 
+    def _yield_goal(self, enemy_cells):
+        """DG-2 §2.3 (designs/proposals/mass_battle_fighting_withdrawal_v1.md): giving ground under
+        pressure, reusing `_kite_goal`'s reflect-through-anchor flee vector -- the anchor-level
+        equivalent of "move away from the nearest engaged enemy". Unlike kite, this ALWAYS flees
+        (yielding isn't a standoff-band behaviour); the "at most 1 cell/tick" cap and the ED-MB-0001
+        §6 path-budget bound are both enforced by the caller (`_node_advance`'s step-cap), not here,
+        matching how `_envelop_goal`/`_sweep_goal`/`_kite_goal` all leave step-magnitude to the caller."""
+        if not enemy_cells:
+            return None
+        ar, ac = self._node_anchor
+        nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
+        return (2 * ar - nearest[0], 2 * ac - nearest[1])  # reflect through anchor -> flee vector
+
     def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
         body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
@@ -796,6 +836,12 @@ class Subunit:
         step = max(0, math.floor(base * disc_mult) + stance_mod)
         if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
             step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
+        # [DG-2 §2.5 anti-abuse, Jordan-ruled "build it now" 2026-07-08] "Speed capped below any
+        # realistic pursuer's closing speed (1 cell/tick ceiling)" -- a yielding body cannot
+        # indefinitely maintain a standoff gap the way a true kiter can. Applies regardless of the
+        # unit's own speed stat (a cavalry subunit ordered to yield still only gives 1 cell/tick).
+        if self.yield_active:
+            step = min(step, 1)
         toi_deferred = bool(FIELD_MOVEMENT and enemy_cells_float)
         ar, ac = self._node_anchor
         nar, nac = ar, ac
@@ -964,7 +1010,16 @@ class Subunit:
         # (a body-level heading, a different quantity) had built up -- zero rate-limiting, the exact
         # hyper-reactive instant-snap this facing model exists to prevent. Slewed here too, reusing
         # _slew_facing (the same function the legacy path already uses for this), gated identically.
-        if PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
+        # [DG-2 §2.3, Jordan-ruled "build it now" 2026-07-08] "Facing is preserved toward the enemy"
+        # -- mechanically load-bearing (octagon_angle's zone gating is a pure function of facing), so
+        # this fires REGARDLESS of PC_FACING_MODEL (which defaults OFF): a yielding body must not
+        # inherit the raw-movement-vector facing that would otherwise point it in its flee direction,
+        # the exact "faces away like a routing body" failure this mechanic exists to avoid. Default
+        # `yielding=False` -> inert for every existing scenario, independent of the facing-model toggle.
+        if self.yield_active and self.target_atom is not None:
+            _tc = self.target_atom.centroid()
+            self.cell_facing_vec[cid] = (_tc[0] - nr, _tc[1] - nc)
+        elif PC_FACING_MODEL and PC_FACING_ATTENTION and self.target_atom is not None:
             _tc = self.target_atom.centroid()
             _desired = (_tc[0] - nr, _tc[1] - nc)
             _cur = self.cell_facing_vec.get(cid, self._node_facing or (self.advance_dir, 0))
@@ -1194,7 +1249,14 @@ class Subunit:
             # v11: record raw movement vector for octagon angle
             _desired = (r_step if cell_target else actual_speed * self.advance_dir,
                         c_step if cell_target else 0)
-            if PC_FACING_MODEL:
+            # [DG-2 §2.3, Jordan-ruled "build it now" 2026-07-08] Same facing-lock as the node path's
+            # equivalent block (see its comment) -- fires regardless of PC_FACING_MODEL. Default
+            # `yielding=False` -> inert; this legacy grid path is otherwise the frozen byte-exact
+            # oracle and untouched by this change unless a scenario explicitly sets `yielding`.
+            if self.yield_active and self.target_atom is not None:
+                _tc = self.target_atom.centroid()
+                _desired = (_tc[0] - my_r, _tc[1] - my_c)
+            elif PC_FACING_MODEL:
                 # (a) attention: face the ENGAGED target if one is committed, else the movement vector
                 if PC_FACING_ATTENTION and self.target_atom is not None:
                     _tc = self.target_atom.centroid()

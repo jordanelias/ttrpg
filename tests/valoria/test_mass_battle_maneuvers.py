@@ -152,10 +152,11 @@ def test_envelop_reaches_rear_node():
     need to scale by a subunit's own troop share for genuine partition invariance, or is "N
     simultaneous full-strength attacking fronts overwhelm one defender" the historically-correct
     emergent mechanism and the bands need reconsidering?) -- explicitly not decided or silently tuned
-    away here. DG-2 (a fighting-withdrawal/yield mechanic) remains a documented but unbuilt workplan
-    (designs/proposals/mass_battle_fighting_withdrawal_v1.md) -- not required to unlock the draws
-    (that was DG-1/DG-3's doing), still worth building for historical fidelity to Cannae's actual
-    thin-and-yielding center, on its own timeline.
+    away here. **2026-07-08 update:** Jordan ruled the partition-invariance question a genuine defect
+    (fixed, see orchestration.py's `_convergence_scale`/ED-MB-0004) and DG-2 "build it now" (the
+    commanded-entry slice is now built, see hierarchy/units.py's `yielding`/`yield_active` +
+    tests/valoria/test_mass_battle_yield.py) -- neither closed H3-H6's overshoot on its own; see
+    tests/coverage_matrix.md's 2026-07-08 entry for the honest numeric record of both.
 
     See tests/coverage_matrix.md's 2026-07-05 entry for the full numeric record."""
     r = _val.v_envelop(path='node', seeds=_CI_SEEDS)

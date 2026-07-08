@@ -5,11 +5,25 @@ unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imp
 orchestration via `from mass_battle.core.exchange import *` so every call site is unchanged.
 [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base]"""
 import math
+import os as _exch_os
 from mass_battle.config import *
 from mass_battle.geometry import cells_to_orig_coords
 
 __all__ = ['_stamina_pool_penalty', 'derive_command', 'command_base_pool', 'subunit_combat_pool',
-           'pair_pool_contribution']
+           'pair_pool_contribution', '_pair_engaged_troops', 'D_YIELD', 'YIELD_POOL_MULT']
+
+# [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md §5, Jordan-ruled "build it now"
+# 2026-07-08] Both magnitudes below are explicitly flagged NOT independently derived, per the
+# proposal doc's own §5 -- reused from the nearest existing precedent rather than invented, and
+# disclosed as such (this repo's anti-fabrication discipline). Both are default-inert: `yielding`
+# defaults False on every Subunit, so neither constant is read unless a 'yield' order fires.
+D_YIELD = int(_exch_os.environ.get('D_YIELD', '3'))  # [CALIBRATED-DEBT] reuses this file's OWN
+# existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
+# 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
+# enough order to give ground at all (the 0.7x tier), not the severely-degraded 0.4x tier.
+YIELD_POOL_MULT = float(_exch_os.environ.get('YIELD_POOL_MULT', str(PC_SHOCK_HOLD_BRACE)))  # [CALIBRATED-DEBT]
+# reuses PC_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
+# proposal doc's §5 suggested -- "traded ground at a cost", a reduced-but-nonzero combat pool.
 
 
 def _stamina_pool_penalty(stamina):
@@ -71,6 +85,14 @@ def subunit_combat_pool(unit, atom):
         raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
     else:
         raw = min(atom.eff_size, unit.command) + unit.command + pen + stam_pen
+    # [DG-2, mass_battle_fighting_withdrawal_v1.md §2.3, Jordan-ruled "build it now" 2026-07-08]
+    # A yielding subunit fights at a reduced-but-nonzero pool ("traded ground at a cost", not
+    # "stopped fighting") -- gated on discipline (a subunit too disordered to give ground in order
+    # just doesn't get the malus removed; it fights at full pool as if not yielding at all, since a
+    # low-discipline 'yield' order below D_YIELD is a no-op by design, not a punishment). Default
+    # `yielding=False` on every Subunit -> inert for every existing scenario.
+    if getattr(atom, 'yield_active', False):
+        raw *= YIELD_POOL_MULT
     return max(1, math.floor(raw))
 
 
@@ -103,22 +125,29 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     gauge battery, flagged as a possible future refinement rather than blocking this fix."""
     if atom.cur_troops <= 0 or base_pool <= 0:
         return 0.0
+    weighted_troops = _pair_engaged_troops(atom, contact_abs_cells)
+    if weighted_troops <= 0:
+        return 0.0
+    pool_per_troop = base_pool / atom.cur_troops
+    return pool_per_troop * weighted_troops
+
+
+def _pair_engaged_troops(atom, contact_abs_cells):
+    """Troop-weighted engagement magnitude for ONE atom in ONE pair -- the same "actual troops in
+    contact, plus depth-weighted support from ranks behind" quantity `pair_pool_contribution`
+    needs internally, factored out so a caller can also use it to weigh SEVERAL atoms against a
+    shared target (see orchestration.py's convergence-normalization pass, the fix for the
+    partition-invariance gap this docstring's sibling function's "known accepted residual" para
+    flags on the OTHER axis -- one atom split across enemies vs several atoms sharing one enemy).
+
+    [2026-07-04 adversarial-review fix, carried from pair_pool_contribution] Iterates the atom's
+    ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier) -- see
+    pair_pool_contribution's docstring for why."""
     contact_orig = set(cells_to_orig_coords(atom, set(contact_abs_cells)))
     if not contact_orig:
         return 0.0
     front_r = min(r for r, c in contact_orig)
     weighted_troops = 0.0
-    # [2026-07-04 adversarial-review fix] Iterate the atom's ACTUAL cell_troops directly, not a
-    # freshly recomputed CELL_PATTERN_FN[shape](tier). A continuous-scale Subunit (troops=/
-    # concentration= set) lays out its real footprint via footprint_for(shape, troops,
-    # concentration) -- a different coordinate scheme than the legacy tier-keyed pattern, and tier
-    # is documented as vestigial on that path. Recomputing from CELL_PATTERN_FN silently missed
-    # every real cell outside the small legacy-tier rectangle, collapsing weighted_troops (and thus
-    # the whole pair's pool) to 0 for any continuous-scale subunit whose footprint doesn't happen to
-    # be a subset of that rectangle -- confirmed by direct repro (a tier=4 troops=8000 Line's real
-    # 70-cell footprint vs. the tier's own 35-cell pattern). cell_troops is already the authoritative,
-    # footprint/drift-aware source of truth (same one cells()/check_drift use), so iterate it
-    # directly and use its own (orig_r, orig_c) keys instead of asking CELL_PATTERN_FN separately.
     cell_troops = getattr(atom, 'cell_troops', None) or {}
     for pid, troops in cell_troops.items():
         if troops <= 0:
@@ -129,5 +158,4 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
         elif SUPPORT_STACK_ENABLED and orig_r > front_r:
             depth = orig_r - front_r
             weighted_troops += troops * SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
-    pool_per_troop = base_pool / atom.cur_troops
-    return pool_per_troop * weighted_troops
+    return weighted_troops
