@@ -543,9 +543,11 @@ Personal economic capacity. Range: 0–5. Cap: 5.
 
 **Starting Resources:** Crown officer: 2. Hafenmark merchant: 3. Varfell scholar: 2. Church functionary: 2. RM organizer: 1. Independent: 1.
 
-**Sources:** Faction salary (+1/season at Standing 2+, +2 at Standing 4+). Settlement governance (+1/season per settlement with Prosperity ≥ 3). Trade action (Cognition + History, Ob varies by settlement Trade stat, in Port/City). Guild contracts (+1 to +3, one-time). Loot (+1 per valuable). Gifts received (+1).
+**Sources:** Faction salary (+1/season at Standing 2+, +2 at Standing 4+). Settlement governance (+1/season per settlement with Prosperity ≥ 3). Guild contracts (+1 to +3, one-time — includes trade ventures in Port/City settlements, Ob varying by the settlement's Trade stat). Loot (+1 per valuable). Gifts received (+1).
 
-**Uses:** Equipment (1). Bribe/gift (1). Hire agent for 1 season (2). Fund settlement development +1D (2). Military equipment upgrade (3). Sponsor settlement event, Order +1 (1). Economic Leverage via personal Resources (3).
+**Uses:** Equipment (1). Bribe/gift (1). Hire agent for 1 season (2). Military equipment upgrade (3). Economic Leverage via personal Resources (3).
+
+**[ED-SE-0005, 2026-07-08 — SE subtractive-action reconciliation.]** Three former §9 economic verbs are consolidated per the ratified pessimist-action audit (`designs/audit/2026-07-08-pessimist-action-audit/`, ED-IN-0027): the standalone **Trade** income roll is PRUNED (personal-only, mechanically indistinct from the other income sources) and folded into *Guild contracts* as its Port/City trade case (above); **Fund settlement development +1D** is MERGED into the `Develop` governance verb's funding structure (the Treasury method in `governance_play_redesign_v1`), rather than carried as a parallel flat dice-bonus purchase; and the free **Sponsor settlement event** (Order +1, no downside) is retired into the single canonical **Sponsor** governance verb, which carries a recurring **Debt** obligation (`governance_play_redesign_v1` §1.3) — closing the dominant-strategy duplication in which the free version strictly dominated the obligation-bearing one.
 
 ---
 

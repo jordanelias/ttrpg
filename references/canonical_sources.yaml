@@ -101,7 +101,7 @@ systems:
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "ef12b7739ddafa525bd48dc9cd80398895e0b284"
+    canonical_sha__designs__scene__combat_v30_md: "449cb26ec5bc02fe422d628c3a528821b850b34f"
     # params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
     # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
     # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
@@ -133,7 +133,7 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "f78e32c2a4bc47d6e2434f3ac56ed9d9ca62a54c"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "165809e5421da98b46a8cd8bbb60c4315886b97e"
     political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
@@ -207,7 +207,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "f78e32c2a4bc47d6e2434f3ac56ed9d9ca62a54c"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "165809e5421da98b46a8cd8bbb60c4315886b97e"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -477,7 +477,7 @@ systems:
     canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
     design_doc: designs/architecture/player_agency_v30.md
-    canonical_sha__designs__architecture__player_agency_v30_md: "db286678adf29a015b968bc2705fc37d11718027"
+    canonical_sha__designs__architecture__player_agency_v30_md: "907edc0d0fee32977ad70ed33e3cadd242e0e379"
     index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "2bc2cbebf87d02dcc0877983f4a1ca49e3220d8d"
+    canonical_sha__references__module_contracts_yaml: "2403b6636e203dbb0e7e8d9d075944d26329e373"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
