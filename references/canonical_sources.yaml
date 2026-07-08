@@ -98,7 +98,7 @@ systems:
     params: params/core.md
     canonical_sha__params__core_md: "724c4f310640f7c8de9c1ac4e05d22d40b1f250f"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
+    canonical_sha__params__bg__core_md: "db6e988325ddd9dab3e65377732d61da1e943000"
   combat:
     design_doc: designs/scene/combat_v30.md
     canonical_sha__designs__scene__combat_v30_md: "449cb26ec5bc02fe422d628c3a528821b850b34f"
@@ -189,7 +189,7 @@ systems:
     canonical_sha__params__scale_transitions_md: "fb16c8ee41067a43ae944ab88f97b5a747115a46"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "ee7571c228fa1c9897d1931a9d5686a7692da97b"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "0a091996a56d9e3fa75c0fcbd0e5502eb47ddde8"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "2403b6636e203dbb0e7e8d9d075944d26329e373"
+    canonical_sha__references__module_contracts_yaml: "07f888a02f814e95629275c99405ea377153b9e7"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
