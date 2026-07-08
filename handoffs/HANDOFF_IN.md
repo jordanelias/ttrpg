@@ -8,6 +8,12 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-B SECOND SLICE 2026-07-08: knots.py ED-912 rebuild (C-TW-12
+  CLOSED).** `sim/personal/knots.py` rebuilt onto the bidirectional −5..+5 gauge (TIER_RANGE/
+  TIER_START; rupture +5; −5 Tempered Close-only absorb-once; break/betrayal Disposition −3;
+  positive-strain Close-break Scar) matching the doc side; pinned test
+  `sim/tests/test_knots_ed912.py` (7 cases; knots had zero coverage). Closes ED-FI-0003's sim
+  residual; ED-WR-0005 still carries C-TW-3 + C-TW-4/6/8/10/11. F7/seed-0 goldens unmoved (island).
 - **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk
   sim truth-alignment deferred from Stratum A (resolution_plan_v1.md §9). **ED-871 CLOSED
   end-to-end** — `sim/thread/operations.py` `attempt_mending` cost −1 → 0 + Mending exempted from
