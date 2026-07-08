@@ -21,6 +21,14 @@ REGENERATING THE GOLDEN (only when a change is *intended* to move balance)
 print(r.n, r.win_share, r.all_winners, r.battles_mean)"
 Then update GOLDEN below and say so in the commit. A surprise failure here means a
 change altered simulation output — investigate before regenerating.
+
+REGENERATED 2026-07-08 (ED-SC-0006, party-derivation bridge): the seed-1 campaign now
+crosses the Stability Crisis trigger and its Emergency Council contest actually resolves
+(previously every contest scene deferred — the kernel was reachable-in-code but
+dead-in-campaign; see scene_dispatch._emergency_council_parties), consuming RNG draws
+that used to never fire and moving this golden's win_share/all_winners/battles_mean.
+This is the intended flip, not a regression — see test_mc_v18_resolves_at_least_one_contest
+below.
 """
 import os
 import sys
@@ -30,14 +38,15 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-from sim.mc_v18 import run_batch  # noqa: E402
+from sim.mc_v18 import run_batch, run_campaign  # noqa: E402
 
-# Golden batch, regenerated 2026-06-30 (deterministic; verified stable across repeat runs).
+# Golden batch, regenerated 2026-07-08 (ED-SC-0006 — see module docstring; deterministic,
+# verified stable across repeat runs).
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 50.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
-GOLDEN_WINNERS = {'Crown': 1, 'Church': 1}
-GOLDEN_BATTLES_MEAN = 38.0
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+GOLDEN_WINNERS = {'Crown': 1, 'Varfell': 1}
+GOLDEN_BATTLES_MEAN = 30.0
 
 
 def test_mc_v18_batch_is_deterministic():
@@ -57,6 +66,17 @@ def test_mc_v18_batch_matches_golden():
     assert r.win_share == GOLDEN_WIN_SHARE, f"win_share drifted: {r.win_share}"
     assert r.all_winners == GOLDEN_WINNERS, f"all_winners drifted: {r.all_winners}"
     assert r.battles_mean == GOLDEN_BATTLES_MEAN, f"battles_mean drifted: {r.battles_mean}"
+
+
+def test_mc_v18_resolves_at_least_one_contest():
+    """ED-SC-0006 (party-derivation bridge): across the golden batch, at least one Emergency
+    Council contest must actually resolve — previously ALWAYS 0 (fable5_social_contest_audit_v1.md
+    N-1: the promoted kernel was reachable in code but dead-in-campaign). This is what
+    test_f7_named_zero_assertions_islands_unreachable (test_f7_smoke_oracle.py) predicted would
+    trip; it happens to still read 0 for that particular seed-42/n=8 sample (Stability Crisis is
+    seed-dependent and rare), so this seed-0 golden is the one that demonstrates the bridge live."""
+    total = sum(run_campaign(seed=_SEED + i).scenes_resolved for i in range(_N))
+    assert total > 0, f"no contest resolved across the seed-{_SEED} golden batch (got {total}) — the party-derivation bridge may have regressed"
 
 
 def test_mc_v18_win_share_is_well_formed():
