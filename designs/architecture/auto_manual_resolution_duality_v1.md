@@ -1,62 +1,84 @@
 # Auto / Manual Resolution Duality (v1)
 
-## Status: PROPOSED — drafted 2026-07-08 at Jordan's request; Jordan-vetoable throughout. Per ED-1094, review-and-merge of the PR that lands this ratifies the DOCTRINE by default; the open forks in §6 stay `needs_jordan` and are not ratified by that merge.
+## Status: Doctrine RULED 2026-07-08 (Jordan) — forks A/B/D resolved; fork C (calibration tolerance) the one residual, carried to the parity harness (§6–§8). Merging the landing PR ratifies the doctrine (ED-1094).
 ## ED: ED-SC-0013
-## Origin: Jordan's Total-War framing, 2026-07-08 — "the extent to which faction parliament actions are the auto-resolve version of playing them out as a scene, in parallel to Total War where you can play the battle or auto it."
+## Origin: Jordan, 2026-07-08 — "faction parliament actions are the auto-resolve version of playing them out as a scene, in parallel to Total War where you can play the battle or auto it" + "every season of game is about specific events and actions that occur on a general interface/slate, so every action and decision are about something in particular."
 
 ---
 
-## 1. The principle
+## 1. The slate is the spine
 
-Every contested event in Valoria has two resolution **fidelities** of the *same* underlying conflict:
+Every season, the engine generates a **Scene Slate** — a general interface of **specific** events. This is not new design: it is `player_agency_v30 §4` (implemented as `sim/autoload/scene_slate.py`). The Slate is:
 
-- **Auto-resolve** — the engine computes an outcome algorithmically on aggregate state, in one step.
-- **Play it out** — the engine resolves the same conflict as a full personal-scale **scene**.
+- **specific** — each entry is a particular event at a particular settlement (a named revolt, a succession, a heresy trial), not an abstract category;
+- **priority-ranked** — `scene_slate` is a priority queue; mandatory events (`scale_transitions_v30 §4.3.2`, `zoom_in_out.check_mandatory_triggers`) sit at Priority 0, world-state events (§4.3.3) at Priority 1;
+- **Conviction-biased** — generation surfaces events that intersect the player's active Convictions (player_agency §4), so what appears is *about something the player cares about*;
+- **budgeted** — the player has **3–5 scene actions per season**; there are always more opportunities than actions. *Choosing what to attend is the gameplay.*
 
-The scale-transition **zoom in / out** protocol (`scale_transitions_v30 §4`) **is** the toggle between them: **zoom out = auto-resolve; zoom in = play it out.** This is the Total War auto-resolve / fight-the-battle duality, and it is architecturally load-bearing — the two contest engines Valoria already carries are **not redundant**; they are one conflict at two fidelities.
+The load-bearing sentence is already in canon (player_agency §4.2): **"Opportunities not pursued do not wait — they resolve through NPC AI and clock advancement without player input, often in ways the player would not have chosen."**
 
-## 2. The two fidelities (reference instance: the Parliamentary vote)
+That clause **is** the auto-resolve of a played scene. So the auto/manual duality is not a new mechanic bolted onto the game — **it is the resolution-fidelity axis of the Slate that already exists.** Every action and decision is *about* a specific slate event; the only question is at what fidelity each event is resolved.
 
-| | Auto-resolve | Play it out |
+## 2. The duality: two fidelities of one slate event
+
+A slate event has two resolution fidelities of the *same* underlying conflict:
+
+- **Play it out** — the event is resolved as a full personal-scale **scene** (the pursued event; the player spends a scene action).
+- **Auto-resolve** — the event is resolved algorithmically on aggregate state, in one step (the un-pursued or over-budget event; "resolved through NPC AI without player input").
+
+The scale-transition **zoom in / out** protocol (`scale_transitions_v30 §4`) is the toggle: **zoom in = play it out; zoom out = auto-resolve.** This is the Total-War auto-resolve / fight-the-battle duality, per specific event.
+
+## 3. Fidelity is a spectrum, not a binary
+
+Canon already carries a **third, middle** fidelity — **Witness Mode** (player_agency §4.2, "Mandatory overflow"): when more mandatory events fire than the player has actions, the un-attended ones are *witnessed* — the player gets the surface event plus **one free Read/Appraise** (a single roll, "not auto-success"), but does not play the scene. So the axis is:
+
+| Fidelity | What the player does | Precedent (Football Manager) |
 |---|---|---|
-| **Engine** | `run_parliamentary_vote` — faction-scale §10 Mandate-pool roll on aggregate state (`sim/cross_scale/parliamentary_bridge.py`) | the personal social-contest kernel — argue-pool exchanges, genre/stasis/rhetoric, a *named* orator (`sim/personal/contest/`) |
-| **Inputs** | aggregate faction stats (`L/Sta/W/I/Mil`) | concrete actors (attributes, History, Convictions, Beliefs) |
-| **Cost** | one roll | a played scene |
-| **Toggle** | stay zoomed out | `zoom_in` |
+| **Played** | resolves the scene interactively (full agency) | watch the full 3D match |
+| **Witnessed** | present, one light roll, no control | commentary-only |
+| **Auto** | not present; NPC-AI resolves it | instant result |
 
-The Parliamentary vote wired in ED-SC-0006/0007 (now `ECHO_TRANSPORT` default ON) is Valoria's **first auto-resolver**. Its played-out counterpart is the promoted contest kernel — today reachable only in tests, because the personal party-derivation is unbuilt (ED-SC-0011).
+The doctrine governs all three as one spectrum; "auto vs manual" is shorthand for its ends.
 
-## 3. The calibration constraint (the load-bearing part)
+## 4. Acclaimed precedents (why this is the right shape)
 
-The auto-resolver and the played scene **must be distributionally consistent on matched inputs**:
+- **Football Manager** — the cleanest analog: every **fixture is specific** (this match, these players, this rivalry), resolved at three fidelities of the *same* match engine — full match / commentary / instant result — calibrated so instant ≈ played. Witness Mode is its commentary.
+- **Total War** — specific battles (this army, this place), auto-or-play *per battle*; auto is unbiased in expectation but you cannot *outplay* it.
+- **Crusader Kings** — event-driven to the core: the slate *is* the event/decision feed; every card is a specific character in a specific situation; the decision is always *about* a particular thing.
+- **XCOM** — the strategic slate surfaces specific missions; you play the ones that matter, the rest are abstracted.
+- **Disco Elysium / Pentiment** — the "played scene" done right: every check is *about* a specific confrontation with a specific person.
 
-> **E[ auto outcome | inputs ] ≈ E[ played outcome | inputs ].**
+player_agency §4's own design (budget-as-triage, opportunities-resolve-without-you) already imports this lineage; the doctrine names it.
 
-**Rationale — this is exploit-prevention, not aesthetics.** The auto-resolver emits *canonical* consequences (Mandate penalties, Domain Echoes) into the strategic layer. If the two modes diverge in expectation, whoever chooses the mode is **mode-shopping** for the better outcome — the political equivalent of save-scumming a battle. Consistency is what makes the choice of fidelity *free of strategic advantage*, leaving it a choice of **richness/agency** only. That is the property that lets both modes coexist.
+## 5. Reference instance: the Parliamentary vote (and its debt)
 
-**Acceptance oracle.** A **parity harness** comparing `parliamentary_bridge` (auto) against the personal kernel (played) on matched inputs, asserting the win / lose / compromise distributions agree within a stated tolerance. This is a new consistency gate — and it is the acceptance criterion for ED-SC-0011 (§5).
+The first auto-resolver shipped is the faction-scale §10 Parliamentary vote (`sim/cross_scale/parliamentary_bridge.py`, ED-SC-0006/0007, `ECHO_TRANSPORT` default ON); its played counterpart is the personal contest kernel (`sim/personal/contest/`), reached for the emergency-council scene via ED-SC-0006 (#96).
 
-**Corollary.** The endgame is plausibly **one engine run at two fidelities**, not two independent mechanics. The kernel's own `faction.py` adapter (`coalition_vote` / `succession` — the §5 Parliamentary action modelled *on* the contest engine) is evidence the reduction is achievable. Whether to unify onto one engine or hold two engines consistent via the harness is an open fork (§6, FORK-A).
+**Debt against §1:** the vote as shipped is a **generic per-season roll**, not the resolution of a *specific motion drawn from the slate*. That violates the slate principle. The doctrine's chief build implication is to **event-parameterize the auto-resolver** — each season it should auto-resolve the *specific* motions on the Slate (a war declaration here, a succession there), so the auto and played fidelities resolve the *same* slate event. (That re-architecture is a separate build, not this doc.)
 
-## 4. Escalation policy: default-auto, opt-in-play
+## 6. The calibration constraint
 
-- **Default is auto.** The engine auto-resolves every season's vote (`ECHO_TRANSPORT` ON). This matches the no-GM model (the engine resolves everything) and Total War (most battles auto-resolved).
-- **A conflict escalates to a played scene when the stakes justify the fidelity** — e.g. the focal party is player-controlled, a Total Victory is reachable, or a Belief/Conviction is on the line. The existing mandatory scene triggers (`scale_transitions_v30 §4.3.2`) are the home for this escalation gate.
-- **Who chooses to zoom** is, today, **engine policy** — there is no RTS-style player layer yet, so the escalation trigger is an engine rule. It becomes a player-facing control if/when a player layer lands (§6, FORK-D).
+Across fidelities, the outcome distribution of a given event **must be consistent on matched inputs**:
 
-## 5. ED-SC-0011, reframed
+> **E[ auto outcome | event ] ≈ E[ played outcome | event ].**
 
-ED-SC-0011 (contest live-dispatch — route `scene_dispatch` to the promoted kernel) is reframed as **the zoom-in expansion**: instantiate a concrete played contest (named orators with attributes / History / Convictions derived from aggregate faction state) that is **calibrated to the auto-resolver per §3**. Its acceptance gate is the parity harness. This converts the previously-"undefined party-derivation" into a **well-posed** problem: the derivation must produce actors whose *played* contest matches the *auto-resolved* vote distributionally. (It removes the reason the personal bridge was blocked — there was no target for the derivation to hit; now there is.)
+**Rationale — exploit-prevention.** The auto-resolver emits *canonical* consequences (Mandate penalties, Domain Echoes) into the strategic layer. If fidelities diverge in expectation, whoever picks the fidelity is **mode-shopping** for the better outcome. Consistency makes the fidelity choice *free of strategic advantage* — a choice of richness/agency only. (player_agency §4.2 already asserts the auto path resolves "in ways the player would not have chosen" — i.e. an honest NPC-AI outcome, not a biased one.)
 
-## 6. Open forks (need Jordan — not ratified by merging this note)
+**Acceptance oracle.** A **parity harness** comparing the auto-resolver against the played kernel on matched inputs, asserting the outcome distributions agree within a stated tolerance. This is the acceptance gate for the ED-SC-0011 zoom-in expansion (§7). The tolerance itself is fork C (§8).
 
-- **FORK-A — one engine or two.** Unify the parliamentary auto-resolver onto the personal σ-kernel (run the kernel at faction fidelity), or keep two engines held consistent by the parity harness? *No default.*
-- **FORK-B — the escalation predicate.** Exactly which conditions escalate a vote to a played scene? `§4.3.2` is the home; the specific stakes predicate is undecided.
-- **FORK-C — calibration tolerance.** What distributional tolerance counts as "consistent," and on which outcome axis (pass/fail/committee share, Total-Victory rate, echo magnitude)?
-- **FORK-D — the player layer.** When a player layer exists, is zoom-in a player *choice* (Total War) or an engine-forced *escalation* (narrative necessity), or both?
+## 7. ED-SC-0011, reframed
 
-## 7. What this note does NOT do
+The ED-SC-0011 work — deriving a played contest from aggregate faction state — is the **zoom-in expansion**: instantiate named orators (attributes / History / Convictions) for a specific slate event, calibrated to the auto-resolver per §6, with the parity harness as its acceptance gate. This makes the previously-"undefined party-derivation" **well-posed**: the derivation must produce actors whose *played* contest matches the *auto-resolved* outcome distributionally. (There was no target for the derivation to hit before; now there is.)
 
-It does not implement the parity harness, unify the engines, change the auto-resolver, or build the personal derivation. It states the duality as the design spine and reframes the ED-SC-0011 charter (§5).
+## 8. Forks — RULED 2026-07-08 (Jordan: resolve A/B/D, keep C open)
+
+- **A — one engine, event-parameterized (RESOLVED).** The slate event supplies the specifics; **auto = the contest kernel run headless, played = the same kernel run interactively.** Not two mechanics — one engine at two fidelities. This is FM's model and matches player_agency's "resolve through NPC AI" (the *same* event, digested). It also retires calibration at the root: same engine ⇒ consistent by construction.
+- **B — escalation predicate: the Scene Slate itself (RESOLVED by existing canon).** The scene-action budget (3–5/season) + slate priority + Conviction-bias *is* the triage; Mandatory triggers (§4.3.2) force a scene, everything else is opt-in. No new formula — this is `player_agency §4.2`.
+- **C — calibration tolerance (OPEN — the one residual).** What tolerance counts as "consistent," and on which axis (pass/fail/committee share, Total-Victory rate, echo magnitude). Lean: **unbiased mean is the hard constraint** (anti-exploit); variance may be looser for auto (you accept the dice when you don't play); Witness Mode is a deliberately-thin middle (one roll, not auto-success). The actual number is set when the **parity harness** lands — it belongs to ED-SC-0011's acceptance gate.
+- **D — choice vs forced: both, slate-marked (RESOLVED by existing canon).** Default is player *choice* (triage what to attend); the Slate **marks some events mandatory** (§4.3.2) — forced to a scene; over-budget mandatories fall to Witness Mode. All already in `player_agency §4.2`.
+
+## 9. What this note does NOT do
+
+It does not implement the parity harness, event-parameterize the auto-resolver, or build the played derivation — those are downstream builds (the derivation + harness is the ED-SC-0011 charter, §7). It states the Slate as the spine, names the fidelity spectrum and its precedents, and records the forks Jordan ruled.
 
 The provisional parliamentary derivation shipped ON by default (proposer = lowest-Stability, establishment = highest-Mandate, others abstain) remains **retunable and is not ratified as canon** by this note.

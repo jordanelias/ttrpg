@@ -6,15 +6,18 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
-- **Auto/Manual Resolution Duality doctrine DRAFTED 2026-07-08 (ED-SC-0013, PROPOSED — Jordan asked me to
-  draft his Total-War auto/manual framing).** `designs/architecture/auto_manual_resolution_duality_v1.md`:
-  the zoom in/out protocol IS the auto-resolve/play-it-out toggle; the Parliamentary vote (ED-SC-0006/0007)
-  is the first auto-resolver, the personal contest kernel its played counterpart. **Load-bearing constraint:**
-  E[auto]≈E[played] on matched inputs (exploit-prevention — no mode-shopping), acceptance oracle = a NEW
-  parity harness. **Reframes ED-SC-0011** as the zoom-in expansion (derivation calibrated to the auto-resolver;
-  parity harness = its acceptance gate) — makes the previously-undefined party-derivation well-posed. Open
-  forks A-D (one-engine-vs-two / escalation predicate / calibration tolerance / player-layer) are needs_jordan.
-  For Jordan's review (in PR #95); merge ratifies the doctrine, forks stay open.
+- **Auto/Manual Resolution Duality doctrine RULED 2026-07-08 (ED-SC-0013 → resolved).**
+  `designs/architecture/auto_manual_resolution_duality_v1.md`, reworked per Jordan's "specific events on a
+  slate" steer to lead with the **Scene Slate as the spine** — already canon (`player_agency_v30 §4`:
+  deterministic, priority-ranked, settlement-anchored, Conviction-biased SPECIFIC events; 3–5 scene-action
+  budget; "opportunities not pursued resolve through NPC AI without player input" = the auto-resolve). Fidelity
+  is a SPECTRUM (played / witnessed [Witness Mode] / auto); precedents FM/Total War/CK/XCOM/Disco Elysium.
+  **Forks ruled (Jordan: resolve A/B/D, keep C):** A = one engine event-parameterized; B = the Slate's budget/
+  priority/Conviction triage + Mandatory §4.3.2; D = Mandatory/opt-in/Witness — all RESOLVED (A by steer, B/D by
+  existing canon). **C (calibration tolerance) is the one residual** — carried to ED-SC-0011's parity-harness
+  acceptance gate. **Load-bearing constraint:** E[auto]≈E[played] (exploit-prevention). **Chief build implication
+  (next, separate item):** event-parameterize the auto-resolver so it resolves SPECIFIC slate motions, not a
+  generic per-season roll; then ED-SC-0011 (the zoom-in expansion) + the parity harness.
 - **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
   of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
   actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
