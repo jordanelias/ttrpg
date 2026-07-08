@@ -55,6 +55,26 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   (hygiene already done; registry filing done; A17 report-only + keys.py hook + A18 detector + tier
   promotion remain, sequenced per the extension's §4); the five lane EDs above await their owning
   lanes' own execution passes.
+- **Wave-Q-step-3 tooling build EXECUTED 2026-07-08 (same-day follow-on to the ratification above;
+  Jordan: "enforce compliance with pointers").** Builds the concrete CI enforcement the prior entry
+  ratified spec-only: `tools/quantity_registry.py` (single reader merging `descriptor_registry.yaml`
+  + `names_index.yaml`) + `tools/ci_quantity_vocabulary_check.py` (A17, report-only, wired into CI
+  via the `contract_adjudicator` `continue-on-error` precedent) + an optional warn-tier
+  `stat_vocabulary` hook on `sim/substrate/keys.py`'s `KeyLog` (OPT-AV-16, candidate invariant 9;
+  default `None` preserves prior behavior exactly — all 25 pre-existing substrate tests unchanged,
+  3 new added). **Measured real A17 backlog: 36/71** (re-derived fresh against the now-much-larger
+  post-ratification registry; `params/*.md` prose intentionally not scanned — that's A18's job).
+  Also filed two small residual registry deltas the ratification pass above didn't cover:
+  `set.facility_tier` (settlement_stats, D5) and "Settlement Weight" (not_descriptors.derived_values,
+  D5's derived companion). **Two defects remain found-but-unfixed by both this pass and the prior
+  ratification** — `ed_options.md` D11 (`pool.knot`/`track.persuasion` cross-link: no linkage exists
+  at either cited source, rejected as fabrication-risk) and D15 (`contracts_bucket`↔KIND crosswalk
+  field: `not_descriptors` carries no KIND field to cross against). One more small thing noticed in
+  passing, flagged not fixed: `descriptor_registry.yaml`'s own Coherence disambiguation note (added
+  by the ratification pass above) claims `module_contracts.yaml`'s `threadwork` module "still tags
+  its Coherence state entry `bucket: pool`" — that's now stale; the same ratification pass's own
+  `module_contracts.yaml` edit already corrected it to `bucket: track`, so the claimed "3-way
+  disagreement" no longer holds.
 - **Pessimist subtractive-action audit RATIFIED 2026-07-08 (ED-IN-0027; Jordan: "Please ratify all").**
   The corpus-wide read-only audit (`designs/audit/2026-07-08-pessimist-action-audit/`) is ratified.
   Two ratification acts landed: (1) **canon** — `references/throughlines_meta.md` §8.2-A + infill §7-A
