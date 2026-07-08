@@ -411,9 +411,28 @@ PP-716's −1D unification superseded in `supersession_register.yaml`; **ED-PC-0
 calibration. Full test + gate pass (387 sim / 90 combat+gate green; goldens unmoved — the deleted
 method had no live callers and contests defer in campaigns).
 
-**The clean, mechanical Stratum-B tail is now exhausted, and the standing PC-lane ruling (ED-PC-0005)
-is closed.** The remaining items each need a design ruling or a large build, not a mechanical fix:
-**ED-PC-0006** (non-combat wound fractional-Ob values — sim-calibration) · the contest live-dispatch /
-derivation bridge (ED-SC-0011) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap direction), C-TW-6/8
-(Thread Fatigue / Co-Movement implement-vs-banner) under ED-WR-0005 · the armature echo-wiring
-integration (PR-2 remainder). These are surfaced for Jordan rather than forced.
+**Fifth slice / Stratum-C (armature deployment) FIRST SLICE 2026-07-08 — ED-IN-0028, "proceed
+large build."** Executed the IN-lane core of the Key & Echo Armature §6.2 "echo transport wiring":
+the DETERMINISTIC echo-transport plumbing. New `sim/cross_scale/echo_transport.py` un-orphans
+`domain_echo.py` (previously ZERO callers — a C-REACH island) and routes a resolved scene outcome
+→ `domain_echo.compute_domain_echo` (degree-keyed) → ONE `scene.*_resolved` Key emitted through the
+substrate `TickScheduler` with an OF-7 **deferred** faction stat_delta apply landing at the
+ACTION→ACCOUNTING boundary. Wired into `scene_dispatch._resolve_slot` (closes the `zoom_out({})` drop)
++ `mc_v18` (world-scoped KeyLog+scheduler; `key_log_hash`/`keys_emitted` telemetry), behind an
+`ECHO_TRANSPORT` flag (**default OFF = byte-exact**; MB FIELD_MOVEMENT precedent). VERIFIED: flag-OFF
+AND flag-ON win-share both byte-identical to the F7 seed-42 golden; OF-7 deferral, degree→delta, and
+byte-identical replay proven in `sim/tests/test_echo_transport.py` (9 cases); full 396-pass sim
+regression green. **Scope discipline — deferred, nothing silently dropped:** the SC context-derivation
+bridge (ED-SC-0006/0007) makes scenes actually resolve, so the live loop is INERT today (KeyLog born
+empty-but-deterministic) — the plumbing is unit-tested and ready; the FA comeback (parliamentary_vote
+into the loop, ED-FA-0005) is a balance change NOT wired; the §5.5 RNG fork is not engaged
+(domain_echo is deterministic). Merge ratifies the plumbing (ED-1094).
+
+**The mechanical Stratum-B tail is exhausted, ED-PC-0005 is closed, and Stratum-C has its first
+slice.** The remaining items each need a design ruling or further build, not a mechanical fix:
+**ED-PC-0006** (non-combat wound fractional-Ob values — sim-calibration) · **ED-SC-0006/0007** (the
+contest context-derivation bridge that activates the echo transport in the live loop) + ED-SC-0011
+(live-dispatch onto the promoted kernel) · **ED-FA-0005** (Hafenmark comeback / parliamentary_vote in
+the loop) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap direction), C-TW-6/8 (Thread Fatigue / Co-Movement
+implement-vs-banner) under ED-WR-0005 · the armature keying/down-seam/rendering waves (§6.3 PR-3+).
+These are surfaced for Jordan rather than forced.

@@ -8,6 +8,19 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-C (armature deployment) FIRST SLICE 2026-07-08: ED-IN-0028, echo-transport
+  plumbing ("proceed large build").** Executed the IN-lane core of Key & Echo Armature §6.2. New
+  `sim/cross_scale/echo_transport.py` un-orphans `domain_echo.py` (was a ZERO-caller C-REACH island) and
+  routes a resolved scene → `domain_echo` (degree-keyed) → one `scene.*_resolved` Key via the substrate
+  `TickScheduler` with an OF-7 **deferred** faction apply at the ACTION→ACCOUNTING boundary. Wired into
+  `scene_dispatch._resolve_slot` (closes `zoom_out({})`) + `mc_v18` (world-scoped KeyLog; `key_log_hash`/
+  `keys_emitted` telemetry), behind an `ECHO_TRANSPORT` flag (default OFF = byte-exact, MB FIELD_MOVEMENT
+  precedent). Flag-OFF **and** flag-ON win-share both byte-identical to the F7 seed-42 golden; OF-7/degree/
+  replay proven in `sim/tests/test_echo_transport.py` (9 cases); 396-pass sim regression green. **DEFERRED
+  (owning lanes, nothing dropped):** SC context-derivation bridge (ED-SC-0006/0007) makes scenes resolve →
+  live loop is INERT today (KeyLog born empty-deterministic; F7 named-zero-assertions stay 0 by design and
+  flip when the bridge lands); FA comeback (parliamentary_vote-in-loop) is ED-FA-0005; §5.5 RNG fork not
+  engaged (domain_echo deterministic). NEXT armature waves = §6.3 PR-3+ (keying / down-seam / rendering).
 - **Resolution Plan v1 — Stratum-B THIRD SLICE 2026-07-08: ED-PC-0005 dead-code investigation →
   truth repair + Jordan flag.** Confirmed `WoundTracker.pool_penalty()` + `WOUND_POOL_PENALTY`
   (`combat_engine_v1/combatant.py`) have ZERO live callers and ED-1041's wound-Ob channel is the live
