@@ -253,28 +253,92 @@ def phi_room_percussion(room):
     r = max(0.0, min(1.0, room))
     return PERC_ROOM_FLOOR + (1.0 - PERC_ROOM_FLOOR) * r
 
+def hilt_assembly_mass(w):
+    """The guard+pommel+integral-grip-material mass — the part that becomes the striking HEAD when a bladed
+    weapon is reversed (Mordhau/Mordschlag: HEMA sources describe both hands moving onto the blade near the
+    ricasso/tip, with the guard+pommel assembly projecting out as an improvised mace head — see
+    reversed_grip_percussion's docstring for sourcing). Pure sum over the weapon's own located parts, no name
+    check. 0.0 for a weapon with no guard/pommel/haft record (e.g. a synthetic test dict)."""
+    guard_m = sum(g['mass_kg'] for g in w.get('guards', ()) if not g.get('dual_role_element'))
+    pommel_m = w.get('pommel', {}).get('mass_kg', 0.0)
+    haft_m = w.get('haft', {}).get('mass_kg', 0.0)
+    return guard_m + pommel_m + haft_m
+
+
+REVERSED_GRIP_EFFICIENCY = 0.25   # [FIAT, HEMA-grounded direction, ED-PC-0009, 2026-07-08] no treatise or
+                    #   biomechanical study gives a precise force reading for a Mordhau/reversed-grip strike, but
+                    #   every source consulted agrees on the QUALITATIVE magnitude: a documented, historically-
+                    #   attested supplementary technique used specifically because the edge/point had failed
+                    #   against armour, NOT the wielder's preferred or most powerful option — explicitly weaker
+                    #   than a dedicated mace/warhammer, "far less injurious" against rigid plate (retains real
+                    #   concussive threat against mail/padding/an exposed head). 0.25 is a deliberately
+                    #   conservative discount on the raw located-part percussion_element_authority computation
+                    #   (which, unmodified, would put every two-handed sword's hilt assembly within ~15-30% of a
+                    #   dedicated mace/poleaxe's OWN authority — physically defensible on raw mass alone, but
+                    #   contradicting the "clearly secondary, far less injurious" historical framing every source
+                    #   agreed on). [SIM-CALIBRATE]: open to playtesting: percussion_authority's own PERC_EXP=0.30
+                    #   power-law cannot express "structurally weak" from input magnitude alone (verified: even a
+                    #   pommel-only mass at a near-zero lever arm still saturates toward ~2-3/8 before this
+                    #   discount, because a fractional exponent compresses ANY nonzero input toward the upper
+                    #   band) — this explicit multiplier is the honest alternative to either leaving Mordhau
+                    #   mace-strength (wrong, JD-4's original finding) or hand-fudging PERC_SCALE/PERC_EXP
+                    #   themselves (which would distort every dedicated blunt weapon's own calibration).
+
+def reversed_grip_percussion(w, grip=0.0, room=1.0):
+    """A bladed, two-handed weapon's Mordhau/Mordschlag percussion option — the pommel/crossguard strike used
+    (per Liechtenauer-tradition half-swording; Wikipedia "Mordhau (weaponry)"; Malevus "Mordhau: The Murder
+    Stroke Technique") when cuts and thrusts fail against rigid armour: both hands move onto the blade and the
+    guard+pommel assembly, now projecting outward, is swung like an improvised mace. GROUNDED SHAPE: reuses
+    percussion_element_authority's existing per-element form — the SAME physics already applied to a lucerne_
+    hammer's rear fluke or a bec_de_corbin's beak (a located mass at its own position, not a whole-weapon
+    lump) — with hilt_assembly_mass(w) as the striking mass and the weapon's own grip_len as the lever arm (the
+    guard+pommel's natural reach beyond a rear hand choked up near the crossguard, per the HEMA grip
+    description: "one hand towards the tip...the other towards the crossguard"). Then applies
+    REVERSED_GRIP_EFFICIENCY (see its own docstring) so the result reads as the documented supplementary,
+    clearly-weaker-than-dedicated-blunt-weapons option rather than mace-parity. Restricted to hands==2 bladed
+    weapons — HEMA's Mordhau is attested for longswords/greatswords/two-handers with enough spare blade length
+    to grip past; a one-handed sword or dagger has no comparable technique in the sourced material. 0.0
+    otherwise, or if the weapon carries no guard/pommel mass at all. `grip`/`room` pass through to
+    percussion_element_authority's own Phi_grip/Phi_room degradation (D2b) — room (how much space there is to
+    swing) applies exactly as it would to a dedicated blunt strike; grip (the PRIMARY blade's own choke state)
+    is threaded too since percussion_element_authority already reads it uniformly, though its physical bearing
+    on an already-reversed grip is a secondary effect at most. Pure."""
+    if w.get('wclass') != 'bladed' or w.get('hands') != 2:
+        return 0.0
+    hilt_m = hilt_assembly_mass(w)
+    if hilt_m <= 1e-9:
+        return 0.0
+    return percussion_element_authority(w, hilt_m, w['grip_len'], grip=grip, room=room) * REVERSED_GRIP_EFFICIENCY
+
+
 def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     """Blunt swing authority from mass + balance (the L's cancel: p ~ sqrt(mass)*pob_frac), times the GROUNDED 2H/arc
-    energy_credit (§1) folded INSIDE the authority term. Saturating; 0 for a non-blunt head (an edge/point delivers
-    no percussion — the edge-no-percuss caveat is THIS gate, emergent).
-    [PHASE-C FLAG, 2026-07-02] The 2026-06-30 anchors below (mace 7.45 > poleaxe 5.83 > staff 2.52, poleaxe BELOW
-    the mace in pure concussion) were tuned against the Phase-A whole-weapon-lump PoB. Morphology-rearch Phase B's
-    located-part mass model gives the poleaxe a materially more forward, more accurate PoB_frac (0.091->0.206 —
-    its real steel hammer/beak/spike assembly is heavier and sits further forward than the old formula's uniform-
-    wood-shaft residual assumed), which lifts its percussion_authority to ~7.48 — ABOVE the mace's own 7.45. This
-    flips the poleaxe's select_mode choice vs heavy armour from its spike (puncture) to its hammer face
-    (percussion) — test_gap_game_poleaxe_spikes_plate and test_use_mode_selection_emerges_from_primitives now fail
-    on this, DELIBERATELY left red (not silently patched): the underlying mass is more physically correct, but the
-    [SIM-CALIBRATE] engine-scale gains here (PERC_SCALE/PERC_EXP, ADEF_BLUNT/ADEF_POINT) were fit to the OLD PoB
-    and need Phase C's balance-harness recalibration pass to restore the intended plate-defeat tier-list under the
-    now-accurate physics — not a per-weapon mass fudge to force the old numbers back.
+    energy_credit (§1) folded INSIDE the authority term. Saturating.
+    NON-BLUNT HEADS (U2/ED-PC-0008/0009, 2026-07-08): the self-gate no longer hard-zeroes every non-blunt head —
+    it routes to reversed_grip_percussion(w) (see its own docstring), the historically-grounded Mordhau/pommel-
+    strike option, correctly weak (roughly 1.4-1.8 on this 0-8 scale for a two-handed sword vs a dedicated mace's
+    8.0/poleaxe's ~7.5) rather than either hard-zero (the old behaviour, which made the blunt/percussion mode
+    invisible to a sword facing armour its edge cannot defeat) or the naive whole-weapon-formula reuse first
+    attempted for JD-4 (which put swords at 5.8-6.3, mace-parity — measured wrong, see ED-PC-0008). 0.0 for a
+    one-handed/short bladed weapon or a hafted weapon whose native head genuinely isn't blunt (no comparable
+    technique is attested in the sourced material).
+    [RESOLVED 2026-07-02->2026-07-08] The 2026-06-30 anchors (mace 7.45 > poleaxe 5.83 > staff 2.52) were tuned
+    against the Phase-A whole-weapon-lump PoB; morphology-rearch Phase B's located-part model gives the poleaxe
+    a materially more forward, more accurate PoB_frac (0.091->0.206), lifting it to ~7.48. Mace itself now pins
+    at PERC_CAP=8.0 (Phase B also raised its own PoB_frac) — mace remains the ceiling, poleaxe close behind;
+    test_gap_game_poleaxe_spikes_plate and test_use_mode_selection_emerges_from_primitives' poleaxe-switches
+    finding are still deliberately left red pending Phase C's PERC_SCALE/PERC_EXP re-fit (unchanged by U2 — this
+    docstring previously described mace as 7.45, stale since the Phase-B mass re-baseline; corrected here, no
+    behaviour change).
     CIRCUMSTANCE-DEGRADED (I2, D2b): grip/room-threaded via the SAME mode-split Phi_grip as heft (JD-4: percussion
     is grip-aware too, avoiding the M-08 blunt/cut asymmetry) PLUS a floored Phi_room (D2b — retained here, unlike
     heft). `sel_head` overrides w['head'] for the affordance gate (None = native). At grip=0/room=1.0 this is
-    byte-identical to the pre-I2 return for every weapon (both Phi terms are 1.0 there)."""
+    byte-identical to the pre-I2 return for every BLUNT-headed weapon (both Phi terms are 1.0 there); the
+    non-blunt branch's own reversed_grip_percussion (U2/ED-PC-0009) is NOT byte-identical to the pre-U2 hard-
+    zero — that is the intended, deliberate behaviour change this increment makes."""
     head = sel_head if sel_head is not None else w['head']
     if head != 'blunt':
-        return 0.0
+        return reversed_grip_percussion(w, grip=grip, room=room)
     pob = derive(w)['PoB_frac']
     base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
     return base * phi_grip(w, grip, 'blunt', sel_pc) * phi_room_percussion(room)

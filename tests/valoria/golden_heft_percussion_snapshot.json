@@ -17,7 +17,7 @@
  },
  "changdao": {
   "heft": 1.1749288479156341,
-  "percussion": 0.0
+  "percussion": 1.7819361715915734
  },
  "cinquedea": {
   "heft": 0.0,
@@ -33,7 +33,7 @@
  },
  "estoc": {
   "heft": 1.5013146100758952,
-  "percussion": 0.0
+  "percussion": 1.7133200487497202
  },
  "falchion": {
   "heft": 1.5920575966452153,
@@ -45,7 +45,7 @@
  },
  "flamberge": {
   "heft": 1.928814943591515,
-  "percussion": 0.0
+  "percussion": 1.773658843236118
  },
  "glaive": {
   "heft": 1.733165947096223,
@@ -57,7 +57,7 @@
  },
  "greatsword": {
   "heft": 1.6039360210015918,
-  "percussion": 0.0
+  "percussion": 1.733087599331821
  },
  "guandao": {
   "heft": 9.176998268174183,
@@ -85,11 +85,11 @@
  },
  "katana": {
   "heft": 1.53121393712251,
-  "percussion": 0.0
+  "percussion": 1.507039172971257
  },
  "longsword": {
   "heft": 1.0,
-  "percussion": 0.0
+  "percussion": 1.5413128801277691
  },
  "lucerne_hammer": {
   "heft": 1.8635379719793188,
@@ -113,11 +113,11 @@
  },
  "nandao": {
   "heft": 2.2542474544980613,
-  "percussion": 0.0
+  "percussion": 1.4004649186069495
  },
  "odachi": {
   "heft": 4.44227071955484,
-  "percussion": 0.0
+  "percussion": 1.5174755099131467
  },
  "paired_short": {
   "heft": 0.38347559851812096,
@@ -189,7 +189,7 @@
  },
  "tachi": {
   "heft": 1.6981446523922394,
-  "percussion": 0.0
+  "percussion": 1.5060140141050022
  },
  "tsurugi": {
   "heft": 0.9497277403058991,

@@ -110,7 +110,7 @@ lane_ids:
   lanes:
     MB: { name: "Mass battle",         next_free: 5 }   # ED-MB-0001: movement/pathing audit (ED-1096) fix-plan execution + adversarial review, 2026-07-02; ED-MB-0002: Cannae gauge-band root-cause audit, ratified + DG-3/DG-4 ruled 2026-07-04; ED-MB-0003: D1-D4 defects found+fixed, DG-1/DG-3 completion + DG-2-as-workplan ruled+executed, 2026-07-05
     # ED-MB-0004 allocated 2026-07-07 (status open): unaddressed-areas ed_options OPT-13 (gauge triage continuation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    PC: { name: "Personal combat",     next_free: 9 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry); ED-PC-0002 allocated 2026-07-05: U0 units-honesty record (renumbered from a concurrent ED-PC-0001 allocation at merge — see its ledger entry)
+    PC: { name: "Personal combat",     next_free: 10 }   # ED-PC-0001 allocated 2026-07-05: NERS-audit E-9 accepted work item (combat player-input scheduling; see ledger entry); ED-PC-0002 allocated 2026-07-05: U0 units-honesty record (renumbered from a concurrent ED-PC-0001 allocation at merge — see its ledger entry)
     # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     # ED-PC-0005 allocated 2026-07-07 (status open): ED-1042 residual wound-Ob prose drift, re-filed from ED-PC-0004/OPT-15 during the Stratum-A execution PR. NOTE: a plan-text label "ED-PC-0005" in designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md:115 (U4 item) is NOT an allocation and must renumber when actually filed (the ED-PC-0001 plan-label collision class). RESOLVED 2026-07-08 (Jordan ruling "never -1D, always fractional Ob").
     # ED-PC-0006 allocated 2026-07-08 (status open): non-combat wound fractional-Ob calibration — follow-on to the ED-PC-0005 ruling. Combat executed with ED-1041 values; Thread/fieldwork/mass-battle Command per-pool fractional-Ob VALUES flagged for sim-calibration (no invented numbers). next_free bumped 6→7.
@@ -129,6 +129,15 @@ lane_ids:
     # undocumented floor bug; the graded-affordance change has a much wider blast radius on exact-set tests
     # than the plan's 5 named acceptance tests). U2 NOT implemented this pass — see ledger entry for full
     # evidence. next_free bumped 8->9.
+    # ED-PC-0009 allocated 2026-07-08 (status resolved): JD-4 + JD-9 DETERMINED by testing bottom-up emergent
+    # primitives (mass/position/geometry, no per-weapon table) and validating top-down against HEMA sourcing +
+    # physics (Jordan directive 2026-07-08). geometry.py's cut_factor/thrust_factor floor-drop fixes; a new
+    # weapon_physics.reversed_grip_percussion (the grounded Mordhau/Mordschlag pommel-strike model, hands==2
+    # bladed weapons only, ~1.4-1.8/8 vs mace's 8.0/poleaxe's ~7.5) replaces percussion_authority's non-blunt
+    # hard-zero self-gate. NOT wired into element_afforded's live mode-selection — a real architectural gap in
+    # core.coupling (DELIVERY constants don't scale with percussion magnitude except vs mail/plate) would make
+    # the weak option incorrectly win selection against UNARMOURED targets if wired naively; documented, not
+    # routed around. next_free bumped 9->10.
     FI: { name: "Field investigation", next_free: 4 }   # ED-FI-0001 allocated 2026-07-05: NERS-audit E-12/GAP-1 accepted work item (investigation-lane audit); ED-FI-0002 allocated 2026-07-05: edge-playability §7 item 7 (counter-espionage loop), edge-playability §7 batch (PR #81)
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     SC: { name: "Social contest",      next_free: 12 }  # ED-SC-0001 allocated 2026-07-05: NERS-audit E-10 accepted work item (dominance sweeps); ED-SC-0002..0010 allocated 2026-07-05: Fable 5 social-contest audit acceptance sweep (PR #80, Jordan post-merge instruction) — P0 decision docket 0002-0005 (echo keying / tracker naming / pool formula / bonus-stack cap; forks awaiting Jordan's picks, needs_jordan), consequence-spine work 0006-0007, contract refresh 0008, Stage-4 entry criteria 0009, Chronicle focalization+consumer 0010

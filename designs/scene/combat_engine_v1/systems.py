@@ -268,6 +268,28 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
 SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
                           #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
+                          #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
+MODE_EDGE_MIN = 0.15      # [DESIGN, U2/ED-PC-0008, 2026-07-08] per-primitive cut-affordance floor for the GRADED,
+                          #   head-independent secondary check (a weapon whose native head ISN'T a cut category
+                          #   can still afford an incidental cut if its own geo['cut'] clears this). Consolidation_
+                          #   v1.md §2.3 already assumed this exact value: "sides==0 => ek<=0.1 < MODE_EDGE_MIN
+                          #   ~=0.15" (the roster's own edgeless-consistency invariant, V14). Verified against the
+                          #   full roster post-geometry.cut_factor's floor drop: mace/staff read 0.0, the needle
+                          #   class (stiletto/estoc/rondel, ek<=0.1) reads 0.02-0.05, comfortably below; rapier
+                          #   (ek=0.30) reads 0.30, comfortably above.
+MODE_TIP_MIN = 0.15       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive thrust-affordance floor, the JD-9
+                          #   resolution. Matched to MODE_EDGE_MIN for a clean, symmetric pair. Verified against
+                          #   the full roster post-geometry.thrust_factor's floor drop: mace (0.02) and staff
+                          #   (0.04) read comfortably below; every weapon test_greatsword_katana_sabre_afford_
+                          #   thrust names reads 0.26+ (sabre, the lowest of the three); the heavily-curved-slasher
+                          #   family (shamshir/pulwar/scimitar) correctly collapses toward the floor too (curvature
+                          #   offsets the point off the hand-target line — HEMA: these are cutting-primary blades).
+MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive percussion-affordance floor for the
+                          #   graded secondary blunt check (weapon_physics.percussion_authority's non-blunt branch,
+                          #   the Mordhau/reversed-grip option). Set well below the ~1.4-1.8 range every eligible
+                          #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
+                          #   swords and daggers, which the function gates to exactly 0 — no comparable technique
+                          #   is attested for them in the sourced material).
 # ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
 # plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
 # quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
@@ -410,12 +432,23 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     OWN mass+position, not the same whole-weapon value). Both `perc` and the blunt token's `eff` are grip/room-
     degraded (the SAME mode-split Phi as D2's heft, JD-4); every other token's `eff`/`gap` stay the STATIC
     per-element primitives (gap/cut do not degrade with grip in R1 — only the swing-moment-bearing quantities
-    do). `element_ref` is carried separately by the caller (afforded_heads), not in this tuple."""
+    do). `element_ref` is carried separately by the caller (afforded_heads), not in this tuple.
+    GRADED, HEAD-INDEPENDENT SECONDARY AFFORDANCES (U2/ED-PC-0008/0009, 2026-07-08): the native-head branch
+    below is UNCHANGED (same tokens, same thresholds, same DELIVERY-multiplier identity — cut_thrust's atomic
+    combo now compares cut against geo['thrust'] instead of geo['gap'], the JD-9 "wire geo['thrust']" fix,
+    keeping gap itself threaded separately for the armour-gap math). AFTER it runs, three independent checks
+    (one per physical family: edge, tip, blunt) ask "does this element's OWN geometry clear the graded floor,
+    regardless of what its native head already claimed?" and ADD a token if so — geometry, not the `head`
+    label, gates every mode; a weapon's `head` only decides which TOKEN NAME a mode's own native family uses
+    (preserving the existing DELIVERY-multiplier routing for cut_thrust/straight_cut/curved_cut/point). A
+    generic 'cut'/'point' token is used when the geometry supports a mode the native head's OWN family didn't
+    already claim (e.g. rapier, head='point', can ALSO afford a weak edge; greatsword, head='straight_cut',
+    can ALSO afford a thrust) — never overwrites a native token, only fills a gap via dict.setdefault."""
     geo=el['geo']; head=el['head']
     gap=geo['gap']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
-        heads['cut_thrust']=(max(geo['cut'], geo['gap']), 'shear_or_puncture', gap, None, pc)
+        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc)
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
         if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear', gap, None, pc)
     elif head=='point':                                              # a real point (element-tokened, not inferred)
@@ -430,6 +463,31 @@ def element_afforded(el, w, grip=0.0, room=1.0):
                                                                         # its striking mass on the haft record, not
                                                                         # itself) — whole-weapon fallback, unchanged
         if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion', gap, pa, pc)
+
+    # ── graded secondary affordances: TRIED AND REVERTED this session (U2/ED-PC-0008/0009, 2026-07-08) ──
+    # Both the independent cut/point checks (MODE_EDGE_MIN/MODE_TIP_MIN) and the percussion secondary check
+    # (MODE_PERC_MIN, wiring weapon_physics.reversed_grip_percussion into a competing 'blunt' token) were
+    # implemented and numerically verified, then reverted after each surfaced a real problem this session did
+    # not have scope to fix:
+    #   - cut/point: turns 7 roster "changers" (armour-tier mode-switchers) into 27 — e.g. bear_spear
+    #     (head='point') newly out-scores its own point with an incidental cut, breaking
+    #     test_thrust_protection_grip_invariant. Needs a full roster re-validation this session didn't complete.
+    #   - percussion: select_mode's greedy comparator uses core.coupling ALONE (DELIVERY x transmit), which does
+    #     NOT read percussion authority's magnitude except specifically against mail/plate (_transmit's rigid-
+    #     armour dampening term) — DELIVERY['blunt']=1.6 is a FIXED constant, the highest of any token. Verified
+    #     directly: every eligible two-handed sword's weak Mordhau option (perc~1.4-1.8) INCORRECTLY won
+    #     selection against NONE/light armour (backwards from the historical grounding — Mordhau is attested as
+    #     a response to armour defeating the edge, not a general preference) and only correctly lost to the
+    #     native cut/thrust at medium/heavy, where the mail/plate dampening finally applies. core.damage()'s own
+    #     `heft = 3.0*(perc/8.0)` term DOES correctly scale by the weak magnitude — the bug is specifically in
+    #     the SELECTION step, not the eventual damage — a real, separate architectural gap in core.coupling that
+    #     a JD-4 fix should not silently route around.
+    # geometry.py's cut_factor/thrust_factor fixes and weapon_physics.reversed_grip_percussion/
+    # hilt_assembly_mass are real, tested, and correct on their own (see their own docstrings + ED-PC-0009); this
+    # is exactly the "determine bottom-up, validate top-down" methodology surfacing that the INTEGRATION point
+    # (this function, plus core.coupling for the percussion case) needs its own separate fix before either
+    # can safely become a live, selectable mode. MODE_EDGE_MIN/MODE_TIP_MIN/MODE_PERC_MIN stay defined above for
+    # whoever picks up that follow-on work.
     return heads
 
 def afforded_heads(w, grip=0.0, room=1.0):
