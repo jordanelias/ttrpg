@@ -47,17 +47,17 @@ grounds a resolution, the item says "strike / defer," not an invented rule.
 | 19 | ED-IN-0029 | F · Infra | Residual open sub-items: OPT-AV-1 roster, OPT-AV-13 naming, Renown cap | **Adopt 9-key roster + Cognition/Spirit + `recall`**; resolve OPT-AV-13 via ED-SC-0003; **cap Renown at 10** |
 | 20 | ED-IN-0030 | F · Infra | Phantom "debt scene" — author it or strike it | **Strike & reuse** the existing Obligation/Grudge tag; drop the invented "§1 debt scene" |
 | 21 | ED-885 | F · Infra | Confirm/fix the phantom "ED-885" ratification citation | **Repoint → ED-874** (the ratified faction Domain-Action resolver); resolve as citation-fixed |
-| 22 | ED-634 | G · NPC/world | Crown inner-circle names + Stance Triangles | *(see §G — pending roster research)* |
-| 23 | ED-508 | G · NPC/world | Starting Dispositions for the named NPC roster | *(see §G — pending roster research)* |
-| 24 | ED-595 | G · NPC/world | Ehrenwall full arc (A/B/C) | *(see §G — pending roster research)* |
-| 25 | ED-596 | G · NPC/world | Torsvald (Riskbreaker) full arc | *(see §G — pending roster research)* |
-| 26 | ED-597 | G · NPC/world | Vossen full arc | *(see §G — pending roster research)* |
-| 27 | ED-598 | G · NPC/world | Hann full arc | *(see §G — pending roster research)* |
-| 28 | ED-599 | G · NPC/world | Orm (Warden second) full arc | *(see §G — pending roster research)* |
-| 29 | ED-601 | G · NPC/world | Almud Arc C (Abdicant/Pretender/Broken) | *(see §G — pending roster research)* |
-| 30 | ED-602 | G · NPC/world | Vaynard Arc A & B | *(see §G — pending roster research)* |
-| 31 | ED-610 | G · NPC/world | Baralta successor (unnamed Hafenmark heir) | *(see §G — pending roster research)* |
-| 32 | ED-507 | G · NPC/world | POI catalog per territory (2–6 each) | *(see §G — pending roster research)* |
+| 22 | ED-634 | G · NPC/world | Crown inner-circle names + Stance Triangles | **Approve all 5 as-is** (already in provisional use); re-skin Thale's Niflhel tie |
+| 23 | ED-508 | G · NPC/world | Starting Dispositions for the named NPC roster | Formula is canon; **seed from already-stated relationships**, flag only ~4–5 NPCs for your lifepath input |
+| 24 | ED-595 | G · NPC/world | Ehrenwall full arc (A/B/C) | **Approve**; re-skin Coup Counter → graduated autonomy |
+| 25 | ED-596 | G · NPC/world | Torsvald (Riskbreaker) full arc | **Approve**; re-skin Niflhel → intel broker |
+| 26 | ED-597 | G · NPC/world | Vossen full arc | **Approve** (no re-skin) |
+| 27 | ED-598 | G · NPC/world | Hann full arc | **Approve** (depends on ED-608 Mediation type); re-skin Niflhel |
+| 28 | ED-599 | G · NPC/world | Orm (Warden second) full arc | **Approve** (cleanly grounded, no re-skin) |
+| 29 | ED-601 | G · NPC/world | Almud Arc C (Abdicant/Pretender/Broken) | **Approve** with ED-595; re-skin Coup Counter |
+| 30 | ED-602 | G · NPC/world | Vaynard Arc A & B | **Approve**; re-skin Niflhel clock; hold bonus Arc C separately |
+| 31 | ED-610 | G · NPC/world | Baralta successor (unnamed Hafenmark heir) | **Propose institutional (Option B) successor**; draft name for approval |
+| 32 | ED-507 | G · NPC/world | POI catalog per territory (2–6 each) | **Reframe per-settlement 2–4** (currency); schedule authoring lane; draft-batch offered |
 
 ---
 
@@ -572,6 +572,148 @@ bookkeeping; no design content changes. (Fix the line to read `ED-874`; strike t
 
 ## CLUSTER G — NPC, roster & world content (ED-634, 508, 595–602, 610, 507)
 
-*(Filled in §G below once the roster/arc-enumeration research returns — these need the existing
-proposal text located and quoted before a recommendation can responsibly say "approve as-is" vs
-"author fresh." Research in flight.)*
+These are the creative-authorial items ("Requires user approval"). The good news from the roster
+survey: most already have **complete proposals** in the corpus that the ledger simply never closed —
+so the call is "approve / adjust," not "author from scratch." Only two are genuine blank-slate design
+(ED-610 successor identity, ED-507's bulk POI content), and for those this docket proposes a concrete
+shape + a first draft rather than leaving them open.
+
+### ED-634 — Crown inner-circle names + Stance Triangles
+
+**The proposal (already written).** `faction_politics_v30 §1.1d` proposes five named inner-circle
+NPCs, each with a full **Stance Triangle** (Conviction + Resonant Style + Certainty 0–5 — the standard
+NPC definition from `npc_behavior_v30 §1.1`). The names are **already echoed into `npc_behavior_v30`
+and `faction_canon_v30`** as if provisionally accepted:
+
+| Role | Name | Conviction / RS / Certainty | Seed relationship |
+|---|---|---|---|
+| Royal Marshal | **Wilhelm Voss** | Order / Authority / 4 | Distrusts Löwenritter; −1 toward Ehrenwall |
+| Lord Treasurer | **Annalie Reichard** | Precedent / Evidence / 5 | Distant Feldhaus (Guild) cousin; +1 toward Baralta |
+| Spymaster (Schattendienst) | **Kolbrun Thale** | Autonomy / Consequence / 3 | Only IC member with (former-)Niflhel contacts |
+| Archbishop's Representative | **Father Gustav Linder** | Faith / Authority / 5 | Church secondee; −2 vs visible Thread-practitioners |
+| Royal Guard Captain / Löwenritter Liaison | **Theodor Kreutz** | Order / Authority / 4 | Allegiance to Almud personally over Ehrenwall |
+
+Plus **Torben Almqvist** as inner-circle-adjacent (non-voting; Continuity / Evidence).
+
+**Recommendation. Approve all five names + Stance Triangles as-is and ratify.** Reasons: (1) the set is
+complete and internally consistent (each has a full triangle); (2) the seed relationships are
+load-bearing and already wired into the arc logic (Voss/Ehrenwall friction, Kreutz→Almud loyalty feed
+Ehrenwall's coup arc; Reichard→Baralta ties the Treasury to the Guild axis); (3) the names follow the
+established Germanic/Norse convention and pass the naming gate (none is the deprecated "Galbados").
+Flip the §1.1d provisional markers, close §10.2 P1, run `ci_naming_check.py` on ratification. One
+housekeeping note: re-skin Thale's "Niflhel contacts" to the settlement-layer intelligence-broker
+framing (Niflhel is struck) — same re-skin the arcs need below.
+
+### ED-508 — starting Dispositions for the named NPC roster
+
+**State.** The **lifepath Disposition formula is canonical and needs no decision**
+(`params/fieldwork.md:148-157`: per lifepath element assign ±0.5 on alignment/conflict with the
+NPC's faction/culture/role vs the reference; sum, floor, clamp [−5,+5]). What is missing is per-NPC
+**values** for the roster: **Vaynard, Baralta, the Cardinals (Jarnstal/Olafsson/Tormann/Klapp),
+Torben, Elske, Klapp, Almud, Maret Uln, Edeyja** — none has an assigned starting Disposition anywhere.
+
+**Recommendation. Don't treat this as fully blocked — resolve it in two moves:**
+1. **Seed from relationships the corpus already states.** Disposition is relational, and several
+   pairs are *already* specified in prose (Voss −1→Ehrenwall, Reichard +1→Baralta, Kreutz allegiance
+   →Almud, and the arc docs' inter-NPC frictions). A follow-up pass can extract those into a
+   Disposition table mechanically — they are the formula's output already written in words — and
+   default all un-stated pairs to **0 (neutral)**. This unblocks most of the roster with zero new
+   creative input.
+2. **Flag the genuinely-unspecified NPCs for your lifepath input.** Only the NPCs with no stated
+   relationships (**Maret Uln, Edeyja, the individual Cardinals**) need you to supply a one-line
+   lifepath profile (birthplace / trade / faction tie / lineage / formative event) to run through the
+   formula. This narrows "roster values pending Jordan" from ~11 open profiles to ~4–5.
+
+I can draft the extracted table + provisional profiles for the unspecified few for your approval on
+request — but the creative facts (a Cardinal's birthplace, Edeyja's formative history) are yours to
+confirm, so I've stopped short of inventing them.
+
+### ED-595–602 — the seven NPC full-arc proposals
+
+**State.** **Complete arc text exists for all seven** in `designs/arcs/arc_expansion_v30.md` (Parts
+II/III). The doc header self-declares "CANONICAL — approved 2026-04-17," but the ledger rows stayed
+`open`/`needs_jordan` — a classic "ruling made, row never closed." Two **mechanical** caveats apply
+across several (not content changes): (i) the **Coup Counter** mechanic (Ehrenwall, Almud) is
+superseded by **Löwenritter graduated autonomy** — the beats are valid, the trigger needs translating;
+(ii) **Niflhel** references (Torsvald, Vossen, Hann, Vaynard) are struck and need re-skinning to
+"settlement-layer intelligence broker."
+
+**Recommendation. Approve all seven arcs, conditioned on the two mechanical re-skins applied during
+ratification.** The arc content is well-developed, internally consistent, and grounded in each NPC's
+Stance Triangle. Per-arc essence + any per-item note:
+
+- **ED-595 Ehrenwall** — A "Watchman" (scores Almud yearly) → B "Instrument at the Edge" → C "The
+  Regency" (installs Torben as figurehead or rules directly; secondary "Failed Regency" cedes to
+  Torben). *Re-skin: Coup Counter → graduated-autonomy stages.* **Approve.**
+- **ED-596 Torsvald/Riskbreaker** — A "The Operative" → B "The Operative Who Sees" (TS≥30, Thread as
+  intel) → C "The Riskbreaker at Risk" (untrained Discovery decay). *Re-skin: Niflhel extraction op →
+  intel-broker op.* **Approve.**
+- **ED-597 Vossen** — A "The Organiser" → B "The Strained Leader" (pacifist-Equity fork) → C "The
+  Legacy" (Captured/Killed/Schism; Schism splits RM into cultural vs operational wings, gating
+  co-victory paths). **Approve.**
+- **ED-598 Hann** — A "The Infrastructure" → B "The Operator" (unauthorized non-violent ops; spawns
+  the Mediation contest type, ED-608) → C "The Fractured Operator" (leads RM's independent intel arm).
+  *Re-skin: Niflhel refs.* **Approve** (note it depends on ED-608 Mediation contest type existing).
+- **ED-599 Orm (Warden second)** — A "The Anchor" → B "The Exhausted" (grief strips Continuity) → C
+  "The Last Stand" (witnessed narrative death sealing a Catastrophic Gap). **Approve** — cleanly
+  grounded in the warden/Gap machinery, no re-skin needed.
+- **ED-601 Almud Arc C** — three trajectories gated by Certainty at exile: **C-i Abdicant** (cedes to
+  Torben; may produce a Thread-theology refutation artifact), **C-ii Pretender** (raises a loyalist
+  faction — a legitimate "restore Almud" co-victory variant), **C-iii Broken** (collapse; Dissonant
+  Coherence risk unless the player becomes his framework). *Re-skin: Coup Counter trigger.* **Approve**
+  — this is the payoff of the Ehrenwall/Crown arc and should ratify together with ED-595.
+- **ED-602 Vaynard Arc A & B** — A "The Scholar" (instrumental Thread study; hidden intel-leak clock)
+  → B "The Awakened" (involuntary Thread perception; "Collaborator" sub-branch to genuine
+  practitioner). *Re-skin: Niflhel-Contact clock → intel-broker-contact clock.* **Approve** (the doc's
+  bonus Arc C "Consumed" is not in ED-602's scope — hold it or file it separately, your call).
+
+Ratifying these closes seven ledger rows at once and applies the two re-skins as a bundled
+`[editorial]` propagation.
+
+### ED-610 — Baralta successor (unnamed Hafenmark heir)
+
+**State.** Genuine blank slate — only a one-line stub. Baralta = **Duchess Inge Baralta**, sovereign of
+Hafenmark (constitutional-duchy; Categorical-Imperative / parliamentary-procedural ethics; anchors
+Isabella I of Castile / Henry VIII). The *institutional* succession mechanic already exists
+(`baralta_crown_claim_v30 §5`: Option A Hafenmark merges into Crown; **Option B** a PI-gated
+"institutional successor" keeps Hafenmark alive as an NPC faction) — but it names no actual heir,
+which is exactly the gap.
+
+**Recommendation (proposed content, for your approval).** Make the successor **institutional, not
+dynastic** — a parliamentary-confirmed successor consistent with Option B. This is the thematically
+correct shape: a *constitutional duchy* whose ethos is parliamentary-procedural should not hinge on a
+bloodline heir; its legitimacy passes through its institution. That also lets ED-610 resolve **with**
+the already-designed Option B instead of adding a parallel dynastic track.
+
+Concrete proposal to accept or replace: the successor is the sitting **Speaker of the Hafenmark
+Kammer** (its parliamentary assembly), confirmed by a PI-gated vote on Baralta's death — carrying
+Hafenmark's Precedent/procedural conviction but *lower* personal Mandate than Inge (an institutional
+caretaker, not a charismatic sovereign), which mechanically models the "institutional successor keeps
+Hafenmark alive but weaker" outcome Option B already implies. A provisional name in convention:
+**Kammer-Speaker Adelheid Feldhaus** (tying the successor to the Feldhaus/Guild axis already seeded
+via Reichard) — or a name of your choosing. **This is your creative call; the docket proposes the
+shape + one concrete option rather than leaving it blank, but will not ratify a named NPC without your
+sign-off.**
+
+### ED-507 — POI catalog per territory
+
+**State.** The **framework is canonical** (`fieldwork_v30 §3.1`: the Depth 0–5 ladder
+Landmark/Resource/Secret/Remnant/Anomaly/Breach; per-settlement-type templates; 7 worked examples such
+as Valorsplatz's "Lion's Archive" and Askeheim's "Wound Core"). The **content is not authored** — only
+7 one-off POIs exist campaign-wide, not a full 2–4 set anywhere.
+
+**Recommendation.**
+1. **Currency fix first:** ED-507's "per **territory**, 2–6 POIs" framing is **stale** — `fieldwork_v30
+   §3.1`'s Throughline-T3 redesign now assigns POIs **per settlement, 2–4 each**. Re-scope the item to
+   the current framing before authoring against it.
+2. **This is a bulk authorial lane, not a single ruling.** ~2–4 POIs × ~35 settlements ≈ 100 POIs is a
+   dedicated content pass, seeded from the 7 existing worked examples + the per-settlement-type
+   templates, with each POI grounded in its settlement's established faction / geography / Thread
+   history. Recommend scheduling it as a WR-lane authoring pass (it is not blocking any mechanic).
+3. **Offer:** I can draft a first batch — the ~8 major settlements (Seat/Cathedral/Parliament tier) —
+   as a template-setting exercise for your approval, so the pattern is fixed before the long tail is
+   filled. Say the word and I'll produce that batch grounded in each settlement's canon.
+
+This item stays `needs_jordan` in the sense that the *content* is yours to approve, but the *decision*
+it needs is small: approve the per-settlement reframe + greenlight the authoring lane (and optionally
+the draft batch).
