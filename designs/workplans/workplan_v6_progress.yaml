@@ -18,7 +18,7 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "83bc08e"
+  sha: "23c0681"
   date: "2026-07-08"
 
 milestones:
@@ -140,13 +140,13 @@ decisions_t0_open:
   - "ED-1051 — engine_clock ratification"
 
 last_progress:
-  - "2026-07-05: PC U0 units-honesty merged (PR #79, ED-PC-0002 — renumbered from a concurrent ED-PC-0001 at merge); juncture 4 in progress"
   - "2026-07-05: Fable 5 social-contest audit + edge-playability audit v1 RATIFIED in full (PR #80-82); ~21 lane EDs filed across SC/FA/WR/FI/SE"
   - "2026-07-07: Key & Echo Armature v1 (ED-IN-0018) + unaddressed-areas audit (ED-IN-0017) RATIFIED (ED-IN-0026); first executable Key substrate sim/substrate/keys.py shipped"
   - "2026-07-07/08: Resolution Plan Stratum-A (7 EDs resolved) + Stratum-B oracle-to-canon (ED-871, C-TW-12, ED-PC-0005 all resolved) + Stratum-C echo-transport (ED-IN-0028); ECHO_TRANSPORT default ON"
   - "2026-07-08: Pessimist subtractive-action audit (ED-IN-0027) RATIFIED; FI/WR/FA/SE lane verdicts executed same day; PC deferred (stale target, ED-PC-0007); SC (ED-SC-0012) still open/unexecuted"
   - "2026-07-08: SC consequence spine LIVE (ED-SC-0002/0006/0007 — kernel live in campaign + parliamentary vote/domain-echo composition); MB partition-invariance fix (ED-MB-0004) + DG-2 yield mechanic (ED-MB-0005) + Command decoupled from pool (ED-MB-0006); attribute/value coherence audit (ED-IN-0029) filed, held back for Jordan ratification"
   - "2026-07-08: JD-1 RULED (\"accept plan bands\") + U1 DONE (ED-PC-0010, PR #99) — T0 wall drops to ED-1051 alone; ED-PC-0006 non-combat wound-Ob calibration also resolved same PR"
-  - "2026-07-08: SC's ED-SC-0012 executed (PR #104) — pessimist subtractive-action audit (ED-IN-0027) now fully executed across all 6 lanes; 4 Jordan-facing decision packets (DP-1..DP-4) authored for narrower forks the audit correctly declined to rule on itself"
-  - "2026-07-08: ED-IN-0016 closed + ED-IN-0030 filed (PR #108) — faction_politics_v30 module-contract flip, dead-filename repoint across 9 docs, phantom 'debt scene' mechanic flagged"
+  - "2026-07-08: SC's ED-SC-0012 executed (PR #104) — the last of ED-IN-0027's six lane-dispositions to land (SC/FA/SE/WR/FI executed; PC deferred, not executed); 4 Jordan-facing decision packets (DP-1..DP-4) authored for narrower forks the audit correctly declined to rule on itself"
+  - "2026-07-08: ED-IN-0016 closed + ED-IN-0030 filed (PR #108) — faction_politics_v30 module-contract flip, dead-filename repoint across 8 docs (commit message/handoff say 9, an inherited miscount vs. the actual diff), phantom 'debt scene' mechanic flagged"
   - "2026-07-08: PC R3 U2 (graded mode-affordance + Phase-C percussion enactment) DONE (ED-PC-0011, PR #109) — JD-4/JD-9 determined + live-wired, validated by a 13-agent adversarial Workflow; ED-PC-0012 (point floor-lock, sabre-class) filed as an explicit non-blocking residual"
+  - "2026-07-08: Master workplan v6 reconciled against all commits since its last touch (c55bdde) — DG-1 struck (closed, ED-MB-0003), DG-2/RC-5/ED-1090 reframed with precise scope, JD-2..8 row split (JD-4/JD-9 removed), new T1 rows for ED-IN-0029 (attribute/value docket) and DP-1..DP-4 (pessimist-audit residual packets); PC/MB/SC §4 lane paragraphs rewritten to current state. Verified via a 10-agent adversarial workflow before any edit landed; no board state changed (register-level reconcile only)"
