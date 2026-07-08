@@ -21,6 +21,10 @@ input — only design merit, judged counterfactually, decides.
    until Jordan rules).
 6. `workplan_v6_register_deltas.md` — the §5 scope-reduction rows for the monthly reconcile.
 7. `01_workings/` — the 8 per-lane dossiers + 8 inverted-critic passes.
+8. `decision_packets/` — 4 Jordan-ruled memos for narrower forks the lane executions surfaced but
+   correctly declined to decide themselves (FA da.* bucket boundaries, SC KU-1 cap numeric value,
+   WR/TW Mending second branch, FI Interview canonical-head governance). Each lays out live options
+   with tradeoffs; none recommends a winner.
 
 ## Headline
 97 action-objects · **64% KEEP** · 36% subtractive, of which ~60% is consolidation (MERGE/DISTILL).

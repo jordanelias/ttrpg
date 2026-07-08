@@ -6,6 +6,27 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **ED-SC-0012 (RESOLVED 2026-07-08) — pessimist-audit SC verdicts EXECUTED (design side)** (SC-lane
+  follow-up to ED-IN-0027; `social_contest_v30.md` + `params/contest.md`, no sim-kernel edits — the
+  kernel is under active rebuild and `ED-SC-0004` is Jordan's). Three verdicts:
+  - **Appraise REFINE (§4 Step 1):** the audience/faction-boost read (a deterministic function of the
+    public Faction Boosts table) splits off to **free setup-screen knowledge**; the Appraise roll keeps
+    only the adjudicator-**armature** judge-read, sharpened. Audience-boost table retained until the
+    setup surface is built.
+  - **Recall+Prep REFINE (§4 Step 3 / §9.1) — resolves the KU-1 P0 question:** a single global cap on the
+    combined non-attribute Recall+Corroborate+Prep+Findings bonus is **adopted** (mirroring the +2D genre
+    cap); the exact **ceiling VALUE is left to Jordan's `ED-SC-0005`** ruling (distinct from `ED-SC-0004`'s
+    Argue-pool-formula fork) — this narrows KU-1 from "whether to cap" to "pick the value". **Interacts
+    with the P0 docket ED-SC-0002..0005 that still awaits your picks.**
+  - **Wager Obligation DISTILL (§6.1.1):** four of five edge cases (counterparty death, institutional
+    collapse, PC-death holding/owing) generalize to **all** Obligations via a shared interruption rule
+    reusing `generational_transition` TRANSFER/RESET; only "structural impossibility" stays Wager-specific.
+    Retained until §6.1 is refactored.
+  - **Residuals (follow-ons):** the KU-1 numeric ceiling (ED-SC-0005; a decision packet is available —
+    see `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/`); the physical setup-screen
+    surface; the §6.1 shared interruption rule; kernel wiring — all coordinate with the staged rebuild
+    below.
+
 - **Auto/Manual Resolution Duality doctrine RULED 2026-07-08 (ED-SC-0013 → resolved).**
   `designs/architecture/auto_manual_resolution_duality_v1.md`, reworked per Jordan's "specific events on a
   slate" steer to lead with the **Scene Slate as the spine** — already canon (`player_agency_v30 §4`:
@@ -18,6 +39,7 @@ index; see it for cross-lane/global items.
   acceptance gate. **Load-bearing constraint:** E[auto]≈E[played] (exploit-prevention). **Chief build implication
   (next, separate item):** event-parameterize the auto-resolver so it resolves SPECIFIC slate motions, not a
   generic per-season roll; then ED-SC-0011 (the zoom-in expansion) + the parity harness.
+
 - **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
   of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
   actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
