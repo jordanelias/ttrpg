@@ -1,0 +1,1711 @@
+# Quantity Census — Attribute/Value Coherence Audit (ED-IN-0029)
+# generated-by: audit merge node (census-merge stage)
+# date: 2026-07-08
+# anchor: ED-IN-0029
+# QUARANTINE-NOTE: this file is an EVIDENCE ARTIFACT of the 2026-07-08 audit sweep,
+#   not a registry and not a source of canonical truth. It documents what six finder
+#   passes found across descriptor_registry.yaml, names_index.yaml, glossary.md,
+#   params/*.md, designs/**/*.md, references/module_contracts.yaml, sim/**, and
+#   designs/scene/combat_engine_v1/**. Where two surfaces disagree, BOTH formulas are
+#   recorded verbatim with their surface — this file does NOT adjudicate collisions or
+#   pick a winner. Genuine design calls (roster picks, values_master disposition, tier
+#   promotion, formula adjudication) remain DOCKET items for Jordan (see the audit's
+#   synthesis/docket document, not this file).
+# schema: rows[] — canonical_name, aliases, kind, cluster, defining_surface, formulas[],
+#   registered, status, key_bindings, consumers, divergences, scale_bounds, finding_basis
+
+rows:
+- canonical_name: Strength
+  aliases: []
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:34
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:34
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.body.strength
+  consumers:
+  - Health formula (0.25*Strength*Endurance term)
+  finding_basis: F-REG items
+- canonical_name: Endurance
+  aliases:
+  - Vitality
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:35
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:35
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.body.endurance
+  consumers:
+  - Stamina
+  - Health/Wound Interval/Max Wounds
+  finding_basis: F-REG items (Vitality alias enforce:warn, not blocking)
+- canonical_name: Agility
+  aliases:
+  - Dexterity
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:36
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:36
+    provenance: F-REG
+  registered: warn
+  status: ORPHANED
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.body.agility
+  divergences:
+  - STRUCK from Combat Pool formula (ED-900/904) — attribute still registered and scaled but its one load-bearing
+    combat consumer was removed; no other consumer confirmed in this sweep.
+  finding_basis: F-REG (Agility STRUCK note)
+- canonical_name: Focus
+  aliases: []
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:38
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:38
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.mind.focus
+  consumers:
+  - Concentration = 3*Focus + 2*Spirit
+  finding_basis: F-REG
+- canonical_name: Acuity
+  aliases:
+  - Reasoning
+  - Cognition
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:39
+  formulas:
+  - formula: 'raw attribute, scale 1-7 (registry primary: Acuity)'
+    surface: references/descriptor_registry.yaml:39
+    provenance: F-REG
+  - formula: 'raw attribute, scale 1-7 (glossary primary: Cognition, no Acuity mention)'
+    surface: references/glossary.md:37
+    provenance: F-REG-003
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.mind.acuity
+  divergences:
+  - descriptor_registry.yaml:39 names Acuity primary (aliases Reasoning/Cognition); references/glossary.md:37
+    names Cognition primary with no Acuity mention; names_index.yaml:49 marks Cognition legacy (enforce:warn).
+  finding_basis: F-REG-003, KNOWN-TRACKED ED-IN-0008 (7-vs-9 roster/naming-authority conflict)
+- canonical_name: Will
+  aliases:
+  - Spirit
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: AMBIGUOUS:references/descriptor_registry.yaml:40 (primary=Will) vs references/glossary.md:40
+    (primary=Spirit)
+  formulas:
+  - formula: 'raw attribute, scale 1-7 (registry primary: Will)'
+    surface: references/descriptor_registry.yaml:40
+    provenance: F-REG
+  - formula: 'raw attribute, scale 1-7 (glossary primary: Spirit; used as ''Spirit'' in every live formula
+      seen)'
+    surface: references/glossary.md:40; config.py:61 CONC_SPIRIT; params/core.md:247
+    provenance: F-REG-004
+  registered: warn
+  status: AMBIGUOUS
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.mind.will
+  divergences:
+  - Registry names Will primary/Spirit alias, but every live formula sweep found (Concentration, Stamina,
+    Thread-Read pool, Wound Interval, Thread Fatigue) uses 'Spirit' exclusively — the 'primary' name and
+    the load-bearing name are inverted in practice.
+  finding_basis: F-REG-004, KNOWN-TRACKED ED-IN-0008
+- canonical_name: Attunement
+  aliases:
+  - Perception
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:42
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:42
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.social.attunement
+  finding_basis: F-REG
+- canonical_name: Charisma
+  aliases:
+  - Influence (attribute alias, distinct from fac.influence)
+  - Presence
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:43
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:43
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.social.charisma
+  consumers:
+  - Composure/Face = Charisma*3
+  - Command = clamp(round((2*Charisma+Cognition)/3),1,7)
+  divergences:
+  - Alias 'Influence' for this attribute is a distinct namespace collision against fac.influence (Influence
+    faction_stat, C5) — same word, two unrelated quantities at different scales; no registry cross-reference
+    flags it.
+  finding_basis: F-REG
+- canonical_name: Bonds
+  aliases:
+  - Sincerity
+  - Affability
+  kind: attribute_scalar
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:44
+  formulas:
+  - formula: raw attribute, scale 1-7
+    surface: references/descriptor_registry.yaml:44
+    provenance: F-REG
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 1-7
+  key_bindings:
+  - attr.social.bonds
+  consumers:
+  - Knot Pool = (Bonds*2)+3
+  - Disposition gating (Bonds>=5 for Knot eligibility, post-ED-912 no longer a ceiling)
+  divergences:
+  - Absent from glossary.md's 7-attribute table entirely (glossary.md:27-41) even though descriptor_registry
+    carries a 9-attribute roster (glossary.md:31 self-flags the conflict).
+  finding_basis: F-REG-005, KNOWN-TRACKED ED-IN-0008 (7-vs-9 roster)
+- canonical_name: Body (aggregate)
+  aliases: []
+  kind: attribute_aggregate
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:49
+  formulas:
+  - formula: sum(Strength, Endurance, Agility)
+    surface: references/descriptor_registry.yaml:49
+    provenance: F-REG
+  registered: warn
+  status: ORPHANED
+  scale_bounds: status:placeholder, NOT wired
+  key_bindings:
+  - agg.body
+  divergences:
+  - Legacy Stat*3 multipliers remain live in place of this aggregate wherever a body-scale multiplier
+    is needed — the aggregate is defined but not consumed anywhere in this sweep.
+  finding_basis: CLAUDE.md baseline / descriptor_registry.yaml status:placeholder
+- canonical_name: Mind (aggregate)
+  aliases: []
+  kind: attribute_aggregate
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:50
+  formulas:
+  - formula: sum(Focus, Acuity, Will)
+    surface: references/descriptor_registry.yaml:50
+    provenance: F-REG
+  registered: warn
+  status: ORPHANED
+  scale_bounds: status:placeholder, NOT wired
+  key_bindings:
+  - agg.mind
+  finding_basis: CLAUDE.md baseline
+- canonical_name: Social (aggregate)
+  aliases: []
+  kind: attribute_aggregate
+  cluster: C1
+  defining_surface: references/descriptor_registry.yaml:51
+  formulas:
+  - formula: sum(Attunement, Charisma, Bonds)
+    surface: references/descriptor_registry.yaml:51
+    provenance: F-REG
+  registered: warn
+  status: ORPHANED
+  scale_bounds: status:placeholder, NOT wired
+  key_bindings:
+  - agg.social
+  finding_basis: CLAUDE.md baseline
+- canonical_name: Thread Sensitivity (TS)
+  aliases: []
+  kind: practitioner_stat
+  cluster: C1
+  defining_surface: references/glossary.md:60
+  formulas:
+  - formula: raw practitioner stat, scale 0-100+; TS>=30 gates Knot formation
+    surface: references/glossary.md:60; params/core.md:149
+    provenance: F-REG
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  scale_bounds: 0-100+
+  consumers:
+  - Thread Pool Score (TPS=TS/10)
+  - thread_leap eligibility (mechanics_index.yaml:359)
+  - Knot formation prerequisite (TS>=30)
+  finding_basis: F-REG-006
+- canonical_name: Resonant Style
+  aliases: []
+  kind: practitioner_stat
+  cluster: C1
+  defining_surface: AMBIGUOUS:designs/npcs/npc_behavior_v30.md:32-34 vs references/module_contracts.yaml:231
+    (gate-only mention)
+  formulas:
+  - formula: enum determined by NPC Conviction taxonomy (Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden)
+    surface: designs/personal/conviction_track_v1.md:10-14
+    provenance: F-DESIGN
+  registered: unregistered
+  status: AMBIGUOUS
+  key_bindings:
+  - piety_track gate g_scar2 ('Resonant Style X exposed')
+  divergences:
+  - Referenced as an exposed state in module_contracts.yaml:231 gate g_scar2 but never declared as a state
+    entry or emission anywhere in contracts.
+  finding_basis: F-C-010, F-DESIGN item; KNOWN-TRACKED ED-IN-0025 (resonance_style retirement correction,
+    NEEDS-JORDAN — do not re-litigate disposition, only note registration gap)
+- canonical_name: Influence (faction stat)
+  aliases: []
+  kind: faction_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:65
+  formulas:
+  - formula: raw faction stat, scale 1-7, floor 1 (cannot drop below 1)
+    surface: references/descriptor_registry.yaml:65; references/glossary.md:105
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7, floor 1
+  key_bindings:
+  - fac.influence
+  consumers:
+  - Reputation = Influence*15
+  divergences:
+  - Shares the bare word 'Influence' with attr.social.charisma's alias 'Influence' (C1) — different concept,
+    different scale, no registry disambiguation.
+  finding_basis: F-REG
+- canonical_name: Wealth
+  aliases: []
+  kind: faction_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:66
+  formulas:
+  - formula: raw faction stat, scale 1-7; 0 = cannot Trade or fund Wealth-requiring actions
+    surface: references/descriptor_registry.yaml:66; references/glossary.md:106
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - fac.wealth
+  consumers:
+  - Treasury = Wealth*100
+  finding_basis: F-REG
+- canonical_name: Military (faction stat)
+  aliases: []
+  kind: faction_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:67
+  formulas:
+  - formula: raw faction stat, scale 1-7; 0 = cannot Muster
+    surface: references/descriptor_registry.yaml:67; references/glossary.md:107
+    provenance: F-REG
+  - formula: Crown starting Military = 5 (Starting Stats table)
+    surface: params/bg/core.md:165
+    provenance: F-PARAMS-09
+  - formula: Crown starting Military = 5/6, prior value 4 struck per ED-869/Jordan 2026-05-31
+    surface: params/factions/stats_1_7_scale.md:19
+    provenance: F-PARAMS-09
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 1-7
+  key_bindings:
+  - fac.military
+  consumers:
+  - Levies Available = Military*2 (ceiling)
+  divergences:
+  - params/bg/core.md:172's own footnote (2026-05-30) still claims an UNRESOLVED conflict with stats_1_7_scale.md
+    ('=4, direction undetermined, see ED-869') even though stats_1_7_scale.md's own text (dated one day
+    later, 2026-05-31) shows the conflict was already resolved to 5/6 — the bg/core.md footnote is stale
+    relative to its own cited resolution.
+  finding_basis: F-PARAMS-09, KNOWN-TRACKED ED-869 (footnote staleness itself is the NEW residual)
+- canonical_name: Intel
+  aliases: []
+  kind: faction_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:68
+  formulas:
+  - formula: raw faction stat, scale 1-7 ('Intelligence capacity')
+    surface: references/descriptor_registry.yaml:68; references/glossary.md:108
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - fac.intel
+  finding_basis: F-REG
+- canonical_name: Stability (faction stat)
+  aliases: []
+  kind: faction_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:69
+  formulas:
+  - formula: raw faction stat, scale 1-7; 0 = Collapse trigger (P-15)
+    surface: references/descriptor_registry.yaml:69; references/glossary.md:109
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 1-7
+  key_bindings:
+  - fac.stability
+  consumers:
+  - Discipline = Stability*10
+  finding_basis: F-REG
+- canonical_name: Legitimacy (settlement, L)
+  aliases:
+  - L
+  - L_s
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: designs/territory/settlement_layer_v30.md:147-177 (§1.8, LPS-2e)
+  formulas:
+  - formula: per-settlement track, 0-7 (Jordan ruling 2026-05-30, supersedes PP-686 v2 faction-level L/PS)
+    surface: references/descriptor_registry.yaml:78; references/module_contracts.yaml:559
+    provenance: F-REG/F-C
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 0-7
+  key_bindings:
+  - set.legitimacy
+  - module_contracts.yaml derivation input L_s
+  consumers:
+  - Mandate formula (both linear and saturating variants)
+  - Faction Legitimacy(derived) = Mandate*20 (distinct, see that row)
+  divergences:
+  - designs/provincial/faction_behavior_v30.md retains its old per-territory §3.4/§3.5 dynamics formulas
+    (pre-LPS-2e) beneath an inline SUPERSEDED-BY banner rather than being rewritten/removed.
+  - Referenced as 'L'/'PS' in module_contracts prose but 'L_s'/'PS_s' in the Mandate derivation formula
+    — abbreviation-vs-subscript synonym split (F-C-008).
+  finding_basis: F-C-008, F-DESIGN (Legitimacy/Popular Support per-settlement item)
+- canonical_name: Popular Support (settlement, PS)
+  aliases:
+  - PS
+  - PS_s
+  - Public Support (deprecated term, renamed 2026-05-30)
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: designs/territory/settlement_layer_v30.md:147-177 (§1.8, LPS-2e)
+  formulas:
+  - formula: per-settlement track, 0-7
+    surface: references/descriptor_registry.yaml:79; references/module_contracts.yaml:559
+    provenance: F-REG/F-C
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 0-7
+  key_bindings:
+  - set.popular_support
+  consumers:
+  - Mandate formula
+  divergences:
+  - Deprecated term 'Public Support' (pre-2026-05-30 rename) still appears live in settlement_layer_v30.md:631
+    — renamed but not propagated (FIX-08).
+  finding_basis: FIX-08 (KNOWN-UNTRACKED per name_collision_database.yaml:469 deprecated_term_residual)
+- canonical_name: Prosperity (settlement)
+  aliases: []
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:80
+  formulas:
+  - formula: raw settlement stat, scale 0-5
+    surface: references/descriptor_registry.yaml:80
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 0-5
+  key_bindings:
+  - set.prosperity
+  consumers:
+  - Local Economy = Prosperity*50
+  - Mandate settlement-weight term W_s
+  finding_basis: F-REG
+- canonical_name: Defense (settlement)
+  aliases: []
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:81
+  formulas:
+  - formula: raw settlement stat, scale 0-5
+    surface: references/descriptor_registry.yaml:81
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 0-5
+  key_bindings:
+  - set.defense
+  consumers:
+  - Garrison Strength = Defense*20 + Fort*30
+  finding_basis: F-REG
+- canonical_name: Order (settlement)
+  aliases: []
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: references/descriptor_registry.yaml:82
+  formulas:
+  - formula: raw settlement stat, scale 0-5
+    surface: references/descriptor_registry.yaml:82
+    provenance: F-REG
+  registered: warn
+  status: COHERENT
+  scale_bounds: 0-5
+  key_bindings:
+  - set.order
+  consumers:
+  - Public Order = Order*20
+  - Province Accord = floor(mean Order across province)
+  finding_basis: F-REG
+- canonical_name: Fort Level
+  aliases:
+  - Fort
+  kind: settlement_stat
+  cluster: C5
+  defining_surface: AMBIGUOUS:no owning module — appears only inside a derivation formula
+  formulas:
+  - formula: Garrison Strength = Defense*20 + Fort*30
+    surface: references/module_contracts.yaml:591-592
+    provenance: F-C-007
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  consumers:
+  - Garrison Strength derivation
+  divergences:
+  - Appears only in the Garrison Strength formula; never declared as a state entry for any module in module_contracts.yaml,
+    not in descriptor_registry, not in names_index.
+  finding_basis: F-C-007
+- canonical_name: Settlement weight inputs (FacilityTier, base(Type), W_s)
+  aliases: []
+  kind: derived_value
+  cluster: C5
+  defining_surface: references/module_contracts.yaml:600 (formula-only, no owning state entries)
+  formulas:
+  - formula: W_s = base(Type) + Prosperity_s + FacilityTier_s; T = sum(W_s*(q_s/7))
+    surface: references/module_contracts.yaml:598-601; designs/territory/settlement_layer_v30.md:159
+    provenance: F-C-005
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  consumers:
+  - Mandate (saturating form) derivation
+  divergences:
+  - FacilityTier, base(Type), and W_s all appear only as formula intermediates in the Mandate derivation;
+    none are declared state entries or derivations of their own. 'base(Type)' notation is unclear (unresolved
+    whether 'Type' is settlement-type metadata).
+  finding_basis: F-C-005
+- canonical_name: Church Influence (CI)
+  aliases:
+  - Crown Index (alleged collision, name_collision_database.yaml:459, unresolved)
+  - Theocracy Counter (TC, deprecated ED-782)
+  - Thread Consciousness (CI) — apparent mis-citation, victory.md Löwenritter row
+  kind: faction_stat
+  cluster: C4
+  defining_surface: AMBIGUOUS:params/bg/core.md:82 / params/bg/ci_seizure.md:119-120 / params/bg/parliament.md:52-53
+    (BG start=28, triangulated) vs params/factions_personal.md (TTRPG start=0) vs params/campaign_modes.md:46
+    (TTRPG start=15, unsupported anywhere else)
+  formulas:
+  - formula: 0-100 clock; BG start=28 (P-32, corrects PP-188's 22)
+    surface: params/bg/core.md:82; params/bg/ci_seizure.md:119-120; params/bg/parliament.md:52-53
+    provenance: F-PARAMS
+  - formula: TTRPG start=0
+    surface: params/factions_personal.md Clock Starting Values
+    provenance: F-PARAMS
+  - formula: '''TTRPG Session Zero'' start=15, cites params_core.md/params_factions_ttrpg.md as source
+      (neither supports 15)'
+    surface: params/campaign_modes.md:46
+    provenance: F-PARAMS-03
+  - formula: 0-100 territorial clock, writable by territorial_piety, read-only by ci_political
+    surface: references/module_contracts.yaml:255,644
+    provenance: F-C-012
+  registered: not_descriptors
+  status: DRIFTED
+  scale_bounds: 0-100
+  key_bindings:
+  - territorial_piety emits, ci_political reads
+  consumers:
+  - Mass Seizure gate (CI>=60, params/bg/ci_seizure.md)
+  - Church primary-victory threshold (CI>=65, params/bg/parliament.md)
+  - Löwenritter victory row (Thread Consciousness (CI)<50, params/bg/victory.md:17,92)
+  divergences:
+  - campaign_modes.md's TTRPG-mode CI=15 matches neither the TTRPG value (0) nor the BG value (28) cited
+    anywhere else (F-PARAMS-03).
+  - params/bg/victory.md:17,92 reuses the 'CI' abbreviation for a second, undefined quantity 'Thread Consciousness'
+    inside the same table that uses CI exclusively for Church Influence elsewhere (F-PARAMS-06).
+  - name_collision_database.yaml:459 separately records CI = Church Influence vs 'Crown Index' as a pending
+    Jordan-adjudication collision (FIX-03, KNOWN-TRACKED).
+  - Two CI thresholds (65 'primary victory' vs 60 'Mass Seizure available') coexist without cross-reference
+    distinguishing them as separate gates.
+  finding_basis: F-PARAMS-03, F-PARAMS-06, FIX-03, F-C-012
+- canonical_name: Institutional Pressure / Invasion Pressure (IP)
+  aliases:
+  - Invasion Pressure
+  - Imperial Pressure (alleged collision, unresolved)
+  kind: clock
+  cluster: C4
+  defining_surface: AMBIGUOUS:params/bg/core.md:83 ('Invasion Pressure') vs params/factions_personal.md/campaign_modes.md/mass_combat.md
+    ('Institutional Pressure') — same value/thresholds, different full name
+  formulas:
+  - formula: 0-100 clock, start 20, IP>=75 Altonian Vanguard deployment
+    surface: params/bg/core.md:83; params/bg/clocks.md:33; params/bg/geography.md:19; params/bg/victory.md:10,85
+    provenance: F-PARAMS-05 ('Invasion Pressure' lineage)
+  - formula: same value/thresholds under 'Institutional Pressure' name
+    surface: params/factions_personal.md; params/campaign_modes.md:47; params/mass_combat.md:382
+    provenance: F-PARAMS-05
+  - formula: 0-100 clock [PROVISIONAL ED-793 start value]
+    surface: references/module_contracts.yaml:516
+    provenance: F-C
+  registered: not_descriptors
+  status: DRIFTED
+  scale_bounds: 0-100
+  key_bindings:
+  - victory gates g_ip100/g_ip85/g_ip80/g_ipfall (module_contracts.yaml:521-536)
+  consumers:
+  - Altonian Vanguard deployment (IP>=75)
+  - AER (Altonian Enemy Rank) logic
+  divergences:
+  - Same 0-100 clock (start 20) carries two different full names across sibling files sharing abbreviation
+    IP, never cross-referenced (F-PARAMS-05).
+  - name_collision_database.yaml separately records IP = Institutional Pressure vs 'Imperial Pressure'
+    as a second, still-pending collision (FIX-03).
+  - No file in either family states an explicit season-over-season advancement formula for IP — thresholds
+    are documented, the update rule is not (FIX-09).
+  finding_basis: F-PARAMS-05, FIX-03, FIX-09
+- canonical_name: Mending Stability (MS)
+  aliases:
+  - Rendering Stability (RS, historical name pre-ED-731)
+  - RS (bare abbreviation, still used undefined in several live files)
+  kind: clock
+  cluster: C4
+  defining_surface: params/core.md:95-101 (MS; ED-731 rename)
+  formulas:
+  - formula: 0-100, floor 0 (Rupture), ceiling 100; TTRPG start=60, BG start=72; decay -1/in-game-year
+      baseline (PP-255)
+    surface: params/core.md:95-101
+    provenance: F-REG/F-PARAMS
+  - formula: 'historical definition under prior name: ''Rendering Stability (RS) | 100->0 | World coherence
+      (shared track)'''
+    surface: params/threadwork_superseded.md:19
+    provenance: F-PARAMS-01
+  - formula: live file still uses bare undefined 'RS Track' with no in-file expansion
+    surface: params/threadwork.md:139-142
+    provenance: F-PARAMS-01
+  registered: not_descriptors
+  status: DRIFTED
+  scale_bounds: 0-100
+  key_bindings:
+  - 'impact_vector: MS (stat_delta)'
+  - victory conditions
+  - threat_weaving prereqs
+  consumers:
+  - params/bg/ed_resolutions.md:186 vs params/bg/faction_actions.md:159 (identical PP-436 Crown Thread
+    Liaison rule, one calls it 'MS tracking' the other 'RS threshold tracking')
+  - params/bg/core.md:149 vs params/bg/tracks.md:135 (identical Turmoil Collapse row, MS vs RS wording)
+  divergences:
+  - Renamed ED-731 in params/core.md and glossary.md, but params/threadwork.md (live, non-superseded)
+    and params/bg/phases.md, bg/npc_priority_trees.md carry bare 'RS' with no expansion anywhere in-file.
+  - values_master.yaml:190 header still says 'Rendering Stability (start)'; mechanics_index.yaml:778 entry
+    'rs_track' still labeled 'Rendering Stability world-track' (F-REG-011).
+  - module_contracts.yaml gap_notes:671 flags MS as an unowned clock read by victory module gates (g_ms0/g_ms5/g_msrec)
+    with no emitting module in contracts (F-C-002).
+  finding_basis: F-PARAMS-01 (KNOWN-UNTRACKED — no ED governs the MS<->RS name unification), F-REG-011,
+    F-C-002
+- canonical_name: Piety Track / Conviction Track (multi-referent)
+  aliases:
+  - PT
+  - CT
+  - Conviction (personal worldview taxonomy, distinct referent)
+  - Persuasion Track (glossary appears to mis-describe this as Piety Track)
+  kind: track
+  cluster: C4
+  defining_surface: 'AMBIGUOUS: at least 4 structurally different referents share this name/abbreviation
+    — see divergences'
+  formulas:
+  - formula: (a) per-territory Church institutional-standing stat, 0-5, '(PT)'
+    surface: designs/scene/conviction_track_v30.md:14-23
+    provenance: F-DESIGN-4
+  - formula: (b) per-character moral-belief/Scar mechanic, no stated 0-10 scale
+    surface: designs/personal/conviction_track_v1.md:1-10
+    provenance: F-DESIGN-4
+  - formula: (c) 'Piety Track | CT* | 0-10 | Debate position tracker... Side A wins >=7...' citing conviction_track_v1.md
+      as canonical, but text matches Persuasion Track instead
+    surface: references/glossary.md:86
+    provenance: F-DESIGN-4/F-REG
+  - formula: (d) 'Piety Track | 0-10 | Per character | Personal religious standing' — fourth uncited restatement
+    surface: designs/scene/derived_stats_v30.md:561
+    provenance: F-DESIGN-4
+  - formula: range 0-5 (NOT 0-10), 0=Restoration/5=Orthodoxy, per-territory
+    surface: references/mechanical_terms_index.md:263
+    provenance: F-INDEX
+  registered: not_descriptors
+  status: AMBIGUOUS
+  scale_bounds: 0-5 (territorial) vs 0-10 (glossary/derived_stats, disputed)
+  key_bindings:
+  - state.scar_acquired (module_contracts.yaml:225, per-Conviction scar count)
+  - territory state vector
+  - Calamity Drift formula
+  divergences:
+  - The narrower (a)-vs-tc_political_redesign 'Piety (PT)' duplicate is separately KNOWN-TRACKED (designs/provincial/faction_politics_v30.md:25
+    A-06; :1048 ED-644 'rename deferred') — that ED covers only that pair, not the broader 4-way collision.
+  - glossary.md:86's own description verbatim matches social_contest_v30.md:276's Persuasion Track, not
+    the Scar mechanic its cited canonical doc (conviction_track_v1.md) actually defines — an apparent
+    miscitation.
+  - name_collision_database.yaml separately records PT = Piety Track vs 'Piety Territory' as a third,
+    still-pending collision (FIX-03); mechanical_terms_index flags an old diagnostic that used the wrong
+    range (0-10 instead of 0-5).
+  finding_basis: F-DESIGN-4 (NEW, broader collision), F-C-001 (3-way collision per module_contracts gap_notes),
+    FIX-03 (KNOWN-TRACKED acronym collision), ED-644 (KNOWN-TRACKED narrow duplicate — not re-litigated)
+- canonical_name: Persuasion Track
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: designs/scene/social_contest_v30.md:89-93,184-276,481-488
+  formulas:
+  - formula: '0-10, banded: >=7 Side A wins, <=3 Side B wins, 4-6 compromise; Regroup/Concede a Point
+      move it +-1; preserved unchanged by CR3'
+    surface: designs/scene/social_contest_v30.md:481
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: UNREGISTERED-LOAD-BEARING
+  scale_bounds: 0-10
+  divergences:
+  - descriptor_registry.yaml:108 lists a bare 'Persuasion' in not_descriptors:tracks with NO scale or
+    formula (F-REG-009, treated there as an orphan) — but a full, coherent definition of a *track by this
+    name* exists in social_contest_v30.md. Likely the same concept under-linked from the registry's bare-name
+    list rather than a genuinely undefined quantity; flagged as a registry-linkage gap, not a design gap.
+  - glossary.md:86's Piety Track entry appears to actually describe this Persuasion Track's mechanics
+    verbatim (see Piety Track row).
+  finding_basis: F-REG-009 + F-DESIGN cross-read; NEW (the registry-vs-design contradiction itself)
+- canonical_name: Disposition
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: designs/scene/derived_stats_v30.md:388-394 (§10.1, ED-912)
+  formulas:
+  - formula: flat -5..+5, per NPC; decoupled from Bonds-as-ceiling (ED-912, supersedes PP-684 'ceiling=Bonds')
+    surface: designs/scene/derived_stats_v30.md:388-394,560
+    provenance: F-DESIGN
+  - formula: same -5..+5 flat range, cross-references ED-912 explicitly
+    surface: params/core.md:147; params/fieldwork.md:123-153
+    provenance: F-PARAMS
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: -5..+5
+  consumers:
+  - NPC behaviour-tree branching
+  - Knot eligibility gated by Bonds>=5 (no longer by Disposition ceiling)
+  finding_basis: F-REG, F-DESIGN, F-PARAMS — positive control case, ED-912 propagation landed consistently
+    across core.md/fieldwork.md/derived_stats_v30.md
+- canonical_name: Standing
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: references/glossary.md:110
+  formulas:
+  - formula: 0-10 (exception to 1-7 scale); no benefit above 7, 10 cosmetic max
+    surface: references/glossary.md:110
+    provenance: F-REG
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: 0-10
+  consumers:
+  - Face_current = round(Standing/10 * Face_max) (params/contest.md:137,143-151)
+  finding_basis: F-REG
+- canonical_name: Renown
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: 'AMBIGUOUS: listed in registry, defined nowhere'
+  formulas: []
+  registered: not_descriptors
+  status: ORPHANED
+  divergences:
+  - descriptor_registry.yaml:108 lists Renown in not_descriptors:tracks; no scale, formula, or design-doc
+    definition found anywhere in the swept corpus.
+  finding_basis: F-REG-008
+- canonical_name: Warden's Accord (WA) / Warden Recognition (WR)
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: 'AMBIGUOUS: params/bg/victory.md (still cites WA) vs params/bg/geography.md (ED-311-resolved,
+    states it replaces WA with WR)'
+  formulas:
+  - formula: 'WA, range -3..+3, gates RM Emergence — Varfell Path B: WA>=+1; Varfell+RM co-victory: WA>=+2'
+    surface: params/bg/victory.md:14,53,89,130; params/bg/npcs_special.md:75-84
+    provenance: F-PARAMS-04
+  - formula: 'WR, range 0-4, Varfell-only, gates Path B — ''Replaces provisional conditions in victory_v30.md
+      §3.4'': WR>=2'
+    surface: params/bg/geography.md:412-431; params/bg/npcs_special.md:40-51
+    provenance: F-PARAMS-04
+  registered: unregistered
+  status: DRIFTED
+  divergences:
+  - params/bg/geography.md's own ED-311-RESOLVED Path B table explicitly states it replaces victory.md
+    §3.4's WA-gated version with a WR-gated version, but victory.md's Summary and Co-Victory tables were
+    never updated off WA — an engine reading victory.md's own table would gate on the wrong (superseded)
+    track.
+  - name_collision_database.yaml separately flags WC/WR as 'registered but no quantity-level definition/bounds/formula
+    found' (FIX-07) — a narrower, still-open registration gap on WR specifically.
+  finding_basis: F-PARAMS-04 (NEW), FIX-07 (NEW, registration-gap angle)
+- canonical_name: Vaynard Thread Mastery (VTM)
+  aliases: []
+  kind: faction_stat
+  cluster: C4
+  defining_surface: params/bg/tracks.md:22-24 ('VTM — STRUCK, PP-663, 2026-04-19)
+  formulas:
+  - formula: STRUCK as faction-level stat
+    surface: params/bg/tracks.md:22-24; params/bg/faction_actions.md:182-184; params/bg/npcs_special.md:29-32,91
+    provenance: KNOWN-TRACKED CR-STRIKE-2026-04-19/PP-663
+  - formula: 'still gates numeric victory thresholds as if live: Path A VTM>=3, Path C VTM=5, Crown+Varfell
+      VTM>=3, Varfell+RM VTM>=4'
+    surface: params/bg/victory.md:13-15,52-53,88-90,129-130
+    provenance: F-PARAMS-02
+  - formula: 'still gates Southernmost Champion access thresholds as if live: ''Vaynard (VTM 3+)'', ''VTM
+      4+'', ''VTM>=2: -1 Ob'''
+    surface: params/bg/geography.md:270-403
+    provenance: F-PARAMS-02
+  registered: unregistered
+  status: DEAD
+  divergences:
+  - The strike itself is KNOWN-TRACKED, but params/bg/victory.md's live victory-condition tables and params/bg/geography.md's
+    entire Southernmost Access/Champion-qualification system never received the propagation and still
+    treat VTM as a live, numerically-checkable stat — both are load-bearing surfaces for actual play resolution.
+  finding_basis: 'F-PARAMS-02 (NEW: the non-propagation, not the strike itself)'
+- canonical_name: Turmoil (= Strain)
+  aliases:
+  - Strain
+  kind: track
+  cluster: C4
+  defining_surface: params/factions_personal.md:104
+  formulas:
+  - formula: 0-10, global; self-documented alias 'Also called "Strain" in peninsular_strain docs and phases.md
+      §4d'
+    surface: params/factions_personal.md:104; params/bg/tracks.md:122-135 (PP-646); params/bg/core.md:141-149
+    provenance: F-PARAMS
+  registered: unregistered
+  status: DRIFTED
+  scale_bounds: 0-10
+  divergences:
+  - Synonym is self-disclosed in-place (not silent) — lower severity than the MS/RS split. Table duplicated
+    near-verbatim across 3 files, a maintenance/drift risk even though values currently agree.
+  finding_basis: F-PARAMS (KNOWN-UNTRACKED, low-stakes)
+- canonical_name: Evidence (Track)
+  aliases: []
+  kind: clock
+  cluster: C4
+  defining_surface: designs/scene/fieldwork_v30.md:254-272 (§4.1)
+  formulas:
+  - formula: 0 to per-investigation threshold; persistent across scenes/sessions, one per investigation
+      regardless of territory
+    surface: designs/scene/fieldwork_v30.md:254-272
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: DRIFTED
+  divergences:
+  - 'kind_guess split: F-REG classifies as ''clock'' (descriptor_registry.yaml:109 not_descriptors), F-DESIGN
+    documents it as a fieldwork ''Evidence Track'' — same concept, inconsistent kind taxonomy applied
+    even within the not_descriptors framework.'
+  finding_basis: F-REG (clock), F-DESIGN (track) — cross-family kind mismatch, NEW observation
+- canonical_name: Coherence (cross-scale)
+  aliases: []
+  kind: track
+  cluster: C4
+  defining_surface: AMBIGUOUS-BY-DESIGN (three intentional scales — see divergences)
+  formulas:
+  - formula: 'Personal: 10 (start) counting down to 0; at 0, character becomes NPC (PP-261)'
+    surface: values_master.yaml:1192; params/core.md:161; references/glossary.md:49
+    provenance: 'F-REG (kind_guess: derived_value)'
+  - formula: 'Personal: 0-10 (or 10->0), a ''permanent degradation track'', explicitly NOT a derived value;
+      Mending costs 0 Coherence (asymmetry)'
+    surface: designs/scene/derived_stats_v30.md:261,563; designs/threadwork/threadwork_v30.md:56,92,133,283-284,344,395,429,446,481
+    provenance: 'F-DESIGN (kind_guess: track)'
+  - formula: 'Cosmological: 4 TS-gated bands — Stirring 30-49, Attuned 50-69, Sensitive 70-89, Resonant
+      90-100'
+    surface: references/mechanical_terms_index.md:368
+    provenance: F-INDEX
+  registered: not_descriptors
+  status: COHERENT
+  key_bindings:
+  - stat_deltas (type:coherence)
+  divergences:
+  - mechanical_terms_index.md:2 explicitly endorses this as an INTENTIONAL cross-silo concept at three
+    scales (personal countdown track, cosmological TS-gated bands) — treated here as by-design, not a
+    defect.
+  - kind_guess itself is inconsistent across families (derived_value in F-REG vs track in F-DESIGN) for
+    the same personal-scale referent — a minor taxonomy inconsistency riding on top of the intentional
+    multi-scale design.
+  finding_basis: F-INDEX (intentional-design note), F-REG/F-DESIGN kind-guess mismatch (NEW, minor)
+- canonical_name: Combat Pool
+  aliases: []
+  kind: derived_value
+  cluster: C3
+  defining_surface: params/core.md:161 (ratified 2026-05-29 R1, ED-901; re-ratified ED-900/904)
+  formulas:
+  - formula: 'CANONICAL: max(5, Relevant History + 6), Agility-independent'
+    surface: params/core.md:161
+    provenance: F-PARAMS/F-REG/F-SIM/F-C canonical
+  - formula: 'STRUCK: (Agility*2) + History + 3, filed under nonexistent params/combat.md'
+    surface: values_master.yaml:212
+    provenance: F-REG-001/FIX-05
+  - formula: STRUCK (duplicate stale entry)
+    surface: values_master.yaml:1150
+    provenance: F-REG-001/FIX-05
+  - formula: stale header comment still citing PP-247 struck form
+    surface: params/core.md:4
+    provenance: F-SIM-06
+  - formula: canonical form implemented
+    surface: designs/scene/combat_engine_v1/combatant.py:117; references/module_contracts.yaml:810; combat_config.gd
+    provenance: F-SIM/F-C-006
+  registered: not_descriptors
+  status: DRIFTED
+  scale_bounds: min 5
+  key_bindings:
+  - 'module_contracts.yaml:810 (resolver: d_sigma, pool=max(5,History+6))'
+  consumers:
+  - designs/scene/combat_v30.md:4
+  - personal_combat resolver
+  divergences:
+  - Triple-carried in values_master.yaml (quarantined, ED-1084) and params/core.md's own stale header
+    — the prose/table body is correct but its provenance comment is stale.
+  - 'designs/scene/derived_stats_v30.md self-contradicts: §13 ''What Does NOT Change'' (line 515) states
+    the struck (Agi*2)+History+3 form as still-current, while §14.4 (line 584) two sections later states
+    that exact formula was STRUCK (F-DESIGN-1, NEW).'
+  - module_contracts.yaml:810's 'History' term is not itself a declared attribute in the 9-attribute roster
+    (descriptor_registry.yaml) — it is a derived/tracked quantity from elsewhere (relevant skill History),
+    not flagged as a gap by any family but worth noting for completeness (F-C-006).
+  finding_basis: F-REG-001, F-PARAMS(F-SIM-06), F-DESIGN-1, F-C-006, FIX-05 — all KNOWN-TRACKED at the
+    values_master level; F-DESIGN-1's specific self-contradiction is NEW
+- canonical_name: Stamina
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:96-122 (§4.2, RATIFIED S1 2026-05-29)
+  formulas:
+  - formula: 'CURRENT: (3*Endurance)+(2*Spirit), range 5-47; recovery ''Take a Breath'' = (Endurance+relevant
+      History)*2, capped'
+    surface: designs/scene/derived_stats_v30.md:96-122,538
+    provenance: F-DESIGN
+  - formula: 'OLD: Endurance*5, range 5-35 (ED-694); recovery = Endurance score'
+    surface: designs/scene/combat_v30.md:302-303,98
+    provenance: F-DESIGN-2
+  - formula: values_master.yaml carries the OLD formula
+    surface: values_master.yaml:1122
+    provenance: F-REG
+  - formula: implemented as (3*Endurance)+(2*Spirit) — matches CURRENT
+    surface: designs/scene/combat_engine_v1/combatant.py:45-47
+    provenance: F-SIM
+  registered: not_descriptors
+  status: DRIFTED
+  scale_bounds: 5-47 (current) vs 5-35 (stale)
+  divergences:
+  - designs/scene/combat_v30.md — the design-layer source doc for personal combat's non-resolution content
+    — still carries the pre-S1 formula and recovery rule with no pointer to the S1-ratified values, even
+    though derived_stats_v30.md's own §12 table documents the supersession explicitly (F-DESIGN-2, NEW).
+  - The sim implementation (combatant.py) already matches the CURRENT formula, so the drift is confined
+    to prose (combat_v30.md, values_master.yaml), not the executable oracle.
+  finding_basis: F-DESIGN-2 (NEW), F-REG, F-SIM (canonical confirmation)
+- canonical_name: Health
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:55-90 (§4.1, AUTHORITATIVE)
+  formulas:
+  - formula: Health(full) = round(WI*(MW+1) + 0.25*Strength*Endurance); WI=round(Endurance+4+0.4*Spirit);
+      MW=min(floor(Endurance/2)+1,3). Felled at cumulative damage>=Health (D-A, ED-1021)
+    surface: designs/scene/derived_stats_v30.md:55-90
+    provenance: F-DESIGN
+  - formula: implemented formula matches
+    surface: designs/scene/combat_engine_v1/combatant.py:40-42
+    provenance: F-SIM
+  - formula: contract formula matches, but references Endurance/Spirit/Strength which are NOT declared
+      personal_combat state entries
+    surface: references/module_contracts.yaml:819,826-829
+    provenance: F-C-003
+  registered: not_descriptors
+  status: UNREGISTERED-LOAD-BEARING
+  key_bindings:
+  - scene.combat_hit stat_deltas route to cumulative_damage substrate (F1 rule)
+  divergences:
+  - module_contracts.yaml's personal_combat module state list (Health, cumulative_damage, Wounds, Stamina,
+    Initiative, Poise) does not include the character attributes (Endurance, Spirit, Strength) its own
+    Health formula depends on — these must come from an external character-attribute model never cross-referenced
+    in the contract (F-C-003, key-binding-gap).
+  finding_basis: F-C-003 (NEW), F-DESIGN/F-SIM (formula itself coherent across all three surfaces)
+- canonical_name: Wound Interval (WI)
+  aliases:
+  - Wound Index
+  kind: derived_value
+  cluster: C2
+  defining_surface: 'AMBIGUOUS: no owning module — intermediate calculation only'
+  formulas:
+  - formula: WI = round(Endurance + 4 + 0.4*Spirit)
+    surface: designs/scene/combat_engine_v1/combatant.py:35-37; references/module_contracts.yaml:819-820
+      (comment only)
+    provenance: F-SIM/F-C-009
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  consumers:
+  - Health formula
+  - Wounds formula (min(floor(cumulative_damage/WI), MW+1))
+  divergences:
+  - Defined only in a formula comment in module_contracts.yaml, never declared as its own state entry
+    or derivation despite being load-bearing for both Health and Wounds (F-C-009).
+  finding_basis: F-C-009
+- canonical_name: Max Wounds (MW)
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:55-90 (§4.1, formula only)
+  formulas:
+  - formula: MW = min(floor(Endurance/2)+1, 3) — PP-717 cap
+    surface: designs/scene/combat_engine_v1/combatant.py:30-32
+    provenance: F-SIM
+  - formula: same formula, comment-only in contract
+    surface: references/module_contracts.yaml:821,828
+    provenance: F-C-009
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  consumers:
+  - Health formula
+  - Wounds formula
+  divergences:
+  - Appears only in formulas (Wounds derivation line 821, Health derivation line 828) in module_contracts.yaml;
+    never declared as its own state entry or derivation (F-C-009).
+  finding_basis: F-C-009
+- canonical_name: Composure / Face
+  aliases:
+  - Composure (retained in combat/knots/conviction)
+  - Face (social-contest-scoped rename)
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/social_contest_v30.md:229-258,481-512 (CR3, ED-1056, 2026-06-01)
+  formulas:
+  - formula: Composure (buffer magnitude) = Charisma*3, range 3-21
+    surface: designs/scene/derived_stats_v30.md:128-161; params/contest.md:137
+    provenance: F-DESIGN
+  - formula: Face_max = Charisma*3; Face_current = round(Standing/10 * Face_max)
+    surface: designs/scene/social_contest_v30.md:481-512; params/contest.md:143-151
+    provenance: F-DESIGN/F-PARAMS
+  registered: not_descriptors
+  status: COHERENT
+  key_bindings:
+  - sim/personal/contest/primitives.py FaceScale
+  - sim/personal/contest/resolver.py
+  divergences:
+  - ED-1056 explicitly scopes the Composure->Face rename to social-contest only; combat/knots/conviction
+    retain 'Composure' as a Jordan-confirmed scoped exception (self-documented, KNOWN-TRACKED, not re-litigated).
+  finding_basis: KNOWN-TRACKED ED-1056 — well cross-referenced in-file, logged for completeness
+- canonical_name: Concentration
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: 'AMBIGUOUS: config.py:61/combatant.py:141 (3*Focus+2*Spirit, matches most citations)
+    vs F-SIM-01''s specific citation of params/core.md:162 as ''Charisma*3'''
+  formulas:
+  - formula: 3*Focus + 2*Spirit (Jordan 2026-06-03), range 5-35, depletes 5/exchange (ED-890/DEP)
+    surface: designs/scene/combat_engine_v1/config.py:61 (CONC_FOCUS=3.0, CONC_SPIRIT=2.0); combatant.py:141;
+      params/contest.md:140; params/contest_extensions.md:11-14 (PP-NEW-D); designs/scene/derived_stats_v30.md:128-161
+    provenance: F-REG/F-PARAMS/F-DESIGN/F-SIM (convergent)
+  - formula: '''Concentration = Charisma*3'' asserted as a params/core.md:162 citation'
+    surface: params/core.md:162 (as cited by F-SIM-01)
+    provenance: F-SIM-01
+  registered: not_descriptors
+  status: AMBIGUOUS
+  key_bindings:
+  - stat_deltas payload (no registry key backing it, see divergences)
+  divergences:
+  - F-SIM-01 asserts a THIRD Concentration formula (Charisma*3) sourced to params/core.md:162, calling
+    it a three-way collision with descriptor_registry and combatant.py. However every other family (F-REG,
+    F-PARAMS, F-DESIGN) — including F-SIM's own combatant.py citation — independently converges on 3*Focus+2*Spirit,
+    and Charisma*3 is elsewhere consistently attributed to Composure/Face, not Concentration. This merge
+    does NOT silently resolve the discrepancy (per merge rule 5) but flags F-SIM-01's params/core.md:162
+    citation as the outlier requiring direct re-verification against the working file — possibly a transcription
+    slip conflating Concentration with Composure, possibly a genuine stale duplicate entry in params/core.md
+    itself.
+  - Concentration is referenced in Key stat_deltas payloads (per F-SIM) but has no descriptor_registry
+    key of its own — stat_deltas accepts any string key with zero vocabulary validation (F-SIM-02/03,
+    enforcement-gap).
+  finding_basis: F-SIM-01 (flagged AMBIGUOUS rather than adjudicated — needs direct re-check of params/core.md:162
+    against disk), F-SIM-02/03 (key-binding-gap + enforcement-gap, both NEW and independent of the formula
+    question)
+- canonical_name: Thread Fatigue
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:227-260 (§6.1)
+  formulas:
+  - formula: 'Threshold = Spirit*5, range 5-35; per-op costs: Leap 3, Passive sensing 2, Mending 4, Pulling
+      5, Locking 7, Dissolution 10'
+    surface: designs/scene/derived_stats_v30.md:227-260,541
+    provenance: F-DESIGN
+  - formula: same formula
+    surface: values_master.yaml:1164; params/core.md:161
+    provenance: F-REG
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: 5-35
+  finding_basis: F-REG, F-DESIGN — no divergence found
+- canonical_name: Thread Pool Score (TPS)
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: params/threadwork.md:13
+  formulas:
+  - formula: TPS = Thread Sensitivity / 10 (round down)
+    surface: params/threadwork.md:13; references/glossary.md:61; params/threadwork_superseded.md:22 (identical,
+      correctly-retained historical copy)
+    provenance: F-REG/F-PARAMS
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  consumers:
+  - Thread-Read pool = Spirit*2 + History + TPS (params/core.md:247)
+  - Thread Pool = (Spirit*2)+History bonus+TPS (designs/threadwork/threadwork_v30.md, restated ~7x consistently)
+  divergences:
+  - No key in descriptor_registry, not_descriptors, or names_index despite being a live bonus-dice source
+    in multiple pool formulas (F-REG-007).
+  finding_basis: F-REG-007
+- canonical_name: Resolve
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: params/core.md:1206 / values_master.yaml:1206
+  formulas:
+  - formula: Resolve = Spirit, range 1-7
+    surface: values_master.yaml:1206; params/core.md:1206
+    provenance: F-REG
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: 1-7
+  finding_basis: F-REG — simple 1:1 alias-derived value, no divergence found
+- canonical_name: Certainty
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: values_master.yaml:1178 / params/core.md:161
+  formulas:
+  - formula: 5 (starting, varies by background), range 0-5, cosmological worldview track
+    surface: values_master.yaml:1178; params/core.md:161
+    provenance: F-REG
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: 0-5
+  finding_basis: F-REG
+- canonical_name: Faction Legitimacy (derived meter)
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:297,325-336,544,554 (§8, §14.1 + footnote)
+  formulas:
+  - formula: Legitimacy(derived) = Mandate * 20, range 0-140
+    surface: designs/scene/derived_stats_v30.md:297,554
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: DRIFTED
+  divergences:
+  - Namespace collision with settlement-scale Legitimacy (set.legitimacy, 0-7, C5) — same word 'Legitimacy'
+    names two different quantities at two different scales (raw per-settlement stat vs faction-level derived
+    meter). The doc's own footnote (line 554) documents the LPS-1->LPS-2e correction and disclaims a 0-100
+    master scale, but no registry key distinguishes the two 'Legitimacy' referents.
+  finding_basis: 'F-DESIGN footnote + cross-read against C5 Legitimacy row (NEW: the namespace collision
+    itself)'
+- canonical_name: Treasury / Reputation / Discipline / Levies Available
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:298-360 (§8)
+  formulas:
+  - formula: Treasury=Wealth*100; Reputation=Influence*15; Discipline=Stability*10; Levies Available=Military*2
+      (ceiling)
+    surface: designs/scene/derived_stats_v30.md:298-360,545-548
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: COHERENT
+  finding_basis: F-DESIGN — no divergence found
+- canonical_name: Local Economy / Garrison Strength / Public Order
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/territory/settlement_layer_v30.md:43-59 / references/module_contracts.yaml:558,586-597
+  formulas:
+  - formula: Local Economy=Prosperity*50; Garrison Strength=Defense*20+Fort*30; Public Order=Order*20
+      (riots below 0)
+    surface: references/module_contracts.yaml:586-597; designs/scene/derived_stats_v30.md:372-382
+    provenance: F-C/F-DESIGN
+  registered: not_descriptors
+  status: DRIFTED
+  divergences:
+  - settlement_layer_v30.md:43 cites 'derived_stats_v1 §4' as its source, but current derived_stats_v30.md
+    numbers this section §9, not §4 — a stale section-number citation (F-DESIGN).
+  - Gate g_dv0 ('derived value = 0 held through Accounting -> stat -1', module_contracts.yaml:575-578)
+    doesn't specify which of the three derived values triggers it, or whether all three must be 0 simultaneously
+    (F-C, gate-logic ambiguity noted but not fully adjudicated — F-GATES family territory).
+  finding_basis: F-C item notes, F-DESIGN (stale section citation)
+- canonical_name: Province Accord
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/territory/settlement_layer_v30.md:61
+  formulas:
+  - formula: floor(mean settlement Order across province settlements); e.g. floor((4+2+1)/3)=2
+    surface: designs/territory/settlement_layer_v30.md:61
+    provenance: F-DESIGN
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-DESIGN — single occurrence, no divergence found
+- canonical_name: Army Morale
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:396-407 (§10.2)
+  formulas:
+  - formula: floor(average unit Morale) + Command modifier(+-1) + Discipline modifier(+-1); thresholds
+      6+ Resolute...0 Routed
+    surface: designs/scene/derived_stats_v30.md:396-407; designs/provincial/mass_battle_v30.md:867-869
+    provenance: F-DESIGN
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-DESIGN — consistent between both citing docs
+- canonical_name: Command (mass combat rating)
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: params/mass_combat.md:139,361-363,369 (ED-899)
+  formulas:
+  - formula: clamp(round((2*Charisma+Cognition)/3), 1, 7) — Charisma-primary, supersedes PP-232's equal-weight
+      ceil((Cha+Cog)/2)
+    surface: params/mass_combat.md:139,361-363,369; designs/provincial/mass_battle_v30.md:266
+    provenance: F-PARAMS/F-DESIGN
+  registered: unregistered
+  status: COHERENT
+  divergences:
+  - Reiterated identically in 3+ places across mass_combat.md (Commander Bonus Formulas Consolidated table,
+    PP-190 note) and mass_battle_v30.md — redundant restatement, a maintenance-burden P3 rather than a
+    coherence defect.
+  finding_basis: F-PARAMS, F-DESIGN — no value collision found, only redundancy
+- canonical_name: TroopCount / Size / block_size
+  aliases: []
+  kind: unit_stat
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:265-289 (§7)
+  formulas:
+  - formula: 'TroopCount=Size*block_size (set at muster); Size=floor(TroopCount/block_size); block_size
+      by scale: Skirmish 10, Company 100, Battle 500, Campaign 1000, War 5000; effective_damage=floor(successes*(1+Power)*TroopCount/max_TroopCount),
+      capped 1.0'
+    surface: designs/scene/derived_stats_v30.md:265-289,543; designs/provincial/mass_battle_v30.md:68-91,138-140
+    provenance: F-DESIGN
+  - formula: BLOCK_SIZE=100 (Company scale) implemented
+    surface: sim/provincial/massbattle.py
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-DESIGN, F-SIM — consistent
+- canonical_name: Inspiration
+  aliases: []
+  kind: derived_value
+  cluster: C2
+  defining_surface: designs/scene/derived_stats_v30.md:164-221 (§5.3)
+  formulas:
+  - formula: Total Inspiration per focus <= Spirit (Resolve cap); +1D genuine pursuit, Ob-1 strategic
+      spend
+    surface: designs/scene/derived_stats_v30.md:164-221
+    provenance: F-DESIGN
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-DESIGN — cross-referenced to fieldwork_v30 §2.2, not independently reread
+- canonical_name: Damage Resistance / Reduction
+  aliases:
+  - Damage Resistance (DR, registered name)
+  - Damage Reduction (used in combat_v30.md)
+  kind: derived_value
+  cluster: C2
+  defining_surface: 'AMBIGUOUS: registered as Resistance, used as Reduction'
+  formulas:
+  - formula: 'registered term: ''Resistance'''
+    surface: references/name_collision_database.yaml:463 (term_drift)
+    provenance: FIX-11
+  - formula: 'used term: ''Damage Reduction'''
+    surface: designs/scene/combat_v30.md:266
+    provenance: FIX-11
+  registered: warn
+  status: DRIFTED
+  finding_basis: FIX-11 (KNOWN-TRACKED term-drift entry in name_collision_database.yaml)
+- canonical_name: cumulative_drift
+  aliases: []
+  kind: practitioner_stat
+  cluster: C2
+  defining_surface: 'AMBIGUOUS: gate-only, no owning declaration'
+  formulas:
+  - formula: 'gate trigger only: cumulative_drift > 0.5 -> scene.gossip emitted; no calculation rule stated'
+    surface: references/module_contracts.yaml:169-173
+    provenance: F-C-004
+  registered: unregistered
+  status: UNREGISTERED-LOAD-BEARING
+  key_bindings:
+  - npc_behavior gate g_drift
+  divergences:
+  - Never declared as a state entry in npc_behavior's beliefs/opinions/concerns/projects/arc-state list
+    (module_contracts.yaml:155-159); appears solely as a gate condition.
+  finding_basis: F-C-004
+- canonical_name: Argue Pool
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: designs/scene/social_contest_v30.md (home doc)
+  formulas:
+  - formula: 'restated 3x in home doc: ''(Primary Attribute*2) + History bonus'' (History bonus=points+3),
+      OMITTING the up-to-+2D style/audience bonus dice the same doc says are added at Step 3'
+    surface: designs/scene/social_contest_v30.md:119,135,164,490 vs :78
+    provenance: F-DESIGN-6
+  - formula: 'complete form: (Primary*2) + History + 3 + style'
+    surface: designs/scene/derived_stats_v30.md:585
+    provenance: F-DESIGN-6
+  registered: not_descriptors
+  status: DRIFTED
+  divergences:
+  - Own home document repeats an incomplete formula 3 times while a separate cross-scale comparison table
+    (derived_stats_v30.md) states the complete version including the style/audience bonus — an intra-document
+    rather than cross-document drift (F-DESIGN-6, NEW).
+  finding_basis: F-DESIGN-6
+- canonical_name: Thread Pool
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: designs/threadwork/threadwork_v30.md (restated ~7x, PP-619/624/625/616)
+  formulas:
+  - formula: (Spirit*2) + History bonus (points+3) + Thread Pool Score (TPS)
+    surface: designs/threadwork/threadwork_v30.md:19,155,266,317,350,374,455; designs/scene/derived_stats_v30.md:586
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: COHERENT
+  finding_basis: F-DESIGN — no divergence found among the 7 restatements
+- canonical_name: Knot Pool
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: mechanics_index.yaml:350
+  formulas:
+  - formula: '(Bonds*2) + 3, range 5-17D; tiers: distant -2..+5, close -5..+5'
+    surface: mechanics_index.yaml:350; designs/scene/derived_stats_v30.md:588
+    provenance: F-REG/F-DESIGN
+  registered: not_descriptors
+  status: UNREGISTERED-LOAD-BEARING
+  divergences:
+  - No registry key (knots.pool not in key_type_registry_v30.md); knots module_contracts.yaml entry lists
+    impact_vector (strain) but not pool (F-REG-013, key-binding-gap).
+  finding_basis: F-REG-013
+- canonical_name: Fieldwork Pool
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: params/fieldwork.md:6-15
+  formulas:
+  - formula: (Primary Attribute*2) + History bonus (points+3); min 5D, max 24D
+    surface: params/fieldwork.md:6-15; params/core.md:252; designs/scene/fieldwork_v30.md:217; designs/scene/derived_stats_v30.md:587
+    provenance: F-PARAMS/F-DESIGN
+  registered: not_descriptors
+  status: COHERENT
+  scale_bounds: min 5D, max 24D
+  divergences:
+  - fieldwork.md:9-12 explicitly documents (ED-1084) that its original by-analogy justification to Combat
+    Pool no longer holds post-ED-901 (Combat Pool is now Agility-independent) but correctly notes its
+    own x2 form now stands independently — a positive control case of successful ED-1084 propagation,
+    unlike Combat Pool's own carriers.
+  finding_basis: F-PARAMS control-case note, no defect found
+- canonical_name: Mass Combat Pool (personal/TTRPG-scale unit)
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: 'params/mass_combat.md:62 (self-disclosed: ED-899/ED-1013 live engine is canonical,
+    PP-233 is legacy)'
+  formulas:
+  - formula: 'LEGACY/PP-233 (headline restated in 2 design docs): min(Size,Command) + Command'
+    surface: params/mass_combat.md:60-76; designs/provincial/mass_battle_v30.md:28,443; designs/scene/derived_stats_v30.md:589
+    provenance: F-PARAMS/F-DESIGN-3
+  - formula: 'LIVE ENGINE (ED-899/ED-1013): base=2*Command at full strength, smoothly -> Command at annihilation
+      via cohesion=Size/maxSize; Command*(1+cohesion)'
+    surface: params/mass_combat.md:62; tests/sim/mass_battle/config.py
+    provenance: F-PARAMS
+  registered: unregistered
+  status: DRIFTED
+  divergences:
+  - params/mass_combat.md itself is a well-documented positive control (self-disclosed ED-899 FOLLOW-UP
+    banner) — but derived_stats_v30.md's §14.4 cross-scale comparison table restates the LEGACY PP-233
+    form with NO ED-899/ED-1013 caveat at all, and mass_battle_v30.md's own §A.1 headline and §A.7 step-1
+    restatement likewise foreground the legacy form (with only a parenthetical aside pointing to the live
+    default) (F-DESIGN-3, KNOWN-UNTRACKED — the design-doc-headline instance is a distinct, uncited residual
+    from the already-known params/mass_combat.md header duplication).
+  finding_basis: F-DESIGN-3 (KNOWN-UNTRACKED), params/mass_combat.md self-disclosure (KNOWN-TRACKED, positive
+    control)
+- canonical_name: Mass Combat Pool (Board Game mode)
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: designs/provincial/mass_battle_v30.md:755 (B.3)
+  formulas:
+  - formula: sum of all engaged unit Martial values + commander bonus
+    surface: designs/provincial/mass_battle_v30.md:755
+    provenance: F-DESIGN
+  registered: unregistered
+  status: COHERENT
+  divergences:
+  - Distinct BG-mode formula, explicitly a separate mode per the doc's own 'Three-mode' framing (line
+    9) — not a collision, catalogued for completeness.
+  finding_basis: F-DESIGN — no defect, different mode by design
+- canonical_name: Faction Domain Pool
+  aliases: []
+  kind: pool
+  cluster: C3
+  defining_surface: designs/scene/derived_stats_v30.md:590 (§14.4)
+  formulas:
+  - formula: bare faction stat, 1-7D
+    surface: designs/scene/derived_stats_v30.md:590
+    provenance: F-DESIGN
+  registered: not_descriptors
+  status: COHERENT
+  divergences:
+  - Doc's own V-1 note (§14.5, line 592-596) explicitly flags this as an intentional non-proportional
+    scale-shift vs. personal-scale pools — by design, not a defect.
+  finding_basis: F-DESIGN — single occurrence, self-disclosed design intent
+- canonical_name: Die Result Rule
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/dice_engine.py:43-51
+  formulas:
+  - formula: 1->-1, 2-6->0, 7-9->+1, 10->+2 successes (no chain)
+    surface: sim/autoload/dice_engine.py:43-51
+    provenance: F-SIM
+  - formula: canonical source
+    surface: params/core.md §Die Rule, PP-246
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: TN (Target Number) Standard
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:79
+  formulas:
+  - formula: TN=7
+    surface: sim/autoload/sigma_leverage.py:79; params/core.md §TN Values
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: Per-Die EV (mu, sigma)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/dice_engine.py:58-62
+  formulas:
+  - formula: TN6:(0.50,0.806) | TN7:(0.40,0.800) | TN8:(0.30,0.781)
+    surface: sim/autoload/dice_engine.py:58-62; sim/autoload/sigma_leverage.py:73-77
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: LEVEL_SIGMA (modifier levels)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:85-90
+  formulas:
+  - formula: '{minor:0.25, moderate:0.50, strong:0.75, major:1.00}'
+    surface: sim/autoload/sigma_leverage.py:85-90; modifier_system_spec.md §2.3
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: M_MAX (soft-cap ceiling)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:92
+  formulas:
+  - formula: 1.5 (sigma-units)
+    surface: sim/autoload/sigma_leverage.py:92; modifier_system_spec.md §3.1
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: SIGMA_N_COEFF
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:93
+  formulas:
+  - formula: 0.8 (sigma-coefficient)
+    surface: sim/autoload/sigma_leverage.py:93; modifier_system_spec.md §2.1
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: OB_MIN
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:96
+  formulas:
+  - formula: '1'
+    surface: sim/autoload/sigma_leverage.py:96; params/core.md §Obstacle Scale
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: MU_PER_DIE / SD_PER_DIE
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:100-101
+  formulas:
+  - formula: 0.40, 0.80 (TN7 only)
+    surface: sim/autoload/sigma_leverage.py:100-101; params/core.md §Expected Value (per die)
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: OVERWHELM_SIGMA
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/sigma_leverage.py:104
+  formulas:
+  - formula: '0.85'
+    surface: sim/autoload/sigma_leverage.py:104; designs/audit/2026-06-03-contest-groundup/engine.py §degree
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: Degree Thresholds (Combat vs Contest)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: 'AMBIGUOUS-BY-DESIGN: two separate degree() functions with different Overwhelming-bar
+    contracts'
+  formulas:
+  - formula: 'Combat: Overwhelming net>=2*Ob AND net>=3 | Success: net>=Ob | Partial: net>0<Ob | Failure:
+      net<=0'
+    surface: sim/autoload/dice_engine.py:94-122; params/core.md §Degrees of Success
+    provenance: F-SIM
+  - formula: 'Contest: Overwhelming pool-aware (net>=muN+OVERWHELM_SIGMA*sigma*sqrt(N))'
+    surface: sim/autoload/sigma_leverage.py:284-311; designs/audit/2026-06-03-contest-groundup/engine.py
+    provenance: F-SIM
+  registered: unregistered
+  status: DRIFTED
+  divergences:
+  - Two degree() functions coexist with different Overwhelming-bar contracts; sigma_leverage.py:287-294
+    explains the split as intentional, but it remains an unreconciled naming/contract collision between
+    combat and contest resolution (F-SIM-05, KNOWN-UNTRACKED).
+  finding_basis: F-SIM-05
+- canonical_name: Wound Ob Channel (WOUND_ATK_OB / WOUND_DEF_OB)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: designs/scene/combat_engine_v1/config.py:65 (ED-1041, ED-PC-0005 ratified 2026-07-08)
+  formulas:
+  - formula: WOUND_ATK_OB=0.15 (attacking), WOUND_DEF_OB=0.25 (defending) per wound; supersedes PP-716's
+      universal -1D
+    surface: designs/scene/combat_engine_v1/config.py:65; designs/scene/derived_stats_v30.md:72,92,517;
+      designs/scene/combat_v30.md:39,298; params/core.md:158; params/fieldwork.md:222-225; params/threadwork.md:63;
+      params/mass_combat.md:434-435
+    provenance: F-SIM/F-DESIGN/F-PARAMS
+  registered: unregistered
+  status: DRIFTED
+  divergences:
+  - Combat's own fractional-Ob value (ED-1041) is ratified; the same-day ruling (ED-PC-0005, 2026-07-08)
+    that generalizes 'fractional Ob per wound' to non-combat pools (Thread ops, fieldwork, mass-battle
+    Command) explicitly defers the actual value to a follow-on calibration (ED-PC-0006, not yet set) —
+    this is KNOWN-TRACKED and cited near-identically across 4 files dated the same day as this audit.
+  finding_basis: KNOWN-TRACKED ED-PC-0005/ED-PC-0006, cited in all contributing families — not re-litigated
+- canonical_name: CFG (Combat Engine coefficients, Class-C export)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: designs/scene/combat_engine_v1/config.py:2-172
+  formulas:
+  - formula: ~100+ tunable coefficients (L0=4.0, BASE_TEMPO=2.0, CONC_SPIRIT=2.0, CONC_FOCUS=3.0, INIT_SIGMA_K=0.16,
+      etc.)
+    surface: designs/scene/combat_engine_v1/config.py:2-172
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  key_bindings:
+  - exports to references/engine_params/combat_engine_v1.json via tools/export_engine_params.py --check
+    (blocking CI, the one typed export in the repo per CLAUDE.md §5)
+  finding_basis: F-SIM — the export pipeline itself; no drift found (port<->oracle parity resolved per
+    ED-1050)
+- canonical_name: PT_MAP, ACCORD_MAP
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/autoload/game_state.py:50-80
+  formulas:
+  - formula: 'PT_MAP: {0:1.0,1:2.5,2:4.0,3:5.5,4:6.5,5:7.0} | ACCORD_MAP: {0:1.0,1:2.5,2:4.0,3:5.5,4:7.0}'
+    surface: sim/autoload/game_state.py:50-80; settlement_layer_v30.md territory systems
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  divergences:
+  - '''PT_MAP'' translates Piety Track values — a code-level touchpoint into the multi-referent Piety
+    Track collision (see that C4 row); not independently re-verified against which Piety Track referent
+    it maps.'
+  finding_basis: F-SIM; cross-link to Piety Track row is NEW observation
+- canonical_name: STAMINA_REF
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: designs/scene/combat_engine_v1/config.py:56
+  formulas:
+  - formula: STAMINA_REF=18.0, defined but never consumed
+    surface: designs/scene/combat_engine_v1/config.py:56
+    provenance: F-SIM-04
+  registered: unregistered
+  status: DEAD
+  divergences:
+  - Live code (combatant.py:45-47,122) reads STAMINA_PER_END/STAMINA_PER_SPIRIT directly ('cfg-free'),
+    bypassing this constant entirely.
+  finding_basis: F-SIM-04
+- canonical_name: Contest Track Starting Position
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/personal/contest/modes.py:5-6
+  formulas:
+  - formula: CANONICAL_TRACK_START=5.0 | CHURCH_TRIBUNAL_TRACK_START=6.0
+    surface: sim/personal/contest/modes.py:5-6; params/contest.md; social_contest_v30.md §7
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: Readiness Constants (Contest)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/personal/contest/primitives.py:18-31
+  formulas:
+  - formula: MAX=12, REGAIN=4, BASE=3, MARGIN=1.0, READING_COEFF=1/6, CAP=3.0, ETHOS_UNLOCK=0.5, LEAK_CAP=0.9,
+      FLOOR=0.40
+    surface: sim/personal/contest/primitives.py:18-31; designs/audit/2026-06-03-contest-groundup/primitives.py
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: Contest Resolver Constants
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/personal/contest/resolver.py:38-45
+  formulas:
+  - formula: RES_FLOOR=0.15, REBUT_CAP=3.0, MERIT_SCALE=2.6, JITTER=0.08, PUBLIC_LEAK=0.5, INST_BIAS=0.6,
+      PUB_BIAS=0.3, EVIDENCE_CAP=3.0
+    surface: sim/personal/contest/resolver.py:38-45
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: 'F-SIM (SEED: sim-tunable, not yet ratified as canon)'
+- canonical_name: Block Size (Mass Battle)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/provincial/massbattle.py
+  formulas:
+  - formula: BLOCK_SIZE=100 (Company scale)
+    surface: sim/provincial/massbattle.py; designs/provincial/mass_battle_v30.md §A.3
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  finding_basis: F-SIM
+- canonical_name: MS Starting Value (code)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/peninsular/ms_track.py
+  formulas:
+  - formula: MS_START=60
+    surface: sim/peninsular/ms_track.py; params/core.md (videogame canonical per Jordan 2026-06-06)
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  divergences:
+  - Matches params/core.md's TTRPG-mode MS start (60) — see Mending Stability (C4) row for the broader
+    MS/RS naming split this code constant sits inside.
+  finding_basis: F-SIM; cross-link to Mending Stability row
+- canonical_name: CI Starting Value (code)
+  aliases: []
+  kind: code_constant
+  cluster: C6
+  defining_surface: sim/peninsular/ci_track.py
+  formulas:
+  - formula: CI_STARTING=28
+    surface: sim/peninsular/ci_track.py; faction_layer_v30.md starting CI
+    provenance: F-SIM
+  registered: unregistered
+  status: COHERENT
+  divergences:
+  - Matches the BG-mode CI start (28) triangulated across bg/core.md, bg/ci_seizure.md, bg/parliament.md
+    — see Church Influence (C4) row for the campaign_modes.md=15 discrepancy this code constant does NOT
+    share.
+  finding_basis: F-SIM; cross-link to Church Influence row
+- canonical_name: Mandate
+  aliases:
+  - 'Mandate Pool (deprecated usage, recommended rename: Political Pool per ci_political_v30 §3.4/§7.2)'
+  kind: faction_stat
+  cluster: C5
+  defining_surface: 'AMBIGUOUS: params/factions_personal.md:14 (LINEAR) vs designs/provincial/faction_behavior_v30.md:398-410
+    §4 + faction_canon_v30.md:216 + references/module_contracts.yaml:598-601 (SATURATING) — the saturating
+    form is the one actually cross-confirmed by 3 independent surfaces and is Stage-4 sim-validated'
+  formulas:
+  - formula: 'LINEAR: round(0.5*Legitimacy + 0.5*Popular_Support), citing ''faction_behavior_v30 §4''
+      as source'
+    surface: params/factions_personal.md:14
+    provenance: F-REG-002/F-DESIGN-5
+  - formula: 'SATURATING: q_s=0.5*L_s+0.5*PS_s; W_s=base(Type)+Prosperity_s+FacilityTier_s; T=sum(W_s*(q_s/7));
+      Mandate=clamp(round(7T/(T+6)),0,7) — Lesson-5 bound, Stage-4 sim validated'
+    surface: references/module_contracts.yaml:598-601; designs/provincial/faction_behavior_v30.md:398-410
+      (§4, current text); designs/provincial/faction_canon_v30.md:216; designs/territory/settlement_layer_v30.md:147-177
+      (§1.8, LPS-2e ruling that produced this form)
+    provenance: F-REG-002/F-DESIGN-5/F-C
+  registered: warn
+  status: DRIFTED
+  scale_bounds: 0-7 (1-7 per F-INDEX floor note; can collapse to 0)
+  key_bindings:
+  - echo_armature §2.1 Domain Echo Debate row
+  - faction_state consumes
+  - settlement_layer<->Mandate feedback loop (damper coefficient 0.6/season, module_contracts.yaml:562-563)
+  consumers:
+  - victory gate g_diss (module_contracts.yaml:685)
+  - Faction Legitimacy(derived)=Mandate*20 (C2 row)
+  divergences:
+  - 'params/factions_personal.md:14''s citation of ''faction_behavior_v30 §4'' is now stale: that section
+    was rewritten under the LPS-2e ruling (2026-05-30) to the saturating, size-weighted form, but the
+    params citation still states the old flat/linear mean — the params doc''s own citation no longer matches
+    its cited source (F-DESIGN-5, confirms the exact divergence named in this audit''s baseline facts).'
+  - name_collision_database.yaml separately flags 'Mandate Pool' as a stat-noun-as-pool-name collision,
+    recommending 'Political Pool' (already canonical usage in ci_political_v30 §3.4/§7.2) — unresolved,
+    low severity.
+  finding_basis: F-REG-002 (NEW), F-DESIGN-5 (NEW, confirms baseline-flagged divergence with exact citations),
+    F-C (contract-side saturating form), FIX (Mandate Pool naming, low-severity unresolved)

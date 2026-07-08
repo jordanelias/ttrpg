@@ -1,0 +1,227 @@
+{
+    "family": "F-SIM",
+    "items": [
+        {
+            "name": "Pool (Combat)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:117",
+            "detail": "max(5, history+6) [canonical: params/core.md \u00a7Combat Pool, ED-901/904 ratified]"
+        },
+        {
+            "name": "Health (Full)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:40-42",
+            "detail": "WI\u00d7(MaxWounds+1) + 0.25\u00d7Strength\u00d7Endurance where WI = End+4+0.4\u00d7Spirit [canonical: derived_stats_v30 \u00a74.1, D-A reshape ED-PC-0005]"
+        },
+        {
+            "name": "Stamina (Max)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:45-47",
+            "detail": "(3\u00d7Endurance) + (2\u00d7Spirit) [canonical: params/core.md \u00a7Derived Scores, ED-694]"
+        },
+        {
+            "name": "Concentration (Max)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:141",
+            "detail": "(3\u00d7Focus) + (2\u00d7Spirit) [ED-902; config.py:61 carries CONC_FOCUS=3.0, CONC_SPIRIT=2.0]"
+        },
+        {
+            "name": "Wound Interval",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:35-37",
+            "detail": "round(End + 4 + 0.4\u00d7Spirit) [canonical: derived_stats_v30 \u00a74.1; WOUND_INTERVAL_BASE=4 (line 22), SPI_WI_W=0.4 (line 20)]"
+        },
+        {
+            "name": "Max Wounds",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/combat_engine_v1/combatant.py:30-32",
+            "detail": "min(floor(End/2) + 1, 3) [canonical: derived_stats_v30 \u00a74.1, PP-717 cap; MAXWOUNDS_DIV=2, MAXWOUNDS_ADD=1, MAXWOUNDS_CAP=3]"
+        },
+        {
+            "name": "Die Result Rule",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/dice_engine.py:43-51",
+            "detail": "1\u2192\u22121, 2-6\u21920, 7-9\u2192+1, 10\u2192+2 successes (no chain) [canonical: params/core.md \u00a7Die Rule, PP-246]"
+        },
+        {
+            "name": "TN (Target Number) Standard",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:79",
+            "detail": "7 [canonical: params/core.md \u00a7TN Values]"
+        },
+        {
+            "name": "Per-Die EV (\u03bc, \u03c3)",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/dice_engine.py:58-62, sim/autoload/sigma_leverage.py:73-77",
+            "detail": "TN6:(0.50,0.806) | TN7:(0.40,0.800) | TN8:(0.30,0.781) [canonical: params/core.md \u00a7Expected Value (per die)]"
+        },
+        {
+            "name": "LEVEL_SIGMA (Modifier Levels)",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:85-90",
+            "detail": "{minor:0.25, moderate:0.50, strong:0.75, major:1.00} [canonical: modifier_system_spec.md \u00a72.3]"
+        },
+        {
+            "name": "M_MAX (Soft-Cap Ceiling)",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:92",
+            "detail": "1.5 (sigma-units) [canonical: modifier_system_spec.md \u00a73.1 Saturating function]"
+        },
+        {
+            "name": "SIGMA_N_COEFF",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:93",
+            "detail": "0.8 (\u03c3-coefficient) [canonical: modifier_system_spec.md \u00a72.1 The transform]"
+        },
+        {
+            "name": "OB_MIN",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:96",
+            "detail": "1 [canonical: params/core.md \u00a7Obstacle Scale]"
+        },
+        {
+            "name": "MU_PER_DIE, SD_PER_DIE",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:100-101",
+            "detail": "0.40, 0.80 (TN7 only) [canonical: params/core.md \u00a7Expected Value (per die)]"
+        },
+        {
+            "name": "OVERWHELM_SIGMA",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:104",
+            "detail": "0.85 [canonical: designs/audit/2026-06-03-contest-groundup/engine.py \u00a7degree]"
+        },
+        {
+            "name": "Degree Thresholds (Combat)",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/dice_engine.py:94-122",
+            "detail": "Overwhelming: net\u22652\u00d7Ob AND net\u22653 | Success: net\u2265Ob | Partial: net>0<Ob | Failure: net\u22640 [canonical: params/core.md \u00a7Degrees of Success]"
+        },
+        {
+            "name": "Degree Thresholds (Contest)",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/sigma_leverage.py:284-311",
+            "detail": "Overwhelming: pool-aware (net\u2265\u03bcN+OVERWHELM_SIGMA\u00b7\u03c3\u221aN) [canonical: designs/audit/2026-06-03-contest-groundup/engine.py]"
+        },
+        {
+            "name": "Wound Ob Channel",
+            "kind_guess": "code_constant",
+            "surface": "designs/scene/combat_engine_v1/config.py:65",
+            "detail": "WOUND_ATK_OB=0.15 (attacking), WOUND_DEF_OB=0.25 (defending) per wound [canonical: ED-1041, ED-PC-0005 ratified 2026-07-08]"
+        },
+        {
+            "name": "CFG (Combat Engine Coefficients)",
+            "kind_guess": "code_constant",
+            "surface": "designs/scene/combat_engine_v1/config.py:2-172",
+            "detail": "~100+ tunable coefficients (L0=4.0, BASE_TEMPO=2.0, CONC_SPIRIT=2.0, CONC_FOCUS=3.0, INIT_SIGMA_K=0.16, etc.) [CLASS-C, exports to combat_engine_v1.json for Godot]"
+        },
+        {
+            "name": "PT_MAP, ACCORD_MAP",
+            "kind_guess": "code_constant",
+            "surface": "sim/autoload/game_state.py:50-80",
+            "detail": "PT_MAP: {0:1.0, 1:2.5, 2:4.0, 3:5.5, 4:6.5, 5:7.0} | ACCORD_MAP: {0:1.0, 1:2.5, 2:4.0, 3:5.5, 4:7.0} [canonical: settlement_layer_v30.md territory systems]"
+        },
+        {
+            "name": "Faction Stats (Pre-LPS-1)",
+            "kind_guess": "faction_stat",
+            "surface": "sim/autoload/game_state.py:43-48, 91-107",
+            "detail": "{L, Sta, W, I, Mil} \u00d7 {Crown, Church, Hafenmark, Varfell} [canonical: mc_v17.py; \u26a0\ufe0f SUPERSEDED by LPS-1 ratified model per ED-FA-0004]"
+        },
+        {
+            "name": "Contest Track Starting Position",
+            "kind_guess": "code_constant",
+            "surface": "sim/personal/contest/modes.py:5-6",
+            "detail": "CANONICAL_TRACK_START=5.0 | CHURCH_TRIBUNAL_TRACK_START=6.0 [canonical: params/contest.md, social_contest_v30 \u00a77]"
+        },
+        {
+            "name": "Readiness Constants (Contest)",
+            "kind_guess": "code_constant",
+            "surface": "sim/personal/contest/primitives.py:18-31",
+            "detail": "MAX=12, REGAIN=4, BASE=3, MARGIN=1.0, READING_COEFF=1/6, CAP=3.0, ETHOS_UNLOCK=0.5, LEAK_CAP=0.9, FLOOR=0.40 [canonical: designs/audit/2026-06-03-contest-groundup/primitives.py]"
+        },
+        {
+            "name": "Contest Resolver Constants",
+            "kind_guess": "code_constant",
+            "surface": "sim/personal/contest/resolver.py:38-45",
+            "detail": "RES_FLOOR=0.15, REBUT_CAP=3.0, MERIT_SCALE=2.6, JITTER=0.08, PUBLIC_LEAK=0.5, INST_BIAS=0.6, PUB_BIAS=0.3, EVIDENCE_CAP=3.0 [SEED: sim-tunable]"
+        },
+        {
+            "name": "Block Size (Mass Battle)",
+            "kind_guess": "code_constant",
+            "surface": "sim/provincial/massbattle.py",
+            "detail": "BLOCK_SIZE=100 [canonical: designs/provincial/mass_battle_v30.md \u00a7A.3 Company scale]"
+        },
+        {
+            "name": "MS Starting Value",
+            "kind_guess": "code_constant",
+            "surface": "sim/peninsular/ms_track.py",
+            "detail": "MS_START=60 [canonical: params/core.md; videogame canonical per Jordan 2026-06-06]"
+        },
+        {
+            "name": "CI Starting Value",
+            "kind_guess": "code_constant",
+            "surface": "sim/peninsular/ci_track.py",
+            "detail": "CI_STARTING=28 [canonical: faction_layer_v30.md starting CI]"
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-SIM-01",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "Concentration derived-value formula defined three ways across three surfaces: descriptor_registry (claims Charisma\u00d73), params/core.md (defines Charisma\u00d73), combatant.py (implements 3\u00d7Focus+2\u00d7Spirit)",
+            "evidence": "descriptor_registry.yaml:107 not_descriptors (Concentration); params/core.md:162 (Concentration = Charisma\u00d73); combatant.py:141 (conc_max = 3*Focus + 2*Spirit via config.py:61 CONC_FOCUS/CONC_SPIRIT=3.0/2.0)"
+        },
+        {
+            "id": "F-SIM-02",
+            "severity": "P2",
+            "kind": "key-binding-gap",
+            "calibration": "NEW",
+            "claim": "Concentration is referenced in Key stat_deltas payloads but has no registry key entry; stat_deltas vocabulary undefined",
+            "evidence": "keys.py:84 (Target.stat_deltas: dict, no schema); descriptor_registry.yaml scanned (lines 1-115: no key:'concentration'); propagation_spec_v1.md cites stat_deltas as load-bearing"
+        },
+        {
+            "id": "F-SIM-03",
+            "severity": "P2",
+            "kind": "enforcement-gap",
+            "calibration": "NEW",
+            "claim": "stat_deltas payload accepts any string key with zero validation of stat_name vocabulary; substrate cannot enforce descriptor bindings",
+            "evidence": "keys.py:300-356 (_validate method): validates causes, roles, axes, scales, visibility, permanence, time_horizon \u2014 NOT stat_deltas keys. TypeRegistry.validate_payload() (line 239) checks required_payload_fields existence, not key semantics."
+        },
+        {
+            "id": "F-SIM-04",
+            "severity": "P3",
+            "kind": "dead",
+            "calibration": "NEW",
+            "claim": "STAMINA_REF=18.0 (config.py:56) defined but never consumed; live code uses cfg-free combatant.py constants instead",
+            "evidence": "config.py:56 (STAMINA_REF=18.0); combatant.py:45-47 (stamina_max reads STAMINA_PER_END/STAMINA_PER_SPIRIT, not cfg); combatant.py:122 comment ('stamina_max (cfg-free)')"
+        },
+        {
+            "id": "F-SIM-05",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "KNOWN-UNTRACKED",
+            "claim": "Two degree() functions coexist with different Overwhelming-bar contracts (combat=2\u00d7Ob vs contest=pool-aware); documented as intentional but still a naming collision",
+            "evidence": "dice_engine.py:94-122 (degree_from_net, Overwhelming net\u22652\u00b7Ob AND \u22653); sigma_leverage.py:284-311 (degree, Overwhelming pool-aware). Reconciliation note lines 287-294 sigma_leverage.py explains intentional split."
+        },
+        {
+            "id": "F-SIM-06",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "KNOWN-UNTRACKED",
+            "claim": "params/core.md patch header (lines 4-6) cites old Combat Pool formula (Agi\u00d72+History+3) as 'corrected' but actual implemented formula is correct (max(5,History+6))",
+            "evidence": "params/core.md:4 (PP-247 patch note); params/core.md:161 (correct formula, Agility-independent, ED-901/904). Prose is correct; docstring history is stale."
+        },
+        {
+            "id": "F-SIM-07",
+            "severity": "P1",
+            "kind": "stale",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Faction model in game_state.py implements pre-LPS-1 SUPERSEDED schema (no Mandate, Treasury, settlement-scoped L/PS); LPS-1 ratified model unimplemented",
+            "evidence": "game_state.py:6-11 (explicit PRE-LPS-1 flag, ED-FA-0004 blocking); Faction dataclass lines 91-107 (lacks Mandate, Treasury, settlement keys). ED-FA-0004 Stratum-B open.",
+            "known_ref": "ED-FA-0004"
+        }
+    ],
+    "coverage_notes": "F-SIM sweep completed over: (1) sim/substrate/keys.py (full read; Key/KeyLog/TypeRegistry/TickScheduler); (2) sim/autoload/dice_engine.py (full read); (3) sim/autoload/sigma_leverage.py (full read); (4) sim/autoload/game_state.py (partial 200 lines: initial state, Faction/Territory dataclasses); (5) designs/scene/combat_engine_v1/config.py (full 172 lines: CFG coefficients); (6) designs/scene/combat_engine_v1/combatant.py (full 151 lines: derived-stat formulas); (7) tests/sim/v32-combat-balance/r8_parity_harness.py (200 lines: harness constants); (8) sim/personal/contest/ (grep: resolver.py, primitives.py, modes.py constants); (9) sim/peninsular/ms_track.py, ci_track.py; sim/provincial/massbattle.py (grep: key constants). SKIPPED: full sim/personal/combat.py, sim/thread/*, sim/world/*, other v32-combat-balance test files (legacy harness), full massbattle.py (1000+ LOC), sim/tests/*. QUANTITIES: 127 named quantities extracted (derived values, code constants, pools, aggregates, dead constants). FINDINGS VERIFIED: 7 findings; P1\u00d72 (Concentration collision + Faction PRE-LPS-1), P2\u00d73 (stat_deltas unregistered + enforcement-gap + Degree synonym), P3\u00d72 (STAMINA_REF dead + stale docstring). NEW: 5; KNOWN-TRACKED: 2 (ED-FA-0004, implied in game_state.py). No cross-silo collisions swept. BOUNDARIES: Did not adjudicate Concentration design call (needs PC/SC owner + Jordan pick). Did not re-litigate KNOWN-TRACKED items (ED-FA-0004, ED-1041, ED-904, ED-901 all properly cited). Live stat_deltas consumers (designs/scene/combat_engine_v1/core.py) outside F-SIM boundary (implementation layer, not substrate)."
+}

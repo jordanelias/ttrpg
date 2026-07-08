@@ -1,0 +1,353 @@
+{
+    "family": "F-PARAMS (params/ prose surface: core, board_game, factions, contest, mass_combat, threadwork, fieldwork, southernmost, scale_transitions, campaign_modes, and all params/bg/*, params/factions/*, params/factions_personal.md, params/threadwork_superseded.md)",
+    "items": [
+        {
+            "name": "Combat Pool",
+            "kind_guess": "derived_value",
+            "surface": "params/core.md:161",
+            "detail": "max(5, Relevant History + 6), min 5 \u2014 'Agility-INDEPENDENT' \u2014 ratified ED-901; re-ratified ED-900/904. Supersedes struck (Agility\u00d72)+History+3 (PP-615/PP-247 era). Single source: designs/scene/combat_engine_v1/",
+            "aliases_or_variants": [
+                "struck form (Agility\u00d72)+History+3 still at params/core.md:4 stale header comment and values_master.yaml:212/1150 (KNOWN-TRACKED per baseline)"
+            ],
+            "consumers_seen": [
+                "module_contracts.yaml:810",
+                "combat_config.gd"
+            ],
+            "notes": "KNOWN-TRACKED per baseline facts; cited here for completeness of family inventory, not re-litigated."
+        },
+        {
+            "name": "Mending Stability (MS) / RS Track",
+            "kind_guess": "track",
+            "surface": "params/core.md:95-101 (MS, TTRPG default 60 / BG default 72, floor 0 ceiling 100); params/threadwork.md:139-142 ('RS Track', range 100\u21920, videogame canonical start 60, 'RS = 0: Rupture')",
+            "detail": "Same 0\u2013100 world-substrate-integrity clock, Rupture at 0, decay \u22121/year baseline, TTRPG/BG 60/72 split \u2014 carried under TWO different names/abbreviations across the family with no in-file bridge in most occurrences.",
+            "aliases_or_variants": [
+                "MS = 'Mending Stability' (params/core.md:96-101; params/mass_combat.md:239-251,423-425,437; params/factions_personal.md Clock Starting Values 'Mending Stability'; params/bg/core.md:81 Starting Values table; params/bg/core.md:149 Turmoil Collapse row 'MS \u22121/season additional'; params/bg/clocks.md:3 '### Mending Stability (MS) Effects'; params/bg/ed_resolutions.md:186 'co-victory MS tracking'; params/campaign_modes.md:45 'Mending Stability | 72')",
+                "RS = 'Rendering Stability' historically (params/threadwork_superseded.md:19 'Rendering Stability (RS) | 100\u21920 | World coherence (shared track)'), continued as bare undefined 'RS' in params/threadwork.md:139 (never spells out the expansion in the live file), params/bg/phases.md:25,53,57,59,73,74, params/bg/tracks.md:135 (same Turmoil Collapse row as core.md:149 but 'RS \u22121/season additional'), params/bg/npc_priority_trees.md:121,130, params/bg/faction_actions.md:159 ('co-victory RS threshold tracking' \u2014 same PP-436 Thread Liaison rule ed_resolutions.md:186 calls 'MS')"
+            ],
+            "consumers_seen": [
+                "params/bg/ed_resolutions.md:184-186 (Crown Thread Liaison, PP-436) vs params/bg/faction_actions.md:157-159 (identical rule, opposite abbreviation)",
+                "params/bg/core.md:149 vs params/bg/tracks.md:135 (identical Turmoil table row, MS vs RS)"
+            ],
+            "notes": "threadwork.md and designs/provincial/clock_registry_v30.md (outside family) gesture at an informal 'OWN-1/2, Jordan passC' resolution merging the 60-vs-72 value question, but no ED number governs the MS\u2194RS NAME unification itself, and it has not propagated to bg/core.md, bg/clocks.md, bg/ed_resolutions.md, mass_combat.md, factions_personal.md, or campaign_modes.md."
+        },
+        {
+            "name": "Invasion Pressure / Institutional Pressure (IP)",
+            "kind_guess": "faction_stat",
+            "surface": "params/bg/core.md:83 ('Invasion Pressure (IP) | 20 | 0\u2013100'); params/factions_personal.md Clock Starting Values ('Institutional Pressure | 20 | 20'); params/campaign_modes.md:47 ('Institutional Pressure | 20 | params_board_game.md'); params/mass_combat.md:382 ('Deployment trigger: Institutional Pressure \u2265 75')",
+            "detail": "Same 0\u2013100 clock (start 20, gates Altonian Vanguard deployment) carried under two different full names sharing the abbreviation IP \u2014 'Invasion Pressure' vs 'Institutional Pressure'.",
+            "aliases_or_variants": [
+                "Invasion Pressure: params/bg/core.md:83, params/bg/clocks.md:33 '### Invasion Pressure (IP) Effects', params/bg/geography.md:19, params/bg/victory.md:10,85",
+                "Institutional Pressure: params/factions_personal.md, params/campaign_modes.md:47, params/mass_combat.md:382"
+            ],
+            "consumers_seen": [],
+            "notes": "Value (20) and threshold semantics are consistent across both name-lineages, so this is a pure naming synonym-split, not a value collision \u2014 but it is undocumented in either direction (no file cross-references the other name)."
+        },
+        {
+            "name": "Warden's Accord (WA) vs Warden Recognition (WR) \u2014 Varfell Path B victory gate",
+            "kind_guess": "track",
+            "surface": "params/bg/victory.md:14,89 (Varfell Path B: '... Warden's Accord (WA) \u2265 +1'); params/bg/victory.md:53,130 (Varfell+RM co-victory: 'WA \u2265 +2'); params/bg/geography.md:412-431 ('Varfell Path B \u2014 Southernmost Dominion (ED-311 RESOLVED \u2014 Option A) [Replaces provisional conditions in victory_v30.md \u00a73.4] ... Warden Recognition (WR) \u2265 2')",
+            "detail": "geography.md's ED-311-resolved Path B table explicitly states it REPLACES victory.md \u00a73.4's WA-gated version with a WR-gated version (WR range 0-4, distinct track from WA range \u22123..+3 per params/bg/npcs_special.md:75-84), but victory.md's own Summary and Co-Victory tables were never updated off WA.",
+            "aliases_or_variants": [
+                "WA definition: params/bg/npcs_special.md:75-84, sourced to designs/board_game/victory_v30.md \u00a78, range \u22123..+3, gates RM Emergence",
+                "WR definition: params/bg/npcs_special.md:40-51, range 0-4, Varfell-only, gates Path B"
+            ],
+            "consumers_seen": [],
+            "notes": "NEW \u2014 an engine reading victory.md's own victory-condition table for Varfell Path B would gate on the wrong track (WA) per geography.md's own supersession note."
+        },
+        {
+            "name": "Vaynard Thread Mastery (VTM)",
+            "kind_guess": "faction_stat",
+            "surface": "params/bg/tracks.md:22-24 ('VTM \u2014 STRUCK (PP-663, 2026-04-19). Vaynard Thread Mastery track removed as faction-level stat.'); params/bg/victory.md:13-15,52,53,88-90,129,130 (Varfell Path A 'VTM \u2265 3', Path C 'VTM = 5', Crown+Varfell co-victory 'VTM \u2265 3', Varfell+RM 'VTM \u2265 4'); params/bg/geography.md:270-403 (Champion TS Values table gates Southernmost access on 'Vaynard (VTM 3+)', 'VTM 4+', 'VTM \u2265 2: \u22121 Ob', Varfell Territorial Expansion Constraint references VTM, Varfell Path B table references VTM \u2265 3)",
+            "detail": "VTM was struck as a faction-level stat (PP-663, 2026-04-19; corroborated params/bg/faction_actions.md:182-184 'Varfell \u2014 VTM Discretion \u2014 STRUCK', params/bg/npcs_special.md:29-32,91 'VTM-advancement spend option struck'). Yet params/bg/victory.md's live victory-condition thresholds and params/bg/geography.md's entire Southernmost Access System / Champion qualification table still gate mechanics on VTM as if live.",
+            "aliases_or_variants": [],
+            "consumers_seen": [
+                "params/bg/victory.md Varfell Path A/B/C summary + co-victory tables (both occurrences of the duplicated table, lines 13-15/88-90 and 52-53/129-130)",
+                "params/bg/geography.md Champion TS Values table (both duplicated occurrences, lines 270-277/347-354) and Expedition Procedure (lines 251,327,337,351,361-365)"
+            ],
+            "notes": "The VTM strike itself is KNOWN-TRACKED (CR-STRIKE-2026-04-19 / PP-663, widely cited). NEW is the specific finding that params/bg/victory.md and params/bg/geography.md \u2014 both load-bearing for actual victory-condition and Southernmost-access resolution \u2014 never received the propagation and still treat VTM as a live, checkable stat with numeric thresholds."
+        },
+        {
+            "name": "Starting Clock Values (TTRPG Session Zero) table",
+            "kind_guess": "other",
+            "surface": "params/campaign_modes.md:42-47",
+            "detail": "'Mending Stability | 72 | params_core.md' and 'Church Influence | 15 | params_factions_ttrpg.md' and 'Institutional Pressure | 20 | params_board_game.md', framed as TTRPG Session Zero values.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "Both cited source values are wrong: params/core.md:101 gives TTRPG MS default = 60 (72 is the BG default, per the same line) \u2014 campaign_modes.md silently substitutes the BG value for a TTRPG table entry. Church Influence: params/factions_personal.md Clock Starting Values gives TTRPG CI = 0 and params/bg/core.md:82/params/bg/ci_seizure.md:120 give BG CI = 28 \u2014 neither matches campaign_modes.md's '15', and there is no other CI=15 value anywhere in the family. Institutional/Invasion Pressure = 20 is at least numerically consistent (see separate IP naming finding)."
+        },
+        {
+            "name": "Combat Pool (fieldwork/contest analogy)",
+            "kind_guess": "derived_value",
+            "surface": "params/fieldwork.md:6-15; params/core.md:252; params/contest.md:275-279",
+            "detail": "Fieldwork Pool = (Primary Attribute \u00d7 2) + History bonus (History bonus = History points + 3); min 5D, max 24D. Both fieldwork.md and core.md's own 'Attribute Roles \u2014 Fieldwork' section (PP-628) independently restate this formula.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "fieldwork.md:9-12 explicitly documents (ED-1084) that the formula's original justification-by-analogy to Combat Pool no longer holds since Combat Pool was re-ratified Agility-independent (max(5,History+6)); fieldwork.md correctly notes its own \u00d72 form now stands on its own rather than by combat analogy. This is a good example of a doc that DID get the ED-1084 propagation that params/core.md:4 and mass_combat.md's Core Formula banner (see next item) illustrate for other cases. Contest.md:275-279 makes the same disclaiming note for the Contest Pool's History-bonus construction. No propagation gap found here \u2014 noted as a control case, not a finding."
+        },
+        {
+            "name": "Mass Battle engagement Pool",
+            "kind_guess": "derived_value",
+            "surface": "params/mass_combat.md:60-76 (PP-233 legacy: Pool = min(Size,Command)+Command); params/mass_combat.md:62 (ED-899/ED-1013 live engine: base = 2\u00d7Command at full strength, smoothly \u2192 Command at annihilation via cohesion=Size/maxSize)",
+            "detail": "Two formulas coexist by design in the same file: the PP-233 'documented OFF-path model' (byte-exact only when COMMAND_SIGMA_ENABLED=0) and the ED-899/ED-1013 live engine default. File explicitly flags itself as non-canonical-by-default and points to config.py as leading canon.",
+            "aliases_or_variants": [],
+            "consumers_seen": [
+                "tests/sim/mass_battle/config.py",
+                "orchestration.py base_combat_pool COMMAND_SIGMA path"
+            ],
+            "notes": "KNOWN-TRACKED / self-disclosed (ED-899 FOLLOW-UP banner at mass_combat.md:62) \u2014 flagged for completeness of inventory, not a new finding. Genuinely well-documented in-place, a positive control case."
+        },
+        {
+            "name": "Command (mass combat)",
+            "kind_guess": "derived_value",
+            "surface": "params/mass_combat.md:139,361-363,369",
+            "detail": "Command = clamp(round((2\u00d7Charisma + Cognition) \u00f7 3), 1, 7) \u2014 ED-899 Charisma-primary weighting; supersedes PP-232's equal-weight \u2308(Cha+Cog)\u00f72\u2309 form. Reiterated identically in three places (Commander Bonus Formulas Consolidated table ED-033, and PP-190 note) \u2014 internally consistent, just triple-carried prose.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "No collision found; flagged only as redundant same-value restatement (maintenance-burden P3, not a coherence defect)."
+        },
+        {
+            "name": "Wound penalty channel (combat/fieldwork/threadwork)",
+            "kind_guess": "other",
+            "surface": "params/core.md:158; params/fieldwork.md:222-225; params/threadwork.md:63; params/mass_combat.md:434-435",
+            "detail": "Jordan ruling 2026-07-08 (ED-PC-0005): every wound now adds a FRACTIONAL Ob per wound to rolls, reversing PP-716's prior \u22121D pool-cut unification; the fractional-Ob VALUE itself is an explicit follow-on calibration not yet set (ED-PC-0006), with combat's own reference value (+0.15 Ob attacking/+0.25 defending, ED-1041) repeatedly cited as the closest ratified analogue.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "KNOWN-TRACKED (ED-PC-0005/ED-PC-0006 explicitly named in all four sites) \u2014 the same ruling text is pasted near-verbatim across core.md, fieldwork.md, threadwork.md, and mass_combat.md dated the SAME DAY as this audit (2026-07-08), suggesting a same-day propagation sweep already occurred across this exact family; cited for completeness, not re-argued."
+        },
+        {
+            "name": "Church Influence (CI) starting value",
+            "kind_guess": "faction_stat",
+            "surface": "params/bg/core.md:82 ('CI **28**'); params/bg/ci_seizure.md:119-120 ('CI starts at 28'); params/bg/parliament.md:52-53 ('CI starting value: 28 ... PP-188 had set it to 22 \u2014 wrong; P-32 in v05 explicitly raises it from 22 to 28'); params/factions_personal.md Clock Starting Values ('Church Influence | 0 | 28'); params/campaign_modes.md:46 ('Church Influence | 15')",
+            "detail": "BG-mode CI start is well-triangulated at 28 across four independent sites (bg/core.md, bg/ci_seizure.md, bg/parliament.md, factions_personal.md's BG column). TTRPG-mode start = 0 per factions_personal.md. campaign_modes.md's TTRPG Session Zero value of 15 matches neither.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "See also the 'Starting Clock Values' finding above \u2014 grouped here for the CI-specific provenance trail."
+        },
+        {
+            "name": "Church primary/seizure CI threshold",
+            "kind_guess": "other",
+            "surface": "params/bg/parliament.md:54 ('Church primary victory threshold: CI \u2265 65 \u2014 P-32 reduced from 70'); params/bg/ci_seizure.md:25-26,42 ('CI \u2265 60 makes Mass Seizure available')",
+            "detail": "Two different CI thresholds (65 for 'primary victory' per parliament.md's PP-189 corrections list vs 60 for 'Mass Seizure available' per ci_seizure.md) are both asserted as canonical without cross-reference distinguishing them.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "Plausibly two genuinely distinct gates (a victory-condition CI floor vs a Seizure-availability floor) rather than a collision \u2014 flagged as NEW/uncertain, lower confidence, not asserted as a hard defect; recommend the two threshold names be explicitly distinguished in-file if they are in fact different."
+        },
+        {
+            "name": "Faction Military (Crown, starting)",
+            "kind_guess": "faction_stat",
+            "surface": "params/bg/core.md:165,172 (Crown Military = 5 in Starting Stats table; footnote: 'UNRESOLVED (Jordan): Crown Military here=5 CONFLICTS with stats_1_7_scale.md=4 (direction undetermined). See ED-869.'); params/factions/stats_1_7_scale.md:19 ('Crown | ... | 5/6 | ... <!-- Mil: Crown fields the L\u00f6wenritter (5/6); prior value 4 struck per ED-869 / Jordan 2026-05-31 -->')",
+            "detail": "bg/core.md's own footnote (added 2026-05-30) says stats_1_7_scale.md shows Crown Military=4, but stats_1_7_scale.md as currently written shows 5/6 (with a note that the 4 was struck by ED-869/Jordan 2026-05-31 \u2014 one day AFTER bg/core.md's footnote was written).",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "KNOWN-TRACKED (ED-869 explicitly named in both sites) but the bg/core.md footnote is now itself STALE relative to stats_1_7_scale.md's later resolution \u2014 it still says 'CONFLICTS ... direction undetermined' when stats_1_7_scale.md shows the conflict was resolved in stats_1_7_scale.md's favor (5/6) one day later. A residual doc-hygiene gap: bg/core.md's footnote was never updated to reflect the ED-869 closure recorded in its sibling file."
+        },
+        {
+            "name": "Domain Action Resolver (deterministic+stochastic, \u03b4/margin model)",
+            "kind_guess": "other",
+            "surface": "params/factions/stats_1_7_scale.md:56-97",
+            "detail": "P_success(M) = clamp(0.50 + 0.10\u00b7M, 0.05, 0.90); P_overwhelming(M) = clamp(0.50+0.10M\u22120.35, 0, 0.55); P_atleast_partial = clamp(0.50+0.10M+0.20, P_success, 0.97). BASE 0.50, SLOPE 0.10, FLOOR 0.05, CAP 0.90. Supersedes bare-stat-pool-vs-Ob (ED-874, ratified 2026-05-31).",
+            "aliases_or_variants": [
+                "legacy Ob mapping: difficulty D = max(1, (O\u22121)\u00b72)"
+            ],
+            "consumers_seen": [
+                "params/bg/faction_actions.md throughout (Royal Decree, Excommunication, Private Collection, Economic Leverage all cite '\u00a7Domain Action Resolution')"
+            ],
+            "notes": "Internally consistent and well cross-referenced across bg/faction_actions.md; no collision found. Logged for inventory completeness."
+        },
+        {
+            "name": "Faction victory-condition track abbreviation 'CI' reused as both 'Church Influence' and L\u00f6wenritter victory row's 'Thread Consciousness (CI)'",
+            "kind_guess": "other",
+            "surface": "params/bg/victory.md:17,92 ('L\u00f6wenritter | Regency Establishment | PV \u2265 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI \u2265 4 + successor')",
+            "detail": "The abbreviation 'CI' is reused for a second, differently-named quantity ('Thread Consciousness') inside the same victory-condition table that elsewhere uses CI exclusively for 'Church Influence'.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "NEW \u2014 no other file in the family defines a 'Thread Consciousness' stat; this looks like a copy-paste/rename artifact reusing the Church Influence abbreviation for what is presumably meant to still be Church Influence (L\u00f6wenritter's victory condition wanting low Church Influence is thematically sensible) but as written creates a second, undefined named quantity sharing the CI abbreviation."
+        },
+        {
+            "name": "Turmoil (= Strain)",
+            "kind_guess": "track",
+            "surface": "params/factions_personal.md:104 ('Turmoil (= Strain) | 0 | 0\u201310 ... Also called \"Strain\" in peninsular_strain docs and phases.md \u00a74d'); params/bg/tracks.md:122-135 ('## Turmoil (Global, 0-10) \u2014 PP-646'); params/bg/core.md:141-149 (near-identical 'Turmoil Threshold Effects' table)",
+            "detail": "Self-documented synonym (the file itself flags 'Also called Strain'); table duplicated near-verbatim across factions_personal.md, bg/core.md, and bg/tracks.md.",
+            "aliases_or_variants": [
+                "Strain"
+            ],
+            "consumers_seen": [],
+            "notes": "Low severity \u2014 the synonym is self-disclosed in-place (not silent), unlike the MS/RS split. Logged as a KNOWN-UNTRACKED but low-stakes duplication (three near-identical copies of the same threshold table is a maintenance/drift risk even though values currently agree, apart from the MS/RS wording difference on the Collapse row already reported separately)."
+        },
+        {
+            "name": "params_board_game.md index",
+            "kind_guess": "other",
+            "surface": "params/board_game.md:1-308",
+            "detail": "Auto-generated 2026-04-18 index whose every link target (`references/params_bg_core.md`, `references/params_bg_clocks.md`, `references/params_bg_ed_resolutions.md`, `references/params_bg_faction_actions.md`, `references/params_bg_geography.md`, `references/params_bg_institutions.md`, `references/params_bg_military.md`, `references/params_bg_ministry.md`, `references/params_bg_npc_priority_trees.md`, `references/params_bg_npcs_special.md`, `references/params_bg_parliament.md`, `references/params_bg_phases.md`, `references/params_bg_stress_patches.md`, `references/params_bg_tc_seizure.md`, `references/params_bg_tracks.md`, `references/params_bg_victory.md`) is verified NOT to exist anywhere in the repo.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "KNOWN-TRACKED per baseline facts; real content lives at params/bg/*.md (verified: core.md, clocks.md, ci_seizure.md [renamed from tc_seizure], ed_resolutions.md, faction_actions.md, geography.md, institutions.md, military.md, ministry.md, npc_priority_trees.md, npcs_special.md, parliament.md, phases.md, royal_assassination.md, stress_patches.md, tensions_deck.md, tracks.md, victory.md all confirmed to exist and hold the real content). Note the index's link basename 'params_bg_tc_seizure.md' doesn't even match the real file's current name (ci_seizure.md) \u2014 an extra layer of drift beyond a merely-stale path."
+        },
+        {
+            "name": "params_factions.md index",
+            "kind_guess": "other",
+            "surface": "params/factions.md:1-61",
+            "detail": "Same broken-index pattern: links to `references/params_factions_ed_006_resolution_pp_287_riskbreakers_identity_fla.md`, `references/params_factions_npc_stance_triangles_pp_new_from_npc_behavior_syst.md`, `references/params_factions_stats_1_7_scale.md` \u2014 none exist. Real content lives at params/factions/riskbreakers_identity.md, params/factions/npc_stance_triangles.md, params/factions/stats_1_7_scale.md.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "KNOWN-TRACKED per baseline facts (cited for completeness); note the index's own truncated/hashed basenames (e.g. '...pp_287_riskbreakers_identity_fla.md') suggest the auto-generator (index_gen.py) mangled long headings into filenames that were never actually created, compounding the staleness with a generation-quality defect."
+        },
+        {
+            "name": "patch_history pointers (family-wide)",
+            "kind_guess": "other",
+            "surface": "params/core.md:167; params/contest.md:266; params/fieldwork.md:257; params/mass_combat.md:350; params/factions_personal.md:119; params/southernmost.md:120; params/threadwork_superseded.md:448",
+            "detail": "Every 'patch_history:' comment across the family points at 'references/params_<name>_history.md' \u2014 verified none of these seven paths exist anywhere in the repo.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "NEW. The real historical content lives at params/history/<name>.md (confirmed populated: board_game.md 129 lines, campaign_modes.md 16, combat.md 108, core.md 17, factions_personal.md 19, mass_combat.md 104, southernmost.md 18, threadwork.md 32 \u2014 443 lines total) \u2014 a directory the patch_history comments never point to. Same broken-index disease as params/board_game.md and params/factions.md, but at the level of individual file footers rather than a whole index file, and not previously called out in the baseline facts."
+        },
+        {
+            "name": "Concentration (contest)",
+            "kind_guess": "derived_value",
+            "surface": "params/contest.md:140 ('Concentration | (3 \u00d7 Focus) + (2 \u00d7 Spirit) | 5\u201335'); params/contest_extensions.md:11-14 (PP-NEW-D, 'Concentration maximum = (3\u00d7Focus)+(2\u00d7Spirit)')",
+            "detail": "Formula consistent across both files; PP-NEW-D explicitly supersedes a struck 'Focus\u00d73' form. No collision.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "Logged for completeness; contest.md:154 also separately depletes Concentration '\u22125/exchange' (ED-890/DEP rescale from \u22121) \u2014 internally consistent with the 5-35 range."
+        },
+        {
+            "name": "Face (contest)",
+            "kind_guess": "derived_value",
+            "surface": "params/contest.md:137,143-151",
+            "detail": "Face_max = Charisma \u00d7 3 (3\u201321 ceiling, the retired Composure magnitude per CR3/ED-1056); Face_current = round(Standing \u00f7 10 \u00d7 Face_max) \u2014 a combo formula resolving a separate 0-10 'Standing' sim-kernel primitive against the build-time Charisma ceiling.",
+            "aliases_or_variants": [
+                "retired name: Composure (social-contest-scoped only, per Gate A 2026-07-01 \u2014 NOT a corpus-wide rename; knots_v30 \u00a74.2 still calls its buffer 'Knot-as-Composure-buffer' by Jordan-confirmed scoped exception, contest.md:151)"
+            ],
+            "consumers_seen": [
+                "sim/personal/contest/primitives.py FaceScale",
+                "sim/personal/contest/resolver.py _Side.face_max()/face_current()"
+            ],
+            "notes": "KNOWN-TRACKED (ED-1056), well cross-referenced in-file \u2014 logged for inventory completeness, not a new finding."
+        },
+        {
+            "name": "Mass Battle Thread MS multiplier",
+            "kind_guess": "other",
+            "surface": "params/mass_combat.md:239-251",
+            "detail": "'\u00d73 multiplier STRUCK (PP-601 struck PP-192/PP-225). Individual Thread op MS costs in mass battle = full TTRPG value (\u00d71).' Uses 'MS' terminology throughout this section even though it is filed immediately adjacent to Substrate Saturation Counter language that in threadwork.md's canonical version uses 'RS' for the same concept (params/threadwork.md:160-167 'Substrate Saturation Counter (PP-606...) ... RS \u22121 at next Accounting').",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "Additional instance of the MS/RS split (see main finding) \u2014 mass_combat.md's Substrate Saturation Counter description is MS-flavored while threadwork.md's canonical version of the identical mechanic (same PP-606 citation) is RS-flavored."
+        },
+        {
+            "name": "Thread Pool Score (TPS)",
+            "kind_guess": "practitioner_stat",
+            "surface": "params/threadwork.md:13 ('TPS = TS \u00f7 10 (round down)'); params/threadwork_superseded.md:22 (identical formula, superseded copy)",
+            "detail": "Consistent formula; superseded copy correctly retained as historical.",
+            "aliases_or_variants": [],
+            "consumers_seen": [
+                "params/fieldwork.md:26,106 (Thread-Read pool)",
+                "params/contest.md (implicitly via Thread-adjacent pools)"
+            ],
+            "notes": "No collision; logged for completeness."
+        },
+        {
+            "name": "Disposition Track",
+            "kind_guess": "derived_value",
+            "surface": "params/fieldwork.md:123-153 (ED-912, range \u22125..+5, supersedes PP-632 'ceiling = Bonds' and the Bonds-capped ceiling); params/threadwork.md:36 (Knot prerequisites: 'Disposition +5 (Bonded)')",
+            "detail": "Consistent range and semantics between fieldwork.md and threadwork.md's Knot Mechanics section (both post-ED-912).",
+            "aliases_or_variants": [],
+            "consumers_seen": [
+                "params/core.md:147 (Bonds section, cross-references Disposition as ED-912 flat \u22125..+5, NOT Bonds-capped \u2014 explicitly correcting the pre-ED-912 framing)"
+            ],
+            "notes": "No collision found; three files (core.md, fieldwork.md, threadwork.md) all show the ED-912 propagation landed consistently \u2014 a positive control case worth noting given how many OTHER quantities in this family show incomplete propagation."
+        },
+        {
+            "name": "Boards game Overwhelming threshold (PP-249/ED-142)",
+            "kind_guess": "other",
+            "surface": "params/bg/core.md:65-75 (Degree Table PP-179+PP-249, '\u2265 2\u00d7Ob AND \u2265 3'); params/board_game_misc.md:2 (header comment only: 'PP-249 2026-04-04: ED-142 resolved \u2014 BG Overwhelming: 2\u00d7Ob + floor 3, supersedes ED-031')",
+            "detail": "params/board_game_misc.md is otherwise EMPTY (only header/patch-application comments, no body content) despite being indexed at ~381 tokens by params/board_game.md's index \u2014 its only 'content' is a comment restating what bg/core.md's actual Degree Table already states in full.",
+            "aliases_or_variants": [],
+            "consumers_seen": [],
+            "notes": "NEW/minor \u2014 params/board_game_misc.md is functionally a stub/orphan: it carries provenance comments for a rule fully specified elsewhere (bg/core.md) and has no unique mechanical content of its own, despite being a first-class file in the (broken) params_board_game.md index."
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-PARAMS-01",
+            "severity": "P1",
+            "kind": "synonym",
+            "calibration": "KNOWN-UNTRACKED",
+            "claim": "The single 0\u2013100 world-substrate-integrity clock (Rupture at 0, decay \u22121/year, TTRPG/BG 60/72 starting split) is carried under two different names \u2014 'Mending Stability (MS)' and 'RS' \u2014 across the params family, with the identical PP-436 Crown Thread Liaison rule and the identical Turmoil Collapse threshold row each stated once under each name in sibling files, and the live (non-superseded) params/threadwork.md never once spelling out what 'RS' stands for.",
+            "evidence": "params/core.md:95-101 ('Mending Stability (MS)... TTRPG default = 60; Board Game default = 72'); params/threadwork.md:139-142 ('RS Track... Starting: videogame canonical 60... RS = 0: Rupture'); params/threadwork_superseded.md:19 (historical definition: 'Rendering Stability (RS) | 100\u21920'); params/bg/core.md:149 ('MS \u22121/season additional') vs params/bg/tracks.md:135 (identical Turmoil Collapse row: 'RS \u22121/season additional'); params/bg/ed_resolutions.md:186 ('Liaison's Thread operations... count toward Crown's co-victory MS tracking') vs params/bg/faction_actions.md:159 (identical PP-436 Thread Liaison rule: '...count toward Crown's co-victory RS threshold tracking'); also params/bg/clocks.md:3 ('Mending Stability (MS) Effects') vs params/bg/phases.md:25,53,57,59,73-74 and params/bg/npc_priority_trees.md:121,130 (bare 'RS' throughout, undefined in-file)."
+        },
+        {
+            "id": "F-PARAMS-02",
+            "severity": "P1",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "Vaynard Thread Mastery (VTM) was struck as a faction-level stat (PP-663, 2026-04-19), but params/bg/victory.md's live victory-condition and co-victory thresholds and params/bg/geography.md's entire Southernmost Access / Champion-qualification system still gate mechanics on numeric VTM thresholds as if the stat is live.",
+            "evidence": "params/bg/tracks.md:22-24 ('VTM \u2014 STRUCK (PP-663, 2026-04-19). Vaynard Thread Mastery track removed as faction-level stat.') vs params/bg/victory.md:13-15,52-53,88-90,129-130 ('Varfell Path A... VTM \u2265 3', 'Path C... VTM = 5', 'Crown+Varfell... VTM \u2265 3', 'Varfell+RM... VTM \u2265 4') and params/bg/geography.md:270-403 (Champion TS Values table: 'Vaynard (VTM 3+)', 'VTM 4+', Expedition Procedure modifiers 'VTM \u2265 2: \u22121 Ob', 'VTM +1 (Varfell only, if VTM \u2265 2)')."
+        },
+        {
+            "id": "F-PARAMS-03",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "params/campaign_modes.md's 'Starting Clock Values (TTRPG Session Zero)' table gives Mending Stability = 72 and Church Influence = 15, citing params_core.md and params_factions_ttrpg.md respectively as sources \u2014 but those sources' actual TTRPG-mode values are MS=60 (72 is explicitly the BG value in the same source line) and CI=0, and no file in the family supports CI=15 for any mode.",
+            "evidence": "params/campaign_modes.md:42-47 ('Mending Stability | 72 | params_core.md', 'Church Influence | 15 | params_factions_ttrpg.md'); params/core.md:101 ('Starting value by mode: TTRPG default = 60; Board Game default = 72'); params/factions_personal.md Clock Starting Values table ('Church Influence | 0 | 28'); params/bg/core.md:82 and params/bg/ci_seizure.md:119-120 (BG CI = 28, not 15)."
+        },
+        {
+            "id": "F-PARAMS-04",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "params/bg/victory.md's Varfell Path B victory condition still gates on 'Warden's Accord (WA) \u2265 +1' (and the Varfell+RM co-victory on 'WA \u2265 +2'), but params/bg/geography.md's own ED-311-resolved Path B table explicitly states it replaces victory.md \u00a73.4's conditions with a different track, 'Warden Recognition (WR) \u2265 2' \u2014 and victory.md was never updated to match.",
+            "evidence": "params/bg/victory.md:14,89 ('Varfell Path B | Southernmost Dominion | PV \u2265 8 + VTM \u2265 3 + T13 control + T15 presence + Warden's Accord (WA) \u2265 +1'); params/bg/victory.md:53,130 ('Varfell + RM | VTM \u2265 4, WA \u2265 +2, ...'); params/bg/geography.md:412-413 ('## Varfell Path B \u2014 Southernmost Dominion (ED-311 RESOLVED \u2014 Option A) [Replaces provisional conditions in victory_v30.md \u00a73.4]') and :417-420 ('Warden Recognition (WR) | \u2265 2')."
+        },
+        {
+            "id": "F-PARAMS-05",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "NEW",
+            "claim": "A single 0\u2013100 clock (start 20, gates Altonian Vanguard deployment at \u226575) is named 'Invasion Pressure (IP)' in params/bg/core.md, params/bg/clocks.md, params/bg/geography.md, and params/bg/victory.md, but 'Institutional Pressure (IP)' in params/factions_personal.md and params/campaign_modes.md and params/mass_combat.md \u2014 same abbreviation, two different full names, never cross-referenced.",
+            "evidence": "params/bg/core.md:83 ('Invasion Pressure (IP) | 20 | 0\u2013100... IP 75 = Altonian Vanguard appears'); params/bg/clocks.md:33 ('### Invasion Pressure (IP) Effects'); params/bg/geography.md:19 ('Invasion Pressure (IP) events fire here first'); params/bg/victory.md:10,85 ('Invasion Pressure (IP) < 60'); vs params/factions_personal.md Clock Starting Values ('Institutional Pressure | 20 | 20'); params/campaign_modes.md:47 ('Institutional Pressure | 20 | params_board_game.md'); params/mass_combat.md:382 ('Deployment trigger: Institutional Pressure \u2265 75')."
+        },
+        {
+            "id": "F-PARAMS-06",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "params/bg/victory.md's L\u00f6wenritter victory-condition row introduces a second quantity under the 'CI' abbreviation \u2014 'Thread Consciousness (CI)' \u2014 distinct from and inconsistent with the same table's other seven rows which all use CI exclusively for 'Church Influence'; no file in the family defines a 'Thread Consciousness' stat.",
+            "evidence": "params/bg/victory.md:17,92 ('L\u00f6wenritter | Regency Establishment | PV \u2265 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI \u2265 4 + successor')."
+        },
+        {
+            "id": "F-PARAMS-07",
+            "severity": "P2",
+            "kind": "orphan",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "params/board_game.md and params/factions.md are auto-generated (2026-04-18) indexes whose every link target under references/params_bg_*.md / references/params_factions_*.md is confirmed non-existent; the real content lives at params/bg/*.md and params/factions/* + params/factions_personal.md.",
+            "evidence": "params/board_game.md:6-304 (16 dead links, e.g. '[params_bg_core.md](references/params_bg_core.md)'); params/factions.md:7-59 (3 dead links, with mangled/truncated basenames e.g. 'params_factions_ed_006_resolution_pp_287_riskbreakers_identity_fla.md'); verified via `ls` that none of the 19 combined targets exist in references/, and that all 18 real files exist at params/bg/*.md and params/factions/*.",
+            "known_ref": "Baseline fact stated in audit brief; cited per cardinal rule (c), extended here with the additional detail that params/bg/tc_seizure.md (the index's link basename) doesn't even match the real file's current name (ci_seizure.md) \u2014 an extra drift layer beyond simple staleness."
+        },
+        {
+            "id": "F-PARAMS-08",
+            "severity": "P2",
+            "kind": "dead",
+            "calibration": "NEW",
+            "claim": "Every 'patch_history:' pointer across the F-PARAMS family (7 distinct files) points at a references/params_<name>_history.md path that does not exist; the real historical content lives instead at params/history/<name>.md, a directory none of the pointers reference.",
+            "evidence": "params/core.md:167 ('references/params_core_history.md'); params/contest.md:266; params/fieldwork.md:257; params/mass_combat.md:350; params/factions_personal.md:119; params/southernmost.md:120; params/threadwork_superseded.md:448 \u2014 all confirmed absent via `ls`; params/history/{board_game,campaign_modes,combat,core,factions_personal,mass_combat,southernmost,threadwork}.md confirmed present (443 total lines) and unreferenced by any patch_history pointer."
+        },
+        {
+            "id": "F-PARAMS-09",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "params/bg/core.md's own footnote (2026-05-30) claims an unresolved Crown-Military-value conflict with params/factions/stats_1_7_scale.md ('5 CONFLICTS with stats_1_7_scale.md=4 (direction undetermined). See ED-869'), but stats_1_7_scale.md's own text (dated one day later, 2026-05-31) shows the conflict was already resolved in favor of 5/6 \u2014 the bg/core.md footnote itself is now stale relative to its own cited resolution.",
+            "evidence": "params/bg/core.md:172 ('UNRESOLVED (Jordan): Crown Military here=5 CONFLICTS with stats_1_7_scale.md=4 (direction undetermined). See ED-869. Jordan-vetoable.'); params/factions/stats_1_7_scale.md:19 ('Crown | ... | 5/6 | ... <!-- Mil: Crown fields the L\u00f6wenritter (5/6); prior value 4 struck per ED-869 / Jordan 2026-05-31 -->')."
+        },
+        {
+            "id": "F-PARAMS-10",
+            "severity": "P3",
+            "kind": "other",
+            "calibration": "NEW",
+            "claim": "params/board_game_misc.md is a functionally empty stub (only provenance/patch-application comments, zero mechanical content) despite being a first-class entry in params/board_game.md's index at ~381 tokens; its only content restates a rule (PP-249 BG Overwhelming threshold) already fully specified in params/bg/core.md's Degree Table.",
+            "evidence": "params/board_game_misc.md:1-7 (entire file: version/patch-header comments only); params/bg/core.md:65-75 (the actual Degree Table PP-179+PP-249 the comment refers to)."
+        }
+    ],
+    "coverage_notes": "Swept in full (every table/formula/PP/ED tag transcribed and cross-checked): params/core.md, params/board_game.md (index only \u2014 confirmed broken, all 16 link targets absent from disk), params/factions.md (index only \u2014 confirmed broken, all 3 link targets absent), params/factions_personal.md, params/factions/stats_1_7_scale.md, params/factions/npc_stance_triangles.md, params/factions/riskbreakers_identity.md, params/contest.md, params/contest_extensions.md, params/mass_combat.md, params/threadwork.md, params/fieldwork.md, params/southernmost.md, params/scale_transitions.md, params/campaign_modes.md, params/board_game_misc.md (confirmed near-empty stub), and every file under params/bg/: core.md, clocks.md, ci_seizure.md, ed_resolutions.md, faction_actions.md, geography.md, institutions.md, military.md, ministry.md, npc_priority_trees.md, npcs_special.md, parliament.md, phases.md, royal_assassination.md, stress_patches.md, tensions_deck.md, tracks.md, victory.md.\n\nPartially swept: params/threadwork_superseded.md \u2014 read lines 1-120 of 712 (header + Practitioner Stats + RS=0 Lockout + Coherence + Thread Depth removal + Leap Roll + Contact Duration + Diagnosis-struck + Weaving/Pulling/Past-Oriented-Pulling openers). This established the historical 'Rendering Stability (RS)' full-name definition used in Finding F-PARAMS-01 (the file's single most load-bearing contribution to this audit), but the remaining ~590 lines (further superseded FR/Lock/Dissolution/Mending mechanics, presumably) were not individually transcribed \u2014 file is explicitly marked non-canonical/patch-history-only by its own header ('values below are stale... Do not use for mechanical reference'), so the marginal audit value of full transcription is low, but I flag this as an incomplete sweep rather than a silent cap.\n\nNot swept: params/history/*.md (8 files, 443 lines total \u2014 board_game, campaign_modes, combat, core, factions_personal, mass_combat, southernmost, threadwork). These are patch-history changelogs, not live mechanical specs; not named in the brief's explicit file list, and their broken referencing (Finding F-PARAMS-08) was established from the pointer side (grep across the live files + `ls` on the targets) without needing to read their content. If a future pass wants the full patch-history record cross-checked against editorial_ledger.jsonl for drift, that would require reading these 443 lines plus the ledger \u2014 out of scope here.\n\nCross-family citations (designs/provincial/clock_registry_v30.md, canon/editorial_ledger.jsonl, values_master.yaml) were spot-checked only to verify/refute specific claims (e.g., confirming ED-793 is unrelated to Institutional/Invasion Pressure and is actually about Conviction Renown grants \u2014 a miscitation in clock_registry_v30.md, noted but NOT reported as an F-PARAMS finding since clock_registry_v30.md is outside this family's surface) \u2014 not exhaustively read, per the brief's family-scoping (Cardinal Rule f / lane scoping).\n\nNo numeric caps were silently applied \u2014 every distinct named quantity, table, and cross-file formula I encountered while reading is either itemized above or explicitly folded into a finding's evidence/notes as a corroborating citation."
+}
