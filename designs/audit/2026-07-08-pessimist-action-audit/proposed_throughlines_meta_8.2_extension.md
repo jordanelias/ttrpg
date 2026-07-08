@@ -1,6 +1,6 @@
 # PROPOSED — throughlines_meta.md §8.2 extension (subtractive disposition addendum)
 
-> ## Status: PROPOSED (2026-07-08, pessimist-action-audit). NOT canon until Jordan rules the ed_options docket. Do not flip any `## Status:` line, ledger field, or `CURRENT.md` on this text alone. Filed under Lane IN; anchor ED-IN-0027. Merge-ratification (CLAUDE.md §2, ED-1094) applies only once the docket is ruled and this text is intentionally landed — it must not ride in on a routine-work PR.
+> ## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08, pessimist-action-audit). NOT canon until Jordan rules the ed_options docket. Do not flip any `## Status:` line, ledger field, or `CURRENT.md` on this text alone. Filed under Lane IN; anchor ED-IN-0027. Merge-ratification (CLAUDE.md §2, ED-1094) applies only once the docket is ruled and this text is intentionally landed — it must not ride in on a routine-work PR.
 
 ## §8.2-A · The subtractive disposition (extends §8.2's build/wire/redesign/flag/iterate routing)
 

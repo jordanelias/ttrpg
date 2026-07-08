@@ -8,6 +8,19 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Pessimist subtractive-action audit RATIFIED 2026-07-08 (ED-IN-0027; Jordan: "Please ratify all").**
+  The corpus-wide read-only audit (`designs/audit/2026-07-08-pessimist-action-audit/`) is ratified.
+  Two ratification acts landed: (1) **canon** — `references/throughlines_meta.md` §8.2-A + infill §7-A
+  now carry the **subtractive disposition** (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT, judged *as-if-built*;
+  the first removal verdict the vetting framework has ever had); (2) **docket** — the ratified verdicts
+  are filed as per-lane work-item EDs **ED-PC-0007 / ED-SC-0012 / ED-FA-0006 / ED-SE-0005 / ED-WR-0007 /
+  ED-FI-0004** with the DECISION ratified and EXECUTION scoped to each lane's own follow-up (not done
+  in this IN-lane PR — lane-scoping, CLAUDE.md §4). NEXT (per-lane, when each lane next runs): execute
+  its ED's verdicts against its surfaces, each naming the downstream resolution-plan Stratum/OPT it
+  retires. Headline: 0 top-level CUTs, 2 PRUNEs (SE Trade, SE Grant/Revoke) — the corpus is
+  over-articulated, not junk-laden; most execution is MERGE/DISTILL consolidation. The 2 critic-overturned
+  candidates (MB Concentration, SC deliberative-game) take no action.
+
 - **Resolution Plan v1 — Stratum-C (armature deployment) FIRST SLICE 2026-07-08: ED-IN-0028, echo-transport
   plumbing ("proceed large build").** Executed the IN-lane core of Key & Echo Armature §6.2. New
   `sim/cross_scale/echo_transport.py` un-orphans `domain_echo.py` (was a ZERO-caller C-REACH island) and
