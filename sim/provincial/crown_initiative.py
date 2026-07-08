@@ -64,6 +64,12 @@ def attempt_royal_progress(crown, world, rng) -> InitiativeResult:
     Pool = Influence + Standing modifier. Ob per ED-840 closure formula.
     Costs Wealth -2 regardless of outcome (part10 §3.2 outcome table).
     """
+    # Historical grounding (annotation only, ED-FA-0017 CP-5, 2026-07-08): itinerant kingship —
+    # Ottonian/Angevin iteration and Elizabeth I's royal progresses — presence-as-governance, the
+    # court "eating the countryside" as simultaneous extraction and theater. Grounds why this mode
+    # exists (Accord/Mandate paid for by physically moving the court through owned territory), not
+    # the Ob/cost constants above, which are unchanged (ED-840 closure). See
+    # designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md CP-5.
     if crown.name != 'Crown':
         return InitiativeResult(status='invalid_not_crown', mode='royal_progress')
     if crown.senator_inward_used:
@@ -129,6 +135,12 @@ def attempt_great_work(crown, world, rng) -> InitiativeResult:
     declare) is deferred. Current form: pays all 3 seasons of Wealth, rolls at
     Ob 4 with Mandate pool, applies outcome.
     """
+    # Historical grounding (annotation only, ED-FA-0017 CP-5, 2026-07-08): cathedral/civic-works
+    # legitimacy — great construction projects (and their fiscal shadow, e.g. Beauvais) as a
+    # standing mechanism for converting sustained Wealth expenditure into durable Mandate/Standing.
+    # Grounds why this mode exists as a Wealth-for-Mandate exchange, not the specific cost/Ob
+    # constants above (canonical, part10 §3.3, unchanged). See
+    # designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md CP-5.
     if crown.name != 'Crown':
         return InitiativeResult(status='invalid_not_crown', mode='great_work')
     if crown.senator_inward_used:
@@ -202,6 +214,12 @@ def attempt_coronation_renewal(crown, world, rng) -> InitiativeResult:
     Pool = Crown.I. Ob = floor(Church.L / 2) + 1.
     On Success/Overwhelming: lifts Excommunication if active. (§6.4 Q-11)
     """
+    # Historical grounding (annotation only, ED-FA-0017 CP-5, 2026-07-08): Festkronungen — ritual
+    # crown-wearings at Christmas/Easter/Whitsun — and the Laudes Regiae, ritual reaffirmations of
+    # sacral kingship distinct from a first coronation. Grounds why a *renewal* rite (not a new
+    # coronation) is the canonical Excommunication-recovery path here; the Ob/pool formula above
+    # (part10 §3.4) is unchanged. See
+    # designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md CP-5.
     if crown.name != 'Crown':
         return InitiativeResult(status='invalid_not_crown', mode='coronation_renewal')
     if crown.senator_inward_used:

@@ -133,11 +133,11 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "6087320521052fce975bc39a8d28a9a354d7c70c"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "136a4ddfbc519f590a23bc5d88b0ecd23a6a2ac2"
     political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
-    canonical_sha__designs__territory__settlement_layer_v30_index_md: "a0c84f286189ca3fb822d7d2afbdc2f75fa5cb30"
+    canonical_sha__designs__territory__settlement_layer_v30_index_md: "aaaebaa38989f4e1da240e2dbb222c59312c5afd"
     adjacency: designs/territory/settlement_adjacency_v30.md
     canonical_sha__designs__territory__settlement_adjacency_v30_md: "0155129ef56f66d70f0e01ab71eac5b09cb56c9b"
     fractional: designs/provincial/fractional_province_ownership_v30.md
@@ -189,7 +189,7 @@ systems:
     canonical_sha__params__scale_transitions_md: "4d24fc8fe33ea8a9307d9cf639884580f8aa0773"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "0a091996a56d9e3fa75c0fcbd0e5502eb47ddde8"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "2b24f59e0bc464e48e909606263b7b599bcca883"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
@@ -207,7 +207,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "6087320521052fce975bc39a8d28a9a354d7c70c"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "136a4ddfbc519f590a23bc5d88b0ecd23a6a2ac2"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"

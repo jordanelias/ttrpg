@@ -178,6 +178,131 @@ Range: undeveloped Outpost W=1 → fully-developed Seat W=11.
 
 **GD-1 synergy.** Parliament votes = current Mandate (`faction_layer §5.3`), and Mandate now aggregates settlement legitimacy weighted by population → a faction's political weight emerges from the size and loyalty of the populace it actually governs, coherent with GD-1 (Peninsular Sovereignty / territorial control as the win condition).
 
+## §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0007, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** §1.8 above specifies how settlement L/PS *aggregate* into
+Mandate and how Mandate *feeds back* into settlement L/PS (the mean-reverting drift), but the only
+settlement-grain *source* of an L/PS change currently specified is §1.8's own uniform faction-level
+cascade ("Faction-level mission outcomes... apply their ΔL/ΔPS to the faction's controlled
+settlements uniformly"). No event distinguishes *how* one settlement's own acceptance rises or
+falls from another's — `sim/territory/registry.py`'s `legitimacy`/`popular_support` fields are
+declared but have no per-settlement derivation rule to execute (the ED-FA-0004 Stratum-B gap this
+subsection exists to fill; provenance and full research:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-1).
+
+**Grounding.** Max Weber's three types of legitimate domination (*Economy and Society*, 1922) —
+**traditional** (sanctity of immemorial rule), **legal-rational** (belief in enacted procedure), and
+**charismatic** (devotion to demonstrated extraordinary performance) — map directly onto this
+section's own L/PS split: **Legitimacy (L) is the traditional + legal-rational channel** (slow,
+institutional); **Popular Support (PS) is the charismatic/performance channel** (fast, earned by
+visible outcomes). Weber's *routinization of charisma* (repeated good performance hardening into
+accepted institutional right) is the mechanism §1.8's own Mandate→L feedback already implements
+without naming it. Albert Hirschman's *loyalty* (*Exit, Voice, and Loyalty*, 1970) supplies the
+damping frame for why these events are additive-and-capped rather than compounding runaway.
+
+**L-channel events (traditional / legal-rational — one-time or slow, capped 0–7):**
+
+| Event | ΔL | Note |
+|---|---|---|
+| Entry oath sworn / privileges confirmed on control transfer | +1 (one-time) | Ties to a future Entry Terms rule (SE-5); not yet specified here |
+| Charter granted (subnational management grant, §3.3) | +1 (one-time) | |
+| Regular court held (governance action, ≥2 consecutive seasons) | +1 (capped once per grant) | Rewards sustained, not one-off, adjudication |
+| Tax/tithe collected within the faction's announced fiscal stance | 0 | Stance *broken* (collection outside the announced rate) → −1; ties to a future Fiscal Stance rule (FA-1) |
+| Governor rotated per stated policy | 0 | Governor imposed over protest → −1 |
+
+**PS-channel events (charismatic / performance — faster-moving, capped 0–7):**
+
+| Event | ΔPS | Note |
+|---|---|---|
+| Dearth relieved (governance response, ties to a future Dearth rule, SE-2) | +2 | |
+| Festival or public event sponsored | +1 | |
+| Settlement successfully defended from raid/siege | +2 | |
+| Levy or extraction taken from the settlement | −1 | |
+| Forced billeting / garrison quartered against local wishes | −1 | |
+| Public execution of a local resident | −2 | |
+
+**Scope discipline.** This subsection specifies the *event → ΔL/ΔPS* table only. It does not
+itself change §1.8's aggregation formula, the Mandate feedback, or the faction-level cascade
+(§1.8's existing paragraph on PP-686 mission outcomes is unchanged and continues to apply
+uniformly where no settlement-grain event fires). Events that reference a not-yet-specified rule
+(Entry Terms, Fiscal Stance, Dearth) are flagged inline above rather than inventing that rule here;
+each is tracked as its own docket item (ED-SE-0007/0008/0011 and ED-FA-0008) and should compose
+with this table when it lands. Magnitudes above are shape proposals per the historical grounding,
+not sim-calibrated constants — calibrate before treating any value as canon, per CLAUDE.md §5/§7.
+
+## §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0012, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** Patches how a *succession* (the controlling faction's
+leadership changing, control unchanged) affects per-settlement L, sharpening the PP-686 succession
+rule (`faction_behavior_v30 §3.5.1`) and tying it to §1.8's feedback model and to §5.3 Entry Terms
+(SE-5). Provenance: `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-6.
+
+**Grounding.** Ernst Kantorowicz, *The King's Two Bodies* (1957) — the medieval legal fiction of the
+corporate crown (*dignitas non moritur*, "the dignity does not die") was engineered *precisely to
+abolish the interregnum*: the office persists undiminished across the mortal person of its holder, so
+a **normal** succession transmits no gap in legitimacy. §1.8 already models legitimacy as
+institutional and slow-moving; this subsection says what a leadership succession does — and,
+critically, does *not* do — to settlement L.
+
+**Rule.** Distinguish a **control transfer** (the settlement's controlling *faction* changes —
+governed by §5.3 Entry Terms, SE-5) from a **succession** (the controlling faction's *leadership*
+changes; control does not move). A single control event resolves under **exactly one** of the two
+rules — they never both fire on one settlement in one season, so a §5.3 Entry-Terms L-seed and a
+succession L-drift are never applied to the same settlement together.
+
+| Succession mode (`state.succession` Key, `succession_mode` field — faction_behavior_v30 §3.5.1) | Effect on held-settlement L | Note |
+|---|---|---|
+| `normal` | **L unchanged** | The corporate crown never dies — no interregnum-exposure penalty (Kantorowicz 1957). |
+| `normal` + entry/confirmation ceremony performed | **L +1** (one-time, only in each settlement where the ceremony is actually held) | This is the §1.8a "privileges confirmed" L-channel event; applies **only** where a ceremony is performed, not automatically. Ties to §5.3 / §3.3a confirmation-for-fee. |
+| `contested` / `emergency` / `imposed` | **L −1 in all held settlements** + Regency check (FA-7) | Disputed/forced succession = interregnum exposure. The Regency subsystem (FA-7) is FA-lane, not specified here. |
+
+**Composition note.** The `+1` confirmation increment above is the *same* event §1.8a lists and the
+*same* ceremony §5.3 Confirm-Privileges credits — but on a **control transfer** that credit is already
+carried by §5.3's L *seed* (L seeds 3 for Confirm), so the `+1` does **not** additionally stack on a
+transfer; it fires only on a **same-faction succession** where a ceremony is separately held. The
+`contested/emergency/imposed` −1 is bounded by the ±2 faction-stat seasonal cap (§1.8) and floors at 0.
+
+**Scope discipline.** This specifies only how a succession event moves settlement L; it does not change
+§1.8 aggregation, the Mandate feedback, §1.8a's event table, or §5.3's transfer seed (with which it
+*composes*, not competes). The Regency subsystem the non-normal modes call is owned by the FA lane
+(FA-7) and is not authored here. Magnitudes are shape proposals per Kantorowicz 1957, not
+sim-calibrated constants — calibrate before treating any value as canon (CLAUDE.md §5/§7).
+
+## §1.8c Weight loss as Exit (PROPOSED — ED-SE-0016, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** Extends the §1.8 Settlement Weight concept and the §4.3
+Prosperity-0 row: makes the "population leaving" flavor text bite the §1.8 Weight aggregate.
+Provenance: same research report, §Step 3 SE-10.
+
+**Grounding.** Albert Hirschman, *Exit, Voice, and Loyalty* (1970) — when institutional *voice*
+fails, the governed **exit**, and exit is the silent vote misgovernance cannot argue with. The
+medieval custom *Stadtluft macht frei nach Jahr und Tag* ("town air makes free after a year and a
+day") supplies the destination logic: towns grew by absorbing the countryside's refugees,
+freedom-after-residence being the historical magnet that turned a neighbor's misrule into one's own
+population gain.
+
+**Rule.** A settlement that spends **≥2 consecutive seasons in Dearth (§4.3a, SE-2) or at Order ≤ 1**
+loses **1 Settlement Weight** (emigration) — lowering both its Mandate contribution (§1.8's `W_s`
+term) and its Treasury base (`derived_stats §8.1`). Weight **recovers +1 per 4 consecutive stable
+seasons** (neither Dearth nor Order ≤ 1), capped at its structural ceiling `base(Type) + Prosperity_s
++ FacilityTier_s` (§1.8 — recovery cannot exceed developed capacity). **Exit destination:** the
+nearest higher-Order settlement reachable on the adjacency graph (§2.2 / `settlement_adjacency_v30`)
+gains a one-time **+0.5 Prosperity-growth season** (the refugees are labor — *Stadtluft macht frei*).
+
+**Composition.** Weight-as-Exit is a *Weight* change, distinct from the L/PS events of §1.8a and the
+succession L-drift of §1.8b: misgovernance bites Mandate **here** through the *size* channel (fewer
+people counted in `W_s`), **there** through the *acceptance* channel (lower `q_s`). Both can fire in
+the same season on the same settlement without double-counting, because they move different terms of
+the §1.8 mass `T = Σ W_s · (q_s / 7)`.
+
+**Scope discipline.** Extends §1.8 (Weight) and §4.3 (Prosperity-0 / Dearth) only; does not alter the
+Mandate formula, the saturating constant K, or the feedback. The Dearth trigger it reads is SE-2's
+(§4.3a); if that lands with a different definition, this rule follows it rather than restating it.
+Magnitudes (2 seasons, +1 per 4, +0.5 growth) are shape proposals per Hirschman 1970, not
+sim-calibrated — calibrate before canon (CLAUDE.md §5/§7).
+
 # PART 2: THE SETTLEMENTS (PP-726 corrected granularity)
 
 **Status note (PP-726, 2026-05-10):** PART 2 has been refactored to operate at correct granularity per `valoria_political_hierarchy_v30 §1.1`. A settlement is a **city/fortress/village/town** — the siege-target. Districts (Cathedral, Market, Barracks, Harbor, Quarter, Parliament, etc.) and outpost-features (garrison towns, watchtowers, mines, lodges, shrines, watches, storehouses, coves, gates, ruins) are subservient to their parent settlement and are NOT separately siegeable; they appear in §2.2 sub-features registry as properties of their parent.
@@ -461,6 +586,55 @@ Certain settlement types naturally align with subnational factions. The provinci
 
 **Contested management:** If the subnational faction's interests conflict with the province faction's orders (e.g., Church governor refuses to allow RM Community Organizing in a Cathedral settlement), the conflict resolves through social contest (per social_contest_v30 §7 — asymmetric, with the province faction as institutional authority and the subnational faction as petitioner).
 
+### §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0010, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** Re-grounds the §3.3 grant/revoke pair above — it *refines
+those PROVISIONAL rules in place*, it does not replace them, and it adds **no** new player action
+(Grant/Revoke remains the single-homed FA-lane Domain Action per the ED-SE-0005 ownership note
+above). Provenance: `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-4.
+
+**Grounding.** The medieval charter tradition: **Magdeburg-law charter diffusion** (a granted
+municipal charter was a durable, heritable instrument, not a revocable license), **Edward I's Quo
+Warranto campaign 1278–94** ("*Quo warranto?* — by what warrant do you hold this liberty?": the crown
+forcing chartered holders to prove title in a public forum), and the **City of London charter
+forfeiture 1683 / restoration 1690** (revoking one city's charter by quo warranto frightened every
+chartered corporation in the realm — the chilling effect). **Prescription doctrine** (long possession
+hardens privilege into right) and **universal accession-confirmation practice** (a new ruler confirms
+existing charters for a fee) complete the frame. Through-line: a charter is *legitimacy made durable*,
+and pulling one is costly in proportion to its age and to how many other holders fear they are next.
+
+**Rules** (layer onto the §3.3 grant/revoke *effects*; they do not add a second player action):
+
+- **Charter tag on grant.** Granting subnational management (§3.3) writes a **durable Charter tag** on
+  the settlement, stamped with its grant-season. The Charter **survives succession** (§1.8b) — it is
+  the settlement's, not the grantor-leader's. Grant fires the §1.8a L-channel "Charter granted +1"
+  event once.
+- **Prescription (age-scaled revocation Ob).** Revocation Ob is no longer flat:
+  `Ob = (§3.3 base revoke Ob = subnational Influence ÷ 2, round up) + floor(charter_age_seasons / 8)`.
+  Privilege hardens into right the longer it stands.
+- **Quo Warranto (public contest for old charters).** Revoking a Charter **older than ~16 seasons** is
+  not a quiet administrative act but a public **Quo Warranto scene** — a social contest
+  (`social_contest_v30 §7`; province faction as institutional authority vs the subnational leader as
+  holder) rather than the §3.3 flat Domain Action. On success the charter is revoked, the §3.3
+  revocation effects apply (Order −1 in the settlement, Disposition −2), **AND Order −1 additionally in
+  every settlement that faction-type manages peninsula-wide** (the London-1683 contagion — every
+  chartered holder now fears its own writ). *[This peninsula-wide echo is the one bold stroke here —
+  flagged Jordan-vetoable.]*
+- **Confirmation-for-fee at transfer/succession.** On a control transfer (§5.3) or a succession where a
+  confirmation ceremony is performed (§1.8b), the new/continuing controller may **Confirm** existing
+  Charters: **W +1** (the confirmation fine) and, in each chartered settlement so confirmed, **L +1**
+  (the §1.8a "privileges confirmed" event). On a §5.3 **Confirm Privileges** transfer this L credit is
+  already carried by that section's L *seed* — do not double-apply (see §1.8b composition note).
+
+**Scope discipline.** Refines §3.3's existing grant/revoke effects and the §1.8a "Charter granted"
+event; does not create a new player action (Grant/Revoke stays single-homed in the FA lane,
+ED-FA-0002) and does not alter the §3.3 Contested-management path. The confirmation-for-fee hinge is
+*shared* with §1.8b (succession) and §5.3 (transfer) — those sections govern *which* fires; this one
+only supplies the Charter-side W/L effect. Magnitudes (÷8 prescription slope, 16-season Quo Warranto
+threshold, peninsula-wide −1) are shape proposals per the cited precedent, not sim-calibrated —
+calibrate before canon (CLAUDE.md §5/§7).
+
 ---
 
 # PART 4: SETTLEMENT AS GAMESPACE
@@ -493,7 +667,7 @@ Each settlement generates 0–1 local events per season based on its stats and t
 
 | Condition | Event |
 |-----------|-------|
-| Prosperity 0 | Famine or economic collapse. Population leaving. Order −1 automatic. |
+| Prosperity 0 (or other Dearth trigger) | **Dearth** — see §4.3a (SE-2) for the full entitlement-failure triggers and governor response verbs. Baseline: Order −1 automatic; sustained ≥2 seasons → population leaving via §1.8c Weight-as-Exit. |
 | Defense 0 + adjacent hostile military | Raid or siege. Mandatory scene if player is present. |
 | Order 0 | Local revolt (analogous to province Accord 0 but at settlement scale). Governor expelled unless garrison present. |
 | Order 5 + Prosperity 4+ | Flourishing. Local festival, trade fair, or cultural event. +1 Disposition with all local NPCs. Scene opportunity for the player. |
@@ -502,6 +676,102 @@ Each settlement generates 0–1 local events per season based on its stats and t
 | Cathedral type + CV change in province | Religious event: sermon, ceremony, procession, or protest depending on CV direction. |
 | Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting (economic contribution, derived_stats_v1). |
 | Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures. |
+
+### §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0008, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** Replaces and extends the §4.3 one-line famine row above.
+Rides the ED-SE-0001 `governance_play_redesign` ratification track (PROPOSED — pending central ratification, not asserted as a settled basis here). Provenance:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-2.
+
+**Grounding.** The moral-economy tradition: **E.P. Thompson 1971** (the crowd's "moral economy" —
+dearth riots were not blind hunger but enforcement of a *legitimate price*, and the crowd's target
+order was **millers and merchants first, then authority**; *taxation populaire* = the crowd setting a
+just price when the governor would not); **James Scott 1976** (the peasant "subsistence ethic" — it is
+not dearth as such but the ruler's **invariance under dearth**, taking the standard levy anyway, that
+detonates rebellion; remission/relief is the classic legitimacy-purchasing response); **Amartya Sen
+1981** (famine as **entitlement failure**, not food unavailability — people starve when they lose the
+means to *command* food, even amid supply). Institutional anchors: Rome's *cura annonae* (the grain
+dole as a governing obligation); **Will & Wong 1991** on the Ming-Qing *changpingcang* ever-normal
+granaries (the state granary as the operative relief instrument); the Tudor **Book of Orders 1587**
+(magistrates fixing grain prices in dearth — the Fix Prices verb).
+
+**Trigger (entitlement failure, not weather).** Dearth fires when **any** of: (i) Prosperity 0; (ii) a
+grain route to the settlement is cut (§4.3b, SE-3); (iii) a Levy/Extraction fiscal stance (FA-1) is
+taken in a settlement already at Prosperity ≤ 1. **Invariance clause** (per Scott): taking the
+*standard* levy during an active Dearth counts as **Ignore** below — it is the invariance that
+detonates.
+
+**Governor response verbs** (the season's governance action, §3.2, selects one):
+
+| Verb | Requirement | Effect |
+|---|---|---|
+| **Open Granary** | granary ≥ 1 | granary −1; Dearth relieved; **PS +1** (Scott's remission). Realizes the §1.8a "Dearth relieved" PS event at settlement grain — see reconciliation note. |
+| **Fix Prices** | — | Dearth held off one season (*taxation populaire* pre-empted); Order unchanged; Guild/merchant local Disposition −1; black-market emergence check (§4.7). |
+| **Requisition** | a neighbor with grain/granary on the adjacency graph | relieves **this** settlement by stripping a neighbor — **displaces** the Dearth to that neighbor next season. |
+| **Ignore** (or standard levy taken during Dearth) | — | Order −2; PS −2; riot event targeting **millers/merchants first, then the governor** (Thompson's documented target order made mechanical). |
+| **Provision** | costs W (pre-emptive governance/faction action) | granary +1 (build the stock before the crisis). |
+
+**New registry field.** This chain requires a per-settlement `granary: int (0–3)` on the `Settlement`
+dataclass in `sim/territory/registry.py`. **[FOLLOW-ON CODE TASK — SE lane, NOT authored in this
+doc-only pass: add `granary` to `registry.py`'s `Settlement`; that Python file is not edited from
+here.]**
+
+**Reconciliation with §1.8a.** §1.8a lists "Dearth relieved (governance response… SE-2) **+2**" as a
+placeholder that *explicitly defers to this rule*. SE-2 now supplies the per-verb PS deltas: the
+operative settlement-grain gain for relieving a Dearth is the **response verb's** value (Open Granary
+PS +1), and §1.8a's provisional "+2" is read as the **ceiling** on PS gained from resolving a single
+Dearth episode, not an additional stacking bonus. No PS is double-counted: **one Dearth episode → one
+relief verb → one PS delta (≤ +2).**
+
+**Scope discipline.** Specifies the Dearth trigger and response verbs and names one new registry
+field; it does not alter §1.8/§1.8a aggregation, the other §4.3 event rows, or §4.7 black-market rules
+(which it references). The grain-route trigger (clause ii) and Fiscal Stance trigger (clause iii) live
+in their own docket items (§4.3b / SE-3 and FA-1) and compose with this table when they land. The
+*Weight* consequence of sustained Dearth is §1.8c (SE-10). Magnitudes are shape proposals per the
+cited moral-economy literature, not sim-calibrated constants — calibrate before canon (CLAUDE.md
+§5/§7).
+
+### §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0009, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** Gives mechanical teeth to the open `geography_v30` item
+**ED-054 / BALANCE-005** ("Hafenmark food dependency has no mechanical teeth — Feldmark unreachable by
+Hafenmark"). This is a **rule on top of** the existing settlement-adjacency graph
+(`settlement_adjacency_v30` / `valoria_geography_v30.yaml :: settlement_adjacency`), **not** a new
+graph spec — it defines no new edges, edge types, or graph file. Provenance: research report §Step 3
+SE-3.
+
+**Grounding.** The classical grain-supply politics of dependent cities: **Athens' Black Sea grain
+law** (statutory control of the Bosporan route that fed the city — cutting it was an act of war);
+**Rome's Egyptian grain fleet** (the *cura annonae*'s strategic face — the *annona* rode on a specific
+sea lane); the **Hanseatic Baltic grain trade through Danzig** (highland/urban regions structurally
+dependent on breadbasket imports). **Sen 1981** again: a siege or blockade is **entitlement warfare** —
+you starve a city by cutting its *command* over food, not by destroying the food.
+
+**Rule (on top of existing adjacency):**
+
+- **Breadbasket sources.** Tag the breadbasket provinces **T5 Feldmark** and **T6 Stillhelm** as grain
+  sources (the Feldmark Storehouse sub-feature, §2.2, is the anchor). **Port-type settlements** are
+  import sources (sea grain — Schoenland/Altonian imports).
+- **Dependency.** Every non-breadbasket settlement needs a **traced route on the existing adjacency
+  graph** to a grain source or a Port.
+- **Route-tracing granularity.** **Per-province by default** (a province is fed if any of its
+  settlements can trace to a source) — flagged inline as the *one* open design decision (per-province
+  vs per-settlement); per-province chosen for tractability and to reuse the existing graph without new
+  per-edge machinery.
+- **Cut route → Dearth.** A route cut by **occupation, blockade, or siege of a waypoint** settlement on
+  the traced path puts every dependent settlement **one season from Dearth** (§4.3a, SE-2). This makes
+  Hafenmark's highland/mining provinces structurally grain-dependent through the T8↔T9↔T2 corridor (or
+  Schoenland Port imports) — so the **dependency itself is the mechanic**, closing the "Feldmark
+  unreachable by Hafenmark" complaint by making unreachability *bite* rather than by editing adjacency.
+
+**Scope discipline.** Reuses only the existing settlement-adjacency graph (`settlement_adjacency_v30`;
+the 49-edge block in `valoria_geography_v30.yaml`). Its sole output is a Dearth trigger consumed by
+§4.3a (clause ii). The per-province tracing default is the one flagged decision; if a later pass
+chooses per-settlement, only the *granularity* changes, not the rule. Geography's ED-054/BALANCE-005 is
+the open item this closes; the actual source-tagging of T5/T6 in the geography YAML is a follow-on data
+task in the geography/world lane, not authored here. Magnitudes (one-season-from-Dearth) are shape
+proposals per the cited precedent — calibrate before canon (CLAUDE.md §5/§7).
 
 ### §4.4 Thread Operations at Settlement Level (Throughline T1)
 
@@ -581,11 +851,102 @@ Invading a province now requires capturing (or bypassing) its settlements. The S
 
 **Fortress as chokepoint:** A Fortress settlement in the invader's path forces engagement — it cannot be bypassed unless the invader's Military exceeds the Fortress Defense by 3+. Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass — effectively impossible for most armies. This is the design's intended function.
 
+**Surrender on Terms vs Storm at conquest (FA-6, PROPOSED — jointly owned with the faction_action.py lane, ED-FA-0013, 2026-07-08):**
+
+**Status: PROPOSED, not yet ratified.** This section specifies the **rule** (the settlement-side
+distinction between the two conquest branches); the code implementing it — **including which branch the
+attacking faction's AI selects** — is owned by the FA lane (`sim/provincial/faction_action.py::_try_conquest`)
+and is **NOT** specified here. Provenance:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 FA-6.
+
+**Grounding.** Hugo Grotius, *De iure belli ac pacis* (1625), **Book III** — the law of war
+distinguished a garrison that **surrendered on terms** from one that **forced a storm**. The
+early-modern siege convention (**Parker 1994**): once the attacker had opened a **practicable breach**
+and the garrison beat the *chamade*, a garrison that surrendered received the **honors of war** (marched
+out with arms, colors, safe conduct); a garrison that instead forced the assault **forfeited that
+protection**, and by the brutal custom the storming troops were entitled to sack. The **Sack of
+Magdeburg 1631** (and Rome 1527) is the anchor for why Storm is costlier than its local damage suggests:
+atrocity was cheap *locally* but ruinous *reputationally* — a legitimacy contagion across every other
+town watching.
+
+On attacker victory, two branches:
+
+- **(a) Accept surrender on terms** — available **only when the defender is NOT routed** (battle degree
+  **Success, not Overwhelming**; and the siege-to-Order-0 capitulation path, §5.1 Siege, takes this
+  branch **by construction** — siege is the legitimacy-preserving slow road, consistent with
+  ED-SETT-04). Effects: the **lighter Accord penalty**; the settlement's **L seeds low-but-nonzero** via
+  §5.3 Entry Terms (the new controller still chooses Confirm vs Impose, but "on terms" surrender makes
+  **Confirm** available and keeps Prosperity intact); the **defender garrison is partially preserved**
+  (marches out — honors of war).
+- **(b) Storm** — **always available**. Effects: the current, **harsher Accord penalty** of the existing
+  §5.1 Assault/capture baseline, plus battle damage to the settlement.
+
+**Which branch the attacking faction's AI picks (Terms vs Storm) is a code-side decision owned by the
+`faction_action.py` lane, not specified here.** Exact numeric magnitudes (Accord deltas, the L seed
+value, the garrison-preservation fraction) are specified by the ED-FA-0013 ledger/report shape and
+implemented in that lane — this section specifies only that the two branches **exist**, that (a) is
+available only on a non-Overwhelming result, and that (a) is lighter on Accord/L/garrison while (b) is
+the harsher current path. *(A third branch — post-Storm **Sack**, the Magdeburg reputational-contagion
+effect — is flagged `needs_jordan` in ED-FA-0013 and is deliberately NOT authored here.)* Composes with
+§5.3 Entry Terms (the transfer-boundary L seed) and `faction_layer §2.3`'s existing Accord-on-transfer
+table (the Order-side effect), neither of which it replaces.
+
 ## §5.2 Garrison and Defense
 
 Each settlement can host a garrison (one military unit). The garrison's stats (from military_layer_v30) add to the settlement's Defense for the purpose of Assault checks: effective Defense = settlement Defense + garrison Discipline.
 
 Ungarrisoned settlements with Defense 0 are auto-captured on any hostile military entry — no roll needed. This makes Towns and Outposts vulnerable unless garrisoned, while Fortresses can hold independently.
+
+## §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0011, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** New subsection. Supplies the **transfer-boundary L seeding
+rule** that LPS-2e (§1.8) never specified — §1.8/§1.8a seed L/PS only at *game start*
+(`faction_state_authoring §8`) and drift them thereafter, but nothing seeds L when a settlement
+changes hands mid-campaign. **Composes with (does NOT replace)** `faction_layer §2.3`'s existing
+Accord-on-transfer table, which remains the **Order-side** effect; this adds the **L-side**. Provenance:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-5.
+
+**Grounding.** The **Joyeuse Entrée of Brabant 1356** — the new duke's "Joyous Entry" was a *sworn
+confirmation of the towns' privileges* as the price of their obedience (conditional allegiance,
+ceremonially entered); **Henry I's coronation charter 1100** (a new ruler buys legitimacy by confirming
+the realm's liberties at the moment of taking power); universal accession-confirmation practice. The
+opposite pole is **Mancur Olson 1993** (the "roving bandit" who strips rather than confirms — Impose
+Administration is roving-bandit pricing: maximal short-term extraction, no legitimacy investment).
+
+**Trigger.** Fires on **every settlement control transfer** — conquest (FA-6 branches (a) and (b),
+§5.1), treaty cession, or seizure. The new controller chooses **one fork per settlement**:
+
+| Fork | Charter/Precedent tags | L seed | Fiscal stance | Other |
+|---|---|---|---|---|
+| **Confirm Privileges** (Joyeuse Entrée) | **kept** (§3.3a) | **L seeds 3** | capped at Standard for 4 seasons | legitimacy-buying path; Prosperity/PS intact |
+| **Impose Administration** | **stripped** | **L seeds 1** | no cap | Order −1 (roving-bandit pricing, Olson 1993) |
+
+**Composition (reconciles with §1.8b, §3.3a, §5.1):**
+
+- **Transfer vs succession.** A control **transfer** (controlling *faction* changes) is governed
+  **here** (Entry Terms *seeds* L); a **succession** (same faction, *leadership* changes) is governed by
+  **§1.8b**. A single control event is **exactly one** of these — the two never both fire on one
+  settlement in one season, so an Entry-Terms seed and a succession drift never stack.
+- **Seed, not increment.** On transfer L is **seeded** (set to 3 or 1), not incremented. The §1.8a
+  "privileges confirmed +1" L-channel event is the **succession-with-ceremony** case (§1.8b); it does
+  **NOT** additionally apply on top of a Confirm-Privileges transfer (the seed of 3 already carries the
+  confirmation credit). See the §1.8b composition note.
+- **FA-6 linkage.** A branch-(a) "surrender on terms" conquest (§5.1) makes **Confirm Privileges** the
+  natural fork and keeps Prosperity intact; a branch-(b) **Storm** does not preclude Confirm but pairs
+  with the harsher Accord penalty. Which the AI picks is the FA lane's call (§5.1 note).
+- **Charter interaction.** **Confirm Privileges** keeps Charter tags (§3.3a) and enables
+  confirmation-for-fee (W +1; the §3.3a **L +1 is subsumed by the seed** on a Confirm transfer — do
+  **not** add it on top of the seed of 3, per the "Seed, not increment" bullet above and §3.3a line
+  ~627); **Impose Administration** strips
+  them — a revocation-by-conquest *without* the §3.3a Quo Warranto contest (the tags simply do not
+  survive an Impose).
+
+**Scope discipline.** Adds the L-side of a control transfer and composes with the Order-side
+(`faction_layer §2.3`) and the succession-side (§1.8b); it does not alter the Accord table, the §1.8
+aggregation, or the FA lane's conquest resolution. Magnitudes (L 3 / L 1, 4-season Standard cap) are
+shape proposals per the cited precedent, not sim-calibrated — calibrate before canon (CLAUDE.md §5/§7).
 
 ---
 
@@ -687,11 +1048,21 @@ A 30-year game spans a generation. The first leaders (Almud, Baralta, Vaynard, H
 - Threshold 4 (Year 20): Second generation leaders emerge. Original leaders who have not been replaced are at −2 to highest attribute. NPC arc branches for retirement, abdication, or natural death activate.
 - Threshold 6 (Year 30): Original leaders who survive are elderly. −3 to highest attribute. The game's political landscape has fundamentally shifted — the players' generation IS the leadership class, whether they sought it or not.
 
+**[Annotation — CP-2, ED-SE-0017, PROPOSED, 2026-07-08]** The Generational Shift clock's "founding
+leaders age, weaken, and their solidarity decays" logic is the game-mechanical shadow of **Ibn Khaldun's
+*asabiyyah* cycle** (*Muqaddimah*, 1377): group solidarity (*asabiyyah*) is strongest in the founding
+generation that won power through shared hardship, and decays predictably by the **third-to-fourth
+generation** as the dynasty urbanizes and softens into sedentary luxury — the classical theory of
+exactly the generational decay these Thresholds 2/4/6 hand-wave (the three-to-four-generation span
+maps onto the Year-10/20/30 thresholds). *[The optional founder-solidarity Sta +1 that would expire at
+Threshold 2 — a numeric/tone call — is `needs_jordan` (ED-SE-0017) and is deliberately NOT implemented
+here; this is a grounding annotation only.]*
+
 ## §7.2 Succession System (Extended)
 
 **Settlement succession:** When a settlement governor dies, is removed, or departs, the province faction must assign a new governor. If no eligible NPC or player is available, the settlement becomes unmanaged (Order −1 per season until a governor is assigned).
 
-**Province succession:** Existing rules (npc_behavior_v30 §5.2 arc profiles) cover faction leader succession. Extended: if the heir is a player character, the player receives the province with all settlements and their current states. If the heir is an NPC, the NPC becomes the faction leader and the player's Standing is preserved.
+**Province succession:** Existing rules (npc_behavior_v30 §5.2 arc profiles) cover faction leader succession. Extended: if the heir is a player character, the player receives the province with all settlements and their current states. If the heir is an NPC, the NPC becomes the faction leader and the player's Standing is preserved. **Settlement-L effect of a leader succession is specified in §1.8b (ED-SE-0012, PROPOSED):** a `normal` succession leaves held-settlement L unchanged (the corporate crown never dies); `contested/emergency/imposed` modes apply L −1 in all held settlements plus a Regency check (FA-7). A control *transfer* to a different faction is a distinct event governed by §5.3 Entry Terms, not by these succession rules.
 
 **Cross-generational play:** In a 30-year game, the player character may age and retire. If the player has a protégé (a named NPC companion or officer with Disposition +4 and Standing 4+), the player may transfer their governance to the protégé and create a new character — starting at Standing 0 but inheriting Renown ÷ 2 (round down) from their predecessor's reputation. The predecessor becomes an NPC. This is CK3's heir system applied to TTRPG.
 

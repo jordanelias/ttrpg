@@ -13,17 +13,19 @@ than silent.
 
 WHAT IT PINS — and why each assertion is a *guard*, not a target
 ----------------------------------------------------------------
-1. The n=8 seed-42 golden win-share {Crown 37.5, Church 0, Hafenmark 0, Varfell 62.5}.
+1. The n=8 seed-42 golden win-share {Crown 37.5, Church 12.5, Hafenmark 12.5, Varfell 37.5}.
    This is now the DEFAULT campaign with ECHO_TRANSPORT ratified ON (Jordan 2026-07-08) — the
-   consequence spine is live. Still small-n (NOT balance signal), but note the spine already
-   ERODED the pre-spine {Varfell 87.5} artifact (retained under ECHO_TRANSPORT=0 in
-   test_echo_transport.py). Do not tune to it.
+   consequence spine is live (REPINNED 2026-07-08 for the merge of origin/main's parliamentary_bridge
+   auto-resolve with this branch's FA-lane mechanics + play-out echo). Still small-n (NOT balance
+   signal), but note the spine already ERODED the pre-spine {Varfell 87.5} artifact (retained under
+   ECHO_TRANSPORT=0 in test_echo_transport.py). Do not tune to it.
 2. scenes_resolved now FIRES (the spine is live — the named-zero flipped, the success signal
    the earlier revision predicted). insurgencies_formed / npcs_generated are STILL 0 — the
    insurgency pipeline and NPE remain built-but-unreachable islands (C-EMERGE-5/6) with no
    bridge yet; when they land these MUST become non-zero (the next success signal).
-3. Hafenmark elimination lockout: Hafenmark never wins (0-territory factions never act
-   again; the only restoration path, parliamentary_transfer, is never called). KNOWN-TRACKED
+3. Hafenmark elimination lockout: the one-way 0-territory lockout MECHANISM is intact (0-territory
+   factions never act again; the only restoration path, parliamentary_transfer, is never called).
+   Hafenmark wins 1/8 here as a TRAJECTORY artifact of the merged RNG, not a comeback. KNOWN-TRACKED
    via ED-FA-0005 (comeback path ruled to be authored). Trips when a comeback path lands.
 4. VICTORY_THRESHOLD dead-param regression: the param moves NO outcome (C-EMERGE-8 / C-FA-9).
    Trips when the victory threshold is actually wired to a live gate.
@@ -50,12 +52,19 @@ _SEED = 42
 _N = 8
 _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 
-# Pinned 2026-07-08 — DEFAULT campaign with the consequence spine ON (ECHO_TRANSPORT ratified ON):
-# the faction-scale §10 vote (parliamentary_bridge) + the personal emergency-council contest (ED-SC-0006 #96).
-GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 62.5}
-GOLDEN_WINNERS = {'Crown': 3, 'Varfell': 5}
-GOLDEN_BATTLES_MEAN = 33.4
-GOLDEN_SCENES_RESOLVED = 367  # was 0 pre-spine — the §10 vote (+ occasional emergency council) resolves each season
+# REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve (parliamentary_bridge.py,
+# origin/main) with this branch's ED-SC-0007 play-out echo addition (scene_dispatch.py) +
+# ED-FA-0009/0012/0013 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of these
+# consume campaign RNG, so goldens from either session alone are stale. This is the DEFAULT campaign
+# with the consequence spine ON (ECHO_TRANSPORT ratified ON, Jordan 2026-07-08): the faction-scale §10
+# vote (parliamentary_bridge, every season) + the personal emergency-council contest with its play-out
+# echo (ED-SC-0006/0007 #96 + this branch). Still small-n (NOT balance signal) — a guard against silent
+# drift, not a target. The pre-spine byte-exact oracle is retained under ECHO_TRANSPORT=0 in
+# test_echo_transport.py. (deterministic; reproduced stable across repeat runs.)
+GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
+GOLDEN_WINNERS = {'Crown': 3, 'Church': 1, 'Hafenmark': 1, 'Varfell': 3}
+GOLDEN_BATTLES_MEAN = 30.2
+GOLDEN_SCENES_RESOLVED = 383  # was 0 pre-spine — the §10 vote (+ occasional emergency council) resolves each season
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -98,9 +107,16 @@ def test_f7_golden_win_share():
 
 
 def test_f7_scenes_live_insurgency_and_npe_still_islands():
-    """The consequence spine is LIVE: scenes_resolved now fires (the §10 vote resolves each season).
-    insurgencies_formed / npcs_generated remain 0 — those islands have no bridge yet; when they
-    land these MUST become non-zero (the next success signal). Update the pins then.
+    """The consequence spine is LIVE: scenes_resolved now FIRES.
+
+    REPINNED 2026-07-08 (merge of both sessions): scenes_resolved is no longer 0 on seed-42. The
+    faction-scale §10 Parliamentary vote (parliamentary_bridge, origin/main) resolves EVERY season,
+    and the personal-scale Emergency Council contest resolves when the FA-lane action-mix/Muster/
+    conquest-fork/Parliamentary changes (this branch) shift seed-42 RNG across Stability Crisis
+    (383 scenes across the n=8 batch). Pinned here as the new golden — NOT re-asserted to 0.
+    insurgencies_formed and npcs_generated remain built-but-unreachable islands (C-EMERGE-4/5),
+    still guarded at 0; when the insurgency pipeline / NPE seeding land, those pins trip next and
+    get updated the same way.
     """
     campaigns = _campaigns42()
     scenes = sum(r.scenes_resolved for r in campaigns)
@@ -112,10 +128,18 @@ def test_f7_scenes_live_insurgency_and_npe_still_islands():
 
 
 def test_f7_hafenmark_elimination_lockout():
-    """Hafenmark never wins (one-way 0-territory lockout). KNOWN-TRACKED via ED-FA-0005."""
+    """Hafenmark wins 1/8 on seed-42 (REPINNED 2026-07-08 for the two-session merge).
+
+    The one-way 0-territory lockout MECHANISM is intact — no comeback path was added (ED-FA-0005
+    remains open; parliamentary_transfer is still never called). Hafenmark's win here is a
+    TRAJECTORY shift, not a comeback: the merged behaviour (the per-season §10 vote from
+    parliamentary_bridge + the FA-lane action-mix/Muster/conquest-fork/Parliamentary fallback +
+    the play-out echo) changed which factions survive to the 50-season horizon on these seeds, so
+    Hafenmark simply avoids elimination in 1 of the 8 and wins on territory. Pinned as the new
+    golden; a move here again means the merged RNG shifted — investigate before regenerating."""
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    assert hafenmark_wins == 0, f"Hafenmark won {hafenmark_wins} — a comeback path may have landed (ED-FA-0005); update the golden"
+    assert hafenmark_wins == 1, f"Hafenmark won {hafenmark_wins} != 1 — merged trajectory moved (or an ED-FA-0005 comeback path landed); investigate before regenerating"
 
 
 def test_f7_victory_threshold_is_a_dead_param():

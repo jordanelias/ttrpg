@@ -33,6 +33,13 @@ DELIBERATE BOUNDARIES (not fabricated):
     resolver/canon-specific and is left empty (flagged) rather than fabricated.
     Consequence (intended): the scene phase is SIDE-EFFECT-FREE on strategic
     state, so wiring it in cannot regress the strategic loop.
+    PARTIAL CLOSURE (ED-SC-0007, 2026-07-08, per the ED-SC-0002 composed-keying
+    ruling): the emergency_council contest now sets a `ctx['echo']` block
+    (Mandate channel, degree-keyed off the ballot verdict) so echo_transport
+    (ED-IN-0028) can fire when ECHO_TRANSPORT is on. Still side-effect-free by
+    DEFAULT (the flag stays off); still empty for combat and any other contest
+    stakes kind. The Projection-genre bonus-token channel remains unmapped —
+    see the inline note at the emergency_council echo block.
   - Only field-evaluable canonical triggers fire (Stability Crisis via
     Faction.Sta). The other 7 §4.3.2 triggers need world-state schema not
     present on the aggregate World; they are reported as deferred, not faked.
@@ -164,12 +171,45 @@ def _resolve_slot(slot, world, rng):
             out["resolved"] = True
             # 'verdict'/'verdict_reason' are the promoted kernel's own shape (a win-condition band
             # or side label, plus 'win'|'draw'|'clinch:...') — NOT the deprecated stub's
-            # ContestResult(winner='A'|'B'|None, total_victory=bool) shape. Mapping this to a
-            # domain_echo degree is ED-SC-0007 (blocked at the spec level by the ED-SC-0002 echo-
-            # keying fork) — out of scope here; no `echo` block is set, so echo_transport (below)
-            # stays inert exactly as ED-IN-0028 left it.
+            # ContestResult(winner='A'|'B'|None, total_victory=bool) shape.
             out["result"] = {"winner": verdict, "reason": verdict_reason, "proceeding": proceeding,
                              "side_a_faculty": parts[0], "side_b_faculty": parts[1]}
+            # ED-SC-0007 (Bout outcome -> domain_echo), per the ED-SC-0002 RULING (2026-07-08,
+            # composed keying: band gates magnitude/whether an echo fires; genre selects the
+            # stat/channel — social_contest_v30 §6 + scale_transitions_v30 §5.4).
+            #   Genre channel: resolve_contest's default policies (logos_spammer for both sides,
+            #   unchanged by this bridge) only ever move with Appeal.LOGOS, which
+            #   dictionaries._APPEAL_TO_GENRE keys to Genre.MEMORY — so, as currently wired, every
+            #   Emergency Council verdict is deterministically Memory-genre, i.e. the Mandate
+            #   channel ("Decisive win + Memory genre: winning faction's Mandate +1", §6). The
+            #   Projection channel (+1D on the first Domain Action) has NO representation in
+            #   domain_echo's stat-delta interface — it is a bonus-token mechanism, not a stat
+            #   write, and is NOT fabricated here; it stays an explicit residual (would need a new
+            #   Key type + a consumption site in faction_action.py, not authored by this change).
+            #   If a future policy ever moves on PATHOS/ETHOS this Memory-only assumption breaks
+            #   and must be revisited.
+            #   Band/magnitude: Guild Arbitration resolves via VoteAtClose (a ballot), not a
+            #   Persuasion-Track value, so there is no Overwhelming/Decisive magnitude gradient to
+            #   key off (§5.4's own table is itself only binary: decisive win/loss, no tiering).
+            #   The honest instantiation of "band gates magnitude" for a ballot verdict is the
+            #   degenerate binary case: side_a (leadership) wins -> Success (+1); side_b (the
+            #   crisis) wins -> Failure (-1, applied to the acting faction's own stat per §5.2,
+            #   which is the same faction here); a draw -> Partial (no echo — "Compromise: no
+            #   Domain Echo" per both source docs). Both sides of this contest are the SAME
+            #   faction's own facets (_emergency_council_parties), so actor_faction==target_faction.
+            # Scoped to emergency_council specifically (matching the party-derivation scoping
+            # above) — a future contest stakes kind with a different actor/genre shape needs its
+            # own mapping, not a silent fallthrough onto this one.
+            if stakes.get("kind") == "emergency_council":
+                if verdict == contest.A:
+                    echo_degree = "Success"
+                elif verdict == contest.B:
+                    echo_degree = "Failure"
+                else:
+                    echo_degree = "Partial"
+                fid = ctx.get("faction")
+                ctx["echo"] = {"actor_faction": fid, "target_faction": fid,
+                              "most_relevant_stat": "L", "degree": echo_degree}
         else:
             out["reason"] = f"resolver for scene_type={st!r} not live (stub or unmapped)"
             return out
