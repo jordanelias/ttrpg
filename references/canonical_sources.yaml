@@ -101,7 +101,7 @@ systems:
     canonical_sha__params__bg__core_md: "db6e988325ddd9dab3e65377732d61da1e943000"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "449cb26ec5bc02fe422d628c3a528821b850b34f"
+    canonical_sha__designs__scene__combat_v30_md: "db827fa23baf0379f161481b28880703c6f964e7"
     # params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
     # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
     # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
@@ -111,9 +111,9 @@ systems:
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "ec3cb72e6bf840956bc22d3c72ec467d2326e313"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "3f1f16ae17d92534d04dd13329612fd29793b726"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "8961f2ed6d2ac16203812c33d121f0dfbb09b11c"
+    canonical_sha__params__threadwork_md: "4be763afc7633d1db6322438d3c66174e310e9e2"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
@@ -160,7 +160,7 @@ systems:
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
     canonical_sha__designs__provincial__mass_battle_v30_infill_md: "c4639775db4bd15257a01682c37cb4fc1fa98b5e"
     params: params/mass_combat.md
-    canonical_sha__params__mass_combat_md: "fed087a7f7b150b6cba655db6ae2d1fd6e483dba"
+    canonical_sha__params__mass_combat_md: "445206bf52b7ea8a1dc235ec79743a245f48862d"
   # social_debate SHA-pins current as of 2026-07-01 (Contest Stage 2 / Gate B closeout).
   # Detailed per-round rationale lives in the ED chain, not here (ED-1055/1056 Gate A CR1/CR2/CR3
   # fold-in; ED-1057 Panel aggregation=weighted-by-standing; ED-1058 Stage-2 dictionaries;
@@ -215,7 +215,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "09abf17ac6390d9784766a9dacf52a7f02aad697"
+    canonical_sha__designs__scene__derived_stats_v30_md: "9a06ae0d2ffcb396f54e82a65e6eecd1eda02058"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
@@ -439,7 +439,7 @@ systems:
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "3e7a05f20bf99b45a748012c745b98daf83c8566"
+    canonical_sha__designs__scene__fieldwork_v30_md: "3a2557fb0815a978d1bc7eec3a8220c6943748b5"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md
