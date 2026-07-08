@@ -4,16 +4,18 @@ sim/tests/test_echo_transport.py — echo-transport plumbing oracle (ED-IN-0028,
 Guards the flag-gated Key & Echo transport wired in this slice (key_echo_armature_v1.md §6.2):
   1. FLAG-OFF byte-exactness: ECHO_TRANSPORT off leaves the seed-42 F7 win-share golden and
      the seed-0-adjacent campaign untouched, and attaches no substrate (empty key_log_hash).
-  2. FLAG-ON in the live loop is currently INERT: every scene still defers (the context-
-     derivation bridge is SC-lane, ED-SC-0006/0007), so win-share is byte-identical to OFF
-     and the campaign's KeyLog is born empty-but-deterministic (sha256 of "").
-  3. The transport PATH itself (exercised directly, the way the SC bridge will drive it):
-     a resolved scene carrying an `echo` block routes through domain_echo -> a valid
+  2. FLAG-ON for the pinned seed-42/n=8 F7 batch is EMPIRICALLY zero (win-share unchanged, no
+     keys emitted) — but, as of ED-SC-0006/ED-SC-0007 (2026-07-08), this is no longer
+     architectural inertness: the SC context-derivation bridge and the emergency_council
+     echo-mapping have both landed (scene_dispatch.py). It is zero here only because Stability
+     Crisis does not happen to fire in any of these 8 particular campaigns (seed-dependent —
+     see test_mc_v18_resolves_at_least_one_contest, sim/tests/test_mc_v18_regression.py, for a
+     seed where it does). test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis
+     below demonstrates the now-live path end-to-end through the real campaign loop.
+  3. The transport PATH itself (exercised directly, the way the SC bridge drives it): a
+     resolved scene carrying an `echo` block routes through domain_echo -> a valid
      scene.*_resolved Key -> an OF-7-deferred faction apply that lands at the accounting
      boundary. Deterministic on replay.
-
-When the SC derivation bridge lands and scenes resolve, assertions (2) flip to feature
-assertions (keys_emitted > 0, a non-empty log hash) — that tripping is the SUCCESS signal.
 """
 import hashlib
 
@@ -39,21 +41,35 @@ def test_flag_off_is_byte_exact_and_attaches_no_substrate():
     assert r.key_log_hash == "" and r.keys_emitted == 0
 
 
-# ── 2. Flag ON in the live loop: inert (all scenes defer), deterministic ──────
+# ── 2. Flag ON: empirically zero for the pinned F7 seed range, but no longer inert-by-design ──
 
-def test_flag_on_live_loop_is_inert_and_deterministic():
-    """With ECHO_TRANSPORT on, the substrate is attached but nothing resolves yet
-    (SC bridge pending), so win-share is unchanged and the KeyLog is empty-deterministic.
-    These assertions FLIP to feature assertions when the derivation bridge lands."""
+def test_flag_on_f7_batch_is_still_empirically_zero():
+    """ECHO_TRANSPORT on for the pinned seed-42/n=8 F7 batch: win-share unchanged and the KeyLog
+    stays empty — NOT because the path is architecturally inert (it isn't, since ED-SC-0006/0007),
+    but because Stability Crisis doesn't happen to fire in any of these 8 campaigns. See
+    test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis for the live case."""
     on = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 1})
     assert on.win_share == _GOLDEN_WIN_SHARE, (
-        f"ON win-share moved ({on.win_share}) — the SC derivation bridge may have landed; "
-        "echoes now fire in the live loop. Update this golden and say so in the commit.")
+        f"ON win-share moved ({on.win_share}) for the F7 seed range — update this golden and "
+        "say so in the commit.")
     r = run_campaign(seed=42, params={'ECHO_TRANSPORT': 1})
-    assert r.keys_emitted == 0, (
-        f"keys_emitted is no longer 0 ({r.keys_emitted}) — scenes resolve now; "
-        "the transport path is live. Update the golden.")
-    assert r.key_log_hash == _EMPTY_LOG_SHA256
+    assert r.keys_emitted == 0 and r.key_log_hash == _EMPTY_LOG_SHA256
+
+
+def test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis():
+    """ED-SC-0006/0007 (2026-07-08): seed=1 is a KNOWN campaign where Stability Crisis fires and
+    the Emergency Council contest resolves (test_mc_v18_regression.py). With ECHO_TRANSPORT on,
+    this now emits real Keys through the composed-keying (ED-SC-0002) Mandate channel — the
+    SUCCESS signal the module docstring above predicted."""
+    off = run_campaign(seed=1, params={'ECHO_TRANSPORT': 0})
+    assert off.keys_emitted == 0 and off.key_log_hash == ""
+    on = run_campaign(seed=1, params={'ECHO_TRANSPORT': 1})
+    assert on.keys_emitted > 0, "expected the Emergency Council echo to fire at least once"
+    assert on.key_log_hash != _EMPTY_LOG_SHA256
+    # NOT asserting win-share equality here: the deferred Mandate apply is now a real (small)
+    # strategic-state mutation for a seed where it fires — that is the intended effect of
+    # ED-SC-0007, not a regression to guard against. Byte-exactness is still guarded where it
+    # actually holds: flag-OFF (above) and the F7 seed-42 batch (still empirically inert).
 
 
 def test_flag_on_off_win_share_identical():

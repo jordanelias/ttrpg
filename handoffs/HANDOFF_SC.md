@@ -96,10 +96,14 @@ index; see it for cross-lane/global items.
   reachability + echo transport) now precedes the Stage-4 four-games build. All 11 ed_options
   candidates filed: decision docket ED-SC-0002..0005 (forks, `needs_jordan`), work items
   ED-SC-0006..0010, cross-cutting ED-IN-0012..0013.
-  - **STILL OPEN: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
-    keying §5.4-band vs §6-genre vs composed; Piety/Persuasion tracker naming + canonical home;
-    kernel Argue-pool formula; Recall/Corroborate/Prep/Findings global cap). ED-SC-0002 and
-    ED-SC-0004 are P1 blockers (echo wiring; calibration/re-verdict/export).
+  - **ED-SC-0002 RULED (2026-07-08, Jordan): COMPOSED** — band gates magnitude/whether an echo
+    fires; genre selects the stat/channel. Memory genre → the Mandate stat delta (§5.4/§6's shared
+    mechanism); Projection genre → the separate +1D-next-Domain-Action bonus (a bonus-token
+    mechanism domain_echo.py's stat-delta-only interface can't yet carry — left as an explicit,
+    un-fabricated residual). Full ruling text: `canon/editorial_ledger.jsonl` ED-SC-0002.
+  - **STILL OPEN: the rest of the P0 decision docket (ED-SC-0003..0005)** — Piety/Persuasion
+    tracker naming + canonical home; kernel Argue-pool formula; Recall/Corroborate/Prep/Findings
+    global cap. ED-SC-0004 is the remaining P1 blocker (calibration/re-verdict/export).
   - **ED-SC-0006 EXECUTED (2026-07-08)** — `sim/cross_scale/scene_dispatch.py`'s contest branch now
     routes to the promoted kernel (`build_contest`/`resolve_contest`), retiring the deprecated
     `contest_legacy_stub.run_contest` call. New `_emergency_council_parties` derives both sides of
@@ -114,17 +118,35 @@ index; see it for cross-lane/global items.
     to fire in that particular 8-seed sample). ED-SC-0007's echo-mapping is deliberately NOT wired by
     this change (still blocked at the spec level by ED-SC-0002); `echo_transport` (ED-IN-0028) stays
     inert. Full ledger note: `canon/editorial_ledger.jsonl` ED-SC-0006.
-  - **NEXT: ED-SC-0007** (Bout outcome → the already-built `domain_echo.py`) is mechanically
-    unblocked (contests now resolve) but still spec-blocked on the ED-SC-0002 echo-keying fork — needs
-    Jordan's P0 pick before it can land. In parallel: **P3-lite** — a minimal interactive Agôn harness
-    over the existing kernel to run the dramatic-legibility test with a human and measure the
-    ~13-consult load (audit D4/N-7) before Stage 4 multiplies interaction shapes.
+  - **ED-SC-0007 EXECUTED (2026-07-08)** — the Emergency Council contest branch now sets a
+    `ctx['echo']` block (Mandate channel, degree-keyed off the ballot verdict per the composed
+    ruling above) before the existing `echo_transport` call, so a real Domain Echo fires — deferred
+    to the accounting boundary — whenever `ECHO_TRANSPORT` is on and Stability Crisis actually
+    fires (verified live for seed=1; `sim/tests/test_echo_transport.py`). The Projection-genre
+    bonus-token channel is explicitly NOT implemented (see the ED-SC-0002 ruling). `parliamentary_vote`
+    call-in-the-loop (ED-SC-0007's item 2) is NOT done — it needs its own trigger-authoring work
+    (no live scene currently calls a BG Parliamentary Vote at all) and is left as a residual, tracked
+    separately below. **NEXT: P3-lite** — a minimal interactive Agôn harness over the existing
+    kernel to run the dramatic-legibility test with a human and measure the ~13-consult load
+    (audit D4/N-7) before Stage 4 multiplies interaction shapes.
+  - **RESIDUAL (not done): parliamentary_vote-in-the-loop.** `sim/personal/parliamentary_vote.py`
+    is a complete, tested, mutating BG-Vote implementation with zero campaign-loop callers — no
+    live trigger currently queues a Parliamentary Vote scene at all (unlike Emergency Council, which
+    piggybacks on the existing Stability Crisis trigger). Wiring it in needs its own trigger/context
+    authoring, analogous to `_emergency_council_parties` but for a genuinely new scene source, not a
+    quick follow-on to this commit. Tracked here so it isn't silently dropped.
   - **Stage 4 entry criteria now include (ED-SC-0009):** Face/Rattled strain channel (KU-3) + §9.3–9.4b
     thread junctures (P-14); plus ED-SC-0005's stack cap must land in prose before wiring; Chronicle
     focalization (ED-SC-0010) before any player-facing narrative output.
 
 ## Decisions
 
+- 2026-07-08 — **ED-SC-0002 ruled (composed keying) + ED-SC-0007 executed** for the one live
+  contest (Emergency Council). See Pending above and the ED-SC-0002/ED-SC-0007 ledger entries for
+  full scope. Two informational reviews filed alongside (not ledger-actionable themselves):
+  `designs/audit/2026-07-08-fable5-four-modes-review/` (Agôn/Negotiation/Inquiry/Consensus design
+  review) and `designs/audit/2026-07-08-contest-settlement-faction-interface/` (contest↔FA/SE
+  interface analysis — its recommendation to rule ED-SC-0002 is what this decision executes).
 - 2026-07-08 — **ED-SC-0006 executed** (party-derivation bridge + kernel routing; see Pending above
   and the ledger entry for full scope). Design defaults shipped as `[SEED]` (party-faculty mapping;
   `guild_arbitration` as the Emergency Council proceeding) rather than deferred to Jordan, per the
@@ -142,12 +164,13 @@ index; see it for cross-lane/global items.
 
 ## Next actions
 
-- **P0 decision docket awaiting Jordan: ED-SC-0002..0005** (echo keying / tracker naming / pool
-  formula / bonus-stack cap — see the ratified-audit item above; ED-SC-0002 blocks ED-SC-0007,
-  ED-SC-0004 blocks calibration + ED-IN-0013 re-verdict).
-- **ED-SC-0006 DONE (2026-07-08)** — kernel routing + party-derivation bridge executed; see
-  Decisions above. **ED-SC-0007 + P3-lite Agôn harness are the remaining P1 work** — the harness is
-  unblocked now; ED-SC-0007 still waits on ED-SC-0002's echo-keying pick.
+- **P0 decision docket awaiting Jordan: ED-SC-0003..0005** (Piety/Persuasion tracker naming; pool
+  formula; bonus-stack cap — ED-SC-0002 is RULED, see Decisions above). ED-SC-0004 blocks
+  calibration + ED-IN-0013 re-verdict.
+- **ED-SC-0006 + ED-SC-0007 DONE (2026-07-08)** — kernel routing, party-derivation bridge, and the
+  composed-keying echo mapping are all executed for the Emergency Council contest; see Decisions
+  above. **P3-lite Agôn harness** is the remaining unblocked P1 work. **parliamentary_vote-in-the-
+  loop** (ED-SC-0007's item 2) is a tracked residual needing its own trigger-authoring pass.
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit
   resequences Stage 4 *after* the consequence spine.
