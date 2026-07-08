@@ -1,7 +1,7 @@
 # FA/SE Historical-Precedent Research — Faction Actions & Settlement Management
 
-## Status: FILED — 2026-07-08 · Lanes: FA, SE. Step-3 proposals docketed as ED-FA-0007..NNNN /
-## ED-SE-0006..NNNN (see `handoffs/HANDOFF_FA.md` / `HANDOFF_SE.md` and `canon/editorial_ledger.jsonl`
+## Status: FILED — 2026-07-08 · Lanes: FA, SE. Step-3 proposals docketed as ED-FA-0008..NNNN /
+## ED-SE-0007..NNNN (see `handoffs/HANDOFF_FA.md` / `HANDOFF_SE.md` and `canon/editorial_ledger.jsonl`
 ## for the per-item filing + which have been executed vs left `needs_jordan`). Not itself canon —
 ## a research/synthesis artifact the docket items cite as provenance.
 

@@ -20,8 +20,11 @@
 # When you need a number: resolve the subsystem head via CURRENT.md and read the prose
 # param/design doc. Typed, CI-round-trip-checked exports are the successor discipline —
 # first artifact: references/engine_params/combat_engine_v1.json (ED-1052).
-# The regenerate-vs-retire decision for this registry is queued for Jordan
-# (2026-07-01 decision queue, item 17).
+#
+# RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-2): RETIRE. This file is a permanent
+# point-in-time historical snapshot — kept for citation archaeology only, never regenerated
+# until a typed extraction pipeline exists (the dead tools/extract_values.py is not that
+# pipeline). Closes the 2026-07-01 decision-queue item 17 regenerate-vs-retire question.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 version: 1

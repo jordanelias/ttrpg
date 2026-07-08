@@ -11,7 +11,7 @@ Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-uniq
 
 v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 Historically the 30/35/20/15 (unique/Conquest/Muster/Govern) vector was a FIXED, uncited prior.
-ED-FA-0011 (FA-5, 2026-07-08) retires the fixed vector: the 30/35/20/15 numbers survive only as the
+ED-FA-0012 (FA-5, 2026-07-08) retires the fixed vector: the 30/35/20/15 numbers survive only as the
 PRIOR base weights, re-weighted by faction state BEFORE the draw and renormalized, so the mix
 degenerates to the old vector in a neutral state. Grounding: Levy 1983 (a high-war baseline is
 period-correct — the fix is *conditioning* the mix on state, not pacifying it); Blainey 1973 (war
@@ -25,7 +25,7 @@ Dependencies:
   - sim/provincial/excommunication (Phase 5/9)
   - sim/provincial/absolution (Phase 5/9)
   - sim/provincial/council_solmund (Phase 5/9)
-  - sim/provincial/parliamentary_action (ED-SC-0007 mechanism; wired here per ED-FA-0011 fallback)
+  - sim/provincial/parliamentary_action (ED-SC-0007 mechanism; wired here per ED-FA-0012 fallback)
 """
 from __future__ import annotations
 
@@ -38,46 +38,46 @@ from sim.provincial import absolution
 from sim.provincial import council_solmund
 from sim.provincial import parliamentary_action
 
-# ── ED-FA-0011 (FA-5): state-conditioned action mix — PRIOR (base) weights ─────────────────────
+# ── ED-FA-0012 (FA-5): state-conditioned action mix — PRIOR (base) weights ─────────────────────
 # The retired M7_ASSUMPTION_SIX fixed vector, kept ONLY as the neutral-state prior. In a neutral
 # state (no valid conquest target, no mil advantage, no undergoverned share, no threat) all three
 # state multipliers below equal 1.0, so these renormalize back to exactly 0.30/0.35/0.20/0.15.
-# [canonical: faction_action.py M7_ASSUMPTION_SIX prior; re-grounded ED-FA-0011 (FA-5)]
-BASE_W_UNIQUE = 0.30      # [canonical: M7_ASSUMPTION_SIX faction-unique share, ED-FA-0011 prior]
-BASE_W_CONQUEST = 0.35    # [canonical: M7_ASSUMPTION_SIX Conquest share, ED-FA-0011 prior]
-BASE_W_MUSTER = 0.20      # [canonical: M7_ASSUMPTION_SIX Muster share, ED-FA-0011 prior]
-BASE_W_GOVERN = 0.15      # [canonical: M7_ASSUMPTION_SIX Govern share, ED-FA-0011 prior]
+# [canonical: faction_action.py M7_ASSUMPTION_SIX prior; re-grounded ED-FA-0012 (FA-5)]
+BASE_W_UNIQUE = 0.30      # [canonical: M7_ASSUMPTION_SIX faction-unique share, ED-FA-0012 prior]
+BASE_W_CONQUEST = 0.35    # [canonical: M7_ASSUMPTION_SIX Conquest share, ED-FA-0012 prior]
+BASE_W_MUSTER = 0.20      # [canonical: M7_ASSUMPTION_SIX Muster share, ED-FA-0012 prior]
+BASE_W_GOVERN = 0.15      # [canonical: M7_ASSUMPTION_SIX Govern share, ED-FA-0012 prior]
 
-# [SEED — ED-FA-0011 (FA-5): Blainey-1973 "war tracks relative power" coefficient split. Conquest is
+# [SEED — ED-FA-0012 (FA-5): Blainey-1973 "war tracks relative power" coefficient split. Conquest is
 #  nudged up by (a) whether a takeable target even exists and (b) a graded mil-advantage signal, each
 #  worth at most +0.5× the base weight. The exact 0.5/0.5 split is a defensible round default, not a
 #  fitted value — revisable, flagged SEED. canonical: designs/audit/2026-07-08-.../fa_se_...v1.md FA-5]
-CONQUEST_TARGET_COEF = 0.5   # [canonical: ED-FA-0011 (FA-5) Conquest weight — target-exists term, SEED]
-CONQUEST_MILADV_COEF = 0.5   # [canonical: ED-FA-0011 (FA-5) Conquest weight — mil-advantage term, SEED]
+CONQUEST_TARGET_COEF = 0.5   # [canonical: ED-FA-0012 (FA-5) Conquest weight — target-exists term, SEED]
+CONQUEST_MILADV_COEF = 0.5   # [canonical: ED-FA-0012 (FA-5) Conquest weight — mil-advantage term, SEED]
 
-# [SEED — ED-FA-0011 (FA-5): "undergoverned" = own held territory whose Accord sits below this
+# [SEED — ED-FA-0012 (FA-5): "undergoverned" = own held territory whose Accord sits below this
 #  threshold. 4.0 is canon Accord bucket boundary "2" (ACCORD_MAP[2]=4.0, game_state) — a settlement
 #  under bucket 2 is materially discontent. Threshold is a clean canon-aligned SEED default.]
-LOW_ACCORD_SEED = 4.0        # [canonical: game_state ACCORD_MAP bucket-2 boundary; ED-FA-0011 (FA-5) SEED]
+LOW_ACCORD_SEED = 4.0        # [canonical: game_state ACCORD_MAP bucket-2 boundary; ED-FA-0012 (FA-5) SEED]
 
-# ── ED-FA-0008 (FA-2): Muster as a fiscal-military purchase ─────────────────────────────────────
+# ── ED-FA-0009 (FA-2): Muster as a fiscal-military purchase ─────────────────────────────────────
 # The military enterpriser (Redlich 1964, the Wallenstein/Mansfeld contractor model; Tilly 1990,
 # coercion-and-capital) is paid REGARDLESS of the levy's success — raising troops is a purchase, not
 # a wager. So Muster costs Wealth up front, every attempt, and money buys pool (floor(W/2) extra dice)
 # rather than the old "free unless you fail" inversion.
-MUSTER_WEALTH_COST = 1       # [canonical: Redlich 1964 (military-enterpriser); Tilly 1990 — ED-FA-0008 (FA-2)]
-MUSTER_WEALTH_TO_POOL_DIV = 2  # [canonical: ED-FA-0008 (FA-2) — pool = Mil + floor(W/2), money raises troops]
+MUSTER_WEALTH_COST = 1       # [canonical: Redlich 1964 (military-enterpriser); Tilly 1990 — ED-FA-0009 (FA-2)]
+MUSTER_WEALTH_TO_POOL_DIV = 2  # [canonical: ED-FA-0009 (FA-2) — pool = Mil + floor(W/2), money raises troops]
 
-# ── ED-FA-0012 (FA-6 a/b): Terms-vs-Storm fork at conquest ──────────────────────────────────────
+# ── ED-FA-0013 (FA-6 a/b): Terms-vs-Storm fork at conquest ──────────────────────────────────────
 # Grotius, De iure belli ac pacis (1625) Book III + Parker 1994 (breach/chamade convention): a
 # garrison that surrenders on terms keeps the honors of war and the town is spared; a garrison that
 # forces the storm forfeits that protection. Terms is strictly lighter on Accord/Legitimacy.
-ACCORD_TERMS = -10           # [canonical: settlement_layer_v30 §5.1 FA-6 branch (a) "lighter Accord"; Grotius III / Parker 1994 — ED-FA-0012]
-ACCORD_STORM = -25           # [canonical: settlement_layer_v30 §5.1 FA-6 branch (b) storm = existing baseline — ED-FA-0012]
-# §5.3 Entry Terms (ED-SE-0010): a "surrender on terms" transfer makes Confirm Privileges the natural
+ACCORD_TERMS = -10           # [canonical: settlement_layer_v30 §5.1 FA-6 branch (a) "lighter Accord"; Grotius III / Parker 1994 — ED-FA-0013]
+ACCORD_STORM = -25           # [canonical: settlement_layer_v30 §5.1 FA-6 branch (b) storm = existing baseline — ED-FA-0013]
+# §5.3 Entry Terms (ED-SE-0011): a "surrender on terms" transfer makes Confirm Privileges the natural
 # fork, which seeds the new settlement's Legitimacy at 3 (vs Impose Administration's 1). Do NOT invent
 # a different number — this is the doc's exact Confirm-Privileges seed.
-ENTRY_TERMS_CONFIRM_L_SEED = 3  # [canonical: settlement_layer_v30 §5.3 Entry Terms — "Confirm Privileges … L seeds 3" (ED-SE-0010)]
+ENTRY_TERMS_CONFIRM_L_SEED = 3  # [canonical: settlement_layer_v30 §5.3 Entry Terms — "Confirm Privileges … L seeds 3" (ED-SE-0011)]
 
 # Minimum Military to open a conquest at all (existing v17 gate, preserved).
 CONQUEST_MIN_MIL = 3.0       # [canonical: faction_action.py v17 conquest gate — Mil >= 3 to attack]
@@ -107,7 +107,7 @@ def _conquest_targets(faction, world) -> list:
     """Adjacent, enemy-held territories this faction could attack.
 
     Shared by `_try_conquest` (target selection) and `faction_take_action`'s state-conditioned
-    Conquest weight (ED-FA-0011, FA-5) so the two never drift on what "a valid target" means.
+    Conquest weight (ED-FA-0012, FA-5) so the two never drift on what "a valid target" means.
     Neutral (owner=None) territories are NOT conquest targets — matches the v17 predicate.
 
     [hash-seed fix 2026-05-20] sort before use — `adj` is built from ADJACENCY set-literals whose
@@ -122,13 +122,13 @@ def _conquest_targets(faction, world) -> list:
 
 
 def _mil_advantage_signal(faction, world, targets) -> float:
-    """[SEED — ED-FA-0011 (FA-5), Blainey 1973] Graded 0–1 signal of this faction's Military edge
+    """[SEED — ED-FA-0012 (FA-5), Blainey 1973] Graded 0–1 signal of this faction's Military edge
     over the factions that own its conquest targets.
 
     Heuristic (defensible, not fitted): relative advantage of faction.Mil over the MEAN Mil of the
     distinct target-owning factions, clamped to [0, 1]. A faction with no edge (or behind) reads 0;
     roughly double the mean enemy Mil saturates at 1. No RNG consumed — pure state read.
-    [canonical: ED-FA-0011 (FA-5) mil-advantage term; Blainey 1973]
+    [canonical: ED-FA-0012 (FA-5) mil-advantage term; Blainey 1973]
     """
     if not targets:
         return 0.0
@@ -143,10 +143,10 @@ def _mil_advantage_signal(faction, world, targets) -> float:
 
 
 def _undergoverned_share(faction, world) -> float:
-    """[SEED — ED-FA-0011 (FA-5), Olson 1993] Share of this faction's OWN held territories whose
+    """[SEED — ED-FA-0012 (FA-5), Olson 1993] Share of this faction's OWN held territories whose
     Accord sits below LOW_ACCORD_SEED — the stationary bandit's incentive to invest in held land.
     Returns 0.0 when the faction holds nothing. No RNG consumed.
-    [canonical: ED-FA-0011 (FA-5) Govern weight; Olson 1993 stationary-bandit]
+    [canonical: ED-FA-0012 (FA-5) Govern weight; Olson 1993 stationary-bandit]
     """
     own = [world.territories[t] for t in faction.territories
            if t in world.territories and world.territories[t].owner == faction.name]
@@ -157,10 +157,10 @@ def _undergoverned_share(faction, world) -> float:
 
 
 def _threat_signal(faction, world) -> float:
-    """[SEED — ED-FA-0011 (FA-5)] 1.0 if any territory adjacent to this faction is held by a faction
+    """[SEED — ED-FA-0012 (FA-5)] 1.0 if any territory adjacent to this faction is held by a faction
     with strictly higher Military than this one (a proximate military threat worth mustering against),
     else 0.0. No RNG consumed — pure state read.
-    [canonical: ED-FA-0011 (FA-5) Muster weight — proximate-threat term]
+    [canonical: ED-FA-0012 (FA-5) Muster weight — proximate-threat term]
     """
     adj = set()
     for tid in faction.territories:
@@ -177,27 +177,27 @@ def faction_take_action(faction, world, rng) -> str:
     """Select and execute one action for a faction this season.
 
     GD-2: mandatory threat-response before stochastic selection.
-    ED-FA-0011 (FA-5): the four action buckets' PRIOR weights (30/35/20/15, M7_ASSUMPTION_SIX) are
+    ED-FA-0012 (FA-5): the four action buckets' PRIOR weights (30/35/20/15, M7_ASSUMPTION_SIX) are
     re-weighted by faction state BEFORE the single selection draw, then renormalized to sum 1.0, so
     the cumulative-threshold dispatch below is identical in structure to v17 — only the boundaries
     move. In a neutral state the mix is exactly the old 30/35/20/15. Grounding: Levy 1983 / Blainey
     1973 / Olson 1993 (see module header). Phase 5/9: the unique slot routes to faction-unique
-    actions per faction.name (and, per ED-FA-0011, falls back to a Parliamentary Censure).
+    actions per faction.name (and, per ED-FA-0012, falls back to a Parliamentary Censure).
 
     Signals below consume NO RNG; the ONLY draw is `roll = rng.random()`, exactly as in v17 — so the
     only campaign-level RNG shift is downstream, from which bucket the moved boundary selects.
     """
     # ── State signals (RNG-free) ────────────────────────────────────────────────────────────────
     targets = _conquest_targets(faction, world)
-    has_target = 1.0 if (targets and faction.Mil >= CONQUEST_MIN_MIL) else 0.0  # [canonical: ED-FA-0011 (FA-5) target-exists indicator]
+    has_target = 1.0 if (targets and faction.Mil >= CONQUEST_MIN_MIL) else 0.0  # [canonical: ED-FA-0012 (FA-5) target-exists indicator]
     mil_adv = _mil_advantage_signal(faction, world, targets)
     deficit = _undergoverned_share(faction, world)
     threat = _threat_signal(faction, world)
 
     # ── State multipliers (all = 1.0 in a neutral state → degenerate to the prior vector) ────────
-    conquest_mult = 1.0 + CONQUEST_TARGET_COEF * has_target + CONQUEST_MILADV_COEF * mil_adv  # [canonical: ED-FA-0011 (FA-5); Blainey 1973]
-    govern_mult = 1.0 + deficit    # [canonical: ED-FA-0011 (FA-5); Olson 1993 stationary-bandit]
-    muster_mult = 1.0 + threat     # [canonical: ED-FA-0011 (FA-5) proximate-threat term]
+    conquest_mult = 1.0 + CONQUEST_TARGET_COEF * has_target + CONQUEST_MILADV_COEF * mil_adv  # [canonical: ED-FA-0012 (FA-5); Blainey 1973]
+    govern_mult = 1.0 + deficit    # [canonical: ED-FA-0012 (FA-5); Olson 1993 stationary-bandit]
+    muster_mult = 1.0 + threat     # [canonical: ED-FA-0012 (FA-5) proximate-threat term]
 
     # ── Re-weight the PRIOR base weights and renormalize to a probability vector ──────────────────
     w_unique = BASE_W_UNIQUE
@@ -218,7 +218,7 @@ def faction_take_action(faction, world, rng) -> str:
 
     roll = rng.random()
 
-    # Faction-unique slot (Phase 5/9 dispatch; ED-FA-0011 Parliamentary fallback inside).
+    # Faction-unique slot (Phase 5/9 dispatch; ED-FA-0012 Parliamentary fallback inside).
     if roll < cum_unique:
         unique_result = _try_faction_unique(faction, world, rng)
         if unique_result != _NOOP:
@@ -243,13 +243,13 @@ def faction_take_action(faction, world, rng) -> str:
 
 def _try_faction_unique(faction, world, rng) -> str:
     """Phase 5/9 dispatch — faction-unique action routing by faction.name, with a universal
-    Parliamentary-Censure fallback (ED-FA-0011).
+    Parliamentary-Censure fallback (ED-FA-0012).
 
     Crown: Crown Initiative (3 modes via select_initiative_mode heuristic).
     Church: picked by situational priority (Excommunication → Council → Absolution).
     Varfell/Hafenmark: no faction-specific unique action yet (Pass 2d/2e BLOCKED).
 
-    ED-FA-0011 fallback: whenever a faction's OWN unique logic falls through to 'invalid' — including
+    ED-FA-0012 fallback: whenever a faction's OWN unique logic falls through to 'invalid' — including
     Crown/Church when their priority chains find nothing, and always for Varfell/Hafenmark — the
     faction attempts a Parliamentary Censure (parliamentary_action.propose_censure) if it is
     parliamentary-eligible. This reuses the EXISTING 30%-prior unique slot rather than inventing a new
@@ -260,7 +260,7 @@ def _try_faction_unique(faction, world, rng) -> str:
     if specific != _NOOP:
         return specific
 
-    # Universal fallback: Parliamentary Censure (ED-FA-0011 — reuse the unique slot, don't add one).
+    # Universal fallback: Parliamentary Censure (ED-FA-0012 — reuse the unique slot, don't add one).
     if faction.parliamentary:
         censure = parliamentary_action.propose_censure(faction, world, rng)
         if censure != _NOOP:
@@ -270,7 +270,7 @@ def _try_faction_unique(faction, world, rng) -> str:
 
 
 def _faction_specific_unique(faction, world, rng) -> str:
-    """The faction's OWN unique-action priority chain (pre-ED-FA-0011 body, unchanged). Returns a
+    """The faction's OWN unique-action priority chain (pre-ED-FA-0012 body, unchanged). Returns a
     dispatch string on success or '{_NOOP}' when the faction has no specific unique action available
     this season — at which point _try_faction_unique applies the Parliamentary-Censure fallback."""
     if faction.name == 'Crown':
@@ -312,7 +312,7 @@ def _faction_specific_unique(faction, world, rng) -> str:
         return _NOOP
 
     # Varfell + Hafenmark — no faction-specific unique action yet (Pass 2d/2e + contamination audit
-    # BLOCKED). ED-FA-0011: the Parliamentary-Censure fallback in _try_faction_unique is the ONLY
+    # BLOCKED). ED-FA-0012: the Parliamentary-Censure fallback in _try_faction_unique is the ONLY
     # live path for these two through the unique slot.
     return _NOOP
 
@@ -326,7 +326,7 @@ def _try_conquest(faction, world, rng) -> str:
     GD-1 binding: produces faction stat / territorial-control deltas only —
     no victory triggers from the battle outcome itself.
 
-    ED-FA-0012 (FA-6 a/b): on attacker victory the settlement-side effect forks Terms vs Storm.
+    ED-FA-0013 (FA-6 a/b): on attacker victory the settlement-side effect forks Terms vs Storm.
     Terms (defender NOT routed — degree 'Success') is strictly cheaper for the attacker and preserves
     legitimacy; the AI accepts Terms whenever it is available. Storm (defender routed — degree
     'Overwhelming', or Terms otherwise not chosen) keeps the existing harsher baseline.
@@ -369,25 +369,25 @@ def _try_conquest(faction, world, rng) -> str:
             faction.territories.append(target)
         t.garrison = True
 
-        # ── ED-FA-0012 (FA-6 a/b): Terms vs Storm settlement-side fork ────────────────────────────
-        # [SEED — attacker-AI policy default, ED-FA-0012] The attacker accepts surrender on Terms
+        # ── ED-FA-0013 (FA-6 a/b): Terms vs Storm settlement-side fork ────────────────────────────
+        # [SEED — attacker-AI policy default, ED-FA-0013] The attacker accepts surrender on Terms
         # whenever it is available (defender NOT routed → degree 'Success'). Terms is strictly cheaper
         # for the attacker (lighter Accord penalty, no reputational Storm cost) and nothing in the
         # current AI prefers the costlier path — so Terms is the defensible default, open to a future
         # explicit AI-policy choice. [canonical: settlement_layer_v30 §5.1 FA-6 branch (a); Grotius III]
         if deg == 'Success':
             # Branch (a) Accept surrender on terms — Grotius III / Parker 1994 (honors of war).
-            t.adjust_accord(ACCORD_TERMS)  # [canonical: settlement_layer_v30 §5.1 FA-6(a) lighter Accord — ED-FA-0012]
+            t.adjust_accord(ACCORD_TERMS)  # [canonical: settlement_layer_v30 §5.1 FA-6(a) lighter Accord — ED-FA-0013]
             # §5.3 Entry Terms: "surrender on terms" makes Confirm Privileges the natural fork, which
-            # seeds the new settlement's Legitimacy at 3 (Joyeuse Entrée; ED-SE-0010). This module is
+            # seeds the new settlement's Legitimacy at 3 (Joyeuse Entrée; ED-SE-0011). This module is
             # the PRE-LPS-1 scalar oracle (ED-FA-0004): there is no populated per-settlement L in the
             # live campaign, so the seed is carried at territory grain as a forward-compatible,
             # golden-inert proxy (read by nothing yet) that LPS-1 relocates onto Settlement.legitimacy.
-            # [canonical: settlement_layer_v30 §5.3 "Confirm Privileges … L seeds 3" (ED-SE-0010)]
+            # [canonical: settlement_layer_v30 §5.3 "Confirm Privileges … L seeds 3" (ED-SE-0011)]
             t.entry_terms_l_seed = ENTRY_TERMS_CONFIRM_L_SEED
         else:
             # Branch (b) Storm (defender routed — degree 'Overwhelming') — existing harsher baseline,
-            # UNCHANGED. [canonical: settlement_layer_v30 §5.1 FA-6(b) storm = existing baseline — ED-FA-0012]
+            # UNCHANGED. [canonical: settlement_layer_v30 §5.1 FA-6(b) storm = existing baseline — ED-FA-0013]
             t.adjust_accord(ACCORD_STORM)  # [canonical: v17 Assault/capture Accord baseline; settlement_layer §5.1 FA-6(b)]
 
         world.battle_count += 1
@@ -398,7 +398,7 @@ def _try_conquest(faction, world, rng) -> str:
 def _try_muster(faction, world, rng) -> str:
     """Muster military strength in owned territory.
 
-    ED-FA-0008 (FA-2): Muster is a fiscal-military PURCHASE, not a free-except-on-failure roll. The
+    ED-FA-0009 (FA-2): Muster is a fiscal-military PURCHASE, not a free-except-on-failure roll. The
     military enterpriser is paid regardless of outcome (Redlich 1964, the Wallenstein/Mansfeld
     contractor model; Tilly 1990, coercion-and-capital), so Wealth is charged UP FRONT on every
     attempt and money buys pool: pool = Mil + floor(W/2). The old "W-3 only on Failure" inversion is
@@ -410,9 +410,9 @@ def _try_muster(faction, world, rng) -> str:
     # Pay the enterpriser up front, ALWAYS — before rolling (Redlich 1964; Tilly 1990). Faction.adjust
     # clamps at its Wealth floor, so an already-broke faction still fires the attempt (the proposal
     # specifies a cost, not a hard Wealth gate) — it simply pays what it can.
-    faction.adjust('W', -MUSTER_WEALTH_COST)  # [canonical: ED-FA-0008 (FA-2) up-front W cost; Redlich 1964 / Tilly 1990]
+    faction.adjust('W', -MUSTER_WEALTH_COST)  # [canonical: ED-FA-0009 (FA-2) up-front W cost; Redlich 1964 / Tilly 1990]
 
-    # Money raises troops: pool = Mil + floor(W/2). [canonical: ED-FA-0008 (FA-2); Redlich 1964]
+    # Money raises troops: pool = Mil + floor(W/2). [canonical: ED-FA-0009 (FA-2); Redlich 1964]
     pool = faction.Mil + math.floor(faction.W / MUSTER_WEALTH_TO_POOL_DIV)
     ob = 1  # [canonical: v17 Muster Ob 1]
     net = _successes(pool, rng) - ob
@@ -420,7 +420,7 @@ def _try_muster(faction, world, rng) -> str:
 
     if deg in ('Overwhelming', 'Success'):
         faction.adjust('Mil', 5 if deg == 'Overwhelming' else 3)  # [canonical: v17 Muster Mil gain +5/+3]
-    # ED-FA-0008 (FA-2): Failure carries NO additional Wealth penalty — the up-front cost above already
+    # ED-FA-0009 (FA-2): Failure carries NO additional Wealth penalty — the up-front cost above already
     # priced the failed levy. Do NOT re-charge the retired v17 W-3-on-Failure here (double-charge).
 
     return f'Muster:{deg}'

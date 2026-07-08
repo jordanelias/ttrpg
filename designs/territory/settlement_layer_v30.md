@@ -40,7 +40,7 @@ The existing 17 territories become **provinces** — the strategic layer. Each p
 
 ## §1.3 Settlement Stats
 
-**Derived values (derived_stats_v1 §4):** Settlement stats (Prosperity/Defense/Order, 0–5) produce derived values for the videogame layer:
+**Derived values (`designs/scene/derived_stats_v30.md` §9/§14.1):** Settlement stats (Prosperity/Defense/Order, 0–5) produce derived values for the videogame layer. **Citation corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)** — previously cited a nonexistent file, `derived_stats_v1`; the real doc's §9 currently marks these formulas "PENDING — Not canonicalized" even though they are unchanged here and already live-gated in `references/module_contracts.yaml` (a separate canonicity-status question, not a citation error — tracked, not resolved by this fix):
 
 | Stat | Derived Value | Derivation | Player Sees |
 |------|--------------|-----------|-------------|
@@ -178,7 +178,7 @@ Range: undeveloped Outpost W=1 → fully-developed Seat W=11.
 
 **GD-1 synergy.** Parliament votes = current Mandate (`faction_layer §5.3`), and Mandate now aggregates settlement legitimacy weighted by population → a faction's political weight emerges from the size and loyalty of the populace it actually governs, coherent with GD-1 (Peninsular Sovereignty / territorial control as the win condition).
 
-## §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0006, 2026-07-08)
+## §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0007, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** §1.8 above specifies how settlement L/PS *aggregate* into
 Mandate and how Mandate *feeds back* into settlement L/PS (the mean-reverting drift), but the only
@@ -227,11 +227,11 @@ itself change §1.8's aggregation formula, the Mandate feedback, or the faction-
 (§1.8's existing paragraph on PP-686 mission outcomes is unchanged and continues to apply
 uniformly where no settlement-grain event fires). Events that reference a not-yet-specified rule
 (Entry Terms, Fiscal Stance, Dearth) are flagged inline above rather than inventing that rule here;
-each is tracked as its own docket item (ED-SE-0006/0007/0010 and ED-FA-0007) and should compose
+each is tracked as its own docket item (ED-SE-0007/0008/0011 and ED-FA-0008) and should compose
 with this table when it lands. Magnitudes above are shape proposals per the historical grounding,
 not sim-calibrated constants — calibrate before treating any value as canon, per CLAUDE.md §5/§7.
 
-## §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0011, 2026-07-08)
+## §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0012, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** Patches how a *succession* (the controlling faction's
 leadership changing, control unchanged) affects per-settlement L, sharpening the PP-686 succession
@@ -270,7 +270,7 @@ transfer; it fires only on a **same-faction succession** where a ceremony is sep
 (FA-7) and is not authored here. Magnitudes are shape proposals per Kantorowicz 1957, not
 sim-calibrated constants — calibrate before treating any value as canon (CLAUDE.md §5/§7).
 
-## §1.8c Weight loss as Exit (PROPOSED — ED-SE-0015, 2026-07-08)
+## §1.8c Weight loss as Exit (PROPOSED — ED-SE-0016, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** Extends the §1.8 Settlement Weight concept and the §4.3
 Prosperity-0 row: makes the "population leaving" flavor text bite the §1.8 Weight aggregate.
@@ -586,7 +586,7 @@ Certain settlement types naturally align with subnational factions. The provinci
 
 **Contested management:** If the subnational faction's interests conflict with the province faction's orders (e.g., Church governor refuses to allow RM Community Organizing in a Cathedral settlement), the conflict resolves through social contest (per social_contest_v30 §7 — asymmetric, with the province faction as institutional authority and the subnational faction as petitioner).
 
-### §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0009, 2026-07-08)
+### §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0010, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** Re-grounds the §3.3 grant/revoke pair above — it *refines
 those PROVISIONAL rules in place*, it does not replace them, and it adds **no** new player action
@@ -677,7 +677,7 @@ Each settlement generates 0–1 local events per season based on its stats and t
 | Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting (economic contribution, derived_stats_v1). |
 | Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures. |
 
-### §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0007, 2026-07-08)
+### §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0008, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** Replaces and extends the §4.3 one-line famine row above.
 Rides the ED-SE-0001 `governance_play_redesign` ratification track (PROPOSED — pending central ratification, not asserted as a settled basis here). Provenance:
@@ -732,7 +732,7 @@ in their own docket items (§4.3b / SE-3 and FA-1) and compose with this table w
 cited moral-economy literature, not sim-calibrated constants — calibrate before canon (CLAUDE.md
 §5/§7).
 
-### §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0008, 2026-07-08)
+### §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0009, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** Gives mechanical teeth to the open `geography_v30` item
 **ED-054 / BALANCE-005** ("Hafenmark food dependency has no mechanical teeth — Feldmark unreachable by
@@ -851,7 +851,7 @@ Invading a province now requires capturing (or bypassing) its settlements. The S
 
 **Fortress as chokepoint:** A Fortress settlement in the invader's path forces engagement — it cannot be bypassed unless the invader's Military exceeds the Fortress Defense by 3+. Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass — effectively impossible for most armies. This is the design's intended function.
 
-**Surrender on Terms vs Storm at conquest (FA-6, PROPOSED — jointly owned with the faction_action.py lane, ED-FA-0012, 2026-07-08):**
+**Surrender on Terms vs Storm at conquest (FA-6, PROPOSED — jointly owned with the faction_action.py lane, ED-FA-0013, 2026-07-08):**
 
 **Status: PROPOSED, not yet ratified.** This section specifies the **rule** (the settlement-side
 distinction between the two conquest branches); the code implementing it — **including which branch the
@@ -884,11 +884,11 @@ On attacker victory, two branches:
 
 **Which branch the attacking faction's AI picks (Terms vs Storm) is a code-side decision owned by the
 `faction_action.py` lane, not specified here.** Exact numeric magnitudes (Accord deltas, the L seed
-value, the garrison-preservation fraction) are specified by the ED-FA-0012 ledger/report shape and
+value, the garrison-preservation fraction) are specified by the ED-FA-0013 ledger/report shape and
 implemented in that lane — this section specifies only that the two branches **exist**, that (a) is
 available only on a non-Overwhelming result, and that (a) is lighter on Accord/L/garrison while (b) is
 the harsher current path. *(A third branch — post-Storm **Sack**, the Magdeburg reputational-contagion
-effect — is flagged `needs_jordan` in ED-FA-0012 and is deliberately NOT authored here.)* Composes with
+effect — is flagged `needs_jordan` in ED-FA-0013 and is deliberately NOT authored here.)* Composes with
 §5.3 Entry Terms (the transfer-boundary L seed) and `faction_layer §2.3`'s existing Accord-on-transfer
 table (the Order-side effect), neither of which it replaces.
 
@@ -898,7 +898,7 @@ Each settlement can host a garrison (one military unit). The garrison's stats (f
 
 Ungarrisoned settlements with Defense 0 are auto-captured on any hostile military entry — no roll needed. This makes Towns and Outposts vulnerable unless garrisoned, while Fortresses can hold independently.
 
-## §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0010, 2026-07-08)
+## §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0011, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** New subsection. Supplies the **transfer-boundary L seeding
 rule** that LPS-2e (§1.8) never specified — §1.8/§1.8a seed L/PS only at *game start*
@@ -1048,21 +1048,21 @@ A 30-year game spans a generation. The first leaders (Almud, Baralta, Vaynard, H
 - Threshold 4 (Year 20): Second generation leaders emerge. Original leaders who have not been replaced are at −2 to highest attribute. NPC arc branches for retirement, abdication, or natural death activate.
 - Threshold 6 (Year 30): Original leaders who survive are elderly. −3 to highest attribute. The game's political landscape has fundamentally shifted — the players' generation IS the leadership class, whether they sought it or not.
 
-**[Annotation — CP-2, ED-SE-0016, PROPOSED, 2026-07-08]** The Generational Shift clock's "founding
+**[Annotation — CP-2, ED-SE-0017, PROPOSED, 2026-07-08]** The Generational Shift clock's "founding
 leaders age, weaken, and their solidarity decays" logic is the game-mechanical shadow of **Ibn Khaldun's
 *asabiyyah* cycle** (*Muqaddimah*, 1377): group solidarity (*asabiyyah*) is strongest in the founding
 generation that won power through shared hardship, and decays predictably by the **third-to-fourth
 generation** as the dynasty urbanizes and softens into sedentary luxury — the classical theory of
 exactly the generational decay these Thresholds 2/4/6 hand-wave (the three-to-four-generation span
 maps onto the Year-10/20/30 thresholds). *[The optional founder-solidarity Sta +1 that would expire at
-Threshold 2 — a numeric/tone call — is `needs_jordan` (ED-SE-0016) and is deliberately NOT implemented
+Threshold 2 — a numeric/tone call — is `needs_jordan` (ED-SE-0017) and is deliberately NOT implemented
 here; this is a grounding annotation only.]*
 
 ## §7.2 Succession System (Extended)
 
 **Settlement succession:** When a settlement governor dies, is removed, or departs, the province faction must assign a new governor. If no eligible NPC or player is available, the settlement becomes unmanaged (Order −1 per season until a governor is assigned).
 
-**Province succession:** Existing rules (npc_behavior_v30 §5.2 arc profiles) cover faction leader succession. Extended: if the heir is a player character, the player receives the province with all settlements and their current states. If the heir is an NPC, the NPC becomes the faction leader and the player's Standing is preserved. **Settlement-L effect of a leader succession is specified in §1.8b (ED-SE-0011, PROPOSED):** a `normal` succession leaves held-settlement L unchanged (the corporate crown never dies); `contested/emergency/imposed` modes apply L −1 in all held settlements plus a Regency check (FA-7). A control *transfer* to a different faction is a distinct event governed by §5.3 Entry Terms, not by these succession rules.
+**Province succession:** Existing rules (npc_behavior_v30 §5.2 arc profiles) cover faction leader succession. Extended: if the heir is a player character, the player receives the province with all settlements and their current states. If the heir is an NPC, the NPC becomes the faction leader and the player's Standing is preserved. **Settlement-L effect of a leader succession is specified in §1.8b (ED-SE-0012, PROPOSED):** a `normal` succession leaves held-settlement L unchanged (the corporate crown never dies); `contested/emergency/imposed` modes apply L −1 in all held settlements plus a Regency check (FA-7). A control *transfer* to a different faction is a distinct event governed by §5.3 Entry Terms, not by these succession rules.
 
 **Cross-generational play:** In a 30-year game, the player character may age and retire. If the player has a protégé (a named NPC companion or officer with Disposition +4 and Standing 4+), the player may transfer their governance to the protégé and create a new character — starting at Standing 0 but inheriting Renown ÷ 2 (round down) from their predecessor's reputation. The predecessor becomes an NPC. This is CK3's heir system applied to TTRPG.
 

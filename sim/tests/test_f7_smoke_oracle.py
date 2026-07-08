@@ -54,7 +54,7 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 
 # REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve (parliamentary_bridge.py,
 # origin/main) with this branch's ED-SC-0007 play-out echo addition (scene_dispatch.py) +
-# ED-FA-0008/0011/0012 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of these
+# ED-FA-0009/0012/0013 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of these
 # consume campaign RNG, so goldens from either session alone are stale. This is the DEFAULT campaign
 # with the consequence spine ON (ECHO_TRANSPORT ratified ON, Jordan 2026-07-08): the faction-scale §10
 # vote (parliamentary_bridge, every season) + the personal emergency-council contest with its play-out

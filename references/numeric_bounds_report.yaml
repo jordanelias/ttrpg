@@ -19,7 +19,11 @@
 #   thread_sensitivity: legitimate tier thresholds (0/20/30/50)
 #   thread_tension: legitimate thresholds (40/50)
 #   ttrpg: false positive (scanner noise)
-# Status: REVIEWED — no action required. Regenerate after next collator run.
+# Status: REVIEWED — no action required.
+# Disposition (RATIFIED 2026-07-08, ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot.
+# "Regenerate after next collator run" will not happen -- the only plausible collator
+# (tools/valoria_collator.py) is dead (CLAUDE.md §8) and its own docstring cross-references
+# values_master.yaml, itself RETIRED (OPT-AV-2). Do not wait on a regeneration that isn't coming.
 
 # Not every 'conflict' is drift: same-named stat can have multiple legitimate thresholds
 # (e.g., Coherence 10 at start, <=4 Fragmented, <=3 further effects). Manual triage needed.

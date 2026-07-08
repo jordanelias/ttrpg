@@ -105,7 +105,7 @@ def succession(a_fac, b_fac, body_adj, a_style=None, b_style=None,
     if band in ('A_total', 'B_total'):       return ('unified',  'a' if band == 'A_total' else 'b', None, round(t, 2))
     if band in ('A_decisive', 'B_decisive'): return ('decisive', 'a' if band == 'A_decisive' else 'b', None, round(t, 2))
     leader = 'a' if t >= 5 else 'b'
-    # Historical grounding (annotation only, ED-FA-0016 CP-1, 2026-07-08): the graduated
+    # Historical grounding (annotation only, ED-FA-0017 CP-1, 2026-07-08): the graduated
     # 0.60/0.55/0.50 split ratios echo the Treaty of Verdun (843) three-way divisio of the
     # Carolingian Empire along affinity/track-closeness lines, and the Western Schism's
     # asymmetric obediences — historical partitions of a fractured polity produce durable but

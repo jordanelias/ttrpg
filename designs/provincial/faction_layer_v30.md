@@ -384,7 +384,7 @@ Casus Belli (CB) is a formal standing right to act against a specific faction wi
 
 CB is consumed upon first use or after 1 season of non-use (expires). A faction may hold multiple CB (one per distinct source). Each is consumed separately.
 
-**Historical grounding (annotation only, ED-FA-0016 CP-4, 2026-07-08).** The formal-standing-right
+**Historical grounding (annotation only, ED-FA-0017 CP-4, 2026-07-08).** The formal-standing-right
 shape above echoes two real precedents for licit war-initiation: the Roman fetial procedure's
 *rerum repetitio* (a formal demand for redress, with a compliance window, that had to precede a
 religiously licit war) and the medieval *diffidatio* (a formal defiance/renunciation of fealty that
@@ -508,7 +508,7 @@ GM controls NPC faction votes (Guilds, Niflhel, and any other NPC-only factions)
 
 **Niflhel — STRUCK** (per CR-STRIKE-2026-04-19 + PP-DISSOLVE). Settlement-broker NPCs (per settlement_layer §4.7-4.9) do not hold Parliamentary seats and do not vote. The prior Niflhel AI vote rule is dead — no replacement faction-level voting behavior exists for Niflhel. Niflhel's residual influence on Parliamentary outcomes operates through the Guilds settlement-broker mechanism above, not through direct vote. (ED-752)
 
-### §5.9 Fiscal Stance (PROPOSED — ED-FA-0007, 2026-07-08)
+### §5.9 Fiscal Stance (PROPOSED — ED-FA-0008, 2026-07-08)
 
 **Status: PROPOSED, not yet ratified.** This document's overall header above is CANONICAL; this
 subsection is a new addition and is not. It fills an admitted void: the corpus has no per-faction

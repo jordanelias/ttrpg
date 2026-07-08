@@ -18,36 +18,36 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   oversight, conquest terms, parish-level church-state jurisdiction, frontier colonization,
   succession/regency, and legitimacy theory (Weber/Olson/Hirschman/Ibn Khaldun) — chosen to be
   disjoint from the deliberation-and-procedure research already mined for the SC lane. Distills
-  into 9 FA-lane mechanical proposals + a citation-patch batch, filed as **ED-FA-0007..0016**
+  into 9 FA-lane mechanical proposals + a citation-patch batch, filed as **ED-FA-0008..0017**
   (see `canon/editorial_ledger.jsonl` for each item's full scope and execution notes; remaining
-  `needs_jordan` forks: ED-FA-0009 coercion/capital muster asymmetry, ED-FA-0012 Sack mechanic
-  (part c only, (a)/(b) EXECUTED), ED-FA-0013 Regency interregnum, ED-FA-0014 Protected Tributary,
-  ED-FA-0015 Guild embargo).
+  `needs_jordan` forks: ED-FA-0010 coercion/capital muster asymmetry, ED-FA-0013 Sack mechanic
+  (part c only, (a)/(b) EXECUTED), ED-FA-0014 Regency interregnum, ED-FA-0015 Protected Tributary,
+  ED-FA-0016 Guild embargo).
   **Built same-day (2026-07-08):**
-  - **ED-FA-0008 (RESOLVED) — Muster re-grounded** as a fiscal-military purchase in
+  - **ED-FA-0009 (RESOLVED) — Muster re-grounded** as a fiscal-military purchase in
     `faction_action.py::_try_muster` (W−1 up front, pool = Mil + floor(W/2)).
-  - **ED-FA-0011 (RESOLVED) — state-conditioned action-mix**: `faction_take_action` re-weights the
+  - **ED-FA-0012 (RESOLVED) — state-conditioned action-mix**: `faction_take_action` re-weights the
     30/35/20/15 PRIOR vector by Conquest-target/Mil-advantage/undergoverned-share/threat signals
     (all `[SEED]`, RNG-free) before drawing, then renormalizes; degenerates to the original mix in
     a neutral state. Built ahead of the ED-FA-0004 Stratum-B (LPS-1) rewrite this docket originally
     recommended waiting for — a disclosed sequencing deviation, not a silent one; will need
     revisiting when Mandate relocates per-settlement.
-  - **ED-FA-0012 (a)/(b) EXECUTED, (c) still needs_jordan** — `_try_conquest` forks Terms
+  - **ED-FA-0013 (a)/(b) EXECUTED, (c) still needs_jordan** — `_try_conquest` forks Terms
     (Success: Accord −10, seeds settlement `entry_terms_l_seed = 3`, matching the SE-lane's own
     §5.3 Confirm-Privileges value, not this docket's flatter "2") vs Storm (Overwhelming: Accord
     −25, unchanged). Disclosed consequence: `resolve_mass_battle` essentially never yields
     attacker-Overwhelming in practice, so Terms now replaces the old flat −25 for nearly all
     conquests — a game-wide Accord-softening side effect.
-  - **ED-FA-0016 (RESOLVED) — all four citation patches** (CP-1 succession split-ratio, CP-3
+  - **ED-FA-0017 (RESOLVED) — all four citation patches** (CP-1 succession split-ratio, CP-3
     parliamentary abstention, CP-4 Casus Belli, CP-5 Crown Initiative modes) landed as
     grounding comments; no numeric values changed.
-  - **ED-FA-0007 (still open) — FA-1 Fiscal Stance** drafted into `faction_layer_v30` §5.9 as
+  - **ED-FA-0008 (still open) — FA-1 Fiscal Stance** drafted into `faction_layer_v30` §5.9 as
     PROPOSED text only; the Treasury-coupling sim implementation is a follow-on lane.
   - **Parliamentary Censure wired into the campaign loop** (the ED-SC-0007 residual item 2): see
     `handoffs/HANDOFF_SC.md` — reuses the existing faction-unique action slot
     (`_try_faction_unique`), so every parliamentary-eligible faction can now propose a Censure.
     Surfaced a genuine cross-lane NEEDS-JORDAN question (Mandate-stacking on a total-victory pass)
-    filed as **ED-SC-0014** — see that handoff.
+    filed as **ED-SC-0015** — see that handoff.
 - **ED-FA-0006 (RESOLVED 2026-07-08) — pessimist-audit FA verdicts EXECUTED** (FA-lane follow-up to
   ED-IN-0027). `params/bg/core.md`: Diplomacy-between-players DISTILLED → Treaty §3.3 Ph2; Thread
   Operation single-sourced to the TW lane (Pontifex/Weaver slot-eligibility kept); Spy given its
@@ -82,10 +82,10 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 - **Implement FA-1 Fiscal Stance in sim** — `faction_layer_v30` §5.9 is drafted (PROPOSED); wire
   the per-faction/province stance choice + yield formula into `sim/territory/registry.py`'s
-  Treasury accounting (ED-FA-0007, still open).
-- **Author FA-6(c) Sack** (ED-FA-0012, needs_jordan) once Jordan rules the atrocity-content /
+  Treasury accounting (ED-FA-0008, still open).
+- **Author FA-6(c) Sack** (ED-FA-0013, needs_jordan) once Jordan rules the atrocity-content /
   W-for-legitimacy exchange-rate tone call.
-- **Jordan ruling needed: ED-SC-0014** (Parliamentary total-victory Mandate stacking) — surfaced
+- **Jordan ruling needed: ED-SC-0015** (Parliamentary total-victory Mandate stacking) — surfaced
   by this session's Censure build; see `handoffs/HANDOFF_SC.md`.
 - **`ci_political_v30` read-routing bug (LB-24, tracked as an `IN`-lane tooling item in
   `handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked

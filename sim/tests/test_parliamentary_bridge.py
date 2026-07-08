@@ -21,7 +21,7 @@ from sim.personal.parliamentary_vote import VoteResult
 # ── Flag-ON campaign golden (seed 42) — the consequence spine is live ─────────
 # REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve (parliamentary_bridge.py, this
 # file's subject, origin/main) with the other session's ED-SC-0007 play-out echo (scene_dispatch.py)
-# + ED-FA-0008/0011/0012 faction-action mechanics + ED-SC-0007-item-2 Censure fallback. All consume
+# + ED-FA-0009/0012/0013 faction-action mechanics + ED-SC-0007-item-2 Censure fallback. All consume
 # campaign RNG, so origin/main's own goldens are stale in the merged tree. NOTE: the flag-OFF baseline
 # is NO LONGER the degenerate {Varfell 87.5} artifact — this branch's FA mechanics already erode the
 # Varfell lockout at flag-OFF ({Crown 50, Hafenmark 25, Varfell 25}); the spine then redistributes

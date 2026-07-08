@@ -14,26 +14,26 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   agonist-antagonist-judge Workflow).**
   `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
   — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
-  Distills into 10 SE-lane mechanical proposals + a citation patch, filed as **ED-SE-0006..0016**
+  Distills into 10 SE-lane mechanical proposals + a citation patch, filed as **ED-SE-0007..0017**
   (see `canon/editorial_ledger.jsonl` for execution notes; remaining `needs_jordan` forks:
-  ED-SE-0012 oversight-toolkit venal-appointment variant, ED-SE-0013 Local Interdict, ED-SE-0014
-  Plant Colony, ED-SE-0016 optional founder-solidarity bonus).
+  ED-SE-0013 oversight-toolkit venal-appointment variant, ED-SE-0014 Local Interdict, ED-SE-0015
+  Plant Colony, ED-SE-0017 optional founder-solidarity bonus).
   **Built same-day (2026-07-08) — all AUTHORED into `settlement_layer_v30.md` as PROPOSED text**
   (no sim code; SE has no player-verb execution code yet, per the ED-SE-0005 precedent):
-  - **ED-SE-0006 (SE-1) §1.8a** — the Weberian L/PS derivation-event table (already drafted; the
+  - **ED-SE-0007 (SE-1) §1.8a** — the Weberian L/PS derivation-event table (already drafted; the
     report's own #1 priority, unblocking the items below).
-  - **ED-SE-0011 (SE-6) §1.8b** — Succession continuity.
-  - **ED-SE-0015 (SE-10) §1.8c** — Weight loss as Exit (Hirschman closure).
-  - **ED-SE-0009 (SE-4) §3.3a** — Charters/prescription/Quo Warranto.
-  - **ED-SE-0007 (SE-2) §4.3a** — Dearth chain + granary.
-  - **ED-SE-0008 (SE-3) §4.3b** — Grain routes (closes the open `geography_v30` ED-054/BALANCE-005
+  - **ED-SE-0012 (SE-6) §1.8b** — Succession continuity.
+  - **ED-SE-0016 (SE-10) §1.8c** — Weight loss as Exit (Hirschman closure).
+  - **ED-SE-0010 (SE-4) §3.3a** — Charters/prescription/Quo Warranto.
+  - **ED-SE-0008 (SE-2) §4.3a** — Dearth chain + granary.
+  - **ED-SE-0009 (SE-3) §4.3b** — Grain routes (closes the open `geography_v30` ED-054/BALANCE-005
     item mechanically).
-  - **ED-SE-0010 (SE-5) §5.3** — Entry Terms at control transfer (Confirm Privileges seeds L=3 /
-    Impose Administration seeds L=1). **Partially LIVE in sim**: `faction_action.py`'s ED-FA-0012
+  - **ED-SE-0011 (SE-5) §5.3** — Entry Terms at control transfer (Confirm Privileges seeds L=3 /
+    Impose Administration seeds L=1). **Partially LIVE in sim**: `faction_action.py`'s ED-FA-0013
     conquest-terms fork reads this exact seed value (a dormant, non-serialized
     `Territory.entry_terms_l_seed` proxy pending LPS-1) — the two lanes are reconciled, not
     independently drifting.
-  - **ED-SE-0016 (CP-2) §7.1** — Ibn Khaldun *asabiyyah* annotation on the Generational Shift
+  - **ED-SE-0017 (CP-2) §7.1** — Ibn Khaldun *asabiyyah* annotation on the Generational Shift
     clock (core annotation only; the optional founder-solidarity mechanic stays needs_jordan).
   Ratification of the PROPOSED sections tracks ordinary merge review (CLAUDE.md §1, ED-1094) —
   none of these were flagged as held-back exceptions. Sim implementation of SE-2/SE-3/SE-4/SE-6/
@@ -83,5 +83,5 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   SE-5's dormant `entry_terms_l_seed` proxy. Sequencing recommendation (from the source docket)
   still holds: SE-5/SE-6 (transfer/succession) → SE-2/SE-3 (dearth + grain) → SE-4 riding the
   ED-SE-0001 ratification track.
-- **Author the remaining `needs_jordan` forks** (ED-SE-0012/0013/0014/0016's optional mechanic)
+- **Author the remaining `needs_jordan` forks** (ED-SE-0013/0014/0015/0017's optional mechanic)
   once Jordan rules each.

@@ -28,7 +28,7 @@ from sim.cross_scale import echo_transport
 
 # The seed-42 n=8 F7 FLAG-OFF golden — the transport flag OFF must not move it. REPINNED 2026-07-08
 # for the two-session merge: with the flag OFF, only this branch's FA-lane mechanics
-# (ED-FA-0008/0011/0012) move seed-42 RNG — parliamentary_bridge and the play-out echo are inert.
+# (ED-FA-0009/0012/0013) move seed-42 RNG — parliamentary_bridge and the play-out echo are inert.
 # The flag-ON default is a DIFFERENT distribution now (test_f7_smoke_oracle.GOLDEN_WIN_SHARE).
 _GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
 

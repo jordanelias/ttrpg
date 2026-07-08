@@ -14,7 +14,7 @@ Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot pr
 
 Status: [implemented: 2026-07-08 — ED-SC-0007 residual "parliamentary_vote-in-the-loop" MECHANISM
     (the proposer/target/declaration authoring that sim/personal/parliamentary_vote.py never had a
-    caller for). WIRED (same session, ED-FA-0011): sim/provincial/faction_action.py's
+    caller for). WIRED (same session, ED-FA-0012): sim/provincial/faction_action.py's
     _try_faction_unique now calls propose_censure as a universal fallback in the existing
     faction-unique action slot, so this reaches every live campaign via faction_take_action — not a
     standalone unreachable mechanism. Not yet wired: scene_dispatch.py has no direct caller (the

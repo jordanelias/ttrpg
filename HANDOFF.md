@@ -537,7 +537,7 @@ block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830�
 per the file's protocol; never max+1. Since the 2026-07-02 cutover (ED-IN-0001), new EDs
 allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
-- **JORDAN RULING NEEDED — ED-SC-0014 (Parliamentary total-victory Mandate stacking).** Filed
+- **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Filed
   2026-07-08 building the FA/SE historical-precedent docket's unblocked items (see
   `handoffs/HANDOFF_SC.md` Pending + `handoffs/HANDOFF_FA.md`): the §10 BG-Vote Total-Victory
   Mandate rider (−1) and the new Parliamentary-Censure §5.4 target effect (−1) compose to −2 on

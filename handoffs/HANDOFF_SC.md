@@ -166,13 +166,13 @@ index; see it for cross-lane/global items.
     action bucket — so every parliamentary-eligible faction can propose a Censure each season.
     Targeting is `[SEED]` (highest-Mandate rival, realist balance-of-power default; ostracism/
     Contarini precedent). The other four Sanction tiers + all constructive motions remain unbuilt
-    (module TODO tracks them). **Surfaced a genuine NEEDS-JORDAN seam, filed as ED-SC-0014**: on a
+    (module TODO tracks them). **Surfaced a genuine NEEDS-JORDAN seam, filed as ED-SC-0015**: on a
     total-victory Censure pass, the §10 BG-Vote Total-Victory Mandate rider (−1) and the §5.4
     Censure target effect (−1) compose to −2 on the same faction within one motion — neither source
     states whether they should stack or cap at −1. Currently implemented as stacking (the literal,
     defensible default) but explicitly NOT ratified canon — **this is the one item from this
     session's build that needs Jordan's direct call**, not a routine merge-ratification. See
-    `canon/editorial_ledger.jsonl` ED-SC-0014.
+    `canon/editorial_ledger.jsonl` ED-SC-0015.
   - **P3-lite Agôn harness BUILT (2026-07-08).** `sim/personal/contest/agon_harness.py` — a
     standalone, `__main__`-runnable interactive harness where a human plays Side A against a simple
     AI policy (logos-spammer / demagogue), printing Appraise reveals and the Face/Concentration/
@@ -192,7 +192,7 @@ index; see it for cross-lane/global items.
 - 2026-07-08 — **P3-lite Agôn harness built + ED-SC-0007 item 2 (Censure-tier
   parliamentary_vote-in-the-loop) executed**, via an agonist-antagonist-judge Workflow (5 parallel
   build lanes, each independently critiqued and judged). Surfaced one genuine NEEDS-JORDAN
-  question, filed as ED-SC-0014 (Parliamentary total-victory Mandate stacking) — see Pending above.
+  question, filed as ED-SC-0015 (Parliamentary total-victory Mandate stacking) — see Pending above.
 - 2026-07-08 — **ED-SC-0002 ruled (composed keying) + ED-SC-0007 executed** for the one live
   contest (Emergency Council). See Pending above and the ED-SC-0002/ED-SC-0007 ledger entries for
   full scope. Two informational reviews filed alongside (not ledger-actionable themselves):
@@ -239,7 +239,7 @@ index; see it for cross-lane/global items.
 - **ED-SC-0006 + ED-SC-0007 DONE (2026-07-08)** — kernel routing, party-derivation bridge, the
   composed-keying echo mapping, the P3-lite Agôn harness, and Censure-tier parliamentary-vote
   wiring are all executed; see Decisions above.
-- **JORDAN RULING NEEDED: ED-SC-0014** (Parliamentary total-victory Mandate stacking, −2 vs −1) —
+- **JORDAN RULING NEEDED: ED-SC-0015** (Parliamentary total-victory Mandate stacking, −2 vs −1) —
   the one open design call this session's build could not resolve on its own authority.
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit

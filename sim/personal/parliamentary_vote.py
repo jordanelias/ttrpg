@@ -53,7 +53,7 @@ from sim.personal.contest import (
 BG_VOTE_TN = 7                              # [canonical: §10 — "Roll combined pool TN 7"]
 BG_VOTE_GENRE_BONUS = 1                     # [canonical: §10 — "+1D if the side's genre matches the primary genre"]
 BG_VOTE_AUDIENCE_BONUS = 1                  # [canonical: §10 — "+1D if the side's genre matches the Parliament's dominant faction boost"]
-# [CP-3 / ED-FA-0016, 2026-07-08 — historical precedent for the abstention-resistance + committee
+# [CP-3 / ED-FA-0017, 2026-07-08 — historical precedent for the abstention-resistance + committee
 #  mechanism (grounds the MECHANISM, never the magnitude — CLAUDE.md §5/§7)]: the Venetian ballot
 #  distinguished the *non sinceri* — formal uncommitted / spoiled ballots — from the sincere yes/no
 #  count. A high non-sinceri tally was not noise but a recognised institutional signal: it withheld

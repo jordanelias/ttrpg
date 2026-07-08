@@ -32,9 +32,9 @@
 | 17 | 121 | 3 | §1.6 Parish Social Services (NEW — historical_precedents_analysis §1.4) |
 | 18 | 135 | 3 | §1.7 Pastoral Assumption (NEW — historical_precedents_analysis §1.4) |
 | 19 | 147 | 2 | §1.8 Settlement Legitimacy & Popular Support → Faction Mandate (LPS-2e — Jordan ruling 2026-05-30: re-grained faction→settlement + size-weighted; derived bottom-up + historical, Jordan-vetoable; supersedes the LPS-1 territory-grain model) |
-| 20 | 181 | 2 | §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0006, 2026-07-08) |
-| 21 | 234 | 2 | §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0011, 2026-07-08) |
-| 22 | 273 | 2 | §1.8c Weight loss as Exit (PROPOSED — ED-SE-0015, 2026-07-08) |
+| 20 | 181 | 2 | §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0007, 2026-07-08) |
+| 21 | 234 | 2 | §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0012, 2026-07-08) |
+| 22 | 273 | 2 | §1.8c Weight loss as Exit (PROPOSED — ED-SE-0016, 2026-07-08) |
 | 23 | 306 | 1 | PART 2: THE SETTLEMENTS (PP-726 corrected granularity) |
 | 24 | 312 | 2 | §2.1 Settlement Registry |
 | 25 | 314 | 3 | Valorsmark duchy (Almud — also monarch of Valoria) |
@@ -48,13 +48,13 @@
 | 33 | 526 | 2 | §3.1 The Two-Tier Authority Model |
 | 34 | 537 | 2 | §3.2 Governor Assignment |
 | 35 | 563 | 2 | §3.3 Subnational Faction Governance |
-| 36 | 589 | 3 | §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0009, 2026-07-08) |
+| 36 | 589 | 3 | §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0010, 2026-07-08) |
 | 37 | 640 | 1 | PART 4: SETTLEMENT AS GAMESPACE |
 | 38 | 642 | 2 | §4.1 Scene Slate Settlement Anchoring |
 | 39 | 650 | 2 | §4.2 Subnational Faction Visibility |
 | 40 | 664 | 2 | §4.3 Settlement Events |
-| 41 | 680 | 3 | §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0007, 2026-07-08) |
-| 42 | 735 | 3 | §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0008, 2026-07-08) |
+| 41 | 680 | 3 | §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0008, 2026-07-08) |
+| 42 | 735 | 3 | §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0009, 2026-07-08) |
 | 43 | 776 | 3 | §4.4 Thread Operations at Settlement Level (Throughline T1) |
 | 44 | 792 | 3 | §4.5 Local Actors (Throughline T7) |
 | 45 | 806 | 1 | PART 5: MILITARY GRANULARITY |
@@ -63,7 +63,7 @@
 | 48 | 828 | 3 | §4.9 Thread Exploitation Sites (Niflhel Dissolution — conflict_architecture_proposal) |
 | 49 | 838 | 2 | §5.1 Invasion and Defense |
 | 50 | 895 | 2 | §5.2 Garrison and Defense |
-| 51 | 901 | 2 | §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0010, 2026-07-08) |
+| 51 | 901 | 2 | §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0011, 2026-07-08) |
 | 52 | 953 | 1 | PART 6: PLAYER PROGRESSION — SETTLEMENT TO NATIONAL |
 | 53 | 955 | 2 | §6.1 The Stature Ladder (Canonical — referenced by player_agency_v30 §5.4) |
 | 54 | 967 | 2 | §6.2 Faction Emergence — Local to National |
@@ -103,9 +103,9 @@
 | 17 | 294 | §1.6 Parish Social Services (NEW — historical_precedents_analysis §1.4) |
 | 18 | 276 | §1.7 Pastoral Assumption (NEW — historical_precedents_analysis §1.4) |
 | 19 | 1,875 | §1.8 Settlement Legitimacy & Popular Support → Faction Mandate (LPS-2e — Jordan ruling 2026-05-30: re-grained faction→settlement + size-weighted; derived bottom-up + historical, Jordan-vetoable; supersedes the LPS-1 territory-grain model) |
-| 20 | 950 | §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0006, 2026-07-08) |
-| 21 | 821 | §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0011, 2026-07-08) |
-| 22 | 598 | §1.8c Weight loss as Exit (PROPOSED — ED-SE-0015, 2026-07-08) |
+| 20 | 950 | §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0007, 2026-07-08) |
+| 21 | 821 | §1.8b Succession continuity and settlement L (PROPOSED — ED-SE-0012, 2026-07-08) |
+| 22 | 598 | §1.8c Weight loss as Exit (PROPOSED — ED-SE-0016, 2026-07-08) |
 | 23 | 3,617 | PART 2: THE SETTLEMENTS (PP-726 corrected granularity) |
 | 24 | 1,198 | §2.1 Settlement Registry |
 | 25 | 347 | Valorsmark duchy (Almud — also monarch of Valoria) |
@@ -119,13 +119,13 @@
 | 33 | 182 | §3.1 The Two-Tier Authority Model |
 | 34 | 767 | §3.2 Governor Assignment |
 | 35 | 2,085 | §3.3 Subnational Faction Governance |
-| 36 | 982 | §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0009, 2026-07-08) |
+| 36 | 982 | §3.3a Charters, prescription, and Quo Warranto (PROPOSED — ED-SE-0010, 2026-07-08) |
 | 37 | 3,681 | PART 4: SETTLEMENT AS GAMESPACE |
 | 38 | 243 | §4.1 Scene Slate Settlement Anchoring |
 | 39 | 453 | §4.2 Subnational Faction Visibility |
 | 40 | 2,975 | §4.3 Settlement Events |
-| 41 | 1,097 | §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0007, 2026-07-08) |
-| 42 | 779 | §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0008, 2026-07-08) |
+| 41 | 1,097 | §4.3a Dearth chain and granary response (PROPOSED — ED-SE-0008, 2026-07-08) |
+| 42 | 779 | §4.3b Grain routes and food dependency (PROPOSED — ED-SE-0009, 2026-07-08) |
 | 43 | 304 | §4.4 Thread Operations at Settlement Level (Throughline T1) |
 | 44 | 255 | §4.5 Local Actors (Throughline T7) |
 | 45 | 2,719 | PART 5: MILITARY GRANULARITY |
@@ -134,7 +134,7 @@
 | 48 | 134 | §4.9 Thread Exploitation Sites (Niflhel Dissolution — conflict_architecture_proposal) |
 | 49 | 1,249 | §5.1 Invasion and Defense |
 | 50 | 117 | §5.2 Garrison and Defense |
-| 51 | 948 | §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0010, 2026-07-08) |
+| 51 | 948 | §5.3 Entry Terms at control transfer (PROPOSED — ED-SE-0011, 2026-07-08) |
 | 52 | 1,815 | PART 6: PLAYER PROGRESSION — SETTLEMENT TO NATIONAL |
 | 53 | 305 | §6.1 The Stature Ladder (Canonical — referenced by player_agency_v30 §5.4) |
 | 54 | 819 | §6.2 Faction Emergence — Local to National |

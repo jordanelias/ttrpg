@@ -42,16 +42,22 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 
 ### Derived Character Stats
 
-| Full Term | Abbr | Formula / Range | Description |
-|-----------|------|-----------------|-------------|
-| Health | HP* | = Endurance | Wound track. Resets per wound. *HP not standalone — write Health.* |
-| Stamina | — | Endurance + History + 1 (armour-modified) | Combat resource. Degrades per round. |
-| Coherence | — | 10→0 | Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner. |
-| Intelligibility | — | 10→0 | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
-| Composure | — | varies | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
-| Focus | — | 1–5+ | Contact duration in Thread operation rounds. |
-| Certainty | CERT* | 0–5 | Cosmological worldview track (PP-551). Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. *CERT not standalone — write Certainty.* |
-| Momentum | — | 0–4 | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
+**Formula column retired 2026-07-08 (ED-IN-0029 docket, OPT-AV-7):** this glossary's own charter
+(header above) is term/abbreviation expansion, not mechanical authority — restating formulas here
+duplicated `params/core.md`/`derived_stats_v30.md` and had already drifted two supersessions stale
+(Health/Stamina) with no mechanism to catch it. Formulas now live in exactly one place each; this
+table gives the term, abbreviation, and a pointer only.
+
+| Full Term | Abbr | Formula lives at | Description |
+|-----------|------|-------------------|-------------|
+| Health | HP* | `params/core.md` §Derived Scores; `derived_stats_v30.md` §4.1 (authoritative) | Wound track. Resets per wound. *HP not standalone — write Health.* |
+| Stamina | — | `params/core.md` §Derived Scores | Combat resource. Degrades per round. |
+| Coherence | — | `params/core.md` §Derived Scores | Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner. |
+| Intelligibility | — | (see Coherence — same source) | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
+| Composure | — | `params/core.md` §Derived Scores | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
+| Focus | — | `references/descriptor_registry.yaml` (attribute) | Attribute governing Thread contact economy — see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description). |
+| Certainty | CERT* | `params/core.md` §PP-551 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. *CERT not standalone — write Certainty.* |
+| Momentum | — | `params/core.md` §Derived Scores | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
 
 ### Thread Practitioner Stats
 

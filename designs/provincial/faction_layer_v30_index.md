@@ -58,7 +58,7 @@
 | 43 | 488 | 3 | §5.6b Turmoil Parliament Interaction |
 | 44 | 494 | 3 | §5.7 Wealth Zero Consequence |
 | 45 | 503 | 3 | §5.8 NPC Vote Behavior |
-| 46 | 511 | 3 | §5.9 Fiscal Stance (PROPOSED — ED-FA-0007, 2026-07-08) |
+| 46 | 511 | 3 | §5.9 Fiscal Stance (PROPOSED — ED-FA-0008, 2026-07-08) |
 | 47 | 575 | 2 | §6 — OFFICER CAPTURE AND SIGNIFICANT LOSS |
 | 48 | 577 | 3 | §6.1 Integration with ED-334/335 |
 | 49 | 581 | 3 | §6.2 Three-Condition Gate (Trigger 5 Full Spec) |
@@ -122,7 +122,7 @@
 | 43 | 223 | §5.6b Turmoil Parliament Interaction |
 | 44 | 386 | §5.7 Wealth Zero Consequence |
 | 45 | 276 | §5.8 NPC Vote Behavior |
-| 46 | 1,062 | §5.9 Fiscal Stance (PROPOSED — ED-FA-0007, 2026-07-08) |
+| 46 | 1,062 | §5.9 Fiscal Stance (PROPOSED — ED-FA-0008, 2026-07-08) |
 | 47 | 519 | §6 — OFFICER CAPTURE AND SIGNIFICANT LOSS |
 | 48 | 62 | §6.1 Integration with ED-334/335 |
 | 49 | 94 | §6.2 Three-Condition Gate (Trigger 5 Full Spec) |

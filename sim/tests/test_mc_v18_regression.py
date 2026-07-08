@@ -30,10 +30,10 @@ that used to never fire and moving this golden's win_share/all_winners/battles_m
 This is the intended flip, not a regression — see test_mc_v18_resolves_at_least_one_contest
 below.
 
-REGENERATED 2026-07-08 (ED-FA-0008/0011/0012 — FA-lane mechanics into faction_action.py):
-state-conditioned action mix (ED-FA-0011, retiring the fixed 30/35/20/15 M7_ASSUMPTION_SIX
-vector), Muster as a fiscal-military purchase (ED-FA-0008: W-1 up front, pool = Mil + floor(W/2)),
-the Terms-vs-Storm conquest fork (ED-FA-0012 a/b), and the Parliamentary-Censure fallback wired
+REGENERATED 2026-07-08 (ED-FA-0009/0012/0013 — FA-lane mechanics into faction_action.py):
+state-conditioned action mix (ED-FA-0012, retiring the fixed 30/35/20/15 M7_ASSUMPTION_SIX
+vector), Muster as a fiscal-military purchase (ED-FA-0009: W-1 up front, pool = Mil + floor(W/2)),
+the Terms-vs-Storm conquest fork (ED-FA-0013 a/b), and the Parliamentary-Censure fallback wired
 into the faction-unique slot. faction_take_action is reachable from EVERY live campaign, so these
 shift RNG consumption and moved this golden's win_share/all_winners/battles_mean — the expected,
 intended move each pin below anticipates (a surprise here means output moved for a DIFFERENT
@@ -57,7 +57,7 @@ from sim.mc_v18 import run_batch, run_campaign  # noqa: E402
 
 # Golden batch — REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve
 # (parliamentary_bridge.py, origin/main) with this branch's ED-SC-0007 play-out echo addition
-# + ED-FA-0008/0011/0012 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of
+# + ED-FA-0009/0012/0013 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of
 # these consume campaign RNG, so goldens from either session alone are stale. The DEFAULT campaign
 # now runs the consequence spine ON (Jordan: "Yes echo transport on"): the faction-scale §10
 # Parliamentary vote each season (parliamentary_bridge) AND the personal-scale emergency-council
