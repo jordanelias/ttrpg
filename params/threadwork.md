@@ -59,6 +59,15 @@ Note: PP-250 Community Organizing formula (Attunement + History + TPS) is supers
 | Past-Oriented Pulling (POP) | 8 |
 | POP Binding (Past-Oriented Lock or Dissolution) | 9 |
 
+<!-- ED-WR-0007 (2026-07-08, pessimist-action audit): DOC-SIDE decisions only — NO param values change in this pass.
+     POP DISTILL: Past-Oriented Pulling is a temporal-target variant of Pulling; its standalone "Ob by recency" table
+     (designs/threadwork/threadwork_v30.md §Past-Oriented Pulling) folds into the Three-Axis Ob System below as a
+     temporal/Distance-axis reinterpretation. The physical fold (retiring the separate POP TN rows above + the recency
+     table) lands with the Stratum-B per-op cost-table work (resolution_plan C-TW-3/4/10/11), not here.
+     Mending REFINE: the zero-Coherence-cost / Mending-Immunity values are EXPLICITLY untouched (canon/02 Amendment 3,
+     ED-871); the flagged Q-robust "second Gap-repair branch / scarcity dimension" question is Jordan's design-iteration
+     call, tracked in the threadwork_v30 §Mending annotation — no number moves here. -->
+
 ## Wound penalty (Thread ops) — ED-PC-0005 ruling
 Each Wound adds a **fractional Ob per wound** to every Thread operation roll (Leap, Weaving, Pulling, Mending, FR) — **NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). The per-pool fractional-Ob VALUE is a follow-on calibration, flagged pending (ED-PC-0006) — not yet set here; combat's ratified reference is ED-1041 (+0.15 Ob attacking / +0.25 defending per wound). See `designs/threadwork/threadwork_v30.md` §2.3/§3/§5 and `designs/scene/derived_stats_v30.md` §4.1 (authoritative).
 

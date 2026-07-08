@@ -209,7 +209,7 @@ Player may override this ordering by explicit declaration. The ordering is a UX 
 1. Player chooses which mandatory scenes to attend personally (one per available scene action).
 2. Remaining mandatory scenes resolve in **Witness Mode**: the player is present but cannot direct outcomes. Per Witness scene the player receives:
    - One free Read or Appraise action — **single roll required, not auto-success** (clarified per stress-test ED-761). Pool per standard Read/Appraise per fieldwork rules; Ob 1 (light, standard); cost: 0 scene actions (the "free" refers to scene-action cost, not roll outcome). Failure means the Witness's perception is unreliable; the player learns the surface event but not its undercurrents.
-   - One narrative input opportunity at scene resolution (one sentence, GM may incorporate or reject; videogame: pre-scripted dialogue branch tagged to player Conviction).
+   - One narrative input opportunity at scene resolution (one sentence, GM may incorporate or reject; videogame: pre-scripted dialogue branch tagged to player Conviction). **[ED-WR-0007, 2026-07-08 — DISTILL]** This is a tabletop-GM mechanic ("GM may incorporate or reject") never re-derived for the engine's *no-GM* invariant — and because the scene's mechanical resolution has already proceeded via NPC AI (next bullet) before the sentence is offered, a branch-pick here changes no world-state outcome (Flavor-only). Fold the narrative-colour beat into the Read/Appraise outcome above: a Read/Appraise *success* additionally unlocks one flavour-tagged dialogue line at the next scene involving that NPC. No separate GM-less "narrative input" mechanic need be invented.
    - The scene's mechanical resolution proceeds via NPC AI as if the player had declined to engage.
 3. Witness Mode does NOT generate Domain Echo (player did not act with Sufficient Scope per scale_transitions §7).
 4. Witness Mode does NOT consume Momentum or Coherence.
@@ -267,10 +267,10 @@ For each active Conviction, scan for intersection with:
 
 **Validator behavior by match type:**
 - **0 matches:** display non-blocking warning "This Conviction will not generate scenes via Step 4 unless you reference a specific NPC, faction, territory, system topic, or role. Refine?"
-- **Weak match only:** display non-blocking suggestion "Did you mean [System keyword X]? If so, capitalize it. Otherwise, your Conviction is general-life-themed and won't fire Step 4 scenes about [System keyword X]." Player chooses: (a) capitalize → strong match → fires Step 4, (b) leave lowercase → no Step 4 firing for that match.
+- **Weak match only:** display an explicit confirmation prompt — "Did you mean the system entity **[System keyword X]** (this will generate Step-4 scenes about it), or the everyday sense (no Step-4 scenes)?" Player picks *system entity* → strong match, fires Step 4; picks *everyday sense* → no Step-4 firing for that match. **[ED-WR-0007, 2026-07-08 — REFINE]** This replaces the former capitalization-as-signal heuristic ("capitalize it if you meant Order"): encoding intent through punctuation was a second-order rule not restatable in one breath with the core scan-and-match rule (Q-elegant fail), and a lowercase "the crown on his head" would silently never fire Step 4 with only a non-blocking hint as the tell. The explicit prompt makes intent a direct choice, not a convention the player must already know.
 - **Strong match (any):** no warning. Step 4 fires for the matched topic.
 
-This prevents both false-negative (zero-match Conviction missed) and false-positive (incidental keyword match firing wrong scenes) at character creation. The capitalization heuristic transfers semantic disambiguation responsibility to the player at Conviction-write time, where the player has the most context to clarify intent.
+This prevents both false-negative (zero-match Conviction missed) and false-positive (incidental keyword match firing wrong scenes) at character creation. The disambiguation is an explicit yes/no confirmation at Conviction-write time (ED-WR-0007), where the player has the most context to clarify intent — not a silent capitalization convention.
 
 For each intersection found, generate one scene entry with the matching NPC/location. Maximum 3 Conviction-generated scenes.
 
@@ -282,13 +282,17 @@ For each named NPC where ALL hold: Disposition ≥ +2 toward player, NPC has act
 
 For each named NPC where ALL hold: Disposition ≤ −2 toward player, NPC holds institutional authority over player's territory, NPC's priority tree fired an action targeting player's faction — generate one scene: "[NPC] has summoned you. [Demand description]." Declining a demand: Disposition −1 with the NPC, +1 Exposure in their territory.
 
-**Step 6 — Territorial (Priority 4):**
+**Step 6 — Territorial Texture (Priority 4):**
 
-Generate 1–2 scenes from the player's current territory: NPC arrival, trade/economic event, Thread phenomenon (if MS ≤ 60 in this territory's Calamity band), military movement.
+Generate 1–2 scenes from the player's current territory: trade/economic event, military movement.
+
+**[ED-WR-0007, 2026-07-08 — pessimist-action audit MERGE + one clause CUT]** Two of this Step's former sub-rules are folded into more rigorous siblings, leaving Step 6 as "Territorial Texture" (the two genuinely-novel ambient-political sub-rules above): **NPC arrival → MERGE into Step 5 (NPC Outreach)**, which gates the same "an NPC shows up" content on Disposition thresholds + a fired priority tree (Step 6's version was ungated duplicate coverage). **Thread phenomenon (MS ≤ 60) → CUT**, not merged: Step 2b (Thread-State Scenes) already owns the local-MS-band condition with a stricter trigger *and* an explicit max-1-per-Slate discipline Step 6 lacked — a second undisciplined Thread row would either be dead weight or violate Step 2b's "max 1" rule. (The clause is CUT rather than merged specifically to protect Step 2b's scarcity discipline.) Step 6 also absorbs Step 7's backfill role, below.
 
 **Step 7 — Ambient (Priority 5):**
 
 Generate 1 ambient scene: unstructured encounter offering low-stakes information or minor relationship opportunity.
+
+**[ED-WR-0007, 2026-07-08 — DISTILL]** Ambient's own §4.5 consequence entry is "No consequence. The world moved on." — as-specified it is a Flavor-only Step (a dedicated priority tier, pruning-table row, and consequence-table row for a mechanic that by its own text changes nothing). Its one real function — never surfacing an emptier Slate than the difficulty band's floor — is **distilled into a backfill clause on Step 6 (Territorial Texture)**: when Steps 1–6 underfill the Slate, Step 6 backfills to the band floor with a low-stakes encounter. No standalone Ambient Step, priority tier, or consequence row is required. (Retained as a numbered anchor here until a Scene-Slate rebuild renumbers §4.2/§4.3/§4.5; the decision binds now.)
 
 ### 4.2b Slate Presentation
 

@@ -111,9 +111,9 @@ systems:
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "aa78357852f80b9811985e51623a3d038ab82357"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "ec3cb72e6bf840956bc22d3c72ec467d2326e313"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "c427fd1c02a782d9a9b3229c2738f87678ade5e4"
+    canonical_sha__params__threadwork_md: "8961f2ed6d2ac16203812c33d121f0dfbb09b11c"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
@@ -477,7 +477,7 @@ systems:
     canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
     design_doc: designs/architecture/player_agency_v30.md
-    canonical_sha__designs__architecture__player_agency_v30_md: "907edc0d0fee32977ad70ed33e3cadd242e0e379"
+    canonical_sha__designs__architecture__player_agency_v30_md: "4673278327232637571f994d9899db34e45ce5d4"
     index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
