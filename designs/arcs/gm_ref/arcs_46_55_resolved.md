@@ -383,15 +383,15 @@ PI climbs: 7 → ~14 by Season 6 (at plausible rate of +1–2/season)
 
 ## Arc 53: The Wound Economy *(confirmed — U-08)*
 
-**Mechanical seed:** Wound penalty −1D per wound applies to personal roll → faction leader's personal roll drives Domain Action → wound propagates from TTRPG personal combat to faction accounting layer
+**Mechanical seed:** Wound penalty (+0.15 Ob per wound, cumulative) applies to personal roll → faction leader's personal roll drives Domain Action → wound propagates from TTRPG personal combat to faction accounting layer [SUPERSEDED FRAMING, ED-PC-0005/ED-PC-0006, 2026-07-08: the original −1D-per-wound pool cut (PP-716, now struck) is replaced by a fractional Ob added to the roll, never a pool cut — value reuses ED-1041's combat "attacking" magnitude, the active-roller case]
 
-**Systems:** Wound penalty −1D per wound, cumulative (PP-232) · Domain Action pool (stage6 confirmed: personal roll + faction stat bonus dice if holding leadership) · Failed Domain Action Stability cost (PP-403)
+**Systems:** Wound penalty +0.15 Ob per wound, cumulative (ED-PC-0005/ED-PC-0006; supersedes PP-232/PP-716's −1D) · Domain Action pool (stage6 confirmed: personal roll + faction stat bonus dice if holding leadership) · Failed Domain Action Stability cost (PP-403)
 
 ---
 
 ### Narrative
 
-Vaynard leads Varfell. His personal roll — the base pool for his Domain Actions — carries his wound penalty. Stage6 confirms: the rolling character's personal action drives the Domain Action; holding leadership adds faction stat as bonus dice. Two wounds reduces his personal pool by −2D. The bonus dice from faction stat are unaffected, but the base pool is degraded.
+Vaynard leads Varfell. His personal roll — the base pool for his Domain Actions — carries his wound penalty. Stage6 confirms: the rolling character's personal action drives the Domain Action; holding leadership adds faction stat as bonus dice. Two wounds adds +0.30 Ob to his personal roll. The bonus dice from faction stat are unaffected, but the base roll faces a harder target.
 
 The players understand wounds as a personal combat consequence. They do not always register that the same penalty propagates into the faction layer at accounting. A TTRPG-layer event — a combat no one thought much about — becomes a faction-layer consequence players trace back, if they trace it at all, to a session where no one thought to find a healer.
 
@@ -404,8 +404,8 @@ Vaynard takes 2 wounds in TTRPG scene combat (Season 4)
     └─ Seasonal Accounting: Varfell Domain Action (Vaynard leading)
             │
             ▼
-        Pool = personal roll − 2D (wound penalty, PP-232) + Varfell Military (bonus dice)
-        Net pool is reduced. Failure probability increases.
+        Pool = personal roll, Ob +0.30 (wound penalty, ED-PC-0005/ED-PC-0006; supersedes PP-232's −2D framing) + Varfell Military (bonus dice)
+        The harder target raises failure probability.
             │
             └─ Domain Action fails → Stability −1 (PP-403)
                     │

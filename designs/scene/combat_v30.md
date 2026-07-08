@@ -425,7 +425,7 @@ See compilation/v0.14/stage11_scale_transitions_deprecated.md §11.8.
 
 ## 10. THREAD IN COMBAT
 
-Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (each wound adds a fractional Ob to Thread operation rolls — NEVER a −1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification; per-pool value is a follow-on calibration, ED-PC-0006). These are not metaphors; per A1, everything is constituted from threads.
+Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (each wound adds +0.15 Ob, cumulative, to Thread operation rolls — NEVER a −1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification; value calibrated ED-PC-0006 from ED-1041's combat "attacking" magnitude). These are not metaphors; per A1, everything is constituted from threads.
 
 **Full Thread operation rules:** designs/ttrpg/threadwork_v30.md.
 
@@ -434,7 +434,7 @@ Combat is thread-configurations in violent restructuring (Foundations A1). A wou
 - **Leap round:** Practitioner commits all pool to Defence during Leap. ~60% hit probability from any opponent who can attack. Real tactical cost.
 - **Coherent Strike (W-24):** Viable only with range protection during Leap.
 - **Rally the Broken (W-33):** Effective only for CP ≥ 3 units.
-- **Wound penalties:** each wound adds a **fractional Ob** to every Thread operation roll — Leap, Weaving, Pulling, Mending, FR — **NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005, which reverses PP-716's −1D unification; the per-pool fractional-Ob value is a follow-on calibration, ED-PC-0006, not an invented number here).
+- **Wound penalties:** each wound adds **+0.15 Ob** (cumulative) to every Thread operation roll — Leap, Weaving, Pulling, Mending, FR — **NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005, which reverses PP-716's −1D unification; value calibrated ED-PC-0006 from ED-1041's combat "attacking" magnitude).
 - **Mass battle:** Coherence −1 per Thread operation. See mass_battle_v30 §A.10.
 
 ### 10.2 Thread Perception in Combat
