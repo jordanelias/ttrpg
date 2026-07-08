@@ -175,7 +175,7 @@ systems:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "59ac89be973f489037c4da1a8164d4cca4732088"
+    canonical_sha__designs__scene__social_contest_v30_md: "a4694b060ea032318f8b2e503d100657fc4ab01f"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
     social_contest_infill: designs/scene/social_contest_v30_infill.md

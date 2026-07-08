@@ -21,6 +21,8 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   first-pass mapping recorded, ambiguous bucket boundaries flagged for Jordan (not fabricated).
   **Feeds ED-FA-0002 (below):** the da.* half of that home-doc task is now scoped down to "add the
   per-verb tag column + rule the flagged boundaries," not "author a new system." No sim edits.
+  **Decision packet available** for the three boundaries:
+  `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA_da_bucket_boundaries.md`.
 
 - **ED-FA-0002 (open) — author the strategic-turn surface / `domain_actions` home doc.** Filed
   2026-07-05 from the ratified edge-playability audit (PR #81, "Ratify all"; finding EP-2): the
