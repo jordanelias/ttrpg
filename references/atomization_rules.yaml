@@ -93,6 +93,30 @@ policies:
   # The JSONL store is integrity-checked at commit by validate_ledger_jsonl.
 
   # ────────────────────────────────────────────────────────────
+  # HANDOFF / CONTINUITY — root index + lane files
+  # ────────────────────────────────────────────────────────────
+  # Added 2026-07-08 (token-efficiency pass): HANDOFF.md had drifted from its stated
+  # "index + cross-cutting items" role to a ~21.5k-token append-only session log, and
+  # nothing was governing it — the generic "**/*.md" catch-all below never applied because
+  # fnmatch (not path-aware globbing) requires a literal "/" in the candidate, so a
+  # leading "**/" pattern can never match a root-level file (see the compliance_check.py
+  # fix in the same pass). Pruned narrative moved to handoffs/HANDOFF_archive.md.
+  - match: "handoffs/HANDOFF_archive.md"
+    on_exceed: "skip"
+    note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
+
+  - match: "HANDOFF.md"
+    max_tokens: 10000
+    on_exceed: "flag_for_split"
+    archive_target_pattern: "handoffs/HANDOFF_archive.md"
+    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; keep only the lane table + genuinely cross-cutting '## Next actions' content live. on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
+
+  - match: "handoffs/*.md"
+    max_tokens: 20000
+    on_exceed: "flag_for_split"
+    note: "Per-lane continuity files. Large by design (active session narrative for one lane), but not unbounded — archive resolved/superseded entries when approaching the cap."
+
+  # ────────────────────────────────────────────────────────────
   # REGISTERS — coverage matrix
   # ────────────────────────────────────────────────────────────
   - match: "tests/coverage_matrix.md"
