@@ -12,7 +12,13 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-07-07 (**Resolution-plan Stratum-A truth-reconciliation first pass** — the
+_Last reconciled: 2026-07-08 (**Pessimist subtractive-action audit RATIFIED** — Jordan "Please
+ratify all", ED-IN-0027: `references/throughlines_meta.md` gains **§8.2-A** — the subtractive
+disposition (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT, judged as-if-built), the first *removal* verdict
+the vetting framework has ever carried; the corpus docket's verdicts are filed as lane work-item EDs
+ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004 (decisions ratified, execution = per-lane
+follow-ups); audit at `designs/audit/2026-07-08-pessimist-action-audit/`). Prior reconcile: 2026-07-07
+(**Resolution-plan Stratum-A truth-reconciliation first pass** — the
 doc/registry/ledger core executed: ED-FI-0003/ED-IN-0022/ED-IN-0023/ED-IN-0024/ED-IN-0025/ED-SE-0004/
 ED-PC-0004 flipped `resolved`; ED-FA-0004/ED-WR-0005 doc-slice done with sim deferred to Stratum B;
 CI-75→CI-100 + fork-2 doc propagation; ED-PC-0005 filed; see `resolution_plan_v1.md` §7. Prior

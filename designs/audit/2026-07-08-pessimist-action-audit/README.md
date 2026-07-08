@@ -1,6 +1,6 @@
 # Pessimist Subtractive NERS — player-available actions (2026-07-08)
 
-**ED-IN-0027 · Lane IN · READ-ONLY · status: PROPOSED (docket UNRULED — Jordan picks).**
+**ED-IN-0027 · Lane IN · RATIFIED 2026-07-08 (Jordan: 'Please ratify all'). §8.2-A landed in canon; docket verdicts filed as lane EDs (execution = lane follow-ups).**
 
 A read-only **scope gate** upstream of the armature-first resolution plan: it judges every
 subsystem's player-available actions **as-if-built** and issues **subtractive** verdicts

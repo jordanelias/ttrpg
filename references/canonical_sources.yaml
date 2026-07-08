@@ -246,9 +246,9 @@ systems:
     canonical_sha__designs__architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
   throughlines_framework:
     design_doc: references/throughlines_meta.md
-    canonical_sha__references__throughlines_meta_md: "816e0980955c7277d25121313b2c220d82fdb5da"
+    canonical_sha__references__throughlines_meta_md: "439bcae6aa5675e96e68851a77dc09e22fde1e64"
     infill: references/throughlines_meta_infill.md
-    canonical_sha__references__throughlines_meta_infill_md: "ec86873295dccfd96f154e7d1b90ae28c5d945b9"
+    canonical_sha__references__throughlines_meta_infill_md: "92b10265821f67ea08016967411f2c7a39e1a707"
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
