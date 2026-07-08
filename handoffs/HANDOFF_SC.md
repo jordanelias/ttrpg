@@ -6,6 +6,18 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **Auto/Manual Resolution Duality doctrine RULED 2026-07-08 (ED-SC-0013 → resolved).**
+  `designs/architecture/auto_manual_resolution_duality_v1.md`, reworked per Jordan's "specific events on a
+  slate" steer to lead with the **Scene Slate as the spine** — already canon (`player_agency_v30 §4`:
+  deterministic, priority-ranked, settlement-anchored, Conviction-biased SPECIFIC events; 3–5 scene-action
+  budget; "opportunities not pursued resolve through NPC AI without player input" = the auto-resolve). Fidelity
+  is a SPECTRUM (played / witnessed [Witness Mode] / auto); precedents FM/Total War/CK/XCOM/Disco Elysium.
+  **Forks ruled (Jordan: resolve A/B/D, keep C):** A = one engine event-parameterized; B = the Slate's budget/
+  priority/Conviction triage + Mandatory §4.3.2; D = Mandatory/opt-in/Witness — all RESOLVED (A by steer, B/D by
+  existing canon). **C (calibration tolerance) is the one residual** — carried to ED-SC-0011's parity-harness
+  acceptance gate. **Load-bearing constraint:** E[auto]≈E[played] (exploit-prevention). **Chief build implication
+  (next, separate item):** event-parameterize the auto-resolver so it resolves SPECIFIC slate motions, not a
+  generic per-season roll; then ED-SC-0011 (the zoom-in expansion) + the parity harness.
 - **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
   of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
   actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
@@ -96,21 +108,58 @@ index; see it for cross-lane/global items.
   reachability + echo transport) now precedes the Stage-4 four-games build. All 11 ed_options
   candidates filed: decision docket ED-SC-0002..0005 (forks, `needs_jordan`), work items
   ED-SC-0006..0010, cross-cutting ED-IN-0012..0013.
-  - **NEXT: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
+  - **STILL OPEN: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
     keying §5.4-band vs §6-genre vs composed; Piety/Persuasion tracker naming + canonical home;
     kernel Argue-pool formula; Recall/Corroborate/Prep/Findings global cap). ED-SC-0002 and
     ED-SC-0004 are P1 blockers (echo wiring; calibration/re-verdict/export).
-  - **THEN: P1 consequence spine (ED-SC-0006, ED-SC-0007)** — dispatch→kernel routing + party-derivation
-    bridge; Bout outcome → the already-built `domain_echo.py`; campaign-regression contest assertion.
-    In parallel: **P3-lite** — a minimal interactive Agôn harness over the existing kernel to run the
-    dramatic-legibility test with a human and measure the ~13-consult load (audit D4/N-7) before
-    Stage 4 multiplies interaction shapes.
+  - **ED-SC-0006 EXECUTED (2026-07-08)** — `sim/cross_scale/scene_dispatch.py`'s contest branch now
+    routes to the promoted kernel (`build_contest`/`resolve_contest`), retiring the deprecated
+    `contest_legacy_stub.run_contest` call. New `_emergency_council_parties` derives both sides of
+    the one live trigger (Stability Crisis → Emergency Council, `scale_transitions_v30.md:137`) from
+    the SAME faction's own aggregate stats (`side_a=round(L)`, `side_b=round(7-Sta)`, both floored at
+    1) — a `[SEED]` design default, not a P0 fork, open to Jordan revision; proceeding defaults to
+    `guild_arbitration` (Panel = seated bench, closest structural match), also `[SEED]`. The kernel's
+    global-`random`-module constraint is bridged by a per-call reseed derived from `world.rng`
+    (restored after), keeping campaign determinism. `sim/tests/test_mc_v18_regression.py` gained
+    `test_mc_v18_resolves_at_least_one_contest`; its seed-0 golden moved and was repinned (the F7
+    seed-42 golden and echo_transport tests were verified unchanged — Stability Crisis doesn't happen
+    to fire in that particular 8-seed sample). ED-SC-0007's echo-mapping is deliberately NOT wired by
+    this change (still blocked at the spec level by ED-SC-0002); `echo_transport` (ED-IN-0028) stays
+    inert. Full ledger note: `canon/editorial_ledger.jsonl` ED-SC-0006.
+  - **NEXT: ED-SC-0007** (Bout outcome → the already-built `domain_echo.py`) is mechanically
+    unblocked (contests now resolve) but still spec-blocked on the ED-SC-0002 echo-keying fork — needs
+    Jordan's P0 pick before it can land. In parallel: **P3-lite** — a minimal interactive Agôn harness
+    over the existing kernel to run the dramatic-legibility test with a human and measure the
+    ~13-consult load (audit D4/N-7) before Stage 4 multiplies interaction shapes.
   - **Stage 4 entry criteria now include (ED-SC-0009):** Face/Rattled strain channel (KU-3) + §9.3–9.4b
     thread junctures (P-14); plus ED-SC-0005's stack cap must land in prose before wiring; Chronicle
     focalization (ED-SC-0010) before any player-facing narrative output.
 
 ## Decisions
 
+- 2026-07-08 — **ED-SC-0006 executed** (party-derivation bridge + kernel routing; see Pending above
+  and the ledger entry for full scope). Design defaults shipped as `[SEED]` (party-faculty mapping;
+  `guild_arbitration` as the Emergency Council proceeding) rather than deferred to Jordan, per the
+  same convention that ships other kernel constants (e.g. `STYLE_AXIS`) `[SEED]`-flagged-but-wired —
+  the audit's own framing rated this "Medium — real design work" but explicitly `needs_jordan: false`.
+  Revisable without unwinding the mechanical routing if Jordan wants a different mapping.
+- 2026-07-08 — **Consequence spine LIVE (ED-SC-0006/0007/0002 resolved; Jordan rulings via AskUserQuestion).**
+  Two blocking forks ruled: (1) party derivation = **wire the canonical Parliamentary vote** (faction-scale
+  §10, consumes aggregate state directly — sidesteps the still-open PERSONAL-scale party-derivation gap);
+  (2) **ED-SC-0002 = composed** keying (band gates magnitude, genre selects stat/channel). New
+  `sim/cross_scale/parliamentary_bridge.py` resolves a §10 vote each season (proposer=lowest-Sta,
+  establishment=highest-Mandate, others abstain/resist), applies the §10 loser Mandate penalty, and
+  composes the winner Domain Echo (band→domain_echo degree; genre→stat: Memory→L, Projection→I) through
+  the substrate (deferred apply at the accounting boundary; echo_transport apply fixed to STAT POINTS ×
+  MULTS). Behind `ECHO_TRANSPORT` (default OFF = byte-exact). Flag ON: scenes_resolved 0→49, keys_emitted
+  0→30; win-share Varfell 87.5→62.5 / Crown 12.5→37.5 (erodes the elimination-lockout degeneracy — all 4
+  factions win at seed 100). `scale_transitions §5.4` + `social_contest §6` reconciled to composed.
+  Goldens: `sim/tests/test_parliamentary_bridge.py`. **RATIFIED ON 2026-07-08 (Jordan: "Yes echo transport
+  on"):** `ECHO_TRANSPORT` defaults ON — the spine is the baseline; seed-0 + F7 goldens regenerated; the
+  pre-spine byte-exact path is retained under `ECHO_TRANSPORT=0`. **Still deferred:** ED-SC-0011 (PERSONAL-
+  scale contest dispatch onto the promoted kernel — distinct from the faction-scale vote wired here) still
+  needs the personal party bridge — the "play it out as a scene" mode of the auto-resolved vote (Jordan's
+  Total-War auto/manual framing, 2026-07-08).
 - 2026-07-05 — **"Ratify all" (PR #80):** the Fable 5 social-contest audit's findings + D6 sequencing
   + all 11 ed_options candidates adopted; audit doc statuses flipped, IDs allocated
   (ED-SC-0002..0010, ED-IN-0012..0013), CURRENT.md SC row refreshed, this handoff updated — per the
@@ -125,8 +174,9 @@ index; see it for cross-lane/global items.
 - **P0 decision docket awaiting Jordan: ED-SC-0002..0005** (echo keying / tracker naming / pool
   formula / bonus-stack cap — see the ratified-audit item above; ED-SC-0002 blocks ED-SC-0007,
   ED-SC-0004 blocks calibration + ED-IN-0013 re-verdict).
-- **P1 consequence spine (ED-SC-0006/0007) + P3-lite Agôn harness** — next build work once the docket
-  lands (0006 and the harness are unblocked already; 0007 waits on ED-SC-0002).
+- **ED-SC-0006 DONE (2026-07-08)** — kernel routing + party-derivation bridge executed; see
+  Decisions above. **ED-SC-0007 + P3-lite Agôn harness are the remaining P1 work** — the harness is
+  unblocked now; ED-SC-0007 still waits on ED-SC-0002's echo-keying pick.
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit
   resequences Stage 4 *after* the consequence spine.

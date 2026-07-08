@@ -6,6 +6,18 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **ED-PC-0007 (DEFERRED 2026-07-08, Jordan: "Defer PC") — pessimist-audit PC verdicts do NOT execute now.**
+  The pessimist-action audit (ED-IN-0027) judged the discrete `combat_v30 §4` ACTIONS menu, but that menu is
+  **PARTIALLY SUPERSEDED** (ED-900): its resolution layer is replaced by the canonical continuous resolver
+  `designs/scene/combat_engine_v1/` (the ONLY up-to-date PC surface; `combat_v30 §4` and `sim/personal/combat.py`
+  are stale). `combat_engine_v1` has no discrete player-action menu yet, and it **already realizes** the
+  consolidations the audit recommended (continuous commit ⊇ Feint; Contact node I7b/D8-D9 ⊇ Disarm/Tie-Up/Retrieve;
+  base offence/defence split ⊇ Full-Guard/Dodge) — so the audit retroactively validated the move to
+  `combat_engine_v1` rather than finding live work. **No edits made to any stale doc.** The forward constraints
+  (don't re-introduce these as separate discrete verbs when a player layer is built; Rescue/Take-a-Breath/Stunt
+  refinements) attach to **ED-PC-0001** (the post-R3 player-input surface). Re-open only if `combat_engine_v1`
+  grows a discrete menu that reintroduces the over-articulation.
+
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
   (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1 RULED 2026-07-08, JD-2…JD-8 remain OPEN, loudly held back).**
   Implementation progress:
@@ -23,7 +35,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     NOT rescaled (it is a reach-POINTS residual added outside `REACH_GEOM_SCALE`, not a stored length — scaling
     it breaks identity and `test_reach_base_byte_identical_at_grip_zero`); `PERC_2H_ARC` rescaled though the
     row omits it (identity forces it once grip_len is metres). See the ED-PC-0002 ledger entry.
-  - **U1 (PoB recalibration, ED-PC-0007) — DONE 2026-07-08.** JD-1 RULED (Jordan: "accept plan bands" —
+  - **U1 (PoB recalibration, ED-PC-0010) — DONE 2026-07-08.** JD-1 RULED (Jordan: "accept plan bands" —
     consolidation_v1's default arms-scholarship ranges: rapier 3–11cm, greatsword 8–20cm, 1H 6–14cm, poleaxe
     20–55cm forward, staff ~0). `weapons.py` data-only blade/head→pommel/haft mass redistribution (total mass
     unchanged per weapon) for the 6 V7-flagged weapons: rapier 17.0→9.0cm, arming 17.8→11.0cm, longsword
@@ -50,7 +62,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     Phase-A fixture-schema-drift failures and `test_gap_game_poleaxe_spikes_plate` are untouched, confirmed
     out of U1 scope. `references/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
     via `export_engine_params.py --check`). 196 passed / 8 failed / 1 xfailed; `valoria_local.py --staged`
-    clean. See the ED-PC-0007 ledger entry for full detail.
+    clean. See the ED-PC-0010 ledger entry for full detail.
   - **U2 ATTEMPTED 2026-07-08, PARTIAL — findings filed as ED-PC-0008, then JD-4/JD-9 DETERMINED same day as
     ED-PC-0009 (Jordan: "determine both by testing bottom-up emergent primitives and validating top-down
     against history and hema and physics").** Immediately after U1 unblocked it, attempted U2 (graded mode
@@ -301,7 +313,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   so that integration is left as documented follow-on work rather than forced through.
 - 2026-07-08 — **JD-1 RULED + executed: PoB target bands = the plan's own arms-scholarship ranges.** Jordan:
   *"accept plan bands"* (offered rapier 3–11cm / greatsword 8–20cm / 1H 6–14cm / poleaxe 20–55cm forward /
-  staff ~0). Executed as U1, ED-PC-0007 — see Pending above for the full mass-redistribution + finding record.
+  staff ~0). Executed as U1, ED-PC-0010 — see Pending above for the full mass-redistribution + finding record.
   Unblocks the rest of the U-series toward M1's juncture 4 (one legible fight).
 - 2026-07-08 — **ED-PC-0005 RULED + executed: wounds never −1D, always a fractional Ob.** Jordan:
   *"never −1D, always increase fractional Ob."* Wounds NEVER cut the pool −1D; each wound ALWAYS adds a

@@ -289,6 +289,13 @@ Both orators push in the same direction within the same temporal horizon.
 - Decisive win + Projection genre: +1D on first Domain Action pursuing the argued outcome within the season.
 - Compromise: no Domain Echo.
 
+**Reconciled with scale_transitions_v30 §5.4 as COMPOSED (ED-SC-0002, Jordan ruling 2026-07-08).**
+This §6 genre scheme selects the **STAT/CHANNEL** (Memory → Mandate; Projection → the outward-initiative
+channel — the "+1D first Domain Action" bonus above); §5.4's Persuasion-Track band supplies the
+**MAGNITUDE** (Total → ±2, Decisive → ±1, Compromise → none). Neither doc supersedes the other; they
+compose. Sim realization: `sim/cross_scale/parliamentary_bridge.py` (Memory → L / Mandate, Projection
+→ I / Influence on the aggregate stat set) + `sim/cross_scale/domain_echo.py` (band → degree magnitude).
+
 **Total Victory** (Persuasion Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
 
 **Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. MS changes subject to MS ceiling (100) and MS=0 lockout.

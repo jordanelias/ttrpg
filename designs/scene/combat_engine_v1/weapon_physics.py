@@ -527,7 +527,7 @@ def edge_vibration(w):
 # MoI-based swing-inertia formula for the IMPACT path violates the plan's own falsifiable spear<arming<longsword<
 # greatsword ordering — a spear's swing-inertia about the working hand is LARGE even though its striking mass is
 # small, which is exactly the COST/IMPACT distinction wield_heft's own docstring already draws).
-HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0007, 2026-07-08] the 2H cut-thrust reference's
+HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0010, 2026-07-08] the 2H cut-thrust reference's
                     #   (longsword) own m_head*PoB_frac, so heft(longsword)==1.0 exactly. Re-computed from
                     #   longsword's U1-recalibrated PoB (JD-1: blade/pommel mass redistributed, PoB 19.4cm->13.9cm
                     #   — weapons.py) to preserve this invariant by construction; was 0.1545336822851806 pre-U1.

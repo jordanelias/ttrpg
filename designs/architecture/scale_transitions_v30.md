@@ -198,6 +198,13 @@ This timing difference is intentional (PP-109): Zoom In is a personal interventi
 | Track 4–6 (compromise) | No Domain Echo. Scene-level consequence only. |
 | Track ≤ 3 (loser's side) | Reversed — loser faction receives penalty. |
 
+**Reconciled with social_contest_v30 §6 as COMPOSED (ED-SC-0002, Jordan ruling 2026-07-08).** This
+§5.4 band scheme and §6's genre scheme are not rivals: the **band gates MAGNITUDE** (Total → ±2,
+Decisive → ±1, Compromise → none — as above) while the **won genre selects the STAT/CHANNEL** (§6:
+Memory → Mandate; Projection → the outward-initiative channel). The loser institutional-authority
+penalty and "Compromise fires nothing" are retained verbatim. Sim realization: `sim/cross_scale/
+parliamentary_bridge.py` (band → `domain_echo` degree; genre → aggregate stat).
+
 ### §5.5 Accord Domain Echo (peninsular_strain_v1.md)
 
 Personal scenes in Hybrid mode may produce Accord changes via Domain Echo. Cap: ±1 Accord in one territory per Zoom In.

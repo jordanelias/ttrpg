@@ -395,6 +395,16 @@ These are requirements for the implementation to honor the framework, not sugges
 
 ---
 
+## §7-A Subtractive dispositions (the Failure Lexicon's missing verdict half) — ED-IN-0027, 2026-07-08
+
+The Failure Lexicon above names *why* a mechanic doesn't deserve to exist, but §8.2's failure-behavior table only ever routes to a *constructive* disposition (build/wire/redesign/flag/iterate). For a **new proposal** that is correct — you don't add what fails N. But for an **existing action** already in the corpus, "flag Jordan, iterate" leaves over-articulation in place forever: the framework could describe the disease and never prescribe removal. The skeleton's §8.2-A supplies the subtractive verdicts (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT); this note records the two design commitments behind it.
+
+**Why "as-if-built" is the governing rule.** A subtractive audit that penalized unbuilt actions would just be a second wiring-backlog under a hostile name — and it would fight the additive resolution program, which owns wiring debt. Keeping build-state out of the verdict is what makes the two programs *complementary*: the subtractive pass decides *what is worth building* (design merit, judged counterfactually); the additive pass decides *how to build what survives*. A stub can be a KEEP; a fully-wired action can be a CUT. The moment a verdict leans on "it isn't wired yet," it has changed subject from design to schedule, and is void.
+
+**Why the two guards (downstream-naming + inverted critic) are not optional.** Without the downstream-naming requirement, "cut" is free — every reviewer can prune on taste and nothing is accountable; requiring each cut to name the Stratum/OPT/lane task it retires makes a cut a *measurable scope reduction* or nothing at all. Without the inverted-critic steelman, a pessimist default over-cuts by construction (the whole point is to demand each action justify itself, which biases toward removal); forcing an independent pass to argue *for* each condemned action, as-if-built, and only upholding the cut if that argument fails against source, is what keeps disciplined pessimism from becoming vandalism. In the 2026-07-08 corpus run this gate overturned 2 of 37 candidates (one for the as-if-built violation itself) and softened 2 more — evidence the guard bites.
+
+---
+
 ## §8 Historical note: why PP-671 was insufficient
 
 The previous meta-throughlines document (`throughlines_meta.md` committed as PP-671) identified five patterns and provided definitions, but did not function as a vetting guide. Audit findings (21 issues) included:

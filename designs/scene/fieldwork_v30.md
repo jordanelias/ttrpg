@@ -297,6 +297,8 @@ If the answer lies at Depth 4 but the investigator conducted only Depth 1-3 acti
 | Thread-Read | Spirit | Perceive Thread-level configurations via perceptive Leap (§4.5). Pool: (Spirit × 2) + History + TPS (PP-619, PP-626). | Depth 3–5. TS ≥ 30 required. Co-movement fires (P-01). +1 Exposure. |
 | Reconstruct | Recall | Assemble existing evidence into a coherent picture. No new information gathered — this action synthesises. | Any depth already reached. Ob = (threshold − current progress), min 1. On success: reveals what the assembled evidence implies. |
 
+**[ED-FI-0004, 2026-07-08 — pessimist-action audit MERGE] The single-roll Interview object folds into the Dialogue Lattice, its one home — not a second live spec.** `investigation_systems_v30` S14 already states the Interview action "now routes through Dialogue Lattice + Response Matrix **instead of** single Charisma roll" — the design intended one object, not two contradictory ones (the graded single-roll here vs the gated flat-yield Lattice). This MERGE makes the Lattice Interview's home; the richer object wins (conversational investigation isn't weak — it's the opposite). The bare-roll row above is retained as the *current mechanical baseline* only until the two specs are reconciled — the open, pending items `ED-921` (schedule/attribute) and `ED-IN-0016` EP-8 (the head-conflict) — and `CURRENT.md` gains a fieldwork row; then it retires. The **Testimonial** evidence tag and Concealment-contestability carry across to the Lattice; no distinct decision is lost.
+
 **Evidence progress by degree:**
 
 | Degree | Progress | Exposure | Additional |

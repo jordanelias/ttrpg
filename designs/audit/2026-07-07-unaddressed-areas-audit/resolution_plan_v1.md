@@ -428,11 +428,28 @@ empty-but-deterministic) — the plumbing is unit-tested and ready; the FA comeb
 into the loop, ED-FA-0005) is a balance change NOT wired; the §5.5 RNG fork is not engaged
 (domain_echo is deterministic). Merge ratifies the plumbing (ED-1094).
 
-**The mechanical Stratum-B tail is exhausted, ED-PC-0005 is closed, and Stratum-C has its first
-slice.** The remaining items each need a design ruling or further build, not a mechanical fix:
-**ED-PC-0006** (non-combat wound fractional-Ob values — sim-calibration) · **ED-SC-0006/0007** (the
-contest context-derivation bridge that activates the echo transport in the live loop) + ED-SC-0011
-(live-dispatch onto the promoted kernel) · **ED-FA-0005** (Hafenmark comeback / parliamentary_vote in
-the loop) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap direction), C-TW-6/8 (Thread Fatigue / Co-Movement
-implement-vs-banner) under ED-WR-0005 · the armature keying/down-seam/rendering waves (§6.3 PR-3+).
-These are surfaced for Jordan rather than forced.
+**Sixth slice / Stratum-C SECOND slice 2026-07-08 — the consequence spine goes LIVE (ED-SC-0006 /
+ED-SC-0007 / ED-SC-0002, Jordan rulings).** Jordan ruled the two forks blocking activation:
+party-derivation = **wire the canonical Parliamentary vote**, echo keying (ED-SC-0002) = **composed**
+(band gates magnitude, genre selects stat/channel). New `sim/cross_scale/parliamentary_bridge.py`
+resolves a faction-scale §10 Parliamentary vote each season on aggregate state (proposer = lowest-
+Stability, establishment = highest-Mandate, others abstain/resist) — sidestepping the still-open
+PERSONAL-scale party-derivation gap — applies the §10 loser Mandate penalty, and composes the winner
+Domain Echo (band → `domain_echo` degree; genre → stat: Memory→L, Projection→I) through the substrate
+(deferred apply at the accounting boundary; also fixed echo_transport's apply to STAT POINTS × MULTS).
+Still behind `ECHO_TRANSPORT` (default OFF = byte-exact). **Flag ON now: `scenes_resolved` 0→49,
+`keys_emitted` 0→30 (KeyLog non-empty) — the F7 named-zero-assertions FLIP (success signal).** The
+consequence spine measurably erodes the degenerate win-share (Varfell 87.5→62.5 / Crown 12.5→37.5; all
+four factions win at seed 100 — the elimination-lockout trap breaks). ED-SC-0002/0006/0007 → resolved;
+`scale_transitions §5.4` + `social_contest §6` reconciled to the composed scheme. **RATIFIED ON
+2026-07-08 (Jordan: "Yes echo transport on"):** `ECHO_TRANSPORT` now defaults ON — the consequence
+spine is the BASELINE campaign. Default-campaign goldens regenerated (seed-0: battles 38→42.5,
+Church 50→0 / Varfell 0→50; F7 seed-42: Varfell 87.5→62.5, scenes_resolved 0→364). Pre-spine
+byte-exact path retained as the frozen oracle under `ECHO_TRANSPORT=0`.
+
+**The mechanical Stratum-B tail is exhausted, ED-PC-0005 is closed, and Stratum-C is now the LIVE
+default.** Remaining items each need a design ruling or further build: **ED-PC-0006** (non-combat
+wound fractional-Ob values) ·
+ED-SC-0011 (personal-scale contest dispatch onto the promoted kernel — distinct from the faction-scale
+vote just wired) · C-TW-3/4/6/8 under ED-WR-0005 · the armature keying/down-seam/rendering waves
+(§6.3 PR-3+). These are surfaced for Jordan rather than forced.

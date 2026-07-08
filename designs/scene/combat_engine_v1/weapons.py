@@ -76,7 +76,7 @@ WEAPONS = {
    mass=1.368, head_len=0.96, grip_len=0.18, hands=1, head='point', hand_guard=0.9, blade_guard=0.45, reach_adj=0.15,
    wclass='bladed', hilt='compound',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.62->0.455kg, counterweight pommel 0.348->0.513kg
+     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.62->0.455kg, counterweight pommel 0.348->0.513kg
      # (same 1.368kg total) — brings PoB from 17.0cm to 9.0cm, into the ratified rapier band (3-11cm): a duelling
      # rapier's heavy counterweight pommel keeps the balance close to the hand for point control (arms-scholarship).
      dict(x_m=0.48, mass_kg=0.455, extent_m=0.96, orient_deg=0, material='steel'),  # blade
@@ -91,7 +91,7 @@ WEAPONS = {
    mass=1.2, head_len=0.72, grip_len=0.24, hands=1, head='cut_thrust', hand_guard=0.4, blade_guard=0.55, reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.78->0.645kg, pommel 0.234->0.369kg (same
+     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.78->0.645kg, pommel 0.234->0.369kg (same
      # 1.2kg total) — brings PoB from 17.8cm to 11.0cm, into the ratified 1H band (6-14cm).
      dict(x_m=0.36, mass_kg=0.645, extent_m=0.72, orient_deg=0, material='steel'),  # blade
     ],
@@ -105,7 +105,7 @@ WEAPONS = {
    mass=1.408, head_len=0.84, grip_len=0.255, hands=2, head='cut_thrust', hand_guard=0.45, blade_guard=0.85,
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.87->0.755kg, pommel 0.3->0.415kg (same
+     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.87->0.755kg, pommel 0.3->0.415kg (same
      # 1.408kg total) — brings PoB from 19.4cm to 13.9cm, into the ratified 1H band (6-14cm; a longsword's
      # hand-and-a-half grip and blade mass sit at the upper end of the single-hand-sword family), chosen so
      # systems.recoverability_factor(longsword) lands at 0.98 (within test_anchor_is_near_one's existing 0.03
@@ -124,7 +124,7 @@ WEAPONS = {
    mass=2.751, head_len=1.26, grip_len=0.39, hands=2, head='straight_cut', hand_guard=0.55, blade_guard=0.7, reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
+     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
      # 2.751kg total) — brings PoB from 30.4cm to 18.0cm, into the ratified greatsword band (8-20cm).
      dict(x_m=0.63, mass_kg=1.414, extent_m=1.26, orient_deg=0, material='steel'),  # blade (with ricasso, often flanked by parrying lugs)
     ],
@@ -477,7 +477,7 @@ WEAPONS = {
  'bec_de_corbin': dict(
    mass=2.4534, head_len=0.86169, grip_len=0.93831, hands=2, head='blunt', hand_guard=0.3, blade_guard=0.15, reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
-   # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): the hammer/beak/spike head was under-massed relative to
+   # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): the hammer/beak/spike head was under-massed relative to
    # its own haft (0.58kg head vs poleaxe's comparable 1.18kg for the same head_len/grip_len shape) — a war-hammer
    # head is a solid steel forging, not a thin fitting. Head elements scaled 2.098x (steel head 0.58->1.217kg),
    # haft correspondingly lightened 1.5834->0.947kg (same 2.4534kg total) — brings PoB from 5.1cm to 22.0cm, into
@@ -502,7 +502,7 @@ WEAPONS = {
  'lucerne_hammer': dict(
    mass=2.4834, head_len=0.86151, grip_len=0.93849, hands=2, head='blunt', hand_guard=0.05, blade_guard=0.15, reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
-   # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): same under-massed-head correction as bec_de_corbin
+   # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): same under-massed-head correction as bec_de_corbin
    # (its own record, above) — the hammer/fluke/spike head scaled ~1.92x (0.70->1.344kg steel), haft correspondingly
    # lightened 1.5834->0.939kg (same 2.4834kg total) — brings PoB from 7.2cm to 24.0cm, into the ratified
    # poleaxe-class band (20-55cm forward).

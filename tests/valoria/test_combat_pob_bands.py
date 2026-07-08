@@ -1,4 +1,4 @@
-"""CI-tier: PoB (point-of-balance) realism gate (U1, JD-1, ED-PC-0007, 2026-07-08).
+"""CI-tier: PoB (point-of-balance) realism gate (U1, JD-1, ED-PC-0010, 2026-07-08).
 
 Pins the ratified JD-1 bands (`designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
 §6) for the weapon classes the fork actually named — rapier, 1H swords (arming/longsword), greatsword,

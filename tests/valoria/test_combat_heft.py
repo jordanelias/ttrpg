@@ -25,7 +25,7 @@ def test_falsifiable_heft_ordering():
     """The plan's own acceptance test: spear < arming < longsword < greatsword. A spear's mass is mostly in its
     long shaft (light head, low PoB_frac contribution to heft), while a greatsword's mass is concentrated in a
     heavy, forward-balanced blade — heft tracks striking mass x forward-balance, not raw weapon mass.
-    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0007] the spear<arming term now FAILS: U1's JD-1 PoB recalibration
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0010] the spear<arming term now FAILS: U1's JD-1 PoB recalibration
     correctly moves arming/longsword's balance back toward the hand (per the ratified 1H band, 6-14cm), which
     necessarily lowers their m_head*PoB_frac heft numerator — even at the band's ceiling, neither can reach
     spear's own (untouched) numerator (checked: max achievable ~0.103/0.097 vs spear's fixed 0.138). This is

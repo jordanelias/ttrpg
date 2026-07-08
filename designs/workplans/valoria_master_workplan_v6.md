@@ -246,7 +246,7 @@ Godot register — cross-lane questions this PR never carried. (ED-1042 removed 
 list 2026-07-07 per ED-PC-0004: it was STRUCK 2026-06-28, superseded_by ED-1021, so it was
 already stale when this line was written; the reverse-direction residual drift is re-filed
 as ED-PC-0005. JD-1 removed 2026-07-08 — RULED by Jordan, "accept plan bands"; executed as
-U1/ED-PC-0007, see `handoffs/HANDOFF_PC.md`.)
+U1/ED-PC-0010, see `handoffs/HANDOFF_PC.md`.)
 
 ### T0 — block the M1 path
 
@@ -255,7 +255,7 @@ U1/ED-PC-0007, see `handoffs/HANDOFF_PC.md`.)
 | ~~F-F/fork-8 — the Light-Function decision~~ **RATIFIED at default 2026-07-05 (ED-IN-0011)** | subtract-only + the §4 weight enumeration (values stay tunable data) | — | v2 §4/§10 |
 | ~~fork 1 — Coup-Counter remap~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | 1:1 remap onto Löwenritter Autonomy 4-stage | narrative Stage 1 compile (execution) | v2 §2 |
 | ~~fork 2 — ARC-T04~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | strike; COLLISION-C → 7-of-8 | Stage-1 validation set (execution) | v2 §2 |
-| ~~JD-1 — PoB bands (PC U1)~~ **RULED 2026-07-08 (Jordan: "accept plan bands"); executed U1/ED-PC-0007** | per consolidation_v1 | the whole U-series chain → juncture 4 | R3 consolidation_v1 |
+| ~~JD-1 — PoB bands (PC U1)~~ **RULED 2026-07-08 (Jordan: "accept plan bands"); executed U1/ED-PC-0010** | per consolidation_v1 | the whole U-series chain → juncture 4 | R3 consolidation_v1 |
 | ED-1051 — engine_clock ratification | flip doc:null to propagation_spec_v1 | juncture 6; GO entry | decision queue 12; CURRENT.md L32 |
 
 ### T1 — block a named stage

@@ -323,6 +323,8 @@ What's needed: a filter chain that takes a player utterance (from the Dialogue L
 
 Every NPC response to a player utterance passes through five filters in sequence. Each filter can: **pass** (response proceeds unmodified), **modify** (response character changes), **block** (response is impossible — NPC cannot engage), or **escalate** (response triggers arc moment or Contest).
 
+> **[ED-FI-0004, 2026-07-08 — pessimist-action audit REFINE (build-gating requirement, not a scope cut).** Each filter is simple in isolation, but the composed five-filter resolution of a *single* utterance (each filter itself branching on NPC Certainty / conviction-wound-count / Disposition-range / Compromise-Profile / Ethical-Framework alignment) is not "restatable after one reading" — a genuine Q-elegant strain on the *composed system*. Because this is a no-GM engine, that depth must run silently AND stay compactly legible to the player. **Requirement before build:** either simplify the chain, or ship a mandated compact player-facing readout — a single "why this NPC responded this way" line surfacing the one or two filters that actually bound the response — so the player can read the outcome without simulating five filters in their head. The Dialogue Lattice's underlying design (character-state-gated utterances, its Certainty Gate the corpus's clearest Ω-b mechanic) is sound and KEPT; this REFINE targets only the response-chain's legibility.]
+
 **Filter 1 — Information Filter**
 
 *Does the NPC have the conceptual framework to understand what the player is saying?*
@@ -422,7 +424,7 @@ The same interaction matrix applies for TS levels, Disposition ranges, and Convi
 | Existing System | What Stays Unchanged | What Changes |
 |---|---|---|
 | S10 NPC Behavior | Named NPC priority stacks; 3-step Domain Action decision procedure | Decision procedure extended with Response Matrix for conversational resolution; generated NPCs use simplified 2-step version |
-| S14 Fieldwork | All six action types; Evidence Track thresholds; Sincerity Gate | Interview action now routes through Dialogue Lattice + Response Matrix instead of single Charisma roll; Surveil action gains spatial context in scene graph |
+| S14 Fieldwork | All six action types; Evidence Track thresholds; Sincerity Gate | Interview action now routes through Dialogue Lattice + Response Matrix instead of single Charisma roll (**ED-FI-0004, 2026-07-08 — pessimist-audit MERGE: the Dialogue Lattice is now Interview's one home; the `fieldwork_v30 §4.2` bare-roll object retires once the reconciliation items `ED-921` / `ED-IN-0016` — both open and pending — are settled**); Surveil action gains spatial context in scene graph |
 | S12 Social Contests | Full contest mechanics unchanged | Contest is the escalation target from Dialogue Lattice, not the only social resolution mode. Lattice handles exploratory dialogue; Contest handles adversarial resolution. Lattice session can pre-load Contest with Conviction/Composure modifications from filter outcomes. |
 | S16 Emergent Arcs | Vector format; 120+ arc vectors | NPE deviation ≥ 5 NPCs become latent arc vectors; Dialogue Lattice arc-trigger outcomes fire arc vectors; Response Matrix Conviction Wound changes update arc evaluator |
 | S17 Scale Transitions | Domain Echo formula | Scene graph IS the Zoom In trigger system; scene graph templates address ED-545 |

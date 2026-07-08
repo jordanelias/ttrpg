@@ -109,7 +109,7 @@ def test_use_mode_selection_emerges_from_primitives():
     spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
     plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not
     silently included as if the current behaviour were correct.
-    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0007] lucerne_hammer JOINS poleaxe's exclusion: U1's JD-1 PoB fix
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0010] lucerne_hammer JOINS poleaxe's exclusion: U1's JD-1 PoB fix
     corrected its under-massed hammer/fluke/spike head (0.70->1.344kg, matching poleaxe's own physical scale
     — weapons.py) to land its PoB in the ratified poleaxe-class band (20-55cm), which as a direct consequence
     lifted its blunt percussion authority enough that it too no longer switches to its spike vs heavy armour —
@@ -187,7 +187,7 @@ def test_at_circumstance_is_l0_pure():
 def test_heft_percussion_ordering_at_ideal():
     """D2 falsifiable acceptance gate #1: spear < arming < longsword < greatsword at grip=0, greatsword not
     collapsed onto longsword.
-    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0007] same finding as test_combat_heft.py::test_falsifiable_heft_
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0010] same finding as test_combat_heft.py::test_falsifiable_heft_
     ordering — U1's JD-1 PoB recalibration correctly lowers arming/longsword's heft numerator (moving their
     balance back toward the hand, per the ratified 1H band), which drops both below spear's own untouched
     numerator. Not a new defect — the SAME reach-class over-dominance already tracked in HANDOFF_PC.md

@@ -345,7 +345,7 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 ### Past-Oriented Pulling
 
-
+**[ED-WR-0007, 2026-07-08 — pessimist-action audit DISTILL (design-merit call, Jordan's to ratify).** Past-Oriented Pulling is a **temporal-target variant of Pulling**, not a structurally separate operation. Its "Ob by recency" table is a standalone recency axis un-integrated with the canonical Three-Axis Ob System (Depth/Breadth/Distance) every other operation uses, with no stated interaction rule (does a POP target also carry Depth/Breadth Ob?) — a Q-smooth "methodology matches governing subsystem" fail. The DISTILL folds POP into Pulling as a temporal target governed by an explicit fourth axis (or a Distance-axis reinterpretation for temporal targets) *inside* the Three-Axis system, rather than a separately-TN'd operation with a parallel recency table. The capability — reaching into the past; grief/legacy as political weight — is **not cut**, only simplified into the one Ob system every operation already shares. Physical fold lands with the per-op cost-table work (resolution_plan C-TW-3/4/10/11, Stratum B); the recency table below is retained as the parameter reference until then.]
 
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-619, PP-625 — TPS÷2 struck; full TPS always; TN+1 already encodes temporal-depth difficulty)
 **TN:** 8 (Binding temporal depth — POP targets past configurations)
@@ -442,6 +442,8 @@ Engine determines domain type when Lock is applied.
 > **Chronic perception (P-13):** *Already patched into §2.7 chronic table.* The frozen thread's perceptual occlusion manifests as +1 Ob to the operation (degraded intentionality from impaired Diagnosis), not to Diagnosis itself (which has no Ob).
 
 ### Mending — Repairing the Substrate
+
+> **[ED-WR-0007, 2026-07-08 — pessimist-action audit REFINE (design-iteration flag, Jordan's call; the zero-cost ruling is explicitly NOT touched).** Mending is the *only* legal repair tool for its target class (Gap / Shifting-Object / Locked-Zone border — Weaving/Pulling/Locking/Dissolution cannot target these), it is Coherence-free and unopposeable (Mending Immunity), and collective/Einhir "approaches" are the *same operation at scale*, not distinct tools. So the single most world-track-consequential decision in the lane — whether/when/how hard to repair the substrate — has no real branching: it is one tool plus a strictly-dominated "leave it, pay the Gap Self-Closure RS-drain" fallback, which fails Q-robust's "three viable approaches" bar. The REFINE does **not** change the zero-Coherence-cost value (canon/02 Amendment 3 + ED-871 — a load-bearing restorative/manipulative/destructive asymmetry): it flags, for Jordan, that Gap-repair needs a genuine second branch or scarcity/opposition dimension (e.g. an opposeable variant in contested/Church-adjacent territory, or RS-drain tuning that makes "let it self-close" a real choice). Design-merit call, not a mechanical fix this audit resolves.]
 
 > **Foundational reference (canon/02).** Mending's zero Coherence cost is a structural consequence of its alignment with substrate tendency (restorative operation type); it is not a mechanical exception. See `canon/02_foundations_amendment_leap_mechanism.md` Amendment 3. Warden Coherence erosion is environmental (proximity to Gaps, dissolution residue, third-mode presences) and is not a function of Mending operations themselves.
 

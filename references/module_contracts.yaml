@@ -495,10 +495,13 @@ modules:
     accounting_phase: [DA_proposal]
     gap_notes:
       - "home doc unlocated [GAP] — DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
+      - "ED-FA-0006 (2026-07-08, pessimist-action audit REFINE — resolves the C-FA-12 triple-vocabulary defect): the da.* five-bucket set is an OUTCOME-TAG taxonomy (it classifies a resolved Domain Action's *consequence* for generic consumers like faction_state/npc_behavior), realized as a per-verb tag on the EXISTING Domain-Action catalogs -- params/bg/core.md Standard Action Ob Reference, faction_layer_v30 §5.4 Parliamentary, params/bg/faction_actions.md unique cards -- NOT a standalone module needing its own design doc. The doc:null closure therefore shrinks from 'author a new system' to 'add the per-verb da.* tag + a short crosswalk note' (a REFINE, not a new-doc GAP)."
+      - "ED-FA-0006 residual authoring task (per-verb bucket assignment — the audit deliberately did NOT fabricate this; intent gate UNDETERMINED, boundaries are Jordan's ruling): DIRECTIONAL first pass only -- Treaty/Diplomacy/Recognition-Challenge/Succession-Endorsement/War-Authorisation -> da.diplomatic_alliance; Spy/Investigate/Counter-Intelligence + covert unique cards -> da.covert_betrayal; Govern/Trade/Subsidy/Piety-Spread/Community-Organising/Martial-Governance -> da.public_governance or da.economic_intervention; Censure/Embargo/Outlawry/Excommunication/Active-Inquisition/Church-Seizure -> da.antinomian_action (coercive) or da.public_governance. Genuinely ambiguous boundaries flagged for Jordan, NOT ruled here: (a) economic_intervention vs public_governance for fiscal-administrative verbs; (b) antinomian_action vs public_governance for punitive-institutional verbs; (c) covert_betrayal scope for lawful intelligence (Spy/Investigate) vs treachery proper. Direct-effect military verbs (Muster/March/Fortify/Blockade-Naval) are not consequence-classified and take no da.* tag."
     status: extracted
     sources:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+      - "designs/audit/2026-07-08-pessimist-action-audit/ (ED-FA-0006 da.* crosswalk decision) [READ: 2026-07-08]"
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
@@ -630,6 +633,7 @@ modules:
     gap_notes:
       - "registry-derived; relationship to settlement_layer §1.3 Local Economy derived value unestablished — possibly the same system [OPEN — Jordan]; home doc [GAP]"
       - "RECOMMEND RETIRE [verification Lens-2/LD-2]: phantom module (no doc/state/logic). Fold da.economic_intervention -> settlement_layer Prosperity delta; re-point env.population_change consumer to settlement_layer. Adding a Population stat is a DESIGN decision (deferred — open_decisions §2). Self-edge hazard: settlement_layer both emits and would consume env.population_change — route peninsular_strain -> settlement_layer."
+      - "ED-SE-0005 (2026-07-08): the SETTLEMENT-ACTION side of this retirement is CONFIRMED by the ratified pessimist-action audit (ED-IN-0027). The player_agency_v30 §9 Trade action -- this phantom module's likely intended settlement-economy player verb -- is PRUNED and folded into the existing income sources; no dedicated settlement-economy player action survives. The da.economic_intervention -> settlement_layer Prosperity fold and the deferred Population-stat design decision (above) remain the open structural half."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
