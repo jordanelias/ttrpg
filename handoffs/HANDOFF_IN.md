@@ -8,6 +8,38 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-B THIRD SLICE 2026-07-08: ED-PC-0005 dead-code investigation →
+  truth repair + Jordan flag.** Confirmed `WoundTracker.pool_penalty()` + `WOUND_POOL_PENALTY`
+  (`combat_engine_v1/combatant.py`) have ZERO live callers and ED-1041's wound-Ob channel is the live
+  mechanic. NOT deleted (it's the only −1D-per-wound impl; whether that rule survives is the crux ED
+  tracks); instead the false "no Ob penalty, ever (canon)" docstrings were corrected + ED-PC-0005
+  flipped needs_jordan. **The clean mechanical Stratum-B tail is now exhausted** — remaining items
+  (ED-PC-0005 reconciliation, ED-SC-0011 contest dispatch, C-TW-3/4/6/8, armature echo-wiring) need a
+  ruling or a large build; surfaced for Jordan, not forced.
+- **Resolution Plan v1 — Stratum-B SECOND SLICE 2026-07-08: knots.py ED-912 rebuild (C-TW-12
+  CLOSED).** `sim/personal/knots.py` rebuilt onto the bidirectional −5..+5 gauge (TIER_RANGE/
+  TIER_START; rupture +5; −5 Tempered Close-only absorb-once; break/betrayal Disposition −3;
+  positive-strain Close-break Scar) matching the doc side; pinned test
+  `sim/tests/test_knots_ed912.py` (7 cases; knots had zero coverage). Closes ED-FI-0003's sim
+  residual; ED-WR-0005 still carries C-TW-3 + C-TW-4/6/8/10/11. F7/seed-0 goldens unmoved (island).
+- **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk
+  sim truth-alignment deferred from Stratum A (resolution_plan_v1.md §9). **ED-871 CLOSED
+  end-to-end** — `sim/thread/operations.py` `attempt_mending` cost −1 → 0 + Mending exempted from
+  the blanket Partial/Failure penalty (all degrees net 0), with a pinned test
+  `sim/tests/test_thread_mending_ed871.py` (threadwork had zero coverage). **CI-75 dead constant**
+  `CI_PHASE_TRANSITION=75` removed from `sim/peninsular/ci_track.py` (CI75-9, under the
+  already-resolved ED-IN-0025). F7 + seed-0 goldens unmoved (island/dead-code). ED-WR-0005 stays
+  open (progress-noted): C-TW-3 (Leap), C-TW-4/6/8/10/11, knots.py C-TW-12 remain.
+- **Resolution Plan v1 — PR-2 F7 smoke oracle LANDED 2026-07-08 (ED-IN-0021 → resolved).**
+  `sim/tests/test_f7_smoke_oracle.py`: the "born guarded" campaign regression the U-4 lesson
+  demanded (no balance claim without an oracle + n≥100). Pins the n=8/seed-42 golden (Varfell
+  87.5% — the historical small-n artifact, labelled NOT balance), named zero-assertions
+  (scenes_resolved / insurgencies_formed / npcs_generated = 0 — the islands; designed to TRIP when
+  the transport waves land), the Hafenmark elimination-lockout (ED-FA-0005), the VICTORY_THRESHOLD
+  dead-param regression (C-EMERGE-8), and a wall-time ceiling. Added minimal additive telemetry
+  (`game_state.World.scenes_resolved` + 3 `CampaignResult` fields; no behaviour change, seed-0
+  golden unmoved). Runs in CI via "Sim Reference Regression" (pytest sim/tests). Landed **ahead of**
+  the armature echo wiring (baseline-first); the wiring is PR-2's remainder. See resolution_plan_v1.md §8.
 - **Resolution Plan v1 — Stratum-A truth-reconciliation FIRST PASS EXECUTED 2026-07-07 (this branch,
   `claude/fable5-audit-resolution-plan-r6kzsa`).** Executes the doc/registry/ledger core of Stratum A;
   `designs/audit/2026-07-07-unaddressed-areas-audit/resolution_plan_v1.md` §7 has the full

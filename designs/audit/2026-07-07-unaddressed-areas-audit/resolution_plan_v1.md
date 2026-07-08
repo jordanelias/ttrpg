@@ -331,3 +331,70 @@ flagged loud, never silently dropped (ED-1094 discipline).
   (miraculous_event full contract footprint — Stratum C); C-VERIFY-5 (armor cost-free intent).
 
 **Next:** the deferred sim edits above (Stratum B entry) and Stratum C armature deployment per §2.
+
+## §8 · PR-2 progress — F7 smoke oracle landed (2026-07-08)
+
+The first piece of PR-2 (§0.1) landed **standalone as a pre-wiring baseline**: the **F7 smoke
+oracle** (ED-IN-0021 / OPT-3), `sim/tests/test_f7_smoke_oracle.py`. It pins the current
+(pre-transport) campaign state so the coming echo wiring is guarded by an *existing* oracle
+rather than born beside a fresh one:
+
+- **Golden** (n=8, base_seed=42): the historical **87.5% artifact** reproduced exactly and pinned
+  with a loud "NOT balance signal" label (the U-4 lesson — this exact un-guarded batch is what
+  propagated into ≥5 docs).
+- **Named zero-assertions:** `scenes_resolved` / `insurgencies_formed` / `npcs_generated` are all
+  0 across the batch (the contest kernel, insurgency pipeline, and NPE are unreachable islands).
+  **These are designed to TRIP when the derivation bridge + keying waves land — that trip is the
+  success signal, not a regression.**
+- **Hafenmark elimination-lockout** assertion (KNOWN-TRACKED, ED-FA-0005 comeback path).
+- **VICTORY_THRESHOLD dead-param regression** (C-EMERGE-8: proven inert — identical output for
+  values 1/11/999).
+- **Wall-time ceiling.**
+
+Minimal additive telemetry only (`game_state.World.scenes_resolved` + three `CampaignResult`
+fields) — no behaviour change; the seed-0 golden in `test_mc_v18_regression.py` is unmoved. Runs
+in CI via the existing "Sim Reference Regression" job. **Remainder of PR-2** (the flag-gated echo
+wiring + A14 runtime lint) is the next step; when it reaches a subsystem, the zero-assertions here
+become the deliberate golden-update trigger.
+
+## §9 · Stratum-B progress — oracle-to-canon, first slice (2026-07-08)
+
+First **Stratum-B** ("oracle to canon") slice: the ruled, low-risk sim truth-alignment deferred
+(with flags) from the Stratum-A pass. Both close doc-side repairs that landed in the first pass;
+both are island/dead-code changes, so the F7 + seed-0 goldens are unmoved (verified).
+
+- **ED-871 CLOSED end-to-end** (ED-WR-0005 tail): `sim/thread/operations.py` — `attempt_mending`
+  base cost −1 → 0, and Mending **exempted from the blanket Partial/Failure degree-penalty** so all
+  four degrees net 0 (canon). Pinned test `sim/tests/test_thread_mending_ed871.py` (threadwork had
+  zero coverage). **Still open in ED-WR-0005:** C-TW-3 (the same blanket penalty mis-hits Leap
+  against its own docstring — deliberately left, flagged), C-TW-4/6/8/10/11, and the knots.py
+  ED-912 rebuild (C-TW-12).
+- **CI-75 dead constant removed** (CI75-9, under the already-resolved ED-IN-0025): `sim/peninsular/
+  ci_track.py` — the dead `CI_PHASE_TRANSITION = 75` (zero callers) and its stale canonical comment
+  are gone; the comment now points at the CI-100 no-freeze model (the doc side landed in the
+  Stratum-A pass). `CI_CEILING = 100` (the live model) is untouched.
+
+**Second slice (2026-07-08):**
+- **C-TW-12 CLOSED** — `sim/personal/knots.py` rebuilt onto the ED-912 bidirectional −5..+5 gauge
+  (`TIER_RANGE`/`TIER_START`; rupture at +5 both tiers; −5 Tempered Close-only absorb-once;
+  break/betrayal Disposition −3, floor −5; a positive-strain Close break scars), matching the doc
+  side (knots_v30 §6 / fieldwork_v30 §5.6b that landed in the Stratum-A pass). Pinned test
+  `sim/tests/test_knots_ed912.py` (7 cases; knots had zero coverage). Also closes ED-FI-0003's noted
+  sim residual. `knots/` is an island, so the F7 + seed-0 goldens are unmoved.
+
+**Third slice (2026-07-08) — ED-PC-0005 dead-code investigation, resolved to a truth repair + a
+Jordan flag.** Confirmed repo-wide that `WoundTracker.pool_penalty()` + `WOUND_POOL_PENALTY`
+(`combat_engine_v1/combatant.py`) have **zero live callers**, and that ED-1041's bilateral wound-Ob
+channel is the live wound-impairment mechanic (`config.py`/`systems.py`, whose own comment supersedes
+the −1D pool penalty). The dead method was **NOT deleted** — it is the only −1D-per-wound
+implementation, and whether that rule survives alongside the Ob channel is exactly the
+`derived_stats §4.1`-vs-ED-1041 contradiction ED-PC-0005 exists to resolve. Instead the **false
+"no Ob penalty, ever (canon)" docstrings** in `combatant.py` were corrected to point at ED-1041 +
+ED-PC-0005; the AUTHORITATIVE §4.1 (PP-716) prose is **untouched** (its reconciliation is a Jordan
+call — ED-PC-0005 flipped `needs_jordan: true`).
+
+**The clean, mechanical Stratum-B tail is now exhausted.** The remaining items each need a design
+ruling or a large build, not a mechanical fix: the ED-PC-0005 −1D-vs-Ob reconciliation itself · the
+contest live-dispatch / derivation bridge (ED-SC-0011) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap
+direction), C-TW-6/8 (Thread Fatigue / Co-Movement implement-vs-banner) under ED-WR-0005 · the
+armature echo-wiring integration (PR-2 remainder). These are surfaced for Jordan rather than forced.

@@ -180,9 +180,14 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     # Apply Coherence delta — modulated by degree per §3.2
     # Failure on certain ops produces additional -1 Coherence (e.g. Pull failure
     # per §2.4 Pulling table); Partial often -1 additional. For Tier 1 first
-    # pass, apply base coherence_delta + extra -1 on Partial/Failure
+    # pass, apply base coherence_delta + extra -1 on Partial/Failure.
+    # ED-871 exception: Mending is a restorative operation and costs 0 Coherence
+    # at EVERY degree, so it is exempt from the blanket Partial/Failure penalty
+    # (else Partial/Failure Mending would net -1, against canon). The broader
+    # C-TW-3 defect — this blanket penalty also mis-hits Leap against its own
+    # docstring — is NOT fixed here (separate item, ED-WR-0005 Stratum-B tail).
     effective_coh = coherence_delta
-    if degree in ("Partial", "Failure"):
+    if degree in ("Partial", "Failure") and operation != "Mending":
         effective_coh -= 1
 
     if effective_coh != 0:
@@ -311,14 +316,17 @@ def attempt_dissolution(actor, target: dict, world=None, rng=None) -> OperationR
 def attempt_mending(actor, target: dict, world=None, rng=None) -> OperationResult:
     """§2.4 Mending — Repairing the Substrate.
 
-    Mending uses MENDING_OB (different scale than Depth Ob). Per §3.2:
-    Mending always costs -1 Coherence regardless of scale (substrate
-    engagement is inherently deep).
+    Mending uses MENDING_OB (different scale than Depth Ob). Per ED-871
+    (2026-05-31) + canon/02 Amendment 3: Mending is a RESTORATIVE operation
+    type and costs 0 Coherence at every degree — operation type, not scale,
+    determines Coherence risk. (Was -1, the pre-ED-871 value; the doc side was
+    propagated to threadwork_v30 §3.2 + params/threadwork.md on 2026-07-07, and
+    the sim is closed here.)
     """
     scale = target.get('scale', 'Relational')
     ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
-    # §3.2: "Mending | -1 (substrate engagement is inherently deep regardless of Gap scale)"
-    coh = -1
+    # ED-871: Mending Coherence cost = 0 (restorative-operation exception).
+    coh = 0
     result = _resolve_operation("Mending", actor, ob, TN_STANDARD,
                                 coherence_delta=coh, world=world, rng=rng)
     # Mending never produces Scars per conviction §3 Mending exception;

@@ -10,16 +10,17 @@ Implements:
   - apply_knot_loss: §6.1/§6.2 consequences (Disposition drop, Coherence -1,
     Composure damage, Conviction Scar if high-strain Close break)
 
-[ASSUMPTION OPTION A] knots_v30 §2 surfaces a 3-way canon contradiction
-(TIER-DRIFT-001) on tier system. Implementing Option A (ED-773
-chronological supersedence): Distant/Close 2-tier with capacities 4/7.
-This is the explicit "Option A" alternative listed in §3.2's
-[PROVISIONAL] note, and matches the most-recent canon source. If Jordan
-resolves to Option B (Loose/Medium/Close) or Option C (4-tier), tier
-constants and §3.2 degree table swap; semantic contracts unchanged.
+[RESOLVED — ED-912, 2026-06-28] knots_v30 §2's TIER-DRIFT-001 contradiction
+was ruled: the 2-tier Distant/Close model was reframed onto a bidirectional
+−5..+5 bond-strain gauge (Distant −2..+5 start 0; Close −5..+5 start −2;
+rupture at +5 both tiers; −5 = Tempered, Close-only, absorbs the next rupture
+trigger once). The pre-ED-912 one-way 0→capacity accumulator (Distant 4 /
+Close 7, PP-632) is struck. This module was rebuilt onto the gauge 2026-07-08
+(C-TW-12), matching the doc side that landed in knots_v30 §6 / fieldwork_v30 §5.6b.
 
 Cyclic resolution: knots depends on coherence (apply_coherence_delta on
-rupture per PP-632 -1 Coherence) and conviction (Scar on high-strain
+rupture — the −1 Coherence loss is [UNVERIFIED post-ED-912], see the
+RUPTURE_COHERENCE_LOSS note) and conviction (Scar on a positive-strain Close
 break per §6.1). Both via late-import inside function bodies — no
 module-load-time cycle.
 
@@ -56,29 +57,41 @@ KNOT_TS_MIN_PARTY = 30  # Either PC or NPC has TS ≥ 30
 KNOT_FORMATION_TN = 7
 KNOT_FORMATION_OB = 2
 
-# §2 Option A tier system + §6.1 capacities
-# [canonical: §2 Option A — Distant/Close 2-tier; §6.1 — Distant 4, Close 7]
+# §2/§3.1 tier system — ED-912 bidirectional −5..+5 bond-strain gauge (RESOLVED 2026-06-28;
+# sim rebuilt 2026-07-08, C-TW-12). [canonical: knots_v30 §2/§3.1/§6.1 + fieldwork_v30 §5.6b —
+# supersedes the pre-ED-912 one-way 0→capacity accumulator (TIER_CAPACITY {Distant:4, Close:7};
+# PP-632 struck).]
 TIER_DISTANT = "Distant"
 TIER_CLOSE = "Close"
-TIER_CAPACITY = {
-    TIER_DISTANT: 4,
-    TIER_CLOSE: 7,
+# per-tier (min, max) strain range on the shared −5..+5 gauge
+TIER_RANGE = {
+    TIER_DISTANT: (-2, 5),
+    TIER_CLOSE:   (-5, 5),
 }
-
-# §6.1 high-strain break threshold (Option A)
-# [canonical: §6.1 — "Close Knots broken at high strain (Option A: strain ≥ 6 of 7):
-#  Conviction Scar +1 to both partners"]
-CLOSE_BREAK_SCAR_STRAIN_THRESHOLD = 6
+# formation start value per tier
+TIER_START = {
+    TIER_DISTANT: 0,
+    TIER_CLOSE:   -2,
+}
+# §6.1 break/rupture at the +5 wear-direction ceiling (both tiers)
+RUPTURE_STRAIN = 5
+# −5 = Tempered (Close only): absorbs the next rupture trigger once, resetting strain to 0
+TEMPERED_STRAIN = -5
 
 # §6.1 break consequences
 # [canonical: §6.1 — "Both partners take 4 Composure"]
 BREAK_COMPOSURE_DAMAGE = 4
+# ED-912 break/rupture Disposition: −3 (Antagonistic), floor −5 (was the pre-ED-912 min(2, disp−2))
+BREAK_DISPOSITION = -3
+DISPOSITION_FLOOR = -5
 
 # §6.2 rupture consequences
-# [canonical: §6.2 — "Per PP-632, rupture imposes mandatory −1 Coherence"]
+# ED-912 betrayal-rupture (public citation of private counsel): Disposition → −3 (revised from −4)
+RUPTURE_DISPOSITION_CITATION = -3
+# [UNVERIFIED post-ED-912] mandatory −1 Coherence on rupture — originally PP-632 (struck); ED-912
+# did not restate it and knots_v30 §6.2 flags it [UNVERIFIED]. Retained provisionally to match the
+# doc; not a settled value.
 RUPTURE_COHERENCE_LOSS = -1
-# [canonical: §6.2 trigger table — public citation: Disposition → -4]
-RUPTURE_DISPOSITION_CITATION = -4
 # [canonical: §6.2 trigger — FR Dissolution rupture-victim takes +1 Wound]
 RUPTURE_WOUND_DISSOLUTION = 1
 
@@ -227,7 +240,7 @@ def form_knot(actor_a: str, actor_b: str, world=None,
         knot_id = f"KNOT-{_knot_id_counter[0]:04d}"
     knot = Knot(
         knot_id=knot_id, actor_a=actor_a, actor_b=actor_b,
-        tier=tier, strain=0, disposition=disp,
+        tier=tier, strain=TIER_START[tier], disposition=disp,
         formed_season=season,
     )
     _store(world)[knot_id] = knot
@@ -248,12 +261,12 @@ def sustain_knot(knot_id: str, strain_delta: int = 0,
         return KnotState(knot=knot, broke=False, ruptured=False,
                          strain_after=knot.strain, notes=["knot inactive"])
 
-    knot.strain = max(0, knot.strain + strain_delta)
+    lo, hi = TIER_RANGE.get(knot.tier, (TEMPERED_STRAIN, RUPTURE_STRAIN))
+    knot.strain = max(lo, min(hi, knot.strain + strain_delta))
     knot.log.append({'source': source, 'strain_delta': strain_delta, 'strain_after': knot.strain})
 
-    # §6.1 capacity break check
-    capacity = TIER_CAPACITY.get(knot.tier, 0)
-    broke = knot.strain > capacity
+    # §6.1 break at the +5 wear-direction ceiling (ED-912 gauge; both tiers share it)
+    broke = knot.strain >= RUPTURE_STRAIN
     if broke:
         knot.active = False
     return KnotState(knot=knot, broke=broke, ruptured=False, strain_after=knot.strain)
@@ -283,6 +296,14 @@ def check_knot_rupture(knot_id: str, trigger: str, world=None) -> KnotState:
         return KnotState(knot=knot, broke=False, ruptured=False,
                          strain_after=knot.strain,
                          notes=[f"unknown trigger '{trigger}'"])
+
+    # ED-912 Tempered (§6.1): a Close knot at −5 absorbs the next rupture trigger ONCE,
+    # resetting strain to 0 instead of rupturing.
+    if knot.tier == TIER_CLOSE and knot.strain <= TEMPERED_STRAIN:
+        knot.strain = 0
+        knot.log.append({'source': f"tempered_absorb: {trigger}", 'tempered': True, 'strain_after': 0})
+        return KnotState(knot=knot, broke=False, ruptured=False, strain_after=0,
+                         notes=[f"§6.1 Tempered (−5, Close): absorbed rupture trigger '{trigger}', strain reset to 0"])
 
     knot.active = False
     knot.log.append({'source': f"rupture: {trigger}", 'rupture': True})
@@ -315,12 +336,12 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
     }
 
     if mode == 'break':
-        # §6.1
+        # §6.1 (ED-912)
         consequences['composure_damage'] = BREAK_COMPOSURE_DAMAGE
-        # Disposition drops to +2 (or current -2, whichever lower)
-        consequences['disposition_set_to'] = min(2, knot.disposition - 2)
-        # High-strain Close break → Conviction Scar
-        if knot.tier == TIER_CLOSE and knot.strain >= CLOSE_BREAK_SCAR_STRAIN_THRESHOLD:
+        # Disposition → −3 (Antagonistic), floor −5
+        consequences['disposition_set_to'] = max(DISPOSITION_FLOOR, BREAK_DISPOSITION)
+        # ED-912: a Close Knot that broke from POSITIVE strain (reached +5) → Conviction Scar +1
+        if knot.tier == TIER_CLOSE and knot.strain > 0:
             consequences['conviction_scar'] = 1
             # Late-import conviction
             try:
@@ -333,8 +354,10 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
                 pass
 
     elif mode == 'rupture':
-        # §6.2
-        # PP-632 mandatory -1 Coherence
+        # §6.2 (ED-912)
+        # Disposition → −3 (betrayal-rupture value, revised from −4), floor −5
+        consequences['disposition_set_to'] = max(DISPOSITION_FLOOR, RUPTURE_DISPOSITION_CITATION)
+        # [UNVERIFIED post-ED-912] mandatory −1 Coherence (see RUPTURE_COHERENCE_LOSS note)
         consequences['coherence_delta'] = RUPTURE_COHERENCE_LOSS
         try:
             from sim.thread.coherence import apply_coherence_delta

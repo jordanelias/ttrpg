@@ -153,6 +153,7 @@ class World:
     arc: int = 0
     winner: str | None = None
     battle_count: int = 0
+    scenes_resolved: int = 0        # F7 telemetry (ED-IN-0021): personal-scale scenes actually resolved (not deferred) — additive counter, no behaviour effect
     rng: random.Random = field(default_factory=random.Random)
     # ─── Schema migration 2026-05-19 ──────────────────────────────────────
     # Registries for Tier 0 modules that previously held module-level state.
