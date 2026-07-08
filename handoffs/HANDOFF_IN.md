@@ -8,6 +8,14 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk
+  sim truth-alignment deferred from Stratum A (resolution_plan_v1.md §9). **ED-871 CLOSED
+  end-to-end** — `sim/thread/operations.py` `attempt_mending` cost −1 → 0 + Mending exempted from
+  the blanket Partial/Failure penalty (all degrees net 0), with a pinned test
+  `sim/tests/test_thread_mending_ed871.py` (threadwork had zero coverage). **CI-75 dead constant**
+  `CI_PHASE_TRANSITION=75` removed from `sim/peninsular/ci_track.py` (CI75-9, under the
+  already-resolved ED-IN-0025). F7 + seed-0 goldens unmoved (island/dead-code). ED-WR-0005 stays
+  open (progress-noted): C-TW-3 (Leap), C-TW-4/6/8/10/11, knots.py C-TW-12 remain.
 - **Resolution Plan v1 — PR-2 F7 smoke oracle LANDED 2026-07-08 (ED-IN-0021 → resolved).**
   `sim/tests/test_f7_smoke_oracle.py`: the "born guarded" campaign regression the U-4 lesson
   demanded (no balance claim without an oracle + n≥100). Pins the n=8/seed-42 golden (Varfell
