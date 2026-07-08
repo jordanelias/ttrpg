@@ -103,7 +103,12 @@ def test_sweep_displaces_laterally_grid():
     "their bands decisively in the attacker's favor instead of landing in them, a newly-surfaced "
     "partition-invariance/Command-scaling question, not this fixture's concern. See "
     "designs/proposals/mass_battle_fighting_withdrawal_v1.md (DG-2 workplan) and "
-    "tests/coverage_matrix.md's 2026-07-05 entry for the full record.",
+    "tests/coverage_matrix.md's 2026-07-05 entry for the full record. "
+    "[2026-07-08 update] Unexpectedly XPASSED (not a failure -- strict=False) once the ED-MB-0006 "
+    "pool-formula change (troop-type/quality/numbers, not Command) landed -- plausibly the "
+    "small detachment's discipline-degradation speed-floor edge case above interacts differently "
+    "with the new pool magnitudes, but this was observed on ONE run, not re-verified across many "
+    "seeds, so the xfail marker is left in place rather than claiming this is now a reliable pass.",
     strict=False)
 def test_envelop_reaches_rear_node():
     """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
@@ -152,10 +157,11 @@ def test_envelop_reaches_rear_node():
     need to scale by a subunit's own troop share for genuine partition invariance, or is "N
     simultaneous full-strength attacking fronts overwhelm one defender" the historically-correct
     emergent mechanism and the bands need reconsidering?) -- explicitly not decided or silently tuned
-    away here. DG-2 (a fighting-withdrawal/yield mechanic) remains a documented but unbuilt workplan
-    (designs/proposals/mass_battle_fighting_withdrawal_v1.md) -- not required to unlock the draws
-    (that was DG-1/DG-3's doing), still worth building for historical fidelity to Cannae's actual
-    thin-and-yielding center, on its own timeline.
+    away here. **2026-07-08 update:** Jordan ruled the partition-invariance question a genuine defect
+    (fixed, see orchestration.py's `_convergence_scale`/ED-MB-0004) and DG-2 "build it now" (the
+    commanded-entry slice is now built, see hierarchy/units.py's `yielding`/`yield_active` +
+    tests/valoria/test_mass_battle_yield.py) -- neither closed H3-H6's overshoot on its own; see
+    tests/coverage_matrix.md's 2026-07-08 entry for the honest numeric record of both.
 
     See tests/coverage_matrix.md's 2026-07-05 entry for the full numeric record."""
     r = _val.v_envelop(path='node', seeds=_CI_SEEDS)

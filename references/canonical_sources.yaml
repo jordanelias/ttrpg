@@ -154,7 +154,7 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "f3f492696e210a099d27d33d930dc963658ba443"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "d3239d93d8965317fd4566cec163f656587a7c68"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
@@ -175,7 +175,7 @@ systems:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "a4694b060ea032318f8b2e503d100657fc4ab01f"
+    canonical_sha__designs__scene__social_contest_v30_md: "13c2f1a2711fd544d93f148c47a0d2764e016d47"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
@@ -184,9 +184,9 @@ systems:
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "e1b25d2b3e114fcef0b265f351cd1699028c05d7"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "0c980e8bf04a2c20d6a3a48746e2a83e65034030"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "fb16c8ee41067a43ae944ab88f97b5a747115a46"
+    canonical_sha__params__scale_transitions_md: "90ea1f1b8ffe587f7ed554bc73fa9bf9791c31bb"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "0a091996a56d9e3fa75c0fcbd0e5502eb47ddde8"

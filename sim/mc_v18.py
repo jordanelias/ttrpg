@@ -44,13 +44,16 @@ DEFAULT_PARAMS = {
 
 
 def _echo_transport_on(effective_params: dict) -> bool:
-    """ECHO_TRANSPORT flag (ED-IN-0028, Key & Echo Armature §6.2) — default OFF, byte-exact.
-    Mirrors the MB FIELD_MOVEMENT/ED-1089 CI-pin precedent: a `params['ECHO_TRANSPORT']`
-    override wins; otherwise read the env var (default '0'). When OFF, no substrate is
-    attached to the world and the scene phase is byte-identical to its pre-transport self."""
+    """ECHO_TRANSPORT flag (ED-IN-0028 / ED-SC-0006/0007) — **default ON** (Jordan ratification
+    2026-07-08: "Yes echo transport on"). The consequence spine (per-season §10 Parliamentary vote
+    + composed Domain Echo, sim/cross_scale/parliamentary_bridge.py) is now the baseline campaign.
+    A `params['ECHO_TRANSPORT']` override wins; otherwise the env var (default '1'). Set
+    ECHO_TRANSPORT=0 (or params={'ECHO_TRANSPORT': 0}) for the pre-spine byte-exact regression
+    oracle, still pinned OFF in test_echo_transport.py (the MB FIELD_MOVEMENT/ED-1089 pattern:
+    default flipped, the old path retained as the frozen oracle)."""
     if 'ECHO_TRANSPORT' in effective_params:
         return bool(effective_params['ECHO_TRANSPORT'])
-    return os.environ.get('ECHO_TRANSPORT', '0') == '1'
+    return os.environ.get('ECHO_TRANSPORT', '1') == '1'
 
 
 @dataclass
@@ -98,6 +101,16 @@ def _faction_actions_callback(world):
     # sim/cross_scale/scene_dispatch.py GAP notes.
     _report = scene_dispatch.run_scene_phase(world, world.rng)
     world.scenes_resolved += _report["dispatch"]["resolved"]
+
+    # Parliamentary vote (ED-SC-0006/0007, Jordan ruling "wire the canonical Parliamentary vote"):
+    # the faction-scale §10 vote resolves directly on aggregate state, applies the §10 loser Mandate
+    # penalty, and composes a winner Domain Echo (ED-SC-0002 composed keying) through the substrate.
+    # Flag-gated by the scheduler's presence — a no-op when ECHO_TRANSPORT is off.
+    if getattr(world, "echo_scheduler", None) is not None:
+        from sim.cross_scale import parliamentary_bridge
+        _pr = parliamentary_bridge.run_parliamentary_scene(world, world.rng)
+        if _pr.get("resolved"):
+            world.scenes_resolved += 1
 
     # ACTION->ACCOUNTING boundary (ED-IN-0028, OF-7): any echo Keys emitted during the scene
     # phase logged LIVE; their deferred faction/territory applies land here as accounting

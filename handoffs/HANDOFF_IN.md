@@ -8,6 +8,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Attribute/value coherence audit 2026-07-08: ED-IN-0029 — the quantity-layer extension of the
+  Key & Echo Armature (docket UNRULED — Jordan picks).** Read-only cross-silo audit of every
+  attribute/derived score/pool/track/clock/stat/constant (Jordan: "we desperately lack unity,
+  consistency and coherence with our explosion of attributes and derived scores… developed in
+  silos" + "tie this into the shaping armature"). 88-row quantity census; 82 findings post-critic
+  (18 P1/39 P2/25 P3); headline: the incoherence lives in **carriers and enforcement** — 4
+  incompatible attribute rosters, 4-formula Knot Pool, Godot RESIST port drifted 4/12 cells
+  (ED-1050 residual), warn-tier-only naming + dead registry test, `stat_deltas` accepts any
+  string; A17/A18 seed backlogs ~39%/~28-31%. Deliverables at
+  `designs/audit/2026-07-08-attribute-value-coherence-audit/` incl. the 18-item `ed_options.md`
+  (OPT-AV-1..18) and the PROPOSED `proposed_quantity_armature_extension.md` (registry deltas +
+  A17 stat-vocabulary closure / A18 formula single-source checks + "Quantity/descriptor
+  unification wave (IN)" slot) — **both held back from merge-ratification (ED-1094)**. NEXT: Jordan
+  rules the docket; then the OPT-AV-7 hygiene batch + OPT-AV-3 registry filing execute as the
+  unification wave. Lane feeds recorded, not ruled: OPT-AV-9 (FI), -10/-11 (FA), -12 (SC+FA),
+  -15 (PC/GO), -18 (SE/MB/FA/SC).
 - **Pessimist subtractive-action audit RATIFIED 2026-07-08 (ED-IN-0027; Jordan: "Please ratify all").**
   The corpus-wide read-only audit (`designs/audit/2026-07-08-pessimist-action-audit/`) is ratified.
   Two ratification acts landed: (1) **canon** — `references/throughlines_meta.md` §8.2-A + infill §7-A
@@ -20,7 +36,6 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   retires. Headline: 0 top-level CUTs, 2 PRUNEs (SE Trade, SE Grant/Revoke) — the corpus is
   over-articulated, not junk-laden; most execution is MERGE/DISTILL consolidation. The 2 critic-overturned
   candidates (MB Concentration, SC deliberative-game) take no action.
-
 - **Resolution Plan v1 — Stratum-C (armature deployment) FIRST SLICE 2026-07-08: ED-IN-0028, echo-transport
   plumbing ("proceed large build").** Executed the IN-lane core of Key & Echo Armature §6.2. New
   `sim/cross_scale/echo_transport.py` un-orphans `domain_echo.py` (was a ZERO-caller C-REACH island) and
