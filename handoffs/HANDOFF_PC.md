@@ -103,12 +103,41 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
       authority/puncture_pressure now nonzero for every hands==2 bladed weapon, confirmed via diff, everything
       else unchanged). 202 passed / 8 failed (identical pre-existing set) / 1 xfailed; `valoria_local.py`
       clean; 0 ED-citation violations. See the ED-PC-0009 ledger entry for full detail + sourcing.
-    - **NEXT for U2:** fix `core.coupling` so `DELIVERY`-equivalent scales with percussion magnitude for every
-      material (not just mail/plate) — only then can `reversed_grip_percussion` safely compete in
-      `select_mode`; separately, re-derive the composite-weapon exact-set fixtures for the cut/point secondary
-      checks (fixture-regeneration-scale effort). T-P2 may start any time (post-U0), scope per JD-6; the F5
-      renderer recovery (JD-8) is confirmed closed on option (a) — the scratchpad script is genuinely gone —
-      only a from-scratch rebuild at T-P2 remains live.
+    - **U2 live wiring — RESOLVED 2026-07-08 as ED-PC-0011 (same day, follow-on session).** Fixed exactly the
+      `core.coupling` gap named above: `_transmit`'s percussion-authority scaling extended to every material
+      via a DUAL reference (mail/plate keeps `PERC_AUTH_REF=8.0` unchanged, preserving the pre-existing tested
+      calibration; none/cloth uses a new `PERC_AUTH_REF_SOFT=6.5`, anchored on the weakest attested dedicated
+      hammer-class weapon rather than mace's own peak — a first attempt using ONE reference for both material
+      classes was caught by adversarial review silently flipping bec_de_corbin/lucerne_hammer's selected mode
+      at the unarmoured tier, backwards from the HEMA framing). `reversed_grip_percussion` now safely competes
+      in `select_mode` — the weak Mordhau option correctly loses to a weapon's own cut/thrust vs soft targets,
+      wins only vs rigid armour. The re-enabled cut/point secondary checks were ALSO re-validated (not just the
+      percussion path): a new `CUT_AUTH_REF=0.70` fix (anchored on the weakest attested native cutter,
+      hook_sword) stops an incidental secondary 'cut' token from outscoring a weapon's own dedicated 'point'
+      regardless of how weak the edge actually is — this is the fix for the SESSION'S ORIGINAL reported bug
+      (rapier's incidental cut beating its own dedicated point at zero armour). Validated via a 13-agent
+      agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group pairs + 1 Opus synthesis)
+      against HEMA/physics grounding across the full 53-weapon roster, per Jordan's explicit request for that
+      methodology. `test_use_mode_selection_emerges_from_primitives`'s expected-changers list grows 7→17 (ten
+      new weapons' secondary half-sword-thrust/incidental-edge judged historically defensible);
+      `test_afforded_heads_emerge_from_phase_b2_mode_elements` updated for ji/kama_yari's genuine incidental
+      'cut' token. **NEW residual, deliberately deferred rather than rushed (filed as ED-PC-0012):** the
+      adversarial pass found a SECOND, structurally identical gap on 'point' — DELIVERY['point'] doesn't scale
+      by thrust magnitude either, and core._transmit's puncture path is floor-locked (verified: scimitar/sabre/
+      falchion/hook_sword's secondary point ALL score an identical coupling at 'light' armour regardless of
+      0.16-0.40 geometry spread). Judged to matter concretely for the one-handed sabre-class roster (sabre/
+      scimitar/falchion — FLAG, historically dedicated slashers with the weakest thrust geometry in the roster)
+      but not the two-handed cutters (historically defensible regardless). A `THRUST_AUTH_REF` fix analogous to
+      `CUT_AUTH_REF` is recommended but NOT implemented — it would also touch several of the newly-accepted
+      two-handed cutters (tachi/nandao/glaive/podao all sit below the natural reference too) and needs its own
+      roster-wide re-verification pass, not a third redesign-and-reverify cycle in the same session.
+      `test_pure_cutters_have_no_gates` updated: greatsword removed (legitimately gained real capability),
+      sabre kept and left deliberately failing, documenting ED-PC-0012 rather than silently patching around it
+      — matching this suite's `test_gap_game_poleaxe_spikes_plate` convention. Full suite: 210 passed / 9 failed
+      (8 pre-existing + this one new, fully-documented failure) / 1 xpassed (pre-existing, unrelated
+      mass-battle test); all local gates clean; 0 ED-citation violations. T-P2 may start any time (post-U0),
+      scope per JD-6; the F5 renderer recovery (JD-8) is confirmed closed on option (a) — the scratchpad script
+      is genuinely gone — only a from-scratch rebuild at T-P2 remains live.
 
   Original adjudication summary: Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
   (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
