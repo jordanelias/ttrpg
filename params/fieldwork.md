@@ -30,6 +30,12 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | Socializing | Rumour | Charisma |
 | Socializing | Negotiate | Attunement |
 
+<!-- ED-FI-0004 (2026-07-08, pessimist-action audit): DOC-SIDE decision only — NO param values change here.
+     Interview MERGE: the "Investigation | Witness / informant" (Attunement) action's single-roll resolution is
+     superseded by the Dialogue Lattice (designs/scene/investigation_systems_v30.md System 3 / S14). The Attunement
+     attribute above is unchanged; what retires (once ED-921's schedule/attribute reconciliation lands) is the bare
+     single-roll resolution path, not the attribute mapping. No number moves in this pass. -->
+
 ## Depth Axis
 | Depth | Name | Perception Gate | Base Ob |
 |-------|------|-----------------|---------|

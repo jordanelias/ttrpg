@@ -96,21 +96,41 @@ index; see it for cross-lane/global items.
   reachability + echo transport) now precedes the Stage-4 four-games build. All 11 ed_options
   candidates filed: decision docket ED-SC-0002..0005 (forks, `needs_jordan`), work items
   ED-SC-0006..0010, cross-cutting ED-IN-0012..0013.
-  - **NEXT: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
+  - **STILL OPEN: the P0 decision docket (ED-SC-0002..0005) — awaits Jordan's four picks** (Domain-Echo
     keying §5.4-band vs §6-genre vs composed; Piety/Persuasion tracker naming + canonical home;
     kernel Argue-pool formula; Recall/Corroborate/Prep/Findings global cap). ED-SC-0002 and
     ED-SC-0004 are P1 blockers (echo wiring; calibration/re-verdict/export).
-  - **THEN: P1 consequence spine (ED-SC-0006, ED-SC-0007)** — dispatch→kernel routing + party-derivation
-    bridge; Bout outcome → the already-built `domain_echo.py`; campaign-regression contest assertion.
-    In parallel: **P3-lite** — a minimal interactive Agôn harness over the existing kernel to run the
-    dramatic-legibility test with a human and measure the ~13-consult load (audit D4/N-7) before
-    Stage 4 multiplies interaction shapes.
+  - **ED-SC-0006 EXECUTED (2026-07-08)** — `sim/cross_scale/scene_dispatch.py`'s contest branch now
+    routes to the promoted kernel (`build_contest`/`resolve_contest`), retiring the deprecated
+    `contest_legacy_stub.run_contest` call. New `_emergency_council_parties` derives both sides of
+    the one live trigger (Stability Crisis → Emergency Council, `scale_transitions_v30.md:137`) from
+    the SAME faction's own aggregate stats (`side_a=round(L)`, `side_b=round(7-Sta)`, both floored at
+    1) — a `[SEED]` design default, not a P0 fork, open to Jordan revision; proceeding defaults to
+    `guild_arbitration` (Panel = seated bench, closest structural match), also `[SEED]`. The kernel's
+    global-`random`-module constraint is bridged by a per-call reseed derived from `world.rng`
+    (restored after), keeping campaign determinism. `sim/tests/test_mc_v18_regression.py` gained
+    `test_mc_v18_resolves_at_least_one_contest`; its seed-0 golden moved and was repinned (the F7
+    seed-42 golden and echo_transport tests were verified unchanged — Stability Crisis doesn't happen
+    to fire in that particular 8-seed sample). ED-SC-0007's echo-mapping is deliberately NOT wired by
+    this change (still blocked at the spec level by ED-SC-0002); `echo_transport` (ED-IN-0028) stays
+    inert. Full ledger note: `canon/editorial_ledger.jsonl` ED-SC-0006.
+  - **NEXT: ED-SC-0007** (Bout outcome → the already-built `domain_echo.py`) is mechanically
+    unblocked (contests now resolve) but still spec-blocked on the ED-SC-0002 echo-keying fork — needs
+    Jordan's P0 pick before it can land. In parallel: **P3-lite** — a minimal interactive Agôn harness
+    over the existing kernel to run the dramatic-legibility test with a human and measure the
+    ~13-consult load (audit D4/N-7) before Stage 4 multiplies interaction shapes.
   - **Stage 4 entry criteria now include (ED-SC-0009):** Face/Rattled strain channel (KU-3) + §9.3–9.4b
     thread junctures (P-14); plus ED-SC-0005's stack cap must land in prose before wiring; Chronicle
     focalization (ED-SC-0010) before any player-facing narrative output.
 
 ## Decisions
 
+- 2026-07-08 — **ED-SC-0006 executed** (party-derivation bridge + kernel routing; see Pending above
+  and the ledger entry for full scope). Design defaults shipped as `[SEED]` (party-faculty mapping;
+  `guild_arbitration` as the Emergency Council proceeding) rather than deferred to Jordan, per the
+  same convention that ships other kernel constants (e.g. `STYLE_AXIS`) `[SEED]`-flagged-but-wired —
+  the audit's own framing rated this "Medium — real design work" but explicitly `needs_jordan: false`.
+  Revisable without unwinding the mechanical routing if Jordan wants a different mapping.
 - 2026-07-05 — **"Ratify all" (PR #80):** the Fable 5 social-contest audit's findings + D6 sequencing
   + all 11 ed_options candidates adopted; audit doc statuses flipped, IDs allocated
   (ED-SC-0002..0010, ED-IN-0012..0013), CURRENT.md SC row refreshed, this handoff updated — per the
@@ -125,8 +145,9 @@ index; see it for cross-lane/global items.
 - **P0 decision docket awaiting Jordan: ED-SC-0002..0005** (echo keying / tracker naming / pool
   formula / bonus-stack cap — see the ratified-audit item above; ED-SC-0002 blocks ED-SC-0007,
   ED-SC-0004 blocks calibration + ED-IN-0013 re-verdict).
-- **P1 consequence spine (ED-SC-0006/0007) + P3-lite Agôn harness** — next build work once the docket
-  lands (0006 and the harness are unblocked already; 0007 waits on ED-SC-0002).
+- **ED-SC-0006 DONE (2026-07-08)** — kernel routing + party-derivation bridge executed; see
+  Decisions above. **ED-SC-0007 + P3-lite Agôn harness are the remaining P1 work** — the harness is
+  unblocked now; ED-SC-0007 still waits on ED-SC-0002's echo-keying pick.
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit
   resequences Stage 4 *after* the consequence spine.
