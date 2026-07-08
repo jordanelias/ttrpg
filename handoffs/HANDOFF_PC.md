@@ -51,12 +51,26 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     out of U1 scope. `references/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
     via `export_engine_params.py --check`). 196 passed / 8 failed / 1 xfailed; `valoria_local.py --staged`
     clean. See the ED-PC-0007 ledger entry for full detail.
-  - **NEXT: U2 (graded mode affordance + Phase-C percussion enactment; allocates ED-PC-0008 at implementation)
-    — UNBLOCKED (U2 ⊣ U1, done).** JD-4 (percussion ceiling tuning) has a default ("ships weak") and does not
-    block starting U2. T-P2 may start any time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is
-    still outstanding — note the scratchpad script it depended on is confirmed genuinely gone (checked this
-    session: no copy anywhere in the repo or environment), so JD-8(a)'s "recover if it still exists" option is
-    closed; only a from-scratch rebuild at T-P2 remains live.
+  - **U2 ATTEMPTED 2026-07-08, NOT LANDED — genuinely underspecified, findings filed as ED-PC-0008 (open,
+    needs_jordan).** Immediately after U1 unblocked it, attempted U2 (graded mode affordance + Phase-C
+    percussion enactment) and found consolidation_v1's one-line spec insufficient for a safe implementation —
+    three findings, each measured directly against the live post-U1 tree, nothing risky committed to engine
+    code: **(1)** JD-4's "ships weak" default is NOT achievable by a bare `percussion_authority` self-gate
+    removal — measured swords land at percussion 5.8–6.3, comparable to poleaxe's 7.48, because the existing
+    whole-weapon PERC_SCALE/PERC_EXP formula was only ever fit against dedicated blunt weapons (whose whole
+    forward mass IS the striking surface) and has no way to represent "only the pommel is." A new pommel-
+    specific percussion sub-model is needed first (JD-4 updated in `consolidation_v1.md` §6 with this finding).
+    **(2)** `thrust_factor` (geometry.py) carries its own undocumented floor bug — mace/staff score
+    "thrust" 0.34/0.31 despite having no point at all (pure cross_section artifact), forcing `MODE_TIP_MIN`
+    into an uncomfortably narrow 0.34–0.37 window against U2's own named tests. New fork **JD-9** filed, no
+    default proposed. **(3)** the graded-affordance change would break several currently-passing exact-set
+    tests beyond the plan's 5 named single-mode weapons (`test_afforded_heads_emerge_from_phase_b2_mode_
+    elements` pins ji/guisarme/voulge/bec_de_corbin/lucerne_hammer/goedendag/poleaxe) — a scope note, not a
+    Jordan fork, for whoever implements U2. **NEXT for U2: resolve JD-4(updated)/JD-9 first**, then re-derive
+    the composite-weapon exact-set fixtures as part of implementation (fixture-regeneration-scale effort, not
+    a quick increment). T-P2 may start any time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is
+    confirmed closed on option (a) — the scratchpad script is genuinely gone from the repo/environment — only
+    a from-scratch rebuild at T-P2 remains live.
 
   Original adjudication summary: Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
   (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
