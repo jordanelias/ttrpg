@@ -48,6 +48,9 @@ class CampaignResult:
     season: int
     surviving: int
     battle_count: int
+    scenes_resolved: int = 0        # F7 telemetry (ED-IN-0021): personal-scale scenes actually resolved
+    insurgencies_formed: int = 0    # F7 telemetry: len(world.insurgencies)
+    npcs_generated: int = 0         # F7 telemetry: world.npc_counter (generate_npc call-count proxy)
     final_state: dict = field(default_factory=dict)
 
 
@@ -80,7 +83,8 @@ def _faction_actions_callback(world):
     # this season's world-state. Caller-side per season.py design. Side-effect-free
     # on strategic stats until the context-derivation bridge lands — see
     # sim/cross_scale/scene_dispatch.py GAP notes.
-    scene_dispatch.run_scene_phase(world, world.rng)
+    _report = scene_dispatch.run_scene_phase(world, world.rng)
+    world.scenes_resolved += _report["dispatch"]["resolved"]
 
 
 def run_campaign(seed: int | None = None, max_seasons: int = 50,
@@ -133,6 +137,9 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         season=world.season,
         surviving=surviving,
         battle_count=world.battle_count,
+        scenes_resolved=world.scenes_resolved,
+        insurgencies_formed=len(world.insurgencies),
+        npcs_generated=world.npc_counter,
         final_state=game_state.serialize_world(world),
     )
 

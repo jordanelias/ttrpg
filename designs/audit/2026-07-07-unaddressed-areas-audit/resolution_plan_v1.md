@@ -331,3 +331,28 @@ flagged loud, never silently dropped (ED-1094 discipline).
   (miraculous_event full contract footprint — Stratum C); C-VERIFY-5 (armor cost-free intent).
 
 **Next:** the deferred sim edits above (Stratum B entry) and Stratum C armature deployment per §2.
+
+## §8 · PR-2 progress — F7 smoke oracle landed (2026-07-08)
+
+The first piece of PR-2 (§0.1) landed **standalone as a pre-wiring baseline**: the **F7 smoke
+oracle** (ED-IN-0021 / OPT-3), `sim/tests/test_f7_smoke_oracle.py`. It pins the current
+(pre-transport) campaign state so the coming echo wiring is guarded by an *existing* oracle
+rather than born beside a fresh one:
+
+- **Golden** (n=8, base_seed=42): the historical **87.5% artifact** reproduced exactly and pinned
+  with a loud "NOT balance signal" label (the U-4 lesson — this exact un-guarded batch is what
+  propagated into ≥5 docs).
+- **Named zero-assertions:** `scenes_resolved` / `insurgencies_formed` / `npcs_generated` are all
+  0 across the batch (the contest kernel, insurgency pipeline, and NPE are unreachable islands).
+  **These are designed to TRIP when the derivation bridge + keying waves land — that trip is the
+  success signal, not a regression.**
+- **Hafenmark elimination-lockout** assertion (KNOWN-TRACKED, ED-FA-0005 comeback path).
+- **VICTORY_THRESHOLD dead-param regression** (C-EMERGE-8: proven inert — identical output for
+  values 1/11/999).
+- **Wall-time ceiling.**
+
+Minimal additive telemetry only (`game_state.World.scenes_resolved` + three `CampaignResult`
+fields) — no behaviour change; the seed-0 golden in `test_mc_v18_regression.py` is unmoved. Runs
+in CI via the existing "Sim Reference Regression" job. **Remainder of PR-2** (the flag-gated echo
+wiring + A14 runtime lint) is the next step; when it reaches a subsystem, the zero-assertions here
+become the deliberate golden-update trigger.

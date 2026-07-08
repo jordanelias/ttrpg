@@ -8,6 +8,16 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — PR-2 F7 smoke oracle LANDED 2026-07-08 (ED-IN-0021 → resolved).**
+  `sim/tests/test_f7_smoke_oracle.py`: the "born guarded" campaign regression the U-4 lesson
+  demanded (no balance claim without an oracle + n≥100). Pins the n=8/seed-42 golden (Varfell
+  87.5% — the historical small-n artifact, labelled NOT balance), named zero-assertions
+  (scenes_resolved / insurgencies_formed / npcs_generated = 0 — the islands; designed to TRIP when
+  the transport waves land), the Hafenmark elimination-lockout (ED-FA-0005), the VICTORY_THRESHOLD
+  dead-param regression (C-EMERGE-8), and a wall-time ceiling. Added minimal additive telemetry
+  (`game_state.World.scenes_resolved` + 3 `CampaignResult` fields; no behaviour change, seed-0
+  golden unmoved). Runs in CI via "Sim Reference Regression" (pytest sim/tests). Landed **ahead of**
+  the armature echo wiring (baseline-first); the wiring is PR-2's remainder. See resolution_plan_v1.md §8.
 - **Resolution Plan v1 — Stratum-A truth-reconciliation FIRST PASS EXECUTED 2026-07-07 (this branch,
   `claude/fable5-audit-resolution-plan-r6kzsa`).** Executes the doc/registry/ledger core of Stratum A;
   `designs/audit/2026-07-07-unaddressed-areas-audit/resolution_plan_v1.md` §7 has the full
