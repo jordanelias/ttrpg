@@ -45,6 +45,8 @@
 
 **Debate outcome → Domain Echo:** Piety Track ≥7 (winner) queues +1 to winner's faction in the contested axis (L for procedural debates, PS for populist debates per audit Q5). ≤3 queues −1 to loser's faction in the same axis. [PP-108]
 
+**Composed keying (ED-SC-0002, Jordan ruling 2026-07-08):** this band mapping supplies the **magnitude** (Total → ±2, Decisive → ±1, Compromise → none); `social_contest_v30 §6`'s won-**genre** selects the **stat/channel** (Memory → Mandate/L; Projection → the outward-initiative channel / I). The two compose — neither supersedes the other. Sim realization: `sim/cross_scale/parliamentary_bridge.py` + `sim/cross_scale/domain_echo.py`.
+
 ## Mass→Personal Register Shift Rules (PP-111)
 
 One mass combat turn = one personal combat exchange. If general's duel is unresolved after one exchange, it continues into the next turn's Phase 5. The general's unit loses CR bonus (effective CR 0) each turn the general is in personal combat. Maximum 5 exchanges before forced disengage or incapacitation. General's Phase 5 consumed until combat resolved.

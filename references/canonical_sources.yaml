@@ -175,7 +175,7 @@ systems:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "0a32025ec8f7f4b026493e013f6a8442e3b947c4"
+    canonical_sha__designs__scene__social_contest_v30_md: "bd1a2b7d15a7fbf69d5aa7d5d1a3f090e68f6f48"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
@@ -184,9 +184,9 @@ systems:
     canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "e1b25d2b3e114fcef0b265f351cd1699028c05d7"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "0c980e8bf04a2c20d6a3a48746e2a83e65034030"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "fb16c8ee41067a43ae944ab88f97b5a747115a46"
+    canonical_sha__params__scale_transitions_md: "90ea1f1b8ffe587f7ed554bc73fa9bf9791c31bb"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "0a091996a56d9e3fa75c0fcbd0e5502eb47ddde8"
