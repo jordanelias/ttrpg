@@ -1,0 +1,519 @@
+{
+    "family": "F-GODOT",
+    "backfill_note": "Original workflow finder failed (StructuredOutput retry cap); backfilled standalone same-day. Cluster C6 dossier/critic ran WITHOUT this inventory (they read the surfaces directly).",
+    "items": [
+        {
+            "name": "decisive_ob",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:15",
+            "detail": "@export var decisive_ob: float = 3.0 — 'base Ob, FIXED; sigma-leverage boosts the ROLL, not the Ob (mu-shift)'. Oracle: core.py:25 DECISIVE_OB = 3 [canonical: combat_v30 §5 degree band centre; relocated verbatim from the frozen r8 harness, ED-1085]",
+            "aliases_or_variants": ["DECISIVE_OB (core.py)"],
+            "consumers_seen": ["strike_module.gd:70 (_degree call), strike_module.gd:74 (overwhelming tail z)"],
+            "key_bindings_seen": [],
+            "notes": "Lives in core.py, NOT config.CFG — outside export_engine_params.py scope (C6-F2). Currently byte-identical to oracle."
+        },
+        {
+            "name": "tn_standard",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:16",
+            "detail": "@export var tn_standard: int = 7 — comment 'PER_DIE[7] = (mu 0.40, sigma 0.800)'. Oracle: sim/autoload/sigma_leverage.py:79 TN_STANDARD = 7 [canonical: params/core.md §TN Values]",
+            "aliases_or_variants": ["TN_STANDARD (sigma_leverage.py)", "TN (core.py:26 TN = SL.TN_STANDARD)"],
+            "consumers_seen": ["NONE in the skeleton — strike_module.gd:135 hardcodes 0.40/0.800 literals instead of reading this field"],
+            "key_bindings_seen": [],
+            "notes": "Source is sigma_leverage.py, a THIRD oracle file outside the exporter (no TN_STANDARD key exists among the JSON's 181 cfg keys). Exported field is dead-in-port: no skeleton code reads it."
+        },
+        {
+            "name": "pool_base / pool_floor",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:17-18",
+            "detail": "pool_base: int = 6; pool_floor: int = 5 — 'pool = max(pool_floor, History + pool_base)'. Oracle: core.py:27 POOL_FLOOR = 5 [canonical: params/core.md §Derived Scores (Combat Pool min 5)]; core.py:28 BASE_POOL = 6 [class-C: armature — pool = max(5, History+6), ED-901; relocated verbatim from r1, ED-1085]. Prose head: params/core.md:161 'Combat Pool | max(5, Relevant History + 6) | min 5' (ED-901; re-ratified ED-900/904)",
+            "aliases_or_variants": ["POOL_FLOOR / BASE_POOL (core.py)", "Combat Pool (params/core.md:161, module_contracts.yaml:810)"],
+            "consumers_seen": ["strike_module.gd:67 (pool = maxi(cfg.pool_floor, round(history) + cfg.pool_base))"],
+            "key_bindings_seen": ["actor.stat(\"history\")"],
+            "notes": "The dossier's §2 four-way COHERENT trace. In core.py, not config.CFG — outside exporter (C6-F2)."
+        },
+        {
+            "name": "m_max / sigma_n_coeff",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:19-20",
+            "detail": "m_max: float = 1.5 ('soft_cap(x)=M·tanh(x/M)'); sigma_n_coeff: float = 0.8 ('σ_N = 0.8·√pool'). Oracle: sim/autoload/sigma_leverage.py:92 M_MAX = 1.5 [canonical: modifier_system_spec.md §3.1 Saturating function]; :93 SIGMA_N_COEFF = 0.8 [canonical: modifier_system_spec.md §2.1 The transform]",
+            "aliases_or_variants": ["M_MAX / SIGMA_N_COEFF (sigma_leverage.py)"],
+            "consumers_seen": ["combat_config.gd:88 soft_cap()", "combat_config.gd:93 sigma_n()", "strike_module.gd:69,75"],
+            "key_bindings_seen": [],
+            "notes": "Match sigma_leverage.py byte-for-byte, but NO M_MAX/SIGMA_N_COEFF keys exist in combat_engine_v1.json — dossier C6 §3 attributes their round-trip match to config.py, which is inaccurate: they are hand-carried from a third, un-exported source file."
+        },
+        {
+            "name": "damage_scale",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:23 + data/combat_config.tres:9",
+            "detail": "damage_scale: float = 1.55 — 'core.DMG_SCALE — the LIVE value (config.py's 4.0 was DEAD; removed)'. .tres override: damage_scale = 1.55 (same value). Oracle: core.py:74 DMG_SCALE=1.55 [damage_model — even Success ~= 1 WI; emergent-tunable]",
+            "aliases_or_variants": ["DMG_SCALE (core.py)", "DAMAGE_SCALE=4.0 (dead config.py duplicate, removed — the documented precedent)"],
+            "consumers_seen": ["strike_module.gd:80 (damage = impact * coupling * qf * cfg.damage_scale)"],
+            "key_bindings_seen": [],
+            "notes": "In core.py, not config.CFG — outside exporter (C6-F2)."
+        },
+        {
+            "name": "heft_light / heft_heavy",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:24-25",
+            "detail": "heft_light: float = 0.0; heft_heavy: float = 3.0. Oracle: core.py:63 HEFT_HEAVY=3.0 (comment: 'the multiplier below anchors on the SAME 2H cut-thrust reference WP.heft() normalises to 1.0'). heft_light has NO current oracle counterpart — the categorical wt{light,heavy} aggregate was retired in the Phase-B6 morphology rearch (weapon_physics.py:457-459, 2026-07-02); oracle cut/thrust heft is now HEFT_HEAVY × WP.heft(w) continuous (core.py:155)",
+            "aliases_or_variants": ["HEFT_HEAVY (core.py:63)", "wt{light,heavy} (RETIRED oracle aggregate)"],
+            "consumers_seen": ["combat_config.gd:80-83 heft_for() — categorical: heft_heavy if weapon.weight == 'heavy' else heft_light"],
+            "key_bindings_seen": [],
+            "notes": "Port's heft_for() implements the PRE-Phase-B6 categorical model; oracle heft is continuous via WP.heft(). See finding F-GODOT-06."
+        },
+        {
+            "name": "qual",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:27",
+            "detail": "qual: Dictionary = {\"graze\": 0.25, \"partial\": 0.5, \"success\": 1.0, \"overwhelming\": 1.5}. Oracle: core.py:72 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5} [damage_model QUALITY base; overwhelming = sigma-leverage tail floor] — MATCH",
+            "aliases_or_variants": ["QUAL (core.py)"],
+            "consumers_seen": ["strike_module.gd:73 (qf = cfg.qual[quality])"],
+            "key_bindings_seen": [],
+            "notes": "In core.py, outside exporter (C6-F2). The overwhelming tail constants OW_MAX=2.5/OW_Z=1.5 (core.py:73) are inlined as bare literals at strike_module.gd:75 — see F-GODOT-09."
+        },
+        {
+            "name": "delivery",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:29-32",
+            "detail": "delivery: Dictionary = {\"blunt\": 1.6, \"point\": 1.45, \"cut_thrust\": 1.35, \"straight_cut\": 1.5, \"curved_cut\": 1.5, \"cut\": 1.5}. Oracle: core.py:76 DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5} [damage_model head delivery] — MATCH",
+            "aliases_or_variants": ["DELIVERY (core.py)"],
+            "consumers_seen": ["weapon_resource.gd:55-58 coupling()"],
+            "key_bindings_seen": [],
+            "notes": "In core.py, outside exporter (C6-F2)."
+        },
+        {
+            "name": "resist",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:34-39",
+            "detail": "PORT: cloth {percussion 0.10, shear 0.35, puncture 0.15}; mail {0.20, 0.80, 0.45}; plate {0.30, 0.95, 0.70}; none all 0.0. ORACLE core.py:86-89: cloth {percussion .12, shear .45, puncture .12}; mail {.20, .85, .45}; plate {.30, .95, .70} — DRIFTED 4/12 cells (cloth all three + mail.shear), post-2026-06-30 grounding edit in the oracle never re-exported",
+            "aliases_or_variants": ["RESIST (core.py)"],
+            "consumers_seen": ["weapon_resource.gd:62 _transmit()"],
+            "key_bindings_seen": [],
+            "notes": "KNOWN-TRACKED: C6 critic C6-M1 (P1, ED-1050 residual). combat_config.gd:57-58's own comment defers 'fuller re-export of RESIST' to the module port."
+        },
+        {
+            "name": "tier_to_material",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:40",
+            "detail": "{\"none\": \"none\", \"light\": \"cloth\", \"medium\": \"mail\", \"heavy\": \"plate\"}. Oracle: core.py:90 TIER2MAT={'none':'none','light':'cloth','medium':'mail','heavy':'plate'} [armour_axes presets — tier->material] — MATCH",
+            "aliases_or_variants": ["TIER2MAT (core.py)"],
+            "consumers_seen": ["weapon_resource.gd:52 coupling()"],
+            "key_bindings_seen": [],
+            "notes": "In core.py, outside exporter (C6-F2)."
+        },
+        {
+            "name": "coverage_gap",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:41",
+            "detail": "coverage_gap: Dictionary = {\"full\": 0.15, \"partial\": 0.5}. Oracle: core.py:91 COVERAGE_GAP={'full':0.15,'partial':0.5} [damage_model — gap/bare-zone exposure] — values MATCH, but the oracle's puncture path NO LONGER uses it as the transmit floor: core.py:122 'Replaces the old fixed COVERAGE_GAP floor' — the live path is max(t, GAP_EXPOSURE[mat]*gap_prec) (core.py:125). The port's weapon_resource.gd:64 still computes maxf(t, cfg.coverage_gap[coverage]) — the superseded logic",
+            "aliases_or_variants": ["COVERAGE_GAP (core.py)", "GAP_EXPOSURE (core.py:105, absent from port)"],
+            "consumers_seen": ["weapon_resource.gd:64,66 _transmit()"],
+            "key_bindings_seen": [],
+            "notes": "Value coherent, LOGIC stale — the port's puncture floor is the model the oracle replaced 2026-06-30. Companion to C6-M2 (GAP_EXPOSURE never carried)."
+        },
+        {
+            "name": "wound_atk_ob / wound_def_ob",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:45-46",
+            "detail": "wound_atk_ob: float = 0.15; wound_def_ob: float = 0.25 — 'ED-1041 — REPLACES the superseded −1D aggressor-only pool penalty'. Oracle: config.py:65 WOUND_ATK_OB=0.15, WOUND_DEF_OB=0.25 [ED-1041 wound obstacle (bilateral, tunable); supersedes -1D (ED-1021)]. JSON: combat_engine_v1.json:201-202 — MATCH all three surfaces. Prose head: params/core.md:158 (+0.15/+0.25 per wound, ED-1041; ED-PC-0005 ruling 2026-07-08)",
+            "aliases_or_variants": ["WOUND_ATK_OB / WOUND_DEF_OB (config.py + JSON)"],
+            "consumers_seen": ["strike_module.gd:64 (wound_ob = cfg.wound_def_ob * d_wounds - cfg.wound_atk_ob * a_wounds)"],
+            "key_bindings_seen": ["actor.get(\"wounds\")"],
+            "notes": "IN config.CFG — inside the verified exporter round-trip. Coherent."
+        },
+        {
+            "name": "adef_w / adef_blunt / adef_point / adef_cut",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:49-52",
+            "detail": "adef_w = {\"none\": 0.0, \"light\": 0.4, \"medium\": 1.0, \"heavy\": 1.7}; adef_blunt = 1.3; adef_point = 1.2 ('re-exported from config.py (the adef-consistency lever, ED-1080)'); adef_cut = -0.9. Oracle: config.py:44 ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.2 [SIM-CALIBRATE; ED-1080], ADEF_CUT=-0.9. JSON:11-12,14,21-26 — MATCH",
+            "aliases_or_variants": ["ADEF_W/ADEF_BLUNT/ADEF_POINT/ADEF_CUT (config.py + JSON)"],
+            "consumers_seen": ["strike_module.gd:113-128 _armor_defeat_sigma()"],
+            "key_bindings_seen": [],
+            "notes": "IN config.CFG — inside the exporter round-trip. Coherent."
+        },
+        {
+            "name": "adef_threshold",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:59",
+            "detail": "adef_threshold: Dictionary = {\"none\": 0.0, \"light\": 0.30, \"medium\": 0.45, \"heavy\": 0.72} — header comment: 'RE-EXPORTED FROM THE ORACLE config.py (ED-1050 resolved, Jordan 2026-06-30): MONOTONE… RETIRES the port's earlier private [AUDIT-FIX]'. Oracle: config.py:51 ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72} [ED-1050 resolved; SIM-CALIBRATE within monotone frame]. JSON:15-20 — MATCH",
+            "aliases_or_variants": ["ADEF_THRESHOLD (config.py + JSON)"],
+            "consumers_seen": ["strike_module.gd:128"],
+            "key_bindings_seen": [],
+            "notes": "The ED-1050 fix, confirmed byte-identical port↔oracle↔JSON (as dossier §3 also verified)."
+        },
+        {
+            "name": "reach_frac / reach_w",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:62-63",
+            "detail": "reach_frac: float = 0.82; reach_w = {\"none\": 0.62, \"light\": 0.50, \"medium\": 0.34, \"heavy\": 0.20}. Oracle: config.py:18 REACH_FRAC=0.82; :19 REACH_W={'none':0.62,'light':0.50,'medium':0.34,'heavy':0.20}. JSON:157,160-165 — MATCH",
+            "aliases_or_variants": ["REACH_FRAC / REACH_W (config.py + JSON)"],
+            "consumers_seen": ["strike_module.gd:111 _reach_sigma()"],
+            "key_bindings_seen": [],
+            "notes": "IN config.CFG. Coherent. But the reach GAP the port multiplies these by comes from _reach_base's retired categorical model — see F-GODOT-06 note on `reach` enum."
+        },
+        {
+            "name": "commit_sigma / init_k / init_reading_k / init_history_k / attacker_bias / read_history_k",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:66-71",
+            "detail": "commit_sigma=0.18, init_k=0.045, init_reading_k=0.03, init_history_k=0.02, attacker_bias=0.12, read_history_k=0.2. Oracle: config.py:64 INIT_K=0.045, COMMIT_SIGMA=0.18; :66 READ_HISTORY_K=0.2, INIT_READING_K=0.03, INIT_HISTORY_K=0.02 [Jordan 2026-06-03; Class-C]; :133 ATTACKER_BIAS=0.12. JSON:50,104-105,108,30,166 — MATCH",
+            "aliases_or_variants": ["COMMIT_SIGMA/INIT_K/INIT_READING_K/INIT_HISTORY_K/ATTACKER_BIAS/READ_HISTORY_K (config.py + JSON)"],
+            "consumers_seen": ["strike_module.gd:56-60 (net_sigma assembly), :65 (attacker_bias), :101 (_reading)"],
+            "key_bindings_seen": ["actor.stat(\"agility\"), actor.stat(\"history\"), actor.stat(\"cognition\"), actor.stat(\"attunement\")"],
+            "notes": "IN config.CFG. Coherent."
+        },
+        {
+            "name": "upset_floor",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:74",
+            "detail": "upset_floor: float = 0.05 — '95% videogame cap: no decided matchup reads 100/0'. Oracle: config.py:161 UPSET_FLOOR=0.05. JSON:194 — MATCH",
+            "aliases_or_variants": ["UPSET_FLOOR (config.py + JSON)"],
+            "consumers_seen": ["NONE in the skeleton — no strike/wound/engine .gd reads it (its oracle consumer is wrapper.py-level fight aggregation, unported)"],
+            "key_bindings_seen": [],
+            "notes": "Exported field with no port consumer yet — build-state (unported wrapper), not deadness in the oracle."
+        },
+        {
+            "name": "heft_for() / soft_cap() / sigma_n()",
+            "kind_guess": "derived_value",
+            "surface": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:80-93",
+            "detail": "heft_for: blunt → 3.0 * (percussion_authority()/8.0), else heft_heavy/heft_light by weapon.weight; soft_cap(net)=m_max*tanh(net/m_max) [m1.soft_cap ← sigma_leverage.py:136]; sigma_n(pool)=sigma_n_coeff*sqrt(max(1,pool)) [m1.sigma_n ← sigma_leverage.py:117]. Oracle blunt heft: core.py:155 'heft = 3.0*(perc/8.0) if weapon_head==blunt else HEFT_HEAVY*heft_units' — blunt branch matches; non-blunt branch diverges (oracle: HEFT_HEAVY × WP.heft(w) continuous; port: categorical weight)",
+            "aliases_or_variants": ["core.damage heft branch", "SL.soft_cap / SL.sigma_n"],
+            "consumers_seen": ["strike_module.gd:69,75,79"],
+            "key_bindings_seen": [],
+            "notes": "soft_cap/sigma_n coherent; heft_for non-blunt branch is the pre-Phase-B6 model (F-GODOT-06)."
+        },
+        {
+            "name": "weapon_name / reach / hands / head (WeaponResource identity+geometry enums)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:10-14",
+            "detail": "weapon_name: String; reach: enum(\"short\",\"long\") = \"long\"; hands: int = 1; head: enum(\"point\",\"cut_thrust\",\"straight_cut\",\"curved_cut\",\"blunt\") = \"cut_thrust\". Oracle weapons.py:74+ carries hands and head per weapon (live: weapon_physics.py:75, core.py). Oracle reach is DERIVED — systems.py:28 'cfg[L0] + cfg[REACH_GEOM_SCALE]*geom + w.get(reach_adj,0.0)' — no categorical short/long field exists in the oracle roster",
+            "aliases_or_variants": ["WEAPONS dict (weapons.py:74)"],
+            "consumers_seen": ["strike_module.gd:106-107 _reach_base (reach/hands/head), weapon_resource.gd:53-58 coupling (head)"],
+            "key_bindings_seen": [],
+            "notes": "The port's reach enum + _reach_base (4.0 + 2.0·long + 0.8·2H + head_reach + reach_adj) is the pre-Phase-B6 reach model; weapon_physics.py:95 says the head_len-based diagnostic reach() was DELETED and the live model is geometry-derived."
+        },
+        {
+            "name": "weight (WeaponResource)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:12",
+            "detail": "@export_enum(\"light\", \"heavy\") var weight: String = \"light\". Oracle: NO weight field in weapons.py roster entries (grep 'weight=' → zero hits); the wt{light,heavy} fiat aggregate was RETIRED in Phase B6 (weapon_physics.py:457-459: 'The three remaining fiat aggregates — wt{light,heavy}, spd…, hand{…} — replaced with derivations off the SAME real per-part mass model')",
+            "aliases_or_variants": ["wt{light,heavy} (RETIRED, weapon_physics.py:458)"],
+            "consumers_seen": ["combat_config.gd:83 heft_for()"],
+            "key_bindings_seen": [],
+            "notes": "Exists in port, retired in oracle — F-GODOT-06."
+        },
+        {
+            "name": "spd (WeaponResource)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:15",
+            "detail": "@export var spd: float = 1.5. Oracle: RETIRED — config.py:54 comment: 'SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02)… replacing the retired per-weapon `spd` scalar'; weapon_physics.py:458 lists spd among the replaced fiat aggregates",
+            "aliases_or_variants": ["spd (RETIRED oracle per-weapon scalar)"],
+            "consumers_seen": ["NONE in the skeleton (grep '.spd' across engines/combat → zero consumers)"],
+            "key_bindings_seen": [],
+            "notes": "Orphan + retired: exported and populated in arming.tres:12 (1.5) / longsword.tres:12 (0.5) but read by nothing, and its oracle source no longer exists — F-GODOT-06."
+        },
+        {
+            "name": "handling (WeaponResource)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:16",
+            "detail": "@export_enum(\"Forgiving\", \"Standard\", \"Demanding\") var handling: String = \"Standard\". Oracle: RETIRED — config.py:173-174: 'HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone'",
+            "aliases_or_variants": ["HANDLE_RANK (RETIRED config.py constant)", "weapon_physics.handling() (the live derived replacement, weapon_physics.py:501)"],
+            "consumers_seen": ["NONE in the skeleton"],
+            "key_bindings_seen": [],
+            "notes": "Orphan + retired — F-GODOT-06. Exporter docstring notes handle_rank retirement (export_engine_params.py:70-72) but the port field survived."
+        },
+        {
+            "name": "grip_len / head_len (WeaponResource lever-arm)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:19-20",
+            "detail": "grip_len: float = 0.8; head_len: float = 2.4 (defaults = arming). Oracle weapons.py:88 arming: head_len=0.72, grip_len=0.24 — METRES per U0 units honesty (ED-PC-0002, weapon_physics.py:9,36). Port/.tres values are pre-U0 units (metres/0.3): 0.72/0.3=2.4, 0.24/0.3=0.8 for arming. longsword.tres:14-15 grip_len=1.6, head_len=2.8 vs oracle weapons.py:100 grip_len=0.255 (→0.85 in old units — MISMATCH beyond units), head_len=0.84 (→2.8 ✓)",
+            "aliases_or_variants": ["head_len/grip_len (weapons.py, metres)"],
+            "consumers_seen": ["NONE in the skeleton (only declared; oracle consumers are weapon_physics lever/reach paths, unported)"],
+            "key_bindings_seen": [],
+            "notes": "F-GODOT-07: stale units (pre-ED-PC-0002) + one outright value mismatch (longsword grip_len)."
+        },
+        {
+            "name": "reach_adj (WeaponResource)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:21",
+            "detail": "reach_adj: float = 0.0. .tres: arming.tres:16 reach_adj = -0.6 vs oracle weapons.py:88 reach_adj=-0.1; longsword.tres:16 reach_adj = -0.9 vs oracle weapons.py:99-101 (no reach_adj key → default 0.0 via systems.py:28 w.get('reach_adj',0.0))",
+            "aliases_or_variants": ["reach_adj (weapons.py, 'a SMALL per-weapon residual in reach-POINTS')"],
+            "consumers_seen": ["strike_module.gd:107 _reach_base"],
+            "key_bindings_seen": [],
+            "notes": "Both .tres values MISMATCH the current oracle — F-GODOT-07. Semantics also differ: port adds it to the retired categorical reach model, oracle to the geometry-derived one."
+        },
+        {
+            "name": "hand_guard / blade_guard (WeaponResource)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:24-25",
+            "detail": "hand_guard: 0.40; blade_guard: 0.55 (defaults = arming). Oracle weapons.py:88 arming hand_guard=0.4, blade_guard=0.55 — MATCH; longsword.tres:17-18 (0.45, 0.85) vs weapons.py:100 (0.45, 0.85) — MATCH",
+            "aliases_or_variants": ["hand_guard/blade_guard (weapons.py authored fields; Phase B4 also derives located-guard values, weapon_physics.py:379-396)"],
+            "consumers_seen": ["NONE in the skeleton (oracle consumers: parry/wind paths, unported)"],
+            "key_bindings_seen": [],
+            "notes": "Values coherent with the authored oracle fields."
+        },
+        {
+            "name": "gap (WeaponResource gap-precision)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:28",
+            "detail": "@export_range(0.0, 1.0) var gap: float = 0.65 — comment 'geometry-baked in Python; carried as data here'. arming.tres:19 gap=0.65; longsword.tres:19 gap=0.9. Oracle: w['gap'] is DERIVED gap_precision = point_concentration × cross_section rigidity (core.py:96-97); GAP_PREC_REF=0.65 (core.py:106) is only the neutral default for unthreaded callers",
+            "aliases_or_variants": ["gap_precision (oracle derived)", "GAP_PREC_REF (core.py:106)"],
+            "consumers_seen": ["strike_module.gd:125,127 _armor_defeat_sigma (adef_point * aw.gap)"],
+            "key_bindings_seen": [],
+            "notes": "Hand-set in .tres vs oracle-derived; the .tres numbers are unverifiable against weapons.py:98/:110 geometry without re-running the derivation — no tool checks them (F-GODOT-07). NOTE the port uses gap only for armour-defeat control; the oracle's gap-game DAMAGE path (GAP_EXPOSURE×gap_prec) is absent (C6-M2)."
+        },
+        {
+            "name": "mass / pob_frac (WeaponResource percussion inputs)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:31-32",
+            "detail": "mass: float = 1.2 (kg); pob_frac: float = 0.12. arming.tres:20-21 mass=1.2 (oracle weapons.py:88 mass=1.2 — MATCH), pob_frac=0.12; longsword.tres:20-21 mass=1.4 vs oracle weapons.py:100 mass=1.408 (near-match, 0.008 off), pob_frac=0.14. Oracle PoB_frac is DERIVED by weapon_physics.derive() from the per-part mass model, not hand-set",
+            "aliases_or_variants": ["mass (weapons.py authored)", "PoB_frac (weapon_physics derived)"],
+            "consumers_seen": ["weapon_resource.gd:45 percussion_authority()"],
+            "key_bindings_seen": [],
+            "notes": "pob_frac hand-set in port vs derived in oracle; feeds the RETIRED p_auth formula (F-GODOT-08)."
+        },
+        {
+            "name": "HEAD_MODE (WeaponResource const)",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:36-39",
+            "detail": "HEAD_MODE := {\"blunt\": \"percussion\", \"point\": \"puncture\", \"cut_thrust\": \"shear\", \"straight_cut\": \"shear\", \"curved_cut\": \"shear\", \"cut\": \"shear\"}. Oracle: core.py:75 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'} — MATCH",
+            "aliases_or_variants": ["HEAD_MODE (core.py:75)"],
+            "consumers_seen": ["weapon_resource.gd:57 coupling()"],
+            "key_bindings_seen": [],
+            "notes": "In core.py, outside exporter (C6-F2 family)."
+        },
+        {
+            "name": "percussion_authority() (WeaponResource)",
+            "kind_guess": "derived_value",
+            "surface": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:44-45",
+            "detail": "minf(8.0, 9.5 * pow(sqrt(maxf(0.0, mass)) * pob_frac, 0.30)) — comment cites 'core.p_auth'. Oracle: core.py:20-23 states the duplicate core.p_auth 'that read the hand-set pob_frac' was RETIRED (Phase-3 consolidation); the live source is weapon_physics.percussion_authority (per-part mass model, weapon_physics.py:72-75 arc/hands credits)",
+            "aliases_or_variants": ["core.p_auth (RETIRED)", "WP.percussion_authority (live oracle)"],
+            "consumers_seen": ["combat_config.gd:82 heft_for (blunt branch)", "strike_module.gd:122 _armor_defeat_sigma (blunt cap)"],
+            "key_bindings_seen": [],
+            "notes": "F-GODOT-08: the port reproduces the retired formula. None of weapon_physics.py's constants (C_HEAD, PERC_2H_HANDS, HEFT_REF, HANDLING_POB_K, GUARD_HAND_K…) have any export path."
+        },
+        {
+            "name": "TraditionResource channel weights (visual/tactile/precommit/leverage/tempo/measure/balance) + channel_modifiers + eff_cw()",
+            "kind_guess": "practitioner_stat",
+            "surface": "designs/godot/skeleton/engines/combat/resources/tradition_resource.gd:14-32",
+            "detail": "7 exported channel weights (neutral 1.0) + channel_modifiers Dictionary + eff_cw(channel) = base × modifier. german.tres:10-16: visual=0.95, tactile=1.35, precommit=1.0, leverage=1.3, tempo=1.1, measure=1.05, balance=1.0. Oracle: traditions.py:10-11 — 'The scalar 7-channel weight vector was REMOVED 2026-06-29 (Jordan) — proven a degenerate \"who-bought-balance\" contest; the raw numbers below survive only as set/mode/provenance metadata, read by nothing as weights' and :15 'its vestigial numbers deleted 2026-06-29 (read by nothing)'. Current TRADITIONS entries (traditions.py:18-27) carry ONLY set + mode",
+            "aliases_or_variants": ["7-dim channel-weight vector (REMOVED from oracle)", "tradition.eff_cw (no longer exists in oracle traditions.py)"],
+            "consumers_seen": ["NONE in the skeleton (no module reads eff_cw)"],
+            "key_bindings_seen": [],
+            "notes": "F-GODOT-05: entire model removed from canon oracle 2026-06-29; tradition_resource.gd:4-5 header even asserts 'channels… routing is complete' — stale. Live oracle differentiation is ability primitives (ability_primitives.py) + PREFERRED imposition gate + familiarity."
+        },
+        {
+            "name": "FAMILIARITY_DEFAULT / FAMILIARITY_ADJACENT (TraditionResource)",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/resources/tradition_resource.gd:25-26",
+            "detail": "FAMILIARITY_DEFAULT := 0.85; FAMILIARITY_ADJACENT := 0.93. Oracle: traditions.py:30 FAMILIARITY_DEFAULT = 0.85; :31 FAMILIARITY_ADJACENT = 0.93 — MATCH",
+            "aliases_or_variants": [],
+            "consumers_seen": ["tradition_resource.gd:37-42 familiarity()"],
+            "key_bindings_seen": [],
+            "notes": "Coherent; outside exporter (traditions.py is another un-exported oracle file). Port takes `adjacent` as a parameter; oracle has the canonical ADJACENT pair-set (traditions.py:32-36) which the port does not carry as data."
+        },
+        {
+            "name": "arming.tres / longsword.tres (weapon data instances)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/godot/skeleton/data/weapons/arming.tres:7-21 + longsword.tres:7-21",
+            "detail": "arming: reach=long, weight=light, hands=1, head=cut_thrust, spd=1.5, handling=Standard, grip_len=0.8, head_len=2.4, reach_adj=-0.6, hand_guard=0.4, blade_guard=0.55, gap=0.65, mass=1.2, pob_frac=0.12. longsword: reach=long, weight=heavy, hands=2, head=cut_thrust, spd=0.5, handling=Standard, grip_len=1.6, head_len=2.8, reach_adj=-0.9, hand_guard=0.45, blade_guard=0.85, gap=0.9, mass=1.4, pob_frac=0.14. Oracle heads: weapons.py:87-98 (arming), :99-111 (longsword)",
+            "aliases_or_variants": ["WEAPONS['arming'] / WEAPONS['longsword'] (weapons.py)"],
+            "consumers_seen": ["strike_module.gd via actor.get(\"weapon\")"],
+            "key_bindings_seen": [],
+            "notes": "Per-field drift detailed in the grip_len/reach_adj/mass items above and F-GODOT-07. No tool round-trips these .tres against weapons.py."
+        },
+        {
+            "name": "combat.tres (EngineManifest)",
+            "kind_guess": "other",
+            "surface": "designs/godot/skeleton/data/engines/combat/combat.tres:7-11",
+            "detail": "engine_id=\"personal_combat\", engine_script=res://engines/combat/combat_engine.gd, scale=\"personal\", modules=[strike.tres, wound.tres], accounting_phase=[\"emission_processing\"]. Mirrors references/module_contracts.yaml personal_combat entry (contracts:810 resolver d_sigma)",
+            "aliases_or_variants": ["module_contracts.yaml personal_combat"],
+            "consumers_seen": ["engine_manifest.gd:15-21 to_spec() (loader = undefined MechanicsRegistry/Kernel spine, CLAUDE.md §6)"],
+            "key_bindings_seen": [],
+            "notes": "Names no stat values itself."
+        },
+        {
+            "name": "strike.tres (StrikeModule manifest)",
+            "kind_guess": "other",
+            "surface": "designs/godot/skeleton/data/engines/combat/strike.tres:8-13",
+            "detail": "module_id=\"combat.strike\", resolver=1, consumes=[\"scene.combat_strike\"], emits=[\"scene.combat_hit\"], owned_scalars=[], config=ExtResource combat_config.tres",
+            "aliases_or_variants": [],
+            "consumers_seen": ["combat_engine.gd:23-25 (config injection)"],
+            "key_bindings_seen": ["consumes/emits Key types scene.combat_strike → scene.combat_hit"],
+            "notes": "owned_scalars empty by design — health delta rides the Key (F1 guard, strike_module.gd:32-34)."
+        },
+        {
+            "name": "wound.tres owned_scalars (cumulative_damage / wounds / health)",
+            "kind_guess": "track",
+            "surface": "designs/godot/skeleton/data/engines/combat/wound.tres:11 + engines/combat/modules/wound_module.gd:29-33",
+            "detail": "owned_scalars = [{bucket:\"track\", name:\"cumulative_damage\", writable:true}, {bucket:\"track\", name:\"wounds\", writable:true}, {bucket:\"derived_value\", name:\"health\", writable:false}]. Registry cross-check: descriptor_registry.yaml:107 lists Health under not_descriptors.derived_values; :108 tracks = [Piety, Disposition, Renown, Standing, Persuasion] — neither \"cumulative_damage\" nor \"wounds\" appears in any registry bucket",
+            "aliases_or_variants": ["Wounds (params/core.md:158 wound counter)", "cumulative damage (derived_stats_v30 §4.1 'non-resetting grand total')"],
+            "consumers_seen": ["wound_module.gd:53-56 (actor.set), strike_module.gd:52-53 (actor.get(\"wounds\"))"],
+            "key_bindings_seen": ["stat_deltas {\"health\": -damage} (strike_module.gd:92)"],
+            "notes": "F-GODOT-10: the port coins two track names with no registry backing (the same unregistered-vocabulary surface as C6-F1's stat_deltas gap, from the producer side)."
+        },
+        {
+            "name": "scene.combat_strike / scene.combat_hit / scene.combat_felled / scene.combat_resolved (KeyTypeResource instances)",
+            "kind_guess": "other",
+            "surface": "designs/godot/skeleton/data/key_types/scene_combat_{strike,hit,felled,resolved}.tres",
+            "detail": "strike: required=[attacker,defender], optional=[commit], transient/immediate. hit: required=[], optional=[degree,damage,net], transient/immediate. felled: required=[actor_id], indelible/near, consumers npc_behavior+faction_state. resolved: required=[scene_id], optional=[participants,outcome], persistent/near, consumers faction_state+npc_behavior. All family=scene, scale=[personal]",
+            "aliases_or_variants": [],
+            "consumers_seen": ["key_type_resource.gd:21-31 to_spec(); emitters strike_module.gd:84-97, wound_module.gd:61-72, combat_engine.gd:49-61"],
+            "key_bindings_seen": ["payload fields degree/damage/net/commit/attacker/defender/actor_id/scene_id/participants/outcome"],
+            "notes": "scene.combat_hit declares required_payload_fields=[] though strike_module always sets degree/net/damage — registration is looser than the emitter. No payload-field VALUE typing anywhere (presence-only, mirroring sim TypeRegistry — C6-F1 adjacent)."
+        },
+        {
+            "name": "references/engine_params/combat_engine_v1.json (typed export)",
+            "kind_guess": "code_constant",
+            "surface": "references/engine_params/combat_engine_v1.json:1-206",
+            "detail": "schema_version=1; source=designs/scene/combat_engine_v1/config.py; canonical_status='CANONICAL combat_engine_v1 (ED-900; re-ratified ED-904)'; sections.cfg = 181 keys (counted programmatically), ACT_BASE…WOUND_DEF_OB. Includes the 7 dead keys CHOKE_GRIP_MIN(:41), CONC_BASE_K(:51), EXPOSE_CHOKE_K(:76), EXPOSE_MOMENT_REF(:79), POLE_CLOSE_PENALTY(:150), REACH_ADV_K(:154), RESIDUAL_REACH_FRAC(:183)",
+            "aliases_or_variants": ["config.CFG (config.py)"],
+            "consumers_seen": ["tools/export_engine_params.py --check (blocking CI round-trip); no Godot consumer yet (skeleton hand-carries values into combat_config.gd instead of ingesting this JSON)"],
+            "key_bindings_seen": [],
+            "notes": "Contains ONLY config.CFG — none of core.py/sigma_leverage.py/weapons.py/traditions.py/combatant.py constants appear. Of the 181 keys, only ~20 have combat_config.gd counterparts; the JSON↔.gd mapping is uppercase→lowercase by hand."
+        },
+        {
+            "name": "tools/export_engine_params.py (scope)",
+            "kind_guess": "other",
+            "surface": "tools/export_engine_params.py:55-74",
+            "detail": "derive() imports config and serializes exactly one section: '\"cfg\": _typed(config.CFG)' (:69). COVERS: config.CFG (181 keys), with --check as a blocking deterministic diff (:83-96). DOES NOT COVER: core.py module constants (DECISIVE_OB, POOL_FLOOR, BASE_POOL, HEFT_HEAVY, QUAL, OW_MAX/OW_Z, DMG_SCALE, HEAD_MODE, DELIVERY, RESIST, TIER2MAT, COVERAGE_GAP, GAP_EXPOSURE, GAP_PREC_REF), sigma_leverage.py (PER_DIE, TN_STANDARD, LEVEL_SIGMA, M_MAX, SIGMA_N_COEFF, MU/SD_PER_DIE), weapons.py WEAPONS roster, weapon_physics.py constants, traditions.py (TRADITIONS/PREFERRED/ADJACENT/FAMILIARITY_*), combatant.py wound-formula constants, and params/*.md prose (explicit scope guard, :16-17)",
+            "aliases_or_variants": [],
+            "consumers_seen": [".github/workflows CI (per dossier §3, verified green live)"],
+            "key_bindings_seen": [],
+            "notes": "Docstring (:17) declares prose parsing as future ED-1052 work; the un-exported TYPED Python sources above are inside its own 'ALREADY-TYPED Python oracle' framing but outside its actual code — C6-F2/C6-U2."
+        },
+        {
+            "name": "wound_module.gd inline wound-model constants",
+            "kind_guess": "derived_value",
+            "surface": "designs/godot/skeleton/engines/combat/modules/wound_module.gd:48-50",
+            "detail": "wi = roundf(end_v + 4.0 + 0.4 * spi); max_w = mini(int(end_v / 2.0) + 1, 3); health_full = roundf(wi * (max_w + 1) + 0.25 * strn * end_v). Prose head: derived_stats_v30.md §4.1 (AUTHORITATIVE, PP-716; D-A ED-1021: WI=round(End+4+0.4×Spirit), Health=round(WI×(MW+1)+0.25×Strength×End), MW cap 3 = PP-717; felling = Health depletion). params/core.md:158 concurs (ED-PC-0005 wound-Ob ruling 2026-07-08)",
+            "aliases_or_variants": ["Wound Interval / Max Wounds / Health (derived_stats_v30 §4.1)", "r2_consequence_wounds.{wound_interval,max_wounds,health_full} (module_contracts.yaml:830)"],
+            "consumers_seen": ["wound_module.gd:52-59 (track writes + felled emission)"],
+            "key_bindings_seen": ["actor.stat(\"endurance\"/\"spirit\"/\"strength\"), actor.set(\"cumulative_damage\"/\"wounds\"/\"health\")"],
+            "notes": "Values match canon prose byte-for-byte, but 4.0/0.4/2/1/3/0.25 are bare inline literals — not in combat_config.gd, not in the JSON, no round-trip path (combatant.py, their typed oracle home, is un-exported)."
+        },
+        {
+            "name": "strike_module.gd inline literals (PER_DIE[7], OW tail, degree bands)",
+            "kind_guess": "code_constant",
+            "surface": "designs/godot/skeleton/engines/combat/modules/strike_module.gd:75, :135, :141-148",
+            "detail": ":135 _roll_net_continuous: 'GameState.rng.randfn(0.40 * pool, 0.800 * sqrt(...))' = PER_DIE[7] (sigma_leverage.py:73-77 [canonical: params/core.md §Expected Value (per die), TN7]) hardcoded, ignoring cfg.tn_standard. :75 'qf = 1.5 + (2.5 - 1.5) * tanh(z / 1.5)' = QUAL floor 1.5 + OW_MAX=2.5 / OW_Z=1.5 (core.py:73 [M-QUAL D-A]) as bare literals. :141-148 _degree: net<0.5 failure; >=2·ob−0.5 AND >=2.5 overwhelming; >=ob−0.5 success — matches core.py:35-43 degree() ER-2 −0.5 continuity correction (commit 793f1a62 cited in the .gd comment); port says \"failure\", oracle 'fail' (internal string only)",
+            "aliases_or_variants": ["PER_DIE / MU_PER_DIE / SD_PER_DIE (sigma_leverage.py:73-77,100-101)", "OW_MAX / OW_Z (core.py:73)"],
+            "consumers_seen": ["strike_module.gd resolve()"],
+            "key_bindings_seen": [],
+            "notes": "F-GODOT-09: OW_MAX/OW_Z ARE already ported (as uncited inline literals) — the C6 dossier §3 statement that they are 'not staged anywhere in the typed export or the .gd file' is wrong on the .gd half."
+        },
+        {
+            "name": "actor.stat() attribute-name bindings (port-wide)",
+            "kind_guess": "attribute_scalar",
+            "surface": "designs/godot/skeleton/engines/combat/modules/strike_module.gd:56-58,66,79,101 + wound_module.gd:44-46",
+            "detail": "Names bound: \"agility\", \"history\", \"cognition\", \"attunement\", \"strength\" (strike), \"endurance\", \"spirit\", \"strength\" (wound). descriptor_registry.yaml roster (IN FLUX): Cognition is a LEGACY alias of Acuity (:39, '[ASSUMPTION] legacy Cognition folds to Acuity — Jordan veto'); Spirit is a LEGACY alias of Will (:40, 'spirit move'); Agility/Strength/Endurance/Attunement are primaries (:34-36,:42). \"history\" appears in NO registry bucket at all (Histories are the skill system, params/core.md:151)",
+            "aliases_or_variants": ["attr.mind.acuity (primary for cognition)", "attr.mind.will (primary for spirit)"],
+            "consumers_seen": ["strike/wound resolve paths"],
+            "key_bindings_seen": ["actor.stat(name) duck-typed API (strike_module.gd:18-19 header)"],
+            "notes": "F-GODOT-10. CLAUDE.md §5: 'Do not bind Godot resource fields to these keys yet' (schema IN FLUX)."
+        },
+        {
+            "name": "german.tres / none.tres (tradition data instances)",
+            "kind_guess": "practitioner_stat",
+            "surface": "designs/godot/skeleton/data/traditions/german.tres:7-16 + none.tres:7-16",
+            "detail": "german: tradition_id=german, set_name=\"Bind Fighter\", mode=tactile, visual=0.95, tactile=1.35, precommit=1.0, leverage=1.3, tempo=1.1, measure=1.05, balance=1.0. none: all channels 1.0, set/mode empty. Oracle traditions.py:19 'german': dict(set='Bind Fighter', mode='tactile') — set/mode MATCH; the seven channel numbers were DELETED from the oracle 2026-06-29 (traditions.py:14-16 'vestigial numbers deleted... read by nothing')",
+            "aliases_or_variants": ["TRADITIONS['german'] (traditions.py:19)"],
+            "consumers_seen": ["NONE (no skeleton module loads tradition .tres)"],
+            "key_bindings_seen": [],
+            "notes": "F-GODOT-05: german.tres preserves numbers canon deleted."
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-GODOT-01",
+            "severity": "P1",
+            "kind": "export-drift",
+            "calibration": "KNOWN-TRACKED",
+            "known_ref": "C6 critic C6-M1 (P1, ED-1050 residual); carried into attribute_value_coherence_v1.md:237",
+            "claim": "combat_config.gd's resist dictionary has materially drifted from the oracle in 4 of 12 cells: port cloth {percussion 0.10, shear 0.35, puncture 0.15} vs oracle cloth {.12, .45, .12}; port mail.shear 0.80 vs oracle .85. The oracle's 2026-06-30 grounding edit was never re-exported.",
+            "evidence": "designs/godot/skeleton/engines/combat/resources/combat_config.gd:34-39 vs designs/scene/combat_engine_v1/core.py:86-89; consumer weapon_resource.gd:62"
+        },
+        {
+            "id": "F-GODOT-02",
+            "severity": "P3",
+            "kind": "export-drift",
+            "calibration": "KNOWN-TRACKED",
+            "known_ref": "C6 critic C6-M2 (P3)",
+            "claim": "GAP_EXPOSURE (core.py:105) and GAP_PREC_REF (core.py:106) are never carried into combat_config.gd or the JSON. Consequence beyond the missing constants: weapon_resource.gd:64's puncture transmit still computes maxf(t, cfg.coverage_gap[coverage]) — the 'old fixed COVERAGE_GAP floor' that core.py:122's own comment says was REPLACED by max(t, GAP_EXPOSURE[mat]*gap_prec) — so the port's gap-game damage logic is the superseded model, not just missing two numbers.",
+            "evidence": "designs/scene/combat_engine_v1/core.py:105-106,121-125 vs designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:61-68; combat_config.gd:57-58 (deferral comment)"
+        },
+        {
+            "id": "F-GODOT-03",
+            "severity": "P2",
+            "kind": "enforcement-gap",
+            "calibration": "KNOWN-TRACKED",
+            "known_ref": "C6 dossier C6-F2 (P2)",
+            "claim": "export_engine_params.py serializes only config.CFG (:69); the canonical core.py constants reach combat_config.gd by hand with no round-trip. EXTENSION not named in C6-F2: three more fields (tn_standard, m_max, sigma_n_coeff) trace to sim/autoload/sigma_leverage.py:79,92-93 — a THIRD un-exported source file — and no TN_STANDARD/M_MAX/SIGMA_N_COEFF keys exist among the JSON's 181 cfg keys; the dossier's §3 field-by-field diff mis-attributes their match to 'config.py/…json'. Fourth and fifth un-exported typed sources: combatant.py (wound-formula constants, inlined at wound_module.gd:48-50) and traditions.py (FAMILIARITY constants at tradition_resource.gd:25-26).",
+            "evidence": "tools/export_engine_params.py:55-74; sim/autoload/sigma_leverage.py:79,92-93; combat_config.gd:16,19-20; references/engine_params/combat_engine_v1.json (no such keys among 181); dossier_C6.md §3"
+        },
+        {
+            "id": "F-GODOT-04",
+            "severity": "P2",
+            "kind": "dead",
+            "calibration": "KNOWN-TRACKED",
+            "known_ref": "C6 dossier C6-F3 (P2)",
+            "claim": "7 of 181 config.CFG keys (CHOKE_GRIP_MIN, CONC_BASE_K, EXPOSE_CHOKE_K, EXPOSE_MOMENT_REF, POLE_CLOSE_PENALTY, REACH_ADV_K, RESIDUAL_REACH_FRAC) are unconsumed by any engine module yet exported into the typed JSON as if live. Confirmed present at combat_engine_v1.json:41,51,76,79,150,154,183.",
+            "evidence": "references/engine_params/combat_engine_v1.json:41,51,76,79,150,154,183; dossier_C6.md §4"
+        },
+        {
+            "id": "F-GODOT-05",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "NEW",
+            "known_ref": null,
+            "claim": "tradition_resource.gd's entire 7-channel weight model (visual/tactile/precommit/leverage/tempo/measure/balance exports, channel_modifiers, eff_cw()) and german.tres's channel numbers (visual=0.95, tactile=1.35, leverage=1.3, tempo=1.1, measure=1.05) implement a mechanic the oracle REMOVED 2026-06-29 (Jordan): traditions.py:10-11 'The scalar 7-channel weight vector was REMOVED… proven a degenerate who-bought-balance contest', vestigial numbers deleted, 'read by nothing as weights'. The .gd header (:4-5) still asserts the opposite — 'channels… routing is complete' — citing a now-stale audit. Live oracle differentiation (ability primitives + PREFERRED imposition gate) has no port counterpart.",
+            "evidence": "designs/godot/skeleton/engines/combat/resources/tradition_resource.gd:4-5,14-32; designs/godot/skeleton/data/traditions/german.tres:10-16; designs/scene/combat_engine_v1/traditions.py:10-11,14-16,18-27"
+        },
+        {
+            "id": "F-GODOT-06",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "NEW",
+            "known_ref": null,
+            "claim": "weapon_resource.gd exports three fields whose oracle sources were RETIRED in the Phase-B6 morphology rearch (2026-07-02): weight (light/heavy — weapon_physics.py:457-459 wt de-leak; no weight= key remains in the weapons.py roster), spd (config.py:54 'replacing the retired per-weapon spd scalar'), and handling (config.py:173-174 'the Forgiving/Standard/Demanding category is gone'). spd and handling are additionally ORPHANS — populated in both weapon .tres files but read by nothing in the skeleton. weight IS consumed (combat_config.gd:83 heft_for), meaning the port's cut/thrust heft is the retired categorical model while the oracle computes HEFT_HEAVY × WP.heft(w) continuous (core.py:155). The reach enum + strike_module._reach_base (:106-107) is likewise the pre-B6 categorical reach model (oracle: systems.py:28 geometry-derived).",
+            "evidence": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:11-16; designs/scene/combat_engine_v1/weapon_physics.py:457-459; config.py:54,173-174; core.py:155; strike_module.gd:106-107; systems.py:28"
+        },
+        {
+            "id": "F-GODOT-07",
+            "severity": "P2",
+            "kind": "export-drift",
+            "calibration": "NEW",
+            "known_ref": null,
+            "claim": "The two weapon .tres instances have drifted from the current weapons.py oracle roster with no tool checking them: (a) lengths are in pre-U0 units (oracle metres per ED-PC-0002 units honesty; .tres values = metres/0.3 — arming head_len 2.4 vs 0.72 m, grip_len 0.8 vs 0.24 m); (b) longsword.tres grip_len=1.6 mismatches even after unit conversion (oracle 0.255 m → 0.85 old-units); (c) reach_adj mismatches outright — arming.tres -0.6 vs oracle -0.1, longsword.tres -0.9 vs oracle unset (default 0.0); (d) gap and pob_frac are hand-set in the .tres while the oracle DERIVES them (gap_precision from geometry, core.py:96-97; PoB_frac from the per-part mass model), so no verbatim comparison is even possible.",
+            "evidence": "designs/godot/skeleton/data/weapons/arming.tres:14-21, longsword.tres:14-21 vs designs/scene/combat_engine_v1/weapons.py:87-111; weapon_physics.py:9,36 (U0/ED-PC-0002); systems.py:28 (reach_adj default); core.py:96-97 (gap derived)"
+        },
+        {
+            "id": "F-GODOT-08",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "NEW",
+            "known_ref": null,
+            "claim": "weapon_resource.gd:44-45 percussion_authority() = min(8, 9.5·(√mass·pob_frac)^0.30) reproduces the RETIRED core.p_auth: core.py:20-23's Phase-3 consolidation note says the duplicate p_auth 'that read the hand-set pob_frac' was retired in favour of weapon_physics.percussion_authority (per-part mass model with 2H/arc credits, weapon_physics.py:72-75). No weapon_physics.py constant has any export path, so the live formula cannot be re-exported to the port.",
+            "evidence": "designs/godot/skeleton/engines/combat/resources/weapon_resource.gd:42-45; designs/scene/combat_engine_v1/core.py:20-23; weapon_physics.py:60-75"
+        },
+        {
+            "id": "F-GODOT-09",
+            "severity": "P3",
+            "kind": "other",
+            "calibration": "NEW",
+            "known_ref": "corrects C6 dossier §3 residual (adjacent to C6-F2)",
+            "claim": "Dossier C6 §3 states OW_MAX/OW_Z are 'not staged anywhere in the typed export or the .gd file for that future module to read' — half wrong: strike_module.gd:74-75 ALREADY ports the overwhelming tail with OW_MAX=2.5 and OW_Z=1.5 as bare inline literals ('qf = 1.5 + (2.5 - 1.5) * tanh(z / 1.5)'), matching core.py:73,174-176. Same pattern at :135: PER_DIE[7] = (0.40, 0.800) hardcoded in _roll_net_continuous, bypassing the exported cfg.tn_standard (which is consequently dead-in-port). Values currently correct; provenance uncited and outside every round-trip.",
+            "evidence": "designs/godot/skeleton/engines/combat/modules/strike_module.gd:74-75,135; designs/scene/combat_engine_v1/core.py:73,174-176; sim/autoload/sigma_leverage.py:73-77; dossier_C6.md §3 (OW_MAX/OW_Z paragraph)"
+        },
+        {
+            "id": "F-GODOT-10",
+            "severity": "P3",
+            "kind": "key-binding-gap",
+            "calibration": "NEW",
+            "known_ref": "adjacent to C6-F1 (substrate-side stat_deltas validation gap) — this is the producer-side vocabulary, not double-counting the missing check",
+            "claim": "The port's stat-name bindings have no registry backing on three fronts: (a) strike_module.gd binds actor.stat(\"cognition\") and wound_module.gd binds actor.stat(\"spirit\") — both LEGACY aliases in the IN-FLUX descriptor_registry roster (primaries Acuity, Will; the Cognition→Acuity fold is itself '[ASSUMPTION] — Jordan veto'); (b) actor.stat(\"history\") binds a quantity in NO registry bucket at all; (c) wound.tres/wound_module.gd register owned tracks \"cumulative_damage\" and \"wounds\" that appear in no registry list (not_descriptors.tracks = [Piety, Disposition, Renown, Standing, Persuasion]). CLAUDE.md §5 explicitly warns against binding Godot fields to these keys while the schema is IN FLUX.",
+            "evidence": "strike_module.gd:57,101; wound_module.gd:45; references/descriptor_registry.yaml:39-40,106-110; data/engines/combat/wound.tres:11; params/core.md:151 (Histories = skill system)"
+        }
+    ],
+    "coverage_notes": "SWEPT IN FULL: combat_config.gd (all 22 @export declarations across 29 values, lines 15-74, + 3 funcs 80-93); weapon_resource.gd (all 15 @export fields + HEAD_MODE const + 3 funcs); tradition_resource.gd (all 10 exports + 2 consts + 2 funcs); ALL 14 .tres files under designs/godot/skeleton/ (combat_config, combat/strike/wound manifests, 4 key_types, arming/longsword weapons, german/none traditions — enumerated by find, none skipped); engine_manifest.gd, key_type_resource.gd, combat_engine.gd, strike_module.gd, wound_module.gd; references/engine_params/combat_engine_v1.json (all 181 sections.cfg keys counted programmatically via json.load; not all 181 individually re-diffed against config.py — the blocking --check gate performs exactly that diff and the C6 dossier ran it live green same-day, so per-key re-verification would duplicate a verified gate; the ~20 keys with combat_config.gd counterparts WERE individually cross-read); tools/export_engine_params.py (full read, both modes). ORACLE CROSS-READS for provenance: core.py:1-32,63-176, config.py (grep-targeted lines), weapons.py:74-111, weapon_physics.py:1-96,362-514, traditions.py:1-46, sigma_leverage.py (grep-targeted), combatant.py:94 vicinity, systems.py:28; prose heads params/core.md:151-161,158, derived_stats_v30.md §4.1 region, descriptor_registry.yaml full, module_contracts.yaml:810-857 (grep-targeted). NOT SWEPT: designs/godot/*.md (the four stale 2026-04-18 docs — out of family scope, already banner-flagged ED-1054 and covered by other lanes); sim/ package internals beyond sigma_leverage provenance (F-SIM's family); tests/sim/v32-combat-balance frozen harness (C6 dossier §1 already byte-compared it). Did not re-run export_engine_params.py --check (dossier verified green live 2026-07-08). Cross-calibration: dossier_C6.md + critic_C6.md read in full; findings 01-04 marked KNOWN-TRACKED against C6-M1/C6-M2/C6-F2/C6-F3; findings 05-10 are NEW (tradition channel-vector removal, retired weapon fields, weapon .tres drift, retired p_auth, OW-literal dossier correction, legacy-alias key bindings) — none appear in dossier_C6.md, critic_C6.md, or attribute_value_coherence_v1.md's C6 rows."
+}
