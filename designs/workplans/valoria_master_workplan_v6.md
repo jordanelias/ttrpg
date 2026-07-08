@@ -50,6 +50,18 @@ Statuses live in exactly one place (the lane handoff or the ledger); the monthly
 (§6) refreshes the pointers. This is the anti-drift design: v5 §3's J-38 line contradicted
 CURRENT.md within four days precisely because two surfaces both claimed status.
 
+**Completeness rule (2026-07-08, Jordan directive):** every §4 lane section MUST open with
+an explicit `handoffs/HANDOFF_<LANE>.md` pointer, even where the section's own prose is
+thin or the lane is quiet — the pointer is what guarantees nothing gets missed, not literal
+enumeration of every open item here. A session (human or agent) scoping into a lane via
+this document is not "caught up" until it has also read that lane's handoff; a §4 entry
+with no handoff pointer is a bug in this document, not an acceptable shorthand (this closed
+a real gap 2026-07-08: SE/WR/FI/FA had no handoff pointer at all, and GO's was hedged
+"if present" despite the file existing). Same rule for §5: every ledger entry tagged
+`needs_jordan: true` must be reachable from this document (a T0/T1/T2 row, a §4 mention, or
+an explicit range/queue citation) — checked by hand 2026-07-08 (0 gaps as of that pass); a
+future mechanical CI check would be the sturdier version of this same rule (not yet built).
+
 **How to read:** §1 milestones · §2 the cross-cutting IN spine · §3 the narrative-engine
 workstream · §4 per-lane workstreams (pointer + next increments + gates) · §5 the tiered
 Jordan-decision register · §6 governance · Appendices A (v5 supersession) / B (session
@@ -238,28 +250,35 @@ in (Recall/pool-cap, boost-vs-Appraise, coalition/solo floor per ED-297). Then s
 share) and settled canon (T-25).
 
 ### SE — settlements
-Status: ED-SE-0001 (governance_play redesign staging; the event deck it specifies is also
-the narrative generator's card substrate — no deck code exists yet, and Stage-2.5 Layer B
-lists it as a precondition, so SE's deck work is on the M2 critical path even though SE
-itself is not M1-gating beyond juncture 1's venue).
+Status: `handoffs/HANDOFF_SE.md` (full open-item list lives there — read it before treating
+this section as complete). ED-SE-0001 (governance_play redesign staging; the event deck it
+specifies is also the narrative generator's card substrate — no deck code exists yet, and
+Stage-2.5 Layer B lists it as a precondition, so SE's deck work is on the M2 critical path
+even though SE itself is not M1-gating beyond juncture 1's venue).
 
 ### WR — world
-Status: ED-WR-0001 (GD-1 strain sweep, ~8 sites, grep-derived) + ED-WR-0002 (MS naming
-sweep + enforce:block — precondition for the thread typed export and juncture 5). Cheap,
-early, unblocking — schedule before the heavy lanes.
+Status: `handoffs/HANDOFF_WR.md` (full open-item list lives there — read it before treating
+this section as complete). ED-WR-0001 (GD-1 strain sweep, ~8 sites, grep-derived) + ED-WR-0002
+(MS naming sweep + enforce:block — precondition for the thread typed export and juncture 5).
+Cheap, early, unblocking — schedule before the heavy lanes.
 
 ### FI — field investigation
-Status: ED-FI-0001 (investigation audit) — now explicitly the **evidence supply chain** for
-the claim-grammar interface (trails → evidence → argument → precedent → new stakes).
+Status: `handoffs/HANDOFF_FI.md` (full open-item list lives there — read it before treating
+this section as complete). ED-FI-0001 (investigation audit) — now explicitly the **evidence
+supply chain** for the claim-grammar interface (trails → evidence → argument → precedent →
+new stakes).
 
 ### FA — factions
-Status: decision-surface work (J-5) delivers juncture 1; fork 10 (faction count 4–8
-unreconciled across four docs, census finding) blocks any faction-scope bank/binding table
-and needs its own ED + ruling. Sim win-share rebalancing stays post-M1 (J-7; queue 8) —
-but F7's smoke oracle (narrative Stage 2.5 precondition) is where its regression gate lands.
+Status: `handoffs/HANDOFF_FA.md` (full open-item list lives there — read it before treating
+this section as complete). Decision-surface work (J-5) delivers juncture 1; fork 10 (faction
+count 4–8 unreconciled across four docs, census finding) blocks any faction-scope
+bank/binding table and needs its own ED + ruling. Sim win-share rebalancing stays post-M1
+(J-7; queue 8) — but F7's smoke oracle (narrative Stage 2.5 precondition) is where its
+regression gate lands.
 
 ### GO — Godot
-Status: `handoffs/HANDOFF_GO.md` if present; governing spec =
+Status: `handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
+this section as complete). Governing spec =
 `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
 (PROPOSED; 8-item register open). Gate-0 exact deliverables, none executed: **G0.1** Key.gd
 v1→v2 (structured targets[], scale_signature[], symbolic_dimensions[4], time_horizon,
@@ -369,9 +388,11 @@ ED-PC-0012 [point-transmit floor-lock, sabre-class] filed as new, explicitly non
 
 - **Monthly reconcile (J-14, institutionalized):** checklist = re-verify ledger counts by
   scan → refresh §5 pointers (strike resolved rows, no status edits elsewhere) → confirm
-  CURRENT.md rows against heads → confirm handoff freshness per lane → refresh the
-  progress board (below) → dated-snapshot the session inventory delta → one commit
-  `[editorial]` citing this section.
+  CURRENT.md rows against heads → confirm handoff freshness per lane → **confirm every §4
+  lane section still opens with its `handoffs/HANDOFF_<LANE>.md` pointer (§0's completeness
+  rule) and every `needs_jordan: true` ledger entry is still reachable from this document**
+  → refresh the progress board (below) → dated-snapshot the session inventory delta → one
+  commit `[editorial]` citing this section.
 - **Progress board (ED-IN-0010):** `designs/workplans/workplan_v6_progress.yaml` is the
   ONE designated home for milestone/juncture-level rollup status (a rollup nothing else
   carries — lane detail stays in the handoffs; rows point at evidence). Rendered only by
