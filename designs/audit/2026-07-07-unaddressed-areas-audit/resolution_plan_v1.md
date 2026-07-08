@@ -356,3 +356,24 @@ fields) — no behaviour change; the seed-0 golden in `test_mc_v18_regression.py
 in CI via the existing "Sim Reference Regression" job. **Remainder of PR-2** (the flag-gated echo
 wiring + A14 runtime lint) is the next step; when it reaches a subsystem, the zero-assertions here
 become the deliberate golden-update trigger.
+
+## §9 · Stratum-B progress — oracle-to-canon, first slice (2026-07-08)
+
+First **Stratum-B** ("oracle to canon") slice: the ruled, low-risk sim truth-alignment deferred
+(with flags) from the Stratum-A pass. Both close doc-side repairs that landed in the first pass;
+both are island/dead-code changes, so the F7 + seed-0 goldens are unmoved (verified).
+
+- **ED-871 CLOSED end-to-end** (ED-WR-0005 tail): `sim/thread/operations.py` — `attempt_mending`
+  base cost −1 → 0, and Mending **exempted from the blanket Partial/Failure degree-penalty** so all
+  four degrees net 0 (canon). Pinned test `sim/tests/test_thread_mending_ed871.py` (threadwork had
+  zero coverage). **Still open in ED-WR-0005:** C-TW-3 (the same blanket penalty mis-hits Leap
+  against its own docstring — deliberately left, flagged), C-TW-4/6/8/10/11, and the knots.py
+  ED-912 rebuild (C-TW-12).
+- **CI-75 dead constant removed** (CI75-9, under the already-resolved ED-IN-0025): `sim/peninsular/
+  ci_track.py` — the dead `CI_PHASE_TRANSITION = 75` (zero callers) and its stale canonical comment
+  are gone; the comment now points at the CI-100 no-freeze model (the doc side landed in the
+  Stratum-A pass). `CI_CEILING = 100` (the live model) is untouched.
+
+**Next Stratum-B candidates:** the knots.py ED-912 rebuild (C-TW-12), the dead `WoundTracker.
+pool_penalty()` (ED-PC-0005), and the contest live-dispatch criterion (ED-SC-0011). The larger
+armature echo-wiring integration (PR-2 remainder) remains its own dedicated build.
