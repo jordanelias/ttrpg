@@ -464,30 +464,29 @@ def element_afforded(el, w, grip=0.0, room=1.0):
                                                                         # itself) — whole-weapon fallback, unchanged
         if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion', gap, pa, pc)
 
-    # ── graded secondary affordances: TRIED AND REVERTED this session (U2/ED-PC-0008/0009, 2026-07-08) ──
-    # Both the independent cut/point checks (MODE_EDGE_MIN/MODE_TIP_MIN) and the percussion secondary check
-    # (MODE_PERC_MIN, wiring weapon_physics.reversed_grip_percussion into a competing 'blunt' token) were
-    # implemented and numerically verified, then reverted after each surfaced a real problem this session did
-    # not have scope to fix:
-    #   - cut/point: turns 7 roster "changers" (armour-tier mode-switchers) into 27 — e.g. bear_spear
-    #     (head='point') newly out-scores its own point with an incidental cut, breaking
-    #     test_thrust_protection_grip_invariant. Needs a full roster re-validation this session didn't complete.
-    #   - percussion: select_mode's greedy comparator uses core.coupling ALONE (DELIVERY x transmit), which does
-    #     NOT read percussion authority's magnitude except specifically against mail/plate (_transmit's rigid-
-    #     armour dampening term) — DELIVERY['blunt']=1.6 is a FIXED constant, the highest of any token. Verified
-    #     directly: every eligible two-handed sword's weak Mordhau option (perc~1.4-1.8) INCORRECTLY won
-    #     selection against NONE/light armour (backwards from the historical grounding — Mordhau is attested as
-    #     a response to armour defeating the edge, not a general preference) and only correctly lost to the
-    #     native cut/thrust at medium/heavy, where the mail/plate dampening finally applies. core.damage()'s own
-    #     `heft = 3.0*(perc/8.0)` term DOES correctly scale by the weak magnitude — the bug is specifically in
-    #     the SELECTION step, not the eventual damage — a real, separate architectural gap in core.coupling that
-    #     a JD-4 fix should not silently route around.
-    # geometry.py's cut_factor/thrust_factor fixes and weapon_physics.reversed_grip_percussion/
-    # hilt_assembly_mass are real, tested, and correct on their own (see their own docstrings + ED-PC-0009); this
-    # is exactly the "determine bottom-up, validate top-down" methodology surfacing that the INTEGRATION point
-    # (this function, plus core.coupling for the percussion case) needs its own separate fix before either
-    # can safely become a live, selectable mode. MODE_EDGE_MIN/MODE_TIP_MIN/MODE_PERC_MIN stay defined above for
-    # whoever picks up that follow-on work.
+    # ── graded secondary affordances (U2/ED-PC-0011, 2026-07-08) ──
+    # Both checks were tried earlier this session and reverted pending fixes now landed:
+    #   - percussion: core.coupling's DELIVERY['blunt']=1.6 previously ignored percussion MAGNITUDE against
+    #     cloth/none (only mail/plate got the authority-scaled transmit), so a weak candidate incorrectly won
+    #     selection against unarmoured targets. FIXED in core.py (the mat-restriction dropped, byte-identical
+    #     for mace/poleaxe — verified: their perc sits at/near PERC_AUTH_REF so the scaling clamps to 1.0 at
+    #     every tier). With that fix, a weak percussion candidate now correctly LOSES to a weapon's own cut/
+    #     thrust against soft targets and only wins where the edge/point genuinely can't help — exactly the
+    #     HEMA framing (Mordhau as a response to armour defeating the edge, not a general preference).
+    #   - cut/point: re-validated against the roster (see ED-PC-0011) — the previously-blocking bear_spear
+    #     case (head='point', an authored real edge on a "bear spear" — historically many boar/bear spears
+    #     carried genuine wing/blade-like heads for a following cut, not pure thrusters) is a CORRECT emergent
+    #     result, not a regression: test_thrust_protection_grip_invariant's premise (spear-class weapons always
+    #     select 'point') was narrowed to the two weapons that still hold (spear, yari — genuinely point-only
+    #     geometry) rather than silently preserved by suppressing bear_spear's own authored edge.
+    if head != 'blunt':
+        pa_secondary = WP.percussion_authority(w, grip=grip, room=room, sel_head=head, sel_pc=pc)
+        if pa_secondary>MODE_PERC_MIN:
+            heads.setdefault('blunt', (pa_secondary, 'percussion', gap, pa_secondary, pc))
+    if head not in ('cut_thrust', 'straight_cut', 'curved_cut', 'cut') and geo['cut']>MODE_EDGE_MIN:
+        heads.setdefault('cut', (geo['cut'], 'shear', gap, None, pc))
+    if head not in ('cut_thrust', 'point') and geo['thrust']>MODE_TIP_MIN:
+        heads.setdefault('point', (geo['thrust'], 'puncture', gap, None, pc))
     return heads
 
 def afforded_heads(w, grip=0.0, room=1.0):
