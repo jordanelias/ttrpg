@@ -205,3 +205,49 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   formula scale tweak (provably can't fix a ratio-sensitive test).** Full record: `tests/
   coverage_matrix.md`'s third 2026-07-08 entry; canon note in `designs/provincial/mass_battle_v30.md`
   §A.1 (ED-MB-0006).
+
+- **ED-MB-0007 (2026-07-08): full 11-surface agonist-antagonist gauge architecture audit — why
+  7/20, and what to do about it.** Per Jordan's direct instruction to investigate "from all
+  directions and surfaces" (widened mid-session to explicitly add movement/pathing/routes/
+  strategies/tactics/stances/reach, then ranged weaponry), two Workflow waves (7 + 4 surfaces;
+  producer → isolated adversarial critic → opus-4.8-max synthesis per wave, then a third
+  opus-4.8-max combination pass) fielded 24 subagents across ~1288 tool calls. **Full record:**
+  `designs/audit/2026-07-08-mass-battle-gauge-architecture-audit/README.md` (+ `01_wave1_synthesis.md`/
+  `02_wave2_synthesis.md` for per-wave detail). **Honest result:** the 13 nominal failures decompose
+  to ~9 genuinely-deep engine divergences (C3/H9 are n=60 sampling noise; R1/R3 are
+  harness-construction failures). Two mechanisms dominate, both causally proven by reversal
+  ablation: **E1**, a cell-count/density plumbing defect (`geometry.py`'s two unreconciled
+  cell-count generators → a static, never-recomputed `Unit.ncells` → the Lanchester density term)
+  that reverses H3/H10 outright when patched; and **D1**, the super-linear resolution architecture
+  ED-MB-0006 already flagged, now measured at melee exponent **p≈3.2 under the live PER_CELL=1
+  path** — worse than ED-MB-0006's disclosed p≈2.50, which turns out to have been measured under
+  the WRONG `PER_CELL` setting by `lanchester_signature.py`'s own hardcoded default. **These two are
+  multiplicative, not competing, and neither alone lands a row in-band — this investigation is
+  diagnostic, not curative**, disclosed as a first-class finding. **Granularity directive verdict:**
+  the per-cell quality/type axis (veteran-front/levy-rear) is confirmed byte-inert for all 20 rows
+  by four independent lines of evidence — a legitimate future architecture, not a gauge fix. The
+  per-cell COUNT axis is already the #1 defect (E1). Troop-grounded speed and the entire
+  ranged/volley pool were never brought under `POOL_QUALITY_MODEL` and remain ungrounded. **New
+  empirical result** (found by the wave-2 synthesis's own probe, not present in either wave in
+  isolation): the two cheapest-looking fixes for the ranged rows (R1: correct archer stats; R3:
+  the `kite` instruction) are **mutually incompatible** — a correctly-statted discipline-3 archer
+  computes a live movement step of exactly zero (no fractional-velocity accumulator on the node
+  path), so `kite` cannot rescue a unit physically unable to move. This reverses an earlier reading
+  that had listed a ranged-`hold` variant as a safe, contained fix — it is not; it is gated on
+  **DG-10**. Ten new engine defects (E1-E10) and a harness-artifact cluster identified and bucketed
+  (full detail + file:line citations in the audit README). **Eleven new Jordan-ruling decision
+  points opened: DG-6 (the resolution-architecture calibration itself — the deepest, highest-
+  leverage call) through DG-16 (tactical/role-layer grounding).** DG-numbering note: an earlier
+  combination draft had reused DG-1..DG-5 for these new gates, colliding with the ALREADY-RULED
+  namespace from ED-MB-0002/0003/0005 — caught and corrected to the DG-6..DG-16 sequence above
+  (crosswalk in the audit README's Appendix). **Not yet implemented:** this ED closes the
+  investigation itself; the ~10-item safe-to-fix list and all eleven DG-6..DG-16 rulings remain
+  open follow-up work, gated primarily on Jordan's ruling on DG-6.
+  **[CALIBRATED-DEBT] flagged, not resolved:** the currently-passing cavalry rows (C4, C5, C7) may
+  be passing partly on the same E1/D1 artifacts targeted for removal — the pass count is not
+  confirmed monotonic in fixes applied. **Next action for whoever continues this lane: DG-6 first**
+  (it gates the highest-leverage fix and several other rulings) — either via Jordan's direct ruling
+  or an `AskUserQuestion` pass through DG-6..DG-16 in priority order, then land the safe-to-fix list
+  paired with whichever DG-6/DG-7 direction is chosen, then re-run the full 20-row gauge (no surface
+  in this audit ran the complete battery — only directional/single-row causal evidence exists for
+  any proposed fix).
