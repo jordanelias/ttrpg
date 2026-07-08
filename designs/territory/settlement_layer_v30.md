@@ -40,7 +40,7 @@ The existing 17 territories become **provinces** — the strategic layer. Each p
 
 ## §1.3 Settlement Stats
 
-**Derived values (derived_stats_v1 §4):** Settlement stats (Prosperity/Defense/Order, 0–5) produce derived values for the videogame layer:
+**Derived values (`designs/scene/derived_stats_v30.md` §9/§14.1):** Settlement stats (Prosperity/Defense/Order, 0–5) produce derived values for the videogame layer. **Citation corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)** — previously cited a nonexistent file, `derived_stats_v1`; the real doc's §9 currently marks these formulas "PENDING — Not canonicalized" even though they are unchanged here and already live-gated in `references/module_contracts.yaml` (a separate canonicity-status question, not a citation error — tracked, not resolved by this fix):
 
 | Stat | Derived Value | Derivation | Player Sees |
 |------|--------------|-----------|-------------|

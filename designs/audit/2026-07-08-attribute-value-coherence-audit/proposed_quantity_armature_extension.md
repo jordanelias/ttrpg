@@ -1,7 +1,10 @@
 # Quantity Armature Extension v1 — the stat layer under the seams
 
-## Status: PROPOSED — held back from merge-ratification (ED-1094 exception, stated loudly:
-## merging the audit PR does NOT ratify this document; it waits for the ed_options.md docket ruling)
+## Status: RATIFIED (spec-level) 2026-07-08 — see ed_options.md's "Ratification outcomes" for the
+## per-check disposition. §2 registry deltas D2/D4-D15 are RATIFIED AND EXECUTED (in
+## descriptor_registry.yaml); D1/D3/D8/D16 follow their own still-open OPT-AV rulings. §3 checks
+## (A17/A18 + companion micro-checks) and the OPT-AV-16 keys.py hook are RATIFIED SPEC-ONLY — build
+## deferred to §4's Wave Q, not yet authored. §4 Wave Q sequencing is RATIFIED exactly as stated below.
 ## Date: 2026-07-08 · Lane: IN · ED anchor: ED-IN-0029
 ## Companion to: designs/architecture/key_echo_armature_v1.md (RATIFIED, ED-IN-0018)
 

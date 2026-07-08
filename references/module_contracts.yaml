@@ -253,7 +253,10 @@ modules:
     state:
       - {name: "CV (per-territory Piety)", bucket: track, writable: true}   # conviction_track_v30 §1, 0-base
       - {name: "CI (Church Influence)", bucket: clock, writable: true}   # CI generation §3 — clock_registry: CI 0-100 source = conviction_track_v30 §3
-      - {name: "TC (Theocracy Counter)", bucket: clock, writable: true}   # §3 seasonal generation
+      # "TC (Theocracy Counter)" row STRUCK 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): TC is CI's
+      # retired predecessor name, not a second live clock (conviction_track_v30.md's glossary
+      # note, corrected same pass). This entry was carrying it as a separate, still-writable state
+      # slot alongside CI itself — pure propagation of an already-decided rename, no new ruling.
     transitions: []
     loops: []
     gates:
@@ -285,7 +288,7 @@ modules:
       - {type: "scene.thread_operation", terminal: false}   # substrate §8.4 verbatim — NOT in registry (F2 class); registry instead has meta.thread_woven; same event? [OPEN — Jordan]
       - {type: "meta.thread_woven", terminal: false}   # registry-declared
     state:
-      - {name: "Coherence", bucket: pool, writable: true}   # [ASSUMPTION bucket] depleting continuous resource (canonical pool notice PP-616/618/619/624/625)
+      - {name: "Coherence", bucket: track, writable: true}   # bucket pool->track RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-3/D7): propagates the already-resolved-but-never-applied ED-830 ruling ("Coherence reclassified from Derived Value to Track"); now also registered in descriptor_registry.yaml not_descriptors.tracks. Prior [ASSUMPTION bucket] tag struck (canonical pool notice PP-616/618/619/624/625 was about the depletion MECHANIC, not the bucket taxonomy)
       - {name: "Thread Fatigue", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to Spirit*5 contact-break threshold] — ED-694, replaces Contact Rounds
     transitions:
       - {via: "scale_transitions §3.1 Personal → Thread"}

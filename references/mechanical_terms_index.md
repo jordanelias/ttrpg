@@ -3,6 +3,10 @@
 
 **Status:** PROPOSAL — diagnostic deliverable for vocabulary audit, not yet committed to canonical sources.
 **Date:** 2026-05-08
+**Disposition (RATIFIED 2026-07-08, ED-IN-0029 docket, OPT-AV-14):** permanent historical snapshot,
+no live regeneration (its would-be regenerator is the dead `tools/valoria_collator.py`, CLAUDE.md §8).
+Flagged as the best candidate among the six sampled secondary indices for a future re-platform as
+live A17/A18 signal, if that work is ever prioritized — not done by this ruling.
 **Purpose:** complete enumeration of mechanical terms organized into vocabulary-isolated silos, with diagnostic registers identifying cross-silo overlaps, attribute↔mechanic word-class violations, synonym candidates, orphan terms, and deprecated/superseded terms. Designed as a working tool for identifying overlap, duplication, and confusion across the system corpus.
 
 ---
@@ -193,8 +197,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | CI Bonus Dice | Bonus to Church faction in political forums per CI threshold. | ci_political §3.2 |
 | CI Obstacle Modifier | +1 Ob to actions opposing Church Domain Actions at CI ≥ 55. | ci_political §3.3 |
 | Spiritual Weight (territory-attached, faction-relevant) | Repurposed from old PV; affects CI generation. | ci_political §1 |
-| Public Support (PS) | Outcome accumulator from Mission/Domain Action outcomes. | faction_behavior §3.4 |
-| Legitimacy (L) | Faction trust currency, tracked alongside PS. | faction_behavior §3.4 |
+| Popular Support (PS) | Per-**settlement** (not faction-level) outcome accumulator, 0-7, aggregated into faction Mandate (LPS-2e, Jordan 2026-05-30). **Corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)**: this row carried both the deprecated name "Public Support" and the superseded pre-LPS-2e faction-level-accumulator model — the real untracked residual the audit found (`name_collision_database.yaml`'s tracked citation pointed at a since-changed settlement_layer_v30.md line that no longer has the issue). | `settlement_layer_v30.md §1.8` |
+| Legitimacy (L) | Per-settlement (0-7) faction trust currency, tracked alongside PS; aggregated into Mandate. | `settlement_layer_v30.md §1.8` |
 | Income / Drain | Per-season resource flow (Wealth/Mandate/Influence/Military). | derived_stats §8.1 |
 | Cascade resolution | Faction-Conviction cascade math; produces Effective Convictions. | faction_behavior §3.2 |
 | Mission | Stated faction objective; alignment with Conviction profile. | faction_behavior §3.1 |
@@ -1164,8 +1168,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 |------|------------|--------|
 | Stability (faction state) | Per-faction internal coherence (1–7); not strictly a clock but tracked as one. | faction_layer §1 |
 | Standing | Per-faction reputation track (0–10). | factions/stats_1_7_scale |
-| Public Support (PS) | Per-faction outcome accumulator. | faction_behavior §3.4 |
-| Legitimacy (L) | Per-faction trust currency. | faction_behavior §3.4 |
+| Popular Support (PS) | Per-**settlement** (0-7) outcome accumulator, aggregated into faction Mandate (LPS-2e). Corrected 2026-07-08 (ED-IN-0029, OPT-AV-7) — was "Public Support," faction-scale. | `settlement_layer_v30.md §1.8` |
+| Legitimacy (L) | Per-settlement (0-7) trust currency, aggregated into Mandate. Corrected 2026-07-08 (same basis) — was faction-scale. | `settlement_layer_v30.md §1.8` |
 | Church Attention Pool | Player-facing Church-detection track. | conviction_track_v30 §11.2, fieldwork §6.5 |
 | Public Expectation | Populace's expected behaviour gating outcomes. | faction_behavior §3.5 |
 

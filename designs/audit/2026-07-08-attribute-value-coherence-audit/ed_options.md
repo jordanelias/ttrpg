@@ -1,6 +1,6 @@
 # Attribute/Value Coherence Audit — Jordan-rulable docket
 
-## Status: PROPOSED (docket UNRULED) · Lane: IN · Anchor: ED-IN-0029 · 2026-07-08
+## Status: PARTIALLY RATIFIED 2026-07-08 (see "Ratification outcomes" below) · Lane: IN · Anchor: ED-IN-0029
 
 **Nothing below ratifies on merge (ED-1094 exception, called out loudly): every row is held back
 for explicit ruling.** Each row states a recommended default; lane-owned rows are marked
@@ -31,3 +31,39 @@ the option closes.
 **Reading note:** OPT-AV-1, -8, -13 and the OPT-AV-18 sub-items are genuine design calls (rule
 no forks — cardinal rule e). Everything else is propagation, bookkeeping, or tooling that only
 *executes* rulings already made; it still waits for this docket because the audit is read-only.
+
+---
+
+## Ratification outcomes (2026-07-08, ED-IN-0029 follow-on session)
+
+Jordan: "Resolve all conflicts ratify commit merge squash close session" — read against the
+"adopt every stated recommended default" answer given to this docket, with one explicit,
+named exception below. Per ED-1094, this ruling pass is itself the ratification event for
+every row it resolves; rows with no stated default are left open, not defaulted.
+
+| id | outcome |
+|---|---|
+| OPT-AV-1 | **SKIPPED — Jordan's explicit instruction ("Skip OPT-AV-1"), not a default-adoption.** Left fully OPEN/UNRULED. All roster edits attempted mid-session were reverted; `descriptor_registry.yaml` `attributes:`/`aggregates:`, `names_index.yaml`, and `glossary.md`'s Part-One table are unchanged from their pre-audit state. Still feeds workplan v6 T1 queue-13 / ED-IN-0008. |
+| OPT-AV-2 | RATIFIED (retire). Executed: `values_master.yaml` + the OPT-AV-14 bundle marked `historical_snapshot` this session. |
+| OPT-AV-3 | RATIFIED and EXECUTED for the Class-B, no-pending-dependency deltas: D2, D4–D15 filed directly into `descriptor_registry.yaml`. D1 (roster) stays unfiled with OPT-AV-1; keys tied to the still-open lane forks (D8 Political Pool's *name* already resolved as a non-fork bookkeeping call — see OPT-AV-18 below) are filed where ratified. |
+| OPT-AV-4 | RATIFIED, spec-only: A17 approved as report-only-first, exactly as the extension states. **Build deferred to Wave Q step 3** — no new CI tooling authored this session. |
+| OPT-AV-5 | RATIFIED, spec-only: A18 + the prose-drift detector approved, sequenced after A17. **Build deferred to Wave Q step 4.** |
+| OPT-AV-6 | RATIFIED, partial: the dead registry test's import-mechanics fix is executed now (`tools/descriptor_registry.py` + `tests/registry/test_descriptor_registry.py`, assertions unchanged — no roster content decided). **warn→block tier promotion stays deferred to Wave Q step 5**, gated on OPT-AV-1 exactly as this option's own default requires — an unratified roster cannot be promoted to a blocking gate. |
+| OPT-AV-7 | RATIFIED and EXECUTED as the `[cleanup]` hygiene batch this session. Two listed items (`params/core.md` Health/Stamina rows) were re-verified as already fixed by intervening PRs merged after the audit's snapshot and needed no further edit. The wound-penalty-sweep completion (PC/MB co-sign) and the `factions_personal.md` Intel backfill (FA co-sign) are lane-owned touches, not executed by this IN-only batch — bundled into ED-PC-0013 / ED-FA-0007 below instead. |
+| OPT-AV-8 | RATIFIED as stated: Wave Q inserted after armature wave 1, before any params-consuming wave, worklist order unchanged. The extension's own §4 already states this sequencing verbatim; no further edit needed. |
+| OPT-AV-9 | RATIFIED (decision: (Spirit×2)+History(Rel)+3, Bonds eligibility-gate only), **execution deferred** — filed as ED-FI-0005. |
+| OPT-AV-10 | RATIFIED (no fork existed — marking only), **execution deferred** — filed as part of ED-FA-0007. |
+| OPT-AV-11 | RATIFIED (decision: TTRPG-vs-BG split discipline, fix campaign_modes=15), **execution deferred** — filed as part of ED-FA-0007. |
+| OPT-AV-12 | RATIFIED (decision: BG range 0–10; scope-tag the homonym), **execution deferred** — filed as ED-SC-0014 (FA co-sign). |
+| OPT-AV-13 | **LEFT OPEN — no default is stated anywhere in this row; none invented.** ED-644's own standing deferral holds. This audit's contribution is the consolidated referent map only; the naming call remains Jordan's. |
+| OPT-AV-14 | RATIFIED and EXECUTED, bundled with OPT-AV-2 — see that row and the file headers of `mechanical_terms_index.md`, `numeric_bounds_report.yaml`, `silo_overlap_matrix.yaml`, `name_collision_database.yaml`, `collision_registry.yaml`. |
+| OPT-AV-15 | RATIFIED (decision: re-export from canon now, annotate the `.gd` until the port slice lands), **execution deferred** — filed as part of ED-PC-0013 (MB co-sign). |
+| OPT-AV-16 | RATIFIED, spec-only: the warn-tier `keys.py` hook approved as invariant-9 candidate. **Build deferred to Wave Q step 3** alongside A17. |
+| OPT-AV-17 | RATIFIED (decision: widen the exporter rather than prune-only), **execution deferred** — filed as part of ED-PC-0013. |
+| OPT-AV-18 | Five of six sub-items RATIFIED and disposed: **Political Pool name** ("Political Pool" per existing prior art — a non-fork bookkeeping call) and **Intel floor** EXECUTED directly in `descriptor_registry.yaml` this session (no design judgment involved, pure registry completeness); **Discipline rename** (display-scope "Faction Discipline") EXECUTED as an annotation in the same file. **Fort Level inheritance** (settlement = province value) and **Garrison/Local-Economy/Public-Order ratify-vs-mark** RATIFIED, **execution deferred** — filed as ED-SE-0006. The sixth sub-item, **Renown cap (10 vs uncapped) + Shadow Renown relation**, has **no stated default in this row's own text** (unlike the other five, which each name one) — left OPEN, flagged in `handoffs/HANDOFF_IN.md`, not bundled into any lane ED. |
+
+**Lane EDs filed this session** (decision-ratified above, execution deferred to the owning
+lane's own session/PR, per the session-lane-scoping convention, CLAUDE.md §3–4):
+ED-FI-0005, ED-FA-0007, ED-SC-0014, ED-SE-0006, ED-PC-0013. See
+`canon/editorial_ledger.jsonl` for each entry and `references/id_reservations.yaml` for the
+allocations.

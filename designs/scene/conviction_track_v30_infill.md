@@ -4,7 +4,10 @@
 # Valoria BG — Piety Track & Church Victory Redesign
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: Design Proposal — Awaiting User Review
-## Scope: Piety Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
+## Scope: Piety Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
+<!-- "TC Generation" -> "CI Generation" corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): TC
+     (Theocracy Counter) was CI's retired predecessor name; this co-filed infill (CLAUDE.md §4 pair
+     of conviction_track_v30.md, which was already renamed) never received the rename. -->
 ## 1. Piety Track — Per-Territory Stat
 **Rationale for name:** Conviction captures popular belief — what the people hold to be true. This is not institutional Church power (that is Mandate) nor theological correctness (the Church is sincerely wrong per canon). It is the strength of orthodox faith in the population. The Restoration pole is the absence of that conviction — not a competing faith, but recovered cultural memory that displaces orthodox certainty.
 ### 1.1 Starting Values (PP-406)
@@ -20,10 +23,10 @@ The Calamity's Thread damage radiates outward from the Southernmost. As RS decli
 ### Ob Formula
 ### Seizure Results
 **Post-seizure governance:** Church controls the territory. Church ethical framework modifiers apply to all Domain Actions in the territory. Church may Preach and Consecrate freely in controlled territories.
-## 3. TC Generation — Redesign (PP-412)
-### Seasonal TC Calculation
+## 3. CI Generation — Redesign (PP-412)
+### Seasonal CI Calculation
 ### Piety Domain Action — DISSOLVED
-### TC Pacing Analysis
+### CI Pacing Analysis
 ## 4. Church Victory Conditions — ED-110 Resolution (PP-413)
 ### 4.1 Primary Victory — Territorial Consolidation
 **Victory condition:** Church holds territories whose Territory Consolidation Values (TCV) sum to ≥ **18**.

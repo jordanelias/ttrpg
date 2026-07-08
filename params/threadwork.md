@@ -22,6 +22,10 @@ Pool = (Spirit × 2) + History + TPS
 History: 1D per point, cap 3 points. +3D constant (floor) always present.
 Full TPS always included. No exceptions.
 
+This is the single defining surface for the Thread Pool formula (OPT-AV-9, ED-IN-0029): the two
+`threadwork_v30.md` mode-branching/implementation-sequence rows that used to restate it inline
+now point back here instead — already matches this row, no value changed.
+
 ## Community Organizing — Canonical Pool (PP-616 supersedes PP-250)
 **Pool = (Spirit × 2) + History + TPS** (PP-616: all Thread operations unified)
 TN: 7 | Ob: 3 | RS outcome: Success = RS +1; Overwhelming = RS +2

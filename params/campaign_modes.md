@@ -40,11 +40,13 @@ GM compression options:
   Expanded season: split across 2 sessions if TTRPG scenes demand it.
 
 ## Starting Clock Values (TTRPG Session Zero)
+**Corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7):** the prior table taught the Board-Game
+Mending Stability default (72) under the TTRPG label, and cited three nonexistent filenames.
 | Clock | Start | Source |
 |-------|-------|--------|
-| Mending Stability | 72 | params_core.md |
-| Church Influence | 15 | params_factions_ttrpg.md |
-| Institutional Pressure | 20 | params_board_game.md |
+| Mending Stability | 60 | `params/core.md` §MS (TTRPG default; BG default is 72 — do not confuse the two) |
+| Church Influence | **UNVERIFIED — pending ED-FA ruling (OPT-AV-11)** | No file states an explicit, cited TTRPG-mode CI starting value; the prior "15" here traced to a nonexistent filename and should not be treated as validated. BG start is 28 (`params/bg/core.md`). |
+| Institutional Pressure | 20 | `params/bg/core.md` §Starting Values |
 
 ## Endgame Indicators (TTRPG — emergent, not triggers)
 - All PCs resolved/abandoned central Beliefs

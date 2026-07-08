@@ -96,9 +96,9 @@ systems:
     design_doc: designs/architecture/complete_systems_reference.md
     canonical_sha__designs__architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
     params: params/core.md
-    canonical_sha__params__core_md: "724c4f310640f7c8de9c1ac4e05d22d40b1f250f"
+    canonical_sha__params__core_md: "1b58325bc4949d76af1f5b755298604e7d496734"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "db6e988325ddd9dab3e65377732d61da1e943000"
+    canonical_sha__params__bg__core_md: "979afea6ae184136867938193191a28e5f9d65a2"
   combat:
     design_doc: designs/scene/combat_v30.md
     canonical_sha__designs__scene__combat_v30_md: "db827fa23baf0379f161481b28880703c6f964e7"
@@ -111,9 +111,9 @@ systems:
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "3f1f16ae17d92534d04dd13329612fd29793b726"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "75d1f3f96e7068091accdb1ccf2a4014e02b2f52"
     params: params/threadwork.md
-    canonical_sha__params__threadwork_md: "4be763afc7633d1db6322438d3c66174e310e9e2"
+    canonical_sha__params__threadwork_md: "49c243108975a5a2f1d739d6a752dc6ab8364c64"
   clocks:
     design_doc: params/bg/clocks.md
     canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
@@ -123,7 +123,7 @@ systems:
     design_doc: designs/provincial/factions_personal_v30.md
     canonical_sha__designs__provincial__factions_personal_v30_md: "1d7d217a3d722e974817188144392733ff86605a"
     params: params/factions.md
-    canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
+    canonical_sha__params__factions_md: "05593acfaadf6713bfc839b339563c75ff8e564f"
     stats: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
   victory:
@@ -133,7 +133,7 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "9808d0e5427d51e3b65ee43765605e02716a6f0b"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "6087320521052fce975bc39a8d28a9a354d7c70c"
     political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
@@ -207,7 +207,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "9808d0e5427d51e3b65ee43765605e02716a6f0b"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "6087320521052fce975bc39a8d28a9a354d7c70c"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -215,14 +215,14 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "9a06ae0d2ffcb396f54e82a65e6eecd1eda02058"
+    canonical_sha__designs__scene__derived_stats_v30_md: "7d0a722aa1e786448272e1bea4965d1710b50852"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "0abc5d362995ec4c87e21ea36bea80eb437bc0dc"
+    canonical_sha__designs__scene__conviction_track_v30_md: "e87de1344a30019a1e5fa6629420803c5200a81f"
     conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
@@ -418,7 +418,7 @@ systems:
     canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "96b9e30471d6953c364860d3398964ed65c2e6f2"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "c5351bbd43c8277da97cf79e56231d8641aaf52f"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "8e916fd14006f185608859483796ea615be6ac3f"
+    canonical_sha__references__module_contracts_yaml: "7e6cf8157118499bc5441d73fd5c5019767255f3"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
