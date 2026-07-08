@@ -65,11 +65,11 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 | Max Wounds | `Max Wounds = min(floor(Endurance / 2) + 1, 3)` — capped at 3 (PP-717) |
 | Wound Interval | `WI = round(Endurance + 4 + 0.4 × Spirit)` — Spirit adds a low-weight, uniformity-reducing term (D-A, ED-1021). At average Spirit 3, `WI = round(End + 5.2)`. |
 | Formula | `Health (full) = round(WI × (Max Wounds + 1) + 0.25 × Strength × Endurance)` — the Strength term (very low weight, proportional to Endurance) adds a survivability buffer that reduces uniformity (D-A, ED-1021). At average Strength 4. |
-| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. **Felled (incapacitated) at Health depletion (cumulative damage ≥ Health)** (D-A, ED-1021); the Strength buffer makes this slightly beyond MW+1 wounds, so Strength buys survivability. Coincides with the legacy 'MW+1 wounds = 0 Health' rule when the Strength buffer is zero. The wound counter (driving the −1D/wound penalty) still caps at MW+1. |
+| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. **Felled (incapacitated) at Health depletion (cumulative damage ≥ Health)** (D-A, ED-1021); the Strength buffer makes this slightly beyond MW+1 wounds, so Strength buys survivability. Coincides with the legacy 'MW+1 wounds = 0 Health' rule when the Strength buffer is zero. The wound counter (driving the wound-Ob penalty — a fractional Ob per wound, ED-PC-0005 / ED-1041) still caps at MW+1. |
 | Damage > WI in one hit | Multiple wounds applied simultaneously (each WI of damage = +1 wound counter). |
 | Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest. |
 | Equipment | ~~Adds flat Health (+4 leather, +6 chain, +8 plate)~~ - **STRUCK 2026-06-05 (Jordan ratified): armour grants damage reduction only (DR/Resist; engine core.py RESIST), NOT flat Health - the engine WoundTracker takes no equipment_health**. Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
-| Wound penalty | −1D to ALL Pools (Combat, Thread — Leap, Weaving, Pulling, Mending, FR — Hybrid mass-battle Command). Universal rule. **No Ob penalty from wounds, ever.** Cumulative; capped by per-Pool floor (Combat Pool floor 5, Thread Pool floor 5 per threadwork §pool-floor). |
+| Wound penalty | **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). **Combat:** the ED-1041 bilateral wound-Ob channel — +0.15 Ob attacking / +0.25 Ob defending per wound (`config.py` WOUND_ATK_OB/WOUND_DEF_OB; live in `systems.py`). **Thread (Leap/Weaving/Pulling/Mending/FR), fieldwork, mass-battle Command:** each wound adds a fractional Ob per wound; the per-pool value is a **follow-on calibration (ED-PC-0006)** — the −1D is struck, the replacing Ob value is not yet set. Cumulative. |
 
 Per-Endurance reference table:
 
@@ -89,7 +89,7 @@ Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Heal
 
 **Max Wounds cap (PP-717).** Simulation testing (v22–v24, 26 tests, 6 iteration rounds) found that the uncapped MW formula produces super-linear Health scaling — End 6 at 60 HP is 50% more than End 4 at 40 HP, making Endurance the dominant stat investment at all armour tiers (69–82% win rate for End-6 builds). Capping MW at 3 reduces End 6 to 48 HP (20% over End 4), preserves the WI × (MW+1) wound structure, and leaves End 1–5 unchanged. Sim-validated: top build drops from 69% to ~62% unarmoured (under 65% threshold). Historical precedent: plate armour wearers (high-End builds) were not invulnerable — exhaustion and mobility penalties limited their advantage.
 
-**Wound penalty universality.** Prior canon (combat_v30 §thread, threadwork_v30 §2.3, §3, §5; params/combat.md §thread; params/mass_combat §CF wound) variously specified "+1 Ob per Wound" for Thread operations, mass-battle Command checks, and CF Zoom-In tactics. PP-716 unifies all wound penalties as −1D to the relevant Pool. The Ob channel is reserved for non-wound mechanics (Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob).
+**Wound penalty universality.** ~~PP-716 unified all wound penalties as −1D to the relevant Pool.~~ **SUPERSEDED — Jordan ruling 2026-07-08 (ED-PC-0005): wounds NEVER impose a −1D pool cut; each wound adds a fractional Ob to the roll.** Combat implements this via the ED-1041 bilateral wound-Ob channel (+0.15 Ob attacking / +0.25 defending per wound). The prior "+1 Ob per Wound" framing (combat_v30 §thread, threadwork_v30 §2.3/§3/§5, params/combat.md §thread, params/mass_combat §CF wound) that PP-716 had unified away is thus re-adopted in **fractional** form — the per-pool fractional-Ob-per-wound values for Thread operations, fieldwork, and mass-battle Command are a follow-on calibration, flagged pending (**ED-PC-0006**); the −1D is struck, the replacing values are TBD. (This does NOT touch the non-wound Ob channels — Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob.)
 
 ### 4.2 Stamina (action economy resource)
 
@@ -437,7 +437,7 @@ Outcomes propagate at different speeds depending on which engine layer absorbs t
 
 | Timescale | Propagating outcome | Owner layer |
 |---|---|---|
-| Per-action | Wound penalty to next-round Pool (combat); Rattled to next exchange (contest, post-PP-716 −1D); Thread Fatigue accumulation during contact session | Pool |
+| Per-action | Wound penalty as a fractional Ob on the next-round roll (combat, ED-1041 +0.15/+0.25 per wound; ED-PC-0005); Rattled to next exchange (contest); Thread Fatigue accumulation during contact session | Pool / Ob |
 | Per-scene | Composure/Concentration depletion; Saturation Counter resets between battle turns | Derived values |
 | Per-session | Momentum reset; Inspiration scene engagement; wound clearance at session end | Tracks, Momentum |
 | Per-season | Disposition shifts → Reputation income; faction stat changes from territory transfers; PT integration | Faction-scale derived |
@@ -514,7 +514,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 - Dice engine: d10, TN 6/7/8, integer pools, integer Ob, degree table
 - Combat Pool: (Agi × 2) + History + 3, split offense/defense
 - Wound Interval: End + 6
-- Wound penalty: −1D per wound (cumulative)
+- Wound penalty: fractional Ob per wound (cumulative; ED-PC-0005 — combat +0.15/+0.25 per ED-1041; non-combat values follow-on, flagged pending ED-PC-0006 — supersedes PP-716's −1D)
 - DR / armor damage reduction tables
 - All faction stat → dice pool relationships
 - All mass combat formulas (Pool, H, damage per success)

@@ -37,7 +37,7 @@ Combat Pool = max(5, Relevant History + 6)
 Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed.
 
 Modifiers:
-- Wounds: −1D per wound (cumulative)
+- Wounds: fractional Ob per wound (cumulative; +0.15 Ob attacking / +0.25 defending per wound — ED-1041 / Jordan ruling 2026-07-08, ED-PC-0005; supersedes the −1D Combat Pool cut)
 - Fibonacci group bonus: +dice to Offence allocation only (see §8)
 - Stamina Out of Breath: −2D to all rolls until recovery action taken
 
@@ -280,7 +280,7 @@ Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wound
 | 6–7 | 4 |
 
 At max Wounds: incapacitated. Health track runs to 0 = incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved)
-Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
+Each Wound: **a fractional Ob on the combat roll** — +0.15 Ob attacking / +0.25 defending per wound (ED-1041; **supersedes the −1D Combat Pool cut** of PP-232, per Jordan ruling 2026-07-08, ED-PC-0005). No pool cut from wounds. (PP-232 → ED-PC-0005; replaces PP-165)
 
 ### Stamina
 Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2. Maximum = base value (PP-275).** (PP-232) Take a Breath restores Endurance score, capped at base Stamina value. Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)

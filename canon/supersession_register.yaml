@@ -297,3 +297,29 @@ entries:
     files_to_recheck:
       - designs/provincial/mass_battle_v30.md
       - canon/mechanics_index.yaml    # mass_battle entry
+
+  # ── Wound-penalty model reversal (added 2026-07-08, ED-PC-0005, Jordan ruling) ──
+  - superseded_id: "PP-716 (−1D universal wound penalty)"
+    scope: "PP-716 unified all wound penalties as −1D to Pools (combat / Thread / fieldwork / mass-battle Command), replacing prior +1 Ob framings; 'no Ob penalty from wounds'."
+    superseded_by: "ED-PC-0005"
+    superseded_date: 2026-07-08
+    replacement: >
+      Jordan ruling 2026-07-08 (ED-PC-0005): wounds NEVER impose a −1D pool cut — each wound ALWAYS
+      adds a fractional Ob to the roll. Combat is the ratified reference via ED-1041's bilateral
+      wound-Ob channel (+0.15 Ob attacking / +0.25 Ob defending per wound; config.py / systems.py).
+      Non-combat per-pool fractional-Ob VALUES (Thread ops, fieldwork, mass-battle Command) are a
+      follow-on calibration, ED-PC-0006 — no invented numbers. derived_stats_v30 §4.1 rewritten;
+      combatant.py WOUND_POOL_PENALTY + the dead pool_penalty() deleted; contest_legacy_stub −1D term removed.
+    files_to_recheck:
+      - designs/scene/derived_stats_v30.md
+      - designs/scene/combat_v30.md
+      - designs/scene/combat_design_v1.md
+      - designs/scene/fieldwork_v30.md
+      - designs/threadwork/threadwork_v30.md
+      - params/core.md
+      - params/fieldwork.md
+      - params/mass_combat.md
+      - designs/scene/combat_engine_v1/combatant.py
+      - sim/personal/contest_legacy_stub.py
+      - designs/arcs/gm_ref/arcs_46_55.md    # downstream PP-232 −1D wound narrative seed — reconcile under ED-PC-0006
+      - designs/arcs/gm_ref/arcs_46_55_resolved.md

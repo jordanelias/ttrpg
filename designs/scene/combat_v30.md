@@ -36,7 +36,7 @@ Combat Pool = max(5, Relevant History + 6)   [RATIFIED 2026-05-29 R1: Agility-IN
 
 
 Modifiers:
-- Wounds: −1D per wound (cumulative)
+- Wounds: fractional Ob per wound (cumulative; +0.15 Ob attacking / +0.25 defending per wound — ED-1041 / Jordan ruling 2026-07-08, ED-PC-0005; supersedes the −1D Combat Pool cut)
 - Fibonacci group bonus: +dice to Offence allocation only (see §8)
 - Stamina Out of Breath: −2D to all rolls until recovery action taken
 
@@ -245,7 +245,7 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 
 **Boundary.** No friendly actor adjacent → no FF check fires (no candidate target). Shooter outside Melee range → standard Ranged rules; no FF (the shot is at standard distance, not into a melee).
 
-**No Ob penalty.** PP-720 strictly uses the −1D-Pool stress channel (PP-716 universal wound penalty + Composure/environmental as TN modifier). No new Ob channel.
+**No new Ob channel [friendly-fire stress].** PP-720's friendly-fire stress uses a −1D-Pool stress channel + Composure/environmental as a TN modifier. ⚠️ Note: this originally cited "PP-716's universal wound penalty" as that −1D channel — but wound penalties became a fractional Ob per Jordan's 2026-07-08 ruling (ED-PC-0005). PP-720's FF −1D therefore now stands as its own deliberate stress cut, no longer the wound channel; confirm on the next FF revisit.
 
 **Tabletop fallback.** Game Master may waive the secondary roll for cinematic clarity if the table prefers simpler resolution (declare narrative miss, no friendly damage). The mechanic is intentionally light-touch — it surfaces tactical risk without bookkeeping ceiling.
 
@@ -295,9 +295,9 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 Total damage capacity before incapacitation = Wound Interval × (Max Wounds + 1). The final Wound Interval (the one after the maximum number of Wounds) is the incapacitation threshold — filling it is what pushes the character past Max Wounds. At Max Wounds + 1 Wound accrued: incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved; ED-548 corrects prior formula.)
 
-Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
+Each Wound: **a fractional Ob on the combat roll** — +0.15 Ob attacking / +0.25 defending per wound (ED-1041; **supersedes the −1D Combat Pool cut** of PP-232, per Jordan ruling 2026-07-08, ED-PC-0005). No pool cut from wounds. (PP-232 → ED-PC-0005; replaces PP-165)
 
-**Design note:** the prior formulation ("Health = Endurance + 6, resets to full on Wound") produced a cliff effect — Wounds always appeared at the same perceived threshold, and the Combat Pool penalty stacked at a uniform rate regardless of the character's actual resilience. The corrected formulation scales total capacity with both Endurance (via Wound Interval) and Max Wounds (via the multiplier), producing a smooth curve. A high-Endurance character absorbs more total damage AND accrues Wounds more slowly. The −1D per Wound penalty now reflects a genuine resource depletion, not a ticking clock to inevitable incapacitation.
+**Design note:** the prior formulation ("Health = Endurance + 6, resets to full on Wound") produced a cliff effect — Wounds always appeared at the same perceived threshold, and the wound penalty stacked at a uniform rate regardless of the character's actual resilience. The corrected formulation scales total capacity with both Endurance (via Wound Interval) and Max Wounds (via the multiplier), producing a smooth curve. A high-Endurance character absorbs more total damage AND accrues Wounds more slowly. The wound penalty (now a fractional Ob per wound — ED-PC-0005/ED-1041, formerly −1D) reflects a genuine resource depletion, not a ticking clock to inevitable incapacitation.
 
 ### Stamina
 **Stamina = Endurance × 5** (range 5–35). Variable action costs: standard attack 5, heavy attack 8, defensive stance 3, dodge 4, movement 2/zone. Armor adds to drain: heavy +2, medium +1, light +0. (ED-694, replaces composite formula.)
@@ -425,7 +425,7 @@ See compilation/v0.14/stage11_scale_transitions_deprecated.md §11.8.
 
 ## 10. THREAD IN COMBAT
 
-Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (−1D per Wound to all Thread operation Pools per `designs/scene/derived_stats_v30.md` §4.1). These are not metaphors; per A1, everything is constituted from threads.
+Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (each wound adds a fractional Ob to Thread operation rolls — NEVER a −1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification; per-pool value is a follow-on calibration, ED-PC-0006). These are not metaphors; per A1, everything is constituted from threads.
 
 **Full Thread operation rules:** designs/ttrpg/threadwork_v30.md.
 
@@ -434,7 +434,7 @@ Combat is thread-configurations in violent restructuring (Foundations A1). A wou
 - **Leap round:** Practitioner commits all pool to Defence during Leap. ~60% hit probability from any opponent who can attack. Real tactical cost.
 - **Coherent Strike (W-24):** Viable only with range protection during Leap.
 - **Rally the Broken (W-33):** Effective only for CP ≥ 3 units.
-- **Wound penalties:** −1D per Wound to all Thread operation Pools — Leap, Weaving, Pulling, Mending, FR (per `designs/scene/derived_stats_v30.md` §4.1 universal wound-penalty rule; PP-716 supersedes prior +1 Ob framing).
+- **Wound penalties:** each wound adds a **fractional Ob** to every Thread operation roll — Leap, Weaving, Pulling, Mending, FR — **NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005, which reverses PP-716's −1D unification; the per-pool fractional-Ob value is a follow-on calibration, ED-PC-0006, not an invented number here).
 - **Mass battle:** Coherence −1 per Thread operation. See mass_battle_v30 §A.10.
 
 ### 10.2 Thread Perception in Combat

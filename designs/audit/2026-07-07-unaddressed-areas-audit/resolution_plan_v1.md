@@ -393,8 +393,27 @@ implementation, and whether that rule survives alongside the Ob channel is exact
 ED-PC-0005; the AUTHORITATIVE §4.1 (PP-716) prose is **untouched** (its reconciliation is a Jordan
 call — ED-PC-0005 flipped `needs_jordan: true`).
 
-**The clean, mechanical Stratum-B tail is now exhausted.** The remaining items each need a design
-ruling or a large build, not a mechanical fix: the ED-PC-0005 −1D-vs-Ob reconciliation itself · the
-contest live-dispatch / derivation bridge (ED-SC-0011) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap
-direction), C-TW-6/8 (Thread Fatigue / Co-Movement implement-vs-banner) under ED-WR-0005 · the
-armature echo-wiring integration (PR-2 remainder). These are surfaced for Jordan rather than forced.
+**Fourth slice (2026-07-08) — ED-PC-0005 RULED and executed (the −1D-vs-Ob reconciliation).**
+Jordan ruled: *"never −1D, always increase fractional Ob."* Wounds NEVER impose a −1D pool cut;
+each wound ALWAYS adds a fractional Ob. ED-1041's bilateral wound-Ob channel fully supersedes the
+−1D-to-Pools rule, reversing PP-716's −1D unification. Scope confirmed via AskUserQuestion =
+**"Combat now, flag rest."** Executed this PR: **(combat, fully)** rewrote the AUTHORITATIVE
+`derived_stats_v30 §4.1` wound-penalty row + universality paragraph to the fractional-Ob model
+(struck-through PP-716, SUPERSEDED marker); rewrote `combat_v30 §7/§10` + `combat_design_v1`;
+**deleted** `WOUND_POOL_PENALTY` and the dead `pool_penalty()` from `combatant.py` (the felled/
+incapacitation gate is unaffected — it keys on Health depletion, not `pool_penalty`); removed the
+`−1*wounds` term from `contest_legacy_stub.build_argue_pool`. **(non-combat, flagged not valued)**
+stripped −1D from the Thread (`threadwork_v30`), fieldwork (`fieldwork_v30 §2.2`), and mass-battle
+Command (`params/mass_combat` ED-167) heads + their params mirrors (`params/core`, `params/fieldwork`),
+replacing each with *"fractional Ob per wound, value ED-PC-0006"* — **no invented numbers.** Recorded
+PP-716's −1D unification superseded in `supersession_register.yaml`; **ED-PC-0005 → resolved**
+(`needs_jordan: false`); filed **ED-PC-0006** (`open`) for the non-combat per-pool fractional-Ob
+calibration. Full test + gate pass (387 sim / 90 combat+gate green; goldens unmoved — the deleted
+method had no live callers and contests defer in campaigns).
+
+**The clean, mechanical Stratum-B tail is now exhausted, and the standing PC-lane ruling (ED-PC-0005)
+is closed.** The remaining items each need a design ruling or a large build, not a mechanical fix:
+**ED-PC-0006** (non-combat wound fractional-Ob values — sim-calibration) · the contest live-dispatch /
+derivation bridge (ED-SC-0011) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap direction), C-TW-6/8
+(Thread Fatigue / Co-Movement implement-vs-banner) under ED-WR-0005 · the armature echo-wiring
+integration (PR-2 remainder). These are surfaced for Jordan rather than forced.

@@ -59,6 +59,9 @@ Note: PP-250 Community Organizing formula (Attunement + History + TPS) is supers
 | Past-Oriented Pulling (POP) | 8 |
 | POP Binding (Past-Oriented Lock or Dissolution) | 9 |
 
+## Wound penalty (Thread ops) — ED-PC-0005 ruling
+Each Wound adds a **fractional Ob per wound** to every Thread operation roll (Leap, Weaving, Pulling, Mending, FR) — **NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). The per-pool fractional-Ob VALUE is a follow-on calibration, flagged pending (ED-PC-0006) — not yet set here; combat's ratified reference is ED-1041 (+0.15 Ob attacking / +0.25 defending per wound). See `designs/threadwork/threadwork_v30.md` §2.3/§3/§5 and `designs/scene/derived_stats_v30.md` §4.1 (authoritative).
+
 ## Three-Axis Ob System (PP-622, PP-623 — canonical)
 **Total Ob = Depth Ob + Breadth Ob + Distance Ob**
 TN modifiers apply on top of total Ob.

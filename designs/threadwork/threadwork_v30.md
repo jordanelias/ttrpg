@@ -156,7 +156,7 @@ Approach Training is a binary tag: a practitioner either has it or does not. It 
 **TN:** 7
 **Ob:** Thread Sensitivity 30–49 = 2 · Thread Sensitivity 50+ = 1
 
-**Wound penalty (universal):** −1D to the Leap Pool per Wound (cumulative; per `designs/scene/derived_stats_v30.md` §4.1; PP-716 supersedes prior +1 Ob framing).
+**Wound penalty (universal):** each Wound adds a **fractional Ob** to the Leap roll — **never a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D). The Thread fractional-Ob-per-wound value is a follow-on calibration (**ED-PC-0006**, TBD); per `designs/scene/derived_stats_v30.md` §4.1.
 
 > **Einhir framework (P-26):** "Einhir framework" appears as a prerequisite for Locked Zone border Mending (Ob 8+). It requires all three of: 1. **Knowledge:** The practitioner has Diagnosed the Locked Zone's structure (requires a prior Southernmost expedition Diagnosis scene or equivalent scholarly research via Einhir Texts). 2. **Technique:** The practitioner possesses at least one Einhir Text technique applicable to Mending 
 
@@ -214,7 +214,7 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 | 4+ | 4+ | 3+ | Three or more. Rare — Focus 4+ requires significant investment. |
 
 
-**Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply −1D to the Leap Pool as normal (Wound penalty). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
+**Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, the normal wound penalty falls on the Leap roll — a fractional Ob per Wound (ED-PC-0005; value flagged pending ED-PC-0006), not a −1D pool cut. The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
 
 **Incapacitation during contact:** If a Wound incapacitates the practitioner during contact (Wounds reach or exceed the incapacitation threshold: ceiling(Health ÷ 2)), contact terminates immediately regardless of the Attunement disruption check result. The operation in progress is treated as a Failure. The practitioner returns to rendering incapacitated.
 
@@ -235,7 +235,7 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 **Concealing from Thread Sensitivity 30+ observers:** Roll Cognition only (no History), TN 7, Ob = observer's Thread Sensitivity ÷ 30 (round up). This is a pre-Leap action — concealment is set before rendering suspends. The practitioner shapes how their configuration presents during contact, but cannot adjust concealment during contact itself.
 
-**Wound penalties:** −1D per Wound applies to all Thread operation Pools — Leap, Weaving, Pulling, Mending, FR (per `designs/scene/derived_stats_v30.md` §4.1; PP-716). The body's damage impedes the suspension.
+**Wound penalties:** each Wound adds a **fractional Ob** to all Thread operation rolls — Leap, Weaving, Pulling, Mending, FR — **never a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716; per-pool value follow-on ED-PC-0006, TBD; per `designs/scene/derived_stats_v30.md` §4.1). The body's damage impedes the suspension.
 
 ### Rendered-Level Thread Event Visibility (ED-677)
 
