@@ -13,7 +13,7 @@ from weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F
 # keeps its historical copies for its own archived runs. Formulas and constants are byte-identical
 # to the r2/r5 originals; provenance tags carried over.
 
-WOUND_POOL_PENALTY = 1       # [canonical: derived_stats_v30 §4.1 (each wound: -1D to Pools; no Ob penalty)]
+WOUND_POOL_PENALTY = 1       # [derived_stats_v30 §4.1: -1D to Pools per wound] -- ⚠️ UNWIRED: pool_penalty() below has zero live callers; wound impairment is applied via the ED-1041 bilateral wound-Ob channel (config.py WOUND_ATK_OB/WOUND_DEF_OB + systems.py), which supersedes the -1D aggressor-only pool penalty (ED-1021). §4.1's "no Ob penalty, ever" is therefore stale vs ratified ED-1041; the reconciliation (does the -1D pool rule survive alongside the Ob channel, or is it fully superseded?) is ED-PC-0005 -- needs Jordan. Do NOT rewrite §4.1's authoritative prose here.
 SPI_WI_W = 0.4               # [D-A noise, Jordan 2026-06-18: Spirit at low weight increases the Wound Interval -> reduces uniformity]
 STR_HEALTH_W = 0.25          # [D-A noise, Jordan 2026-06-18: Strength at very low weight, proportional to Endurance, into Health -> reduces uniformity]
 WOUND_INTERVAL_BASE = 4      # [D-A recalib, Jordan 2026-06-18: flat base lowered 6->4; 2 pts moved into Spirit/Strength terms, conserving avg Health=40]
@@ -48,7 +48,9 @@ class WoundTracker:
     """The authoritative non-resetting wound-gate tracker (derived_stats_v30 §4.1).
     Health depletes; every WI of cumulative damage is a wound gate; a single hit larger than WI
     crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
-    Each wound = -1D to Pools (queried via pool_penalty); no Ob penalty, ever. Persists between
+    Historically each wound = -1D to Pools (via pool_penalty), no Ob penalty; ED-1041 SUPERSEDED that
+    with a bilateral wound-Ob channel (config.py/systems.py), so "no Ob penalty, ever" is stale and
+    pool_penalty() is now unwired (drift tracked at ED-PC-0005). Persists between
     encounters (cleared only at session end, per canon)."""
 
     def __init__(self, end, equipment_health=0, spirit=3, strength=4):
@@ -71,11 +73,14 @@ class WoundTracker:
     def felled(self):
         """Incapacitated at Health depletion (cumulative damage >= Health). Health carries a low-weight
         Strength buffer (D-A reshape, Jordan-ratified), so Strength now buys survivability; coincides with the
-        old MW+1-wound rule when that buffer is zero. Pool penalty still caps at MW+1 wounds (-1D each)."""
+        old MW+1-wound rule when that buffer is zero. (pool_penalty() would cap at MW+1 wounds at -1D
+        each, but it is unwired -- wound impairment runs through the ED-1041 Ob channel; see ED-PC-0005.)"""
         return self.cumulative_damage >= self.health_full
 
     def pool_penalty(self):
-        """-1D per wound to all Pools (capped at felled). No Ob penalty (canon)."""
+        """-1D per wound to all Pools (capped at felled). ⚠️ UNWIRED (zero live callers) and its
+        "No Ob penalty" claim is stale: ED-1041's bilateral wound-Ob channel is the live wound-impairment
+        mechanic. Retained pending ED-PC-0005's reconciliation (needs Jordan) -- do not delete blind."""
         return min(self.wounds, self.max_wounds + 1) * WOUND_POOL_PENALTY
 
     def apply(self, damage):

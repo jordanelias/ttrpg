@@ -382,7 +382,19 @@ both are island/dead-code changes, so the F7 + seed-0 goldens are unmoved (verif
   `sim/tests/test_knots_ed912.py` (7 cases; knots had zero coverage). Also closes ED-FI-0003's noted
   sim residual. `knots/` is an island, so the F7 + seed-0 goldens are unmoved.
 
-**Next Stratum-B candidates:** the dead `WoundTracker.pool_penalty()` (ED-PC-0005) and the contest
-live-dispatch criterion (ED-SC-0011). ED-WR-0005 still carries C-TW-3 (the blanket penalty mis-hits
-Leap) + C-TW-4/6/8/10/11. The larger armature echo-wiring integration (PR-2 remainder) remains its
-own dedicated build.
+**Third slice (2026-07-08) — ED-PC-0005 dead-code investigation, resolved to a truth repair + a
+Jordan flag.** Confirmed repo-wide that `WoundTracker.pool_penalty()` + `WOUND_POOL_PENALTY`
+(`combat_engine_v1/combatant.py`) have **zero live callers**, and that ED-1041's bilateral wound-Ob
+channel is the live wound-impairment mechanic (`config.py`/`systems.py`, whose own comment supersedes
+the −1D pool penalty). The dead method was **NOT deleted** — it is the only −1D-per-wound
+implementation, and whether that rule survives alongside the Ob channel is exactly the
+`derived_stats §4.1`-vs-ED-1041 contradiction ED-PC-0005 exists to resolve. Instead the **false
+"no Ob penalty, ever (canon)" docstrings** in `combatant.py` were corrected to point at ED-1041 +
+ED-PC-0005; the AUTHORITATIVE §4.1 (PP-716) prose is **untouched** (its reconciliation is a Jordan
+call — ED-PC-0005 flipped `needs_jordan: true`).
+
+**The clean, mechanical Stratum-B tail is now exhausted.** The remaining items each need a design
+ruling or a large build, not a mechanical fix: the ED-PC-0005 −1D-vs-Ob reconciliation itself · the
+contest live-dispatch / derivation bridge (ED-SC-0011) · C-TW-3 (Leap penalty), C-TW-4 (POP-cap
+direction), C-TW-6/8 (Thread Fatigue / Co-Movement implement-vs-banner) under ED-WR-0005 · the
+armature echo-wiring integration (PR-2 remainder). These are surfaced for Jordan rather than forced.
