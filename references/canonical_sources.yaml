@@ -133,7 +133,7 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "165809e5421da98b46a8cd8bbb60c4315886b97e"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "9808d0e5427d51e3b65ee43765605e02716a6f0b"
     political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
@@ -184,9 +184,9 @@ systems:
     canonical_sha__params__contest_md: "6db13f1e72fa253c8786c47106e3be8974cdb852"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "0c980e8bf04a2c20d6a3a48746e2a83e65034030"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "c5a3d35697c1e5c2622c6720e232536c6fb4af18"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "90ea1f1b8ffe587f7ed554bc73fa9bf9791c31bb"
+    canonical_sha__params__scale_transitions_md: "4d24fc8fe33ea8a9307d9cf639884580f8aa0773"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "0a091996a56d9e3fa75c0fcbd0e5502eb47ddde8"
@@ -207,7 +207,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "165809e5421da98b46a8cd8bbb60c4315886b97e"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "9808d0e5427d51e3b65ee43765605e02716a6f0b"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -229,7 +229,7 @@ systems:
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
     related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
@@ -477,7 +477,7 @@ systems:
     canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
     design_doc: designs/architecture/player_agency_v30.md
-    canonical_sha__designs__architecture__player_agency_v30_md: "4673278327232637571f994d9899db34e45ce5d4"
+    canonical_sha__designs__architecture__player_agency_v30_md: "d49c182e49135a7cb5b5b54d4c5588f5fbdf5ed1"
     index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
@@ -487,9 +487,9 @@ systems:
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
   throughline_resolutions:
     design_doc: designs/arcs/throughline_resolutions_v30.md
-    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "ca4c04179f90a157b2f9b19762a06cb2a3905d9f"
+    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "5aa4ea143cd4d9cec19da2991eec0eb61f3d636b"
     index: designs/arcs/throughline_resolutions_v30_index.md
-    canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "5dc526993ff1549be2948f316940be39035b5633"
+    canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "2c9ca8c1c2414173a6440fcaa13b8ae79a2c9f07"
   ui_ux:
     design_doc: designs/ui/valoria_ui_ux_v4.md
     canonical_sha__designs__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
@@ -501,14 +501,14 @@ systems:
     canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
   npc_behavior:
     design_doc: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "487c1d9204673a6a0f792f31548365c202538e2a"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
     npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
     canonical_sha__designs__npcs__npc_behavior_v30_index_md: "d71b538d8a88bae5937494beb63e43595673f6ff"
     npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "07f888a02f814e95629275c99405ea377153b9e7"
+    canonical_sha__references__module_contracts_yaml: "8e916fd14006f185608859483796ea615be6ac3f"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

@@ -17,7 +17,7 @@
 | 2 | 3 | 2 | Status: CANONICAL (approved Jordan 2026-04-17) |
 | 3 | 4 | 2 | Scope: Resolve 10 second-order integration questions raised by PP-660 faction politics rank-ladder expansion. |
 | 4 | 5 | 2 | Supersedes: none (new document) |
-| 5 | 6 | 2 | Cross-references: faction_politics_expanded_v1 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix. |
+| 5 | 6 | 2 | Cross-references: faction_politics_v30 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix. |
 | 6 | 10 | 1 | §0 — AUDIT ORIGIN |
 | 7 | 29 | 1 | §1 — CASTE STARTING-STATE ONBOARDING (Throughline 1) |
 | 8 | 31 | 2 | §1.1 The Problem |
@@ -64,10 +64,10 @@
 | 49 | 354 | 1 | §8 — REGISTER SPLIT FUTURE-MARKER (Throughline 10) |
 | 50 | 356 | 2 | §8.1 The Problem |
 | 51 | 360 | 2 | §8.2 Resolution |
-| 52 | 373 | 1 | §9 — DOCUMENT STATUS AND PROPAGATION |
-| 53 | 377 | 2 | §9.1 Files Modified by This Commit |
-| 54 | 394 | 2 | §9.2 Editorial Items Raised |
-| 55 | 403 | 2 | §9.3 Open Dependencies |
+| 52 | 375 | 1 | §9 — DOCUMENT STATUS AND PROPAGATION |
+| 53 | 379 | 2 | §9.1 Files Modified by This Commit |
+| 54 | 396 | 2 | §9.2 Editorial Items Raised |
+| 55 | 405 | 2 | §9.3 Open Dependencies |
 
 ## Section Sizes (tokens)
 
@@ -78,7 +78,7 @@
 | 2 | 12 | Status: CANONICAL (approved Jordan 2026-04-17) |
 | 3 | 28 | Scope: Resolve 10 second-order integration questions raised by PP-660 faction politics rank-ladder expansion. |
 | 4 | 8 | Supersedes: none (new document) |
-| 5 | 61 | Cross-references: faction_politics_expanded_v1 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix. |
+| 5 | 61 | Cross-references: faction_politics_v30 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix. |
 | 6 | 470 | §0 — AUDIT ORIGIN |
 | 7 | 1,206 | §1 — CASTE STARTING-STATE ONBOARDING (Throughline 1) |
 | 8 | 177 | §1.1 The Problem |

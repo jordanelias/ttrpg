@@ -162,8 +162,8 @@
 | `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `designs/architecture/complete_systems_reference.md` | PENDING |
 | `designs/systems/derived_stats_v1.md` | `designs/scene/derived_stats_v30.md` | PENDING |
 | `designs/systems/derived_stats_v1_skeleton.md` | `designs/scene/derived_stats_v30_skeleton.md` | PENDING |
-| `designs/systems/faction_politics_expanded_v1.md` | `designs/provincial/faction_politics_v30.md` | PENDING |
-| `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | PENDING |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/provincial/faction_politics_v30.md` | DONE (2026-07-08, ED-IN-0016 — file move already complete, old path long gone; citation-repointing half executed this pass across the live corpus) |
+| `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | N/A (2026-07-08, ED-IN-0016 — not executed: `faction_politics_v30.md` was promoted as a single monolithic doc; no index/skeleton split was ever authored for it, confirmed no such file exists) |
 | `designs/systems/integration_proposal_2026-04-15.md` | `designs/architecture/integration_proposal_v30.md` | PENDING |
 | `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `designs/architecture/integration_proposal_v30_skeleton.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15.md` | `designs/scene/investigation_systems_v30.md` | PENDING |

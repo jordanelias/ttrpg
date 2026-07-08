@@ -126,9 +126,9 @@ Option B: **Hafenmark persists as a separate faction under institutional success
 
 ### Player Rank Transitions under Option B
 
-**Hafenmark-to-Crown Recognition Ceremony** (see faction_politics_expanded_v1.md §6.4): If Baralta wins the Crown Succession Contest AND the player holds Hafenmark Standing 7 (Speaker-Regent) at the moment of contest resolution, a formal scene fires in which Baralta presents the player at Valorsplatz. The player gains Crown Standing 5 (Seneschal-equivalent) provisionally. Crown inner circle evaluates: majority acceptance → rank consolidates permanent Crown Std 5; majority rejection → provisional rank falls to Crown Std 2, and Hafenmark rank reverts to Chancellor (Std 6) in the institutional-successor Hafenmark.
+**Hafenmark-to-Crown Recognition Ceremony** (see faction_politics_v30.md §6.4): If Baralta wins the Crown Succession Contest AND the player holds Hafenmark Standing 7 (Speaker-Regent) at the moment of contest resolution, a formal scene fires in which Baralta presents the player at Valorsplatz. The player gains Crown Standing 5 (Seneschal-equivalent) provisionally. Crown inner circle evaluates: majority acceptance → rank consolidates permanent Crown Std 5; majority rejection → provisional rank falls to Crown Std 2, and Hafenmark rank reverts to Chancellor (Std 6) in the institutional-successor Hafenmark.
 
-Hafenmark ranks below Std 7 do NOT auto-transfer. Crown ranks under Baralta are not automatically affected — existing Crown officers at Disposition ≥ 0 with Baralta retain rank; those at negative Disposition are demoted to Std 3 within 1 season. See faction_politics_expanded_v1.md §6 for the full rank-cascade specification across Outcome A (Hafenmark wins), Outcome B (Consecration Crisis branches), and Outcome C (Löwenritter or Church wins).
+Hafenmark ranks below Std 7 do NOT auto-transfer. Crown ranks under Baralta are not automatically affected — existing Crown officers at Disposition ≥ 0 with Baralta retain rank; those at negative Disposition are demoted to Std 3 within 1 season. See faction_politics_v30.md §6 for the full rank-cascade specification across Outcome A (Hafenmark wins), Outcome B (Consecration Crisis branches), and Outcome C (Löwenritter or Church wins).
 
 [EDITORIAL: ED-647 — Hafenmark-to-Crown Recognition Ceremony formalization pending (P2).]
 
