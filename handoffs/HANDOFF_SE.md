@@ -10,6 +10,20 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **ED-SE-0005 (RESOLVED 2026-07-08) — pessimist-audit SE verdicts EXECUTED.** The first execution
+  of a ratified pessimist-action-audit lane docket (ED-IN-0027). Done: `player_agency_v30 §9` Trade
+  PRUNED (folded into Guild-contracts income), Fund-settlement-development MERGED into Develop
+  funding, free Sponsor-settlement-event retired into the Debt-bearing `Sponsor`; `settlement_layer_v30`
+  §3.2 Administer annotated DISTILL (info→Investigate, maintenance→AP-not-spent; the *physical* fold
+  lands when `governance_play_redesign_v1` supersedes §3.2 at OPT-16), §3.3 Grant/Revoke annotated as
+  an FA-owned `da.public_governance` Domain Action (single-home = the `domain_actions` doc, ED-FA-0002);
+  `governance_play_redesign_v1` (proposal) refined — Investigate reuses the fieldwork Investigation
+  resolver, Treat's chit call-in trigger is now specified (Debt tag → Friction card, §1.6/§2.3);
+  `module_contracts` settlement_economy SE-side retirement confirmed; a stale `combat_v30` Trade
+  pointer fixed. **Residual for OPT-16 (governance-redesign staging):** the physical §3.2 Administer
+  removal + the Develop-funding merge land when the redesign is ratified — the decisions are baked in,
+  not left silent. No sim work (SE has no player-verb execution code).
+
 - **ED-SE-0002 (open, needs_jordan) — Accord/Order stacking ruling.** Filed 2026-07-05 from the
   ratified edge-playability audit (PR #81, "Ratify all"; finding EP-9): `scale_transitions_v30`
   §5.5 ("do not stack — higher Accord applies") vs `peninsular_strain_v30` §2.7 ("stack

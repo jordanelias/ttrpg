@@ -53,6 +53,13 @@ Plus the always-available **Petition / Defy** response to the Directive (§1.4),
 
 **Design note:** the verbs are deliberately *not* orthogonal stat-pumps. `Develop`/`Fortify`/`Keep Order` each force a *method* choice that hands power to a different faction, so optimizing the number costs you politically. That is the EU4-estate / Shadow-Empire principal-agent friction ported down to the player's tier.
 
+**Reconciliation notes (ED-SE-0005, 2026-07-08 — ratified pessimist-action audit, ED-IN-0027).** These refine the verbs above without changing the menu; they bind when this proposal is staged (OPT-16):
+
+- **Investigate — DISTILL.** The concealment *roll* (Cognition + history vs a hidden actor's concealment) is **not respecified here**: it invokes the existing **fieldwork Investigation resolver** (`investigation_systems_v30` Observe/Surveil/Reconstruct). What this verb authors is the settlement-specific **four-way post-discovery disposition** (expose · expel · co-opt · shelter) — that is the genuinely new, load-bearing content; the detection engine is reused, not duplicated. (Shrinks the §5.2 build sequence — one fewer bespoke roll-resolver to author.)
+- **Treat — REFINE (chit call-in trigger, previously unspecified).** A Treat side-deal stores its **chit as a Debt-family tag** (§1.6 Ledger of Consequence · *Debt*) on the counterparty. It is **called in when a Friction card that references it fires** (§2.3 Card families · *Friction* ← "Treat chits"), on the same "fires when due" cadence the Debt tag already uses for sponsorship expectations — i.e. at the counterparty's next Friction surfacing, not a free-floating adjudication (this is a no-GM engine). This closes the Q-smooth gap the audit flagged: the trigger is now enumerated, not implicit.
+- **Sponsor** is the single canonical patronage verb: it absorbs the retired `player_agency_v30 §9` free "Sponsor settlement event" (Order +1, no downside). Only the **Debt**-bearing form survives, removing the dominant-strategy duplication.
+- **Administer** (dropped from `settlement_layer_v30 §3.2`'s four-verb menu) is formally folded, not silently omitted: its information half → **Investigate**, its maintenance half → the "governance action not spent on growth this season" state. No standalone Administer verb is reintroduced.
+
 ### §1.4 The Directive — the dual-authority engine
 
 Each season the Provincial Authority issues **one Directive** to the settlement (the controlling faction's AI, or the GM, per the faction priority tree). Typed examples:
