@@ -114,7 +114,12 @@ lane_ids:
     # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     # ED-PC-0005 allocated 2026-07-07 (status open): ED-1042 residual wound-Ob prose drift, re-filed from ED-PC-0004/OPT-15 during the Stratum-A execution PR. NOTE: a plan-text label "ED-PC-0005" in designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md:115 (U4 item) is NOT an allocation and must renumber when actually filed (the ED-PC-0001 plan-label collision class). RESOLVED 2026-07-08 (Jordan ruling "never -1D, always fractional Ob").
     # ED-PC-0006 allocated 2026-07-08 (status resolved): non-combat wound fractional-Ob calibration — follow-on to the ED-PC-0005 ruling. RESOLVED 2026-07-08: adopted +0.15 Ob per wound (cumulative), reusing ED-1041's combat "attacking" magnitude, propagated to Thread ops/fieldwork/mass-battle Command + params mirrors (see ledger entry). next_free bumped 6→7.
-    # ED-PC-0007 allocated 2026-07-08 (status deferred): pessimist-audit PC action-consolidation work items, decision ratified by ED-IN-0027. DEFERRED 2026-07-08 (Jordan: "Defer PC") — the audited combat_v30 §4 ACTIONS menu is PARTIALLY SUPERSEDED (ED-900) by the canonical continuous resolver combat_engine_v1/, which has no discrete player-action surface yet; the subtractive consolidations are already realized/moot under combat_engine_v1's design. No edits to the stale surface; forward constraints attach to ED-PC-0001 (see ledger entry). next_free bumped 7→8.
+    # ED-PC-0007 allocated 2026-07-08 (status deferred): pessimist-audit PC action-consolidation work items.
+    # DEFERRED 2026-07-08 (Jordan: "Defer PC") — the audited combat_v30 §4 ACTIONS menu predates the current
+    # continuous resolver combat_engine_v1/, which has no discrete player-action surface yet; the subtractive
+    # consolidations are already realized/moot under combat_engine_v1's design. No edits to the stale surface.
+    # Forward constraints (see ledger entry for the full list) attach to the post-R3 player-input-surface item.
+    # next_free bumped 7→8.
     # ED-PC-0008 allocated 2026-07-08 (status open, needs_jordan): U2 scoping findings — attempted U2 (graded
     # mode affordance + Phase-C percussion enactment) this session and found it materially underspecified
     # relative to consolidation_v1.md's one-line description; three NEW forks surfaced (percussion self-gate
