@@ -8,6 +8,33 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract hygiene)
+  2026-07-08: ED-IN-0016 CLOSED, ED-IN-0030 filed.** Agonist/antagonist pair (producer + independent
+  read-only critic, adversarially re-verified against source files) executed the already-ratified
+  ED-IN-0016 ("RATIFIED-AS-ACCEPTED... Ratify all" on PR #81) plus C-INJ-4: (1) `module_contracts.yaml`
+  `faction_politics` `doc: null` flipped to `designs/provincial/faction_politics_v30.md` (was stale —
+  the CANONICAL PP-660 1,115-line home exists; C-INJ-4's scenario_authoring gap_notes needed no edit,
+  already refreshed by ED-IN-0023); (2) `CURRENT.md` gained three rows/extensions (faction_politics_v30
+  appended to the Faction/political row; new Scale-transitions row; new Player-agency row; new
+  Fieldwork/Investigation row citing ED-FI-0004's Interview-MERGE resolution of the EP-8 contradiction);
+  (3) repointed the dead `faction_politics_expanded_v1.md` filename (30 live-corpus citations, ep-14) to
+  its promoted successor across 9 live canonical docs (baralta_crown_claim_v30, scale_transitions_v30,
+  settlement_layer_v30, player_agency_v30, npc_behavior_v30, throughline_resolutions_v30 + its `_index`
+  co-file, throughlines_complete.md) — verified section-by-section against the actual promoted doc's
+  headers (not blind find-replace); one citation (player_agency §2, succession) could NOT be verified to
+  a matching section and was rewritten as a prose pointer with an inline flag instead of guessed;
+  deliberately left ALL `designs/audit/`, `tests/sim/`, `archives/`, and `references/propagation_log.md`
+  hits untouched (historical snapshots, rewriting would falsify the record); (4) `restructure_ledger.md`'s
+  two stale PENDING rows closed (DONE / N/A — no skeleton split was ever authored); (5) **filed
+  `ED-IN-0030`** (open, needs_jordan) for a genuinely new defect the sweep surfaced: `scale_transitions_v30`
+  §4.3.2 row 8's "creating a debt scene per §1" clause cites a mechanic that does not exist anywhere in
+  the promoted `faction_politics_v30.md` — flagged, not authored or struck. Critic caught two minor
+  drift issues pre-commit (index co-file line-numbers off by 2 after an inserted note; one wrong
+  key_type_registry_v30.md line citation) — both fixed. Gates green (`valoria_local --staged`,
+  `validate_ed_citations` 0 violations, `freshness_gate` 133/133, naming clean); `pytest tests/valoria
+  sim/tests` full-suite pass pending final confirmation in this same PR. NEXT §6.3 waves: down-seam
+  (FA/WR targets[] population), A13-A16 checker implementation (needs a new `doc_emit_ref:` schema field
+  + `references/rendering_dispositions.yaml`), rendering wave.
 - **Attribute/value coherence audit 2026-07-08: ED-IN-0029 — the quantity-layer extension of the
   Key & Echo Armature (docket UNRULED — Jordan picks).** Read-only cross-silo audit of every
   attribute/derived score/pool/track/clock/stat/constant (Jordan: "we desperately lack unity,

@@ -3,7 +3,7 @@
 ## Status: CANONICAL (approved Jordan 2026-04-17)
 ## Scope: Resolve 10 second-order integration questions raised by PP-660 faction politics rank-ladder expansion.
 ## Supersedes: none (new document)
-## Cross-references: faction_politics_expanded_v1 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix.
+## Cross-references: faction_politics_v30 (primary source), player_agency_v30 §3/§5/§7, settlement_layer_v30 §1, npc_behavior_v30 (new §11), baralta_crown_claim_v30 (new §7), threadwork_v30 (ED-629 stress test open), coverage_matrix.
 
 ---
 
@@ -100,13 +100,13 @@ player_agency §3.2 says "each season the player's faction leader assigns one Du
 
 **§3.2 revised generation logic:**
 
-Add new paragraph after existing generation rules: *"Duty assignment requires Standing ≥ 1. At Standing 0 (Petitioner), the player receives the **Initiation Duty** only — a faction-specific scene arc (faction_politics_expanded_v1 §1) that must be completed before standard Duty generation begins. The Initiation Duty is not drawn from the faction AI priority stack; it is a fixed narrative gate. Successful completion transitions the player to Standing 1 and activates the Duty system as defined below."*
+Add new paragraph after existing generation rules: *"Duty assignment requires Standing ≥ 1. At Standing 0 (Petitioner), the player receives the **Initiation Duty** only — a faction-specific scene arc (faction_politics_v30 §1) that must be completed before standard Duty generation begins. The Initiation Duty is not drawn from the faction AI priority stack; it is a fixed narrative gate. Successful completion transitions the player to Standing 1 and activates the Duty system as defined below."*
 
 **§3.4 revised ladder references:**
 
 Replace: *"Standing +1 (faction-specific track, 0–5). High Standing unlocks: ... authority to issue sub-commands to NPC officers (Standing 4), candidacy for faction leadership succession (Standing 5)."*
 
-With: *"Standing +1 (faction-specific track, 0–7 per faction_politics_expanded_v1 §1). Rank thresholds unlock: Standing 2 (faction intelligence access), Standing 3 (council observation, specialty branch selection, Formal Recognition Event), Standing 4 (NPC officer sub-commands, +1 scene action), Standing 5 (treaty-level standing, inner-circle adjacency), Standing 6 (inner-circle voting, +2 scene actions), Standing 7 (succession-eligible, Regent-Designate authority)."*
+With: *"Standing +1 (faction-specific track, 0–7 per faction_politics_v30 §1). Rank thresholds unlock: Standing 2 (faction intelligence access), Standing 3 (council observation, specialty branch selection, Formal Recognition Event), Standing 4 (NPC officer sub-commands, +1 scene action), Standing 5 (treaty-level standing, inner-circle adjacency), Standing 6 (inner-circle voting, +2 scene actions), Standing 7 (succession-eligible, Regent-Designate authority)."*
 
 **§3.4 failure condition revised:** *"Below Standing 0 is not possible — Standing 0 is the minimum institutional state (Petitioner). A player who fails the Initiation Duty remains at Standing 0 until they complete it or declare for a different faction. A player who fails a Duty at Standing 1+ drops by 1 step but cannot fall below Standing 1 (once initiated, the rank is floor-protected unless explicitly dismissed — see ED-647 for dismissal mechanics)."*
 
@@ -122,7 +122,7 @@ Secondly: PP-660 §2 names the Restoration Movement as a potential sub-office ta
 
 ## §3.2 Resolution: Warden × CI Pressure Scale
 
-**Add to faction_politics_expanded_v1 §5 (CI × Rank Ladder Integration) via this document's propagation:**
+**Add to faction_politics_v30 §5 (CI × Rank Ladder Integration) via this document's propagation:**
 
 | Warden Standing | CI 0–39 | CI 40–54 | CI 55–79 (Prominent+) | CI 80–99 (Ascendant) | CI 100 (Unification) |
 |-----------------|---------|----------|----------------------|---------------------|---------------------|
@@ -135,7 +135,7 @@ This is the mirror of the Church bonus curve: as Church political legitimacy ris
 
 ED-629 (2026-04-17) raised 28 P0 blockers on Thread system integration, including horizontal integration across social/companion/fieldwork boundaries. The Warden ladder adds a new integration surface (rank × TS thresholds) that is affected by those findings but does not block on them.
 
-**Canonical note:** The Warden Ladder (faction_politics_expanded_v1 §2.7) is committed as-designed. If ED-629 resolution produces substrate-level changes to TS, Knot, or Thread operation rules, the Warden ladder will require a confirmatory audit. This is flagged as a dependency, not a blocking conflict.
+**Canonical note:** The Warden Ladder (faction_politics_v30 §2.7) is committed as-designed. If ED-629 resolution produces substrate-level changes to TS, Knot, or Thread operation rules, the Warden ladder will require a confirmatory audit. This is flagged as a dependency, not a blocking conflict.
 
 ## §3.4 Resolution: RM-When-Active Ladder (Stub)
 
@@ -299,7 +299,7 @@ Add to `designs/systems/settlement_layer_v30.md` after §1.3 (Settlement Stats):
 
 ### §1.4 Institutional Facility Tiers
 
-Each Seat-type and certain City-type settlements offer a bounded number of **Institutional Facility slots** that the faction controlling the settlement can allocate to rank-holders (per faction_politics_expanded_v1 §1 Hall Tier specification). Facility slots are a finite settlement resource; when full, new rank-holders at the corresponding tier receive "pending" status until a slot opens.
+Each Seat-type and certain City-type settlements offer a bounded number of **Institutional Facility slots** that the faction controlling the settlement can allocate to rank-holders (per faction_politics_v30 §1 Hall Tier specification). Facility slots are a finite settlement resource; when full, new rank-holders at the corresponding tier receive "pending" status until a slot opens.
 
 #### §1.4.1 Facility Slot Capacity by Settlement Type
 
@@ -343,7 +343,7 @@ Cross-faction Wings are a diplomatic concession mechanic — a faction may perma
 
 ## §7.1 The Problem
 
-PP-660 raised SIM-POL-R01 through R05 as simulation debt. These were deferred per Jordan instruction. But the debt lives only inside faction_politics_expanded_v1 §10.2 — invisible to anyone reading `tests/coverage_matrix.md` (the canonical debt register).
+PP-660 raised SIM-POL-R01 through R05 as simulation debt. These were deferred per Jordan instruction. But the debt lives only inside faction_politics_v30 §10.2 — invisible to anyone reading `tests/coverage_matrix.md` (the canonical debt register).
 
 ## §7.2 Resolution
 
@@ -368,11 +368,13 @@ Proposed future decomposition (deferred, not scheduled):
 
 Trigger for split: when faction_politics_expanded_v1 next requires a patch larger than 20% of its current size, split at that time.
 
+> **2026-07-08 note (ED-IN-0016):** This §8 split proposal predates the PP-660 register's promotion into `designs/provincial/faction_politics_v30.md`. No split was ever executed — the register was promoted as a single 1,115-line monolithic doc, with no `rank_ladder_v1`/`caste_integration_v1` decomposition and no index/skeleton split authored for it (`references/restructure_ledger.md`). The proposal above is retained as historical record of the deferred-split discussion, not as a live plan.
+
 ---
 
 # §9 — DOCUMENT STATUS AND PROPAGATION
 
-This document is CANONICAL effective 2026-04-17 via PP-661. It resolves the 10 throughline findings from the PP-660 post-audit. It does not supersede faction_politics_expanded_v1 — it extends it.
+This document is CANONICAL effective 2026-04-17 via PP-661. It resolves the 10 throughline findings from the PP-660 post-audit. It does not supersede faction_politics_v30 — it extends it.
 
 ## §9.1 Files Modified by This Commit
 
@@ -402,7 +404,7 @@ This document is CANONICAL effective 2026-04-17 via PP-661. It resolves the 10 t
 
 ## §9.3 Open Dependencies
 
-- **ED-629** (Thread stress test): Warden ladder integration depends on this resolution. Post-ED-629, confirmatory audit of faction_politics_expanded_v1 §2.7 required.
+- **ED-629** (Thread stress test): Warden ladder integration depends on this resolution. Post-ED-629, confirmatory audit of faction_politics_v30 §2.7 required.
 - **ED-647** (provisional, pending) (Rank dismissal mechanics): partially resolved by §2 above (failure-clause revision); full mechanical spec still pending.
 - **SIM-POL-R01–R05**: deferred per 2026-04-17 instruction. Coverage_matrix entry created for discoverability.
 
