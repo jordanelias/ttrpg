@@ -15,7 +15,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
   Distills into 10 SE-lane mechanical proposals + a citation patch, filed as **ED-SE-0006..0016**
   (`needs_jordan` forks: ED-SE-0012 oversight-toolkit venal-appointment variant, ED-SE-0013 Local
-  Interdict, ED-SE-0014 Plant Colony, ED-SE-0016 optional founder-cohesion bonus). **ED-SE-0006
+  Interdict, ED-SE-0014 Plant Colony, ED-SE-0016 optional founder-solidarity bonus). **ED-SE-0006
   (SE-1, the Weberian L/PS derivation-event table) is the report's own #1 priority — it converts
   `sim/territory/registry.py`'s inert `legitimacy`/`popular_support` fields into a specified
   pipeline and "unblocks everything" downstream (SE-5/SE-6 boundary rules, FA-1's compliance
