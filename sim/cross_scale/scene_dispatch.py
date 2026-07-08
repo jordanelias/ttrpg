@@ -22,6 +22,12 @@ DELIBERATE BOUNDARIES (not fabricated):
     is an undefined design decision; this module does NOT invent actors. When a
     queued scene lacks resolvable actors in its context, dispatch records a
     flagged deferral (reason='context-derivation gap') and resolves nothing.
+    PARTIAL CLOSURE (ED-SC-0006, 2026-07-08): the one live trigger, Stability
+    Crisis's "emergency council" contest, now derives its two sides from the
+    SAME faction's own cited aggregate stats via _emergency_council_parties —
+    see that function's docstring for the citation + the [SEED] flag on the
+    specific mapping. combat, and any future contest trigger that is not
+    emergency_council, still defer (no bridge exists for those actor shapes).
   - OUTCOME->ECHO MAPPING GAP: resolved-scene outcomes are passed to zoom_out,
     but the resolver-result -> accord/faction-stat echo mapping is
     resolver/canon-specific and is left empty (flagged) rather than fabricated.
@@ -60,7 +66,8 @@ def evaluate_triggers(world):
                     "origin": "world_state",
                     "faction": fid,
                     "stakes": {"kind": "emergency_council", "faction": fid},
-                    # parties intentionally absent: derivation bridge gap (flagged)
+                    # parties intentionally absent here: derived at RESOLVE time (freshest
+                    # world state), not queue time — see _emergency_council_parties.
                 },
             })
     evaluable = {"Stability Crisis"}
@@ -74,6 +81,38 @@ def queue_triggered_scenes(world):
     for ev in fired:
         scene_slate.queue_scene(ev["scene_type"], ev["context"], ev["priority"])
     return {"queued": len(fired), "deferred_triggers": deferred}
+
+
+# Emergency Council → proceeding mapping (ED-SC-0006 party-derivation bridge).
+# scale_transitions_v30.md:137 names the scene "Emergency faction council" but assigns it no
+# proceeding. Of the 8 canonical social_contest_v30 proceedings (contest.modes.PROCEEDINGS),
+# Guild Arbitration is the closest structural match: its Panel adjudicator is "Masters arbitrate"
+# (ED-1059) — a seated bench deliberating together, which mirrors a faction council convening to
+# judge its own crisis better than a single expert/crowd judge does. [SEED — a provisional
+# proceeding choice, open to Jordan revision; the mechanical routing this module does is
+# proceeding-agnostic].
+EMERGENCY_COUNCIL_PROCEEDING = "guild_arbitration"
+
+
+def _emergency_council_parties(fid, world):
+    """Derive the two internal sides of a faction's Emergency Council — fired by the Stability
+    Crisis trigger (scale_transitions_v30.md:137: "Emergency faction council: social contest ...
+    revealing the source of the crisis"). No player-character schema exists at this (aggregate,
+    Monte-Carlo) scale — CLAUDE.md §5's no-fabrication rule and this module's own DELIBERATE
+    BOUNDARIES note both forbid inventing a personal actor. Both sides are therefore derived
+    from the SAME faction's own already-cited aggregate stats, not a new invented attribute:
+      side_a = the sitting leadership's case to stay the course — faculty = round(Faction.L),
+               its institutional legitimacy/authority to persuade.
+      side_b = the crisis's own case for change — faculty = round(7 - Faction.Sta): the worse
+               the Stability, the stronger the case.
+    Both floor at 1 (build_contest's kernel Pool.size floors the rolled pool at 5 regardless of
+    faculty — ED-SC-0004, a separate open fork over the pool formula itself).
+    [SEED — a provisional derivation, ED-SC-0006; a design default open to Jordan revision, not
+    itself a P0 fork]. Returns None if `fid` does not name a live faction."""
+    f = getattr(world, "factions", {}).get(fid)
+    if f is None:
+        return None
+    return (max(1, round(f.L)), max(1, round(7.0 - f.Sta)))
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -99,13 +138,38 @@ def _resolve_slot(slot, world, rng):
             out["result"] = getattr(rr, "__dict__", str(rr))
         elif st == "contest":
             parts = ctx.get("parties")
+            stakes = ctx.get("stakes") or {}
+            if (not parts or len(parts) < 2) and stakes.get("kind") == "emergency_council":
+                parts = _emergency_council_parties(ctx.get("faction"), world)
             if not parts or len(parts) < 2:
                 out["reason"] = "context-derivation gap: no personal contest parties from aggregate faction state"
                 return out
+            # ED-SC-0006: route to the PROMOTED kernel (build_contest/resolve_contest), retiring
+            # the deprecated contest_legacy_stub.run_contest call this branch used to make.
             import sim.personal.contest as contest
-            cr = contest.run_contest(parts, ctx.get("stakes", {}), world=world, rng=rng)
+            proceeding = ctx.get("proceeding", EMERGENCY_COUNCIL_PROCEEDING)
+            # The promoted kernel resolves off the GLOBAL `random` module, not an injectable rng
+            # (resolver.py's own note: the 151 seeded kernel tests rely on the module-level
+            # stream). Reseed it from a value DERIVED from world.rng — NOT a fixed pin, which
+            # massbattle.py:1826-1830 already learned breaks batch reproducibility — so the same
+            # campaign seed still yields the same contest outcome, then restore the prior global
+            # state so nothing else observes the reseed.
+            prev_random_state = random.getstate()
+            try:
+                random.seed(rng.getrandbits(32))
+                built = contest.build_contest(parts[0], parts[1], venue=proceeding)
+                (verdict, verdict_reason), _bout = contest.resolve_contest(built)
+            finally:
+                random.setstate(prev_random_state)
             out["resolved"] = True
-            out["result"] = getattr(cr, "__dict__", str(cr))
+            # 'verdict'/'verdict_reason' are the promoted kernel's own shape (a win-condition band
+            # or side label, plus 'win'|'draw'|'clinch:...') — NOT the deprecated stub's
+            # ContestResult(winner='A'|'B'|None, total_victory=bool) shape. Mapping this to a
+            # domain_echo degree is ED-SC-0007 (blocked at the spec level by the ED-SC-0002 echo-
+            # keying fork) — out of scope here; no `echo` block is set, so echo_transport (below)
+            # stays inert exactly as ED-IN-0028 left it.
+            out["result"] = {"winner": verdict, "reason": verdict_reason, "proceeding": proceeding,
+                             "side_a_faculty": parts[0], "side_b_faculty": parts[1]}
         else:
             out["reason"] = f"resolver for scene_type={st!r} not live (stub or unmapped)"
             return out
