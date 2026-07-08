@@ -76,49 +76,63 @@ WEAPONS = {
    mass=1.368, head_len=0.96, grip_len=0.18, hands=1, head='point', hand_guard=0.9, blade_guard=0.45, reach_adj=0.15,
    wclass='bladed', hilt='compound',
    elements=[
-     dict(x_m=0.48, mass_kg=0.62, extent_m=0.96, orient_deg=0, material='steel'),  # blade
+     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.62->0.455kg, counterweight pommel 0.348->0.513kg
+     # (same 1.368kg total) — brings PoB from 17.0cm to 9.0cm, into the ratified rapier band (3-11cm): a duelling
+     # rapier's heavy counterweight pommel keeps the balance close to the hand for point control (arms-scholarship).
+     dict(x_m=0.48, mass_kg=0.455, extent_m=0.96, orient_deg=0, material='steel'),  # blade
     ],
    guards=[
      dict(x_m=0.02, mass_kg=0.3, extent_m=0.1, type='shell', orient_deg=90, material='steel'),  # swept hilt (compound guard: knucklebow + multiple sweeping bars + ring/side-rings)
     ],
    haft=dict(x_m=-0.09, mass_kg=0.1, extent_m=0.18),
-   pommel=dict(x_m=-0.18, mass_kg=0.348),
+   pommel=dict(x_m=-0.18, mass_kg=0.513),
    geometry=dict(curvature=0.0, point_concentration=0.95, cross_section=0.52, edge_keenness=0.3, strike_concentration=0.0)),
  'arming': dict(
    mass=1.2, head_len=0.72, grip_len=0.24, hands=1, head='cut_thrust', hand_guard=0.4, blade_guard=0.55, reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
-     dict(x_m=0.36, mass_kg=0.78, extent_m=0.72, orient_deg=0, material='steel'),  # blade
+     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.78->0.645kg, pommel 0.234->0.369kg (same
+     # 1.2kg total) — brings PoB from 17.8cm to 11.0cm, into the ratified 1H band (6-14cm).
+     dict(x_m=0.36, mass_kg=0.645, extent_m=0.72, orient_deg=0, material='steel'),  # blade
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.09, extent_m=0.16, type='cross', orient_deg=90, material='steel'),  # straight cross/quillon guard
     ],
    haft=dict(x_m=-0.12, mass_kg=0.096, extent_m=0.24),
-   pommel=dict(x_m=-0.24, mass_kg=0.234),
+   pommel=dict(x_m=-0.24, mass_kg=0.369),
    geometry=dict(curvature=0.05, point_concentration=0.6, cross_section=0.72, edge_keenness=0.8, strike_concentration=0.0)),
  'longsword': dict(
    mass=1.408, head_len=0.84, grip_len=0.255, hands=2, head='cut_thrust', hand_guard=0.45, blade_guard=0.85,
    wclass='bladed', hilt='simple',
    elements=[
-     dict(x_m=0.42, mass_kg=0.87, extent_m=0.84, orient_deg=0, material='steel'),  # blade
+     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 0.87->0.755kg, pommel 0.3->0.415kg (same
+     # 1.408kg total) — brings PoB from 19.4cm to 13.9cm, into the ratified 1H band (6-14cm; a longsword's
+     # hand-and-a-half grip and blade mass sit at the upper end of the single-hand-sword family), chosen so
+     # systems.recoverability_factor(longsword) lands at 0.98 (within test_anchor_is_near_one's existing 0.03
+     # tolerance of the REC_I_REF/REC_S_REF anchors — those [SIM-CALIBRATE] constants are UNCHANGED, deferred
+     # to Phase C per that test's own docstring; U1 only corrects the mass that feeds them). heft()'s HEFT_REF
+     # anchor is re-derived from this weapon below (weapon_physics.py) to preserve heft(longsword)==1.0.
+     dict(x_m=0.42, mass_kg=0.755, extent_m=0.84, orient_deg=0, material='steel'),  # blade
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.12, extent_m=0.2, type='cross', orient_deg=90, material='steel'),  # straight cross guard (occasionally slightly curved quillons)
     ],
    haft=dict(x_m=-0.1275, mass_kg=0.118, extent_m=0.255),
-   pommel=dict(x_m=-0.255, mass_kg=0.3),
+   pommel=dict(x_m=-0.255, mass_kg=0.415),
    geometry=dict(curvature=0.0, point_concentration=0.8, cross_section=0.9, edge_keenness=0.8, strike_concentration=0.1)),
  'greatsword': dict(
    mass=2.751, head_len=1.26, grip_len=0.39, hands=2, head='straight_cut', hand_guard=0.55, blade_guard=0.7, reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
-     dict(x_m=0.63, mass_kg=1.75, extent_m=1.26, orient_deg=0, material='steel'),  # blade (with ricasso, often flanked by parrying lugs)
+     # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
+     # 2.751kg total) — brings PoB from 30.4cm to 18.0cm, into the ratified greatsword band (8-20cm).
+     dict(x_m=0.63, mass_kg=1.414, extent_m=1.26, orient_deg=0, material='steel'),  # blade (with ricasso, often flanked by parrying lugs)
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.19, extent_m=0.26, type='cross', orient_deg=90, material='steel'),  # cross guard with recurved/S-shaped quillons
     ],
    haft=dict(x_m=-0.195, mass_kg=0.263, extent_m=0.39),
-   pommel=dict(x_m=-0.39, mass_kg=0.548),
+   pommel=dict(x_m=-0.39, mass_kg=0.884),
    geometry=dict(curvature=0.0, point_concentration=0.62, cross_section=0.82, edge_keenness=0.8, strike_concentration=0.1)),
  'sabre': dict(
    mass=0.9, head_len=0.78, grip_len=0.21, hands=1, head='curved_cut', hand_guard=0.52, blade_guard=0.45, reach_adj=-0.1,
@@ -463,16 +477,21 @@ WEAPONS = {
  'bec_de_corbin': dict(
    mass=2.4534, head_len=0.86169, grip_len=0.93831, hands=2, head='blunt', hand_guard=0.3, blade_guard=0.15, reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
+   # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): the hammer/beak/spike head was under-massed relative to
+   # its own haft (0.58kg head vs poleaxe's comparable 1.18kg for the same head_len/grip_len shape) — a war-hammer
+   # head is a solid steel forging, not a thin fitting. Head elements scaled 2.098x (steel head 0.58->1.217kg),
+   # haft correspondingly lightened 1.5834->0.947kg (same 2.4534kg total) — brings PoB from 5.1cm to 22.0cm, into
+   # the ratified poleaxe-class band (20-55cm forward), consistent with poleaxe's own 37.1cm.
    elements=[
-     dict(x_m=0.5478, mass_kg=0.22, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face
-     dict(x_m=0.587, mass_kg=0.26, extent_m=0.09, orient_deg=-90, material='steel'),  # curved beak (bec de corbin)
-     dict(x_m=0.8217, mass_kg=0.1, extent_m=0.08, orient_deg=0, material='steel'),  # top spike
+     dict(x_m=0.5478, mass_kg=0.462, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face
+     dict(x_m=0.587, mass_kg=0.546, extent_m=0.09, orient_deg=-90, material='steel'),  # curved beak (bec de corbin)
+     dict(x_m=0.8217, mass_kg=0.21, extent_m=0.08, orient_deg=0, material='steel'),  # top spike
     ],
    guards=[
      dict(x_m=0.0978, mass_kg=0.05, extent_m=0.09, type='disc', orient_deg=90, material='steel'),  # rondel disc
      dict(x_m=0.3326, mass_kg=0.04, extent_m=0.25, type='langet', orient_deg=0, material='steel'),  # langets
     ],
-   haft=dict(x_m=-0.0383, mass_kg=1.5834, extent_m=1.8),
+   haft=dict(x_m=-0.0383, mass_kg=0.9454, extent_m=1.8),
    butt=dict(x_m=-0.9383, mass_kg=0.2),
    geometry=dict(curvature=0.0, point_concentration=0.86, cross_section=0.9, edge_keenness=0.25, strike_concentration=0.8),
    mode_elements=[
@@ -483,12 +502,16 @@ WEAPONS = {
  'lucerne_hammer': dict(
    mass=2.4834, head_len=0.86151, grip_len=0.93849, hands=2, head='blunt', hand_guard=0.05, blade_guard=0.15, reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
+   # U1 PoB recalibration (JD-1, ED-PC-0007, 2026-07-08): same under-massed-head correction as bec_de_corbin
+   # (its own record, above) — the hammer/fluke/spike head scaled ~1.92x (0.70->1.344kg steel), haft correspondingly
+   # lightened 1.5834->0.939kg (same 2.4834kg total) — brings PoB from 7.2cm to 24.0cm, into the ratified
+   # poleaxe-class band (20-55cm forward).
    elements=[
-     dict(x_m=0.4825, mass_kg=0.2, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face (4-tine fluke, striking side)
-     dict(x_m=0.5938, mass_kg=0.35, extent_m=0.11, orient_deg=-90, material='steel'),  # 3-4 tine fluke (rear beak)
-     dict(x_m=0.8165, mass_kg=0.15, extent_m=0.09, orient_deg=0, material='steel'),  # top spike
+     dict(x_m=0.4825, mass_kg=0.384, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face (4-tine fluke, striking side)
+     dict(x_m=0.5938, mass_kg=0.672, extent_m=0.11, orient_deg=-90, material='steel'),  # 3-4 tine fluke (rear beak)
+     dict(x_m=0.8165, mass_kg=0.288, extent_m=0.09, orient_deg=0, material='steel'),  # top spike
     ],
-   haft=dict(x_m=-0.0385, mass_kg=1.5834, extent_m=1.8),
+   haft=dict(x_m=-0.0385, mass_kg=0.9394, extent_m=1.8),
    butt=dict(x_m=-0.9385, mass_kg=0.2),
    geometry=dict(curvature=0.0, point_concentration=0.8, cross_section=0.9, edge_keenness=0.2, strike_concentration=0.62),
    mode_elements=[

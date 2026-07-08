@@ -463,10 +463,17 @@ def edge_vibration(w):
 # MoI-based swing-inertia formula for the IMPACT path violates the plan's own falsifiable spear<arming<longsword<
 # greatsword ordering — a spear's swing-inertia about the working hand is LARGE even though its striking mass is
 # small, which is exactly the COST/IMPACT distinction wield_heft's own docstring already draws).
-HEFT_REF = 0.1545336822851806  # [ANCHOR] the 2H cut-thrust reference's (longsword) own m_head*PoB_frac, so
-                    #   heft(longsword)==1.0 exactly — core.damage's HEFT_HEAVY*heft_units then reproduces the old
-                    #   ~3.0 class magnitude at the SAME anchor weapon, so DMG_SCALE (calibrated against the old
-                    #   heft scale) is undisturbed.
+HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0007, 2026-07-08] the 2H cut-thrust reference's
+                    #   (longsword) own m_head*PoB_frac, so heft(longsword)==1.0 exactly. Re-computed from
+                    #   longsword's U1-recalibrated PoB (JD-1: blade/pommel mass redistributed, PoB 19.4cm->13.9cm
+                    #   — weapons.py) to preserve this invariant by construction; was 0.1545336822851806 pre-U1.
+                    #   Rescales heft() for every weapon uniformly (a deliberate re-baseline, not a per-weapon
+                    #   fudge) — DMG_SCALE's old ~3.0 class magnitude at this SAME anchor weapon is unaffected by
+                    #   a uniform rescale. NEW FINDING (U1): the correctly-banded arming/longsword now read BELOW
+                    #   spear's own (untouched) heft numerator — test_falsifiable_heft_ordering's spear<arming
+                    #   term now fails; see that test's updated docstring (test_combat_heft.py) — this is the
+                    #   SAME reach-class dominance already tracked in handoffs/HANDOFF_PC.md ("SPEAR flat-
+                    #   dominance"), not a new defect, and is deliberately left failing pending that fix.
 
 def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits

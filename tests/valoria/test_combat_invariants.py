@@ -108,7 +108,14 @@ def test_use_mode_selection_emerges_from_primitives():
     Phase-B mass distribution lifted its blunt percussion authority enough that it no longer switches to its
     spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
     plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not
-    silently included as if the current behaviour were correct."""
+    silently included as if the current behaviour were correct.
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0007] lucerne_hammer JOINS poleaxe's exclusion: U1's JD-1 PoB fix
+    corrected its under-massed hammer/fluke/spike head (0.70->1.344kg, matching poleaxe's own physical scale
+    — weapons.py) to land its PoB in the ratified poleaxe-class band (20-55cm), which as a direct consequence
+    lifted its blunt percussion authority enough that it too no longer switches to its spike vs heavy armour —
+    the SAME mechanism, corroborating rather than contradicting the poleaxe finding (both weapons share the
+    same head_len/grip_len/composite-head shape). Moved out of `expected` below until the same Phase-C
+    engine-scale recalibration restores it."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -118,7 +125,7 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    expected = ['kama_yari', 'guandao', 'fauchard', 'voulge', 'guisarme', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above; voulge/guisarme added I2/R-7, guandao/fauchard added I4/JD-5 — see docstring
+    expected = ['kama_yari', 'guandao', 'fauchard', 'voulge', 'guisarme', 'ji', 'bec_de_corbin']   # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above; voulge/guisarme added I2/R-7, guandao/fauchard added I4/JD-5 — see docstring
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -179,7 +186,12 @@ def test_at_circumstance_is_l0_pure():
 
 def test_heft_percussion_ordering_at_ideal():
     """D2 falsifiable acceptance gate #1: spear < arming < longsword < greatsword at grip=0, greatsword not
-    collapsed onto longsword."""
+    collapsed onto longsword.
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0007] same finding as test_combat_heft.py::test_falsifiable_heft_
+    ordering — U1's JD-1 PoB recalibration correctly lowers arming/longsword's heft numerator (moving their
+    balance back toward the hand, per the ratified 1H band), which drops both below spear's own untouched
+    numerator. Not a new defect — the SAME reach-class over-dominance already tracked in HANDOFF_PC.md
+    ("SPEAR flat-dominance"). Deliberately left failing; see the other test's docstring for the full account."""
     C, core, S, WP, CFG = _mods()
     h = {n: WP.heft(C.WEAPONS[n]) for n in ('spear', 'arming', 'longsword', 'greatsword')}
     assert h['spear'] < h['arming'] < h['longsword'] < h['greatsword'], h

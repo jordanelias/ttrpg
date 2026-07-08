@@ -7,8 +7,8 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 ## Pending
 
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
-  (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1…JD-8 remain OPEN, loudly held back).** Implementation
-  progress:
+  (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1 RULED 2026-07-08, JD-2…JD-8 remain OPEN, loudly held back).**
+  Implementation progress:
   - **U0 (units honesty, ED-PC-0002) — DONE 2026-07-05** (branch `claude/begin-u0-arppwt`). head_len/grip_len →
     honest metres (×0.30, all 53 records); `WP.UNIT_M` deleted; per-length gains /0.30 (`PERC_2H_ARC`, `LEVER_K`,
     `REACH_GEOM_SCALE`); stored-length constants ×0.30 (`PERC_GRIP_1H`, `GRIP_SHORT/LONG`, `LEVER_REF`,
@@ -23,11 +23,40 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     NOT rescaled (it is a reach-POINTS residual added outside `REACH_GEOM_SCALE`, not a stored length — scaling
     it breaks identity and `test_reach_base_byte_identical_at_grip_zero`); `PERC_2H_ARC` rescaled though the
     row omits it (identity forces it once grip_len is metres). See the ED-PC-0002 ledger entry.
-  - **NEXT: U1 (PoB recalibration; its ED allocates at filing — plan-text labels are NOT IDs,
-    workplan v6 §6; U0's own label collided with #78's ED-PC-0001 and was renumbered to
-    ED-PC-0002 at merge) — GATED on JD-1** (PoB target bands sign-off, consolidation_v1
-    §6; default = the plan's arms-scholarship bands if Jordan waves it through). U2 ⊣ U1. T-P2 may start any
-    time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is still outstanding.
+  - **U1 (PoB recalibration, ED-PC-0007) — DONE 2026-07-08.** JD-1 RULED (Jordan: "accept plan bands" —
+    consolidation_v1's default arms-scholarship ranges: rapier 3–11cm, greatsword 8–20cm, 1H 6–14cm, poleaxe
+    20–55cm forward, staff ~0). `weapons.py` data-only blade/head→pommel/haft mass redistribution (total mass
+    unchanged per weapon) for the 6 V7-flagged weapons: rapier 17.0→9.0cm, arming 17.8→11.0cm, longsword
+    19.4→13.9cm (chosen so `recoverability_factor(longsword)`≈0.98, inside the existing anchor test's
+    tolerance), greatsword 30.4→18.0cm, bec_de_corbin 5.1→22.0cm, lucerne_hammer 7.2→24.0cm (both poleaxe-family
+    heads scaled ~2x to match poleaxe's own physical proportions). `weapon_physics.HEFT_REF` re-anchored to the
+    new longsword value (preserves `heft(longsword)==1.0`; rescales `heft()` roster-wide, a deliberate
+    re-baseline). Cinquedea (also flagged in V7 but with no JD-1-named band) deliberately left untouched — no
+    invented band. Fixtures regenerated with recorded reasons: `r3_identity_golden.json` (53 weapons; only the
+    6 flagged weapons' physics genuinely moved, confirmed via diff — every other weapon's shift is float noise
+    or the uniform HEFT_REF rescale), `golden_heft_percussion_snapshot.json`. New
+    `tests/valoria/test_combat_pob_bands.py::test_pob_within_realistic_range` pins the bands going forward.
+    Retired 2 accepted-red tests as predicted (`test_anchor_is_near_one`, `test_lunge_quality_…`).
+    **NEW finding (undocumented by the plan, not silently patched):** the correctly-banded arming/longsword now
+    read BELOW spear's own untouched heft numerator even at each band's ceiling (checked exhaustively — no
+    JD-1-compliant sword value can beat it) — `test_falsifiable_heft_ordering` /
+    `test_heft_percussion_ordering_at_ideal`'s spear<arming term now fails. This corroborates, not contradicts,
+    the already-tracked "SPEAR flat-dominance" finding below via a second symptom; both tests are left
+    deliberately failing with the finding recorded in their own docstrings, per the same convention as the
+    pre-existing `test_gap_game_poleaxe_spikes_plate` [PHASE-C FLAG]. A second, positive side effect:
+    `lucerne_hammer`'s corrected head mass now makes it join `poleaxe`'s existing percussion-dominance
+    exclusion in `test_use_mode_selection_emerges_from_primitives` (updated). Net accepted-red count 8→8 (2
+    retired, 2 new — both PHASE-C-flagged, not silent); the 5 pre-existing `test_combat_element_parity.py`
+    Phase-A fixture-schema-drift failures and `test_gap_game_poleaxe_spikes_plate` are untouched, confirmed
+    out of U1 scope. `references/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
+    via `export_engine_params.py --check`). 196 passed / 8 failed / 1 xfailed; `valoria_local.py --staged`
+    clean. See the ED-PC-0007 ledger entry for full detail.
+  - **NEXT: U2 (graded mode affordance + Phase-C percussion enactment; allocates ED-PC-0008 at implementation)
+    — UNBLOCKED (U2 ⊣ U1, done).** JD-4 (percussion ceiling tuning) has a default ("ships weak") and does not
+    block starting U2. T-P2 may start any time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is
+    still outstanding — note the scratchpad script it depended on is confirmed genuinely gone (checked this
+    session: no copy anywhere in the repo or environment), so JD-8(a)'s "recover if it still exists" option is
+    closed; only a from-scratch rebuild at T-P2 remains live.
 
   Original adjudication summary: Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
   (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
@@ -221,6 +250,10 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Decisions
 
+- 2026-07-08 — **JD-1 RULED + executed: PoB target bands = the plan's own arms-scholarship ranges.** Jordan:
+  *"accept plan bands"* (offered rapier 3–11cm / greatsword 8–20cm / 1H 6–14cm / poleaxe 20–55cm forward /
+  staff ~0). Executed as U1, ED-PC-0007 — see Pending above for the full mass-redistribution + finding record.
+  Unblocks the rest of the U-series toward M1's juncture 4 (one legible fight).
 - 2026-07-08 — **ED-PC-0005 RULED + executed: wounds never −1D, always a fractional Ob.** Jordan:
   *"never −1D, always increase fractional Ob."* Wounds NEVER cut the pool −1D; each wound ALWAYS adds a
   fractional Ob. ED-1041's bilateral wound-Ob channel (+0.15 Ob attacking / +0.25 defending per wound)
