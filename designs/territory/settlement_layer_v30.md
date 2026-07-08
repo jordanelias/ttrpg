@@ -178,6 +178,59 @@ Range: undeveloped Outpost W=1 → fully-developed Seat W=11.
 
 **GD-1 synergy.** Parliament votes = current Mandate (`faction_layer §5.3`), and Mandate now aggregates settlement legitimacy weighted by population → a faction's political weight emerges from the size and loyalty of the populace it actually governs, coherent with GD-1 (Peninsular Sovereignty / territorial control as the win condition).
 
+## §1.8a Settlement-grain L/PS derivation events (PROPOSED — ED-SE-0006, 2026-07-08)
+
+**Status: PROPOSED, not yet ratified.** §1.8 above specifies how settlement L/PS *aggregate* into
+Mandate and how Mandate *feeds back* into settlement L/PS (the mean-reverting drift), but the only
+settlement-grain *source* of an L/PS change currently specified is §1.8's own uniform faction-level
+cascade ("Faction-level mission outcomes... apply their ΔL/ΔPS to the faction's controlled
+settlements uniformly"). No event distinguishes *how* one settlement's own acceptance rises or
+falls from another's — `sim/territory/registry.py`'s `legitimacy`/`popular_support` fields are
+declared but have no per-settlement derivation rule to execute (the ED-FA-0004 Stratum-B gap this
+subsection exists to fill; provenance and full research:
+`designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+§Step 3 SE-1).
+
+**Grounding.** Max Weber's three types of legitimate domination (*Economy and Society*, 1922) —
+**traditional** (sanctity of immemorial rule), **legal-rational** (belief in enacted procedure), and
+**charismatic** (devotion to demonstrated extraordinary performance) — map directly onto this
+section's own L/PS split: **Legitimacy (L) is the traditional + legal-rational channel** (slow,
+institutional); **Popular Support (PS) is the charismatic/performance channel** (fast, earned by
+visible outcomes). Weber's *routinization of charisma* (repeated good performance hardening into
+accepted institutional right) is the mechanism §1.8's own Mandate→L feedback already implements
+without naming it. Albert Hirschman's *loyalty* (*Exit, Voice, and Loyalty*, 1970) supplies the
+damping frame for why these events are additive-and-capped rather than compounding runaway.
+
+**L-channel events (traditional / legal-rational — one-time or slow, capped 0–7):**
+
+| Event | ΔL | Note |
+|---|---|---|
+| Entry oath sworn / privileges confirmed on control transfer | +1 (one-time) | Ties to a future Entry Terms rule (SE-5); not yet specified here |
+| Charter granted (subnational management grant, §3.3) | +1 (one-time) | |
+| Regular court held (governance action, ≥2 consecutive seasons) | +1 (capped once per grant) | Rewards sustained, not one-off, adjudication |
+| Tax/tithe collected within the faction's announced fiscal stance | 0 | Stance *broken* (collection outside the announced rate) → −1; ties to a future Fiscal Stance rule (FA-1) |
+| Governor rotated per stated policy | 0 | Governor imposed over protest → −1 |
+
+**PS-channel events (charismatic / performance — faster-moving, capped 0–7):**
+
+| Event | ΔPS | Note |
+|---|---|---|
+| Dearth relieved (governance response, ties to a future Dearth rule, SE-2) | +2 | |
+| Festival or public event sponsored | +1 | |
+| Settlement successfully defended from raid/siege | +2 | |
+| Levy or extraction taken from the settlement | −1 | |
+| Forced billeting / garrison quartered against local wishes | −1 | |
+| Public execution of a local resident | −2 | |
+
+**Scope discipline.** This subsection specifies the *event → ΔL/ΔPS* table only. It does not
+itself change §1.8's aggregation formula, the Mandate feedback, or the faction-level cascade
+(§1.8's existing paragraph on PP-686 mission outcomes is unchanged and continues to apply
+uniformly where no settlement-grain event fires). Events that reference a not-yet-specified rule
+(Entry Terms, Fiscal Stance, Dearth) are flagged inline above rather than inventing that rule here;
+each is tracked as its own docket item (ED-SE-0006/0007/0010 and ED-FA-0007) and should compose
+with this table when it lands. Magnitudes above are shape proposals per the historical grounding,
+not sim-calibrated constants — calibrate before treating any value as canon, per CLAUDE.md §5/§7.
+
 # PART 2: THE SETTLEMENTS (PP-726 corrected granularity)
 
 **Status note (PP-726, 2026-05-10):** PART 2 has been refactored to operate at correct granularity per `valoria_political_hierarchy_v30 §1.1`. A settlement is a **city/fortress/village/town** — the siege-target. Districts (Cathedral, Market, Barracks, Harbor, Quarter, Parliament, etc.) and outpost-features (garrison towns, watchtowers, mines, lodges, shrines, watches, storehouses, coves, gates, ruins) are subservient to their parent settlement and are NOT separately siegeable; they appear in §2.2 sub-features registry as properties of their parent.

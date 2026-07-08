@@ -10,6 +10,20 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **FA/SE historical-precedent research docket (filed 2026-07-08).**
+  `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+  — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
+  Distills into 10 SE-lane mechanical proposals + a citation patch, filed as **ED-SE-0006..0016**
+  (`needs_jordan` forks: ED-SE-0012 oversight-toolkit venal-appointment variant, ED-SE-0013 Local
+  Interdict, ED-SE-0014 Plant Colony, ED-SE-0016 optional founder-cohesion bonus). **ED-SE-0006
+  (SE-1, the Weberian L/PS derivation-event table) is the report's own #1 priority — it converts
+  `sim/territory/registry.py`'s inert `legitimacy`/`popular_support` fields into a specified
+  pipeline and "unblocks everything" downstream (SE-5/SE-6 boundary rules, FA-1's compliance
+  coupling).** Sequencing recommendation: SE-1 → SE-5+SE-6 (transfer/succession boundary rules) →
+  SE-2/SE-3 (dearth + grain routes, closing the open `geography_v30` item ED-054/BALANCE-005) →
+  SE-4/SE-7 riding the ED-SE-0001 `governance_play_redesign` ratification track. Not yet authored
+  into the design docs — a follow-on pass drafts each accepted item into `settlement_layer_v30` as
+  PROPOSED.
 - **ED-SE-0005 (RESOLVED 2026-07-08) — pessimist-audit SE verdicts EXECUTED.** The first execution
   of a ratified pessimist-action-audit lane docket (ED-IN-0027). Done: `player_agency_v30 §9` Trade
   PRUNED (folded into Guild-contracts income), Fund-settlement-development MERGED into Develop
@@ -49,4 +63,6 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
-(none currently tracked.)
+- **Author SE-1 (Weberian L/PS derivation table) into `settlement_layer_v30` §1.8** — the
+  historical-precedent docket's top SE-lane priority (see Pending); a first pass of this is
+  drafted directly in this same session (see the doc's new subsection).

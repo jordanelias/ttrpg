@@ -10,6 +10,21 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **FA/SE historical-precedent research docket (filed 2026-07-08).**
+  `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
+  — an intensive historical/political-science research pass (Jordan-requested) covering fiscal
+  sociology, tax farming, moral-economy dearth politics, urban charters, provincial-governor
+  oversight, conquest terms, parish-level church-state jurisdiction, frontier colonization,
+  succession/regency, and legitimacy theory (Weber/Olson/Hirschman/Ibn Khaldun) — chosen to be
+  disjoint from the deliberation-and-procedure research already mined for the SC lane. Distills
+  into 9 FA-lane mechanical proposals + a citation-patch batch, filed as **ED-FA-0007..0016**
+  (see `canon/editorial_ledger.jsonl` for each item's full scope; `needs_jordan` forks:
+  ED-FA-0009 coercion/capital muster asymmetry, ED-FA-0012 Sack mechanic (part c only),
+  ED-FA-0013 Regency interregnum, ED-FA-0014 Protected Tributary, ED-FA-0015 Guild embargo).
+  Report's own priority order: **FA-1 + FA-2 (fiscal stance + muster re-grounding) next**, then
+  FA-5/FA-6(a/b) riding the ED-FA-0004 Stratum-B rewrite. Not yet authored into the design docs —
+  this filing is the docket; a follow-on pass drafts each accepted item into
+  `faction_layer_v30`/`faction_canon_v30`/`faction_action.py` as PROPOSED.
 - **ED-FA-0006 (RESOLVED 2026-07-08) — pessimist-audit FA verdicts EXECUTED** (FA-lane follow-up to
   ED-IN-0027). `params/bg/core.md`: Diplomacy-between-players DISTILLED → Treaty §3.3 Ph2; Thread
   Operation single-sourced to the TW lane (Pontifex/Weaver slot-eligibility kept); Spy given its
@@ -40,6 +55,8 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **Author FA-1/FA-2 (fiscal stance + muster re-grounding) into `faction_layer_v30`/
+  `faction_action.py`** — the historical-precedent docket's top FA-lane priority (see Pending).
 - **`ci_political_v30` read-routing bug (LB-24, tracked as an `IN`-lane tooling item in
   `handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked
   read returns 0 (index-routes) — this is a routing/tooling bug, not a faction-content decision,
