@@ -8,6 +8,14 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **Resolution Plan v1 — Stratum-B THIRD SLICE 2026-07-08: ED-PC-0005 dead-code investigation →
+  truth repair + Jordan flag.** Confirmed `WoundTracker.pool_penalty()` + `WOUND_POOL_PENALTY`
+  (`combat_engine_v1/combatant.py`) have ZERO live callers and ED-1041's wound-Ob channel is the live
+  mechanic. NOT deleted (it's the only −1D-per-wound impl; whether that rule survives is the crux ED
+  tracks); instead the false "no Ob penalty, ever (canon)" docstrings were corrected + ED-PC-0005
+  flipped needs_jordan. **The clean mechanical Stratum-B tail is now exhausted** — remaining items
+  (ED-PC-0005 reconciliation, ED-SC-0011 contest dispatch, C-TW-3/4/6/8, armature echo-wiring) need a
+  ruling or a large build; surfaced for Jordan, not forced.
 - **Resolution Plan v1 — Stratum-B SECOND SLICE 2026-07-08: knots.py ED-912 rebuild (C-TW-12
   CLOSED).** `sim/personal/knots.py` rebuilt onto the bidirectional −5..+5 gauge (TIER_RANGE/
   TIER_START; rupture +5; −5 Tempered Close-only absorb-once; break/betrayal Disposition −3;
