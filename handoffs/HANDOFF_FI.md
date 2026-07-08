@@ -10,6 +10,17 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **ED-FI-0004 (RESOLVED 2026-07-08) — pessimist-audit FI verdicts EXECUTED** (FI-lane follow-up to
+  ED-IN-0027). **Interview MERGE:** the `fieldwork_v30 §4.2` bare-roll Interview object is annotated as
+  superseded by the Dialogue Lattice (`investigation_systems_v30` S14 — its own Cross-System table already
+  says the Interview routes through the Lattice "instead of single Charisma roll"); the Lattice is now the
+  single canonical Interview home. Bare-roll row retained as baseline until **ED-921** (schedule/attribute
+  reconciliation) + a `CURRENT.md` fieldwork row settle governance — this MERGE retires ED-921 + the fieldwork
+  half of ED-IN-0016/EP-8 to one ruling. **Dialogue Lattice REFINE:** the five-filter Response-Matrix chain
+  gets a build-gating requirement for a compact "why this NPC responded" readout (composed-system Q-elegant
+  strain); the Lattice design + Certainty Gate are KEPT (ordinary finding, not a scope cut). `params/fieldwork.md`
+  carries a doc-side co-file note (no values changed). No sim edits (investigation.py/fieldwork.py are stubs).
+
 - **ED-FI-0002 (open) — counter-espionage loop.** Filed 2026-07-05 from the ratified
   edge-playability audit (PR #81, "Ratify all"; finding EP-6): enemy `da.covert_betrayal` reaches
   the player only as a non-interactive cut scene when `exposed==true`; antinomian/economic covert
