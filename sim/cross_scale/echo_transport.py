@@ -33,6 +33,7 @@ from pathlib import Path
 from typing import Optional
 
 from sim.cross_scale import domain_echo
+from sim.autoload.game_state import MULTS
 from sim.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, TypeRegistry
 
 
@@ -152,9 +153,12 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
     )
 
     def _apply(_k, faction=er.affected_faction, _stat=er.affected_stat, _delta=er.delta):
+        # domain_echo.delta is in STAT POINTS (§5.2 ±2 Mandate); Faction.adjust expects a
+        # GRANULAR delta (points × MULTS) — mirror the §10 Mandate-penalty convention
+        # (parliamentary_vote: adjust("L", -1 * MULTS["L"])), so ±N points lands as ±N.
         f = getattr(world, "factions", {}).get(faction)
-        if f is not None and hasattr(f, "adjust"):
-            f.adjust(_stat, _delta)
+        if f is not None and hasattr(f, "adjust") and _stat in MULTS:
+            f.adjust(_stat, _delta * MULTS[_stat])
 
     sched.emit(key, apply=_apply)  # OF-7: Key logs LIVE now; _apply lands at accounting_boundary()
     return {"other_echoes": [{"faction": er.affected_faction,

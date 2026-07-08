@@ -135,7 +135,7 @@ The following events generate Priority 0 Scene Slate entries per player_agency_v
 | Companion Arc Trigger | A companion's arc branch trigger fires (npc_behavior §5.2) | The companion's transformation scene plays out with the player present. The player witnesses and may influence the companion's arc resolution. |
 | Knot Partner in Crisis | An NPC Knotted to the player reaches Conviction crisis (Scar count ≥ 3) | The Knot transmits the crisis. The player perceives the NPC's distress through the relational thread (per P-12). Scene: the player may seek out the NPC or experience the crisis at distance through Thread perception. |
 | Stability Crisis | Player's faction Stability drops to ≤ 2 at Accounting OR drops by ≥ 2 in a single Accounting (ED-587). **Hysteresis (ED-749):** Trigger fires once per Stab ≤ 2 entry. Re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. | Emergency faction council: social contest or fieldwork scene revealing the source of the crisis. Player may intervene (Govern action Ob 2 → +1 Stability queued to next Accounting, per Domain Echo §5) or assess (Fieldwork Evidence +2 on "faction stability sources" investigation). Cannot be declined — faction is in crisis. |
-| Rank Advancement Recognition Event | Player's Standing crosses a rank threshold (per faction_politics_expanded_v1.md §1, Std 3 and above) AND Formal Recognition Event conditions are met | The recognition ceremony unfolds as a formal faction scene. The player receives the rank, insignia, and attendant obligations. Recognition can be withheld in-scene if inner-circle Disposition or rival-candidate conditions fire — creating a debt scene per §1. |
+| Rank Advancement Recognition Event | Player's Standing crosses a rank threshold (per faction_politics_v30.md §1, Std 3 and above) AND Formal Recognition Event conditions are met | The recognition ceremony unfolds as a formal faction scene. The player receives the rank, insignia, and attendant obligations. Recognition can be withheld in-scene if inner-circle Disposition or rival-candidate conditions fire — creating a debt scene per §1. (⚠ 'debt scene' mechanic undefined — no such concept in faction_politics_v30.md; needs Jordan: author it or strike the clause — ED-IN-0016 residual, tracked ED-IN-0030) |
 
 If mandatory scenes exceed the scene action budget, the player chooses which to attend personally. Remaining mandatory scenes resolve through NPC AI with reduced player influence: the player is present but overwhelmed, able to observe but not direct.
 
@@ -197,6 +197,13 @@ This timing difference is intentional (PP-109): Zoom In is a personal interventi
 | Track ≥ 7 (winner's side) | Winner faction: +1 Mandate. Loser faction: −1 Mandate if they held institutional authority. |
 | Track 4–6 (compromise) | No Domain Echo. Scene-level consequence only. |
 | Track ≤ 3 (loser's side) | Reversed — loser faction receives penalty. |
+
+**Reconciled with social_contest_v30 §6 as COMPOSED (ED-SC-0002, Jordan ruling 2026-07-08).** This
+§5.4 band scheme and §6's genre scheme are not rivals: the **band gates MAGNITUDE** (Total → ±2,
+Decisive → ±1, Compromise → none — as above) while the **won genre selects the STAT/CHANNEL** (§6:
+Memory → Mandate; Projection → the outward-initiative channel). The loser institutional-authority
+penalty and "Compromise fires nothing" are retained verbatim. Sim realization: `sim/cross_scale/
+parliamentary_bridge.py` (band → `domain_echo` degree; genre → aggregate stat).
 
 ### §5.5 Accord Domain Echo (peninsular_strain_v1.md)
 

@@ -108,7 +108,43 @@ def test_use_mode_selection_emerges_from_primitives():
     Phase-B mass distribution lifted its blunt percussion authority enough that it no longer switches to its
     spike vs heavy armour (weapon_physics.percussion_authority docstring; also test_gap_game_poleaxe_spikes_
     plate); left OUT of the expected set here until Phase C's engine-scale recalibration restores it, not
-    silently included as if the current behaviour were correct."""
+    silently included as if the current behaviour were correct.
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0010] lucerne_hammer JOINS poleaxe's exclusion: U1's JD-1 PoB fix
+    corrected its under-massed hammer/fluke/spike head (0.70->1.344kg, matching poleaxe's own physical scale
+    — weapons.py) to land its PoB in the ratified poleaxe-class band (20-55cm), which as a direct consequence
+    lifted its blunt percussion authority enough that it too no longer switches to its spike vs heavy armour —
+    the SAME mechanism, corroborating rather than contradicting the poleaxe finding (both weapons share the
+    same head_len/grip_len/composite-head shape). Moved out of `expected` below until the same Phase-C
+    engine-scale recalibration restores it.
+    [U2/ED-PC-0011, 2026-07-08 — the graded secondary-affordance checks (percussion/cut/point) re-enabled in
+    element_afforded, plus the CUT_AUTH_REF magnitude-scaling fix] EXPANDS the changer set from 7 to 17,
+    validated via a 13-agent agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group
+    pairs cross-examining each other's HEMA/physics grounding + 1 Opus final synthesis) rather than accepted
+    on say-so. Ten NEW weapons join: greatsword/katana/tachi/nandao/glaive/podao/fauchard/hook_sword — all
+    natively straight_cut/curved_cut two-handed OR one-handed blades that now afford a weak secondary
+    half-sword-style thrust (point), switching to it once the material-resistance table's Williams-sourced
+    puncture-beats-shear-vs-soft-armour asymmetry (and, vs plate, the situational gap game) out-couples their
+    own edge's armour-degraded transmit — judged historically defensible (half-swording to the gaps is a
+    well-attested PRIMARY technique against a harnessed opponent for every one of these classes, not just
+    longswords) and accepted as genuine changers. tachi/nandao specifically switch to their OWN weak Mordhau/
+    blunt option at 'heavy' rather than to their (comparatively weaker, 0.32/0.24) point — judged plausible
+    given the two blades' own thrust geometry is the weakest of this group's.
+    sabre/scimitar/falchion ALSO newly switch to a secondary point, and are included below because the engine
+    genuinely does this today — but the adversarial pass FLAGGED this as a probable bug, not a validated finding
+    (ED-PC-0012): these are historically dedicated slashing blades (scimitar's own point geometry, 0.16, is the
+    lowest of any weapon in the roster) and the switch was traced to core.coupling's DELIVERY['point'] not
+    scaling by the candidate's own thrust magnitude the way 'cut' now does — verified directly that scimitar/
+    sabre/falchion/hook_sword's secondary point ALL score an IDENTICAL coupling at 'light' armour regardless of
+    their 0.16-0.40 geometry spread (core._transmit's puncture gap-seeking term is floor-locked below the raw
+    material transmission for any of these gap_precision values). A THRUST_AUTH_REF fix analogous to
+    CUT_AUTH_REF is recommended but deliberately NOT implemented this pass (see ED-PC-0012's ledger entry) — it
+    would also touch several of the newly-accepted two-handed cutters (tachi/nandao/glaive/podao all sit below
+    the natural reference too) and needs its own roster-wide re-verification, not a third redesign-and-reverify
+    cycle rushed through in the same session. hook_sword's own switch was judged MORE defensible than the other
+    three one-handed cutters' (its point, 0.40, is measurably above-floor via its own gap_precision, the least
+    mechanism-dominated of the four) and is accepted rather than flagged. When ED-PC-0012 lands, sabre/scimitar/
+    falchion's entries below are expected to be removed (or their switch-tier to change) — this is a KNOWN,
+    DOCUMENTED, load-bearing residual, not an oversight."""
     C, core, S, WP, CFG = _mods()
     tiers = ['none', 'light', 'medium', 'heavy']
     changers = []
@@ -118,7 +154,11 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    expected = ['kama_yari', 'guandao', 'fauchard', 'voulge', 'guisarme', 'ji', 'bec_de_corbin', 'lucerne_hammer']   # poleaxe excluded — see [PHASE-C FLAG] above; voulge/guisarme added I2/R-7, guandao/fauchard added I4/JD-5 — see docstring
+    # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above. sabre/scimitar/falchion ARE included (the
+    # engine genuinely changes them today) but are a FLAGGED, NOT-YET-FIXED bug (ED-PC-0012) — see docstring.
+    expected = ['greatsword', 'sabre', 'kama_yari', 'glaive', 'guandao', 'podao', 'fauchard', 'voulge',
+                'guisarme', 'ji', 'bec_de_corbin', 'katana', 'tachi', 'nandao', 'scimitar', 'falchion',
+                'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -133,13 +173,24 @@ def test_afforded_heads_emerge_from_primitives():
 
 def test_afforded_heads_emerge_from_phase_b2_mode_elements():
     """The morphology-rearch Phase B2 composites' per-element mode_elements affordances — each weapon's union
-    over its own real striking elements, not a copy of another weapon's set."""
+    over its own real striking elements, not a copy of another weapon's set.
+    [U2/ED-PC-0011, 2026-07-08] ji/kama_yari gain a THIRD token, 'cut': each weapon's own POINT-tokened
+    spearhead element carries a small incidental edge (ji=0.40, kama_yari=0.32 — a wing/blade-like flare near
+    the socket, distinct from and much weaker than the weapon's own dedicated curved_cut blade, 0.99/0.88) that
+    now clears the graded secondary-affordance floor (MODE_EDGE_MIN). Verified via the ED-PC-0011 adversarial
+    Workflow this is genuine (not spurious) physics — comparable real yari/ji-class spearheads carried a real,
+    if secondary, cutting capability near the socket — and that it NEVER wins selection at any armour tier or
+    grip/room condition (curved_cut dominates at 'none', point dominates everywhere armour is present); its
+    presence here is a real but currently-inert affordance, the same class as goedendag's own never-selected
+    point. guisarme/voulge do NOT gain this token — each has only ONE point-family element (a genuine thrusting
+    spike), not a separate incidental-edge source, and their own cut_thrust element already carries the ONLY
+    edge each weapon has."""
     C, core, S, WP, CFG = _mods()
     assert set(S.afforded_heads(C.WEAPONS['bec_de_corbin'])) == {'blunt', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['lucerne_hammer'])) == {'blunt', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['goedendag'])) == {'blunt', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut'}
-    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut'}
+    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut', 'cut'}
+    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut', 'cut'}
     assert set(S.afforded_heads(C.WEAPONS['guisarme'])) == {'cut_thrust', 'point'}
     assert set(S.afforded_heads(C.WEAPONS['voulge'])) == {'cut_thrust', 'point'}
 
@@ -179,7 +230,12 @@ def test_at_circumstance_is_l0_pure():
 
 def test_heft_percussion_ordering_at_ideal():
     """D2 falsifiable acceptance gate #1: spear < arming < longsword < greatsword at grip=0, greatsword not
-    collapsed onto longsword."""
+    collapsed onto longsword.
+    [PHASE-C FLAG, 2026-07-08, U1/ED-PC-0010] same finding as test_combat_heft.py::test_falsifiable_heft_
+    ordering — U1's JD-1 PoB recalibration correctly lowers arming/longsword's heft numerator (moving their
+    balance back toward the hand, per the ratified 1H band), which drops both below spear's own untouched
+    numerator. Not a new defect — the SAME reach-class over-dominance already tracked in HANDOFF_PC.md
+    ("SPEAR flat-dominance"). Deliberately left failing; see the other test's docstring for the full account."""
     C, core, S, WP, CFG = _mods()
     h = {n: WP.heft(C.WEAPONS[n]) for n in ('spear', 'arming', 'longsword', 'greatsword')}
     assert h['spear'] < h['arming'] < h['longsword'] < h['greatsword'], h
@@ -191,7 +247,7 @@ def test_thrust_protection_grip_invariant():
     C, core, S, WP, CFG = _mods()
     for n in ('bear_spear', 'spear', 'yari'):
         c = C.Combatant('x', weapon=n)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG)
         assert h == 'point', f"{n} did not select point: {h}"
         phi = WP.phi_grip(C.WEAPONS[n], 1.0, h, spc)
         assert phi >= 0.9, f"{n} thrust-protection failed at full gather: {phi}"
@@ -225,7 +281,7 @@ def test_damage_retention_worst_case_material_lever():
     def worst_retention(name, grip_star):
         w = C.WEAPONS[name]
         c = C.Combatant('x', weapon=name)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG)
         gap = sg if sg is not None else w['gap']
         perc = sp if sp is not None else WP.percussion_authority(w)
         worst = 0.0
@@ -262,7 +318,7 @@ def test_select_mode_open_measure_identity_single_mode_weapons():
         if 'base' in w or w.get('mode_elements'):
             continue
         c = C.Combatant('x', weapon=n)
-        dm, h, sg, sp, spc = S.select_mode(c, 'none', False, CFG)
+        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', False, CFG)
         assert sg == w['gap'], (n, sg, w['gap'])
         assert spc == w['geometry']['point_concentration'], (n, spc)
         if h == 'blunt':
@@ -278,7 +334,7 @@ def test_select_mode_sel_fields_track_swap_window():
     probes the longsword->longsword_halfsword swap window (M-02/R-7's object-confusion class)."""
     C, core, S, WP, CFG = _mods()
     c = C.Combatant('x', weapon='longsword_halfsword')
-    dm, h, sg, sp, spc = S.select_mode(c, 'heavy', True, CFG)
+    dm, h, sg, sp, spc, se = S.select_mode(c, 'heavy', True, CFG)
     w = C.WEAPONS['longsword_halfsword']
     assert sg == w['gap'] or sg == w['geo']['gap']
     assert spc == w['geometry']['point_concentration']
@@ -366,7 +422,7 @@ def test_close_efficacy_arc_vs_thrust_from_selected_element():
     guandao_pc = C.WEAPONS['guandao']['mode_elements'][0]['geo']['point_concentration']
     assert S.close_efficacy(guandao_pc, 0.0, 1.0, True, head='curved_cut') < 0.9
     c = C.Combatant('x', weapon='bear_spear')
-    dm, h, sg, sp, spc = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
+    dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
     assert h == 'point'
     assert spc == C.WEAPONS['bear_spear']['geometry']['point_concentration'] == 0.55, "bear_spear has no mode_elements; its moderate whole-weapon pc is the R-3 trap"
     assert S.close_efficacy(spc, 0.0, 1.0, True, head=h) == 1.0, "gated on the SELECTED HEAD, not pc alone"

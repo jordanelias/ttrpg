@@ -67,14 +67,14 @@ How each faction's identity produces mechanical consequences across systems.
 
 ### T-08: Church as Rendering Reinforcement
 **Chain:** Faith Conviction → Certainty 5 selection → TC generation → CV maintenance → Heresy Investigation → AP accumulation → Thread suppression → population TS suppression → practitioner scarcity → reduced Thread capability → Church institutional dominance
-**Systems:** conviction_track, npc_behavior (Church priority tree), params_core (Certainty Track), fieldwork (Exposure → AP), faction_politics_expanded (Church rank ladder requires Certainty), threadwork (Church Heresy Investigation via TC trigger PP-182)
+**Systems:** conviction_track, npc_behavior (Church priority tree), params_core (Certainty Track), fieldwork (Exposure → AP), faction_politics_v30 (Church rank ladder requires Certainty), threadwork (Church Heresy Investigation via TC trigger PP-182)
 **What it means:** The Church's institutional function is rendering-reinforcement. Every mechanism it controls — CV maintenance, Heresy Investigation, Excommunication, Certainty-indexed rank advancement — works to prevent the population from perceiving the substrate. This is not malice; it is the institutional expression of Faith Conviction. The Church genuinely believes rendering is sufficient.
 
 **Extension (2026-04-20 ED-730, ED-733, ED-735).** The Church's rendering-reinforcement is driven by a specific category-identification error named in `canon/02_foundations_amendment_leap_mechanism.md` Amendment 5: the Church collapses confrontation (perception) with operation (substrate engagement), and within operation collapses restorative / manipulative / destructive types into a single suspect category. The error is sincere and theologically coherent — the Church's Ficinian Cardinal emanation self-understanding (ED-733, canonical) is a genuine theological structure — but structurally incorrect at the framework layer. This conflation is the *generative engine* of the design: it produces the Perceptual Prophylaxis, the moral terror, the Heresy Investigation machinery, and the recursive rediscovery dynamic (T-26). Player mechanical consequences are distributed across Certainty pressure in Church territory, Miracle Investigation aporia (§22.1 consolidated guide), triple-interpretation faction conflict, Rendering Strain, and the suppressed Practitioner Witness Tradition (`designs/world/worldbuilding_v30.md` §3.7).
 
 ### T-09: Varfell as Thread Progressive
 **Chain:** VTM advancement → WR advancement → WC advancement → RS recovery → Thread capability improvement → more VTM advancement
-**Systems:** victory (WR/WC tracks), faction_politics_expanded (Warden ladder, VTM), threadwork (WC effects), npc_behavior (Varfell priority tree, Vaynard arc)
+**Systems:** victory (WR/WC tracks), faction_politics_v30 (Warden ladder, VTM), threadwork (WC effects), npc_behavior (Varfell priority tree, Vaynard arc)
 **What it means:** Varfell is the faction whose institutional interest aligns with substrate maintenance. The three Vaynard paths (Intelligence, Southernmost, Thread Supremacy) represent different strategies for this alignment. Path B (Southernmost Dominion) makes WC Varfell's primary objective — the faction whose political interest IS the survival contest.
 **Arc register vectors:** ARC-S01, ARC-S13, ARC-S16, ARC-S27, ARC-T21
 
@@ -125,7 +125,7 @@ Individual-scale chains that shape the player and NPC experience.
 
 ### T-15: Player Progression (Cell → Faction)
 **Chain:** Standing 0 (nobody) → Renown accumulation → Standing advancement → settlement governance → provincial authority → faction emergence
-**Systems:** faction_politics_expanded (rank ladders 0–7), player_agency (Stature, Renown), settlement_layer (§6 Player Progression), bridge_part1_revisions (Renown track)
+**Systems:** faction_politics_v30 (rank ladders 0–7), player_agency (Stature, Renown), settlement_layer (§6 Player Progression), bridge_part1_revisions (Renown track)
 **What it means:** The player starts as an individual within an existing faction. Through Standing and Renown, they rise to institutional authority. At Standing 6–7, they may found their own faction. The progression is the game's answer to "why does my character matter?" — you begin as a rendered being subject to institutions, and you end as a being who shapes the rendering itself.
 
 ---
@@ -201,7 +201,7 @@ Chains that produce emergent story.
 
 ### T-25: The Generational Arc
 **Chain:** 30-year game span → Generational Shift clock (+1 per 5 years) → original leaders age (−1/−2/−3 to highest attribute) → succession fires → player's generation becomes the leadership class → player-founded factions become primary actors → the peninsula's political landscape is the player's creation
-**Systems:** settlement_layer (§7 Extended Timeline, §7.2 Succession), npc_behavior (arc profiles for succession NPCs), faction_politics_expanded (Torben's Readiness Track, Baralta succession), player_agency (Stature progression)
+**Systems:** settlement_layer (§7 Extended Timeline, §7.2 Succession), npc_behavior (arc profiles for succession NPCs), faction_politics_v30 (Torben's Readiness Track, Baralta succession), player_agency (Stature progression)
 **What it means:** The game's longest throughline. The first leaders (Almud, Baralta, Vaynard, Himlensendt) are not permanent — they will weaken, retire, or die. The player who rises from Standing 0 to Standing 7 over 30 years IS the succession. The game's endpoint is not "who won" but "what world did the player build?"
 
 

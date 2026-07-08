@@ -68,7 +68,7 @@ def engagement(A, B, first, cfg, rng):
             c.facing=S.facing_target(c, closed, cfg)   # FACING (I6, D6): near-neutral per-beat state, keyed ONLY on stance/measure/grip (C2 — never weapon class). Feeds the lateral-void close_rate term + reach_sigma's small profile term.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
             opp = B if c is A else A
-            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2): the SELECTED element's own gap/percussion/point_concentration, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). I4/D5: measure_gap threads the close-efficacy factor into the greedy comparator. Refreshed after the half-sword form-switch below.
+            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2), then to 6 (sel_eff — U2/ED-PC-0011): the SELECTED element's own gap/percussion/point_concentration/cut-thrust-magnitude, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). I4/D5: measure_gap threads the close-efficacy factor into the greedy comparator. Refreshed after the half-sword form-switch below.
             er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
@@ -123,11 +123,11 @@ def engagement(A, B, first, cfg, rng):
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (I2/D2b:
-        # BOTH call sites must write all five sel_* fields — c.w flips at :120 above, so a partial thread would
+        # BOTH call sites must write all six sel_* fields — c.w flips at :120 above, so a partial thread would
         # leave a post-swap c.w resolved against a pre-swap-selected element, the same object-confusion bug R-7
         # closed for select_mode's own return).
-        aggressor.sel_dmg, aggressor.sel_head, aggressor.sel_gap, aggressor.sel_perc, aggressor.sel_pc = S.select_mode(aggressor, defender.armor, closed, cfg, measure_gap=measure_gap)
-        defender.sel_dmg,  defender.sel_head,  defender.sel_gap,  defender.sel_perc,  defender.sel_pc  = S.select_mode(defender, aggressor.armor, closed, cfg, measure_gap=measure_gap)
+        aggressor.sel_dmg, aggressor.sel_head, aggressor.sel_gap, aggressor.sel_perc, aggressor.sel_pc, aggressor.sel_eff = S.select_mode(aggressor, defender.armor, closed, cfg, measure_gap=measure_gap)
+        defender.sel_dmg,  defender.sel_head,  defender.sel_gap,  defender.sel_perc,  defender.sel_pc,  defender.sel_eff  = S.select_mode(defender, aggressor.armor, closed, cfg, measure_gap=measure_gap)
         er[aggressor]=S.reach_base(aggressor,cfg); er[defender]=S.reach_base(defender,cfg)   # er REFRESH #2 (I3, D3): re-derives er for aggressor/defender on the grip+FORM-aware POST-SWAP weapon — so a half-sworded longsword reads its shorter reach everywhere in the closed exchange (reach_sigma below), not the frozen pre-swap #1 value. Consistency-proven: at open measure (grip=0, no swap) this equals #1 exactly.
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The

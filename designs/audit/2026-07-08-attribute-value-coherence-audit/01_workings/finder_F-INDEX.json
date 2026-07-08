@@ -1,0 +1,271 @@
+{
+    "family": "F-INDEX (Secondary Indices + Validators)",
+    "items": [
+        {
+            "name": "Combat Pool",
+            "kind_guess": "attribute_scalar",
+            "surface": "params/core.md:161 (table)",
+            "detail": "max(5, History+6) OR Agility x 2 + History + 3",
+            "aliases_or_variants": [
+                "Combat Pool (personal)",
+                "Combat Pool (unit)"
+            ],
+            "key_bindings_seen": [
+                "module_contracts.yaml:810 (resolver input)",
+                "combat_config.gd (Godot export)",
+                "values_master.yaml:212 (NONEXISTENT file reference)"
+            ],
+            "consumers_seen": [
+                "designs/scene/combat_v30.md:4",
+                "params/core.md:161",
+                "module_contracts.yaml:810"
+            ],
+            "notes": "Triple-carried: values_master.yaml:212 (references nonexistent params/combat.md), values_master.yaml:1150, AND params/core.md:4 header comment cite PP-247 (stale). Canonical per numeric_bounds_report: params/core.md:161 + module_contracts.yaml:810 + combat_config.gd agree on max(5, History+6)."
+        },
+        {
+            "name": "Mending Stability (MS)",
+            "kind_guess": "attribute_aggregate",
+            "surface": "references/mechanical_terms_index.md:348 (silo 4); numeric_bounds_report.yaml:670",
+            "detail": "range 0-100; floor 0 (Rupture); ceiling 100; starts 60 (TTRPG), 72 (BG). Thresholds: 0/10/20/40/50/60/72 verified legitimate.",
+            "aliases_or_variants": [
+                "Rendering Stability (legacy ED-731)",
+                "Thread Tension (inverse direction)"
+            ],
+            "key_bindings_seen": [
+                "impact_vector: MS (stat_delta)",
+                "victory conditions",
+                "threat_weaving prereqs"
+            ],
+            "consumers_seen": [
+                "designs/threadwork/threadwork_v30.md:246",
+                "designs/provincial/strategic_layer_v30.md:178-181",
+                "designs/arcs/emergent_arcs_experimental.md:138-208"
+            ],
+            "notes": "RENAMED ED-731. All thresholds verified legitimate per numeric_bounds_report 2026-04-26. No formula governs MS drift; thresholds hand-authored."
+        },
+        {
+            "name": "Church Influence (CI)",
+            "kind_guess": "faction_stat",
+            "surface": "references/name_collision_database.yaml:51; numeric_bounds_report.yaml:224; designs/provincial/ci_political_v30.md:99",
+            "detail": "range 0-100 (no freeze). Starting value 28 per P-32. Thresholds: 50 (Restoration Assert), 55 (emergent), 60 (Mass Seizure).",
+            "aliases_or_variants": [
+                "Theocracy Counter (TC, deprecated ED-782)"
+            ],
+            "key_bindings_seen": [
+                "ci_political impact formulas",
+                "Mass Seizure gate",
+                "Assault (Crown) logic"
+            ],
+            "consumers_seen": [
+                "designs/provincial/ci_political_v30.md:99",
+                "params/bg/core.md:168",
+                "designs/arcs/arcs_20_23.md:43"
+            ],
+            "notes": "COLLISION PENDING: CI = Church Influence (ci_political) AND Crown Index (derived_stats_v30). Recorded name_collision_database.yaml:459 awaiting Jordan ruling."
+        },
+        {
+            "name": "Institutional Pressure (IP)",
+            "kind_guess": "track",
+            "surface": "references/name_collision_database.yaml:64; numeric_bounds_report.yaml:555",
+            "detail": "range 0-100+. Thresholds: 20 (start), 30 (milestone), 60 (Elske gate), 75 (Vanguard), 76 (AER-3), 80 (final).",
+            "aliases_or_variants": [
+                "IP (abbr, collision pending)"
+            ],
+            "key_bindings_seen": [
+                "AER logic (Altonian Enemy Rank)",
+                "Vanguard deployment"
+            ],
+            "consumers_seen": [
+                "designs/provincial/strategic_layer_v30.md:532-585",
+                "designs/arcs/arcs_20_23.md:43",
+                "params/mass_combat.md:378"
+            ],
+            "notes": "COLLISION PENDING: IP = Institutional Pressure (clock) AND Imperial Pressure (derived_stats). FORMULA MISSING: no explicit advancement rule found."
+        },
+        {
+            "name": "Piety Track (PT)",
+            "kind_guess": "track",
+            "surface": "references/mechanical_terms_index.md:263; references/name_collision_database.yaml:50, 275",
+            "detail": "range 0-5 (NOT 0-10). 0=Restoration, 5=Orthodoxy. Per-territory.",
+            "aliases_or_variants": [
+                "Conviction Track (legacy, ED-644)",
+                "PT (collision pending)"
+            ],
+            "key_bindings_seen": [
+                "territory state vector",
+                "Calamity Drift formula"
+            ],
+            "consumers_seen": [
+                "conviction_track_v30.md:1",
+                "victory_v30.md:Restoration",
+                "designs/arcs/gm_ref/arcs_05_09.md:82"
+            ],
+            "notes": "COLLISION PENDING: PT = Piety Track AND Piety Territory (derived_stats). Mechanical_terms_index line 264 flags old diagnostic used wrong range (0-10, should be 0-5)."
+        },
+        {
+            "name": "Coherence",
+            "kind_guess": "attribute_scalar",
+            "surface": "references/mechanical_terms_index.md:368 (cosmological); glossary:1 (character); threadwork:3",
+            "detail": "Personal: 0-10 (full to fractured). Cosmological: 4 TS-gated bands (Stirring 30-49, Attuned 50-69, Sensitive 70-89, Resonant 90-100). Thresholds: 10/<=4/0.",
+            "aliases_or_variants": [],
+            "key_bindings_seen": [
+                "stat_deltas (type:coherence)",
+                "Coherence 0 outcome bands (TS-gated)"
+            ],
+            "consumers_seen": [
+                "designs/threadwork/threadwork_v30.md:246",
+                "canon/01_foundations_amendment_self_rendering.md"
+            ],
+            "notes": "INTENTIONAL cross-silo per mechanical_terms_index:2 (same concept at three scales). Multiple thresholds verified legitimate per numeric_bounds_report 2026-04-26."
+        },
+        {
+            "name": "Mandate (faction stat)",
+            "kind_guess": "faction_stat",
+            "surface": "references/name_collision_database.yaml:131 (silo_2); numeric_bounds_report.yaml:623",
+            "detail": "range 1-7 (floor normally 1, can collapse 0). Thresholds: 0=loss-control, 4=trigger. Ceiling 7 hard.",
+            "aliases_or_variants": [
+                "Mandate Pool (deprecated, should be Political Pool)"
+            ],
+            "key_bindings_seen": [
+                "Political Pool driver (stat->pool)",
+                "faction collapse gate"
+            ],
+            "consumers_seen": [
+                "factions/stats_1_7_scale.md",
+                "designs/provincial/strategic_layer_v30.md:158"
+            ],
+            "notes": "COLLISION (LOW): Mandate Pool uses stat noun. Collision_registry recommends Political Pool (already canonical in ci_political_v30:3.4,7.2). Unresolved."
+        },
+        {
+            "name": "Conviction Scar",
+            "kind_guess": "derived_value",
+            "surface": "references/mechanical_terms_index.md:123 (silo 1); canon/editorial_ledger.jsonl (PP-718)",
+            "detail": "Per-Conviction accumulator. Crisis at 3+ Scars on ANY SINGLE Conviction (not aggregate). Multi-primary NPCs scar each independently.",
+            "aliases_or_variants": [],
+            "key_bindings_seen": [
+                "conviction_track_v1.md:2 (per-Conviction mechanics)",
+                "state_transition Key: state.scar_acquired"
+            ],
+            "consumers_seen": [
+                "designs/personal/conviction_track_v1.md",
+                "designs/scene/social_contest_v30.md:625"
+            ],
+            "notes": "CLARIFIED PP-718 (2026-05-10): per-Conviction accumulation (not aggregate). Crisis table updated: Autonomy->Self-Other-orientation. Migration preserves Scar counts."
+        }
+    ],
+    "findings": [
+        {
+            "id": "FIX-01",
+            "severity": "P1",
+            "kind": "dead",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "test_descriptor_registry.py imports defunct paths + no test_* function; pytest collection skips silently",
+            "evidence": "tests/registry/test_descriptor_registry.py:1-10 imports from /home/claude/ (moved per CLAUDE.md); main() instead of test_*; no test_ discovery"
+        },
+        {
+            "id": "FIX-02",
+            "severity": "P2",
+            "kind": "enforcement-gap",
+            "calibration": "NEW",
+            "claim": "No running validator for descriptor_registry.yaml; test is dead",
+            "evidence": "CI workflow does not invoke test_descriptor_registry; no consistency check between registry.yaml and actual term usage in canon"
+        },
+        {
+            "id": "FIX-03",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Three acronym collisions pending Jordan: CI (Church Influence vs Crown Index), IP (Institutional Pressure vs Imperial Pressure), PT (Piety Track vs Piety Territory)",
+            "evidence": "name_collision_database.yaml:459-461 (scrape_findings); status:pending on all three"
+        },
+        {
+            "id": "FIX-04",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "mechanical_terms_index.md marked PROPOSAL, not committed to canonical_sources.yaml",
+            "evidence": "mechanical_terms_index.md:4 status marker; CURRENT.md does not list it as canonical"
+        },
+        {
+            "id": "FIX-05",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Combat Pool defined three ways: values_master:212 (Agility x2+History+3), values_master:1150, params/core:161 max(5,History+6)",
+            "evidence": "numeric_bounds_report.yaml:289-299; values_master quarantined ED-1084; params/core + module_contracts agree on canonical"
+        },
+        {
+            "id": "FIX-06",
+            "severity": "P2",
+            "kind": "dead",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "values_master.yaml QUARANTINED-STALE; generator tool extract_values.py is DEAD",
+            "evidence": "ED-1084; CLAUDE.md:8 lists extract_values as dead; no regenerate cycle in CI"
+        },
+        {
+            "id": "FIX-07",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Acronyms WC (Warden Cooperation), WR (Warden Recognition) registered but no quantity-level definition/bounds/formula found",
+            "evidence": "name_collision_database.yaml:54-55 (enforced 2026-06-04); no contract in designs/ or params/"
+        },
+        {
+            "id": "FIX-08",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "Deprecated term Public Support still appears live in settlement_layer_v30.md:631; renamed 2026-05-30 but not propagated",
+            "evidence": "name_collision_database.yaml:469 (deprecated_term_residual); settlement_layer stat table line 631"
+        },
+        {
+            "id": "FIX-09",
+            "severity": "P1",
+            "kind": "key-binding-gap",
+            "calibration": "NEW",
+            "claim": "Institutional Pressure thresholds documented but NO formula explains how IP advances each season",
+            "evidence": "numeric_bounds_report.yaml:555-600 (8 threshold hits, no formula); strategic_layer_v30_infill.md:119 'No explicit formula seen'"
+        },
+        {
+            "id": "FIX-10",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "numeric_bounds_report.yaml status says Regenerate (2026-04-26); no regeneration as of 2026-07-08 (71 days stale)",
+            "evidence": "numeric_bounds_report.yaml:22 status; no regenerate gate in CI tools"
+        },
+        {
+            "id": "FIX-11",
+            "severity": "P1",
+            "kind": "synonym",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Damage Resistance (DR): registered as Resistance but used as Reduction in combat_v30.md:L266",
+            "evidence": "name_collision_database.yaml:463 (term_drift); combat_v30.md line 266 'Damage Reduction'"
+        },
+        {
+            "id": "FIX-12",
+            "severity": "P2",
+            "kind": "other",
+            "calibration": "NEW",
+            "claim": "mechanical_terms_index marked PROPOSAL but used as working diagnostic; differs from descriptor_registry taxonomy (16 silos vs 9 attributes)",
+            "evidence": "mechanical_terms_index.md:4 PROPOSAL status; descriptor_registry focuses personal attributes only; no reconciliation path documented"
+        },
+        {
+            "id": "FIX-13",
+            "severity": "P2",
+            "kind": "enforcement-gap",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "ci_names_check.py is report-only while ci_naming_check.py is blocking; deprecated-term rule splits enforcement",
+            "evidence": "ci_names_check.py:13-24 (report-only policy); violation of CLAUDE.md:8 'intended invariant: every rule lives once'"
+        },
+        {
+            "id": "FIX-14",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Unregistered acronym candidates PW/NPE/TK/WA flagged 2026-06-04; never verified or tracked",
+            "evidence": "name_collision_database.yaml:475-478 (scrape_findings); note says verify before registering; no follow-up task exists"
+        }
+    ],
+    "coverage_notes": "SCOPE SWEPT: F-INDEX family (secondary indices + validators) in depth. FILES READ COMPLETE: mechanical_terms_index.md (1743 lines, sampled first 645 + overview), numeric_bounds_report.yaml (full 1635), propagation_map.md (full 161), silo_overlap_matrix.yaml (full 202), name_collision_database.yaml (full 506), collision_registry.yaml (full 60), test_descriptor_registry.py (full 50), ci_names_check.py (200+ lines). SKIPPED/LIMITS: (1) Full cross-validation of mechanical_terms_index vs all 80 source docs (would exceed token budget; spot-checked params/ + designs/scene/ only). (2) descriptor_registry.yaml itself (infrastructure layer, not F-INDEX scope). (3) ci_naming_check.py hard gate (focus was report gate + collision DB). (4) 8 archived propagation entries (out of scope). CARDINAL RULES APPLIED: (a) every claim has file:line evidence; (b) build-state never verdict; (c) KNOWN-TRACKED findings cite ED id; (d) no new criteria (all findings name shape-divergence or enforcement-gap per armature guardrails). HONEST GAPS: mechanical_terms_index overlap verdicts accepted as-is (did not verify each per-entry); numeric_bounds_report thresholds marked legitimate by tool's 2026-04-26 review (accepted KNOWN-TRACKED)."
+}

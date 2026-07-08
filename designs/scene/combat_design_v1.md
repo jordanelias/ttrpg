@@ -268,7 +268,7 @@ DR is subtracted from damage after net hits + weapon modifier.
 ## 7. WOUNDS AND STAMINA
 
 ### Wounds
-Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wounds accumulate at intervals of every (Endurance + 6) damage. Each threshold crossed: Wound counter +1, −1D penalty applies. At 0 Health: incapacitated (max Wounds reached). (PP-232, ED-438)
+Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wounds accumulate at intervals of every (Endurance + 6) damage. Each threshold crossed: Wound counter +1, a fractional Ob applies (never a −1D pool cut — Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716; combat's ratified value is ED-1041's +0.15 Ob attacking / +0.25 Ob defending per wound). At 0 Health: incapacitated (max Wounds reached). (PP-232, ED-438; wound-penalty mechanic superseded by ED-PC-0005)
 
 **Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
 

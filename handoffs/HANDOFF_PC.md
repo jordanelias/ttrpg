@@ -19,8 +19,8 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   grows a discrete menu that reintroduces the over-articulation.
 
 - **R3 consolidation plan-of-record — `designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`
-  (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1…JD-8 remain OPEN, loudly held back).** Implementation
-  progress:
+  (RATIFIED 2026-07-04 via PR #76 per ED-1094; JD-1 RULED 2026-07-08, JD-2…JD-8 remain OPEN, loudly held back).**
+  Implementation progress:
   - **U0 (units honesty, ED-PC-0002) — DONE 2026-07-05** (branch `claude/begin-u0-arppwt`). head_len/grip_len →
     honest metres (×0.30, all 53 records); `WP.UNIT_M` deleted; per-length gains /0.30 (`PERC_2H_ARC`, `LEVER_K`,
     `REACH_GEOM_SCALE`); stored-length constants ×0.30 (`PERC_GRIP_1H`, `GRIP_SHORT/LONG`, `LEVER_REF`,
@@ -35,11 +35,109 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     NOT rescaled (it is a reach-POINTS residual added outside `REACH_GEOM_SCALE`, not a stored length — scaling
     it breaks identity and `test_reach_base_byte_identical_at_grip_zero`); `PERC_2H_ARC` rescaled though the
     row omits it (identity forces it once grip_len is metres). See the ED-PC-0002 ledger entry.
-  - **NEXT: U1 (PoB recalibration; its ED allocates at filing — plan-text labels are NOT IDs,
-    workplan v6 §6; U0's own label collided with #78's ED-PC-0001 and was renumbered to
-    ED-PC-0002 at merge) — GATED on JD-1** (PoB target bands sign-off, consolidation_v1
-    §6; default = the plan's arms-scholarship bands if Jordan waves it through). U2 ⊣ U1. T-P2 may start any
-    time (post-U0), scope per JD-6; the F5 renderer recovery (JD-8) is still outstanding.
+  - **U1 (PoB recalibration, ED-PC-0010) — DONE 2026-07-08.** JD-1 RULED (Jordan: "accept plan bands" —
+    consolidation_v1's default arms-scholarship ranges: rapier 3–11cm, greatsword 8–20cm, 1H 6–14cm, poleaxe
+    20–55cm forward, staff ~0). `weapons.py` data-only blade/head→pommel/haft mass redistribution (total mass
+    unchanged per weapon) for the 6 V7-flagged weapons: rapier 17.0→9.0cm, arming 17.8→11.0cm, longsword
+    19.4→13.9cm (chosen so `recoverability_factor(longsword)`≈0.98, inside the existing anchor test's
+    tolerance), greatsword 30.4→18.0cm, bec_de_corbin 5.1→22.0cm, lucerne_hammer 7.2→24.0cm (both poleaxe-family
+    heads scaled ~2x to match poleaxe's own physical proportions). `weapon_physics.HEFT_REF` re-anchored to the
+    new longsword value (preserves `heft(longsword)==1.0`; rescales `heft()` roster-wide, a deliberate
+    re-baseline). Cinquedea (also flagged in V7 but with no JD-1-named band) deliberately left untouched — no
+    invented band. Fixtures regenerated with recorded reasons: `r3_identity_golden.json` (53 weapons; only the
+    6 flagged weapons' physics genuinely moved, confirmed via diff — every other weapon's shift is float noise
+    or the uniform HEFT_REF rescale), `golden_heft_percussion_snapshot.json`. New
+    `tests/valoria/test_combat_pob_bands.py::test_pob_within_realistic_range` pins the bands going forward.
+    Retired 2 accepted-red tests as predicted (`test_anchor_is_near_one`, `test_lunge_quality_…`).
+    **NEW finding (undocumented by the plan, not silently patched):** the correctly-banded arming/longsword now
+    read BELOW spear's own untouched heft numerator even at each band's ceiling (checked exhaustively — no
+    JD-1-compliant sword value can beat it) — `test_falsifiable_heft_ordering` /
+    `test_heft_percussion_ordering_at_ideal`'s spear<arming term now fails. This corroborates, not contradicts,
+    the already-tracked "SPEAR flat-dominance" finding below via a second symptom; both tests are left
+    deliberately failing with the finding recorded in their own docstrings, per the same convention as the
+    pre-existing `test_gap_game_poleaxe_spikes_plate` [PHASE-C FLAG]. A second, positive side effect:
+    `lucerne_hammer`'s corrected head mass now makes it join `poleaxe`'s existing percussion-dominance
+    exclusion in `test_use_mode_selection_emerges_from_primitives` (updated). Net accepted-red count 8→8 (2
+    retired, 2 new — both PHASE-C-flagged, not silent); the 5 pre-existing `test_combat_element_parity.py`
+    Phase-A fixture-schema-drift failures and `test_gap_game_poleaxe_spikes_plate` are untouched, confirmed
+    out of U1 scope. `references/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
+    via `export_engine_params.py --check`). 196 passed / 8 failed / 1 xfailed; `valoria_local.py --staged`
+    clean. See the ED-PC-0010 ledger entry for full detail.
+  - **U2 ATTEMPTED 2026-07-08, PARTIAL — findings filed as ED-PC-0008, then JD-4/JD-9 DETERMINED same day as
+    ED-PC-0009 (Jordan: "determine both by testing bottom-up emergent primitives and validating top-down
+    against history and hema and physics").** Immediately after U1 unblocked it, attempted U2 (graded mode
+    affordance + Phase-C percussion enactment) and found consolidation_v1's one-line spec insufficient for a
+    safe implementation (ED-PC-0008, 3 findings). Jordan then directed resolving JD-4/JD-9 via grounded
+    research rather than deferring — both are now DONE at the formula level:
+    - **JD-9 (thrust_factor floor bug) — RESOLVED.** Dropped the additive `point_concentration` floor
+      (matching `cut_factor`'s already-fixed shape) — physics: pressure=force/area, a broad pointless face
+      reads ~0 regardless of rigidity. Verified: mace/staff 0.34/0.31→0.02/0.04; every U2-named acceptance
+      weapon still clears comfortably. `MODE_EDGE_MIN`/`MODE_TIP_MIN` both set to 0.15 (systems.py) — a clean
+      margin, not the old fragile 0.34–0.37 window. `element_afforded`'s `cut_thrust` branch now compares cut
+      against `geo['thrust']` instead of `geo['gap']` (the literal "wire geo[thrust]" ask; `gap` stays
+      threaded separately for the armour-gap math) — a narrow, fully re-validated, zero-regression swap.
+    - **JD-4 (pommel/Mordhau percussion) — RESOLVED.** Researched HEMA sourcing (Wikipedia "Mordhau
+      (weaponry)"; Malevus "Mordhau: The Murder Stroke Technique") — a documented half-sword technique: both
+      hands move onto the blade, guard+pommel project out as an improvised mace, used specifically when
+      cuts/thrusts fail against rigid armour, explicitly "far less injurious" than a dedicated mace/warhammer.
+      New `weapon_physics.hilt_assembly_mass(w)` + `reversed_grip_percussion(w)` (bottom-up: reuses the
+      EXISTING `percussion_element_authority` per-element form with the hilt assembly as striking mass and
+      `grip_len` as the lever arm, gated to hands==2 bladed weapons) + an explicit `REVERSED_GRIP_EFFICIENCY
+      =0.25` [FIAT, HEMA-grounded direction] discount — needed because `percussion_authority`'s own
+      PERC_EXP=0.30 power-law was measured to be UNABLE to express "structurally weak" from input magnitude
+      alone (every mass/lever combination tried saturates toward 5-7/8). Result: two-handed swords read
+      1.4–1.8/8, clearly weak vs mace's 8.0/poleaxe's ~7.5. `percussion_authority`'s non-blunt self-gate now
+      routes here instead of a hard 0.0.
+    - **NOT wired into live mode-selection (both).** Tried wiring reversed_grip_percussion into
+      `element_afforded` as a competing 'blunt' token; reverted after finding `select_mode`'s comparator
+      (`core.coupling`) doesn't read percussion magnitude except vs mail/plate — `DELIVERY['blunt']=1.6` is a
+      FIXED constant, so the weak option incorrectly WON selection against unarmoured targets (backwards from
+      the sourcing). That's a genuine, separate `core.coupling` gap, not routed around. Also reverted the
+      independent cut/point secondary checks (the other half of "graded mode affordance") — they turn 7
+      roster armour-tier "changers" into 27 (e.g. bear_spear newly prefers an incidental cut over its own
+      point, breaking `test_thrust_protection_grip_invariant`) — a full roster re-validation, not attempted.
+      `MODE_EDGE_MIN`/`MODE_TIP_MIN`/`MODE_PERC_MIN` stay defined in systems.py for whoever picks up both
+      follow-ons (the `core.coupling` fix + the roster-wide cut/point re-validation).
+    - New `tests/valoria/test_combat_reversed_grip.py` (6 tests) exercises the grounded functions directly.
+      Fixtures regenerated (`r3_identity_golden.json`, `golden_heft_percussion_snapshot.json` — percussion_
+      authority/puncture_pressure now nonzero for every hands==2 bladed weapon, confirmed via diff, everything
+      else unchanged). 202 passed / 8 failed (identical pre-existing set) / 1 xfailed; `valoria_local.py`
+      clean; 0 ED-citation violations. See the ED-PC-0009 ledger entry for full detail + sourcing.
+    - **U2 live wiring — RESOLVED 2026-07-08 as ED-PC-0011 (same day, follow-on session).** Fixed exactly the
+      `core.coupling` gap named above: `_transmit`'s percussion-authority scaling extended to every material
+      via a DUAL reference (mail/plate keeps `PERC_AUTH_REF=8.0` unchanged, preserving the pre-existing tested
+      calibration; none/cloth uses a new `PERC_AUTH_REF_SOFT=6.5`, anchored on the weakest attested dedicated
+      hammer-class weapon rather than mace's own peak — a first attempt using ONE reference for both material
+      classes was caught by adversarial review silently flipping bec_de_corbin/lucerne_hammer's selected mode
+      at the unarmoured tier, backwards from the HEMA framing). `reversed_grip_percussion` now safely competes
+      in `select_mode` — the weak Mordhau option correctly loses to a weapon's own cut/thrust vs soft targets,
+      wins only vs rigid armour. The re-enabled cut/point secondary checks were ALSO re-validated (not just the
+      percussion path): a new `CUT_AUTH_REF=0.70` fix (anchored on the weakest attested native cutter,
+      hook_sword) stops an incidental secondary 'cut' token from outscoring a weapon's own dedicated 'point'
+      regardless of how weak the edge actually is — this is the fix for the SESSION'S ORIGINAL reported bug
+      (rapier's incidental cut beating its own dedicated point at zero armour). Validated via a 13-agent
+      agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group pairs + 1 Opus synthesis)
+      against HEMA/physics grounding across the full 53-weapon roster, per Jordan's explicit request for that
+      methodology. `test_use_mode_selection_emerges_from_primitives`'s expected-changers list grows 7→17 (ten
+      new weapons' secondary half-sword-thrust/incidental-edge judged historically defensible);
+      `test_afforded_heads_emerge_from_phase_b2_mode_elements` updated for ji/kama_yari's genuine incidental
+      'cut' token. **NEW residual, deliberately deferred rather than rushed (filed as ED-PC-0012):** the
+      adversarial pass found a SECOND, structurally identical gap on 'point' — DELIVERY['point'] doesn't scale
+      by thrust magnitude either, and core._transmit's puncture path is floor-locked (verified: scimitar/sabre/
+      falchion/hook_sword's secondary point ALL score an identical coupling at 'light' armour regardless of
+      0.16-0.40 geometry spread). Judged to matter concretely for the one-handed sabre-class roster (sabre/
+      scimitar/falchion — FLAG, historically dedicated slashers with the weakest thrust geometry in the roster)
+      but not the two-handed cutters (historically defensible regardless). A `THRUST_AUTH_REF` fix analogous to
+      `CUT_AUTH_REF` is recommended but NOT implemented — it would also touch several of the newly-accepted
+      two-handed cutters (tachi/nandao/glaive/podao all sit below the natural reference too) and needs its own
+      roster-wide re-verification pass, not a third redesign-and-reverify cycle in the same session.
+      `test_pure_cutters_have_no_gates` updated: greatsword removed (legitimately gained real capability),
+      sabre kept and left deliberately failing, documenting ED-PC-0012 rather than silently patching around it
+      — matching this suite's `test_gap_game_poleaxe_spikes_plate` convention. Full suite: 210 passed / 9 failed
+      (8 pre-existing + this one new, fully-documented failure) / 1 xpassed (pre-existing, unrelated
+      mass-battle test); all local gates clean; 0 ED-citation violations. T-P2 may start any time (post-U0),
+      scope per JD-6; the F5 renderer recovery (JD-8) is confirmed closed on option (a) — the scratchpad script
+      is genuinely gone — only a from-scratch rebuild at T-P2 remains live.
 
   Original adjudication summary: Fable-adjudicated merge of two parallel PC-lane efforts: this session's R3 plan
   (units-honesty, PoB recalibration, graded mode-affordance retiring the `head`-category gating of
@@ -233,6 +331,19 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Decisions
 
+- 2026-07-08 — **JD-4 + JD-9 DETERMINED via grounded research, not deferred.** Jordan: *"please determine
+  both by testing bottom-up emergent primitives and validating top-down against history and hema and
+  physics."* Directed resolving both ED-PC-0008-surfaced forks directly rather than waiting for a separate
+  ruling — executed as ED-PC-0009 (see Pending above for the full record). JD-9 (thrust_factor floor)
+  resolved cleanly and fully wired. JD-4 (Mordhau percussion) resolved at the formula level
+  (`reversed_grip_percussion`, HEMA-sourced + physically grounded) but explicitly NOT wired into live mode-
+  selection — a real `core.coupling` architectural gap (DELIVERY constants don't scale with percussion
+  magnitude except vs mail/plate) made a naive wiring backwards (weak options winning vs unarmoured targets),
+  so that integration is left as documented follow-on work rather than forced through.
+- 2026-07-08 — **JD-1 RULED + executed: PoB target bands = the plan's own arms-scholarship ranges.** Jordan:
+  *"accept plan bands"* (offered rapier 3–11cm / greatsword 8–20cm / 1H 6–14cm / poleaxe 20–55cm forward /
+  staff ~0). Executed as U1, ED-PC-0010 — see Pending above for the full mass-redistribution + finding record.
+  Unblocks the rest of the U-series toward M1's juncture 4 (one legible fight).
 - 2026-07-08 — **ED-PC-0005 RULED + executed: wounds never −1D, always a fractional Ob.** Jordan:
   *"never −1D, always increase fractional Ob."* Wounds NEVER cut the pool −1D; each wound ALWAYS adds a
   fractional Ob. ED-1041's bilateral wound-Ob channel (+0.15 Ob attacking / +0.25 defending per wound)

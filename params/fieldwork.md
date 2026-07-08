@@ -225,10 +225,10 @@ Church territory (PT ≥ 3 or Church-controlled): Watched → +1 AP at Accountin
 Cap: +1/character/season, +2/territory/season from fieldwork.
 
 ## Wounds and Fieldwork (§2.2)
-Physical wounds add a fractional Ob per wound (NEVER a −1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification): apply to Endurance-based exploration and Surveil only. Per-pool fractional-Ob value is a follow-on calibration, flagged pending (ED-PC-0006) — combat's ratified reference is ED-1041 (+0.15 Ob attacking / +0.25 Ob defending per wound).
+Physical wounds add **+0.15 Ob per wound** (cumulative; NEVER a −1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification): apply to Endurance-based exploration and Surveil only. Value calibrated ED-PC-0006: reuses ED-1041's combat "attacking" magnitude (+0.15 Ob) — Endurance-exploration and Surveil are active-roller checks with no bilateral attacker/defender split, so the passive-defence +0.25 term does not apply.
 Social/cognitive fieldwork: unaffected by physical wounds.
 Rattled: +1 Ob per mark to social fieldwork actions.
-Wounds and Thread ops: fractional Ob per wound to Leap-based Thread ops (concentration, not pool penalty; value ED-PC-0006). The prior "+1 Ob" figure predates the ED-PC-0005 ruling and is subsumed into that calibration.
+Wounds and Thread ops: **+0.15 Ob per wound** to Leap-based Thread ops (concentration, not pool penalty; ED-PC-0006, same value as above). The prior "+1 Ob" figure predates the ED-PC-0005 ruling and is superseded by this calibration (a flat, non-cumulative legacy figure vs. the new per-wound-cumulative value — at 1 wound the new figure is gentler, at 7+ wounds it exceeds the old flat +1).
 
 ## Inspiration Spend
 1 Inspiration before rolling → Ob −1 (min 1).

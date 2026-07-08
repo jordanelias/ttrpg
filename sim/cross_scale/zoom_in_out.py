@@ -56,7 +56,7 @@ class ZoomInResult:
 class ZoomOutResult:
     domain_echoes_queued: list[dict]
     pc_incap_applied: bool
-    contested_figure_wound_ob: int  # ED-167: +1 Ob to commander BG tactic rolls if wound
+    contested_figure_wound_ob: float  # ED-167/ED-PC-0006: +0.15 Ob to commander BG tactic rolls if wound
     notes: list[str] = field(default_factory=list)
 
 
@@ -102,7 +102,7 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
     scene_outcomes accepts:
       - 'accord_changes': list of dicts (queued as Domain Echoes per §5.5)
       - 'pc_incapacitated': bool (Stage 1 applies immediately per ED-159)
-      - 'contested_figure_wounded': bool (ED-167: +1 Ob to commander)
+      - 'contested_figure_wounded': bool (ED-167: +0.15 Ob to commander, ED-PC-0006)
       - 'other_echoes': list of dicts (faction stat changes per §5)
     """
     notes = []
@@ -122,11 +122,16 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
         #  immediately on Zoom Out (ED-159)"]
         notes.append("PC incapacitation Stage 1 applies immediately (ED-159)")
 
-    wound_ob = 1 if scene_outcomes.get('contested_figure_wounded', False) else 0
+    # ED-PC-0006 (2026-07-08): the flat +1 Ob (Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's
+    # -1D unification) is now +0.15 Ob -- reuses ED-1041's combat "attacking" magnitude (a commander
+    # issuing BG tactic rolls is the active roller, no bilateral attacker/defender split). Still a flat
+    # modifier keyed on the boolean wounded flag, not a per-wound-cumulative counter (params/mass_combat.md
+    # ED-167 note) -- a true wound-counter model for the CF is future work.
+    wound_ob = 0.15 if scene_outcomes.get('contested_figure_wounded', False) else 0.0
     if wound_ob:
-        # [canonical: §4.2 — "Contested Figure wound → +1 Ob to commander's
-        #  BG tactic rolls for remainder of battle (ED-167)"]
-        notes.append("Contested Figure wound: +1 Ob to commander BG tactic rolls (ED-167)")
+        # [canonical: §4.2 — "Contested Figure wound -> +0.15 Ob to commander's
+        #  BG tactic rolls for remainder of battle (ED-167, ED-PC-0006)"]
+        notes.append("Contested Figure wound: +0.15 Ob to commander BG tactic rolls (ED-167, ED-PC-0006)")
 
     notes.append("Phase 6 Steps 2-6 resolve after Zoom Out with updated state (PP-110)")
 

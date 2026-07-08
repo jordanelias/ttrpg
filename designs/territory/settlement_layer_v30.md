@@ -62,7 +62,7 @@ Each settlement has 3 stats tracked on a 0–5 scale:
 
 ## §1.4 Institutional Facility Tiers (PP-661)
 
-Each Seat-type and certain City-type settlements offer a bounded number of **Institutional Facility slots** that the faction controlling the settlement can allocate to rank-holders per faction_politics_expanded_v1 §1 Hall Tier specification. Facility slots are a finite settlement resource; when full, new rank-holders at the corresponding tier receive "pending" status until a slot opens.
+Each Seat-type and certain City-type settlements offer a bounded number of **Institutional Facility slots** that the faction controlling the settlement can allocate to rank-holders per faction_politics_v30 §1 Hall Tier specification. Facility slots are a finite settlement resource; when full, new rank-holders at the corresponding tier receive "pending" status until a slot opens.
 
 ### §1.4.1 Facility Slot Capacity by Settlement Type
 
@@ -81,7 +81,7 @@ Each Seat-type and certain City-type settlements offer a bounded number of **Ins
 
 - Slots are allocated by the settlement's controlling authority (usually the province faction).
 - At Seat settlements, the faction leader occupies one Wing automatically (counted against the 3-cap). Inner circle NPCs occupy additional Wings per rank.
-- Player advancement to Standing 6+ requires an available Wing slot. If none available, advancement is "pending" (FAC-02 standing-debt equivalent per faction_politics_expanded_v1 §1.0).
+- Player advancement to Standing 6+ requires an available Wing slot. If none available, advancement is "pending" (FAC-02 standing-debt equivalent per faction_politics_v30 §1.0).
 - Wing occupancy is durable across seasons until death, succession, exile, or formal transfer.
 
 ### §1.4.3 Capacity Pressure as Political Mechanic
