@@ -434,12 +434,12 @@ systems:
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
   investigation:
     design_doc: designs/scene/investigation_systems_v30.md
-    canonical_sha__designs__scene__investigation_systems_v30_md: "f5265bc470c5c0e80a24c514654314a0bd3c77be"
+    canonical_sha__designs__scene__investigation_systems_v30_md: "1866fcc0496dfff2eeb7edb81b69c74ee7a26272"
     index: designs/scene/investigation_systems_v30_index.md
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "e3b1b70b913e384c02a8a4411c5937a0339a0625"
+    canonical_sha__designs__scene__fieldwork_v30_md: "3e7a05f20bf99b45a748012c745b98daf83c8566"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md
