@@ -1625,7 +1625,14 @@ class Unit:
         #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
         #  ED-899/ED-1013); legacy OFF-path min(Size,Command)+Command at COMMAND_SIGMA_ENABLED=0]
         stam_pen = _stamina_pool_penalty(self.agg_stamina())
-        if COMMAND_SIGMA_ENABLED:
+        if POOL_QUALITY_MODEL:
+            # [Jordan directive 2026-07-08, mirrors core.exchange.subunit_combat_pool's default
+            # branch for the UNIT-level pool this pursuit/rout path uses -- see config.py's
+            # POOL_QUALITY_MODEL comment.] No Command: troop-type quality (`power`) x numbers
+            # (`effective_size`, already the continuously-degrading quantity this method's own v16
+            # comment names).
+            raw = self.power * self.effective_size * POOL_QUALITY_SCALE + pen + stam_pen
+        elif COMMAND_SIGMA_ENABLED:
             # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
             # degrading SMOOTHLY with own casualties to command at annihilation via cohesion=hp/hp_max.
             # Cohesion is a FRACTION (not headcount) -> per-capita effectiveness size-independent -> Lanchester

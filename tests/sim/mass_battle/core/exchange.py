@@ -3,7 +3,10 @@ Stage-1 behaviour-frozen extract from orchestration.py (derive_command, command_
 subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config + math + duck-typed
 unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
 orchestration via `from mass_battle.core.exchange import *` so every call site is unchanged.
-[canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base]"""
+[canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
+for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
+`derive_command`/`command_base_pool` below remain live for whatever still reads Command
+(morale, formation-hold speed, order-issuing, derive_rout), just no longer the combat pool]"""
 import math
 import os as _exch_os
 from mass_battle.config import *
@@ -58,12 +61,14 @@ def command_base_pool(command, pen, stam_pen):
 
 
 def subunit_combat_pool(unit, atom):
-    """Per-subunit combat pool (Jordan directive): SHARED Command (the general),
-    per-subunit Discipline + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a
-    single-subunit unit (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline inherits unit) ->
-    byte-exact for the homogeneous gauge; differentiates per subunit for mixed units.
+    """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
+    TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
+    no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
+    + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a single-subunit unit
+    (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
+    for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
-     mirrors Unit.discipline_penalty 'fix discipline'; size-decoupled cohesion form]"""
+     mirrors Unit.discipline_penalty 'fix discipline']"""
     if unit.routed or unit.broken or atom.routed or atom.broken:
         return 0
     disc = atom.eff_discipline
@@ -81,7 +86,29 @@ def subunit_combat_pool(unit, atom):
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
     stam_pen = _stamina_pool_penalty(atom.eff_stamina)
-    if COMMAND_SIGMA_ENABLED:
+    if POOL_QUALITY_MODEL:
+        # [Jordan directive 2026-07-08: "abandon combat pools being related to the commander,
+        # and instead [derive them] solely from the subunit troop type, quality and numbers" --
+        # see config.py's POOL_QUALITY_MODEL comment for the full rationale/history.] Command is
+        # absent from this branch entirely. `eff_power` is the troop-TYPE quality stat
+        # (TROOP_TYPE_STATS/§B.2 -- levy=1 through knights_templar=5, §A.1's own "Power... determines
+        # dice rolled"); `eff_size` is NUMBERS (current troops / BLOCK_SIZE, already continuously
+        # degrading with casualties -- no separate cohesion multiplier needed, unlike the Command
+        # branch below, since eff_size itself IS the smoothly-shrinking quantity). `pen`/`stam_pen`
+        # (discipline/stamina) are the remaining QUALITY terms, unchanged from every other branch.
+        #
+        # [Jordan follow-up, 2026-07-08: "subunit power is the aggregate or derivation of cell
+        # power"] Correct, and this closed form already IS that aggregate: `eff_power * eff_size`
+        # equals sum-over-cells(cell_power x cell_troops) / BLOCK_SIZE whenever a subunit's cells
+        # share one troop type/power (true for every Subunit today -- per-cell troop_type doesn't
+        # exist yet, see pair_pool_contribution's own docstring on this same gap). Written as the
+        # closed form for the SUBUNIT's total score (cheap, no per-cell loop needed here);
+        # `pair_pool_contribution`/`_pair_engaged_troops` below are what actually walk `cell_troops`
+        # cell-by-cell to redistribute this total across a SPECIFIC pair by real contact-cell
+        # density -- that per-cell mechanism already generalizes to true per-cell power the moment
+        # that data exists, with no change needed here.
+        raw = atom.eff_power * atom.eff_size * POOL_QUALITY_SCALE + pen + stam_pen
+    elif COMMAND_SIGMA_ENABLED:
         raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
     else:
         raw = min(atom.eff_size, unit.command) + unit.command + pen + stam_pen

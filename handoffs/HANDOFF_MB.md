@@ -175,3 +175,33 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   asymmetry lead to a root cause; (3) DG-1's composition question and the still-live envelopment-shock
   magnitude remain the larger unaddressed levers for H3-H6's overshoot (the partition-invariance fix
   closed a real defect but was never the dominant one there).
+
+- **ED-MB-0006 (2026-07-08): combat pool abandons Command entirely — troop type/quality/numbers.**
+  Per Jordan's direct instruction ("consider abandoning combat pools being related to the commander,
+  and instead being solely derived from the subunit troop type, quality and numbers"), new
+  `POOL_QUALITY_MODEL` (default ON): base pool = `eff_power × eff_size × POOL_QUALITY_SCALE` —
+  troop-TYPE quality (`TROOP_TYPE_STATS`/§B.2) × NUMBERS (troops/BLOCK_SIZE), no Command anywhere.
+  `POOL_QUALITY_SCALE=0.5` renormalizes to the historical baseline magnitude. Discipline/stamina
+  penalties unchanged. Command still governs morale/formation-speed/orders/`derive_rout`, just not
+  the dice pool. Applied consistently to both `subunit_combat_pool` and `Unit.base_combat_pool`
+  (pursuit path). `COMMAND_SIGMA_ENABLED` branches remain selectable (`POOL_QUALITY_MODEL=0`) for
+  A/B. All 4 `bat.py` digests re-recorded; `tests/valoria` 121 passed/57 skipped/1 xpassed (the
+  usual pre-existing `test_names.py` failures aside).
+  **Honest, mixed gauge result:** 6/20→7/20 (multi). C4/C5 newly pass (bigger-force cavalry rows
+  correctly reward numbers now); **H4 (actual Cannae) flips from attacker-WIN-OUT to attacker
+  LOSING badly** (1.7%/65%/33% draws) — composed-army rows lose out because their PER-ATOM numbers
+  are now smaller than the single consolidated defender's, an real emergent trade-off, not a bug.
+  **Open, disclosed residual:** `lanchester_signature.py`'s law-exponent check (melee should conserve
+  p≤1.4) fails under BOTH models — pre-existing baseline already measured p≈1.55 (previously
+  undetected, unrelated to this change) and a separate apparent "2:1 army loses 97% of the time"
+  reading that a quick trace suggests may be test-methodology noise (single 18-tick `run_battle`
+  call rarely resolves decisively at this ratio), not independently confirmed. The new model measures
+  p≈2.50, tested extensively (sqrt-numbers variant, 8-point scale sweep) without finding a scale that
+  reaches ≤1.4 — plateaus at p≈1.65-1.7, confirmed NOT a Lanchester double-count (disabling
+  `LANCHESTER_ENABLED` doesn't change the exponent at all) — the amplification is internal to how
+  larger absolute pools reduce variance and make `compute_degree`'s discrete tier assignment
+  near-deterministic from the pool ratio alone. **Next action: this needs the degree/damage-tier
+  discretization or the Lanchester coefficient's own interaction reconsidered — not another pool-
+  formula scale tweak (provably can't fix a ratio-sensitive test).** Full record: `tests/
+  coverage_matrix.md`'s third 2026-07-08 entry; canon note in `designs/provincial/mass_battle_v30.md`
+  §A.1 (ED-MB-0006).

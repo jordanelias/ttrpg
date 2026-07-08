@@ -1134,3 +1134,103 @@ and step 7, the waypoint primitive itself, still pending):
 - **Remaining, not yet done:** step 8 (lower-severity hardening, parallelizable); re-producing the
   Cannae visualization to confirm the fix end-to-end — done (task #78, delivered as an Artifact).
 
+## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented
+- **ED-MB-0002 ratified** (PR #73 merge = ratification, ED-1094 convention); DG-3/DG-4 ruled by Jordan
+  same day in chat, recorded as an addendum in `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
+  README.md` (PR #75). Two independent bug fixes landed first: `validators.py`'s `_attacker_envelop`
+  ghost-cell construction bug (`starting_position` assigned after `__post_init__` already ran — added a
+  `col=` param to `_line()` instead); `orchestration.py`'s float-epsilon pool-floor bug (`math.floor(x)`
+  → `math.floor(x + 1e-9)`).
+- **DG-3 implemented, bottom-up (Jordan's own correction of a first-pass eng_counts-division attempt —
+  "misleading... should be per-cell troop density... bottom-up... solves multiple engagements"):** new
+  `core/exchange.pair_pool_contribution()` redistributes a subunit's unchanged combat-score
+  (`subunit_combat_pool`) across a specific contact pair by ACTUAL troop density in the engaged cells
+  (`cell_troops`) plus depth-weighted support (reusing `support_engage_frac`'s `SUPPORT_WEIGHTS` falloff)
+  — replaces the flat divide-by-simultaneous-pair-count with an exact troop-weighted split.
+  `a_troops_frac` (a separate, pre-existing multi-SUBUNIT Command-sharing dampener) kept as an outer
+  multiplier, orthogonal to this fix. Known accepted residual, same discipline as Stage A's TOI
+  multi-body approximation: a cell simultaneously adjacent to 2+ enemy atoms double-contributes its
+  troop share (dogpile edge case, not solved).
+- **DG-4 implemented ("a blend of per-subunit as well as whole unit... more likely to wilt if other
+  subunits losing, more likely to rally if other subunits winning"):** `build_army` now defaults every
+  subunit to its own real starting morale (closing RC-1(b)'s double-count by construction — no new
+  state); new `Subunit.pull_morale()` + a continuous per-phase term in `core/state.morale_check_phase`
+  pulls each subunit's morale toward its LIVING SIBLINGS' troop-weighted aggregate (new
+  `MORALE_SIBLING_PULL=0.15`, tagged Class-B/Jordan-vetoable — the mechanic is ruled, the magnitude is
+  not derived from any existing primitive). RC-1(c) (subunit-scale casualty trigger vs shared pool)
+  auto-resolves as a side effect — both sides of that mismatch are now subunit-scale.
+- **Perf finding, fixed:** `support_engage_frac` was still called unconditionally for every pair even
+  though C-ii no longer reads its result — duplicated the same abs→orig cell-coordinate conversion
+  `pair_pool_contribution` does internally. Made conditional on `POOL_VARIANT != "C-ii"`. Profiling
+  (cProfile on an envelop-army trial) showed the DOMINANT remaining cost is pre-existing Stage-A TOI
+  physics (`resolve_toi_and_commit`/`_pair_toi_scale`, 679K calls, ~2.2s of 4.7s), not this fix's own
+  code (`resolve_engagements` ~0.6s) — multi-subunit field-path battles are inherently more expensive
+  under the existing TOI system; `bat.py`'s full battery now takes ~1-4 min per mode instead of
+  seconds (disclosed, not a hang — confirmed by direct profiling and isolated single-trial timing).
+- **Adversarial review (general-purpose agent) — 4 findings, all fixed, none moved the recorded
+  digests (confirmed by re-running `bat.py --check` all 4 modes post-fix — all still match):**
+  1. **(HIGH)** `pair_pool_contribution` recomputed the cell layout from `CELL_PATTERN_FN[shape](tier)`
+     (the legacy tier-only pattern) instead of iterating `atom.cell_troops` directly — silently
+     zeroed the whole pool for any continuous-scale (`troops=`/`concentration=`) subunit whose real
+     footprint (`footprint_for`) extends beyond that small legacy rectangle (confirmed by repro: a
+     tier=4/troops=8000 Line's real 70-cell footprint vs. the tier's own 35-cell pattern — pool
+     contribution was silently 0.0, now correctly non-zero). Fixed: iterate `cell_troops.items()`
+     directly (the same authoritative, footprint-aware source `cells()`/`check_drift` already use).
+     Masked in the current battery only by coincidence (existing fixture troop counts happen to stay
+     inside the legacy rectangle).
+  2. **(HIGH)** The sibling-morale pull ran AFTER this-phase's own casualty/exhaustion erosion, so a
+     healthy sibling's pull could retroactively rescue a subunit from a same-phase rout its own
+     casualties would have caused, before `rout_resolution` ever saw the eroded value — a materially
+     stronger mechanic than "more likely to rally," and an unintended side effect of call ordering.
+     Fixed: reordered so the sibling-pull (using a phase-start snapshot) applies BEFORE self-erosion —
+     a sibling's state can soften/harden the morale a subunit ENTERS its own erosion with, but can no
+     longer erase that erosion's result; self-erosion keeps the final say on this-phase rout.
+  3. **(MEDIUM)** Siblings were aggregated from already-mutated live values within the same per-atom
+     loop (Gauss-Seidel order-dependency, biased toward whichever subunit iterates first) rather than
+     a fixed phase-start snapshot. Fixed as part of the same reorder above (one snapshot dict built
+     once per unit before the loop).
+  4. **(LOW, dormant)** `build_army`'s `kw.setdefault('morale', morale)` no-ops if a spec explicitly
+     sets `'morale': None` (key present, not absent) — silently keeps that one subunit on the
+     shared-pool double-erosion path DG-4 exists to close. No current caller does this, but fixed
+     (explicit `if kw.get('morale') is None:` check, matching this file's own `unit_type` precedent).
+- **Verified:** all 4 `bat.py` digests changed from the pre-DG-3/DG-4 baseline and re-recorded (expected
+  — touches shared, non-gated combat-resolution code). Re-checked after the 4 adversarial-review fixes
+  above: `unit`/`unit_field` stayed byte-identical to their first re-record; **`cell` and `cell_field`
+  BOTH moved again** and were re-recorded a second time. **Process gap, caught by CI not locally:**
+  `test_byte_exact_cell_mode` only hard-fails inside `_in_reference_env()` (GITHUB_ACTIONS+Linux) and
+  silently SKIPS elsewhere — a real pytest pass count locally can hide a genuine `cell`-mode digest
+  drift. Confirmed NOT a portability artifact (this sandbox reproduces CI's exact new hash directly via
+  `bat.py --check`) — a real movement from the same fixes, just invisible to `pytest`'s local summary.
+  Lesson recorded in `bat.py`'s own comment: always re-verify `cell` with a direct `bat.py --check`
+  call, not just the pytest suite, after any core.exchange/core.state/orchestration change.
+  `tests/valoria` 87 passed/17 skipped/1 xfailed either way (neither byte-exact pytest test covers the
+  two field modes at all — manual `bat.py --check` is the only check for those).
+- **Gauge re-run (n=20, reduced from the standard 60 for turnaround — `gauge_mb.py`'s own `__main__`
+  hardcodes n=60 with no CLI override, confirmed by reading it):** **honest result: the fix did NOT
+  close the targeted gap.** Aggregate counts are unchanged from the pre-fix baseline (single 2/20, multi
+  4/20) but the COMPOSITION shifted: multi-mode H1 (mirror Line-vs-Line, previously passing) now reads
+  60/40 (WIN-OUT, band 42-58) while C1 (previously failing) now reads 45/55 (OK, band 35-55) — a
+  trade, not a net gain. **H3, H5, H6 (three of the four actual Cannae-pattern target rows) remain
+  UNRESOLVED (100% draws) in both single and multi mode** — worse than the pre-fix "0-13% losses"
+  framing in one sense (that at least resolved decisively, if in the wrong direction) and better in
+  another (no longer a rout, just a stalemate) — either way, not inside the historical band. **H4
+  (Cannae proper)** improved from a decisive loss to `WIN-OUT` (0/10, 90% draw) — still fails, still
+  undershoots. **C4** improved from the disclosed 0-13% range to 66.7% (`WIN-OUT`, 75-95 band, 70%
+  draw) — real movement toward the band, still short. This is disclosed, not hidden: RC-1's
+  accounting-layer fix was never proven (RC-3 was explicitly "confounded, not proven") to be
+  gauge-scale-sufficient on its own, and this n=20 read is the first real evidence on that question —
+  it looks like RC-1 alone is necessary but not sufficient; DG-1/DG-2 (composition/yield-mechanic, both
+  still open) are the more likely remaining levers, not a bug in this fix.
+- **Frozen-wings ablation (§2 step 4) — CLOSES DG-5 cleanly:** H3/H4/H5/H6 read byte-identical
+  A%/decA%/draw% whether wings wheel normally or are frozen in place for the whole battle (`n=30`
+  each). **No maneuver-timing race exists** — confirms the fixture-scale finding generalizes to gauge
+  scale. DG-5 is not a live question; the bottleneck is entirely elsewhere (most likely DG-1's
+  composition question, given H3/H5/H6's total non-resolution above).
+- **C4-vs-C7 trace (§2 step 5) — single-mechanism, fully explained:** varying only the defender's
+  `stance`/`discipline` (`n=30` each): baseline 16.7%; `+discipline=8` alone: 16.7% (zero effect);
+  `+stance='hold'` alone: 76.7% (the entire gap); `+both` (=C7): 76.7% (no additional discipline
+  contribution). **`stance='hold'` alone fully accounts for the C4→C7 divergence** — discipline plays
+  no role.
+- **Not yet done:** `test_envelop_reaches_rear_node`'s xfail re-evaluation (next); DG-1/DG-2 remain
+  open and are now the better-evidenced next lever given the gauge results above.
+

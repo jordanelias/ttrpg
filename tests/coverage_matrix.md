@@ -100,105 +100,20 @@ Archived entries in tests/coverage_matrix_archive.md
   modes confirmed byte-exact where the change was node-path-only); `tests/valoria` 84 passed/10
   skipped/1 xfailed. Full detail: `tests/coverage_matrix_archive.md`.
 
-## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented
-- **ED-MB-0002 ratified** (PR #73 merge = ratification, ED-1094 convention); DG-3/DG-4 ruled by Jordan
-  same day in chat, recorded as an addendum in `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/
-  README.md` (PR #75). Two independent bug fixes landed first: `validators.py`'s `_attacker_envelop`
-  ghost-cell construction bug (`starting_position` assigned after `__post_init__` already ran — added a
-  `col=` param to `_line()` instead); `orchestration.py`'s float-epsilon pool-floor bug (`math.floor(x)`
-  → `math.floor(x + 1e-9)`).
-- **DG-3 implemented, bottom-up (Jordan's own correction of a first-pass eng_counts-division attempt —
-  "misleading... should be per-cell troop density... bottom-up... solves multiple engagements"):** new
-  `core/exchange.pair_pool_contribution()` redistributes a subunit's unchanged combat-score
-  (`subunit_combat_pool`) across a specific contact pair by ACTUAL troop density in the engaged cells
-  (`cell_troops`) plus depth-weighted support (reusing `support_engage_frac`'s `SUPPORT_WEIGHTS` falloff)
-  — replaces the flat divide-by-simultaneous-pair-count with an exact troop-weighted split.
-  `a_troops_frac` (a separate, pre-existing multi-SUBUNIT Command-sharing dampener) kept as an outer
-  multiplier, orthogonal to this fix. Known accepted residual, same discipline as Stage A's TOI
-  multi-body approximation: a cell simultaneously adjacent to 2+ enemy atoms double-contributes its
-  troop share (dogpile edge case, not solved).
-- **DG-4 implemented ("a blend of per-subunit as well as whole unit... more likely to wilt if other
-  subunits losing, more likely to rally if other subunits winning"):** `build_army` now defaults every
-  subunit to its own real starting morale (closing RC-1(b)'s double-count by construction — no new
-  state); new `Subunit.pull_morale()` + a continuous per-phase term in `core/state.morale_check_phase`
-  pulls each subunit's morale toward its LIVING SIBLINGS' troop-weighted aggregate (new
-  `MORALE_SIBLING_PULL=0.15`, tagged Class-B/Jordan-vetoable — the mechanic is ruled, the magnitude is
-  not derived from any existing primitive). RC-1(c) (subunit-scale casualty trigger vs shared pool)
-  auto-resolves as a side effect — both sides of that mismatch are now subunit-scale.
-- **Perf finding, fixed:** `support_engage_frac` was still called unconditionally for every pair even
-  though C-ii no longer reads its result — duplicated the same abs→orig cell-coordinate conversion
-  `pair_pool_contribution` does internally. Made conditional on `POOL_VARIANT != "C-ii"`. Profiling
-  (cProfile on an envelop-army trial) showed the DOMINANT remaining cost is pre-existing Stage-A TOI
-  physics (`resolve_toi_and_commit`/`_pair_toi_scale`, 679K calls, ~2.2s of 4.7s), not this fix's own
-  code (`resolve_engagements` ~0.6s) — multi-subunit field-path battles are inherently more expensive
-  under the existing TOI system; `bat.py`'s full battery now takes ~1-4 min per mode instead of
-  seconds (disclosed, not a hang — confirmed by direct profiling and isolated single-trial timing).
-- **Adversarial review (general-purpose agent) — 4 findings, all fixed, none moved the recorded
-  digests (confirmed by re-running `bat.py --check` all 4 modes post-fix — all still match):**
-  1. **(HIGH)** `pair_pool_contribution` recomputed the cell layout from `CELL_PATTERN_FN[shape](tier)`
-     (the legacy tier-only pattern) instead of iterating `atom.cell_troops` directly — silently
-     zeroed the whole pool for any continuous-scale (`troops=`/`concentration=`) subunit whose real
-     footprint (`footprint_for`) extends beyond that small legacy rectangle (confirmed by repro: a
-     tier=4/troops=8000 Line's real 70-cell footprint vs. the tier's own 35-cell pattern — pool
-     contribution was silently 0.0, now correctly non-zero). Fixed: iterate `cell_troops.items()`
-     directly (the same authoritative, footprint-aware source `cells()`/`check_drift` already use).
-     Masked in the current battery only by coincidence (existing fixture troop counts happen to stay
-     inside the legacy rectangle).
-  2. **(HIGH)** The sibling-morale pull ran AFTER this-phase's own casualty/exhaustion erosion, so a
-     healthy sibling's pull could retroactively rescue a subunit from a same-phase rout its own
-     casualties would have caused, before `rout_resolution` ever saw the eroded value — a materially
-     stronger mechanic than "more likely to rally," and an unintended side effect of call ordering.
-     Fixed: reordered so the sibling-pull (using a phase-start snapshot) applies BEFORE self-erosion —
-     a sibling's state can soften/harden the morale a subunit ENTERS its own erosion with, but can no
-     longer erase that erosion's result; self-erosion keeps the final say on this-phase rout.
-  3. **(MEDIUM)** Siblings were aggregated from already-mutated live values within the same per-atom
-     loop (Gauss-Seidel order-dependency, biased toward whichever subunit iterates first) rather than
-     a fixed phase-start snapshot. Fixed as part of the same reorder above (one snapshot dict built
-     once per unit before the loop).
-  4. **(LOW, dormant)** `build_army`'s `kw.setdefault('morale', morale)` no-ops if a spec explicitly
-     sets `'morale': None` (key present, not absent) — silently keeps that one subunit on the
-     shared-pool double-erosion path DG-4 exists to close. No current caller does this, but fixed
-     (explicit `if kw.get('morale') is None:` check, matching this file's own `unit_type` precedent).
-- **Verified:** all 4 `bat.py` digests changed from the pre-DG-3/DG-4 baseline and re-recorded (expected
-  — touches shared, non-gated combat-resolution code). Re-checked after the 4 adversarial-review fixes
-  above: `unit`/`unit_field` stayed byte-identical to their first re-record; **`cell` and `cell_field`
-  BOTH moved again** and were re-recorded a second time. **Process gap, caught by CI not locally:**
-  `test_byte_exact_cell_mode` only hard-fails inside `_in_reference_env()` (GITHUB_ACTIONS+Linux) and
-  silently SKIPS elsewhere — a real pytest pass count locally can hide a genuine `cell`-mode digest
-  drift. Confirmed NOT a portability artifact (this sandbox reproduces CI's exact new hash directly via
-  `bat.py --check`) — a real movement from the same fixes, just invisible to `pytest`'s local summary.
-  Lesson recorded in `bat.py`'s own comment: always re-verify `cell` with a direct `bat.py --check`
-  call, not just the pytest suite, after any core.exchange/core.state/orchestration change.
-  `tests/valoria` 87 passed/17 skipped/1 xfailed either way (neither byte-exact pytest test covers the
-  two field modes at all — manual `bat.py --check` is the only check for those).
-- **Gauge re-run (n=20, reduced from the standard 60 for turnaround — `gauge_mb.py`'s own `__main__`
-  hardcodes n=60 with no CLI override, confirmed by reading it):** **honest result: the fix did NOT
-  close the targeted gap.** Aggregate counts are unchanged from the pre-fix baseline (single 2/20, multi
-  4/20) but the COMPOSITION shifted: multi-mode H1 (mirror Line-vs-Line, previously passing) now reads
-  60/40 (WIN-OUT, band 42-58) while C1 (previously failing) now reads 45/55 (OK, band 35-55) — a
-  trade, not a net gain. **H3, H5, H6 (three of the four actual Cannae-pattern target rows) remain
-  UNRESOLVED (100% draws) in both single and multi mode** — worse than the pre-fix "0-13% losses"
-  framing in one sense (that at least resolved decisively, if in the wrong direction) and better in
-  another (no longer a rout, just a stalemate) — either way, not inside the historical band. **H4
-  (Cannae proper)** improved from a decisive loss to `WIN-OUT` (0/10, 90% draw) — still fails, still
-  undershoots. **C4** improved from the disclosed 0-13% range to 66.7% (`WIN-OUT`, 75-95 band, 70%
-  draw) — real movement toward the band, still short. This is disclosed, not hidden: RC-1's
-  accounting-layer fix was never proven (RC-3 was explicitly "confounded, not proven") to be
-  gauge-scale-sufficient on its own, and this n=20 read is the first real evidence on that question —
-  it looks like RC-1 alone is necessary but not sufficient; DG-1/DG-2 (composition/yield-mechanic, both
-  still open) are the more likely remaining levers, not a bug in this fix.
-- **Frozen-wings ablation (§2 step 4) — CLOSES DG-5 cleanly:** H3/H4/H5/H6 read byte-identical
-  A%/decA%/draw% whether wings wheel normally or are frozen in place for the whole battle (`n=30`
-  each). **No maneuver-timing race exists** — confirms the fixture-scale finding generalizes to gauge
-  scale. DG-5 is not a live question; the bottleneck is entirely elsewhere (most likely DG-1's
-  composition question, given H3/H5/H6's total non-resolution above).
-- **C4-vs-C7 trace (§2 step 5) — single-mechanism, fully explained:** varying only the defender's
-  `stance`/`discipline` (`n=30` each): baseline 16.7%; `+discipline=8` alone: 16.7% (zero effect);
-  `+stance='hold'` alone: 76.7% (the entire gap); `+both` (=C7): 76.7% (no additional discipline
-  contribution). **`stance='hold'` alone fully accounts for the C4→C7 divergence** — discipline plays
-  no role.
-- **Not yet done:** `test_envelop_reaches_rear_node`'s xfail re-evaluation (next); DG-1/DG-2 remain
-  open and are now the better-evidenced next lever given the gauge results above.
+## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented (archived — condensed)
+- ED-MB-0002 ratified (PR #73 merge = ratification, ED-1094 convention). Two bug fixes landed first
+  (validators.py ghost-cell construction; orchestration.py float-epsilon pool-floor). Root-cause audit
+  (RC-1 through RC-5) found composition-coupling defects in the pool/morale accounting layer explained
+  the H3-H6 Cannae-pattern gauge collapse, not the "two racing clocks" theory. Jordan ruled DG-3
+  ("intensive, per-troop, bottom-up" pool -- combat pool per cell as per troop type/quality/density,
+  not a flat subunit-level split) and DG-4 (per-subunit + whole-unit morale blend, wiring already-
+  existing agg_morale/derive_rout/cascade_morale_hit machinery, no new state). Both implemented
+  (new `pair_pool_contribution` in core/exchange.py; sibling-morale pull in core/state.py +
+  hierarchy/units.py). All 4 `bat.py` digest modes re-recorded (shared, non-gated code). DG-5
+  (racing-clocks) closed: a frozen-vs-wheeling-wings ablation showed byte-identical outcomes, refuting
+  the theory outright. **Honest result: draws GONE (100%→resolves decisively) but H3-H6/C4 now
+  OVERSHOOT their bands in the attacker's favor** instead of landing in them -- not a clean fix, a
+  change in failure mode. `tests/valoria` green throughout. Full detail: `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-05 — mass_battle: Cannae follow-up audit (ED-MB-0003) — 4 defects fixed, DG-1/DG-3 completed, DG-2 captured as workplan
 
@@ -459,3 +374,69 @@ regardless of outcome"), not oversold as "DG-2 helps."
 (§2.4's third bullet — blocked-retreat malus removal). The "collapse to routed" exit needed no new
 code (existing `derive_rout` fires regardless of `yielding`) and is therefore the only exit path
 this build actually has.
+
+## 2026-07-08 — mass_battle: pool abandons Command entirely (ED-MB-0006) — troop type/quality/numbers
+
+Jordan directive (verbatim): "consider abandoning combat pools being related to the commander, and
+instead being solely derived from the subunit troop type, quality and numbers." New
+`POOL_QUALITY_MODEL` (default ON, `config.py`): base pool = `eff_power x eff_size x
+POOL_QUALITY_SCALE` — `eff_power` is the troop-TYPE quality stat (`TROOP_TYPE_STATS`/§B.2, §A.1's
+own "Power... determines dice rolled"), `eff_size` is NUMBERS (troops/BLOCK_SIZE, continuously
+degrading with casualties), `POOL_QUALITY_SCALE=0.5` renormalizes the product to the historical
+T3-baseline magnitude (~8, matching the old command=4/full-cohesion baseline). Discipline/stamina
+penalties (`pen`/`stam_pen`) are unchanged. Command is absent from the pool entirely — it still
+governs morale, formation-hold speed, order-issuing, and `derive_rout`'s Command-0 condition.
+`COMMAND_SIGMA_ENABLED` branches remain selectable (`POOL_QUALITY_MODEL=0`) for A/B. Applied to
+both `core/exchange.py:subunit_combat_pool` and `hierarchy/units.py:Unit.base_combat_pool` (the
+pursuit/rout path) for consistency. Per Jordan's follow-up ("subunit power is the aggregate or
+derivation of cell power"): `eff_power x eff_size` is already exactly that aggregate whenever a
+subunit's cells share one troop type (true today — no per-cell troop_type exists yet); documented
+as such rather than adding a redundant cell loop, since `pair_pool_contribution`/
+`_pair_engaged_troops` already do the real per-cell redistribution for pair-scoped resolution and
+will pick up true per-cell power the moment that data exists, no change needed there.
+
+**Verification — all 4 `bat.py` digests re-recorded** (shared, non-gated code): `unit`
+d9ca7c7e→444afdd4 is now `d9ca7c7e`, `cell`→`88481bbd`, `unit_field`→`40649feb`, `cell_field`→
+`7b3b0a8d` (full hashes in `bat.py`). `tests/valoria`: 121 passed/57 skipped/1 xpassed/7 failed (6
+pre-existing `test_names.py` + the expected digest-drift failure now fixed by the re-record) — see
+`test_mass_battle_maneuvers.py`'s updated xfail note for the 1 xpass (unexpectedly passing once,
+not re-verified across seeds, marker left in place).
+
+**Gauge (multi, n=60): 6/20 → 7/20.** Newly passing: C4 (cavalry envelopment, WIN-OUT before,
+now 83.3% — inside its 75-95 band), C5 (shaken-line exploit, now 95%, inside 65-98). Newly
+failing/changed: **H4 (the actual Cannae matchup) flips from attacker WIN-OUT to attacker LOSING
+badly** (1.7% A / 65% B / 33% draws, was 96.6% A before) — a genuinely mixed, not uniformly
+positive, result: giving Size direct pool weight helps the SINGLE-large-subunit cavalry rows
+(bigger force = bigger pool, working as intended) but hurts the multi-subunit envelopment-army
+rows where the composed army's PER-ATOM numbers are now smaller than the single consolidated
+defender's. H1/C1/C3 stay OK-band with mild reshuffled percentages. Single-mode stays 2/20
+(structurally uninformative, unaffected).
+
+**Honest, disclosed residual — `lanchester_signature.py`'s law-exponent check.** Melee should
+conserve p≤1.4 (linear law); this was tested extensively before landing:
+- The PRE-EXISTING Command-driven baseline (`POOL_QUALITY_MODEL=0`, i.e. what was in production
+  before today) already **fails this exact check** (p≈1.55) — a previously-undetected gap,
+  confirmed unrelated to this session (reproduces identically on the pre-session commit). The
+  same baseline's `check_linear` (a 2:1 melee army should win decisively) ALSO fails today
+  (big_win=3.0%, i.e. the bigger army loses 97% of the time) — flagged, not chased: a quick trace
+  showed this specific check calls `run_battle` for a single 18-tick engagement, which usually
+  ends in a draw at this troop ratio (mild ~10-15% casualties either way), so the 3%/97% split may
+  be measuring decisive-outcome noise in a rarely-decisive sample rather than a structural defect;
+  not confirmed either way, left for whoever next touches this test.
+- Under the new model, `check_linear`'s win-rate check now correctly **PASSES** (100% big-army
+  win, cas_diff +53.7) — the qualitative "bigger army should win" property is restored. But the
+  stricter trajectory-fit exponent check gets WORSE (p≈2.50, not better) — swept extensively
+  (sqrt-of-size variant: p≈2.35, barely moved; uniform pool-magnitude scale in
+  {1, 0.5, 0.25, 0.2, 0.15, 0.1, 0.0625, 0.03}: plateaus at p≈1.65-1.7 below ~0.15, never reaching
+  ≤1.4). Confirmed NOT a Lanchester double-count (disabling `LANCHESTER_ENABLED` entirely leaves
+  the exponent completely unchanged at p=2.5) — the amplification is internal to the
+  pool→net-successes→`compute_degree` tier→`DAMAGE_BY_DEGREE` pipeline: larger absolute pools have
+  proportionally lower variance, so which discrete degree tier (Partial/Success/Overwhelming) each
+  side lands in becomes near-deterministic from the pool ratio alone, and that tier assignment
+  compounds the ratio rather than passing it through linearly. **Not silently patched** — a uniform
+  scale provably cannot fix it (it doesn't change the win/loss ratio the test measures), and fixing
+  it for real likely means revisiting `compute_degree`'s threshold logic or the degree/damage
+  mapping, not the pool formula alone. Flagged as an open follow-up in `designs/provincial/
+  mass_battle_v30.md`'s ED-MB-0006 note and here.
+
+Filed as ED-MB-0006 (supersedes ED-899's Command-only base for the pool term).
