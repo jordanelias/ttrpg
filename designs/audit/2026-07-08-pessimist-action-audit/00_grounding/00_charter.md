@@ -1,6 +1,6 @@
 # Charter — Pessimist Subtractive NERS over player-available actions
 
-## Status: PROPOSED (read-only audit, 2026-07-08) · Lane: IN (cross-cutting) · Anchor: ED-IN (allocate at filing)
+## Status: PROPOSED (read-only audit, 2026-07-08) · Lane: IN (cross-cutting) · Anchor: ED-IN-0027
 ## Method: 8 Sonnet lane dossiers → 1 Sonnet inverted critic → Fable-5 verdict+synthesis (opus effort:max fallback). Read-only: no canon, params, code, ledger, or handoff edits. This audit only proposes; nothing here is ratified until Jordan rules the docket.
 
 ---
