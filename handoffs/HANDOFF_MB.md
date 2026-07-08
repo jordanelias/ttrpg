@@ -123,3 +123,85 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   digests re-recorded; `tests/valoria` 88 passed/16 skipped(numpy)/1 xfailed. See
   `tests/coverage_matrix.md`'s 2026-07-05 entry + ED-MB-0003. **Next action: Jordan's ruling on the new
   partition-invariance question and DG-2's build sequencing — not further unprompted implementation.**
+
+- **ED-MB-0004 (2026-07-08): partition-invariance fix landed; RC-5 preliminary finding; DG-2 build
+  in progress.** Jordan ruled (AskUserQuestion): partition-invariance = **"genuine defect — fix it"**;
+  DG-2 = **"build it now"**; RC-5 triage = **start now**. Fixed `subunit_combat_pool`'s Command-driven
+  score being troop-count-independent per atom in a way that let >=2 of one side's atoms simultaneously,
+  fully engage the SAME single opposing atom (a pinning center + 2 wings converging on one Line/Arrowhead
+  defender — H3-H6/C4/C7's exact shape) each roll near-full base_pool, multiplying total dice by the
+  convergence-group size for identical total troops. New `core/exchange.py:_pair_engaged_troops` +
+  `orchestration.py:_convergence_scale`/`PC_CONVERGENCE_NORM` (default ON) renormalize any such group to
+  what ONE merged atom of the combined troops would contribute; verified live via direct trace (fires on
+  1446/1686 sampled ticks of an H3-style battle, max group size 3 — not a no-op). All 4 `bat.py` digests
+  re-recorded (shared, non-gated code). `tests/valoria`: 112 passed/57 skipped/1 xfailed/0 failed (the 7
+  `test_names.py` failures seen locally are PRE-EXISTING and unrelated — confirmed via `git stash`
+  bisection, an environment/fixture issue). **Honest result:** gauge re-run (multi, n=60) shows the fix
+  does NOT move H3-H6/C4's win/loss/draw split at all (bit-for-bit identical to the pre-fix baseline) —
+  the defect was real and is now closed, but was never the dominant lever for these rows' overshoot
+  (envelopment/charge-shock morale collapse dominates). Full 20-row gauge unchanged (single 2/20, multi
+  6/20). **RC-5 preliminary finding (diagnostic only):** a controlled A/B-slot-swap test on 3 pairs
+  (Arrowhead/Line, GappedLine/Line, GappedLine/Arrowhead) found an inconsistent slot-dependent asymmetry
+  that tracks neither a uniform side bias nor shape hierarchy (a true Line-Line mirror stays near-even,
+  17/13 of 30, ruling out a blanket engine-wide bug) — likely shared ingredient (not traced further):
+  `ANCHOR_MAP`'s per-shape deployment column (Line=9/Arrowhead=8/GappedLine=7) applied regardless of
+  which side carries that shape, so differently-shaped sides deploy at different absolute columns. Next
+  concrete lead for RC-5, not claimed solved; the other 6 rows (H7,H8,R1,R3,C1,C3,C5) untouched. Full
+  record: `tests/coverage_matrix.md`'s 2026-07-08 entry + ED-MB-0004 (now resolved).
+
+- **ED-MB-0005 (2026-07-08): DG-2 fighting-withdrawal/yield mechanic — commanded-entry slice built.**
+  Per Jordan's "build it now" ruling, built exactly the proposal doc's own §4 step-1 scope: `Subunit.
+  yielding`/`yield_active` (discipline-gated, melee-only), a `'yield'` order (composes with existing
+  Order/check_orders — `yielding` added to `_ORDER_SAFE_FIELDS`), movement (`_yield_goal`, reuses
+  `_kite_goal`'s flee vector, capped 1 cell/tick, node/field path only — same scope as envelop/sweep),
+  facing-lock (fires regardless of `PC_FACING_MODEL`, the mechanically load-bearing "faces the enemy,
+  unlike rout" distinction), combat-pool malus (`YIELD_POOL_MULT`, reuses `PC_SHOCK_HOLD_BRACE`=0.35),
+  and anti-abuse (no volleying while yielding). Both new magnitudes (`D_YIELD=3`, `YIELD_POOL_MULT`)
+  flagged `[CALIBRATED-DEBT]`, not independently derived, per the doc's own §5. All 4 `bat.py` digests
+  confirmed BYTE-IDENTICAL (genuinely inert-by-default, no re-record needed). New
+  `tests/valoria/test_mass_battle_yield.py` (9 tests, all green); full `tests/valoria` suite green, no
+  regressions (123 passed/56 skipped/1 xfailed/6 pre-existing-unrelated `test_names.py` failures).
+  **NOT built this pass (disclosed):** emergent auto-entry, rally exit, pocket exit — only the free
+  "collapse to routed" exit exists (needed no new code).
+  **Honest measurement:** center-yields-from-tick-0 (n=20, node path) raises center hp retained
+  35.8%→40.6% (the mechanism works) but collapses the attacking army's win rate 70%→0% — an
+  unconditional, whole-battle yield trades far more offense than it recoups. Not a broken mechanic;
+  Cannae's yield was TIMED, this pass didn't build/measure timed entry — flagged as the natural next
+  experiment. Full record: `tests/coverage_matrix.md`'s second 2026-07-08 entry + ED-MB-0005.
+  **Next actions for whoever continues this lane:** (1) a timed/conditional yield-entry experiment
+  (Order `tick:N` trigger, or emergent entry keyed to encirclement progress) to see whether a properly
+  time-boxed yield recovers the army-level win-rate cost while keeping the center-survival benefit;
+  (2) RC-5's other 6 untriaged rows (H7,H8,R1,R3,C1,C3,C5) plus tracing the ANCHOR_MAP deployment-column
+  asymmetry lead to a root cause; (3) DG-1's composition question and the still-live envelopment-shock
+  magnitude remain the larger unaddressed levers for H3-H6's overshoot (the partition-invariance fix
+  closed a real defect but was never the dominant one there).
+
+- **ED-MB-0006 (2026-07-08): combat pool abandons Command entirely — troop type/quality/numbers.**
+  Per Jordan's direct instruction ("consider abandoning combat pools being related to the commander,
+  and instead being solely derived from the subunit troop type, quality and numbers"), new
+  `POOL_QUALITY_MODEL` (default ON): base pool = `eff_power × eff_size × POOL_QUALITY_SCALE` —
+  troop-TYPE quality (`TROOP_TYPE_STATS`/§B.2) × NUMBERS (troops/BLOCK_SIZE), no Command anywhere.
+  `POOL_QUALITY_SCALE=0.5` renormalizes to the historical baseline magnitude. Discipline/stamina
+  penalties unchanged. Command still governs morale/formation-speed/orders/`derive_rout`, just not
+  the dice pool. Applied consistently to both `subunit_combat_pool` and `Unit.base_combat_pool`
+  (pursuit path). `COMMAND_SIGMA_ENABLED` branches remain selectable (`POOL_QUALITY_MODEL=0`) for
+  A/B. All 4 `bat.py` digests re-recorded; `tests/valoria` 121 passed/57 skipped/1 xpassed (the
+  usual pre-existing `test_names.py` failures aside).
+  **Honest, mixed gauge result:** 6/20→7/20 (multi). C4/C5 newly pass (bigger-force cavalry rows
+  correctly reward numbers now); **H4 (actual Cannae) flips from attacker-WIN-OUT to attacker
+  LOSING badly** (1.7%/65%/33% draws) — composed-army rows lose out because their PER-ATOM numbers
+  are now smaller than the single consolidated defender's, an real emergent trade-off, not a bug.
+  **Open, disclosed residual:** `lanchester_signature.py`'s law-exponent check (melee should conserve
+  p≤1.4) fails under BOTH models — pre-existing baseline already measured p≈1.55 (previously
+  undetected, unrelated to this change) and a separate apparent "2:1 army loses 97% of the time"
+  reading that a quick trace suggests may be test-methodology noise (single 18-tick `run_battle`
+  call rarely resolves decisively at this ratio), not independently confirmed. The new model measures
+  p≈2.50, tested extensively (sqrt-numbers variant, 8-point scale sweep) without finding a scale that
+  reaches ≤1.4 — plateaus at p≈1.65-1.7, confirmed NOT a Lanchester double-count (disabling
+  `LANCHESTER_ENABLED` doesn't change the exponent at all) — the amplification is internal to how
+  larger absolute pools reduce variance and make `compute_degree`'s discrete tier assignment
+  near-deterministic from the pool ratio alone. **Next action: this needs the degree/damage-tier
+  discretization or the Lanchester coefficient's own interaction reconsidered — not another pool-
+  formula scale tweak (provably can't fix a ratio-sensitive test).** Full record: `tests/
+  coverage_matrix.md`'s third 2026-07-08 entry; canon note in `designs/provincial/mass_battle_v30.md`
+  §A.1 (ED-MB-0006).

@@ -47,7 +47,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
     `handoffs/HANDOFF_SC.md` — reuses the existing faction-unique action slot
     (`_try_faction_unique`), so every parliamentary-eligible faction can now propose a Censure.
     Surfaced a genuine cross-lane NEEDS-JORDAN question (Mandate-stacking on a total-victory pass)
-    filed as **ED-SC-0013** — see that handoff.
+    filed as **ED-SC-0014** — see that handoff.
 - **ED-FA-0006 (RESOLVED 2026-07-08) — pessimist-audit FA verdicts EXECUTED** (FA-lane follow-up to
   ED-IN-0027). `params/bg/core.md`: Diplomacy-between-players DISTILLED → Treaty §3.3 Ph2; Thread
   Operation single-sourced to the TW lane (Pontifex/Weaver slot-eligibility kept); Spy given its
@@ -59,6 +59,8 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   first-pass mapping recorded, ambiguous bucket boundaries flagged for Jordan (not fabricated).
   **Feeds ED-FA-0002 (below):** the da.* half of that home-doc task is now scoped down to "add the
   per-verb tag column + rule the flagged boundaries," not "author a new system." No sim edits.
+  **Decision packet available** for the three boundaries:
+  `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA_da_bucket_boundaries.md`.
 
 - **ED-FA-0002 (open) — author the strategic-turn surface / `domain_actions` home doc.** Filed
   2026-07-05 from the ratified edge-playability audit (PR #81, "Ratify all"; finding EP-2): the
@@ -83,7 +85,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   Treasury accounting (ED-FA-0007, still open).
 - **Author FA-6(c) Sack** (ED-FA-0012, needs_jordan) once Jordan rules the atrocity-content /
   W-for-legitimacy exchange-rate tone call.
-- **Jordan ruling needed: ED-SC-0013** (Parliamentary total-victory Mandate stacking) — surfaced
+- **Jordan ruling needed: ED-SC-0014** (Parliamentary total-victory Mandate stacking) — surfaced
   by this session's Censure build; see `handoffs/HANDOFF_SC.md`.
 - **`ci_political_v30` read-routing bug (LB-24, tracked as an `IN`-lane tooling item in
   `handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked

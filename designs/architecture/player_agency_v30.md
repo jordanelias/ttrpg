@@ -129,7 +129,7 @@ At the start of each season, the player's faction leader evaluates the faction's
 - **Player's skills:** Investigation duties for high-Cognition characters, diplomatic duties for high-Charisma characters, Thread duties for practitioners.
 - **Faction urgency:** Survival-tier priorities (Stability ≤ 2) generate urgent defensive Duties. Expansion-tier priorities generate offensive Duties.
 
-**Standing 0 carve-out (PP-661):** Duty assignment requires Standing ≥ 1. At Standing 0 (Petitioner), the player receives the **Initiation Duty** only — a faction-specific scene arc specified in faction_politics_expanded_v1 §1 that must be completed before standard Duty generation begins. The Initiation Duty is a fixed narrative gate, not drawn from the faction AI priority stack. Successful completion transitions the player to Standing 1 and activates the Duty system as defined below. See throughline_resolutions_v1 §2 for full reconciliation.
+**Standing 0 carve-out (PP-661):** Duty assignment requires Standing ≥ 1. At Standing 0 (Petitioner), the player receives the **Initiation Duty** only — a faction-specific scene arc specified in faction_politics_v30 §1 that must be completed before standard Duty generation begins. The Initiation Duty is a fixed narrative gate, not drawn from the faction AI priority stack. Successful completion transitions the player to Standing 1 and activates the Duty system as defined below. See throughline_resolutions_v1 §2 for full reconciliation.
 
 ### 3.3 Duty Types
 
@@ -146,7 +146,7 @@ At the start of each season, the player's faction leader evaluates the faction's
 
 ### 3.4 Duty Completion
 
-**Success:** Standing +1 (faction-specific track, 0–7 per faction_politics_expanded_v1 §1). Rank thresholds unlock (PP-661 revision):
+**Success:** Standing +1 (faction-specific track, 0–7 per faction_politics_v30 §1). Rank thresholds unlock (PP-661 revision):
 - Standing 2 — faction intelligence access (rival stats, territory conditions)
 - Standing 3 — council observation, specialty branch selection, Formal Recognition Event required
 - Standing 4 — NPC officer sub-commands, +1 scene action
@@ -362,7 +362,7 @@ The player cannot prevent the world from moving. They can only choose where to b
 
 ### 5.1 Stature Levels (revised 2026-04-17, PP-660)
 
-The player's relationship to the faction layer changes as they accumulate Standing. The Standing ladder runs 0–7, with faction-specific titles specified in faction_politics_expanded_v1.md §1:
+The player's relationship to the faction layer changes as they accumulate Standing. The Standing ladder runs 0–7, with faction-specific titles specified in faction_politics_v30.md §1:
 
 | Standing | Stature | Faction Relationship |
 |----------|---------|---------------------|
@@ -375,19 +375,19 @@ The player's relationship to the faction layer changes as they accumulate Standi
 | 6 | Prince/Chancellor/Senior-Jarl/Cardinal | Inner-circle voting member. May initiate Ministry reforms. Two scene actions per season. Nomination authority for junior ranks. |
 | 7 | Regent-Designate | Succession-eligible. May act in leader's name in their absence (with Legitimacy Token damage per POW-03). At this level, the player can initiate a leadership challenge OR succeed on leader vacancy. |
 
-Full rank specification (titles, initiation gates, hall tier, livery, mentor, demotion) per faction in faction_politics_expanded_v1.md §1.
+Full rank specification (titles, initiation gates, hall tier, livery, mentor, demotion) per faction in faction_politics_v30.md §1.
 
 ### 5.2 Leadership Acquisition
 
 When a faction leader is removed (Almud overthrown by Coup, Himlensendt's Crisis of Faith, Baralta's succession, Vaynard's death), the game evaluates succession:
 
 - If the player is Standing 7 in that faction: they are offered leadership (per the Regent-Designate role). Accepting transforms them from operative to leader — they now issue Domain Actions directly, play the faction's card hand, and lose the Duty system (replaced by faction AI evaluation as their "advisor").
-- If the player is Standing 5–6: succession contest per SUC-01 through SUC-03 (see faction_politics_expanded_v1.md §2). Inner-circle support determines outcome.
+- If the player is Standing 5–6: succession contest per SUC-01 through SUC-03 (see faction_politics_v30.md, section correspondence not verified — its Part 2 is Sub-Office Rank Ladders, not succession; the succession-contest material now appears to live in Part 1's rank tables and Part 6's Baralta-outcome cascades instead). <!-- [flag: section correspondence not verified, ED-IN-0016] --> Inner-circle support determines outcome.
 - If the player is below Standing 5: succession follows the canonical NPC rules (Torben inherits Crown, Cardinals contend for Church, Maret Uln may inherit Varfell, Baralta's succession under Option A/B per baralta_crown_claim_v30).
 
 Leadership can also be seized: a Standing 4+ character can call a leadership challenge at any time via social contest against the current leader, with the faction council as expert adjudicator (Cognition-based). Success: player becomes faction leader. Failure: Standing drops to 2, Disposition with deposed leader drops to −4.
 
-[EDITORIAL: ED-634 — Ladder rewrite per faction_politics_expanded_v1.md §1. Faction-specific titles and full progression gates specified there.]
+[EDITORIAL: ED-634 — Ladder rewrite per faction_politics_v30.md §1. Faction-specific titles and full progression gates specified there.]
 
 ### 5.3 Staying Independent
 
@@ -472,12 +472,12 @@ The scene action budget is the game's primary pacing lever. It determines how mu
 Character creation steps (revised PP-661 for caste + Initiation integration):
 
 1. **Write 3 Convictions** (per §2.2). One should relate to a personal goal, one to a faction concern, one to a relationship or NPC.
-2. **Choose caste background** (new PP-661 step): Northern Einhir / Central Einhir / Southern Einhir. See faction_politics_expanded_v1 §3.1 for caste definitions.
+2. **Choose caste background** (new PP-661 step): Northern Einhir / Central Einhir / Southern Einhir. See faction_politics_v30 §3.1 for caste definitions.
 3. **Review Viability Matrix** (new PP-661 display): 4-faction × 3-caste × specialty-branch grid showing which combinations play at Favored (★★★), Standard (★★), Gated (★), or Closed (✕) difficulty. See throughline_resolutions_v1 §1.3 for the canonical matrix.
 4. **Choose faction alignment** (or independent) — with the Viability Matrix visible.
 5. **If faction member:** the specialty branch (where applicable — Crown, Hafenmark, Varfell, Church) is selected at Standing 3 via in-game Formal Recognition Event, not at character creation. At character creation the player may only *indicate* intent for GM use.
 6. **Derived: Starting Standing = 0 (Petitioner)** for faction members; independent characters have no Standing. *(Change from prior spec which derived Standing = 1 — PP-660 introduced the Standing 0 Petitioner state with Initiation Duty; character creation now aligns.)*
-7. **Display Initiation Duty preview** — the first-season scene the faction-aligned character will play. See faction_politics_expanded_v1 §1 for per-faction Initiation Duties.
+7. **Display Initiation Duty preview** — the first-season scene the faction-aligned character will play. See faction_politics_v30 §1 for per-faction Initiation Duties.
 
 **Advisory text (canonical, display to players):**
 

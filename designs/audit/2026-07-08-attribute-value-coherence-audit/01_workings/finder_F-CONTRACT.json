@@ -1,0 +1,342 @@
+{
+    "family": "F-CONTRACT (Contracts + Armature)",
+    "items": [
+        {
+            "name": "Mandate",
+            "kind_guess": "faction_stat",
+            "surface": "references/module_contracts.yaml:87, 598-601",
+            "detail": "Derived faction stat: q_s = 0.5*L+0.5*PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating per Lesson-5 bound. Range 0-7.",
+            "aliases_or_variants": [
+                "faction Mandate"
+            ],
+            "consumers_seen": [
+                "settlement_layer derivation:598",
+                "victory gate g_diss:685"
+            ],
+            "key_bindings_seen": [
+                "echo_armature \u00a72.1 Domain Echo Debate row",
+                "faction_state consumes"
+            ],
+            "notes": "F1 guard: write-protected, derives only. Cross-module output from settlement_layer. Loop with settlement_layer (Mandate\u2194L/PS feedback, line 562-563, damper coefficient 0.6/season)."
+        },
+        {
+            "name": "Prosperity / Defense / Order",
+            "kind_guess": "settlement_stat",
+            "surface": "references/module_contracts.yaml:557",
+            "detail": "Three settlement stats, 0-5 per settlement, writable: true, track bucket. Canonical settlement_layer_v30 \u00a71.3.",
+            "aliases_or_variants": [
+                "Prosperity",
+                "Defense",
+                "Order"
+            ],
+            "consumers_seen": [
+                "settlement_layer derivations:586-597",
+                "gates g_ord0, g_def0",
+                "Mandate formula (Prosperity term)"
+            ],
+            "key_bindings_seen": [],
+            "notes": "Three distinct stats embedded in one contracted name. Gate g_ord0 triggers on Order=0; g_def0 on Defense=0."
+        },
+        {
+            "name": "Local Economy / Garrison Strength / Public Order",
+            "kind_guess": "derived_value",
+            "surface": "references/module_contracts.yaml:558, 586-597",
+            "detail": "Three derived values: Local Economy = Prosperity\u00d750; Garrison Strength = Defense\u00d720 + Fort\u00d730; Public Order = Order\u00d720 (riots below 0). All writable: false.",
+            "aliases_or_variants": [
+                "Local Economy",
+                "Garrison Strength",
+                "Public Order"
+            ],
+            "consumers_seen": [
+                "gate g_dv0:575-578"
+            ],
+            "key_bindings_seen": [],
+            "notes": "Three separate derived values with three separate formulas. Gate g_dv0 'derived value = 0 held through Accounting \u2192 stat -1' but doesn't specify which three or if all three must be 0."
+        },
+        {
+            "name": "conviction scars",
+            "kind_guess": "practitioner_stat",
+            "surface": "references/module_contracts.yaml:225, gates g_scar2:229, g_scar3:234",
+            "detail": "Per-Conviction scar count, indelible; writable: true, clock bucket. conviction_track_v1 \u00a72 canonical.",
+            "aliases_or_variants": [
+                "Scars",
+                "conviction scar"
+            ],
+            "consumers_seen": [
+                "piety_track module gates g_scar2/g_scar3",
+                "state.scar_acquired Key emits"
+            ],
+            "key_bindings_seen": [
+                "state.scar_acquired (required payload: npc_id, conviction, scar_count_before/after, triggering_event_key)"
+            ],
+            "notes": "\u00a71 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717) per line 225 note; \u00a72/\u00a73 pending PP-718. THREE-WAY collision: personal conviction_track_v1 system shares name 'Piety Track' with territorial CV system (conviction_track_v30 \u00a71). gap_notes line 240."
+        },
+        {
+            "name": "IP (Institutional Pressure)",
+            "kind_guess": "clock",
+            "surface": "references/module_contracts.yaml:516, gates g_ip100:521, g_ip85:526, g_ip80:531, g_ipfall:536",
+            "detail": "0-100 clock [PROVISIONAL ED-793]; writable: true, clock bucket. peninsular_strain_v30 \u00a74 generation.",
+            "aliases_or_variants": [
+                "Institutional Pressure"
+            ],
+            "consumers_seen": [
+                "victory module gates (reader of IP)"
+            ],
+            "key_bindings_seen": [],
+            "notes": "[PROVISIONAL ED-793 start value]. Victory gates reference specific thresholds: 100\u2192Phase 1 Occupation, >=85\u2192Phase 2, >=80\u2192Phase 3, <85/<75\u2192stall/abandon per victory_v30 \u00a75.2."
+        },
+        {
+            "name": "Health",
+            "kind_guess": "derived_value",
+            "surface": "references/module_contracts.yaml:819, 826-829",
+            "detail": "WI*(MW+1)+0.25*Str*End - cumulative_damage, where WI=round(End+4+0.4*Spi). Writable: false, derived_value (F1 guard).",
+            "aliases_or_variants": [],
+            "consumers_seen": [
+                "personal_combat resolver",
+                "scene.combat_hit carries health stat_delta"
+            ],
+            "key_bindings_seen": [
+                "scene.combat_hit stat_deltas route to cumulative_damage substrate (F1 rule)"
+            ],
+            "notes": "Formula at line 828 references Endurance, Spirit, Strength, Spi (Spirit abbreviation) but these are character attributes NOT defined in personal_combat module's state list. WI and MW undefined as state entries. Export-drift: attributes come from external character model, not internal combat state."
+        },
+        {
+            "name": "Legitimacy (L) / Popular Support (PS)",
+            "kind_guess": "settlement_stat",
+            "surface": "references/module_contracts.yaml:559, derivations 598-605",
+            "detail": "Per-settlement tracks, 0-7 range (Jordan ruling 2026-05-30); writable: true, track bucket. \u00a71.8 LPS-2e canonical.",
+            "aliases_or_variants": [
+                "L",
+                "PS",
+                "L_s",
+                "PS_s"
+            ],
+            "consumers_seen": [
+                "settlement_layer derivation (inputs L_s/PS_s)",
+                "settlement_layer loop Mandate\u2194L/PS feedback (line 562)"
+            ],
+            "key_bindings_seen": [],
+            "notes": "Referenced as 'L' and 'PS' in prose, 'L_s' and 'PS_s' in derivation formula (lines 599-600). Abbreviation-vs-full-name SYNONYM split."
+        },
+        {
+            "name": "CI (Church Influence)",
+            "kind_guess": "clock",
+            "surface": "references/module_contracts.yaml:255 (territorial_piety), 644 (ci_political)",
+            "detail": "0-100 territorial clock, writable: true in territorial_piety, writable: false in ci_political. conviction_track_v30 \u00a73 generation.",
+            "aliases_or_variants": [
+                "Church Influence"
+            ],
+            "consumers_seen": [
+                "territorial_piety module (writer)",
+                "ci_political module (reader)",
+                "victory gates g_ci100, ci_political gates g_ci100/g_cicap"
+            ],
+            "key_bindings_seen": [],
+            "notes": "TWO-MODULE reference to same quantity: owned by territorial_piety (line 255, writable), read by ci_political (line 644, writable: false). Correctly scoped but potential desynchronization if CI generation and consumption aren't synchronized at accounting boundary."
+        },
+        {
+            "name": "cumulative_drift",
+            "kind_guess": "practitioner_stat",
+            "surface": "references/module_contracts.yaml:169-173 (gate g_drift only)",
+            "detail": "Gate trigger: cumulative_drift > 0.5 \u2192 scene.gossip emitted. No state entry declaration.",
+            "aliases_or_variants": [
+                "drift"
+            ],
+            "consumers_seen": [
+                "npc_behavior gate g_drift only"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: gate references cumulative_drift but it's never declared as a state entry in npc_behavior (line 156-159). Calculation rule unknown. Appears only as gate condition, not in beliefs/opinions or concerns state declarations."
+        },
+        {
+            "name": "Fort Level",
+            "kind_guess": "settlement_stat",
+            "surface": "references/module_contracts.yaml:591-592 (derivation formula only)",
+            "detail": "Appears in Garrison Strength formula: Defense \u00d7 20 + Fort \u00d7 30. Never declared as state entry.",
+            "aliases_or_variants": [
+                "Fort"
+            ],
+            "consumers_seen": [
+                "settlement_layer Garrison Strength derivation"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: defined only in formula at line 591-592, never listed as state entry for any module. Origin module unknown. No gate references it."
+        },
+        {
+            "name": "MS (unowned clock read by victory)",
+            "kind_guess": "clock",
+            "surface": "references/module_contracts.yaml:671 (gap_notes, victory gates g_ms0/g_ms5/g_msrec)",
+            "detail": "Unowned clock read by victory module. Gates reference MS=0 (Post-Calamity), MS<=5 (Second Calamity), MS restored to 20 (recovery).",
+            "aliases_or_variants": [
+                "MS"
+            ],
+            "consumers_seen": [
+                "victory gates only (no emitter)"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED OWNERSHIP: gap_notes line 671 explicitly \u2014 'MS (unowned clock \u2014 no module in contracts)'. Never emitted by any module listed in contracts, only read by victory_v30 \u00a75.1 as a world-state reader."
+        },
+        {
+            "name": "WI (Wound Index)",
+            "kind_guess": "derived_value",
+            "surface": "references/module_contracts.yaml:819-820 (formula comment only)",
+            "detail": "Intermediate calculation: WI = round(End+4+0.4*Spi). Used in Health and Wounds formulas but never declared as state entry.",
+            "aliases_or_variants": [
+                "Wound Index"
+            ],
+            "consumers_seen": [
+                "Health derivation (line 828)",
+                "Wounds derivation (line 821)"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: defined only in comment at line 820, not as state entry. Intermediate calculation that appears in formulas for Health (line 828: WI*(MW+1)+...) and Wounds (line 821: min(floor(cum/WI), MW+1))."
+        },
+        {
+            "name": "MW (Max Wounds)",
+            "kind_guess": "practitioner_stat",
+            "surface": "references/module_contracts.yaml:821 (formula only)",
+            "detail": "Appears in Wounds formula: min(floor(cum/WI), MW+1). Never declared as state entry. Indirectly in Health formula (line 828: WI*(MW+1)+...).",
+            "aliases_or_variants": [
+                "Max Wounds"
+            ],
+            "consumers_seen": [
+                "Wounds derivation:821",
+                "Health derivation:828"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: appears in formula at line 821-828 but never declared as state entry or derivation. Origin and calculation rule unknown."
+        },
+        {
+            "name": "FacilityTier / base(Type) / W_s (settlement weight)",
+            "kind_guess": "derived_value",
+            "surface": "references/module_contracts.yaml:600 (Mandate derivation formula only)",
+            "detail": "Appear in Mandate formula W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7). Never declared as state entries.",
+            "aliases_or_variants": [
+                "FacilityTier",
+                "base",
+                "Type",
+                "settlement weight"
+            ],
+            "consumers_seen": [
+                "settlement_layer Mandate derivation only"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: three quantities appear only in Mandate formula (line 600) as intermediate calculations, never as owned state entries. Origin and calculation rules unknown. base(Type) is a function call notation (unclear what 'Type' refers to \u2014 settlement type metadata?)."
+        },
+        {
+            "name": "Resonant Style",
+            "kind_guess": "practitioner_stat",
+            "surface": "references/module_contracts.yaml:231 (gate g_scar2 only)",
+            "detail": "Gate g_scar2: 'Resonant Style X exposed; arc transition if X was top primary'. Never declared as state entry.",
+            "aliases_or_variants": [
+                "Resonance_style"
+            ],
+            "consumers_seen": [
+                "piety_track gate g_scar2 only"
+            ],
+            "key_bindings_seen": [],
+            "notes": "UNREGISTERED: gate g_scar2 (line 231) triggers on Scars=2 but 'Resonant Style exposure' is never defined as a state entry or emission. Related to ED-IN-0025 (resonance_style retirement correction, NEEDS-JORDAN)."
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-C-001",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "Three-way name collision on 'Piety Track': personal conviction scar system (designs/personal/conviction_track_v1.md) and territorial Piety Value/CV system (designs/scene/conviction_track_v30.md) share the same name, creating ambiguity in gap_notes and cross-references.",
+            "evidence": "references/module_contracts.yaml:225 (piety_track module, 'Piety Track'), :254 (territorial_piety module references 'CV'), gap_notes:240 'NAME COLLISION (3-way)'. Both systems present in module_contracts with different semantics (personal scar vs territory CV)."
+        },
+        {
+            "id": "F-C-002",
+            "severity": "P1",
+            "kind": "dead",
+            "calibration": "NEW",
+            "claim": "MS (Morale/Strain) clock is read by victory module but never emitted by any module listed in module_contracts.yaml; gap_notes explicitly flag it as unowned.",
+            "evidence": "references/module_contracts.yaml:671 gap_notes 'MS (unowned clock \u2014 no module in contracts)'. Victory module gates g_ms0:667, g_ms5:673, g_msrec:678 all read MS but victory is state_reader (consumes: []). No module in contracts lists MS in emits:."
+        },
+        {
+            "id": "F-C-003",
+            "severity": "P1",
+            "kind": "key-binding-gap",
+            "calibration": "NEW",
+            "claim": "Health derivation formula in personal_combat (line 828) references character attributes (Endurance, Spirit, Strength, Spi) that are NOT defined in personal_combat's own state list and are not in any module_contracts entry.",
+            "evidence": "references/module_contracts.yaml:828 'formula: round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance)'. personal_combat state entries (lines 818-824) list Health, cumulative_damage, Wounds, Stamina, Initiative, Poise but NOT Endurance, Spirit, Strength. These must come from a character attribute model outside this contracts file."
+        },
+        {
+            "id": "F-C-004",
+            "severity": "P1",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "cumulative_drift is referenced only in npc_behavior gate g_drift (line 170) but is never declared as a state entry; calculation rule is unknown.",
+            "evidence": "references/module_contracts.yaml:169-173 gate g_drift 'when: cumulative_drift > 0.5, then: scene.gossip emitted'. npc_behavior state entries (lines 155-159) list beliefs/opinions, concerns, projects, arc state but NOT cumulative_drift. No derivation or formula defines it."
+        },
+        {
+            "id": "F-C-005",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Settlement Mandate derivation formula (line 600) references four quantities not declared as state entries: FacilityTier, base(Type), W_s (settlement weight), and an implicit 'q_s'.",
+            "evidence": "references/module_contracts.yaml:598-601 derivation 'faction Mandate' formula: 'W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7)'. No state entries list FacilityTier, base(Type), or W_s."
+        },
+        {
+            "id": "F-C-006",
+            "severity": "P2",
+            "kind": "export-drift",
+            "calibration": "NEW",
+            "claim": "personal_combat module says resolver is 'd_sigma' with pool formula 'max(5,History+6)' but 'History' is not in the 9-attribute roster documented in descriptor_registry or key_substrate.",
+            "evidence": "references/module_contracts.yaml:810 'resolver: d_sigma' with comment 'pool=max(5,History+6)'. CURRENT.md and descriptor_registry.yaml document 9 personal attributes (Agility, Cunning, Spirit, Strength, Endurance, Will, Conviction, Resonance, ?) but History is not listed."
+        },
+        {
+            "id": "F-C-007",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "Fort Level appears in settlement Garrison Strength derivation formula (line 591-592) but is never declared as a state entry for any module.",
+            "evidence": "references/module_contracts.yaml:591-592 derivation 'Garrison Strength' formula: 'Defense \u00d7 20 + Fort \u00d7 30'. settlement_layer state entries (lines 557-560) list Prosperity/Defense/Order, Local Economy/Garrison/Public Order, Legitimacy/PS, Accord but NOT Fort Level."
+        },
+        {
+            "id": "F-C-008",
+            "severity": "P2",
+            "kind": "synonym",
+            "calibration": "NEW",
+            "claim": "Legitimacy/Popular Support are referenced with three name variants in formulas: 'L' and 'PS' in prose, 'L_s' and 'PS_s' in derivation formulas (lines 599-600). Abbreviation-vs-full-name SYNONYM split.",
+            "evidence": "references/module_contracts.yaml:559 state entry 'Legitimacy (L) / Popular Support (PS)', line 599 derivation input 'L_s', line 600 'q_s = 0.5L+0.5PS'. Same quantities referenced as L/PS and L_s/PS_s."
+        },
+        {
+            "id": "F-C-009",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "NEW",
+            "claim": "WI (Wound Index) and MW (Max Wounds) are referenced in personal_combat formulas but are never declared as state entries or derivations.",
+            "evidence": "references/module_contracts.yaml:819-820 comment 'WI=round(End+4+0.4*Spi)', formula lines 821 'min(floor(cum/WI), MW+1)', line 828 'WI*(MW+1)+0.25*Str*End'. No state entries list WI or MW."
+        },
+        {
+            "id": "F-C-010",
+            "severity": "P2",
+            "kind": "unregistered",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "Resonant Style is mentioned in piety_track gate g_scar2 (line 231) as an exposed state ('Resonant Style X exposed') but is never declared as a state entry or emission.",
+            "evidence": "references/module_contracts.yaml:231 gate g_scar2 'then: Resonant Style X exposed; arc transition if X was top primary'. piety_track state entries (line 225) list only conviction scars, no Resonant Style. Related to ED-IN-0025 (resonance_style retirement correction, NEEDS-JORDAN).",
+            "known_ref": "ED-IN-0025"
+        },
+        {
+            "id": "F-C-011",
+            "severity": "P3",
+            "kind": "stale",
+            "calibration": "KNOWN-TRACKED",
+            "claim": "piety_track conviction_track_v1 (line 225) carries note that \u00a71 taxonomy is SUPERSEDED by conviction_taxonomy_v30 (PP-717), yet the module still references that superseded taxonomy in its gap_notes.",
+            "evidence": "references/module_contracts.yaml:225 note '\u00a71 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717); \u00a72/\u00a73 canonical pending PP-718'. The module documentation may be pointing readers to outdated taxonomy definitions.",
+            "known_ref": "PP-717"
+        },
+        {
+            "id": "F-C-012",
+            "severity": "P3",
+            "kind": "other",
+            "calibration": "NEW",
+            "claim": "CI (Church Influence) is read by ci_political module (writable: false) but owned by territorial_piety module (writable: true). Ownership spans two modules and could desynchronize if accounting phases aren't ordered correctly.",
+            "evidence": "references/module_contracts.yaml:255 territorial_piety 'CI (Church Influence) writable: true', line 644 ci_political 'CI (Church Influence) writable: false, reads CI for political effects'. Loop/cross-module reference noted."
+        }
+    ],
+    "coverage_notes": "SWEPT SURFACES (complete): references/module_contracts.yaml all 27 modules (lines 1-900), every state/derivations/gates entry, all emits/consumes edges. designs/architecture/key_echo_armature_v1.md \u00a71-\u00a75 (seam contracts, Echo Matrix, registry deltas, conformance binding, fork docket + ruling log). designs/architecture/key_type_registry_v30.md type format \u00a71, all seven families (scene_event, da_outcome, mechanical_event, state_transition, environmental, scene_outcome, system_meta) with payload field requirements. designs/architecture/key_substrate_v30.md \u00a71-\u00a72.5 (Key schema, universal fields, Conviction axis-space).\n\nDELIBERATELY SKIPPED (out of F-CONTRACT scope): params/*.md files (prose tables, F-PARAMS family). sim/ simulation code (oracle verification, F-ORACLE family). designs/scene/combat_engine_v1/ and other subsystem design docs (rich detail but not contracts binding). references/descriptor_registry.yaml (attribute roster, F-DESCRIPTOR family). references/values_master.yaml (stale/wrong, F-VALUES family). Godot .gd and .tres files (port surface, F-GODOT family).\n\nKNOWN-TRACKED OVERLAPS ALREADY CITED (not re-litigated): ED-IN-0008 (descriptor_registry naming), ED-1051 (module_contracts doc:null gaps), ED-1052 (typed engine-params scope), ED-IN-0025 (resonance_style retirement), ED-SC-0008 (social_contest refresh), ED-PC-0003 (sigma band-discipline, ruled in ED-IN-0026 5.12).\n\nHONEST GAPS IN THIS SWEEP: (1) Payload field definitions in key_type_registry \u00a72-\u00a76 were read but not exhaustively cross-checked against module state entries \u2014 full matrix (48 types \u00d7 required_payload_fields) not built (F-PAYLOAD family). (2) No verification that gate conditions are implementable (e.g., g_dv0 'derived value = 0 held through Accounting' \u2014 which of three derived values?) \u2014 gate-logic audit is F-GATES family. (3) Abbreviation-to-canonical mapping (Spi \u2192 Spirit) noted but not systematized. (4) Three modules with doc: null (engine_clock, scene_slate, game_director, scenario_authoring, faction_politics, npc_memory) were extracted from registry but state/derivations/gates are ASSUMPTION-grade \u2014 not re-verified against external design docs."
+}

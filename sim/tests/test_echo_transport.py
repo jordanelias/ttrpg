@@ -1,39 +1,36 @@
 """
 sim/tests/test_echo_transport.py — echo-transport plumbing oracle (ED-IN-0028, PR-2a)
 
-Guards the flag-gated Key & Echo transport wired in this slice (key_echo_armature_v1.md §6.2):
-  1. FLAG-OFF byte-exactness: ECHO_TRANSPORT off leaves the seed-42 F7 win-share golden and
-     the seed-0-adjacent campaign untouched, and attaches no substrate (empty key_log_hash).
-  2. FLAG-ON for the pinned seed-42/n=8 F7 batch emits no echo Keys (win-share unchanged, no
-     keys emitted) — but, as of ED-SC-0006/ED-SC-0007 (2026-07-08), this is no longer
-     architectural inertness: the SC context-derivation bridge and the emergency_council
-     echo-mapping have both landed (scene_dispatch.py). As of ED-FA-0008/0011/0012 (2026-07-08)
-     the reconditioned FA action mix DOES now cross Stability Crisis within this batch (F7
-     scenes_resolved is non-zero — test_f7_smoke_oracle.py), yet the seed-42 single-campaign
-     probe below still emits zero echo Keys (that particular campaign's resolutions don't map to
-     an echo, and the batch win-share is unmoved by the flag). See
-     test_mc_v18_resolves_at_least_one_contest for a seed where contests resolve, and
-     test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis below for the seed
-     (seed=1) that drives the now-live echo path end-to-end through the real campaign loop.
-  3. The transport PATH itself (exercised directly, the way the SC bridge drives it): a
-     resolved scene carrying an `echo` block routes through domain_echo -> a valid
-     scene.*_resolved Key -> an OF-7-deferred faction apply that lands at the accounting
-     boundary. Deterministic on replay.
+Guards the flag-gated Key & Echo TRANSPORT (ED-IN-0028, key_echo_armature_v1.md §6.2) at the
+unit level, plus one live-loop smoke that the flag now fires end-to-end.
+
+REPINNED / MERGED 2026-07-08 (two concurrent sessions): ECHO_TRANSPORT is now DEFAULT ON (Jordan:
+"Yes echo transport on"). Two mechanisms emit under it — origin/main's faction-scale §10 Parliamentary
+vote every season (sim/cross_scale/parliamentary_bridge.py) and this branch's personal-scale
+emergency-council play-out echo (sim/cross_scale/scene_dispatch.py). The full flag-ON campaign golden
+lives in test_parliamentary_bridge.py + test_f7_smoke_oracle.py; this file pins the flag-OFF byte-exact
+oracle, one live-loop smoke, and the transport path in isolation.
+
+  1. FLAG-OFF byte-exactness: ECHO_TRANSPORT off leaves the seed-42 F7 win-share golden untouched
+     and attaches no substrate (empty key_log_hash).
+  2. FLAG-ON live loop: for a seed that crosses Stability Crisis (seed=1) the campaign now emits real
+     echo Keys through the composed-keying (ED-SC-0002) path — no longer architecturally inert
+     (ED-SC-0006/0007). As of the merge the default-ON per-season Parliamentary vote also emits on
+     essentially every seed.
+  3. The transport PATH itself, exercised directly: a resolved scene carrying an `echo` block
+     routes through domain_echo -> a valid scene.*_resolved Key -> an OF-7-deferred faction apply
+     (in STAT POINTS via MULTS) that lands at the accounting boundary. Deterministic on replay.
 """
-import hashlib
-
-import pytest
-
 from sim.mc_v18 import run_batch, run_campaign
 from sim.autoload import game_state
 from sim.cross_scale import echo_transport
 
 
-# The seed-42 n=8 F7 golden (test_f7_smoke_oracle.py) — the transport flag must not move it.
-# REGENERATED 2026-07-08 (ED-FA-0008/0011/0012): the FA-lane mechanics in faction_action.py moved the
-# F7 seed-42 win-share (was {Crown 12.5, Varfell 87.5}); mirrors test_f7_smoke_oracle.GOLDEN_WIN_SHARE.
+# The seed-42 n=8 F7 FLAG-OFF golden — the transport flag OFF must not move it. REPINNED 2026-07-08
+# for the two-session merge: with the flag OFF, only this branch's FA-lane mechanics
+# (ED-FA-0008/0011/0012) move seed-42 RNG — parliamentary_bridge and the play-out echo are inert.
+# The flag-ON default is a DIFFERENT distribution now (test_f7_smoke_oracle.GOLDEN_WIN_SHARE).
 _GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
-_EMPTY_LOG_SHA256 = hashlib.sha256(b"").hexdigest()  # sha256("") — the born-empty KeyLog
 
 
 # ── 1. Flag OFF: byte-exact, no substrate ────────────────────────────────────
@@ -46,47 +43,32 @@ def test_flag_off_is_byte_exact_and_attaches_no_substrate():
     assert r.key_log_hash == "" and r.keys_emitted == 0
 
 
-# ── 2. Flag ON: empirically zero for the pinned F7 seed range, but no longer inert-by-design ──
-
-def test_flag_on_f7_batch_is_still_empirically_zero():
-    """ECHO_TRANSPORT on for the pinned seed-42/n=8 F7 batch: win-share unchanged and the seed-42
-    single-campaign KeyLog stays empty — NOT because the path is architecturally inert (it isn't,
-    since ED-SC-0006/0007), and NOT (as of ED-FA-0008/0011/0012) because Stability Crisis never fires
-    in the batch (it now does — F7 scenes_resolved is non-zero), but because the seed-42 campaign's
-    own resolutions don't map to an echo Key and the flag leaves the batch win-share unmoved. See
-    test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis for the live case."""
-    on = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 1})
-    assert on.win_share == _GOLDEN_WIN_SHARE, (
-        f"ON win-share moved ({on.win_share}) for the F7 seed range — update this golden and "
-        "say so in the commit.")
-    r = run_campaign(seed=42, params={'ECHO_TRANSPORT': 1})
-    assert r.keys_emitted == 0 and r.key_log_hash == _EMPTY_LOG_SHA256
-
+# ── 2. Flag ON: the live loop now fires (default ON) ─────────────────────────
 
 def test_flag_on_live_loop_fires_for_a_seed_that_crosses_stability_crisis():
-    """ED-SC-0006/0007 (2026-07-08): seed=1 is a KNOWN campaign where Stability Crisis fires and
-    the Emergency Council contest resolves (test_mc_v18_regression.py). With ECHO_TRANSPORT on,
-    this now emits real Keys through the composed-keying (ED-SC-0002) Mandate channel — the
-    SUCCESS signal the module docstring above predicted."""
+    """ED-SC-0006/0007 + the merged parliamentary_bridge: with ECHO_TRANSPORT on the campaign emits
+    real echo Keys. seed=1 is the historically-motivated case (Stability Crisis fires and the
+    Emergency Council contest resolves — test_mc_v18_regression.py); as of the merge the per-season
+    §10 Parliamentary vote (parliamentary_bridge.py) ALSO emits every season, so the flag is live on
+    essentially every seed. Flag OFF stays byte-exact (no substrate)."""
     off = run_campaign(seed=1, params={'ECHO_TRANSPORT': 0})
     assert off.keys_emitted == 0 and off.key_log_hash == ""
     on = run_campaign(seed=1, params={'ECHO_TRANSPORT': 1})
-    assert on.keys_emitted > 0, "expected the Emergency Council echo to fire at least once"
-    assert on.key_log_hash != _EMPTY_LOG_SHA256
-    # NOT asserting win-share equality here: the deferred Mandate apply is now a real (small)
-    # strategic-state mutation for a seed where it fires — that is the intended effect of
-    # ED-SC-0007, not a regression to guard against. Byte-exactness is still guarded where it
-    # actually holds: flag-OFF (above) and the F7 seed-42 batch (still empirically inert).
+    assert on.keys_emitted > 0, "expected the consequence spine to emit at least one echo Key"
+    assert on.key_log_hash != "" and on.key_log_hash != off.key_log_hash
+    # NOT asserting win-share equality here: the deferred Mandate applies are now a real strategic-
+    # state mutation — the intended effect of ED-SC-0007, not a regression to guard against.
+    # Byte-exactness is guarded where it still holds: flag-OFF (above) and the flag-OFF F7 batch
+    # (_GOLDEN_WIN_SHARE / test_flag_off_is_byte_exact_and_attaches_no_substrate).
+    #
+    # MERGE NOTE (2026-07-08): two prior HEAD tests here — test_flag_on_f7_batch_is_still_empirically_zero
+    # and test_flag_on_off_win_share_identical — were DROPPED. Both asserted the flag is INERT (zero
+    # keys at seed-42 / on==off win-share), which the merged default-ON parliamentary_bridge falsifies
+    # (seed-42 flag-ON now emits 13 keys and the flag moves the batch win-share). The flag-ON campaign
+    # golden is pinned in test_f7_smoke_oracle.py + test_parliamentary_bridge.py instead.
 
 
-def test_flag_on_off_win_share_identical():
-    """Belt-and-suspenders: ON and OFF produce identical strategic outcomes while inert."""
-    off = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 0}).win_share
-    on = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 1}).win_share
-    assert off == on
-
-
-# ── 3. The transport path (driven directly, as the SC bridge will) ────────────
+# ── 3. The transport path (driven directly, as the SC bridge drives it) ───────
 
 def _world_with_scheduler(seed=42):
     world = game_state.create_world(seed=seed)
@@ -120,7 +102,8 @@ def test_echo_apply_is_deferred_to_accounting_boundary():
     assert getattr(world.factions[fid], 'L') == before, "apply must be deferred, not live"
     ran = world.echo_scheduler.accounting_boundary()
     assert ran == 1
-    assert getattr(world.factions[fid], 'L') > before, "delta lands at the boundary"
+    # Overwhelming = +2 STAT POINTS (via MULTS), clamped to ceiling 7.0 — mirrors the §10 scale.
+    assert getattr(world.factions[fid], 'L') == min(7.0, before + 2), "full band delta lands at the boundary"
 
 
 def test_transport_path_is_deterministic_on_replay():

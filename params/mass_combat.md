@@ -432,7 +432,7 @@ Mid-phase Zoom In fires at next legal phase-lock point. Phase-5 trigger → Afte
 Pursuing-side Discipline check = Ob 1. P(hold | Discipline 4) ≈ 87%. P(hold | Discipline 1) ≈ 40%.
 
 ## ED-167 provisional — CF wound on Zoom Out
-CF wound during Zoom In → a fractional Ob per wound on that commander's BG tactic rolls for remainder of current battle — NEVER a −1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification; the per-pool fractional-Ob value is a follow-on calibration, ED-PC-0006, combat reference ED-1041).
+CF wound during Zoom In → **+0.15 Ob** on that commander's BG tactic rolls for remainder of current battle — NEVER a −1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, reversing PP-716's −1D unification). Value calibrated ED-PC-0006: reuses ED-1041's combat "attacking" magnitude — a commander issuing BG tactic rolls is the active roller (no bilateral attacker/defender split), so the passive-defence +0.25 term does not apply. Implemented as a flat modifier (`sim/cross_scale/zoom_in_out.py`'s `contested_figure_wounded` flag is currently boolean, not a wound counter — a true per-wound-cumulative model for the CF is future work, out of ED-PC-0006's value-calibration scope).
 
 ## ED-170 provisional — Coherence recovery in multi-day battle
 1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.

@@ -156,14 +156,32 @@ def trial_vector(ua, ub, r):
 # verification (bat.py all 4 modes, tests/valoria, gauge_mb.py re-run) in coverage_matrix.md's
 # 2026-07-04 entry.
 EXPECTED = {
-    # [2026-07-05, Step 4 fix, mass-battle Cannae gauge follow-up audit, Jordan-ratified "intensive
-    # (per-troop, partition-invariant)"] re-recorded again, and for the FIRST time this changes
-    # 'unit' too (not just the field-path modes) -- this fix removes the outer troops_frac/army-size
-    # divisor from orchestration.py's POOL_VARIANT=="C-ii" branch, which is SHARED, non-gated
-    # combat-resolution code (like the DG-3/DG-4 landing before it), so all 4 digest modes move.
-    # Correction to the D2-fix comment below: that comment's "'unit' confirmed BYTE-IDENTICAL" claim
-    # was true for the D2 fix IN ISOLATION, not cumulatively once this Step-4 change stacks on top.
-    'unit': '204d4d738bb7ba1ef89e804779edd8f26994f8b7ec208c19912b0d62bcaccbee',
+    # [2026-07-08, ED-MB-0004, partition-invariance fix, Jordan-ruled "genuine defect -- fix it"]
+    # re-recorded a final time, all 4 modes -- orchestration.py's new `_convergence_scale` renormalizes
+    # >=2 of one side's atoms simultaneously, fully engaging the SAME single opposing atom (this
+    # battery's 'envelop'/'cannae'/'oblique' rows: a pinning center + 2 wings all converging on one
+    # Line/Arrowhead defender) back down to what ONE merged atom of their combined troops would
+    # contribute -- see core/exchange.py's new `_pair_engaged_troops` + orchestration.py's
+    # `_convergence_scale`/`PC_CONVERGENCE_NORM`. Shared, non-gated combat-resolution code (same as
+    # every prior DG-3/DG-4/Step-4 landing in this lane), so all 4 modes move again. Verified live
+    # (not just via digest motion): a direct trace confirmed `_convergence_scale` fires on the
+    # majority of this battery's ticks (1446/1686 sampled calls non-empty, max simultaneous-convergence
+    # group size 3) -- the mechanism genuinely engages, this isn't a no-op digest churn. Gauge re-run
+    # (n=60, multi mode) showed the fix does NOT move H3-H6/C4's win/loss/draw split at all (bit-for-bit
+    # identical decA/dec_n to the pre-fix baseline) even though exact per-trial hp/turn values changed
+    # (confirming the digest move is real but small relative to these rows' other dominant mechanisms,
+    # namely envelopment/charge shock) -- disclosed honestly, not claimed as a gauge-band fix. See
+    # tests/coverage_matrix.md's 2026-07-08 entry + ED-MB-0004.
+    #
+    # [2026-07-08, ED-MB-0006, Jordan directive: "abandon combat pools being related to the
+    # commander, and instead [derive them] solely from the subunit troop type, quality and
+    # numbers"] Re-recorded a final time, all 4 modes -- the base pool term is now
+    # `eff_power x eff_size x POOL_QUALITY_SCALE` (POOL_QUALITY_MODEL, default ON), replacing
+    # Command entirely; see config.py's POOL_QUALITY_MODEL/POOL_QUALITY_SCALE comments and
+    # core/exchange.py's subunit_combat_pool for the full rationale. Shared, non-gated code
+    # (every mode moves). Full honest gauge/exponent record: tests/coverage_matrix.md's second
+    # 2026-07-08 entry.
+    'unit': 'd9ca7c7e8be442eae9d68c19ed248ed1a0f22f50f50ee4c8dab464c758802db4',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -176,7 +194,9 @@ EXPECTED = {
     #
     # [2026-07-05, Step 4 fix, same as 'unit' above] re-recorded again -- same shared, non-gated
     # combat-resolution code, so 'cell' moves too.
-    'cell': '84e606c045b68c0fcec605c9190a4450afa4914cc733a294e4d5ea9bb9f2f6ca',
+    # [2026-07-08, same fix as 'unit' above] re-recorded.
+    # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
+    'cell': '88481bbd1a6748325b7aba92e434dd51a21774fcb3f82704213d4daa2f6993f6',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -226,7 +246,9 @@ EXPECTED = {
     # moves again once the Step-4 pool-semantics fix stacks on top.
     #
     # [2026-07-05, Step 4 fix, same rationale as 'unit'/'cell' above] re-recorded again.
-    'unit_field': '79c19100d45be623769449a123a6d37c783f3632e9e3be61c7da4ea6ab1c743b',
+    # [2026-07-08, same fix as 'unit' above] re-recorded.
+    # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
+    'unit_field': '40649feb7c634509831e4ca124a9ecbd346bd7e3485699480be01961b86c814f',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -257,7 +279,9 @@ EXPECTED = {
     # re-confirmed BYTE-IDENTICAL to the prior recording (the grid battery/this specific field-mode
     # battery combination don't happen to exercise a mid-battle rout with a still-live opposing pair on
     # those 3 modes); only `cell_field` moves.
-    'cell_field': 'c3de8306c1faa8159a7db129630555e898d01fa0ead8b205c49a11a40664c065',
+    # [2026-07-08, same fix as 'unit' above] re-recorded.
+    # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
+    'cell_field': '7b3b0a8d61429e07042dd61095bb14bae208179bf09e67f50bbd5f6546dcbed5',
 }
 
 

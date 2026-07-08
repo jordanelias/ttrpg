@@ -38,6 +38,12 @@ into the faction-unique slot. faction_take_action is reachable from EVERY live c
 shift RNG consumption and moved this golden's win_share/all_winners/battles_mean — the expected,
 intended move each pin below anticipates (a surprise here means output moved for a DIFFERENT
 reason; investigate before regenerating).
+
+REPINNED 2026-07-08 (MERGE of two concurrent sessions): the goldens below were re-derived after
+merging origin/main's ED-SC-0002/0006/0007 auto-resolve path (sim/cross_scale/parliamentary_bridge.py
++ ECHO_TRANSPORT default ON) with this branch's FA-lane mechanics and its ED-SC-0007 play-out echo
+(scene_dispatch.py). Both bodies of work consume campaign RNG, so a golden pinned from either session
+in isolation is stale — see the block comment on the constants below.
 """
 import os
 import sys
@@ -49,15 +55,20 @@ if _REPO_ROOT not in sys.path:
 
 from sim.mc_v18 import run_batch, run_campaign  # noqa: E402
 
-# Golden batch, regenerated 2026-07-08 (ED-FA-0008/0011/0012 — see module docstring; deterministic,
-# verified stable across repeat runs). Prior ED-SC-0006 values were {Crown 50, Varfell 50} /
-# {Crown 1, Varfell 1} / 30.0; the FA-lane action-mix + Muster + conquest-fork + Parliamentary
-# fallback shifted campaign RNG and moved them here.
+# Golden batch — REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve
+# (parliamentary_bridge.py, origin/main) with this branch's ED-SC-0007 play-out echo addition
+# + ED-FA-0008/0011/0012 faction-action mechanics + ED-SC-0007-item-2 Censure fallback — all of
+# these consume campaign RNG, so goldens from either session alone are stale. The DEFAULT campaign
+# now runs the consequence spine ON (Jordan: "Yes echo transport on"): the faction-scale §10
+# Parliamentary vote each season (parliamentary_bridge) AND the personal-scale emergency-council
+# contest (ED-SC-0006 #96, when Stability Crisis fires, now additionally emitting a play-out echo
+# via scene_dispatch.py). The pre-spine byte-exact oracle is retained under ECHO_TRANSPORT=0 in
+# test_echo_transport.py. Deterministic; verified stable across repeat runs.
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 100.0}
-GOLDEN_WINNERS = {'Varfell': 2}
-GOLDEN_BATTLES_MEAN = 35.0
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+GOLDEN_WINNERS = {'Varfell': 1, 'Crown': 1}
+GOLDEN_BATTLES_MEAN = 30.5
 
 
 def test_mc_v18_batch_is_deterministic():
@@ -97,6 +108,14 @@ def test_mc_v18_win_share_is_well_formed():
     assert all(0.0 <= v <= 100.0 for v in r.win_share.values())
     assert abs(sum(r.win_share.values()) - 100.0) < 1e-6
     assert r.battles_mean >= 0.0
+
+
+def test_flag_on_resolves_at_least_one_contest():
+    """ED-SC-0006 item 3: with ECHO_TRANSPORT on, the campaign resolves >=1 contest — closing the
+    gap where the flag-OFF golden is structurally blind to contest regressions. (The full flag-ON
+    campaign golden lives in sim/tests/test_parliamentary_bridge.py.)"""
+    r = run_campaign(seed=_SEED, params={'ECHO_TRANSPORT': 1})
+    assert r.scenes_resolved >= 1, "no contest resolved under ECHO_TRANSPORT — the consequence spine is dead"
 
 
 if __name__ == '__main__':

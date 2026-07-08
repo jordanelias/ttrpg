@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
 
 BATTLEFIELD_SIZE = 50  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
@@ -157,6 +157,49 @@ COMMAND_SIGMA_ENABLED = _sigma_os.environ.get('COMMAND_SIGMA_ENABLED', '1') == '
 COMMAND_POOL_MULT = float(_sigma_os.environ.get('COMMAND_POOL_MULT', '2'))  # [canonical: Jordan directive 2026-06-02 — Command-only base = MULT×Command; =2 matches min(Size,Command)+Command at Size≥Command; class-B]
 CMD_CHA_WEIGHT = float(_sigma_os.environ.get('CMD_CHA_WEIGHT', '2'))  # [canonical: Jordan directive 2026-06-02 — Charisma PRIMARY weight in derived Command; class-B]
 CMD_COG_WEIGHT = float(_sigma_os.environ.get('CMD_COG_WEIGHT', '1'))  # [canonical: Jordan directive 2026-06-02 — Cognition SECONDARY weight in derived Command; class-B]
+
+# ─── POOL-QUALITY MODEL (Jordan directive 2026-07-08: "abandon combat pools being related to the
+# commander, and instead [derive them] solely from the subunit troop type, quality and numbers") ───
+# Supersedes the 2026-06-02 Command-only directive above for the BASE pool term (the discipline/
+# stamina penalties and the yield malus are untouched -- those were never Command-derived). The
+# general/Command still exists in the model (morale, formation-hold speed gate, order-issuing,
+# derive_rout's "Command 0 -> unit routs" condition) -- only the RAW COMBAT POOL stops reading it.
+# New base term: `eff_power` (troop TYPE quality -- TROOP_TYPE_STATS/§B.2, the stat §A.1 itself
+# already names "determines dice rolled") multiplied by `eff_size` (NUMBERS -- current troops /
+# BLOCK_SIZE, continuously degrading with casualties). Deliberately a PRODUCT, not the historical
+# `min(Size,X)+X` shape PP-233/the Command-only directive both used: the 2026-06-02 comment block
+# above records that THAT min-capped shape was the original reason Size was pulled out of the pool
+# (it measured an emergent exponent ~1.7 against the Lanchester linear law's p~1, because per-capita
+# effectiveness degraded once Size fell below the capping stat). A plain product is p=1 by
+# construction -- "strength = quality x numbers", the Lanchester Linear Law's own premise -- so it
+# should not reintroduce that specific defect, though numbers now ALSO enters `_lanchester_strength`
+# separately (a different quantity: the ENEMY's contact-frontage-capped engaged troops, not this
+# atom's own total) -- whether the two compound into a new emergent exponent is an empirical
+# question for `lanchester_signature.py`, not assumed either way here. OFF reproduces the Command-
+# driven models above exactly (A/B, both COMMAND_SIGMA_ENABLED branches still reachable when this is
+# off). Class-B sim-tunable, Jordan-vetoable/further-patchable per his own "continue testing and
+# patching" direction.
+POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # default ON per 2026-07-08 directive; OFF = Command-driven (COMMAND_SIGMA_ENABLED branches)
+# [CALIBRATED, 2026-07-08] `eff_power x eff_size` alone reaches ~16 at the canonical T3-infantry
+# baseline (power=4, eff_size=4 at full strength) vs the Command-driven baseline's ~8 (command=4,
+# full cohesion) -- this constant renormalizes the NEW formula's baseline to reproduce that SAME
+# historical magnitude at that SAME reference point (0.5 = 8/16), so `pen`/`stam_pen`'s existing
+# (unscaled) discipline/stamina penalties keep roughly the same relative weight they always had,
+# and the engine's other magnitude-tuned constants (degree thresholds, DAMAGE_BY_DEGREE, Lanchester
+# coefficients) aren't suddenly fed a pool an order of magnitude outside the range they were tuned
+# against. This is a grounded anchor-point normalization, not a fit to any specific test target --
+# tested (lanchester_signature.py) and disclosed honestly: even at this and smaller scales, the
+# stricter LAW-EXPONENTS trajectory-fit check still measures melee p~1.65-1.7 (vs its own <=1.4
+# bar) -- notably, the PRE-EXISTING Command-driven baseline (POOL_QUALITY_MODEL=0) already fails
+# that same check today (p~1.55, plus a separate, apparently pre-existing "big army loses to a
+# smaller one" defect this session found while testing, unrelated to this change -- see
+# tests/coverage_matrix.md). Swept scale in {1, 0.5, 0.25, 0.2, 0.15, 0.1, 0.0625, 0.03}: the
+# exponent plateaus around 1.65-1.7 below ~0.15 and does not reach <=1.4 at any scale tried -- a
+# uniform scale cannot fix it (it does not change the WIN/LOSS ratio, only the absolute pool
+# magnitude), so this is flagged as a genuine, not-yet-closed follow-up (likely needs the
+# degree/damage-tier discretization or Lanchester's own interaction reconsidered), not
+# silently patched by picking a smaller scale that merely LOOKS closer.
+POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
 
 # ─── P-C COMPOSITIONAL-FORMATION ROLES (SCAFFOLD — data only; INERT until the instruction→
 # primitive modulation lands, which is behaviour-cascading; see pc_formation_design.md §3.5/§9.1).

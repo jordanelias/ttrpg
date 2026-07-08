@@ -62,6 +62,14 @@ not). Single-sourced in `sim/personal/contest/dictionaries.py` `STYLES_TABLE[...
 | Audience boost | +1D | Orator's chosen genre OR orientation matches audience faction's boosted axis |
 | Maximum combined | +2D | Both conditions met |
 
+<!-- ED-SC-0012 (2026-07-08, pessimist-action audit): DOC-SIDE decisions — NO param values change here.
+     (1) KU-1 combined stacking cap DECIDED: the non-attribute Recall(+2D) + Corroborate(+1D) + Prep(+1D) +
+         Findings(<=+2D) bonuses get a single global ceiling, mirroring this genre/audience +2D cap. The exact
+         ceiling VALUE binds with Jordan's ED-SC-0004 pool-formula ruling (P0, needs_jordan) — not pinned here.
+     (2) Appraise split: the audience-boost read (channel a) becomes free setup-screen knowledge (a deterministic
+         function of the public Faction Boosts table); the Appraise roll (line 23) keeps only the adjudicator-
+         armature judge-read. The pool/Ob values above are unchanged. See social_contest_v30 §4 Step 1 / §4 Step 3. -->
+
 **CR4 — Ciceronian stasis × genre (RATIFIED_2026-06-01.md CR4; ED-1062; Stage 3 / Gate C).** The primary genre is no longer a GM pick — it is a **function of the proceeding's live classical stasis** (conjectural / definitional / qualitative / translative). Only a conjectural (FACT) stasis sets Memory primary; only a deliberative (CONSEQUENCE/FEASIBILITY) stasis sets Projection primary; qualitative (present-tense terrain) and translative (pre-merits jurisdiction, the Stay) carry no primary genre; definitional is a higher-order reframe, not a genre. See social_contest_v30 §2 Step 2 for the full stasis→genre table. **CR4 reachability fix (ED-1062):** stasis only ever shifts UPWARD during play, and every canonical proceeding previously opened on the qualitative default, so the conjectural FACT stasis was unreachable and this +1D was DEAD in every shipped proceeding. **Church Tribunal now opens at the conjectural (FACT) stasis** (see §Proceeding Types below) — the one proceeding whose thematic shape (an Inquisitor investigating whether the accused committed an act) is genuinely conjectural. The other 7 proceedings are unchanged (still open qualitative).
 
 ## Faction Boosts (single axis per faction)
