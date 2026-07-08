@@ -113,6 +113,19 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # (~authority-independent) so it is unscaled. perc=PERC_AUTH_REF = full transmission. Magnitude is FIAT. NOTE: FIX-1b
 # is a damage-LETHALITY reduction only — it does NOT touch the sigma/reach/control path that drives the staff's
 # vs-plate WIN-RATE (that is FIX-1's job); the staff-vs-arming heavy win-rate is ~flat under this change alone.
+# EXTENDED TO EVERY MATERIAL (U2/ED-PC-0011, 2026-07-08): the `mat in ('mail','plate')` restriction hid the
+# authority scaling entirely against cloth/none. This was invisible pre-U2 because percussion_authority hard-
+# zeroed for every non-blunt head, so 'blunt' candidates were ALWAYS dedicated blunt weapons already at/near
+# PERC_AUTH_REF (mace 8.0, poleaxe 7.48) — the gate never had a weak candidate to discriminate. Once
+# weapon_physics.reversed_grip_percussion (ED-PC-0009) introduced a genuinely WEAK percussion candidate
+# (~1.4-1.8/8 for a two-handed sword's Mordhau option) as a competitor in select_mode's greedy comparator, the
+# gap surfaced directly: DELIVERY['blunt']=1.6 (the highest fixed constant of any token) let a weak pommel-
+# strike win selection against UNARMOURED targets purely on the delivery constant, with `perc`'s actual
+# magnitude never read at all for cloth/none — backwards from the HEMA sourcing (Mordhau is a response to
+# armour defeating the edge, not a general preference). Removing the material restriction makes the SAME
+# authority-scaling apply everywhere: BYTE-IDENTICAL for any percussion candidate at/near PERC_AUTH_REF
+# (mace/poleaxe verified unchanged across all 4 tiers — ratio clamps to 1.0, the max(...) is inert), and
+# correctly discriminating for weak candidates at every tier, not just mail/plate.
 PERC_AUTH_REF=8.0; PERC_TRANSMIT_FLOOR=0.35
 def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
     t=1.0-RESIST[mat][mode]
@@ -123,8 +136,8 @@ def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
         # for every point; the poleaxe spike / rondel now beat the through-material 0.30, the rapier's whippy point does
         # not. Emergent in gap_prec (= w['gap']); no weapon name.
         return max(t, GAP_EXPOSURE[mat]*gap_prec)
-    if mode=='percussion' and mat in ('mail','plate'):             # FIX-1b: rigid armour spreads blunt -> authority-scaled
-        t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/PERC_AUTH_REF))
+    if mode=='percussion':                                          # FIX-1b, extended U2/ED-PC-0011: authority-scaled
+        t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/PERC_AUTH_REF))   # vs EVERY material, not just rigid armour (see above)
     if mat!='none':
         g=COVERAGE_GAP[coverage]; return t*(1-g)+1.0*g             # some blows reach a bare zone
     return t

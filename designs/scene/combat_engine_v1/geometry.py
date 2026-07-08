@@ -36,14 +36,26 @@ def gap_precision(point_concentration, cross_section):
 
 def thrust_factor(point_concentration, cross_section, curvature):
     """Thrust effectiveness: rises with point concentration + rigidity, FALLS with curvature (a curved blade's point
-    is offset from the hand-target line, so the thrust is less direct/alignable)."""
-    base = (0.35 + 0.65*point_concentration) * (0.55 + 0.45*cross_section)
+    is offset from the hand-target line, so the thrust is less direct/alignable).
+    U2/ED-PC-0009 (2026-07-08): the additive point_concentration floor (formerly `0.35 + 0.65*pc`) is DROPPED —
+    pressure = force/area (physics), so a broad, pointless face (pc->0, e.g. mace pc=0.02) must read ~0 thrust
+    regardless of how rigid its cross_section is; the old floor gave mace/staff a nontrivial 0.31-0.34 "thrust"
+    from rigidity alone, with no point at all. Verified against the full roster: mace/staff now read <0.05,
+    every genuinely point-capable weapon (rapier..stiletto) reads >=0.6, and the curved-sabre family splits
+    sensibly on curvature (katana/sabre/glaive keep a real partial thrust; shamshir/pulwar/scimitar, HEMA's most
+    heavily curved slashers, correctly collapse toward 0) — same fix shape as cut_factor's floor drop below."""
+    base = point_concentration * (0.55 + 0.45*cross_section)
     return round(max(0.0, base*(1.0 - 0.6*curvature)), 2)
 
 def cut_factor(curvature, edge_keenness):
     """Cut effectiveness: a keen edge cuts; CURVATURE adds slicing/draw-cut (contact point translates along the edge,
-    presenting a more acute effective angle). Diminishing returns on curvature."""
-    return round((0.45 + 0.55*edge_keenness) * (1.0 + 0.45*tanh(2.0*curvature)), 2)
+    presenting a more acute effective angle). Diminishing returns on curvature.
+    U2/ED-PC-0008 (2026-07-08): the additive edge_keenness floor (formerly `0.45 + 0.55*ek`) is DROPPED — an
+    edgeless weapon (ek=0, e.g. mace/staff) or a needle-class thruster (ek<=0.1, the roster's own edgeless-
+    consistency invariant, consolidation_v1.md V14) must afford ~0 cut, not a floored 0.45+. This is what lets
+    element_afforded's MODE_EDGE_MIN~=0.15 threshold do real work (§2.3 of consolidation_v1.md already assumed
+    this fix when it set that constant)."""
+    return round(edge_keenness * (1.0 + 0.45*tanh(2.0*curvature)), 2)
 
 def percussion_concentration(strike_concentration):
     """For blunt heads: a concentrated striking surface (beak/pick) focuses force to defeat plate; a broad face
