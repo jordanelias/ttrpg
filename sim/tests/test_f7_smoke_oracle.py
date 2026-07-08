@@ -13,14 +13,15 @@ than silent.
 
 WHAT IT PINS — and why each assertion is a *guard*, not a target
 ----------------------------------------------------------------
-1. The n=8 seed-42 golden win-share {Crown 12.5, Church 0, Hafenmark 0, Varfell 87.5}.
-   This IS the historical artifact, pinned deliberately and labelled: it is NOT balance
-   signal (n=8 is far too small; the audit's n=100 read is 56/36/7/1). Do not tune to it.
-2. Named ZERO-assertions: scenes_resolved / insurgencies_formed / npcs_generated are all 0
-   across the whole batch, because the contest kernel, insurgency pipeline, and NPE are
-   built-but-unreachable islands (C-REACH / C-EMERGE-4/5/6). These MUST start firing when
-   the derivation bridge + keying waves land — this test tripping is then the SUCCESS signal
-   (update the golden and say so in the commit).
+1. The n=8 seed-42 golden win-share {Crown 37.5, Church 0, Hafenmark 0, Varfell 62.5}.
+   This is now the DEFAULT campaign with ECHO_TRANSPORT ratified ON (Jordan 2026-07-08) — the
+   consequence spine is live. Still small-n (NOT balance signal), but note the spine already
+   ERODED the pre-spine {Varfell 87.5} artifact (retained under ECHO_TRANSPORT=0 in
+   test_echo_transport.py). Do not tune to it.
+2. scenes_resolved now FIRES (the spine is live — the named-zero flipped, the success signal
+   the earlier revision predicted). insurgencies_formed / npcs_generated are STILL 0 — the
+   insurgency pipeline and NPE remain built-but-unreachable islands (C-EMERGE-5/6) with no
+   bridge yet; when they land these MUST become non-zero (the next success signal).
 3. Hafenmark elimination lockout: Hafenmark never wins (0-territory factions never act
    again; the only restoration path, parliamentary_transfer, is never called). KNOWN-TRACKED
    via ED-FA-0005 (comeback path ruled to be authored). Trips when a comeback path lands.
@@ -49,10 +50,12 @@ _SEED = 42
 _N = 8
 _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 
-# Pinned 2026-07-07 (deterministic; reproduced stable across repeat runs).
-GOLDEN_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 87.5}
-GOLDEN_WINNERS = {'Varfell': 7, 'Crown': 1}
-GOLDEN_BATTLES_MEAN = 33.0
+# Pinned 2026-07-08 — DEFAULT campaign with the consequence spine ON (ECHO_TRANSPORT ratified ON):
+# the faction-scale §10 vote (parliamentary_bridge) + the personal emergency-council contest (ED-SC-0006 #96).
+GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 62.5}
+GOLDEN_WINNERS = {'Crown': 3, 'Varfell': 5}
+GOLDEN_BATTLES_MEAN = 33.4
+GOLDEN_SCENES_RESOLVED = 367  # was 0 pre-spine — the §10 vote (+ occasional emergency council) resolves each season
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -94,17 +97,16 @@ def test_f7_golden_win_share():
     assert b.battles_mean == GOLDEN_BATTLES_MEAN, f"battles_mean drifted: {b.battles_mean}"
 
 
-def test_f7_named_zero_assertions_islands_unreachable():
-    """scenes_resolved / insurgencies_formed / npcs_generated are 0 — the islands never fire.
-
-    When the derivation bridge (SC) + keying waves + NPE seeding land, these MUST become
-    non-zero: this test tripping is the SUCCESS signal, not a regression. Update the pins then.
+def test_f7_scenes_live_insurgency_and_npe_still_islands():
+    """The consequence spine is LIVE: scenes_resolved now fires (the §10 vote resolves each season).
+    insurgencies_formed / npcs_generated remain 0 — those islands have no bridge yet; when they
+    land these MUST become non-zero (the next success signal). Update the pins then.
     """
     campaigns = _campaigns42()
     scenes = sum(r.scenes_resolved for r in campaigns)
     insurgencies = sum(r.insurgencies_formed for r in campaigns)
     npcs = sum(r.npcs_generated for r in campaigns)
-    assert scenes == 0, f"scenes_resolved is no longer 0 ({scenes}) — the contest/scene bridge may have landed; update the golden"
+    assert scenes == GOLDEN_SCENES_RESOLVED, f"scenes_resolved drifted ({scenes} vs {GOLDEN_SCENES_RESOLVED}) — the spine output moved; investigate before regenerating"
     assert insurgencies == 0, f"insurgencies_formed is no longer 0 ({insurgencies}) — the insurgency pipeline may be reachable; update the golden"
     assert npcs == 0, f"npcs_generated is no longer 0 ({npcs}) — generate_npc may have live call sites; update the golden"
 

@@ -6,6 +6,18 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **Auto/Manual Resolution Duality doctrine RULED 2026-07-08 (ED-SC-0013 → resolved).**
+  `designs/architecture/auto_manual_resolution_duality_v1.md`, reworked per Jordan's "specific events on a
+  slate" steer to lead with the **Scene Slate as the spine** — already canon (`player_agency_v30 §4`:
+  deterministic, priority-ranked, settlement-anchored, Conviction-biased SPECIFIC events; 3–5 scene-action
+  budget; "opportunities not pursued resolve through NPC AI without player input" = the auto-resolve). Fidelity
+  is a SPECTRUM (played / witnessed [Witness Mode] / auto); precedents FM/Total War/CK/XCOM/Disco Elysium.
+  **Forks ruled (Jordan: resolve A/B/D, keep C):** A = one engine event-parameterized; B = the Slate's budget/
+  priority/Conviction triage + Mandatory §4.3.2; D = Mandatory/opt-in/Witness — all RESOLVED (A by steer, B/D by
+  existing canon). **C (calibration tolerance) is the one residual** — carried to ED-SC-0011's parity-harness
+  acceptance gate. **Load-bearing constraint:** E[auto]≈E[played] (exploit-prevention). **Chief build implication
+  (next, separate item):** event-parameterize the auto-resolver so it resolves SPECIFIC slate motions, not a
+  generic per-season roll; then ED-SC-0011 (the zoom-in expansion) + the parity harness.
 - **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
   of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
   actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
@@ -131,6 +143,23 @@ index; see it for cross-lane/global items.
   same convention that ships other kernel constants (e.g. `STYLE_AXIS`) `[SEED]`-flagged-but-wired —
   the audit's own framing rated this "Medium — real design work" but explicitly `needs_jordan: false`.
   Revisable without unwinding the mechanical routing if Jordan wants a different mapping.
+- 2026-07-08 — **Consequence spine LIVE (ED-SC-0006/0007/0002 resolved; Jordan rulings via AskUserQuestion).**
+  Two blocking forks ruled: (1) party derivation = **wire the canonical Parliamentary vote** (faction-scale
+  §10, consumes aggregate state directly — sidesteps the still-open PERSONAL-scale party-derivation gap);
+  (2) **ED-SC-0002 = composed** keying (band gates magnitude, genre selects stat/channel). New
+  `sim/cross_scale/parliamentary_bridge.py` resolves a §10 vote each season (proposer=lowest-Sta,
+  establishment=highest-Mandate, others abstain/resist), applies the §10 loser Mandate penalty, and
+  composes the winner Domain Echo (band→domain_echo degree; genre→stat: Memory→L, Projection→I) through
+  the substrate (deferred apply at the accounting boundary; echo_transport apply fixed to STAT POINTS ×
+  MULTS). Behind `ECHO_TRANSPORT` (default OFF = byte-exact). Flag ON: scenes_resolved 0→49, keys_emitted
+  0→30; win-share Varfell 87.5→62.5 / Crown 12.5→37.5 (erodes the elimination-lockout degeneracy — all 4
+  factions win at seed 100). `scale_transitions §5.4` + `social_contest §6` reconciled to composed.
+  Goldens: `sim/tests/test_parliamentary_bridge.py`. **RATIFIED ON 2026-07-08 (Jordan: "Yes echo transport
+  on"):** `ECHO_TRANSPORT` defaults ON — the spine is the baseline; seed-0 + F7 goldens regenerated; the
+  pre-spine byte-exact path is retained under `ECHO_TRANSPORT=0`. **Still deferred:** ED-SC-0011 (PERSONAL-
+  scale contest dispatch onto the promoted kernel — distinct from the faction-scale vote wired here) still
+  needs the personal party bridge — the "play it out as a scene" mode of the auto-resolved vote (Jordan's
+  Total-War auto/manual framing, 2026-07-08).
 - 2026-07-05 — **"Ratify all" (PR #80):** the Fable 5 social-contest audit's findings + D6 sequencing
   + all 11 ed_options candidates adopted; audit doc statuses flipped, IDs allocated
   (ED-SC-0002..0010, ED-IN-0012..0013), CURRENT.md SC row refreshed, this handoff updated — per the
