@@ -1,14 +1,19 @@
 """tests/registry/test_descriptor_registry.py -- W1.13. Confirms the Descriptor Registry loads and
 that alias-driven recategorization-without-rewiring works (the 'spirit move' payoff): legacy
-attribute names back-resolve to their new keys, so existing formulas need no rewrite."""
-import sys
-sys.path.insert(0, '/home/claude')
-sys.path.insert(0, 'skills/valoria-orchestrator/scripts')
-import descriptor_registry as dr
+attribute names back-resolve to their new keys, so existing formulas need no rewrite.
+
+Revived 2026-07-08 (OPT-AV-7, coherence-audit hygiene batch): the prior version imported a dead
+path (/home/claude, skills/valoria-orchestrator/scripts/) and defined no test_* function, so pytest
+silently collected zero tests from this file. Fixed to import tools/descriptor_registry.py (the
+live replacement) and to expose a real test_* entry point. Assertions are UNCHANGED from the
+original -- they still match the current registry (the attribute-roster ratification, ED-IN-0029
+OPT-AV-1, was explicitly deferred; this fix is import-mechanics only, no design content)."""
+import tools.descriptor_registry as dr
 
 
-def main():
-    reg = dr.load(open('/home/claude/descriptor_registry.yaml').read())
+def test_descriptor_registry():
+    with open('references/descriptor_registry.yaml') as f:
+        reg = dr.load(f.read())
 
     # 9 attributes, 3 per category
     assert len(dr.all_attributes(reg)) == 9, "expected 9 attributes"
@@ -40,10 +45,3 @@ def main():
     # deprecation
     assert dr.is_deprecated(reg, 'resonance_style')
     assert not dr.is_deprecated(reg, 'attr.mind.will')
-
-    print("PASS: 9 attrs (3x3), alias recategorization resolves (Spirit->Will, Cognition->Acuity, "
-          "Presence->Charisma), Recall retired, agg placeholders + domains intact, resonance_style deprecated")
-
-
-if __name__ == '__main__':
-    main()

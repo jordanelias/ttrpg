@@ -1,6 +1,7 @@
 register: attribute_mechanic_collisions
 source: references/mechanical_terms_index.md §3
 extracted: '2026-05-10'
+disposition: "RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot, no live regeneration path."
 rule: Character/faction characteristics must not collide with mechanic words.
 active_violations:
 - violation: '**"Mandate Pool"** as a strategic-layer pool name (when "Faction Pool" or "Political Pool" is also in use)'
