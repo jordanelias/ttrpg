@@ -91,6 +91,21 @@ policies:
   # editorial_ledger_archive*.yaml files were deprecated 2026-05-28 to
   # deprecated/canon/ — no active editorial YAML register remains to atomize.
   # The JSONL store is integrity-checked at commit by validate_ledger_jsonl.
+  #
+  # LANE SPLIT (2026-07-08 atomization pass): entries whose id already declares a lane
+  # (ED-<LANE>-NNNN) were moved out of the flat canon/editorial_ledger.jsonl into their own
+  # canon/editorial_ledger_<lane>.jsonl (lowercase lane code), mirroring the
+  # handoffs/HANDOFF_<LANE>.md split and the same ED-<LANE>-NNNN taxonomy. Pre-cutover
+  # flat-ID entries are NOT retrofitted with a lane (same no-retrofit precedent as the
+  # ED-<LANE>-NNNN cutover itself) and stay in canon/editorial_ledger.jsonl, which dropped
+  # from ~150k tokens (at its own cap) to ~90k as a result. Both the main file and every
+  # per-lane file are "active" — consumers (tools/validate_ed_citations.py,
+  # tools/broken_dependency_checker.py) read all of them, not just the main one, or the
+  # lane-tagged third of live entries would silently stop being validated. A lane file is
+  # created only on that lane's first ED allocation (no `_go.jsonl` yet — zero GO entries).
+  # Size caps for all ledger files live in tools/ci_register_size_check.py's THRESHOLDS,
+  # not here (that script is the actual enforcement gate for this register; see its own
+  # comments for per-file caps).
 
   # ────────────────────────────────────────────────────────────
   # HANDOFF / CONTINUITY — root index + lane files
@@ -106,10 +121,10 @@ policies:
     note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
 
   - match: "HANDOFF.md"
-    max_tokens: 10000
+    max_tokens: 4000
     on_exceed: "flag_for_split"
     archive_target_pattern: "handoffs/HANDOFF_archive.md"
-    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; keep only the lane table + genuinely cross-cutting '## Next actions' content live. on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
+    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; lane-owned '## Next actions' content belongs in that lane's handoffs/HANDOFF_<LANE>.md, never here (2026-07-08 second pass: ~9k tokens of lane-specific bullets were fully redundant with content already in the lane files and were dropped, not just moved). on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
 
   - match: "handoffs/*.md"
     max_tokens: 20000

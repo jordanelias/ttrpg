@@ -75,7 +75,7 @@ are more "current state" files than there should be; trust them in this strict p
 
 | Directory | Contents |
 |---|---|
-| `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
+| `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl` for pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries, §3), patch register, mechanics index, canonical timeline, supersession register |
 | `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
@@ -111,6 +111,12 @@ are more "current state" files than there should be; trust them in this strict p
   construction, not just by allocation discipline. Both formats resolve through the same
   citation-audit path (`tools/validate_ed_citations.py`) and currency gate
   (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
+  **The ledger file itself is lane-split too (2026-07-08):** an `ED-<LANE>-NNNN` entry lives in
+  `canon/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
+  `canon/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
+  merge-collision reason. Pre-cutover flat-ID entries stay in the main file (no retrofit). A
+  lane file exists only once that lane has allocated an ED (no `_go.jsonl` yet). Both the main
+  file and every lane file are "active, authoritative" — read all of them, not just one.
   **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
   lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
   to that lane's files — avoid a single PR touching unrelated lanes except for genuinely

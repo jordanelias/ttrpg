@@ -296,6 +296,26 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Decisions
 
+- 2026-07-08 — **Second HANDOFF atomization pass + editorial-ledger lane split.** Jordan: "Make it
+  so that handoffs are by lane, not just a giant document. Break up handoffs and editorial register
+  for that reason because they should be atomized for better management." Two changes:
+  (1) root `HANDOFF.md`'s "## Next actions" section still carried ~9k tokens of lane-owned bullets
+  (mass battle, PC, IN, SC) despite the 2026-07-02 lane split below — every one was cross-checked
+  against its lane file first (most were already duplicated there verbatim) and dropped rather than
+  re-copied; the two genuine gaps found (R2 capstone finding, J-36) were backfilled into
+  `HANDOFF_PC.md`/`HANDOFF_IN.md` before trimming root. Root is now ~95 lines / ~1.6k tokens, only
+  cross-lane content. (2) `canon/editorial_ledger.jsonl` (404 live entries, ~150k tokens, previously
+  ungoverned by lane) split the same way: the 115 entries whose id already declares a lane
+  (`ED-<LANE>-NNNN`) moved to their own `canon/editorial_ledger_<lane>.jsonl`; the 289 pre-cutover
+  flat-ID entries stayed put (no retrofit, same precedent as the ID-namespace cutover itself). Main
+  ledger dropped from ~150k tokens (at its own cap) to ~90k. Updated
+  `tools/validate_ed_citations.py` (reads main + all lane files as "active") and
+  `tools/broken_dependency_checker.py`'s `check_editorial_ledger` (same — the lane-tagged third of
+  live entries would otherwise silently stop being checked for broken paths, the exact failure class
+  ED-1081 already fixed once) and `tools/ci_register_size_check.py` (per-lane caps). Verified:
+  `validate_ed_citations.py` 0 violations, `broken_dependency_checker.py` clean,
+  `ci_register_size_check.py`/`compliance_check.py --check-only` clean, `currency_consistency_check.py`
+  clean, full `tests/valoria` suite green.
 - 2026-07-07 — **Consolidated ruling pass on the Key & Echo armature §5 docket + ed_options.md
   (ED-IN-0026).** Jordan: "Perform consolidated ruling pass? I want to ratify all and get to work
   on this" — exercising, before merge, the ratification authority PR #85's body had deliberately
@@ -495,3 +515,7 @@ allocate, bump, co-commit; never max+1.)_
   session-lane-scoping convention (`CLAUDE.md` §3) is documented but not yet CI-enforced —
   detecting which lane a PR's file changes belong to and flagging mismatches is real follow-up
   work, not built yet.
+- **J-36 — Key-bus closure for the 6 off-bus writers**, gated on the distillation report's deferred
+  adversarial pass. Design-tier docket item awaiting Jordan; see also `handoffs/HANDOFF_SC.md`'s J-31
+  (social-contest deliberative-game findings) — the two were tracked together in root `HANDOFF.md`
+  before the 2026-07-08 per-lane content split.

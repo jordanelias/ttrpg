@@ -99,9 +99,18 @@ def _load_restructure_map():
 # entries are historical record and legitimately cite paths that have since moved.
 LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
 
+# Lane-split active ledger (2026-07-08 atomization pass): ED-<LANE>-NNNN entries live in
+# their own canon/editorial_ledger_<lane>.jsonl file, mirroring handoffs/HANDOFF_<LANE>.md.
+# Pre-cutover flat-ID entries stay in the main file (no retrofit). Both are "active" and
+# must be checked the same way, or the lane-tagged 1/3 of live entries would silently stop
+# being validated for broken paths — the exact failure class ED-1081 already fixed once.
+_LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+LANE_LEDGER_PATHS = tuple(f'canon/editorial_ledger_{lane.lower()}.jsonl' for lane in _LANE_CODES)
+
 
 def check_editorial_ledger(all_files):
-    """Check LIVE entries of canon/editorial_ledger.jsonl for broken paths.
+    """Check LIVE entries of canon/editorial_ledger.jsonl + its per-lane siblings for
+    broken paths.
 
     ED-1081: this check was silently dead since inception — it read
     canon/editorial_ledger.yaml, which never existed (the ledger is JSONL), and
@@ -111,31 +120,36 @@ def check_editorial_ledger(all_files):
     an INFO line, not a violation — migrating the entry text is a canon edit that
     stays with Jordan)."""
     import json
-    content = read_file("canon/editorial_ledger.jsonl")
-    if content is None:
-        return [], ["canon/editorial_ledger.jsonl not found"]
     remap = _load_restructure_map()
     broken, infos = [], []
-    for line in content.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            entry = json.loads(line)
-            status = str(entry.get('status', '')).lower()
-            ed_id = entry.get('id', '?')
-        except (ValueError, AttributeError):
-            status, ed_id = 'open', '?'  # unparseable line: treat as live, surface its refs
-        if not status.startswith(LIVE_STATUSES):
-            continue
-        for ref in extract_file_refs(line, "editorial_ledger.jsonl"):
-            if ref in all_files:
+    found_any = False
+    for ledger_path in ("canon/editorial_ledger.jsonl", *LANE_LEDGER_PATHS):
+        content = read_file(ledger_path)
+        if content is None:
+            continue  # lane files are created on first allocation to that lane
+        found_any = True
+        for line in content.splitlines():
+            line = line.strip()
+            if not line:
                 continue
-            new_home = remap.get(ref)
-            if new_home and new_home in all_files:
-                infos.append(f"{ed_id}: {ref} -> {new_home} (pre-restructure path; mapped home exists)")
-            else:
-                broken.append(f"{ref} (live entry {ed_id})")
+            try:
+                entry = json.loads(line)
+                status = str(entry.get('status', '')).lower()
+                ed_id = entry.get('id', '?')
+            except (ValueError, AttributeError):
+                status, ed_id = 'open', '?'  # unparseable line: treat as live, surface its refs
+            if not status.startswith(LIVE_STATUSES):
+                continue
+            for ref in extract_file_refs(line, ledger_path):
+                if ref in all_files:
+                    continue
+                new_home = remap.get(ref)
+                if new_home and new_home in all_files:
+                    infos.append(f"{ed_id}: {ref} -> {new_home} (pre-restructure path; mapped home exists)")
+                else:
+                    broken.append(f"{ref} (live entry {ed_id})")
+    if not found_any:
+        return [], ["canon/editorial_ledger.jsonl not found"]
     for note in sorted(infos):
         print(f"  [INFO] {note}")
     return broken, []
