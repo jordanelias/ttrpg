@@ -10,6 +10,38 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **Comparative-governance-research docket round 2 (filed + partly executed 2026-07-09).**
+  `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`
+  — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
+  Filed as **ED-SE-0018..0044** (see `canon/editorial_ledger.jsonl`; 27 SE-lane items, 7 authored,
+  20 open/needs_jordan — the largest single-session SE allocation to date).
+  **Authored into `governance_play_redesign_v1.md` / `settlement_layer_v30.md` as PROPOSED text
+  (2026-07-09; no sim code — SE still has no player-verb execution code, per the ED-SE-0005
+  precedent):**
+  - **ED-SE-0018/ED-SE-0019 `governance_play_redesign_v1.md` §1.3a** — Locked Extraction Figures:
+    one shared substrate (`assessed_base`), two acquisition triggers — unilateral **Survey**
+    (Hideyoshi's *Taikō Kenchi* cadastral survey; composes with `faction_layer_v30` §5.9 Fiscal
+    Stance) and negotiated **Encabezamiento** (Cortes of Castile, 1534), the latter opening a
+    **fifth Ledger-of-Consequence tag family, Compact** (§1.6).
+  - **ED-SE-0020 §1.3b** — Bind the Cells: a new `Keep Order` method (goningumi five-household
+    collective liability, Hideyoshi 1597), with a compounding "Cell Revolt" Crisis-card failure
+    mode.
+  - **ED-SE-0021 `settlement_layer_v30.md` §3.3b** — Za patron-lapse: extends the §3.3a Charter
+    machinery with a **patron** field; privileges lapse automatically when the patron's own
+    standing falls, no Quo Warranto needed.
+  - **ED-SE-0022 `governance_play_redesign_v1.md` §1.1a** — Clerk Capacity: a second, *opaque*
+    AP source (Ming-Qing *zhixiàn* thin-bureaucracy model) with a hidden Clerk Corruption counter
+    discoverable only via Investigate.
+  - **ED-SE-0023 §1.3c** — Ordenanza Ratification: a new `Hold Court` branch for guild
+    self-authored rules (Spanish *gremios*), three-way Ratify/Reject/Amend fork that can lock
+    caste exclusion into settlement policy.
+  - **ED-SE-0024 `settlement_layer_v30.md` §3.3c** — The Seggio Council: a new subnational-faction
+    archetype (Naples's *Seggi*) sitting deliberately *outside* the Charter/Quo-Warranto system —
+    bespoke non-transferable privileges, inherited/married/seized only.
+  **Not authored this session** (queued, see Next actions): the promote-ready-but-unlanded P2/P3
+  items (CHN-6, HRE-3, HRE-4, VEN-SE-2, IT-1, HAB-1) and the 20-item SE-lane share of the
+  needs_jordan queue.
+
 - **FA/SE historical-precedent research docket (filed 2026-07-08; built out same-day via an
   agonist-antagonist-judge Workflow).**
   `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
@@ -78,6 +110,14 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **Land the remaining promote-ready P2/P3 items from the 2026-07-09 docket**: CHN-6 (Gongsuo
+  Registration), HRE-3 (Convene the Circle), HRE-4 (Borrow), VEN-SE-2 (Boschi Pubblici
+  Requisition), IT-1 + HAB-1 (fold into SE-7's oversight toolkit as a 5-instrument menu per the
+  docket's own S-2 synthesis). See STEP 3 §4 sequencing recommendation.
+- **Author card-deck specs for the 2026-07-09 batch's new triggers** (Cell Revolt, the
+  clerk-corruption Intrigue, "Guild seeks Ordenanza sanction," "Patron's Rivals Move") per the
+  `governance_play_redesign_v1.md` §2.2 schema — only noted inline at §2.3 so far, not fully
+  specced as standalone cards.
 - **Implement the SE-1..SE-6/SE-10 PROPOSED sections in sim** — `settlement_layer_v30` §1.8a/b/c,
   §3.3a, §4.3a/b, §5.3 are drafted (see Pending); no sim code exists yet for any of them beyond
   SE-5's dormant `entry_terms_l_seed` proxy. Sequencing recommendation (from the source docket)

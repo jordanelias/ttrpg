@@ -30,6 +30,16 @@ A player-governor's season has three layers, resolved in order:
 
 **Administration Points:** `AP = 2 + FacilityTier_s` (the §1.8 built-infrastructure tier, 0–3) → 2–5 AP/season. Standing 5 governors (Seat/Cathedral) get +1. AP do not carry over. **This is the core constraint: you cannot do everything the settlement needs in one season — you must prioritize, and what you neglect festers (P5, feeds the deck).**
 
+### §1.1a Clerk Capacity — the second, opaque AP source (NEW — ED-SE-0022, 2026-07-09)
+
+**Status: PROPOSED.** A second, orthogonal AP source alongside the `FacilityTier` formula above — the only AP source in the doc that is not visible/transparent up front. Provenance: `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` §Step 3 CHN-3.
+
+**Grounding.** The Ming–Qing county magistrate (*zhixián*): a single ranked official governing tens of thousands, backed by unranked private secretaries (*muyou*, personally paid, no state budget line) and clerks/runners (*shúlì*/*yázì*) who did the bulk of actual paperwork — and who were structurally prone to corruption, since the magistrate had no state apparatus to supervise them directly (T'ung-tsu Ch'ü, *Local Government in China Under the Ch'ing*, 1962).
+
+**Mechanic.** New verb **Retain Clerks** (1 AP + `W −1`/season, auto-succeeds, no roll): grants +1 effective AP per point of Clerk Capacity (CC, 0–3 per settlement), uncapped by `FacilityTier`. Each CC point also silently increments a hidden **Clerk Corruption** counter, raising the draw-weight of a new Intrigue-family trigger (a clerk skimming a Levy, selling access, or extorting a Local Actor in the governor's name — §2.3). The counter is discoverable only via `Investigate` (§1.3), never surfaced up front the way every other AP source is. Dismissing clerks (1 AP) stops future accrual but does not undo Grudge/Reputation already generated.
+
+**Status:** promote-ready — self-contained addition to the AP formula plus one new verb, hooking entirely into the existing Intrigue card family and Ledger tag machinery; the only opaque-liability AP source against a doc where every other is transparent.
+
 ### §1.2 What replaces "one free governance action"
 
 The old "one mandatory free governance action" is removed. Instead the governor has an **AP budget over a richer verb menu**, so the seasonal decision is *allocation*, not *single-pick*. Companion-governors get a fixed 2 AP (down from a free action) per `settlement_bridge_unification C-04`.
@@ -60,6 +70,44 @@ Plus the always-available **Petition / Defy** response to the Directive (§1.4),
 - **Sponsor** is the single canonical patronage verb: it absorbs the retired `player_agency_v30 §9` free "Sponsor settlement event" (Order +1, no downside). Only the **Debt**-bearing form survives, removing the dominant-strategy duplication.
 - **Administer** (dropped from `settlement_layer_v30 §3.2`'s four-verb menu) is formally folded, not silently omitted: its information half → **Investigate**, its maintenance half → the "governance action not spent on growth this season" state. No standalone Administer verb is reintroduced.
 
+### §1.3a Locked Extraction Figures — Survey and Encabezamiento (NEW — ED-SE-0018/ED-SE-0019, 2026-07-09)
+
+**Status: PROPOSED.** Two proposals landed as one shared substrate per the judged synthesis recommendation (comparative-governance-research docket §3 S-5): both lock an extraction figure that then decouples from live Prosperity, letting the governor (or the settlement) eat the resulting gap. One locked-figure read-path, two acquisition triggers. Provenance: same docket, §Step 3 SE-JP2, HAB-5.
+
+**The shared substrate.** A settlement may carry a durable **Assessment** tag: `assessed_base`, a locked Prosperity figure. While an Assessment tag is active, `faction_layer_v30` §5.9's Fiscal Stance yield formula and any Levy/Extract Directive target read off `assessed_base`, not live Prosperity. A settlement that has grown since its last Assessment is under-taxed (a legible surplus the governor can exploit or quietly hide); one that has declined is over-taxed relative to real capacity.
+
+**Trigger A — Survey (unilateral).** New verb **Survey** (2 AP, Cognition + Governance-history vs Ob ⌊Prosperity/2⌋+1, ~8-season cooldown). On success, writes/refreshes the Assessment tag at the current Prosperity. *Grounding:* Toyotomi Hideyoshi's *Taikō Kenchi* cadastral survey (1582–1598) — the *koku*/*kokudaka* rating fixed a domain's assessed size, and with it its lord's stipend tier and military-service quota, off one periodically-resurveyed number, never continuously tracked (Wikipedia, "Koku"). **New failure mode:** an Extract/Tax Directive (§1.4) against a stale-high Assessment strips a since-declined settlement below subsistence purely from administrative neglect — Scott's extraction-invariance-detonates-revolt logic (already cited at `settlement_layer_v30` §4.3a), triggered here by *inaction* rather than policy.
+
+**Trigger B — Encabezamiento (negotiated).** New method under the existing `Levy` verb (§1.3), parallel to how `Develop`/`Fortify`/`Keep Order` already force a method choice: **Negotiate Quota** (2 AP, Charisma/Cognition + history vs the settlement's Local Actors as a mass social contest, `social_contest_v30` §7). On success, converts the settlement's per-season variable Levy into a fixed multi-season **Compact** — a new **fifth Ledger-of-Consequence tag family** (§1.6), alongside Precedent/Grudge/Debt/Reputation, locking a Treasury/troop figure for 4–6 seasons. During the term the Extract Directive auto-resolves via the Compact at 0 AP and no further Order/PS penalty, but the figure does not rise even if Prosperity does. In exchange, Local Actors gain standing to bring one Petition per Compact term that the governor must `Hold Court` on to keep the Compact intact; refusing breaks it immediately (reverts to normal Levy, writes a Grudge, blocks renegotiation for 2 seasons). Renewal at term-end is a fresh Negotiate Quota roll, harder if settlement Reputation is Weak/Hated. *Grounding:* the Cortes of Castile's *encabezamiento*, formalized 1534 for the *alcabala* — eighteen chartered cities (Burgos, Toledo, Sevilla, etc.) negotiating fixed ~6-year tax quotas in exchange for redress of grievances (*peticiones*), the crown's key fiscal lever through the 1575 crisis (Chamley; Britannica, "Cortes"; *Hispania*, CSIC).
+
+**Status:** both promote-ready — Survey wraps a periodic-refresh discipline around the already-PROPOSED §5.9 formula without changing its shape; Encabezamiento is a bounded alternative resolution path reusing the existing mass-social-contest resolver. Neither changes any faction roster.
+
+### §1.3b Bind the Cells — Goningumi collective liability (NEW — ED-SE-0020, 2026-07-09)
+
+**Status: PROPOSED.** A new method under the `Keep Order` verb (§1.3), alongside Consent/Force/Clergy. Provenance: same docket, §Step 3 SE-JP1.
+
+**Grounding.** Hideyoshi's 1597 edict (five households for samurai, ten for urban commoners), generalized under the Tokugawa into five-household *goningumi* units: collective tax and crime liability with a reporting group leader answering to the local magistrate (Britannica, "Gonin-gumi").
+
+**Mechanic.** **Bind the Cells** (1 AP — cheaper than Force, and unlike Force carries no PS penalty): partitions the settlement's Local Actors (§4.5) into fixed five-household cells, each with a Group Leader who reports to the governor; Order +1 on success. Once bound, any single member's infraction auto-stamps a durable **Collective Liability** Ledger tag (a Grudge-family variant, §1.6) on the *whole* cell — Disposition −1 to every member, not just the offender — instead of requiring per-actor `Investigate` spend to find the culprit. Stacking three Collective Liability tags on one cell auto-seeds a new Crisis-family card, **"Cell Revolt"** (§2.3). Unbinding costs its own 1-AP verb plus Order −1. The tradeoff: cheap, distributed enforcement against a compounding collective-punishment failure mode disproportionate to the original infraction.
+
+**Status:** promote-ready — adds one new Keep Order method and one new Ledger tag variant inside a doc already at PROPOSED status; reuses existing AP/Disposition/card machinery, forks no faction's identity.
+
+### §1.3c Ordenanza Ratification — guild self-regulation vs. civic check
+
+**Status: PROPOSED (NEW — ED-SE-0023, 2026-07-09).** A new resolution branch under the `Hold Court` verb (§1.3). Cross-references `faction_politics_v30` §2.5 Guild Ladder (Guild Master obligations). Provenance: same docket, §Step 3 HAB-7.
+
+**Grounding.** Spanish *gremios* (craft guilds): guild-authored *ordenanzas* — entry standards, price floors, output quotas, quality rules — required municipal or royal sanction to be enforceable, with continuing municipal inspection to check the guild's own self-interest (Encyclopedia.com, "Guilds (Gremios)"; Academia.edu, "Guild Authorities in Late Medieval Spain").
+
+**Mechanic.** When a settlement's Guild Master (`faction_politics_v30` §2.5, Gu-Std 3+) autonomously writes a new internal *ordenanza* (an ambition-engine action, §3.2), it does not take effect automatically: it generates a Petition-family card, **"Guild seeks Ordenanza sanction"** (§2.3). `Hold Court` gains three resolution branches:
+
+- **Ratify** — the ordenanza's effect applies (e.g., faster Prosperity growth under `Develop`'s Guild-charter funding option), but Guild Influence in the settlement +1 — a standing claimant.
+- **Reject** — Guild Master Disposition −2, a Grudge tag, no Prosperity bonus, no Influence creep.
+- **Amend** — Charisma/Cognition vs the Guild Master, Ob 2. Success: half the bonus, no Influence gain. Failure: treated as Reject, but at only −1 Disposition.
+
+An ordenanza's entry-standard clause can encode caste exclusion per the existing §2.5 caste note (Masterpiece Examination committees rejecting Einhir candidates); **Ratifying such a clause locks the exclusion in as settlement policy** with no separate roll — no current mechanic otherwise lets a governor unilaterally undo a sanctioned ordenanza short of a fresh Investigate-then-Hold-Court chain.
+
+**Status:** promote-ready — new Hold Court sub-case using only existing verbs, Ledger/Influence mechanics, and the already-ratified Guild ladder's stated Guild Master obligations; no new faction roster action or track.
+
 ### §1.4 The Directive — the dual-authority engine
 
 Each season the Provincial Authority issues **one Directive** to the settlement (the controlling faction's AI, or the GM, per the faction priority tree). Typed examples:
@@ -88,6 +136,7 @@ Every governance choice writes a durable per-settlement tag the world remembers:
 - **Grudge** — an actor/faction wronged; raises their hostile-action weight, seeds Intrigue cards.
 - **Debt** — an obligation (a sponsorship expectation, a called-in Treat favor); fires when due.
 - **Reputation** — the settlement's read on the governor (Just / Harsh / Generous / Weak / Hated), modifying Local-Actor starting Disposition and event tone.
+- **Compact** (NEW — ED-SE-0019, 2026-07-09; §1.3a) — a fifth family: a negotiated, fixed-term extraction agreement (Encabezamiento) locking a Treasury/troop figure for its term and granting the counterparty a bounded Petition right. Distinct from Debt (which fires once, when called in): a Compact fires *every season of its term* until renewal or breach.
 
 Tags persist across the governor's tenure and **survive succession** (the next governor inherits the settlement's memory), which is what makes player→world stick.
 
@@ -148,6 +197,8 @@ card:
 | **Intrigue** | …scheming behind your back (blackmail, assassination, covert actor) | Grudges, covert factions, NPC ambitions |
 | **Ambition** | …an NPC making *their* move (claiming, betraying, rising) | The NPC ambition engine (Part 3) |
 | **Thread** | …manifesting the metaphysical (RS bleed, Calamity edge) | Thread Proximity, RS thresholds |
+
+**New triggers landed 2026-07-09 (comparative-governance-research docket — see §1.1a/§1.3a/§1.3b/§1.3c above for the full specification of each):** *Intrigue* — "Clerk skims/sells access/extorts" (seeded by Clerk Corruption, §1.1a); *Crisis* — "Cell Revolt" (seeded by 3 stacked Collective Liability tags, §1.3b); *Petition* — "Guild seeks Ordenanza sanction" (seeded by a Guild Master's autonomous ordenanza, §1.3c). A fourth, **"Patron's Rivals Move"** (Intrigue), is seeded by a Guild's backing patron losing standing — specified at `settlement_layer_v30` §3.3b, not here, since the patron-standing state it reads lives in the settlement's subnational-faction record rather than this deck's own state.
 
 ### §2.4 Drawing
 

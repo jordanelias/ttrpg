@@ -10,6 +10,36 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Pending
 
+- **Comparative-governance-research docket round 2 (filed + partly executed 2026-07-09; a
+  22-agent Workflow — 7 civilizations × research→adversarial-verify→distill, Sonnet-tier, then a
+  single Opus 4.8 judgment pass).**
+  `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`
+  — Jordan-requested extension of the round-1 docket below, covering Byzantium, feudal/imperial
+  China, feudal Japan, the Holy Roman Empire, Venice (Stato da Mar/Terraferma), Renaissance Italy
+  outside Venice, and Habsburg Spain, targeting settlement-management and intra-faction
+  rank-advancement content specifically. Each research lane was steered off everything round-1 and
+  the 2026-06-28 deliberation corpus already mined. The Opus judge pass caught and corrected a
+  stale premise several proposals inherited (the "missing Guilds ladder," which `faction_politics_v30`
+  §2.5 already authors in full — the actually-flat surface is the Crown Administrative branch,
+  §1.1b) and cut 14 of 58 proposals as redundant/pattern-matched/too-vague before curating the
+  remaining 44. Filed as **ED-FA-0018..0034** (see `canon/editorial_ledger.jsonl` for each item's
+  scope; `needs_jordan` forks: ED-FA-0018 CHN-2 examination pipeline for the Administrative
+  branch — the single highest-value open rank decision — plus ED-FA-0027/0028/0029/0030/0031
+  BYZ-1/9/7/8, CHN-8-0031, ED-FA-0032/0033 FA-JP3/5, ED-FA-0034 HAB-2).
+  **Authored into `faction_politics_v30.md` as PROPOSED text (2026-07-09):**
+  - **ED-FA-0019 §1.0b** — Recognition Fork (Confirm/New-Grant), a cross-rank dimension applying
+    uniformly across all four primary ladders (Kamakura *honryoando*/*shin'on*).
+  - **ED-FA-0020 §1.0c** — Court Attendance + hostage-kin, Standing-4+ absentee-governor dimension
+    (*sankin-kōtai*).
+  - **ED-FA-0021 §1.0d** — Patron-Sponsored Performance Audit, an optional Standing-6+ toggle on
+    the Obligations column that auto-lapses with its patron (Zhang Juzheng's *kaochengfa*).
+  - **ED-FA-0022/ED-FA-0023 §2.5a** — Guild-ladder entry/mastership forks, landed together per the
+    judged synthesis: guarantor-vs-sole-patron entry (Book of the Eparch) and capital-gated
+    Free Mastership vs the examined path (Arte della Lana), both writing durable tags that
+    interact with the ladder's existing caste bias.
+  **Not authored this session** (queued, see Next actions below): the promote-ready-but-unlanded
+  P2/P3 items (HRE-2, HAB-4, IT-2) and the full needs_jordan queue.
+
 - **FA/SE historical-precedent research docket (filed 2026-07-08; built out same-day via an
   agonist-antagonist-judge Workflow).**
   `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
@@ -80,6 +110,17 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **Resolve ED-FA-0018 (CHN-2 Examination Ladder)** — the single highest-value open rank decision
+  from the 2026-07-09 docket: does the Crown Administrative branch (§1.1b, currently the ladder
+  system's one genuinely flat sub-office surface) get a non-Skyrim-Eight credentialing pipeline
+  (capped pass rates, direct Standing-3 appointment, a "Waiting Laureate Pool")? Recommended yes
+  per the docket's own judgment. Decide this before BYZ-1 (next item) — they compose.
+- **Land the remaining promote-ready P2/P3 items from the 2026-07-09 docket**: HRE-2 (Chapter
+  Capture, faction_politics §1.4d), HAB-4 (Overlapping Consulta, §7.1a), IT-2 (Condotta
+  three-phase contract, faction_action.py). See the docket's STEP 3 §4 sequencing recommendation.
+- **Take the 2026-07-09 needs_jordan queue to a decision memo** alongside the round-1 leftovers
+  below — start with BYZ-1 (Office/Dignity Standing-split) since HAB-2 (Valido) explicitly composes
+  with it (§5 items 1-3 of the new docket).
 - **Implement FA-1 Fiscal Stance in sim** — `faction_layer_v30` §5.9 is drafted (PROPOSED); wire
   the per-faction/province stance choice + yield formula into `sim/territory/registry.py`'s
   Treasury accounting (ED-FA-0008, still open).
