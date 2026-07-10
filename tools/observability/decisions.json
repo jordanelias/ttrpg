@@ -9574,10 +9574,10 @@
     },
     {
       "id": "PP-687-001",
-      "scope": "Doc 08 \u00a71 EventImpact (categorical aligned/neutral/contradicted projection)",
+      "scope": "Doc 08 \u00a71 [REDACTED-LEGACY-NAME, canon=Key] (categorical aligned/neutral/contradicted projection)",
       "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a72",
       "date": "2026-05-01",
-      "replacement": "EventImpact superseded by Key.impact_vector \u2014 continuous signed projection onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype becomes "
+      "replacement": "[REDACTED-LEGACY-NAME, canon=Key] superseded by Key.impact_vector \u2014 continuous signed projection onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype becomes "
     },
     {
       "id": "PP-687-002",

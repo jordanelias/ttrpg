@@ -32,15 +32,16 @@ OUT = Path(__file__).resolve().parent
 # Redact EVERY legacy name (block- and warn-tier alike, references/names_index.yaml —
 # single source of truth per tools/ci_naming_check.py / tools/ci_names_check.py, imported
 # here, not re-hardcoded) out of any corpus text this tool quotes verbatim. This register
-# aggregates arbitrary corpus lines, including decision entries that legitimately DISCUSS a
-# renamed/forbidden term by name (quoting the exact token, as part of explaining the rename
-# or the naming gate itself) — without this, regenerating the register can re-introduce a
-# legacy token into decisions.json/DECISIONS.md and trip ci_naming_check.py (block-tier) or
-# ci_names_check.py (warn-tier) on the next commit (both failed exactly this way, 2026-07-10:
-# block-tier on a naming-gate discussion, then warn-tier on an "EventImpact superseded by
-# Key" supersession note). This masks the generator's OWN output; it does not touch either
-# gate's exclusion list or matching logic — enforce=None pulls every tier so a future
-# warn->block promotion needs no change here.
+# aggregates arbitrary corpus lines, including decision/supersession entries that
+# legitimately DISCUSS a renamed/forbidden term by name (quoting the exact token, as part
+# of explaining the rename or the naming gate itself) — without this, regenerating the
+# register can re-introduce a legacy token into decisions.json/DECISIONS.md and trip
+# ci_naming_check.py (block-tier) or ci_names_check.py (warn-tier) on the next commit (both
+# failed this way in practice, 2026-07-10). This masks the generator's OWN output; it does
+# not touch either gate's exclusion list or matching logic — enforce=None pulls every tier
+# so a future warn->block promotion needs no change here. MUST be applied to every text
+# field this tool writes, not just add()'s corpus-sweep path — the supersession-register
+# "resolved" entries below are a second, separate source of quoted corpus text.
 def _redact_forbidden_names(text: str) -> str:
     sys.path.insert(0, str(REPO / "tools"))
     try:
@@ -182,11 +183,14 @@ def main():
             raw = yaml.safe_load(sr.read_text(encoding="utf-8")) or {}
             for e in (raw.get("entries") or []):
                 if isinstance(e, dict) and e.get("superseded_id"):
+                    # A supersession entry's whole POINT is often "old term -> new term",
+                    # so this is the source most likely to quote a legacy name verbatim —
+                    # redact the same as add()'s corpus-sweep text (see note above).
                     resolved.append({"id": str(e.get("superseded_id")),
-                                     "scope": str(e.get("scope", "")),
+                                     "scope": _redact_forbidden_names(str(e.get("scope", ""))),
                                      "superseded_by": str(e.get("superseded_by", "")),
                                      "date": str(e.get("superseded_date") or e.get("date", "")),
-                                     "replacement": str(e.get("replacement") or "")[:160]})
+                                     "replacement": _redact_forbidden_names(str(e.get("replacement") or "")[:160])})
         except yaml.YAMLError:
             pass
 
