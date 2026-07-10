@@ -75,14 +75,14 @@ are more "current state" files than there should be; trust them in this strict p
 
 | Directory | Contents |
 |---|---|
-| `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
+| `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl` for pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries, §3), patch register, mechanics index, canonical timeline, supersession register |
 | `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
 | `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
 | `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
 | `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
-| `engine/` | Sigma-leverage engine armature + audit harness. ⚠️ `engine_audit_harness.py` is **dead** (hardcoded `/home/claude` paths) — do not invoke. |
+| `engine/` | Sigma-leverage engine armature + audit harness docs. The dead `engine_audit_harness.py` (hardcoded `/home/claude` paths) was retired to `deprecated/engine/` (2026-07-09) — do not resurrect. |
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once. Some tools are dead or GitHub-dependent — §6. |
 | `archives/`, `deprecated/` | History; not canonical. |
 
@@ -111,6 +111,12 @@ are more "current state" files than there should be; trust them in this strict p
   construction, not just by allocation discipline. Both formats resolve through the same
   citation-audit path (`tools/validate_ed_citations.py`) and currency gate
   (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
+  **The ledger file itself is lane-split too (2026-07-08):** an `ED-<LANE>-NNNN` entry lives in
+  `canon/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
+  `canon/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
+  merge-collision reason. Pre-cutover flat-ID entries stay in the main file (no retrofit). A
+  lane file exists only once that lane has allocated an ED (no `_go.jsonl` yet). Both the main
+  file and every lane file are "active, authoritative" — read all of them, not just one.
   **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
   lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
   to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
@@ -209,10 +215,19 @@ Do not represent the skeleton as a runnable head-start.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
-- **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
-  `deprecated/`, or hardcode `/home/claude`): `extract_values`, `extract_proper_nouns`,
-  `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
-  They fail opaquely — don't assume "tool exists ⇒ rule enforced." (`compliance_check` is
+- **Several tools were dead** (imported the orchestrator's `github_ops.py`, only present under
+  `deprecated/`, or hardcoded `/home/claude`) and were **retired to `deprecated/tools/` /
+  `deprecated/engine/` (2026-07-09, token-efficiency pass)**, mirroring the earlier
+  `valoria-orchestrator` → `deprecated/skills/` retirement: `extract_values.py`,
+  `extract_proper_nouns.py`, `valoria_collator.py`, `valoria_bulk_fix.py`, `file_lookup.py`,
+  `compliance_dryrun.py`, `engine/engine_audit_harness.py`. None were invoked by CI, local
+  hooks, or any skill — confirmed by grepping every workflow/hook/skill for each filename
+  before moving. `skills/prose-writer/scripts/consistency_check.py` (the pre-`ci_naming_check.py`
+  naming-gate matcher, GitHub-API-only) retired the same way, to
+  `deprecated/skills/prose-writer/scripts/`. `tools/canon_coverage_check.py` is a **different**
+  case — GitHub-API-based and unwired (`ci_job: ""` in `references/ci_checks_registry.yaml`) but
+  explicitly awaiting Jordan's inclusion decision, not confirmed-dead legacy; left in place.
+  (`compliance_check` is
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
   BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
   compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
