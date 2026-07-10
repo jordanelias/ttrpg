@@ -202,7 +202,12 @@ def main():
     for f, n in hotspots:
         md.append(f"- `{f}` — {n}")
 
-    PER_CAT_CAP = 60
+    # 2026-07-09 (token-efficiency pass): was 60. DECISIONS.md is a human-skimmable
+    # summary — decisions.json (unchanged, uncapped) is the complete machine-readable
+    # source both console.html and any programmatic consumer actually read. At 60,
+    # DECISIONS.md had grown to ~59k tokens (4x its own atomization_rules.yaml cap)
+    # without adding real coverage, since nothing reads the .md for completeness.
+    PER_CAT_CAP = 12
 
     def section(title, prio):
         rows = [r for r in items if r["priority"] == prio]

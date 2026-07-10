@@ -114,12 +114,12 @@ in_session_hooks:
 
   - hook: forbidden_token_gate
     level: 4
-    role: "PI core_rules canonical-name enforcement (Solmund, never Galbados). Mirrors prose-writer/scripts/consistency_check.py."
+    role: "PI core_rules canonical-name enforcement (Solmund, never Galbados). The live gate is tools/ci_naming_check.py (+ the edit-time tools/hook_naming_guard.py); the GitHub-API-only predecessor this row originally pointed at, prose-writer/scripts/consistency_check.py, was never wired into any hook or CI job and was retired to deprecated/skills/prose-writer/scripts/ (2026-07-09)."
 
   - hook: abbreviation_registry_gate
     level: 4
     role: "One-owner-per-abbreviation enforcement. Consumes references/name_collision_database.yaml; fires on definitional 'Name (ACR)' patterns; halts on enforced owner-violations + deprecated abbreviations, soft-warns on status:recorded / unregistered."
-    paired_ci: tools/valoria_collator.py
+    paired_ci: ""    # was tools/valoria_collator.py — never actually wired into any hook or CI job (confirmed 2026-07-09); the tool retired to deprecated/tools/. This hook's enforcement remains a documented-but-unbuilt gap, not a live pairing.
     notes: "Added 2026-06-04. Closes the gap where name_collision_database.yaml declared itself hook-checkable but no hook consumed it. Collisions CI/Crown-Index, IP/Imperial-Pressure, PT/Piety-Territory+Parliamentary-Transfer registered status:recorded pending Jordan rename ruling."
 
   - hook: vetting_gate

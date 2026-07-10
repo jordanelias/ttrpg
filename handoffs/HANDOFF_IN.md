@@ -296,6 +296,59 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Decisions
 
+- 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observability
+  register re-capped, two stale size warnings resolved.** Jordan: "What other steps can we take to
+  increase token efficiency... How often are we calling in from GitHub needlessly instead of just
+  looking at local cloned repo?" then "All please, but carefully." A subagent traced every
+  GitHub-API code path in the repo first: **zero live-invoked tools touch the GitHub API** — the
+  ED-1053 migration to working-tree reads is complete for every gate CI/hooks actually run. What
+  remained was dead code that only *looked* live, independently re-verified (grep for each
+  filename across every workflow/hook/skill/Python import) before touching anything:
+  - **Retired to `deprecated/tools/` / `deprecated/engine/`** (mirroring the existing
+    `valoria-orchestrator` → `deprecated/skills/` precedent, not hard-deleted):
+    `extract_values.py`, `extract_proper_nouns.py`, `valoria_collator.py`, `valoria_bulk_fix.py`,
+    `file_lookup.py`, `compliance_dryrun.py`, `engine/engine_audit_harness.py`. Also
+    `skills/prose-writer/scripts/consistency_check.py` (the GitHub-API-only naming-gate predecessor
+    `tools/ci_naming_check.py` itself documents as superseded) → `deprecated/skills/prose-writer/scripts/`.
+    Fixed the two `references/ci_checks_registry.yaml` rows that asserted a live pairing to two of
+    these (`abbreviation_registry_gate` → `valoria_collator.py`, `forbidden_token_gate` →
+    `consistency_check.py`) — both pairings were already stale/never wired, confirmed by grep.
+    **`tools/canon_coverage_check.py` deliberately left in place** — GitHub-API-based and unwired
+    too, but its own registry entry says `ci_job: ""  # not yet wired — Jordan to decide`, a
+    pending-decision status, not confirmed-dead legacy.
+  - **Dead single function removed in-place** (file itself is live): `fetch_full()` in
+    `skills/valoria-vector-audit/scripts/vector_audit.py` — a GitHub Contents API helper with zero
+    callers, vestigial from before the read-path rewrite (LB-22). Removed with its now-unused
+    `urllib.request`/`base64`/`json` imports; file still compiles.
+  - **`tools/observability/DECISIONS.md` re-capped**: was 59,085 tokens (4x its 15k
+    `atomization_rules.yaml` cap) purely from `build_decisions.py`'s `PER_CAT_CAP=60` truncation
+    setting being too generous — nothing reads the .md for completeness (console.html and any
+    programmatic consumer read the uncapped `decisions.json`, unchanged). Dropped `PER_CAT_CAP` to
+    12 and regenerated; file is now ~6.3k tokens. (Regeneration also re-swept the current corpus,
+    surfacing the counts have drifted since the file's one prior commit — expected, not a bug.)
+  - **Two other standing `compliance_check` size warnings resolved**, not by pruning content but by
+    fixing the governance that was wrong: `references/module_contracts.yaml` (~14.4k tokens) was
+    hitting the generic 10k `**/*.yaml` catch-all with no policy ever written for it despite being a
+    genuinely comprehensive, actively machine-checked 27-module registry (CLAUDE.md §6 already notes
+    it's expected to grow, not shrink) — raised its explicit cap to 18k, `warn_only`, same treatment
+    as `canonical_sources.yaml`/`mechanical_terms_index.md`. The attribute/value coherence audit's
+    `02_census/quantity_census.yaml` (~18.5k tokens) is a self-declared frozen evidence artifact
+    ("QUARANTINE-NOTE: not a registry, not canonical truth") hitting the same catch-all with nothing
+    to act on — given `on_exceed: skip`, scoped to that one file (not a blanket `designs/audit/`
+    exemption). `compliance_check.py --check-only --repo-state .` now reports 0 warnings, 0 errors
+    (previously 3 standing warnings).
+  - Model-tiering gap noted but **not code-fixed**: of three persisted Workflow scripts in
+    `.claude/` (git-tracked, each a provenance record of one already-executed audit —
+    `wf_attribute_coherence.js`, `wf_combat_critique.js`, `wf_social_contest_critique.js`), only the
+    first shows real haiku/sonnet/opus/fable tiering per CLAUDE.md §10; the other two have almost no
+    `model:` overrides. These are historical run records, not reusable named workflows (no
+    `.claude/workflows/` dir exists) — editing them now wouldn't change any past cost and would
+    misrepresent what actually ran, so left as-is. The actionable form of this finding is: apply
+    §10 tiering when *authoring* the next heavy audit/critique workflow, not a retrofit here.
+  - Verified: `compliance_check.py --check-only --repo-state .` (0/0), `ci_register_size_check.py`,
+    `ci_hooks_verifier.py` (dead-tool `/home/claude` warnings dropped from 6 files to the expected
+    remainder), `ci_naming_check.py`, `currency_consistency_check.py`, `validate_ed_citations.py`
+    (0 violations), `broken_dependency_checker.py` (clean), full `tests/valoria` suite — all green.
 - 2026-07-08 — **Second HANDOFF atomization pass + editorial-ledger lane split.** Jordan: "Make it
   so that handoffs are by lane, not just a giant document. Break up handoffs and editorial register
   for that reason because they should be atomized for better management." Two changes:
