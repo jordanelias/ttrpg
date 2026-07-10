@@ -491,7 +491,7 @@
       "count": 1
     },
     {
-      "text": "A5 \u2014 The piety-rename mechanism is `alias_registry.yaml` + `name_collision_database.yaml`, NOT `ci_naming_check.py`.** The report said \"update `tools/ci_naming_check.py`.\" That tool only blocks the token `[REDACTED-DEPRECATED-NAME, canon=Solmund]` (single-purpose). The collision machinery already exists (`alias_regi\u2026",
+      "text": "A5 \u2014 The piety-rename mechanism is `alias_registry.yaml` + `name_collision_database.yaml`, NOT `ci_naming_check.py`.** The report said \"update `tools/ci_naming_check.py`.\" That tool only blocks the token `[REDACTED-LEGACY-NAME, canon=Solmund]` (single-purpose). The collision machinery already exists (`alias_registry\u2026",
       "category": "naming",
       "priority": 1,
       "label": "Ruling pending",

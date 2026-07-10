@@ -29,24 +29,27 @@ except ImportError:
 REPO = Path(__file__).resolve().parents[2]
 OUT = Path(__file__).resolve().parent
 
-# Redact block-tier forbidden names (references/names_index.yaml, single source of truth
-# per tools/ci_naming_check.py — imported here, not re-hardcoded) out of any corpus text
-# this tool quotes verbatim. This register aggregates arbitrary corpus lines, including
-# decision entries that legitimately DISCUSS the naming gate by name (quoting the exact
-# token the gate forbids, as part of explaining the gate itself) — without this,
-# regenerating the register can re-introduce the forbidden token into decisions.json /
-# DECISIONS.md and trip ci_naming_check.py on the next commit (a real failure this way,
-# 2026-07-10). This masks the generator's OWN output; it does not touch the enforcement
-# gate's exclusion list or matching logic.
+# Redact EVERY legacy name (block- and warn-tier alike, references/names_index.yaml —
+# single source of truth per tools/ci_naming_check.py / tools/ci_names_check.py, imported
+# here, not re-hardcoded) out of any corpus text this tool quotes verbatim. This register
+# aggregates arbitrary corpus lines, including decision entries that legitimately DISCUSS a
+# renamed/forbidden term by name (quoting the exact token, as part of explaining the rename
+# or the naming gate itself) — without this, regenerating the register can re-introduce a
+# legacy token into decisions.json/DECISIONS.md and trip ci_naming_check.py (block-tier) or
+# ci_names_check.py (warn-tier) on the next commit (both failed exactly this way, 2026-07-10:
+# block-tier on a naming-gate discussion, then warn-tier on an "EventImpact superseded by
+# Key" supersession note). This masks the generator's OWN output; it does not touch either
+# gate's exclusion list or matching logic — enforce=None pulls every tier so a future
+# warn->block promotion needs no change here.
 def _redact_forbidden_names(text: str) -> str:
     sys.path.insert(0, str(REPO / "tools"))
     try:
         import names as _names
-        legacy = _names.all_legacy(enforce="block")
+        legacy = _names.all_legacy(enforce=None)
     except Exception:
         return text
     for legacy_name, canon, _key, _tier in legacy:
-        text = re.sub(re.escape(legacy_name), f"[REDACTED-DEPRECATED-NAME, canon={canon}]",
+        text = re.sub(re.escape(legacy_name), f"[REDACTED-LEGACY-NAME, canon={canon}]",
                       text, flags=re.IGNORECASE)
     return text
 
