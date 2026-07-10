@@ -108,6 +108,7 @@ settlement_stats:
     - {key: set.prosperity,      name: Prosperity,       scale: "0-5"}
     - {key: set.defense,         name: Defense,          scale: "0-5"}
     - {key: set.order,           name: Order,            scale: "0-5"}
+    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "designs/territory/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
@@ -140,7 +141,7 @@ deprecated:
 # specified as a future W2.8-style migration, not implemented by this ruling.
 # ============================================================================
 not_descriptors:
-  derived_values: [Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate, Wound Interval, Max Wounds, Face, TroopCount, "Legitimacy (faction, derived)", Treasury, Levies Available, Reputation, "Discipline (faction)", Intelligence Holdings, Public Order]
+  derived_values: [Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate, Wound Interval, Max Wounds, Face, TroopCount, "Legitimacy (faction, derived)", Treasury, Levies Available, Reputation, "Discipline (faction)", Intelligence Holdings, Public Order, Settlement Weight]
   tracks:  [Piety, Disposition, Renown, Standing, Persuasion, Coherence, Warden Recognition]
   clocks:  [Evidence, CI, MS, IP]
   pools:   [Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain, Political Pool]
@@ -165,3 +166,17 @@ not_descriptors:
       opponents `max(0,Mandate-floor(CI/30))`, ci_political_v30 §3.4). Name ratified per existing
       prior art in mechanical_terms_index.md (which already deprecates "Mandate/Faction Pool" in
       favor of this name) -- not a new coinage.
+
+  wave_q_step3_additions: >
+    Residual filed 2026-07-08 alongside the Wave-Q-step-3 tooling build (A17 checker +
+    `sim/substrate/keys.py` stat_vocabulary hook, see handoffs/HANDOFF_IN.md): `set.facility_tier`
+    (settlement_stats, D5 residual -- distinct from `terr.fort_level` above) and "Settlement Weight"
+    (D5's derived companion, no `derived.*` KIND exists in this file so it's a plain name here, same
+    treatment as the other derived_values). Two proposed deltas remain REJECTED, not filed, by both
+    this pass and the prior ratification pass: D11 (`pool.knot`/`track.persuasion` cross-link -- no
+    linkage exists at either cited source) and D15 (`contracts_bucket`<->KIND crosswalk field --
+    `not_descriptors` carries no KIND field to cross against). Also flagged, not fixed: the Coherence
+    disambiguation note two paragraphs up is itself now STALE -- `module_contracts.yaml`'s
+    `threadwork` module's Coherence entry was corrected to `bucket: track` in this same PR #112
+    ratification pass, so the "3-way disagreement... contracts: pool" claim no longer holds; left
+    as-is rather than hand-edited, since fixing PR #112's own prose is out of this pass's scope.

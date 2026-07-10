@@ -57,7 +57,9 @@ jobs:
             tools/compliance_check.py \
             tools/atomizer.py \
             tools/doc_index_gen.py \
-            tools/index_gen.py
+            tools/index_gen.py \
+            tools/quantity_registry.py \
+            tools/ci_quantity_vocabulary_check.py
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -256,6 +258,34 @@ jobs:
             --contracts references/module_contracts.yaml \
             --registry  designs/architecture/key_type_registry_v30.md \
             --sources   references/canonical_sources.yaml
+
+  quantity-vocabulary-check:
+    name: Quantity Vocabulary Closure — A17 (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only: A17 from the Key & Echo Armature's quantity-layer extension
+    # (designs/audit/2026-07-08-attribute-value-coherence-audit/
+    # proposed_quantity_armature_extension.md §3.1, ED-IN-0029 — the mechanical
+    # rows OPT-AV-4/16 executed by direct Jordan instruction; the doc's
+    # design-naming forks, e.g. OPT-AV-1/9/10/11/12/13/15/18, remain open and
+    # are NOT decided by this job). Same lifecycle + same STEP-level
+    # continue-on-error precedent as contract-conformance above: land
+    # report-only, burn the backlog via a shaping wave, flip to blocking only
+    # at zero backlog (armature §4 / extension §3, OPT-AV-6). Deliberately not
+    # listed in ci-summary's needs, matching contract-conformance.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Stat identifiers resolve to the descriptor registry (report-only)
+        continue-on-error: true
+        run: python3 tools/ci_quantity_vocabulary_check.py
 
   engine-params-roundtrip:
     name: Engine-Params Round-Trip (oracle → export)

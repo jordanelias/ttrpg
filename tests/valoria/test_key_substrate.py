@@ -143,6 +143,43 @@ def test_visibility_shapes(registry):
     log.append(make_key("k5", visibility=Visibility(public=False, semi_public_observers=["a", "b"])))
 
 
+# -- OPT-AV-16 stat-vocabulary hook (extension §3.1, ED-IN-0029; candidate
+# invariant 9 — WARN-tier, collects, never raises) --------------------------
+
+def test_stat_vocabulary_default_none_is_unchanged(registry):
+    # Default behavior must be byte-for-byte what it was before this hook
+    # existed: no vocabulary check performed, no warnings list populated,
+    # and an unresolvable stat_deltas key does not raise.
+    log = KeyLog(registry)
+    log.append(make_key("k1", targets=[
+        Target(actor_id="a", role="witness", stat_deltas={"NotARegisteredStat": 1}),
+    ]))
+    assert log.stat_vocabulary is None
+    assert log.stat_vocabulary_warnings == []
+
+
+def test_stat_vocabulary_warns_but_never_raises(registry):
+    known = {"Strength", "Wealth"}
+    log = KeyLog(registry, stat_vocabulary=known)
+    log.append(make_key("k1", targets=[
+        Target(actor_id="a", role="witness",
+               stat_deltas={"Strength": 1, "TotallyMadeUp": 2}),
+    ]))
+    assert len(log.stat_vocabulary_warnings) == 1
+    assert "TotallyMadeUp" in log.stat_vocabulary_warnings[0]
+    assert "Strength" not in log.stat_vocabulary_warnings[0]
+
+
+def test_stat_vocabulary_accepts_callable_resolver(registry):
+    resolver = lambda name: name == "Wealth"  # noqa: E731
+    log = KeyLog(registry, stat_vocabulary=resolver)
+    log.append(make_key("k1", targets=[
+        Target(actor_id="a", role="witness", stat_deltas={"Wealth": 1, "Other": 1}),
+    ]))
+    assert len(log.stat_vocabulary_warnings) == 1
+    assert "Other" in log.stat_vocabulary_warnings[0]
+
+
 # -- SSI append order + determinism ------------------------------------------
 
 def test_sub_step_index_append_order(registry):

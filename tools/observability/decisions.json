@@ -1,21 +1,21 @@
 {
   "meta": {
     "files_scanned": 1261,
-    "total_open": 838,
+    "total_open": 842,
     "by_category": {
       "ratification": 47,
       "ruling": 207,
-      "naming": 62,
+      "naming": 63,
       "mechanics": 23,
       "gap": 293,
-      "assumption": 170,
+      "assumption": 173,
       "stub": 23,
       "todo": 13
     },
     "by_priority": {
-      "1": 304,
+      "1": 305,
       "2": 35,
-      "3": 499
+      "3": 502
     },
     "hotspots": [
       [
@@ -469,6 +469,17 @@
       "count": 1
     },
     {
+      "text": "ED-SC-0003 \u2014 \"Piety Track\" name collision (P2)",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:71"
+      ],
+      "systems": [],
+      "count": 1
+    },
+    {
       "text": "4. **Root is KNOWN-TRACKED.** `ED-1006` (status **open**) flags the \"3-way piety/conviction_track name collision (substrate SS8.4 vs conviction_track_v1 vs scene/conviction_track_v30)\" and conviction_track_v1 \"header-CANONICAL but absent from canonical_sources.\" The conviction subsystem's canonical-currency confusio\u2026",
       "category": "naming",
       "priority": 1,
@@ -480,7 +491,7 @@
       "count": 1
     },
     {
-      "text": "A5 \u2014 The piety-rename mechanism is `alias_registry.yaml` + `name_collision_database.yaml`, NOT `ci_naming_check.py`.** The report said \"update `tools/ci_naming_check.py`.\" That tool only blocks the token `galbados` (single-purpose). The collision machinery already exists (`alias_registry` collision_table + `name_col\u2026",
+      "text": "A5 \u2014 The piety-rename mechanism is `alias_registry.yaml` + `name_collision_database.yaml`, NOT `ci_naming_check.py`.** The report said \"update `tools/ci_naming_check.py`.\" That tool only blocks the token `[REDACTED-DEPRECATED-NAME, canon=Solmund]` (single-purpose). The collision machinery already exists (`alias_regi\u2026",
       "category": "naming",
       "priority": 1,
       "label": "Ruling pending",
@@ -4798,6 +4809,39 @@
       "label": "Flagged assumption (verify)",
       "locations": [
         "designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md:87"
+      ],
+      "systems": [],
+      "count": 1
+    },
+    {
+      "text": "| 17 | ED-1051 | F \u00b7 Infra | Ratify `propagation_spec_v1.md` as `engine_clock`'s home, flip `doc:null` | **Flip `engine_clock` now**; sequence the other ~10 doc:null + 13 [ASSUMPTION] resolvers |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:45"
+      ],
+      "systems": [],
+      "count": 1
+    },
+    {
+      "text": "`[ASSUMPTION]` resolvers) is a work-plan, not a single ruling. The **ready decision** is narrow:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:472"
+      ],
+      "systems": [],
+      "count": 1
+    },
+    {
+      "text": "exercise), adjudicating each `[ASSUMPTION]` resolver's determinism class as its home doc lands. This",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:482"
       ],
       "systems": [],
       "count": 1

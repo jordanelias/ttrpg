@@ -28,6 +28,28 @@ except ImportError:
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = Path(__file__).resolve().parent
+
+# Redact block-tier forbidden names (references/names_index.yaml, single source of truth
+# per tools/ci_naming_check.py — imported here, not re-hardcoded) out of any corpus text
+# this tool quotes verbatim. This register aggregates arbitrary corpus lines, including
+# decision entries that legitimately DISCUSS the naming gate by name (quoting the exact
+# token the gate forbids, as part of explaining the gate itself) — without this,
+# regenerating the register can re-introduce the forbidden token into decisions.json /
+# DECISIONS.md and trip ci_naming_check.py on the next commit (a real failure this way,
+# 2026-07-10). This masks the generator's OWN output; it does not touch the enforcement
+# gate's exclusion list or matching logic.
+def _redact_forbidden_names(text: str) -> str:
+    sys.path.insert(0, str(REPO / "tools"))
+    try:
+        import names as _names
+        legacy = _names.all_legacy(enforce="block")
+    except Exception:
+        return text
+    for legacy_name, canon, _key, _tier in legacy:
+        text = re.sub(re.escape(legacy_name), f"[REDACTED-DEPRECATED-NAME, canon={canon}]",
+                      text, flags=re.IGNORECASE)
+    return text
+
 SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
 
 # lines that mention a marker but are ALREADY settled — do not list as open
@@ -74,7 +96,7 @@ def main():
     decisions: dict[str, dict] = {}   # norm-text -> record
 
     def add(text, cat, prio, label, where, system=""):
-        text = text.strip()
+        text = _redact_forbidden_names(text.strip())
         if len(text) > 320:
             text = text[:317] + "…"
         k = norm(text)

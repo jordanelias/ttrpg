@@ -32,6 +32,16 @@ to key_substrate_v30.md §4.1 steps 4/5; both are now RATIFIED (Jordan's
 consolidated ruling pass, 2026-07-07, ED-IN-0026 — see propagation_spec_v1.md's
 amended "Relationship to other canonical surfaces" section) and default ON here,
 while remaining ordinary caller-toggleable flags rather than hardcoded behavior.
+
+Quantity-layer extension (designs/audit/2026-07-08-attribute-value-coherence-audit/
+proposed_quantity_armature_extension.md §3.1, ED-IN-0029 — the mechanical row
+OPT-AV-16 executed by direct Jordan instruction; the doc's design-naming forks,
+e.g. OPT-AV-1/9/10/11/12/13/15/18, remain OPEN and are NOT decided here):
+KeyLog gained an OPTIONAL `stat_vocabulary` hook — a candidate WARN-tier
+invariant 9, deliberately separate from invariants 1-8 (which raise). Default
+None preserves prior behavior exactly: stat_deltas key NAMES were never
+checked before this (only field presence was — the C6-F1/C7-F6 gap the
+extension names). See KeyLog._check_stat_vocabulary.
 """
 
 from __future__ import annotations
@@ -273,11 +283,18 @@ class KeyLog:
     R-F2-style determinism surface).
     """
 
-    def __init__(self, registry: TypeRegistry):
+    def __init__(self, registry: TypeRegistry, *, stat_vocabulary=None):
         self.registry = registry
         self._entries: list = []          # list[Key], append order
         self._ids: dict = {}              # id -> index (dict, not set: ORD-2)
         self._season_counters: dict = {}  # season_index -> next sub_step_index
+        # OPT-AV-16 (extension §3.1): optional resolver for stat_deltas key
+        # NAMES — a callable(name)->bool or any container supporting `in`.
+        # None (default) skips the check entirely; unresolved names are
+        # WARNED (collected here), never raised (candidate invariant 9 is
+        # deliberately not alongside the hard invariants 1-8).
+        self.stat_vocabulary = stat_vocabulary
+        self.stat_vocabulary_warnings: list = []
 
     def __len__(self) -> int:
         return len(self._entries)
@@ -290,6 +307,8 @@ class KeyLog:
 
     def append(self, key: Key) -> Key:
         self._validate(key)
+        if self.stat_vocabulary is not None:
+            self._check_stat_vocabulary(key)
         season = key.emitted_at.season_index
         key.emitted_at.sub_step_index = self._season_counters.get(season, 0)
         self._season_counters[season] = key.emitted_at.sub_step_index + 1
@@ -354,6 +373,23 @@ class KeyLog:
             raise KeyValidationError(f"key {key.id!r} invalid time_horizon {key.time_horizon!r}")
         if key.permanence not in PERMANENCE_VALUES:
             raise KeyValidationError(f"key {key.id!r} invalid permanence {key.permanence!r}")
+
+    def _check_stat_vocabulary(self, key: Key) -> None:
+        """OPT-AV-16 candidate invariant 9 (extension §3.1) — WARN-tier by
+        design: stat_deltas key-name coverage is a known, measured backlog
+        (A17), not a structural defect, so this collects into
+        `stat_vocabulary_warnings` and never raises (unlike invariants 1-8).
+        Only runs when a caller supplies `stat_vocabulary` at construction."""
+        resolver = self.stat_vocabulary
+        test = resolver if callable(resolver) else (lambda name: name in resolver)
+        for t in key.targets:
+            for stat_name in t.stat_deltas:
+                if not test(stat_name):
+                    self.stat_vocabulary_warnings.append(
+                        f"key {key.id!r} target {t.actor_id!r} stat_deltas key "
+                        f"{stat_name!r} does not resolve to a registered quantity "
+                        f"(A17/OPT-AV-16)"
+                    )
 
     def serialize(self) -> str:
         return "\n".join(
