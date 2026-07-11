@@ -424,9 +424,13 @@ hook is content volume, not system — and is cut here regardless of how well-gr
   space)? (`player_seats_are_contestable` — the sharpest stakes call)
 - **R-3 (§7):** author **Territory** as the connective-tissue scale (shared AP + routes + Key
   aggregation), folding BYZ-6/IT-5 into it? (the highest-leverage architectural ruling)
+- **R-4 (§14.2):** the event-deck draw's **discrete band-cliffs** (Π 7→8 flips Intrigue→Crisis) — an
+  intended dramatic threshold, or softened with a transition band? (the one resolution-diagnostic P-iii
+  finding gating the deck-draw engine's ratification)
 
-None of the three needs more research. Each is a taste/scope decision this spec has framed to be
-ratifiable as-is. Everything else in the loop is wiring over primitives that already exist.
+None of the four needs more research. Each is a taste/scope/architecture decision this spec has framed to be
+ratifiable as-is. Everything else in the loop is wiring over primitives and contracts that already exist —
+verified against `module_contracts.yaml`, the resolver enum, and the resolution diagnostic in §14.
 
 ---
 
@@ -484,3 +488,72 @@ test, is the difference between a substrate and a wish.
 > which is HOOK-NEEDED — so R-2's *architecture* is one clause away, not zero. And the §6.2 AT-RISK edge is
 > the one place this spec asks to be checked hardest before authoring, because it is the one place the spec
 > caught *itself* reaching for a resemblance instead of a dependency.
+
+---
+
+## §14 · Architecture compliance — module contracts, resolver shapes, resolution diagnostic
+
+A mechanic that "reads well" but has no legal Key IN → resolver → OUT shape is not implementable. This
+section binds every arc of the loop to `references/module_contracts.yaml` (the IN→resolver→OUT registry,
+governed by `valoria-module-adjudicator`), the fixed resolver enum, the Key Type Registry vocabulary, and
+— for anything that resolves via a draw — the resolution diagnostic (`valoria-resolution-diagnostic`,
+NERS resolver-stress P-i…P-v). **Verified against the actual contracts this pass, not asserted.** Two
+findings up front, both favorable: the standing bridge needs *no new Key type*, and the card branches need
+*no new resolver*.
+
+### §14.1 · The loop, mapped to module contracts (owner · resolver · Keys)
+
+| Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN → OUT (registry vocabulary) | Compliance |
+|---|---|---|---|---|
+| Event draw (§4) | `scene_slate` surfaces (manifest); driven by `settlement_layer` state + env shocks | **weighted-event table** — *not* in the enum; a draw | IN: `settlement_layer` state (Π, Order…) + `env.disaster` / `env.peninsular_strain_shock` (registered) → OUT: a drawn card | **NEW ENGINE** — diagnose by P-i…P-v (§14.2), surface for ratification |
+| Settlement impact (§2) | `settlement_layer` | `deterministic_accounting` | writes `Prosperity/Order/Defense/L/PS` tracks (all `writable: true` in the contract) | the 5 new levers (§2) = new `state:` rows (`bucket: track`) on `settlement_layer` — a **contract edit to surface** (R-1) |
+| Response resolution (§3) | `domain_actions` (governance verbs / Directive) | **`d_sigma`** (ED-874: legible odds, flat +10%/pt uniform-P-ii, FLOOR .05/CAP .90, FAIL_FLOOR .97 graded-P-iv) | IN: player choice → OUT: `da_outcome.*` (registered) | **WIRED** — reuses the ratified deterministic+stochastic resolver; social/Hold-Court branches route to `social_contest` `dice_pool` (5–18D, "keep dice") |
+| Standing bridge (§5) | `faction_politics` | `deterministic_accounting` | IN: consumes the `da_outcome.*` / `scene.*_resolved` Key (carrying `resolution_quality` on its impact_vector) → OUT: **`state.standing_change`** (ALREADY REGISTERED, already emitted by faction_politics) | **NO NEW KEY TYPE.** The only new thing is one *consumes-edge* (faction_politics ← settlement resolution Key) — a finding to surface, not a subsystem |
+| FI ripple (§6.1) | `scene_slate` / `fieldwork_knots` | `manifest` / `dice_pool` | a negative-resolution Key raises the concealment inventory the `Investigate` (`dice_pool`, `investigation_systems`) resolver reads | **WIRED** — CHN-3 Clerk-Corruption is the existing precedent |
+| SC ripple (§6.2) | `social_contest` | `dice_pool` | would need a NEW `consumes: {stakes.source_key}` edge | **AT-RISK** (§13) — the contract has no such consumes-edge today; author it or weaken to "cite" |
+| FA ripple (§6.3) | `faction_state` | `deterministic_accounting` | via `settlement_layer`'s existing **Mandate derivation** → `faction_state` | **WIRED via Mandate** (the derivation is in the contract, §1.8 LPS-2e) |
+| Aggregation (§7) | `settlement_layer` → `faction_state`; `peninsular_strain` | `deterministic_accounting` | `scale_signature` on every Key (registered); `env.peninsular_strain_shock` (registered) | **WIRED** — the Mandate rollup + peninsular_strain shock both already in-contract |
+
+### §14.2 · Resolution diagnostic on the event-deck draw (the one NEW engine)
+
+`valoria-resolution-diagnostic` §"new engine" rule: *a card/deck draw / weighted-event table is diagnosed
+against P-i…P-v directly and surfaced for ratification.* Running it on the Π-weighted draw
+(`weight = base + Π-scaling + tag-modifiers`, band-gated 0–2 / 3–7 / 8–10):
+
+| Property | Verdict | Reasoning |
+|---|---|---|
+| **P-i legible odds** | **PASS (band) / PARTIAL (card)** | Π legibly maps to the family band (the player reads high Π → Crisis). The *specific* card is tag-weighted — legible only if active tag-weights are surfaced in the UI (a tooltip). Mitigation: surface the draw-weight contributors. |
+| **P-ii uniform leverage** | **PASS** | A weighted-event table has **no pool / no √N term** — exempt from the flat-shift `1/√N` trap by the diagnostic's own scope rule (a no-pool resolver has no √N). A tag's draw-weight contribution is uniform across Π. |
+| **P-iii bounded + monotonic** | **⚠ FINDING** | The band thresholds are **discrete cliffs** — Π 7→8 flips the draw from the Intrigue band to the Crisis band, a continuous input crossing a discrete boundary that jumps the outcome class (the ED-884-class concern). **Ruling needed:** intended dramatic threshold, or soften with a transition band (7–8: both bands draw, Crisis-weighted). |
+| **P-iv graded, recoverable** | **PASS** | The draw is a *selection*, not a fragile binary; the card's *resolution* is graded through `d_sigma` (FAIL_FLOOR .97 — ≥3% residual even at overmatch). No irreversible bare-binary on the draw. |
+| **P-v right engine** | **PASS** | A weighted-event table is the correct shape for *event selection* (not a dice pool, not a skill contest). Tag `[NEW ENGINE — surface for canon ratification]` per the diagnostic. |
+
+**Net:** the deck draw is compliant on four of five properties; the single **P-iii band-cliff finding** is the
+one thing that must be ruled (intended vs softened) before the draw is ratified as a canonical engine. This
+is exactly the kind of result the resolution diagnostic exists to surface — a real finding, not a rubber stamp.
+
+### §14.3 · Findings to surface (not silently resolved — the adjudicator discipline)
+
+`module_contracts.yaml`'s own discipline: *cross-doc edges are kept VISIBLE as findings, never normalized
+silently.* This spec therefore **surfaces, does not auto-edit**, the contract deltas it implies:
+
+1. **New consumes-edge:** `faction_politics ← {type: da_outcome.* / scene.*_resolved, from: [domain_actions, settlement_layer]}` — the §5 standing bridge. (No new Key type; `state.standing_change` OUT already exists.)
+2. **New state rows on `settlement_layer`:** the 5 levers (§2), `bucket: track` — gated on R-1.
+3. **New consumes-edge on `social_contest`:** `{type: stakes.source_key}` — the §6.2 AT-RISK hook; author or drop.
+4. **New engine to ratify:** the Π-weighted event-deck draw (§14.2), with the P-iii band-cliff ruling attached.
+5. **Any Key type a generated card emits that the registry lacks** is a *finding to surface*, never a silent
+   new type — per the transcription discipline. The card compliance pass (§14.4) enforces this per card.
+
+None of these is edited into `module_contracts.yaml` here — that is a `valoria-module-adjudicator`
+ratification step (contract edits follow doc authoring + Jordan sign-off), and doing it silently would
+violate the registry's own visible-findings rule.
+
+### §14.4 · Binding requirement on the in-flight event-card deck (and all future mechanics)
+
+Every card in the generated deck (and every mechanic anywhere in this program) is **not compliant until**
+it carries, explicitly: (a) its **owning module** + **resolver** from the enum; (b) **registry-valid Key
+types** for everything it emits/consumes, with any gap surfaced as a finding; (c) for any card that
+resolves via a **draw** (the deck draw, or a `dice_pool` branch), a **resolution-diagnostic P-i…P-v verdict**.
+A dedicated **architecture-compliance pass** runs over the surviving deck to attach exactly these three
+things per card — a card with a real impact but no legal IN→resolver→OUT shape is a design sketch, not an
+implementable mechanic, and is held until shaped. This section is the gate that gets applied to it.
