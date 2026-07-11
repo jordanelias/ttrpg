@@ -21,7 +21,9 @@ Pages once Jordan enables it once (repo Settings → Pages → Source: GitHub Ac
 token cannot do this itself). See `tools/ci_audit_registry_check.py` for the registry's ongoing
 (report-only) freshness gate.
 
-_Last reconciled: 2026-07-08 (**Pessimist subtractive-action audit RATIFIED** — Jordan "Please
+_Last reconciled: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
+paragraph above; `docs/dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
+`tools/ci_audit_registry_check.py`). Prior reconcile: 2026-07-08 (**Pessimist subtractive-action audit RATIFIED** — Jordan "Please
 ratify all", ED-IN-0027: `references/throughlines_meta.md` gains **§8.2-A** — the subtractive
 disposition (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT, judged as-if-built), the first *removal* verdict
 the vetting framework has ever carried; the corpus docket's verdicts are filed as lane work-item EDs
