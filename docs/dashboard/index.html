@@ -166,6 +166,66 @@
   .audit-link { font-size: 0.78rem; }
   a { color: var(--series-blue); }
 
+  .balance-block { margin-bottom: 14px; }
+  .balance-block:last-child { margin-bottom: 0; }
+  .balance-block-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+  .balance-bar-row {
+    display: grid;
+    grid-template-columns: minmax(80px, 34%) 1fr 46px;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    padding: 3px 0;
+  }
+  .balance-bar-row > span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .balance-bar-track {
+    background: var(--gridline);
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .balance-bar-fill {
+    background: var(--series-blue);
+    height: 100%;
+    border-radius: 4px;
+  }
+  .balance-bar-value { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .balance-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; }
+  .balance-stale-banner {
+    background: rgba(250, 178, 25, 0.15);
+    border: 1px solid var(--warning);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 0.78rem;
+    margin-bottom: 6px;
+  }
+  .balance-nodata {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    padding: 4px 0;
+  }
+
+  .lane-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 10px; }
+  .lane-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--gridline);
+    padding: 3px 6px;
+  }
+  .lane-table td { padding: 3px 6px; border-bottom: 1px solid var(--gridline); font-variant-numeric: tabular-nums; }
+  .lane-table td:first-child, .lane-table th:first-child { font-variant-numeric: normal; }
+
   .stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
   .stat-tile { flex: 1 1 120px; }
   .stat-tile .value { font-size: 1.5rem; font-weight: 700; }
@@ -200,6 +260,16 @@
   <section class="card" id="audits-card">
     <h2>Audit &amp; balance verdicts</h2>
     <div id="audits-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="balance-card">
+    <h2>Balance &amp; victory data</h2>
+    <div id="balance-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="registers-card">
+    <h2>Registers</h2>
+    <div id="registers-body" class="empty-state">loading…</div>
   </section>
 
   <div class="grid-2">
@@ -347,9 +417,10 @@ function renderAudits(d) {
   html += '</tbody></table>';
   if (au.entries.some(e => e.audit_type === 'simulation_balance')) {
     html += `<div class="decision-source" style="margin-top:8px;">
-      ⚠ known gap: no CI job runs a full mc_v18 campaign — a seeded batch has shown a degenerate
-      win-share with no oracle flagging it (see sim/README.md). simulation_balance rows above are
-      not a substitute for that check.</div>`;
+      ⚠ no n≥100 full-campaign balance run is persisted anywhere in the repo — only two small-n
+      (2 and 8) CI-pinned regression goldens exist (sim/tests/). See the Balance &amp; victory data
+      card below for the actual numbers. (The older "~87% degenerate win-share" claim was itself a
+      small-N artifact, since debunked — see sim/tests/test_f7_smoke_oracle.py's docstring.)</div>`;
   }
   el.innerHTML = html;
 }
@@ -379,6 +450,94 @@ function renderCurrency(d) {
     return;
   }
   el.innerHTML = `<div>${esc(cu.summary)}</div>`;
+}
+
+const SUBSYSTEM_LABEL = {
+  personal_combat: 'Personal combat', mass_battle: 'Mass battle', social_contest: 'Social contest',
+  faction_political: 'Faction political', settlement_territory: 'Settlement / territory',
+  threadwork: 'Threadwork',
+};
+
+function barRows(pairs, maxVal) {
+  return pairs.map(([label, pct]) => `
+    <div class="balance-bar-row">
+      <span>${esc(label)}</span>
+      <span class="balance-bar-track"><span class="balance-bar-fill" style="width:${maxVal ? Math.round(pct / maxVal * 100) : 0}%;"></span></span>
+      <span class="balance-bar-value">${pct}%</span>
+    </div>`).join('');
+}
+
+function renderBalanceBlock(subsystemKey, block) {
+  const title = SUBSYSTEM_LABEL[subsystemKey] || subsystemKey;
+  if (!block || block.available === false) {
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)}</div>
+      <div class="balance-nodata">no data — ${esc((block && block.reason) || 'unavailable')}</div>
+    </div>`;
+  }
+  if (subsystemKey === 'personal_combat') {
+    const pairs = Object.entries(block.field_win_rate_pct || {});
+    const maxVal = Math.max(...pairs.map(p => p[1]), 1);
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)} — weapon win-rate vs field</div>
+      ${block.stale ? `<div class="balance-stale-banner">⚠ stale (as of ${esc(block.as_of)}): ${esc(block.stale_reason)}</div>` : ''}
+      ${barRows(pairs, maxVal)}
+      <div class="balance-meta">source: <a href="https://github.com/jordanelias/ttrpg/blob/main/${encodeURI(block.source)}" target="_blank" rel="noopener">${esc(block.source)}</a></div>
+    </div>`;
+  }
+  if (subsystemKey === 'faction_political') {
+    const goldenBlocks = (block.goldens || []).map(g => {
+      const pairs = Object.entries(g.win_share_pct || {});
+      const maxVal = Math.max(...pairs.map(p => p[1]), 1);
+      return `<div style="margin-bottom:8px;">
+        <div class="decision-source">${esc(g.label)} — <a href="https://github.com/jordanelias/ttrpg/blob/main/${encodeURI(g.source)}" target="_blank" rel="noopener">${esc(g.source)}</a></div>
+        ${barRows(pairs, maxVal)}
+      </div>`;
+    }).join('');
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)} — win-share goldens</div>
+      ${goldenBlocks}
+      <div class="balance-meta">${esc(block.note)}</div>
+    </div>`;
+  }
+  return '';
+}
+
+function renderBalance(d) {
+  const el = document.getElementById('balance-body');
+  const bal = d.balance;
+  if (!bal || bal.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const order = ['personal_combat', 'faction_political', 'mass_battle', 'social_contest', 'threadwork', 'settlement_territory'];
+  el.innerHTML = order.map(key => renderBalanceBlock(key, bal[key])).join('');
+}
+
+function renderRegisters(d) {
+  const el = document.getElementById('registers-body');
+  const reg = d.registers;
+  if (!reg || reg.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const ed = reg.editorial_ledger || {};
+  const byLane = ed.by_lane || {};
+  const laneRows = Object.keys(byLane).sort().map(lane => `
+    <tr><td>${esc(lane)}</td><td>${byLane[lane].open}</td><td>${byLane[lane].needs_jordan}</td></tr>`).join('');
+  const patch = reg.patch_register_active || {};
+  const patchStatuses = Object.entries(patch.by_status || {}).map(([s, n]) => `${esc(s)}: ${n}`).join(' · ');
+  el.innerHTML = `
+    <div class="stat-row" style="margin-bottom:10px;">
+      <div class="stat-tile"><div class="value">${ed.total_open ?? 0}</div><div class="label">editorial items open</div></div>
+      <div class="stat-tile"><div class="value">${ed.total_needs_jordan ?? 0}</div><div class="label">need Jordan's ruling</div></div>
+      <div class="stat-tile"><div class="value">${patch.total ?? 0}</div><div class="label">active patches</div></div>
+    </div>
+    <table class="lane-table">
+      <thead><tr><th>Lane</th><th>Open</th><th>Needs Jordan</th></tr></thead>
+      <tbody>${laneRows}</tbody>
+    </table>
+    ${patchStatuses ? `<div class="decision-source">patch register: ${patchStatuses}</div>` : ''}`;
 }
 
 function renderActivity(d) {
@@ -418,6 +577,8 @@ async function load() {
     renderDecisions(d);
     renderWorkplan(d);
     renderAudits(d);
+    renderBalance(d);
+    renderRegisters(d);
     renderCi(d);
     renderCurrency(d);
     renderActivity(d);

@@ -19,7 +19,14 @@ progress, recent commit activity, audit/simulation-balance verdicts
 skill's "Dashboard registry logging" section), and a "needs your decision" inbox, at GitHub
 Pages once Jordan enables it once (repo Settings → Pages → Source: GitHub Actions — the default
 token cannot do this itself). See `tools/ci_audit_registry_check.py` for the registry's ongoing
-(report-only) freshness gate.
+(report-only) freshness gate. **Extended 2026-07-11 (ED-IN-0037** — renumbered from a collision
+with PR #122's concurrent audit-ecosystem batch, which independently claimed ED-IN-0032 through
+0036; see `references/id_reservations.yaml`'s IN-lane comment) **with a Balance & victory data
+card** (personal-combat weapon matrix — flagged stale, predates the 2026-07-02 40-weapon expansion;
+faction win-share goldens read from `sim/tests/`, labeled as CI regression guards not a persisted
+full-campaign run; explicit no-data flags for mass_battle/social_contest/threadwork/
+settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
+counts by lane, active patch-register counts).
 
 _Last reconciled: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
 paragraph above; `docs/dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
