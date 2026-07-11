@@ -102,7 +102,10 @@ are more "current state" files than there should be; trust them in this strict p
   (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
   is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
   **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
-  at `ED-1094` (no new allocations, but permanently valid for existing citations), and all NEW EDs
+  at `ED-1096` (two more flat IDs, ED-1095/1096, landed the same cutover day before the sequence
+  fully stopped — `ED-1094` is the ruling that established the freeze, not the last ID issued
+  under it; corrected 2026-07-11, ED-IN-0034, caught auditing `skills/valoria-editorial-register`
+  against the ledger) — no new allocations, but permanently valid for existing citations — and all NEW EDs
   use the lane-tagged `ED-<LANE>-NNNN` format (e.g. `ED-MB-0001`), zero-padded to 4 digits. Lanes:
   `MB` mass battle, `PC` personal combat, `FI` field investigation, `SC` social contest,
   `FA` faction actions, `WR` world, `IN` infrastructure/cross-cutting, `GO` godot, `SE` settlements.
