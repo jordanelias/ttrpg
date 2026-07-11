@@ -58,6 +58,15 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   (`references/audit_registry.jsonl`, now kept current by the 8 audit/simulation skills'
   retrofitted registry-append step). **One manual step needed from Jordan before it goes
   live:** repo Settings → Pages → Source: "GitHub Actions" (the default token can't flip this).
+  **Extended 2026-07-11 (ED-IN-0037** — renumbered from a collision with PR #122's concurrent
+  audit-ecosystem batch, which independently claimed ED-IN-0032 through 0036; see
+  `references/id_reservations.yaml`'s IN-lane comment**)**: Balance & victory data card (personal-combat weapon
+  matrix — flagged stale; faction win-share goldens from `sim/tests/`, labeled as CI regression
+  guards, not a persisted full-campaign run; honest no-data flags for mass_battle/social_contest/
+  threadwork/settlement_territory) + Registers card (editorial-ledger open/needs_jordan counts by
+  lane, active patch-register counts). Also corrected a stale dashboard callout that had been
+  repeating the now-debunked "~87% degenerate win-share" claim (CLAUDE.md §7) — see
+  `sim/tests/test_f7_smoke_oracle.py`'s docstring for the actual correction.
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
   detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
   `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build
