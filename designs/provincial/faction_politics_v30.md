@@ -95,6 +95,55 @@ The Demotion Trigger column on each rank ladder specifies *what causes* demotion
 
 ---
 
+### §1.0b Recognition Fork — Confirm vs. New-Grant (NEW — ED-FA-0019, 2026-07-09)
+
+**Status: PROPOSED.** A cross-rank dimension in the same class as Rival Cohort / Rank-Restricted Dialogue / Dismissal (§1.0) — not a new Standing, and it does not alter any ladder's Initiation Gate criteria. Applies uniformly to every Formal Recognition Event and Recognized Deed across all four primary ladders (Crown §1.1, Hafenmark §1.2, Varfell §1.3, Church §1.4), preserving Part 9 cross-faction parity. Provenance: `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` §Step 3 FA-JP2.
+
+**Grounding.** Kamakura-period vassal reward took one of two named forms: *honryoando* — confirmation/protection of a vassal's existing landholding — or *shin'on* / *shinonkyūyo* — an outright new grant of territory or office (a fresh jitō stewardship, for instance). Which form the shogunate chose for a given act of recognition was itself a political instrument: after the Mongol invasions of 1274/1281, gokenin who had rendered real service expected shin'on, but there was no conquered territory to redistribute, so many received only honryoando — a mismatch between service and reward that fed directly into the shogunate's terminal legitimacy crisis (Jeffrey P. Mass, 1974; Britannica, "gokenin").
+
+**Mechanic.** Every Standing-3 Formal Recognition Event and Standing-5 Recognized Deed (§1.1–§1.4) resolves as an explicit choice by the granting authority, not an automatic pass-on-threshold:
+
+- **Honryoando (Confirm).** The ceremony fires narratively — the relationship is legible to the world — but the rank's mechanical unlock (Access / Hall Tier / Livery / new Obligations) is withheld. In exchange, the player's Demotion Trigger thresholds at their CURRENT rank ease by one step for the following year-arc (the faction is visibly still backing them, just not yet advancing them).
+- **Shinonkyūyo (New-Grant).** The full mechanical unlock fires as written in the rank's row, and the new territory/office/Access becomes a new Required Obligation the player must actively defend.
+
+A faction leader or inner-circle NPC choosing Confirm two Recognition Events in a row for a player who has met every stated Initiation Gate criterion is itself a legible political signal — a Disposition-adjacent event the player may read and act on (petition directly, cultivate a rival patron, or escalate to Defiance per `governance_play_redesign_v1.md` §1.4). This gives faction AI/GM behavior a graduated stonewalling lever where previously a qualified candidate could only be denied outright or advanced automatically — no intermediate state existed.
+
+**Status:** promote-ready — refines the existing Recognition Event/Recognized Deed concept in place, applies uniformly (preserves parity), adds no roster item.
+
+---
+
+### §1.0c Court Attendance and Hostage-Kin (NEW — ED-FA-0020, 2026-07-09)
+
+**Status: PROPOSED.** A new cross-rank dimension, additive alongside Rival Cohort / Rank-Restricted Dialogue / Dismissal (§1.0). Applies at Standing 4+ to any rank-holder governing a settlement away from their faction's capital (per `settlement_layer_v30.md` §3.2); specified here for Crown (§1.1) and Varfell (§1.3), the two ladders whose Standing-4+ ranks routinely govern settlements at a remove from Valorsplatz/Sigurdshelm. Provenance: same docket, §Step 3 FA-JP4.
+
+**Grounding.** *Sankin-kōtai* ("alternate attendance"), formalized 1635 under Tokugawa Iemitsu's Buke Shohatto: daimyo alternated residence between their domain and Edo on a fixed schedule, while their principal wife and heir were required to reside *permanently* in Edo — de facto hostages guaranteeing the daimyo's continued compliance. The processions and dual-residence upkeep structurally drained domain treasuries, which was as much the point as the hostage mechanism itself (Wikipedia, "Sankin-kōtai"; Nippon.com, "All Roads Lead to Edo").
+
+**Mechanic.**
+- **Court Attendance (mandatory, Standing 4+ absentee governors).** Once per year-arc, spend 1 AP + a Treasury cost (travel/retinue) on a court-attendance scene at the faction capital. Skipping it accrues the settlement-registry Suspicion field (`governance_play_redesign_v1.md` §1.4) at double the normal rate for that season.
+- **Hostage-Kin (optional, Standing 4+).** The faction may require — or the player may offer, to buy trust — a hostage-kin: a named Knot-relationship NPC (spouse, heir, or ward) who takes up permanent residence at the capital. While a hostage-kin is held: the §1.0a "sustained Duty failure" Demotion Magnitude trigger eases by one step (the faction reads continued compliance as guaranteed); but the hostage becomes a legible target — capture or credible threat by a rival faction or Niflhel opens an off-ladder, personal-stakes Duty; and skipping a Court Attendance while a hostage is held auto-escalates Suspicion further (read by the faction as a flight risk, not mere neglect).
+
+**Status:** promote-ready — composes with already-live Knots, Suspicion (`governance_play_redesign_v1.md`), and §1.0a Demotion-Magnitude machinery without forking any faction's identity; applies narrowly enough (Standing 4+, absentee governors) to preserve Part 9 parity by not touching ranks below it.
+
+---
+
+### §1.0d Patron-Sponsored Performance Audit (NEW — ED-FA-0021, 2026-07-09)
+
+**Status: PROPOSED.** An optional, reversible overlay on the Required Obligations column (§1.0), available to any Standing-6+ NPC (or the player, once they reach Standing 6) as a tool for governing their own subordinate chain. Provenance: same docket, §Step 3 CHN-9.
+
+**Grounding.** Zhang Juzheng's 1573 *kaochengfa* ("law for evaluating performance"): triplicate task ledgers kept per office, with monthly/annual/biannual review cadence routed through the Six Offices of Scrutiny to the Grand Secretariat, feeding promotion and demotion decisions directly off the ledger rather than off vague reputation. The system's own history supplies its lapse condition: it began unwinding within months of Zhang's death in July 1582, once its sponsoring patron was gone (Ray Huang, *1587, A Year of No Significance*, 1981).
+
+**Mechanic.** While toggled on for a subordinate chain, every rank-holder's Required Obligations (the existing per-rank column, §1.1–§1.4) are tracked as an explicit triplicate task ledger instead of the vague "consecutive failures" standard the ladders currently use:
+
+1. A missed Obligation auto-generates a formal Waiting Order after 1 season.
+2. It escalates to the sponsoring patron's personal review after 2 seasons.
+3. It converts to an immediate Demotion Magnitude-1 trigger (§1.0a) after 3 seasons, bypassing the normal grace period.
+
+The same tempo cuts both ways: faster Obligation-success cycling under the ledger also gates faster Duty-based promotion — a genuine acceleration in both directions, not a punitive-only toggle. **Patron-bound lapse:** the instant the sponsoring Standing-6+ NPC is demoted, dies, or vacates their seat, the ledger auto-lapses within 1 season; any task mid-escalation is voided, not resolved to its prior trajectory.
+
+**Status:** promote-ready — an optional, reversible toggle riding entirely on the existing Obligations/Demotion-Magnitude columns with a clearly defined lapse condition (patron durability, mirroring §1.0a's own precedent-driven design); introduces a real "how long will my patron last" bet for the player without forking any faction's ladder or adding a new resource type.
+
+---
+
 ## §1.1 CROWN RANK LADDER (Valorsmark Monarchy)
 
 **Faction ethical framework:** Virtue (factions_ttrpg_v30 §8.2). Visible, public, virtuous actions are −1 Ob; covert or morally ambiguous are +1 Ob. This is a ladder where **being seen doing the right thing** matters more than the doing.
@@ -513,6 +562,23 @@ As with Inquisitor, Templar caps at Standing 5 (Cardinal-equivalent).
 The Guildmaster Council leadership structure per factions_ttrpg_v30 §8.6 means Standing 6 is extraordinary and normally omitted — the Guilds are a *collective* leadership by design. This is different from the other factions and is a design feature, not a bug.
 
 **Caste note:** Guild advancement is the most caste-open path in Valoria *at the lowest rank*. A Southern Einhir apprentice is not barred from apprenticeship. But the Masterpiece Examination (Std 1→2) is reviewed by a Free Master committee — and the committee can reject Einhir candidates on procedural grounds. Historically (per npc_roster §14) the Guilds economically benefit from Einhir caste suppression (Feldhaus AI analysis). So the Guilds are selectively open: a Southern Einhir can become Journeyman, can become Free Master with difficulty, and can almost never become Guild Master. See Part 3 for exact gating.
+
+### §2.5a Entry and Mastership Forks (NEW — ED-FA-0023/ED-FA-0022, 2026-07-09)
+
+**Status: PROPOSED.** Two forks landed together per the judged synthesis recommendation (comparative-governance-research docket §3 S-4): entry (Gu-Std 0→1) and mastership (Gu-Std 1→2) each gain a genuine skill/capital/social-collateral tradeoff rather than the single flat gate each currently specifies. Both interact deliberately with the §2.5 caste note above (the Masterpiece Examination committee's documented Einhir bias) — the bought paths let capital purchase a route past that committee, at a durable-tag cost. Provenance: `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` §Step 3 BYZ-3, IT-8.
+
+**BYZ-3 — Guarantor-gated entry (replaces the Gu-Std 0 Initiation Gate cell "Accepted by a Guild Master in a trade").** The applicant chooses one of two entry paths:
+
+- **Guarantor path.** Recruit 3–5 existing Guild members (Gu-Std ≥ 1) as guarantors, each staking Disposition against the apprentice's future conduct. If the apprentice triggers an existing Gu-Std 0/1 Demotion Trigger ("Desertion", "theft from master", "Craft fraud"), every guarantor takes a Disposition hit and a new **Vouched-For** grudge tag; a guarantor burned twice cannot sponsor again for 2 year-arcs. A scarce, spendable social-collateral resource distinct from anything else in the ladder.
+- **Sole-patron path (the existing rule, unchanged: Ob 1, one scene).** Faster, but the single Standing-3+ Guild Master bears full liability alone — a violation costs *their* Disposition at double weight, plus a public **"Vouches Carelessly"** Precedent tag that raises Ob on their future sponsorships.
+
+*Grounding:* the *Book of the Eparch* (redacted under Leo VI, c. 895–912), Constantinople's guild code: entry to a regulated corporation required either five personal freeman guarantors, jointly liable for the entrant's conduct, or a single owner's suretyship.
+
+**IT-8 — Capital-gated Free Mastership (alternate Gu-Std 1→2 gate, alongside the existing Masterpiece Examination).** A Journeyman may pay a flat Wealth buy-in to be confirmed Free Master immediately, skipping both the 2-year-arc wait and the caste-vulnerable Masterpiece Examination committee. This writes a durable **Upstart** tag: peer Free Masters' starting Disposition −2 toward the player; the player cannot take Apprentices for 4 seasons (denied the mentor-training pipeline the ladder otherwise assumes); and any Guild Schism/expulsion check targeting the Upstart resolves at −1 Ob for the accuser (a bought rank is structurally easier to strip than an examined one).
+
+*Grounding:* the Arte della Lana (Florence's wool guild) — workshop capital, not demonstrated craft skill, was the real admission bar for the guild that anchored Florentine textile wealth.
+
+**Status:** both promote-ready — additive to single existing cells, reuse existing Disposition/tag machinery, no roster addition, no rebalancing above Gu-Std 0→2.
 
 ---
 

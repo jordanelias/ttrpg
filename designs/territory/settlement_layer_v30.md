@@ -635,6 +635,66 @@ only supplies the Charter-side W/L effect. Magnitudes (÷8 prescription slope, 1
 threshold, peninsula-wide −1) are shape proposals per the cited precedent, not sim-calibrated —
 calibrate before canon (CLAUDE.md §5/§7).
 
+### §3.3b Patron-backed privilege lapse — the Za model (NEW — ED-SE-0021, 2026-07-09)
+
+**Status: PROPOSED.** Extends the §3.3a Charter machinery (does not replace it) with a **patron**
+field, giving a Charter a second, independent failure mode beyond Quo Warranto. Provenance:
+`designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`
+§Step 3 SE-JP3.
+
+**Grounding.** *Za* trade guilds (Heian–Sengoku Japan): merchant and craft-guild monopoly and
+toll-exemption rights were legally enforceable specifically *because* a patron institution — a
+temple, shrine, or court noble house — backed them. Kitano Tenman-gū sponsored the yeast-brewers'
+za; Enryakuji sponsored oil brokers. The privilege was never freestanding; it was only as durable
+as its patron's own standing (*Cambridge History of Japan*, vol. 3; Wikipedia, "Za (guilds)").
+
+**Mechanic.** A Guild-managed settlement's Charter (§3.3a) may carry a **patron** field: a named
+institution or NPC (a temple, a noble house, a Ministry — per §7) whose own political standing
+backs the guild's privileges. If the patron's standing drops below a set threshold (CI loss,
+Disposition collapse from a rival's Intrigue action), the Charter's privileges lapse
+**automatically** at the next Accounting step — no Quo Warranto contest required, because nobody
+revoked anything; the backing simply gave out. A new Intrigue-family card, **"Patron's Rivals
+Move,"** fires one season before automatic lapse, giving the guild (and the governor, if they wish
+to intervene) a Bargain window — a `Treat` verb spend (`governance_play_redesign_v1.md` §1.3) to
+shore up the patron directly. This creates a new attack vector distinct from Quo Warranto:
+breaking a guild monopoly can mean targeting the *patron's* standing rather than the guild's
+charter.
+
+**Status:** promote-ready — adds one field and one automatic-lapse trigger to the already-PROPOSED
+§3.3a machinery; reuses existing Investigate/Treat verbs and the Intrigue card family; no new
+player action.
+
+### §3.3c The Seggio Council — hereditary corporate subnational faction (NEW — ED-SE-0024, 2026-07-09)
+
+**Status: PROPOSED.** A new subnational-faction archetype for the §3.3 table, deliberately
+structured to sit *outside* the uniform "Management Effect" pattern every other row in that table
+shares, and outside the §3.3a Charter/Quo-Warranto system entirely. Composes with §4.5 Local
+Actors for its Eletti bloc. Provenance: same docket, §Step 3 IT-7.
+
+**Grounding.** Naples's *Seggi* (five noble seggi plus one popolo seggio), each electing an
+*Eletto* to the joint Tribunal of San Lorenzo, held bespoke, non-transferable civic privileges —
+one seggio's prerogative over building regulation, another's over water rights, another's over
+coinage or market oversight — that did not reduce to a single uniform grant.
+
+**Mechanic.** At Seat/City settlements, the province faction may recognize 1–5 hereditary Seggio
+bodies. Each Seggio holds **one bespoke, non-transferable privilege**, instead of the uniform
+Management Effect the §3.3 table specifies for other subnational factions — for example: one
+Seggio gates the `Develop` verb's Guild-charter funding option in that settlement; another gates
+the `Fortify` verb's Militia option; another sole-adjudicates water or market disputes brought by
+Local Actors (§4.5), bypassing the governor's own Hold Court authority for that dispute class. All
+resident Seggi share a single joint council seat — an **Eletti bloc** — that the governor must
+`Treat` (`governance_play_redesign_v1.md` §1.3) with collectively: one Seggio's Disposition swing
+ripples across the whole bloc's vote, since they sit and vote together.
+
+Seggio privileges **cannot** be granted or revoked via the standard §3.3 Domain Action or via Quo
+Warranto (§3.3a) — they may only be inherited, married into, or seized by force (a conquest- or
+coup-adjacent event, not an administrative one). This is the deliberate point of difference from
+the Charter system: Seggio privilege is corporate-noble prerogative, not crown-granted license.
+
+**Status:** promote-ready — adds a new Local-Actor/subnational-faction archetype using only
+existing schema fields (Knots, Disposition, the §3.3 table's own format); no new resolver, no
+roster fork.
+
 ---
 
 # PART 4: SETTLEMENT AS GAMESPACE
