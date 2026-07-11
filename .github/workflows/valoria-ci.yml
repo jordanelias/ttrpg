@@ -410,6 +410,10 @@ jobs:
         run: pip install pyyaml
       - run: python3 tools/validate_ed_citations.py
 
+  # NOTE: tools/dashboard_data.py (the GitHub Pages dashboard's CI-health widget)
+  # reads this workflow's job ids by name — specifically unit-tests, sim-regression,
+  # and ci-summary below. If any of the three is renamed, update dashboard_data.py's
+  # job-id lookup in the same change (see its own matching cross-reference comment).
   unit-tests:
     name: Validator Unit Tests
     runs-on: ubuntu-latest
@@ -447,6 +451,25 @@ jobs:
       # against (ED-1053). Before this, sim/ had zero tests and never ran in CI, so a
       # degenerate-balance regression could land unflagged. ~20s.
       - run: python -m pytest sim/tests -q
+
+  audit-registry-check:
+    name: Audit Registry Freshness (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 tools/ci_audit_registry_check.py
+      # Report-only (always exits 0) — deliberately excluded from ci-summary's
+      # needs: below, same as the other warn-tier gates (supersession-check,
+      # names-drift, currency-consistency, etc.). See the check's own module
+      # docstring; feeds tools/dashboard_data.py's audit-verdict table, not a
+      # merge gate.
 
   integrity:
     name: Repository Integrity

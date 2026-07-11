@@ -52,6 +52,12 @@ block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830�
 per the file's protocol; never max+1. Since the 2026-07-02 cutover (ED-IN-0001), new EDs
 allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
+- **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `docs/dashboard/`,
+  published by `.github/workflows/dashboard.yml` to GitHub Pages. Surfaces workplan progress,
+  recent activity, a "needs your decision" inbox, and audit/simulation-balance verdicts
+  (`references/audit_registry.jsonl`, now kept current by the 8 audit/simulation skills'
+  retrofitted registry-append step). **One manual step needed from Jordan before it goes
+  live:** repo Settings → Pages → Source: "GitHub Actions" (the default token can't flip this).
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
   detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
   `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build
