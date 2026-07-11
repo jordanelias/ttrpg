@@ -285,21 +285,28 @@ The primitive: a negative resolution Key **raises the concealment inventory** th
 from. (Concerns catalogue: the Clerk-Corruption hidden counter, CHN-3, is the same shape — a hidden
 liability that Investigate later surfaces.)
 
-### §6.2 · Social Contest / Parliament
+### §6.2 · Social Contest / Parliament  *(⚠ AT-RISK edge — see §13)*
 The event *and the standing shift it caused* become the **subject matter** of a contest — not backdrop
 the contest ignores. A Demotion-Magnitude trip from a mishandled Crisis is the **factual predicate** a
 Parliamentary Censure motion (`HANDOFF_SC.md`, ED-SC-0015) or a Negotiation/Inquiry contest argues over.
-The primitive: a resolution-quality Key with magnitude past a threshold **becomes a citable contest
-predicate** — the contest's stakes and opening Ob are read from the Key, so Parliament debates *what
-actually happened in the world* rather than an abstract motion. This is the direct answer to "provide
-context/content for parliamentary proceedings and other social contests."
+The intended primitive: a resolution-quality Key past a threshold feeds the contest's Step-6 stakes and
+opening resistance, so Parliament debates *what actually happened in the world* rather than an abstract
+motion. **Honesty flag (§13):** canon's contest resolver (`social_contest_v30` §6, the Parliament
+Persuasion-Track motion rule) has a "Define stakes" step but **no input hook that reads an external Key** —
+so "opening Ob from the Key magnitude" is *this spec's proposal, not a found dependency.* Before this edge
+is trusted it must be **earned** (author a `stakes.source_key` input the Step-6 stakes read) or **weakened**
+to "a motion may *cite* the resolution Key as its narrative predicate" (real today, less mechanical). This
+is the one edge where the spec caught itself reaching for a resemblance instead of a read/write dependency —
+flagged rather than hidden.
 
-### §6.3 · Faction Action
-The aggregate of resolution Keys across a faction's settlements **opens or closes a domain-action
-window.** A run of well-handled Crises (positive signal, rising Mandate) unlocks an expansion/Muster
-window; a run of mishandled ones (Mandate bleed) forces a defensive Consolidate/Suppress posture. The
-primitive: faction-scale action availability **reads the settlement-Key aggregate** (§7), so faction
-strategy is downstream of settlement-level event handling, not a separate track.
+### §6.3 · Faction Action  *(routes through Mandate — see §13)*
+A run of well-handled Crises (positive signal, rising Mandate) unlocks an expansion/Muster window; a run
+of mishandled ones (Mandate bleed) forces a defensive Consolidate/Suppress posture. The primitive is the
+**canon path, stated honestly**: resolution Keys move settlement L/PS → **Mandate = Σ settlement L/PS**
+(`settlement_layer §1.5`, canon) → domain-action availability already gates on faction stats. There is
+**no separate "Key aggregate"** — §6.3 is real precisely *because* it routes through the Mandate
+aggregation that already exists, not a new faction-level sum. Faction strategy is thereby downstream of
+settlement-level event handling without a new track.
 
 ### §6.4 · Why these three are one mechanism
 All three read the *same* §5 resolution-quality Key at three scales (personal FI lead, court-scale
@@ -441,3 +448,39 @@ terms:
 Both are the *same lesson this spec exists to prevent*: a mechanic authored as its own subsystem when
 it is really one configuration of a shared primitive. Building §5's general bridge makes CHN-9 a
 three-line configuration, not a section — which is the whole argument for the substrate.
+
+---
+
+## §13 · Self-audit — grading the loop edges against this spec's own §9 test
+
+§9 sets a hard bar: a connection is real only if *"there is a specific field one writes that the other
+reads."* Intellectual honesty demands the spec meet its own bar. Grading each loop edge against actual
+canon (verified this pass, not asserted) yields a mixed result the spec must state plainly rather than
+paper over — an edge graded **WIRED** composes today; **HOOK-NEEDED** has a real read-target but needs one
+explicitly-authored input clause (not more research — one clause); **AT-RISK** is currently closer to
+pattern-matching than a verified dependency and must be earned before it is trusted.
+
+| Loop edge | Grade | Verified against canon | What it still needs |
+|---|---|---|---|
+| Event → settlement operation (§4) | **WIRED** | `governance_play_redesign_v1.md` §2.1–2.3 — cards trigger on stat predicates; already canon | — |
+| Settlement → Mandate → faction (§7) | **WIRED** | `settlement_layer §1.5` (Mandate = Σ L/PS) + `derived_stats §8.1` (Treasury = Σ Prosperity×10) — both canon | — |
+| Cross-scale stamping (§7) | **WIRED** | `key_substrate §2.1` `scale_signature: [personal\|settlement\|territory\|peninsula]` — the four scales already on every Key | — |
+| Event → FI lead (§6.1) | **WIRED** | `Investigate` reads "concealment" (§1.3); CHN-3 Clerk-Corruption is an existing event→hidden-counter→Investigate chain | — |
+| Event → standing (§5) | **HOOK-NEEDED** | §1.0a Demotion Triggers read state ("3 consecutive Duty failures," "Disposition −3," "inner-circle majority turning") — real read-targets, but **none reads a per-event resolution signal today** | one authored §1.0a trigger clause: *"a settlement resolution_quality Key below threshold, on a Directive-bound seat, counts as a Duty failure"* — until authored, §5 is not "already wired," it is *one clause from wired* |
+| Faction-action window (§6.3) | **HOOK-NEEDED** (via Mandate) | domain actions gate on faction stats (canon); Mandate bleed from §7 is real — but there is **no separate "Key aggregate"**; §6.3 is real *only* routed through Mandate | reframe §6.3 as "reads the **Mandate** delta (§7)," not "the settlement-Key aggregate" — the honest path is the canon one |
+| Event → Parliament/SC predicate (§6.2) | **AT-RISK** | `social_contest_v30 §6` "Define stakes" step + `§...` Parliament resolver ("Persuasion Track ≥7 = motion passes") **exist**, but **no hook reads stakes/opening-Ob from an external Key** — "opening Ob from the signal magnitude" is *this spec's proposal, not a found dependency* | either author a real hook (a contest `stakes.source_key` input the Step-6 stakes and opening resistance can read) **or** downgrade §6.2's claim to "a Censure motion may *cite* a resolution Key as narrative predicate" (weaker, but honest) — as written §6.2 is the one edge that would fail this spec's own §9 test |
+| Arc feedback → deck re-weight (§8) | **HOOK-NEEDED** | tag-modifiers on card weight are canon (§2.2 `weight: base + Π-scaling + tag-modifiers`); resolution Keys writing those modifiers is the one added step | one convention: resolution Keys write a tag-modifier delta on the settlement's future draws |
+
+**The honest headline:** the loop's **spine is wired today** (event→settlement→Mandate→faction, plus
+cross-scale stamping and the FI ripple — five of eight edges compose on current canon). Two edges are
+*one authored clause* from wired (§5 standing, §8 arc-feedback), and §6.3 just needs to be *reframed onto
+the canon Mandate path it already has.* **Exactly one edge — §6.2, event→Parliament — is currently
+AT-RISK of being the pattern-matching §9 condemns**, because I asserted an "opening-Ob-from-Key-magnitude"
+dependency that canon does not have. That edge must be *earned* (author the `stakes.source_key` hook) or
+*weakened* (a motion merely *cites* the Key) before it is trusted. Flagging it here, against the spec's own
+test, is the difference between a substrate and a wish.
+
+> **Consequence for §11's rulings:** R-2 (can an NPC contest a player-held seat) presupposes the §5 edge,
+> which is HOOK-NEEDED — so R-2's *architecture* is one clause away, not zero. And the §6.2 AT-RISK edge is
+> the one place this spec asks to be checked hardest before authoring, because it is the one place the spec
+> caught *itself* reaching for a resemblance instead of a dependency.
