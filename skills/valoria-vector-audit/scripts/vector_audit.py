@@ -337,7 +337,7 @@ def banner_classify(content, path):
 # ──────────────────────────── STAGES ─────────────────────────────────────────
 # (Stages 1-7 implementations — direct port of v3 execution logic.)
 # Full implementations available; collapsed here for brevity in skill enshrinement.
-# See designs/audit/2026-04-29-topographic-analysis/ for executed reference run.
+# See archives/audit/2026-04-29-topographic-analysis/ for executed reference run.
 
 
 def main():
@@ -365,7 +365,7 @@ def main():
     # this skeleton documents the expected interface.
 
     print("\nFor full executed pipeline, see:")
-    print("  designs/audit/2026-04-29-topographic-analysis/")
+    print("  archives/audit/2026-04-29-topographic-analysis/")
     print("  This script's full implementation will be ported from that run.")
     print("\nThis skill enshrines the methodology + scaffolding;")
     print("the executed reference run is the canonical implementation.")
