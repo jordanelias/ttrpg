@@ -38,6 +38,7 @@ def main(argv):
         ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
+        ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

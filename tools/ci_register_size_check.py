@@ -91,6 +91,13 @@ THRESHOLDS = {
     "canon/editorial_ledger_in.jsonl": 50_000,
     "canon/editorial_ledger_go.jsonl": 50_000,
     "canon/editorial_ledger_se.jsonl": 50_000,
+    # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
+    # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
+    # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,
+    # -module-adjudicator, -vector-audit, -editorial-register, -combat-simulator,
+    # -simulator). Same append-only shape as the editorial ledger; generous headroom
+    # since audit cadence is far lower than editorial-decision cadence.
+    "references/audit_registry.jsonl": 50_000,
     "archives/session/session_log_archive_part_7.md": 100_000,
     "canon/patch_register_index.md":         20_000,
 }

@@ -108,6 +108,23 @@ policies:
   # comments for per-file caps).
 
   # ────────────────────────────────────────────────────────────
+  # REGISTERS — audit/simulation-run verdict registry
+  # ────────────────────────────────────────────────────────────
+  # Added 2026-07-11 with the GitHub Pages dashboard (tools/dashboard_data.py):
+  # references/audit_registry.jsonl is one JSONL line per completed audit/simulation
+  # run (audit_type: canon_guard | mechanic_audit | resolution_diagnostic |
+  # module_adjudicator | vector_audit | editorial_register | simulation_balance),
+  # appended by tools/audit_registry.py's `append` mode. Same append-only shape and
+  # merge-collision rationale as canon/editorial_ledger.jsonl (CLAUDE.md §1/§3) — a
+  # shared YAML list that concurrent-session skill runs edit would collide the same
+  # way HANDOFF.md/editorial_ledger.yaml did before their splits; JSONL append avoids
+  # the structural-edit collision without needing a lane split (audit runs are far
+  # less frequent than editorial decisions). Freshness (registry vs. actual
+  # designs/audit/ folders) is checked by tools/ci_audit_registry_check.py, report-only.
+  # Size cap lives in tools/ci_register_size_check.py's THRESHOLDS, not here (same
+  # single-sourcing convention as the editorial ledger above).
+
+  # ────────────────────────────────────────────────────────────
   # HANDOFF / CONTINUITY — root index + lane files
   # ────────────────────────────────────────────────────────────
   # Added 2026-07-08 (token-efficiency pass): HANDOFF.md had drifted from its stated

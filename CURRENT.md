@@ -12,6 +12,15 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
+**Mobile-friendly status dashboard (2026-07-11, ED-IN-0031):** `docs/dashboard/` (built by
+`tools/dashboard_data.py`, published by `.github/workflows/dashboard.yml`) surfaces workplan
+progress, recent commit activity, audit/simulation-balance verdicts
+(`references/audit_registry.jsonl`, retrofitted into the 8 audit/simulation skills — see each
+skill's "Dashboard registry logging" section), and a "needs your decision" inbox, at GitHub
+Pages once Jordan enables it once (repo Settings → Pages → Source: GitHub Actions — the default
+token cannot do this itself). See `tools/ci_audit_registry_check.py` for the registry's ongoing
+(report-only) freshness gate.
+
 _Last reconciled: 2026-07-08 (**Pessimist subtractive-action audit RATIFIED** — Jordan "Please
 ratify all", ED-IN-0027: `references/throughlines_meta.md` gains **§8.2-A** — the subtractive
 disposition (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT, judged as-if-built), the first *removal* verdict
