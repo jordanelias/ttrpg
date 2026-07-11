@@ -135,6 +135,13 @@ def _match_rule(path: str, rules: dict) -> dict | None:
             continue
         if fnmatch.fnmatch(path, pattern):
             return policy
+        # fnmatch is not path-aware: "*" and "**" both translate to ".*", so a
+        # leading "**/" pattern requires a literal "/" somewhere in the candidate
+        # to match. That silently exempts every root-level file (HANDOFF.md,
+        # CURRENT.md, README.md, ...) from any "**/*.ext" catch-all. Also try the
+        # pattern with the leading "**/" stripped so root files reach the same policy.
+        if pattern.startswith('**/') and fnmatch.fnmatch(path, pattern[3:]):
+            return policy
     return None
 
 

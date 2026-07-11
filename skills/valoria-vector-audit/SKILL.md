@@ -60,7 +60,10 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 
 ## Step 3 — Pipeline Stages
 
-The full pipeline lives in `scripts/vector_audit.py` and runs in sequence:
+The pipeline's specification is this stage table. **`scripts/vector_audit.py` does NOT currently
+implement it** — its `main()` has no stage dispatcher, only a stub that prints a pointer back to
+the 2026-04-29 run (see "Reference Files" below, ED-IN-0035/ED-IN-0036). A rerun of this audit is
+blocked on someone implementing the dispatcher against this table, not on running the script as-is:
 
 | Stage | What | Output |
 |---|---|---|
@@ -184,13 +187,57 @@ PP entry references the audit folder; ED entry describes what was found.
 - `references/methodology.md` — v3 multi-graph triangulation specification (full §3 procedure, all pre-committed thresholds, class taxonomy)
 - `references/diagnostic_modes.md` — A through H mode specifications with worked examples
 - `references/v1_v2_v3_history.md` — methodology evolution, why each pivot was needed (institutional memory)
-- `scripts/vector_audit.py` — full pipeline, runs all stages
+- `scripts/vector_audit.py` — **STUB, not a runnable pipeline** (found 2026-07-11, audit-ecosystem
+  consolidation ED-IN-0035): `main()` has no stage-execution dispatcher (`# Stage execution
+  dispatcher would go here`) and just prints a pointer back to the original 2026-04-29 run. No
+  other file in the repo implements the pipeline. **A rerun of this audit is currently blocked on
+  implementing the stage dispatcher this file only scaffolds** — that is real engineering work,
+  not a methodology-delta note. Do not attempt to invoke this script expecting output; if asked to
+  rerun the audit, say so plainly rather than reporting a partial or fabricated result.
 
 ## Cross-references
 
-- Original execution: `designs/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file)
-- Workplan v3: `designs/audit/2026-04-29-topographic-analysis/00_workplan.md`
-- Weakness register: `designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
+- Original execution: `archives/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file —
+  moved from `designs/audit/` to `archives/audit/` at some point after this skill was written;
+  corrected 2026-07-11, ED-IN-0036)
+- Workplan v3: `archives/audit/2026-04-29-topographic-analysis/00_workplan.md`
+- Weakness register: `archives/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
 - PP-676 / ED-762 (v2+v3 execution)
 - PP-677 / ED-764 (throughlines load-bearing systems column — restored Mode F)
 - PP-678 / ED-765 (vocabulary debt sweep workflow demonstrated)
+
+## Forward-only findings-disposition discipline
+
+Every finding in `02_weakness_register.md` must resolve to either a filed `ED-<LANE>-NNNN` id
+(per `references/id_reservations.yaml`'s allocation protocol) or an explicit no-action line (e.g.
+"no action — working as intended," "no action — superseded by PP-NNN"). This mirrors the
+disposition-table discipline added to `valoria-mechanic-audit`'s output contract in the same
+audit-ecosystem consolidation batch. Applies going forward only — the existing
+`02_weakness_register.md` from the 2026-04-29 run is not retroactively required to carry this
+(no findings-schema existed at that time to check it against).
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type vector_audit \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-vector-audit \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass — this skill's
+own runs are usually `corpus_wide`). See `tools/audit_registry.py`'s module
+docstring for the full field/vocabulary reference — this is the single source of
+truth for the schema, not this note.

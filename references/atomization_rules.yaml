@@ -91,6 +91,62 @@ policies:
   # editorial_ledger_archive*.yaml files were deprecated 2026-05-28 to
   # deprecated/canon/ — no active editorial YAML register remains to atomize.
   # The JSONL store is integrity-checked at commit by validate_ledger_jsonl.
+  #
+  # LANE SPLIT (2026-07-08 atomization pass): entries whose id already declares a lane
+  # (ED-<LANE>-NNNN) were moved out of the flat canon/editorial_ledger.jsonl into their own
+  # canon/editorial_ledger_<lane>.jsonl (lowercase lane code), mirroring the
+  # handoffs/HANDOFF_<LANE>.md split and the same ED-<LANE>-NNNN taxonomy. Pre-cutover
+  # flat-ID entries are NOT retrofitted with a lane (same no-retrofit precedent as the
+  # ED-<LANE>-NNNN cutover itself) and stay in canon/editorial_ledger.jsonl, which dropped
+  # from ~150k tokens (at its own cap) to ~90k as a result. Both the main file and every
+  # per-lane file are "active" — consumers (tools/validate_ed_citations.py,
+  # tools/broken_dependency_checker.py) read all of them, not just the main one, or the
+  # lane-tagged third of live entries would silently stop being validated. A lane file is
+  # created only on that lane's first ED allocation (no `_go.jsonl` yet — zero GO entries).
+  # Size caps for all ledger files live in tools/ci_register_size_check.py's THRESHOLDS,
+  # not here (that script is the actual enforcement gate for this register; see its own
+  # comments for per-file caps).
+
+  # ────────────────────────────────────────────────────────────
+  # REGISTERS — audit/simulation-run verdict registry
+  # ────────────────────────────────────────────────────────────
+  # Added 2026-07-11 with the GitHub Pages dashboard (tools/dashboard_data.py):
+  # references/audit_registry.jsonl is one JSONL line per completed audit/simulation
+  # run (audit_type: canon_guard | mechanic_audit | resolution_diagnostic |
+  # module_adjudicator | vector_audit | editorial_register | simulation_balance),
+  # appended by tools/audit_registry.py's `append` mode. Same append-only shape and
+  # merge-collision rationale as canon/editorial_ledger.jsonl (CLAUDE.md §1/§3) — a
+  # shared YAML list that concurrent-session skill runs edit would collide the same
+  # way HANDOFF.md/editorial_ledger.yaml did before their splits; JSONL append avoids
+  # the structural-edit collision without needing a lane split (audit runs are far
+  # less frequent than editorial decisions). Freshness (registry vs. actual
+  # designs/audit/ folders) is checked by tools/ci_audit_registry_check.py, report-only.
+  # Size cap lives in tools/ci_register_size_check.py's THRESHOLDS, not here (same
+  # single-sourcing convention as the editorial ledger above).
+
+  # ────────────────────────────────────────────────────────────
+  # HANDOFF / CONTINUITY — root index + lane files
+  # ────────────────────────────────────────────────────────────
+  # Added 2026-07-08 (token-efficiency pass): HANDOFF.md had drifted from its stated
+  # "index + cross-cutting items" role to a ~21.5k-token append-only session log, and
+  # nothing was governing it — the generic "**/*.md" catch-all below never applied because
+  # fnmatch (not path-aware globbing) requires a literal "/" in the candidate, so a
+  # leading "**/" pattern can never match a root-level file (see the compliance_check.py
+  # fix in the same pass). Pruned narrative moved to handoffs/HANDOFF_archive.md.
+  - match: "handoffs/HANDOFF_archive.md"
+    on_exceed: "skip"
+    note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
+
+  - match: "HANDOFF.md"
+    max_tokens: 4000
+    on_exceed: "flag_for_split"
+    archive_target_pattern: "handoffs/HANDOFF_archive.md"
+    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; lane-owned '## Next actions' content belongs in that lane's handoffs/HANDOFF_<LANE>.md, never here (2026-07-08 second pass: ~9k tokens of lane-specific bullets were fully redundant with content already in the lane files and were dropped, not just moved). on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
+
+  - match: "handoffs/*.md"
+    max_tokens: 20000
+    on_exceed: "flag_for_split"
+    note: "Per-lane continuity files. Large by design (active session narrative for one lane), but not unbounded — archive resolved/superseded entries when approaching the cap."
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — coverage matrix
@@ -192,6 +248,11 @@ policies:
     max_tokens: 12000
     note: "Raised 5000 -> 8000 -> 9000 (2026-05-18) -> 12000 (2026-06-12, aligned with TOKEN_THRESHOLDS + arch interim cap 633f5e57). 115 canonical_sha fields added by freshness_gate --update pushed file to 8086 tokens; threshold predated SHA metadata."
 
+  - match: "references/module_contracts.yaml"
+    max_tokens: 18000
+    on_exceed: "warn_only"
+    note: "Was hitting the generic **/*.yaml 10000 catch-all (actual: ~14.4k tokens as of 2026-07-09), flagged as an unexplained violation nobody had acted on. Not narrative bloat to prune — it's a genuinely comprehensive per-module IN/resolver/OUT contract registry (27 modules), machine-checked by skills/valoria-module-adjudicator/scripts/contract_adjudicator.py, and CLAUDE.md §6 notes 10/27 modules still have doc:null — expected to grow, not shrink, as those gaps get filled. Same category as canonical_sources.yaml/mechanical_terms_index.md above: raise the explicit cap with headroom rather than leave it flagged against a generic threshold that never accounted for this file's real shape."
+
 
   # ────────────────────────────────────────────────────────────
   # FROZEN / HISTORICAL CONTENT — explicit exemptions from catch-all
@@ -251,6 +312,17 @@ policies:
     on_exceed: "warn_only"
     note: "Pending T6 structural extraction. Size expected until T6 complete."
 
+  # Auto-generated observability decision register: a human-skimmable summary, not the
+  # complete data (that's decisions.json, deliberately uncapped — console.html and any
+  # programmatic consumer read the JSON, never this .md). Regenerated by
+  # tools/observability/build_decisions.py; do not hand-edit. 2026-07-09: PER_CAT_CAP
+  # dropped 60 -> 12 in the generator after this file drifted to ~59k tokens (4x this
+  # cap) with the higher setting adding no real coverage.
+  - match: "tools/observability/DECISIONS.md"
+    max_tokens: 15000
+    on_exceed: "flag_for_split"
+    note: "Regenerate via `python tools/observability/build_decisions.py` (tune PER_CAT_CAP there, not this file) rather than hand-trimming."
+
   # Foundational canon: not splittable. Philosophically complete by design.
   - match: "canon/00_philosophical_foundations.md"
     max_tokens: 20000
@@ -305,6 +377,10 @@ policies:
   - match: "tests/sim/**/session_activity_log.md"
     on_exceed: "skip"
     note: "Per-run sim activity logs. Frozen historical output (same class as tests/sim/sim_*.md)."
+
+  - match: "designs/audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml"
+    on_exceed: "skip"
+    note: "Frozen evidence artifact of a completed one-off audit merge stage (self-declared 'QUARANTINE-NOTE: not a registry and not a source of canonical truth' in the file header). Was hitting the generic **/*.yaml 10000 catch-all at ~18.5k tokens with no action possible or intended — same class as the tests/sim/ and research/ skip-policies above, scoped to this specific file rather than a blanket designs/audit/**/*.yaml exemption."
 
   # ────────────────────────────────────────────────────────────
   # CATCH-ALL — flag any unrecognized file above safe size

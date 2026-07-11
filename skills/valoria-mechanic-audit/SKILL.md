@@ -18,7 +18,7 @@ Before running any audit mode, read the following from the working tree:
 
 - `references/canonical_sources.yaml` — confirm which design doc is canonical
 - the target system doc — session-local work OR canonical; need NOT be canon (D2); canon is the baseline
-- `references/params_<system>.md` — extracted mechanical values
+- `params/<system>.md` — extracted mechanical values (e.g. `params/core.md`, `params/contest.md`, `params/mass_combat.md`)
 - `canon/02_canon_constraints.md` — P-01–P-15
 - `references/propagation_map.md` — dependency map
 
@@ -108,9 +108,43 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 **Output:** `core_principles_audit.md`
 
 ## Output Rules
-- Each mode produces a standalone md file
-- Modes can run independently or as full suite (A–E)
+- Findings land in a dated `archives/audit/<date>-<topic>/` folder (matching the naming pattern
+  used throughout `archives/audit/`, e.g. `2026-06-09-faction-comprehensive/`,
+  `2026-06-11-interdependency-master/`) — not standalone files at unspecified locations.
+- Modes can run independently or as full suite (A–E); when multiple modes run in one session, their
+  findings can share one dated folder (one file per mode, e.g. `formula_audit.md`,
+  `number_systems_audit.md`, `mechanic_dependency_graph.md`, `gap_register_update.md`,
+  `core_principles_audit.md`), or be combined into a single report — either is fine as long as the
+  folder is dated and topic-named.
 - All findings assigned severity (P1/P2/P3)
-- P1 findings automatically appended to `canon/editorial_ledger.yaml`
+- Every finding must resolve to an **ED-disposition table**: one row per finding, each row citing
+  either the `ED-<LANE>-NNNN` id filed for it (per `references/id_reservations.yaml`'s allocation
+  protocol) or an explicit no-action line (e.g. "no action — working as intended", "no action —
+  superseded by PP-NNN"). P1 findings must be filed as ED entries, not merely noted.
 - No editorial judgment — mechanical analysis only
 - All mechanical values cited with source file and section from the working tree
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type mechanic_audit \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-mechanic-audit \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
+`tools/audit_registry.py`'s module docstring for the full field/vocabulary
+reference — this is the single source of truth for the schema, not this note.

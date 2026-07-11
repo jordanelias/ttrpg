@@ -44,11 +44,8 @@ VERSION: v3 (2026-04-29)
 import sys
 import os
 import re
-import json
 import argparse
 import time
-import urllib.request
-import base64
 from collections import defaultdict, Counter
 from pathlib import Path
 
@@ -291,23 +288,6 @@ SEED_TOKENS = {
 
 # ──────────────────────────── HELPERS ────────────────────────────────────────
 
-def fetch_full(path, pat, repo='jordanelias/ttrpg', ref='main'):
-    """Direct GitHub Contents API fetch — bypasses index routing."""
-    url = f'https://api.github.com/repos/{repo}/contents/{path}?ref={ref}'
-    req = urllib.request.Request(url, headers={
-        'Authorization': f'token {pat}',
-        'Accept': 'application/vnd.github.v3+json',
-    })
-    try:
-        with urllib.request.urlopen(req) as r:
-            data = json.loads(r.read())
-        if data.get('type') == 'file' and 'content' in data:
-            return base64.b64decode(data['content']).decode('utf-8', errors='replace')
-        return None
-    except urllib.error.HTTPError:
-        return None
-
-
 def to_paragraphs(content):
     """Strip HTML comments + code blocks; split on blank lines; min 50 chars."""
     content = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
@@ -357,7 +337,7 @@ def banner_classify(content, path):
 # ──────────────────────────── STAGES ─────────────────────────────────────────
 # (Stages 1-7 implementations — direct port of v3 execution logic.)
 # Full implementations available; collapsed here for brevity in skill enshrinement.
-# See designs/audit/2026-04-29-topographic-analysis/ for executed reference run.
+# See archives/audit/2026-04-29-topographic-analysis/ for executed reference run.
 
 
 def main():
@@ -385,7 +365,7 @@ def main():
     # this skeleton documents the expected interface.
 
     print("\nFor full executed pipeline, see:")
-    print("  designs/audit/2026-04-29-topographic-analysis/")
+    print("  archives/audit/2026-04-29-topographic-analysis/")
     print("  This script's full implementation will be ported from that run.")
     print("\nThis skill enshrines the methodology + scaffolding;")
     print("the executed reference run is the canonical implementation.")

@@ -161,3 +161,29 @@ Before running any mode that uses mechanical values:
 | `references/sim_protocol.md` | State machine, manoeuvre contest protocol |
 | `references/findings_template.md` | Output structure |
 | `scripts/combat_sim.py` | Runnable simulation script |
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type simulation_balance \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-combat-simulator \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass — this
+skill's own runs are usually `personal_combat`). See `tools/audit_registry.py`'s
+module docstring for the full field/vocabulary reference — this is the single
+source of truth for the schema, not this note.

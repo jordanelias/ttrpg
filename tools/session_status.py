@@ -51,6 +51,16 @@ def main():
     except Exception:
         pass
 
+    # audit-family staleness (Phase 5a, ED-IN-0032 planning): at most two stalest
+    # one-line warnings. Renderer lives once in audit_staleness.py; never allowed to
+    # break session start.
+    try:
+        import audit_staleness as ast
+        for warn in ast.top_stale():
+            print(warn)
+    except Exception:
+        pass
+
     if os.path.exists('HANDOFF.md'):
         try:
             with open('HANDOFF.md', encoding='utf-8', errors='replace') as f:

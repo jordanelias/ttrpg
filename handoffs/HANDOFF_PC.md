@@ -400,6 +400,17 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Next actions
 
+- **R2 (closing-distance/facing/grip/contact redesign) — I0→I8 COMPLETE (2026-07-03), PR #72, awaiting
+  review/merge.** Implemented the full ratified plan
+  (`designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md`) per its own
+  per-increment discipline. All 9 Jordan-decisions (JD-1..JD-9) taken at the plan's own stated default.
+  I8's capstone measurement + findings record:
+  `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md` — **the one open
+  finding**: the plan's ~55-75%/~30-45% reach-class/dagger CONTESTED-balance target is **not yet met**
+  (reach-class weapons run 75-93% vs arming; not inverted, but above the band), traced to the same
+  pre-existing Phase-B mass-model calibration debt already carried by the 3 accepted `[PHASE-C FLAG]` reds
+  — explicitly out of R2's scope, deferred to Phase C's engine-scale re-tune. **Next action, if a Phase C
+  recalibration effort starts:** read the capstone audit doc's item 1 table first.
 - **ED-PC-0006 (`open`) — non-combat wound fractional-Ob calibration, follow-on to the ED-PC-0005 ruling.**
   Direction is ruled (wounds add a fractional Ob, never −1D); only the per-pool VALUES remain. Sites now
   reading *"fractional Ob per wound, value ED-PC-0006"* awaiting a number: Thread ops (`threadwork_v30`,

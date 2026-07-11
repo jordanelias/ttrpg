@@ -1,0 +1,80 @@
+name: Valoria Dashboard
+
+# Builds docs/dashboard/data.json (tools/dashboard_data.py) and deploys
+# docs/dashboard/ to GitHub Pages. One-time manual step required before the
+# first successful deploy: repo Settings -> Pages -> Source: "GitHub Actions"
+# (the default GITHUB_TOKEN cannot flip that setting itself).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'designs/workplans/**'
+      - 'references/audit_registry.jsonl'
+      - 'handoffs/**'
+      - 'HANDOFF.md'
+      - 'docs/dashboard/**'
+      - 'tools/dashboard_data.py'
+      - '.github/workflows/dashboard.yml'
+  schedule:
+    # Daily fallback — staleness (workplan drift, CI status) can change even with
+    # no commits to the paths above. NOTE: GitHub auto-disables scheduled workflows
+    # after 60 days with no repository activity; the push trigger above is the
+    # actual freshness backstop, this cron is a convenience, not the only path.
+    - cron: '17 6 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history required — tools/dashboard_data.py's `activity` section
+          # reads `git log`; the default shallow checkout (depth 1) would leave it
+          # able to see only the single latest commit.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Build dashboard data.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 tools/dashboard_data.py
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # Scoped to docs/dashboard only — docs/ also holds unrelated internal
+          # docs (docs/freshness_gate_spec.md, docs/governance_deferred.yaml)
+          # that are not part of the published site.
+          path: docs/dashboard
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Summary
+        run: echo "Dashboard live at ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"

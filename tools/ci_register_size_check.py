@@ -78,6 +78,26 @@ THRESHOLDS = {
     # tools/validate_ed_citations.py ARCHIVE_JSONL_PATHS so archived-ED citations still
     # resolve. Soft limit matches the active ledger's own cap.
     "canon/editorial_ledger_archive.jsonl": 150_000,
+    # Per-lane active ledgers (2026-07-08 atomization pass): ED-<LANE>-NNNN entries split
+    # out of canon/editorial_ledger.jsonl by lane, mirroring handoffs/HANDOFF_<LANE>.md.
+    # Generous headroom — each lane starts small (largest today, IN, is ~34 entries) but
+    # this is a live append-only store like its parent, not a fixed-size snapshot.
+    "canon/editorial_ledger_mb.jsonl": 50_000,
+    "canon/editorial_ledger_pc.jsonl": 50_000,
+    "canon/editorial_ledger_fi.jsonl": 50_000,
+    "canon/editorial_ledger_sc.jsonl": 50_000,
+    "canon/editorial_ledger_fa.jsonl": 50_000,
+    "canon/editorial_ledger_wr.jsonl": 50_000,
+    "canon/editorial_ledger_in.jsonl": 50_000,
+    "canon/editorial_ledger_go.jsonl": 50_000,
+    "canon/editorial_ledger_se.jsonl": 50_000,
+    # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
+    # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
+    # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,
+    # -module-adjudicator, -vector-audit, -editorial-register, -combat-simulator,
+    # -simulator). Same append-only shape as the editorial ledger; generous headroom
+    # since audit cadence is far lower than editorial-decision cadence.
+    "references/audit_registry.jsonl": 50_000,
     "archives/session/session_log_archive_part_7.md": 100_000,
     "canon/patch_register_index.md":         20_000,
 }
