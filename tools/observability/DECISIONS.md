@@ -5,6 +5,23 @@
 **842 open items** across 1261 files · P1 305 · P2 35 · P3 502 · 23 already settled (supersessions).
 
 
+## By lane
+
+_Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — informs lane-scoped triage, does not auto-file anything. An item with locations in more than one lane, or no matching path prefix at all, lands in **unassigned** rather than a forced guess._
+
+| Lane | P1 | P2 | P3 | Total |
+|---|---|---|---|---|
+| **MB** — Mass battle | 6 | 0 | 48 | 54 |
+| **PC** — Personal combat | 18 | 1 | 93 | 112 |
+| **FI** — Field investigation | 0 | 0 | 1 | 1 |
+| **SC** — Social contest | 5 | 0 | 2 | 7 |
+| **FA** — Faction actions | 3 | 0 | 64 | 67 |
+| **WR** — World | 0 | 0 | 8 | 8 |
+| **IN** — Infrastructure / cross-cutting | 2 | 9 | 9 | 20 |
+| **GO** — Godot | 9 | 2 | 8 | 19 |
+| **SE** — Settlements | 0 | 0 | 5 | 5 |
+| _unassigned_ (`lane: null`) | 262 | 23 | 264 | 549 |
+
 ## By category
 
 - **Documented gaps** — 293

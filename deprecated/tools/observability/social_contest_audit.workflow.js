@@ -1,3 +1,19 @@
+// RETIRED (2026-07-11, ED-IN-0033, Valoria Audit Ecosystem plan Phase 2 item 10 — Jordan's
+// ruling). Moved from tools/observability/ to deprecated/tools/observability/ via `git mv`.
+// Do not invoke; do not resurrect without re-authoring against current canon.
+//
+// Why:
+//   - Never executed even once: no dated audit output anywhere in designs/audit/ cites this
+//     workflow by name (confirmed by grep of designs/audit/ for "social_contest_audit.workflow").
+//   - Its CORPUS constant cites `sim/personal/contest.py`, which no longer exists — the
+//     2026-07-02 contest rebuild (Stage 3 / Gate C, PR #63) replaced it with the
+//     `sim/personal/contest/` package (armature, rhetoric, appraise modules).
+//   - Its CANON_NOTE source-hierarchy predates the entire ED-SC-0002..0015 lane-tagged
+//     ruling sequence and no longer reflects the live canonical-precedence ordering.
+//   - The SC lane already has a ratified, dated, executed subsystem audit covering this exact
+//     ground: designs/audit/2026-07-05-fable5-social-contest-audit/ (PR #80).
+//
+// See deprecated/skills/README.md for the retirement-batch precedent this follows.
 export const meta = {
   name: 'social-contest-audit',
   description: 'Multi-agent consistency audit of the Valoria social contest subsystem (spec vs params vs canonical derived-stats vs sim), with adversarial verification of every finding',

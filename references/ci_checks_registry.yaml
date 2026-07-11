@@ -29,7 +29,13 @@
 # every paired_hook listed here actually exists in valoria_hooks.py.
 
 version: 1
-generated: 2026-05-10
+generated: 2026-07-11
+# Full regeneration (2026-07-11, ED-IN-0031, Valoria Audit Ecosystem plan Phase 2 item 11):
+# the previous 2026-05-10 snapshot listed only 8 of the ~22 checker-shaped tools/*.py scripts
+# and only 5 of the workflow's then-19 non-aggregator jobs. Regenerated against the working
+# tree post-Phase-2 (25 jobs total incl. ci-summary; 22 tools/*.py invocations across them).
+# See tools/broken_dependency_checker.py::check_ci_registry_coverage() for the mechanical
+# verifier that now keeps this honest going forward (wired into the `integrity` CI job).
 ci_workflow: .github/workflows/valoria-ci.yml
 
 # ── Level 5 (CI external) ────────────────────────────────────────────────────
@@ -89,8 +95,113 @@ ci_checks:
     level: 5
     role: "Bidirectional Status:CANONICAL ↔ canonical_sources.yaml verification."
     paired_hook: ""
-    ci_job: ""    # not yet wired into CI — Jordan to decide on inclusion
-    notes: "Added 2026-05-10. Initial state: 41 unregistered-with-header, 32 registered-no-header. CLI --strict for CI exit code."
+    ci_job: canon-coverage-check
+    notes: "Added 2026-05-10. Ported off the GitHub code-search API onto a working-tree os.walk (ED-IN-0032, doctrine fix). Wired into CI report-only 2026-07-11 (Jordan's ruling, Phase 2 item 9). Current drift (2026-07-11): 1 unregistered-with-header, 28 registered-no-header."
+
+  - path: tools/ci_audit_registry_check.py
+    level: 5
+    role: "Report-only freshness gate for references/audit_registry.jsonl: flags a designs/audit/ folder newer than the registry's latest known date with no matching record (a skill's append-on-completion step silently didn't run)."
+    paired_hook: ""
+    ci_job: audit-registry-check
+    notes: "Added 2026-07-10 (PR #121, ED-IN-0031, mobile-friendly GitHub Pages status dashboard). Always exits 0 by design (audit cadence is irregular/manual, unlike code) — feeds tools/dashboard_data.py's audit-verdict table, not a merge gate. Complementary to tools/audit_staleness.py (added the same day, Phase 5a of the audit-ecosystem consolidation plan, no ED filed — a SessionStart-only signal, not a CI check): this checks 'did a completed audit get logged,' audit_staleness.py checks 'has an already-logged audit's content drifted behind the corpus since' — two different failure modes on the same underlying question, deliberately kept as two small tools rather than merged into one."
+
+  - path: tools/ci_naming_check.py
+    level: 5
+    role: "Blocking naming-invariant gate: no new use of a deprecated name (Solmund never Galbados), diff-aware over enforce:block entries in names_index.yaml."
+    paired_hook: forbidden_token_gate
+    ci_job: naming-check
+    notes: "Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/ci_names_check.py
+    level: 5
+    role: "Report-only naming-drift lint over every enforce:warn entry in names_index.yaml; flags newly-added legacy terms and names the canonical replacement."
+    paired_hook: ""
+    ci_job: names-drift
+    notes: "continue-on-error in CI; report-only (blocking=False) in valoria_local.py. Flip an index entry warn->block to promote it under ci_naming_check."
+
+  - path: tools/ci_names_consistency.py
+    level: 5
+    role: "Asserts descriptor_registry.yaml / proper_noun_registry.yaml mirror fields equal names_index.yaml's canonical value (index is authoritative)."
+    paired_hook: ""
+    ci_job: names-consistency
+    notes: "Whole-tree gate, no diff needed. Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/ci_generation_consistency.py
+    level: 5
+    role: "v40 generation currency invariant: every canonical design doc exists, carries a recognized Status: line, and isn't recorded as superseded."
+    paired_hook: ""
+    ci_job: generation-consistency-check
+    notes: "Warn-only by design (always exits 0 per its own docstring). Already ran locally via valoria_local.py --staged; CI wire added 2026-07-11 (Phase 2 item 8) to close the local/CI parity gap."
+
+  - path: tools/ci_module_shape_check.py
+    level: 5
+    role: "Holonic container/shape hygiene on engine/sim runtime code (ED-1085): no sys.path reach-ins into tests/ trees, no tests/ imports; INFO-tier untagged module-scope constant surfacing."
+    paired_hook: ""
+    ci_job: module-shape-check
+    notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
+
+  - path: tools/ci_quantity_vocabulary_check.py
+    level: 5
+    role: "A17 stat-vocabulary closure: every stat identifier in module_contracts.yaml / sim stat_deltas / impact_vector dicts resolves to descriptor_registry.yaml or names_index.yaml (via tools/quantity_registry.py)."
+    paired_hook: ""
+    ci_job: quantity-vocabulary-check
+    notes: "Report-only (continue-on-error), ED-IN-0029. Not listed in ci-summary's needs."
+
+  - path: tools/ci_sim_fabrication_check.py
+    level: 5
+    role: "Blocking anti-fabrication guard: every numeric literal in sim/*.py must be ledger-cited or carry a canonical-source comment."
+    paired_hook: sim_fabrication_check
+    ci_job: sim-fabrication-check
+    notes: "Ports valoria_hooks.sim_fabrication_check (deprecated/skills/valoria-orchestrator/) into a standalone validator. Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/ci_supersession_check.py
+    level: 5
+    role: "Warn-only churn guard: flags changesets touching a path listed in a supersession_register.yaml entry's files_to_recheck."
+    paired_hook: supersession_check
+    ci_job: supersession-check
+    notes: "Ports valoria_hooks.supersession_check. Never fails the build (always exits 0). Also runs locally via valoria_local.py --staged (report-only)."
+
+  - path: tools/ci_vetting_check.py
+    level: 5
+    role: "PP-674 framework vetting gate: PP entries id>=674 without a class:C|D|E/pre-framework exemption must carry a valid vetting: block."
+    paired_hook: vetting_gate
+    ci_job: vetting-check
+    notes: "Ports valoria_hooks.vetting_gate. Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/compliance_check.py
+    level: 5
+    role: "Working-tree size-cap compliance scan (atomization_rules.yaml thresholds)."
+    paired_hook: ""
+    ci_job: compliance-check
+    notes: "CI mode (--check-only --repo-state .) is the live BLOCKING half; NOT in valoria_local.py's local check list, so local-green != compliance-green (ED-1082 correction, CLAUDE.md §8). Its orchestrator-era check_all()/validate_commit() harness paths (github_ops import, /home/claude sys.path insert) remain dead outside CI mode."
+
+  - path: tools/currency_consistency_check.py
+    level: 5
+    role: "Self-updating recency gate (ED-1087): CURRENT.md reconcile-stamp vs head freshness, ED-ceiling consistency, register header/body currency, dead maintainer pointers."
+    paired_hook: ""
+    ci_job: currency-consistency
+    notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
+
+  - path: tools/export_engine_params.py
+    level: 5
+    role: "Oracle -> typed-JSON round-trip: references/engine_params/combat_engine_v1.json must match designs/scene/combat_engine_v1/config.py (--check mode)."
+    paired_hook: ""
+    ci_job: engine-params-roundtrip
+    notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."
+
+  - path: tools/mechanics_index_gen.py
+    level: 5
+    role: "canon/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
+    paired_hook: ""
+    ci_job: mechanics-index-check
+    notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
+
+  - path: tools/validate_ed_citations.py
+    level: 5
+    role: "Every ED-NNN / ED-<LANE>-NNNN cited in canon/design docs resolves to a real, non-open ledger entry (active + archives)."
+    paired_hook: ""
+    ci_job: ed-citations
+    notes: "Blocking as of 2026-06-29 (backlog reconciled 292 -> 0, designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md)."
 
 # ── Level 3-4 (in-session hooks, mostly pre_commit_gate) ─────────────────────
 # These fire in-session via valoria_hooks.py before commit. CI mirrors
@@ -210,15 +321,24 @@ known_issues:
     surface: ".github/workflows/valoria-ci.yml syntax-check job"
     proposed_fix: "Replace skeleton_gen.py with doc_index_gen.py in the syntax-check command. One-line CI fix."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — .github/workflows/valoria-ci.yml's syntax-check job's py_compile list compiles tools/doc_index_gen.py (line 59); no reference to skeleton_gen.py remains anywhere in the workflow. Verified via grep, ED-IN-0031."
 
   - id: freshness_gate-get_live_sha-missing
     description: "Bootstrap session-startup tries `freshness_gate.get_live_sha` and warns 'module has no attribute get_live_sha' on every run. Function appears not present in current freshness_gate.py."
     surface: "freshness_gate.py / bootstrap call site"
     proposed_fix: "Add get_live_sha() to freshness_gate.py, or remove the bootstrap call site."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — tools/freshness_gate.py:80 defines `get_live_sha = get_blob_sha` as a public alias (comment at line 79: 'Public alias kept for API stability'), directly under get_blob_sha's definition at line 70. Verified by reading the file, ED-IN-0031."
 
   - id: compliance-doc_index_gen-missing
     description: "compliance_check.py logs '[COMPLIANCE] Auto-fetch failed: No module named doc_index_gen — skipping' on every bootstrap. doc_index_gen.py exists at tools/, but compliance_check is looking for it as an importable module rather than tool path."
     surface: "compliance_check.py auto-fetch path resolution"
     proposed_fix: "Adjust import path or add tools/ to sys.path before the import attempt."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — tools/compliance_check.py's _lazy_import() (line 24) walks sys.path/known tool dirs for atomizer.py, resolves a `required = ['atomizer.py', 'doc_index_gen.py', 'index_gen.py']` list (line 41) against them, and only falls back to a GitHub auto-fetch for whatever's genuinely missing (lines 45-68) before `import doc_index_gen as _s` (line 74). doc_index_gen.py resolves correctly when present at tools/. Verified by reading the file, ED-IN-0031."

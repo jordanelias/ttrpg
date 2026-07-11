@@ -18,7 +18,7 @@ Before running any audit mode, read the following from the working tree:
 
 - `references/canonical_sources.yaml` — confirm which design doc is canonical
 - the target system doc — session-local work OR canonical; need NOT be canon (D2); canon is the baseline
-- `references/params_<system>.md` — extracted mechanical values
+- `params/<system>.md` — extracted mechanical values (e.g. `params/core.md`, `params/contest.md`, `params/mass_combat.md`)
 - `canon/02_canon_constraints.md` — P-01–P-15
 - `references/propagation_map.md` — dependency map
 
@@ -108,10 +108,19 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 **Output:** `core_principles_audit.md`
 
 ## Output Rules
-- Each mode produces a standalone md file
-- Modes can run independently or as full suite (A–E)
+- Findings land in a dated `archives/audit/<date>-<topic>/` folder (matching the naming pattern
+  used throughout `archives/audit/`, e.g. `2026-06-09-faction-comprehensive/`,
+  `2026-06-11-interdependency-master/`) — not standalone files at unspecified locations.
+- Modes can run independently or as full suite (A–E); when multiple modes run in one session, their
+  findings can share one dated folder (one file per mode, e.g. `formula_audit.md`,
+  `number_systems_audit.md`, `mechanic_dependency_graph.md`, `gap_register_update.md`,
+  `core_principles_audit.md`), or be combined into a single report — either is fine as long as the
+  folder is dated and topic-named.
 - All findings assigned severity (P1/P2/P3)
-- P1 findings automatically appended to `canon/editorial_ledger.yaml`
+- Every finding must resolve to an **ED-disposition table**: one row per finding, each row citing
+  either the `ED-<LANE>-NNNN` id filed for it (per `references/id_reservations.yaml`'s allocation
+  protocol) or an explicit no-action line (e.g. "no action — working as intended", "no action —
+  superseded by PP-NNN"). P1 findings must be filed as ED entries, not merely noted.
 - No editorial judgment — mechanical analysis only
 - All mechanical values cited with source file and section from the working tree
 

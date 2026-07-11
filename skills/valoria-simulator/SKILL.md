@@ -121,6 +121,14 @@ Systematic search across nine categories:
 
 **Output:** `sim_edge_cases_[domain].md`
 
+**Forward-only findings-disposition discipline:** every finding above must resolve to either a
+filed `ED-<LANE>-NNNN` id (per `references/id_reservations.yaml`'s allocation protocol) or an
+explicit no-action line (e.g. "no action — working as intended," "no action — superseded by
+PP-NNN"). P1 findings must be filed as ED entries, not merely flagged in the findings section.
+Mirrors the disposition-table discipline added to `valoria-mechanic-audit` and
+`valoria-vector-audit`'s output contracts in the same audit-ecosystem consolidation batch.
+Applies going forward only.
+
 ### Mode F — Fieldwork Simulation (G-FW)
 
 Simulate fieldwork operations across investigation, exploration, and socializing tracks.

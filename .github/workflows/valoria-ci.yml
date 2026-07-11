@@ -287,6 +287,81 @@ jobs:
         continue-on-error: true
         run: python3 tools/ci_quantity_vocabulary_check.py
 
+  mechanics-index-check:
+    name: Mechanics Index Validation (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0033, Phase 2 item 7): validates canon/mechanics_index.yaml
+    # (schema, cross-references, GD-1 singularity invariant, drift report) via its own
+    # --strict CLI contract. Never wired into CI before despite being fully CI-shaped.
+    # Same STEP-level continue-on-error precedent as contract-conformance: land quiet,
+    # burn the current schema/scale-value backlog, flip to blocking once clean.
+    # Deliberately not listed in ci-summary's needs, matching contract-conformance /
+    # quantity-vocabulary-check.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Mechanics index schema + cross-reference + GD-1 drift (report-only)
+        continue-on-error: true
+        run: python3 tools/mechanics_index_gen.py --strict
+
+  generation-consistency-check:
+    name: Generation v40 Currency Gate (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0033, Phase 2 item 8): closes the local/CI parity gap —
+    # ci_generation_consistency.py already runs on every local commit via
+    # tools/valoria_local.py --staged (one of its 13 checks) but never ran in CI.
+    # The script is warn-only-by-design (always exits 0 per its own docstring), so
+    # this costs one CI job and zero new blocking risk. continue-on-error kept for
+    # consistency with the other report-only jobs in this file even though the
+    # script itself never returns nonzero.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every canonical doc carries a Status line and isn't superseded (report-only)
+        continue-on-error: true
+        run: python3 tools/ci_generation_consistency.py
+
+  canon-coverage-check:
+    name: Canonical Index Coverage (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (Jordan's ruling, ED-IN-0033, Phase 2 item 9): bidirectional
+    # Status:CANONICAL <-> canonical_sources.yaml drift check. Ported off the
+    # GitHub code-search API onto a working-tree os.walk in Phase 1 (ED-IN-0031);
+    # this job is the deferred CI wire now that the doctrine violation is fixed.
+    # Current tree carries real drift (1 unregistered-with-header, 28
+    # registered-no-header as of 2026-07-11) — same ratchet pattern as the other
+    # report-only jobs above: land quiet, burn the backlog, flip to blocking later.
+    # Deliberately not listed in ci-summary's needs.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Status:CANONICAL header <-> canonical_sources.yaml registry agree (report-only)
+        continue-on-error: true
+        run: python3 tools/canon_coverage_check.py --strict --json
+
   engine-params-roundtrip:
     name: Engine-Params Round-Trip (oracle → export)
     runs-on: ubuntu-latest
@@ -485,6 +560,11 @@ jobs:
           python-version: '3.11'
       # ED-1053: these three now read the LOCAL WORKING TREE (no PAT, no network) —
       # they validate the checkout under test, not remote main.
+      # Broken dependency check also runs check_ci_registry_coverage() (ED-IN-0033,
+      # Phase 2 item 11): cross-checks references/ci_checks_registry.yaml's path/
+      # ci_job/paired_hook fields against the working tree, this workflow's job ids,
+      # and valoria_hooks.py — folded into this existing step/script rather than a
+      # new job, same defect class as the other checks it sits next to.
       - name: Broken dependency check
         run: python3 tools/broken_dependency_checker.py
       - name: Patch propagation check
