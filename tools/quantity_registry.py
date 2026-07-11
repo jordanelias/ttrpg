@@ -12,8 +12,11 @@ names for some quantities (clocks, mass-combat stats, mechanics) under its own
 consumer asks: "is this stat name a pointer into a registry, or did I just
 hardcode it?"
 
-ONE SOURCE, MANY READERS (mirrors tools/names.py): this module is the only
-place that merges the two files into one resolvable vocabulary.
+ONE SOURCE, MANY READERS (mirrors tools/names.py): descriptor_registry.yaml is
+parsed in exactly one place, tools/descriptor_registry.py's load() — this
+module imports and calls that loader rather than re-parsing the YAML itself,
+then merges its output with names_index.yaml (parsed here, since no other
+module owns that file) into one resolvable vocabulary.
 tools/ci_quantity_vocabulary_check.py (A17) is the primary caller; any future
 runtime caller (e.g. a KeyLog stat_vocabulary hook) should use this instead of
 re-parsing either YAML.
@@ -29,6 +32,7 @@ bundled "A / B / C" forms), not a single normalized identifier space. See
 """
 import os
 import re
+import sys
 
 try:
     import yaml
@@ -36,6 +40,15 @@ except Exception:  # PyYAML absent — degrade, never crash
     yaml = None
 
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
+if _TOOLS_DIR not in sys.path:
+    sys.path.insert(0, _TOOLS_DIR)
+
+try:
+    import descriptor_registry as _descriptor_registry
+except Exception:  # PyYAML absent, or the module can't import — degrade, never crash
+    _descriptor_registry = None
+
 DESCRIPTOR_PATH = os.path.join(_REPO_ROOT, 'references', 'descriptor_registry.yaml')
 NAMES_INDEX_PATH = os.path.join(_REPO_ROOT, 'references', 'names_index.yaml')
 
@@ -43,11 +56,36 @@ _cache = None
 
 
 def _load_yaml(path):
+    """Generic YAML-to-dict loader for files descriptor_registry.py does not own
+    (currently only names_index.yaml). Not used for descriptor_registry.yaml — see
+    _load_descriptor(), which delegates that file's parsing to descriptor_registry.load()."""
     if yaml is None:
         return {}
     try:
         with open(path, encoding='utf-8') as f:
             data = yaml.safe_load(f) or {}
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _load_descriptor(path):
+    """Load descriptor_registry.yaml's dict via tools/descriptor_registry.py's load() —
+    the one parser for that file — instead of re-parsing it independently. Reads `path`
+    as text and hands it to that loader's `text=` parameter, so an explicit path override
+    (e.g. a test fixture) is honored the same way the rest of this module honors overrides.
+    Fault-tolerant: missing file, absent PyYAML, or a parse error all degrade to {} — same
+    discipline as the rest of this module.
+    """
+    if _descriptor_registry is None:
+        return {}
+    try:
+        with open(path, encoding='utf-8') as f:
+            text = f.read()
+    except Exception:
+        return {}
+    try:
+        data = _descriptor_registry.load(text=text)
     except Exception:
         return {}
     return data if isinstance(data, dict) else {}
@@ -78,7 +116,7 @@ def load(descriptor_path=None, names_index_path=None):
         if name and name not in known:
             known[name] = key
 
-    descriptor = _load_yaml(descriptor_path or DESCRIPTOR_PATH)
+    descriptor = _load_descriptor(descriptor_path or DESCRIPTOR_PATH)
 
     attrs = descriptor.get('attributes', {}) or {}
     for group in ('body', 'mind', 'social'):

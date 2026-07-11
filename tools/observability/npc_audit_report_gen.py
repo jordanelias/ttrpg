@@ -8,10 +8,29 @@ reproducible even when the synthesis agent is blocked by a rate/session limit.
 """
 import json, sys, os, collections
 
-SRC = sys.argv[1] if len(sys.argv) > 1 else \
-    r"C:/Users/Jordan/AppData/Local/Temp/claude/C--Github-ttrpg/3aeb16e9-3e5b-4241-b8a5-b8d5dd701181/tasks/w4cn2qkxi.output"
+# Repo root, three levels up from tools/observability/npc_audit_report_gen.py
+# (mirrors the _REPO_ROOT idiom in tools/quantity_registry.py, adjusted one level
+# deeper for this file's location).
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_USAGE = (
+    "usage: npc_audit_report_gen.py <workflow_result.json> [output.md]\n"
+    "\n"
+    "  <workflow_result.json>  Required. The ultracode npc-audit workflow's JSON result\n"
+    "                          file (result.confirmed = list of verified findings). No\n"
+    "                          portable default exists — this is the ephemeral output\n"
+    "                          path of a specific past workflow run.\n"
+    "  [output.md]             Optional. Markdown report destination. Defaults to\n"
+    "                          designs/audit/2026-06-22-npc-comprehensive-audit.md\n"
+    "                          under the repo root.\n"
+)
+
+if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
+    sys.stderr.write(_USAGE)
+    sys.exit(0 if len(sys.argv) >= 2 and sys.argv[1] in ("-h", "--help") else 2)
+
+SRC = sys.argv[1]
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
-    r"C:/Github/ttrpg/designs/audit/2026-06-22-npc-comprehensive-audit.md"
+    os.path.join(_REPO_ROOT, "designs", "audit", "2026-06-22-npc-comprehensive-audit.md")
 
 data = json.load(open(SRC, encoding="utf-8"))
 res = data.get("result", {})

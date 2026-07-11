@@ -210,15 +210,24 @@ known_issues:
     surface: ".github/workflows/valoria-ci.yml syntax-check job"
     proposed_fix: "Replace skeleton_gen.py with doc_index_gen.py in the syntax-check command. One-line CI fix."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — .github/workflows/valoria-ci.yml's syntax-check job's py_compile list compiles tools/doc_index_gen.py (line 59); no reference to skeleton_gen.py remains anywhere in the workflow. Verified via grep, ED-IN-0031."
 
   - id: freshness_gate-get_live_sha-missing
     description: "Bootstrap session-startup tries `freshness_gate.get_live_sha` and warns 'module has no attribute get_live_sha' on every run. Function appears not present in current freshness_gate.py."
     surface: "freshness_gate.py / bootstrap call site"
     proposed_fix: "Add get_live_sha() to freshness_gate.py, or remove the bootstrap call site."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — tools/freshness_gate.py:80 defines `get_live_sha = get_blob_sha` as a public alias (comment at line 79: 'Public alias kept for API stability'), directly under get_blob_sha's definition at line 70. Verified by reading the file, ED-IN-0031."
 
   - id: compliance-doc_index_gen-missing
     description: "compliance_check.py logs '[COMPLIANCE] Auto-fetch failed: No module named doc_index_gen — skipping' on every bootstrap. doc_index_gen.py exists at tools/, but compliance_check is looking for it as an importable module rather than tool path."
     surface: "compliance_check.py auto-fetch path resolution"
     proposed_fix: "Adjust import path or add tools/ to sys.path before the import attempt."
     flagged: 2026-05-10
+    resolved: true
+    resolved_date: 2026-07-11
+    resolution_note: "Already fixed in the working tree — tools/compliance_check.py's _lazy_import() (line 24) walks sys.path/known tool dirs for atomizer.py, resolves a `required = ['atomizer.py', 'doc_index_gen.py', 'index_gen.py']` list (line 41) against them, and only falls back to a GitHub auto-fetch for whatever's genuinely missing (lines 45-68) before `import doc_index_gen as _s` (line 74). doc_index_gen.py resolves correctly when present at tools/. Verified by reading the file, ED-IN-0031."
