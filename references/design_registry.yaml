@@ -17,10 +17,12 @@
 version: 30
 established: 2026-04-13
 
-# next_id_note: editorial_ledger active set carries `next_id: 789` in its header
-#   (canon/editorial_ledger.yaml). Source of truth is the ledger header itself —
-#   verified 2026-05-10 against the active ledger. This note exists only to
-#   document the location of the counter; do not duplicate the value here.
+# next_id_note (STALE — corrected 2026-07-12, ED-IN-0038): this used to point at a
+#   `next_id` header in a since-migrated canon/editorial_ledger.yaml, which does not exist
+#   (the store moved to JSONL in 2026-05-28 and lane-split further in 2026-07-08 — see
+#   CLAUDE.md §3). ID allocation for both ED-<LANE>-NNNN and PP-NNN now goes through
+#   references/id_reservations.yaml's per-lane/per-round `next_free` counters exclusively —
+#   see skills/valoria-editorial-register/SKILL.md's ID Law / Collision Guard sections.
 
 registry:
 

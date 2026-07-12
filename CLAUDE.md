@@ -274,7 +274,8 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
 (2026-07-12, ED-IN-0039) — its bundled script was a hand-hardcoded, long-frozen 9-weapon model,
 fully superseded by `designs/scene/combat_engine_v1/workbench/balance.py`, the actively-maintained
-40-weapon canonical balance harness; see `deprecated/skills/README.md` for detail.
+51-weapon canonical balance harness (40 added in the 2026-07-02 morphology expansion, plus the
+original 11); see `deprecated/skills/README.md` for detail.
 
 **General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
 `handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`

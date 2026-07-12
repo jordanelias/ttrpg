@@ -120,8 +120,11 @@ def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
     the ER-2 fix landed in params/core.md, commit a3d3888) so odds track the discrete model
     even at small pools, per params/core.md's own equivalence note. Ob may be fractional
     (fractional Ob is canonical in videogame mode); clamped to the canonical [1, 20] range.
-    Degree thresholds match params/core.md's Degrees of Success table exactly: Overwhelming
-    net >= max(2*Ob, 3), Success net >= Ob, Partial 0 < net < Ob, Failure net <= 0."""
+    Degree thresholds match params/core.md's Degrees of Success table: Overwhelming
+    net >= max(2*Ob, 3), Success net >= Ob, Partial 0 < net < Ob, Failure net <= 0 —
+    EXCEPT the documented Ob-20 exception (params/core.md "Degrees of Success"): at Ob 20,
+    Overwhelming is unavailable (folds into Success) and Partial requires net >= 10 instead
+    of net > 0."""
     if tn not in _CONTINUOUS_MU:
         raise ValueError(f"No continuous-engine mu/sigma for TN {tn} — only 6/7/8 defined")
     mu = _CONTINUOUS_MU[tn] * n
@@ -131,8 +134,18 @@ def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
     def p_at_least(x: float) -> float:
         return 1 - _norm_cdf((x - 0.5 - mu) / sigma)
 
-    p_overwhelming = p_at_least(max(2 * ob, 3))
     p_success_or_better = p_at_least(ob)
+    if ob >= 20:
+        # Ob-20 exception: Overwhelming unavailable, Partial requires net >= 10.
+        p_partial_or_better = p_at_least(10)
+        return {
+            "overwhelming": 0.0,
+            "success": p_success_or_better,
+            "partial": p_partial_or_better - p_success_or_better,
+            "failure": 1 - p_partial_or_better,
+            "p_full": p_success_or_better,
+        }
+    p_overwhelming = p_at_least(max(2 * ob, 3))
     p_partial_or_better = p_at_least(1e-9)  # net > 0
     return {
         "overwhelming": p_overwhelming,

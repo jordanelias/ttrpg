@@ -146,17 +146,6 @@ The module is `skills/valoria-dice-model/valoria_dice.py` in the working tree. R
 **Output:** one-line summary via `quick_check(n, tn, ob)`.
 Use when mechanic-audit or simulator needs a spot probability without a full table.
 
-### Task 9 — Continuous-Mode Table (Godot-canonical)
-**Input:** pool sizes (list), TN, Ob values (list, may be fractional)
-**Procedure:**
-1. Run `continuous_outcome_probs(n, tn, ob)` for each (pool, ob) combination — closed-form, no
-   trial count needed.
-2. Output markdown table: Pool | Overwhelm | Success | Partial | Failure, labeled
-   "[continuous/Godot-canonical]" so it isn't mistaken for the discrete-mode table.
-3. Use whenever the question is about the videogame's actual resolver rather than tabletop play
-   (see "Two Resolver Modes" above) — e.g. balance questions that will land in
-   `references/engine_params/*.json` or `designs/scene/combat_engine_v1/`.
-
 ### Task 8 — Full Multi-TN Probability Tables
 **Input:** pool range (e.g. 3–15), Ob range (e.g. 1–8)
 **Procedure:**
@@ -167,6 +156,17 @@ Use when mechanic-audit or simulator needs a spot probability without a full tab
 
 **Standard reference output** (generate once, cache to `references/tn_full_tables.md`):
 Pool 3–12, Ob 1–6, all three TNs.
+
+### Task 9 — Continuous-Mode Table (Godot-canonical)
+**Input:** pool sizes (list), TN, Ob values (list, may be fractional)
+**Procedure:**
+1. Run `continuous_outcome_probs(n, tn, ob)` for each (pool, ob) combination — closed-form, no
+   trial count needed.
+2. Output markdown table: Pool | Overwhelm | Success | Partial | Failure, labeled
+   "[continuous/Godot-canonical]" so it isn't mistaken for the discrete-mode table.
+3. Use whenever the question is about the videogame's actual resolver rather than tabletop play
+   (see "Two Resolver Modes" above) — e.g. balance questions that will land in
+   `references/engine_params/*.json` or `designs/scene/combat_engine_v1/`.
 
 ---
 
@@ -187,6 +187,7 @@ Round probabilities to 3 decimal places in tables; 1 decimal in prose.
 | valoria-mechanic-audit | "Is Fibonacci bonus well-calibrated?" | 5 |
 | valoria-simulator | "When is Momentum worth spending?" | 6 |
 | Any skill | Spot-check a specific pool/TN/Ob | 7 |
+| Any skill | "What will the Godot build actually roll?" | 9 |
 
 ---
 

@@ -23,7 +23,7 @@ Before generating arcs, read these from the working tree:
 
 **Do not read compilation stage files from memory.** Read them from the working tree, and check `canonical_sources.yaml` for which version is current before using any values.
 
-**If `compilation_current: false` in `canonical_sources.yaml`:** Use the canonical design doc for that system, not the compilation snapshot.
+**Always use the canonical design doc, never a compilation snapshot.** `references/canonical_sources.yaml` carries no `compilation_current` field (that schema was never migrated into the live file) — resolve currency via `CURRENT.md` and a doc's own `## Status:` line instead (CLAUDE.md §4).
 
 ## What This Produces
 

@@ -47,13 +47,16 @@ drifting independently next time the protocol changes).
 This was not simple prose drift. Its bundled `scripts/combat_sim.py` is a **fully independent,
 hand-hardcoded implementation** — a 9-weapon roster (`Short-LightCut`, `Short-HeavyCut`, …,
 `Unarmed`) frozen at a 2026-03-31 docstring date — with zero relationship to the current
-40-weapon `combat_engine_v1` roster (post-2026-07-02 morphology expansion). Two things already
-supersede it:
+51-weapon `combat_engine_v1` roster (40 added in the 2026-07-02 morphology expansion, plus the
+original 11). Two things already supersede it:
 
 1. `designs/scene/combat_engine_v1/workbench/balance.py` — the actively-maintained canonical
    balance harness. Wilson-CI-validated, position-swapped, reuses the canonical `fight()`
    resolver directly (no parallel model), covers weapon/attribute/tradition/armour sweeps
-   across the full 40-weapon roster. CLI: `python workbench/balance.py [weapon|attr|tradition|all] [n]`.
+   across the full 51-weapon roster. CLI: `python workbench/balance.py [weapon|attr|tradition|all] [n]`.
+   **Known gap (found on adversarial review):** the CLI exposes only curated sweep modes, not
+   the retired skill's full pairwise build-vs-build cross-product; the underlying `winrate()`
+   function supports it but isn't wired to a CLI mode. Documented as a residual, not built.
 2. `sim/personal/combat.py` — itself carries an explicit `[DEPRECATED 2026-06-23]` banner
    pointing at `combat_engine_v1` as canonical; not usable as a fallback either.
 
@@ -61,6 +64,35 @@ Given a fully superseded parallel implementation (not a documentation gap), reti
 right fix — confirmed with Jordan via `AskUserQuestion` before executing (options were retire /
 minimal-patch / rearchitect-to-wrap-`balance.py`; retire was chosen). See
 `deprecated/skills/README.md` and `ED-IN-0039` for the retirement record.
+
+## Adversarial verification pass (2026-07-12, ED-IN-0043)
+
+Jordan requested an adversarial pass on this PR before merge. Three independent, read-only
+critic agents re-derived every claim above directly from the working tree (not from this
+document's summary), following the repo's agonist/antagonist relay pattern (CLAUDE.md §10).
+Everything not listed below was independently **CONFIRMED**. Five real issues were found and
+fixed in this same PR:
+
+1. **Real correctness bug:** `continuous_outcome_probs()` didn't implement `params/core.md`'s
+   documented Ob-20 exception (Overwhelming unavailable; Partial requires net ≥ 10) — wrong at
+   realistic pool sizes (e.g. `n=100, TN7, Ob20` gave `overwhelming=0.525` instead of `0.0`).
+   Fixed; docstring's "matches exactly" claim corrected to note the exception is now handled.
+2. **Repeated factual error:** "40-weapon roster" conflated weapons-*added* with weapons-*total*
+   — the actual total is 51 (40 added 2026-07-02 + the original 11). Corrected in CLAUDE.md,
+   `deprecated/skills/README.md`, `HANDOFF_IN.md`, and this doc.
+3. **Minor capability-coverage gap**, noted above and in `deprecated/skills/README.md` rather
+   than silently claiming full parity.
+4. **Two intra-PR misses:** `valoria-arc-generator/SKILL.md:26` and `design_registry.yaml`'s
+   `next_id_note` comment each still carried the *exact defect class* this PR was fixing
+   elsewhere (a dead `compilation_current` field; a dead `canon/editorial_ledger.yaml`
+   reference) — both inside files this PR had already edited. Fixed.
+5. **Minor miscount:** `id_reservations.yaml`'s ED-IN-0038 comment said "9 skills," actually 8.
+
+**Explicitly not re-litigated:** live, non-archived references to the nonexistent
+`canon/editorial_ledger.yaml` remain scattered outside this PR's scope (e.g.
+`references/glossary.md`, `designs/npcs/npc_behavior_v30.md`,
+`designs/provincial/faction_politics_v30.md`) — real debt, pre-existing, not introduced by this
+PR, and not claimed as fixed. Left for separate cleanup. Full detail: `ED-IN-0043`.
 
 ## valoria-dice-model — canonical continuous resolver added
 

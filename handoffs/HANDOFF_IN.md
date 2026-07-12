@@ -326,7 +326,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   ED-IN-0038); `valoria-compiler` had four independent breaks including a nonexistent gate field
   and an orphaned `compilation/` output path (ED-IN-0038); and `valoria-combat-simulator`'s
   bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31
-  model vs. the live 40-weapon `combat_engine_v1/workbench/balance.py`), retired to
+  model vs. the live 51-weapon `combat_engine_v1/workbench/balance.py`), retired to
   `deprecated/skills/` after Jordan confirmed via AskUserQuestion (ED-IN-0039). Also, per Jordan's
   explicit confirmation: `valoria-dice-model` gained the canonical continuous (Godot-mode)
   resolver alongside the legacy discrete one, validated against the existing Monte Carlo
