@@ -7,6 +7,7 @@
 | [npc_cast.md](npc_cast.md) | 6 collision-wired NPC dossiers + 3 minor actors — the deck's fuel and initiative |
 | [event_deck.md](event_deck.md) | a 28-card pressure-driven deck across all 7 families — the world's moves |
 | [sim_build_spec.md](sim_build_spec.md) | an implementable plan to run it (registry, ledger, deck engine, ambition tick, Directive generator) |
+| [generation_methodology.md](generation_methodology.md) | *how this slice was made* — the vectorized-slice-stack with noisy throughlines (geography seed → conditioned weighted slices → noise → thread → verify), with a reproduction recipe |
 
 **Status:** PROPOSAL, 2026-06-23. Authored directly (the authoring workflow died three times on session/rate/spend limits); the **adversarial verification workflow did run on rerun** — see [verification_findings.md](verification_findings.md), with its clear bug-fixes folded into this commit.
 
