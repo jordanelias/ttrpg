@@ -58,14 +58,14 @@
 
 ### HEV-TRADE-05 — Muscovite conquest of Novgorod / end of the merchant-boyar republic (Novgorod, 1478) · Intrigue
 - **Historical grounding:** Ivan III's 1478 conquest of Novgorod, ending the merchant-boyar republic (veche-bell removal, boyar confiscations, land-concentration). Citations: EBSCO; Wikipedia Novgorod Republic.
-- **Trigger:** `a Guild-type faction's Recognition/Cohesion below threshold AND the settlement's Disposition toward a rival external Crown exceeds threshold (being courted) AND its own patron faction's Standing independently declining`
+- **Trigger:** `a Guild-type faction's Recognition/Discipline below threshold AND the settlement's Disposition toward a rival external Crown exceeds threshold (being courted) AND its own patron faction's Standing independently declining`
 - **Response branches:**
   - Comply (accept the rival's overtures): home-PA Disposition−, Grudge.
   - Bargain (hedge both ways): temporary, no resolution.
-  - Defy (reject): requires Keep Order/Levy investment to shore up Cohesion.
+  - Defy (reject): requires Keep Order/Levy investment to shore up Discipline.
 - **Follow-on (FO):** Unresolved courting + declining patron seeds "Annexation Bid" Crisis → a Conquest dissolving the Guild ladder (Dismissal + Rival Cohort tags on its top rank, reassignment via Governor Assignment).
-- **Introduces (Action):** Assembly Cohesion (Keep Order feeding the ladder's Recognition/Rival Cohort dimensions: raise internal standing to counter the erosion that makes it a target).
-- **Loop:** Letting Cohesion/Recognition erode while the patron falls raises Π and Intrigue odds; Assembly Cohesion lowers them directly, while an Intrigue resolving into Conquest permanently deletes the ladder and forecloses the Assembly Cohesion option at that settlement forever.
+- **Introduces (Action):** Assembly Discipline (Keep Order feeding the ladder's Recognition/Rival Cohort dimensions: raise internal standing to counter the erosion that makes it a target).
+- **Loop:** Letting Discipline/Recognition erode while the patron falls raises Π and Intrigue odds; Assembly Discipline lowers them directly, while an Intrigue resolving into Conquest permanently deletes the ladder and forecloses the Assembly Discipline option at that settlement forever.
 
 ---
 
