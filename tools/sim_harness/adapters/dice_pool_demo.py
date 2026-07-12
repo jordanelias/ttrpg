@@ -6,6 +6,17 @@ it is the simplest genuinely canon-cited resolver in the repo (params/core.md), 
 carries no game-balance judgment risk, and it already has a working, reusable trial
 core — the harness wraps it rather than re-deriving dice math.
 
+Canon-fidelity discipline: resolve_params() distinguishes two kinds of values.
+TN=7 ("Standard") and Ob=5 ("Entrenched") are genuine documented constants in
+params/core.md's TN Values / Obstacle Scale tables — resolve_params() calls
+resolver.verify_citation(...) to confirm each is STILL literally present in that
+doc before trusting it, rather than hardcoding a number that could silently go
+stale. Pool sizes (pool/atk_pool/def_pool), by contrast, are NOT a fixed canon
+constant anywhere in params/core.md — dice pool size is character-build-dependent
+(attribute + skill + situational modifiers), so there is no single "the" canonical
+pool size to cite. Those are declared, explicit test-scenario values, and their
+provenance entries say so plainly instead of implying a citation that doesn't exist.
+
 Real, confirmed finding this adapter surfaces on its own: dice-pool resolution is
 cross-cutting substrate with NO row of its own in references/module_contracts.yaml
 (grepped for dice/roll/resolution/core across all 27 module names — zero matches).
@@ -23,22 +34,40 @@ if str(_SKILL_DIR) not in sys.path:
     sys.path.insert(0, str(_SKILL_DIR))
 import valoria_dice  # noqa: E402  (skills/valoria-dice-model/valoria_dice.py)
 
-from ..adapter import Adapter, Outcome
+from ..adapter import Adapter, Outcome, register_adapter
 from ..depth import DecisionPoint, Tier
 
 
+@register_adapter("dice_pool_demo")
 class DicePoolAdapter(Adapter):
     contract_module = None  # see module docstring — confirmed no module_contracts.yaml row
     canon_row = "Dice / resolution"  # CURRENT.md: params/core.md + d+sigma resolver
     registry_subsystem = "cross_cutting"
 
-    def resolve_params(self, resolver) -> dict:
-        # Confirms the CURRENT.md citation resolves before any trial runs; raises
-        # CanonGapError (never fabricates a fallback) if params/core.md's row moves
-        # or is renamed without this adapter being updated.
-        resolver.resolve(self.canon_row)
-        return {"pool": 6, "tn": 7, "ob": 5, "atk_pool": 5, "atk_tn": 7,
-                "def_pool": 5, "def_tn": 7}
+    def resolve_params(self, resolver) -> tuple[dict, dict]:
+        std_tn = resolver.verify_citation(
+            self.canon_row, "params/core.md", "| Standard | 7 | Default |",
+        )
+        entrenched_ob = resolver.verify_citation(
+            self.canon_row, "params/core.md", "| 5 | Entrenched |",
+        )
+        params = {
+            "pool": 6, "tn": 7, "ob": 5,
+            "atk_pool": 5, "atk_tn": 7,
+            "def_pool": 5, "def_tn": 7,
+        }
+        provenance = {
+            "pool": "test-scenario value, not canon-derived: dice pool size is "
+                    "character-build-dependent (attribute+skill+situational), "
+                    "params/core.md defines no single fixed pool size",
+            "tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "ob": f"params/core.md verified: {entrenched_ob!r} (Obstacle Scale / Entrenched)",
+            "atk_pool": "test-scenario value, not canon-derived: see 'pool'",
+            "atk_tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "def_pool": "test-scenario value, not canon-derived: see 'pool'",
+            "def_tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+        }
+        return params, provenance
 
     def decision_points(self) -> list[DecisionPoint]:
         return [
@@ -55,28 +84,35 @@ class DicePoolAdapter(Adapter):
                 justification="an opposed roll's result is consumed by a caller "
                                "outside this event, per the harness rubric default",
             ),
+            DecisionPoint(
+                name="stub_probe",
+                default_tier=Tier.MINOR,
+                branches=[],
+                justification="synthetic probe, not a real subsystem event: "
+                               "deliberately raises NotImplementedError so Gate-0 "
+                               "ships a real, working end-to-end demonstration of "
+                               "the harness's automatic STUB_HIT capture (Harness."
+                               "_run_one_trial's except NotImplementedError clause) "
+                               "instead of only a theoretical claim about it",
+            ),
         ]
 
     def run_once(self, rng, params: dict, decision_point: DecisionPoint) -> Outcome:
         if decision_point.name == "single_pool_check":
-            r = valoria_dice._roll_pool(params["pool"], params["tn"])
-            ob = params["ob"]
-            if ob == 10:
-                branch = "success" if r >= ob else ("partial" if r >= 5 else "failure")
-            elif r >= 2 * ob:
-                branch = "overwhelming"
-            elif r >= ob:
-                branch = "success"
-            elif r > 0:
-                branch = "partial"
-            else:
-                branch = "failure"
+            r = valoria_dice.roll_pool(params["pool"], params["tn"])
+            branch = valoria_dice.classify_outcome(r, params["ob"])
             return Outcome(decision_point.name, r, {"branch": branch})
 
         if decision_point.name == "opposed_roll":
-            a = valoria_dice._roll_pool(params["atk_pool"], params["atk_tn"])
-            d = valoria_dice._roll_pool(params["def_pool"], params["def_tn"])
+            a = valoria_dice.roll_pool(params["atk_pool"], params["atk_tn"])
+            d = valoria_dice.roll_pool(params["def_pool"], params["def_tn"])
             branch = "attacker_wins" if a > d else ("defender_wins" if d > a else "tie")
             return Outcome(decision_point.name, a - d, {"branch": branch})
+
+        if decision_point.name == "stub_probe":
+            raise NotImplementedError(
+                "Gate-0 synthetic probe — not a real subsystem gap, demonstrates "
+                "STUB_HIT capture end-to-end"
+            )
 
         raise ValueError(f"unknown decision point {decision_point.name!r}")

@@ -14,6 +14,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import random
 import sys
 from collections import Counter
@@ -23,7 +24,8 @@ if __name__ == "__main__" and __package__ is None:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     __package__ = "tools.sim_harness"
 
-from .adapter import Adapter
+from . import adapters as _adapters_pkg  # noqa: F401  (import triggers @register_adapter on every shipped adapter)
+from .adapter import ADAPTER_REGISTRY, Adapter
 from .canon_resolver import CanonGapError, CanonResolver
 from .depth import DEPTH_TIERS, Tier
 from .trace_logger import TraceEvent, TraceLogger
@@ -35,11 +37,7 @@ RESULTS_DIR = Path(__file__).resolve().parent / "results"
 class Harness:
     def __init__(self, adapter: Adapter, *, seed: int = 0):
         self.adapter = adapter
-        # valoria_dice.py's trial core calls the `random` module directly rather than
-        # accepting an injected Random instance, so Gate-0 seeds globally for
-        # reproducibility; a future adapter that takes an injected rng can ignore this.
-        random.seed(seed)
-        self.rng = random.Random(seed)
+        self._seed = seed
         self.resolver = CanonResolver()
         self.logger = TraceLogger(adapter.__class__.__name__, adapter.contract_module)
 
@@ -48,9 +46,18 @@ class Harness:
         module (if any) exists in module_contracts.yaml and note its doc/status.
         Running the real A1-A12 closure checks (skills/valoria-module-adjudicator/
         scripts/contract_adjudicator.py) against the live corpus on every harness run
-        is Wave 1 work (design doc section 4/7), not implemented here."""
+        is Wave 1 work (design doc section 4/7), not implemented here — deliberately
+        not duplicated here; adjudicator.py's checks need a registry_path this
+        generic harness has no natural value for, and re-implementing A1-A12 by hand
+        would be exactly the kind of second, drifting parser CLAUDE.md section 8
+        warns against."""
         if self.adapter.contract_module is None:
-            self.logger.events.append  # no-op; explicit opt-out, nothing to flag
+            self.logger.note(
+                "contract_binding",
+                "adapter declares contract_module=None — deliberate opt-out for "
+                "cross-cutting substrate with no references/module_contracts.yaml "
+                "row of its own (see the adapter's own docstring for why)",
+            )
             return
         try:
             import yaml  # already a repo dependency (tools/ci_* scripts use it)
@@ -62,7 +69,7 @@ class Harness:
             return
         contracts_path = Path(__file__).resolve().parents[2] / "references" / "module_contracts.yaml"
         data = yaml.safe_load(contracts_path.read_text(encoding="utf-8"))
-        entries = {m["module"]: m for m in data.get("modules", [])}
+        entries = {m.get("module"): m for m in data.get("modules", []) if m.get("module")}
         entry = entries.get(self.adapter.contract_module)
         if entry is None:
             self.logger.triage.flag(
@@ -78,11 +85,30 @@ class Harness:
                 f"against a canonical spec",
             )
 
+    def _run_one_trial(self, dp, params, trial_idx: int):
+        """Reseed deterministically per trial (base seed, event name, trial index)
+        so reproducibility does not depend on constructor-time global state alone —
+        a second Harness built later in the same process cannot silently perturb an
+        earlier one's sequence, since every trial re-establishes its own seed
+        immediately before running.
+
+        Uses hashlib, not Python's builtin hash(): str/tuple hashing is
+        PYTHONHASHSEED-salted per process by default (a deliberate CPython security
+        feature), so hash((seed, dp.name, trial_idx)) silently produces a DIFFERENT
+        derived seed on every process run — the exact opposite of the determinism
+        this method exists to guarantee. Caught by re-running the same --seed twice
+        and diffing trace content_hash before trusting this method."""
+        digest = hashlib.sha256(f"{self._seed}:{dp.name}:{trial_idx}".encode()).digest()
+        derived_seed = int.from_bytes(digest[:8], "big")
+        random.seed(derived_seed)
+        rng = random.Random(derived_seed)
+        return self.adapter.run_once(rng, params, dp)
+
     def run(self, trials_per_point: int = 200) -> TraceLogger:
         self._check_contract_binding()
 
         try:
-            params = self.adapter.resolve_params(self.resolver)
+            params, provenance = self.adapter.resolve_params(self.resolver)
             citations = self.resolver.resolve(self.adapter.canon_row)["doc_paths"]
         except CanonGapError as exc:
             self.logger.triage.flag(
@@ -90,14 +116,48 @@ class Harness:
             )
             return self.logger
 
+        missing_provenance = sorted(set(params) - set(provenance))
+        if missing_provenance:
+            raise ValueError(
+                f"{self.adapter.__class__.__name__}.resolve_params() returned "
+                f"param(s) {missing_provenance} with no provenance entry — every "
+                f"value reaching a trial must be labeled canon-verified or an "
+                f"explicit non-canon test-scenario choice (adapter authoring bug, "
+                f"not a runtime gap — fix the adapter)"
+            )
+
         for dp in self.adapter.decision_points():
             tier = dp.tier()
             policy = DEPTH_TIERS[tier]
             n = trials_per_point
             branch_counts: Counter = Counter()
+            stub_hit = False
 
-            for _ in range(n):
-                outcome = self.adapter.run_once(self.rng, params, dp)
+            for trial_idx in range(n):
+                try:
+                    outcome = self._run_one_trial(dp, params, trial_idx)
+                except NotImplementedError as exc:
+                    self.logger.triage.flag(
+                        dp.name, tier, TriageCategory.STUB_HIT,
+                        f"adapter's resolver raised NotImplementedError on trial "
+                        f"{trial_idx}/{n} — genuine stub/unimplemented branch: {exc}",
+                    )
+                    stub_hit = True
+                    break
+                except Exception as exc:  # noqa: BLE001 — deliberate: a crashing
+                    # adapter must still produce a trace + registry record instead
+                    # of taking the whole harness process down with it (this is the
+                    # exact "claims to log, doesn't" failure mode one layer down
+                    # that the design doc's own section 5 promise depends on not
+                    # happening).
+                    self.logger.triage.flag(
+                        dp.name, tier, TriageCategory.UNCLASSIFIED,
+                        f"adapter raised {exc.__class__.__name__} on trial "
+                        f"{trial_idx}/{n}, not caught by the adapter itself: {exc}",
+                    )
+                    stub_hit = True
+                    break
+
                 branch = outcome.detail.get("branch")
                 if branch is not None:
                     if dp.branches and branch not in dp.branches:
@@ -112,8 +172,11 @@ class Harness:
                         dp.name, tier, TriageCategory.STUB_HIT,
                         f"adapter reported a stub/unimplemented branch at {dp.name}",
                     )
+                    stub_hit = True
 
-            if n < policy.min_n:
+            actual_n = sum(branch_counts.values())
+
+            if not stub_hit and n < policy.min_n:
                 self.logger.triage.flag(
                     dp.name, tier, TriageCategory.DEGENERATE_DISTRIBUTION,
                     f"tier-{int(tier)} ({policy.label}) event sampled at n={n} < "
@@ -122,20 +185,23 @@ class Harness:
                     f"no balance claim without an oracle + n >= 100)",
                 )
 
-            if policy.degenerate_threshold is not None and len(dp.branches) > 1 and n > 0:
-                top_branch, top_count = branch_counts.most_common(1)[0] if branch_counts else (None, 0)
-                if top_count / n >= policy.degenerate_threshold:
+            if (not stub_hit and policy.degenerate_threshold is not None
+                    and len(dp.branches) > 1 and actual_n > 0):
+                top_branch, top_count = branch_counts.most_common(1)[0]
+                if top_count / actual_n >= policy.degenerate_threshold:
                     self.logger.triage.flag(
                         dp.name, tier, TriageCategory.DEGENERATE_DISTRIBUTION,
-                        f"{top_count}/{n} trials ({top_count / n:.1%}) collapsed into "
-                        f"single branch {top_branch!r} at tier {int(tier)} "
-                        f"({policy.label}) — exceeds the {policy.degenerate_threshold:.0%} "
-                        f"threshold for this tier",
+                        f"{top_count}/{actual_n} trials ({top_count / actual_n:.1%}) "
+                        f"collapsed into single branch {top_branch!r} at tier "
+                        f"{int(tier)} ({policy.label}) — exceeds the "
+                        f"{policy.degenerate_threshold:.0%} threshold for this tier",
                     )
 
             self.logger.record(TraceEvent(
-                event_id=dp.name, tier=int(tier), n=n,
+                event_id=dp.name, tier=int(tier), n=actual_n,
                 branch_counts=dict(branch_counts), citations=citations,
+                justification=dp.justification,
+                param_provenance={k: provenance[k] for k in params},
                 contract_note=(f"contract_module={self.adapter.contract_module!r}"
                                 if self.adapter.contract_module else "no module_contracts.yaml "
                                 "row — cross-cutting substrate, deliberate opt-out"),
@@ -145,16 +211,18 @@ class Harness:
 
 
 def _build_adapter(name: str) -> Adapter:
-    if name == "dice_pool_demo":
-        from .adapters.dice_pool_demo import DicePoolAdapter
-        return DicePoolAdapter()
-    raise SystemExit(f"unknown adapter {name!r} — only dice_pool_demo ships in Gate-0")
+    cls = ADAPTER_REGISTRY.get(name)
+    if cls is None:
+        raise SystemExit(
+            f"unknown adapter {name!r} — available: {sorted(ADAPTER_REGISTRY)}"
+        )
+    return cls()
 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Gate-0 simulation/test harness prototype")
     parser.add_argument("--adapter", default="dice_pool_demo",
-                         help="adapter name under adapters/ (Gate-0: only dice_pool_demo)")
+                         help=f"adapter name (available: {sorted(ADAPTER_REGISTRY)})")
     parser.add_argument("--trials", type=int, default=200, help="trials per decision point")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--no-registry", action="store_true",
@@ -167,7 +235,8 @@ def main(argv=None) -> int:
 
     trace_path = logger.write_trace(RESULTS_DIR)
     print(f"trace written: {trace_path}")
-    print(f"events: {len(logger.events)}  triage flags: {len(logger.triage.flags)}")
+    n_events = sum(1 for e in logger.events if getattr(e, "kind", "event") == "event")
+    print(f"events: {n_events}  triage flags: {len(logger.triage.flags)}")
     for f in logger.triage.flags:
         print(f"  [{f.category.value}] tier={f.tier} {f.event_id}: {f.detail}")
     verdict = logger.triage.verdict()

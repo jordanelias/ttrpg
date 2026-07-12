@@ -19,11 +19,21 @@ class TriageCategory(str, Enum):
     CONTRACT_VIOLATION = "CONTRACT_VIOLATION"
     #: a sampled outcome fell outside a declared clamp/bound
     OUT_OF_RANGE = "OUT_OF_RANGE"
-    #: the adapter's resolver hit a NotImplementedError / [PROVISIONAL] branch
+    #: the adapter's resolver hit a NotImplementedError / [PROVISIONAL] branch.
+    #: Raised automatically by Harness.run() if run_once() itself raises
+    #: NotImplementedError (or any other uncaught exception, filed as UNCLASSIFIED
+    #: instead — see harness.py) — an adapter does not have to catch this itself for
+    #: the run to survive and produce a trace + registry record.
     STUB_HIT = "STUB_HIT"
     #: a distribution collapsed to (near-)one outcome at a tier that requires spread
     DEGENERATE_DISTRIBUTION = "DEGENERATE_DISTRIBUTION"
-    #: a numeric literal reached the resolver without a citation CanonResolver could verify
+    #: a numeric literal reached a trial without provenance CanonResolver could
+    #: verify. In Gate-0 this is enforced as a hard construction-time ValueError in
+    #: Harness.run() rather than a soft flag here (every Adapter.resolve_params()
+    #: param must carry a provenance entry, canon-verified or explicitly declared
+    #: test-scenario) — stricter than a triage flag, so this category is reserved
+    #: for a future adapter shape where that hard check doesn't apply cleanly,
+    #: not currently reachable by the shipped code.
     FABRICATION_RISK = "FABRICATION_RISK"
     UNCLASSIFIED = "UNCLASSIFIED"
 
