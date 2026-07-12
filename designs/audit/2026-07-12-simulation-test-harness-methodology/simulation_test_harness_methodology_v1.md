@@ -398,8 +398,21 @@ A minimal, runnable proof of the architecture in §4–§5 ships alongside this 
 (`adapters/dice_pool_demo.py`, over `valoria_dice.py`), demonstrates canon-parameter resolution,
 tier-1/2/3 branch exploration, triage-flag collection, and a live (not backfilled) `audit_registry.jsonl`
 append. It is explicitly **not**: wired into CI, a claim of coverage over any subsystem beyond the demo,
-or a claim that `combat_sim.py`/contest/mass-battle adapters (§8 waves 2–4) are anything more than
+or a claim that `combat_sim.py`/contest/mass-battle adapters (§8 waves 2–8) are anything more than
 specified here.
+
+**§3's two governing halves — canon-verified simulation AND pluggable provisional test code — are both
+now concretely proven, not just claimed.** The demo adapter proves the first half (parameters checked
+live against `params/core.md`). The second half was not proven by the demo alone: `Adapter.canon_row`
+was a required `str` with no `None`-handling anywhere in `harness.py`, so an adapter for a
+proposed-but-not-yet-ratified mechanic would have crashed on its first resolver call — silently
+contradicting the "insert/swap in/plug in provisional test code" requirement this proposal was built to
+satisfy. `canon_row: str | None = None` now has a real, first-class, harness-recognized path (a
+deliberate, logged opt-out — see `Adapter.canon_row`'s docstring), independent of `contract_module`'s
+existing nullable axis, and every trace event now carries an explicit `canon_status: "verified" |
+"provisional"` field so a provisional run's numbers can never be mistaken for canon-verified ones. See
+`tools/sim_harness/README.md`'s "Provisional adapters" section for the worked pattern (a sketch, not a
+shipped adapter — the next real provisional adapter is follow-on work, not part of this ratification).
 
 ---
 

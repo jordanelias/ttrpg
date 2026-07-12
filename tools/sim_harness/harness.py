@@ -166,7 +166,24 @@ class Harness:
         try:
             self._check_contract_binding()
             params, provenance = self.adapter.resolve_params(self.resolver)
-            citations = self.resolver.resolve(self.adapter.canon_row)["doc_paths"]
+            if self.adapter.canon_row is None:
+                # Deliberate, explicit opt-out for an adapter testing provisional/
+                # pre-canonical work — see Adapter.canon_row's docstring for the
+                # distinction from contract_module=None. Logged, not silently
+                # skipped, and citations stays [] rather than raising or being
+                # left unset, so downstream code (TraceEvent) never has to guess
+                # whether an empty citations list means "verified but the row
+                # happened to cite nothing" or "never checked."
+                self.logger.note(
+                    "canon_binding",
+                    "adapter declares canon_row=None — deliberate opt-out, "
+                    "testing provisional/pre-canonical work with no CURRENT.md "
+                    "row to verify against yet (see the adapter's own docstring "
+                    "for the specific proposal/ED this run is validating)",
+                )
+                citations = []
+            else:
+                citations = self.resolver.resolve(self.adapter.canon_row)["doc_paths"]
             missing_provenance = sorted(set(params) - set(provenance))
             if missing_provenance:
                 raise ValueError(
@@ -354,6 +371,7 @@ class Harness:
                 branch_counts=dict(branch_counts), citations=citations,
                 justification=dp.justification,
                 param_provenance={k: provenance[k] for k in params},
+                canon_status="provisional" if self.adapter.canon_row is None else "verified",
                 contract_note=(f"contract_module={self.adapter.contract_module!r}"
                                 if self.adapter.contract_module else "no module_contracts.yaml "
                                 "row — cross-cutting substrate, deliberate opt-out"),

@@ -44,6 +44,14 @@ class TraceEvent:
     citations: list
     justification: str = ""
     param_provenance: dict = field(default_factory=dict)
+    #: "verified" (the owning Adapter.canon_row resolved against a real CURRENT.md
+    #: row) or "provisional" (canon_row is None — deliberately testing pre-canonical
+    #: work). Distinct from an empty citations list, which alone is ambiguous: a
+    #: verified row that happens to cite no docs and a provisional adapter with no
+    #: row to cite would otherwise look identical in the trace. Added so a reader
+    #: (or future tooling) can never mistake a provisional run's numbers for
+    #: canon-verified ones just by scanning citations.
+    canon_status: str = "verified"
     contract_note: str | None = None
     kind: str = "event"
 
@@ -57,6 +65,7 @@ class TraceEvent:
             "citations": self.citations,
             "justification": self.justification,
             "param_provenance": self.param_provenance,
+            "canon_status": self.canon_status,
             "contract_note": self.contract_note,
         }
 

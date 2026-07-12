@@ -98,14 +98,67 @@ write to `results/` (gitignored, same convention as `sim/results/`).
 Implement `Adapter` (see `adapter.py`'s docstrings and `adapters/dice_pool_demo.py` as the worked
 example): declare `contract_module` (a real `references/module_contracts.yaml` key, or `None` with a
 one-line justification if the subsystem is genuinely cross-cutting), `canon_row` (a `CURRENT.md` bold
-row-label substring), `resolve_params()` (returns `(params, provenance)` — every param key needs a
-provenance entry, canon-verified or an explicit "test-scenario, not canon-derived" note), `decision_points()`,
+row-label substring, or `None` — see "Provisional adapters" below), `resolve_params()` (returns
+`(params, provenance)` — every param key needs a provenance entry: canon-verified, an explicit
+"test-scenario, not canon-derived" note, or an explicit "PROVISIONAL: ..." note), `decision_points()`,
 and `run_once()` (may raise `NotImplementedError` for a genuine stub branch — the harness catches it).
 
 Then add **one import line** to `adapters/__init__.py` so `@register_adapter(...)` actually runs at
 import time — that is the only file outside the adapter's own that needs touching. `harness.py` itself
 never needs an edit to add an adapter; this is enforced by construction (the CLI's `--adapter` dispatch
 reads `ADAPTER_REGISTRY`, not a hardcoded name), not just documented.
+
+## Provisional adapters — testing pre-canonical mechanics
+
+The Gate-0 demo (`dice_pool_demo.py`) only proves the harness against already-ratified canon
+(`params/core.md`, via `verify_citation`). That's half the original ask — the other half was explicitly
+"have it so that we can insert/swap in/plug in provisional test code" — and it was NOT concretely proven
+by Gate-0: `canon_row` was a required `str` with no `None`-handling anywhere in `harness.py`, so an
+adapter for a proposed-but-not-yet-ratified mechanic would have crashed on its first resolver call.
+
+`canon_row: str | None = None` now has a real, first-class path (see `adapter.py`'s docstring for the
+full reasoning). `contract_module` and `canon_row` are two **independent** nullable axes — don't conflate
+them:
+
+| | `contract_module` | `canon_row` |
+|---|---|---|
+| Answers | Is this bound to a `module_contracts.yaml` IN→resolver→OUT contract? | Is this bound to a live `CURRENT.md` canonical head at all? |
+| `None` means | Genuinely cross-cutting substrate (e.g. dice math — canon-cited, but no module-contract row) | Deliberately testing provisional/pre-canonical work — a proposed mechanic, possibly with a filed `ED-<LANE>-NNNN`, that hasn't been ratified into a `CURRENT.md` row yet |
+
+A provisional adapter (sketch, not a shipped file — write one when there's a real proposed mechanic to
+test):
+
+```python
+@register_adapter("proposed_faction_bonus")
+class ProposedFactionBonusAdapter(Adapter):
+    contract_module = None       # or a real module_contracts.yaml key if one exists
+    canon_row = None             # no CURRENT.md row yet — this is what makes it provisional
+    registry_subsystem = "faction_political"
+
+    def resolve_params(self, resolver):
+        params = {"proposed_bonus": 2}
+        provenance = {
+            "proposed_bonus": "PROVISIONAL: designs/audit/2026-xx-xx-some-proposal/, "
+                               "ED-FA-9999 filed, not yet ratified",
+        }
+        return params, provenance
+
+    def decision_points(self):
+        return [DecisionPoint(
+            name="proposed_check", default_tier=Tier.MINOR, branches=["pass", "fail"],
+            justification="smoke-testing a proposed mechanic ahead of ratification",
+        )]
+
+    def run_once(self, rng, params, dp):
+        ...
+```
+
+Every event this produces carries `canon_status: "provisional"` in the persisted trace (verified
+adapters carry `"verified"`) — a reader or future tooling can never mistake a provisional run's numbers
+for canon-verified ones just by scanning an empty `citations` list, which was ambiguous before this
+field existed (a verified row citing zero docs and a provisional adapter with no row at all used to look
+identical). The harness also logs an explicit `canon_binding` note (visible in the trace, distinct from
+a silent skip) whenever `canon_row is None`.
 
 Do not add a new top-level interface shape — if the `Adapter` protocol doesn't fit a subsystem, that's a
 finding to raise against the design doc, not a reason to route around it.

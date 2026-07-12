@@ -67,22 +67,53 @@ class Adapter(ABC):
     #: row of its own (confirmed by grep for the Gate-0 dice adapter — see its
     #: docstring) — NOT a silent skip; the harness logs the opt-out either way.
     contract_module: str | None = None
-    #: substring matched against a CURRENT.md bold row label by CanonResolver
-    canon_row: str
+
+    #: substring matched against a CURRENT.md bold row label by CanonResolver. This
+    #: and contract_module are two INDEPENDENT axes, both legitimately nullable for
+    #: different reasons — do not conflate them:
+    #:   - contract_module answers "is this bound to a module_contracts.yaml
+    #:     IN->resolver->OUT contract?" (None = genuinely cross-cutting substrate,
+    #:     e.g. dice math, which has canon citations but no module-contract row)
+    #:   - canon_row answers "is this bound to a live CURRENT.md canonical head at
+    #:     all?" (None = this adapter is DELIBERATELY testing provisional/
+    #:     pre-canonical work — a mechanic that has been proposed and may even have
+    #:     a filed ED-<LANE>-NNNN, but has not been ratified into a CURRENT.md row
+    #:     yet, so there is nothing for CanonResolver to verify against)
+    #: canon_row=None is real, first-class support, not an afterthought: the earlier
+    #: cut of this field had no default and no None-handling anywhere in harness.py,
+    #: so a provisional adapter's canon_row=None would have crashed on the very
+    #: first resolver call, before round 6's broad exception net silently absorbed
+    #: it into an ambiguous UNCLASSIFIED flag indistinguishable from an actual bug.
+    #: Both failure modes defeated the stated goal (a harness usable for "insert/
+    #: swap in/plug in provisional test code," not just already-ratified canon) —
+    #: fixed by giving canon_row=None an explicit, logged, harness-recognized path
+    #: (see Harness.run()) distinct from both the cross-cutting opt-out and a crash.
+    #: When canon_row is None, provenance strings in resolve_params()'s return
+    #: should say so explicitly, e.g. "PROVISIONAL: <doc/ED citation for the
+    #: proposed-but-not-yet-ratified mechanic>, not yet canonical" — distinct from
+    #: both "verified against params/core.md" and "test-scenario, not canon-derived"
+    #: (see resolve_params()'s docstring below), so a reader of the trace can never
+    #: mistake a provisional run's numbers for canon-verified ones.
+    canon_row: str | None = None
 
     @abstractmethod
     def resolve_params(self, resolver) -> tuple[dict, dict]:
         """Return (params, provenance) — both dicts, same keys as params.
-        provenance[k] must state either a verified citation (typically the string
-        returned by resolver.verify_citation(...)) or, for a value that is
+        provenance[k] must state one of three things (never leave a value
+        unlabeled): a verified citation (typically the string returned by
+        resolver.verify_citation(...)); an explicit note that the value is
         legitimately not a fixed canon constant (e.g. a dice pool size, which
-        varies by character build rather than being a single documented number),
-        an explicit note saying so — e.g. "test-scenario value, not canon-derived:
-        <reason>". Every key in params must have a provenance entry; a harness-side
-        check enforces this (see Harness.run()) so a value can never reach a trial
-        silently unlabeled as fabricated-or-not. Must not fabricate: let
-        CanonGapError propagate from the resolver rather than substituting a
-        default when a citation can't be verified."""
+        varies by character build rather than being a single documented number)
+        — "test-scenario value, not canon-derived: <reason>"; or, for an adapter
+        whose canon_row is None, an explicit provisional note — "PROVISIONAL:
+        <source>, not yet canonical". Every key in params must have a provenance
+        entry; a harness-side check enforces this (see Harness.run()) so a value
+        can never reach a trial silently unlabeled as fabricated-or-not. Must not
+        fabricate: let CanonGapError propagate from the resolver rather than
+        substituting a default when a citation can't be verified — this still
+        applies even for a provisional adapter's non-provisional params (e.g. a
+        proposed combat mechanic might still legitimately cite an already-ratified
+        TN value from params/core.md alongside its own provisional numbers)."""
 
     @abstractmethod
     def decision_points(self) -> list[DecisionPoint]:
