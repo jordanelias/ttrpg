@@ -76,3 +76,4 @@ gates/checkers, so they're intentionally not in the registry above.
 | `workplan_status.py` | The only renderer of `designs/workplans/workplan_v6_progress.yaml`; feeds the SessionStart banner and `valoria-workplan-navigator` |
 | `model_router.html` | UI for model routing decisions |
 | `editorial_review/valoria-editorial-review.jsx` | React component for editorial review workflow |
+| `sim_harness/` | **PROPOSED (ED-IN-0038), not wired into CI.** Gate-0 prototype of a generic, per-subsystem-adapter simulation/stress-test harness with canon-parameter resolution, depth-tiered probabilistic exploration, and mandatory triage-flag logging to `audit_registry.jsonl`. See `sim_harness/README.md` and `designs/audit/2026-07-12-simulation-test-harness-methodology/` |

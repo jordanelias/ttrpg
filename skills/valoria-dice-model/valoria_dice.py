@@ -1,6 +1,6 @@
 import math
 import random
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 TRIALS = 200_000
 
@@ -20,15 +20,41 @@ def die_ev(tn: int) -> float:
 def pool_ev(n: int, tn: int) -> float:
     return n * die_ev(tn)
 
-def _roll_die(tn: int) -> int:
-    r = random.randint(1, 10)
+def _roll_die(tn: int, rng: Optional[random.Random] = None) -> int:
+    r = (rng or random).randint(1, 10)
     if r == 1:  return -1
     if r == 10: return 2
     if r >= tn: return 1
     return 0
 
-def _roll_pool(n: int, tn: int) -> int:
-    return sum(_roll_die(tn) for _ in range(n))
+def _roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
+    return sum(_roll_die(tn, rng) for _ in range(n))
+
+def roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
+    """Public wrapper for _roll_pool — one pool roll's net successes. Exists so
+    callers outside this module (e.g. tools/sim_harness/) depend on a stable public
+    name instead of an underscore-prefixed implementation detail.
+
+    rng is optional and defaults to the global random module (unchanged behavior
+    for every existing caller, none of which pass it) — a caller that needs
+    isolated, injected randomness (e.g. tools/sim_harness/'s per-trial Random
+    instance) can pass one explicitly instead of relying on global random.seed()
+    having been called first."""
+    return _roll_pool(n, tn, rng)
+
+def classify_outcome(r: int, ob: int) -> str:
+    """Bucket a net-successes result against an obstacle: overwhelming/success/
+    partial/failure. Extracted from outcome_probs' loop body so any caller needing
+    single-trial classification (not just a bulk trial distribution) shares the
+    exact same rule rather than re-deriving it."""
+    if ob == 10:
+        if r >= ob:  return "success"
+        if r >= 5:   return "partial"
+        return "failure"
+    if r >= 2 * ob: return "overwhelming"
+    if r >= ob:     return "success"
+    if r > 0:       return "partial"
+    return "failure"
 
 def simulate_pool(n: int, tn: int, trials: int = TRIALS) -> List[int]:
     return [_roll_pool(n, tn) for _ in range(trials)]
@@ -37,15 +63,11 @@ def outcome_probs(n: int, tn: int, ob: int, trials: int = TRIALS) -> Dict[str, f
     results = simulate_pool(n, tn, trials)
     overwhelming = success = partial = failure = 0
     for r in results:
-        if ob == 10:
-            if r >= ob:   success += 1
-            elif r >= 5:  partial += 1
-            else:         failure += 1
-        else:
-            if r >= 2*ob: overwhelming += 1
-            elif r >= ob: success += 1
-            elif r > 0:   partial += 1
-            else:         failure += 1
+        bucket = classify_outcome(r, ob)
+        if bucket == "overwhelming": overwhelming += 1
+        elif bucket == "success":    success += 1
+        elif bucket == "partial":    partial += 1
+        else:                        failure += 1
     t = trials
     return {
         "overwhelming": overwhelming/t, "success": success/t,
