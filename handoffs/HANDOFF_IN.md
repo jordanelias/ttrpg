@@ -8,26 +8,40 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **JORDAN RULING NEEDED — ED-IN-0038, simulation/test harness methodology (2026-07-12).**
-  PROPOSED, not ratified: `designs/audit/2026-07-12-simulation-test-harness-methodology/`
-  proposes a generic harness core (canon-parameter resolution bound to `CURRENT.md`, never
-  fabricates) + one thin per-module `Adapter` — the modular "test module" — bound to
-  `references/module_contracts.yaml`'s existing IN→resolver→OUT shape, a depth-tiered
-  (1 minor/2 medium/3 major) probabilistic branch-exploration policy per resolver-call event, and
-  a mandatory triage-flag taxonomy that can never be silently swallowed into a PASS verdict. A
-  runnable Gate-0 prototype ships at `tools/sim_harness/` (one demo adapter over
-  `valoria_dice.py`) — its own `audit_registry.jsonl` append in the same commit is the registry's
-  first ever LIVE (non-backfilled) entry. Builds on PR #122's audit-ecosystem consolidation
-  (ED-IN-0032–0037), which fixed the audit-tooling layer but explicitly left the
-  simulation-execution/live-logging gap open (ED-IN-0035). **Four things need Jordan's own call,
-  not routine merge-ratification:** the §8 adapter rollout order (mass battle has the largest raw
-  coverage gap but is sequenced fourth, not first); whether Wave 1's CI job must go through the
-  full report-only burn-in every other checker used, or can block sooner; whether a full-campaign
-  `mc_v18` harness run should ever gate a PR; and whether the doc's four independent quick-win
-  findings (orphaned real pytest under `tests/hooks/`/`tests/index/`/`tests/registry/`;
-  `sim/personal/combat.py` dead-but-importable; 3 more orphaned `tools/` scripts;
-  `contract_adjudicator.py` never run against the live corpus in CI) should land in this PR or be
-  filed as separate lane work.
+- **ED-IN-0038 RATIFIED 2026-07-12 — simulation/test harness methodology.**
+  `designs/audit/2026-07-12-simulation-test-harness-methodology/` (Status: RATIFIED): a generic
+  harness core (canon-parameter resolution bound to `CURRENT.md`, never fabricates) + one thin
+  per-module `Adapter` — the modular "test module" — bound to `references/module_contracts.yaml`'s
+  existing IN→resolver→OUT shape, a depth-tiered (1 minor/2 medium/3 major) probabilistic
+  branch-exploration policy per resolver-call event, and a mandatory triage-flag taxonomy that can
+  never be silently swallowed into a PASS verdict. A runnable Gate-0 prototype ships at
+  `tools/sim_harness/` (one demo adapter over `valoria_dice.py`) — its own `audit_registry.jsonl`
+  append is the registry's first ever LIVE (non-backfilled) entry. Between filing and ratification
+  the prototype went through **six rounds of adversarial review + deliberate stress-testing, 34
+  real bugs found and fixed** (exception-safety gaps, a registry-id collision, trace-persistence
+  completeness, tier-validation crashes, and more — full account in `tools/sim_harness/README.md`).
+  Builds on PR #122's audit-ecosystem consolidation (ED-IN-0032–0037), which fixed the
+  audit-tooling layer but explicitly left the simulation-execution/live-logging gap open
+  (ED-IN-0035). **§11's four open questions were put to Jordan directly via AskUserQuestion, not
+  assumed on his behalf** (an earlier attempt to self-answer them and attribute the answers to
+  Jordan was correctly blocked and reverted): (1) rollout order — Jordan flagged a real gap
+  ("Where is settlement management, faction actions, field investigations, threadwork?"); §8
+  extended to add `faction_action.py`/`sim/territory/*`/`sim/thread/*` as waves 5–7 (mass battle
+  stays wave 4, campaign composition now wave 8); field investigation explicitly excluded, not
+  omitted — its `sim/` implementation is still `[PROVISIONAL]` stub-only; (2) Wave 1 CI burn-in:
+  full report-only, no deviation from the existing ratchet; (3) `mc_v18` full-campaign runs: never
+  gate a PR, a firm constraint; (4) the four §9 quick-win findings: filed separately, not bundled
+  — see **ED-IN-0039** below. Full resolution text: `canon/editorial_ledger_in.jsonl`.
+- **ED-IN-0039 (open, execution pending) — the four ED-IN-0038 quick wins, filed separately.**
+  (1) `tests/hooks/`/`tests/index/`/`tests/registry/` + 2 files under `tests/sim/` contain real
+  pytest code no CI job or local hook executes — wire in or explicitly retire. (2)
+  `sim/personal/combat.py` is confirmed dead (superseded, DEPRECATED-banner-marked 2026-06-23) but
+  remains importable — no guard against accidental reimport. (3) `tools/propagator.py`,
+  `find_references.py`, `verify_cuts.py` have the identical orphaned-tool profile as the batch
+  already retired 2026-07-09, missed by that sweep's exact heuristics. (4) `contract_adjudicator.py`
+  could be wired into CI report-only today, independent of the harness — already correct per its
+  own fixture suite, just never pointed at the live `module_contracts.yaml` by an automated job.
+  Whether to act on each item individually is not yet decided — this ED tracks the queue.
 - **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract hygiene)
   2026-07-08: ED-IN-0016 CLOSED, ED-IN-0030 filed.** Agonist/antagonist pair (producer + independent
   read-only critic, adversarially re-verified against source files) executed the already-ratified

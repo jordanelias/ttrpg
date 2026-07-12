@@ -67,12 +67,15 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   lane, active patch-register counts). Also corrected a stale dashboard callout that had been
   repeating the now-debunked "~87% degenerate win-share" claim (CLAUDE.md §7) — see
   `sim/tests/test_f7_smoke_oracle.py`'s docstring for the actual correction.
-- **JORDAN RULING NEEDED — ED-IN-0038 (simulation/test harness methodology proposal, 2026-07-12).**
-  Full detail in `handoffs/HANDOFF_IN.md`'s Pending section. PROPOSED, not ratified:
-  `designs/audit/2026-07-12-simulation-test-harness-methodology/` + a runnable Gate-0 prototype at
-  `tools/sim_harness/`. Four items genuinely need Jordan's own call (rollout order, CI-ratchet
-  pace, whether `mc_v18` should ever gate a PR, quick-win bundling) — everything else in the doc is
-  routine-ratifies-on-merge per ED-1094.
+- **ED-IN-0038 RATIFIED 2026-07-12 (simulation/test harness methodology + Gate-0 prototype).**
+  `designs/audit/2026-07-12-simulation-test-harness-methodology/` +
+  `tools/sim_harness/` (six rounds of adversarial review/stress-testing since filing, 34 real bugs
+  found and fixed — see the package's own README). §11's four open questions were put to Jordan
+  directly, not assumed: rollout order extended (§8 gained faction actions/settlement-territory/
+  threadwork as waves 5–7, per Jordan flagging the gap; field investigation excluded as still
+  stub-only); Wave 1 CI burn-in stays full report-only; `mc_v18` never gates a PR; the four §9
+  quick wins filed separately as **ED-IN-0039** (open, execution pending — see
+  `handoffs/HANDOFF_IN.md`). Full resolution text: `canon/editorial_ledger_in.jsonl`.
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
   detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
   `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build

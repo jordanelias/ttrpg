@@ -1,9 +1,24 @@
 # Simulation & Test Harness Methodology v1
 
-**Status: PROPOSED** (ED-IN-0038, Lane IN). Not ratified. Nothing in this doc changes CI behavior,
-retires a tool, or is binding until Jordan rules on it (CLAUDE.md's default-ratifies-on-merge rule
-applies to the *document*, not to the CI/engineering work it recommends — see §11, this is the loud
-exception CLAUDE.md §2 asks for).
+**Status: RATIFIED** (ED-IN-0038, Lane IN — ratified 2026-07-12). §11's four open questions were put to
+Jordan directly (not assumed) and are RULED below; everything else in this doc ratifies as originally
+proposed. The architecture (§3–§8), the Gate-0 prototype (`tools/sim_harness/` — six rounds of
+adversarial review and deliberate stress-testing since initial filing, 34 real bugs found and fixed, see
+the package's own README for the full account), and the rollout order are now the plan of record.
+
+**§11 rulings (Jordan's actual answers, not defaults assumed on his behalf):**
+1. **Rollout order — extended, not left as originally proposed.** Jordan flagged a real gap: the
+   original §8 only sequenced 5 waves and silently omitted settlement/territory, faction actions, and
+   threadwork, all of which have real `sim/` code per §1.1. §8 now adds `faction_action.py`,
+   `sim/territory/*`, and `sim/thread/*` as waves 5–7 (mass battle stays wave 4), with campaign
+   composition last. Field investigation is explicitly excluded, not omitted by oversight — its `sim/`
+   implementation is still `[PROVISIONAL]` stub-only, so there is no real resolver to adapt yet.
+2. **Wave 1 CI burn-in — the existing ratchet convention applies, no deviation** (Jordan: "Full
+   report-only burn-in").
+3. **`mc_v18.py` full-campaign runs never gate a PR** (Jordan: "Never gate a PR") — a firm constraint on
+   the Wave-8 adapter, not just a deferred question.
+4. **The four §9 quick wins are filed as separate lane work, not bundled into this PR** (Jordan: "File
+   separately") — tracked as ED-IN-0039.
 
 **Trigger:** a repo-wide sweep of every engine/resolver/simulator/test/Python surface, requested to
 evaluate how Valoria manages simulation and testing at this point in the project, and to propose a
@@ -328,12 +343,32 @@ without a separate research pass:
 4. **`sim/provincial/massbattle.py`** — highest-value target per §1.1's own gap finding (1905 LOC,
    CANONICAL, zero dedicated test today), but held to wave 4 deliberately: it's the largest ungoverned
    surface, so it should go in after the harness has already proven itself on three smaller subsystems.
-5. **`mc_v18.py`** (full campaign) — last, tier-3-only, explicitly the `test_f7_smoke_oracle.py`
+5. **`sim/provincial/faction_action.py`** (448L, CANONICAL) — real, GD-2 mandatory-action dispatch,
+   already exercised indirectly via `mc_v18` regression tests but with no dedicated unit test of its
+   own; same maturity/risk tier as mass battle, sequenced right after it.
+6. **`sim/territory/*`** (settlement/territory — `adjacency.py` CANONICAL, the rest populated and
+   real but unlabeled, no dedicated test in `sim/tests/`) — same profile as faction actions: real,
+   untested, ready for an adapter.
+7. **`sim/thread/*`** (threadwork, ~1500 LOC — real except `rendering.py`/one branch of `opposing.py`,
+   only one narrow existing regression, `test_thread_mending_ed871.py`) — largest remaining real-but-
+   thin-tested surface before campaign composition.
+8. **`mc_v18.py`** (full campaign) — last, tier-3-only, explicitly the `test_f7_smoke_oracle.py`
    large-N discipline generalized to arbitrary campaign configurations, not just the one pinned seed.
+   Composes all of the above, so it has to come after them.
 
-Faction-flavor `[PROVISIONAL]` stubs and other deliberately-unauthored modules are **not** rollout
-targets — running the harness against them would only confirm `STUB_HIT`, which is already known and
-tracked as a contamination-audit dependency, not a gap this harness needs to rediscover.
+**Field investigation is a different case, not an oversight:** its `sim/` implementation
+(`personal/fieldwork.py`/`investigation.py`/`companion.py`, 33L/31L/21L) is still `[PROVISIONAL]`
+armature-stub-only per §1.1 — there is no real resolver to adapt yet, only a stub that would
+immediately and only confirm `STUB_HIT`. It becomes a rollout candidate once that engineering work
+(tracked separately, not by this proposal) lands a real resolver. Faction-flavor `[PROVISIONAL]` stubs
+and other deliberately-unauthored modules are excluded from the sequence for the same reason — running
+the harness against them would only confirm what's already known and tracked as a contamination-audit
+dependency, not a gap this harness needs to rediscover.
+
+This still isn't all 27 `module_contracts.yaml` modules — the "many thin adapters" architecture means
+every real module eventually gets one, but only these 8 are sequenced concretely here. The rest (e.g.
+`scene_slate`, `game_director`, `engine_clock`) get adapters as capacity allows, in whatever order a
+future session finds has the best real/populated-vs-tested ratio, using the same three criteria above.
 
 ---
 
