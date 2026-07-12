@@ -7,7 +7,19 @@ as a result of this pass.
 
 ## What this is
 
-Nine [`tools/sim_harness/`](../../../tools/sim_harness/) **provisional adapters**
+**Three passes.** Pass 1 (8 adapters) tests each of PR#119's 12 authored items in isolation.
+Pass 2 (`pr119_integrated_campaign.py` + `campaign_stats.py`) composes 11 of them on one
+persistent settlement to surface interdependencies. Pass 3 (this update) answers three follow-
+up asks directly: (a) "where are the character-standing/advancement and proactive-governance
+proposals?" — they exist in a much larger, never-before-touched research corpus
+(`designs/audit/2026-07-12-governance-compendium/`), now covered (§"Character standing... and
+proactive governance" below); (b) "settlements must be able to fall into ruin, prosper, or hold
+steady depending on governance skill and luck" — `pr119_event_deck_engine.py`, a real card-based
+engine, not more ad-hoc probability draws; (c) "an extensive log tracing every death spiral with
+proposed patches" — `death_spiral_log.py`, a committed, reproducible artifact (§"Death-spiral
+log" below). **19 adapters total** across all three passes.
+
+Nineteen [`tools/sim_harness/`](../../../tools/sim_harness/) **provisional adapters**
 (`canon_row=None` — the harness's own first-class path for testing proposed-but-not-yet-
 ratified mechanics; see `tools/sim_harness/README.md` "Provisional adapters") that mechanically
 re-test the PR #119 settlement/faction governance proposals and the two PR #125 cross-cutting
@@ -155,6 +167,112 @@ make Za/Seggio the dominant terminal state are the same mechanics recall-avoidan
 Guild influence (mean 2.56–3.97) grows steadily with campaign length via §1.3c Ordenanza — the
 one composed mechanic with no negative-feedback path at all in this wave's wiring.
 
+## Character standing/advancement and proactive governance
+
+Investigation found these proposals exist in a body of research neither the first two passes
+nor PR #119/#125 ever touched: `designs/audit/2026-07-12-governance-compendium/` (58 comparative-
+governance proposals total, of which PR#119 authored only 12). Two whole systems live there —
+`40_roster_officer_system.md` (the "Ascendancy" system — exactly "character political standing/
+advancement/demotion") and `41_proactive_scale_menus.md` (exactly "proactive governance") — both
+PROPOSED research, zero sim/ implementation. Also tested here per Jordan's confirmation
+(AskUserQuestion): all **9 "promote-ready, unlanded"** proposals — vetted buildable-without-a-
+ruling by the compendium's own triage, but never authored into any canon doc and never stress-
+tested (`tier3_proposal_status_closure.md` §3.2b).
+
+| Item | Adapter · decision point | n | Result | Note |
+|---|---|---|---|---|
+| Ascendancy climb (`40_roster_officer_system.md`) | `pr119_ascendancy_system` · `consolidation_climb` | 100 | reached-threshold 38 / stalled 62 | Grounded on Konrad (bureaucratic/patronage) and Orsk (purchased/bureaucratic) — real Goldenfurt NPCs whose npc_cast.md dossiers already imply a `power_base` |
+| Ascendancy Ω-d downfall | same · `downfall_exploitation` | 100 | exploited-bureaucratic 51 / exploited-patronage 41 / undiscovered 8 | **92% of climbs get exploited** — the compendium's Ω-d non-dominance design principle (climb driver = downfall liability) holds up mechanically, not just as a stated intent; reuses the real `Leverage:konrad-corrupt` ledger write already proven elsewhere in this cluster |
+| Proactive-menu scale entities (`41_proactive_scale_menus.md`) | `pr119_proactive_governance_menus` · `scale_entity_check` | 100 | `only_settlement_built` 100/100 | **Confirms structurally** (real `registry.py` source scan): of the 4 proposed scales (Organization/Settlement/Territory/Faction), only Settlement has a built entity |
+| Relay Tier's temporal dependency | same · `relay_tier_temporal_dependency` | 100 | `contingent_on_unauthored_engine_clock` 100/100 | Confirms via real `module_contracts.yaml` lookup: the compendium's own "strongest new-state case in the corpus" is blocked on `engine_clock`, which CLAUDE.md §6 already names `doc: null` |
+| HRE-4 Borrow | `pr119_hre4_borrow` · `borrow_clawback` | 100 | undiscovered 50 / clawback-wins 21 / clawback-fails 29 | Clean mechanic, no structural issue |
+| VEN-SE-2 Requisition, Reading A (species of Extract) | `pr119_promote_ready_fiscal` · `requisition_as_extract_species` | 100 | compact-collision 59 / defy 41 | **Answers the closure register's own open question with data**: if Requisition inherits §1.3a's Compact auto-resolution, it inherits the confirmed silent-6th-family bug 59% of the time |
+| VEN-SE-2 Requisition, Reading B (immune to Extract) | same · `requisition_as_immune_directive` | 100 | complied 57 / defy 43 | The two readings are **measurably different mechanical shapes** — the ambiguity the closure register flags is real, not academic |
+| IT-2 Condotta | `pr119_promote_ready_fiscal` · `condotta_state_machine` | 100 | ferma 7 / aspetto 10 / lapsed 83 | At the tested transition rates the 3-state machine trends heavily toward Lapsed — informative for future tuning, not a canon claim |
+| HAB-1 Corregidor (overlay) | `pr119_oversight_instruments` · `corregidor_overlay` | 100 | override-invoked 35 / expired-unused 65 | Confirms the overlay shape (concurrent with the sitting governor) is mechanically distinct from IT-1's replacement below |
+| IT-1 Podestà (replacement) | same · `podesta_replacement` | 100 | clean 69 / appointer-liable 31 | Real `registry.succeed_governor()` call, distinct code path from the Corregidor overlay — the two items' defining mechanical difference (overlay vs. replacement) is now measured, not just asserted |
+| HRE-2 Chapter Capture | `pr119_promote_ready_political` · `banked_seats_convert` | 100 | vacancy-fires-seats-convert 81 / stay-banked 19 | Clean mechanic |
+| HRE-3 Convene the Circle | same · `circle_quota_call_in` | 100 | called-in 43 / expires-unclaimed 57 | Tested as the closure register's own refined Debt-family variant, not the original standalone-resource pitch |
+| CHN-6 Gongsuo Registration | same · `registration_gates_ordenanza_petition` | 100 | blocked-unregistered 63 / surfaces-registered 37 | Tested directly against the real §1.3c Ordenanza roll (`pr119_guild_ladder.py`'s same dice call) per the closure register's re-homing recommendation, not as a standalone toggle |
+| HAB-4 Consulta Arbitration | same · `consulta_arbitration` | 100 | resolved (agenda-set) 30 / resolved (ratify) 35 / paralysis 35 | Clean mechanic; the closure register's own noted gap (no per-Ministry action-economy foundation exists yet) is structural, not something this roll-level test can close |
+
+Not tested: the 23 "needs-Jordan" proposals (genuinely contested binary calls only Jordan can
+make — e.g. CHN-2 Imperial Examination Ladder, the docket's #1 open rank decision) and the 14
+cut proposals. Four cuts the closure register itself flags as stress-test-vindicated and worth
+reconsidering: **IT-3** (Sforza Gambit), **VEN-SE-4** (Dedizione), **VEN-SE-7** (Sindici
+Inquisitori), **BYZ-4** (price-control half). Named here, not simulated — reopening a CUT
+verdict is a Jordan call, not a harness run.
+
+## Real event-deck engine: skill, luck, and settlement fate
+
+`pr119_integrated_campaign.py` (pass 2) never grows Prosperity — nothing in its 11 composed
+mechanics has a positive lever, so it cannot produce a genuine "the settlement prospered"
+outcome. Built in direct response to "settlements [should] be able to fall into ruin or
+prosper or remain as they are depending upon how well they are governed and how lucky/unlucky
+their events are": `pr119_event_deck_engine.py`, a real card-based deck engine over **13 of
+Goldenfurt's actual 28 event-deck cards** (`event_deck.md`, spanning all 7 card families —
+Petition/Friction/Opportunity/Crisis/Intrigue/Ambition/Thread — with real triggers, weights,
+and response deltas transcribed, not invented), including the deck's own POSITIVE Opportunity
+cards (G301 Harvest Fair, G303 Hedda's alliance) that neither prior campaign ever modeled.
+
+**Skill and luck are separated by construction**, not just by label: LUCK is which cards are
+eligible and which of them draw (the real `1 + floor(Pi/3)` family-weighted mechanic,
+transcribed verbatim from `event_deck.md`'s own header); SKILL is `governance_skill` (0–1), the
+probability the governor picks each card's best-available response — a skilled governor is not
+guaranteed a good outcome (some cards have no good response) and an unlucky one is not
+guaranteed a bad one. A neglect-decay term (`governance_play_redesign_v1.md` §1.1: "what you
+neglect festers") makes both Prosperity and Order drift down absent active upkeep, scaled
+inversely to skill — without it, "ruin" was unreachable even at zero skill (a real bug this
+pass found and fixed, not a design choice presented as a finding).
+
+| `governance_skill` | prospering | holding_steady | ruined |
+|---|---|---|---|
+| 0.0 (worst) | 0% | 18% | **82%** |
+| 0.2 | 0% | 44% | 56% |
+| 0.35 (below-average — the death-spiral log's own regime, see below) | 0% | 65% | 35% |
+| 0.5 | 2% | 82% | 16% |
+| 0.8 | 65% | 35% | 0% |
+| 1.0 (best) | **100%** | 0% | 0% |
+
+300 trials/row, seed 0, 20-season horizon. **Skill drives the outcome monotonically and the
+full range — ruin, steady, and prosper — is genuinely reachable at every skill level except the
+two extremes**, which is the honest, correct shape for "luck matters too": a skill-1.0 governor
+still faces real event-deck variance within a single run even though the aggregate across 300
+trials converges to 100% prospering; a skill-0.0 governor is not guaranteed ruin every time (18%
+still hold steady on luck alone). `collapsed_repeated_recalls` (3+ recalls in one trial) never
+fired in any tested regime up to 30 seasons — an honest empirical finding, not a design gap: this
+card engine's G606 dynamics are gentler than `pr119_integrated_campaign.py`'s (which found
+near-universal recall dominance, see above), because Konrad's progress here only advances via a
+specific G201-Defy draw rather than every non-compliant season. The two engines' divergent
+dominant failure modes (recall-dominance vs. prosperity/ruin) is itself informative: different
+modeling assumptions about which mechanics compose surface materially different systemic risks
+— worth reconciling in a future wave, not silently averaged away here.
+
+## Death-spiral log
+
+Built directly in response to "implement an extensive log that traces and flags all death
+spirals explicitly complete with proposed patches/adjustments." `death_spiral_log.py` runs both
+campaign engines (300 trials each; the event-deck engine at `governance_skill=0.35`, a
+deliberately below-average-governor regime — logging only best-case runs would undercount every
+pattern) and flags five named, independently-detected patterns against each trial's real stats,
+each paired with a cited, concrete patch — not a general "this seems bad" note. Output committed
+at [`death_spiral_log.jsonl`](death_spiral_log.jsonl) (600 trials, 846 flagged occurrences,
+reproducible via the command below).
+
+| Pattern | Engine | Occurrences / 300 | Cited patch |
+|---|---|---|---|
+| `PI_RUNAWAY_SUSTAINED` | integrated_campaign | 298 (99.3%) | VEN-SE-5 Scuole Grandi Π-valve (`44_standing_institutions.md`) — re-home as a Sponsor sub-option draining Π through the formula's existing generic release term |
+| `LEDGER_SCHEMA_CORRUPTION` | integrated_campaign | 229 (76.3%) | `governance_consolidation_v1.md` §1 D3 — model `Compact` as a `Debt` subtype, or deliberately extend `ledger.TAG_KINDS`, before §1.3a ratifies |
+| `RECALL_CASCADE` | integrated_campaign | 151 (50.3%) | `governance_consolidation_v1.md` §1 D5 — merge §1.0d onto Goldenfurt's G606 signal as a modifier, not a parallel cascade; this session's own 1,500-trial run already found G606 alone drives ~100% of terminal recalls |
+| `GRUDGE_ACCUMULATION` | integrated_campaign | 76 (25.3%) | The stress-test synthesis's own recommendation — Grudge decay, survivable Appeal odds, and a defined Suspicion→Recall increment (the same three substrate fixes `44_standing_institutions.md` independently confirms no institution can substitute for) |
+| `PROSPERITY_COLLAPSE` | event_deck_engine (skill=0.35) | 92 (30.7%) | A real Develop-verb positive-feedback path (`governance_play_redesign_v1.md` §1.3), not yet built in `sim/`; this adapter's own neglect-decay term is a stand-in for that gap, not a fix in its own right |
+
+All five patches are cited to a real, already-written doc — none is invented for this log. Two
+(`RECALL_CASCADE`'s merge and the Scuole Grandi valve) are already independently named as the
+top-priority open work in `governance_consolidation_v1.md` §3 (E1/E7) and
+`44_standing_institutions.md`; this log is the first place they're tied to a measured occurrence
+rate rather than a qualitative "highest-value lever" claim.
+
 ## What this is not
 
 - Not a ratification of any PR#119 item — every `## Status:` line stays as-is.
@@ -174,10 +292,20 @@ one composed mechanic with no negative-feedback path at all in this wave's wirin
 - Not a replacement for #125's seed-by-seed narrative traces (`seed_traces/seed_S1..S7*.md`),
   which read for texture and cascade *plausibility* in a way a branch-count table cannot; the
   two approaches are complementary, not competing.
+- Not full coverage of the governance-compendium's 58 proposals: the 23 needs-Jordan and 14 cut
+  proposals are named, not simulated (see "Character standing/advancement and proactive
+  governance" above) — reopening a contested or cut verdict is a Jordan call.
+- Not a reconciliation of `pr119_integrated_campaign.py`'s and `pr119_event_deck_engine.py`'s
+  divergent dominant failure modes (recall-dominance vs. prosperity/ruin) — both are honestly
+  reported, the divergence itself is named as a finding, but nothing here picks a winner.
+- The event-deck engine's `governance_skill`→response-quality mapping (`skill_weight` per card
+  response) is this adapter's own documented judgment call on which response a competent
+  governor would prefer, not an assertion of canon balance.
 
 ## Re-running
 
 ```
+# Pass 1 — single-mechanic adapters
 python3 -m tools.sim_harness.harness --adapter pr119_recognition_accountability --trials 100 --seed 0
 python3 -m tools.sim_harness.harness --adapter pr119_clerk_capacity --trials 100 --seed 0
 python3 -m tools.sim_harness.harness --adapter pr119_guild_ladder --trials 100 --seed 0
@@ -186,14 +314,29 @@ python3 -m tools.sim_harness.harness --adapter pr119_bind_the_cells --trials 100
 python3 -m tools.sim_harness.harness --adapter pr119_subnational_factions --trials 100 --seed 0
 python3 -m tools.sim_harness.harness --adapter pr119_structural_gaps --trials 100 --seed 0
 python3 -m tools.sim_harness.harness --adapter pr119_pressure_homeostat --trials 500 --seed 0
-python3 -m tools.sim_harness.harness --adapter pr119_integrated_campaign --trials 200 --seed 0
 
-# world-state / interdependency statistics (the three-regime table above):
+# Pass 2 — interdependency campaign
+python3 -m tools.sim_harness.harness --adapter pr119_integrated_campaign --trials 200 --seed 0
 python3 -m tools.sim_harness.adapters.pr119_governance.campaign_stats --n 500 --seed 0
 python3 -m tools.sim_harness.adapters.pr119_governance.campaign_stats --n 500 --seed 0 --p-comply 0.75
 python3 -m tools.sim_harness.adapters.pr119_governance.campaign_stats --n 500 --seed 0 --p-comply 0.75 --pa-demotion-streak 5
+
+# Pass 3 — character standing/advancement, proactive governance, 9 promote-ready, event deck, death spirals
+python3 -m tools.sim_harness.harness --adapter pr119_ascendancy_system --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_proactive_governance_menus --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_hre4_borrow --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_venSE2_requisition --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_it2_condotta --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_oversight_instruments --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_hre2_chapter_capture --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_hre3_convene_circle --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_chn6_gongsuo --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_hab4_consulta --trials 100 --seed 0
+python3 -m tools.sim_harness.harness --adapter pr119_event_deck_engine --trials 300 --seed 0
+python3 -m tools.sim_harness.adapters.pr119_governance.death_spiral_log --n 300 --seed 0
 ```
 
 Add `--no-registry` for a local dry run of the harness CLI that skips the `audit_registry.jsonl`
-append. `campaign_stats.py` never touches the registry — it's a pure statistics pass over
-`run_campaign()`.
+append. `campaign_stats.py` and `death_spiral_log.py` never touch the registry — both are pure
+statistics/logging passes reusing the adapters' own `run_campaign()`/`run_deck_campaign()`
+functions directly, not duplicated simulation logic.
