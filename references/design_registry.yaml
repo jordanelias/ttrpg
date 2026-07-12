@@ -71,6 +71,13 @@ registry:
     params: params/threadwork.md
 
   # ─── COMBAT ────────────────────────────────────────────────────────────────
+  # ⚠ SUPERSEDED (2026-07-12, ED-IN-0038): this entry describes the pre-engine v30 doc, which
+  # CLAUDE.md §4 flags PARTIALLY SUPERSEDED. The live personal-combat head is
+  # designs/scene/combat_engine_v1/ (a Python resolver package with its own .md design docs —
+  # see CURRENT.md) — it does not fit this registry's single-doc index/infill model and is not
+  # tracked here. params/combat.md no longer exists (deprecated 2026-06-04, see
+  # references/canonical_sources.yaml). Entry retained for the historical v30 doc only; do not
+  # atomize combat_engine_v1 via valoria-atomizer.
   combat:
     system: combat
     mode: ALL
@@ -79,7 +86,7 @@ registry:
     infill: designs/scene/combat_v30_infill.md
     atomized: complete
     predecessor: designs/scene/combat_design_v1.md
-    params: params/combat.md
+    params: null
 
   # ─── BOARD GAME ────────────────────────────────────────────────────────────
   board_game:

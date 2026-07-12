@@ -1,7 +1,15 @@
+import math
 import random
 from typing import List, Dict
 
 TRIALS = 200_000
+
+# Continuous engine (Decision E, params/core.md "Continuous Engine") — canonical for the
+# Godot videogame implementation. net ~ Normal(mu*N, sigma*sqrt(N)) per die at the active TN;
+# statistically equivalent to the discrete d10 rule below (validated to within 0.03 in mean/std,
+# pool sizes 5-17, Phase 5 sim 2026-05-15). The discrete rule stays canonical for TTRPG-mode play.
+_CONTINUOUS_MU = {6: 0.50, 7: 0.40, 8: 0.30}
+_CONTINUOUS_SIGMA = {6: 0.806, 7: 0.800, 8: 0.781}
 
 def die_ev(tn: int) -> float:
     p_minus = 0.1
@@ -102,6 +110,43 @@ def momentum_value(tn: int, ob: int, pool: int, trials: int = TRIALS) -> Dict:
         "momentum_p_full":   mom_full / trials,
         "momentum_vs_die":   (mom_full/trials) - extra["p_full"],
     }
+
+def _norm_cdf(x: float) -> float:
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
+    """Canonical videogame-mode (Godot) resolver — net ~ Normal(mu*N, sigma*sqrt(N)) per
+    params/core.md's Continuous Engine. Continuity-corrected (resolve against x - 0.5, per
+    the ER-2 fix landed in params/core.md, commit a3d3888) so odds track the discrete model
+    even at small pools, per params/core.md's own equivalence note. Ob may be fractional
+    (fractional Ob is canonical in videogame mode); clamped to the canonical [1, 20] range.
+    Degree thresholds match params/core.md's Degrees of Success table exactly: Overwhelming
+    net >= max(2*Ob, 3), Success net >= Ob, Partial 0 < net < Ob, Failure net <= 0."""
+    if tn not in _CONTINUOUS_MU:
+        raise ValueError(f"No continuous-engine mu/sigma for TN {tn} — only 6/7/8 defined")
+    mu = _CONTINUOUS_MU[tn] * n
+    sigma = _CONTINUOUS_SIGMA[tn] * math.sqrt(n)
+    ob = max(1.0, min(20.0, ob))
+
+    def p_at_least(x: float) -> float:
+        return 1 - _norm_cdf((x - 0.5 - mu) / sigma)
+
+    p_overwhelming = p_at_least(max(2 * ob, 3))
+    p_success_or_better = p_at_least(ob)
+    p_partial_or_better = p_at_least(1e-9)  # net > 0
+    return {
+        "overwhelming": p_overwhelming,
+        "success": p_success_or_better - p_overwhelming,
+        "partial": p_partial_or_better - p_success_or_better,
+        "failure": 1 - p_partial_or_better,
+        "p_full": p_success_or_better,
+    }
+
+def continuous_quick_check(n: int, tn: int, ob: float) -> str:
+    p = continuous_outcome_probs(n, tn, ob)
+    return (f"[continuous/Godot-canonical] Pool {n} TN{tn} Ob{ob}: "
+            f"Overwhelm {p['overwhelming']:.1%} | Success {p['success']:.1%} | "
+            f"Partial {p['partial']:.1%} | Fail {p['failure']:.1%}")
 
 def quick_check(n: int, tn: int, ob: int) -> str:
     p = outcome_probs(n, tn, ob, 100_000)

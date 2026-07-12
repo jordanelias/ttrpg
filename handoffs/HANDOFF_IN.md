@@ -316,6 +316,27 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Decisions
 
+- 2026-07-12 — **Skills-ecosystem staleness remediation, "Phase 7" (ED-IN-0038..0042) — continues
+  the 2026-07-11 audit-ecosystem batch (ED-IN-0032..0037) this file's Pending/Decisions log never
+  got an entry for; note that gap here rather than backfilling the missing history.** Jordan asked
+  for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
+  skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
+  findings at the FROZEN flat `canon/editorial_ledger.jsonl` instead of the live lane-split files
+  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
+  ED-IN-0038); `valoria-compiler` had four independent breaks including a nonexistent gate field
+  and an orphaned `compilation/` output path (ED-IN-0038); and `valoria-combat-simulator`'s
+  bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31
+  model vs. the live 40-weapon `combat_engine_v1/workbench/balance.py`), retired to
+  `deprecated/skills/` after Jordan confirmed via AskUserQuestion (ED-IN-0039). Also, per Jordan's
+  explicit confirmation: `valoria-dice-model` gained the canonical continuous (Godot-mode)
+  resolver alongside the legacy discrete one, validated against the existing Monte Carlo
+  implementation (ED-IN-0040). Closed one cheap ecosystem gap: PP-NNN allocation had no
+  documented protocol despite `id_reservations.yaml` already reserving PP blocks the same way as
+  ED — added to `valoria-editorial-register` (ED-IN-0041). Deferred gaps (Godot port-readiness
+  tracking, session lane-scoping enforcement, `compliance_check.py` local-hook integration, missing
+  sim↔port parity tooling) filed as `ED-IN-0042`, `needs_jordan: true` — see
+  `designs/audit/2026-07-12-skills-ecosystem-audit/skills_ecosystem_audit_v1.md` for full detail
+  and the per-gap suggested shape.
 - 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observability
   register re-capped, two stale size warnings resolved.** Jordan: "What other steps can we take to
   increase token efficiency... How often are we calling in from GitHub needlessly instead of just

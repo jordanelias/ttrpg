@@ -145,7 +145,7 @@ necessary, not sufficient, for NERS; behavioral compliance stays with
 valoria-resolution-diagnostic.
 ```
 
-Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Derived views (flowchart, state graph, flattened pipeline map) are regenerated into the same directory by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited. P1/P2 findings that are canonical gaps go to `canon/editorial_ledger.jsonl` via `append_to_register` — compute the next ED id at append time (parallel sessions assign concurrently; the class-#12 collision is live).
+Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Derived views (flowchart, state graph, flattened pipeline map) are regenerated into the same directory by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited. P1/P2 findings that are canonical gaps append to the relevant `canon/editorial_ledger_<lane>.jsonl` (lane chosen by the finding's subsystem; cross-cutting architecture findings default to `_in`), per `references/id_reservations.yaml`'s Collision Guard allocation protocol — read `next_free`, form the entry, bump, co-commit (see `valoria-editorial-register`'s ID Law section). There is no `append_to_register` function to call; that was retired orchestrator-era GitHub-API tooling (`deprecated/skills/valoria-orchestrator/`).
 
 ## STAGE 4 — ENFORCE & RE-TEST
 

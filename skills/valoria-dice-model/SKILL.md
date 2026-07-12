@@ -28,7 +28,18 @@ Use `references/glossary.md` (read above) for all term definitions and permitted
 
 ---
 
-## Canonical Die Rule
+## Two Resolver Modes (both canonical, different contexts — params/core.md §Continuous Engine)
+
+Valoria's dice engine has two statistically-equivalent implementations. **Which one governs
+depends on what's being built, not which is "more current":**
+
+- **Discrete (legacy / TTRPG-mode)** — the d10-per-die rule below. Canonical for tabletop play.
+- **Continuous (videogame-mode / canonical for Godot implementation)** — `net ~ Normal(μ·N,
+  σ·√N)`, continuity-corrected. **This is the resolver the videogame itself uses.** Use Tasks 1–8
+  below (discrete) for TTRPG-facing questions; use the continuous functions (see below) for
+  anything answering "what will the Godot build actually roll."
+
+### Discrete — Canonical Die Rule (TTRPG-mode)
 
 Read from `params/core.md`. Current standard:
 
@@ -44,7 +55,29 @@ Net successes = sum of all dice contributions (may be negative).
 
 TN values in Valoria: **6** (Controlled), **7** (Standard), **8** (Desperate).
 
-If `params_core.md` specifies different values, those govern over the above.
+If `params/core.md` specifies different values, those govern over the above.
+
+### Continuous — Godot-canonical Resolver (videogame-mode)
+
+`net ~ Normal(μ·N, σ·√N)` per die at the active TN (`params/core.md §Continuous Engine`):
+
+| TN | μ (E\[net\]/die) | σ/die |
+|---|---|---|
+| 6 (Controlled) | 0.50 | 0.806 |
+| 7 (Standard) | 0.40 | 0.800 |
+| 8 (Desperate) | 0.30 | 0.781 |
+
+Continuity-corrected (resolves against `x − 0.5`, per the ER-2 fix landed in `params/core.md`,
+commit `a3d3888`) so odds track the discrete model even at small pools. Ob may be fractional
+(fractional Ob is canonical in videogame mode — weapon condition, cover, terrain). Degree
+thresholds match the discrete model's Degrees of Success table exactly: Overwhelming
+`net ≥ max(2·Ob, 3)`, Success `net ≥ Ob`, Partial `0 < net < Ob`, Failure `net ≤ 0`.
+Validated equivalence: max deviation 0.029 in mean, 0.022 in std vs the discrete model at pool
+sizes 5–17 (Phase 5 sim, 2026-05-15).
+
+Implemented in `valoria_dice.py` as `continuous_outcome_probs(n, tn, ob)` and
+`continuous_quick_check(n, tn, ob)` — same call shape as their discrete counterparts, no
+Monte Carlo sampling required (closed-form via the normal CDF).
 
 ---
 
@@ -113,6 +146,17 @@ The module is `skills/valoria-dice-model/valoria_dice.py` in the working tree. R
 **Output:** one-line summary via `quick_check(n, tn, ob)`.
 Use when mechanic-audit or simulator needs a spot probability without a full table.
 
+### Task 9 — Continuous-Mode Table (Godot-canonical)
+**Input:** pool sizes (list), TN, Ob values (list, may be fractional)
+**Procedure:**
+1. Run `continuous_outcome_probs(n, tn, ob)` for each (pool, ob) combination — closed-form, no
+   trial count needed.
+2. Output markdown table: Pool | Overwhelm | Success | Partial | Failure, labeled
+   "[continuous/Godot-canonical]" so it isn't mistaken for the discrete-mode table.
+3. Use whenever the question is about the videogame's actual resolver rather than tabletop play
+   (see "Two Resolver Modes" above) — e.g. balance questions that will land in
+   `references/engine_params/*.json` or `designs/scene/combat_engine_v1/`.
+
 ### Task 8 — Full Multi-TN Probability Tables
 **Input:** pool range (e.g. 3–15), Ob range (e.g. 1–8)
 **Procedure:**
@@ -151,7 +195,6 @@ Round probabilities to 3 decimal places in tables; 1 decimal in prose.
 | Params file | Used by |
 |-------------|---------|
 | `params/core.md` | All skills (dice engine baseline) |
-| `params/combat.md` | simulator Mode G1, combat-simulator |
 | `params/mass_combat.md` | simulator Mode G1 |
 | `params/contest.md` | simulator Mode G2 |
 | `params/threadwork.md` | simulator Mode G3 |
