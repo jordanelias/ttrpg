@@ -1,6 +1,6 @@
 # Simulation & Test Harness Methodology v1
 
-**Status: RATIFIED** (ED-IN-0038, Lane IN — ratified 2026-07-12). §11's four open questions were put to
+**Status: RATIFIED** (ED-IN-0044, Lane IN — ratified 2026-07-12). §11's four open questions were put to
 Jordan directly (not assumed) and are RULED below; everything else in this doc ratifies as originally
 proposed. The architecture (§3–§8), the Gate-0 prototype (`tools/sim_harness/` — six rounds of
 adversarial review and deliberate stress-testing since initial filing, 34 real bugs found and fixed, see
@@ -18,7 +18,18 @@ the package's own README for the full account), and the rollout order are now th
 3. **`mc_v18.py` full-campaign runs never gate a PR** (Jordan: "Never gate a PR") — a firm constraint on
    the Wave-8 adapter, not just a deferred question.
 4. **The four §9 quick wins are filed as separate lane work, not bundled into this PR** (Jordan: "File
-   separately") — tracked as ED-IN-0039.
+   separately") — tracked as ED-IN-0045.
+
+**Post-ratification currency note (merge-conflict discovery, 2026-07-12):** while this PR sat open, a
+concurrent PR (#126, "Skills-ecosystem staleness remediation") retired `skills/valoria-combat-simulator/`
+to `deprecated/skills/` (ED-IN-0039 on that PR's own numbering, not this doc's) — its `combat_sim.py` is
+explicitly marked **do not invoke or resurrect**, superseded by
+`designs/scene/combat_engine_v1/workbench/balance.py` (a 51-weapon Wilson-CI harness). §1 and §2 below
+cite `combat_sim.py` as a live tool because that was accurate at the time of the original sweep, before
+that retirement — left as an honest historical record, not rewritten. §6 and §8's *forward-looking*
+references (what the harness should actually wrap going forward) have been corrected to point at
+`balance.py` instead, since leaving them pointing at a since-deprecated, do-not-resurrect file would
+misdirect future work.
 
 **Trigger:** a repo-wide sweep of every engine/resolver/simulator/test/Python surface, requested to
 evaluate how Valoria manages simulation and testing at this point in the project, and to propose a
@@ -296,7 +307,7 @@ Every run, pass or fail, writes:
 | Existing surface | Disposition |
 |---|---|
 | `contract_adjudicator.py` (A1–A12) | **Absorbed as a pre-flight check**, called by the harness before every adapter run. Its own fixture suite (`tests/contracts/`) is untouched — still the thing that verifies the checker's own correctness. |
-| `combat_sim.py`, `valoria_dice.py` | **Become adapters.** Their Monte Carlo cores are reused verbatim; the harness adds canon-resolution, depth-tiering, and triage-flagging around them instead of duplicating the trial logic. |
+| `designs/scene/combat_engine_v1/workbench/balance.py`, `valoria_dice.py` | **Become adapters.** Their Monte Carlo cores are reused verbatim; the harness adds canon-resolution, depth-tiering, and triage-flagging around them instead of duplicating the trial logic. (`combat_sim.py` — see the post-ratification currency note above — was retired to `deprecated/skills/` by a concurrent PR and is superseded by `balance.py`, a 51-weapon Wilson-CI harness; note it has a documented coverage gap of its own, no full pairwise build-vs-build mode, only curated sweeps.) |
 | `sim/tests/` (ED-1053 oracle) | **Left alone**, and used as the model for what a tier-3 golden should look like. The harness does not replace deterministic regression tests — it's for exploratory/stress runs, not pinned goldens. |
 | `mc_v18.py` | Eventually the harness's largest adapter (a "campaign" adapter, tier-3 by default), but explicitly **out of scope for the first rollout wave** — see §8, it's the highest-blast-radius target, not the first one. |
 | `ci_sim_fabrication_check.py` | **Left alone** — still the commit-time gate. The harness's `FABRICATION_RISK` flag is the run-time complement, not a replacement. |
@@ -311,7 +322,7 @@ Every run, pass or fail, writes:
 Following the exact pattern already proven in PR #122:
 
 1. **Wave 0 (this proposal + Gate-0 prototype):** no CI change. `tools/sim_harness/` exists, is
-   run-by-hand only, same footing `combat_sim.py` has today.
+   run-by-hand only, same footing `balance.py` (§6's `combat_sim.py` replacement) has today.
 2. **Wave 1:** one report-only CI job, `sim-harness-pilot`, running the harness against **one** adapter
    (§8 names the candidate) on every PR touching that module's declared source files (reuse
    `ci_common.get_changed_files()`, the existing single source of truth for "what changed"). Non-blocking,
@@ -334,10 +345,14 @@ without a separate research pass:
 
 1. **`valoria_dice.py`** (dice-pool primitives) — Gate-0, ships with this proposal. Simplest possible
    resolver, canon-cited cleanly to `params/core.md`, zero game-balance judgment risk.
-2. **`combat_sim.py`** (personal combat) — the most mature CANONICAL subsystem, already has a verified
-   typed export (`references/engine_params/combat_engine_v1.json`, round-trip-checked) to resolve
-   canon params from directly rather than re-deriving from prose, and an existing Monte Carlo core to
-   wrap rather than write.
+2. **`designs/scene/combat_engine_v1/workbench/balance.py`** (personal combat — see the post-
+   ratification currency note above; supersedes `combat_sim.py`, retired 2026-07-12) — the most
+   mature CANONICAL subsystem, already has a verified typed export
+   (`references/engine_params/combat_engine_v1.json`, round-trip-checked) to resolve canon params
+   from directly rather than re-deriving from prose, and an existing Monte Carlo core to wrap rather
+   than write. `balance.py`'s own documented coverage gap (curated sweeps only, no full pairwise
+   build-vs-build mode) is this wave's first real finding, inherited free — worth naming when this
+   wave actually lands, not re-discovering.
 3. **`sim/personal/contest/`** (social contest kernel) — largest real subsystem, has its own
    `_kernel_tests.py` (222 seeded checks) to cross-validate the harness's tier-1/2 output against.
 4. **`sim/provincial/massbattle.py`** — highest-value target per §1.1's own gap finding (1905 LOC,

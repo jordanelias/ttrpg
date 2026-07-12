@@ -8,7 +8,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **ED-IN-0038 RATIFIED 2026-07-12 — simulation/test harness methodology.**
+- **ED-IN-0044 RATIFIED 2026-07-12 — simulation/test harness methodology.**
   `designs/audit/2026-07-12-simulation-test-harness-methodology/` (Status: RATIFIED): a generic
   harness core (canon-parameter resolution bound to `CURRENT.md`, never fabricates) + one thin
   per-module `Adapter` — the modular "test module" — bound to `references/module_contracts.yaml`'s
@@ -31,8 +31,8 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   omitted — its `sim/` implementation is still `[PROVISIONAL]` stub-only; (2) Wave 1 CI burn-in:
   full report-only, no deviation from the existing ratchet; (3) `mc_v18` full-campaign runs: never
   gate a PR, a firm constraint; (4) the four §9 quick-win findings: filed separately, not bundled
-  — see **ED-IN-0039** below. Full resolution text: `canon/editorial_ledger_in.jsonl`.
-- **ED-IN-0039 (open, execution pending) — the four ED-IN-0038 quick wins, filed separately.**
+  — see **ED-IN-0045** below. Full resolution text: `canon/editorial_ledger_in.jsonl`.
+- **ED-IN-0045 (open, execution pending) — the four ED-IN-0044 quick wins, filed separately.**
   (1) `tests/hooks/`/`tests/index/`/`tests/registry/` + 2 files under `tests/sim/` contain real
   pytest code no CI job or local hook executes — wire in or explicitly retire. (2)
   `sim/personal/combat.py` is confirmed dead (superseded, DEPRECATED-banner-marked 2026-06-23) but
@@ -350,6 +350,27 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Decisions
 
+- 2026-07-12 — **Skills-ecosystem staleness remediation, "Phase 7" (ED-IN-0044..0042) — continues
+  the 2026-07-11 audit-ecosystem batch (ED-IN-0032..0037) this file's Pending/Decisions log never
+  got an entry for; note that gap here rather than backfilling the missing history.** Jordan asked
+  for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
+  skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
+  findings at the FROZEN flat `canon/editorial_ledger.jsonl` instead of the live lane-split files
+  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
+  ED-IN-0044); `valoria-compiler` had four independent breaks including a nonexistent gate field
+  and an orphaned `compilation/` output path (ED-IN-0044); and `valoria-combat-simulator`'s
+  bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31
+  model vs. the live 51-weapon `combat_engine_v1/workbench/balance.py`), retired to
+  `deprecated/skills/` after Jordan confirmed via AskUserQuestion (ED-IN-0045). Also, per Jordan's
+  explicit confirmation: `valoria-dice-model` gained the canonical continuous (Godot-mode)
+  resolver alongside the legacy discrete one, validated against the existing Monte Carlo
+  implementation (ED-IN-0040). Closed one cheap ecosystem gap: PP-NNN allocation had no
+  documented protocol despite `id_reservations.yaml` already reserving PP blocks the same way as
+  ED — added to `valoria-editorial-register` (ED-IN-0041). Deferred gaps (Godot port-readiness
+  tracking, session lane-scoping enforcement, `compliance_check.py` local-hook integration, missing
+  sim↔port parity tooling) filed as `ED-IN-0042`, `needs_jordan: true` — see
+  `designs/audit/2026-07-12-skills-ecosystem-audit/skills_ecosystem_audit_v1.md` for full detail
+  and the per-gap suggested shape.
 - 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observability
   register re-capped, two stale size warnings resolved.** Jordan: "What other steps can we take to
   increase token efficiency... How often are we calling in from GitHub needlessly instead of just

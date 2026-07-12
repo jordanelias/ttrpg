@@ -1,6 +1,6 @@
 # `tools/sim_harness/` — Gate-0 prototype
 
-**Status: PROPOSED, ED-IN-0038.** Not wired into CI or local hooks. This is a proof of the
+**Status: PROPOSED, ED-IN-0044.** Not wired into CI or local hooks. This is a proof of the
 architecture described in
 `designs/audit/2026-07-12-simulation-test-harness-methodology/simulation_test_harness_methodology_v1.md`
 — read that doc first for the full methodology, the depth-tier rubric, the triage-flag taxonomy, and
@@ -86,8 +86,11 @@ write to `results/` (gitignored, same convention as `sim/results/`).
 - Not a coverage claim over any subsystem beyond the one demo adapter.
 - Not wired into CI — see the design doc §7 for the proposed report-only → blocking ratchet.
 - Not a replacement for `sim/tests/`'s deterministic regression goldens, `contract_adjudicator.py`'s
-  fixture suite, or `combat_sim.py`. It's built to absorb the latter two as adapters in later waves
-  (§6/§8 of the design doc), not to compete with any of them.
+  fixture suite, or `designs/scene/combat_engine_v1/workbench/balance.py` (the personal-combat Monte
+  Carlo tool — `combat_sim.py` was retired to `deprecated/skills/` by a concurrent PR while this one
+  sat open, see the design doc's post-ratification currency note; `balance.py` is its replacement).
+  It's built to absorb the latter two as adapters in later waves (§6/§8 of the design doc), not to
+  compete with any of them.
 - Not a mechanical guarantee that a declared tier (minor/medium/major) is the *correct* one — `depth.py`
   enforces that every tier choice is justified (non-empty, recorded), not that the justification is
   good. Catching a self-serving tier downgrade is still a review-time responsibility. Said plainly here

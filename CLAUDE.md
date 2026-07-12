@@ -255,8 +255,8 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | If the task is… | Use |
 |---|---|
 | Writing infill prose | `prose-writer` |
-| Dice/EV/pool/Momentum math, d10 success probs | `valoria-dice-model` |
-| Combat-balance simulation | `valoria-combat-simulator` |
+| Dice/EV/pool/Momentum math, d10 success probs (+ Godot-canonical continuous mode) | `valoria-dice-model` |
+| Combat-balance simulation | `designs/scene/combat_engine_v1/workbench/balance.py` directly (run `python workbench/balance.py [weapon\|attr\|tradition\|all] [n]`) — no skill wrapper; see §8's retirement note |
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (P-01..P-14) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
@@ -271,7 +271,11 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Incremental module-by-module sim build | `valoria-simulator` |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
-driver; superseded by the Claude Code-native model).
+driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
+(2026-07-12, ED-IN-0039) — its bundled script was a hand-hardcoded, long-frozen 9-weapon model,
+fully superseded by `designs/scene/combat_engine_v1/workbench/balance.py`, the actively-maintained
+51-weapon canonical balance harness (40 added in the 2026-07-02 morphology expansion, plus the
+original 11); see `deprecated/skills/README.md` for detail.
 
 **General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
 `handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
