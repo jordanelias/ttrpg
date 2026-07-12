@@ -68,6 +68,19 @@ class DecisionPoint:
     justification: str = ""
 
     def __post_init__(self):
+        # default_tier isn't runtime-checked by the `Tier` type hint — an adapter
+        # passing a raw int/other value (e.g. default_tier=99) would otherwise sail
+        # through construction and only fail deep inside Harness.run() with a bare
+        # KeyError from DEPTH_TIERS[tier], after contract-binding and canon
+        # resolution already ran, with no trace or registry record produced. Found
+        # by deliberately stress-testing an adapter with an out-of-range tier value.
+        if not isinstance(self.default_tier, Tier):
+            raise ValueError(
+                f"DecisionPoint {self.name!r} declares default_tier="
+                f"{self.default_tier!r}, not a real Tier member ({list(Tier)}) — "
+                f"caught at construction time so this fails loudly for the adapter "
+                f"author instead of crashing mid-run with an opaque KeyError"
+            )
         # (self.justification or "") tolerates a caller passing justification=None
         # (violates the str type hint, but nothing stops an adapter author doing it
         # e.g. via a dict.get() default) — without this, .strip() on None raises an
