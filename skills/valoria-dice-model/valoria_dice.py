@@ -1,5 +1,5 @@
 import random
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 TRIALS = 200_000
 
@@ -12,21 +12,27 @@ def die_ev(tn: int) -> float:
 def pool_ev(n: int, tn: int) -> float:
     return n * die_ev(tn)
 
-def _roll_die(tn: int) -> int:
-    r = random.randint(1, 10)
+def _roll_die(tn: int, rng: Optional[random.Random] = None) -> int:
+    r = (rng or random).randint(1, 10)
     if r == 1:  return -1
     if r == 10: return 2
     if r >= tn: return 1
     return 0
 
-def _roll_pool(n: int, tn: int) -> int:
-    return sum(_roll_die(tn) for _ in range(n))
+def _roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
+    return sum(_roll_die(tn, rng) for _ in range(n))
 
-def roll_pool(n: int, tn: int) -> int:
+def roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
     """Public wrapper for _roll_pool — one pool roll's net successes. Exists so
     callers outside this module (e.g. tools/sim_harness/) depend on a stable public
-    name instead of an underscore-prefixed implementation detail."""
-    return _roll_pool(n, tn)
+    name instead of an underscore-prefixed implementation detail.
+
+    rng is optional and defaults to the global random module (unchanged behavior
+    for every existing caller, none of which pass it) — a caller that needs
+    isolated, injected randomness (e.g. tools/sim_harness/'s per-trial Random
+    instance) can pass one explicitly instead of relying on global random.seed()
+    having been called first."""
+    return _roll_pool(n, tn, rng)
 
 def classify_outcome(r: int, ob: int) -> str:
     """Bucket a net-successes result against an obstacle: overwhelming/success/

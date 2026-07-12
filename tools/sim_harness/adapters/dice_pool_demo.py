@@ -98,14 +98,19 @@ class DicePoolAdapter(Adapter):
         ]
 
     def run_once(self, rng, params: dict, decision_point: DecisionPoint) -> Outcome:
+        # rng is passed through explicitly to valoria_dice's roll functions rather
+        # than relying on the harness's global random.seed() call alone — that call
+        # still happens (belt-and-suspenders for any code that reads global random
+        # state some other way) but this adapter's own determinism no longer
+        # depends on it silently continuing to happen.
         if decision_point.name == "single_pool_check":
-            r = valoria_dice.roll_pool(params["pool"], params["tn"])
+            r = valoria_dice.roll_pool(params["pool"], params["tn"], rng)
             branch = valoria_dice.classify_outcome(r, params["ob"])
             return Outcome(decision_point.name, r, {"branch": branch})
 
         if decision_point.name == "opposed_roll":
-            a = valoria_dice.roll_pool(params["atk_pool"], params["atk_tn"])
-            d = valoria_dice.roll_pool(params["def_pool"], params["def_tn"])
+            a = valoria_dice.roll_pool(params["atk_pool"], params["atk_tn"], rng)
+            d = valoria_dice.roll_pool(params["def_pool"], params["def_tn"], rng)
             branch = "attacker_wins" if a > d else ("defender_wins" if d > a else "tie")
             return Outcome(decision_point.name, a - d, {"branch": branch})
 

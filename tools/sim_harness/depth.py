@@ -68,7 +68,13 @@ class DecisionPoint:
     justification: str = ""
 
     def __post_init__(self):
-        if not self.justification.strip():
+        # (self.justification or "") tolerates a caller passing justification=None
+        # (violates the str type hint, but nothing stops an adapter author doing it
+        # e.g. via a dict.get() default) — without this, .strip() on None raises an
+        # opaque AttributeError instead of the intended, informative ValueError this
+        # method exists to guarantee. Found by adversarial review: the first cut of
+        # this check crashed exactly this way.
+        if not (self.justification or "").strip():
             raise ValueError(
                 f"DecisionPoint {self.name!r} declares tier {self.default_tier!r} "
                 f"with no justification — every tiering choice must state why, so "

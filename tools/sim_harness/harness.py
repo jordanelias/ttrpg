@@ -125,6 +125,14 @@ class Harness:
                 f"explicit non-canon test-scenario choice (adapter authoring bug, "
                 f"not a runtime gap — fix the adapter)"
             )
+        orphaned_provenance = sorted(set(provenance) - set(params))
+        if orphaned_provenance:
+            self.logger.triage.flag(
+                "resolve_params", Tier.MINOR, TriageCategory.UNCLASSIFIED,
+                f"provenance declares key(s) {orphaned_provenance} not present in "
+                f"params — stale/orphaned entry (e.g. left over after a param was "
+                f"renamed), silently dropped otherwise; surfaced instead of hidden",
+            )
 
         for dp in self.adapter.decision_points():
             tier = dp.tier()
@@ -175,6 +183,24 @@ class Harness:
                     stub_hit = True
 
             actual_n = sum(branch_counts.values())
+
+            # dp.branches non-empty means this decision point DECLARED it classifies
+            # trials into buckets — if it also ran n>0 trials without a stub/crash yet
+            # produced fewer classified outcomes than trials run, the adapter is
+            # silently failing to set Outcome.detail['branch'] on some or all trials.
+            # Without this check that state reports verdict PASS with zero flags and
+            # zero real data (actual_n=0 in the trace, but nothing reacts to it) —
+            # exactly the "claims to verify, doesn't" failure this harness exists to
+            # prevent, recurring one layer up from the registry-logging gap it was
+            # built to fix. Found by adversarial review with a reproducing adapter.
+            if not stub_hit and dp.branches and n > 0 and actual_n < n:
+                self.logger.triage.flag(
+                    dp.name, tier, TriageCategory.UNCLASSIFIED,
+                    f"adapter completed {n} trial(s) but only classified {actual_n} "
+                    f"into a declared branch — Outcome.detail['branch'] was unset "
+                    f"for the remaining {n - actual_n}; sampled data is incomplete "
+                    f"and should not be trusted",
+                )
 
             if not stub_hit and n < policy.min_n:
                 self.logger.triage.flag(

@@ -107,6 +107,24 @@ class CanonResolver:
         gap CLAUDE.md section 5 names as not yet built; this method only prevents
         USING a value the corpus no longer actually says, it does not derive new
         values from prose on its own.
+
+        Known limitation, inherited from the reused _current_md_paths() parser
+        (found verifying this fix, not introduced by it): some CURRENT.md rows cite
+        a doc list as `` `full/path/first.md` + `bare_filename.md` + ... `` — only
+        the first citation carries its directory prefix, the rest rely on prose-
+        level "+" continuation for a human reader. _current_md_paths() requires a
+        path to start with a known top-level directory, so a bare continuation
+        filename like `` `faction_layer_v30.md` `` is silently dropped from
+        doc_paths — meaning verify_citation() would wrongly raise CanonGapError for
+        a legitimately-cited doc formatted that way (confirmed against CURRENT.md's
+        Faction/political row). Not fixed here: the parser is shared with the
+        already-CI-wired tools/currency_consistency_check.py, and this method
+        deliberately reuses it rather than adding a second, drifting one (see
+        module docstring) — broadening the shared regex is a change to a live CI
+        check's behavior and belongs in its own reviewed change, not folded
+        silently into this harness fix. An adapter targeting a row that uses this
+        citation shorthand should verify against the row's FIRST (full-path)
+        citation, or file the parser gap separately before relying on the rest.
         """
         resolved = self.resolve(row_label_substring)
         if doc_relpath not in resolved["doc_paths"]:
