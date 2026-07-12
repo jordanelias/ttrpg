@@ -67,6 +67,12 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   lane, active patch-register counts). Also corrected a stale dashboard callout that had been
   repeating the now-debunked "~87% degenerate win-share" claim (CLAUDE.md §7) — see
   `sim/tests/test_f7_smoke_oracle.py`'s docstring for the actual correction.
+- **JORDAN RULING NEEDED — ED-IN-0038 (simulation/test harness methodology proposal, 2026-07-12).**
+  Full detail in `handoffs/HANDOFF_IN.md`'s Pending section. PROPOSED, not ratified:
+  `designs/audit/2026-07-12-simulation-test-harness-methodology/` + a runnable Gate-0 prototype at
+  `tools/sim_harness/`. Four items genuinely need Jordan's own call (rollout order, CI-ratchet
+  pace, whether `mc_v18` should ever gate a PR, quick-win bundling) — everything else in the doc is
+  routine-ratifies-on-merge per ED-1094.
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
   detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
   `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build

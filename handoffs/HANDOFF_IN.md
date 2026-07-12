@@ -8,6 +8,26 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **JORDAN RULING NEEDED — ED-IN-0038, simulation/test harness methodology (2026-07-12).**
+  PROPOSED, not ratified: `designs/audit/2026-07-12-simulation-test-harness-methodology/`
+  proposes a generic harness core (canon-parameter resolution bound to `CURRENT.md`, never
+  fabricates) + one thin per-module `Adapter` — the modular "test module" — bound to
+  `references/module_contracts.yaml`'s existing IN→resolver→OUT shape, a depth-tiered
+  (1 minor/2 medium/3 major) probabilistic branch-exploration policy per resolver-call event, and
+  a mandatory triage-flag taxonomy that can never be silently swallowed into a PASS verdict. A
+  runnable Gate-0 prototype ships at `tools/sim_harness/` (one demo adapter over
+  `valoria_dice.py`) — its own `audit_registry.jsonl` append in the same commit is the registry's
+  first ever LIVE (non-backfilled) entry. Builds on PR #122's audit-ecosystem consolidation
+  (ED-IN-0032–0037), which fixed the audit-tooling layer but explicitly left the
+  simulation-execution/live-logging gap open (ED-IN-0035). **Four things need Jordan's own call,
+  not routine merge-ratification:** the §8 adapter rollout order (mass battle has the largest raw
+  coverage gap but is sequenced fourth, not first); whether Wave 1's CI job must go through the
+  full report-only burn-in every other checker used, or can block sooner; whether a full-campaign
+  `mc_v18` harness run should ever gate a PR; and whether the doc's four independent quick-win
+  findings (orphaned real pytest under `tests/hooks/`/`tests/index/`/`tests/registry/`;
+  `sim/personal/combat.py` dead-but-importable; 3 more orphaned `tools/` scripts;
+  `contract_adjudicator.py` never run against the live corpus in CI) should land in this PR or be
+  filed as separate lane work.
 - **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract hygiene)
   2026-07-08: ED-IN-0016 CLOSED, ED-IN-0030 filed.** Agonist/antagonist pair (producer + independent
   read-only critic, adversarially re-verified against source files) executed the already-ratified
