@@ -6,14 +6,23 @@ architecture described in
 — read that doc first for the full methodology, the depth-tier rubric, the triage-flag taxonomy, and
 the real rollout order (§8). This README is usage notes only.
 
-**Revision note:** this package went through an adversarial review pass (8 independent finder angles)
-that found several real defects in the first cut, then a fix pass that closed all of them — see the
-per-file docstrings for what changed and why (each corrected claim states the failure it replaces, not
-just the new behavior). The most important one: an uncaught exception from a stub subsystem used to
-crash the whole run before any trace or registry entry was written; `Harness.run()` now catches it and
-reports a `STUB_HIT`/`UNCLASSIFIED` triage flag instead, and the shipped demo adapter includes a
-synthetic decision point (`stub_probe`) that deliberately exercises this path so the fix has a real,
-working, always-run example rather than only a claim about it.
+**Revision note:** this package has been through six rounds of adversarial review and deliberate
+stress-testing (not just one) — see the per-file docstrings for what changed and why in each; every
+corrected claim states the failure it replaces, not just the new behavior, precisely because this note
+itself went stale once already (round 1's note described only round 1's fix and was never updated
+through rounds 2–5, which is a finding from round 6 in its own right). Headlines, roughly in order found:
+(1) an uncaught exception from a stub subsystem crashed the whole run before any trace/registry write —
+`Harness.run()` now catches it, and the shipped demo includes a synthetic `stub_probe` decision point
+that exercises the path on every invocation, not just in theory; (2) two more rounds of stress-testing
+found a same-day registry-id collision, a crash on missing/malformed `CURRENT.md` or
+`module_contracts.yaml`, an invalid-tier value sailing through construction to crash deep inside a run,
+and a triage-flag flood at scale (10,000 duplicate flags from one systematic classification bug); (3)
+round 6 (max effort) found that **triage flags were never actually written into the persisted trace
+file** — only printed to console and rolled up in the registry summary — plus an uncaught exception path
+in `resolve_params()`/the provenance check, a `UnicodeDecodeError` gap in three separate `except OSError`
+guards (fixed by extracting one shared `read_text_or_gap` helper), `--trials 0` silently skipping the
+stub-capture demonstration entirely, and `DEGENERATE_DISTRIBUTION` misreporting a broken adapter's
+garbage output as if it were a real, if skewed, distribution.
 
 ## What ships here
 
@@ -29,9 +38,11 @@ working, always-run example rather than only a claim about it.
 - `adapter.py` — the `Adapter` protocol every subsystem's "test module" implements, plus the
   `@register_adapter("name")` decorator + `ADAPTER_REGISTRY` that makes adding one a single-file,
   single-import operation — the harness core never hardcodes an adapter name.
-- `trace_logger.py` — per-event trace (deterministic JSON, matching `sim/substrate/keys.py`'s `KeyLog`
-  serialization convention — but not its schema/validation, see the module docstring for the precise
-  boundary) + a **live** (not backfilled) `references/audit_registry.jsonl` append.
+- `trace_logger.py` — per-event trace **and every triage flag** (deterministic JSON, matching
+  `sim/substrate/keys.py`'s `KeyLog` serialization convention — but not its schema/validation, see the
+  module docstring for the precise boundary) + a **live** (not backfilled) `references/audit_registry.jsonl`
+  append. Both durable writes are guarded in `main()` — a disk-full or permissions failure prints a
+  warning instead of discarding the console-visible summary of a run that already completed.
 - `harness.py` — orchestrator + CLI. Catches `NotImplementedError` (and any other exception) raised by
   an adapter's `run_once()` and converts it to a triage flag instead of crashing; reseeds deterministically
   per trial (via `hashlib`, not Python's salted builtin `hash()` — see `_run_one_trial`'s docstring for
@@ -54,6 +65,12 @@ python3 -m tools.sim_harness.harness --trials 200 --seed 0
 python3 -m tools.sim_harness.harness --trials 10 --seed 0 --no-registry   # forces DEGENERATE_DISTRIBUTION on the two real events
 python3 -m tools.sim_harness.harness --adapter bogus --no-registry        # lists real available adapter names instead of a bare crash
 ```
+
+`--trials` must be positive: 0 (or negative) trials means every decision point's loop runs zero
+iterations, so no stub/crash path ever fires — `Harness.run()` rejects this with `ValueError` rather than
+silently producing a plausible-looking verdict for the wrong reason (found live: `--trials 0` reported
+the same `PARTIAL` headline as a real run, but with zero `STUB_HIT` flags, for a completely different and
+misleading reason).
 
 The shipped adapter's `verdict` is **PARTIAL by default**, not PASS — its `stub_probe` decision point
 deliberately raises `NotImplementedError` every run, by design, so the STUB_HIT path is exercised on

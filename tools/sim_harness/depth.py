@@ -2,10 +2,14 @@
 per-tier exploration policy.
 
 Tier is a property of the EVENT (a resolver call site). What this module actually
-enforces, mechanically: every DecisionPoint MUST declare a non-empty justification
-for its tier (construction-time ValueError otherwise, see DecisionPoint below) — an
-adapter can never leave a tiering choice unexplained, and the justification is
-carried into the trace record so it's auditable after the fact.
+enforces, mechanically, at DecisionPoint construction (both ValueError, not
+deferred to a runtime check that could be skipped): (1) default_tier must be a
+real Tier member, not any int/other value that happens to look plausible — found
+by adversarial review, an earlier cut let default_tier=99 sail through and only
+failed later, deep inside Harness.run(), with a bare KeyError; (2) every
+DecisionPoint MUST declare a non-empty justification for its tier — an adapter
+can never leave a tiering choice unexplained, and the justification is carried
+into the trace record so it's auditable after the fact.
 
 What this module does NOT (and, without a fuller rubric-classifier, cannot)
 mechanically enforce: that the declared tier is actually the CORRECT one for the

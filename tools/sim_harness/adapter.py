@@ -49,11 +49,15 @@ class Outcome:
     value: Any
     #: detail["branch"] (str, must be one of the owning DecisionPoint.branches) and
     #: detail["stub_hit"] (bool) are the two keys the harness reads; an adapter may
-    #: add more for its own trace record. Note: the harness ALSO auto-detects a stub
-    #: hit if run_once() itself raises NotImplementedError — setting
-    #: detail["stub_hit"]=True is for an adapter that catches a stub condition
-    #: internally and wants to keep sampling other branches rather than aborting
-    #: the trial; letting the exception propagate is equally valid and handled.
+    #: add more for its own trace record. The harness ALSO auto-detects a stub hit
+    #: if run_once() itself raises NotImplementedError — either path (setting
+    #: detail["stub_hit"]=True on a returned Outcome, or letting the exception
+    #: propagate) is equally valid and handled identically: the harness records
+    #: one STUB_HIT flag and aborts the remaining trials for that decision point.
+    #: Earlier revisions of this docstring claimed the detail-flag path preserves
+    #: the ability to keep sampling further trials — that was never actually true
+    #: of the shipped harness.py, which breaks immediately on either path (found
+    #: by adversarial review as a docstring/behavior mismatch); corrected here.
     detail: dict = field(default_factory=dict)
 
 

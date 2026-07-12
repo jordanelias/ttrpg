@@ -41,6 +41,28 @@ class CanonGapError(RuntimeError):
     a CANON_GAP triage flag — never catch it to substitute a fabricated default."""
 
 
+def read_text_or_gap(path: Path, *, what: str) -> str:
+    """Read a file as UTF-8 text, converting any read/decode failure into
+    CanonGapError instead of letting it propagate uncaught.
+
+    Extracted after this exact try/except-OSError shape was independently
+    hand-written three separate times in this package (here twice, and a third
+    time — differently — in harness.py's module_contracts.yaml read), which is
+    exactly the "second, drifting parser" CLAUDE.md section 8 warns against.
+    Also closes a real gap none of the three copies had: read_text(encoding=...)
+    can raise UnicodeDecodeError on invalid UTF-8, and UnicodeDecodeError is a
+    ValueError subclass, NOT an OSError subclass (confirmed:
+    issubclass(UnicodeDecodeError, OSError) is False) — so `except OSError`
+    alone silently let a non-UTF-8 file crash the run uncaught. Found by
+    adversarial review reasoning through the exception hierarchy, not by
+    tripping it in practice.
+    """
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        raise CanonGapError(f"cannot read {what} at {path}: {exc}") from exc
+
+
 class CanonResolver:
     def __init__(self, current_md_path: Path = CURRENT_MD):
         self._path = current_md_path
@@ -49,16 +71,7 @@ class CanonResolver:
     def _load_rows(self) -> dict[str, str]:
         if self._rows is not None:
             return self._rows
-        # Every other failure path in this module raises CanonGapError so
-        # Harness.run()'s `except CanonGapError` can convert it to a graceful
-        # triage flag instead of crashing the run. A bare read_text() call here
-        # would let a missing/unreadable CURRENT.md raise an uncaught OSError
-        # straight through that same except clause — found by deliberately
-        # pointing a CanonResolver at a nonexistent path.
-        try:
-            text = self._path.read_text(encoding="utf-8")
-        except OSError as exc:
-            raise CanonGapError(f"cannot read {self._path}: {exc}") from exc
+        text = read_text_or_gap(self._path, what="CURRENT.md")
         rows: dict[str, str] = {}
         for line in text.splitlines():
             m = _ROW_RE.match(line)
@@ -143,10 +156,7 @@ class CanonResolver:
                 f"to trust a value from an uncited doc"
             )
         doc_path = REPO_ROOT / doc_relpath
-        try:
-            text = doc_path.read_text(encoding="utf-8")
-        except OSError as exc:
-            raise CanonGapError(f"cannot read cited doc {doc_relpath!r}: {exc}") from exc
+        text = read_text_or_gap(doc_path, what=f"cited doc {doc_relpath!r}")
         if expected_substring not in text:
             raise CanonGapError(
                 f"{expected_substring!r} not found verbatim in {doc_relpath!r} — "
