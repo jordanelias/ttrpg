@@ -20,7 +20,15 @@ Surfaces (established by ED-IN-0010):
 - **Board** (the one rollup-status home): `designs/workplans/workplan_v6_progress.yaml`
 - **Renderer** (one rule, one home): `python3 tools/workplan_status.py [--full|--check]`
 - Status detail stays in `handoffs/HANDOFF_<LANE>.md`; decisions in the workplan §5
-  register + `canon/editorial_ledger.jsonl`. The board only points at them.
+  register + the editorial ledger (`canon/editorial_ledger.jsonl` for pre-cutover flat
+  IDs, plus every live `canon/editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries
+  — CLAUDE.md §3). The board only points at them.
+- **Dashboard** (a published rendering, not an independent data source): `docs/dashboard/`
+  (built by `tools/dashboard_data.py` from this board + `references/audit_registry.jsonl`)
+  surfaces the same workplan progress plus a "needs your decision" inbox and
+  audit/simulation verdicts. Useful as a mobile-friendly pointer for Jordan, but this
+  skill's own board + freshness gate remain authoritative — the dashboard reads from them,
+  never the other way around.
 
 ## Input validation (MANDATORY before any workflow)
 

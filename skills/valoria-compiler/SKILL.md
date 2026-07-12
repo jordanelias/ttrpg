@@ -14,14 +14,21 @@ description: >
 
 Before compiling, read the following from the working tree:
 
-- `references/canonical_sources.yaml` — confirm canonical source and compilation_current flag
+- `references/canonical_sources.yaml` — confirm canonical source path
 - `canon/patch_register_active.yaml` — pending approved patches
-- `canon/editorial_ledger.yaml` — pending editorial items
-- the canonical design doc named in `canonical_sources.yaml`
+- `canon/editorial_ledger.jsonl` (pre-cutover flat-ID items) plus every existing
+  `canon/editorial_ledger_<lane>.jsonl` relevant to the target system (see
+  `valoria-editorial-register`'s ID Law section for the lane roster) — **not**
+  `canon/editorial_ledger.yaml`, which does not exist
+- the canonical design doc named in `canonical_sources.yaml`, and its `## Status:` line
 
 If any of these paths is missing, stop — cannot compile without the repo data.
 
-**Gate check:** If `compilation_current: true` in `canonical_sources.yaml`, compilation is already up to date — do not re-compile. If `compilation_current: false`, proceed.
+**Gate check:** `references/canonical_sources.yaml` has no `compilation_current` field (that
+schema was never migrated into the live file — do not look for it). Currency is read from the
+target doc's own `## Status:` line instead (CLAUDE.md §4): if it already reads `CANONICAL` and
+no approved patches/editorial items are pending against it, compilation is already up to date —
+report that and stop. Otherwise proceed.
 
 ## Process
 
@@ -34,6 +41,10 @@ If any of these paths is missing, stop — cannot compile without the repo data.
 - Apply approved patches in sequential order by patch ID (PP-NNN)
 - Preserve section numbering unless restructuring is approved
 - For each patch applied: mark as APPLIED in patch register with date
+- If this compilation pass itself needs to allocate a new `PP-NNN` (e.g. to record a
+  restructuring patch), follow `valoria-editorial-register`'s PP Number Collision Guard —
+  re-read `references/id_reservations.yaml`'s live `next_free` immediately before assigning,
+  never reuse a cached value
 
 ### 3. Editorial Content Check
 - Scan for any content flagged `[EDITORIAL: pending user approval]`
@@ -45,18 +56,36 @@ Every compiled ruleset MUST begin with:
 > *All mechanics derive from the Philosophical Foundations. Where this document conflicts with the Foundations, the Foundations govern.*
 
 ### 5. Export
-- Output: `compilation/v[N]/[system]_checkpoint_[N].md`
-- Include Appendix: Patch Log (all changes since previous checkpoint)
-- Include Appendix: Open Items (from editorial ledger, P1 and P2 only)
+
+There is no live `compilation/` directory in this repo — nothing reads or writes one; do not
+create it. Two supported output modes instead, chosen by what the user actually asked for:
+
+- **In-place ratification (the common case, per CLAUDE.md §2's ED-1094 convention):** edit the
+  canonical design doc directly with the applied patches, flip its `## Status:` line
+  `PROPOSED`/`provisional` → `CANONICAL` (or leave it as-is if it was already canonical and this
+  pass only applied incremental patches), flip the corresponding ED ledger entry/entries'
+  `status` field, and update `CURRENT.md`'s row for that subsystem — all in the same commit. Do
+  not leave a doc's contents ratified while its `## Status:` line still says otherwise; that
+  silent-mismatch failure mode is exactly what ED-1094 exists to close.
+- **Full clean export (only when explicitly requested — a standalone flattened artifact
+  separate from the live canonical doc):** output to
+  `designs/audit/<date>-compilation-export/<system>_export.md`, matching the dated-folder
+  convention every other audit-producing skill uses (`designs/audit/<date>-<topic>/`).
+- Both modes: include Appendix: Patch Log (all changes since the previous compilation of this
+  system) and Appendix: Open Items (from the editorial ledger, P1 and P2 only).
 
 ### 6. Final Canon Guard Pass (Sonnet)
 - Run valoria-canon-guard on the compiled output
 - Any FAIL results: revert the causing patch, flag for review
 - Any PARTIAL results: note in compilation report
 
-### 7. Update canonical_sources.yaml
-- Set `compilation_current: true` for the compiled system
-- Include in the same atomic commit as the compiled output
+### 7. Ratification Bookkeeping
+- For in-place ratification: confirm the doc's `## Status:` line, the ED ledger entry/entries,
+  and `CURRENT.md` were all updated in the same commit as the compiled content (step 5) — this
+  is the loud, non-silent form ED-1094 requires; do not bundle a held-back item into this commit
+  without flagging it prominently in the commit/PR body as *not* ratified.
+- For a full clean export: no `## Status:` or `CURRENT.md` change is implied by the export
+  itself (the live canonical doc is unchanged) — only note the export's existence and location.
 
 ## Patch Format (standardized)
 ```markdown
@@ -100,7 +129,6 @@ Every compiled ruleset MUST begin with:
 - Never remove the Foundations supremacy clause
 - Preserve section numbering unless explicitly approved for restructuring
 - All output to md format
-Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
 **Post-commit verification:** after committing, re-read all modified files from the working tree and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
 

@@ -78,7 +78,11 @@ Systematic check:
 - Missing resolution procedures (what happens when X and Y conflict?)
 - Missing tables
 
-**Output:** `gap_register_update.md` — appends to `canon/editorial_ledger.yaml`
+**Output:** `gap_register_update.md` — findings feed the ED-disposition table (Output Rules
+below); there is no `canon/editorial_ledger.yaml` file. P1 gaps get filed as
+`ED-<LANE>-NNNN` entries in the relevant `canon/editorial_ledger_<lane>.jsonl`, per
+`references/id_reservations.yaml`'s allocation protocol (see `valoria-editorial-register`'s
+ID Law section) — not appended to a YAML file.
 ```
 | ID | Type | Description | Location | Severity | Status |
 ```
@@ -108,9 +112,10 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 **Output:** `core_principles_audit.md`
 
 ## Output Rules
-- Findings land in a dated `archives/audit/<date>-<topic>/` folder (matching the naming pattern
-  used throughout `archives/audit/`, e.g. `2026-06-09-faction-comprehensive/`,
-  `2026-06-11-interdependency-master/`) — not standalone files at unspecified locations.
+- Findings land in a dated `designs/audit/<date>-<topic>/` folder (matching the naming
+  pattern used throughout `designs/audit/`) — not standalone files at unspecified locations.
+  (`archives/audit/` holds older runs that have since been superseded/archived — it is
+  history only, never a target for new output; CLAUDE.md §1.)
 - Modes can run independently or as full suite (A–E); when multiple modes run in one session, their
   findings can share one dated folder (one file per mode, e.g. `formula_audit.md`,
   `number_systems_audit.md`, `mechanic_dependency_graph.md`, `gap_register_update.md`,

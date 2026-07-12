@@ -94,6 +94,28 @@ correct response — not a special case, the normal one.
   size-overflow-driven split of settled entries — see that file's own header/the ledger's
   `_split_from` fields for provenance).
 
+## PP Number Collision Guard (MANDATORY — re-read before every PP assignment)
+
+`PP-NNN` mechanical patches use the exact same `id_reservations.yaml` allocation discipline as
+`ED-<LANE>-NNNN` above — read `next_free`, form the entry, bump, co-commit. They are a separate
+counter (patches, not editorial decisions) but share the file and the protocol:
+
+1. Re-read `references/id_reservations.yaml` from the working tree right now. PP blocks are
+   per-round, not per-lane (unlike ED): find the active round's `PP: { block, next_free }` (as
+   of this writing, round D's `next_free: 810`, with the `contest_rebuild` sub-block's own PP
+   range separately tracked — check `reservations` for the current live block, not a cached
+   value).
+2. That `next_free` value IS the next PP to assign — form the entry as `PP-NNN` (no lane tag;
+   `PP-NNN` predates the ED lane split and was never split the same way).
+3. Append the entry to `canon/patch_register_active.yaml` (see that file's own header for its
+   schema — `id`, `date`, `severity`, `description`, `affects`, `status`).
+4. Increment the round's `PP.next_free` by the count allocated and co-commit
+   `references/id_reservations.yaml` in the **same commit** as the patch-register entry.
+
+Do not invent a variant format (e.g. a skill-specific `PP-SIM-NNN` prefix) — `canon/
+patch_register_active.yaml` uses plain `PP-NNN` throughout; a non-conforming prefix will not
+match `references/id_reservations.yaml`'s counters or any tooling that scans for `PP-\d+`.
+
 ## Term Reference
 
 Use `references/glossary.md` (read above) for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.

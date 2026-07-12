@@ -9,7 +9,6 @@ Inline instruction from the user overrides this table. If the user specifies eff
 
 | Skill | Default Effort |
 |-------|---------------|
-| valoria-orchestrator | 100 |
 | valoria-simulator | 125 |
 | valoria-mechanic-audit | 125 |
 | valoria-canon-guard | 100 |
@@ -17,8 +16,10 @@ Inline instruction from the user overrides this table. If the user specifies eff
 | valoria-compiler | 75 |
 | valoria-chunker | 75 |
 | valoria-arc-generator | 125 |
-| valoria-combat-simulator | 125 |
 | valoria-dice-model | 75 |
+
+`valoria-orchestrator` and `valoria-combat-simulator` rows removed 2026-07-12 (ED-IN-0038/0039)
+— both skills are retired to `deprecated/skills/`; do not re-add.
 
 ## Effort Level Definitions
 
