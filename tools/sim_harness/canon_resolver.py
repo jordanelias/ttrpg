@@ -49,7 +49,16 @@ class CanonResolver:
     def _load_rows(self) -> dict[str, str]:
         if self._rows is not None:
             return self._rows
-        text = self._path.read_text(encoding="utf-8")
+        # Every other failure path in this module raises CanonGapError so
+        # Harness.run()'s `except CanonGapError` can convert it to a graceful
+        # triage flag instead of crashing the run. A bare read_text() call here
+        # would let a missing/unreadable CURRENT.md raise an uncaught OSError
+        # straight through that same except clause — found by deliberately
+        # pointing a CanonResolver at a nonexistent path.
+        try:
+            text = self._path.read_text(encoding="utf-8")
+        except OSError as exc:
+            raise CanonGapError(f"cannot read {self._path}: {exc}") from exc
         rows: dict[str, str] = {}
         for line in text.splitlines():
             m = _ROW_RE.match(line)

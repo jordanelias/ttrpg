@@ -168,12 +168,6 @@ class Harness:
 
                 branch = outcome.detail.get("branch")
                 if branch is not None:
-                    if dp.branches and branch not in dp.branches:
-                        self.logger.triage.flag(
-                            dp.name, tier, TriageCategory.OUT_OF_RANGE,
-                            f"outcome classified into branch {branch!r}, not declared "
-                            f"in decision point's branches {dp.branches}",
-                        )
                     branch_counts[branch] += 1
                 if outcome.detail.get("stub_hit"):
                     self.logger.triage.flag(
@@ -181,6 +175,29 @@ class Harness:
                         f"adapter reported a stub/unimplemented branch at {dp.name}",
                     )
                     stub_hit = True
+                    # Break immediately, matching the two exception-based stub paths
+                    # above — without this, an adapter that sets stub_hit=True every
+                    # trial (instead of raising) would produce n duplicate STUB_HIT
+                    # flags rather than one. Found alongside the OUT_OF_RANGE spam
+                    # below by deliberately stress-testing a systematically
+                    # misbehaving adapter at n=10,000.
+                    break
+
+            # OUT_OF_RANGE is flagged once per distinct invalid branch (with its
+            # count), not once per trial: the first cut of this flagged inline
+            # inside the loop above, so a single adapter classification bug at
+            # n=10,000 produced 10,000 near-identical flags — real memory bloat and
+            # unusable CLI output, found by deliberately stress-testing a
+            # systematically-misclassifying adapter at scale.
+            if dp.branches:
+                for bad_branch, count in branch_counts.items():
+                    if bad_branch not in dp.branches:
+                        self.logger.triage.flag(
+                            dp.name, tier, TriageCategory.OUT_OF_RANGE,
+                            f"{count}/{n} trial(s) classified into branch "
+                            f"{bad_branch!r}, not declared in decision point's "
+                            f"branches {dp.branches}",
+                        )
 
             actual_n = sum(branch_counts.values())
 

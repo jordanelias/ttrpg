@@ -116,11 +116,20 @@ class TraceLogger:
         if self.triage.flags:
             cats = sorted({f.category.value for f in self.triage.flags})
             detail_bits.append(f"{len(self.triage.flags)} triage flag(s): {', '.join(cats)}")
+        today = date.today().isoformat()
+        # tools/audit_registry.py defaults a record's id to f"{skill}-{date}" when not
+        # given one explicitly — every harness run sharing a skill+date (i.e. any two
+        # runs on the same day, which is the normal case during stress testing) would
+        # silently collide on the identical id despite being genuinely different runs
+        # (different seed/adapter/verdict). Pass an explicit, content-hash-disambiguated
+        # id instead. Found by deliberately running the harness twice live in one day
+        # and observing both entries share one id.
         record = {
+            "id": f"sim-harness-{self.adapter_name}-{today}-{self.content_hash()[:8]}",
             "audit_type": "simulation_balance",
             "subsystem": subsystem,
             "skill": "sim-harness",
-            "date": date.today().isoformat(),
+            "date": today,
             "folder": folder,
             "scope": scope,
             "verdict": verdict,
