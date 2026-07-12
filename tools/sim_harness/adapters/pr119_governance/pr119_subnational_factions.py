@@ -23,7 +23,7 @@ from ...depth import DecisionPoint, Tier
 from .goldenfurt_fixture import SID
 
 
-class _FakeWorld:
+class FakeWorld:
     """Minimal stand-in satisfying infrastructure.build_infrastructure()'s only real
     requirement (`territory_id in world.territories`) without depending on the full
     sim.autoload.game_state.World construction this adapter has no other need for."""
@@ -94,7 +94,7 @@ class SubnationalFactionsAdapter(Adapter):
             # Church Governor) to confirm the violent removal path's Ob modifier is real,
             # non-zero, and capped, exactly as §1.5 + the reconciliation doc claim.
             tid = params["seggio_territory_id"]
-            world = _FakeWorld([tid])
+            world = FakeWorld([tid])
             infrastructure.build_infrastructure(tid, "Cathedral", world=world)
             infrastructure.build_infrastructure(tid, "Church Governor", world=world)
             mod = infrastructure.seizure_ob_modifier(tid, world=world)
