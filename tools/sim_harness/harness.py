@@ -68,8 +68,23 @@ class Harness:
             )
             return
         contracts_path = Path(__file__).resolve().parents[2] / "references" / "module_contracts.yaml"
-        data = yaml.safe_load(contracts_path.read_text(encoding="utf-8"))
-        entries = {m.get("module"): m for m in data.get("modules", []) if m.get("module")}
+        # This runs unconditionally, first, in Harness.run() — before even the
+        # try/except CanonGapError around resolve_params(). An unguarded read+parse
+        # here would let a missing/unreadable/malformed module_contracts.yaml raise
+        # an uncaught OSError or yaml.YAMLError straight out of run(), crashing
+        # before any trace or registry write — the same bug class as the
+        # CURRENT.md-read fix in canon_resolver.py, found by the same kind of
+        # deliberate stress test (mocking a missing file rather than touching the
+        # real one).
+        try:
+            data = yaml.safe_load(contracts_path.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError) as exc:
+            self.logger.triage.flag(
+                "contract_binding", Tier.MAJOR, TriageCategory.CANON_GAP,
+                f"cannot read/parse {contracts_path}: {exc}",
+            )
+            return
+        entries = {m.get("module"): m for m in (data or {}).get("modules", []) if m.get("module")}
         entry = entries.get(self.adapter.contract_module)
         if entry is None:
             self.logger.triage.flag(
