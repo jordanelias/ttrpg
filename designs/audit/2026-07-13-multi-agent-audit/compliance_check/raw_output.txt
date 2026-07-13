@@ -1,0 +1,2 @@
+[COMPLIANCE] CI mode — checking local repo state
+[COMPLIANCE ✓] All files within thresholds
