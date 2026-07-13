@@ -1,6 +1,6 @@
 # Governance Consolidation (v1) — the reconciled proposal head
 
-## Status: D1–D5 RATIFIED (2026-07-13, ED-IN-0046) — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. §6 decisions D1–D5 are RULED (each accepted as stated below, per their own "(rec: yes)"); the Phase-4 execution plan and §2 item dispositions are downstream of that ruling and still track their own authoring status. **D6 (the G606 recall-clock wiring fork, filed by `designs/architecture/ners_vsg_reconciliation_v1.md`) is a SEPARATE, still-open decision — not resolved by this ruling.**
+## Status: D1–D6 RATIFIED (D1–D5: 2026-07-13, ED-IN-0046; D6: 2026-07-13, ED-IN-0047) — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. §6 decisions D1–D6 are all RULED; the Phase-4 execution plan and §2 item dispositions are downstream of that ruling and still track their own authoring status. **D6 RULED 2026-07-13: cumulative per-Defy-season suspicion accrual is canonical, on the explicit condition that E11 (a symmetric suspicion-reduction counter-mechanic, §3 below) lands in the same authoring pass as D5's merge — not deferred.**
 
 **What this is.** The single consolidated head for this session's governance proposal arc, reconciled
 against the **pre-existing built substrate** the earlier work was blind to. It collates six streams into
@@ -102,6 +102,21 @@ Ordered by leverage. E1 is the single highest-value move and is **already design
   Flourishing (500-seed: 3.7 vs 659/seed). Beyond E1's valves, the world needs a way for *good* governance
   to compound (a Flourishing→Prosperity→Opportunity loop), or the only stable attractor is collapse. This is
   the highest-leverage *balance* intervention and is currently no one's item.
+- **E11 (NEW, 2026-07-13, ED-IN-0047) · D6 RULED — a symmetric suspicion-reduction counter to G606's
+  cumulative accrual.** Jordan's ruling: "if there is a way to advance suspicion from non-compliance, there
+  must be a way to reduce suspicion by over-compliance and consistency/predictability. Build the counter to
+  cumulative." This settles D6 in favor of the cumulative-per-Defy-season model (matching the spine's own
+  already-stated spec — "suspicion accrues... capped +1/season") **on the explicit condition that E11 lands
+  in the same authoring pass, not as optional follow-on**: an ongoing suspicion-decay term driven by
+  sustained compliance/consistency (not merely the one-shot `Submit to audit` escape), so a governor who
+  reliably delivers can walk the recall clock back down, not just survive one crisis. This is the concrete,
+  governance-specific instance of the general principle Jordan stated for VSG's calibration (§7 below):
+  "every negative must be able to be offset by some kind of positive... good, bad and middling governance
+  must all be possible, but must all be unpredictable and dynamic." E11 is a co-requisite of authoring D5's
+  merge into `faction_politics_v30.md` — the merge cannot land without it (mirrors E1's own E3/E7
+  co-requisite pattern per §3 above and `ners_vsg_reconciliation_v1.md §3`). Specific decay curve (rate,
+  what counts as "consistency," interaction with the Standing-6+ gate) is authoring-level detail, not a
+  further Jordan decision.
 
 ---
 
@@ -161,9 +176,13 @@ Items with no stated recommendation anywhere in this doc were explicitly NOT res
    two-Mandates collision.
 5. **D5 RULED YES** — §1.0d merges into the suspicion/recall spine as a Standing-6+ modifier, not a
    parallel cascade: one signal, one recall scene (G606), one escape (`Submit to audit`, −2 suspicion).
-   **The spine's WIRING — does suspicion advance every non-compliant season, or only on a specific
-   card draw (`ners_vsg_reconciliation_v1.md` D6) — is NOT ruled by this and stays open**; the merge
-   cannot be authored into `faction_politics_v30.md` until D6 is answered.
+6. **D6 RULED (2026-07-13, ED-IN-0047)** — the spine's wiring is cumulative per-Defy-season accrual
+   (matching the spine's own already-stated spec), **on the explicit condition that E11 — a symmetric,
+   ongoing suspicion-reduction mechanic driven by sustained compliance/consistency, not just the one-shot
+   escape — lands in the same authoring pass**, per Jordan's ruling: "if there is a way to advance
+   suspicion from non-compliance, there must be a way to reduce suspicion by over-compliance and
+   consistency/predictability." D5's merge into `faction_politics_v30.md` may now be authored, but only
+   with E11 included — see §3's E11 entry for the full ruling text.
 6. **RATIFIED** — the six items §2 called a clean "RATIFY" with no open sub-question: §1.0c
    (ED-FA-0020), §2.5a mastership + entry forks (ED-FA-0022/0023), §1.3c (ED-SE-0023), §3.3b
    (ED-SE-0021). (The governance-ripple substrate and the 58-card grounded-deck architecture items in
@@ -176,7 +195,18 @@ Items with no stated recommendation anywhere in this doc were explicitly NOT res
    bundled port. This is a build/engineering task, not a ratification, and remains tracked in the
    reconciliation doc's workplan.
 
-**Still genuinely open (no recommendation exists anywhere to accept, not resolved by "ratify all"):** D6
-(G606 wiring), B1 (faction count 4–8, `ED-FA-0001`), B2 (S-006's identity), B12 (the Territory-naming
-collision) — all per `ners_vsg_reconciliation_v1.md §5`. Also explicitly held back: Part 41's
-Territory-scale content (Relay Tier/Beacon Network), per that same document's loud-exception flag.
+**RULED 2026-07-13 (second pass, direct Jordan input, not "ratify all"-inferred):** D6 (above) and B1
+— starting faction count is **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund/Himmelenger,
+exactly matching `valoria_political_hierarchy_v30.md`'s existing 3-duchy + Church-special-entity
+structure), with an explicit, intentional emergent-faction mechanic allowed (Restoration Movement via
+`insurgency_pipeline_v30`, Löwenritter-style post-coup splits via `faction_succession_split_v30`, an
+Altonia-usurper archetype named as a further valid emergence case) — see `ED-FA-0001` (resolved) and
+`ners_vsg_reconciliation_v1.md §5`.
+
+**Still genuinely open:** B2 (S-006's identity — context gathered, awaiting Jordan's call), B12 (a
+real conflict surfaced between the new Settlement→Territory→Province hierarchy Jordan described and
+this doc's existing companion `valoria_political_hierarchy_v30.md`'s "Territory = Settlement"
+equivalence — needs Jordan's resolution before any doc is edited, see `ners_vsg_reconciliation_v1.md
+§5`). Also explicitly held back: Part 41's Territory-scale content (Relay Tier/Beacon Network), per
+that same document's loud-exception flag — now additionally gated on B12's resolution, since Part 41's
+"Territory scale" may or may not be the same tier Jordan just described.

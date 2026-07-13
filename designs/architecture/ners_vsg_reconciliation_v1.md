@@ -1,6 +1,6 @@
 # NERS-Review / VSG Reconciliation (v1) — merging the harness-verification empirical branch with the generation-methodology design branch
 
-## Status: D1–D5 RATIFIED (2026-07-13, ED-IN-0046) · D6/B1/B2/B12 still OPEN — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record the same ruling) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. Ratification basis: Jordan's "ratify commit all" (2026-07-13) applied to the scoped tier described in reply, unobjected, plus the review-and-merge of this doc as PR #129 — see `governance_consolidation_v1.md §6` for the full ruling record. **Four items were explicitly NOT resolved because no recommendation existed anywhere to accept — see §5's update below, unchanged from the original ask.**
+## Status: D1–D6 RATIFIED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047) · B2 context-gathered, awaiting Jordan · B12 surfaces a real conflict with existing Class A canon, unresolved — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record the same rulings) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. See §5 for the full, twice-updated ruling record — nothing was inferred or fabricated for B2/B12; both await direct Jordan input.
 
 **What this is.** Two independent PRs landed on `main` within the same session window and were never
 cross-read against each other:
@@ -180,25 +180,62 @@ items governance_consolidation_v1 §2 already called a clean RATIFY (§1.0c, §2
 §1.3c, §3.3b). Item 3 below (Phase-1 resequencing) is accepted as part of that same ruling — it was
 this document's own recommendation and drew no objection.
 
-**Still genuinely open — "ratify commit all" could not resolve these because no recommendation existed
-anywhere to accept, and resolving them now would mean fabricating an answer and attributing it to
-Jordan. Matches the repo's own precedent (the pre-existing faction-count gap, item 3 below: "no default exists — deliberately NOT resolved by
-a prior ratify-all").**
+**RULED, second pass (2026-07-13, ED-IN-0047, direct Jordan input in conversation, not inferred from
+"ratify commit all"):**
 
-1. **D6.** Which G606 wiring model ships — cumulative-per-season advance (near-total recall
-   dominance) or specific-card-draw advance (recall cascades nearly absent)? This determines what
-   Goldenfurt-derived settlements *feel like* to govern, not just an implementation detail. **Blocks
-   authoring D5's merge into `faction_politics_v30.md`.**
-2. **B2.** S-006's identity — Goldenfurt Town in Kronmark (T2), or Lowenskyst Fortress/Border (T3)?
-   Two branches (VSG's calibration test, and retroactively every PR#127 adapter that used the fixture)
-   are blocked or already-exposed on this. Lean offered earlier (installed-base: virtually everything
-   built assumes Goldenfurt/Kronmark) but not treated as a ruling.
-3. **B1.** Faction count 4–8 (`ED-FA-0001`, filed 2026-07-05, no default). Blocks VSG's F-stack and P2.
-4. **B12.** Does the sourcebook's Territory/Province stack (R-series) mean the same thing as Part 41's
-   Territory *scale*? Neither doc cites the other.
-5. **The held-back item (Phase 6), unaffected by the ruling above.** Part 41's Territory-scale content
-   (Relay Tier/Beacon Network) remains explicitly NOT bundled into "author Part 41 now" — it needs
-   `engine_clock` authored first and B12 resolved. This flag stands regardless of the D1–D5 ruling.
+1. **D6 RULED.** Cumulative per-Defy-season suspicion accrual is canonical (matches the suspicion/
+   recall spine's own already-stated spec), **on the explicit condition that E11 lands in the same
+   authoring pass** — a new, symmetric, ongoing suspicion-*reduction* mechanic driven by sustained
+   compliance/consistency/predictability, not merely the existing one-shot `Submit to audit` escape.
+   Jordan: "if there is a way to advance suspicion from non-compliance, there must be a way to reduce
+   suspicion by over-compliance and consistency/predictability. Build the counter to cumulative." See
+   `governance_consolidation_v1.md §3` E11 for the full ruling. **Unblocks** authoring D5's merge into
+   `faction_politics_v30.md`, provided E11 ships with it.
+2. **B1 RULED.** Starting faction count = **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund) —
+   independently confirmed against `valoria_political_hierarchy_v30.md`'s existing 3-duchy +
+   Church-special-entity structure, not an arbitrary pick. Emergent factions are explicitly in scope
+   and intentional: Restoration Movement (`insurgency_pipeline_v30`), Löwenritter-style post-coup
+   splits (`faction_succession_split_v30`), and an Altonia-usurper archetype are named as valid
+   emergence cases, reusing the F-stack's already-designed F6 mechanisms. **Resolves `ED-FA-0001`.**
+
+**Context gathered, still awaiting Jordan's call — not resolved by inference:**
+
+3. **B2.** Not really a design fork — an abandoned mechanical fix. `valoria_geography_v30.yaml` (the
+   map source of truth) has no Goldenfurt at all and still says S-006=Lowenskyst Fortress,
+   S-007=Lowenskyst Garrison Town. `settlement_layer_v30.md`'s own settlement table already flipped
+   this (S-006=Goldenfurt/Kronmark, S-007=Lowenskyst Fortress) via a migration note at lines 488–489 —
+   but the same file's line 912 still has a stale reference to the old numbering, and the geography
+   YAML was never touched at all (Goldenfurt has zero coordinates/polygon/roads there). Lean: finish
+   the already-started fix (line 912's stale ref + actually adding Goldenfurt to the geography YAML),
+   since that's what `settlement_layer_v30.md`'s own primary table and all of `goldenfurt_slice/`
+   already assume. Awaiting confirmation.
+
+**A NEW finding, surfaces a real conflict with existing Class A canon — do not write anything for this
+until Jordan resolves it:**
+
+4. **B12, sharpened.** Jordan's ruling (2026-07-13, in conversation) describes a genuine hierarchy
+   expansion: Settlement (people, local factions, local governance) → **Territory** (multiple
+   settlements, its own levers/pressures) → **Province** (multiple territories, provincial-scale
+   factions, provincial governance) → national (Parliament). This directly conflicts with
+   `valoria_political_hierarchy_v30.md` (PP-726, **existing Class A canon**), which states explicitly:
+   *"**Territory = Settlement** is the smallest political unit"* — i.e., current canon has NO
+   intermediate tier between Settlement and Province at all; "Territory" is currently just a synonym
+   for Settlement. Jordan's ruling also specifies that local/provincial/national-scale factions are
+   independent tiers (not necessarily nested), that factions hold *people* rather than territory as
+   their power base, and that settlements/territories/provinces can become independent of — or be
+   claimed directly by — a faction from a different scale (e.g., a single settlement claimed by a
+   national faction like the Restoration Movement without an intervening territory/province
+   membership). This is real, substantial, well-specified new content — but it needs to land as a
+   reconciliation against PP-726, not a silent overwrite. **Two readings offered to Jordan, awaiting
+   his pick** (see the session's direct exchange): (a) insert a genuinely new Territory tier between
+   Settlement and Province, reworking PP-726 §2.1–§2.5 around it; (b) some other mapping onto PP-726's
+   existing Province/Territory=Settlement structure. **Nothing in `generation_sourcebook_v1.md`'s
+   R-series or any settlement/territory doc should be edited for B12 until this lands.**
+5. **The held-back item (Phase 6), unaffected by the D6/B1 ruling above.** Part 41's Territory-scale
+   content (Relay Tier/Beacon Network) remains explicitly NOT bundled into "author Part 41 now" — it
+   needs `engine_clock` authored first and B12 resolved. B12's newly-discovered PP-726 conflict makes
+   this gate *stronger*, not weaker: Part 41's "Territory scale" may or may not be the same tier
+   Jordan just described, and that can't be known until B12 lands.
 
 ---
 

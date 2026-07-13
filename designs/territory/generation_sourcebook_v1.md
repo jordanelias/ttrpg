@@ -151,7 +151,7 @@ All three generators are **designable now but sit on unbuilt ground.** Blockers,
 
 | ID | Blocker | Blocks | Source |
 |---|---|---|---|
-| **B1** | **Faction count 4–8 unreconciled** (ED-FA-0001, needs_jordan; no default) | faction roster (F-stack), P2 settlement ownership | `faction_layer §587`; churn fork-10 |
+| **B1** | ~~Faction count 4–8 unreconciled~~ **RESOLVED 2026-07-13 (ED-IN-0047, ED-FA-0001 closed)**: starting count = **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund), matching `valoria_political_hierarchy_v30.md`'s existing 3-duchy + Church-special-entity structure. Emergent factions beyond the 4 are explicit and intentional (RM via `insurgency_pipeline_v30`, Löwenritter-style post-coup splits via `faction_succession_split_v30`, an Altonia-usurper archetype) — the F-stack's F6 "Emergence path" row already names these mechanisms; this ruling confirms they're the intended roster-growth path, not a gap | faction roster (F-stack), P2 settlement ownership | `faction_layer §587`; churn fork-10; `designs/architecture/governance_consolidation_v1.md §6` |
 | **B2** | **S-006 triple-booked** (T3 Lowenskyst / Goldenfurt Town / Lowenskyst Fortress) | VSG calibration fixture | `generation_methodology §7` |
 | **B3** | **Type-taxonomy drift** — Village/Fortress-City/Cathedral-City used but undefined in §1.2/§1.4/§3.2/§4.5 (cross-confirmed 3×: audit H3, stress-01 F1) | P4 Type paradigm | `2026-06-22-territory-settlement-audit` |
 | **B4** | **Inert L/PS** — declared, never read/written; faction oracle still pre-LPS-1 5-stat model, no Mandate aggregation | F3, P6/P11 feedback | `unaddressed-areas U-1`; `contest-settlement-faction-interface §2.4b` |

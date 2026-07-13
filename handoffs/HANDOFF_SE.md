@@ -110,15 +110,33 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
-- **D1–D5 RULED 2026-07-13 (ED-IN-0046)** — `governance_consolidation_v1.md §6` and
+- **D1–D6 all RULED 2026-07-13 (ED-IN-0046/0047)** — `governance_consolidation_v1.md §6` and
   `ners_vsg_reconciliation_v1.md` are both updated with the full ruling record. SE-lane concrete
   effect: §1.3a's D3 gate is cleared (Compact = a recurring `Debt` subtype — E3's subsistence
   floor is the remaining authoring gap); §1.0c (ED-FA-0020, FA-lane but composes with SE) and
   four SE items (Za patron-lapse ED-SE-0021, Ordenanza ED-SE-0023, plus FA's 2.5a) are RATIFIED
   outright — **authoring the ratified text into `governance_play_redesign_v1.md`/
   `settlement_layer_v30.md` as CANONICAL prose is now the concrete next action**, not a decision
-  wait. B1 (faction count) and B2 (S-006's identity) remain genuinely open — no recommendation
-  existed for either, so the ruling did not touch them.
+  wait. **B1 (faction count) is RULED**: starting count = 4, matching `valoria_political_hierarchy_v30.md`'s
+  duchy+Church structure exactly; `ED-FA-0001` resolved.
+- **B2 — context gathered 2026-07-13, awaiting Jordan's confirmation, not yet a ruling.** Not really
+  a design fork: `valoria_geography_v30.yaml` (the map) has no Goldenfurt at all and still uses the
+  old S-006=Lowenskyst-Fortress/S-007=Garrison-Town numbering; `settlement_layer_v30.md`'s own
+  settlement table already flipped this (S-006=Goldenfurt/Kronmark, S-007=Lowenskyst Fortress) via a
+  migration note at lines 488–489, but the same file's line 912 has a stale reference to the old
+  numbering, and the geography YAML was never updated at all. Lean offered: finish the
+  already-started fix (line 912 + actually add Goldenfurt to the geography YAML with real
+  coordinates/polygon/roads), matching what `settlement_layer_v30.md`'s primary table and all of
+  `goldenfurt_slice/` already assume.
+- **B12 — a live worldbuilding decision, conflicts with existing Class A canon. Do NOT edit any
+  settlement/territory doc for B12 until it lands.** Jordan described a genuine hierarchy expansion
+  (Settlement → Territory [multiple settlements] → Province [multiple territories]) that directly
+  contradicts `valoria_political_hierarchy_v30.md` (PP-726)'s explicit "Territory = Settlement"
+  equivalence — PP-726 currently has no tier between Settlement and Province at all. Two readings
+  offered to Jordan (insert a new Territory tier and rework PP-726 §2.1–§2.5 around it, vs. some
+  other mapping onto PP-726's existing structure) — see `ners_vsg_reconciliation_v1.md §5` item 4
+  for the full finding, including the people-based-faction-power and cross-scale-independence content
+  Jordan specified alongside it.
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13) before resuming any
   item below.** It cross-reads `governance_consolidation_v1.md`'s D1–D5/E1–E7 decision surface
   against `tools/sim_harness/`'s 19-adapter empirical pass

@@ -110,13 +110,28 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
-- **D1–D5 RULED 2026-07-13 (ED-IN-0046)** — see `governance_consolidation_v1.md §6` for the full
-  record. FA-lane effect: §1.0c Court Attendance (ED-FA-0020) and both §2.5a Guild forks
-  (ED-FA-0022/0023) are RATIFIED outright — author into `faction_politics_v30.md` as CANONICAL
-  prose next. §1.0d (ED-FA-0021, Kaochengfa) is ruled to MERGE into the suspicion/recall spine as
-  a modifier, **but `needs_jordan` stays true**: the spine's wiring (D6 — does suspicion advance
-  every non-compliant season, or only on a specific card draw?) has no stated recommendation
-  anywhere and blocks authoring this merge until answered.
+- **D1–D6 all RULED 2026-07-13 (ED-IN-0046/0047)** — see `governance_consolidation_v1.md §6` for the
+  full record. FA-lane effect: §1.0c Court Attendance (ED-FA-0020) and both §2.5a Guild forks
+  (ED-FA-0022/0023) are RATIFIED outright — author into `faction_politics_v30.md` as CANONICAL prose
+  next. §1.0d (ED-FA-0021, Kaochengfa) MERGES into the suspicion/recall spine as a modifier, wired as
+  cumulative per-Defy-season accrual (D6), **but authoring it requires landing E11 in the same
+  pass** — a new symmetric suspicion-*reduction* mechanic (sustained compliance/consistency), per
+  Jordan's ruling: "if there is a way to advance suspicion from non-compliance, there must be a way
+  to reduce suspicion by over-compliance." `needs_jordan` is now FALSE on ED-FA-0021 — this is an
+  authoring task, not a further decision wait.
+- **B1 RULED 2026-07-13 (ED-IN-0047)** — starting faction count = 4 (Valorsmark, Hafenmark, Varfell,
+  Church of Solmund); `ED-FA-0001` resolved. Emergent factions are explicit and intentional (RM,
+  Löwenritter-style post-coup splits, an Altonia-usurper archetype) reusing already-designed
+  mechanisms — see `ED-FA-0001`'s ledger entry.
+- **B12 is a live, cross-lane worldbuilding decision — do not author faction-tier content assuming
+  either reading until it lands.** Jordan described local/provincial/national-scale factions as
+  independent tiers (not necessarily nested — a local faction need not belong to a provincial one),
+  factions holding *people* rather than territory as their power base, and settlements/territories/
+  provinces able to become independent of, or be claimed directly by, a faction from a different
+  scale (e.g., a single settlement claimed by a national faction like the Restoration Movement). This
+  conflicts with existing Class A canon (`valoria_political_hierarchy_v30.md`'s "Territory =
+  Settlement" equivalence) — see `ners_vsg_reconciliation_v1.md §5` item 4 for the full finding and
+  the two readings offered to Jordan.
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13)** before landing
   HRE-2/HAB-4/IT-2 below — `tools/sim_harness/`'s NERS review found HRE-2 needs an explicit
   acquisition cost added (currently an uncosted 81%-favorable bet, E10), HAB-4 needs a Ministry
