@@ -909,7 +909,7 @@ Invading a province now requires capturing (or bypassing) its settlements. The S
 
 **Province capture:** When the Seat is captured, provincial control transfers to the invader. Non-Seat settlements with Order ≥ 3 may resist (maintaining their current governor). The invader must reduce each resistant settlement individually or grant them autonomy (subnational management) to avoid further conflict.
 
-**Fortress as chokepoint:** A Fortress settlement in the invader's path forces engagement — it cannot be bypassed unless the invader's Military exceeds the Fortress Defense by 3+. Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass — effectively impossible for most armies. This is the design's intended function.
+**Fortress as chokepoint:** A Fortress settlement in the invader's path forces engagement — it cannot be bypassed unless the invader's Military exceeds the Fortress Defense by 3+. Lowenskyst Fortress (S-007, Defense 4) requires Military 7+ to bypass — effectively impossible for most armies. This is the design's intended function.
 
 **Surrender on Terms vs Storm at conquest (FA-6, PROPOSED — jointly owned with the faction_action.py lane, ED-FA-0013, 2026-07-08):**
 

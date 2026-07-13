@@ -123,15 +123,20 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   Church of Solmund); `ED-FA-0001` resolved. Emergent factions are explicit and intentional (RM,
   Löwenritter-style post-coup splits, an Altonia-usurper archetype) reusing already-designed
   mechanisms — see `ED-FA-0001`'s ledger entry.
-- **B12 is a live, cross-lane worldbuilding decision — do not author faction-tier content assuming
-  either reading until it lands.** Jordan described local/provincial/national-scale factions as
-  independent tiers (not necessarily nested — a local faction need not belong to a provincial one),
-  factions holding *people* rather than territory as their power base, and settlements/territories/
-  provinces able to become independent of, or be claimed directly by, a faction from a different
-  scale (e.g., a single settlement claimed by a national faction like the Restoration Movement). This
-  conflicts with existing Class A canon (`valoria_political_hierarchy_v30.md`'s "Territory =
-  Settlement" equivalence) — see `ners_vsg_reconciliation_v1.md §5` item 4 for the full finding and
-  the two readings offered to Jordan.
+- **B12 RULED 2026-07-13 — Jordan explicitly overrules existing canon.** Local/provincial/
+  national-scale factions are independent tiers (a local faction need not belong to a provincial
+  one), holding *people* rather than territory as their power base (named examples: local — guilds,
+  independence protests, militia, unions/cooperatives, councils; provincial — guilds, bureaucracies,
+  councils, independence movements, large unions/cooperatives; national — Restoration Movement,
+  Löwenritter). Settlements/territories/provinces can become independent of, or be claimed directly
+  by, a faction from a different scale (e.g., a settlement claimed straight by the Restoration
+  Movement). Two authorities bypass the normal chain entirely: the monarch (any duchy/province/
+  territory/settlement, not just the Crown's own duchy) and Parliament (no fixed chain position, can
+  forcibly impact any tier — composes with the existing Parliamentary Censure mechanics). Full ruling
+  + the Settlement→Territory→Province hierarchy it's paired with: `designs/territory/scale_hierarchy_v1.md`,
+  overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. **Do not author faction-roster
+  content assuming the old territory-nesting model** — the F-stack's independent-tier + people-based
+  power model is now the authoring target (tracked, unexecuted — see the new doc's §6 item 3).
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13)** before landing
   HRE-2/HAB-4/IT-2 below — `tools/sim_harness/`'s NERS review found HRE-2 needs an explicit
   acquisition cost added (currently an uncosted 81%-favorable bet, E10), HAB-4 needs a Ministry
