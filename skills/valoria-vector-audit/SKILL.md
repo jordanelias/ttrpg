@@ -214,6 +214,19 @@ PP entry references the audit folder; ED entry describes what was found.
   `python3 scripts/structure_audit.py --repo-root . --output-dir <run>` → `structure_register.md` +
   `data/*.json`. Regression-pinned in `tests/valoria/test_structure_audit.py` against PR #131's
   hand-caught L2 defects (the mass_battle fabricated emit, the personal_combat dead emits).
+- `scripts/pointer_audit.py` — the observatory's **G_pointer** layer (WS0b, added 2026-07-13; the WS1
+  registry-work progress meter). For every stat/quantity identifier on the same surfaces A17 scans
+  (`module_contracts.yaml` `state`/`derivations` + `sim/*.py` `stat_deltas`/`impact_vector` literals),
+  does it resolve to a `descriptor_registry`/`names_index` key, or is it hardcoded pointer-debt? It
+  **reuses A17's rule, does not reimplement it** (CLAUDE.md §8) — imports `tools/quantity_registry.py`
+  `resolve()` and `tools/ci_quantity_vocabulary_check.py`'s scanners verbatim; A17 is the CI gate, this
+  is the graph/meter VIEW. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates.** The unresolved list is *candidate* debt — it explicitly flags that some rows are
+  computed/internal quantities (e.g. `cumulative_damage`, `L_s`) that A17 calls "expected backlog, not
+  a bug," so triage before acting. Invoke:
+  `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>` → `pointer_register.md` +
+  `data/{g_pointer,pointer_scorecard}.json`. Tests: `tests/valoria/test_pointer_audit.py` (pins the
+  §8 reuse-by-identity + the A17 ground-truth count match).
 
 ## Cross-references
 
