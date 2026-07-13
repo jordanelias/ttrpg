@@ -60,10 +60,17 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 
 ## Step 3 — Pipeline Stages
 
-The pipeline's specification is this stage table. **`scripts/vector_audit.py` does NOT currently
-implement it** — its `main()` has no stage dispatcher, only a stub that prints a pointer back to
-the 2026-04-29 run (see "Reference Files" below, ED-IN-0035/ED-IN-0036). A rerun of this audit is
-blocked on someone implementing the dispatcher against this table, not on running the script as-is:
+The pipeline's specification is this stage table. **`scripts/vector_audit.py` now implements it**
+(stage dispatcher landed 2026-07-13, repo-realignment WS0a): it reads the working tree, builds the
+five graphs, runs P1/P2/P3 validation and all 8 diagnostic modes, and writes the outputs below. Run
+it directly:
+
+```
+python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
+```
+
+It is **working-tree only** (no GitHub fetch) and degrades gracefully without `numpy`/`sklearn` (the
+supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage table:
 
 | Stage | What | Output |
 |---|---|---|
@@ -187,13 +194,15 @@ PP entry references the audit folder; ED entry describes what was found.
 - `references/methodology.md` — v3 multi-graph triangulation specification (full §3 procedure, all pre-committed thresholds, class taxonomy)
 - `references/diagnostic_modes.md` — A through H mode specifications with worked examples
 - `references/v1_v2_v3_history.md` — methodology evolution, why each pivot was needed (institutional memory)
-- `scripts/vector_audit.py` — **STUB, not a runnable pipeline** (found 2026-07-11, audit-ecosystem
-  consolidation ED-IN-0035): `main()` has no stage-execution dispatcher (`# Stage execution
-  dispatcher would go here`) and just prints a pointer back to the original 2026-04-29 run. No
-  other file in the repo implements the pipeline. **A rerun of this audit is currently blocked on
-  implementing the stage dispatcher this file only scaffolds** — that is real engineering work,
-  not a methodology-delta note. Do not attempt to invoke this script expecting output; if asked to
-  rerun the audit, say so plainly rather than reporting a partial or fabricated result.
+- `scripts/vector_audit.py` — **runnable pipeline** (stage dispatcher implemented 2026-07-13,
+  repo-realignment WS0a; supersedes the 2026-07-11 STUB status noted under ED-IN-0035/0036).
+  Implements Stages 1–6 (Stage 0 pilot + Stage 7 discourse overlay reserved), reads the working
+  tree only, and writes `data/*.json` + `02_weakness_register.md` + `03_validation_report.md`.
+  Reuses the in-file `SEED_TOKENS`/`PILOT_TOKENS`/`CLASSES`/helper scaffolding. `numpy`/`sklearn`
+  are optional (only the supporting TF-IDF graph needs them). Invoke via the command in Step 3.
+  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run;
+  validation may still report FAILED (P2 conviction-symmetry) — that is a real finding, not a bug
+  (methodology §3.8).
 
 ## Cross-references
 
