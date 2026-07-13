@@ -1,7 +1,7 @@
 # Vectorized Settlement Generation (VSG v1) — a vertical stack of weighted paradigms with noisy throughlines
 
 ## Status: PROPOSAL / working notes, Jordan-vetoable
-## Date: 2026-07-13 · Lane: SE · Reference draw: `goldenfurt_slice/` · Reifies: `goldenfurt_slice/generation_methodology.md §6`
+## Date: 2026-07-13 · Lane: SE · Reference draw: `goldenfurt_slice/` · Reifies: `goldenfurt_slice/generation_methodology.md §6` · Grounding sweep: `generation_sourcebook_v1.md` (settlement + faction + territory stacks, canon tables, blocker register)
 
 **What this is.** A generator design that reifies the tacit authoring stack that produced Goldenfurt
 (`goldenfurt_slice/generation_methodology.md`) into an explicit, seeded, reproducible procedure. A
