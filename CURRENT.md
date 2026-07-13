@@ -28,7 +28,9 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
+_Last reconciled: 2026-07-13 (**PR#127/#128 reconciliation** — `designs/architecture/ners_vsg_reconciliation_v1.md`
+cross-reads the `tools/sim_harness/` empirical pass against the VSG settlement-generator proposal;
+settlement/territory row updated above). Prior reconcile: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
 paragraph above; `docs/dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
 `tools/ci_audit_registry_check.py`). Prior reconcile: 2026-07-09 (**Comparative-governance-research docket round 2** — **Comparative-governance-research docket round 2** — Jordan-requested
 extension of the 2026-07-08 FA/SE historical-precedent docket into Byzantium, feudal/imperial
