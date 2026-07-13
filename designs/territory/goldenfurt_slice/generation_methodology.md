@@ -171,7 +171,9 @@ To make the next settlement a procedure, not a ritual:
 
 **Recommended build:** promote steps 1–2 into a committed `settlement_generator` (weighted slice
 tables → seeded draw → threaded settlement pack), so the sampler is a tool with a fixed cross-platform
-seed, not an in-session process that "died three times."
+seed, not an in-session process that "died three times." **→ Now proposed as
+`../settlement_generator_v1.md` (VSG v1) — the vertical stack of weighted paradigms with noisy
+throughlines, extended to characters and events, calibrated to reproduce this slice.**
 
 ---
 
