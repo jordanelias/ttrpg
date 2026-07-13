@@ -12,10 +12,18 @@
   (vector_audit, BLOCKED/stub). Read in full; it already logged "no compliance_check cross-reference
   available" against a zero-file inventory. That pass ran before mechanic_audit/module_adjudicator had
   written anything — this pass now has both, so the picture is fuller.
-- `mechanic_audit/` — 6 subsystem folders, each with 5 files. Complete. Read all 6
-  `gap_register_update.md` in full; grepped `formula_audit.md`/`core_principles_audit.md`/
-  `number_systems_audit.md` across all 6 subsystems for hits on the compliance-relevant filenames
-  (`module_contracts.yaml`, `values_master.yaml`, `mechanical_terms_index.md`, `coverage_matrix.md`).
+- `mechanic_audit/` — at first read (03:33) held 6 complete subsystem folders; **re-checked at this
+  pass (post-architecture-completion) and now holds 7 complete subsystem folders** (`architecture`,
+  `faction_political`, `fieldwork_investigation`, `mass_battle`, `personal_combat`,
+  `settlement_territory`, `social_contest`; the 8th, `threadwork`, is an empty directory — no files —
+  consistent with `00_cross_reference_report.md`'s note that the threadwork mechanic_audit pass never
+  ran). Read all `gap_register_update.md` in full; grepped `formula_audit.md`/
+  `core_principles_audit.md`/`number_systems_audit.md` across all 7 populated subsystems (including a
+  fresh re-grep of the newly-completed `architecture/` folder) for hits on the compliance-relevant
+  filenames (`module_contracts.yaml`, `values_master.yaml`, `mechanical_terms_index.md`,
+  `coverage_matrix.md`, `HANDOFF.md`, `numeric_bounds_report.yaml`, `npc_registry.yaml`,
+  `00_philosophical_foundations.md`). `architecture/` adds **zero** new hits — the finding below is
+  unchanged by its completion.
 - `module_adjudicator/` — 4 files, complete (`module_flowchart.mermaid`, `state_graph.mermaid`,
   `module_map_flat.md`, `verdict_full_graph.md`). Read `module_map_flat.md` and `verdict_full_graph.md`
   in full.
