@@ -36,12 +36,19 @@ end-to-end; it does not re-derive every one of the ~150 config constants by hand
 |---|---|---|---|---|
 | A3.1 | Wound Interval: `WI = round(End + 4 + 0.4×Spirit)` · Health: `round(WI×(MaxWounds+1) + 0.25×Strength×End)` | `designs/scene/combat_engine_v1/combatant.py:35-42` (`wound_interval`, `health_full`) — **matches** `designs/scene/derived_stats_v30.md §4.1` exactly (lines 55-72, "AUTHORITATIVE (PP-716)", D-A update ED-1021 2026-06-18) | `params/core.md:158`'s own Health row still states the **pre-D-A** formula `(End+6) × (MW+1)`, range "14–48" — it omits both the Spirit-weighted Wound-Interval term (`+0.4×Spirit`, base lowered 6→4) and the Strength→Health survivability buffer (`+0.25×Strength×End`) that `derived_stats_v30.md §4.1` and the live `combatant.py` both implement. The row does cite `derived_stats_v30.md §4.1` as authoritative in bold, so a careful reader is pointed to the correct formula — but the row's *own* formula/range column is stale and would mislead anyone who reads only `params/core.md` (which CLAUDE.md §5 names as exactly the doc a number-into-Godot pass is supposed to resolve against). Concretely: at End=4/Spirit=3/Str=4 the stale formula gives `(4+6)×3=30`; the correct formula gives `round((4+4+1.2)×3 + 0.25×4×4)=round(27.6+4)=32` — a ~7% discrepancy that would propagate into a Godot Health stat if hand-transcribed from the wrong row. | **P2 — see gap register** |
 
+## A4 — Stamina formula: a second doc-internal (not cross-doc) inconsistency (verification pass)
+
+| ID | Formula | Source | Issue | Status |
+|---|---|---|---|---|
+| A4.1 | `stamina_max(end,spirit) = 3×end + 2×spirit` | `combatant.py:45-47` (`stamina_max`), thin-accessed by `systems.py:92-93` | Live code matches `derived_stats_v30.md` §4.2's own **Formula** row exactly (hand-verified `stamina_max(7,7)==35`). But that same §4.2 table's **Range** row states "5–47 (Spirit/End 1–7)" — internally inconsistent with its own Formula row one line above (max is 35, not 47; even the prior formula it says it replaces, `Endurance×5`, tops out at 35). This is a single-table, doc-only transcription error — not a cross-doc drift like A3.1, and not a code defect. | **P3 — see gap register GAP-PC-7** |
+
 ## Summary
 
 No division-by-zero, negative-pool, or out-of-band boundary defects found in the core resolve/damage
 chain — the module is unusually mature and self-audited (every tunable in `config.py` already carries
 a provenance tag, and prior audit passes ED-1050/ED-PC-0002/ED-PC-0009/ED-PC-0010/ED-PC-0011 have
-already swept most of the obvious formula-grounding issues). The one live formula defect found is a
-**documentation drift**, not an engine bug: `params/core.md`'s own Health row has not been updated to
-match the 2026-06-18 D-A reshape that both the authoritative doc (`derived_stats_v30.md §4.1`) and the
-live code (`combatant.py`) already carry correctly.
+already swept most of the obvious formula-grounding issues). Two live formula/doc defects found, both
+**documentation drift**, not engine bugs: `params/core.md`'s Health row (A3.1, P2) and
+`derived_stats_v30.md`'s own internally-inconsistent Stamina range cell (A4.1, P3) — neither is
+reflected incorrectly in the actual `combat_engine_v1` code, which was independently hand-verified
+against both authoritative formulas.

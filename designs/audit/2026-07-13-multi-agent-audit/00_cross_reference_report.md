@@ -1,8 +1,13 @@
 # Cross-Reference Synthesis — 2026-07-13 Multi-Agent Audit
 
-**Instruments:** mechanic_audit (7 subsystem heads — see scope caveat below), module_adjudicator
-(full 27-module graph), vector_audit (status/blocked), compliance_check (CI size gate).
+**Instruments:** mechanic_audit (all 8 subsystem heads — threadwork completed after the earlier crawler
+passes were logged; see §4.2), module_adjudicator (full 27-module graph), vector_audit (status/blocked),
+compliance_check (CI size gate).
 **Synthesis inputs:** all four instruments' on-disk output + all four `crawler_log/*_delta.md` notes.
+**Note on currency:** the three earlier crawler deltas (mechanic_audit, module_adjudicator, vector_audit)
+were logged when only 6–7 mechanic_audit subsystems had landed and describe threadwork as absent; the
+threadwork folder (5 files) has since completed on disk and is folded into this final synthesis. Where a
+delta note says "7 subsystems" / "threadwork never ran," this report supersedes it.
 **Governance discipline:** this document is analysis-only. No writes to `canon/editorial_ledger*.jsonl`,
 `references/id_reservations.yaml`, or `references/audit_registry.jsonl` — those are owned by the run's
 dedicated sequential registry step. No `ED-<LANE>-NNNN` IDs are allocated here.
@@ -27,9 +32,10 @@ break, but not clean either.
   the corpus is over its token cap today. (Caveat: the instrument's own crawler flagged a latent
   severity-misclassification bug — see §2.5 — but no file currently trips it.)
 - **The mechanical prose has a steady stream of content defects** that only a section-by-section read
-  catches. Across the 7 subsystems mechanic_audit actually covered, it surfaced **13 new,
-  previously-unfiled P1 findings** (plus module_adjudicator's 2), heavily concentrated in
-  settlement/territory (5) and mass_battle (2, plus adjudicator's 1). The dominant defect classes are
+  catches. Across all 8 subsystems mechanic_audit covered, it surfaced **15 new, previously-unfiled P1
+  findings** (plus module_adjudicator's 2, for **17 total**), heavily concentrated in
+  settlement/territory (5) and mass_battle (2, plus adjudicator's 1), with threadwork adding one
+  (a truncated override table) and faction/social/fieldwork/architecture the rest. The dominant defect classes are
   **internal self-contradiction** (a value or rule stated two incompatible ways in one doc),
   **stale/dead cross-references** (citations to renamed or nonexistent files), and
   **referenced-but-undefined mechanics** (a formula invoking a term with no definition).
@@ -182,15 +188,18 @@ spots:
    systematic detector** — and the same defect plausibly sits uncaught in every subsystem no
    instrument read this run.
 
-2. **mechanic_audit covered only 7 subsystem heads — and the run's own framing said 8.** On disk:
-   architecture, faction_political, fieldwork_investigation, mass_battle, personal_combat,
-   settlement_territory, social_contest. **threadwork is absent** despite being named in the run's
-   8-subsystem scope — no `mechanic_audit/threadwork/` output was produced. Beyond that omission, the
-   mechanic slate is by design only the CURRENT.md subsystem heads; it does **not** cover
+2. **mechanic_audit covered all 8 intended subsystem heads, but the slate is still only the CURRENT.md
+   heads — not the full corpus.** On disk (all complete): architecture, faction_political,
+   fieldwork_investigation, mass_battle, personal_combat, settlement_territory, social_contest, and
+   **threadwork** (which landed after the three earlier crawler deltas were logged — those notes' "7
+   subsystems / threadwork never ran" statements are stale; see the currency note at the top). The
+   completed threadwork pass adds one new P1 (D1, truncated P-25 override table) and a dense P2 tail
+   (D3/D4/D8/D9/D10/D11/D12/D14, all lane=WR) that this report folds in. Even at 8/8, the mechanic slate
+   by design covers only the CURRENT.md subsystem heads; it does **not** cover
    piety_track/conviction_track, npc_behavior, victory, npc_memory, territorial_piety, or the engine
    temporal spine — several of which module_adjudicator independently flags with A6/A8 issues. The
-   stale-citation and referenced-but-undefined defect classes are unmeasured in every subsystem
-   outside the 7.
+   stale-citation and referenced-but-undefined defect classes remain unmeasured in every subsystem
+   outside those 8.
 
 3. **module_adjudicator only sees modules registered in `module_contracts.yaml`, and only the wiring
    layer.** It cannot catch (a) empty/never-cited canonical sections — e.g. mechanic_audit's **GAP-D3**
@@ -237,11 +246,14 @@ ledger entries; re-filing would duplicate.
 | 14 | FI | `fieldwork_v30.md` §2.2 vs §2.3 | Wound penalty to physical fieldwork stated two contradictory ways in one doc: §2.2 "+0.15 Ob per wound, NEVER a −1D pool cut" vs §2.3 "−1D to physical fieldwork per wound, per §2.2" (mis-citing §2.2's own opposite rule). ED-PC-0005/0006 already made the call; this executes propagation. May combine with #15 | mechanic_audit (GAP-1) |
 | 15 | FI | `fieldwork_v30.md` §2.4 (Wounds and Thread operations) | Wound penalty to Thread-Read/Leap ops still states flat "+1 Ob"; the co-file `params/fieldwork.md` (patched under ED-PC-0006) says this exact figure is superseded by "+0.15 Ob per wound." Design-doc source never swept. May be filed as one combined wound-language ED with #14 (§2.2/§2.3/§2.4) | mechanic_audit (GAP-2) |
 | 16 | FI | `fieldwork_v30.md` §5.6b; **also** `designs/personal/knots_v30.md` §9 (CANONICAL, cross-lane) | P-06 (philosophy) violation: Knot mechanic "drains the threadcut being's Coherence." Fix replaces it with a self-maintenance-strain cost (model already in `fieldwork_v30.md §2.8`). **Must fix both files in the same pass** — the identical defect is replicated in `knots_v30.md §9`, which sits outside the fieldwork canonical_sources entries | mechanic_audit (P-06, Mode E) |
+| 17 | WR | `designs/threadwork/threadwork_v30.md` line 40 (P-25 "Scale-based Mending Stability" override table) | Content-loss: the Scale-based Mending Stability override table is truncated to its header row + "Object" with zero data rows. Confirmed via `git log --follow -p` to be an original authoring truncation, not a regression — no prior revision ever had complete data. Leaves the scale-override behavior for Mending Stability unspecified. Lane WR per the threadwork audit's own routing (threadwork has no dedicated lane in the §3 taxonomy) | mechanic_audit (threadwork D1 / formula_audit A7) |
 
-**Queue totals:** 16 new P1s — MB ×3, SE ×5, IN ×3, SC ×1, FA ×1, FI ×3. Consolidation opportunities
-the ledger step may take: #1–#3 as one MB provenance batch; #14+#15 as one FI wound-language ED; #16
-requires a cross-file (fieldwork + personal/knots) edit; #11 requires coordination with ED-SC-0003.
-personal_combat contributed **0** new P1s (all its findings are P2/P3 with in-repo self-awareness).
+**Queue totals:** 17 new P1s — SE ×5, MB ×3, IN ×3, FI ×3, SC ×1, FA ×1, WR ×1. Consolidation
+opportunities the ledger step may take: #1–#3 as one MB provenance batch; #14+#15 as one FI
+wound-language ED; #16 requires a cross-file (fieldwork + personal/knots) edit; #11 requires
+coordination with ED-SC-0003; #17 (threadwork) can anchor a WR-lane batch alongside the threadwork P2
+tail (D3/D4/D8/D9/D10/D11/D12/D14, also lane=WR) rather than landing alone. personal_combat contributed
+**0** new P1s (all its findings are P2/P3 with in-repo self-awareness).
 
 ---
 
@@ -262,8 +274,12 @@ personal_combat contributed **0** new P1s (all its findings are P2/P3 with in-re
    into `module_contracts.yaml`, which sits at 80% of cap; the misclassification would turn a
    designed-to-be-tolerated warn into a CI-blocking error if the file crosses 18k. Sequence the fix
    ahead of the growth.
-5. **Close the threadwork mechanic_audit gap.** The run's 8-subsystem framing named threadwork but no
-   output exists; schedule a threadwork Mode A–E pass so the CURRENT.md heads are actually all covered.
+5. **Land the threadwork (WR-lane) remediation as a batch.** The threadwork Mode A–E pass did complete
+   this run; it yields one new P1 (#17, truncated P-25 override table) plus a dense P2 tail
+   (D3 empty Combat-Timing section, D4 broken §2.7 cross-ref, D8 History-bonus ambiguity, D9 asymmetric
+   Pulling floor, D10 fractional-Ob rounding gap, D11 Knot-Strain terminology collision, D12 P-NN
+   namespace collision, D14 stale propagation-map paths) — all lane=WR. Land them as one WR batch;
+   D5 (CANONICAL-vs-proposal header) and D2 (Thread Debt homing gap) are already tracked — do not re-file.
 6. **Escalate vector_audit dispatcher implementation to the workplan as real engineering work.** Until
    Stage 1–7 exists, the stale-citation / terminology-drift class (4 hand-caught instances this run)
    has no corpus-wide detector, and the modules no instrument read (threadwork, npc_behavior, victory,
@@ -274,6 +290,9 @@ personal_combat contributed **0** new P1s (all its findings are P2/P3 with in-re
    `handoffs/HANDOFF_IN.md`, and the settlement items to the SE handoff, so the in-flight surface
    reflects this snapshot.
 
-**Scope honesty:** this synthesis reflects exactly what four instruments saw on 2026-07-13 — 7 of the
-intended 8 mechanic subsystems, the registered-module wiring graph, a green size gate, and a blocked
-topographic pass. It is a reliable read of *that* surface, not a clean bill of health for the corpus.
+**Scope honesty:** this synthesis reflects exactly what four instruments saw on 2026-07-13 — all 8
+intended mechanic subsystem heads (threadwork included, landed late), the registered-module wiring
+graph, a green size gate, and a blocked topographic pass. It is a reliable read of *that* surface — the
+CURRENT.md heads plus the registered-contract graph — **not** a clean bill of health for the corpus:
+the modules outside the CURRENT.md slate, the empty/never-cited canonical sections, and the entire
+stale-citation/terminology-drift class (vector_audit blocked) remain unmeasured.

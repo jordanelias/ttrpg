@@ -20,6 +20,8 @@ as the live head, cross-checked against `references/canonical_sources.yaml` `fac
 | FA-F-05 | Public Expectation Strictness: `strictness = clamp(0.4 + 0.5·(agg_L/7) − 0.3·(agg_PS/7), 0, 1)` (`faction_behavior_v30.md` §3.6) vs. the illustrative table immediately below it | high-L/high-PS (7,7) computes 0.6 | high-L/low-PS (7,0) computes 0.9; low-L/high-PS (0,7) computes 0.1; low-L/low-PS (0,0) computes 0.4 | **Formula and table disagree on 3 of 4 rows.** Table states: high/high=0.4, high/low=0.7, low/high=0.2, low/low=0.4. Recomputing the formula at the natural 0–7 extremes gives 0.6, 0.9, 0.1, 0.4 respectively — only the low/low cell matches. No choice of "high"/"low" as intermediate values (tested 5/2) reconciles the mismatch either. The table reads as a stale hand-worked illustration from an earlier coefficient set that was not regenerated when `base_strictness=0.4`/`0.5`/`0.3` were finalized. | **FAIL — see finding FA-A-02 below** |
 | FA-F-06 | ΔLegitimacy: `+λ_continuity·seasons_in_role_uninterrupted + λ_procedural·procedural_event_score − λ_violation·violation_event_score`, `λ_continuity=0.05` (`faction_behavior_v30.md` §3.5) | seasons=0 → term=0 | seasons=20 (realistic late-campaign tenure per `victory_v30`-cited S14–S20 pacing) → continuity term alone = **+1.0/season**, unbounded and growing linearly thereafter | `seasons_in_role_uninterrupted` has **no stated cap**, unlike every other per-season delta term in this corpus (Stability's explicit `FACTION_STAT_SEASONAL_CAP=±2`, faction stats' `±2/season` cap in `stats_1_7_scale.md`). At realistic late-campaign tenure the continuity term becomes comparable to or larger than the maximum plausible `λ_violation·violation_event_score` term (≈0.6×1–3 ≈ 0.6–1.8), meaning a long-uninterrupted leader trends toward legitimacy near-immunity from violations — undercutting the explicit design promise in `faction_layer_v30.md` §5.6b ("Parliament is a legitimacy weapon: sustained institutional pressure degrades governance"). No hard range violation (L is clamped 0–7 elsewhere), so this is a balance/degenerate-tendency finding, not a crash-class defect. | PARTIAL (balance risk, not a hard formula break) — see finding FA-A-03 |
 | FA-F-07 | Royal Decree escalation: faction_canon_v30.md §9/Crown sheet ("+1 Ob/season consecutive") vs. `params/factions/stats_1_7_scale.md` ("difficulty +2/season (legacy +1 Ob)") | — | — | Both describe the **same mechanic** (Crown's Royal Decree consecutive-use fatigue) but in **different, non-interchangeable units** post-ED-874 resolver migration (2026-05-31). `stats_1_7_scale.md` correctly translates the legacy "+1 Ob" into the resolver's native "+2 difficulty" (per the resolver's own stated `D=max(1,(O−1)·2)` legacy mapping). `faction_canon_v30.md` (dated 2026-05-07, predates the 2026-05-31 resolver ratification) was never swept and still reads literally as "+1 Ob/season" — an implementer following faction_canon alone would apply half the intended escalation. Mitigated: faction_canon's own header explicitly subordinates itself ("Source files remain canonical until ratification commits"), and `stats_1_7_scale.md` is the correct/authoritative source, so this is a propagation-lag ambiguity rather than a dual-canon conflict. | PARTIAL (documentation propagation lag) — see finding FA-A-04 |
+| FA-F-08 | Casus Belli expiry timer: `faction_layer_v30.md` §3.5 body ("CB is consumed upon first use or **after 1 season of non-use** (expires)") vs. `faction_layer_v30.md` §10 open-items table, `ED-NEW-001` ("Casus Belli: consumes on use vs expires after 1 season. **RESOLVED** — consumes on use. **Auto-expires after 3 seasons if unused.**") | — | — | **Direct in-file contradiction on a concrete state-machine timer.** §3.5 states the CB unused-expiry window is 1 season; §10's own resolution table — whose stated purpose is to settle exactly this question ("expires after 1 season" is the literal alternative posed and rejected in the same cell) — answers with 3 seasons. Both passages are written as settled canon, not as open questions, so there is no textual signal for which value an implementer should encode. This governs the Casus Belli mechanic used across §3.5 (treaty breach), §5.4 (Outlawry "CB granted to all"), and cross-referenced by `faction_layer_v30.md §4.1` Varfell's diplomatic bonus row — a widely-consumed identifier. | **FAIL — see finding FA-A-06 below** |
+| FA-F-09 | Institutional Mandate gates: `Faction L ≥ 4` (`params/factions/stats_1_7_scale.md` §"Institutional Mandate Trigger" and §"Institutional Mandate — Uphold / Appease", PP-189/ED-003) | — | — | References a bare faction-level **L** (Legitimacy) stat. Per the LPS-1→LPS-2e ruling (Jordan, 2026-05-30) propagated through `faction_canon_v30.md` §5.1/§5.3, `faction_behavior_v30.md` §2/§3.4/§3.5/§4, and `stats_1_7_scale.md`'s own §"Mandate Recovery" section (which *was* swept — "REVISED by LPS-2e... per controlled SETTLEMENT"), **Legitimacy no longer exists as a faction-level scalar** — only per-settlement L (settlement_layer §1.8) and the aggregate Mandate stat exist at faction scale. These two PP-189/ED-003 blocks were not swept in the same pass (both still carry their pre-LPS `[PROVISIONAL]` tag, unlike the neighboring Mandate-Recovery section a few dozen lines below in the same file, which explicitly documents its own LPS-2e revision). No definition remains of what "Faction L ≥ 4" should now resolve against (aggregate_Legitimacy? Mandate? a specific settlement?). | **FAIL — see finding FA-A-07 below** |
 
 ---
 
@@ -67,6 +69,34 @@ ED-874 resolver migration (the sweep already covered `faction_layer_v30.md` §0'
 and `stats_1_7_scale.md` itself, per that table's `FACTION_RESOLVER_PROPAGATION` entry — faction_canon
 was evidently missed). Not filed as a new ED; not P1 because the authoritative source is unambiguous
 and locatable.
+
+### FA-A-06 — Casus Belli unused-expiry timer contradicts itself (1 season vs 3 seasons) [P1]
+**File/section:** `designs/provincial/faction_layer_v30.md` §3.5 body text vs. §10 `ED-NEW-001`
+resolution-table entry, in the **same file**. §3.5 states CB "expires" after "1 season of non-use."
+§10's own settled-answer table — posed as a direct 1-season-vs-alternative question — answers "Auto-expires
+after 3 seasons if unused." Both read as finished canon (no "TBD"/"pending" marker on either), so there
+is no in-doc tiebreak. This governs a concrete, engine-relevant timer consumed by treaty-breach CB
+grants (§3.5), Outlawry's CB-to-all rider (§5.4), and Varfell's diplomatic-stratagem bonus (§4.1) — a
+widely-referenced mechanical identifier, not a cosmetic value.
+**Disposition: PROPOSED-ED, lane=FA.** Recommend Jordan pick one value and strike the other; §10's
+table (being the explicit "RESOLVED" answer to the named open item) is the more likely intended source
+of truth, but the body text at §3.5 is what a first-time reader encounters and currently states the
+opposite value with no forward pointer to §10.
+
+### FA-A-07 — "Institutional Mandate" (PP-189/ED-003) still gates on faction-level "L", which LPS-2e removed [P2]
+**File/section:** `params/factions/stats_1_7_scale.md` §"Institutional Mandate Trigger" and
+§"Institutional Mandate — Uphold / Appease" (both `[PROVISIONAL]`, ED-003/PP-189). Both still read
+"Faction L ≥ 4" as their trigger condition. Per LPS-1→LPS-2e (2026-05-30 Jordan ruling), Legitimacy is
+no longer a faction-level stat anywhere in this subsystem — it exists only per-settlement
+(`settlement_layer_v30.md` §1.8) and as the derived faction **Mandate** aggregate. Every other
+Mandate/L-touching passage in this same file was swept with an explicit `[REVISED by LPS-2e]` banner
+(see e.g. the "Mandate Recovery" section immediately below §"Unique Actions") — these two were missed.
+No definition remains of what value an implementer should read for "Faction L ≥ 4" post-migration.
+**Disposition: PROPOSED-ED, lane=FA.** Downgraded from P1 to P2 because both blocks already carry a
+pre-existing `[PROVISIONAL]` tag predating the LPS sweep, signalling lower confidence/priority even
+before this drift, and neither is cross-referenced as a dependency by any of the other four target
+docs (unlike Mandate, which is load-bearing everywhere) — so the blast radius is narrower than
+FA-A-06's Casus Belli defect.
 
 ### FA-A-05 — α_seniority undefined at Standing 0 [P3]
 **File/section:** `designs/provincial/faction_behavior_v30.md` §3.2.3 table. Linear extrapolation of

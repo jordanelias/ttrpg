@@ -22,10 +22,25 @@ None found. The two cyclic patterns present (initiative and wound-Ob) are both *
 feedback, explicitly damped/capped, and match the design's own stated intent — not the same-beat
 circular dependency this check is meant to catch.
 
+## Verification pass — engine's own dead-end tooling re-run
+
+`state_graph.py` ships its own dynamic-coverage dead-branch scan (`python state_graph.py`, run this
+pass with numpy installed locally). Re-running it independently confirms the state graph itself is
+fully connected (edge closure, terminal reachability, entry coverage, emit legality all **PASS**), but
+its dead-branch check flags two of `wrapper.engagement`'s four `return None` separation sites
+(`'beat_exhaustion'`, `'collapse'`) as unreached across a 4-matchup/30-seed sweep — a *third*, engine-
+tool-detected dead-end candidate distinct from `seize` and `reopen`/`disengage` above. Filed as
+GAP-PC-8 (P3) in the gap register, since the tool's own printed guidance already tells a future session
+what to do with it (widen the trigger, demote to a documented guard, or delete) — this audit adds
+nothing beyond confirming the flag still fires on the current working tree.
+
 ## Summary
 
 - 1 confirmed dead-end mechanic (`seize`) — P2, filed in gap register.
 - 1 confirmed unconnected system (`reopen`/`disengage`) — P2, filed in gap register.
+- 1 tool-flagged dead-end candidate (`state_graph.py`'s own separation-reason coverage scan:
+  `beat_exhaustion`/`collapse` never fire in a 30-seed sweep) — P3, filed in gap register (GAP-PC-8),
+  re-verified by independently re-running the engine's own self-test rather than trusting the doc claim.
 - 1 apparent dead-end (contact/clinch axis) investigated and **ruled a false positive** — the mechanic
   is live-wired; the "unbuilt"/"not activated" language in two docs is stale relative to `contact.py`
   (added 2026-07-02) and should be corrected but does not represent a code-level gap.
