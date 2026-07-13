@@ -227,6 +227,35 @@ PP entry references the audit folder; ED entry describes what was found.
   `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>` → `pointer_register.md` +
   `data/{g_pointer,pointer_scorecard}.json`. Tests: `tests/valoria/test_pointer_audit.py` (pins the
   §8 reuse-by-identity + the A17 ground-truth count match).
+- `scripts/formula_audit.py` — the observatory's **L1 formula-dependency** layer (WS0b, added
+  2026-07-13). Builds the quantity-dependency DAG (output ← input) from `module_contracts.yaml`
+  `derivations` + `descriptor_registry.yaml`, detecting orphan inputs (a quantity consumed but never
+  produced), multi-definition conflicts (the "Combat Pool defined three ways" class), and dependency
+  cycles. **Reuses** `tools/quantity_registry.py` `resolve()`,
+  `ci_quantity_vocabulary_check._split_bundled`, and `structure_audit.py`'s `tarjan_scc`/`degrees`
+  (no reimplementation, §8). Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates**; the unresolved/orphan list is *candidate* debt (triage first — some are computed/placeholder
+  quantities). A malformed derivation with a null `output` is surfaced via a sentinel node, never
+  silently dropped. Invoke: `python3 scripts/formula_audit.py --repo-root . --output-dir <run>` →
+  `formula_register.md` + `data/*.json`. Tests: `tests/valoria/test_formula_audit.py` (§8
+  reuse-by-identity + end-to-end cycle detection + the null-output regression).
+- `scripts/gen_audit.py` — the observatory's **G_generation** currency layer (WS0b, added 2026-07-13;
+  the WS3 / NS4 v40-transition meter). Partitions the whole `.md` corpus into LIVE heads vs HISTORICAL
+  records (so a historical doc's stale refs are *structurally* never scanned), then runs three
+  detections: (1) **stale version-pointers** inside live heads — a `_vNN.md` ref that is superseded,
+  *moved* (successor exists per the restructure ledger — a trivial repoint), or genuinely nonexistent;
+  (2) **unregistered canonical heads** (a `## Status: CANONICAL` doc absent from
+  `canonical_sources.yaml`); (3) **currency drift** (registered AND superseded). **Reuses**
+  `ci_generation_consistency.py`'s currency rule (`canonical_docs`/`status_of`/`superseded_ids`/
+  `RECOGNIZED`), `broken_dependency_checker.py`'s
+  `extract_file_refs`/`get_all_repo_files`/`_load_restructure_map`, and `vector_audit.banner_classify`
+  — no rule re-derived (§8). Authoritative registration beats the weak banner content-keyword; physical
+  archival paths still demote. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates** (`ci_generation_consistency.py` is the WARN-only gate). The stale-pointer list is
+  severity-triaged (superseded/moved = mechanical repoints; only *nonexistent* needs a human). Invoke:
+  `python3 scripts/gen_audit.py --repo-root . --output-dir <run>` → `generation_register.md` +
+  `data/g_generation.json`. Tests: `tests/valoria/test_gen_audit.py` (33 tests: §8 reuse-by-identity,
+  the LIVE/HISTORICAL discriminator, the moved-vs-nonexistent severity split).
 
 ## Cross-references
 
