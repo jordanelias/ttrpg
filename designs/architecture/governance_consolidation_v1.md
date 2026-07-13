@@ -1,6 +1,6 @@
 # Governance Consolidation (v1) — the reconciled proposal head
 
-## Status: PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. NOT canon; supersedes nothing until Jordan rules the §6 decisions. ED allocation deferred to ratification (per the merge-ratifies convention).
+## Status: D1–D5 RATIFIED (2026-07-13, ED-IN-0046) — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. §6 decisions D1–D5 are RULED (each accepted as stated below, per their own "(rec: yes)"); the Phase-4 execution plan and §2 item dispositions are downstream of that ruling and still track their own authoring status. **D6 (the G606 recall-clock wiring fork, filed by `designs/architecture/ners_vsg_reconciliation_v1.md`) is a SEPARATE, still-open decision — not resolved by this ruling.**
 
 **What this is.** The single consolidated head for this session's governance proposal arc, reconciled
 against the **pre-existing built substrate** the earlier work was blind to. It collates six streams into
@@ -142,15 +142,41 @@ Phases A–C are ordinary-merge ratifiable once R + their gates clear. Phase D i
 
 ---
 
-## §6 · The explicit ask (decisions for Jordan)
+## §6 · The explicit ask (decisions for Jordan) — RULED 2026-07-13
 
-1. **D1** card-deck canonical for play, predicate-sweep as batch oracle? (rec: yes)
-2. **D2** AP economy canonical, handlers as batch approximation? (rec: yes — already the built reality)
-3. **D3** model **Compact** as a recurring fixed-term **Debt** subtype (rec) — or mint a real 6th ledger family? **(blocks §1.3a)**
-4. **D4** retire §1.8 Mandate as the collapse carrier (floor-avg Order + fracturing + Standing Keys instead); rename the faction "Mandate" meter? (rec: yes)
-5. **D5** **§1.0d merges** into the suspicion/recall spine as a modifier, not a parallel cascade? (rec: yes — confirmed NERS MERGE) **(blocks §1.0d)**
-6. **Ratify** the clean five (1.0c, 2.5a, 1.3c, 3.3b, substrate, deck-arch) now?
-7. **Greenlight** Phase P (port Goldenfurt's Π valve + recall escape) as the first build — highest leverage, no new design?
+**Ruling basis:** Jordan's "ratify commit all" instruction (2026-07-13), applied to the scoped tier laid
+out in reply (D1–D5 plus the six items §2 already called a clean, no-open-sub-question RATIFY) and left
+unobjected, followed by the review-and-merge of PR #129 (`designs/architecture/ners_vsg_reconciliation_v1.md`,
+which restates and relies on D1–D5) — per CLAUDE.md §2's merge-ratifies-by-default convention (ED-1094).
+Items with no stated recommendation anywhere in this doc were explicitly NOT resolved by that instruction
+(precedent: the pre-existing faction-count gap, "no default exists — deliberately NOT resolved by a prior ratify-all" — see B1 below).
 
-**Everything above is PROPOSED.** No `Status:` line flips, no ledger entry, and no `module_contracts.yaml`
-edit is made here — this is the decision surface, and the decisions are §6.
+1. **D1 RULED YES** — card-deck canonical for play, predicate-sweep is the batch oracle.
+2. **D2 RULED YES** — AP economy canonical, handlers are the batch approximation (already the built reality).
+3. **D3 RULED** — Compact models as a recurring fixed-term `Debt` subtype
+   (`Debt(key="compact:<quota>", ttl=term, recurs=True)`), **not** a 6th `ledger.TAG_KINDS` family.
+   **Unblocks §1.3a** (still needs E3's subsistence-floor clamp authored before §1.3a itself ratifies).
+4. **D4 RULED YES** — retire §1.8's Mandate formula as the collapse carrier (floor-avg Order + province
+   fracturing + Standing/resolution_quality Keys instead); rename the faction "Mandate" meter to end the
+   two-Mandates collision.
+5. **D5 RULED YES** — §1.0d merges into the suspicion/recall spine as a Standing-6+ modifier, not a
+   parallel cascade: one signal, one recall scene (G606), one escape (`Submit to audit`, −2 suspicion).
+   **The spine's WIRING — does suspicion advance every non-compliant season, or only on a specific
+   card draw (`ners_vsg_reconciliation_v1.md` D6) — is NOT ruled by this and stays open**; the merge
+   cannot be authored into `faction_politics_v30.md` until D6 is answered.
+6. **RATIFIED** — the six items §2 called a clean "RATIFY" with no open sub-question: §1.0c
+   (ED-FA-0020), §2.5a mastership + entry forks (ED-FA-0022/0023), §1.3c (ED-SE-0023), §3.3b
+   (ED-SE-0021). (The governance-ripple substrate and the 58-card grounded-deck architecture items in
+   §2's table are **not** touched here — no ED citation was available to update them accurately in this
+   pass; they remain as governance_consolidation_v1 §2 already described them.)
+7. **NOT ruled — Phase P greenlight.** `ners_vsg_reconciliation_v1.md §3` supersedes this ask: four
+   independent measurements (500-seed isolated test, 1500-trial integrated campaign, the event-deck
+   engine, two prior methodologies) show the unaugmented Π term does not de-fang the runaway pattern
+   alone — Phase P as originally scoped (E1 alone) should not be greenlit; E1+E3+E7 need to land as one
+   bundled port. This is a build/engineering task, not a ratification, and remains tracked in the
+   reconciliation doc's workplan.
+
+**Still genuinely open (no recommendation exists anywhere to accept, not resolved by "ratify all"):** D6
+(G606 wiring), B1 (faction count 4–8, `ED-FA-0001`), B2 (S-006's identity), B12 (the Territory-naming
+collision) — all per `ners_vsg_reconciliation_v1.md §5`. Also explicitly held back: Part 41's
+Territory-scale content (Relay Tier/Beacon Network), per that same document's loud-exception flag.

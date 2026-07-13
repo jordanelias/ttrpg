@@ -1,6 +1,6 @@
 # NERS-Review / VSG Reconciliation (v1) — merging the harness-verification empirical branch with the generation-methodology design branch
 
-## Status: PROPOSED — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · NOT canon; flips no `## Status:` line; allocates no ED. Supersedes nothing; extends `governance_consolidation_v1.md` with execution evidence and folds `generation_sourcebook_v1.md`'s blocker register into one surface.
+## Status: D1–D5 RATIFIED (2026-07-13, ED-IN-0046) · D6/B1/B2/B12 still OPEN — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record the same ruling) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. Ratification basis: Jordan's "ratify commit all" (2026-07-13) applied to the scoped tier described in reply, unobjected, plus the review-and-merge of this doc as PR #129 — see `governance_consolidation_v1.md §6` for the full ruling record. **Four items were explicitly NOT resolved because no recommendation existed anywhere to accept — see §5's update below, unchanged from the original ask.**
 
 **What this is.** Two independent PRs landed on `main` within the same session window and were never
 cross-read against each other:
@@ -173,25 +173,32 @@ Phase 7 — VSG build proper (generation_sourcebook_v1 §7's sequence, now dated
 
 ---
 
-## §5 · Explicit asks for Jordan (nothing above is silently decided)
+## §5 · Explicit asks for Jordan — updated 2026-07-13 post-ruling
 
-1. **D6 (new).** Which G606 wiring model ships — cumulative-per-season advance (near-total recall
+**RULED** (ED-IN-0046, see `governance_consolidation_v1.md §6` for the full record): D1–D5, and the six
+items governance_consolidation_v1 §2 already called a clean RATIFY (§1.0c, §2.5a mastership+entry,
+§1.3c, §3.3b). Item 3 below (Phase-1 resequencing) is accepted as part of that same ruling — it was
+this document's own recommendation and drew no objection.
+
+**Still genuinely open — "ratify commit all" could not resolve these because no recommendation existed
+anywhere to accept, and resolving them now would mean fabricating an answer and attributing it to
+Jordan. Matches the repo's own precedent (the pre-existing faction-count gap, item 3 below: "no default exists — deliberately NOT resolved by
+a prior ratify-all").**
+
+1. **D6.** Which G606 wiring model ships — cumulative-per-season advance (near-total recall
    dominance) or specific-card-draw advance (recall cascades nearly absent)? This determines what
-   Goldenfurt-derived settlements *feel like* to govern, not just an implementation detail.
-2. **B2, recommend resolving independently and immediately.** S-006's identity — Goldenfurt Town in
-   Kronmark (T2), or Lowenskyst Fortress/Border (T3)? Two branches (VSG's calibration test, and
-   retroactively every PR#127 adapter that used the fixture) are blocked or already-exposed on this;
-   it's cheap and editorial, not a design call.
-3. **Phase-1 resequencing (§3).** Confirm collapsing E1+E3+E7 into one bundled port rather than
-   `governance_consolidation_v1`'s original phased split — recommend yes, given the four-measurement
-   convergence.
-4. **The held-back item (Phase 6).** Part 41's Territory-scale content (Relay Tier/Beacon Network) is
-   explicitly NOT bundled into "author Part 41 now" — it needs `engine_clock` authored first and the
-   Territory/R-stack naming collision (B12) resolved. Flagging this prominently per ED-1094 rather than
-   letting it ride in silently under a broader "author Part 41" approval.
-5. Everything in `governance_consolidation_v1 §6` (D1–D5) and `settlement_generator_v1.md §7`'s
-   original open calls still stands, unchanged by this document except where §1's table marks a
-   CONFIRMED/CHALLENGES verdict.
+   Goldenfurt-derived settlements *feel like* to govern, not just an implementation detail. **Blocks
+   authoring D5's merge into `faction_politics_v30.md`.**
+2. **B2.** S-006's identity — Goldenfurt Town in Kronmark (T2), or Lowenskyst Fortress/Border (T3)?
+   Two branches (VSG's calibration test, and retroactively every PR#127 adapter that used the fixture)
+   are blocked or already-exposed on this. Lean offered earlier (installed-base: virtually everything
+   built assumes Goldenfurt/Kronmark) but not treated as a ruling.
+3. **B1.** Faction count 4–8 (`ED-FA-0001`, filed 2026-07-05, no default). Blocks VSG's F-stack and P2.
+4. **B12.** Does the sourcebook's Territory/Province stack (R-series) mean the same thing as Part 41's
+   Territory *scale*? Neither doc cites the other.
+5. **The held-back item (Phase 6), unaffected by the ruling above.** Part 41's Territory-scale content
+   (Relay Tier/Beacon Network) remains explicitly NOT bundled into "author Part 41 now" — it needs
+   `engine_clock` authored first and B12 resolved. This flag stands regardless of the D1–D5 ruling.
 
 ---
 
