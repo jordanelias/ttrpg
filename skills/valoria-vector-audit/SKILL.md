@@ -203,6 +203,17 @@ PP entry references the audit folder; ED entry describes what was found.
   Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run;
   validation may still report FAILED (P2 conviction-symmetry) — that is a real finding, not a bug
   (methodology §3.8).
+- `scripts/structure_audit.py` — the observatory's **architecture layers** (WS0b core, added
+  2026-07-13). Companion to `vector_audit.py` (which is the L0 prose layer). Builds **G_code** (AST
+  import graph over `sim/` + `tools/` — cycles, cut-vertices, orphans) and **L2** (the
+  `module_contracts.yaml` producer→consumer wiring graph — Key emit/consume closure, phantom
+  producers, dangling non-terminal emits, `doc:null` modules, cross-scale locality). Stdlib + PyYAML
+  only (no numpy/sklearn/networkx — the graph algorithms are implemented in-file), working-tree only,
+  deterministic. **Provenance-tagged** (notional/`[ASSUMPTION]`/`doc:null` modules bucketed as
+  lower-confidence) and it **measures, never gates** (pytest + import-smoke gate). Invoke:
+  `python3 scripts/structure_audit.py --repo-root . --output-dir <run>` → `structure_register.md` +
+  `data/*.json`. Regression-pinned in `tests/valoria/test_structure_audit.py` against PR #131's
+  hand-caught L2 defects (the mass_battle fabricated emit, the personal_combat dead emits).
 
 ## Cross-references
 
