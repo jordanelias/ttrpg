@@ -184,21 +184,41 @@ already closed).
 
 ---
 
-## §7 Open Jordan calls this proposal surfaces
+## §7 Open Jordan calls this proposal surfaces — 4 RULED 2026-07-13
 
-- **Settlement-grain temperament** (P12) — promote α/β from province to settlement grain? (Stage-6b was
-  deferred; VSG needs it.)
-- **Political allegiance as a first-class generation axis** (P11) — is deliberately seeding an
-  off-owner (contested/fracture-prone) settlement in scope, or does allegiance only emerge from play?
-  (bears on `political_hierarchy_v30 §2.3` fracture triggers, still unspecified.)
-- **Which paradigms are load-bearing vs cut** — does settlement identity come from the full twelve, or
-  a smaller core (the ripple-substrate R-1 question)?
-- **Weights are a taste surface** — τ and per-paradigm weights need a sim sweep against "ever boring /
-  ever an unsurvivable spiral" before trust (the same open question `governance_play_redesign_v1 §5.3`
-  and the death-spiral finding raise).
-- Depends on `governance_consolidation_v1` D1–D5 (Compact, event-architecture, AP) landing first.
+1. **Settlement-grain temperament** (P12) — **RULED**: not a flat promotion to settlement-only grain.
+   Jordan: "Explore multiple temperaments whereby larger scales are partially informed by the aggregate
+   of their constituent pieces." Each scale in the hierarchy (Settlement, and whatever tier(s) emerge
+   from the B12 scale-hierarchy ruling — see `ners_vsg_reconciliation_v1.md §5`) carries **its own**
+   temperament, **partially** derived by aggregating its children's realized temperaments — not a pure
+   top-down province→settlement inheritance (the current P12 model) and not fully independent
+   per-settlement draws either. Exact aggregation function (mean? weighted by Weight/population? with
+   how much noise added on top of the aggregate?) is authoring-level detail, not further ruled here.
+   **Blocked on B12** landing first, since the scales this aggregates across are still being defined.
+2. **Political allegiance as a first-class generation axis** (P11) — **RULED, conditionally**: "If the
+   generator can justify it within game world by backtracing, then sure." Deliberately seeding an
+   off-owner/contested settlement is in scope **only if** the generator produces an in-world causal
+   justification for the divergence (a real backstory the paradigm stack can point to — a conquest,
+   a patronage collapse, a migration), not an arbitrary/unmotivated assignment. This is a real
+   constraint on P11's implementation, not a green light to randomize allegiance freely.
+3. **Which paradigms are load-bearing vs cut** — **RULED**: "Worthy of investigation." Prioritized as a
+   next research task, not yet decided which of the twelve survive a smaller-core cut.
+4. **Weights/calibration are a taste surface** — **RULED, as a general principle beyond VSG alone**:
+   "Every negative must be able to be offset by some kind of positive, but not necessarily a binary
+   pair. Good, bad and middling governance must all be possible, but must all be unpredictable and
+   dynamic." This is the same principle behind `governance_consolidation_v1.md`'s new **E11** (D6's
+   suspicion-reduction counter-mechanic) — it generalizes past that one mechanic to VSG's calibration
+   surface as a whole: no paradigm's weight table should encode a purely negative or purely positive
+   track; every pressure needs a counter-pressure, every decay needs a growth path, and the resulting
+   distribution of outcomes must stay genuinely unpredictable (no dominant strategy converges to one
+   outcome), not just balanced-on-average.
+- Depends on `governance_consolidation_v1` D1–D6 (now all RULED, 2026-07-13, ED-IN-0046/0047) landing
+  as authored text.
 
 ---
 
 **Status:** PROPOSED, no ED allocated yet (SE lane; would take `ED-SE-NNNN` on landing). A generator
 design over existing canonical tables + the July proposals; ratification tracks ordinary merge review.
+Items 1–4 above ruled 2026-07-13 (ED-IN-0047 covers 1 as it composes with B12; the other three are
+recorded here and in `ners_vsg_reconciliation_v1.md §5` — no separate ED needed, they're design
+guidance for this doc's own future authoring, not blocking decisions with downstream ledger effects).

@@ -1,6 +1,6 @@
 # Governance Consolidation (v1) — the reconciled proposal head
 
-## Status: PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. NOT canon; supersedes nothing until Jordan rules the §6 decisions. ED allocation deferred to ratification (per the merge-ratifies convention).
+## Status: D1–D6 RATIFIED (D1–D5: 2026-07-13, ED-IN-0046; D6: 2026-07-13, ED-IN-0047) — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Opus 4.8 max-effort consolidation. §6 decisions D1–D6 are all RULED; the Phase-4 execution plan and §2 item dispositions are downstream of that ruling and still track their own authoring status. **D6 RULED 2026-07-13: cumulative per-Defy-season suspicion accrual is canonical, on the explicit condition that E11 (a symmetric suspicion-reduction counter-mechanic, §3 below) lands in the same authoring pass as D5's merge — not deferred.**
 
 **What this is.** The single consolidated head for this session's governance proposal arc, reconciled
 against the **pre-existing built substrate** the earlier work was blind to. It collates six streams into
@@ -102,6 +102,21 @@ Ordered by leverage. E1 is the single highest-value move and is **already design
   Flourishing (500-seed: 3.7 vs 659/seed). Beyond E1's valves, the world needs a way for *good* governance
   to compound (a Flourishing→Prosperity→Opportunity loop), or the only stable attractor is collapse. This is
   the highest-leverage *balance* intervention and is currently no one's item.
+- **E11 (NEW, 2026-07-13, ED-IN-0047) · D6 RULED — a symmetric suspicion-reduction counter to G606's
+  cumulative accrual.** Jordan's ruling: "if there is a way to advance suspicion from non-compliance, there
+  must be a way to reduce suspicion by over-compliance and consistency/predictability. Build the counter to
+  cumulative." This settles D6 in favor of the cumulative-per-Defy-season model (matching the spine's own
+  already-stated spec — "suspicion accrues... capped +1/season") **on the explicit condition that E11 lands
+  in the same authoring pass, not as optional follow-on**: an ongoing suspicion-decay term driven by
+  sustained compliance/consistency (not merely the one-shot `Submit to audit` escape), so a governor who
+  reliably delivers can walk the recall clock back down, not just survive one crisis. This is the concrete,
+  governance-specific instance of the general principle Jordan stated for VSG's calibration (§7 below):
+  "every negative must be able to be offset by some kind of positive... good, bad and middling governance
+  must all be possible, but must all be unpredictable and dynamic." E11 is a co-requisite of authoring D5's
+  merge into `faction_politics_v30.md` — the merge cannot land without it (mirrors E1's own E3/E7
+  co-requisite pattern per §3 above and `ners_vsg_reconciliation_v1.md §3`). Specific decay curve (rate,
+  what counts as "consistency," interaction with the Standing-6+ gate) is authoring-level detail, not a
+  further Jordan decision.
 
 ---
 
@@ -142,15 +157,56 @@ Phases A–C are ordinary-merge ratifiable once R + their gates clear. Phase D i
 
 ---
 
-## §6 · The explicit ask (decisions for Jordan)
+## §6 · The explicit ask (decisions for Jordan) — RULED 2026-07-13
 
-1. **D1** card-deck canonical for play, predicate-sweep as batch oracle? (rec: yes)
-2. **D2** AP economy canonical, handlers as batch approximation? (rec: yes — already the built reality)
-3. **D3** model **Compact** as a recurring fixed-term **Debt** subtype (rec) — or mint a real 6th ledger family? **(blocks §1.3a)**
-4. **D4** retire §1.8 Mandate as the collapse carrier (floor-avg Order + fracturing + Standing Keys instead); rename the faction "Mandate" meter? (rec: yes)
-5. **D5** **§1.0d merges** into the suspicion/recall spine as a modifier, not a parallel cascade? (rec: yes — confirmed NERS MERGE) **(blocks §1.0d)**
-6. **Ratify** the clean five (1.0c, 2.5a, 1.3c, 3.3b, substrate, deck-arch) now?
-7. **Greenlight** Phase P (port Goldenfurt's Π valve + recall escape) as the first build — highest leverage, no new design?
+**Ruling basis:** Jordan's "ratify commit all" instruction (2026-07-13), applied to the scoped tier laid
+out in reply (D1–D5 plus the six items §2 already called a clean, no-open-sub-question RATIFY) and left
+unobjected, followed by the review-and-merge of PR #129 (`designs/architecture/ners_vsg_reconciliation_v1.md`,
+which restates and relies on D1–D5) — per CLAUDE.md §2's merge-ratifies-by-default convention (ED-1094).
+Items with no stated recommendation anywhere in this doc were explicitly NOT resolved by that instruction
+(precedent: the pre-existing faction-count gap, "no default exists — deliberately NOT resolved by a prior ratify-all" — see B1 below).
 
-**Everything above is PROPOSED.** No `Status:` line flips, no ledger entry, and no `module_contracts.yaml`
-edit is made here — this is the decision surface, and the decisions are §6.
+1. **D1 RULED YES** — card-deck canonical for play, predicate-sweep is the batch oracle.
+2. **D2 RULED YES** — AP economy canonical, handlers are the batch approximation (already the built reality).
+3. **D3 RULED** — Compact models as a recurring fixed-term `Debt` subtype
+   (`Debt(key="compact:<quota>", ttl=term, recurs=True)`), **not** a 6th `ledger.TAG_KINDS` family.
+   **Unblocks §1.3a** (still needs E3's subsistence-floor clamp authored before §1.3a itself ratifies).
+4. **D4 RULED YES** — retire §1.8's Mandate formula as the collapse carrier (floor-avg Order + province
+   fracturing + Standing/resolution_quality Keys instead); rename the faction "Mandate" meter to end the
+   two-Mandates collision.
+5. **D5 RULED YES** — §1.0d merges into the suspicion/recall spine as a Standing-6+ modifier, not a
+   parallel cascade: one signal, one recall scene (G606), one escape (`Submit to audit`, −2 suspicion).
+6. **D6 RULED (2026-07-13, ED-IN-0047)** — the spine's wiring is cumulative per-Defy-season accrual
+   (matching the spine's own already-stated spec), **on the explicit condition that E11 — a symmetric,
+   ongoing suspicion-reduction mechanic driven by sustained compliance/consistency, not just the one-shot
+   escape — lands in the same authoring pass**, per Jordan's ruling: "if there is a way to advance
+   suspicion from non-compliance, there must be a way to reduce suspicion by over-compliance and
+   consistency/predictability." D5's merge into `faction_politics_v30.md` may now be authored, but only
+   with E11 included — see §3's E11 entry for the full ruling text.
+6. **RATIFIED** — the six items §2 called a clean "RATIFY" with no open sub-question: §1.0c
+   (ED-FA-0020), §2.5a mastership + entry forks (ED-FA-0022/0023), §1.3c (ED-SE-0023), §3.3b
+   (ED-SE-0021). (The governance-ripple substrate and the 58-card grounded-deck architecture items in
+   §2's table are **not** touched here — no ED citation was available to update them accurately in this
+   pass; they remain as governance_consolidation_v1 §2 already described them.)
+7. **NOT ruled — Phase P greenlight.** `ners_vsg_reconciliation_v1.md §3` supersedes this ask: four
+   independent measurements (500-seed isolated test, 1500-trial integrated campaign, the event-deck
+   engine, two prior methodologies) show the unaugmented Π term does not de-fang the runaway pattern
+   alone — Phase P as originally scoped (E1 alone) should not be greenlit; E1+E3+E7 need to land as one
+   bundled port. This is a build/engineering task, not a ratification, and remains tracked in the
+   reconciliation doc's workplan.
+
+**RULED 2026-07-13 (second pass, direct Jordan input, not "ratify all"-inferred):** D6 (above) and B1
+— starting faction count is **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund/Himmelenger,
+exactly matching `valoria_political_hierarchy_v30.md`'s existing 3-duchy + Church-special-entity
+structure), with an explicit, intentional emergent-faction mechanic allowed (Restoration Movement via
+`insurgency_pipeline_v30`, Löwenritter-style post-coup splits via `faction_succession_split_v30`, an
+Altonia-usurper archetype named as a further valid emergence case) — see `ED-FA-0001` (resolved) and
+`ners_vsg_reconciliation_v1.md §5`.
+
+**Still genuinely open:** B2 (S-006's identity — context gathered, awaiting Jordan's call), B12 (a
+real conflict surfaced between the new Settlement→Territory→Province hierarchy Jordan described and
+this doc's existing companion `valoria_political_hierarchy_v30.md`'s "Territory = Settlement"
+equivalence — needs Jordan's resolution before any doc is edited, see `ners_vsg_reconciliation_v1.md
+§5`). Also explicitly held back: Part 41's Territory-scale content (Relay Tier/Beacon Network), per
+that same document's loud-exception flag — now additionally gated on B12's resolution, since Part 41's
+"Territory scale" may or may not be the same tier Jordan just described.

@@ -23,9 +23,19 @@ max+1); `next_free` bumped and co-committed per lane. All new entries are `statu
 | 6 | **ED-SE-0046** | SE | `settlement_layer_v30.md` §1.2 (L30-39), §1.8 (L160), registry L358/L429 | Confirmed: Fortress-City (S-014) / Cathedral-City (S-036) absent from §1.2 table AND §1.8 base(Type) → W_s uncomputable for the 2 compound types; Village absent from §1.2 (present in §1.8). |
 | 7 | **ED-SE-0047** | SE | `settlement_layer_v30.md` §4.7 (L877-878) | Confirmed: modifies "Settlement Wealth" / "Settlement Accord"; §1.3 REVISED schema is Prosperity/Defense/Order, Accord is province-derived. Invalid fields. |
 | 8 | **ED-SE-0048** | SE | `settlement_adjacency_v30.md` §1.2 (L34,L36) vs `valoria_geography_v30.yaml` L569-587 | Confirmed: prose "36 settlements"/PP-723/49 edges vs YAML "PP-726 supersedes PP-723", 37 settlements/55 edges. S-ID drift confirmed (S-011 = Spelzdorf in settlement_layer registry vs Stillhelm Watch in YAML+adjacency). |
-| 9 | **ED-IN-0046** | IN | `scale_transitions_v30.md` §3.3 (L51) | Confirmed: heading only, blank body (L52), no stub marker, unlike §3.4/§3.6 which carry `[EDITORIAL: ED-748]`. |
-| 10 | **ED-IN-0047** | IN | `scale_transitions_v30.md` §1 L19, §3.2 L49 | Confirmed: "GM adjudication" (L19 mode table) and "GM recognises faction scope" (L49) vs no-GM invariant. Same class as ED-WR-0007. |
+| 9 | **ED-IN-0049** *(renumbered, was ED-IN-0046)* | IN | `scale_transitions_v30.md` §3.3 (L51) | Confirmed: heading only, blank body (L52), no stub marker, unlike §3.4/§3.6 which carry `[EDITORIAL: ED-748]`. |
+| 10 | **ED-IN-0050** *(renumbered, was ED-IN-0047)* | IN | `scale_transitions_v30.md` §1 L19, §3.2 L49 | Confirmed: "GM adjudication" (L19 mode table) and "GM recognises faction scope" (L49) vs no-GM invariant. Same class as ED-WR-0007. |
 | 11 | **ED-IN-0048** | IN | `references/canonical_sources.yaml` L223-227 | Confirmed: registered head is `designs/scene/conviction_track_v30.md`; piety_track home `designs/personal/conviction_track_v1.md` exists on disk but is unregistered. Cross-cited to ED-SC-0003 (same naming-collision root cause, SC lane). *(Note: source finding called the registered doc "territorial"; it is the scene-scale head — `designs/territory/conviction_track_v30.md` does not exist.)* |
+
+**Post-filing collision note (2026-07-13, merge reconciliation):** this branch originally allocated
+`ED-IN-0046`/`ED-IN-0047` for queue items 9/10 (IN `next_free` read as 46 at filing time). Merging
+`origin/main` afterward brought in PR #130 (`governance_consolidation_v1` ratification), which had
+concurrently and independently claimed `ED-IN-0046`/`ED-IN-0047` for its own D1–D5/D6+B1 rulings and
+merged first. Per this repo's standing collision convention (renumber the later-merging side —
+`references/id_reservations.yaml`'s own documented precedent for the ED-IN-0031/0032,
+ED-IN-0033/0034, and ED-IN-0038/0039 incidents), items 9/10 were renumbered to `ED-IN-0049`/
+`ED-IN-0050`; item 11's `ED-IN-0048` needed no change (48 was still free). `lane_ids.lanes.IN.next_free`
+bumped to 51 accordingly.
 | 12 | **ED-SC-0016** | SC | `social_contest_v30.md` §7.2.1 L418-425 | Confirmed: Track 4=60/40, 5=55/45, 6=50/50 incoherent under "track-distance weighted" framing; ED-762 in flat ledger is a spec-progression entry with `_migration_flag: ID-CONFLICT` and an orphaned `_migration_alt` carrying the lost succession rationale. |
 | 13 | **ED-FA-0035** | FA | `faction_behavior_v30.md` §3.7 L339-355 | Confirmed: `cascade_alignment_modifier` has no definition corpus-wide (all other occurrences are invocations); `expectation_alignment_modifier`'s `× {1,2}` is a bare set literal, magnitude discarded by `sign()`. |
 | 14 | **ED-FI-0006** | FI | `fieldwork_v30.md` §2.2 L72 vs §2.3 L104 | Confirmed: §2.2 "+0.15 Ob/wound, NEVER −1D"; §2.3 "−1D per wound, per §2.2" (mis-cites §2.2's opposite rule). Cross-cited ED-PC-0005/0006 + ED-FI-0007. |
