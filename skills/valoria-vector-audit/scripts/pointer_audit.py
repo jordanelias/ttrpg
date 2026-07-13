@@ -255,6 +255,17 @@ def run(root, out, contracts_path=None, sim_root=None):
           f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} occurrences resolve '
           f'({_pct(ov["percent_resolved_occurrences"])})')
 
+    # capstone #5 (ED-IN-0056): `all_known()` returns every RESOLVABLE NAME STRING —
+    # aliases included (e.g. "Dexterity", "Agility", "attr.body.agility" all resolve to
+    # ONE key). Reporting its length as "known registry vocabulary = N names" reads as
+    # "N distinct registered quantities" when the real count of distinct keyed quantities
+    # is roughly half. Compute BOTH and label each honestly.
+    _name_strings = quantity_registry.all_known()
+    _distinct_keys = {quantity_registry.resolve(n)[1] for n in _name_strings}
+    _distinct_keys.discard(None)
+    n_name_strings = len(_name_strings)
+    n_distinct_keys = len(_distinct_keys)
+
     # ---- JSON ----
     def dump(name, obj):
         (out / 'data' / name).write_text(json.dumps(obj, indent=1, sort_keys=True), encoding='utf-8')
@@ -265,7 +276,8 @@ def run(root, out, contracts_path=None, sim_root=None):
         'by_surface': scorecard['by_surface'],
         'top_resolved_registry_keys': resolved_buckets[:25],
         'unresolved_pointer_debt': debt,
-        'known_registry_vocabulary_size': len(quantity_registry.all_known()),
+        'known_registry_name_strings': n_name_strings,   # resolvable names incl. aliases
+        'distinct_registry_keys': n_distinct_keys,        # distinct keyed quantities (~half)
     })
 
     # ---- register (primary deliverable) ----
@@ -284,7 +296,8 @@ def run(root, out, contracts_path=None, sim_root=None):
              f'({_pct(ov["percent_resolved_unique_identifiers"])}) · '
              f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} raw occurrences resolved '
              f'({_pct(ov["percent_resolved_occurrences"])}) · '
-             f'known registry vocabulary = {len(quantity_registry.all_known())} names.')
+             f'known registry vocabulary = {n_name_strings} resolvable name strings '
+             f'(aliases included) → {n_distinct_keys} distinct registry keys.')
     L.append('')
 
     L.append('## By surface')

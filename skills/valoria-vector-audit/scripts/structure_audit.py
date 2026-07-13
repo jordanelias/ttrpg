@@ -252,6 +252,17 @@ def _as_list(v):
     return []
 
 
+def is_notional(doc, resolver):
+    """The ONE provenance predicate (capstone §8 reconciliation, ED-IN-0056): a
+    module_contracts entry is `notional` — lower-confidence, doc:null /
+    [ASSUMPTION]-grade — when it has no home design doc OR no real resolver.
+    Single-sourced HERE and imported by formula_audit.py (which previously
+    copy-pasted the identical `(not doc) or (resolver in (None,'None'))` rule),
+    so the governance predicate the observatory's contract says every layer
+    honors uniformly genuinely lives once."""
+    return (not doc) or (resolver in (None, 'None'))
+
+
 def build_l2(root):
     """L2 module graph + closure findings from references/module_contracts.yaml.
     Returns (graph, modules_meta, findings)."""
@@ -270,7 +281,7 @@ def build_l2(root):
         name = m.get('module')
         doc = m.get('doc')
         resolver = m.get('resolver')
-        notional = (not doc) or (resolver in (None, 'None'))
+        notional = is_notional(doc, resolver)
         meta[name] = {
             'scales': m.get('scales') or [], 'resolver': resolver,
             'doc': doc, 'status': m.get('status'),
@@ -350,10 +361,43 @@ def cross_scale_locality(g, meta):
             'per_module': per_module}
 
 
+def l2_contract_without_code(l2_nodes, code_nodes):
+    """Evidence for the contract↔code correspondence DISCLOSURE (capstone #7,
+    ED-IN-0056). Nothing in the observatory joins L2's `module_contracts.yaml`
+    modules to G_code's real code modules, so a fictional / unimplemented contract
+    would surface as canon-grade wiring unchallenged. This computes the plain-name
+    match rate purely to SHOW that a name heuristic cannot close that gap: a contract
+    'has code' only if its name is a dotted segment of some G_code module path (e.g.
+    `mass_battle` <- `sim.provincial.mass_battle`). It returns the unmatched list, but
+    that list is NOT presented as findings — the real convention diverges (`massbattle`,
+    `faction_action.py`, ...) so most misses are false positives. `run()` uses only the
+    COUNT, to disclose (not measure) the gap; closing it needs a mechanics_index
+    `sim_module:` join, a deferred task."""
+    code_segments = set()
+    for m in code_nodes:
+        for seg in m.split('.'):
+            code_segments.add(seg)
+    return sorted(m for m in l2_nodes if m and m not in code_segments)
+
+
 # ──────────────────────────── OUTPUT ─────────────────────────────────────────
 
-def _cycles(scc):
-    return [sorted(c) for c in scc if len(c) > 1]
+def _cycles(scc, adj):
+    """Cycles = SCCs of size >1, PLUS single-node self-loops. `tarjan_scc` groups a
+    self-loop into a size-1 component, so a self-loop must be checked against the
+    adjacency explicitly — exactly what this module's own `tarjan_scc` docstring
+    promises ("components of size >1 (or self-loops) are cycles"). Extracting only
+    `len(c) > 1` silently DROPPED self-loops (capstone reconciliation #1/#2,
+    ED-IN-0056): a module that imports itself, or an L2 module that emits a Key it
+    also consumes, is a real 1-node cycle the scorecard must not undercount. Shared
+    with formula_audit.py, which imports this rather than keeping its own copy (§8)."""
+    out = []
+    for c in scc:
+        if len(c) > 1:
+            out.append(sorted(c))
+        elif len(c) == 1 and c[0] in adj.get(c[0], ()):
+            out.append(list(c))
+    return out
 
 
 def run(root, out):
@@ -365,7 +409,7 @@ def run(root, out):
     g_code, parse_errors = build_g_code(root, modules)
     code_nodes = list(modules)
     code_scc = tarjan_scc(g_code)
-    code_cycles = _cycles(code_scc)
+    code_cycles = _cycles(code_scc, g_code)
     code_cuts = articulation_points(g_code)
     code_deg = degrees(g_code, code_nodes)
     code_orphans = sorted(n for n in code_nodes
@@ -380,10 +424,16 @@ def run(root, out):
     g_l2, meta, edges_meta, findings, assumption_count = build_l2(root)
     l2_nodes = list(meta)
     l2_scc = tarjan_scc(g_l2)
-    l2_cycles = _cycles(l2_scc)  # cross-check against the contracts' own `loops` field
+    l2_cycles = _cycles(l2_scc, g_l2)  # cross-check against the contracts' own `loops` field
     l2_deg = degrees(g_l2, l2_nodes)
     l2_cuts = articulation_points(g_l2)
     locality = cross_scale_locality(g_l2, meta)
+    l2_without_code = l2_contract_without_code(l2_nodes, code_nodes)
+    # capstone #4 (ED-IN-0056): `edges_meta` is the RAW emit->consume edge list (parallel
+    # edges kept); the cycle/cut-vertex/locality metrics all run on `g_l2`, the DEDUPLICATED
+    # simple graph. Report BOTH so the scorecard never juxtaposes a raw multi-edge count with
+    # simple-graph stats as if they were the same graph.
+    l2_simple_edges = sum(len(v) for v in g_l2.values())
     print(f'     {len(l2_nodes)} modules, {len(edges_meta)} wiring edges, '
           f'{len(findings["phantom_producer"])} phantom-producer, '
           f'{len(findings["dangling_emit"])} dangling-emit, '
@@ -398,15 +448,20 @@ def run(root, out):
         'code': {'nodes': len(code_nodes), 'edges': sum(len(v) for v in g_code.values()),
                  'cycles': code_cycles, 'cut_vertices': sorted(code_cuts),
                  'orphans': code_orphans, 'parse_errors': parse_errors},
-        'l2': {'nodes': len(l2_nodes), 'edges': len(edges_meta), 'cycles': l2_cycles,
+        'l2': {'nodes': len(l2_nodes),
+               'edges_raw': len(edges_meta),        # raw emit->consume edges (parallels kept)
+               'edges_simple': l2_simple_edges,     # deduplicated graph the metrics below run on
+               'cycles': l2_cycles,
                'cut_vertices': sorted(l2_cuts), 'locality': locality,
+               'contract_code_correspondence_verified': False,   # capstone #7: no reliable name join
+               'contract_code_name_unmatched': l2_without_code,   # informational, NOT a fabrication list
                'assumption_markers': assumption_count},
         'findings': findings,
     })
 
     # ---- register (primary deliverable) ----
-    top_code_hubs = sorted(code_nodes, key=lambda n: -(code_deg[n]['in'] + code_deg[n]['out']))[:12]
-    top_l2_hubs = sorted(l2_nodes, key=lambda n: -(l2_deg[n]['in'] + l2_deg[n]['out']))[:12]
+    top_code_hubs = sorted(code_nodes, key=lambda n: (-(code_deg[n]['in'] + code_deg[n]['out']), n))[:12]
+    top_l2_hubs = sorted(l2_nodes, key=lambda n: (-(l2_deg[n]['in'] + l2_deg[n]['out']), n))[:12]
     real_phantoms = [p for p in findings['phantom_producer'] if not p['src_notional']]
     notional_phantoms = [p for p in findings['phantom_producer'] if p['src_notional']]
     real_dangling = [d for d in findings['dangling_emit'] if not d['notional']]
@@ -421,7 +476,9 @@ def run(root, out):
     L.append('')
     L.append(f'**Scorecard:** code-modules={len(code_nodes)}, import-edges={sum(len(v) for v in g_code.values())}, '
              f'import-cycles={len(code_cycles)}, code-cut-vertices={len(code_cuts)}, code-orphans={len(code_orphans)}; '
-             f'l2-modules={len(l2_nodes)}, wiring-edges={len(edges_meta)}, l2-cycles={len(l2_cycles)}, '
+             f'l2-modules={len(l2_nodes)}, wiring-edges={len(edges_meta)} raw ({l2_simple_edges} simple/deduped — '
+             f'the cycle/cut-vertex/locality metrics run on the simple graph), l2-cycles={len(l2_cycles)}, '
+             f'l2-contract↔code-correspondence=UNVERIFIED({len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} name-map), '
              f'phantom-producers={len(real_phantoms)}(+{len(notional_phantoms)} notional), '
              f'dangling-emits={len(real_dangling)}, cross-scale-fraction={locality["cross_fraction"]}.')
     L.append('')
@@ -442,15 +499,32 @@ def run(root, out):
             real_dangling, lambda d: f"`{d['emitter']}` emits `{d['type']}` — no consumer")
     section('Import cycles (SCC > 1) in sim/ + tools/', code_cycles,
             lambda c: ' ↔ '.join(c[:6]) + (' …' if len(c) > 6 else ''))
+    # capstone #3 (ED-IN-0056): articulation_points() returns a set; sorting only by
+    # -degree left equal-degree ties resolving in set-iteration (hash-seed) order —
+    # nondeterministic across runs. The `n` tiebreaker makes the register order a total,
+    # reproducible order (the JSON already sorts alphabetically; now the register agrees).
     section('Code cut-vertices — single points of failure (removal disconnects the import graph)',
-            sorted(code_cuts, key=lambda n: -(code_deg[n]['in'] + code_deg[n]['out'])),
+            sorted(code_cuts, key=lambda n: (-(code_deg[n]['in'] + code_deg[n]['out']), n)),
             lambda n: f"`{n}` (in {code_deg[n]['in']}, out {code_deg[n]['out']})")
     section('L2 module cut-vertices — wiring fragility points',
-            sorted(l2_cuts, key=lambda n: -(l2_deg[n]['in'] + l2_deg[n]['out'])),
+            sorted(l2_cuts, key=lambda n: (-(l2_deg[n]['in'] + l2_deg[n]['out']), n)),
             lambda n: f"`{n}` (in {l2_deg[n]['in']}, out {l2_deg[n]['out']}, "
                       f"{'notional' if meta[n]['notional'] else 'canon'})")
     section('doc:null modules — registered contract, no home design doc (unimplementable spec)',
             sorted(findings['doc_null']), lambda n: f"`{n}`")
+    L.append('## Contract↔code correspondence — a DISCLOSED BLACK-HOLE (capstone #7, ED-IN-0056)')
+    L.append('')
+    L.append(f'Nothing in the observatory joins L2\'s {len(l2_nodes)} `module_contracts.yaml` modules to '
+             f'G_code\'s {len(code_nodes)} real code modules, so a fictional / unimplemented contract '
+             f'entry would surface as canon-grade wiring unchallenged. This gap is **named, not measured**: '
+             f'the contract→code mapping is NOT name-based (a plain name match finds only '
+             f'{len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} — the code uses `massbattle` for the '
+             f'`mass_battle` contract, folds `faction_state` into `faction_action.py`, etc.), so any '
+             f'name-heuristic cross-check would cry wolf at ~{round(100*len(l2_without_code)/max(1,len(l2_nodes)))}% '
+             f'and is deliberately NOT shipped as a finding. Closing this honestly needs the '
+             f'`canon/mechanics_index.yaml` `sim_module:` join (a contract↔mechanic↔file map) — a deferred '
+             f'WS task. Until then: **contract↔code correspondence is UNVERIFIED by this layer.**')
+    L.append('')
     section('Import orphans — internal module nothing imports (dead-ish; verify before removal)',
             code_orphans, lambda n: f"`{n}`")
     section('Code import hubs (highest total degree — change-impact)', top_code_hubs,
@@ -460,6 +534,14 @@ def run(root, out):
     L.append('## Cross-scale locality (NS3 — does the wiring cluster by scale?)')
     L.append(f"{locality['intra']} intra-scale vs {locality['cross']} cross-scale edges "
              f"({locality['cross_fraction']:.0%} cross). Lower is better-clustered.")
+    L.append('')
+    L.append('> **EXPLORATORY, not authoritative (capstone #8, ED-IN-0056):** this metric keys on each '
+             'module\'s `scales:` field, whose vocabulary is NOT yet reconciled (that is WS2 — the four '
+             'divergent scale vocabularies are an open workstream), so the intra/cross split can shift '
+             'when the vocabulary lands. Unlike the phantom-producer / dangling-emit findings above, this '
+             'one does NOT split notional (`doc:null`/`[ASSUMPTION]`) modules into a lower-confidence '
+             'bucket — a notional module\'s declared `scales:` is weighted the same as a canon module\'s. '
+             'Read it as a directional signal, not a gate.')
     L.append('')
     if notional_phantoms:
         L.append('## Lower-confidence (findings on notional/[ASSUMPTION] modules)')

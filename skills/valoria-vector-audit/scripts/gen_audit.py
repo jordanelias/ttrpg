@@ -591,6 +591,21 @@ def run(root, out):
              f'unregistered-canonical={scorecard["unregistered_canonical_heads"]}; '
              f'currency-drift={scorecard["currency_drift_docs"]}.')
     L.append('')
+    L.append('> **Scope disclosures (capstone reconciliation, ED-IN-0056):**')
+    L.append('> - **#9 — this measures currency-partition HEALTH, not v40 ADOPTION.** All three '
+             'detections (stale pointers, unregistered heads, drift) can read zero while ZERO live '
+             'heads carry a legible `v40` marker — a green scorecard here is compatible with no v40 '
+             'transition at all. Measuring v40-marker adoption needs the WS3 `head_pointers.yaml` + a '
+             '`Generation: v40` stamp, which do not exist yet; until they do, "NS4 meter" means "the '
+             'live/historical partition is clean," NOT "v40 is adopted."')
+    L.append('> - **#11 — `canon/`, `references/`, and `params/` paths can NEVER be LIVE heads here.** '
+             'The reused `ci_generation_consistency.DOC_KEYS` extraction hard-anchors captured paths to '
+             'a literal `designs/` prefix, so a current head such as `params/core.md` (named live in '
+             '`CURRENT.md`) is unconditionally HISTORICAL to this layer — a structural, corpus-wide '
+             'blind spot beyond the four detection-2 DOC_KEYS examples already disclosed. Widening it '
+             'is a `ci_generation_consistency.py` change (that rule lives once, §8), not a gen_audit '
+             'patch.')
+    L.append('')
 
     def section(title, rows, fmt, empty='(none)'):
         L.append(f'## {title}')

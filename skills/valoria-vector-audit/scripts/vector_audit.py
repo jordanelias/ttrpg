@@ -401,6 +401,21 @@ def extract_corpus(root):
     manifest['discourse_count'] = len(discourse)
     manifest['excluded_count'] = len(manifest['excluded'])
     manifest['missing_count'] = len(manifest['missing'])
+    # capstone #6 (ED-IN-0056): the L0 corpus is a CURATED slice (`_canonical_paths`), not the
+    # whole repo. Quantify what it structurally does NOT see so a green L0 result is never
+    # misread as whole-repo coverage. (pathlib-only; skip VCS/cache dirs.)
+    _skip = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache'}
+    all_md = [p for p in root.rglob('*.md')
+              if not any(part in _skip for part in p.relative_to(root).parts)]
+    total_md = len(all_md)
+    designs_md = sum(1 for p in all_md if p.relative_to(root).parts[:1] == ('designs',))
+    manifest['coverage'] = {
+        'design_files_scanned': len(design),
+        'repo_total_md': total_md,
+        'designs_total_md': designs_md,
+        'pct_of_designs_md': round(100 * len(design) / designs_md, 1) if designs_md else 0.0,
+        'pct_of_repo_md': round(100 * len(design) / total_md, 1) if total_md else 0.0,
+    }
     return design, discourse, manifest
 
 
@@ -997,10 +1012,19 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
 
     # 02_weakness_register.md — primary deliverable
     conf = "leads, not verdicts" if validation['verdict'] == 'FAILED' else "structural findings"
+    _cov = manifest.get('coverage', {})
     wr = [f'# Weakness register — vector audit v3 ({conf})', '',
           f"Corpus: {manifest['design_count']} design docs, "
           f"{len(tokens)} tokens. Validation: **{validation['verdict']}** "
           f"({validation['passed']}/3). Confidence inherits from validation (methodology §3.8).",
+          '',
+          f"**Coverage disclosure (capstone #6):** this L0 layer is a CURATED slice — "
+          f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
+          f"{_cov.get('pct_of_designs_md', '?')}% of the {_cov.get('designs_total_md', '?')} `.md` under "
+          f"`designs/`, and only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
+          f"{_cov.get('repo_total_md', '?')} `.md` files. Everything outside `_canonical_paths()` "
+          f"(most of `designs/`, all of `params/`/`sim/`/`tests/`/`canon/` prose) is structurally "
+          f"invisible to L0 — a green result here is NOT whole-repo coverage.",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={len(diag['C_notional'])}, sparse={len(diag['E_sparse_context'])}, "

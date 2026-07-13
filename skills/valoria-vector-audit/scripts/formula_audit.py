@@ -114,12 +114,14 @@ try:
 except Exception:  # pragma: no cover
     sys.exit("formula_audit requires PyYAML")
 
-# Import the graph primitives from the sibling observatory script (same
-# scripts/ directory) rather than a second Tarjan/degrees implementation.
+# Import the graph primitives + the shared provenance/cycle rules from the sibling
+# observatory script (same scripts/ directory) rather than a second implementation.
+# `is_notional` and `_cycles` are single-sourced in structure_audit.py (capstone §8
+# reconciliation, ED-IN-0056) — this module previously kept its own copies.
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
-from structure_audit import tarjan_scc, degrees  # noqa: E402  (reused, not reimplemented)
+from structure_audit import tarjan_scc, degrees, is_notional, _cycles  # noqa: E402  (reused, not reimplemented)
 
 # Import the ONE resolver + the ONE bundle-splitter from tools/ (mirrors
 # pointer_audit.py's import block exactly).
@@ -172,7 +174,7 @@ def module_meta_from_contracts(contracts):
         name = m.get('module')
         doc = m.get('doc')
         resolver = m.get('resolver')
-        notional = (not doc) or (resolver in (None, 'None'))
+        notional = is_notional(doc, resolver)   # single-sourced from structure_audit (§8, ED-IN-0056)
         meta[name] = {'doc': doc, 'resolver': resolver, 'notional': bool(notional)}
     return meta
 
@@ -322,20 +324,6 @@ def build_adjacency(edges, definitions):
     for node in definitions:
         adj.setdefault(node, set())
     return adj
-
-
-def _cycles(scc, adj):
-    """Components of size >1, PLUS single-node self-loops (structure_audit.py's
-    tarjan_scc groups a self-loop into a size-1 component; a self-loop must be
-    checked against the adjacency explicitly, same caveat as that module's own
-    docstring: 'components of size >1 (or self-loops) are cycles')."""
-    out = []
-    for c in scc:
-        if len(c) > 1:
-            out.append(sorted(c))
-        elif len(c) == 1 and c[0] in adj.get(c[0], ()):
-            out.append(list(c))
-    return out
 
 
 def compute_max_depth(adj, scc):

@@ -42,6 +42,39 @@ def test_tarjan_no_cycle():
     assert all(len(c) == 1 for c in sa.tarjan_scc(adj))
 
 
+# ── capstone reconciliation pins (ED-IN-0056) ───────────────────────────────
+
+def test_cycles_includes_self_loops():
+    # capstone #1/#2: a size-1 SCC WITH a self-edge is a real 1-node cycle. The old
+    # `_cycles(scc)` filtered `len>1` and silently dropped self-loops, contradicting
+    # tarjan_scc's own docstring; `_cycles` now takes the adjacency to detect them.
+    adj = {'a': ['a'], 'b': ['c'], 'c': []}   # a self-loops; b->c acyclic
+    assert sa._cycles(sa.tarjan_scc(adj), adj) == [['a']]
+
+
+def test_cycles_multi_node_still_reported_and_dag_is_empty():
+    cyc = {'x': ['y'], 'y': ['x'], 'z': []}
+    assert sa._cycles(sa.tarjan_scc(cyc), cyc) == [['x', 'y']]
+    dag = {'a': ['b'], 'b': ['c'], 'c': []}
+    assert sa._cycles(sa.tarjan_scc(dag), dag) == []
+
+
+def test_is_notional_is_the_one_provenance_predicate():
+    # capstone #10: single-sourced here; doc:null OR no/literal-'None' resolver => notional.
+    assert sa.is_notional(None, 'RealResolver') is True
+    assert sa.is_notional('designs/x_v30.md', None) is True
+    assert sa.is_notional('designs/x_v30.md', 'None') is True
+    assert sa.is_notional('designs/x_v30.md', 'RealResolver') is False
+
+
+def test_l2_contract_without_code_is_informational_name_gap():
+    # capstone #7: returns contract names absent as a code-path segment. Informational
+    # (drives the DISCLOSURE), never presented as a fabrication findings list.
+    l2 = ['mass_battle', 'faction_state', 'victory']
+    code = ['sim.provincial.mass_battle', 'sim.autoload.victory']   # faction_state absent
+    assert sa.l2_contract_without_code(l2, code) == ['faction_state']
+
+
 def test_articulation_point_on_path():
     # a - b - c : b is the cut vertex
     adj = {'a': ['b'], 'b': ['c'], 'c': []}

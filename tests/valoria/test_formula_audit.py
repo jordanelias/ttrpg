@@ -67,6 +67,15 @@ def test_module_reuses_structure_audit_tarjan_and_degrees():
     assert fa.degrees is sa.degrees
 
 
+def test_reuses_structure_audit_is_notional_and_cycles_by_identity():
+    # capstone #12 (ED-IN-0056): the `notional` provenance predicate and the
+    # self-loop-aware cycle extractor were copy-pasted here; now single-sourced in
+    # structure_audit and IMPORTED. Pinned by identity so a future edit to either
+    # rule can't silently fork the two layers' definitions.
+    assert fa.is_notional is sa.is_notional
+    assert fa._cycles is sa._cycles
+
+
 def test_tarjan_still_finds_a_cycle_through_the_reused_import():
     adj = {'a': ['b'], 'b': ['c'], 'c': ['a']}
     comps = fa.tarjan_scc(adj)
