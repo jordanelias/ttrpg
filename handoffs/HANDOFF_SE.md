@@ -110,6 +110,15 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **D1–D5 RULED 2026-07-13 (ED-IN-0046)** — `governance_consolidation_v1.md §6` and
+  `ners_vsg_reconciliation_v1.md` are both updated with the full ruling record. SE-lane concrete
+  effect: §1.3a's D3 gate is cleared (Compact = a recurring `Debt` subtype — E3's subsistence
+  floor is the remaining authoring gap); §1.0c (ED-FA-0020, FA-lane but composes with SE) and
+  four SE items (Za patron-lapse ED-SE-0021, Ordenanza ED-SE-0023, plus FA's 2.5a) are RATIFIED
+  outright — **authoring the ratified text into `governance_play_redesign_v1.md`/
+  `settlement_layer_v30.md` as CANONICAL prose is now the concrete next action**, not a decision
+  wait. B1 (faction count) and B2 (S-006's identity) remain genuinely open — no recommendation
+  existed for either, so the ruling did not touch them.
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13) before resuming any
   item below.** It cross-reads `governance_consolidation_v1.md`'s D1–D5/E1–E7 decision surface
   against `tools/sim_harness/`'s 19-adapter empirical pass

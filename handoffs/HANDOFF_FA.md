@@ -110,6 +110,13 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **D1–D5 RULED 2026-07-13 (ED-IN-0046)** — see `governance_consolidation_v1.md §6` for the full
+  record. FA-lane effect: §1.0c Court Attendance (ED-FA-0020) and both §2.5a Guild forks
+  (ED-FA-0022/0023) are RATIFIED outright — author into `faction_politics_v30.md` as CANONICAL
+  prose next. §1.0d (ED-FA-0021, Kaochengfa) is ruled to MERGE into the suspicion/recall spine as
+  a modifier, **but `needs_jordan` stays true**: the spine's wiring (D6 — does suspicion advance
+  every non-compliant season, or only on a specific card draw?) has no stated recommendation
+  anywhere and blocks authoring this merge until answered.
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13)** before landing
   HRE-2/HAB-4/IT-2 below — `tools/sim_harness/`'s NERS review found HRE-2 needs an explicit
   acquisition cost added (currently an uncosted 81%-favorable bet, E10), HAB-4 needs a Ministry
