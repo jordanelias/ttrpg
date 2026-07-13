@@ -110,10 +110,21 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13) before resuming any
+  item below.** It cross-reads `governance_consolidation_v1.md`'s D1–D5/E1–E7 decision surface
+  against `tools/sim_harness/`'s 19-adapter empirical pass
+  (`designs/audit/2026-07-12-pr119-harness-verification/`) and VSG's generator proposal
+  (`designs/territory/settlement_generator_v1.md` + `generation_sourcebook_v1.md`), and proposes
+  one merged sequence (Phase 0–7). Headline corrections it makes to this list: the promote-ready
+  items below now have per-item NERS dispositions (HRE-4/HAB-1/HRE-3/CHN-6 are clean KEEPs ready
+  to author; VEN-SE-2/IT-2/IT-1/HAB-4 need a named REFINE first — see the doc's Phase 3); E1
+  (port the Π restoring term) cannot land alone, per §3 of the reconciliation doc; a new decision
+  D6 (which G606 recall-clock wiring ships) is now open and blocks D5's execution.
 - **Land the remaining promote-ready P2/P3 items from the 2026-07-09 docket**: CHN-6 (Gongsuo
   Registration), HRE-3 (Convene the Circle), HRE-4 (Borrow), VEN-SE-2 (Boschi Pubblici
   Requisition), IT-1 + HAB-1 (fold into SE-7's oversight toolkit as a 5-instrument menu per the
-  docket's own S-2 synthesis). See STEP 3 §4 sequencing recommendation.
+  docket's own S-2 synthesis). See STEP 3 §4 sequencing recommendation, and the reconciliation
+  doc's Phase 2/3 for the refined per-item dispositions.
 - **Author card-deck specs for the 2026-07-09 batch's new triggers** (Cell Revolt, the
   clerk-corruption Intrigue, "Guild seeks Ordenanza sanction," "Patron's Rivals Move") per the
   `governance_play_redesign_v1.md` §2.2 schema — only noted inline at §2.3 so far, not fully

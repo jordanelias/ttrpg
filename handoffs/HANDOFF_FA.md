@@ -110,6 +110,15 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13)** before landing
+  HRE-2/HAB-4/IT-2 below — `tools/sim_harness/`'s NERS review found HRE-2 needs an explicit
+  acquisition cost added (currently an uncosted 81%-favorable bet, E10), HAB-4 needs a Ministry
+  action-economy foundation authored first (E9, Part 7 currently grants no per-Ministry action
+  capability), and IT-2's Aspetto ×0.5 clause needs reconciling against all four real
+  `faction.Mil` read sites named in the doc (E8) before it ships. The same doc also validated the
+  Ascendancy character-power system (Part 40, `designs/audit/2026-07-12-governance-compendium/`)
+  as the review's single strongest KEEP — ready to author into canon independent of anything else
+  on this list.
 - **Resolve ED-FA-0018 (CHN-2 Examination Ladder)** — the single highest-value open rank decision
   from the 2026-07-09 docket: does the Crown Administrative branch (§1.1b, currently the ladder
   system's one genuinely flat sub-office surface) get a non-Skyrim-Eight credentialing pipeline
