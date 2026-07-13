@@ -76,7 +76,7 @@ supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage tabl
 |---|---|---|
 | 0 | Pilot validation (8 well-understood tokens, sanity check tokenization) | `data/pilot.json` |
 | 1 | Corpus extraction with banner classifier (design vs discourse) | `data/corpus_*.json`, `data/corpus_manifest.json` |
-| 2 | Token curation: seed + auto-extract with disambiguation rules | `data/tokens.json`, `data/auto_candidates.json` |
+| 2 | Token curation: **derived from the live registries** (canonical_sources `systems:` + names_index + proper_noun_registry) layered on the curated disambiguation core — see `derive_tokens()` | `data/tokens.json` |
 | 2.5 | Expanded citation graph (explicit refs + implicit ≥2 body mentions + PP affects) | `data/g_cite.json` |
 | 3 | Standard sklearn TF-IDF over paragraphs (supporting only) | `data/g_tfidf.npz` |
 | 4 | Metadata graphs from throughlines table + Μ collapsing + PP affects | `data/g_metadata.json` |

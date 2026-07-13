@@ -92,9 +92,15 @@ PILOT_TOKENS = {
 }
 
 
-# ──────────────────────────── SEED TOKENS ────────────────────────────────────
-# Keep this list in sync with canonical_sources.yaml `systems:` block + named NPCs.
-# Auto-extracted tokens are added at Stage 2; this seed is the floor.
+# ──────────────────────────── SEED TOKENS (curated core) ─────────────────────
+# This is no longer the whole token set — it is the CURATED CORE that derive_tokens()
+# layers the live registries on top of (NS2: the token list is derived from
+# canonical_sources.yaml + names_index.yaml + proper_noun_registry.yaml at runtime, not
+# hand-maintained). The core is kept because it carries what derivation can't: the §3.5
+# disambiguation `context` for English-word collision tokens (Faith/Order/Crown/Church/…),
+# the foundation set, and the 7-Conviction / 4-Pressure-Point / clock members that P2
+# validation and the class taxonomy depend on. The core WINS on any name collision, so
+# these keep their disambiguation. To refresh tokens, update the registries — not this list.
 
 SEED_TOKENS = {
     # Foundation
@@ -422,13 +428,127 @@ def _passes_context(para, ctx_compiled):
     return any(rx.search(para) for rx in ctx_compiled)
 
 
-def curate_tokens(design):
-    """Build the working token table from SEED_TOKENS, computing per-token
-    paragraph_count and primary_doc against the design corpus. (Seed is the floor;
-    auto-extract is intentionally omitted here — deterministic seed-only run.)"""
+def _yaml(root, rel):
+    fp = root / rel
+    if not fp.exists():
+        return {}
+    try:
+        return yaml.safe_load(fp.read_text(encoding='utf-8', errors='replace')) or {}
+    except Exception:
+        return {}
+
+
+def _strip_display(s):
+    """Registry display string -> (bare label, abbreviation|None). Strips markdown
+    bold and a trailing '(ABBR)' parenthetical, returning the abbreviation separately
+    so it becomes its own match pattern."""
+    s = (s or '').replace('*', '').strip()
+    m = re.search(r'\(([A-Z][A-Za-z0-9]{1,6})\)\s*$', s)
+    abbr = m.group(1) if m else None
+    s = re.sub(r'\s*\([^)]*\)\s*$', '', s).strip()
+    return s, abbr
+
+
+def _pattern_for(label, abbr=None):
+    """Match patterns for a token label: word-boundary-anchored for short single
+    words (avoids substring noise), plain phrase otherwise; abbreviation added
+    word-boundary-anchored if present."""
+    if not label:
+        return []
+    esc = re.escape(label)
+    pats = [r'\b' + esc + r'\b'] if (' ' not in label and len(label) <= 6) else [esc]
+    if abbr:
+        pats.append(r'\b' + re.escape(abbr) + r'\b')
+    return pats
+
+
+# Canonical-source `systems:` keys that are lore/meta/migration docs, not mechanics —
+# excluded from derivation to keep the token set signal-heavy.
+SKIP_SYSTEMS = {
+    'module_contracts', 'ui_ux', 'videogame_mode_spec', 'core_engine',
+    'narrative_voice_canon', 'solmund_voice', 'solmund_philosophy', 'solmund_artifacts',
+    'character_generation_questionnaire', 'character_histories', 'character_canon_consolidation',
+    'faction_canon_consolidation', 'political_dynamics_keys_migration',
+    'conviction_migration_roster', 'throughlines_framework',
+    'tc_political',  # deprecated pre-CI naming variant; the 'CI Political' seed token is canonical
+}
+
+_ACRONYMS = {'Npc': 'NPC', 'Ci': 'CI', 'Ms': 'MS', 'Ip': 'IP', 'Ui': 'UI',
+             'Ux': 'UX', 'Ap': 'AP', 'Pi': 'PI', 'Ts': 'TS', 'Rm': 'RM'}
+
+
+def _humanize_system(key):
+    """Turn a canonical_sources system key into a display label: drop a trailing
+    '_npc' tag, title-case, then restore known acronyms (NPC/CI/MS/…)."""
+    key = re.sub(r'_npc$', '', key)
+    label = key.replace('_', ' ').title()
+    return ' '.join(_ACRONYMS.get(w, w) for w in label.split())
+
+
+def derive_tokens(root):
+    """Build the token table from the LIVE central registries (NS2: derived, not a
+    hardcoded frozen list), layered on the curated SEED_TOKENS core. The curated core
+    carries the validated §3.5 disambiguation context plus the foundation / 7-Conviction
+    / 4-Pressure-Point / clock sets that P2 validation and the class taxonomy depend on,
+    and it WINS on any name collision — so the English-word collision tokens
+    (Faith/Order/Crown/Church/Evidence/…) keep their disambiguation rather than being
+    re-derived context-free. Additive sources: canonical_sources.yaml `systems:`,
+    names_index.yaml `entries:` (minus bare attributes, which are grep-noisy),
+    proper_noun_registry.yaml characters/factions/subfactions/organizations (minus
+    rarely-mentioned entities)."""
+    tokens = {name: dict(meta) for name, meta in SEED_TOKENS.items()}
+    for m in tokens.values():
+        m.setdefault('source', 'seed')
+    norm = lambda s: re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).strip()
+    seen = {norm(n) for n in tokens}
+
+    def add(name, patterns, scale, source):
+        n = norm(name)
+        if not name or not patterns or not n or n in seen or len(name) < 3:
+            return
+        seen.add(n)
+        tokens[name] = {'patterns': patterns, 'scale': scale, 'status': 'canonical',
+                        'source': source, 'context': []}
+
+    cs = _yaml(root, 'references/canonical_sources.yaml')
+    for key in sorted((cs.get('systems', {}) or {})):
+        if key in SKIP_SYSTEMS:
+            continue
+        label = _humanize_system(key)
+        add(label, _pattern_for(label) + [re.escape(key)], 'system', 'derived:canonical_sources')
+
+    for e in (_yaml(root, 'references/names_index.yaml').get('entries', {}) or {}).values():
+        if not isinstance(e, dict) or e.get('category') == 'attribute':
+            continue
+        label, abbr = _strip_display(e.get('canonical'))
+        pats = _pattern_for(label, abbr) + [re.escape(a) for a in (e.get('aliases') or []) if len(a) >= 4]
+        add(label, pats, e.get('category') or 'mechanic', 'derived:names_index')
+
+    pn = _yaml(root, 'references/proper_noun_registry.yaml')
+    for cat, scale in (('characters', 'npc'), ('factions', 'faction'),
+                       ('subfactions', 'faction'), ('organizations', 'faction')):
+        grp = pn.get(cat, {}) or {}
+        if not isinstance(grp, dict):
+            continue
+        for item in grp.values():
+            if not isinstance(item, dict):
+                continue
+            occ = item.get('occurrences_count')
+            if isinstance(occ, int) and occ < 5:  # drop barely-present entities (noise)
+                continue
+            label, _ = _strip_display(item.get('canonical'))
+            pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
+            add(label, pats, scale, 'derived:proper_noun')
+
+    return tokens
+
+
+def curate_tokens(design, token_defs):
+    """Compute per-token paragraph_count and primary_doc against the design corpus
+    for the derived token table (see derive_tokens)."""
     paras_by_doc = {d: to_paragraphs(c) for d, c in design.items()}
     tokens = {}
-    for name, meta in SEED_TOKENS.items():
+    for name, meta in token_defs.items():
         comp = _compiled(meta['patterns'])
         ctx = _compiled(meta.get('context', []))
         para_count, per_doc = 0, {}
@@ -932,8 +1052,11 @@ def run(root, out):
     print(f'          {manifest["design_count"]} design / {manifest["discourse_count"]} discourse '
           f'/ {manifest["missing_count"]} missing')
 
-    print('[stage 2] curating tokens...')
-    tokens, paras_by_doc = curate_tokens(design)
+    print('[stage 2] deriving + curating tokens (registries + seed core)...')
+    token_defs = derive_tokens(root)
+    tokens, paras_by_doc = curate_tokens(design, token_defs)
+    _srcs = Counter(m.get('source', 'seed').split(':')[0] for m in token_defs.values())
+    print(f'          {len(tokens)} tokens ({dict(_srcs)})')
 
     print('[stage 2.5] citation graph...')
     g_cite = build_g_cite(tokens, design)
