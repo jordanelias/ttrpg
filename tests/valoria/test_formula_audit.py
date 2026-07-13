@@ -311,9 +311,14 @@ def test_real_corpus_has_known_orphan_inputs_pinned(real_dag):
     orphans = fa.find_orphan_inputs(real_dag['edges'], real_dag['definitions'])
     ids = {o['identifier'] for o in orphans}
     assert 'cumulative_damage' in ids
-    # settlement_layer's faction-Mandate derivation references L_s/PS_s/W_s,
-    # none of which are registered or derived anywhere else in the corpus.
-    assert {'L_s', 'PS_s', 'W_s'}.issubset(ids)
+    # settlement_layer's faction-Mandate derivation inputs were canonicalized
+    # (ED-IN-0060): L_s/PS_s -> Legitimacy/Popular Support, which ARE registered
+    # (set.legitimacy/set.popular_support) so they are no longer orphans. What
+    # remains is W_s -- a formula-local intermediate (W_s = base(Type)+Prosperity+
+    # FacilityTier), unregistered and derived nowhere else -- the one real residual
+    # orphan of that derivation.
+    assert 'W_s' in ids
+    assert 'L_s' not in ids and 'PS_s' not in ids   # canonicalized away, no longer orphans
 
 
 def test_real_corpus_faction_mandate_paren_variant_is_not_a_false_orphan(real_dag):
