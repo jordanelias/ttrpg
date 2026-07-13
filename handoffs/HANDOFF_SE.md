@@ -110,6 +110,34 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **D1–D6 all RULED 2026-07-13 (ED-IN-0046/0047)** — `governance_consolidation_v1.md §6` and
+  `ners_vsg_reconciliation_v1.md` are both updated with the full ruling record. SE-lane concrete
+  effect: §1.3a's D3 gate is cleared (Compact = a recurring `Debt` subtype — E3's subsistence
+  floor is the remaining authoring gap); §1.0c (ED-FA-0020, FA-lane but composes with SE) and
+  four SE items (Za patron-lapse ED-SE-0021, Ordenanza ED-SE-0023, plus FA's 2.5a) are RATIFIED
+  outright — **authoring the ratified text into `governance_play_redesign_v1.md`/
+  `settlement_layer_v30.md` as CANONICAL prose is now the concrete next action**, not a decision
+  wait. **B1 (faction count) is RULED**: starting count = 4, matching `valoria_political_hierarchy_v30.md`'s
+  duchy+Church structure exactly; `ED-FA-0001` resolved.
+- **B2 RULED and EXECUTED 2026-07-13.** S-006 stays Goldenfurt (Kronmark/T2), S-007 is Lowenskyst
+  Fortress. Jordan then mandated "reconcile all geography stuff with bias towards recency" —
+  `valoria_geography_v30.yaml`'s entire `settlements:` dict was running the stale pre-PP-726
+  36-scheme (not just S-006/S-007), discovered via `settlement_layer_v30.md §2.3`'s own migration
+  table cross-checked against the geography YAML's `settlement_adjacency:` block (already correctly
+  rebuilt to the new scheme during PP-726). Migrated all 37 settlements; verified zero orphans, full
+  province↔settlement consistency, every adjacency edge resolves, ≥2-connection rule holds. Also
+  closes `generation_sourcebook_v1.md`'s **B9** blocker.
+- **B12 RULED 2026-07-13 — Jordan explicitly overrules existing canon.** Settlement → **Territory**
+  (new tier, multiple settlements, own governance levers) → **Province** (multiple territories,
+  formed only while they share a common faction holder — replaces PP-726 §2.3's fracturing rule) →
+  Duchy → Country. A bidirectional governance-type cascade (each tier sets the tier below's
+  governance type) is modulated by **L/PS** — settlements can resist imposed governance, which makes
+  wiring L/PS (`governance_consolidation_v1.md` E5) the single highest-priority open item in this
+  entire thread, not just an FA-lane note. Full ruling + propagation scope:
+  `designs/territory/scale_hierarchy_v1.md`. `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3
+  now carry a supersession banner; the mechanical rewrite (§2.1/§2.4/§2.5) is tracked, unexecuted
+  follow-on authoring — see the new doc's §6 for the full propagation list (also resolves B12's
+  naming-collision concern re: Part 41's Territory scale — same tier, not a collision).
 - **Read `designs/architecture/ners_vsg_reconciliation_v1.md` (2026-07-13) before resuming any
   item below.** It cross-reads `governance_consolidation_v1.md`'s D1–D5/E1–E7 decision surface
   against `tools/sim_harness/`'s 19-adapter empirical pass

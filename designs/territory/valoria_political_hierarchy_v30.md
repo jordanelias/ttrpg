@@ -7,7 +7,15 @@
 # Valoria — Political Hierarchy Canon (PP-726)
 
 **Class:** A — substrate-defining canon.
-**Status:** PROVISIONAL.
+**Status:** PROVISIONAL. ⚠️ **§1's "Territory = Settlement" equivalence and §2.3's fracturing rule are
+SUPERSEDED (2026-07-13, direct Jordan ruling)** by `designs/territory/scale_hierarchy_v1.md` — Territory
+is now a real intermediate tier (Settlement → Territory → Province, multiple settlements per territory,
+multiple territories per province), and provinces are conditional aggregations of common-faction
+territories rather than fixed units that fracture. **This doc's Duchy tier, §2.1's settlement-count
+mechanics (now needing a territory-tier analogue), §2.4's political-value formula, and §2.5's governor
+assignment are NOT yet rewritten to match — that propagation is tracked, unexecuted work** (see
+`scale_hierarchy_v1.md §6`). Do not treat §1/§2.3 as current; do not resume mechanical rewrite work here
+without reading the superseding doc first.
 **Purpose.** Establish the canonical political hierarchy from peninsula geography down to march-route settlement: who owns what, at what scale, under what rules. Closes the substrate-modeling error that ran through PP-666/ED-710/PP-723 — those iterations conflated siege-target settlements with their subservient districts and outposts, producing a 36-entry registry that mixed two granularities and a 49-edge adjacency graph at the wrong level. PP-726 re-cuts the schema at the correct level and establishes the political-administrative scaffolding (duchies, provinces, fracturing rule, political-value computation, governor assignment).
 
 ---

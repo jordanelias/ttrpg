@@ -1,6 +1,6 @@
 # NERS-Review / VSG Reconciliation (v1) — merging the harness-verification empirical branch with the generation-methodology design branch
 
-## Status: PROPOSED — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · NOT canon; flips no `## Status:` line; allocates no ED. Supersedes nothing; extends `governance_consolidation_v1.md` with execution evidence and folds `generation_sourcebook_v1.md`'s blocker register into one surface.
+## Status: ALL SIX ITEMS RULED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047; B2+B12: direct Jordan ruling 2026-07-13) — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record D1–D6) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. B12's ruling landed as its own document, `designs/territory/scale_hierarchy_v1.md`, which overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 for the full, three-times-updated ruling record.
 
 **What this is.** Two independent PRs landed on `main` within the same session window and were never
 cross-read against each other:
@@ -88,10 +88,10 @@ existed; new items continue each series.
 | B6 | No spatial substrate | untouched |
 | B7 | No typed engine-params schema | untouched |
 | **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk_progress`) wired in, validated across a 6-point skill sweep (skill 0.0 → 82% ruin/18% steady/0% prosper; skill 1.0 → 100% prosper). It is a **test harness proving the S3–S6 concept**, not the production spec (Directive generator, full 28-card set, card-format schema are still unbuilt) — B8 should be re-scoped to "extend the proven 13-card harness to the full 28-card production spec," not restated as zero progress. |
-| B9 | Geography YAML `settlements:` block stale 36-scheme | untouched |
-| B10 | VSG depends on `governance_consolidation_v1 §6` D1–D5 | now also depends on **D6 (NEW)** above |
-| **B11 (NEW)** | `engine_clock` unauthored (`doc: null` in `module_contracts.yaml`, per CLAUDE.md §6) blocks more than previously scoped: it's the sole blocker on Part 41's Relay Tier/Beacon Network — "the single strongest new-state case in the corpus" per the NERS review — and by extension on VSG ever generating a cross-settlement Territory-scale mechanic that actually fires at runtime. | `pr119_proactive_governance_menus.py`: `relay_tier_temporal_dependency` → `contingent_on_unauthored_engine_clock`, **100/100** |
-| **B12 (NEW)** | **Naming collision, unconfirmed either way:** `generation_sourcebook_v1 §1.3`'s TERRITORY/PROVINCE stack (R1–R9, a geographic/administrative generation layer — duchy, temperament, calamity exposure) and Part 41's "Territory" **proactive-governance scale** (connective tissue between settlements — Beacon Network, Cordon, shared reserve) use the same word for what may or may not be the same underlying entity. Neither document cites the other. | Surfaced by cross-reading both branches for this document; not tested by any adapter |
+| B9 | ~~Geography YAML `settlements:` block stale 36-scheme~~ **RESOLVED 2026-07-13** ("reconcile all geography stuff with bias towards recency") — full 37-settlement migration against `settlement_layer_v30.md`'s already-current table, cross-verified against the already-correct `settlement_adjacency:` block. See §5 item 3. | resolved |
+| B10 | VSG depends on `governance_consolidation_v1 §6` D1–D6 | **RESOLVED** — all of D1–D6 now ruled |
+| **B11** | `engine_clock` unauthored (`doc: null` in `module_contracts.yaml`, per CLAUDE.md §6) blocks more than previously scoped: it's the sole blocker on Part 41's Relay Tier/Beacon Network — "the single strongest new-state case in the corpus" per the NERS review — and by extension on VSG ever generating a cross-settlement Territory-scale mechanic that actually fires at runtime. | `pr119_proactive_governance_menus.py`: `relay_tier_temporal_dependency` → `contingent_on_unauthored_engine_clock`, **100/100**. **Still open** — B12's resolution (below) doesn't touch this. |
+| **B12** | ~~Naming collision, unconfirmed either way~~ **RESOLVED 2026-07-13, Jordan RULED directly**: not a collision — the sourcebook's Territory/Province stack and Part 41's Territory scale name the same real tier. Full ruling: `designs/territory/scale_hierarchy_v1.md`, which explicitly overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 item 4. | resolved |
 
 ---
 
@@ -173,25 +173,63 @@ Phase 7 — VSG build proper (generation_sourcebook_v1 §7's sequence, now dated
 
 ---
 
-## §5 · Explicit asks for Jordan (nothing above is silently decided)
+## §5 · Explicit asks for Jordan — updated 2026-07-13 post-ruling
 
-1. **D6 (new).** Which G606 wiring model ships — cumulative-per-season advance (near-total recall
-   dominance) or specific-card-draw advance (recall cascades nearly absent)? This determines what
-   Goldenfurt-derived settlements *feel like* to govern, not just an implementation detail.
-2. **B2, recommend resolving independently and immediately.** S-006's identity — Goldenfurt Town in
-   Kronmark (T2), or Lowenskyst Fortress/Border (T3)? Two branches (VSG's calibration test, and
-   retroactively every PR#127 adapter that used the fixture) are blocked or already-exposed on this;
-   it's cheap and editorial, not a design call.
-3. **Phase-1 resequencing (§3).** Confirm collapsing E1+E3+E7 into one bundled port rather than
-   `governance_consolidation_v1`'s original phased split — recommend yes, given the four-measurement
-   convergence.
-4. **The held-back item (Phase 6).** Part 41's Territory-scale content (Relay Tier/Beacon Network) is
-   explicitly NOT bundled into "author Part 41 now" — it needs `engine_clock` authored first and the
-   Territory/R-stack naming collision (B12) resolved. Flagging this prominently per ED-1094 rather than
-   letting it ride in silently under a broader "author Part 41" approval.
-5. Everything in `governance_consolidation_v1 §6` (D1–D5) and `settlement_generator_v1.md §7`'s
-   original open calls still stands, unchanged by this document except where §1's table marks a
-   CONFIRMED/CHALLENGES verdict.
+**RULED** (ED-IN-0046, see `governance_consolidation_v1.md §6` for the full record): D1–D5, and the six
+items governance_consolidation_v1 §2 already called a clean RATIFY (§1.0c, §2.5a mastership+entry,
+§1.3c, §3.3b). Item 3 below (Phase-1 resequencing) is accepted as part of that same ruling — it was
+this document's own recommendation and drew no objection.
+
+**RULED, second pass (2026-07-13, ED-IN-0047, direct Jordan input in conversation, not inferred from
+"ratify commit all"):**
+
+1. **D6 RULED.** Cumulative per-Defy-season suspicion accrual is canonical (matches the suspicion/
+   recall spine's own already-stated spec), **on the explicit condition that E11 lands in the same
+   authoring pass** — a new, symmetric, ongoing suspicion-*reduction* mechanic driven by sustained
+   compliance/consistency/predictability, not merely the existing one-shot `Submit to audit` escape.
+   Jordan: "if there is a way to advance suspicion from non-compliance, there must be a way to reduce
+   suspicion by over-compliance and consistency/predictability. Build the counter to cumulative." See
+   `governance_consolidation_v1.md §3` E11 for the full ruling. **Unblocks** authoring D5's merge into
+   `faction_politics_v30.md`, provided E11 ships with it.
+2. **B1 RULED.** Starting faction count = **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund) —
+   independently confirmed against `valoria_political_hierarchy_v30.md`'s existing 3-duchy +
+   Church-special-entity structure, not an arbitrary pick. Emergent factions are explicitly in scope
+   and intentional: Restoration Movement (`insurgency_pipeline_v30`), Löwenritter-style post-coup
+   splits (`faction_succession_split_v30`), and an Altonia-usurper archetype are named as valid
+   emergence cases, reusing the F-stack's already-designed F6 mechanisms. **Resolves `ED-FA-0001`.**
+
+**RULED, third pass (2026-07-13, direct Jordan input in conversation):**
+
+3. **B2 RULED.** S-006 keeps its existing name, Goldenfurt ("S-006 can be Goldenfurt in that case") —
+   the collision lean (renaming to "Kronmark," which S-004 already carries) is withdrawn. Jordan then
+   gave a broader mandate: **"Just reconcile all geography stuff with bias towards recency."** Executed
+   2026-07-13: `valoria_geography_v30.yaml`'s `settlements:` dict was running the stale pre-PP-726
+   36-scheme entirely (not just S-006/S-007) — confirmed via `settlement_layer_v30.md §2.3`'s own
+   old-ID→new-ID migration table, which the geography YAML's `settlement_adjacency:` block had
+   *already* been correctly rebuilt against during PP-726 (used as the cross-check). Migrated all 37
+   settlements to match `settlement_layer_v30.md`'s current table (14 retained/renumbered + 21 newly
+   authored, coords inferred for the 21 with no prior data — flagged in-file as placement, not
+   hand-tuned balance), all 17 provinces' settlement lists corrected, stale S-ID references in terrain
+   features / `altonian_passes` / `settlement_layer_v30.md:912` fixed. Verified: 37 settlements, zero
+   orphans, every province↔settlement territory reference consistent, every adjacency edge resolves,
+   ≥2-connection rule holds (Schoenland exempt). This resolves generation_sourcebook_v1.md's **B9**
+   blocker too (the geography-YAML resync it named) — not just the narrow S-006/S-007 question.
+4. **B12 RULED — Jordan explicitly overrules existing canon.** Settlement → **Territory** (new tier,
+   multiple settlements) → **Province** (multiple territories, and only formed while they share a
+   common faction holder — replaces PP-726 §2.3's fracturing rule) → Duchy → Country. Plus: a
+   governance-type cascade (each tier's authority sets the tier below's governance type, bidirectional,
+   noisy); L/PS as the consent/resistance modulator on that cascade (making E5's wiring the single
+   highest-priority open item in the whole thread, not just an FA-lane note); faction tiers
+   (local/provincial/national) as independent, people-holding rather than territory-holding; settlement/
+   territory/province independence and cross-scale claiming (e.g. RM claiming one settlement directly);
+   and two chain-bypassing authorities (the monarch, Parliament). Full ruling + propagation scope:
+   `designs/territory/scale_hierarchy_v1.md`. `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3 now
+   carry a supersession banner; the mechanical rewrite (§2.1/§2.4/§2.5, the R/F-series sourcebook
+   stacks) is tracked, unexecuted follow-on authoring — see that doc's §6.
+5. **The held-back item (Phase 6), now partially resolved.** B12's resolution (item 4) confirms Part
+   41's Territory *scale* and the sourcebook's Territory/Province stack describe the same real tier —
+   no longer a naming collision. Part 41's Territory-scale content (Relay Tier/Beacon Network) still
+   needs `engine_clock` (B11) authored before it ships — that hold is unaffected and stands alone now.
 
 ---
 
