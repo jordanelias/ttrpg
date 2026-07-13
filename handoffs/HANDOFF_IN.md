@@ -596,6 +596,17 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **Governance Type Registry (2026-07-13)** — `designs/architecture/governance_type_registry_v1.md`
+  inventories every governance/politics/hierarchy/faction/geography type across the corpus (4 parallel
+  survey passes + this session's generation-methodology work), classified FLAG vs. VECTOR, cross-scale
+  throughlines named (§3), 5 same-name/different-scale naming collisions surfaced unresolved (§2.8),
+  and a grounded (not ratified) proposal for a `Field`/`Gauge` substrate primitive extending
+  `key_echo_armature_v1.md` to cover continuous VECTOR state — closing the OF-3 `decay()` fork
+  (deferred 2026-07-07, `key_echo_armature_v1.md §5.2`) generically instead of per-track. **Read this
+  before authoring any new cross-scale accumulation/propagation/decay mechanic** — it names two
+  working templates (MS's hysteresis+falloff, Π's homeostat clamp) to generalize from rather than
+  re-deriving. OF-3's `decay()` fork itself is still Jordan's to rule.
+
 _(Reserved-ID state healthy as of 2026-07-02: LB-21 executed, then the `ED-<LANE>-NNNN` cutover
 (ED-IN-0001) froze the flat sequence at `ED-1094`. `references/id_reservations.yaml`'s `lane_ids`
 section is now the live allocation source for all NEW EDs — read `next_free` for your lane,
