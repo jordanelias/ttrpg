@@ -85,22 +85,24 @@ silently swallowed:
   test_registry.py, so the mechanism is exercised against real corpus data, not only a
   synthetic monkeypatch).
 
-  KNOWN LIMITATIONS this facade CANNOT fix on its own (WS1 antagonist findings, ED-IN-0057).
-  These are exactly the pointer-collisions WS1's data fold-in exists to RESOLVE; they are
-  disclosed here (never silently swallowed) and deferred to that later checkpoint, NOT this
-  read-only facade:
-  * ALIAS/CANONICAL STRING COLLISION. "Influence" is BOTH an alias of attr.social.charisma
-    AND the canonical name of the faction-stat fac.influence. Inside quantity_registry.load()
-    and names.entries() the attribute registers first (first-write-wins), so the string
-    "Influence" resolves to attr.social.charisma and fac.influence is reachable by NO display
-    string — and NO 'disagreement' can fire, because the losing candidate is discarded
-    UPSTREAM, before resolve() compares anything. Fixing it means giving fac.influence a
-    non-colliding pointer in the fold-in; it is not a precedence bug in this reader.
-  * BARE STRUCTURAL KEYS ARE ATTRIBUTE-ONLY. descriptor_registry.resolve() scans only the
-    body/mind/social ATTRIBUTES, so 'attr.body.strength' resolves but 'fac.influence' /
-    'set.legitimacy' / 'prac.thread_sensitivity' / 'terr.fort_level' do NOT (they resolve
-    through nothing, returning None indistinguishably from "unknown"). All-section structural-
-    key resolution lands with the same fold-in checkpoint.
+  STRUCTURAL-KEY COVERAGE + COLLISION SURFACING (WS1 antagonist findings ED-IN-0057, closed
+  ED-IN-0058):
+  * BARE STRUCTURAL KEYS — RESOLVED. resolve() now covers the WHOLE descriptor_registry.yaml
+    structural namespace: attributes via descriptor_registry.resolve() (reused, §8), and the
+    fac./set./prac./terr./agg. sections' keys + names + aliases via the non-attribute structural
+    index (_nonattr_structural_index). So 'fac.influence', 'set.legitimacy',
+    'prac.thread_sensitivity', 'terr.fort_level' all resolve now (kind='descriptor', with a
+    'section' tag), where before they returned None indistinguishably from "unknown". A
+    structural term like "Fort"/"Wealth" therefore routes through the AUTHORITATIVE descriptor
+    registry rather than quantity_registry's fuzzy merge.
+  * ALIAS/CANONICAL STRING COLLISION — RESIDUAL, but the entity is reachable and the collision is
+    SURFACED. "Influence" is both an alias of attr.social.charisma AND the canonical name of
+    fac.influence; the attribute wins the string (checked first), so the STRING "Influence" still
+    resolves to attr.social.charisma and no 'disagreement' fires (the loser is discarded upstream).
+    BUT fac.influence is now reachable by its bare KEY (above), so the entity is no longer lost —
+    and collisions() reports the residual string-ambiguity as the precise work-list the WS1 data
+    fold-in must disambiguate (give fac.influence a non-colliding display pointer). Resolving the
+    string itself is a data change (the fold-in), not a precedence fix in this read-only reader.
 
 RETURN SHAPE — resolve(term) is either None (no resolver recognizes `term` at all) or:
     {
@@ -151,6 +153,7 @@ except Exception:               # pragma: no cover
 
 _UNSET = object()
 _DESCRIPTOR_REG_CACHE = _UNSET   # descriptor_registry.load() output, parsed at most once per process
+_NONATTR_INDEX_CACHE = _UNSET    # non-attribute structural index, rebuilt whenever the reg reloads
 
 
 def _load_descriptor_reg():
@@ -169,7 +172,7 @@ def _load_descriptor_reg():
     Never raises: returns None on a missing file, an absent/failed descriptor_registry module,
     or any parse error (same fault-tolerance discipline as the three wrapped modules).
     """
-    global _DESCRIPTOR_REG_CACHE
+    global _DESCRIPTOR_REG_CACHE, _NONATTR_INDEX_CACHE
     if _DESCRIPTOR_REG_CACHE is not _UNSET:
         return _DESCRIPTOR_REG_CACHE
     reg = None
@@ -182,22 +185,64 @@ def _load_descriptor_reg():
         except Exception:
             reg = None
     _DESCRIPTOR_REG_CACHE = reg
+    _NONATTR_INDEX_CACHE = _UNSET   # force the structural index to rebuild against the fresh reg
     return reg
 
 
+# descriptor_registry.yaml sections OTHER than `attributes` that carry keyed entries.
+# descriptor_registry.resolve() scans ONLY `attributes`, so the fac./set./prac./terr./agg.
+# structural namespace otherwise resolves through NOTHING (WS1 antagonist finding, ED-IN-0058).
+# `by_reference` is excluded: its keys are wildcards (conv.*, axis.*), not concrete resolvable keys.
+_NONATTR_KEYED_SECTIONS = ('aggregates', 'faction_stats', 'practitioner_stats',
+                           'territory_stats', 'settlement_stats')
+
+
+def _nonattr_structural_index(reg):
+    """{lowercased term -> (key, section)} over every key / name / alias in the NON-attribute
+    keyed sections of descriptor_registry.yaml. Cached (rebuilt when _load_descriptor_reg reloads).
+
+    This is NEW coverage of a namespace no existing resolver reaches — NOT a reimplementation of
+    the attribute rule, which stays delegated to descriptor_registry.resolve() (§8). Deterministic:
+    sections are walked in a fixed order and the FIRST binding of a term wins, so the result never
+    depends on dict iteration order."""
+    global _NONATTR_INDEX_CACHE
+    if _NONATTR_INDEX_CACHE is not _UNSET:
+        return _NONATTR_INDEX_CACHE
+    index = {}
+    if isinstance(reg, dict):
+        for section in _NONATTR_KEYED_SECTIONS:
+            block = reg.get(section) or {}
+            entries = block.get('entries') if isinstance(block, dict) else None
+            for e in (entries or []):
+                if not isinstance(e, dict) or not e.get('key'):
+                    continue
+                for form in [e['key'], e.get('name')] + list(e.get('aliases') or []):
+                    if form:
+                        index.setdefault(str(form).strip().lower(), (e['key'], section))
+    _NONATTR_INDEX_CACHE = index
+    return index
+
+
 def _descriptor_hit(term):
-    """Resolve `term` via the real descriptor_registry.resolve(); None if unrecognized
-    (including when the registry itself can't be loaded at all)."""
+    """Resolve `term` against descriptor_registry.yaml. First the ATTRIBUTE domain via the real
+    descriptor_registry.resolve() (reused, §8); then — for the fac./set./prac./terr./agg.
+    structural namespace descriptor_registry.resolve() does NOT scan — via the non-attribute
+    structural index. None if unrecognized (including when the registry can't be loaded)."""
     reg = _load_descriptor_reg()
     if reg is None:
         return None
     try:
         entry = descriptor_registry.resolve(reg, term)
     except Exception:
-        return None
-    if not entry:
-        return None
-    return {'kind': 'descriptor', 'key': entry.get('key'), 'via': 'descriptor_registry'}
+        entry = None
+    if entry:
+        return {'kind': 'descriptor', 'key': entry.get('key'), 'via': 'descriptor_registry',
+                'section': 'attributes'}
+    hit = _nonattr_structural_index(reg).get(str(term).strip().lower())
+    if hit is not None:
+        key, section = hit
+        return {'kind': 'descriptor', 'key': key, 'via': 'descriptor_registry', 'section': section}
+    return None
 
 
 def _names_hit(term):
@@ -277,6 +322,8 @@ def resolve(term):
     }
     if 'matched_as' in winner:
         result['matched_as'] = winner['matched_as']
+    if 'section' in winner:
+        result['section'] = winner['section']   # which descriptor_registry.yaml section owns the key
     return result
 
 
@@ -322,5 +369,53 @@ def all_known():
             for a in (e.get('aliases') or []):
                 if a:
                     known.add(a)
+        # non-attribute structural namespace (fac./set./prac./terr./agg. — bare keys included,
+        # which quantity_registry.all_known() does not carry since resolve() can't match a raw key)
+        for section in _NONATTR_KEYED_SECTIONS:
+            block = reg.get(section) or {}
+            entries = block.get('entries') if isinstance(block, dict) else None
+            for e in (entries or []):
+                if not isinstance(e, dict) or not e.get('key'):
+                    continue
+                known.add(e['key'])
+                if e.get('name'):
+                    known.add(e['name'])
+                for a in (e.get('aliases') or []):
+                    if a:
+                        known.add(a)
 
     return known
+
+
+def collisions():
+    """DIAGNOSTIC (not resolution): display strings / aliases bound to MORE THAN ONE structural key
+    across descriptor_registry.yaml — the un-pointered ambiguities the WS1 data fold-in must resolve.
+    The canonical instance is "influence" -> {attr.social.charisma, fac.influence}: an attribute
+    alias and a faction-stat name collide on one string, so fac.influence is reachable by no display
+    string (only by its bare key). Returns {lowercased term: sorted[keys]} for every term bound to
+    >1 key — making the collisions the reader CANNOT auto-resolve VISIBLE (the precise work-list for
+    the fold-in) rather than silently swallowed. Keys themselves are unique and excluded."""
+    reg = _load_descriptor_reg()
+    if reg is None:
+        return {}
+    term_keys = {}   # lowercased display term -> set(keys)
+    try:
+        attrs = descriptor_registry.all_attributes(reg)   # attribute rule reused, §8
+    except Exception:
+        attrs = []
+
+    def _add(forms, key):
+        for form in forms:
+            if form:
+                term_keys.setdefault(str(form).strip().lower(), set()).add(key)
+
+    for e in attrs:
+        if isinstance(e, dict) and e.get('key'):
+            _add([e.get('name')] + list(e.get('aliases') or []), e['key'])
+    for section in _NONATTR_KEYED_SECTIONS:
+        block = reg.get(section) or {}
+        entries = block.get('entries') if isinstance(block, dict) else None
+        for e in (entries or []):
+            if isinstance(e, dict) and e.get('key'):
+                _add([e.get('name')] + list(e.get('aliases') or []), e['key'])
+    return {t: sorted(ks) for t, ks in sorted(term_keys.items()) if len(ks) > 1}

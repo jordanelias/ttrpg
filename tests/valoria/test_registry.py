@@ -123,60 +123,75 @@ def test_resolve_canonical_proper_noun_name():
     assert result['disagreement'] == []
 
 
-def test_resolve_quantity_only_practitioner_stat():
+def test_resolve_structural_practitioner_stat_via_descriptor():
     # "Thread Sensitivity" (prac.thread_sensitivity) lives in descriptor_registry.yaml's
-    # practitioner_stats section, which descriptor_registry.resolve() does NOT search (it
-    # only scans body/mind/social attributes) and which names_index.yaml does not mirror
-    # (its own header comment lists only attr./agg./fac./set. as mirrored sections) —
-    # confirmed directly against both real resolvers below, before asserting the facade's
-    # answer. This is the clearest real (non-monkeypatched) case where quantity_registry is
-    # not just first-checked but the ONLY resolver of the three with an answer at all.
+    # practitioner_stats section. descriptor_registry.resolve() itself does NOT scan it
+    # (attributes only) and names_index.yaml does not mirror it — but the reader now resolves the
+    # FULL descriptor_registry structural namespace (fac./set./prac./terr./agg.) via its
+    # non-attribute index (ED-IN-0058), so this routes through the AUTHORITATIVE descriptor
+    # registry (kind='descriptor'), not the fuzzy quantity merge. Same key, more authoritative via.
     reg = real_descriptor_registry.load()
-    assert real_descriptor_registry.resolve(reg, 'Thread Sensitivity') is None
+    assert real_descriptor_registry.resolve(reg, 'Thread Sensitivity') is None   # attributes-only
     assert real_names.key_for('Thread Sensitivity') is None
 
     result = registry.resolve('Thread Sensitivity')
-    assert result['kind'] == 'quantity'
+    assert result['kind'] == 'descriptor'
     assert result['key'] == 'prac.thread_sensitivity'
-    assert result['via'] == 'quantity_registry'
-    assert result['matched_as'] == 'Thread Sensitivity'
-    assert result['disagreement'] == []
+    assert result['registry_key'] == 'prac.thread_sensitivity'
+    assert result['via'] == 'descriptor_registry'
+    assert result['section'] == 'practitioner_stats'
 
 
-def test_resolve_quantity_only_territory_stat_abbreviation():
-    # "Fort" is a declared alias of terr.fort_level — same uniquely-quantity_registry story
-    # as Thread Sensitivity above, but exercising an abbreviation/alias form instead of a
-    # primary name.
+def test_resolve_structural_territory_stat_alias_via_descriptor():
+    # "Fort" is a declared alias of terr.fort_level — same story via an ALIAS form. Now resolved
+    # through the descriptor registry's non-attribute index (kind='descriptor'), not quantity.
     reg = real_descriptor_registry.load()
     assert real_descriptor_registry.resolve(reg, 'Fort') is None
     assert real_names.key_for('Fort') is None
 
     result = registry.resolve('Fort')
-    assert result['kind'] == 'quantity'
+    assert result['kind'] == 'descriptor'
     assert result['key'] == 'terr.fort_level'
-    assert result['via'] == 'quantity_registry'
-    assert result['matched_as'] == 'Fort'
+    assert result['via'] == 'descriptor_registry'
+    assert result['section'] == 'territory_stats'
 
 
-def test_influence_alias_shadows_faction_stat_KNOWN_LIMITATION():
-    # KNOWN LIMITATION (WS1 antagonist finding, ED-IN-0057) — pinned as a limitation, NOT
-    # certified as correct. "Influence" is BOTH an alias of attr.social.charisma AND the
-    # canonical name of the faction-stat fac.influence. The attribute registers first inside
-    # both underlying resolvers (first-write-wins), so:
-    #   (a) the string "Influence" resolves to attr.social.charisma, and
-    #   (b) fac.influence is reachable by NO display string at all, and
-    #   (c) NO 'disagreement' fires — the losing candidate is discarded UPSTREAM of resolve().
-    # This is the pointer-collision the WS1 fold-in must resolve (give fac.influence a
-    # non-colliding pointer); it is NOT a precedence bug in the facade. If a future fold-in
-    # fixes it, THIS test should start failing — that is the signal to update it.
+def test_influence_string_collision_KNOWN_LIMITATION_but_key_now_reachable():
+    # KNOWN LIMITATION (WS1 antagonist finding, ED-IN-0057), now PARTIALLY closed (ED-IN-0058).
+    # The STRING "Influence" is BOTH an alias of attr.social.charisma AND the canonical name of
+    # the faction-stat fac.influence; the attribute wins the string (checked first), so
+    # "Influence" -> attr.social.charisma with no 'disagreement' (the loser is discarded UPSTREAM,
+    # invisible to resolve()). That residual STRING ambiguity is the pointer-collision the WS1
+    # data fold-in must resolve; it is not a facade bug.
     result = registry.resolve('Influence')
-    assert result['key'] == 'attr.social.charisma'      # the attribute meaning wins the string
-    assert result['disagreement'] == []                 # the collision is invisible to disagreement
-    # fac.influence is a real ratified faction stat, yet unreachable by every string form:
-    assert registry.resolve('fac.influence') is None    # (bare key: attribute-only reach, below)
-    data = real_quantity_registry.load()
-    assert 'fac.influence' not in set(data['known'].values()) or \
-        [k for k, v in data['known'].items() if v == 'fac.influence'] == []
+    assert result['key'] == 'attr.social.charisma'   # the attribute meaning wins the string
+    assert result['disagreement'] == []              # collision invisible to disagreement (upstream)
+
+    # PARTIAL FIX (ED-IN-0058): the ENTITY fac.influence is no longer wholly unreachable — it now
+    # resolves by its bare structural key through the descriptor registry, even though its display
+    # name is shadowed. So the faction stat is at least pointer-addressable today.
+    bykey = registry.resolve('fac.influence')
+    assert bykey is not None
+    assert bykey['kind'] == 'descriptor'
+    assert bykey['key'] == 'fac.influence'
+    assert bykey['section'] == 'faction_stats'
+
+    # And the reader SURFACES the residual string-collision as the fold-in work-list rather than
+    # hiding it: collisions() reports exactly this ambiguity (and, today, only this one).
+    col = registry.collisions()
+    assert col.get('influence') == ['attr.social.charisma', 'fac.influence']
+
+
+def test_collisions_is_the_foldin_worklist():
+    # collisions() is the NS2 diagnostic: display strings bound to >1 structural key — what the
+    # data fold-in must disambiguate. Deterministic dict of {term: sorted[keys]}; every listed
+    # term genuinely maps to multiple distinct keys.
+    col = registry.collisions()
+    assert isinstance(col, dict)
+    for term, keys in col.items():
+        assert term == term.lower()
+        assert keys == sorted(keys)
+        assert len(keys) == len(set(keys)) >= 2
 
 
 def test_thread_fatigue_is_a_real_LIVE_disagreement():
