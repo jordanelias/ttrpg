@@ -698,3 +698,12 @@ allocate, bump, co-commit; never max+1.)_
   adversarial pass. Design-tier docket item awaiting Jordan; see also `handoffs/HANDOFF_SC.md`'s J-31
   (social-contest deliberative-game findings) — the two were tracked together in root `HANDOFF.md`
   before the 2026-07-08 per-lane content split.
+
+- **Observatory Remediation Program filed (2026-07-14, ED-IN-0066 — renumbered off the #139 ED-IN-0065
+  collision, PROPOSED)** — `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md`:
+  the resolve-everything plan over ED-IN-0064's findings, **incorporating PR #139** (its landed observatory
+  integrity fixes; its needs_jordan items as D15/D16; the G_pointer keyed-rate 21.8% baseline; the
+  head_pointers.yaml + REPO_MAP.md action in P2). **Next action: Jordan rules the Phase-1 decision docket
+  (D1–D16)**; P0 (instrument hardening, net of #139: the G_code __init__ HIGH, banner_classify tie-break,
+  contract↔code join, direction_audit.py) can start in parallel, IN lane. Program structure ratifies on
+  merge; every D-row stays needs_jordan.
