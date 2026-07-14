@@ -4,7 +4,9 @@
 
 `G_pointer` (the observatory's `skills/valoria-vector-audit/scripts/pointer_audit.py`) measures
 what fraction of the quantity identifiers in `references/module_contracts.yaml` + `sim/` resolve to
-a central registry key. Today: **27/59 unique identifiers (45.8%)**, 35/71 occurrences (49.3%). The
+a central registry key. Baseline at time of writing (2026-07-13): **27/59 unique (45.8%)**, 35/71
+occurrences (49.3%). **After Category A (ED-IN-0060, executed via contract canonicalization): 29/55
+unique (52.7%) raw / 53.7% refined once formula-locals are excluded (ED-IN-0061).** The
 reader (`tools/registry.py`) being complete does **not** move this number — an empirical check
 (2026-07-13) confirmed **0 of the 32 unresolved identifiers resolve through the unified reader that
 don't already resolve through `quantity_registry` alone**. They are genuinely *unregistered*, not
@@ -16,14 +18,21 @@ prose or a descriptor entry — cited inline. Nothing here fabricates a quantity
 
 ---
 
-## Category A — abbreviation/alias of an ALREADY-registered quantity (SAFE alias-add, evidence-cited)
+## Category A — abbreviation/alias of an ALREADY-registered quantity — **DONE (ED-IN-0060, dfb9da6)**
 
-These are the low-risk, no-new-design wins: the quantity already exists in
-`references/descriptor_registry.yaml`; the identifier is just an abbreviated / scale-suffixed / prose
-form the resolver doesn't yet recognize. Fix = add the form as an `aliases:` entry on the existing
-key. **Caveat (why this is a careful follow-up, not done here):** `descriptor_registry.yaml` is
-CI-mirrored to `names_index.yaml` by `tools/ci_names_consistency.py` and self-declared IN FLUX, so
-each alias-add must be verified green against that mirror gate before landing.
+**Executed** — but via **contract-side canonicalization**, not the alias-adds proposed below: the
+`settlement_layer` `module_contracts.yaml` derivation shorthand was rewritten to the quantities' real
+registry names (`L_s`→`Legitimacy`, `PS_s`→`Popular Support`, `settlement Order`→`Order`, etc.), so
+the module now references the pointer directly and `descriptor_registry.yaml`/the mirror gate were
+never touched (lower blast radius than alias-adds). This moved the meter 45.8%→52.7%. The table below
+is the original proposal, retained for provenance.
+
+These were the low-risk, no-new-design wins: the quantity already exists in
+`references/descriptor_registry.yaml`; the identifier was just an abbreviated / scale-suffixed / prose
+form the resolver didn't recognize. The originally-proposed fix was to add the form as an `aliases:`
+entry on the existing key — with the caveat that `descriptor_registry.yaml` is CI-mirrored to
+`names_index.yaml` by `tools/ci_names_consistency.py` and self-declared IN FLUX, so each alias-add
+would need the mirror gate green. The contract-canonicalization route sidestepped that entirely.
 
 | Unresolved identifier | Existing key | Evidence |
 |---|---|---|

@@ -531,8 +531,10 @@ def run(root, out, contracts_path=None, descriptor_path=None):
              'negative — the name is unresolved only because of a leading/trailing qualifier word '
              'the resolver does not strip (e.g. `settlement Prosperity` vs registered `Prosperity`); '
              'and (c) an internal/intermediate quantity with no registry-eligible identity that '
-             'A17 itself calls "expected backlog, not a bug" (`cumulative_damage`, `L_s`, `W_s`, '
-             '`PS_s`). Every one of today\'s rows is (b) or (c), not (a) — inspect each before filing.')
+             'A17 itself calls "expected backlog, not a bug" (e.g. `cumulative_damage`; or a '
+             'formula-local intermediate like `W_s`, defined inside its own derivation formula). '
+             'Do not assume a class — inspect each row against its home contract before filing '
+             '(this note is generic; it is NOT a computed claim that every current row is (b)/(c)).')
     L.append('')
     if not canon_orphans:
         L.append('(none)')

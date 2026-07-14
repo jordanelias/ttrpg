@@ -78,8 +78,12 @@ Confirmed **no live regeneration path**, by the source files' own disposition no
 
 Confirmed **orphaned** — the one consumer named in the file's own header is itself dead or
 retired (verified by direct grep, not inferred from the registry's self-description alone):
-  - `references/alias_registry.yaml` — its stated consumer, `tools/valoria_collator.py`, is
-    in CLAUDE.md §8's dead-tools list.
+  - `references/alias_registry.yaml` — **RECLASSIFIED (ED-IN-0058): needs content adjudication, not
+    a clean orphan.** Its stated *Python* consumer (`tools/valoria_collator.py`) is dead, but its
+    DATA is cited as authoritative by other artifacts (`censured_vocabulary.yaml:197-198` names it
+    "authoritative for renames" / "abbreviation collisions"), so folding it requires dedup vs
+    `names_index.yaml`, preserving the authoritative rename/collision data, and updating prose
+    citations — a deliberate content merge, not a mechanical retire.
   - `references/name_collision_database.yaml` — its stated consumer,
     `abbreviation_registry_gate` in `valoria_hooks.py`, lives under
     `skills/valoria-orchestrator/scripts/`, and that skill directory no longer exists at a
