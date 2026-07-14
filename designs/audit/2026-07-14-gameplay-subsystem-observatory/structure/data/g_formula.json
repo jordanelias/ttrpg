@@ -1,0 +1,76 @@
+{
+ "Garrison Strength": [],
+ "Health": [],
+ "Local Economy": [],
+ "Public Order": [],
+ "W_s": [
+  "faction Mandate (cross-module \u2192 faction_state)"
+ ],
+ "agg.body": [],
+ "agg.mind": [],
+ "agg.social": [],
+ "attr.body.agility": [
+  "agg.body"
+ ],
+ "attr.body.endurance": [
+  "Health",
+  "agg.body"
+ ],
+ "attr.body.strength": [
+  "Health",
+  "agg.body"
+ ],
+ "attr.mind.acuity": [
+  "agg.mind"
+ ],
+ "attr.mind.focus": [
+  "agg.mind"
+ ],
+ "attr.mind.will": [
+  "Health",
+  "agg.mind"
+ ],
+ "attr.social.attunement": [
+  "agg.social"
+ ],
+ "attr.social.bonds": [
+  "agg.social"
+ ],
+ "attr.social.charisma": [
+  "agg.social"
+ ],
+ "cumulative_damage": [
+  "Health"
+ ],
+ "faction Mandate": [
+  "set.legitimacy",
+  "set.popular_support"
+ ],
+ "faction Mandate (cross-module \u2192 faction_state)": [],
+ "faction Treasury income (cross-module \u2192 faction_state)": [],
+ "prac.thread_sensitivity": [
+  "prac.tps"
+ ],
+ "prac.tps": [],
+ "province Accord": [],
+ "set.defense": [
+  "Garrison Strength"
+ ],
+ "set.legitimacy": [
+  "faction Mandate (cross-module \u2192 faction_state)"
+ ],
+ "set.order": [
+  "Public Order",
+  "province Accord"
+ ],
+ "set.popular_support": [
+  "faction Mandate (cross-module \u2192 faction_state)"
+ ],
+ "set.prosperity": [
+  "Local Economy",
+  "faction Treasury income (cross-module \u2192 faction_state)"
+ ],
+ "terr.fort_level": [
+  "Garrison Strength"
+ ]
+}

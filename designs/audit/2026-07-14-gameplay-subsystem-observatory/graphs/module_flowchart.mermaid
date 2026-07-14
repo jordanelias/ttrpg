@@ -1,0 +1,100 @@
+flowchart LR
+  subgraph PENINSULA["PENINSULA"]
+    peninsular_strain["peninsular_strain"]
+    scenario_authoring["scenario_authoring"]
+  end
+  subgraph PROVINCIAL["PROVINCIAL"]
+    faction_state["faction_state"]
+    domain_actions["domain_actions"]
+    ci_political["ci_political"]
+    victory["victory"]
+    engine_clock["engine_clock"]
+    faction_politics["faction_politics"]
+    clock_registry["clock_registry"]
+  end
+  subgraph TERRITORY_SETTLEMENT["TERRITORY / SETTLEMENT"]
+    territorial_piety["territorial_piety"]
+    settlement_layer["settlement_layer"]
+    settlement_economy["settlement_economy"]
+  end
+  subgraph SCENE["SCENE"]
+    scene_slate["scene_slate"]
+    game_director["game_director"]
+    scene_timer["scene_timer"]
+    audit["audit"]
+    social_contest["social_contest"]
+    mass_battle["mass_battle"]
+  end
+  subgraph PERSONAL["PERSONAL"]
+    npc_behavior["npc_behavior"]
+    npc_memory["npc_memory"]
+    piety_track["piety_track"]
+    threadwork["threadwork"]
+    fieldwork_knots["fieldwork_knots"]
+    miraculous_event["miraculous_event"]
+    personal_combat["personal_combat"]
+  end
+  subgraph READERS["READERS"]
+    articulation_layer["articulation_layer"]
+  end
+  subgraph STUBS["STUBS"]
+    campaign_architecture["campaign_architecture (stub)"]
+  end
+  ENGINE(["engine: Key stream / Memory / clock state"])
+  UNCONSUMED["no declared consumer (A4)"]
+  domain_actions -->|"da.* x5"| faction_state
+  domain_actions -.->|"da.* x3, scene.draft_da !A6"| npc_behavior
+  domain_actions -.->|"da.* x2 !A6"| piety_track
+  domain_actions -.->|"da.economic_intervention !A6"| settlement_economy
+  engine_clock -->|"mechanical.accounting"| faction_state
+  faction_politics -->|"scene.investigation_resolved, state.* x3"| faction_state
+  faction_politics -.->|"scene.investigation_resolved, state.* x3 !A6"| npc_behavior
+  faction_state -->|"mechanical.* x2, state.standing_change"| faction_state
+  faction_state -->|"mechanical.* x2, state.standing_change"| npc_behavior
+  fieldwork_knots -->|"scene.gift"| faction_state
+  fieldwork_knots -->|"meta.* x2, scene.gift, state.belief_revised"| npc_behavior
+  fieldwork_knots -->|"meta.knot_ruptured"| piety_track
+  game_director -->|"mechanical.* x3"| audit
+  game_director -->|"mechanical.* x3"| scene_timer
+  mass_battle -->|"scene.battle_concluded"| faction_state
+  mass_battle -->|"scene.battle_concluded"| npc_behavior
+  mass_battle -->|"scene.battle_concluded"| piety_track
+  miraculous_event -->|"meta.miraculous_event"| faction_state
+  miraculous_event -->|"meta.miraculous_event"| npc_behavior
+  npc_behavior -->|"mechanical.project_advanced, scene.* x2, state.* x2"| npc_behavior
+  npc_behavior -->|"scene.* x2, state.* x2"| npc_memory
+  npc_behavior -->|"scene.witness"| piety_track
+  npc_behavior -->|"state.opinion_revised"| social_contest
+  peninsular_strain -->|"env.* x3"| faction_state
+  peninsular_strain -.->|"env.peninsular_strain_shock !A6"| npc_behavior
+  peninsular_strain -.->|"env.population_change !A6"| settlement_economy
+  peninsular_strain -.->|"env.* x2 !A6"| settlement_layer
+  personal_combat -->|"scene.combat_hit"| personal_combat
+  piety_track -->|"state.scar_acquired"| faction_state
+  piety_track -->|"state.scar_acquired"| npc_behavior
+  player_input -->|"scene.combat_strike"| personal_combat
+  scenario_authoring -->|"env.disaster"| faction_state
+  scenario_authoring -.->|"env.disaster !A6"| settlement_layer
+  scene_slate -->|"scene.* x5"| faction_state
+  scene_slate -->|"scene.* x6"| npc_behavior
+  scene_slate -->|"scene.combat_strike"| personal_combat
+  scene_slate -.->|"scene.* x4 !A6"| piety_track
+  settlement_layer -->|"env.population_change"| faction_state
+  settlement_layer -->|"env.population_change"| settlement_economy
+  social_contest -->|"scene.* x4"| faction_state
+  social_contest -->|"scene.* x4"| npc_behavior
+  social_contest -->|"scene.* x3"| piety_track
+  threadwork -->|"meta.thread_woven, scene.thread_operation"| npc_behavior
+  threadwork -->|"meta.thread_woven"| piety_track
+  ENGINE -.->|"*"| articulation_layer
+  ENGINE -.->|"*"| fieldwork_knots
+  engine_clock -.->|"mechanical.season_change"| UNCONSUMED
+  mass_battle -.->|"scene_outcome.battle_concluded *UNREG"| UNCONSUMED
+  peninsular_strain -.->|"env.crisis"| UNCONSUMED
+  personal_combat -.->|"scene.combat_felled"| UNCONSUMED
+  personal_combat -.->|"scene.combat_resolved"| UNCONSUMED
+  scenario_authoring -.->|"env.crisis"| UNCONSUMED
+  classDef stubcls stroke-dasharray: 5 5,opacity:0.7;
+  class campaign_architecture stubcls;
+  classDef sink fill:#fee,stroke:#c00;
+  class UNCONSUMED sink;
