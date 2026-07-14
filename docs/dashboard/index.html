@@ -241,6 +241,54 @@
   .commit-date { color: var(--text-muted); font-size: 0.75rem; flex: 0 0 auto; }
   .unavailable { color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
   .empty-state { color: var(--text-muted); font-size: 0.85rem; }
+
+  /* links inside surfaced text */
+  a { color: var(--series-blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* juncture readability (North star) */
+  .juncture-row { align-items: baseline; }
+  .juncture-title { font-weight: 600; color: var(--text-primary); }
+  .milestone-head { margin: 14px 0 4px; }
+  .milestone-head:first-child { margin-top: 2px; }
+
+  /* collapsible accordions (details/summary) */
+  details.acc { border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; overflow: hidden; }
+  details.acc > summary {
+    cursor: pointer; padding: 9px 12px; font-weight: 600; color: var(--text-primary);
+    list-style: none; background: var(--page-plane); user-select: none;
+  }
+  details.acc > summary::-webkit-details-marker { display: none; }
+  details.acc > summary::before {
+    content: '▸'; display: inline-block; width: 1em; color: var(--text-muted);
+    transition: transform 0.15s ease;
+  }
+  details.acc[open] > summary::before { transform: rotate(90deg); }
+  details.acc > .acc-body { padding: 10px 12px; border-top: 1px solid var(--border); }
+  .acc-count { color: var(--text-muted); font-weight: 400; font-size: 0.82rem; }
+
+  /* work-by-area queue */
+  .area-group { margin: 4px 0 12px; }
+  .area-name { font-weight: 600; color: var(--text-primary); margin: 8px 0 4px; }
+  .lane-block { margin: 6px 0 6px 4px; }
+  .lane-label { font-size: 0.82rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+  ul.tight { list-style: disc; margin: 4px 0 8px 20px; padding: 0; }
+  ul.tight li { margin: 3px 0; font-size: 0.88rem; }
+  .split-you   { border-left: 3px solid var(--warning); padding-left: 8px; }
+  .split-claude { border-left: 3px solid var(--good); padding-left: 8px; }
+  .split-head { font-weight: 600; font-size: 0.82rem; margin: 6px 0 2px; }
+
+  /* mermaid repo shape */
+  .mermaid-wrap { overflow-x: auto; }
+  .mermaid { min-width: 480px; }
+  pre.mermaid-src { white-space: pre; overflow-x: auto; font-size: 0.72rem; color: var(--text-secondary); background: var(--page-plane); padding: 8px; border-radius: 6px; }
+
+  /* keys/actions reference */
+  .kv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .kv-table td { padding: 4px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .kv-table td.k { font-weight: 600; white-space: nowrap; color: var(--text-primary); }
+  .ref-note { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; }
+  .status-pill { font-size: 0.72rem; padding: 1px 6px; border-radius: 4px; background: var(--page-plane); border: 1px solid var(--border); color: var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -262,6 +310,16 @@
     <div id="workplan-body" class="empty-state">loading…</div>
   </section>
 
+  <section class="card" id="queue-card">
+    <h2>Work by area</h2>
+    <div id="queue-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="proposals-card">
+    <h2>Proposals awaiting ratification</h2>
+    <div id="proposals-body" class="empty-state">loading…</div>
+  </section>
+
   <section class="card" id="audits-card">
     <h2>Audit &amp; balance verdicts</h2>
     <div id="audits-body" class="empty-state">loading…</div>
@@ -275,6 +333,21 @@
   <section class="card" id="registers-card">
     <h2>Registers</h2>
     <div id="registers-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="shape-card">
+    <h2>Repository shape</h2>
+    <div id="shape-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="keys-card">
+    <h2>Keys &amp; substrates</h2>
+    <div id="keys-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="actions-card">
+    <h2>Character actions &amp; interactions</h2>
+    <div id="actions-body" class="empty-state">loading…</div>
   </section>
 
   <div class="grid-2">
@@ -294,6 +367,19 @@
     <div id="activity-body" class="empty-state">loading…</div>
   </section>
 
+<script type="module">
+// Mermaid is loaded from CDN for the collapsible "Repository shape" diagram.
+// If it fails (offline / CSP), the raw mermaid source stays visible as a fallback.
+try {
+  const mod = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+  const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  mod.default.initialize({ startOnLoad: false, securityLevel: 'strict', theme: dark ? 'dark' : 'neutral' });
+  window.__mermaid = mod.default;
+  window.dispatchEvent(new Event('mermaid-ready'));
+} catch (e) {
+  window.__mermaidFailed = true;
+}
+</script>
 <script>
 const GLYPH = { done: '■', in_progress: '◐', blocked: '⊘', not_started: '▢' };
 
@@ -310,6 +396,34 @@ const VERDICT_ICON = {
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const REPO = 'https://github.com/jordanelias/ttrpg';
+const REPO_BLOB = REPO + '/blob/main/';
+function fileUrl(path, line) { return REPO_BLOB + path + (line ? '#L' + line : ''); }
+function ghSearch(q) { return REPO + '/search?q=' + encodeURIComponent(q) + '&type=code'; }
+
+// Escape first, THEN wrap recognized tokens (file paths, ED/PP ids, PR #NNN) in
+// links. Patterns never match HTML-escape sequences, so running them on escaped
+// text is safe. Anchors always target GitHub (blob for files, code-search for ids).
+function linkify(raw) {
+  let s = esc(raw);
+  s = s.replace(/\b((?:designs|sim|tools|canon|references|params|handoffs|docs|research|tests|engine)\/[\w./-]+\.\w+)(?::(\d+))?/g,
+    (m, path, ln) => `<a href="${fileUrl(path, ln)}" target="_blank" rel="noopener">${m}</a>`);
+  s = s.replace(/\b(ED-[A-Z]{0,3}-?\d{3,4}|PP-\d{2,4})\b/g,
+    (m) => `<a href="${ghSearch(m)}" target="_blank" rel="noopener">${m}</a>`);
+  s = s.replace(/(^|[^\w">/=])#(\d{2,4})\b/g,
+    (m, pre, n) => `${pre}<a href="${REPO}/pull/${n}" target="_blank" rel="noopener">#${n}</a>`);
+  return s;
+}
+
+// A clickable source path (or path:line) shown as its basename.
+function srcLink(path) {
+  if (!path) return '';
+  const mm = String(path).match(/^([^\s:]+?)(?::(\d+))?$/);
+  const p = mm ? mm[1] : path, ln = mm ? mm[2] : null;
+  const base = p.split('/').pop() + (ln ? ':' + ln : '');
+  return `<a href="${fileUrl(p, ln)}" target="_blank" rel="noopener" title="${esc(p)}">${esc(base)}</a>`;
 }
 
 function cleanMarkdown(s) {
@@ -350,7 +464,7 @@ function renderDecisions(d) {
   const items = nd.items.map(item => `
     <li class="decision-item">
       <span class="dot"></span>
-      <span>${esc(cleanMarkdown(item.text))}<br><span class="decision-source">${esc(item.source)}${item.line ? ':' + item.line : ''}</span></span>
+      <span>${linkify(cleanMarkdown(item.text))}<br><span class="decision-source">${item.source && item.source.includes('/') ? srcLink(item.source + (item.line ? ':' + item.line : '')) : esc(item.source || '')}</span></span>
     </li>`).join('');
   el.innerHTML = `<ul class="plain">${items}</ul>
     <div class="decision-source" style="margin-top:8px;">heuristic prose scan — a floor, not a guarantee</div>`;
@@ -409,13 +523,13 @@ function renderWorkplan(d) {
     const ms = wp.milestones && wp.milestones[mkey];
     if (!ms || !ms.rows || ms.rows.length === 0) continue;
     const bar = ms.rows.map(r => GLYPH[r.state] || GLYPH.not_started).join('');
-    html += `<div style="margin-bottom:6px;"><strong>${mkey}</strong> <span class="bar">${bar}</span> — ${esc(ms.label)}</div>`;
+    html += `<div class="milestone-head"><strong>${mkey}</strong> <span class="bar">${bar}</span> — ${esc(ms.label)}</div>`;
     for (const r of ms.rows) {
       const glyph = GLYPH[r.state] || GLYPH.not_started;
       html += `<div class="juncture-row">
-        <span><span class="juncture-glyph">${glyph}</span> ${esc(r.label)}${r.blocked_on ? ' <span class="decision-source">[gate: ' + esc(r.blocked_on) + ']</span>' : ''}</span>
+        <span><span class="juncture-glyph">${glyph}</span> <span class="juncture-title">${esc(r.label)}</span>${r.blocked_on ? ' <span class="decision-source">[gate: ' + linkify(r.blocked_on) + ']</span>' : ''}</span>
       </div>`;
-      if (r.next) html += `<div class="juncture-next">${esc(r.next)}</div>`;
+      if (r.next) html += `<div class="juncture-next">▸ next: ${linkify(r.next)}</div>`;
     }
   }
   if (wp.decisions_t0_open && wp.decisions_t0_open.length) {
@@ -612,6 +726,126 @@ function renderActivity(d) {
     </li>`).join('') + '</ul>';
 }
 
+function renderQueue(d) {
+  const el = document.getElementById('queue-body');
+  const q = d.queue;
+  if (!q || q.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const t = q.totals || {};
+  let html = `<div style="margin-bottom:10px;">
+    <span class="chip warning">◐ ${t.needs_jordan || 0} need your decision</span>
+    <span class="chip good">✓ ${t.actionable || 0} Claude can action</span>
+    <span class="acc-count"> ${t.open || 0} open ledger items</span></div>`;
+  const items = arr => arr.length
+    ? '<ul class="tight">' + arr.map(it => `<li>${linkify(it.id)} — ${linkify(it.desc)}${it.source ? ' · ' + srcLink(it.source) : ''}</li>`).join('') + '</ul>'
+    : '<div class="empty-state" style="margin:2px 0 6px;">none</div>';
+  for (const cat of q.category_order) {
+    const groups = q.categories[cat] || {};
+    const names = Object.keys(groups).sort();
+    if (!names.length) continue;
+    const nj = names.reduce((n, g) => n + groups[g].needs_jordan.length, 0);
+    const ac = names.reduce((n, g) => n + groups[g].actionable.length, 0);
+    let inner = '';
+    for (const g of names) {
+      const b = groups[g];
+      if (!b.needs_jordan.length && !b.actionable.length) continue;
+      inner += `<div class="lane-block">`;
+      if (cat === 'subsystem') inner += `<div class="lane-label">${esc(g)}</div>`;
+      inner += `<div class="split-you"><div class="split-head">Needs your decision (${b.needs_jordan.length})</div>${items(b.needs_jordan)}</div>`;
+      inner += `<div class="split-claude"><div class="split-head">Claude can action (${b.actionable.length})</div>${items(b.actionable)}</div>`;
+      inner += `</div>`;
+    }
+    html += `<details class="acc"><summary>${esc(q.category_labels[cat] || cat)} <span class="acc-count">— ${nj} decision · ${ac} actionable</span></summary><div class="acc-body">${inner}</div></details>`;
+  }
+  html += `<div class="ref-note">${esc(q.note)}</div>`;
+  el.innerHTML = html;
+}
+
+function renderProposals(d) {
+  const el = document.getElementById('proposals-body');
+  const p = d.proposals;
+  if (!p || p.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  if (!p.count) { el.innerHTML = '<div class="empty-state">nothing PROPOSED/PROVISIONAL — all landed.</div>'; return; }
+  let html = `<div style="margin-bottom:8px;"><span class="chip warning">◐ ${p.count} awaiting ratification</span></div>`;
+  for (const g of Object.keys(p.groups).sort()) {
+    const rows = p.groups[g];
+    html += `<details class="acc"><summary>designs/${esc(g)} <span class="acc-count">— ${rows.length}</span></summary><div class="acc-body"><ul class="tight">`
+      + rows.map(r => `<li>${srcLink(r.path)} <span class="status-pill">${esc(r.status)}</span></li>`).join('')
+      + `</ul></div></details>`;
+  }
+  html += `<div class="ref-note">${esc(p.note)}</div>`;
+  el.innerHTML = html;
+}
+
+function renderRepoShape(d) {
+  const el = document.getElementById('shape-body');
+  const rs = d.repo_shape;
+  if (!rs || rs.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const code = rs.mermaid || '';
+  el.innerHTML = `<details class="acc"><summary>Structure diagram <span class="acc-count">— ${rs.subsystem_count} subsystem folders</span></summary>
+    <div class="acc-body">
+      <div class="mermaid-wrap"><div class="mermaid" id="repo-mermaid">${esc(code)}</div></div>
+      <pre class="mermaid-src" id="repo-mermaid-src" hidden>${esc(code)}</pre>
+      <div class="ref-note">${esc(rs.note)}</div>
+    </div></details>`;
+  const details = el.querySelector('details');
+  let done = false;
+  const render = () => {
+    if (done) return;
+    const host = document.getElementById('repo-mermaid');
+    const src = document.getElementById('repo-mermaid-src');
+    if (window.__mermaidFailed || !window.__mermaid) { if (src) src.hidden = false; return; }
+    done = true;
+    window.__mermaid.render('repo-mermaid-svg', code)
+      .then(({ svg }) => { host.innerHTML = svg; })
+      .catch(() => { if (src) src.hidden = false; });
+  };
+  details.addEventListener('toggle', () => {
+    if (!details.open) return;
+    if (window.__mermaid || window.__mermaidFailed) render();
+    else window.addEventListener('mermaid-ready', render, { once: true });
+  });
+}
+
+function renderKeys(d) {
+  const el = document.getElementById('keys-body');
+  const k = d.keys;
+  if (!k || k.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const fam = k.families.map(f => `<tr><td class="k">${esc(f.family)} <span class="acc-count">(${f.count})</span></td><td>${esc(f.types)}</td></tr>`).join('');
+  const comp = k.components.map(c => `<tr><td class="k">${esc(c.name)}</td><td>${esc(c.role)}</td></tr>`).join('');
+  const prop = k.propagation.map(p => `<tr><td class="k">${esc(p.name)}</td><td>${esc(p.desc)}<br><span class="decision-source">${srcLink(p.source)}</span></td></tr>`).join('');
+  const flag = (k.count_check && k.count_check !== 'current')
+    ? `<span class="chip warning">⚠ ${esc(k.count_check)}</span>`
+    : `<span class="chip good">✓ ${k.type_total} types · registry in sync</span>`;
+  el.innerHTML = `
+    <div style="margin-bottom:8px;">${flag}</div>
+    <p style="font-size:0.9rem;">${esc(k.definition)} <span class="decision-source">${srcLink(k.definition_source)}</span></p>
+    <details class="acc" open><summary>Key type registry <span class="acc-count">— ${k.type_total} types · ${k.families.length} families</span></summary>
+      <div class="acc-body"><table class="kv-table">${fam}</table>
+      <div class="ref-note">Symbolic axes: ${esc(k.conviction_axes)}. * = STUB/provisional subtype. Source: ${srcLink(k.registry_source)}</div></div></details>
+    <details class="acc"><summary>Substrate components <span class="acc-count">— ${k.components.length} · keys.py</span></summary>
+      <div class="acc-body"><table class="kv-table">${comp}</table><div class="ref-note">Source: ${srcLink(k.components_source)}</div></div></details>
+    <details class="acc"><summary>Propagation model</summary>
+      <div class="acc-body"><table class="kv-table">${prop}</table></div></details>
+    <details class="acc"><summary>${esc(k.field_extension.name)}</summary>
+      <div class="acc-body"><p style="font-size:0.88rem;">${esc(k.field_extension.desc)}</p><div class="decision-source">${srcLink(k.field_extension.source)}</div></div></details>
+    <div class="ref-note">${esc(k.note)}</div>`;
+}
+
+function renderActions(d) {
+  const el = document.getElementById('actions-body');
+  const a = d.actions;
+  if (!a || a.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  let html = '';
+  for (const s of a.subsystems) {
+    const rows = s.actions.map(x => `<tr><td class="k">${esc(x.name)}</td><td>${esc(x.desc)} <span class="decision-source">${srcLink(x.source)}</span></td></tr>`).join('');
+    html += `<details class="acc"><summary>${esc(s.name)} <span class="acc-count">— ${s.actions.length} · ${esc(s.availability)}</span></summary>
+      <div class="acc-body"><table class="kv-table">${rows}</table>
+      ${s.caveat ? `<div class="ref-note">⚠ ${linkify(s.caveat)}</div>` : ''}</div></details>`;
+  }
+  html += `<div class="ref-note">${esc(a.note)}</div>`;
+  el.innerHTML = html;
+}
+
 async function load() {
   try {
     const res = await fetch('data.json', { cache: 'no-store' });
@@ -620,9 +854,14 @@ async function load() {
     renderDecisions(d);
     renderDrift(d);
     renderWorkplan(d);
+    renderQueue(d);
+    renderProposals(d);
     renderAudits(d);
     renderBalance(d);
     renderRegisters(d);
+    renderRepoShape(d);
+    renderKeys(d);
+    renderActions(d);
     renderCi(d);
     renderCurrency(d);
     renderActivity(d);

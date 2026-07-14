@@ -556,6 +556,320 @@ def _generated_at():
     }
 
 
+# ── categorized work queue (Claude-actionable vs needs-Jordan) ───────────────
+#
+# Deterministic read of the open editorial-ledger backlog, organized the way the
+# North Star wants it: infrastructure → subsystem → simulation/testing → godot,
+# each item split by whether it needs Jordan's ruling (needs_jordan) or is
+# actionable without him. Lane comes free from the lane-split ledger filenames;
+# the two cross-cutting overlays (sim/testing, godot) are keyword-detected.
+
+LANE_NAMES = {
+    'PC': 'personal combat', 'MB': 'mass battle', 'SC': 'social contest',
+    'SE': 'settlement / territory', 'WR': 'world', 'FI': 'field investigation',
+    'FA': 'faction / political', 'IN': 'infrastructure', 'GO': 'godot',
+}
+_SIM_RE = re.compile(r'\bsim/|sim_harness|mc_v18|\boracle\b|regression|\btests?/|harness', re.I)
+_GODOT_RE = re.compile(r'godot|gdscript|\.gd\b|valoria-game', re.I)
+CATEGORY_ORDER = ['infrastructure', 'subsystem', 'simulation', 'godot']
+CATEGORY_LABELS = {
+    'infrastructure': 'Infrastructure / cross-cutting',
+    'subsystem': 'Subsystems',
+    'simulation': 'Simulation & testing',
+    'godot': 'Godot port',
+}
+
+
+def _ledger_open_entries():
+    out = []
+    for path in sorted(glob.glob('canon/editorial_ledger*.jsonl')):
+        if 'archive' in path:
+            continue
+        m = re.search(r'editorial_ledger_([a-z]{2})\.jsonl$', path)
+        lane = m.group(1).upper() if m else None
+        with open(path, encoding='utf-8', errors='replace') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    e = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if e.get('status') != 'open':
+                    continue
+                out.append({
+                    'id': e.get('id', '?'),
+                    'lane': lane,
+                    'desc': (e.get('description') or '').strip()[:240],
+                    'source': e.get('source'),
+                    'needs_jordan': bool(e.get('needs_jordan')),
+                })
+    return out
+
+
+def _category_for(entry):
+    text = f"{entry['desc']} {entry.get('source') or ''}"
+    if entry['lane'] == 'GO' or _GODOT_RE.search(text):
+        return 'godot'
+    if entry['lane'] in ('PC', 'MB', 'SC', 'SE', 'WR', 'FI', 'FA'):
+        return 'subsystem'
+    if _SIM_RE.search(text):
+        return 'simulation'
+    return 'infrastructure'
+
+
+def build_queue():
+    entries = _ledger_open_entries()
+    cats = {c: {} for c in CATEGORY_ORDER}
+    for e in entries:
+        c = _category_for(e)
+        if c == 'subsystem':
+            group = LANE_NAMES.get(e['lane'] or '', 'other')
+        else:
+            group = CATEGORY_LABELS[c]
+        bucket = cats[c].setdefault(group, {'needs_jordan': [], 'actionable': []})
+        item = {'id': e['id'], 'desc': e['desc'], 'source': e.get('source')}
+        (bucket['needs_jordan'] if e['needs_jordan'] else bucket['actionable']).append(item)
+    return {
+        "available": True,
+        "categories": cats,
+        "category_order": CATEGORY_ORDER,
+        "category_labels": CATEGORY_LABELS,
+        "totals": {
+            "needs_jordan": sum(1 for e in entries if e['needs_jordan']),
+            "actionable": sum(1 for e in entries if not e['needs_jordan']),
+            "open": len(entries),
+        },
+        "note": ("Open editorial-ledger items. “Needs your decision” = needs_jordan:true; "
+                 "“Claude can action” = the remaining open items. The ledger is the source "
+                 "of truth; a merge ratifies (ED-1094)."),
+    }
+
+
+# ── proposals / provisional / awaiting ratification ──────────────────────────
+
+_STATUS_RE = re.compile(r'^#{1,3}\s*Status:\s*(.+)$', re.I)
+
+
+def build_proposals():
+    rows = []
+    for path in glob.glob('designs/**/*.md', recursive=True):
+        if '/deprecated/' in path or '/archives/' in path or '/archive/' in path:
+            continue
+        try:
+            with open(path, encoding='utf-8', errors='replace') as f:
+                head = f.read(4000)
+        except OSError:
+            continue
+        for line in head.splitlines():
+            m = _STATUS_RE.match(line.strip())
+            if not m:
+                continue
+            status = m.group(1).strip()
+            up = status.upper()
+            prefix = up.split('(')[0]  # "CANONICAL (with provisional elements)" -> CANONICAL, kept out
+            if ('PROPOSED' in up or 'PROVISIONAL' in up or 'DRAFT' in up) and 'CANONICAL' not in prefix:
+                group = path.split('/')[1] if path.count('/') >= 2 else 'designs'
+                rows.append({"path": path, "status": status[:140], "group": group})
+            break  # only the first Status: line per doc
+    rows.sort(key=lambda r: (r['group'], r['path']))
+    groups = {}
+    for r in rows:
+        groups.setdefault(r['group'], []).append({"path": r['path'], "status": r['status']})
+    return {
+        "available": True,
+        "groups": groups,
+        "count": len(rows),
+        "note": ("Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT — "
+                 "awaiting ratification (a doc-PR merge ratifies by default, ED-1094; these have not "
+                 "landed that way). Excludes deprecated/ and archives/."),
+    }
+
+
+# ── repository shape (mermaid) ───────────────────────────────────────────────
+
+def build_repo_shape():
+    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') if os.path.isdir(d))
+    lines = [
+        'graph TD',
+        '  CANON["canon/ — philosophy P-01..P-14 · ledgers · mechanics index"]',
+        '  REF["references/ — registries · module_contracts · indices"]',
+        '  DESIGN["designs/ — subsystem design docs"]',
+        '  PARAMS["params/ — mechanical parameter tables"]',
+        '  SIM["sim/ — Python oracle · 1:1 port reference"]',
+        '  TOOLS["tools/ — CI checks · validators · generators"]',
+        '  GODOT["Godot port — valoria-game · frozen 2026-05-04"]',
+        '  CANON --> DESIGN',
+        '  DESIGN --> PARAMS',
+        '  PARAMS --> SIM',
+        '  SIM --> GODOT',
+        '  REF -.-> DESIGN',
+        '  TOOLS -.-> CANON',
+        '  subgraph SS["designs/ subsystems"]',
+    ]
+    for i, d in enumerate(subdirs):
+        lines.append(f'    D{i}["{d}"]')
+    lines.append('  end')
+    lines.append('  DESIGN --> SS')
+    return {
+        "available": True,
+        "mermaid": '\n'.join(lines),
+        "subsystem_count": len(subdirs),
+        "note": ("High-level repo structure: the layer spine (canon → design → params → "
+                 "sim → godot) plus the designs/ subsystem folders (generated from disk)."),
+    }
+
+
+# ── keys & substrates reference (curated snapshot + live cross-check) ─────────
+#
+# Reference content transcribed from the architecture docs (2026-07-14). The
+# volatile bit — the live count of registered key types — is re-extracted every
+# build and cross-checked against the snapshot, so drift shows instead of hiding.
+
+_KEY_REGISTRY_DOC = 'designs/architecture/key_type_registry_v30.md'
+
+
+def _live_key_type_count():
+    if not os.path.exists(_KEY_REGISTRY_DOC):
+        return None
+    n = 0
+    with open(_KEY_REGISTRY_DOC, encoding='utf-8', errors='replace') as f:
+        for line in f:
+            if line.startswith('### ') and '.' in line:
+                n += 1
+    return n
+
+
+def build_keys():
+    families = [
+        {"family": "scene_event", "count": 10,
+         "types": "scene.dialogue, witness, gift, insult, threat, thread_operation*, draft_da*, displacement*, interaction, gossip"},
+        {"family": "da_outcome", "count": 5,
+         "types": "da.public_governance, covert_betrayal, diplomatic_alliance, antinomian_action, economic_intervention"},
+        {"family": "mechanical_event", "count": 8,
+         "types": "season_change, accounting, cascade_resolution, mission_shift, scene_entered/exited/skipped, project_advanced"},
+        {"family": "state_transition", "count": 8,
+         "types": "scar_acquired, standing_change, coup_attempted, succession, project_completed/failed, opinion_revised, concern_resolved"},
+        {"family": "environmental", "count": 4,
+         "types": "env.peninsular_strain_shock, crisis, disaster, population_change"},
+        {"family": "scene_outcome", "count": 7,
+         "types": "contest_resolved, battle_concluded, investigation_resolved, combat_resolved*, combat_strike*, combat_hit*, combat_felled*"},
+        {"family": "system_meta", "count": 7,
+         "types": "meta.knot_formed/ruptured, thread_woven, cascade_cluster_event, miraculous_event, belief_revised, legacy_event"},
+    ]
+    components = [
+        {"name": "Key", "role": "The universal typed, validated, append-only event object (id/type/targets/scale_signature/symbolic_dimensions/…). No cascade_depth field."},
+        {"name": "Target", "role": "One targets[] entry (actor, role, impact_vector, stat_deltas). Wide fan-out is ONE Key with N targets, never N Keys."},
+        {"name": "KeyLog", "role": "The append-only canonical log — enforces all 8 universal invariants, deterministic serialize()/content_hash() for replay."},
+        {"name": "TypeRegistry", "role": "Loads/validates against key_type_registry_v30.md at runtime (parses the markdown) instead of duplicating the roster in code."},
+        {"name": "TickScheduler", "role": "The engine_clock-shaped emission seam — tick queue, cascade_depth re-entrancy meter, Level-B termination guard, deferred-apply at ACCOUNTING."},
+        {"name": "TerminationBreach", "role": "Raised when a Level-B termination invariant is violated — never silently clamped."},
+    ]
+    propagation = [
+        {"name": "Aggregate-up", "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).", "source": "designs/architecture/propagation_spec_v1.md §2"},
+        {"name": "Distribute-down", "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.", "source": "designs/architecture/propagation_spec_v1.md §3 (§12.3)"},
+        {"name": "Termination", "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.", "source": "designs/architecture/propagation_spec_v1.md §4 (PROPOSED)"},
+    ]
+    live = _live_key_type_count()
+    return {
+        "available": True,
+        "snapshot_date": "2026-07-14",
+        "definition": ("Every consequential event is a Key — a typed, validated, append-only record. "
+                       "One update rule consumes Keys and propagates effects. Save state = initial "
+                       "conditions + Key log; replay = deterministic re-execution of the log."),
+        "definition_source": "designs/architecture/key_substrate_v30.md §1",
+        "families": families,
+        "type_total": 49,
+        "registry_source": _KEY_REGISTRY_DOC,
+        "live_type_header_count": live,
+        "count_check": ("current" if live in (None, 49) else f"registry now has {live} type headers vs snapshot 49 — refresh this section"),
+        "components": components,
+        "components_source": "sim/substrate/keys.py",
+        "propagation": propagation,
+        "conviction_axes": "hierarchical · sacred · instrumental · traditional (4-axis symbolic space)",
+        "field_extension": {
+            "name": "Field / Gauge (PROPOSED)",
+            "desc": ("A Key is a one-shot emission — wrong for continuous VECTOR state (Legitimacy/PS, "
+                     "Pressure Π, MS, Accord). The proposed Field primitive is a continuously-read/written "
+                     "scale-tagged value with aggregate_fn / propagate_fn / decay_fn / derived_flags. Unblock = "
+                     "Jordan ruling OF-3's decay() fork."),
+            "source": "designs/architecture/governance_type_registry_v1.md §4.2",
+        },
+        "note": ("Reference snapshot (2026-07-14) with source links; the live key-type header count is "
+                 "re-checked every build. See the source docs for canonical detail. Key substrate doc "
+                 "carries a contradictory status marker (treat as IN FLUX)."),
+    }
+
+
+# ── character actions & interactions per subsystem (curated snapshot) ─────────
+
+def build_actions():
+    S = lambda name, avail, head, actions, caveat=None: {
+        "name": name, "availability": avail, "source_head": head,
+        "actions": [{"name": a, "desc": d, "source": s} for a, d, s in actions],
+        "caveat": caveat}
+    subsystems = [
+        S("Personal combat", "partial (legacy menu)", "designs/scene/combat_engine_v1/",
+          [("Strike", "Allocate pool split, roll, apply damage", "designs/scene/combat_v30.md §4"),
+           ("Feint", "Commit dice to bait a pool-reduction contest", "designs/scene/combat_v30.md §4"),
+           ("Establish Distance", "Move to preferred range, contested", "designs/scene/combat_v30.md §4"),
+           ("Take a Breath", "Forfeit action to recover Stamina", "designs/scene/combat_v30.md §4"),
+           ("Full Guard", "All dice to Defence, cannot Attack", "designs/scene/combat_v30.md §4"),
+           ("Disarm", "Offence roll to force a weapon drop at Close", "designs/scene/combat_v30.md §4"),
+           ("Tie Up / Escape", "Close grapple that blocks escape; Agility to break free", "designs/scene/combat_v30.md §4"),
+           ("Rescue", "Reactive action redirecting an attack onto yourself", "designs/scene/combat_v30.md §4"),
+           ("Dodge", "Forfeit offence, full pool as passive ranged defence", "designs/scene/combat_v30.md §4"),
+           ("Stunt", "+dice to a Strike from environment/position", "designs/scene/combat_v30.md §4")],
+          caveat="The current head (combat_engine_v1/) auto-resolves via a sigma state-machine — no player menu. The list above is the legacy combat_v30 §4 TTRPG menu (dice-math superseded); shown as the only enumerable player-facing set."),
+        S("Social contest", "yes", "designs/scene/social_contest_v30.md",
+          [("Appraise", "Read the audience/adjudicator before arguing", "designs/scene/social_contest_v30.md §4"),
+           ("Choose Style", "Pick Precedent / Suppression / Vision / Insinuation", "designs/scene/social_contest_v30.md §4"),
+           ("Corroborate", "A coalition member declares support for +1D", "designs/scene/social_contest_v30.md §4"),
+           ("Argue", "Roll the Argue pool; CLASH / REINFORCE / CROSS / TIE", "designs/scene/social_contest_v30.md §4"),
+           ("Regroup", "Forfeit exchange to restore Concentration", "designs/scene/social_contest_v30.md §4"),
+           ("Concede a Point", "Forfeit, take strain, gain +1D next exchange", "designs/scene/social_contest_v30.md §4"),
+           ("Pre-Contest Preparation", "Prepare for +1D on Exchange 1", "designs/scene/social_contest_v30.md §9.1"),
+           ("Practitioner Weaving", "A Thread-sensitive orator adds bonus dice", "designs/scene/social_contest_v30.md §9.3")]),
+        S("Mass battle", "yes", "designs/provincial/mass_battle_v30.md",
+          [("Tactics", "Envelopment · Feigned Retreat · Ambush · Concentration · Refused Flank · Hammer & Anvil", "designs/provincial/mass_battle_v30.md §A.8"),
+           ("General's turn action", "Rally · Reinforce Discipline · Support Threadweave · Personal combat · Stabilise general", "designs/provincial/mass_battle_v30.md §A.7"),
+           ("Formations", "Line · Shield Wall · Wedge · Skirmish · Column · Feigned Retreat · Reserve", "designs/provincial/mass_battle_v30.md §A.6")]),
+        S("Faction / domain actions", "yes (across 3 layers)", "params/factions/stats_1_7_scale.md",
+          [("Domain Actions", "Assert · Reconstitute · Govern · Claim Masterless · Suppress · Parliamentary Rebuttal · Treaty · Accounting Stability Check", "params/factions/stats_1_7_scale.md"),
+           ("Faction Unique Action", "One signature verb per faction (Royal Decree, Excommunication, Economic Leverage, …)", "params/factions/stats_1_7_scale.md"),
+           ("Parliamentary motions", "Censure · Embargo · Blockade · Outlawry · Subsidy · War Authorisation · Treaty Ratification · Recognition Challenge · Succession Endorsement", "designs/provincial/faction_layer_v30.md §5.4")],
+          caveat="The live sim (sim/provincial/faction_action.py) dispatches unique → Conquest → Muster → Govern each season; some code verbs (Crown Royal Progress/Great Work) are PROVISIONAL and differ from the ratified Royal Decree."),
+        S("Settlements / territory", "yes (baseline + PROPOSED redesign)", "designs/territory/settlement_layer_v30.md",
+          [("Governor (baseline)", "Develop · Fortify · Pacify · Administer", "designs/territory/settlement_layer_v30.md §3.2"),
+           ("Governance verbs (PROPOSED)", "Develop · Fortify · Keep Order · Hold Court · Sponsor · Treat · Levy · Investigate", "designs/territory/governance_play_redesign_v1.md §1.3"),
+           ("Petition / Defy", "Respond to the Provincial Authority's seasonal Directive", "designs/territory/governance_play_redesign_v1.md §1.4")],
+          caveat="The 8-verb menu is a PROPOSAL (governance_play_redesign_v1) not yet ratified; the baseline §3.2 four-verb set is current."),
+        S("Threadwork", "yes", "designs/threadwork/threadwork_v30.md",
+          [("The Leap", "Suspend rendering to enter Thread contact (prerequisite)", "designs/threadwork/threadwork_v30.md §2.3"),
+           ("Weaving", "“Things cohere” — stabilise/reinforce a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
+           ("Pulling", "“Things open” — loosen or reopen a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
+           ("Locking", "“Unable to become” — freeze a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
+           ("Dissolution", "“Unable to be” — tear a configuration apart", "designs/threadwork/threadwork_v30.md §2.4"),
+           ("Mending", "Repair the substrate — the only Coherence-free operation", "designs/threadwork/threadwork_v30.md §2.4")]),
+        S("Field investigation", "yes", "designs/scene/fieldwork_v30.md",
+          [("Examine", "Study physical evidence, documents, objects", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Interview", "Question a witness — now routed via the Dialogue Lattice (ED-FI-0004)", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Research", "Consult archives, oral histories, records", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Surveil", "Observe a location/person/faction over time", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Thread-Read", "Perceive Thread configurations via a perceptive Leap", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Reconstruct", "Synthesise gathered evidence into a picture", "designs/scene/fieldwork_v30.md §4.2"),
+           ("Social (non-contest)", "Read · Converse · Connect · Impress · Rumour · Negotiate · Gift/Bribe", "designs/scene/fieldwork_v30.md §5.2")]),
+    ]
+    return {
+        "available": True,
+        "snapshot_date": "2026-07-14",
+        "subsystems": subsystems,
+        "note": ("Player/character action vocabulary per subsystem — a reference snapshot (2026-07-14) "
+                 "with source links. See each source doc (resolved via CURRENT.md) for canonical detail."),
+    }
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
@@ -565,6 +879,11 @@ def build_all():
         "currency": _safe('currency', build_currency),
         "needs_decision": _safe('needs_decision', build_needs_decision),
         "drift": _safe('drift', build_drift),
+        "queue": _safe('queue', build_queue),
+        "proposals": _safe('proposals', build_proposals),
+        "repo_shape": _safe('repo_shape', build_repo_shape),
+        "keys": _safe('keys', build_keys),
+        "actions": _safe('actions', build_actions),
         "balance": _safe('balance', build_balance),
         "registers": _safe('registers', build_registers),
         "github": _safe('github', build_github),
