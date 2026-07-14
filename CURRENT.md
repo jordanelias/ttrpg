@@ -28,7 +28,17 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-13 (**PR#127/#128 reconciliation** — `designs/architecture/ners_vsg_reconciliation_v1.md`
+_Last reconciled: 2026-07-14 (**Multi-scale governance research + audit pass**, ED-IN-0064 — a durable
+comparative-governance research corpus at `research/governance/` (8 civilizations × 3 themes: modes /
+hierarchy-standing-advancement-demotion / conflicts; ~228 `=> Valoria design hook` lines; Byzantine
+deferred; **Mandate of Heaven history-only**), a fresh post-#137 vector audit
+(`designs/audit/2026-07-14-governance-vector-audit/`), and a chain/gap + decision-surface analysis docket
+(`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/`): 2-axis chain map, per-scale
+decision-surface census, churn/event map, MoH-free gap register v2 + a ranked `decision_queue_delta_v1.md`,
+unified end-to-end by a holistic agonist→antagonist→unifier pass (`unification_synthesis_v1.md`, verdict
+UNIFIES_WITH_FIXES, fixes applied). Analysis-only, no canon ratification; hands a ranked MoH-free design
+surface to Jordan. **Also indexes the previously-un-indexed ED-IN-0051** (the 2026-07-13
+cross-scale-governance-grounding docket). Prior reconcile: 2026-07-13 (**PR#127/#128 reconciliation** — `designs/architecture/ners_vsg_reconciliation_v1.md`
 cross-reads the `tools/sim_harness/` empirical pass against the VSG settlement-generator proposal;
 settlement/territory row updated above). Prior reconcile: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
 paragraph above; `docs/dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
