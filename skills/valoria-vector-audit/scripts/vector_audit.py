@@ -56,6 +56,19 @@ except Exception:
     np = None
 import yaml
 
+# Reuse tools/names.py as THE reader for references/names_index.yaml (CLAUDE.md §8 — "every rule
+# lives once"; names.py's own docstring declares it the single reader) instead of re-parsing that
+# file locally (Fable-5 audit fix). The reader module is loaded from the REAL repo's tools/ (via
+# __file__), while the DATA is read from the --repo-root-relative path, so --repo-root is honored.
+_TOOLS_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), 'tools')
+if _TOOLS_DIR not in sys.path:
+    sys.path.insert(0, _TOOLS_DIR)
+try:
+    import names  # noqa: E402
+except Exception:  # pragma: no cover — degrade to the local _yaml reader if unavailable
+    names = None
+
 
 # ──────────────────────────── CANONICAL TAXONOMY ─────────────────────────────
 
@@ -329,7 +342,13 @@ def to_native(o):
 def banner_classify(content, path):
     """Banner-classify a doc: design / discourse / excluded."""
     head = content[:2000]
-    if re.search(r'\bSTATUS:\s*(CANONICAL|DESIGN)\b', head, re.I):
+    # STATUS-FIRST (Fable-5 audit fix): a doc that declares a recognized design/reference status is
+    # DESIGN, checked BEFORE the weak AUDIT/WORKPLAN keyword heuristic below — otherwise a
+    # REFERENCE/CURRENT-status head (e.g. faction_systems_overview_v30.md) is false-demoted to
+    # 'discourse' merely because the word "audit" appears in its scope prose (it cites a
+    # designs/audit/ doc). Mirrors gen_audit's ED-IN-0055 status-before-banner precedence;
+    # single-sourced here since gen_audit reuses banner_classify. (REFERENCE/CURRENT/WORKING added.)
+    if re.search(r'\bSTATUS:\s*(CANONICAL|DESIGN|REFERENCE|CURRENT|WORKING)\b', head, re.I):
         return 'design'
     if re.search(r'\[STRUCK\b|deprecated/', head + path, re.I):
         return 'excluded'
@@ -532,7 +551,9 @@ def derive_tokens(root):
         label = _humanize_system(key)
         add(label, _pattern_for(label) + [re.escape(key)], 'system', 'derived:canonical_sources')
 
-    for e in (_yaml(root, 'references/names_index.yaml').get('entries', {}) or {}).values():
+    _ni_entries = (names.entries(path=str(root / 'references' / 'names_index.yaml')) if names
+                   else (_yaml(root, 'references/names_index.yaml').get('entries', {}) or {}))
+    for e in _ni_entries.values():
         if not isinstance(e, dict) or e.get('category') == 'attribute':
             continue
         label, abbr = _strip_display(e.get('canonical'))

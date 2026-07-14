@@ -65,14 +65,13 @@ silently swallowed:
      The broadest, most permissive resolver: a best-effort, case-insensitive,
      punctuation/suffix-normalizing merge of ALL of descriptor_registry.yaml (attributes,
      aggregates, faction_stats, practitioner_stats, territory_stats, settlement_stats,
-     by_reference, not_descriptors) PLUS names_index.yaml. Checked LAST, as the catch-all:
-     empirically (verified by hand, not assumed — see test_registry.py), it is the ONLY one
-     of the three that reaches practitioner_stats/territory_stats terms such as "Thread
-     Sensitivity" or "Fort Level" — sections descriptor_registry.resolve() itself never
-     searches (it only scans body/mind/social attributes) and names_index.yaml does not
-     mirror (its own header comment lists only attr./agg./fac./set. as mirrored) — and the
-     only one that tolerates messy input forms (parenthetical annotations, "Track"/"Pool"
-     suffixes, underscores).
+     by_reference, not_descriptors) PLUS names_index.yaml. Checked LAST, as the catch-all —
+     the only one that tolerates messy input forms (parenthetical annotations, "Track"/"Pool"
+     suffixes, underscores). NOTE (corrected, ED-IN-0058/ED-IN-0063 Fable-5 audit): quantity_registry
+     is NO LONGER the sole resolver of practitioner_stats/territory_stats terms — the DESCRIPTOR path
+     now covers the whole descriptor_registry.yaml structural namespace (fac./set./prac./terr./agg.)
+     via `_nonattr_structural_index`, so "Thread Sensitivity"/"Fort Level" resolve as kind='descriptor'
+     (authoritative) and quantity_registry only wins for the messy-form and names_index-only cases.
 
   Net effect ("quantity/descriptor keys before free names"): the two registries that carry
   a genuine, narrow, structural KEY namespace — descriptor_registry directly, and

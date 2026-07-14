@@ -218,7 +218,15 @@ def build_g_code(root, modules):
         except SyntaxError as e:
             parse_errors.append(f'{rel}: {e}')
             continue
-        pkg = mod.rsplit('.', 1)[0] if '.' in mod else mod
+        # The package this file lives in: for a package __init__.py the module NAME already IS
+        # the package (so its own `from . import x` must resolve against itself); for a regular
+        # module a.b.c it is a.b. (Fable-5 audit fix: the old `mod.rsplit('.',1)[0]` dropped the
+        # last segment unconditionally, so every relative import inside a package __init__ resolved
+        # one package too high — e.g. `from . import ip_track` in sim/peninsular/__init__.py landed
+        # on the nonexistent sim.ip_track instead of sim.peninsular.ip_track — producing false
+        # import-orphans and a dropped relative-import cycle. It also ignored multi-dot node.level.)
+        is_pkg = rel.endswith('__init__.py')
+        cur_pkg = mod if is_pkg else (mod.rsplit('.', 1)[0] if '.' in mod else '')
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
@@ -227,8 +235,12 @@ def build_g_code(root, modules):
                         g[mod].add(tgt)
             elif isinstance(node, ast.ImportFrom):
                 base = node.module or ''
-                if node.level:  # relative import — resolve against this file's package
-                    base = pkg + ('.' + base if base else '')
+                if node.level:  # relative import — resolve against this file's package, walking
+                    #             up (level-1) packages for each leading dot beyond the first
+                    parts = cur_pkg.split('.') if cur_pkg else []
+                    up = node.level - 1
+                    base_pkg = '.'.join(parts[:len(parts) - up]) if up <= len(parts) else ''
+                    base = (base_pkg + ('.' + base if base else '')) if base_pkg else base
                 # try the module, then module.name for `from pkg import submod`
                 cands = [base] + [f'{base}.{a.name}' for a in node.names if base]
                 for c in cands:
@@ -495,6 +507,20 @@ def run(root, out):
             L.append('- ' + fmt(r))
         L.append('')
 
+    L.append('## L2 Key-closure — relationship to the module-adjudicator (§8 disclosure)')
+    L.append('')
+    L.append('The two closure findings below (phantom-producer, dangling-emit) cover the same '
+             'ground as `valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan '
+             'emission** — NOT a second implementation of them (§8 "every rule lives once"). The '
+             'adjudicator is the **authoritative per-module gate**: it runs A1–A12 against the Key '
+             'registry with wildcard-family inhabitance and emits the CLOSED/OPEN verdict. This '
+             'layer instead computes closure **corpus-wide as a measure** (a producer/consumer index '
+             'over all 27 contracts at once) to surface the graph-level pattern — a consume whose '
+             'named source emits nothing, a non-terminal emit with zero consumers anywhere. It '
+             '**measures; it does not gate** (the observatory never gates — pytest + the adjudicator '
+             'do). Where the two disagree, the adjudicator’s registry-aware verdict wins; a row here '
+             'is a pointer to inspect, not a ruling.')
+    L.append('')
     section('L2 phantom producers — a consume names a source that does NOT emit that Key '
             '(canon-grade; the mass_battle `scene_outcome.battle_concluded` class)',
             real_phantoms,

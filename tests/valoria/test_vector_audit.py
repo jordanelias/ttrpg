@@ -1,0 +1,90 @@
+"""Unit tests for the Structural Observatory's L0 prose layer
+(skills/valoria-vector-audit/scripts/vector_audit.py).
+
+vector_audit.py shipped with ZERO tests (Fable-5 multi-agent audit, 2026-07-13,
+finding J) even though it carries the classifier that decides, for every doc in
+the corpus, whether it is design / discourse / excluded — the partition every
+downstream L0 finding (and gen_audit, which reuses `banner_classify`) is built
+on. These pin the classifier's decision table (esp. the status-first tie-break
+that the same audit added), the same_class equivalence predicate, and the §8
+reuse of the real `names` reader.
+"""
+import importlib.util
+import os
+
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'vector_audit.py')
+
+
+def _load():
+    spec = importlib.util.spec_from_file_location('vector_audit', _SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+va = _load()
+
+
+# ── banner_classify decision table ──────────────────────────────────────────
+
+def test_status_declaration_is_design_even_with_audit_word():
+    # The Fable-5 status-first fix: a REFERENCE/CURRENT/WORKING/CANONICAL/DESIGN
+    # status head is DESIGN, checked BEFORE the weak AUDIT keyword — otherwise a
+    # reference head that merely CITES a designs/audit/ doc is false-demoted.
+    for status in ('CANONICAL', 'DESIGN', 'REFERENCE', 'CURRENT', 'WORKING'):
+        head = f'# Foo\n## Status: {status}\nScope: see the audit in designs/audit/x.md\n'
+        assert va.banner_classify(head, 'designs/x_v30.md') == 'design', status
+
+
+def test_provisional_status_is_design():
+    assert va.banner_classify('## Status: PROVISIONAL\n', 'designs/x.md') == 'design'
+
+
+def test_struck_and_deprecated_are_excluded():
+    assert va.banner_classify('[STRUCK] retired\n', 'designs/x.md') == 'excluded'
+    # a deprecated/ path is excluded even with no struck marker in the body
+    assert va.banner_classify('# ordinary\n', 'deprecated/old.md') == 'excluded'
+
+
+def test_workplan_and_audit_keywords_are_discourse_absent_status():
+    # with no recognized status line, the AUDIT/WORKPLAN keyword demotes to discourse
+    assert va.banner_classify('# Master WORKPLAN\n', 'designs/workplans/x.md') == 'discourse'
+    assert va.banner_classify('# Session AUDIT notes\n', 'designs/x.md') == 'discourse'
+
+
+def test_audit_folder_path_is_discourse_but_dev_spec_is_design():
+    assert va.banner_classify('# notes\n', 'designs/audit/2026/notes.md') == 'discourse'
+    assert va.banner_classify(
+        '# spec\n', 'designs/audit/2026/development_specification.md') == 'design'
+
+
+def test_status_first_beats_deprecated_ordering_is_status_then_struck():
+    # a live doc that references a deprecated/ path in its BODY (not its path) and
+    # carries no status is not auto-excluded by the word 'deprecated/' unless the
+    # struck/deprecated regex matches head+path; a plain design doc stays design.
+    assert va.banner_classify('# ordinary design doc\n', 'designs/x.md') == 'design'
+
+
+# ── same_class equivalence predicate ────────────────────────────────────────
+
+def test_same_class_groups_and_separates():
+    # same_class underpins the "implied-missing" (Mode B) reasoning: two tokens of
+    # the same class shouldn't be flagged as a cross-class gap. Two conviction axes
+    # are same-class; a conviction axis and a faction are not.
+    assert va.same_class('Faith', 'Order') is True          # both conviction
+    assert va.same_class('Crown', 'Church') is True         # both faction
+    assert va.same_class('Faith', 'Crown') is False         # conviction vs faction
+    assert va.same_class('unlisted', 'alsounlisted') is False  # neither in any class
+    # symmetric by construction
+    assert va.same_class('Faith', 'Crown') == va.same_class('Crown', 'Faith')
+
+
+# ── §8 reuse: the real names reader, not a re-parse ─────────────────────────
+
+def test_vector_audit_reuses_the_real_names_reader():
+    # Fable-5 finding: §8 "every rule lives once" — vector_audit must import the
+    # real tools/names.py, not re-parse names_index.yaml with a private matcher.
+    import importlib
+    real_names = importlib.import_module('names')
+    assert va.names is real_names

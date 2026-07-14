@@ -12,12 +12,14 @@ was written), then exercise the disagreement-disclosure mechanism BOTH on a real
 disagreement ("Thread Fatigue" — names vs quantity_registry, see the pin below) AND on a
 controlled synthetic conflict (monkeypatch, for the multi-resolver shape not present live).
 
-Two real pointer-COLLISIONS are pinned as KNOWN LIMITATIONS, not as correct behavior (WS1
-antagonist findings, ED-IN-0057 — they are what the WS1 data fold-in exists to resolve):
-"Influence" (an attribute alias that shadows the faction-stat fac.influence's canonical name,
-making fac.influence reachable by no string) and the attribute-only reach of bare structural
-keys. Pinning them as limitations keeps a green test from silently CERTIFYING the shadowed
-answer as correct.
+One residual pointer-COLLISION is pinned as a KNOWN LIMITATION (WS1 antagonist finding ED-IN-0057,
+narrowed by ED-IN-0058): the "Influence" STRING collision — the attribute alias shadows the
+faction-stat fac.influence's canonical *name*, so the string resolves to the attribute. But the
+two limitations checkpoint 1 disclosed have since been CLOSED and the tests below now assert the
+FIXES, not the limitations: fac.influence is reachable by its bare KEY, all-section structural keys
+(fac./set./prac./terr./agg.) resolve, and collisions() surfaces the residual string ambiguity (see
+test_influence_string_collision_KNOWN_LIMITATION_but_key_now_reachable). Pinning the residual keeps
+a green test from silently certifying the shadowed string as fully correct.
 """
 import os
 import sys
