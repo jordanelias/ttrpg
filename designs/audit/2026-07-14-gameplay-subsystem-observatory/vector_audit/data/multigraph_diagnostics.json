@@ -1,0 +1,575 @@
+{
+ "A_multigraph_hubs": [
+  {
+   "token": "Baralta",
+   "in_graphs": 3,
+   "cite": 124,
+   "throughline": 4,
+   "mu": 12,
+   "pp": 0
+  },
+  {
+   "token": "Conflict Architecture",
+   "in_graphs": 3,
+   "cite": 107,
+   "throughline": 10,
+   "mu": 21,
+   "pp": 9
+  },
+  {
+   "token": "Factions",
+   "in_graphs": 3,
+   "cite": 135,
+   "throughline": 14,
+   "mu": 21,
+   "pp": 0
+  },
+  {
+   "token": "Settlement Layer",
+   "in_graphs": 3,
+   "cite": 117,
+   "throughline": 10,
+   "mu": 23,
+   "pp": 0
+  },
+  {
+   "token": "Territories",
+   "in_graphs": 3,
+   "cite": 149,
+   "throughline": 7,
+   "mu": 21,
+   "pp": 0
+  },
+  {
+   "token": "Threadwork",
+   "in_graphs": 3,
+   "cite": 135,
+   "throughline": 18,
+   "mu": 25,
+   "pp": 0
+  }
+ ],
+ "B_implied_missing": [
+  {
+   "a": "CI Political",
+   "b": "Clocks",
+   "meta_links": 2
+  },
+  {
+   "a": "Campaign Architecture",
+   "b": "Faction Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Campaign Architecture",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "Campaign Architecture",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "Faction Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "MS Trajectory",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "Royal Assassination Fuse",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "Threadwork",
+   "meta_links": 2
+  },
+  {
+   "a": "Clocks",
+   "b": "Victory",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Faction Succession Split",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Leap Mechanism",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Conviction Track",
+   "b": "Derived Stats",
+   "meta_links": 2
+  },
+  {
+   "a": "Derived Stats",
+   "b": "Self-Rendering",
+   "meta_links": 2
+  },
+  {
+   "a": "Derived Stats",
+   "b": "Solmund",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Layer",
+   "b": "Mass Combat",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Layer",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Succession Split",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Factions",
+   "b": "MS Trajectory",
+   "meta_links": 2
+  },
+  {
+   "a": "Factions",
+   "b": "Miraculous Event",
+   "meta_links": 2
+  },
+  {
+   "a": "MS Trajectory",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "MS Trajectory",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Mass Combat",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Mass Combat",
+   "b": "Victory",
+   "meta_links": 2
+  },
+  {
+   "a": "Military Layer",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Miraculous Event",
+   "b": "Threadwork",
+   "meta_links": 2
+  },
+  {
+   "a": "Peninsular Strain",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Royal Assassination Fuse",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Self-Rendering",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Threadwork",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Victory",
+   "meta_links": 2
+  },
+  {
+   "a": "Tensions Deck",
+   "b": "Victory",
+   "meta_links": 2
+  }
+ ],
+ "C_notional": [
+  {
+   "source": "CI Political",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Inge Baralta",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Torben",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Church",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Hafenmark",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Varfell",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "L\u00f6wenritter",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Guilds",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Standing",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Baralta",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Conviction Track",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Factions",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "NPC Roster",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Aldric Tormann",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Cardinal Arnlod Olafsson",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Cardinal Osten Jarnstal",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Duchess Inge Baralta",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Gerik Strand",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Maret Uln",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Peder Almstedt",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Prince Torben Almqvist",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Wardens",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Einhir",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Riskbreaker",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Leap",
+   "target": "MS",
+   "cite_weight": 153
+  }
+ ],
+ "D_cascade_sinks": [
+  {
+   "terminal": "Territories",
+   "chains": 201
+  },
+  {
+   "terminal": "Church",
+   "chains": 200
+  },
+  {
+   "terminal": "Stability",
+   "chains": 191
+  },
+  {
+   "terminal": "Threadwork",
+   "chains": 190
+  },
+  {
+   "terminal": "Crown",
+   "chains": 189
+  },
+  {
+   "terminal": "Varfell",
+   "chains": 188
+  },
+  {
+   "terminal": "Restoration Movement",
+   "chains": 188
+  },
+  {
+   "terminal": "Hafenmark",
+   "chains": 186
+  },
+  {
+   "terminal": "Wardens",
+   "chains": 184
+  },
+  {
+   "terminal": "Conviction",
+   "chains": 183
+  },
+  {
+   "terminal": "Mandate",
+   "chains": 178
+  },
+  {
+   "terminal": "Einhir",
+   "chains": 175
+  },
+  {
+   "terminal": "TS",
+   "chains": 173
+  },
+  {
+   "terminal": "L\u00f6wenritter",
+   "chains": 171
+  },
+  {
+   "terminal": "Altonia",
+   "chains": 170
+  }
+ ],
+ "E_sparse_context": [
+  {
+   "token": "Body",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "NPC Relational Graph",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Territory Temperaments",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Fractional Province",
+   "paragraphs": 1,
+   "cite_deg": 23,
+   "status": "provisional"
+  },
+  {
+   "token": "Mind",
+   "paragraphs": 1,
+   "cite_deg": 13,
+   "status": "canonical"
+  },
+  {
+   "token": "Propagation Spec",
+   "paragraphs": 1,
+   "cite_deg": 13,
+   "status": "canonical"
+  },
+  {
+   "token": "Event Impact Matrix",
+   "paragraphs": 2,
+   "cite_deg": 13,
+   "status": "provisional"
+  },
+  {
+   "token": "Holonic Container Doctrine",
+   "paragraphs": 2,
+   "cite_deg": 11,
+   "status": "canonical"
+  },
+  {
+   "token": "Armature System",
+   "paragraphs": 3,
+   "cite_deg": 3,
+   "status": "provisional"
+  },
+  {
+   "token": "Thread Horizontal Integration",
+   "paragraphs": 4,
+   "cite_deg": 3,
+   "status": "canonical"
+  },
+  {
+   "token": "MS Trajectory",
+   "paragraphs": 6,
+   "cite_deg": 19,
+   "status": "canonical"
+  }
+ ],
+ "H_isolates": [
+  {
+   "token": "Body",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "NPC Relational Graph",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Territory Temperaments",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "status": "canonical"
+  }
+ ],
+ "F_throughline_orphans": [
+  {
+   "throughline": "T-10",
+   "systems": [
+    "\u2014"
+   ],
+   "substantiating": 0
+  }
+ ],
+ "G_vocabulary_debt": [
+  {
+   "term": "Coup Counter",
+   "total": 57,
+   "docs": 13,
+   "concentration": [
+    [
+     "designs/arcs/arc_expansion_v30.md",
+     30
+    ],
+    [
+     "designs/arcs/throughline_resolutions_v30.md",
+     10
+    ],
+    [
+     "designs/architecture/conflict_architecture_proposal.md",
+     3
+    ]
+   ]
+  },
+  {
+   "term": "Cultural Reformation",
+   "total": 23,
+   "docs": 9,
+   "concentration": [
+    [
+     "designs/provincial/peninsular_strain_v30.md",
+     10
+    ],
+    [
+     "designs/provincial/victory_v30.md",
+     4
+    ],
+    [
+     "designs/architecture/complete_systems_reference.md",
+     2
+    ]
+   ]
+  },
+  {
+   "term": "Game Master",
+   "total": 21,
+   "docs": 8,
+   "concentration": [
+    [
+     "designs/arcs/throughline_resolutions_v30.md",
+     4
+    ],
+    [
+     "designs/scene/combat_v30.md",
+     4
+    ],
+    [
+     "designs/architecture/videogame_mode_spec.md",
+     3
+    ]
+   ]
+  }
+ ]
+}
