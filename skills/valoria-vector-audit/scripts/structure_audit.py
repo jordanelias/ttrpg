@@ -409,7 +409,12 @@ def run(root, out):
     g_code, parse_errors = build_g_code(root, modules)
     code_nodes = list(modules)
     code_scc = tarjan_scc(g_code)
-    code_cycles = _cycles(code_scc, g_code)
+    code_cycles = sorted(_cycles(code_scc, g_code))   # sort the cycle LIST (each cycle is already
+    #                                                   internally sorted) so the dumped order is
+    #                                                   deterministic — tarjan visits SCCs in the
+    #                                                   set-derived node order, hash-seed dependent
+    #                                                   (Fable-5 audit finding; mirrors the capstone
+    #                                                   cut-vertex/hub tiebreak, now applied to cycles)
     code_cuts = articulation_points(g_code)
     code_deg = degrees(g_code, code_nodes)
     code_orphans = sorted(n for n in code_nodes
@@ -424,7 +429,7 @@ def run(root, out):
     g_l2, meta, edges_meta, findings, assumption_count = build_l2(root)
     l2_nodes = list(meta)
     l2_scc = tarjan_scc(g_l2)
-    l2_cycles = _cycles(l2_scc, g_l2)  # cross-check against the contracts' own `loops` field
+    l2_cycles = sorted(_cycles(l2_scc, g_l2))  # sorted for determinism; cross-check vs contracts' `loops`
     l2_deg = degrees(g_l2, l2_nodes)
     l2_cuts = articulation_points(g_l2)
     locality = cross_scale_locality(g_l2, meta)

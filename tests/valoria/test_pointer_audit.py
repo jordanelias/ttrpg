@@ -242,11 +242,18 @@ def test_formula_local_intermediates_detects_lhs_defined_input():
 
 
 def test_formula_local_ignores_comparison_operators():
-    # '==' must NOT be misread as an LHS definition.
+    # '==' at SEGMENT START must NOT be misread as an LHS definition. The comparison must sit
+    # where the start-anchored regex would otherwise fire, so this actually exercises the `(?!=)`
+    # guard: with the guard, 'X == 0' does NOT match (X's '=' is followed by '='); WITHOUT the
+    # guard it WOULD match and wrongly mark X a local. (The old fixture 'gate when X == 0' put the
+    # comparison mid-segment where the anchored regex never fires — vacuous; Fable-5 audit finding.)
     contracts = {'modules': [{'module': 'm', 'derivations': [
-        {'inputs': ['X'], 'formula': 'gate when X == 0'},
+        {'inputs': ['X'], 'formula': 'X == 0'},
     ]}]}
     assert pa.formula_local_intermediates(contracts) == {}
+    # sanity: a real single-'=' assignment on the SAME shape IS caught (proves the fixture is live)
+    assert pa.formula_local_intermediates(
+        {'modules': [{'module': 'm', 'derivations': [{'inputs': ['X'], 'formula': 'X = 0'}]}]}) == {('m', 'X'): 'X = 0'}
 
 
 def test_is_formula_local_only_flags_derivation_inputs():
