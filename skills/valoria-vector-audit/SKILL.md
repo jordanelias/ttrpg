@@ -60,16 +60,23 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 
 ## Step 3 — Pipeline Stages
 
-The pipeline's specification is this stage table. **`scripts/vector_audit.py` does NOT currently
-implement it** — its `main()` has no stage dispatcher, only a stub that prints a pointer back to
-the 2026-04-29 run (see "Reference Files" below, ED-IN-0035/ED-IN-0036). A rerun of this audit is
-blocked on someone implementing the dispatcher against this table, not on running the script as-is:
+The pipeline's specification is this stage table. **`scripts/vector_audit.py` now implements it**
+(stage dispatcher landed 2026-07-13, repo-realignment WS0a): it reads the working tree, builds the
+five graphs, runs P1/P2/P3 validation and all 8 diagnostic modes, and writes the outputs below. Run
+it directly:
+
+```
+python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
+```
+
+It is **working-tree only** (no GitHub fetch) and degrades gracefully without `numpy`/`sklearn` (the
+supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage table:
 
 | Stage | What | Output |
 |---|---|---|
 | 0 | Pilot validation (8 well-understood tokens, sanity check tokenization) | `data/pilot.json` |
 | 1 | Corpus extraction with banner classifier (design vs discourse) | `data/corpus_*.json`, `data/corpus_manifest.json` |
-| 2 | Token curation: seed + auto-extract with disambiguation rules | `data/tokens.json`, `data/auto_candidates.json` |
+| 2 | Token curation: **derived from the live registries** (canonical_sources `systems:` + names_index + proper_noun_registry) layered on the curated disambiguation core — see `derive_tokens()` | `data/tokens.json` |
 | 2.5 | Expanded citation graph (explicit refs + implicit ≥2 body mentions + PP affects) | `data/g_cite.json` |
 | 3 | Standard sklearn TF-IDF over paragraphs (supporting only) | `data/g_tfidf.npz` |
 | 4 | Metadata graphs from throughlines table + Μ collapsing + PP affects | `data/g_metadata.json` |
@@ -187,13 +194,68 @@ PP entry references the audit folder; ED entry describes what was found.
 - `references/methodology.md` — v3 multi-graph triangulation specification (full §3 procedure, all pre-committed thresholds, class taxonomy)
 - `references/diagnostic_modes.md` — A through H mode specifications with worked examples
 - `references/v1_v2_v3_history.md` — methodology evolution, why each pivot was needed (institutional memory)
-- `scripts/vector_audit.py` — **STUB, not a runnable pipeline** (found 2026-07-11, audit-ecosystem
-  consolidation ED-IN-0035): `main()` has no stage-execution dispatcher (`# Stage execution
-  dispatcher would go here`) and just prints a pointer back to the original 2026-04-29 run. No
-  other file in the repo implements the pipeline. **A rerun of this audit is currently blocked on
-  implementing the stage dispatcher this file only scaffolds** — that is real engineering work,
-  not a methodology-delta note. Do not attempt to invoke this script expecting output; if asked to
-  rerun the audit, say so plainly rather than reporting a partial or fabricated result.
+- `scripts/vector_audit.py` — **runnable pipeline** (stage dispatcher implemented 2026-07-13,
+  repo-realignment WS0a; supersedes the 2026-07-11 STUB status noted under ED-IN-0035/0036).
+  Implements Stages 1–6 (Stage 0 pilot + Stage 7 discourse overlay reserved), reads the working
+  tree only, and writes `data/*.json` + `02_weakness_register.md` + `03_validation_report.md`.
+  Reuses the in-file `SEED_TOKENS`/`PILOT_TOKENS`/`CLASSES`/helper scaffolding. `numpy`/`sklearn`
+  are optional (only the supporting TF-IDF graph needs them). Invoke via the command in Step 3.
+  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run;
+  validation may still report FAILED (P2 conviction-symmetry) — that is a real finding, not a bug
+  (methodology §3.8).
+- `scripts/structure_audit.py` — the observatory's **architecture layers** (WS0b core, added
+  2026-07-13). Companion to `vector_audit.py` (which is the L0 prose layer). Builds **G_code** (AST
+  import graph over `sim/` + `tools/` — cycles, cut-vertices, orphans) and **L2** (the
+  `module_contracts.yaml` producer→consumer wiring graph — Key emit/consume closure, phantom
+  producers, dangling non-terminal emits, `doc:null` modules, cross-scale locality). Stdlib + PyYAML
+  only (no numpy/sklearn/networkx — the graph algorithms are implemented in-file), working-tree only,
+  deterministic. **Provenance-tagged** (notional/`[ASSUMPTION]`/`doc:null` modules bucketed as
+  lower-confidence) and it **measures, never gates** (pytest + import-smoke gate). Invoke:
+  `python3 scripts/structure_audit.py --repo-root . --output-dir <run>` → `structure_register.md` +
+  `data/*.json`. Regression-pinned in `tests/valoria/test_structure_audit.py` against PR #131's
+  hand-caught L2 defects (the mass_battle fabricated emit, the personal_combat dead emits).
+- `scripts/pointer_audit.py` — the observatory's **G_pointer** layer (WS0b, added 2026-07-13; the WS1
+  registry-work progress meter). For every stat/quantity identifier on the same surfaces A17 scans
+  (`module_contracts.yaml` `state`/`derivations` + `sim/*.py` `stat_deltas`/`impact_vector` literals),
+  does it resolve to a `descriptor_registry`/`names_index` key, or is it hardcoded pointer-debt? It
+  **reuses A17's rule, does not reimplement it** (CLAUDE.md §8) — imports `tools/quantity_registry.py`
+  `resolve()` and `tools/ci_quantity_vocabulary_check.py`'s scanners verbatim; A17 is the CI gate, this
+  is the graph/meter VIEW. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates.** The unresolved list is *candidate* debt — it explicitly flags that some rows are
+  computed/internal quantities (e.g. `cumulative_damage`, `L_s`) that A17 calls "expected backlog, not
+  a bug," so triage before acting. Invoke:
+  `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>` → `pointer_register.md` +
+  `data/{g_pointer,pointer_scorecard}.json`. Tests: `tests/valoria/test_pointer_audit.py` (pins the
+  §8 reuse-by-identity + the A17 ground-truth count match).
+- `scripts/formula_audit.py` — the observatory's **L1 formula-dependency** layer (WS0b, added
+  2026-07-13). Builds the quantity-dependency DAG (output ← input) from `module_contracts.yaml`
+  `derivations` + `descriptor_registry.yaml`, detecting orphan inputs (a quantity consumed but never
+  produced), multi-definition conflicts (the "Combat Pool defined three ways" class), and dependency
+  cycles. **Reuses** `tools/quantity_registry.py` `resolve()`,
+  `ci_quantity_vocabulary_check._split_bundled`, and `structure_audit.py`'s `tarjan_scc`/`degrees`
+  (no reimplementation, §8). Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates**; the unresolved/orphan list is *candidate* debt (triage first — some are computed/placeholder
+  quantities). A malformed derivation with a null `output` is surfaced via a sentinel node, never
+  silently dropped. Invoke: `python3 scripts/formula_audit.py --repo-root . --output-dir <run>` →
+  `formula_register.md` + `data/*.json`. Tests: `tests/valoria/test_formula_audit.py` (§8
+  reuse-by-identity + end-to-end cycle detection + the null-output regression).
+- `scripts/gen_audit.py` — the observatory's **G_generation** currency layer (WS0b, added 2026-07-13;
+  the WS3 / NS4 v40-transition meter). Partitions the whole `.md` corpus into LIVE heads vs HISTORICAL
+  records (so a historical doc's stale refs are *structurally* never scanned), then runs three
+  detections: (1) **stale version-pointers** inside live heads — a `_vNN.md` ref that is superseded,
+  *moved* (successor exists per the restructure ledger — a trivial repoint), or genuinely nonexistent;
+  (2) **unregistered canonical heads** (a `## Status: CANONICAL` doc absent from
+  `canonical_sources.yaml`); (3) **currency drift** (registered AND superseded). **Reuses**
+  `ci_generation_consistency.py`'s currency rule (`canonical_docs`/`status_of`/`superseded_ids`/
+  `RECOGNIZED`), `broken_dependency_checker.py`'s
+  `extract_file_refs`/`get_all_repo_files`/`_load_restructure_map`, and `vector_audit.banner_classify`
+  — no rule re-derived (§8). Authoritative registration beats the weak banner content-keyword; physical
+  archival paths still demote. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates** (`ci_generation_consistency.py` is the WARN-only gate). The stale-pointer list is
+  severity-triaged (superseded/moved = mechanical repoints; only *nonexistent* needs a human). Invoke:
+  `python3 scripts/gen_audit.py --repo-root . --output-dir <run>` → `generation_register.md` +
+  `data/g_generation.json`. Tests: `tests/valoria/test_gen_audit.py` (33 tests: §8 reuse-by-identity,
+  the LIVE/HISTORICAL discriminator, the moved-vs-nonexistent severity split).
 
 ## Cross-references
 
