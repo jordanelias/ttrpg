@@ -293,15 +293,15 @@ def partition_corpus(root, live_set, superseded_set):
     {relpath: content} for the live bucket only — the exact set detection 1 is
     allowed to see).
 
-    NOTE — a `live_set` member can still land in the 'historical' bucket here:
-    `classify()` checks the path-prefix / ledger / banner_classify HISTORICAL
-    signals BEFORE checking `live_set` membership. This is deliberate, not a
-    bug — it implements the spec's explicit tie-break ("when in doubt,
-    classify HISTORICAL... a false 'live' is worse than a false 'historical'
-    here"). `run()` below computes exactly which `live_set` members this
-    demotes and reports them explicitly (never silently dropped) — see the
-    'live heads demoted by a historical-path/banner signal' section of the
-    register."""
+    NOTE — a `live_set` member can still land in the 'historical' bucket, but ONLY via an
+    AUTHORITATIVE signal: `classify()` checks superseded_id / archival-path-prefix / ledger
+    BEFORE `live_set` membership, and checks `live_set` membership BEFORE the weak
+    `banner_classify` content heuristic (the ED-IN-0055 fix — an authoritative registration
+    must not be demoted by a mere prose keyword like a stray "audit" in the doc's scope
+    text). So a registered live head is demoted only by a genuine path/superseded/ledger
+    signal, never by banner_classify alone. `run()` below computes exactly which `live_set`
+    members are demoted and reports them explicitly (never silently dropped) — see the
+    'live heads demoted by a historical-path signal' section of the register."""
     partition = {'live': [], 'historical': []}
     reason_counts = {}
     per_file_reason = {}

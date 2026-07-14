@@ -424,9 +424,13 @@ def run(root, out, contracts_path=None, sim_root=None):
              'references/registry/pointer_debt_worklist.md, Category B/C), not something to silently '
              'exclude. `derivations.inputs` rows skew toward (b); `state`/`derivations.output` toward (a).')
     L.append('')
+    _debt_occ = sum(r['occurrences'] for r in debt)
+    _debt_idents = len({r['identifier'] for r in debt})
     L.append(f'{len(debt)} unique unresolved (surface, location, identifier) row(s), '
-             f'{ov["occurrences_unresolved"]} raw occurrence(s), '
-             f'{ov["unique_identifiers_unresolved"]} unique identifier(s).')
+             f'{_debt_occ} occurrence(s), {_debt_idents} unique identifier(s) — counts computed '
+             f'from THIS (refined) list, so they always match it. (Raw, formula-locals included: '
+             f'{ov["occurrences_unresolved"]} occ / {ov["unique_identifiers_unresolved"]} unique — '
+             f'the {len(excluded_locals)} excluded formula-local(s) are enumerated above.)')
     L.append('')
     if not debt:
         L.append('(nothing to report — every scanned identifier resolves to the registry)')
