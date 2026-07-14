@@ -19,15 +19,19 @@ name: Valoria Audit Refresh
 # SCOPE NOTE (why this workflow has one job, not two): the original design for
 # this phase called for a second job re-running skills/valoria-vector-audit/
 # scripts/vector_audit.py's deterministic corpus-extraction/diagnostic stages.
-# That script turned out to be a stub -- its main() has no stage dispatcher at
-# all ("Stage execution dispatcher would go here"; the real implementation
-# that produced archives/audit/2026-04-29-topographic-analysis/'s data was
-# never ported into it). Building a CI job to "run" a pipeline that doesn't
-# exist would silently commit near-empty output while looking like real
-# automation -- worse than not building it, and it would undermine
-# tools/audit_staleness.py's own honest "vector-audit: 412 files changed
-# since last refresh" signal. Deferred: vector_audit.py needs its stage
-# dispatcher actually implemented before any automated refresh is possible.
+# When this note was first written that script was a stub (no stage dispatcher).
+# THAT IS NO LONGER TRUE (corrected after the Fable-5 2026-07-14 audit, Obs-7):
+# vector_audit.py's main()->run() is a working pipeline (110 design docs, 176
+# tokens, real diagnostics + a P1/P2/P3 verdict), and it now has four sibling
+# Tier-0 scripts (structure_audit / pointer_audit / formula_audit / gen_audit),
+# each with committed unit + regression tests. So the precondition that blocked
+# automating a refresh no longer holds. It remains UNWIRED here by an open
+# DECISION, not by inability: the observatory is a "measures, never gates"
+# hygiene instrument, and whether a monthly non-gating refresh job should
+# persist its scorecards (and where) is the reopened call tracked in the
+# 2026-07-14 holistic-unification doc. Until that lands, refresh stays manual
+# (`--output-dir <run>`), which is why tools/audit_staleness.py still reports
+# vector-audit drift honestly.
 
 on:
   schedule:

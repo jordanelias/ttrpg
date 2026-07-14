@@ -251,16 +251,38 @@ def build_scorecard(occurrences):
     assert not overlap, f"identifier resolved AND unresolved across occurrences: {overlap}"
     unique_total = len(ident_resolved) + len(ident_unresolved)
 
+    # KEYED split (Fable-5 2026-07-14 audit, meter finding 1). `resolve()` returns
+    # matched-is-not-None even for a `not_descriptors` entry — a name the registry
+    # DELIBERATELY declines to key (a track/clock/derived value). Counting those as
+    # "resolved" answers "did the name match ANY registry entry," NOT the question the
+    # tool is named for ("does it POINT to a registry KEY"). So we split `resolved` into:
+    #   keyed                 — key is not None → a real pointer to a registry key
+    #   declared_non_pointer  — matched but key is None → registry-acknowledged, intentionally keyless
+    # and report BOTH honestly. The keyed rate is the true pointer rate; the earlier
+    # headline conflated the two and overstated it ~2.4x. `keyed` is a per-string property
+    # (resolve() is deterministic), so the identifier sets are well-defined.
+    occ_keyed = sum(1 for o in occurrences if o['key'] is not None)
+    occ_declared_non_pointer = resolved - occ_keyed
+    ident_keyed = {o['identifier'] for o in occurrences if o['key'] is not None}
+    ident_declared_non_pointer = ident_resolved - ident_keyed
+
     overall = {
         'occurrences_total': total,
         'occurrences_resolved': resolved,
         'occurrences_unresolved': unresolved,
         'percent_resolved_occurrences': round(100.0 * resolved / total, 1) if total else None,
+        'occurrences_keyed': occ_keyed,
+        'occurrences_declared_non_pointer': occ_declared_non_pointer,
+        'percent_keyed_occurrences': round(100.0 * occ_keyed / total, 1) if total else None,
         'unique_identifiers_total': unique_total,
         'unique_identifiers_resolved': len(ident_resolved),
         'unique_identifiers_unresolved': len(ident_unresolved),
         'percent_resolved_unique_identifiers': round(100.0 * len(ident_resolved) / unique_total, 1)
                                                 if unique_total else None,
+        'unique_identifiers_keyed': len(ident_keyed),
+        'unique_identifiers_declared_non_pointer': len(ident_declared_non_pointer),
+        'percent_keyed_unique_identifiers': round(100.0 * len(ident_keyed) / unique_total, 1)
+                                            if unique_total else None,
     }
     return {'overall': overall, 'by_surface': by_surface}
 
@@ -314,8 +336,12 @@ def run(root, out, contracts_path=None, sim_root=None):
     ov = scorecard['overall']
     rov = refined_scorecard['overall']
     print(f'            raw:     {ov["unique_identifiers_resolved"]}/{ov["unique_identifiers_total"]} unique '
-          f'({_pct(ov["percent_resolved_unique_identifiers"])}); '
+          f'matched ({_pct(ov["percent_resolved_unique_identifiers"])}); '
           f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} occ ({_pct(ov["percent_resolved_occurrences"])})')
+    print(f'            KEYED:   {ov["unique_identifiers_keyed"]}/{ov["unique_identifiers_total"]} unique '
+          f'point to a real registry KEY ({_pct(ov["percent_keyed_unique_identifiers"])}) — the true pointer '
+          f'rate; the other {ov["unique_identifiers_declared_non_pointer"]} "matched" are declared-non-pointer '
+          f'(registry-acknowledged, intentionally keyless)')
     print(f'            refined: {rov["unique_identifiers_resolved"]}/{rov["unique_identifiers_total"]} unique '
           f'({_pct(rov["percent_resolved_unique_identifiers"])}) after excluding '
           f'{len(excluded_locals)} formula-local intermediate(s)')
@@ -358,13 +384,29 @@ def run(root, out, contracts_path=None, sim_root=None):
              '`tools/quantity_registry.py`\'s `resolve()` verbatim — no resolution logic is '
              'reimplemented here.')
     L.append('')
-    L.append(f'**Scorecard (progress meter):** '
-             f'{ov["unique_identifiers_resolved"]}/{ov["unique_identifiers_total"]} unique identifiers resolved '
+    L.append(f'**Scorecard — the honest split (Fable-5 2026-07-14 audit, meter finding 1).** '
+             f'`resolve()` matching a name is NOT the same as that name pointing to a registry KEY: '
+             f'the registry deliberately declines to key some names (`not_descriptors` — tracks, '
+             f'clocks, derived values). So the meter reports both:')
+    L.append('')
+    L.append(f'- **KEYED (the true pointer rate):** '
+             f'{ov["unique_identifiers_keyed"]}/{ov["unique_identifiers_total"]} unique '
+             f'({_pct(ov["percent_keyed_unique_identifiers"])}) · '
+             f'{ov["occurrences_keyed"]}/{ov["occurrences_total"]} occ '
+             f'({_pct(ov["percent_keyed_occurrences"])}) point to a real registry key.')
+    L.append(f'- **Matched-but-declared-non-pointer:** '
+             f'{ov["unique_identifiers_declared_non_pointer"]} more unique identifiers match a '
+             f'`not_descriptors` entry (registry-acknowledged, intentionally keyless) — counted as '
+             f'"resolved" by the older meter, which is why the headline used to read '
+             f'{_pct(ov["percent_resolved_unique_identifiers"])} (matched-anything) instead of the '
+             f'true {_pct(ov["percent_keyed_unique_identifiers"])} keyed. NOTE these are structurally '
+             f'the SAME kind of thing as the "computed/internal, no key needed" debt rows below — '
+             f'the only difference is someone already listed them in `not_descriptors`.')
+    L.append(f'- **Matched (either of the above):** '
+             f'{ov["unique_identifiers_resolved"]}/{ov["unique_identifiers_total"]} unique '
              f'({_pct(ov["percent_resolved_unique_identifiers"])}) · '
-             f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} raw occurrences resolved '
-             f'({_pct(ov["percent_resolved_occurrences"])}) · '
              f'known registry vocabulary = {n_name_strings} resolvable name strings '
-             f'(aliases included) → {n_distinct_keys} distinct registry keys.')
+             f'(aliases incl.) → {n_distinct_keys} distinct registry keys.')
     L.append('')
     L.append(f'**Refined meter (formula-local intermediates excluded, ED-IN-0061):** '
              f'{rov["unique_identifiers_resolved"]}/{rov["unique_identifiers_total"]} unique '
@@ -395,6 +437,11 @@ def run(root, out, contracts_path=None, sim_root=None):
         more = '' if len(b['unique_identifiers']) <= 6 else f" (+{len(b['unique_identifiers']) - 6} more)"
         L.append(f"- `{b['key']}` — {b['occurrences']} occurrence(s), "
                  f"{len(b['unique_identifiers'])} unique identifier(s): {idents}{more}")
+    if len(resolved_buckets) > 20:
+        # disclose truncation (Fable-5 2026-07-14 audit, Obs-9 — this section lacked the
+        # "… N more" line the debt section already had; JSON keeps the top 25).
+        L.append(f'- … {len(resolved_buckets) - 20} more (see `data/pointer_scorecard.json` '
+                 f'-> `top_resolved_registry_keys`, top 25)')
     L.append('')
 
     L.append('## Formula-local intermediates excluded from the refined meter (logged, not silently dropped)')

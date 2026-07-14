@@ -326,6 +326,31 @@ def build_adjacency(edges, definitions):
     return adj
 
 
+def cycles_via_loose_form(adj, raw_cycles):
+    """Detect cycles that only close once trailing paren-annotations are normalized
+    away — e.g. the LIVE Mandate↔Legitimacy feedback, where an output spelled
+    `faction Mandate (cross-module → faction_state)` and an input spelled bare
+    `faction Mandate` are distinct raw nodes so the exact-identity SCC misses the
+    loop (Fable-5 2026-07-14 audit, finding F: this was disclosed-but-unfixed; now
+    fixed). Runs SCC on a loose-form-collapsed VIEW (raw node identity is preserved
+    everywhere else — roots/leaves/orphans still use exact text) and returns only
+    MULTI-NODE cycles not already present in `raw_cycles`. Self-loops introduced
+    purely by the collapse are dropped (the annotation-shadowing false-positive the
+    module docstring warns about). Returned cycle members are loose forms."""
+    norm_adj = defaultdict(set)
+    for u, vs in adj.items():
+        lu = _loose_form(u)
+        norm_adj.setdefault(lu, set())
+        for v in vs:
+            lv = _loose_form(v)
+            if lu != lv:                      # drop collapse-induced self-loops
+                norm_adj[lu].add(lv)
+    norm_cycles = _cycles(tarjan_scc(norm_adj), norm_adj)
+    raw_sets = {frozenset(_loose_form(n) for n in c) for c in raw_cycles}
+    extra = [c for c in norm_cycles if len(c) > 1 and frozenset(c) not in raw_sets]
+    return sorted(extra)
+
+
 def compute_max_depth(adj, scc):
     """Longest path (edge count) through the SCC-condensed graph. Condensing
     first makes this safe even if a cycle exists (a raw longest-path search
@@ -456,7 +481,8 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     adj = build_adjacency(edges, definitions)
     nodes = list(adj)
     scc = tarjan_scc(adj)
-    cycles = _cycles(scc, adj)
+    cycles = sorted(_cycles(scc, adj))               # sorted for determinism (Obs-8 parity with structure_audit)
+    paren_cycles = cycles_via_loose_form(adj, cycles)  # cross-module feedback the exact-identity SCC misses (finding F fix)
     deg = degrees(adj, nodes)
     roots = sorted(n for n in nodes if deg[n]['in'] == 0 and deg[n]['out'] > 0)
     leaves = sorted(n for n in nodes if deg[n]['out'] == 0 and deg[n]['in'] > 0)
@@ -469,7 +495,8 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     total_edges = sum(len(v) for v in adj.values())
     print(f'         {len(nodes)} nodes, {total_edges} edges '
           f'({len(contract_edges)} module_contracts, {len(descriptor_edges)} descriptor_registry), '
-          f'{len(cycles)} cycle(s), {len(orphans)} orphan input(s), {len(multi_defs)} multi-def output(s), '
+          f'{len(cycles)} exact cycle(s) + {len(paren_cycles)} paren-normalized, '
+          f'{len(orphans)} orphan input(s), {len(multi_defs)} multi-def output(s), '
           f'{len(malformed)} malformed derivation(s)')
 
     # ---- JSON ----
@@ -480,7 +507,8 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     dump('formula_metrics.json', {
         'nodes': len(nodes), 'edges': total_edges,
         'contract_edges': len(contract_edges), 'descriptor_edges': len(descriptor_edges),
-        'cycles': cycles, 'roots': roots, 'leaves': leaves, 'isolated': isolated,
+        'cycles': cycles, 'paren_normalized_cycles': paren_cycles,
+        'roots': roots, 'leaves': leaves, 'isolated': isolated,
         'max_depth': max_depth,
         'orphan_inputs': orphans, 'multi_definitions': multi_defs,
         'malformed_derivations': malformed,
@@ -507,7 +535,7 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     L.append(f'**Scorecard:** nodes={len(nodes)}, edges={total_edges} '
              f'({len(contract_edges)} module_contracts.derivations, {len(descriptor_edges)} descriptor_registry), '
              f'roots(pure inputs)={len(roots)}, leaves(final outputs)={len(leaves)}, isolated={len(isolated)}, '
-             f'max-depth={max_depth}, cycles={len(cycles)}, '
+             f'max-depth={max_depth}, cycles={len(cycles)} exact(+{len(paren_cycles)} paren-normalized), '
              f'orphan-inputs={len(canon_orphans)}(+{len(notional_orphans)} notional/placeholder-only), '
              f'multi-def-outputs={len(canon_multi)}(+{len(notional_multi)} notional/placeholder-only).')
     L.append('')
@@ -553,21 +581,29 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     )
     L.append('## Cycles — a quantity transitively depends on itself (Tarjan SCC > 1, or a self-loop)')
     L.append('')
-    L.append('**Node identity is the raw derivation string, not a resolved registry key** — so a '
-             'cross-module feedback loop whose two legs spell the same quantity differently is NOT '
-             'detected here. Concretely: `faction_state`’s `Mandate` is emitted annotated '
-             '(`faction Mandate (cross-module → faction_state)`) but consumed bare '
-             '(`faction Mandate`); those are two distinct nodes, so the real Mandate↔Legitimacy '
-             'feedback does not close into an SCC and is absent below. This is a deliberate '
-             'under-report: normalizing node ids by stripping the parenthetical would risk collapsing '
-             'genuinely-distinct disambiguating annotations (see the script docstring). Treat the '
-             'cycle list as a lower bound, and cross-module `(... → module)`-annotated outputs as '
-             'known blind spots until a registry-key node identity is built.')
-    L.append('(none)' if not cycles else '')
+    L.append('Reported in **two passes** (Fable-5 2026-07-14 audit, finding F — previously this was a '
+             'disclosed-but-unfixed blind spot; now detected):')
+    L.append('- **Exact-identity cycles** — SCCs over the raw derivation strings.')
+    L.append('- **Paren-normalized cycles** — a SECOND pass over a loose-form-collapsed view that '
+             'strips trailing `(...)` annotations, so a cross-module feedback whose legs spell the '
+             'same quantity differently DOES close. Concretely this catches the live Mandate↔Legitimacy '
+             'loop (`faction Mandate (cross-module → faction_state)` emitted, `faction Mandate` '
+             'consumed). Raw node identity is preserved everywhere else (roots/leaves/orphans); only '
+             'cycle detection uses the collapsed view, and collapse-induced self-loops are dropped to '
+             'avoid the annotation-shadowing false-positive the docstring warns about.')
+    L.append('')
+    L.append('**Exact-identity:** ' + ('(none)' if not cycles else ''))
     for c in cycles[:25]:
         L.append('- ' + ' -> '.join(c[:8]) + (' …' if len(c) > 8 else ''))
     if len(cycles) > 25:
         L.append(f'- … {len(cycles) - 25} more (see `data/formula_metrics.json`)')
+    L.append('')
+    L.append('**Paren-normalized (cross-module feedback the exact pass misses):** '
+             + ('(none)' if not paren_cycles else ''))
+    for c in paren_cycles[:25]:
+        L.append('- ' + ' -> '.join(c[:8]) + (' …' if len(c) > 8 else ''))
+    if len(paren_cycles) > 25:
+        L.append(f'- … {len(paren_cycles) - 25} more (see `data/formula_metrics.json`)')
     L.append('')
     section('Malformed derivations — `output` field missing/blank (inputs were routed to a '
             'sentinel node so their orphan status still surfaces above)',
@@ -588,6 +624,7 @@ def run(root, out, contracts_path=None, descriptor_path=None):
     (out / 'formula_register.md').write_text('\n'.join(L), encoding='utf-8')
     print(f'[done] {out}/formula_register.md')
     return {'edges': edges, 'definitions': definitions, 'adj': adj, 'cycles': cycles,
+            'paren_cycles': paren_cycles,
             'orphans': orphans, 'multi_defs': multi_defs, 'roots': roots, 'leaves': leaves,
             'max_depth': max_depth}
 

@@ -350,7 +350,12 @@ def banner_classify(content, path):
     # single-sourced here since gen_audit reuses banner_classify. (REFERENCE/CURRENT/WORKING added.)
     if re.search(r'\bSTATUS:\s*(CANONICAL|DESIGN|REFERENCE|CURRENT|WORKING)\b', head, re.I):
         return 'design'
-    if re.search(r'\[STRUCK\b|deprecated/', head + path, re.I):
+    # STRUCK marker is a CONTENT signal (checked in head); `deprecated/` is a PATH signal
+    # (checked in path ONLY). The Fable-5 2026-07-14 audit flagged that matching `deprecated/`
+    # against head+path would wrongly EXCLUDE (drop entirely) a live design doc that merely
+    # CITES a deprecated/ path in its prose — the same content-substring false-classification
+    # class fixed for the AUDIT keyword above. Path-anchoring closes it.
+    if re.search(r'\[STRUCK\b', head, re.I) or 'deprecated/' in path.lower():
         return 'excluded'
     if 'STATUS: PROVISIONAL' in head:
         return 'design'
@@ -894,13 +899,19 @@ def diagnostics(tokens, graphs, degs):
                 implied.append({'a': a, 'b': b, 'meta_links': links})
     out['B_implied_missing'] = sorted(implied, key=lambda r: (-r['meta_links'], r['a'], r['b']))
 
-    # C — notional (cite edge, no metadata support)
+    # C — notional (cite edge, no metadata support). The itemized list is capped for
+    # readability, but the TRUE total is recorded separately so nothing is silently
+    # dropped (governance: "never a silent cap — every exclusion logged"). The Fable-5
+    # 2026-07-14 audit caught the old `[:25]` destroying the true count (~9k) with no
+    # side channel — the scorecard read "25" as if complete.
     notional = []
     for a, edges in g_cite.items():
         for b, w in edges.items():
             if not any(b in graphs[k].get(a, {}) or a in graphs[k].get(b, {}) for k in meta):
                 notional.append({'source': a, 'target': b, 'cite_weight': w})
-    out['C_notional'] = sorted(notional, key=lambda r: -r['cite_weight'])[:25]
+    notional_sorted = sorted(notional, key=lambda r: -r['cite_weight'])
+    out['C_notional'] = notional_sorted[:50]
+    out['C_notional_total'] = len(notional_sorted)
 
     # D — cascade-without-return (chains len>=3, no return path)
     sinks = Counter()
@@ -922,8 +933,9 @@ def diagnostics(tokens, graphs, degs):
             for c in adj.get(b, ()):
                 if c != a and not reaches(c, a):
                     sinks[c] += 1
-    out['D_cascade_sinks'] = [{'terminal': t, 'chains': n}
-                              for t, n in sinks.most_common(15)]
+    sinks_ranked = sinks.most_common()
+    out['D_cascade_sinks'] = [{'terminal': t, 'chains': n} for t, n in sinks_ranked[:15]]
+    out['D_cascade_sinks_total'] = len(sinks_ranked)   # true total (side channel; not just the shown 15)
 
     # E — sparse-context (paragraph AND cite-degree in bottom 10th pct)
     pcut = _percentile_10_cut([tokens[t]['paragraph_count'] for t in names])
@@ -1048,15 +1060,23 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
           f"invisible to L0 — a green result here is NOT whole-repo coverage.",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
-          f"notional={len(diag['C_notional'])}, sparse={len(diag['E_sparse_context'])}, "
+          f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "
+          f"cascade-sinks={diag.get('D_cascade_sinks_total', len(diag['D_cascade_sinks']))}, "
+          f"sparse={len(diag['E_sparse_context'])}, "
           f"isolates={len(diag['H_isolates'])}, vocab-debt-terms={len(vocab)}.", '']
-    def section(title, rows, fmt, empty='(none)'):
+    def section(title, rows, fmt, empty='(none)', total=None):
+        # total overrides len(rows) when the caller already capped `rows` upstream (Modes
+        # C/D), so the disclosed "… N more" reflects the TRUE count, not the shown slice.
         wr.append(f'## {title}')
         if not rows:
             wr.append(empty)
         else:
             for r in rows[:20]:
                 wr.append('- ' + fmt(r))
+            shown = min(len(rows), 20)
+            true_total = len(rows) if total is None else total
+            if true_total > shown:
+                wr.append(f'- … {true_total - shown} more (see `data/multigraph_diagnostics.json`)')
         wr.append('')
     section('Mode A — multi-graph hubs (highest change-impact)',
             diag['A_multigraph_hubs'],
@@ -1067,10 +1087,12 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
             lambda r: f"{r['a']} ↔ {r['b']} ({r['meta_links']} metadata graphs, 0 cite)")
     section('Mode C — notional edges (cited, no metadata support)',
             diag['C_notional'],
-            lambda r: f"{r['source']} → {r['target']} (cite weight {r['cite_weight']})")
+            lambda r: f"{r['source']} → {r['target']} (cite weight {r['cite_weight']})",
+            total=diag.get('C_notional_total'))
     section('Mode D — cascade sinks (one-way "black holes")',
             diag['D_cascade_sinks'],
-            lambda r: f"**{r['terminal']}** — {r['chains']} chains terminate here")
+            lambda r: f"**{r['terminal']}** — {r['chains']} chains terminate here",
+            total=diag.get('D_cascade_sinks_total'))
     section('Mode E — sparse-context tokens (gapped regions)',
             diag['E_sparse_context'],
             lambda r: f"{r['token']} ({r['paragraphs']} paras, cite-deg {r['cite_deg']}, {r['status']})")
