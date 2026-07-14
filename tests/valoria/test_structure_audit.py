@@ -135,3 +135,79 @@ def test_l2_has_wiring_edges_and_provenance(l2):
     assert l2['assumption_count'] > 0        # provenance signal is live
     # every module carries a notional flag (provenance tag)
     assert all('notional' in m for m in l2['meta'].values())
+
+
+# ── G_code relative-import resolution (Fable-5 finding M: build_g_code, the ──
+#    AST import-graph builder, shipped untested; the batch-2 fix to package
+#    __init__ / multi-dot relative resolution had no regression pin) ──────────
+
+def _write_pkg(tmp_path, files):
+    """files: {relpath: source} — write them under tmp_path and return a
+    {module_name: relpath} map shaped exactly like build_g_code expects."""
+    from pathlib import Path
+    modules = {}
+    for rel, src in files.items():
+        p = tmp_path / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(src, encoding='utf-8')
+        modules[sa._module_name(rel)] = rel
+    return Path(tmp_path), modules
+
+
+def test_g_code_relative_import_from_package_init_resolves_within_package(tmp_path):
+    # The batch-2 defect: `from . import ip_track` inside sim/peninsular/__init__.py
+    # must resolve to sim.peninsular.ip_track, NOT the nonexistent sim.ip_track. A
+    # package __init__'s own module name IS its package, so it must not rsplit a
+    # segment off before resolving `.`.
+    root, modules = _write_pkg(tmp_path, {
+        'pkg/__init__.py': 'from . import leaf\n',
+        'pkg/leaf.py': 'X = 1\n',
+    })
+    g, errs = sa.build_g_code(root, modules)
+    assert errs == []
+    assert 'pkg.leaf' in g['pkg']              # resolved within the package
+    assert 'ip_track' not in str(g)            # no one-package-too-high miss
+
+
+def test_g_code_relative_import_from_regular_module(tmp_path):
+    # a regular module a.b.c: `from . import d` resolves against a.b (its package)
+    root, modules = _write_pkg(tmp_path, {
+        'a/__init__.py': '',
+        'a/b.py': 'from . import c\n',
+        'a/c.py': 'Y = 2\n',
+    })
+    g, errs = sa.build_g_code(root, modules)
+    assert errs == []
+    assert 'a.c' in g['a.b']
+
+
+def test_g_code_multi_dot_relative_walks_up(tmp_path):
+    # `from .. import top` inside a.sub.mod must climb two packages to a.top
+    root, modules = _write_pkg(tmp_path, {
+        'a/__init__.py': '',
+        'a/top.py': 'Z = 3\n',
+        'a/sub/__init__.py': '',
+        'a/sub/mod.py': 'from .. import top\n',
+    })
+    g, errs = sa.build_g_code(root, modules)
+    assert errs == []
+    assert 'a.top' in g['a.sub.mod']
+
+
+def test_g_code_captures_relative_import_cycle(tmp_path):
+    # two modules importing each other relatively form a real SCC — the batch-2 fix
+    # was motivated by such a cycle (sim.personal.contest) being dropped when the
+    # relative target mis-resolved. Determinism: _cycles is sorted, so the same
+    # fixture yields the same list every run.
+    root, modules = _write_pkg(tmp_path, {
+        'p/__init__.py': '',
+        'p/one.py': 'from . import two\n',
+        'p/two.py': 'from . import one\n',
+    })
+    g, errs = sa.build_g_code(root, modules)
+    assert errs == []
+    cycles = sa._cycles(sa.tarjan_scc(g), g)
+    # each cycle's MEMBERS are sorted by _cycles (the outer list is sorted by run()).
+    assert ['p.one', 'p.two'] in cycles
+    # determinism: re-running yields the byte-identical result.
+    assert sa._cycles(sa.tarjan_scc(g), g) == cycles

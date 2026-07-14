@@ -507,6 +507,20 @@ def run(root, out):
             L.append('- ' + fmt(r))
         L.append('')
 
+    L.append('## L2 Key-closure — relationship to the module-adjudicator (§8 disclosure)')
+    L.append('')
+    L.append('The two closure findings below (phantom-producer, dangling-emit) cover the same '
+             'ground as `valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan '
+             'emission** — NOT a second implementation of them (§8 "every rule lives once"). The '
+             'adjudicator is the **authoritative per-module gate**: it runs A1–A12 against the Key '
+             'registry with wildcard-family inhabitance and emits the CLOSED/OPEN verdict. This '
+             'layer instead computes closure **corpus-wide as a measure** (a producer/consumer index '
+             'over all 27 contracts at once) to surface the graph-level pattern — a consume whose '
+             'named source emits nothing, a non-terminal emit with zero consumers anywhere. It '
+             '**measures; it does not gate** (the observatory never gates — pytest + the adjudicator '
+             'do). Where the two disagree, the adjudicator’s registry-aware verdict wins; a row here '
+             'is a pointer to inspect, not a ruling.')
+    L.append('')
     section('L2 phantom producers — a consume names a source that does NOT emit that Key '
             '(canon-grade; the mass_battle `scene_outcome.battle_concluded` class)',
             real_phantoms,

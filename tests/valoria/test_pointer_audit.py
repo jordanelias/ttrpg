@@ -285,3 +285,29 @@ def test_real_corpus_W_s_is_the_one_formula_local_and_refined_meter_is_smaller()
     refined = pa.build_scorecard([o for o in occ if not o['formula_local']])['overall']
     assert refined['unique_identifiers_total'] < raw['unique_identifiers_total']
     assert refined['unique_identifiers_unresolved'] < raw['unique_identifiers_unresolved']
+
+
+# ── run()-level end-to-end smoke (Fable-5 finding K: pieces were tested, the ──
+#    orchestration that wires them + writes the register was not) ─────────────
+
+def test_run_end_to_end_writes_register_and_returns_consistent_bundle(tmp_path):
+    from pathlib import Path
+    out = tmp_path / 'ptr_run'
+    result = pa.run(Path(_ROOT), out)
+    # the primary deliverable exists and is non-trivial
+    reg = out / 'pointer_register.md'
+    assert reg.exists()
+    body = reg.read_text(encoding='utf-8')
+    assert 'Formula-local' in body or 'formula-local' in body   # the C1 disclosure is present
+    # the JSON scorecard was dumped
+    assert (out / 'data' / 'pointer_scorecard.json').exists()
+    # the returned bundle is internally consistent with the register it just wrote
+    assert set(result) >= {'occurrences', 'g_pointer', 'scorecard', 'debt'}
+    ov = result['scorecard']['overall']
+    assert ov['unique_identifiers_total'] > 0
+    assert ov['unique_identifiers_resolved'] <= ov['unique_identifiers_total']
+    # every debt row is a genuinely unresolved, non-formula-local occurrence
+    local_ids = {(o['location'], o['identifier']) for o in result['occurrences']
+                 if o.get('formula_local')}
+    for row in result['debt']:
+        assert (row['location'], row['identifier']) not in local_ids

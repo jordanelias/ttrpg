@@ -551,8 +551,24 @@ def run(root, out, contracts_path=None, descriptor_path=None):
                   f"({'DIFFERING input sets' if m['differing_inputs'] else 'same input set'}): " +
                   '; '.join(f"`{d['module']}`#{d['derivation_index']} <- {d['inputs']}" for d in m['definitions']),
     )
-    section('Cycles — a quantity transitively depends on itself (Tarjan SCC > 1, or a self-loop)',
-            cycles, lambda c: ' -> '.join(c[:8]) + (' …' if len(c) > 8 else ''))
+    L.append('## Cycles — a quantity transitively depends on itself (Tarjan SCC > 1, or a self-loop)')
+    L.append('')
+    L.append('**Node identity is the raw derivation string, not a resolved registry key** — so a '
+             'cross-module feedback loop whose two legs spell the same quantity differently is NOT '
+             'detected here. Concretely: `faction_state`’s `Mandate` is emitted annotated '
+             '(`faction Mandate (cross-module → faction_state)`) but consumed bare '
+             '(`faction Mandate`); those are two distinct nodes, so the real Mandate↔Legitimacy '
+             'feedback does not close into an SCC and is absent below. This is a deliberate '
+             'under-report: normalizing node ids by stripping the parenthetical would risk collapsing '
+             'genuinely-distinct disambiguating annotations (see the script docstring). Treat the '
+             'cycle list as a lower bound, and cross-module `(... → module)`-annotated outputs as '
+             'known blind spots until a registry-key node identity is built.')
+    L.append('(none)' if not cycles else '')
+    for c in cycles[:25]:
+        L.append('- ' + ' -> '.join(c[:8]) + (' …' if len(c) > 8 else ''))
+    if len(cycles) > 25:
+        L.append(f'- … {len(cycles) - 25} more (see `data/formula_metrics.json`)')
+    L.append('')
     section('Malformed derivations — `output` field missing/blank (inputs were routed to a '
             'sentinel node so their orphan status still surfaces above)',
             [m for m in malformed if not m['notional']],
