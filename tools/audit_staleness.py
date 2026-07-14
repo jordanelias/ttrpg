@@ -46,7 +46,9 @@ import sys
 FAMILIES = [
     {
         "name": "vector-audit",
-        "artifact_paths": ["archives/audit/2026-04-29-topographic-analysis/"],
+        # Repointed 2026-07-14 (ED-IN-0064) from the stale 2026-04-29 baseline to the fresh
+        # gameplay-subsystem observatory run — the first real run since the pipeline dispatcher landed.
+        "artifact_paths": ["designs/audit/2026-07-14-gameplay-subsystem-observatory/"],
         "scope_prefixes": ("designs/", "canon/", "params/", "references/"),
     },
     {

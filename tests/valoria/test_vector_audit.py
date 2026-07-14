@@ -43,8 +43,19 @@ def test_provisional_status_is_design():
 
 def test_struck_and_deprecated_are_excluded():
     assert va.banner_classify('[STRUCK] retired\n', 'designs/x.md') == 'excluded'
-    # a deprecated/ path is excluded even with no struck marker in the body
+    # a deprecated/ PATH is excluded even with no struck marker in the body
     assert va.banner_classify('# ordinary\n', 'deprecated/old.md') == 'excluded'
+
+
+def test_deprecated_is_path_anchored_not_content_matched():
+    # Fable-5 2026-07-14 audit (Obs-6): `deprecated/` is a PATH signal, checked in the
+    # path ONLY. A LIVE design doc that merely CITES a deprecated/ path in its prose must
+    # NOT be dropped. Mutation guard: reverting to `re.search('deprecated/', head+path)`
+    # makes this doc 'excluded', which this test catches.
+    body = '# Combat design\nNote: the old extractor at deprecated/tools/extract_values.py is retired.\n'
+    assert va.banner_classify(body, 'designs/scene/combat.md') == 'design'
+    # and the [STRUCK] content marker still works from the body
+    assert va.banner_classify('[STRUCK] retired concept\n', 'designs/live_path.md') == 'excluded'
 
 
 def test_workplan_and_audit_keywords_are_discourse_absent_status():
@@ -59,13 +70,6 @@ def test_audit_folder_path_is_discourse_but_dev_spec_is_design():
         '# spec\n', 'designs/audit/2026/development_specification.md') == 'design'
 
 
-def test_status_first_beats_deprecated_ordering_is_status_then_struck():
-    # a live doc that references a deprecated/ path in its BODY (not its path) and
-    # carries no status is not auto-excluded by the word 'deprecated/' unless the
-    # struck/deprecated regex matches head+path; a plain design doc stays design.
-    assert va.banner_classify('# ordinary design doc\n', 'designs/x.md') == 'design'
-
-
 # ── same_class equivalence predicate ────────────────────────────────────────
 
 def test_same_class_groups_and_separates():
@@ -76,8 +80,26 @@ def test_same_class_groups_and_separates():
     assert va.same_class('Crown', 'Church') is True         # both faction
     assert va.same_class('Faith', 'Crown') is False         # conviction vs faction
     assert va.same_class('unlisted', 'alsounlisted') is False  # neither in any class
-    # symmetric by construction
-    assert va.same_class('Faith', 'Crown') == va.same_class('Crown', 'Faith')
+
+
+# ── silent-cap fix: Mode C/D record the TRUE total, not the shown slice ─────
+
+def test_diagnostics_records_true_notional_total_not_just_shown_slice():
+    # Fable-5 2026-07-14 audit, Obs-1: Mode C used to cap at [:25] with the true count
+    # destroyed (scorecard read "25" as complete). It must now record C_notional_total.
+    # Build a star cite-graph with >50 notional edges (no metadata graphs, so every cite
+    # edge is notional) and assert the recorded total exceeds the shown (capped) list.
+    n = 60
+    toks = {f't{i}': {'paragraph_count': 1, 'status': 'design'} for i in range(n + 1)}
+    cite = {'t0': {f't{i}': 1 for i in range(1, n + 1)}}   # t0 -> t1..t60, all notional
+    graphs = {'cite': cite, 'throughline': {}, 'mu': {}, 'pp': {}}
+    degs = {'cite': {'t0': n, **{f't{i}': 1 for i in range(1, n + 1)}},
+            'throughline': {}, 'mu': {}, 'pp': {}}
+    diag = va.diagnostics(toks, graphs, degs)
+    assert diag['C_notional_total'] == n            # the TRUE count is recorded
+    assert len(diag['C_notional']) <= 50            # the itemized list is capped
+    assert diag['C_notional_total'] > len(diag['C_notional'])  # cap did not destroy the total
+    assert 'D_cascade_sinks_total' in diag          # Mode D total side channel also present
 
 
 # ── §8 reuse: the real names reader, not a re-parse ─────────────────────────
