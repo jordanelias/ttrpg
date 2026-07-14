@@ -252,6 +252,11 @@
     <div id="decisions-body" class="empty-state">loading…</div>
   </section>
 
+  <section class="card" id="drift-card">
+    <h2>Reconciliation status</h2>
+    <div id="drift-body" class="empty-state">loading…</div>
+  </section>
+
   <section class="card" id="workplan-card">
     <h2>North star — workplan</h2>
     <div id="workplan-body" class="empty-state">loading…</div>
@@ -349,6 +354,44 @@ function renderDecisions(d) {
     </li>`).join('');
   el.innerHTML = `<ul class="plain">${items}</ul>
     <div class="decision-source" style="margin-top:8px;">heuristic prose scan — a floor, not a guarantee</div>`;
+}
+
+function renderDrift(d) {
+  const el = document.getElementById('drift-body');
+  const dr = d.drift;
+  if (!dr || dr.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const surfaces = dr.surfaces || [];
+  const staleCount = dr.stale_count || 0;
+  const chip = staleCount === 0
+    ? '<span class="chip good">✓ all surfaces current</span>'
+    : `<span class="chip warning">◐ ${staleCount} of ${dr.total} surface(s) drifted</span>`;
+  const rows = surfaces.map(s => `
+    <li class="decision-item">
+      <span class="dot" style="background:${s.stale ? 'var(--warning)' : 'var(--good)'}"></span>
+      <span>
+        <strong>${esc(s.surface)}</strong> — ${esc(s.detail)}<br>
+        <span class="decision-source">${esc(s.ref)} · refresh: ${esc(s.refresh)}</span>
+      </span>
+    </li>`).join('');
+  const handoffs = (dr.handoffs || [])
+    .filter(h => h.days_ago !== null && h.days_ago !== undefined && h.surface !== 'HANDOFF_archive.md')
+    .sort((a, b) => (b.days_ago || 0) - (a.days_ago || 0));
+  const handoffList = handoffs.length
+    ? `<div class="decision-source" style="margin-top:12px;">Continuity notes — last updated (informational, not counted as drift):</div>
+       <div class="stat-row" style="margin-top:6px;flex-wrap:wrap;gap:6px;">`
+      + handoffs.map(h => {
+          const label = (h.surface.replace(/^HANDOFF_?/, '').replace(/\.md$/, '') || 'root');
+          return `<span class="chip ${(h.days_ago || 0) > 14 ? 'warning' : 'unknown'}">${esc(label)} · ${h.days_ago}d</span>`;
+        }).join('')
+      + `</div>`
+    : '';
+  el.innerHTML = `<div style="margin-bottom:10px;">${chip}</div>
+    <ul class="plain">${rows}</ul>
+    ${handoffList}
+    <div class="decision-source" style="margin-top:10px;">${esc(dr.note)}</div>`;
 }
 
 function renderWorkplan(d) {
@@ -575,6 +618,7 @@ async function load() {
     const d = await res.json();
     renderGeneratedMeta(d);
     renderDecisions(d);
+    renderDrift(d);
     renderWorkplan(d);
     renderAudits(d);
     renderBalance(d);
