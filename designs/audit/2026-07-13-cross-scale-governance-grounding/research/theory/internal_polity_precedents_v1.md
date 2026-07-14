@@ -140,5 +140,5 @@ Protected-Tributary's shape** (dhimmi/jizya convergence).
 - **Doctrinal drift** on long-suppressed Latent identities (kakure/hanare) — restored toleration doesn't fully
   satisfy the original grievance after many seasons underground → a schism-on-reemergence outcome.
 - **SURFACE-ANALOGY WARNING:** Rome vs **Carthage** — "total erasure achieved" is **historically false** (Neo-Punic
-  persisted ~700 yrs; the "salted earth" detail is apocryphal). Any mechanic implying a suppression/conquest can
+  persisted ~500 yrs — inscriptions to ~3rd c. CE, spoken to Augustine, d. 430; the "salted earth" detail is apocryphal). Any mechanic implying a suppression/conquest can
   *fully zero* a Conviction/identity track should be **rejected — model a floor, not a zero.**

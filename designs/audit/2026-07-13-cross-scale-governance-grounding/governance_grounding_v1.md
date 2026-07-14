@@ -2,6 +2,16 @@
 
 ## Status: FILED (in progress) — 2026-07-13 · ED-IN-0051
 
+> ⚠️ **Fable-audit corrections (`fable_audit_v1.md`).** (1) **Armature binding is aspirational, not native.**
+> The Key & Echo Armature's `diagonal` = `causes[]` provenance and `outward` = player-facing rendering —
+> **not** skip-scale / bend-around. Cross-scale claiming (`scale_hierarchy §5.2`) and chain-bypass (`§5.3`)
+> are **RULED behaviors** whose binding onto an armature/substrate channel is **UNBUILT** (an additional gap),
+> not existing grounding — read the "grounded natively in the six directions" language below as *aspirational*.
+> (2) **Some LIVE labels overstate wiring.** `L/PS→Mandate` is a *defined formula* not driven by the inert
+> L/PS (see GAP-B1); Turmoil/Strain/IP are **designed but not written** by live code (writers survive only in
+> archived `mc_v4–v14`). Where a LIVE label here conflicts with `pressure_key_registry_v1.md`'s
+> INERT/DOCTRINE-ONLY rows, **the registry is authoritative** — read LIVE as "live *or* formula-defined/designed".
+
 **Purpose.** This is the graph half of the cross-scale governance docket: it draws Valoria's whole
 political nexus as a small set of directed "cuts," grounds governance at every scale in one matrix,
 inventories the player actions that drive it, and names which emergent arcs the live graph actually

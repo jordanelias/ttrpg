@@ -110,3 +110,21 @@ collision* primitive, caste *circumvention*, cultural-*suppression* backfire, an
 on sound logic; a minority needs an imported-and-adapted mechanism** — and the adversarial gate (Phase F)
 must defend every one of the 8 [GENUINE-GAP] imports against an available chain-completion, and every
 precedent against surface-analogy.
+
+---
+
+## Addendum (Phase-F + Fable audit) — register reconciliation
+
+- **Revised genuine-gap count.** The Phase-F gate (top banner) reclassified 6 gaps to COMPLETE-THE-CHAIN and
+  C4 to MIXED, so the surviving [GENUINE-GAP] surface is **~6** (B2-valves, C2, D1, E1, E2, G2) — not the "8"
+  the summary above states pre-gate. Revised tally: **~21 CTC · ~6 GAP · 1 MIX.**
+- **GAP-F6 · recognition-fission** — [GENUINE-GAP]. A *peaceful negotiated-recognition* insurgency-**formation**
+  path (charter a sub-faction out of a permanently-diverged population); `insurgency_pipeline §4.1` has only a
+  territorial-neglect trigger. Precedent: Ottoman **millet** fission (verified REAL). Re-homed from fix-catalog §3.
+- **GAP-F7 · reaggregation** — [GENUINE-GAP]. A Crown action that changes the allegiance **aggregation topology**
+  (redraw the blocs), not the values. Precedent: **Cleisthenes** (verified REAL); nothing in the current stack
+  touches aggregation topology. Re-homed from fix-catalog §3.
+- **Armature-binding gap (Fable).** Cross-scale claiming (`§5.2`) + chain-bypass (`§5.3`) are RULED but have
+  **no armature/substrate binding** — an additional [COMPLETE-THE-CHAIN]-to-author item (see
+  `governance_grounding_v1.md`'s Fable banner). The "grounded natively in the six armature directions" framing
+  was aspirational.
