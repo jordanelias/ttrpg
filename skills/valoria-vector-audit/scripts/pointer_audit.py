@@ -51,6 +51,7 @@ CLI:
 import argparse
 import json
 import os
+import re
 import sys
 from collections import Counter, OrderedDict, defaultdict
 from pathlib import Path
@@ -125,6 +126,57 @@ def collect_occurrences(contracts, sim_root):
         })
 
     return occurrences
+
+
+# ──────────────── CATEGORY C — FORMULA-LOCAL INTERMEDIATE SCOPE REFINEMENT ────
+# A derivation's `formula` often DEFINES local intermediate variables ("W_s =
+# base(Type)+Prosperity+FacilityTier; T = Σ W_s·(q_s/7)"). When such a local also appears
+# in that derivation's `inputs`, A17's scanner emits it as an identifier and it counts as
+# unresolved pointer-debt — but it is NOT an external quantity REFERENCE; it is a variable
+# the formula itself introduces. Counting it is a false positive (WS1 pointer-debt Category
+# C, ED-IN-0061). This detector removes it from a REFINED meter, and every removal is LOGGED
+# (never a silent cap). It is RIGOROUS, not name-guessing: the formula literally defines it.
+# NOTE the exclusion is keyed (module, identifier) — matching what A17's occurrences carry (they
+# don't tag a derivation index) — so if an input is a formula-local in ANY derivation of a module,
+# that identifier is excluded across that module. In the rare case where the same name is a
+# formula-local in one derivation AND a genuine input in another derivation of the same module,
+# this over-excludes — but the removal is always enumerated in the log, so it stays auditable,
+# never silent. (No such collision exists today: W_s is the only formula-local and appears nowhere
+# else in its module.)
+_FORMULA_LHS_RE = re.compile(r'^\s*([A-Za-z_][\w]*)\s*=(?!=)')
+
+
+def formula_local_intermediates(contracts):
+    """{(module, component): formula} for each derivation INPUT that is defined as an LHS
+    in that same derivation's `formula`. Components are split the SAME way A17 splits them
+    (a17._split_bundled), so the keys match `collect_occurrences`' identifier field exactly."""
+    out = {}
+    for m in (contracts.get('modules') or []):
+        if not isinstance(m, dict):
+            continue
+        module = m.get('module')
+        for d in (m.get('derivations') or []):
+            if not isinstance(d, dict):
+                continue
+            lhs = set()
+            for seg in str(d.get('formula') or '').split(';'):
+                mt = _FORMULA_LHS_RE.match(seg)
+                if mt:
+                    lhs.add(mt.group(1))
+            if not lhs:
+                continue
+            for inp in (d.get('inputs') or []):
+                for comp in a17._split_bundled(inp):
+                    if comp in lhs:
+                        out[(module, comp)] = str(d.get('formula') or '')
+    return out
+
+
+def is_formula_local(occurrence, local_set):
+    """True if this occurrence is a per-derivation formula-local intermediate (only
+    derivations.inputs occurrences can be), keyed on (location, identifier)."""
+    return (occurrence['surface'].endswith('derivations.inputs')
+            and (occurrence['location'], occurrence['identifier']) in local_set)
 
 
 # ──────────────────────────── G_POINTER GRAPH ────────────────────────────────
@@ -241,19 +293,32 @@ def run(root, out, contracts_path=None, sim_root=None):
     print('[G_pointer] scanning module_contracts.yaml state/derivations + sim/*.py literals...')
     contracts = yaml.safe_load(contracts_path.read_text(encoding='utf-8')) or {}
     occurrences = collect_occurrences(contracts, str(sim_root))
+    # Category C (ED-IN-0061): tag per-derivation formula-local intermediates so a REFINED
+    # meter can exclude them — they are variables the formula itself defines, not external
+    # quantity references, so counting them as pointer-debt is a false positive. Every
+    # exclusion is LOGGED below (register section + JSON), never a silent cap.
+    local_set = formula_local_intermediates(contracts)
+    for o in occurrences:
+        o['formula_local'] = is_formula_local(o, local_set)
     print(f'            {len(occurrences)} identifier occurrence(s) scanned '
           f'(reusing tools/ci_quantity_vocabulary_check.py\'s A17 scanners)')
 
     print('[G_pointer] resolving each identifier via tools/quantity_registry.py...')
     g_pointer = build_g_pointer(occurrences)
-    scorecard = build_scorecard(occurrences)
+    scorecard = build_scorecard(occurrences)                    # RAW — all occurrences
+    refined_occurrences = [o for o in occurrences if not o['formula_local']]
+    refined_scorecard = build_scorecard(refined_occurrences)    # excluding formula-locals
     resolved_buckets = resolved_key_buckets(occurrences)
-    debt = unresolved_pointer_debt(occurrences)
+    debt = unresolved_pointer_debt(refined_occurrences)         # actionable debt (locals removed, logged separately)
+    excluded_locals = sorted({(o['location'], o['identifier']) for o in occurrences if o['formula_local']})
     ov = scorecard['overall']
-    print(f'            {ov["unique_identifiers_resolved"]}/{ov["unique_identifiers_total"]} unique identifiers '
-          f'resolve ({_pct(ov["percent_resolved_unique_identifiers"])}); '
-          f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} occurrences resolve '
-          f'({_pct(ov["percent_resolved_occurrences"])})')
+    rov = refined_scorecard['overall']
+    print(f'            raw:     {ov["unique_identifiers_resolved"]}/{ov["unique_identifiers_total"]} unique '
+          f'({_pct(ov["percent_resolved_unique_identifiers"])}); '
+          f'{ov["occurrences_resolved"]}/{ov["occurrences_total"]} occ ({_pct(ov["percent_resolved_occurrences"])})')
+    print(f'            refined: {rov["unique_identifiers_resolved"]}/{rov["unique_identifiers_total"]} unique '
+          f'({_pct(rov["percent_resolved_unique_identifiers"])}) after excluding '
+          f'{len(excluded_locals)} formula-local intermediate(s)')
 
     # capstone #5 (ED-IN-0056): `all_known()` returns every RESOLVABLE NAME STRING —
     # aliases included (e.g. "Dexterity", "Agility", "attr.body.agility" all resolve to
@@ -272,10 +337,12 @@ def run(root, out, contracts_path=None, sim_root=None):
 
     dump('g_pointer.json', g_pointer)
     dump('pointer_scorecard.json', {
-        'overall': scorecard['overall'],
+        'overall': scorecard['overall'],                       # RAW — all scanned occurrences
+        'refined_overall': refined_scorecard['overall'],       # excludes formula-local intermediates (ED-IN-0061)
         'by_surface': scorecard['by_surface'],
         'top_resolved_registry_keys': resolved_buckets[:25],
-        'unresolved_pointer_debt': debt,
+        'unresolved_pointer_debt': debt,                       # already excludes the logged formula-locals
+        'formula_locals_excluded': [{'module': m, 'identifier': i} for (m, i) in excluded_locals],
         'known_registry_name_strings': n_name_strings,   # resolvable names incl. aliases
         'distinct_registry_keys': n_distinct_keys,        # distinct keyed quantities (~half)
     })
@@ -299,6 +366,16 @@ def run(root, out, contracts_path=None, sim_root=None):
              f'known registry vocabulary = {n_name_strings} resolvable name strings '
              f'(aliases included) → {n_distinct_keys} distinct registry keys.')
     L.append('')
+    L.append(f'**Refined meter (formula-local intermediates excluded, ED-IN-0061):** '
+             f'{rov["unique_identifiers_resolved"]}/{rov["unique_identifiers_total"]} unique '
+             f'({_pct(rov["percent_resolved_unique_identifiers"])}) · '
+             f'{rov["occurrences_resolved"]}/{rov["occurrences_total"]} occurrences '
+             f'({_pct(rov["percent_resolved_occurrences"])}) — after removing '
+             f'{len(excluded_locals)} per-derivation formula-local(s), each a variable the formula '
+             f'itself defines (not an external quantity reference) and each listed below. This is a '
+             f'scope refinement, NOT a silent cap: the raw meter above is unchanged and every '
+             f'exclusion is enumerated.')
+    L.append('')
 
     L.append('## By surface')
     L.append('')
@@ -320,16 +397,32 @@ def run(root, out, contracts_path=None, sim_root=None):
                  f"{len(b['unique_identifiers'])} unique identifier(s): {idents}{more}")
     L.append('')
 
+    L.append('## Formula-local intermediates excluded from the refined meter (logged, not silently dropped)')
+    L.append('')
+    if not excluded_locals:
+        L.append('(none — no derivation input is defined as an LHS in its own formula)')
+    else:
+        L.append(f'{len(excluded_locals)} identifier(s), each a variable its derivation\'s `formula` '
+                 f'defines (the LHS of an `=`), so it is not an external quantity reference:')
+        for (mod, ident) in excluded_locals:
+            formula = local_set.get((mod, ident), '')
+            snip = (formula[:90] + '…') if len(formula) > 90 else formula
+            L.append(f"- `{mod}` · `{ident}` — defined in formula: `{snip}`")
+    L.append('')
+
     L.append('## Unresolved identifiers — candidate pointer-debt (surface / location / identifier)')
     L.append('')
-    L.append('**Triage before acting — not every row is fixable debt.** This list mixes two kinds '
-             '(the resolver cannot tell them apart): (a) genuinely-missing registrations — a stat '
-             'name that *should* resolve but is hardcoded (real pointer-debt: register it or rename '
-             'it to canonical); and (b) computed/internal quantities with no registry-eligible '
-             'identity, which A17\'s own docstring calls out as "a real, expected backlog item, not '
-             'a bug" (e.g. `cumulative_damage`, and the `_s`-suffixed intermediates like `L_s`/'
-             '`W_s`/`PS_s`). Case (b) is not something to "fix" by registration. `derivations.inputs` '
-             'rows skew toward (b); `state`/`derivations.output` rows skew toward (a).')
+    L.append('**Triage before acting — not every row is fixable debt.** Formula-local intermediates '
+             '(a derivation input its own formula defines) are already excluded above. What remains '
+             'still mixes kinds the resolver cannot tell apart: (a) genuinely-missing registrations — '
+             'a stat name that *should* resolve but is hardcoded (real pointer-debt: register or '
+             'rename to canonical); (b) computed/internal quantities with no registry-eligible '
+             'identity, which A17\'s own docstring calls "a real, expected backlog item, not a bug" '
+             '(e.g. `cumulative_damage`); and (c) candidate NON-SCALAR structured state (e.g. '
+             'npc_behavior\'s `beliefs`/`opinions`/`arc state`), left in this list ON PURPOSE — '
+             'whether it is a registry quantity at all is a DESIGN ruling (see '
+             'references/registry/pointer_debt_worklist.md, Category B/C), not something to silently '
+             'exclude. `derivations.inputs` rows skew toward (b); `state`/`derivations.output` toward (a).')
     L.append('')
     L.append(f'{len(debt)} unique unresolved (surface, location, identifier) row(s), '
              f'{ov["occurrences_unresolved"]} raw occurrence(s), '

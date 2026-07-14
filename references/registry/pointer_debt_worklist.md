@@ -58,15 +58,23 @@ registering (§5 anti-fabrication). These are the decisions that actually close 
 
 ---
 
-## Category C — composite / structured STATE, not a scalar registry quantity (OUT OF SCOPE)
+## Category C — not a scalar quantity reference (scope refinement, partly DONE)
 
-These are structured state objects, not scalar quantities the descriptor registry keys. They should
-NOT be forced into the quantity registry; flagging them as "unresolved" is arguably a scope mismatch
-in what `G_pointer` counts, not real debt. Candidate: exclude them from the pointer-debt denominator
-(a `pointer_audit.py` scope refinement) rather than register them.
+Two sub-classes the raw meter wrongly counted as pointer-debt:
 
-- npc_behavior: `arc state`, `beliefs`, `concerns`, `opinions`, `projects` — an NPC's relational /
-  psychological state graph, not a scalar.
+**C1 — formula-local intermediates — DONE (ED-IN-0061).** A derivation input that its own `formula`
+defines (e.g. settlement_layer's `W_s = base(Type)+Prosperity+FacilityTier`) is a variable, not an
+external quantity reference. `pointer_audit.py` now detects these rigorously (LHS-of-`=` in the same
+derivation's formula), excludes them from a **refined meter**, and **logs every exclusion** (never a
+silent cap). Today: `W_s` is the only one; refined meter 53.7% unique / 60.0% occurrences vs the raw
+52.7% / 59.2%.
+
+**C2 — candidate non-scalar structured state — needs a DESIGN RULING (not auto-excluded).**
+`npc_behavior`'s `arc state`, `beliefs`, `concerns`, `opinions`, `projects` read as an NPC's
+relational / psychological state graph, not scalars — but the contract buckets them as `track`/`clock`
+(same as real scalars like `Legitimacy`), so they are NOT rigorously distinguishable by tooling.
+Whether they are registry quantities at all is Jordan's call. They are left IN the debt list (flagged,
+per the pointer register's triage note) rather than silently dropped, pending that ruling.
 
 ---
 

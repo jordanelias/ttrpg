@@ -224,3 +224,57 @@ def test_empty_corpus_scorecard_percents_are_none_not_zero():
     assert ov['occurrences_total'] == 0
     assert ov['percent_resolved_occurrences'] is None
     assert ov['percent_resolved_unique_identifiers'] is None
+
+
+# ── Category C: formula-local intermediate scope refinement (ED-IN-0061) ──────
+
+def test_formula_local_intermediates_detects_lhs_defined_input():
+    # A derivation input that its own formula DEFINES (LHS of '=') is a formula-local
+    # intermediate, not an external quantity reference.
+    contracts = {'modules': [{'module': 'm', 'derivations': [
+        {'inputs': ['Legitimacy', 'W_s'], 'formula': 'W_s = a + b; T = W_s * 2'},
+        {'inputs': ['Order'], 'formula': 'Order * 20'},   # no '=' LHS -> nothing local
+    ]}]}
+    locals_ = pa.formula_local_intermediates(contracts)
+    assert ('m', 'W_s') in locals_
+    assert ('m', 'Legitimacy') not in locals_   # a real input, not formula-defined
+    assert ('m', 'Order') not in locals_
+
+
+def test_formula_local_ignores_comparison_operators():
+    # '==' must NOT be misread as an LHS definition.
+    contracts = {'modules': [{'module': 'm', 'derivations': [
+        {'inputs': ['X'], 'formula': 'gate when X == 0'},
+    ]}]}
+    assert pa.formula_local_intermediates(contracts) == {}
+
+
+def test_is_formula_local_only_flags_derivation_inputs():
+    local_set = {('m', 'W_s'): 'W_s = ...'}
+    assert pa.is_formula_local(
+        {'surface': 'module_contracts.derivations.inputs', 'location': 'm', 'identifier': 'W_s'}, local_set)
+    # a STATE occurrence of the same name is NOT a formula-local (only inputs can be)
+    assert not pa.is_formula_local(
+        {'surface': 'module_contracts.state', 'location': 'm', 'identifier': 'W_s'}, local_set)
+    # a different identifier on the input surface is not excluded
+    assert not pa.is_formula_local(
+        {'surface': 'module_contracts.derivations.inputs', 'location': 'm', 'identifier': 'Order'}, local_set)
+
+
+def test_real_corpus_W_s_is_the_one_formula_local_and_refined_meter_is_smaller():
+    from pathlib import Path
+    contracts = yaml.safe_load(
+        (Path(_ROOT) / 'references' / 'module_contracts.yaml').read_text(encoding='utf-8'))
+    locals_ = pa.formula_local_intermediates(contracts)
+    # settlement_layer's W_s (W_s = base(Type)+Prosperity+FacilityTier) is the corpus's one
+    # formula-local today; it must be detected.
+    assert ('settlement_layer', 'W_s') in locals_
+    # the refined meter (formula-locals excluded) must count strictly fewer unique identifiers
+    # AND fewer unresolved than the raw meter — the exclusion is real, not cosmetic.
+    occ = pa.collect_occurrences(contracts, str(Path(_ROOT) / 'sim'))
+    for o in occ:
+        o['formula_local'] = pa.is_formula_local(o, locals_)
+    raw = pa.build_scorecard(occ)['overall']
+    refined = pa.build_scorecard([o for o in occ if not o['formula_local']])['overall']
+    assert refined['unique_identifiers_total'] < raw['unique_identifiers_total']
+    assert refined['unique_identifiers_unresolved'] < raw['unique_identifiers_unresolved']
