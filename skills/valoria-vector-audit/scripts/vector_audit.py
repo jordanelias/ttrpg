@@ -329,7 +329,13 @@ def to_native(o):
 def banner_classify(content, path):
     """Banner-classify a doc: design / discourse / excluded."""
     head = content[:2000]
-    if re.search(r'\bSTATUS:\s*(CANONICAL|DESIGN)\b', head, re.I):
+    # STATUS-FIRST (Fable-5 audit fix): a doc that declares a recognized design/reference status is
+    # DESIGN, checked BEFORE the weak AUDIT/WORKPLAN keyword heuristic below — otherwise a
+    # REFERENCE/CURRENT-status head (e.g. faction_systems_overview_v30.md) is false-demoted to
+    # 'discourse' merely because the word "audit" appears in its scope prose (it cites a
+    # designs/audit/ doc). Mirrors gen_audit's ED-IN-0055 status-before-banner precedence;
+    # single-sourced here since gen_audit reuses banner_classify. (REFERENCE/CURRENT/WORKING added.)
+    if re.search(r'\bSTATUS:\s*(CANONICAL|DESIGN|REFERENCE|CURRENT|WORKING)\b', head, re.I):
         return 'design'
     if re.search(r'\[STRUCK\b|deprecated/', head + path, re.I):
         return 'excluded'
