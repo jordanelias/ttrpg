@@ -1,0 +1,300 @@
+{
+ "by_surface": {
+  "module_contracts.derivations.inputs": {
+   "percent_resolved": 78.6,
+   "resolved": 11,
+   "total": 14,
+   "unresolved": 3
+  },
+  "module_contracts.derivations.output": {
+   "percent_resolved": 66.7,
+   "resolved": 6,
+   "total": 9,
+   "unresolved": 3
+  },
+  "module_contracts.state": {
+   "percent_resolved": 52.1,
+   "resolved": 25,
+   "total": 48,
+   "unresolved": 23
+  },
+  "sim_literals": {
+   "percent_resolved": null,
+   "resolved": 0,
+   "total": 0,
+   "unresolved": 0
+  }
+ },
+ "distinct_registry_keys": 99,
+ "formula_locals_excluded": [
+  {
+   "identifier": "W_s",
+   "module": "settlement_layer"
+  }
+ ],
+ "known_registry_name_strings": 196,
+ "overall": {
+  "occurrences_resolved": 42,
+  "occurrences_total": 71,
+  "occurrences_unresolved": 29,
+  "percent_resolved_occurrences": 59.2,
+  "percent_resolved_unique_identifiers": 52.7,
+  "unique_identifiers_resolved": 29,
+  "unique_identifiers_total": 55,
+  "unique_identifiers_unresolved": 26
+ },
+ "refined_overall": {
+  "occurrences_resolved": 42,
+  "occurrences_total": 70,
+  "occurrences_unresolved": 28,
+  "percent_resolved_occurrences": 60.0,
+  "percent_resolved_unique_identifiers": 53.7,
+  "unique_identifiers_resolved": 29,
+  "unique_identifiers_total": 54,
+  "unique_identifiers_unresolved": 25
+ },
+ "top_resolved_registry_keys": [
+  {
+   "key": "set.legitimacy",
+   "occurrences": 3,
+   "unique_identifiers": [
+    "Legitimacy",
+    "Legitimacy (L)"
+   ]
+  },
+  {
+   "key": "set.order",
+   "occurrences": 3,
+   "unique_identifiers": [
+    "Order"
+   ]
+  },
+  {
+   "key": "set.popular_support",
+   "occurrences": 3,
+   "unique_identifiers": [
+    "Popular Support",
+    "Popular Support (PS)"
+   ]
+  },
+  {
+   "key": "set.prosperity",
+   "occurrences": 3,
+   "unique_identifiers": [
+    "Prosperity"
+   ]
+  },
+  {
+   "key": "set.defense",
+   "occurrences": 2,
+   "unique_identifiers": [
+    "Defense"
+   ]
+  },
+  {
+   "key": "attr.body.endurance",
+   "occurrences": 1,
+   "unique_identifiers": [
+    "Endurance"
+   ]
+  },
+  {
+   "key": "attr.body.strength",
+   "occurrences": 1,
+   "unique_identifiers": [
+    "Strength"
+   ]
+  },
+  {
+   "key": "attr.mind.will",
+   "occurrences": 1,
+   "unique_identifiers": [
+    "Spirit"
+   ]
+  },
+  {
+   "key": "attr.social.bonds",
+   "occurrences": 1,
+   "unique_identifiers": [
+    "Bonds"
+   ]
+  },
+  {
+   "key": "terr.fort_level",
+   "occurrences": 1,
+   "unique_identifiers": [
+    "Fort Level"
+   ]
+  }
+ ],
+ "unresolved_pointer_debt": [
+  {
+   "identifier": "cumulative_damage",
+   "location": "personal_combat",
+   "occurrences": 1,
+   "surface": "module_contracts.derivations.inputs"
+  },
+  {
+   "identifier": "faction Mandate",
+   "location": "settlement_layer",
+   "occurrences": 1,
+   "surface": "module_contracts.derivations.inputs"
+  },
+  {
+   "identifier": "faction Mandate (cross-module \u2192 faction_state)",
+   "location": "settlement_layer",
+   "occurrences": 1,
+   "surface": "module_contracts.derivations.output"
+  },
+  {
+   "identifier": "faction Treasury income (cross-module \u2192 faction_state)",
+   "location": "settlement_layer",
+   "occurrences": 1,
+   "surface": "module_contracts.derivations.output"
+  },
+  {
+   "identifier": "province Accord",
+   "location": "settlement_layer",
+   "occurrences": 1,
+   "surface": "module_contracts.derivations.output"
+  },
+  {
+   "identifier": "card hands",
+   "location": "ci_political",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "cooldown",
+   "location": "ci_political",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "faction political pool",
+   "location": "ci_political",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "season counter",
+   "location": "engine_clock",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "faction stats 1-7",
+   "location": "faction_state",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "knot strain",
+   "location": "fieldwork_knots",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "arc state",
+   "location": "npc_behavior",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "beliefs",
+   "location": "npc_behavior",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "concerns",
+   "location": "npc_behavior",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "opinions",
+   "location": "npc_behavior",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "projects",
+   "location": "npc_behavior",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Turmoil",
+   "location": "peninsular_strain",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Initiative",
+   "location": "personal_combat",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Poise",
+   "location": "personal_combat",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Wounds",
+   "location": "personal_combat",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "cumulative_damage",
+   "location": "personal_combat",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "conviction scars",
+   "location": "piety_track",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "province Accord",
+   "location": "settlement_layer",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "CV (per-territory Piety)",
+   "location": "territorial_piety",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Accord",
+   "location": "victory",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "PT reads",
+   "location": "victory",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "PV",
+   "location": "victory",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  },
+  {
+   "identifier": "Turmoil",
+   "location": "victory",
+   "occurrences": 1,
+   "surface": "module_contracts.state"
+  }
+ ]
+}

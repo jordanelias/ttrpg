@@ -1,0 +1,305 @@
+{
+ "code": {
+  "cut_vertices": [
+   "sim.autoload.game_state",
+   "sim.cross_scale.echo_transport",
+   "sim.cross_scale.scene_dispatch",
+   "sim.peninsular.ms_track",
+   "sim.peninsular.season",
+   "sim.personal.parliamentary_vote",
+   "sim.provincial.excommunication",
+   "sim.provincial.faction_action",
+   "sim.substrate",
+   "sim.territory.infrastructure",
+   "sim.territory.registry",
+   "tools.sim_harness.adapters",
+   "tools.sim_harness.adapters.pr119_governance.pr119_integrated_campaign",
+   "tools.sim_harness.harness"
+  ],
+  "cycles": [
+   [
+    "sim.autoload.game_state",
+    "sim.world.npe"
+   ],
+   [
+    "sim.personal.contest",
+    "sim.personal.contest.appraise",
+    "sim.personal.contest.armature",
+    "sim.personal.contest.dictionaries",
+    "sim.personal.contest.faction",
+    "sim.personal.contest.modes",
+    "sim.personal.contest.resolver",
+    "sim.personal.contest.rhetoric",
+    "sim.personal.contest.wrapper"
+   ],
+   [
+    "sim.provincial.massbattle",
+    "sim.provincial.units"
+   ]
+  ],
+  "edges": 268,
+  "nodes": 173,
+  "orphans": [
+   "sim",
+   "sim.autoload.npc_ai",
+   "sim.autoload.registry",
+   "sim.cross_scale.articulation",
+   "sim.cross_scale.handoff_rules",
+   "sim.mc_v18",
+   "sim.peninsular",
+   "sim.peninsular.ip_track",
+   "sim.peninsular.rs_track",
+   "sim.personal.companion",
+   "sim.personal.contest.agon_harness",
+   "sim.personal.fieldwork",
+   "sim.personal.investigation",
+   "sim.personal.parliamentary_stay",
+   "sim.provincial.altonian_reinforcements",
+   "sim.provincial.charter_liberties",
+   "sim.provincial.hafenmark_equipment",
+   "sim.provincial.home_sanctuary",
+   "sim.provincial.infrastructure_reclamation",
+   "sim.provincial.mass_seizure",
+   "sim.provincial.parliamentary_transfer",
+   "sim.provincial.tactic_cards",
+   "sim.provincial.varfell_mandate_action",
+   "sim.provincial.varfell_territorial_acquisition",
+   "sim.territory.settlement",
+   "sim.territory.temperaments",
+   "sim.thread",
+   "sim.thread.co_movement",
+   "sim.thread.collective",
+   "sim.thread.opposing",
+   "sim.thread.rendering",
+   "sim.world",
+   "sim.world.miraculous_event",
+   "sim.world.restoration_movement",
+   "tools.atomizer",
+   "tools.audit_registry",
+   "tools.audit_staleness",
+   "tools.broken_dependency_checker",
+   "tools.build_audit_registry_backfill",
+   "tools.canon_coverage_check",
+   "tools.ci_audit_registry_check",
+   "tools.ci_co_file_checker",
+   "tools.ci_common",
+   "tools.ci_editorial_checker",
+   "tools.ci_generation_consistency",
+   "tools.ci_hooks_verifier",
+   "tools.ci_module_shape_check",
+   "tools.ci_names_check",
+   "tools.ci_names_consistency",
+   "tools.ci_naming_check",
+   "tools.ci_quantity_vocabulary_check",
+   "tools.ci_register_size_check",
+   "tools.ci_sim_fabrication_check",
+   "tools.ci_supersession_check",
+   "tools.ci_vetting_check",
+   "tools.compliance_check",
+   "tools.coverage_matrix",
+   "tools.currency_consistency_check",
+   "tools.dashboard_data",
+   "tools.descriptor_registry",
+   "tools.doc_index_gen",
+   "tools.export_engine_params",
+   "tools.find_references",
+   "tools.freshness_gate",
+   "tools.geography.jsx_to_canonical",
+   "tools.hook_naming_guard",
+   "tools.index_gen",
+   "tools.mechanics_index_gen",
+   "tools.names",
+   "tools.observability.build_decisions",
+   "tools.observability.build_graph",
+   "tools.observability.build_lexicon",
+   "tools.observability.npc_audit_report_gen",
+   "tools.patch_propagation_checker",
+   "tools.propagator",
+   "tools.quantity_registry",
+   "tools.registry",
+   "tools.session_handoff_reminder",
+   "tools.session_status",
+   "tools.sim_harness.adapters.pr119_governance.campaign_stats",
+   "tools.sim_harness.adapters.pr119_governance.death_spiral_log",
+   "tools.sim_harness.harness",
+   "tools.validate_ed_citations",
+   "tools.valoria_local",
+   "tools.valoria_rename",
+   "tools.verify_cuts",
+   "tools.workplan_status"
+  ],
+  "parse_errors": []
+ },
+ "findings": {
+  "dangling_emit": [
+   {
+    "emitter": "mass_battle",
+    "notional": false,
+    "type": "scene_outcome.battle_concluded"
+   },
+   {
+    "emitter": "peninsular_strain",
+    "notional": false,
+    "type": "env.crisis"
+   },
+   {
+    "emitter": "engine_clock",
+    "notional": true,
+    "type": "mechanical.season_change"
+   },
+   {
+    "emitter": "scenario_authoring",
+    "notional": true,
+    "type": "env.crisis"
+   },
+   {
+    "emitter": "personal_combat",
+    "notional": false,
+    "type": "scene.combat_felled"
+   },
+   {
+    "emitter": "personal_combat",
+    "notional": false,
+    "type": "scene.combat_resolved"
+   }
+  ],
+  "doc_null": [
+   "npc_memory",
+   "scene_slate",
+   "game_director",
+   "scene_timer",
+   "audit",
+   "domain_actions",
+   "settlement_economy",
+   "engine_clock",
+   "scenario_authoring"
+  ],
+  "phantom_producer": [],
+  "unconsumed_terminal_ok": 0
+ },
+ "l2": {
+  "assumption_markers": 13,
+  "contract_code_correspondence_verified": false,
+  "contract_code_name_unmatched": [
+   "articulation_layer",
+   "audit",
+   "campaign_architecture",
+   "ci_political",
+   "clock_registry",
+   "domain_actions",
+   "engine_clock",
+   "faction_politics",
+   "faction_state",
+   "fieldwork_knots",
+   "game_director",
+   "mass_battle",
+   "npc_behavior",
+   "npc_memory",
+   "peninsular_strain",
+   "personal_combat",
+   "piety_track",
+   "scenario_authoring",
+   "scene_timer",
+   "settlement_economy",
+   "settlement_layer",
+   "social_contest",
+   "territorial_piety",
+   "threadwork"
+  ],
+  "cut_vertices": [
+   "faction_state",
+   "game_director",
+   "npc_behavior",
+   "scene_slate"
+  ],
+  "cycles": [
+   [
+    "faction_state",
+    "npc_behavior",
+    "piety_track",
+    "social_contest"
+   ],
+   [
+    "personal_combat"
+   ]
+  ],
+  "edges_raw": 99,
+  "edges_simple": 43,
+  "locality": {
+   "cross": 22,
+   "cross_fraction": 0.512,
+   "intra": 21,
+   "per_module": {
+    "domain_actions": {
+     "cross": 3,
+     "intra": 1
+    },
+    "engine_clock": {
+     "cross": 0,
+     "intra": 1
+    },
+    "faction_politics": {
+     "cross": 1,
+     "intra": 1
+    },
+    "faction_state": {
+     "cross": 1,
+     "intra": 1
+    },
+    "fieldwork_knots": {
+     "cross": 1,
+     "intra": 2
+    },
+    "game_director": {
+     "cross": 0,
+     "intra": 2
+    },
+    "mass_battle": {
+     "cross": 2,
+     "intra": 1
+    },
+    "miraculous_event": {
+     "cross": 1,
+     "intra": 1
+    },
+    "npc_behavior": {
+     "cross": 0,
+     "intra": 4
+    },
+    "peninsular_strain": {
+     "cross": 4,
+     "intra": 0
+    },
+    "personal_combat": {
+     "cross": 0,
+     "intra": 1
+    },
+    "piety_track": {
+     "cross": 1,
+     "intra": 1
+    },
+    "scenario_authoring": {
+     "cross": 2,
+     "intra": 0
+    },
+    "scene_slate": {
+     "cross": 3,
+     "intra": 1
+    },
+    "settlement_layer": {
+     "cross": 1,
+     "intra": 1
+    },
+    "social_contest": {
+     "cross": 2,
+     "intra": 1
+    },
+    "threadwork": {
+     "cross": 0,
+     "intra": 2
+    }
+   }
+  },
+  "nodes": 27
+ }
+}
