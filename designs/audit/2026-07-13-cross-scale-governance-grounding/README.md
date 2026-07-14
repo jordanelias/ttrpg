@@ -1,6 +1,17 @@
 # Cross-Scale Governance Grounding — Graph, Pressure-Keys & Gap Synthesis
 
-## Status: FILED (in progress) — 2026-07-13 · Lane: IN (cross-cutting SE/FA/SC/WR/GO) · ED-IN-0051
+## Status: FILED — 2026-07-13 · Lane: IN (cross-cutting SE/FA/SC/WR/GO) · ED-IN-0051
+
+> **Complete — all files landed** (the manifest table below predates completion; treat this banner as current).
+> Graph (`governance_grounding_v1.md`) · 65-key registry (`pressure_key_registry_v1.md`) · classified gap
+> register (`gap_register_v1.md`) · precedent fix catalog (`precedent_fix_catalog_v1.md`) · three-skeptic
+> **adversarial review** + **Fable-5 max-effort audit** (`adversarial_review_v1.md`, `fable_audit_v1.md` —
+> verdict **SOUND-WITH-FIXES**, all fixes applied) · ranked **decision queue** (`decision_queue.md`) · six
+> research files (`research/games/`, `research/theory/`) · a self-contained **interactive artifact**
+> (`governance_nexus_artifact.html`, published). **Post-gate tally: ~21 chain-completions · ~6 genuine gaps ·
+> 1 mixed** — the genuine mechanism surface clusters on Mandate-of-Heaven, Bodin, the consensus/regime
+> decision-procedures, and the suppression-backfire taxonomy. `adversarial_review_v1.md` + the per-file
+> Phase-F banners are the authoritative correction layer.
 
 **What this docket is.** One synthesis of Valoria's whole political system — the spatial spine
 `characters ↔ settlements ↔ territories ↔ provinces ↔ country / ruling-authority` and the political

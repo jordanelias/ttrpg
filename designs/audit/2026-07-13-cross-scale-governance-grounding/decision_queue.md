@@ -54,3 +54,19 @@ genuine design surface worth Jordan's direct calls; Tier 3 (#9–13) are rulings
 is hygiene + one held proposal. Nothing here is executed by this docket — it indexes, classifies, and hands
 off. Per CLAUDE.md §1, merging this docket's PR ratifies its *analysis* (FILED); the **fixes remain PROPOSED**
 and each needs its own sign-off before authoring into canon.
+
+---
+
+### Addendum (Fable audit) — items to fold in
+
+- **GAP-B3 · reconcile the three competing "faction political power" formulas** — [CTC]. franchise
+  National-Influence · `political_value()` (§2.4, scalars TBD) · Mandate `round(7T/(T+K))`. Execute per **D4**'s
+  ruling (one carrier). A currency/execution item, not a new design call — belongs at **Tier 3**; omitted from
+  the table above, surfaced by the Fable audit.
+- **GAP-B5 · rank = secession blast-radius** — [CTC, reclassified]. The disloyal actor's Standing rank sets the
+  scope of what breaks away — a chain-completion of `settlement_layer §3` (the ROTK principle, cited by name) +
+  `§3.2` rank→holding-scope gate + `§5.2` independence. Execution, not import. **Tier 3.**
+- **Armature-binding** (Fable) — bind cross-scale claiming (`§5.2`) + chain-bypass (`§5.3`) onto an
+  armature/substrate channel; currently RULED-but-unbound. [CTC]-to-author, **Tier 3**.
+- **GAP-F6/F7** (millet recognition-fission / Cleisthenes reaggregation) are at **Tier 2 #8** and now also
+  recorded in `gap_register_v1.md`.

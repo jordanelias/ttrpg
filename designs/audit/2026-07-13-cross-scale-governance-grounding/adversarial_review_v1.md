@@ -135,3 +135,32 @@ one self-contradicting citation, decorative canon-citation, and three stale/misl
 now corrected here and in the committed docs. The honest headline for Jordan: **most of the "missing"
 governance is unbuilt wiring on sound logic (~21 chain-completions); the genuinely-new mechanism surface is
 ~6–8 items, and it is worth building precisely because it is small and load-bearing.**
+
+---
+
+## 6 · Fable-tier audit addendum (2026-07-13 · `fable_audit_v1.md`)
+
+A final top-of-stack **Fable-5, max-effort** audit ran over the complete docket *and this Phase-F
+reconciliation*. **Verdict: SOUND-WITH-FIXES** — no CRITICAL findings; every headline BROKEN/INERT/ORPHAN
+claim survived independent code verification; all six reclassifications and the E1 strike + A1/E3/H1
+corrections were confirmed correct; no fabricated evidence. Four **MAJOR** findings (all missed by the three
+skeptics above), now addressed:
+1. **Armature mis-binding.** The nexus's `diagonal=skip-scale` / `outward=bend-around` mapping is
+   *aspirational*, not native — the armature's `diagonal`=`causes[]` provenance, `outward`=rendering.
+   Cross-scale claiming (`§5.2`) and chain-bypass (`§5.3`) are RULED behaviors whose armature/substrate
+   binding is **UNBUILT** — an *additional gap*. Corrected via a banner in `governance_grounding_v1.md`.
+2. **LIVE-inflation.** `L/PS→Mandate` is a defined formula not driven by inert L/PS; Turmoil/Strain/IP are
+   designed-but-not-written (writers only in archived `mc_v4–v14`). Corrected via the same banner;
+   `pressure_key_registry_v1.md`'s INERT/DOCTRINE rows are authoritative. *This weakens D2's "LIVE fragility
+   pool" evidence — D2 stays a chain-completion, but the Turmoil/IP pool is **designed**, not live-written.*
+3. **Recorded-vs-applied convention (this review's own overstatement).** §2–§3 state strikes/removals
+   (EU4-Court-and-Country, P-01/12/14, etc.) as *authoritative recorded corrections* — the fix-catalog and
+   research bodies **retain the original text under their Phase-F banners** (not surgically edited), *except*
+   the two in-place edits actually made: `governance_grounding §5` (the ~87% stat) and
+   `internal_polity_precedents §C` (Carthage ~700→~500 yrs). This review + the banners **are** the correction layer.
+4. **Dropped/inconsistent items.** GAP-B3 (three-formula reconciliation) and the reclassified B5 are added to
+   `decision_queue.md`; GAP-F6/F7 are recorded in `gap_register_v1.md`; the register's row/summary tally is reconciled.
+
+Confidence: HIGH per finding, MODERATE-HIGH on completeness. The audit's headline stands: *most of the
+"missing" governance is unbuilt wiring on sound logic (~21 chain-completions); the genuinely-new mechanism
+surface is ~6–8 items — worth building precisely because it is small and load-bearing.*
