@@ -8,6 +8,31 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **ED-IN-0064 FILED 2026-07-14 — multi-scale governance research + audit pass (analysis-only).**
+  Durable comparative-governance research corpus at `research/governance/` (8 civilizations × 3 themes —
+  modes / hierarchy-standing-advancement-demotion / conflicts; ~228 `=> Valoria design hook` lines;
+  Byzantine deferred; **Mandate of Heaven history-only**, collapse/collision/relief-valve hooks grounded
+  on non-MoH precedent — Roman/Byzantine dual-trigger usurpation, Ottoman vizier-scapegoat + Janissary
+  revolt, Roman recusatio/penance, Polybian regime-cycle). Fresh post-#137 vector audit
+  (`designs/audit/2026-07-14-governance-vector-audit/`). Chain/gap + decision-surface analysis docket
+  (`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/`): a 2-axis chain map
+  (character→settlement→territory→province→duchy→country; faction-action→domain-action→social-contest→
+  field-investigation, each edge state-classified with the **sim-WIRED ≠ canon-WIRED** principle), a
+  per-scale decision-surface census (flags council-member / territory-bureaucrat / Parliament-as-body
+  below the ~4-5 meaningful-action floor), a churn/event-opportunity map, a MoH-free gap register v2
+  (~19 complete-the-chain / ~8 genuine-gap) + a ranked Tier-1–4 `decision_queue_delta_v1.md`.
+  Adversarially unified end-to-end (docket-internal `adversarial_review_v1.md` + a **holistic**
+  `unification_findings_v1.md` → `unification_synthesis_v1.md`, verdict UNIFIES_WITH_FIXES, fix-list
+  applied). **Highest-leverage next action: code PR #136's L/PS §5 sequence** — it advances B1/A2/B4/A4
+  from undesigned → SPEC-ONLY but all remain uncoded (`lps_inert_check` 100/100 red); until it lands the
+  consent-cascade has no gameplay consequence. Two surfaces are unreachable by the live engine: the Key
+  `scale_signature` enum is 3-of-6 (no province/duchy/country) and Field Investigation has zero live
+  dispatch path. Analysis-only — hands a ranked MoH-free design surface to Jordan; no canon edited.
+  Allocates ED-IN-0064 (`canon/editorial_ledger_in.jsonl`) + syncs the pre-existing **duplicate IN-key**
+  `next_free` in `references/id_reservations.yaml` (flagged for a proper single-block repair). **Also
+  indexed the previously-un-indexed ED-IN-0051** (2026-07-13 cross-scale-governance-grounding docket)
+  into `CURRENT.md` + here.
+
 - **ED-IN-0044 RATIFIED 2026-07-12 — simulation/test harness methodology.**
   `designs/audit/2026-07-12-simulation-test-harness-methodology/` (Status: RATIFIED): a generic
   harness core (canon-parameter resolution bound to `CURRENT.md`, never fabricates) + one thin
