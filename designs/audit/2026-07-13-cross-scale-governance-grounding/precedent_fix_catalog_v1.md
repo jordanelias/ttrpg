@@ -2,6 +2,19 @@
 
 ## Status: FILED (in progress) — 2026-07-13 · Lane: IN · ED-IN-0051
 
+> ⚠️ **`adversarial_review_v1.md` (Phase-F) is authoritative where it conflicts with this catalog.** The
+> three-skeptic gate **reclassified 6 entries** (A4, C3-hardness, D2, F3, H3, B5-extension) from §2
+> [GENUINE-GAP] to §1 [COMPLETE-THE-CHAIN], moved **C4** to MIXED (its Consensus-resolver internals are a
+> load-bearing import, not confirmatory), **struck the "EU4 Court-and-Country" citation from E1** (a
+> self-contradicting single-accumulator disaster → replace with Imperator Tyranny×Aggressive-Expansion),
+> **downgraded** the §3.3 Roman *auctoritas*→L and §3.4 anacyclosis citations to confirmatory-only (the fixes
+> stand on Tokugawa and on Old-World-cognomen-decay/Horde-Unity respectively), and **removed** the P-01/12/14
+> citations from B2/E1/E2/G2 as out-of-scope (Thread-op-scoped; GD-1/2/3 + holonic + no-GM stand). Revised
+> tally: **~21 chain-completions · ~6 genuine gaps · 1 mixed.** No genuine-gap fix collapsed; the genuine
+> surface clusters on Mandate-of-Heaven, Bodin, the consensus/regime decision-procedures, and the
+> suppression-backfire taxonomy. Two under-documented §3 imports (millet recognition-fission, Cleisthenes
+> reaggregation) are re-homed as **GAP-F6/F7** in `decision_queue.md`.
+
 **Purpose.** The culminating synthesis of the `2026-07-13-cross-scale-governance-grounding` docket: one
 **PROPOSED** fix per gap in `gap_register_v1.md` (GAP-A1..H3), drawn from that register's already-decided
 two-tier classification, the graph (`governance_grounding_v1.md`), the key census

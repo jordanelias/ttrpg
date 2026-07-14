@@ -2,6 +2,14 @@
 
 ## Status: FILED (in progress) — 2026-07-13 · Lane: IN · ED-IN-0051
 
+> ⚠️ **Phase-F correction layer.** `adversarial_review_v1.md` is authoritative where it conflicts with this
+> file. The adversarial gate reclassified 6 gaps — **A4, C3-hardness, D2, F3, H3, B5-extension** — from
+> GENUINE-GAP to **COMPLETE-THE-CHAIN**, and **C4** to **MIXED**; and corrected three evidence claims below:
+> **GAP-A1** (the F7 "~87%" win-share is a debunked small-N artifact — the real defect is irrecoverable
+> territory), **GAP-E3** (E11 is RULED via ED-IN-0047 but **not-yet-authored**, not "exists"), and
+> **GAP-H1** (**3** of the 5 named docs show the header/body contradiction, not 5 — `franchise_v30` is DRAFT
+> and `valoria_political_hierarchy_v30` has no `## Status:` line, both already self-consistent).
+
 Every gap / break / dead-end / friction on the governance nexus, keyed to a graph edge, evidence-traced,
 and **classified before any fix is proposed** per the two-tier doctrine (Jordan, this turn):
 

@@ -292,7 +292,11 @@ is why the Cut-B loop currently spins at the faction layer without a populace ga
   the map and the new holding re-aggregates (the "win territory through Parliament" strategy;
   ARC-S45 Deed Claim confrontations that assume territory changes hands). The vote resolves but nothing
   moves — **GAP-A1** (`parliamentary_transfer` never called). `test_f7_smoke_oracle.py` records the
-  live symptom: factions can never regain lost territory, degenerating to a ~87% single-faction win.
+  live symptom: **factions can never regain lost territory** because the transfer never fires (the
+  structural defect). *(Correction, Phase-F: the earlier "~87% single-faction win" figure this was tied to
+  is a debunked small-N artifact per `test_f7_smoke_oracle.py`'s own docstring — superseded by
+  ECHO_TRANSPORT, current golden 37.5/12.5/12.5/37.5; the defect is the irrecoverable-territory wiring, not
+  the win-share.)*
 - **Settlement-consent arcs** — the Defy-the-Directive → suspicion → Recall / faction-emergence path
   (`governance_play_redesign_v1 §1.4`) and settlement revolts keyed to L/PS. A settlement's acceptance
   never changes who keeps power — **GAP-B1** (L/PS INERT 100/100). These are the arcs the governance-play
