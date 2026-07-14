@@ -26,6 +26,25 @@
 resolve everything — starting from "what improvements can we make to the vector-audit skill and its scripts."
 The investigation is complete (ED-IN-0064, five adversarial passes). This is the resolution program.
 
+> **Hardened by a direct Fable review run before finalization** (`fable_review_v1.md` — Jordan-instructed pass
+> over this session's outputs + PR #139). Material changes: **P5 demoted to conditional P5†** (it un-deferred the
+> armature's standing Stratum-B ruling; nothing gameplay-blocking depends on it), the docket split into
+> ratify-by-merge vs explicit-pick classes, P4's tail changed from blanket-grounding to per-module disposition,
+> and the pointer meter stated in three honest bands.
+
+## Jordan's 20-minute version
+
+Rule these **five** and every track proceeds; everything else either has a safe recommended default that
+ratifies with its executing PR (Class R) or is independent:
+
+1. **D2** — the accord-echo composition rule (the D.6-safe design) → unblocks P3's biggest wire.
+2. **D4** — the non-scalar structured-state ruling → unblocks pointer-debt closure.
+3. **D11** — approve the Convictions first-class doc → flips the P2 validation failure.
+4. **D13** — `handoff_rules` demote-vs-de-orphan (architecture-shape call).
+5. **D3** — `PARL_TRANSFER` activation criterion (territory can change hands via the political loop).
+
+P0 (instrument hardening) and P2's mechanical sweep start immediately regardless.
+
 ---
 
 ## §0 · What "resolved" means (the trichotomy) + scope-outs
@@ -71,7 +90,7 @@ flowchart LR
   P2[P2 Mechanical CTC sweep<br/>haiku/sonnet]
   P3[P3 Wire the dead channels<br/>flag-gated · sonnet/opus]
   P4[P4 Hub grounding<br/>opus adjudication]
-  P5[P5 Field/Gauge keystone +<br/>convergence artifact · FABLE]
+  P5[P5† CONDITIONAL Field/Gauge +<br/>convergence · trigger: Stratum B or D1† opt-in]
   P6[P6 Corpus health +<br/>certification rerun]
   P0 --> P3 & P6
   P1 -->|D8,D9| P2
@@ -83,7 +102,8 @@ flowchart LR
   P2 & P3 & P4 & P5 --> P6
 ```
 
-P0 ∥ P1 start immediately; P2 needs only D8/D9; P4 can start after P0. Critical path: **P1(D1) → P5 → P6**.
+P0 ∥ P1 start immediately; P2 needs only D8/D9 (Class R); P4 can start after P0. Critical path (post-review):
+**P1(D2, D4, D11) → P3/P4 → P6** — P5† sits *off* the critical path unless its trigger fires.
 
 ---
 
@@ -108,11 +128,17 @@ does not pretend to include it.
 
 ---
 
-## §4 · Phase 1 — the decision docket (all HELD-BACK; recommendations attached)
+## §4 · Phase 1 — the decision docket (recommendations attached; two classes per the Fable review)
+
+**Class E (explicit pick — HELD-BACK until Jordan rules):** D1†, D2, D3, D4, D5, D6, D11, D12, D13, D14.
+**Class R (ratify-by-merge):** D7, D8, D9, D10, D15, D16 — each executes in its phase PR *with the recommendation
+as written*, and **that PR's normal ED-1094 merge ratifies it** (nothing in Class R is ratified by *this* plan).
+Object to any Class-R row and it moves to Class E. Jordan's explicit load: **10 rulings, of which 5 are the
+critical path** (the "20-minute version" above).
 
 | ID | Decision | Recommendation |
 |---|---|---|
-| **D1** | **OF-3 `decay()`** — the one ruling gating the keystone | Ship `Field.decay_fn` as a template library `{none, linear, homeostat, hysteresis}` seeded from the three live exemplars (MS hysteresis, Turmoil counters, Π homeostat); per-quantity assignment table lands PROPOSED in P5.2 for ratification. |
+| **D1†** | **OF-3 `decay()` — reframed by the Fable review** (the armature already ruled it deferred to Stratum B+; do not re-rule by accident) | **Default: confirm the standing deferral stands** — P5† stays conditional. Opt-in alternative: open Stratum B early, in which case `decay_fn` ships as a template library `{none, linear, homeostat, hysteresis}` seeded from the live exemplars (MS hysteresis, Turmoil counters, Π homeostat). |
 | **D2** | **Accord-echo composition** (wiring `compute_accord_echo` naively risks the D.6 double-count) | F1-lawful design: echoes never write Accord; they enter as a bounded **event-modifier term in the Accord derivation**, read from KEY_LOG at Accounting (the AU-4 pattern) — `Accord = floor(mean Order) + clamp(Σ echo_deltas, ±cap)`. Single writer preserved; each scene outcome counted exactly once. |
 | **D3** | **`propose_transfer` activation** | Wire behind `PARL_TRANSFER` default OFF; Jordan flips after a seeded 30-season sim shows no degenerate territory churn. |
 | **D4** | **GAP-G2 non-scalar state** (npc beliefs/opinions/arcs) | Keep OUT of the scalar registry; add a typed *structured-state* section to `descriptor_registry` (schema-only) so `pointer_audit` classifies it registered-structured, not debt. |
@@ -168,12 +194,21 @@ PROPOSED-contract flag in its PR).
 `faction_state` (in-13) and `npc_behavior` (in-12): extract their accounting procedures into verifiable specs
 (d_sigma-contested per ED-874; Procedures B–E), sim parity tests, adjudicator flips `[ASSUMPTION]` → grounded;
 loop dampers annotated on **both** sides of npc↔contest (GAP-C3); dual-emit table per D6; combat-emit consumers
-land here. Then **P4.3**: the remaining 11 `[ASSUMPTION]` markers swept with the same pattern (each grounded or
-explicitly ED-ruled). Opus-tier module-adjudicator work; Fable only on an evidence-based upgrade trigger.
+land here. Then **P4.3 (re-scoped by the Fable review):** the remaining 11 markers are **dispositioned
+per-module** — grounded where load-bearing, **CLASSIFIED where grounding is make-work** (trivial infra like
+`scenario_authoring`'s authoring-time manifest or `miraculous_event`'s gated reader take an ED-ruled
+classification, not a parity suite). Blanket-grounding all 11 was checkbox-ism. Opus-tier module-adjudicator
+work; Fable only on an evidence-based upgrade trigger.
 
-## §8 · Phase 5 — the keystone: Field/Gauge + decay + convergence (the Fable nodes)
+## §8 · Phase 5† — CONDITIONAL: Field/Gauge + decay + convergence (demoted by the Fable review)
 
-The reserved artifact (doctrine ED-1083 §4). Not blank-slate: the schema is **already PROPOSED**
+> **Trigger required — not scheduled work.** The armature's standing ruling defers `decay()` (and with it the
+> cross-tick convergence artifact) to **Stratum B+**; this program's own gap register classifies GAP-DIR-5 as a
+> deferral. P5† therefore runs **only** on (a) Stratum B opening, or (b) an explicit D1† opt-in. Nothing
+> gameplay-blocking waits on it — the D.6 risk that is live *now* is fully handled by D2 + P3's exactly-once
+> property test. **Tiering: Opus-first; Fable only on demonstrated failure** (§10's upgrade-trigger rule).
+
+When triggered, it is not blank-slate: the schema is **already PROPOSED**
 (`governance_type_registry_v1 §4.2`: `aggregate_fn / propagate_fn / decay_fn / derived_flags`) and the saturation
 kernel **already ships** one scale down (`sigma_leverage.py` weighted-sum → tanh soft-cap → scale-invariant).
 
@@ -219,12 +254,12 @@ doc, domain_actions home from the FA lane).
 | Dangling emits | 4 | **0** (1 deleted, 2 wired, 1 consumed; season_change classified) |
 | Zero-caller cross-scale resolvers | 3 | **0** (flag-gated wirings) |
 | `causes[]` populated instances | 0 | **≥ 1** exemplar + chain-walk test |
-| G_pointer — **keyed** rate (the NS2 meter per #139's Meter-1) | **21.8 %** keyed (52.7 % matched) | **every identifier keyed or explicitly classified** (declared-non-pointer / structured-state per D4 / computed-internal); keyed ≥ 60 % after Category-B registrations |
+| G_pointer — **three-band** (the honest NS2 meter: #139's keyed/matched split + this review's disposition refinement) | keyed **21.8 %** (12/55) · declared-non-pointer **30.9 %** (17/55) · **unresolved 47.3 %** (26/55) | **unresolved → 0** — every identifier keyed or explicitly classified (declared-non-pointer / structured-state per D4 / computed-internal); keyed ≥ 60 % after Category-B |
 | Contract↔code join | 3/27 | **27/27** mapped-or-explained |
 | L2 modules | 27 | **25** (retirements) |
 | Import-orphans | 87 *(pre-P0.1; inflated)* | re-derived, **fully dispositioned** |
-| Cross-tick convergence | unproven (bounded) | **artifact ratified + property tests** |
-| Directions live end-to-end | 2 of 7 | **6 of 7** (temporal closes with D1/P5; all six spatial live) |
+| Cross-tick convergence | unproven (bounded) | **D.6 exactly-once property test landed (P3)**; the general artifact is P5†-conditional |
+| Directions live end-to-end | 2 of 7 | **all six spatial live**; temporal **closed by classification** (the standing Stratum-B deferral, per this program's own trichotomy) |
 
 ## §11 · Risks
 
@@ -247,10 +282,12 @@ phases now carry). The navigator refreshes the board on next use.
 
 ## §13 · Sizing & tiering
 
-≈ **16 lane-scoped PRs / ~8–12 sessions.** P0: 2 PRs (sonnet build / opus verify) · P1: 1 docket + a Jordan pass ·
-P2: 2 PRs (haiku/sonnet) · P3: 3 PRs (sonnet code / opus review) · P4: 3 PRs (opus, module-adjudicator) ·
-P5: 3 PRs (**Fable** authorship, opus verification) · P6: 2 PRs. Per §10, Fable appears only at the reserved
-nodes (P5.3/P5.4 and this plan); everything else tiers down.
+≈ **10–12 core lane-scoped PRs / ~6–9 sessions** (+3 conditional if P5† triggers). P0: 2 PRs (sonnet build /
+opus verify) · P1: 1 docket + a Jordan pass · P2: 2 PRs (haiku/sonnet) · P3: 3 PRs (sonnet code / opus review) ·
+P4: 2–3 PRs (opus, module-adjudicator; P4.3 dispositions rather than blanket-grounds) · P6: 2 PRs ·
+P5†: +3 conditional (Opus-first; **Fable only on demonstrated failure**, per §10's upgrade-trigger rule — the
+review corrected this plan's own earlier Fable-by-default tiering). Fable's standing role: the review gates
+(this plan's `fable_review_v1.md`), not scheduled construction.
 
 ---
 
