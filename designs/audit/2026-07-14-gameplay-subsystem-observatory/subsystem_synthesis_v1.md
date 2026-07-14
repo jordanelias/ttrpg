@@ -447,9 +447,10 @@ Each: **Inventory** (contract facts) · **Shape** (code architecture) · **Conne
   victory path (peninsular sovereignty).
 - **Shape** — a pure `state_reader` gating era transitions; owns no state, writes nothing.
 - **Connectivity** — in-0 / out-0 at the Key layer (reads clocks directly, not via Keys).
-- **Gaps** — **GAP-F1** (**the headline coverage gap: `victory` reads `MS` (Mending Stability), a clock with NO
-  owning module anywhere in the 27 contracts** — the state_graph marks it explicitly; GENUINE structural gap —
-  who ticks MS?). **GAP-G7** (victory's own Accord/PT/PV/Turmoil reads un-pointered).
+- **Gaps** — **GAP-F1** (**`victory` reads `MS` (Mending Stability), a clock with NO owning module anywhere in the
+  27 contracts** — the state_graph marks it explicitly; **CTC, corrected from GENUINE by the adversarial gate**: MS
+  is already ticked in the sim (PP-255 `ms_track.py` → `accounting.py:61`), so only a *contract* owner is missing,
+  not a mechanism — see the banner + §7). **GAP-G7** (victory's own Accord/PT/PV/Turmoil reads un-pointered).
 
 **Infra context (11, not first-class here):** `npc_memory` (doc:null pure reader) · `scene_slate` (doc:null
 manifest, out-4 root) · `game_director`/`scene_timer`/`audit` (doc:null scene telemetry) · `engine_clock`
@@ -464,8 +465,9 @@ manifest, out-4 root) · `game_director`/`scene_timer`/`audit` (doc:null scene t
 1. **Two hubs carry the world.** `faction_state` (in-13) + `npc_behavior` (in-12) are both L2 cut-vertices and
    both `[ASSUMPTION]`-resolver — the highest-leverage, lowest-grounding pair in the graph (GAP-B2/B7).
 2. **Nine `doc:null` modules** are unimplementable specs; the load-bearing ones are `domain_actions` (strategic
-   verbs) and `engine_clock` (temporal spine). Porting beyond the combat slice is blocked on authoring these
-   (§6 territory).
+   verbs) and `engine_clock` (temporal spine). Porting beyond the combat slice is blocked on authoring
+   `domain_actions`' home and flipping `engine_clock`'s pointer (its home `propagation_spec_v1 §O.2` is CANONICAL,
+   only the pointer-flip pends ED-1051) (§6 territory).
 3. **Four dangling emits** (`scene_outcome.battle_concluded` [known-fabricated ED-MB-0010], `env.crisis`,
    `scene.combat_felled`, `scene.combat_resolved`). Only `env.crisis` is a plausibly-genuine missing consumer.
 4. **Twenty `!A6` cross-scale seams** — annotation-debt per `scale_transitions §12`, NOT missing mechanisms.
@@ -487,7 +489,8 @@ manifest, out-4 root) · `game_director`/`scene_timer`/`audit` (doc:null scene t
 The port is PROPOSED and largely un-executed (`godot_conversion_strategy_v1.md`, Jordan-vetoable). Only
 `personal_combat` is skeletoned, on a spine (`BaseEngine`/`KeyBus`/`Key`/`GameState`/`Resolver`) defined nowhere
 — non-compilable. The 9 `doc:null` modules + `[ASSUMPTION]` resolvers here ARE the port's blocking work-list:
-author `engine_clock` and `domain_actions` homes first. No number crosses into Godot in this docket.
+author `domain_actions`' home and flip `engine_clock`'s pointer (its home is canonical, ED-1051) first. No number
+crosses into Godot in this docket.
 
 ---
 

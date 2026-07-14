@@ -185,7 +185,9 @@ aggregation contract anywhere in the corpus**. The full census (consolidated fro
 (Mandate; and σ-leverage, below), weighted-mean (aggregate L/PS `ΣW_s·L_s/ΣW_s`; National Influence
 `clamp(round(Σ(TI·franchise)/Σfranchise),1,7)`), floor-mean (Accord), flat-sum (Treasury; `agg.body/mind/social`
 placeholder; CI Piety-Yield `Σ(PT-tier·SW)`), and threshold-count (IP `stepwise 0-1→0…6+→+3`; Turmoil `+1/Accord≤1
-territory cap+3`) — plus **4 distribute-down rules** and **2 boundary rules** (§B). Two whole rungs have **no**
+territory cap+3`) — plus **4 distribute-down rules**, **~3 decay templates + ~7 time-decay-gap quantities** (§D), and
+**2 boundary rules** (§B): **≈ 27 distinct value-transformation rules** in all (11 + 4 + 3 + 7 + 2), the derivation
+behind the "~27" headline. Two whole rungs have **no**
 aggregation: **faction→national is ruled non-nested** ("factions hold *people*, not territory… no canonical formula,"
 `scale_hierarchy_v1 §5.1`; `pressure_key_registry_v1.md:76` DOCTRINE-ONLY), and the **Settlement→Territory→Province
 stratum is doctrine-only**, blocked on `engine_clock`. So the primitive doesn't just reconcile existing rungs — it must

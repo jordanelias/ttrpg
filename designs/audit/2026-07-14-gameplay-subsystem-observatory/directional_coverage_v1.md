@@ -142,12 +142,16 @@ entropy that pulls quantities back over time.
 (`sim/peninsular/accounting.py:61` calls `apply_ms_baseline_decay` under "PP-255 — Year-End cadence" — grep-verified;
 this is exactly the mechanism that makes GAP-F1/MS a *wiring* gap, not a design gap). (b) The **general `decay()`
 term is an explicit un-shipped deferral (GAP-DIR-5)** — the armature: "substrate ships WITHOUT decay … deferred to
-Stratum B+." So event-builds accumulate without entropy. Reproduces governance **GAP-B4** (ΔLegitimacy has no decay
-term) and **GAP-A4** (cross-tick convergence unproven; the D.6 double-count).
+Stratum B+." So event-builds accumulate without a *general* entropy pull. Narrowly reproduces governance **GAP-B4** —
+but ΔLegitimacy is **not** brakeless: it carries an event-driven `−λ_violation·score` erosion term, and the live
+Mandate↔L/PS loop is Stage-4-sim-verified mean-reverting and bounded (no runaway); the gap is only the absence of a
+*time-based/entropic* decay term. Also reproduces **GAP-A4** (cross-tick convergence unproven — the open risk is
+**bounded non-settling oscillation, not amplification**; the D.6 double-count).
 **Solution.** MS decay is already the worked cadence exemplar — generalize its pattern into the deferred `decay()`
 term when Stratum B (cross-tick convergence) actually starts. Until then, `decay()` is a **ruled deferral**, not an
-oversight — flag it, don't "fix" it. (Any faction/settlement quantity that "only goes up" — ΔLegitimacy, standing
-event-builds — is a symptom to list against this deferral.)
+oversight — flag it, don't "fix" it. (Faction/settlement quantities lacking a *time-based* decay term — ΔLegitimacy's
+continuity build, standing event-builds — are symptoms to list against this deferral; they are **not** literally
+unbounded, since event erosion + the mean-reverting Mandate↔L/PS loop already brake them locally.)
 
 ---
 
@@ -217,8 +221,9 @@ exemption class by a *different* mechanism than the 8 strategic-down seams.
   the strategic map can't change hands through the political loop yet.
 - **Handoff dispatcher orphaned / §3.3 empty** → the curated cross-scale procedures aren't the single home; a
   Personal→Contest zoom has no authored handoff.
-- **Temporal decay deferred** → faction/settlement pressures only accumulate; without entropy, legitimacy and
-  standing ratchet up and never relax, so long campaigns drift toward saturation (the D.6 double-count risk).
+- **Temporal decay deferred** → faction/settlement pressures lack a *general* entropy pull; event erosion + the
+  mean-reverting Mandate↔L/PS loop brake legitimacy locally, but with no time-based decay term the open risk under
+  repeated up-down cycles is bounded non-settling oscillation (the D.6 double-count), not unbounded ratcheting.
 - **Personal-actor→faction path deferred** → an *individual's* deed reaches the faction only as aggregate stats,
   not as that character's act — the "my character mattered strategically" beat is muted.
 
