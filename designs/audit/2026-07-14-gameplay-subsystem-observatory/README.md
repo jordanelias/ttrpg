@@ -21,6 +21,7 @@ solutions exist."*
 | `README.md` | This index. |
 | `00_workplan.md` | Run config + **pre-committed thresholds (LOCKED)** + the Class-A vetting block. |
 | `01_methodology.md` | Executed parameters; what changed vs the 2026-04-29 baseline; numpy/sklearn-absent + coverage disclosures; the two-gate verification. |
+| **`unification_v1.md`** | **The capstone** — one synthesis across the whole docket: the single thesis, the four cuts as one picture, the three loci where all correctness concentrates, the genuine-vs-CTC surface, the epistemic status (three confidence tiers + the five-pass hardening history), and the prioritized action surface. Read this first for the through-line. |
 | **`subsystem_synthesis_v1.md`** | **The primary deliverable** — the master graph, 5 Mermaid cuts, 16 per-subsystem sections (inventory/shape/connectivity/gaps), cross-cutting findings, the §8 directional double-check, and the forward-only disposition table. |
 | **`subsystem_discussion_v1.md`** | **Per-subsystem discussion/solutions piece** (Jordan's 2nd ask) — readable prose per subsystem: where the gaps are and what solutions exist, typed CTC vs GENUINE with the backing canon/code. |
 | **`directional_coverage_v1.md`** | **The "all directions" deep-dive** (Jordan's 3rd ask) — each of the 6 (+temporal) delivery directions in detail, the 16×6 matrix, seam reconciliation, and the solutions roadmap. |

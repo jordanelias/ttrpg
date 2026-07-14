@@ -9,7 +9,8 @@ of code architecture → connectivity → gaps, as a graph, plus a six-direction
 discussion/solutions piece. Subsystem set: the **16 player-facing gameplay modules** (personal_combat,
 social_contest, mass_battle, threadwork, fieldwork_knots, domain_actions, faction_state, faction_politics,
 ci_political, territorial_piety, settlement_layer, peninsular_strain, npc_behavior, piety_track, miraculous_event,
-victory) + `settlement_economy` as a degenerate 17th; the 11 infrastructure modules appear as connectivity context.
+victory) + `settlement_economy` as a degenerate 17th; the 10 infrastructure modules appear as connectivity context
+(16 + 1 + 10 = 27).
 
 ## Pre-committed thresholds (LOCKED — no post-hoc tuning; SKILL.md §3.7)
 

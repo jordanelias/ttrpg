@@ -452,7 +452,8 @@ Each: **Inventory** (contract facts) · **Shape** (code architecture) · **Conne
   is already ticked in the sim (PP-255 `ms_track.py` → `accounting.py:61`), so only a *contract* owner is missing,
   not a mechanism — see the banner + §7). **GAP-G7** (victory's own Accord/PT/PV/Turmoil reads un-pointered).
 
-**Infra context (11, not first-class here):** `npc_memory` (doc:null pure reader) · `scene_slate` (doc:null
+**Infra context (10, not first-class here — 16 gameplay + settlement_economy as a degenerate 17th + 10 infra = 27):**
+`npc_memory` (doc:null pure reader) · `scene_slate` (doc:null
 manifest, out-4 root) · `game_director`/`scene_timer`/`audit` (doc:null scene telemetry) · `engine_clock`
 (doc:null temporal spine — candidate home `propagation_spec_v1`, ED-1051) · `clock_registry` (pure catalog) ·
 `articulation_layer` (universal wildcard reader; presentation, not a played mechanic) · `scenario_authoring`

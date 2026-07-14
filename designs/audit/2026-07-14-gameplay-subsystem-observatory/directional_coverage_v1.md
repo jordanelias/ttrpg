@@ -119,8 +119,9 @@ proving the mechanism is exercised. **Solution:** the same §12.3 `targets[]` pa
 scale, so a consequence "skips" intervening scales along a provenance chain (§12.1; the §5.6 Thread Echo exemplar).
 This is the direction that lets a distant cause ripple to a distant effect without touching every rung.
 **Status — ZERO executable instances (VERIFIED).** The substrate *supports* it (`sim/substrate/keys.py` has the
-`causes[]` field + a DAG walk), but **no emit site in `sim/` ever populates `causes=`** (grep-verified: `causes=`
-across `sim/**` returns only the def/serialize/validate in `keys.py` — no domain code sets it). The named exemplar,
+`causes[]` field + a DAG walk), but **no emit site in `sim/` ever populates it** (grep-verified: `keys.py`
+declares the field as `causes:` with an empty default, and no domain code sets it — the provenance DAG has nothing
+to traverse). The named exemplar,
 §5.6 Thread Echo `domain_echo.compute_thread_echo` (`sim/cross_scale/domain_echo.py:178`), has **zero callers**. And
 the armature concedes it *verbatim*: **"The diagonal direction has zero executable or exemplified instances"**
 (`designs/architecture/key_echo_armature_v1.md:41`; "~15% … currently unauthored", L126).
