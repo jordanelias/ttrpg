@@ -563,13 +563,13 @@ modules:
       - {name: "Prosperity / Defense / Order", bucket: track, writable: true}   # §1.3, 0-5 per settlement
       - {name: "Local Economy / Garrison Strength / Public Order", bucket: derived_value, writable: false}   # §1.3 derived (Prosperity x50 etc.) — F1 guard
       - {name: "Legitimacy (L) / Popular Support (PS)", bucket: track, writable: true}   # §1.8 LPS-2e per-settlement 0-7 (Jordan ruling 2026-05-30)
-      - {name: "province Accord", bucket: derived_value, writable: false}   # §1.3 floor(mean settlement Order) — F1 guard
+      - {name: "province Accord", bucket: derived_value, writable: false}   # §1.3 floor(mean Order across settlements) — F1 guard
     transitions: []
     loops:
       - {with: faction_state, damper: "Mandate↔L/PS: saturating Mandate = 7T/(T+6) (∂Mandate/∂q shrinks as T grows) + mean-reverting feedback drift ±1; Stage-4 sim bounded 0-7 over 30 seasons under mission shocks (settlement_layer_v30 §1.8, Lesson-5 bound)"}
     gates:
       - id: g_ord0
-        when: "settlement Order = 0"
+        when: "Order = 0"
         then: "local revolt"
         "on": "Prosperity / Defense / Order"
         source: "settlement_layer_v30 §1.3"
@@ -586,7 +586,7 @@ modules:
     derivations:
       - output: "province Accord"
         inputs: ["Order"]
-        formula: "floor(mean settlement Order)"
+        formula: "floor(mean Order across settlements)"
         bucket: derived_value
         source: "settlement_layer_v30 §1.3"
       - output: "Local Economy"
@@ -611,7 +611,7 @@ modules:
         source: "settlement_layer_v30 §1.8"
       - output: "faction Treasury income (cross-module → faction_state)"
         inputs: ["Prosperity"]
-        formula: "Σ settlement Prosperity × 10"
+        formula: "Σ Prosperity across settlements × 10"
         source: "derived_stats §8.1 (quoted in settlement_layer §1.8)"
     accounting_phase: [settlement_accounting]
     gap_notes:

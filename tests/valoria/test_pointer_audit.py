@@ -130,6 +130,45 @@ def test_scorecard_math_is_internally_consistent():
     assert sc['by_surface']['sim_literals']['total'] == 1  # made_up_stat's one sim.stat_deltas occurrence
 
 
+def test_scorecard_keyed_split_separates_real_keys_from_declared_non_pointer():
+    # Fable-5 2026-07-14 audit, meter finding 1: `resolve()` returns matched-not-None even
+    # for a `not_descriptors` entry (key=None) — a name the registry declines to key. The
+    # scorecard must count those as "matched/resolved" but NOT as "keyed". Build a fixture
+    # with one keyed match, one declared-non-pointer match (matched-but-key-None), and one
+    # genuine miss.
+    occ = [
+        {'surface': 'module_contracts.state', 'location': 'm', 'raw': 'Dexterity',
+         'identifier': 'Dexterity', 'matched_as': 'Dexterity', 'key': 'attr.body.agility',
+         'resolved': True},
+        {'surface': 'module_contracts.state', 'location': 'm', 'raw': 'Mandate',
+         'identifier': 'Mandate', 'matched_as': 'Mandate', 'key': None,   # declared non-pointer
+         'resolved': True},
+        {'surface': 'module_contracts.state', 'location': 'm', 'raw': 'nope',
+         'identifier': 'nope', 'matched_as': None, 'key': None, 'resolved': False},
+    ]
+    ov = pa.build_scorecard(occ)['overall']
+    # matched (resolved) counts BOTH the keyed and the declared-non-pointer
+    assert ov['unique_identifiers_resolved'] == 2
+    # but keyed counts ONLY the one with a real key
+    assert ov['unique_identifiers_keyed'] == 1
+    assert ov['unique_identifiers_declared_non_pointer'] == 1
+    assert ov['occurrences_keyed'] == 1
+    assert ov['occurrences_declared_non_pointer'] == 1
+    # keyed rate is strictly below the matched rate whenever a declared-non-pointer exists
+    assert ov['percent_keyed_unique_identifiers'] < ov['percent_resolved_unique_identifiers']
+    # invariant: keyed + declared_non_pointer == resolved
+    assert ov['unique_identifiers_keyed'] + ov['unique_identifiers_declared_non_pointer'] \
+        == ov['unique_identifiers_resolved']
+
+
+def test_real_corpus_keyed_rate_is_below_matched_rate(real_occurrences):
+    # On the live corpus the honest keyed rate must be strictly lower than the matched rate
+    # (there ARE not_descriptors matches today) — this pins that the split is real, not cosmetic.
+    ov = pa.build_scorecard(real_occurrences)['overall']
+    assert ov['unique_identifiers_keyed'] < ov['unique_identifiers_resolved']
+    assert 0 < ov['percent_keyed_unique_identifiers'] < ov['percent_resolved_unique_identifiers']
+
+
 def test_resolved_key_buckets_counts_occurrences_not_just_identifiers():
     buckets = pa.resolved_key_buckets(_fake_occurrences())
     assert len(buckets) == 1

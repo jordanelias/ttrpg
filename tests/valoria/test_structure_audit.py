@@ -165,8 +165,11 @@ def test_g_code_relative_import_from_package_init_resolves_within_package(tmp_pa
     })
     g, errs = sa.build_g_code(root, modules)
     assert errs == []
-    assert 'pkg.leaf' in g['pkg']              # resolved within the package
-    assert 'ip_track' not in str(g)            # no one-package-too-high miss
+    assert 'pkg.leaf' in g['pkg']              # resolved WITHIN the package
+    # the one-package-too-high miss would resolve `from . import leaf` to a bare `leaf`
+    # (no package prefix) instead of `pkg.leaf`; assert that mis-resolution is absent.
+    assert 'leaf' not in g['pkg']              # never the unqualified (too-high) target
+    assert g['pkg'] == {'pkg.leaf'}            # exactly the correct edge, nothing spurious
 
 
 def test_g_code_relative_import_from_regular_module(tmp_path):
@@ -207,7 +210,18 @@ def test_g_code_captures_relative_import_cycle(tmp_path):
     g, errs = sa.build_g_code(root, modules)
     assert errs == []
     cycles = sa._cycles(sa.tarjan_scc(g), g)
-    # each cycle's MEMBERS are sorted by _cycles (the outer list is sorted by run()).
     assert ['p.one', 'p.two'] in cycles
-    # determinism: re-running yields the byte-identical result.
-    assert sa._cycles(sa.tarjan_scc(g), g) == cycles
+
+
+def test_cycles_members_are_sorted_regardless_of_insertion_order():
+    # The real determinism property _cycles provides: each cycle's MEMBERS come out
+    # sorted, so the output does NOT depend on set/hash iteration order of the SCC.
+    # Build two adjacencies describing the SAME 3-cycle in opposite insertion orders;
+    # both must yield identically-sorted members. (Mutation guard: dropping the
+    # `sorted(c)` in _cycles makes these two results differ.)
+    fwd = {'a': ['b'], 'b': ['c'], 'c': ['a']}
+    rev = {'c': ['a'], 'b': ['c'], 'a': ['b']}
+    cf = sa._cycles(sa.tarjan_scc(fwd), fwd)
+    cr = sa._cycles(sa.tarjan_scc(rev), rev)
+    assert cf == [['a', 'b', 'c']]
+    assert cf == cr

@@ -596,6 +596,21 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **WS0 Structural Observatory + WS1 registry reader (2026-07-13/14, ED-IN-0057..0063)** — the five
+  Tier-0 audit scripts (`skills/valoria-vector-audit/scripts/{vector,structure,pointer,formula,gen}_audit.py`)
+  and the read-only facade `tools/registry.py` (+ `references/registry/README.md` &
+  `pointer_debt_worklist.md`, both **PROPOSED**) are built, merged (PRs #132/#135/#137), and
+  hardened by two adversarial passes (a partial Fable-5 audit + a 5-critic holistic pass,
+  `designs/audit/2026-07-14-holistic-unification/`). **Open, Jordan-gated decisions surfaced there:**
+  (1) **`ED-IN-0059` pointer-debt worklist Category B** (register the genuinely-unregistered scalars —
+  Wounds/Turmoil/Accord/etc., each needs a canonical key + home-doc verification) and **Category C2**
+  (whether npc_behavior's `beliefs`/`concerns`/`projects`/`arc state` are registry quantities at all);
+  (2) whether the observatory gets a **non-gating CI refresh job** that persists scorecards (it is
+  runnable now but wired nowhere — `audit-refresh.yml` deliberately does not run it); (3) `settlement_layer`
+  derivation `Legitimacy / Popular Support` (module_contracts.yaml) is a Mandate-feedback drift loop with
+  **no `bucket:` tag** — is it a `derived_value` or a track-write? These are the concrete "needs_jordan"
+  items a resuming session must not silently skip.
+
 - **Governance Type Registry (2026-07-13)** — `designs/architecture/governance_type_registry_v1.md`
   inventories every governance/politics/hierarchy/faction/geography type across the corpus (4 parallel
   survey passes + this session's generation-methodology work), classified FLAG vs. VECTOR, cross-scale
@@ -659,8 +674,11 @@ allocate, bump, co-commit; never max+1.)_
   (social-contest deliberative-game findings) — the two were tracked together in root `HANDOFF.md`
   before the 2026-07-08 per-lane content split.
 
-- **Observatory Remediation Program filed (2026-07-14, ED-IN-0065, PROPOSED)** —
-  `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md`: the resolve-everything
-  plan over ED-IN-0064's findings. **Next action: Jordan rules the Phase-1 decision docket (D1–D14)**;
-  P0 (instrument hardening, incl. ED-IN-0063 residuals + the contract↔code join) can start in parallel,
-  IN lane. Program structure ratifies on merge; every D-row stays needs_jordan.
+- **Observatory Remediation Program filed (2026-07-14, ED-IN-0066 — renumbered off the #139 ED-IN-0065
+  collision, PROPOSED)** — `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md`:
+  the resolve-everything plan over ED-IN-0064's findings, **incorporating PR #139** (its landed observatory
+  integrity fixes; its needs_jordan items as D15/D16; the G_pointer keyed-rate 21.8% baseline; the
+  head_pointers.yaml + REPO_MAP.md action in P2). **Next action: Jordan rules the Phase-1 decision docket
+  (D1–D16)**; P0 (instrument hardening, net of #139: the G_code __init__ HIGH, banner_classify tie-break,
+  contract↔code join, direction_audit.py) can start in parallel, IN lane. Program structure ratifies on
+  merge; every D-row stays needs_jordan.

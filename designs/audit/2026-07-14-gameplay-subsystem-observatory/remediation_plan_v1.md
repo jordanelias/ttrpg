@@ -1,11 +1,24 @@
 # Observatory Remediation Program (v1) — the Resolve-Everything Plan
 
-## Status: PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0065
+## Status: PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066
+
+> **PR #139 INCORPORATED (renumber note).** This plan was allocated ED-IN-0065 concurrently with PR #139 (the
+> holistic 5-critic adversarial pass over the WS0 observatory + WS1 registry, with its own unification doc at
+> `designs/audit/2026-07-14-holistic-unification/unification_v1.md`); #139 merged first and keeps ED-IN-0065 —
+> this plan is **renumbered ED-IN-0066** (the ED-IN-0031/0044/0064 collision class). #139's landed fixes are
+> folded in below: the **silent-cap repairs** (Obs-1/2/3 — Mode C's true notional total is ~9.3k, not the
+> displayed 25; full-list disclosures everywhere), the **G_pointer meter-integrity split** (true **keyed** rate
+> **21.8%** vs 52.7% *matched* — the scorecard baseline is restated on the keyed meter), the **paren-normalized
+> formula cycle pass** (the Mandate↔Legitimacy feedback is now machine-visible — the narrow GAP-J2 fix is DONE),
+> the L2 §8 disclosure correction, and 4 test-defect replacements (140 tests green). #139's `needs_jordan` items
+> join the docket as **D15/D16** (its C2 ≡ D4; its Category-B ≡ the existing pointer row). Its unification's
+> converged next action — **generate `head_pointers.yaml` + `docs/REPO_MAP.md`** — is added to P2, and its NS3
+> verdict (dammed behind un-started `scale_hierarchy_v1 §6` territorial propagation) is bound into P5.2/§12.
 
 > **Fable-authored** (CLAUDE.md §10 / doctrine ED-1083 §4 — the aggregate-up/distribute-down + termination
 > artifact is the reserved top-of-stack node this program sequences). **Merging this PR ratifies the program
 > structure and sequencing ONLY (ED-1094).** Every design ruling inside is **HELD-BACK** in the Phase-1 decision
-> docket (D1–D14, §4) and remains `needs_jordan` until explicitly picked — this banner is the loud exception.
+> docket (D1–D16, §4) and remains `needs_jordan` until explicitly picked — this banner is the loud exception.
 > Companion to the merged ED-IN-0064 docket; where a classification here conflicts with `gap_register_v1.md` +
 > `adversarial_review_v1.md`, those govern.
 
@@ -54,7 +67,7 @@ workplan restructuring (this program *feeds* the navigator, it does not fork M1 
 ```mermaid
 flowchart LR
   P0[P0 Instrument hardening<br/>IN · sonnet/opus]
-  P1[P1 Decision docket D1–D14<br/>Jordan]
+  P1[P1 Decision docket D1–D16<br/>Jordan]
   P2[P2 Mechanical CTC sweep<br/>haiku/sonnet]
   P3[P3 Wire the dead channels<br/>flag-gated · sonnet/opus]
   P4[P4 Hub grounding<br/>opus adjudication]
@@ -80,13 +93,13 @@ The direct answer to "what improvements can we make to the skill and its scripts
 
 | # | Item | What / why | Closes |
 |---|---|---|---|
-| P0.1 | **Execute ED-IN-0063 residual batches** | The known script defects: **G_code `__init__.py` relative-import misresolution** (HIGH — inflates the 87-orphan list and drops a cycle; *no dead-code triage until this lands and orphans are re-derived*); `vector_audit.banner_classify` status-first tie-break (fixed in gen_audit, left live here); `formula_audit` Mandate paren-variant normalization; §8 re-parse duplications; missing tests (`test_vector_audit.py`, pointer run()-level, determinism). | ED-IN-0063 |
+| P0.1 | **Execute ED-IN-0063 residual batches** *(net of #139)* | Still open: **G_code `__init__.py` relative-import misresolution** (HIGH — inflates the 87-orphan list and drops a cycle; *no dead-code triage until this lands and orphans are re-derived*); `vector_audit.banner_classify` status-first tie-break; §8 re-parse duplications; `test_vector_audit.py`. **Already landed via #139:** the Mandate paren-normalization (now a full second cycle pass), the silent-cap/section() disclosures, the L2 §8 correction, 4 test-defect replacements. | ED-IN-0063 |
 | P0.2 | **Contract↔code join** | Add the `mechanics_index.yaml sim_module:` join to `structure_audit` so the 27 contracts map to G_code modules (3/27 → 27/27 mapped-or-explained; correspondence flag flips from UNVERIFIED). Side-effect: refreshes the stale mechanics-index family. | GAP-I4 |
 | P0.3 | **New layer: `direction_audit.py` (G_direction)** | Mechanize what ED-IN-0064 hand-authored: the 16×6 directional matrix; machine `!A6`-seam diff vs `scale_transitions §12.4`; **caller-liveness** (zero-caller detection for declared cross-scale resolver entry points — the `compute_accord_echo` class); **`causes[]`-population meter** (currently 0). Register in `audit_staleness.FAMILIES` + the registry enum. "Double-check in all directions" becomes a rerunnable meter. | GAP-DIR-* verification |
 | P0.4 | **structure_audit closures** | Dangling-emit × registry-declared-consumer cross-check (separates the `combat_felled` class from the `env.crisis` class); registry emitter-reality census over all 49 types (the `meta.legacy_event` class); string-wiring pre-check before orphan verdicts (adapters wire by string). | GAP-C taxonomy |
 | P0.5 | **L0 corpus scope** | Derive the L0 corpus from `gen_audit`'s LIVE partition ∪ foundation (reuse, §8 — one currency rule) instead of the hardcoded 10.3% slice; report coverage % in the scorecard header. Implement Stage-0 pilot; Stage-7 stays explicitly reserved. | coverage disclosure |
 | P0.6 | **gen_audit widening** | Lift the `designs/`-anchor in `ci_generation_consistency.DOC_KEYS` (the one home) so `params/`/`canon/`/`references/` heads can be LIVE; fix the DOC_KEYS key-name regex blind spot tool-side. | capstone #9/#11 |
-| P0.7 | **Automation** | `audit-refresh.yml`: add scheduled report-only vector+structure refresh job; fix the stale "stub" header comment; refresh decisions-digest (stale family). | staleness banners |
+| P0.7 | **Automation** | Refresh decisions-digest (stale family); fix the stale "stub" header comment in `audit-refresh.yml`. The scheduled observatory-refresh job itself moves to **D16** (#139 tracks it as a Jordan decision). | staleness banners |
 | P0.8 | **Tests** | Agonist/antagonist pair per new layer (§10); PYTHONHASHSEED determinism pins; keep the "measures, never gates" contract. | observatory discipline |
 
 *Recommended-and-deferred (explicit, not silent):* **A18 params-prose extractor** (typed engine-params generation
@@ -113,6 +126,8 @@ does not pretend to include it.
 | **D12** | **P1 foundation-periphery criterion** | Approve *investigating* it as a possible v4 methodology revision with its own justification — explicitly not tuning a run to pass. |
 | **D13** | **`handoff_rules.py` disposition** | Either de-orphan (route echoes through it — satisfies §8 one-home) or demote to reference + fold content into `scale_transitions §3`. **Recommend demote** (echo_transport is the live, tested path; smaller blast radius). Genuinely Jordan's architecture call. |
 | **D14** | **§3.3 Personal→Contest handoff body** (ED-IN-0049) | Approve authoring (small GENUINE; the one empty handoff). |
+| **D15** | *(from #139)* `settlement_layer` L/PS derivation `bucket:` tag | Rule the bucket classification so the F1 guard's coverage is unambiguous on the Mandate-feedback derivation. |
+| **D16** | *(from #139)* Observatory CI-refresh | Approve/decline the scheduled report-only vector+structure refresh job in `audit-refresh.yml` (absorbs P0.7's job half; "measures, never gates" stays true either way). |
 
 ---
 
@@ -126,6 +141,10 @@ settlement_adjacency, fractional_province_ownership) · `combat_v30` currency-dr
 vocab-debt sweeps (Coup Counter 57/13 docs — the big one; Cultural Reformation 23/9; Game Master 21/8; PP-678
 workflow) · CLAUDE.md §6 refresh (9 doc:null / 13 `[ASSUMPTION]` + the stale audit-refresh comment) ·
 `faction_politics` state-block extraction (GAP-K1) · ED-MB-0010 emit deletion (post-D8) · retirements (post-D9) ·
+**generate `references/head_pointers.yaml` + `docs/REPO_MAP.md`** from `canonical_sources.yaml` + `CURRENT.md`
+(#139's converged highest-leverage unblocked action — haiku-tier, deterministic; the pointer indirection that lets
+docs cite "the current combat head" instead of decoding version suffixes, serving NS1+NS2+NS4 and giving
+`G_generation` its first downstream consumer) ·
 pointer Category-A remainder + combat scalars (GAP-G1; gated on the ci_names_consistency mirror) · dead-citation
 triage (5 nonexistent) + 10 mechanical restructure repoints · **MS contract owner** — add the drafted
 `substrate_state`/peninsular entry emitting `env.ms_delta`, pointing at the existing PP-255 decay (GAP-F1; loud
@@ -162,7 +181,10 @@ kernel **already ships** one scale down (`sigma_leverage.py` weighted-sum → ta
   `soft_cap` as the shared saturation library (§8 reuse — import, don't copy).
 - **P5.2** Instance migration of the ~27-rule census: aggregate-up (Mandate, Accord, Treasury, National Influence,
   CI Piety-Yield, IP, Turmoil, `agg.*` wiring decision), distribute-down (Mandate→L/PS; CI≥80→PT; Turmoil→Accord
-  force; governance-type cascade stays doctrine until the Territory tier lands), decay assignments per D1's table.
+  force; governance-type cascade stays doctrine until the Territory tier lands — and per #139's NS3 verdict the
+  tier itself is **dammed behind un-started `scale_hierarchy_v1 §6` territorial propagation**, so P5.2 includes
+  authoring §6's settlement→territory→province aggregation as Field instances, co-gated on P2's engine_clock flip),
+  decay assignments per D1's table.
   **Byte-exact acceptance:** re-homing an unchanged formula must not change a single sim output (regression-pinned).
 - **P5.3** **The termination/convergence artifact.** Per-tick fixpoint and per-cascade termination are already
   proven; the cross-tick proof strategy is now available *because of* D1 and D2: the **D2 single-writer ledger-fold
@@ -197,7 +219,7 @@ doc, domain_actions home from the FA lane).
 | Dangling emits | 4 | **0** (1 deleted, 2 wired, 1 consumed; season_change classified) |
 | Zero-caller cross-scale resolvers | 3 | **0** (flag-gated wirings) |
 | `causes[]` populated instances | 0 | **≥ 1** exemplar + chain-walk test |
-| G_pointer resolution | 52.7 % | **≥ 90 % or classified** (D4 resolves the structured-state block) |
+| G_pointer — **keyed** rate (the NS2 meter per #139's Meter-1) | **21.8 %** keyed (52.7 % matched) | **every identifier keyed or explicitly classified** (declared-non-pointer / structured-state per D4 / computed-internal); keyed ≥ 60 % after Category-B registrations |
 | Contract↔code join | 3/27 | **27/27** mapped-or-explained |
 | L2 modules | 27 | **25** (retirements) |
 | Import-orphans | 87 *(pre-P0.1; inflated)* | re-derived, **fully dispositioned** |
@@ -216,8 +238,12 @@ re-homing (regression pins) · **flag flips are ratifications** (each ON-flip is
 
 This program **feeds** M1, it does not fork it: the workplan's own next action ("FA decision-surface J-5 + author
 the `domain_actions` module home") **is** this program's GAP-A1/ED-FA-0002 — the FA lane executes it inside its
-juncture; this plan just sequences around it. Phase 0 extends **WS0b**; pointer items extend **WS1**; the scales
-fix is **WS2**; gen_audit/v40 items are **WS3**. The navigator refreshes the board on next use.
+juncture; this plan just sequences around it. Phase 0 extends **WS0b** (net of #139's landed fixes); pointer items
+extend **WS1** (on the corrected keyed meter); the scales fix is **WS2**; gen_audit/v40 items are **WS3** — where
+`head_pointers.yaml` + `REPO_MAP.md` (P2) are #139's converged next action. The two unification docs are
+complementary and cross-referenced: this docket's (`unification_v1.md`, the *findings* through-line) and #139's
+(`2026-07-14-holistic-unification/`, the *program/North-Star* reconciliation whose NS1–NS5 verdicts this plan's
+phases now carry). The navigator refreshes the board on next use.
 
 ## §13 · Sizing & tiering
 
@@ -228,5 +254,6 @@ nodes (P5.3/P5.4 and this plan); everything else tiers down.
 
 ---
 
-*Disposition: this plan is ED-IN-0065 (open, needs_jordan — the D1–D14 docket). Every issue enumerated in
-ED-IN-0064 resolves through exactly one phase above or a decision row; nothing is silently dropped.*
+*Disposition: this plan is ED-IN-0066 (open, needs_jordan — the D1–D16 docket; renumbered from ED-IN-0065 at the
+PR #139 merge, see the banner). Every issue enumerated in ED-IN-0064 — plus #139's tracked items — resolves
+through exactly one phase above or a decision row; nothing is silently dropped.*
