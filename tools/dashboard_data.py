@@ -163,6 +163,146 @@ def build_needs_decision():
     }
 
 
+# ── reconciliation / drift panel ─────────────────────────────────────────────
+#
+# Deterministic aggregation of the repo's existing staleness detectors — the
+# "which maintained surface has fallen behind the work?" view. DETECTION ONLY:
+# this section never edits a surface; it reports which ones drifted and the
+# refresh route for each. That division is deliberate (the roadmap_state.yaml
+# lesson, ED-IN-0006): a derived state surface must not be auto-written by an
+# unattended job — machines detect, an agent proposes via PR, Jordan ratifies
+# on merge (ED-1094). Every probe is independently guarded so one failure
+# yields a skipped row, not a broken section (the _safe contract, one level in).
+
+CURRENT_MD = 'CURRENT.md'
+_RECONCILED_RE = re.compile(r'_Last reconciled:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})')
+
+
+def _days_since(date_str):
+    try:
+        d = datetime.strptime(date_str[:10], '%Y-%m-%d').replace(tzinfo=timezone.utc)
+        return (datetime.now(timezone.utc) - d).days
+    except Exception:
+        return None
+
+
+def _drift_workplan_board():
+    import workplan_status as wps
+    warn = wps.staleness()
+    as_of = (wps._load() or {}).get('as_of') or {}
+    return [{
+        "surface": "Workplan progress board",
+        "category": "workplan",
+        "ref": f"as_of {as_of.get('sha', '?')} ({as_of.get('date', '?')})",
+        "stale": bool(warn),
+        "detail": warn or "current — no workplan-relevant file changed since the last refresh",
+        "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check",
+    }]
+
+
+def _drift_audit_families():
+    import audit_staleness as ast_
+    rows = []
+    for st in (ast_.report() or []):
+        drift = st.get('drift')
+        rows.append({
+            "surface": f"Audit family: {st.get('name', '?')}",
+            "category": "audit-family",
+            "ref": f"base {st.get('base_sha', '?')} ({st.get('base_date', '?')})",
+            "stale": bool(drift),
+            "detail": (f"{drift} in-scope file(s) changed since last refresh"
+                       if drift else "current"),
+            "refresh": "the family's owning regenerator · tools/audit_staleness.py --full",
+        })
+    return rows
+
+
+def _drift_audit_registry():
+    import ci_audit_registry_check as arc
+    registry = arc._registry_entries()
+    known = {r.get('folder') for r in registry if r.get('folder')}
+    max_date = max((r.get('date', '') for r in registry), default='')
+    if not max_date:
+        return []
+    unregistered = [f for d, f in arc._audit_dir_entries()
+                    if d > max_date and f not in known]
+    names = ", ".join(os.path.basename(f.rstrip('/')) for f in unregistered[:4])
+    detail = (f"{len(unregistered)} audit folder(s) newer than the registry with no record"
+              + (f": {names}" + (" …" if len(unregistered) > 4 else "") if names else "")
+              ) if unregistered else "current — every recent audit folder has a registry record"
+    return [{
+        "surface": "Audit registry ↔ designs/audit/ folders",
+        "category": "registry",
+        "ref": f"latest registered {max_date}",
+        "stale": bool(unregistered),
+        "detail": detail,
+        "refresh": "the owning audit skill's registry-append step · tools/ci_audit_registry_check.py",
+    }]
+
+
+def _drift_current_index(threshold_days=7):
+    if not os.path.exists(CURRENT_MD):
+        return []
+    with open(CURRENT_MD, encoding='utf-8', errors='replace') as f:
+        m = _RECONCILED_RE.search(f.read())
+    if not m:
+        return []
+    date = m.group(1)
+    days = _days_since(date)
+    stale = days is not None and days > threshold_days
+    detail = (f"last hand-reconciled {days} day(s) ago" if days is not None
+              else f"last reconciled {date}") + (" — past the weekly reconcile cadence" if stale else "")
+    return [{
+        "surface": "CURRENT.md canonical index",
+        "category": "index",
+        "ref": f"last reconciled {date}",
+        "stale": bool(stale),
+        "detail": detail,
+        "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written",
+    }]
+
+
+def _handoff_last_updated():
+    # Informational (deliberately NOT counted as drift): a lane not being touched
+    # is a cold lane, not a rotted derived surface. Surfaced so the panel shows
+    # which continuity notes are going stale alongside the genuine drift rows.
+    out = []
+    for path in _handoff_files():
+        r = subprocess.run(['git', 'log', '-1', '--date=short', '--format=%ad', '--', path],
+                           capture_output=True, text=True)
+        date = r.stdout.strip() if r.returncode == 0 else ''
+        out.append({
+            "surface": os.path.basename(path),
+            "last_updated": date or "unknown",
+            "days_ago": _days_since(date) if date else None,
+        })
+    return out
+
+
+def build_drift():
+    surfaces = []
+    for probe in (_drift_workplan_board, _drift_audit_families,
+                  _drift_audit_registry, _drift_current_index):
+        try:
+            surfaces.extend(probe() or [])
+        except Exception as e:
+            print(f"WARN dashboard_data: drift probe {probe.__name__} failed: {e}", file=sys.stderr)
+    try:
+        handoffs = _handoff_last_updated()
+    except Exception:
+        handoffs = []
+    return {
+        "available": True,
+        "surfaces": surfaces,
+        "stale_count": sum(1 for s in surfaces if s.get('stale')),
+        "total": len(surfaces),
+        "handoffs": handoffs,
+        # Detection only — this panel never edits a surface; every refresh route
+        # is a human/skill/PR action so the merge-ratifies gate stays in the loop.
+        "note": "detection only — surfaces are refreshed by their owning skill/PR, never by this job",
+    }
+
+
 # ── balance/victory data (real numbers, not just a verdict chip) ───────────
 #
 # Research finding (2026-07-11): there is no consistent convention for where
@@ -424,6 +564,7 @@ def build_all():
         "activity": _safe('activity', build_activity),
         "currency": _safe('currency', build_currency),
         "needs_decision": _safe('needs_decision', build_needs_decision),
+        "drift": _safe('drift', build_drift),
         "balance": _safe('balance', build_balance),
         "registers": _safe('registers', build_registers),
         "github": _safe('github', build_github),

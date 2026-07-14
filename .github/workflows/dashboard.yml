@@ -13,6 +13,7 @@ on:
       - 'references/audit_registry.jsonl'
       - 'handoffs/**'
       - 'HANDOFF.md'
+      - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
       - 'docs/dashboard/**'
       - 'tools/dashboard_data.py'
       - '.github/workflows/dashboard.yml'
