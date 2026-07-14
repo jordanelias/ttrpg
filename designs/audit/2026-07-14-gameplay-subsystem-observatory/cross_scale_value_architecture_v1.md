@@ -1,225 +1,299 @@
-# Cross-Scale Value Architecture — Three Axes (v1)
+# Cross-Scale Value Architecture — Three Axes (v1, hardened 2026-07-14)
 
-## Status: FILED — 2026-07-14 · ED-IN-0064 · companion to `subsystem_synthesis_v1.md` + `directional_coverage_v1.md`
+## Status: FILED — 2026-07-14 · ED-IN-0064 · **hardened after a four-agent adversarial + intensification pass**
 
-> A re-cut of the observatory findings along three architectural axes Jordan named: **(1)** the executable object
-> stack (wrappers · engines · modules · adapters); **(2)** the Key/data plane (keys · schema · I/O location) and
-> **(2.a)** transport of values across scales / propagation between subsystems; **(3)** aggregation/differentiation
-> and escalation/de-escalation of value *weights* across scales — i.e. **how the system manages the context of
-> content** as it moves between scales. Grounded in the same working-tree run; **leads, not verdicts** (L0 gate
-> FAILED 1/3); **all fixes HELD-BACK (ED-1094)**. These three axes are three *planes* of the same architecture —
-> objects, data, and semantics — and each has a distinct debt profile.
+> A re-cut of the observatory findings along three axes Jordan named: **(1)** the executable object stack
+> (wrappers · engines · modules · adapters); **(2)** the Key/data plane (keys · schema · I/O location) and **(2.a)**
+> transport of values across scales / propagation between subsystems; **(3)** aggregation/differentiation and
+> escalation/de-escalation of value *weights* across scales — how the system **manages the context of content**.
+> Grounded in the working-tree run; **leads, not verdicts** (L0 gate FAILED 1/3); **all fixes HELD-BACK (ED-1094)**.
+> Every `code:`/`doc:` claim below was code-verified in the hardening pass (file:line cited).
+
+---
+
+## Correction log — Phase 2 (four independent read-only agents: three refute-by-default skeptics + one intensifier)
+
+The first draft of this doc was a single synthesis pass written from accumulated context, without independent
+verification. A four-agent pass (opus, read-only) refuted, confirmed, or deepened each claim. **Where this log
+conflicts with anything below, this log wins.** What was wrong, and what changed:
+
+- **[BIGGEST ERROR — fixed] "Collision of stresses" misattribution.** The prior draft called collision-of-stresses a
+  regime of `holonic_container_doctrine`/`propagation_spec` — the phrase is in **neither** (grep-confirmed); it comes
+  from `designs/audit/2026-07-13-cross-scale-governance-grounding/governance_grounding_v1.md` (Cut D). It also
+  propped the "un-unified aggregation" claim on **GAP-E1**, which is about **MS distance-falloff + Calamity radiation +
+  Peninsular Strain + Π homeostat** — *not* the Accord/Mandate/Treasury formulas. **Fix:** collision-of-stresses is
+  now a correctly-attributed co-equal *second* regime (Axis 3 §C), and GAP-E1's "un-unified" verdict is applied to
+  its real target (the four radiation systems), not to the nested-aggregation formulas.
+- **[SUPERSEDED CANON — fixed] ΔLegitimacy "accelerator, no brake."** Leaned on `faction_behavior_v30 §3.5`, which
+  carries a `[SUPERSEDED-BY LPS-1 (settlement_layer §1.8), 2026-05-30]` banner. And "no brake / ratchet to saturation"
+  is false: the same formula has a `−λ_violation·score` term + a §3.5.2 violation-erosion subsection, and the *live*
+  Mandate↔L/PS loop is Stage-4-sim-verified **mean-reverting, bounded 0–7, convergent over 30 seasons, "no runaway"**
+  (`settlement_layer_v30 §1.8`). **Fix:** the real gap is narrowed to *no time-based/entropic decay term* (`decay()`
+  deferred), and GAP-E3 notes an E11 suspicion-decay counter already exists in code.
+- **[FABRICATION — removed] "~60% built / 40% deferred."** No source; an unsourced number dressed as a measurement.
+  Deleted.
+- **[WRONG FIELD — fixed] Axis 2 "scale_signature/permanence/time_horizon are default-valued/sparse."** All three are
+  **~100% populated at the type level** (50/50/50 across 49 types). The genuinely-sparse field is the *per-instance*
+  `targets[]` (0 occurrences in the registry; populated in exactly one live emitter, `echo_transport.py:146`). **Fix:**
+  the §12.3 authoring debt is now correctly named as `targets[]`, not the type-level trio.
+- **[MISMAPPING — fixed] "The 6 resolver-families are the wrappers."** The sim's own `contest/wrapper.py:4` says *"the
+  wrapper ADAPTS + ROUTES; it RESOLVES NOTHING"* — so in the reference, **wrapper ≡ adapter/router**, not the
+  resolver-family. **Fix:** Axis 1 now distinguishes the YAML `resolver:` *type-tags* from the code's wrapper=adapter
+  objects, and notes ≥3 literal `wrapper.py` files (contest, combat_engine_v1, mass_battle).
+- **[OVERREACH — fixed] "Cut-vertices are adapters/dispatchers, not engines."** ~6 of the 14 code cut-vertices are
+  subsystem engines (`faction_action`, `parliamentary_vote`, `excommunication`, `infrastructure`, `ms_track`,
+  `season`); I even mislabeled `faction_action` as an adapter while treating it as an engine elsewhere. **Fix:**
+  reframed to "plumbing is a slight majority; engines are ~40%."
+- **[OVERREACH — fixed] "Three homes don't cross-check" / "Combat Pool three ways" / "escalated by size."** (a) A
+  partial cross-check *exists* (`ci_quantity_vocabulary_check` A17 + `quantity_registry.resolve()` + the resolved
+  `tools/registry.py` facade, ED-IN-0057/0058) — the 52.7% figure itself rides on it. (b) Combat Pool is **one stale +
+  two agreeing** (`max(5, History+6)`), not three divergent; my `PP-247` tag is itself superseded by ED-901. (c) The
+  boundary transform is **quantize-and-throttle**, not weight-escalation (Axis 3 §B).
+- **[MAJOR OMISSIONS — added]** the `engine/sigma_leverage_engine_armature.md` defined engine abstraction (Axis 1);
+  the shipped **σ-leverage saturation kernel** (Axis 3 §A); the **`Field`/`Gauge` PROPOSED primitive** that already is
+  the "future" recommendation (Axis 3 §E); the **quantize-and-throttle escalation math** (§B); **faction→national
+  ruled non-nested** + **Territory tier doctrine-only** (§A); the **~27-rule value-transformation census** (§A);
+  `tools/registry.py` + `meta.legacy_event` (Axis 2).
+- **[CONFIRMED — held up]** the three aggregation formulas (verbatim), Sufficient Scope's priority order + 1/scene cap
+  (verbatim, `scale_transitions §3.4/§5.1`), the transport spot-checks (`causes[]` nowhere; `compute_accord_echo` /
+  `propose_transfer` zero callers; `ECHO_TRANSPORT` default ON), the two-hub in-13/in-12 `[ASSUMPTION]` finding, the
+  F1 guard, the convergence-unproven analysis (bounded-oscillation, D.6 double-count), the 3/27 contract↔code black
+  hole, and — correctly — *excluding* `agg.body/mind/social` from cross-scale (they are within-actor).
 
 ---
 
 ## Axis 1 · Wrappers · Engines · Modules · Adapters — the executable object stack
 
-**The intended stack.** Valoria's code is meant to layer as
-**Adapter → Engine → Module → Wrapper(resolver-family) → dice/accounting primitive**:
+**The intended stack** is **Adapter → Engine → Module → resolver-family → dice/accounting primitive** — but the
+observatory shows the *object identity* of that stack is only partly real, and the code's own vocabulary differs from
+the four-layer taxonomy.
 
-- **Engine** — the per-subsystem resolver object. The canonical form is `personal_combat`'s `CombatEngine`, which
-  `extends BaseEngine`. `references/module_contracts.yaml` treats each of its 27 modules as the **conversion unit** —
-  one engine or service per entry.
-- **Module** — a sub-resolver *inside* an engine. Realized in exactly one place: `personal_combat` hosts an
-  11-EngineModule sub-list (`strike`/`wound` ported, `armour_defeat` folded, 8 pending). The other 26 contracts are
-  **flat** — no engine→module decomposition.
-- **Wrapper** — the resolver-family that adapts a subsystem's inputs into a resolution call: `d_sigma` (continuous
-  d+σ), `dice_pool` (v30 pool), `deterministic_accounting`, `state_reader`, `manifest`, `clock_advance`. Social
-  contest has this literally — `sim/personal/contest/wrapper.py` wraps its four contest games (with the Consensus
-  game a `NotImplementedError` STUB).
-- **Adapter** — the boundary layer. `tools/sim_harness/adapters` (an import cut-vertex, **out-17**) adapts the sim
-  reference to the campaign/test harness; the Godot data-manifest adapters (`engine_manifest.gd`,
-  `key_type_resource.gd`) mirror `module_contracts.yaml` into Godot resources.
+- **Engine.** The contract-formalized engine→module decomposition exists for **1 of 27** modules — only
+  `personal_combat` carries a `modules:` sub-list (`module_contracts.yaml:844`, 11 EngineModules: strike/wound
+  PORTED, armour_defeat FOLDED, 8 PENDING). *But at the code layer the decomposition is broader:* `social_contest`
+  (`sim/personal/contest/`, a 9-file package with a `GAMES` router + `MECHANICS` registry) and `mass_battle`
+  (`sim/provincial/massbattle.py` `resolve_*`) have genuine engine-internal structure — just not expressed as contract
+  `modules:`. So "1 of 27" is a *contract-formalization* count, not a claim that only combat has internal modules.
+- **The Godot spine is undefined** — zero `class_name BaseEngine|EngineModule|KeyBus|GameState|Resolver` in any
+  `.gd`; the skeleton `extends BaseEngine`/`EngineModule` against nothing, so it cannot compile. (Honest scope: a
+  Python `GameState` exists in *test scaffolds* — `tests/sim_framework/state.py` — but `sim/autoload/game_state.py`
+  defines `Faction`/`Territory`/`World`, not a `GameState` class, and none is the Godot spine.)
+- **There IS a defined engine abstraction the first draft missed:** `engine/sigma_leverage_engine_armature.md` — a
+  committed, **system-agnostic "portable resolution engine"** with an explicit **ENGINE-vs-APPLICATION portability
+  boundary** and a method for porting the d+σ resolver to "any Valoria dice-resolved system." It is *prose*, self-marked
+  **Class B (draft sim-seed, not canonical)** — but it is the nearest thing in the corpus to a defined engine spine, and
+  it is exactly where the resolver-family plugs into an engine. The Godot `BaseEngine` is undefined; this armature is not.
+- **Wrapper = Adapter, in the reference.** The code's own wrapper concept (`sim/personal/contest/wrapper.py:4`) says
+  *"the wrapper ADAPTS + ROUTES; it RESOLVES NOTHING."* So Jordan's *Wrapper* and *Adapter* layers are, in the sim, the
+  **same object** — a router, not the resolver. There are **≥3 literal `wrapper.py`** (contest, `combat_engine_v1/`,
+  and `mass_battle`'s `engine.py` which contest "mirrors"). The six **resolver-families** (`d_sigma`, `dice_pool`,
+  `deterministic_accounting`, `state_reader`, `manifest`, `clock_advance`) are the YAML `resolver:` *type-tags* on the
+  27 contracts — category labels, not wrapper objects.
+- **Adapters are the healthiest-defined layer** — `tools/sim_harness/adapters` (a cut-vertex, out-17) bridges the sim
+  reference to the campaign/test harness; the Godot `engine_manifest.gd`/`key_type_resource.gd` mirror
+  `module_contracts.yaml`. But these are *harness/data* adapters; the runtime *KeyBus* adapter is the undefined spine.
 
-**What the observatory found about this stack.**
-
-1. **The stack is realized for 1 of 27.** Only `personal_combat` instantiates engine→module. The **spine that would
-   make the pattern real everywhere** — `BaseEngine`, `EngineModule`, `KeyBus`, `GameState`, `Resolver` — is
-   **defined nowhere in the corpus** (grep-confirmed: zero `class_name` matches). So outside the combat slice, the
-   wrapper→engine→module→adapter stack is a *design intent*, not a built layer; the Godot skeleton cannot compile.
-2. **Import cycles mark where object boundaries are muddy.** G_code found 3 cycles: the **9-module `sim.personal.contest`
-   SCC** (an engine whose internals — appraise/armature/dictionaries/faction/modes/resolver/rhetoric/wrapper — are
-   mutually coupled rather than layered), `massbattle↔units`, and `game_state↔npe`. A clean engine/module layering
-   would be a DAG; these SCCs are the object-boundary debt.
-3. **Cut-vertices are the load-bearing joints — and they are adapters/dispatchers, not engines.** The 14 code
-   cut-vertices are led by `game_state`, `sim_harness.adapters`, `faction_action`, `echo_transport`, `scene_dispatch`.
-   The system's single-points-of-failure are the **transport/adapter layer**, not the subsystem engines — which is
-   architecturally telling: the engines are replaceable, the plumbing is not.
-4. **Contract↔code identity is a BLACK HOLE.** Nothing joins the 27 contract "engines" to G_code's 173 code
-   modules; a plain name-match resolves only **3/27** (the code spells `mass_battle` as `massbattle`, folds
-   `faction_state` into `faction_action.py`). So the object layer's *identity* — which code module *is* which
-   contract engine — is unverified. A fabricated engine entry would pass unchallenged.
-
-**Solution direction (HELD-BACK).** The missing map is `canon/mechanics_index.yaml`'s `sim_module:` field — a
-contract-engine ↔ code-module join that would close the black hole (GAP-I4). The missing *layer* is the Gate-0 spine
-(`BaseEngine`/`EngineModule`/`KeyBus`) from `godot_conversion_strategy_v1.md` — authoring it is what promotes
-"engine hosts modules, adapter bridges to runtime" from combat-only to universal. Until both exist, the stack is
-real for combat and aspirational elsewhere.
+**What the object graph reveals.** The 14 code **cut-vertices** are **~8 transport/adapter + ~6 subsystem engines**
+(`faction_action` in1/out9, `parliamentary_vote`, `excommunication`, `infrastructure`, `ms_track`, `season`): plumbing
+is a slight majority, but engines are ~40% — so "single points of failure are the plumbing" is a *tendency*, not a
+clean rule. Three **import cycles** mark muddy boundaries (the 9-module contest SCC; `massbattle↔units`;
+`game_state↔npe`). And **contract↔code identity is a black hole** — a name-match resolves only **3/27**
+(`scene_slate`, `victory`, `miraculous_event`); even `personal_combat`, the one fully-decomposed engine, is *unmatched*
+(`massbattle`≠`mass_battle`, `faction_state` folded into `faction_action.py`). A fabricated engine entry would pass
+unchallenged. **Fix (HELD-BACK):** the `mechanics_index.yaml sim_module:` join closes the identity black hole; the
+Gate-0 spine makes the engine→module→adapter stack real beyond combat — and the `engine/` armature is the design seed
+for that spine.
 
 ---
 
 ## Axis 2 · Keys · Schema · Location of Inputs and Outputs — the data plane
 
-**The substrate.** All cross-object communication is Keys — "no system maintains a private event channel; every
-system emits and consumes Keys" (`key_substrate §1`). One **single update rule** (§4.1): emit → validate (registry +
-invariants + `causes[]` DAG) → append to the immutable `KEY_LOG` → **resolve observers** (§4.2 `compute_observers`) →
-apply `stat_deltas` to each. 49 Key types in `key_type_registry_v30.md`.
+**One substrate.** All communication is Keys through the single update rule (`key_substrate §4.1`): emit → validate
+(registry + invariants + `causes[]` DAG) → append to the immutable `KEY_LOG` → resolve observers (`§4.2
+compute_observers`) → apply `stat_deltas`. 49 Key types.
 
-**The schema — and where I/O actually lives.** A Key type's schema fields: `type_id`, `emitting_systems`,
-`consuming_systems`, `default_scale_signature`, `default_permanence`, `default_time_horizon`. A module's schema:
-`consumes:[{type, from}]`, `emits:[{type, terminal}]`, `state:[{name, bucket, writable}]`, `derivations`, `gates`.
-The load-bearing observation is that **a single value's I/O is dispersed across three homes that don't cross-check**:
+**Where a value's I/O lives — three homes, only *partially* cross-checked.** *Who emits/consumes* lives in
+`key_type_registry_v30.md` (`emitting_systems`/`consuming_systems`); *owned state* in `module_contracts.state[]`
+(track / clock / pool / **derived_value**, the last read-only under the **F1 guard** — a formal canon rule,
+`propagation_spec §42/147`, that no aggregate is ever written directly); *how it's computed* in **untyped `params/`
+prose**. These are cross-checked *in part* — `ci_quantity_vocabulary_check` (A17) + `quantity_registry.resolve()` +
+the resolved `tools/registry.py` facade (ED-IN-0057/0058) reconcile the *vocabulary* of homes #1–#2, and the doc's own
+**52.7% pointer-resolution** figure is produced by exactly that check. The strictly-true residue: **no tool verifies
+I/O *consistency* across all three homes, and home #3 (params prose) is outside any check** (A18 unbuilt). So the
+dispersion is real but narrower than "don't cross-check."
 
-| Facet | Lives in | Consequence |
-|---|---|---|
-| **who emits / consumes** a type | `key_type_registry` (`emitting_systems`/`consuming_systems`) | the transport addressing |
-| **a module's owned state** | `module_contracts.state[]` (track / clock / pool / **derived_value**) | the F1 guard: `derived_value` is read-only, never written directly |
-| **how a value is computed** | `params/*.md` prose tables (untyped) | the pointer-debt gap — 47% of identifiers don't resolve |
+**What the observatory found.**
+1. **The schema is IN FLUX** (`descriptor_registry.yaml:12`; aggregates `placeholder`). The oft-cited "Combat Pool
+   three ways" is really **one stale + two agreeing**: the struck `(Agility×2)+History+3` (pre-ED-901, self-flagged) vs
+   the canonical `max(5, History+6)` in both `params/core.md:161` and `module_contracts.yaml:858` — a currency problem,
+   not three-way divergence.
+2. **Holes are output-side, not input-side.** 0 phantom producers (every `consumes` names a real emitter) but **4
+   dangling emits** — `scene_outcome.battle_concluded` (fabricated type, ED-MB-0010), `env.crisis`, `scene.combat_felled`,
+   `scene.combat_resolved` — with `env.crisis` being one of those 4 (not a 5th), reaching no concrete consumer.
+3. **Pointer-debt is a *location* problem** (52.7% resolve). The unresolved cluster is the values whose *home is
+   undecided*: `victory`'s era reads, combat's Wounds/Poise/Initiative, and — the hard case — `npc_behavior`'s
+   non-scalar `beliefs/opinions/arc-state` (a Jordan design ruling, GAP-G2).
+4. **The direction-carrying discipline is the per-instance `targets[]`, not the type-level tags.**
+   `default_scale_signature`/`default_permanence`/`default_time_horizon` are ~100% populated per type (50/50/50);
+   `targets[]` occurs **0 times** in the registry and is populated in **one** live emitter (`echo_transport.py:146`).
+   Populating `targets[]` **is** the §12.3 debt (Axis 2.a). Note `permanence` (transient/persistent/**indelible**) is
+   itself relevant to Axis 3 — an `indelible` Key by definition never decays.
+5. **Two misses the first draft's production-side census can't see:** `tools/registry.py` (a *resolved* 2026-07-13
+   vocabulary-unification facade — directly undercuts the "not-built" framing) and `meta.legacy_event` (a registered
+   type **never emitted** — a Phase-B migration scaffold, retired; the census only audits `module_contracts` I/O, not
+   the registry's 49 types for emitter reality).
 
-**What the observatory found about the data plane.**
+### Axis 2.a · Transport across scales · propagation between subsystems
 
-1. **The schema itself is IN FLUX.** `descriptor_registry.yaml` marks the 9-attribute roster IN FLUX, aggregates as
-   `placeholder`/not-wired; **Combat Pool is defined three different ways** across `values_master`, `params/core.md`,
-   and `module_contracts`. There is no typed engine-params file — every value crossing into Godot is hand-transcribed
-   prose. So the schema's *canonical form* is unsettled, which is upstream of most pointer-debt.
-2. **The holes are output-side, not input-side.** **0 phantom producers** (every `consumes` names a real emitter —
-   the input graph is closed) but **4 dangling emits** (outputs consumed nowhere) + `env.crisis` reaching no concrete
-   consumer. So inputs are well-addressed; **outputs leak**.
-3. **One schema violation is a fabricated `type_id`.** `mass_battle`'s `scene_outcome.battle_concluded` uses a
-   *family name* as a type prefix — a schema-discipline breach (ED-MB-0010; canon writes `scene.battle_concluded`).
-4. **Pointer-debt is fundamentally a *location* problem.** 52.7% of identifiers resolve to a registry key. The
-   unresolved cluster isn't random — it's the values whose *home is undecided*: `victory`'s era reads
-   (MS/Accord/PV/PT), combat's Wounds/Poise/Initiative, and — the hard case — `npc_behavior`'s
-   `beliefs/opinions/arc-state`, which are **non-scalar structured state** the scalar registry can't place at all
-   (GAP-G2, a design ruling). The schema can't yet say *where these live*.
-5. **The direction-carrying fields are the sparsely-populated ones.** `scale_signature`, `permanence`, `time_horizon`
-   are the schema fields that encode *how far and how long a value reaches* — and they're default-valued. Populating
-   them **is** the §12.3 discipline (Axis 2.a). The schema has the slots for context; they're mostly empty.
-
-**Solution direction (HELD-BACK).** A typed engine-params file (numeric operands, structured formulas, explicit
-clamps) generated from the prose and round-trip-checked (CLAUDE.md §5's recommended-not-built) would move
-computation out of prose into the schema. Registering the placeable pointers is CTC; deciding where non-scalar state
-lives is a Jordan ruling. Closing the 4 output leaks is CTC (wire declared consumers).
-
-### Axis 2.a · Transport of values across scales · propagation between subsystems
-
-**One substrate, all directions — transport correctness = authoring discipline.** Direction is not a routing table;
-it is an **emergent property** of a Key's `targets[]`, `scale_signature`, and `causes[]` (`scale_transitions §12.1`).
-This is the architecture's most elegant decision and its biggest liability at once: because there is no per-direction
-channel to be "missing," transport correctness collapses onto whether emitters *populate the addressing fields*. The
-directional audit (`directional_coverage_v1.md`) graded the seven directions:
-
-| Transport state | Directions | Meaning |
-|---|---|---|
-| **LIVE end-to-end** | lateral · bottom-up Domain-Echo core (`ECHO_TRANSPORT` default ON) | the value reaches its observer, verified |
-| **ANNOTATION-DEBT** | top-down · down-diagonal (the 8 §12.4 `!A6` seams) | mechanism runs elsewhere; this emitter's sub-scale `targets[]` is blank → delivers *blind* |
-| **DEAD** | diagonal (`causes[]` populated **nowhere** — zero instances); Accord-echo + territory-transfer (built resolvers, **zero callers**); handoff dispatcher (orphaned) | the value cannot cross this way at all today |
-| **DEFERRED** | temporal (`decay()` unshipped) | values transport across *space* but not across *time* |
-
-**Propagation between subsystems** has a distinct shape from transport-across-scales: the module-pair graph is a
-**wide producer front → two integration hubs → thin reader tier**. `faction_state` (in-13) and `npc_behavior`
-(in-12) absorb nearly every subsystem's output — and both are L2 cut-vertices *and* both run an unverified
-`[ASSUMPTION]` resolver. So the propagation topology's two bottlenecks are also its two least-grounded nodes: **the
-places the most value flows through are the places the resolution is least certain.** That is the highest-leverage
-grounding target in the whole system.
-
-**Solution direction (HELD-BACK).** Transport: the debt is authoring — populate `targets[]`/`scale_signature` for
-the 8 seams (CTC), author the *first* `causes[]` diagonal exemplar (the one genuine build, GAP-DIR-1), wire the two
-uncalled resolvers (CTC). Propagation: ground the two `[ASSUMPTION]` hubs before anything else — every downstream
-value passes through them.
+**Because direction is emergent** (a Key's `targets[]`/`scale_signature`/`causes[]`, `scale_transitions §12.1`),
+transport correctness collapses onto authoring discipline. Of seven directions (verified this pass): **2 live**
+(lateral + bottom-up Domain-Echo core, `ECHO_TRANSPORT` default ON, `mc_v18.py:47`), **2 annotation-debt** (the 8
+`!A6` down-seams — sparse `targets[]`), **3 dead** (diagonal `causes[]` populated **nowhere** in `sim/`;
+`compute_accord_echo` + `propose_transfer` **zero callers**; handoff dispatcher orphaned), **1 deferred** (`decay()`).
+**Propagation between subsystems** is a wide producer front → **two hubs (`faction_state` in-13, `npc_behavior` in-12)**
+→ thin reader tier, and both hubs are `[ASSUMPTION]`-resolver: **the highest-value flow passes through the
+least-certain resolution.** Ground the two hubs first.
 
 ---
 
 ## Axis 3 · Aggregation / Differentiation · Weight Escalation / De-escalation across scales — managing the context of content
 
-This is the deepest axis: not *whether* a value moves, but *how it changes* — and by how much it should *count* — as
-it crosses a scale. Valoria has two first-class propagation regimes (`holonic_container_doctrine_v1`,
-`propagation_spec_v1`): **nested aggregation** (personal→settlement→territory→province→national) and **collision of
-stresses** (an exogenous shock acting up and down at once). The observatory surfaced a **sophisticated but
-un-unified** value-transformation layer.
+This is the deepest axis, and the hardening pass changed the picture substantially. There are **two regimes** (not
+one), the "escalation" is really **compression**, the un-unified surface is **~27 rules** (not three), and the unified
+primitive the first draft "reserved for the future" **already exists as a proposed schema**.
 
-**Aggregate-up (many sub-values → one super-value) — three different disciplines coexist, unreconciled.** From the
-live derivations (`module_map_flat §4.4`, verified):
+### §A · Nested aggregation — three cross-scale rollups, and the rigorous "un-unified" census
 
-| Up-map | Formula | Discipline | What it costs |
+The live nested-aggregation rollups (verified verbatim, `settlement_layer_v30 §1.3/§1.8`, `derived_stats §8.1`):
+
+| Up-map | Formula | Rung | Discipline |
 |---|---|---|---|
-| Order → province **Accord** | `floor(mean settlement Order)` | **mean** | loses the distribution — masks peripheral collapse (the D4 finding) |
-| L/PS → faction **Mandate** | `q_s=0.5L+0.5PS; T=Σ W_s·(q_s/7); Mandate=round(7T/(T+6))` | **weighted + saturating** | the sophisticated one — see below |
-| Prosperity → **Treasury** | `Σ Prosperity × 10` | **flat sum** | no weight, no saturation — unbounded linear |
+| Order → province **Accord** | `floor(mean settlement Order)` | settlement → **province** | floor-mean (loses distribution) |
+| L/PS → faction **Mandate** | `q_s=0.5L+0.5PS; T=Σ W_s·(q_s/7); Mandate=clamp(round(7T/(T+6)),0,7)` | settlement → **faction** | weighted + **saturating** |
+| Prosperity → **Treasury** | `Σ settlement Prosperity × 10` | settlement → **faction** | flat sum |
 
-The Mandate aggregation is the model to generalize: **`W_s = base(Type)+Prosperity+FacilityTier` is literally the
-"escalation of value weight across scales"** — a bigger/richer/more-built settlement's contribution is *escalated* by
-its size before it aggregates, and `7T/(T+6)` **saturates** (diminishing returns as total weight grows). That is
-exactly the "manage how much content counts" control Jordan is asking about — realized for Mandate, absent for Accord
-(unweighted mean) and Treasury (unweighted sum). **Three aggregation disciplines, one subsystem apart, with no
-shared primitive** (governance GAP-E1, "collision primitive not unified").
+Two corrections to the first draft's framing: (a) canon groups these **2 + 1** — `settlement_layer §1.8` explicitly
+unifies **Mandate and Treasury** as the settlement→*faction* rollup, with **Accord** as the settlement→*province*
+rollup; "three disciplines one subsystem apart" flattened that tier line. (b) The Mandate `clamp(...,0,7)` (K=6) is
+canonical (dropped in the first draft — numerically redundant but incomplete). `W_s = base(Type)+Prosperity+FacilityTier`
+is a real **weight-escalation** term — a bigger/richer/more-built settlement's acceptance "counts for more" before it
+aggregates (`§1.8:158,162`) — *within* the settlement→faction rollup.
 
-**Distribute-down (one super-value → many sub-values) — one live path, rate-limited.** Mandate → L/PS:
-`drift ±1/settlement/season toward Mandate (damped, mean-reverting; Stage-4 bounded 30 seasons)`. This is
-**differentiation by damped mean-reversion** — each settlement's L/PS is pulled toward the faction value, but slowly,
-so the down-distribution can't whiplash. It is the *only* live down-differentiation; the governance-type top-down
-cascade is doctrine-only. So the system distributes *value* down (Mandate→L/PS) but not *policy/type* down.
+**Making "un-unified" rigorous.** The claim is not "three formulas differ" — it is that there is **no shared
+aggregation contract anywhere in the corpus**. The full census (consolidated from
+`.../pressure_key_registry_v1.md`) is **~11 live aggregate-up formulas across six saturation postures** — saturating
+(Mandate; and σ-leverage, below), weighted-mean (aggregate L/PS `ΣW_s·L_s/ΣW_s`; National Influence
+`clamp(round(Σ(TI·franchise)/Σfranchise),1,7)`), floor-mean (Accord), flat-sum (Treasury; `agg.body/mind/social`
+placeholder; CI Piety-Yield `Σ(PT-tier·SW)`), and threshold-count (IP `stepwise 0-1→0…6+→+3`; Turmoil `+1/Accord≤1
+territory cap+3`) — plus **4 distribute-down rules** and **2 boundary rules** (§B). Two whole rungs have **no**
+aggregation: **faction→national is ruled non-nested** ("factions hold *people*, not territory… no canonical formula,"
+`scale_hierarchy_v1 §5.1`; `pressure_key_registry_v1.md:76` DOCTRINE-ONLY), and the **Settlement→Territory→Province
+stratum is doctrine-only**, blocked on `engine_clock`. So the primitive doesn't just reconcile existing rungs — it must
+*supply* aggregation where the architecture deliberately left holes. (`agg.body/mind/social` are within-actor sums —
+correctly *excluded* from the cross-scale story, but they are a *sixth* flat-sum instance the primitive would also
+subsume.)
 
-**Escalation vs de-escalation of weights — the asymmetry is the gap.**
+### §B · Escalation is quantize-and-throttle, not weight-preservation — the concrete boundary math
 
-- **Escalation (up) is gated and prioritized — real context control.** **Sufficient Scope (§7)** is the up-escalation
-  gate: a scene value only escalates to the faction scale if it clears a scope threshold, capped at **1 Echo per
-  faction per scene**, and **priority-ordered** (Thread op → Combat victory → Settlement governance → Disposition →
-  Investigation → Faction-leader-direct → Other). This *is* "managing the context of content": Sufficient Scope
-  decides *which* scene content is significant enough to become a strategic consequence, and the priority order is
-  the weight ranking. This half exists and is thoughtful.
-- **De-escalation (down/decay) is UNSHIPPED — the asymmetry.** There is **no entropy** pulling values back down over
-  time. `decay()` is an explicit deferral (GAP-DIR-5; `key_echo_armature`: "ships WITHOUT decay… deferred to
-  Stratum B+"). Concretely, `ΔLegitimacy` event-builds with `+λ×seasons_in_role` and **no decay term** (governance
-  GAP-B4). So values **escalate but never de-escalate** — over a long campaign, legitimacy/standing/pressure ratchet
-  upward toward saturation. The weight-management system has an accelerator and no brake.
+The first draft framed up-escalation as "weighted, then gated." The **actual** magnitude transform at the scale
+boundary (`sim/cross_scale/domain_echo.py`, `echo_transport.py`) is a lossy compressor:
 
-**Managing the context of content — the four mechanisms, and where they hold.**
+1. a scene resolves to a **continuous** outcome (real-valued `net_σ`, or a contest verdict);
+2. collapsed to **one of four degree bands** (Overwhelming / Success / Partial / Failure);
+3. mapped `{Overwhelming:+2, Success:+1, Partial:0, Failure:−1}` (`domain_echo.py:30-35`);
+4. **hard-capped ±2** (`ECHO_STAT_CAP`) and **throttled to 1 echo/faction/scene** (`PP_329_...=1`).
 
-1. **`scale_signature`** — the per-Key context tag: which scales a value is "in context" for. Sparse signatures (the
-   §12.3 debt) = values delivered *without* context (blind). *Partly populated.*
-2. **`causes[]` DAG** — the provenance context: what a value descends from. **Never populated** — so no value carries
-   its causal context (the diagonal gap). *Empty.*
-3. **The significance-function / `articulation_layer`** — the repo's explicit context-*weigher*: a universal wildcard
-   reader that scores the significance of the entire Key stream for rendering/chronicle. But it **emits nothing** —
-   it is a read-only significance meter, *not* a control that feeds weight back into resolution. So context is
-   *observed* but not *acted on*. *Read-only.*
-4. **The termination artifact / convergence proof** — the deepest one. `holonic_container_doctrine §4` requires an
-   aggregate-up/distribute-down primitive *plus a convergence proof*; `propagation_spec_v1` proves only per-tick and
-   per-cascade termination, **not cross-tick convergence** (GAP-A4; the D.6 double-count risk). So the system cannot
-   yet guarantee that repeated up-then-down cycles **settle** rather than **oscillate or double-count**. Without it,
-   aggregating up and redistributing down every season may amplify rather than converge. *Unproven.*
+So a duel won by a hair and a duel won overwhelmingly both become `Success → +1`, and **no scene can move a faction
+stat by more than 2 of its 7 points, ever**. The system *deliberately de-magnifies* per-scene weight to prevent
+scene-dominance (PP-329, "prevents compounding"). The real context-management control at the boundary is
+**compression to a ~2-bit token**, and **Sufficient Scope** (§3.4 — priority order *Thread op → Combat victory →
+Settlement governance → Disposition reach → Investigation completion → Faction-leader-direct → Other*, cap 1/faction/scene;
+verified verbatim) decides *whether* the token crosses, while the degree-table sets its coarse sign+magnitude. Caveats:
+this whole path is **INERT in the live campaign** except a synthetic emergency-council contest (`scene_dispatch`
+"every scene DEFERS"), and Thread Echo (§5.6) has a *separate* significance gate — so Sufficient Scope is not literally
+the only up-gate.
 
-**Synthesis of Axis 3.** Valoria's cross-scale value semantics are richer than most strategy games attempt — a
-weighted saturating aggregation (Mandate), a damped mean-reverting distribution, and a gated/priority-ordered
-up-escalation (Sufficient Scope). But they are **un-unified and asymmetric**: three different aggregation formulas
-with no shared primitive; escalation-up without de-escalation-down (decay deferred); a significance-weigher that
-observes but doesn't feed back; and no proof that the up-down loop converges. **"Managing the context of content"
-across scales is therefore ~60% built and ~40% deferred** — the escalation and weighting half is real, the decay and
-convergence half is the reserved work.
+### §C · Collision of stresses — the co-equal SECOND regime (correctly attributed)
 
-**Solution direction (HELD-BACK).** This is precisely the artifact the doctrine reserved for top-of-stack (fable-tier)
-authorship (`holonic_container_doctrine §4` / ED-1083): **one unified aggregate-up/distribute-down primitive** that
-takes a weight function (generalizing `W_s`), a saturation curve (generalizing `7T/(T+6)`), a **decay term**
-(shipping GAP-DIR-5), and a **cross-tick convergence proof** (closing GAP-A4). Generalize the Mandate pattern into
-that primitive; make Accord and Treasury instances of it rather than bespoke formulas; give `articulation_layer`'s
-significance score a feedback path if context is meant to *weight* resolution, not just narrate it. That single
-primitive would unify Axes 2.a and 3 — transport carries the value, the primitive transforms and bounds it.
+Distinct from nested aggregation (one directed flow per boundary), **collision of stresses** is an exogenous shock
+acting **top-down AND bottom-up in the same tick**, converging on the intermediate (Territory/Province) tiers. This
+is the regime the first draft named and then dropped — and it is developed as **Cut D** of the governance docket
+(`governance_grounding_v1.md §Cut D`), *not* in `holonic`/`propagation_spec`. It is realized as **four un-unified
+radiation systems with no shared primitive — the real referent of GAP-E1:**
+
+1. **Calamity Radiation** — RS-band × node-distance matrix radiating outward from Askeheim; "southern factions face
+   existential threat before northern ones notice" (`designs/world/calamity_radiation_v30.md`). A top-down distance-falloff field.
+2. **Mending Stability (MS)** — graduated per-territory by node-distance (d1–d5), with logarithmic recovery +
+   **hysteresis** (falling 20/40/60, rising +8) + a 12-MS warning window — "the strongest template in the corpus."
+3. **Peninsular Strain / Turmoil** — bottom-up `+1/Accord≤1 territory (cap +3)` that then top-down-forces Accord down
+   at Fracture/Crisis/Collapse — itself a collision.
+4. **Settlement Pressure Π** — a homeostat `clamp(Π + …unserved-needs/grudges/shocks − releases, 0, 10)` with a
+   designed-but-unported restoring term toward Π=3.
+
+GAP-E1 flags these four as un-unified; GAP-E2 adds that a collision is **not even modeled** as requiring two
+independent signals (a famine reads as a lone settlement problem, never a material-threshold-AND-interpretive-trigger
+event). This is where the D.6 double-count and the deferred `decay()` actually *bite* — up-aggregates and down-deltas
+meeting on one node in one Accounting.
+
+### §D · De-escalation and convergence — corrected
+
+The first draft's "accelerator with no brake" was wrong on the evidence. There **is** downward force: an event-driven
+`−λ_violation·score` erosion term (though that specific formula, `faction_behavior_v30 §3.5`, is **superseded by
+LPS-1**), and the *live* Mandate↔L/PS loop is **mean-reverting, bounded 0–7, and Stage-4-sim-verified convergent over
+30 seasons with "no runaway"** (`settlement_layer_v30 §1.8`). The **real** gap is narrower and specific: **no
+time-based/entropic `decay()` term** — an explicit deferral to Stratum B+ (`key_echo_armature_v1.md:270`, OF-3) — so
+event-*builds* accumulate without a general entropy pull. GAP-E3 further notes an **E11 suspicion-decay counter
+already exists in code**, un-systematized as a general dampener. On **convergence**: `propagation_spec_v1 §4` proves
+per-tick fixpoint and per-cascade termination but **not cross-tick convergence**, and **proves magnitude is bounded**
+— so the open risk is **non-settling bounded oscillation, not amplification** (the first draft's "may amplify" was too
+strong), conditional on the D.6 double-count being resolved (`§3 D.6`, HIGH). The `holonic_container_doctrine §4`
+"termination/convergence artifact" is the reserved reasoning work.
+
+### §E · Managing context of content — the four mechanisms, and the primitive that already exists
+
+The context-management apparatus: **`scale_signature`** (type-level populated; per-instance `targets[]` sparse — the
+§12.3 debt); **`causes[]` provenance** (empty — 0 populated instances; the substrate's own "~15%" is a *simulated
+projection*, never met live); **`articulation_layer`** (a wildcard **significance-function**, `§3.2`, that reads the
+whole stream but **emits no Key that feeds resolution** — its one design-doc emit `meta.cascade_cluster_event` is
+unregistered *and* orphan, and cut-scenes/chronicle/the `awareness` field it writes are narrative rendering, not
+resolution inputs — so "context observed, not acted on" holds); and the **temporal apparatus** (`permanence`
+transient/persistent/indelible + `time_horizon` feeding salience decay — memory-context decay ships; *value* decay
+does not).
+
+**The decisive correction:** the unified primitive the first draft "reserved for fable-tier authorship" **already
+exists as a PROPOSED schema** — the **`Field`/`Gauge` primitive** (`governance_type_registry_v1.md §4`):
+```yaml
+field_id, scale_signature, range,
+aggregate_fn: <none | weighted_mean | floor_mean | sum | custom>   # generalizes W_s + 7T/(T+6)
+propagate_fn: <none | cascade_with_noise>                          # the distribute-down
+decay_fn:    <none | linear | homeostat | hysteresis | custom>     # closes OF-3; MS/Π/Turmoil are templates
+derived_flags: [...]
+```
+with a `sim/substrate/fields.py` companion to `keys.py` sketched, blocked on **one Jordan ruling** (OF-3's `decay()`).
+And the **saturation half is already shipping one scale down**: `sim/autoload/sigma_leverage.py` is a live, canonical,
+*shared* (combat + contest) **weighted-sum → `tanh` soft-cap (M_MAX=1.5) → scale-invariant** weighting kernel
+(`net_boost = eff_σ·σ_per_die·√N`, where σ and √N cancel so an advantage shifts the z-score by exactly `eff_σ` at
+*every* pool size). That is structurally the **same** weighted-saturating move as Mandate's `7T/(T+6)` — the doc's
+claim that it exists "only for Mandate" was false. **The strongest thesis:** the primitive is not blank-slate future
+work — it is a *proposed schema* + a *shipped saturation kernel trapped at the sub-resolution grain*. The work is:
+**lift σ-leverage's saturation to the cross-scale grain, populate the `Field` schema over the ~27 rules, rule OF-3's
+`decay()`, supply the collision primitive (GAP-E1/E2), and close the cross-tick convergence artifact (D.6).**
 
 ---
 
 ## The three axes as one picture
 
-- **Axis 1 (objects)** is *aspirational above the combat slice*: the engine→module→adapter stack is real for
-  `personal_combat`, undefined elsewhere (the missing spine), with the contract↔code identity unverified.
-- **Axis 2 (data)** is *closed on input, leaky on output, dispersed on location*: inputs well-addressed, outputs
-  leak, computation stranded in prose, schema in flux — and the direction-carrying fields mostly empty.
-- **Axis 3 (semantics)** is *sophisticated but un-unified and asymmetric*: good weighted-saturating aggregation and a
-  real up-escalation gate, but three un-reconciled aggregation disciplines, no de-escalation/decay, and no
-  convergence proof.
+- **Axis 1 (objects)** — the engine→module→adapter stack is contract-formalized only for combat and undefined in
+  Godot, but a *defined* engine abstraction exists in prose (`engine/` armature); in the sim, **wrapper ≡ adapter**;
+  contract↔code identity is a 3/27 black hole.
+- **Axis 2 (data)** — closed on input, leaky on output, dispersed-but-partially-cross-checked on location; the
+  direction-carrying debt is per-instance `targets[]`, and a vocabulary-unification facade (`registry.py`) already exists.
+- **Axis 3 (semantics)** — **two regimes** (nested aggregation + collision of stresses), an escalation that is really
+  **compression to a 2-bit token**, ~27 un-unified transformation rules across six postures, a real but *event-only*
+  de-escalation (time-decay deferred), an unproven-but-bounded convergence — and a **unified primitive that already
+  exists as a proposed `Field` schema plus a shipped σ-leverage saturation kernel**.
 
-The through-line across all three: **the substrate's elegance (one update rule, topology-neutral direction, one
-delivery path) pushes all correctness onto two things — authoring discipline (populate `targets[]`/`scale_signature`/
-`causes[]`) and one value-transformation primitive (unify aggregation/differentiation + weight + decay + convergence).**
-Those two are the debt. Everything else the observatory flagged — pointer-debt, dangling emits, the seams, the
-uncalled resolvers, the two `[ASSUMPTION]` hubs — is a symptom that resolves once those two are addressed.
+The through-line, now sharper: the substrate's topology-neutral elegance pushes all correctness onto **authoring
+discipline** (`targets[]`/`causes[]`) and **one value-transformation primitive** — and that primitive is *further
+along than the first draft claimed*: proposed as a schema, half-shipped as a kernel, blocked on a single `decay()`
+ruling and the convergence proof. Everything else the observatory flagged is a symptom that resolves once those land.
