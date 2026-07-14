@@ -501,25 +501,38 @@ def run(root, out):
     L.append('')
 
     def section(title, rows, fmt, empty='(none)'):
+        # Disclose truncation with a "… N more" line, matching formula_audit.py /
+        # gen_audit.py's helpers. The Fable-5 2026-07-14 audit caught this helper silently
+        # dropping rows (87 import-orphans, only 20 shown) with no in-section signal —
+        # the observatory's own "never a silent cap" rule, violated in the observatory.
         L.append(f'## {title}')
         L.append(empty if not rows else '')
         for r in rows[:20]:
             L.append('- ' + fmt(r))
+        if len(rows) > 20:
+            L.append(f'- … {len(rows) - 20} more (see `data/structure_metrics.json`)')
         L.append('')
 
     L.append('## L2 Key-closure — relationship to the module-adjudicator (§8 disclosure)')
     L.append('')
-    L.append('The two closure findings below (phantom-producer, dangling-emit) cover the same '
-             'ground as `valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan '
-             'emission** — NOT a second implementation of them (§8 "every rule lives once"). The '
-             'adjudicator is the **authoritative per-module gate**: it runs A1–A12 against the Key '
-             'registry with wildcard-family inhabitance and emits the CLOSED/OPEN verdict. This '
-             'layer instead computes closure **corpus-wide as a measure** (a producer/consumer index '
-             'over all 27 contracts at once) to surface the graph-level pattern — a consume whose '
-             'named source emits nothing, a non-terminal emit with zero consumers anywhere. It '
-             '**measures; it does not gate** (the observatory never gates — pytest + the adjudicator '
-             'do). Where the two disagree, the adjudicator’s registry-aware verdict wins; a row here '
-             'is a pointer to inspect, not a ruling.')
+    L.append('The two closure findings below (phantom-producer, dangling-emit) overlap '
+             '`valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan emission** — and '
+             'the honest §8 accounting (corrected after the Fable-5 2026-07-14 audit called out an '
+             'earlier over-claim) is: this is **NOT the same rule, and the two are NOT equivalent.** '
+             '`contract_adjudicator.adjudicate()` already runs A1–A12 **corpus-wide** in one call '
+             '(it is not per-module — the earlier version of this note wrongly implied it was), '
+             'against the Key registry, and — critically — it does **family-wildcard inhabitance** '
+             'checking for wildcard consumes like `scene.*` (`_wild_registered`/`_pat_overlap`). This '
+             'layer’s `build_l2()` deliberately does **less**: it `continue`s past every wildcard '
+             'consume (`ktype == "*"` or a family pattern) rather than resolving it, so it detects '
+             'only the exact-type phantom/dangling cases. It is therefore a **strict-subset, '
+             'registry-unaware, corpus-wide MEASURE**, not a re-implementation of A3/A4 and not a '
+             'second gate. The adjudicator is the authoritative registry-aware gate; where the two '
+             'disagree the adjudicator wins, and this layer will MISS any closure defect that only a '
+             'wildcard-family resolution would surface. A row here is a pointer to inspect, not a '
+             'ruling. (True single-sourcing — importing `adjudicate()` here — is the right end-state; '
+             'it is tracked, not yet done, because that function returns prose verdicts rather than '
+             'the structured edge list this graph layer needs.)')
     L.append('')
     section('L2 phantom producers — a consume names a source that does NOT emit that Key '
             '(canon-grade; the mass_battle `scene_outcome.battle_concluded` class)',

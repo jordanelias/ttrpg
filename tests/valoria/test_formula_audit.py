@@ -109,6 +109,29 @@ def test_loose_form_strips_trailing_parenthetical_only():
     assert fa._loose_form('settlement Order') == 'settlement Order'
 
 
+def test_cycles_via_loose_form_catches_paren_hidden_feedback():
+    # Fable-5 2026-07-14 audit, finding F (now FIXED, not just disclosed): a cross-module
+    # feedback whose legs spell the same quantity differently — output annotated, input bare —
+    # is missed by the exact-identity SCC but caught by the loose-form pass.
+    adj = {
+        'Legitimacy': {'faction Mandate (cross-module -> faction_state)'},  # L feeds Mandate
+        'faction Mandate (cross-module -> faction_state)': set(),
+        'faction Mandate': {'Legitimacy'},                                  # Mandate feeds L
+    }
+    # exact-identity: the two Mandate spellings are distinct nodes -> NO cycle
+    assert fa._cycles(fa.tarjan_scc(adj), adj) == []
+    # loose-form pass: collapses the annotation -> the Legitimacy<->Mandate cycle closes
+    paren = fa.cycles_via_loose_form(adj, [])
+    assert ['Legitimacy', 'faction Mandate'] in paren
+
+
+def test_cycles_via_loose_form_drops_collapse_induced_self_loops():
+    # An output annotated form of a node feeding ONLY back to its own bare name must NOT be
+    # reported as a cycle (that's the annotation-shadowing false-positive the fix guards against).
+    adj = {'X': {'X (annotated)'}, 'X (annotated)': set()}
+    assert fa.cycles_via_loose_form(adj, []) == []
+
+
 # ── build_contract_edges / build_descriptor_edges on tiny synthetic fixtures ─
 
 def _synthetic_contracts():

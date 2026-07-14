@@ -13,6 +13,18 @@ don't already resolve through `quantity_registry` alone**. They are genuinely *u
 mis-routed. The meter moves only by **registering** them — which is a design act, so this document
 is the evidenced, categorized work-list, not a unilateral edit.
 
+> **Two honesty corrections (Fable-5 holistic audit, 2026-07-14 — `designs/audit/2026-07-14-holistic-unification/`):**
+> 1. **The "52.7% resolved" figure is *matched*, not *keyed*.** `resolve()` matching a name is not the
+>    same as that name pointing to a registry KEY — the registry deliberately declines to key ~17
+>    identifiers (`not_descriptors`: tracks/clocks/derived values like `Mandate`, `Treasury`, `CI`). The
+>    **true keyed pointer rate is 12/55 = 21.8%**, not 52.7%. `pointer_audit.py` now reports both the
+>    keyed rate and the matched rate side by side; treat **keyed** as the real NS2 meter.
+> 2. **Category A moved the number by *text editing*, not registration.** The 45.8%→52.7% delta is
+>    entirely: 6 shorthand strings (`L_s`/`PS_s`/`settlement Order`…) deleted and replaced with spellings
+>    that *already resolved*, plus 2 already-known display names added. **Zero previously-unresolved
+>    identifiers were newly registered.** It is legitimate document hygiene, but it is not debt paid
+>    down — the debt-closing work is Category B (below), still un-executed and Jordan-gated.
+
 Every mapping in Category A below is backed by the module's OWN `module_contracts.yaml` `state`
 prose or a descriptor entry — cited inline. Nothing here fabricates a quantity (CLAUDE.md §5).
 
