@@ -68,10 +68,13 @@ jobs:
       - name: Regenerate decisions digest
         run: python3 tools/observability/build_decisions.py
 
+      - name: Regenerate proposals register
+        run: python3 tools/observability/build_proposals.py
+
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js; then
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -92,12 +95,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js
-          git commit -m "[infrastructure] Scheduled decisions-digest refresh (${DATE})"
+          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js
+          git commit -m "[infrastructure] Scheduled decisions-digest + proposals refresh (${DATE})"
           git push origin "$BRANCH"
           URL=$(gh pr create \
-            --title "Scheduled decisions-digest refresh (${DATE})" \
-            --body "Automated corpus re-scan by \`.github/workflows/audit-refresh.yml\` (\`tools/observability/build_decisions.py\`). Deterministic, no judgment applied -- review the diff before merging like any other PR. Lane-priority rollup and per-item counts are in \`tools/observability/DECISIONS.md\`." \
+            --title "Scheduled decisions-digest + proposals refresh (${DATE})" \
+            --body "Automated corpus re-scan by \`.github/workflows/audit-refresh.yml\` (\`tools/observability/build_decisions.py\` + \`build_proposals.py\`). Deterministic, no judgment applied -- review the diff before merging like any other PR. Lane-priority rollup in \`DECISIONS.md\`; unified unratified-work register in \`PROPOSALS.md\`." \
             --base main --head "$BRANCH")
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
