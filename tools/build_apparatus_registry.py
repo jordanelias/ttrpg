@@ -231,7 +231,10 @@ def role_of(info: dict, invokers: list[str], rel: str) -> str:
                     and not w["dest"].startswith("<")
                     and not w["dest"].startswith("/home/claude")
                     for w in info["writes"])
-    if not info["has_main"] and not info["writes"]:
+    # No __main__ and no committed (literal-dest) write => import-only library. A
+    # library function that writes only to a caller-supplied dynamic path (e.g.
+    # core.write_js_bundle) is still import-only; its writes fire only when imported.
+    if not info["has_main"] and not committed:
         return "D:import-only-library"
     if committed:
         return "A:writes-artifact"

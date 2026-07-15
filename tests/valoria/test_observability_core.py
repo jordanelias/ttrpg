@@ -13,7 +13,7 @@ import sys
 HERE = os.path.dirname(__file__)
 OBS = os.path.join(HERE, '..', '..', 'tools', 'observability')
 sys.path.insert(0, OBS)
-import core  # noqa: E402
+import obs_core as core  # noqa: E402  (distinct name — no collision with combat's core.py)
 
 
 def test_lane_codes_includes_go():

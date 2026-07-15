@@ -4,11 +4,10 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**92 apparatuses** — hook: 4, skill-script: 8, tool: 77, workflow: 3 · **5 orphaned**.
+**92 apparatuses** — hook: 4, skill-script: 8, tool: 77, workflow: 3 · **4 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
-- `tools/build_apparatus_registry.py`
 - `tools/build_audit_registry_backfill.py`
 - `tools/geography/jsx_to_canonical.py`
 - `tools/observability/build_graph.py`
@@ -27,20 +26,13 @@
 | `skills/valoria-vector-audit/scripts/structure_audit.py` | `structure_register.md` (markdown); `<name>` (unknown) | yes | skill:valoria-vector-audit, tool:imported |
 | `skills/valoria-vector-audit/scripts/vector_audit.py` | `03_validation_report.md` (markdown); `02_weakness_register.md` (markdown); `<name>` (unknown) | yes | ci:audit-refresh.yml, skill:valoria-vector-audit, tool:imported |
 | `tools/atomizer.py` | `<stream>` (yaml) | yes | ci:valoria-ci.yml, tool:imported |
-| `tools/build_apparatus_registry.py` | `<md_path>` (unknown); `<yaml_path>` (unknown); `.json` (json); `<stream>` (yaml) | yes | — |
+| `tools/build_apparatus_registry.py` | `<md_path>` (unknown); `<yaml_path>` (unknown); `.json` (json); `<stream>` (yaml) | yes | ci:audit-refresh.yml |
 | `tools/freshness_gate.py` | `references/canonical_sources.yaml` (yaml) | yes | ci:valoria-ci.yml, skill:valoria-atomizer |
 | `tools/observability/build_decisions.py` | `decisions.json` (json); `decisions_data.js` (js); `DECISIONS.md` (markdown) | yes | ci:audit-refresh.yml, tool:imported |
 | `tools/observability/build_graph.py` | `graph.json` (json); `graph_data.js` (js); `console.html` (html) | yes | — |
 | `tools/observability/build_lexicon.py` | `lexicon.json` (json); `lexicon_data.js` (js) | yes | tool:imported |
 | `tools/observability/build_proposals.py` | `proposals.json` (json); `PROPOSALS.md` (markdown) | yes | ci:audit-refresh.yml, tool:imported |
 | `tools/sim_harness/adapters/pr119_governance/death_spiral_log.py` | `death_spiral_log.jsonl` (jsonl) | yes | — |
-
-### C — Mutating / dynamic-destination
-
-| Path | Writes (dest · format) | CLI | Invoked by |
-|---|---|---|---|
-| `tools/observability/core.py` | `<path>` (unknown) | — | ci:dashboard.yml, tool:imported |
-| `tools/sim_harness/trace_logger.py` | `<tmp_path>` (unknown) | — | tool:imported |
 
 ### B — Stdout report / CI gate (exit-code)
 
@@ -72,7 +64,6 @@
 | `tools/hook_naming_guard.py` | — | yes | ci:valoria-ci.yml, hook:claude |
 | `tools/index_gen.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/mechanics_index_gen.py` | `<stream>` (yaml); `<index_path>` (unknown) | yes | ci:valoria-ci.yml |
-| `tools/observability/npc_audit_report_gen.py` | `<OUT>` (unknown) | — | — |
 | `tools/patch_propagation_checker.py` | — | yes | ci:valoria-ci.yml, skill:valoria-atomizer |
 | `tools/session_status.py` | — | yes | ci:valoria-ci.yml, hook:claude |
 | `tools/sim_harness/adapters/pr119_governance/campaign_stats.py` | — | yes | — |
@@ -93,6 +84,8 @@
 | `tools/ci_hooks_verifier.py` | — | — | ci:valoria-ci.yml |
 | `tools/descriptor_registry.py` | — | — | tool:imported |
 | `tools/names.py` | — | — | ci:valoria-ci.yml, tool:imported |
+| `tools/observability/npc_audit_report_gen.py` | `<OUT>` (unknown) | — | — |
+| `tools/observability/obs_core.py` | `<path>` (unknown) | — | ci:dashboard.yml, tool:imported |
 | `tools/quantity_registry.py` | — | — | ci:valoria-ci.yml, skill:valoria-vector-audit, tool:imported |
 | `tools/registry.py` | — | — | tool:imported |
 | `tools/session_handoff_reminder.py` | — | — | ci:valoria-ci.yml, hook:claude |
@@ -119,6 +112,7 @@
 | `tools/sim_harness/adapters/pr119_governance/pr119_subnational_factions.py` | — | — | tool:imported |
 | `tools/sim_harness/canon_resolver.py` | — | — | tool:imported |
 | `tools/sim_harness/depth.py` | — | — | tool:imported |
+| `tools/sim_harness/trace_logger.py` | `<tmp_path>` (unknown) | — | tool:imported |
 | `tools/sim_harness/triage.py` | — | — | tool:imported |
 
 ## Hooks
@@ -134,7 +128,7 @@
 
 | Workflow | Runs | Emits |
 |---|---|---|
-| `.github/workflows/audit-refresh.yml` | `tools/observability/build_decisions.py`, `tools/observability/build_proposals.py` | commit/PR |
+| `.github/workflows/audit-refresh.yml` | `tools/build_apparatus_registry.py`, `tools/observability/build_decisions.py`, `tools/observability/build_proposals.py` | commit/PR |
 | `.github/workflows/dashboard.yml` | `tools/dashboard_data.py` | github-pages |
 | `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vetting_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/patch_propagation_checker.py`, `tools/validate_ed_citations.py` | ci-status |
 

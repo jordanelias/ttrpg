@@ -15,7 +15,7 @@ cross-linked, both lane-partitioned. (CLAUDE.md §8; ED-IN-0068.)
 Detect-not-author: this surfaces items and LINKS OUT to the human-authored ranked
 queue and workplan §5 — it never invents its own ranking or ratifies anything.
 
-Sources (all structured, via tools/observability/core.py — every rule lives once):
+Sources (all structured, via tools/observability/obs_core.py — every rule lives once):
   • canon/editorial_ledger*.jsonl  open items, split by needs_jordan
   • references/audit_registry.jsonl  PARTIAL / OPEN verdicts
   • designs/proposals/*.md          detected BY LOCATION (surfaces the 8 without a Status line)
@@ -32,7 +32,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
-import core  # noqa: E402
+# obs_core (not "core"): a distinct top-level module name, so it can't collide in
+# sys.modules with designs/scene/combat_engine_v1/core.py (also imported bare).
+import obs_core as core  # noqa: E402
 
 # the current human-authored ranked queue + tiered register (LINKED, not parsed)
 RANKED_QUEUE = "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md"
@@ -72,16 +74,19 @@ def collect() -> list[dict]:
     seen: set[tuple] = set()
 
     def add(kind, source, ident, title, lane, needs_jordan=False, status=None, links=None):
-        key = (kind, source, ident)
+        key = (kind, source, ident)          # dedup on raw values (pre-redaction)
         if key in seen:
             return
         seen.add(key)
+        # Redact EVERY text field written to the .md/.json — id/source/links can be
+        # file paths or audit-folder names, so a legacy token there would otherwise
+        # leak into the committed output and trip ci_naming_check (finding #4).
         items.append({
-            "kind": kind, "source": source, "id": ident,
+            "kind": kind, "source": _rd(source), "id": _rd(ident),
             "title": _rd(title)[:240], "lane": lane or "unassigned",
             "needs_jordan": bool(needs_jordan),
             "status": _rd(status) if status else None,
-            "links": links or [],
+            "links": [_rd(x) for x in (links or [])],
         })
 
     # 1 + 2. design docs: designs/proposals/ BY LOCATION; else by unratified Status line

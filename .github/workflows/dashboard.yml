@@ -18,7 +18,7 @@ on:
       - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
       - 'docs/dashboard/**'
       - 'tools/dashboard_data.py'
-      - 'tools/observability/core.py'   # shared primitives the inline proposals section uses
+      - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
       - '.github/workflows/dashboard.yml'
   schedule:
     # Daily fallback — staleness (workplan drift, CI status) can change even with

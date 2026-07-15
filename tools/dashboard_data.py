@@ -424,7 +424,7 @@ def build_balance():
 # Lane roster — sourced from the shared observability core so every lane-aware
 # surface agrees (fixes the prior GO omission that would misbucket editorial_ledger_go.jsonl).
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'observability'))
-import core as _obs_core  # noqa: E402
+import obs_core as _obs_core  # noqa: E402  (distinct name — no sys.modules collision with combat's core.py)
 LEDGER_LANES = list(_obs_core.LEDGER_LANE_CODES)  # ('mb','pc','fi','sc','fa','wr','in','go','se')
 
 

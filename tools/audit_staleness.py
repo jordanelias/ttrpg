@@ -67,6 +67,13 @@ FAMILIES = [
                            "designs/workplans/"),
     },
     {
+        "name": "apparatus-registry",
+        "artifact_paths": ["references/apparatus_registry.yaml"],
+        # build_apparatus_registry.py scans tools/, skills/, .githooks/, .claude/,
+        # .github/workflows/ for the output/format/orphan inventory.
+        "scope_prefixes": ("tools/", "skills/", ".githooks/", ".github/workflows/"),
+    },
+    {
         "name": "graph-lexicon",
         # Tracked as one family (not two): build_graph.py and build_lexicon.py are
         # regenerated together in practice and their source scopes overlap heavily

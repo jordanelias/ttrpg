@@ -62,7 +62,7 @@ gates/checkers, so they're intentionally not in the registry above.
 | `atomizer.py` | Splitting engine for file atomization (content + rule → new file set) |
 | `index_gen.py` | Generates index files for registers, archives, and atomized file sets |
 | `doc_index_gen.py` | Generates `_index.md` files from canonical design docs (renamed from `skeleton_gen.py`, PP-673) |
-| `observability/core.py` | Shared observability primitives (ledger reader, lane roster, status/marker parse, JS-bundle) — single owner, imported by the generators |
+| `observability/obs_core.py` | Shared observability primitives (ledger reader, lane roster, status/marker parse, JS-bundle) — single owner, imported by the generators |
 | `observability/build_proposals.py` | Generates the unified proposals/open-work register (`PROPOSALS.md` triad) |
 | `names.py` | The single reader for `references/names_index.yaml` (legacy→canonical mapping) |
 | `descriptor_registry.py` | Loader/resolver for `references/descriptor_registry.yaml` (key/name/alias resolution) |

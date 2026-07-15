@@ -12,15 +12,13 @@ counts:
     workflow: 3
   by_role:
     A:writes-artifact: 14
-    B:stdout-or-gate: 39
-    D:import-only-library: 34
-    C:mutating-or-dynamic-dest: 2
+    B:stdout-or-gate: 38
+    D:import-only-library: 37
     workflow: 3
-  orphaned: 5
+  orphaned: 4
   prune_candidates: 0
 prune_candidates: []
 orphaned_no_cli:
-- tools/build_apparatus_registry.py
 - tools/build_audit_registry_backfill.py
 - tools/geography/jsx_to_canonical.py
 - tools/observability/build_graph.py
@@ -113,9 +111,10 @@ entries:
   prints_stdout: true
   has_cli: true
   uses_cli_args: true
-  invoked_by: []
+  invoked_by:
+  - ci:audit-refresh.yml
   imported_internally: false
-  orphaned: true
+  orphaned: false
   prune_candidate: false
   role: A:writes-artifact
   imports:
@@ -696,24 +695,6 @@ entries:
   prune_candidate: false
   role: A:writes-artifact
   imports: []
-- path: tools/observability/core.py
-  kind: tool
-  stem: core
-  writes:
-  - dest: <path>
-    format: unknown
-    mode: write
-  prints_stdout: false
-  has_cli: false
-  uses_cli_args: false
-  invoked_by:
-  - ci:dashboard.yml
-  - tool:imported
-  imported_internally: true
-  orphaned: false
-  prune_candidate: false
-  role: C:mutating-or-dynamic-dest
-  imports: []
 - path: tools/observability/npc_audit_report_gen.py
   kind: tool
   stem: npc_audit_report_gen
@@ -728,7 +709,25 @@ entries:
   imported_internally: false
   orphaned: true
   prune_candidate: false
-  role: B:stdout-or-gate
+  role: D:import-only-library
+  imports: []
+- path: tools/observability/obs_core.py
+  kind: tool
+  stem: obs_core
+  writes:
+  - dest: <path>
+    format: unknown
+    mode: write
+  prints_stdout: false
+  has_cli: false
+  uses_cli_args: false
+  invoked_by:
+  - ci:dashboard.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: D:import-only-library
   imports: []
 - path: tools/patch_propagation_checker.py
   kind: tool
@@ -1176,7 +1175,7 @@ entries:
   imported_internally: true
   orphaned: false
   prune_candidate: false
-  role: C:mutating-or-dynamic-dest
+  role: D:import-only-library
   imports:
   - audit_registry
 - path: tools/sim_harness/triage.py
@@ -1430,6 +1429,7 @@ entries:
 - path: .github/workflows/audit-refresh.yml
   kind: workflow
   runs:
+  - tools/build_apparatus_registry.py
   - tools/observability/build_decisions.py
   - tools/observability/build_proposals.py
   emits:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tools/observability/core.py — shared observability primitives (single owner).
+tools/observability/obs_core.py — shared observability primitives (single owner).
 
 The observability tier had the same rules re-implemented in ≥4 places (editorial
 ledger parsed 4 ways; status-line regex 3 ways; lane rosters 3 ways; the

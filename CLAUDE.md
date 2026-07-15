@@ -234,7 +234,7 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
   BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
   compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
-- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/core.py`
+- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/obs_core.py`
   is now the single owner of the primitives that were re-implemented ≥4 ways (editorial-ledger read,
   the 9-code lane roster **including GO**, the reconciled `## Status:` regex, the narrow needs-Jordan
   vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
