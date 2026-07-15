@@ -234,6 +234,21 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
   BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
   compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
+- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/core.py`
+  is now the single owner of the primitives that were re-implemented ≥4 ways (editorial-ledger read,
+  the 9-code lane roster **including GO**, the reconciled `## Status:` regex, the narrow needs-Jordan
+  vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
+  it. `tools/observability/build_proposals.py` generates the **unified proposals/open-work register**
+  (`PROPOSALS.md` triad — one lane-partitioned view of every unratified item, covering
+  `designs/proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
+  it complements `DECISIONS.md` (marker-level debt) rather than duplicating it.
+  `tools/build_apparatus_registry.py` generates `references/apparatus_registry.{yaml,md}` — the
+  inventory of every tool/skill/hook/workflow with its output destination + format + orphan status
+  (orphan flag derived from `structure_audit`'s import graph). That prune pass retired 4 zero-importer
+  dead pure-function tools (`propagator`, `verify_cuts`, `coverage_matrix`, `find_references`) to
+  `deprecated/tools/`. Still deliberately deferred (blocking-gate risk): migrating
+  `currency_consistency_check`'s flat-file-only ledger reader and the `ci_audit_registry_check`
+  all-entries reader onto `core` — each needs its own expected-delta test, not a drop-in.
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
