@@ -1,8 +1,8 @@
 # Repository Reorganization (v1) — content-class taxonomy + phased migration
 
-## Status: PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). This is a hard architecture call filed so it stops evaporating — **not** a routine-merge item. Merging this PR ratifies only that the proposal is *tracked* (per ED-1094 the reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **Several taxonomy forks were RULED by direct Jordan input 2026-07-15 (see §2 / §5)** — those are settled; the remaining forks and all execution stay HELD-BACK.
+## Status: PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). A hard architecture call, filed so it stops evaporating — **not** a routine-merge item. Merging tracks the proposal only (ED-1094 reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **The primary axis is now decided on evidence (§2a): subsystem, not scale.** Several sub-forks RULED by direct Jordan input 2026-07-15; the rest stay HELD-BACK (§5).
 
-**Provenance / why this exists.** Jordan raised, in conversation, a suggestion to *reorganize the repository around its code architecture / schema*. A corpus search (ledgers, decision queues, workplan v6 §5 register, `designs/proposals/`, handoffs) found **no record of it anywhere** — no ED, no proposal, no decision-queue row. The only pre-existing structural-debt item is one line in workplan v6 §5 (*"queue 21–23 — stale branches · duplicate compilation homes · pre-restructure ledger paths"*, tier **T2-H3**, the lowest), which is narrow cleanup, not this. The suggestion fell through the same continuity gap that (same session) left the workplan board a week stale and bundled a workplan-reconciliation into `designs/audit/`: a call that needs human judgment, with no register hook, silently disappears. This doc is the hook.
+**Provenance.** Jordan raised, in conversation, reorganizing the repo around its code architecture/schema. A corpus search found it recorded **nowhere** — no ED, proposal, or decision-queue row (only workplan v6 §5 "queue 21–23", tier T2-H3, narrow ledger-path cleanup). It fell through the same continuity gap that (same session) left the workplan board a week stale and mis-filed a workplan-reconciliation under `designs/audit/`. This doc is the register hook.
 
 ---
 
@@ -10,115 +10,142 @@
 
 Current top-level: `archives · canon · deprecated · designs · docs · engine · handoffs · params · references · research · sim · skills · tests · tools · versions`.
 
-Ten incoherences, each grounded in the working tree:
-
 | # | Current placement | What it actually is | The incoherence |
 |---|---|---|---|
-| 1 | `archives/` vs `deprecated/` | Intended: archives = dead **content** (superseded docs, `archives/workplans/`, `archives/audit/`); deprecated = dead **code/machinery** (`deprecated/{tools,skills,session_machinery,engine}`) | Boundary leaks: `deprecated/canon/` holds dead *ledger content*; `archives/audit/` holds *audit content* indistinguishable from `designs/audit/`. Two graveyards, one unenforced rule. |
-| 2 | `references/` vs `research/` | references = internal **index layer** (canonical_sources, names_index, module_contracts, descriptor/apparatus/audit registries); research = external **inbound source material** (8-civ governance, pre-firearms formations, rhetoric) feeding `=> design hook` lines | The distinction is real, but `references/` is an overloaded junk drawer: it also holds `arcs/`, `historical/`, `engine_params/`, `mass_battle_redesign_workplan_v1.md`, `npc_registry.sql`, `effort-guide.md`, `D10_INTEGRATION_GUIDE.md`. `references/historical/` overlaps `research/` conceptually. |
-| 3 | `params/` | A parallel **numeric-truth layer** — mechanical values lifted out of design prose into their own tables | Justified in theory, broken in practice (CLAUDE.md §5): the values are *prose tables, not typed data*, so they can't be ingested, **and** they duplicate numbers that also live in the design docs → the drift risk §5 warns of. Content masquerading as a data layer. |
-| 4 | `tests/` at root **and** `tests/sim` **and** `tests/sim_framework` vs root `sim/` | Three unrelated things named "sim": root `sim/` = the real ~11.4k-LOC Python oracle; `tests/sim/` = **narrative markdown** sim *records*; `tests/sim_framework/` = a **retired** arc-test harness. Only `tests/valoria/` is executable pytest. | Worst offender. `tests/` is ~5% executable and ~95% historical prose (`emergent_arc_skeleton_*`, `coverage_matrix_archive_*`, `audit/`, `handoffs/`, `stress/`). Naming collision (sim ×3) **and** category collision (specs vs records). |
-| 5 | `designs/godot/` vs `designs/videogame/` | Same subsystem, two folders. godot/ = 4 stale (2026-04-18) impl docs + the 1-of-27 non-compilable skeleton; videogame/ = a *single* file `godot_architecture_specification.md` | Pure accretion. The *governing* spec is a **third** home (`designs/audit/2026-06-10-godot-conversion-strategy/`). Three homes for one port. |
-| 6 | `designs/workplans/` | The live steering surface (master workplan v6 + progress board) | A workplan is *process/steering*, not a *design artifact* — the map nested inside the territory. Workplan artifacts leak anyway (`designs/audit/` April sprawl, `references/…workplan…`, `designs/ui/…workplan…`). |
-| 7 | `engine/` (top-level, 2 files) | Two markdown docs about the sigma-leverage *armature* (the harness code was retired to `deprecated/engine/`) | Vestigial. It's *architecture prose* that overlaps `designs/architecture/`. A 2-file top-level primary whose "engine" (the executable model) actually lives in `sim/`. |
-| 8 | `designs/arcs/` | Generated **narrative content** (arc_expansion, arcs_16–35, scenario chains, throughline resolutions) | Arcs are neither system-mechanics nor world-canon — a third content class. And split: content in `designs/arcs/`, registers in `references/arcs/` + `references/arc_register*`. |
-| 9 | audit subfolders **everywhere** (`designs/audit` ×24, `archives/audit` ×6, `tests/audit`, `tests/sim/**/audits`, `skills/*-audit`, `references/audit_registry`) | "Audit" treated as both a *place* and an *activity that dumps artifacts wherever the session ran* | Audit outputs are **never promoted-then-archived**, so every session's findings accrete in-place forever. `designs/audit/` has become the repo's session-output landfill. |
-| 10 | editorial/patch **registers** under `canon/` | `canon/` mixes object-level **world/design truth** (philosophical_foundations, canonical_timeline, constraints, amendments) with meta-level **process ledgers** (10× editorial_ledger, patch_register, supersession_register, mechanics_index) | The editorial ledger is *about changes to* canon — it isn't canon. Canon is currently both constitution and legislative record. Object-level and meta-level conflated. |
+| 1 | `archives/` vs `deprecated/` | archives = dead **content**; deprecated = dead **code/machinery** | Leaks: `deprecated/canon/` holds dead ledger content; `archives/audit/` is indistinguishable from `designs/audit/`. Two graveyards, one unenforced rule. |
+| 2 | `references/` vs `research/` | references = internal **index layer**; research = external **inbound source material** | `references/` is an overloaded junk drawer (`arcs/`, `historical/`, `engine_params/`, a workplan, `npc_registry.sql`, `effort-guide.md`); `references/historical/` overlaps `research/`. |
+| 3 | `params/` | A parallel **numeric-truth layer** | Prose tables, not typed data → can't be ingested, and duplicate numbers already in the design docs (§5 drift risk). Content masquerading as data. |
+| 4 | `tests/` at root + `tests/sim` + `tests/sim_framework` vs root `sim/` | `sim/` = real oracle; `tests/sim/` = narrative records; `tests/sim_framework/` = retired harness; only `tests/valoria/` executes | Worst offender: `tests/` is ~5% executable, ~95% historical prose. Naming collision (sim ×3) + category collision. |
+| 5 | `designs/godot/` vs `designs/videogame/` | Same subsystem, two folders + a 3rd home (`designs/audit/2026-06-10-godot-conversion-strategy/`) | Pure accretion — three homes for one port. |
+| 6 | `designs/workplans/` | The live steering surface | Process/steering nested inside `designs/` as if a design artifact. |
+| 7 | `engine/` (2 files) | Sigma-leverage *armature* prose | Vestigial; overlaps `designs/architecture/`; the real "engine" (executable model) is `sim/`. |
+| 8 | `designs/arcs/` | Generated **narrative content** | Neither system-mechanics nor world-canon; split from its `references/arc_register*` registers. |
+| 9 | audit subfolders **everywhere** (24 in `designs/audit`, +`archives/audit`, `tests/audit`, `skills/*-audit`) | "Audit" is both a place and an activity dumping artifacts wherever the session ran | Findings never promoted-then-archived → the landfill. |
+| 10 | editorial/patch **registers** under `canon/` | Object-level world-truth mixed with meta-level process ledgers | The editorial ledger is *about* canon — it isn't canon. Constitution + legislative record in one folder. |
 
-**Through-line (the root cause).** Almost every incoherence is one failure: **no distinction between an artifact's *content class* and the *activity that produced it*, and no lifecycle** (produce → promote findings → archive the record). Folders accrete by "where the session was working," not "what kind of thing this is." That is why audits, workplans, and sims each have 2–3 homes.
+**Through-line:** no distinction between an artifact's *content class* and the *activity that produced it*, and no lifecycle (produce → promote → archive). Folders accrete by "where the session worked," not "what kind of thing this is."
 
 ---
 
-## §2 — Resolved target taxonomy
+## §2 — Target taxonomy (13 primaries)
 
-Thirteen top-level primaries. **✓ RULED** = decided by direct Jordan input 2026-07-15. **⊘** = still a fork, see §5.
+**✓ RULED** = decided by direct Jordan input 2026-07-15. **⊘** = fork, see §5.
 
-| Target primary | Contents | Status |
+| Primary | Contents | Status |
 |---|---|---|
-| `canon/` | World/design truth ONLY: philosophy (P-01..P-14), amendments, canonical timeline, constraints. Registers move OUT (#10). | core |
-| `registers/` | All process ledgers: `editorial_ledger*` (11), `patch_register*`, `supersession_register`, `id_reservations`, collision/naming/deprecated-terms registries, `apparatus_registry`, `audit_registry`. | core — ⊘ handoffs placement (§5) |
-| `systems/` | Design docs **by scale**, one folder per system, laid out per §2a. `ui/` lives here. Scale-local sim scripts co-locate here (see §2a). | core — ⊘ scale roster/names (§5) |
-| `arcs/` | Generated narrative content (arc_expansion, arcs_16–35, scenario chains, throughline resolutions) + the `references/arc_register*` registers. | **✓ RULED — own primary** |
-| `proposals/` | Unratified design proposals (today `designs/proposals/`), promoted out of `designs/`. | **✓ RULED — own primary** |
-| `research/` | External inbound source material (governance, pre-firearms formations, rhetoric) + `references/historical/` folded in. | **✓ RULED — own primary** |
-| `engine/` | The **executable model** (Python side): `sim/mc_v18.py` (the Monte-Carlo campaign core), `params/` (numeric layer), and the typed `engine_params/` exports. | **✓ RULED — MC + params here** |
-| `godot/` | The Godot port, consolidated: the conversion-strategy doc, `skeleton/`, and the impl docs from `designs/{godot,videogame}` (#5, three homes → one). | **✓ RULED — own primary** |
-| `audits/` | **In-flight audits only**, under a lifecycle rule (#9): findings promote to the system/register, the closed audit archives to `deprecated/`. | core — ⊘ lifecycle rule (§5) |
-| `workplans/` | Master workplan + progress board (steering). Promoted to primary (#6). | core |
-| `infrastructure/` | `skills/`, `tools/`, CI, hooks, the structural-observatory / "vector shape" self-description. Generators here; published view in `dashboard/`. | core |
-| `dashboard/` | The published status site (today `docs/dashboard/`). | core |
-| `deprecated/` | Everything dead — `archives/` merged in, split `content/` vs `code/` (#1). | core |
+| `canon/` | World/design truth ONLY (philosophy, amendments, timeline, constraints). Registers move out. | core |
+| `registers/` | All process ledgers (`editorial_ledger*`, patch/supersession registers, `id_reservations`, collision/naming/apparatus/audit registries). | core — ⊘ handoffs placement |
+| `systems/` | Design docs by **subsystem**, laid out per §2a; `ui/` lives here. | **✓ RULED axis (§2a)** |
+| `arcs/` | Narrative content + `references/arc_register*`. | ✓ RULED — own primary |
+| `proposals/` | Unratified proposals (from `designs/proposals/`). | ✓ RULED — own primary |
+| `research/` | External source material + `references/historical/`. | ✓ RULED — own primary |
+| `engine/` | Executable model (Python): `sim/mc_v18.py`, `params/`, typed `engine_params/`. | ✓ RULED — MC + params here |
+| `godot/` | The Godot port, consolidated (strategy doc + `skeleton/` + `designs/{godot,videogame}`); the `res://` project (§6). | ✓ RULED — own primary |
+| `audits/` | In-flight audits only, under a lifecycle rule (§7). | core — ⊘ lifecycle rule |
+| `workplans/` | Master workplan + progress board. | core |
+| `infrastructure/` | `skills/`, `tools/`, CI, hooks, structural-observatory; also `scene_timer`/`audit` telemetry (§7). | core |
+| `dashboard/` | Published status site (`docs/dashboard/`). | core |
+| `deprecated/` | Everything dead — `archives/` merged, split `content/` vs `code/`. | core |
 
-### §2a — Intra-`systems/` layout (RULED)
+### §2a — `systems/` is subsystem-organized (RULED, evidence-backed)
 
-Every system is a folder whose **design prose (`.md`) sits at its root**, with a **`sim/` subfolder holding all that system's executable scripts** — co-locating the 1:1 Python oracle beside the design it implements:
+The axis was a real fork — **scale** (matches the `sim/` package layout) vs **subsystem** (matches the ID lanes / CURRENT.md / handoffs). Decided **subsystem**, on two grounds:
+
+1. **Isomorphism.** One subsystem = one folder = one ID lane = one CURRENT.md row = one `HANDOFF_<LANE>.md` = one Godot module tree (§6). Today those four indices agree with each other but not with the folder tree; this aligns all five.
+2. **The co-location cost is measured and small.** Co-locating each subsystem's `sim/` scripts beside its design `.md` requires splitting the scale-packaged `sim/`. From the vector-audit import graph (`g_code.json`, §6): of 178 `sim.*→sim.*` edges, **104 stay intra-subsystem, 60 point at shared homes (`engine`/`_architecture`), and only 14 become cross-folder** — and those 14 are real couplings that already exist (e.g. the parliamentary-vote kernel shared by `factions`↔`social_contest`; `knots`↔`conviction`; faction actions reaching `settlements`). 14 explicit import rewrites, not a shatter.
+
+Layout — design `.md` at each subsystem's root, a `sim/` subfolder for its scripts:
 
 ```
 systems/
-  scenes/                        # personal-scale resolution
-    social_contest/
-      social_contest_v30.md      # + _index, _infill, params tables, etc. (prose at root)
-      sim/                       # this system's scripts (from sim/personal/contest/, …)
-    combat/
-      combat_*.md
-      sim/                       # from sim/personal/ combat modules
-  provincial/
-    mass_battle/  { *.md ; sim/ }
-  territory/
-    settlement/   { *.md ; sim/ }        # from sim/territory/
-  world/          { *.md ; sim/ }        # from sim/world/, sim/thread/
-  _cross/                        # scale-spanning substrate (mirrors the ID system's IN lane)
-    { key_substrate, propagation_spec, holonic_doctrine, scale_transitions,
-      player_agency, clocks/tracks, narrative_engine ; sim/ ← sim/substrate/, sim/cross_scale/ (⊘ §5) }
-  ui/                            # UI/UX (RULED: under systems)
+  combat/            { *.md ; sim/ ← sim/personal/combat.py }
+  social_contest/    { *.md ; sim/ ← sim/personal/contest/ + parliamentary_vote/stay }
+  factions/          { *.md ; sim/ ← sim/provincial/ (faction+domain actions) }
+  fieldwork/         { *.md ; sim/ ← sim/personal/{fieldwork,investigation,knots} }
+  mass_battle/       { *.md ; sim/ }
+  settlements/       { *.md ; sim/ ← sim/territory/ }
+  character_generation/ { *.md ; sim/ ← sim/personal/{conviction,beliefs,companion} }
+  threadwork/        { *.md ; sim/ ← sim/thread/ }
+  world/             { *.md ; sim/ ← sim/world/ + sim/peninsular/ tracks }
+  npcs/              { *.md ; sim/ }            # own folder (RULED)
+  articulation/      { *.md ; sim/ }            # own folder (RULED)
+  ui/                { *.md ; sim/ (starts empty — not Key-emitting, §7) }   # under systems (RULED)
+  _architecture/     # substrate the gameplay rides on (RULED)
+                     # Key substrate, propagation_spec, holonic_doctrine, scale_transitions,
+                     # player_agency, clock_registry, narrative_engine ; sim/ ← sim/substrate + sim/cross_scale
 ```
 
-**`sim/` disposition (RULED):** `mc_v18.py` (the Monte-Carlo driver) → `engine/`; every scale-specific subpackage (`sim/personal`, `sim/provincial`, `sim/territory`, `sim/thread`, `sim/world`) → `systems/<scale>/<system>/sim/`; the cross-scale substrate (`sim/substrate`, `sim/cross_scale`) → `systems/_cross/sim/` **or** `engine/` (⊘ §5).
+Names normalized to **singular** to match the ID lanes. Scale becomes a frontmatter tag, not a folder level.
 
 ---
 
 ## §3 — Migration risk (why this is not `git mv`)
 
-CLAUDE.md is emphatic that paths and names are load-bearing (~16k citations, `canonical_sha__*` pins, co-file pairs). A top-level move breaks, non-exhaustively:
-- `references/canonical_sources.yaml` SHA pins + `references/module_contracts.yaml` `doc:` paths
-- `tools/workplan_status.py` `RELEVANT_PREFIXES`; `tools/audit_staleness.py` `artifact_paths`; `tools/dashboard_data.py`; `.github/workflows/dashboard.yml` + `audit-refresh.yml` path filters; `.githooks/` + `tools/valoria_local.py`
-- `references/audit_registry.jsonl` + `references/apparatus_registry.yaml` path fields
-- thousands of in-doc `designs/scene/… §x` citations and every co-file `*_index.md`/`*_infill.md` pair
-- moving `sim/` splits an import graph — `mc_v18` imports the per-scale subpackages, so the `engine/` ↔ `systems/*/sim/` split needs the Python import paths rewritten together, not folder-by-folder
-
-So the migration needs **tooling, not moves**: a path-rewrite pass (with an alias/redirect map), a citation-rewrite pass, an import-rewrite pass for the sim split, a CI-path update, and a co-file-pair integrity re-check — sequenced so CI stays green at every step. This is a real `IN`-lane cross-cutting project. Its size is exactly why it never self-started.
+Paths/names are load-bearing (~16k citations, `canonical_sha__*` pins, co-file pairs). A move breaks: `canonical_sources.yaml` pins + `module_contracts.yaml` `doc:` paths; `workplan_status.py` `RELEVANT_PREFIXES`, `audit_staleness.py` `artifact_paths`, `dashboard.yml`/`audit-refresh.yml` filters, `.githooks/`; `audit_registry.jsonl`/`apparatus_registry.yaml` path fields; thousands of in-doc citations + co-file pairs; and the sim import graph (the 14 cross-folder edges from §2a, rewritten in lockstep). So: **tooling, not moves** — a path-rewrite pass + alias map, a citation-rewrite pass, an import-rewrite pass, a CI-path update, a co-file re-check — CI green at every step. The §6 vector-audit artifacts are the inputs to that tooling.
 
 ---
 
-## §4 — Phased migration plan (cheapest / highest-value first)
+## §4 — Phased plan (cheapest / highest-value first)
 
-Each phase is independently mergeable and leaves CI green. **None executes until §5's remaining forks are ruled and sequencing is approved.**
+Each phase independently mergeable, CI green throughout. **None executes until §5's remaining forks are ruled + sequencing approved.**
 
-1. **P0 — Registers out of `canon/`** (#10). Highest value, lowest blast radius (ledgers cited by ID, not path). → `registers/`; update `tools/` ledger readers (`obs_core.py`, `currency_consistency_check.py`, `validate_ed_citations.py`, `ci_audit_registry_check.py`) + workflow/hook path refs. Ship a path-map + CI green-check.
-2. **P1 — Promote the easy primaries** (#6, #8, and the RULED calls): `designs/workplans`→`workplans/`, `designs/proposals`→`proposals/`, `designs/arcs`+`references/arc_register*`→`arcs/`, `docs/dashboard`→`dashboard/`, `references/historical`→`research/`, `skills`+`tools`→`infrastructure/`. Mostly moves + path refs.
-3. **P2 — Collapse duplicate homes** (#5, #7): merge `designs/{videogame,godot}` + the strategy doc (`designs/audit/2026-06-10-godot-conversion-strategy/`) into the `godot/` primary; sigma-leverage armature docs → `systems/_cross/`; empty shells → `deprecated/`.
-4. **P3 — `engine/` assembly** (RULED): `sim/mc_v18.py` + `params/` + `references/engine_params/` → `engine/`. Rewrite `mc_v18`'s imports in lockstep with P4's per-scale sim moves.
-5. **P4 — `systems/` by scale + intra-system sim** (the big one, §2a). Rehome `designs/{scene,personal,provincial,territory,world,architecture,threadwork,npcs,articulation,factions,ui}` → `systems/`, and distribute `sim/`'s per-scale subpackages into each system's `sim/` subfolder. Requires the full citation- + import-rewrite tools. Do last.
-6. **P5 — `tests/` disentangle + `audits/` lifecycle + `archives/`→`deprecated/`** (#1, #4, #9). Keep executable `tests/valoria/`; relocate the ~95% narrative prose to `deprecated/content/` or `audits/`. Introduce the audit promotion rule + a CI gate (a `*workplan*`/reconciliation artifact under `audits/` fails — the §3-rule violation found this session).
+1. **P0 — Registers out of `canon/`** → `registers/` (cited by ID, low blast radius). Update ledger readers + workflow/hook refs. Proof-of-tooling.
+2. **P1 — Promote easy primaries**: `workplans/`, `proposals/`, `arcs/`, `dashboard/`, `research/` (+`references/historical`), `infrastructure/` (`skills`+`tools`).
+3. **P2 — Collapse Godot's three homes** → the `godot/` primary; sigma-leverage armature → `systems/_architecture/`; shells → `deprecated/`.
+4. **P3 — `engine/` assembly**: `sim/mc_v18.py` + `params/` + `engine_params/`; rewrite `mc_v18` imports in lockstep with P4.
+5. **P4 — `systems/` by subsystem + intra-system sim** (§2a): rehome `designs/*` → `systems/*`; distribute `sim/` subpackages into each `sim/`; apply the 14 cross-folder import rewrites. Full citation + import tooling. Do last.
+6. **P5 — `tests/` disentangle + `audits/` lifecycle + `archives/`→`deprecated/`** (#1, #4, #9). Keep `tests/valoria/`; relocate narrative prose; add the audit promotion rule + misfile CI gate.
 
 ---
 
-## §5 — Forks — resolved vs still HELD-BACK
+## §5 — Forks: resolved vs held-back
 
-**RULED 2026-07-15 (direct Jordan input) — settled, folded into §2/§2a above:**
-- `arcs/` → its own primary.
-- `proposals/` → its own primary.
-- `research/` → its own primary.
-- `ui/` → under `systems/`.
-- `params/` → `engine/`.
-- `sim/` split: `mc_v18` (Monte-Carlo) → `engine/`; each scale's sim → `systems/<scale>/<system>/sim/`.
-- Intra-`systems/` layout: design `.md` at each system's root + a `sim/` subfolder for its scripts.
-- `godot/` → its own primary (the port is **not** under `engine/`; the three current Godot homes consolidate here).
+**RULED 2026-07-15 (direct Jordan input):** subsystem axis (§2a, evidence-backed); `arcs`/`proposals`/`research`/`godot` each own primary; `ui` under `systems`, mapped at Godot conversion (§6); `params`+`mc_v18` → `engine`; per-scale sim → `systems/<subsystem>/sim/`; npcs/articulation/ui own folders, singular names; `_architecture/` for the substrate tier.
 
 **Still HELD-BACK (needs Jordan):**
-1. **`engine/` remaining scope** — the typed **`engine_params/`** exports live under `engine/` (recommended: yes); does the **cross-scale sim** (`sim/substrate`, `sim/cross_scale`) go to `engine/` or `systems/_cross/sim/`?
-2. **`registers/` vs `continuity/`** — do handoffs (prose) live with the ledgers (data), or separately?
-3. **`mechanics_index.yaml`** — register (→`registers/`) or canon-derived index (stays near `canon/`)?
-4. **`systems/` scale roster + names** — confirm the axis and exact names (e.g. `scenes/` vs `scene/`), and where threadwork (spans scales → `world/`? `_cross/`?) and factions (`provincial/`? `_cross/`?) sit.
-5. **`audits/` lifecycle rule** — the exact promotion marker + the staleness/misfile CI gate.
-6. **Sequencing** — approve the P0→P5 order (P0 first recommended as a scoped proof-of-tooling), or re-prioritize.
+1. `engine/` remainder — typed `engine_params/` under `engine/` (rec: yes); cross-scale sim (`sim/substrate`, `sim/cross_scale`) → `engine/` or `systems/_architecture/sim/`?
+2. `registers/` vs `continuity/` — handoffs (prose) with the ledgers (data), or separate?
+3. `mechanics_index.yaml` — register or canon-derived index?
+4. `piety_track` home (module-census orphan, §7) — player conviction, fits no gameplay folder cleanly.
+5. `audits/` lifecycle rule — promotion marker + misfile CI gate.
+6. Sequencing — approve P0→P5, or reorder.
+
+---
+
+## §6 — Migration data sources + Godot conversion map
+
+**Repo-shape inputs (reuse, don't re-derive).** The 2026-07-14 `valoria-vector-audit` / gameplay-subsystem-observatory runs left the machine-readable shape under `designs/audit/2026-07-14-{governance-vector-audit,gameplay-subsystem-observatory}/`:
+
+| Artifact | Drives |
+|---|---|
+| `data/g_code.json` (import graph) | The sim-split / import-rewrite (the §2a 14-edge measurement came from this) |
+| `data/g_cite.json` + `degrees.json` | Boundary placement (fewest-cut) + hub/substrate identification |
+| `vector_audit/data/corpus_manifest.json` | The migration work-list (every file → target home) |
+| `data/tokens.json` | Sequencing (biggest movers) |
+| `graphs/module_flowchart.mermaid`, `structure/data/g_pointer.json` | Post-move stat-vocabulary resolution check |
+
+**Godot conversion is a *map*, not a mirror.** Godot separates headless engine logic from presentation from singletons from typed data; the repo organizes by subsystem (logic+presentation together). The `ui`-under-`systems` fork (RULED) is resolved at conversion, not in the repo:
+
+| Repo | → Godot `res://` |
+|---|---|
+| `systems/<sub>/*.md` | design source — not shipped |
+| `systems/<sub>/sim/` (Python oracle) | `res://engine/modules/<sub>/` — GDScript `EngineModule` per module (1:1 oracle→port, ED-1050) |
+| `systems/_architecture/` | `res://autoloads/` — `KeyBus`, `GameState`, `Resolver`, `EngineClock` singletons (the spine CLAUDE.md §6 says is defined nowhere yet) |
+| `systems/ui/` | `res://scenes/` + `res://ui/` — presentation tree |
+| `engine/engine_params/` | `res://resources/*.tres` — the `combat_engine_v1.json` pattern → Godot Resources |
+| `engine/` (mc_v18, params) | not shipped — Python-side oracle/balance; its typed exports are the only bridge |
+| `godot/` (primary) | **is** the `res://` project root (engine/modules, autoloads, scenes, ui, resources) + the strategy doc + skeleton |
+
+**Payoff:** `godot/engine/modules/<subsystem>/` becomes a **folder-for-folder mirror of `systems/<subsystem>/sim/`**, and the oracle-parity check (Python ↔ GDScript) is a per-folder diff. This is a second, independent argument for the subsystem axis.
+
+---
+
+## §7 — Module-census blind spots to fix (from `module_contracts.yaml`, 27 modules)
+
+- `ui` and `character_generation` map to **zero** engine modules (not Key-emitting) — their `sim/` starts empty. Legitimate; named so it isn't mistaken for an error.
+- `piety_track` is **homeless** (player conviction) → §5 fork 4.
+- `scene_timer` and `audit` are **telemetry, not gameplay** → `infrastructure/`, not `systems/_architecture/`.
+- `campaign_architecture` is a stub already dissolved into 4 folders → **no folder**.
+- `settlement_economy` flagged **RECOMMEND RETIRE** (phantom module — no doc/state/logic).
+- Data bug to fix in passing: `mass_battle.scales = [scene]` (should be provincial).
+- Coupling note (not a taxonomy failure): `faction_state` (13 producers) and `npc_behavior` (11) are terminal accounting **sinks** — every axis leaves them importing widely. Don't optimize the tree to "minimize cross-folder edges" (unwinnable); optimize for navigation + lane isomorphism (done).
