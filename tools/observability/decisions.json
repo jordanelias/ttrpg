@@ -1,24 +1,24 @@
 {
   "meta": {
-    "files_scanned": 1261,
-    "total_open": 842,
+    "files_scanned": 1423,
+    "total_open": 990,
     "by_category": {
-      "ratification": 47,
-      "ruling": 207,
-      "naming": 63,
-      "mechanics": 23,
-      "gap": 293,
-      "assumption": 173,
-      "stub": 23,
-      "todo": 13
+      "ratification": 50,
+      "ruling": 219,
+      "naming": 72,
+      "mechanics": 24,
+      "gap": 327,
+      "assumption": 250,
+      "stub": 34,
+      "todo": 14
     },
     "by_priority": {
-      "1": 305,
-      "2": 35,
-      "3": 502
+      "1": 329,
+      "2": 36,
+      "3": 625
     },
     "by_lane": {
-      "unassigned": 549,
+      "unassigned": 697,
       "IN": 20,
       "FA": 67,
       "SC": 7,
@@ -31,9 +31,9 @@
     },
     "by_lane_priority": {
       "unassigned": {
-        "1": 262,
-        "2": 23,
-        "3": 264
+        "1": 286,
+        "2": 24,
+        "3": 387
       },
       "IN": {
         "1": 2,
@@ -95,6 +95,10 @@
         42
       ],
       [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md",
+        36
+      ],
+      [
         "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md",
         21
       ],
@@ -108,6 +112,10 @@
       ],
       [
         "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md",
+        17
+      ],
+      [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md",
         17
       ],
       [
@@ -127,23 +135,15 @@
         13
       ],
       [
-        "designs/provincial/faction_canon_v30.md",
-        10
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md",
+        12
       ],
       [
-        "references/name_collision_database.yaml",
-        10
-      ],
-      [
-        "designs/audit/2026-04-28-political-dynamics-session/SIM_B_domain_action_selection.md",
-        10
-      ],
-      [
-        "designs/audit/2026-04-28-political-dynamics-session/SIM_H_pathology_crisis.md",
-        9
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
+        11
       ]
     ],
-    "resolved_count": 23
+    "resolved_count": 25
   },
   "decisions": [
     {
@@ -411,6 +411,54 @@
       "lane": null
     },
     {
+      "text": "HRE-5 \u00b7 Guild Uprising (Compact-vs-Suppression) \u00b7 `ED-SE-0033`** \u2014 Final REFINE (confirmed). N clean (crisis-triggered constitutional rupture, distinct register from Ordenanza's routine paperwork); Omega-d holds; Concord's seat+veto is genuinely new (not a restatement of Ratify's Influence-tick). Two source-confirme\u2026",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/pessimist_ners_audit_v1.md:140"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "mechanic_audit G-6** (`social_contest/gap_register_update.md`): \"Piety Track\" name collision",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/00_cross_reference_report.md:118"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "as a **name collision between two referents**: the 0\u201310 debate tracker (sourced to",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/crawler_log/module_adjudicator_delta.md:41"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| G-6 | Open decision, self-flagged in-doc | Piety Track name collision (0\u201310 debate tracker vs per-territory BG stat) | Transitively referenced via `scale_transitions_v30.md` \u00a75.4 domain-echo composition | P2 | No action \u2014 already tracked, `ED-SC-0003` |",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/social_contest/gap_register_update.md:20"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "Isolate the build-budget heisenbug (bisect the import set; suspect a module-level name collision across r1\u2013r7) or sidestep it by constructing builds inline with an explicit point-allocation that is asserted.",
       "category": "naming",
       "priority": 1,
@@ -441,6 +489,18 @@
       "label": "Naming collision",
       "locations": [
         "designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/refutations/armature_critic.md:44"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **FA-JP4** | ED-FA-0020 | Japan | Court Attendance + hostage-kin | Recurring court-presence cost + hostage-kin lever easing Demotion thresholds while making the hostage a legible target. | **REFINE** *(steelman survived)* | \u00a71.0c **HOLD (lightly loaded)** \u2014 fired once (S7), correctly inert below the Std-4 threshol\u2026",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:72"
       ],
       "systems": [],
       "count": 1,
@@ -572,7 +632,7 @@
       "priority": 1,
       "label": "Naming collision",
       "locations": [
-        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:71"
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:77"
       ],
       "systems": [],
       "count": 1,
@@ -625,6 +685,54 @@
       "systems": [],
       "count": 1,
       "lane": "GO"
+    },
+    {
+      "text": "| `tests/sim/` | **No** \u2014 frozen historical archive predating `sim/`, held old `mc_v17.py`. Name collision only. | No (except path-string references from `ci_sim_fabrication_check`/`atomization_rules`) | 151 .py / 295 .md / 51 .json, ~8.3MB, history only |",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-12-simulation-test-harness-methodology/simulation_test_harness_methodology_v1.md:106"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "What solutions exist.** Key it **[CTC]** (parallels ci_political). The name collision is **[UNRECONCILED \u2014",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:139"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(only the *territorial* `conviction_track_v30.md` is registered \u2014 the name collision again). It shares the \"Piety",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:190"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Gaps** \u2014 **GAP-E2** (zero Key wiring). **GAP-J1** (3-way \"Piety Track\" name collision \u2014 `territorial_piety`",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:379"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "| **Legitimacy / Popular Support** (per-settlement 0-7) | `settlement_layer_v30.md \u00a71.8` | `descriptor_registry.yaml:78-79`; `faction_canon_v30.md` (cited) | `derived_stats_v30.md:297` (Legitimacy meter = Mandate\u00d720, **name collision**, self-reconciled at :554); `sim/territory/registry.py:59` (inert stub) | Value AG\u2026",
@@ -939,6 +1047,18 @@
       "lane": "PC"
     },
     {
+      "text": "| FA-D-04 | Self-contradictory in-doc status marker | `faction_behavior_v30.md` carries both `## Status: CANONICAL` (line 6) and, elsewhere in the same file, `**Status:** PROVISIONAL.` (line 11) and \"End spec. PROVISIONAL pending ratification.\" (final line). `faction_canon_v30.md` has the identical pattern (`## Stat\u2026",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/faction_political/gap_register_update.md:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "Health note (pending Jordan ratification \u2014 see session B): the discrete `Max Wounds` step at End4",
       "category": "ratification",
       "priority": 1,
@@ -1077,6 +1197,30 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/audit/2026-04-30-architecture-session/00_index.md:4"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| C | 2026-05-07 | 439L | `npcs/character_canon_v30.md` | PROVISIONAL \u2014 pending ratification. | \u2014 |",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "designs/audit/2026-07-15-proposal-reconciliation/00_proposal_census.md:93"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "\"awaiting ratification\" register. This pass adds a `## Status:` heading to each (reconciled disposition",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "designs/audit/2026-07-15-proposal-reconciliation/04_natureD_designs_proposals.md:9"
       ],
       "systems": [],
       "count": 1,
@@ -1232,7 +1376,7 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:97"
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:99"
       ],
       "systems": [],
       "count": 1,
@@ -2895,6 +3039,66 @@
       "lane": null
     },
     {
+      "text": "| 3 | **ED-MB-0010** | MB | `references/module_contracts.yaml` L468 | Confirmed: emits both `scene_outcome.battle_concluded` (\"\u00a78.5 verbatim\") and correct `scene.battle_concluded`; inline comment already flags \"[OPEN \u2014 Jordan]\" drift. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/05_ed_filing_log.md:21"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "The `npc_behavior \u2194 social_contest` 2-cycle is annotated **BOUNDED from the social_contest side** (Procedure-D 1/Accounting cadence + |\u0394affect|\u22650.5 threshold + Chain-Contest cap 3) but the **npc_behavior side records \"dampers unconfirmed [OPEN \u2014 Jordan].\"** One-sided damper confirmation; A7 passes on existence, but \u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:53"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| npc_behavior \u2194 social_contest (2-cycle) | social_contest side BOUNDED (Procedure-D cadence + \u0394affect threshold + Chain cap 3); npc_behavior side \"unconfirmed [OPEN\u2014Jordan]\" | **BOUNDED, one-sided annotation** (P3-B) |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:120"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| D5 | Doc-status contradiction | Document header simultaneously declares `## Status: CANONICAL` (line 7) and `## Authority: ... this document (design proposal, requires editorial approval)` (line 9) \u2014 self-contradictory status framing for the entire skeleton. | `threadwork_v30.md` lines 7\u20139 | P2 | **[CONFIRMED-OPEN\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/threadwork/gap_register_update.md:16"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| D5 \u2014 CANONICAL vs. \"design proposal\" header contradiction | P2 | no action \u2014 already tracked, `module_contracts.yaml` `[OPEN \u2014 Jordan]` |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/threadwork/gap_register_update.md:49"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "`[OPEN \u2014 Jordan decision]` The F1 fix raises the **max-favorable ceiling** from ~89% (Ob-shift, floored) to ~98% (\u03bc-shift) on low-Ob strikes. This is the *inverse* of the foreclosure question: **how dominant should a maximally-leveraged fighter be?** A ~98% ceiling means even total setup advantage whiffs ~2%; a lowe\u2026",
       "category": "ruling",
       "priority": 1,
@@ -3471,6 +3675,90 @@
       "lane": "GO"
     },
     {
+      "text": "(`territorial_piety`/`conviction_track_v30` vs `piety_track`/`conviction_track_v1`) flagged `[OPEN \u2014 Jordan]` in both",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:137"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "nodes \u2014 `[OPEN \u2014 Jordan]` in both gap_notes). **GAP-B4** (`[ASSUMPTION]`). CV un-pointered.",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:381"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "the registry but npc_behavior's contract also claims it \u2014 `[OPEN \u2014 Jordan]`).",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:430"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| GAP-J1/J2/J3 name collision + hidden loop + dual-emit | \u2014 | `[OPEN \u2014 Jordan]` in gap_notes \u2014 HELD-BACK |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:526"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "J \u00b7 Name collision / hidden loop / dual-emit (`[OPEN \u2014 Jordan]`)",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:136"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-J1** | 3-way \"**Piety Track**\" collision: `piety_track` (personal, conviction_track_v1) vs `territorial_piety` (territorial, conviction_track_v30) | `doc:` both contracts' gap_notes `[OPEN \u2014 Jordan]` | **UNRECONCILED** | Do NOT merge the nodes; disambiguate the name. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:140"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-J3** | dual-emit attribution: `scene.dialogue` (scene_slate+social_contest vs npc_behavior), `mechanical.scene_entered`, `state.belief_revised` | `doc:` gap_notes `[OPEN \u2014 Jordan]` | **UNRECONCILED** | Assign a single canonical emitter per type. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:142"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "Third finding \u2014 properly-flagged 3-way name collision adjacent to this term.** `references/module_contracts.yaml:240` (gap_notes) independently documents: *\"NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 'Piety Track' (this personal scar system\u2026 home designs/personal/conviction_track_v1.md) vs designs/scene/\u2026",
       "category": "ruling",
       "priority": 1,
@@ -3834,6 +4122,19 @@
         "campaign_architecture"
       ],
       "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Key Type Registry (A2 / F2 class).",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/module_map_flat.md:11",
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/graphs/module_map_flat.md:11"
+      ],
+      "systems": [],
+      "count": 2,
       "lane": null
     },
     {
@@ -4519,6 +4820,32 @@
       "lane": null
     },
     {
+      "text": "Deterministic, working-tree only. **Measures; does not gate** (pytest + import-smoke gate). Provenance: L2 is built on `module_contracts.yaml`, which carries 13 `[ASSUMPTION]` markers and 9 `doc:null` modules \u2014 findings on those are bucketed as lower-confidence.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-governance-vector-audit/structure_register.md:3",
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/structure/structure_register.md:3"
+      ],
+      "systems": [],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "EXPLORATORY, not authoritative (capstone #8, ED-IN-0056):** this metric keys on each module's `scales:` field, whose vocabulary is NOT yet reconciled (that is WS2 \u2014 the four divergent scale vocabularies are an open workstream), so the intra/cross split can shift when the vocabulary lands. Unlike the phantom-producer\u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-governance-vector-audit/structure_register.md:123",
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/structure/structure_register.md:123"
+      ],
+      "systems": [],
+      "count": 2,
+      "lane": null
+    },
+    {
       "text": "`[GAP: tested at uniform attributes + light armour + tradition none only. Armour-tier matchups, attribute\u00d7weapon interactions, and live tradition-ability values are each a follow-on matrix.]`",
       "category": "gap",
       "priority": 3,
@@ -4679,6 +5006,30 @@
       "lane": null
     },
     {
+      "text": "13 `[ASSUMPTION]`, 4 dangling emits surfaced \u00b7 **#141** multi-scale governance research corpus + chain/gap",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-weekly-review/weekly_review_2026-07-07_to_2026-07-14.md:125"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "instrument, not a one-off audit. It found 9 `doc:null` modules, 13 `[ASSUMPTION]` resolvers, dangling",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-weekly-review/weekly_review_2026-07-07_to_2026-07-14.md:148"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "`[ASSUMPTION: \"testing ... with historical precedents as guides\" = the historical-grounding lens, not the I-17 numerical sim \u2014 basis: history cannot tune matchup percentages; the precedents bear on design coherence. Surfaced; proceeded.]`",
       "category": "assumption",
       "priority": 3,
@@ -4769,6 +5120,18 @@
       "label": "Flagged assumption (verify)",
       "locations": [
         "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md:133"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| social_contest | dice_pool | **CONFORMANT** | transitions \u00a73.4 Domain Echo fit (J2 pass); loop BOUNDED; persuasion_track bucket [ASSUMPTION] (see J1) |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:86"
       ],
       "systems": [],
       "count": 1,
@@ -5296,7 +5659,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:45"
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:51"
       ],
       "systems": [],
       "count": 1,
@@ -5308,7 +5671,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:472"
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:478"
       ],
       "systems": [],
       "count": 1,
@@ -5320,7 +5683,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:482"
+        "designs/audit/2026-07-08-open-items-jordan-decision-docket/README.md:488"
       ],
       "systems": [],
       "count": 1,
@@ -5639,6 +6002,870 @@
       "lane": null
     },
     {
+      "text": "`references/module_contracts.yaml`: 27 modules, 10 with `doc: null`, 11 `[ASSUMPTION]`-grade resolvers,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-12-simulation-test-harness-methodology/simulation_test_harness_methodology_v1.md:140"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "resolve to a real entry; if that entry is `doc: null` or `[ASSUMPTION]`-grade, the harness still runs",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-12-simulation-test-harness-methodology/simulation_test_harness_methodology_v1.md:245"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "unverified `[ASSUMPTION]` resolver; a cluster of CANONICAL docs (`ci_political`, `territorial_piety`, `victory`)",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Where the gaps are.** It is **doc:null** \u2014 no home design doc \u2014 and its resolver is `[ASSUMPTION]`-grade. It also",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:89"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "resolver is `[ASSUMPTION]`-grade. That combination \u2014 highest in-degree, unverified resolver \u2014 is the single",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:102"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(ED-874); the accounting spine is defined; the fix is to promote it from `[ASSUMPTION]` to verified against the sim.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:108"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]`, and it has one `!A6` seam into npc_behavior.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:117"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]`. And it shares the name \"Piety Track\" with the *personal* `piety_track` \u2014 a three-way collision",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:136"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Where the gaps are.** It is a **phantom** \u2014 doc:null, no state, no emitted Keys, `[ASSUMPTION]` resolver,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:157"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`settlement_layer`. This resolves its doc:null and `[ASSUMPTION]` flags by deletion. (It is the \"16 vs 17\" ambiguity",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:160"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]`; Turmoil is pointer-debt.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:168"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Where the gaps are.** Like faction_state, it pairs highest-tier centrality with an `[ASSUMPTION]` resolver \u2014 the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:178"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Track\" name (the three-way collision). Resolver is `[ASSUMPTION]`. And it is the origin of the **P2 validation",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:191"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Where the gaps are.** Modest \u2014 its resolver is `[ASSUMPTION]`-grade; otherwise it's cleanly wired (emits",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:201"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(retires doc:null/[ASSUMPTION]).\" Only the `module_contracts.yaml` pointer-flip pends ED-1051 (administrative). A",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:226"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Sixteen subsystems, one story: **register the pointers, key the inert modules, ground the two `[ASSUMPTION]` hubs,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md:234"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "workflow) \u00b7 CLAUDE.md \u00a76 refresh (9 doc:null / 13 `[ASSUMPTION]` + the stale audit-refresh comment) \u00b7",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md:168"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "\u00a77 \u00b7 Phase 4 \u2014 hub grounding (the two `[ASSUMPTION]` integration hubs)",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md:192"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(d_sigma-contested per ED-874; Procedures B\u2013E), sim parity tests, adjudicator flips `[ASSUMPTION]` \u2192 grounded;",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md:195"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| `[ASSUMPTION]` markers | 13 | **0 unruled** (grounded or ED-ruled) |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md:252"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`propose_transfer` zero callers; `ECHO_TRANSPORT` default ON), the two-hub in-13/in-12 `[ASSUMPTION]` finding, the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/cross_scale_value_architecture_v1.md:59"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "\u2192 thin reader tier, and both hubs are `[ASSUMPTION]`-resolver: **the highest-value flow passes through the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/cross_scale_value_architecture_v1.md:154"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "27 modules**, 99 raw / 43 simple wiring edges, 2 L2 cycles, **9 `doc:null`** (not 10), **13 `[ASSUMPTION]`**,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/README.md:40"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]`-resolver \u2014 the highest-leverage grounding target.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/README.md:43"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **Per-subsystem** | `subsystem_synthesis` + `subsystem_discussion` | 16 gameplay subsystems; a wide producer front \u2192 **two hubs** (`faction_state` in-13, `npc_behavior` in-12) \u2192 thin reader tier; a zero-Key trio; two retirement phantoms | the load is on the two hubs, and both are `[ASSUMPTION]` |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:38"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "are both L2 cut-vertices and both `[ASSUMPTION]`-grade resolvers. **The most value in the system flows through the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:59"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]` to verified-against-the-sim \u2014 is the single highest-leverage act in the entire docket, and it is CTC",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:61"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "ground the two `[ASSUMPTION]` hubs \u00b7 wire the two built-but-uncalled resolvers (`compute_accord_echo`,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:91"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]` / 4 dangling / 0 phantom; G_code 173 / 268 / 3 cycles / 14 cut-vertices; pointer 52.7%; `faction_state`",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:110"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "1. **Ground the two `[ASSUMPTION]` hubs** (`faction_state`, `npc_behavior`) \u2014 CTC, highest leverage; every downstream",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/unification_v1.md:130"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "notional** (dotted) \u2014 an edge touching a `doc:null` or `[ASSUMPTION]` module (lower-confidence).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:83"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Node badges: `doc:null` (\u2300, 9 modules) \u00b7 `[ASSUMPTION]` resolver (~, 13 markers) \u00b7 **retiring** (faded:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:85"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| L2 wiring | 27 modules \u00b7 **99 raw / 43 simple** edges \u00b7 **2** cycles \u00b7 **0** phantom-producers \u00b7 **4** dangling-emits \u00b7 **9** `doc:null` \u00b7 **13** `[ASSUMPTION]` \u00b7 cross-scale-fraction 0.512 (exploratory) |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:95"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]`.\" The live measured values are **9 `doc:null`** (`faction_politics` + `miraculous_event` were",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:102"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "cumulative_damage, Wounds, Stamina(pool), Initiative, Poise. No `doc:null`, resolver is real (not `[ASSUMPTION]`).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:277"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "6 \u00b7 domain_actions  \u27e8PROVINCIAL \u00b7 d_sigma \u00b7 doc:null \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:332"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Inventory** \u2014 **`doc:null`** (candidate home = a strategic-turn doc). Resolver `[ASSUMPTION]`. No state.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:333"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(`[ASSUMPTION]` resolver). **GAP-D1** (the 3 `!A6` seams \u2014 annotation-debt, COMPLETE-THE-CHAIN).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:341"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "7 \u00b7 faction_state  \u27e8PROVINCIAL \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:343"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "State: Mandate(derived,read), Treasury(derived,read), faction stats 1-7. Resolver `[ASSUMPTION]`.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:345"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Gaps** \u2014 **GAP-B2** (`[ASSUMPTION]` resolver on the single highest-in-degree node \u2014 highest-leverage lead).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:350"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "8 \u00b7 faction_politics  \u27e8PROVINCIAL \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:355"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "ED-IN-0016** \u2014 PP-660, 1115 lines). Resolver `[ASSUMPTION]`. No state block in contract.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:357"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Gaps** \u2014 **GAP-B3** (`[ASSUMPTION]` resolver). **GAP-D2** (`!A6` seam \u2192 npc_behavior). No state block despite a",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:361"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "10 \u00b7 territorial_piety  \u27e8TERRITORY/provincial \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:374"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Influence). Gates: CI=100 \u2192 Theocracy Unification; seasonal CI cap. Resolver `[ASSUMPTION]`.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:376"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "12 \u00b7 settlement_economy  \u27e8SETTLEMENT \u00b7 deterministic_accounting \u00b7 doc:null \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:398"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Inventory** \u2014 **`doc:null`**, resolver `[ASSUMPTION]`, no state, no emits. **Retirement-flagged (ED-SE-0005).**",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:399"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(`[ASSUMPTION]`) \u2014 both moot if retired.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:405"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "13 \u00b7 peninsular_strain  \u27e8PENINSULA \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:407"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(Occupation Phases 1\u20133). Resolver `[ASSUMPTION]`.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:409"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "peninsular_strain_v30). Turmoil un-pointered. **GAP-B6** (`[ASSUMPTION]`).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:417"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "14 \u00b7 npc_behavior  \u27e8PERSONAL/scene \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:419"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "arc state(clock). Gates: project stall\u22658 \u2192 project_failed; cumulative_drift>0.5 \u2192 gossip. Resolver `[ASSUMPTION]`.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:421"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Gaps** \u2014 **GAP-B7** (`[ASSUMPTION]` on the #2 hub \u2014 with faction_state, the two highest-leverage resolver",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:426"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "15 \u00b7 piety_track  \u27e8PERSONAL \u00b7 deterministic_accounting \u00b7 [ASSUMPTION]\u27e9",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:432"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Resonant Style exposed; Scars\u22653 \u2192 Conviction crisis (d6 table). Resolver `[ASSUMPTION]`.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:434"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "open, mirrors PR#131 P1-B). **GAP-J1** (the shared \"Piety Track\" collision, above). **GAP-B8** (`[ASSUMPTION]`).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:441"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "both `[ASSUMPTION]`-resolver \u2014 the highest-leverage, lowest-grounding pair in the graph (GAP-B2/B7).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:467"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "\u2014 non-compilable. The 9 `doc:null` modules + `[ASSUMPTION]` resolvers here ARE the port's blocking work-list:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:492"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| GAP-B2/B7 faction_state + npc_behavior `[ASSUMPTION]` | CTC | Highest-leverage resolver-grounding leads \u2014 HELD-BACK, needs_jordan |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:516"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| GAP-H5 stale doc:null/[ASSUMPTION] counts in CLAUDE.md | hygiene | **NEW LEAD \u2192 IN** (refresh \u00a76 to 9/13) \u2014 HELD-BACK |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md:522"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`[ASSUMPTION]` (raw grep 14 counts the header comment), in-13/in-12 hubs, 52.7 % pointer, validation FAILED 1/3",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/adversarial_review_v1.md:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "B \u00b7 `[ASSUMPTION]`-grade resolvers (13 markers; the gameplay ones)",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:45"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-B2** | `faction_state` resolver `[ASSUMPTION]` on the **in-13 hub** | `code:` L2 hub in-13 + cut-vertex; `doc:` contract resolver comment | **CTC** | Highest-leverage: ground the accounting resolver (d_sigma for contested, ED-874 exists) \u2014 surrounding logic determines it. needs_jordan. |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:49"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-B7** | `npc_behavior` resolver `[ASSUMPTION]` on the **in-12 hub** | `code:` L2 hub in-12 + cut-vertex | **CTC** | Second-highest leverage; ground the Procedure B\u2013E accounting. |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:50"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-B1/B3\u2013B8** | domain_actions, faction_politics, piety_track, territorial_piety, peninsular_strain, settlement_economy, npc_memory, miraculous_event, scenario_authoring `[ASSUMPTION]` | `code:` 13 `[ASSUMPTION]` markers in `module_contracts.yaml` | **CTC** | Per-module resolver grounding; none needs an importe\u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:51"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **GAP-H5** | CLAUDE.md \u00a76 stale \"10/27 doc:null, 11/27 [ASSUMPTION]\" | `code:` live L2 = 9 / 13 | **CTC (hygiene)** | **NEW LEAD \u2192 IN**: refresh \u00a76 to 9 doc:null / 13 [ASSUMPTION]. |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:120"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "overwhelmingly **unbuilt wiring on sound logic** \u2014 zero-Key modules to key, `[ASSUMPTION]` resolvers to ground,",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:164"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "(`faction_state`, `npc_behavior`) carrying in-13/in-12 while both `[ASSUMPTION]`-grade remain the highest-leverage",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/gap_register_v1.md:169"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "9, `[ASSUMPTION]` 13, seams 20, dangling 4, zero-caller 3, `causes[]` 0, join 3/27 \u2014 none derived from the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/fable_review_v1.md:38"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[ASSUMPTION] markers\"** is checkbox-ism \u2014 several are trivial infra where CLASSIFY is the honest disposition;",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "designs/audit/2026-07-14-gameplay-subsystem-observatory/fable_review_v1.md:43"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "`[ASSUMPTION: \"ratify all provisionally\" = the full CR1-CR7 set above. Name any item to strike it.]`",
       "category": "assumption",
       "priority": 3,
@@ -5920,7 +7147,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/proposals/2026-05-25-mechanics-integration-v3_1.md:549"
+        "designs/proposals/2026-05-25-mechanics-integration-v3_1.md:551"
       ],
       "systems": [],
       "count": 1,
@@ -7751,6 +8978,138 @@
       "lane": "PC"
     },
     {
+      "text": "call); **[GAP]** = GENUINE-GAP (a real design call, precedent-informed); **[MIX]** = mixed. Every fix is",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:14"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **3** | **Mandate collapse: ratify D4 + author the two relief-valves** \u2014 GAP-B2 | [GAP] (valves) + [CTC] (devolution=D4/A1/F5) | Confirm D4 (retire `round(7T/(T+K))` as collapse-carrier \u2192 floor-avg Order + fracturing + Standing Keys), and **rule the two Mandate-of-Heaven relief-valves**: (a) **scapegoat** \u2014 an app\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:25"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **4** | **Rank the two chain-bypass authorities** \u2014 GAP-D1 | [GAP] | Monarch + Parliament are both unconditional bypasses with **no precedence** (`scale_hierarchy \u00a75.3`). Pick: **(a)** nest one inside the other (constitutional-monarchy / Tokugawa asymmetry), or **(b)** make Monarch-vs-Parliament collision a **name\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:31"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **6** | **Governance-mode FLAG taxonomy** \u2014 GAP-C2 (+ C1 split, C4 resolver) | [GAP] + [MIX] | Adopt the **8-value `governance_mode` FLAG domain** (AUTOCRATIC_FIAT / ROYAL_COURT_APPOINTMENT / OLIGARCHIC_COUNCIL / LANDHOLDER_FRANCHISE / DELIBERATIVE_ASSEMBLY / CONSENSUS_UNANIMITY / NEGOTIATED_ESTATES / MERITOCRATIC\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:33"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **7** | **Suppression as consequence-bearing + identity-migration** \u2014 GAP-G2 | [GAP] (taxonomy + migration) | Approve modeling cultural suppression via the **seven backfire mechanisms**, esp. the novel **identity-migration** hand-off (severe suppression converts a militarily-solvable problem into a militarily-*uns\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:34"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **8** | **Two missing resolution registers** \u2014 GAP-F6, F7 (re-homed from \u00a73) | [GAP] | **F6 recognition-fission** \u2014 a *peaceful* negotiated-recognition insurgency-*formation* path (charter a sub-faction out of a diverged population); `insurgency_pipeline \u00a74.1` has only a territorial-neglect trigger. **F7 reaggrega\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:35"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **15** | **Caste cross-scale cascade + circumvention** \u2014 GAP-F2, F4, F5, F3 | [CTC] (+F3 sliver [GAP]) | Wire caste-composition\u2192franchise-suppression; adopt the orphaned Fragmentation-Check + Consolidation + two-stage split resolver; generalize the \u00a72.5a wealth-buyout. **F3 genuine sliver:** the *limpieza* forged-\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-cross-scale-governance-grounding/decision_queue.md:52"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| scene_slate | manifest | **NON-CONFORMANT** | A6 (P2-A, scene\u2192personal artifact \u2192 piety_track); W-DOC (home doc [GAP]) |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:72"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| Settlement Weight (`W_s`) | base(Type) [gap: 2 types undefined, F-06], Prosperity, FacilityTier; degraded by \u00a71.8c Weight-as-Exit (sustained Dearth/Order\u22641) | Faction Mandate aggregation `T = \u03a3 W_s\u00b7(q_s/7)` (\u00a71.8), faction Treasury base (\u00a78.1, referenced by \u00a71.8c) | 2 | Clean single-purpose funnel into Mandate; no\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/settlement_territory/mechanic_dependency_graph.md:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| FA-D-08 | Structurally incomplete \"consolidated\" canonical doc | `faction_canon_v30.md` \u2014 the doc `CURRENT.md`'s \"Faction / political\" row lists first among the five heads, explicitly framed (\u00a71\u2013\u00a72) as pulling \"per-faction texture into a single sheet per faction\" for all canonical factions, using a fixed per-facti\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/faction_political/gap_register_update.md:18"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "5 target docs; the corpus's convention here is explicit `[GAP \u2014 Phase B authoring per ED-717]` /",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/faction_political/gap_register_update.md:23"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "`[GAP: \u00a74 freeze sources (Kozlowska; Royal Society; Nature 2021) and the \u00a75 MMA material were *not* independently re-verified at primary-text level this session; the \u00a71/\u00a73 expert-discrimination citations *were* (Jackson 2018 retrieved and read in-thread). A deeper peer-reviewed pass on \u00a74/\u00a75 is available via scholar\u2026",
       "category": "gap",
       "priority": 3,
@@ -8517,6 +9876,282 @@
       "systems": [],
       "count": 1,
       "lane": "PC"
+    },
+    {
+      "text": "sound logic \u2014 usually a ruling-to-unblock, not a design call) \u00b7 **[GAP]** GENUINE-GAP (a real precedent-informed",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **#11 D.6 disjoint + convergence (GAP-A4)** | [CTC] ruling needed | **SPEC-ONLY \u2014 artifact designed** | #136 \u00a75 (M_prev snapshot step 0 / drift step 4) + \u00a79 test 4 is the designed termination artifact. Residual [GAP]: the convergence is *asserted*, not yet *proven* \u2014 a Fable/opus proof node remains. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:27"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **3** | **Mandate collapse + the two relief-valves \u2014 RE-GROUNDED** (GAP-B2) | [GAP] (valves) + [CTC] (devolution) | Confirm D4 (retire `round(7T/(T+K))` as collapse carrier \u2192 floor-avg Order + fracturing + Standing Keys), and rule the two valves **on non-MoH precedent (\u00a7C)**: scapegoat + self-reproach. | Gives the\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:42"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **4** | **Rank the two chain-bypass authorities** (GAP-D1) | [GAP] | Monarch + Parliament both bypass with no precedence. Pick nest-one-inside-the-other OR named-crisis-mode. **New this pass:** also distinguish a **third bypass-adjacent authority** (a standing ideological/juridical seat outside the chain) + an *ad\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:48"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **5** | **Collision-of-stresses two-signal primitive \u2014 RE-GROUNDED** (GAP-E1/E2) | [GAP] | Approve a unified collision primitive requiring **two independently-arriving signals** (material threshold AND independent legitimating trigger) to resonate before a rank-appropriate revolt/Mandate-tier event resolves; a bar\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:49"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **6** | **Author the thin decision-surface verb sets** (NG-4) | [GAP] | Author council-member (~5), territory-bureaucrat (~5), and Parliament-body (~4) verb menus so each is a real \u22654-5 decision surface. **Guard:** each verb must emit a down-tier Key or it is decorative false depth. | Signoria + *intercessio* (cou\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:50"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **7** | **Parliament's ruled-reach verb + armature binding** (NG-5) | [GAP]+[CTC] | Author a `Reichsexekution`-shaped Domain Action emitting a coercive Key onto a named province/territory/settlement; bind the RULED-but-unbound \u00a75.2/\u00a75.3 cross-scale-claiming/bypass authorities to an armature channel. | HRE Reichsex\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:51"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **8** | **Governance-mode FLAG taxonomy** (GAP-C2, carried) | [GAP]+[MIX] | Adopt the 8-value `governance_mode` domain (distinct from manager-type); it is the *thinness multiplier* the census runs its per-role verdicts against. | Aristotle/Athens-sortition/Roman-comitia/consensus polities. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:52"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **9** | **Suppression-backfire + identity-migration** (GAP-G2, carried) | [GAP] | Seven backfire mechanisms; the novel identity-migration hand-off converts a militarily-solvable problem into a Fieldwork/Investigation one. Model a floor, not a zero (Carthage discard). | Reconquista/*limpieza*/Morisco; Rome-vs-Jerus\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:53"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **12** | **Author `engine_clock` + `domain_actions` home docs** (VA-1 / GAP-H3) | [GAP] (author) | Flip the two load-bearing `doc:null` contracts (of 9): `engine_clock` (temporal spine sequencing every V-axis boundary; #136 \u00a75 depends on it; home `propagation_spec_v1`) and `domain_actions` (H1's resolver home; hom\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:61"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **15** | **`stakes.source_key` predicate \u2014 earn or weaken** (chain_map \u00a73, GAP-E-adjacent) | [GAP] | Author the `stakes.source_key` consume-edge on `social_contest \u00a76`, OR downgrade the event\u2192Parliament/SC claim to \"a motion may cite the Key.\" The one edge failing the ripple substrate's own \u00a79 dependency test. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md:64"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[CTC]** complete-the-chain (execution on sound logic) \u00b7 **[GAP]** genuine precedent-informed design",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:164"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "3. **Mandate collapse + two relief-valves \u2014 RE-GROUNDED** (GAP-B2) \u2014 [GAP]+[CTC]. Confirm D4 (retire",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:175"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "4. **Rank the two chain-bypass authorities** (GAP-D1) \u2014 [GAP]. Monarch + Parliament bypass with no",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:184"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "5. **Collision-of-stresses two-signal primitive \u2014 RE-GROUNDED** (GAP-E1/E2) \u2014 [GAP]. Two independently",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:189"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "5b. Tetrarchy multi-seat power-share \u2014 MECHANIC + MANDATORY FAILURE-GUARD (hook c)** \u2014 [GAP]. Offer",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:194"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "6. **Author the thin decision-surface verb sets** (NG-4) \u2014 [GAP]. Council (~5), bureaucrat (~5),",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:200"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "7. **Parliament's ruled-reach verb + armature binding** (NG-5) \u2014 [GAP]+[CTC]. A `Reichsexekution`-shaped",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:204"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "8. **Governance-mode FLAG taxonomy** (GAP-C2) \u2014 [GAP]. Adopt the 8-value `governance_mode` domain. \u25c7",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:206"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "9. **Suppression-backfire + identity-migration** (GAP-G2) \u2014 [GAP]. Seven backfire mechanisms; convert a",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:212"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "12. **Author `engine_clock` + `domain_actions` home docs** (VA-1) \u2014 [GAP]. The two load-bearing",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:220"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "15. **`stakes.source_key` predicate \u2014 earn or weaken** (\u00a76.2/\u00a73 AT-RISK edge) \u2014 [GAP].",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:224"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[GAP]\": offer the deliberate multi-seat power-share as a player-chosen anti-secession mitigation",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md:289"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "| Terrain | `terrain=None` | `[GAP]` \u2014 deferred |",
@@ -9568,7 +11203,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:48"
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:50"
       ],
       "systems": [],
       "count": 1,
@@ -9580,7 +11215,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:226"
+        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:228"
       ],
       "systems": [],
       "count": 1,
@@ -10065,6 +11700,54 @@
       "lane": null
     },
     {
+      "text": "HRE-4 \u00b7 Borrow (financier loan vs future extraction) \u00b7 `ED-FA-0029`** \u2014 Final KEEP *(overturned: MERGE[stub] \u2192 KEEP; steelman survived)*. The dossier is a **placeholder** \u2014 reasoning \"test reasoning long enough\u2026\", downstream artifact \"test\". Per the charter, a MERGE naming \"test\" caps at REFINE by construction. On t\u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/pessimist_ners_audit_v1.md:114"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "HRE-2 \u00b7 Chapter Capture (pre-vacancy College investment) \u00b7 `ED-FA-0024`** \u2014 Final KEEP *(overturned: DISTILL[stub] \u2192 KEEP; steelman survived)*. **Placeholder dossier** (\"test\" throughout). Critic verified against \u00a71.4 rows 328/330/331: the only existing College mechanism is *reactive* (please the currently-seated Pr\u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/pessimist_ners_audit_v1.md:116"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "HAB-1 \u00b7 The Corregidor (outside-appointee judicial override) \u00b7 `ED-SE-0030`** \u2014 Final KEEP *(overturned: MERGE[stub] \u2192 KEEP; steelman survived)*. **Placeholder dossier** (\"test reasoning long enough to satisfy minimum requirements maybe\"). Critic: \u00a71.4's suspicion-threshold \"audit\" is an unmechanized stub; HAB-1 is \u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/pessimist_ners_audit_v1.md:118"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "CHN-4 \u00b7 Salt Certificate (tradeable monopoly license) \u00b7 `ED-SE-0037`** \u2014 Final REFINE *(overturned: MERGE[stub] \u2192 REFINE; steelman survived)*. **Placeholder dossier** (\"test\" throughout, failure_lexicon `[\"a\"]`). Critic: not a duplicate of Guild-charter (political-claimant cost vs. tradeable liquidity-timing token w\u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/pessimist_ners_audit_v1.md:144"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "f\"[STUB WP-2 \u00a7A.14] mandate_delta_loser={o.mandate_delta_loser} \"",
       "category": "stub",
       "priority": 3,
@@ -10233,6 +11916,90 @@
       "lane": null
     },
     {
+      "text": "| **HRE-4** | ED-FA-0029 | HRE | Borrow (financier loan) | Loan secured against a *named* extractive right; spawns an Investigate-discoverable financier-actor; reuses Quo Warranto for the hard clawback (Concession tag). | **KEEP** *(overturned MERGE[stub]\u2192KEEP)* | Not stress-tested. Named by the catalogue as one of \u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:95"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **HRE-2** | ED-FA-0024 | HRE | Chapter Capture | Pre-vacancy patronage banking \"College seats owed\" that convert to vote-weight only if/when a vacancy fires (timing the player doesn't control). | **KEEP** *(overturned DISTILL[stub]\u2192KEEP)* | Not stress-tested. | **Promote.** Distinct from BYZ-9's external override \u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:96"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **HAB-1** | ED-SE-0030 | Habsburg | Corregidor (overlay) | Outside appointee *layered over* the sitting governor (override on Hold Court/Investigate, governor keeps the rest); self-expiring term-scoped tags. | **KEEP** *(overturned MERGE[stub]\u2192KEEP)* | Not stress-tested. The first mechanic to actually mechanize \u00a71\u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:97"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **CHN-4** | ED-SE-0037 | China | Salt Certificate | Tradeable, geography-siloed monopoly tokens as a Develop funding option + a \"Convert to Hereditary Franchise\" one-way door. | **REFINE** *(overturned MERGE[stub]\u2192REFINE)* | Not stress-tested. Catalogue rates it \"bolstered\" \u2014 *the general form* Toll/Mining-Charter\u2026",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:129"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Prior NERS verdict:** **REFINE** (overturned MERGE[stub]\u2192REFINE \u2014 the original dossier was a",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/reeval/reeval_chn_byz.md:240"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Prior NERS verdict:** **KEEP** *(overturned: DISTILL[stub] \u2192 KEEP; steelman survived)*. The",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/reeval/reeval_ven_hre.md:26"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Prior NERS verdict:** **KEEP** *(overturned: MERGE[stub] \u2192 KEEP; steelman survived)*. Placeholder",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/reeval/reeval_ven_hre.md:82"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "| Architecture spine | thin (plumbing) | partial (Why?-diagnostic unbuilt) | present-but-thin (`scene.thread_operation` [STUB]) | Uniform, direction-neutral delivery \u2014 with the least-specified modules (domain_actions, engine_clock) at the most load-bearing junctions. |",
       "category": "stub",
       "priority": 3,
@@ -10335,6 +12102,18 @@
       "label": "TODO / FIXME",
       "locations": [
         "designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/refutations/refuter_R3_threadwork_knots_FI.md:47"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Changes verdict?** **Yes.** The audit treated the Charter-composition gap as a specification TODO",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "designs/audit/2026-07-12-governance-compendium/reeval/reeval_ven_hre.md:182"
       ],
       "systems": [],
       "count": 1,
@@ -10610,6 +12389,20 @@
       "superseded_by": "ED-PC-0005",
       "date": "2026-07-08",
       "replacement": "Jordan ruling 2026-07-08 (ED-PC-0005): wounds NEVER impose a \u22121D pool cut \u2014 each wound ALWAYS adds a fractional Ob to the roll. Combat is the ratified reference"
+    },
+    {
+      "id": "designs/audit/2026-07-05-emergent-narrative-engine/{00_grounding,01_workings}/**.md (29 working-record docs)",
+      "scope": "The 29 grounding/charter/arch-lane/critic/judge/refute/draft/spec-section/synthesis working notes of the 2026-07-05 emergent-narrative-engine design effort, each still first-Status PROPOSED, read as independently-pending design proposals.\n",
+      "superseded_by": "ED-IN-0011",
+      "date": "2026-07-15",
+      "replacement": "The effort's head is RATIFIED: designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md (+ narrative_engine_design_v1.md-as-amende"
+    },
+    {
+      "id": "Compact as a new \"5th ledger tag-family\" (compendium Part 44/45; grounded_event_card_deck_v1 C.3; governance_play_redesign_v1 \u00a71.3a/\u00a71.6; ED-SE-0018/0019 framing)",
+      "scope": "Multiple governance-cluster docs frame \"Compact\" (fixed-quota extraction, Encabezamiento) as a new 5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.\n",
+      "superseded_by": "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)",
+      "date": "2026-07-13",
+      "replacement": "Compact is NOT a new tag-family \u2014 model it as a recurring Debt subtype: Debt(key=\"compact:<quota>\", ttl=term, recurs=True). Leverage remains the built 5th famil"
     }
   ]
 }

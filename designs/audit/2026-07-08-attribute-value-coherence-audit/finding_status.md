@@ -1,6 +1,6 @@
 # Finding status — tallies through the critic funnel
 
-## Status: PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029
+## Status: READ-ONLY AUDIT (2026-07-08) · Lane: IN · Anchor: ED-IN-0029 (findings tracked in the ledger; not a ratifiable design doc). [reclassified 2026-07-15, proposal-reconciliation pass]
 
 ## 1. Before / after the critic funnel
 

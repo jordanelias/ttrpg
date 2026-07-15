@@ -12,7 +12,7 @@ All highest-severity anchors verified against the working tree: TW's resolver im
 
 # Pessimist Subtractive NERS — Corpus Synthesis (crunch-cascade / cognitive-load / legibility pass, verdict-first)
 
-## Status: PROPOSED (read-only synthesis, 2026-07-08) · Lane: IN · aggregates 9 lane critic-passes (PC / MB / SC / FA / SE / TW / DC / AN / XS), each already through an inverted-critic verification
+## Status: READ-ONLY SYNTHESIS (2026-07-08) · Lane: IN · aggregates 9 lane critic-passes (PC/MB/SC/FA/SE/TW/DC/AN/XS); not a ratifiable design doc. [reclassified 2026-07-15, proposal-reconciliation pass]
 Judged **as-if-built** throughout. No verdict rests on stub/unwired/unbuilt/unported status; build state is captured only as routing metadata. Unlike the sibling *action* audit, this pass ranges over **all flagged elements** — trackers, mechanics, rolling engines, and legibility gaps — not just player verbs.
 
 ---

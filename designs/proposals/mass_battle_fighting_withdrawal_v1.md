@@ -1,5 +1,7 @@
 # Fighting-Withdrawal / Yield Mechanic — Design Workplan (DG-2)
 
+## Status: PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]
+
 **Status: PROPOSAL — pending Jordan sign-off before implementation.** Not canon yet. Date 2026-07-05.
 Ratified scope for THIS document (Jordan, 2026-07-05): *"Create as workplan"* — i.e. this doc captures
 the design, it does **not** implement the mechanic. Implementation is a future session's work, gated on

@@ -1,6 +1,6 @@
 # S3 — Q4: How narratives are made present for the player (master section)
 
-## Status: PROPOSED (spec-section draft, render lane, 2026-07-05)
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0069]
 ## Lane: IN · Charter: `00_engine_charter.md` Q4 (L107–135) · Spine: Architecture B, layer **L5 Render** (`synthesis.md §1, §6`)
 
 This section drafts the L5 (Render) master surface of the Arc-Vector Engine plus the parts of

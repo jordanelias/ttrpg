@@ -1,6 +1,6 @@
 # S5 — Worked Season Trace: ARC-S07, "The Torben Loyalty Clock"
 
-## Status: PROPOSED (spec-section draft, emergent-narrative-engine effort · Lane IN · 2026-07-05)
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0069]
 
 _The capstone deliverable. One major arc driven end-to-end through the six-layer Arc-Vector
 Engine (synthesis §1), exhibiting all twelve charter capstones (`00_engine_charter.md:153-164`).

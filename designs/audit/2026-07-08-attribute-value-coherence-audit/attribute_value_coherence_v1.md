@@ -1,6 +1,6 @@
 # Attribute / Value Coherence Audit — corpus report
 
-## Status: PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029
+## Status: READ-ONLY AUDIT (2026-07-08) · Lane: IN · Anchor: ED-IN-0029 (findings tracked in the ledger; not a ratifiable design doc). [reclassified 2026-07-15, proposal-reconciliation pass — was mis-tagged as a pending proposal]
 
 Quantity-layer extension of the Key & Echo Armature (`designs/architecture/key_echo_armature_v1.md`,
 RATIFIED ED-IN-0018). The armature unified the seam layer; this audit covers the quantities those

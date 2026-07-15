@@ -1,4 +1,6 @@
 # Stub Infill Plan — sim/ Implementation Roadmap
+
+## Status: SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]
 **Draft · 2026-05-19 · proposed for Jordan ratification**
 
 ## Summary

@@ -1,5 +1,7 @@
 # Implementation Plan — Army-Scale Multi-Unit Envelopment
 
+## Status: PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]
+
 **Date:** 2026-06-22 · **Status:** PROPOSED (Jordan-vetoable) · **Scope:** mass-battle sim engine (`tests/sim/mass_battle/`); Godot implementation is downstream · **Tier:** mechanical/systemic gap-fill (project-owner contract) — bottom-up from the traced engine, top-down against Cannae + acclaimed spatial wargame design.
 
 ## Thesis

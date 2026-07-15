@@ -5,13 +5,13 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 283,
-    "needs_jordan": 77,
+    "total": 247,
+    "needs_jordan": 79,
     "by_kind": {
-      "provisional_status_doc": 55,
+      "provisional_status_doc": 17,
       "proposal_doc": 9,
       "ledger_actionable": 127,
-      "ledger_needs_jordan": 75,
+      "ledger_needs_jordan": 77,
       "audit_partial": 17
     },
     "by_lane": {
@@ -24,8 +24,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 32,
-        "needs_jordan": 12
+        "total": 34,
+        "needs_jordan": 14
       },
       "MB": {
         "total": 6,
@@ -48,15 +48,15 @@
         "needs_jordan": 1
       },
       "unassigned": {
-        "total": 134,
+        "total": 96,
         "needs_jordan": 14
       }
     }
   },
   "by_lane": {
     "IN": {
-      "total": 32,
-      "needs_jordan": 12,
+      "total": 34,
+      "needs_jordan": 14,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -319,6 +319,26 @@
           "links": []
         },
         {
+          "kind": "ledger_needs_jordan",
+          "source": "canon/editorial_ledger",
+          "id": "ED-IN-0069",
+          "title": "Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "canon/editorial_ledger",
+          "id": "ED-IN-0070",
+          "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
           "kind": "audit_partial",
           "source": "references/audit_registry.jsonl",
           "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
@@ -393,389 +413,9 @@
       ]
     },
     "unassigned": {
-      "total": 134,
+      "total": 96,
       "needs_jordan": 14,
       "items": [
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md",
-          "title": "00 engine charter",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort charter — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/01_arc_corpus.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/01_arc_corpus.md",
-          "title": "01 arc corpus",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/02_prose_render_stack.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/02_prose_render_stack.md",
-          "title": "02 prose render stack",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md",
-          "title": "03 prior art and module homes",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/README.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/README.md",
-          "title": "README",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED working record (companion to ../narrative_engine_design_v1.md — not canonical design text)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md",
-          "title": "arch A minimal detector",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort lane output, 2026-07-05) — Jordan-vetoable",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_B_arc_vector_engine.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_B_arc_vector_engine.md",
-          "title": "arch B arc vector engine",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md",
-          "title": "arch C director layer",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort architecture lane — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/critic.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/critic.md",
-          "title": "critic",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (critic lane, 2026-07-05 · Lane IN)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_register_formalizability.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_register_formalizability.md",
-          "title": "dossier register formalizability",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_transport_fitness.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_transport_fitness.md",
-          "title": "dossier transport fitness",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (lane working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s2_q3_arcs.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s2_q3_arcs.md",
-          "title": "draft s2 q3 arcs",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED working notes (Jordan-vetoable) · Lane IN · 2026-07-05",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s3_q4_render.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s3_q4_render.md",
-          "title": "draft s3 q4 render",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "working notes (render-lane drafter, 2026-07-05). Deliverable = `spec_sections/s3_q4_render.md`.",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_architecture_integrity.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_architecture_integrity.md",
-          "title": "judge architecture integrity",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort judgment — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_buildability.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_buildability.md",
-          "title": "judge buildability",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort judge notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_player_experience.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_player_experience.md",
-          "title": "judge player experience",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (design-effort judge working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_determinism_replay.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_determinism_replay.md",
-          "title": "refute determinism replay",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_integration_reality.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_integration_reality.md",
-          "title": "refute integration reality",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_railroad_windows.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_railroad_windows.md",
-          "title": "refute railroad windows",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_determinism_cost.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_determinism_cost.md",
-          "title": "refute v2 determinism cost",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial working notes — Jordan-vetoable)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_light_function.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_light_function.md",
-          "title": "refute v2 light function",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial-skeptic lane, LIGHT-FUNCTION lens · 2026-07-05 · Lane IN)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_veto_railroad.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_veto_railroad.md",
-          "title": "refute v2 veto railroad",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_veto_and_drift.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_veto_and_drift.md",
-          "title": "refute veto and drift",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s1_q1_q2.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s1_q1_q2.md",
-          "title": "s1 q1 q2",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (spec-section draft, 2026-07-05 · Lane IN)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md",
-          "title": "s2 q3 arcs",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (spec-section draft — Jordan-vetoable, ratified-on-merge per CLAUDE.md §2 ED-1094)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md",
-          "title": "s3 q4 render",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (spec-section draft, render lane, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md",
-          "title": "s4 substrate",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (spec-section drafter lane, 2026-07-05 · Lane IN)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md",
-          "title": "s5 season trace",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (spec-section draft, emergent-narrative-engine effort · Lane IN · 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/synthesis.md",
-          "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/synthesis.md",
-          "title": "synthesis",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (synthesis-architect lane output, 2026-07-05)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-07-unaddressed-areas-audit/00_grounding/00_charter.md",
-          "id": "designs/audit/2026-07-07-unaddressed-areas-audit/00_grounding/00_charter.md",
-          "title": "00 charter",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (Jordan-vetoable throughout; the audit half of this PR edits no canon)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md",
-          "id": "designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md",
-          "title": "attribute value coherence v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-attribute-value-coherence-audit/finding_status.md",
-          "id": "designs/audit/2026-07-08-attribute-value-coherence-audit/finding_status.md",
-          "title": "finding status",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/01_pessimist_subtractive_ners/00_corpus_synthesis.md",
-          "id": "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/01_pessimist_subtractive_ners/00_corpus_synthesis.md",
-          "title": "00 corpus synthesis",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (read-only synthesis, 2026-07-08) · Lane: IN · aggregates 9 lane critic-passes (PC / MB / SC / FA / SE / TW / DC / AN / XS), each already through an inverted-critic verification",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-pessimist-action-audit/00_grounding/00_charter.md",
-          "id": "designs/audit/2026-07-08-pessimist-action-audit/00_grounding/00_charter.md",
-          "title": "00 charter",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN (cross-cutting) · Anchor: ED-IN-0027",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-pessimist-action-audit/ed_options.md",
-          "id": "designs/audit/2026-07-08-pessimist-action-audit/ed_options.md",
-          "title": "ed options",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · one row per subtractive verdict · grouped by lane",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-pessimist-action-audit/finding_status.md",
-          "id": "designs/audit/2026-07-08-pessimist-action-audit/finding_status.md",
-          "title": "finding status",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · 97 action-objects across 8 lanes",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-pessimist-action-audit/pessimist_action_audit_v1.md",
-          "id": "designs/audit/2026-07-08-pessimist-action-audit/pessimist_action_audit_v1.md",
-          "title": "pessimist action audit v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0027",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-08-pessimist-action-audit/workplan_v6_register_deltas.md",
-          "id": "designs/audit/2026-07-08-pessimist-action-audit/workplan_v6_register_deltas.md",
-          "title": "workplan v6 register deltas",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08, pessimist-action-audit) · deltas apply only on Jordan docket ruling",
-          "links": []
-        },
         {
           "kind": "provisional_status_doc",
           "source": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
@@ -858,16 +498,6 @@
         },
         {
           "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-pr119-harness-verification/narrative_ners_review.md",
-          "id": "designs/audit/2026-07-12-pr119-harness-verification/narrative_ners_review.md",
-          "title": "narrative ners review",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED, read-only. NOT canon. Does not ratify anything.",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
           "source": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
           "id": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
           "title": "remediation plan v1",
@@ -888,6 +518,16 @@
         },
         {
           "kind": "provisional_status_doc",
+          "source": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
+          "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
+          "title": "governance cluster reconciliation v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
           "source": "designs/npcs/character_canon_v30.md",
           "id": "designs/npcs/character_canon_v30.md",
           "title": "character canon v30",
@@ -903,7 +543,7 @@
           "title": "2026-05-16-PC-4.4-unified-success-stress",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
           "links": []
         },
         {
@@ -913,7 +553,7 @@
           "title": "2026-05-16-faction-audit-followup-plan",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -923,7 +563,7 @@
           "title": "2026-05-25-mechanics-integration-v3 1",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -933,7 +573,7 @@
           "title": "mass battle shape echelon revamp",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
           "links": []
         },
         {
@@ -943,7 +583,7 @@
           "title": "pc formation system",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -953,7 +593,7 @@
           "title": "stub infill plan",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -963,7 +603,7 @@
           "title": "weapon physics and concentration model",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -1749,7 +1389,7 @@
           "title": "mass battle fighting withdrawal v1",
           "lane": "MB",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -1759,7 +1399,7 @@
           "title": "multiunit envelopment plan",
           "lane": "MB",
           "needs_jordan": false,
-          "status": "(no Status line — designs/proposals/)",
+          "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
           "links": []
         },
         {
@@ -2996,386 +2636,6 @@
     },
     {
       "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md",
-      "title": "00 engine charter",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort charter — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/01_arc_corpus.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/01_arc_corpus.md",
-      "title": "01 arc corpus",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/02_prose_render_stack.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/02_prose_render_stack.md",
-      "title": "02 prose render stack",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md",
-      "title": "03 prior art and module homes",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort grounding — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/README.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/README.md",
-      "title": "README",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED working record (companion to ../narrative_engine_design_v1.md — not canonical design text)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md",
-      "title": "arch A minimal detector",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort lane output, 2026-07-05) — Jordan-vetoable",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_B_arc_vector_engine.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_B_arc_vector_engine.md",
-      "title": "arch B arc vector engine",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md",
-      "title": "arch C director layer",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort architecture lane — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/critic.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/critic.md",
-      "title": "critic",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (critic lane, 2026-07-05 · Lane IN)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_register_formalizability.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_register_formalizability.md",
-      "title": "dossier register formalizability",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_transport_fitness.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_transport_fitness.md",
-      "title": "dossier transport fitness",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (lane working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s2_q3_arcs.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s2_q3_arcs.md",
-      "title": "draft s2 q3 arcs",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED working notes (Jordan-vetoable) · Lane IN · 2026-07-05",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s3_q4_render.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s3_q4_render.md",
-      "title": "draft s3 q4 render",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "working notes (render-lane drafter, 2026-07-05). Deliverable = `spec_sections/s3_q4_render.md`.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_architecture_integrity.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_architecture_integrity.md",
-      "title": "judge architecture integrity",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort judgment — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_buildability.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_buildability.md",
-      "title": "judge buildability",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort judge notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_player_experience.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_player_experience.md",
-      "title": "judge player experience",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (design-effort judge working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_determinism_replay.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_determinism_replay.md",
-      "title": "refute determinism replay",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_integration_reality.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_integration_reality.md",
-      "title": "refute integration reality",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_railroad_windows.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_railroad_windows.md",
-      "title": "refute railroad windows",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_determinism_cost.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_determinism_cost.md",
-      "title": "refute v2 determinism cost",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial working notes — Jordan-vetoable)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_light_function.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_light_function.md",
-      "title": "refute v2 light function",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial-skeptic lane, LIGHT-FUNCTION lens · 2026-07-05 · Lane IN)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_veto_railroad.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_veto_railroad.md",
-      "title": "refute v2 veto railroad",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_veto_and_drift.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_veto_and_drift.md",
-      "title": "refute veto and drift",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (adversarial-skeptic lane, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s1_q1_q2.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s1_q1_q2.md",
-      "title": "s1 q1 q2",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (spec-section draft, 2026-07-05 · Lane IN)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md",
-      "title": "s2 q3 arcs",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (spec-section draft — Jordan-vetoable, ratified-on-merge per CLAUDE.md §2 ED-1094)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md",
-      "title": "s3 q4 render",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (spec-section draft, render lane, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md",
-      "title": "s4 substrate",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (spec-section drafter lane, 2026-07-05 · Lane IN)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md",
-      "title": "s5 season trace",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (spec-section draft, emergent-narrative-engine effort · Lane IN · 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/synthesis.md",
-      "id": "designs/audit/2026-07-05-emergent-narrative-engine/01_workings/synthesis.md",
-      "title": "synthesis",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (synthesis-architect lane output, 2026-07-05)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-07-unaddressed-areas-audit/00_grounding/00_charter.md",
-      "id": "designs/audit/2026-07-07-unaddressed-areas-audit/00_grounding/00_charter.md",
-      "title": "00 charter",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (Jordan-vetoable throughout; the audit half of this PR edits no canon)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md",
-      "id": "designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md",
-      "title": "attribute value coherence v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-attribute-value-coherence-audit/finding_status.md",
-      "id": "designs/audit/2026-07-08-attribute-value-coherence-audit/finding_status.md",
-      "title": "finding status",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/01_pessimist_subtractive_ners/00_corpus_synthesis.md",
-      "id": "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/01_pessimist_subtractive_ners/00_corpus_synthesis.md",
-      "title": "00 corpus synthesis",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (read-only synthesis, 2026-07-08) · Lane: IN · aggregates 9 lane critic-passes (PC / MB / SC / FA / SE / TW / DC / AN / XS), each already through an inverted-critic verification",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-pessimist-action-audit/00_grounding/00_charter.md",
-      "id": "designs/audit/2026-07-08-pessimist-action-audit/00_grounding/00_charter.md",
-      "title": "00 charter",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN (cross-cutting) · Anchor: ED-IN-0027",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-pessimist-action-audit/ed_options.md",
-      "id": "designs/audit/2026-07-08-pessimist-action-audit/ed_options.md",
-      "title": "ed options",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · one row per subtractive verdict · grouped by lane",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-pessimist-action-audit/finding_status.md",
-      "id": "designs/audit/2026-07-08-pessimist-action-audit/finding_status.md",
-      "title": "finding status",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08) · 97 action-objects across 8 lanes",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-pessimist-action-audit/pessimist_action_audit_v1.md",
-      "id": "designs/audit/2026-07-08-pessimist-action-audit/pessimist_action_audit_v1.md",
-      "title": "pessimist action audit v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0027",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-08-pessimist-action-audit/workplan_v6_register_deltas.md",
-      "id": "designs/audit/2026-07-08-pessimist-action-audit/workplan_v6_register_deltas.md",
-      "title": "workplan v6 register deltas",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08, pessimist-action-audit) · deltas apply only on Jordan docket ruling",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
       "source": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
       "id": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
       "title": "grounded event card deck v1",
@@ -3456,16 +2716,6 @@
     },
     {
       "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-pr119-harness-verification/narrative_ners_review.md",
-      "id": "designs/audit/2026-07-12-pr119-harness-verification/narrative_ners_review.md",
-      "title": "narrative ners review",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED, read-only. NOT canon. Does not ratify anything.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
       "source": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
       "id": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
       "title": "remediation plan v1",
@@ -3486,6 +2736,16 @@
     },
     {
       "kind": "provisional_status_doc",
+      "source": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
+      "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
+      "title": "governance cluster reconciliation v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
       "source": "designs/npcs/character_canon_v30.md",
       "id": "designs/npcs/character_canon_v30.md",
       "title": "character canon v30",
@@ -3501,7 +2761,7 @@
       "title": "2026-05-16-PC-4.4-unified-success-stress",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
       "links": []
     },
     {
@@ -3511,7 +2771,7 @@
       "title": "2026-05-16-faction-audit-followup-plan",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3521,7 +2781,7 @@
       "title": "2026-05-25-mechanics-integration-v3 1",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3531,7 +2791,7 @@
       "title": "mass battle fighting withdrawal v1",
       "lane": "MB",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3541,7 +2801,7 @@
       "title": "mass battle shape echelon revamp",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
       "links": []
     },
     {
@@ -3551,7 +2811,7 @@
       "title": "multiunit envelopment plan",
       "lane": "MB",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3561,7 +2821,7 @@
       "title": "pc formation system",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3571,7 +2831,7 @@
       "title": "stub infill plan",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -3581,7 +2841,7 @@
       "title": "weapon physics and concentration model",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "(no Status line — designs/proposals/)",
+      "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {
@@ -4931,6 +4191,26 @@
       "title": "Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work",
       "lane": "IN",
       "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "canon/editorial_ledger",
+      "id": "ED-IN-0069",
+      "title": "Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia",
+      "lane": "IN",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "canon/editorial_ledger",
+      "id": "ED-IN-0070",
+      "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+      "lane": "IN",
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },

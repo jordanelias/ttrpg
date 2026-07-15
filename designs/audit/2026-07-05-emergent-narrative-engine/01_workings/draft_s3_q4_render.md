@@ -1,6 +1,6 @@
 # Working notes — S3 / Q4 render lane
 
-## Status: working notes (render-lane drafter, 2026-07-05). Deliverable = `spec_sections/s3_q4_render.md`.
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0069]
 
 ## Sources read in full / targeted (working tree)
 - `00_engine_charter.md` (full) — Q4 = L107–135; constraints C1–C7 L24–41; substrate contract

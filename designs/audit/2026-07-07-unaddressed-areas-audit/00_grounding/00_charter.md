@@ -1,6 +1,6 @@
 # Unaddressed-Areas Comprehensive Audit — Charter
 
-## Status: PROPOSED (Jordan-vetoable throughout; the audit half of this PR edits no canon)
+## Status: AUDIT CHARTER (2026-07-07, Anchor ED-IN-0017) · Lane: IN · scaffolding; edits no canon; not a ratifiable design doc. [reclassified 2026-07-15, proposal-reconciliation pass]
 ## Date: 2026-07-07 · Lane: IN (cross-cutting) · Branch: `claude/fable5-audit-coverage-gaps-22nz7i`
 ## ED anchor: ED-IN-0017 (allocated this PR)
 

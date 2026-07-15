@@ -1,5 +1,7 @@
 # Faction Audit Follow-Up Plan
 
+## Status: SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]
+
 **Date:** 2026-05-16
 **Status:** PROVISIONAL — proposal-of-process; Jordan-approval-gated for execution
 **Source audit:** `designs/audit/2026-05-16-faction-ners-all-directions.md` (commit ffb1e57)

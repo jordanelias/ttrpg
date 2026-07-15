@@ -1,6 +1,6 @@
 # Completeness Critic — full working notes
 
-## Status: PROPOSED (critic lane, 2026-07-05 · Lane IN)
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0069]
 _Role: completeness critic for the whole emergent-narrative-engine design effort, against the
 charter. Read in full: `00_engine_charter.md`; the five `spec_sections/s{1..5}`; grounding
 `01/02/03`; the three verification verdicts (contract-coherence, trace-accounting,

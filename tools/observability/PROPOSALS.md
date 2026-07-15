@@ -5,16 +5,16 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**283 open work items** · **77 need your decision**.
+**247 open work items** · **79 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`designs/workplans/valoria_master_workplan_v6.md` §5](designs/workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 75, Proposal docs (designs/proposals/) — 9, Provisional / draft design docs — 55
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 77, Proposal docs (designs/proposals/) — 9, Provisional / draft design docs — 17
 
 ## MB — Mass battle  (6 items, 3 need decision)
 
-- `designs/proposals/mass_battle_fighting_withdrawal_v1.md` — mass battle fighting withdrawal v1  _((no Status line — designs/proposals/))_
-- `designs/proposals/multiunit_envelopment_plan.md` — multiunit envelopment plan  _((no Status line — designs/proposals/))_
+- `designs/proposals/mass_battle_fighting_withdrawal_v1.md` — mass battle fighting withdrawal v1  _(PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15])_
+- `designs/proposals/multiunit_envelopment_plan.md` — multiunit envelopment plan  _(PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - 🔸 `ED-MB-0008` — Two contradictory ranged/volley Damage-Reduction tables coexist in params/mass_combat.md, both live (neither marked superseded/struck). (1) 'Projectile weapons (mass combat only -- PP-104)' table (~L191-200) gives Heavy-armour DR of LP/arro  _(open)_
 - 🔸 `ED-MB-0009` — designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending   _(open)_
 - 🔸 `ED-MB-0010` — The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl  _(open)_
@@ -98,7 +98,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-WR-0006` — OPT-12, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). NPC orphan triage ED (the workplan T2 default, executed per the C-NPC disposition proposal): one consolidated Conviction/Ethics/TS migration-completion ED (~250-300 fin  _(open)_
 - `valoria-mechanic-audit-2026-07-13:threadwork:threadwork` — [PARTIAL] mechanic_audit / threadwork: 1 new P1 (P-25 Scale-based Mending Stability override table truncated to zero data rows, A7/D1) + 7 new P2 (History-bonus dual-phrasing A2/D8, Pulling-only 5D pool floor A3/D9, fractional wound-Ob no r  _(PARTIAL)_
 
-## IN — Infrastructure / cross-cutting  (32 items, 12 need decision)
+## IN — Infrastructure / cross-cutting  (34 items, 14 need decision)
 
 - `designs/architecture/governance_ripple_substrate_v1.md` — governance ripple substrate v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified)_
 - `designs/architecture/governance_type_registry_v1.md` — governance type registry v1  _(PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.)_
@@ -110,6 +110,8 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-IN-0050` — The canonical mode-bridge doc scale_transitions_v30.md carries literal GM-as-resolution-actor language uncorrected against the no-GM engine invariant ('There is no GM -- the engine resolves everything'). SS1 mode table (L19): 'TTRPG | Scene  _(open)_
 - 🔸 `ED-IN-0062` — Cross-scale governance grounding synthesis docket (Jordan-requested). Composes one graph of Valoria's whole political system across the spatial containment spine (settlement->territory->province->duchy->country) and the political spine (fac  _(open)_
 - 🔸 `ED-IN-0066` — Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl  _(open)_
+- 🔸 `ED-IN-0069` — Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia  _(open)_
+- 🔸 `ED-IN-0070` — Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0064` — Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0066` — [RENUMBERED from ED-IN-0065 at merge -- COLLISION: this branch read next_free=65 from pre-#139 main and allocated ED-IN-0065 for the remediation program, but PR #139 (holistic 5-critic observatory adversarial pass + its own unification doc)  _(open)_
 - `ED-IN-0003` — Convergence Markers need a runtime detector/applier. arc_register_events.md §VI's 8 markers are hand-authored trigger+payload rows with no detector, no Key type, no module contract, no sim module; combined payloads are non-summative by the   _(open)_
@@ -177,47 +179,47 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (134 items, 14 need decision)
+## unassigned — Unassigned / cross-lane  (96 items, 14 need decision)
 
-- `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _((no Status line — designs/proposals/))_
-- `designs/proposals/2026-05-16-faction-audit-followup-plan.md` — 2026-05-16-faction-audit-followup-plan  _((no Status line — designs/proposals/))_
-- `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _((no Status line — designs/proposals/))_
-- `designs/proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _((no Status line — designs/proposals/))_
-- `designs/proposals/pc_formation_system.md` — pc formation system  _((no Status line — designs/proposals/))_
-- `designs/proposals/stub_infill_plan.md` — stub infill plan  _((no Status line — designs/proposals/))_
-- `designs/proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _((no Status line — designs/proposals/))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md` — 00 engine charter  _(PROPOSED (design-effort charter — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/01_arc_corpus.md` — 01 arc corpus  _(PROPOSED (design-effort grounding — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/02_prose_render_stack.md` — 02 prose render stack  _(PROPOSED (design-effort grounding — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md` — 03 prior art and module homes  _(PROPOSED (design-effort grounding — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/README.md` — README  _(PROPOSED working record (companion to ../narrative_engine_design_v1.md — not canonical design text))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_A_minimal_detector.md` — arch A minimal detector  _(PROPOSED (design-effort lane output, 2026-07-05) — Jordan-vetoable)_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_B_arc_vector_engine.md` — arch B arc vector engine  _(PROPOSED (design-effort working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md` — arch C director layer  _(PROPOSED (design-effort architecture lane — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/critic.md` — critic  _(PROPOSED (critic lane, 2026-07-05 · Lane IN))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_register_formalizability.md` — dossier register formalizability  _(PROPOSED (design-effort working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_transport_fitness.md` — dossier transport fitness  _(PROPOSED (lane working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s2_q3_arcs.md` — draft s2 q3 arcs  _(PROPOSED working notes (Jordan-vetoable) · Lane IN · 2026-07-05)_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s3_q4_render.md` — draft s3 q4 render  _(working notes (render-lane drafter, 2026-07-05). Deliverable = `spec_sections/s3_q4_render.md`.)_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_architecture_integrity.md` — judge architecture integrity  _(PROPOSED (design-effort judgment — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_buildability.md` — judge buildability  _(PROPOSED (design-effort judge notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/judge_player_experience.md` — judge player experience  _(PROPOSED (design-effort judge working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_determinism_replay.md` — refute determinism replay  _(PROPOSED (adversarial working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_integration_reality.md` — refute integration reality  _(PROPOSED (adversarial-skeptic lane, 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_railroad_windows.md` — refute railroad windows  _(PROPOSED (adversarial-skeptic lane, 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_determinism_cost.md` — refute v2 determinism cost  _(PROPOSED (adversarial working notes — Jordan-vetoable))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_light_function.md` — refute v2 light function  _(PROPOSED (adversarial-skeptic lane, LIGHT-FUNCTION lens · 2026-07-05 · Lane IN))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_v2_veto_railroad.md` — refute v2 veto railroad  _(PROPOSED (adversarial-skeptic lane, 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/refute_veto_and_drift.md` — refute veto and drift  _(PROPOSED (adversarial-skeptic lane, 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s1_q1_q2.md` — s1 q1 q2  _(PROPOSED (spec-section draft, 2026-07-05 · Lane IN))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md` — s2 q3 arcs  _(PROPOSED (spec-section draft — Jordan-vetoable, ratified-on-merge per CLAUDE.md §2 ED-1094))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md` — s3 q4 render  _(PROPOSED (spec-section draft, render lane, 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md` — s4 substrate  _(PROPOSED (spec-section drafter lane, 2026-07-05 · Lane IN))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md` — s5 season trace  _(PROPOSED (spec-section draft, emergent-narrative-engine effort · Lane IN · 2026-07-05))_
-- `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/synthesis.md` — synthesis  _(PROPOSED (synthesis-architect lane output, 2026-07-05))_
-- `designs/audit/2026-07-07-unaddressed-areas-audit/00_grounding/00_charter.md` — 00 charter  _(PROPOSED (Jordan-vetoable throughout; the audit half of this PR edits no canon))_
-- `designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md` — attribute value coherence v1  _(PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029)_
-- `designs/audit/2026-07-08-attribute-value-coherence-audit/finding_status.md` — finding status  _(PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0029)_
-- `designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/01_pessimist_subtractive_ners/00_corpus_synthesis.md` — 00 corpus synthesis  _(PROPOSED (read-only synthesis, 2026-07-08) · Lane: IN · aggregates 9 lane critic-passes (PC / MB / SC / FA / SE / TW / DC / AN / XS), each already through an inverted-critic verification)_
-- …and 94 more (see `proposals.json`).
+- `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
+- `designs/proposals/2026-05-16-faction-audit-followup-plan.md` — 2026-05-16-faction-audit-followup-plan  _(SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15])_
+- `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
+- `designs/proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _(SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED'])_
+- `designs/proposals/pc_formation_system.md` — pc formation system  _(PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
+- `designs/proposals/stub_infill_plan.md` — stub infill plan  _(SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15])_
+- `designs/proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
+- `designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
+- `designs/audit/2026-07-12-governance-compendium/00_index.md` — 00 index  _(PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Read-only research consolidation. NOT canon; nothing here flips a `Status:` line. The single home for this session's entire governance-design body of work, so nothing is left stranded as unused research.)_
+- `designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md` — 42 action verb catalogue  _(PROPOSED — compiled 2026-07-12, Lane: IN (cross-cutting; touches FA, SE, MB, GO))_
+- `designs/audit/2026-07-12-governance-compendium/43_directive_types.md` — 43 directive types  _(PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md`))_
+- `designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md` — 44 standing institutions  _(PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md` / `settlement_layer_v30.md`))_
+- `designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md` — 45 hidden longfuse stats  _(PROPOSED — needs a granularity ruling)_
+- `designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md` — 00 integration map  _(PROPOSED — compendium integration pass, not yet Jordan-ratified)_
+- `designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md` — reeval jp se  _(PROPOSED / provisional re-evaluation artifact — 2026-07-12. Re-judges the 8 kept Japan-origin proposals (`FA-JP-*`, `SE-JP-*`) from the 2026-07-09 comparative-governance research docket (STEP-3, 44 KEPT) against the newly-discovered **BUILT** substrate (`sim/territory/`, `goldenfurt_slice/`, `settlement_mgmt_stress_01`), reading each item's prior NERS verdict from the 2026-07-11 pessimist-NERS audit as the starting point. Not itself canon — a review artifact feeding the docket's next authoring/decision pass. **Scope note:** the STEP-3 44-KEPT table uses only civilization-prefixed codes (`BYZ-`, `CHN-`, `HRE-`, `VEN-SE-`, `VEN-FA-`, `IT-`, `HAB-`, `FA-JP-`, `SE-JP-`) — no bare `SE-*`/`FA-*` codes exist outside a civilization prefix, so "remaining SE-*/FA-*" resolves to the empty set for this pass; all 8 Japan-lane items are covered below in full.)_
+- `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md` — remediation plan v1  _(PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066)_
+- `designs/audit/2026-07-14-holistic-unification/unification_v1.md` — unification v1  _(PROPOSED (audit synthesis; ED-IN-0065, 2026-07-14))_
+- `designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md` — governance cluster reconciliation v1  _(PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout)_
+- `designs/npcs/character_canon_v30.md` — character canon v30  _(PROVISIONAL — pending ratification.)_
+- `designs/territory/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
+- 🔸 `ED-1043` — Mass-battle bottom-up re-architecture audit + staged/gated/adversarial roadmap. Findings: engine.py is an inert re-exporter while orchestration.py (2,899 L) is a god-file conflating data model + targeting + attrition-law authoring + volley   _(open)_
+- 🔸 `ED-1051` — Godot module-contract coverage gap (ecosystem review #1.2/#1.3). references/module_contracts.yaml has 10/27 modules with doc:null (no home design doc, including engine_clock the temporal spine) and 11/27 resolvers at [ASSUMPTION] grade (det  _(open)_
+- 🔸 `ED-507` — POI catalog per territory: each needs 2-6 authored POIs across depth levels (authorial). P2.  _(open)_
+- 🔸 `ED-508` — Specific starting Dispositions for named NPC roster (lifepath formula canonical; roster values pending Jordan).  _(open)_
+- 🔸 `ED-595` — Ehrenwall full arc (A/B/C) proposed; explicitly 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-596` — Torsvald (Riskbreaker) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-597` — Vossen full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-598` — Hann full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-599` — Orm (Warden second) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-601` — Almud Arc C three-trajectory expansion (Abdicant/Pretender/Broken) proposed. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-602` — Vaynard Arc A and Arc B full specification proposed. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-610` — Baralta successor (unnamed Hafenmark heir) — requires design (P3). Creative NPC/naming intent.  _(open)_
+- 🔸 `ED-634` — Crown inner-circle names (Voss, Reichard, Thale, Linder, Kreutz) proposed §1.1d; §10.2 P1 'confirm names and Stance Triangles'. Also umbrella range-label ED-634-ED-658.  _(open)_
+- 🔸 `ED-885` — canonical_sources cites ED-885 as 'Jordan-ratified' for 2026-05-30 F-RESID migration (4 bare-stat Unique Actions -> d+sigma resolver), but ED-885 was never written (outside ED-874-882 block). Real ratification plausibly ED-874; unverified —  _(open)_
+- `ED-1006` — Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3  _(open)_
+- `ED-1009` — Stage-3 module-adjudication verdict (full graph, 27 modules) — completes the run staged in ED-1005/1006/1007/1008. Whole-graph verdict OPEN: 27 violations / 58 warnings; 11 NON-CONFORMANT / 14 CONFORMANT / 2 stubs. Graph is INCOMPLETE, not   _(open)_
+- `ED-1010` — Per-op Coherence cap is canonical-in-effect but lives only in threadwork_v30_infill l.121 ('costs from a single operation capped at -1 total'). Four witnesses fix the non-FR reading at total -1: infill l.121; threadwork_v30 §3.4 residue ('R  _(open)_
+- `ED-1011` — Coherence-0 NPC-transition is split and gapped. params/core PP-261 ('at 0: NPC ... see params_threadwork for full rule') points at a file with nothing on Coherence 0 (dead pointer). Actual arc = threadwork_v30 §3.7 [PROVISIONAL] (PP-194): w  _(open)_
+- `ED-1033` — Indirect orientation has no track-movement path. Simulation 2026-06-18 (n=30k randomized, L1 contest): an Indirect-oriented orator reaches a decisive Persuasion Track win 1.8% vs 31.9% Direct, because params/contest.md grants an Indirect wi  _(open)_
+- `ED-1036` — L3 venue policy-dominance / legibility. Simulation 2026-06-18 (optimal-vs-worst policy sweep, 13 venues): every venue has a worst challenger policy that wins 0.00 (self-clinching/off-ground policies invalid in that venue); policy-mismatch d  _(open)_
+- …and 56 more (see `proposals.json`).
 

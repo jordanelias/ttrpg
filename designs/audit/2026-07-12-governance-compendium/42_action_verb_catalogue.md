@@ -5,7 +5,7 @@
 **Source.** Every entry below is extracted from the `Introduces (Action)` line of an event card in
 `designs/audit/2026-07-10-historical-concerns-action-catalogue/historical_concerns_action_catalogue_v1.md`
 §2.1–§2.10, cross-checked against the compiled event-card files in
-`designs/architecture/governance_compendium_v1/event_cards/*.md` (HEV-* IDs). Nothing here is newly
+`designs/audit/2026-07-12-governance-compendium/event_cards/*.md` (HEV-* IDs). Nothing here is newly
 invented for this compendium — it is a deduped, verb-grouped index over already-proposed mechanics.
 **All entries are PROPOSED** (the historical-concerns audit is explicitly "not itself canon — a
 research/synthesis artifact for a follow-up authoring pass," per that doc's own header) and none of
@@ -248,7 +248,7 @@ ratification pass to fold together rather than ship as N near-duplicate verbs:
 *End of Part 42. Cross-references: source catalogue
 `designs/audit/2026-07-10-historical-concerns-action-catalogue/historical_concerns_action_catalogue_v1.md`
 §1–§4 (executive framing, full catalogue, ripple chains, cross-reference against the companion
-governance docket's 44 proposals); compiled event cards `designs/architecture/governance_compendium_v1/
+governance docket's 44 proposals); compiled event cards `designs/audit/2026-07-12-governance-compendium/
 event_cards/*.md` (HEV-* IDs, §2.1–2.10 + §3 ripple chains in `30_ripple_chains.md`). This Part performs
 no new ratification — flip status lines in the source docs first, then update this Part's own
 `## Status:` line to match, per CLAUDE.md §"Merging a PR ratifies its PROPOSED contents by default."*

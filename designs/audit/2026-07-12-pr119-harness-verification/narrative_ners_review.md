@@ -1,6 +1,6 @@
 # Narrative Emergence + NERS Review — every proposal tested by the pr119_governance harness cluster
 
-## Status: PROPOSED, read-only. NOT canon. Does not ratify anything.
+## Status: READ-ONLY REVIEW — NOT canon; does not ratify anything (not a ratifiable proposal). [reclassified 2026-07-15, proposal-reconciliation pass]
 
 This document performs a **max-effort, per-proposal design review** over all 19 `tools/sim_harness/adapters/pr119_governance/` adapters — every proposal, cross-cutting finding, and composite system tested in `designs/audit/2026-07-12-pr119-harness-verification/README.md`. For each of 29 line items it gives three things:
 

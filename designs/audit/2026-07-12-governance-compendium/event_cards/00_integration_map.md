@@ -10,7 +10,7 @@ authored independently and never cross-referenced against one another:
    generators → adversarial per-cluster critic → Opus synthesis) mining four research dockets.
 2. **The 28-card Goldenfurt starter deck** — `designs/territory/goldenfurt_slice/event_deck.md` (slice
    S-006, bespoke settlement instance, `governance_play_redesign_v1.md §2` engine).
-3. **The ~94-card HEV historical catalogue** — `designs/architecture/governance_compendium_v1/event_cards/2*.md`
+3. **The ~94-card HEV historical catalogue** — `designs/audit/2026-07-12-governance-compendium/event_cards/2*.md`
    (`21_succession_civilwar.md` through `30_ripple_chains.md` plus `210_trade_monopoly_merchant_capital.md`;
    `30_ripple_chains.md` is chain-mechanics, not a card list, and is not counted below). The task brief's
    figure of "~124" catalogue cards is an estimate that does not match the working tree — the actual count,

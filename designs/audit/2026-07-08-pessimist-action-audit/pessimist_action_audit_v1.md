@@ -1,6 +1,6 @@
 # Pessimist Subtractive NERS — Corpus Synthesis (verdict-first)
 
-## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN · Anchor: ED-IN-0027
+## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally a read-only audit, 2026-07-08 · Lane: IN · Anchor: ED-IN-0027
 Judged **as-if-built** throughout. No verdict rests on stub/unwired/unbuilt/unported status; build state is captured only as routing metadata for the additive plan.
 
 ---

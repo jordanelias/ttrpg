@@ -1,6 +1,6 @@
 # Workplan v6 §5 — Register deltas (SCOPE REDUCTIONS vs resolution-plan Stratum C/D)
 
-## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (2026-07-08, pessimist-action-audit) · deltas apply only on Jordan docket ruling
+## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally filed 2026-07-08 (pessimist-action-audit) · deltas apply only on Jordan docket ruling
 These rows mark subtractive verdicts as **reductions to the additive resolution plan's deployment surface** (`designs/audit/2026-07-07-unaddressed-areas-audit/resolution_plan_v1.md`). Each names the Stratum C (spec-reconciliation) or Stratum D (deployment/wiring) work it removes. **Complementarity, not competition:** the additive plan still owns everything KEPT; these deltas subtract only what the audit found need not be built, wired, or re-authored. No delta rests on build-state.
 
 ## Δ-C · Stratum C reductions (spec-reconciliation surface)

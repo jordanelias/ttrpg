@@ -1,6 +1,6 @@
 # Charter — Pessimist Subtractive NERS over player-available actions
 
-## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally PROPOSED (read-only audit, 2026-07-08) · Lane: IN (cross-cutting) · Anchor: ED-IN-0027
+## Status: RATIFIED 2026-07-08 (Jordan: 'Please ratify all'; ED-IN-0027) — §8.2-A landed in references/throughlines_meta.md; docket verdicts filed as lane EDs (ED-PC-0007/SC-0012/FA-0006/SE-0005/WR-0007/FI-0004), execution = lane follow-ups. Originally a read-only audit, 2026-07-08 · Lane: IN (cross-cutting) · Anchor: ED-IN-0027
 ## Method: 8 Sonnet lane dossiers → 1 Sonnet inverted critic → Fable-5 verdict+synthesis (opus effort:max fallback). Read-only: no canon, params, code, ledger, or handoff edits. This audit only proposes; nothing here is ratified until Jordan rules the docket.
 
 ---
