@@ -41,7 +41,7 @@ Current top-level: `archives · canon · deprecated · designs · docs · engine
 | `research/` | External source material + `references/historical/`. | ✓ RULED — own primary |
 | `engine/` | Executable model (Python): `sim/mc_v18.py`, `params/`, typed `engine_params/`, **+ the substrate code `sim/substrate/` + `sim/cross_scale/`** (RULED). | ✓ RULED |
 | `godot/` | The Godot port, consolidated (strategy + `skeleton/` + `designs/{godot,videogame}`); **is** the `res://` project (§6). | ✓ RULED — own primary |
-| `audits/` | In-flight audits, **filed by category**, **auto-deprecated after 1 month** → `deprecated/` (RULED §7). | ✓ RULED |
+| `audits/` | In-flight audits, filed **by category** (audit-type, controlled vocab) + a **subsystem frontmatter tag**; **auto-deprecated after 1 month** → `deprecated/content/audits/<category>/` (RULED §7). | ✓ RULED |
 | `workplans/` | Master workplan + progress board. | core |
 | `infrastructure/` | `skills/`, `tools/`, CI, hooks, structural-observatory; also `scene_timer`/`audit` telemetry (§7). | core |
 | `dashboard/` | Published status site (`docs/dashboard/`). | core |
@@ -104,7 +104,7 @@ Each phase independently mergeable, CI green throughout.
 3. **P2 — Collapse Godot's three homes** → the `godot/` primary; sigma-leverage armature → `systems/_architecture/`; shells → `deprecated/`.
 4. **P3 — `engine/` assembly**: `sim/mc_v18.py` + `params/` + `engine_params/` + `sim/substrate/` + `sim/cross_scale/`; rewrite `mc_v18` imports in lockstep with P4.
 5. **P4 — `systems/` by subsystem + intra-system sim** (§2a): rehome `designs/*` → `systems/*` (incl. the `character/` nesting and the piety split); distribute `sim/` subpackages; apply the 14 cross-folder import rewrites. Full citation + import tooling. Do last.
-6. **P5 — `tests/` disentangle + `audits/` lifecycle + `archives/`→`deprecated/`** (#1, #4, #9). Keep `tests/valoria/`; relocate narrative prose. Stand up the `audits/` **by-category filing + 1-month auto-deprecation** (fork 5): a CI/tooling gate that (a) rejects a new audit not filed under a category, (b) moves any audit >1 month old to `deprecated/content/`, (c) fails a `*workplan*`/reconciliation artifact misfiled under `audits/`.
+6. **P5 — `tests/` disentangle + `audits/` lifecycle + `archives/`→`deprecated/`** (#1, #4, #9). Keep `tests/valoria/`; relocate narrative prose. Stand up the `audits/` **by-category filing + 1-month auto-deprecation** (fork 5): a CI/tooling gate that (a) requires each audit under a controlled category folder + a subsystem frontmatter tag, (b) **rejects a folder with no assignable audit category as not-an-audit** (routes it to `research/`/`proposals/`/`systems/`), (c) moves any audit >1 month old to `deprecated/content/audits/<category>/`, (d) fails a `*workplan*`/reconciliation artifact misfiled under `audits/`.
 
 ---
 
@@ -120,7 +120,7 @@ Round 2 (the six held-back):
 5. **`audits/` lifecycle** → **filed by category**, **auto-deprecated after 1 month**. Enforced by a P5 CI/tooling gate.
 6. **Sequencing** → **P0→P5 as written** (Jordan: "whatever makes most sense").
 
-Residual sub-decision (minor, non-blocking): the `audits/` **category axis** — file by subsystem (`audits/combat/…`, matching `systems/`) or by audit-type (`audits/vector/…`, matching the audit skills)? Recommend **by subsystem** for `systems/` symmetry, with audit-type as a filename prefix. Will default to that unless told otherwise.
+**Audits category axis — RULED by category (audit-type), 2026-07-15.** An adversarial pass confirmed it over by-subsystem: most audits are cross-cutting (governance / multi-agent / observatory / vector span many subsystems), so by-subsystem would pile the majority into an `_cross/` mini-landfill; category is the audit's stable identity and matches the audit skills. Refinements adopted: (a) a **controlled category vocabulary** (the audit skills — vector / mechanic / canon-guard / resolution-diagnostic / module-adjudicator — plus a short recurring set; one `thematic/` bucket for genuine one-offs — not free-text); (b) a **subsystem frontmatter tag** so "audits touching combat" is a metadata query, not a folder (category = folder, subsystem = tag, mirroring scale-as-tag); (c) a **not-an-audit gate** — a folder with no assignable audit category is not an audit and routes to `research/` / `proposals/` / `systems/` (directly attacks the #9 landfill). The 1-month TTL keeps live `audits/` small, so the category grouping mainly organizes the `deprecated/` archive (same path carried through).
 
 ---
 
