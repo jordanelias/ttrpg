@@ -421,7 +421,11 @@ def build_balance():
 
 # ── registers (editorial ledger + patch register — "what needs tending") ───
 
-LEDGER_LANES = ['fa', 'fi', 'in', 'mb', 'pc', 'sc', 'se', 'wr']  # ED-<LANE>-NNNN taxonomy
+# Lane roster — sourced from the shared observability core so every lane-aware
+# surface agrees (fixes the prior GO omission that would misbucket editorial_ledger_go.jsonl).
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'observability'))
+import obs_core as _obs_core  # noqa: E402  (distinct name — no sys.modules collision with combat's core.py)
+LEDGER_LANES = list(_obs_core.LEDGER_LANE_CODES)  # ('mb','pc','fi','sc','fa','wr','in','go','se')
 
 
 def build_registers():
@@ -649,10 +653,11 @@ def build_queue():
 
 # ── proposals / provisional / awaiting ratification ──────────────────────────
 
-_STATUS_RE = re.compile(r'^#{1,3}\s*Status:\s*(.+)$', re.I)
-
-
 def build_proposals():
+    # Status parsing via the shared core (tolerant superset regex). designs/proposals/
+    # docs are surfaced BY LOCATION even without a Status line — the gap that made all
+    # 9 of them invisible here. Both this card and build_proposals.py call the same core,
+    # so they agree without one reading the other's committed output.
     rows = []
     for path in glob.glob('designs/**/*.md', recursive=True):
         if '/deprecated/' in path or '/archives/' in path or '/archive/' in path:
@@ -662,17 +667,14 @@ def build_proposals():
                 head = f.read(4000)
         except OSError:
             continue
-        for line in head.splitlines():
-            m = _STATUS_RE.match(line.strip())
-            if not m:
-                continue
-            status = m.group(1).strip()
-            up = status.upper()
-            prefix = up.split('(')[0]  # "CANONICAL (with provisional elements)" -> CANONICAL, kept out
-            if ('PROPOSED' in up or 'PROVISIONAL' in up or 'DRAFT' in up) and 'CANONICAL' not in prefix:
-                group = path.split('/')[1] if path.count('/') >= 2 else 'designs'
-                rows.append({"path": path, "status": status[:140], "group": group})
-            break  # only the first Status: line per doc
+        status = _obs_core.first_status(head)
+        in_proposals_dir = path.startswith('designs/proposals/')
+        if in_proposals_dir:
+            shown = status or '(no Status line — designs/proposals/)'
+            rows.append({"path": path, "status": shown[:140], "group": 'proposals'})
+        elif _obs_core.is_unratified_status(status):
+            group = path.split('/')[1] if path.count('/') >= 2 else 'designs'
+            rows.append({"path": path, "status": status[:140], "group": group})
     rows.sort(key=lambda r: (r['group'], r['path']))
     groups = {}
     for r in rows:
@@ -681,9 +683,10 @@ def build_proposals():
         "available": True,
         "groups": groups,
         "count": len(rows),
-        "note": ("Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT — "
-                 "awaiting ratification (a doc-PR merge ratifies by default, ED-1094; these have not "
-                 "landed that way). Excludes deprecated/ and archives/."),
+        "note": ("Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus "
+                 "every doc under designs/proposals/ (surfaced by location). Awaiting ratification "
+                 "(a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and archives/. "
+                 "The full unified register is tools/observability/PROPOSALS.md."),
     }
 
 
