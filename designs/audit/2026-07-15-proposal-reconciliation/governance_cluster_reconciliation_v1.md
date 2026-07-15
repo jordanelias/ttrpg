@@ -1,6 +1,6 @@
 # Governance / Cross-Scale Proposal Cluster — Unified Reconciliation (v1)
 
-## Status: PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0069 · Jordan-vetoable throughout
+## Status: PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout
 
 > **What this is.** The single reconciled record over the governance-play proposal cluster that had
 > accumulated as ~7 overlapping PROPOSED docs across 2026-07-11 → 07-14. It **organizes** them under one
@@ -8,7 +8,7 @@
 > nothing. Merging this doc ratifies the *organization* (which doc is the index, which are the kept deep
 > sources, the one recency supersession in §3) per CLAUDE.md §2 / ED-1094 — but **every design fork in §4 is
 > HELD-BACK and remains `needs_jordan`** (this banner is the loud exception the convention requires).
-> Full conflict analysis + provenance: `01_reconciliation_map.md` (ED-IN-0068).
+> Full conflict analysis + provenance: `01_reconciliation_map.md` (ED-IN-0069).
 
 ---
 
@@ -103,6 +103,6 @@ re-expressing Franchise as a derived view over L/PS, not a parallel new stat). S
 - **Does NOT:** decide any §4 fork; author any compendium content into a canon head; supersede any deep source;
   ratify `lps_wiring` or `franchise` on their own merits; touch the B-obs (ED-IN-0064/65/66) docket.
 
-On merge, the register step flips this doc's `## Status:` and the ED-IN-0069 ledger entry per the standard gate,
+On merge, the register step flips this doc's `## Status:` and the ED-IN-0070 ledger entry per the standard gate,
 and adds the index-head pointer to `CURRENT.md`'s governance/faction row. The §4 forks stay `needs_jordan` until
 explicitly picked.

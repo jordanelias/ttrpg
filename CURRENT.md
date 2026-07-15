@@ -28,12 +28,12 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0068/0069 —
+_Last reconciled: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
 `designs/audit/2026-07-15-proposal-reconciliation/`: classified the dashboard's 55 awaiting-ratification docs
 + 9 dashboard-invisible `designs/proposals/` docs into 4 natures; executed safe status bookkeeping (39
 Nature-A flips — 29 ratified-narrative-engine working record → SUPERSEDED, 10 read-only-audit mis-tags
 reclassified; 9 Nature-D status-line additions), dropping the awaiting count 55→16; authored the
-`governance_cluster_reconciliation_v1.md` unified head (ED-IN-0069, PROPOSED) — `governance_type_registry_v1`
+`governance_cluster_reconciliation_v1.md` unified head (ED-IN-0070, PROPOSED) — `governance_type_registry_v1`
 is the governance-play index over kept deep sources, Compact ruled a Debt subtype (ED-IN-0046 D3, not a 5th
 ledger family), observatory-tooling axis (ED-IN-0064/65/66) held separate; all design forks HELD-BACK for
 Jordan. Also fixed the recurring `id_reservations.yaml` duplicate-IN-key regression (3 stale IN keys shadowed

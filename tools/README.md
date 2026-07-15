@@ -57,14 +57,13 @@ gates/checkers, so they're intentionally not in the registry above.
 
 | Tool | Purpose |
 |---|---|
-| `coverage_matrix.py` | Generates/updates the 7-dimension test coverage matrix from test files |
-| `propagator.py` | Applies editorial decisions and patches across compiled stage files |
+| `build_apparatus_registry.py` | Generates `references/apparatus_registry.{yaml,md}` — the inventory of every tool/skill/hook/workflow (output destination + format + orphan status) |
 | `valoria_rename.py` | The "change once" executor for `names_index.yaml`-centralized definition renames |
 | `atomizer.py` | Splitting engine for file atomization (content + rule → new file set) |
 | `index_gen.py` | Generates index files for registers, archives, and atomized file sets |
 | `doc_index_gen.py` | Generates `_index.md` files from canonical design docs (renamed from `skeleton_gen.py`, PP-673) |
-| `find_references.py` | Searches all files for exact occurrences of a value (editorial/patch `affects` list verification) |
-| `verify_cuts.py` | Scans compiled output for cut-mechanic references |
+| `observability/obs_core.py` | Shared observability primitives (ledger reader, lane roster, status/marker parse, JS-bundle) — single owner, imported by the generators |
+| `observability/build_proposals.py` | Generates the unified proposals/open-work register (`PROPOSALS.md` triad) |
 | `names.py` | The single reader for `references/names_index.yaml` (legacy→canonical mapping) |
 | `descriptor_registry.py` | Loader/resolver for `references/descriptor_registry.yaml` (key/name/alias resolution) |
 | `quantity_registry.py` | Single reader for the merged quantity/attribute vocabulary (descriptor_registry + names_index) |

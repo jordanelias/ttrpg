@@ -59,6 +59,21 @@ FAMILIES = [
         "scope_prefixes": ("designs/", "canon/", "params/", "references/", "sim/"),
     },
     {
+        "name": "proposals-register",
+        "artifact_paths": ["tools/observability/proposals.json"],
+        # per build_proposals.py's sources: the editorial ledgers, audit registry,
+        # designs/proposals/ + Status-tagged design docs, and workplan §5.
+        "scope_prefixes": ("designs/", "canon/", "references/audit_registry.jsonl",
+                           "designs/workplans/"),
+    },
+    {
+        "name": "apparatus-registry",
+        "artifact_paths": ["references/apparatus_registry.yaml"],
+        # build_apparatus_registry.py scans tools/, skills/, .githooks/, .claude/,
+        # .github/workflows/ for the output/format/orphan inventory.
+        "scope_prefixes": ("tools/", "skills/", ".githooks/", ".github/workflows/"),
+    },
+    {
         "name": "graph-lexicon",
         # Tracked as one family (not two): build_graph.py and build_lexicon.py are
         # regenerated together in practice and their source scopes overlap heavily

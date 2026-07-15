@@ -1,6 +1,6 @@
 # 01 — Reconciliation Map (Nature-B: the governance / cross-scale cluster)
 
-## Status: REFERENCE (analysis-only; Class-A self-exempting — no canon flipped by this file). Anchors ED-IN-0068; the unified head it recommends is `governance_cluster_reconciliation_v1.md` (ED-IN-0069, filed for ratification).
+## Status: REFERENCE (analysis-only; Class-A self-exempting — no canon flipped by this file). Anchors ED-IN-0069; the unified head it recommends is `governance_cluster_reconciliation_v1.md` (ED-IN-0070, filed for ratification).
 
 The 13 remaining awaiting-ratification docs after the Nature-A/D bookkeeping are read here **against each
 other**, applying the adjudication rule: **recency wins by default; explicit supersession beats a recency
@@ -109,7 +109,7 @@ content stays owned by the older ripple_substrate + compendium. No recency-drive
 
 ---
 
-## §3 · Recommended unified structure (→ `governance_cluster_reconciliation_v1.md`, ED-IN-0069, PROPOSED)
+## §3 · Recommended unified structure (→ `governance_cluster_reconciliation_v1.md`, ED-IN-0070, PROPOSED)
 
 - **Index head:** `governance_type_registry_v1.md` (07-13) — the FLAG/VECTOR registry indexing the cluster.
 - **Deep-content sources (kept, pointed-to, not superseded):** `governance_ripple_substrate_v1` (propagation
@@ -146,7 +146,7 @@ Nothing in B-gov is deleted; the reconciliation is **organizational** (one index
 11. multiunit Path-B envelopment (MB) — greenlight the unbuilt spatial mechanism or not
 12. PARTIAL residuals → file as lane handoff items: MB yield exits/calibration (#4), MB §A.6 dice-vs-geometry (#7), PC §7 concentration-error (#9)
 
-**Non-fork residuals (safe, tracked under ED-IN-0068, not needing a Jordan pick):**
+**Non-fork residuals (safe, tracked under ED-IN-0069, not needing a Jordan pick):**
 - Propagate the Compact=Debt-subtype annotation to `governance_play_redesign §1.3a/§1.6`, deck C.3, compendium 44/45
   (§2.1) — as ED-IN-0046 D3's own follow-up.
 - **Broken path citation** `designs/architecture/governance_compendium_v1/` (does not exist) → real

@@ -10,12 +10,15 @@ on:
     branches: [main]
     paths:
       - 'designs/workplans/**'
+      - 'designs/proposals/**'       # proposals card recomputes inline (build_proposals section)
+      - 'canon/editorial_ledger*.jsonl'
       - 'references/audit_registry.jsonl'
       - 'handoffs/**'
       - 'HANDOFF.md'
       - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
       - 'docs/dashboard/**'
       - 'tools/dashboard_data.py'
+      - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
       - '.github/workflows/dashboard.yml'
   schedule:
     # Daily fallback — staleness (workplan drift, CI status) can change even with

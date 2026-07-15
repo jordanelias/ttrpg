@@ -1,6 +1,6 @@
 # 02 — Nature-A status flips (executed 2026-07-15)
 
-## Status: REFERENCE (log of executed status-line changes; anchors ED-IN-0068)
+## Status: REFERENCE (log of executed status-line changes; anchors ED-IN-0069)
 
 Nature A = docs the awaiting-ratification scan flagged that are **not open design proposals** — they are
 either (A1) working record of a design effort whose head is already ratified, or (A2) read-only
@@ -21,7 +21,7 @@ independently ratifiable.
 `## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as
 ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md,
 ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15,
-proposal-reconciliation pass, ED-IN-0068]`
+proposal-reconciliation pass, ED-IN-0069]`
 
 All 29 first-`## Status:` lines were previously `PROPOSED …` (design-effort grounding / working notes /
 adversarial-skeptic / judge / spec-section draft / synthesis). Full list: `00_grounding/{00_engine_charter,

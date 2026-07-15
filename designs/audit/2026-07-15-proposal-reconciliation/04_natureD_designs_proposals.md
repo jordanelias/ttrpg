@@ -1,6 +1,6 @@
 # 04 — Nature-D: the dashboard-invisible proposals in `designs/proposals/`
 
-## Status: REFERENCE (analysis + executed status-line additions; anchors ED-IN-0068)
+## Status: REFERENCE (analysis + executed status-line additions; anchors ED-IN-0069)
 
 **Systemic finding.** `designs/proposals/` holds **9 design proposals the dashboard never surfaced.** The
 scan (`tools/dashboard_data.py::build_proposals`) is anchored on a markdown **heading** —

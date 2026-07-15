@@ -2,6 +2,12 @@
 
 ## Status: PROPOSAL DOCKET — **nothing here ratifies on merge** (ED-1094 exception, called out loudly). Every recommendation below awaits Jordan's explicit pick. Merging this PR files the docket as a proposal artifact; it does NOT flip any `needs_jordan` flag, `status`, or `CURRENT.md` row. · Lane: IN (cross-cutting) · Date: 2026-07-08
 
+> **Superseded as a live surface (2026-07-15, ED-IN-0068).** This 2026-07-08 snapshot of open
+> `needs_jordan` items is retained for provenance. The live, always-fresh view of every open work
+> item (needs-Jordan split included) is generated at
+> [`tools/observability/PROPOSALS.md`](../../../tools/observability/PROPOSALS.md); the current ranked
+> queue is [`decision_queue_delta_v1.md`](../2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md).
+
 **What this is.** A single consolidated recommendation surface for **all 32 open `needs_jordan: true`
 editorial items** in `canon/editorial_ledger.jsonl` (as of 2026-07-08). Jordan asked for
 "editorial content / infill / resolutions / suggestions / recommendations for all open editorial

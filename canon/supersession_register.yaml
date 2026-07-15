@@ -340,7 +340,7 @@ entries:
       The effort's head is RATIFIED: designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md
       (+ narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). The 29
       docs are drafter/adversarial/judge lane record, not independently ratifiable; first-Status lines flipped
-      SUPERSEDED 2026-07-15 (ED-IN-0068, proposal-reconciliation pass). Do not resume them as open proposals.
+      SUPERSEDED 2026-07-15 (ED-IN-0069, proposal-reconciliation pass). Do not resume them as open proposals.
     files_to_recheck:
       - designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/   # DONE (4 docs flipped)
       - designs/audit/2026-07-05-emergent-narrative-engine/01_workings/   # DONE (25 docs flipped incl. spec_sections/)
@@ -355,7 +355,7 @@ entries:
     replacement: >
       Compact is NOT a new tag-family — model it as a recurring Debt subtype:
       Debt(key="compact:<quota>", ttl=term, recurs=True). Leverage remains the built 5th family; no conflict.
-      Surfaced by reeval_jp_se (SE-JP2); reconciled 2026-07-15 (ED-IN-0068/0069). The prose propagation to the
+      Surfaced by reeval_jp_se (SE-JP2); reconciled 2026-07-15 (ED-IN-0069/0070). The prose propagation to the
       files below is a follow-up execution of D3 (a ratified ruling), recommended as its own SE/IN pass — NOT
       done in the 2026-07-15 reconciliation PR, since it re-models a mechanic in a current head.
     files_to_recheck:
