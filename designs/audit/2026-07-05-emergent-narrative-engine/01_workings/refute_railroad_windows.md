@@ -1,6 +1,6 @@
 # Refutation lane — C7 RAILROAD adversarial audit
 
-## Status: PROPOSED (adversarial-skeptic lane, 2026-07-05)
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0068]
 _Role: try to BREAK the synthesized Arc-Vector Engine on C7. Working tree only; every claim cites
 file §section or is tagged [UNGROUNDED]. Charter C7 =
 `00_engine_charter.md:40-41` + Q1 anti-railroad proof `:54` + Q2 history-modes `:75-79`._

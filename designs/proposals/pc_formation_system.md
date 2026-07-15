@@ -1,5 +1,7 @@
 # P-C — Compositional Formation System (design-capture)
 
+## Status: PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]
+
 **Status: PROPOSAL — pending Jordan structural sign-off.** Not canon yet. Date 2026-06-02.
 Intended home on acceptance: `designs/` (formation system) + reconciliation into `mb_engine_workplan.md` P-C body.
 

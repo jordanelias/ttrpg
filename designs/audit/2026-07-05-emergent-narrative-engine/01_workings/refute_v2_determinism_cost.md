@@ -1,6 +1,6 @@
 # Refutation lane — v2 CHURN engine · DETERMINISM + COST axes
 
-## Status: PROPOSED (adversarial working notes — Jordan-vetoable)
+## Status: SUPERSEDED (working record of the emergent-narrative-engine design effort; head RATIFIED as ../narrative_engine_design_v2_churn.md + narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). Not independently ratifiable; retained as record. [status reconciled 2026-07-15, proposal-reconciliation pass, ED-IN-0068]
 _Skeptic lane, 2026-07-05, working tree only. Target: `narrative_engine_design_v2_churn.md`
 (§3 FORECAST, §4 LIGHT, §7 R-F1). Grounding: `01_workings/dossier_forecast_tractability.md`,
 `spec/churn_amendments.md` (s4). Cites `file:line`. Complements the v1-scoped

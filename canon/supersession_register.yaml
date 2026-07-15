@@ -328,3 +328,38 @@ entries:
       - sim/personal/contest_legacy_stub.py   # already current (ED-PC-0005 pass)
       - designs/arcs/gm_ref/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)
       - designs/arcs/gm_ref/arcs_46_55_resolved.md   # DONE — worked example renarrated (−2D → +0.30 Ob)
+
+  - superseded_id: "designs/audit/2026-07-05-emergent-narrative-engine/{00_grounding,01_workings}/**.md (29 working-record docs)"
+    scope: >
+      The 29 grounding/charter/arch-lane/critic/judge/refute/draft/spec-section/synthesis working notes of
+      the 2026-07-05 emergent-narrative-engine design effort, each still first-Status PROPOSED, read as
+      independently-pending design proposals.
+    superseded_by: "ED-IN-0011"
+    superseded_date: "2026-07-15"
+    replacement: >
+      The effort's head is RATIFIED: designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md
+      (+ narrative_engine_design_v1.md-as-amended + spec/churn_amendments.md, ED-IN-0011, 2026-07-05). The 29
+      docs are drafter/adversarial/judge lane record, not independently ratifiable; first-Status lines flipped
+      SUPERSEDED 2026-07-15 (ED-IN-0068, proposal-reconciliation pass). Do not resume them as open proposals.
+    files_to_recheck:
+      - designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/   # DONE (4 docs flipped)
+      - designs/audit/2026-07-05-emergent-narrative-engine/01_workings/   # DONE (25 docs flipped incl. spec_sections/)
+
+  - superseded_id: 'Compact as a new "5th ledger tag-family" (compendium Part 44/45; grounded_event_card_deck_v1 C.3; governance_play_redesign_v1 §1.3a/§1.6; ED-SE-0018/0019 framing)'
+    scope: >
+      Multiple governance-cluster docs frame "Compact" (fixed-quota extraction, Encabezamiento) as a new
+      5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code
+      (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.
+    superseded_by: "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)"
+    superseded_date: "2026-07-13"
+    replacement: >
+      Compact is NOT a new tag-family — model it as a recurring Debt subtype:
+      Debt(key="compact:<quota>", ttl=term, recurs=True). Leverage remains the built 5th family; no conflict.
+      Surfaced by reeval_jp_se (SE-JP2); reconciled 2026-07-15 (ED-IN-0068/0069). The prose propagation to the
+      files below is a follow-up execution of D3 (a ratified ruling), recommended as its own SE/IN pass — NOT
+      done in the 2026-07-15 reconciliation PR, since it re-models a mechanic in a current head.
+    files_to_recheck:
+      - designs/territory/governance_play_redesign_v1.md   # §1.3a/§1.6 "fifth Ledger tag family" — PENDING D3 propagation
+      - designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md   # C.3 — PENDING
+      - designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md   # §44.2.7 — PENDING
+      - designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md   # PENDING

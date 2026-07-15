@@ -1,5 +1,7 @@
 # Valoria — Integrated Mechanics Design Document
 
+## Status: PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]
+
 **Version:** 3.1
 **Date:** 2026-05-25
 **Status:** PROPOSAL — pre-canon, pending Sprint 0 audit completion + Jordan review + sim Stage 10 validation

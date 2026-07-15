@@ -1,5 +1,7 @@
 # Mass-Battle Shape-Echelon Revamp — Scoping Plan
 
+## Status: SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI/Cohesion toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']
+
 **Status:** PARTIALLY EXECUTED (updated 2026-07-02) · **Date:** 2026-06-09 · **Scope:** mass-battle engine (`tests/sim/mass_battle/`) + canon (ED-816, ED-909)
 
 > **2026-07-02 update:** this scoping doc's "Headline: this is a build, not a deletion" section below —

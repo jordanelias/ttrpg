@@ -1,4 +1,6 @@
 # Valoria — Weapon-Physics Model + Concentration (implementation spec · v2)
+
+## Status: PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]
 **2026-06-05 · the new physical-weapon system + the concentration error mechanic**
 
 Supersedes the v1 draft: the invented head-mass fraction `f` is **retired** for the measured **point of balance** plus a **wood/iron composite-mass model**. Engine sites/formulas/current values are **HEAD-verified this session**; physical values are **sourced** (tiers in §6) — ranges where per-specimen data is sparse. `[PROPOSED]` = my call, vetoable; `[RE-VERIFY]` = confirm the constant at implementation (config drifted).
