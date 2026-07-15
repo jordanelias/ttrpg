@@ -4,35 +4,27 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 94
+  total: 92
   by_kind:
-    tool: 79
+    tool: 77
     skill-script: 8
     hook: 4
     workflow: 3
   by_role:
-    A:writes-artifact: 13
-    B:stdout-or-gate: 43
+    A:writes-artifact: 14
+    B:stdout-or-gate: 39
     D:import-only-library: 34
-    C:mutating-or-dynamic-dest: 1
+    C:mutating-or-dynamic-dest: 2
     workflow: 3
-  orphaned: 9
-  prune_candidates: 4
-prune_candidates:
-- tools/coverage_matrix.py
-- tools/find_references.py
-- tools/propagator.py
-- tools/verify_cuts.py
+  orphaned: 5
+  prune_candidates: 0
+prune_candidates: []
 orphaned_no_cli:
 - tools/build_apparatus_registry.py
 - tools/build_audit_registry_backfill.py
-- tools/coverage_matrix.py
-- tools/find_references.py
 - tools/geography/jsx_to_canonical.py
 - tools/observability/build_graph.py
 - tools/observability/npc_audit_report_gen.py
-- tools/propagator.py
-- tools/verify_cuts.py
 entries:
 - path: tools/atomizer.py
   kind: tool
@@ -423,19 +415,6 @@ entries:
   role: B:stdout-or-gate
   imports:
   - yaml
-- path: tools/coverage_matrix.py
-  kind: tool
-  stem: coverage_matrix
-  writes: []
-  prints_stdout: true
-  has_cli: true
-  uses_cli_args: false
-  invoked_by: []
-  imported_internally: false
-  orphaned: true
-  prune_candidate: true
-  role: B:stdout-or-gate
-  imports: []
 - path: tools/currency_consistency_check.py
   kind: tool
   stem: currency_consistency_check
@@ -522,19 +501,6 @@ entries:
   imported_internally: false
   orphaned: false
   prune_candidate: false
-  role: B:stdout-or-gate
-  imports: []
-- path: tools/find_references.py
-  kind: tool
-  stem: find_references
-  writes: []
-  prints_stdout: true
-  has_cli: true
-  uses_cli_args: false
-  invoked_by: []
-  imported_internally: false
-  orphaned: true
-  prune_candidate: true
   role: B:stdout-or-gate
   imports: []
 - path: tools/freshness_gate.py
@@ -657,7 +623,8 @@ entries:
   uses_cli_args: false
   invoked_by:
   - ci:audit-refresh.yml
-  imported_internally: false
+  - tool:imported
+  imported_internally: true
   orphaned: false
   prune_candidate: false
   role: A:writes-artifact
@@ -708,6 +675,45 @@ entries:
   role: A:writes-artifact
   imports:
   - yaml
+- path: tools/observability/build_proposals.py
+  kind: tool
+  stem: build_proposals
+  writes:
+  - dest: proposals.json
+    format: json
+    mode: write
+  - dest: PROPOSALS.md
+    format: markdown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: false
+  invoked_by:
+  - ci:audit-refresh.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports: []
+- path: tools/observability/core.py
+  kind: tool
+  stem: core
+  writes:
+  - dest: <path>
+    format: unknown
+    mode: write
+  prints_stdout: false
+  has_cli: false
+  uses_cli_args: false
+  invoked_by:
+  - ci:dashboard.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: C:mutating-or-dynamic-dest
+  imports: []
 - path: tools/observability/npc_audit_report_gen.py
   kind: tool
   stem: npc_audit_report_gen
@@ -737,19 +743,6 @@ entries:
   imported_internally: false
   orphaned: false
   prune_candidate: false
-  role: B:stdout-or-gate
-  imports: []
-- path: tools/propagator.py
-  kind: tool
-  stem: propagator
-  writes: []
-  prints_stdout: true
-  has_cli: true
-  uses_cli_args: false
-  invoked_by: []
-  imported_internally: false
-  orphaned: true
-  prune_candidate: true
   role: B:stdout-or-gate
   imports: []
 - path: tools/quantity_registry.py
@@ -1250,19 +1243,6 @@ entries:
   role: B:stdout-or-gate
   imports:
   - names
-- path: tools/verify_cuts.py
-  kind: tool
-  stem: verify_cuts
-  writes: []
-  prints_stdout: true
-  has_cli: true
-  uses_cli_args: false
-  invoked_by: []
-  imported_internally: false
-  orphaned: true
-  prune_candidate: true
-  role: B:stdout-or-gate
-  imports: []
 - path: tools/workplan_status.py
   kind: tool
   stem: workplan_status
@@ -1451,6 +1431,7 @@ entries:
   kind: workflow
   runs:
   - tools/observability/build_decisions.py
+  - tools/observability/build_proposals.py
   emits:
   - commit/PR
   writes: []

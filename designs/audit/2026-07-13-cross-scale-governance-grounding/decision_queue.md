@@ -2,6 +2,12 @@
 
 ## Status: FILED — 2026-07-13 · Lane: IN · ED-IN-0051
 
+> **Superseded as a live surface (2026-07-15, ED-IN-0068).** The current ranked queue is
+> [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](../2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md).
+> The unified, always-fresh register of every open work item (this queue + the ledger +
+> proposals + audit verdicts) is generated at [`tools/observability/PROPOSALS.md`](../../../tools/observability/PROPOSALS.md).
+> This dated docket is retained for provenance only.
+
 The ranked surface this docket hands to Jordan. Ordering = **leverage** (impact on the L/PS-pressure spine)
 × **1/cost** × **novelty**. Classifications are the **Phase-F revised** ones (`adversarial_review_v1.md`):
 **[CTC]** = COMPLETE-THE-CHAIN (execution on sound logic — mostly needs a *ruling to unblock*, not a design
