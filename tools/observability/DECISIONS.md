@@ -59,7 +59,7 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 ### Ratifications (50)
 
 - End spec. PROVISIONAL pending ratification.**  
-  ↳ `designs/provincial/faction_behavior_v30.md:548` +3 more
+  ↳ `designs/personal/conviction_taxonomy_v30.md:337` +3 more
 - <!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->  
   ↳ `designs/architecture/key_type_registry_v30.md:148` +3 more
 
@@ -76,7 +76,7 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 ### Ratifications (50)
 
 - Status: PROVISIONAL — pending ratification.  
-  ↳ `designs/provincial/faction_canon_v30.md:7` +1 more
+  ↳ `designs/npcs/character_canon_v30.md:6` +1 more
 
 ### Open rulings (219)
 
@@ -85,14 +85,6 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 
 ### Naming & collisions (60)
 
-- | 29 | 560 | 3 | §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |  
-  ↳ `designs/scene/social_contest_v30_index.md:44`
-- | 29 | 59 | §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |  
-  ↳ `designs/scene/social_contest_v30_index.md:93`
-- [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision.]  
-  ↳ `designs/scene/social_contest_v30_infill.md:48`
-- §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]  
-  ↳ `designs/scene/social_contest_v30.md:579`
 - [INTER-12b] "Discipline" name collision: unit stat vs faction derived value  
   ↳ `designs/audit/mass_battle_interdependency_2026-04-29.md:55`
 - | AUD-NPC2-084 | Confessor Arne Himlensendt | naming | MEDIUM | CONFIRMED | designs/npcs/npc_behavior_v30.md L360 | 'Reichard' name collision: Church-head placeholder reuses the surname of the canonical Hafenmark Lord Treasurer (Annalie Reichard) |  
@@ -109,16 +101,32 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:1190`
 - Unit:** Aldric Hann | **Category:** naming | **Constraint/Ref:** Intra-roster first-name collision (Aldric Hann vs Aldric Tormann); cf. prior AUD-NPC2-126 | **Verifier verdict:** CONFIRMED  
   ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:3160`
+- Unit:** Aldric Hann | **Category:** naming | **Constraint/Ref:** Surname collision (Aldric Hann / Thorvald Hann) | **Verifier verdict:** CONFIRMED  
+  ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:3167`
+- Issue:** Beyond the first-name 'Aldric' collision, there is a separate surname collision: 'Hann' is used both for Aldric Hann (RM visible leadership) and Thorvald Hann, Senior Jarl of Varfell's Eastern March (a 'canonical heritage' name, conviction Order/Authority, anti-Maret-Uln succession bloc). Different given na…  
+  ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:3168`
+- Unit:** Aldric Tormann | **Category:** naming | **Constraint/Ref:** Intra-roster first-name collision | **Verifier verdict:** CONFIRMED  
+  ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:3195`
+- Verdict: **DRIFTED, with the corpus's worst name collision.** `designs/provincial/clock_registry_v30.md`  
+  ↳ `designs/audit/2026-07-08-attribute-value-coherence-audit/attribute_value_coherence_v1.md:105`
 - _…and more in this category — see `decisions.json`._
 
 ### Ratifications (50)
 
-- <!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions §7 bullet 5 + §5 Domain Echo. Jordan-vetoable.] -->  
-  ↳ `designs/provincial/faction_behavior_v30.md:437`
+- End roster. PROVISIONAL pending ratification.**  
+  ↳ `designs/personal/conviction_migration_roster_v30.md:295`
+- Each becomes a `designs/proposals/PP-NNN-*.md` entry with vetting block per PP-674. Candidate IDs `PC-N`; assigned PP-N at Jordan approval. **Each PC-4.x advances from proposal → PROVISIONAL canon only after sim battery PASS; remains PROVISIONAL pending Class A vetting per PP-674; reaches CANONICAL on Jordan ratific…  
+  ↳ `designs/proposals/2026-05-16-faction-audit-followup-plan.md:99`
+- <!-- STATUS: PROVISIONAL — pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->  
+  ↳ `designs/npcs/character_canon_v30.md:2`
+- End spec. PROVISIONAL pending ratification. B1.2/B1.3/B1.4/B2 are deferred follow-up PPs.**  
+  ↳ `designs/npcs/npc_relational_graph_v30.md:681`
 - Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.  
   ↳ `designs/provincial/mass_battle_integration_v30.md:301`
 - <!-- STATUS: PROVISIONAL — pending Jordan ratification. Source files remain canonical until ratification commits. -->  
   ↳ `designs/provincial/faction_canon_v30.md:2`
+- <!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions §7 bullet 5 + §5 Domain Echo. Jordan-vetoable.] -->  
+  ↳ `designs/provincial/faction_behavior_v30.md:437`
 - Status:** WORKPLAN (draft pending ratification)  
   ↳ `designs/audit/ecosystem_workplan_2026-04-30.md:448`
 - Drafted by Claude (claude-opus-4-7) at user direction 2026-04-30. Pending ratification before execution.*  
@@ -129,42 +137,34 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `designs/audit/2026-06-22-npc-comprehensive-audit.md:2720`
 - Editorial ledger candidates staged:** 13 entries total across batches (12 in batch 1, 1 in batch 2 social SC1 architectural note). All pending Jordan ratification + commit to canon/editorial_ledger.yaml as separate batch operation.  
   ↳ `designs/audit/2026-05-28-resolution-diagnostic/resolution_diagnostic_README_batch2.md:37`
-- status: PROVISIONAL · PROPOSED, Jordan-vetoable · no ED IDs assigned · not bootstrapped-to-HEAD for ratification**  
-  ↳ `designs/audit/2026-06-13-combat-bottomup/README.md:3`
-- | FA-D-04 | Self-contradictory in-doc status marker | `faction_behavior_v30.md` carries both `## Status: CANONICAL` (line 6) and, elsewhere in the same file, `**Status:** PROVISIONAL.` (line 11) and "End spec. PROVISIONAL pending ratification." (final line). `faction_canon_v30.md` has the identical pattern (`## Stat…  
-  ↳ `designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/faction_political/gap_register_update.md:13`
-- Health note (pending Jordan ratification — see session B): the discrete `Max Wounds` step at End4  
-  ↳ `designs/audit/2026-06-29-combat-corpus-recovery/valoria_character_sheet_personal_combat_2026-06-01.md:35`
-- `[ASSUMPTION: Reflexes = (3·Agi+Att)/4, derived (Jordan-confirmed); weight = the knob]` · Jordan-vetoable · not committed.  
-  ↳ `designs/audit/2026-06-29-combat-corpus-recovery/valoria_defensive_branch_bind_parry_dodge_2026-06-01.md:9`
 - _…and more in this category — see `decisions.json`._
 
 ### Open rulings (219)
 
-- Stated as fork → recommended default; full wording in the chapters' `[OPEN — Jordan]` flags:  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v1.md:103`
-- `[OPEN — Jordan]` in module_contracts — surfaced as fork 11, §10, default compile =  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md:89`
-- `[OPEN — Jordan]`; RATIFIED at default 2026-07-05: compile is authoring-time, its output  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md:578`
-- (scene_slate vs game_director, [OPEN — Jordan]); gives `game_director` and/or  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md:148`
-- applies (KNOWN items are not discoveries); numbers marked [OPEN — Jordan tuning] are  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/00_engine_charter.md:170`
-- conflict with game_director marked [OPEN — Jordan]**.  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md:56`
-- authoring-time vs runtime classification [OPEN — Jordan]; home doc [GAP]. = PP-690's never-  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/00_grounding/03_prior_art_and_module_homes.md:59`
-- (`module_contracts.yaml` L342-385, `mechanical.scene_entered` [OPEN — Jordan]). The booker  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md:37`
-- home). Home doc: `scenario_authoring_v1.md`. Its authoring-time-vs-runtime [OPEN — Jordan]  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md:303`
-- a Jordan ruling ([OPEN — Jordan]) the architecture proposes but cannot ratify.  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/arch_C_director_layer.md:354`
-- 2026-07-04 NERS audit are context not discoveries; numbers marked `[OPEN — Jordan tuning]` are  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/dossier_content_economics.md:12`
-- MAJOR scene_entered silently resolved → **restored as [OPEN — Jordan] fork** (§Q2.2), with the  
-  ↳ `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/draft_s1_q1_q2.md:35`
+- | ep-17 | Contest↔NPC 2-cycle: in-scene stakes resolve now, durable behavior batches to Accounting — the distinction is drawn nowhere, risking all-persuasion-feels-inert builds | contest↔npc | P2 | UNDETERMINED (dampers already [OPEN—Jordan]) |  
+  ↳ `designs/audit/2026-07-05-edge-playability-audit/edge_playability_audit_v1.md:175`
+- 7. **Verdict:** PLAYS-ROUGH · P1 · UNDETERMINED (dampers "unconfirmed [OPEN—Jordan]," `module_contracts.yaml:153`). A single dramatic persuasion beat gets its stakes resolved now but its relational truth ("does this NPC actually treat me differently") deferred a season — right for slow court intrigue, wrong as the *…  
+  ↳ `designs/audit/2026-07-05-edge-playability-audit/01_workings/cluster_F_npc_fabric.md:21`
+- 3. **Feedback:** `module_contracts.yaml:129/306` shows the SAME type emitted by both `npc_behavior` and `fieldwork_knots`, flagged "[OPEN—Jordan]." Player-facing exposure (via Appraise) likely survives a double-emission, but the "Why?" backward-walk diagnostic (`key_substrate_v30.md:381`) risks an incoherent or dupl…  
+  ↳ `designs/audit/2026-07-05-edge-playability-audit/01_workings/cluster_F_npc_fabric.md:88`
+- | C7-F1 | **soften** (calibration NEW→KNOWN-TRACKED; P1 stands) | Facts confirmed (name_collision_database.yaml:461,466-467; glossary.md:86,94; module_contracts.yaml:254) but calibration NEW is the dossier's worst conformance failure: the exact CT/CV/PT collision is tracked by **ED-644** (open, "CV≡PT... full rename…  
+  ↳ `designs/audit/2026-07-08-attribute-value-coherence-audit/01_workings/critic_C7.md:9`
+- the exact collision, with an [OPEN — Jordan] gap_note in the very cited block. C7-F8 has the same  
+  ↳ `designs/audit/2026-07-08-attribute-value-coherence-audit/01_workings/critic_C7.md:37`
+- | 3 | **ED-MB-0010** | MB | `references/module_contracts.yaml` L468 | Confirmed: emits both `scene_outcome.battle_concluded` ("§8.5 verbatim") and correct `scene.battle_concluded`; inline comment already flags "[OPEN — Jordan]" drift. |  
+  ↳ `designs/audit/2026-07-13-multi-agent-audit/05_ed_filing_log.md:21`
+- The `npc_behavior ↔ social_contest` 2-cycle is annotated **BOUNDED from the social_contest side** (Procedure-D 1/Accounting cadence + |Δaffect|≥0.5 threshold + Chain-Contest cap 3) but the **npc_behavior side records "dampers unconfirmed [OPEN — Jordan]."** One-sided damper confirmation; A7 passes on existence, but …  
+  ↳ `designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:53`
+- | npc_behavior ↔ social_contest (2-cycle) | social_contest side BOUNDED (Procedure-D cadence + Δaffect threshold + Chain cap 3); npc_behavior side "unconfirmed [OPEN—Jordan]" | **BOUNDED, one-sided annotation** (P3-B) |  
+  ↳ `designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/verdict_full_graph.md:120`
+- | D5 | Doc-status contradiction | Document header simultaneously declares `## Status: CANONICAL` (line 7) and `## Authority: ... this document (design proposal, requires editorial approval)` (line 9) — self-contradictory status framing for the entire skeleton. | `threadwork_v30.md` lines 7–9 | P2 | **[CONFIRMED-OPEN…  
+  ↳ `designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/threadwork/gap_register_update.md:16`
+- | D5 — CANONICAL vs. "design proposal" header contradiction | P2 | no action — already tracked, `module_contracts.yaml` `[OPEN — Jordan]` |  
+  ↳ `designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/threadwork/gap_register_update.md:49`
+- {"id": "ED-SC-NNNN", "status": "open", "priority": "P3", "needs_jordan": false, "title": "Sweep the unverified degenerate-play candidates when their lanes next open", "detail": "Social (fold into Stage 4): Recall/Corroborate/Prep stacking vs a global pool cap; boost-lookup vs Appraise value; coalition-vs-solo floor …  
+  ↳ `designs/audit/2026-07-04-ners-qualitative-audit/ed_options.md:61`
+- gated on `[OPEN — Jordan tuning]` numbers; listed in `01_workings/deferred_unverified.json` +  
+  ↳ `designs/audit/2026-07-04-ners-qualitative-audit/ners_qualitative_audit_v1.md:251`
 - _…and more in this category — see `decisions.json`._
 
 ---
@@ -176,10 +176,6 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 
 - Key Type Registry (A2 / F2 class).  
   ↳ `designs/audit/2026-07-13-multi-agent-audit/module_adjudicator/module_map_flat.md:11` +1 more
-- | 31 | **ED-937/PR-1 Lane-B propagation** — battle_concluded naming fixed at substrate §8.5; residual: `module_contracts.yaml` L446 drift-form + stale `[unreg]`/`NOT in registry` comments (L130-133/268/467/816, now registered ED-935) + `module_map_flat.md` regen. | P3 | ED-937; module_contracts.yaml | Lane B (LB-5) |  
-  ↳ `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:76`
-- 31 — ED-937/PR-1 Lane-B propagation.** *Pending:* battle_concluded naming fixed at the substrate source only. *Needs:* in `references/module_contracts.yaml` — resolve L446 `scene_outcome.battle_concluded` (align to / strike in favour of L447 `scene.battle_concluded`); update the now-false `[unreg]`/`NOT in registry`…  
-  ↳ `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:96`
 - Verdict: NOT stale/fabricated — mis-located, not miscited.** `key_type_registry_v30.md §10` (`:1026-1043`, "Extension Process") is indeed generic boilerplate, as `cluster_C-MBSE.md:111,158` already found ("could not corroborate"). But the "`[registry §10 candidate]`" annotation is a real, recurring tag used elsewher…  
   ↳ `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/refutations/gapclosure_G4.md:39`
 - `ci_political`: `references/module_contracts.yaml:641` — "ZERO Key integration in a CANONICAL doc... CI=100 Theocracy Unification Attempt (§2.2) is unkeyed **[registry §10 candidate]**." Cross-referenced in `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:64` and `designs/audit/202…  
@@ -192,6 +188,10 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:41`
 - | **R** | pass | reach_sigma is bounded and monotonic: gap is a continuous signed differential, REACH_W[armor] falls 0.62->0.50->0.34->0.20 across armour tiers (reach -> clinch rotation), and the maximum raw sigma (spear vs arming, gap=1.9, armor=none) is 0.966 sigma — well below the M_MAX=1.5 soft-cap ceiling; no c…  
   ↳ `designs/audit/2026-06-28-combat-critique/recovered_modules_and_resolution.md:632`
+- | 31 | **ED-937/PR-1 Lane-B propagation** — battle_concluded naming fixed at substrate §8.5; residual: `module_contracts.yaml` L446 drift-form + stale `[unreg]`/`NOT in registry` comments (L130-133/268/467/816, now registered ED-935) + `module_map_flat.md` regen. | P3 | ED-937; module_contracts.yaml | Lane B (LB-5) |  
+  ↳ `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:76`
+- 31 — ED-937/PR-1 Lane-B propagation.** *Pending:* battle_concluded naming fixed at the substrate source only. *Needs:* in `references/module_contracts.yaml` — resolve L446 `scene_outcome.battle_concluded` (align to / strike in favour of L447 `scene.battle_concluded`); update the now-false `[unreg]`/`NOT in registry`…  
+  ↳ `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md:96`
 - {type: "scene.displacement", terminal: false}   # DA Proposal Phase, displacement_neglect_observed (doc-12 §8 verbatim) — NOT in registry, NOT declared in doc-12 §7 (F2 class)  
   ↳ `references/module_contracts.yaml:147`
 - {type: "mechanical.project_advanced", terminal: false}   # Procedure C (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)  

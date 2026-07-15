@@ -5,12 +5,12 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 247,
+    "total": 246,
     "needs_jordan": 79,
     "by_kind": {
       "provisional_status_doc": 17,
       "proposal_doc": 9,
-      "ledger_actionable": 127,
+      "ledger_actionable": 126,
       "ledger_needs_jordan": 77,
       "audit_partial": 17
     },
@@ -24,7 +24,7 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 34,
+        "total": 33,
         "needs_jordan": 14
       },
       "MB": {
@@ -55,7 +55,7 @@
   },
   "by_lane": {
     "IN": {
-      "total": 34,
+      "total": 33,
       "needs_jordan": 14,
       "items": [
         {
@@ -305,16 +305,6 @@
           "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
           "lane": "IN",
           "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "canon/editorial_ledger",
-          "id": "ED-IN-0068",
-          "title": "Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work",
-          "lane": "IN",
-          "needs_jordan": false,
           "status": "open",
           "links": []
         },
@@ -4181,16 +4171,6 @@
       "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
       "lane": "IN",
       "needs_jordan": true,
-      "status": "open",
-      "links": []
-    },
-    {
-      "kind": "ledger_actionable",
-      "source": "canon/editorial_ledger",
-      "id": "ED-IN-0068",
-      "title": "Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work",
-      "lane": "IN",
-      "needs_jordan": false,
       "status": "open",
       "links": []
     },

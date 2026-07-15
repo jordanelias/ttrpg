@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**247 open work items** · **79 need your decision**.
+**246 open work items** · **79 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`designs/workplans/valoria_master_workplan_v6.md` §5](designs/workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 77, Proposal docs (designs/proposals/) — 9, Provisional / draft design docs — 17
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 126, Editorial ledger — needs your decision — 77, Proposal docs (designs/proposals/) — 9, Provisional / draft design docs — 17
 
 ## MB — Mass battle  (6 items, 3 need decision)
 
@@ -98,7 +98,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-WR-0006` — OPT-12, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). NPC orphan triage ED (the workplan T2 default, executed per the C-NPC disposition proposal): one consolidated Conviction/Ethics/TS migration-completion ED (~250-300 fin  _(open)_
 - `valoria-mechanic-audit-2026-07-13:threadwork:threadwork` — [PARTIAL] mechanic_audit / threadwork: 1 new P1 (P-25 Scale-based Mending Stability override table truncated to zero data rows, A7/D1) + 7 new P2 (History-bonus dual-phrasing A2/D8, Pulling-only 5D pool floor A3/D9, fractional wound-Ob no r  _(PARTIAL)_
 
-## IN — Infrastructure / cross-cutting  (34 items, 14 need decision)
+## IN — Infrastructure / cross-cutting  (33 items, 14 need decision)
 
 - `designs/architecture/governance_ripple_substrate_v1.md` — governance ripple substrate v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified)_
 - `designs/architecture/governance_type_registry_v1.md` — governance type registry v1  _(PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.)_
@@ -127,7 +127,6 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-IN-0019` — Renumbered off the ED-IN-0012 double-allocation (armature §5.10 ruling, ED-IN-0026). Registry×rendering sweep (edge-playability SIG-1; EP-3/EP-4/EP-5) from the edge-playability §7 batch (PR #81/#82): the articulation Tier-2 trigger table co  _(open)_
 - `ED-IN-0020` — Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv  _(open)_
 - `ED-IN-0045` — Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a  _(open)_
-- `ED-IN-0068` — Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work  _(open)_
 - 🔸 `valoria-module-adjudicator-2026-07-13:cross_cutting:module_adjudicator` — [OPEN] module_adjudicator / cross_cutting: 22 violations, 61 warnings; consume-closure 100%, cycle-closure 100%, gate/derivation/sequence 100%, emit-closure 97.9%; 20/22 violations collapse to one un-propagated ED-1038 scale_transitions §12  _(OPEN)_
 - 🔸 `valoria-vector-audit-2026-07-13:corpus_wide:vector_audit` — [OPEN] vector_audit / corpus_wide: scripts/vector_audit.py confirmed a stub end-to-end (no Stage 1-7 dispatcher; docstring/scaffolding only; main() prints a pointer, writes nothing); last real run (archives/audit/2026-04-29-topographic-anal  _(OPEN)_
 - `valoria-mechanic-audit-2026-07-13:architecture:architecture` — [PARTIAL] mechanic_audit / architecture: 2 P1 gaps (empty §3.3 Handoff Rule; uncorrected literal-GM language vs no-GM invariant) proposed for ED-IN filing; 6 P2s, several already-tracked items confirmed still open, no new ED allocated by th  _(PARTIAL)_
