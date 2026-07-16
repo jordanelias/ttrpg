@@ -37,7 +37,7 @@ Current top-level: `archives · canon · deprecated · designs · docs · engine
 | `registers/` | All process ledgers (`editorial_ledger*`, patch/supersession registers, `id_reservations`, collision/naming/apparatus/audit registries) **+ handoffs** (RULED) **+ `mechanics_index`** (RULED). Generated registers (`mechanics_index`, `apparatus_registry`, `audit_registry`) carry a **freshness gate** — kept current, not left to rot (§7). | ✓ RULED |
 | `systems/` | Design docs by **subsystem**, laid out per §2a; `ui/` lives here. | ✓ RULED axis (§2a) |
 | `arcs/` | Narrative content + `references/arc_register*`. | ✓ RULED — own primary |
-| `proposals/` | Unratified proposals (from `designs/proposals/`). | ✓ RULED — own primary |
+| `proposals/` | Unratified proposals (from `proposals/`). | ✓ RULED — own primary |
 | `research/` | External source material + `references/historical/`. | ✓ RULED — own primary |
 | `engine/` | Executable model (Python): `sim/mc_v18.py`, `params/`, typed `engine_params/`, **+ the substrate code `sim/substrate/` + `sim/cross_scale/`** (RULED). | ✓ RULED |
 | `godot/` | The Godot port, consolidated (strategy + `skeleton/` + `designs/{godot,videogame}`); **is** the `res://` project (§6). | ✓ RULED — own primary |

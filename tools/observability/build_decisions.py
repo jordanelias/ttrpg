@@ -77,7 +77,7 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
 # obvious subject-matter grouping (sim/ subpackages, params/ files, designs/ subdirs).
 # Matched by LONGEST-PREFIX-WINS (a file-specific entry beats its parent directory's).
 # Deliberately NOT exhaustive: designs/audit/**, references/** (module_contracts.yaml,
-# values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), designs/proposals/**,
+# values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), proposals/**,
 # and designs/personal/conviction_*/piety_* are left OUT on purpose — these are
 # genuinely cross-lane/shared surfaces (module_contracts.yaml's own gap_notes span all 27
 # modules; conviction/piety tracks are drawn on by PC+SC+FI alike; most audit folders are
@@ -90,8 +90,8 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/provincial/mass_battle_v30", "MB"),
     ("designs/provincial/mass_battle_integration_v30.md", "MB"),
     ("designs/provincial/military_layer_v30", "MB"),
-    ("designs/proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
-    ("designs/proposals/multiunit_envelopment_plan.md", "MB"),
+    ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
+    ("proposals/multiunit_envelopment_plan.md", "MB"),
     ("params/mass_combat.md", "MB"),
     ("sim/provincial/massbattle.py", "MB"),
     ("sim/provincial/units.py", "MB"),

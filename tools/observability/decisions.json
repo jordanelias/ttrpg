@@ -1,24 +1,24 @@
 {
   "meta": {
-    "files_scanned": 1418,
-    "total_open": 991,
+    "files_scanned": 1408,
+    "total_open": 986,
     "by_category": {
-      "ratification": 50,
+      "ratification": 49,
       "ruling": 219,
-      "naming": 73,
+      "naming": 72,
       "mechanics": 24,
-      "gap": 327,
-      "assumption": 250,
+      "gap": 325,
+      "assumption": 249,
       "stub": 34,
       "todo": 14
     },
     "by_priority": {
-      "1": 330,
+      "1": 328,
       "2": 36,
-      "3": 625
+      "3": 622
     },
     "by_lane": {
-      "unassigned": 706,
+      "unassigned": 701,
       "IN": 12,
       "FA": 67,
       "SC": 7,
@@ -31,9 +31,9 @@
     },
     "by_lane_priority": {
       "unassigned": {
-        "1": 287,
+        "1": 285,
         "2": 32,
-        "3": 387
+        "3": 384
       },
       "IN": {
         "1": 2,
@@ -831,18 +831,6 @@
       "lane": null
     },
     {
-      "text": "axis of conviction (RULED) \u2014 breaks the 3-way \"Piety Track\" name collision",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/proposals/repo-reorganization-v1.md:75"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
       "text": "VALORIA \u2014 Name Collision Database",
       "category": "naming",
       "priority": 1,
@@ -1377,18 +1365,6 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/personal/conviction_migration_roster_v30.md:295"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Each becomes a `designs/proposals/PP-NNN-*.md` entry with vetting block per PP-674. Candidate IDs `PC-N`; assigned PP-N at Jordan approval. **Each PC-4.x advances from proposal \u2192 PROVISIONAL canon only after sim battery PASS; remains PROVISIONAL pending Class A vetting per PP-674; reaches CANONICAL on Jordan ratific\u2026",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:99"
       ],
       "systems": [],
       "count": 1,
@@ -7154,18 +7130,6 @@
       "lane": "IN"
     },
     {
-      "text": "Resolution proposal:** treat `parliamentary_transfer \u00a73` 8-source list as canonical comprehensive list. `faction_layer \u00a73.5` 4-source list should be updated to match in a separate canon-cleanup task. P8 uses 8-source list with `[ASSUMPTION: parliamentary_transfer \u00a73 is canonical; faction_layer \u00a73.5 needs update]`.",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/proposals/2026-05-25-mechanics-integration-v3_1.md:551"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
       "category": "assumption",
       "priority": 3,
@@ -11210,30 +11174,6 @@
       "lane": null
     },
     {
-      "text": "| V-1.7 | M-1 | P3 | `conviction_taxonomy_v30.md` (PP-684) \u00b7 `key_substrate_v30.md` (PP-687) | Personal-scale \u2194 faction-scale Conviction flow soundness (needed to fully verify \u00a75.2 bottom-up chain from audit) | Verification \u2014 closes audit `[GAP]` on PP-684/PP-687 unread |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:50"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "`[GAP: sim battery designs are proposal-level sketches]`** \u2014 each PC-4.x patch register entry will need full sim battery design per PP-674 vetting block discipline.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/proposals/2026-05-16-faction-audit-followup-plan.md:228"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
       "text": "Marks every Tier-3 NPC with explicit `[GAP \u2014 Phase B authoring]` for missing dimensions; does not invent.",
       "category": "gap",
       "priority": 3,
@@ -12319,14 +12259,14 @@
       "replacement": "Superseded first by R2 (its own banner), then by master workplan v3. Its D-2 'M4 BUILT (L1980-2483)' claim is FALSE (evening whole-file hook scan; M4 unbuilt = "
     },
     {
-      "id": "designs/proposals/combat_v32_proposal.md",
+      "id": "proposals/combat_v32_proposal.md",
       "scope": "combat-v32 \u2014 state-graph reframe PROPOSAL (PP-TBD; never ratified as a doc)",
       "superseded_by": "ED-900",
       "date": "2026-06-10",
       "replacement": "DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). T"
     },
     {
-      "id": "designs/proposals/combat_v31_proposal.md",
+      "id": "proposals/combat_v31_proposal.md",
       "scope": "combat-v31 \u2014 earlier engine-replacement PROPOSAL in the same superseded line",
       "superseded_by": "ED-900",
       "date": "2026-06-10",

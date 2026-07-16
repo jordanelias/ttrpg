@@ -30,7 +30,7 @@ counts by lane, active patch-register counts).
 
 _Last reconciled: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
 `designs/audit/2026-07-15-proposal-reconciliation/`: classified the dashboard's 55 awaiting-ratification docs
-+ 9 dashboard-invisible `designs/proposals/` docs into 4 natures; executed safe status bookkeeping (39
++ 9 dashboard-invisible `proposals/` docs into 4 natures; executed safe status bookkeeping (39
 Nature-A flips — 29 ratified-narrative-engine working record → SUPERSEDED, 10 read-only-audit mis-tags
 reclassified; 9 Nature-D status-line additions), dropping the awaiting count 55→16; authored the
 `governance_cluster_reconciliation_v1.md` unified head (ED-IN-0070, PROPOSED) — `governance_type_registry_v1`

@@ -102,7 +102,7 @@ def test_sweep_displaces_laterally_grid():
     "cavalry-wing) were both implemented -- but the gauge-scale rows this unlocked now OVERSHOOT "
     "their bands decisively in the attacker's favor instead of landing in them, a newly-surfaced "
     "partition-invariance/Command-scaling question, not this fixture's concern. See "
-    "designs/proposals/mass_battle_fighting_withdrawal_v1.md (DG-2 workplan) and "
+    "proposals/mass_battle_fighting_withdrawal_v1.md (DG-2 workplan) and "
     "tests/coverage_matrix.md's 2026-07-05 entry for the full record. "
     "[2026-07-08 update] Unexpectedly XPASSED (not a failure -- strict=False) once the ED-MB-0006 "
     "pool-formula change (troop-type/quality/numbers, not Command) landed -- plausibly the "

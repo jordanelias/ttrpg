@@ -195,7 +195,7 @@ _v25 section (2026-05-15) archived to `tests/coverage_matrix_archive.md` 2026-05
 
 ## [ARCHIVED 2026-06-06 from coverage_matrix.md] May stub-infill coverage (Tier 0 2026-05-19; Tier 3 Lane C / parliamentary_stay / parliamentary_transfer 2026-05-31)
 
-## Tier 0 Stub Infill (2026-05-19+) — designs/proposals/stub_infill_plan.md (6669592f)
+## Tier 0 Stub Infill (2026-05-19+) — proposals/stub_infill_plan.md (6669592f)
 
 One row per module. Trial detail in commit body + sim_verification_ledger.json.
 
@@ -236,20 +236,20 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 | `tests/sim/sim_mb_sigma.py` (cavalry velocity primitive) | cavalry closes faster -> triggers charge | canon set aside per owner 2026-05-31; validated vs real warfare + NERS diagnostic | Under PER_CELL, cavalry actual_speed x PC_CAVALRY_SPEED_MULT (2.0): cavalry now out-momentums infantry (cell speed 2 vs 1), producing the differential that triggers the Incr5 depth-absorbed charge. PER_CELL=0 reproduces committed 120/120. Charge fires + is absorbed by deep formations (cavalry weak vs deep Line, strong vs shallow). NOTE: broader cavalry-vs-infantry balance tuning still open. |
 | `tests/sim/sim_mb_sigma.py` (fatigue rest refinement) | only genuine reserves recover stamina | canon set aside per owner 2026-05-31; validated vs real warfare + NERS diagnostic | update_stamina rest fix: a column recovers ONLY if not adjacent to any engaged column (a true reserve) and battle is joined — front-line columns momentarily out of the contact set no longer spuriously heal (which masked front fatigue). Stamina pattern realistic ([0,0,0,0,38] vs prior [5,5,5,5,100]). PER_CELL=0 reproduces committed 120/120; no band regression (H1 52,H2 57,H4 46,H7 47 — H7 slightly improved). |
 
-## Tier 3 Stub Infill — Lane C (2026-05-31) — designs/proposals/stub_infill_plan.md
+## Tier 3 Stub Infill — Lane C (2026-05-31) — proposals/stub_infill_plan.md
 
 | Module | Commit | Canon | Verification |
 |---|---|---|---|
 | `sim/personal/parliamentary_vote.py` | (Lane C 2026-05-31) | `social_contest_v30 §10` + `02_canon_constraints §B GD-3` | `run_parliamentary_vote` §10 BG vote — Mandate(=L) pool + genre/audience +1D, TN7, track thresholds 7/3/4–6, total-victory ≥9/≤1 → Mandate −1; GD-3 extra-parliamentary filter; reuses contest §6 constants. Smoke 4 scenarios verified. 11 §10 ledger entries appended. |
 
-## Tier 3 Stub Infill — parliamentary_stay (Lane C 2026-05-31) — designs/proposals/stub_infill_plan.md
+## Tier 3 Stub Infill — parliamentary_stay (Lane C 2026-05-31) — proposals/stub_infill_plan.md
 
 | Module | Commit | Canon | Verification |
 |---|---|---|---|
 | `sim/personal/parliamentary_stay.py` | (Lane C 2026-05-31) | `social_contest_v30 §10.1` (ED-631) | `invoke_stay`/`resolve_stay_lift` — §10.1 Stay via §10 vote; CI<55 availability gate, ≥2 Side A + Church Side B, pass→suspend 1 season else proceed. Verified across 60 seeds (granted/denied) + unavailable/invalid + resolve_stay_lift season-gating. 3 §10.1 ledger entries. |
 | `tests/sim/sim_mb_sigma.py` (envelopment wheel P1/P2) | overhang cells wheel toward enemy flank; facing follows | canon set aside per owner 2026-05-31; validated vs real warfare + Jordan rotation hypothesis (confirmed) | advance_cells: an overhang cell (column beyond the enemy frontage span) targets the nearest enemy cell instead of its own column -> wheels inward -> cell_facing_vec rotates inward (Horseshoe 4/18 cells now lateral, was 0/18). Gated PER_CELL+PC_WHEEL; PER_CELL=0 reproduces committed 120/120. Cells now ROTATE (hypothesis fix). Combat payoff NOT yet realized: _per_cell_angle_mod uses attacker CENTROID (still frontal) not the wheeled cell -> next step is centroid->nearest-attacker for flank detection. |
 
-## Tier 3 Stub Infill — parliamentary_transfer (Lane C 2026-05-31) — designs/proposals/stub_infill_plan.md
+## Tier 3 Stub Infill — parliamentary_transfer (Lane C 2026-05-31) — proposals/stub_infill_plan.md
 
 | Module | Commit | Canon | Verification |
 |---|---|---|---|

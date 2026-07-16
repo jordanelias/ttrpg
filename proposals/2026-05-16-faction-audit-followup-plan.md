@@ -96,7 +96,7 @@ Each is a question with options labeled α/β/γ. Claude does not pick.
 
 ### Phase 4 — Mechanic proposals (Class B patch register; conditional on Phase 2)
 
-Each becomes a `designs/proposals/PP-NNN-*.md` entry with vetting block per PP-674. Candidate IDs `PC-N`; assigned PP-N at Jordan approval. **Each PC-4.x advances from proposal → PROVISIONAL canon only after sim battery PASS; remains PROVISIONAL pending Class A vetting per PP-674; reaches CANONICAL on Jordan ratification** (per M-4).
+Each becomes a `proposals/PP-NNN-*.md` entry with vetting block per PP-674. Candidate IDs `PC-N`; assigned PP-N at Jordan approval. **Each PC-4.x advances from proposal → PROVISIONAL canon only after sim battery PASS; remains PROVISIONAL pending Class A vetting per PP-674; reaches CANONICAL on Jordan ratification** (per M-4).
 
 **Intra-phase priority** (per O-7): high-value first.
 

@@ -62,7 +62,7 @@ lanes:
       - "designs/world/**"
       - "designs/personal/**"
       - "designs/scene/**"          # [2026-06-12 Jordan] scene -> Lane A (sole design-content lane; owns all sibling designs/ globs). Resolves OWNS-GAP: social_contest/combat_engine_v1/conviction_track/derived_stats/miraculous_event/investigation_systems/fieldwork were unowned. Fieldwork to move into designs/scene/fieldwork/ (separate Lane-A op).
-      - "designs/proposals/**"
+      - "proposals/**"
       - "references/propagation_map.md"
     reserved_ed: "890-939"
     reserved_pp: "727-759"

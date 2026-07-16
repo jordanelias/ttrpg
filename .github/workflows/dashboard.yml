@@ -10,7 +10,7 @@ on:
     branches: [main]
     paths:
       - 'designs/workplans/**'
-      - 'designs/proposals/**'       # proposals card recomputes inline (build_proposals section)
+      - 'proposals/**'       # proposals card recomputes inline (build_proposals section)
       - 'registers/editorial_ledger*.jsonl'
       - 'references/audit_registry.jsonl'
       - 'handoffs/**'

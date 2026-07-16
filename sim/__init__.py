@@ -17,7 +17,7 @@ Subpackages:
 
 Top-level orchestrator: sim/mc_v18.py
 
-Status: Tier 0 stub infill in progress per designs/proposals/stub_infill_plan.md.
+Status: Tier 0 stub infill in progress per proposals/stub_infill_plan.md.
 17 modules implemented (Phase 7 mass battle + Crown/Church faction-unique +
 autoload); Tier 0 lands the next 14 (terr/settlement, thread/coherence,
 cross_scale/{handoff_rules, zoom_in_out, domain_echo}, peninsular/{ms_track,

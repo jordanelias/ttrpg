@@ -212,7 +212,7 @@ lane_ids:
     # RENUMBERED from ED-IN-0068/0069 at merge — collision with PR #146's ED-IN-0068 (merged first
     # keeps the number; same class as ED-IN-0031/0044/0064 precedents). next_free 69->71.
     # ED-IN-0071 allocated 2026-07-15 (repository reorganization proposal,
-    # designs/proposals/repo-reorganization-v1.md): content-class taxonomy critique + resolved
+    # proposals/repo-reorganization-v1.md): content-class taxonomy critique + resolved
     # target buckets + phased P0-P5 migration plan; PROPOSED, needs_jordan, all forks HELD-BACK.
     # Captures Jordan's previously-untracked repo-reorg suggestion (found nowhere in the corpus).
     # next_free 71->72.

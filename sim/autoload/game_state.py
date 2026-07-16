@@ -161,7 +161,7 @@ class World:
     # dataclass (CoherenceState, InsurgencyRecord, NPC, TreatyRecord) and
     # bidirectional typing would create import cycles. Consumer modules
     # check type at runtime.
-    # [canonical: designs/proposals/stub_infill_plan.md Amendment 2026-05-19
+    # [canonical: proposals/stub_infill_plan.md Amendment 2026-05-19
     #  "schema-migration commit that adds the missing registries"]
     practitioners: dict = field(default_factory=dict)            # actor_id → CoherenceState (from sim/thread/coherence)
     insurgencies: dict = field(default_factory=dict)             # insurgency_id → InsurgencyRecord (from sim/world/insurgency_pipeline)
@@ -173,7 +173,7 @@ class World:
     # Tier 1/2 registries. Same Any-typing rationale + _store(world) router
     # pattern as migration #1. Modules retain module-level fallback when
     # world is None (legacy callers + tests).
-    # [canonical: designs/proposals/stub_infill_plan.md Amendment 2026-05-19c
+    # [canonical: proposals/stub_infill_plan.md Amendment 2026-05-19c
     #  follow-on "Schema migration #2 to add world.convictions, world.beliefs..."]
     convictions: dict = field(default_factory=dict)              # actor_id → ConvictionState (from sim/personal/conviction)
     beliefs: dict = field(default_factory=dict)                  # actor_id → list[Belief] (from sim/personal/beliefs)

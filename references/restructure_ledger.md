@@ -529,3 +529,19 @@
 | `canon/patch_register_index.md` | `registers/patch_register_index.md` |
 | `canon/placeholder_names.yaml` | `registers/placeholder_names.yaml` |
 | `canon/supersession_register.yaml` | `registers/supersession_register.yaml` |
+
+
+## 2026-07-16 — designs/proposals -> proposals (ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` | `proposals/2026-05-16-PC-4.4-unified-success-stress.md` |
+| `designs/proposals/2026-05-16-faction-audit-followup-plan.md` | `proposals/2026-05-16-faction-audit-followup-plan.md` |
+| `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` | `proposals/2026-05-25-mechanics-integration-v3_1.md` |
+| `designs/proposals/mass_battle_fighting_withdrawal_v1.md` | `proposals/mass_battle_fighting_withdrawal_v1.md` |
+| `designs/proposals/mass_battle_shape_echelon_revamp.md` | `proposals/mass_battle_shape_echelon_revamp.md` |
+| `designs/proposals/multiunit_envelopment_plan.md` | `proposals/multiunit_envelopment_plan.md` |
+| `designs/proposals/pc_formation_system.md` | `proposals/pc_formation_system.md` |
+| `designs/proposals/repo-reorganization-v1.md` | `proposals/repo-reorganization-v1.md` |
+| `designs/proposals/stub_infill_plan.md` | `proposals/stub_infill_plan.md` |
+| `designs/proposals/weapon_physics_and_concentration_model.md` | `proposals/weapon_physics_and_concentration_model.md` |

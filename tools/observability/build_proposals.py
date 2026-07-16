@@ -4,7 +4,7 @@ tools/observability/build_proposals.py — Valoria unified proposals / open-work
 
 ONE deduplicated, lane-partitioned view of every piece of UNRATIFIED WORK in flight —
 the thing that was scattered across a chain of stale hand-authored decision-queue
-snapshots, a 9-file designs/proposals/ folder invisible to the dashboard, ~200 open
+snapshots, a 9-file proposals/ folder invisible to the dashboard, ~200 open
 editorial-ledger items, the audit registry, and workplan §5. Sibling of
 build_decisions.py; both are generated every audit-refresh so they cannot rot.
 
@@ -18,7 +18,7 @@ queue and workplan §5 — it never invents its own ranking or ratifies anything
 Sources (all structured, via tools/observability/obs_core.py — every rule lives once):
   • registers/editorial_ledger*.jsonl  open items, split by needs_jordan
   • references/audit_registry.jsonl  PARTIAL / OPEN verdicts
-  • designs/proposals/*.md          detected BY LOCATION (surfaces the 8 without a Status line)
+  • proposals/*.md          detected BY LOCATION (surfaces the 8 without a Status line)
   • designs/**/*.md                 first `## Status:` = PROPOSED / PROVISIONAL / DRAFT
 
 Output: proposals.json, proposals_data.js (window.VALORIA_PROPOSALS), PROPOSALS.md
@@ -47,7 +47,7 @@ AUDIT_SUBSYS_LANE = {
     "architecture": "IN", "threadwork": "WR", "cross_cutting": "IN", "corpus_wide": "IN",
 }
 KIND_LABELS = {
-    "proposal_doc": "Proposal docs (designs/proposals/)",
+    "proposal_doc": "Proposal docs (proposals/)",
     "provisional_status_doc": "Provisional / draft design docs",
     "ledger_needs_jordan": "Editorial ledger — needs your decision",
     "ledger_actionable": "Editorial ledger — actionable (no ruling needed)",
@@ -89,12 +89,12 @@ def collect() -> list[dict]:
             "links": [_rd(x) for x in (links or [])],
         })
 
-    # 1 + 2. design docs: designs/proposals/ BY LOCATION; else by unratified Status line
-    for path in sorted((REPO / "designs").rglob("*.md")):
+    # 1 + 2. design docs: proposals/ BY LOCATION; else by unratified Status line
+    for path in sorted(list((REPO / "designs").rglob("*.md")) + list((REPO / "proposals").rglob("*.md"))):
         rel = str(path.relative_to(REPO))
         if any(seg in rel for seg in ("/deprecated/", "/archives/", "/archive/")):
             continue
-        in_proposals_dir = rel.startswith("designs/proposals/")
+        in_proposals_dir = rel.startswith("proposals/")
         head = _doc_head(path)
         status = core.first_status(head)
         # design-doc kinds previously could NOT carry needs_jordan (they never passed
@@ -105,7 +105,7 @@ def collect() -> list[dict]:
             add("proposal_doc", rel, rel,
                 title=path.stem.replace("_", " "),
                 lane=core.infer_lane(rel), needs_jordan=nj,
-                status=status or "(no Status line — designs/proposals/)")
+                status=status or "(no Status line — proposals/)")
         elif core.is_unratified_status(status):
             add("provisional_status_doc", rel, rel,
                 title=path.stem.replace("_", " "),

@@ -654,7 +654,7 @@ def build_queue():
 # ── proposals / provisional / awaiting ratification ──────────────────────────
 
 def build_proposals():
-    # Status parsing via the shared core (tolerant superset regex). designs/proposals/
+    # Status parsing via the shared core (tolerant superset regex). proposals/
     # docs are surfaced BY LOCATION even without a Status line — the gap that made all
     # 9 of them invisible here. Both this card and build_proposals.py call the same core,
     # so they agree without one reading the other's committed output.
@@ -668,9 +668,9 @@ def build_proposals():
         except OSError:
             continue
         status = _obs_core.first_status(head)
-        in_proposals_dir = path.startswith('designs/proposals/')
+        in_proposals_dir = path.startswith('proposals/')
         if in_proposals_dir:
-            shown = status or '(no Status line — designs/proposals/)'
+            shown = status or '(no Status line — proposals/)'
             rows.append({"path": path, "status": shown[:140], "group": 'proposals'})
         elif _obs_core.is_unratified_status(status):
             group = path.split('/')[1] if path.count('/') >= 2 else 'designs'
@@ -684,7 +684,7 @@ def build_proposals():
         "groups": groups,
         "count": len(rows),
         "note": ("Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus "
-                 "every doc under designs/proposals/ (surfaced by location). Awaiting ratification "
+                 "every doc under proposals/ (surfaced by location). Awaiting ratification "
                  "(a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and archives/. "
                  "The full unified register is tools/observability/PROPOSALS.md."),
     }
