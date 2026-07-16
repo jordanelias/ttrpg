@@ -98,7 +98,7 @@ systems:
     params: params/core.md
     canonical_sha__params__core_md: "1b58325bc4949d76af1f5b755298604e7d496734"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "979afea6ae184136867938193191a28e5f9d65a2"
+    canonical_sha__params__bg__core_md: "4f98d87a741445c44441dfc45278a48abff6306f"
   combat:
     design_doc: designs/scene/combat_v30.md
     canonical_sha__designs__scene__combat_v30_md: "db827fa23baf0379f161481b28880703c6f964e7"
@@ -246,9 +246,9 @@ systems:
     canonical_sha__designs__architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
   throughlines_framework:
     design_doc: references/throughlines_meta.md
-    canonical_sha__references__throughlines_meta_md: "439bcae6aa5675e96e68851a77dc09e22fde1e64"
+    canonical_sha__references__throughlines_meta_md: "9dc9c5a093ffa44fc0c4fc09266bc68a5bdc4552"
     infill: references/throughlines_meta_infill.md
-    canonical_sha__references__throughlines_meta_infill_md: "92b10265821f67ea08016967411f2c7a39e1a707"
+    canonical_sha__references__throughlines_meta_infill_md: "923cdaf1d0d0339802ea42aab17e7af4194f50c4"
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "9f1f8e1c25e1aa0ad1ac9fc2cc24ac0f2d11fe0f"
+    canonical_sha__references__module_contracts_yaml: "df2a0a500608a175a10424bf53492f11d2772a96"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
