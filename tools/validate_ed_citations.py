@@ -84,7 +84,7 @@ LANE_LEDGER_PATHS = tuple(
 REGISTER_PATHS = {'registers/editorial_ledger.jsonl', 'registers/patch_register_active.yaml',
                   *LANE_LEDGER_PATHS}
 # Frozen history: citations there are records, not live claims.
-SKIP_PREFIXES = ('archives/', 'deprecated/', 'references/atoms_pending/')
+SKIP_PREFIXES = ('deprecated/archives/', 'deprecated/', 'references/atoms_pending/')
 # Working documents (audits, workplans) PROPOSE and TRACK EDs — they do not
 # assert canon, so they are out of the validator's mandate (which is canonical
 # surfaces only). Excluded from scanning entirely. See _is_working_doc.
@@ -103,7 +103,7 @@ SCAN_PREFIXES = ('canon/', 'designs/', 'params/', 'references/')
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
-ARCHIVE_GLOBS = ('archives/editorial/', 'archives/editorials/', 'deprecated/canon/')
+ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editorials/', 'deprecated/canon/')
 
 # JSONL archive siblings of the active ledger (registers/editorial_ledger.jsonl's own overflow
 # chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the

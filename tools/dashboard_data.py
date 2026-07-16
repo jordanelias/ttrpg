@@ -685,7 +685,7 @@ def build_proposals():
         "count": len(rows),
         "note": ("Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus "
                  "every doc under proposals/ (surfaced by location). Awaiting ratification "
-                 "(a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and archives/. "
+                 "(a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and deprecated/archives/. "
                  "The full unified register is tools/observability/PROPOSALS.md."),
     }
 

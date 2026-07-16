@@ -94,8 +94,8 @@ def test_forbidden_token_case_insensitive_halts():
 
 
 def test_forbidden_token_exempt_prefix_passes():
-    # archives/ is an exempt prefix even with a bare forbidden token.
-    valoria_hooks.forbidden_token_gate([('archives/old/x.md', 'historical: Galbados')])
+    # deprecated/archives/ is an exempt prefix even with a bare forbidden token.
+    valoria_hooks.forbidden_token_gate([('deprecated/archives/old/x.md', 'historical: Galbados')])
 
 
 # ─────────────────────────────────────────────────────────────────────────────

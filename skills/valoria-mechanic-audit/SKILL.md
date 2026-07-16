@@ -114,7 +114,7 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 ## Output Rules
 - Findings land in a dated `designs/audit/<date>-<topic>/` folder (matching the naming
   pattern used throughout `designs/audit/`) — not standalone files at unspecified locations.
-  (`archives/audit/` holds older runs that have since been superseded/archived — it is
+  (`deprecated/archives/audit/` holds older runs that have since been superseded/archived — it is
   history only, never a target for new output; CLAUDE.md §1.)
 - Modes can run independently or as full suite (A–E); when multiple modes run in one session, their
   findings can share one dated folder (one file per mode, e.g. `formula_audit.md`,

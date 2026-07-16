@@ -15,7 +15,7 @@ ED-1095/ED-1096 are same-day-as-cutover 2026-07-02 flat allocations (valid; the 
 holds from the cutover forward — no later flat allocation observed).**
 
 **Supersedes (on merge):** `workplans/valoria_master_workplan_v5.md` → moves to
-`archives/workplans/` with a supersession banner (per `workplans/README.md`). v5's
+`deprecated/archives/workplans/` with a supersession banner (per `workplans/README.md`). v5's
 J-/LA-/LB-/LC- keys and v4's register rows 1–43 stay citable and are NOT renumbered; Appendix
 A accounts for every open v5 item. v4 stays the frozen 06-11/06-22 record.
 

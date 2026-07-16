@@ -173,8 +173,8 @@ def test_core_discriminator_live_head_flagged_historical_never(tmp_path):
     (designs_dir / 'fake_live_v30.md').write_text(
         '## Status: CANONICAL\n\nThis is a fake live head. ' + ref_line, encoding='utf-8')
 
-    archives_dir = tmp_path / 'archives'
-    archives_dir.mkdir()
+    archives_dir = tmp_path / 'deprecated' / 'archives'
+    archives_dir.mkdir(parents=True)
     (archives_dir / 'fake_historical_v30.md').write_text(
         '## Status: CANONICAL\n\nThis is a fake historical record. ' + ref_line, encoding='utf-8')
 
@@ -183,18 +183,18 @@ def test_core_discriminator_live_head_flagged_historical_never(tmp_path):
         tmp_path, live_set, set())
 
     assert partition['live'] == ['designs/fake_live_v30.md']
-    assert 'archives/fake_historical_v30.md' in partition['historical']
+    assert 'deprecated/archives/fake_historical_v30.md' in partition['historical']
     # the historical doc's content is structurally never even collected for scanning —
     # not filtered out later, never gathered in the first place.
     assert set(live_contents) == {'designs/fake_live_v30.md'}
 
     # the target genuinely does not exist anywhere in this fixture -> nonexistent
-    all_files = {'designs/fake_live_v30.md', 'archives/fake_historical_v30.md'}
+    all_files = {'designs/fake_live_v30.md', 'deprecated/archives/fake_historical_v30.md'}
     stale = ga.stale_pointers_in_live_heads(live_contents, all_files, set())
 
     assert stale == [{'live_head': 'designs/fake_live_v30.md',
                       'ref': 'designs/fake_target_v1.md', 'reason': 'nonexistent'}]
-    assert not any(s['live_head'] == 'archives/fake_historical_v30.md' for s in stale)
+    assert not any(s['live_head'] == 'deprecated/archives/fake_historical_v30.md' for s in stale)
 
 
 def test_stale_pointers_flags_superseded_target_too():
@@ -350,9 +350,9 @@ def test_real_corpus_stale_severity_split_sums_and_moved_targets_exist(real_run)
 
 def test_real_corpus_never_flags_a_historical_doc_as_a_stale_pointer_source(real_run):
     # Structural guarantee, cross-checked against the real run: no finding's
-    # live_head is ever a path under archives/ or deprecated/ or designs/audit/.
+    # live_head is ever a path under deprecated/archives/ or deprecated/ or designs/audit/.
     for s in real_run['stale']:
-        assert not s['live_head'].startswith(('archives/', 'deprecated/', 'designs/audit/'))
+        assert not s['live_head'].startswith(('deprecated/archives/', 'deprecated/', 'designs/audit/'))
 
 
 def test_real_corpus_deterministic_across_two_runs(real_run, tmp_path_factory):

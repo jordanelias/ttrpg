@@ -363,7 +363,7 @@ At session close, append to session_log_current.md:
 ### §5.3 Session log file management
 
 - One `session_log_current.md` at canon root, replaced each session
-- Previous logs archived to `archives/session/session_log_archive_YYYY-MM.yaml`
+- Previous logs archived to `deprecated/archives/session/session_log_archive_YYYY-MM.yaml`
 - `g.safe_session_close(new_log, bootstrap_log)` handles this
 
 ---
@@ -866,7 +866,7 @@ Per Valoria PI. Note ED-796 (open) — manual override of context_gate hard-stop
 ### §11.4 Session log management
 
 - One `session_log_current.md` at canon root
-- Archive previous logs to `archives/session/session_log_archive_YYYY-MM.yaml` at session close
+- Archive previous logs to `deprecated/archives/session/session_log_archive_YYYY-MM.yaml` at session close
 
 ---
 

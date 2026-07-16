@@ -82,7 +82,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   co-file, throughlines_complete.md) — verified section-by-section against the actual promoted doc's
   headers (not blind find-replace); one citation (player_agency §2, succession) could NOT be verified to
   a matching section and was rewritten as a prose pointer with an inline flag instead of guessed;
-  deliberately left ALL `designs/audit/`, `tests/sim/`, `archives/`, and `references/propagation_log.md`
+  deliberately left ALL `designs/audit/`, `tests/sim/`, `deprecated/archives/`, and `references/propagation_log.md`
   hits untouched (historical snapshots, rewriting would falsify the record); (4) `restructure_ledger.md`'s
   two stale PENDING rows closed (DONE / N/A — no skeleton split was ever authored); (5) **filed
   `ED-IN-0030`** (open, needs_jordan) for a genuinely new defect the sweep surfaced: `scale_transitions_v30`
@@ -334,7 +334,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   **Workplan v6** (`workplans/valoria_master_workplan_v6.md`, ED-IN-0009): M1/M2/M3
   milestones, IN spine, per-lane sequencing, tiered T0/T1/T2 decision register (no status
   fields), governance incl. the ED-PC plan-text-label rule. **ED-IN-0006 EXECUTED**:
-  roadmap_state → `deprecated/references/` (banner), v5 → `archives/workplans/` (banner
+  roadmap_state → `deprecated/references/` (banner), v5 → `deprecated/archives/workplans/` (banner
   fixing its J-38 contradiction), decision-queue items 1–3 refreshed + queue demoted to
   dated snapshot, CURRENT.md rows updated (workplan v6 + new Narrative-engine row),
   `lane_assignments.yaml` repointed. Next IN actions live in v6 §2. **⚠️ F-F/fork-8 note
@@ -365,7 +365,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
     Retired-session-file relocation to `deprecated/` is DONE (via ED-1084). Still open: (a)
     relocate the ~850KB of narrative markdown mislabeled as tests
     (`tests/emergent_arc_skeleton_test_2026-04-17_batch*.md`,
-    `tests/sim_framework/session_audit_2026-04-19.md`) to `designs/audit/` or `archives/`;
+    `tests/sim_framework/session_audit_2026-04-19.md`) to `designs/audit/` or `deprecated/archives/`;
     (b) regenerate `sim/README.md` (self-flags stale rather than being rewritten accurate),
     `sim/CONVENTIONS.md` (still `[PROVISIONAL — Pass 2l armature scaffold 2026-05-17]`), and
     `tools/README.md` (missing `currency_consistency_check.py`, `ci_module_shape_check.py`,
@@ -609,7 +609,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 - 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/v4)
   while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
   revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `workplans/` (now the
-  one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
+  one live home — see its `README.md`); archived the two dead files to `deprecated/archives/workplans/`. Repointed
   `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
   commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
   `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling

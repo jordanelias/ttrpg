@@ -72,7 +72,7 @@ EXCLUDE = (
     'params/bg/institutions.md',
     'skills/prose-writer/',
     'tests/',
-    'archives/',
+    'deprecated/archives/',
     'deprecated/',
     'designs/audit/',
     'registers/editorial_ledger',

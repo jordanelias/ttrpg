@@ -20,7 +20,7 @@ DECLARED EXCLUSIONS (measurement/dev harnesses are not runtime containers):
   * anything under a tests/ tree itself,
   * designs/scene/combat_engine_v1/workbench/ (the measurement workbench reaches into the
     frozen v32 validation station BY DESIGN — tagged at each insert),
-  * archives/, deprecated/.
+  * deprecated/archives/, deprecated/.
 
 Scope: full working tree (deterministic; cheap). Exit 1 on any category-1/2 violation.
 Wired report-only in CI first (same graduation lane as names-drift).

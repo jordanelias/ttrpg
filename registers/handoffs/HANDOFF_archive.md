@@ -491,7 +491,7 @@ here.
 - 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/v4)
   while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
   revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `workplans/` (now the
-  one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
+  one live home — see its `README.md`); archived the two dead files to `deprecated/archives/workplans/`. Repointed
   `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
   commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
   `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling
