@@ -60,7 +60,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     exclusion in `test_use_mode_selection_emerges_from_primitives` (updated). Net accepted-red count 8→8 (2
     retired, 2 new — both PHASE-C-flagged, not silent); the 5 pre-existing `test_combat_element_parity.py`
     Phase-A fixture-schema-drift failures and `test_gap_game_poleaxe_spikes_plate` are untouched, confirmed
-    out of U1 scope. `references/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
+    out of U1 scope. `engine/engine_params/combat_engine_v1.json` unaffected (config.py untouched, verified
     via `export_engine_params.py --check`). 196 passed / 8 failed / 1 xfailed; `valoria_local.py --staged`
     clean. See the ED-PC-0010 ledger entry for full detail.
   - **U2 ATTEMPTED 2026-07-08, PARTIAL — findings filed as ED-PC-0008, then JD-4/JD-9 DETERMINED same day as

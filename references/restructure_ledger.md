@@ -701,3 +701,11 @@
 | `archives/propagation/` | `deprecated/archives/propagation/` |
 | `archives/session/` | `deprecated/archives/session/` |
 | `archives/workplans/` | `deprecated/archives/workplans/` |
+
+
+## 2026-07-16 — references/engine_params -> engine/engine_params (ED-IN-0071 P3 seed)
+
+| old path | new path |
+|---|---|
+| `references/engine_params/` | `engine/engine_params/` |
+| `references/engine_params/combat_engine_v1.json` | `engine/engine_params/combat_engine_v1.json` |

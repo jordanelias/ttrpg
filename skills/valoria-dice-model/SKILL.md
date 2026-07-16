@@ -166,7 +166,7 @@ Pool 3–12, Ob 1–6, all three TNs.
    "[continuous/Godot-canonical]" so it isn't mistaken for the discrete-mode table.
 3. Use whenever the question is about the videogame's actual resolver rather than tabletop play
    (see "Two Resolver Modes" above) — e.g. balance questions that will land in
-   `references/engine_params/*.json` or `designs/scene/combat_engine_v1/`.
+   `engine/engine_params/*.json` or `designs/scene/combat_engine_v1/`.
 
 ---
 

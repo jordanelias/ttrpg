@@ -371,7 +371,7 @@ here.
   fold; mirror 23→83) · session-log machinery → `deprecated/session_machinery/` · combat engine
   runtime **numpy-free** (σ-kernel via `sim.autoload.sigma_leverage`; state kernel engine-owned;
   ED-1085) with new container-hygiene guard · **first typed Godot params artifact**
-  (`references/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
+  (`engine/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
   contract-conformance CI (report-only; ED-1051 backlog surfaced per-PR) · CLAUDE.md §10 fable
   tier + relay patterns; workplan **J-38** (propagation-spec authorship) docketed ·
   `currency_consistency_check` self-updating recency gate (CI + SessionStart banner; ED-1087) ·
