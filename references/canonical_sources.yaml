@@ -453,7 +453,7 @@ systems:
     hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
     editorial: designs/scene/fieldwork_editorial.md
-    canonical_sha__designs__scene__fieldwork_editorial_md: "4a2003cec32e0e0f4d878cfa1c6ea1e4ac0b9867"
+    canonical_sha__designs__scene__fieldwork_editorial_md: "ad833700c736f928c380a6cfdf0d7acab9030ad3"
     exploration: designs/scene/fieldwork_exploration.md
     canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
     exposure: designs/scene/fieldwork_exposure.md
