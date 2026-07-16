@@ -63,7 +63,7 @@ index; see it for cross-lane/global items.
   - **D0-3 RESOLVED → HYBRID** (present-as-Ob display over the δσ substrate; CR6 upheld, not reopened). Memo:
     `designs/audit/2026-06-30-contest-fractional-ob-probe/MEMO.md`; decision → ED-1055. Probe also surfaced a LIVE
     combat bug (`dice_engine.roll_pool` ignores `tn`; TN5/6/8 weapons rolled at TN7 rate) → spun out as a
-    combat-lane task (`task_210994b7`, out of contest scope — see `handoffs/HANDOFF_PC.md`).
+    combat-lane task (`task_210994b7`, out of contest scope — see `registers/handoffs/HANDOFF_PC.md`).
   - **Stage 1c DONE + merged into main (PR #44, all CI green).** v30 re-skin (8 proceedings, Persuasion Track
     banding, 4 adjudicator types) + `build_contest`/`resolve_contest` wrapper + MECHANICS registry, mirroring
     `tests/sim/mass_battle/engine.py`. 888 tests green.

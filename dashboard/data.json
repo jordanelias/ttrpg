@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T21:08:26+00:00",
-    "commit_sha": "4c5a82c"
+    "timestamp_utc": "2026-07-16T21:27:18+00:00",
+    "commit_sha": "3af29dc"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 5 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": ""
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "3af29dc45c",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] arcs: rename gm_ref -> simulated + consolidate root arc-batches into it (#156)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "4c5a82c9d3",
         "date": "2026-07-16",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "[infrastructure] Wave-Q-step-3 tooling build: A17 stat-vocabulary closure (ED-IN-0029) (#115)",
         "scope": "infrastructure"
-      },
-      {
-        "sha": "78dba93334",
-        "date": "2026-07-08",
-        "author": "jordanelias",
-        "subject": "[design] Pessimist Subtractive NERS + corpus contamination/hardcode registry (follow-up to PR #101) (#116)",
-        "scope": "design"
       }
     ]
   },
@@ -699,24 +699,9 @@
         "source": "HANDOFF.md",
         "line": 89,
         "text": "- **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full"
-      },
-      {
-        "source": "handoffs/HANDOFF_FA.md",
-        "line": 165,
-        "text": "- **Jordan ruling needed: ED-SC-0015** (Parliamentary total-victory Mandate stacking) — surfaced"
-      },
-      {
-        "source": "handoffs/HANDOFF_IN.md",
-        "line": 396,
-        "text": "sim↔port parity tooling) filed as `ED-IN-0042`, `needs_jordan: true` — see"
-      },
-      {
-        "source": "handoffs/HANDOFF_SC.md",
-        "line": 242,
-        "text": "- **JORDAN RULING NEEDED: ED-SC-0015** (Parliamentary total-victory Mandate stacking, −2 vs −1) —"
       }
     ],
-    "count": 5,
+    "count": 2,
     "heuristic": true
   },
   "drift": {
@@ -726,8 +711,8 @@
         "surface": "Workplan progress board",
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
-        "stale": true,
-        "detail": "⚠ 5 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "stale": false,
+        "detail": "current — no workplan-relevant file changed since the last refresh",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -743,15 +728,15 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "4 in-scope file(s) changed since last refresh",
+        "detail": "7 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base 95d871f (2026-07-16)",
-        "stale": true,
-        "detail": "43 in-scope file(s) changed since last refresh",
+        "ref": "base 3af29dc (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -767,7 +752,7 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "1 in-scope file(s) changed since last refresh",
+        "detail": "4 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -803,61 +788,11 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 9,
+    "stale_count": 7,
     "total": 10,
     "handoffs": [
       {
         "surface": "HANDOFF.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_FA.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_FI.md",
-        "last_updated": "2026-07-08",
-        "days_ago": 8
-      },
-      {
-        "surface": "HANDOFF_GO.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_IN.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_MB.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_PC.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_SC.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_SE.md",
-        "last_updated": "2026-07-16",
-        "days_ago": 0
-      },
-      {
-        "surface": "HANDOFF_WR.md",
-        "last_updated": "2026-07-08",
-        "days_ago": 8
-      },
-      {
-        "surface": "HANDOFF_archive.md",
         "last_updated": "2026-07-16",
         "days_ago": 0
       }

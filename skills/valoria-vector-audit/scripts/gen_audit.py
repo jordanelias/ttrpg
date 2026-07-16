@@ -25,7 +25,7 @@ THE CORE PARTITION (get this right — it is the whole point of the tool):
     `status_of()` is in the recognized current vocabulary (`RECOGNIZED`) AND is
     NOT a `superseded_ids()` entry.
   - **HISTORICAL record:** anything under `archives/`, `deprecated/`,
-    `designs/audit/`, `handoffs/`, a `registers/editorial_ledger*`/`patch_register`/
+    `designs/audit/`, `registers/handoffs/`, a `registers/editorial_ledger*`/`patch_register`/
     `supersession_register` path, any `superseded_ids()` entry, anything
     `vector_audit.banner_classify()` returns 'discourse'/'excluded' for *that was
     not itself registered as a live head* (the weak banner content-keyword does
@@ -39,7 +39,7 @@ THE CORE PARTITION (get this right — it is the whole point of the tool):
 
   **Tie-break, made explicit (not hidden):** the AUTHORITATIVE historical
   signals — a `superseded_ids()` entry, a physical archival PATH (`archives/`,
-  `deprecated/`, `designs/audit/`, `handoffs/`), or a ledger/register path — are
+  `deprecated/`, `designs/audit/`, `registers/handoffs/`), or a ledger/register path — are
   checked BEFORE strict-LIVE membership in `classify()`, so a doc that IS a strict
   LIVE head (registered, recognized status, not superseded) can still be demoted
   to HISTORICAL and excluded from detection 1's scan when it is physically filed as
@@ -193,7 +193,7 @@ import vector_audit as va                     # noqa: E402  (the ONE banner clas
 
 # ──────────────────────────── PARTITION (LIVE vs HISTORICAL) ─────────────────
 
-_HISTORICAL_PATH_PREFIXES = ('archives/', 'deprecated/', 'designs/audit/', 'handoffs/')
+_HISTORICAL_PATH_PREFIXES = ('archives/', 'deprecated/', 'designs/audit/', 'registers/handoffs/')
 # Ephemeral / gitignored build+cache dirs: they are not part of the design corpus
 # and their presence varies by environment (a fresh CI clone has no `.pytest_cache`),
 # so walking them would make the HISTORICAL count non-deterministic across machines
@@ -239,7 +239,7 @@ def classify(relpath, content, live_set, superseded_set):
     Signal precedence (agonist-antagonist reconciliation 2026-07-13, ED-IN-0055).
     The AUTHORITATIVE historical signals win even over strict-LIVE membership: a
     `superseded_ids()` entry, a physical archival PATH (`archives/`, `deprecated/`,
-    `designs/audit/`, `handoffs/`), or a ledger/register path — a doc physically
+    `designs/audit/`, `registers/handoffs/`), or a ledger/register path — a doc physically
     filed under `designs/audit/` is a historical record whatever its `## Status:`
     line claims (real instance: `integration_plan_v18.md`, registered CANONICAL yet
     filed under `designs/audit/`). But `banner_classify()`'s CONTENT-keyword
@@ -676,7 +676,7 @@ def run(root, out):
         L.append('')
         L.append('These pass the strict currency rule (registered, recognized `## Status:`, not '
                  'superseded) but are demoted to HISTORICAL by an AUTHORITATIVE override — a physical '
-                 'archival path (`archives/`/`deprecated/`/`designs/audit/`/`handoffs/`) or a '
+                 'archival path (`archives/`/`deprecated/`/`designs/audit/`/`registers/handoffs/`) or a '
                  'ledger/register path — because a doc filed as a record is a record whatever its '
                  '`## Status:` line says (e.g. a registered-CANONICAL plan under `designs/audit/`). '
                  'Since the ED-IN-0055 reconciliation, `vector_audit.banner_classify()`\'s weak '

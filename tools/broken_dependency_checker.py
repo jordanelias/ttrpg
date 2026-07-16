@@ -100,7 +100,7 @@ def _load_restructure_map():
 LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
 
 # Lane-split active ledger (2026-07-08 atomization pass): ED-<LANE>-NNNN entries live in
-# their own registers/editorial_ledger_<lane>.jsonl file, mirroring handoffs/HANDOFF_<LANE>.md.
+# their own registers/editorial_ledger_<lane>.jsonl file, mirroring registers/handoffs/HANDOFF_<LANE>.md.
 # Pre-cutover flat-ID entries stay in the main file (no retrofit). Both are "active" and
 # must be checked the same way, or the lane-tagged 1/3 of live entries would silently stop
 # being validated for broken paths — the exact failure class ED-1081 already fixed once.

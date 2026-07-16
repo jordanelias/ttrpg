@@ -20,7 +20,7 @@ are more "current state" files than there should be; trust them in this strict p
    When unsure whether a doc is current, this is the authority. Last reconciled by hand (2026-06-28),
    so treat it as fresher than any filename or in-file version string.
 2. **`HANDOFF.md`** — the **continuity index**: root file pointing to lane-scoped
-   `handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
+   `registers/handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
    GO, SE`) plus genuinely cross-cutting pending work/decisions/next actions. Split 2026-07-02 to
    reduce concurrent-session merge-collision surface on one shared file, the same motivation
    behind the ID namespace itself. The SessionStart banner (`tools/session_status.py`) reads root
@@ -34,10 +34,10 @@ are more "current state" files than there should be; trust them in this strict p
 - `README.md` — outdated navigational pointers; defers to the three files above.
 - Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`,
   `deprecated/session_machinery/handoffs/` — old per-lane-A/B/C `.yaml` files, a **different,
-  retired thing** from the live root-level `handoffs/*.md` directory below, do not confuse them —
+  retired thing** from the live root-level `registers/handoffs/*.md` directory below, do not confuse them —
   `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
   — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
-  **`HANDOFF.md` + `handoffs/HANDOFF_<LANE>.md` are the only live continuity surface.** Do not
+  **`HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` are the only live continuity surface.** Do not
   write into or resume from anything under `deprecated/session_machinery/`.
 - `archives/`, `deprecated/` — history only, never canonical.
 
@@ -54,9 +54,9 @@ are more "current state" files than there should be; trust them in this strict p
   `[scope] description` where scope ∈
   `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` in the description when applicable.
-- **Continuity = git history + `HANDOFF.md`/`handoffs/HANDOFF_<LANE>.md`.** No session-log/checkpoint
+- **Continuity = git history + `HANDOFF.md`/`registers/handoffs/HANDOFF_<LANE>.md`.** No session-log/checkpoint
   machinery is in use (despite retired files lingering — §1). When you pause mid-task, capture next
-  actions in your lane's `handoffs/HANDOFF_<LANE>.md` (or root `HANDOFF.md` only for genuinely
+  actions in your lane's `registers/handoffs/HANDOFF_<LANE>.md` (or root `HANDOFF.md` only for genuinely
   cross-cutting items); a commit *is* the session close.
 - **Merging a PR ratifies its PROPOSED contents by default (ED-1094, 2026-07-02).** If a PR lands a
   design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
@@ -77,7 +77,7 @@ are more "current state" files than there should be; trust them in this strict p
 |---|---|
 | `canon/` | Philosophical foundations (P-01..P-14), canonical timeline, canon constraints, self-rendering/leap-mechanism amendments. **The process registers moved OUT to `registers/` (2026-07-16, ED-IN-0071 P0)** — canon/ now holds only world/design truth. |
 | `registers/` | Process ledgers/registers, moved out of `canon/` (ED-IN-0071 P0, 2026-07-16): editorial ledger (`editorial_ledger.jsonl` pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN`, §3), patch register, supersession register, mechanics index, placeholder names. Old `canon/…` citations resolve via `references/restructure_ledger.md`'s alias map. |
-| `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
+| `registers/handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1), moved under `registers/` from top-level `handoffs/` (ED-IN-0071 P0b, 2026-07-16). Root `HANDOFF.md` (the index the SessionStart banner reads) **stays at repo root**. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`. |
 | `godot/` | The Godot port, consolidated out of THREE former homes (`designs/godot/`, `designs/videogame/`, `designs/audit/2026-06-10-godot-conversion-strategy/`) to a top-level primary (ED-IN-0071 P2, 2026-07-16): the PROPOSED governing `godot_conversion_strategy_v1.md`, the `godot_architecture_specification.md`, the 4 stale pre-`d+σ` docs, and `skeleton/` (§6). **Is** the eventual `res://` project root. Old paths alias via `references/restructure_ledger.md`. |
 | `arcs/` | Generated **narrative content**, promoted out of `designs/arcs/` to a top-level primary (ED-IN-0071, 2026-07-16) — neither system-mechanics nor world-canon. Root holds the non-batch narrative (`arc_expansion`, `emergent_*`, `narrative_scenario_chains`, `throughline_resolutions`); the numbered arc batches (`arcs_01_04`…`arcs_46_55` + `arc_narrative_analysis`) live in `arcs/simulated/` (renamed from `gm_ref/`, root batches consolidated in). Arc **registers** (`arc_register*` tracking clocks/events/factions/territory/threads, formerly `references/arc_register*` + `references/arcs/`) live in `arcs/registers/` — distinct from the process ledgers in top-level `registers/`. Old paths alias via `references/restructure_ledger.md`. |
@@ -305,7 +305,7 @@ fully superseded by `designs/scene/combat_engine_v1/workbench/balance.py`, the a
 original 11); see `deprecated/skills/README.md` for detail.
 
 **General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
-`handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
+`registers/handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
 line → make the change in the working tree → run the
 relevant `tools/` validator and `pytest tests/valoria` → commit with the `[scope]` format and any
 `PP-NNN`/`ED-NNN` citation. When a number must cross into Godot, follow §5; when porting, follow §6/§7.

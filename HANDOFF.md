@@ -10,11 +10,11 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 ## History
 
 Full narrative for the work below (2026-06-24 through 2026-07-02) moved to
-`handoffs/HANDOFF_archive.md` (2026-07-08, token-efficiency pass) — this file had drifted from
+`registers/handoffs/HANDOFF_archive.md` (2026-07-08, token-efficiency pass) — this file had drifted from
 "index" to a full append-only session log. Nothing was deleted, only relocated; the archive is
 frozen, do not resume work from it.
 
-Per-lane continuity now lives in `handoffs/HANDOFF_<LANE>.md`, using the same 9 lane codes as
+Per-lane continuity now lives in `registers/handoffs/HANDOFF_<LANE>.md`, using the same 9 lane codes as
 the `ED-<LANE>-NNNN` editorial namespace (`ED-IN-0001`, `CLAUDE.md` §3). This file is the
 **index** plus genuinely cross-cutting items — read the lane file(s) relevant to your session
 before starting work, and keep your own updates scoped to your lane's file (or this one, only
@@ -22,15 +22,15 @@ for cross-cutting items).
 
 | Lane | Subsystem | File |
 |---|---|---|
-| `MB` | Mass battle | `handoffs/HANDOFF_MB.md` |
-| `PC` | Personal / scene combat | `handoffs/HANDOFF_PC.md` |
-| `FI` | Field investigation | `handoffs/HANDOFF_FI.md` |
-| `SC` | Social contest | `handoffs/HANDOFF_SC.md` |
-| `FA` | Faction actions | `handoffs/HANDOFF_FA.md` |
-| `WR` | World | `handoffs/HANDOFF_WR.md` |
-| `IN` | Infrastructure / cross-cutting | `handoffs/HANDOFF_IN.md` |
-| `GO` | Godot conversion | `handoffs/HANDOFF_GO.md` |
-| `SE` | Settlements | `handoffs/HANDOFF_SE.md` |
+| `MB` | Mass battle | `registers/handoffs/HANDOFF_MB.md` |
+| `PC` | Personal / scene combat | `registers/handoffs/HANDOFF_PC.md` |
+| `FI` | Field investigation | `registers/handoffs/HANDOFF_FI.md` |
+| `SC` | Social contest | `registers/handoffs/HANDOFF_SC.md` |
+| `FA` | Faction actions | `registers/handoffs/HANDOFF_FA.md` |
+| `WR` | World | `registers/handoffs/HANDOFF_WR.md` |
+| `IN` | Infrastructure / cross-cutting | `registers/handoffs/HANDOFF_IN.md` |
+| `GO` | Godot conversion | `registers/handoffs/HANDOFF_GO.md` |
+| `SE` | Settlements | `registers/handoffs/HANDOFF_SE.md` |
 
 **Why the split:** the ID-collision incidents that motivated `ED-<LANE>-NNNN` (two same-session
 concurrent-allocation collisions on the flat sequence within one PR — see `ED-1094`'s ledger
@@ -42,7 +42,7 @@ keyed to the SAME lane taxonomy the ID system already enforces, not an ad-hoc pe
 and this root file remains the one stable SessionStart entry point.
 
 **Full detail on the split itself, and every historical decision predating it, is filed at
-`handoffs/HANDOFF_IN.md`'s Decisions log** — this root file does not duplicate that history.
+`registers/handoffs/HANDOFF_IN.md`'s Decisions log** — this root file does not duplicate that history.
 
 ## Next actions
 
@@ -61,7 +61,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   wiring** is flagged the single highest-priority open item). The dashboard's proposals register
   was made honest 2026-07-16 (**ED-IN-0072**): of the open work, ~136 items are genuinely
   agent-executable (no ruling needed) and ~97 need your decision — see
-  `tools/observability/PROPOSALS.md`. Lane detail in each `handoffs/HANDOFF_<LANE>.md`.
+  `tools/observability/PROPOSALS.md`. Lane detail in each `registers/handoffs/HANDOFF_<LANE>.md`.
 - **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `dashboard/`,
   published by `.github/workflows/dashboard.yml` to GitHub Pages. Surfaces workplan progress,
   recent activity, a "needs your decision" inbox, and audit/simulation-balance verdicts
@@ -85,16 +85,16 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   threadwork as waves 5–7, per Jordan flagging the gap; field investigation excluded as still
   stub-only); Wave 1 CI burn-in stays full report-only; `mc_v18` never gates a PR; the four §9
   quick wins filed separately as **ED-IN-0045** (open, execution pending — see
-  `handoffs/HANDOFF_IN.md`). Full resolution text: `registers/editorial_ledger_in.jsonl`.
+  `registers/handoffs/HANDOFF_IN.md`). Full resolution text: `registers/editorial_ledger_in.jsonl`.
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
-  detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
-  `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build
+  detail in `registers/handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
+  `registers/handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build
   genuinely needing Jordan's own call, not routine merge-ratification — everything else in that
   build ratifies normally on merge per ED-1094.
 - **START HERE — Master Workplan v6 is the live steering surface, RATIFIED with the whole
   of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
   playable season · M2 any-seed story bar · M3 Godot slice), per-lane workstreams (status
-  stays in `handoffs/HANDOFF_<LANE>.md` — v6 only sequences), and the tiered T0/T1/T2
+  stays in `registers/handoffs/HANDOFF_<LANE>.md` — v6 only sequences), and the tiered T0/T1/T2
   Jordan-decision register (§5) that **supersedes the 2026-07-01 `decision_queue.md` as the
   live decision list** (that file is now a dated snapshot; its items 1–3 were refreshed at
   supersession). Steering reconciliation ED-IN-0006 EXECUTED: `roadmap_state.yaml` retired to
@@ -108,7 +108,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   RULED = 4 (2026-07-13, ED-IN-0047, resolves ED-FA-0001); both struck from the wall.
 - **Month-overview + consolidation (2026-07-01), doctrine + propagation spec RATIFIED (2026-07-02).**
   Full narrative + the 23-item Jordan decision queue: `designs/audit/2026-07-01-month-overview-architecture-consolidation/`
-  (`decision_queue.md` first) and `handoffs/HANDOFF_IN.md`'s Next actions. Doctrine ratification
+  (`decision_queue.md` first) and `registers/handoffs/HANDOFF_IN.md`'s Next actions. Doctrine ratification
   (ED-1083) and J-38 propagation-spec authorship (ED-1093) are both **CANONICAL** as of PR #58
   (ED-1094 merge-ratifies-by-default).
 - **Per-lane "Next actions" content lives in each lane's own file (2026-07-08 atomization pass)** —
@@ -117,12 +117,12 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   where already covered (one gap found and backfilled: the R2 capstone finding → `HANDOFF_PC.md`;
   J-36 → `HANDOFF_IN.md`). Start with:
   - **Mass battle** (coordinate-field engine, DG-1..DG-5, the open partition-invariance ruling):
-    `handoffs/HANDOFF_MB.md`.
+    `registers/handoffs/HANDOFF_MB.md`.
   - **Personal / scene combat** (R2 capstone finding, Track-2 residuals, weapon-morphology
-    consolidation, JD-1..JD-9): `handoffs/HANDOFF_PC.md`.
+    consolidation, JD-1..JD-9): `registers/handoffs/HANDOFF_PC.md`.
   - **Infrastructure / CI** (LB-22/23/24 residuals, LA-23 ledger reconciliation, J-36):
-    `handoffs/HANDOFF_IN.md`.
-  - **Social contest** (ED-SC-0015, J-31): `handoffs/HANDOFF_SC.md`.
+    `registers/handoffs/HANDOFF_IN.md`.
+  - **Social contest** (ED-SC-0015, J-31): `registers/handoffs/HANDOFF_SC.md`.
 - **Reserved-ID state:** the flat `ED-NNNN` sequence is FROZEN (2026-07-02 cutover,
   `ED-IN-0001`) — the ruling `ED-1094` established the freeze; the live ceiling is `ED-1096`
   (ED-1095/1096 landed same-day). All NEW EDs use `ED-<LANE>-NNNN` — `references/id_reservations.yaml`'s

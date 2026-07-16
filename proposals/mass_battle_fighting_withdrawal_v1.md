@@ -1,6 +1,6 @@
 # Fighting-Withdrawal / Yield Mechanic — Design Workplan (DG-2)
 
-## Status: PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]
+## Status: PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = registers/handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]
 
 **Status: PROPOSAL — pending Jordan sign-off before implementation.** Not canon yet. Date 2026-07-05.
 Ratified scope for THIS document (Jordan, 2026-07-05): *"Create as workplan"* — i.e. this doc captures
@@ -283,4 +283,4 @@ magnitude tweak. The full 20-row gauge aggregate moved only marginally (4/20 →
 n=30) — this is not a straightforward net improvement or regression, it is a change in *which* rows fail
 and *how* they fail (draws → overshoot for the composed-army rows; the 9 RC-5 single-subunit rows remain
 failing, now also mostly via overshoot rather than their prior mixed signatures). See
-`tests/coverage_matrix.md`'s 2026-07-05 entry and `handoffs/HANDOFF_MB.md` for the full numeric record.
+`tests/coverage_matrix.md`'s 2026-07-05 entry and `registers/handoffs/HANDOFF_MB.md` for the full numeric record.

@@ -342,7 +342,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-30 as
   ED-1050..1054 (full report: `designs/audit/2026-06-30-ecosystem-adversarial-review.md`).
-  ED-1050 (combat parity oracle) lives in `handoffs/HANDOFF_PC.md` (RESOLVED, one residual
+  ED-1050 (combat parity oracle) lives in `registers/handoffs/HANDOFF_PC.md` (RESOLVED, one residual
   left). This lane owns the rest:
   - **ED-1051 — module-contract gaps, `needs_jordan`.** `references/module_contracts.yaml`
     has 11/27 modules `doc:null` (grew from the originally-filed 10/27) and 13/27 resolvers at
@@ -482,7 +482,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   nomenclature.** Jordan: "Handoffs need to have the same tagging nomenclature. There are
   different handoffs for different lanes." Root `HANDOFF.md` is now a thin index + genuinely
   cross-cutting "Next actions" pointer; each lane (`MB, PC, FI, SC, FA, WR, IN, GO, SE`) gets
-  its own `handoffs/HANDOFF_<LANE>.md` carrying that lane's Pending/Decisions/Next-actions.
+  its own `registers/handoffs/HANDOFF_<LANE>.md` carrying that lane's Pending/Decisions/Next-actions.
   Motivation is the same one behind the `ED-<LANE>-NNNN` split itself: reduce concurrent-session
   merge-collision surface on shared continuity files. Note this partially reverses an EARLIER,
   deliberate consolidation (`deprecated/session_machinery/` retired per-topic session-log files
@@ -506,7 +506,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   session-lane-scoping convention. Separately, Jordan pasted an uncommitted local adjudication
   docket (D1-D5, drawn from the 2026-06-30 ecosystem review's `needs_jordan` subset) for
   relevance-checking against the current tree; verdicts folded into the ED-1050/1051/1052/1054
-  entries above (this file) and `handoffs/HANDOFF_PC.md`.
+  entries above (this file) and `registers/handoffs/HANDOFF_PC.md`.
 - 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine
   ratified; J-38 propagation spec ratified (ED-1093).** Jordan: merging a PR ratifies its
   PROPOSED/provisional contents by default unless the PR body explicitly holds an item back
@@ -683,19 +683,19 @@ allocate, bump, co-commit; never max+1.)_
   is a refactor that can follow independently, no longer a precondition.
 - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0
   (index-routes). Tooling/routing bug, not a faction-content decision — cross-referenced in
-  `handoffs/HANDOFF_FA.md` since the file itself is faction/political content.
+  `registers/handoffs/HANDOFF_FA.md` since the file itself is faction/political content.
 - **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
   and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the
   report-only `validate_ed_citations` count 748→731. **Residual:** ED-914 left `open` — its mechanical
   parts remain (PP-719 record-or-strike; dead `fieldwork_design_v1` parent-path refs in `params/bg/core.md`,
   `designs/scene/fieldwork_v30.md`, `designs/scene/fieldwork_godot.md` — cross-referenced in
-  `handoffs/HANDOFF_FI.md`).
+  `registers/handoffs/HANDOFF_FI.md`).
 - **The new `ED-<LANE>-NNNN` namespace's own residual (from ED-IN-0001's PR body):** the
   session-lane-scoping convention (`CLAUDE.md` §3) is documented but not yet CI-enforced —
   detecting which lane a PR's file changes belong to and flagging mismatches is real follow-up
   work, not built yet.
 - **J-36 — Key-bus closure for the 6 off-bus writers**, gated on the distillation report's deferred
-  adversarial pass. Design-tier docket item awaiting Jordan; see also `handoffs/HANDOFF_SC.md`'s J-31
+  adversarial pass. Design-tier docket item awaiting Jordan; see also `registers/handoffs/HANDOFF_SC.md`'s J-31
   (social-contest deliberative-game findings) — the two were tracked together in root `HANDOFF.md`
   before the 2026-07-08 per-lane content split.
 

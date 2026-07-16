@@ -69,7 +69,7 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godo
 #     (e.g. Lane A owns the whole of designs/scene/**), too coarse to separate PC/SC/FI.
 #   - workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
 #     enumerate lane WORK ITEMS, not a path->lane ownership table.
-#   - handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
+#   - registers/handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
 #     (e.g. HANDOFF_PC.md -> designs/scene/combat_engine_v1/) — real signal, used below,
 #     but only names a handful of files per lane, not a full corpus partition.
 #

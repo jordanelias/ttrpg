@@ -13,7 +13,7 @@ on:
       - 'proposals/**'       # proposals card recomputes inline (build_proposals section)
       - 'registers/editorial_ledger*.jsonl'
       - 'references/audit_registry.jsonl'
-      - 'handoffs/**'
+      - 'registers/handoffs/**'
       - 'HANDOFF.md'
       - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
       - 'dashboard/**'

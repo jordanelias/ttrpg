@@ -451,4 +451,4 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
      a separate explicitly-confirmed step.
 - **ED-1051 residual affecting this lane:** `engine_clock`'s doc:null grade now has a candidate home doc
   (`propagation_spec_v1.md`, ED-1093) but ED-1051 itself (module-contract closure priorities across all 27
-  modules) is an **IN**-lane item — see `handoffs/HANDOFF_IN.md`.
+  modules) is an **IN**-lane item — see `registers/handoffs/HANDOFF_IN.md`.

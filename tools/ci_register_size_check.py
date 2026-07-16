@@ -79,7 +79,7 @@ THRESHOLDS = {
     # resolve. Soft limit matches the active ledger's own cap.
     "registers/editorial_ledger_archive.jsonl": 150_000,
     # Per-lane active ledgers (2026-07-08 atomization pass): ED-<LANE>-NNNN entries split
-    # out of registers/editorial_ledger.jsonl by lane, mirroring handoffs/HANDOFF_<LANE>.md.
+    # out of registers/editorial_ledger.jsonl by lane, mirroring registers/handoffs/HANDOFF_<LANE>.md.
     # Generous headroom — each lane starts small (largest today, IN, is ~34 entries) but
     # this is a live append-only store like its parent, not a fixed-size snapshot.
     "registers/editorial_ledger_mb.jsonl": 50_000,
