@@ -169,7 +169,7 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Grievance Marker | — | Token placed on a faction after hostile covert action. Originally scoped to Niflhel hostile action; Niflhel-as-faction struck per ED-764, scope extended to any covert/hostile action. |
 | Co-Movement Card | — | Strategic-layer mechanism for Thread co-movement; resolved on every Thread operation result. (BG layer — name reflects card-economy origin; engine implementation is automatic on Thread-operation-completion event.) |
 | Einhir | — | Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis. |
-| Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in designs/arcs/. See `designs/arcs/arc_expansion_v30.md`. |
+| Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. |
 | Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `designs/architecture/scale_transitions_v30.md` §4. |
 | Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
 | Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `designs/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |

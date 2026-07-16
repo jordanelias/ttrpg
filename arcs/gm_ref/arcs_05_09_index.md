@@ -1,6 +1,6 @@
 <!-- [PROVISIONAL: PP-673 — terminology cleanup, auto-gen navigation index renamed from _skeleton.md to _index.md; content unchanged] -->
-<!-- SKELETON: designs/arcs/gm_ref/arcs_05_09.md -->
-<!-- canonical: designs/arcs/gm_ref/arcs_05_09.md -->
+<!-- SKELETON: arcs/gm_ref/arcs_05_09.md -->
+<!-- canonical: arcs/gm_ref/arcs_05_09.md -->
 <!-- Generated: 2026-04-18 (post-restructure) -->
 
 # Valoria Emergent Arcs — Batch 02

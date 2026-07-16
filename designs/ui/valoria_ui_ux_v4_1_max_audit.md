@@ -427,7 +427,7 @@ Settlement anchor is clickable — opens the settlement view directly. Event ico
 
 **M62 Mandatory Zoom In (Priority 0) · **v4.1 §1.4 cutscene queue rules correctly prioritize Priority 0 events. scale_transitions §4.3.2 table matches v4.1's coverage: Settlement Revolt, Heresy target, Faction Leader Removal.
 
-**Finding F-43 [P2] — scale_transitions §4.3.2 also includes arc-specific triggers (§4.3.1: Haelgrund Defection, Consecration Crisis, per-arc triggers) that v4.1 §1.4 does not enumerate.** These are arc-register-driven (references/arc_register.md) — the 120+ arc vectors from emergent_arcs. v4.1 cannot enumerate all, but should specify the mechanism: any arc vector whose trigger condition is met during a season generates a Priority 0 entry at the arc's designated location. Non-blocking; spec-completeness.
+**Finding F-43 [P2] — scale_transitions §4.3.2 also includes arc-specific triggers (§4.3.1: Haelgrund Defection, Consecration Crisis, per-arc triggers) that v4.1 §1.4 does not enumerate.** These are arc-register-driven (arcs/registers/arc_register.md) — the 120+ arc vectors from emergent_arcs. v4.1 cannot enumerate all, but should specify the mechanism: any arc vector whose trigger condition is met during a season generates a Priority 0 entry at the arc's designated location. Non-blocking; spec-completeness.
 
 **M63 Retrospective Zoom In (player not present) · **scale_transitions §4.3 Retrospective table: companion delivers / Knot resonance / messenger / ambient rumor. v4.1 does not address this.
 
