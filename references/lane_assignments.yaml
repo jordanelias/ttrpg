@@ -56,7 +56,7 @@ lanes:
     name: "Canon / Editorial / Design-content"
     bootstrap_scope: ["editorial", "design"]
     owns:                         # write-exclusive globs (fnmatch; '*' spans '/')
-      - "canon/**"                # incl. canon/editorial_ledger.jsonl + patch_register_active.yaml; the ledger is APPEND-SHARED per shared_files (canon/** = structural authority, not an append lock)
+      - "canon/**"                # incl. registers/editorial_ledger.jsonl + patch_register_active.yaml; the ledger is APPEND-SHARED per shared_files (canon/** = structural authority, not an append lock)
       - "params/**"
       - "designs/provincial/**"
       - "designs/world/**"
@@ -122,7 +122,7 @@ lanes:
     launch_ready: true
 
 shared_files:                         # the unavoidable cross-lane writes — handle by discipline, not ownership
-  - path: "canon/editorial_ledger.jsonl"
+  - path: "registers/editorial_ledger.jsonl"
     rule: >
       APPEND-ONLY; each lane uses ONLY its reserved ED range -> ID-collision impossible.
       File-level race on near-simultaneous appends resolves via CollisionError -> re-fetch +

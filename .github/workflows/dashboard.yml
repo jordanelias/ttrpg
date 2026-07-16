@@ -11,7 +11,7 @@ on:
     paths:
       - 'designs/workplans/**'
       - 'designs/proposals/**'       # proposals card recomputes inline (build_proposals section)
-      - 'canon/editorial_ledger*.jsonl'
+      - 'registers/editorial_ledger*.jsonl'
       - 'references/audit_registry.jsonl'
       - 'handoffs/**'
       - 'HANDOFF.md'

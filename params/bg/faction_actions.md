@@ -7,7 +7,7 @@
 <!-- Tribune intel (reveals enemy stats for target selection) remains. Thread operations remain as personal-scale actions -->
 <!-- available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer combat/territorial bonuses. -->
 <!-- See commits: 297f892 (engine), 13b8f30 (workplan), 13b8f30 (canon audit workplan). -->
-<!-- [CORRECTED 2026-05-29, ED-880] The "purely military / does not convert populations ideologically" framing above is SUPERSEDED. The 2026-04-19 strike validly removed VTM-dependent Cultural REFORMATION (VTM remains struck); conviction_track_v30 reintroduced ideological conversion VTM-free as Cultural RECLAMATION (Varfell: Influence vs Ob 2; target-territory Piety/PT -1 toward Einhir Restoration) — a non-military Piety-ALIGNMENT action, NOT a control transfer and NOT a victory path. Per GD-1 the sole victory path for all factions is Peninsular Sovereignty. See params/bg/core.md and canon/supersession_register.yaml. -->
+<!-- [CORRECTED 2026-05-29, ED-880] The "purely military / does not convert populations ideologically" framing above is SUPERSEDED. The 2026-04-19 strike validly removed VTM-dependent Cultural REFORMATION (VTM remains struck); conviction_track_v30 reintroduced ideological conversion VTM-free as Cultural RECLAMATION (Varfell: Influence vs Ob 2; target-territory Piety/PT -1 toward Einhir Restoration) — a non-military Piety-ALIGNMENT action, NOT a control transfer and NOT a victory path. Per GD-1 the sole victory path for all factions is Peninsular Sovereignty. See params/bg/core.md and registers/supersession_register.yaml. -->
 
 ## Faction Unique Actions — Board Game (PP-428–442, 2026-04-07)
 <!-- PATCHES APPLIED: PP-428–442 + PP-431-COR + PP-441-COR -->
@@ -260,7 +260,7 @@ Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per
 
 Cultural Reformation dissolved per CR-STRIKE-2026-04-19 (supersession_register). The VTM-dependent Reformation mechanic was incompatible with Vaynard's identity as military conqueror; VTM remains struck.
 
-**Replacement (corrected per ED-880, 2026-05-29):** the "military-only" framing is superseded. Reformation/VTM stay struck, but conviction_track_v30 reintroduced ideological conversion VTM-free as **Cultural Reclamation** (Varfell: Influence vs Ob 2; target-territory Piety/PT −1 toward Einhir Restoration) — a non-military Piety-ALIGNMENT action, NOT a territory-control transfer and NOT a victory path. Per GD-1 the sole victory condition for all factions is Peninsular Sovereignty. See `params/bg/core.md` §Cultural Reformation and `canon/supersession_register.yaml`. Character-scale Thread operations remain available per `threadwork_v30` but do not transfer territory.
+**Replacement (corrected per ED-880, 2026-05-29):** the "military-only" framing is superseded. Reformation/VTM stay struck, but conviction_track_v30 reintroduced ideological conversion VTM-free as **Cultural Reclamation** (Varfell: Influence vs Ob 2; target-territory Piety/PT −1 toward Einhir Restoration) — a non-military Piety-ALIGNMENT action, NOT a territory-control transfer and NOT a victory path. Per GD-1 the sole victory condition for all factions is Peninsular Sovereignty. See `params/bg/core.md` §Cultural Reformation and `registers/supersession_register.yaml`. Character-scale Thread operations remain available per `threadwork_v30` but do not transfer territory.
 
 ---
 

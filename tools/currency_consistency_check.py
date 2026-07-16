@@ -13,7 +13,7 @@ CHECKS
      heads (the PR #50 stale-merge-state failure class).
   2. ID-ceiling consistency — references/id_reservations.yaml `verified_live_max.ED`, every
      active block's bounds/next_free, and any literal "ED ceiling NNNN" in HANDOFF.md are
-     compared to the ACTUAL max ED in canon/editorial_ledger.jsonl (the drift that overran
+     compared to the ACTUAL max ED in registers/editorial_ledger.jsonl (the drift that overran
      reserved blocks A–C). Also covers the ED-<LANE>-NNNN namespace (2026-07-02, ED-IN-0001):
      each lane's `lane_ids.<LANE>.next_free` is compared to that lane's actual max in the
      ledger. The flat ED-NNNN sequence is FROZEN at cutover — no new flat allocations, so
@@ -86,7 +86,7 @@ def _next_day(date_str):
 
 
 def _ledger_max_ed():
-    text = _read('canon/editorial_ledger.jsonl') or ''
+    text = _read('registers/editorial_ledger.jsonl') or ''
     ids = [int(m) for m in re.findall(r'"id":\s*"ED-(\d+)"', text)]
     return max(ids) if ids else 0
 
@@ -100,7 +100,7 @@ def _ledger_lane_max():
     """{'MB': 3, 'SC': 1, ...} — max per-lane numeric suffix seen in the live ledger.
     A flat 'ED-NNNN' id never matches (no letters after the dash), so this is naturally
     disjoint from _ledger_max_ed() and requires no coordination with it."""
-    text = _read('canon/editorial_ledger.jsonl') or ''
+    text = _read('registers/editorial_ledger.jsonl') or ''
     out = {}
     for lane, num in re.findall(r'"id":\s*"ED-([A-Z]{2})-(\d+)"', text):
         if lane in LANE_CODES:
@@ -181,9 +181,9 @@ def check_lane_id_ceilings(drift):
 
 
 def check_patch_register_header(drift):
-    text = _read('canon/patch_register_active.yaml')
+    text = _read('registers/patch_register_active.yaml')
     if text is None:
-        drift.append("canon/patch_register_active.yaml missing")
+        drift.append("registers/patch_register_active.yaml missing")
         return
     m = re.search(r'Next PP number:\s*(\d+)', text)
     body_max = max((int(x) for x in re.findall(r'\bPP-(\d+)', text)), default=0)

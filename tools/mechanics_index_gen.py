@@ -2,7 +2,7 @@
 """
 mechanics_index_gen.py — Valoria mechanics index validator and generator (v1)
 
-Pass 2j authoring deliverable. Operates against canon/mechanics_index.yaml.
+Pass 2j authoring deliverable. Operates against registers/mechanics_index.yaml.
 
 v1 SCOPE (this version):
   - YAML round-trip validation (yaml.safe_load + re-dump for malformed-YAML detection)
@@ -430,7 +430,7 @@ def main() -> int:
     if args.index_path:
         index_path = Path(args.index_path).resolve()
     else:
-        index_path = repo_root / "canon" / "mechanics_index.yaml"
+        index_path = repo_root / "registers" / "mechanics_index.yaml"
 
     if not index_path.exists():
         print(f"[FATAL] mechanics_index.yaml not found at {index_path}", file=sys.stderr)

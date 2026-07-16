@@ -435,7 +435,7 @@ def build_registers():
     total_open = 0
     total_needs_jordan = 0
 
-    for fn in sorted(glob.glob(os.path.join('canon', 'editorial_ledger*.jsonl'))):
+    for fn in sorted(glob.glob(os.path.join('registers', 'editorial_ledger*.jsonl'))):
         base = os.path.basename(fn)
         if 'archive' in base:
             continue  # settled history, not live debt
@@ -461,7 +461,7 @@ def build_registers():
                     total_needs_jordan += 1
 
     patch_active = {"total": 0, "by_status": {}}
-    patch_path = os.path.join('canon', 'patch_register_active.yaml')
+    patch_path = os.path.join('registers', 'patch_register_active.yaml')
     if os.path.exists(patch_path):
         with open(patch_path, encoding='utf-8') as f:
             d = yaml.safe_load(f) or {}
@@ -586,7 +586,7 @@ CATEGORY_LABELS = {
 
 def _ledger_open_entries():
     out = []
-    for path in sorted(glob.glob('canon/editorial_ledger*.jsonl')):
+    for path in sorted(glob.glob('registers/editorial_ledger*.jsonl')):
         if 'archive' in path:
             continue
         m = re.search(r'editorial_ledger_([a-z]{2})\.jsonl$', path)

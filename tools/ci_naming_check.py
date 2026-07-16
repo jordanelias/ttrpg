@@ -75,7 +75,7 @@ EXCLUDE = (
     'archives/',
     'deprecated/',
     'designs/audit/',
-    'canon/editorial_ledger',
+    'registers/editorial_ledger',
     'CLAUDE.md',                  # documents the naming rule (names the token)
     'tools/ci_naming_check.py',   # this file names the token
     'tools/hook_naming_guard.py',

@@ -292,7 +292,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: syntax-check
     timeout-minutes: 5
-    # Report-only (ED-IN-0033, Phase 2 item 7): validates canon/mechanics_index.yaml
+    # Report-only (ED-IN-0033, Phase 2 item 7): validates registers/mechanics_index.yaml
     # (schema, cross-references, GD-1 singularity invariant, drift report) via its own
     # --strict CLI contract. Never wired into CI before despite being fully CI-shaped.
     # Same STEP-level continue-on-error precedent as contract-conformance: land quiet,

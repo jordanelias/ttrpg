@@ -44,7 +44,7 @@ if design_docs and 'references/canonical_sources.yaml' not in changed:
     )
 
 # ── Rule 2: patch register write → propagation_map.md ────────────────────────
-register_writes = [f for f in changed if f.startswith('canon/patch_register')]
+register_writes = [f for f in changed if f.startswith('registers/patch_register')]
 if register_writes and 'references/propagation_map.md' not in changed:
     violations.append(
         f"PATCH REGISTER changed but propagation_map.md not in commit.\n"

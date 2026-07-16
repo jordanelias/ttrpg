@@ -62,42 +62,42 @@ policies:
   # ────────────────────────────────────────────────────────────
   # REGISTERS — patches
   # ────────────────────────────────────────────────────────────
-  - match: "canon/patch_register_active.yaml"
+  - match: "registers/patch_register_active.yaml"
     max_tokens: 15000
     auto_archive_status: [applied, struck, superseded]
-    archive_target_pattern: "canon/patch_register_archive_{range}.yaml"
+    archive_target_pattern: "registers/patch_register_archive_{range}.yaml"
     archive_chunk_max: 10000
     archive_chunk_by: pp_range
-    index_file: "canon/patch_register_index.md"
+    index_file: "registers/patch_register_index.md"
     index_max_tokens: 3000
     regenerate_index_on: [any_change]
 
-  - match: "canon/patch_register_archive*.yaml"
+  - match: "registers/patch_register_archive*.yaml"
     max_tokens: 10000
     on_exceed: "error"
     read_restriction: "index_first"
 
-  - match: "canon/patch_register_index.md"
+  - match: "registers/patch_register_index.md"
     max_tokens: 6000
     note: "Full-history index across all archives (199+ entries). Raised from 3000 after fixing index_gen to parse all archive formats."
     split_active_only: true
-    regenerate_from: "canon/patch_register_active.yaml"
+    regenerate_from: "registers/patch_register_active.yaml"
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — editorial ledger
   # ────────────────────────────────────────────────────────────
-  # Editorial ledger fully migrated to canon/editorial_ledger.jsonl (JSONL
+  # Editorial ledger fully migrated to registers/editorial_ledger.jsonl (JSONL
   # migration 5c07bff0; reader cutover 6a42b1f1). The YAML ledger and all 10
   # editorial_ledger_archive*.yaml files were deprecated 2026-05-28 to
   # deprecated/canon/ — no active editorial YAML register remains to atomize.
   # The JSONL store is integrity-checked at commit by validate_ledger_jsonl.
   #
   # LANE SPLIT (2026-07-08 atomization pass): entries whose id already declares a lane
-  # (ED-<LANE>-NNNN) were moved out of the flat canon/editorial_ledger.jsonl into their own
-  # canon/editorial_ledger_<lane>.jsonl (lowercase lane code), mirroring the
+  # (ED-<LANE>-NNNN) were moved out of the flat registers/editorial_ledger.jsonl into their own
+  # registers/editorial_ledger_<lane>.jsonl (lowercase lane code), mirroring the
   # handoffs/HANDOFF_<LANE>.md split and the same ED-<LANE>-NNNN taxonomy. Pre-cutover
   # flat-ID entries are NOT retrofitted with a lane (same no-retrofit precedent as the
-  # ED-<LANE>-NNNN cutover itself) and stay in canon/editorial_ledger.jsonl, which dropped
+  # ED-<LANE>-NNNN cutover itself) and stay in registers/editorial_ledger.jsonl, which dropped
   # from ~150k tokens (at its own cap) to ~90k as a result. Both the main file and every
   # per-lane file are "active" — consumers (tools/validate_ed_citations.py,
   # tools/broken_dependency_checker.py) read all of them, not just the main one, or the
@@ -115,7 +115,7 @@ policies:
   # run (audit_type: canon_guard | mechanic_audit | resolution_diagnostic |
   # module_adjudicator | vector_audit | editorial_register | simulation_balance),
   # appended by tools/audit_registry.py's `append` mode. Same append-only shape and
-  # merge-collision rationale as canon/editorial_ledger.jsonl (CLAUDE.md §1/§3) — a
+  # merge-collision rationale as registers/editorial_ledger.jsonl (CLAUDE.md §1/§3) — a
   # shared YAML list that concurrent-session skill runs edit would collide the same
   # way HANDOFF.md/editorial_ledger.yaml did before their splits; JSONL append avoids
   # the structural-edit collision without needing a lane split (audit runs are far

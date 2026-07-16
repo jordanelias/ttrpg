@@ -13,7 +13,7 @@ Sources:
         [GAP …] · F1/F2 class · registry §10 candidate · [ASSUMPTION …]
   - references/module_contracts.yaml  (gap_notes, with affected systems)
   - tools/observability/lexicon.json  (abbreviation collisions, placeholders, censured)
-  - canon/supersession_register.yaml  (what's already settled — shown for reassurance)
+  - registers/supersession_register.yaml  (what's already settled — shown for reassurance)
 
 Output: decisions.json, decisions_data.js (window.VALORIA_DECISIONS), DECISIONS.md
 Run:    python tools/observability/build_decisions.py
@@ -391,11 +391,11 @@ def main():
         for ph in L.get("placeholders", []):
             if ph.get("status") != "expired":
                 add(f"Placeholder name '{ph.get('placeholder_name','')}' (was '{ph.get('prior_name','')}') — needs canonical name [{ph.get('status','')}]",
-                    "naming", 2, "Placeholder name (rename pending)", "canon/placeholder_names.yaml")
+                    "naming", 2, "Placeholder name (rename pending)", "registers/placeholder_names.yaml")
 
     # ---- 4. supersessions (settled — for reassurance / stale-vs-fresh) ----
     resolved = []
-    sr = REPO / "canon" / "supersession_register.yaml"
+    sr = REPO / "registers" / "supersession_register.yaml"
     if sr.exists():
         try:
             raw = yaml.safe_load(sr.read_text(encoding="utf-8")) or {}
@@ -526,7 +526,7 @@ def main():
     md.append("\n---\n\n## Already settled (recent supersessions)\n")
     md.append("_These are NOT open — shown so stale references don't read as live decisions "
               "(your “stale vs fresh” problem). Before treating any old ED/PP as authoritative, "
-              "check `canon/supersession_register.yaml`._\n")
+              "check `registers/supersession_register.yaml`._\n")
     for r in resolved[:40]:
         md.append(f"- **{r.get('id','')}** — {r.get('scope','')[:120]} → _{r.get('replacement','') or r.get('superseded_by','')}_")
     (OUT / "DECISIONS.md").write_text("\n".join(md) + "\n", encoding="utf-8")

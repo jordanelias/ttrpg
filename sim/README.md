@@ -67,7 +67,7 @@ See `sim/CONVENTIONS.md`. Every module declares:
 
 ## Mechanics index
 
-`canon/mechanics_index.yaml` (Pass 2j, pending) is the authoritative registry
+`registers/mechanics_index.yaml` (Pass 2j, pending) is the authoritative registry
 mapping each mechanic to its `sim_module` path. Load via `sim/autoload/registry.py`.
 
 ## Status flags

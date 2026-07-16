@@ -20,8 +20,8 @@ Surfaces (established by ED-IN-0010):
 - **Board** (the one rollup-status home): `designs/workplans/workplan_v6_progress.yaml`
 - **Renderer** (one rule, one home): `python3 tools/workplan_status.py [--full|--check]`
 - Status detail stays in `handoffs/HANDOFF_<LANE>.md`; decisions in the workplan §5
-  register + the editorial ledger (`canon/editorial_ledger.jsonl` for pre-cutover flat
-  IDs, plus every live `canon/editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries
+  register + the editorial ledger (`registers/editorial_ledger.jsonl` for pre-cutover flat
+  IDs, plus every live `registers/editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries
   — CLAUDE.md §3). The board only points at them.
 - **Dashboard** (a published rendering, not an independent data source): `docs/dashboard/`
   (built by `tools/dashboard_data.py` from this board + `references/audit_registry.jsonl`)

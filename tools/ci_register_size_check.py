@@ -40,7 +40,7 @@ COVERAGE_MATRIX_LIMIT = yaml_max_tokens("tests/coverage_matrix.md") or 10_000
 # Same single-sourcing for the patch register. The old hardcoded 20_000 had drifted
 # above the policy file's 15_000 — two gates, one file, two limits. Read the cap from
 # the policy so they cannot diverge again. (Live register is ~5k tokens, well under both.)
-PATCH_REGISTER_LIMIT = yaml_max_tokens("canon/patch_register_active.yaml") or 15_000
+PATCH_REGISTER_LIMIT = yaml_max_tokens("registers/patch_register_active.yaml") or 15_000
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
@@ -55,7 +55,7 @@ THRESHOLDS = {
     "references/canonical_sources.yaml":      12_000,
     # Single-sourced from references/atomization_rules.yaml (PATCH_REGISTER_LIMIT) so the
     # validator and the policy file can't drift (was hardcoded 20_000 vs policy 15_000).
-    "canon/patch_register_active.yaml":   PATCH_REGISTER_LIMIT,
+    "registers/patch_register_active.yaml":   PATCH_REGISTER_LIMIT,
     # Single-sourced from references/atomization_rules.yaml (COVERAGE_MATRIX_LIMIT).
     # coverage_matrix grows naturally as test coverage expands; adjust the cap in
     # the policy file (one place) and this validator follows. Drift between the two
@@ -67,9 +67,9 @@ THRESHOLDS = {
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
-    "canon/patch_register_archive.yaml":     100_000,
-    "canon/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
-    # Overflow chunk for canon/editorial_ledger.jsonl (2026-07-02, first split — settled
+    "registers/patch_register_archive.yaml":     100_000,
+    "registers/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
+    # Overflow chunk for registers/editorial_ledger.jsonl (2026-07-02, first split — settled
     # resolved/struck/superseded/applied entries ED-001..ED-330; 2026-07-07 second split,
     # user-approved during the Key & Echo armature ratification pass — the active ledger had
     # drifted to 152,202 tokens against the 150,000 cap, so the next batch of terminal-status
@@ -77,20 +77,20 @@ THRESHOLDS = {
     # patch_register_active/archive co-location convention. Recognized by
     # tools/validate_ed_citations.py ARCHIVE_JSONL_PATHS so archived-ED citations still
     # resolve. Soft limit matches the active ledger's own cap.
-    "canon/editorial_ledger_archive.jsonl": 150_000,
+    "registers/editorial_ledger_archive.jsonl": 150_000,
     # Per-lane active ledgers (2026-07-08 atomization pass): ED-<LANE>-NNNN entries split
-    # out of canon/editorial_ledger.jsonl by lane, mirroring handoffs/HANDOFF_<LANE>.md.
+    # out of registers/editorial_ledger.jsonl by lane, mirroring handoffs/HANDOFF_<LANE>.md.
     # Generous headroom — each lane starts small (largest today, IN, is ~34 entries) but
     # this is a live append-only store like its parent, not a fixed-size snapshot.
-    "canon/editorial_ledger_mb.jsonl": 50_000,
-    "canon/editorial_ledger_pc.jsonl": 50_000,
-    "canon/editorial_ledger_fi.jsonl": 50_000,
-    "canon/editorial_ledger_sc.jsonl": 50_000,
-    "canon/editorial_ledger_fa.jsonl": 50_000,
-    "canon/editorial_ledger_wr.jsonl": 50_000,
-    "canon/editorial_ledger_in.jsonl": 50_000,
-    "canon/editorial_ledger_go.jsonl": 50_000,
-    "canon/editorial_ledger_se.jsonl": 50_000,
+    "registers/editorial_ledger_mb.jsonl": 50_000,
+    "registers/editorial_ledger_pc.jsonl": 50_000,
+    "registers/editorial_ledger_fi.jsonl": 50_000,
+    "registers/editorial_ledger_sc.jsonl": 50_000,
+    "registers/editorial_ledger_fa.jsonl": 50_000,
+    "registers/editorial_ledger_wr.jsonl": 50_000,
+    "registers/editorial_ledger_in.jsonl": 50_000,
+    "registers/editorial_ledger_go.jsonl": 50_000,
+    "registers/editorial_ledger_se.jsonl": 50_000,
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,
@@ -99,7 +99,7 @@ THRESHOLDS = {
     # since audit cadence is far lower than editorial-decision cadence.
     "references/audit_registry.jsonl": 50_000,
     "archives/session/session_log_archive_part_7.md": 100_000,
-    "canon/patch_register_index.md":         20_000,
+    "registers/patch_register_index.md":         20_000,
 }
 
 def main():

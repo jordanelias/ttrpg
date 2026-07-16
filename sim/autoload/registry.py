@@ -1,7 +1,7 @@
 """
 sim/autoload/registry.py — mechanics_index.yaml loader and mechanic-by-id dispatch
 
-Canon source: canon/mechanics_index.yaml
+Canon source: registers/mechanics_index.yaml
 Status: [CANONICAL — Phase 1 implementation 2026-05-17]
 
 Dependencies:
@@ -57,7 +57,7 @@ class MechanicsIndex:
 _loaded_index: MechanicsIndex | None = None
 
 
-def load_index(path: str = "canon/mechanics_index.yaml") -> MechanicsIndex:
+def load_index(path: str = "registers/mechanics_index.yaml") -> MechanicsIndex:
     """Load and parse the mechanics index. Caches after first load."""
     global _loaded_index
     if _loaded_index is not None:

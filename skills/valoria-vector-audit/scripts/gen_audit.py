@@ -25,7 +25,7 @@ THE CORE PARTITION (get this right — it is the whole point of the tool):
     `status_of()` is in the recognized current vocabulary (`RECOGNIZED`) AND is
     NOT a `superseded_ids()` entry.
   - **HISTORICAL record:** anything under `archives/`, `deprecated/`,
-    `designs/audit/`, `handoffs/`, a `canon/editorial_ledger*`/`patch_register`/
+    `designs/audit/`, `handoffs/`, a `registers/editorial_ledger*`/`patch_register`/
     `supersession_register` path, any `superseded_ids()` entry, anything
     `vector_audit.banner_classify()` returns 'discourse'/'excluded' for *that was
     not itself registered as a live head* (the weak banner content-keyword does
@@ -254,7 +254,7 @@ def classify(relpath, content, live_set, superseded_set):
         return 'historical', 'superseded_id'
     if relpath.startswith(_HISTORICAL_PATH_PREFIXES):
         return 'historical', 'archival_path'
-    if relpath.startswith('canon/') and any(
+    if (relpath.startswith('registers/') or relpath.startswith('canon/')) and any(
             s in relpath for s in ('editorial_ledger', 'patch_register', 'supersession_register')):
         return 'historical', 'ledger_or_register'
     if relpath in live_set:
@@ -598,7 +598,7 @@ def run(root, out):
              'transition at all. Measuring v40-marker adoption needs the WS3 `head_pointers.yaml` + a '
              '`Generation: v40` stamp, which do not exist yet; until they do, "NS4 meter" means "the '
              'live/historical partition is clean," NOT "v40 is adopted."')
-    L.append('> - **#11 — `canon/`, `references/`, and `params/` paths can NEVER be LIVE heads here.** '
+    L.append('> - **#11 — `canon/`, `registers/`, `references/`, and `params/` paths can NEVER be LIVE heads here.** '
              'The reused `ci_generation_consistency.DOC_KEYS` extraction hard-anchors captured paths to '
              'a literal `designs/` prefix, so a current head such as `params/core.md` (named live in '
              '`CURRENT.md`) is unconditionally HISTORICAL to this layer — a structural, corpus-wide '

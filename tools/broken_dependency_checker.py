@@ -100,16 +100,16 @@ def _load_restructure_map():
 LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
 
 # Lane-split active ledger (2026-07-08 atomization pass): ED-<LANE>-NNNN entries live in
-# their own canon/editorial_ledger_<lane>.jsonl file, mirroring handoffs/HANDOFF_<LANE>.md.
+# their own registers/editorial_ledger_<lane>.jsonl file, mirroring handoffs/HANDOFF_<LANE>.md.
 # Pre-cutover flat-ID entries stay in the main file (no retrofit). Both are "active" and
 # must be checked the same way, or the lane-tagged 1/3 of live entries would silently stop
 # being validated for broken paths — the exact failure class ED-1081 already fixed once.
 _LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
-LANE_LEDGER_PATHS = tuple(f'canon/editorial_ledger_{lane.lower()}.jsonl' for lane in _LANE_CODES)
+LANE_LEDGER_PATHS = tuple(f'registers/editorial_ledger_{lane.lower()}.jsonl' for lane in _LANE_CODES)
 
 
 def check_editorial_ledger(all_files):
-    """Check LIVE entries of canon/editorial_ledger.jsonl + its per-lane siblings for
+    """Check LIVE entries of registers/editorial_ledger.jsonl + its per-lane siblings for
     broken paths.
 
     ED-1081: this check was silently dead since inception — it read
@@ -123,7 +123,7 @@ def check_editorial_ledger(all_files):
     remap = _load_restructure_map()
     broken, infos = [], []
     found_any = False
-    for ledger_path in ("canon/editorial_ledger.jsonl", *LANE_LEDGER_PATHS):
+    for ledger_path in ("registers/editorial_ledger.jsonl", *LANE_LEDGER_PATHS):
         content = read_file(ledger_path)
         if content is None:
             continue  # lane files are created on first allocation to that lane
@@ -149,7 +149,7 @@ def check_editorial_ledger(all_files):
                 else:
                     broken.append(f"{ref} (live entry {ed_id})")
     if not found_any:
-        return [], ["canon/editorial_ledger.jsonl not found"]
+        return [], ["registers/editorial_ledger.jsonl not found"]
     for note in sorted(infos):
         print(f"  [INFO] {note}")
     return broken, []

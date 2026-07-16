@@ -22,7 +22,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   stale premise several proposals inherited (the "missing Guilds ladder," which `faction_politics_v30`
   §2.5 already authors in full — the actually-flat surface is the Crown Administrative branch,
   §1.1b) and cut 14 of 58 proposals as redundant/pattern-matched/too-vague before curating the
-  remaining 44. Filed as **ED-FA-0018..0034** (see `canon/editorial_ledger.jsonl` for each item's
+  remaining 44. Filed as **ED-FA-0018..0034** (see `registers/editorial_ledger.jsonl` for each item's
   scope; `needs_jordan` forks: ED-FA-0018 CHN-2 examination pipeline for the Administrative
   branch — the single highest-value open rank decision — plus ED-FA-0027/0028/0029/0030/0031
   BYZ-1/9/7/8, CHN-8-0031, ED-FA-0032/0033 FA-JP3/5, ED-FA-0034 HAB-2).
@@ -49,7 +49,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   succession/regency, and legitimacy theory (Weber/Olson/Hirschman/Ibn Khaldun) — chosen to be
   disjoint from the deliberation-and-procedure research already mined for the SC lane. Distills
   into 9 FA-lane mechanical proposals + a citation-patch batch, filed as **ED-FA-0008..0017**
-  (see `canon/editorial_ledger.jsonl` for each item's full scope and execution notes; remaining
+  (see `registers/editorial_ledger.jsonl` for each item's full scope and execution notes; remaining
   `needs_jordan` forks: ED-FA-0010 coercion/capital muster asymmetry, ED-FA-0013 Sack mechanic
   (part c only, (a)/(b) EXECUTED), ED-FA-0014 Regency interregnum, ED-FA-0015 Protected Tributary,
   ED-FA-0016 Guild embargo).
