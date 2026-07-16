@@ -21,7 +21,7 @@ bootstrap, wrong CI job count). For anything current, defer to:
 - **`HANDOFF.md`** — the single live continuity surface: pending work and next actions.
 - **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable indices.
 
-Superseded exploration lives under `archives/` and `deprecated/` — history, not canon.
+Superseded exploration lives under `deprecated/archives/` and `deprecated/` — history, not canon.
 
 ## License
 

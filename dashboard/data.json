@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T21:27:18+00:00",
-    "commit_sha": "3af29dc"
+    "timestamp_utc": "2026-07-16T21:52:09+00:00",
+    "commit_sha": "a27a82e"
   },
   "workplan": {
     "available": true,
@@ -402,6 +402,13 @@
     "available": true,
     "commits": [
       {
+        "sha": "a27a82eda2",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P0b part 1: handoffs/ -> registers/handoffs/ (ED-IN-0071) (#157)",
+        "scope": "infrastructure"
+      },
+      {
         "sha": "3af29dc45c",
         "date": "2026-07-16",
         "author": "jordanelias",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "[editorial] Open-items Jordan decision docket — recommendations for all 32 open needs_jordan items (#117)",
         "scope": "editorial"
-      },
-      {
-        "sha": "3f6bd1fab9",
-        "date": "2026-07-08",
-        "author": "jordanelias",
-        "subject": "[infrastructure] Wave-Q-step-3 tooling build: A17 stat-vocabulary closure (ED-IN-0029) (#115)",
-        "scope": "infrastructure"
       }
     ]
   },
@@ -720,7 +720,7 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "184 in-scope file(s) changed since last refresh",
+        "detail": "187 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -728,13 +728,13 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "7 in-scope file(s) changed since last refresh",
+        "detail": "13 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base 3af29dc (2026-07-16)",
+        "ref": "base a27a82e (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -744,7 +744,7 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "48 in-scope file(s) changed since last refresh",
+        "detail": "49 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -752,7 +752,7 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "4 in-scope file(s) changed since last refresh",
+        "detail": "9 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -768,7 +768,7 @@
         "category": "audit-family",
         "ref": "base 95d871f (2026-07-16)",
         "stale": true,
-        "detail": "43 in-scope file(s) changed since last refresh",
+        "detail": "45 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -1989,7 +1989,7 @@
       ]
     },
     "count": 17,
-    "note": "Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus every doc under proposals/ (surfaced by location). Awaiting ratification (a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and archives/. The full unified register is tools/observability/PROPOSALS.md."
+    "note": "Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus every doc under proposals/ (surfaced by location). Awaiting ratification (a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and deprecated/archives/. The full unified register is tools/observability/PROPOSALS.md."
   },
   "repo_shape": {
     "available": true,

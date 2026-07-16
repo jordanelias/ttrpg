@@ -686,3 +686,18 @@
 | `handoffs/HANDOFF_SE.md` | `registers/handoffs/HANDOFF_SE.md` |
 | `handoffs/HANDOFF_WR.md` | `registers/handoffs/HANDOFF_WR.md` |
 | `handoffs/HANDOFF_archive.md` | `registers/handoffs/HANDOFF_archive.md` |
+
+
+## 2026-07-16 — archives/ -> deprecated/archives/ (merge graveyards, ED-IN-0071 P5, fork #1)
+
+| old path | new path |
+|---|---|
+| `archives/` | `deprecated/archives/` |
+| `archives/audit/` | `deprecated/archives/audit/` |
+| `archives/editorial/` | `deprecated/archives/editorial/` |
+| `archives/editorials/` | `deprecated/archives/editorials/` |
+| `archives/handoffs/` | `deprecated/archives/handoffs/` |
+| `archives/patches/` | `deprecated/archives/patches/` |
+| `archives/propagation/` | `deprecated/archives/propagation/` |
+| `archives/session/` | `deprecated/archives/session/` |
+| `archives/workplans/` | `deprecated/archives/workplans/` |

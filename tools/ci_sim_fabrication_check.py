@@ -96,7 +96,7 @@ def is_sim_file(path: str) -> bool:
     # tools/ are validators/generators (this checker included), not sim reference
     # code — gating them would flag a validator's own thresholds and docstring prose
     # (e.g. this file's "ED-1053" / "0.60" examples). Exclude them.
-    if norm.startswith('deprecated/') or norm.startswith('archives/') or norm.startswith('tools/'):
+    if norm.startswith('deprecated/') or norm.startswith('deprecated/archives/') or norm.startswith('tools/'):
         return False
     if norm.startswith('tests/sim/'):
         return True

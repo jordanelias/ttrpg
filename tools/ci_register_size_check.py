@@ -98,7 +98,7 @@ THRESHOLDS = {
     # -simulator). Same append-only shape as the editorial ledger; generous headroom
     # since audit cadence is far lower than editorial-decision cadence.
     "references/audit_registry.jsonl": 50_000,
-    "archives/session/session_log_archive_part_7.md": 100_000,
+    "deprecated/archives/session/session_log_archive_part_7.md": 100_000,
     "registers/patch_register_index.md":         20_000,
 }
 

@@ -88,7 +88,7 @@ lanes:
       - "tests/index/**"
       - "session_logs/**"
       - "tools/**"
-      - "archives/**"
+      - "deprecated/archives/**"
       - "deprecated/skills/valoria-orchestrator/references/skill_registry.yaml"   # retired harness — moved to deprecated/ (LB-22)
     shared_not_exclusive:             # under references/** but co-owned — see shared_files
       - "references/canonical_sources.yaml"

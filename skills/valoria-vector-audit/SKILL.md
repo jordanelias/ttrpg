@@ -259,11 +259,11 @@ PP entry references the audit folder; ED entry describes what was found.
 
 ## Cross-references
 
-- Original execution: `archives/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file —
-  moved from `designs/audit/` to `archives/audit/` at some point after this skill was written;
+- Original execution: `deprecated/archives/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file —
+  moved from `designs/audit/` to `deprecated/archives/audit/` at some point after this skill was written;
   corrected 2026-07-11, ED-IN-0036)
-- Workplan v3: `archives/audit/2026-04-29-topographic-analysis/00_workplan.md`
-- Weakness register: `archives/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
+- Workplan v3: `deprecated/archives/audit/2026-04-29-topographic-analysis/00_workplan.md`
+- Weakness register: `deprecated/archives/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
 - PP-676 / ED-762 (v2+v3 execution)
 - PP-677 / ED-764 (throughlines load-bearing systems column — restored Mode F)
 - PP-678 / ED-765 (vocabulary debt sweep workflow demonstrated)

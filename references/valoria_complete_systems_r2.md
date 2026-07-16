@@ -10,7 +10,7 @@
 > homes). Its PART 2 combat core (pool `(Agi×2)+H+3`, TN 7, versus initiative) predates the
 > d+σ resolver and is **no longer canon** — the head is `designs/scene/combat_engine_v1/`
 > (pool `max(5, History+6)`, ED-901, ED-900/904). Resolve currency via `CURRENT.md`. Which
-> home is retained (and which retires to `archives/`) is queued for Jordan — see the
+> home is retained (and which retires to `deprecated/archives/`) is queued for Jordan — see the
 > 2026-07-01 decision queue.
 
 ---

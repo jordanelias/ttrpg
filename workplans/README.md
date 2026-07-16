@@ -16,7 +16,7 @@ kept getting lost. See `HANDOFF.md` 2026-07-01 entry for the cleanup that fixed 
 ## Convention going forward
 
 - **New master-workplan revision:** author it directly in this directory (not a new `designs/audit/`
-  folder). Move the previous live version to `archives/workplans/`. Update `CURRENT.md` and
+  folder). Move the previous live version to `deprecated/archives/workplans/`. Update `CURRENT.md` and
   `references/lane_assignments.yaml` source pointers in the same commit. (`references/roadmap_state.yaml`
   was a third pointer until 2026-07-05 — retired to `deprecated/references/` by ED-IN-0006/ED-IN-0009.)
 - **Exception — intentionally frozen historical versions:** a major version that's bundled with sibling

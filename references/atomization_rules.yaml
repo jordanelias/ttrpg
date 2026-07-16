@@ -51,13 +51,13 @@ policies:
     write_policy: "single_writer"
     note: "Per-session log files. Single writer per file (owning session only)."
     on_close: "archive_to"
-    archive_target_pattern: "archives/session/session_log_{scope}_{date}_{token}.md"
+    archive_target_pattern: "deprecated/archives/session/session_log_{scope}_{date}_{token}.md"
 
-  - match: "archives/session/session_log_archive.md"
+  - match: "deprecated/archives/session/session_log_archive.md"
     max_tokens: 50000
     on_exceed: "chunk_by_quarter"
-    chunk_pattern: "archives/session/session_log_archive_{year}_q{quarter}.md"
-    index_file: "archives/session/session_log_archive_index.md"
+    chunk_pattern: "deprecated/archives/session/session_log_archive_{year}_q{quarter}.md"
+    index_file: "deprecated/archives/session/session_log_archive_index.md"
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — patches
@@ -264,7 +264,7 @@ policies:
     note: "Frozen historical content. Size is expected and non-actionable."
 
   # Archives: frozen historical. May exceed chunk limits legitimately.
-  - match: "archives/**"
+  - match: "deprecated/archives/**"
     max_tokens: 100000
     on_exceed: "warn_only"
     note: "Historical archive content. Warn but do not block."
@@ -377,7 +377,7 @@ policies:
 
   # ────────────────────────────────────────────────────────────
   # RESEARCH NOTES + SIM ACTIVITY LOGS — reference/historical, not governed registers
-  # (added 2026-05-31, Lane B item 5.6; precedent: deprecated/** · archives/** · tests/sim/sim_*.md skip-policies)
+  # (added 2026-05-31, Lane B item 5.6; precedent: deprecated/** · deprecated/archives/** · tests/sim/sim_*.md skip-policies)
   # ────────────────────────────────────────────────────────────
   - match: "research/**"
     on_exceed: "skip"

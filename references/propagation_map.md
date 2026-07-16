@@ -1,7 +1,7 @@
 <!-- v30 path update applied 2026-04-13 -->
 # VALORIA PROPAGATION MAP
 
-> **Historical batches archived.** Sections from 2026-05-02 (Mandate audit ED-784, Register cap ED-786, ED-784 Phase 2 sweep commits A–D) moved to `archives/propagation/propagation_map_archive_2026_05_02.md` (this archival sweep). Earlier batches: `references/propagation_map_archive_2026-05-10.md` (root-level), `archives/propagation/propagation_map_archive_2026_05_01*.md` (4 batches). Active file tracks 2026-05-09 onwards.
+> **Historical batches archived.** Sections from 2026-05-02 (Mandate audit ED-784, Register cap ED-786, ED-784 Phase 2 sweep commits A–D) moved to `deprecated/archives/propagation/propagation_map_archive_2026_05_02.md` (this archival sweep). Earlier batches: `references/propagation_map_archive_2026-05-10.md` (root-level), `deprecated/archives/propagation/propagation_map_archive_2026_05_01*.md` (4 batches). Active file tracks 2026-05-09 onwards.
 
 ## Register-header reconcile (2026-07-01, ED-1082)
 **Class E; applied this commit.** Patch-register header `Next PP number: 724` was stale vs
@@ -121,14 +121,14 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## Patch Register Archival 2026-05-10
 
-19 applied patches (PP-684..688, PP-705..723) archived to `archives/patches/patch_register_archive_2026_05_10.yaml`. No mechanical propagation required — all patches already fully applied and verified in canon. Active register reduced from ~15k to ~1.5k tokens.
+19 applied patches (PP-684..688, PP-705..723) archived to `deprecated/archives/patches/patch_register_archive_2026_05_10.yaml`. No mechanical propagation required — all patches already fully applied and verified in canon. Active register reduced from ~15k to ~1.5k tokens.
 
 ## PP-723 vetting m_summary count correction (2026-05-10)
 **Class E (vetting documentation refinement); applied this commit.** No mechanical change to PP-723.
 - PP-723 m_summary corrected from "3 + · 4 ✓ · 4 ○" to "2 + · 4 ✓ · 5 ○": post-commit read-back caught off-by-one against actual ratings.
 - Actual M-ratings: M-1 ○ · M-2 + · M-3 ✓ · M-4 ○ · M-5 + · M-6 ✓ · M-7 ✓ · M-8 ○ · M-9 ○ · M-10 ✓ · M-11 ○ = 2 + · 4 ✓ · 5 ○ · 0 −.
 - Pass/fail verdict unchanged (zero violations).
-- Correction applied at archives/patches/patch_register_archive_2026_05_10.yaml (PP-723 was auto-archived between the original commit 0a4a1ff7 and this correction commit, so the fix lands in the archive rather than active register).
+- Correction applied at deprecated/archives/patches/patch_register_archive_2026_05_10.yaml (PP-723 was auto-archived between the original commit 0a4a1ff7 and this correction commit, so the fix lands in the archive rather than active register).
 - This is the third off-by-one detection across recent vetting work (PP-718 walkthrough commit 5a47da16; PP-718 recalibration commit 04d026a0; this); a process improvement (D1 from improvement_avenues_2026-05-10) for tighter post-commit verification is now demonstrably load-bearing.
 
 ## PP-724 NPC-NPC relational graph framework (2026-05-10)

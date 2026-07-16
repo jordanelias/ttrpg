@@ -39,7 +39,7 @@ are more "current state" files than there should be; trust them in this strict p
   — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
   **`HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` are the only live continuity surface.** Do not
   write into or resume from anything under `deprecated/session_machinery/`.
-- `archives/`, `deprecated/` — history only, never canonical.
+- `deprecated/` (incl. `deprecated/archives/`, the former top-level `archives/` merged in 2026-07-16, ED-IN-0071 P5) — history only, never canonical.
 
 ---
 
@@ -90,7 +90,7 @@ are more "current state" files than there should be; trust them in this strict p
 | `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
 | `engine/` | Sigma-leverage engine armature + audit harness docs. The dead `engine_audit_harness.py` (hardcoded `/home/claude` paths) was retired to `deprecated/engine/` (2026-07-09) — do not resurrect. |
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once. Some tools are dead or GitHub-dependent — §6. |
-| `archives/`, `deprecated/` | History; not canonical. |
+| `deprecated/` | History; not canonical. The two former graveyards are merged (ED-IN-0071 P5, fork #1): dead **content** under `deprecated/archives/` (the former top-level `archives/`), dead **code/machinery** under `deprecated/{tools,skills,engine,session_machinery,…}`. |
 
 ---
 
