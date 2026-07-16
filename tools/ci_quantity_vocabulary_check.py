@@ -24,10 +24,10 @@ the backlog via a shaping wave, flip to blocking at zero backlog (armature §4
 any unresolved identifier so a local run is informative.
 
 Known scope limits (stated, not silently dropped — CLAUDE.md workflow ethic):
-  * params/*.md prose tables are NOT scanned here. A17's own spec (extension
+  * engine/params/*.md prose tables are NOT scanned here. A17's own spec (extension
     §3.1) lists them as an input surface, but resolving free-form markdown
     table rows needs a real table extractor — that is A18's prose-drift
-    detector (extension §3.2), sequenced AFTER this check. Scanning params/
+    detector (extension §3.2), sequenced AFTER this check. Scanning engine/params/
     naively here would be noise-dominated; better to under-report than to
     ship an unreliable heuristic as the first measurement.
   * Only LITERAL string dict keys in stat_deltas={...}/impact_vector={...}

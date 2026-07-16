@@ -14,7 +14,7 @@ class: the port hand-"corrected" its oracle). This exporter starts the successor
 discipline — oracle → typed export → port regenerates from the export, never hand-edits
 (godot_conversion_strategy re-export rule; holonic doctrine ED-1083: convertibility =
 round-trip morphisms). Scope guard: exports the ALREADY-TYPED Python oracle only; it does
-NOT parse params/*.md prose (that pipeline remains future ED-1052 work).
+NOT parse engine/params/*.md prose (that pipeline remains future ED-1052 work).
 
 MODES:
     python tools/export_engine_params.py            # (re)generate the JSON artifact

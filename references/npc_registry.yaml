@@ -380,7 +380,7 @@ characters:
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Church
-    notes: "Canonical per params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
+    notes: "Canonical per engine/params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
 
 # ═══════════════════════════════════════════════════════════════
 # CROWN INNER CIRCLE (faction_canon_v30, npc_behavior_v30 §2.15)

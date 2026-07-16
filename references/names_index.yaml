@@ -1,6 +1,6 @@
 # names_index.yaml — UNIFIED NAMES INDEX (the one place a definition's name lives).
 #
-# WHY: names used to be hardcoded and duplicated across 50+ prose docs, params/, the
+# WHY: names used to be hardcoded and duplicated across 50+ prose docs, engine/params/, the
 # registries, and the tools (ci_naming_check.py even hardcoded the deprecated proper
 # noun). descriptor_registry.yaml already promised "a descriptor can be renamed HERE
 # without rewriting any consumer" — this index makes that real for ALL named

@@ -58,7 +58,7 @@ entries:
   silos_where_it_appears: '§1 (Conviction #2) · §6 (debate Pressure Point Type — **RENAMED to Sanction**) · §2 (faction-attribute parlance, adjacent
     to Mandate)'
   verdict_+_rationale: '~~Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction''s English root, but mechanically
-    "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in params/contest.md. Remaining
+    "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in engine/params/contest.md. Remaining
     uses (Conviction #2, faction-attribute parlance) are non-colliding.**'
 - word: '**Equity / Order / Precedent / Continuity / Honor**'
   silos_where_it_appears: '§1 (Convictions #6/3/8/legacy/13) · debate argument-style classifiers (Citation = Precedent + Revealing; etc.)'

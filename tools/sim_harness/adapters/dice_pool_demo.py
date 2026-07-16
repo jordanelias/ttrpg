@@ -2,17 +2,17 @@
 skills/valoria-dice-model/valoria_dice.py Monte Carlo core.
 
 Chosen as the Gate-0 proof for three reasons (see the design doc section 8, wave 1):
-it is the simplest genuinely canon-cited resolver in the repo (params/core.md), it
+it is the simplest genuinely canon-cited resolver in the repo (engine/params/core.md), it
 carries no game-balance judgment risk, and it already has a working, reusable trial
 core — the harness wraps it rather than re-deriving dice math.
 
 Canon-fidelity discipline: resolve_params() distinguishes two kinds of values.
 TN=7 ("Standard") and Ob=5 ("Entrenched") are genuine documented constants in
-params/core.md's TN Values / Obstacle Scale tables — resolve_params() calls
+engine/params/core.md's TN Values / Obstacle Scale tables — resolve_params() calls
 resolver.verify_citation(...) to confirm each is STILL literally present in that
 doc before trusting it, rather than hardcoding a number that could silently go
 stale. Pool sizes (pool/atk_pool/def_pool), by contrast, are NOT a fixed canon
-constant anywhere in params/core.md — dice pool size is character-build-dependent
+constant anywhere in engine/params/core.md — dice pool size is character-build-dependent
 (attribute + skill + situational modifiers), so there is no single "the" canonical
 pool size to cite. Those are declared, explicit test-scenario values, and their
 provenance entries say so plainly instead of implying a citation that doesn't exist.
@@ -41,15 +41,15 @@ from ..depth import DecisionPoint, Tier
 @register_adapter("dice_pool_demo")
 class DicePoolAdapter(Adapter):
     contract_module = None  # see module docstring — confirmed no module_contracts.yaml row
-    canon_row = "Dice / resolution"  # CURRENT.md: params/core.md + d+sigma resolver
+    canon_row = "Dice / resolution"  # CURRENT.md: engine/params/core.md + d+sigma resolver
     registry_subsystem = "cross_cutting"
 
     def resolve_params(self, resolver) -> tuple[dict, dict]:
         std_tn = resolver.verify_citation(
-            self.canon_row, "params/core.md", "| Standard | 7 | Default |",
+            self.canon_row, "engine/params/core.md", "| Standard | 7 | Default |",
         )
         entrenched_ob = resolver.verify_citation(
-            self.canon_row, "params/core.md", "| 5 | Entrenched |",
+            self.canon_row, "engine/params/core.md", "| 5 | Entrenched |",
         )
         params = {
             "pool": 6, "tn": 7, "ob": 5,
@@ -59,13 +59,13 @@ class DicePoolAdapter(Adapter):
         provenance = {
             "pool": "test-scenario value, not canon-derived: dice pool size is "
                     "character-build-dependent (attribute+skill+situational), "
-                    "params/core.md defines no single fixed pool size",
-            "tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
-            "ob": f"params/core.md verified: {entrenched_ob!r} (Obstacle Scale / Entrenched)",
+                    "engine/params/core.md defines no single fixed pool size",
+            "tn": f"engine/params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "ob": f"engine/params/core.md verified: {entrenched_ob!r} (Obstacle Scale / Entrenched)",
             "atk_pool": "test-scenario value, not canon-derived: see 'pool'",
-            "atk_tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "atk_tn": f"engine/params/core.md verified: {std_tn!r} (TN Values / Standard)",
             "def_pool": "test-scenario value, not canon-derived: see 'pool'",
-            "def_tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "def_tn": f"engine/params/core.md verified: {std_tn!r} (TN Values / Standard)",
         }
         return params, provenance
 

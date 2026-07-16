@@ -4,7 +4,7 @@ validate_ed_citations.py — citation-integrity guard for the editorial register
 
 WHY THIS EXISTS
 ---------------
-The 2026-05-31 P1 resolver incident (ED-883): params/factions/stats_1_7_scale.md
+The 2026-05-31 P1 resolver incident (ED-883): engine/params/factions/stats_1_7_scale.md
 asserted the Domain Action resolver "CANONICAL (ED-865/874, ratified 2026-05-29)"
 and extended it (treaty positioning, unique actions, bare-stat supersession) on the
 same authority — but ED-874 and ED-885 were never written to the ledger, and ED-865
@@ -99,7 +99,7 @@ PROVENANCE_PATHS = {
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
-SCAN_PREFIXES = ('canon/', 'designs/', 'params/', 'references/')
+SCAN_PREFIXES = ('canon/', 'designs/', 'engine/params/', 'references/')
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).

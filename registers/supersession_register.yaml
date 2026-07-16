@@ -26,7 +26,7 @@ entries:
     files_to_recheck:
       - designs/provincial/victory_v30.md
       - designs/provincial/ci_political_v30.md
-      - params/bg/ci_seizure.md
+      - engine/params/bg/ci_seizure.md
 
   - superseded_id: tests/audit/editorial_decisions_ci_pv_2026-04-18.md Decision 3
     scope: "Seizure available from CI >= 60 (automatic availability)"
@@ -44,8 +44,8 @@ entries:
     files_to_recheck:
       - designs/provincial/victory_v30.md
       - designs/provincial/varfell_path_b_v30.md
-      - params/bg/core.md
-      - params/bg/npc_priority_trees.md
+      - engine/params/bg/core.md
+      - engine/params/bg/npc_priority_trees.md
     commits: [f7aa0ed, 297f892, 13b8f30]
 
   - superseded_id: "CR-STRIKE-2026-04-19"
@@ -58,8 +58,8 @@ entries:
       Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions
       available to Varfell first due to southern TS baseline + RM proximity — NOT as BG-layer territorial/combat bonuses.
     files_to_recheck:
-      - params/bg/faction_actions.md
-      - params/bg/npc_priority_trees.md
+      - engine/params/bg/faction_actions.md
+      - engine/params/bg/npc_priority_trees.md
       - designs/provincial/faction_politics_v30.md
       - designs/npcs/npc_behavior_v30.md
       - designs/provincial/victory_v30.md
@@ -104,7 +104,7 @@ entries:
 
   - superseded_id: "PP-686-001"
     date: 2026-05-01
-    scope: "params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
+    scope: "engine/params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
     superseded_by: "PP-686 v2 / designs/provincial/faction_behavior_v30.md §3.7"
     replacement: >
       Ethical Framework Modifiers superseded by triadic decomposition: 
@@ -112,10 +112,10 @@ entries:
       clamped at ±2 (was ±3 — sim v2 confirmed ±3 produced dominant-strategy at high alignment).
       Strictness functions only as deviation-cost modulator (C2; reward path dropped).
     files_to_recheck:
-      - params/bg/core.md
-      - params/factions.md
-      - params/factions_personal.md
-      - params/bg/tracks.md
+      - engine/params/bg/core.md
+      - engine/params/factions.md
+      - engine/params/factions_personal.md
+      - engine/params/bg/tracks.md
     commits: ["dede72f"]
 
 
@@ -219,7 +219,7 @@ entries:
     superseded_date: 2026-06-04
     replacement: >
       PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04).
-      RESOLUTION superseded by combat_engine_v1; config.py supersedes params/combat.md values.
+      RESOLUTION superseded by combat_engine_v1; config.py supersedes engine/params/combat.md values.
       Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
     files_to_recheck:
       - designs/scene/combat_v30.md
@@ -237,9 +237,9 @@ entries:
       Composure. Resolves ED-841 (TIER-DRIFT-001), ED-842 (COMPOSURE-DRIFT-001 → 4), ED-912, ED-914.
     files_to_recheck:
       - designs/scene/fieldwork_v30.md §5.1/§5.6
-      - params/fieldwork.md
-      - params/threadwork.md §Knot Mechanics
-      - params/core.md (Bonds)
+      - engine/params/fieldwork.md
+      - engine/params/threadwork.md §Knot Mechanics
+      - engine/params/core.md (Bonds)
       - designs/personal/knots_v30.md
       - designs/architecture/complete_systems_reference.md Part 8
       - designs/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
@@ -261,8 +261,8 @@ entries:
       - designs/provincial/ci_political_v30.md
       - designs/provincial/victory_v30.md
       - designs/provincial/peninsular_strain_v30.md §7c
-      - params/bg/ci_seizure.md
-      - params/board_game.md
+      - engine/params/bg/ci_seizure.md
+      - engine/params/board_game.md
       - sim/peninsular/ci_track.py    # dead CI_PHASE_TRANSITION=75 constant (CI75-9, SIM-CODE, deferred to Stratum B)
 
   # ── Mass-battle rulings back-propagation (added 2026-07-07, ED-IN-0025, C-VERIFY-2) ──
@@ -321,9 +321,9 @@ entries:
       - designs/scene/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
       - designs/scene/fieldwork_v30.md   # DONE
       - designs/threadwork/threadwork_v30.md   # DONE
-      - params/core.md   # already current (ED-PC-0005 pass)
-      - params/fieldwork.md   # DONE
-      - params/mass_combat.md   # DONE
+      - engine/params/core.md   # already current (ED-PC-0005 pass)
+      - engine/params/fieldwork.md   # DONE
+      - engine/params/mass_combat.md   # DONE
       - designs/scene/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
       - sim/personal/contest_legacy_stub.py   # already current (ED-PC-0005 pass)
       - arcs/simulated/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)

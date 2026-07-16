@@ -114,7 +114,7 @@ class Chn6GongsuoAdapter(Adapter):
         provenance = {
             "amend_pool": "test-scenario value, not canon-derived: reuses "
                 "pr119_guild_ladder.py's identical Ordenanza roll for a direct comparison",
-            "amend_tn": "test-scenario value matching params/core.md's Standard TN=7",
+            "amend_tn": "test-scenario value matching engine/params/core.md's Standard TN=7",
             "amend_ob": "PROVISIONAL: governance_play_redesign_v1.md §1.3c -- 'Amend ... Ob 2'",
         }
         return params, provenance

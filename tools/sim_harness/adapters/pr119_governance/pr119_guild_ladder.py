@@ -36,7 +36,7 @@ class GuildLadderAdapter(Adapter):
 
     def resolve_params(self, resolver) -> tuple[dict, dict]:
         std_tn = resolver.verify_citation(
-            "Dice / resolution", "params/core.md", "| Standard | 7 | Default |",
+            "Dice / resolution", "engine/params/core.md", "| Standard | 7 | Default |",
         )
         params = {
             "orsk_guild_standing": _ORSK["guild_standing"],
@@ -72,7 +72,7 @@ class GuildLadderAdapter(Adapter):
                 "failure (rate itself is test-scenario, not stated numerically in canon)",
             "amend_pool": "test-scenario value, not canon-derived: dice pool size is "
                 "character-build-dependent, no single fixed pool size for this roll",
-            "amend_tn": f"params/core.md verified: {std_tn!r} (TN Values / Standard)",
+            "amend_tn": f"engine/params/core.md verified: {std_tn!r} (TN Values / Standard)",
             "amend_ob": "PROVISIONAL: designs/territory/governance_play_redesign_v1.md "
                 "§1.3c — 'Amend — Charisma/Cognition vs the Guild Master, Ob 2'",
         }

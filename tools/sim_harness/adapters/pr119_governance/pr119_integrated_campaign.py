@@ -326,7 +326,7 @@ class IntegratedCampaignAdapter(Adapter):
             "ordenanza_period": "test-scenario value, not canon-derived: an ordenanza is an "
                 "NPC ambition-engine action (§1.3c), not a fixed cadence in canon",
             "amend_pool": "test-scenario value, not canon-derived: see pr119_guild_ladder.py",
-            "amend_tn": "test-scenario value matching params/core.md's Standard TN=7 (see "
+            "amend_tn": "test-scenario value matching engine/params/core.md's Standard TN=7 (see "
                 "pr119_guild_ladder.py's verified citation of the same constant)",
             "amend_ob": "PROVISIONAL: governance_play_redesign_v1.md §1.3c -- 'Amend ... Ob 2'",
             "patron_lapse_threshold": "test-scenario value, not canon-derived",

@@ -22,7 +22,7 @@ note: |
 # ─── Reference metadata ────────────────────────────────────────────────────
 
 scales:
-  primitive: "Dice engine + foundational rules (params/core.md)"
+  primitive: "Dice engine + foundational rules (engine/params/core.md)"
   service: "Infrastructure (state, season loop, scene manager, registry — not game mechanics per se)"
   personal: "Character-scale individual actions"
   thread: "Thread-layer operations (substrate mechanics)"
@@ -51,12 +51,12 @@ test_status_values:
 
 mechanics:
 
-  # ─── PRIMITIVES (params/core.md) ─────────────────────────────────────────
+  # ─── PRIMITIVES (engine/params/core.md) ─────────────────────────────────────────
 
   die_rule_d10:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Die Rule"]
+    canon_sources: ["engine/params/core.md#Die Rule"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "d10 with chain on 10s, subtract on 1s. Foundational dice primitive."
@@ -64,7 +64,7 @@ mechanics:
   tn_values:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#TN Values"]
+    canon_sources: ["engine/params/core.md#TN Values"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "TN scale 5-9 mapping to action difficulty tiers."
@@ -72,14 +72,14 @@ mechanics:
   obstacle_scale:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Obstacle Scale"]
+    canon_sources: ["engine/params/core.md#Obstacle Scale"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
 
   degrees_of_success:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Degrees of Success"]
+    canon_sources: ["engine/params/core.md#Degrees of Success"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Overwhelming / Success / Partial / Failure"
@@ -87,7 +87,7 @@ mechanics:
   continuous_engine_quasibinomial:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Continuous Engine Decision E"]
+    canon_sources: ["engine/params/core.md#Continuous Engine Decision E"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Quasibinomial sampling phi ~= 2.67, p_hit=0.4. Canonized 2026-05-15."
@@ -95,7 +95,7 @@ mechanics:
   pool_minimum:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Pool Minimum"]
+    canon_sources: ["engine/params/core.md#Pool Minimum"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Pool floor 5."
@@ -103,7 +103,7 @@ mechanics:
   net_successes_floor:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Net Successes Floor"]
+    canon_sources: ["engine/params/core.md#Net Successes Floor"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "PP-246 floor."
@@ -112,8 +112,8 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources:
-      - "params/core.md#Momentum"
-      - "params/core.md#Momentum Carry"
+      - "engine/params/core.md#Momentum"
+      - "engine/params/core.md#Momentum Carry"
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "PP-255 momentum carry mechanic."
@@ -121,7 +121,7 @@ mechanics:
   ms_baseline_decay:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#MS Baseline Decay"]
+    canon_sources: ["engine/params/core.md#MS Baseline Decay"]
     sim_module: sim/peninsular/ms_track.py
     test_status: not_implemented
     notes: "PP-255. MS world-track per-arc decay."
@@ -129,7 +129,7 @@ mechanics:
   coherence_zero_transition:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Coherence 0 NPC Transition"]
+    canon_sources: ["engine/params/core.md#Coherence 0 NPC Transition"]
     sim_module: sim/thread/coherence.py
     test_status: not_implemented
     notes: "PP-261. Coherence reaches 0 -> NPC."
@@ -137,7 +137,7 @@ mechanics:
   ed_301_orthogonality:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#ED-301 Propagation"]
+    canon_sources: ["engine/params/core.md#ED-301 Propagation"]
     sim_module: sim/thread/coherence.py
     test_status: not_implemented
     notes: "TS / Coherence orthogonality."
@@ -145,7 +145,7 @@ mechanics:
   certainty_track:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Certainty Track"]
+    canon_sources: ["engine/params/core.md#Certainty Track"]
     sim_module: sim/personal/conviction.py
     test_status: not_implemented
     notes: "PP-551 redesigned."
@@ -210,7 +210,7 @@ mechanics:
       - "designs/scene/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
       - "designs/architecture/complete_systems_reference.md#part-2"
       - "designs/scene/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
-    params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (params/combat.md deprecated -> deprecated/params/)
+    params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
     sim_module: designs/scene/combat_engine_v1/   # canonical engine; sim/personal/combat.py is the DEPRECATED v30 wiring
     godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
     test_status: validated   # combat_engine_v1 ratified; Godot slice (strike/wound) ported + validated 2026-06-23
@@ -224,7 +224,7 @@ mechanics:
     canon_sources:
       - "designs/scene/social_contest_v30.md"
       - "designs/architecture/complete_systems_reference.md#part-3"
-    params: "params/contest.md"
+    params: "engine/params/contest.md"
     sim_module: sim/personal/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
     test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
     dependencies:
@@ -268,7 +268,7 @@ mechanics:
     canon_sources:
       - "designs/scene/fieldwork_v30.md"
       - "designs/architecture/complete_systems_reference.md#part-5"
-    params: "params/fieldwork.md"
+    params: "engine/params/fieldwork.md"
     sim_module: sim/personal/fieldwork.py
     test_status: not_implemented
     dependencies:
@@ -360,7 +360,7 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    params: "params/threadwork.md"
+    params: "engine/params/threadwork.md"
     sim_module: sim/thread/operations.py
     test_status: not_implemented
     dependencies:
@@ -472,7 +472,7 @@ mechanics:
     canon_sources:
       - "designs/provincial/mass_battle_v30.md"
       - "designs/architecture/complete_systems_reference.md#part-6"
-    params: "params/mass_combat.md"
+    params: "engine/params/mass_combat.md"
     sim_module: sim/provincial/massbattle.py
     test_status: not_implemented
     gd_applicable: [GD-1]
@@ -676,7 +676,7 @@ mechanics:
     canon_sources:
       - "canon/02_canon_constraints.md#section-b-gd-2"
       - "designs/provincial/faction_canon_v30.md"
-    params: "params/factions.md"
+    params: "engine/params/factions.md"
     sim_module: sim/provincial/faction_action.py
     test_status: not_implemented
     gd_applicable: [GD-2]
@@ -786,7 +786,7 @@ mechanics:
   ms_track:
     scale: peninsular
     faction: universal
-    canon_sources: ["params/core.md#MS Baseline Decay"]
+    canon_sources: ["engine/params/core.md#MS Baseline Decay"]
     sim_module: sim/peninsular/ms_track.py
     test_status: not_implemented
     notes: "Mending Stability world-track. PP-255 baseline decay."

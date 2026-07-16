@@ -18,8 +18,8 @@
       "3": 620
     },
     "by_lane": {
-      "unassigned": 697,
-      "IN": 11,
+      "unassigned": 695,
+      "IN": 13,
       "FA": 67,
       "SC": 7,
       "PC": 112,
@@ -33,12 +33,12 @@
       "unassigned": {
         "1": 282,
         "2": 32,
-        "3": 383
+        "3": 381
       },
       "IN": {
         "1": 2,
         "2": 1,
-        "3": 8
+        "3": 10
       },
       "FA": {
         "1": 3,
@@ -4815,12 +4815,12 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "params/bg/core.md:27",
-        "params/bg/core.md:46"
+        "engine/params/bg/core.md:27",
+        "engine/params/bg/core.md:46"
       ],
       "systems": [],
       "count": 2,
-      "lane": null
+      "lane": "IN"
     },
     {
       "text": "<!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->",
@@ -4841,12 +4841,12 @@
       "priority": 3,
       "label": "TODO / FIXME",
       "locations": [
-        "params/bg/stress_patches.md:63",
-        "params/bg/stress_patches.md:115"
+        "engine/params/bg/stress_patches.md:63",
+        "engine/params/bg/stress_patches.md:115"
       ],
       "systems": [],
       "count": 2,
-      "lane": null
+      "lane": "IN"
     },
     {
       "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
@@ -12059,18 +12059,6 @@
       "lane": "PC"
     },
     {
-      "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
-      "category": "todo",
-      "priority": 3,
-      "label": "TODO / FIXME",
-      "locations": [
-        "params/factions/stats_1_7_scale.md:45"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "{item: \"legacy faction name (naming-rule)\", at: \"faction_politics_v30 \u00a7naming-note\", actual: \"appears only in an editorial note ABOUT the naming rule, not live usage \u2014 NOT a violation; but the note flags a 'Galbadian->Solmund' propagation TODO to grep designs/ for the adjective form\"}",
       "category": "todo",
       "priority": 3,
@@ -12113,6 +12101,18 @@
       "label": "TODO / FIXME",
       "locations": [
         "sim/provincial/parliamentary_action.py:162"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "engine/params/factions/stats_1_7_scale.md:45"
       ],
       "systems": [],
       "count": 1,
@@ -12171,7 +12171,7 @@
     },
     {
       "id": "PP-686-001",
-      "scope": "params/bg/core.md \u00a7Ethical Framework Modifiers (philosophical-tradition vocabulary, \u00b13 Ob cap)",
+      "scope": "engine/params/bg/core.md \u00a7Ethical Framework Modifiers (philosophical-tradition vocabulary, \u00b13 Ob cap)",
       "superseded_by": "PP-686 v2 / designs/provincial/faction_behavior_v30.md \u00a73.7",
       "date": "2026-05-01",
       "replacement": "Ethical Framework Modifiers superseded by triadic decomposition:  mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier clamp"
@@ -12237,7 +12237,7 @@
       "scope": "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) \u2014 NOTE: PARTIAL only",
       "superseded_by": "ED-900",
       "date": "2026-06-04",
-      "replacement": "PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes p"
+      "replacement": "PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes e"
     },
     {
       "id": "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)",
