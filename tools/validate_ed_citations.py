@@ -72,16 +72,16 @@ NONBASIS_MARKERS = (
 CONTEXT = 90  # chars of context captured each side of a citation
 
 # Lane-split active ledger (2026-07-08 atomization pass): entries whose id already
-# declares a lane (ED-<LANE>-NNNN) live in their own canon/editorial_ledger_<lane>.jsonl
-# file instead of the flat canon/editorial_ledger.jsonl, mirroring the handoffs/
+# declares a lane (ED-<LANE>-NNNN) live in their own registers/editorial_ledger_<lane>.jsonl
+# file instead of the flat registers/editorial_ledger.jsonl, mirroring the handoffs/
 # HANDOFF_<LANE>.md split. Pre-cutover flat-ID entries are NOT retrofitted (same
 # no-retrofit precedent as the ED-<LANE>-NNNN cutover itself) and stay in the main file.
 LANE_LEDGER_PATHS = tuple(
-    f'canon/editorial_ledger_{lane.lower()}.jsonl' for lane in LANE_CODES
+    f'registers/editorial_ledger_{lane.lower()}.jsonl' for lane in LANE_CODES
 )
 
 # Source-of-truth registers are never scanned as "citing docs".
-REGISTER_PATHS = {'canon/editorial_ledger.jsonl', 'canon/patch_register_active.yaml',
+REGISTER_PATHS = {'registers/editorial_ledger.jsonl', 'registers/patch_register_active.yaml',
                   *LANE_LEDGER_PATHS}
 # Frozen history: citations there are records, not live claims.
 SKIP_PREFIXES = ('archives/', 'deprecated/', 'references/atoms_pending/')
@@ -95,7 +95,7 @@ PROVENANCE_PATHS = {
     'references/roadmap_state.yaml',
     'references/synonym_registry.yaml',
     'references/mechanical_terms_index.md',
-    'canon/supersession_register.yaml',
+    'registers/supersession_register.yaml',
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
@@ -105,11 +105,11 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 ARCHIVE_GLOBS = ('archives/editorial/', 'archives/editorials/', 'deprecated/canon/')
 
-# JSONL archive siblings of the active ledger (canon/editorial_ledger.jsonl's own overflow
+# JSONL archive siblings of the active ledger (registers/editorial_ledger.jsonl's own overflow
 # chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the
 # patch_register_active.yaml / patch_register_archive.yaml co-location convention, not the
 # older ARCHIVE_GLOBS directories which predate the 2026-05-28 JSONL migration).
-ARCHIVE_JSONL_PATHS = ('canon/editorial_ledger_archive.jsonl',)
+ARCHIVE_JSONL_PATHS = ('registers/editorial_ledger_archive.jsonl',)
 
 
 # ── Pure core (network-free; unit-tested) ─────────────────────────────────────
@@ -326,7 +326,7 @@ def load_ed_universe(warn=True) -> dict:
         if warn and bad_lines:
             dropped.append((ap, f"{bad_lines} malformed JSONL line(s)", 0))
     active_entries = []
-    for active_path in ('canon/editorial_ledger.jsonl', *LANE_LEDGER_PATHS):
+    for active_path in ('registers/editorial_ledger.jsonl', *LANE_LEDGER_PATHS):
         led = _read(active_path) or ''
         for ln in led.splitlines():
             ln = ln.strip()

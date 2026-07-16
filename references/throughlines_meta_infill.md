@@ -509,7 +509,7 @@ A framework that is advisory is not a framework. The previous state (PP-672) com
 
 ### §11.2 Enforcement mechanism
 
-`valoria_hooks.vetting_gate(additions)` fires during `pre_commit_gate` when additions include `canon/patch_register_active.yaml`. It parses the patch register, finds PP entries with `id >= PP-674`, and for each verifies:
+`valoria_hooks.vetting_gate(additions)` fires during `pre_commit_gate` when additions include `registers/patch_register_active.yaml`. It parses the patch register, finds PP entries with `id >= PP-674`, and for each verifies:
 
 - The entry has a `vetting:` block.
 - The block has `class:` with value A/B/C/D/E.

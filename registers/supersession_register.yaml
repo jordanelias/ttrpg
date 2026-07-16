@@ -266,7 +266,7 @@ entries:
       - sim/peninsular/ci_track.py    # dead CI_PHASE_TRANSITION=75 constant (CI75-9, SIM-CODE, deferred to Stratum B)
 
   # ── Mass-battle rulings back-propagation (added 2026-07-07, ED-IN-0025, C-VERIFY-2) ──
-  - superseded_id: "canon/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')"
+  - superseded_id: "registers/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')"
     scope: "Pre-audit mass-battle status: the engine treated as an unimplemented <5% stub"
     superseded_by: "ED-MB-0001"
     superseded_date: 2026-07-02
@@ -276,7 +276,7 @@ entries:
       designs/provincial/mass_battle_v30.md + the Cannae gauge harness.
     files_to_recheck:
       - designs/provincial/mass_battle_v30.md
-      - canon/mechanics_index.yaml    # mass_battle entry flagged STALE 2026-07-07 (C-VERIFY-1); test_status needs re-survey
+      - registers/mechanics_index.yaml    # mass_battle entry flagged STALE 2026-07-07 (C-VERIFY-1); test_status needs re-survey
       - tests/coverage_matrix.md
   - superseded_id: "mass_battle Cannae-pattern gauge baseline (pre-ED-MB-0002)"
     scope: "PER_CELL combat collapsing the H3-H6 Cannae historical gauge rows to 0-13% vs the 45-72% band"
@@ -296,7 +296,7 @@ entries:
       DG-1/DG-3, and captured DG-2 as workplan work (PR #84).
     files_to_recheck:
       - designs/provincial/mass_battle_v30.md
-      - canon/mechanics_index.yaml    # mass_battle entry
+      - registers/mechanics_index.yaml    # mass_battle entry
 
   # ── Wound-penalty model reversal (added 2026-07-08, ED-PC-0005, Jordan ruling) ──
   - superseded_id: "PP-716 (−1D universal wound penalty)"

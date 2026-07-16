@@ -81,7 +81,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 | Institutional Pressure | IP | 0–100 | ALL | 20 | 75/80 = Altonian Vanguard (BG) | Pressure from the Altonian Empire. Invasion threat tracker. |
 | Public Instability | PI | 0–10 | BG | 5 | 0 = Parliament dissolved + Löwenritter coup | Parliamentary health tracker. Board Game mode only. |
 
-**Old CI = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `CI` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `canon/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `CI` in new content.**
+**Old CI = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `CI` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `registers/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `CI` in new content.**
 
 ---
 

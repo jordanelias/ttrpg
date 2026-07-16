@@ -104,13 +104,13 @@ this is provenance, not a continuity surface. **Do not resume work from this fil
     1041 sim+valoria + 385 kernel tests green; freshness gate clean.
   - **Reconciled with `main` post-Gate-C (`715c5c3e`).** `main` had advanced substantially (mass-battle LC-8,
     a month-overview architecture consolidation, ~10 new EDs) while Gate C was in flight. Two real conflicts:
-    `canon/editorial_ledger.jsonl` (both sides appended new entries — kept both, ascending ED order) and
+    `registers/editorial_ledger.jsonl` (both sides appended new entries — kept both, ascending ED order) and
     `references/canonical_sources.yaml` (both sides had independently run a full `freshness_gate.py --update`
     regeneration, so the whole file conflicted at the line level even though the content barely differed —
     resolved by regenerating fresh from the merged working tree rather than hand-patching). The merge also
     tripped `ci_register_size_check.py`: the combined ledger hit 150,949 tokens (cap 150,000). Fixed properly,
     not bypassed — split the ledger for the first time: archived the 216 oldest resolved/struck/superseded/
-    applied entries (ED-001..ED-330) to new `canon/editorial_ledger_archive.jsonl` (live ledger now ~130k
+    applied entries (ED-001..ED-330) to new `registers/editorial_ledger_archive.jsonl` (live ledger now ~130k
     tokens, ~20k headroom), registered its own cap in `ci_register_size_check.py`, and extended
     `tools/validate_ed_citations.py` (`ARCHIVE_JSONL_PATHS`) to scan `.jsonl` archives — its existing
     `ARCHIVE_GLOBS` scanner only recognized the older pre-2026-05-28 YAML archive convention, so without this

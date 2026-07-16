@@ -7,7 +7,7 @@
       "references/deprecated_terms_registry.yaml",
       "references/censured_vocabulary.yaml",
       "references/proper_noun_registry.yaml",
-      "canon/placeholder_names.yaml",
+      "registers/placeholder_names.yaml",
       "references/descriptor_registry.yaml",
       "references/glossary.md",
       "designs/architecture/scale_transitions_v30.md"
@@ -255,7 +255,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3127,7 +3127,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3322,7 +3322,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3472,7 +3472,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -4409,7 +4409,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -6285,7 +6285,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -6895,7 +6895,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -6914,7 +6914,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {

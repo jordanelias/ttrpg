@@ -83,9 +83,9 @@ FAMILIES = [
             "tools/observability/lexicon.json",
         ],
         # union of build_graph.py's sources (references/module_contracts.yaml,
-        # designs/architecture/key_type_registry_v30.md, canon/mechanics_index.yaml) and
+        # designs/architecture/key_type_registry_v30.md, registers/mechanics_index.yaml) and
         # build_lexicon.py's sources (references/*.yaml, references/glossary.md,
-        # canon/placeholder_names.yaml, designs/architecture/scale_transitions_v30.md).
+        # registers/placeholder_names.yaml, designs/architecture/scale_transitions_v30.md).
         "scope_prefixes": ("references/", "canon/", "designs/architecture/"),
     },
     {
@@ -95,7 +95,7 @@ FAMILIES = [
     },
     {
         "name": "mechanics-index",
-        "artifact_paths": ["canon/mechanics_index.yaml"],
+        "artifact_paths": ["registers/mechanics_index.yaml"],
         # Broad designs/ scope (no cheaply-determinable mechanics-relevant subset).
         # Lower priority than the other families: since Phase 2 (commit 806aa63),
         # tools/mechanics_index_gen.py --strict runs in CI on every push and continuously

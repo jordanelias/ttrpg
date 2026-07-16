@@ -140,7 +140,7 @@ Last turn's load-bearing question — "canonize the armature as the engine spec?
 
 ## PROPOSED EDITORIAL-LEDGER ENTRY (staged — not committed)
 
-The `audit` task-gate states P1 findings append to `canon/editorial_ledger.jsonl`. I am **staging** rather than auto-appending: F1's resolution is a design fork (owner contract → Jordan), and self-assigning an `ED-NNN` risks collision against the open 94-ID backlog. On your word I append via the ledger primitive with an ID you confirm.
+The `audit` task-gate states P1 findings append to `registers/editorial_ledger.jsonl`. I am **staging** rather than auto-appending: F1's resolution is a design fork (owner contract → Jordan), and self-assigning an `ED-NNN` risks collision against the open 94-ID backlog. On your word I append via the ledger primitive with an ID you confirm.
 
 ```json
 {"id": "ED-PENDING", "type": "audit_finding", "severity": "P1", "status": "open-jordan-fork",

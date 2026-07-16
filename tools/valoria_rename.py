@@ -48,7 +48,7 @@ SKIP = (
     'archives/',
     'deprecated/',
     'designs/audit/',
-    'canon/editorial_ledger',
+    'registers/editorial_ledger',
     'skills/prose-writer/',
 )
 

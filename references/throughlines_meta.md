@@ -13,7 +13,7 @@
 
 **Authority.** Jordan owns N, Ω, Μ. Co-owned М, Τ. Claude applies Q and the full protocol. Claude flags N/Ω concerns to Jordan; never unilaterally rejects for N or Ω failure.
 
-**Enforcement (PP-674).** `valoria_hooks.vetting_gate` blocks commits to `canon/patch_register_active.yaml` that add Class A/B PP entries from PP-674 onward without a `vetting:` block. CI runs the same check externally.
+**Enforcement (PP-674).** `valoria_hooks.vetting_gate` blocks commits to `registers/patch_register_active.yaml` that add Class A/B PP entries from PP-674 onward without a `vetting:` block. CI runs the same check externally.
 
 **Load order.** For routine vetting, load this skeleton. Load infill (`throughlines_meta_infill.md`) only when a decision requires deeper justification — examples, rationale, worked cases, per-T tag table, full Μ̄ translation rationale.
 
@@ -107,7 +107,7 @@ Structural patterns across the 41 throughlines. Each subordinated to Μ modes. E
 
 Source: `references/throughlines_complete.md`.
 
-**Τ-level question:** Which T's does this touch? For each: extend, preserve, or break? If break, is there deliberate supersession? Log breaks to `canon/supersession_register.yaml`.
+**Τ-level question:** Which T's does this touch? For each: extend, preserve, or break? If break, is there deliberate supersession? Log breaks to `registers/supersession_register.yaml`.
 
 ---
 
@@ -279,9 +279,9 @@ Pre-PP-674 entries may use `pre-framework: true` for grandfathering.
 ## §9 REGISTER INTEGRATION
 
 No new registers. Uses existing:
-- `canon/patch_register_active.yaml`: Class A/B entries include `vetting` field with Ω/Μ/М/Q results.
+- `registers/patch_register_active.yaml`: Class A/B entries include `vetting` field with Ω/Μ/М/Q results.
 - `canon/editorial_ledger.yaml`: flagged concerns use Failure Lexicon terms.
-- `canon/supersession_register.yaml`: Τ-breaks with supersession.
+- `registers/supersession_register.yaml`: Τ-breaks with supersession.
 - `references/canonical_sources.yaml`: notes framework as vetting authority.
 - `references/throughlines_complete.md`: М-tag annotations per infill §3.1.
 

@@ -724,9 +724,9 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/02_
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/00_philosophical_foundations_rules.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('35', 'canon/02_canon_constraints.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('36', 'canon/03_canonical_timeline.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'canon/editorial_ledger.jsonl');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'canon/patch_register_active.yaml');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'canon/patch_register_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'registers/editorial_ledger.jsonl');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'registers/patch_register_active.yaml');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'registers/patch_register_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('39', 'references/canonical_sources.yaml');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('40', 'references/throughlines_meta.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('40', 'references/throughline_registry.md');

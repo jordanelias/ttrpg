@@ -60,9 +60,9 @@ This one command rebuilds **both** datasets (it calls `build_lexicon.py` for you
 |---|---|
 | `references/module_contracts.yaml` | the `IN → resolver → OUT` wrapper contracts + owned scalars + gates + derivations + transitions |
 | `designs/architecture/key_type_registry_v30.md` | authoritative Key metadata + emit/consume routing (the vectorized routing) |
-| `canon/mechanics_index.yaml` | scale / GD-constraint / sim-module enrichment per mechanic |
+| `registers/mechanics_index.yaml` | scale / GD-constraint / sim-module enrichment per mechanic |
 | `references/alias_registry.yaml` + `name_collision_database.yaml` + `synonym_registry.yaml` | canonical names, abbreviations, aliases, silos, collisions |
-| `references/deprecated_terms_registry.yaml` + `censured_vocabulary.yaml` + `canon/placeholder_names.yaml` | retired / do-not-use / placeholder names |
+| `references/deprecated_terms_registry.yaml` + `censured_vocabulary.yaml` + `registers/placeholder_names.yaml` | retired / do-not-use / placeholder names |
 | `references/glossary.md` + `descriptor_registry.yaml` + `proper_noun_registry.yaml` | definitions, ranges, attributes/stats/axes, world entities |
 | `designs/architecture/scale_transitions_v30.md` | the cross-scale handshakes (§3 / §5 / §12) |
 

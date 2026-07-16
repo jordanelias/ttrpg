@@ -3,7 +3,7 @@
 ci_supersession_check.py
 Ports valoria_hooks.supersession_check into a standalone CI validator.
 
-WARN-ONLY churn / downstream-consequence guard. Reads canon/supersession_register.yaml
+WARN-ONLY churn / downstream-consequence guard. Reads registers/supersession_register.yaml
 from the working tree and the current git changeset (via ci_common), then emits a
 WARNING for every register entry whose 'files_to_recheck' list overlaps the changed
 paths. A propagating change legitimately re-touches these files, so this NEVER blocks
@@ -23,7 +23,7 @@ except ImportError:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ci_common
 
-REGISTER_PATH = 'canon/supersession_register.yaml'
+REGISTER_PATH = 'registers/supersession_register.yaml'
 
 
 def find_matches(entries: list, changed_paths: set) -> list:

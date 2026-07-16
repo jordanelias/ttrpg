@@ -128,7 +128,7 @@ def test_classify_banner_discourse_still_demotes_a_NON_registered_doc():
 
 
 def test_classify_ledger_path_is_historical():
-    bucket, reason = ga.classify('canon/editorial_ledger_pc.jsonl', 'text', set(), set())
+    bucket, reason = ga.classify('registers/editorial_ledger_pc.jsonl', 'text', set(), set())
     assert bucket == 'historical'
     assert reason == 'ledger_or_register'
 

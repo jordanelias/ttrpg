@@ -1,5 +1,5 @@
 # Patch Register — Active
-# Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
+# Applied/approved/consumed patches archived to registers/patch_register_archive_*.yaml
 # Next PP number: 727 (header reconciled 2026-07-01 — body already held PP-724..726; new PPs
 # allocate from reserved blocks, see references/id_reservations.yaml)
 # 2026-05-02: Renumbered mass-battle PP-684..688 → PP-711..715 to resolve register collision
@@ -40,7 +40,7 @@ patches:
   source: user
   affects:
   - designs/audit/2026-04-29-terminology-conversion/00_workplan.md
-  - canon/patch_register_active.yaml
+  - registers/patch_register_active.yaml
   - canon/editorial_ledger.yaml
   - session_log_current.md
   - references/propagation_map.md
@@ -84,7 +84,7 @@ patches:
   source: user
   affects:
   - designs/audit/2026-04-29-topographic-analysis/00_workplan.md
-  - canon/patch_register_active.yaml
+  - registers/patch_register_active.yaml
   - canon/editorial_ledger.yaml
   - references/propagation_map.md
   - session_log_current.md
@@ -121,7 +121,7 @@ patches:
   source: editorial
   affects:
     - designs/npcs/npc_relational_graph_v30.md
-    - canon/patch_register_active.yaml
+    - registers/patch_register_active.yaml
     - references/canonical_sources.yaml
     - references/propagation_map.md
   status: applied
@@ -162,7 +162,7 @@ patches:
   source: editorial
   affects:
     - designs/npcs/npc_relational_graph_v30.md
-    - canon/patch_register_active.yaml
+    - registers/patch_register_active.yaml
     - references/canonical_sources.yaml
     - references/propagation_map.md
   status: applied
@@ -206,7 +206,7 @@ patches:
     - designs/territory/settlement_layer_v30.md
     - designs/territory/valoria_geography_v30.yaml
     - designs/npcs/npc_relational_graph_v30.md
-    - canon/patch_register_active.yaml
+    - registers/patch_register_active.yaml
     - references/canonical_sources.yaml
     - references/propagation_map.md
   status: applied

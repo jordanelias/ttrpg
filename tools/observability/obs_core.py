@@ -46,13 +46,13 @@ LEDGER_LANE_CODES: tuple[str, ...] = tuple(c.lower() for c in LANE_CODES)  # led
 
 # --- A. editorial-ledger reader (single owner) ---------------------------------
 def read_ledger_entries(repo: Path | None = None) -> list[dict]:
-    """Every entry across canon/editorial_ledger*.jsonl (flat + per-lane), normalized.
+    """Every entry across registers/editorial_ledger*.jsonl (flat + per-lane), normalized.
     Lane comes free from the filename (`editorial_ledger_<xx>.jsonl`) — the 2-letter
     match captures GO, which dashboard_data.LEDGER_LANES did not. Archive file skipped
     (settled history, not live debt)."""
     repo = repo or REPO
     out: list[dict] = []
-    for path in sorted((repo / "canon").glob("editorial_ledger*.jsonl")):
+    for path in sorted((repo / "registers").glob("editorial_ledger*.jsonl")):
         base = path.name
         if "archive" in base:
             continue
@@ -125,7 +125,7 @@ NEEDS_JORDAN_MARKERS = re.compile(r'JORDAN RULING NEEDED|needs_jordan\s*[:=]\s*t
 #   (A) proposal_doc / provisional_status_doc kinds never carried a needs_jordan
 #       flag at all, so a design doc whose Status reads "HELD FOR JORDAN" showed as
 #       plain actionable — structurally unflaggable.
-#   (B) pre-cutover flat ledger entries (canon/editorial_ledger.jsonl) predate the
+#   (B) pre-cutover flat ledger entries (registers/editorial_ledger.jsonl) predate the
 #       needs_jordan FIELD, so an entry whose own text says "PENDING Jordan" /
 #       "Jordan to confirm" / "DECISION (Jordan)" defaulted to actionable.
 # The vocabulary deliberately matches FUTURE / PENDING Jordan action ONLY, never a

@@ -15,9 +15,9 @@ description: >
 Before compiling, read the following from the working tree:
 
 - `references/canonical_sources.yaml` — confirm canonical source path
-- `canon/patch_register_active.yaml` — pending approved patches
-- `canon/editorial_ledger.jsonl` (pre-cutover flat-ID items) plus every existing
-  `canon/editorial_ledger_<lane>.jsonl` relevant to the target system (see
+- `registers/patch_register_active.yaml` — pending approved patches
+- `registers/editorial_ledger.jsonl` (pre-cutover flat-ID items) plus every existing
+  `registers/editorial_ledger_<lane>.jsonl` relevant to the target system (see
   `valoria-editorial-register`'s ID Law section for the lane roster) — **not**
   `canon/editorial_ledger.yaml`, which does not exist
 - the canonical design doc named in `canonical_sources.yaml`, and its `## Status:` line
@@ -34,7 +34,7 @@ report that and stop. Otherwise proceed.
 
 ### 1. Load Current State
 - Read `canonical_sources.yaml` for structure and current canonical docs
-- Read `canon/patch_register_active.yaml` for pending approved patches
+- Read `registers/patch_register_active.yaml` for pending approved patches
 - Identify: which patches are approved, which are pending, which are editorial
 
 ### 2. Apply Patches

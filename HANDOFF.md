@@ -85,7 +85,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   threadwork as waves 5–7, per Jordan flagging the gap; field investigation excluded as still
   stub-only); Wave 1 CI burn-in stays full report-only; `mc_v18` never gates a PR; the four §9
   quick wins filed separately as **ED-IN-0045** (open, execution pending — see
-  `handoffs/HANDOFF_IN.md`). Full resolution text: `canon/editorial_ledger_in.jsonl`.
+  `handoffs/HANDOFF_IN.md`). Full resolution text: `registers/editorial_ledger_in.jsonl`.
 - **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
   detail in `handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
   `handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build

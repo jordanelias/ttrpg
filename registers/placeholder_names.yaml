@@ -28,7 +28,7 @@ placeholders:
     prior_name: vaynards_hall
     rename_reason: |
       Original name 'vaynards_hall' carries identity-coded flavor (Reinhardt-anchored
-      mead-hall framing per canon/supersession_register.yaml CR-STRIKE-2026-04-19;
+      mead-hall framing per registers/supersession_register.yaml CR-STRIKE-2026-04-19;
       Vaynard is Reinhardt von Lohengramm-coded military conqueror per CR-STRIKE).
       Mechanism W-1 + Mil-1 -> +1 L flagged broken by Jordan 2026-05-17
       (double-cost asymmetry vs other faction Mandate actions). Both name AND
@@ -39,7 +39,7 @@ placeholders:
     blocks_canonization: yes
     paths_using_placeholder:
       - sim/provincial/varfell_mandate_action.py
-      - canon/mechanics_index.yaml::mechanics.varfell_mandate_action
+      - registers/mechanics_index.yaml::mechanics.varfell_mandate_action
     contamination_audit_scope: |
       Audit Vaynard's identity claims across faction_canon, designs/audit/...,
       params/factions.md, and prior session inserts. Strike contaminated flavor
@@ -62,7 +62,7 @@ placeholders:
     blocks_canonization: no  # mechanism canonized; only name + identity-claims placeholder
     paths_using_placeholder:
       - sim/provincial/varfell_territorial_acquisition.py
-      - canon/mechanics_index.yaml::mechanics.varfell_territorial_acquisition
+      - registers/mechanics_index.yaml::mechanics.varfell_territorial_acquisition
     contamination_audit_scope: |
       Validate or strike 'Einhir' cultural framing. v12c §4.1 mechanism (Pool I;
       Ob = max(1, 1+PT*weight) for uncontrolled; PT degradation effect) is canon.
@@ -85,7 +85,7 @@ placeholders:
     blocks_canonization: no  # mechanism canonized; only content-finalization placeholder
     paths_using_placeholder:
       - sim/provincial/altonian_reinforcements.py
-      - canon/mechanics_index.yaml::mechanics.altonian_reinforcements
+      - registers/mechanics_index.yaml::mechanics.altonian_reinforcements
     contamination_audit_scope: |
       Audit Hafenmark identity claims (Altonian/Schoenland relationship,
       Wagenburg/Bombards equipment framing per Pass 2e backlog). Strike
@@ -107,7 +107,7 @@ placeholders:
     blocks_canonization: yes  # mechanism not yet canonized
     paths_using_placeholder:
       - sim/provincial/infrastructure_reclamation.py
-      - canon/mechanics_index.yaml::mechanics.infrastructure_reclamation
+      - registers/mechanics_index.yaml::mechanics.infrastructure_reclamation
     contamination_audit_scope: |
       Audit Church identity claims. Author infrastructure_reclamation_v30.md
       canon doc. Reconcile 3-source Mass Seizure drift (conviction_track §2
@@ -128,7 +128,7 @@ placeholders:
     blocks_canonization: yes
     paths_using_placeholder:
       - sim/provincial/home_sanctuary.py
-      - canon/mechanics_index.yaml::mechanics.home_sanctuary_t9
+      - registers/mechanics_index.yaml::mechanics.home_sanctuary_t9
     contamination_audit_scope: |
       Audit Church identity claims. Author home_sanctuary_t9_v30.md canon doc.
 
@@ -148,7 +148,7 @@ placeholders:
     blocks_canonization: yes
     paths_using_placeholder:
       - sim/provincial/hafenmark_equipment.py
-      - canon/mechanics_index.yaml::mechanics.hafenmark_equipment
+      - registers/mechanics_index.yaml::mechanics.hafenmark_equipment
     contamination_audit_scope: |
       Audit Hafenmark identity claims AND tactic_cards module contents
       (per separate tactic_cards audit). Author hafenmark_equipment_v30.md
@@ -170,7 +170,7 @@ placeholders:
     blocks_canonization: yes
     paths_using_placeholder:
       - sim/autoload/npc_ai.py
-      - canon/mechanics_index.yaml::mechanics.npc_ai_service
+      - registers/mechanics_index.yaml::mechanics.npc_ai_service
     contamination_audit_scope: |
       Per-faction audit of priority-stack entries. Strike contaminated AI
       priorities (e.g., Varfell espionage-prioritization). Re-author against
@@ -189,7 +189,7 @@ placeholders:
     blocks_canonization: yes
     paths_using_placeholder:
       - sim/provincial/tactic_cards.py
-      - canon/mechanics_index.yaml::mechanics.tactic_cards
+      - registers/mechanics_index.yaml::mechanics.tactic_cards
     contamination_audit_scope: |
       Per-faction audit of card pool contents. Strike contaminated cards.
       Re-author against clean trait base. Dependency for hafenmark_equipment.
@@ -200,7 +200,7 @@ placeholders:
 # Behavior:
 #   - For each placeholder with deadline_status == 'expired':
 #       If placeholder_name appears in any committed file path OR content,
-#       AND the commit does not include an entry in canon/placeholder_names.yaml
+#       AND the commit does not include an entry in registers/placeholder_names.yaml
 #       moving it from 'expired' to 'resolved' (with canonical_name_assigned field):
 #         HALT with RuntimeError listing the placeholder.
 #   - Placeholders with deadline_status == 'pending' do not trigger halt.

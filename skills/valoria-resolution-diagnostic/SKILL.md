@@ -269,7 +269,7 @@ E: pass/fail — <defect, severity, lesson/property>
 REMEDIATION (worst-first):
   <severity> <finding> → Lesson <n> / P-<x>: <concrete fix>
 ```
-**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to the relevant `canon/editorial_ledger_<lane>.jsonl` (lane chosen by the engine's subsystem), per `references/id_reservations.yaml`'s Collision Guard allocation protocol (see `valoria-editorial-register`'s ID Law section) — commit gate; if blocked, stage inline and flag `[DRIFT]`.
+**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to the relevant `registers/editorial_ledger_<lane>.jsonl` (lane chosen by the engine's subsystem), per `references/id_reservations.yaml`'s Collision Guard allocation protocol (see `valoria-editorial-register`'s ID Law section) — commit gate; if blocked, stage inline and flag `[DRIFT]`.
 
 ---
 

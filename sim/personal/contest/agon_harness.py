@@ -14,7 +14,7 @@ legibility promise (the walkthrough's own 3-question test) has never been empiri
 WORKPLAN CONTEXT (cite per task instruction). HANDOFF_SC.md's Decisions/Next-actions log this
 explicitly: "Sequencing adopted: P0 spec-reconciliation -> P1 consequence spine (∥ P3-lite
 human-plays-Agôn slice) -> Stage 4 -> calibration" and, after ED-SC-0006/0007 executed the P1
-consequence-spine work (kernel routing + party-derivation bridge — canon/editorial_ledger.jsonl
+consequence-spine work (kernel routing + party-derivation bridge — registers/editorial_ledger.jsonl
 ED-SC-0006), "NEXT: P3-lite — a minimal interactive Agôn harness over the existing kernel to run the
 dramatic-legibility test with a human and measure the ~13-consult load (audit D4/N-7) before Stage 4
 multiplies interaction shapes." THIS FILE is that harness. It is additive-only: no kernel file

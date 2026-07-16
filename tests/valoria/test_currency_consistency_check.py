@@ -38,9 +38,9 @@ def test_retired_markers_suppress():
 
 
 def test_ledger_max_and_ceiling_logic(tmp_path, monkeypatch):
-    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'registers').mkdir()
     (tmp_path / 'references').mkdir()
-    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+    (tmp_path / 'registers' / 'editorial_ledger.jsonl').write_text(
         '{"id": "ED-100", "status": "resolved"}\n{"id": "ED-1090", "status": "open"}\n',
         encoding='utf-8')
     (tmp_path / 'references' / 'id_reservations.yaml').write_text(
@@ -70,9 +70,9 @@ def test_ledger_lane_max_ignores_flat_ids():
 
 
 def test_lane_id_ceiling_drift_flagged(tmp_path, monkeypatch):
-    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'registers').mkdir()
     (tmp_path / 'references').mkdir()
-    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+    (tmp_path / 'registers' / 'editorial_ledger.jsonl').write_text(
         '{"id": "ED-MB-0005", "status": "ratified"}\n', encoding='utf-8')
     (tmp_path / 'references' / 'id_reservations.yaml').write_text(
         'lane_ids:\n  lanes:\n    MB: { name: "Mass battle", next_free: 3 }\n',
@@ -85,9 +85,9 @@ def test_lane_id_ceiling_drift_flagged(tmp_path, monkeypatch):
 
 
 def test_lane_id_ceiling_missing_lane_flagged(tmp_path, monkeypatch):
-    (tmp_path / 'canon').mkdir()
+    (tmp_path / 'registers').mkdir()
     (tmp_path / 'references').mkdir()
-    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+    (tmp_path / 'registers' / 'editorial_ledger.jsonl').write_text(
         '{"id": "ED-SE-0001", "status": "ratified"}\n', encoding='utf-8')
     (tmp_path / 'references' / 'id_reservations.yaml').write_text(
         'lane_ids:\n  lanes:\n    MB: { name: "Mass battle", next_free: 3 }\n',
@@ -99,8 +99,8 @@ def test_lane_id_ceiling_missing_lane_flagged(tmp_path, monkeypatch):
 
 
 def test_lane_id_ceiling_clean_when_no_lane_ids_yet(tmp_path, monkeypatch):
-    (tmp_path / 'canon').mkdir()
-    (tmp_path / 'canon' / 'editorial_ledger.jsonl').write_text(
+    (tmp_path / 'registers').mkdir()
+    (tmp_path / 'registers' / 'editorial_ledger.jsonl').write_text(
         '{"id": "ED-100", "status": "resolved"}\n', encoding='utf-8')
     monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
     drift = []
@@ -109,8 +109,8 @@ def test_lane_id_ceiling_clean_when_no_lane_ids_yet(tmp_path, monkeypatch):
 
 
 def test_patch_register_header_check(tmp_path, monkeypatch):
-    (tmp_path / 'canon').mkdir()
-    (tmp_path / 'canon' / 'patch_register_active.yaml').write_text(
+    (tmp_path / 'registers').mkdir()
+    (tmp_path / 'registers' / 'patch_register_active.yaml').write_text(
         '# Next PP number: 724\npatches:\n  - id: PP-726\n', encoding='utf-8')
     monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
     drift = []

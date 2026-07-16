@@ -9,7 +9,7 @@ The audit produces five structural graphs over the design corpus and surfaces fi
 | **G_cite** | Body mentions ≥2 + explicit `Cross-references:` + `see X.md` + PP `affects:` | Actual citation structure of the corpus |
 | **G_throughline** | T-NN table in `references/throughlines_meta_infill.md`: tokens sharing a throughline | Tokens that participate in the same throughline |
 | **G_mu** | Throughlines collapsed by primary/secondary Μ field; tokens within shared Μ collection | Tokens that share an Μ mode |
-| **G_pp** | `canon/patch_register_active.yaml` `affects:` lists; tokens whose primary docs co-appear | Tokens touched by the same patch |
+| **G_pp** | `registers/patch_register_active.yaml` `affects:` lists; tokens whose primary docs co-appear | Tokens touched by the same patch |
 | **G_tfidf** | sklearn TfidfVectorizer over paragraphs (supporting only, not primary) | Lexical co-occurrence baseline |
 
 **G_tfidf is supporting only.** v3's central pivot from v2 was demoting TF-IDF from primary to supporting role. Use it for cross-checking Mode A (multi-graph hubs) and Mode E (sparse-context), never for primary findings.
@@ -56,7 +56,7 @@ Primary topology built from design corpus. Discourse corpus is overlay-only for 
 
 Auto-finds that pass review become tokens; ones that don't get added to stopword list for next run. Track which tokens are seed vs auto in `tokens.json`.
 
-**Legacy terms** (parsed from `canon/supersession_register.yaml`) are added as auto with `status: gap` flag. They're not real tokens for analysis, just present so vocabulary debt mode (G) finds them.
+**Legacy terms** (parsed from `registers/supersession_register.yaml`) are added as auto with `status: gap` flag. They're not real tokens for analysis, just present so vocabulary debt mode (G) finds them.
 
 ### §3.3 Token deduplication
 

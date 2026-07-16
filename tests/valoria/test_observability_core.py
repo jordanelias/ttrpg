@@ -40,7 +40,7 @@ def test_is_unratified_status():
 
 
 def test_ledger_reader_normalizes_and_tolerates_list_desc(tmp_path):
-    d = tmp_path / "canon"
+    d = tmp_path / "registers"
     d.mkdir()
     (d / "editorial_ledger_go.jsonl").write_text(
         '{"id":"ED-GO-0001","status":"open","needs_jordan":true,"description":["a","b"]}\n'
@@ -82,7 +82,7 @@ def test_text_needs_jordan_negative():
 def test_ledger_reader_rescues_fieldless_pending_jordan(tmp_path):
     # a pre-cutover flat entry with NO needs_jordan field but pending-Jordan text
     # must read as needs_jordan (the field-absent undercount)
-    d = tmp_path / "canon"
+    d = tmp_path / "registers"
     d.mkdir()
     (d / "editorial_ledger.jsonl").write_text(
         '{"id":"ED-9001","status":"open","description":"[GATE - Jordan decision] pending Jordan."}\n'

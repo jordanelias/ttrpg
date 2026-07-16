@@ -193,7 +193,7 @@ terms:
 # ─────────────────────────────────────────────────────────────────────
 # Reference cross-links
 # ─────────────────────────────────────────────────────────────────────
-# canon/supersession_register.yaml — authoritative for VTM, CR strikes
+# registers/supersession_register.yaml — authoritative for VTM, CR strikes
 # references/alias_registry.yaml legacy_renames — authoritative for renames
 # references/alias_registry.yaml collision_table — abbreviation collisions
 # designs/audit/2026-04-30-terminology-vector-audit/ — Mode G corpus residuals

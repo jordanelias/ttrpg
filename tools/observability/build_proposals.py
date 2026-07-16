@@ -16,7 +16,7 @@ Detect-not-author: this surfaces items and LINKS OUT to the human-authored ranke
 queue and workplan §5 — it never invents its own ranking or ratifies anything.
 
 Sources (all structured, via tools/observability/obs_core.py — every rule lives once):
-  • canon/editorial_ledger*.jsonl  open items, split by needs_jordan
+  • registers/editorial_ledger*.jsonl  open items, split by needs_jordan
   • references/audit_registry.jsonl  PARTIAL / OPEN verdicts
   • designs/proposals/*.md          detected BY LOCATION (surfaces the 8 without a Status line)
   • designs/**/*.md                 first `## Status:` = PROPOSED / PROVISIONAL / DRAFT
@@ -114,7 +114,7 @@ def collect() -> list[dict]:
     # 3. editorial ledger open items, split by needs_jordan
     for e in core.open_ledger_entries():
         kind = "ledger_needs_jordan" if e["needs_jordan"] else "ledger_actionable"
-        add(kind, "canon/editorial_ledger", e["id"],
+        add(kind, "registers/editorial_ledger", e["id"],
             title=e["description"] or e["id"], lane=e["lane"],
             needs_jordan=e["needs_jordan"], status="open")
 

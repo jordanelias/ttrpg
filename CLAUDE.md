@@ -25,7 +25,7 @@ are more "current state" files than there should be; trust them in this strict p
    reduce concurrent-session merge-collision surface on one shared file, the same motivation
    behind the ID namespace itself. The SessionStart banner (`tools/session_status.py`) reads root
    `HANDOFF.md`'s "Next actions" section only — check your lane's file too.
-3. **`references/canonical_sources.yaml`** + **`canon/mechanics_index.yaml`** — machine-readable
+3. **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable
    indices. ⚠️ The `canonical_sha__*` pins in `canonical_sources.yaml` are **not verified against the
    working tree** (the only tooling re-syncs them *from* GitHub, which contradicts the working-tree
    rule). Treat the pins as advisory, not a trustworthy integrity signal.
@@ -75,7 +75,8 @@ are more "current state" files than there should be; trust them in this strict p
 
 | Directory | Contents |
 |---|---|
-| `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl` for pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries, §3), patch register, mechanics index, canonical timeline, supersession register |
+| `canon/` | Philosophical foundations (P-01..P-14), canonical timeline, canon constraints, self-rendering/leap-mechanism amendments. **The process registers moved OUT to `registers/` (2026-07-16, ED-IN-0071 P0)** — canon/ now holds only world/design truth. |
+| `registers/` | Process ledgers/registers, moved out of `canon/` (ED-IN-0071 P0, 2026-07-16): editorial ledger (`editorial_ledger.jsonl` pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN`, §3), patch register, supersession register, mechanics index, placeholder names. Old `canon/…` citations resolve via `references/restructure_ledger.md`'s alias map. |
 | `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
@@ -98,8 +99,8 @@ are more "current state" files than there should be; trust them in this strict p
   `## Status:` line can.** Concrete hazard: `_v30` is nominally "current generation", but the current
   **combat** head is `designs/scene/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
   *PARTIALLY SUPERSEDED*. Always resolve combat via `CURRENT.md`, never by the `_v30` suffix.
-- **ID systems.** `PP-NNN` patches (`canon/patch_register_active.yaml`), `ED-NNN` editorial items
-  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
+- **ID systems.** `PP-NNN` patches (`registers/patch_register_active.yaml`), `ED-NNN` editorial items
+  (`registers/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
   is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
   **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
   at `ED-1096` (two more flat IDs, ED-1095/1096, landed the same cutover day before the sequence
@@ -115,8 +116,8 @@ are more "current state" files than there should be; trust them in this strict p
   citation-audit path (`tools/validate_ed_citations.py`) and currency gate
   (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
   **The ledger file itself is lane-split too (2026-07-08):** an `ED-<LANE>-NNNN` entry lives in
-  `canon/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
-  `canon/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
+  `registers/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
+  `registers/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
   merge-collision reason. Pre-cutover flat-ID entries stay in the main file (no retrofit). A
   lane file exists only once that lane has allocated an ED (no `_go.jsonl` yet). Both the main
   file and every lane file are "active, authoritative" — read all of them, not just one.
