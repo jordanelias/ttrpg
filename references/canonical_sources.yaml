@@ -68,7 +68,7 @@ sources:
 
   knots_unified:
     design_doc: designs/personal/knots_v30.md
-    canonical_sha__designs__personal__knots_v30_md: "914888b53c6cec60203a87cf35e1b4be73437bf7"
+    canonical_sha__designs__personal__knots_v30_md: "94c4e90c49a0fc5a28eaacf29c2ea00e58453c7b"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
     contradictions_pending:
@@ -215,7 +215,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "7d0a722aa1e786448272e1bea4965d1710b50852"
+    canonical_sha__designs__scene__derived_stats_v30_md: "40a2e46788347b30b12f47bc1333c3d2c566ce59"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
@@ -453,7 +453,7 @@ systems:
     hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
     editorial: designs/scene/fieldwork_editorial.md
-    canonical_sha__designs__scene__fieldwork_editorial_md: "4a2003cec32e0e0f4d878cfa1c6ea1e4ac0b9867"
+    canonical_sha__designs__scene__fieldwork_editorial_md: "ad833700c736f928c380a6cfdf0d7acab9030ad3"
     exploration: designs/scene/fieldwork_exploration.md
     canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
     exposure: designs/scene/fieldwork_exposure.md

@@ -53,7 +53,7 @@ Major redesign applied to fieldwork_socializing.md:
 - Ob rule: stepped table → **max(1, base Ob − Disposition)** direct subtraction
 - Starting Disposition: faction table → **lifepath ±0.5 increments, floor**
 - Knots: TS-gated Thread construct → **being-with (Mitsein), any character, Bonds-governed**
-- Knot pool: (Bonds×2)+3. Tiers: Close 5 / Medium 2 / Loose 1. Max: floor(Bonds/2)+1
+- Knot pool: (Spirit×2)+History(Relevant)+3 [ED-FI-0005; Bonds = eligibility-gate, not additive]. Tiers: Close 5 / Medium 2 / Loose 1. Max: floor(Bonds/2)+1
 - Formation: max Disposition + Connect roll (Ob = tier). Breaking: rupture (Disposition →−4) vs loss (Coherence −1)
 - Information gates updated for new Disposition range
 - Decay threshold: above +3 → **above +2**
