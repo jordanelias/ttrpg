@@ -13,17 +13,17 @@ description: >
 
 # Valoria Workplan Navigator
 
-Reports the tracked position against `designs/workplans/valoria_master_workplan_v6.md`
+Reports the tracked position against `workplans/valoria_master_workplan_v6.md`
 (milestones M1/M2/M3), keeps the progress board honest, and always presents options.
 Surfaces (established by ED-IN-0010):
 
-- **Board** (the one rollup-status home): `designs/workplans/workplan_v6_progress.yaml`
+- **Board** (the one rollup-status home): `workplans/workplan_v6_progress.yaml`
 - **Renderer** (one rule, one home): `python3 tools/workplan_status.py [--full|--check]`
 - Status detail stays in `handoffs/HANDOFF_<LANE>.md`; decisions in the workplan §5
   register + the editorial ledger (`registers/editorial_ledger.jsonl` for pre-cutover flat
   IDs, plus every live `registers/editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries
   — CLAUDE.md §3). The board only points at them.
-- **Dashboard** (a published rendering, not an independent data source): `docs/dashboard/`
+- **Dashboard** (a published rendering, not an independent data source): `dashboard/`
   (built by `tools/dashboard_data.py` from this board + `references/audit_registry.jsonl`)
   surfaces the same workplan progress plus a "needs your decision" inbox and
   audit/simulation verdicts. Useful as a mobile-friendly pointer for Jordan, but this
@@ -34,10 +34,10 @@ Surfaces (established by ED-IN-0010):
 
 Read from the working tree — never from memory:
 
-- `designs/workplans/workplan_v6_progress.yaml` — the board. **If missing or unparseable,
+- `workplans/workplan_v6_progress.yaml` — the board. **If missing or unparseable,
   STOP and offer to regenerate it** from workplan v6 §1/§3/§4 + the lane handoffs (that
   regeneration is Workflow C run over every row).
-- `designs/workplans/valoria_master_workplan_v6.md` — §1 (milestones/junctures), §5
+- `workplans/valoria_master_workplan_v6.md` — §1 (milestones/junctures), §5
   (tiered decision register; T0 list). If a v7+ exists per `CURRENT.md`'s workplan row,
   use it and flag that this skill + board need re-keying to the new version.
 - Root `HANDOFF.md` "Next actions" (cross-lane in-flight work the board may not carry yet).

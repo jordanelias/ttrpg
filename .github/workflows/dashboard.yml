@@ -1,7 +1,7 @@
 name: Valoria Dashboard
 
-# Builds docs/dashboard/data.json (tools/dashboard_data.py) and deploys
-# docs/dashboard/ to GitHub Pages. One-time manual step required before the
+# Builds dashboard/data.json (tools/dashboard_data.py) and deploys
+# dashboard/ to GitHub Pages. One-time manual step required before the
 # first successful deploy: repo Settings -> Pages -> Source: "GitHub Actions"
 # (the default GITHUB_TOKEN cannot flip that setting itself).
 
@@ -9,14 +9,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'designs/workplans/**'
+      - 'workplans/**'
       - 'proposals/**'       # proposals card recomputes inline (build_proposals section)
       - 'registers/editorial_ledger*.jsonl'
       - 'references/audit_registry.jsonl'
       - 'handoffs/**'
       - 'HANDOFF.md'
       - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
-      - 'docs/dashboard/**'
+      - 'dashboard/**'
       - 'tools/dashboard_data.py'
       - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
       - '.github/workflows/dashboard.yml'
@@ -63,10 +63,10 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          # Scoped to docs/dashboard only — docs/ also holds unrelated internal
+          # Scoped to dashboard only — docs/ also holds unrelated internal
           # docs (docs/freshness_gate_spec.md, docs/governance_deferred.yaml)
           # that are not part of the published site.
-          path: docs/dashboard
+          path: dashboard
 
   deploy:
     needs: build

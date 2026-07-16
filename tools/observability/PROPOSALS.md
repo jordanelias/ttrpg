@@ -7,7 +7,7 @@
 
 **248 open work items** · **97 need your decision**.
 
-Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`designs/workplans/valoria_master_workplan_v6.md` §5](designs/workplans/valoria_master_workplan_v6.md)
+Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
 By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 120, Editorial ledger — needs your decision — 84, Proposal docs (proposals/) — 10, Provisional / draft design docs — 17
 

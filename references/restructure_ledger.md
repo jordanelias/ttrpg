@@ -545,3 +545,18 @@
 | `designs/proposals/repo-reorganization-v1.md` | `proposals/repo-reorganization-v1.md` |
 | `designs/proposals/stub_infill_plan.md` | `proposals/stub_infill_plan.md` |
 | `designs/proposals/weapon_physics_and_concentration_model.md` | `proposals/weapon_physics_and_concentration_model.md` |
+
+## 2026-07-16 — primary promotions batch (research/dashboard/workplans, ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `references/historical/mass_battle_gauge_grounding.md` | `research/historical/mass_battle_gauge_grounding.md` |
+| `references/historical/precedents_analysis.md` | `research/historical/precedents_analysis.md` |
+| `references/historical/precedents_warfare.md` | `research/historical/precedents_warfare.md` |
+| `docs/dashboard/data.json` | `dashboard/data.json` |
+| `docs/dashboard/icon.svg` | `dashboard/icon.svg` |
+| `docs/dashboard/index.html` | `dashboard/index.html` |
+| `docs/dashboard/manifest.json` | `dashboard/manifest.json` |
+| `designs/workplans/README.md` | `workplans/README.md` |
+| `designs/workplans/valoria_master_workplan_v6.md` | `workplans/valoria_master_workplan_v6.md` |
+| `designs/workplans/workplan_v6_progress.yaml` | `workplans/workplan_v6_progress.yaml` |

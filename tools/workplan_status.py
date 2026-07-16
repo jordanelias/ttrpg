@@ -3,7 +3,7 @@
 workplan_status.py — print the workplan v6 position from the progress board.
 
 One rule, one home (CLAUDE.md §8): this is the ONLY renderer of
-designs/workplans/workplan_v6_progress.yaml. Consumers: the SessionStart banner
+workplans/workplan_v6_progress.yaml. Consumers: the SessionStart banner
 (tools/session_status.py, one-line mode) and the valoria-workplan-navigator skill
 (--full mode: the ASCII progress diagram + per-row detail).
 
@@ -20,7 +20,7 @@ import os
 import subprocess
 import sys
 
-BOARD = os.path.join('designs', 'workplans', 'workplan_v6_progress.yaml')
+BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 
 GLYPH = {
     'done': '■',          # ■

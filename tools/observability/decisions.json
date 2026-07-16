@@ -1,25 +1,25 @@
 {
   "meta": {
-    "files_scanned": 1408,
-    "total_open": 986,
+    "files_scanned": 1402,
+    "total_open": 982,
     "by_category": {
-      "ratification": 49,
+      "ratification": 46,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
       "gap": 325,
-      "assumption": 249,
+      "assumption": 248,
       "stub": 34,
       "todo": 14
     },
     "by_priority": {
-      "1": 328,
+      "1": 325,
       "2": 36,
-      "3": 622
+      "3": 621
     },
     "by_lane": {
-      "unassigned": 701,
-      "IN": 12,
+      "unassigned": 698,
+      "IN": 11,
       "FA": 67,
       "SC": 7,
       "PC": 112,
@@ -31,14 +31,14 @@
     },
     "by_lane_priority": {
       "unassigned": {
-        "1": 285,
+        "1": 282,
         "2": 32,
         "3": 384
       },
       "IN": {
         "1": 2,
         "2": 1,
-        "3": 9
+        "3": 8
       },
       "FA": {
         "1": 3,
@@ -1425,42 +1425,6 @@
       "label": "Awaiting ratification",
       "locations": [
         "references/module_contracts.yaml:14"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "`[mechanical-tier, Jordan-vetoable: which consumers go per-subunit, and that reserve relief is positional (the engine has no reserve-hold AI \u2014 a held reserve is shown via target_delay_ticks), are design calls \u2014 built bottom-up from the engine, anchored top-down on Sabin/Zhmodikov/du Picq/Clausewitz, logged for veto.]`",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "references/historical/mass_battle_gauge_grounding.md:139"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "`[mechanical-tier, Jordan-vetoable: the snake_case key set and the decision to map only Power/Discipline/Morale (deferring Armour\u2192dr and Endur\u2192stamina) are design calls \u2014 built bottom-up from the canonical \u00a7B.2 table, anchored top-down on Sabin's validated troop-type model, logged for veto. of_type maps stats only; \u2026",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "references/historical/mass_battle_gauge_grounding.md:159"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "`[mechanical-tier, Jordan-vetoable: forks (a) derived unit-rout and (b) no intra-unit cascade are canon-structure-adjacent design calls \u2014 built bottom-up from the engine and \u00a7A.4/\u00a7A.12, anchored top-down on \u00a7A.12's own Cannae/Hastings sectional-collapse rationale and du Picq's local-panic principle, byte-exact for t\u2026",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "references/historical/mass_battle_gauge_grounding.md:182"
       ],
       "systems": [],
       "count": 1,
@@ -7116,18 +7080,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "other ~10 doc:null modules + 13 [ASSUMPTION] resolvers, prioritized by M1's junctures).",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/workplans/valoria_master_workplan_v6.md:120"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "IN"
     },
     {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",

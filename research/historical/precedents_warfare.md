@@ -2,7 +2,7 @@
 ## Date: 2026-04-17
 ## Status: ANALYSIS — feeds design refinements
 ## Scope: Historical grounding for mass battle, army composition, feudal mustering, siege warfare, territory acquisition, governance legitimacy
-## Companion to: references/historical_precedents_analysis.md (Church/RM/invasion/cultural revival)
+## Companion to: research/historical_precedents_analysis.md (Church/RM/invasion/cultural revival)
 
 ---
 

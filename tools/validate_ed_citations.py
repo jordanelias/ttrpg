@@ -88,7 +88,7 @@ SKIP_PREFIXES = ('archives/', 'deprecated/', 'references/atoms_pending/')
 # Working documents (audits, workplans) PROPOSE and TRACK EDs — they do not
 # assert canon, so they are out of the validator's mandate (which is canonical
 # surfaces only). Excluded from scanning entirely. See _is_working_doc.
-WORKING_PREFIXES = ('designs/audit/', 'designs/workplans/')
+WORKING_PREFIXES = ('designs/audit/', 'workplans/')
 # Provenance registers RECORD where an ED applies; a citation there is a record,
 # never a canonical-basis claim. Demoted to OPEN_INFO. See _is_provenance.
 PROVENANCE_PATHS = {
@@ -372,7 +372,7 @@ def main():
         if c is not None:
             docs[p] = c
     print('Mandate: canonical surfaces only — audits/workplans excluded '
-          '(designs/audit/, designs/workplans/, *workplan*); provenance registers '
+          '(designs/audit/, workplans/, *workplan*); provenance registers '
           'reported as INFO, not basis.')
     print(f'Scanning {len(docs)} doc(s) for ED citations...\n')
 

@@ -515,7 +515,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 
 ## 2026-06-15 — Mass-battle gauge recalibration (ED-1014) [resolves the ED-1013 gauge-staleness flag]
 - tests/sim/gauge_mb.py recalibrated bottom-up from historical precedent + peer-reviewed academic military
-  analysis (grounding doc: references/historical/mass_battle_gauge_grounding.md). Bands set by HISTORY, the
+  analysis (grounding doc: research/historical/mass_battle_gauge_grounding.md). Bands set by HISTORY, the
   engine validated against them -- a fail FLAGS engine divergence, it does not lower the band.
 - METRIC: raw-A% -> DECISIVE SPLIT decA=A/(A+B) (raw-A% failed symmetric mirrors purely on draw rate); the
   draw rate is validated separately (draw_exp). Near-parity high-draw is analytically expected (Hillestad 1995
@@ -579,7 +579,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   envelopment/shaken) x 20 seeds in the resolving multi-turn mode -- identical state-vector digest. Rotation demonstrated:
   an engaged front subunit drains to 32/100 while a held reserve stays 100/100 (divergence impossible under shared
   Unit.stamina); the fresh reserve yields +1 combat-pool die over the exhausted front. make_mixed_unit extended for
-  per-subunit stamina (make_unit unchanged). Grounding (references/historical/mass_battle_gauge_grounding.md §6): Sabin 2000
+  per-subunit stamina (make_unit unchanged). Grounding (research/historical/mass_battle_gauge_grounding.md §6): Sabin 2000
   JRS line relief / supporting troops; Zhmodikov 2000 Historia; du Picq Battle Studies; Clausewitz On War III.12. V1 SCOPE:
   per-subunit rout + eroding morale/discipline stay UNIT-level (deferred, Jordan-vetoable). Implemented by Claude, Jordan-vetoable.
 - ED-1018 (troop-taxonomy stat home, Jordan directive 2026-06-17): wired the troop taxonomy onto the per-subunit stats
@@ -596,7 +596,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   deliberately left to inherit and flagged, not guessed; unit_type (melee vs ranged) stays caller-controlled (a role, not a
   stat). Differentiation demonstrated: of_type reproduces every B.2 row exactly; the stats separate combat on both channels --
   pool via discipline (Levy 6 dice -> Cavalry/Knights Templar 8) and damage via the (1+Power) multiplier (Levy x2 -> Cavalry
-  x6); caller overrides beat the preset; unknown types inherit the Unit. Grounding (references/historical/
+  x6); caller overrides beat the preset; unknown types inherit the Unit. Grounding (research/historical/
   mass_battle_gauge_grounding.md §7): the canonical B.2 table itself (bottom-up); Sabin Lost Battles 2007 validated
   ancient-battle model rating units by type and quality, plus the settled heavy/light/missile distinction (top-down).
   Implemented by Claude, Jordan-vetoable.
@@ -621,7 +621,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   rear's morale to 0 over 2 phases (cohesion 0.18 -> -2/phase) while the front held at 5.0 (cohesion 1.0); rout_resolution
   routed the rear only (rear.routed=True, front.routed=False, UNIT.routed=False -- line held), rear pool -> 0 while front
   kept 7 dice; breaking the front too routed the unit (derive_rout). Single-subunit routs exactly at morale 0 as before.
-  Grounding (references/historical/mass_battle_gauge_grounding.md S8): A.12 Cannae/Hastings sectional collapse; du Picq
+  Grounding (research/historical/mass_battle_gauge_grounding.md S8): A.12 Cannae/Hastings sectional collapse; du Picq
   Battle Studies (panic is local, spreads from a break). Implemented by Claude, Jordan-vetoable.
 
 - **ED-1020** (bugfix -- per-subunit broken-state scope; ED-1019 follow-up). Per-subunit stress testing

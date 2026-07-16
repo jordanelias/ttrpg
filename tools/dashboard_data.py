@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-dashboard_data.py — assembles docs/dashboard/data.json for the Valoria GitHub
+dashboard_data.py — assembles dashboard/data.json for the Valoria GitHub
 Pages dashboard (the mobile-friendly "what's been happening" view: workplan
 progress, recent activity, audit/simulation verdicts, decisions needing Jordan,
 CI health, open PR/issue counts).
@@ -38,7 +38,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
-DEFAULT_OUT = os.path.join('docs', 'dashboard', 'data.json')
+DEFAULT_OUT = os.path.join('dashboard', 'data.json')
 HANDOFF_ROOT = 'HANDOFF.md'
 HANDOFFS_DIR = 'handoffs'
 GITHUB_REPO_DEFAULT = 'jordanelias/ttrpg'

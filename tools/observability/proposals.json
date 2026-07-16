@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_proposals.py",
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
-  "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
+  "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
     "total": 248,
     "needs_jordan": 97,

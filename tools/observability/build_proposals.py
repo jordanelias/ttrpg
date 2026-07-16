@@ -38,7 +38,7 @@ import obs_core as core  # noqa: E402
 
 # the current human-authored ranked queue + tiered register (LINKED, not parsed)
 RANKED_QUEUE = "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md"
-WORKPLAN_TIERS = "designs/workplans/valoria_master_workplan_v6.md"  # §5 T0/T1/T2
+WORKPLAN_TIERS = "workplans/valoria_master_workplan_v6.md"  # §5 T0/T1/T2
 
 # audit-registry subsystem -> ED lane
 AUDIT_SUBSYS_LANE = {

@@ -488,9 +488,9 @@ here.
 - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
   retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
   and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
-- 2026-07-01 — **Workplan sprawl cleanup.** `designs/workplans/` was dead (both files pre-dated v3/v4)
+- 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/v4)
   while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
-  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `designs/workplans/` (now the
+  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `workplans/` (now the
   one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
   `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
   commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
