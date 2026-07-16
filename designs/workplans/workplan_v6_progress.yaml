@@ -18,8 +18,8 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "b5db2c8"
-  date: "2026-07-08"
+  sha: "470aa09"
+  date: "2026-07-16"
 
 milestones:
   M1:
@@ -29,8 +29,8 @@ milestones:
         label: "Strategic decision"
         state: not_started
         blocked_on: null
-        next: "FA decision-surface work (J-5) + author the domain_actions module home (ED-FA-0002, still open)"
-        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc"]
+        next: "author the domain_actions home (ED-FA-0002) + ratification-flip the FA §1.0c/§1.0d/§2.5 riders RULED 2026-07-13 (ED-IN-0046/0047), landing E11 (symmetric suspicion-reduction) in the same pass; fork-10 no longer blocks faction-scope work"
+        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring"]
       - n: 2
         label: "Domain action"
         state: not_started
@@ -140,14 +140,13 @@ decisions_t0_open:
   - "ED-1051 — engine_clock ratification"
 
 last_progress:
-  - "2026-07-08: Pessimist subtractive-action audit (ED-IN-0027) RATIFIED; FI/WR/FA/SE lane verdicts executed same day; PC deferred (stale target, ED-PC-0007); SC (ED-SC-0012) still open/unexecuted"
   - "2026-07-08: SC consequence spine LIVE (ED-SC-0002/0006/0007 — kernel live in campaign + parliamentary vote/domain-echo composition); MB partition-invariance fix (ED-MB-0004) + DG-2 yield mechanic (ED-MB-0005) + Command decoupled from pool (ED-MB-0006); attribute/value coherence audit (ED-IN-0029) filed, held back for Jordan ratification"
-  - "2026-07-08: JD-1 RULED (\"accept plan bands\") + U1 DONE (ED-PC-0010, PR #99) — T0 wall drops to ED-1051 alone; ED-PC-0006 non-combat wound-Ob calibration also resolved same PR"
-  - "2026-07-08: SC's ED-SC-0012 executed (PR #104) — the last of ED-IN-0027's six lane-dispositions to land (SC/FA/SE/WR/FI executed; PC deferred, not executed); 4 Jordan-facing decision packets (DP-1..DP-4) authored for narrower forks the audit correctly declined to rule on itself"
-  - "2026-07-08: ED-IN-0016 closed + ED-IN-0030 filed (PR #108) — faction_politics_v30 module-contract flip, dead-filename repoint across 8 docs (commit message/handoff say 9, an inherited miscount vs. the actual diff), phantom 'debt scene' mechanic flagged"
-  - "2026-07-08: PC R3 U2 (graded mode-affordance + Phase-C percussion enactment) DONE (ED-PC-0011, PR #109) — JD-4/JD-9 determined + live-wired, validated by a 13-agent adversarial Workflow; ED-PC-0012 (point floor-lock, sabre-class) filed as an explicit non-blocking residual"
-  - "2026-07-08: Master workplan v6 reconciled against all commits since its last touch (c55bdde) — DG-1 struck (closed, ED-MB-0003), DG-2/RC-5/ED-1090 reframed with precise scope, JD-2..8 row split (JD-4/JD-9 removed), new T1 rows for ED-IN-0029 (attribute/value docket) and DP-1..DP-4 (pessimist-audit residual packets); PC/MB/SC §4 lane paragraphs rewritten to current state (PR #111)"
-  - "2026-07-08: MB full 11-surface gauge architecture audit (ED-MB-0007, PR #114) — two dominant defects (E1 cell-count plumbing, D1 super-linear resolution architecture, measured p≈3.2) causally proven by reversal ablation; 11 new decision points DG-6..16 opened, none ruled; diagnostic only, no gauge row fixed"
-  - "2026-07-08: FA/SE historical-precedent docket built (PR #105) — 9 FA + 10 SE mechanical proposals (ED-FA-0008..0017 / ED-SE-0007..0017) mostly authored as PROPOSED text same-day; Parliamentary Censure wired into the campaign loop, surfacing ED-SC-0015 (Mandate-stacking, needs Jordan)"
-  - "2026-07-08: Attribute/value coherence audit (ED-IN-0029, PR #112) PARTIALLY RATIFIED — OPT-AV-1 (attribute roster) explicitly SKIPPED per Jordan, everything else adopted; Wave-Q tooling (PR #115) built the A17 quantity-vocabulary CI check same day (report-only, 36/71 backlog measured)"
-  - "2026-07-08: Open-items Jordan decision docket (PR #117) — consolidated recommendations authored for all 32-33 open needs_jordan ledger items across SC/FA/SE/PC/IN/NPC clusters (ED-SC-0003..0005/0015, ED-FA-0001/0010/0013c/0014-0016, ED-SE-0002/0013-0015/0017, ED-PC-0008, ED-1051/1043, ED-IN-0029/0030/885, ED-634 et al.); a proposal surface only — ratifies nothing on merge, awaiting Jordan's picks"
+  - "2026-07-08: JD-1 RULED (\"accept plan bands\") + U1 DONE (ED-PC-0010, PR #99) — T0 wall drops to ED-1051 alone; PC R3 U2 DONE (ED-PC-0011, PR #109, 13-agent adversarial validation)"
+  - "2026-07-08: MB full 11-surface gauge architecture audit (ED-MB-0007, PR #114) — D1 super-linear resolution architecture (p≈3.2) proven by ablation; 11 new decision points DG-6..16 opened, none ruled; diagnostic only, no gauge row fixed"
+  - "2026-07-08: Open-items Jordan decision docket (PR #117) — consolidated recommendations for ~32 open needs_jordan items; a proposal surface only, ratifies nothing on merge (now itself stale vs. the 07-09/07-13 waves below)"
+  - "2026-07-09: Comparative-governance round-2 docket — ED-FA-0018..0035 + ED-SE-0018..0044 filed (mostly PROPOSED/needs_jordan); FA riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder + the SE historical-precedent mechanics authored as PROPOSED text, awaiting rulings"
+  - "2026-07-13: Multi-agent mechanic audit P1 batch — 7 subsystems PARTIAL, module-adjudicator OPEN (22 violations); ~20 new needs_jordan EDs (ED-MB-0008..0010, ED-FI-0006..0008, ED-SC-0016, ED-WR-0008, ED-SE-0045..0048, ED-IN-0046..0050/0062)"
+  - "2026-07-13: Governance D1-D6 RULED (ED-IN-0046/0047) — card-deck/AP-economy/Compact-as-Debt/Mandate-retirement/1.0d-merge accepted; D6 recall-clock cumulative accrual conditioned on E11; B1 faction count = 4 (resolves ED-FA-0001, closes fork-10); B12 new Settlement->Territory->Province->Duchy->Country hierarchy (Jordan overrules old nesting) — L/PS wiring now the highest-priority open item"
+  - "2026-07-14: WS0/WS1 Structural Observatory (ED-IN-0057..0064); ED-IN-0064 specs the L/PS §5 sequence (PR #136) but lps_inert_check stays 100/100 red (nothing has consequence yet); governance vector-audit run"
+  - "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16"
+  - "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0071) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; register now honest (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); the dashboard's actionable count no longer hides ~18 Jordan-gated items"
