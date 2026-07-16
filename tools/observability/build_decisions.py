@@ -214,7 +214,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
 
     # --- GO: godot ---
     ("godot/", "GO"),
-    ("references/engine_params/", "GO"),
+    ("engine/engine_params/", "GO"),
 
     # --- SE: settlements ---
     ("designs/territory/settlement_layer_v30", "SE"),

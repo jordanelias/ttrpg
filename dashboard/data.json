@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T21:52:09+00:00",
-    "commit_sha": "a27a82e"
+    "timestamp_utc": "2026-07-16T22:13:45+00:00",
+    "commit_sha": "cdb917d"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": ""
+    "staleness_warning": "⚠ 2 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "cdb917d932",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P5 fork #1: merge graveyards — archives/ -> deprecated/archives/ (ED-IN-0071) (#159)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "a27a82eda2",
         "date": "2026-07-16",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "Atomize HANDOFF continuity and the editorial ledger by lane (#118)",
         "scope": null
-      },
-      {
-        "sha": "b5db2c810b",
-        "date": "2026-07-08",
-        "author": "jordanelias",
-        "subject": "[editorial] Open-items Jordan decision docket — recommendations for all 32 open needs_jordan items (#117)",
-        "scope": "editorial"
       }
     ]
   },
@@ -711,8 +711,8 @@
         "surface": "Workplan progress board",
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
-        "stale": false,
-        "detail": "current — no workplan-relevant file changed since the last refresh",
+        "stale": true,
+        "detail": "⚠ 2 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,7 +720,7 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "187 in-scope file(s) changed since last refresh",
+        "detail": "191 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -728,13 +728,13 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "13 in-scope file(s) changed since last refresh",
+        "detail": "18 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base a27a82e (2026-07-16)",
+        "ref": "base cdb917d (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -744,7 +744,7 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "49 in-scope file(s) changed since last refresh",
+        "detail": "51 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -752,7 +752,7 @@
         "category": "audit-family",
         "ref": "base 1a83ccf (2026-07-16)",
         "stale": true,
-        "detail": "9 in-scope file(s) changed since last refresh",
+        "detail": "14 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -788,7 +788,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 7,
+    "stale_count": 8,
     "total": 10,
     "handoffs": [
       {

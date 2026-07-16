@@ -324,7 +324,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
     design_doc: designs/architecture/holonic_container_doctrine_v1.md
-    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "f20c240289c7b371a109362a513dcbc5cd418b6d"
+    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "a6b38a827f9c4582e1da44eb6cc74a2392bb977b"
     status: canonical
     added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
   propagation_spec:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "19517383f474390341884566cb5bccbd05fda53f"
+    canonical_sha__references__module_contracts_yaml: "966d16f0e2fa84b25f550a7c64e0729855988292"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

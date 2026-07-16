@@ -78,7 +78,7 @@ Derived from the doctrine, enforced by `tools/ci_module_shape_check.py` (report-
   `sim/autoload/sigma_leverage.py`, the sanctioned shared service.)
 - **Tunables live in the container's declared config.** For `combat_engine_v1`, Class-C
   coefficients live in `config.py` (the oracle) and cross boundaries only by **export**
-  (`references/engine_params/`), never by re-declaration.
+  (`engine/engine_params/`), never by re-declaration.
 - **Shared services live in `autoload/`** (the ladder's service layer), not in any one
   scale's package — σ-leverage is the model case.
 

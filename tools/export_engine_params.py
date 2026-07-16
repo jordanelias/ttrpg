@@ -6,7 +6,7 @@ Serializes the CANONICAL personal-combat Class-C oracle
 (designs/scene/combat_engine_v1/config.py — ratified ED-900/904; the live parameter source
 per references/canonical_sources.yaml `resolution_engine`) to a typed JSON artifact:
 
-    references/engine_params/combat_engine_v1.json
+    engine/engine_params/combat_engine_v1.json
 
 WHY (CLAUDE.md §5): mechanical parameters live as prose tables a Godot importer cannot
 ingest; every value crossing into Godot has been hand-transcribed (the ED-1050 failure
@@ -35,7 +35,7 @@ import sys
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 ENGINE_DIR = os.path.join(REPO_ROOT, 'designs', 'scene', 'combat_engine_v1')
-OUT_PATH = os.path.join(REPO_ROOT, 'references', 'engine_params', 'combat_engine_v1.json')
+OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'combat_engine_v1.json')
 
 SCHEMA_VERSION = 1
 

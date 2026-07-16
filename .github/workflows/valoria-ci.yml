@@ -368,7 +368,7 @@ jobs:
     needs: syntax-check
     timeout-minutes: 5
     # BLOCKING from day one: deterministic and self-consistent (no external pins).
-    # references/engine_params/combat_engine_v1.json is GENERATED from the canonical
+    # engine/engine_params/combat_engine_v1.json is GENERATED from the canonical
     # combat oracle (config.py, ED-900/904). If config.py changes, regenerate with
     # tools/export_engine_params.py and commit both together — the port regenerates
     # from the export and never hand-edits (ED-1050 discipline; ED-1052 typed-params seed).

@@ -355,7 +355,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   - **ED-1052 — typed engine-params layer for Godot ingestion, still open.** No scope/fence
     decision made. A narrower path was found and executed (2026-07-01): `tools/export_engine_params.py`
     serializes the LIVE `combat_engine_v1/config.py` Class-C oracle directly to
-    `references/engine_params/combat_engine_v1.json` (blocking CI round-trip check),
+    `engine/engine_params/combat_engine_v1.json` (blocking CI round-trip check),
     sidestepping the settled-vs-in-flux dilemma without deciding the broader
     `params/*.md`-prose-parsing question (its own docstring is explicit it does NOT parse
     prose). A prior attempt (PR #37) asserting a Combat Pool formula as authoritative was
@@ -537,7 +537,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   fold; mirror 23→83) · session-log machinery → `deprecated/session_machinery/` · combat engine
   runtime **numpy-free** (σ-kernel via `sim.autoload.sigma_leverage`; state kernel engine-owned;
   ED-1085) with new container-hygiene guard · **first typed Godot params artifact**
-  (`references/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
+  (`engine/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
   contract-conformance CI (report-only; ED-1051 backlog surfaced per-PR) · CLAUDE.md §10 fable
   tier + relay patterns; workplan **J-38** (propagation-spec authorship) docketed ·
   `currency_consistency_check` self-updating recency gate (CI + SessionStart banner; ED-1087) ·
