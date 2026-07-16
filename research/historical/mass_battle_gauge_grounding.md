@@ -29,7 +29,7 @@ So: **even matchups** (mirrors, subtle formation edges) → `draw_exp='high'` (h
 
 **Generalship / force-employment dominates numbers.**
 - Biddle, *Military Power: Explaining Victory and Defeat in Modern Battle* (Princeton, 2004), rev. Wirtz (2006), *Journal of Politics* 68(2), DOI [10.1111/j.1468-2508.2006.00420_5.x](https://doi.org/10.1111/j.1468-2508.2006.00420_5.x): victory goes to whoever masters combined-arms force employment, *relatively insensitive to the numerical and technological balance.*
-- `references/historical/precedents_warfare.md` §1.1 (Crécy 1346, Agincourt 1415, Austerlitz 1805): command quality, not numbers, decided. → **engine command-decisiveness (cmd6-vs-2 → 40-0) is correct.**
+- `research/historical/precedents_warfare.md` §1.1 (Crécy 1346, Agincourt 1415, Austerlitz 1805): command quality, not numbers, decided. → **engine command-decisiveness (cmd6-vs-2 → 40-0) is correct.**
 
 **Full envelopment is the one geometric edge that reliably tells.**
 - Cannae 216 BC (double envelopment); Sidnell, *Warhorse: Cavalry in Ancient Warfare* (2006), rev. Basler (2008), *Historian* 70(3), DOI [10.1111/j.1540-6563.2008.00221_61.x](https://doi.org/10.1111/j.1540-6563.2008.00221_61.x): heavy cavalry was decisive in a **shock role** via physical + psychological effect *against the right target*.

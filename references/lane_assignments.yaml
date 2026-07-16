@@ -26,7 +26,7 @@
 # =====================================================================================
 version: 1
 updated: "2026-07-05"
-source: "designs/workplans/valoria_master_workplan_v6.md — §4 lane workstreams + §6 governance (lineage: v5 2026-06-28 -> v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs unchanged; the old A/B/C lane framing is generalized by the ED-<LANE>-NNNN session lane-scoping, CLAUDE.md §4)"
+source: "workplans/valoria_master_workplan_v6.md — §4 lane workstreams + §6 governance (lineage: v5 2026-06-28 -> v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs unchanged; the old A/B/C lane framing is generalized by the ED-<LANE>-NNNN session lane-scoping, CLAUDE.md §4)"
 # ID ALLOCATION (2026-07-05 note superseding the v5 §0a exhaustion warning): the flat ED
 # sequence is FROZEN (ED-IN-0001 cutover 2026-07-02); all new EDs allocate per-lane from
 # references/id_reservations.yaml `lane_ids` (read next_free, bump, co-commit). The old
@@ -62,7 +62,7 @@ lanes:
       - "designs/world/**"
       - "designs/personal/**"
       - "designs/scene/**"          # [2026-06-12 Jordan] scene -> Lane A (sole design-content lane; owns all sibling designs/ globs). Resolves OWNS-GAP: social_contest/combat_engine_v1/conviction_track/derived_stats/miraculous_event/investigation_systems/fieldwork were unowned. Fieldwork to move into designs/scene/fieldwork/ (separate Lane-A op).
-      - "designs/proposals/**"
+      - "proposals/**"
       - "references/propagation_map.md"
     reserved_ed: "890-939"
     reserved_pp: "727-759"

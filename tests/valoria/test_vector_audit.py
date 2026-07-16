@@ -60,7 +60,7 @@ def test_deprecated_is_path_anchored_not_content_matched():
 
 def test_workplan_and_audit_keywords_are_discourse_absent_status():
     # with no recognized status line, the AUDIT/WORKPLAN keyword demotes to discourse
-    assert va.banner_classify('# Master WORKPLAN\n', 'designs/workplans/x.md') == 'discourse'
+    assert va.banner_classify('# Master WORKPLAN\n', 'workplans/x.md') == 'discourse'
     assert va.banner_classify('# Session AUDIT notes\n', 'designs/x.md') == 'discourse'
 
 

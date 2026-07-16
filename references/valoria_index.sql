@@ -807,7 +807,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/u
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('81', 'designs/personal/conviction_track_v1.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('82', 'designs/npcs/npc_relational_graph_v30.md');
 
--- stubs: 45 rows (curated mirror of designs/proposals/stub_infill_plan.md +
+-- stubs: 45 rows (curated mirror of proposals/stub_infill_plan.md +
 --   tests/sim/v18-integration/module_manifest.md, status as of 2026-05-19; regenerable)
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/__init__.py', '(root)', 0, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/autoload/npc_ai.py', 'autoload', 0, 'canon_gated', NULL, 'contamination audit');

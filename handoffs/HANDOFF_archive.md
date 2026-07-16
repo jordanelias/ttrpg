@@ -415,7 +415,7 @@ here.
   ED-1081, after contest_rebuild reserved 1055-1079 + combat at 1080). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
   (`ci_register_size_check.py` 20k→policy 15k; register is ~5k); RETIRED banners on
   `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md`; flipped
-  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `designs/godot/*.md`
+  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `godot/*.md`
   specs; rewrote `README.md` to defer to CLAUDE/CURRENT/HANDOFF. **Not done (needs Jordan / re-sweep):**
   the parity-oracle balance values (ED-1050) and the Gate-0/contracts authoring (ED-1051).
 
@@ -488,9 +488,9 @@ here.
 - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
   retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
   and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
-- 2026-07-01 — **Workplan sprawl cleanup.** `designs/workplans/` was dead (both files pre-dated v3/v4)
+- 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/v4)
   while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
-  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `designs/workplans/` (now the
+  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `workplans/` (now the
   one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
   `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
   commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in

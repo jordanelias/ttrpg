@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_proposals.py",
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
-  "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
+  "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
     "total": 248,
     "needs_jordan": 97,
@@ -537,9 +537,19 @@
           "links": []
         },
         {
+          "kind": "provisional_status_doc",
+          "source": "designs/territory/lps_wiring_v1.md",
+          "id": "designs/territory/lps_wiring_v1.md",
+          "title": "lps wiring v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
+          "links": []
+        },
+        {
           "kind": "proposal_doc",
-          "source": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-          "id": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+          "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+          "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
           "title": "2026-05-16-PC-4.4-unified-success-stress",
           "lane": "unassigned",
           "needs_jordan": true,
@@ -548,8 +558,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/2026-05-16-faction-audit-followup-plan.md",
-          "id": "designs/proposals/2026-05-16-faction-audit-followup-plan.md",
+          "source": "proposals/2026-05-16-faction-audit-followup-plan.md",
+          "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
           "title": "2026-05-16-faction-audit-followup-plan",
           "lane": "unassigned",
           "needs_jordan": false,
@@ -558,8 +568,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
-          "id": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
+          "source": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+          "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
           "title": "2026-05-25-mechanics-integration-v3 1",
           "lane": "unassigned",
           "needs_jordan": true,
@@ -568,8 +578,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/mass_battle_shape_echelon_revamp.md",
-          "id": "designs/proposals/mass_battle_shape_echelon_revamp.md",
+          "source": "proposals/mass_battle_shape_echelon_revamp.md",
+          "id": "proposals/mass_battle_shape_echelon_revamp.md",
           "title": "mass battle shape echelon revamp",
           "lane": "unassigned",
           "needs_jordan": false,
@@ -578,8 +588,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/pc_formation_system.md",
-          "id": "designs/proposals/pc_formation_system.md",
+          "source": "proposals/pc_formation_system.md",
+          "id": "proposals/pc_formation_system.md",
           "title": "pc formation system",
           "lane": "unassigned",
           "needs_jordan": true,
@@ -588,8 +598,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/repo-reorganization-v1.md",
-          "id": "designs/proposals/repo-reorganization-v1.md",
+          "source": "proposals/repo-reorganization-v1.md",
+          "id": "proposals/repo-reorganization-v1.md",
           "title": "repo-reorganization-v1",
           "lane": "unassigned",
           "needs_jordan": false,
@@ -598,8 +608,8 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/stub_infill_plan.md",
-          "id": "designs/proposals/stub_infill_plan.md",
+          "source": "proposals/stub_infill_plan.md",
+          "id": "proposals/stub_infill_plan.md",
           "title": "stub infill plan",
           "lane": "unassigned",
           "needs_jordan": false,
@@ -608,22 +618,12 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "designs/proposals/weapon_physics_and_concentration_model.md",
-          "id": "designs/proposals/weapon_physics_and_concentration_model.md",
+          "source": "proposals/weapon_physics_and_concentration_model.md",
+          "id": "proposals/weapon_physics_and_concentration_model.md",
           "title": "weapon physics and concentration model",
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/territory/lps_wiring_v1.md",
-          "id": "designs/territory/lps_wiring_v1.md",
-          "title": "lps wiring v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
           "links": []
         },
         {
@@ -1388,74 +1388,6 @@
         }
       ]
     },
-    "MB": {
-      "total": 6,
-      "needs_jordan": 5,
-      "items": [
-        {
-          "kind": "proposal_doc",
-          "source": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
-          "id": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
-          "title": "mass battle fighting withdrawal v1",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "designs/proposals/multiunit_envelopment_plan.md",
-          "id": "designs/proposals/multiunit_envelopment_plan.md",
-          "title": "multiunit envelopment plan",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0008",
-          "title": "Two contradictory ranged/volley Damage-Reduction tables coexist in params/mass_combat.md, both live (neither marked superseded/struck). (1) 'Projectile weapons (mass combat only -- PP-104)' table (~L191-200) gives Heavy-armour DR of LP/arro",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0009",
-          "title": "designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending ",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0010",
-          "title": "The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle",
-          "title": "[PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step",
-          "lane": "MB",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/mass_battle/"
-          ]
-        }
-      ]
-    },
     "FA": {
       "total": 28,
       "needs_jordan": 16,
@@ -1838,6 +1770,74 @@
           "status": "PARTIAL",
           "links": [
             "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/threadwork"
+          ]
+        }
+      ]
+    },
+    "MB": {
+      "total": 6,
+      "needs_jordan": 5,
+      "items": [
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/mass_battle_fighting_withdrawal_v1.md",
+          "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
+          "title": "mass battle fighting withdrawal v1",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/multiunit_envelopment_plan.md",
+          "id": "proposals/multiunit_envelopment_plan.md",
+          "title": "multiunit envelopment plan",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0008",
+          "title": "Two contradictory ranged/volley Damage-Reduction tables coexist in params/mass_combat.md, both live (neither marked superseded/struck). (1) 'Projectile weapons (mass combat only -- PP-104)' table (~L191-200) gives Heavy-armour DR of LP/arro",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0009",
+          "title": "designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending ",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0010",
+          "title": "The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle",
+          "title": "[PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step",
+          "lane": "MB",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/mass_battle/"
           ]
         }
       ]
@@ -2765,106 +2765,6 @@
       "links": []
     },
     {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "id": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "title": "2026-05-16-PC-4.4-unified-success-stress",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/2026-05-16-faction-audit-followup-plan.md",
-      "id": "designs/proposals/2026-05-16-faction-audit-followup-plan.md",
-      "title": "2026-05-16-faction-audit-followup-plan",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "id": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "title": "2026-05-25-mechanics-integration-v3 1",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
-      "id": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
-      "title": "mass battle fighting withdrawal v1",
-      "lane": "MB",
-      "needs_jordan": true,
-      "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/mass_battle_shape_echelon_revamp.md",
-      "id": "designs/proposals/mass_battle_shape_echelon_revamp.md",
-      "title": "mass battle shape echelon revamp",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/multiunit_envelopment_plan.md",
-      "id": "designs/proposals/multiunit_envelopment_plan.md",
-      "title": "multiunit envelopment plan",
-      "lane": "MB",
-      "needs_jordan": true,
-      "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/pc_formation_system.md",
-      "id": "designs/proposals/pc_formation_system.md",
-      "title": "pc formation system",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/repo-reorganization-v1.md",
-      "id": "designs/proposals/repo-reorganization-v1.md",
-      "title": "repo-reorganization-v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/stub_infill_plan.md",
-      "id": "designs/proposals/stub_infill_plan.md",
-      "title": "stub infill plan",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "designs/proposals/weapon_physics_and_concentration_model.md",
-      "id": "designs/proposals/weapon_physics_and_concentration_model.md",
-      "title": "weapon physics and concentration model",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
       "kind": "provisional_status_doc",
       "source": "designs/provincial/franchise_v30.md",
       "id": "designs/provincial/franchise_v30.md",
@@ -2892,6 +2792,106 @@
       "lane": "WR",
       "needs_jordan": true,
       "status": "DRAFT — all content PROVISIONAL pending Jordan editorial approval",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+      "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+      "title": "2026-05-16-PC-4.4-unified-success-stress",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-05-16-faction-audit-followup-plan.md",
+      "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
+      "title": "2026-05-16-faction-audit-followup-plan",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "title": "2026-05-25-mechanics-integration-v3 1",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "title": "mass battle fighting withdrawal v1",
+      "lane": "MB",
+      "needs_jordan": true,
+      "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/mass_battle_shape_echelon_revamp.md",
+      "id": "proposals/mass_battle_shape_echelon_revamp.md",
+      "title": "mass battle shape echelon revamp",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/multiunit_envelopment_plan.md",
+      "id": "proposals/multiunit_envelopment_plan.md",
+      "title": "multiunit envelopment plan",
+      "lane": "MB",
+      "needs_jordan": true,
+      "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/pc_formation_system.md",
+      "id": "proposals/pc_formation_system.md",
+      "title": "pc formation system",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/repo-reorganization-v1.md",
+      "id": "proposals/repo-reorganization-v1.md",
+      "title": "repo-reorganization-v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/stub_infill_plan.md",
+      "id": "proposals/stub_infill_plan.md",
+      "title": "stub infill plan",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/weapon_physics_and_concentration_model.md",
+      "id": "proposals/weapon_physics_and_concentration_model.md",
+      "title": "weapon physics and concentration model",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
     {

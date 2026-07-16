@@ -54,7 +54,7 @@ def _redact_forbidden_names(text: str) -> str:
                       text, flags=re.IGNORECASE)
     return text
 
-SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
+SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godot"]
 
 # ---------------------------------------------------------------------------------------
 # Path -> ED-<LANE> lane inference (audit-ecosystem Phase 4 — no ED allocated for this
@@ -67,7 +67,7 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
 #     header warns against conflating them) — the write-disjoint Lane A/B/C concurrency
 #     model, not the ED-<LANE>-NNNN editorial namespace. Its owns-globs are bulk
 #     (e.g. Lane A owns the whole of designs/scene/**), too coarse to separate PC/SC/FI.
-#   - designs/workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
+#   - workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
 #     enumerate lane WORK ITEMS, not a path->lane ownership table.
 #   - handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
 #     (e.g. HANDOFF_PC.md -> designs/scene/combat_engine_v1/) — real signal, used below,
@@ -77,7 +77,7 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
 # obvious subject-matter grouping (sim/ subpackages, params/ files, designs/ subdirs).
 # Matched by LONGEST-PREFIX-WINS (a file-specific entry beats its parent directory's).
 # Deliberately NOT exhaustive: designs/audit/**, references/** (module_contracts.yaml,
-# values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), designs/proposals/**,
+# values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), proposals/**,
 # and designs/personal/conviction_*/piety_* are left OUT on purpose — these are
 # genuinely cross-lane/shared surfaces (module_contracts.yaml's own gap_notes span all 27
 # modules; conviction/piety tracks are drawn on by PC+SC+FI alike; most audit folders are
@@ -90,8 +90,8 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/provincial/mass_battle_v30", "MB"),
     ("designs/provincial/mass_battle_integration_v30.md", "MB"),
     ("designs/provincial/military_layer_v30", "MB"),
-    ("designs/proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
-    ("designs/proposals/multiunit_envelopment_plan.md", "MB"),
+    ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
+    ("proposals/multiunit_envelopment_plan.md", "MB"),
     ("params/mass_combat.md", "MB"),
     ("sim/provincial/massbattle.py", "MB"),
     ("sim/provincial/units.py", "MB"),
@@ -213,8 +213,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 
     # --- GO: godot ---
-    ("designs/godot/", "GO"),
-    ("designs/audit/2026-06-10-godot-conversion-strategy/", "GO"),
+    ("godot/", "GO"),
     ("references/engine_params/", "GO"),
 
     # --- SE: settlements ---
@@ -238,7 +237,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("engine/", "IN"),
     ("designs/architecture/", "IN"),
     ("designs/articulation/", "IN"),
-    ("designs/workplans/", "IN"),
+    ("workplans/", "IN"),
     ("designs/provincial/clock_registry_v30", "IN"),   # timer/scheduling registry, engine_clock-adjacent
     ("references/id_reservations.yaml", "IN"),
     ("references/ci_checks_registry.yaml", "IN"),

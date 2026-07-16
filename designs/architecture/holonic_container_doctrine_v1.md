@@ -106,6 +106,6 @@ Derived from the doctrine, enforced by `tools/ci_module_shape_check.py` (report-
 - `references/module_contracts.yaml` — remains the canonical contract store; this doctrine
   names its shape as *the* container contract and directs all new modules to instantiate it
   unchanged.
-- `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` —
+- `godot/godot_conversion_strategy_v1.md` —
   remains the conversion plan; convertibility here (§1 morphisms row) is the doctrine-level
   statement of that plan's Key-log-parity discipline.

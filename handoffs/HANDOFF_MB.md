@@ -55,7 +55,7 @@ namespace and are folded into Next actions below, which carries the full narrati
   calibrated-debt retirement sweep).
 - **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
   mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
-  marker); `designs/proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  marker); `proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
   ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
   that landed — don't conflate "Envelopment shipped" with "Path B shipped."
 
@@ -111,7 +111,7 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   single-subunit opponent's troops, fixed via `total_troops` force parity). **Jordan's rulings
   (AskUserQuestion): DG-3 completion = intensive pool semantics; DG-1 = symmetric-at-parity (infantry)
   + majority-pin/cavalry-wing (C4/C7, Polybius/Livy order of battle); DG-2 = "create as workplan"** —
-  `designs/proposals/mass_battle_fighting_withdrawal_v1.md`, PROPOSED, NOT implemented. Independent
+  `proposals/mass_battle_fighting_withdrawal_v1.md`, PROPOSED, NOT implemented. Independent
   adversarial review caught 2 more real bugs (D3's no-op; `wing_speed` never reaching `Unit.speed`) —
   both fixed. **Honest result: H3/H4/H5/H6/C4's draws are entirely GONE, but every row now OVERSHOOTS
   its band decisively in the attacker's favor** (except C7, still passing). Full 20-row gauge: 4/20 →

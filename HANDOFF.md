@@ -62,7 +62,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   was made honest 2026-07-16 (**ED-IN-0072**): of the open work, ~136 items are genuinely
   agent-executable (no ruling needed) and ~97 need your decision — see
   `tools/observability/PROPOSALS.md`. Lane detail in each `handoffs/HANDOFF_<LANE>.md`.
-- **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `docs/dashboard/`,
+- **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `dashboard/`,
   published by `.github/workflows/dashboard.yml` to GitHub Pages. Surfaces workplan progress,
   recent activity, a "needs your decision" inbox, and audit/simulation-balance verdicts
   (`references/audit_registry.jsonl`, now kept current by the 8 audit/simulation skills'
@@ -92,7 +92,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   genuinely needing Jordan's own call, not routine merge-ratification — everything else in that
   build ratifies normally on merge per ED-1094.
 - **START HERE — Master Workplan v6 is the live steering surface, RATIFIED with the whole
-  of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `designs/workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
+  of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
   playable season · M2 any-seed story bar · M3 Godot slice), per-lane workstreams (status
   stays in `handoffs/HANDOFF_<LANE>.md` — v6 only sequences), and the tiered T0/T1/T2
   Jordan-decision register (§5) that **supersedes the 2026-07-01 `decision_queue.md` as the

@@ -212,7 +212,7 @@ mechanics:
       - "designs/scene/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
     params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (params/combat.md deprecated -> deprecated/params/)
     sim_module: designs/scene/combat_engine_v1/   # canonical engine; sim/personal/combat.py is the DEPRECATED v30 wiring
-    godot_home: designs/godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
+    godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
     test_status: validated   # combat_engine_v1 ratified; Godot slice (strike/wound) ported + validated 2026-06-23
     dependencies:
       mechanics: [die_rule_d10, degrees_of_success]
@@ -311,7 +311,7 @@ mechanics:
   companion:
     scale: personal
     faction: universal
-    canon_sources: ["designs/godot/scene_tree_architecture.md#CompanionScene"]
+    canon_sources: ["godot/scene_tree_architecture.md#CompanionScene"]
     sim_module: sim/personal/companion.py
     test_status: not_implemented
     notes: "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc."

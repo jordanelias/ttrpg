@@ -242,7 +242,7 @@ index; see it for cross-lane/global items.
 - **JORDAN RULING NEEDED: ED-SC-0015** (Parliamentary total-victory Mandate stacking, −2 vs −1) —
   the one open design call this session's build could not resolve on its own authority.
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
-  row #39 → LA-19, `designs/workplans/valoria_master_workplan_v5.md`) — note the ratified audit
+  row #39 → LA-19, `workplans/valoria_master_workplan_v5.md`) — note the ratified audit
   resequences Stage 4 *after* the consequence spine.
 - **`contest.py` fabrication-debt triage** — 19 uncited constants block the J-31 terminology
   propagation into code (also tracked at `decision_queue.md` item 16).

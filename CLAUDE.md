@@ -78,7 +78,11 @@ are more "current state" files than there should be; trust them in this strict p
 | `canon/` | Philosophical foundations (P-01..P-14), canonical timeline, canon constraints, self-rendering/leap-mechanism amendments. **The process registers moved OUT to `registers/` (2026-07-16, ED-IN-0071 P0)** — canon/ now holds only world/design truth. |
 | `registers/` | Process ledgers/registers, moved out of `canon/` (ED-IN-0071 P0, 2026-07-16): editorial ledger (`editorial_ledger.jsonl` pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN`, §3), patch register, supersession register, mechanics index, placeholder names. Old `canon/…` citations resolve via `references/restructure_ledger.md`'s alias map. |
 | `handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1). Root `HANDOFF.md` indexes these. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
-| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. |
+| `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `audit/`. |
+| `godot/` | The Godot port, consolidated out of THREE former homes (`designs/godot/`, `designs/videogame/`, `designs/audit/2026-06-10-godot-conversion-strategy/`) to a top-level primary (ED-IN-0071 P2, 2026-07-16): the PROPOSED governing `godot_conversion_strategy_v1.md`, the `godot_architecture_specification.md`, the 4 stale pre-`d+σ` docs, and `skeleton/` (§6). **Is** the eventual `res://` project root. Old paths alias via `references/restructure_ledger.md`. |
+| `workplans/` | The master workplan + progress board, promoted out of `designs/workplans/` (ED-IN-0071 P1, 2026-07-16) to a top-level primary. `workplan_v6_progress.yaml` is the board the SessionStart banner reads (`tools/workplan_status.py`); `valoria_master_workplan_v6.md` is the live steering surface. Old `designs/workplans/…` paths alias via `references/restructure_ledger.md`. |
+| `dashboard/` | The published GitHub-Pages status site, promoted out of `docs/dashboard/` (ED-IN-0071 P1). `tools/dashboard_data.py` writes `dashboard/data.json`; `.github/workflows/dashboard.yml` deploys it. |
+| `proposals/` | Unratified design proposals, promoted out of `designs/proposals/` (ED-IN-0071 P1, 2026-07-16). Surfaced BY LOCATION by `tools/observability/build_proposals.py`. Old `designs/proposals/…` citations alias via `references/restructure_ledger.md`. |
 | `params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*`. ⚠️ Numbers live as English tables, not typed data (see §5). |
 | `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
 | `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
@@ -161,11 +165,15 @@ not treat any "structured" data layer as ground truth without checking it agains
 The conversion is **PROPOSED and largely un-executed**. The skeleton is illustrative, not buildable.
 Do not represent the skeleton as a runnable head-start.
 
-- **Governing spec:** `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
+- **One home now.** The Godot material was consolidated from three scattered homes into the top-level
+  `godot/` primary (ED-IN-0071 P2, 2026-07-16): the governing strategy (formerly under
+  `designs/audit/2026-06-10-godot-conversion-strategy/`), `godot_architecture_specification.md` (formerly
+  `designs/videogame/`), and the stale docs + `skeleton/` (formerly `designs/godot/`). Old paths alias.
+- **Governing spec:** `godot/godot_conversion_strategy_v1.md`
   — status **PROPOSED (Jordan-vetoable throughout)**, with an open 8-item register and **unexecuted
   Gate-0 preconditions** (KeyStore v2, base classes, RNG service). It is the plan, **not yet a ratified
   contract**. Drive its register + Gate-0 to closure before treating any decision as fixed.
-- **Skeleton is non-compilable.** `designs/godot/skeleton/` covers only **1 of 27** modules
+- **Skeleton is non-compilable.** `godot/skeleton/` covers only **1 of 27** modules
   (`personal_combat`) and `extends`/calls a spine (`BaseEngine`, `EngineModule`, `Key`, `KeyBus`,
   `GameState`, `Resolver`) **defined nowhere in the corpus**. It cannot be opened and run in Godot 4.6.
 - **Port↔oracle discipline (ED-1050, resolved 2026-06-30).** `combat_config.gd` once hand-edited
@@ -178,9 +186,11 @@ Do not represent the skeleton as a runnable head-start.
   have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
   are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
   with `engine_clock`).
-- **The four `designs/godot/*.md` docs are stale (all 2026-04-18)** and encode the pre-`d+σ` model —
-  each now carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner (flagged 2026-06-30, ED-1054) pointing at
-  the strategy doc. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
+- **The four stale pre-`d+σ` docs** (`godot/{scene_tree_architecture,gm_to_engine_conversion,data_serialization_spec,implementation_sequence}.md`,
+  all 2026-04-18) encode the pre-`d+σ` model — each carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner
+  (flagged 2026-06-30, ED-1054) pointing at the strategy doc. (`godot/`'s other `.md` files —
+  `README.md`, `godot_conversion_strategy_v1.md`, `godot_architecture_specification.md` — are current.)
+  `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
   settlements). Do not implement from them; defer to the strategy doc + Key substrate.
 
 ---
@@ -241,7 +251,7 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
   it. `tools/observability/build_proposals.py` generates the **unified proposals/open-work register**
   (`PROPOSALS.md` triad — one lane-partitioned view of every unratified item, covering
-  `designs/proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
+  `proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
   it complements `DECISIONS.md` (marker-level debt) rather than duplicating it.
   `tools/build_apparatus_registry.py` generates `references/apparatus_registry.{yaml,md}` — the
   inventory of every tool/skill/hook/workflow with its output destination + format + orphan status

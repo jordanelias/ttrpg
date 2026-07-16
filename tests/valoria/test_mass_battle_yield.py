@@ -1,6 +1,6 @@
 """DG-2 (fighting-withdrawal/yield mechanic) acceptance tests.
 
-designs/proposals/mass_battle_fighting_withdrawal_v1.md, Jordan-ruled "build it now" 2026-07-08.
+proposals/mass_battle_fighting_withdrawal_v1.md, Jordan-ruled "build it now" 2026-07-08.
 This session builds ONLY the commanded-entry state/movement/facing/combat-pool slice (the doc's
 own §4 step 1, "lowest-risk slice") -- NOT the emergent auto-entry path (§2.2's second bullet,
 explicitly deferred pending its own measurement), NOT the "rally" exit, and NOT the "pocket"

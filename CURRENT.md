@@ -12,7 +12,7 @@ is current, start here. Machine-readable source of truth: `references/canonical_
 (SHA-pinned) and `registers/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-**Mobile-friendly status dashboard (2026-07-11, ED-IN-0031):** `docs/dashboard/` (built by
+**Mobile-friendly status dashboard (2026-07-11, ED-IN-0031):** `dashboard/` (built by
 `tools/dashboard_data.py`, published by `.github/workflows/dashboard.yml`) surfaces workplan
 progress, recent commit activity, audit/simulation-balance verdicts
 (`references/audit_registry.jsonl`, retrofitted into the 8 audit/simulation skills — see each
@@ -30,7 +30,7 @@ counts by lane, active patch-register counts).
 
 _Last reconciled: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
 `designs/audit/2026-07-15-proposal-reconciliation/`: classified the dashboard's 55 awaiting-ratification docs
-+ 9 dashboard-invisible `designs/proposals/` docs into 4 natures; executed safe status bookkeeping (39
++ 9 dashboard-invisible `proposals/` docs into 4 natures; executed safe status bookkeeping (39
 Nature-A flips — 29 ratified-narrative-engine working record → SUPERSEDED, 10 read-only-audit mis-tags
 reclassified; 9 Nature-D status-line additions), dropping the awaiting count 55→16; authored the
 `governance_cluster_reconciliation_v1.md` unified head (ED-IN-0070, PROPOSED) — `governance_type_registry_v1`
@@ -50,7 +50,7 @@ surface to Jordan. **Also indexes the previously-un-indexed ED-IN-0051** (the 20
 cross-scale-governance-grounding docket). Prior reconcile: 2026-07-13 (**PR#127/#128 reconciliation** — `designs/architecture/ners_vsg_reconciliation_v1.md`
 cross-reads the `tools/sim_harness/` empirical pass against the VSG settlement-generator proposal;
 settlement/territory row updated above). Prior reconcile: 2026-07-11 (**Mobile-friendly status dashboard built**, ED-IN-0031 — see the
-paragraph above; `docs/dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
+paragraph above; `dashboard/`, `tools/dashboard_data.py`, `references/audit_registry.jsonl`,
 `tools/ci_audit_registry_check.py`). Prior reconcile: 2026-07-09 (**Comparative-governance-research docket round 2** — **Comparative-governance-research docket round 2** — Jordan-requested
 extension of the 2026-07-08 FA/SE historical-precedent docket into Byzantium, feudal/imperial
 China, feudal Japan, the Holy Roman Empire, Venice, Renaissance Italy, and Habsburg Spain,
@@ -103,9 +103,9 @@ the head of its lineage; predecessors are archived._
 | **Player agency** | `designs/architecture/player_agency_v30.md` — CANONICAL (approved 2026-04-17); Scene Slate (§4), Standing/Duty/Conviction player-motivation architecture. New row 2026-07-08 (ED-IN-0016 — same missing-row gap as Scale transitions above) |
 | **Articulation** | `designs/articulation/articulation_layer_v30.md` |
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
-| **Master workplan** | `designs/workplans/valoria_master_workplan_v6.md` (CANON — RATIFIED 2026-07-05, ED-IN-0009/ED-IN-0011; supersedes v5 → `archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface; progress board `workplan_v6_progress.yaml` + `valoria-workplan-navigator`) |
+| **Master workplan** | `workplans/valoria_master_workplan_v6.md` (CANON — RATIFIED 2026-07-05, ED-IN-0009/ED-IN-0011; supersedes v5 → `archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface; progress board `workplan_v6_progress.yaml` + `valoria-workplan-navigator`) |
 | **Narrative engine** | `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (RATIFIED 2026-07-05, ED-IN-0011 — Jordan sign-off incl. the F-F/fork-8 Light-Function decision at its default, subtract-only + weight-set-as-data; supersedes-in-part v1, which is ratified-as-amended with spec chapters s1–s5 + `spec/churn_amendments.md`. Executes ED-IN-0003/0004; stages sequenced in workplan v6 §3) |
-| **Godot conversion** | `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
+| **Godot conversion** | `godot/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
 | **Board game** | `params/board_game.md` + `params/bg/*` governing tables |
 | **Dice / resolution** | `params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |
 

@@ -131,7 +131,7 @@ NEEDS_JORDAN_MARKERS = re.compile(r'JORDAN RULING NEEDED|needs_jordan\s*[:=]\s*t
 # The vocabulary deliberately matches FUTURE / PENDING Jordan action ONLY, never a
 # citation of a PAST ruling — so "evidence-decided, not a Jordan choice" (ED-913) and
 # "per Jordan's prior ruling" (ED-930) correctly STAY actionable. Verified empirically
-# against the live ledger + designs/proposals/ when this landed (see
+# against the live ledger + proposals/ when this landed (see
 # tests/valoria/test_observability_core.py::test_text_needs_jordan_*).
 NEEDS_JORDAN_TEXT = re.compile(
     r"""

@@ -11,7 +11,7 @@
 **Date:** 2026-04-19  
 **Status:** ANALYSIS — feeds design decisions  
 **Scope:** Why the early game has no fire starters, what history shows about conflict ignition, whether a new faction is needed, and how to create per-game variability  
-**Depends on:** 4 batches of arc test results, `references/historical/precedents_analysis.md`, `references/historical/precedents_warfare.md`, NPC behavior + NPC character analyses
+**Depends on:** 4 batches of arc test results, `research/historical/precedents_analysis.md`, `research/historical/precedents_warfare.md`, NPC behavior + NPC character analyses
 
 ---
 

@@ -340,7 +340,7 @@ VOLLEY_MIN_RANGE = 2
 # Historical longbow at Crécy/Agincourt: effective fire began ~100 paces (~5 cells)
 # but harassment fire extended further. Range 8 captures both regimes.
 # Reduces R1 (Ranged vs Line) by ~25% by removing 4-5 turns of free volley.
-# [canonical: references/historical/precedents_warfare.md — effective volleys at
+# [canonical: research/historical/precedents_warfare.md — effective volleys at
 #  100-200 paces; killing zone was the final approach to contact]
 VOLLEY_MAX_RANGE = 8
 
@@ -610,7 +610,7 @@ def cell_speed(shape, tier, local_r, local_c):
         # partial momentum bonus that helps against wide formations (HS) without
         # dominating same-width opposition (Line).
         # Refused cell at width-1 holds at speed 0.
-        # [canonical: references/historical/precedents_warfare.md — Leuctra 371 BC,
+        # [canonical: research/historical/precedents_warfare.md — Leuctra 371 BC,
         #  Theban front rank advanced at battle pace; depth followed]
         if local_c == width - 1: return 0
         if local_r == 0: return 2
@@ -941,7 +941,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, rng=None):
         # Historical: archers in hand-to-hand were near-useless. At Agincourt, the
         # English archers played minor role in melee; their decisive contribution was
         # ranged. Heavy melee infantry (men-at-arms) decided close combat.
-        # [canonical: references/historical/precedents_warfare.md — Agincourt 1415,
+        # [canonical: research/historical/precedents_warfare.md — Agincourt 1415,
         #  Crécy 1346: archer melee performance documented as marginal]
         if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
         if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)

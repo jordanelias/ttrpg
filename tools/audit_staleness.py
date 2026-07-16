@@ -62,9 +62,9 @@ FAMILIES = [
         "name": "proposals-register",
         "artifact_paths": ["tools/observability/proposals.json"],
         # per build_proposals.py's sources: the editorial ledgers, audit registry,
-        # designs/proposals/ + Status-tagged design docs, and workplan §5.
+        # proposals/ + Status-tagged design docs, and workplan §5.
         "scope_prefixes": ("designs/", "canon/", "references/audit_registry.jsonl",
-                           "designs/workplans/"),
+                           "workplans/"),
     },
     {
         "name": "apparatus-registry",

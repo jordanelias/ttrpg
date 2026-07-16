@@ -529,3 +529,70 @@
 | `canon/patch_register_index.md` | `registers/patch_register_index.md` |
 | `canon/placeholder_names.yaml` | `registers/placeholder_names.yaml` |
 | `canon/supersession_register.yaml` | `registers/supersession_register.yaml` |
+
+
+## 2026-07-16 — designs/proposals -> proposals (ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` | `proposals/2026-05-16-PC-4.4-unified-success-stress.md` |
+| `designs/proposals/2026-05-16-faction-audit-followup-plan.md` | `proposals/2026-05-16-faction-audit-followup-plan.md` |
+| `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` | `proposals/2026-05-25-mechanics-integration-v3_1.md` |
+| `designs/proposals/mass_battle_fighting_withdrawal_v1.md` | `proposals/mass_battle_fighting_withdrawal_v1.md` |
+| `designs/proposals/mass_battle_shape_echelon_revamp.md` | `proposals/mass_battle_shape_echelon_revamp.md` |
+| `designs/proposals/multiunit_envelopment_plan.md` | `proposals/multiunit_envelopment_plan.md` |
+| `designs/proposals/pc_formation_system.md` | `proposals/pc_formation_system.md` |
+| `designs/proposals/repo-reorganization-v1.md` | `proposals/repo-reorganization-v1.md` |
+| `designs/proposals/stub_infill_plan.md` | `proposals/stub_infill_plan.md` |
+| `designs/proposals/weapon_physics_and_concentration_model.md` | `proposals/weapon_physics_and_concentration_model.md` |
+
+## 2026-07-16 — primary promotions batch (research/dashboard/workplans, ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `references/historical/mass_battle_gauge_grounding.md` | `research/historical/mass_battle_gauge_grounding.md` |
+| `references/historical/precedents_analysis.md` | `research/historical/precedents_analysis.md` |
+| `references/historical/precedents_warfare.md` | `research/historical/precedents_warfare.md` |
+| `docs/dashboard/data.json` | `dashboard/data.json` |
+| `docs/dashboard/icon.svg` | `dashboard/icon.svg` |
+| `docs/dashboard/index.html` | `dashboard/index.html` |
+| `docs/dashboard/manifest.json` | `dashboard/manifest.json` |
+| `designs/workplans/README.md` | `workplans/README.md` |
+| `designs/workplans/valoria_master_workplan_v6.md` | `workplans/valoria_master_workplan_v6.md` |
+| `designs/workplans/workplan_v6_progress.yaml` | `workplans/workplan_v6_progress.yaml` |
+
+
+## 2026-07-16 — Godot three-home collapse -> godot/ (ED-IN-0071 P2)
+
+| old path | new path |
+|---|---|
+| `designs/godot/` | `godot/` |
+| `designs/videogame/` | `godot/` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/` | `godot/` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/README.md` | `godot/README.md` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` | `godot/godot_conversion_strategy_v1.md` |
+| `designs/godot/data_serialization_spec.md` | `godot/data_serialization_spec.md` |
+| `designs/godot/gm_to_engine_conversion.md` | `godot/gm_to_engine_conversion.md` |
+| `designs/godot/implementation_sequence.md` | `godot/implementation_sequence.md` |
+| `designs/godot/scene_tree_architecture.md` | `godot/scene_tree_architecture.md` |
+| `designs/godot/skeleton/core/engine_manifest.gd` | `godot/skeleton/core/engine_manifest.gd` |
+| `designs/godot/skeleton/core/key_type_resource.gd` | `godot/skeleton/core/key_type_resource.gd` |
+| `designs/godot/skeleton/data/combat_config.tres` | `godot/skeleton/data/combat_config.tres` |
+| `designs/godot/skeleton/data/engines/combat/combat.tres` | `godot/skeleton/data/engines/combat/combat.tres` |
+| `designs/godot/skeleton/data/engines/combat/strike.tres` | `godot/skeleton/data/engines/combat/strike.tres` |
+| `designs/godot/skeleton/data/engines/combat/wound.tres` | `godot/skeleton/data/engines/combat/wound.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_felled.tres` | `godot/skeleton/data/key_types/scene_combat_felled.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_hit.tres` | `godot/skeleton/data/key_types/scene_combat_hit.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_resolved.tres` | `godot/skeleton/data/key_types/scene_combat_resolved.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_strike.tres` | `godot/skeleton/data/key_types/scene_combat_strike.tres` |
+| `designs/godot/skeleton/data/traditions/german.tres` | `godot/skeleton/data/traditions/german.tres` |
+| `designs/godot/skeleton/data/traditions/none.tres` | `godot/skeleton/data/traditions/none.tres` |
+| `designs/godot/skeleton/data/weapons/arming.tres` | `godot/skeleton/data/weapons/arming.tres` |
+| `designs/godot/skeleton/data/weapons/longsword.tres` | `godot/skeleton/data/weapons/longsword.tres` |
+| `designs/godot/skeleton/engines/combat/combat_engine.gd` | `godot/skeleton/engines/combat/combat_engine.gd` |
+| `designs/godot/skeleton/engines/combat/modules/strike_module.gd` | `godot/skeleton/engines/combat/modules/strike_module.gd` |
+| `designs/godot/skeleton/engines/combat/modules/wound_module.gd` | `godot/skeleton/engines/combat/modules/wound_module.gd` |
+| `designs/godot/skeleton/engines/combat/resources/combat_config.gd` | `godot/skeleton/engines/combat/resources/combat_config.gd` |
+| `designs/godot/skeleton/engines/combat/resources/tradition_resource.gd` | `godot/skeleton/engines/combat/resources/tradition_resource.gd` |
+| `designs/godot/skeleton/engines/combat/resources/weapon_resource.gd` | `godot/skeleton/engines/combat/resources/weapon_resource.gd` |
+| `designs/videogame/godot_architecture_specification.md` | `godot/godot_architecture_specification.md` |

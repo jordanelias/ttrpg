@@ -1,7 +1,7 @@
 """
 Unit tests for tools/observability/build_proposals.py — the unified proposals register.
 
-Pins the coverage guarantees: all designs/proposals/ docs surface BY LOCATION
+Pins the coverage guarantees: all proposals/ docs surface BY LOCATION
 (incl. the 8 without a Status line — the gap the dashboard had), the 17 non-PASS
 audit-registry verdicts are not over-collapsed by shared ids, every item is
 lane-tagged, and the schema/dedup hold. Runs against the live working tree.
@@ -24,12 +24,12 @@ def test_all_proposals_docs_surface_by_location():
     reg = _reg()
     props = {i["source"] for i in reg["items"] if i["kind"] == "proposal_doc"}
     on_disk = {
-        f"designs/proposals/{f}"
-        for f in os.listdir(os.path.join(REPO, "designs", "proposals"))
+        f"proposals/{f}"
+        for f in os.listdir(os.path.join(REPO, "proposals"))
         if f.endswith(".md")
     }
     assert props == on_disk, f"missing: {on_disk - props}"
-    # Regression pin on the location-scan count; bump when a designs/proposals doc
+    # Regression pin on the location-scan count; bump when a proposals doc
     # is added/removed. 10 since ED-IN-0071 (repo-reorganization-v1.md).
     assert len(props) == 10
 

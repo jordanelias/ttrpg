@@ -14,8 +14,8 @@ append-only ledger; rewriting it is a Jordan-reserved canon edit — register ro
 ED-1095/ED-1096 are same-day-as-cutover 2026-07-02 flat allocations (valid; the flat freeze
 holds from the cutover forward — no later flat allocation observed).**
 
-**Supersedes (on merge):** `designs/workplans/valoria_master_workplan_v5.md` → moves to
-`archives/workplans/` with a supersession banner (per `designs/workplans/README.md`). v5's
+**Supersedes (on merge):** `workplans/valoria_master_workplan_v5.md` → moves to
+`archives/workplans/` with a supersession banner (per `workplans/README.md`). v5's
 J-/LA-/LB-/LC- keys and v4's register rows 1–43 stay citable and are NOT renumbered; Appendix
 A accounts for every open v5 item. v4 stays the frozen 06-11/06-22 record.
 
@@ -279,7 +279,7 @@ regression gate lands.
 ### GO — Godot
 Status: `handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
 this section as complete). Governing spec =
-`designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
+`godot/godot_conversion_strategy_v1.md`
 (PROPOSED; 8-item register open). Gate-0 exact deliverables, none executed: **G0.1** Key.gd
 v1→v2 (structured targets[], scale_signature[], symbolic_dimensions[4], time_horizon,
 permanence, causes[]; drop scalar salience) · **G0.2** one ruled docs/architecture.md v2
@@ -393,7 +393,7 @@ ED-PC-0012 [point-transmit floor-lock, sabre-class] filed as new, explicitly non
   rule) and every `needs_jordan: true` ledger entry is still reachable from this document**
   → refresh the progress board (below) → dated-snapshot the session inventory delta → one
   commit `[editorial]` citing this section.
-- **Progress board (ED-IN-0010):** `designs/workplans/workplan_v6_progress.yaml` is the
+- **Progress board (ED-IN-0010):** `workplans/workplan_v6_progress.yaml` is the
   ONE designated home for milestone/juncture-level rollup status (a rollup nothing else
   carries — lane detail stays in the handoffs; rows point at evidence). Rendered only by
   `tools/workplan_status.py` (one-liner in the SessionStart banner; `--full` ASCII

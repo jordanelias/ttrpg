@@ -163,7 +163,7 @@ adversarially reviewed (2 more real bugs found+fixed in that pass).
   `pin_frac=2/3`, matching Polybius/Livy order of battle, built entirely from `engine.build_envelopment`
   unmodified.
 - **DG-2 = "create as workplan"** — NOT implemented. Captured as
-  `designs/proposals/mass_battle_fighting_withdrawal_v1.md` (status PROPOSED): a per-subunit `yielding`
+  `proposals/mass_battle_fighting_withdrawal_v1.md` (status PROPOSED): a per-subunit `yielding`
   state, facing preserved toward the enemy (unlike rout), commanded-entry first via a discipline-gated
   `'yield'` order, emergent auto-entry flagged default-off pending measurement, reuses `_kite_goal`'s
   reflect vector + the TOI/halt substrate + ED-MB-0001 §6's path-budget formula (NOT the audit's
@@ -303,7 +303,7 @@ investigated this pass.
 
 ## 2026-07-08 — mass_battle: DG-2 fighting-withdrawal/yield mechanic, commanded-entry slice built
 
-Jordan ruled DG-2 = **"build it now"**. Built exactly the proposal doc's (`designs/proposals/
+Jordan ruled DG-2 = **"build it now"**. Built exactly the proposal doc's (`proposals/
 mass_battle_fighting_withdrawal_v1.md`) own §4 step 1, the "lowest-risk slice": **state +
 commanded-entry only** — no emergent auto-entry (§2.2's second bullet), no "rally"/"pocket" exits
 (§2.4, beyond the free "collapse to routed" which needed no new code). Disclosed, not silently

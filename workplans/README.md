@@ -1,4 +1,4 @@
-# designs/workplans/ — the one live home for the master workplan
+# workplans/ — the one live home for the master workplan
 
 **Rule:** the current master workplan lives here, under a version-suffixed filename
 (`valoria_master_workplan_vN.md`). `CURRENT.md`'s "Master workplan" row always names the exact

@@ -812,7 +812,7 @@ modules:
   - module: personal_combat
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: designs/scene/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
-    godot_home: designs/godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
+    godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: references/engine_params/combat_engine_v1.json   # GENERATED from config.py (tools/export_engine_params.py, schema v1); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
     resolver: d_sigma   # sigma-leverage continuous (sim.autoload.sigma_leverage since ED-1085; parity-tested vs the r1/m1 originals): pool=max(5,History+6), base Ob 3 FIXED, advantage = mu-shift on the ROLL. NOT v30 dice_pool (Agi×2 / TN-7).
@@ -856,7 +856,7 @@ modules:
     gap_notes:
       - "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED — combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass."
       - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, sim/personal/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
-      - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in designs/godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
+      - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
       - "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3)."
       - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple)."
     status: extracted
