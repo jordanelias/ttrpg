@@ -1,6 +1,6 @@
 <!-- [PROVISIONAL: PP-673 — terminology cleanup, auto-gen navigation index renamed from _skeleton.md to _index.md; content unchanged] -->
-<!-- SKELETON: arcs/gm_ref/arc_narrative_analysis.md -->
-<!-- canonical: arcs/gm_ref/arc_narrative_analysis.md -->
+<!-- SKELETON: arcs/simulated/arc_narrative_analysis.md -->
+<!-- canonical: arcs/simulated/arc_narrative_analysis.md -->
 <!-- Generated: 2026-04-18 (post-restructure) -->
 
 # Emergent Arc Analysis — Narrative Quality

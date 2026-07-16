@@ -5,12 +5,12 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 248,
+    "total": 247,
     "needs_jordan": 97,
     "by_kind": {
       "provisional_status_doc": 17,
       "proposal_doc": 10,
-      "ledger_actionable": 120,
+      "ledger_actionable": 119,
       "ledger_needs_jordan": 84,
       "audit_partial": 17
     },
@@ -20,7 +20,7 @@
         "needs_jordan": 16
       },
       "FI": {
-        "total": 7,
+        "total": 6,
         "needs_jordan": 3
       },
       "IN": {
@@ -1843,7 +1843,7 @@
       ]
     },
     "FI": {
-      "total": 7,
+      "total": 6,
       "needs_jordan": 3,
       "items": [
         {
@@ -1861,16 +1861,6 @@
           "source": "registers/editorial_ledger",
           "id": "ED-FI-0002",
           "title": "Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se",
-          "lane": "FI",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-FI-0005",
-          "title": "Knot Pool formula ratification (OPT-AV-9, attribute/value coherence audit ED-IN-0029) -- four non-agreeing live formulas found (census C3-F1). RATIFIED: (Spirit x2) + History(Relevant) + 3; Bonds stays an eligibility-gate only, not an addit",
           "lane": "FI",
           "needs_jordan": false,
           "status": "open",
@@ -3929,16 +3919,6 @@
       "source": "registers/editorial_ledger",
       "id": "ED-FI-0002",
       "title": "Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se",
-      "lane": "FI",
-      "needs_jordan": false,
-      "status": "open",
-      "links": []
-    },
-    {
-      "kind": "ledger_actionable",
-      "source": "registers/editorial_ledger",
-      "id": "ED-FI-0005",
-      "title": "Knot Pool formula ratification (OPT-AV-9, attribute/value coherence audit ED-IN-0029) -- four non-agreeing live formulas found (census C3-F1). RATIFIED: (Spirit x2) + History(Relevant) + 3; Bonds stays an eligibility-gate only, not an addit",
       "lane": "FI",
       "needs_jordan": false,
       "status": "open",

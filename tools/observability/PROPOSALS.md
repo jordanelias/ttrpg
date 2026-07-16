@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**248 open work items** · **97 need your decision**.
+**247 open work items** · **97 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 120, Editorial ledger — needs your decision — 84, Proposal docs (proposals/) — 10, Provisional / draft design docs — 17
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 84, Proposal docs (proposals/) — 10, Provisional / draft design docs — 17
 
 ## MB — Mass battle  (6 items, 5 need decision)
 
@@ -29,14 +29,13 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-PC-0013` — Bundle of three attribute/value coherence audit (ED-IN-0029) items, decision-ratified, execution deferred to the PC lane (+MB co-sign where noted): (1) OPT-AV-15 RESIST re-export -- combat_config.gd carries pre-2026-06-30 values, 4/12 cells  _(open)_
 - `combat-critique-2026-06-28:personal_combat:2026-06-28-combat-critique` — [PARTIAL] resolution_diagnostic / personal_combat:   _(PARTIAL)_
 
-## FI — Field investigation  (7 items, 3 need decision)
+## FI — Field investigation  (6 items, 3 need decision)
 
 - 🔸 `ED-FI-0006` — Wound penalty to physical fieldwork is stated two contradictory ways within fieldwork_v30.md. SS2.2 (L72): 'Physical wounds add +0.15 Ob per wound (cumulative -- NEVER a -1D pool cut; Jordan ruling 2026-07-08, ED-PC-0005 ... calibrated ED-P  _(open)_
 - 🔸 `ED-FI-0007` — fieldwork_v30.md SS2.4 (L141) still states the wound penalty to Thread-Read/Leap operations as a flat '+1 Ob' ('wounds apply +1 Ob to Thread operations requiring Leap'). The co-file params/fieldwork.md (patched under ED-PC-0006) explicitly   _(open)_
 - 🔸 `ED-FI-0008` — P-06 philosophy violation (canon/02_canon_constraints.md P-06: 'Threadcut beings have no layer 2 ... Coherence does not apply -- layer-two self-rendering is absent by structure ... FAIL if the mechanic applies Coherence to threadcut beings'  _(open)_
 - `ED-FI-0001` — Audit the field-investigation lane (audit GAP-1): investigation_systems_v30 was audited by no lane and is the home of orphan throughlines T-02 (rendering=consciousness-performed) and T-30 (information asymmetry). ACTION: run the dossier + t  _(open)_
 - `ED-FI-0002` — Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se  _(open)_
-- `ED-FI-0005` — Knot Pool formula ratification (OPT-AV-9, attribute/value coherence audit ED-IN-0029) -- four non-agreeing live formulas found (census C3-F1). RATIFIED: (Spirit x2) + History(Relevant) + 3; Bonds stays an eligibility-gate only, not an addit  _(open)_
 - `valoria-mechanic-audit-2026-07-13:fieldwork_investigation:fieldwork_investigation` — [PARTIAL] mechanic_audit / fieldwork_investigation: 3 P1 (2 wound-formula self-contradictions from incomplete ED-PC-0005/0006 propagation; 1 P-06 canon violation — threadcut Coherence drain in Knot mechanic, also replicated in knots_v30.md)  _(PARTIAL)_
 
 ## SC — Social contest  (13 items, 5 need decision)

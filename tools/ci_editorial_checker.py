@@ -5,7 +5,7 @@ Runs in CI. Checks that commits to editorial-governed paths contain
 [EDITORIAL] or [PROVISIONAL] markers for substantive content.
 
 Editorial paths: designs/npcs/, designs/world/,
-                 arcs/gm_ref/, canon/03_ (timeline)
+                 arcs/simulated/, canon/03_ (timeline)
 
 Short stubs (< 200 chars) are exempt.
 Mechanical-only content (tables, formulas) is NOT exempt — the rule is path-based.
@@ -23,7 +23,7 @@ except ImportError:
 EDITORIAL_PATHS = (
     'designs/npcs/',
     'designs/world/',
-    'arcs/gm_ref/',
+    'arcs/simulated/',
     'canon/03_',
 )
 MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')

@@ -1,6 +1,6 @@
 <!-- [PROVISIONAL: PP-673 — terminology cleanup, auto-gen navigation index renamed from _skeleton.md to _index.md; content unchanged] -->
-<!-- SKELETON: arcs/gm_ref/arcs_46_55_resolved.md -->
-<!-- canonical: arcs/gm_ref/arcs_46_55_resolved.md -->
+<!-- SKELETON: arcs/simulated/arcs_46_55_resolved.md -->
+<!-- canonical: arcs/simulated/arcs_46_55_resolved.md -->
 <!-- Generated: 2026-04-18 (post-restructure) -->
 
 # Valoria — Emergent Campaign Arcs 46–55

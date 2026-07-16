@@ -210,7 +210,7 @@ settled) by CI tooling (see "Enforcement reality" below) — treat any status ot
 Triggered when a design file contains `[EDITORIAL: ...]` or `[PROVISIONAL: ...]` flags not yet
 in the ledger. (This marker convention is independently enforced by
 `tools/ci_editorial_checker.py` — see "Enforcement reality" below — for commits touching
-`designs/npcs/`, `designs/world/`, `arcs/gm_ref/`, or `canon/03_canonical_timeline.md`:
+`designs/npcs/`, `designs/world/`, `arcs/simulated/`, or `canon/03_canonical_timeline.md`:
 substantive new/changed content in those paths must carry an `[EDITORIAL:` or `[PROVISIONAL:`
 marker or CI fails. This workflow is how a flag placed in-doc gets a matching ledger entry.)
 
@@ -322,7 +322,7 @@ After any session where design work was done:
 1. Read all files modified in the session from the working tree.
 2. Extract all `[EDITORIAL: ...]` / `[PROVISIONAL: ...]` flags from those files (see
    `tools/ci_editorial_checker.py` — this is what CI actually enforces on
-   `designs/npcs/`, `designs/world/`, `arcs/gm_ref/`, `canon/03_canonical_timeline.md`
+   `designs/npcs/`, `designs/world/`, `arcs/simulated/`, `canon/03_canonical_timeline.md`
    commits; harvesting keeps the ledger in sync with what CI already requires to exist in-doc).
 3. Cross-reference against the relevant lane ledger file(s) (by description/ID match).
 4. Add unregistered items via Workflow B (correct lane, real `next_free` allocation).
@@ -337,7 +337,7 @@ Two separate, unrelated CI mechanisms touch this system. Do not conflate them:
 
 - **`tools/ci_editorial_checker.py`** (CI job `editorial-check`) does **not** parse or
   validate the JSONL ledger files at all. It checks that commits touching
-  `designs/npcs/`, `designs/world/`, `arcs/gm_ref/`, or `canon/03_canonical_timeline.md`
+  `designs/npcs/`, `designs/world/`, `arcs/simulated/`, or `canon/03_canonical_timeline.md`
   carry an `[EDITORIAL:`, `[PROVISIONAL:`, or `[EDITORIAL GATE]` marker somewhere in the
   changed content (stubs under 200 chars are exempt; auto-generated `_skeleton.md` files are
   exempt). Deleting a file from those paths requires the marker in the commit message instead,

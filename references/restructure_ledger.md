@@ -609,38 +609,38 @@
 | `designs/arcs/README.md` | `arcs/README.md` |
 | `designs/arcs/arc_expansion_v30.md` | `arcs/arc_expansion_v30.md` |
 | `designs/arcs/arc_expansion_v30_index.md` | `arcs/arc_expansion_v30_index.md` |
-| `designs/arcs/arcs_16_19.md` | `arcs/arcs_16_19.md` |
-| `designs/arcs/arcs_16_19_index.md` | `arcs/arcs_16_19_index.md` |
-| `designs/arcs/arcs_20_23.md` | `arcs/arcs_20_23.md` |
-| `designs/arcs/arcs_20_23_index.md` | `arcs/arcs_20_23_index.md` |
-| `designs/arcs/arcs_24_27.md` | `arcs/arcs_24_27.md` |
-| `designs/arcs/arcs_24_27_index.md` | `arcs/arcs_24_27_index.md` |
-| `designs/arcs/arcs_28_30.md` | `arcs/arcs_28_30.md` |
-| `designs/arcs/arcs_28_30_index.md` | `arcs/arcs_28_30_index.md` |
-| `designs/arcs/arcs_31_35.md` | `arcs/arcs_31_35.md` |
-| `designs/arcs/arcs_31_35_index.md` | `arcs/arcs_31_35_index.md` |
+| `designs/arcs/arcs_16_19.md` | `arcs/simulated/arcs_16_19.md` |
+| `designs/arcs/arcs_16_19_index.md` | `arcs/simulated/arcs_16_19_index.md` |
+| `designs/arcs/arcs_20_23.md` | `arcs/simulated/arcs_20_23.md` |
+| `designs/arcs/arcs_20_23_index.md` | `arcs/simulated/arcs_20_23_index.md` |
+| `designs/arcs/arcs_24_27.md` | `arcs/simulated/arcs_24_27.md` |
+| `designs/arcs/arcs_24_27_index.md` | `arcs/simulated/arcs_24_27_index.md` |
+| `designs/arcs/arcs_28_30.md` | `arcs/simulated/arcs_28_30.md` |
+| `designs/arcs/arcs_28_30_index.md` | `arcs/simulated/arcs_28_30_index.md` |
+| `designs/arcs/arcs_31_35.md` | `arcs/simulated/arcs_31_35.md` |
+| `designs/arcs/arcs_31_35_index.md` | `arcs/simulated/arcs_31_35_index.md` |
 | `designs/arcs/emergent_arcs_experimental.md` | `arcs/emergent_arcs_experimental.md` |
 | `designs/arcs/emergent_arcs_experimental_index.md` | `arcs/emergent_arcs_experimental_index.md` |
 | `designs/arcs/emergent_campaign_arcs.md` | `arcs/emergent_campaign_arcs.md` |
 | `designs/arcs/emergent_scenarios.md` | `arcs/emergent_scenarios.md` |
 | `designs/arcs/emergent_scenarios_index.md` | `arcs/emergent_scenarios_index.md` |
-| `designs/arcs/gm_ref/README.md` | `arcs/gm_ref/README.md` |
-| `designs/arcs/gm_ref/arc_narrative_analysis.md` | `arcs/gm_ref/arc_narrative_analysis.md` |
-| `designs/arcs/gm_ref/arc_narrative_analysis_index.md` | `arcs/gm_ref/arc_narrative_analysis_index.md` |
-| `designs/arcs/gm_ref/arcs_01_04.md` | `arcs/gm_ref/arcs_01_04.md` |
-| `designs/arcs/gm_ref/arcs_01_04_index.md` | `arcs/gm_ref/arcs_01_04_index.md` |
-| `designs/arcs/gm_ref/arcs_05_09.md` | `arcs/gm_ref/arcs_05_09.md` |
-| `designs/arcs/gm_ref/arcs_05_09_index.md` | `arcs/gm_ref/arcs_05_09_index.md` |
-| `designs/arcs/gm_ref/arcs_10_18.md` | `arcs/gm_ref/arcs_10_18.md` |
-| `designs/arcs/gm_ref/arcs_10_18_index.md` | `arcs/gm_ref/arcs_10_18_index.md` |
-| `designs/arcs/gm_ref/arcs_36_40.md` | `arcs/gm_ref/arcs_36_40.md` |
-| `designs/arcs/gm_ref/arcs_36_40_index.md` | `arcs/gm_ref/arcs_36_40_index.md` |
-| `designs/arcs/gm_ref/arcs_41_45.md` | `arcs/gm_ref/arcs_41_45.md` |
-| `designs/arcs/gm_ref/arcs_41_45_index.md` | `arcs/gm_ref/arcs_41_45_index.md` |
-| `designs/arcs/gm_ref/arcs_46_55.md` | `arcs/gm_ref/arcs_46_55.md` |
-| `designs/arcs/gm_ref/arcs_46_55_index.md` | `arcs/gm_ref/arcs_46_55_index.md` |
-| `designs/arcs/gm_ref/arcs_46_55_resolved.md` | `arcs/gm_ref/arcs_46_55_resolved.md` |
-| `designs/arcs/gm_ref/arcs_46_55_resolved_index.md` | `arcs/gm_ref/arcs_46_55_resolved_index.md` |
+| `designs/arcs/gm_ref/README.md` | `arcs/simulated/README.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis.md` | `arcs/simulated/arc_narrative_analysis.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis_index.md` | `arcs/simulated/arc_narrative_analysis_index.md` |
+| `designs/arcs/gm_ref/arcs_01_04.md` | `arcs/simulated/arcs_01_04.md` |
+| `designs/arcs/gm_ref/arcs_01_04_index.md` | `arcs/simulated/arcs_01_04_index.md` |
+| `designs/arcs/gm_ref/arcs_05_09.md` | `arcs/simulated/arcs_05_09.md` |
+| `designs/arcs/gm_ref/arcs_05_09_index.md` | `arcs/simulated/arcs_05_09_index.md` |
+| `designs/arcs/gm_ref/arcs_10_18.md` | `arcs/simulated/arcs_10_18.md` |
+| `designs/arcs/gm_ref/arcs_10_18_index.md` | `arcs/simulated/arcs_10_18_index.md` |
+| `designs/arcs/gm_ref/arcs_36_40.md` | `arcs/simulated/arcs_36_40.md` |
+| `designs/arcs/gm_ref/arcs_36_40_index.md` | `arcs/simulated/arcs_36_40_index.md` |
+| `designs/arcs/gm_ref/arcs_41_45.md` | `arcs/simulated/arcs_41_45.md` |
+| `designs/arcs/gm_ref/arcs_41_45_index.md` | `arcs/simulated/arcs_41_45_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55.md` | `arcs/simulated/arcs_46_55.md` |
+| `designs/arcs/gm_ref/arcs_46_55_index.md` | `arcs/simulated/arcs_46_55_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved.md` | `arcs/simulated/arcs_46_55_resolved.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved_index.md` | `arcs/simulated/arcs_46_55_resolved_index.md` |
 | `designs/arcs/narrative_scenario_chains.md` | `arcs/narrative_scenario_chains.md` |
 | `designs/arcs/narrative_scenario_chains_index.md` | `arcs/narrative_scenario_chains_index.md` |
 | `designs/arcs/throughline_resolutions_v30.md` | `arcs/throughline_resolutions_v30.md` |
@@ -652,3 +652,20 @@
 | `references/arcs/arc_register_factions.md` | `arcs/registers/arc_register_factions.md` |
 | `references/arcs/arc_register_territory.md` | `arcs/registers/arc_register_territory.md` |
 | `references/arcs/arc_register_threads.md` | `arcs/registers/arc_register_threads.md` |
+
+
+## 2026-07-16 — arcs/gm_ref -> simulated + root arc-batches pulled in (ED-IN-0071 follow-up)
+
+| old path | new path |
+|---|---|
+| `arcs/gm_ref/` | `arcs/simulated/` |
+| `arcs/arcs_16_19.md` | `arcs/simulated/arcs_16_19.md` |
+| `arcs/arcs_16_19_index.md` | `arcs/simulated/arcs_16_19_index.md` |
+| `arcs/arcs_20_23.md` | `arcs/simulated/arcs_20_23.md` |
+| `arcs/arcs_20_23_index.md` | `arcs/simulated/arcs_20_23_index.md` |
+| `arcs/arcs_24_27.md` | `arcs/simulated/arcs_24_27.md` |
+| `arcs/arcs_24_27_index.md` | `arcs/simulated/arcs_24_27_index.md` |
+| `arcs/arcs_28_30.md` | `arcs/simulated/arcs_28_30.md` |
+| `arcs/arcs_28_30_index.md` | `arcs/simulated/arcs_28_30_index.md` |
+| `arcs/arcs_31_35.md` | `arcs/simulated/arcs_31_35.md` |
+| `arcs/arcs_31_35_index.md` | `arcs/simulated/arcs_31_35_index.md` |
