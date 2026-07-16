@@ -59,7 +59,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
   riders, B1 faction-count = 4, and B12's new Settlement→Territory→Province→Duchy→Country
   hierarchy await ratification-flip + authoring (E11 symmetric suspicion-reduction; **L/PS
   wiring** is flagged the single highest-priority open item). The dashboard's proposals register
-  was made honest 2026-07-16 (**ED-IN-0071**): of the open work, ~136 items are genuinely
+  was made honest 2026-07-16 (**ED-IN-0072**): of the open work, ~136 items are genuinely
   agent-executable (no ruling needed) and ~97 need your decision — see
   `tools/observability/PROPOSALS.md`. Lane detail in each `handoffs/HANDOFF_<LANE>.md`.
 - **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `docs/dashboard/`,

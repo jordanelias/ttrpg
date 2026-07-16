@@ -5,13 +5,13 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 246,
-    "needs_jordan": 97,
+    "total": 248,
+    "needs_jordan": 99,
     "by_kind": {
       "provisional_status_doc": 17,
-      "proposal_doc": 9,
+      "proposal_doc": 10,
       "ledger_actionable": 119,
-      "ledger_needs_jordan": 84,
+      "ledger_needs_jordan": 85,
       "audit_partial": 17
     },
     "by_lane": {
@@ -24,8 +24,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 33,
-        "needs_jordan": 15
+        "total": 34,
+        "needs_jordan": 16
       },
       "MB": {
         "total": 6,
@@ -48,15 +48,15 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 96,
-        "needs_jordan": 27
+        "total": 97,
+        "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "IN": {
-      "total": 33,
-      "needs_jordan": 15,
+      "total": 34,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -329,6 +329,16 @@
           "links": []
         },
         {
+          "kind": "ledger_needs_jordan",
+          "source": "canon/editorial_ledger",
+          "id": "ED-IN-0071",
+          "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
           "kind": "audit_partial",
           "source": "references/audit_registry.jsonl",
           "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
@@ -403,8 +413,8 @@
       ]
     },
     "unassigned": {
-      "total": 96,
-      "needs_jordan": 27,
+      "total": 97,
+      "needs_jordan": 28,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -574,6 +584,16 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "designs/proposals/repo-reorganization-v1.md",
+          "id": "designs/proposals/repo-reorganization-v1.md",
+          "title": "repo-reorganization-v1",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). A hard architecture call, filed so it stops evaporating — **not** a routine-merge item. Merging tracks the proposal only (ED-1094 reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **The primary axis (subsystem, §2a) and all six §5 sub-forks are now RULED by direct Jordan input (2026-07-15).** What remains before execution is sequencing sign-off (ruled: P0 first) and building the migration tooling (§3/§6).",
           "links": []
         },
         {
@@ -2816,6 +2836,16 @@
     },
     {
       "kind": "proposal_doc",
+      "source": "designs/proposals/repo-reorganization-v1.md",
+      "id": "designs/proposals/repo-reorganization-v1.md",
+      "title": "repo-reorganization-v1",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). A hard architecture call, filed so it stops evaporating — **not** a routine-merge item. Merging tracks the proposal only (ED-1094 reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **The primary axis (subsystem, §2a) and all six §5 sub-forks are now RULED by direct Jordan input (2026-07-15).** What remains before execution is sequencing sign-off (ruled: P0 first) and building the migration tooling (§3/§6).",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
       "source": "designs/proposals/stub_infill_plan.md",
       "id": "designs/proposals/stub_infill_plan.md",
       "title": "stub infill plan",
@@ -4189,6 +4219,16 @@
       "source": "canon/editorial_ledger",
       "id": "ED-IN-0070",
       "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+      "lane": "IN",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "canon/editorial_ledger",
+      "id": "ED-IN-0071",
+      "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
       "lane": "IN",
       "needs_jordan": true,
       "status": "open",
