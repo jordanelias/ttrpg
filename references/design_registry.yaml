@@ -366,7 +366,7 @@ registry:
   emergent_arcs:
     system: emergent_arcs
     mode: ALL
-    canonical_v30: references/arc_register.md
+    canonical_v30: arcs/registers/arc_register.md
     skeleton: null
     infill: null
     atomized: not_applicable

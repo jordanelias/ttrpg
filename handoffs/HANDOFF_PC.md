@@ -418,7 +418,7 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   mass-battle Command (`params/mass_combat` ED-167). ACTION: sim-calibrate against the combat anchor
   (ED-1041 +0.15/+0.25), reconcile the pre-ruling "+1 Ob to Leap Thread ops" datum, propagate + land a
   verified PR (merge-ratifies). Also reconcile the two downstream narrative citations of the old −1D seed
-  (`designs/arcs/gm_ref/arcs_46_55.md` + `arcs_46_55_resolved.md`, PP-232 framing). No invented numbers.
+  (`arcs/gm_ref/arcs_46_55.md` + `arcs_46_55_resolved.md`, PP-232 framing). No invented numbers.
 - **Scene-combat — merged (`d4bf2af3` PR #40, `8fbc4b66` PR #47); next up, all Jordan-gated:**
   1. **Two Track-2 residuals awaiting Jordan's single-source-target decision** (forward_roadmap Track 2;
      "Still open on `main`" above): (a) `wt`/`spd` cost-path de-leak (`core.py:55`, `systems.py:46`) — an

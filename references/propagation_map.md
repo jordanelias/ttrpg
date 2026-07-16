@@ -69,7 +69,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## ED-777 5-arc reframe — closure (2026-05-10)
 **Class C (content reframe per Jordan's 2026-05-09 G-L03 decision); applied this commit.**
-- `references/arcs/arc_register_factions.md` NIFLHEL section: rewritten as "CRIME & UNDERGROUND NETWORKS (settlement-layer phenomena — formerly NIFLHEL fourth-tier)".
+- `arcs/registers/arc_register_factions.md` NIFLHEL section: rewritten as "CRIME & UNDERGROUND NETWORKS (settlement-layer phenomena — formerly NIFLHEL fourth-tier)".
 - ARC-S11 reframed: "Headless Network" → "Underground Network Engagement" (per-settlement Intel; four-arm structure dissolved with Niflhel).
 - ARC-S54 reframed: "Quiet Overreach" → "Underground Operational Detection" (Thread-signature dependency removed).
 - ARC-S55 reframed: "Arms Out of Sync" → "Network Coordination Failure".

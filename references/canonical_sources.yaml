@@ -274,7 +274,7 @@ systems:
 # D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
 #   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
 # D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
-#   Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
+#   Propagated arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   narrative_voice_canon:
@@ -400,9 +400,9 @@ systems:
 
   # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
   arc_expansion:
-    design_doc: designs/arcs/arc_expansion_v30.md
+    design_doc: arcs/arc_expansion_v30.md
     canonical_sha__designs__arcs__arc_expansion_v30_md: "0f3fb011914a0d0908ee0118cab64df16a134dc3"
-    index: designs/arcs/arc_expansion_v30_index.md
+    index: arcs/arc_expansion_v30_index.md
     canonical_sha__designs__arcs__arc_expansion_v30_index_md: "5f2e99014ee3e06e1e9da6b337f5a9ffdd8e4fd6"
   calamity_radiation:
     design_doc: designs/world/calamity_radiation_v30.md
@@ -486,9 +486,9 @@ systems:
     index: designs/threadwork/thread_horizontal_integration_spec_index.md
     canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
   throughline_resolutions:
-    design_doc: designs/arcs/throughline_resolutions_v30.md
+    design_doc: arcs/throughline_resolutions_v30.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_md: "5aa4ea143cd4d9cec19da2991eec0eb61f3d636b"
-    index: designs/arcs/throughline_resolutions_v30_index.md
+    index: arcs/throughline_resolutions_v30_index.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "2c9ca8c1c2414173a6440fcaa13b8ae79a2c9f07"
   ui_ux:
     design_doc: designs/ui/valoria_ui_ux_v4.md

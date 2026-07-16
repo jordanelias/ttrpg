@@ -326,8 +326,8 @@ entries:
       - params/mass_combat.md   # DONE
       - designs/scene/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
       - sim/personal/contest_legacy_stub.py   # already current (ED-PC-0005 pass)
-      - designs/arcs/gm_ref/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)
-      - designs/arcs/gm_ref/arcs_46_55_resolved.md   # DONE — worked example renarrated (−2D → +0.30 Ob)
+      - arcs/gm_ref/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)
+      - arcs/gm_ref/arcs_46_55_resolved.md   # DONE — worked example renarrated (−2D → +0.30 Ob)
 
   - superseded_id: "designs/audit/2026-07-05-emergent-narrative-engine/{00_grounding,01_workings}/**.md (29 working-record docs)"
     scope: >

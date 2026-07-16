@@ -764,8 +764,8 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('48', 'params/bg
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/threadwork_superseded.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/history/threadwork.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/threadwork.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'designs/arcs/arc_expansion_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'designs/arcs/arc_expansion_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'arcs/arc_expansion_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'arcs/arc_expansion_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('51', 'designs/provincial/parliamentary_transfer_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('52', 'designs/architecture/integration_proposal_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('52', 'designs/architecture/integration_proposal_v30_index.md');
@@ -800,8 +800,8 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('75', 'designs/f
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('76', 'references/simulation_workplan_v1.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('77', 'designs/audit/2026-05-17-v18-integration/integration_plan_v18.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('78', 'designs/provincial/treaty_expiration_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'designs/arcs/throughline_resolutions_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'designs/arcs/throughline_resolutions_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'arcs/throughline_resolutions_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'arcs/throughline_resolutions_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('81', 'designs/personal/conviction_track_v1.md');

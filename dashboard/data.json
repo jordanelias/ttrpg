@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T19:38:06+00:00",
-    "commit_sha": "a65b6e5"
+    "timestamp_utc": "2026-07-16T20:46:42+00:00",
+    "commit_sha": "95d871f"
   },
   "workplan": {
     "available": true,
@@ -402,11 +402,11 @@
     "available": true,
     "commits": [
       {
-        "sha": "a65b6e5278",
+        "sha": "95d871f57a",
         "date": "2026-07-16",
-        "author": "Claude",
-        "subject": "[infrastructure] P1: proposals out of designs/ -> proposals/ (ED-IN-0071)",
-        "scope": "infrastructure"
+        "author": "jordanelias",
+        "subject": "P1+P2: primary promotions + Godot consolidation (ED-IN-0071) (#153)",
+        "scope": null
       },
       {
         "sha": "0e6bb2bd55",
@@ -735,13 +735,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "97 in-scope file(s) changed since last refresh",
+        "detail": "133 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base a65b6e5 (2026-07-16)",
+        "ref": "base 95d871f (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -749,7 +749,7 @@
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base a65b6e5 (2026-07-16)",
+        "ref": "base 95d871f (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -759,15 +759,15 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "45 in-scope file(s) changed since last refresh",
+        "detail": "46 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 0e6bb2b (2026-07-16)",
-        "stale": true,
-        "detail": "4 in-scope file(s) changed since last refresh",
+        "ref": "base 95d871f (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -781,9 +781,9 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 0e6bb2b (2026-07-16)",
-        "stale": true,
-        "detail": "10 in-scope file(s) changed since last refresh",
+        "ref": "base 95d871f (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -803,7 +803,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 6,
+    "stale_count": 4,
     "total": 10,
     "handoffs": [
       {
@@ -823,8 +823,8 @@
       },
       {
         "surface": "HANDOFF_GO.md",
-        "last_updated": "2026-07-08",
-        "days_ago": 8
+        "last_updated": "2026-07-16",
+        "days_ago": 0
       },
       {
         "surface": "HANDOFF_IN.md",
@@ -2063,8 +2063,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"architecture\"]\n    D1[\"arcs\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"godot\"]\n    D6[\"npcs\"]\n    D7[\"personal\"]\n    D8[\"proposals\"]\n    D9[\"provincial\"]\n    D10[\"scene\"]\n    D11[\"territory\"]\n    D12[\"threadwork\"]\n    D13[\"ui\"]\n    D14[\"videogame\"]\n    D15[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 16,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"architecture\"]\n    D1[\"articulation\"]\n    D2[\"audit\"]\n    D3[\"factions\"]\n    D4[\"npcs\"]\n    D5[\"personal\"]\n    D6[\"proposals\"]\n    D7[\"provincial\"]\n    D8[\"scene\"]\n    D9[\"territory\"]\n    D10[\"threadwork\"]\n    D11[\"ui\"]\n    D12[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 13,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {

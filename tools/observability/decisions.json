@@ -1,13 +1,13 @@
 {
   "meta": {
-    "files_scanned": 1402,
-    "total_open": 982,
+    "files_scanned": 1356,
+    "total_open": 981,
     "by_category": {
       "ratification": 46,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
-      "gap": 325,
+      "gap": 324,
       "assumption": 248,
       "stub": 34,
       "todo": 14
@@ -15,10 +15,10 @@
     "by_priority": {
       "1": 325,
       "2": 36,
-      "3": 621
+      "3": 620
     },
     "by_lane": {
-      "unassigned": 698,
+      "unassigned": 697,
       "IN": 11,
       "FA": 67,
       "SC": 7,
@@ -33,7 +33,7 @@
       "unassigned": {
         "1": 282,
         "2": 32,
-        "3": 384
+        "3": 383
       },
       "IN": {
         "1": 2,
@@ -189,19 +189,6 @@
       ],
       "systems": [],
       "count": 4,
-      "lane": null
-    },
-    {
-      "text": "<!-- [EDITORIAL: PP-665 \u2014 Yrsa Vossen \u2192 Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/arcs/gm_ref/arcs_36_40.md:1",
-        "designs/npcs/npc_behavior_system_v1.md:1"
-      ],
-      "systems": [],
-      "count": 2,
       "lane": null
     },
     {
@@ -813,6 +800,18 @@
       "label": "Naming collision",
       "locations": [
         "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/02_term_usage_sweep/batch_09_mass_battle_engine_terms_and_the_coherence_cohesion_near_col.md:161"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "<!-- [EDITORIAL: PP-665 \u2014 Yrsa Vossen \u2192 Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/npcs/npc_behavior_system_v1.md:1"
       ],
       "systems": [],
       "count": 1,
@@ -3867,12 +3866,12 @@
       "lane": "IN"
     },
     {
-      "text": "Contents:** `godot_conversion_strategy_v1.md` \u2014 the consolidated conversion strategy and all-directions hierarchy spec. Status **PROPOSED**, Jordan-vetoable throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface.",
+      "text": "throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface). Details below.",
       "category": "ruling",
       "priority": 1,
       "label": "Open ruling (awaiting Jordan)",
       "locations": [
-        "godot/README.md:3"
+        "godot/README.md:11"
       ],
       "systems": [],
       "count": 1,
@@ -11348,18 +11347,6 @@
       "label": "Documented gap",
       "locations": [
         "references/module_contracts.yaml:717"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "IP rises from institutional momentum at a base rate `[GAP: canonical base rate not specified; working assumption +2/season]` and from specific triggers (Tutoring Demand failure, Torben delivery, Laskaris Flip). Direction: toward Altonian engagement thresholds (30 = Tutoring Demand; 60\u201374 = trade disruption, proxy ac\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/arcs/arc_register_clocks.md:24"
       ],
       "systems": [],
       "count": 1,

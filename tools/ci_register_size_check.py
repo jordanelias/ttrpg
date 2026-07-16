@@ -61,7 +61,7 @@ THRESHOLDS = {
     # the policy file (one place) and this validator follows. Drift between the two
     # is caught by tests/valoria/test_coverage_matrix_threshold.py.
     "tests/coverage_matrix.md":   COVERAGE_MATRIX_LIMIT,
-    "references/arc_register.md":            20_000,
+    "arcs/registers/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)

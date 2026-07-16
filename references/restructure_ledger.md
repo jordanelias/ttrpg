@@ -596,3 +596,59 @@
 | `designs/godot/skeleton/engines/combat/resources/tradition_resource.gd` | `godot/skeleton/engines/combat/resources/tradition_resource.gd` |
 | `designs/godot/skeleton/engines/combat/resources/weapon_resource.gd` | `godot/skeleton/engines/combat/resources/weapon_resource.gd` |
 | `designs/videogame/godot_architecture_specification.md` | `godot/godot_architecture_specification.md` |
+
+
+## 2026-07-16 — arcs primary promotion -> arcs/ (+ arcs/registers/) (ED-IN-0071 P1-class)
+
+| old path | new path |
+|---|---|
+| `designs/arcs/` | `arcs/` |
+| `references/arcs/` | `arcs/registers/` |
+| `references/arc_register.md` | `arcs/registers/arc_register.md` |
+| `references/arc_register_infill.md` | `arcs/registers/arc_register_infill.md` |
+| `designs/arcs/README.md` | `arcs/README.md` |
+| `designs/arcs/arc_expansion_v30.md` | `arcs/arc_expansion_v30.md` |
+| `designs/arcs/arc_expansion_v30_index.md` | `arcs/arc_expansion_v30_index.md` |
+| `designs/arcs/arcs_16_19.md` | `arcs/arcs_16_19.md` |
+| `designs/arcs/arcs_16_19_index.md` | `arcs/arcs_16_19_index.md` |
+| `designs/arcs/arcs_20_23.md` | `arcs/arcs_20_23.md` |
+| `designs/arcs/arcs_20_23_index.md` | `arcs/arcs_20_23_index.md` |
+| `designs/arcs/arcs_24_27.md` | `arcs/arcs_24_27.md` |
+| `designs/arcs/arcs_24_27_index.md` | `arcs/arcs_24_27_index.md` |
+| `designs/arcs/arcs_28_30.md` | `arcs/arcs_28_30.md` |
+| `designs/arcs/arcs_28_30_index.md` | `arcs/arcs_28_30_index.md` |
+| `designs/arcs/arcs_31_35.md` | `arcs/arcs_31_35.md` |
+| `designs/arcs/arcs_31_35_index.md` | `arcs/arcs_31_35_index.md` |
+| `designs/arcs/emergent_arcs_experimental.md` | `arcs/emergent_arcs_experimental.md` |
+| `designs/arcs/emergent_arcs_experimental_index.md` | `arcs/emergent_arcs_experimental_index.md` |
+| `designs/arcs/emergent_campaign_arcs.md` | `arcs/emergent_campaign_arcs.md` |
+| `designs/arcs/emergent_scenarios.md` | `arcs/emergent_scenarios.md` |
+| `designs/arcs/emergent_scenarios_index.md` | `arcs/emergent_scenarios_index.md` |
+| `designs/arcs/gm_ref/README.md` | `arcs/gm_ref/README.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis.md` | `arcs/gm_ref/arc_narrative_analysis.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis_index.md` | `arcs/gm_ref/arc_narrative_analysis_index.md` |
+| `designs/arcs/gm_ref/arcs_01_04.md` | `arcs/gm_ref/arcs_01_04.md` |
+| `designs/arcs/gm_ref/arcs_01_04_index.md` | `arcs/gm_ref/arcs_01_04_index.md` |
+| `designs/arcs/gm_ref/arcs_05_09.md` | `arcs/gm_ref/arcs_05_09.md` |
+| `designs/arcs/gm_ref/arcs_05_09_index.md` | `arcs/gm_ref/arcs_05_09_index.md` |
+| `designs/arcs/gm_ref/arcs_10_18.md` | `arcs/gm_ref/arcs_10_18.md` |
+| `designs/arcs/gm_ref/arcs_10_18_index.md` | `arcs/gm_ref/arcs_10_18_index.md` |
+| `designs/arcs/gm_ref/arcs_36_40.md` | `arcs/gm_ref/arcs_36_40.md` |
+| `designs/arcs/gm_ref/arcs_36_40_index.md` | `arcs/gm_ref/arcs_36_40_index.md` |
+| `designs/arcs/gm_ref/arcs_41_45.md` | `arcs/gm_ref/arcs_41_45.md` |
+| `designs/arcs/gm_ref/arcs_41_45_index.md` | `arcs/gm_ref/arcs_41_45_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55.md` | `arcs/gm_ref/arcs_46_55.md` |
+| `designs/arcs/gm_ref/arcs_46_55_index.md` | `arcs/gm_ref/arcs_46_55_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved.md` | `arcs/gm_ref/arcs_46_55_resolved.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved_index.md` | `arcs/gm_ref/arcs_46_55_resolved_index.md` |
+| `designs/arcs/narrative_scenario_chains.md` | `arcs/narrative_scenario_chains.md` |
+| `designs/arcs/narrative_scenario_chains_index.md` | `arcs/narrative_scenario_chains_index.md` |
+| `designs/arcs/throughline_resolutions_v30.md` | `arcs/throughline_resolutions_v30.md` |
+| `designs/arcs/throughline_resolutions_v30_index.md` | `arcs/throughline_resolutions_v30_index.md` |
+| `references/arc_register.md` | `arcs/registers/arc_register.md` |
+| `references/arc_register_infill.md` | `arcs/registers/arc_register_infill.md` |
+| `references/arcs/arc_register_clocks.md` | `arcs/registers/arc_register_clocks.md` |
+| `references/arcs/arc_register_events.md` | `arcs/registers/arc_register_events.md` |
+| `references/arcs/arc_register_factions.md` | `arcs/registers/arc_register_factions.md` |
+| `references/arcs/arc_register_territory.md` | `arcs/registers/arc_register_territory.md` |
+| `references/arcs/arc_register_threads.md` | `arcs/registers/arc_register_threads.md` |

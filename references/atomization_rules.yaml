@@ -192,11 +192,11 @@ policies:
   # ────────────────────────────────────────────────────────────
   # ARC REGISTER
   # ────────────────────────────────────────────────────────────
-  - match: "references/arc_register.md"
+  - match: "arcs/registers/arc_register.md"
     max_tokens: 5000
     split_strategy: by_vector_category
     split_cap_per_file: 10000
-    target_pattern: "references/arcs/arc_register_{category}.md"
+    target_pattern: "arcs/registers/arc_register_{category}.md"
     index_replaces_canonical: true
     categories:
       - name: clocks
