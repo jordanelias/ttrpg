@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T20:46:42+00:00",
-    "commit_sha": "95d871f"
+    "timestamp_utc": "2026-07-16T21:08:26+00:00",
+    "commit_sha": "4c5a82c"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": ""
+    "staleness_warning": "⚠ 5 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,20 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "4c5a82c9d3",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "Reconcile Knot Pool formula to the ratified form (ED-FI-0005) (#154)",
+        "scope": null
+      },
+      {
+        "sha": "1a83ccf452",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] arcs: promote narrative content + arc registers to arcs/ primary (ED-IN-0071) (#155)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "95d871f57a",
         "date": "2026-07-16",
@@ -666,20 +680,6 @@
         "author": "jordanelias",
         "subject": "[design] Pessimist Subtractive NERS + corpus contamination/hardcode registry (follow-up to PR #101) (#116)",
         "scope": "design"
-      },
-      {
-        "sha": "1ad283f77d",
-        "date": "2026-07-08",
-        "author": "jordanelias",
-        "subject": "Social contest workplan + FA/SE historical-precedent build (P3-lite Agôn, Muster/action-mix/conquest rework, Parliamentary Censure) (#105)",
-        "scope": null
-      },
-      {
-        "sha": "362cf35b44",
-        "date": "2026-07-08",
-        "author": "jordanelias",
-        "subject": "Mass battle: full 11-surface gauge architecture audit (ED-MB-0007) (#114)",
-        "scope": null
       }
     ]
   },
@@ -726,8 +726,8 @@
         "surface": "Workplan progress board",
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
-        "stale": false,
-        "detail": "current — no workplan-relevant file changed since the last refresh",
+        "stale": true,
+        "detail": "⚠ 5 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -735,23 +735,23 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "133 in-scope file(s) changed since last refresh",
+        "detail": "184 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 95d871f (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "ref": "base 1a83ccf (2026-07-16)",
+        "stale": true,
+        "detail": "4 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
         "ref": "base 95d871f (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "stale": true,
+        "detail": "43 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -759,15 +759,15 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "46 in-scope file(s) changed since last refresh",
+        "detail": "48 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 95d871f (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "ref": "base 1a83ccf (2026-07-16)",
+        "stale": true,
+        "detail": "1 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -782,8 +782,8 @@
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
         "ref": "base 95d871f (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "stale": true,
+        "detail": "43 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -803,7 +803,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 4,
+    "stale_count": 9,
     "total": 10,
     "handoffs": [
       {
@@ -838,8 +838,8 @@
       },
       {
         "surface": "HANDOFF_PC.md",
-        "last_updated": "2026-07-10",
-        "days_ago": 6
+        "last_updated": "2026-07-16",
+        "days_ago": 0
       },
       {
         "surface": "HANDOFF_SC.md",
@@ -1495,11 +1495,6 @@
               "id": "ED-FI-0002",
               "desc": "Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se",
               "source": "designs/audit/2026-07-05-edge-playability-audit/edge_playability_audit_v1.md"
-            },
-            {
-              "id": "ED-FI-0005",
-              "desc": "Knot Pool formula ratification (OPT-AV-9, attribute/value coherence audit ED-IN-0029) -- four non-agreeing live formulas found (census C3-F1). RATIFIED: (Spirit x2) + History(Relevant) + 3; Bonds stays an eligibility-gate only, not an addit",
-              "source": "designs/audit/2026-07-08-attribute-value-coherence-audit/ed_options.md (OPT-AV-9)"
             }
           ]
         },
@@ -1969,8 +1964,8 @@
     },
     "totals": {
       "needs_jordan": 77,
-      "actionable": 127,
-      "open": 204
+      "actionable": 126,
+      "open": 203
     },
     "note": "Open editorial-ledger items. “Needs your decision” = needs_jordan:true; “Claude can action” = the remaining open items. The ledger is the source of truth; a merge ratifies (ED-1094)."
   },
@@ -2494,7 +2489,7 @@
   "registers": {
     "available": true,
     "editorial_ledger": {
-      "total_open": 204,
+      "total_open": 203,
       "total_needs_jordan": 82,
       "by_lane": {
         "flat": {
@@ -2510,7 +2505,7 @@
           "needs_jordan": 1
         },
         "fi": {
-          "open": 6,
+          "open": 5,
           "needs_jordan": 3
         },
         "sc": {

@@ -65,7 +65,7 @@ ci_checks:
 
   - path: tools/ci_editorial_checker.py
     level: 5
-    role: "Editorial paths (designs/npcs/, designs/world/, arcs/gm_ref/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
+    role: "Editorial paths (designs/npcs/, designs/world/, arcs/simulated/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
     paired_hook: editorial_gate
     ci_job: editorial-check
     notes: ""

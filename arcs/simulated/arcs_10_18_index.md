@@ -1,6 +1,6 @@
 <!-- [PROVISIONAL: PP-673 — terminology cleanup, auto-gen navigation index renamed from _skeleton.md to _index.md; content unchanged] -->
-<!-- SKELETON: arcs/gm_ref/arcs_10_18.md -->
-<!-- canonical: arcs/gm_ref/arcs_10_18.md -->
+<!-- SKELETON: arcs/simulated/arcs_10_18.md -->
+<!-- canonical: arcs/simulated/arcs_10_18.md -->
 <!-- Generated: 2026-04-18 (post-restructure) -->
 
 # Valoria Emergent Arcs — Batch 03 (Consolidated)

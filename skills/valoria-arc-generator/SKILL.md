@@ -19,7 +19,7 @@ Before generating arcs, read these from the working tree:
 
 - Step 1: always read `references/canonical_sources.yaml` first — it resolves which docs are current.
 - Step 2: read required docs based on arc scope (see Read Protocol below).
-- Step 3: check the `arcs/gm_ref/` directory to avoid arc duplication.
+- Step 3: check the `arcs/simulated/` directory to avoid arc duplication.
 
 **Do not read compilation stage files from memory.** Read them from the working tree, and check `canonical_sources.yaml` for which version is current before using any values.
 
@@ -63,7 +63,7 @@ Read in this order. Check `canonical_sources.yaml` to confirm current paths befo
 - The canonical territories doc (check `canonical_sources.yaml` for current path)
 
 **Check for prior arcs (avoid duplication):**
-- `arcs/gm_ref/` — list the directory contents before generating; do not reproduce an arc already documented there
+- `arcs/simulated/` — list the directory contents before generating; do not reproduce an arc already documented there
 
 ---
 
@@ -119,5 +119,5 @@ Read in this order. Check `canonical_sources.yaml` to confirm current paths befo
 - Inline in chat if 3 arcs or fewer and no prior arcs to check.
 - `.md` file if 4+ arcs or if the user requests a document.
 
-- Commit to `arcs/gm_ref/` after every batch. File naming: `arcs_NN_MM_[topic].md`.
+- Commit to `arcs/simulated/` after every batch. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.
