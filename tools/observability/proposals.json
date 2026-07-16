@@ -5,19 +5,19 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "designs/workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 247,
-    "needs_jordan": 79,
+    "total": 248,
+    "needs_jordan": 99,
     "by_kind": {
       "provisional_status_doc": 17,
-      "proposal_doc": 9,
-      "ledger_actionable": 127,
-      "ledger_needs_jordan": 77,
+      "proposal_doc": 10,
+      "ledger_actionable": 119,
+      "ledger_needs_jordan": 85,
       "audit_partial": 17
     },
     "by_lane": {
       "FA": {
         "total": 28,
-        "needs_jordan": 15
+        "needs_jordan": 16
       },
       "FI": {
         "total": 7,
@@ -25,11 +25,11 @@
       },
       "IN": {
         "total": 34,
-        "needs_jordan": 14
+        "needs_jordan": 16
       },
       "MB": {
         "total": 6,
-        "needs_jordan": 3
+        "needs_jordan": 5
       },
       "PC": {
         "total": 6,
@@ -45,18 +45,18 @@
       },
       "WR": {
         "total": 9,
-        "needs_jordan": 1
+        "needs_jordan": 2
       },
       "unassigned": {
-        "total": 96,
-        "needs_jordan": 14
+        "total": 97,
+        "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "IN": {
       "total": 34,
-      "needs_jordan": 14,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -74,7 +74,7 @@
           "id": "designs/architecture/governance_type_registry_v1.md",
           "title": "governance type registry v1",
           "lane": "IN",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
           "links": []
         },
@@ -309,16 +309,6 @@
           "links": []
         },
         {
-          "kind": "ledger_actionable",
-          "source": "canon/editorial_ledger",
-          "id": "ED-IN-0068",
-          "title": "Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
           "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-IN-0069",
@@ -333,6 +323,16 @@
           "source": "canon/editorial_ledger",
           "id": "ED-IN-0070",
           "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "canon/editorial_ledger",
+          "id": "ED-IN-0071",
+          "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
           "lane": "IN",
           "needs_jordan": true,
           "status": "open",
@@ -413,8 +413,8 @@
       ]
     },
     "unassigned": {
-      "total": 96,
-      "needs_jordan": 14,
+      "total": 97,
+      "needs_jordan": 28,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -522,7 +522,7 @@
           "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
           "title": "governance cluster reconciliation v1",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
           "links": []
         },
@@ -532,7 +532,7 @@
           "id": "designs/npcs/character_canon_v30.md",
           "title": "character canon v30",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROVISIONAL — pending ratification.",
           "links": []
         },
@@ -542,7 +542,7 @@
           "id": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
           "title": "2026-05-16-PC-4.4-unified-success-stress",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
           "links": []
         },
@@ -562,7 +562,7 @@
           "id": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
           "title": "2026-05-25-mechanics-integration-v3 1",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
           "links": []
         },
@@ -582,8 +582,18 @@
           "id": "designs/proposals/pc_formation_system.md",
           "title": "pc formation system",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "designs/proposals/repo-reorganization-v1.md",
+          "id": "designs/proposals/repo-reorganization-v1.md",
+          "title": "repo-reorganization-v1",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). A hard architecture call, filed so it stops evaporating — **not** a routine-merge item. Merging tracks the proposal only (ED-1094 reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **The primary axis (subsystem, §2a) and all six §5 sub-forks are now RULED by direct Jordan input (2026-07-15).** What remains before execution is sequencing sign-off (ruled: P0 first) and building the migration tooling (§3/§6).",
           "links": []
         },
         {
@@ -602,7 +612,7 @@
           "id": "designs/proposals/weapon_physics_and_concentration_model.md",
           "title": "weapon physics and concentration model",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
           "links": []
         },
@@ -687,12 +697,12 @@
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-651",
           "title": "Markamt Minister — explicit name and Stance Triangle needed. [Jordan name + Stance-Triangle pass] needs Jordan's name (creative layer) + a Stance Triangle from the faction template (absent in ministry.md). Part of the ED-634-658 NPC cluster",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -717,32 +727,32 @@
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-879",
           "title": "[GATE G8 - Jordan decision] Faction/combat C3: out-of-bounds x Pool-Floor-5 interaction underspecified - does the Pool-Floor-5 apply when a combatant is pushed out-of-bounds? Re-assessed as needing OWNER DESIGN INTENT (not an evidence-patte",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-911",
           "title": "Comprehensive personal-combat audit 2026-06-09 (designs/audit/2026-06-09-personal-combat-comprehensive/comprehensive_analysis_personal_combat.md, F1). combat_engine_v1 is ratified as THE canonical personal-combat resolver superseding the RE",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-1006",
           "title": "Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -937,32 +947,32 @@
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-932",
           "title": "params/bg/clocks.md carried the MS/CI/IP Environmental Effects sections + Battle Consequences + Altonian Vanguard block TWICE in full (copies verbatim-identical except 2 blank lines; verified by line diff). Removed the second copy, kept cop",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-1033",
           "title": "Indirect orientation has no track-movement path. Simulation 2026-06-18 (n=30k randomized, L1 contest): an Indirect-oriented orator reaches a decisive Persuasion Track win 1.8% vs 31.9% Direct, because params/contest.md grants an Indirect wi",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
         {
-          "kind": "ledger_actionable",
+          "kind": "ledger_needs_jordan",
           "source": "canon/editorial_ledger",
           "id": "ED-1036",
           "title": "L3 venue policy-dominance / legibility. Simulation 2026-06-18 (optimal-vs-worst policy sweep, 13 venues): every venue has a worst challenger policy that wins 0.00 (self-clinching/off-ground policies invalid in that venue); policy-mismatch d",
           "lane": "unassigned",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -1380,7 +1390,7 @@
     },
     "MB": {
       "total": 6,
-      "needs_jordan": 3,
+      "needs_jordan": 5,
       "items": [
         {
           "kind": "proposal_doc",
@@ -1388,7 +1398,7 @@
           "id": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
           "title": "mass battle fighting withdrawal v1",
           "lane": "MB",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
           "links": []
         },
@@ -1398,7 +1408,7 @@
           "id": "designs/proposals/multiunit_envelopment_plan.md",
           "title": "multiunit envelopment plan",
           "lane": "MB",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
           "links": []
         },
@@ -1448,7 +1458,7 @@
     },
     "FA": {
       "total": 28,
-      "needs_jordan": 15,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -1456,7 +1466,7 @@
           "id": "designs/provincial/franchise_v30.md",
           "title": "franchise v30",
           "lane": "FA",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "DRAFT — awaiting Jordan review",
           "links": []
         },
@@ -1736,7 +1746,7 @@
     },
     "WR": {
       "total": 9,
-      "needs_jordan": 1,
+      "needs_jordan": 2,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -1744,7 +1754,7 @@
           "id": "designs/world/solmund_master_document.md",
           "title": "solmund master document",
           "lane": "WR",
-          "needs_jordan": false,
+          "needs_jordan": true,
           "status": "DRAFT — all content PROVISIONAL pending Jordan editorial approval",
           "links": []
         },
@@ -2630,7 +2640,7 @@
       "id": "designs/architecture/governance_type_registry_v1.md",
       "title": "governance type registry v1",
       "lane": "IN",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
       "links": []
     },
@@ -2740,7 +2750,7 @@
       "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
       "title": "governance cluster reconciliation v1",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
       "links": []
     },
@@ -2750,7 +2760,7 @@
       "id": "designs/npcs/character_canon_v30.md",
       "title": "character canon v30",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROVISIONAL — pending ratification.",
       "links": []
     },
@@ -2760,7 +2770,7 @@
       "id": "designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md",
       "title": "2026-05-16-PC-4.4-unified-success-stress",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
       "links": []
     },
@@ -2780,7 +2790,7 @@
       "id": "designs/proposals/2026-05-25-mechanics-integration-v3_1.md",
       "title": "2026-05-25-mechanics-integration-v3 1",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
       "links": []
     },
@@ -2790,7 +2800,7 @@
       "id": "designs/proposals/mass_battle_fighting_withdrawal_v1.md",
       "title": "mass battle fighting withdrawal v1",
       "lane": "MB",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
       "links": []
     },
@@ -2810,7 +2820,7 @@
       "id": "designs/proposals/multiunit_envelopment_plan.md",
       "title": "multiunit envelopment plan",
       "lane": "MB",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
@@ -2820,8 +2830,18 @@
       "id": "designs/proposals/pc_formation_system.md",
       "title": "pc formation system",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "designs/proposals/repo-reorganization-v1.md",
+      "id": "designs/proposals/repo-reorganization-v1.md",
+      "title": "repo-reorganization-v1",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — HELD FOR JORDAN (ED-IN-0071, 2026-07-15 · Lane: IN, cross-cutting all lanes · Jordan-vetoable throughout). A hard architecture call, filed so it stops evaporating — **not** a routine-merge item. Merging tracks the proposal only (ED-1094 reconciliation-map pattern, cf. ED-IN-0069); it authorizes **no** file move. **The primary axis (subsystem, §2a) and all six §5 sub-forks are now RULED by direct Jordan input (2026-07-15).** What remains before execution is sequencing sign-off (ruled: P0 first) and building the migration tooling (§3/§6).",
       "links": []
     },
     {
@@ -2840,7 +2860,7 @@
       "id": "designs/proposals/weapon_physics_and_concentration_model.md",
       "title": "weapon physics and concentration model",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
       "links": []
     },
@@ -2850,7 +2870,7 @@
       "id": "designs/provincial/franchise_v30.md",
       "title": "franchise v30",
       "lane": "FA",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "DRAFT — awaiting Jordan review",
       "links": []
     },
@@ -2870,7 +2890,7 @@
       "id": "designs/world/solmund_master_document.md",
       "title": "solmund master document",
       "lane": "WR",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "DRAFT — all content PROVISIONAL pending Jordan editorial approval",
       "links": []
     },
@@ -2945,12 +2965,12 @@
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-651",
       "title": "Markamt Minister — explicit name and Stance Triangle needed. [Jordan name + Stance-Triangle pass] needs Jordan's name (creative layer) + a Stance Triangle from the faction template (absent in ministry.md). Part of the ED-634-658 NPC cluster",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
@@ -2975,32 +2995,32 @@
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-879",
       "title": "[GATE G8 - Jordan decision] Faction/combat C3: out-of-bounds x Pool-Floor-5 interaction underspecified - does the Pool-Floor-5 apply when a combatant is pushed out-of-bounds? Re-assessed as needing OWNER DESIGN INTENT (not an evidence-patte",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-911",
       "title": "Comprehensive personal-combat audit 2026-06-09 (designs/audit/2026-06-09-personal-combat-comprehensive/comprehensive_analysis_personal_combat.md, F1). combat_engine_v1 is ratified as THE canonical personal-combat resolver superseding the RE",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-1006",
       "title": "Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
@@ -3195,32 +3215,32 @@
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-932",
       "title": "params/bg/clocks.md carried the MS/CI/IP Environmental Effects sections + Battle Consequences + Altonian Vanguard block TWICE in full (copies verbatim-identical except 2 blank lines; verified by line diff). Removed the second copy, kept cop",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-1033",
       "title": "Indirect orientation has no track-movement path. Simulation 2026-06-18 (n=30k randomized, L1 contest): an Indirect-oriented orator reaches a decisive Persuasion Track win 1.8% vs 31.9% Direct, because params/contest.md grants an Indirect wi",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
     {
-      "kind": "ledger_actionable",
+      "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-1036",
       "title": "L3 venue policy-dominance / legibility. Simulation 2026-06-18 (optimal-vs-worst policy sweep, 13 venues): every venue has a worst challenger policy that wins 0.00 (self-clinching/off-ground policies invalid in that venue); policy-mismatch d",
       "lane": "unassigned",
-      "needs_jordan": false,
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
@@ -4185,16 +4205,6 @@
       "links": []
     },
     {
-      "kind": "ledger_actionable",
-      "source": "canon/editorial_ledger",
-      "id": "ED-IN-0068",
-      "title": "Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work",
-      "lane": "IN",
-      "needs_jordan": false,
-      "status": "open",
-      "links": []
-    },
-    {
       "kind": "ledger_needs_jordan",
       "source": "canon/editorial_ledger",
       "id": "ED-IN-0069",
@@ -4209,6 +4219,16 @@
       "source": "canon/editorial_ledger",
       "id": "ED-IN-0070",
       "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+      "lane": "IN",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "canon/editorial_ledger",
+      "id": "ED-IN-0071",
+      "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
       "lane": "IN",
       "needs_jordan": true,
       "status": "open",

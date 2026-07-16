@@ -65,6 +65,16 @@ def test_needs_jordan_split_matches_ledger():
     assert all(not i["needs_jordan"] for i in actionable)
 
 
+def test_design_docs_can_carry_needs_jordan():
+    # regression for the structural undercount: proposal_doc / provisional_status_doc
+    # kinds must be able to carry needs_jordan (a "HELD FOR JORDAN" doc is not actionable)
+    reg = _reg()
+    design = [i for i in reg["items"]
+              if i["kind"] in ("proposal_doc", "provisional_status_doc")]
+    flagged = [i for i in design if i["needs_jordan"]]
+    assert flagged, "no design doc carries needs_jordan — the flag is unreachable again"
+
+
 def test_links_out_not_reranks():
     # detect-not-author: the register LINKS the human ranked queue, never re-ranks
     reg = _reg()
