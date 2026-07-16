@@ -592,7 +592,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Argue Pool | `(Primary × 2) + History + 3 + style` | 5–18D | Social Contest |
 | Thread Pool | `(Spirit × 2) + History + TPS`, min 5 | 5–17D+ | Thread Operations |
 | Fieldwork Pool | `(Primary × 2) + History + 3` | 5–17D | Fieldwork |
-| Knot Pool | `(Bonds × 2) + 3` | 5–17D | Knot Formation |
+| Knot Pool | `(Spirit × 2) + History(Relevant) + 3` | 5–17D | Knot Formation |
 | Mass Combat Pool | `min(Size, Command) + Command` — the off-path model the engine byte-reproduces at `COMMAND_SIGMA_ENABLED=0`. **CAVEAT ADDED 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): SUPERSEDED as the engine default (ED-899/ED-1013) — this row was the one uncaveated carrier of the legacy formula. For the live default, see `params/mass_combat.md`'s own ED-899 supersession banner (single source; not restated here to avoid a second copy going stale).** | 2–14D | Mass Combat (unit) |
 | Faction Domain Pool | bare faction stat | 1–7D | Faction action |
 

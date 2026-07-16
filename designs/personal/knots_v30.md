@@ -34,7 +34,7 @@ The PC's Knot count is capped at `floor(Bonds/2) + 1` (per PP-632, derived_stats
 
 | Property | Value | Canon source |
 |---|---|---|
-| **Knot Pool** (formation roll) | `(Bonds × 2) + 3`, min 5 | PP-632; derived_stats §14.4 |
+| **Knot Pool** (formation roll) | `(Spirit × 2) + History(Relevant) + 3`, min 5 | PP-632; ED-FI-0005; derived_stats §14.4 |
 | **Knot Max** (simultaneous Knots) | `floor(Bonds/2) + 1` | PP-632; fieldwork §5.6a prereq 3 |
 | **Knot tier system** | **Distant / Close** (2-tier), bidirectional −5..+5 strain | RESOLVED ED-912 (TIER-DRIFT-001); fieldwork §5.6b |
 | **Disposition range** | flat **−5..+5** (NOT Bonds-capped; Bonds ≥ 5 is a separate Knot prereq) | ED-912; fieldwork §5.1 |
