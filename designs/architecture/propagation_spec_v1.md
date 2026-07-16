@@ -401,5 +401,5 @@ Nothing below is decided by this document. Ranked roughly by how much downstream
 - `designs/architecture/key_substrate_v30.md` — remains the canonical substrate spec. This document proposed two cited amendments to it (OF-7, OF-B1) rather than silently diverging; **both are now RATIFIED (2026-07-07, Jordan's consolidated "ratify all" ruling pass, ED-IN-0026)** — treat §4.1 step 4/5 in `key_substrate_v30.md` as amended per this document's OF-7/OF-B1 text (see that file's own pointer note).
 - `designs/architecture/scale_transitions_v30.md` §12 (J-1/ED-1038) — the downward-delivery ruling this document builds on, not reopens.
 - `references/module_contracts.yaml` — the `engine_clock` entry (ED-1051, open — awaiting Jordan) carries a gap_notes pointer at this document as the candidate home doc; `doc: null` stays unflipped until Jordan resolves ED-1051.
-- `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` — conversion register #1 (downward Key delivery, ED-1006) and the IV.2 directional laws this document formalizes.
+- `godot/godot_conversion_strategy_v1.md` — conversion register #1 (downward Key delivery, ED-1006) and the IV.2 directional laws this document formalizes.
 - `CURRENT.md` — indexes this doc under Architecture as of this ratification (ED-1094 merge-ratifies-by-default).

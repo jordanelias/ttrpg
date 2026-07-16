@@ -190,19 +190,19 @@ entries:
     files_to_recheck:
       - designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md
 
-  - superseded_id: designs/godot/implementation_sequence.md
+  - superseded_id: godot/implementation_sequence.md
     scope: "Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list)"
     superseded_by: b42aa03
     superseded_date: 2026-06-10
     replacement: >
       PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI
-      (designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md). The scene-tree
+      (godot/godot_conversion_strategy_v1.md). The scene-tree
       and transitions content in scene_tree_architecture.md remains valid. Per the strategy's own
       supersedes-in-part clause.
     files_to_recheck:
-      - designs/godot/implementation_sequence.md
+      - godot/implementation_sequence.md
 
-  - superseded_id: designs/godot/data_serialization_spec.md
+  - superseded_id: godot/data_serialization_spec.md
     scope: "Godot .tres schemas derived from the retired sim_framework/state.py (framing only)"
     superseded_by: b42aa03
     superseded_date: 2026-06-10
@@ -211,7 +211,7 @@ entries:
       the Descriptor Registry, not sim_framework/state.py (conversion strategy Part V). The .tres
       mechanics remain a useful reference; regenerate the schemas from the registries.
     files_to_recheck:
-      - designs/godot/data_serialization_spec.md
+      - godot/data_serialization_spec.md
 
   - superseded_id: designs/scene/combat_v30.md
     scope: "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only"

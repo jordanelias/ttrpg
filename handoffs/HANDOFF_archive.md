@@ -415,7 +415,7 @@ here.
   ED-1081, after contest_rebuild reserved 1055-1079 + combat at 1080). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
   (`ci_register_size_check.py` 20k→policy 15k; register is ~5k); RETIRED banners on
   `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md`; flipped
-  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `designs/godot/*.md`
+  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `godot/*.md`
   specs; rewrote `README.md` to defer to CLAUDE/CURRENT/HANDOFF. **Not done (needs Jordan / re-sweep):**
   the parity-oracle balance values (ED-1050) and the Gate-0/contracts authoring (ED-1051).
 

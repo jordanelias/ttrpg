@@ -21,7 +21,7 @@ without checking which one you actually mean:
 ## Purpose
 
 Replaces the prior monolithic `tests/sim/v17-integration/mc_v17.py` orchestrator
-with a modular armature mirroring `designs/godot/scene_tree_architecture.md` 1:1.
+with a modular armature mirroring `godot/scene_tree_architecture.md` 1:1.
 Each canonical mechanical system has a dedicated module under one of the eight
 subpackages.
 

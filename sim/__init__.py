@@ -1,7 +1,7 @@
 """
 sim/ — Valoria modular simulation armature
 
-Mirrors the Godot scene tree (designs/godot/scene_tree_architecture.md) so that
+Mirrors the Godot scene tree (godot/scene_tree_architecture.md) so that
 each canonical mechanical system has a 1:1 sim-module home. Replaces the
 monolithic tests/sim/v17-integration/mc_v17.py orchestrator pattern.
 

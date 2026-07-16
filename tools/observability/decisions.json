@@ -107,7 +107,7 @@
         18
       ],
       [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md",
+        "godot/godot_conversion_strategy_v1.md",
         18
       ],
       [
@@ -675,18 +675,6 @@
       "lane": null
     },
     {
-      "text": "| 3 | territorial_piety | accounting | territory/provincial | CV/CI/TC system (new) | 1 | CANONICAL doc, **zero Key integration** \u2014 registry \u00a710 keying pass precedes emit wiring. Name collision with #4 [OPEN]. |",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:62"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "| `tests/sim/` | **No** \u2014 frozen historical archive predating `sim/`, held old `mc_v17.py`. Name collision only. | No (except path-string references from `ci_sim_fabrication_check`/`atomization_rules`) | 151 .py / 295 .md / 51 .json, ~8.3MB, history only |",
       "category": "naming",
       "priority": 1,
@@ -889,6 +877,18 @@
       "systems": [],
       "count": 1,
       "lane": null
+    },
+    {
+      "text": "| 3 | territorial_piety | accounting | territory/provincial | CV/CI/TC system (new) | 1 | CANONICAL doc, **zero Key integration** \u2014 registry \u00a710 keying pass precedes emit wiring. Name collision with #4 [OPEN]. |",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:62"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
     },
     {
       "text": "Abbreviation 'PT' collides \u2014 owner ''. COLLISION: \"Piety Territory (PT)\" derived_stats + \"Parliamentary Transfer (PT)\" faction; ruling pending",
@@ -1263,18 +1263,6 @@
       "lane": null
     },
     {
-      "text": "End of v1. Status PROPOSED; every recommendation above is Jordan-vetoable; the [OPEN] register (Part VIII) is the veto surface.*",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:230"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "\"\u00a73.3 prose: 'if a Bonded NPC accumulates many low-stakes Keys with no cut scene fired, eventually a routine Key triggers a higher-significance cut scene.' But the only emission gate is `matches_trigger_ruleset(key)` (\u00a75 pseudocode, L256); `unarticulated_weight` is consumed purely as an additive term inside `signifi\u2026",
       "category": "ratification",
       "priority": 1,
@@ -1453,6 +1441,18 @@
       "systems": [],
       "count": 1,
       "lane": "SC"
+    },
+    {
+      "text": "End of v1. Status PROPOSED; every recommendation above is Jordan-vetoable; the [OPEN] register (Part VIII) is the veto surface.*",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:230"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
     },
     {
       "text": "Stated as fork \u2192 recommended default; full wording in the chapters' `[OPEN \u2014 Jordan]` flags:",
@@ -3543,90 +3543,6 @@
       "lane": null
     },
     {
-      "text": "Contents:** `godot_conversion_strategy_v1.md` \u2014 the consolidated conversion strategy and all-directions hierarchy spec. Status **PROPOSED**, Jordan-vetoable throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface.",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/README.md:3"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "So the strategy is:** (Part I\u2013III) one consolidated picture of what exists on all three legs; (Part IV) the target all-directions hierarchy with the conversion unit fixed as the **module contract**; (Part V) the Python\u2192Godot dictionary including the determinism/parity protocol; (Part VI) gated sequencing; (Part VII\u2013\u2026",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:17"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 4 | piety_track (personal) | accounting | personal | scar system on Tracker (new) | 3 | 3-way name collision (substrate \u00a78.4 \"Piety Track\" = registry `conviction_track` = personal scars vs territorial doc) [OPEN \u2014 Jordan]. |",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:63"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 15 | settlement_economy | accounting | settlement | fold-vs-distinct vs #1 | 2-hold | Possibly the same system as settlement_layer Local Economy [OPEN \u2014 Jordan]; do not double-implement. |",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:74"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 27 | campaign_architecture | \u2014 | \u2014 | \u2014 | **R** | Reclassified 06-10: a consolidation doc, not a runtime module; contents distribute to victory/threadwork/settlement/strain. Stub retirement [OPEN \u2014 Jordan]. |",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:86"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| D6 | P2 | Open since 04-27: Church L+PS 4/4 vs canonical 5/5; Church Man/Wea values | `stats_1_7_scale` / workplan \u00a74.1 | Carried `[OPEN \u2014 Jordan]` in design_sync; resolve at first faction-data export. |",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:111"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "PART VIII \u2014 CONSOLIDATED [OPEN \u2014 Jordan] REGISTER (conversion-specific; all vetoable)",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:208"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "(`territorial_piety`/`conviction_track_v30` vs `piety_track`/`conviction_track_v1`) flagged `[OPEN \u2014 Jordan]` in both",
       "category": "ruling",
       "priority": 1,
@@ -3951,6 +3867,90 @@
       "lane": "IN"
     },
     {
+      "text": "Contents:** `godot_conversion_strategy_v1.md` \u2014 the consolidated conversion strategy and all-directions hierarchy spec. Status **PROPOSED**, Jordan-vetoable throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface.",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/README.md:3"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "So the strategy is:** (Part I\u2013III) one consolidated picture of what exists on all three legs; (Part IV) the target all-directions hierarchy with the conversion unit fixed as the **module contract**; (Part V) the Python\u2192Godot dictionary including the determinism/parity protocol; (Part VI) gated sequencing; (Part VII\u2013\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 4 | piety_track (personal) | accounting | personal | scar system on Tracker (new) | 3 | 3-way name collision (substrate \u00a78.4 \"Piety Track\" = registry `conviction_track` = personal scars vs territorial doc) [OPEN \u2014 Jordan]. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:63"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 15 | settlement_economy | accounting | settlement | fold-vs-distinct vs #1 | 2-hold | Possibly the same system as settlement_layer Local Economy [OPEN \u2014 Jordan]; do not double-implement. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:74"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 27 | campaign_architecture | \u2014 | \u2014 | \u2014 | **R** | Reclassified 06-10: a consolidation doc, not a runtime module; contents distribute to victory/threadwork/settlement/strain. Stub retirement [OPEN \u2014 Jordan]. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:86"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| D6 | P2 | Open since 04-27: Church L+PS 4/4 vs canonical 5/5; Church Man/Wea values | `stats_1_7_scale` / workplan \u00a74.1 | Carried `[OPEN \u2014 Jordan]` in design_sync; resolve at first faction-data export. |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:111"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "PART VIII \u2014 CONSOLIDATED [OPEN \u2014 Jordan] REGISTER (conversion-specific; all vetoable)",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:208"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
       "text": "registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]",
       "category": "ruling",
       "priority": 1,
@@ -4162,18 +4162,6 @@
       "lane": null
     },
     {
-      "text": "33 hook gates live (`safe_commit` family, task_gate, sim_gate, R4 derived-write guard, R7 formula co-file, ID-uniqueness, collision detection); CI mirrors externally in **both** repos (`valoria-ci.yml`, incl. `godot-ci.yml` in valoria-game); editorial store = `editorial_ledger.jsonl` (single-source, 639+ entries, 0 \u2026",
-      "category": "mechanics",
-      "priority": 2,
-      "label": "Write-protection (F1)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:41"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "| **R** | pass | reach_sigma is bounded and monotonic: gap is a continuous signed differential, REACH_W[armor] falls 0.62->0.50->0.34->0.20 across armour tiers (reach -> clinch rotation), and the maximum raw sigma (spear vs arming, gap=1.9, armor=none) is 0.966 sigma \u2014 well below the M_MAX=1.5 soft-cap ceiling; no c\u2026",
       "category": "mechanics",
       "priority": 2,
@@ -4294,6 +4282,18 @@
       "lane": "IN"
     },
     {
+      "text": "33 hook gates live (`safe_commit` family, task_gate, sim_gate, R4 derived-write guard, R7 formula co-file, ID-uniqueness, collision detection); CI mirrors externally in **both** repos (`valoria-ci.yml`, incl. `godot-ci.yml` in valoria-game); editorial store = `editorial_ledger.jsonl` (single-source, 639+ entries, 0 \u2026",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Write-protection (F1)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:41"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
       "text": "faction_state: feedback loop open \u2014 damper/cap unconfirmed",
       "category": "mechanics",
       "priority": 2,
@@ -4390,18 +4390,6 @@
       "lane": null
     },
     {
-      "text": "| 9 | game_director | state_reader | scene | `GameDirector.gd` (exists, refit lifecycle Keys) | S | scene_entered/exited/skipped; attribution conflict with scene_slate [OPEN]. |",
-      "category": "naming",
-      "priority": 2,
-      "label": "Vocabulary / attribution conflict",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:68"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "\"registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered\"",
       "category": "naming",
       "priority": 2,
@@ -4412,6 +4400,18 @@
       "systems": [],
       "count": 1,
       "lane": null
+    },
+    {
+      "text": "| 9 | game_director | state_reader | scene | `GameDirector.gd` (exists, refit lifecycle Keys) | S | scene_entered/exited/skipped; attribution conflict with scene_slate [OPEN]. |",
+      "category": "naming",
+      "priority": 2,
+      "label": "Vocabulary / attribution conflict",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:68"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
     },
     {
       "text": "registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered",
@@ -5928,18 +5928,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "G0.3 K8 verdict.** The commissioned peninsula-scale \u00a74.1 fan-out performance audit (W2.7) decides Key-as-Resource vs RefCounted-runtime (V.1) and any salience/subscription cost ceilings. `[ASSUMPTION: K8 not yet executed \u2014 no commit or report evidences it since 2026-06-06; if a verdict exists, substitute it here]`. \u2026",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:179"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
     },
     {
       "text": "`[ASSUMPTION]`-grade resolver \u2014 confirmed 11/27 (both match CLAUDE.md's cited figures exactly).",
@@ -7788,6 +7776,18 @@
       "systems": [],
       "count": 1,
       "lane": "IN"
+    },
+    {
+      "text": "G0.3 K8 verdict.** The commissioned peninsula-scale \u00a74.1 fan-out performance audit (W2.7) decides Key-as-Resource vs RefCounted-runtime (V.1) and any salience/subscription cost ceilings. `[ASSUMPTION: K8 not yet executed \u2014 no commit or report evidences it since 2026-06-06; if a verdict exists, substitute it here]`. \u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:179"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
     },
     {
       "text": "Does not author missing substrate-postures (Crown / Church / Varfell / Guilds \u2014 all four are flagged `[GAP \u2014 Phase B]`).",
@@ -10958,90 +10958,6 @@
       "lane": null
     },
     {
-      "text": "| 8 | engine_clock | clock_advance | provincial | `SeasonManager`/`GameStateMachine` (refit) | S | Emits mechanical.accounting / season_change; **home doc unlocated [GAP]** \u2014 contract is the spec seed. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:67"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 10 | scene_slate | state_reader | scene | `SituationGenerator`+slate (refit) | S/4 | Home doc [GAP] (spec scattered: settlement \u00a74.1 + substrate \u00a78.5). |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:69"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 12 | domain_actions | **d_sigma** | provincial | `DomainActionSystem` refit to d+\u03c3 ED-874 | 2 | Home doc [GAP \u2014 resolver spec sits in an audit dir; promote]. Drop `scene.draft_da` (W3.4). |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:71"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 14 | faction_politics | accounting | provincial | succession/coup system (new) | 2 | Boundary vs faction_state unestablished [OPEN]; home doc [GAP]. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:73"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| 22 | npc_memory | state_reader | personal | Memory store under Meta/NarrativeState | 4 | Home doc [GAP] (doc-12 \u00a72.3 bridge); Memory Query API per substrate \u00a74.4. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:81"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "Rule for [GAP]-doc modules** (11 of 27 lack a home doc per the contract gap-notes): a module converts only against an authored spec; until the home doc exists, the module contract + extraction artifact is the spec seed, the port is flagged `[PROVISIONAL]`, and any value not traceable to canon halts the port rather t\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:90"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
-      "text": "| Descriptor/Key-type/clock registries (yaml) | Resource tables loaded at boot; **bind-at-load** StringName keys; reverse index kept | Generated from the ttrpg yaml by the export ritual \u2014 never hand-transcribed (the standing `[GAP]` Phase E names: verify, then adopt exports). |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:149"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "Jackson, B. S. (1991). \"Towards a semiotic model of the games analogy in jurisprudence,\" *Droit et soci\u00e9t\u00e9* 17\u201318, pp. 99\u2013123** \u2014 in the special issue *Droit et jeu* (\"Law and Play\"), eds. F. Ost & M. van de Kerchove. **T1.** Directly on-topic: judges Hart's games analogy \"partial \u2026 strained\"; contrasts Huizinga's l\u2026",
       "category": "gap",
       "priority": 3,
@@ -11508,6 +11424,90 @@
       "systems": [],
       "count": 1,
       "lane": "FA"
+    },
+    {
+      "text": "| 8 | engine_clock | clock_advance | provincial | `SeasonManager`/`GameStateMachine` (refit) | S | Emits mechanical.accounting / season_change; **home doc unlocated [GAP]** \u2014 contract is the spec seed. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:67"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 10 | scene_slate | state_reader | scene | `SituationGenerator`+slate (refit) | S/4 | Home doc [GAP] (spec scattered: settlement \u00a74.1 + substrate \u00a78.5). |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:69"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 12 | domain_actions | **d_sigma** | provincial | `DomainActionSystem` refit to d+\u03c3 ED-874 | 2 | Home doc [GAP \u2014 resolver spec sits in an audit dir; promote]. Drop `scene.draft_da` (W3.4). |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:71"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 14 | faction_politics | accounting | provincial | succession/coup system (new) | 2 | Boundary vs faction_state unestablished [OPEN]; home doc [GAP]. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:73"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| 22 | npc_memory | state_reader | personal | Memory store under Meta/NarrativeState | 4 | Home doc [GAP] (doc-12 \u00a72.3 bridge); Memory Query API per substrate \u00a74.4. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:81"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "Rule for [GAP]-doc modules** (11 of 27 lack a home doc per the contract gap-notes): a module converts only against an authored spec; until the home doc exists, the module contract + extraction artifact is the spec seed, the port is flagged `[PROVISIONAL]`, and any value not traceable to canon halts the port rather t\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:90"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "| Descriptor/Key-type/clock registries (yaml) | Resource tables loaded at boot; **bind-at-load** StringName keys; reverse index kept | Generated from the ttrpg yaml by the export ritual \u2014 never hand-transcribed (the standing `[GAP]` Phase E names: verify, then adopt exports). |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "godot/godot_conversion_strategy_v1.md:149"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
     },
     {
       "text": "home doc unlocated \u2014 Memory schema lives in doc-12 \u00a72.3 schema bridge; standalone spec [GAP]",
@@ -12232,14 +12232,14 @@
       "replacement": "DEPRECATED as a forward-looking verdict \u2014 it diagnosed a proposal the project did not ratify; combat_engine_v1 is the ratified resolver. Retained as the honest "
     },
     {
-      "id": "designs/godot/implementation_sequence.md",
+      "id": "godot/implementation_sequence.md",
       "scope": "Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list)",
       "superseded_by": "b42aa03",
       "date": "2026-06-10",
-      "replacement": "PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI (designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_s"
+      "replacement": "PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI (godot/godot_conversion_strategy_v1.md). The scene-tree and transition"
     },
     {
-      "id": "designs/godot/data_serialization_spec.md",
+      "id": "godot/data_serialization_spec.md",
       "scope": "Godot .tres schemas derived from the retired sim_framework/state.py (framing only)",
       "superseded_by": "b42aa03",
       "date": "2026-06-10",

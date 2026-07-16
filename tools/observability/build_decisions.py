@@ -54,7 +54,7 @@ def _redact_forbidden_names(text: str) -> str:
                       text, flags=re.IGNORECASE)
     return text
 
-SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
+SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godot"]
 
 # ---------------------------------------------------------------------------------------
 # Path -> ED-<LANE> lane inference (audit-ecosystem Phase 4 — no ED allocated for this
@@ -213,8 +213,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 
     # --- GO: godot ---
-    ("designs/godot/", "GO"),
-    ("designs/audit/2026-06-10-godot-conversion-strategy/", "GO"),
+    ("godot/", "GO"),
     ("references/engine_params/", "GO"),
 
     # --- SE: settlements ---

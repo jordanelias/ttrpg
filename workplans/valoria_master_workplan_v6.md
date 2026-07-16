@@ -279,7 +279,7 @@ regression gate lands.
 ### GO — Godot
 Status: `handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
 this section as complete). Governing spec =
-`designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
+`godot/godot_conversion_strategy_v1.md`
 (PROPOSED; 8-item register open). Gate-0 exact deliverables, none executed: **G0.1** Key.gd
 v1→v2 (structured targets[], scale_signature[], symbolic_dimensions[4], time_horizon,
 permanence, causes[]; drop scalar salience) · **G0.2** one ruled docs/architecture.md v2

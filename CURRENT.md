@@ -105,7 +105,7 @@ the head of its lineage; predecessors are archived._
 | **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
 | **Master workplan** | `workplans/valoria_master_workplan_v6.md` (CANON — RATIFIED 2026-07-05, ED-IN-0009/ED-IN-0011; supersedes v5 → `archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface; progress board `workplan_v6_progress.yaml` + `valoria-workplan-navigator`) |
 | **Narrative engine** | `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (RATIFIED 2026-07-05, ED-IN-0011 — Jordan sign-off incl. the F-F/fork-8 Light-Function decision at its default, subtract-only + weight-set-as-data; supersedes-in-part v1, which is ratified-as-amended with spec chapters s1–s5 + `spec/churn_amendments.md`. Executes ED-IN-0003/0004; stages sequenced in workplan v6 §3) |
-| **Godot conversion** | `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
+| **Godot conversion** | `godot/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
 | **Board game** | `params/board_game.md` + `params/bg/*` governing tables |
 | **Dice / resolution** | `params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |
 

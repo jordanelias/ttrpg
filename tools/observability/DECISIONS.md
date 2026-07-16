@@ -41,7 +41,7 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 - `designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_synthesis_v1.md` — 36
 - `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s5_season_trace.md` — 21
 - `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s4_substrate.md` — 18
-- `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` — 18
+- `godot/godot_conversion_strategy_v1.md` — 18
 - `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md` — 17
 - `designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md` — 17
 - `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-STUB.md` — 16
@@ -188,8 +188,6 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/refutations/gapclosure_G4.md:41`
 - `settlement_layer` (Order/L-PS drift, revolt, undefended auto-capture): **not** found tagged `[registry §10 candidate]` anywhere in `module_contracts.yaml` or elsewhere in the corpus — consistent with being the one-of-three left unflagged.  
   ↳ `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/refutations/gapclosure_G4.md:42`
-- 33 hook gates live (`safe_commit` family, task_gate, sim_gate, R4 derived-write guard, R7 formula co-file, ID-uniqueness, collision detection); CI mirrors externally in **both** repos (`valoria-ci.yml`, incl. `godot-ci.yml` in valoria-game); editorial store = `editorial_ledger.jsonl` (single-source, 639+ entries, 0 …  
-  ↳ `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:41`
 - | **R** | pass | reach_sigma is bounded and monotonic: gap is a continuous signed differential, REACH_W[armor] falls 0.62->0.50->0.34->0.20 across armour tiers (reach -> clinch rotation), and the maximum raw sigma (spear vs arming, gap=1.9, armor=none) is 0.966 sigma — well below the M_MAX=1.5 soft-cap ceiling; no c…  
   ↳ `designs/audit/2026-06-28-combat-critique/recovered_modules_and_resolution.md:632`
 - {type: "scene.displacement", terminal: false}   # DA Proposal Phase, displacement_neglect_observed (doc-12 §8 verbatim) — NOT in registry, NOT declared in doc-12 §7 (F2 class)  
@@ -198,16 +196,18 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `references/module_contracts.yaml:148`
 - {type: "state.project_failed", terminal: false}   # Procedure C, stall >= 8 (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)  
   ↳ `references/module_contracts.yaml:149`
+- {type: "state.project_completed", terminal: false}   # Procedure C (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)  
+  ↳ `references/module_contracts.yaml:150`
 - _…and more in this category — see `decisions.json`._
 
 ### Naming & collisions (12)
 
 - | `scene_slate` | Deterministic 7-priority slate generation | "home doc unlocated — referenced from `settlement_layer_v30` §4.1 and substrate §8.5; standalone doc [GAP]"; attribution conflict with `game_director` over `mechanical.scene_entered` | none; sim DOES have `sim/autoload/scene_slate.py` (implemented) — code…  
   ↳ `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-STUB.md:51`
-- | 9 | game_director | state_reader | scene | `GameDirector.gd` (exists, refit lifecycle Keys) | S | scene_entered/exited/skipped; attribution conflict with scene_slate [OPEN]. |  
-  ↳ `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md:68`
 - "registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered"  
   ↳ `references/module_contracts.yaml:394`
+- | 9 | game_director | state_reader | scene | `GameDirector.gd` (exists, refit lifecycle Keys) | S | scene_entered/exited/skipped; attribution conflict with scene_slate [OPEN]. |  
+  ↳ `godot/godot_conversion_strategy_v1.md:68`
 - registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered _(systems: game_director)_  
   ↳ `references/module_contracts.yaml`
 - Placeholder name 'varfell_mandate_action' (was 'vaynards_hall') — needs canonical name []  
@@ -258,8 +258,8 @@ _These are NOT open — shown so stale references don't read as live decisions (
 - **proposals/combat_v32_proposal.md** — combat-v32 — state-graph reframe PROPOSAL (PP-TBD; never ratified as a doc) → _DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). T_
 - **proposals/combat_v31_proposal.md** — combat-v31 — earlier engine-replacement PROPOSAL in the same superseded line → _DEPRECATED. Superseded by combat_v32_proposal (2026-05-28 reframe) and then jointly by the ratified combat_engine_v1. Historical only. Move to deprecated/propos_
 - **designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md** — NERS verdict on the combat_v32 proposal (the index-drift orphan, registered to no concept) → _DEPRECATED as a forward-looking verdict — it diagnosed a proposal the project did not ratify; combat_engine_v1 is the ratified resolver. Retained as the honest _
-- **designs/godot/implementation_sequence.md** — Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list) → _PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI (designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_s_
-- **designs/godot/data_serialization_spec.md** — Godot .tres schemas derived from the retired sim_framework/state.py (framing only) → _FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str_
+- **godot/implementation_sequence.md** — Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list) → _PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI (godot/godot_conversion_strategy_v1.md). The scene-tree and transition_
+- **godot/data_serialization_spec.md** — Godot .tres schemas derived from the retired sim_framework/state.py (framing only) → _FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str_
 - **designs/scene/combat_v30.md** — combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only → _PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes p_
 - **PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)** — Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5,  → _ED-912 (Jordan ruling 2026-06-28) canonizes: Disposition is a flat −5..+5 (NOT Bonds-capped; Bonds ≥ 5 is a separate explicit Knot prerequisite), resolved via a_
 - **PP-421 (CI ceiling 75-freeze)** — CI ceiling 75 (freeze + territorial-seizure phase transition) as the Church phase-transition/victory model → _CI runs 0-100 with no freeze; milestones 40/55/65/80/100 (ci_political_v30 §2.1); Mass Seizure one-shot at CI >= 60 (victory_v30 §3.2); Theocracy Unification At_

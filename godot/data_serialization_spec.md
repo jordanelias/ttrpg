@@ -4,7 +4,7 @@
 > Known-wrong schemas: `FactionData.mandate` is shown as a writable `@export int` (canon: Mandate is a
 > **read-only derived aggregate**), and it lists 34 settlements (canon: **35**). **Do not implement from
 > this doc.** Regenerate `.tres` schemas from `references/module_contracts.yaml` + `references/descriptor_registry.yaml`;
-> the governing Godot spec is `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
+> the governing Godot spec is `godot/godot_conversion_strategy_v1.md`
 > (itself PROPOSED). Tracked by ED-1054.
 
 # Date: 2026-04-18
