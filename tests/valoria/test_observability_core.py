@@ -40,7 +40,7 @@ def test_is_unratified_status():
 
 
 def test_ledger_reader_normalizes_and_tolerates_list_desc(tmp_path):
-    d = tmp_path / "canon"
+    d = tmp_path / "registers"
     d.mkdir()
     (d / "editorial_ledger_go.jsonl").write_text(
         '{"id":"ED-GO-0001","status":"open","needs_jordan":true,"description":["a","b"]}\n'

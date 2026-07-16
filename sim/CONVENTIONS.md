@@ -25,7 +25,7 @@ Entry points:
 
 ## Naming
 
-- Module filenames match the mechanic name in `canon/mechanics_index.yaml`
+- Module filenames match the mechanic name in `registers/mechanics_index.yaml`
   (snake_case)
 - Entry-point function names are imperative verbs: `resolve_*`, `apply_*`,
   `compute_*`, `check_*`, `attempt_*`
@@ -68,7 +68,7 @@ When a module references canon content (a mechanic value, a system version),
 the citation goes in:
 1. The module docstring `Canon source:` line (file-level)
 2. An inline comment at the relevant function: `# Canon: designs/<path>#<section>`
-3. The `canon/mechanics_index.yaml` entry for the mechanic
+3. The `registers/mechanics_index.yaml` entry for the mechanic
 
 Module changes that affect mechanic shape require updating `mechanics_index.yaml`
 in the same commit (Pass 2j enforcement, pending).

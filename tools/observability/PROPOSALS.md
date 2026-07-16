@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**247 open work items** · **79 need your decision**.
+**248 open work items** · **79 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`designs/workplans/valoria_master_workplan_v6.md` §5](designs/workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 77, Proposal docs (designs/proposals/) — 9, Provisional / draft design docs — 17
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 77, Proposal docs (designs/proposals/) — 10, Provisional / draft design docs — 17
 
 ## MB — Mass battle  (6 items, 3 need decision)
 
@@ -127,7 +127,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-IN-0019` — Renumbered off the ED-IN-0012 double-allocation (armature §5.10 ruling, ED-IN-0026). Registry×rendering sweep (edge-playability SIG-1; EP-3/EP-4/EP-5) from the edge-playability §7 batch (PR #81/#82): the articulation Tier-2 trigger table co  _(open)_
 - `ED-IN-0020` — Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv  _(open)_
 - `ED-IN-0045` — Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a  _(open)_
-- `ED-IN-0068` — Apparatus consolidation (deduplicate -> prune -> reconcile -> consolidate). Collapsed 4 duplicate IN: keys in id_reservations.yaml (next_free 68->69). Adds tools/build_apparatus_registry.py (generated inventory of every skill/tool/hook/work  _(open)_
+- `ED-IN-0071` — Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa  _(open)_
 - 🔸 `valoria-module-adjudicator-2026-07-13:cross_cutting:module_adjudicator` — [OPEN] module_adjudicator / cross_cutting: 22 violations, 61 warnings; consume-closure 100%, cycle-closure 100%, gate/derivation/sequence 100%, emit-closure 97.9%; 20/22 violations collapse to one un-propagated ED-1038 scale_transitions §12  _(OPEN)_
 - 🔸 `valoria-vector-audit-2026-07-13:corpus_wide:vector_audit` — [OPEN] vector_audit / corpus_wide: scripts/vector_audit.py confirmed a stub end-to-end (no Stage 1-7 dispatcher; docstring/scaffolding only; main() prints a pointer, writes nothing); last real run (archives/audit/2026-04-29-topographic-anal  _(OPEN)_
 - `valoria-mechanic-audit-2026-07-13:architecture:architecture` — [PARTIAL] mechanic_audit / architecture: 2 P1 gaps (empty §3.3 Handoff Rule; uncorrected literal-GM language vs no-GM invariant) proposed for ED-IN filing; 6 P2s, several already-tracked items confirmed still open, no new ED allocated by th  _(PARTIAL)_
@@ -179,13 +179,14 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (96 items, 14 need decision)
+## unassigned — Unassigned / cross-lane  (97 items, 14 need decision)
 
 - `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
 - `designs/proposals/2026-05-16-faction-audit-followup-plan.md` — 2026-05-16-faction-audit-followup-plan  _(SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15])_
 - `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
 - `designs/proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _(SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED'])_
 - `designs/proposals/pc_formation_system.md` — pc formation system  _(PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
+- `designs/proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
 - `designs/proposals/stub_infill_plan.md` — stub infill plan  _(SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15])_
 - `designs/proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - `designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
@@ -220,6 +221,5 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-1010` — Per-op Coherence cap is canonical-in-effect but lives only in threadwork_v30_infill l.121 ('costs from a single operation capped at -1 total'). Four witnesses fix the non-FR reading at total -1: infill l.121; threadwork_v30 §3.4 residue ('R  _(open)_
 - `ED-1011` — Coherence-0 NPC-transition is split and gapped. params/core PP-261 ('at 0: NPC ... see params_threadwork for full rule') points at a file with nothing on Coherence 0 (dead pointer). Actual arc = threadwork_v30 §3.7 [PROVISIONAL] (PP-194): w  _(open)_
 - `ED-1033` — Indirect orientation has no track-movement path. Simulation 2026-06-18 (n=30k randomized, L1 contest): an Indirect-oriented orator reaches a decisive Persuasion Track win 1.8% vs 31.9% Direct, because params/contest.md grants an Indirect wi  _(open)_
-- `ED-1036` — L3 venue policy-dominance / legibility. Simulation 2026-06-18 (optimal-vs-worst policy sweep, 13 venues): every venue has a worst challenger policy that wins 0.00 (self-clinching/off-ground policies invalid in that venue); policy-mismatch d  _(open)_
-- …and 56 more (see `proposals.json`).
+- …and 57 more (see `proposals.json`).
 

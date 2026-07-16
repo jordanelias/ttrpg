@@ -6,7 +6,7 @@ Ports valoria_hooks.vetting_gate (the "Hook 3b" framework vetting gate) into a
 standalone, network-free CI validator that reads the working tree.
 
 The enforced rule (canonical framework, ref references/throughlines_meta.md §8):
-  * Parse PP-(\\d+) entries from canon/patch_register_active.yaml.
+  * Parse PP-(\\d+) entries from registers/patch_register_active.yaml.
   * Entries with id < PP-674 are GRANDFATHERED (pre-framework) — skipped.
   * For any entry with id >= 674:
       - If it carries `class: C|D|E` (anywhere in the entry body) or
@@ -21,7 +21,7 @@ The enforced rule (canonical framework, ref references/throughlines_meta.md §8)
 The ONLY behavioural change from the original valoria_hooks.vetting_gate is the
 I/O surface: the original received an in-memory `additions` list from the old
 GitHub-API commit harness and fired only when that list touched the patch
-register. This version reads canon/patch_register_active.yaml from the working
+register. This version reads registers/patch_register_active.yaml from the working
 tree on disk and validates it on EVERY run (a CI job should always validate the
 current register, not just when it was touched). The regex-based, PyYAML-free
 parsing approach of the original is preserved verbatim.
@@ -40,7 +40,7 @@ VETTING_REQUIRED_KEYS = ('class', 'necessity', 'omega', 'mu', 'm_ratings', 'q')
 VETTING_CLASS_VALUES = ('A', 'B', 'C', 'D', 'E')
 VETTING_ENFORCED_FROM_PP = 674
 
-REGISTER_PATH = 'canon/patch_register_active.yaml'
+REGISTER_PATH = 'registers/patch_register_active.yaml'
 
 
 def _extract_vetting_block(body: str):
@@ -83,7 +83,7 @@ def check_register(content: str) -> list:
     framework vetting gate.
 
     Args:
-        content: the full text of canon/patch_register_active.yaml.
+        content: the full text of registers/patch_register_active.yaml.
 
     Returns:
         A list of human-readable violation strings. An empty list means the
@@ -163,7 +163,7 @@ def check_register(content: str) -> list:
 
 def main() -> int:
     """
-    Read canon/patch_register_active.yaml from the working tree (relative to the
+    Read registers/patch_register_active.yaml from the working tree (relative to the
     current working directory, expected to be the repo root), validate it, and
     report. Returns a process exit code: 0 = clean / file absent, 1 = violations.
     """

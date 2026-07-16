@@ -18,16 +18,16 @@ description: >
 
 Read the following from the working tree before running any workflow. Do not use memory.
 
-- `canon/editorial_ledger.jsonl` — the frozen flat-ID legacy store (read-only for new
+- `registers/editorial_ledger.jsonl` — the frozen flat-ID legacy store (read-only for new
   entries; still live for resolving/striking/citing pre-cutover `ED-NNN` items).
-- Every `canon/editorial_ledger_<lane>.jsonl` that exists (`ls canon/editorial_ledger_*.jsonl`
+- Every `registers/editorial_ledger_<lane>.jsonl` that exists (`ls registers/editorial_ledger_*.jsonl`
   — currently `_mb`, `_pc`, `_fi`, `_sc`, `_fa`, `_wr`, `_se`, `_in`, plus the overflow
   `_archive`; a lane file only exists once that lane has allocated its first ED, so `_go`
   may be absent — that is expected, not an error).
 - `references/id_reservations.yaml` — the ID allocation source of truth (§ below).
 - `references/glossary.md` — term definitions.
 
-**If any path is missing:** STOP for that path — except a missing `canon/editorial_ledger_<lane>.jsonl`
+**If any path is missing:** STOP for that path — except a missing `registers/editorial_ledger_<lane>.jsonl`
 lane file, which is expected for a lane that has never allocated (do not treat as a failure;
 just note the lane has no entries yet). For any other missing path, report the failure and do
 not proceed using memory.
@@ -64,7 +64,7 @@ the entry with that ID → increment `next_free` → co-commit both files in the
 **Worked examples (this repo's own history, follow this shape):** the audit-ecosystem
 consolidation batch that produced this rewrite allocated `ED-IN-0032`, `ED-IN-0033`, and
 `ED-IN-0034` in sequence, each by reading `lane_ids.lanes.IN.next_free`, forming the ledger
-entry with that ID in `canon/editorial_ledger_in.jsonl`, bumping `next_free` in
+entry with that ID in `registers/editorial_ledger_in.jsonl`, bumping `next_free` in
 `id_reservations.yaml`, and committing both files together (or, for a doc-only phase, filing
 the ledger entry as a small follow-up commit — either is fine, the protocol doesn't require a
 single atomic commit, just that the ledger entry and the `next_free` bump land together).
@@ -90,7 +90,7 @@ correct response — not a special case, the normal one.
   stopped — `ED-1094` is the ruling that established the freeze, not the last ID actually issued
   under it). No new flat IDs are ever allocated. Existing flat IDs remain permanently valid to
   cite, resolve, strike, or supersede (via a NEW lane-tagged ID) — they live in
-  `canon/editorial_ledger.jsonl` (active) or `canon/editorial_ledger_archive.jsonl` (older,
+  `registers/editorial_ledger.jsonl` (active) or `registers/editorial_ledger_archive.jsonl` (older,
   size-overflow-driven split of settled entries — see that file's own header/the ledger's
   `_split_from` fields for provenance).
 
@@ -107,7 +107,7 @@ counter (patches, not editorial decisions) but share the file and the protocol:
    value).
 2. That `next_free` value IS the next PP to assign — form the entry as `PP-NNN` (no lane tag;
    `PP-NNN` predates the ED lane split and was never split the same way).
-3. Append the entry to `canon/patch_register_active.yaml` (see that file's own header for its
+3. Append the entry to `registers/patch_register_active.yaml` (see that file's own header for its
    schema — `id`, `date`, `severity`, `description`, `affects`, `status`).
 4. Increment the round's `PP.next_free` by the count allocated and co-commit
    `references/id_reservations.yaml` in the **same commit** as the patch-register entry.
@@ -122,8 +122,8 @@ Use `references/glossary.md` (read above) for all term definitions and permitted
 
 ## Purpose
 
-Maintain the editorial register — `canon/editorial_ledger.jsonl` (frozen legacy) plus the
-lane-split `canon/editorial_ledger_<lane>.jsonl` files (live, where all new work is filed) —
+Maintain the editorial register — `registers/editorial_ledger.jsonl` (frozen legacy) plus the
+lane-split `registers/editorial_ledger_<lane>.jsonl` files (live, where all new work is filed) —
 as the source of truth for editorial decisions. Present unresolved items to the user, record
 decisions, propagate changes across the working tree and commit, and keep the register clean.
 
@@ -134,16 +134,16 @@ decisions, propagate changes across the working tree and commit, and keep the re
 **Format:** JSONL — one JSON object per line, NOT a single YAML file, NOT a
 `editorial_decisions:` top-level list. Append a new line to add an entry; never rewrite the
 whole file wholesale (git-diffability is the entire point of this format — see
-`canon/editorial_ledger_migration_2026-05-28.md` for why it replaced the old fragmented-YAML
+`registers/editorial_ledger_migration_2026-05-28.md` for why it replaced the old fragmented-YAML
 scheme).
 
 **Files:**
-- `canon/editorial_ledger.jsonl` — flat, pre-cutover `ED-NNN` entries. Read-only for new
+- `registers/editorial_ledger.jsonl` — flat, pre-cutover `ED-NNN` entries. Read-only for new
   entries; existing entries may still transition `status` (e.g. `open` → `resolved`/`struck`).
-- `canon/editorial_ledger_archive.jsonl` — an overflow split of the flat file's own older,
+- `registers/editorial_ledger_archive.jsonl` — an overflow split of the flat file's own older,
   terminal-status entries (token-cap driven, mirrors `patch_register_active`/`_archive`). Same
   rules as the flat file.
-- `canon/editorial_ledger_<lane>.jsonl` (`mb`, `pc`, `fi`, `sc`, `fa`, `wr`, `se`, `in`, and
+- `registers/editorial_ledger_<lane>.jsonl` (`mb`, `pc`, `fi`, `sc`, `fa`, `wr`, `se`, `in`, and
   `go` once GO allocates) — where every NEW entry is filed, one file per lane.
 
 **Field vocabulary — observed-descriptive, not an enforced schema.** This is a practiced
@@ -180,8 +180,8 @@ settled) by CI tooling (see "Enforcement reality" below) — treat any status ot
 
 ## Workflow A — Resolve Items
 
-1. From every `canon/editorial_ledger_<lane>.jsonl` that exists, plus
-   `canon/editorial_ledger.jsonl` for any still-open legacy items (read each from the working
+1. From every `registers/editorial_ledger_<lane>.jsonl` that exists, plus
+   `registers/editorial_ledger.jsonl` for any still-open legacy items (read each from the working
    tree): filter to non-terminal `status` values (`open`, `provisional`, `deferred`, etc. — not
    `resolved`/`struck`/`ratified`/`deprecated`), sorted with `needs_jordan: true` and any
    `P1-BLOCKER`/`P1` items first.
@@ -222,7 +222,7 @@ marker or CI fails. This workflow is how a flag placed in-doc gets a matching le
 4. If not registered: determine the correct lane (by subsystem — see the lane roster above),
    re-read `references/id_reservations.yaml`'s `lane_ids.lanes.<LANE>.next_free` **right now**
    (Collision Guard above), assign that ID, append one JSON line to
-   `canon/editorial_ledger_<lane>.jsonl` (create the file if this lane has never allocated
+   `registers/editorial_ledger_<lane>.jsonl` (create the file if this lane has never allocated
    before), and bump `next_free` in `id_reservations.yaml`.
 5. Run Workflow D (dedup) before committing.
 6. Atomic commit: the lane ledger file(s) + `id_reservations.yaml`. If the in-doc
@@ -345,7 +345,7 @@ Two separate, unrelated CI mechanisms touch this system. Do not conflate them:
   design files" language is grounded in.
 - **`tools/broken_dependency_checker.py::check_editorial_ledger`** (part of the BLOCKING
   `repository-integrity` CI job) is the check that actually reads
-  `canon/editorial_ledger.jsonl` and every `canon/editorial_ledger_<lane>.jsonl`. For every
+  `registers/editorial_ledger.jsonl` and every `registers/editorial_ledger_<lane>.jsonl`. For every
   entry whose `status` is one of the "live" values (`open`, `provisional`, `applied`,
   `confirmed`, `deferred` — resolved/struck/ratified/deprecated entries are historical record
   and exempt), it extracts file-path references from the JSON line and fails the build if any
@@ -354,7 +354,7 @@ Two separate, unrelated CI mechanisms touch this system. Do not conflate them:
   `description` citing a path that later moves or is deleted will break CI** — either update
   the entry's path reference or resolve/strike it when the file it names goes away.
 - **`tools/ci_register_size_check.py`** enforces soft token caps per ledger file (150,000 for
-  `canon/editorial_ledger.jsonl` and `_archive.jsonl`; 50,000 per lane file, including
+  `registers/editorial_ledger.jsonl` and `_archive.jsonl`; 50,000 per lane file, including
   not-yet-created `_go.jsonl`). Approaching a cap is a split signal (as already happened once
   for the flat file, 2026-07-02 and 2026-07-07), not an emergency — but don't ignore a warning.
 - **`tools/validate_ed_citations.py`** scans canon/design docs (not the ledger files

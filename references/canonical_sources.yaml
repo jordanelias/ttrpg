@@ -5,7 +5,7 @@
 
 sources:
   # ── Struck canon (2026-04-19) ──────────────────────────────────────────
-  # The following mechanics are NO LONGER CANONICAL. See canon/supersession_register.yaml.
+  # The following mechanics are NO LONGER CANONICAL. See registers/supersession_register.yaml.
   # Any doc referencing these mechanics has [SUPERSEDED 2026-04-19] marker at top of file.
   struck:
     - id: "VTM"
@@ -83,7 +83,7 @@ sources:
     canonized: "2026-05-17"
     canonized_pass: "Pass 2n"
 
-# Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
+# Patch history (PP-665..PP-674 and beyond) → registers/patch_register_active.yaml + registers/patch_register_archive_*.yaml.
 
 
 # ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────

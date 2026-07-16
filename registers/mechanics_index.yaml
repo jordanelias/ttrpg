@@ -196,7 +196,7 @@ mechanics:
   mechanics_registry_service:
     scale: service
     faction: universal
-    canon_sources: ["canon/mechanics_index.yaml"]
+    canon_sources: ["registers/mechanics_index.yaml"]
     sim_module: sim/autoload/registry.py
     test_status: not_implemented
     notes: "Loads this very index file."
@@ -574,7 +574,7 @@ mechanics:
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-3"]
     sim_module: sim/provincial/varfell_mandate_action.py
     test_status: contested
-    notes: "Module name placeholder pending Jordan rename. Current canon mechanic (W -1 + Mil -1 -> +1 L) flagged broken by Jordan 2026-05-17 (double-cost asymmetry). Current canon flavor framing (mead-hall / Tribune Network / Heorot / Althing anchors stitched into Reinhardt anchor) flagged as contamination. Canonical Vaynard identity per canon/supersession_register.yaml CR-STRIKE-2026-04-19 is Reinhardt-coded military conqueror. Mechanic + name redesign pending."
+    notes: "Module name placeholder pending Jordan rename. Current canon mechanic (W -1 + Mil -1 -> +1 L) flagged broken by Jordan 2026-05-17 (double-cost asymmetry). Current canon flavor framing (mead-hall / Tribune Network / Heorot / Althing anchors stitched into Reinhardt anchor) flagged as contamination. Canonical Vaynard identity per registers/supersession_register.yaml CR-STRIKE-2026-04-19 is Reinhardt-coded military conqueror. Mechanic + name redesign pending."
 
   varfell_territorial_acquisition:
     scale: provincial

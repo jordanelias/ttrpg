@@ -566,7 +566,7 @@ def run(root, out):
              f'`mass_battle` contract, folds `faction_state` into `faction_action.py`, etc.), so any '
              f'name-heuristic cross-check would cry wolf at ~{round(100*len(l2_without_code)/max(1,len(l2_nodes)))}% '
              f'and is deliberately NOT shipped as a finding. Closing this honestly needs the '
-             f'`canon/mechanics_index.yaml` `sim_module:` join (a contract↔mechanic↔file map) — a deferred '
+             f'`registers/mechanics_index.yaml` `sim_module:` join (a contract↔mechanic↔file map) — a deferred '
              f'WS task. Until then: **contract↔code correspondence is UNVERIFIED by this layer.**')
     L.append('')
     section('Import orphans — internal module nothing imports (dead-ish; verify before removal)',

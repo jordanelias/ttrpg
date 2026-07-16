@@ -507,3 +507,25 @@
 | `designs/board_game/tc_political_redesign_v30_skeleton.md` | PENDING |
 | `path` | PENDING |
 | `session_log_archive.md` | PENDING |
+
+
+## 2026-07-16 — Registers out of canon/ (ED-IN-0071 P0)
+
+| old path | new path |
+|---|---|
+| `canon/editorial_ledger.jsonl` | `registers/editorial_ledger.jsonl` |
+| `canon/editorial_ledger_archive.jsonl` | `registers/editorial_ledger_archive.jsonl` |
+| `canon/editorial_ledger_fa.jsonl` | `registers/editorial_ledger_fa.jsonl` |
+| `canon/editorial_ledger_fi.jsonl` | `registers/editorial_ledger_fi.jsonl` |
+| `canon/editorial_ledger_in.jsonl` | `registers/editorial_ledger_in.jsonl` |
+| `canon/editorial_ledger_mb.jsonl` | `registers/editorial_ledger_mb.jsonl` |
+| `canon/editorial_ledger_migration_2026-05-28.md` | `registers/editorial_ledger_migration_2026-05-28.md` |
+| `canon/editorial_ledger_pc.jsonl` | `registers/editorial_ledger_pc.jsonl` |
+| `canon/editorial_ledger_sc.jsonl` | `registers/editorial_ledger_sc.jsonl` |
+| `canon/editorial_ledger_se.jsonl` | `registers/editorial_ledger_se.jsonl` |
+| `canon/editorial_ledger_wr.jsonl` | `registers/editorial_ledger_wr.jsonl` |
+| `canon/mechanics_index.yaml` | `registers/mechanics_index.yaml` |
+| `canon/patch_register_active.yaml` | `registers/patch_register_active.yaml` |
+| `canon/patch_register_index.md` | `registers/patch_register_index.md` |
+| `canon/placeholder_names.yaml` | `registers/placeholder_names.yaml` |
+| `canon/supersession_register.yaml` | `registers/supersession_register.yaml` |

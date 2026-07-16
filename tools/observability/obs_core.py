@@ -46,13 +46,13 @@ LEDGER_LANE_CODES: tuple[str, ...] = tuple(c.lower() for c in LANE_CODES)  # led
 
 # --- A. editorial-ledger reader (single owner) ---------------------------------
 def read_ledger_entries(repo: Path | None = None) -> list[dict]:
-    """Every entry across canon/editorial_ledger*.jsonl (flat + per-lane), normalized.
+    """Every entry across registers/editorial_ledger*.jsonl (flat + per-lane), normalized.
     Lane comes free from the filename (`editorial_ledger_<xx>.jsonl`) — the 2-letter
     match captures GO, which dashboard_data.LEDGER_LANES did not. Archive file skipped
     (settled history, not live debt)."""
     repo = repo or REPO
     out: list[dict] = []
-    for path in sorted((repo / "canon").glob("editorial_ledger*.jsonl")):
+    for path in sorted((repo / "registers").glob("editorial_ledger*.jsonl")):
         base = path.name
         if "archive" in base:
             continue

@@ -80,7 +80,7 @@ Systematic check:
 
 **Output:** `gap_register_update.md` — findings feed the ED-disposition table (Output Rules
 below); there is no `canon/editorial_ledger.yaml` file. P1 gaps get filed as
-`ED-<LANE>-NNNN` entries in the relevant `canon/editorial_ledger_<lane>.jsonl`, per
+`ED-<LANE>-NNNN` entries in the relevant `registers/editorial_ledger_<lane>.jsonl`, per
 `references/id_reservations.yaml`'s allocation protocol (see `valoria-editorial-register`'s
 ID Law section) — not appended to a YAML file.
 ```

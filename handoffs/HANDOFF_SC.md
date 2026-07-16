@@ -134,7 +134,7 @@ index; see it for cross-lane/global items.
     fires; genre selects the stat/channel. Memory genre → the Mandate stat delta (§5.4/§6's shared
     mechanism); Projection genre → the separate +1D-next-Domain-Action bonus (a bonus-token
     mechanism domain_echo.py's stat-delta-only interface can't yet carry — left as an explicit,
-    un-fabricated residual). Full ruling text: `canon/editorial_ledger.jsonl` ED-SC-0002.
+    un-fabricated residual). Full ruling text: `registers/editorial_ledger.jsonl` ED-SC-0002.
   - **STILL OPEN: the rest of the P0 decision docket (ED-SC-0003..0005)** — Piety/Persuasion
     tracker naming + canonical home; kernel Argue-pool formula; Recall/Corroborate/Prep/Findings
     global cap. ED-SC-0004 is the remaining P1 blocker (calibration/re-verdict/export).
@@ -151,7 +151,7 @@ index; see it for cross-lane/global items.
     seed-42 golden and echo_transport tests were verified unchanged — Stability Crisis doesn't happen
     to fire in that particular 8-seed sample). ED-SC-0007's echo-mapping is deliberately NOT wired by
     this change (still blocked at the spec level by ED-SC-0002); `echo_transport` (ED-IN-0028) stays
-    inert. Full ledger note: `canon/editorial_ledger.jsonl` ED-SC-0006.
+    inert. Full ledger note: `registers/editorial_ledger.jsonl` ED-SC-0006.
   - **ED-SC-0007 EXECUTED (2026-07-08)** — the Emergency Council contest branch now sets a
     `ctx['echo']` block (Mandate channel, degree-keyed off the ballot verdict per the composed
     ruling above) before the existing `echo_transport` call, so a real Domain Echo fires — deferred
@@ -172,7 +172,7 @@ index; see it for cross-lane/global items.
     states whether they should stack or cap at −1. Currently implemented as stacking (the literal,
     defensible default) but explicitly NOT ratified canon — **this is the one item from this
     session's build that needs Jordan's direct call**, not a routine merge-ratification. See
-    `canon/editorial_ledger.jsonl` ED-SC-0015.
+    `registers/editorial_ledger.jsonl` ED-SC-0015.
   - **P3-lite Agôn harness BUILT (2026-07-08).** `sim/personal/contest/agon_harness.py` — a
     standalone, `__main__`-runnable interactive harness where a human plays Side A against a simple
     AI policy (logos-spammer / demagogue), printing Appraise reveals and the Face/Concentration/

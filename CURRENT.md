@@ -9,7 +9,7 @@
 
 **This is the single human-readable index of what is live.** When in doubt about whether a doc
 is current, start here. Machine-readable source of truth: `references/canonical_sources.yaml`
-(SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
+(SHA-pinned) and `registers/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
 **Mobile-friendly status dashboard (2026-07-11, ED-IN-0031):** `docs/dashboard/` (built by

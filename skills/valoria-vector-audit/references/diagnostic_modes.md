@@ -123,7 +123,7 @@ Each mode is a self-contained query over the five graphs (G_cite, G_throughline,
 
 **Question:** What struck/legacy terminology still appears in active design docs?
 
-**Method:** Parse `canon/supersession_register.yaml` for struck terms. Direct grep for each term across design corpus. Report paragraph count + doc-level concentration per term.
+**Method:** Parse `registers/supersession_register.yaml` for struck terms. Direct grep for each term across design corpus. Report paragraph count + doc-level concentration per term.
 
 **Output format:**
 ```

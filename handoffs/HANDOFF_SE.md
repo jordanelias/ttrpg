@@ -13,7 +13,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 - **Comparative-governance-research docket round 2 (filed + partly executed 2026-07-09).**
   `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`
   — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
-  Filed as **ED-SE-0018..0044** (see `canon/editorial_ledger.jsonl`; 27 SE-lane items, 7 authored,
+  Filed as **ED-SE-0018..0044** (see `registers/editorial_ledger.jsonl`; 27 SE-lane items, 7 authored,
   20 open/needs_jordan — the largest single-session SE allocation to date).
   **Authored into `governance_play_redesign_v1.md` / `settlement_layer_v30.md` as PROPOSED text
   (2026-07-09; no sim code — SE still has no player-verb execution code, per the ED-SE-0005
@@ -47,7 +47,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   `designs/audit/2026-07-08-fa-se-historical-precedent-research/fa_se_historical_precedent_research_v1.md`
   — see `handoffs/HANDOFF_FA.md` for the full docket description (shared report, split by lane).
   Distills into 10 SE-lane mechanical proposals + a citation patch, filed as **ED-SE-0007..0017**
-  (see `canon/editorial_ledger.jsonl` for execution notes; remaining `needs_jordan` forks:
+  (see `registers/editorial_ledger.jsonl` for execution notes; remaining `needs_jordan` forks:
   ED-SE-0013 oversight-toolkit venal-appointment variant, ED-SE-0014 Local Interdict, ED-SE-0015
   Plant Colony, ED-SE-0017 optional founder-solidarity bonus).
   **Built same-day (2026-07-08) — all AUTHORED into `settlement_layer_v30.md` as PROPOSED text**

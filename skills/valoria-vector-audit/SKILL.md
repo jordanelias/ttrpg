@@ -36,7 +36,7 @@ Read the following files from the working tree (use the Read tool) before procee
 - `designs/architecture/complete_systems_reference.md` — NPC list, faction list
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
-- `canon/patch_register_active.yaml` — PP affects: lists for G_pp
+- `registers/patch_register_active.yaml` — PP affects: lists for G_pp
 
 The pipeline ALWAYS bypasses index routing for content reads — index files lack the body content needed for citation graph extraction; read the full files above.
 
@@ -111,7 +111,7 @@ Tokens in bottom 10th percentile of paragraph count AND bottom 10th percentile o
 For each throughline, count substantiating paragraphs (paragraphs mentioning ≥2 of throughline's load-bearing systems). ≤2 substantiating = at risk of being orphaned. **Requires `references/throughlines_meta_infill.md` to have the Load-bearing systems column** (added by PP-677). Without that column, this mode degenerates to null — diagnose accordingly.
 
 ### Mode G — Vocabulary debt sweep
-Direct grep for known-struck terms (parsed from `canon/supersession_register.yaml`). Reports paragraph count + doc-level concentration per legacy term.
+Direct grep for known-struck terms (parsed from `registers/supersession_register.yaml`). Reports paragraph count + doc-level concentration per legacy term.
 
 ### Mode H — Multi-graph isolates
 Tokens with degree ≤1 in **every** graph. Conceptually present, structurally disconnected. Often canonical concepts lacking first-class doc status.

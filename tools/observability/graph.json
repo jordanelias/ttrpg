@@ -3,7 +3,7 @@
     "generated_from": [
       "references/module_contracts.yaml",
       "designs/architecture/key_type_registry_v30.md",
-      "canon/mechanics_index.yaml"
+      "registers/mechanics_index.yaml"
     ],
     "contracts_schema_version": 2,
     "contracts_status": "EXTRACTED_STAGE1",
@@ -120,13 +120,13 @@
     ],
     "stats": {
       "systems": 29,
-      "keys": 48,
+      "keys": 49,
       "key_families": 7,
-      "scalars": 35,
-      "scales": 8,
-      "edges": 196,
-      "keys_with_emitter": 48,
-      "keys_with_consumer": 45,
+      "scalars": 34,
+      "scales": 9,
+      "edges": 201,
+      "keys_with_emitter": 49,
+      "keys_with_consumer": 46,
       "orphan_emits": [
         "meta.legacy_event"
       ],
@@ -141,7 +141,7 @@
       "registry_only": false,
       "registry_system": "articulation",
       "doc": "designs/articulation/articulation_layer_v30.md",
-      "resolver": "armature_dot_product",
+      "resolver": "deterministic_accounting",
       "scales": [
         "personal",
         "scene",
@@ -338,11 +338,14 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "home doc unlocated [GAP] \u2014 DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
+        "home doc unlocated [GAP] \u2014 DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home",
+        "ED-FA-0006 (2026-07-08, pessimist-action audit REFINE \u2014 resolves the C-FA-12 triple-vocabulary defect): the da.* five-bucket set is an OUTCOME-TAG taxonomy (it classifies a resolved Domain Action's *consequence* for generic consumers like faction_state/npc_behavior), realized as a per-verb tag on the EXISTING Domain-Action catalogs -- params/bg/core.md Standard Action Ob Reference, faction_layer_v30 \u00a75.4 Parliamentary, params/bg/faction_actions.md unique cards -- NOT a standalone module needing its own design doc. The doc:null closure therefore shrinks from 'author a new system' to 'add the per-verb da.* tag + a short crosswalk note' (a REFINE, not a new-doc GAP).",
+        "ED-FA-0006 residual authoring task (per-verb bucket assignment \u2014 the audit deliberately did NOT fabricate this; intent gate UNDETERMINED, boundaries are Jordan's ruling): DIRECTIONAL first pass only -- Treaty/Diplomacy/Recognition-Challenge/Succession-Endorsement/War-Authorisation -> da.diplomatic_alliance; Spy/Investigate/Counter-Intelligence + covert unique cards -> da.covert_betrayal; Govern/Trade/Subsidy/Piety-Spread/Community-Organising/Martial-Governance -> da.public_governance or da.economic_intervention; Censure/Embargo/Outlawry/Excommunication/Active-Inquisition/Church-Seizure -> da.antinomian_action (coercive) or da.public_governance. Genuinely ambiguous boundaries flagged for Jordan, NOT ruled here: (a) economic_intervention vs public_governance for fiscal-administrative verbs; (b) antinomian_action vs public_governance for punitive-institutional verbs; (c) covert_betrayal scope for lawful intelligence (Spy/Investigate) vs treachery proper. Direct-effect military verbs (Muster/March/Fortify/Blockade-Naval) are not consequence-classified and take no da.* tag."
       ],
       "sources": [
         "key_substrate_v30 \u00a78.6 [READ: 2026-06-10]",
-        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]",
+        "designs/audit/2026-07-08-pessimist-action-audit/ (ED-FA-0006 da.* crosswalk decision) [READ: 2026-07-08]"
       ],
       "gd_constraints": [],
       "sim_module": "",
@@ -423,7 +426,8 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
+        "registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)",
+        "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open \u2014 awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -458,7 +462,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "faction_politics",
-      "doc": null,
+      "doc": "designs/provincial/faction_politics_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -468,7 +472,8 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]"
+        "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
+        "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale \u2014 doc: field flipped to designs/provincial/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -524,7 +529,8 @@
       ],
       "gap_notes": [
         "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate \u00a78.6)",
-        "registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]"
+        "registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]",
+        "SCOPE [verification A6]: faction_state = {faction_layer_v30 (stability/occupation/treaties/parliament) + faction_behavior_v30 (PP-686 mission/cascade/expectation/Mandate)}; the doc field names only faction_behavior_v30. Boundary vs faction_politics (rank ladder) is the registry dual-emit on state.standing_change/coup_attempted/succession."
       ],
       "sources": [
         "key_substrate_v30 \u00a78.1, \u00a78.6 [READ: 2026-06-10]",
@@ -740,7 +746,7 @@
       "loops": [],
       "gap_notes": [
         "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) \u2014 cross-check vs scene_slate emitting same type",
-        "knots_v30 \u00a711 carries open canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001) [OPEN \u2014 Jordan, pre-existing]"
+        "knots_v30 \u00a76.1/\u00a76.2/\u00a711 carried the pre-ED-912 tier-capacity model + \u22124 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) \u2014 \u00a711 now records the resolution instead of forward-flagging it. Residual: \u00a76.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild = Stratum B (C-TW-12)"
       ],
       "sources": [
         "knots_v30 full [READ: 2026-06-10]",
@@ -773,7 +779,7 @@
       "state": [
         {
           "name": "knot strain",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "fieldwork_knots::knot strain"
         },
@@ -827,7 +833,7 @@
       "registry_only": false,
       "registry_system": "game_director",
       "doc": null,
-      "resolver": "state_reader",
+      "resolver": "manifest",
       "scales": [
         "scene"
       ],
@@ -910,18 +916,19 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "miraculous_event",
-      "doc": null,
+      "doc": "designs/scene/miraculous_event_v30.md",
       "resolver": "state_reader",
       "scales": [
         "personal",
-        "scene"
+        "settlement",
+        "peninsula"
       ],
       "status": "extracted",
       "accounting_phase": [],
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan]; home doc [GAP]"
+        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): designs/scene/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -966,7 +973,7 @@
       ],
       "gap_notes": [
         "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module \u2014 political_dynamics_keys_migration_v30 is \"Doc 12 Procedures \u2014 Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable.",
-        "doc-12 \u00a78 sequencing tree names FOUR Key types its own \u00a77 never declares and the registry lacks: scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed \u2014 F2 class [registry \u00a710 candidates]. Supersedes the v2 note \"Procedure C unkeyed\" (it IS keyed in \u00a78, just unregistered).",
+        "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 \u00a79). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four \u2014 closed by this same commit's consumes[] additions above.",
         "Accounting sequence (doc-12 \u00a78, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate \u00a74.1 single-update rule processes emissions inline"
       ],
       "sources": [
@@ -1169,6 +1176,42 @@
           "from": [
             "faction_politics"
           ]
+        },
+        {
+          "type": "scene.thread_operation",
+          "from": [
+            "threadwork"
+          ]
+        },
+        {
+          "type": "scene.draft_da",
+          "from": [
+            "domain_actions"
+          ]
+        },
+        {
+          "type": "scene.displacement",
+          "from": [
+            "npc_behavior"
+          ]
+        },
+        {
+          "type": "mechanical.project_advanced",
+          "from": [
+            "npc_behavior"
+          ]
+        },
+        {
+          "type": "state.project_completed",
+          "from": [
+            "npc_behavior"
+          ]
+        },
+        {
+          "type": "state.project_failed",
+          "from": [
+            "npc_behavior"
+          ]
         }
       ],
       "state": [
@@ -1186,13 +1229,13 @@
         },
         {
           "name": "projects",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "npc_behavior::projects"
         },
         {
           "name": "arc state",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "npc_behavior::arc state"
         }
@@ -1396,7 +1439,7 @@
       "sources": [
         "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]",
         "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]",
-        "canon/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]",
+        "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]",
         "personal-combat audit 2026-06-22 (this session) \u2014 model-correctness + drift findings folded in"
       ],
       "gd_constraints": [],
@@ -1579,7 +1622,7 @@
       "state": [
         {
           "name": "conviction scars",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "piety_track::conviction scars"
         }
@@ -1642,14 +1685,14 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; authoring-time vs runtime classification [OPEN \u2014 Jordan]; home doc [GAP]"
+        "registry-derived; authoring-time (compile-time) confirmed \u2014 fork 11 RATIFIED 2026-07-05 (ED-IN-0011): compile is authoring-time, its output packs seed runtime. Execution unbuilt (no Stage-1 compile tooling / template-pack format / settlement_layer injection wiring \u2014 C-INJ-5). Home doc still [GAP]: no dedicated scenario_authoring design doc exists (C-INJ-3). [ED-IN-0023]"
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "",
-      "test_status": "",
+      "sim_module": null,
+      "test_status": "not_implemented",
       "emits": [
         {
           "type": "env.crisis",
@@ -1671,7 +1714,7 @@
       "registry_only": false,
       "registry_system": "scene_slate",
       "doc": null,
-      "resolver": "state_reader",
+      "resolver": "manifest",
       "scales": [
         "scene"
       ],
@@ -1735,7 +1778,7 @@
       "registry_only": false,
       "registry_system": "scene_timer",
       "doc": null,
-      "resolver": "clock_advance",
+      "resolver": "state_reader",
       "scales": [
         "scene"
       ],
@@ -1792,7 +1835,9 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; relationship to settlement_layer \u00a71.3 Local Economy derived value unestablished \u2014 possibly the same system [OPEN \u2014 Jordan]; home doc [GAP]"
+        "registry-derived; relationship to settlement_layer \u00a71.3 Local Economy derived value unestablished \u2014 possibly the same system [OPEN \u2014 Jordan]; home doc [GAP]",
+        "RECOMMEND RETIRE [verification Lens-2/LD-2]: phantom module (no doc/state/logic). Fold da.economic_intervention -> settlement_layer Prosperity delta; re-point env.population_change consumer to settlement_layer. Adding a Population stat is a DESIGN decision (deferred \u2014 open_decisions \u00a72). Self-edge hazard: settlement_layer both emits and would consume env.population_change \u2014 route peninsular_strain -> settlement_layer.",
+        "ED-SE-0005 (2026-07-08): the SETTLEMENT-ACTION side of this retirement is CONFIRMED by the ratified pessimist-action audit (ED-IN-0027). The player_agency_v30 \u00a79 Trade action -- this phantom module's likely intended settlement-economy player verb -- is PRUNED and folded into the existing income sources; no dedicated settlement-economy player action survives. The da.economic_intervention -> settlement_layer Prosperity fold and the deferred Population-stat design decision (above) remain the open structural half."
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -1902,7 +1947,7 @@
       "gates": [
         {
           "id": "g_ord0",
-          "when": "settlement Order = 0",
+          "when": "Order = 0",
           "then": "local revolt",
           "on": "Prosperity / Defense / Order",
           "source": "settlement_layer_v30 \u00a71.3"
@@ -1926,9 +1971,9 @@
         {
           "output": "province Accord",
           "inputs": [
-            "settlement Order"
+            "Order"
           ],
-          "formula": "floor(mean settlement Order)",
+          "formula": "floor(mean Order across settlements)",
           "bucket": "derived_value",
           "source": "settlement_layer_v30 \u00a71.3"
         },
@@ -1952,7 +1997,7 @@
         {
           "output": "Public Order",
           "inputs": [
-            "settlement Order"
+            "Order"
           ],
           "formula": "Order \u00d7 20 (riot events below 0)",
           "source": "settlement_layer_v30 \u00a71.3"
@@ -1960,15 +2005,15 @@
         {
           "output": "faction Mandate (cross-module \u2192 faction_state)",
           "inputs": [
-            "L_s",
-            "PS_s",
+            "Legitimacy",
+            "Popular Support",
             "W_s"
           ],
           "formula": "q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating (Lesson-5 bound)",
           "source": "settlement_layer_v30 \u00a71.8 LPS-2e"
         },
         {
-          "output": "settlement L/PS (Mandate feedback)",
+          "output": "Legitimacy / Popular Support",
           "inputs": [
             "faction Mandate"
           ],
@@ -1978,9 +2023,9 @@
         {
           "output": "faction Treasury income (cross-module \u2192 faction_state)",
           "inputs": [
-            "settlement Prosperity"
+            "Prosperity"
           ],
-          "formula": "\u03a3 settlement Prosperity \u00d7 10",
+          "formula": "\u03a3 Prosperity across settlements \u00d7 10",
           "source": "derived_stats \u00a78.1 (quoted in settlement_layer \u00a71.8)"
         }
       ]
@@ -2000,7 +2045,12 @@
       "transitions": [
         "scale_transitions \u00a73.4 Scene \u2192 Faction (Domain Echo)"
       ],
-      "loops": [],
+      "loops": [
+        {
+          "with": "npc_behavior",
+          "damper": "2-cycle: emits scene.contest_resolved/scene.dialogue, consumes state.opinion_revised. BOUNDED [verification LD-1]: Procedure-D batch cadence (1/Accounting) + |delta-affect|>=0.5 emission threshold + Chain-Contest cap 3 then 4-season cold equilibrium. NOTE: the affect_axis clamp is NOT in canon; convergence rests on these bounds + the saturating \u00a75.4 drift curve."
+        }
+      ],
       "gap_notes": [],
       "sources": [
         "key_substrate_v30 \u00a78.5 (PP-683) [READ: 2026-06-10]",
@@ -2008,7 +2058,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/personal/contest.py",
+      "sim_module": "sim/personal/contest/",
       "test_status": "not_implemented",
       "emits": [
         {
@@ -2039,7 +2089,7 @@
       "state": [
         {
           "name": "persuasion_track",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "social_contest::persuasion_track"
         }
@@ -2087,12 +2137,6 @@
           "bucket": "clock",
           "writable": true,
           "scalar_id": "territorial_piety::CI (Church Influence)"
-        },
-        {
-          "name": "TC (Theocracy Counter)",
-          "bucket": "clock",
-          "writable": true,
-          "scalar_id": "territorial_piety::TC (Theocracy Counter)"
         }
       ],
       "gates": [
@@ -2158,13 +2202,13 @@
       "state": [
         {
           "name": "Coherence",
-          "bucket": "pool",
+          "bucket": "track",
           "writable": true,
           "scalar_id": "threadwork::Coherence"
         },
         {
           "name": "Thread Fatigue",
-          "bucket": "track",
+          "bucket": "clock",
           "writable": true,
           "scalar_id": "threadwork::Thread Fatigue"
         }
@@ -2593,6 +2637,24 @@
       "consumers": []
     },
     {
+      "id": "meta.cascade_cluster_event",
+      "family": "system_meta",
+      "description": "Cross-faction cascade cluster forms or dissolves (sustained \u2265 4 seasons of |cosine similarity| > 0.40 between two factions' cascade_fidelity_history). A CANONICAL articulation trigger (articulation_layer_v30 \u00a73.1",
+      "scale_signature": [
+        "territorial"
+      ],
+      "permanence": "persistent",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "articulation_layer"
+      ],
+      "consumers": [
+        "articulation_layer"
+      ]
+    },
+    {
       "id": "meta.knot_formed",
       "family": "system_meta",
       "description": "Knot formed between two NPCs (per fieldwork_socializing \u00a75.6).",
@@ -2892,16 +2954,19 @@
     {
       "id": "scene.gossip",
       "family": "system_meta",
-      "description": "",
-      "scale_signature": [],
-      "permanence": "",
-      "cls": "A",
+      "description": "Emitted by Procedure E \u00a76.3 when cumulative interaction drift > 0.5. Generates a propagatable gossip artifact reachable by inner-circle observers and (via propagation) third-parties. (PP-687 Phase B Stage 1 \u00a77.3)",
+      "scale_signature": [
+        "personal"
+      ],
+      "permanence": "structural",
+      "cls": "B",
       "registered": true,
       "broadcast": false,
       "emitters": [
         "npc_behavior"
       ],
       "consumers": [
+        "articulation_layer",
         "npc_memory"
       ]
     },
@@ -3333,7 +3398,7 @@
       "id": "fieldwork_knots::knot strain",
       "name": "knot strain",
       "owner": "fieldwork_knots",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [
@@ -3362,7 +3427,7 @@
       "id": "npc_behavior::arc state",
       "name": "arc state",
       "owner": "npc_behavior",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -3402,7 +3467,7 @@
       "id": "npc_behavior::projects",
       "name": "projects",
       "owner": "npc_behavior",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [
@@ -3541,7 +3606,7 @@
       "id": "piety_track::conviction scars",
       "name": "conviction scars",
       "owner": "piety_track",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [
@@ -3607,7 +3672,7 @@
         {
           "system": "settlement_layer",
           "id": "g_ord0",
-          "when": "settlement Order = 0",
+          "when": "Order = 0",
           "then": "local revolt",
           "source": "settlement_layer_v30 \u00a71.3",
           "kind": "on",
@@ -3632,7 +3697,7 @@
       "bucket": "derived_value",
       "writable": false,
       "derived_by": [
-        "floor(mean settlement Order)"
+        "floor(mean Order across settlements)"
       ],
       "gated_by": [],
       "read_by": []
@@ -3641,7 +3706,7 @@
       "id": "social_contest::persuasion_track",
       "name": "persuasion_track",
       "owner": "social_contest",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -3687,20 +3752,10 @@
       "read_by": []
     },
     {
-      "id": "territorial_piety::TC (Theocracy Counter)",
-      "name": "TC (Theocracy Counter)",
-      "owner": "territorial_piety",
-      "bucket": "clock",
-      "writable": true,
-      "derived_by": [],
-      "gated_by": [],
-      "read_by": []
-    },
-    {
       "id": "threadwork::Coherence",
       "name": "Coherence",
       "owner": "threadwork",
-      "bucket": "pool",
+      "bucket": "track",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -3710,7 +3765,7 @@
       "id": "threadwork::Thread Fatigue",
       "name": "Thread Fatigue",
       "owner": "threadwork",
-      "bucket": "track",
+      "bucket": "clock",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -3734,6 +3789,7 @@
     "scene",
     "settlement",
     "system_meta",
+    "territorial",
     "territory",
     "thread"
   ],
@@ -4068,6 +4124,36 @@
       "kind": "consumes"
     },
     {
+      "src": "scene.thread_operation",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.draft_da",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.displacement",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "mechanical.project_advanced",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "state.project_completed",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "state.project_failed",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
       "src": "npc_behavior",
       "dst": "npc_behavior::beliefs/opinions",
       "kind": "owns"
@@ -4195,11 +4281,6 @@
     {
       "src": "territorial_piety",
       "dst": "territorial_piety::CI (Church Influence)",
-      "kind": "owns"
-    },
-    {
-      "src": "territorial_piety",
-      "dst": "territorial_piety::TC (Theocracy Counter)",
       "kind": "owns"
     },
     {
@@ -4574,9 +4655,9 @@
       "src": "settlement_layer",
       "dst": "settlement_layer::province Accord",
       "kind": "derives",
-      "formula": "floor(mean settlement Order)",
+      "formula": "floor(mean Order across settlements)",
       "inputs": [
-        "settlement Order"
+        "Order"
       ]
     },
     {
@@ -4604,7 +4685,7 @@
       "kind": "derives",
       "formula": "Order \u00d7 20 (riot events below 0)",
       "inputs": [
-        "settlement Order"
+        "Order"
       ]
     },
     {
@@ -4613,14 +4694,14 @@
       "kind": "derives",
       "formula": "q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating (Lesson-5 bound)",
       "inputs": [
-        "L_s",
-        "PS_s",
+        "Legitimacy",
+        "Popular Support",
         "W_s"
       ]
     },
     {
       "src": "settlement_layer",
-      "dst": "settlement_layer::settlement L/PS (Mandate feedback)",
+      "dst": "settlement_layer::Legitimacy / Popular Support",
       "kind": "derives",
       "formula": "drift \u00b11/settlement/season toward Mandate (damped, mean-reverting; Stage-4 sim bounded 30 seasons)",
       "inputs": [
@@ -4631,9 +4712,9 @@
       "src": "settlement_layer",
       "dst": "settlement_layer::faction Treasury income (cross-module \u2192 faction_state)",
       "kind": "derives",
-      "formula": "\u03a3 settlement Prosperity \u00d7 10",
+      "formula": "\u03a3 Prosperity across settlements \u00d7 10",
       "inputs": [
-        "settlement Prosperity"
+        "Prosperity"
       ]
     },
     {

@@ -863,7 +863,7 @@ modules:
     sources:
       - "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]"
       - "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]"
-      - "canon/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
+      - "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
 
   - module: campaign_architecture

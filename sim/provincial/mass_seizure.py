@@ -2,7 +2,7 @@
 sim/provincial/mass_seizure.py — Church Mass Seizure (PP-411 + supersession 250715f)
 
 Canon source: designs/provincial/victory_v30.md §3.2; designs/architecture/campaign_architecture_v30.md §1.3
-Supersession: canon/supersession_register.yaml 250715f — threshold remains CI ≥ 60
+Supersession: registers/supersession_register.yaml 250715f — threshold remains CI ≥ 60
               but declaration is probabilistic P(declare) = ((CI-60)/40)^3.3.
 
 Implements:

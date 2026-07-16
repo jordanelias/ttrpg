@@ -28,7 +28,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   consent-cascade has no gameplay consequence. Two surfaces are unreachable by the live engine: the Key
   `scale_signature` enum is 3-of-6 (no province/duchy/country) and Field Investigation has zero live
   dispatch path. Analysis-only — hands a ranked MoH-free design surface to Jordan; no canon edited.
-  Allocates ED-IN-0064 (`canon/editorial_ledger_in.jsonl`) + syncs the pre-existing **duplicate IN-key**
+  Allocates ED-IN-0064 (`registers/editorial_ledger_in.jsonl`) + syncs the pre-existing **duplicate IN-key**
   `next_free` in `references/id_reservations.yaml` (flagged for a proper single-block repair). **Also
   indexed the previously-un-indexed ED-IN-0051** (2026-07-13 cross-scale-governance-grounding docket)
   into `CURRENT.md` + here.
@@ -56,7 +56,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   omitted — its `sim/` implementation is still `[PROVISIONAL]` stub-only; (2) Wave 1 CI burn-in:
   full report-only, no deviation from the existing ratchet; (3) `mc_v18` full-campaign runs: never
   gate a PR, a firm constraint; (4) the four §9 quick-win findings: filed separately, not bundled
-  — see **ED-IN-0045** below. Full resolution text: `canon/editorial_ledger_in.jsonl`.
+  — see **ED-IN-0045** below. Full resolution text: `registers/editorial_ledger_in.jsonl`.
 - **ED-IN-0045 (open, execution pending) — the four ED-IN-0044 quick wins, filed separately.**
   (1) `tests/hooks/`/`tests/index/`/`tests/registry/` + 2 files under `tests/sim/` contain real
   pytest code no CI job or local hook executes — wire in or explicitly retire. (2)
@@ -380,7 +380,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   got an entry for; note that gap here rather than backfilling the missing history.** Jordan asked
   for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
   skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
-  findings at the FROZEN flat `canon/editorial_ledger.jsonl` instead of the live lane-split files
+  findings at the FROZEN flat `registers/editorial_ledger.jsonl` instead of the live lane-split files
   (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
   ED-IN-0044); `valoria-compiler` had four independent breaks including a nonexistent gate field
   and an orphaned `compilation/` output path (ED-IN-0044); and `valoria-combat-simulator`'s
@@ -457,9 +457,9 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   against its lane file first (most were already duplicated there verbatim) and dropped rather than
   re-copied; the two genuine gaps found (R2 capstone finding, J-36) were backfilled into
   `HANDOFF_PC.md`/`HANDOFF_IN.md` before trimming root. Root is now ~95 lines / ~1.6k tokens, only
-  cross-lane content. (2) `canon/editorial_ledger.jsonl` (404 live entries, ~150k tokens, previously
+  cross-lane content. (2) `registers/editorial_ledger.jsonl` (404 live entries, ~150k tokens, previously
   ungoverned by lane) split the same way: the 115 entries whose id already declares a lane
-  (`ED-<LANE>-NNNN`) moved to their own `canon/editorial_ledger_<lane>.jsonl`; the 289 pre-cutover
+  (`ED-<LANE>-NNNN`) moved to their own `registers/editorial_ledger_<lane>.jsonl`; the 289 pre-cutover
   flat-ID entries stayed put (no retrofit, same precedent as the ID-namespace cutover itself). Main
   ledger dropped from ~150k tokens (at its own cap) to ~90k. Updated
   `tools/validate_ed_citations.py` (reads main + all lane files as "active") and

@@ -1,11 +1,11 @@
 {
   "meta": {
-    "files_scanned": 1423,
-    "total_open": 990,
+    "files_scanned": 1418,
+    "total_open": 991,
     "by_category": {
       "ratification": 50,
       "ruling": 219,
-      "naming": 72,
+      "naming": 73,
       "mechanics": 24,
       "gap": 327,
       "assumption": 250,
@@ -13,13 +13,13 @@
       "todo": 14
     },
     "by_priority": {
-      "1": 329,
+      "1": 330,
       "2": 36,
       "3": 625
     },
     "by_lane": {
-      "unassigned": 697,
-      "IN": 20,
+      "unassigned": 706,
+      "IN": 12,
       "FA": 67,
       "SC": 7,
       "PC": 112,
@@ -31,13 +31,13 @@
     },
     "by_lane_priority": {
       "unassigned": {
-        "1": 286,
-        "2": 24,
+        "1": 287,
+        "2": 32,
         "3": 387
       },
       "IN": {
         "1": 2,
-        "2": 9,
+        "2": 1,
         "3": 9
       },
       "FA": {
@@ -825,6 +825,18 @@
       "label": "Naming collision",
       "locations": [
         "designs/audit/2026-07-08-crunch-cascade-pessimist-ners-contamination/02_term_usage_sweep/batch_09_mass_battle_engine_terms_and_the_coherence_cohesion_near_col.md:161"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "axis of conviction (RULED) \u2014 breaks the 3-way \"Piety Track\" name collision",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "designs/proposals/repo-reorganization-v1.md:75"
       ],
       "systems": [],
       "count": 1,
@@ -4481,11 +4493,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'varfell_territorial_acquisition' (was 'einhir_revival') \u2014 needs canonical name []",
@@ -4493,11 +4505,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'altonian_reinforcements' (was 'altonian_reinforcements') \u2014 needs canonical name []",
@@ -4505,11 +4517,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'infrastructure_reclamation' (was 'infrastructure_reclamation') \u2014 needs canonical name []",
@@ -4517,11 +4529,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'home_sanctuary' (was 'home_sanctuary') \u2014 needs canonical name []",
@@ -4529,11 +4541,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'hafenmark_equipment' (was 'hafenmark_equipment') \u2014 needs canonical name []",
@@ -4541,11 +4553,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'npc_ai_service' (was 'npc_ai_service') \u2014 needs canonical name []",
@@ -4553,11 +4565,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "Placeholder name 'tactic_cards' (was 'tactic_cards') \u2014 needs canonical name []",
@@ -4565,11 +4577,11 @@
       "priority": 2,
       "label": "Placeholder name (rename pending)",
       "locations": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "age: null  # [GAP]",
@@ -12363,7 +12375,7 @@
       "replacement": "CI runs 0-100 with no freeze; milestones 40/55/65/80/100 (ci_political_v30 \u00a72.1); Mass Seizure one-shot at CI >= 60 (victory_v30 \u00a73.2); Theocracy Unification At"
     },
     {
-      "id": "canon/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')",
+      "id": "registers/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')",
       "scope": "Pre-audit mass-battle status: the engine treated as an unimplemented <5% stub",
       "superseded_by": "ED-MB-0001",
       "date": "2026-07-02",

@@ -1409,7 +1409,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Proper Noun Registry | — | World-entity (people/places) registry. | references/proper_noun_registry |
 | Canonical Sources | — | System → doc-path map. | references/canonical_sources |
 | File Index Summary | — | Sparse repo-tree summary. | references/file_index_summary |
-| Supersession Register | — | History of superseded design entries. | canon/supersession_register |
+| Supersession Register | — | History of superseded design entries. | registers/supersession_register |
 | Patch Register (in victory_v30) | — | Per-doc patch log. | victory §12 |
 | Sign-off Block (PP-674 Vetting) | — | Stage-gate sign-off schema. | (PP-674) |
 | Stage Gates | — | Sequential design-progression gates. | (cross-cutting) |

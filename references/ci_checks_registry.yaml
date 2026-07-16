@@ -191,7 +191,7 @@ ci_checks:
 
   - path: tools/mechanics_index_gen.py
     level: 5
-    role: "canon/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
+    role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
     paired_hook: ""
     ci_job: mechanics-index-check
     notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
@@ -243,7 +243,7 @@ in_session_hooks:
 
   - hook: supersession_check
     level: 4
-    role: "Warn (non-blocking) if commit touches files in canon/supersession_register.yaml files_to_recheck list."
+    role: "Warn (non-blocking) if commit touches files in registers/supersession_register.yaml files_to_recheck list."
 
   - hook: assert_unique_ids
     level: 4
