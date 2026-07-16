@@ -57,6 +57,42 @@ def test_ledger_reader_normalizes_and_tolerates_list_desc(tmp_path):
     assert core.open_ledger_entries(tmp_path) == [e for e in entries if e["status"] == "open"]
 
 
+def test_text_needs_jordan_positive():
+    # the pending-Jordan phrasings that build_proposals' design-doc + flat-ledger
+    # rescue depends on (the structural undercount fix)
+    assert core.text_needs_jordan("Status: PROPOSAL — pending Jordan sign-off")
+    assert core.text_needs_jordan("HELD FOR JORDAN.")
+    assert core.text_needs_jordan("DRAFT — awaiting Jordan review")
+    assert core.text_needs_jordan("[GATE G8 - Jordan decision] out-of-bounds …")
+    assert core.text_needs_jordan("Two mechanical-tier decisions for Jordan veto: (1) …")
+    assert core.text_needs_jordan("INTENT UNDETERMINED: Jordan to confirm the surfaces")
+    assert core.text_needs_jordan("DECISION (Jordan): (a) declare RETAINED …")
+    assert core.text_needs_jordan("this doc is Jordan-vetoable throughout")
+
+
+def test_text_needs_jordan_negative():
+    # must match FUTURE/PENDING action only — a PAST ruling's citation stays actionable
+    assert not core.text_needs_jordan("evidence-decided, not a Jordan choice")
+    assert not core.text_needs_jordan("Decided canon per Jordan's prior ruling")
+    assert not core.text_needs_jordan("routine cleanup, no ruling needed")
+    assert not core.text_needs_jordan(None)
+    assert not core.text_needs_jordan("")
+
+
+def test_ledger_reader_rescues_fieldless_pending_jordan(tmp_path):
+    # a pre-cutover flat entry with NO needs_jordan field but pending-Jordan text
+    # must read as needs_jordan (the field-absent undercount)
+    d = tmp_path / "registers"
+    d.mkdir()
+    (d / "editorial_ledger.jsonl").write_text(
+        '{"id":"ED-9001","status":"open","description":"[GATE - Jordan decision] pending Jordan."}\n'
+        '{"id":"ED-9002","status":"open","description":"evidence-decided, not a Jordan choice"}\n',
+        encoding="utf-8")
+    entries = {e["id"]: e for e in core.read_ledger_entries(tmp_path)}
+    assert entries["ED-9001"]["needs_jordan"] is True    # rescued by text scan
+    assert entries["ED-9002"]["needs_jordan"] is False   # past/negated — stays actionable
+
+
 def test_no_import_cycle():
     # core imports build_decisions; build_decisions must NOT import core (would cycle)
     import build_decisions  # noqa: F401

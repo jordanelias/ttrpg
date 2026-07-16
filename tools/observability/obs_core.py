@@ -73,7 +73,9 @@ def read_ledger_entries(repo: Path | None = None) -> list[dict]:
                 "id": e.get("id", "?"),
                 "lane": lane,
                 "status": e.get("status"),
-                "needs_jordan": bool(e.get("needs_jordan")),
+                # flat pre-cutover entries predate the needs_jordan FIELD — fall back
+                # to a pending-Jordan text scan so they aren't miscounted actionable.
+                "needs_jordan": bool(e.get("needs_jordan")) or text_needs_jordan(desc),
                 "description": str(desc).strip(),
                 "source": e.get("source"),
                 "file": base,
@@ -117,6 +119,45 @@ def is_unratified_status(status: str | None) -> bool:
 # Kept SEPARATE from DECISION_MARKERS (the corpus-wide TODO/GAP/STUB sweep) on
 # purpose — merging them would flood the inbox with hygiene items (finding B3).
 NEEDS_JORDAN_MARKERS = re.compile(r'JORDAN RULING NEEDED|needs_jordan\s*[:=]\s*true', re.I)
+
+# --- pending-Jordan free-text detection (single owner) --------------------------
+# Rescues two STRUCTURAL undercounts in build_proposals' needs-your-decision split:
+#   (A) proposal_doc / provisional_status_doc kinds never carried a needs_jordan
+#       flag at all, so a design doc whose Status reads "HELD FOR JORDAN" showed as
+#       plain actionable — structurally unflaggable.
+#   (B) pre-cutover flat ledger entries (registers/editorial_ledger.jsonl) predate the
+#       needs_jordan FIELD, so an entry whose own text says "PENDING Jordan" /
+#       "Jordan to confirm" / "DECISION (Jordan)" defaulted to actionable.
+# The vocabulary deliberately matches FUTURE / PENDING Jordan action ONLY, never a
+# citation of a PAST ruling — so "evidence-decided, not a Jordan choice" (ED-913) and
+# "per Jordan's prior ruling" (ED-930) correctly STAY actionable. Verified empirically
+# against the live ledger + designs/proposals/ when this landed (see
+# tests/valoria/test_observability_core.py::test_text_needs_jordan_*).
+NEEDS_JORDAN_TEXT = re.compile(
+    r"""
+      HELD \s+ FOR \s+ JORDAN
+    | JORDAN \s+ RULING \s+ NEEDED
+    | needs_jordan \s* [:=] \s* true
+    | PENDING \s* :? \s* JORDAN
+    | AWAITING \s+ (?:A \s+)? JORDAN
+    | JORDAN [-\s] VETO(?:ABLE)?
+    | \b for \s+ Jordan \s+ veto \b
+    | DECISION \s* \( \s* JORDAN \s* \)
+    | \[ \s* (?:GATE [^\]]* [-–] \s*)? JORDAN \s+ DECISION [^\]]* \]
+    | \b JORDAN \s+ (?: TO \s+ (?:CONFIRM|NAME|RULE|DECIDE|ADJUDICATE|CHOOSE|RESOLVE|VET)
+                     | NAMING \s+ RULING
+                     | DECISION \s+ NEEDED )
+    | \[ \s* JORDAN \s+ TO \s+ \w+ [^\]]* \]
+    | UNDETERMINED [:,]? \s+ JORDAN
+    """,
+    re.I | re.X,
+)
+
+
+def text_needs_jordan(text: str | None) -> bool:
+    """True when free text signals a *pending* Jordan decision (see NEEDS_JORDAN_TEXT).
+    Matches future/pending phrasings only — never a past ruling's citation."""
+    return bool(text) and bool(NEEDS_JORDAN_TEXT.search(text))
 
 
 # --- 3-artifact JS-bundle writer (single owner) --------------------------------

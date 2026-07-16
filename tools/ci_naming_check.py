@@ -59,10 +59,16 @@ FORBIDDEN = tuple(_forbidden_patterns())
 # the matcher). Matched as substrings against the forward-slashed path.
 EXCLUDE = (
     'references/names_index.yaml',          # the source of truth — names the token by design
+    'references/alias_registry.yaml',       # deprecated->canonical alias source (names tokens by design)
     'references/name_collision_database.yaml',
     'references/ci_checks_registry.yaml',
     'references/deprecated_terms_registry.yaml',
     'references/proper_noun_registry.yaml',
+    # generated glossary bundles carry the deprecated aliases AS DATA (the "from"
+    # side of each mapping, generated from alias_registry/names_index) — same
+    # rationale as the source registries above; a regen must not trip the gate.
+    'tools/observability/lexicon',          # lexicon.json, lexicon_data.js
+    'tools/observability/console.html',     # embeds window.VALORIA_LEXICON
     'params/bg/institutions.md',
     'skills/prose-writer/',
     'tests/',

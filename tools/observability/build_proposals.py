@@ -95,16 +95,21 @@ def collect() -> list[dict]:
         if any(seg in rel for seg in ("/deprecated/", "/archives/", "/archive/")):
             continue
         in_proposals_dir = rel.startswith("designs/proposals/")
-        status = core.first_status(_doc_head(path))
+        head = _doc_head(path)
+        status = core.first_status(head)
+        # design-doc kinds previously could NOT carry needs_jordan (they never passed
+        # the flag) — detect a pending-Jordan disposition from the doc's own Status +
+        # head so a "HELD FOR JORDAN" doc is counted as needing your decision.
+        nj = core.text_needs_jordan((status or "") + "\n" + head)
         if in_proposals_dir:
             add("proposal_doc", rel, rel,
                 title=path.stem.replace("_", " "),
-                lane=core.infer_lane(rel),
+                lane=core.infer_lane(rel), needs_jordan=nj,
                 status=status or "(no Status line — designs/proposals/)")
         elif core.is_unratified_status(status):
             add("provisional_status_doc", rel, rel,
                 title=path.stem.replace("_", " "),
-                lane=core.infer_lane(rel), status=status)
+                lane=core.infer_lane(rel), needs_jordan=nj, status=status)
 
     # 3. editorial ledger open items, split by needs_jordan
     for e in core.open_ledger_entries():
