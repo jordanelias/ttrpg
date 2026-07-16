@@ -95,7 +95,7 @@ policies:
   # LANE SPLIT (2026-07-08 atomization pass): entries whose id already declares a lane
   # (ED-<LANE>-NNNN) were moved out of the flat registers/editorial_ledger.jsonl into their own
   # registers/editorial_ledger_<lane>.jsonl (lowercase lane code), mirroring the
-  # handoffs/HANDOFF_<LANE>.md split and the same ED-<LANE>-NNNN taxonomy. Pre-cutover
+  # registers/handoffs/HANDOFF_<LANE>.md split and the same ED-<LANE>-NNNN taxonomy. Pre-cutover
   # flat-ID entries are NOT retrofitted with a lane (same no-retrofit precedent as the
   # ED-<LANE>-NNNN cutover itself) and stay in registers/editorial_ledger.jsonl, which dropped
   # from ~150k tokens (at its own cap) to ~90k as a result. Both the main file and every
@@ -132,18 +132,18 @@ policies:
   # nothing was governing it — the generic "**/*.md" catch-all below never applied because
   # fnmatch (not path-aware globbing) requires a literal "/" in the candidate, so a
   # leading "**/" pattern can never match a root-level file (see the compliance_check.py
-  # fix in the same pass). Pruned narrative moved to handoffs/HANDOFF_archive.md.
-  - match: "handoffs/HANDOFF_archive.md"
+  # fix in the same pass). Pruned narrative moved to registers/handoffs/HANDOFF_archive.md.
+  - match: "registers/handoffs/HANDOFF_archive.md"
     on_exceed: "skip"
     note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
 
   - match: "HANDOFF.md"
     max_tokens: 4000
     on_exceed: "flag_for_split"
-    archive_target_pattern: "handoffs/HANDOFF_archive.md"
-    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; lane-owned '## Next actions' content belongs in that lane's handoffs/HANDOFF_<LANE>.md, never here (2026-07-08 second pass: ~9k tokens of lane-specific bullets were fully redundant with content already in the lane files and were dropped, not just moved). on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
+    archive_target_pattern: "registers/handoffs/HANDOFF_archive.md"
+    note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; lane-owned '## Next actions' content belongs in that lane's registers/handoffs/HANDOFF_<LANE>.md, never here (2026-07-08 second pass: ~9k tokens of lane-specific bullets were fully redundant with content already in the lane files and were dropped, not just moved). on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
 
-  - match: "handoffs/*.md"
+  - match: "registers/handoffs/*.md"
     max_tokens: 20000
     on_exceed: "flag_for_split"
     note: "Per-lane continuity files. Large by design (active session narrative for one lane), but not unbounded — archive resolved/superseded entries when approaching the cap."

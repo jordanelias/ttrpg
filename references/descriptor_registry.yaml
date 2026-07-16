@@ -169,7 +169,7 @@ not_descriptors:
 
   wave_q_step3_additions: >
     Residual filed 2026-07-08 alongside the Wave-Q-step-3 tooling build (A17 checker +
-    `sim/substrate/keys.py` stat_vocabulary hook, see handoffs/HANDOFF_IN.md): `set.facility_tier`
+    `sim/substrate/keys.py` stat_vocabulary hook, see registers/handoffs/HANDOFF_IN.md): `set.facility_tier`
     (settlement_stats, D5 residual -- distinct from `terr.fort_level` above) and "Settlement Weight"
     (D5's derived companion, no `derived.*` KIND exists in this file so it's a plain name here, same
     treatment as the other derived_values). Two proposed deltas remain REJECTED, not filed, by both

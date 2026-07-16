@@ -29,7 +29,7 @@ def test_falsifiable_heft_ordering():
     correctly moves arming/longsword's balance back toward the hand (per the ratified 1H band, 6-14cm), which
     necessarily lowers their m_head*PoB_frac heft numerator — even at the band's ceiling, neither can reach
     spear's own (untouched) numerator (checked: max achievable ~0.103/0.097 vs spear's fixed 0.138). This is
-    NOT a new defect — it is the SAME reach-class over-dominance already tracked in handoffs/HANDOFF_PC.md
+    NOT a new defect — it is the SAME reach-class over-dominance already tracked in registers/handoffs/HANDOFF_PC.md
     ("SPEAR flat-dominance... its win is REACH, not tempo") surfacing through a second symptom. Fixing it
     means revisiting spear's own head/haft mass split (out of JD-1's scope — spear was not one of the flagged
     weapons) or the approach-side lever already identified for the win-rate anomaly, not a per-weapon fudge

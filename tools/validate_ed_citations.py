@@ -73,7 +73,7 @@ CONTEXT = 90  # chars of context captured each side of a citation
 
 # Lane-split active ledger (2026-07-08 atomization pass): entries whose id already
 # declares a lane (ED-<LANE>-NNNN) live in their own registers/editorial_ledger_<lane>.jsonl
-# file instead of the flat registers/editorial_ledger.jsonl, mirroring the handoffs/
+# file instead of the flat registers/editorial_ledger.jsonl, mirroring the registers/handoffs/
 # HANDOFF_<LANE>.md split. Pre-cutover flat-ID entries are NOT retrofitted (same
 # no-retrofit precedent as the ED-<LANE>-NNNN cutover itself) and stay in the main file.
 LANE_LEDGER_PATHS = tuple(

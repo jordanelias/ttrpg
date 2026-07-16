@@ -21,7 +21,7 @@ A accounts for every open v5 item. v4 stays the frozen 06-11/06-22 record.
 
 **Binds (does not fork):** `references/lane_assignments.yaml` (owns-globs; source pointer
 repointed here) · `references/id_reservations.yaml` (lane counters live; allocation protocol
-below) · `HANDOFF.md` + `handoffs/HANDOFF_<LANE>.md` (the ONLY per-lane status surface) ·
+below) · `HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` (the ONLY per-lane status surface) ·
 `CURRENT.md` (currency authority). Steering reconciliation executed with this document:
 **ED-IN-0009** (this workplan) closing **ED-IN-0006** (roadmap_state retired, decision queue
 refreshed, v5 archived, hierarchy adopted).
@@ -51,7 +51,7 @@ Statuses live in exactly one place (the lane handoff or the ledger); the monthly
 CURRENT.md within four days precisely because two surfaces both claimed status.
 
 **Completeness rule (2026-07-08, Jordan directive):** every §4 lane section MUST open with
-an explicit `handoffs/HANDOFF_<LANE>.md` pointer, even where the section's own prose is
+an explicit `registers/handoffs/HANDOFF_<LANE>.md` pointer, even where the section's own prose is
 thin or the lane is quiet — the pointer is what guarantees nothing gets missed, not literal
 enumeration of every open item here. A session (human or agent) scoping into a lane via
 this document is not "caught up" until it has also read that lane's handoff; a §4 entry
@@ -109,7 +109,7 @@ authoring canon first (CLAUDE.md §6), and `valoria-game` has been frozen since 
 
 ## §2 · Cross-cutting spine (IN lane)
 
-Ordered; each item cites its ledger anchor. Status: `handoffs/HANDOFF_IN.md`.
+Ordered; each item cites its ledger anchor. Status: `registers/handoffs/HANDOFF_IN.md`.
 
 1. **Steering reconcile (ED-IN-0006 → ED-IN-0009)** — EXECUTED WITH THIS PR: roadmap_state
    retired to `deprecated/references/` (banner), decision-queue items 1–3 refreshed, v5
@@ -165,7 +165,7 @@ _Format: **status pointer** (the handoff file — no status duplicated here) · 
 · gates. Lane discipline: ED-<LANE>-NNNN allocation per `references/id_reservations.yaml`._
 
 ### PC — personal combat
-Status: `handoffs/HANDOFF_PC.md` (progress detail lives there, not here). Plan-of-record: R3
+Status: `registers/handoffs/HANDOFF_PC.md` (progress detail lives there, not here). Plan-of-record: R3
 weapon-model consolidation
 (`designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`, RATIFIED).
 Sequence: **U0** units-honesty (✅ DONE, ED-PC-0002) → **U1** PoB recalibration
@@ -190,7 +190,7 @@ retire-docstrings recommendation), phase4_5 (4a game-theoretic · 4b abilities-a
 one legible fight — the U-series' front half, not phase4_5.
 
 ### MB — mass battle
-Status: `handoffs/HANDOFF_MB.md` (+ the 06-30 bottom-up workplan,
+Status: `registers/handoffs/HANDOFF_MB.md` (+ the 06-30 bottom-up workplan,
 `designs/audit/2026-06-30-mass-battle-bottomup/05_redesign_workplan.md` — the governing
 plan; do NOT resume `references/mass_battle_redesign_workplan_v1.md`, banner-superseded).
 **DG-1 RULED and CLOSED** (2026-07-05, ED-MB-0003): symmetric-at-parity infantry +
@@ -224,7 +224,7 @@ change. Then Stage-E UX depth, Stage-F actor-gate, LC-8 re-baseline. Doc↔sim: 
 + §A.8 splitting numbers are banner-flagged; **sim leads canon** (ED-899/909/MB-0001..0006).
 
 ### SC — social contest
-Status: `handoffs/HANDOFF_SC.md` is the current, actively-maintained record — through the
+Status: `registers/handoffs/HANDOFF_SC.md` is the current, actively-maintained record — through the
 2026-07-05 Fable-5 subsystem audit (ED-SC-0002–0013) and the 2026-07-08 consequence-spine
 work. **Root `HANDOFF.md` still carries a stale, un-updated pre-split SC snapshot** (frozen
 since before the 2026-07-02 lane split — it reads "PR #63 open, CI running" though PR #63 in
@@ -250,26 +250,26 @@ in (Recall/pool-cap, boost-vs-Appraise, coalition/solo floor per ED-297). Then s
 share) and settled canon (T-25).
 
 ### SE — settlements
-Status: `handoffs/HANDOFF_SE.md` (full open-item list lives there — read it before treating
+Status: `registers/handoffs/HANDOFF_SE.md` (full open-item list lives there — read it before treating
 this section as complete). ED-SE-0001 (governance_play redesign staging; the event deck it
 specifies is also the narrative generator's card substrate — no deck code exists yet, and
 Stage-2.5 Layer B lists it as a precondition, so SE's deck work is on the M2 critical path
 even though SE itself is not M1-gating beyond juncture 1's venue).
 
 ### WR — world
-Status: `handoffs/HANDOFF_WR.md` (full open-item list lives there — read it before treating
+Status: `registers/handoffs/HANDOFF_WR.md` (full open-item list lives there — read it before treating
 this section as complete). ED-WR-0001 (GD-1 strain sweep, ~8 sites, grep-derived) + ED-WR-0002
 (MS naming sweep + enforce:block — precondition for the thread typed export and juncture 5).
 Cheap, early, unblocking — schedule before the heavy lanes.
 
 ### FI — field investigation
-Status: `handoffs/HANDOFF_FI.md` (full open-item list lives there — read it before treating
+Status: `registers/handoffs/HANDOFF_FI.md` (full open-item list lives there — read it before treating
 this section as complete). ED-FI-0001 (investigation audit) — now explicitly the **evidence
 supply chain** for the claim-grammar interface (trails → evidence → argument → precedent →
 new stakes).
 
 ### FA — factions
-Status: `handoffs/HANDOFF_FA.md` (full open-item list lives there — read it before treating
+Status: `registers/handoffs/HANDOFF_FA.md` (full open-item list lives there — read it before treating
 this section as complete). Decision-surface work (J-5) delivers juncture 1; fork 10 (faction
 count 4–8 unreconciled across four docs, census finding) blocks any faction-scope
 bank/binding table and needs its own ED + ruling. Sim win-share rebalancing stays post-M1
@@ -277,7 +277,7 @@ bank/binding table and needs its own ED + ruling. Sim win-share rebalancing stay
 regression gate lands.
 
 ### GO — Godot
-Status: `handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
+Status: `registers/handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
 this section as complete). Governing spec =
 `godot/godot_conversion_strategy_v1.md`
 (PROPOSED; 8-item register open). Gate-0 exact deliverables, none executed: **G0.1** Key.gd
@@ -313,7 +313,7 @@ Godot register — cross-lane questions this PR never carried. (ED-1042 removed 
 list 2026-07-07 per ED-PC-0004: it was STRUCK 2026-06-28, superseded_by ED-1021, so it was
 already stale when this line was written; the reverse-direction residual drift is re-filed
 as ED-PC-0005. JD-1 removed 2026-07-08 — RULED by Jordan, "accept plan bands"; executed as
-U1/ED-PC-0010, see `handoffs/HANDOFF_PC.md`. DG-1 removed 2026-07-08 — actually RULED
+U1/ED-PC-0010, see `registers/handoffs/HANDOFF_PC.md`. DG-1 removed 2026-07-08 — actually RULED
 2026-07-05 (ED-MB-0003; this list simply wasn't refreshed until now): symmetric-at-parity
 infantry + majority-pin/cavalry-wing composition for C4/C7, per Polybius/Livy — closes the
 decision gate only, not the underlying gauge-band overshoot (§4-MB). JD-4/JD-9 removed
@@ -389,7 +389,7 @@ ED-PC-0012 [point-transmit floor-lock, sabre-class] filed as new, explicitly non
 - **Monthly reconcile (J-14, institutionalized):** checklist = re-verify ledger counts by
   scan → refresh §5 pointers (strike resolved rows, no status edits elsewhere) → confirm
   CURRENT.md rows against heads → confirm handoff freshness per lane → **confirm every §4
-  lane section still opens with its `handoffs/HANDOFF_<LANE>.md` pointer (§0's completeness
+  lane section still opens with its `registers/handoffs/HANDOFF_<LANE>.md` pointer (§0's completeness
   rule) and every `needs_jordan: true` ledger entry is still reachable from this document**
   → refresh the progress board (below) → dated-snapshot the session inventory delta → one
   commit `[editorial]` citing this section.

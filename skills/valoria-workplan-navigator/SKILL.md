@@ -19,7 +19,7 @@ Surfaces (established by ED-IN-0010):
 
 - **Board** (the one rollup-status home): `workplans/workplan_v6_progress.yaml`
 - **Renderer** (one rule, one home): `python3 tools/workplan_status.py [--full|--check]`
-- Status detail stays in `handoffs/HANDOFF_<LANE>.md`; decisions in the workplan §5
+- Status detail stays in `registers/handoffs/HANDOFF_<LANE>.md`; decisions in the workplan §5
   register + the editorial ledger (`registers/editorial_ledger.jsonl` for pre-cutover flat
   IDs, plus every live `registers/editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN` entries
   — CLAUDE.md §3). The board only points at them.
@@ -45,10 +45,10 @@ Read from the working tree — never from memory:
 ## Freshness gate (run FIRST, both workflows)
 
 1. `python3 tools/workplan_status.py --check` — it warns when workplan-relevant paths
-   (`designs/`, `handoffs/`, `canon/`, `sim/`) changed since the board's last-touch
+   (`designs/`, `registers/handoffs/`, `canon/`, `sim/`) changed since the board's last-touch
    commit; the check is authoritative.
 2. If it warns: BEFORE answering, find what changed (`git log --name-only
-   <board-last-touch>..HEAD`), read the touched lanes' `handoffs/HANDOFF_<LANE>.md`
+   <board-last-touch>..HEAD`), read the touched lanes' `registers/handoffs/HANDOFF_<LANE>.md`
    (+ ledger for new ED resolutions), and update the affected board rows — state, `next`,
    `evidence`, `blocked_on` (a ruled fork comes OFF `decisions_t0_open`). Set `as_of` to
    current HEAD sha + date (the human-facing record), append one `last_progress` line for
@@ -73,7 +73,7 @@ Read from the working tree — never from memory:
 
 1. Freshness gate (compressed report: the diagram + one line of delta).
 2. **AskUserQuestion** with 2–4 resume options (option rule below).
-3. On selection: read that lane's `handoffs/HANDOFF_<LANE>.md` in full + the workplan v6
+3. On selection: read that lane's `registers/handoffs/HANDOFF_<LANE>.md` in full + the workplan v6
    §4 row for the lane; declare the lane (allocate any EDs as `ED-<LANE>-NNNN` per
    `references/id_reservations.yaml` protocol); begin the increment. If the selection was
    a decision sitting, present each T0/T1 fork as its own AskUserQuestion with the
@@ -102,7 +102,7 @@ screen — not when its first PR merges), refresh `next` to the new next increme
 `evidence` (PR/ED/sha), clear or set `blocked_on` from the ledger. Append ONE
 `last_progress` line (date: what landed, PR/ED). Keep `last_progress` to ~10 entries
 (drop oldest). Bump `as_of`. Commit `[editorial]`. The Stop hook nudges this when
-`designs/`/`handoffs/` changed but the board didn't.
+`designs/`/`registers/handoffs/` changed but the board didn't.
 
 ## Honesty rules
 

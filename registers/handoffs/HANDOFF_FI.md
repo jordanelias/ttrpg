@@ -40,7 +40,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
-- **ED-914 residual (from `handoffs/HANDOFF_IN.md`'s LA-23 ledger-status reconciliation):**
+- **ED-914 residual (from `registers/handoffs/HANDOFF_IN.md`'s LA-23 ledger-status reconciliation):**
   left `open`; mechanical parts remain — PP-719 record-or-strike; dead `fieldwork_design_v1`
   parent-path refs in `params/bg/core.md`, `designs/scene/fieldwork_v30.md`,
   `designs/scene/fieldwork_godot.md`.

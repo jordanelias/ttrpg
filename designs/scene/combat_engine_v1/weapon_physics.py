@@ -536,7 +536,7 @@ HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0010, 2026-07-08]
                     #   a uniform rescale. NEW FINDING (U1): the correctly-banded arming/longsword now read BELOW
                     #   spear's own (untouched) heft numerator — test_falsifiable_heft_ordering's spear<arming
                     #   term now fails; see that test's updated docstring (test_combat_heft.py) — this is the
-                    #   SAME reach-class dominance already tracked in handoffs/HANDOFF_PC.md ("SPEAR flat-
+                    #   SAME reach-class dominance already tracked in registers/handoffs/HANDOFF_PC.md ("SPEAR flat-
                     #   dominance"), not a new defect, and is deliberately left failing pending that fix.
 
 def heft(w, grip=0.0, sel_head=None, sel_pc=None):

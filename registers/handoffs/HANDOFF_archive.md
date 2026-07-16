@@ -3,9 +3,9 @@
 Frozen historical narrative pruned from the live `HANDOFF.md` (2026-07-08, token-efficiency
 pass — root `HANDOFF.md` had drifted to ~21.5k tokens of append-only session narrative, most
 of it already-merged/ratified work also captured in git history, the editorial ledger, and the
-lane-scoped `handoffs/HANDOFF_<LANE>.md` files). Nothing below was deleted, only relocated —
+lane-scoped `registers/handoffs/HANDOFF_<LANE>.md` files). Nothing below was deleted, only relocated —
 this is provenance, not a continuity surface. **Do not resume work from this file.** Check
-`HANDOFF.md`'s "## Next actions" section and your lane's `handoffs/HANDOFF_<LANE>.md` first.
+`HANDOFF.md`'s "## Next actions" section and your lane's `registers/handoffs/HANDOFF_<LANE>.md` first.
 
 ---
 
@@ -299,8 +299,8 @@ this is provenance, not a continuity surface. **Do not resume work from this fil
 filed concurrently by a different session while this session was independently adjudicating the
 same five items from a pasted copy) is now **ADJUDICATED, not still pending** — see its own
 updated status header. Verdicts: D1/D5 resolved and struck, D2/D3 still open with materially
-changed context, D4 partially done and narrowed. Detail lives in `handoffs/HANDOFF_PC.md` (D1),
-`handoffs/HANDOFF_IN.md` (D2/D3/D4/D5), and `decision_queue.md` items 5/12/24/25 — not repeated
+changed context, D4 partially done and narrowed. Detail lives in `registers/handoffs/HANDOFF_PC.md` (D1),
+`registers/handoffs/HANDOFF_IN.md` (D2/D3/D4/D5), and `decision_queue.md` items 5/12/24/25 — not repeated
 here.
 
 - 2026-07-02 — **Scene-combat closing-distance/facing/grip redesign (R0+R1) — plan RATIFIED by Jordan,

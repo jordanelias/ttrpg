@@ -3,13 +3,13 @@
 # tools/workplan_status.py; owned + refreshed by skills/valoria-workplan-navigator.)
 #
 # RULES (anti-rot — this surface class killed roadmap_state.yaml, retired ED-IN-0006):
-#   1. Rollup ONLY. Lane detail stays in handoffs/HANDOFF_<LANE>.md; every row POINTS at
+#   1. Rollup ONLY. Lane detail stays in registers/handoffs/HANDOFF_<LANE>.md; every row POINTS at
 #      its evidence (PR / ED / commit), it never restates lane narrative.
 #   2. Verify before trust: tools/workplan_status.py --check warns whenever
-#      workplan-relevant paths (designs/, handoffs/, canon/, sim/) changed since this
+#      workplan-relevant paths (designs/, registers/handoffs/, canon/, sim/) changed since this
 #      file's last-touch commit (the machine freshness base; `as_of` below is the
 #      human-facing record). The navigator skill runs the check on EVERY read; stale
-#      board -> refresh rows from the handoffs/ledger FIRST, then answer.
+#      board -> refresh rows from the registers/handoffs/ledger FIRST, then answer.
 #   3. Refresh-on-use: any session that lands juncture/stage-relevant work updates the
 #      touched rows + appends one last_progress line + bumps as_of (skill Workflow C).
 #   4. States: not_started | in_progress | blocked | done. `blocked_on` names the gate

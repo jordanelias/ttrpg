@@ -74,7 +74,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   - **ED-FA-0008 (still open) — FA-1 Fiscal Stance** drafted into `faction_layer_v30` §5.9 as
     PROPOSED text only; the Treasury-coupling sim implementation is a follow-on lane.
   - **Parliamentary Censure wired into the campaign loop** (the ED-SC-0007 residual item 2): see
-    `handoffs/HANDOFF_SC.md` — reuses the existing faction-unique action slot
+    `registers/handoffs/HANDOFF_SC.md` — reuses the existing faction-unique action slot
     (`_try_faction_unique`), so every parliamentary-eligible faction can now propose a Censure.
     Surfaced a genuine cross-lane NEEDS-JORDAN question (Mandate-stacking on a total-victory pass)
     filed as **ED-SC-0015** — see that handoff.
@@ -163,8 +163,8 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 - **Author FA-6(c) Sack** (ED-FA-0013, needs_jordan) once Jordan rules the atrocity-content /
   W-for-legitimacy exchange-rate tone call.
 - **Jordan ruling needed: ED-SC-0015** (Parliamentary total-victory Mandate stacking) — surfaced
-  by this session's Censure build; see `handoffs/HANDOFF_SC.md`.
+  by this session's Censure build; see `registers/handoffs/HANDOFF_SC.md`.
 - **`ci_political_v30` read-routing bug (LB-24, tracked as an `IN`-lane tooling item in
-  `handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked
+  `registers/handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked
   read returns 0 (index-routes) — this is a routing/tooling bug, not a faction-content decision,
   but the affected file is faction/political content so cross-referenced here.

@@ -6,7 +6,7 @@ index; see it for cross-lane/global items.
 
 No dedicated session work tracked directly under this lane as of the 2026-07-02 HANDOFF split
 (the one concrete Godot artifact shipped so far — `tools/export_engine_params.py` — is filed
-under `handoffs/HANDOFF_IN.md`'s ED-1052 item, since it's a typed-params/tooling deliverable,
+under `registers/handoffs/HANDOFF_IN.md`'s ED-1052 item, since it's a typed-params/tooling deliverable,
 not a port-implementation one). Governing spec: `godot/
 godot_conversion_strategy_v1.md` — status PROPOSED (Jordan-vetoable throughout), with an open
 8-item register and unexecuted Gate-0 preconditions (KeyStore v2, base classes, RNG service).

@@ -194,9 +194,9 @@ Each module gets its own session. The session protocol:
 5. Write the module code. Every mechanical constant carries an inline `# [canonical: path §section]` comment OR corresponds to a ledger entry. The fabrication check verifies this at commit.
 6. Run module in isolation against known inputs. Outputs logged.
 7. Commit the module file with an updated `tests/sim/<sim-name>/module_manifest.md` that marks the module `status: verified`.
-8. Record in the relevant `handoffs/HANDOFF_<LANE>.md`: module completed, ledger entries added, next module to build. (Root `HANDOFF.md` only for genuinely cross-cutting items — CLAUDE.md §1/§2.)
+8. Record in the relevant `registers/handoffs/HANDOFF_<LANE>.md`: module completed, ledger entries added, next module to build. (Root `HANDOFF.md` only for genuinely cross-cutting items — CLAUDE.md §1/§2.)
 
-**If a session cannot complete a module:** write a checkpoint to the relevant `handoffs/HANDOFF_<LANE>.md` with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
+**If a session cannot complete a module:** write a checkpoint to the relevant `registers/handoffs/HANDOFF_<LANE>.md` with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
 
 **Step 3 — Inter-module integration.**
 

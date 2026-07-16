@@ -669,3 +669,20 @@
 | `arcs/arcs_28_30_index.md` | `arcs/simulated/arcs_28_30_index.md` |
 | `arcs/arcs_31_35.md` | `arcs/simulated/arcs_31_35.md` |
 | `arcs/arcs_31_35_index.md` | `arcs/simulated/arcs_31_35_index.md` |
+
+
+## 2026-07-16 — handoffs/ -> registers/handoffs/ (ED-IN-0071 P0b, part 1)
+
+| old path | new path |
+|---|---|
+| `handoffs/` | `registers/handoffs/` |
+| `handoffs/HANDOFF_FA.md` | `registers/handoffs/HANDOFF_FA.md` |
+| `handoffs/HANDOFF_FI.md` | `registers/handoffs/HANDOFF_FI.md` |
+| `handoffs/HANDOFF_GO.md` | `registers/handoffs/HANDOFF_GO.md` |
+| `handoffs/HANDOFF_IN.md` | `registers/handoffs/HANDOFF_IN.md` |
+| `handoffs/HANDOFF_MB.md` | `registers/handoffs/HANDOFF_MB.md` |
+| `handoffs/HANDOFF_PC.md` | `registers/handoffs/HANDOFF_PC.md` |
+| `handoffs/HANDOFF_SC.md` | `registers/handoffs/HANDOFF_SC.md` |
+| `handoffs/HANDOFF_SE.md` | `registers/handoffs/HANDOFF_SE.md` |
+| `handoffs/HANDOFF_WR.md` | `registers/handoffs/HANDOFF_WR.md` |
+| `handoffs/HANDOFF_archive.md` | `registers/handoffs/HANDOFF_archive.md` |
