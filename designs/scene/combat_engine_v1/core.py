@@ -1,5 +1,5 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
-Resolves the sigma kernel through sim.autoload.sigma_leverage (the numpy-free single source,
+Resolves the sigma kernel through engine.autoload.sigma_leverage (the numpy-free single source,
 Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 
 [ED-1085 container de-leak, 2026-07-01] This module previously reached into the FROZEN
@@ -16,7 +16,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh
-from sim.autoload import sigma_leverage as SL
+from engine.autoload import sigma_leverage as SL
 import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
                               # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math

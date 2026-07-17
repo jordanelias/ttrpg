@@ -6,9 +6,9 @@ Status:    [Stage 1b — substrate promotion + σ-kernel unification, 2026-06-30
 
 This package is the 9-module groundup kernel relocated from
 designs/audit/2026-06-03-contest-groundup/ into a real sim package, unified onto the
-ONE canonical σ-kernel (sim.autoload.sigma_leverage / dice_engine). The groundup local
+ONE canonical σ-kernel (engine.autoload.sigma_leverage / dice_engine). The groundup local
 engine.py is NOT copied in — its symbols (roll_net, net_boost, effective_ob, degree,
-level) are imported from sim.autoload.sigma_leverage, retiring the "third σ-kernel"
+level) are imported from engine.autoload.sigma_leverage, retiring the "third σ-kernel"
 hazard. This stage is BEHAVIOR-PRESERVING: the 151 groundup tests stay green
 (sim/tests/test_contest_kernel.py runs _kernel_tests.py and gates on "151 passed").
 

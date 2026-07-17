@@ -37,8 +37,8 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass, field
 
-from sim.autoload import dice_engine
-from sim.autoload.game_state import MULTS
+from engine.autoload import dice_engine
+from engine.autoload.game_state import MULTS
 
 # Shared Persuasion-Track thresholds (§6) — single source of truth, do NOT redefine:
 from sim.personal.contest import (

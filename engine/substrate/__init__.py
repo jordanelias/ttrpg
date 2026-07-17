@@ -1,4 +1,4 @@
-"""sim.substrate — executable Key substrate (v1).
+"""engine.substrate — executable Key substrate (v1).
 
 Status: [RATIFIED — Key & Echo armature v1, ED-IN-0018, 2026-07-07; §5 fork docket ruled by
 Jordan's consolidated "ratify all" pass, ED-IN-0026, same date]
@@ -23,7 +23,7 @@ designs/architecture/key_echo_armature_v1.md §5, the consolidated docket):
   - campaign-loop wiring: PR-2 scope (flag-gated), not this module.
 """
 
-from sim.substrate.keys import (  # noqa: F401
+from engine.substrate.keys import (  # noqa: F401
     AXES,
     ROLES,
     SCALES,

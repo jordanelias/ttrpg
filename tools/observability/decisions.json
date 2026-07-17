@@ -1,6 +1,6 @@
 {
   "meta": {
-    "files_scanned": 1356,
+    "files_scanned": 1357,
     "total_open": 981,
     "by_category": {
       "ratification": 46,
@@ -4274,7 +4274,7 @@
       "priority": 2,
       "label": "Missing cross-scale handoff",
       "locations": [
-        "sim/cross_scale/handoff_rules.py:231"
+        "engine/cross_scale/handoff_rules.py:231"
       ],
       "systems": [],
       "count": 1,
@@ -7753,24 +7753,24 @@
       "lane": "SE"
     },
     {
-      "text": "[ASSUMPTION: dispatcher returns a procedure descriptor rather than executing",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/cross_scale/handoff_rules.py:14"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "IN"
-    },
-    {
       "text": "`[ASSUMPTION: P-232 applies to the \u03c3-transform \u2014 basis: P-232 is stated with no continuous-mode/transform carve-out and is restated in the Pool-Floor section; the carve-out, if intended, would live in modifier_system_spec.md, which does not exist. Flagged as the F1 fork rather than assumed away.]`",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
         "engine/sigma_leverage_engine_audit.md:164"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
+      "text": "[ASSUMPTION: dispatcher returns a procedure descriptor rather than executing",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "engine/cross_scale/handoff_rules.py:14"
       ],
       "systems": [],
       "count": 1,

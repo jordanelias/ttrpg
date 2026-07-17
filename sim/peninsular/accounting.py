@@ -49,7 +49,7 @@ def run_accounting(world):
 
     Track arithmetic routes through dedicated modules; no inline duplication.
     Seasonal resets (faction flags, arc boundaries) handled by
-    sim.autoload.season_manager.advance_season upstream.
+    engine.autoload.season_manager.advance_season upstream.
     """
     # PP-412 — every season; no caller-driven Assert/Suppress at accounting
     # (those are faction Domain Actions resolved by faction_action, not here)

@@ -8,7 +8,7 @@ Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
       §2.1 universal Key schema · §2.2 field semantics · §2.3 validation
       invariants 1-8 · §2.5 canonical 4-axis set · §4.1 single update rule
       (steps 1-2, 5-6 subset; steps 3-4 observer/armature NOT implemented,
-      blocked on ORD-3 — see module docstring of sim.substrate).
+      blocked on ORD-3 — see module docstring of engine.substrate).
   - designs/architecture/key_type_registry_v30.md
       §1 type format (required/optional payload fields, defaults) · §2-§8 the
       44-type roster, parsed at load time — the registry markdown remains the

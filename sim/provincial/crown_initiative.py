@@ -24,8 +24,8 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from sim.autoload import dice_engine
-from sim.autoload.dice_engine import Degree
+from engine.autoload import dice_engine
+from engine.autoload.dice_engine import Degree
 
 
 # ── Granular conversion (matches v17 mc_v17.py:477-479 convention) ───────────

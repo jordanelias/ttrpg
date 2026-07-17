@@ -37,7 +37,7 @@ casing; no scale-local dialect.
 """
 from __future__ import annotations
 
-from sim.cross_scale import echo_transport
+from engine.cross_scale import echo_transport
 from sim.personal.parliamentary_vote import Motion, VoteDeclaration, run_parliamentary_vote
 from sim.personal.contest import (
     PERSUASION_TOTAL_VICTORY,   # 9

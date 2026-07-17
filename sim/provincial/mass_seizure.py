@@ -46,8 +46,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from sim.autoload.dice_engine import roll_pool
-from sim.autoload.game_state import canonical_pt
+from engine.autoload.dice_engine import roll_pool
+from engine.autoload.game_state import canonical_pt
 from sim.territory.infrastructure import (
     count_infrastructure, seizure_ob_modifier, BUILDING_CHAPEL,
     BUILDING_CHURCH, BUILDING_CATHEDRAL,

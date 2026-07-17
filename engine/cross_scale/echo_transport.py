@@ -32,9 +32,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
-from sim.cross_scale import domain_echo
-from sim.autoload.game_state import MULTS
-from sim.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, TypeRegistry
+from engine.cross_scale import domain_echo
+from engine.autoload.game_state import MULTS
+from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, TypeRegistry
 
 
 _REGISTRY_PATH = (Path(__file__).resolve().parents[2]

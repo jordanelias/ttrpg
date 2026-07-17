@@ -12,9 +12,9 @@ The flag-OFF path stays byte-exact (guarded in test_echo_transport.py + test_f7_
 """
 from dataclasses import replace
 
-from sim.mc_v18 import run_batch, run_campaign
-from sim.autoload import game_state
-from sim.cross_scale import parliamentary_bridge as pb
+from engine.mc_v18 import run_batch, run_campaign
+from engine.autoload import game_state
+from engine.cross_scale import parliamentary_bridge as pb
 from sim.personal.parliamentary_vote import VoteResult
 
 
@@ -99,7 +99,7 @@ def test_bridge_is_inert_without_scheduler():
 
 
 def test_bridge_resolves_and_may_echo_with_scheduler():
-    from sim.cross_scale import echo_transport
+    from engine.cross_scale import echo_transport
     w = game_state.create_world(seed=42)
     w.echo_scheduler = echo_transport.make_scheduler()
     w.key_log = w.echo_scheduler.log

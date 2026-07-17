@@ -22,8 +22,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from sim.autoload import dice_engine
-from sim.autoload.dice_engine import Degree
+from engine.autoload import dice_engine
+from engine.autoload.dice_engine import Degree
 
 
 # ── Ledger-cited constants (every value here has a sim_verification_ledger.json entry) ──

@@ -31,10 +31,10 @@ import time
 from collections import Counter
 from dataclasses import dataclass, field
 
-from sim.autoload import game_state, victory, scene_slate
+from engine.autoload import game_state, victory, scene_slate
 from sim.provincial.faction_action import faction_take_action
 from sim.peninsular.season import run_season
-from sim.cross_scale import scene_dispatch
+from engine.cross_scale import scene_dispatch
 
 
 DEFAULT_PARAMS = {
@@ -107,7 +107,7 @@ def _faction_actions_callback(world):
     # penalty, and composes a winner Domain Echo (ED-SC-0002 composed keying) through the substrate.
     # Flag-gated by the scheduler's presence — a no-op when ECHO_TRANSPORT is off.
     if getattr(world, "echo_scheduler", None) is not None:
-        from sim.cross_scale import parliamentary_bridge
+        from engine.cross_scale import parliamentary_bridge
         _pr = parliamentary_bridge.run_parliamentary_scene(world, world.rng)
         if _pr.get("resolved"):
             world.scenes_resolved += 1
@@ -140,7 +140,7 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
     # ED-IN-0028 — attach the executable Key substrate to the world when ECHO_TRANSPORT is on.
     # Its presence is the flag the scene phase reads; absence => byte-exact legacy path.
     if _echo_transport_on(effective_params):
-        from sim.cross_scale import echo_transport
+        from engine.cross_scale import echo_transport
         world.echo_scheduler = echo_transport.make_scheduler(
             cascade_depth_max=effective_params.get(
                 'ECHO_CASCADE_DEPTH_MAX', echo_transport.DEFAULT_CASCADE_DEPTH_MAX),

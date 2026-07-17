@@ -33,7 +33,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from sim.autoload.dice_engine import roll_pool
+from engine.autoload.dice_engine import roll_pool
 from sim.thread.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,

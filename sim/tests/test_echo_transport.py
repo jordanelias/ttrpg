@@ -21,9 +21,9 @@ oracle, one live-loop smoke, and the transport path in isolation.
      routes through domain_echo -> a valid scene.*_resolved Key -> an OF-7-deferred faction apply
      (in STAT POINTS via MULTS) that lands at the accounting boundary. Deterministic on replay.
 """
-from sim.mc_v18 import run_batch, run_campaign
-from sim.autoload import game_state
-from sim.cross_scale import echo_transport
+from engine.mc_v18 import run_batch, run_campaign
+from engine.autoload import game_state
+from engine.cross_scale import echo_transport
 
 
 # The seed-42 n=8 F7 FLAG-OFF golden — the transport flag OFF must not move it. REPINNED 2026-07-08

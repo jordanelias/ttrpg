@@ -19,7 +19,7 @@ Separation of concerns (D0-2):
   dice_engine  = pool / degree primitive (stdlib root, no deps)
   sigma_leverage = advantage→μ-shift layer atop it (this module)
 
-Dependencies: stdlib only (math, random) + sim.autoload.dice_engine.
+Dependencies: stdlib only (math, random) + engine.autoload.dice_engine.
               numpy is NOT imported — stdlib math.tanh / math.sqrt are used throughout.
 
 Porting notes
@@ -63,7 +63,7 @@ import math
 import random
 from typing import Sequence
 
-from sim.autoload import dice_engine
+from engine.autoload import dice_engine
 
 # ---------------------------------------------------------------------------
 # Canonical per-die statistics (params/core.md "Expected Value (per die)")
@@ -259,7 +259,7 @@ def roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = Non
 
     Pool floored at 1D. [canonical: params/core.md §Die Rule (d10)]
     This sigma_leverage wrapper exists so callers that previously imported from
-    m1_dice_sigma_core can switch to sim.autoload.sigma_leverage without a call-site
+    m1_dice_sigma_core can switch to engine.autoload.sigma_leverage without a call-site
     change. The authoritative implementation is dice_engine.roll_pool.
     """
     effective_pool = max(1, int(round(pool)))       # [canonical: params/core.md §Pool Floor (all systems)]

@@ -32,7 +32,7 @@ from sim.thread.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
     _actor_pool, _resolve_operation, OperationResult,
 )
-from sim.autoload.dice_engine import roll_pool
+from engine.autoload.dice_engine import roll_pool
 
 
 # §2.5 lattice fracture threshold

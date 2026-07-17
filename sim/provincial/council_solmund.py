@@ -17,8 +17,8 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from sim.autoload import dice_engine
-from sim.autoload.dice_engine import Degree
+from engine.autoload import dice_engine
+from engine.autoload.dice_engine import Degree
 
 
 _MULTS_L = 20  # [canonical: params/factions.md]

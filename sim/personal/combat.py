@@ -39,7 +39,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from sim.autoload.dice_engine import roll_pool
+from engine.autoload.dice_engine import roll_pool
 
 
 # §1 Combat Pool formula constants

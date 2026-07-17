@@ -1,11 +1,11 @@
 """tests.py — unit + venue/win-condition/defeat + invariants + integration. Run: python3 tests.py"""
 from math import isclose
-from sim.autoload import sigma_leverage as E
+from engine.autoload import sigma_leverage as E
 from .contract import A, B, other, Move, FaultState, Adjudicator, Panel
 from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue)
 from .resolver import (ContestState, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, Venue)
-from sim.autoload.sigma_leverage import degree
+from engine.autoload.sigma_leverage import degree
 from .modes import ContestedMode, DyadicMode
 from .policy import (logos_spammer as LOG, demagogue as DEM, courtier as COU,
                     build_then_close as BTC, exploiter as EXP, overreacher as OV, staller as ST)
@@ -399,7 +399,7 @@ for name, mode in _cc.items():
 
 # == σ-LEVERAGE ENGINE (regression guards for the two patches) ==
 from .primitives import Leverage
-from sim.autoload.sigma_leverage import effective_ob as _eff_ob, sigma_N as _sN
+from engine.autoload.sigma_leverage import effective_ob as _eff_ob, sigma_N as _sN
 _fac1_lev = Leverage.net(1, on_ground=True)
 _fac1_ob  = max(1.0, _eff_ob(2.0, _fac1_lev, Pool.size(1)))
 _fac2_ob  = max(1.0, _eff_ob(2.0, Leverage.net(2, on_ground=True), Pool.size(2)))
@@ -1237,7 +1237,7 @@ ck("CR4 epideictic: the present/epideictic register genuinely survives in the su
 from .resolver import (Bout as _B4, Contestant as _C4, Venue as _V4, PersuasionTrack as _PT4,
                        roll_net as _rn4)
 from .contract import Adjudicator as _Adj4
-from sim.autoload.sigma_leverage import net_boost as _nb4
+from engine.autoload.sigma_leverage import net_boost as _nb4
 from .primitives import Pool as _Pool4, Leverage as _Lev4
 def _mean_net(pool_bonus, faculty=5, seed_base=0, N=800):
     """Mean reception NET (roll_net + net_boost) of an argue move under `pool_bonus` extra pool dice,
