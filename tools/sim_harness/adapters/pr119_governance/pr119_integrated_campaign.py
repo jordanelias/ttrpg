@@ -9,9 +9,9 @@ This adapter runs a real, persistent, multi-season campaign on ONE Goldenfurt Se
 (goldenfurt_fixture.build_goldenfurt_settlement()), composing ALL 11 tested PR#119 items
 (the 12th, §1.0b Recognition Fork, is a per-event choice with no season-to-season state to
 compose and is left to its own dedicated adapter) plus the Pi homeostat, wired so later
-mechanics read the REAL state earlier mechanics wrote — real sim/territory/ledger.py tag
-writes, real sim/territory/registry.py Settlement fields (church_attention, pressure,
-suspicion), and real sim/territory/infrastructure.py + sim/territory/registry.py functions
+mechanics read the REAL state earlier mechanics wrote — real systems/settlements/sim/ledger.py tag
+writes, real systems/settlements/sim/registry.py Settlement fields (church_attention, pressure,
+suspicion), and real systems/settlements/sim/infrastructure.py + systems/settlements/sim/registry.py functions
 (seizure_ob_modifier, succeed_governor, province_accord, province_effective_prosperity) —
 instead of each mechanic drawing its own independent random number every season.
 
@@ -62,7 +62,7 @@ if str(_SKILL_DIR) not in sys.path:
     sys.path.insert(0, str(_SKILL_DIR))
 import valoria_dice  # noqa: E402
 
-from sim.territory import infrastructure, registry  # noqa: E402
+from systems.settlements.sim import infrastructure, registry  # noqa: E402
 
 from ...adapter import Adapter, Outcome, register_adapter  # noqa: E402
 from ...depth import DecisionPoint, Tier  # noqa: E402
@@ -303,7 +303,7 @@ class IntegratedCampaignAdapter(Adapter):
                 "every composed mechanic's terminal state to reach",
             "p_comply": "test-scenario value, not canon-derived: the shared per-season "
                 "compliance signal every composed mechanic below reacts to",
-            "p_comply_strains_order": "PROVISIONAL: designs/territory/governance_play_"
+            "p_comply_strains_order": "PROVISIONAL: systems/settlements/governance_play_"
                 "redesign_v1.md §1.4 response table -- Comply 'often strains the settlement "
                 "(the Directive usually conflicts with a Need)'; rate itself is test-scenario "
                 "(not numerically stated) -- wires the real Settlement.order field so "

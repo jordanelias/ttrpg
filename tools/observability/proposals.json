@@ -5,13 +5,13 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 247,
-    "needs_jordan": 97,
+    "total": 251,
+    "needs_jordan": 98,
     "by_kind": {
-      "provisional_status_doc": 17,
+      "provisional_status_doc": 20,
       "proposal_doc": 10,
       "ledger_actionable": 119,
-      "ledger_needs_jordan": 84,
+      "ledger_needs_jordan": 85,
       "audit_partial": 17
     },
     "by_lane": {
@@ -24,8 +24,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 32,
-        "needs_jordan": 14
+        "total": 33,
+        "needs_jordan": 15
       },
       "MB": {
         "total": 6,
@@ -48,14 +48,14 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 99,
+        "total": 102,
         "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 99,
+      "total": 102,
       "needs_jordan": 28,
       "items": [
         {
@@ -170,12 +170,32 @@
         },
         {
           "kind": "provisional_status_doc",
-          "source": "designs/territory/lps_wiring_v1.md",
-          "id": "designs/territory/lps_wiring_v1.md",
-          "title": "lps wiring v1",
+          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
+          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
+          "title": "00 findings",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
+          "status": "PROPOSED — read-only, docket unruled",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
+          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
+          "title": "01 remediation L1 L2",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
+          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
+          "title": "02 emergence oracle spec",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED",
           "links": []
         },
         {
@@ -286,6 +306,16 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROVISIONAL — pending ratification.",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "systems/settlements/lps_wiring_v1.md",
+          "id": "systems/settlements/lps_wiring_v1.md",
+          "title": "lps wiring v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
           "links": []
         },
         {
@@ -1573,8 +1603,8 @@
       ]
     },
     "IN": {
-      "total": 32,
-      "needs_jordan": 14,
+      "total": 33,
+      "needs_jordan": 15,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -1833,6 +1863,16 @@
           "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
           "lane": "IN",
           "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0073",
+          "title": "Adversarial audit of the character-decision machinery (designs/audit/2026-07-17-character-decision-adversarial-audit/) along three axes — logic/consistency, narrative emergence, qualitative rendering. READ-ONLY umbrella; docket UNRULED (Jor",
+          "lane": "IN",
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -2726,22 +2766,42 @@
     },
     {
       "kind": "provisional_status_doc",
+      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
+      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
+      "title": "00 findings",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED — read-only, docket unruled",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
+      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
+      "title": "01 remediation L1 L2",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
+      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
+      "title": "02 emergence oracle spec",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
       "source": "designs/provincial/franchise_v30.md",
       "id": "designs/provincial/franchise_v30.md",
       "title": "franchise v30",
       "lane": "FA",
       "needs_jordan": true,
       "status": "DRAFT — awaiting Jordan review",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/territory/lps_wiring_v1.md",
-      "id": "designs/territory/lps_wiring_v1.md",
-      "title": "lps wiring v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
       "links": []
     },
     {
@@ -2872,6 +2932,16 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROVISIONAL — pending ratification.",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "systems/settlements/lps_wiring_v1.md",
+      "id": "systems/settlements/lps_wiring_v1.md",
+      "title": "lps wiring v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007",
       "links": []
     },
     {
@@ -4211,6 +4281,16 @@
       "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
       "lane": "IN",
       "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-IN-0073",
+      "title": "Adversarial audit of the character-decision machinery (designs/audit/2026-07-17-character-decision-adversarial-audit/) along three axes — logic/consistency, narrative emergence, qualitative rendering. READ-ONLY umbrella; docket UNRULED (Jor",
+      "lane": "IN",
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },

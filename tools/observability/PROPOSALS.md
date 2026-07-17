@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**247 open work items** · **97 need your decision**.
+**251 open work items** · **98 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 84, Proposal docs (proposals/) — 10, Provisional / draft design docs — 17
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 10, Provisional / draft design docs — 20
 
 ## MB — Mass battle  (6 items, 5 need decision)
 
@@ -97,7 +97,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-WR-0006` — OPT-12, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). NPC orphan triage ED (the workplan T2 default, executed per the C-NPC disposition proposal): one consolidated Conviction/Ethics/TS migration-completion ED (~250-300 fin  _(open)_
 - `valoria-mechanic-audit-2026-07-13:threadwork:threadwork` — [PARTIAL] mechanic_audit / threadwork: 1 new P1 (P-25 Scale-based Mending Stability override table truncated to zero data rows, A7/D1) + 7 new P2 (History-bonus dual-phrasing A2/D8, Pulling-only 5D pool floor A3/D9, fractional wound-Ob no r  _(PARTIAL)_
 
-## IN — Infrastructure / cross-cutting  (32 items, 14 need decision)
+## IN — Infrastructure / cross-cutting  (33 items, 15 need decision)
 
 - 🔸 `ED-IN-0029` — Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou  _(open)_
 - 🔸 `ED-IN-0030` — Phantom 'debt scene' mechanic -- dangling citation surfaced while executing ED-IN-0016's citation-repoint pass. designs/architecture/scale_transitions_v30.md §4.3.2 row 8 (Rank Advancement Recognition Event) reads: 'Recognition can be withh  _(open)_
@@ -109,6 +109,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-IN-0066` — Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl  _(open)_
 - 🔸 `ED-IN-0069` — Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia  _(open)_
 - 🔸 `ED-IN-0070` — Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_  _(open)_
+- 🔸 `ED-IN-0073` — Adversarial audit of the character-decision machinery (designs/audit/2026-07-17-character-decision-adversarial-audit/) along three axes — logic/consistency, narrative emergence, qualitative rendering. READ-ONLY umbrella; docket UNRULED (Jor  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0064` — Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0066` — [RENUMBERED from ED-IN-0065 at merge -- COLLISION: this branch read next_free=65 from pre-#139 main and allocated ED-IN-0065 for the remediation program, but PR #139 (holistic 5-critic observatory adversarial pass + its own unification doc)  _(open)_
 - `ED-IN-0003` — Convergence Markers need a runtime detector/applier. arc_register_events.md §VI's 8 markers are hand-authored trigger+payload rows with no detector, no Key type, no module contract, no sim module; combined payloads are non-summative by the   _(open)_
@@ -176,7 +177,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (99 items, 28 need decision)
+## unassigned — Unassigned / cross-lane  (102 items, 28 need decision)
 
 - 🔸 `proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
 - 🔸 `proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
@@ -199,8 +200,11 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md` — reeval jp se  _(PROPOSED / provisional re-evaluation artifact — 2026-07-12. Re-judges the 8 kept Japan-origin proposals (`FA-JP-*`, `SE-JP-*`) from the 2026-07-09 comparative-governance research docket (STEP-3, 44 KEPT) against the newly-discovered **BUILT** substrate (`sim/territory/`, `goldenfurt_slice/`, `settlement_mgmt_stress_01`), reading each item's prior NERS verdict from the 2026-07-11 pessimist-NERS audit as the starting point. Not itself canon — a review artifact feeding the docket's next authoring/decision pass. **Scope note:** the STEP-3 44-KEPT table uses only civilization-prefixed codes (`BYZ-`, `CHN-`, `HRE-`, `VEN-SE-`, `VEN-FA-`, `IT-`, `HAB-`, `FA-JP-`, `SE-JP-`) — no bare `SE-*`/`FA-*` codes exist outside a civilization prefix, so "remaining SE-*/FA-*" resolves to the empty set for this pass; all 8 Japan-lane items are covered below in full.)_
 - `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md` — remediation plan v1  _(PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066)_
 - `designs/audit/2026-07-14-holistic-unification/unification_v1.md` — unification v1  _(PROPOSED (audit synthesis; ED-IN-0065, 2026-07-14))_
-- `designs/territory/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
+- `designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md` — 00 findings  _(PROPOSED — read-only, docket unruled)_
+- `designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md` — 01 remediation L1 L2  _(PROPOSED)_
+- `designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md` — 02 emergence oracle spec  _(PROPOSED)_
 - `systems/_architecture/governance_ripple_substrate_v1.md` — governance ripple substrate v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified)_
+- `systems/settlements/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
 - 🔸 `ED-1006` — Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3  _(open)_
 - 🔸 `ED-1033` — Indirect orientation has no track-movement path. Simulation 2026-06-18 (n=30k randomized, L1 contest): an Indirect-oriented orator reaches a decisive Persuasion Track win 1.8% vs 31.9% Direct, because params/contest.md grants an Indirect wi  _(open)_
 - 🔸 `ED-1036` — L3 venue policy-dominance / legibility. Simulation 2026-06-18 (optimal-vs-worst policy sweep, 13 venues): every venue has a worst challenger policy that wins 0.00 (self-clinching/off-ground policies invalid in that venue); policy-mismatch d  _(open)_
@@ -215,8 +219,5 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-599` — Orm (Warden second) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
 - 🔸 `ED-601` — Almud Arc C three-trajectory expansion (Abdicant/Pretender/Broken) proposed. Creative NPC arc profile.  _(open)_
 - 🔸 `ED-602` — Vaynard Arc A and Arc B full specification proposed. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-610` — Baralta successor (unnamed Hafenmark heir) — requires design (P3). Creative NPC/naming intent.  _(open)_
-- 🔸 `ED-634` — Crown inner-circle names (Voss, Reichard, Thale, Linder, Kreutz) proposed §1.1d; §10.2 P1 'confirm names and Stance Triangles'. Also umbrella range-label ED-634-ED-658.  _(open)_
-- 🔸 `ED-651` — Markamt Minister — explicit name and Stance Triangle needed. [Jordan name + Stance-Triangle pass] needs Jordan's name (creative layer) + a Stance Triangle from the faction template (absent in ministry.md). Part of the ED-634-658 NPC cluster  _(open)_
-- …and 59 more (see `proposals.json`).
+- …and 62 more (see `proposals.json`).
 

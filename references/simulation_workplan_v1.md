@@ -404,7 +404,7 @@ At session close, append to session_log_current.md:
 
 **Pre-sim canon to pull:**
 - `designs/provincial/mass_battle_v30.md` (60,996 bytes) — primary
-- `designs/territory/march_layer_v30.md` — march/A* mechanics
+- `systems/settlements/march_layer_v30.md` — march/A* mechanics
 - `params/mass_combat.md`
 - `designs/provincial/military_layer_v30.md` (verify path)
 - `params/bg/military.md`

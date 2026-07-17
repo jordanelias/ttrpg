@@ -118,7 +118,7 @@ def declared_canonical_files(designs_dir: str | None = None) -> set[str]:
         for fn in filenames:
             # Match registered_paths' extension set (line 83) exactly — the registry
             # can name .md/.yaml/.svg files, and a couple of real canonical sources
-            # (e.g. designs/territory/valoria_geography_v30.yaml,
+            # (e.g. systems/settlements/valoria_geography_v30.yaml,
             # valoria_map_v30.svg) carry the "Status: CANONICAL" marker in a
             # header comment despite not being Markdown. Restricting this walk to
             # .md only (as an earlier version of this fix did) silently drops

@@ -54,7 +54,7 @@ class RecognitionAccountabilityAdapter(Adapter):
             "pa_demotion_streak": "PROVISIONAL: designs/provincial/faction_politics_v30.md "
                 "§1.0d — 'It converts to an immediate Demotion Magnitude-1 trigger ... after "
                 "3 seasons, bypassing the normal grace period'",
-            "konrad_fire_threshold": "PROVISIONAL: designs/territory/goldenfurt_slice/"
+            "konrad_fire_threshold": "PROVISIONAL: systems/settlements/goldenfurt_slice/"
                 "event_deck.md EVT-G606 — 'fires when G06 progress >= 4'",
             "konrad_progress_cap": "PROVISIONAL: event_deck.md EVT-G606 — 'Konrad's advance "
                 "is capped +1/season, see npc_cast G06'",

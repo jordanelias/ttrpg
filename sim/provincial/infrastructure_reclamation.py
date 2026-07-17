@@ -6,7 +6,7 @@ Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17 (Pass 2f canon authori
 
 Dependencies:
   - sim/provincial/massbattle
-  - sim/territory/infrastructure
+  - systems/settlements/sim/infrastructure
 
 Entry points:
   - compute_reclamation_bonus(target_territory: str, world: GameState) -> ReclamationBonus

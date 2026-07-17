@@ -22,7 +22,7 @@ NPC seeding for new faction's leadership) awaits Pass 2i.
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/adjacency
+  - systems/settlements/sim/adjacency
 
 Entry points:
   - check_insurgency_triggers(world: GameState) -> list[InsurgencyEvent]
@@ -110,10 +110,10 @@ class PromotionResult:
 def _contiguous_uncontrolled_groups(world) -> list[list[str]]:
     """Find groups of adjacent territories all in Uncontrolled state.
 
-    Uses sim/territory/adjacency for neighbor lookup. Returns list of
+    Uses systems/settlements/sim/adjacency for neighbor lookup. Returns list of
     territory-id lists, one per connected component of Uncontrolled.
     """
-    from sim.territory.adjacency import ADJACENCY
+    from systems.settlements.sim.adjacency import ADJACENCY
     uncontrolled = [tid for tid, t in world.territories.items() if t.is_uncontrolled()]
     visited = set()
     groups = []

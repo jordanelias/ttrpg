@@ -1,5 +1,5 @@
 """pr119_bind_the_cells.py — provisional adapter testing PR#119's §1.3b Bind the Cells /
-Goningumi collective liability (ED-SE-0020, designs/territory/governance_play_redesign_v1.md).
+Goningumi collective liability (ED-SE-0020, systems/settlements/governance_play_redesign_v1.md).
 
 The reconciliation doc (designs/audit/2026-07-12-settlement-season-stress-sim/
 reconciliation_with_existing_territory_work.md §B.2) sharpens PR#125's "actor cap collision"
@@ -39,9 +39,9 @@ class BindTheCellsAdapter(Adapter):
         provenance = {
             "goldenfurt_actor_count": "PROVISIONAL: goldenfurt_fixture.build_goldenfurt_"
                 "settlement().npc_ids, read at call time — the real 9 named actors "
-                "(designs/territory/goldenfurt_slice/npc_cast.md: 6 NPC dossiers + 3 minor "
+                "(systems/settlements/goldenfurt_slice/npc_cast.md: 6 NPC dossiers + 3 minor "
                 "Local Actors), not an invented count",
-            "cell_size": "PROVISIONAL: designs/territory/governance_play_redesign_v1.md "
+            "cell_size": "PROVISIONAL: systems/settlements/governance_play_redesign_v1.md "
                 "§1.3b — 'partitions the settlement's Local Actors (§4.5) into fixed "
                 "five-household cells'",
             "revolt_stack": "PROVISIONAL: same §1.3b — 'Stacking three Collective Liability "

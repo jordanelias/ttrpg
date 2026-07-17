@@ -1,8 +1,8 @@
 """
-sim/territory/ledger.py — Durable per-settlement governance memory (Ledger tags)
+systems/settlements/sim/ledger.py — Durable per-settlement governance memory (Ledger tags)
 
-Canon source: designs/territory/goldenfurt_slice/sim_build_spec.md §2;
-              designs/territory/governance_play_redesign_v1.md §1.6
+Canon source: systems/settlements/goldenfurt_slice/sim_build_spec.md §2;
+              systems/settlements/governance_play_redesign_v1.md §1.6
 
 A LedgerTag records a consequence of governance that the world remembers:
   Precedent  — a ruling/policy that biases future events (±Ob, opens/closes cards)

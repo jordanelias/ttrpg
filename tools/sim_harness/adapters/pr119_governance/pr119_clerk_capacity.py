@@ -1,5 +1,5 @@
 """pr119_clerk_capacity.py — provisional adapter testing PR#119's §1.1a Clerk Capacity
-(ED-SE-0022, designs/territory/governance_play_redesign_v1.md), the one item of the 12
+(ED-SE-0022, systems/settlements/governance_play_redesign_v1.md), the one item of the 12
 authored PR#119 mechanics that pr119_structural_gaps.py's earlier verification pass flagged
 as a real scope gap ("no dedicated decision point this wave") rather than silently leaving
 untested.
@@ -40,7 +40,7 @@ class ClerkCapacityAdapter(Adapter):
             "corruption_discovery_k": 0.12,
         }
         provenance = {
-            "cc_cap": "PROVISIONAL: designs/territory/governance_play_redesign_v1.md §1.1a "
+            "cc_cap": "PROVISIONAL: systems/settlements/governance_play_redesign_v1.md §1.1a "
                 "— 'Clerk Capacity (CC, 0-3 per settlement)'",
             "seasons": "test-scenario value, not canon-derived: chosen to let CC accumulate "
                 "toward its cap within one trial",

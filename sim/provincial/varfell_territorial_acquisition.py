@@ -17,7 +17,7 @@ Placeholder context:
 
 Dependencies:
   - sim/autoload/dice_engine
-  - sim/territory/temperaments
+  - systems/settlements/sim/temperaments
   - systems/world/sim/restoration_movement
 
 Entry points:

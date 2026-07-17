@@ -551,7 +551,7 @@ modules:
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
-    doc: designs/territory/settlement_layer_v30.md
+    doc: systems/settlements/settlement_layer_v30.md
     scales: [settlement, territory]
     resolver: deterministic_accounting
     consumes:

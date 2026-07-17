@@ -8,7 +8,7 @@ numeric here yet to sample.
 
 What it checks, against real code:
   - Settlement is the ONLY one of the four scales with built machinery
-    (sim/territory/registry.py's Settlement dataclass); Organization and Territory have no
+    (systems/settlements/sim/registry.py's Settlement dataclass); Organization and Territory have no
     registry/entity of their own anywhere in sim/ -- confirmed by source-text absence, not
     asserted from the doc's own claim.
   - The doc's one genuinely-concrete new lever (Relay Tier / Beacon Network, "the single
@@ -30,7 +30,7 @@ from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier
 
 _REPO_ROOT = Path(__file__).resolve().parents[4]
-_REGISTRY_PY = _REPO_ROOT / "sim" / "territory" / "registry.py"
+_REGISTRY_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "registry.py"
 _MODULE_CONTRACTS = _REPO_ROOT / "references" / "module_contracts.yaml"
 
 

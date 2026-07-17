@@ -1,9 +1,9 @@
 {
   "meta": {
-    "files_scanned": 1361,
-    "total_open": 983,
+    "files_scanned": 1365,
+    "total_open": 984,
     "by_category": {
-      "ratification": 46,
+      "ratification": 47,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
@@ -13,13 +13,13 @@
       "todo": 14
     },
     "by_priority": {
-      "1": 325,
+      "1": 326,
       "2": 36,
       "3": 622
     },
     "by_lane": {
       "FA": 68,
-      "unassigned": 703,
+      "unassigned": 704,
       "SC": 7,
       "PC": 112,
       "GO": 19,
@@ -36,7 +36,7 @@
         "3": 64
       },
       "unassigned": {
-        "1": 282,
+        "1": 283,
         "2": 32,
         "3": 389
       },
@@ -1292,6 +1292,18 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/audit/2026-05-26-pt-treaty-build-readiness/findings.md:4"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Header `CANONICAL`, body `PROVISIONAL` twice, footer \"PROVISIONAL pending ratification.\" The same",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md:227"
       ],
       "systems": [],
       "count": 1,
@@ -7069,6 +7081,42 @@
       "lane": null
     },
     {
+      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/settlement.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
+      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/infrastructure.py:15"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
+      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/temperaments.py:12"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
       "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
       "category": "assumption",
       "priority": 3,
@@ -7715,42 +7763,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/territory/settlement.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/territory/infrastructure.py:15"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/territory/temperaments.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
     },
     {
       "text": "`[ASSUMPTION: P-232 applies to the \u03c3-transform \u2014 basis: P-232 is stated with no continuous-mode/transform carve-out and is restated in the Pool-Floor section; the carve-out, if intended, would live in modifier_system_spec.md, which does not exist. Flagged as the F1 fork rather than assumed away.]`",
@@ -12314,7 +12326,7 @@
     },
     {
       "id": "Compact as a new \"5th ledger tag-family\" (compendium Part 44/45; grounded_event_card_deck_v1 C.3; governance_play_redesign_v1 \u00a71.3a/\u00a71.6; ED-SE-0018/0019 framing)",
-      "scope": "Multiple governance-cluster docs frame \"Compact\" (fixed-quota extraction, Encabezamiento) as a new 5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.\n",
+      "scope": "Multiple governance-cluster docs frame \"Compact\" (fixed-quota extraction, Encabezamiento) as a new 5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code (systems/settlements/sim/ledger.py:30) has Leverage as the 5th family and no Compact.\n",
       "superseded_by": "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)",
       "date": "2026-07-13",
       "replacement": "Compact is NOT a new tag-family \u2014 model it as a recurring Debt subtype: Debt(key=\"compact:<quota>\", ttl=term, recurs=True). Leverage remains the built 5th famil"
