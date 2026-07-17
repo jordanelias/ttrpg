@@ -67,8 +67,8 @@ sources:
       - ED-840 (closed in this commit; Royal Progress Ob iteration)
 
   knots_unified:
-    design_doc: designs/personal/knots_v30.md
-    canonical_sha__designs__personal__knots_v30_md: "94c4e90c49a0fc5a28eaacf29c2ea00e58453c7b"
+    design_doc: systems/fieldwork/knots_v30.md
+    canonical_sha__systems__fieldwork__knots_v30_md: "94c4e90c49a0fc5a28eaacf29c2ea00e58453c7b"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
     contradictions_pending:
@@ -433,41 +433,41 @@ systems:
     index: designs/provincial/faction_politics_v30_index.md
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
   investigation:
-    design_doc: designs/scene/investigation_systems_v30.md
-    canonical_sha__designs__scene__investigation_systems_v30_md: "1866fcc0496dfff2eeb7edb81b69c74ee7a26272"
-    index: designs/scene/investigation_systems_v30_index.md
-    canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
+    design_doc: systems/fieldwork/investigation_systems_v30.md
+    canonical_sha__systems__fieldwork__investigation_systems_v30_md: "1866fcc0496dfff2eeb7edb81b69c74ee7a26272"
+    index: systems/fieldwork/investigation_systems_v30_index.md
+    canonical_sha__systems__fieldwork__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
-    design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "3a2557fb0815a978d1bc7eec3a8220c6943748b5"
-    index: designs/scene/fieldwork_v30_index.md
-    canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
-    infill: designs/scene/fieldwork_v30_infill.md
-    canonical_sha__designs__scene__fieldwork_v30_infill_md: "47a2a78ffb2ff8fef741d5a0ad24c07ead41b630"
-    bg: designs/scene/fieldwork_bg_v30.md
-    canonical_sha__designs__scene__fieldwork_bg_v30_md: "e4831b5a85fdefe9477054760c401c79d95a1402"
-    bg_infill: designs/scene/fieldwork_bg_v30_infill.md
-    canonical_sha__designs__scene__fieldwork_bg_v30_infill_md: "270a77ed20d7b445e2ec3d46833ee0e7ac515804"
-    hybrid: designs/scene/fieldwork_hybrid_v30.md
-    canonical_sha__designs__scene__fieldwork_hybrid_v30_md: "e7415ea1233c72a7f38a98bdce62e716d28f5fc8"
-    hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
-    canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
-    editorial: designs/scene/fieldwork_editorial.md
-    canonical_sha__designs__scene__fieldwork_editorial_md: "ad833700c736f928c380a6cfdf0d7acab9030ad3"
-    exploration: designs/scene/fieldwork_exploration.md
-    canonical_sha__designs__scene__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
-    exposure: designs/scene/fieldwork_exposure.md
-    canonical_sha__designs__scene__fieldwork_exposure_md: "b8ce2c4c1e0f10e207c3c017ef75b465bb420eee"
-    godot: designs/scene/fieldwork_godot.md
-    canonical_sha__designs__scene__fieldwork_godot_md: "c827744afe2480d6fc60c61d30c723ef113f4c5b"
-    investigation: designs/scene/fieldwork_investigation.md
-    canonical_sha__designs__scene__fieldwork_investigation_md: "a1604b831b505e2e2b58eae62976e19983452482"
-    rationale: designs/scene/fieldwork_rationale.md
-    canonical_sha__designs__scene__fieldwork_rationale_md: "25b8893296466e9909357e267b998e3c0c9b6df3"
-    socializing: designs/scene/fieldwork_socializing.md
-    canonical_sha__designs__scene__fieldwork_socializing_md: "99a4b811d5fe49cb2ded09d0f61294309bd2b424"
-    summary: designs/scene/fieldwork_summary.md
-    canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
+    design_doc: systems/fieldwork/fieldwork_v30.md
+    canonical_sha__systems__fieldwork__fieldwork_v30_md: "3a2557fb0815a978d1bc7eec3a8220c6943748b5"
+    index: systems/fieldwork/fieldwork_v30_index.md
+    canonical_sha__systems__fieldwork__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
+    infill: systems/fieldwork/fieldwork_v30_infill.md
+    canonical_sha__systems__fieldwork__fieldwork_v30_infill_md: "47a2a78ffb2ff8fef741d5a0ad24c07ead41b630"
+    bg: systems/fieldwork/fieldwork_bg_v30.md
+    canonical_sha__systems__fieldwork__fieldwork_bg_v30_md: "e4831b5a85fdefe9477054760c401c79d95a1402"
+    bg_infill: systems/fieldwork/fieldwork_bg_v30_infill.md
+    canonical_sha__systems__fieldwork__fieldwork_bg_v30_infill_md: "270a77ed20d7b445e2ec3d46833ee0e7ac515804"
+    hybrid: systems/fieldwork/fieldwork_hybrid_v30.md
+    canonical_sha__systems__fieldwork__fieldwork_hybrid_v30_md: "e7415ea1233c72a7f38a98bdce62e716d28f5fc8"
+    hybrid_infill: systems/fieldwork/fieldwork_hybrid_v30_infill.md
+    canonical_sha__systems__fieldwork__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
+    editorial: systems/fieldwork/fieldwork_editorial.md
+    canonical_sha__systems__fieldwork__fieldwork_editorial_md: "ad833700c736f928c380a6cfdf0d7acab9030ad3"
+    exploration: systems/fieldwork/fieldwork_exploration.md
+    canonical_sha__systems__fieldwork__fieldwork_exploration_md: "35c7366a288360d1976b98e7580d12ae63bcaad8"
+    exposure: systems/fieldwork/fieldwork_exposure.md
+    canonical_sha__systems__fieldwork__fieldwork_exposure_md: "b8ce2c4c1e0f10e207c3c017ef75b465bb420eee"
+    godot: systems/fieldwork/fieldwork_godot.md
+    canonical_sha__systems__fieldwork__fieldwork_godot_md: "c827744afe2480d6fc60c61d30c723ef113f4c5b"
+    investigation: systems/fieldwork/fieldwork_investigation.md
+    canonical_sha__systems__fieldwork__fieldwork_investigation_md: "a1604b831b505e2e2b58eae62976e19983452482"
+    rationale: systems/fieldwork/fieldwork_rationale.md
+    canonical_sha__systems__fieldwork__fieldwork_rationale_md: "25b8893296466e9909357e267b998e3c0c9b6df3"
+    socializing: systems/fieldwork/fieldwork_socializing.md
+    canonical_sha__systems__fieldwork__fieldwork_socializing_md: "99a4b811d5fe49cb2ded09d0f61294309bd2b424"
+    summary: systems/fieldwork/fieldwork_summary.md
+    canonical_sha__systems__fieldwork__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
   npc_roster:
     design_doc: systems/npcs/npc_roster_v30.md
     canonical_sha__systems__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "3094b061ce006c65b6c7b26dab510a6fc435f229"
+    canonical_sha__references__module_contracts_yaml: "c5b73238d3ac1a0e73f5f8497e15226836804cbb"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

@@ -730,7 +730,7 @@
       "full_stream": true,
       "registry_only": false,
       "registry_system": "fieldwork",
-      "doc": "designs/personal/knots_v30.md",
+      "doc": "systems/fieldwork/knots_v30.md",
       "resolver": "dice_pool",
       "scales": [
         "personal",
@@ -746,7 +746,7 @@
       "loops": [],
       "gap_notes": [
         "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) \u2014 cross-check vs scene_slate emitting same type",
-        "knots_v30 \u00a76.1/\u00a76.2/\u00a711 carried the pre-ED-912 tier-capacity model + \u22124 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) \u2014 \u00a711 now records the resolution instead of forward-flagging it. Residual: \u00a76.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild = Stratum B (C-TW-12)"
+        "knots_v30 \u00a76.1/\u00a76.2/\u00a711 carried the pre-ED-912 tier-capacity model + \u22124 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) \u2014 \u00a711 now records the resolution instead of forward-flagging it. Residual: \u00a76.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
       ],
       "sources": [
         "knots_v30 full [READ: 2026-06-10]",
@@ -755,7 +755,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/personal/fieldwork.py",
+      "sim_module": "systems/fieldwork/sim/fieldwork.py",
       "test_status": "not_implemented",
       "emits": [
         {

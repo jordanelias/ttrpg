@@ -16,8 +16,8 @@ REPO = os.path.join(os.path.dirname(__file__), "..", "..")
 # The surfaces that carry the Knot Pool *formation-pool* formula (not the count cap).
 SURFACES = (
     "designs/scene/derived_stats_v30.md",
-    "designs/personal/knots_v30.md",
-    "designs/scene/fieldwork_editorial.md",
+    "systems/fieldwork/knots_v30.md",
+    "systems/fieldwork/fieldwork_editorial.md",
 )
 
 
@@ -52,6 +52,6 @@ def test_no_surface_carries_the_superseded_bonds_pool_term():
 def test_bonds_count_cap_preserved():
     # Bonds stays the eligibility-gate: the count cap floor(Bonds/2)+1 must survive
     cap = _norm("floor(Bonds/2)+1")
-    for rel in ("designs/personal/knots_v30.md", "designs/scene/fieldwork_editorial.md"):
+    for rel in ("systems/fieldwork/knots_v30.md", "systems/fieldwork/fieldwork_editorial.md"):
         body = open(os.path.join(REPO, rel), encoding="utf-8").read()
         assert cap in _norm(body), f"{rel}: Bonds count cap floor(Bonds/2)+1 lost"

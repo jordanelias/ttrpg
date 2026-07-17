@@ -29,7 +29,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-719 fieldwork §5.6b sustained Disposition reduction clarification (2026-05-10)
 **Class E (editorial); applied this commit.** Single-line clarification, no mechanical change.
-- `designs/scene/fieldwork_v30.md §5.6b`: "sustained for 2 seasons" → "2 consecutive seasons (defined as Disposition value at Accounting in season N below +3 AND season N+1 below +3, both unbroken). Non-consecutive seasons below +3 do not aggregate."
+- `systems/fieldwork/fieldwork_v30.md §5.6b`: "sustained for 2 seasons" → "2 consecutive seasons (defined as Disposition value at Accounting in season N below +3 AND season N+1 below +3, both unbroken). Non-consecutive seasons below +3 do not aggregate."
 - Surfaced by: EC-F2.A-01 in `fieldwork_lifecycle_stress_01` (commit ddccbf9a).
 - No simulation re-run required.
 

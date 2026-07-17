@@ -1,7 +1,7 @@
 """
-sim/personal/fieldwork.py — Fieldwork resolution — Exploration / Investigation / Socializing
+systems/fieldwork/sim/fieldwork.py — Fieldwork resolution — Exploration / Investigation / Socializing
 
-Canon source: designs/scene/fieldwork_v30.md
+Canon source: systems/fieldwork/fieldwork_v30.md
 Params source: params/fieldwork.md
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
@@ -22,12 +22,12 @@ from __future__ import annotations
 
 
 def run_fieldwork_scene(scene: FieldworkScene):
-    raise NotImplementedError("sim/personal/fieldwork.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/fieldwork.py — Pass 2l armature stub")
 
 
 def advance_disposition(target, delta: int):
-    raise NotImplementedError("sim/personal/fieldwork.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/fieldwork.py — Pass 2l armature stub")
 
 
 def advance_evidence(case, delta: int):
-    raise NotImplementedError("sim/personal/fieldwork.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/fieldwork.py — Pass 2l armature stub")

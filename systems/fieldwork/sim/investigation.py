@@ -1,7 +1,7 @@
 """
-sim/personal/investigation.py — Investigation systems — NPE, Interface, Dialogue Lattice, Response Matrix
+systems/fieldwork/sim/investigation.py — Investigation systems — NPE, Interface, Dialogue Lattice, Response Matrix
 
-Canon source: designs/scene/investigation_systems_v30.md
+Canon source: systems/fieldwork/investigation_systems_v30.md
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
@@ -20,12 +20,12 @@ from __future__ import annotations
 
 
 def resolve_npe_response(npc_id: str, prompt: dict, world: GameState):
-    raise NotImplementedError("sim/personal/investigation.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/investigation.py — Pass 2l armature stub")
 
 
 def evaluate_dialogue_lattice(scene, choice: str):
-    raise NotImplementedError("sim/personal/investigation.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/investigation.py — Pass 2l armature stub")
 
 
 def apply_response_matrix(actor, target, action):
-    raise NotImplementedError("sim/personal/investigation.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/fieldwork/sim/investigation.py — Pass 2l armature stub")
