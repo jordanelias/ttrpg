@@ -174,12 +174,12 @@ systems:
   social_debate:
     design_doc: engine/params/contest.md
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
-    social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "13c2f1a2711fd544d93f148c47a0d2764e016d47"
-    social_contest_index: designs/scene/social_contest_v30_index.md
-    canonical_sha__designs__scene__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
-    social_contest_infill: designs/scene/social_contest_v30_infill.md
-    canonical_sha__designs__scene__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
+    social_contest_design: systems/social_contest/social_contest_v30.md
+    canonical_sha__systems__social_contest__social_contest_v30_md: "13c2f1a2711fd544d93f148c47a0d2764e016d47"
+    social_contest_index: systems/social_contest/social_contest_v30_index.md
+    canonical_sha__systems__social_contest__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
+    social_contest_infill: systems/social_contest/social_contest_v30_infill.md
+    canonical_sha__systems__social_contest__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
     params: engine/params/contest.md
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
   scale_transitions:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "c5b73238d3ac1a0e73f5f8497e15226836804cbb"
+    canonical_sha__references__module_contracts_yaml: "2324425e413407533cb8ece7fa4a085ef15315dd"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

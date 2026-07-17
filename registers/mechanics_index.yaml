@@ -222,10 +222,10 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/social_contest_v30.md"
+      - "systems/social_contest/social_contest_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-3"
     params: "engine/params/contest.md"
-    sim_module: sim/personal/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
+    sim_module: systems/social_contest/sim/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
     test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
     dependencies:
       mechanics: [die_rule_d10, conviction_scar, beliefs]
@@ -234,7 +234,7 @@ mechanics:
   excommunication_tribunal:
     scale: personal
     faction: Church
-    canon_sources: ["designs/scene/social_contest_v30.md#section-7-1"]
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-7-1"]
     sim_module: sim/personal/tribunal.py
     test_status: not_implemented
     dependencies:
@@ -244,8 +244,8 @@ mechanics:
   parliamentary_vote:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/social_contest_v30.md#section-10"]
-    sim_module: sim/personal/parliamentary_vote.py
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-10"]
+    sim_module: systems/social_contest/sim/parliamentary_vote.py
     test_status: not_implemented
     gd_applicable: [GD-3]
     dependencies:
@@ -255,8 +255,8 @@ mechanics:
   parliamentary_stay:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/social_contest_v30.md#section-10-1"]
-    sim_module: sim/personal/parliamentary_stay.py
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-10-1"]
+    sim_module: systems/social_contest/sim/parliamentary_stay.py
     test_status: not_implemented
     dependencies:
       mechanics: [parliamentary_vote]
@@ -321,7 +321,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "systems/fieldwork/fieldwork_v30.md#section-5-5"
-      - "designs/scene/social_contest_v30.md#section-9-5"
+      - "systems/social_contest/social_contest_v30.md#section-9-5"
       - "systems/articulation/articulation_layer_v30.md#section-3-5"
     sim_module: sim/personal/beliefs.py
     test_status: not_implemented
@@ -336,7 +336,7 @@ mechanics:
       - "systems/threadwork/threadwork_v30.md#section-3-5"
       - "systems/fieldwork/fieldwork_v30.md#section-2-6"
       - "systems/fieldwork/fieldwork_v30.md#section-5-6"
-      - "designs/scene/social_contest_v30.md#section-9-4"
+      - "systems/social_contest/social_contest_v30.md#section-9-4"
       - "systems/articulation/articulation_layer_v30.md#section-2-4"
       - "systems/articulation/articulation_layer_v30.md#section-6"
       - "designs/scene/derived_stats_v30.md#section-10-1"
@@ -539,7 +539,7 @@ mechanics:
     faction: Church
     canon_sources:
       - "designs/provincial/faction_canon_v30.md#section-8-2"
-      - "designs/scene/social_contest_v30.md#section-7-1"
+      - "systems/social_contest/social_contest_v30.md#section-7-1"
     sim_module: sim/provincial/excommunication.py
     test_status: not_implemented
     dependencies:

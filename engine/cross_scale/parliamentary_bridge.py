@@ -11,7 +11,7 @@ personal path remain future work; this activates contest resolution via the fact
 
 WHAT LANDS HERE (all behind ECHO_TRANSPORT — default OFF is byte-exact):
   - ED-SC-0006 (derivation): each season, derive a two-pole motion from world state and resolve it
-    with sim.personal.parliamentary_vote.run_parliamentary_vote (the ratified §10 impl). A resolved
+    with systems.social_contest.sim.parliamentary_vote.run_parliamentary_vote (the ratified §10 impl). A resolved
     vote counts as a resolved contest (world.scenes_resolved) — closing N-1 (the kernel/vote was
     unreachable from the loop) and the F7 scenes_resolved==0 gap.
   - ED-SC-0007 (outcome → world): the §10 Total-Victory Mandate penalty is applied by
@@ -38,8 +38,8 @@ casing; no scale-local dialect.
 from __future__ import annotations
 
 from engine.cross_scale import echo_transport
-from sim.personal.parliamentary_vote import Motion, VoteDeclaration, run_parliamentary_vote
-from sim.personal.contest import (
+from systems.social_contest.sim.parliamentary_vote import Motion, VoteDeclaration, run_parliamentary_vote
+from systems.social_contest.sim.contest import (
     PERSUASION_TOTAL_VICTORY,   # 9
     PERSUASION_TOTAL_DEFEAT,    # 1
 )

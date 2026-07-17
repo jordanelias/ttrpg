@@ -2035,7 +2035,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "social_contest",
-      "doc": "designs/scene/social_contest_v30.md",
+      "doc": "systems/social_contest/social_contest_v30.md",
       "resolver": "dice_pool",
       "scales": [
         "scene"
@@ -2058,7 +2058,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/personal/contest/",
+      "sim_module": "systems/social_contest/sim/contest/",
       "test_status": "not_implemented",
       "emits": [
         {

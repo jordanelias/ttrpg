@@ -199,7 +199,7 @@ def test_g_code_multi_dot_relative_walks_up(tmp_path):
 
 def test_g_code_captures_relative_import_cycle(tmp_path):
     # two modules importing each other relatively form a real SCC — the batch-2 fix
-    # was motivated by such a cycle (sim.personal.contest) being dropped when the
+    # was motivated by such a cycle (systems.social_contest.sim.contest) being dropped when the
     # relative target mis-resolved. Determinism: _cycles is sorted, so the same
     # fixture yields the same list every run.
     root, modules = _write_pkg(tmp_path, {

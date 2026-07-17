@@ -618,11 +618,11 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('8', 'designs/sc
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('8', 'designs/scene/combat_design_v1_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('8', 'engine/params/mass_combat.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('8', 'engine/params/combat.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'designs/scene/social_contest_system_v2_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'designs/scene/social_contest_system_v2.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'designs/scene/social_contest_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'designs/scene/social_contest_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'designs/scene/social_contest_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'systems/social_contest/social_contest_system_v2_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'systems/social_contest/social_contest_system_v2.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'systems/social_contest/social_contest_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'systems/social_contest/social_contest_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('9', 'systems/social_contest/social_contest_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('10', 'designs/scene/conviction_track_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('10', 'designs/scene/conviction_track_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('10', 'designs/scene/conviction_track_v30_infill.md');
@@ -828,8 +828,8 @@ INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/fieldwork/sim/fieldwork.py', 'personal', 3, 'stub', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/fieldwork/sim/investigation.py', 'personal', 3, 'stub', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/fieldwork/sim/knots.py', 'personal', 2, 'verified', NULL, NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/parliamentary_stay.py', 'personal', 4, 'verified', 'designs/scene/social_contest_v30.md', NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/parliamentary_vote.py', 'personal', 3, 'verified', 'designs/scene/social_contest_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/social_contest/sim/parliamentary_stay.py', 'personal', 4, 'verified', 'systems/social_contest/social_contest_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/social_contest/sim/parliamentary_vote.py', 'personal', 3, 'verified', 'systems/social_contest/social_contest_v30.md', NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/altonian_reinforcements.py', 'provincial', 5, 'canon_gated', 'designs/provincial/altonian_reinforcements_v30.md', 'Pass 2e Hafenmark');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/charter_liberties.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2e Hafenmark');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/hafenmark_equipment.py', 'provincial', 5, 'canon_gated', NULL, 'Pass 2e Hafenmark');

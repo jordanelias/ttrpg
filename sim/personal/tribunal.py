@@ -1,7 +1,7 @@
 """
 sim/personal/tribunal.py — Asymmetric proceedings + Excommunication Tribunal
 
-Canon source: designs/scene/social_contest_v30.md §7 + §7.1 (ED-625, approved 2026-04-17)
+Canon source: systems/social_contest/social_contest_v30.md §7 + §7.1 (ED-625, approved 2026-04-17)
 Game Design constraints applicable: GD-3 (status-flag enforcement at boundary)
 Status: [PROVISIONAL — Phase 5/9 integration 2026-05-17. Single-roll procedural
          abstraction of the §7.1 procedure. Full multi-Exchange Contest engine
@@ -28,7 +28,7 @@ from engine.autoload.dice_engine import Degree
 
 # ── Ledger-cited constants (every value here has a sim_verification_ledger.json entry) ──
 
-# Canon: designs/scene/social_contest_v30.md §7.1 — Persuasion Track starts at 7
+# Canon: systems/social_contest/social_contest_v30.md §7.1 — Persuasion Track starts at 7
 # (institutional fait accompli). In the multi-Exchange procedure this means the
 # track is near-decisive before Exchange 1. In our single-roll abstraction it
 # translates to +1D pool bonus for the Church side when formal grounds apply.

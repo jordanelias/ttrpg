@@ -1,18 +1,18 @@
 """
-sim/personal/contest_legacy_stub.py — DEPRECATED single-compare social-contest stub
+systems/social_contest/sim/contest_legacy_stub.py — DEPRECATED single-compare social-contest stub
 
 ⚠️ DEPRECATED (Stage 1b, 2026-06-30, designs/audit/2026-06-30-contest-stage0-reconciliation).
-   SUPERSEDED BY the promoted groundup kernel package `sim/personal/contest/` (a real
+   SUPERSEDED BY the promoted groundup kernel package `systems/social_contest/sim/contest/` (a real
    directory package). This 256-line single-compare stub is retained (deprecate-not-delete)
    ONLY as the provenance source for the public API the two live importers need:
      • run_contest / ContestResult / ExchangeResult / build_argue_pool / resolve_exchange
      • the Persuasion-Track threshold constants (PERSUASION_*)
-   The new package `sim/personal/contest/__init__.py` RE-EXPORTS these from this module so
+   The new package `systems/social_contest/sim/contest/__init__.py` RE-EXPORTS these from this module so
    scene_dispatch.py and parliamentary_vote.py keep resolving unchanged. Do NOT import this
-   module directly in new code; import `sim.personal.contest` (the package) instead. The v30
+   module directly in new code; import `systems.social_contest.sim.contest` (the package) instead. The v30
    re-skin + build_contest/resolve_contest wrapper land in the NEXT stage.
 
-Canon source: designs/scene/social_contest_v30.md §1-§9
+Canon source: systems/social_contest/social_contest_v30.md §1-§9
 
 Implements the contest pipeline:
   - build_argue_pool: §3 Argue Pool = (Primary Attribute × 2) + History

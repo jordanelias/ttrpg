@@ -1,12 +1,12 @@
 """
-sim/personal/parliamentary_vote.py — Parliamentary Vote (faction scale)
+systems/social_contest/sim/parliamentary_vote.py — Parliamentary Vote (faction scale)
 
-Canon source: designs/scene/social_contest_v30.md §10 (Parliamentary Vote)
+Canon source: systems/social_contest/social_contest_v30.md §10 (Parliamentary Vote)
 Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot cast
     Parliamentary votes — canon/02_canon_constraints.md §B GD-3)
 Status: [implemented: 2026-05-31 — §10 BG vote against social_contest_v30. Faction-scale
     Mandate-pool resolution (NOT the §1-9 personal argue-pool contest); reuses the shared
-    Persuasion-Track threshold constants from sim.personal.contest §6.]
+    Persuasion-Track threshold constants from systems.social_contest.sim.contest §6.]
 
 Dependencies:
   - sim/autoload/dice_engine — d10 pool roll (TN 7)
@@ -41,7 +41,7 @@ from engine.autoload import dice_engine
 from engine.autoload.game_state import MULTS
 
 # Shared Persuasion-Track thresholds (§6) — single source of truth, do NOT redefine:
-from sim.personal.contest import (
+from systems.social_contest.sim.contest import (
     PERSUASION_WIN_THRESHOLD,        # 7  [canonical: social_contest_v30 §6/§10]
     PERSUASION_LOSS_THRESHOLD,       # 3
     PERSUASION_TOTAL_VICTORY,        # 9

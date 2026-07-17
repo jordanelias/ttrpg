@@ -139,7 +139,7 @@ def test_classify_ledger_path_is_historical():
     ('designs/scene/combat_v30.md', True),                              # plain _vNN.md
     ('designs/scene/derived_stats_v1.md', True),                        # single-digit version
     ('systems/_architecture/campaign_architecture_v30_index.md', True),  # _v30_index.md
-    ('designs/scene/social_contest_v30_infill.md', True),               # _v30_infill.md
+    ('systems/social_contest/social_contest_v30_infill.md', True),               # _v30_infill.md
     ('designs/scene/fieldwork.md', False),                              # no version suffix at all
     ('designs/scene/combat_v30.py', False),                             # not .md
     ('tools/quantity_registry.py', False),                              # not .md, no version suffix

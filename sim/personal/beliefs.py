@@ -2,7 +2,7 @@
 sim/personal/beliefs.py — Belief tracking and revision
 
 Canon source: systems/fieldwork/fieldwork_v30.md §5.5 Socializing and Beliefs;
-              designs/scene/social_contest_v30.md §9.5 Beliefs Integration
+              systems/social_contest/social_contest_v30.md §9.5 Beliefs Integration
 
 Implements:
   - Belief-aligned social success: +1 Momentum (cap 4) per §5.5

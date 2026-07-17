@@ -4,7 +4,7 @@ dictionaries.py — the Stage-2 TYPED DICTIONARIES (Gate B).
 Per the staged plan (Stage 2 / Gate B) and DECISIONS.md locked decision 3 (sim + canon
 only; NO Godot YAML), the contest's four canonical dictionaries live HERE as frozen Python
 dataclasses, single-sourced with the canonical prose tables in params/contest.md +
-designs/scene/social_contest_v30.md. There is deliberately NO data/*.yaml layer.
+systems/social_contest/social_contest_v30.md. There is deliberately NO data/*.yaml layer.
 
 The four dictionaries:
   1. PROCEEDINGS_TABLE  — Proceeding×8   (Formal/Grand Contest, Royal Audience, Church
