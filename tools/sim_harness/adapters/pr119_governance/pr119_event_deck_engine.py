@@ -7,7 +7,7 @@ not real event-deck content — it cannot produce a genuine PROSPER outcome beca
 it ever grows Prosperity. This module fixes that by implementing the actual deck.
 
 **Thirteen of Goldenfurt's real 28 cards**, transcribed with citations from
-`designs/territory/goldenfurt_slice/event_deck.md` (the "Spine cards" full-schema section plus
+`systems/settlements/goldenfurt_slice/event_deck.md` (the "Spine cards" full-schema section plus
 selected "Remaining cards" compact entries), spanning all 7 card families so the family-weighted
 draw bias is real, not token: G101, G201, G204 (Petition/Friction, full schema), G301, G303
 (Opportunity, POSITIVE — the deck's own growth levers, absent from `pr119_integrated_campaign.py`
@@ -48,15 +48,15 @@ if str(_SKILL_DIR) not in sys.path:
     sys.path.insert(0, str(_SKILL_DIR))
 import valoria_dice  # noqa: E402
 
-from sim.territory import registry  # noqa: E402
-from sim.territory.registry import STAT_MAX, STAT_MIN  # noqa: E402
+from systems.settlements.sim import registry  # noqa: E402
+from systems.settlements.sim.registry import STAT_MAX, STAT_MIN  # noqa: E402
 
 from ...adapter import Adapter, Outcome, register_adapter  # noqa: E402
 from ...depth import DecisionPoint, Tier  # noqa: E402
 from .goldenfurt_fixture import build_goldenfurt_settlement  # noqa: E402
 from .pr119_pressure_homeostat import _restore_toward  # noqa: E402 (single source of truth)
 
-_EVENT_DECK_DOC = "designs/territory/goldenfurt_slice/event_deck.md"
+_EVENT_DECK_DOC = "systems/settlements/goldenfurt_slice/event_deck.md"
 
 
 def _clamp_stat(v: int) -> int:
@@ -419,7 +419,7 @@ def _r_g702_mend(ctx, s, ev, rng):
 G702 = Card(
     card_id="G702", family="Thread", cooldown=5,
     # Thread Proximity isn't a tracked field in this cluster (real Thread-layer state lives
-    # outside sim/territory/) -- a flat, documented test-scenario eligibility chance stands in.
+    # outside systems/settlements/sim/) -- a flat, documented test-scenario eligibility chance stands in.
     trigger=lambda ctx, s: True,
     responses=[
         CardResponse("investigate", 0.4, _r_g702_investigate),

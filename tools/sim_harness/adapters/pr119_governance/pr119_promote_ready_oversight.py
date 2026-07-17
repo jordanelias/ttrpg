@@ -21,7 +21,7 @@ canon doc, no CURRENT.md row. contract_module="settlement_layer".
 """
 from __future__ import annotations
 
-from sim.territory import registry
+from systems.settlements.sim import registry
 
 from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier

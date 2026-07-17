@@ -1,7 +1,7 @@
 """
-sim/territory/temperaments.py — Per-territory Public Temperament (PP-686 v2 Phase B Stage 6)
+systems/settlements/sim/temperaments.py — Per-territory Public Temperament (PP-686 v2 Phase B Stage 6)
 
-Canon source: designs/territory/territory_temperaments_v30.md
+Canon source: systems/settlements/territory_temperaments_v30.md
 
 Implements §2 per-territory temperament authoring (17 provinces, T1-T17) +
 §3 per-faction aggregation + §4 drift dynamics under peninsular_strain_shock.
@@ -17,7 +17,7 @@ each with α (outcomes weight) and β (conduct weight) coefficients.
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/settlement
+  - systems/settlements/sim/settlement
 
 Entry points:
   - temperament_of(territory_id) -> str

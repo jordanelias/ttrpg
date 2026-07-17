@@ -62,7 +62,7 @@ def _detect_integrated(stats: dict) -> list:
                        f"such kind",
                        "PATCH: governance_consolidation_v1.md §1 D3 -- model Compact as a "
                        "Debt subtype (ttl/recurs fields) rather than a 6th ledger family, or "
-                       "deliberately extend sim/territory/ledger.py's TAG_KINDS -- either way, "
+                       "deliberately extend systems/settlements/sim/ledger.py's TAG_KINDS -- either way, "
                        "before §1.3a ratifies (currently blocking)."))
     if stats.get("grudge_tag_count", 0) >= 5:
         flags.append(("GRUDGE_ACCUMULATION",
@@ -102,7 +102,7 @@ def _detect_deck(stats: dict) -> list:
         flags.append(("PROSPERITY_COLLAPSE",
                        f"final Prosperity={stats['final_prosperity']}, "
                        f"Order={stats['final_order']}, Pi={stats['final_pressure']:.2f}",
-                       "PATCH: designs/territory/governance_play_redesign_v1.md §1.3a's own "
+                       "PATCH: systems/settlements/governance_play_redesign_v1.md §1.3a's own "
                        "cited logic (Scott's extraction-invariance-detonates-revolt) argues "
                        "for a subsistence floor on Extract/Tax Directives against a declining "
                        "settlement; the real counter-lever is the Develop verb itself "

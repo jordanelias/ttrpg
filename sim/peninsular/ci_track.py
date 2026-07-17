@@ -24,7 +24,7 @@ Plus apply_ci_delta for non-seasonal mutations (Excommunication +4, etc).
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/infrastructure (for Templar Station CI gain integration)
+  - systems/settlements/sim/infrastructure (for Templar Station CI gain integration)
 
 Entry points:
   - compute_seasonal_ci_delta(world: GameState) -> dict

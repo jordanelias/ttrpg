@@ -281,9 +281,9 @@ def test_mentioned_in_canonical_sources_raw_honors_root(tmp_path):
     refs_dir = tmp_path / 'references'
     refs_dir.mkdir()
     (refs_dir / 'canonical_sources.yaml').write_text(
-        'systems:\n  foo:\n    adjacency: designs/territory/foo_v30.md\n', encoding='utf-8')
+        'systems:\n  foo:\n    adjacency: systems/settlements/foo_v30.md\n', encoding='utf-8')
     text = ga._mentioned_in_canonical_sources_raw(tmp_path)
-    assert 'designs/territory/foo_v30.md' in text
+    assert 'systems/settlements/foo_v30.md' in text
 
 
 def test_mentioned_in_canonical_sources_raw_missing_file_returns_empty(tmp_path):

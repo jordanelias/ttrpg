@@ -177,8 +177,8 @@
 | `designs/systems/npc_behavior_v30_skeleton.md` | `systems/npcs/npc_behavior_v30_skeleton.md` | PENDING |
 | `designs/systems/player_agency_v30.md` | `systems/_architecture/player_agency_v30.md` | PENDING |
 | `designs/systems/player_agency_v30_skeleton.md` | `systems/_architecture/player_agency_v30_skeleton.md` | PENDING |
-| `designs/systems/settlement_layer_v30.md` | `designs/territory/settlement_layer_v30.md` | PENDING |
-| `designs/systems/settlement_layer_v30_skeleton.md` | `designs/territory/settlement_layer_v30_skeleton.md` | PENDING |
+| `designs/systems/settlement_layer_v30.md` | `systems/settlements/settlement_layer_v30.md` | PENDING |
+| `designs/systems/settlement_layer_v30_skeleton.md` | `systems/settlements/settlement_layer_v30_skeleton.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30.md` | `designs/provincial/tc_political_v30.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30_skeleton.md` | `designs/provincial/tc_political_v30_skeleton.md` | PENDING |
 | `designs/systems/thread_horizontal_integration_spec.md` | `systems/threadwork/thread_horizontal_integration_spec.md` | PENDING |
@@ -801,3 +801,11 @@
 |---|---|
 | `designs/world/` | `systems/world/` |
 | `sim/world/` | `systems/world/sim/` |
+
+
+## 2026-07-17 — settlements designs/territory + sim/territory -> systems/settlements/ (P4 slice 5, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/territory/` | `systems/settlements/` |
+| `sim/territory/` | `systems/settlements/sim/` |

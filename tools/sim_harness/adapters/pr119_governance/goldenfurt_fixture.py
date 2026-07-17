@@ -1,9 +1,9 @@
 """goldenfurt_fixture.py — shared Goldenfurt (S-006) test data for the pr119_governance
 adapter cluster.
 
-Builds a real sim.territory.registry.Settlement (the actual dataclass, not a
+Builds a real systems.settlements.sim.registry.Settlement (the actual dataclass, not a
 re-implementation) populated with values hand-transcribed from
-designs/territory/goldenfurt_slice/{npc_cast,event_deck,sim_build_spec}.md — the one
+systems/settlements/goldenfurt_slice/{npc_cast,event_deck,sim_build_spec}.md — the one
 worked, adversarially-verified vertical slice governance_play_redesign_v1.md was authored
 against. Every value's provenance is documented in PROVENANCE below, mirroring the
 Adapter.resolve_params() discipline: nothing here is a fabricated number.
@@ -20,13 +20,13 @@ decision points and across trials within one decision point.
 """
 from __future__ import annotations
 
-from sim.territory.registry import Settlement
+from systems.settlements.sim.registry import Settlement
 
 SID = "S-006"
 SETTLEMENT_NAME = "Goldenfurt"
 
 # NPC dossiers -- id -> the fields this adapter cluster actually consumes.
-# Source: designs/territory/goldenfurt_slice/npc_cast.md.
+# Source: systems/settlements/goldenfurt_slice/npc_cast.md.
 NPCS = {
     "NPC-G01": {"name": "Hedda Vorn", "role": "Magistrate (local law)", "disposition": 1},
     "NPC-G02": {
@@ -52,15 +52,15 @@ NPCS = {
 LOCAL_ACTORS = ["LA-G01", "LA-G02", "LA-G03"]  # Mertha, Old Brun, Sister Aldith
 
 PROVENANCE = {
-    "identity": "PROVISIONAL: designs/territory/goldenfurt_slice/README.md — "
+    "identity": "PROVISIONAL: systems/settlements/goldenfurt_slice/README.md — "
         "'S-006 Goldenfurt, a Crown breadbasket river-town in Kronmark province'",
-    "pressure/facility_tier": "PROVISIONAL: designs/territory/goldenfurt_slice/README.md "
+    "pressure/facility_tier": "PROVISIONAL: systems/settlements/goldenfurt_slice/README.md "
         "worked-example opening state — 'AP = 3 (Town, FacilityTier 1). Pi = 4.' "
         "(registry.Settlement.ap = 2 + facility_tier for a Town, so facility_tier=1 "
         "reproduces the cited AP=3.)",
-    "npc_ids": "PROVISIONAL: designs/territory/goldenfurt_slice/npc_cast.md — NPC-G01..G06 "
+    "npc_ids": "PROVISIONAL: systems/settlements/goldenfurt_slice/npc_cast.md — NPC-G01..G06 "
         "+ LA-G01..G03 (9 named actors total)",
-    "npc dispositions/progress": "PROVISIONAL: designs/territory/goldenfurt_slice/npc_cast.md, "
+    "npc dispositions/progress": "PROVISIONAL: systems/settlements/goldenfurt_slice/npc_cast.md, "
         "each NPC's own 'Loyalty/Disposition(governor)' and (for Konrad, G06) 'Progress' lines; "
         "event_deck.md EVT-G606 for the +1/season cap and >=4 fire threshold",
     "religious_building": "PROVISIONAL: npc_cast.md NPC-G03's ambition is to upgrade the town "

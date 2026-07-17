@@ -1,7 +1,7 @@
 """
-sim/territory/settlement.py — Settlement-level state — Order, Prosperity, Population
+systems/settlements/sim/settlement.py — Settlement-level state — Order, Prosperity, Population
 
-Canon source: designs/territory/settlement_layer_v30.md §1.2-1.3
+Canon source: systems/settlements/settlement_layer_v30.md §1.2-1.3
 
 Implements §1.3 derived values + province-aggregation formula. Settlement
 registry does not yet exist in game_state.World (territories carry the
@@ -30,7 +30,7 @@ import math
 
 
 # Section 1.3 derived-value multipliers (settlement stat -> videogame derived value)
-# [canonical: designs/territory/settlement_layer_v30.md §1.3 Settlement Stats table]
+# [canonical: systems/settlements/settlement_layer_v30.md §1.3 Settlement Stats table]
 PROSPERITY_TO_LOCAL_ECONOMY = 50   # Prosperity x 50 = Gold contribution
 DEFENSE_BASE_TO_GARRISON = 20      # Defense x 20 + Fort x 30 = Garrison Strength
 FORT_LEVEL_TO_GARRISON = 30        # Per-fort-level contribution to Garrison Strength
@@ -77,7 +77,7 @@ class ProvinceState:
 
 def _state_from_settlement(s) -> SettlementState:
     """Build the §1.3 derived-value view directly from an authored registry
-    Settlement (sim/territory/registry.py). Used by the registry-backed path."""
+    Settlement (systems/settlements/sim/registry.py). Used by the registry-backed path."""
     return SettlementState(
         settlement_id=s.sid,
         settlement_type=s.stype,
@@ -104,7 +104,7 @@ def compute_settlement_state(settlement_id: str, world) -> SettlementState:
     """
     # [registry-backed path — closes audit gap G1] prefer an authored Settlement
     # if the registry holds one; else fall back to the 1:1 Territory derivation.
-    from sim.territory.registry import get_settlement
+    from systems.settlements.sim.registry import get_settlement
     s = get_settlement(settlement_id, world)
     if s is not None:
         return _state_from_settlement(s)
@@ -172,7 +172,7 @@ def aggregate_to_province(province_id: str, world) -> ProvinceState:
     # [registry-backed path — closes G1] aggregate the province's REAL member
     # settlements when the registry is populated — the multi-settlement
     # floor-average the §1.3 formula always intended (was a synthetic single).
-    from sim.territory.registry import province_members
+    from systems.settlements.sim.registry import province_members
     members = province_members(province_id, world)
     if members:
         states = [_state_from_settlement(s) for s in members]

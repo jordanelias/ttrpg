@@ -1870,7 +1870,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "settlement_layer",
-      "doc": "designs/territory/settlement_layer_v30.md",
+      "doc": "systems/settlements/settlement_layer_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "settlement",

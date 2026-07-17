@@ -349,7 +349,7 @@ entries:
     scope: >
       Multiple governance-cluster docs frame "Compact" (fixed-quota extraction, Encabezamiento) as a new
       5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code
-      (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.
+      (systems/settlements/sim/ledger.py:30) has Leverage as the 5th family and no Compact.
     superseded_by: "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)"
     superseded_date: "2026-07-13"
     replacement: >
@@ -359,7 +359,7 @@ entries:
       files below is a follow-up execution of D3 (a ratified ruling), recommended as its own SE/IN pass — NOT
       done in the 2026-07-15 reconciliation PR, since it re-models a mechanic in a current head.
     files_to_recheck:
-      - designs/territory/governance_play_redesign_v1.md   # §1.3a/§1.6 "fifth Ledger tag family" — PENDING D3 propagation
+      - systems/settlements/governance_play_redesign_v1.md   # §1.3a/§1.6 "fifth Ledger tag family" — PENDING D3 propagation
       - designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md   # C.3 — PENDING
       - designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md   # §44.2.7 — PENDING
       - designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md   # PENDING

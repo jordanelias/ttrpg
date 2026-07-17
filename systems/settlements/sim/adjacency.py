@@ -1,5 +1,5 @@
 """
-sim/territory/adjacency.py — Territory adjacency map
+systems/settlements/sim/adjacency.py — Territory adjacency map
 
 Canon source: m1_church_infrastructure.py L276-293; settlement_layer_v30 + valoria_geography
 Status: [CANONICAL — Phase 2 implementation 2026-05-17]

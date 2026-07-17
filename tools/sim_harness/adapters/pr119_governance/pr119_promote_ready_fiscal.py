@@ -21,7 +21,7 @@ CURRENT.md row. contract_module="faction_politics" (HRE-4, IT-2 are FA-lane EDs)
 """
 from __future__ import annotations
 
-from sim.territory import ledger
+from systems.settlements.sim import ledger
 
 from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier

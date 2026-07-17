@@ -712,13 +712,13 @@ mechanics:
     gd_applicable: [GD-2]
     notes: "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory."
 
-  # ─── TERRITORY (sim/territory/) ──────────────────────────────────────────
+  # ─── TERRITORY (systems/settlements/sim/) ──────────────────────────────────────────
 
   settlement_state:
     scale: territory
     faction: universal
-    canon_sources: ["designs/territory/settlement_layer_v30.md"]
-    sim_module: sim/territory/settlement.py
+    canon_sources: ["systems/settlements/settlement_layer_v30.md"]
+    sim_module: systems/settlements/sim/settlement.py
     test_status: not_implemented
     notes: "Order / Prosperity / Population stats. Tier 2 gap per gap_analysis.md."
 
@@ -726,9 +726,9 @@ mechanics:
     scale: territory
     faction: universal
     canon_sources:
-      - "designs/territory/settlement_layer_v30.md"
+      - "systems/settlements/settlement_layer_v30.md"
       - "tests/sim/v17-integration/gap_analysis.md"
-    sim_module: sim/territory/infrastructure.py
+    sim_module: systems/settlements/sim/infrastructure.py
     test_status: not_implemented
     notes: "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending."
 
@@ -736,16 +736,16 @@ mechanics:
     scale: territory
     faction: universal
     canon_sources:
-      - "designs/territory/settlement_adjacency_v30.md"
-      - "designs/territory/valoria_geography_v30.yaml"
-    sim_module: sim/territory/adjacency.py
+      - "systems/settlements/settlement_adjacency_v30.md"
+      - "systems/settlements/valoria_geography_v30.yaml"
+    sim_module: systems/settlements/sim/adjacency.py
     test_status: not_implemented
 
   territory_temperaments:
     scale: territory
     faction: universal
-    canon_sources: ["designs/territory/territory_temperaments_v30.md"]
-    sim_module: sim/territory/temperaments.py
+    canon_sources: ["systems/settlements/territory_temperaments_v30.md"]
+    sim_module: systems/settlements/sim/temperaments.py
     test_status: not_implemented
     notes: "5-temperament typology."
 

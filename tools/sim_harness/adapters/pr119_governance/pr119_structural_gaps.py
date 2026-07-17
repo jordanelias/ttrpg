@@ -27,11 +27,11 @@ from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier
 
 _REPO_ROOT = Path(__file__).resolve().parents[4]
-_REGISTRY_PY = _REPO_ROOT / "sim" / "territory" / "registry.py"
-_LEDGER_PY = _REPO_ROOT / "sim" / "territory" / "ledger.py"
-_SETTLEMENT_PY = _REPO_ROOT / "sim" / "territory" / "settlement.py"
+_REGISTRY_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "registry.py"
+_LEDGER_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "ledger.py"
+_SETTLEMENT_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "settlement.py"
 _PREDICATE_SWEEP_DIR = _REPO_ROOT / "tests" / "sim" / "settlement_mgmt_stress_01"
-_CARD_DECK_DOC = _REPO_ROOT / "designs" / "territory" / "goldenfurt_slice" / "event_deck.md"
+_CARD_DECK_DOC = _REPO_ROOT / "systems" / "settlements" / "goldenfurt_slice" / "event_deck.md"
 
 
 @register_adapter("pr119_structural_gaps")

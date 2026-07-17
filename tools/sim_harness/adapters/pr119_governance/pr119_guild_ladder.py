@@ -2,7 +2,7 @@
   - designs/provincial/faction_politics_v30.md §2.5a Entry and Mastership Forks
     (ED-FA-0022/ED-FA-0023): guarantor-gated entry vs. sole-patron entry; capital-gated
     Free Mastership vs. the existing Masterpiece Examination.
-  - designs/territory/governance_play_redesign_v1.md §1.3c Ordenanza Ratification
+  - systems/settlements/governance_play_redesign_v1.md §1.3c Ordenanza Ratification
     (ED-SE-0023), which requires a Gu-Std 3+ Guild Master — cross-references §2.5.
 
 Grounded on Orsk Tallow (NPC-G02), Goldenfurt's real Grainmaster/Guild factor
@@ -73,7 +73,7 @@ class GuildLadderAdapter(Adapter):
             "amend_pool": "test-scenario value, not canon-derived: dice pool size is "
                 "character-build-dependent, no single fixed pool size for this roll",
             "amend_tn": f"engine/params/core.md verified: {std_tn!r} (TN Values / Standard)",
-            "amend_ob": "PROVISIONAL: designs/territory/governance_play_redesign_v1.md "
+            "amend_ob": "PROVISIONAL: systems/settlements/governance_play_redesign_v1.md "
                 "§1.3c — 'Amend — Charisma/Cognition vs the Guild Master, Ob 2'",
         }
         return params, provenance

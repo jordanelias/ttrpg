@@ -1,11 +1,11 @@
 """
-sim/territory/registry.py — Settlement registry (closes audit gap G1)
+systems/settlements/sim/registry.py — Settlement registry (closes audit gap G1)
 
-Canon source: designs/territory/goldenfurt_slice/sim_build_spec.md §1;
-              designs/territory/settlement_layer_v30.md §1.1-1.3, §2.1
+Canon source: systems/settlements/goldenfurt_slice/sim_build_spec.md §1;
+              systems/settlements/settlement_layer_v30.md §1.1-1.3, §2.1
 
 The Settlement is the base civic/political unit (settlement_layer §1.1; the
-siege-target). Before this module, sim/territory/settlement.py mapped 1:1
+siege-target). Before this module, systems/settlements/sim/settlement.py mapped 1:1
 territory->settlement because game_state.World had no Settlement registry
 (audit 2026-06-22 gap G1). This adds a registry so a province can hold its
 canonical 1-3 settlements and the §1.3 floor-average province aggregation can
@@ -28,7 +28,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from sim.territory.ledger import (
+from systems.settlements.sim.ledger import (
     LedgerTag, ledger_add, ledger_get, ledger_has, ledger_sweep,
 )
 

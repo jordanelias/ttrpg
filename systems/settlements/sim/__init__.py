@@ -1,5 +1,5 @@
 """
-sim.territory — Settlement + infrastructure + adjacency layer
+systems.settlements.sim — Settlement + infrastructure + adjacency layer
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 

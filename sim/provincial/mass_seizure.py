@@ -35,7 +35,7 @@ to win — same as any other faction.
 Dependencies:
   - sim/autoload/dice_engine
   - sim/peninsular/ci_track
-  - sim/territory/infrastructure
+  - systems/settlements/sim/infrastructure
 
 Entry points:
   - attempt_mass_seizure_declaration(world, force_declare=False) -> SeizureDeclaration
@@ -48,7 +48,7 @@ from typing import Optional
 
 from engine.autoload.dice_engine import roll_pool
 from engine.autoload.game_state import canonical_pt
-from sim.territory.infrastructure import (
+from systems.settlements.sim.infrastructure import (
     count_infrastructure, seizure_ob_modifier, BUILDING_CHAPEL,
     BUILDING_CHURCH, BUILDING_CATHEDRAL,
 )
