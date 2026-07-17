@@ -8,6 +8,23 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **ED-IN-0073 FILED 2026-07-17 — adversarial audit of the character-decision machinery (read-only).**
+  `designs/audit/2026-07-17-character-decision-adversarial-audit/` (00_findings + 01_remediation_L1_L2 +
+  02_emergence_oracle_spec). Three-axis attack (logic / narrative emergence / qualitative rendering);
+  3 Sonnet finders + Opus synthesis + independent arithmetic re-derivation. Genuine holes: **L1** contest
+  armature `_row()` is algebraically a single-axis lookup (off-axis `0.15·S` cancels; balanced judge ties
+  all styles at 0.725); **L2** two incompatible vector spaces both named `armature_position` — convictions
+  never reach a social-contest verdict; **L3/L4** roster vs npc_behavior Conviction contradictions + legacy
+  9-Conviction labels in CANONICAL npc_behavior with no matrix rows; **N1–N3** GD-2 mandatory pass / NPC arc
+  state machine / GD-3 insurgencies all unbuilt-or-inert; **N6/N7** story-fraction hypothetical + Stage-10
+  battery laundered into CANONICAL stamps; **Q1–Q4** qualitative-rendering layer largely unbuilt
+  (articulation.py all `NotImplementedError`; flagship Key types never emitted; `Belief.statement` read by
+  nothing). Remediation proposed & arithmetically verified: genre-overlap `STYLE_AXIS` (fixes L1, rank-3
+  genre plane) + `CONV_TO_RESONANCE` 13×4 derivation (fixes L2); minimal n≥100 `mc_v18` emergence oracle
+  (closes L6/N1–N4). N5 Hafenmark lockout already = ED-FA-0005 (not re-filed). **Next action: Jordan rules
+  the C-1..C-9 docket** (`00_findings.md §5`); C-1 (L1 matrix) is self-contained and lowest-risk to land
+  first, C-2 (L2) gated on C-4 (legacy-label migration). Read-only umbrella; no canon edited.
+
 - **ED-IN-0064 FILED 2026-07-14 — multi-scale governance research + audit pass (analysis-only).**
   Durable comparative-governance research corpus at `research/governance/` (8 civilizations × 3 themes —
   modes / hierarchy-standing-advancement-demotion / conflicts; ~228 `=> Valoria design hook` lines;
