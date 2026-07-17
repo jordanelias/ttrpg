@@ -888,3 +888,6 @@
 | `sim/provincial/altonian_reinforcements.py` | `systems/mass_battle/sim/altonian_reinforcements.py` |
 | `designs/provincial/mass_battle_v30` | `systems/mass_battle/mass_battle_v30` |
 | `sim/provincial/massbattle` | `systems/mass_battle/sim/massbattle` |
+| `sim/provincial/units` | `systems/mass_battle/sim/units` |
+| `sim/provincial/tactic_cards` | `systems/mass_battle/sim/tactic_cards` |
+| `sim/provincial/altonian_reinforcements` | `systems/mass_battle/sim/altonian_reinforcements` |

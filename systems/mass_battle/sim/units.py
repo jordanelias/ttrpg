@@ -17,7 +17,7 @@ This module late-binds to them via `_mb` to avoid circular import — Python's
 import machinery resolves these names at method-call time, not import time.
 
 Dependencies:
-  - sim/provincial/massbattle — constants + cell-pattern/speed/stamina helpers (late-bound)
+  - systems/mass_battle/sim/massbattle — constants + cell-pattern/speed/stamina helpers (late-bound)
 
 Entry points:
   - Subunit  — atomic combat unit (shape + tier + cells)

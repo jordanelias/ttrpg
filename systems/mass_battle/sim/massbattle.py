@@ -28,8 +28,8 @@ helper functions are defined) — units.py late-binds back to `_mb` for those
 names. See units.py docstring for the circular-import resolution pattern.
 
 Dependencies:
-  - sim/provincial/units — Subunit, Unit dataclasses (imported at file tail)
-  - sim/provincial/tactic_cards — FACTION_TACTIC_CARD_POOL_MODIFIERS (stub)
+  - systems/mass_battle/sim/units — Subunit, Unit dataclasses (imported at file tail)
+  - systems/mass_battle/sim/tactic_cards — FACTION_TACTIC_CARD_POOL_MODIFIERS (stub)
 
 Entry points:
   - resolve_mass_battle(faction_a, faction_b, terrain, world) -> dict
