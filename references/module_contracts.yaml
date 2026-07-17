@@ -436,7 +436,7 @@ modules:
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
-    doc: designs/scene/social_contest_v30.md
+    doc: systems/social_contest/social_contest_v30.md
     scales: [scene]
     resolver: dice_pool
     consumes:

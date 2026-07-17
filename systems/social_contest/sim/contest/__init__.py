@@ -1,5 +1,5 @@
 """
-sim/personal/contest/ — promoted groundup social-contest kernel (Stage 1b).
+systems/social_contest/sim/contest/ — promoted groundup social-contest kernel (Stage 1b).
 
 Rationale: designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md
 Status:    [Stage 1b — substrate promotion + σ-kernel unification, 2026-06-30]
@@ -19,10 +19,10 @@ multiplicative/additive flag are the NEXT stage, not this one.
 ──────────────────────────────────────────────────────────────────────────────
 BACK-COMPAT SHIM (deprecate-not-delete):
 The two live importers of the OLD single-compare stub keep resolving through this
-package, which re-exports the stub's public API from sim.personal.contest_legacy_stub
+package, which re-exports the stub's public API from systems.social_contest.sim.contest_legacy_stub
 (the deprecated stub, retained as the provenance source):
-  • sim/cross_scale/scene_dispatch.py:105  ->  import sim.personal.contest as contest ; contest.run_contest(...)
-  • sim/personal/parliamentary_vote.py:42   ->  from sim.personal.contest import PERSUASION_* thresholds
+  • sim/cross_scale/scene_dispatch.py:105  ->  import systems.social_contest.sim.contest as contest ; contest.run_contest(...)
+  • systems/social_contest/sim/parliamentary_vote.py:42   ->  from systems.social_contest.sim.contest import PERSUASION_* thresholds
 These re-exports are the legacy surface; the promoted kernel's own API (Bout, Venue,
 ContestedMode, the venue/mode registries, faction adapters, narrative) is exposed
 alongside. The NEXT stage folds the legacy run_contest into the wrapper.
@@ -32,7 +32,7 @@ from __future__ import annotations
 
 # ── Legacy surface re-exported for the two live importers (deprecate-not-delete) ──
 # scene_dispatch.py uses run_contest; parliamentary_vote.py uses the PERSUASION_* thresholds.
-from sim.personal.contest_legacy_stub import (  # noqa: F401
+from systems.social_contest.sim.contest_legacy_stub import (  # noqa: F401
     run_contest,
     resolve_exchange,
     build_argue_pool,

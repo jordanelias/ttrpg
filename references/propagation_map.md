@@ -52,7 +52,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-722 PP-349 stale Niflhel example fix (2026-05-10)
 **Class E (editorial); applied this commit.** Surgical 5-word replacement.
-- `designs/scene/social_contest_v30.md` PP-349 paragraph: "collaborating with Niflhel" → "collaborating with crime or underground networks operating against Church interests".
+- `systems/social_contest/social_contest_v30.md` PP-349 paragraph: "collaborating with Niflhel" → "collaborating with crime or underground networks operating against Church interests".
 - Aligns canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03 from setup_ignition_stress_01 commit cab3bd85).
 - Surfaced by: F3 Heresy Investigation EC-F3.A-01 (commit 8de82dbb).
 

@@ -1,7 +1,7 @@
 """
-sim/personal/parliamentary_stay.py — Parliamentary Stay procedure (§10.1, ED-631)
+systems/social_contest/sim/parliamentary_stay.py — Parliamentary Stay procedure (§10.1, ED-631)
 
-Canon source: designs/scene/social_contest_v30.md §10.1 Parliamentary Stay (ED-631)
+Canon source: systems/social_contest/social_contest_v30.md §10.1 Parliamentary Stay (ED-631)
 Status: [implemented: 2026-05-31 — §10.1. A Senator Inward motion halting an active Church
     Tribunal filing for 1 season via the §10 BG Parliamentary Vote. Available only while CI < 55.]
 
@@ -31,7 +31,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sim.personal.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
+from systems.social_contest.sim.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
 
 # ── §10.1 constants (ledgered) ──
 STAY_CI_AVAILABILITY_MAX = 55   # [canonical: §10.1 — "Only while CI < 55"]

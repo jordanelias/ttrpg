@@ -375,7 +375,7 @@ At session close, append to session_log_current.md:
 **Status:** Y1-Y2 done in this session. Y3-Y7 compressed; needs granular treatment.
 
 **Pre-sim canon to pull (additional to base 28):**
-- `designs/scene/social_contest_v30.md`
+- `systems/social_contest/social_contest_v30.md`
 - `designs/scene/conviction_track_v30.md`
 
 **NRSE-prep targets (mechanics to exercise in Y3-Y7):**

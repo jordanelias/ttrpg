@@ -153,7 +153,7 @@ def _resolve_slot(slot, world, rng):
                 return out
             # ED-SC-0006: route to the PROMOTED kernel (build_contest/resolve_contest), retiring
             # the deprecated contest_legacy_stub.run_contest call this branch used to make.
-            import sim.personal.contest as contest
+            import systems.social_contest.sim.contest as contest
             proceeding = ctx.get("proceeding", EMERGENCY_COUNCIL_PROCEEDING)
             # The promoted kernel resolves off the GLOBAL `random` module, not an injectable rng
             # (resolver.py's own note: the 151 seeded kernel tests rely on the module-level

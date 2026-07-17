@@ -15,7 +15,7 @@ from dataclasses import replace
 from engine.mc_v18 import run_batch, run_campaign
 from engine.autoload import game_state
 from engine.cross_scale import parliamentary_bridge as pb
-from sim.personal.parliamentary_vote import VoteResult
+from systems.social_contest.sim.parliamentary_vote import VoteResult
 
 
 # ── Flag-ON campaign golden (seed 42) — the consequence spine is live ─────────

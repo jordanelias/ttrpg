@@ -154,7 +154,7 @@ terms:
     authority: "vocabulary audit — silo isolation directive"
     residual_count: 89
     residual_at_audit: "2026-05-08"
-    residual_concentration: "engine/params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + 87 remaining files"
+    residual_concentration: "engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md (FIXED) + 87 remaining files"
 
   - term: "Conviction Track (territory-context)"
     canonical_full: "Piety Track (PT)"
@@ -188,7 +188,7 @@ terms:
     authority: "vocabulary audit — silo isolation directive"
     residual_count: 5
     residual_at_audit: "2026-05-08"
-    residual_concentration: "engine/params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + infill/v2 files pending"
+    residual_concentration: "engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md (FIXED) + infill/v2 files pending"
 
 # ─────────────────────────────────────────────────────────────────────
 # Reference cross-links

@@ -36,7 +36,7 @@ from dataclasses import dataclass, field
 
 from engine.autoload.dice_engine import roll_pool, Degree
 from engine.autoload.game_state import ACCORD_MAP, MULTS
-from sim.personal.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
+from systems.social_contest.sim.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
 
 # ── §1/§3/§5 constants (ledgered) ──
 PARL_MAJORITY_OB_BONUS = 2               # [§1.1 Ob = Holder Legitimacy + 2; §5 sensitivity: 2 canonical default]

@@ -94,10 +94,10 @@
 | `designs/combat/combat_v30.md` | `designs/scene/combat_v30.md` | PENDING |
 | `designs/combat/combat_v30_infill.md` | `designs/scene/combat_v30_infill.md` | PENDING |
 | `designs/combat/combat_v30_skeleton.md` | `designs/scene/combat_v30_skeleton.md` | PENDING |
-| `designs/contest/social_contest_system_v2.md` | `designs/scene/social_contest_system_v2.md` | PENDING |
+| `designs/contest/social_contest_system_v2.md` | `systems/social_contest/social_contest_system_v2.md` | PENDING |
 | `designs/contest/social_contest_system_v2_skeleton.md` | `designs/scene/social_contest_system_v2_skeleton.md` | PENDING |
-| `designs/contest/social_contest_v30.md` | `designs/scene/social_contest_v30.md` | PENDING |
-| `designs/contest/social_contest_v30_infill.md` | `designs/scene/social_contest_v30_infill.md` | PENDING |
+| `designs/contest/social_contest_v30.md` | `systems/social_contest/social_contest_v30.md` | PENDING |
+| `designs/contest/social_contest_v30_infill.md` | `systems/social_contest/social_contest_v30_infill.md` | PENDING |
 | `designs/contest/social_contest_v30_skeleton.md` | `designs/scene/social_contest_v30_skeleton.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30.md` | `designs/scene/conviction_track_v30.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30_infill.md` | `designs/scene/conviction_track_v30_infill.md` | PENDING |
@@ -839,3 +839,18 @@
 | `sim/personal/fieldwork` | `systems/fieldwork/sim/fieldwork` |
 | `sim/personal/investigation` | `systems/fieldwork/sim/investigation` |
 | `sim/personal/knots` | `systems/fieldwork/sim/knots` |
+
+
+## 2026-07-17 — social_contest cross-subdir extraction -> systems/social_contest/ (P4 slice 7, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/social_contest_system_v2.md` | `systems/social_contest/social_contest_system_v2.md` |
+| `designs/scene/social_contest_system_v2_index.md` | `systems/social_contest/social_contest_system_v2_index.md` |
+| `designs/scene/social_contest_v30.md` | `systems/social_contest/social_contest_v30.md` |
+| `designs/scene/social_contest_v30_index.md` | `systems/social_contest/social_contest_v30_index.md` |
+| `designs/scene/social_contest_v30_infill.md` | `systems/social_contest/social_contest_v30_infill.md` |
+| `sim/personal/parliamentary_vote.py` | `systems/social_contest/sim/parliamentary_vote.py` |
+| `sim/personal/parliamentary_stay.py` | `systems/social_contest/sim/parliamentary_stay.py` |
+| `sim/personal/contest_legacy_stub.py` | `systems/social_contest/sim/contest_legacy_stub.py` |
+| `sim/personal/contest/` | `systems/social_contest/sim/contest/` |

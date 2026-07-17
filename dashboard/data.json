@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-17T15:15:18+00:00",
-    "commit_sha": "6e79eb6"
+    "timestamp_utc": "2026-07-17T18:00:20+00:00",
+    "commit_sha": "36857f1"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 187 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 213 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "36857f161f",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 6: extract fieldwork -> systems/fieldwork/ (ED-IN-0071) (#169)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "6e79eb66ed",
         "date": "2026-07-17",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "[editorial] Rule governance_consolidation_v1's D1–D5 (ED-IN-0046); ratify 6 confirmed-clean PR#119 items (#130)",
         "scope": "editorial"
-      },
-      {
-        "sha": "6a5e6551a0",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "[design] Reconcile PR#127 (harness-verification) with PR#128 (VSG generation methodology) (#129)",
-        "scope": "design"
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 187 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 213 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,13 +720,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "391 in-scope file(s) changed since last refresh",
+        "detail": "414 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 6e79eb6 (2026-07-17)",
+        "ref": "base 36857f1 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -735,8 +735,8 @@
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
         "ref": "base 6e79eb6 (2026-07-17)",
-        "stale": false,
-        "detail": "current",
+        "stale": true,
+        "detail": "25 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -750,7 +750,7 @@
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 6e79eb6 (2026-07-17)",
+        "ref": "base 36857f1 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -766,7 +766,7 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 6e79eb6 (2026-07-17)",
+        "ref": "base 36857f1 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -788,7 +788,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 5,
+    "stale_count": 6,
     "total": 10,
     "handoffs": [
       {
@@ -2010,8 +2010,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"fieldwork\"]\n    D6[\"npcs\"]\n    D7[\"personal\"]\n    D8[\"provincial\"]\n    D9[\"scene\"]\n    D10[\"settlements\"]\n    D11[\"threadwork\"]\n    D12[\"ui\"]\n    D13[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 14,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"fieldwork\"]\n    D6[\"npcs\"]\n    D7[\"personal\"]\n    D8[\"provincial\"]\n    D9[\"scene\"]\n    D10[\"settlements\"]\n    D11[\"social_contest\"]\n    D12[\"threadwork\"]\n    D13[\"ui\"]\n    D14[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 15,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
@@ -2177,47 +2177,47 @@
       {
         "name": "Social contest",
         "availability": "yes",
-        "source_head": "designs/scene/social_contest_v30.md",
+        "source_head": "systems/social_contest/social_contest_v30.md",
         "actions": [
           {
             "name": "Appraise",
             "desc": "Read the audience/adjudicator before arguing",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Choose Style",
             "desc": "Pick Precedent / Suppression / Vision / Insinuation",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Corroborate",
             "desc": "A coalition member declares support for +1D",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Argue",
             "desc": "Roll the Argue pool; CLASH / REINFORCE / CROSS / TIE",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Regroup",
             "desc": "Forfeit exchange to restore Concentration",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Concede a Point",
             "desc": "Forfeit, take strain, gain +1D next exchange",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Pre-Contest Preparation",
             "desc": "Prepare for +1D on Exchange 1",
-            "source": "designs/scene/social_contest_v30.md §9.1"
+            "source": "systems/social_contest/social_contest_v30.md §9.1"
           },
           {
             "name": "Practitioner Weaving",
             "desc": "A Thread-sensitive orator adds bonus dice",
-            "source": "designs/scene/social_contest_v30.md §9.3"
+            "source": "systems/social_contest/social_contest_v30.md §9.3"
           }
         ],
         "caveat": null

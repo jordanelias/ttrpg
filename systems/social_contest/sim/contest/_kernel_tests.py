@@ -714,7 +714,7 @@ ck("CR3: Face + Concentration are per-side; the Persuasion Track is shared (two-
 # Composure is RETIRED — it is NOT a kernel primitive and must not reappear as one.
 ck("CR3: Composure is retired (listed in RETIRED_TRACKERS, absent from the live TRACKERS)",
    "Composure" in _RETIRED and "Composure" not in _TRK)
-import sim.personal.contest.primitives as _prim_mod
+import systems.social_contest.sim.contest.primitives as _prim_mod
 ck("CR3: no 'Composure' primitive exists in the contest kernel (retired, not a class)",
    not hasattr(_prim_mod, "Composure"))
 # The per-side runtime exposes the canonical CR3 accessors, bound to the real primitives.
@@ -1513,7 +1513,7 @@ ck("Stage3 δσ: a misaligned style buys LESS than a perfectly-aligned one, but 
 # resonance_uplift (ARMATURE_RES_GAIN) must be GONE from the module — plus the prior fractional-POOL
 # ARMATURE_MAX_POOL_BONUS / style_axis_pool_bonus / ArmatureConfig.pool_bonus (judge finding 5: replaced by
 # the continuous δσ). The ONLY live armature magnitude is the cited δσ. Assert the dead symbols are gone.
-import sim.personal.contest.armature as _armmod
+import systems.social_contest.sim.contest.armature as _armmod
 ck("Stage3 ONE CHANNEL: the dead subtractive path + uncited resonance twin + the rounded pool-bonus channel are DELETED (no resistance_delta / armature_resistance / eroded_resistance / ARMATURE_MAX_DELTA / ARMATURE_RES_GAIN / ARMATURE_MAX_POOL_BONUS / style_axis_pool_bonus)",
    not any(hasattr(_armmod, s) for s in
            ("resistance_delta", "armature_resistance", "eroded_resistance",

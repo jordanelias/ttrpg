@@ -1,7 +1,7 @@
 """
 agon_harness.py — P3-lite: the human-plays-Agôn interactive harness (Stage-1 kernel validation).
 
-WHY THIS EXISTS. The promoted social-contest kernel (sim/personal/contest/) is fully built and
+WHY THIS EXISTS. The promoted social-contest kernel (systems/social_contest/sim/contest/) is fully built and
 engine-against-itself tested (_kernel_tests.py, sim/tests/test_contest_kernel.py), but — per the
 2026-07-05 Fable-5 subsystem audit (designs/audit/2026-07-05-fable5-social-contest-audit/
 fable5_social_contest_audit_v1.md, finding D4/N-7) — NO HUMAN has ever played it. N-7 (UPHELD by the

@@ -136,11 +136,11 @@ registry:
   social_debate:
     system: social_debate
     mode: TTRPG
-    canonical_v30: designs/scene/social_contest_v30.md
-    skeleton: designs/scene/social_contest_v30.md
-    infill: designs/scene/social_contest_v30_infill.md
+    canonical_v30: systems/social_contest/social_contest_v30.md
+    skeleton: systems/social_contest/social_contest_v30.md
+    infill: systems/social_contest/social_contest_v30_infill.md
     atomized: complete
-    predecessor: designs/scene/social_contest_system_v2.md
+    predecessor: systems/social_contest/social_contest_system_v2.md
     params: engine/params/contest.md
 
   # ─── FIELDWORK (mode-split) ─────────────────────────────────────────────────

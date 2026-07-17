@@ -13,7 +13,7 @@ Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot pr
     Parliamentary votes — enforced here at proposal time and again inside run_parliamentary_vote).
 
 Status: [implemented: 2026-07-08 — ED-SC-0007 residual "parliamentary_vote-in-the-loop" MECHANISM
-    (the proposer/target/declaration authoring that sim/personal/parliamentary_vote.py never had a
+    (the proposer/target/declaration authoring that systems/social_contest/sim/parliamentary_vote.py never had a
     caller for). WIRED (same session, ED-FA-0012): sim/provincial/faction_action.py's
     _try_faction_unique now calls propose_censure as a universal fallback in the existing
     faction-unique action slot, so this reaches every live campaign via faction_take_action — not a
@@ -22,7 +22,7 @@ Status: [implemented: 2026-07-08 — ED-SC-0007 residual "parliamentary_vote-in-
 
 [PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: this module reads Mandate as the scalar
  Faction.L (`proposer.L >= 2`), inheriting the SUPERSEDED pre-LPS-1 Mandate==Faction.L convention
- documented at the top of sim/personal/parliamentary_vote.py. LPS-1 relocates Legitimacy/Mandate
+ documented at the top of systems/social_contest/sim/parliamentary_vote.py. LPS-1 relocates Legitimacy/Mandate
  per-settlement; do NOT port this scalar-L read as canon-conformant until ED-FA-0004 (Stratum B)
  closes. This is KNOWN inherited debt, not new debt introduced here.]
 
@@ -37,7 +37,7 @@ Entry points:
 from __future__ import annotations
 
 from engine.autoload.game_state import MULTS
-from sim.personal.parliamentary_vote import (
+from systems.social_contest.sim.parliamentary_vote import (
     Motion,
     VoteDeclaration,
     run_parliamentary_vote,

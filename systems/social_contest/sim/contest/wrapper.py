@@ -1,5 +1,5 @@
 """
-sim/personal/contest/wrapper.py — public API wrapper for the social-contest engine.
+systems/social_contest/sim/contest/wrapper.py — public API wrapper for the social-contest engine.
 
 Mirrors tests/sim/mass_battle/engine.py: the wrapper ADAPTS + ROUTES; it RESOLVES NOTHING.
   • build_contest(...)  — the side→Contestant + proceeding→Venue/Adjudicator ADAPTER (the P1 seam:
