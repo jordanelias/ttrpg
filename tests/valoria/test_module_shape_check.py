@@ -55,7 +55,7 @@ def test_tests_package_import_flagged(tmp_path):
 
 def test_workbench_and_tests_excluded(tmp_path):
     v = _run_on(tmp_path, {
-        'designs/scene/combat_engine_v1/workbench/harness.py': """
+        'systems/combat/combat_engine_v1/workbench/harness.py': """
             import sys, os
             sys.path.insert(0, 'tests/sim/v32-combat-balance')  # measurement harness: allowed
         """,
@@ -69,7 +69,7 @@ def test_workbench_and_tests_excluded(tmp_path):
 
 def test_non_tests_path_insert_allowed(tmp_path):
     v = _run_on(tmp_path, {
-        'designs/scene/combat_engine_v1/core_like.py': """
+        'systems/combat/combat_engine_v1/core_like.py': """
             import sys, os
             sys.path.insert(0, os.path.dirname(__file__))
         """,

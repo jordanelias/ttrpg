@@ -2,7 +2,7 @@
 beat and passes Combatant objects to every subsystem. Initialization is the only toggle. This is the structural
 cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import core, systems as S, tradition as TR, contact as CT
+import core, combat_systems as S, tradition as TR, contact as CT
 from config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────

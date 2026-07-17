@@ -86,7 +86,7 @@ write to `results/` (gitignored, same convention as `sim/results/`).
 - Not a coverage claim over any subsystem beyond the one demo adapter.
 - Not wired into CI — see the design doc §7 for the proposed report-only → blocking ratchet.
 - Not a replacement for `sim/tests/`'s deterministic regression goldens, `contract_adjudicator.py`'s
-  fixture suite, or `designs/scene/combat_engine_v1/workbench/balance.py` (the personal-combat Monte
+  fixture suite, or `systems/combat/combat_engine_v1/workbench/balance.py` (the personal-combat Monte
   Carlo tool — `combat_sim.py` was retired to `deprecated/skills/` by a concurrent PR while this one
   sat open, see the design doc's post-ratification currency note; `balance.py` is its replacement).
   It's built to absorb the latter two as adapters in later waves (§6/§8 of the design doc), not to

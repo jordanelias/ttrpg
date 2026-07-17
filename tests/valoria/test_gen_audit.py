@@ -136,12 +136,12 @@ def test_classify_ledger_path_is_historical():
 # ── _is_version_pointer / _leading_status_token: small pure-function pins ───
 
 @pytest.mark.parametrize('ref,expected', [
-    ('designs/scene/combat_v30.md', True),                              # plain _vNN.md
+    ('systems/combat/combat_v30.md', True),                              # plain _vNN.md
     ('designs/scene/derived_stats_v1.md', True),                        # single-digit version
     ('systems/_architecture/campaign_architecture_v30_index.md', True),  # _v30_index.md
     ('systems/social_contest/social_contest_v30_infill.md', True),               # _v30_infill.md
     ('designs/scene/fieldwork.md', False),                              # no version suffix at all
-    ('designs/scene/combat_v30.py', False),                             # not .md
+    ('systems/combat/combat_v30.py', False),                             # not .md
     ('tools/quantity_registry.py', False),                              # not .md, no version suffix
 ])
 def test_is_version_pointer(ref, expected):
@@ -316,19 +316,19 @@ def test_real_corpus_partition_sums_to_classified_total(real_run):
 
 
 def test_real_corpus_finds_the_known_combat_v30_currency_drift(real_run):
-    # designs/scene/combat_v30.md is registered canonical (via some key) AND
+    # systems/combat/combat_v30.md is registered canonical (via some key) AND
     # recorded as a supersession_register.yaml superseded_id — a live, standing
     # instance of currency drift in this corpus as of this writing.
-    assert 'designs/scene/combat_v30.md' in real_run['drift']
+    assert 'systems/combat/combat_v30.md' in real_run['drift']
 
 
 def test_real_corpus_finds_the_known_mass_battle_stale_pointer(real_run):
     # designs/provincial/mass_battle_integration_v30.md (a real LIVE head) cites
-    # `designs/scene/combat_v30.md` (a superseded_ids() entry) — a live, standing
+    # `systems/combat/combat_v30.md` (a superseded_ids() entry) — a live, standing
     # stale version-pointer in this corpus as of this writing (see module docstring).
     hits = [s for s in real_run['stale']
             if s['live_head'] == 'designs/provincial/mass_battle_integration_v30.md'
-            and s['ref'] == 'designs/scene/combat_v30.md']
+            and s['ref'] == 'systems/combat/combat_v30.md']
     assert hits and hits[0]['reason'] == 'superseded'
 
 

@@ -24,7 +24,7 @@ def _affords_point(w):
     its spike mode_element (an explicit point-tokened striking element, morphology-rearch Phase B2) affords a
     genuine point, and systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the
     situational gap game) — so the static-head-only check under-reports this capability for it."""
-    import systems as S
+    import combat_systems as S
     return 'point' in S.afforded_heads(w)
 
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     except Exception:
         pass
     from combatant import Combatant
-    import systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
+    import combat_systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
     import core
     import contact as CT
     checks, rule = [], '=' * 64

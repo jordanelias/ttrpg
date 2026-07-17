@@ -89,10 +89,10 @@
 | `designs/characters/character_histories_v30.md` | `systems/world/character_histories_v30.md` | PENDING |
 | `designs/characters/character_histories_v30_infill.md` | `systems/world/character_histories_v30_infill.md` | PENDING |
 | `designs/characters/character_histories_v30_skeleton.md` | `systems/world/character_histories_v30_skeleton.md` | PENDING |
-| `designs/combat/combat_design_v1.md` | `designs/scene/combat_design_v1.md` | PENDING |
+| `designs/combat/combat_design_v1.md` | `systems/combat/combat_design_v1.md` | PENDING |
 | `designs/combat/combat_design_v1_skeleton.md` | `designs/scene/combat_design_v1_skeleton.md` | PENDING |
-| `designs/combat/combat_v30.md` | `designs/scene/combat_v30.md` | PENDING |
-| `designs/combat/combat_v30_infill.md` | `designs/scene/combat_v30_infill.md` | PENDING |
+| `designs/combat/combat_v30.md` | `systems/combat/combat_v30.md` | PENDING |
+| `designs/combat/combat_v30_infill.md` | `systems/combat/combat_v30_infill.md` | PENDING |
 | `designs/combat/combat_v30_skeleton.md` | `designs/scene/combat_v30_skeleton.md` | PENDING |
 | `designs/contest/social_contest_system_v2.md` | `systems/social_contest/social_contest_system_v2.md` | PENDING |
 | `designs/contest/social_contest_system_v2_skeleton.md` | `designs/scene/social_contest_system_v2_skeleton.md` | PENDING |
@@ -854,3 +854,19 @@
 | `sim/personal/parliamentary_stay.py` | `systems/social_contest/sim/parliamentary_stay.py` |
 | `sim/personal/contest_legacy_stub.py` | `systems/social_contest/sim/contest_legacy_stub.py` |
 | `sim/personal/contest/` | `systems/social_contest/sim/contest/` |
+
+
+## 2026-07-17 — combat scene split -> systems/combat/ (P4 slice 8, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/combat_c4_draft_v0.md` | `systems/combat/combat_c4_draft_v0.md` |
+| `designs/scene/combat_design_v1.md` | `systems/combat/combat_design_v1.md` |
+| `designs/scene/combat_design_v1_index.md` | `systems/combat/combat_design_v1_index.md` |
+| `designs/scene/combat_v30.md` | `systems/combat/combat_v30.md` |
+| `designs/scene/combat_v30_index.md` | `systems/combat/combat_v30_index.md` |
+| `designs/scene/combat_v30_infill.md` | `systems/combat/combat_v30_infill.md` |
+| `sim/personal/combat.py` | `systems/combat/sim/combat.py` |
+| `designs/scene/combat_engine_v1/` | `systems/combat/combat_engine_v1/` |
+| `designs/scene/scene_combat_v1/` | `systems/combat/scene_combat_v1/` |
+| `designs/scene/combat_engine_v1/systems.py` | `systems/combat/combat_engine_v1/combat_systems.py` |

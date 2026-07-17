@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-17T18:00:20+00:00",
-    "commit_sha": "36857f1"
+    "timestamp_utc": "2026-07-17T19:39:45+00:00",
+    "commit_sha": "1c2f76e"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 213 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 238 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "1c2f76eb12",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 7: extract social_contest -> systems/social_contest/ (ED-IN-0071) (#170)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "36857f161f",
         "date": "2026-07-17",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "Multi-agent audit: mechanic audit + module adjudicator + vector audit + compliance check (#131)",
         "scope": null
-      },
-      {
-        "sha": "9b56c9d9d3",
-        "date": "2026-07-13",
-        "author": "jordanelias",
-        "subject": "[editorial] Rule governance_consolidation_v1's D1–D5 (ED-IN-0046); ratify 6 confirmed-clean PR#119 items (#130)",
-        "scope": "editorial"
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 213 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 238 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,13 +720,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "414 in-scope file(s) changed since last refresh",
+        "detail": "439 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 36857f1 (2026-07-17)",
+        "ref": "base 1c2f76e (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -736,7 +736,7 @@
         "category": "audit-family",
         "ref": "base 6e79eb6 (2026-07-17)",
         "stale": true,
-        "detail": "25 in-scope file(s) changed since last refresh",
+        "detail": "50 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -750,7 +750,7 @@
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 36857f1 (2026-07-17)",
+        "ref": "base 1c2f76e (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -766,7 +766,7 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 36857f1 (2026-07-17)",
+        "ref": "base 1c2f76e (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -2010,8 +2010,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"fieldwork\"]\n    D6[\"npcs\"]\n    D7[\"personal\"]\n    D8[\"provincial\"]\n    D9[\"scene\"]\n    D10[\"settlements\"]\n    D11[\"social_contest\"]\n    D12[\"threadwork\"]\n    D13[\"ui\"]\n    D14[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 15,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"fieldwork\"]\n    D7[\"npcs\"]\n    D8[\"personal\"]\n    D9[\"provincial\"]\n    D10[\"scene\"]\n    D11[\"settlements\"]\n    D12[\"social_contest\"]\n    D13[\"threadwork\"]\n    D14[\"ui\"]\n    D15[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 16,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
@@ -2119,57 +2119,57 @@
       {
         "name": "Personal combat",
         "availability": "partial (legacy menu)",
-        "source_head": "designs/scene/combat_engine_v1/",
+        "source_head": "systems/combat/combat_engine_v1/",
         "actions": [
           {
             "name": "Strike",
             "desc": "Allocate pool split, roll, apply damage",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Feint",
             "desc": "Commit dice to bait a pool-reduction contest",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Establish Distance",
             "desc": "Move to preferred range, contested",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Take a Breath",
             "desc": "Forfeit action to recover Stamina",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Full Guard",
             "desc": "All dice to Defence, cannot Attack",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Disarm",
             "desc": "Offence roll to force a weapon drop at Close",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Tie Up / Escape",
             "desc": "Close grapple that blocks escape; Agility to break free",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Rescue",
             "desc": "Reactive action redirecting an attack onto yourself",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Dodge",
             "desc": "Forfeit offence, full pool as passive ranged defence",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Stunt",
             "desc": "+dice to a Strike from environment/position",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           }
         ],
         "caveat": "The current head (combat_engine_v1/) auto-resolves via a sigma state-machine — no player menu. The list above is the legacy combat_v30 §4 TTRPG menu (dice-math superseded); shown as the only enumerable player-facing set."

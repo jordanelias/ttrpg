@@ -161,7 +161,7 @@ entries:
     superseded_by: ED-900
     superseded_date: 2026-06-10
     replacement: >
-      DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/
+      DEPRECATED. The ratified personal-combat resolver is systems/combat/combat_engine_v1/
       (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). The v32 proposal was the
       pre-ratification engine-replacement design that the combat_engine_v1 implementation superseded; it
       was never editorially ratified as a doc. Do not pull up as canon. Physical move to
@@ -213,7 +213,7 @@ entries:
     files_to_recheck:
       - godot/data_serialization_spec.md
 
-  - superseded_id: designs/scene/combat_v30.md
+  - superseded_id: systems/combat/combat_v30.md
     scope: "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only"
     superseded_by: ED-900
     superseded_date: 2026-06-04
@@ -222,7 +222,7 @@ entries:
       RESOLUTION superseded by combat_engine_v1; config.py supersedes engine/params/combat.md values.
       Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
     files_to_recheck:
-      - designs/scene/combat_v30.md
+      - systems/combat/combat_v30.md
 
   - superseded_id: "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)"
     scope: "Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5, any character, pool (Bonds×2)+3)"
@@ -317,14 +317,14 @@ entries:
       from a flat int 1 to a float 0.15.
     files_to_recheck:
       - designs/scene/derived_stats_v30.md   # DONE
-      - designs/scene/combat_v30.md   # DONE
-      - designs/scene/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
+      - systems/combat/combat_v30.md   # DONE
+      - systems/combat/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
       - systems/fieldwork/fieldwork_v30.md   # DONE
       - systems/threadwork/threadwork_v30.md   # DONE
       - engine/params/core.md   # already current (ED-PC-0005 pass)
       - engine/params/fieldwork.md   # DONE
       - engine/params/mass_combat.md   # DONE
-      - designs/scene/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
+      - systems/combat/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
       - sim/personal/contest_legacy_stub.py   # already current (ED-PC-0005 pass)
       - arcs/simulated/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)
       - arcs/simulated/arcs_46_55_resolved.md   # DONE — worked example renarrated (−2D → +0.30 Ob)

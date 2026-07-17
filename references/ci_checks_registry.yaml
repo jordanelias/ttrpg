@@ -184,7 +184,7 @@ ci_checks:
 
   - path: tools/export_engine_params.py
     level: 5
-    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match designs/scene/combat_engine_v1/config.py (--check mode)."
+    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match systems/combat/combat_engine_v1/config.py (--check mode)."
     paired_hook: ""
     ci_job: engine-params-roundtrip
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."

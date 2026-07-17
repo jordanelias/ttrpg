@@ -18,7 +18,7 @@ Enforces the holonic container rules on ENGINE/SIM RUNTIME code
 
 DECLARED EXCLUSIONS (measurement/dev harnesses are not runtime containers):
   * anything under a tests/ tree itself,
-  * designs/scene/combat_engine_v1/workbench/ (the measurement workbench reaches into the
+  * systems/combat/combat_engine_v1/workbench/ (the measurement workbench reaches into the
     frozen v32 validation station BY DESIGN — tagged at each insert),
   * deprecated/archives/, deprecated/.
 
@@ -37,7 +37,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file_
 # Runtime container roots this guard patrols.
 RUNTIME_ROOTS = (
     'sim',
-    'designs/scene/combat_engine_v1',
+    'systems/combat/combat_engine_v1',
     'engine',
 )
 
@@ -87,7 +87,7 @@ def check(verbose=True):
             line = src[:m.start()].count('\n') + 1
             violations.append(f"{rel}:{line}: runtime import from tests/ package")
 
-        if rel.startswith('designs/scene/combat_engine_v1/') and not rel.endswith('/config.py'):
+        if rel.startswith('systems/combat/combat_engine_v1/') and not rel.endswith('/config.py'):
             for i, raw in enumerate(src.splitlines(), 1):
                 cm = CONST_RE.match(raw)
                 if cm:

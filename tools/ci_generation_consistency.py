@@ -40,7 +40,7 @@ def canonical_docs():
         for line in fh:
             if line.lstrip().startswith("#"):
                 continue
-            for m in re.finditer(DOC_KEYS + r"\s*:\s*(designs/[^\s#]+\.md)", line):
+            for m in re.finditer(DOC_KEYS + r"\s*:\s*((?:designs|systems)/[^\s#]+\.md)", line):
                 docs.add(m.group(2))
     return sorted(d for d in docs if os.path.isfile(os.path.join(ROOT, d)))
 
@@ -59,7 +59,7 @@ def superseded_ids():
     ids = set()
     with open(SUPERSESSION, encoding="utf-8") as fh:
         for line in fh:
-            m = re.match(r"""\s*-?\s*superseded_id:\s*["']?(designs/[^\s"'#]+\.md)""", line)
+            m = re.match(r"""\s*-?\s*superseded_id:\s*["']?((?:designs|systems)/[^\s"'#]+\.md)""", line)
             if m:
                 ids.add(m.group(1))
     return ids

@@ -1412,7 +1412,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "personal_combat",
-      "doc": "designs/scene/combat_engine_v1/",
+      "doc": "systems/combat/combat_engine_v1/",
       "resolver": "d_sigma",
       "scales": [
         "personal"
@@ -1431,13 +1431,13 @@
       ],
       "gap_notes": [
         "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED \u2014 combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass.",
-        "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi\u00d72, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, sim/personal/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty).",
+        "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi\u00d72, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, systems/combat/sim/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty).",
         "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types \u2014 scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry \u00a77 had contest/battle/investigation only).",
         "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3).",
         "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them \u2014 the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat\u2192faction/NPC ripple)."
       ],
       "sources": [
-        "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]",
+        "systems/combat/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]",
         "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]",
         "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]",
         "personal-combat audit 2026-06-22 (this session) \u2014 model-correctness + drift findings folded in"

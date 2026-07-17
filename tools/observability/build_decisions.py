@@ -70,7 +70,7 @@ SWEEP_DIRS = ["designs", "systems", "canon", "params", "references", "sim", "eng
 #   - workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
 #     enumerate lane WORK ITEMS, not a path->lane ownership table.
 #   - registers/handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
-#     (e.g. HANDOFF_PC.md -> designs/scene/combat_engine_v1/) — real signal, used below,
+#     (e.g. HANDOFF_PC.md -> systems/combat/combat_engine_v1/) — real signal, used below,
 #     but only names a handful of files per lane, not a full corpus partition.
 #
 # So: a minimal prefix table, hand-built from the above signals plus each subsystem's
@@ -104,18 +104,18 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/audit/2026-06-23-mb-fidelity-critique/", "MB"),
 
     # --- PC: personal combat ---
-    ("designs/scene/combat_v30", "PC"),
-    ("designs/scene/combat_design_v1", "PC"),
-    ("designs/scene/combat_c4_draft_v0.md", "PC"),
-    ("designs/scene/combat_engine_v1/", "PC"),
-    ("designs/scene/scene_combat_v1/", "PC"),
+    ("systems/combat/combat_v30", "PC"),
+    ("systems/combat/combat_design_v1", "PC"),
+    ("systems/combat/combat_c4_draft_v0.md", "PC"),
+    ("systems/combat/combat_engine_v1/", "PC"),
+    ("systems/combat/scene_combat_v1/", "PC"),
     # derived_stats_v30 deliberately NOT mapped: it explicitly scopes itself
     # "across personal, unit, settlement, and faction scales" and CLAUDE.md
     # Section 5 flags the derived-stat schema as cross-system "IN FLUX" -- a
     # single-lane assignment would contradict this script's own
     # spans-multiple-lanes -> null policy (caught in adversarial review of
     # Phase 4 / ED-IN-0032's audit-ecosystem plan).
-    ("sim/personal/combat.py", "PC"),
+    ("systems/combat/sim/combat.py", "PC"),
     ("designs/audit/2026-06-09-personal-combat-comprehensive/", "PC"),
     ("designs/audit/2026-06-13-combat-bottomup/", "PC"),
     ("designs/audit/2026-06-16-combat-reconciliation/", "PC"),

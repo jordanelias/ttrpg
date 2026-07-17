@@ -207,16 +207,16 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
+      - "systems/combat/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
       - "systems/_architecture/complete_systems_reference.md#part-2"
-      - "designs/scene/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
-    params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
-    sim_module: designs/scene/combat_engine_v1/   # canonical engine; sim/personal/combat.py is the DEPRECATED v30 wiring
+      - "systems/combat/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
+    params: "systems/combat/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
+    sim_module: systems/combat/combat_engine_v1/   # canonical engine; systems/combat/sim/combat.py is the DEPRECATED v30 wiring
     godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
     test_status: validated   # combat_engine_v1 ratified; Godot slice (strike/wound) ported + validated 2026-06-23
     dependencies:
       mechanics: [die_rule_d10, degrees_of_success]
-    notes: "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was sim/personal/combat.py / combat_v30) per the 2026-06-22 audit."
+    notes: "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit."
 
   social_contest:
     scale: personal
@@ -495,7 +495,7 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "designs/scene/combat_v30.md#section-11"
+      - "systems/combat/combat_v30.md#section-11"
       - "designs/provincial/mass_battle_v30.md"
     sim_module: sim/provincial/units.py
     test_status: not_implemented
