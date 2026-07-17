@@ -1,6 +1,6 @@
 {
   "meta": {
-    "files_scanned": 1357,
+    "files_scanned": 1359,
     "total_open": 981,
     "by_category": {
       "ratification": 46,
@@ -7165,6 +7165,78 @@
       "lane": null
     },
     {
+      "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/collective.py:12"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/operations.py:15"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: \u00a76.1 Ontological Status canon body is empty in the doc \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/threadcut.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: Rendering Threshold = Health / 2 per \u00a76.4 \u2014 but Health-vs-",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/threadcut.py:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: practitioner registry stored at module level rather than on",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/coherence.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: deck state stored at module level \u2014 basis: World has no",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/co_movement.py:11"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
       "text": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
       "category": "assumption",
       "priority": 3,
@@ -7483,78 +7555,6 @@
       "label": "Flagged assumption (verify)",
       "locations": [
         "sim/world/npe.py:10"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/collective.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/operations.py:15"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: \u00a76.1 Ontological Status canon body is empty in the doc \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/threadcut.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: Rendering Threshold = Health / 2 per \u00a76.4 \u2014 but Health-vs-",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/threadcut.py:17"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: practitioner registry stored at module level rather than on",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/coherence.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: deck state stored at module level \u2014 basis: World has no",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/co_movement.py:11"
       ],
       "systems": [],
       "count": 1,

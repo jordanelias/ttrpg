@@ -110,8 +110,8 @@ systems:
     resolution_engine: "designs/scene/combat_engine_v1/"
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
-    design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "75d1f3f96e7068091accdb1ccf2a4014e02b2f52"
+    design_doc: systems/threadwork/threadwork_v30.md
+    canonical_sha__systems__threadwork__threadwork_v30_md: "75d1f3f96e7068091accdb1ccf2a4014e02b2f52"
     params: engine/params/threadwork.md
     canonical_sha__params__threadwork_md: "49c243108975a5a2f1d739d6a752dc6ab8364c64"
   clocks:
@@ -481,10 +481,10 @@ systems:
     index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
-    design_doc: designs/threadwork/thread_horizontal_integration_spec.md
-    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
-    index: designs/threadwork/thread_horizontal_integration_spec_index.md
-    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
+    design_doc: systems/threadwork/thread_horizontal_integration_spec.md
+    canonical_sha__systems__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
+    index: systems/threadwork/thread_horizontal_integration_spec_index.md
+    canonical_sha__systems__threadwork__thread_horizontal_integration_spec_index_md: "06781cd52882d56cd361dbe07e7155edef2bce56"
   throughline_resolutions:
     design_doc: arcs/throughline_resolutions_v30.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_md: "5aa4ea143cd4d9cec19da2991eec0eb61f3d636b"
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "89a243716e74fca64a196ed5591197622f55cab1"
+    canonical_sha__references__module_contracts_yaml: "1c2a848fb9f8aee29687b8a0147b32a151f7efa0"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

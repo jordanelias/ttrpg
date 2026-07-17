@@ -130,7 +130,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Coherence 0 NPC Transition"]
-    sim_module: sim/thread/coherence.py
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "PP-261. Coherence reaches 0 -> NPC."
 
@@ -138,7 +138,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#ED-301 Propagation"]
-    sim_module: sim/thread/coherence.py
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "TS / Coherence orthogonality."
 
@@ -332,8 +332,8 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/architecture/complete_systems_reference.md#part-8"
-      - "designs/threadwork/threadwork_v30.md#section-2-6"
-      - "designs/threadwork/threadwork_v30.md#section-3-5"
+      - "systems/threadwork/threadwork_v30.md#section-2-6"
+      - "systems/threadwork/threadwork_v30.md#section-3-5"
       - "designs/scene/fieldwork_v30.md#section-2-6"
       - "designs/scene/fieldwork_v30.md#section-5-6"
       - "designs/scene/social_contest_v30.md#section-9-4"
@@ -354,14 +354,14 @@ mechanics:
       loss: "[UNVERIFIED post-ED-912 — see knots_v30 §6.2 / C-FI-5b-coherence]"
     notes: "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc."
 
-  # ─── THREAD (sim/thread/) ────────────────────────────────────────────────
+  # ─── THREAD (systems/threadwork/sim/) ────────────────────────────────────────────────
 
   thread_leap:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
     params: "engine/params/threadwork.md"
-    sim_module: sim/thread/operations.py
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
     dependencies:
       mechanics: [die_rule_d10, coherence_track]
@@ -369,59 +369,59 @@ mechanics:
   thread_weaving:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_pulling:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_past_pulling:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_locking:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_dissolution:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_mending:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
     notes: "Depth Ob -1, immune to opposition."
 
   collective_thread_operations:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-5"]
-    sim_module: sim/thread/collective.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#section-2-5"]
+    sim_module: systems/threadwork/sim/collective.py
     test_status: not_implemented
     notes: "Multi-practitioner Thread operations."
 
   opposing_thread_operations:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-6"]
-    sim_module: sim/thread/opposing.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#section-2-6"]
+    sim_module: systems/threadwork/sim/opposing.py
     test_status: not_implemented
     dependencies:
       mechanics: [knots]
@@ -431,26 +431,26 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources:
-      - "designs/threadwork/threadwork_v30.md#part-3"
+      - "systems/threadwork/threadwork_v30.md#part-3"
       - "canon/02_canon_constraints.md#section-a-p-10"
       - "canon/02_canon_constraints.md#section-a-p-15"
-    sim_module: sim/thread/coherence.py
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "Coherence 10-to-0 track per Foundations P-10, P-15."
 
   co_movement:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-4"]
-    sim_module: sim/thread/co_movement.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-4"]
+    sim_module: systems/threadwork/sim/co_movement.py
     test_status: not_implemented
     notes: "Version C with 15 cards. Inseparability P-01 enforcement."
 
   rendering_stability:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
-    sim_module: sim/thread/rendering.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
+    sim_module: systems/threadwork/sim/rendering.py
     test_status: not_implemented
     dependencies:
       mechanics: [coherence_track]
@@ -459,8 +459,8 @@ mechanics:
   threadcut_beings:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-6"]
-    sim_module: sim/thread/threadcut.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-6"]
+    sim_module: systems/threadwork/sim/threadcut.py
     test_status: not_implemented
     notes: "P-06 - no layer-2 self-rendering."
 
@@ -778,7 +778,7 @@ mechanics:
   rs_track:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
     sim_module: sim/peninsular/rs_track.py
     test_status: not_implemented
     notes: "Rendering Stability world-track."

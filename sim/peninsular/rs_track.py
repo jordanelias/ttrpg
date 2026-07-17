@@ -1,12 +1,12 @@
 """
 sim/peninsular/rs_track.py — Rendering Stability world-track
 
-Canon source: designs/threadwork/threadwork_v30.md Part 5
+Canon source: systems/threadwork/threadwork_v30.md Part 5
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/thread/rendering
+  - systems/threadwork/sim/rendering
 
 Entry points:
   - apply_rs_delta(delta: int, source: str, world: GameState) -> int

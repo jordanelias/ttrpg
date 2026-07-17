@@ -280,7 +280,7 @@ modules:
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
-    doc: designs/threadwork/threadwork_v30.md
+    doc: systems/threadwork/threadwork_v30.md
     scales: [personal, thread]
     resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
     consumes: []

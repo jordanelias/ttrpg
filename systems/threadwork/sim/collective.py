@@ -1,7 +1,7 @@
 """
-sim/thread/collective.py — Collective Thread operations (multi-practitioner)
+systems/threadwork/sim/collective.py — Collective Thread operations (multi-practitioner)
 
-Canon source: designs/threadwork/threadwork_v30.md §2.5 Collective Operations
+Canon source: systems/threadwork/threadwork_v30.md §2.5 Collective Operations
 
 Implements:
   - attempt_collective_operation: §2.5 procedure. All practitioners Leap
@@ -15,8 +15,8 @@ Implements:
  .cognition when set; default to .spirit for practitioner-only contexts.]
 
 Dependencies:
-  - sim/thread/operations
-  - sim/thread/coherence (apply_coherence_delta per-practitioner)
+  - systems/threadwork/sim/operations
+  - systems/threadwork/sim/coherence (apply_coherence_delta per-practitioner)
 
 Entry points:
   - attempt_collective_operation(actors, op_type, target, world) -> CollectiveResult
@@ -26,7 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from sim.thread.operations import (
+from systems.threadwork.sim.operations import (
     attempt_weaving, attempt_pulling, attempt_locking, attempt_dissolution,
     attempt_mending, attempt_past_pulling, attempt_leap,
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
@@ -175,7 +175,7 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     # Apply Coherence cost to each successful Leap participant per §3.2 + §2.5
     # ("Co-Movement / Coherence fires per-practitioner per §3.2 — each
     # suspended their own layer 2")
-    from sim.thread.coherence import apply_coherence_delta
+    from systems.threadwork.sim.coherence import apply_coherence_delta
     coh_delta = -1 if scale in ("Relational", "Field", "Territorial") else -2 if scale in ("Structural", "Foundational") else 0
     if degree in ("Partial", "Failure"):
         coh_delta -= 1

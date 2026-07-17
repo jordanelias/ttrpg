@@ -108,7 +108,7 @@ From GitHub code search — includes both "Theocracy Counter" and standalone `\b
 | designs/world/southernmost_v30.md | |
 | designs/scene/combat_v30.md | |
 | systems/npcs/npc_foils_v30.md | |
-| designs/threadwork/threadwork_v30_infill.md | |
+| systems/threadwork/threadwork_v30_infill.md | |
 | designs/arcs/narrative_scenario_chains.md | |
 | designs/arcs/gm_ref/arcs_10_18.md | |
 | designs/arcs/gm_ref/arcs_36_40.md | |

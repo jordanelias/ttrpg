@@ -495,7 +495,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
         line: 135
         value: 245
         pattern: named_bound
-        context: "`designs/world/calamity_radiation_v30.md` (MS band → territory effect; radiation matrix) · `designs/threadwork/threadwor"
+        context: "`designs/world/calamity_radiation_v30.md` (MS band → territory effect; radiation matrix) · `systems/threadwork/threadwor"
   gm_advisory:
     distinct_values: [3]
     file_count: 1
@@ -737,17 +737,17 @@ Minimum 1 real-world session per in-game season. No maximum — a season may spa
         value: 50
         pattern: known_clock_threshold
         context: "> **Clarification (PP-035):** \"Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction"
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 246
         value: 40
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 246
         value: 20
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 784
         value: 10
         pattern: known_clock_threshold
@@ -1024,37 +1024,37 @@ Companion cap 2. Connection action during social scene: requires Disp +3, not fa
         value: 50
         pattern: known_clock_threshold
         context: "## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 238
         value: 40
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 238
         value: 20
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 310
         value: 60
         pattern: known_clock_threshold
         context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 765
         value: 10
         pattern: known_clock_threshold
         context: "| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (t"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 772
         value: 0
         pattern: known_clock_threshold
         context: "Rendering Stability replaces Thread Tension on the board game track. Invert all Thread Tension references: where Thread "
-      - file: "designs/threadwork/threadwork_v30_infill.md"
+      - file: "systems/threadwork/threadwork_v30_infill.md"
         line: 74
         value: 60
         pattern: known_clock_threshold
         context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
-      - file: "designs/threadwork/threadwork_v30_infill.md"
+      - file: "systems/threadwork/threadwork_v30_infill.md"
         line: 157
         value: 0
         pattern: known_clock_threshold

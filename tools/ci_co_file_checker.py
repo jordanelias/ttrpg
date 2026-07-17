@@ -34,8 +34,16 @@ print()
 violations = []
 
 # ── Rule 1: design doc change → canonical_sources.yaml ───────────────────────
+# A pure rename (git mv with no content edit) appears in `changed` at its new path
+# but has NO added lines in the diff — the co-file rules are about *content* changes
+# (mechanical values → params; source authority → canonical_sources), so a path-only
+# move must not trip them. Load-bearing for the ED-IN-0071 P4 reorg, which relocates
+# params-bearing _v30 docs wholesale as renames. A rename that ALSO edits content still
+# has added lines, so it stays governed.
+_added = ci_common.get_added_lines(_mode)
 design_docs = [f for f in changed
-               if re.match(r'(?:designs|systems)/.+_v30\.md$', f) and 'infill' not in f]
+               if re.match(r'(?:designs|systems)/.+_v30\.md$', f) and 'infill' not in f
+               and f in _added]
 if design_docs and 'references/canonical_sources.yaml' not in changed:
     violations.append(
         f"DESIGN DOCS changed but canonical_sources.yaml not in commit.\n"

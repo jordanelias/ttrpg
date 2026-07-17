@@ -2162,7 +2162,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "threadwork",
-      "doc": "designs/threadwork/threadwork_v30.md",
+      "doc": "systems/threadwork/threadwork_v30.md",
       "resolver": "dice_pool",
       "scales": [
         "personal",

@@ -1,7 +1,7 @@
 """
-sim/thread/co_movement.py — Co-Movement Version C with 15 cards (ED-577)
+systems/threadwork/sim/co_movement.py — Co-Movement Version C with 15 cards (ED-577)
 
-Canon source: designs/threadwork/threadwork_v30.md Part 4 (Co-Movement)
+Canon source: systems/threadwork/threadwork_v30.md Part 4 (Co-Movement)
 
 Implements the 15-card canonical deck (CM-01 through CM-15) per §4.3
 ED-577. CM-16/17/18 are Mending-specific additions per §7.1; not
@@ -13,7 +13,7 @@ implemented here (will land with Mending sim integration). Deck is global
  reserved for future schema migration.]
 
 Dependencies:
-  - sim/thread/operations (target of Co-Movement firing)
+  - systems/threadwork/sim/operations (target of Co-Movement firing)
   - sim/autoload/dice_engine (rng)
 
 Entry points:
@@ -130,7 +130,7 @@ def draw_comovement_card(op_type: str, depth: str = "Object", world=None,
 def apply_comovement_effects(card: CoMovementCard, op_result, world) -> dict:
     """Apply the card's MS delta + side effects.
 
-    op_result: the OperationResult from sim/thread/operations (for chaining
+    op_result: the OperationResult from systems/threadwork/sim/operations (for chaining
                MS effects). Not currently mutated; included for future
                territory-specific side-effect routing.
 

@@ -51,7 +51,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   assumed on his behalf** (an earlier attempt to self-answer them and attribute the answers to
   Jordan was correctly blocked and reverted): (1) rollout order — Jordan flagged a real gap
   ("Where is settlement management, faction actions, field investigations, threadwork?"); §8
-  extended to add `faction_action.py`/`sim/territory/*`/`sim/thread/*` as waves 5–7 (mass battle
+  extended to add `faction_action.py`/`sim/territory/*`/`systems/threadwork/sim/*` as waves 5–7 (mass battle
   stays wave 4, campaign composition now wave 8); field investigation explicitly excluded, not
   omitted — its `sim/` implementation is still `[PROVISIONAL]` stub-only; (2) Wave 1 CI burn-in:
   full report-only, no deviation from the existing ratchet; (3) `mc_v18` full-campaign runs: never
@@ -175,7 +175,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   residual; ED-WR-0005 still carries C-TW-3 + C-TW-4/6/8/10/11. F7/seed-0 goldens unmoved (island).
 - **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk
   sim truth-alignment deferred from Stratum A (resolution_plan_v1.md §9). **ED-871 CLOSED
-  end-to-end** — `sim/thread/operations.py` `attempt_mending` cost −1 → 0 + Mending exempted from
+  end-to-end** — `systems/threadwork/sim/operations.py` `attempt_mending` cost −1 → 0 + Mending exempted from
   the blanket Partial/Failure penalty (all degrees net 0), with a pinned test
   `sim/tests/test_thread_mending_ed871.py` (threadwork had zero coverage). **CI-75 dead constant**
   `CI_PHASE_TRANSITION=75` removed from `sim/peninsular/ci_track.py` (CI75-9, under the

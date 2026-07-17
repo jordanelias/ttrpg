@@ -163,7 +163,7 @@ class World:
     # check type at runtime.
     # [canonical: proposals/stub_infill_plan.md Amendment 2026-05-19
     #  "schema-migration commit that adds the missing registries"]
-    practitioners: dict = field(default_factory=dict)            # actor_id → CoherenceState (from sim/thread/coherence)
+    practitioners: dict = field(default_factory=dict)            # actor_id → CoherenceState (from systems/threadwork/sim/coherence)
     insurgencies: dict = field(default_factory=dict)             # insurgency_id → InsurgencyRecord (from sim/world/insurgency_pipeline)
     uncontrolled_streaks: dict = field(default_factory=dict)     # frozenset[tid] → consecutive seasons (from sim/world/insurgency_pipeline)
     npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from sim/world/npe)
@@ -181,8 +181,8 @@ class World:
     knot_id_counter: int = 0                                      # incrementing id source for Knot generation
     territory_infrastructure: dict = field(default_factory=dict) # territory_id → InfrastructureState (from sim/territory/infrastructure)
     npc_drift_state: dict = field(default_factory=dict)          # territory_id → drift float (from sim/territory/temperaments)
-    threadcut_beings: dict = field(default_factory=dict)         # being_id → ThreadcutState (from sim/thread/threadcut)
-    comovement_deck: dict = field(default_factory=lambda: {'remaining': [], 'discard': []})  # global deck state (from sim/thread/co_movement)
+    threadcut_beings: dict = field(default_factory=dict)         # being_id → ThreadcutState (from systems/threadwork/sim/threadcut)
+    comovement_deck: dict = field(default_factory=lambda: {'remaining': [], 'discard': []})  # global deck state (from systems/threadwork/sim/co_movement)
     # ─── Schema migration #3 — 2026-06-23 (settlement registry, audit gap G1) ──
     # A province now holds its canonical 1-3 settlements (settlement_layer
     # §1.1/§2.1) instead of the prior 1:1 territory->settlement stub. Same
@@ -319,7 +319,7 @@ def restore_world(snapshot: dict) -> World:
     # ─── Schema migration #1 registries ──────────────────────────────────
     # Late-import each owning module's dataclass for .from_dict
     if 'practitioners' in snapshot:
-        from sim.thread.coherence import CoherenceState
+        from systems.threadwork.sim.coherence import CoherenceState
         w.practitioners = {k: CoherenceState.from_dict(v)
                             for k, v in snapshot['practitioners'].items()}
     if 'insurgencies' in snapshot:
@@ -359,7 +359,7 @@ def restore_world(snapshot: dict) -> World:
     if 'npc_drift_state' in snapshot:
         w.npc_drift_state = dict(snapshot['npc_drift_state'])
     if 'threadcut_beings' in snapshot:
-        from sim.thread.threadcut import ThreadcutState
+        from systems.threadwork.sim.threadcut import ThreadcutState
         w.threadcut_beings = {k: ThreadcutState.from_dict(v)
                                for k, v in snapshot['threadcut_beings'].items()}
     if 'comovement_deck' in snapshot:

@@ -1,5 +1,5 @@
 """
-sim.thread — Thread layer operations and substrate mechanics
+systems.threadwork.sim — Thread layer operations and substrate mechanics
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
