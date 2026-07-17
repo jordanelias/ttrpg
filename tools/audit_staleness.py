@@ -49,14 +49,14 @@ FAMILIES = [
         # Repointed 2026-07-14 (ED-IN-0064) from the stale 2026-04-29 baseline to the fresh
         # gameplay-subsystem observatory run — the first real run since the pipeline dispatcher landed.
         "artifact_paths": ["designs/audit/2026-07-14-gameplay-subsystem-observatory/"],
-        "scope_prefixes": ("designs/", "canon/", "params/", "references/"),
+        "scope_prefixes": ("designs/", "canon/", "engine/params/", "references/"),
     },
     {
         "name": "decisions-digest",
         "artifact_paths": ["tools/observability/decisions.json"],
-        # per build_decisions.py's own header: "corpus sweep (designs/ canon/ params/
+        # per build_decisions.py's own header: "corpus sweep (designs/ canon/ engine/params/
         # references/ sim/) for explicit markers".
-        "scope_prefixes": ("designs/", "canon/", "params/", "references/", "sim/"),
+        "scope_prefixes": ("designs/", "canon/", "engine/params/", "references/", "sim/"),
     },
     {
         "name": "proposals-register",

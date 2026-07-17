@@ -25,7 +25,7 @@ terms:
     authority: "ED-706 / VTM-STRIKE-2026-04-19"
     residual_count: 18
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/provincial/victory_v30.md (5) + params/bg/victory.md (4)"
+    residual_concentration: "designs/provincial/victory_v30.md (5) + engine/params/bg/victory.md (4)"
 
   - term: "Vaynard Thread Mastery"
     canonical_full: "Vaynard Thread Mastery"
@@ -35,7 +35,7 @@ terms:
     authority: "ED-706 / VTM-STRIKE-2026-04-19"
     residual_count: 2
     residual_at_audit: "2026-04-30"
-    residual_concentration: "params/bg/victory.md (2)"
+    residual_concentration: "engine/params/bg/victory.md (2)"
 
   - term: "Cultural Reformation"
     canonical_full: "Cultural Reformation"
@@ -67,7 +67,7 @@ terms:
     authority: "PP-232"
     residual_count: 5
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/provincial/mass_battle_v30.md (2) + params/mass_combat.md (2) + designs/provincial/peninsular_strain_v30.md (1)"
+    residual_concentration: "designs/provincial/mass_battle_v30.md (2) + engine/params/mass_combat.md (2) + designs/provincial/peninsular_strain_v30.md (1)"
 
   - term: "Thread Depth"
     canonical_full: "Thread Depth"
@@ -141,7 +141,7 @@ terms:
     authority: "PP-691 (formal censure); session-log P1 directive"
     residual_count: 29
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/npcs/npc_behavior_v30.md (5) + params/core.md (4) + designs/provincial/faction_layer_v30.md (3); diffuse — 14 docs total"
+    residual_concentration: "designs/npcs/npc_behavior_v30.md (5) + engine/params/core.md (4) + designs/provincial/faction_layer_v30.md (3); diffuse — 14 docs total"
 
 
   # ─────────────── Silo cross-contamination fixes (2026-05-08) ───────────────
@@ -154,7 +154,7 @@ terms:
     authority: "vocabulary audit — silo isolation directive"
     residual_count: 89
     residual_at_audit: "2026-05-08"
-    residual_concentration: "params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + 87 remaining files"
+    residual_concentration: "engine/params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + 87 remaining files"
 
   - term: "Conviction Track (territory-context)"
     canonical_full: "Piety Track (PT)"
@@ -188,7 +188,7 @@ terms:
     authority: "vocabulary audit — silo isolation directive"
     residual_count: 5
     residual_at_audit: "2026-05-08"
-    residual_concentration: "params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + infill/v2 files pending"
+    residual_concentration: "engine/params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + infill/v2 files pending"
 
 # ─────────────────────────────────────────────────────────────────────
 # Reference cross-links

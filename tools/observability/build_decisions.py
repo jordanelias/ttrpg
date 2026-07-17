@@ -8,7 +8,7 @@ corpus from many sessions — into ONE deduplicated, categorized, prioritized li
 so you can see (and clear) the decisions you actually still owe.
 
 Sources:
-  - corpus sweep (designs/ canon/ params/ references/ sim/) for explicit markers:
+  - corpus sweep (designs/ canon/ engine/params/ references/ sim/) for explicit markers:
         [OPEN — Jordan] · ruling pending · pending ratification · awaiting ratification
         [GAP …] · F1/F2 class · registry §10 candidate · [ASSUMPTION …]
   - references/module_contracts.yaml  (gap_notes, with affected systems)
@@ -74,7 +74,7 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godo
 #     but only names a handful of files per lane, not a full corpus partition.
 #
 # So: a minimal prefix table, hand-built from the above signals plus each subsystem's
-# obvious subject-matter grouping (sim/ subpackages, params/ files, designs/ subdirs).
+# obvious subject-matter grouping (sim/ subpackages, engine/params/ files, designs/ subdirs).
 # Matched by LONGEST-PREFIX-WINS (a file-specific entry beats its parent directory's).
 # Deliberately NOT exhaustive: designs/audit/**, references/** (module_contracts.yaml,
 # values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), proposals/**,
@@ -92,7 +92,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/provincial/military_layer_v30", "MB"),
     ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
     ("proposals/multiunit_envelopment_plan.md", "MB"),
-    ("params/mass_combat.md", "MB"),
+    ("engine/params/mass_combat.md", "MB"),
     ("sim/provincial/massbattle.py", "MB"),
     ("sim/provincial/units.py", "MB"),
     ("sim/provincial/tactic_cards.py", "MB"),
@@ -138,8 +138,8 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/scene/social_contest_system_v2", "SC"),
     ("sim/personal/contest/", "SC"),
     ("sim/personal/contest_legacy_stub.py", "SC"),
-    ("params/contest.md", "SC"),
-    ("params/contest_extensions.md", "SC"),
+    ("engine/params/contest.md", "SC"),
+    ("engine/params/contest_extensions.md", "SC"),
     ("designs/audit/2026-06-01-contest-redesign/", "SC"),
     ("designs/audit/2026-06-03-contest-groundup/", "SC"),
     ("designs/audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
@@ -157,7 +157,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("sim/personal/fieldwork.py", "FI"),
     ("sim/personal/investigation.py", "FI"),
     ("sim/personal/knots.py", "FI"),
-    ("params/fieldwork.md", "FI"),
+    ("engine/params/fieldwork.md", "FI"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
 
     # --- FA: faction actions ---
@@ -190,24 +190,24 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("sim/provincial/varfell_territorial_acquisition.py", "FA"),
     ("sim/personal/parliamentary_stay.py", "FA"),
     ("sim/personal/parliamentary_vote.py", "FA"),
-    ("params/bg/faction_actions.md", "FA"),
-    ("params/bg/parliament.md", "FA"),
-    ("params/bg/ministry.md", "FA"),
-    ("params/bg/ci_seizure.md", "FA"),
-    ("params/bg/royal_assassination.md", "FA"),
-    ("params/bg/institutions.md", "FA"),
-    ("params/bg/tensions_deck.md", "FA"),
-    ("params/factions.md", "FA"),
-    ("params/factions_personal.md", "FA"),
-    ("params/factions/", "FA"),
+    ("engine/params/bg/faction_actions.md", "FA"),
+    ("engine/params/bg/parliament.md", "FA"),
+    ("engine/params/bg/ministry.md", "FA"),
+    ("engine/params/bg/ci_seizure.md", "FA"),
+    ("engine/params/bg/royal_assassination.md", "FA"),
+    ("engine/params/bg/institutions.md", "FA"),
+    ("engine/params/bg/tensions_deck.md", "FA"),
+    ("engine/params/factions.md", "FA"),
+    ("engine/params/factions_personal.md", "FA"),
+    ("engine/params/factions/", "FA"),
 
     # --- WR: world ---
     ("designs/world/", "WR"),
     ("designs/threadwork/", "WR"),
     ("designs/scene/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
-    ("params/threadwork.md", "WR"),
-    ("params/threadwork_superseded.md", "WR"),
-    ("params/southernmost.md", "WR"),
+    ("engine/params/threadwork.md", "WR"),
+    ("engine/params/threadwork_superseded.md", "WR"),
+    ("engine/params/southernmost.md", "WR"),
     ("sim/world/", "WR"),
     ("sim/thread/", "WR"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
@@ -228,7 +228,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/provincial/peninsular_strain_v30", "SE"),
     ("sim/territory/", "SE"),
     ("sim/peninsular/", "SE"),
-    ("params/bg/geography.md", "SE"),
+    ("engine/params/bg/geography.md", "SE"),
     ("designs/audit/2026-06-22-territory-settlement-audit/", "SE"),
 
     # --- IN: infrastructure / cross-cutting ---

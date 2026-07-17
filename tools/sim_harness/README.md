@@ -52,7 +52,7 @@ garbage output as if it were a real, if skewed, distribution.
   `skills/valoria-dice-model/valoria_dice.py`'s **public** API (`roll_pool`, `classify_outcome` — added
   to that module so this package no longer depends on its underscore-prefixed internals). Chosen
   deliberately as the simplest, lowest-risk demo. Distinguishes canon-verified parameters (TN, Ob — real
-  `params/core.md` table values, checked live via `verify_citation`) from declared test-scenario values
+  `engine/params/core.md` table values, checked live via `verify_citation`) from declared test-scenario values
   (pool size, which is character-build-dependent and has no single fixed canonical value) — every
   parameter carries a provenance string, and `Harness.run()` raises if any doesn't. Also surfaces a real
   finding: dice-pool resolution has **no row of its own** in `references/module_contracts.yaml` (grepped
@@ -114,7 +114,7 @@ reads `ADAPTER_REGISTRY`, not a hardcoded name), not just documented.
 ## Provisional adapters — testing pre-canonical mechanics
 
 The Gate-0 demo (`dice_pool_demo.py`) only proves the harness against already-ratified canon
-(`params/core.md`, via `verify_citation`). That's half the original ask — the other half was explicitly
+(`engine/params/core.md`, via `verify_citation`). That's half the original ask — the other half was explicitly
 "have it so that we can insert/swap in/plug in provisional test code" — and it was NOT concretely proven
 by Gate-0: `canon_row` was a required `str` with no `None`-handling anywhere in `harness.py`, so an
 adapter for a proposed-but-not-yet-ratified mechanic would have crashed on its first resolver call.

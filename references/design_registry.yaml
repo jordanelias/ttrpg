@@ -30,12 +30,12 @@ registry:
   core_engine:
     system: core_engine
     mode: ALL
-    canonical_v30: params/core.md
+    canonical_v30: engine/params/core.md
     skeleton: null
     infill: null
     atomized: not_applicable
     predecessor: null
-    params: params/core.md
+    params: engine/params/core.md
     notes: >
       No design doc layer. params_core.md IS the authoritative record.
       No rename needed (params files are not versioned by filename).
@@ -43,12 +43,12 @@ registry:
   characters:
     system: characters
     mode: TTRPG
-    canonical_v30: params/core.md
+    canonical_v30: engine/params/core.md
     skeleton: null
     infill: null
     atomized: not_applicable
     predecessor: null
-    params: params/core.md
+    params: engine/params/core.md
     notes: "Merged into core_engine. No separate design doc."
 
   character_histories:
@@ -70,14 +70,14 @@ registry:
     infill: designs/threadwork/threadwork_v30_infill.md
     atomized: complete
     predecessor: designs/threadwork/threadwork_v25_historical.md
-    params: params/threadwork.md
+    params: engine/params/threadwork.md
 
   # ─── COMBAT ────────────────────────────────────────────────────────────────
   # ⚠ SUPERSEDED (2026-07-12, ED-IN-0038): this entry describes the pre-engine v30 doc, which
   # CLAUDE.md §4 flags PARTIALLY SUPERSEDED. The live personal-combat head is
   # designs/scene/combat_engine_v1/ (a Python resolver package with its own .md design docs —
   # see CURRENT.md) — it does not fit this registry's single-doc index/infill model and is not
-  # tracked here. params/combat.md no longer exists (deprecated 2026-06-04, see
+  # tracked here. engine/params/combat.md no longer exists (deprecated 2026-06-04, see
   # references/canonical_sources.yaml). Entry retained for the historical v30 doc only; do not
   # atomize combat_engine_v1 via valoria-atomizer.
   combat:
@@ -99,7 +99,7 @@ registry:
     infill: designs/provincial/strategic_layer_v30_infill.md
     atomized: complete
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    params: params/board_game.md
+    params: engine/params/board_game.md
 
   victory:
     system: victory
@@ -130,7 +130,7 @@ registry:
     infill: designs/provincial/mass_battle_v30_infill.md
     atomized: complete
     predecessor: designs/mass_combat/mass_battle_v3.md
-    params: params/mass_combat.md
+    params: engine/params/mass_combat.md
 
   # ─── SOCIAL / DEBATE ───────────────────────────────────────────────────────
   social_debate:
@@ -141,7 +141,7 @@ registry:
     infill: designs/scene/social_contest_v30_infill.md
     atomized: complete
     predecessor: designs/scene/social_contest_system_v2.md
-    params: params/contest.md
+    params: engine/params/contest.md
 
   # ─── FIELDWORK (mode-split) ─────────────────────────────────────────────────
   fieldwork:
@@ -209,7 +209,7 @@ registry:
     infill: designs/architecture/scale_transitions_v30_infill.md
     atomized: complete
     predecessor: designs/hybrid/scale_transitions_design_v1.md
-    params: params/scale_transitions.md
+    params: engine/params/scale_transitions.md
 
   hybrid_gaps:
     system: scale_transitions
@@ -248,11 +248,11 @@ registry:
     system: factions
     mode: TTRPG
     canonical_v30: designs/provincial/factions_personal_v30.md
-    skeleton: params/factions_personal.md
-    infill: params/factions_personal.md
+    skeleton: engine/params/factions_personal.md
+    infill: engine/params/factions_personal.md
     atomized: complete
     predecessor: deprecated/compilation/v0.14/stage6_factions_deprecated.md
-    params: params/factions.md
+    params: engine/params/factions.md
     notes: >
       Source is compilation/stage6, which is unverified. v30 rename BLOCKED
       until a design-layer doc is created from stage6 content. Flag for design session.
@@ -266,7 +266,7 @@ registry:
     infill: designs/provincial/strategic_layer_v30_infill.md_ttrpg.md
     atomized: not_applicable
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    params: params/factions.md
+    params: engine/params/factions.md
     notes: "BG/Hybrid faction mechanics live in board_game_v30."
 
   # ─── CAMPAIGN MODES ────────────────────────────────────────────────────────
@@ -274,11 +274,11 @@ registry:
     system: campaign_modes
     mode: ALL
     canonical_v30: designs/architecture/campaign_modes_v30.md
-    skeleton: params/factions_personal.md
-    infill: params/factions_personal.md
+    skeleton: engine/params/factions_personal.md
+    infill: engine/params/factions_personal.md
     atomized: complete
     predecessor: deprecated/compilation/v0.14/stage12_campaign_modes_deprecated.md
-    params: params/factions_personal.md
+    params: engine/params/factions_personal.md
     notes: >
       Source is compilation/stage12, unverified. v30 rename BLOCKED
       until design-layer doc created.
@@ -289,11 +289,11 @@ registry:
     system: southernmost
     mode: TTRPG
     canonical_v30: designs/world/southernmost_v30.md
-    skeleton: params/southernmost.md
-    infill: params/southernmost.md
+    skeleton: engine/params/southernmost.md
+    infill: engine/params/southernmost.md
     atomized: complete
     predecessor: deprecated/compilation/v0.14/stage4_southernmost_deprecated.md
-    params: params/southernmost.md
+    params: engine/params/southernmost.md
     notes: >
       Source is compilation/stage4, unverified. v30 rename BLOCKED
       until design-layer doc created. ED-048 open.
@@ -308,7 +308,7 @@ registry:
     infill: designs/world/worldbuilding_v30_infill.md
     atomized: complete
     predecessor: designs/worldbuilding/worldbuilding_integration_v3.md
-    params: params/campaign_modes.md
+    params: engine/params/campaign_modes.md
 
   # ─── NPCs ──────────────────────────────────────────────────────────────────
   npc_roster:

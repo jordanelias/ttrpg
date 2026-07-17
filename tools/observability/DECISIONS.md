@@ -17,10 +17,10 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 | **SC** — Social contest | 5 | 0 | 2 | 7 |
 | **FA** — Faction actions | 3 | 0 | 64 | 67 |
 | **WR** — World | 0 | 0 | 8 | 8 |
-| **IN** — Infrastructure / cross-cutting | 2 | 1 | 8 | 11 |
+| **IN** — Infrastructure / cross-cutting | 2 | 1 | 10 | 13 |
 | **GO** — Godot | 9 | 2 | 8 | 19 |
 | **SE** — Settlements | 0 | 0 | 5 | 5 |
-| _unassigned_ (`lane: null`) | 282 | 32 | 383 | 697 |
+| _unassigned_ (`lane: null`) | 282 | 32 | 381 | 695 |
 
 ## By category
 
@@ -246,7 +246,7 @@ _These are NOT open — shown so stale references don't read as live decisions (
 - **PP-687-001** — Doc 08 §1 [REDACTED-LEGACY-NAME, canon=Key] (categorical aligned/neutral/contradicted projection) → _[REDACTED-LEGACY-NAME, canon=Key] superseded by Key.impact_vector — continuous signed projection onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype becomes _
 - **PP-687-002** — Doc 12 Political Dynamics — bespoke event records in procedures A-E → _Procedures A-E rewrite to consume Keys (Phase B Stage 1). Procedure A reads Memory Keys filtered by axis-relevance. Procedures B-D read scene_event and da_outco_
 - **PP-687-003** — NPC Memory record bespoke schema (per npc_behavior_v30) → _NPC.memory becomes list of Key references with per-NPC salience field (no longer per-NPC bespoke event copies). Memory Query API §4.4 indexes by axis-relevance _
-- **PP-686-001** — params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap) → _Ethical Framework Modifiers superseded by triadic decomposition:  mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier clamp_
+- **PP-686-001** — engine/params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap) → _Ethical Framework Modifiers superseded by triadic decomposition:  mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier clamp_
 - **designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md** — 2026-06-06 capstone master workplan (W-register, §8 kernel framing, Waves 0-1 + K8 commission) → _designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md is THE master. The 06-06 approved content is carried into v3 with live status; the 06-_
 - **designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md** — Workplan R2 (Phases A-E, keystones K-1/2/3, the per-system ritual, the carried docket) → _Carried into master workplan v3 (designs/audit/2026-06-10-master-workplan-v3/). v3 §0 also de-stales R2's carried docket (combat-v32 ratify / OWN-4 resolved; OW_
 - **valoria_delta_workplan_2026-06-09.md** — Same-day delta workplan (never separately committed; an uploaded session artifact) → _Superseded first by R2 (its own banner), then by master workplan v3. Its D-2 'M4 BUILT (L1980-2483)' claim is FALSE (evening whole-file hook scan; M4 unbuilt = _
@@ -255,7 +255,7 @@ _These are NOT open — shown so stale references don't read as live decisions (
 - **designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md** — NERS verdict on the combat_v32 proposal (the index-drift orphan, registered to no concept) → _DEPRECATED as a forward-looking verdict — it diagnosed a proposal the project did not ratify; combat_engine_v1 is the ratified resolver. Retained as the honest _
 - **godot/implementation_sequence.md** — Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list) → _PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI (godot/godot_conversion_strategy_v1.md). The scene-tree and transition_
 - **godot/data_serialization_spec.md** — Godot .tres schemas derived from the retired sim_framework/state.py (framing only) → _FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str_
-- **designs/scene/combat_v30.md** — combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only → _PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes p_
+- **designs/scene/combat_v30.md** — combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only → _PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes e_
 - **PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)** — Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5,  → _ED-912 (Jordan ruling 2026-06-28) canonizes: Disposition is a flat −5..+5 (NOT Bonds-capped; Bonds ≥ 5 is a separate explicit Knot prerequisite), resolved via a_
 - **PP-421 (CI ceiling 75-freeze)** — CI ceiling 75 (freeze + territorial-seizure phase transition) as the Church phase-transition/victory model → _CI runs 0-100 with no freeze; milestones 40/55/65/80/100 (ci_political_v30 §2.1); Mass Seizure one-shot at CI >= 60 (victory_v30 §3.2); Theocracy Unification At_
 - **registers/mechanics_index.yaml mass_battle entry (not_implemented; 'v17 M3 has <5% of v22 feature surface')** — Pre-audit mass-battle status: the engine treated as an unimplemented <5% stub → _ED-MB-0001 executed the movement/pathing audit (ED-1096) fix-plan end-to-end plus a 5-dimension adversarial review — envelop/sweep/kite work on the live default_

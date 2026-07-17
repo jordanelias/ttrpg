@@ -120,7 +120,7 @@ class CanonResolver:
         """Confirm doc_relpath is cited in the resolved row AND that
         expected_substring appears verbatim in doc_relpath's current text. This is
         the mechanism an adapter uses to trust one specific canon-derived constant
-        (e.g. a table row in params/core.md) instead of hardcoding it: if the doc
+        (e.g. a table row in engine/params/core.md) instead of hardcoding it: if the doc
         moves, the citation is dropped from CURRENT.md, or the cited text changes,
         this raises CanonGapError rather than silently returning a stale value.
 

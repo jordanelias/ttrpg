@@ -77,8 +77,8 @@ for doc in design_docs:
     # Extract system name from path: designs/{category}/{system}_v30.md
     basename = os.path.basename(doc).replace('_v30.md', '')
     params_candidates = [
-        f'params/{basename}.md',
-        f'params/{basename.replace("_design","")}.md',
+        f'engine/params/{basename}.md',
+        f'engine/params/{basename.replace("_design","")}.md',
     ]
     existing = [p for p in params_candidates if os.path.exists(p)]
     if not existing:

@@ -709,3 +709,53 @@
 |---|---|
 | `references/engine_params/` | `engine/engine_params/` |
 | `references/engine_params/combat_engine_v1.json` | `engine/engine_params/combat_engine_v1.json` |
+
+
+## 2026-07-16 — params/ -> engine/params/ (ED-IN-0071 P3; pointers for prose refs)
+
+| old path | new path |
+|---|---|
+| `params/` | `engine/params/` |
+| `params/bg/ci_seizure.md` | `engine/params/bg/ci_seizure.md` |
+| `params/bg/clocks.md` | `engine/params/bg/clocks.md` |
+| `params/bg/core.md` | `engine/params/bg/core.md` |
+| `params/bg/ed_resolutions.md` | `engine/params/bg/ed_resolutions.md` |
+| `params/bg/faction_actions.md` | `engine/params/bg/faction_actions.md` |
+| `params/bg/geography.md` | `engine/params/bg/geography.md` |
+| `params/bg/institutions.md` | `engine/params/bg/institutions.md` |
+| `params/bg/military.md` | `engine/params/bg/military.md` |
+| `params/bg/ministry.md` | `engine/params/bg/ministry.md` |
+| `params/bg/npc_priority_trees.md` | `engine/params/bg/npc_priority_trees.md` |
+| `params/bg/npcs_special.md` | `engine/params/bg/npcs_special.md` |
+| `params/bg/parliament.md` | `engine/params/bg/parliament.md` |
+| `params/bg/phases.md` | `engine/params/bg/phases.md` |
+| `params/bg/royal_assassination.md` | `engine/params/bg/royal_assassination.md` |
+| `params/bg/stress_patches.md` | `engine/params/bg/stress_patches.md` |
+| `params/bg/tensions_deck.md` | `engine/params/bg/tensions_deck.md` |
+| `params/bg/tracks.md` | `engine/params/bg/tracks.md` |
+| `params/bg/victory.md` | `engine/params/bg/victory.md` |
+| `params/board_game.md` | `engine/params/board_game.md` |
+| `params/board_game_misc.md` | `engine/params/board_game_misc.md` |
+| `params/campaign_modes.md` | `engine/params/campaign_modes.md` |
+| `params/contest.md` | `engine/params/contest.md` |
+| `params/contest_extensions.md` | `engine/params/contest_extensions.md` |
+| `params/core.md` | `engine/params/core.md` |
+| `params/factions.md` | `engine/params/factions.md` |
+| `params/factions/npc_stance_triangles.md` | `engine/params/factions/npc_stance_triangles.md` |
+| `params/factions/riskbreakers_identity.md` | `engine/params/factions/riskbreakers_identity.md` |
+| `params/factions/stats_1_7_scale.md` | `engine/params/factions/stats_1_7_scale.md` |
+| `params/factions_personal.md` | `engine/params/factions_personal.md` |
+| `params/fieldwork.md` | `engine/params/fieldwork.md` |
+| `params/history/board_game.md` | `engine/params/history/board_game.md` |
+| `params/history/campaign_modes.md` | `engine/params/history/campaign_modes.md` |
+| `params/history/combat.md` | `engine/params/history/combat.md` |
+| `params/history/core.md` | `engine/params/history/core.md` |
+| `params/history/factions_personal.md` | `engine/params/history/factions_personal.md` |
+| `params/history/mass_combat.md` | `engine/params/history/mass_combat.md` |
+| `params/history/southernmost.md` | `engine/params/history/southernmost.md` |
+| `params/history/threadwork.md` | `engine/params/history/threadwork.md` |
+| `params/mass_combat.md` | `engine/params/mass_combat.md` |
+| `params/scale_transitions.md` | `engine/params/scale_transitions.md` |
+| `params/southernmost.md` | `engine/params/southernmost.md` |
+| `params/threadwork.md` | `engine/params/threadwork.md` |
+| `params/threadwork_superseded.md` | `engine/params/threadwork_superseded.md` |

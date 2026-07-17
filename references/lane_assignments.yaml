@@ -57,7 +57,7 @@ lanes:
     bootstrap_scope: ["editorial", "design"]
     owns:                         # write-exclusive globs (fnmatch; '*' spans '/')
       - "canon/**"                # incl. registers/editorial_ledger.jsonl + patch_register_active.yaml; the ledger is APPEND-SHARED per shared_files (canon/** = structural authority, not an append lock)
-      - "params/**"
+      - "engine/params/**"
       - "designs/provincial/**"
       - "designs/world/**"
       - "designs/personal/**"
