@@ -46,10 +46,10 @@ def extract_file_refs(content, source_file=""):
     """Extract all file path references from a markdown/yaml document."""
     refs = set()
     patterns = [
-        r'`((?:designs|compilation|references|canon|tests|skills|tools)/[^`\s]+\.(?:md|yaml|py|json))`',
-        r'"((?:designs|compilation|references|canon|tests|skills|tools)/[^"\s]+\.(?:md|yaml|py|json))"',
-        r"'((?:designs|compilation|references|canon|tests|skills|tools)/[^'\s]+\.(?:md|yaml|py|json))'",
-        r'(?:canonical|source_file|path|affects):\s*((?:designs|compilation|references|canon|tests|skills|tools)/\S+\.(?:md|yaml|py|json))',
+        r'`((?:designs|systems|compilation|references|canon|tests|skills|tools)/[^`\s]+\.(?:md|yaml|py|json))`',
+        r'"((?:designs|systems|compilation|references|canon|tests|skills|tools)/[^"\s]+\.(?:md|yaml|py|json))"',
+        r"'((?:designs|systems|compilation|references|canon|tests|skills|tools)/[^'\s]+\.(?:md|yaml|py|json))'",
+        r'(?:canonical|source_file|path|affects):\s*((?:designs|systems|compilation|references|canon|tests|skills|tools)/\S+\.(?:md|yaml|py|json))',
     ]
     for pat in patterns:
         for m in re.finditer(pat, content):

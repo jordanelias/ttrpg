@@ -49,21 +49,21 @@ FAMILIES = [
         # Repointed 2026-07-14 (ED-IN-0064) from the stale 2026-04-29 baseline to the fresh
         # gameplay-subsystem observatory run — the first real run since the pipeline dispatcher landed.
         "artifact_paths": ["designs/audit/2026-07-14-gameplay-subsystem-observatory/"],
-        "scope_prefixes": ("designs/", "canon/", "engine/params/", "references/"),
+        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/"),
     },
     {
         "name": "decisions-digest",
         "artifact_paths": ["tools/observability/decisions.json"],
         # per build_decisions.py's own header: "corpus sweep (designs/ canon/ engine/params/
         # references/ sim/) for explicit markers".
-        "scope_prefixes": ("designs/", "canon/", "engine/params/", "references/", "sim/"),
+        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/", "sim/"),
     },
     {
         "name": "proposals-register",
         "artifact_paths": ["tools/observability/proposals.json"],
         # per build_proposals.py's sources: the editorial ledgers, audit registry,
         # proposals/ + Status-tagged design docs, and workplan §5.
-        "scope_prefixes": ("designs/", "canon/", "references/audit_registry.jsonl",
+        "scope_prefixes": ("designs/", "systems/", "canon/", "references/audit_registry.jsonl",
                            "workplans/"),
     },
     {
@@ -91,7 +91,7 @@ FAMILIES = [
     {
         "name": "npc-audit",
         "artifact_paths": ["designs/audit/2026-06-22-npc-comprehensive-audit.md"],
-        "scope_prefixes": ("designs/npcs/", "references/npc_registry.yaml"),
+        "scope_prefixes": ("systems/npcs/", "references/npc_registry.yaml"),
     },
     {
         "name": "mechanics-index",
@@ -102,7 +102,7 @@ FAMILIES = [
         # validates this file's *internal schema validity*. That is a different concern
         # from what this module tracks — whether the audit's *content* has fallen behind
         # corpus changes — and CI covers the former continuously, this covers the latter.
-        "scope_prefixes": ("designs/",),
+        "scope_prefixes": ("designs/", "systems/",),
     },
 ]
 

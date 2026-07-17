@@ -123,7 +123,7 @@
         16
       ],
       [
-        "designs/npcs/character_canon_v30.md",
+        "systems/npcs/character_canon_v30.md",
         14
       ],
       [
@@ -153,9 +153,9 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/provincial/faction_behavior_v30.md:548",
-        "designs/articulation/articulation_layer_v30.md:363",
         "designs/personal/conviction_taxonomy_v30.md:337",
-        "designs/architecture/key_substrate_v30.md:627"
+        "designs/architecture/key_substrate_v30.md:627",
+        "systems/articulation/articulation_layer_v30.md:363"
       ],
       "systems": [],
       "count": 4,
@@ -198,7 +198,7 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/provincial/faction_canon_v30.md:7",
-        "designs/npcs/character_canon_v30.md:6"
+        "systems/npcs/character_canon_v30.md:6"
       ],
       "systems": [],
       "count": 2,
@@ -811,7 +811,7 @@
       "priority": 1,
       "label": "Naming collision",
       "locations": [
-        "designs/npcs/npc_behavior_system_v1.md:1"
+        "systems/npcs/npc_behavior_system_v1.md:1"
       ],
       "systems": [],
       "count": 1,
@@ -1363,7 +1363,7 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/npcs/character_canon_v30.md:2"
+        "systems/npcs/character_canon_v30.md:2"
       ],
       "systems": [],
       "count": 1,
@@ -1375,7 +1375,7 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/npcs/npc_relational_graph_v30.md:681"
+        "systems/npcs/npc_relational_graph_v30.md:681"
       ],
       "systems": [],
       "count": 1,
@@ -7069,66 +7069,6 @@
       "lane": null
     },
     {
-      "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/npcs/character_canon_v30.md:232"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Per-NPC Coherence baselines exist for some named NPCs (Edeyja: 9). For most others, **authored Coherence is absent** \u2014 sheets in Part B carry `[ASSUMPTION: default 8 Stable]` where unauthored.",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/npcs/character_canon_v30.md:265"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Spirit is essentially absent from canonical NPC sheets.** Per Decision Log \u00a711 D5: per-NPC sheets in Part B carry default Spirit 4 (mid-range neutral) with `[ASSUMPTION]` flag. Where the design pressure clearly diverges (Edeyja high; Vaynard at Arc C low), the sheet notes the design pressure but does not author a sp\u2026",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/npcs/character_canon_v30.md:279"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "| (implicit) TS / Coherence / Spirit | TS reliable; Coherence partial; Spirit absent | All four axes (incl Certainty) shown per NPC; defaults flagged with [ASSUMPTION]. |",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/npcs/character_canon_v30.md:393"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "| **D5** | Spirit values absent from canonical NPC sheets; prose-writer treats Spirit as third independent axis at Coherence \u2264 4 | Default Spirit 4 (mid-range neutral) per prose-writer guidance. Flag with `[ASSUMPTION]` per NPC where applied. Where design pressure clearly diverges (Edeyja high; Vaynard at Arc C low)\u2026",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/npcs/character_canon_v30.md:430"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
       "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
       "category": "assumption",
       "priority": 3,
@@ -7163,6 +7103,66 @@
       "systems": [],
       "count": 1,
       "lane": "IN"
+    },
+    {
+      "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:232"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Per-NPC Coherence baselines exist for some named NPCs (Edeyja: 9). For most others, **authored Coherence is absent** \u2014 sheets in Part B carry `[ASSUMPTION: default 8 Stable]` where unauthored.",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:265"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Spirit is essentially absent from canonical NPC sheets.** Per Decision Log \u00a711 D5: per-NPC sheets in Part B carry default Spirit 4 (mid-range neutral) with `[ASSUMPTION]` flag. Where the design pressure clearly diverges (Edeyja high; Vaynard at Arc C low), the sheet notes the design pressure but does not author a sp\u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:279"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| (implicit) TS / Coherence / Spirit | TS reliable; Coherence partial; Spirit absent | All four axes (incl Certainty) shown per NPC; defaults flagged with [ASSUMPTION]. |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:393"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **D5** | Spirit values absent from canonical NPC sheets; prose-writer treats Spirit as third independent axis at Coherence \u2264 4 | Default Spirit 4 (mid-range neutral) per prose-writer guidance. Flag with `[ASSUMPTION]` per NPC where applied. Where design pressure clearly diverges (Edeyja high; Vaynard at Arc C low)\u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:430"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
@@ -11046,7 +11046,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:38"
+        "systems/npcs/character_canon_v30.md:38"
       ],
       "systems": [],
       "count": 1,
@@ -11058,7 +11058,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:43"
+        "systems/npcs/character_canon_v30.md:43"
       ],
       "systems": [],
       "count": 1,
@@ -11070,7 +11070,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:343"
+        "systems/npcs/character_canon_v30.md:343"
       ],
       "systems": [],
       "count": 1,
@@ -11082,7 +11082,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:364"
+        "systems/npcs/character_canon_v30.md:364"
       ],
       "systems": [],
       "count": 1,
@@ -11094,7 +11094,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:392"
+        "systems/npcs/character_canon_v30.md:392"
       ],
       "systems": [],
       "count": 1,
@@ -11106,7 +11106,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:428"
+        "systems/npcs/character_canon_v30.md:428"
       ],
       "systems": [],
       "count": 1,
@@ -11118,7 +11118,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:429"
+        "systems/npcs/character_canon_v30.md:429"
       ],
       "systems": [],
       "count": 1,

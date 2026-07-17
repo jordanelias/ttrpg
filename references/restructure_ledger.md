@@ -158,7 +158,7 @@
 | `designs/systems/clock_registry_v30_infill.md` | `designs/provincial/clock_registry_v30_infill.md` | PENDING |
 | `designs/systems/cogload_moderate_target.md` | `designs/architecture/cogload_moderate_target.md` | PENDING |
 | `designs/systems/companion_app_design_note_2026-04-04.md` | `designs/architecture/companion_app_design_note.md` | PENDING |
-| `designs/systems/companion_specification_v30.md` | `designs/npcs/companion_specification_v30.md` | PENDING |
+| `designs/systems/companion_specification_v30.md` | `systems/npcs/companion_specification_v30.md` | PENDING |
 | `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `designs/architecture/complete_systems_reference.md` | PENDING |
 | `designs/systems/derived_stats_v1.md` | `designs/scene/derived_stats_v30.md` | PENDING |
 | `designs/systems/derived_stats_v1_skeleton.md` | `designs/scene/derived_stats_v30_skeleton.md` | PENDING |
@@ -170,11 +170,11 @@
 | `designs/systems/investigation_systems_proposal_2026-04-15_skeleton.md` | `designs/scene/investigation_systems_v30_skeleton.md` | PENDING |
 | `designs/systems/military_layer_v30.md` | `designs/provincial/military_layer_v30.md` | PENDING |
 | `designs/systems/military_layer_v30_skeleton.md` | `designs/provincial/military_layer_v30_skeleton.md` | PENDING |
-| `designs/systems/npc_behavior_system_v1.md` | `designs/npcs/npc_behavior_system_v1.md` | PENDING |
-| `designs/systems/npc_behavior_system_v1_skeleton.md` | `designs/npcs/npc_behavior_system_v1_skeleton.md` | PENDING |
-| `designs/systems/npc_behavior_v30.md` | `designs/npcs/npc_behavior_v30.md` | PENDING |
-| `designs/systems/npc_behavior_v30_infill.md` | `designs/npcs/npc_behavior_v30_infill.md` | PENDING |
-| `designs/systems/npc_behavior_v30_skeleton.md` | `designs/npcs/npc_behavior_v30_skeleton.md` | PENDING |
+| `designs/systems/npc_behavior_system_v1.md` | `systems/npcs/npc_behavior_system_v1.md` | PENDING |
+| `designs/systems/npc_behavior_system_v1_skeleton.md` | `systems/npcs/npc_behavior_system_v1_skeleton.md` | PENDING |
+| `designs/systems/npc_behavior_v30.md` | `systems/npcs/npc_behavior_v30.md` | PENDING |
+| `designs/systems/npc_behavior_v30_infill.md` | `systems/npcs/npc_behavior_v30_infill.md` | PENDING |
+| `designs/systems/npc_behavior_v30_skeleton.md` | `systems/npcs/npc_behavior_v30_skeleton.md` | PENDING |
 | `designs/systems/player_agency_v30.md` | `designs/architecture/player_agency_v30.md` | PENDING |
 | `designs/systems/player_agency_v30_skeleton.md` | `designs/architecture/player_agency_v30_skeleton.md` | PENDING |
 | `designs/systems/settlement_layer_v30.md` | `designs/territory/settlement_layer_v30.md` | PENDING |
@@ -184,7 +184,7 @@
 | `designs/systems/thread_horizontal_integration_spec.md` | `designs/threadwork/thread_horizontal_integration_spec.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1.md` | `designs/arcs/throughline_resolutions_v30.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1_skeleton.md` | `designs/arcs/throughline_resolutions_v30_skeleton.md` | PENDING |
-| `designs/ttrpg/edeyja_npc.md` | `designs/npcs/edeyja_npc.md` | PENDING |
+| `designs/ttrpg/edeyja_npc.md` | `systems/npcs/edeyja_npc.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30.md` | `designs/provincial/factions_personal_v30.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_infill.md` | `designs/provincial/factions_personal_v30_infill.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_skeleton.md` | `designs/provincial/factions_personal_v30_skeleton.md` | PENDING |
@@ -769,3 +769,12 @@
 | `sim/autoload/` | `engine/autoload/` |
 | `sim/cross_scale/` | `engine/cross_scale/` |
 | `sim/mc_v18.py` | `engine/mc_v18.py` |
+
+
+## 2026-07-17 — designs/ -> systems/ P4 slice 1 (doc-only clean subsystems, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/npcs/` | `systems/npcs/` |
+| `designs/articulation/` | `systems/articulation/` |
+| `designs/ui/` | `systems/ui/` |

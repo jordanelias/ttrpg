@@ -528,16 +528,6 @@
         },
         {
           "kind": "provisional_status_doc",
-          "source": "designs/npcs/character_canon_v30.md",
-          "id": "designs/npcs/character_canon_v30.md",
-          "title": "character canon v30",
-          "lane": "unassigned",
-          "needs_jordan": true,
-          "status": "PROVISIONAL — pending ratification.",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
           "source": "designs/territory/lps_wiring_v1.md",
           "id": "designs/territory/lps_wiring_v1.md",
           "title": "lps wiring v1",
@@ -624,6 +614,16 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "systems/npcs/character_canon_v30.md",
+          "id": "systems/npcs/character_canon_v30.md",
+          "title": "character canon v30",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROVISIONAL — pending ratification.",
           "links": []
         },
         {
@@ -2746,16 +2746,6 @@
     },
     {
       "kind": "provisional_status_doc",
-      "source": "designs/npcs/character_canon_v30.md",
-      "id": "designs/npcs/character_canon_v30.md",
-      "title": "character canon v30",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROVISIONAL — pending ratification.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
       "source": "designs/provincial/franchise_v30.md",
       "id": "designs/provincial/franchise_v30.md",
       "title": "franchise v30",
@@ -2882,6 +2872,16 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "systems/npcs/character_canon_v30.md",
+      "id": "systems/npcs/character_canon_v30.md",
+      "title": "character canon v30",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROVISIONAL — pending ratification.",
       "links": []
     },
     {

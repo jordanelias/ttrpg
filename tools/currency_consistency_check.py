@@ -74,7 +74,7 @@ def _current_md_paths(text):
     """Paths named in CURRENT.md (backticked); keeps trailing-slash package dirs.
     Glob patterns (engine/params/bg/*) are references to families, not checkable paths."""
     paths = re.findall(
-        r'`((?:designs|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`', text)
+        r'`((?:designs|systems|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`', text)
     return sorted({p for p in paths if '*' not in p and '?' not in p})
 
 

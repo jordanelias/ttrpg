@@ -684,7 +684,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('24', 'designs/p
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('24', 'designs/provincial/peninsular_strain_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('25', 'designs/provincial/ci_political_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('25', 'designs/provincial/ci_political_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('26', 'designs/npcs/baralta_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('26', 'systems/npcs/baralta_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('26', 'designs/provincial/baralta_crown_claim_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('26', 'designs/provincial/baralta_crown_claim_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('27', 'designs/architecture/scale_transitions_v30_infill.md');
@@ -704,20 +704,20 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('30', 'designs/t
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('30', 'designs/threadwork/threadwork_philosophical_reference_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('30', 'engine/params/threadwork.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('30', 'designs/threadwork/thread_horizontal_integration_spec.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_roster_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_foils_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_character_analyses_v30_infill.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_character_analyses_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_foils_v30_infill.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_roster_v30_infill.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_roster_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'designs/npcs/npc_character_analyses_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'designs/npcs/npc_behavior_v30_infill.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'designs/npcs/npc_behavior_system_v1_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'designs/npcs/npc_behavior_system_v1.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'designs/npcs/npc_behavior_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'designs/npcs/npc_behavior_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('33', 'designs/npcs/companion_specification_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_roster_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_foils_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_character_analyses_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_character_analyses_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_foils_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_roster_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_roster_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('31', 'systems/npcs/npc_character_analyses_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'systems/npcs/npc_behavior_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'systems/npcs/npc_behavior_system_v1_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'systems/npcs/npc_behavior_system_v1.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'systems/npcs/npc_behavior_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('32', 'systems/npcs/npc_behavior_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('33', 'systems/npcs/companion_specification_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/00_philosophical_foundations.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/01_foundations_amendment_self_rendering.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/02_foundations_amendment_leap_mechanism.md');
@@ -785,13 +785,13 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('62', 'designs/a
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('63', 'designs/provincial/fractional_province_ownership_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('63', 'designs/provincial/fractional_province_ownership_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('64', 'designs/provincial/mass_battle_integration_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('65', 'designs/articulation/articulation_layer_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('65', 'systems/articulation/articulation_layer_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('66', 'designs/personal/conviction_axis_matrix_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('67', 'designs/territory/valoria_political_hierarchy_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('68', 'designs/personal/knots_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('69', 'designs/architecture/key_type_registry_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('70', 'designs/provincial/political_dynamics_keys_migration_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('71', 'designs/npcs/character_canon_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('71', 'systems/npcs/character_canon_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('72', 'designs/personal/character_generation_questionnaire_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('73', 'designs/provincial/faction_canon_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('74', 'designs/provincial/varfell_path_b_v30.md');
@@ -802,10 +802,10 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('77', 'designs/a
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('78', 'designs/provincial/treaty_expiration_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'arcs/throughline_resolutions_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'arcs/throughline_resolutions_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'systems/ui/valoria_ui_ux_v4.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'systems/ui/valoria_ui_ux_v4_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('81', 'designs/personal/conviction_track_v1.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('82', 'designs/npcs/npc_relational_graph_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('82', 'systems/npcs/npc_relational_graph_v30.md');
 
 -- stubs: 45 rows (curated mirror of proposals/stub_infill_plan.md +
 --   tests/sim/v18-integration/module_manifest.md, status as of 2026-05-19; regenerable)

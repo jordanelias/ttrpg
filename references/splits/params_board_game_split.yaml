@@ -180,7 +180,7 @@ domain_files:
       - "Altonian Mountain Passes"
       - "Proximity Ratings (supersedes Southernmost Zones — PP-199)"
       - "Southernmost Access System (PP-219)"
-      - "Authority: designs/npcs/edeyja_npc.md; Philosophical Foundations P-13"
+      - "Authority: systems/npcs/edeyja_npc.md; Philosophical Foundations P-13"
       - "Expedition Procedure (T6 → T15)"
       - "Champion TS Values (BG)"
       - "What \"No Faction Control\" Means in BG"

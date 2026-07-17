@@ -193,11 +193,11 @@ registry:
   npc_behavior:
     system: npc_behavior
     mode: ALL
-    canonical_v30: designs/npcs/npc_behavior_v30.md
-    skeleton: designs/npcs/npc_behavior_v30.md
-    infill: designs/npcs/npc_behavior_v30_infill.md
+    canonical_v30: systems/npcs/npc_behavior_v30.md
+    skeleton: systems/npcs/npc_behavior_v30.md
+    infill: systems/npcs/npc_behavior_v30_infill.md
     atomized: complete
-    predecessor: designs/npcs/npc_behavior_system_v1.md
+    predecessor: systems/npcs/npc_behavior_system_v1.md
     params: null
 
   # ─── SCALE TRANSITIONS (HYBRID) ────────────────────────────────────────────
@@ -314,31 +314,31 @@ registry:
   npc_roster:
     system: npcs
     mode: ALL
-    canonical_v30: designs/npcs/npc_roster_v30.md
-    skeleton: designs/npcs/npc_roster_v30.md
-    infill: designs/npcs/npc_roster_v30_infill.md
+    canonical_v30: systems/npcs/npc_roster_v30.md
+    skeleton: systems/npcs/npc_roster_v30.md
+    infill: systems/npcs/npc_roster_v30_infill.md
     atomized: complete
-    predecessor: designs/npcs/npc_roster.md
+    predecessor: systems/npcs/npc_roster.md
     params: null
 
   npc_foils:
     system: npcs
     mode: ALL
-    canonical_v30: designs/npcs/npc_foils_v30.md
-    skeleton: designs/npcs/npc_foils_v30.md
-    infill: designs/npcs/npc_foils_v30_infill.md
+    canonical_v30: systems/npcs/npc_foils_v30.md
+    skeleton: systems/npcs/npc_foils_v30.md
+    infill: systems/npcs/npc_foils_v30_infill.md
     atomized: complete
-    predecessor: designs/npcs/npc_foils.md
+    predecessor: systems/npcs/npc_foils.md
     params: null
 
   npc_character_analyses:
     system: npcs
     mode: ALL
-    canonical_v30: designs/npcs/npc_character_analyses_v30.md
-    skeleton: designs/npcs/npc_character_analyses_v30.md
-    infill: designs/npcs/npc_character_analyses_v30_infill.md
+    canonical_v30: systems/npcs/npc_character_analyses_v30.md
+    skeleton: systems/npcs/npc_character_analyses_v30.md
+    infill: systems/npcs/npc_character_analyses_v30_infill.md
     atomized: complete
-    predecessor: designs/npcs/npc_character_analyses.md
+    predecessor: systems/npcs/npc_character_analyses.md
     params: null
 
   # ─── MECHANICS ─────────────────────────────────────────────────────────────

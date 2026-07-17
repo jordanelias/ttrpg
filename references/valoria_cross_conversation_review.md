@@ -83,7 +83,7 @@ Projects advance +1/season with faction presence. Disrupted by battle (−2), co
 
 ### 2.3 NPC Comprehensive Audit Results (April 10)
 
-A detailed NPC audit was committed to the design repo (designs/npcs/npc_comprehensive_audit.md). Key findings I should have referenced:
+A detailed NPC audit was committed to the design repo (systems/npcs/npc_comprehensive_audit.md). Key findings I should have referenced:
 
 - **Haelgrund** scored 39/40 (highest). His hidden TS and buried Reason conviction make him the most mechanically complex NPC — not "incomplete" as I suggested, but exceptionally well-designed.
 - **Lenneth** scored 28/40 with "zero mechanical expression despite high narrative importance" — the widest gap between characterization quality and mechanical presence.

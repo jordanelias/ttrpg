@@ -11,40 +11,40 @@ characters:
     role: "Fourth Cardinal"
     location: "Prudence"
     aliases: []
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     occurrences_count: 6
     files_count: 3
   annika_feldhaus:
     canonical: "Annika Feldhaus"
     role: "Guilds Representative"
     aliases: ["Feldhaus"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   cardinal_arnlod_olafsson:
     canonical: "Cardinal Arnlod Olafsson"
     aliases: ["Olafsson"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   cardinal_magnus_klapp:
     canonical: "Cardinal Magnus Klapp"
     aliases: []
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   cardinal_osten_jarnstal:
     canonical: "Cardinal Osten Jarnstal"
     aliases: ["Jarnstal"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   confessor_arne_himlensendt:
     canonical: "Confessor Arne Himlensendt"
     aliases: ["Himlensendt", "Confessor"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   dalla_virke:
@@ -52,9 +52,9 @@ characters:
     role: "Settlement-Broker (intelligence)"
     location: "T1 Valorsplatz / settlement-level network"
     aliases: ["Virke"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     note: "Originally Niflhel-affiliated; reassigned to settlement-broker mechanic post-Niflhel dissolution (CR-STRIKE-2026-04-19)."
     files_count: 4
@@ -63,21 +63,21 @@ characters:
     role: "Altonian Prince"
     location: "married to Elske"
     aliases: ["Laskaris"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   duchess_inge_baralta:
     canonical: "Duchess Inge Baralta"
     aliases: ["Baralta"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   duke_magnus_vaynard:
     canonical: "Duke Magnus Vaynard"
     aliases: ["Vaynard", "Duke"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   edeyja:
@@ -85,9 +85,9 @@ characters:
     role: "Warden-Chief"
     location: "Southernmost"
     aliases: []
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 25
     files_count: 4
   gerik_strand:
@@ -95,15 +95,15 @@ characters:
     role: "Crown Minister"
     location: "Lord Steward"
     aliases: []
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   grandmaster_ehrenwall:
     canonical: "Grandmaster Ehrenwall"
     aliases: ["Ehrenwall"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   halvar_brandt:
@@ -111,69 +111,69 @@ characters:
     role: "Löwenritter Officer"
     location: "Lions' Table"
     aliases: ["Brandt"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   king_almud_almqvist:
     canonical: "King Almud Almqvist"
     aliases: ["Almud"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   maret_uln:
     canonical: "Maret Uln"
     role: "Varfell Practitioner / Succession Fallback"
     aliases: []
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 11
     files_count: 5
   yrsa_vossen:
     canonical: "Yrsa Vossen"
     role: "Restoration Movement Leader"
     aliases: ["Vossen"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 10
     files_count: 4
   peder_almstedt:
     canonical: "Peder Almstedt"
     role: "Ministry Bureaucrat"
     aliases: ["Almstedt"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   prince_torben_almqvist:
     canonical: "Prince Torben Almqvist"
     aliases: ["Torben"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   princess_elske_almqvist:
     canonical: "Princess Elske Almqvist"
     aliases: ["Elske"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 3
     files_count: 3
   queen_lenneth_almqvist:
     canonical: "Queen Lenneth Almqvist"
     aliases: ["Lenneth"]
-    source: "designs/npcs/npc_character_analyses_v30.md"
+    source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   rikard_solberg:
     canonical: "Rikard Solberg"
     role: "Schoenland Factor"
     aliases: ["Solberg"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   sigrid_torsvald:
@@ -181,9 +181,9 @@ characters:
     role: "TS Riskbreaker"
     location: "Löwenritter Covert"
     aliases: ["Torsvald"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
   solmund:
@@ -198,9 +198,9 @@ characters:
     role: "Church Inquisitor"
     location: "Cardinal Justice"
     aliases: ["Haelgrund"]
-    source: "designs/npcs/npc_roster_v30.md"
+    source: "systems/npcs/npc_roster_v30.md"
     additional_sources:
-      - "designs/npcs/npc_character_analyses_v30.md"
+      - "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
 

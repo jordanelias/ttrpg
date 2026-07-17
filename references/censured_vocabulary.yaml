@@ -141,7 +141,7 @@ terms:
     authority: "PP-691 (formal censure); session-log P1 directive"
     residual_count: 29
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/npcs/npc_behavior_v30.md (5) + engine/params/core.md (4) + designs/provincial/faction_layer_v30.md (3); diffuse — 14 docs total"
+    residual_concentration: "systems/npcs/npc_behavior_v30.md (5) + engine/params/core.md (4) + designs/provincial/faction_layer_v30.md (3); diffuse — 14 docs total"
 
 
   # ─────────────── Silo cross-contamination fixes (2026-05-08) ───────────────
