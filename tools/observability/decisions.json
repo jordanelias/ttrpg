@@ -1,13 +1,13 @@
 {
   "meta": {
-    "files_scanned": 1359,
-    "total_open": 981,
+    "files_scanned": 1361,
+    "total_open": 983,
     "by_category": {
       "ratification": 46,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
-      "gap": 324,
+      "gap": 326,
       "assumption": 248,
       "stub": 34,
       "todo": 14
@@ -15,11 +15,11 @@
     "by_priority": {
       "1": 325,
       "2": 36,
-      "3": 620
+      "3": 622
     },
     "by_lane": {
       "FA": 68,
-      "unassigned": 701,
+      "unassigned": 703,
       "SC": 7,
       "PC": 112,
       "GO": 19,
@@ -38,7 +38,7 @@
       "unassigned": {
         "1": 282,
         "2": 32,
-        "3": 387
+        "3": 389
       },
       "SC": {
         "1": 5,
@@ -7105,6 +7105,30 @@
       "lane": null
     },
     {
+      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/insurgency_pipeline.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/npe.py:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
       "category": "assumption",
       "priority": 3,
@@ -7535,30 +7559,6 @@
       "systems": [],
       "count": 1,
       "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/world/insurgency_pipeline.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/world/npe.py:10"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
     },
     {
       "text": "\"\"\"Duck-typed actor per operations.py's [ASSUMPTION] contract.\"\"\"",
@@ -11347,6 +11347,30 @@
       "label": "Documented gap",
       "locations": [
         "references/module_contracts.yaml:717"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "differentiating input. Flagged inline as `[GAP: faction\u2192unit construction lacks canonical spec]`;",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "sim/mc_v18_walkthrough.md:97"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| Mass-battle `faction\u2192unit` construction is Mil-only | **Inline only** \u2014 `massbattle.py` `[GAP]` + Phase 7 Steps 2\u20139; not in any ED ledger/handoff |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "sim/mc_v18_walkthrough.md:167"
       ],
       "systems": [],
       "count": 1,

@@ -934,7 +934,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/world/miraculous_event.py",
+      "sim_module": "systems/world/sim/miraculous_event.py",
       "test_status": "not_implemented",
       "emits": [
         {

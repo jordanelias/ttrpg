@@ -810,7 +810,7 @@ mechanics:
     gd_applicable: [GD-1]
     notes: "GD-1 sole victory condition. all 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
 
-  # ─── WORLD (sim/world/) ──────────────────────────────────────────────────
+  # ─── WORLD (systems/world/sim/) ──────────────────────────────────────────────────
 
   restoration_movement:
     scale: world
@@ -819,7 +819,7 @@ mechanics:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-2"
       - "designs/scene/conviction_track_v30.md#section-5"
     canon_authoring_target: "designs/provincial/restoration_movement_v30.md (Pass 2d, pending)"
-    sim_module: sim/world/restoration_movement.py
+    sim_module: systems/world/sim/restoration_movement.py
     test_status: validated_n1000_v12c
     gd_applicable: [GD-3]
     dependencies:
@@ -830,7 +830,7 @@ mechanics:
     scale: world
     faction: universal
     canon_sources: ["designs/scene/miraculous_event_v30.md"]
-    sim_module: sim/world/miraculous_event.py
+    sim_module: systems/world/sim/miraculous_event.py
     test_status: not_implemented
 
   scenario_authoring:
@@ -845,8 +845,8 @@ mechanics:
     scale: world
     faction: emergent
     canon_sources: ["canon/02_canon_constraints.md#section-b-gd-3"]
-    canon_authoring_target: "designs/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
-    sim_module: sim/world/insurgency_pipeline.py
+    canon_authoring_target: "systems/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
+    sim_module: systems/world/sim/insurgency_pipeline.py
     test_status: not_implemented
     gd_applicable: [GD-3]
     notes: "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary."
@@ -855,7 +855,7 @@ mechanics:
     scale: world
     faction: universal
     canon_sources: ["designs/scene/investigation_systems_v30.md"]
-    sim_module: sim/world/npe.py
+    sim_module: systems/world/sim/npe.py
     test_status: not_implemented
     notes: "NPC Population Engine."
 

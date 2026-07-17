@@ -87,7 +87,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 
 ## WR — World  (9 items, 2 need decision)
 
-- 🔸 `designs/world/solmund_master_document.md` — solmund master document  _(DRAFT — all content PROVISIONAL pending Jordan editorial approval)_
+- 🔸 `systems/world/solmund_master_document.md` — solmund master document  _(DRAFT — all content PROVISIONAL pending Jordan editorial approval)_
 - 🔸 `ED-WR-0008` — Content-loss: the P-25 'Scale-based Mending Stability' override table in threadwork_v30.md (line 40) is truncated to its header row plus the single label 'Object' with ZERO data rows -- the blockquote literally ends '... Override degree tab  _(open)_
 - `ED-WR-0001` — Complete GD-1's strike sweep of peninsular_strain_v30 (~8 live co-victory sites: §6.3 + L129/220/310/457/493/571/590). Sibling victory_v30 §0.1 was banner-swept; peninsular_strain never was because GD-1's hand-maintained propagation list om  _(open)_
 - `ED-WR-0002` — MS/RS world-stability track: MS (MENDING STABILITY) WINS (fork resolved by Jordan — the direction ED-731/ED-772's sweep was already heading). threadwork_v30 §5 reads MS; params/threadwork.md still reads RS (the sweep never reached it); name  _(open)_

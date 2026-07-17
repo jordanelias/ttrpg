@@ -209,84 +209,84 @@ territories:
     canonical: "Askeheim"
     territory_id: T15
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 18
     files_count: 6
   ehrenfeld:
     canonical: "Ehrenfeld"
     territory_id: T14
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 8
     files_count: 4
   feldmark:
     canonical: "Feldmark"
     territory_id: T5
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 11
     files_count: 5
   gransol:
     canonical: "Gransol"
     territory_id: T8
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 6
     files_count: 3
   grauwald:
     canonical: "Grauwald"
     territory_id: T4
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 9
     files_count: 4
   halvardshelm:
     canonical: "Halvardshelm"
     territory_id: T11
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 7
     files_count: 4
   halvarshelm:
     canonical: "Halvarshelm"
     territory_id: T17
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 6
     files_count: 2
   himmelenger:
     canonical: "Himmelenger"
     territory_id: T9
     aliases: ["Himmelenger Child"]
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 18
     files_count: 6
   kronmark:
     canonical: "Kronmark"
     territory_id: T2
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 7
     files_count: 3
   lowenskyst:
     canonical: "Lowenskyst"
     territory_id: T3
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 15
     files_count: 7
   oastad:
     canonical: "Oastad"
     territory_id: T13
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 14
     files_count: 5
   rendstad:
     canonical: "Rendstad"
     territory_id: T7
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 6
     files_count: 3
   schoenland:
@@ -294,37 +294,37 @@ territories:
     also_types: ["faction"]
     territory_id: T16
     aliases: ["Schoenland Factor"]
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     additional_sources:
-      - "designs/world/geography_v30.md"
+      - "systems/world/geography_v30.md"
     occurrences_count: 60
     files_count: 8
   sigurdshelm:
     canonical: "Sigurdshelm"
     territory_id: T12
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 8
     files_count: 3
   spartfell:
     canonical: "Spartfell"
     territory_id: T10
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 17
     files_count: 6
   stillhelm:
     canonical: "Stillhelm"
     territory_id: T6
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 9
     files_count: 5
   valorsplatz:
     canonical: "Valorsplatz"
     territory_id: T1
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 21
     files_count: 9
 
@@ -332,31 +332,31 @@ factions:
   church:
     canonical: "Church"
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 256
     files_count: 12
   crown:
     canonical: "Crown"
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 171
     files_count: 12
   hafenmark:
     canonical: "Hafenmark"
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 58
     files_count: 10
   uncontrolled:
     canonical: "Uncontrolled"
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 2
     files_count: 1
   varfell:
     canonical: "Varfell"
     aliases: []
-    source: "designs/world/geography_v30.md"
+    source: "systems/world/geography_v30.md"
     occurrences_count: 79
     files_count: 10
 

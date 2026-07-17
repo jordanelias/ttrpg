@@ -4,6 +4,7 @@
 <!-- canonical_tokens: 4117 -->
 <!-- generated: 2026-04-20T01:18:34Z -->
 
+<!-- [EDITORIAL: ED-IN-0071 — relocated to systems/world/ in the P4 reorg; content unchanged] -->
 # worldbuilding_v30 — Index
 
 **Usage:** `g.read_sections('designs/world/worldbuilding_v30.md', [indices])` to load specific sections.
