@@ -136,8 +136,8 @@
 | `designs/hybrid/scale_transitions_v30.md` | `systems/_architecture/scale_transitions_v30.md` | PENDING |
 | `designs/hybrid/scale_transitions_v30_infill.md` | `systems/_architecture/scale_transitions_v30_infill.md` | PENDING |
 | `designs/hybrid/scale_transitions_v30_skeleton.md` | `systems/_architecture/scale_transitions_v30_skeleton.md` | PENDING |
-| `designs/mass_combat/mass_battle_v30.md` | `designs/provincial/mass_battle_v30.md` | PENDING |
-| `designs/mass_combat/mass_battle_v30_infill.md` | `designs/provincial/mass_battle_v30_infill.md` | PENDING |
+| `designs/mass_combat/mass_battle_v30.md` | `systems/mass_battle/mass_battle_v30.md` | PENDING |
+| `designs/mass_combat/mass_battle_v30_infill.md` | `systems/mass_battle/mass_battle_v30_infill.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_skeleton.md` | `designs/provincial/mass_battle_v30_skeleton.md` | PENDING |
 | `designs/mechanics/baralta_crown_claim_v30.md` | `designs/provincial/baralta_crown_claim_v30.md` | PENDING |
 | `designs/mechanics/baralta_crown_claim_v30_infill.md` | `designs/provincial/baralta_crown_claim_v30_infill.md` | PENDING |
@@ -168,7 +168,7 @@
 | `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `systems/_architecture/integration_proposal_v30_skeleton.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15.md` | `systems/fieldwork/investigation_systems_v30.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15_skeleton.md` | `designs/scene/investigation_systems_v30_skeleton.md` | PENDING |
-| `designs/systems/military_layer_v30.md` | `designs/provincial/military_layer_v30.md` | PENDING |
+| `designs/systems/military_layer_v30.md` | `systems/mass_battle/military_layer_v30.md` | PENDING |
 | `designs/systems/military_layer_v30_skeleton.md` | `designs/provincial/military_layer_v30_skeleton.md` | PENDING |
 | `designs/systems/npc_behavior_system_v1.md` | `systems/npcs/npc_behavior_system_v1.md` | PENDING |
 | `designs/systems/npc_behavior_system_v1_skeleton.md` | `systems/npcs/npc_behavior_system_v1_skeleton.md` | PENDING |
@@ -870,3 +870,24 @@
 | `designs/scene/combat_engine_v1/` | `systems/combat/combat_engine_v1/` |
 | `designs/scene/scene_combat_v1/` | `systems/combat/scene_combat_v1/` |
 | `designs/scene/combat_engine_v1/systems.py` | `systems/combat/combat_engine_v1/combat_systems.py` |
+
+
+## 2026-07-17 — mass_battle provincial split (part 1) -> systems/mass_battle/ (P4 slice 9, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/provincial/mass_battle_integration_v30.md` | `systems/mass_battle/mass_battle_integration_v30.md` |
+| `designs/provincial/mass_battle_v30.md` | `systems/mass_battle/mass_battle_v30.md` |
+| `designs/provincial/mass_battle_v30_index.md` | `systems/mass_battle/mass_battle_v30_index.md` |
+| `designs/provincial/mass_battle_v30_infill.md` | `systems/mass_battle/mass_battle_v30_infill.md` |
+| `designs/provincial/military_layer_v30.md` | `systems/mass_battle/military_layer_v30.md` |
+| `designs/provincial/military_layer_v30_index.md` | `systems/mass_battle/military_layer_v30_index.md` |
+| `sim/provincial/massbattle.py` | `systems/mass_battle/sim/massbattle.py` |
+| `sim/provincial/units.py` | `systems/mass_battle/sim/units.py` |
+| `sim/provincial/tactic_cards.py` | `systems/mass_battle/sim/tactic_cards.py` |
+| `sim/provincial/altonian_reinforcements.py` | `systems/mass_battle/sim/altonian_reinforcements.py` |
+| `designs/provincial/mass_battle_v30` | `systems/mass_battle/mass_battle_v30` |
+| `sim/provincial/massbattle` | `systems/mass_battle/sim/massbattle` |
+| `sim/provincial/units` | `systems/mass_battle/sim/units` |
+| `sim/provincial/tactic_cards` | `systems/mass_battle/sim/tactic_cards` |
+| `sim/provincial/altonian_reinforcements` | `systems/mass_battle/sim/altonian_reinforcements` |

@@ -1,7 +1,7 @@
 """
-sim/provincial/tactic_cards.py — Tactic card pool + faction-restricted modifiers
+systems/mass_battle/sim/tactic_cards.py — Tactic card pool + faction-restricted modifiers
 
-Canon source: designs/provincial/mass_battle_v30.md §B.4 (tactic-card mechanism + faction-specific card table; disposition mapping §B.3);
+Canon source: systems/mass_battle/mass_battle_v30.md §B.4 (tactic-card mechanism + faction-specific card table; disposition mapping §B.3);
               designs/audit/2026-05-17-v18-integration/integration_plan_v18.md §1.4
               (card-pool contents BLOCKED on contamination audit per Jordan
               diagnosis 2026-05-17)

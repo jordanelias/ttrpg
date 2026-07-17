@@ -67,7 +67,7 @@ terms:
     authority: "PP-232"
     residual_count: 5
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/provincial/mass_battle_v30.md (2) + engine/params/mass_combat.md (2) + designs/provincial/peninsular_strain_v30.md (1)"
+    residual_concentration: "systems/mass_battle/mass_battle_v30.md (2) + engine/params/mass_combat.md (2) + designs/provincial/peninsular_strain_v30.md (1)"
 
   - term: "Thread Depth"
     canonical_full: "Thread Depth"

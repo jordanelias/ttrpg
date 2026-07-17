@@ -470,10 +470,10 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "designs/provincial/mass_battle_v30.md"
+      - "systems/mass_battle/mass_battle_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-6"
     params: "engine/params/mass_combat.md"
-    sim_module: sim/provincial/massbattle.py
+    sim_module: systems/mass_battle/sim/massbattle.py
     test_status: not_implemented
     gd_applicable: [GD-1]
     v22_features_pending:
@@ -488,7 +488,7 @@ mechanics:
       - reform_check_hook
       - threadwork_check_hook
       - lethality_scale_restoration
-    integration_plan_doc: "designs/provincial/mass_battle_integration_v30.md (Pass 2n canonized 2026-05-17)"
+    integration_plan_doc: "systems/mass_battle/mass_battle_integration_v30.md (Pass 2n canonized 2026-05-17)"
     notes: "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. ⚠️ STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum — do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows)."
 
   units:
@@ -496,8 +496,8 @@ mechanics:
     faction: universal
     canon_sources:
       - "systems/combat/combat_v30.md#section-11"
-      - "designs/provincial/mass_battle_v30.md"
-    sim_module: sim/provincial/units.py
+      - "systems/mass_battle/mass_battle_v30.md"
+    sim_module: systems/mass_battle/sim/units.py
     test_status: not_implemented
     notes: "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis."
 
@@ -505,9 +505,9 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "designs/provincial/mass_battle_v30.md"
+      - "systems/mass_battle/mass_battle_v30.md"
       - "tests/sim/v17-integration/m6_faction_actions.py"
-    sim_module: sim/provincial/tactic_cards.py
+    sim_module: systems/mass_battle/sim/tactic_cards.py
     test_status: contested
     notes: "Card pool contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending before authoring new cards."
 
@@ -596,7 +596,7 @@ mechanics:
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-3"
     canon_authoring_target: "designs/provincial/altonian_reinforcements_v30.md (Pass 2e, pending)"
-    sim_module: sim/provincial/altonian_reinforcements.py
+    sim_module: systems/mass_battle/sim/altonian_reinforcements.py
     test_status: validated_n1000_v12c
     notes: "v12c version was auto-at-arc-boundary. Pass 2e iteration adds choice-lock (Jordan 2026-05-17): once invoked, Hafenmark Standing-with-other-parliamentaries permanently locked <= +1."
 
@@ -605,7 +605,7 @@ mechanics:
     faction: Hafenmark
     canon_sources: []
     canon_authoring_target: "designs/provincial/hafenmark_equipment_v30.md (Pass 2e, pending)"
-    sim_module: sim/provincial/tactic_cards.py
+    sim_module: systems/mass_battle/sim/tactic_cards.py
     test_status: contested
     notes: "Wagenburg + Bombards tactic cards per Jordan 2026-05-17 (Hussite battle wagons + proto-firearms). Pass 2e canon authoring pending contamination audit. Dependency: tactic_cards module pool may need to be partially struck before adding new cards."
 
@@ -686,7 +686,7 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "designs/provincial/mass_battle_v30.md"
+      - "systems/mass_battle/mass_battle_v30.md"
       - "canon/02_canon_constraints.md#section-b-gd-1"
     sim_module: sim/provincial/faction_action.py
     test_status: not_implemented

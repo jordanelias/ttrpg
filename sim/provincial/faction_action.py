@@ -322,7 +322,7 @@ def _try_conquest(faction, world, rng) -> str:
 
     Phase 7 (§4.10 sub-step 3): single-roll path replaced with
     `resolve_mass_battle` engine invocation per
-    designs/provincial/mass_battle_integration_v30.md §4.10.
+    systems/mass_battle/mass_battle_integration_v30.md §4.10.
     GD-1 binding: produces faction stat / territorial-control deltas only —
     no victory triggers from the battle outcome itself.
 
@@ -332,7 +332,7 @@ def _try_conquest(faction, world, rng) -> str:
     'Overwhelming', or Terms otherwise not chosen) keeps the existing harsher baseline.
 
     Citations:
-      - designs/provincial/mass_battle_integration_v30.md §4.10 step 3
+      - systems/mass_battle/mass_battle_integration_v30.md §4.10 step 3
       - systems/settlements/settlement_layer_v30.md §5.1 (FA-6) / §5.3 (Entry Terms)
       - canon/02_canon_constraints.md §B GD-1
     """
@@ -346,7 +346,7 @@ def _try_conquest(faction, world, rng) -> str:
 
     # Phase 7 §4.10.3 — mass-battle engine invocation (replaces v17 single-roll path).
     # Defender is the territory owner faction, or None (uncontrolled garrison stub).
-    from sim.provincial.massbattle import resolve_mass_battle
+    from systems.mass_battle.sim.massbattle import resolve_mass_battle
     defender_faction = world.factions.get(t.owner) if t.owner else None
     battle = resolve_mass_battle(
         faction_a=faction,

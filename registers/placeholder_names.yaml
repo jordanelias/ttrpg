@@ -84,7 +84,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: no  # mechanism canonized; only content-finalization placeholder
     paths_using_placeholder:
-      - sim/provincial/altonian_reinforcements.py
+      - systems/mass_battle/sim/altonian_reinforcements.py
       - registers/mechanics_index.yaml::mechanics.altonian_reinforcements
     contamination_audit_scope: |
       Audit Hafenmark identity claims (Altonian/Schoenland relationship,
@@ -188,7 +188,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: yes
     paths_using_placeholder:
-      - sim/provincial/tactic_cards.py
+      - systems/mass_battle/sim/tactic_cards.py
       - registers/mechanics_index.yaml::mechanics.tactic_cards
     contamination_audit_scope: |
       Per-faction audit of card pool contents. Strike contaminated cards.
