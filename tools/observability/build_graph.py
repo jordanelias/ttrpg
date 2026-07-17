@@ -37,7 +37,7 @@ except ImportError:
 
 REPO = Path(__file__).resolve().parents[2]
 CONTRACTS = REPO / "references" / "module_contracts.yaml"
-REGISTRY = REPO / "designs" / "architecture" / "key_type_registry_v30.md"
+REGISTRY = REPO / "systems" / "_architecture" / "key_type_registry_v30.md"
 MECHANICS = REPO / "registers" / "mechanics_index.yaml"
 OUT_DIR = Path(__file__).resolve().parent
 

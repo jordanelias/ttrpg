@@ -715,7 +715,7 @@ modules:
     accounting_phase: [season_tick, accounting_boundary]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
-      - "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+      - "2026-07-02: systems/_architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -867,7 +867,7 @@ modules:
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
 
   - module: campaign_architecture
-    doc: designs/architecture/campaign_architecture_v30.md
+    doc: systems/_architecture/campaign_architecture_v30.md
     scales: [provincial]
     gap_notes:
       - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"

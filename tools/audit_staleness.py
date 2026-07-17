@@ -83,10 +83,10 @@ FAMILIES = [
             "tools/observability/lexicon.json",
         ],
         # union of build_graph.py's sources (references/module_contracts.yaml,
-        # designs/architecture/key_type_registry_v30.md, registers/mechanics_index.yaml) and
+        # systems/_architecture/key_type_registry_v30.md, registers/mechanics_index.yaml) and
         # build_lexicon.py's sources (references/*.yaml, references/glossary.md,
-        # registers/placeholder_names.yaml, designs/architecture/scale_transitions_v30.md).
-        "scope_prefixes": ("references/", "canon/", "designs/architecture/"),
+        # registers/placeholder_names.yaml, systems/_architecture/scale_transitions_v30.md).
+        "scope_prefixes": ("references/", "canon/", "systems/_architecture/"),
     },
     {
         "name": "npc-audit",

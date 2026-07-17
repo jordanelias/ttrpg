@@ -33,7 +33,7 @@ Built from 80 cached design files (~1.08 MB) including:
 - 17 canonical system docs from `references/canonical_sources.yaml` plus their auxiliary docs
 - All `params/` parameter files, `params/bg/` strategic-mode files, `params/factions/` faction-specific files
 - All `designs/scene/` (combat_v30, social_contest_v30, fieldwork_v30, investigation_systems_v30, conviction_track_v30, derived_stats_v30, miraculous_event_v30)
-- All `systems/threadwork/`, `designs/personal/`, `designs/architecture/`, `systems/articulation/`, `designs/territory/`, `designs/world/`
+- All `systems/threadwork/`, `designs/personal/`, `systems/_architecture/`, `systems/articulation/`, `designs/territory/`, `designs/world/`
 - `canon/01_foundations_amendment_self_rendering.md`, `canon/02_foundations_amendment_leap_mechanism.md`
 
 Algorithmic extraction surfaced 2,166 candidate terms with 131 cross-silo overlaps; this file presents the curated set with diagnostic verdicts.

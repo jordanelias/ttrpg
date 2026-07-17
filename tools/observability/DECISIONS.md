@@ -15,12 +15,12 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 | **PC** — Personal combat | 18 | 1 | 93 | 112 |
 | **FI** — Field investigation | 0 | 0 | 1 | 1 |
 | **SC** — Social contest | 5 | 0 | 2 | 7 |
-| **FA** — Faction actions | 3 | 0 | 64 | 67 |
+| **FA** — Faction actions | 4 | 0 | 64 | 68 |
 | **WR** — World | 0 | 0 | 8 | 8 |
-| **IN** — Infrastructure / cross-cutting | 2 | 1 | 10 | 13 |
+| **IN** — Infrastructure / cross-cutting | 1 | 1 | 4 | 6 |
 | **GO** — Godot | 9 | 2 | 8 | 19 |
 | **SE** — Settlements | 0 | 0 | 5 | 5 |
-| _unassigned_ (`lane: null`) | 282 | 32 | 381 | 695 |
+| _unassigned_ (`lane: null`) | 282 | 32 | 387 | 701 |
 
 ## By category
 
@@ -61,7 +61,7 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 - End spec. PROVISIONAL pending ratification.**  
   ↳ `designs/provincial/faction_behavior_v30.md:548` +3 more
 - <!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->  
-  ↳ `designs/architecture/key_type_registry_v30.md:148` +3 more
+  ↳ `systems/_architecture/key_type_registry_v30.md:148` +3 more
 
 ### Open rulings (219)
 

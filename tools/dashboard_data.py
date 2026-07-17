@@ -730,7 +730,7 @@ def build_repo_shape():
 # volatile bit — the live count of registered key types — is re-extracted every
 # build and cross-checked against the snapshot, so drift shows instead of hiding.
 
-_KEY_REGISTRY_DOC = 'designs/architecture/key_type_registry_v30.md'
+_KEY_REGISTRY_DOC = 'systems/_architecture/key_type_registry_v30.md'
 
 
 def _live_key_type_count():
@@ -770,9 +770,9 @@ def build_keys():
         {"name": "TerminationBreach", "role": "Raised when a Level-B termination invariant is violated — never silently clamped."},
     ]
     propagation = [
-        {"name": "Aggregate-up", "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).", "source": "designs/architecture/propagation_spec_v1.md §2"},
-        {"name": "Distribute-down", "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.", "source": "designs/architecture/propagation_spec_v1.md §3 (§12.3)"},
-        {"name": "Termination", "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.", "source": "designs/architecture/propagation_spec_v1.md §4 (PROPOSED)"},
+        {"name": "Aggregate-up", "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).", "source": "systems/_architecture/propagation_spec_v1.md §2"},
+        {"name": "Distribute-down", "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.", "source": "systems/_architecture/propagation_spec_v1.md §3 (§12.3)"},
+        {"name": "Termination", "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.", "source": "systems/_architecture/propagation_spec_v1.md §4 (PROPOSED)"},
     ]
     live = _live_key_type_count()
     return {
@@ -781,7 +781,7 @@ def build_keys():
         "definition": ("Every consequential event is a Key — a typed, validated, append-only record. "
                        "One update rule consumes Keys and propagates effects. Save state = initial "
                        "conditions + Key log; replay = deterministic re-execution of the log."),
-        "definition_source": "designs/architecture/key_substrate_v30.md §1",
+        "definition_source": "systems/_architecture/key_substrate_v30.md §1",
         "families": families,
         "type_total": 49,
         "registry_source": _KEY_REGISTRY_DOC,
@@ -797,7 +797,7 @@ def build_keys():
                      "Pressure Π, MS, Accord). The proposed Field primitive is a continuously-read/written "
                      "scale-tagged value with aggregate_fn / propagate_fn / decay_fn / derived_flags. Unblock = "
                      "Jordan ruling OF-3's decay() fork."),
-            "source": "designs/architecture/governance_type_registry_v1.md §4.2",
+            "source": "systems/_architecture/governance_type_registry_v1.md §4.2",
         },
         "note": ("Reference snapshot (2026-07-14) with source links; the live key-type header count is "
                  "re-checked every build. See the source docs for canonical detail. Key substrate doc "

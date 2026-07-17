@@ -2,7 +2,7 @@
   "meta": {
     "generated_from": [
       "references/module_contracts.yaml",
-      "designs/architecture/key_type_registry_v30.md",
+      "systems/_architecture/key_type_registry_v30.md",
       "registers/mechanics_index.yaml"
     ],
     "contracts_schema_version": 2,
@@ -220,7 +220,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "campaign_architecture",
-      "doc": "designs/architecture/campaign_architecture_v30.md",
+      "doc": "systems/_architecture/campaign_architecture_v30.md",
       "resolver": "",
       "scales": [
         "provincial"
@@ -427,7 +427,7 @@
       "loops": [],
       "gap_notes": [
         "registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)",
-        "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open \u2014 awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+        "2026-07-02: systems/_architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open \u2014 awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"

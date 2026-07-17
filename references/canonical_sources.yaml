@@ -93,8 +93,8 @@ sources:
 
 systems:
   core_engine:
-    design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
+    design_doc: systems/_architecture/complete_systems_reference.md
+    canonical_sha__systems___architecture__complete_systems_reference_md: "34f0829be9351be5e7a6485eb3c70e3a1456b706"
     params: engine/params/core.md
     canonical_sha__params__core_md: "1b58325bc4949d76af1f5b755298604e7d496734"
     bg_params: engine/params/bg/core.md
@@ -183,8 +183,8 @@ systems:
     params: engine/params/contest.md
     canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
   scale_transitions:
-    design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "c5a3d35697c1e5c2622c6720e232536c6fb4af18"
+    design_doc: systems/_architecture/scale_transitions_v30.md
+    canonical_sha__systems___architecture__scale_transitions_v30_md: "c5a3d35697c1e5c2622c6720e232536c6fb4af18"
     params: engine/params/scale_transitions.md
     canonical_sha__params__scale_transitions_md: "4d24fc8fe33ea8a9307d9cf639884580f8aa0773"
   faction_layer:
@@ -209,10 +209,10 @@ systems:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "099d96c2e6f5b2941f412d927778a51743eac967"
   campaign_architecture:
-    design_doc: designs/architecture/campaign_architecture_v30.md
-    canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
-    campaign_architecture_index: designs/architecture/campaign_architecture_v30_index.md
-    canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
+    design_doc: systems/_architecture/campaign_architecture_v30.md
+    canonical_sha__systems___architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
+    campaign_architecture_index: systems/_architecture/campaign_architecture_v30_index.md
+    canonical_sha__systems___architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
     canonical_sha__designs__scene__derived_stats_v30_md: "40a2e46788347b30b12f47bc1333c3d2c566ce59"
@@ -242,8 +242,8 @@ systems:
     canonical_sha__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
     source: conflict_architecture_proposal.md
   conflict_architecture:
-    design_doc: designs/architecture/conflict_architecture_proposal.md
-    canonical_sha__designs__architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
+    design_doc: systems/_architecture/conflict_architecture_proposal.md
+    canonical_sha__systems___architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
   throughlines_framework:
     design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "9dc9c5a093ffa44fc0c4fc09266bc68a5bdc4552"
@@ -313,23 +313,23 @@ systems:
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
   key_substrate:
-    design_doc: designs/architecture/key_substrate_v30.md
-    canonical_sha__designs__architecture__key_substrate_v30_md: "a818077829c0368a51b048a5fde40687753f1ece"
+    design_doc: systems/_architecture/key_substrate_v30.md
+    canonical_sha__systems___architecture__key_substrate_v30_md: "a818077829c0368a51b048a5fde40687753f1ece"
     status: canonical
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
-    design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "e63cf185eb924b0494eb3fca0018570dcce41a07"
+    design_doc: systems/_architecture/key_type_registry_v30.md
+    canonical_sha__systems___architecture__key_type_registry_v30_md: "e63cf185eb924b0494eb3fca0018570dcce41a07"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
-    design_doc: designs/architecture/holonic_container_doctrine_v1.md
-    canonical_sha__designs__architecture__holonic_container_doctrine_v1_md: "a6b38a827f9c4582e1da44eb6cc74a2392bb977b"
+    design_doc: systems/_architecture/holonic_container_doctrine_v1.md
+    canonical_sha__systems___architecture__holonic_container_doctrine_v1_md: "a6b38a827f9c4582e1da44eb6cc74a2392bb977b"
     status: canonical
     added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
   propagation_spec:
-    design_doc: designs/architecture/propagation_spec_v1.md
-    canonical_sha__designs__architecture__propagation_spec_v1_md: "d0fe00574c70c30639011b6cea32f3609502404b"
+    design_doc: systems/_architecture/propagation_spec_v1.md
+    canonical_sha__systems___architecture__propagation_spec_v1_md: "d0fe00574c70c30639011b6cea32f3609502404b"
     status: canonical
     added: '2026-07-02 ED-1093/ED-1094 ratification (pre-staged) — ordering/determinism, aggregate-up, distribute-down, termination transforms (TERMINATION-ONLY; cross-tick convergence NOT proven); supplies engine_clock candidate home doc (ED-1051, open — awaiting Jordan; doc:null stays unflipped until then)'
   conviction_taxonomy:
@@ -476,10 +476,10 @@ systems:
     infill: systems/npcs/npc_roster_v30_infill.md
     canonical_sha__systems__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
-    design_doc: designs/architecture/player_agency_v30.md
-    canonical_sha__designs__architecture__player_agency_v30_md: "d49c182e49135a7cb5b5b54d4c5588f5fbdf5ed1"
-    index: designs/architecture/player_agency_v30_index.md
-    canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
+    design_doc: systems/_architecture/player_agency_v30.md
+    canonical_sha__systems___architecture__player_agency_v30_md: "d49c182e49135a7cb5b5b54d4c5588f5fbdf5ed1"
+    index: systems/_architecture/player_agency_v30_index.md
+    canonical_sha__systems___architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:
     design_doc: systems/threadwork/thread_horizontal_integration_spec.md
     canonical_sha__systems__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
@@ -495,10 +495,10 @@ systems:
     canonical_sha__systems__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
     valoria_ui_ux_1: systems/ui/valoria_ui_ux_v4_1.md
   videogame_mode_spec:
-    design_doc: designs/architecture/videogame_mode_spec.md
-    canonical_sha__designs__architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
-    index: designs/architecture/videogame_mode_spec_index.md
-    canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
+    design_doc: systems/_architecture/videogame_mode_spec.md
+    canonical_sha__systems___architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
+    index: systems/_architecture/videogame_mode_spec_index.md
+    canonical_sha__systems___architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
   npc_behavior:
     design_doc: systems/npcs/npc_behavior_v30.md
     canonical_sha__systems__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "1c2a848fb9f8aee29687b8a0147b32a151f7efa0"
+    canonical_sha__references__module_contracts_yaml: "9276ad92d4a19a2b41ffaa9a74f4e90ea1523c24"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

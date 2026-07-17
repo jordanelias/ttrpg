@@ -95,6 +95,23 @@ def _load_restructure_map():
     return mapping
 
 
+def _resolve_remap(ref, remap):
+    """Resolve a pre-restructure path to its current home: exact row first, then the
+    longest matching DIRECTORY-prefix row (an old→new row whose old path ends in '/').
+    Dir-prefix rows (e.g. `designs/architecture/` -> `systems/_architecture/`) are the
+    ED-IN-0071 P4 alias-pointer convention — without prefix resolution they were inert
+    for file-level refs, forcing every moved file to be enumerated individually. Returns
+    None if nothing matches; the caller still verifies the mapped home actually exists,
+    so a prefix match to a nonexistent path stays BROKEN (never a false pass)."""
+    if ref in remap:
+        return remap[ref]
+    best = None
+    for old, new in remap.items():
+        if old.endswith('/') and ref.startswith(old) and (best is None or len(old) > len(best[0])):
+            best = (old, new)
+    return best[1] + ref[len(best[0]):] if best else None
+
+
 # Statuses whose entries are still live obligations; resolved/struck/superseded
 # entries are historical record and legitimately cite paths that have since moved.
 LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
@@ -143,7 +160,7 @@ def check_editorial_ledger(all_files):
             for ref in extract_file_refs(line, ledger_path):
                 if ref in all_files:
                     continue
-                new_home = remap.get(ref)
+                new_home = _resolve_remap(ref, remap)
                 if new_home and new_home in all_files:
                     infos.append(f"{ed_id}: {ref} -> {new_home} (pre-restructure path; mapped home exists)")
                 else:

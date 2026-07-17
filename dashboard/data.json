@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-17T04:43:10+00:00",
-    "commit_sha": "ff9b413"
+    "timestamp_utc": "2026-07-17T05:47:20+00:00",
+    "commit_sha": "62db147"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 66 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 88 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "62db147da6",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 2: threadwork designs/ + sim/ -> systems/ (ED-IN-0071) (#164)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "ff9b4130d6",
         "date": "2026-07-16",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "Skills-ecosystem staleness remediation, Phase 7 (ED-IN-0038..0043)",
         "scope": null
-      },
-      {
-        "sha": "847c375345",
-        "date": "2026-07-11",
-        "author": "jordanelias",
-        "subject": "Comparative-governance research round 2: Byzantium/China/Japan/HRE/Venice/Italy/Spain (settlement management + rank advancement) (#119)",
-        "scope": null
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 66 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 88 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,13 +720,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "276 in-scope file(s) changed since last refresh",
+        "detail": "296 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base ff9b413 (2026-07-16)",
+        "ref": "base 62db147 (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -735,8 +735,8 @@
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
         "ref": "base ff9b413 (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "stale": true,
+        "detail": "19 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -750,7 +750,7 @@
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base ff9b413 (2026-07-16)",
+        "ref": "base 62db147 (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -766,7 +766,7 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base ff9b413 (2026-07-16)",
+        "ref": "base 62db147 (2026-07-16)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -788,7 +788,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 5,
+    "stale_count": 6,
     "total": 10,
     "handoffs": [
       {
@@ -1907,13 +1907,13 @@
   "proposals": {
     "available": true,
     "groups": {
-      "architecture": [
+      "_architecture": [
         {
-          "path": "designs/architecture/governance_ripple_substrate_v1.md",
+          "path": "systems/_architecture/governance_ripple_substrate_v1.md",
           "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified"
         },
         {
-          "path": "designs/architecture/governance_type_registry_v1.md",
+          "path": "systems/_architecture/governance_type_registry_v1.md",
           "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOS"
         }
       ],
@@ -1993,7 +1993,7 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"npcs\"]\n    D6[\"personal\"]\n    D7[\"provincial\"]\n    D8[\"scene\"]\n    D9[\"territory\"]\n    D10[\"threadwork\"]\n    D11[\"ui\"]\n    D12[\"world\"]\n  end\n  DESIGN --> SS",
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"npcs\"]\n    D6[\"personal\"]\n    D7[\"provincial\"]\n    D8[\"scene\"]\n    D9[\"territory\"]\n    D10[\"threadwork\"]\n    D11[\"ui\"]\n    D12[\"world\"]\n  end\n  DESIGN --> SS",
     "subsystem_count": 13,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
@@ -2001,7 +2001,7 @@
     "available": true,
     "snapshot_date": "2026-07-14",
     "definition": "Every consequential event is a Key — a typed, validated, append-only record. One update rule consumes Keys and propagates effects. Save state = initial conditions + Key log; replay = deterministic re-execution of the log.",
-    "definition_source": "designs/architecture/key_substrate_v30.md §1",
+    "definition_source": "systems/_architecture/key_substrate_v30.md §1",
     "families": [
       {
         "family": "scene_event",
@@ -2040,7 +2040,7 @@
       }
     ],
     "type_total": 49,
-    "registry_source": "designs/architecture/key_type_registry_v30.md",
+    "registry_source": "systems/_architecture/key_type_registry_v30.md",
     "live_type_header_count": 49,
     "count_check": "current",
     "components": [
@@ -2074,24 +2074,24 @@
       {
         "name": "Aggregate-up",
         "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).",
-        "source": "designs/architecture/propagation_spec_v1.md §2"
+        "source": "systems/_architecture/propagation_spec_v1.md §2"
       },
       {
         "name": "Distribute-down",
         "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.",
-        "source": "designs/architecture/propagation_spec_v1.md §3 (§12.3)"
+        "source": "systems/_architecture/propagation_spec_v1.md §3 (§12.3)"
       },
       {
         "name": "Termination",
         "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.",
-        "source": "designs/architecture/propagation_spec_v1.md §4 (PROPOSED)"
+        "source": "systems/_architecture/propagation_spec_v1.md §4 (PROPOSED)"
       }
     ],
     "conviction_axes": "hierarchical · sacred · instrumental · traditional (4-axis symbolic space)",
     "field_extension": {
       "name": "Field / Gauge (PROPOSED)",
       "desc": "A Key is a one-shot emission — wrong for continuous VECTOR state (Legitimacy/PS, Pressure Π, MS, Accord). The proposed Field primitive is a continuously-read/written scale-tagged value with aggregate_fn / propagate_fn / decay_fn / derived_flags. Unblock = Jordan ruling OF-3's decay() fork.",
-      "source": "designs/architecture/governance_type_registry_v1.md §4.2"
+      "source": "systems/_architecture/governance_type_registry_v1.md §4.2"
     },
     "note": "Reference snapshot (2026-07-14) with source links; the live key-type header count is re-checked every build. See the source docs for canonical detail. Key substrate doc carries a contradictory status marker (treat as IN FLUX)."
   },
