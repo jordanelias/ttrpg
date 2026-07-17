@@ -1,5 +1,5 @@
 """
-sim/world/npe.py — NPC Population Engine
+systems/world/sim/npe.py — NPC Population Engine
 
 Canon source: designs/scene/investigation_systems_v30.md SYSTEM 1 (NPE)
 

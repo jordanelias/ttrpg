@@ -164,9 +164,9 @@ class World:
     # [canonical: proposals/stub_infill_plan.md Amendment 2026-05-19
     #  "schema-migration commit that adds the missing registries"]
     practitioners: dict = field(default_factory=dict)            # actor_id → CoherenceState (from systems/threadwork/sim/coherence)
-    insurgencies: dict = field(default_factory=dict)             # insurgency_id → InsurgencyRecord (from sim/world/insurgency_pipeline)
-    uncontrolled_streaks: dict = field(default_factory=dict)     # frozenset[tid] → consecutive seasons (from sim/world/insurgency_pipeline)
-    npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from sim/world/npe)
+    insurgencies: dict = field(default_factory=dict)             # insurgency_id → InsurgencyRecord (from systems/world/sim/insurgency_pipeline)
+    uncontrolled_streaks: dict = field(default_factory=dict)     # frozenset[tid] → consecutive seasons (from systems/world/sim/insurgency_pipeline)
+    npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from systems/world/sim/npe)
     npc_counter: int = 0                                          # incrementing id source for NPC generation
     treaties: dict = field(default_factory=dict)                 # frozenset[parties] → TreatyRecord (from sim/provincial/treaty)
     # ─── Schema migration #2 — 2026-05-19 ─────────────────────────────────
@@ -323,14 +323,14 @@ def restore_world(snapshot: dict) -> World:
         w.practitioners = {k: CoherenceState.from_dict(v)
                             for k, v in snapshot['practitioners'].items()}
     if 'insurgencies' in snapshot:
-        from sim.world.insurgency_pipeline import InsurgencyRecord
+        from systems.world.sim.insurgency_pipeline import InsurgencyRecord
         w.insurgencies = {k: InsurgencyRecord.from_dict(v)
                            for k, v in snapshot['insurgencies'].items()}
     if 'uncontrolled_streaks' in snapshot:
         w.uncontrolled_streaks = {frozenset(entry['tids']): entry['streak']
                                    for entry in snapshot['uncontrolled_streaks']}
     if 'npcs' in snapshot:
-        from sim.world.npe import NPC
+        from systems.world.sim.npe import NPC
         w.npcs = {tid: [NPC.from_dict(n) for n in npc_list]
                    for tid, npc_list in snapshot['npcs'].items()}
     w.npc_counter = snapshot.get('npc_counter', 0)

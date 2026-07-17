@@ -1,6 +1,7 @@
 <!-- INFILL — prose/rationale extracted from southernmost_v30.md -->
 <!-- Skeleton: southernmost_v30.md -->
 
+<!-- [EDITORIAL: ED-IN-0071 — relocated to systems/world/ in the P4 reorg; content unchanged] -->
 # PART SIX: THE SOUTHERNMOST
 The Southernmost is the peninsula where the Einhir catastrophe occurred. Its Thread configurations have never recovered: three distinct zone-types persist from the collapse, each reflecting a different mode of configurational failure.
 **Locked zones**: Threads frozen at the exact moment of catastrophe. Cities stand intact. Bodies are undecayed. The Einhir moment is preserved in amber. Most historically significant for research.

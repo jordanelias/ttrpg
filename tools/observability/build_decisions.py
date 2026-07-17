@@ -202,13 +202,13 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("engine/params/factions/", "FA"),
 
     # --- WR: world ---
-    ("designs/world/", "WR"),
+    ("systems/world/", "WR"),
     ("systems/threadwork/", "WR"),
     ("designs/scene/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
     ("engine/params/threadwork.md", "WR"),
     ("engine/params/threadwork_superseded.md", "WR"),
     ("engine/params/southernmost.md", "WR"),
-    ("sim/world/", "WR"),
+    ("systems/world/sim/", "WR"),
     ("systems/threadwork/sim/", "WR"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 

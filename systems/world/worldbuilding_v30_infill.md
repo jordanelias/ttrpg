@@ -1,6 +1,7 @@
 <!-- INFILL — prose/rationale extracted from worldbuilding_v30.md -->
 <!-- Skeleton: worldbuilding_v30.md -->
 
+<!-- [EDITORIAL: ED-IN-0071 — relocated to systems/world/ in the P4 reorg; content unchanged] -->
 # WORLDBUILDING INTEGRATION v3 — Lore-to-Mechanics (Final Trimmed)
 ## Source: Pre-project lore documents (Church, Löwenritter, Crown, Guilds, Economy, Governance)
 ## Date: 2026-04-03

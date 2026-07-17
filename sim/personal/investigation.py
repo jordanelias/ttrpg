@@ -6,7 +6,7 @@ Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
   - sim/personal/fieldwork
-  - sim/world/npe
+  - systems/world/sim/npe
 
 Entry points:
   - resolve_npe_response(npc_id: str, prompt: dict, world: GameState) -> NPEResponse

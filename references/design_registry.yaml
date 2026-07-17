@@ -54,9 +54,9 @@ registry:
   character_histories:
     system: characters
     mode: TTRPG
-    canonical_v30: designs/world/character_histories_v30.md
-    skeleton: designs/world/character_histories_v30.md
-    infill: designs/world/character_histories_v30_infill.md
+    canonical_v30: systems/world/character_histories_v30.md
+    skeleton: systems/world/character_histories_v30.md
+    infill: systems/world/character_histories_v30_infill.md
     atomized: complete
     predecessor: designs/characters/character_histories_lifepath.md
     params: null
@@ -226,9 +226,9 @@ registry:
   territories:
     system: territories
     mode: ALL
-    canonical_v30: designs/world/geography_v30.md
-    skeleton: designs/world/geography_v30.md
-    infill: designs/world/geography_v30_infill.md
+    canonical_v30: systems/world/geography_v30.md
+    skeleton: systems/world/geography_v30.md
+    infill: systems/world/geography_v30_infill.md
     atomized: complete
     predecessor: designs/setting/geography_design.md
     params: null
@@ -236,9 +236,9 @@ registry:
   calamity_radiation:
     system: calamity_radiation
     mode: ALL
-    canonical_v30: designs/world/calamity_radiation_v30.md
-    skeleton: designs/world/calamity_radiation_v30.md
-    infill: designs/world/calamity_radiation_v30_infill.md
+    canonical_v30: systems/world/calamity_radiation_v30.md
+    skeleton: systems/world/calamity_radiation_v30.md
+    infill: systems/world/calamity_radiation_v30_infill.md
     atomized: complete
     predecessor: designs/setting/calamity_radiation.md
     params: null
@@ -288,7 +288,7 @@ registry:
   southernmost:
     system: southernmost
     mode: TTRPG
-    canonical_v30: designs/world/southernmost_v30.md
+    canonical_v30: systems/world/southernmost_v30.md
     skeleton: engine/params/southernmost.md
     infill: engine/params/southernmost.md
     atomized: complete
@@ -303,9 +303,9 @@ registry:
   worldbuilding:
     system: worldbuilding
     mode: ALL
-    canonical_v30: designs/world/worldbuilding_v30.md
-    skeleton: designs/world/worldbuilding_v30.md
-    infill: designs/world/worldbuilding_v30_infill.md
+    canonical_v30: systems/world/worldbuilding_v30.md
+    skeleton: systems/world/worldbuilding_v30.md
+    infill: systems/world/worldbuilding_v30_infill.md
     atomized: complete
     predecessor: designs/worldbuilding/worldbuilding_integration_v3.md
     params: engine/params/campaign_modes.md

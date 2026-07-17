@@ -59,7 +59,7 @@ lanes:
       - "canon/**"                # incl. registers/editorial_ledger.jsonl + patch_register_active.yaml; the ledger is APPEND-SHARED per shared_files (canon/** = structural authority, not an append lock)
       - "engine/params/**"
       - "designs/provincial/**"
-      - "designs/world/**"
+      - "systems/world/**"
       - "designs/personal/**"
       - "designs/scene/**"          # [2026-06-12 Jordan] scene -> Lane A (sole design-content lane; owns all sibling designs/ globs). Resolves OWNS-GAP: social_contest/combat_engine_v1/conviction_track/derived_stats/miraculous_event/investigation_systems/fieldwork were unowned. Fieldwork to move into designs/scene/fieldwork/ (separate Lane-A op).
       - "proposals/**"

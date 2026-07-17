@@ -86,9 +86,9 @@
 | `designs/board_game/victory_v30.md` | `designs/provincial/victory_v30.md` | PENDING |
 | `designs/board_game/victory_v30_infill.md` | `designs/provincial/victory_v30_infill.md` | PENDING |
 | `designs/board_game/victory_v30_skeleton.md` | `designs/provincial/victory_v30_skeleton.md` | PENDING |
-| `designs/characters/character_histories_v30.md` | `designs/world/character_histories_v30.md` | PENDING |
-| `designs/characters/character_histories_v30_infill.md` | `designs/world/character_histories_v30_infill.md` | PENDING |
-| `designs/characters/character_histories_v30_skeleton.md` | `designs/world/character_histories_v30_skeleton.md` | PENDING |
+| `designs/characters/character_histories_v30.md` | `systems/world/character_histories_v30.md` | PENDING |
+| `designs/characters/character_histories_v30_infill.md` | `systems/world/character_histories_v30_infill.md` | PENDING |
+| `designs/characters/character_histories_v30_skeleton.md` | `systems/world/character_histories_v30_skeleton.md` | PENDING |
 | `designs/combat/combat_design_v1.md` | `designs/scene/combat_design_v1.md` | PENDING |
 | `designs/combat/combat_design_v1_skeleton.md` | `designs/scene/combat_design_v1_skeleton.md` | PENDING |
 | `designs/combat/combat_v30.md` | `designs/scene/combat_v30.md` | PENDING |
@@ -141,13 +141,13 @@
 | `designs/mass_combat/mass_battle_v30_skeleton.md` | `designs/provincial/mass_battle_v30_skeleton.md` | PENDING |
 | `designs/mechanics/baralta_crown_claim_v30.md` | `designs/provincial/baralta_crown_claim_v30.md` | PENDING |
 | `designs/mechanics/baralta_crown_claim_v30_infill.md` | `designs/provincial/baralta_crown_claim_v30_infill.md` | PENDING |
-| `designs/setting/adjacency_map.jsx` | `designs/world/adjacency_map.jsx` | PENDING |
-| `designs/setting/calamity_radiation_v30.md` | `designs/world/calamity_radiation_v30.md` | PENDING |
-| `designs/setting/calamity_radiation_v30_infill.md` | `designs/world/calamity_radiation_v30_infill.md` | PENDING |
-| `designs/setting/geography_v30.md` | `designs/world/geography_v30.md` | PENDING |
-| `designs/setting/geography_v30_infill.md` | `designs/world/geography_v30_infill.md` | PENDING |
-| `designs/setting/southernmost_v30.md` | `designs/world/southernmost_v30.md` | PENDING |
-| `designs/setting/southernmost_v30_infill.md` | `designs/world/southernmost_v30_infill.md` | PENDING |
+| `designs/setting/adjacency_map.jsx` | `systems/world/adjacency_map.jsx` | PENDING |
+| `designs/setting/calamity_radiation_v30.md` | `systems/world/calamity_radiation_v30.md` | PENDING |
+| `designs/setting/calamity_radiation_v30_infill.md` | `systems/world/calamity_radiation_v30_infill.md` | PENDING |
+| `designs/setting/geography_v30.md` | `systems/world/geography_v30.md` | PENDING |
+| `designs/setting/geography_v30_infill.md` | `systems/world/geography_v30_infill.md` | PENDING |
+| `designs/setting/southernmost_v30.md` | `systems/world/southernmost_v30.md` | PENDING |
+| `designs/setting/southernmost_v30_infill.md` | `systems/world/southernmost_v30_infill.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16.md` | `designs/arcs/arc_expansion_v30.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16_skeleton.md` | `designs/arcs/arc_expansion_v30_skeleton.md` | PENDING |
 | `designs/systems/campaign_architecture_v1.md` | `systems/_architecture/campaign_architecture_v30.md` | PENDING |
@@ -199,10 +199,10 @@
 | `designs/ttrpg/valoria_emergent_scenarios_skeleton.md` | `designs/arcs/emergent_scenarios_skeleton.md` | PENDING |
 | `designs/ttrpg/valoria_narrative_scenario_chains.md` | `designs/arcs/narrative_scenario_chains.md` | PENDING |
 | `designs/ttrpg/valoria_narrative_scenario_chains_skeleton.md` | `designs/arcs/narrative_scenario_chains_skeleton.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_canon_audit_v30.md` | `designs/world/worldbuilding_canon_audit_v30.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_canon_audit_v30_infill.md` | `designs/world/worldbuilding_canon_audit_v30_infill.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_v30.md` | `designs/world/worldbuilding_v30.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_v30_infill.md` | `designs/world/worldbuilding_v30_infill.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_canon_audit_v30.md` | `systems/world/worldbuilding_canon_audit_v30.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_canon_audit_v30_infill.md` | `systems/world/worldbuilding_canon_audit_v30_infill.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_v30.md` | `systems/world/worldbuilding_v30.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_v30_infill.md` | `systems/world/worldbuilding_v30_infill.md` | PENDING |
 | `gm_ref/README.md` | `designs/arcs/gm_ref/README.md` | PENDING |
 | `gm_ref/arc_narrative_analysis.md` | `designs/arcs/gm_ref/arc_narrative_analysis.md` | PENDING |
 | `gm_ref/arcs_01_04_nongreedy.md` | `designs/arcs/gm_ref/arcs_01_04.md` | PENDING |
@@ -793,3 +793,11 @@
 | old path | new path |
 |---|---|
 | `designs/architecture/` | `systems/_architecture/` |
+
+
+## 2026-07-17 — world designs/ + sim/ -> systems/ (P4 slice 4, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/world/` | `systems/world/` |
+| `sim/world/` | `systems/world/sim/` |

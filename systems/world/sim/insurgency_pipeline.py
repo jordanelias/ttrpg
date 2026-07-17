@@ -1,5 +1,5 @@
 """
-sim/world/insurgency_pipeline.py — Revolt → Insurgency → Faction emergence pipeline (GD-3)
+systems/world/sim/insurgency_pipeline.py — Revolt → Insurgency → Faction emergence pipeline (GD-3)
 
 Canon source: canon/02_canon_constraints.md §B GD-3
 
@@ -15,7 +15,7 @@ PARTIAL IMPLEMENTATION:
  Stored at module level keyed by world_token + insurgency_id, with
  reset_for_world helper. Schema migration to World pending.]
 
-[CANON-GATED]: designs/world/insurgency_pipeline_v30.md cited but not yet
+[CANON-GATED]: systems/world/insurgency_pipeline_v30.md cited but not yet
 authored (Pass 2i pending). This module implements GD-3's mechanical
 constraints; richer behavior (specific Conviction generation per emergence,
 NPC seeding for new faction's leadership) awaits Pass 2i.

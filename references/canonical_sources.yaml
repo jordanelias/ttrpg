@@ -46,8 +46,8 @@ sources:
     declares_pass_2_content_complete: true
 
   insurgency_pipeline_v30:
-    design_doc: designs/world/insurgency_pipeline_v30.md
-    canonical_sha__designs__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
+    design_doc: systems/world/insurgency_pipeline_v30.md
+    canonical_sha__systems__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2i"
     gd_binding: ["GD-1", "GD-2", "GD-3"]
@@ -146,10 +146,10 @@ systems:
     canonical_sha__designs__territory__valoria_geography_v30_yaml: "53e92edae79ca49b5543141bbebddb2fbb5f7b5c"
     geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "570bde5ccfb7cd0cada8f326cbb79360b47e6b0b"
-    geographic_design_doc: designs/world/geography_v30.md
-    canonical_sha__designs__world__geography_v30_md: "c1fc7ffd2547bf08e924fe4e6cde612f25dbadab"
-    geographic_design_doc_infill: designs/world/geography_v30_infill.md
-    canonical_sha__designs__world__geography_v30_infill_md: "18197bd570a375490fb71d9e0b545e0dd56a7b9d"
+    geographic_design_doc: systems/world/geography_v30.md
+    canonical_sha__systems__world__geography_v30_md: "c1fc7ffd2547bf08e924fe4e6cde612f25dbadab"
+    geographic_design_doc_infill: systems/world/geography_v30_infill.md
+    canonical_sha__systems__world__geography_v30_infill_md: "18197bd570a375490fb71d9e0b545e0dd56a7b9d"
     march_layer_skeleton: designs/territory/march_layer_v30.md
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
@@ -252,8 +252,8 @@ systems:
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
-    design_doc: designs/world/ms_trajectory_v1.md
-    canonical_sha__designs__world__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
+    design_doc: systems/world/ms_trajectory_v1.md
+    canonical_sha__systems__world__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
 
 # ── Foundations amendments (canonical philosophy) ──────────────────────
   leap_mechanism:
@@ -278,28 +278,28 @@ systems:
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   narrative_voice_canon:
-    design_doc: designs/world/narrative_voice_canon_v30.md
-    canonical_sha__designs__world__narrative_voice_canon_v30_md: "f163a7e1872a9b432fc33110f47b567c7801b4cb"
+    design_doc: systems/world/narrative_voice_canon_v30.md
+    canonical_sha__systems__world__narrative_voice_canon_v30_md: "f163a7e1872a9b432fc33110f47b567c7801b4cb"
     status: provisional
     added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
   solmund_voice:
-    design_doc: designs/world/solmund_voice_v30.md
-    canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
+    design_doc: systems/world/solmund_voice_v30.md
+    canonical_sha__systems__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
     status: provisional
     added: '2026-04-25 Stage 4; 2026-05-02 ED-784 Phase 2: Mandate→L+PS migration applied (38 refs reclassified per audit §2.1; Ethical Framework Modifiers + Löwenritter PP-246 sections SUPERSEDED per PP-686 v2)'
   solmund_philosophy:
-    design_doc: designs/world/solmund_philosophy_v30.md
-    canonical_sha__designs__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"
+    design_doc: systems/world/solmund_philosophy_v30.md
+    canonical_sha__systems__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund:
-    design_doc: designs/world/solmund_v30.md
-    canonical_sha__designs__world__solmund_v30_md: "27f8e4eeee7b2640cee645a4006c9b46ca017064"
+    design_doc: systems/world/solmund_v30.md
+    canonical_sha__systems__world__solmund_v30_md: "27f8e4eeee7b2640cee645a4006c9b46ca017064"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund_artifacts:
-    design_doc: designs/world/solmund_artifacts_v30.md
-    canonical_sha__designs__world__solmund_artifacts_v30_md: "393eb32b1c9e0bdb829420928cdc06476059ba7b"
+    design_doc: systems/world/solmund_artifacts_v30.md
+    canonical_sha__systems__world__solmund_artifacts_v30_md: "393eb32b1c9e0bdb829420928cdc06476059ba7b"
     status: provisional
     added: '2026-04-25 Stage 4'
   miraculous_event:
@@ -405,17 +405,17 @@ systems:
     index: arcs/arc_expansion_v30_index.md
     canonical_sha__designs__arcs__arc_expansion_v30_index_md: "5f2e99014ee3e06e1e9da6b337f5a9ffdd8e4fd6"
   calamity_radiation:
-    design_doc: designs/world/calamity_radiation_v30.md
-    canonical_sha__designs__world__calamity_radiation_v30_md: "7f5cbeba85265051f18e15686d2cf596d9e17890"
-    infill: designs/world/calamity_radiation_v30_infill.md
-    canonical_sha__designs__world__calamity_radiation_v30_infill_md: "b1d24c136acb6542f073685ac23a37a37222df5d"
+    design_doc: systems/world/calamity_radiation_v30.md
+    canonical_sha__systems__world__calamity_radiation_v30_md: "7f5cbeba85265051f18e15686d2cf596d9e17890"
+    infill: systems/world/calamity_radiation_v30_infill.md
+    canonical_sha__systems__world__calamity_radiation_v30_infill_md: "b1d24c136acb6542f073685ac23a37a37222df5d"
   character_histories:
-    design_doc: designs/world/character_histories_v30.md
-    canonical_sha__designs__world__character_histories_v30_md: "6bfd1c76ba5c6b7b29748cca92fff99be0760552"
-    index: designs/world/character_histories_v30_index.md
-    canonical_sha__designs__world__character_histories_v30_index_md: "87ef6d969a39903521360fcab05195809807887e"
-    infill: designs/world/character_histories_v30_infill.md
-    canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
+    design_doc: systems/world/character_histories_v30.md
+    canonical_sha__systems__world__character_histories_v30_md: "6bfd1c76ba5c6b7b29748cca92fff99be0760552"
+    index: systems/world/character_histories_v30_index.md
+    canonical_sha__systems__world__character_histories_v30_index_md: "87ef6d969a39903521360fcab05195809807887e"
+    infill: systems/world/character_histories_v30_infill.md
+    canonical_sha__systems__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
     canonical_sha__designs__provincial__clock_registry_v30_md: "c5351bbd43c8277da97cf79e56231d8641aaf52f"

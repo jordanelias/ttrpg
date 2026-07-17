@@ -1,5 +1,5 @@
 """
-sim.world — Background world processes
+systems.world.sim — Background world processes
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 

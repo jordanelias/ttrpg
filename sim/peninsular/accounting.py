@@ -18,9 +18,9 @@ and NPC ecology run through their pipeline modules.
 
 [2026-05-20 wire-up — closes two "module verified but not invoked" gaps from
  the post-Deferred-Migration roadmap (#2 + #3):
-   - sim.world.insurgency_pipeline.check_insurgency_triggers — GD-3 emergence
+   - systems.world.sim.insurgency_pipeline.check_insurgency_triggers — GD-3 emergence
      fires at accounting time after Accord aggregates.
-   - sim.world.npe.simulate_npc_actions — territory-level NPC stance drift
+   - systems.world.sim.npe.simulate_npc_actions — territory-level NPC stance drift
      runs at season end before victory check.
  Both modules were verified individually at T0-10 / T0-11 but never invoked
  from the season loop.]
@@ -29,12 +29,12 @@ from __future__ import annotations
 
 from sim.peninsular.ci_track import apply_seasonal_ci
 from sim.peninsular.ms_track import apply_ms_baseline_decay, SEASONS_PER_YEAR
-from sim.world.insurgency_pipeline import (
+from systems.world.sim.insurgency_pipeline import (
     check_insurgency_triggers,
     check_insurgency_promotion,
     get_insurgencies,
 )
-from sim.world.npe import simulate_npc_actions
+from systems.world.sim.npe import simulate_npc_actions
 
 
 def run_accounting(world):
