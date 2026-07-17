@@ -3,7 +3,7 @@
 ci_module_shape_check.py — container/shape hygiene guard (ED-1085; doctrine ED-1083 §3).
 
 Enforces the holonic container rules on ENGINE/SIM RUNTIME code
-(designs/architecture/holonic_container_doctrine_v1.md §3):
+(systems/_architecture/holonic_container_doctrine_v1.md §3):
 
   1. NO cross-container reach-ins: runtime modules must not manipulate sys.path to point
      into a tests/ tree (the ED-1085 failure class: combat_engine_v1/core.py importing its

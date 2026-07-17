@@ -155,7 +155,7 @@ mechanics:
   game_state_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/complete_systems_reference.md"]
+    canon_sources: ["systems/_architecture/complete_systems_reference.md"]
     sim_module: sim/autoload/game_state.py
     test_status: not_implemented
     notes: "Global state container - not a game mechanic, infrastructure."
@@ -163,21 +163,21 @@ mechanics:
   season_manager_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/autoload/season_manager.py
     test_status: not_implemented
 
   scene_slate_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md"]
     sim_module: sim/autoload/scene_slate.py
     test_status: not_implemented
 
   npc_ai_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/complete_systems_reference.md#part-1"]
+    canon_sources: ["systems/_architecture/complete_systems_reference.md#part-1"]
     sim_module: sim/autoload/npc_ai.py
     test_status: contested
     notes: "Priority-stack contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending."
@@ -208,7 +208,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/scene/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
-      - "designs/architecture/complete_systems_reference.md#part-2"
+      - "systems/_architecture/complete_systems_reference.md#part-2"
       - "designs/scene/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
     params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
     sim_module: designs/scene/combat_engine_v1/   # canonical engine; sim/personal/combat.py is the DEPRECATED v30 wiring
@@ -223,7 +223,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/scene/social_contest_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-3"
+      - "systems/_architecture/complete_systems_reference.md#part-3"
     params: "engine/params/contest.md"
     sim_module: sim/personal/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
     test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
@@ -267,7 +267,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/scene/fieldwork_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-5"
+      - "systems/_architecture/complete_systems_reference.md#part-5"
     params: "engine/params/fieldwork.md"
     sim_module: sim/personal/fieldwork.py
     test_status: not_implemented
@@ -331,7 +331,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/architecture/complete_systems_reference.md#part-8"
+      - "systems/_architecture/complete_systems_reference.md#part-8"
       - "systems/threadwork/threadwork_v30.md#section-2-6"
       - "systems/threadwork/threadwork_v30.md#section-3-5"
       - "designs/scene/fieldwork_v30.md#section-2-6"
@@ -471,7 +471,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/provincial/mass_battle_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-6"
+      - "systems/_architecture/complete_systems_reference.md#part-6"
     params: "engine/params/mass_combat.md"
     sim_module: sim/provincial/massbattle.py
     test_status: not_implemented
@@ -754,14 +754,14 @@ mechanics:
   season_loop:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/peninsular/season.py
     test_status: not_implemented
 
   accounting_cascade:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/peninsular/accounting.py
     test_status: not_implemented
     notes: "13-step end-of-season cascade."
@@ -864,7 +864,7 @@ mechanics:
   domain_echo:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-5"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-5"]
     sim_module: sim/cross_scale/domain_echo.py
     test_status: not_implemented
     notes: "Scene -> Faction propagation. ED-300 autonomous resolution."
@@ -872,14 +872,14 @@ mechanics:
   zoom_in_out:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-4"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-4"]
     sim_module: sim/cross_scale/zoom_in_out.py
     test_status: not_implemented
 
   handoff_rules:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-3"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-3"]
     sim_module: sim/cross_scale/handoff_rules.py
     test_status: not_implemented
     notes: "8 handoff rules: Personal<->Thread, Personal<->Faction, Personal<->Scene, Scene<->Faction Domain Echo, Thread<->Faction, Thread<->Mass, Mass<->Personal General Duel, Scene<->Mass, Fieldwork<->All."

@@ -18,32 +18,27 @@
       "3": 620
     },
     "by_lane": {
-      "unassigned": 695,
-      "IN": 13,
-      "FA": 67,
+      "FA": 68,
+      "unassigned": 701,
       "SC": 7,
       "PC": 112,
       "GO": 19,
       "MB": 54,
+      "IN": 6,
       "SE": 5,
       "WR": 8,
       "FI": 1
     },
     "by_lane_priority": {
+      "FA": {
+        "1": 4,
+        "2": 0,
+        "3": 64
+      },
       "unassigned": {
         "1": 282,
         "2": 32,
-        "3": 381
-      },
-      "IN": {
-        "1": 2,
-        "2": 1,
-        "3": 10
-      },
-      "FA": {
-        "1": 3,
-        "2": 0,
-        "3": 64
+        "3": 387
       },
       "SC": {
         "1": 5,
@@ -64,6 +59,11 @@
         "1": 6,
         "2": 0,
         "3": 48
+      },
+      "IN": {
+        "1": 1,
+        "2": 1,
+        "3": 4
       },
       "SE": {
         "1": 0,
@@ -154,12 +154,12 @@
       "locations": [
         "designs/provincial/faction_behavior_v30.md:548",
         "designs/personal/conviction_taxonomy_v30.md:337",
-        "designs/architecture/key_substrate_v30.md:627",
+        "systems/_architecture/key_substrate_v30.md:627",
         "systems/articulation/articulation_layer_v30.md:363"
       ],
       "systems": [],
       "count": 4,
-      "lane": null
+      "lane": "FA"
     },
     {
       "text": "<!-- [STUB: payload inferred, not canon-specified \u2014 provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->",
@@ -167,14 +167,14 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:148",
-        "designs/architecture/key_type_registry_v30.md:165",
-        "designs/architecture/key_type_registry_v30.md:183",
-        "designs/architecture/key_type_registry_v30.md:744"
+        "systems/_architecture/key_type_registry_v30.md:148",
+        "systems/_architecture/key_type_registry_v30.md:165",
+        "systems/_architecture/key_type_registry_v30.md:183",
+        "systems/_architecture/key_type_registry_v30.md:744"
       ],
       "systems": [],
       "count": 4,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "`[OPEN \u2014 Jordan]`",
@@ -4828,12 +4828,12 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:779",
-        "designs/architecture/key_type_registry_v30.md:795"
+        "systems/_architecture/key_type_registry_v30.md:779",
+        "systems/_architecture/key_type_registry_v30.md:795"
       ],
       "systems": [],
       "count": 2,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |",
@@ -7074,11 +7074,11 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/holonic_container_doctrine_v1.md:38"
+        "systems/_architecture/holonic_container_doctrine_v1.md:38"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "`engine_clock`'s `doc: null` / `[ASSUMPTION]` grade in `module_contracts.yaml` \u2014 that flip",
@@ -7086,11 +7086,11 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/propagation_spec_v1.md:33"
+        "systems/_architecture/propagation_spec_v1.md:33"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "O.2 engine_clock module contract (retires doc:null/[ASSUMPTION])",
@@ -7098,11 +7098,11 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/propagation_spec_v1.md:69"
+        "systems/_architecture/propagation_spec_v1.md:69"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
@@ -11944,11 +11944,11 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:762"
+        "systems/_architecture/key_type_registry_v30.md:762"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "<!-- [STUB: emitting_systems=[fieldwork] may under-attribute \u2014 npc_behavior \u00a73 belief revision may also emit this; verify; tracked workplan #32 / ED-937] -->",
@@ -11956,11 +11956,11 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:924"
+        "systems/_architecture/key_type_registry_v30.md:924"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "| **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete \u00a710.2 \u2014 TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |",
@@ -12151,21 +12151,21 @@
     {
       "id": "PP-687-001",
       "scope": "Doc 08 \u00a71 [REDACTED-LEGACY-NAME, canon=Key] (categorical aligned/neutral/contradicted projection)",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a72",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a72",
       "date": "2026-05-01",
       "replacement": "[REDACTED-LEGACY-NAME, canon=Key] superseded by Key.impact_vector \u2014 continuous signed projection onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype becomes "
     },
     {
       "id": "PP-687-002",
       "scope": "Doc 12 Political Dynamics \u2014 bespoke event records in procedures A-E",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a78.3",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a78.3",
       "date": "2026-05-01",
       "replacement": "Procedures A-E rewrite to consume Keys (Phase B Stage 1). Procedure A reads Memory Keys filtered by axis-relevance. Procedures B-D read scene_event and da_outco"
     },
     {
       "id": "PP-687-003",
       "scope": "NPC Memory record bespoke schema (per npc_behavior_v30)",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a74.3-4.4",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a74.3-4.4",
       "date": "2026-05-01",
       "replacement": "NPC.memory becomes list of Key references with per-NPC salience field (no longer per-NPC bespoke event copies). Memory Query API \u00a74.4 indexes by axis-relevance "
     },

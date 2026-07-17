@@ -255,7 +255,7 @@ def main():
                 in_tbl = False
 
     # ---- handshakes: scale_transitions_v30.md §3 handoffs + §5 Domain Echo ----
-    st = REPO / "designs" / "architecture" / "scale_transitions_v30.md"
+    st = REPO / "systems" / "_architecture" / "scale_transitions_v30.md"
     s_st = "designs/architecture/scale_transitions_v30.md"
     if st.exists():
         lines = st.read_text(encoding="utf-8").splitlines()

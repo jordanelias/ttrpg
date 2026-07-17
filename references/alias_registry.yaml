@@ -397,7 +397,7 @@ world_narrative:
     canonical: "Domain Action"
     abbreviations: []
     category: mechanic
-    note: "Faction-level strategic action resolved at scale-transition phase. Unit of strategic-layer decision. Canonical in designs/architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Mode D cascade-terminal — 346 chains. Added to glossary 2026-04-30 (PP-691)."
+    note: "Faction-level strategic action resolved at scale-transition phase. Unit of strategic-layer decision. Canonical in systems/_architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Mode D cascade-terminal — 346 chains. Added to glossary 2026-04-30 (PP-691)."
 
 thread_operations:
   weaving:

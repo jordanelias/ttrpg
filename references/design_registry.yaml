@@ -204,9 +204,9 @@ registry:
   scale_transitions:
     system: scale_transitions
     mode: HYBRID
-    canonical_v30: designs/architecture/scale_transitions_v30.md
-    skeleton: designs/architecture/scale_transitions_v30.md
-    infill: designs/architecture/scale_transitions_v30_infill.md
+    canonical_v30: systems/_architecture/scale_transitions_v30.md
+    skeleton: systems/_architecture/scale_transitions_v30.md
+    infill: systems/_architecture/scale_transitions_v30_infill.md
     atomized: complete
     predecessor: designs/hybrid/scale_transitions_design_v1.md
     params: engine/params/scale_transitions.md
@@ -214,9 +214,9 @@ registry:
   hybrid_gaps:
     system: scale_transitions
     mode: HYBRID
-    canonical_v30: designs/architecture/hybrid_gaps_v30.md
-    skeleton: designs/architecture/hybrid_gaps_v30.md
-    infill: designs/architecture/hybrid_gaps_v30_infill.md
+    canonical_v30: systems/_architecture/hybrid_gaps_v30.md
+    skeleton: systems/_architecture/hybrid_gaps_v30.md
+    infill: systems/_architecture/hybrid_gaps_v30_infill.md
     atomized: complete
     predecessor: designs/hybrid/hybrid_gaps_resolved.md
     params: null
@@ -273,7 +273,7 @@ registry:
   campaign_modes:
     system: campaign_modes
     mode: ALL
-    canonical_v30: designs/architecture/campaign_modes_v30.md
+    canonical_v30: systems/_architecture/campaign_modes_v30.md
     skeleton: engine/params/factions_personal.md
     infill: engine/params/factions_personal.md
     atomized: complete

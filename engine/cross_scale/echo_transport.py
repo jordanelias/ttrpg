@@ -38,7 +38,7 @@ from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, Type
 
 
 _REGISTRY_PATH = (Path(__file__).resolve().parents[2]
-                  / "designs" / "architecture" / "key_type_registry_v30.md")
+                  / "systems" / "_architecture" / "key_type_registry_v30.md")
 _REGISTRY: Optional[TypeRegistry] = None
 
 

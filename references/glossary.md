@@ -164,13 +164,13 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | History | — | Skill-equivalent. Specific experiential knowledge that grants bonus dice. Cap = Memory score. |
 | Character Point | CP | Advancement currency earned through Beliefs and session milestones. **CP refers to Character Points only** (ED-136); see PART TWELVE collision entry. |
 | Disposition | — | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). |
-| Domain Action | — | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `designs/architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). |
+| Domain Action | — | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `systems/_architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). |
 | Domain Echo | — | Faction-level consequence triggered by decisive Debate outcomes. |
 | Grievance Marker | — | Token placed on a faction after hostile covert action. Originally scoped to Niflhel hostile action; Niflhel-as-faction struck per ED-764, scope extended to any covert/hostile action. |
 | Co-Movement Card | — | Strategic-layer mechanism for Thread co-movement; resolved on every Thread operation result. (BG layer — name reflects card-economy origin; engine implementation is automatic on Thread-operation-completion event.) |
 | Einhir | — | Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis. |
 | Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. |
-| Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `designs/architecture/scale_transitions_v30.md` §4. |
+| Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `systems/_architecture/scale_transitions_v30.md` §4. |
 | Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
 | Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `systems/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
 
@@ -229,8 +229,8 @@ These are canonical-authority systems with their own design docs. Hub-centrality
 | Full Term | Canonical doc | Description |
 |-----------|---------------|-------------|
 | Turmoil | `designs/provincial/peninsular_strain_v30.md` | Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A — top quintile in cite + mu + pp). |
-| Conflict Architecture | `designs/architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
-| Campaign Architecture | `designs/architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
+| Conflict Architecture | `systems/_architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
+| Campaign Architecture | `systems/_architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
 | Victory | `designs/provincial/victory_v30.md` + `params/bg/victory.md` | Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / Löwenritter / RM / Guilds). |
 | CI Political | `designs/provincial/ci_political_v30.md` | Church Influence political dynamics — milestones, seizure mechanics, Theocracy Unification spec. Renamed from `tc_political_redesign_v30` (same doc, CI = Church Influence's politically-active form per `references/canonical_sources.yaml` note). |
 

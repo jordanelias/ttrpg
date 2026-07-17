@@ -67,7 +67,7 @@ entries:
   - superseded_id: "PP-687-001"
     date: 2026-05-01
     scope: "Doc 08 §1 EventImpact (categorical aligned/neutral/contradicted projection)"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §2"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §2"
     replacement: >
       EventImpact superseded by Key.impact_vector — continuous signed projection
       onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype
@@ -80,7 +80,7 @@ entries:
   - superseded_id: "PP-687-002"
     date: 2026-05-01
     scope: "Doc 12 Political Dynamics — bespoke event records in procedures A-E"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §8.3"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §8.3"
     replacement: >
       Procedures A-E rewrite to consume Keys (Phase B Stage 1).
       Procedure A reads Memory Keys filtered by axis-relevance.
@@ -93,7 +93,7 @@ entries:
   - superseded_id: "PP-687-003"
     date: 2026-05-01
     scope: "NPC Memory record bespoke schema (per npc_behavior_v30)"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §4.3-4.4"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §4.3-4.4"
     replacement: >
       NPC.memory becomes list of Key references with per-NPC salience field
       (no longer per-NPC bespoke event copies). Memory Query API §4.4 indexes
@@ -241,7 +241,7 @@ entries:
       - engine/params/threadwork.md §Knot Mechanics
       - engine/params/core.md (Bonds)
       - designs/personal/knots_v30.md
-      - designs/architecture/complete_systems_reference.md Part 8
+      - systems/_architecture/complete_systems_reference.md Part 8
       - systems/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
       - designs/scene/investigation_systems_v30.md (Ontological Ledger)
       - designs/scene/fieldwork_socializing.md

@@ -54,7 +54,7 @@ allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
 - **Current state (2026-07-16).** The **sole remaining T0 blocker** on M1 is **ED-1051**
   (engine_clock ratification — default: flip `references/module_contracts.yaml` `engine_clock`
-  `doc:null` → `designs/architecture/propagation_spec_v1.md`); it also gates the GO lane's
+  `doc:null` → `systems/_architecture/propagation_spec_v1.md`); it also gates the GO lane's
   Gate-0 entry. Governance **D1–D6 RULED 2026-07-13** (ED-IN-0046/0047): the FA §1.0c/§1.0d/§2.5
   riders, B1 faction-count = 4, and B12's new Settlement→Territory→Province→Duchy→Country
   hierarchy await ratification-flip + authoring (E11 symmetric suspicion-reduction; **L/PS

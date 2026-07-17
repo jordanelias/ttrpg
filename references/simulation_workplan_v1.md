@@ -631,7 +631,7 @@ At session close, append to session_log_current.md:
 ### §6.8 A8 GENERATIONAL deep
 
 **Pre-sim canon:**
-- `designs/architecture/generational_transition_v30.md` (already in base)
+- `systems/_architecture/generational_transition_v30.md` (already in base)
 - `params/factions_personal.md`
 - Companion mechanics docs (search)
 

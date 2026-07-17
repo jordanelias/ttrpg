@@ -24,8 +24,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 34,
-        "needs_jordan": 15
+        "total": 32,
+        "needs_jordan": 14
       },
       "MB": {
         "total": 6,
@@ -48,373 +48,15 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 97,
-        "needs_jordan": 27
+        "total": 99,
+        "needs_jordan": 28
       }
     }
   },
   "by_lane": {
-    "IN": {
-      "total": 34,
-      "needs_jordan": 15,
-      "items": [
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/architecture/governance_ripple_substrate_v1.md",
-          "id": "designs/architecture/governance_ripple_substrate_v1.md",
-          "title": "governance ripple substrate v1",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/architecture/governance_type_registry_v1.md",
-          "id": "designs/architecture/governance_type_registry_v1.md",
-          "title": "governance type registry v1",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0003",
-          "title": "Convergence Markers need a runtime detector/applier. arc_register_events.md §VI's 8 markers are hand-authored trigger+payload rows with no detector, no Key type, no module contract, no sim module; combined payloads are non-summative by the ",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0004",
-          "title": "Articulation §3.1 trigger ruleset omits scene.battle_concluded / scene.investigation_resolved (+scene.combat_resolved variant) despite key_type_registry §7 declaring articulation their consumer; §6.4 L296 asserts battle_concluded 'already t",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0005",
-          "title": "Playability-layer currency: PER-SUBSYSTEM WALKTHROUGH METHOD ADOPTED AS STANDING POLICY (fork resolved by Jordan — the SC-lane walkthrough-first method generalizes; no corpus-wide UI monolith revival mid mechanic-churn). valoria_ui_ux_v4_1.",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0007",
-          "title": "Register back-propagation gate: ratifications never round-trip to canon/supersession_register.yaml (frozen at ED-912/06-28 — no GD-1 entry, root cause of ED-WR-0001; no mass-battle/contest flips) or canon/mechanics_index.yaml (mass_battle/s",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0008",
-          "title": "Naming-authority unification: glossary.md and descriptor_registry/names_index both self-declare naming authority and disagree on the attribute roster (7 vs 9, and which of Cognition/Presence/Spirit are canonical vs alias); descriptor_regist",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0012",
-          "title": "Cross-cutting index-hygiene work item (accepted; IN lane): (1) refresh the throughline registry's social-contest citations (audit finding N-9, UPHELD) -- T-14 and T-23 cite the contest via retired tracker names (Piety Track, Composure; thro",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0013",
-          "title": "Cross-cutting diagnostic-hygiene work item (accepted; IN lane; SEQUENCED AFTER ED-SC-0004): (1) re-run the rolling-engine resolution diagnostic (skills/valoria-resolution-diagnostic) against the sigma-substrate contest kernel -- the 2026-05",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0014",
-          "title": "Key the silent emitters: settlement_layer + ci_political + victory era/occupation transitions (edge-playability EP-4/EP-5). Settlement Order/L-PS drift, revolt (g_ord0) and undefended auto-capture (g_def0) emit no Key of any type (settlemen",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0015",
-          "title": "Seam-feedback line as an authoring convention (edge-playability SIG-2/EP-11). Every 'how does the player see this?' answer at the audited seams resolves to the off-index UI v4 docs, a local unkeyed presentation spec, or nothing — current-ge",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0016",
-          "title": "Index the joints (edge-playability ep-14/ep-23/EP-8; SIG-4). The connective tissue is off the currency index: fieldwork/investigation, scale_transitions, and player_agency have no CURRENT.md rows; module_contracts still carries faction_poli",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0019",
-          "title": "Renumbered off the ED-IN-0012 double-allocation (armature §5.10 ruling, ED-IN-0026). Registry×rendering sweep (edge-playability SIG-1; EP-3/EP-4/EP-5) from the edge-playability §7 batch (PR #81/#82): the articulation Tier-2 trigger table co",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0020",
-          "title": "Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0029",
-          "title": "Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0030",
-          "title": "Phantom 'debt scene' mechanic -- dangling citation surfaced while executing ED-IN-0016's citation-repoint pass. designs/architecture/scale_transitions_v30.md §4.3.2 row 8 (Rank Advancement Recognition Event) reads: 'Recognition can be withh",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0042",
-          "title": "Skills-ecosystem gap audit (Phase 7 companion to ED-IN-0038..0041) -- structural gaps in the skill/tooling ecosystem surfaced but deliberately NOT built this pass (scope: document + close only the cheap items, per Jordan's explicit AskUserQ",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0045",
-          "title": "Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0048",
-          "title": "piety_track's real home design doc designs/personal/conviction_track_v1.md (exists on disk; the debate-tracker canonical home per glossary.md:84 and ED-SC-0003) is NOT registered in references/canonical_sources.yaml. The only conviction_tra",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0049",
-          "title": "scale_transitions_v30.md SS3.3 'Personal -> Scene (Contest)' (L51) is one of the eight named Handoff Rules but is an EMPTY section -- heading only, zero body, no editorial stub marker (unlike siblings SS3.4 and SS3.6, which carry '[EDITORIA",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0050",
-          "title": "The canonical mode-bridge doc scale_transitions_v30.md carries literal GM-as-resolution-actor language uncorrected against the no-GM engine invariant ('There is no GM -- the engine resolves everything'). SS1 mode table (L19): 'TTRPG | Scene",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0062",
-          "title": "Cross-scale governance grounding synthesis docket (Jordan-requested). Composes one graph of Valoria's whole political system across the spatial containment spine (settlement->territory->province->duchy->country) and the political spine (fac",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-REMEDIATION-0064",
-          "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-REMEDIATION-0066",
-          "title": "[RENUMBERED from ED-IN-0065 at merge -- COLLISION: this branch read next_free=65 from pre-#139 main and allocated ED-IN-0065 for the remediation program, but PR #139 (holistic 5-critic observatory adversarial pass + its own unification doc)",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0066",
-          "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0069",
-          "title": "Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0070",
-          "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0071",
-          "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
-          "title": "[PARTIAL] mechanic_audit / architecture: 2 P1 gaps (empty §3.3 Handoff Rule; uncorrected literal-GM language vs no-GM invariant) proposed for ED-IN filing; 6 P2s, several already-tracked items confirmed still open, no new ED allocated by th",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/architecture"
-          ]
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-module-adjudicator-2026-07-13:cross_cutting:module_adjudicator",
-          "title": "[OPEN] module_adjudicator / cross_cutting: 22 violations, 61 warnings; consume-closure 100%, cycle-closure 100%, gate/derivation/sequence 100%, emit-closure 97.9%; 20/22 violations collapse to one un-propagated ED-1038 scale_transitions §12",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "OPEN",
-          "links": [
-            "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator"
-          ]
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-vector-audit-2026-07-13:corpus_wide:vector_audit",
-          "title": "[OPEN] vector_audit / corpus_wide: scripts/vector_audit.py confirmed a stub end-to-end (no Stage 1-7 dispatcher; docstring/scaffolding only; main() prints a pointer, writes nothing); last real run (deprecated/archives/audit/2026-04-29-topog",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "OPEN",
-          "links": [
-            "designs/audit/2026-07-13-multi-agent-audit/vector_audit"
-          ]
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-vector-audit-2026-07-14:corpus_wide:2026-07-14-governance-vector-audit",
-          "title": "[PARTIAL] vector_audit / corpus_wide: L0 validation FAILED 1/3 (P2 conviction-symmetry, a real finding per methodology §3.8); structural: 9 doc:null, 6 dangling-emit, 4 unregistered-canonical, 1 currency-drift — folded into the ED-IN-0064 c",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-14-governance-vector-audit"
-          ]
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-vector-audit-2026-07-14:corpus_wide:vector_audit",
-          "title": "[PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P1 foundation-periphery, P2 conviction-symmetry) -> leads not verdicts; ED-IN-0064",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-14-gameplay-subsystem-observatory/vector_audit"
-          ]
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-vector-audit-2026-07-14:architecture:2026-07-14-gameplay-subsystem-observatory",
-          "title": "[PARTIAL] vector_audit / architecture: 16 gameplay modules; 9 doc:null/13 [ASSUMPTION]/4 dangling; 2 GENUINE reclassified CTC by adversarial gate; ED-IN-0064",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-14-gameplay-subsystem-observatory"
-          ]
-        }
-      ]
-    },
     "unassigned": {
-      "total": 97,
-      "needs_jordan": 27,
+      "total": 99,
+      "needs_jordan": 28,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -614,6 +256,26 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "systems/_architecture/governance_ripple_substrate_v1.md",
+          "id": "systems/_architecture/governance_ripple_substrate_v1.md",
+          "title": "governance ripple substrate v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified",
+          "links": []
+        },
+        {
+          "kind": "provisional_status_doc",
+          "source": "systems/_architecture/governance_type_registry_v1.md",
+          "id": "systems/_architecture/governance_type_registry_v1.md",
+          "title": "governance type registry v1",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
           "links": []
         },
         {
@@ -1910,6 +1572,344 @@
         }
       ]
     },
+    "IN": {
+      "total": 32,
+      "needs_jordan": 14,
+      "items": [
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0003",
+          "title": "Convergence Markers need a runtime detector/applier. arc_register_events.md §VI's 8 markers are hand-authored trigger+payload rows with no detector, no Key type, no module contract, no sim module; combined payloads are non-summative by the ",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0004",
+          "title": "Articulation §3.1 trigger ruleset omits scene.battle_concluded / scene.investigation_resolved (+scene.combat_resolved variant) despite key_type_registry §7 declaring articulation their consumer; §6.4 L296 asserts battle_concluded 'already t",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0005",
+          "title": "Playability-layer currency: PER-SUBSYSTEM WALKTHROUGH METHOD ADOPTED AS STANDING POLICY (fork resolved by Jordan — the SC-lane walkthrough-first method generalizes; no corpus-wide UI monolith revival mid mechanic-churn). valoria_ui_ux_v4_1.",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0007",
+          "title": "Register back-propagation gate: ratifications never round-trip to canon/supersession_register.yaml (frozen at ED-912/06-28 — no GD-1 entry, root cause of ED-WR-0001; no mass-battle/contest flips) or canon/mechanics_index.yaml (mass_battle/s",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0008",
+          "title": "Naming-authority unification: glossary.md and descriptor_registry/names_index both self-declare naming authority and disagree on the attribute roster (7 vs 9, and which of Cognition/Presence/Spirit are canonical vs alias); descriptor_regist",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0012",
+          "title": "Cross-cutting index-hygiene work item (accepted; IN lane): (1) refresh the throughline registry's social-contest citations (audit finding N-9, UPHELD) -- T-14 and T-23 cite the contest via retired tracker names (Piety Track, Composure; thro",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0013",
+          "title": "Cross-cutting diagnostic-hygiene work item (accepted; IN lane; SEQUENCED AFTER ED-SC-0004): (1) re-run the rolling-engine resolution diagnostic (skills/valoria-resolution-diagnostic) against the sigma-substrate contest kernel -- the 2026-05",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0014",
+          "title": "Key the silent emitters: settlement_layer + ci_political + victory era/occupation transitions (edge-playability EP-4/EP-5). Settlement Order/L-PS drift, revolt (g_ord0) and undefended auto-capture (g_def0) emit no Key of any type (settlemen",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0015",
+          "title": "Seam-feedback line as an authoring convention (edge-playability SIG-2/EP-11). Every 'how does the player see this?' answer at the audited seams resolves to the off-index UI v4 docs, a local unkeyed presentation spec, or nothing — current-ge",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0016",
+          "title": "Index the joints (edge-playability ep-14/ep-23/EP-8; SIG-4). The connective tissue is off the currency index: fieldwork/investigation, scale_transitions, and player_agency have no CURRENT.md rows; module_contracts still carries faction_poli",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0019",
+          "title": "Renumbered off the ED-IN-0012 double-allocation (armature §5.10 ruling, ED-IN-0026). Registry×rendering sweep (edge-playability SIG-1; EP-3/EP-4/EP-5) from the edge-playability §7 batch (PR #81/#82): the articulation Tier-2 trigger table co",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0020",
+          "title": "Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0029",
+          "title": "Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0030",
+          "title": "Phantom 'debt scene' mechanic -- dangling citation surfaced while executing ED-IN-0016's citation-repoint pass. designs/architecture/scale_transitions_v30.md §4.3.2 row 8 (Rank Advancement Recognition Event) reads: 'Recognition can be withh",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0042",
+          "title": "Skills-ecosystem gap audit (Phase 7 companion to ED-IN-0038..0041) -- structural gaps in the skill/tooling ecosystem surfaced but deliberately NOT built this pass (scope: document + close only the cheap items, per Jordan's explicit AskUserQ",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0045",
+          "title": "Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0048",
+          "title": "piety_track's real home design doc designs/personal/conviction_track_v1.md (exists on disk; the debate-tracker canonical home per glossary.md:84 and ED-SC-0003) is NOT registered in references/canonical_sources.yaml. The only conviction_tra",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0049",
+          "title": "scale_transitions_v30.md SS3.3 'Personal -> Scene (Contest)' (L51) is one of the eight named Handoff Rules but is an EMPTY section -- heading only, zero body, no editorial stub marker (unlike siblings SS3.4 and SS3.6, which carry '[EDITORIA",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0050",
+          "title": "The canonical mode-bridge doc scale_transitions_v30.md carries literal GM-as-resolution-actor language uncorrected against the no-GM engine invariant ('There is no GM -- the engine resolves everything'). SS1 mode table (L19): 'TTRPG | Scene",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0062",
+          "title": "Cross-scale governance grounding synthesis docket (Jordan-requested). Composes one graph of Valoria's whole political system across the spatial containment spine (settlement->territory->province->duchy->country) and the political spine (fac",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-REMEDIATION-0064",
+          "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-REMEDIATION-0066",
+          "title": "[RENUMBERED from ED-IN-0065 at merge -- COLLISION: this branch read next_free=65 from pre-#139 main and allocated ED-IN-0065 for the remediation program, but PR #139 (holistic 5-critic observatory adversarial pass + its own unification doc)",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0066",
+          "title": "Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0069",
+          "title": "Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0070",
+          "title": "Unified reconciliation head over the governance-PLAY proposal cluster (governance_ripple_substrate_v1 07-11, grounded_event_card_deck_v1 07-11, the 2026-07-12 governance-compendium 42/43/44/45+event_cards+00_index, reeval_jp_se, governance_",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0071",
+          "title": "Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
+          "title": "[PARTIAL] mechanic_audit / architecture: 2 P1 gaps (empty §3.3 Handoff Rule; uncorrected literal-GM language vs no-GM invariant) proposed for ED-IN filing; 6 P2s, several already-tracked items confirmed still open, no new ED allocated by th",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/architecture"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-module-adjudicator-2026-07-13:cross_cutting:module_adjudicator",
+          "title": "[OPEN] module_adjudicator / cross_cutting: 22 violations, 61 warnings; consume-closure 100%, cycle-closure 100%, gate/derivation/sequence 100%, emit-closure 97.9%; 20/22 violations collapse to one un-propagated ED-1038 scale_transitions §12",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "OPEN",
+          "links": [
+            "designs/audit/2026-07-13-multi-agent-audit/module_adjudicator"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-13:corpus_wide:vector_audit",
+          "title": "[OPEN] vector_audit / corpus_wide: scripts/vector_audit.py confirmed a stub end-to-end (no Stage 1-7 dispatcher; docstring/scaffolding only; main() prints a pointer, writes nothing); last real run (deprecated/archives/audit/2026-04-29-topog",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "OPEN",
+          "links": [
+            "designs/audit/2026-07-13-multi-agent-audit/vector_audit"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-14:corpus_wide:2026-07-14-governance-vector-audit",
+          "title": "[PARTIAL] vector_audit / corpus_wide: L0 validation FAILED 1/3 (P2 conviction-symmetry, a real finding per methodology §3.8); structural: 9 doc:null, 6 dangling-emit, 4 unregistered-canonical, 1 currency-drift — folded into the ED-IN-0064 c",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-14-governance-vector-audit"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-14:corpus_wide:vector_audit",
+          "title": "[PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P1 foundation-periphery, P2 conviction-symmetry) -> leads not verdicts; ED-IN-0064",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-14-gameplay-subsystem-observatory/vector_audit"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-14:architecture:2026-07-14-gameplay-subsystem-observatory",
+          "title": "[PARTIAL] vector_audit / architecture: 16 gameplay modules; 9 doc:null/13 [ASSUMPTION]/4 dangling; 2 GENUINE reclassified CTC by adversarial gate; ED-IN-0064",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-14-gameplay-subsystem-observatory"
+          ]
+        }
+      ]
+    },
     "PC": {
       "total": 6,
       "needs_jordan": 1,
@@ -2616,26 +2616,6 @@
   "items": [
     {
       "kind": "provisional_status_doc",
-      "source": "designs/architecture/governance_ripple_substrate_v1.md",
-      "id": "designs/architecture/governance_ripple_substrate_v1.md",
-      "title": "governance ripple substrate v1",
-      "lane": "IN",
-      "needs_jordan": false,
-      "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/architecture/governance_type_registry_v1.md",
-      "id": "designs/architecture/governance_type_registry_v1.md",
-      "title": "governance type registry v1",
-      "lane": "IN",
-      "needs_jordan": true,
-      "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
       "source": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
       "id": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
       "title": "grounded event card deck v1",
@@ -2872,6 +2852,26 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "systems/_architecture/governance_ripple_substrate_v1.md",
+      "id": "systems/_architecture/governance_ripple_substrate_v1.md",
+      "title": "governance ripple substrate v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "systems/_architecture/governance_type_registry_v1.md",
+      "id": "systems/_architecture/governance_type_registry_v1.md",
+      "title": "governance type registry v1",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
       "links": []
     },
     {

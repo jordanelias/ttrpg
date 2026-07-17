@@ -131,11 +131,11 @@
 | `designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental.md` | `designs/arcs/emergent_arcs_experimental.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental_skeleton.md` | `designs/arcs/emergent_arcs_experimental_skeleton.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/valoria_emergent_campaign_arcs.md` | `designs/arcs/emergent_campaign_arcs.md` | PENDING |
-| `designs/hybrid/hybrid_gaps_v30.md` | `designs/architecture/hybrid_gaps_v30.md` | PENDING |
-| `designs/hybrid/hybrid_gaps_v30_infill.md` | `designs/architecture/hybrid_gaps_v30_infill.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30.md` | `designs/architecture/scale_transitions_v30.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30_infill.md` | `designs/architecture/scale_transitions_v30_infill.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30_skeleton.md` | `designs/architecture/scale_transitions_v30_skeleton.md` | PENDING |
+| `designs/hybrid/hybrid_gaps_v30.md` | `systems/_architecture/hybrid_gaps_v30.md` | PENDING |
+| `designs/hybrid/hybrid_gaps_v30_infill.md` | `systems/_architecture/hybrid_gaps_v30_infill.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30.md` | `systems/_architecture/scale_transitions_v30.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30_infill.md` | `systems/_architecture/scale_transitions_v30_infill.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30_skeleton.md` | `systems/_architecture/scale_transitions_v30_skeleton.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30.md` | `designs/provincial/mass_battle_v30.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_infill.md` | `designs/provincial/mass_battle_v30_infill.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_skeleton.md` | `designs/provincial/mass_battle_v30_skeleton.md` | PENDING |
@@ -150,22 +150,22 @@
 | `designs/setting/southernmost_v30_infill.md` | `designs/world/southernmost_v30_infill.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16.md` | `designs/arcs/arc_expansion_v30.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16_skeleton.md` | `designs/arcs/arc_expansion_v30_skeleton.md` | PENDING |
-| `designs/systems/campaign_architecture_v1.md` | `designs/architecture/campaign_architecture_v30.md` | PENDING |
-| `designs/systems/campaign_modes_v30.md` | `designs/architecture/campaign_modes_v30.md` | PENDING |
-| `designs/systems/campaign_modes_v30_infill.md` | `designs/architecture/campaign_modes_v30_infill.md` | PENDING |
-| `designs/systems/canonical_registry_r2_2026-04-15.md` | `designs/architecture/canonical_registry.md` | PENDING |
+| `designs/systems/campaign_architecture_v1.md` | `systems/_architecture/campaign_architecture_v30.md` | PENDING |
+| `designs/systems/campaign_modes_v30.md` | `systems/_architecture/campaign_modes_v30.md` | PENDING |
+| `designs/systems/campaign_modes_v30_infill.md` | `systems/_architecture/campaign_modes_v30_infill.md` | PENDING |
+| `designs/systems/canonical_registry_r2_2026-04-15.md` | `systems/_architecture/canonical_registry.md` | PENDING |
 | `designs/systems/clock_registry_v30.md` | `designs/provincial/clock_registry_v30.md` | PENDING |
 | `designs/systems/clock_registry_v30_infill.md` | `designs/provincial/clock_registry_v30_infill.md` | PENDING |
-| `designs/systems/cogload_moderate_target.md` | `designs/architecture/cogload_moderate_target.md` | PENDING |
-| `designs/systems/companion_app_design_note_2026-04-04.md` | `designs/architecture/companion_app_design_note.md` | PENDING |
+| `designs/systems/cogload_moderate_target.md` | `systems/_architecture/cogload_moderate_target.md` | PENDING |
+| `designs/systems/companion_app_design_note_2026-04-04.md` | `systems/_architecture/companion_app_design_note.md` | PENDING |
 | `designs/systems/companion_specification_v30.md` | `systems/npcs/companion_specification_v30.md` | PENDING |
-| `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `designs/architecture/complete_systems_reference.md` | PENDING |
+| `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `systems/_architecture/complete_systems_reference.md` | PENDING |
 | `designs/systems/derived_stats_v1.md` | `designs/scene/derived_stats_v30.md` | PENDING |
 | `designs/systems/derived_stats_v1_skeleton.md` | `designs/scene/derived_stats_v30_skeleton.md` | PENDING |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/provincial/faction_politics_v30.md` | DONE (2026-07-08, ED-IN-0016 — file move already complete, old path long gone; citation-repointing half executed this pass across the live corpus) |
 | `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | N/A (2026-07-08, ED-IN-0016 — not executed: `faction_politics_v30.md` was promoted as a single monolithic doc; no index/skeleton split was ever authored for it, confirmed no such file exists) |
-| `designs/systems/integration_proposal_2026-04-15.md` | `designs/architecture/integration_proposal_v30.md` | PENDING |
-| `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `designs/architecture/integration_proposal_v30_skeleton.md` | PENDING |
+| `designs/systems/integration_proposal_2026-04-15.md` | `systems/_architecture/integration_proposal_v30.md` | PENDING |
+| `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `systems/_architecture/integration_proposal_v30_skeleton.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15.md` | `designs/scene/investigation_systems_v30.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15_skeleton.md` | `designs/scene/investigation_systems_v30_skeleton.md` | PENDING |
 | `designs/systems/military_layer_v30.md` | `designs/provincial/military_layer_v30.md` | PENDING |
@@ -175,8 +175,8 @@
 | `designs/systems/npc_behavior_v30.md` | `systems/npcs/npc_behavior_v30.md` | PENDING |
 | `designs/systems/npc_behavior_v30_infill.md` | `systems/npcs/npc_behavior_v30_infill.md` | PENDING |
 | `designs/systems/npc_behavior_v30_skeleton.md` | `systems/npcs/npc_behavior_v30_skeleton.md` | PENDING |
-| `designs/systems/player_agency_v30.md` | `designs/architecture/player_agency_v30.md` | PENDING |
-| `designs/systems/player_agency_v30_skeleton.md` | `designs/architecture/player_agency_v30_skeleton.md` | PENDING |
+| `designs/systems/player_agency_v30.md` | `systems/_architecture/player_agency_v30.md` | PENDING |
+| `designs/systems/player_agency_v30_skeleton.md` | `systems/_architecture/player_agency_v30_skeleton.md` | PENDING |
 | `designs/systems/settlement_layer_v30.md` | `designs/territory/settlement_layer_v30.md` | PENDING |
 | `designs/systems/settlement_layer_v30_skeleton.md` | `designs/territory/settlement_layer_v30_skeleton.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30.md` | `designs/provincial/tc_political_v30.md` | PENDING |
@@ -259,7 +259,7 @@
 | `references/params_threadwork_history.md` | `params/history/threadwork.md` | PENDING |
 | `references/params_threadwork_superseded.md` | `params/threadwork_superseded.md` | PENDING |
 | `references/sim_decision_protocols.md` | `tests/sim/sim_decision_protocols.md` | PENDING |
-| `references/videogame_mode_spec.md` | `designs/architecture/videogame_mode_spec.md` | PENDING |
+| `references/videogame_mode_spec.md` | `systems/_architecture/videogame_mode_spec.md` | PENDING |
 | `session_log_archive_part_1.md` | `archives/session/session_log_archive_part_1.md` | PENDING |
 | `session_log_archive_part_2.md` | `archives/session/session_log_archive_part_2.md` | PENDING |
 | `session_log_archive_part_3.md` | `archives/session/session_log_archive_part_3.md` | PENDING |
@@ -786,3 +786,10 @@
 |---|---|
 | `designs/threadwork/` | `systems/threadwork/` |
 | `sim/thread/` | `systems/threadwork/sim/` |
+
+
+## 2026-07-17 — designs/architecture/ -> systems/_architecture/ (P4 slice 3, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/architecture/` | `systems/_architecture/` |

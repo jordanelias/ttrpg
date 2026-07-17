@@ -26,7 +26,7 @@ from engine.substrate import (
     Visibility,
 )
 
-REGISTRY_PATH = "designs/architecture/key_type_registry_v30.md"
+REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
 
 
 @pytest.fixture(scope="module")

@@ -117,7 +117,7 @@ terms:
     authority: "ED-781"
     residual_count: 6
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/architecture/conflict_architecture_proposal.md (3) + canon/03_canonical_timeline.md (1) + designs/architecture/campaign_architecture_v30.md (1) + designs/provincial/faction_layer_v30.md (1)"
+    residual_concentration: "systems/_architecture/conflict_architecture_proposal.md (3) + canon/03_canonical_timeline.md (1) + systems/_architecture/campaign_architecture_v30.md (1) + designs/provincial/faction_layer_v30.md (1)"
 
   # ─────────────── Faction-scope strikes ───────────────
 
@@ -129,7 +129,7 @@ terms:
     authority: "ED-764"
     residual_count: 23
     residual_at_audit: "2026-04-30"
-    residual_concentration: "designs/architecture/conflict_architecture_proposal.md (5) + designs/provincial/faction_layer_v30.md (5)"
+    residual_concentration: "systems/_architecture/conflict_architecture_proposal.md (5) + designs/provincial/faction_layer_v30.md (5)"
 
   # ─────────────── Policy-target standalone abbreviations ───────────────
 
