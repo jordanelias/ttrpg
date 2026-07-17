@@ -1,7 +1,7 @@
 """
-sim/provincial/units.py — Unit / Subunit dataclasses for mass-battle resolution
+systems/mass_battle/sim/units.py — Unit / Subunit dataclasses for mass-battle resolution
 
-Canon source: designs/provincial/mass_battle_v30.md §A.3 (Company scale + block_size),
+Canon source: systems/mass_battle/mass_battle_v30.md §A.3 (Company scale + block_size),
               §A.4 (Discipline, Combat Pool, Stamina); designs/scene/derived_stats_v30.md
               (TroopCount / block_size); tests/sim/sim_mb_06_v22.py (lines 697–1035)
 Params source: params/mass_combat.md
@@ -33,7 +33,7 @@ from typing import Dict, List, Optional, Set, Tuple
 # names via _mb.NAME. At import time _mb may be a partially-loaded module
 # (massbattle imports units from its tail); at method-call time massbattle
 # is fully loaded. See module docstring.
-from sim.provincial import massbattle as _mb
+from systems.mass_battle.sim import massbattle as _mb
 
 
 @dataclass(eq=False)
@@ -45,7 +45,7 @@ class Subunit:
     # target_atom is set-by-reference and never compared by value throughout
     # the engine (verified: no `subunit == subunit` call sites; sets/dicts
     # already use id() — massbattle.py L749-750).
-    # [canonical: designs/provincial/mass_battle_integration_v30.md §4.1
+    # [canonical: systems/mass_battle/mass_battle_integration_v30.md §4.1
     #  PROVISIONAL flex — call-signature flex licensed where statistical
     #  equivalence holds; identity-eq does not change observable outcomes]
     shape: str
@@ -324,7 +324,7 @@ class Unit:
     broken: bool = False
     stance: str = "balanced"
     # v22/G-11: Speed tier — determines pursuit capability.
-    # [canonical: designs/provincial/mass_battle_v30.md L120 — "Slow / Standard / Fast"]
+    # [canonical: systems/mass_battle/mass_battle_v30.md L120 — "Slow / Standard / Fast"]
     # [ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard
     #  — basis: L429 "Cavalry → Standard" in forest implies Fast default]
     speed: str = "Standard"  # "Slow" | "Standard" | "Fast"

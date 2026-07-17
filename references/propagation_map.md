@@ -81,7 +81,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 ## ED-780 Phase 3 geography spec — closure (2026-05-10)
 **Class B (system extension); applied this commit.** Phase 3 mechanical body authored.
 - `systems/settlements/march_layer_v30.md`: skeleton filled (~7.4k → ~15k chars). §§1.1-1.4 cavalry/skirmish/supply/multi-army coord; §§2.2-2.4 cache invalidation/UI/route blocking; §§3.1-3.4 fog/scouting/counter-recon/Thread-Witnessed; §4.3 bypass; §§5.2-5.4 multi-edge/engagement/Casus Belli; §§7.2-7.3 radiation traversal/Askeheim Gates; §8.2 hex-grid + geographic battle-terrain derivation. Naval §6 deferred to ED-055.
-- `designs/provincial/mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS`: Phase 3 extension clause — geographic battle-terrain derivation at engagement coordinates via geography polygon query.
+- `systems/mass_battle/mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS`: Phase 3 extension clause — geographic battle-terrain derivation at engagement coordinates via geography polygon query.
 - `systems/settlements/settlement_adjacency_v30.md §6`: cross-reference to march_layer added; Edge Type → Manoeuvre Modifier mapping consumed by march_layer §4.2.
 - ED-780 status: standing → closed.
 - ED-781 (Phase 4 stress tests) standing.

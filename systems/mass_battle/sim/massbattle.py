@@ -1,9 +1,9 @@
 """
-sim/provincial/massbattle.py — Mass-battle resolution engine (multi-turn, multi-unit,
+systems/mass_battle/sim/massbattle.py — Mass-battle resolution engine (multi-turn, multi-unit,
 freed-attacker, morale cascade, rout contagion, cavalry pursuit, simultaneous resolution)
 
-Canon source: designs/provincial/mass_battle_v30.md (canonical, approved 2026-04-17);
-              designs/provincial/mass_battle_integration_v30.md §4.1 Step 1 (bare port spec);
+Canon source: systems/mass_battle/mass_battle_v30.md (canonical, approved 2026-04-17);
+              systems/mass_battle/mass_battle_integration_v30.md §4.1 Step 1 (bare port spec);
               designs/architecture/complete_systems_reference.md Part 6 (MASS COMBAT)
 Params source: params/mass_combat.md; params/core.md
 Game Design constraints applicable: GD-1 (mass-battle resolution produces faction stat /
@@ -15,14 +15,14 @@ Status: [CANONICAL — Phase 7 bare port from tests/sim/sim_mb_06_v22.py 2026-05
 
 Bare-port source: tests/sim/sim_mb_06_v22.py (2143 lines, validated_n1000 in v17 sweep).
 Per `mass_battle_integration_v30.md §4.1 Step 1`:
-  1. Copy v22 → sim/provincial/massbattle.py  ← THIS FILE
-  2. Extract Unit / Subunit dataclasses → sim/provincial/units.py
-  3. Extract FACTION_TACTIC_CARD_POOL_MODIFIERS → sim/provincial/tactic_cards.py
+  1. Copy v22 → systems/mass_battle/sim/massbattle.py  ← THIS FILE
+  2. Extract Unit / Subunit dataclasses → systems/mass_battle/sim/units.py
+  3. Extract FACTION_TACTIC_CARD_POOL_MODIFIERS → systems/mass_battle/sim/tactic_cards.py
        [not present in v22 — canonical-named empty stub; BLOCKED on contamination audit
         per integration_plan_v18 §1.4]
   4. Module docstring per CONVENTIONS  ← THIS HEADER
 
-Dataclasses Subunit + Unit live in `sim.provincial.units` (split per step 2).
+Dataclasses Subunit + Unit live in `systems.mass_battle.sim.units` (split per step 2).
 This module imports them at file tail (after all module-level constants and
 helper functions are defined) — units.py late-binds back to `_mb` for those
 names. See units.py docstring for the circular-import resolution pattern.
@@ -50,13 +50,13 @@ import random, math, statistics, time
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 
-# [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
+# [canonical: systems/mass_battle/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 BATTLEFIELD_SIZE = 25
-# [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
+# [canonical: systems/mass_battle/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 UNIT_GRID_SIZE = 15
 BUFFER_CELLS = 5
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
-# [canonical: designs/provincial/mass_battle_v30.md §deployment]
+# [canonical: systems/mass_battle/mass_battle_v30.md §deployment]
 SIDE_A_START_ROW = 16  # symmetric: 4 from center
 SIDE_B_START_ROW = 8   # symmetric: 4 from center
 
@@ -97,7 +97,7 @@ MAX_SUB_PHASES = 5
 TICKS_PER_PHASE = 6
 
 # ─── TROOP COUNT / BLOCK SIZE (bottom-up lethality) ─────────────────────────
-# [canonical: designs/provincial/mass_battle_v30.md §A.3 — "1 Size = block_size soldiers"]
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.3 — "1 Size = block_size soldiers"]
 # [canonical: derived_stats architecture (2026-04-19) — "TroopCount = Size × block_size"]
 # HP = TroopCount = Size × BLOCK_SIZE. Damage from combat = soldier casualties.
 #
@@ -128,17 +128,17 @@ TICKS_PER_PHASE = 6
 # role. Rationalizing the HP/H/DR architecture is out of scope for Step 4.2;
 # flagged as a separate concern for Phase 7 cleanup.
 #
-# [canonical: designs/provincial/mass_battle_integration_v30.md §3.1 — formula
+# [canonical: systems/mass_battle/mass_battle_integration_v30.md §3.1 — formula
 #  intent; restoration license]
 # [canonical: params/mass_combat.md PP-233 — Core Formula damage shape]
 # [PROVISIONAL per §3.1: "0.10 starting value untested at v22's multi-turn
 #  structure. Calibration sweep required at first port — adjust toward
 #  ~14-16% per-turn casualty target."]
-BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — Company scale]
+BLOCK_SIZE = 100  # [canonical: systems/mass_battle/mass_battle_v30.md §A.3 — Company scale]
 LETHALITY_SCALE = 1.25  # Calibrated 2026-05-18 — see sweep notes at L107 / commit body
 
 # ─── MORALE EROSION (v20 — fully emergent) ───────────────────────────────────
-# [canonical: designs/provincial/mass_battle_v30.md §A.4 morale triggers]
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.4 morale triggers]
 # v20: morale eroded by damage_taken / (discipline × command) each tick.
 # NO thresholds. Rout point emerges from unit stats:
 #   morale 6, damage ~3/tick, disc=5, cmd=4: erosion 3/20 = 0.15/tick
@@ -146,7 +146,7 @@ LETHALITY_SCALE = 1.25  # Calibrated 2026-05-18 — see sweep notes at L107 / co
 #   cmd=6: 45% to rout. cmd=2: 15%. Generalship dominance (T1) is structural.
 # Morale is now float (accumulates fractional erosion). Rout at morale ≤ 0.
 # No morale floor — general's contribution is in the denominator.
-# [canonical: designs/provincial/mass_battle_v30.md §A.4 — "Generalship dominates"]
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — "Generalship dominates"]
 
 # ─── STAMINA CONSTANTS (G-1) ────────────────────────────────────────────────
 # [ASSUMPTION: stamina constants are tuning parameters — basis: no canonical
@@ -238,7 +238,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     Per-tick morale handles casualty-based triggers separately.
     Exhausted units lose -1 morale at phase boundary (within cap).
     Floor is NOT overridden here — that's the per-tick trigger's job.
-    [canonical: designs/provincial/mass_battle_v30.md §A.4 — morale floor 1 while general present;
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — morale floor 1 while general present;
      §A.4 — cap −3 non-general morale loss per Cascade Phase]"""
     for u in [unit_a, unit_b]:
         if u.routed or u.broken:
@@ -254,7 +254,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Units with morale ≤ 0 rout.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12 —
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12 —
      "Routing: Slow/Standard cannot fight back."
      "Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
       Offence successes (no Defence) each turn. Recall: Command Ob 2."]
@@ -467,7 +467,7 @@ def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
     # [canonical: Jordan design — octagon: GREEN<45deg, YELLOW 45-90deg, RED>=90deg]
     # 45.0 = half of GREEN 90deg face; 90.0 = boundary of rear hemisphere
     if angle_deg < 45.0:   return "GREEN",  angle_deg
-    if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: designs/provincial/mass_battle_v30.md §octagon]
+    if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: systems/mass_battle/mass_battle_v30.md §octagon]
     return "RED", angle_deg
 
 ANGLE_DEF_MOD = {
@@ -1285,13 +1285,13 @@ def run_battle(unit_a, unit_b, max_turns=18, rng=None):
         # v21: SIMULTANEOUS MORALE — compute erosion for both units, then
         # check rout for both. Prevents ordering from affecting which unit
         # routs first within a single tick.
-        # [canonical: designs/provincial/mass_battle_v30.md §A.4 — generalship]
+        # [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — generalship]
         total_dmg_a_morale = result.get("dmg_a", 0) + volley_dmg_a * volley_hp_scale(unit_a)
         total_dmg_b_morale = result.get("dmg_b", 0) + volley_dmg_b * volley_hp_scale(unit_b)
         for u, total_dmg in [(unit_a, total_dmg_a_morale), (unit_b, total_dmg_b_morale)]:
             if u.routed: continue
             # General death: Command=0 → instant rout (M1: general IS the army)
-            # [canonical: designs/provincial/mass_battle_v30.md §A.4 — "General killed: Morale −2 (uncapped)"]
+            # [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — "General killed: Morale −2 (uncapped)"]
             if u.command <= 0:
                 u.morale = 0.0
                 continue  # rout check below
@@ -1331,7 +1331,7 @@ BETWEEN_TURN_STAMINA_RECOVERY = 30  # partial rest during disengagement
 BETWEEN_TURN_MORALE_RECOVERY = 0    # morale does NOT recover between turns
 # HP does NOT recover between turns (casualties are permanent within a battle)
 # Discipline persists (canonical PP-712)
-# [canonical: designs/provincial/mass_battle_v30.md §A.4 — "Morale reset between battles"]
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — "Morale reset between battles"]
 
 
 def between_turn_recovery(unit):
@@ -1416,7 +1416,7 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
 
 
 # ─── PURSUIT (G-11, v22) ─────────────────────────────────────────────────────
-# [canonical: designs/provincial/mass_battle_v30.md §A.12-514]
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.12-514]
 # "Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
 #  Offence successes (no Defence) each turn. Recall: Command Ob 2."
 # "Routing: Slow/Standard cannot fight back. Fast may rearguard at −2D Off."
@@ -1429,7 +1429,7 @@ def pursuit_damage(pursuer, routing_unit, rng=None):
     unless it is also Fast (rearguard at -2D Off).
     Returns HP damage dealt.
     rng: optional random.Random; None falls back to module random.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12]"""
     if pursuer.speed != "Fast":
         return 0  # Only Fast units can pursue
     if pursuer.routed or pursuer.broken:
@@ -1467,7 +1467,7 @@ def recall_check(pursuer, rng=None):
     """General attempts to recall pursuing unit. Command Ob 2.
     Returns True if recalled (pursuit stops).
     rng: optional random.Random; None falls back to module random.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12]"""
     net = roll_pool(pursuer.command, rng=rng)
     return net >= RECALL_OB
 
@@ -1476,14 +1476,14 @@ def recall_check(pursuer, rng=None):
 # Models battles with multiple units per side. Each engagement pair runs through
 # run_battle (1v1). After all pairs resolve: morale cascade, rout contagion,
 # freed-attacker flanking. Between turns: recovery.
-# [canonical: designs/provincial/mass_battle_v30.md §A.12 — Morale Cascade,
+# [canonical: systems/mass_battle/mass_battle_v30.md §A.12 — Morale Cascade,
 #  Rout contagion brake, pursuit rules]
 
 # v22: Morale cascade discipline check — Ob 1, fires at Phase 6 Step 3
 # [canonical: §A.12 — "all friendly units in the same engagement make a
 #  Discipline check (Ob 1). Failure: Morale −1"]
-MORALE_CASCADE_OB = 1  # [canonical: designs/provincial/mass_battle_v30.md §A.12]
-ROUT_CONTAGION_MORALE_HIT = 1  # [canonical: designs/provincial/mass_battle_v30.md L167]
+MORALE_CASCADE_OB = 1  # [canonical: systems/mass_battle/mass_battle_v30.md §A.12]
+ROUT_CONTAGION_MORALE_HIT = 1  # [canonical: systems/mass_battle/mass_battle_v30.md L167]
 FREED_ATTACKER_FLANK_PENALTY = 1  # [canonical: §A.4 octagon YELLOW = -1D]
 
 
@@ -1491,7 +1491,7 @@ def discipline_check_cascade(unit, rng=None):
     """Discipline check Ob 1 for morale cascade.
     Returns True if unit PASSES (resists cascade).
     rng: optional random.Random; None falls back to module random.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12 — Ob 1 check]"""
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12 — Ob 1 check]"""
     # [canonical: params/mass_combat.md — roll_pool uses TN 7 default]
     net = roll_pool(unit.discipline, rng=rng)
     return net >= MORALE_CASCADE_OB
@@ -1502,7 +1502,7 @@ def freed_attacker_damage(freed_unit, target_unit, rng=None):
     The freed unit rolls its full pool. Target defends at -1D (flank).
     Returns damage dealt to target.
     rng: optional random.Random; None falls back to module random.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12 — implied by
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12 — implied by
      rout freeing the victor to attack adjacent enemies]"""
     if freed_unit.routed or freed_unit.broken:
         return 0
@@ -1510,7 +1510,7 @@ def freed_attacker_damage(freed_unit, target_unit, rng=None):
         return 0
     # [canonical: params/mass_combat.md PP-233 — Pool = min(Size,Cmd)+Cmd]
     a_pool = freed_unit.base_combat_pool()
-    # [canonical: designs/provincial/mass_battle_v30.md §A.4 — YELLOW zone -1D]
+    # [canonical: systems/mass_battle/mass_battle_v30.md §A.4 — YELLOW zone -1D]
     b_pool = max(1, target_unit.base_combat_pool() - FREED_ATTACKER_FLANK_PENALTY)
     a_net = roll_pool(a_pool, rng=rng)
     b_net = roll_pool(b_pool, rng=rng)
@@ -1538,7 +1538,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         max_battle_turns: turn cap
 
     Returns: dict with winner ('A'|'B'|'draw'), per-turn log, casualties.
-    [canonical: designs/provincial/mass_battle_v30.md §A.12 — Morale Cascade,
+    [canonical: systems/mass_battle/mass_battle_v30.md §A.12 — Morale Cascade,
      Rout contagion brake; Phase 6 Steps 1-3]
     """
     log = []
@@ -1590,7 +1590,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 freed_units.append((pursuer, p_side, p_pair))
 
         # ── Phase: run each active engagement ──
-        # [canonical: designs/provincial/mass_battle_v30.md — Phase 2-5 per pair]
+        # [canonical: systems/mass_battle/mass_battle_v30.md — Phase 2-5 per pair]
         for pair_idx in list(active_pairs):
             a_idx, b_idx = pairings[pair_idx]
             ua, ub = side_a[a_idx], side_b[b_idx]
@@ -1638,7 +1638,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     target.hp = max(0, target.hp - dmg)
                     target.recalc_size()
                     # Morale erosion from flanking damage
-                    # [canonical: designs/provincial/mass_battle_v30.md §A.4]
+                    # [canonical: systems/mass_battle/mass_battle_v30.md §A.4]
                     if target.discipline > 0 and target.command > 0:
                         erosion = dmg / (target.discipline * target.command)
                         target.morale -= erosion
@@ -1661,7 +1661,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         turn_log['routs_this_turn'] = [(s, i) for s, i, _ in newly_routed]
 
         # ── Phase 6 Step 3: Morale Cascade ──
-        # [canonical: designs/provincial/mass_battle_v30.md §A.12]
+        # [canonical: systems/mass_battle/mass_battle_v30.md §A.12]
         for routed_side, routed_idx, pair_idx in newly_routed:
             # All friendly units in the SAME engagement check Discipline Ob 1
             a_idx, b_idx = pairings[pair_idx]
@@ -1672,7 +1672,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             else:
                 pass
             # Adjacent friendly units: rout contagion (-1, braked)
-            # [canonical: designs/provincial/mass_battle_v30.md L167]
+            # [canonical: systems/mass_battle/mass_battle_v30.md L167]
             for adj_offset in [-1, 1]:
                 adj_pair = pair_idx + adj_offset
                 if adj_pair < 0 or adj_pair >= len(pairings):
@@ -1896,10 +1896,10 @@ def _faction_to_unit(faction):
 
 
 # ─── DATACLASS RE-EXPORT (must come AFTER all module-level constants/functions) ──
-# Subunit + Unit are defined in sim.provincial.units; that module late-binds back
+# Subunit + Unit are defined in systems.mass_battle.sim.units; that module late-binds back
 # to this module's namespace (`_mb` alias) for constants like TROOPS_PER_TIER and
 # helpers like oriented_pattern, cell_speed, _stamina_pool_penalty. Python's import
 # machinery resolves the circular path because all those names are already bound
 # in this module by the time the from-import below executes.
 
-from sim.provincial.units import Subunit, Unit  # noqa: E402
+from systems.mass_battle.sim.units import Subunit, Unit  # noqa: E402

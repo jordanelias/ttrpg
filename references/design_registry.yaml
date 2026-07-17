@@ -125,9 +125,9 @@ registry:
   mass_combat:
     system: mass_combat
     mode: ALL
-    canonical_v30: designs/provincial/mass_battle_v30.md
-    skeleton: designs/provincial/mass_battle_v30.md
-    infill: designs/provincial/mass_battle_v30_infill.md
+    canonical_v30: systems/mass_battle/mass_battle_v30.md
+    skeleton: systems/mass_battle/mass_battle_v30.md
+    infill: systems/mass_battle/mass_battle_v30_infill.md
     atomized: complete
     predecessor: designs/mass_combat/mass_battle_v3.md
     params: engine/params/mass_combat.md

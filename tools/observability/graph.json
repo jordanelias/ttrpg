@@ -874,7 +874,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "mass_battle",
-      "doc": "designs/provincial/mass_battle_v30.md",
+      "doc": "systems/mass_battle/mass_battle_v30.md",
       "resolver": "dice_pool",
       "scales": [
         "scene"
@@ -894,7 +894,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/provincial/massbattle.py",
+      "sim_module": "systems/mass_battle/sim/massbattle.py",
       "test_status": "not_implemented",
       "emits": [
         {

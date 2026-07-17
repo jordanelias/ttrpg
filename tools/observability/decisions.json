@@ -1,6 +1,6 @@
 {
   "meta": {
-    "files_scanned": 1371,
+    "files_scanned": 1373,
     "total_open": 984,
     "by_category": {
       "ratification": 47,
@@ -950,18 +950,6 @@
       "lane": "FA"
     },
     {
-      "text": "Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "designs/provincial/mass_battle_integration_v30.md:301"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
       "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
       "category": "ratification",
       "priority": 1,
@@ -1368,6 +1356,18 @@
       "systems": [],
       "count": 1,
       "lane": null
+    },
+    {
+      "text": "Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/mass_battle/mass_battle_integration_v30.md:301"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
     },
     {
       "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->",
@@ -4861,18 +4861,6 @@
       "lane": "IN"
     },
     {
-      "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "designs/provincial/mass_battle_integration_v30.md:416"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
       "text": "`[ASSUMPTION: PP-686 v2 PROVISIONAL canonical status accepted]` per file headers; treating as canonical for audit basis.",
       "category": "assumption",
       "priority": 3,
@@ -7189,6 +7177,78 @@
       "lane": "WR"
     },
     {
+      "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/mass_battle_integration_v30.md:416"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: stamina constants are tuning parameters \u2014 basis: no canonical",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:152"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: drain per contact cell is a tuning parameter]",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:160"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: threshold 1.0 eff_size maps to \"Size lost > 1\" in original]",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:189"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: between-turn recovery constants are tuning parameters \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:1327"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/units.py:328"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
       "category": "assumption",
       "priority": 3,
@@ -7645,54 +7705,6 @@
       "lane": "FA"
     },
     {
-      "text": "[ASSUMPTION: stamina constants are tuning parameters \u2014 basis: no canonical",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/massbattle.py:152"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: drain per contact cell is a tuning parameter]",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/massbattle.py:160"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: threshold 1.0 eff_size maps to \"Size lost > 1\" in original]",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/massbattle.py:189"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: between-turn recovery constants are tuning parameters \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/massbattle.py:1327"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
       "text": "[ASSUMPTION: game_state models NO Casus Belli ledger (verified \u2014 no casus_belli field). CB is read from an",
       "category": "assumption",
       "priority": 3,
@@ -7703,18 +7715,6 @@
       "systems": [],
       "count": 1,
       "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/units.py:328"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
     },
     {
       "text": "\"\"\"Duck-typed actor per operations.py's [ASSUMPTION] contract.\"\"\"",
@@ -11053,6 +11053,54 @@
       "lane": null
     },
     {
+      "text": "[GAP: faction\u2192unit construction has no canonical spec; uses minimum-viable",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:38"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[GAP: faction\u2192unit construction lacks canonical spec \u2014 minimum-viable defaults",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:1812"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[GAP: defenderless-territory garrison strength lacks canonical spec; using",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:1858"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[GAP: no canonical spec for faction.Mil \u2192 Unit construction. Defaults:",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:1870"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
       "text": "Marks every Tier-3 NPC with explicit `[GAP \u2014 Phase B authoring]` for missing dimensions; does not invent.",
       "category": "gap",
       "priority": 3,
@@ -11387,54 +11435,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "[GAP: faction\u2192unit construction has no canonical spec; uses minimum-viable",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "sim/provincial/massbattle.py:38"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[GAP: faction\u2192unit construction lacks canonical spec \u2014 minimum-viable defaults",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "sim/provincial/massbattle.py:1812"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[GAP: defenderless-territory garrison strength lacks canonical spec; using",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "sim/provincial/massbattle.py:1858"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[GAP: no canonical spec for faction.Mil \u2192 Unit construction. Defaults:",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "sim/provincial/massbattle.py:1870"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
     },
     {
       "text": "terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]",

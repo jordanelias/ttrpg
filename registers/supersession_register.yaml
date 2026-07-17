@@ -273,9 +273,9 @@ entries:
     replacement: >
       ED-MB-0001 executed the movement/pathing audit (ED-1096) fix-plan end-to-end plus a 5-dimension
       adversarial review — envelop/sweep/kite work on the live default path. Live engine:
-      designs/provincial/mass_battle_v30.md + the Cannae gauge harness.
+      systems/mass_battle/mass_battle_v30.md + the Cannae gauge harness.
     files_to_recheck:
-      - designs/provincial/mass_battle_v30.md
+      - systems/mass_battle/mass_battle_v30.md
       - registers/mechanics_index.yaml    # mass_battle entry flagged STALE 2026-07-07 (C-VERIFY-1); test_status needs re-survey
       - tests/coverage_matrix.md
   - superseded_id: "mass_battle Cannae-pattern gauge baseline (pre-ED-MB-0002)"
@@ -286,7 +286,7 @@ entries:
       Cannae gauge-band root-cause audit RATIFIED (PR #73); DG-3/DG-4 (bottom-up pool + sibling morale)
       ruled after a four-lens adversarial diagnosis.
     files_to_recheck:
-      - designs/provincial/mass_battle_v30.md
+      - systems/mass_battle/mass_battle_v30.md
   - superseded_id: "mass_battle DG-3/DG-4 shipped code (pre-ED-MB-0003)"
     scope: "DG-3/DG-4 (PR #75) did not close the H3-H6 gauge gap; four surviving engine defects (D1-D4)"
     superseded_by: "ED-MB-0003"
@@ -295,7 +295,7 @@ entries:
       ED-MB-0003 found+fixed D1-D4 (subunit pool dilution, envelop phase threshold, etc.), completed
       DG-1/DG-3, and captured DG-2 as workplan work (PR #84).
     files_to_recheck:
-      - designs/provincial/mass_battle_v30.md
+      - systems/mass_battle/mass_battle_v30.md
       - registers/mechanics_index.yaml    # mass_battle entry
 
   # ── Wound-penalty model reversal (added 2026-07-08, ED-PC-0005, Jordan ruling) ──

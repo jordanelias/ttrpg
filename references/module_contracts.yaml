@@ -460,7 +460,7 @@ modules:
 
   - module: mass_battle
     registry_system: "mass_battle"   # Key Type Registry vocabulary
-    doc: designs/provincial/mass_battle_v30.md
+    doc: systems/mass_battle/mass_battle_v30.md
     scales: [scene]
     resolver: dice_pool
     consumes: []

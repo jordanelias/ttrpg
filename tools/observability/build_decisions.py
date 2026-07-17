@@ -87,16 +87,16 @@ SWEEP_DIRS = ["designs", "systems", "canon", "params", "references", "sim", "eng
 # explicitly cites them as that lane's own audit trail (not a guess from the folder name).
 LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     # --- MB: mass battle ---
-    ("designs/provincial/mass_battle_v30", "MB"),
-    ("designs/provincial/mass_battle_integration_v30.md", "MB"),
-    ("designs/provincial/military_layer_v30", "MB"),
+    ("systems/mass_battle/mass_battle_v30", "MB"),
+    ("systems/mass_battle/mass_battle_integration_v30.md", "MB"),
+    ("systems/mass_battle/military_layer_v30", "MB"),
     ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
     ("proposals/multiunit_envelopment_plan.md", "MB"),
     ("engine/params/mass_combat.md", "MB"),
-    ("sim/provincial/massbattle.py", "MB"),
-    ("sim/provincial/units.py", "MB"),
-    ("sim/provincial/tactic_cards.py", "MB"),
-    ("sim/provincial/altonian_reinforcements.py", "MB"),
+    ("systems/mass_battle/sim/massbattle.py", "MB"),
+    ("systems/mass_battle/sim/units.py", "MB"),
+    ("systems/mass_battle/sim/tactic_cards.py", "MB"),
+    ("systems/mass_battle/sim/altonian_reinforcements.py", "MB"),
     ("designs/audit/2026-06-30-massbattle-bottomup/", "MB"),
     ("designs/audit/2026-06-01-massbattle-stub-wiring/", "MB"),
     ("designs/audit/2026-05-29-massbattle-sim-foundation/", "MB"),
