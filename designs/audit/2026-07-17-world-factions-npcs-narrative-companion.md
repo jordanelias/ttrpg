@@ -512,6 +512,56 @@ a voice canon that "never performs its own secrets." Chekhov is the *name* for t
 (subtext over escalation — the Belief a character does *not* voice, the deviation they *decline*), not a new
 rule. The design suggestion is only to *trust* it: let a pivotal scene be quiet. *Free* (it's already policy).
 
+## 3.9 The three-body ratchet — designing so all three always win (and Almud's impossible choice)
+
+**The idea.** Design the three principals so that *every* political exchange leaves all of them ahead — and
+therefore settles nothing. If Baralta, Vaynard, and Almud each wield moves that win *whatever* the opponent
+does, no contest is ever resolved; the stakes only ratchet, season over season, until the whole board is
+wound tighter than any single actor intended. **The escalation *is* the point:** it is what keeps the
+strategic layer relentless and its tension from ever plateauing. This is a structural engine, not a scene.
+
+**The corpus already holds the seed.** Baralta's *"Penitent's Gambit"* is a fully-worked no-lose move: a
+Parliamentary motion *"phrased so precisely that Cardinal Justice must either accept it (establishing that
+Church authority requires Parliamentary authorisation) or reject it (proving the Church considers itself
+above Parliament). Either way, Hafenmark wins the argument"* (`arcs/simulated/arcs_10_18.md`). Vaynard's
+equivalent works through *"Tribune intel"* and his hidden Collection — winning by controlling the
+documentation and the framing rather than the vote. And a faction-identity canon review already names the
+third: *"Almud = best player at the table playing defense on all fronts — weaponizes the Einhir question,
+redirects threats into each other, wins late by absorbing wreckage"*
+(`deprecated/archives/session/session_log_archive_part_7.md`).
+
+**Real grounding (leads).** The shape is a named piece of political sociology: **Georg Simmel's *tertius
+gaudens*** — the third who rejoices, profiting from the other two's conflict, and its active form
+*divide et impera*. That is Almud exactly: he does not defeat Baralta or Vaynard, he *turns them on each
+other* and banks the wreckage. His own anchor, **Manuel I Komnenos** ("six simultaneous threats through
+strategic patience"), and **Bismarck holding the balance** (the honest broker who kept rivals in tension so
+his own power profited) are the real statesmen of precisely this craft. The no-lose forced dilemma has a
+historical archetype the corpus's own arc already invokes: **Canossa (1077)**, where Gregory VII (by
+absolving a penitent king) and Henry IV (by forcing the priest to absolve him) *both* walked away claiming
+victory from the same act. And the escalation the mechanic produces is the real **"war of increments"** of a
+multipolar balance — the security-dilemma ratchet in which each crisis is settled in a way that leaves every
+party more dangerously positioned than before (the pre-1914 concert; the Warring States; the Italian-Wars
+balance Machiavelli anatomizes).
+
+**Literary lens (what it adds).** Tragic **peripeteia** — the reversal in which the very act that looks like
+a triumph is the seed of the fall — supplies the register the engine needs: the player must *feel* that each
+"win" tightens a noose none of the three can see, so the ratchet reads as mounting dread rather than
+stalemate. And the figure of the **impossible-choice statesman** — the ruler whose greatness is measured by
+loss *averted*, never victory *won* — is what makes Almud playable as a person rather than a chess engine:
+he is assailed from every direction at once, and canon should never hand him a *right* answer, only a *best*
+one. That constraint is his character.
+
+**The design.** (1) Give each principal a signature *no-lose forced dilemma* — Baralta's exists; author
+Vaynard's documentation-trap and Almud's redirect-and-absorb. (2) Make the moving quantity the *stakes*
+themselves: every exchange increments a peninsula-scale pressure (Turmoil, the "war of increments") even as
+each actor wins *locally*, so the board escalates while no contest resolves. (3) Author Almud explicitly as
+*tertius gaudens*: his win condition is not to prevail but to be *still standing, and still choosing*, when
+the other two have spent themselves — and every choice he is offered is best-not-right, a selection of which
+fire to let burn. This is the engine that makes the campaign's tension monotone-increasing, and it pairs
+directly with the Collision class (§3.3): a Collision is what fires when the ratchet finally forces a stake
+no one can win their way out of. *Needs Jordan* (a structural commitment on how the political layer
+escalates, and a character-design ruling that Almud never gets a right choice).
+
 ---
 ---
 
@@ -576,6 +626,9 @@ Solmund cosmology, not the ~90%-unlanded governance research).
   un-named endgame ritual; the single largest deferred narrative call.
 - **The reader-as-renderer resolution (§3.7)** — an engine-architecture fork with a real philosophical cost
   (NPC rendering) to weigh.
+- **The three-body ratchet (§3.9)** — a structural commitment on how the political layer escalates (every
+  principal wields no-lose moves, so stakes ratchet and never resolve), plus a character ruling that Almud
+  never gets a *right* choice, only a best one.
 - **The Edeyja arc (§2.6)** — free to *sketch* her stance, but its payoff is *gated on the §3.5 ruling* and so
   cannot be finalized independently.
 
@@ -629,6 +682,7 @@ corpus are marked ⟢; the rest are the wider historical record.
 | Testament (§3.6) | ⟢ Promissione Ducale + posthumous audit; ⟢ Hideyoshi's Go-Tairō charter | Robinson (the dying first-person voice; grace) | free |
 | Ellison / non-perception | Jim Crow testimony-discounting (cross-refs §3.4) | Ellison (the phenomenology of invisibility) | free |
 | Reader-as-renderer (§3.7) | trial-by-ordeal → trial-by-jury (secondary) | **Calvino (primary — epistemology, honest)** | needs Jordan |
+| Three-body ratchet (§3.9) | ⟢ tertius gaudens (Simmel); Manuel I Komnenos; Bismarck's balance; Canossa 1077; the "war of increments" | tragic peripeteia; the impossible-choice statesman | needs Jordan |
 
 *Closing word on method.* The corpus's own research self-audit is the standard this revision now meets:
 *"the methodology was the right work to do first. Without it, design proposals would have been built on

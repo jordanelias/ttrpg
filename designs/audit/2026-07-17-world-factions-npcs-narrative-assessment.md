@@ -763,7 +763,13 @@ lattice:
   unresolved doubt about the caste system *"he administers but does not feel,"* and his blind spot is
   precisely engineered — the foil doc notes his uncertainty "is itself a decision," that *"Lenneth sees this.
   Almud does not,"* because to him uncertainty is "the absence of a decision, not the presence of one." His administrative virtue *is* the
-  caste system's chief protection.
+  caste system's chief protection. **Yet the "inert doubt" reading undersells him, and a faction-identity
+  canon review supplies the sharper one:** Almud is *"the best player at the table playing defense on all
+  fronts — weaponizes the Einhir question, redirects threats into each other, wins late by absorbing
+  wreckage."* That is the more usable Almud — not a passive custodian but the peninsula's shrewdest statesman,
+  the third party who profits by turning Baralta and Vaynard on each other. His tragedy is not indecision; it
+  is that his position never offers a *right* choice, only the best one, assailed from every side at once — a
+  distinction the companion builds into a design engine (companion §3.9).
 - **Queen Lenneth Almqvist** (Crown, reformist; anchor Catherine the Great). Archivist who would make the
   dynasty *"the family that reunited the Valnese people."* Her frustration with Almud is exact: *"not that
   he disagrees — it is that he has not decided. She could argue against disagreement. She cannot argue
