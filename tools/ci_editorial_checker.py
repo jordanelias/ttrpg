@@ -4,7 +4,7 @@ ci_editorial_checker.py
 Runs in CI. Checks that commits to editorial-governed paths contain
 [EDITORIAL] or [PROVISIONAL] markers for substantive content.
 
-Editorial paths: designs/npcs/, designs/world/,
+Editorial paths: systems/npcs/, designs/world/,
                  arcs/simulated/, canon/03_ (timeline)
 
 Short stubs (< 200 chars) are exempt.
@@ -21,7 +21,7 @@ except ImportError:
     import ci_common
 
 EDITORIAL_PATHS = (
-    'designs/npcs/',
+    'systems/npcs/',
     'designs/world/',
     'arcs/simulated/',
     'canon/03_',

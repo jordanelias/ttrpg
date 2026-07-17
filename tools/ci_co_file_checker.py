@@ -35,7 +35,7 @@ violations = []
 
 # ── Rule 1: design doc change → canonical_sources.yaml ───────────────────────
 design_docs = [f for f in changed
-               if re.match(r'designs/.+_v30\.md$', f) and 'infill' not in f]
+               if re.match(r'(?:designs|systems)/.+_v30\.md$', f) and 'infill' not in f]
 if design_docs and 'references/canonical_sources.yaml' not in changed:
     violations.append(
         f"DESIGN DOCS changed but canonical_sources.yaml not in commit.\n"

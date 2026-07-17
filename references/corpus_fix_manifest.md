@@ -40,7 +40,7 @@
 ### Per-label file lists (active docs only, excluding deprecated/archives/tests):
 
 #### "Categorical Imperative" (~36 active files)
-Includes: params/bg/core.md, params/contest.md, params/factions/npc_stance_triangles.md, designs/personal/conviction_taxonomy_v30.md, designs/arcs/arcs_31_35.md, designs/npcs/npc_foils_v30_infill.md, designs/npcs/npc_behavior_v30.md, designs/ui/valoria_ui_ux_v4.md, designs/npcs/character_canon_v30.md, designs/arcs/gm_ref/arcs_05_09.md, designs/arcs/gm_ref/arcs_41_45.md, references/alias_registry.yaml, designs/arcs/emergent_scenarios.md, canon/patch_register_active.yaml, designs/arcs/arc_expansion_v30.md, references/valoria_complete_systems_r2.md, references/numeric_bounds_report.yaml, designs/audit/valoria_holistic_audit.md, designs/provincial/faction_canon_v30.md, designs/scene/investigation_systems_v30.md, designs/provincial/faction_politics_v30.md, designs/npcs/npc_character_analyses_v30_infill.md, designs/scene/social_contest_v30.md, designs/scene/social_contest_system_v2.md, designs/provincial/factions_personal_v30.md, designs/provincial/faction_behavior_v30.md, and others.
+Includes: params/bg/core.md, params/contest.md, params/factions/npc_stance_triangles.md, designs/personal/conviction_taxonomy_v30.md, designs/arcs/arcs_31_35.md, systems/npcs/npc_foils_v30_infill.md, systems/npcs/npc_behavior_v30.md, systems/ui/valoria_ui_ux_v4.md, systems/npcs/character_canon_v30.md, designs/arcs/gm_ref/arcs_05_09.md, designs/arcs/gm_ref/arcs_41_45.md, references/alias_registry.yaml, designs/arcs/emergent_scenarios.md, canon/patch_register_active.yaml, designs/arcs/arc_expansion_v30.md, references/valoria_complete_systems_r2.md, references/numeric_bounds_report.yaml, designs/audit/valoria_holistic_audit.md, designs/provincial/faction_canon_v30.md, designs/scene/investigation_systems_v30.md, designs/provincial/faction_politics_v30.md, systems/npcs/npc_character_analyses_v30_infill.md, designs/scene/social_contest_v30.md, designs/scene/social_contest_system_v2.md, designs/provincial/factions_personal_v30.md, designs/provincial/faction_behavior_v30.md, and others.
 
 #### "Divine Command" (~28 active files)
 Similar distribution as above.
@@ -67,7 +67,7 @@ Per conviction_migration_roster_v30.md. Each legacy label maps to specific Convi
 
 ### Recommended approach:
 1. Read conviction_migration_roster_v30.md for per-character/faction mappings
-2. Process files in groups: params/ first (3 files), then designs/scene/ (canonical system docs), then designs/npcs/ (character docs), then designs/provincial/ (faction docs)
+2. Process files in groups: params/ first (3 files), then designs/scene/ (canonical system docs), then systems/npcs/ (character docs), then designs/provincial/ (faction docs)
 3. Each file: check context — is the label used mechanically (rename) or historically (annotate)?
 
 ---
@@ -79,7 +79,7 @@ Per conviction_migration_roster_v30.md. Each legacy label maps to specific Convi
 
 ### Fixed this session:
 - ✓ designs/provincial/mass_battle_v30.md (1 TC→CI)
-- ✓ designs/npcs/npc_character_analyses_v30_infill.md (2 TC→CI)
+- ✓ systems/npcs/npc_character_analyses_v30_infill.md (2 TC→CI)
 - ✓ references/throughlines_meta_infill.md (0 hits — clean)
 
 ### Remaining files with TC (active, non-deprecated):
@@ -107,7 +107,7 @@ From GitHub code search — includes both "Theocracy Counter" and standalone `\b
 | designs/provincial/faction_politics_v30.md | |
 | designs/world/southernmost_v30.md | |
 | designs/scene/combat_v30.md | |
-| designs/npcs/npc_foils_v30.md | |
+| systems/npcs/npc_foils_v30.md | |
 | designs/threadwork/threadwork_v30_infill.md | |
 | designs/arcs/narrative_scenario_chains.md | |
 | designs/arcs/gm_ref/arcs_10_18.md | |
@@ -147,6 +147,6 @@ This is primarily relevant in:
 |------|--------|--------|
 | params/contest.md | Pressure Point "Authority" → "Sanction" | COMMITTED |
 | designs/provincial/mass_battle_v30.md | TC → CI (1 occurrence) | COMMITTED |
-| designs/npcs/npc_character_analyses_v30_infill.md | TC → CI (2 occurrences) | COMMITTED |
+| systems/npcs/npc_character_analyses_v30_infill.md | TC → CI (2 occurrences) | COMMITTED |
 | references/mechanical_terms_index.md | New file: diagnostic glossary with GAPs resolved | COMMITTED |
 | references/corpus_fix_manifest.md | New file: this manifest | COMMITTED |

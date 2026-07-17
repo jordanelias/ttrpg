@@ -168,7 +168,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -274,7 +274,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -338,8 +338,8 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "Behaviour-tree decision logic for NPC-controlled factions/characters. See designs/npcs/npc_behavior_v30.md.",
-      "range": "Behaviour-tree decision logic for NPC-controlled factions/characters. See designs/npcs/npc_behavior_v30.md.",
+      "definition": "Behaviour-tree decision logic for NPC-controlled factions/characters. See systems/npcs/npc_behavior_v30.md.",
+      "range": "Behaviour-tree decision logic for NPC-controlled factions/characters. See systems/npcs/npc_behavior_v30.md.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -736,8 +736,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See designs/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
-      "range": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See designs/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
+      "definition": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See systems/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
+      "range": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See systems/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -761,7 +761,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -778,7 +778,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -797,7 +797,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -1482,7 +1482,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -1790,7 +1790,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2006,8 +2006,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
-      "range": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
+      "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
+      "range": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -2126,7 +2126,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2145,7 +2145,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -2165,7 +2165,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -2182,7 +2182,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2965,7 +2965,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -3039,7 +3039,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -3146,7 +3146,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -3725,7 +3725,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -4005,7 +4005,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -4366,8 +4366,8 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per designs/npcs/npc_behavior_v30.md.",
-      "range": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per designs/npcs/npc_behavior_v30.md.",
+      "definition": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per systems/npcs/npc_behavior_v30.md.",
+      "range": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per systems/npcs/npc_behavior_v30.md.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -4758,7 +4758,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -5098,7 +5098,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5117,7 +5117,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5300,7 +5300,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5460,7 +5460,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -5690,7 +5690,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -6227,7 +6227,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -7232,7 +7232,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {

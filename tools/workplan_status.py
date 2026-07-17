@@ -68,7 +68,7 @@ def _next_ready(board):
     return 'no ungated increment — rule a T0 decision'
 
 
-RELEVANT_PREFIXES = ('designs/', 'registers/handoffs/', 'canon/', 'sim/')
+RELEVANT_PREFIXES = ('designs/', 'systems/', 'registers/handoffs/', 'canon/', 'sim/')
 
 
 def staleness():

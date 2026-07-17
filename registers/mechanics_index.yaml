@@ -322,7 +322,7 @@ mechanics:
     canon_sources:
       - "designs/scene/fieldwork_v30.md#section-5-5"
       - "designs/scene/social_contest_v30.md#section-9-5"
-      - "designs/articulation/articulation_layer_v30.md#section-3-5"
+      - "systems/articulation/articulation_layer_v30.md#section-3-5"
     sim_module: sim/personal/beliefs.py
     test_status: not_implemented
     notes: "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass."
@@ -337,8 +337,8 @@ mechanics:
       - "designs/scene/fieldwork_v30.md#section-2-6"
       - "designs/scene/fieldwork_v30.md#section-5-6"
       - "designs/scene/social_contest_v30.md#section-9-4"
-      - "designs/articulation/articulation_layer_v30.md#section-2-4"
-      - "designs/articulation/articulation_layer_v30.md#section-6"
+      - "systems/articulation/articulation_layer_v30.md#section-2-4"
+      - "systems/articulation/articulation_layer_v30.md#section-6"
       - "designs/scene/derived_stats_v30.md#section-10-1"
     unified_canon_target: "designs/personal/knots_v30.md (Pass 2g canonized 2026-05-17)"
     sim_module: sim/personal/knots.py
@@ -887,7 +887,7 @@ mechanics:
   articulation_layer:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/articulation/articulation_layer_v30.md"]
+    canon_sources: ["systems/articulation/articulation_layer_v30.md"]
     sim_module: sim/cross_scale/articulation.py
     test_status: not_implemented
     pp: PP-688

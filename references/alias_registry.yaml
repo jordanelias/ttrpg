@@ -392,7 +392,7 @@ world_narrative:
     canonical: "Disposition"
     abbreviations: []
     category: mechanic
-    note: "NPC-attached attitude state toward another entity. Drives behaviour-tree branching. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal — 391 chains. Added to glossary 2026-04-30 (PP-691)."
+    note: "NPC-attached attitude state toward another entity. Drives behaviour-tree branching. Canonical in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal — 391 chains. Added to glossary 2026-04-30 (PP-691)."
   domain_action:
     canonical: "Domain Action"
     abbreviations: []

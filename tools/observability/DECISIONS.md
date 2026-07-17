@@ -45,7 +45,7 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 - `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s2_q3_arcs.md` — 17
 - `designs/audit/2026-07-14-gameplay-subsystem-observatory/subsystem_discussion_v1.md` — 17
 - `designs/audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-STUB.md` — 16
-- `designs/npcs/character_canon_v30.md` — 14
+- `systems/npcs/character_canon_v30.md` — 14
 - `designs/audit/2026-05-15-mb-comparative-audit/audit.md` — 14
 - `designs/audit/2026-07-05-emergent-narrative-engine/01_workings/spec_sections/s3_q4_render.md` — 13
 - `designs/audit/2026-07-14-scale-chain-and-decision-surface-map/unification_synthesis_v1.md` — 12

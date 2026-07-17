@@ -99,7 +99,7 @@ PROVENANCE_PATHS = {
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
-SCAN_PREFIXES = ('canon/', 'designs/', 'engine/params/', 'references/')
+SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'engine/params/', 'references/')
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).

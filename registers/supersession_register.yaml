@@ -61,7 +61,7 @@ entries:
       - engine/params/bg/faction_actions.md
       - engine/params/bg/npc_priority_trees.md
       - designs/provincial/faction_politics_v30.md
-      - designs/npcs/npc_behavior_v30.md
+      - systems/npcs/npc_behavior_v30.md
       - designs/provincial/victory_v30.md
     commits: [297f892, 13b8f30]
   - superseded_id: "PP-687-001"
@@ -99,7 +99,7 @@ entries:
       (no longer per-NPC bespoke event copies). Memory Query API §4.4 indexes
       by axis-relevance / time-window / target-mention for 1000-3300-entry scale.
     files_to_recheck:
-      - designs/npcs/npc_behavior_v30.md
+      - systems/npcs/npc_behavior_v30.md
     commits: ["d2a75fc"]
 
   - superseded_id: "PP-686-001"
@@ -242,7 +242,7 @@ entries:
       - engine/params/core.md (Bonds)
       - designs/personal/knots_v30.md
       - designs/architecture/complete_systems_reference.md Part 8
-      - designs/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
+      - systems/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
       - designs/scene/investigation_systems_v30.md (Ontological Ledger)
       - designs/scene/fieldwork_socializing.md
 

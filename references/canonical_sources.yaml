@@ -228,8 +228,8 @@ systems:
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: engine/params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
-    related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
+    related: systems/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
+    canonical_sha__systems__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
@@ -272,7 +272,7 @@ systems:
 # D-3 (ED-724): Solmund dissolution site — specific, contested, off-map.
 #   Propagated canon/03_canonical_timeline.md §Solmund.
 # D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
-#   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
+#   ceiling 10-20. Propagated systems/npcs/npc_character_analyses_v30{,_infill}.md.
 # D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
 #   Propagated arcs/simulated/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
@@ -308,8 +308,8 @@ systems:
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
-    design_doc: designs/npcs/baralta_v30.md
-    canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
+    design_doc: systems/npcs/baralta_v30.md
+    canonical_sha__systems__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
   key_substrate:
@@ -349,8 +349,8 @@ systems:
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
-    design_doc: designs/articulation/articulation_layer_v30.md
-    canonical_sha__designs__articulation__articulation_layer_v30_md: "e38d1a92586784e6c50026fc4e9a422637e7a6e2"
+    design_doc: systems/articulation/articulation_layer_v30.md
+    canonical_sha__systems__articulation__articulation_layer_v30_md: "e38d1a92586784e6c50026fc4e9a422637e7a6e2"
     status: canonical
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
   conviction_axis_matrix:
@@ -375,8 +375,8 @@ systems:
     added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
 
   character_canon_consolidation:
-    design_doc: designs/npcs/character_canon_v30.md
-    canonical_sha__designs__npcs__character_canon_v30_md: "cc3779b981dbc228f61c87e96bb82c8a7053f019"
+    design_doc: systems/npcs/character_canon_v30.md
+    canonical_sha__systems__npcs__character_canon_v30_md: "cc3779b981dbc228f61c87e96bb82c8a7053f019"
     status: provisional
     added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
   faction_canon_consolidation:
@@ -393,8 +393,8 @@ systems:
     added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
 
   npc_relational_graph:
-    design_doc: designs/npcs/npc_relational_graph_v30.md
-    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "9e67cd7122cbf3f46d3966a60af90e949eee0e9f"
+    design_doc: systems/npcs/npc_relational_graph_v30.md
+    canonical_sha__systems__npcs__npc_relational_graph_v30_md: "9e67cd7122cbf3f46d3966a60af90e949eee0e9f"
     pp: PP-724
     status: provisional
 
@@ -422,11 +422,11 @@ systems:
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
-    design_doc: designs/npcs/companion_specification_v30.md
-    canonical_sha__designs__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"
+    design_doc: systems/npcs/companion_specification_v30.md
+    canonical_sha__systems__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"
   edeyja_npc:
-    design_doc: designs/npcs/edeyja_npc.md
-    canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
+    design_doc: systems/npcs/edeyja_npc.md
+    canonical_sha__systems__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
   faction_politics:
     design_doc: designs/provincial/faction_politics_v30.md
     canonical_sha__designs__provincial__faction_politics_v30_md: "ee2b98542f93dc7732a39056ad547e8b42625bd0"
@@ -469,12 +469,12 @@ systems:
     summary: designs/scene/fieldwork_summary.md
     canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
   npc_roster:
-    design_doc: designs/npcs/npc_roster_v30.md
-    canonical_sha__designs__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
-    index: designs/npcs/npc_roster_v30_index.md
-    canonical_sha__designs__npcs__npc_roster_v30_index_md: "42da7a6787bd19acfd70c863f8b31d7618412005"
-    infill: designs/npcs/npc_roster_v30_infill.md
-    canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
+    design_doc: systems/npcs/npc_roster_v30.md
+    canonical_sha__systems__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
+    index: systems/npcs/npc_roster_v30_index.md
+    canonical_sha__systems__npcs__npc_roster_v30_index_md: "42da7a6787bd19acfd70c863f8b31d7618412005"
+    infill: systems/npcs/npc_roster_v30_infill.md
+    canonical_sha__systems__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
     design_doc: designs/architecture/player_agency_v30.md
     canonical_sha__designs__architecture__player_agency_v30_md: "d49c182e49135a7cb5b5b54d4c5588f5fbdf5ed1"
@@ -491,24 +491,24 @@ systems:
     index: arcs/throughline_resolutions_v30_index.md
     canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "2c9ca8c1c2414173a6440fcaa13b8ae79a2c9f07"
   ui_ux:
-    design_doc: designs/ui/valoria_ui_ux_v4.md
-    canonical_sha__designs__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
-    valoria_ui_ux_1: designs/ui/valoria_ui_ux_v4_1.md
+    design_doc: systems/ui/valoria_ui_ux_v4.md
+    canonical_sha__systems__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
+    valoria_ui_ux_1: systems/ui/valoria_ui_ux_v4_1.md
   videogame_mode_spec:
     design_doc: designs/architecture/videogame_mode_spec.md
     canonical_sha__designs__architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
     index: designs/architecture/videogame_mode_spec_index.md
     canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
   npc_behavior:
-    design_doc: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
-    npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
-    canonical_sha__designs__npcs__npc_behavior_v30_index_md: "d71b538d8a88bae5937494beb63e43595673f6ff"
-    npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
-    canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
+    design_doc: systems/npcs/npc_behavior_v30.md
+    canonical_sha__systems__npcs__npc_behavior_v30_md: "3f332c08e842a6026e75fa845e4a648e451a4647"
+    npc_behavior_index: systems/npcs/npc_behavior_v30_index.md
+    canonical_sha__systems__npcs__npc_behavior_v30_index_md: "d71b538d8a88bae5937494beb63e43595673f6ff"
+    npc_behavior_infill: systems/npcs/npc_behavior_v30_infill.md
+    canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "fe129e226695364f98dd406e916b39d427f9d003"
+    canonical_sha__references__module_contracts_yaml: "89a243716e74fca64a196ed5591197622f55cab1"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

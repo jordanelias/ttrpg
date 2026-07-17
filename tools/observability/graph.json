@@ -140,7 +140,7 @@
       "full_stream": true,
       "registry_only": false,
       "registry_system": "articulation",
-      "doc": "designs/articulation/articulation_layer_v30.md",
+      "doc": "systems/articulation/articulation_layer_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -952,7 +952,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "npc_behavior (+ Procedures B/D/E)",
-      "doc": "designs/npcs/npc_behavior_v30.md",
+      "doc": "systems/npcs/npc_behavior_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -977,7 +977,7 @@
         "Accounting sequence (doc-12 \u00a78, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate \u00a74.1 single-update rule processes emissions inline"
       ],
       "sources": [
-        "designs/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]",
+        "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]",
         "political_dynamics_keys_migration_v30 full incl. \u00a78 sequencing [READ: 2026-06-10]",
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]",
         "key_substrate_v30 \u00a78.2, \u00a78.3 [READ: 2026-06-10]"

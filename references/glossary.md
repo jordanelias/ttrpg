@@ -163,7 +163,7 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Inspiration | — | Named focus that grants bonus dice when engaged in relevant scenes. Distinct from Belief (which drives Momentum/CP) and History (which is experiential skill). Per ED-779. |
 | History | — | Skill-equivalent. Specific experiential knowledge that grants bonus dice. Cap = Memory score. |
 | Character Point | CP | Advancement currency earned through Beliefs and session milestones. **CP refers to Character Points only** (ED-136); see PART TWELVE collision entry. |
-| Disposition | — | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `designs/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). |
+| Disposition | — | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). |
 | Domain Action | — | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `designs/architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). |
 | Domain Echo | — | Faction-level consequence triggered by decisive Debate outcomes. |
 | Grievance Marker | — | Token placed on a faction after hostile covert action. Originally scoped to Niflhel hostile action; Niflhel-as-faction struck per ED-764, scope extended to any covert/hostile action. |
@@ -172,7 +172,7 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. |
 | Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `designs/architecture/scale_transitions_v30.md` §4. |
 | Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
-| Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `designs/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
+| Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `systems/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
 
 ---
 
@@ -203,10 +203,10 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Editorial Decision | ED-NNN | Editorial decision requiring user approval. Tracked in `canon/editorial_ledger.yaml`. |
 | Simulation Debt | SIM-DEBT-NNN | Outstanding simulation recalibration needed after a mechanical change. |
 | Game Master | GM | Design-source-of-truth role term. **In Valoria's videogame target there is no GM** — engine handles all resolution. The term persists in design corpus as legacy taxonomy; in implementation it maps to engine resolution authority (priority systems, scripted scene resolution, NPC AI orchestration). The bare-`GM` corpus sweep is queued; new content should use "engine" or write "Game Master" in full only when referring to the design-source taxonomic role. |
-| Non-Player Character | NPC | A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per `designs/npcs/npc_behavior_v30.md`. |
+| Non-Player Character | NPC | A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per `systems/npcs/npc_behavior_v30.md`. |
 | Player Character | PC | A character controlled by a player. |
 | Burning Wheel | BW | Precedent game (Burning Wheel by Luke Crane). Referenced in cognitive load / precedent analysis. **Design-precedent term**; not an in-game mechanic. |
-| Artificial Intelligence | AI | Behaviour-tree decision logic for NPC-controlled factions/characters. See `designs/npcs/npc_behavior_v30.md`. |
+| Artificial Intelligence | AI | Behaviour-tree decision logic for NPC-controlled factions/characters. See `systems/npcs/npc_behavior_v30.md`. |
 
 For Expected Value (EV) / Target Number (TN) / Obstacle (Ob) — see Part Six.
 

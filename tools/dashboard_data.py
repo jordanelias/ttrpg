@@ -659,7 +659,7 @@ def build_proposals():
     # 9 of them invisible here. Both this card and build_proposals.py call the same core,
     # so they agree without one reading the other's committed output.
     rows = []
-    for path in glob.glob('designs/**/*.md', recursive=True):
+    for path in glob.glob('designs/**/*.md', recursive=True) + glob.glob('systems/**/*.md', recursive=True):
         if '/deprecated/' in path or '/archives/' in path or '/archive/' in path:
             continue
         try:
@@ -693,7 +693,7 @@ def build_proposals():
 # ── repository shape (mermaid) ───────────────────────────────────────────────
 
 def build_repo_shape():
-    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') if os.path.isdir(d))
+    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') + glob.glob('systems/*') if os.path.isdir(d))
     lines = [
         'graph TD',
         '  CANON["canon/ — philosophy P-01..P-14 · ledgers · mechanics index"]',

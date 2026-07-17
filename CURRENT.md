@@ -30,7 +30,8 @@ counts by lane, active patch-register counts).
 
 _Last reconciled: 2026-07-17 (**ED-IN-0071 repo-reorganization path reconciliation** — updated CURRENT.md's
 head-row paths to the executed reorg slices (`godot/`, `arcs/`, `arcs/simulated/`, `registers/`,
-`registers/handoffs/`, `engine/engine_params/`, `engine/params/`, and the sim engine-core → `engine/` move);
+`registers/handoffs/`, `engine/engine_params/`, `engine/params/`, the sim engine-core → `engine/` move, and P4 slice 1
+moving the npcs / articulation / ui subsystems into `systems/`);
 no head *contents* changed, only their locations, and every moved path aliases via
 `references/restructure_ledger.md`). Prior reconcile: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
 `designs/audit/2026-07-15-proposal-reconciliation/`: classified the dashboard's 55 awaiting-ratification docs
@@ -105,8 +106,8 @@ the head of its lineage; predecessors are archived._
 | **Architecture / Propagation spec** | `designs/architecture/propagation_spec_v1.md` — CANONICAL (ratified 2026-07-02, ED-1093/ED-1094; workplan v5 J-38). Ordering/determinism, aggregate-up, distribute-down, and termination (TERMINATION-ONLY — cross-tick convergence NOT proven) transforms; supplies `engine_clock`'s candidate home doc, but the `doc: null`/[ASSUMPTION] grade in `module_contracts.yaml` stays unflipped until ED-1051 is separately resolved. **2026-07-07: OF-7/OF-B1 RATIFIED** (consolidated ruling pass, ED-IN-0026 — §4.1 steps 4/5 amended; `engine/substrate/keys.py` defaults both flags ON). Remaining open flags tracked in the doc's own §5 (D.6/OF-D6, `decay()`, RNG-MODEL-COLLISION, cap constants, ORD-3/ORD-4) |
 | **Scale transitions** | `designs/architecture/scale_transitions_v30.md` — CANONICAL; three-mode (TTRPG / Hybrid / Board Game) zoom in/out mode-bridge protocol, incl. the Mandatory Zoom In Triggers table (§4.3.2). New row 2026-07-08 (ED-IN-0016 — this connective-tissue doc had no CURRENT.md row) |
 | **Player agency** | `designs/architecture/player_agency_v30.md` — CANONICAL (approved 2026-04-17); Scene Slate (§4), Standing/Duty/Conviction player-motivation architecture. New row 2026-07-08 (ED-IN-0016 — same missing-row gap as Scale transitions above) |
-| **Articulation** | `designs/articulation/articulation_layer_v30.md` |
-| **NPC behaviour** | `designs/npcs/npc_behavior_v30.md` |
+| **Articulation** | `systems/articulation/articulation_layer_v30.md` |
+| **NPC behaviour** | `systems/npcs/npc_behavior_v30.md` |
 | **Master workplan** | `workplans/valoria_master_workplan_v6.md` (CANON — RATIFIED 2026-07-05, ED-IN-0009/ED-IN-0011; supersedes v5 → `deprecated/archives/workplans/` with banner; v4 stays the frozen 06-11/06-22 record. North-Star milestones M1/M2/M3 + tiered decision register §5 — the live decision surface; progress board `workplan_v6_progress.yaml` + `valoria-workplan-navigator`) |
 | **Narrative engine** | `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (RATIFIED 2026-07-05, ED-IN-0011 — Jordan sign-off incl. the F-F/fork-8 Light-Function decision at its default, subtract-only + weight-set-as-data; supersedes-in-part v1, which is ratified-as-amended with spec chapters s1–s5 + `spec/churn_amendments.md`. Executes ED-IN-0003/0004; stages sequenced in workplan v6 §3) |
 | **Godot conversion** | `godot/godot_conversion_strategy_v1.md` (Lane-C governing spec) |

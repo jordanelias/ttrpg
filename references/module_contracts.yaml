@@ -104,7 +104,7 @@ modules:
 
   - module: npc_behavior
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
-    doc: designs/npcs/npc_behavior_v30.md
+    doc: systems/npcs/npc_behavior_v30.md
     scales: [personal, scene]
     resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     consumes:
@@ -178,7 +178,7 @@ modules:
       - "Accounting sequence (doc-12 §8, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate §4.1 single-update rule processes emissions inline"
     status: extracted
     sources:
-      - "designs/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
+      - "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
       - "political_dynamics_keys_migration_v30 full incl. §8 sequencing [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "key_substrate_v30 §8.2, §8.3 [READ: 2026-06-10]"
@@ -778,7 +778,7 @@ modules:
 
   - module: articulation_layer
     registry_system: "articulation"   # Key Type Registry vocabulary
-    doc: designs/articulation/articulation_layer_v30.md
+    doc: systems/articulation/articulation_layer_v30.md
     scales: [personal, scene, provincial]
     resolver: deterministic_accounting   # significance-function accounting + embedded armature read [verification RU-4: the armature dot-product is the SUBSTRATE interpretation primitive (key_substrate §2.5/§4.1), NOT a system resolver] (substrate §8.2, §8.7)
     consumes:

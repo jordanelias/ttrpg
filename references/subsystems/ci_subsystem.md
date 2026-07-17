@@ -19,7 +19,7 @@ Triggers on push + pull_request to `main`; concurrency-cancels rapid runs. **Eig
 ## CI scripts (`tools/ci_*.py`)
 - `ci_register_size_check.py` — fails if any governed file exceeds its token threshold. The external "cannot be bypassed" size gate (in spirit — see drift note).
 - `ci_co_file_checker.py` — verifies co-file requirements from the CI side: design-doc change → `canonical_sources.yaml`; patch content → `patch_register_active.yaml`; sim output → `coverage_matrix.md`; mechanical-value change → params file. Uses `git diff` against the GitHub event context (push/PR/squash-merge aware).
-- `ci_editorial_checker.py` — commits touching editorial paths (`designs/npcs/`, `designs/world/`, `arcs/simulated/`, `canon/03_`) must carry `[EDITORIAL:` / `[PROVISIONAL:` / `[EDITORIAL GATE]` markers for substantive content (>200 chars; `_skeleton.md` exempt).
+- `ci_editorial_checker.py` — commits touching editorial paths (`systems/npcs/`, `designs/world/`, `arcs/simulated/`, `canon/03_`) must carry `[EDITORIAL:` / `[PROVISIONAL:` / `[EDITORIAL GATE]` markers for substantive content (>200 chars; `_skeleton.md` exempt).
 - `ci_hooks_verifier.py` — verifies the enforcement architecture is intact: `valoria_hooks.py` has the required functions (`assert_bootstrap`, `task_gate`, `editorial_gate`, `pre_commit_gate`, `commit_message_gate`, `propose_mechanic_gate`, `context_gate`, `safe_commit`); the orchestrator SKILL imports hooks + calls `assert_bootstrap`; uses `h.safe_commit` not `g.atomic_commit` directly; redundant stripped blocks have not returned; skills are under their token limits.
 
 ## Invocation
