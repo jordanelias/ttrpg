@@ -30,7 +30,7 @@ Dependencies:
 from __future__ import annotations
 
 import math
-from sim.autoload.game_state import MULTS, ALL_PLAYABLE_15
+from engine.autoload.game_state import MULTS, ALL_PLAYABLE_15
 from sim.territory.adjacency import ADJACENCY
 from sim.provincial import crown_initiative
 from sim.provincial import excommunication

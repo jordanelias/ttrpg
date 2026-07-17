@@ -42,7 +42,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Any
 
-from sim.autoload.dice_engine import roll_pool
+from engine.autoload.dice_engine import roll_pool
 
 
 # §3.1 prerequisites

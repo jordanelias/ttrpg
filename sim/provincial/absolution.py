@@ -18,8 +18,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sim.autoload import dice_engine
-from sim.autoload.dice_engine import Degree
+from engine.autoload import dice_engine
+from engine.autoload.dice_engine import Degree
 
 
 # ── Granular conversion ───────────────────────────────────────────────────────

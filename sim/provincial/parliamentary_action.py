@@ -36,7 +36,7 @@ Entry points:
 """
 from __future__ import annotations
 
-from sim.autoload.game_state import MULTS
+from engine.autoload.game_state import MULTS
 from sim.personal.parliamentary_vote import (
     Motion,
     VoteDeclaration,

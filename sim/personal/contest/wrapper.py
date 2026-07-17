@@ -356,7 +356,7 @@ def _stage3_resolution_invocation_check():
         # cr4_stasis_genre: the +1D primary-genre bonus must raise the mean reception NET (the roll the
         # resolver bands to a degree) when the live stasis has a matching primary genre.
         from .primitives import Pool as _Pl, Leverage as _Lv
-        from sim.autoload.sigma_leverage import net_boost as _nbst
+        from engine.autoload.sigma_leverage import net_boost as _nbst
         def _mean_net(bonus, N=200):
             tot = 0.0; lev = _Lv.net(5, on_ground=True)
             for s in range(N):

@@ -34,8 +34,8 @@ TransferResult — matching the sibling faction-action convention (crown_initiat
 from __future__ import annotations
 from dataclasses import dataclass, field
 
-from sim.autoload.dice_engine import roll_pool, Degree
-from sim.autoload.game_state import ACCORD_MAP, MULTS
+from engine.autoload.dice_engine import roll_pool, Degree
+from engine.autoload.game_state import ACCORD_MAP, MULTS
 from sim.personal.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
 
 # ── §1/§3/§5 constants (ledgered) ──

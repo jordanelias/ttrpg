@@ -1,5 +1,5 @@
 """
-sim.cross_scale — Inter-scale handoff, echo, zoom, articulation
+engine.cross_scale — Inter-scale handoff, echo, zoom, articulation
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 

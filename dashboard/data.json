@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T23:15:19+00:00",
-    "commit_sha": "2edd9d7"
+    "timestamp_utc": "2026-07-17T01:13:57+00:00",
+    "commit_sha": "d627e05"
   },
   "workplan": {
     "available": true,
@@ -402,6 +402,13 @@
     "available": true,
     "commits": [
       {
+        "sha": "d627e059f6",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P3: params/ -> engine/params/ (go big, pointers for prose) (ED-IN-0071) (#161)",
+        "scope": "infrastructure"
+      },
+      {
         "sha": "2edd9d7ae0",
         "date": "2026-07-16",
         "author": "jordanelias",
@@ -673,19 +680,12 @@
         "author": "jordanelias",
         "subject": "Audit ecosystem: consolidation, reconciliation, and always-fresh infrastructure (#122)",
         "scope": null
-      },
-      {
-        "sha": "bd5c79802e",
-        "date": "2026-07-10",
-        "author": "jordanelias",
-        "subject": "Add mobile-friendly GitHub Pages status dashboard (ED-IN-0031) (#121)",
-        "scope": null
       }
     ]
   },
   "currency": {
     "available": true,
-    "summary": "currency drift: 3 item(s) — run python tools/currency_consistency_check.py"
+    "summary": "currency drift: 2 item(s) — run python tools/currency_consistency_check.py"
   },
   "needs_decision": {
     "available": true,
@@ -720,15 +720,15 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "191 in-scope file(s) changed since last refresh",
+        "detail": "240 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 1a83ccf (2026-07-16)",
-        "stale": true,
-        "detail": "22 in-scope file(s) changed since last refresh",
+        "ref": "base d627e05 (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -744,15 +744,15 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "53 in-scope file(s) changed since last refresh",
+        "detail": "61 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 1a83ccf (2026-07-16)",
-        "stale": true,
-        "detail": "18 in-scope file(s) changed since last refresh",
+        "ref": "base d627e05 (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -760,15 +760,15 @@
         "category": "audit-family",
         "ref": "base 5d9a359 (2026-07-08)",
         "stale": true,
-        "detail": "1 in-scope file(s) changed since last refresh",
+        "detail": "2 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 95d871f (2026-07-16)",
-        "stale": true,
-        "detail": "46 in-scope file(s) changed since last refresh",
+        "ref": "base d627e05 (2026-07-16)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -784,17 +784,17 @@
         "category": "index",
         "ref": "last reconciled 2026-07-15",
         "stale": false,
-        "detail": "last hand-reconciled 1 day(s) ago",
+        "detail": "last hand-reconciled 2 day(s) ago",
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 9,
+    "stale_count": 6,
     "total": 10,
     "handoffs": [
       {
         "surface": "HANDOFF.md",
         "last_updated": "2026-07-16",
-        "days_ago": 0
+        "days_ago": 1
       }
     ],
     "note": "detection only — surfaces are refreshed by their owning skill/PR, never by this job"

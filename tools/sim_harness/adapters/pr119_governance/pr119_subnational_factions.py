@@ -26,7 +26,7 @@ from .goldenfurt_fixture import SID
 class FakeWorld:
     """Minimal stand-in satisfying infrastructure.build_infrastructure()'s only real
     requirement (`territory_id in world.territories`) without depending on the full
-    sim.autoload.game_state.World construction this adapter has no other need for."""
+    engine.autoload.game_state.World construction this adapter has no other need for."""
     def __init__(self, territory_ids):
         self.territories = {tid: object() for tid in territory_ids}
 

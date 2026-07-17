@@ -3,7 +3,7 @@ sim/tests/test_contest_kernel.py — pytest gate for the promoted groundup conte
 
 Stage 1b (designs/audit/2026-06-30-contest-stage0-reconciliation): the 9-module groundup
 kernel was relocated into sim/personal/contest/ and unified onto the ONE canonical σ-kernel
-(sim.autoload.sigma_leverage / dice_engine), replacing the groundup local engine.py. This
+(engine.autoload.sigma_leverage / dice_engine), replacing the groundup local engine.py. This
 stage is BEHAVIOR-PRESERVING: the seeded 151-check kernel suite must stay green.
 
 The kernel suite (sim/personal/contest/_kernel_tests.py) is the groundup tests.py

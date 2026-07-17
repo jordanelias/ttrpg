@@ -15,13 +15,13 @@ from .contract import A, B, other, Move, ContestView, FaultState, Adjudicator, P
 from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier,
                         RhetoricalWeights, FaceScale)
-# Stage 1b: rewired to the ONE canonical σ-kernel (sim.autoload.sigma_leverage), replacing the
+# Stage 1b: rewired to the ONE canonical σ-kernel (engine.autoload.sigma_leverage), replacing the
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
 # byte-identical at TN7 (parity-tested). roll_net is wrapped below to preserve the kernel's
 # GLOBAL-random stream (sigma_leverage.roll_net(rng=random) draws from the module-level RNG the
 # 151 seeded tests rely on; passing rng=None would use a fresh Random and desync the seed).
-from sim.autoload import sigma_leverage as _sigma
-from sim.autoload.sigma_leverage import effective_ob, degree, net_boost
+from engine.autoload import sigma_leverage as _sigma
+from engine.autoload.sigma_leverage import effective_ob, degree, net_boost
 
 def roll_net(pool):
     """Behavior-preserving wrapper: canonical d10 roll drawn from the GLOBAL random stream

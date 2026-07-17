@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from sim.personal import tribunal
-from sim.autoload.dice_engine import Degree
+from engine.autoload.dice_engine import Degree
 
 
 # ── Ledger-cited constants ────────────────────────────────────────────────────

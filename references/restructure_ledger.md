@@ -759,3 +759,13 @@
 | `params/southernmost.md` | `engine/params/southernmost.md` |
 | `params/threadwork.md` | `engine/params/threadwork.md` |
 | `params/threadwork_superseded.md` | `engine/params/threadwork_superseded.md` |
+
+
+## 2026-07-16 — sim/ engine core -> engine/ (ED-IN-0071 P3 Phase A)
+
+| old path | new path |
+|---|---|
+| `sim/substrate/` | `engine/substrate/` |
+| `sim/autoload/` | `engine/autoload/` |
+| `sim/cross_scale/` | `engine/cross_scale/` |
+| `sim/mc_v18.py` | `engine/mc_v18.py` |

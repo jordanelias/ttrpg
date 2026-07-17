@@ -48,8 +48,8 @@ from __future__ import annotations
 
 import random
 
-from sim.autoload import scene_slate
-from sim.cross_scale import zoom_in_out
+from engine.autoload import scene_slate
+from engine.cross_scale import zoom_in_out
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -221,7 +221,7 @@ def _resolve_slot(slot, world, rng):
     # zoom_out({}) no-echo path. With one attached AND ctx carrying an `echo` block, the
     # resolved outcome routes through domain_echo -> substrate Key (deferred faction apply).
     if getattr(world, "echo_scheduler", None) is not None:
-        from sim.cross_scale import echo_transport
+        from engine.cross_scale import echo_transport
         scene_outcomes = echo_transport.emit_scene_echo(st, out["result"], ctx, world)
         out["echo_fired"] = bool(scene_outcomes.get("other_echoes"))
     else:

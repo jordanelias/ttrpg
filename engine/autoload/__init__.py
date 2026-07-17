@@ -1,5 +1,5 @@
 """
-sim.autoload — Global services mirroring Godot autoloads
+engine.autoload — Global services mirroring Godot autoloads
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 

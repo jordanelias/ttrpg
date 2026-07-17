@@ -17,7 +17,7 @@ Runtime ≈ 5 s. The happy path does not touch any of sim's NotImplementedError 
 
 REGENERATING THE GOLDEN (only when a change is *intended* to move balance)
 --------------------------------------------------------------------------
-    python -c "from sim.mc_v18 import run_batch; r=run_batch(n=2, base_seed=0); \
+    python -c "from engine.mc_v18 import run_batch; r=run_batch(n=2, base_seed=0); \
 print(r.n, r.win_share, r.all_winners, r.battles_mean)"
 Then update GOLDEN below and say so in the commit. A surprise failure here means a
 change altered simulation output — investigate before regenerating.
@@ -53,7 +53,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-from sim.mc_v18 import run_batch, run_campaign  # noqa: E402
+from engine.mc_v18 import run_batch, run_campaign  # noqa: E402
 
 # Golden batch — REPINNED 2026-07-08: merge of ED-SC-0002/0006/0007 auto-resolve
 # (parliamentary_bridge.py, origin/main) with this branch's ED-SC-0007 play-out echo addition

@@ -71,7 +71,7 @@ def test_l2_contract_without_code_is_informational_name_gap():
     # capstone #7: returns contract names absent as a code-path segment. Informational
     # (drives the DISCLOSURE), never presented as a fabrication findings list.
     l2 = ['mass_battle', 'faction_state', 'victory']
-    code = ['sim.provincial.mass_battle', 'sim.autoload.victory']   # faction_state absent
+    code = ['sim.provincial.mass_battle', 'engine.autoload.victory']   # faction_state absent
     assert sa.l2_contract_without_code(l2, code) == ['faction_state']
 
 

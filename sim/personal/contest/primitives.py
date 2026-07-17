@@ -6,7 +6,7 @@ toggle showed readiness carries the build payoff). DefeatCatalogue is venue-conf
 """
 from dataclasses import dataclass
 from .contract import A, B
-from sim.autoload.sigma_leverage import level   # Stage 1b: single-sourced σ-kernel (was local engine.py)
+from engine.autoload.sigma_leverage import level   # Stage 1b: single-sourced σ-kernel (was local engine.py)
 
 class Stasis:
     FACT, DEFINITION, QUALITY, JURISDICTION = "fact", "definition", "quality", "jurisdiction"

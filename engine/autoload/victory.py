@@ -54,7 +54,7 @@ def check_peninsular_sovereignty(faction_id: str, world) -> VictoryResult:
 
     Canon: all 15 territories held, Accord >= 2 in all, PS <= 6, sustained 2 seasons.
     """
-    from sim.autoload.game_state import ALL_PLAYABLE_15
+    from engine.autoload.game_state import ALL_PLAYABLE_15
 
     faction = world.factions.get(faction_id)
     if faction is None:

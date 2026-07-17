@@ -143,7 +143,7 @@ from typing import Dict, Optional
 
 from .contract import Adjudicator, Panel
 from .dictionaries import STYLES_TABLE, Genre, Orientation
-from sim.autoload.sigma_leverage import level as _sigma_level
+from engine.autoload.sigma_leverage import level as _sigma_level
 
 
 # ══════════════════════════════════════════════════════════════════════════════════════════
