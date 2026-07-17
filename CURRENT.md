@@ -28,7 +28,11 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
+_Last reconciled: 2026-07-17 (**ED-IN-0071 repo-reorganization path reconciliation** — updated CURRENT.md's
+head-row paths to the executed reorg slices (`godot/`, `arcs/`, `arcs/simulated/`, `registers/`,
+`registers/handoffs/`, `engine/engine_params/`, `engine/params/`, and the sim engine-core → `engine/` move);
+no head *contents* changed, only their locations, and every moved path aliases via
+`references/restructure_ledger.md`). Prior reconcile: 2026-07-15 (**Awaiting-ratification proposal-reconciliation pass**, ED-IN-0069/0070 —
 `designs/audit/2026-07-15-proposal-reconciliation/`: classified the dashboard's 55 awaiting-ratification docs
 + 9 dashboard-invisible `proposals/` docs into 4 natures; executed safe status bookkeeping (39
 Nature-A flips — 29 ratified-narrative-engine working record → SUPERSEDED, 10 read-only-audit mis-tags
