@@ -1,7 +1,7 @@
 """
-sim/thread/operations.py — Thread operations: Leap, Weaving, Pulling, Past-Pulling, Locking, Dissolution, Mending
+systems/threadwork/sim/operations.py — Thread operations: Leap, Weaving, Pulling, Past-Pulling, Locking, Dissolution, Mending
 
-Canon source: designs/threadwork/threadwork_v30.md Part 2 (§2.3-§2.6)
+Canon source: systems/threadwork/threadwork_v30.md Part 2 (§2.3-§2.6)
 Params source: params/threadwork.md (TN modifiers, Three-Axis Ob, Thread Pool formula)
 
 Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
@@ -9,7 +9,7 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
   - Constructs pool per PP-616/618/619 canonical pool formula
   - Looks up TN per §TN Modifiers
   - Resolves degree (Overwhelming/Success/Partial/Failure)
-  - Applies Coherence delta via sim/thread/coherence (already landed)
+  - Applies Coherence delta via systems/threadwork/sim/coherence (already landed)
   - Returns OperationResult with degree + side-effects
 
 [ASSUMPTION: practitioner stats sourced from caller — basis: actor parameter
@@ -20,7 +20,7 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
 
 Dependencies:
   - sim/autoload/dice_engine
-  - sim/thread/coherence (apply_coherence_delta)
+  - systems/threadwork/sim/coherence (apply_coherence_delta)
   - sim/cross_scale/handoff_rules (TS-banded coherence cost for mass-battle context)
 
 Entry points:
@@ -38,7 +38,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Any
 
 from engine.autoload.dice_engine import roll_pool
-from sim.thread.coherence import apply_coherence_delta
+from systems.threadwork.sim.coherence import apply_coherence_delta
 
 
 # §TN Modifiers (PP-619 — canonical)

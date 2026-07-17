@@ -1,7 +1,7 @@
 """
-sim/thread/coherence.py — Coherence 10-0 track per Foundations P-10, P-15
+systems/threadwork/sim/coherence.py — Coherence 10-0 track per Foundations P-10, P-15
 
-Canon source: designs/threadwork/threadwork_v30.md Part 3; canon/02_canon_constraints.md §A P-10 / P-15
+Canon source: systems/threadwork/threadwork_v30.md Part 3; canon/02_canon_constraints.md §A P-10 / P-15
 
 Implements the per-practitioner Coherence track per §3.1-§3.6:
   - 10 -> 0 integer track, starting 10 (§3.1)
@@ -31,7 +31,7 @@ from typing import Optional
 
 
 # Coherence track bounds per §3.1
-# [canonical: designs/threadwork/threadwork_v30.md §3.1 — "Range: 10 (fully
+# [canonical: systems/threadwork/threadwork_v30.md §3.1 — "Range: 10 (fully
 #  coherent) -> 0 (rendering crisis). Starting value: 10 (all practitioners)."]
 COHERENCE_MAX = 10
 COHERENCE_MIN = 0

@@ -1,7 +1,7 @@
 """
-sim/thread/threadcut.py — Threadcut beings (P-06)
+systems/threadwork/sim/threadcut.py — Threadcut beings (P-06)
 
-Canon source: designs/threadwork/threadwork_v30.md Part 6
+Canon source: systems/threadwork/threadwork_v30.md Part 6
 
 Implements:
   - is_threadcut: registry check
@@ -19,8 +19,8 @@ Implements:
  .wounds (count) and .max_wounds; Rendering Threshold = max_wounds / 2.]
 
 Dependencies:
-  - sim/thread/operations
-  - sim/thread/coherence (NOT used — threadcut beings have no Coherence track per §6.3)
+  - systems/threadwork/sim/operations
+  - systems/threadwork/sim/coherence (NOT used — threadcut beings have no Coherence track per §6.3)
 
 Entry points:
   - is_threadcut(being_id: str, world) -> bool

@@ -181,20 +181,20 @@
 | `designs/systems/settlement_layer_v30_skeleton.md` | `designs/territory/settlement_layer_v30_skeleton.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30.md` | `designs/provincial/tc_political_v30.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30_skeleton.md` | `designs/provincial/tc_political_v30_skeleton.md` | PENDING |
-| `designs/systems/thread_horizontal_integration_spec.md` | `designs/threadwork/thread_horizontal_integration_spec.md` | PENDING |
+| `designs/systems/thread_horizontal_integration_spec.md` | `systems/threadwork/thread_horizontal_integration_spec.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1.md` | `designs/arcs/throughline_resolutions_v30.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1_skeleton.md` | `designs/arcs/throughline_resolutions_v30_skeleton.md` | PENDING |
 | `designs/ttrpg/edeyja_npc.md` | `systems/npcs/edeyja_npc.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30.md` | `designs/provincial/factions_personal_v30.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_infill.md` | `designs/provincial/factions_personal_v30_infill.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_skeleton.md` | `designs/provincial/factions_personal_v30_skeleton.md` | PENDING |
-| `designs/ttrpg/threadwork_philosophical_reference_v30.md` | `designs/threadwork/threadwork_philosophical_reference_v30.md` | PENDING |
-| `designs/ttrpg/threadwork_philosophical_reference_v30_infill.md` | `designs/threadwork/threadwork_philosophical_reference_v30_infill.md` | PENDING |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/threadwork/threadwork_v25_historical.md` | PENDING |
-| `designs/ttrpg/threadwork_redesign_v25_skeleton.md` | `designs/threadwork/threadwork_v25_historical_skeleton.md` | PENDING |
-| `designs/ttrpg/threadwork_v30.md` | `designs/threadwork/threadwork_v30.md` | PENDING |
-| `designs/ttrpg/threadwork_v30_infill.md` | `designs/threadwork/threadwork_v30_infill.md` | PENDING |
-| `designs/ttrpg/threadwork_v30_skeleton.md` | `designs/threadwork/threadwork_v30_skeleton.md` | PENDING |
+| `designs/ttrpg/threadwork_philosophical_reference_v30.md` | `systems/threadwork/threadwork_philosophical_reference_v30.md` | PENDING |
+| `designs/ttrpg/threadwork_philosophical_reference_v30_infill.md` | `systems/threadwork/threadwork_philosophical_reference_v30_infill.md` | PENDING |
+| `designs/ttrpg/threadwork_redesign_v25.md` | `systems/threadwork/threadwork_v25_historical.md` | PENDING |
+| `designs/ttrpg/threadwork_redesign_v25_skeleton.md` | `systems/threadwork/threadwork_v25_historical_skeleton.md` | PENDING |
+| `designs/ttrpg/threadwork_v30.md` | `systems/threadwork/threadwork_v30.md` | PENDING |
+| `designs/ttrpg/threadwork_v30_infill.md` | `systems/threadwork/threadwork_v30_infill.md` | PENDING |
+| `designs/ttrpg/threadwork_v30_skeleton.md` | `systems/threadwork/threadwork_v30_skeleton.md` | PENDING |
 | `designs/ttrpg/valoria_emergent_scenarios.md` | `designs/arcs/emergent_scenarios.md` | PENDING |
 | `designs/ttrpg/valoria_emergent_scenarios_skeleton.md` | `designs/arcs/emergent_scenarios_skeleton.md` | PENDING |
 | `designs/ttrpg/valoria_narrative_scenario_chains.md` | `designs/arcs/narrative_scenario_chains.md` | PENDING |
@@ -778,3 +778,11 @@
 | `designs/npcs/` | `systems/npcs/` |
 | `designs/articulation/` | `systems/articulation/` |
 | `designs/ui/` | `systems/ui/` |
+
+
+## 2026-07-17 — threadwork designs/ + sim/ -> systems/ (P4 slice 2, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/threadwork/` | `systems/threadwork/` |
+| `sim/thread/` | `systems/threadwork/sim/` |

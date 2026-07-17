@@ -6,7 +6,7 @@ Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
   - sim/autoload/dice_engine
-  - sim/thread/rendering
+  - systems/threadwork/sim/rendering
 
 Entry points:
   - trigger_miraculous_event(event_type: str, world: GameState) -> MiraculousResult

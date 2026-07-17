@@ -35,8 +35,8 @@ rollups:
       severity: error
       hint: "Legacy term \"Rendering Stability\" used — current canonical: \"Mending Stability (MS)\""
       top_files:
-        - "designs/threadwork/threadwork_v25_historical.md": 116
-        - "designs/threadwork/threadwork_v30_infill.md": 34
+        - "systems/threadwork/threadwork_v25_historical.md": 116
+        - "systems/threadwork/threadwork_v30_infill.md": 34
         - "designs/provincial/strategic_layer_v30_infill.md": 3
         - "designs/audit/session_master_2026_04_20.md": 2
         - "designs/architecture/campaign_modes_v30_infill.md": 1
@@ -69,8 +69,8 @@ rollups:
         - "designs/arcs/arcs_20_23.md": 4
         - "designs/provincial/mass_battle_v30.md": 4
         - "designs/provincial/victory_v30.md": 3
-        - "designs/threadwork/threadwork_v25_historical.md": 3
-        - "designs/threadwork/threadwork_v30.md": 3
+        - "systems/threadwork/threadwork_v25_historical.md": 3
+        - "systems/threadwork/threadwork_v30.md": 3
         - "params/history/mass_combat.md": 3
         - "designs/arcs/arcs_31_35.md": 2
         - "designs/audit/valoria_complete_system_audit.md": 2
@@ -82,8 +82,8 @@ rollups:
       top_files:
         - "designs/arcs/emergent_scenarios.md": 10
         - "designs/scene/combat_design_v1.md": 5
-        - "designs/threadwork/threadwork_v25_historical.md": 5
-        - "designs/threadwork/threadwork_v30.md": 5
+        - "systems/threadwork/threadwork_v25_historical.md": 5
+        - "systems/threadwork/threadwork_v30.md": 5
         - "params/history/mass_combat.md": 5
         - "designs/provincial/strategic_layer_v30.md": 4
         - "designs/architecture/campaign_modes_v30.md": 3
@@ -145,8 +145,8 @@ rollups:
       top_files:
         - "designs/arcs/emergent_scenarios.md": 10
         - "designs/scene/combat_design_v1.md": 5
-        - "designs/threadwork/threadwork_v25_historical.md": 5
-        - "designs/threadwork/threadwork_v30.md": 5
+        - "systems/threadwork/threadwork_v25_historical.md": 5
+        - "systems/threadwork/threadwork_v30.md": 5
         - "params/history/mass_combat.md": 5
         - "designs/architecture/campaign_modes_v30.md": 3
         - "designs/arcs/narrative_scenario_chains.md": 3

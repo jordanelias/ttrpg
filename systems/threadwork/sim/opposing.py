@@ -1,7 +1,7 @@
 """
-sim/thread/opposing.py — Opposing Thread operations + Knot Strain interaction
+systems/threadwork/sim/opposing.py — Opposing Thread operations + Knot Strain interaction
 
-Canon source: designs/threadwork/threadwork_v30.md §2.6
+Canon source: systems/threadwork/threadwork_v30.md §2.6
 
 Implements:
   - resolve_opposing_operations: §2.6 6-row resolution table (Meets/Partial/
@@ -21,7 +21,7 @@ sides accrue strain on the Knot per the canon table.
  dict with .actor + .op_type + .target, or an OperationResult-like obj.]
 
 Dependencies:
-  - sim/thread/operations
+  - systems/threadwork/sim/operations
   - sim/personal/knots (for Knot strain accumulation via late-import)
 
 Entry points:
@@ -34,11 +34,11 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from engine.autoload.dice_engine import roll_pool
-from sim.thread.operations import (
+from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
 )
-from sim.thread.coherence import apply_coherence_delta
+from systems.threadwork.sim.coherence import apply_coherence_delta
 
 
 # §2.6 Opposing Engagement Modifier

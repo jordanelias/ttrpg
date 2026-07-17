@@ -28,7 +28,7 @@ module-load-time cycle.
  .knots field. _store(world) router prepared for future schema migration.]
 
 Dependencies:
-  - sim/thread/coherence (apply_coherence_delta on rupture)
+  - systems/threadwork/sim/coherence (apply_coherence_delta on rupture)
   - sim/personal/conviction (apply_conviction_scar on high-strain break)
 
 Entry points:
@@ -360,7 +360,7 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
         # [UNVERIFIED post-ED-912] mandatory −1 Coherence (see RUPTURE_COHERENCE_LOSS note)
         consequences['coherence_delta'] = RUPTURE_COHERENCE_LOSS
         try:
-            from sim.thread.coherence import apply_coherence_delta
+            from systems.threadwork.sim.coherence import apply_coherence_delta
             apply_coherence_delta(actor, RUPTURE_COHERENCE_LOSS,
                                   f"Knot rupture (id={knot_id})", world=world)
         except (ImportError, AttributeError):

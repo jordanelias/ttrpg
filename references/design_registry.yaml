@@ -65,11 +65,11 @@ registry:
   threadwork:
     system: threadwork
     mode: TTRPG
-    canonical_v30: designs/threadwork/threadwork_v30.md
-    skeleton: designs/threadwork/threadwork_v30.md
-    infill: designs/threadwork/threadwork_v30_infill.md
+    canonical_v30: systems/threadwork/threadwork_v30.md
+    skeleton: systems/threadwork/threadwork_v30.md
+    infill: systems/threadwork/threadwork_v30_infill.md
     atomized: complete
-    predecessor: designs/threadwork/threadwork_v25_historical.md
+    predecessor: systems/threadwork/threadwork_v25_historical.md
     params: engine/params/threadwork.md
 
   # ─── COMBAT ────────────────────────────────────────────────────────────────

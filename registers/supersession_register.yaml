@@ -320,7 +320,7 @@ entries:
       - designs/scene/combat_v30.md   # DONE
       - designs/scene/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
       - designs/scene/fieldwork_v30.md   # DONE
-      - designs/threadwork/threadwork_v30.md   # DONE
+      - systems/threadwork/threadwork_v30.md   # DONE
       - engine/params/core.md   # already current (ED-PC-0005 pass)
       - engine/params/fieldwork.md   # DONE
       - engine/params/mass_combat.md   # DONE

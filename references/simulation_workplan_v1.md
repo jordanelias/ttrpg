@@ -562,7 +562,7 @@ At session close, append to session_log_current.md:
 ### §6.6 A6 DEEP THREADWORK
 
 **Pre-sim canon:**
-- All `designs/threadwork/` files
+- All `systems/threadwork/` files
 - `params/threadwork.md` (already in base — full read)
 - `canon/01_foundations_amendment_self_rendering.md`
 - `canon/02_foundations_amendment_leap_mechanism.md`
