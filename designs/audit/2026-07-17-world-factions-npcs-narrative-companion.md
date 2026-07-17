@@ -3,17 +3,20 @@
 **Status: SPECULATIVE ANALYSIS — proposals, extensions, and suggestions. Not canon, not ratified design.**
 This is the companion to `2026-07-17-world-factions-npcs-narrative-assessment.md`. Where the assessment
 *reads* the corpus, this document *extends* it: it fills the gaps the assessment named, proposes new
-mechanisms, and grounds each in **real historical precedent — real actors, real politics** — with literary
-lenses kept to a secondary, framing role. It ratifies nothing and touches no ledger, `CURRENT.md` row, or
+mechanisms, and grounds each in **real historical precedent — real actors, real politics — *alongside* the
+acclaimed literary and narrative lenses**, using both rather than either alone. It ratifies nothing and touches no ledger, `CURRENT.md` row, or
 module contract.
 
 **This is a revised version.** An earlier draft leaned on literary lenses as the primary grounding; an
 adversarial fidelity + cliché + historical-grounding review found that this inverted the corpus's own
 discipline (its NPC anchors run ~15:1 real-historical to fictional, with the one fictional exception —
 von Lohengramm — explicitly flagged as an outlier) and, three times, reached *past* a real precedent
-already sitting in the paragraph being quoted. This revision corrects that: **every proposal now leads with
-the real precedent — drawn first from the repo's own `research/` corpus and ratified canon — and demotes
-the literary lens to a closing gloss where it survives at all.** The review's conceptual findings (a
+already sitting in the paragraph being quoted. This revision corrects that — but the fix is *both/and*, not a
+replacement: **every proposal now pairs a real precedent — drawn first from the repo's own `research/` corpus
+and ratified canon — with its literary lens, each doing its own work.** The failure was relying *only* on the
+literary (and, in three cases, reaching past a real anchor already in the paragraph); the correction is to
+*add* the history the corpus demands, not to strip the literary that gives a mechanic its form and resonance.
+The review's conceptual findings (a
 Collision-class that flattened an asymmetric injustice into a symmetric tragedy; three proposals that
 checked the wrong constraint; a stance mechanic that left out the very people it was about) are addressed
 inline and summarized in Part IV.
@@ -62,15 +65,17 @@ papacy, the Varangian Guard, the Investiture Contest, the British Raj.
 
 The discipline for this companion follows directly: **before reaching for a novelist or a philosopher, find
 the real actor and the real politics — first in the repo's own `research/` corpus, which was built for
-exactly this and is mostly unused, then in the wider historical record.** A literary lens may still earn a
-place, but only as a *secondary* framing device (a name for a shape, a mood), never as the structural
-grounding. The corpus's own research self-audit states the principle this companion now obeys: *"the
+exactly this and is mostly unused, then in the wider historical record.** The real precedent must be
+*present* — its absence was the earlier draft's failure — but the literary lens is a genuine *co-contributor*,
+not a decoration: the history supplies the mechanism, the actors, and the proof it can happen; the literary
+lens supplies the *form*, the *register*, the *moral framing*, and the *question* that makes a mechanic
+resonate. Use both. The corpus's own research self-audit states the principle this companion now obeys: *"the
 methodology was the right work to do first. Without it, design proposals would have been built on ungrounded
 intuition."* (`research/pre_firearms_formations/16_historical_vs_gamedesign_audit.md`.)
 
 Where the earlier draft's literary lens turned out to be *replacing* a real anchor the corpus had already
-established, this revision restores the real anchor and keeps the literary one only if it adds something the
-history doesn't. In three cases the history was in the same paragraph the draft was quoting:
+established, this revision restores the real anchor *and keeps the literary lens working beside it*. In three
+cases the history was in the same paragraph the draft was quoting, and had simply been ignored:
 
 - **Altonia** already carries the ratified anchor *"Historical parallel: British India… the British managed
   religious institutions by granting them defined jurisdictional space"* (`canon/03_canonical_timeline.md`)
@@ -302,9 +307,10 @@ accumulate independent executive standing (`research/governance/governance_modes
 executing anything — Bibulus used it against Caesar in 59 BCE) are the two closest "perception nullifies
 action without touching it" precedents.
 
-**Literary gloss (secondary).** Simone Weil's *attention* and *décréation* explain the *ethics* of a mode
-that gives without grasping — but supply no institutional mechanism, so they close the section rather than
-open it.
+**Literary lens (what it adds).** Simone Weil's *attention* and *décréation* supply what the institutional
+history cannot: the *ethics and phenomenology* of a mode that gives precisely because it does not grasp — the
+reason a "watch-only" office is a spiritual discipline, not merely an audit function. The Cishi and the
+liquidators tell you how to *build* it; Weil tells you why it *matters*, and how it should *feel*.
 
 **Canon check.** P-01 is satisfied (attention *alters nothing*, so co-movement has nothing to move). **The
 real risk is P-08 / Foundations §10.1** (thread-perception requires repeated confrontation; study alone
@@ -380,8 +386,12 @@ pays a terrible price or loses (the tragedy of *Antigone* read from Antigone's s
 revolt below). Baralta ↔ Vaynard stays that asymmetric case, with the caste's injustice intact. Applying the
 "no right answer" mechanic to it is a design error the class is built to prevent.
 
-**Literary gloss (secondary).** Hegel's reading of *Antigone* — two ethical substances, both right — is the
-philosophical name for the *symmetric* case, kept as a one-line gloss. *Needs Jordan* (a new event grammar).
+**Literary lens (what it adds).** Hegel's reading of *Antigone* — two ethical substances, each right within
+its own order — supplies the *conceptual clarity* the historical cases only illustrate: it names precisely
+*why* a true collision has no clean outcome, and, read from Antigone's own side, it is also the frame for the
+*asymmetric* injustice (the just cause that pays a terrible price). The Investiture Controversy is the
+mechanism; *Antigone* is the idea it enacts, and the reason the guard against false balance matters. *Needs
+Jordan* (a new event grammar).
 
 ## 3.4 The Omelas compass — with the Southern Einhir's own documented stances
 
@@ -417,8 +427,10 @@ necessary* causal link, and using it smuggles the metaphysical framing into the 
 metaphysical version, which contradicts the Warden-driven Mending trajectory and *needs Jordan* — the political
 compass itself is free to build.
 
-**Literary gloss (secondary).** Le Guin's "Omelas" names the *shape* (a good order and the knowledge of its
-cost) as a closing device only.
+**Literary lens (what it adds).** Le Guin's "Omelas" supplies the *moral architecture* the mechanisms need:
+the specific ethical weight of *knowing* the cost and choosing anyway, and the fourth stance — walking away —
+that a devshirme-or-Helot analysis alone would never surface. The history proves such orders exist and
+endure; "Omelas" is what makes *a stance toward one* a moral act rather than a bookkeeping entry.
 
 ## 3.5 The Buried Giant fork — a legislated non-remembering pact, not a liftable mist
 
@@ -445,24 +457,30 @@ combustible; leave it, and the peace holds atop a bargain no one will name. Neit
 Jordan* (makes the Forgetting a decision; implicates the un-named endgame ritual — the biggest single narrative
 call the setting has deferred).
 
-**Literary gloss (secondary).** Ishiguro's *Buried Giant* survives as the *mood* (a whole society organized
-around a shared not-remembering), not the mechanism.
+**Literary lens (what it adds).** Ishiguro's *Buried Giant* supplies the *question* that makes the fork more
+than a policy choice — *is forgetting a wound or a mercy?* — and the mood of a whole society quietly
+organized around a shared not-remembering. The Athenian Amnesty is the legal mechanism; Ishiguro is the ache
+that makes a table hesitate before either answer.
 
 ## 3.6 The archive and the Testament — real accountability instruments
 
 **The Deep Archives** ("pre-Catastrophe records containing inconsistencies… a Thread artifact") are named and
-unused. Ground them not as a lore-codex but as instruments of *contested memory*: the Nabokov *Pale Fire*
-structure (a fixed text whose meaning lives in the gloss the player's growing knowledge writes) is a fair
-secondary frame, but the *real* register is **archival suppression as political technology** (the "myth of
-Venice" / *damnatio memoriae* material from §3.2) and the place the Buried Giant fork (§3.5) is *researched*.
+unused. Ground them as instruments of *contested memory*, using both a form and a politics: the Nabokov
+*Pale Fire* structure (a fixed text whose meaning lives in the gloss the player's growing knowledge writes)
+supplies the *form* — how a document can betray itself on re-reading — while the real register of *why* an
+archive is a battlefield is **archival suppression as political technology** (the "myth of Venice" /
+*damnatio memoriae* material from §3.2). The Deep Archives are where the Buried Giant fork (§3.5) is
+*researched*.
 
 **The Testament** — a first-person artifact a dying leader or Warden leaves, carrying their Belief forward —
-should be grounded not in Robinson's *Gilead* (a private letter with no institutional consequence) but in the
-**Doge's *Promissione Ducale*** and the ***Inquisitori sopra il Doge defunto*** (`governance_modes.md`): the
-Doge's oath was re-drafted and lengthened at *every* accession by a standing magistracy closing off the
-previous Doge's abuses, and a posthumous audit could *fine his estate before his heirs inherited*. That gives
-the Testament **teeth** — it is *reckoned against* after death, formally audited by a successor institution —
-which Robinson's private grace never suggested. **Hideyoshi's 1598 deathbed charter of the Go-Tairō** is the
+works best as *both* a moving personal document and an audited instrument. Robinson's *Gilead* supplies the
+*register* the design should keep — grace, the dying first-person voice, a testament written to a successor —
+while the **Doge's *Promissione Ducale*** and the ***Inquisitori sopra il Doge defunto*** (`governance_modes.md`)
+supply the *teeth* the register alone lacks: the Doge's oath was re-drafted and lengthened at *every*
+accession by a standing magistracy closing off the previous Doge's abuses, and a posthumous audit could
+*fine his estate before his heirs inherited*. A Testament that is *both* Gilead-tender *and* reckoned against
+after death — formally audited by a successor institution — is richer than either alone.
+**Hideyoshi's 1598 deathbed charter of the Go-Tairō** is the
 secondary case (a testamentary instrument establishing the governance meant to carry a dead ruler's intent
 forward). *Free* (additive artifact + a real accountability mechanic).
 
@@ -561,50 +579,55 @@ Solmund cosmology, not the ~90%-unlanded governance research).
 - **The Edeyja arc (§2.6)** — free to *sketch* her stance, but its payoff is *gated on the §3.5 ruling* and so
   cannot be finalized independently.
 
-## 4.3 On the literary lenses — supply vs. name (honest accounting)
+## 4.3 On the literary lenses — what each one adds (honest accounting)
 
-The earlier draft claimed every literary lens "supplies a mechanism, a constraint, or a question… never a
-costume." That was false by the draft's own hedges. The honest distinction, applied throughout this revision:
+The proposals use *both* real precedent and literary lens, because they do *different* work. The real
+precedent supplies the mechanism, the actors, and the proof that such a thing can happen and endure; the
+literary lens supplies the form, the register, the moral framing, and the question that makes the mechanic
+*resonate* at the table. Neither alone is enough — the earlier draft's error was using *only* the literary;
+the correction is to add the history beside it, not to strip the literary out. What each contributes:
 
-- **Lenses that supply something the history doesn't** — kept, and only these: **Borges** (belief-edits-
-  ontology has no real analogue by design — §3.2's metaphysical half) and **Calvino** (the reader-as-renderer
-  is an epistemology question, not a politics one — §3.7). These do irreplaceable work.
-- **Lenses that only *name* an existing shape** — demoted to a closing gloss, with the real mechanism leading:
-  **the Investiture Controversy** now grounds the Collision class (Hegel/Antigone is the name); **Chernobyl
-  liquidators + the Han Cishi** ground the Attention economy (Weil is the ethics-gloss); **the Athenian
-  Amnesty** grounds the Buried Giant fork (Ishiguro is the mood); **devshirme/Stellinga/Jim Crow** ground the
-  Omelas compass (Le Guin is the closing name); **the British Raj/District Collector** grounds Altonia
-  (Coetzee is a mood-note); **the Promissione Ducale** grounds the Testament (Robinson is retired).
-- **Lenses the corpus already uses** — flagged, not presented as novel: **Ishiguro** and **Borges** are *both
-  already named* in the canonical voice doc (`narrative_voice_canon_v30.md`) as two of its twelve style
+- **A few lenses do work no real precedent can** — **Borges** (belief-edits-ontology has no real analogue by
+  design — §3.2's metaphysical half) and **Calvino** (the reader-as-renderer is an epistemology question, not
+  a politics one — §3.7). Here the literary lens genuinely *leads*.
+- **The rest pair a real mechanism with a literary framing, both load-bearing**: the Investiture Controversy
+  supplies the Collision mechanism and *Antigone* supplies the idea it enacts; the Cishi and the liquidators
+  supply the Attention office and Weil supplies its ethics; the Athenian Amnesty supplies the Buried Giant
+  pact and Ishiguro supplies its unanswerable question; devshirme and the Stellinga revolt supply the Omelas
+  compass and Le Guin supplies its moral weight; the British Raj supplies Altonia's mechanism and Coetzee
+  supplies the magistrate's interiority; the Promissione Ducale supplies the Testament's teeth and Robinson
+  supplies its voice. In each pair, remove *either* and the proposal is poorer.
+- **Two lenses the corpus already uses** — a fidelity note, not a demotion: **Ishiguro** and **Borges** are
+  *both already named* in the canonical voice doc (`narrative_voice_canon_v30.md`) as two of its twelve style
   authors (for grammatical register), and Borges recurs in the ratified Churn Engine v2 grounding. This
-  companion's use of them for *theme/mechanism* is an **extension of an existing influence**, not the
-  introduction of an unused one — which is a *stronger* claim than the draft's "not yet used," made honestly.
+  companion's use of them for *theme/mechanism* is an **extension of an existing influence** — a *stronger*
+  footing than the earlier draft's "not yet used," made honestly.
 
 ---
 
-## APPENDIX — THE PRECEDENT LEDGER (real primary, literary secondary)
+## APPENDIX — THE PRECEDENT LEDGER (real precedent + literary lens, both load-bearing)
 
-The reground in one table. **Real precedent leads; the literary lens is secondary or retired.** Real
-precedents drawn from the repo's own corpus are marked ⟢; the rest are the wider historical record.
+The reground in one table. **Each proposal draws on both:** a real precedent for the *mechanism*, and a
+literary lens for the *form, register, question, or moral framing*. Real precedents from the repo's own
+corpus are marked ⟢; the rest are the wider historical record.
 
-| Proposal | Real precedent (leads) | Literary gloss (secondary) | Status |
+| Proposal | Real precedent (the mechanism) | Literary lens (what it adds) | Status |
 |---|---|---|---|
-| Altonia through one face (§2.1) | ⟢ British Raj / District Collector; ⟢ post-colonial India retained-state; ⟢ Demetrios Palaiologos; Cromer's Veiled Protectorate | Coetzee (mood only) | free |
+| Altonia through one face (§2.1) | ⟢ British Raj / District Collector; ⟢ post-colonial India retained-state; ⟢ Demetrios Palaiologos; Cromer's Veiled Protectorate | Coetzee (the magistrate's interiority; "never show the capital") | free |
 | Cardinal Olafsson (§2.2) | ⟢ Spanish-Inquisition anchor → limpieza de sangre / converso persecution | — | free |
-| Cardinal Klapp (§2.2) | Gerbert of Aurillac; differentiated from Haelgrund (documentary vs. perceptual) | Nabokov (§3.6, secondary) | free |
+| Cardinal Klapp (§2.2) | Gerbert of Aurillac; differentiated from Haelgrund (documentary vs. perceptual) | Nabokov (the self-betraying text — the form, §3.6) | free |
 | Cardinal Jarnstal (§2.2) | ⟢ Praetorian Guard / Didius Julianus (193 AD); Wallenstein | — | free |
 | Torben (§2.3) | Henry VI; ⟢ Han child-emperors (Zhi, Xian); ⟢ Toyotomi Hideyori | — | free |
 | Elske (§2.3) | ⟢ sankin-kōtai; Irene of Montferrat; ⟢ Han heqin | — | free |
-| Mass-battle arc (§2.5) | ⟢ Hastings/Crécy/Agincourt/Grandson/Bannockburn/Ankara; ⟢ Third-Century Crisis; ⟢ barnaboti | Tolstoy (name only) | free |
+| Mass-battle arc (§2.5) | ⟢ Hastings/Crécy/Agincourt/Grandson/Bannockburn/Ankara; ⟢ Third-Century Crisis; ⟢ barnaboti | Tolstoy (history as the integral of small wills — the frame) | free |
 | Naming as contest (§2.7) | ⟢ Sōshi-kaimei (Korea 1939–45); decolonization reclamations | — | free |
-| Attention economy (§3.1) | ⟢ Chernobyl liquidators; ⟢ Han Cishi; Roman Censor/*obnuntiatio* | Weil (ethics gloss) | needs Jordan |
+| Attention economy (§3.1) | ⟢ Chernobyl liquidators; ⟢ Han Cishi; Roman Censor/*obnuntiatio* | Weil (the ethics & feel of attention) | needs Jordan |
 | Belief-as-rendering (§3.2) | ⟢ mask-vs-substance (Cao Cao); ⟢ damnatio memoriae / Faliero; ⟢ basilikos logos | **Borges (primary — metaphysical half, irreplaceable)** | needs Jordan |
-| Collision class (§3.3) | ⟢ Investiture Controversy → Concordat of Worms; ⟢ Nanboku-chō; ⟢ Palatinate electorate | Hegel/*Antigone* (name) | needs Jordan |
-| Omelas compass (§3.4) | ⟢ excluded-from-coalition (canon); ⟢ devshirme; ⟢ Stellinga revolt; Sparta Helots; Jim Crow | Le Guin (closing name) | political free / metaphysical needs Jordan |
-| Buried Giant fork (§3.5) | Athenian Amnesty (403 BCE); Pacto de Olvido (1977/2007/2022) | Ishiguro (mood) | needs Jordan |
-| Testament (§3.6) | ⟢ Promissione Ducale + posthumous audit; ⟢ Hideyoshi's Go-Tairō charter | Robinson (retired) | free |
-| Ellison / non-perception | Jim Crow testimony-discounting (cross-refs §3.4) | Ellison (name) | free |
+| Collision class (§3.3) | ⟢ Investiture Controversy → Concordat of Worms; ⟢ Nanboku-chō; ⟢ Palatinate electorate | Hegel/*Antigone* (the idea the mechanism enacts) | needs Jordan |
+| Omelas compass (§3.4) | ⟢ excluded-from-coalition (canon); ⟢ devshirme; ⟢ Stellinga revolt; Sparta Helots; Jim Crow | Le Guin (the moral weight of knowing the cost) | political free / metaphysical needs Jordan |
+| Buried Giant fork (§3.5) | Athenian Amnesty (403 BCE); Pacto de Olvido (1977/2007/2022) | Ishiguro (the question: wound or mercy?) | needs Jordan |
+| Testament (§3.6) | ⟢ Promissione Ducale + posthumous audit; ⟢ Hideyoshi's Go-Tairō charter | Robinson (the dying first-person voice; grace) | free |
+| Ellison / non-perception | Jim Crow testimony-discounting (cross-refs §3.4) | Ellison (the phenomenology of invisibility) | free |
 | Reader-as-renderer (§3.7) | trial-by-ordeal → trial-by-jury (secondary) | **Calvino (primary — epistemology, honest)** | needs Jordan |
 
 *Closing word on method.* The corpus's own research self-audit is the standard this revision now meets:
