@@ -1,5 +1,5 @@
 """
-sim/tests/test_sigma_leverage_parity.py — parity between sim.autoload.sigma_leverage
+sim/tests/test_sigma_leverage_parity.py — parity between engine.autoload.sigma_leverage
 and the numpy original tests/sim/v32-combat-balance/m1_dice_sigma_core.py.
 
 Rationale: D0-2 (designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md)
@@ -47,7 +47,7 @@ if _REPO_ROOT not in sys.path:
 # ---------------------------------------------------------------------------
 # Import the new stdlib autoload module (always available).
 # ---------------------------------------------------------------------------
-from sim.autoload import sigma_leverage as SL  # noqa: E402
+from engine.autoload import sigma_leverage as SL  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Attempt to import the numpy original.
@@ -79,7 +79,7 @@ TOL = 1e-9  # tight float tolerance (math vs numpy, same IEEE-754 doubles)
 # ---------------------------------------------------------------------------
 
 def _sl_ref(fn_name: str, *args, **kwargs):
-    """Call sim.autoload.sigma_leverage.<fn_name>."""
+    """Call engine.autoload.sigma_leverage.<fn_name>."""
     return getattr(SL, fn_name)(*args, **kwargs)
 
 
@@ -472,10 +472,18 @@ class TestRollNetContinuous:
 _GROUNDUP_DIR = os.path.join(_REPO_ROOT, 'designs', 'audit', '2026-06-03-contest-groundup')
 _groundup_engine = None
 try:
-    if _GROUNDUP_DIR not in sys.path:
-        sys.path.insert(0, _GROUNDUP_DIR)
-    import engine as _groundup_engine  # noqa: E402
-except ImportError:
+    # Load the ground-up reference engine.py BY EXPLICIT PATH under a unique module
+    # name. A bare `import engine` here now collides with the top-level `engine/`
+    # package (ED-IN-0071 P3 Phase A — the executable-model primary), which is
+    # cached in sys.modules once any `engine.mc_v18`/`engine.substrate` import runs,
+    # so `import engine` would return that package (no `degree`/`level`) instead of
+    # this audit-folder file. Self-contained (imports only math/random).
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location(
+        "_groundup_engine_ref", os.path.join(_GROUNDUP_DIR, "engine.py"))
+    _groundup_engine = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_groundup_engine)
+except (ImportError, FileNotFoundError, AttributeError):
     _groundup_engine = None
 
 

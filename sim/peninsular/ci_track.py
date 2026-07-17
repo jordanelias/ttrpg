@@ -24,7 +24,7 @@ Plus apply_ci_delta for non-seasonal mutations (Excommunication +4, etc).
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/infrastructure (for Templar Station CI gain integration)
+  - systems/settlements/sim/infrastructure (for Templar Station CI gain integration)
 
 Entry points:
   - compute_seasonal_ci_delta(world: GameState) -> dict
@@ -115,7 +115,7 @@ def compute_seasonal_ci_delta(world,
     # [BUG FIX 2026-05-19: canon PT is categorical 0-5 but Territory.pt is
     #  continuous 0.5-7.0 via PT_MAP. Must bucket through canonical_pt;
     #  int(t.pt) drifts (pt=7.0 → int=7 has no CI_YIELD entry → 0 yield).]
-    from sim.autoload.game_state import canonical_pt
+    from engine.autoload.game_state import canonical_pt
     raw_yield = 0.0
     for tid, t in world.territories.items():
         if not _church_is_prominent(world, tid):

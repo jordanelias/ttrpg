@@ -63,7 +63,7 @@ aggregates:
 # formation, fieldwork investigation) with zero prior registry presence.
 # ============================================================================
 practitioner_stats:
-  source: "params/threadwork.md; references/glossary.md (Thread Practitioner Stats)"
+  source: "engine/params/threadwork.md; references/glossary.md (Thread Practitioner Stats)"
   entries:
     - {key: prac.thread_sensitivity, name: Thread Sensitivity, aliases: [TS], scale: "0-100+"}
     - {key: prac.tps, name: Thread Pool Score, aliases: [TPS], derived_from: prac.thread_sensitivity, formula: "floor(TS / 10)"}
@@ -75,20 +75,20 @@ practitioner_stats:
 # province-to-settlement inheritance rule itself is a separate open item, OPT-AV-18, fed to SE).
 # ============================================================================
 territory_stats:
-  source: "params/bg/geography.md; designs/territory/settlement_layer_v30.md (Fort Level)"
+  source: "engine/params/bg/geography.md; systems/settlements/settlement_layer_v30.md (Fort Level)"
   entries:
     - {key: terr.fort_level, name: Fort Level, aliases: [Fort], scale: "0-4"}
 
 # ============================================================================
 # FACTION stats (actor/faction) -- Mandate is DERIVED, not a base descriptor.
 # Per-entry floor/ceiling RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14/D14 + OPT-AV-18 Intel
-# floor): the prior blanket "1-7" scale lost the per-stat floor table in params/bg/core.md
+# floor): the prior blanket "1-7" scale lost the per-stat floor table in engine/params/bg/core.md
 # §Stat Ceilings and Floors -- Influence floors at 1 (never fully vanishes institutionally),
 # Wealth/Military/Stability float at 0; Intel had no independently-declared floor anywhere in the
 # corpus, ratified here at 0 (matching the other non-Influence stats) per OPT-AV-18's default.
 # ============================================================================
 faction_stats:
-  source: params/factions/stats_1_7_scale.md
+  source: engine/params/factions/stats_1_7_scale.md
   entries:
     - {key: fac.influence, name: Influence, scale: "1-7"}
     - {key: fac.wealth,    name: Wealth,    scale: "0-7"}
@@ -101,14 +101,14 @@ faction_stats:
 # SETTLEMENT stats (settlement domain).
 # ============================================================================
 settlement_stats:
-  source: "designs/territory/settlement_layer_v30.md §1.8"
+  source: "systems/settlements/settlement_layer_v30.md §1.8"
   entries:
     - {key: set.legitimacy,      name: Legitimacy,       scale: "0-7"}
     - {key: set.popular_support, name: Popular Support,  scale: "0-7"}
     - {key: set.prosperity,      name: Prosperity,       scale: "0-5"}
     - {key: set.defense,         name: Defense,          scale: "0-5"}
     - {key: set.order,           name: Order,            scale: "0-5"}
-    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "designs/territory/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
+    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "systems/settlements/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
@@ -118,8 +118,8 @@ by_reference:
   - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "designs/personal/conviction_axis_matrix_v30.md / PP-687"}
   - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "designs/personal/conviction_axis_matrix_v30.md §2"}
   - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "designs/personal/conviction_taxonomy_v30.md §3"}
-  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "designs/scene/social_contest_v30.md (Step 2-3)"}
-  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "designs/territory/territory_temperaments_v30.md §3.4.1"}
+  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/social_contest_v30.md (Step 2-3)"}
+  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/territory_temperaments_v30.md §3.4.1"}
   - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "designs/personal/conviction_taxonomy_v30.md §5"}
 
 # ============================================================================

@@ -65,7 +65,7 @@ ci_checks:
 
   - path: tools/ci_editorial_checker.py
     level: 5
-    role: "Editorial paths (designs/npcs/, designs/world/, arcs/simulated/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
+    role: "Editorial paths (systems/npcs/, systems/world/, arcs/simulated/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
     paired_hook: editorial_gate
     ci_job: editorial-check
     notes: ""
@@ -86,7 +86,7 @@ ci_checks:
 
   - path: tools/freshness_gate.py
     level: 5
-    role: "params/canonical SHA drift detection — compares live HEAD SHA of canonical doc against recorded SHA in canonical_sources.yaml."
+    role: "engine/params/canonical SHA drift detection — compares live HEAD SHA of canonical doc against recorded SHA in canonical_sources.yaml."
     paired_hook: ""
     ci_job: integrity
     notes: "Bootstrap currently calls but the function get_live_sha is absent in active session; warning emitted, non-blocking."
@@ -184,7 +184,7 @@ ci_checks:
 
   - path: tools/export_engine_params.py
     level: 5
-    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match designs/scene/combat_engine_v1/config.py (--check mode)."
+    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match systems/combat/combat_engine_v1/config.py (--check mode)."
     paired_hook: ""
     ci_job: engine-params-roundtrip
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."

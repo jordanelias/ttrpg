@@ -33,7 +33,7 @@ Built from 80 cached design files (~1.08 MB) including:
 - 17 canonical system docs from `references/canonical_sources.yaml` plus their auxiliary docs
 - All `params/` parameter files, `params/bg/` strategic-mode files, `params/factions/` faction-specific files
 - All `designs/scene/` (combat_v30, social_contest_v30, fieldwork_v30, investigation_systems_v30, conviction_track_v30, derived_stats_v30, miraculous_event_v30)
-- All `designs/threadwork/`, `designs/personal/`, `designs/architecture/`, `designs/articulation/`, `designs/territory/`, `designs/world/`
+- All `systems/threadwork/`, `designs/personal/`, `systems/_architecture/`, `systems/articulation/`, `systems/settlements/`, `systems/world/`
 - `canon/01_foundations_amendment_self_rendering.md`, `canon/02_foundations_amendment_leap_mechanism.md`
 
 Algorithmic extraction surfaced 2,166 candidate terms with 131 cross-silo overlaps; this file presents the curated set with diagnostic verdicts.
@@ -1724,7 +1724,7 @@ Anything else is a violation requiring rename.
 4. **Piety Track (PT) vs Conviction Track (CV)** — ~~verify these are distinct or unify.~~ **RESOLVED: ED-644 in conviction_track_v30 explicitly confirms PT ≡ CV — same track, same abbreviation (PT), range 0–5. "CV" and "0–10" were index errors. §3.1, §4, §9 entries updated.** (§4 synonym register, closed.)
 5. **Bonds attribute and Renown derived value** — ~~verify if first-class character properties; add to §1.2 if so.~~ **RESOLVED: both confirmed first-class. Bonds = structural relationship capacity (PP-684, derived_stats §10.1). Renown = governance-linked reputation track (derived_stats §10.3). Added to §1.2.** (§5 orphan, closed.)
 6. **Conviction-name appearances in mechanic context** — full sweep recommended; add inline cross-references to §1.5 anywhere a Conviction word is used in a mechanic. **OPEN: requires text sweep of all contest, faction_behavior, and argument-style contexts.** (§3.3, §3.5 #5.)
-7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue, Faith, Scholastic, Equity, Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, designs/npcs/, designs/provincial/, designs/scene/, arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
+7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue, Faith, Scholastic, Equity, Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, systems/npcs/, designs/provincial/, designs/scene/, arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
 8. **Corpus residual sweep for TC** — ~~npc_behavior swept; remaining 5 paragraphs across throughlines_meta_infill, npc_character_analyses, mass_battle queued.~~ **PARTIALLY RESOLVED: mass_battle_v30 (1 TC→CI), npc_character_analyses_v30_infill (2 TC→CI) fixed this session. throughlines_meta_infill clean (0 hits). Remaining TC residuals exist in 40+ other files (mostly in references/, designs/audit/, and non-canonical docs). See corpus_fix_manifest.md.** (§6.1.)
 
 ## §V.3 Recommended commit path

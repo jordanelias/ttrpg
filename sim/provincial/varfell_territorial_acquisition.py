@@ -17,8 +17,8 @@ Placeholder context:
 
 Dependencies:
   - sim/autoload/dice_engine
-  - sim/territory/temperaments
-  - sim/world/restoration_movement
+  - systems/settlements/sim/temperaments
+  - systems/world/sim/restoration_movement
 
 Entry points:
   - attempt_territorial_acquisition(target_territory: str, world: GameState) -> AcquisitionResult

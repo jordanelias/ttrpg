@@ -4,7 +4,7 @@ sim/provincial/excommunication.py — Church Excommunication faction-unique acti
 Canon source:
   - designs/provincial/faction_canon_v30.md §9 (Tactic / Unique Action Overview)
   - designs/provincial/faction_canon_v30.md (Church faction sheet — Tactic / Unique Actions)
-  - designs/scene/social_contest_v30.md §7.1 (Excommunication Tribunal, ED-625)
+  - systems/social_contest/social_contest_v30.md §7.1 (Excommunication Tribunal, ED-625)
 Game Design constraints applicable: GD-2 (mandatory-before-stochastic action selection)
 Status: [PROVISIONAL — Phase 5/9 integration 2026-05-17. §9 strategic-scale
          action wrapping a single-roll abstraction of the §7.1 Tribunal procedure.
@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from sim.personal import tribunal
-from sim.autoload.dice_engine import Degree
+from engine.autoload.dice_engine import Degree
 
 
 # ── Ledger-cited constants ────────────────────────────────────────────────────

@@ -34,9 +34,9 @@ TransferResult — matching the sibling faction-action convention (crown_initiat
 from __future__ import annotations
 from dataclasses import dataclass, field
 
-from sim.autoload.dice_engine import roll_pool, Degree
-from sim.autoload.game_state import ACCORD_MAP, MULTS
-from sim.personal.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
+from engine.autoload.dice_engine import roll_pool, Degree
+from engine.autoload.game_state import ACCORD_MAP, MULTS
+from systems.social_contest.sim.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
 
 # ── §1/§3/§5 constants (ledgered) ──
 PARL_MAJORITY_OB_BONUS = 2               # [§1.1 Ob = Holder Legitimacy + 2; §5 sensitivity: 2 canonical default]

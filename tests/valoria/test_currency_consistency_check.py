@@ -14,10 +14,10 @@ def test_next_day_grace():
 
 
 def test_current_md_paths_filter_globs():
-    text = "| row | `params/core.md` + `params/bg/*` | `designs/scene/combat_engine_v1/` |"
+    text = "| row | `params/core.md` + `params/bg/*` | `systems/combat/combat_engine_v1/` |"
     paths = ccc._current_md_paths(text)
     assert 'params/core.md' in paths
-    assert 'designs/scene/combat_engine_v1/' in paths
+    assert 'systems/combat/combat_engine_v1/' in paths
     assert all('*' not in p for p in paths)
 
 

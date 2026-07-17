@@ -7,7 +7,7 @@ family governance_play_redesign_v1.md §1.6 introduces:
 
 The reconciliation doc (designs/audit/2026-07-12-settlement-season-stress-sim/
 reconciliation_with_existing_territory_work.md §C.1, flagged "★ the single most actionable
-new find") observes the BUILT sim/territory/ledger.py already has five tag kinds —
+new find") observes the BUILT systems/settlements/sim/ledger.py already has five tag kinds —
 {Precedent, Grudge, Debt, Reputation, Leverage} — so `Compact` is not actually the built
 system's fifth family; it is either a sixth family, a collision with Leverage, or should
 reuse an existing kind. That claim was made by reading ledger.py's docstring; this adapter
@@ -17,7 +17,7 @@ canon_row=None: §1.3a/§1.6's Compact family is PROPOSED, no CURRENT.md row.
 """
 from __future__ import annotations
 
-from sim.territory import ledger
+from systems.settlements.sim import ledger
 
 from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier
@@ -26,7 +26,7 @@ from .goldenfurt_fixture import build_goldenfurt_settlement
 
 @register_adapter("pr119_ledger_family_collision")
 class LedgerFamilyCollisionAdapter(Adapter):
-    contract_module = "settlement_layer"  # references/module_contracts.yaml -> designs/territory/settlement_layer_v30.md
+    contract_module = "settlement_layer"  # references/module_contracts.yaml -> systems/settlements/settlement_layer_v30.md
     canon_row = None
     registry_subsystem = "settlement_territory"
 
@@ -39,9 +39,9 @@ class LedgerFamilyCollisionAdapter(Adapter):
             "built_family_count": len(ledger.TAG_KINDS),
         }
         provenance = {
-            "proposed_family": "PROVISIONAL: designs/territory/governance_play_redesign_v1.md "
+            "proposed_family": "PROVISIONAL: systems/settlements/governance_play_redesign_v1.md "
                 "§1.6 — 'Compact (NEW -- ED-SE-0019, 2026-07-09; §1.3a) -- a fifth family'",
-            "built_family_count": "live sim/territory/ledger.py TAG_KINDS, read at call time "
+            "built_family_count": "live systems/settlements/sim/ledger.py TAG_KINDS, read at call time "
                 "(not a canon citation — this is the built code's own current state, the "
                 "thing the proposal is being checked against)",
         }

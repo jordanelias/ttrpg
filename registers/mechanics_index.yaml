@@ -22,7 +22,7 @@ note: |
 # ─── Reference metadata ────────────────────────────────────────────────────
 
 scales:
-  primitive: "Dice engine + foundational rules (params/core.md)"
+  primitive: "Dice engine + foundational rules (engine/params/core.md)"
   service: "Infrastructure (state, season loop, scene manager, registry — not game mechanics per se)"
   personal: "Character-scale individual actions"
   thread: "Thread-layer operations (substrate mechanics)"
@@ -51,12 +51,12 @@ test_status_values:
 
 mechanics:
 
-  # ─── PRIMITIVES (params/core.md) ─────────────────────────────────────────
+  # ─── PRIMITIVES (engine/params/core.md) ─────────────────────────────────────────
 
   die_rule_d10:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Die Rule"]
+    canon_sources: ["engine/params/core.md#Die Rule"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "d10 with chain on 10s, subtract on 1s. Foundational dice primitive."
@@ -64,7 +64,7 @@ mechanics:
   tn_values:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#TN Values"]
+    canon_sources: ["engine/params/core.md#TN Values"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "TN scale 5-9 mapping to action difficulty tiers."
@@ -72,14 +72,14 @@ mechanics:
   obstacle_scale:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Obstacle Scale"]
+    canon_sources: ["engine/params/core.md#Obstacle Scale"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
 
   degrees_of_success:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Degrees of Success"]
+    canon_sources: ["engine/params/core.md#Degrees of Success"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Overwhelming / Success / Partial / Failure"
@@ -87,7 +87,7 @@ mechanics:
   continuous_engine_quasibinomial:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Continuous Engine Decision E"]
+    canon_sources: ["engine/params/core.md#Continuous Engine Decision E"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Quasibinomial sampling phi ~= 2.67, p_hit=0.4. Canonized 2026-05-15."
@@ -95,7 +95,7 @@ mechanics:
   pool_minimum:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Pool Minimum"]
+    canon_sources: ["engine/params/core.md#Pool Minimum"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "Pool floor 5."
@@ -103,7 +103,7 @@ mechanics:
   net_successes_floor:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Net Successes Floor"]
+    canon_sources: ["engine/params/core.md#Net Successes Floor"]
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "PP-246 floor."
@@ -112,8 +112,8 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources:
-      - "params/core.md#Momentum"
-      - "params/core.md#Momentum Carry"
+      - "engine/params/core.md#Momentum"
+      - "engine/params/core.md#Momentum Carry"
     sim_module: sim/autoload/dice_engine.py
     test_status: not_implemented
     notes: "PP-255 momentum carry mechanic."
@@ -121,7 +121,7 @@ mechanics:
   ms_baseline_decay:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#MS Baseline Decay"]
+    canon_sources: ["engine/params/core.md#MS Baseline Decay"]
     sim_module: sim/peninsular/ms_track.py
     test_status: not_implemented
     notes: "PP-255. MS world-track per-arc decay."
@@ -129,23 +129,23 @@ mechanics:
   coherence_zero_transition:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Coherence 0 NPC Transition"]
-    sim_module: sim/thread/coherence.py
+    canon_sources: ["engine/params/core.md#Coherence 0 NPC Transition"]
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "PP-261. Coherence reaches 0 -> NPC."
 
   ed_301_orthogonality:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#ED-301 Propagation"]
-    sim_module: sim/thread/coherence.py
+    canon_sources: ["engine/params/core.md#ED-301 Propagation"]
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "TS / Coherence orthogonality."
 
   certainty_track:
     scale: primitive
     faction: universal
-    canon_sources: ["params/core.md#Certainty Track"]
+    canon_sources: ["engine/params/core.md#Certainty Track"]
     sim_module: sim/personal/conviction.py
     test_status: not_implemented
     notes: "PP-551 redesigned."
@@ -155,7 +155,7 @@ mechanics:
   game_state_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/complete_systems_reference.md"]
+    canon_sources: ["systems/_architecture/complete_systems_reference.md"]
     sim_module: sim/autoload/game_state.py
     test_status: not_implemented
     notes: "Global state container - not a game mechanic, infrastructure."
@@ -163,21 +163,21 @@ mechanics:
   season_manager_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/autoload/season_manager.py
     test_status: not_implemented
 
   scene_slate_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md"]
     sim_module: sim/autoload/scene_slate.py
     test_status: not_implemented
 
   npc_ai_service:
     scale: service
     faction: universal
-    canon_sources: ["designs/architecture/complete_systems_reference.md#part-1"]
+    canon_sources: ["systems/_architecture/complete_systems_reference.md#part-1"]
     sim_module: sim/autoload/npc_ai.py
     test_status: contested
     notes: "Priority-stack contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending."
@@ -207,25 +207,25 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
-      - "designs/architecture/complete_systems_reference.md#part-2"
-      - "designs/scene/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
-    params: "designs/scene/combat_engine_v1/config.py"   # Class-C tunables (params/combat.md deprecated -> deprecated/params/)
-    sim_module: designs/scene/combat_engine_v1/   # canonical engine; sim/personal/combat.py is the DEPRECATED v30 wiring
+      - "systems/combat/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
+      - "systems/_architecture/complete_systems_reference.md#part-2"
+      - "systems/combat/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
+    params: "systems/combat/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
+    sim_module: systems/combat/combat_engine_v1/   # canonical engine; systems/combat/sim/combat.py is the DEPRECATED v30 wiring
     godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
     test_status: validated   # combat_engine_v1 ratified; Godot slice (strike/wound) ported + validated 2026-06-23
     dependencies:
       mechanics: [die_rule_d10, degrees_of_success]
-    notes: "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was sim/personal/combat.py / combat_v30) per the 2026-06-22 audit."
+    notes: "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit."
 
   social_contest:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/social_contest_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-3"
-    params: "params/contest.md"
-    sim_module: sim/personal/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
+      - "systems/social_contest/social_contest_v30.md"
+      - "systems/_architecture/complete_systems_reference.md#part-3"
+    params: "engine/params/contest.md"
+    sim_module: systems/social_contest/sim/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
     test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
     dependencies:
       mechanics: [die_rule_d10, conviction_scar, beliefs]
@@ -234,7 +234,7 @@ mechanics:
   excommunication_tribunal:
     scale: personal
     faction: Church
-    canon_sources: ["designs/scene/social_contest_v30.md#section-7-1"]
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-7-1"]
     sim_module: sim/personal/tribunal.py
     test_status: not_implemented
     dependencies:
@@ -244,8 +244,8 @@ mechanics:
   parliamentary_vote:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/social_contest_v30.md#section-10"]
-    sim_module: sim/personal/parliamentary_vote.py
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-10"]
+    sim_module: systems/social_contest/sim/parliamentary_vote.py
     test_status: not_implemented
     gd_applicable: [GD-3]
     dependencies:
@@ -255,8 +255,8 @@ mechanics:
   parliamentary_stay:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/social_contest_v30.md#section-10-1"]
-    sim_module: sim/personal/parliamentary_stay.py
+    canon_sources: ["systems/social_contest/social_contest_v30.md#section-10-1"]
+    sim_module: systems/social_contest/sim/parliamentary_stay.py
     test_status: not_implemented
     dependencies:
       mechanics: [parliamentary_vote]
@@ -266,10 +266,10 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/fieldwork_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-5"
-    params: "params/fieldwork.md"
-    sim_module: sim/personal/fieldwork.py
+      - "systems/fieldwork/fieldwork_v30.md"
+      - "systems/_architecture/complete_systems_reference.md#part-5"
+    params: "engine/params/fieldwork.md"
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
     dependencies:
       mechanics: [die_rule_d10, investigation_npe, disposition_track, evidence_track]
@@ -278,8 +278,8 @@ mechanics:
   investigation_npe:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/investigation_systems_v30.md"]
-    sim_module: sim/personal/investigation.py
+    canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
+    sim_module: systems/fieldwork/sim/investigation.py
     test_status: not_implemented
     dependencies:
       mechanics: [fieldwork, npe]
@@ -288,16 +288,16 @@ mechanics:
   disposition_track:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/fieldwork_v30.md#section-5"]
-    sim_module: sim/personal/fieldwork.py
+    canon_sources: ["systems/fieldwork/fieldwork_v30.md#section-5"]
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
     notes: "Cap by Bonds attribute (same formula as Knot Max per derived_stats §10.1)."
 
   evidence_track:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/fieldwork_v30.md"]
-    sim_module: sim/personal/fieldwork.py
+    canon_sources: ["systems/fieldwork/fieldwork_v30.md"]
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
 
   conviction_scar:
@@ -320,9 +320,9 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/fieldwork_v30.md#section-5-5"
-      - "designs/scene/social_contest_v30.md#section-9-5"
-      - "designs/articulation/articulation_layer_v30.md#section-3-5"
+      - "systems/fieldwork/fieldwork_v30.md#section-5-5"
+      - "systems/social_contest/social_contest_v30.md#section-9-5"
+      - "systems/articulation/articulation_layer_v30.md#section-3-5"
     sim_module: sim/personal/beliefs.py
     test_status: not_implemented
     notes: "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass."
@@ -331,17 +331,17 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/architecture/complete_systems_reference.md#part-8"
-      - "designs/threadwork/threadwork_v30.md#section-2-6"
-      - "designs/threadwork/threadwork_v30.md#section-3-5"
-      - "designs/scene/fieldwork_v30.md#section-2-6"
-      - "designs/scene/fieldwork_v30.md#section-5-6"
-      - "designs/scene/social_contest_v30.md#section-9-4"
-      - "designs/articulation/articulation_layer_v30.md#section-2-4"
-      - "designs/articulation/articulation_layer_v30.md#section-6"
+      - "systems/_architecture/complete_systems_reference.md#part-8"
+      - "systems/threadwork/threadwork_v30.md#section-2-6"
+      - "systems/threadwork/threadwork_v30.md#section-3-5"
+      - "systems/fieldwork/fieldwork_v30.md#section-2-6"
+      - "systems/fieldwork/fieldwork_v30.md#section-5-6"
+      - "systems/social_contest/social_contest_v30.md#section-9-4"
+      - "systems/articulation/articulation_layer_v30.md#section-2-4"
+      - "systems/articulation/articulation_layer_v30.md#section-6"
       - "designs/scene/derived_stats_v30.md#section-10-1"
-    unified_canon_target: "designs/personal/knots_v30.md (Pass 2g canonized 2026-05-17)"
-    sim_module: sim/personal/knots.py
+    unified_canon_target: "systems/fieldwork/knots_v30.md (Pass 2g canonized 2026-05-17)"
+    sim_module: systems/fieldwork/sim/knots.py
     pp: ED-912   # was PP-632 (struck); tier/gauge/rupture model reframed 2026-06-28 (ED-912/ED-841), propagated here 2026-07-07 (ED-FI-0003)
     test_status: not_implemented
     dependencies:
@@ -354,14 +354,14 @@ mechanics:
       loss: "[UNVERIFIED post-ED-912 — see knots_v30 §6.2 / C-FI-5b-coherence]"
     notes: "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc."
 
-  # ─── THREAD (sim/thread/) ────────────────────────────────────────────────
+  # ─── THREAD (systems/threadwork/sim/) ────────────────────────────────────────────────
 
   thread_leap:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    params: "params/threadwork.md"
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    params: "engine/params/threadwork.md"
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
     dependencies:
       mechanics: [die_rule_d10, coherence_track]
@@ -369,59 +369,59 @@ mechanics:
   thread_weaving:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_pulling:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_past_pulling:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_locking:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_dissolution:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
 
   thread_mending:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
-    sim_module: sim/thread/operations.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-2"]
+    sim_module: systems/threadwork/sim/operations.py
     test_status: not_implemented
     notes: "Depth Ob -1, immune to opposition."
 
   collective_thread_operations:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-5"]
-    sim_module: sim/thread/collective.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#section-2-5"]
+    sim_module: systems/threadwork/sim/collective.py
     test_status: not_implemented
     notes: "Multi-practitioner Thread operations."
 
   opposing_thread_operations:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-6"]
-    sim_module: sim/thread/opposing.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#section-2-6"]
+    sim_module: systems/threadwork/sim/opposing.py
     test_status: not_implemented
     dependencies:
       mechanics: [knots]
@@ -431,26 +431,26 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources:
-      - "designs/threadwork/threadwork_v30.md#part-3"
+      - "systems/threadwork/threadwork_v30.md#part-3"
       - "canon/02_canon_constraints.md#section-a-p-10"
       - "canon/02_canon_constraints.md#section-a-p-15"
-    sim_module: sim/thread/coherence.py
+    sim_module: systems/threadwork/sim/coherence.py
     test_status: not_implemented
     notes: "Coherence 10-to-0 track per Foundations P-10, P-15."
 
   co_movement:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-4"]
-    sim_module: sim/thread/co_movement.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-4"]
+    sim_module: systems/threadwork/sim/co_movement.py
     test_status: not_implemented
     notes: "Version C with 15 cards. Inseparability P-01 enforcement."
 
   rendering_stability:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
-    sim_module: sim/thread/rendering.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
+    sim_module: systems/threadwork/sim/rendering.py
     test_status: not_implemented
     dependencies:
       mechanics: [coherence_track]
@@ -459,8 +459,8 @@ mechanics:
   threadcut_beings:
     scale: thread
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-6"]
-    sim_module: sim/thread/threadcut.py
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-6"]
+    sim_module: systems/threadwork/sim/threadcut.py
     test_status: not_implemented
     notes: "P-06 - no layer-2 self-rendering."
 
@@ -471,8 +471,8 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/provincial/mass_battle_v30.md"
-      - "designs/architecture/complete_systems_reference.md#part-6"
-    params: "params/mass_combat.md"
+      - "systems/_architecture/complete_systems_reference.md#part-6"
+    params: "engine/params/mass_combat.md"
     sim_module: sim/provincial/massbattle.py
     test_status: not_implemented
     gd_applicable: [GD-1]
@@ -495,7 +495,7 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "designs/scene/combat_v30.md#section-11"
+      - "systems/combat/combat_v30.md#section-11"
       - "designs/provincial/mass_battle_v30.md"
     sim_module: sim/provincial/units.py
     test_status: not_implemented
@@ -539,7 +539,7 @@ mechanics:
     faction: Church
     canon_sources:
       - "designs/provincial/faction_canon_v30.md#section-8-2"
-      - "designs/scene/social_contest_v30.md#section-7-1"
+      - "systems/social_contest/social_contest_v30.md#section-7-1"
     sim_module: sim/provincial/excommunication.py
     test_status: not_implemented
     dependencies:
@@ -676,7 +676,7 @@ mechanics:
     canon_sources:
       - "canon/02_canon_constraints.md#section-b-gd-2"
       - "designs/provincial/faction_canon_v30.md"
-    params: "params/factions.md"
+    params: "engine/params/factions.md"
     sim_module: sim/provincial/faction_action.py
     test_status: not_implemented
     gd_applicable: [GD-2]
@@ -712,13 +712,13 @@ mechanics:
     gd_applicable: [GD-2]
     notes: "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory."
 
-  # ─── TERRITORY (sim/territory/) ──────────────────────────────────────────
+  # ─── TERRITORY (systems/settlements/sim/) ──────────────────────────────────────────
 
   settlement_state:
     scale: territory
     faction: universal
-    canon_sources: ["designs/territory/settlement_layer_v30.md"]
-    sim_module: sim/territory/settlement.py
+    canon_sources: ["systems/settlements/settlement_layer_v30.md"]
+    sim_module: systems/settlements/sim/settlement.py
     test_status: not_implemented
     notes: "Order / Prosperity / Population stats. Tier 2 gap per gap_analysis.md."
 
@@ -726,9 +726,9 @@ mechanics:
     scale: territory
     faction: universal
     canon_sources:
-      - "designs/territory/settlement_layer_v30.md"
+      - "systems/settlements/settlement_layer_v30.md"
       - "tests/sim/v17-integration/gap_analysis.md"
-    sim_module: sim/territory/infrastructure.py
+    sim_module: systems/settlements/sim/infrastructure.py
     test_status: not_implemented
     notes: "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending."
 
@@ -736,16 +736,16 @@ mechanics:
     scale: territory
     faction: universal
     canon_sources:
-      - "designs/territory/settlement_adjacency_v30.md"
-      - "designs/territory/valoria_geography_v30.yaml"
-    sim_module: sim/territory/adjacency.py
+      - "systems/settlements/settlement_adjacency_v30.md"
+      - "systems/settlements/valoria_geography_v30.yaml"
+    sim_module: systems/settlements/sim/adjacency.py
     test_status: not_implemented
 
   territory_temperaments:
     scale: territory
     faction: universal
-    canon_sources: ["designs/territory/territory_temperaments_v30.md"]
-    sim_module: sim/territory/temperaments.py
+    canon_sources: ["systems/settlements/territory_temperaments_v30.md"]
+    sim_module: systems/settlements/sim/temperaments.py
     test_status: not_implemented
     notes: "5-temperament typology."
 
@@ -754,14 +754,14 @@ mechanics:
   season_loop:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/peninsular/season.py
     test_status: not_implemented
 
   accounting_cascade:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
     sim_module: sim/peninsular/accounting.py
     test_status: not_implemented
     notes: "13-step end-of-season cascade."
@@ -778,7 +778,7 @@ mechanics:
   rs_track:
     scale: peninsular
     faction: universal
-    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
+    canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
     sim_module: sim/peninsular/rs_track.py
     test_status: not_implemented
     notes: "Rendering Stability world-track."
@@ -786,7 +786,7 @@ mechanics:
   ms_track:
     scale: peninsular
     faction: universal
-    canon_sources: ["params/core.md#MS Baseline Decay"]
+    canon_sources: ["engine/params/core.md#MS Baseline Decay"]
     sim_module: sim/peninsular/ms_track.py
     test_status: not_implemented
     notes: "Mending Stability world-track. PP-255 baseline decay."
@@ -810,7 +810,7 @@ mechanics:
     gd_applicable: [GD-1]
     notes: "GD-1 sole victory condition. all 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
 
-  # ─── WORLD (sim/world/) ──────────────────────────────────────────────────
+  # ─── WORLD (systems/world/sim/) ──────────────────────────────────────────────────
 
   restoration_movement:
     scale: world
@@ -819,7 +819,7 @@ mechanics:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-2"
       - "designs/scene/conviction_track_v30.md#section-5"
     canon_authoring_target: "designs/provincial/restoration_movement_v30.md (Pass 2d, pending)"
-    sim_module: sim/world/restoration_movement.py
+    sim_module: systems/world/sim/restoration_movement.py
     test_status: validated_n1000_v12c
     gd_applicable: [GD-3]
     dependencies:
@@ -830,7 +830,7 @@ mechanics:
     scale: world
     faction: universal
     canon_sources: ["designs/scene/miraculous_event_v30.md"]
-    sim_module: sim/world/miraculous_event.py
+    sim_module: systems/world/sim/miraculous_event.py
     test_status: not_implemented
 
   scenario_authoring:
@@ -845,8 +845,8 @@ mechanics:
     scale: world
     faction: emergent
     canon_sources: ["canon/02_canon_constraints.md#section-b-gd-3"]
-    canon_authoring_target: "designs/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
-    sim_module: sim/world/insurgency_pipeline.py
+    canon_authoring_target: "systems/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
+    sim_module: systems/world/sim/insurgency_pipeline.py
     test_status: not_implemented
     gd_applicable: [GD-3]
     notes: "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary."
@@ -854,8 +854,8 @@ mechanics:
   npe:
     scale: world
     faction: universal
-    canon_sources: ["designs/scene/investigation_systems_v30.md"]
-    sim_module: sim/world/npe.py
+    canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
+    sim_module: systems/world/sim/npe.py
     test_status: not_implemented
     notes: "NPC Population Engine."
 
@@ -864,7 +864,7 @@ mechanics:
   domain_echo:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-5"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-5"]
     sim_module: sim/cross_scale/domain_echo.py
     test_status: not_implemented
     notes: "Scene -> Faction propagation. ED-300 autonomous resolution."
@@ -872,14 +872,14 @@ mechanics:
   zoom_in_out:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-4"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-4"]
     sim_module: sim/cross_scale/zoom_in_out.py
     test_status: not_implemented
 
   handoff_rules:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-3"]
+    canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-3"]
     sim_module: sim/cross_scale/handoff_rules.py
     test_status: not_implemented
     notes: "8 handoff rules: Personal<->Thread, Personal<->Faction, Personal<->Scene, Scene<->Faction Domain Echo, Thread<->Faction, Thread<->Mass, Mass<->Personal General Duel, Scene<->Mass, Fieldwork<->All."
@@ -887,7 +887,7 @@ mechanics:
   articulation_layer:
     scale: cross_scale
     faction: universal
-    canon_sources: ["designs/articulation/articulation_layer_v30.md"]
+    canon_sources: ["systems/articulation/articulation_layer_v30.md"]
     sim_module: sim/cross_scale/articulation.py
     test_status: not_implemented
     pp: PP-688

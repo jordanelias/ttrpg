@@ -1,5 +1,5 @@
 """pr119_pressure_homeostat.py — provisional adapter re-testing the Pi (pressure) homeostat
-formula from designs/territory/goldenfurt_slice/sim_build_spec.md §5, the CG-1-fixed
+formula from systems/settlements/goldenfurt_slice/sim_build_spec.md §5, the CG-1-fixed
 bidirectional restoring term:
 
     Pi_next = clamp(Pi + unserved_needs + active_grudges + ambitions_in_motion + external_shock

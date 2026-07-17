@@ -26,7 +26,7 @@ entries:
     files_to_recheck:
       - designs/provincial/victory_v30.md
       - designs/provincial/ci_political_v30.md
-      - params/bg/ci_seizure.md
+      - engine/params/bg/ci_seizure.md
 
   - superseded_id: tests/audit/editorial_decisions_ci_pv_2026-04-18.md Decision 3
     scope: "Seizure available from CI >= 60 (automatic availability)"
@@ -44,8 +44,8 @@ entries:
     files_to_recheck:
       - designs/provincial/victory_v30.md
       - designs/provincial/varfell_path_b_v30.md
-      - params/bg/core.md
-      - params/bg/npc_priority_trees.md
+      - engine/params/bg/core.md
+      - engine/params/bg/npc_priority_trees.md
     commits: [f7aa0ed, 297f892, 13b8f30]
 
   - superseded_id: "CR-STRIKE-2026-04-19"
@@ -58,16 +58,16 @@ entries:
       Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions
       available to Varfell first due to southern TS baseline + RM proximity — NOT as BG-layer territorial/combat bonuses.
     files_to_recheck:
-      - params/bg/faction_actions.md
-      - params/bg/npc_priority_trees.md
+      - engine/params/bg/faction_actions.md
+      - engine/params/bg/npc_priority_trees.md
       - designs/provincial/faction_politics_v30.md
-      - designs/npcs/npc_behavior_v30.md
+      - systems/npcs/npc_behavior_v30.md
       - designs/provincial/victory_v30.md
     commits: [297f892, 13b8f30]
   - superseded_id: "PP-687-001"
     date: 2026-05-01
     scope: "Doc 08 §1 EventImpact (categorical aligned/neutral/contradicted projection)"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §2"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §2"
     replacement: >
       EventImpact superseded by Key.impact_vector — continuous signed projection
       onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype
@@ -80,7 +80,7 @@ entries:
   - superseded_id: "PP-687-002"
     date: 2026-05-01
     scope: "Doc 12 Political Dynamics — bespoke event records in procedures A-E"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §8.3"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §8.3"
     replacement: >
       Procedures A-E rewrite to consume Keys (Phase B Stage 1).
       Procedure A reads Memory Keys filtered by axis-relevance.
@@ -93,18 +93,18 @@ entries:
   - superseded_id: "PP-687-003"
     date: 2026-05-01
     scope: "NPC Memory record bespoke schema (per npc_behavior_v30)"
-    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §4.3-4.4"
+    superseded_by: "PP-687 / systems/_architecture/key_substrate_v30.md §4.3-4.4"
     replacement: >
       NPC.memory becomes list of Key references with per-NPC salience field
       (no longer per-NPC bespoke event copies). Memory Query API §4.4 indexes
       by axis-relevance / time-window / target-mention for 1000-3300-entry scale.
     files_to_recheck:
-      - designs/npcs/npc_behavior_v30.md
+      - systems/npcs/npc_behavior_v30.md
     commits: ["d2a75fc"]
 
   - superseded_id: "PP-686-001"
     date: 2026-05-01
-    scope: "params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
+    scope: "engine/params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
     superseded_by: "PP-686 v2 / designs/provincial/faction_behavior_v30.md §3.7"
     replacement: >
       Ethical Framework Modifiers superseded by triadic decomposition: 
@@ -112,10 +112,10 @@ entries:
       clamped at ±2 (was ±3 — sim v2 confirmed ±3 produced dominant-strategy at high alignment).
       Strictness functions only as deviation-cost modulator (C2; reward path dropped).
     files_to_recheck:
-      - params/bg/core.md
-      - params/factions.md
-      - params/factions_personal.md
-      - params/bg/tracks.md
+      - engine/params/bg/core.md
+      - engine/params/factions.md
+      - engine/params/factions_personal.md
+      - engine/params/bg/tracks.md
     commits: ["dede72f"]
 
 
@@ -161,7 +161,7 @@ entries:
     superseded_by: ED-900
     superseded_date: 2026-06-10
     replacement: >
-      DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/
+      DEPRECATED. The ratified personal-combat resolver is systems/combat/combat_engine_v1/
       (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). The v32 proposal was the
       pre-ratification engine-replacement design that the combat_engine_v1 implementation superseded; it
       was never editorially ratified as a doc. Do not pull up as canon. Physical move to
@@ -213,16 +213,16 @@ entries:
     files_to_recheck:
       - godot/data_serialization_spec.md
 
-  - superseded_id: designs/scene/combat_v30.md
+  - superseded_id: systems/combat/combat_v30.md
     scope: "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only"
     superseded_by: ED-900
     superseded_date: 2026-06-04
     replacement: >
       PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04).
-      RESOLUTION superseded by combat_engine_v1; config.py supersedes params/combat.md values.
+      RESOLUTION superseded by combat_engine_v1; config.py supersedes engine/params/combat.md values.
       Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
     files_to_recheck:
-      - designs/scene/combat_v30.md
+      - systems/combat/combat_v30.md
 
   - superseded_id: "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)"
     scope: "Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5, any character, pool (Bonds×2)+3)"
@@ -236,15 +236,15 @@ entries:
       +5; reinforce −1/season at Disposition ≥ +3; −5 = Tempered). Break/rupture: Disposition −3, 4
       Composure. Resolves ED-841 (TIER-DRIFT-001), ED-842 (COMPOSURE-DRIFT-001 → 4), ED-912, ED-914.
     files_to_recheck:
-      - designs/scene/fieldwork_v30.md §5.1/§5.6
-      - params/fieldwork.md
-      - params/threadwork.md §Knot Mechanics
-      - params/core.md (Bonds)
-      - designs/personal/knots_v30.md
-      - designs/architecture/complete_systems_reference.md Part 8
-      - designs/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
-      - designs/scene/investigation_systems_v30.md (Ontological Ledger)
-      - designs/scene/fieldwork_socializing.md
+      - systems/fieldwork/fieldwork_v30.md §5.1/§5.6
+      - engine/params/fieldwork.md
+      - engine/params/threadwork.md §Knot Mechanics
+      - engine/params/core.md (Bonds)
+      - systems/fieldwork/knots_v30.md
+      - systems/_architecture/complete_systems_reference.md Part 8
+      - systems/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
+      - systems/fieldwork/investigation_systems_v30.md (Ontological Ledger)
+      - systems/fieldwork/fieldwork_socializing.md
 
   # ── CI-75 ceiling supersession (added 2026-07-07, ED-IN-0025 / CI-75 propagation, CI75-10) ──
   - superseded_id: "PP-421 (CI ceiling 75-freeze)"
@@ -261,8 +261,8 @@ entries:
       - designs/provincial/ci_political_v30.md
       - designs/provincial/victory_v30.md
       - designs/provincial/peninsular_strain_v30.md §7c
-      - params/bg/ci_seizure.md
-      - params/board_game.md
+      - engine/params/bg/ci_seizure.md
+      - engine/params/board_game.md
       - sim/peninsular/ci_track.py    # dead CI_PHASE_TRANSITION=75 constant (CI75-9, SIM-CODE, deferred to Stratum B)
 
   # ── Mass-battle rulings back-propagation (added 2026-07-07, ED-IN-0025, C-VERIFY-2) ──
@@ -317,14 +317,14 @@ entries:
       from a flat int 1 to a float 0.15.
     files_to_recheck:
       - designs/scene/derived_stats_v30.md   # DONE
-      - designs/scene/combat_v30.md   # DONE
-      - designs/scene/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
-      - designs/scene/fieldwork_v30.md   # DONE
-      - designs/threadwork/threadwork_v30.md   # DONE
-      - params/core.md   # already current (ED-PC-0005 pass)
-      - params/fieldwork.md   # DONE
-      - params/mass_combat.md   # DONE
-      - designs/scene/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
+      - systems/combat/combat_v30.md   # DONE
+      - systems/combat/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
+      - systems/fieldwork/fieldwork_v30.md   # DONE
+      - systems/threadwork/threadwork_v30.md   # DONE
+      - engine/params/core.md   # already current (ED-PC-0005 pass)
+      - engine/params/fieldwork.md   # DONE
+      - engine/params/mass_combat.md   # DONE
+      - systems/combat/combat_engine_v1/combatant.py   # already current (ED-PC-0005 pass)
       - sim/personal/contest_legacy_stub.py   # already current (ED-PC-0005 pass)
       - arcs/simulated/arcs_46_55.md    # DONE — worked example renarrated (−2D → +0.30 Ob)
       - arcs/simulated/arcs_46_55_resolved.md   # DONE — worked example renarrated (−2D → +0.30 Ob)
@@ -349,7 +349,7 @@ entries:
     scope: >
       Multiple governance-cluster docs frame "Compact" (fixed-quota extraction, Encabezamiento) as a new
       5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code
-      (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.
+      (systems/settlements/sim/ledger.py:30) has Leverage as the 5th family and no Compact.
     superseded_by: "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)"
     superseded_date: "2026-07-13"
     replacement: >
@@ -359,7 +359,7 @@ entries:
       files below is a follow-up execution of D3 (a ratified ruling), recommended as its own SE/IN pass — NOT
       done in the 2026-07-15 reconciliation PR, since it re-models a mechanic in a current head.
     files_to_recheck:
-      - designs/territory/governance_play_redesign_v1.md   # §1.3a/§1.6 "fifth Ledger tag family" — PENDING D3 propagation
+      - systems/settlements/governance_play_redesign_v1.md   # §1.3a/§1.6 "fifth Ledger tag family" — PENDING D3 propagation
       - designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md   # C.3 — PENDING
       - designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md   # §44.2.7 — PENDING
       - designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md   # PENDING

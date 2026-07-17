@@ -91,7 +91,7 @@ class Adapter(ABC):
     #: When canon_row is None, provenance strings in resolve_params()'s return
     #: should say so explicitly, e.g. "PROVISIONAL: <doc/ED citation for the
     #: proposed-but-not-yet-ratified mechanic>, not yet canonical" — distinct from
-    #: both "verified against params/core.md" and "test-scenario, not canon-derived"
+    #: both "verified against engine/params/core.md" and "test-scenario, not canon-derived"
     #: (see resolve_params()'s docstring below), so a reader of the trace can never
     #: mistake a provisional run's numbers for canon-verified ones.
     canon_row: str | None = None
@@ -113,7 +113,7 @@ class Adapter(ABC):
         substituting a default when a citation can't be verified — this still
         applies even for a provisional adapter's non-provisional params (e.g. a
         proposed combat mechanic might still legitimately cite an already-ratified
-        TN value from params/core.md alongside its own provisional numbers)."""
+        TN value from engine/params/core.md alongside its own provisional numbers)."""
 
     @abstractmethod
     def decision_points(self) -> list[DecisionPoint]:

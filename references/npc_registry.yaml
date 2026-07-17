@@ -13,7 +13,7 @@ schema:
   optional: [age, birthplace, territory, ts, coherence, stats, convictions, goals, arc_trajectory, notes]
 
 # ═══════════════════════════════════════════════════════════════
-# ROSTER NPCs (designs/npcs/npc_roster_v30.md)
+# ROSTER NPCs (systems/npcs/npc_roster_v30.md)
 # ═══════════════════════════════════════════════════════════════
 
 characters:
@@ -44,7 +44,7 @@ characters:
     goals: ["Maintain substrate stability", "Protect Southernmost practitioners", "Continue the work regardless of interference"]
     arc_trajectory: "Warden-Chief navigating Church pressure and Thread instability"
     resonant_style: Evidence  # per edeyja_npc.md
-    source: designs/npcs/edeyja_npc.md, npc_roster_v30 §1
+    source: systems/npcs/edeyja_npc.md, npc_roster_v30 §1
     notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
 
   - id: NPC-002
@@ -380,7 +380,7 @@ characters:
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Church
-    notes: "Canonical per params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
+    notes: "Canonical per engine/params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
 
 # ═══════════════════════════════════════════════════════════════
 # CROWN INNER CIRCLE (faction_canon_v30, npc_behavior_v30 §2.15)

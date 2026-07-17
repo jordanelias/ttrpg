@@ -159,32 +159,32 @@ policies:
   # ────────────────────────────────────────────────────────────
   # PARAMS FILES — atomized by domain
   # ────────────────────────────────────────────────────────────
-  - match: "params/board_game.md"
+  - match: "engine/params/board_game.md"
     max_tokens: 5000
     split_strategy: custom_map
     split_map: "references/splits/params_board_game_split.yaml"
     index_replaces_canonical: true
 
-  - match: "params/threadwork.md"
+  - match: "engine/params/threadwork.md"
     max_tokens: 5000
     split_strategy: canonical_vs_superseded
     superseded_marker: "SUPERSEDED SECTIONS"
-    superseded_target: "params/threadwork_superseded.md"
+    superseded_target: "engine/params/threadwork_superseded.md"
     superseded_max_tokens: 15000
 
-  - match: "params/factions.md"
+  - match: "engine/params/factions.md"
     max_tokens: 5000
     split_strategy: by_level_2_heading
     split_cap_per_file: 5000
-    target_pattern: "params/factions/{slug}.md"
+    target_pattern: "engine/params/factions/{slug}.md"
     index_replaces_canonical: true
 
   # Superseded params: frozen for reference. Never shrinks.
-  - match: "params/threadwork_superseded.md"
+  - match: "engine/params/threadwork_superseded.md"
     on_exceed: "skip"
-    note: "Superseded by params/threadwork.md. Frozen for reference only."
+    note: "Superseded by engine/params/threadwork.md. Frozen for reference only."
 
-  - match: "params/*.md"
+  - match: "engine/params/*.md"
     max_tokens: 10000
     on_exceed: "flag_for_split"
     require_rule_above_threshold: true
@@ -275,9 +275,9 @@ policies:
     note: "Staging area for atomization work. Not a governed register."
 
   # Superseded params: frozen historical. Never shrinks.
-  - match: "params/threadwork_superseded.md"
+  - match: "engine/params/threadwork_superseded.md"
     on_exceed: "skip"
-    note: "Superseded by params/threadwork.md. Frozen for reference only."
+    note: "Superseded by engine/params/threadwork.md. Frozen for reference only."
 
   # Auto-generated values registry: grows with corpus. Not splittable by status.
   - match: "references/values_master.yaml"

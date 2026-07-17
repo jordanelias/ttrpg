@@ -659,7 +659,7 @@ def build_proposals():
     # 9 of them invisible here. Both this card and build_proposals.py call the same core,
     # so they agree without one reading the other's committed output.
     rows = []
-    for path in glob.glob('designs/**/*.md', recursive=True):
+    for path in glob.glob('designs/**/*.md', recursive=True) + glob.glob('systems/**/*.md', recursive=True):
         if '/deprecated/' in path or '/archives/' in path or '/archive/' in path:
             continue
         try:
@@ -693,13 +693,13 @@ def build_proposals():
 # ── repository shape (mermaid) ───────────────────────────────────────────────
 
 def build_repo_shape():
-    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') if os.path.isdir(d))
+    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') + glob.glob('systems/*') if os.path.isdir(d))
     lines = [
         'graph TD',
         '  CANON["canon/ — philosophy P-01..P-14 · ledgers · mechanics index"]',
         '  REF["references/ — registries · module_contracts · indices"]',
         '  DESIGN["designs/ — subsystem design docs"]',
-        '  PARAMS["params/ — mechanical parameter tables"]',
+        '  PARAMS["engine/params/ — mechanical parameter tables"]',
         '  SIM["sim/ — Python oracle · 1:1 port reference"]',
         '  TOOLS["tools/ — CI checks · validators · generators"]',
         '  GODOT["Godot port — valoria-game · frozen 2026-05-04"]',
@@ -730,7 +730,7 @@ def build_repo_shape():
 # volatile bit — the live count of registered key types — is re-extracted every
 # build and cross-checked against the snapshot, so drift shows instead of hiding.
 
-_KEY_REGISTRY_DOC = 'designs/architecture/key_type_registry_v30.md'
+_KEY_REGISTRY_DOC = 'systems/_architecture/key_type_registry_v30.md'
 
 
 def _live_key_type_count():
@@ -770,9 +770,9 @@ def build_keys():
         {"name": "TerminationBreach", "role": "Raised when a Level-B termination invariant is violated — never silently clamped."},
     ]
     propagation = [
-        {"name": "Aggregate-up", "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).", "source": "designs/architecture/propagation_spec_v1.md §2"},
-        {"name": "Distribute-down", "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.", "source": "designs/architecture/propagation_spec_v1.md §3 (§12.3)"},
-        {"name": "Termination", "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.", "source": "designs/architecture/propagation_spec_v1.md §4 (PROPOSED)"},
+        {"name": "Aggregate-up", "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).", "source": "systems/_architecture/propagation_spec_v1.md §2"},
+        {"name": "Distribute-down", "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.", "source": "systems/_architecture/propagation_spec_v1.md §3 (§12.3)"},
+        {"name": "Termination", "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.", "source": "systems/_architecture/propagation_spec_v1.md §4 (PROPOSED)"},
     ]
     live = _live_key_type_count()
     return {
@@ -781,7 +781,7 @@ def build_keys():
         "definition": ("Every consequential event is a Key — a typed, validated, append-only record. "
                        "One update rule consumes Keys and propagates effects. Save state = initial "
                        "conditions + Key log; replay = deterministic re-execution of the log."),
-        "definition_source": "designs/architecture/key_substrate_v30.md §1",
+        "definition_source": "systems/_architecture/key_substrate_v30.md §1",
         "families": families,
         "type_total": 49,
         "registry_source": _KEY_REGISTRY_DOC,
@@ -797,7 +797,7 @@ def build_keys():
                      "Pressure Π, MS, Accord). The proposed Field primitive is a continuously-read/written "
                      "scale-tagged value with aggregate_fn / propagate_fn / decay_fn / derived_flags. Unblock = "
                      "Jordan ruling OF-3's decay() fork."),
-            "source": "designs/architecture/governance_type_registry_v1.md §4.2",
+            "source": "systems/_architecture/governance_type_registry_v1.md §4.2",
         },
         "note": ("Reference snapshot (2026-07-14) with source links; the live key-type header count is "
                  "re-checked every build. See the source docs for canonical detail. Key substrate doc "
@@ -813,56 +813,56 @@ def build_actions():
         "actions": [{"name": a, "desc": d, "source": s} for a, d, s in actions],
         "caveat": caveat}
     subsystems = [
-        S("Personal combat", "partial (legacy menu)", "designs/scene/combat_engine_v1/",
-          [("Strike", "Allocate pool split, roll, apply damage", "designs/scene/combat_v30.md §4"),
-           ("Feint", "Commit dice to bait a pool-reduction contest", "designs/scene/combat_v30.md §4"),
-           ("Establish Distance", "Move to preferred range, contested", "designs/scene/combat_v30.md §4"),
-           ("Take a Breath", "Forfeit action to recover Stamina", "designs/scene/combat_v30.md §4"),
-           ("Full Guard", "All dice to Defence, cannot Attack", "designs/scene/combat_v30.md §4"),
-           ("Disarm", "Offence roll to force a weapon drop at Close", "designs/scene/combat_v30.md §4"),
-           ("Tie Up / Escape", "Close grapple that blocks escape; Agility to break free", "designs/scene/combat_v30.md §4"),
-           ("Rescue", "Reactive action redirecting an attack onto yourself", "designs/scene/combat_v30.md §4"),
-           ("Dodge", "Forfeit offence, full pool as passive ranged defence", "designs/scene/combat_v30.md §4"),
-           ("Stunt", "+dice to a Strike from environment/position", "designs/scene/combat_v30.md §4")],
+        S("Personal combat", "partial (legacy menu)", "systems/combat/combat_engine_v1/",
+          [("Strike", "Allocate pool split, roll, apply damage", "systems/combat/combat_v30.md §4"),
+           ("Feint", "Commit dice to bait a pool-reduction contest", "systems/combat/combat_v30.md §4"),
+           ("Establish Distance", "Move to preferred range, contested", "systems/combat/combat_v30.md §4"),
+           ("Take a Breath", "Forfeit action to recover Stamina", "systems/combat/combat_v30.md §4"),
+           ("Full Guard", "All dice to Defence, cannot Attack", "systems/combat/combat_v30.md §4"),
+           ("Disarm", "Offence roll to force a weapon drop at Close", "systems/combat/combat_v30.md §4"),
+           ("Tie Up / Escape", "Close grapple that blocks escape; Agility to break free", "systems/combat/combat_v30.md §4"),
+           ("Rescue", "Reactive action redirecting an attack onto yourself", "systems/combat/combat_v30.md §4"),
+           ("Dodge", "Forfeit offence, full pool as passive ranged defence", "systems/combat/combat_v30.md §4"),
+           ("Stunt", "+dice to a Strike from environment/position", "systems/combat/combat_v30.md §4")],
           caveat="The current head (combat_engine_v1/) auto-resolves via a sigma state-machine — no player menu. The list above is the legacy combat_v30 §4 TTRPG menu (dice-math superseded); shown as the only enumerable player-facing set."),
-        S("Social contest", "yes", "designs/scene/social_contest_v30.md",
-          [("Appraise", "Read the audience/adjudicator before arguing", "designs/scene/social_contest_v30.md §4"),
-           ("Choose Style", "Pick Precedent / Suppression / Vision / Insinuation", "designs/scene/social_contest_v30.md §4"),
-           ("Corroborate", "A coalition member declares support for +1D", "designs/scene/social_contest_v30.md §4"),
-           ("Argue", "Roll the Argue pool; CLASH / REINFORCE / CROSS / TIE", "designs/scene/social_contest_v30.md §4"),
-           ("Regroup", "Forfeit exchange to restore Concentration", "designs/scene/social_contest_v30.md §4"),
-           ("Concede a Point", "Forfeit, take strain, gain +1D next exchange", "designs/scene/social_contest_v30.md §4"),
-           ("Pre-Contest Preparation", "Prepare for +1D on Exchange 1", "designs/scene/social_contest_v30.md §9.1"),
-           ("Practitioner Weaving", "A Thread-sensitive orator adds bonus dice", "designs/scene/social_contest_v30.md §9.3")]),
+        S("Social contest", "yes", "systems/social_contest/social_contest_v30.md",
+          [("Appraise", "Read the audience/adjudicator before arguing", "systems/social_contest/social_contest_v30.md §4"),
+           ("Choose Style", "Pick Precedent / Suppression / Vision / Insinuation", "systems/social_contest/social_contest_v30.md §4"),
+           ("Corroborate", "A coalition member declares support for +1D", "systems/social_contest/social_contest_v30.md §4"),
+           ("Argue", "Roll the Argue pool; CLASH / REINFORCE / CROSS / TIE", "systems/social_contest/social_contest_v30.md §4"),
+           ("Regroup", "Forfeit exchange to restore Concentration", "systems/social_contest/social_contest_v30.md §4"),
+           ("Concede a Point", "Forfeit, take strain, gain +1D next exchange", "systems/social_contest/social_contest_v30.md §4"),
+           ("Pre-Contest Preparation", "Prepare for +1D on Exchange 1", "systems/social_contest/social_contest_v30.md §9.1"),
+           ("Practitioner Weaving", "A Thread-sensitive orator adds bonus dice", "systems/social_contest/social_contest_v30.md §9.3")]),
         S("Mass battle", "yes", "designs/provincial/mass_battle_v30.md",
           [("Tactics", "Envelopment · Feigned Retreat · Ambush · Concentration · Refused Flank · Hammer & Anvil", "designs/provincial/mass_battle_v30.md §A.8"),
            ("General's turn action", "Rally · Reinforce Discipline · Support Threadweave · Personal combat · Stabilise general", "designs/provincial/mass_battle_v30.md §A.7"),
            ("Formations", "Line · Shield Wall · Wedge · Skirmish · Column · Feigned Retreat · Reserve", "designs/provincial/mass_battle_v30.md §A.6")]),
-        S("Faction / domain actions", "yes (across 3 layers)", "params/factions/stats_1_7_scale.md",
-          [("Domain Actions", "Assert · Reconstitute · Govern · Claim Masterless · Suppress · Parliamentary Rebuttal · Treaty · Accounting Stability Check", "params/factions/stats_1_7_scale.md"),
-           ("Faction Unique Action", "One signature verb per faction (Royal Decree, Excommunication, Economic Leverage, …)", "params/factions/stats_1_7_scale.md"),
+        S("Faction / domain actions", "yes (across 3 layers)", "engine/params/factions/stats_1_7_scale.md",
+          [("Domain Actions", "Assert · Reconstitute · Govern · Claim Masterless · Suppress · Parliamentary Rebuttal · Treaty · Accounting Stability Check", "engine/params/factions/stats_1_7_scale.md"),
+           ("Faction Unique Action", "One signature verb per faction (Royal Decree, Excommunication, Economic Leverage, …)", "engine/params/factions/stats_1_7_scale.md"),
            ("Parliamentary motions", "Censure · Embargo · Blockade · Outlawry · Subsidy · War Authorisation · Treaty Ratification · Recognition Challenge · Succession Endorsement", "designs/provincial/faction_layer_v30.md §5.4")],
           caveat="The live sim (sim/provincial/faction_action.py) dispatches unique → Conquest → Muster → Govern each season; some code verbs (Crown Royal Progress/Great Work) are PROVISIONAL and differ from the ratified Royal Decree."),
-        S("Settlements / territory", "yes (baseline + PROPOSED redesign)", "designs/territory/settlement_layer_v30.md",
-          [("Governor (baseline)", "Develop · Fortify · Pacify · Administer", "designs/territory/settlement_layer_v30.md §3.2"),
-           ("Governance verbs (PROPOSED)", "Develop · Fortify · Keep Order · Hold Court · Sponsor · Treat · Levy · Investigate", "designs/territory/governance_play_redesign_v1.md §1.3"),
-           ("Petition / Defy", "Respond to the Provincial Authority's seasonal Directive", "designs/territory/governance_play_redesign_v1.md §1.4")],
+        S("Settlements / territory", "yes (baseline + PROPOSED redesign)", "systems/settlements/settlement_layer_v30.md",
+          [("Governor (baseline)", "Develop · Fortify · Pacify · Administer", "systems/settlements/settlement_layer_v30.md §3.2"),
+           ("Governance verbs (PROPOSED)", "Develop · Fortify · Keep Order · Hold Court · Sponsor · Treat · Levy · Investigate", "systems/settlements/governance_play_redesign_v1.md §1.3"),
+           ("Petition / Defy", "Respond to the Provincial Authority's seasonal Directive", "systems/settlements/governance_play_redesign_v1.md §1.4")],
           caveat="The 8-verb menu is a PROPOSAL (governance_play_redesign_v1) not yet ratified; the baseline §3.2 four-verb set is current."),
-        S("Threadwork", "yes", "designs/threadwork/threadwork_v30.md",
-          [("The Leap", "Suspend rendering to enter Thread contact (prerequisite)", "designs/threadwork/threadwork_v30.md §2.3"),
-           ("Weaving", "“Things cohere” — stabilise/reinforce a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
-           ("Pulling", "“Things open” — loosen or reopen a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
-           ("Locking", "“Unable to become” — freeze a configuration", "designs/threadwork/threadwork_v30.md §2.4"),
-           ("Dissolution", "“Unable to be” — tear a configuration apart", "designs/threadwork/threadwork_v30.md §2.4"),
-           ("Mending", "Repair the substrate — the only Coherence-free operation", "designs/threadwork/threadwork_v30.md §2.4")]),
-        S("Field investigation", "yes", "designs/scene/fieldwork_v30.md",
-          [("Examine", "Study physical evidence, documents, objects", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Interview", "Question a witness — now routed via the Dialogue Lattice (ED-FI-0004)", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Research", "Consult archives, oral histories, records", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Surveil", "Observe a location/person/faction over time", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Thread-Read", "Perceive Thread configurations via a perceptive Leap", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Reconstruct", "Synthesise gathered evidence into a picture", "designs/scene/fieldwork_v30.md §4.2"),
-           ("Social (non-contest)", "Read · Converse · Connect · Impress · Rumour · Negotiate · Gift/Bribe", "designs/scene/fieldwork_v30.md §5.2")]),
+        S("Threadwork", "yes", "systems/threadwork/threadwork_v30.md",
+          [("The Leap", "Suspend rendering to enter Thread contact (prerequisite)", "systems/threadwork/threadwork_v30.md §2.3"),
+           ("Weaving", "“Things cohere” — stabilise/reinforce a configuration", "systems/threadwork/threadwork_v30.md §2.4"),
+           ("Pulling", "“Things open” — loosen or reopen a configuration", "systems/threadwork/threadwork_v30.md §2.4"),
+           ("Locking", "“Unable to become” — freeze a configuration", "systems/threadwork/threadwork_v30.md §2.4"),
+           ("Dissolution", "“Unable to be” — tear a configuration apart", "systems/threadwork/threadwork_v30.md §2.4"),
+           ("Mending", "Repair the substrate — the only Coherence-free operation", "systems/threadwork/threadwork_v30.md §2.4")]),
+        S("Field investigation", "yes", "systems/fieldwork/fieldwork_v30.md",
+          [("Examine", "Study physical evidence, documents, objects", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Interview", "Question a witness — now routed via the Dialogue Lattice (ED-FI-0004)", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Research", "Consult archives, oral histories, records", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Surveil", "Observe a location/person/faction over time", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Thread-Read", "Perceive Thread configurations via a perceptive Leap", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Reconstruct", "Synthesise gathered evidence into a picture", "systems/fieldwork/fieldwork_v30.md §4.2"),
+           ("Social (non-contest)", "Read · Converse · Connect · Impress · Rumour · Negotiate · Gift/Bribe", "systems/fieldwork/fieldwork_v30.md §5.2")]),
     ]
     return {
         "available": True,

@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-16T22:13:45+00:00",
-    "commit_sha": "cdb917d"
+    "timestamp_utc": "2026-07-17T19:39:45+00:00",
+    "commit_sha": "1c2f76e"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 2 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 238 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -402,6 +402,90 @@
     "available": true,
     "commits": [
       {
+        "sha": "1c2f76eb12",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 7: extract social_contest -> systems/social_contest/ (ED-IN-0071) (#170)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "36857f161f",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 6: extract fieldwork -> systems/fieldwork/ (ED-IN-0071) (#169)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "6e79eb66ed",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 5: settlements territory/ + sim/ -> systems/settlements/ (ED-IN-0071) (#168)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "ebe897ce14",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[editorial] adversarial audit of character-decision machinery + L1/L2 fix design + emergence oracle spec (ED-IN-0073) (#167)",
+        "scope": "editorial"
+      },
+      {
+        "sha": "37cd3ab991",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 4: world designs/ + sim/ -> systems/world/ (ED-IN-0071) (#166)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "409402e2cb",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 3: designs/architecture/ -> systems/_architecture/ (ED-IN-0071) (#165)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "5abada9578",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[simulation] mc_v18 walkthrough + sim-generated emergent arcs 56-65 (PROVISIONAL) (#158)",
+        "scope": "simulation"
+      },
+      {
+        "sha": "62db147da6",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 2: threadwork designs/ + sim/ -> systems/ (ED-IN-0071) (#164)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "ff9b4130d6",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 1: designs/{npcs,articulation,ui} -> systems/ (ED-IN-0071) (#163)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "8593f9cf33",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "P3 Phase A: sim engine-core → engine/ — the oracle move (ED-IN-0071) (#162)",
+        "scope": null
+      },
+      {
+        "sha": "d627e059f6",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P3: params/ -> engine/params/ (go big, pointers for prose) (ED-IN-0071) (#161)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "2edd9d7ae0",
+        "date": "2026-07-16",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P3 seed: references/engine_params/ -> engine/engine_params/ (ED-IN-0071) (#160)",
+        "scope": "infrastructure"
+      },
+      {
         "sha": "cdb917d932",
         "date": "2026-07-16",
         "author": "jordanelias",
@@ -596,90 +680,6 @@
         "author": "jordanelias",
         "subject": "Multi-agent audit: mechanic audit + module adjudicator + vector audit + compliance check (#131)",
         "scope": null
-      },
-      {
-        "sha": "9b56c9d9d3",
-        "date": "2026-07-13",
-        "author": "jordanelias",
-        "subject": "[editorial] Rule governance_consolidation_v1's D1–D5 (ED-IN-0046); ratify 6 confirmed-clean PR#119 items (#130)",
-        "scope": "editorial"
-      },
-      {
-        "sha": "6a5e6551a0",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "[design] Reconcile PR#127 (harness-verification) with PR#128 (VSG generation methodology) (#129)",
-        "scope": "design"
-      },
-      {
-        "sha": "814edd5794",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "PR#119/#125 provisional-mechanic verification via sim_harness (Goldenfurt-grounded) (#127)",
-        "scope": null
-      },
-      {
-        "sha": "a1c8b2fb96",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "[design] Goldenfurt generation methodology + VSG v1 settlement generator proposal (#128)",
-        "scope": "design"
-      },
-      {
-        "sha": "0685e0a791",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "Simulation/test harness methodology proposal + Gate-0 prototype (ED-IN-0044) (#124)",
-        "scope": null
-      },
-      {
-        "sha": "89ce08d09d",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "Settlement-season stress test: 7 seeds × 5 seasons, depth-3 failure tracing on PR#119 provisional mechanics (#125)",
-        "scope": null
-      },
-      {
-        "sha": "819917cfd3",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "Skills-ecosystem staleness remediation, Phase 7 (ED-IN-0038..0043)",
-        "scope": null
-      },
-      {
-        "sha": "847c375345",
-        "date": "2026-07-11",
-        "author": "jordanelias",
-        "subject": "Comparative-governance research round 2: Byzantium/China/Japan/HRE/Venice/Italy/Spain (settlement management + rank advancement) (#119)",
-        "scope": null
-      },
-      {
-        "sha": "6d8f17bccc",
-        "date": "2026-07-11",
-        "author": "jordanelias",
-        "subject": "[infrastructure] Extend dashboard with balance data and register stats (ED-IN-0037) (#123)",
-        "scope": "infrastructure"
-      },
-      {
-        "sha": "8c07b78ae7",
-        "date": "2026-07-11",
-        "author": "jordanelias",
-        "subject": "Audit ecosystem: consolidation, reconciliation, and always-fresh infrastructure (#122)",
-        "scope": null
-      },
-      {
-        "sha": "bd5c79802e",
-        "date": "2026-07-10",
-        "author": "jordanelias",
-        "subject": "Add mobile-friendly GitHub Pages status dashboard (ED-IN-0031) (#121)",
-        "scope": null
-      },
-      {
-        "sha": "a95f71d859",
-        "date": "2026-07-10",
-        "author": "jordanelias",
-        "subject": "Atomize HANDOFF continuity and the editorial ledger by lane (#118)",
-        "scope": null
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 2 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 238 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,23 +720,23 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "191 in-scope file(s) changed since last refresh",
+        "detail": "439 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 1a83ccf (2026-07-16)",
-        "stale": true,
-        "detail": "18 in-scope file(s) changed since last refresh",
+        "ref": "base 1c2f76e (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base cdb917d (2026-07-16)",
-        "stale": false,
-        "detail": "current",
+        "ref": "base 6e79eb6 (2026-07-17)",
+        "stale": true,
+        "detail": "50 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -744,15 +744,15 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "51 in-scope file(s) changed since last refresh",
+        "detail": "77 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 1a83ccf (2026-07-16)",
-        "stale": true,
-        "detail": "14 in-scope file(s) changed since last refresh",
+        "ref": "base 1c2f76e (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -760,15 +760,15 @@
         "category": "audit-family",
         "ref": "base 5d9a359 (2026-07-08)",
         "stale": true,
-        "detail": "1 in-scope file(s) changed since last refresh",
+        "detail": "19 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 95d871f (2026-07-16)",
-        "stale": true,
-        "detail": "45 in-scope file(s) changed since last refresh",
+        "ref": "base 1c2f76e (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -776,24 +776,24 @@
         "category": "registry",
         "ref": "latest registered 2026-07-14",
         "stale": true,
-        "detail": "1 audit folder(s) newer than the registry with no record: 2026-07-15-proposal-reconciliation",
+        "detail": "2 audit folder(s) newer than the registry with no record: 2026-07-15-proposal-reconciliation, 2026-07-17-character-decision-adversarial-audit",
         "refresh": "the owning audit skill's registry-append step · tools/ci_audit_registry_check.py"
       },
       {
         "surface": "CURRENT.md canonical index",
         "category": "index",
-        "ref": "last reconciled 2026-07-15",
+        "ref": "last reconciled 2026-07-17",
         "stale": false,
-        "detail": "last hand-reconciled 1 day(s) ago",
+        "detail": "last hand-reconciled 0 day(s) ago",
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 8,
+    "stale_count": 6,
     "total": 10,
     "handoffs": [
       {
         "surface": "HANDOFF.md",
-        "last_updated": "2026-07-16",
+        "last_updated": "2026-07-17",
         "days_ago": 0
       }
     ],
@@ -919,6 +919,11 @@
               "id": "ED-IN-0069",
               "desc": "Proposal-reconciliation pass over the dashboard's 55 awaiting-ratification docs (tools/dashboard_data.py::build_proposals) + 9 dashboard-invisible proposals in designs/proposals/. Deliverables in designs/audit/2026-07-15-proposal-reconcilia",
               "source": "Proposal-reconciliation pass 2026-07-15 (Jordan-requested), Opus orchestrator + 2 Sonnet read-only analyzers (designs/proposals disposition; governance-cluster conflict table), verified against the working tree."
+            },
+            {
+              "id": "ED-IN-0073",
+              "desc": "Adversarial audit of the character-decision machinery (designs/audit/2026-07-17-character-decision-adversarial-audit/) along three axes — logic/consistency, narrative emergence, qualitative rendering. READ-ONLY umbrella; docket UNRULED (Jor",
+              "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/ (00_findings.md, 01_remediation_L1_L2.md, 02_emergence_oracle_spec.md); working-tree verification per finding"
             }
           ],
           "actionable": [
@@ -1898,22 +1903,22 @@
       "godot": "Godot port"
     },
     "totals": {
-      "needs_jordan": 77,
+      "needs_jordan": 78,
       "actionable": 126,
-      "open": 203
+      "open": 204
     },
     "note": "Open editorial-ledger items. “Needs your decision” = needs_jordan:true; “Claude can action” = the remaining open items. The ledger is the source of truth; a merge ratifies (ED-1094)."
   },
   "proposals": {
     "available": true,
     "groups": {
-      "architecture": [
+      "_architecture": [
         {
-          "path": "designs/architecture/governance_ripple_substrate_v1.md",
+          "path": "systems/_architecture/governance_ripple_substrate_v1.md",
           "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified"
         },
         {
-          "path": "designs/architecture/governance_type_registry_v1.md",
+          "path": "systems/_architecture/governance_type_registry_v1.md",
           "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOS"
         }
       ],
@@ -1961,11 +1966,23 @@
         {
           "path": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
           "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout"
+        },
+        {
+          "path": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
+          "status": "PROPOSED — read-only, docket unruled"
+        },
+        {
+          "path": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
+          "status": "PROPOSED"
+        },
+        {
+          "path": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
+          "status": "PROPOSED"
         }
       ],
       "npcs": [
         {
-          "path": "designs/npcs/character_canon_v30.md",
+          "path": "systems/npcs/character_canon_v30.md",
           "status": "PROVISIONAL — pending ratification."
         }
       ],
@@ -1975,33 +1992,33 @@
           "status": "DRAFT — awaiting Jordan review"
         }
       ],
-      "territory": [
+      "settlements": [
         {
-          "path": "designs/territory/lps_wiring_v1.md",
+          "path": "systems/settlements/lps_wiring_v1.md",
           "status": "PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007"
         }
       ],
       "world": [
         {
-          "path": "designs/world/solmund_master_document.md",
+          "path": "systems/world/solmund_master_document.md",
           "status": "DRAFT — all content PROVISIONAL pending Jordan editorial approval"
         }
       ]
     },
-    "count": 17,
+    "count": 20,
     "note": "Docs whose first “## Status:” line reads PROPOSED / PROVISIONAL / DRAFT, plus every doc under proposals/ (surfaced by location). Awaiting ratification (a doc-PR merge ratifies by default, ED-1094). Excludes deprecated/ and deprecated/archives/. The full unified register is tools/observability/PROPOSALS.md."
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"architecture\"]\n    D1[\"articulation\"]\n    D2[\"audit\"]\n    D3[\"factions\"]\n    D4[\"npcs\"]\n    D5[\"personal\"]\n    D6[\"proposals\"]\n    D7[\"provincial\"]\n    D8[\"scene\"]\n    D9[\"territory\"]\n    D10[\"threadwork\"]\n    D11[\"ui\"]\n    D12[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 13,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"fieldwork\"]\n    D7[\"npcs\"]\n    D8[\"personal\"]\n    D9[\"provincial\"]\n    D10[\"scene\"]\n    D11[\"settlements\"]\n    D12[\"social_contest\"]\n    D13[\"threadwork\"]\n    D14[\"ui\"]\n    D15[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 16,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
     "available": true,
     "snapshot_date": "2026-07-14",
     "definition": "Every consequential event is a Key — a typed, validated, append-only record. One update rule consumes Keys and propagates effects. Save state = initial conditions + Key log; replay = deterministic re-execution of the log.",
-    "definition_source": "designs/architecture/key_substrate_v30.md §1",
+    "definition_source": "systems/_architecture/key_substrate_v30.md §1",
     "families": [
       {
         "family": "scene_event",
@@ -2040,7 +2057,7 @@
       }
     ],
     "type_total": 49,
-    "registry_source": "designs/architecture/key_type_registry_v30.md",
+    "registry_source": "systems/_architecture/key_type_registry_v30.md",
     "live_type_header_count": 49,
     "count_check": "current",
     "components": [
@@ -2074,24 +2091,24 @@
       {
         "name": "Aggregate-up",
         "desc": "faction_stat has no setter: it is AGGREGATE(child stats) ⊕ Σ event-modifiers, a query over KEY_LOG. Domain Echoes defer-apply at the Accounting boundary (OF-7, ratified).",
-        "source": "designs/architecture/propagation_spec_v1.md §2"
+        "source": "systems/_architecture/propagation_spec_v1.md §2"
       },
       {
         "name": "Distribute-down",
         "desc": "A strategic/environmental Key reaching sub-scale actors must populate targets[] + scale_signature[] at emission. Fan-out is one Key, not N.",
-        "source": "designs/architecture/propagation_spec_v1.md §3 (§12.3)"
+        "source": "systems/_architecture/propagation_spec_v1.md §3 (§12.3)"
       },
       {
         "name": "Termination",
         "desc": "Level A (per-tick fixpoint) and Level B (per-cascade bound) are PROVEN; cross-tick convergence is NOT — it waits on decay() (OF-3) and the D.6 disjointness ruling.",
-        "source": "designs/architecture/propagation_spec_v1.md §4 (PROPOSED)"
+        "source": "systems/_architecture/propagation_spec_v1.md §4 (PROPOSED)"
       }
     ],
     "conviction_axes": "hierarchical · sacred · instrumental · traditional (4-axis symbolic space)",
     "field_extension": {
       "name": "Field / Gauge (PROPOSED)",
       "desc": "A Key is a one-shot emission — wrong for continuous VECTOR state (Legitimacy/PS, Pressure Π, MS, Accord). The proposed Field primitive is a continuously-read/written scale-tagged value with aggregate_fn / propagate_fn / decay_fn / derived_flags. Unblock = Jordan ruling OF-3's decay() fork.",
-      "source": "designs/architecture/governance_type_registry_v1.md §4.2"
+      "source": "systems/_architecture/governance_type_registry_v1.md §4.2"
     },
     "note": "Reference snapshot (2026-07-14) with source links; the live key-type header count is re-checked every build. See the source docs for canonical detail. Key substrate doc carries a contradictory status marker (treat as IN FLUX)."
   },
@@ -2102,57 +2119,57 @@
       {
         "name": "Personal combat",
         "availability": "partial (legacy menu)",
-        "source_head": "designs/scene/combat_engine_v1/",
+        "source_head": "systems/combat/combat_engine_v1/",
         "actions": [
           {
             "name": "Strike",
             "desc": "Allocate pool split, roll, apply damage",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Feint",
             "desc": "Commit dice to bait a pool-reduction contest",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Establish Distance",
             "desc": "Move to preferred range, contested",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Take a Breath",
             "desc": "Forfeit action to recover Stamina",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Full Guard",
             "desc": "All dice to Defence, cannot Attack",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Disarm",
             "desc": "Offence roll to force a weapon drop at Close",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Tie Up / Escape",
             "desc": "Close grapple that blocks escape; Agility to break free",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Rescue",
             "desc": "Reactive action redirecting an attack onto yourself",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Dodge",
             "desc": "Forfeit offence, full pool as passive ranged defence",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           },
           {
             "name": "Stunt",
             "desc": "+dice to a Strike from environment/position",
-            "source": "designs/scene/combat_v30.md §4"
+            "source": "systems/combat/combat_v30.md §4"
           }
         ],
         "caveat": "The current head (combat_engine_v1/) auto-resolves via a sigma state-machine — no player menu. The list above is the legacy combat_v30 §4 TTRPG menu (dice-math superseded); shown as the only enumerable player-facing set."
@@ -2160,47 +2177,47 @@
       {
         "name": "Social contest",
         "availability": "yes",
-        "source_head": "designs/scene/social_contest_v30.md",
+        "source_head": "systems/social_contest/social_contest_v30.md",
         "actions": [
           {
             "name": "Appraise",
             "desc": "Read the audience/adjudicator before arguing",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Choose Style",
             "desc": "Pick Precedent / Suppression / Vision / Insinuation",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Corroborate",
             "desc": "A coalition member declares support for +1D",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Argue",
             "desc": "Roll the Argue pool; CLASH / REINFORCE / CROSS / TIE",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Regroup",
             "desc": "Forfeit exchange to restore Concentration",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Concede a Point",
             "desc": "Forfeit, take strain, gain +1D next exchange",
-            "source": "designs/scene/social_contest_v30.md §4"
+            "source": "systems/social_contest/social_contest_v30.md §4"
           },
           {
             "name": "Pre-Contest Preparation",
             "desc": "Prepare for +1D on Exchange 1",
-            "source": "designs/scene/social_contest_v30.md §9.1"
+            "source": "systems/social_contest/social_contest_v30.md §9.1"
           },
           {
             "name": "Practitioner Weaving",
             "desc": "A Thread-sensitive orator adds bonus dice",
-            "source": "designs/scene/social_contest_v30.md §9.3"
+            "source": "systems/social_contest/social_contest_v30.md §9.3"
           }
         ],
         "caveat": null
@@ -2231,17 +2248,17 @@
       {
         "name": "Faction / domain actions",
         "availability": "yes (across 3 layers)",
-        "source_head": "params/factions/stats_1_7_scale.md",
+        "source_head": "engine/params/factions/stats_1_7_scale.md",
         "actions": [
           {
             "name": "Domain Actions",
             "desc": "Assert · Reconstitute · Govern · Claim Masterless · Suppress · Parliamentary Rebuttal · Treaty · Accounting Stability Check",
-            "source": "params/factions/stats_1_7_scale.md"
+            "source": "engine/params/factions/stats_1_7_scale.md"
           },
           {
             "name": "Faction Unique Action",
             "desc": "One signature verb per faction (Royal Decree, Excommunication, Economic Leverage, …)",
-            "source": "params/factions/stats_1_7_scale.md"
+            "source": "engine/params/factions/stats_1_7_scale.md"
           },
           {
             "name": "Parliamentary motions",
@@ -2254,22 +2271,22 @@
       {
         "name": "Settlements / territory",
         "availability": "yes (baseline + PROPOSED redesign)",
-        "source_head": "designs/territory/settlement_layer_v30.md",
+        "source_head": "systems/settlements/settlement_layer_v30.md",
         "actions": [
           {
             "name": "Governor (baseline)",
             "desc": "Develop · Fortify · Pacify · Administer",
-            "source": "designs/territory/settlement_layer_v30.md §3.2"
+            "source": "systems/settlements/settlement_layer_v30.md §3.2"
           },
           {
             "name": "Governance verbs (PROPOSED)",
             "desc": "Develop · Fortify · Keep Order · Hold Court · Sponsor · Treat · Levy · Investigate",
-            "source": "designs/territory/governance_play_redesign_v1.md §1.3"
+            "source": "systems/settlements/governance_play_redesign_v1.md §1.3"
           },
           {
             "name": "Petition / Defy",
             "desc": "Respond to the Provincial Authority's seasonal Directive",
-            "source": "designs/territory/governance_play_redesign_v1.md §1.4"
+            "source": "systems/settlements/governance_play_redesign_v1.md §1.4"
           }
         ],
         "caveat": "The 8-verb menu is a PROPOSAL (governance_play_redesign_v1) not yet ratified; the baseline §3.2 four-verb set is current."
@@ -2277,37 +2294,37 @@
       {
         "name": "Threadwork",
         "availability": "yes",
-        "source_head": "designs/threadwork/threadwork_v30.md",
+        "source_head": "systems/threadwork/threadwork_v30.md",
         "actions": [
           {
             "name": "The Leap",
             "desc": "Suspend rendering to enter Thread contact (prerequisite)",
-            "source": "designs/threadwork/threadwork_v30.md §2.3"
+            "source": "systems/threadwork/threadwork_v30.md §2.3"
           },
           {
             "name": "Weaving",
             "desc": "“Things cohere” — stabilise/reinforce a configuration",
-            "source": "designs/threadwork/threadwork_v30.md §2.4"
+            "source": "systems/threadwork/threadwork_v30.md §2.4"
           },
           {
             "name": "Pulling",
             "desc": "“Things open” — loosen or reopen a configuration",
-            "source": "designs/threadwork/threadwork_v30.md §2.4"
+            "source": "systems/threadwork/threadwork_v30.md §2.4"
           },
           {
             "name": "Locking",
             "desc": "“Unable to become” — freeze a configuration",
-            "source": "designs/threadwork/threadwork_v30.md §2.4"
+            "source": "systems/threadwork/threadwork_v30.md §2.4"
           },
           {
             "name": "Dissolution",
             "desc": "“Unable to be” — tear a configuration apart",
-            "source": "designs/threadwork/threadwork_v30.md §2.4"
+            "source": "systems/threadwork/threadwork_v30.md §2.4"
           },
           {
             "name": "Mending",
             "desc": "Repair the substrate — the only Coherence-free operation",
-            "source": "designs/threadwork/threadwork_v30.md §2.4"
+            "source": "systems/threadwork/threadwork_v30.md §2.4"
           }
         ],
         "caveat": null
@@ -2315,42 +2332,42 @@
       {
         "name": "Field investigation",
         "availability": "yes",
-        "source_head": "designs/scene/fieldwork_v30.md",
+        "source_head": "systems/fieldwork/fieldwork_v30.md",
         "actions": [
           {
             "name": "Examine",
             "desc": "Study physical evidence, documents, objects",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Interview",
             "desc": "Question a witness — now routed via the Dialogue Lattice (ED-FI-0004)",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Research",
             "desc": "Consult archives, oral histories, records",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Surveil",
             "desc": "Observe a location/person/faction over time",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Thread-Read",
             "desc": "Perceive Thread configurations via a perceptive Leap",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Reconstruct",
             "desc": "Synthesise gathered evidence into a picture",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Social (non-contest)",
             "desc": "Read · Converse · Connect · Impress · Rumour · Negotiate · Gift/Bribe",
-            "source": "designs/scene/fieldwork_v30.md §5.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §5.2"
           }
         ],
         "caveat": null
@@ -2424,8 +2441,8 @@
   "registers": {
     "available": true,
     "editorial_ledger": {
-      "total_open": 203,
-      "total_needs_jordan": 82,
+      "total_open": 204,
+      "total_needs_jordan": 83,
       "by_lane": {
         "flat": {
           "open": 76,
@@ -2456,8 +2473,8 @@
           "needs_jordan": 1
         },
         "in": {
-          "open": 26,
-          "needs_jordan": 16
+          "open": 27,
+          "needs_jordan": 17
         },
         "go": {
           "open": 0,

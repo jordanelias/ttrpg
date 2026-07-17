@@ -21,12 +21,12 @@ rollups:
       top_files:
         - "designs/arcs/arc_expansion_v30.md": 60
         - "designs/audit/npc_faction_arc_interdependency_2026-04-18.md": 49
-        - "designs/ui/valoria_ui_ux_v4.md": 28
+        - "systems/ui/valoria_ui_ux_v4.md": 28
         - "designs/arcs/gm_ref/arcs_46_55_resolved.md": 25
         - "params/threadwork.md": 23
-        - "designs/ui/valoria_ui_ux_v4_1.md": 22
+        - "systems/ui/valoria_ui_ux_v4_1.md": 22
         - "designs/audit/solmund_n_check_res_check.md": 20
-        - "designs/ui/valoria_ui_ux_v4_1_max_audit.md": 20
+        - "systems/ui/valoria_ui_ux_v4_1_max_audit.md": 20
         - "designs/arcs/gm_ref/arcs_46_55.md": 18
         - "designs/audit/session_master_2026_04_20.md": 18
     - token: "Rendering Stability"
@@ -35,8 +35,8 @@ rollups:
       severity: error
       hint: "Legacy term \"Rendering Stability\" used — current canonical: \"Mending Stability (MS)\""
       top_files:
-        - "designs/threadwork/threadwork_v25_historical.md": 116
-        - "designs/threadwork/threadwork_v30_infill.md": 34
+        - "systems/threadwork/threadwork_v25_historical.md": 116
+        - "systems/threadwork/threadwork_v30_infill.md": 34
         - "designs/provincial/strategic_layer_v30_infill.md": 3
         - "designs/audit/session_master_2026_04_20.md": 2
         - "designs/architecture/campaign_modes_v30_infill.md": 1
@@ -69,8 +69,8 @@ rollups:
         - "designs/arcs/arcs_20_23.md": 4
         - "designs/provincial/mass_battle_v30.md": 4
         - "designs/provincial/victory_v30.md": 3
-        - "designs/threadwork/threadwork_v25_historical.md": 3
-        - "designs/threadwork/threadwork_v30.md": 3
+        - "systems/threadwork/threadwork_v25_historical.md": 3
+        - "systems/threadwork/threadwork_v30.md": 3
         - "params/history/mass_combat.md": 3
         - "designs/arcs/arcs_31_35.md": 2
         - "designs/audit/valoria_complete_system_audit.md": 2
@@ -82,8 +82,8 @@ rollups:
       top_files:
         - "designs/arcs/emergent_scenarios.md": 10
         - "designs/scene/combat_design_v1.md": 5
-        - "designs/threadwork/threadwork_v25_historical.md": 5
-        - "designs/threadwork/threadwork_v30.md": 5
+        - "systems/threadwork/threadwork_v25_historical.md": 5
+        - "systems/threadwork/threadwork_v30.md": 5
         - "params/history/mass_combat.md": 5
         - "designs/provincial/strategic_layer_v30.md": 4
         - "designs/architecture/campaign_modes_v30.md": 3
@@ -145,8 +145,8 @@ rollups:
       top_files:
         - "designs/arcs/emergent_scenarios.md": 10
         - "designs/scene/combat_design_v1.md": 5
-        - "designs/threadwork/threadwork_v25_historical.md": 5
-        - "designs/threadwork/threadwork_v30.md": 5
+        - "systems/threadwork/threadwork_v25_historical.md": 5
+        - "systems/threadwork/threadwork_v30.md": 5
         - "params/history/mass_combat.md": 5
         - "designs/architecture/campaign_modes_v30.md": 3
         - "designs/arcs/narrative_scenario_chains.md": 3
@@ -416,8 +416,8 @@ rollups:
         - "designs/architecture/campaign_modes_v30_infill.md"
         - "designs/architecture/hybrid_gaps_v30_infill.md"
         - "designs/architecture/scale_transitions_v30_infill.md"
-        - "designs/npcs/npc_behavior_v30_infill.md"
-        - "designs/npcs/npc_character_analyses_v30_infill.md"
+        - "systems/npcs/npc_behavior_v30_infill.md"
+        - "systems/npcs/npc_character_analyses_v30_infill.md"
     - token: "WC"
       total_count: 29
       file_count: 29
@@ -450,7 +450,7 @@ rollups:
         - "designs/audit/gap_resolution_2026-04-19.md"
         - "designs/audit/settlement_bridge_unification_2026-04-16.md"
         - "designs/audit/valoria_workplan_final.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
     - token: "CV"
       total_count: 26
       file_count: 26
@@ -548,8 +548,8 @@ rollups:
         - "designs/arcs/emergent_scenarios.md"
         - "designs/audit/throughlines_transitions_hierarchy.md"
         - "designs/audit/valoria_systems_workplan.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
-        - "designs/npcs/npc_behavior_v30.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/npc_behavior_v30.md"
     - token: "BOARD"
       total_count: 20
       file_count: 20
@@ -557,9 +557,9 @@ rollups:
       hint: "Abbreviation \"BOARD\" not registered in alias_registry"
       top_files:
         - "designs/arcs/emergent_scenarios.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
-        - "designs/npcs/npc_behavior_v30.md"
-        - "designs/npcs/npc_behavior_v30_infill.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/npc_behavior_v30.md"
+        - "systems/npcs/npc_behavior_v30_infill.md"
         - "designs/provincial/fail_forward_pp177.md"
     - token: "NEW"
       total_count: 19
@@ -602,9 +602,9 @@ rollups:
       top_files:
         - "designs/arcs/emergent_scenarios.md"
         - "designs/audit/throughlines_transitions_hierarchy.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
-        - "designs/npcs/npc_behavior_v30.md"
-        - "designs/npcs/npc_behavior_v30_infill.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/npc_behavior_v30.md"
+        - "systems/npcs/npc_behavior_v30_infill.md"
     - token: "OW"
       total_count: 17
       file_count: 17
@@ -669,8 +669,8 @@ rollups:
         - "designs/architecture/conflict_architecture_proposal.md"
         - "designs/audit/session_master_2026_04_20.md"
         - "designs/audit/valoria_systems_workplan.md"
-        - "designs/npcs/companion_specification_v30.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/companion_specification_v30.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
     - token: "FROM"
       total_count: 16
       file_count: 16
@@ -702,8 +702,8 @@ rollups:
         - "designs/arcs/arcs_31_35.md"
         - "designs/audit/cross_conversation_review_2026-04-15.md"
         - "designs/audit/gap_resolution_2026-04-19.md"
-        - "designs/npcs/npc_behavior_system_v1.md"
-        - "designs/npcs/npc_behavior_v30.md"
+        - "systems/npcs/npc_behavior_system_v1.md"
+        - "systems/npcs/npc_behavior_v30.md"
   UNKNOWN_PROPER_NOUN:
     - token: "Ob"
       total_count: 2335
@@ -1232,7 +1232,7 @@ rollups:
         - "designs/audit/integration_audit_v1_2026-04-15.md"
         - "designs/audit/integration_audit_v2_2026-04-16.md"
         - "designs/audit/throughline_specifications_2026-04-17.md"
-        - "designs/npcs/npc_behavior_v30.md"
+        - "systems/npcs/npc_behavior_v30.md"
     - token: "Pool"
       total_count: 84
       file_count: 11

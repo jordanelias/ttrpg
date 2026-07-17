@@ -69,7 +69,7 @@ EXCLUDE = (
     # rationale as the source registries above; a regen must not trip the gate.
     'tools/observability/lexicon',          # lexicon.json, lexicon_data.js
     'tools/observability/console.html',     # embeds window.VALORIA_LEXICON
-    'params/bg/institutions.md',
+    'engine/params/bg/institutions.md',
     'skills/prose-writer/',
     'tests/',
     'deprecated/archives/',

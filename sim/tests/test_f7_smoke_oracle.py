@@ -33,7 +33,7 @@ WHAT IT PINS — and why each assertion is a *guard*, not a target
 
 REGENERATING THE GOLDEN (only when a change is *intended* to move output)
 -------------------------------------------------------------------------
-    python -c "from sim.mc_v18 import run_batch; print(run_batch(n=8, base_seed=42).win_share)"
+    python -c "from engine.mc_v18 import run_batch; print(run_batch(n=8, base_seed=42).win_share)"
 A surprise failure means simulation output moved — investigate BEFORE regenerating. If the
 move is the transport layer / oracle finally reaching a subsystem, that is the intended win;
 update the pins and note it.
@@ -46,7 +46,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-from sim.mc_v18 import run_campaign, run_batch  # noqa: E402
+from engine.mc_v18 import run_campaign, run_batch  # noqa: E402
 
 _SEED = 42
 _N = 8

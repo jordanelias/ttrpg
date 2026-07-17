@@ -90,7 +90,7 @@ def collect() -> list[dict]:
         })
 
     # 1 + 2. design docs: proposals/ BY LOCATION; else by unratified Status line
-    for path in sorted(list((REPO / "designs").rglob("*.md")) + list((REPO / "proposals").rglob("*.md"))):
+    for path in sorted(list((REPO / "designs").rglob("*.md")) + list((REPO / "systems").rglob("*.md")) + list((REPO / "proposals").rglob("*.md"))):
         rel = str(path.relative_to(REPO))
         if any(seg in rel for seg in ("/deprecated/", "/archives/", "/archive/")):
             continue

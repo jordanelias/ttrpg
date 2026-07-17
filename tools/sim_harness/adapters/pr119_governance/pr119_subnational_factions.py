@@ -1,12 +1,12 @@
 """pr119_subnational_factions.py — provisional adapter testing PR#119's two §3.3 subnational-
-faction items (designs/territory/settlement_layer_v30.md):
+faction items (systems/settlements/settlement_layer_v30.md):
   - §3.3b Patron-backed privilege lapse -- the Za model (ED-SE-0021)
   - §3.3c The Seggio Council (ED-SE-0024)
 
 The reconciliation doc (designs/audit/2026-07-12-settlement-season-stress-sim/
 reconciliation_with_existing_territory_work.md §A.3) down-tiers PR#125's "§3.3c no force/
 seizure resolver" CRITICAL finding to MEDIUM: the VIOLENT removal path already exists in
-built code (sim/territory/infrastructure.py's seizure_ob_modifier, §1.5), it is only the
+built code (systems/settlements/sim/infrastructure.py's seizure_ob_modifier, §1.5), it is only the
 SOFTER political "Mandate Challenge" path that political_hierarchy §2.4 forward-references
 but never defines. This adapter calls the real seizure_ob_modifier() to confirm the violent
 path is real, and declares the political path's absence as the adapter's own expected,
@@ -16,7 +16,7 @@ canon_row=None: §3.3b and §3.3c are both PROPOSED, no CURRENT.md row.
 """
 from __future__ import annotations
 
-from sim.territory import infrastructure
+from systems.settlements.sim import infrastructure
 
 from ...adapter import Adapter, Outcome, register_adapter
 from ...depth import DecisionPoint, Tier
@@ -26,7 +26,7 @@ from .goldenfurt_fixture import SID
 class FakeWorld:
     """Minimal stand-in satisfying infrastructure.build_infrastructure()'s only real
     requirement (`territory_id in world.territories`) without depending on the full
-    sim.autoload.game_state.World construction this adapter has no other need for."""
+    engine.autoload.game_state.World construction this adapter has no other need for."""
     def __init__(self, territory_ids):
         self.territories = {tid: object() for tid in territory_ids}
 

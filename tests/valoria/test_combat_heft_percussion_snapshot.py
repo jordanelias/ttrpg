@@ -18,7 +18,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules

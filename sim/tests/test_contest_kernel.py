@@ -2,11 +2,11 @@
 sim/tests/test_contest_kernel.py — pytest gate for the promoted groundup contest kernel.
 
 Stage 1b (designs/audit/2026-06-30-contest-stage0-reconciliation): the 9-module groundup
-kernel was relocated into sim/personal/contest/ and unified onto the ONE canonical σ-kernel
-(sim.autoload.sigma_leverage / dice_engine), replacing the groundup local engine.py. This
+kernel was relocated into systems/social_contest/sim/contest/ and unified onto the ONE canonical σ-kernel
+(engine.autoload.sigma_leverage / dice_engine), replacing the groundup local engine.py. This
 stage is BEHAVIOR-PRESERVING: the seeded 151-check kernel suite must stay green.
 
-The kernel suite (sim/personal/contest/_kernel_tests.py) is the groundup tests.py
+The kernel suite (systems/social_contest/sim/contest/_kernel_tests.py) is the groundup tests.py
 (random.seed(20260603), gates via sys.exit, prints "RESULT: N passed, 0 failed"). It runs
 as a script, not a pytest module, so this wrapper executes it as a subprocess and asserts
 both the exit code (0) and the ">= 151 passed, 0 failed" line — the master parity guard for
@@ -71,7 +71,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")
 
 def _run_kernel_suite() -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, "-m", "sim.personal.contest._kernel_tests"],
+        [sys.executable, "-m", "systems.social_contest.sim.contest._kernel_tests"],
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,

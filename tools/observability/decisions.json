@@ -1,59 +1,54 @@
 {
   "meta": {
-    "files_scanned": 1356,
-    "total_open": 981,
+    "files_scanned": 1371,
+    "total_open": 984,
     "by_category": {
-      "ratification": 46,
+      "ratification": 47,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
-      "gap": 324,
+      "gap": 326,
       "assumption": 248,
       "stub": 34,
       "todo": 14
     },
     "by_priority": {
-      "1": 325,
+      "1": 326,
       "2": 36,
-      "3": 620
+      "3": 622
     },
     "by_lane": {
-      "unassigned": 697,
-      "IN": 11,
-      "FA": 67,
-      "SC": 7,
+      "FA": 68,
+      "unassigned": 704,
       "PC": 112,
+      "SC": 7,
       "GO": 19,
       "MB": 54,
+      "IN": 6,
       "SE": 5,
       "WR": 8,
       "FI": 1
     },
     "by_lane_priority": {
-      "unassigned": {
-        "1": 282,
-        "2": 32,
-        "3": 383
-      },
-      "IN": {
-        "1": 2,
-        "2": 1,
-        "3": 8
-      },
       "FA": {
-        "1": 3,
+        "1": 4,
         "2": 0,
         "3": 64
       },
-      "SC": {
-        "1": 5,
-        "2": 0,
-        "3": 2
+      "unassigned": {
+        "1": 283,
+        "2": 32,
+        "3": 389
       },
       "PC": {
         "1": 18,
         "2": 1,
         "3": 93
+      },
+      "SC": {
+        "1": 5,
+        "2": 0,
+        "3": 2
       },
       "GO": {
         "1": 9,
@@ -64,6 +59,11 @@
         "1": 6,
         "2": 0,
         "3": 48
+      },
+      "IN": {
+        "1": 1,
+        "2": 1,
+        "3": 4
       },
       "SE": {
         "1": 0,
@@ -123,7 +123,7 @@
         16
       ],
       [
-        "designs/npcs/character_canon_v30.md",
+        "systems/npcs/character_canon_v30.md",
         14
       ],
       [
@@ -153,13 +153,13 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/provincial/faction_behavior_v30.md:548",
-        "designs/articulation/articulation_layer_v30.md:363",
         "designs/personal/conviction_taxonomy_v30.md:337",
-        "designs/architecture/key_substrate_v30.md:627"
+        "systems/_architecture/key_substrate_v30.md:627",
+        "systems/articulation/articulation_layer_v30.md:363"
       ],
       "systems": [],
       "count": 4,
-      "lane": null
+      "lane": "FA"
     },
     {
       "text": "<!-- [STUB: payload inferred, not canon-specified \u2014 provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->",
@@ -167,14 +167,14 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:148",
-        "designs/architecture/key_type_registry_v30.md:165",
-        "designs/architecture/key_type_registry_v30.md:183",
-        "designs/architecture/key_type_registry_v30.md:744"
+        "systems/_architecture/key_type_registry_v30.md:148",
+        "systems/_architecture/key_type_registry_v30.md:165",
+        "systems/_architecture/key_type_registry_v30.md:183",
+        "systems/_architecture/key_type_registry_v30.md:744"
       ],
       "systems": [],
       "count": 4,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "`[OPEN \u2014 Jordan]`",
@@ -198,7 +198,7 @@
       "label": "Awaiting ratification",
       "locations": [
         "designs/provincial/faction_canon_v30.md:7",
-        "designs/npcs/character_canon_v30.md:6"
+        "systems/npcs/character_canon_v30.md:6"
       ],
       "systems": [],
       "count": 2,
@@ -216,54 +216,6 @@
       "systems": [],
       "count": 2,
       "lane": null
-    },
-    {
-      "text": "| 29 | 560 | 3 | \u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/scene/social_contest_v30_index.md:44"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
-    },
-    {
-      "text": "| 29 | 59 | \u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/scene/social_contest_v30_index.md:93"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
-    },
-    {
-      "text": "[ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision.]",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/scene/social_contest_v30_infill.md:48"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
-    },
-    {
-      "text": "\u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "designs/scene/social_contest_v30.md:579"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
     },
     {
       "text": "[INTER-12b] \"Discipline\" name collision: unit stat vs faction derived value",
@@ -811,11 +763,59 @@
       "priority": 1,
       "label": "Naming collision",
       "locations": [
-        "designs/npcs/npc_behavior_system_v1.md:1"
+        "systems/npcs/npc_behavior_system_v1.md:1"
       ],
       "systems": [],
       "count": 1,
       "lane": null
+    },
+    {
+      "text": "| 29 | 560 | 3 | \u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "systems/social_contest/social_contest_v30_index.md:44"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
+    },
+    {
+      "text": "| 29 | 59 | \u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.] |",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "systems/social_contest/social_contest_v30_index.md:93"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
+    },
+    {
+      "text": "[ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision.]",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "systems/social_contest/social_contest_v30_infill.md:48"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
+    },
+    {
+      "text": "\u00a79.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from \"Forced Unmask\" to disambiguate from PP-255's stalemate Forced Unmask \u2014 P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "systems/social_contest/social_contest_v30.md:579"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
     },
     {
       "text": "VALORIA \u2014 Name Collision Database",
@@ -1298,6 +1298,18 @@
       "lane": null
     },
     {
+      "text": "Header `CANONICAL`, body `PROVISIONAL` twice, footer \"PROVISIONAL pending ratification.\" The same",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md:227"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "Plus Class-B `[ASSUMPTION]` tuning flags (stamina, recovery, troop-speed-class mapping at 1037) \u2014 logged, Jordan-vetoable, not defects.",
       "category": "ratification",
       "priority": 1,
@@ -1363,7 +1375,7 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/npcs/character_canon_v30.md:2"
+        "systems/npcs/character_canon_v30.md:2"
       ],
       "systems": [],
       "count": 1,
@@ -1375,11 +1387,23 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/npcs/npc_relational_graph_v30.md:681"
+        "systems/npcs/npc_relational_graph_v30.md:681"
       ],
       "systems": [],
       "count": 1,
       "lane": null
+    },
+    {
+      "text": "\"status\": \"OPEN DECISION FOR JORDAN (Gate B 2026-07-01; provisional pending Jordan ratification)\",",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/social_contest/sim/contest/dictionaries.py:202"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
     },
     {
       "text": "INNOV-NNN: <description> [pending ratification]",
@@ -1428,18 +1452,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "\"status\": \"OPEN DECISION FOR JORDAN (Gate B 2026-07-01; provisional pending Jordan ratification)\",",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "sim/personal/contest/dictionaries.py:202"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
     },
     {
       "text": "End of v1. Status PROPOSED; every recommendation above is Jordan-vetoable; the [OPEN] register (Part VIII) is the veto surface.*",
@@ -4274,7 +4286,7 @@
       "priority": 2,
       "label": "Missing cross-scale handoff",
       "locations": [
-        "sim/cross_scale/handoff_rules.py:231"
+        "engine/cross_scale/handoff_rules.py:231"
       ],
       "systems": [],
       "count": 1,
@@ -4815,12 +4827,12 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "params/bg/core.md:27",
-        "params/bg/core.md:46"
+        "engine/params/bg/core.md:27",
+        "engine/params/bg/core.md:46"
       ],
       "systems": [],
       "count": 2,
-      "lane": null
+      "lane": "IN"
     },
     {
       "text": "<!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->",
@@ -4828,12 +4840,12 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:779",
-        "designs/architecture/key_type_registry_v30.md:795"
+        "systems/_architecture/key_type_registry_v30.md:779",
+        "systems/_architecture/key_type_registry_v30.md:795"
       ],
       "systems": [],
       "count": 2,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |",
@@ -4841,12 +4853,12 @@
       "priority": 3,
       "label": "TODO / FIXME",
       "locations": [
-        "params/bg/stress_patches.md:63",
-        "params/bg/stress_patches.md:115"
+        "engine/params/bg/stress_patches.md:63",
+        "engine/params/bg/stress_patches.md:115"
       ],
       "systems": [],
       "count": 2,
-      "lane": null
+      "lane": "IN"
     },
     {
       "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
@@ -7069,12 +7081,120 @@
       "lane": null
     },
     {
+      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/settlement.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
+      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/infrastructure.py:15"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
+      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/settlements/sim/temperaments.py:12"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SE"
+    },
+    {
+      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/combat/sim/combat.py:24"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "PC"
+    },
+    {
+      "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/_architecture/holonic_container_doctrine_v1.md:38"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "`engine_clock`'s `doc: null` / `[ASSUMPTION]` grade in `module_contracts.yaml` \u2014 that flip",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/_architecture/propagation_spec_v1.md:33"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "O.2 engine_clock module contract (retires doc:null/[ASSUMPTION])",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/_architecture/propagation_spec_v1.md:69"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/insurgency_pipeline.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/npe.py:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/npcs/character_canon_v30.md:232"
+        "systems/npcs/character_canon_v30.md:232"
       ],
       "systems": [],
       "count": 1,
@@ -7086,7 +7206,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/npcs/character_canon_v30.md:265"
+        "systems/npcs/character_canon_v30.md:265"
       ],
       "systems": [],
       "count": 1,
@@ -7098,7 +7218,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/npcs/character_canon_v30.md:279"
+        "systems/npcs/character_canon_v30.md:279"
       ],
       "systems": [],
       "count": 1,
@@ -7110,7 +7230,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/npcs/character_canon_v30.md:393"
+        "systems/npcs/character_canon_v30.md:393"
       ],
       "systems": [],
       "count": 1,
@@ -7122,47 +7242,179 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/npcs/character_canon_v30.md:430"
+        "systems/npcs/character_canon_v30.md:430"
       ],
       "systems": [],
       "count": 1,
       "lane": null
     },
     {
-      "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
+      "text": "[ASSUMPTION: world has no tribunal-filing registry or suspension field (verified \u2014 tribunal.py",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/holonic_container_doctrine_v1.md:38"
+        "systems/social_contest/sim/parliamentary_stay.py:17"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": "FA"
     },
     {
-      "text": "`engine_clock`'s `doc: null` / `[ASSUMPTION]` grade in `module_contracts.yaml` \u2014 that flip",
+      "text": "[ASSUMPTION: the armature signature invoke_stay(motion, invoker_id, world) cannot supply the",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/propagation_spec_v1.md:33"
+        "systems/social_contest/sim/parliamentary_stay.py:21"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": "FA"
     },
     {
-      "text": "O.2 engine_clock module contract (retires doc:null/[ASSUMPTION])",
+      "text": "(Upgrades the prior hedged [ASSUMPTION] note, which predated ED-FA-0004's ruling.)]",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "designs/architecture/propagation_spec_v1.md:69"
+        "systems/social_contest/sim/parliamentary_vote.py:24"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: GD-3 'extra-parliamentary' == Faction.parliamentary is False \u2014 basis: game_state",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/social_contest/sim/parliamentary_vote.py:25"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: Parliament dominant-genre, per-side genre, and lobbying offset are carried on the",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/social_contest/sim/parliamentary_vote.py:28"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "_TRACK_FLOOR, _TRACK_CEIL = 0, 10          # [ASSUMPTION: clamp per contest.py \u00a76 convention; \u00a710 states no explicit bound]",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/social_contest/sim/parliamentary_vote.py:73"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: actor is duck-typed \u2014 basis: World has no contestant character",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/social_contest/sim/contest_legacy_stub.py:23"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
+    },
+    {
+      "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/collective.py:12"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/operations.py:15"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: \u00a76.1 Ontological Status canon body is empty in the doc \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/threadcut.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: Rendering Threshold = Health / 2 per \u00a76.4 \u2014 but Health-vs-",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/threadcut.py:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: practitioner registry stored at module level rather than on",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/coherence.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: deck state stored at module level \u2014 basis: World has no",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/threadwork/sim/co_movement.py:11"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/fieldwork/sim/knots.py:27"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FI"
     },
     {
       "text": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
@@ -7465,102 +7717,6 @@
       "lane": "MB"
     },
     {
-      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/world/insurgency_pipeline.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/world/npe.py:10"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/collective.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/operations.py:15"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: \u00a76.1 Ontological Status canon body is empty in the doc \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/threadcut.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: Rendering Threshold = Health / 2 per \u00a76.4 \u2014 but Health-vs-",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/threadcut.py:17"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: practitioner registry stored at module level rather than on",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/coherence.py:13"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: deck state stored at module level \u2014 basis: World has no",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/thread/co_movement.py:11"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
       "text": "\"\"\"Duck-typed actor per operations.py's [ASSUMPTION] contract.\"\"\"",
       "category": "assumption",
       "priority": 3,
@@ -7573,78 +7729,6 @@
       "lane": null
     },
     {
-      "text": "[ASSUMPTION: world has no tribunal-filing registry or suspension field (verified \u2014 tribunal.py",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_stay.py:17"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: the armature signature invoke_stay(motion, invoker_id, world) cannot supply the",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_stay.py:21"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "(Upgrades the prior hedged [ASSUMPTION] note, which predated ED-FA-0004's ruling.)]",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_vote.py:24"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: GD-3 'extra-parliamentary' == Faction.parliamentary is False \u2014 basis: game_state",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_vote.py:25"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: Parliament dominant-genre, per-side genre, and lobbying offset are carried on the",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_vote.py:28"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "_TRACK_FLOOR, _TRACK_CEIL = 0, 10          # [ASSUMPTION: clamp per contest.py \u00a76 convention; \u00a710 states no explicit bound]",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/parliamentary_vote.py:73"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "[ASSUMPTION: Belief storage at module level \u2014 basis: World has no actor",
       "category": "assumption",
       "priority": 3,
@@ -7655,42 +7739,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/knots.py:27"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FI"
-    },
-    {
-      "text": "[ASSUMPTION: actor is duck-typed \u2014 basis: World has no contestant character",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/contest_legacy_stub.py:23"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
-    },
-    {
-      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/combat.py:24"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "PC"
     },
     {
       "text": "[ASSUMPTION: per-actor conviction state stored at module level \u2014 basis:",
@@ -7717,40 +7765,16 @@
       "lane": null
     },
     {
-      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
+      "text": "`[ASSUMPTION: P-232 applies to the \u03c3-transform \u2014 basis: P-232 is stated with no continuous-mode/transform carve-out and is restated in the Pool-Floor section; the carve-out, if intended, would live in modifier_system_spec.md, which does not exist. Flagged as the F1 fork rather than assumed away.]`",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "sim/territory/settlement.py:13"
+        "engine/sigma_leverage_engine_audit.md:164"
       ],
       "systems": [],
       "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/territory/infrastructure.py:15"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/territory/temperaments.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
+      "lane": "IN"
     },
     {
       "text": "[ASSUMPTION: dispatcher returns a procedure descriptor rather than executing",
@@ -7758,19 +7782,7 @@
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "sim/cross_scale/handoff_rules.py:14"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "IN"
-    },
-    {
-      "text": "`[ASSUMPTION: P-232 applies to the \u03c3-transform \u2014 basis: P-232 is stated with no continuous-mode/transform carve-out and is restated in the Pool-Floor section; the carve-out, if intended, would live in modifier_system_spec.md, which does not exist. Flagged as the F1 fork rather than assumed away.]`",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "engine/sigma_leverage_engine_audit.md:164"
+        "engine/cross_scale/handoff_rules.py:14"
       ],
       "systems": [],
       "count": 1,
@@ -11046,7 +11058,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:38"
+        "systems/npcs/character_canon_v30.md:38"
       ],
       "systems": [],
       "count": 1,
@@ -11058,7 +11070,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:43"
+        "systems/npcs/character_canon_v30.md:43"
       ],
       "systems": [],
       "count": 1,
@@ -11070,7 +11082,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:343"
+        "systems/npcs/character_canon_v30.md:343"
       ],
       "systems": [],
       "count": 1,
@@ -11082,7 +11094,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:364"
+        "systems/npcs/character_canon_v30.md:364"
       ],
       "systems": [],
       "count": 1,
@@ -11094,7 +11106,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:392"
+        "systems/npcs/character_canon_v30.md:392"
       ],
       "systems": [],
       "count": 1,
@@ -11106,7 +11118,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:428"
+        "systems/npcs/character_canon_v30.md:428"
       ],
       "systems": [],
       "count": 1,
@@ -11118,7 +11130,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "designs/npcs/character_canon_v30.md:429"
+        "systems/npcs/character_canon_v30.md:429"
       ],
       "systems": [],
       "count": 1,
@@ -11347,6 +11359,30 @@
       "label": "Documented gap",
       "locations": [
         "references/module_contracts.yaml:717"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "differentiating input. Flagged inline as `[GAP: faction\u2192unit construction lacks canonical spec]`;",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "sim/mc_v18_walkthrough.md:97"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| Mass-battle `faction\u2192unit` construction is Mil-only | **Inline only** \u2014 `massbattle.py` `[GAP]` + Phase 7 Steps 2\u20139; not in any ED ledger/handoff |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "sim/mc_v18_walkthrough.md:167"
       ],
       "systems": [],
       "count": 1,
@@ -11944,11 +11980,11 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:762"
+        "systems/_architecture/key_type_registry_v30.md:762"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "<!-- [STUB: emitting_systems=[fieldwork] may under-attribute \u2014 npc_behavior \u00a73 belief revision may also emit this; verify; tracked workplan #32 / ED-937] -->",
@@ -11956,11 +11992,11 @@
       "priority": 3,
       "label": "Stub / pointer only",
       "locations": [
-        "designs/architecture/key_type_registry_v30.md:924"
+        "systems/_architecture/key_type_registry_v30.md:924"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "| **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete \u00a710.2 \u2014 TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |",
@@ -12059,18 +12095,6 @@
       "lane": "PC"
     },
     {
-      "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
-      "category": "todo",
-      "priority": 3,
-      "label": "TODO / FIXME",
-      "locations": [
-        "params/factions/stats_1_7_scale.md:45"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "{item: \"legacy faction name (naming-rule)\", at: \"faction_politics_v30 \u00a7naming-note\", actual: \"appears only in an editorial note ABOUT the naming rule, not live usage \u2014 NOT a violation; but the note flags a 'Galbadian->Solmund' propagation TODO to grep designs/ for the adjective form\"}",
       "category": "todo",
       "priority": 3,
@@ -12117,6 +12141,18 @@
       "systems": [],
       "count": 1,
       "lane": "FA"
+    },
+    {
+      "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "engine/params/factions/stats_1_7_scale.md:45"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
     }
   ],
   "resolved": [
@@ -12151,27 +12187,27 @@
     {
       "id": "PP-687-001",
       "scope": "Doc 08 \u00a71 [REDACTED-LEGACY-NAME, canon=Key] (categorical aligned/neutral/contradicted projection)",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a72",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a72",
       "date": "2026-05-01",
       "replacement": "[REDACTED-LEGACY-NAME, canon=Key] superseded by Key.impact_vector \u2014 continuous signed projection onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype becomes "
     },
     {
       "id": "PP-687-002",
       "scope": "Doc 12 Political Dynamics \u2014 bespoke event records in procedures A-E",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a78.3",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a78.3",
       "date": "2026-05-01",
       "replacement": "Procedures A-E rewrite to consume Keys (Phase B Stage 1). Procedure A reads Memory Keys filtered by axis-relevance. Procedures B-D read scene_event and da_outco"
     },
     {
       "id": "PP-687-003",
       "scope": "NPC Memory record bespoke schema (per npc_behavior_v30)",
-      "superseded_by": "PP-687 / designs/architecture/key_substrate_v30.md \u00a74.3-4.4",
+      "superseded_by": "PP-687 / systems/_architecture/key_substrate_v30.md \u00a74.3-4.4",
       "date": "2026-05-01",
       "replacement": "NPC.memory becomes list of Key references with per-NPC salience field (no longer per-NPC bespoke event copies). Memory Query API \u00a74.4 indexes by axis-relevance "
     },
     {
       "id": "PP-686-001",
-      "scope": "params/bg/core.md \u00a7Ethical Framework Modifiers (philosophical-tradition vocabulary, \u00b13 Ob cap)",
+      "scope": "engine/params/bg/core.md \u00a7Ethical Framework Modifiers (philosophical-tradition vocabulary, \u00b13 Ob cap)",
       "superseded_by": "PP-686 v2 / designs/provincial/faction_behavior_v30.md \u00a73.7",
       "date": "2026-05-01",
       "replacement": "Ethical Framework Modifiers superseded by triadic decomposition:  mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier clamp"
@@ -12202,7 +12238,7 @@
       "scope": "combat-v32 \u2014 state-graph reframe PROPOSAL (PP-TBD; never ratified as a doc)",
       "superseded_by": "ED-900",
       "date": "2026-06-10",
-      "replacement": "DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). T"
+      "replacement": "DEPRECATED. The ratified personal-combat resolver is systems/combat/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). "
     },
     {
       "id": "proposals/combat_v31_proposal.md",
@@ -12233,11 +12269,11 @@
       "replacement": "FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str"
     },
     {
-      "id": "designs/scene/combat_v30.md",
+      "id": "systems/combat/combat_v30.md",
       "scope": "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) \u2014 NOTE: PARTIAL only",
       "superseded_by": "ED-900",
       "date": "2026-06-04",
-      "replacement": "PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes p"
+      "replacement": "PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes e"
     },
     {
       "id": "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)",
@@ -12290,7 +12326,7 @@
     },
     {
       "id": "Compact as a new \"5th ledger tag-family\" (compendium Part 44/45; grounded_event_card_deck_v1 C.3; governance_play_redesign_v1 \u00a71.3a/\u00a71.6; ED-SE-0018/0019 framing)",
-      "scope": "Multiple governance-cluster docs frame \"Compact\" (fixed-quota extraction, Encabezamiento) as a new 5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code (sim/territory/ledger.py:30) has Leverage as the 5th family and no Compact.\n",
+      "scope": "Multiple governance-cluster docs frame \"Compact\" (fixed-quota extraction, Encabezamiento) as a new 5th Ledger-of-Consequence tag-family alongside Precedent/Grudge/Debt/Reputation. The built code (systems/settlements/sim/ledger.py:30) has Leverage as the 5th family and no Compact.\n",
       "superseded_by": "ED-IN-0046 (governance_consolidation_v1 D3, RATIFIED 2026-07-13)",
       "date": "2026-07-13",
       "replacement": "Compact is NOT a new tag-family \u2014 model it as a recurring Debt subtype: Debt(key=\"compact:<quota>\", ttl=term, recurs=True). Leverage remains the built 5th famil"

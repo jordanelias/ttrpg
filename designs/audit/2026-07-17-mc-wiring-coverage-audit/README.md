@@ -1,6 +1,8 @@
 # Monte-Carlo Engine — Wiring & Build-State Coverage Audit
 
-## Status: ANALYSIS-ONLY — filed 2026-07-17 (ED-IN-0073). No canon ratified. Defects register (§6) is `needs_jordan`.
+## Status: ANALYSIS-ONLY — filed 2026-07-17 (ED-IN-0074). No canon ratified. Defects register (§6) is `needs_jordan`.
+
+> **Path note (post-merge).** This audit was captured against branch `claude/monte-carlo-wiring-question-thpxul` *before* the ED-IN-0071 P3/P4 restructure (`sim/` → `engine/`, `designs/{combat,social_contest,fieldwork,world,settlements,threadwork,npcs,articulation,ui,architecture}` → `systems/`) merged to `main`. The `file:line` citations below reflect the **pre-restructure** layout; findings, counts, and structure are unchanged — only paths moved. (Originally allocated `ED-IN-0073`; renumbered to `ED-IN-0074` at merge — `main` PR #167's character-decision audit claimed `0073` first.)
 
 **Scope.** A full accounting of what the Valoria simulation engine actually wires together at runtime, versus what the design corpus says *should* wire, versus what exists as code but is never reached. Built as an interactive, depth-toggleable map (`wiring_map.html`, this folder) and verified against the working tree by **six adversarial verification lanes + four coverage vectors** — not by reading alone. Every quantitative claim below was either executed (`run_campaign` over 7 seeds) or grep/AST-verified with a `file:line` citation in the lane reports.
 

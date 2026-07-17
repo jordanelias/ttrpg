@@ -30,7 +30,7 @@ from currency_consistency_check import _current_md_paths  # noqa: E402
 # reused rather than re-implemented so this module stays in sync with the one other
 # place that already knows how to extract citable paths from CURRENT.md (backticked,
 # keeps trailing-slash package dirs, so a directory-only canonical head like
-# designs/scene/combat_engine_v1/ is captured, not just *.md files).
+# systems/combat/combat_engine_v1/ is captured, not just *.md files).
 
 _ROW_RE = re.compile(r"^\|\s*\*\*(.+?)\*\*\s*\|(.*)\|\s*$")
 
@@ -120,7 +120,7 @@ class CanonResolver:
         """Confirm doc_relpath is cited in the resolved row AND that
         expected_substring appears verbatim in doc_relpath's current text. This is
         the mechanism an adapter uses to trust one specific canon-derived constant
-        (e.g. a table row in params/core.md) instead of hardcoding it: if the doc
+        (e.g. a table row in engine/params/core.md) instead of hardcoding it: if the doc
         moves, the citation is dropped from CURRENT.md, or the cited text changes,
         this raises CanonGapError rather than silently returning a stale value.
 

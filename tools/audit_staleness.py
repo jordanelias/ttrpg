@@ -49,21 +49,21 @@ FAMILIES = [
         # Repointed 2026-07-14 (ED-IN-0064) from the stale 2026-04-29 baseline to the fresh
         # gameplay-subsystem observatory run — the first real run since the pipeline dispatcher landed.
         "artifact_paths": ["designs/audit/2026-07-14-gameplay-subsystem-observatory/"],
-        "scope_prefixes": ("designs/", "canon/", "params/", "references/"),
+        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/"),
     },
     {
         "name": "decisions-digest",
         "artifact_paths": ["tools/observability/decisions.json"],
-        # per build_decisions.py's own header: "corpus sweep (designs/ canon/ params/
+        # per build_decisions.py's own header: "corpus sweep (designs/ canon/ engine/params/
         # references/ sim/) for explicit markers".
-        "scope_prefixes": ("designs/", "canon/", "params/", "references/", "sim/"),
+        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/", "sim/"),
     },
     {
         "name": "proposals-register",
         "artifact_paths": ["tools/observability/proposals.json"],
         # per build_proposals.py's sources: the editorial ledgers, audit registry,
         # proposals/ + Status-tagged design docs, and workplan §5.
-        "scope_prefixes": ("designs/", "canon/", "references/audit_registry.jsonl",
+        "scope_prefixes": ("designs/", "systems/", "canon/", "references/audit_registry.jsonl",
                            "workplans/"),
     },
     {
@@ -83,15 +83,15 @@ FAMILIES = [
             "tools/observability/lexicon.json",
         ],
         # union of build_graph.py's sources (references/module_contracts.yaml,
-        # designs/architecture/key_type_registry_v30.md, registers/mechanics_index.yaml) and
+        # systems/_architecture/key_type_registry_v30.md, registers/mechanics_index.yaml) and
         # build_lexicon.py's sources (references/*.yaml, references/glossary.md,
-        # registers/placeholder_names.yaml, designs/architecture/scale_transitions_v30.md).
-        "scope_prefixes": ("references/", "canon/", "designs/architecture/"),
+        # registers/placeholder_names.yaml, systems/_architecture/scale_transitions_v30.md).
+        "scope_prefixes": ("references/", "canon/", "systems/_architecture/"),
     },
     {
         "name": "npc-audit",
         "artifact_paths": ["designs/audit/2026-06-22-npc-comprehensive-audit.md"],
-        "scope_prefixes": ("designs/npcs/", "references/npc_registry.yaml"),
+        "scope_prefixes": ("systems/npcs/", "references/npc_registry.yaml"),
     },
     {
         "name": "mechanics-index",
@@ -102,7 +102,7 @@ FAMILIES = [
         # validates this file's *internal schema validity*. That is a different concern
         # from what this module tracks — whether the audit's *content* has fallen behind
         # corpus changes — and CI covers the former continuously, this covers the latter.
-        "scope_prefixes": ("designs/",),
+        "scope_prefixes": ("designs/", "systems/",),
     },
 ]
 

@@ -5,7 +5,7 @@ Canon source: designs/scene/conviction_track_v30.md §3 PP-412 (CI generation);
               params/core.md §MS Baseline Decay PP-255 (MS year-end decay);
               designs/provincial/ci_political_v30.md (CI political role);
               canon/02_canon_constraints.md §B GD-3 (insurgency pipeline);
-              designs/scene/investigation_systems_v30.md SYSTEM 1 (NPE).
+              systems/fieldwork/investigation_systems_v30.md SYSTEM 1 (NPE).
 Status: [CANONICAL — Phase 2 2026-05-17; Deferred Migration Batch 2026-05-20;
                     insurgency + NPE wire-up 2026-05-20]
 [PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: run_accounting() has NO Mandate-aggregation
@@ -18,9 +18,9 @@ and NPC ecology run through their pipeline modules.
 
 [2026-05-20 wire-up — closes two "module verified but not invoked" gaps from
  the post-Deferred-Migration roadmap (#2 + #3):
-   - sim.world.insurgency_pipeline.check_insurgency_triggers — GD-3 emergence
+   - systems.world.sim.insurgency_pipeline.check_insurgency_triggers — GD-3 emergence
      fires at accounting time after Accord aggregates.
-   - sim.world.npe.simulate_npc_actions — territory-level NPC stance drift
+   - systems.world.sim.npe.simulate_npc_actions — territory-level NPC stance drift
      runs at season end before victory check.
  Both modules were verified individually at T0-10 / T0-11 but never invoked
  from the season loop.]
@@ -29,12 +29,12 @@ from __future__ import annotations
 
 from sim.peninsular.ci_track import apply_seasonal_ci
 from sim.peninsular.ms_track import apply_ms_baseline_decay, SEASONS_PER_YEAR
-from sim.world.insurgency_pipeline import (
+from systems.world.sim.insurgency_pipeline import (
     check_insurgency_triggers,
     check_insurgency_promotion,
     get_insurgencies,
 )
-from sim.world.npe import simulate_npc_actions
+from systems.world.sim.npe import simulate_npc_actions
 
 
 def run_accounting(world):
@@ -49,7 +49,7 @@ def run_accounting(world):
 
     Track arithmetic routes through dedicated modules; no inline duplication.
     Seasonal resets (faction flags, arc boundaries) handled by
-    sim.autoload.season_manager.advance_season upstream.
+    engine.autoload.season_manager.advance_season upstream.
     """
     # PP-412 — every season; no caller-driven Assert/Suppress at accounting
     # (those are faction Domain Actions resolved by faction_action, not here)
@@ -78,5 +78,5 @@ def run_accounting(world):
     # NPE — territory-level NPC stance drift. Pairs with shared worldview and
     # adjacent stance positions roll Volatility to drift toward each other.
     # Side-effect: world.npcs state mutated. Actions list discarded here.
-    # [canonical: designs/scene/investigation_systems_v30.md SYSTEM 1 §Persistence]
+    # [canonical: systems/fieldwork/investigation_systems_v30.md SYSTEM 1 §Persistence]
     simulate_npc_actions(world)

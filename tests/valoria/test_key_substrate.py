@@ -14,7 +14,7 @@ import random
 
 import pytest
 
-from sim.substrate import (
+from engine.substrate import (
     EmittedAt,
     Key,
     KeyLog,
@@ -26,7 +26,7 @@ from sim.substrate import (
     Visibility,
 )
 
-REGISTRY_PATH = "designs/architecture/key_type_registry_v30.md"
+REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
 
 
 @pytest.fixture(scope="module")

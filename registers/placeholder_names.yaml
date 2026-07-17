@@ -42,7 +42,7 @@ placeholders:
       - registers/mechanics_index.yaml::mechanics.varfell_mandate_action
     contamination_audit_scope: |
       Audit Vaynard's identity claims across faction_canon, designs/audit/...,
-      params/factions.md, and prior session inserts. Strike contaminated flavor
+      engine/params/factions.md, and prior session inserts. Strike contaminated flavor
       (mead-hall / Tribune Network / Althing-anchor stitching). Vaynard's
       Reinhardt-coded military-conqueror identity per CR-STRIKE-2026-04-19 is
       the canonical anchor.

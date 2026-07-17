@@ -18,13 +18,13 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 
 class _Rng:
     """Engine rng factory — the contract is a stdlib random.Random since the ED-1085 numpy
-    de-leak (core resolves through sim.autoload.sigma_leverage; rng.gauss/betavariate/randrange).
+    de-leak (core resolves through engine.autoload.sigma_leverage; rng.gauss/betavariate/randrange).
     Wrapped so a future substrate change is a one-line re-point here, and bands re-baseline
     with a recorded reason per the module docstring."""
     default_rng = staticmethod(lambda seed: random.Random(seed))

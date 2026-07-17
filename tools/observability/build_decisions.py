@@ -8,7 +8,7 @@ corpus from many sessions — into ONE deduplicated, categorized, prioritized li
 so you can see (and clear) the decisions you actually still owe.
 
 Sources:
-  - corpus sweep (designs/ canon/ params/ references/ sim/) for explicit markers:
+  - corpus sweep (designs/ canon/ engine/params/ references/ sim/) for explicit markers:
         [OPEN — Jordan] · ruling pending · pending ratification · awaiting ratification
         [GAP …] · F1/F2 class · registry §10 candidate · [ASSUMPTION …]
   - references/module_contracts.yaml  (gap_notes, with affected systems)
@@ -54,7 +54,7 @@ def _redact_forbidden_names(text: str) -> str:
                       text, flags=re.IGNORECASE)
     return text
 
-SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godot"]
+SWEEP_DIRS = ["designs", "systems", "canon", "params", "references", "sim", "engine", "godot"]
 
 # ---------------------------------------------------------------------------------------
 # Path -> ED-<LANE> lane inference (audit-ecosystem Phase 4 — no ED allocated for this
@@ -70,11 +70,11 @@ SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine", "godo
 #   - workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
 #     enumerate lane WORK ITEMS, not a path->lane ownership table.
 #   - registers/handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
-#     (e.g. HANDOFF_PC.md -> designs/scene/combat_engine_v1/) — real signal, used below,
+#     (e.g. HANDOFF_PC.md -> systems/combat/combat_engine_v1/) — real signal, used below,
 #     but only names a handful of files per lane, not a full corpus partition.
 #
 # So: a minimal prefix table, hand-built from the above signals plus each subsystem's
-# obvious subject-matter grouping (sim/ subpackages, params/ files, designs/ subdirs).
+# obvious subject-matter grouping (sim/ subpackages, engine/params/ files, designs/ subdirs).
 # Matched by LONGEST-PREFIX-WINS (a file-specific entry beats its parent directory's).
 # Deliberately NOT exhaustive: designs/audit/**, references/** (module_contracts.yaml,
 # values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), proposals/**,
@@ -92,7 +92,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/provincial/military_layer_v30", "MB"),
     ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
     ("proposals/multiunit_envelopment_plan.md", "MB"),
-    ("params/mass_combat.md", "MB"),
+    ("engine/params/mass_combat.md", "MB"),
     ("sim/provincial/massbattle.py", "MB"),
     ("sim/provincial/units.py", "MB"),
     ("sim/provincial/tactic_cards.py", "MB"),
@@ -104,18 +104,18 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/audit/2026-06-23-mb-fidelity-critique/", "MB"),
 
     # --- PC: personal combat ---
-    ("designs/scene/combat_v30", "PC"),
-    ("designs/scene/combat_design_v1", "PC"),
-    ("designs/scene/combat_c4_draft_v0.md", "PC"),
-    ("designs/scene/combat_engine_v1/", "PC"),
-    ("designs/scene/scene_combat_v1/", "PC"),
+    ("systems/combat/combat_v30", "PC"),
+    ("systems/combat/combat_design_v1", "PC"),
+    ("systems/combat/combat_c4_draft_v0.md", "PC"),
+    ("systems/combat/combat_engine_v1/", "PC"),
+    ("systems/combat/scene_combat_v1/", "PC"),
     # derived_stats_v30 deliberately NOT mapped: it explicitly scopes itself
     # "across personal, unit, settlement, and faction scales" and CLAUDE.md
     # Section 5 flags the derived-stat schema as cross-system "IN FLUX" -- a
     # single-lane assignment would contradict this script's own
     # spans-multiple-lanes -> null policy (caught in adversarial review of
     # Phase 4 / ED-IN-0032's audit-ecosystem plan).
-    ("sim/personal/combat.py", "PC"),
+    ("systems/combat/sim/combat.py", "PC"),
     ("designs/audit/2026-06-09-personal-combat-comprehensive/", "PC"),
     ("designs/audit/2026-06-13-combat-bottomup/", "PC"),
     ("designs/audit/2026-06-16-combat-reconciliation/", "PC"),
@@ -134,12 +134,12 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("designs/audit/2026-05-31-percell-combat/", "PC"),
 
     # --- SC: social contest ---
-    ("designs/scene/social_contest_v30", "SC"),
-    ("designs/scene/social_contest_system_v2", "SC"),
-    ("sim/personal/contest/", "SC"),
-    ("sim/personal/contest_legacy_stub.py", "SC"),
-    ("params/contest.md", "SC"),
-    ("params/contest_extensions.md", "SC"),
+    ("systems/social_contest/social_contest_v30", "SC"),
+    ("systems/social_contest/social_contest_system_v2", "SC"),
+    ("systems/social_contest/sim/contest/", "SC"),
+    ("systems/social_contest/sim/contest_legacy_stub.py", "SC"),
+    ("engine/params/contest.md", "SC"),
+    ("engine/params/contest_extensions.md", "SC"),
     ("designs/audit/2026-06-01-contest-redesign/", "SC"),
     ("designs/audit/2026-06-03-contest-groundup/", "SC"),
     ("designs/audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
@@ -152,12 +152,12 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
 
     # --- FI: field investigation ---
     ("designs/scene/fieldwork", "FI"),
-    ("designs/scene/investigation_systems_v30", "FI"),
-    ("designs/personal/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
-    ("sim/personal/fieldwork.py", "FI"),
-    ("sim/personal/investigation.py", "FI"),
-    ("sim/personal/knots.py", "FI"),
-    ("params/fieldwork.md", "FI"),
+    ("systems/fieldwork/investigation_systems_v30", "FI"),
+    ("systems/fieldwork/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
+    ("systems/fieldwork/sim/fieldwork.py", "FI"),
+    ("systems/fieldwork/sim/investigation.py", "FI"),
+    ("systems/fieldwork/sim/knots.py", "FI"),
+    ("engine/params/fieldwork.md", "FI"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
 
     # --- FA: faction actions ---
@@ -188,28 +188,28 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("sim/provincial/mass_seizure.py", "FA"),
     ("sim/provincial/varfell_mandate_action.py", "FA"),
     ("sim/provincial/varfell_territorial_acquisition.py", "FA"),
-    ("sim/personal/parliamentary_stay.py", "FA"),
-    ("sim/personal/parliamentary_vote.py", "FA"),
-    ("params/bg/faction_actions.md", "FA"),
-    ("params/bg/parliament.md", "FA"),
-    ("params/bg/ministry.md", "FA"),
-    ("params/bg/ci_seizure.md", "FA"),
-    ("params/bg/royal_assassination.md", "FA"),
-    ("params/bg/institutions.md", "FA"),
-    ("params/bg/tensions_deck.md", "FA"),
-    ("params/factions.md", "FA"),
-    ("params/factions_personal.md", "FA"),
-    ("params/factions/", "FA"),
+    ("systems/social_contest/sim/parliamentary_stay.py", "FA"),
+    ("systems/social_contest/sim/parliamentary_vote.py", "FA"),
+    ("engine/params/bg/faction_actions.md", "FA"),
+    ("engine/params/bg/parliament.md", "FA"),
+    ("engine/params/bg/ministry.md", "FA"),
+    ("engine/params/bg/ci_seizure.md", "FA"),
+    ("engine/params/bg/royal_assassination.md", "FA"),
+    ("engine/params/bg/institutions.md", "FA"),
+    ("engine/params/bg/tensions_deck.md", "FA"),
+    ("engine/params/factions.md", "FA"),
+    ("engine/params/factions_personal.md", "FA"),
+    ("engine/params/factions/", "FA"),
 
     # --- WR: world ---
-    ("designs/world/", "WR"),
-    ("designs/threadwork/", "WR"),
+    ("systems/world/", "WR"),
+    ("systems/threadwork/", "WR"),
     ("designs/scene/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
-    ("params/threadwork.md", "WR"),
-    ("params/threadwork_superseded.md", "WR"),
-    ("params/southernmost.md", "WR"),
-    ("sim/world/", "WR"),
-    ("sim/thread/", "WR"),
+    ("engine/params/threadwork.md", "WR"),
+    ("engine/params/threadwork_superseded.md", "WR"),
+    ("engine/params/southernmost.md", "WR"),
+    ("systems/world/sim/", "WR"),
+    ("systems/threadwork/sim/", "WR"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 
     # --- GO: godot ---
@@ -217,18 +217,18 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("engine/engine_params/", "GO"),
 
     # --- SE: settlements ---
-    ("designs/territory/settlement_layer_v30", "SE"),
-    ("designs/territory/settlement_adjacency_v30", "SE"),
-    ("designs/territory/territory_temperaments_v30.md", "SE"),
-    ("designs/territory/governance_play_redesign_v1.md", "SE"),
-    ("designs/territory/march_layer_v30.md", "SE"),
-    ("designs/territory/valoria_political_hierarchy_v30.md", "SE"),
-    ("designs/territory/valoria_geography_v30.yaml", "SE"),
-    ("designs/territory/goldenfurt_slice/", "SE"),
+    ("systems/settlements/settlement_layer_v30", "SE"),
+    ("systems/settlements/settlement_adjacency_v30", "SE"),
+    ("systems/settlements/territory_temperaments_v30.md", "SE"),
+    ("systems/settlements/governance_play_redesign_v1.md", "SE"),
+    ("systems/settlements/march_layer_v30.md", "SE"),
+    ("systems/settlements/valoria_political_hierarchy_v30.md", "SE"),
+    ("systems/settlements/valoria_geography_v30.yaml", "SE"),
+    ("systems/settlements/goldenfurt_slice/", "SE"),
     ("designs/provincial/peninsular_strain_v30", "SE"),
-    ("sim/territory/", "SE"),
+    ("systems/settlements/sim/", "SE"),
     ("sim/peninsular/", "SE"),
-    ("params/bg/geography.md", "SE"),
+    ("engine/params/bg/geography.md", "SE"),
     ("designs/audit/2026-06-22-territory-settlement-audit/", "SE"),
 
     # --- IN: infrastructure / cross-cutting ---

@@ -20,7 +20,7 @@ onset tracks perceived relative power → Conquest keys off a mil-advantage sign
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/adjacency
+  - systems/settlements/sim/adjacency
   - sim/provincial/crown_initiative (Phase 5/9)
   - sim/provincial/excommunication (Phase 5/9)
   - sim/provincial/absolution (Phase 5/9)
@@ -30,8 +30,8 @@ Dependencies:
 from __future__ import annotations
 
 import math
-from sim.autoload.game_state import MULTS, ALL_PLAYABLE_15
-from sim.territory.adjacency import ADJACENCY
+from engine.autoload.game_state import MULTS, ALL_PLAYABLE_15
+from systems.settlements.sim.adjacency import ADJACENCY
 from sim.provincial import crown_initiative
 from sim.provincial import excommunication
 from sim.provincial import absolution
@@ -333,7 +333,7 @@ def _try_conquest(faction, world, rng) -> str:
 
     Citations:
       - designs/provincial/mass_battle_integration_v30.md §4.10 step 3
-      - designs/territory/settlement_layer_v30.md §5.1 (FA-6) / §5.3 (Entry Terms)
+      - systems/settlements/settlement_layer_v30.md §5.1 (FA-6) / §5.3 (Entry Terms)
       - canon/02_canon_constraints.md §B GD-1
     """
     targets = _conquest_targets(faction, world)

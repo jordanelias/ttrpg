@@ -104,7 +104,7 @@ modules:
 
   - module: npc_behavior
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
-    doc: designs/npcs/npc_behavior_v30.md
+    doc: systems/npcs/npc_behavior_v30.md
     scales: [personal, scene]
     resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     consumes:
@@ -178,7 +178,7 @@ modules:
       - "Accounting sequence (doc-12 §8, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate §4.1 single-update rule processes emissions inline"
     status: extracted
     sources:
-      - "designs/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
+      - "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
       - "political_dynamics_keys_migration_v30 full incl. §8 sequencing [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "key_substrate_v30 §8.2, §8.3 [READ: 2026-06-10]"
@@ -280,7 +280,7 @@ modules:
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
-    doc: designs/threadwork/threadwork_v30.md
+    doc: systems/threadwork/threadwork_v30.md
     scales: [personal, thread]
     resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
     consumes: []
@@ -306,7 +306,7 @@ modules:
 
   - module: fieldwork_knots
     registry_system: "fieldwork"   # Key Type Registry vocabulary
-    doc: designs/personal/knots_v30.md
+    doc: systems/fieldwork/knots_v30.md
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     consumes:
@@ -343,7 +343,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
-      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild = Stratum B (C-TW-12)"
+      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
     sources:
       - "knots_v30 full [READ: 2026-06-10]"
@@ -436,7 +436,7 @@ modules:
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
-    doc: designs/scene/social_contest_v30.md
+    doc: systems/social_contest/social_contest_v30.md
     scales: [scene]
     resolver: dice_pool
     consumes:
@@ -498,7 +498,7 @@ modules:
     accounting_phase: [DA_proposal]
     gap_notes:
       - "home doc unlocated [GAP] — DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
-      - "ED-FA-0006 (2026-07-08, pessimist-action audit REFINE — resolves the C-FA-12 triple-vocabulary defect): the da.* five-bucket set is an OUTCOME-TAG taxonomy (it classifies a resolved Domain Action's *consequence* for generic consumers like faction_state/npc_behavior), realized as a per-verb tag on the EXISTING Domain-Action catalogs -- params/bg/core.md Standard Action Ob Reference, faction_layer_v30 §5.4 Parliamentary, params/bg/faction_actions.md unique cards -- NOT a standalone module needing its own design doc. The doc:null closure therefore shrinks from 'author a new system' to 'add the per-verb da.* tag + a short crosswalk note' (a REFINE, not a new-doc GAP)."
+      - "ED-FA-0006 (2026-07-08, pessimist-action audit REFINE — resolves the C-FA-12 triple-vocabulary defect): the da.* five-bucket set is an OUTCOME-TAG taxonomy (it classifies a resolved Domain Action's *consequence* for generic consumers like faction_state/npc_behavior), realized as a per-verb tag on the EXISTING Domain-Action catalogs -- engine/params/bg/core.md Standard Action Ob Reference, faction_layer_v30 §5.4 Parliamentary, engine/params/bg/faction_actions.md unique cards -- NOT a standalone module needing its own design doc. The doc:null closure therefore shrinks from 'author a new system' to 'add the per-verb da.* tag + a short crosswalk note' (a REFINE, not a new-doc GAP)."
       - "ED-FA-0006 residual authoring task (per-verb bucket assignment — the audit deliberately did NOT fabricate this; intent gate UNDETERMINED, boundaries are Jordan's ruling): DIRECTIONAL first pass only -- Treaty/Diplomacy/Recognition-Challenge/Succession-Endorsement/War-Authorisation -> da.diplomatic_alliance; Spy/Investigate/Counter-Intelligence + covert unique cards -> da.covert_betrayal; Govern/Trade/Subsidy/Piety-Spread/Community-Organising/Martial-Governance -> da.public_governance or da.economic_intervention; Censure/Embargo/Outlawry/Excommunication/Active-Inquisition/Church-Seizure -> da.antinomian_action (coercive) or da.public_governance. Genuinely ambiguous boundaries flagged for Jordan, NOT ruled here: (a) economic_intervention vs public_governance for fiscal-administrative verbs; (b) antinomian_action vs public_governance for punitive-institutional verbs; (c) covert_betrayal scope for lawful intelligence (Spy/Investigate) vs treachery proper. Direct-effect military verbs (Muster/March/Fortify/Blockade-Naval) are not consequence-classified and take no da.* tag."
     status: extracted
     sources:
@@ -551,7 +551,7 @@ modules:
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
-    doc: designs/territory/settlement_layer_v30.md
+    doc: systems/settlements/settlement_layer_v30.md
     scales: [settlement, territory]
     resolver: deterministic_accounting
     consumes:
@@ -715,7 +715,7 @@ modules:
     accounting_phase: [season_tick, accounting_boundary]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
-      - "2026-07-02: designs/architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+      - "2026-07-02: systems/_architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -778,7 +778,7 @@ modules:
 
   - module: articulation_layer
     registry_system: "articulation"   # Key Type Registry vocabulary
-    doc: designs/articulation/articulation_layer_v30.md
+    doc: systems/articulation/articulation_layer_v30.md
     scales: [personal, scene, provincial]
     resolver: deterministic_accounting   # significance-function accounting + embedded armature read [verification RU-4: the armature dot-product is the SUBSTRATE interpretation primitive (key_substrate §2.5/§4.1), NOT a system resolver] (substrate §8.2, §8.7)
     consumes:
@@ -811,7 +811,7 @@ modules:
 
   - module: personal_combat
     registry_system: "personal_combat"   # Key Type Registry vocabulary
-    doc: designs/scene/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
+    doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
     godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py (tools/export_engine_params.py, schema v1); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
@@ -855,19 +855,19 @@ modules:
       - {id: "combat.armour_defeat", resolver: d_sigma, status: FOLDED}   # a term inside combat.strike for the slice; promote to a module in the full port
     gap_notes:
       - "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED — combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass."
-      - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, sim/personal/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
+      - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, systems/combat/sim/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
       - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
       - "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3)."
       - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple)."
     status: extracted
     sources:
-      - "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]"
+      - "systems/combat/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]"
       - "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]"
       - "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
 
   - module: campaign_architecture
-    doc: designs/architecture/campaign_architecture_v30.md
+    doc: systems/_architecture/campaign_architecture_v30.md
     scales: [provincial]
     gap_notes:
       - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"
