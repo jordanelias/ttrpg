@@ -13,7 +13,7 @@ Callers (wrapper.py) own the `opening_created` flag: a real prior opening this b
 beaten-aside/slip-inside displace, or a deep-commit reopen moment) — never re-derived here."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 import math
-import systems as S
+import combat_systems as S
 
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
 def _short_reach_exempt(c, cfg):

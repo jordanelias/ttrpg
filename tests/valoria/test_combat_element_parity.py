@@ -22,7 +22,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 sys.path.insert(0, os.path.join(ENGINE, '..', '..', '..', 'tests', 'sim', 'v32-combat-balance'))
 
@@ -35,7 +35,7 @@ TIERS = ('none', 'light', 'medium', 'heavy')
 def _mods():
     pytest.importorskip("numpy")
     import combatant as C
-    import systems as S
+    import combat_systems as S
     import weapon_physics as WP
     from config import CFG
     return C, S, WP, CFG

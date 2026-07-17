@@ -8,13 +8,13 @@ multiplier), longsword is the 1.0 reference, and the multiplier is floored so it
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 import pytest  # noqa: E402
 pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
 
-import systems as S  # noqa: E402
+import combat_systems as S  # noqa: E402
 from combatant import WEAPONS, Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 

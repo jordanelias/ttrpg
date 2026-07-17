@@ -20,7 +20,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 sys.path.insert(0, os.path.join(ENGINE, 'tests', 'sim', 'v32-combat-balance'))
 
@@ -29,7 +29,7 @@ def _mods():
     pytest.importorskip("numpy")
     import combatant as C
     import core
-    import systems as S
+    import combat_systems as S
     import weapon_physics as WP
     from config import CFG
     return C, core, S, WP, CFG
@@ -75,7 +75,7 @@ def test_no_weapon_name_literal_in_resolution():
     C, core, S, WP, CFG = _mods()
     names = {n for n in C.WEAPONS if 'base' not in C.WEAPONS[n]}  # weapon names (exclude auto-switch forms)
     offenders = {}
-    for mod in ('core.py', 'systems.py', 'wrapper.py', 'contact.py'):   # I7b: contact.py joins the scanned resolution modules
+    for mod in ('core.py', 'combat_systems.py', 'wrapper.py', 'contact.py'):   # I7b: contact.py joins the scanned resolution modules
         lits = _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
         hit = sorted({s for s in lits if s in names})
         if hit:
@@ -685,7 +685,7 @@ def test_every_circumstance_field_has_a_live_reader():
     Source-scans for either direct attribute access (`.field`) or the getattr(...,'field',...) fallback
     idiom core.strike/systems use for these optional fields."""
     consumers_src = "".join(open(os.path.join(ENGINE, mod), encoding='utf-8').read()
-                             for mod in ('core.py', 'systems.py', 'contact.py'))
+                             for mod in ('core.py', 'combat_systems.py', 'contact.py'))
     orphans = []
     for f in CIRCUMSTANCE_FIELDS:
         if not re.search(rf"\.{f}\b|'{f}'|\"{f}\"", consumers_src):

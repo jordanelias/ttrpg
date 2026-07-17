@@ -428,8 +428,8 @@ These canon-level questions are surfaced by the v22 audit but require Jordan rat
 
 - `designs/provincial/mass_battle_v30.md` — full design (Part A TTRPG / Part B BG / Part C resolved editorial / Part D World Bridge / Part E Battle Consequences). This integration spec implements Part A + selected Part B mechanics in sim/.
 - `params/mass_combat.md` — all PP-NNN and ED-NNN params referenced by canon
-- `designs/scene/combat_v30.md` §9 (Mass Combat TTRPG-scale)
-- `designs/scene/combat_v30.md` §11 (Faction Unit Rosters)
+- `systems/combat/combat_v30.md` §9 (Mass Combat TTRPG-scale)
+- `systems/combat/combat_v30.md` §11 (Faction Unit Rosters)
 
 ### v22 sim artifacts (consumed; not canon)
 

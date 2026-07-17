@@ -12,7 +12,7 @@ Purpose
 Single-source the σ-leverage modifier layer for BOTH combat and social-contest, retiring:
   • the test-dir dependency (tests/sim/v32-combat-balance/m1_dice_sigma_core.py)
   • the numpy dependency that file carried
-  • the combat sys.path.insert hack (designs/scene/combat_engine_v1/core.py:3)
+  • the combat sys.path.insert hack (systems/combat/combat_engine_v1/core.py:3)
   • the distillation report's "two σ-kernels" debt
 
 Separation of concerns (D0-2):

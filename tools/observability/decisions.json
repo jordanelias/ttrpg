@@ -1,6 +1,6 @@
 {
   "meta": {
-    "files_scanned": 1369,
+    "files_scanned": 1371,
     "total_open": 984,
     "by_category": {
       "ratification": 47,
@@ -7117,6 +7117,18 @@
       "lane": "SE"
     },
     {
+      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/combat/sim/combat.py:24"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "PC"
+    },
+    {
       "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
       "category": "assumption",
       "priority": 3,
@@ -7727,18 +7739,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/combat.py:24"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "PC"
     },
     {
       "text": "[ASSUMPTION: per-actor conviction state stored at module level \u2014 basis:",
@@ -12238,7 +12238,7 @@
       "scope": "combat-v32 \u2014 state-graph reframe PROPOSAL (PP-TBD; never ratified as a doc)",
       "superseded_by": "ED-900",
       "date": "2026-06-10",
-      "replacement": "DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). T"
+      "replacement": "DEPRECATED. The ratified personal-combat resolver is systems/combat/combat_engine_v1/ (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). "
     },
     {
       "id": "proposals/combat_v31_proposal.md",
@@ -12269,7 +12269,7 @@
       "replacement": "FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str"
     },
     {
-      "id": "designs/scene/combat_v30.md",
+      "id": "systems/combat/combat_v30.md",
       "scope": "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) \u2014 NOTE: PARTIAL only",
       "superseded_by": "ED-900",
       "date": "2026-06-04",

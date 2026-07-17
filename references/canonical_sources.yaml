@@ -79,7 +79,7 @@ sources:
 
   mass_battle_integration_v18:
     design_doc: designs/provincial/mass_battle_integration_v30.md
-    canonical_sha__designs__provincial__mass_battle_integration_v30_md: "2664b9e09392a85f063819045582d604d3edaf1b"
+    canonical_sha__designs__provincial__mass_battle_integration_v30_md: "9e9f973ab251094c269fa274d14e55add8fa4746"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2n"
 
@@ -100,14 +100,14 @@ systems:
     bg_params: engine/params/bg/core.md
     canonical_sha__params__bg__core_md: "4f98d87a741445c44441dfc45278a48abff6306f"
   combat:
-    design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "db827fa23baf0379f161481b28880703c6f964e7"
+    design_doc: systems/combat/combat_v30.md
+    canonical_sha__systems__combat__combat_v30_md: "db827fa23baf0379f161481b28880703c6f964e7"
     # engine/params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
     # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
-    # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
+    # systems/combat/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
     # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/
     # tradition. config.py = live Class-C parameter source. SHA-track via freshness_gate.py --update.
-    resolution_engine: "designs/scene/combat_engine_v1/"
+    resolution_engine: "systems/combat/combat_engine_v1/"
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: systems/threadwork/threadwork_v30.md
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "2324425e413407533cb8ece7fa4a085ef15315dd"
+    canonical_sha__references__module_contracts_yaml: "c892487ab27cbc00509c6a18e4653b163e98639a"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

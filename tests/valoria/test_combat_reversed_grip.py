@@ -12,7 +12,7 @@ against UNARMOURED targets — backwards from the historical grounding)."""
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 import pytest  # noqa: E402
@@ -53,7 +53,7 @@ def test_thrust_factor_is_wired():
     fact kept for the downstream armour-defeat math) — the previously-dead thrust_factor is live. Checked
     directly against the formula (not a hand-picked weapon pair, since gap and thrust are close enough across
     the roster that no weapon reliably demonstrates the direction of the swap on its own)."""
-    import systems as S
+    import combat_systems as S
     for n in ('longsword', 'arming', 'dagger', 'jian'):
         w = WEAPONS[n]
         assert w['head'] == 'cut_thrust', f"test premise: {n} must be cut_thrust-headed"

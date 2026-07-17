@@ -7,7 +7,7 @@ classes were NOT part of JD-1's ruling and are intentionally not asserted here (
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 import pytest  # noqa: E402

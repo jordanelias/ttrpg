@@ -9,7 +9,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-716 — Wound mechanic correction (2026-05-09)
 **Source:** Jordan canonical clarification.
-**Files patched:** designs/scene/derived_stats_v30.md (§4.1 authoritative), designs/scene/combat_v30.md (L253-378 wound spec + thread interface), systems/threadwork/threadwork_v30.md (Leap/Weaving/Pulling/Mending/FR pool penalty), params/combat.md (Health formula + Thread interface), params/mass_combat.md (CF Zoom-In).
+**Files patched:** designs/scene/derived_stats_v30.md (§4.1 authoritative), systems/combat/combat_v30.md (L253-378 wound spec + thread interface), systems/threadwork/threadwork_v30.md (Leap/Weaving/Pulling/Mending/FR pool penalty), params/combat.md (Health formula + Thread interface), params/mass_combat.md (CF Zoom-In).
 **Propagation:** All references to wound-induced +1 Ob (combat→thread, mass-Command, BG-CF) flipped to −1D Pool. All Vitality = End × 10 references reverted to Health = (End+6)×(MW+1). MW = floor(End/2)+1 restored. derived_stats_v30 §4.1 made authoritative source; other files reference §4.1.
 **ED resolved:** ED-789. **ED reverted:** ED-694.
 **Open propagation:** tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md (Module 1 R1) is SUPERSEDED — banner added; needs redo against PP-716 canon. canonical_sources.yaml SHAs marked PENDING_PP_716 pending freshness_gate refresh.
@@ -35,7 +35,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-720 R7 stress-FF threshold spec (2026-05-10)
 **Class C (mechanical — parameter/resolution-path extension); applied this commit.**
-- `designs/scene/combat_v30.md §5`: new subsection "Stress-FF (ranged into melee under stress conditions)" inserted before §6 ARMOUR.
+- `systems/combat/combat_v30.md §5`: new subsection "Stress-FF (ranged into melee under stress conditions)" inserted before §6 ARMOUR.
 - Stress conditions: Wounds ≥1 OR Composure ≤3 OR environmental degradation.
 - Resolution: secondary FF roll TN+1 (single-stress) / TN+2 (multi-stress); damage = floor(STR/2) + weapon_mod_vs_armour.
 - No new Ob channel; uses canonical Combat Pool + TN modifier.
@@ -44,7 +44,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-721 R9 routine-encounter B-mode presentation flag (2026-05-10)
 **Class C (UX/presentation parameter); applied this commit.**
-- `designs/scene/combat_v30.md §8`: new subsection "Architecture-B Presentation Flag" inserted before §9 MASS COMBAT.
+- `systems/combat/combat_v30.md §8`: new subsection "Architecture-B Presentation Flag" inserted before §9 MASS COMBAT.
 - B-mode flag triggers: (1) fixed-geometry zone, (2) scripted entry positions, (3) single fixed objective, (4) stakes routine (no C-duel triggers).
 - UI effect only: discrete position-cells, narrowed Stunt vocabulary, 8-actor cap. Mechanics unchanged.
 - Tabletop fallback: B-mode is videogame-specific; tabletop ignores.

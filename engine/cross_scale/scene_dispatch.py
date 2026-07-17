@@ -139,7 +139,7 @@ def _resolve_slot(slot, world, rng):
             if not parts or len(parts) < 2:
                 out["reason"] = "context-derivation gap: no personal combat actors in aggregate world-state"
                 return out
-            import sim.personal.combat as combat
+            import systems.combat.sim.combat as combat
             rr = combat.resolve_combat_round(parts, scene=ctx.get("scene"), rng=rng)
             out["resolved"] = True
             out["result"] = getattr(rr, "__dict__", str(rr))

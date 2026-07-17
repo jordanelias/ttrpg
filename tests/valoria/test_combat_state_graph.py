@@ -1,6 +1,6 @@
 """CI-tier static integrity for the scene-combat engagement state graph (WS-1).
 
-Fast, deterministic checks over designs/scene/combat_engine_v1/state_graph.py — the declarative graph that is
+Fast, deterministic checks over systems/combat/combat_engine_v1/state_graph.py — the declarative graph that is
 the source of truth for "the state graph flows correctly" (requirement 1). The heavier dynamic coverage sweep
 + dead-branch scan lives in state_graph.py's __main__ (it runs fights); here we keep CI fast: the static
 graph properties plus one small live smoke that the trace actually visits the core states.
@@ -10,7 +10,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
 
