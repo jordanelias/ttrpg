@@ -10,7 +10,7 @@ into quantitative game form.
 
 - **Date:** 2026-07-17
 - **Scope:** world · factions · NPCs · emergent narrative · precedents & influences · the texture→mechanism bridge
-- **Method:** a twelve-agent parallel deep-read of the entire narrative surface — canon foundations
+- **Method:** a twelve-agent parallel deep-read of the narrative surface — canon foundations
   (`canon/`), the Solmund mythology (`systems/world/solmund_*`), geography & calamity (`systems/world/`,
   `systems/settlements/`), the faction corpus (`designs/provincial/`, `designs/factions/`), the NPC corpus
   (`systems/npcs/`, `references/npc_registry.yaml`), the arcs (`arcs/`), the historical-precedent program
@@ -46,7 +46,7 @@ Three qualities make the corpus unusual for a game setting:
 3. **The corpus is already reaching for the quantitative bridge this compendium serves.** Its NPC engine
    turns "what argument would change this person's mind" into a playable contest with permanent memory;
    its factions' ethical philosophies were *deliberately demoted from mechanics to pure narrative tags
-   "for prose-writer continuity"*; its research program extracts **234 explicit "=> Valoria design hook"
+   "for prose-writer continuity"*; its research program extracts **~230 explicit "=> Valoria design hook"
    lines** from real governance history. The bridge is half-built. Part VI maps the rest.
 
 ---
@@ -67,7 +67,8 @@ must not mistake vivid provisional material for settled canon. The load-bearing 
   `faction_politics_v30.md` vs. the PP-686 Mission/Cascade/Public-Expectation/Legitimacy model in
   `faction_behavior_v30.md`, which explicitly retires the labels. `CURRENT.md` does not flag the tension.
 - **Varfell's "Path B" victory is struck by GD-1** (peninsula-only victory), though its Warden Recognition
-  relationship track survives live.
+  relationship track survives in the cross-cutting clock registry (`clock_registry_v30.md`) — and is itself
+  flagged "DRIFTED" (a naming collision) in a later coherence audit.
 - **The settlement/territory scale is mid-refactor** (the 2026-07-13 "B12" ruling introduces a new
   Territory→Province tier not yet fully executed).
 - **A metaphysics-vs-"no-GM" seam is unresolved** in the source itself (see Part I §1). Several scenarios
@@ -76,6 +77,12 @@ must not mistake vivid provisional material for settled canon. The load-bearing 
 Where a section leans on provisional or superseded material, it says so. Resolve any number crossing into
 the engine via `CURRENT.md` → the prose head → the cited `PP-`/`ED-` per CLAUDE.md §5, never from this
 compendium directly.
+
+**On quotation (added after an adversarial fidelity pass):** passages in quotation marks are drawn from the
+cited source, and the large majority verify verbatim — but the review found a minority had been lightly
+compressed, stitched across sentences, or reworded while kept inside quote marks. Every such instance the
+pass surfaced has been corrected; still, treat any single-sentence quotation here as *close to* the source
+and re-verify exact wording against the head before citing it onward as verbatim canon language.
 
 ---
 ---
@@ -123,7 +130,7 @@ The load-bearing principles, in plain terms:
   Reality Strain* (90–100), where a single being's continued existence strains the substrate the way the
   whole Einhir network once did.
 
-The finest writing in the entire repo lives here, in §4.3's reframing of trauma as **constitutive
+Some of the finest writing in the repo lives here, in §4.3's reframing of trauma as **constitutive
 finitude** rather than damage. Confrontation with what exceeds the rendering produces a signature
 *"structurally indistinguishable from clinical trauma"* — and the text insists this is not failure:
 
@@ -139,7 +146,8 @@ Two further pieces of the spine matter for design. First, the **operation taxono
 **Restorative** (substrate-aligned, *zero inherent Coherence cost — structurally, not as a balance
 choice*), **Manipulative** (cost ∝ scale × deviation), or **Destructive** (catastrophic). Second, the
 **scale-invariance** claim: a single Coherence-0 practitioner straining the substrate and the
-civilization-scale Einhir Catastrophe are *"the same mechanism at different scale and duration."* One
+civilization-scale Einhir Catastrophe are, in the foundations' words, *"identical in mechanism… reduced in
+scale"* — *"The physics is the same."* One
 formula spans the individual quest and the world's history — and any sufficiently powerful, sufficiently
 broken NPC is a walking proto-Calamity, a built-in emergent-quest generator the canon implies rather than
 invents.
@@ -222,7 +230,7 @@ trackable act of heresy — a qualitative fact with an obvious mechanical hook.
 
 The standout invented artifact-form is the **Seam Text** — a passage of ordinary orthodox scripture where
 the witness-testimony breaks through the theological overlay, legible only above Thread Sensitivity 30.
-The worked example is the best prose in the corpus:
+The worked example is one of the strongest passages of prose in the corpus:
 
 > *"And Solmund came to the village where the well had gone dry… the water returned. Not as rain returns —
 > from above, falling. The water returned from below. It rose as if the ground remembered holding water and
@@ -328,7 +336,7 @@ surviving zone-types are each a distinct mode of failure, described with real ec
   zone-type."*
 - **Snapped zones** — *"Threads wound to maximum potential. Objects crumble on contact."*
 
-The calamity's signature — and the single most distinctive idea in this slice of the corpus — is **the
+The calamity's signature — and one of the most distinctive ideas in this slice of the corpus — is **the
 Forgetting**: the Southernmost's danger *cannot be rendered* by those without Thread Sensitivity, because
 *"the threads encoding the nature and scale of the danger are too close to the unintelligible ground to
 hold stable in consciousness — so they are simply not retained. This is not a psychological defence or a
@@ -374,7 +382,7 @@ The history (`canon/03_canonical_timeline.md`) is a tight, cited chronology, and
 - **Game era** (200–245 AG): the first Almqvist dies in ~218 AG in a hunting accident *"widely suspected
   assassination, perpetrator deliberately undefined"* (a live succession-legitimacy mystery, editorial item
   E-01). His son **Almud** ascends unproven, spends his reign *"proving the presumption warranted."*
-  **Game start is 245 AG:** MS 72 ("Strained"), Church Influence 22, Institutional (invasion) Pressure 20
+  **Game start is 245 AG:** MS 72 ("Strained"), Church Influence 22, Institutional Pressure (IP) 20
   ("Dormant").
 
 ## 8. Assessment — the world
@@ -420,7 +428,8 @@ victory until it is governed into consent: *"The cost is in the holding, not the
 Two rulings shape the whole contest. First, **there is exactly one way to win** (GD-1): **Peninsular
 Sovereignty** — hold all fifteen territories at Accord ≥ 2, Turmoil ≤ 6, for two consecutive Accountings.
 Every faction-specific "victory" that used to exist is explicitly demoted to *"a description of each
-faction's asymmetric approach to territorial acquisition… NOT alternate endpoints."* The single win
+faction's asymmetric approach to territorial acquisition"* — and, in the victory doc's separate phrasing,
+"not an alternate endpoint." The single win
 condition means **the only way to win is to govern well enough that the whole peninsula consents.**
 Second, **equal win probability across factions is a stated axiom** (BALANCE-001): no faction's identity —
 theocracy, monarchy, mercantile duchy, insurgency — is intrinsically favored by the ruleset. Asymmetry is
@@ -581,7 +590,7 @@ its most consequential internal fault: **two competing "why factions act" models
   Relativism, Restoration = Equity/Rawls, Ministry = Administrative Proceduralism — that sets Domain-Action
   Ob modifiers (aligned −1 Ob, contradictory +1 to +2). This is a near-complete survey of Western
   normative ethics mapped onto political factions.
-- **Model 2 (`faction_behavior_v30.md`, PP-686):** explicitly *"eliminates the philosophical-tradition
+- **Model 2 (`faction_behavior_v30.md`, PP-686):** explicitly *"eliminates philosophical-tradition
   vocabulary"* and replaces it with four interacting components — **Mission** (an authored telos with
   aligned/contradicted action categories), **Cascade** (leadership Convictions propagating down a
   supervisor graph, `effective = α·personal + (1−α)·supervisor`, with a per-institution *culture* scalar:
@@ -591,7 +600,10 @@ its most consequential internal fault: **two competing "why factions act" models
   and **Legitimacy + Popular Support** (now per-settlement 0–7, aggregated into the headline **Mandate**).
 
 Model 2 is the more sophisticated system; Model 1 carries all the named-NPC detail; neither has been
-rewritten to match the other, and `CURRENT.md` does not flag the tension. **Notably, the surviving
+rewritten to match the other, and `CURRENT.md` does not flag the tension. (The cleanest proof of the split:
+the *same* ethical-framework table is struck and marked SUPERSEDED — PP-686/ED-784 — in
+`engine/params/factions/stats_1_7_scale.md`, yet stands unmarked in `faction_politics_v30.md`'s live ladder
+prose.) **Notably, the surviving
 disposition of Model 1 is the single cleanest instance of this compendium's whole thesis in action:** the
 ethical-framework labels were formally retired as mechanics but *deliberately kept alive "as descriptive
 disposition tags for prose-writer continuity"* — a mechanic demoted to pure texture, on purpose,
@@ -599,8 +611,9 @@ decoupled from math. That is the qualitative↔quantitative boundary being manag
 
 Two further layers give factions personality without over-quantizing it. The **Nine Political Axes**
 (Sovereignty, Knowledge, Legitimacy, Cultural identity, Economic control, Military authority, Information,
-External threat, Ontological) are *deliberately not tracked numerically* — *"qualitative tools for scene
-generation"* with named poles and a primary opposition each (Axis 1: Crown authority vs. Church authority;
+External threat, Ontological) are *deliberately not tracked numerically* — the corpus reserves them for "war
+justification (casus belli), Domain Echo content framing, faction-foil structural analysis," with named poles
+and a primary opposition each (Axis 1: Crown authority vs. Church authority;
 the Ontological axis: whether the world is what it appears to be). And each faction carries a
 **Substrate-Posture** — its stance toward the Thread cosmology: the Church actively suppresses; Hafenmark is
 an *"unmediated sovereigntist" (Protestant position)*; the Löwenritter are a *"substrate-agnostic protector"
@@ -668,8 +681,10 @@ optimal window**, late claim is a gamble — is genuine dramaturgical R&D.
 
 **Varfell's "Path B" (Southernmost Dominion)** is the cautionary case: a richly-developed conquest-and-lore
 victory path, now **struck outright by GD-1** (peninsula-only victory). It survives only as
-supersession-trail evidence — but its underlying **Warden Recognition (0–4)** relationship track *lives on*
-inside the current faction ladders. A platform author needs to hold both truths: the *victory frame is dead*
+supersession-trail evidence — but its underlying **Warden Recognition (0–4)** relationship track *survives* in
+the cross-cutting clock registry (`clock_registry_v30.md`), not the faction ladders, and is itself flagged
+"DRIFTED" (a naming collision) in a later coherence audit. A platform author needs to hold both truths: the
+*victory frame is dead*
 but the *relationship texture is live*.
 
 ## 9. Assessment — the factions
@@ -737,7 +752,7 @@ cannot make anyone who matters understand what she protects, because the Forgett
 maintaining a building whose occupants don't know the building exists."* Her flaw *is* her virtue at its
 limit: *"Edeyja's 'flaw' is that she is correct and the world is dying anyway."* She is the fixed point the
 others arc relative to: *"The question is never 'will Edeyja change?' It is 'will the world change enough
-to make her job possible?'"* The GM-voice summary is perfect: *"She is not hostile. She is occupied. These
+to make her job possible, or will she fail despite being the best?'"* The GM-voice summary is perfect: *"She is not hostile. She is occupied. These
 are different things."*
 
 **The Ruler Diamond.** Four incompatible visions of the post-war settlement, worked as a full opposition
@@ -746,8 +761,8 @@ lattice:
 - **King Almud Almqvist** (Crown, TS 0). Second-generation deed-monarch, 27 years on the throne, competent
   patient restraint (anchor: Manuel I Komnenos, *"playing six boards at once"*). His wound is a private,
   unresolved doubt about the caste system *"he administers but does not feel,"* and his blind spot is
-  precisely engineered: *"his uncertainty is itself a decision… Almud does not see this — because to him,
-  uncertainty is the absence of a decision, not the presence of one."* His administrative virtue *is* the
+  precisely engineered — the foil doc notes his uncertainty "is itself a decision," that *"Lenneth sees this.
+  Almud does not,"* because to him uncertainty is "the absence of a decision, not the presence of one." His administrative virtue *is* the
   caste system's chief protection.
 - **Queen Lenneth Almqvist** (Crown, reformist; anchor Catherine the Great). Archivist who would make the
   dynasty *"the family that reunited the Valnese people."* Her frustration with Almud is exact: *"not that
@@ -789,7 +804,7 @@ that he IS the thing he investigates."*
 **The Löwenritter.** **Grandmaster Ehrenwall**, given one of the corpus's sharpest reframes: *"She is not a
 potential traitor contemplating treason against a divinely ordained king. She is a military professional
 calculating whether the current office-holder is still performing the deeds that justify the office."* Her
-Coup Counter is *"the deed-logic's literal enforcement mechanism,"* and she would transfer loyalty to
+Coup Counter is *"the deed-logic's enforcement mechanism,"* and she would transfer loyalty to
 Baralta without experiencing it as betrayal. **Halvar Brandt** (anchor Aetius, "the Last Roman") held a
 mountain pass for three days twelve years ago and lost his command — *"militarily invaluable, politically
 illiterate,"* his arc resolving on a question the setting may never answer (*was he right about
@@ -844,7 +859,8 @@ earns its keep because the subjective readings are load-bearing: Almud reads Vay
 input,"* which is *exactly the reduction Vaynard's own analysis names as the insult* — *"The revolutionary
 whose people were excluded from the founding settlement is, to the settlement's custodian, a management
 challenge. The reduction itself is the insult."* The single sharpest pairing is Baralta↔Vaynard, framed as
-categorical imperative vs. consequentialism *"at the level of ethical grammar, not just policy"* — yet even
+categorical imperative vs. consequentialism — the caste axis, per the foil doc, *"makes the opposition
+existential, not just philosophical"* — yet even
 here an unstable operational coalition is conceivable if the Crown weakens enough: *"The instability IS the
 drama."*
 
@@ -861,7 +877,7 @@ unit is the **Stance Triangle** — three genuinely different questions about a 
 
 - **Conviction** — what they *want* to do (a weighted vector over **13 canonical Convictions**: Faith,
   Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue,
-  Honor — each a period-Latin ethical dimension; 1–3 primaries at 0.6–0.8 plus a distributed cultural
+  Honor — each a period (mostly Latin) ethical dimension; 1–3 primaries at 0.6–0.8 plus a distributed cultural
   background template, projected through a fixed 13×4 matrix onto a `hierarchical/sacred/instrumental/
   traditional` armature).
 - **Ethical Framework** — what they are *rewarded* for doing (faction-inherited; an Ob modifier).
@@ -870,7 +886,7 @@ unit is the **Stance Triangle** — three genuinely different questions about a 
 Orthogonal to Conviction is a **Self-Other orientation** scalar `[−1, +1]` — *who benefits*, not *what is
 valued* — that **drifts from accumulated outcomes** (κ ≈ 0.03/season). This is the cleanest single piece of
 the bridge: it turns *"this character is becoming corrupt"* from a writer's decision into an emergent read
-of play, using *"Cesare Borgia vs. a public-spirited republican magistrate"* (same Conviction, opposite
+of play, using the corpus's own case of *"Cesare Borgia and a public-spirited republican magistrate"* (same Conviction, opposite
 Self-Other) as its illustrating case — the Macbeth arc as an equation.
 
 An NPC *decides* via a literal four-step procedure (Institutional Filter → Conviction Filter → a Scar-count
@@ -957,7 +973,9 @@ value conflicts — the quantitative substrate the whole behavior model depends 
 its most dramatic sub-mechanic (Defection Cascade) is admittedly unvalidated. (5) **A citable
 cross-document contradiction on a load-bearing number**: Almud's Thread Sensitivity is stated as **0**
 throughout the analyses and foils but as **28** in `character_canon_v30.md`'s Knot-strain table — worth
-resolving before any system reads it. (6) The intended single canonical character sheet
+resolving before any system reads it. Haelgrund carries two of the same kind: his historical anchor is
+**Bellarmine** in the roster/analyses but **"Savonarola"** in `npc_registry.yaml`, and his Thread Sensitivity
+reads **12** in the analyses versus **15** (`# per Jordan`) in the registry. (6) The intended single canonical character sheet
 (`character_canon_v30.md` Part B) *does not yet exist* — the texture is still scattered exactly the way the
 consolidation doc complains about.
 
@@ -1096,9 +1114,10 @@ generates its own resistance — the model for the Occupation Era).
 
 **Movements → government.** The Restoration Movement is grounded in **Bolshevik 1917**, the **Indian
 independence movement** (constructive-program legitimacy), **Solidarity**, the **ANC**, the **CCP** (Yan'an
-base-area governance), and — named as *"the closest real-world parallel to RM"* — the **Zapatistas**
-(anti-hierarchical, alternative-not-capture governance). Its two founding pathways are explicitly *"1917
-(concentrated) vs. 1848 (distributed)."*
+base-area governance), and — named as the parallel the doc draws "most directly" — the **Zapatistas**
+(anti-hierarchical, alternative-not-capture governance). Its two founding pathways are modeled — in the
+mechanics doc `victory_v30.md`, not this research file — on Bolshevik 1917 (concentrated) vs. the 1848
+revolutions (distributed).
 
 **Cultural revival / post-colonial governance.** Grounded in the **Irish (Gaelic League)**, **Hebrew/Zionist**
 (the most successful revival→state transition), post-colonial **India** (inheriting the colonial
@@ -1109,17 +1128,20 @@ reconstruct the political shell of Einhir governance but not its Thread foundati
 **Governance at depth (`research/governance/`, the methodological gold standard).** An 8-civilization ×
 3-theme corpus (Ottoman, Rome, Carolingian, HRE, Renaissance Italy, Venice, Han/Three-Kingdoms, Shogunate
 Japan) built by a Sonnet-researcher / Opus-verifier pipeline with the verifier's factual corrections
-preserved inline. It yields **234 explicit "=> Valoria design hook" lines** and three reusable primitives:
+preserved inline. It yields **~230 explicit "=> Valoria design hook" lines** (an exact count runs 228–230
+depending on whether the manifest's prose mentions are included; `CURRENT.md` hedges it "~228") and three
+reusable primitives:
 **standing = a claim on a debasable currency, never a bare scalar** (rank as a display aggregate over
 office/honor/access/kinship axes); the **collision-of-stresses (two-signal) event primitive** (a bare
 grievance fizzles; only a material threshold *plus* an independent interpretive trigger, arriving together,
 detonates — flagship case the **Ōnin War**); and **mode-as-mask-vs-substance** (a polity can display one
 governance mode while running another — Cao Cao's "Han" edicts, the Medici informal principate). Its most
-telling discipline: a standing design-lead ruling that **"Mandate of Heaven is history only, never a Valoria
-mechanic,"** enforced across all 234 hooks and verifier-checked civilization by civilization — the corpus
+telling discipline: a standing design-lead ruling that **"Mandate of Heaven appears as history only, never a
+Valoria mechanic,"** enforced across all ~230 hooks and verifier-checked civilization by civilization — the corpus
 repeatedly had the on-the-nose fantasy answer available (a cosmic-mandate legitimacy meter) and *deliberately
 declined it*, doing the harder work of finding ideologically-inert equivalents. **Max Weber's** tripartite
-legitimacy typology and **Polybius's** *anacyclosis* are named as organizing frameworks.
+legitimacy typology (named in the warfare-precedent research, `precedents_warfare.md`) and **Polybius's**
+*anacyclosis* (in the governance corpus) are named as organizing frameworks.
 
 **Warfare (`precedents_warfare.md`, `research/pre_firearms_formations/`).** The mass-battle layer is
 validated against named battles and historians — Cannae, Trasimene, Hastings, Leuctra, Leuthen; du Picq,
@@ -1181,7 +1203,8 @@ The corpus names some of its game precedents outright — **Skyrim** (rank-ladde
 Kings** and **KOEI Romance of the Three Kingdoms** (court/officer/succession simulation, cited by name),
 **Mount & Blade** (player-presence-affects-morale), **Terra Mystica / Gaia Project**, **Root** (the RM as
 the asymmetric "Vagabond"), **Here I Stand / Virgin Queen** (*"Valoria's closest precedent in structure"*),
-and **Twilight Imperium** (the "hollow victory" model). Beyond the named set, the structural resemblances are
+and **Twilight Imperium** (cited for narrative completeness for every player — "Hollow Victory" is Valoria's
+own mechanic, not TI4's). Beyond the named set, the structural resemblances are
 strong and worth recording as inferred lineage:
 
 - **Blades in the Dark** — the entire Vector/Clock apparatus (segmented pressures filled by triggering
@@ -1275,7 +1298,8 @@ The corpus has learned — sometimes painfully — a set of rules for *not* flat
 spreadsheet. These are its own lessons, extracted; treat them as the platform's constitution.
 
 1. **Keep some things qualitative on purpose, and say so.** The **Nine Political Axes** are *deliberately
-   un-tracked* — "qualitative tools for scene generation." The **ethical-framework labels** were
+   un-tracked* — the corpus reserves them for "war justification, Domain Echo content framing, faction-foil
+   structural analysis." The **ethical-framework labels** were
    *deliberately retained as prose-only tags* after their mechanical role was retired. Not every quality
    should become a number; the skill is choosing which stays prose, and *documenting the choice* so a later
    pass does not "helpfully" quantify it.
@@ -1332,10 +1356,10 @@ mechanism. None is a ratified proposal — they are a menu for the design pass.
   as witness-account above it. This is a cheap, high-texture way to make Thread Sensitivity *feel* like a
   different way of reading the world rather than a bigger number.
 - **The wound as a renewable hazard (Move C, licensed by canon).** The scale-invariance claim ("one
-  Coherence-0 NPC and the whole Catastrophe are the same mechanism at different scale") means the platform
+  Coherence-0 NPC and the whole Catastrophe run the same mechanism at different scale and duration) means the platform
   can generate **proto-Calamity quests** procedurally: any sufficiently powerful, sufficiently broken NPC is
   a walking Gap-in-waiting; containing them before they tear a new Locked Zone is a quest template the canon
-  *implies*. This is the single most generative unbuilt hook in the world layer.
+  *implies*. This is among the most generative unbuilt hooks in the world layer.
 
 ### Factions & politics
 
@@ -1419,7 +1443,7 @@ leverage (how much texture it unlocks) over effort:
    Triangle as the canonical NPC model — they are the corpus's strongest bridges and the template Part VI's
    method is drawn from.
 4. **Build the two-signal crisis-event grammar** from the governance research — it is fully cited, gives the
-   strategic layer a principled detonation rule, and is the readiest of the 234 hooks.
+   strategic layer a principled detonation rule, and is the readiest of the ~230 hooks.
 5. **Make Thread Sensitivity a way of *reading the world*** — ship the Seam Text as comprehension-gated
    content and the Forgetting as a credibility economy — so the setting's central perceptual gift *feels*
    qualitatively different rather than being a larger number.
