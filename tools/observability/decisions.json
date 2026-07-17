@@ -1,6 +1,6 @@
 {
   "meta": {
-    "files_scanned": 1365,
+    "files_scanned": 1367,
     "total_open": 984,
     "by_category": {
       "ratification": 47,
@@ -7309,6 +7309,18 @@
       "lane": "WR"
     },
     {
+      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/fieldwork/sim/knots.py:27"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FI"
+    },
+    {
       "text": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
       "category": "assumption",
       "priority": 3,
@@ -7703,18 +7715,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/personal/knots.py:27"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FI"
     },
     {
       "text": "[ASSUMPTION: actor is duck-typed \u2014 basis: World has no contestant character",

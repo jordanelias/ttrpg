@@ -152,11 +152,11 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
 
     # --- FI: field investigation ---
     ("designs/scene/fieldwork", "FI"),
-    ("designs/scene/investigation_systems_v30", "FI"),
-    ("designs/personal/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
-    ("sim/personal/fieldwork.py", "FI"),
-    ("sim/personal/investigation.py", "FI"),
-    ("sim/personal/knots.py", "FI"),
+    ("systems/fieldwork/investigation_systems_v30", "FI"),
+    ("systems/fieldwork/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
+    ("systems/fieldwork/sim/fieldwork.py", "FI"),
+    ("systems/fieldwork/sim/investigation.py", "FI"),
+    ("systems/fieldwork/sim/knots.py", "FI"),
     ("engine/params/fieldwork.md", "FI"),
     ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
 

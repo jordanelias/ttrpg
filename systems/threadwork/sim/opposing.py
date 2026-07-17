@@ -235,7 +235,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     notes = []
     if a_knot_id or b_knot_id:
         try:
-            from sim.personal.knots import sustain_knot
+            from systems.fieldwork.sim.knots import sustain_knot
             # FR + winner Dissolved: loser takes +1 Wound (handled by caller)
             knot_strain_delta = KNOT_STRAIN_FR_LOSER if is_fr else KNOT_STRAIN_STANDARD_LOSER
             if a_knot_id:

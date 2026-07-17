@@ -349,7 +349,7 @@ def restore_world(snapshot: dict) -> World:
         w.beliefs = {k: [Belief.from_dict(b) for b in v]
                       for k, v in snapshot['beliefs'].items()}
     if 'knots' in snapshot:
-        from sim.personal.knots import Knot
+        from systems.fieldwork.sim.knots import Knot
         w.knots = {k: Knot.from_dict(v) for k, v in snapshot['knots'].items()}
     w.knot_id_counter = snapshot.get('knot_id_counter', 0)
     if 'territory_infrastructure' in snapshot:

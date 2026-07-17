@@ -236,15 +236,15 @@ entries:
       +5; reinforce −1/season at Disposition ≥ +3; −5 = Tempered). Break/rupture: Disposition −3, 4
       Composure. Resolves ED-841 (TIER-DRIFT-001), ED-842 (COMPOSURE-DRIFT-001 → 4), ED-912, ED-914.
     files_to_recheck:
-      - designs/scene/fieldwork_v30.md §5.1/§5.6
+      - systems/fieldwork/fieldwork_v30.md §5.1/§5.6
       - engine/params/fieldwork.md
       - engine/params/threadwork.md §Knot Mechanics
       - engine/params/core.md (Bonds)
-      - designs/personal/knots_v30.md
+      - systems/fieldwork/knots_v30.md
       - systems/_architecture/complete_systems_reference.md Part 8
       - systems/articulation/articulation_layer_v30.md §2.3   # path+section corrected (ED-IN-0025, 2026-07-07): dir moved designs/scene -> designs/articulation; Bonds register is §2.3, not §2.4 (C-VERIFY-22)
-      - designs/scene/investigation_systems_v30.md (Ontological Ledger)
-      - designs/scene/fieldwork_socializing.md
+      - systems/fieldwork/investigation_systems_v30.md (Ontological Ledger)
+      - systems/fieldwork/fieldwork_socializing.md
 
   # ── CI-75 ceiling supersession (added 2026-07-07, ED-IN-0025 / CI-75 propagation, CI75-10) ──
   - superseded_id: "PP-421 (CI ceiling 75-freeze)"
@@ -319,7 +319,7 @@ entries:
       - designs/scene/derived_stats_v30.md   # DONE
       - designs/scene/combat_v30.md   # DONE
       - designs/scene/combat_design_v1.md   # DONE (one residual −1D line found + fixed, §7 Wounds)
-      - designs/scene/fieldwork_v30.md   # DONE
+      - systems/fieldwork/fieldwork_v30.md   # DONE
       - systems/threadwork/threadwork_v30.md   # DONE
       - engine/params/core.md   # already current (ED-PC-0005 pass)
       - engine/params/fieldwork.md   # DONE

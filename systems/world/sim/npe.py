@@ -1,7 +1,7 @@
 """
 systems/world/sim/npe.py — NPC Population Engine
 
-Canon source: designs/scene/investigation_systems_v30.md SYSTEM 1 (NPE)
+Canon source: systems/fieldwork/investigation_systems_v30.md SYSTEM 1 (NPE)
 
 Implements §Territory Social Ecology weights + §NPC Genome 5-axis structure
 + §Two-Tier Generation (archetype seed + deviation roll) + §Persistence

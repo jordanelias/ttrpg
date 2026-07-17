@@ -147,23 +147,23 @@ registry:
   fieldwork:
     system: fieldwork
     mode: TTRPG
-    canonical_v30: designs/scene/fieldwork_v30.md
-    skeleton: designs/scene/fieldwork_v30.md
-    infill: designs/scene/fieldwork_v30_infill.md
+    canonical_v30: systems/fieldwork/fieldwork_v30.md
+    skeleton: systems/fieldwork/fieldwork_v30.md
+    infill: systems/fieldwork/fieldwork_v30_infill.md
     atomized: complete
     predecessor: designs/fieldwork/fieldwork_design_v1.md
     params: null
     mode_variants:
-      hybrid: designs/scene/fieldwork_hybrid_v30.md
-      bg: designs/scene/fieldwork_bg_v30.md
+      hybrid: systems/fieldwork/fieldwork_hybrid_v30.md
+      bg: systems/fieldwork/fieldwork_bg_v30.md
     notes: "Sub-docs (exploration, investigation, socializing, exposure) are infill candidates."
 
   fieldwork_hybrid:
     system: fieldwork
     mode: HYBRID
-    canonical_v30: designs/scene/fieldwork_hybrid_v30.md
-    skeleton: designs/scene/fieldwork_hybrid_v30.md
-    infill: designs/scene/fieldwork_hybrid_v30_infill.md
+    canonical_v30: systems/fieldwork/fieldwork_hybrid_v30.md
+    skeleton: systems/fieldwork/fieldwork_hybrid_v30.md
+    infill: systems/fieldwork/fieldwork_hybrid_v30_infill.md
     atomized: complete
     predecessor: designs/fieldwork/fieldwork_hybrid.md
     params: null
@@ -171,9 +171,9 @@ registry:
   fieldwork_bg:
     system: fieldwork
     mode: BG
-    canonical_v30: designs/scene/fieldwork_bg_v30.md
-    skeleton: designs/scene/fieldwork_bg_v30.md
-    infill: designs/scene/fieldwork_bg_v30_infill.md
+    canonical_v30: systems/fieldwork/fieldwork_bg_v30.md
+    skeleton: systems/fieldwork/fieldwork_bg_v30.md
+    infill: systems/fieldwork/fieldwork_bg_v30_infill.md
     atomized: complete
     predecessor: designs/fieldwork/fieldwork_bg.md
     params: null

@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-17T14:13:41+00:00",
-    "commit_sha": "ebe897c"
+    "timestamp_utc": "2026-07-17T15:15:18+00:00",
+    "commit_sha": "6e79eb6"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 158 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 187 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "6e79eb66ed",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 5: settlements territory/ + sim/ -> systems/settlements/ (ED-IN-0071) (#168)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "ebe897ce14",
         "date": "2026-07-17",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "[design] Reconcile PR#127 (harness-verification) with PR#128 (VSG generation methodology) (#129)",
         "scope": "design"
-      },
-      {
-        "sha": "814edd5794",
-        "date": "2026-07-12",
-        "author": "jordanelias",
-        "subject": "PR#119/#125 provisional-mechanic verification via sim_harness (Goldenfurt-grounded) (#127)",
-        "scope": null
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 158 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 187 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,23 +720,23 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "363 in-scope file(s) changed since last refresh",
+        "detail": "391 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 37cd3ab (2026-07-17)",
-        "stale": true,
-        "detail": "4 in-scope file(s) changed since last refresh",
+        "ref": "base 6e79eb6 (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base 37cd3ab (2026-07-17)",
-        "stale": true,
-        "detail": "3 in-scope file(s) changed since last refresh",
+        "ref": "base 6e79eb6 (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -744,15 +744,15 @@
         "category": "audit-family",
         "ref": "base 1cd93d3 (2026-07-15)",
         "stale": true,
-        "detail": "63 in-scope file(s) changed since last refresh",
+        "detail": "77 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 37cd3ab (2026-07-17)",
-        "stale": true,
-        "detail": "1 in-scope file(s) changed since last refresh",
+        "ref": "base 6e79eb6 (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -766,9 +766,9 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 37cd3ab (2026-07-17)",
-        "stale": true,
-        "detail": "3 in-scope file(s) changed since last refresh",
+        "ref": "base 6e79eb6 (2026-07-17)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -788,7 +788,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 9,
+    "stale_count": 5,
     "total": 10,
     "handoffs": [
       {
@@ -2010,8 +2010,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"npcs\"]\n    D6[\"personal\"]\n    D7[\"provincial\"]\n    D8[\"scene\"]\n    D9[\"settlements\"]\n    D10[\"threadwork\"]\n    D11[\"ui\"]\n    D12[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 13,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"factions\"]\n    D5[\"fieldwork\"]\n    D6[\"npcs\"]\n    D7[\"personal\"]\n    D8[\"provincial\"]\n    D9[\"scene\"]\n    D10[\"settlements\"]\n    D11[\"threadwork\"]\n    D12[\"ui\"]\n    D13[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 14,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
@@ -2332,42 +2332,42 @@
       {
         "name": "Field investigation",
         "availability": "yes",
-        "source_head": "designs/scene/fieldwork_v30.md",
+        "source_head": "systems/fieldwork/fieldwork_v30.md",
         "actions": [
           {
             "name": "Examine",
             "desc": "Study physical evidence, documents, objects",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Interview",
             "desc": "Question a witness — now routed via the Dialogue Lattice (ED-FI-0004)",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Research",
             "desc": "Consult archives, oral histories, records",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Surveil",
             "desc": "Observe a location/person/faction over time",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Thread-Read",
             "desc": "Perceive Thread configurations via a perceptive Leap",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Reconstruct",
             "desc": "Synthesise gathered evidence into a picture",
-            "source": "designs/scene/fieldwork_v30.md §4.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §4.2"
           },
           {
             "name": "Social (non-contest)",
             "desc": "Read · Converse · Connect · Impress · Rumour · Negotiate · Gift/Bribe",
-            "source": "designs/scene/fieldwork_v30.md §5.2"
+            "source": "systems/fieldwork/fieldwork_v30.md §5.2"
           }
         ],
         "caveat": null

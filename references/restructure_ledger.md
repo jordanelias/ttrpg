@@ -102,20 +102,20 @@
 | `designs/conviction_track/conviction_track_v30.md` | `designs/scene/conviction_track_v30.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30_infill.md` | `designs/scene/conviction_track_v30_infill.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30_skeleton.md` | `designs/scene/conviction_track_v30_skeleton.md` | PENDING |
-| `designs/fieldwork/fieldwork_bg_v30.md` | `designs/scene/fieldwork_bg_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_bg_v30_infill.md` | `designs/scene/fieldwork_bg_v30_infill.md` | PENDING |
-| `designs/fieldwork/fieldwork_editorial.md` | `designs/scene/fieldwork_editorial.md` | PENDING |
-| `designs/fieldwork/fieldwork_exploration.md` | `designs/scene/fieldwork_exploration.md` | PENDING |
-| `designs/fieldwork/fieldwork_exposure.md` | `designs/scene/fieldwork_exposure.md` | PENDING |
-| `designs/fieldwork/fieldwork_godot.md` | `designs/scene/fieldwork_godot.md` | PENDING |
-| `designs/fieldwork/fieldwork_hybrid_v30.md` | `designs/scene/fieldwork_hybrid_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_hybrid_v30_infill.md` | `designs/scene/fieldwork_hybrid_v30_infill.md` | PENDING |
-| `designs/fieldwork/fieldwork_investigation.md` | `designs/scene/fieldwork_investigation.md` | PENDING |
-| `designs/fieldwork/fieldwork_rationale.md` | `designs/scene/fieldwork_rationale.md` | PENDING |
-| `designs/fieldwork/fieldwork_socializing.md` | `designs/scene/fieldwork_socializing.md` | PENDING |
-| `designs/fieldwork/fieldwork_summary.md` | `designs/scene/fieldwork_summary.md` | PENDING |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/scene/fieldwork_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_v30_infill.md` | `designs/scene/fieldwork_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_bg_v30.md` | `systems/fieldwork/fieldwork_bg_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_bg_v30_infill.md` | `systems/fieldwork/fieldwork_bg_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_editorial.md` | `systems/fieldwork/fieldwork_editorial.md` | PENDING |
+| `designs/fieldwork/fieldwork_exploration.md` | `systems/fieldwork/fieldwork_exploration.md` | PENDING |
+| `designs/fieldwork/fieldwork_exposure.md` | `systems/fieldwork/fieldwork_exposure.md` | PENDING |
+| `designs/fieldwork/fieldwork_godot.md` | `systems/fieldwork/fieldwork_godot.md` | PENDING |
+| `designs/fieldwork/fieldwork_hybrid_v30.md` | `systems/fieldwork/fieldwork_hybrid_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_hybrid_v30_infill.md` | `systems/fieldwork/fieldwork_hybrid_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_investigation.md` | `systems/fieldwork/fieldwork_investigation.md` | PENDING |
+| `designs/fieldwork/fieldwork_rationale.md` | `systems/fieldwork/fieldwork_rationale.md` | PENDING |
+| `designs/fieldwork/fieldwork_socializing.md` | `systems/fieldwork/fieldwork_socializing.md` | PENDING |
+| `designs/fieldwork/fieldwork_summary.md` | `systems/fieldwork/fieldwork_summary.md` | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `systems/fieldwork/fieldwork_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_v30_infill.md` | `systems/fieldwork/fieldwork_v30_infill.md` | PENDING |
 | `designs/fieldwork/fieldwork_v30_skeleton.md` | `designs/scene/fieldwork_v30_skeleton.md` | PENDING |
 | `designs/gm_ref_cp14/README.md` | `designs/arcs/README.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/arcs_16_19_faction_domain_echoes.md` | `designs/arcs/arcs_16_19.md` | PENDING |
@@ -166,7 +166,7 @@
 | `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | N/A (2026-07-08, ED-IN-0016 — not executed: `faction_politics_v30.md` was promoted as a single monolithic doc; no index/skeleton split was ever authored for it, confirmed no such file exists) |
 | `designs/systems/integration_proposal_2026-04-15.md` | `systems/_architecture/integration_proposal_v30.md` | PENDING |
 | `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `systems/_architecture/integration_proposal_v30_skeleton.md` | PENDING |
-| `designs/systems/investigation_systems_proposal_2026-04-15.md` | `designs/scene/investigation_systems_v30.md` | PENDING |
+| `designs/systems/investigation_systems_proposal_2026-04-15.md` | `systems/fieldwork/investigation_systems_v30.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15_skeleton.md` | `designs/scene/investigation_systems_v30_skeleton.md` | PENDING |
 | `designs/systems/military_layer_v30.md` | `designs/provincial/military_layer_v30.md` | PENDING |
 | `designs/systems/military_layer_v30_skeleton.md` | `designs/provincial/military_layer_v30_skeleton.md` | PENDING |
@@ -809,3 +809,33 @@
 |---|---|
 | `designs/territory/` | `systems/settlements/` |
 | `sim/territory/` | `systems/settlements/sim/` |
+
+
+## 2026-07-17 — fieldwork cross-subdir extraction -> systems/fieldwork/ (P4 slice 6, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/fieldwork_bg_v30.md` | `systems/fieldwork/fieldwork_bg_v30.md` |
+| `designs/scene/fieldwork_bg_v30_infill.md` | `systems/fieldwork/fieldwork_bg_v30_infill.md` |
+| `designs/scene/fieldwork_editorial.md` | `systems/fieldwork/fieldwork_editorial.md` |
+| `designs/scene/fieldwork_exploration.md` | `systems/fieldwork/fieldwork_exploration.md` |
+| `designs/scene/fieldwork_exposure.md` | `systems/fieldwork/fieldwork_exposure.md` |
+| `designs/scene/fieldwork_godot.md` | `systems/fieldwork/fieldwork_godot.md` |
+| `designs/scene/fieldwork_hybrid_v30.md` | `systems/fieldwork/fieldwork_hybrid_v30.md` |
+| `designs/scene/fieldwork_hybrid_v30_infill.md` | `systems/fieldwork/fieldwork_hybrid_v30_infill.md` |
+| `designs/scene/fieldwork_investigation.md` | `systems/fieldwork/fieldwork_investigation.md` |
+| `designs/scene/fieldwork_rationale.md` | `systems/fieldwork/fieldwork_rationale.md` |
+| `designs/scene/fieldwork_socializing.md` | `systems/fieldwork/fieldwork_socializing.md` |
+| `designs/scene/fieldwork_summary.md` | `systems/fieldwork/fieldwork_summary.md` |
+| `designs/scene/fieldwork_v30.md` | `systems/fieldwork/fieldwork_v30.md` |
+| `designs/scene/fieldwork_v30_index.md` | `systems/fieldwork/fieldwork_v30_index.md` |
+| `designs/scene/fieldwork_v30_infill.md` | `systems/fieldwork/fieldwork_v30_infill.md` |
+| `designs/scene/investigation_systems_v30.md` | `systems/fieldwork/investigation_systems_v30.md` |
+| `designs/scene/investigation_systems_v30_index.md` | `systems/fieldwork/investigation_systems_v30_index.md` |
+| `designs/personal/knots_v30.md` | `systems/fieldwork/knots_v30.md` |
+| `sim/personal/fieldwork.py` | `systems/fieldwork/sim/fieldwork.py` |
+| `sim/personal/investigation.py` | `systems/fieldwork/sim/investigation.py` |
+| `sim/personal/knots.py` | `systems/fieldwork/sim/knots.py` |
+| `sim/personal/fieldwork` | `systems/fieldwork/sim/fieldwork` |
+| `sim/personal/investigation` | `systems/fieldwork/sim/investigation` |
+| `sim/personal/knots` | `systems/fieldwork/sim/knots` |

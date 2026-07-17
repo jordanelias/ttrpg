@@ -6,7 +6,7 @@ WHY THIS EXISTS
 ED-912 (ruled 2026-06-28) reframed the Knot tier model onto a bidirectional -5..+5 gauge and
 struck the pre-ED-912 one-way 0->capacity accumulator (TIER_CAPACITY {Distant:4, Close:7}, PP-632).
 The doc side propagated 2026-07-07 (knots_v30 §6 + fieldwork_v30 §5.6b); the audit (C-TW-12) found
-sim/personal/knots.py still ran the struck model with ZERO test coverage. This pins the rebuild:
+systems/fieldwork/sim/knots.py still ran the struck model with ZERO test coverage. This pins the rebuild:
 
   - Distant strain range -2..+5 (start 0); Close range -5..+5 (start -2)
   - rupture/break at +5 (the wear-direction ceiling, both tiers)
@@ -24,7 +24,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-import sim.personal.knots as knots  # noqa: E402
+import systems.fieldwork.sim.knots as knots  # noqa: E402
 
 
 class _FormActor:

@@ -266,10 +266,10 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/fieldwork_v30.md"
+      - "systems/fieldwork/fieldwork_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-5"
     params: "engine/params/fieldwork.md"
-    sim_module: sim/personal/fieldwork.py
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
     dependencies:
       mechanics: [die_rule_d10, investigation_npe, disposition_track, evidence_track]
@@ -278,8 +278,8 @@ mechanics:
   investigation_npe:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/investigation_systems_v30.md"]
-    sim_module: sim/personal/investigation.py
+    canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
+    sim_module: systems/fieldwork/sim/investigation.py
     test_status: not_implemented
     dependencies:
       mechanics: [fieldwork, npe]
@@ -288,16 +288,16 @@ mechanics:
   disposition_track:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/fieldwork_v30.md#section-5"]
-    sim_module: sim/personal/fieldwork.py
+    canon_sources: ["systems/fieldwork/fieldwork_v30.md#section-5"]
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
     notes: "Cap by Bonds attribute (same formula as Knot Max per derived_stats §10.1)."
 
   evidence_track:
     scale: personal
     faction: universal
-    canon_sources: ["designs/scene/fieldwork_v30.md"]
-    sim_module: sim/personal/fieldwork.py
+    canon_sources: ["systems/fieldwork/fieldwork_v30.md"]
+    sim_module: systems/fieldwork/sim/fieldwork.py
     test_status: not_implemented
 
   conviction_scar:
@@ -320,7 +320,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources:
-      - "designs/scene/fieldwork_v30.md#section-5-5"
+      - "systems/fieldwork/fieldwork_v30.md#section-5-5"
       - "designs/scene/social_contest_v30.md#section-9-5"
       - "systems/articulation/articulation_layer_v30.md#section-3-5"
     sim_module: sim/personal/beliefs.py
@@ -334,14 +334,14 @@ mechanics:
       - "systems/_architecture/complete_systems_reference.md#part-8"
       - "systems/threadwork/threadwork_v30.md#section-2-6"
       - "systems/threadwork/threadwork_v30.md#section-3-5"
-      - "designs/scene/fieldwork_v30.md#section-2-6"
-      - "designs/scene/fieldwork_v30.md#section-5-6"
+      - "systems/fieldwork/fieldwork_v30.md#section-2-6"
+      - "systems/fieldwork/fieldwork_v30.md#section-5-6"
       - "designs/scene/social_contest_v30.md#section-9-4"
       - "systems/articulation/articulation_layer_v30.md#section-2-4"
       - "systems/articulation/articulation_layer_v30.md#section-6"
       - "designs/scene/derived_stats_v30.md#section-10-1"
-    unified_canon_target: "designs/personal/knots_v30.md (Pass 2g canonized 2026-05-17)"
-    sim_module: sim/personal/knots.py
+    unified_canon_target: "systems/fieldwork/knots_v30.md (Pass 2g canonized 2026-05-17)"
+    sim_module: systems/fieldwork/sim/knots.py
     pp: ED-912   # was PP-632 (struck); tier/gauge/rupture model reframed 2026-06-28 (ED-912/ED-841), propagated here 2026-07-07 (ED-FI-0003)
     test_status: not_implemented
     dependencies:
@@ -854,7 +854,7 @@ mechanics:
   npe:
     scale: world
     faction: universal
-    canon_sources: ["designs/scene/investigation_systems_v30.md"]
+    canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
     sim_module: systems/world/sim/npe.py
     test_status: not_implemented
     notes: "NPC Population Engine."

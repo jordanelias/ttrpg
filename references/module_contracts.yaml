@@ -306,7 +306,7 @@ modules:
 
   - module: fieldwork_knots
     registry_system: "fieldwork"   # Key Type Registry vocabulary
-    doc: designs/personal/knots_v30.md
+    doc: systems/fieldwork/knots_v30.md
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     consumes:
@@ -343,7 +343,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
-      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; sim/personal/knots.py rebuild = Stratum B (C-TW-12)"
+      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
     sources:
       - "knots_v30 full [READ: 2026-06-10]"

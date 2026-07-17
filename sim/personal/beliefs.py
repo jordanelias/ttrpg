@@ -1,7 +1,7 @@
 """
 sim/personal/beliefs.py — Belief tracking and revision
 
-Canon source: designs/scene/fieldwork_v30.md §5.5 Socializing and Beliefs;
+Canon source: systems/fieldwork/fieldwork_v30.md §5.5 Socializing and Beliefs;
               designs/scene/social_contest_v30.md §9.5 Beliefs Integration
 
 Implements:
