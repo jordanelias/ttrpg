@@ -310,7 +310,16 @@ def load_ed_universe(warn=True) -> dict:
                 archive_entries.extend(salvaged)
                 continue
             archive_entries.extend(parsed)
-    for ap in ARCHIVE_JSONL_PATHS:
+    # flat overflow archive (ARCHIVE_JSONL_PATHS) + per-lane archives
+    # (registers/editorial_ledger_<lane>_archive.jsonl — the lane-split mirror of the flat
+    # overflow convention; the IN lane's was the first, ED-IN-0075). Globbed so every lane's
+    # archive joins the ED universe automatically and archived-ED citations never NONEXIST.
+    import glob as _glob
+    _jsonl_archives = list(dict.fromkeys([
+        *ARCHIVE_JSONL_PATHS,
+        *sorted(_glob.glob('registers/editorial_ledger_*_archive.jsonl')),
+    ]))
+    for ap in _jsonl_archives:
         raw = _read(ap)
         if not raw:
             continue

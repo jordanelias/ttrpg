@@ -91,6 +91,11 @@ THRESHOLDS = {
     "registers/editorial_ledger_in.jsonl": 50_000,
     "registers/editorial_ledger_go.jsonl": 50_000,
     "registers/editorial_ledger_se.jsonl": 50_000,
+    # Per-lane ARCHIVE overflow (ED-IN-0075, IN was the first lane to reach its 50k cap):
+    # resolved/superseded entries move here from the live lane ledger; still loaded into the
+    # ED universe by tools/validate_ed_citations.py (globs editorial_ledger_*_archive.jsonl),
+    # so archived-ED citations keep resolving. Large cap like the flat editorial archive.
+    "registers/editorial_ledger_in_archive.jsonl": 150_000,
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,

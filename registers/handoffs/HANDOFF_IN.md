@@ -8,12 +8,21 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **⚠ IN lane-ledger AT CAP — archive pass needed before the next IN ED.** `registers/editorial_ledger_in.jsonl`
-  is **49,857 / 50,000 tokens (99.7%)** after `ED-IN-0074` (main #173 MC-wiring) + `ED-IN-0075` (Truth ruling).
-  The **next IN ED will exceed the register-size cap** (`tools/ci_register_size_check.py`, BLOCKING CI). Next IN
-  work must FIRST archive `status: resolved`/superseded entries to a `registers/editorial_ledger_in_archive*.jsonl`
-  per the chunking protocol, and confirm the citation consumers (`validate_ed_citations.py`,
-  `broken_dependency_checker.py`) read the archive too (they read all lane files today). Flagged 2026-07-18.
+- **✅ IN lane-ledger archive pass DONE (2026-07-18).** `registers/editorial_ledger_in.jsonl` was at 99.7% of
+  its 50k cap (after `ED-IN-0074`/`ED-IN-0075`). Established the **per-lane archive convention**:
+  `registers/editorial_ledger_in_archive.jsonl` (the first lane archive; mirrors the flat
+  `editorial_ledger_archive.jsonl` overflow pattern). Moved **25 `resolved`/`superseded` entries** there → live
+  now **34,641 / 50,000 tokens (~30% headroom)**, archive 15,215 / 150,000. Wiring: `validate_ed_citations.py`'s
+  `load_ed_universe` now **globs `editorial_ledger_*_archive.jsonl`** (so archived-ED citations still resolve —
+  verified: archived `ED-IN-0031` is cited 7× and stays green); `ci_register_size_check.py` THRESHOLDS gained
+  the archive (150k cap). `broken_dependency_checker` needs no change (validates live entries only).
+  **Archiving is dedup-safe** — ids appearing more than once in the live file are NEVER archived, so no
+  effective status ever changes via last-write-wins. Future lanes: same pattern, glob already covers them.
+- **⚠ pre-existing bug surfaced (needs editorial reconciliation, NOT mine to rule): 4 duplicated ED-IN ids in
+  the live ledger** — `ED-IN-0012`(×2), `ED-IN-0013`(×2), `ED-IN-0016`(×2), `ED-IN-0029`(×3), several with
+  *conflicting* statuses (an `open` copy masked by a later `resolved` copy via last-write-wins). The known
+  ED-IN-0012/0013 double-allocation is documented in `id_reservations.yaml`; the 0016/0029 duplicates are
+  additional. These should be de-duplicated/reconciled (which status is authoritative?) in an editorial pass.
 
 - **ED-IN-0075 FILED 2026-07-18 — "Truth" consolidation RULED + SoT authored; corpus sweep STAGED.**
   Jordan ruling (option A): the per-character metaphysical-stance axis is renamed **Truth**, consolidating
