@@ -105,7 +105,7 @@ The Sincerity Gate is not a punishment for strategic play. It is the NPC's rende
 
 - **Belief-aligned social success:** +1 Momentum (cap 4). Counts as Belief achievement.
 - **Belief-challenging social success:** No Momentum; GM marks potential Belief revision opportunity.
-- **Social action that requires betraying a Belief:** Certainty pressure. Resolves at session end.
+- **Social action that requires betraying a Belief:** Truth pressure. Resolves at session end.
 
 ---
 

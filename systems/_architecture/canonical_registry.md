@@ -202,7 +202,7 @@ Higher net = first-to-speak holder = declares last (information advantage). Tie:
 
 ## 4.8 Personal Tracks
 
-Coherence (10→0, practitioners), Thread Sensitivity (0–100), Certainty (0–5), Momentum (0–4, resets per session), Disposition (per NPC, PP-632), Exposure (per territory per season, 0–10+).
+Coherence (10→0, practitioners), Thread Sensitivity (0–100), Truth (0–5), Momentum (0–4, resets per session), Disposition (per NPC, PP-632), Exposure (per territory per season, 0–10+).
 
 ---
 

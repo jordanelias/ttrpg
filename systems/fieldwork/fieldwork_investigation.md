@@ -91,7 +91,7 @@ Thread-Read is a **perceptive Leap** — the practitioner enters active Thread c
 1. Declare Thread-Read. Requires TS ≥ 30. The practitioner must not be in melee with a declared attacker.
 2. **Leap.** Follow standard Leap procedure: full-round action (Priority 5 in combat time; one scene action in fieldwork time). Vulnerability window applies — the practitioner is in Thread contact and exposed.
 3. **Perception.** Roll Attunement × 2 + History bonus, TN 7, Ob per Depth. Add Thread Pool Score (TS ÷ 10, round down) as bonus dice.
-4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Certainty modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
+4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Truth modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
 5. **Coherence cost.** Per scale table (stage11 §11.1): Object/Personal scale = 0 auto-cost; Relational+ scale = −1 Coherence.
 6. **Evidence progress.** Apply degree result per §4.2 table.
 

@@ -69,9 +69,9 @@ Multi-character: leader + max 2 assistants. Assistant rolls at same Ob +1. Assis
 ## Rendering Strain (Depth 3+)
 | Depth | Effect |
 |-------|--------|
-| 3 (Remnant) | Minor. TS ≥ 10: no effect. TS < 10: vague unease. Certainty pressure (GM marks). |
-| 4 (Anomaly) | Significant. Coherence check Ob 1 (fail: −1). Certainty −1 if ≥ 3. |
-| 5 (Breach) | Severe. Coherence −1 auto. Certainty forced ≤ 2. TS +1. Warning: Coherence ≤ 2 practitioners risk Crisis. |
+| 3 (Remnant) | Minor. TS ≥ 10: no effect. TS < 10: vague unease. Truth pressure (GM marks). |
+| 4 (Anomaly) | Significant. Coherence check Ob 1 (fail: −1). Truth −1 if ≥ 3. |
+| 5 (Breach) | Severe. Coherence −1 auto. Truth forced ≤ 2. TS +1. Warning: Coherence ≤ 2 practitioners risk Crisis. |
 
 Non-sensitive at Depth 3+: +0 Exposure (institutionally invisible). Sensitive: +1 Exposure.
 

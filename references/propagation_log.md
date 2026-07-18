@@ -395,7 +395,7 @@ Propagation targets:
 | social_contest_system_v2.md | extends | Resonant Style targeting, Appraise revelation |
 | params_factions.md | reads + future write | Faction stats, Ob modifiers; will receive Stance Triangles |
 | params_board_game.md | reads + future write | BG mechanics, NPC priority trees |
-| params_core.md | reads | Certainty, Coherence, attributes |
+| params_core.md | reads | Truth, Coherence, attributes |
 | params_contest.md | extends | Resonant Style targeting to be extracted |
 | threadwork_redesign_v25.md | reads | Knots, TS thresholds, epistemic seduction |
 | edeyja_npc.md | reads | Edeyja Stance Triangle, Arc profiles |

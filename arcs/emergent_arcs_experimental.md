@@ -73,7 +73,7 @@ flowchart TD
     E -->|"Inquisitor wins by Evidence genre Overwhelming (margin ≥ 3)"| I["Evidence genre Thread consequence fires:\nTemporal co-movement — Pulling\nThe past invoked with enough force disturbs the present\nObservers with TS 30+: perceive thread-shimmer in room\nRS +1 (temporal disturbance stable — past invoked coherently)"]
     
     I --> J["TS 30+ witnesses experience involuntary perception\nParticipants without Approach Training:\nTS 10–29: vague unease, cannot locate source\nTS 30–49: sense operation in scene, general direction\nChurch officials with TS 0–9: perceive nothing"]
-    J --> K["Axis 9 complication:\nThread truth is visible in the room\nBut only to sensitives\nNon-sensitives perceived nothing = Church maintains deniability\nSensitives who witnessed: Certainty check TN7 Ob 1 if their memory contradicts official record"]
+    J --> K["Axis 9 complication:\nThread truth is visible in the room\nBut only to sensitives\nNon-sensitives perceived nothing = Church maintains deniability\nSensitives who witnessed: Truth check TN7 Ob 1 if their memory contradicts official record"]
     
     H --> L["Accused wins on Distinction phase (Phase 5: Poise)\nHigh Poise + Thread-relevant History survives asymmetric proceeding\nEven without Sed Contra, precise final rebuttal can swing margin\nPoise = 'composure under pressure — finding the precise flaw in a fully developed argument while the room watches'"]
     L --> M["Consequence: Accused gains Mandate +1 (sympathy martyr mechanic)\nChurch Mandate −1 (Excommunication failure analog)\nThread argument entered the public record\nAxis 2 activates: Knowledge — Thread truth now formally contested, not suppressed"]
@@ -135,7 +135,7 @@ flowchart TD
 
 ## Arc 8: The Temporal Window
 
-**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) · Mending Stability degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Certainty checks · Multiple faction awareness
+**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) · Mending Stability degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Truth checks · Multiple faction awareness
 
 **Seed:** Mending Stability deteriorates below 60. Multiple factions learn that Past-Oriented Pulling is now mechanically accessible.
 
@@ -162,11 +162,11 @@ flowchart TD
     K --> L["Past-Oriented Pulling attempt:\nTS 70+, MS ≤ 60, Diagnosis mandatory\nFoundational event: Ob 7 (base) + 2 (Foundational surcharge) = Ob 9\nRS consequence ×3: Success = MS −9 minimum\nFailure: snap-back Wound + MS −6 minimum\nPractitioner pool ceiling: Spirit + History + TPS÷2"]
     
     L --> M{Pull outcome}
-    M -->|"Success (MS −9 minimum)"| N["Event displaced\nTemporal Disjunction fires:\nMemories of the displaced event persist in all witnesses\nPhysical facts removed from the world\nAll characters whose mechanical state reverts: Spirit TN7 Ob 1\nFailure: Certainty −1 — they remember something that didn't happen"]
+    M -->|"Success (MS −9 minimum)"| N["Event displaced\nTemporal Disjunction fires:\nMemories of the displaced event persist in all witnesses\nPhysical facts removed from the world\nAll characters whose mechanical state reverts: Spirit TN7 Ob 1\nFailure: Truth −1 — they remember something that didn't happen"]
     M -->|"Failure (MS −6 minimum + snap-back Wound)"| O["Practitioner takes Wound\nRS −6: likely drops MS another threshold band\nTemporally: nothing displaced\nBut the attempt created detectable Thread activity\nAxis 9 fires: Church detects large-scale unauthorised Thread operation"]
     M -->|"Partial (MS −6, Shifting Object at Foundational scale)"| P["Foundational-scale Shifting Object\nThe Catastrophe event oscillates between presence and absence\nInstitutions built on its history oscillate in authority\nChurch's theological basis destabilised at Structural scale\nReversal requires second Pull or large-scale Mending"]
     
-    N --> Q["Temporal Disjunction consequences\nPhysical-fact-triggered states revert (e.g., Knot strain from external events)\nExperience-triggered states persist (strain from character's own response)\nWitnesses who directly contradict their memory: mandatory Certainty check\nTS 30+ observers: mandatory\nCharacters with Knot to displaced fact: mandatory\n'Their rendering of reality has been compromised — they remember something that didn't happen'"]
+    N --> Q["Temporal Disjunction consequences\nPhysical-fact-triggered states revert (e.g., Knot strain from external events)\nExperience-triggered states persist (strain from character's own response)\nWitnesses who directly contradict their memory: mandatory Truth check\nTS 30+ observers: mandatory\nCharacters with Knot to displaced fact: mandatory\n'Their rendering of reality has been compromised — they remember something that didn't happen'"]
     Q --> R["MS now below 50 or below 40 depending on starting position\nRS threshold band shifts: new threshold effects apply at next Accounting\nIf MS crosses from Strained to Fragile:\nSpontaneous Shifting Objects begin forming in high-traffic Thread territories"]
     
     O --> S["Church opens Heresy Investigation\nKnowledge that Foundational Pull was attempted\nAxis 9 fully activated\nTC +1 (Church consolidation response to Thread threat)\nGrand Debate: 5 exchanges — can practitioners defend the attempt?"]
@@ -207,7 +207,7 @@ flowchart TD
 | Belief conflict in Collective operations | 7 | Opposing intentionalities block collective Mending/Corrective Weaving |
 | Mending Stability ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perverse incentive structure |
 | Einhir Ritual Framework (§9.15) | 8 | Three-condition gate for Foundational operations; each condition is a campaign arc in itself |
-| Temporal Disjunction + Certainty checks | 8 | Success of the Pull destabilises rendering for all witnesses; victory has ontological cost |
+| Temporal Disjunction + Truth checks | 8 | Success of the Pull destabilises rendering for all witnesses; victory has ontological cost |
 | Foundational-scale Shifting Object (Partial) | 8 | Half-successful temporal manipulation oscillates institutional authority at Structural scale; political crisis from Thread event |
 
 ---

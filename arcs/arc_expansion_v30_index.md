@@ -18,7 +18,7 @@
 | 3 | 4 | 2 | Resolves: Gap analysis across all factions and sub-factions |
 | 4 | 5 | 2 | Methodology: Follows npc_behavior_v30 §5 Arc Emergence State Machine. |
 | 5 | 6 | 2 | Each arc has: (A) default, (B) branch-condition transformation, (C) crisis/collapse. |
-| 6 | 7 | 2 | Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Certainty, Scar count). |
+| 6 | 7 | 2 | Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Truth, Scar count). |
 | 7 | 8 | 2 | Cross-NPC conditioners specify when one NPC's arc triggers a transition in another. |
 | 8 | 9 | 2 | Environmental conditioners bind arcs to world-track thresholds. |
 | 9 | 28 | 2 | PART I: METHODOLOGY REFERENCE |
@@ -79,7 +79,7 @@
 | 3 | 15 | Resolves: Gap analysis across all factions and sub-factions |
 | 4 | 18 | Methodology: Follows npc_behavior_v30 §5 Arc Emergence State Machine. |
 | 5 | 22 | Each arc has: (A) default, (B) branch-condition transformation, (C) crisis/collapse. |
-| 6 | 31 | Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Certainty, Scar count). |
+| 6 | 31 | Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Truth, Scar count). |
 | 7 | 22 | Cross-NPC conditioners specify when one NPC's arc triggers a transition in another. |
 | 8 | 446 | Environmental conditioners bind arcs to world-track thresholds. |
 | 9 | 345 | PART I: METHODOLOGY REFERENCE |

@@ -49,7 +49,7 @@ T13 Oastad non-Varfell: WR progression pauses 1 season (Wardens reassess). If Ch
 RS Fragile (59–40), Proximity 1 effects active in T13: Haelgrund Overwhelming investigations in T13 at −1 Ob (Thread phenomena provide evidence that is technically non-heretical but practically incriminating; his PROCEDURALIST flaw produces decisive results more readily).
 
 **TE-18 — Fjord Witness** `Practitioners | T13 | TTRPG`
-RS crosses 40 (Fragile → Fractured) at Accounting, PC TS ≥ 10 present in T13: mandatory Discovery Event check (Spirit TN 7 Ob 1). Preparation action: in the scene before this Accounting, Diagnosis (Cognition Ob 1) — success means failure consequence reduces from new-Belief-from-ignorance to Certainty −1 only (bracing vs being caught unaware). The check is mandatory either way; preparation changes the failure consequence.
+RS crosses 40 (Fragile → Fractured) at Accounting, PC TS ≥ 10 present in T13: mandatory Discovery Event check (Spirit TN 7 Ob 1). Preparation action: in the scene before this Accounting, Diagnosis (Cognition Ob 1) — success means failure consequence reduces from new-Belief-from-ignorance to Truth −1 only (bracing vs being caught unaware). The check is mandatory either way; preparation changes the failure consequence.
 
 **TE-19 — Crown's Southern Gate** `Crown | T6, T15 | ALL`
 T6 Stillhelm non-Crown: WC −1 if Crown was providing Warden access to T15. Hostile faction controlling T6 opens a northern T15 approach that bypasses TE-12 (Varfell gate control).

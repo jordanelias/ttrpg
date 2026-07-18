@@ -217,7 +217,7 @@ Few settings give you their *language of belief* this precisely. The Solmund cor
 vocabulary by orthodoxy (`solmund_master_document.md` §16):
 
 - **Orthodox:** *the Weaving* (creation), *the Loom* (the world), *Thread*, *Pattern* (divine order),
-  *the Wound* (the Southernmost), *Solmund's Hand* (providence), *the Unravelling* (sin), *Certainty*
+  *the Wound* (the Southernmost), *Solmund's Hand* (providence), *the Unravelling* (sin), *Truth*
   (faith), *the Rendering* (Solmund's gift to consciousness).
 - **Suppressed / heterodox:** *the Ground* (the Ein Sof by another name), *Spooling*, *the Waterline* (the
   boundary of the intelligible), *the Oscillation*, *the Dark*, *the Excess*, *the Leap*.
@@ -254,11 +254,11 @@ already a content template.
 ## 4. The narrative voice — how the world sounds
 
 Valoria has two voice canons at different altitudes. `solmund_voice_v30.md` is the *in-world* register
-bible: it keys prose style to a character's **Certainty** score, assigning named real-world authors as
+bible: it keys prose style to a character's **Truth** score, assigning named real-world authors as
 tonal registers (a rare case of a voice bible precise enough to drive procedural or LLM-assisted
 generation):
 
-| Certainty | Register (named authors) | Feel |
+| Truth | Register (named authors) | Feel |
 |---|---|---|
 | 1–2 | Böhme; plain speech | rejection / indifference |
 | 3 | R.S. Thomas; early Levertov | faith as habit without conviction |
@@ -394,7 +394,7 @@ genuinely original rather than genre-standard: the **Forgetting** (and its credi
 mechanic); the **Perceptual Prophylaxis** (a religion that immunizes its faithful against perceiving the
 truth); the **Seam Text** (comprehension-gated, not visibility-gated, revelation); and the
 **scale-invariant** treatment of the Calamity as a *renewable* hazard rather than a one-off. The voice
-canon's "competent monstrous / observing-around" instruction and the Certainty→author register table are
+canon's "competent monstrous / observing-around" instruction and the Truth→author register table are
 the two most directly usable pieces of craft in the corpus. The Kabbalistic and phenomenological
 substrate (Ein Sof, tsimtsum, Husserlian rendering) is deployed with unusual rigor for a game.
 
@@ -926,7 +926,7 @@ That is quantitative→qualitative running the *other* way, on purpose.
 
 A load-bearing correction first: `character_histories_v30.md` is **not** NPC backstory — it is a
 Burning-Wheel/SaGa-style **lifepath character-creation system for PCs** (Origin → Formation → Vocation →
-Catalyst, each granting skills, Certainty modifiers, and a **Knot** answering three questions: *what does
+Catalyst, each granting skills, Truth modifiers, and a **Knot** answering three questions: *what does
 this person want from you, what does the relationship cost, what happens if it breaks*). It is a formalized
 backstory compiler, and its "Lost Someone" catalyst even ships an anti-fridge *ghost-sheet* rule so the
 dead keep influencing play. The actual named-character depth lives in `references/npc_registry.yaml` (**46
@@ -1177,7 +1177,7 @@ The Solmund cosmology and the canon foundations wear their sources openly:
   Leap*, mechanized directly as a game term), **Lacan** (the Real, grounding monstrosity structurally),
   **Whitehead/Bergson** (process philosophy), **Wittgenstein** (*Tractatus* 7, "whereof one cannot speak"),
   **Levinas** (the Face, applied specifically to the Einhir dead), and **Derrida** (aporia).
-- **The poets, as tonal registers** (the Certainty table): Böhme, R.S. Thomas, Di Cicco, Hopkins, Ficino,
+- **The poets, as tonal registers** (the Truth table): Böhme, R.S. Thomas, Di Cicco, Hopkins, Ficino,
   Eliot, John of the Cross, Teresa of Ávila — and, for the post-catastrophe Einhir voice, **Paul Celan** and
   **Edmond Jabès** (post-Holocaust Jewish poetics of double-speech and absence). The prose-writer's own
   Beckett-vs-Lispector spectrum keys diction to the Spirit stat.
@@ -1220,7 +1220,7 @@ strong and worth recording as inferred lineage:
   escalating pressure off aggregate world-state via banded thresholds) — the register's refusal to
   pre-script outcomes and its tolerance for absurd disproportion (a 9% roll becoming an occupation crisis)
   are squarely in this lineage.
-- **Disco Elysium** — the Certainty/TS-gated internal register-switching, and the immersive-sim "each NPC is
+- **Disco Elysium** — the Truth/TS-gated internal register-switching, and the immersive-sim "each NPC is
   a lock with a specific key" design (Strand's flattery, Haelgrund's Diagnosis) — persuasion as skill-gated
   discovery rather than a flat check.
 - **Return of the Obra Dinn / Outer Wilds** — the Seam Text's comprehension-gated (not visibility-gated)
@@ -1282,7 +1282,7 @@ territory's temperament) can be a low-dimensional vector with named axes rather 
 corpus's best mechanics are threshold systems where a numeric track crosses named bands and *forecloses or
 unlocks* actions rather than merely adding modifiers: **Accord** (0–3) changes what a territory *is*
 (busy markets vs. barricades); **Coherence** (0–10) crossing bands changes which Thread actions are *legal*
-and forks into four different fates at zero; **Certainty** selects the *prose register* a character speaks
+and forks into four different fates at zero; **Truth** selects the *prose register* a character speaks
 in; **Thread Sensitivity 30** gates *comprehension* of the Seam Text. The signature of the best of these is
 the **two-stat intersection fork** — Coherence-0 outcome forked by TS, the Consecration Crisis forked by
 Church Stability *at the moment of claim* — where the drama comes from *which* threshold you cross *when*.
@@ -1346,12 +1346,12 @@ mechanism. None is a ratified proposal — they are a menu for the design pass.
 - **Heresy of naming (Move C).** The tripartite vocabulary already makes *saying the wrong word* an act of
   dissent (orthodox "the Ground" vs. forbidden "Ein Sof"/"Ungrund"). Candidate: a lightweight **Lexical
   Exposure** tag on dialogue/appeal actions — using suppressed or forbidden vocabulary in public raises a
-  Heresy-Investigation signal and shifts the speaker's Certainty register; using it *privately* with a
+  Heresy-Investigation signal and shifts the speaker's Truth register; using it *privately* with a
   high-trust NPC is a bonding beat. Texture that is currently a glossary tier becomes a spoken-risk economy.
 - **The grammatical tell of dissent (Move A/C).** "The break from 'we' into 'I' is the first sign of
-  theological dissent." Candidate: the prose-generation layer already keys register to Certainty; add a
+  theological dissent." Candidate: the prose-generation layer already keys register to Truth; add a
   *person* axis (plural/orthodox ↔ singular/heterodox) so that generated NPC speech *shows* a drifting
-  Certainty before any stat is revealed — the voice performs the number.
+  Truth before any stat is revealed — the voice performs the number.
 - **The Forgetting as a testimony economy (Move B, already half-built).** The Testimony-Ob-penalty-that-
   *decreases*-with-exposure-depth is one of the best mechanics in the corpus. Extend it into a full
   **Credibility-from-Proximity** system for Southernmost knowledge: what a character can *convince* others

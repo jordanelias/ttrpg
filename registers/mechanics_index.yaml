@@ -145,7 +145,7 @@ mechanics:
   certainty_track:
     scale: primitive
     faction: universal
-    canon_sources: ["engine/params/core.md#Certainty Track"]
+    canon_sources: ["engine/params/core.md#Truth Track"]
     sim_module: sim/personal/conviction.py
     test_status: not_implemented
     notes: "PP-551 redesigned."

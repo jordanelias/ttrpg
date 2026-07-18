@@ -11,13 +11,13 @@
 
 | # | Question | Resolution | Rationale |
 |---|---|---|---|
-| 1 | Scar severity × Certainty scaling | **Yes.** C5: +1 Scar. C0: −1 Scar. C2–3: standard. | Already applied in npc_behavior_v30 §3.4. Follows Certainty Track's own mechanical bonus model. |
+| 1 | Scar severity × Truth scaling | **Yes.** C5: +1 Scar. C0: −1 Scar. C2–3: standard. | Already applied in npc_behavior_v30 §3.4. Follows Truth Track's own mechanical bonus model. |
 | 2 | Player Conviction × Thread events | **Yes.** Spirit TN 7 Ob 1. Failure: active Conviction shaken for 1 season. | Already applied in npc_behavior_v30 §3.4 (ED-671). Player parity with NPC Scar system. |
 | 3 | Battle-driven TS development | **No separate mechanic.** Radiation model sufficient. Discovery Events at RS Critical/Proximity 3 (calamity_radiation_v30) covers environmental TS growth. Battle-specific TS growth would produce too many practitioners in sustained war campaigns, undermining Thread scarcity. | Per calamity_radiation_v30: TS growth is environmental (substrate instability) not experiential (battlefield trauma). |
 | 4 | NPC AI formalization | **Direct priority tree amendments.** Arc register vectors translated into NPC faction priority tree gates. | Already started with npc_behavior_v30 §4.3 Coherence AI. Remaining: Thread warfare doctrine as priority tree amendments (§THREAD WARFARE AI below). |
 | 5 | Niflhel Harvest | **Confirmed.** Harvest = Dissolution Residue collection. Niflhel is the accelerationist faction. | Resolved in wc_survival_spine.md. Quiet One arc (arc_expansion_v1) is the behavioral specification. |
 | 6 | Settlement Thread granularity | **Per-territory (radiation matrix).** Not per-settlement. | Calamity radiation is graduated by proximity (per-territory). Adding per-settlement would multiply granularity without proportional strategic depth. Settlement Order effects fire when territory-level radiation triggers. |
-| 7 | Integration approach | **Hybrid.** Cross-system fires in this document. In-place patches to target documents for mechanical specifications. | Follows existing pattern: Certainty Track in params_core, TC trigger in params_threadwork, Domain Echo in scale_transitions. New fire paths specified here; inserted into target documents by propagation. |
+| 7 | Integration approach | **Hybrid.** Cross-system fires in this document. In-place patches to target documents for mechanical specifications. | Follows existing pattern: Truth Track in params_core, TC trigger in params_threadwork, Domain Echo in scale_transitions. New fire paths specified here; inserted into target documents by propagation. |
 
 ---
 
@@ -142,7 +142,7 @@ Extension of §2.3 to cover rendered-level events (not practitioner operations):
 | Observer TS | Combat Wound | Death | Mass Casualty | Composure 0 (Contest) | Gap Manifestation | Rendering Crisis |
 |---|---|---|---|---|---|---|
 | 0–9 | Nothing | Nothing | Nothing | Nothing | Nothing | Vague wrongness |
-| 10–29 | Vague unease at violence | Sense of loss beyond normal grief | Deep wrongness; nightmares for days | Nothing | Unease near site | Overwhelming wrongness; Certainty check |
+| 10–29 | Vague unease at violence | Sense of loss beyond normal grief | Deep wrongness; nightmares for days | Nothing | Unease near site | Overwhelming wrongness; Truth check |
 | 30–49 | Perceives thread disruption at wound site | Perceives configuration ceasing to cohere | Senses mass thread disruption; direction identifiable | Perceives epistemic structure straining | Perceives absence; Gap topology partially readable | Perceives full crisis — practitioner's substrate state visible |
 | 50–69 | Identifies wound depth (surface vs structural) | Perceives dissolution of thread-configuration | Identifies scope and approximate casualties through substrate reading | Identifies which epistemic dimension is under pressure | Full Gap reading: original configuration reconstructible (forensic) | Perceives crisis cause; can identify which operation produced it |
 | 70+ | Full structural perception of wound's thread-state | Perceives the dying configuration's complete thread-state | Perceives every individual disruption in the mass event | Full epistemic structure of both parties visible | Full forensic reading + temporal trace | Can intervene: Anchoring Scene assistance possible |
@@ -153,15 +153,15 @@ Extension of §2.3 to cover rendered-level events (not practitioner operations):
 
 ---
 
-## ED-678: Lifepath → Starting TS/Certainty Derivation
+## ED-678: Lifepath → Starting TS/Truth Derivation
 
 **Target:** designs/characters/character_histories_v30.md — insert after Stage 3 Vocation
 
 **Specification:**
 
-### Starting Certainty and Thread Sensitivity from Lifepath (ED-678)
+### Starting Truth and Thread Sensitivity from Lifepath (ED-678)
 
-| Lifepath Element | Certainty Modifier | TS Modifier |
+| Lifepath Element | Truth Modifier | TS Modifier |
 |---|---|---|
 | **Origin:** Church Territory (1E) | +1 (toward 5) | 0 |
 | **Origin:** Southern Einhir (1D) | −1 (toward 0) | +5 baseline |
@@ -174,11 +174,11 @@ Extension of §2.3 to cover rendered-level events (not practitioner operations):
 | **Vocation:** Any Varfell Vocation (Thread-adjacent) | −1 (toward 0) | +5 |
 | **Vocation:** Any Guild/Crown/Hafenmark Vocation | 0 | 0 |
 
-**Base:** Certainty 4 (average Valorian). TS 0 (non-practitioner).
+**Base:** Truth 4 (average Valorian). TS 0 (non-practitioner).
 
-**Calculation:** Apply all modifiers. Certainty clamped to 0–5. TS clamped to 0 (minimum); no maximum from lifepath (TS 30+ requires First Leap during play, not lifepath — except Formation 2F which represents pre-game First Leap).
+**Calculation:** Apply all modifiers. Truth clamped to 0–5. TS clamped to 0 (minimum); no maximum from lifepath (TS 30+ requires First Leap during play, not lifepath — except Formation 2F which represents pre-game First Leap).
 
-**Consistency with params_core:** Starting Certainty values in params_core §Certainty Track are now derived from this table rather than assigned ad hoc. Formation 2F (Practitioner Mentorship) produces Certainty 2 (4 − 2 = 2), matching params_core "Post-First Leap practitioner: 2."
+**Consistency with params_core:** Starting Truth values in params_core §Truth Track are now derived from this table rather than assigned ad hoc. Formation 2F (Practitioner Mentorship) produces Truth 2 (4 − 2 = 2), matching params_core "Post-First Leap practitioner: 2."
 
 ---
 

@@ -86,14 +86,14 @@ Bad Convictions (too vague, too passive, no obstacle): "I want to help my factio
 
 **Momentum:** Pursuing a Conviction in a scene grants +1 Momentum. The action must be a genuine step toward the Conviction, not a retroactive justification. Momentum is spent for +1D or to invoke a Stunt.
 
-**Fulfillment:** When a Conviction is achieved or fundamentally abandoned, the player writes a new Conviction. Fulfillment grants a one-time +2 Momentum and may trigger a character development moment (Certainty shift, NPC arc trigger, or Domain Echo if the fulfillment had Sufficient Scope).
+**Fulfillment:** When a Conviction is achieved or fundamentally abandoned, the player writes a new Conviction. Fulfillment grants a one-time +2 Momentum and may trigger a character development moment (Truth shift, NPC arc trigger, or Domain Echo if the fulfillment had Sufficient Scope).
 
 **Resolution States (campaign_architecture_v1 §7.3):** When a Conviction resolves, it enters one of four states:
 
 | State | Condition | Narrative Effect |
 |-------|-----------|-----------------|
-| **Fulfilled** | The player achieved what the Conviction stated. | +2 Momentum. Certainty may shift toward the value the Conviction expressed. Portrait records this as an accomplished belief. |
-| **Failed** | The player pursued the Conviction but circumstances prevented achievement. | +1 Momentum (the attempt mattered). Certainty may shift away from the value. Portrait records this as a tested and broken belief. |
+| **Fulfilled** | The player achieved what the Conviction stated. | +2 Momentum. Truth may shift toward the value the Conviction expressed. Portrait records this as an accomplished belief. |
+| **Failed** | The player pursued the Conviction but circumstances prevented achievement. | +1 Momentum (the attempt mattered). Truth may shift away from the value. Portrait records this as a tested and broken belief. |
 | **Transformed** | Through play, the Conviction evolved into something different from what was originally written. | +2 Momentum. The player writes the transformed Conviction as a new Conviction (it does not count against the 3-Conviction cap for one season). Portrait records the transformation arc. |
 | **Unresolved** | The Conviction was abandoned without pursuit — the player lost interest or events overtook it. | No Momentum. Portrait does not record this — it simply fades. If all 3 Convictions are simultaneously Unresolved, the player receives a "drift" warning: "Your character has no active purpose." |
 

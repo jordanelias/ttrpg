@@ -812,7 +812,7 @@ Fires after every operation. 3-second minimum display. Cannot be dismissed early
 
 Shows:
 - **Temporal axis:** CD accumulation (with current total and band), History Resonance event if triggered
-- **Epistemic axis:** Certainty shifts on observers, Inert Knowledge formations
+- **Epistemic axis:** Truth shifts on observers, Inert Knowledge formations
 - **Actualized axis:** Co-movement card drawn, mechanical effect
 
 ## §9.6 RS environmental rendering
@@ -928,7 +928,7 @@ Memory pulling is detectable (P-09). When a practitioner performs a Memory Pull:
 - Co-movement panel (§9.5) explicitly shows "orphaned configuration created at [location]"
 - The orphaned configuration appears on the Peninsula map as a subtle environmental marker for TS 30+ observers (a faint discontinuity icon)
 - TS 30+ Diagnosis roll Ob 3 reveals the pull occurred
-- The memory target NPC has Certainty reduction displayed in their character sheet (if revealed)
+- The memory target NPC has Truth reduction displayed in their character sheet (if revealed)
 
 Non-practitioners cannot detect memory pulls directly. They may notice behavioral changes in the target NPC (Disposition shifts, Belief revisions) but cannot attribute these to memory alteration without a practitioner's Diagnosis.
 

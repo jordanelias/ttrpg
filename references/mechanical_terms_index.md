@@ -99,7 +99,7 @@ Diagnostic registers:
 | Composure | (COMP) | varies | Social endurance track. Rattled at ≤2; concession forced at 0. | contest §6 |
 | Concentration | — | varies | Action-economy resource for sustained rhetorical positions. | contest, derived_stats §5.2 |
 | Focus | — | 1–5+ | Contact duration in Thread operation rounds. | threadwork §2.3 |
-| Certainty | (CERT) | 0–5 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). PCs only; named NPCs at GM discretion. | conviction_track, glossary §1 |
+| Truth | — | 0–5 | Per-character metaphysical stance (renamed from Certainty + consolidates the retired character "Piety Track"/religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, Himmelenger pole) → Thread-truth acceptance (0, Edeyja pole). Engine-internal; players see qualitative bands. PCs only; named NPCs at GM discretion. Legacy abbr `CERT` retired. | conviction_track, glossary §1 |
 | Momentum | — | 0–4 | Tactical resource. Earned on Overwhelming success or Belief achieved; spent for automatic successes (non-Thread only). | combat_v30 §1 |
 | Thread Fatigue | — | resource | Replaces Contact Rounds (ED-694). | threadwork §2.3 |
 | Bonds | — | 1–7 | Structural relationship capacity. Caps Disposition Track (PP-684). Companion formation requires Bonds ≥ 5. | derived_stats §10.1, params/core |
@@ -408,8 +408,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Solmund Artifacts | Material objects of Solmund-cosmological significance. | solmund_artifacts_v30 |
 | Miraculous Event | Cosmologically-charged rare event class. | miraculous_event_v30 |
 | Baralta (the entity) | Cosmological/historical figure (extracted from miraculous_event §21). | baralta_v30 |
-| Solmund Orthodoxy | Highest Certainty value (5). World-religious orthodoxy. | conviction_track |
-| Thread acceptance | Lowest Certainty value (0). Worldview accepting Thread substrate. | conviction_track |
+| Solmund Orthodoxy | Highest Truth value (5). World-religious orthodoxy. | conviction_track |
+| Thread acceptance | Lowest Truth value (0). Worldview accepting Thread substrate. | conviction_track |
 
 ### 4.6 Peninsular-scale world state
 | Term | Abbr | Definition | Source |
@@ -1434,7 +1434,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | **Composure** | §1 character stat (derived) · §6 debate damage track · §16 (dice engine, indirectly) | INTENTIONAL — debate-system damage track *is* the character's Composure stat being attacked. Same noun, same referent. Glossary cross-lists it. **Keep.** |
 | **Coherence** | §1 character stat · §4 cosmological state · §7 threadwork track | INTENTIONAL — Coherence is one concept (rendering integrity) examined at three scales (personal stat, cosmological substrate, in-operation track). **Keep.** |
 | **Mending Stability (MS)** | §4 world-cosmological · §7 threadwork · §12 clocks · §14 victory | INTENTIONAL — MS is the canonical world-clock; every system that touches it cross-references the same value. **Keep.** |
-| **Certainty** | §1 character stat · §4 solmund-world | INTENTIONAL — Certainty is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character sheet. **Keep.** |
+| **Truth** | §1 character stat · §4 solmund-world | INTENTIONAL — Truth is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character sheet. **Keep.** |
 | **~~Conviction Track / CV~~** | §9 (per-territory) · §12 clocks · §14 victory · §6 debate | **NO LONGER KEPT.** Renamed: territory = Piety Track (PT); contest = Persuasion Track. "Conviction" is a §1 attribute word — silo contamination. |
 | **The 13 Conviction names** (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor) | §1 character attributes · §2 faction attributes (via faction Cascade) | INTENTIONAL — same Conviction set at personal and faction scale (per conviction_taxonomy §1). **Keep but FLAG for §3 collision audit:** a Conviction name appearing as a *mechanic verb* would be a violation. None currently do. |
 | **Domain Echo** | §6 debate (bridge out) · §10 mass combat (bridge out) · §11 faction layer · §15 scale-bridging | INTENTIONAL — Domain Echo is the canonical *bridge mechanism*; every personal-scale system that can trigger it cross-references the same primitive. **Keep.** |

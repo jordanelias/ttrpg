@@ -319,7 +319,7 @@ COHERENCE starts at 10 (all practitioners)
 │   ├─ −2D social and Memory rolls
 │   ├─ All Knots +1 strain/session
 │   ├─ Once/scene with Thread op: Spirit TN 7 Ob 1 or lose 1 round (dissociation)
-│   ├─ Certainty max −1 per Coherence level below 3
+│   ├─ Truth max −1 per Coherence level below 3
 │   ├─ BELIEF CO-AUTHORSHIP begins (GM and player rewrite Beliefs to reflect
 │   │   dissolving perceptual categories)
 │   └─ Roll FRACTURED FALLOUT (d6) on entering this band

@@ -44,7 +44,7 @@ Evidence (facts contradicting belief), Consequence (outcomes framework fails to 
 
 Not indecisive — burdened by incommensurate contradictory pressures. No good choice, only least bad.
 
-**Convictions:** Order (primary), Reason (secondary, suppressed — privately sympathizes with Restoration, recognizes Thread reality may be true, does not act). **Pressure Point:** Consequence (primary — show the cost of maintaining order), Loyalty (secondary — via intimate Knot only). **Thread Sensitivity:** 28. **Certainty:** 3. **Authority Challenge Ob:** 2.
+**Convictions:** Order (primary), Reason (secondary, suppressed — privately sympathizes with Restoration, recognizes Thread reality may be true, does not act). **Pressure Point:** Consequence (primary — show the cost of maintaining order), Loyalty (secondary — via intimate Knot only). **Thread Sensitivity:** 28. **Truth:** 3. **Authority Challenge Ob:** 2.
 
 **Beliefs:** (1) "The peninsula survives because I hold the center." (2) "Thread truth may be real, but acknowledging it publicly would shatter the consensus." (3) "Torben must be kept from Altonian influence."
 
@@ -52,13 +52,13 @@ Not indecisive — burdened by incommensurate contradictory pressures. No good c
 
 **NPC Simulation Patch PP-NPC-01:** Crown Decree gated on Mandate ≥ 3. Prevents death spiral where Almud issues Decrees at low Mandate, fails, loses more Mandate.
 
-**Arcs:** A (Reformer: Certainty → 0-1, Coup ≤ 1, publicly acknowledges Thread), B (Fortress: Stability ≤ 2, Certainty ≥ 3, Order doubles down), C (Overthrown: Coup Counter ≥ 3, exile).
+**Arcs:** A (Reformer: Truth → 0-1, Coup ≤ 1, publicly acknowledges Thread), B (Fortress: Stability ≤ 2, Truth ≥ 3, Order doubles down), C (Overthrown: Coup Counter ≥ 3, exile).
 
 ## 1.5 Confessor Arne Himlensendt (Church)
 
 Sincerely devout. Not cynical — wrong.
 
-**Convictions:** Faith (primary), Order (secondary). **Pressure Point:** Evidence (primary), Authority (secondary — only Holy See or revelation). **TS:** 0. **Certainty:** 5. **Authority Challenge Ob:** 3.
+**Convictions:** Faith (primary), Order (secondary). **Pressure Point:** Evidence (primary), Authority (secondary — only Holy See or revelation). **TS:** 0. **Truth:** 5. **Authority Challenge Ob:** 3.
 
 **Beliefs:** (1) "Solmund's word is the only truth." (2) "The people need the Church's protection." (3) "Thread practitioners are dangerous."
 
@@ -70,13 +70,13 @@ Sincerely devout. Not cynical — wrong.
 
 ## 1.6 Duchess Inge Baralta (Hafenmark)
 
-**Convictions:** Precedent/Faith (privatized). **Pressure Point:** Evidence/Consequence. **TS:** 0 (triple barrier Ob 4). **Certainty:** 5. **Authority Challenge Ob:** 1.
+**Convictions:** Precedent/Faith (privatized). **Pressure Point:** Evidence/Consequence. **TS:** 0 (triple barrier Ob 4). **Truth:** 5. **Authority Challenge Ob:** 1.
 
 **AI:** 1. Survival: T8. 2. Conviction-critical: Seizure/Treaty targeting HF → Sovereign Authority Doctrine. 3. Framework-aligned: legislative, Token placement. 4. Institutional: Govern/Trade. 5. Secondary: Piety maintenance. 6. Reactive: Military (defensive only). 7. Pass.
 
 ## 1.7 Duke Magnus Vaynard (Varfell)
 
-**Convictions:** Reason/Autonomy. **Pressure Point:** Consequence/Evidence. **TS:** 14. **Certainty:** 3. **Authority Challenge Ob:** 2.
+**Convictions:** Reason/Autonomy. **Pressure Point:** Consequence/Evidence. **TS:** 14. **Truth:** 3. **Authority Challenge Ob:** 2.
 
 **AI:** 1. Survival. 2. VTM at risk → prioritize. 3. Espionage (−1 Ob). 4. Investigate rivals, VTM, Wardens. 5. Southernmost expansion. 6. Counter-intelligence. 7. Pass.
 
@@ -84,7 +84,7 @@ Sincerely devout. Not cynical — wrong.
 
 ## 1.8 Grandmaster Lisbeth Ehrenwall (Löwenritter)
 
-**Convictions:** Order (national survival)/Autonomy. **Pressure Point:** Consequence/Loyalty. **TS:** 0–5. **Certainty:** 4. **Authority Challenge Ob:** 2.
+**Convictions:** Order (national survival)/Autonomy. **Pressure Point:** Consequence/Loyalty. **TS:** 0–5. **Truth:** 4. **Authority Challenge Ob:** 2.
 
 **AI:** 1. Survival. 2. Coup readiness (Counter ≥ 2): pre-position T14. 3. Border defense (−1 Ob). 4. Monitor Military stats. 5. Crown Mandate < 3 or Torben < 3 → Riskbreaker. 6. Full military response. 7. Pass.
 
@@ -104,7 +104,7 @@ Sincerely devout. Not cynical — wrong.
 
 ## 1.9 Yrsa Vossen (Restoration Movement)
 
-**Convictions:** Equity/Continuity. **Pressure Point:** Loyalty/Consequence. **TS:** 0. **Certainty:** 2. **Authority Challenge Ob:** 2.
+**Convictions:** Equity/Continuity. **Pressure Point:** Loyalty/Consequence. **TS:** 0. **Truth:** 2. **Authority Challenge Ob:** 2.
 
 **AI:** 1. Survival. 2. Piety ≤ 1 in 3+ territories → Presence. 3. Benefits common population (−1 Ob). 4. Protect agents. 5. Community Weaving if MS ≤ 60. 6. Non-violent appeal. 7. Pass.
 

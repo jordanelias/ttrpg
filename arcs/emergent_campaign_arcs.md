@@ -79,7 +79,7 @@ flowchart TD
     M --> N["Vaynard at TS 14+ base\nEach Collection use: Spirit check TN7 Ob1\nDiscovery Event risk fires"]
     N --> O{"Discovery Event"}
     O -->|"Success"| P["TK immediate +2\nVaynard becomes informed actor\nNew Belief generated"]
-    O -->|"Failure"| Q["Certainty −1\nNew Belief from ignorance\nVaynard becomes unpredictable"]
+    O -->|"Failure"| Q["Truth −1\nNew Belief from ignorance\nVaynard becomes unpredictable"]
 ```
 
 **Why this arc is emergent:** Church Influence accumulates from Vaynard's TK advances as a side effect of helping him. The Player Character who builds the relationship is simultaneously raising a clock they probably need to suppress. No player intends this.

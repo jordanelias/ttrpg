@@ -256,7 +256,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
         line: 85
         value: 5
         pattern: named_bound
-        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Truth\" | **GAP — no settlement-level Truth defined"
   ci_mass_seizure:
     distinct_values: [60]
     file_count: 1
@@ -848,12 +848,12 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
         line: 21
         value: 3
         pattern: named_bound
-        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+        context: "You choose a starting Truth (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
       - file: "designs/audit/valoria_how_to_play.md"
         line: 21
         value: 3
         pattern: starts_at
-        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+        context: "You choose a starting Truth (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
   n_dice:
     distinct_values: [3]
     file_count: 2
@@ -1609,7 +1609,7 @@ CI starts at 28 per P-32. Unchanged."
         line: 85
         value: 3
         pattern: named_bound
-        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Truth\" | **GAP — no settlement-level Truth defined"
   victory:
     distinct_values: [18]
     file_count: 1

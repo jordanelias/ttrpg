@@ -28,7 +28,7 @@ Until those editorial decisions are made, the content lives here as a discoverab
 
 ## 27. Five Throughlines
 
-**T-A: Perceptual Prophylaxis as Literary Engine.** The Church's essentialist theology generates the entire literary landscape because non-practitioners must use language to point toward what they cannot perceive. Every register is differentiated by perceptual access. Connects to: Thread Revelation Curve, Certainty track, SA stat, Discovery Event arcs.
+**T-A: Perceptual Prophylaxis as Literary Engine.** The Church's essentialist theology generates the entire literary landscape because non-practitioners must use language to point toward what they cannot perceive. Every register is differentiated by perceptual access. Connects to: Thread Revelation Curve, Truth track, SA stat, Discovery Event arcs.
 
 **T-B: Seam Texts as Mechanical Objects.** Same text, comprehension-gated by TS via P-08. Maps to POI Remnant category. Connects to: POI discovery, fieldwork Survey, SA increments, character formation.
 
@@ -46,7 +46,7 @@ Until those editorial decisions are made, the content lives here as a discoverab
 - 10-15 Seam Texts as POI content objects. Each uses a structural pattern from §17. Each contains a seam comprehensible at TS 30+. Place in T2 Kronmark, T9 Himmelenger, T14 Ehrenfeld.
 - 5-8 loadscreen aphorisms using the Cusan Triad pattern (§17.1).
 - 3-5 folk songs (Levertov register) for Feldmark and Stillhelm territories.
-- Settlement flavour text keyed to controlling faction's Certainty baseline (Church territories: 5, Varfell: 3-4, Crown heartland: 4, Hafenmark: 4).
+- Settlement flavour text keyed to controlling faction's Truth baseline (Church territories: 5, Varfell: 3-4, Crown heartland: 4, Hafenmark: 4).
 
 **Short-term (requires editorial decisions):**
 - If Baralta direct communion accepted → update NPC analysis §6.
@@ -83,7 +83,7 @@ All findings from the original critical review have been resolved inline in this
 | S-2 | Levinasian monstrous encounter | §9 — reframed as structural necessity, not ethical demand |
 | B-1 | Ficinian Cardinal emanation | §3.2 — flagged as proposed, not derived |
 | B-2 | Teresian frame incomplete | §3.4 — prophylaxis role explicitly stated |
-| B-3 | Certainty 6+ qualification | §2.3 — rare bypass requirement noted |
+| B-3 | Truth 6+ qualification | §2.3 — rare bypass requirement noted |
 
 # APPENDIX B: OPEN EDITORIAL ITEMS
 
@@ -97,7 +97,7 @@ All findings from the original critical review have been resolved inline in this
 | SA-gated faction actions | Accept thresholds? | All faction engagement |
 | Miraculous Event → Accord +1 | Accept? | Settlement-scale effects |
 | Miraculous Event → Proximity Rating −1 | Accept? | Territory-scale RS interaction |
-| Conviction mechanic for Miraculous Event | Accept Cognition vs Ob = Certainty? | Personal-scale effects |
+| Conviction mechanic for Miraculous Event | Accept Cognition vs Ob = Truth? | Personal-scale effects |
 
 ---
 

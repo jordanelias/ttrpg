@@ -26,7 +26,7 @@ NPCs hold primary + secondary Conviction. Secondary activates under pressure (Be
 TS Gate: Thread-level evidence invalid as Evidence targeting vs TS 0 NPCs (P-08 compliance). Ontical evidence only.
 
 ### Named NPC Stance Triangles
-| NPC | Faction | Primary Conviction | Secondary | Primary Resonant Style | Secondary MS | TS | Certainty |
+| NPC | Faction | Primary Conviction | Secondary | Primary Resonant Style | Secondary MS | TS | Truth |
 |---|---|---|---|---|---|---|---|
 | Almud | Crown | Order | Reason | Consequence | Solidarity | 28 | 3 |
 | Himlensendt | Church | Faith | Order | Evidence | Authority | 0 | 5 |
@@ -45,7 +45,7 @@ Torben: first faction at Loyalty ≥ 5 sets primary Conviction. Default Autonomy
 | Framework | Faction | Drift | Frequency | Cap |
 |---|---|---|---|---|
 | Faith | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + CI advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
-| Virtue | Crown | Crown NPCs Certainty ≥ 3: +1 Certainty/year unchallenged | Per year | Certainty 5 |
+| Virtue | Crown | Crown NPCs Truth ≥ 3: +1 Truth/year unchallenged | Per year | Truth 5 |
 | Categorical Imperative | Hafenmark | Influence +1 per season all actions framework-aligned | Per season (conditional) | Stat ceiling 7 |
 | Utility-driven Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |
 | Equity Social Contract | RM | Presence +1 adjacent territory/season when Stability ≥ 3 | Per season (conditional) | — |

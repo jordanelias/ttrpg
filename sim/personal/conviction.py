@@ -58,7 +58,9 @@ SCAR_CRISIS = 3          # Scar 3+: Conviction crisis on X
 # [canonical: §3 — "Season cap: Max 1 Scar per season from Thread witnessing per NPC"]
 SCAR_SEASON_CAP_THREAD = 1
 
-# §3 Certainty scaling
+# §3 Truth scaling (the axis was renamed Certainty -> Truth per ED-IN-0075; the internal
+#     identifier CERTAINTY_SCALING / the `certainty` param below are retained to avoid churning
+#     frozen tests/sim callers, and denote the 0-5 Truth value)
 # [canonical: §3 — "C5: +1 Scar severity. C0: -1 Scar severity. C2-3: standard."]
 CERTAINTY_SCALING = {
     0: -1, 1: -1, 2: 0, 3: 0, 4: 0, 5: +1,

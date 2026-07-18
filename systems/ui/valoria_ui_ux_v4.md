@@ -1642,7 +1642,7 @@ After every operation, the co-movement panel takes over. It is NOT dismissable f
 ║      (Mode 2 Providence event, brief)                                     ║
 ║                                                                            ║
 ║  ─── EPISTEMIC ───────────────────────────────────────────                ║
-║    Vaelke's Certainty: 3 → 2 (she sensed something)                       ║
+║    Vaelke's Truth: 3 → 2 (she sensed something)                       ║
 ║    Clerk of Seals (nearby, non-sensitive) experiences an                  ║
 ║      involuntary perceptual moment. Inert Knowledge forms.                ║
 ║                                                                            ║

@@ -29,7 +29,7 @@ Conviction Legacy fires (T8): one Conviction transforms and transfers to new cha
 - Standing: reset to 0 (new character must prove themselves — Initiation Duty fires)
 - Coherence: reset to 10 (new practitioner, untouched by Thread work)
 - Thread Sensitivity: per new character's lifepath origin
-- Certainty: per new character's lifepath origin
+- Truth: per new character's lifepath origin
 - Wounds: 0
 - Stamina: full
 - Momentum: 0

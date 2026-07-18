@@ -24,12 +24,19 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   (`conviction_taxonomy_v30`) and the territory-scale **Piety (PT)** — both DISTINCT and unchanged. SoT
   authored this pass: `engine/params/core.md` §Truth Track, `derived_stats_v30` §14.2 + §5.3.4,
   `clock_registry_v30`, `glossary.md`, `alias_registry.yaml`; ledger ED-IN-0075; `CURRENT.md`.
-  **Next action (STAGED SWEEP):** corpus-wide `Certainty → Truth` rename — **419 occurrences / 81 files**
-  (NPC stat blocks in `complete_systems_reference`, UI dialogue-gates, `combat_v30`, `player_agency_v30`,
-  `fieldwork`/`southernmost` params, threadwork specs, `sim/personal/conviction.py` `CERTAINTY_SCALING`).
-  Semantically sensitive (must not touch prose "certainty" / "source of truth"); `Certainty` is an accepted
-  alias meanwhile (`alias_registry`), naming gate unaffected (never in `names_index`). Also fold the retired
-  character "Piety Track" name-uses (glossary debate-CT entry, `conviction_track_v1` title) into the sweep.
+  **Corpus sweep EXECUTED (2026-07-18, second commit of this PR):** case-sensitive `\bCertainty\b → Truth`
+  across the live corpus — **89 files / 515 refs** (NPC stat blocks, world/fieldwork/threadwork docs, arcs,
+  machine-read `values_master`/`npc_registry`/`numeric_bounds`, `mechanical_terms_index`, glossary `CERT` entry).
+  Case-sensitive so prose "certainty"/"uncertainty" is untouched. Excluded: the SoT files authored in commit 1
+  (they intentionally keep "formerly Certainty" history), `deprecated/`, `designs/audit/`, `threadwork_superseded.md`.
+  **Residuals (deliberately deferred):** (a) the `sim/personal/conviction.py` internal identifier
+  `CERTAINTY_SCALING` / `certainty` param is RETAINED — renaming it would churn frozen `tests/sim` callers; the
+  docstring notes it now denotes the Truth value; (b) the glossary "Piety Track (CT)" **debate-position tracker**
+  is a distinct social-contest mechanic and keeps its name (out of scope for the Truth axis); (c) four
+  **params-bearing / generated** files retain "Certainty" (alias-covered) to avoid the co-file params-co-change
+  rule firing on a terminology-only change: `systems/factions/factions_personal_v30.md`,
+  `systems/threadwork/threadwork_v30.md` (+ `_infill`), and the generated `registers/patch_register_index.md`.
+  A params-coordinated rename (touching `engine/params/*` alongside) can fold these in later.
 
 - **ED-IN-0073 FILED 2026-07-17 — adversarial audit of the character-decision machinery (read-only).**
   `designs/audit/2026-07-17-character-decision-adversarial-audit/` (00_findings + 01_remediation_L1_L2 +

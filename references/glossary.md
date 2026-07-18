@@ -258,7 +258,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Resolution | Status |
 |-------------|------------|--------|
-| CERT | Certainty (cosmological worldview track, 0–5; PP-551). See Part One. | RESOLVED — active stat |
+| CERT | Legacy abbreviation for the former **Certainty** Track — now **Truth** (renamed + consolidated, ED-IN-0075; see Part One). Retire; do not use for new writing. | SUPERSEDED — renamed to Truth |
 | TLK | Torben Loyalty Clock (narrative-specific, 10→0; F72 gap). | DEPRECATED — historical only |
 | DD | Deniability Debt (Niflhel Operative mechanic). Niflhel-as-faction struck per ED-764; mechanic survives as "Deniability Debt" full term where retained. | DEPRECATED — abbreviation not in active use |
 | FSTAT | Faction Stats (collective shorthand for Mandate / Influence / Wealth / Military / Intel / Stability). | DEPRECATED — simulator code, never in-game term |

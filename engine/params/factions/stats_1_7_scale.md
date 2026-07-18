@@ -224,7 +224,7 @@ Resolution: d+σ resolver (§Domain Action Resolution) — M = Intel − 2 (lega
 | Success (choose one) | +2D to one Thread-related Domain Action this season; OR reveal one hidden faction attribute; OR −1 Ob to one Einhir Research action this season |
 | Failure | Artefact's Thread signature detected by a practitioner; Church Intel +1D vs Varfell for 1 season; Thread Tension +1 |
 Long-term cost: each use: +1 to Vaynard's hidden Thread Sensitivity (TS). At Thread Sensitivity 14+, each use triggers Spirit check TN 7 Ob 1 for a Discovery Event.
-Player Character takeover: collection transfers as institutional asset; triggers mandatory Discovery Event for new leader (Spirit TN 7 Ob 1; Success: Thread Knowledge (TK) +1; Failure: Certainty −1, new Belief offered).
+Player Character takeover: collection transfers as institutional asset; triggers mandatory Discovery Event for new leader (Spirit TN 7 Ob 1; Success: Thread Knowledge (TK) +1; Failure: Truth −1, new Belief offered).
 
 ### Guilds — Economic Leverage
 Trigger: Guild Favour ≥ 5 in target territory (1–7 territory track).

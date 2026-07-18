@@ -112,7 +112,7 @@ T-25 Generational Arc: 30-year campaign clock. Per-Conviction Scar tracks let th
 
 ### М-6 Choice is forced · Parent Μ-α
 
-**Pattern.** Choice carries cost; no rest-state evasion. Canonical T-instances: T-12 Practitioner Arc, T-13 Certainty Journey, T-14 Conviction Architecture, T-17 Companion Moral Mirror, T-20 Two Contests, T-22 Belief Lattice (primary).
+**Pattern.** Choice carries cost; no rest-state evasion. Canonical T-instances: T-12 Practitioner Arc, T-13 Truth Journey, T-14 Conviction Architecture, T-17 Companion Moral Mirror, T-20 Two Contests, T-22 Belief Lattice (primary).
 
 **Application to PP-718.** **T-14 Conviction Architecture** is the most directly relevant T. T-14's specification: "Forced-choice — Scar accumulation forces arc transitions." Per-Conviction Scar accumulation makes the forced-choice mechanic *per-axis*: an NPC with high Faith Scar count faces forced choices on Faith-engaging decisions specifically, while their other primaries remain stable. This produces a richer choice space — the NPC isn't simply "in crisis" or "not"; they're in crisis on a *named axis* and stable on others.
 

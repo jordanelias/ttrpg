@@ -4,7 +4,7 @@
 ## Resolves: Gap analysis across all factions and sub-factions
 ## Methodology: Follows npc_behavior_v30 §5 Arc Emergence State Machine.
 ##   Each arc has: (A) default, (B) branch-condition transformation, (C) crisis/collapse.
-##   Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Certainty, Scar count).
+##   Conditioners reference game-state variables (TC, RS, Strain, Stability, Mandate, Coup Counter, WR, Truth, Scar count).
 ##   Cross-NPC conditioners specify when one NPC's arc triggers a transition in another.
 ##   Environmental conditioners bind arcs to world-track thresholds.
 
@@ -63,9 +63,9 @@ Every arc profile defines:
 
 #### Arc A: The Reformer (Branch Condition Expansion)
 
-**Branch condition (complete):** Almud's Certainty reaches 1 OR 0 AND Löwenritter Coup Counter ≤ 1 AND at least one of:
+**Branch condition (complete):** Almud's Truth reaches 1 OR 0 AND Löwenritter Coup Counter ≤ 1 AND at least one of:
 - PC has won a Decisive Contest against Almud via Consequence RS, citing specific RS data
-- Almud has witnessed a Thread phenomenon directly (fieldwork/personal scene in RS ≤ 55 territory produces Certainty check: Spirit 4D TN7 Ob 2; success = Certainty −1)
+- Almud has witnessed a Thread phenomenon directly (fieldwork/personal scene in RS ≤ 55 territory produces Truth check: Spirit 4D TN7 Ob 2; success = Truth −1)
 - Torben returns from Altonia with Thread-credible testimony (Torben Loyalty ≤ 2 to Crown AND player has invested in Torben with Evidence RS)
 
 **Arc A transformation mechanics:**
@@ -75,7 +75,7 @@ Every arc profile defines:
 4. Almud's Priority 5 updates: "If TC ≥ 50 AND Crown Mandate ≥ 4 → Suppress Church" replaces "Thread Liaison declaration."
 5. Almud's Resonant Style primary shifts: Order fades, Reason emerges. Evidence RS becomes effective again (Reason Conviction = evidence-responsive).
 
-**Arc A Decision Fork — The Public Edict:** When Certainty reaches 0, Almud faces a Decision Fork: make the Exemption public (Full Reformer, Coup Counter +1 + TC −2 + Church Excommunication eligible) or keep it private (Half Reformer — benefits Thread practitioners but risks institutional exposure). Player can influence this Fork via Solidarity RS (personal appeal through Knot with Almud) — with a Knot at Close, the appeal tips toward public.
+**Arc A Decision Fork — The Public Edict:** When Truth reaches 0, Almud faces a Decision Fork: make the Exemption public (Full Reformer, Coup Counter +1 + TC −2 + Church Excommunication eligible) or keep it private (Half Reformer — benefits Thread practitioners but risks institutional exposure). Player can influence this Fork via Solidarity RS (personal appeal through Knot with Almud) — with a Knot at Close, the appeal tips toward public.
 
 **Arc A secondary trigger — Cardinal of Temperance Testimony:** If the Cardinal of Temperance has reached Scar 1 AND approaches Almud privately (triggered when Temperance's Conviction crisis fires — see Cardinal arcs below), this can substitute for the full RS contest requirement. Temperance delivering internal Church evidence of RS degradation is an Authority appeal Almud cannot dismiss (the source is Church-internal, his Virtue framework values institutional honesty).
 
@@ -90,7 +90,7 @@ Every arc profile defines:
 2. Almud refuses all private audiences with Thread practitioners and their known associates. PC with Thread-adjacent Belief cannot seek audience without triggering Heresy Investigation filing (Almud's Attention Pool +1 from the request alone).
 3. Almud's Beliefs update: Belief 2 replaces with "The Restoration is an existential threat — I cannot distinguish truth from sedition." Any RM Outreach in Crown territory now triggers Priority 2 (Conviction-critical) responses.
 4. Ehrenwall Disposition toward Almud: +1 (Fortress Almud validates Ehrenwall's worldview — order is strength). Coup Counter does NOT advance — Almud is behaving as Ehrenwall wants.
-5. The Fortress is self-reinforcing: every season Almud maintains Fortress, Crown NPCs at Certainty ≥ 3 gain +1 Certainty (Virtue Drift). The institution hardens while Almud hardens.
+5. The Fortress is self-reinforcing: every season Almud maintains Fortress, Crown NPCs at Truth ≥ 3 gain +1 Truth (Virtue Drift). The institution hardens while Almud hardens.
 
 **Arc B exit condition (how to get Almud OUT of Fortress):** The only exit is Ehrenwall. If the player has a Knot at Intimate with Ehrenwall AND Ehrenwall's Solidarity RS is active AND Ehrenwall delivers a Consequence argument ("The Fortress is producing the instability you exist to prevent") — this is the only RS attack Almud can hear in Arc B because it comes through Authority. Ehrenwall is the authority Almud respects.
 
@@ -102,21 +102,21 @@ Every arc profile defines:
 
 **Arc C Post-Exile States (three trajectories):**
 
-**C-i: The Abdicant** (Coup Counter 3, Almud Certainty ≥ 2 at exile):
+**C-i: The Abdicant** (Coup Counter 3, Almud Truth ≥ 2 at exile):
 - Almud formally abdicates. He releases Crown legitimacy to Torben.
 - Behavior: retires to a monastery or private estate. Thread Sensitivity 28 becomes a quiet development — he starts perceiving, without framework, alone.
 - Mechanical: Crown faction continues under Torben/Löwenritter. Almud is removed from political play. BUT: 1/season GM roll d10. On 10: Almud writes a document — a private theological refutation of Solmund doctrine based on his unguided Thread perception. If this document reaches the player (Fieldwork OW Investigation in Almud's location), it is a campaign-altering Evidence artifact (+3 Evidence on any investigation targeting Church theology).
 
-**C-ii: The Pretender** (Coup Counter 3, Almud Certainty 1 at exile, Löwenritter Mandate ≤ 3):
+**C-ii: The Pretender** (Coup Counter 3, Almud Truth 1 at exile, Löwenritter Mandate ≤ 3):
 - Almud does NOT accept the coup. He organises a loyalist faction among Masterless Crown units.
 - Behavior: Priority Tree shifts to: Priority 1 — Reconstitution (march toward T1). Priority 2 — Recruit (Mandate-building in territories Löwenritter has not fully absorbed). Priority 3 — Diplomacy (seek Hafenmark support — Baralta's Precedent conviction may sympathise with legitimate succession).
-- Risk: Pretender war creates Strain +1/season. Almud at Certainty 1 may Collapse to Arc C-iii under sustained military failure.
+- Risk: Pretender war creates Strain +1/season. Almud at Truth 1 may Collapse to Arc C-iii under sustained military failure.
 - Player opportunity: supporting Almud's pretender claim is a legitimate co-victory path variant — Almud restored = Crown faction reinitialised under reformed leadership, TC −3, RS stabilisation commitment possible.
 
-**C-iii: The Broken** (Coup Counter 3, Almud Certainty 0 at exile, Stability ≤ 1):
+**C-iii: The Broken** (Coup Counter 3, Almud Truth 0 at exile, Stability ≤ 1):
 - Almud's framework has completely collapsed. He no longer functions as a political actor.
-- Behavior: withdraws entirely. Certainty 0 → Authority RS only (old framework void). He has no authority to appeal to — every framework has failed him.
-- Thread consequence: Thread Sensitivity 28 with Certainty 0 + no framework = unguided Thread contact risk. GM roll at Year-End: d10 ≥ 7 = Almud has his First Leap, alone, without training. This is an ontological crisis event. If unassisted: 40% chance he reaches Coherence 5 (Dissonant) within 2 seasons, creating a wandering NPC who perceives things and cannot render them. If player reaches him (Expedition/Fieldwork in exile location): opportunity to become his framework — teaching him to integrate what he perceives. This is the campaign's most intimate possible arc payoff.
+- Behavior: withdraws entirely. Truth 0 → Authority RS only (old framework void). He has no authority to appeal to — every framework has failed him.
+- Thread consequence: Thread Sensitivity 28 with Truth 0 + no framework = unguided Thread contact risk. GM roll at Year-End: d10 ≥ 7 = Almud has his First Leap, alone, without training. This is an ontological crisis event. If unassisted: 40% chance he reaches Coherence 5 (Dissonant) within 2 seasons, creating a wandering NPC who perceives things and cannot render them. If player reaches him (Expedition/Fieldwork in exile location): opportunity to become his framework — teaching him to integrate what he perceives. This is the campaign's most intimate possible arc payoff.
 
 ---
 
@@ -131,7 +131,7 @@ Every arc profile defines:
 **Branch condition:** Default arc. No PC expedition to Varfell's Private Collection. No VTM advancement challenge. Vaynard is an intellect consuming information without transformation.
 
 **Arc A behavior:**
-1. Vaynard pursues VTM advancement purely instrumentally (Tribune Intel, Private Collection). No Certainty movement. Utility-driven Pragmatism remains stable.
+1. Vaynard pursues VTM advancement purely instrumentally (Tribune Intel, Private Collection). No Truth movement. Utility-driven Pragmatism remains stable.
 2. His Priority 2 fires reliably: Intel opportunities always taken before any other action.
 3. Vaynard acquires Thread knowledge without Thread perception. He knows facts about Thread without experiencing Thread. This is the most dangerous configuration: competence without wisdom.
 4. Arc A stable state: VTM 2–3 reached by Season 8–10 through reliable Intel. No RS care — Varfell's Thread operations (if any) are purely extractive.
@@ -147,33 +147,33 @@ Every arc profile defines:
 
 Three triggering events (any one sufficient):
 1. PC practitioner performs Thread operation targeting Vaynard's configuration at Personal scale (Weaving or Pulling) — Vaynard's dormant sensitivity activates under direct Thread exposure. Spirit check TN 7, Ob 1: success = TS advances from 14 to 22 immediately (partial activation). Repeat exposure pushes to 30.
-2. Vaynard spends 2 seasons in T15 Askeheim (the Calamity ground) during an Expedition. Calamity proximity at T15 forces Certainty check AND TS check regardless of prophylaxis. TS advances +8 per season in T15. By Season 2 of T15 exposure: TS 30 (Stirring).
+2. Vaynard spends 2 seasons in T15 Askeheim (the Calamity ground) during an Expedition. Calamity proximity at T15 forces Truth check AND TS check regardless of prophylaxis. TS advances +8 per season in T15. By Season 2 of T15 exposure: TS 30 (Stirring).
 3. Private Collection discovery: if Vaynard accesses a specific artifact (Einhir Thread-active device — placed by GM based on Fieldwork discovery) without practitioner supervision, the device triggers forced TS activation. TS: 14 → 35 in one scene.
 
 **Arc B transformation:**
 1. Vaynard begins perceiving Thread configurations. Not deliberately — involuntarily. His Cognition-primary worldview (everything is a hypothesis to test) now applies to Thread data he cannot control.
-2. Certainty: 3 → 2 (empirical encounter with Thread reality confirms the hypothesis but destabilises the framework — his model was too neat).
+2. Truth: 3 → 2 (empirical encounter with Thread reality confirms the hypothesis but destabilises the framework — his model was too neat).
 3. Resonant Style: Consequence remains primary. Evidence gains a new vector — he can now cite Thread perception as evidence. This makes him simultaneously MORE persuadable (Thread evidence now hits his Evidence RS) and MORE interesting as a political ally.
 4. Behavioral change: Vaynard's Priority 2 updates. Alongside Intel operations: "IF TS ≥ 30 AND Discovery Event roll not yet taken this season → Private Collection use triggers Spirit check for Discovery Event." He is no longer able to study Thread dispassionately — the study studies him back.
 5. Framework Drift new source: +1D on all Thread-adjacent investigations (he perceives what he investigates). This makes Vaynard an extraordinary investigator — 2D above normal for any Thread-related fieldwork.
 
-**Arc B secondary emergence — The Collaborator:** If player has built Disposition ≥ +3 with Vaynard in Arc B AND offers genuine Thread education (player has TS ≥ 30 AND spends a scene teaching Vaynard formal Approach Training): Vaynard's Certainty → 1. He begins formal Thread study. VTM and Thread Sensitivity advance in parallel. Within 3 seasons, he reaches TS 35 (Maret Uln level) with Approach Training. This creates a Varfell that can field practitioners, dramatically accelerating Path C and making Varfell+Crown co-victory viable.
+**Arc B secondary emergence — The Collaborator:** If player has built Disposition ≥ +3 with Vaynard in Arc B AND offers genuine Thread education (player has TS ≥ 30 AND spends a scene teaching Vaynard formal Approach Training): Vaynard's Truth → 1. He begins formal Thread study. VTM and Thread Sensitivity advance in parallel. Within 3 seasons, he reaches TS 35 (Maret Uln level) with Approach Training. This creates a Varfell that can field practitioners, dramatically accelerating Path C and making Varfell+Crown co-victory viable.
 
 ---
 
 #### Arc C: Consumed (Full Expansion)
 
-**Branch condition:** Vaynard reaches TS 30+ WITHOUT guidance AND Certainty drops to 0 (empirical worldview cannot integrate what he perceives).
+**Branch condition:** Vaynard reaches TS 30+ WITHOUT guidance AND Truth drops to 0 (empirical worldview cannot integrate what he perceives).
 
 **Arc C cascade:**
 1. First unguided Leap in a scene alone — Spirit 4D TN7 Ob 2. On failure: Rendering Crisis begins immediately (Coherence 10 → 5 from unguided contact). On success: brief contact, terrifying, productive. Either outcome advances the Consumed trajectory.
 2. Vaynard's Utility-driven Pragmatism: "I will use what I learn." Coherence degradation = he is using what he learns at the cost of his own coherence. He knows this. He continues anyway.
-3. Certainty 0: his framework has not been disproved — it has been confirmed. The Thread IS real. And now he cannot stop perceiving it. The confirmation destroys him more thoroughly than disproof would have.
+3. Truth 0: his framework has not been disproved — it has been confirmed. The Thread IS real. And now he cannot stop perceiving it. The confirmation destroys him more thoroughly than disproof would have.
 4. Behavioral: Vaynard's Priority Tree collapses entirely. His actions become Thread-compelled rather than politically rational. He takes actions that make no strategic sense because he perceives configurations that require addressing. He becomes an NPC the GM must manage as an agent of the Thread itself, not of Varfell's interests.
 5. Vaynard at Coherence ≤ 3 (Fragmented): −1D all social rolls. Cannot execute Utility-driven Pragmatism (requires rational assessment of outcomes). His Leadership Deviation Ob effectively becomes 1 (the institution cannot predict him).
 6. Knot strain propagation (§5.0b): TS 30+ in active crisis → Close Knot +1 strain/season to all Knotted NPCs. If Vaynard has a Knot with the PC (likely at Disposition +3): PC takes +1 Coherence strain per session in Vaynard's presence.
 
-**Arc C recovery gate:** The only exit from Consumed is Edeyja. If Vaynard reaches T15 in Consumed state AND Edeyja is in Arc B (Collaboration) AND Edeyja agrees to treat him: Recovery arc begins. Edeyja's TS 75+ provides the framework Vaynard's Reason cannot build for itself. Recovery takes 3 seasons. Vaynard emerges with Certainty 1, Coherence 6, TS 40 — a genuine practitioner, no longer Scholar, no longer Consumed. A third state that has no name yet.
+**Arc C recovery gate:** The only exit from Consumed is Edeyja. If Vaynard reaches T15 in Consumed state AND Edeyja is in Arc B (Collaboration) AND Edeyja agrees to treat him: Recovery arc begins. Edeyja's TS 75+ provides the framework Vaynard's Reason cannot build for itself. Recovery takes 3 seasons. Vaynard emerges with Truth 1, Coherence 6, TS 40 — a genuine practitioner, no longer Scholar, no longer Consumed. A third state that has no name yet.
 
 ---
 
@@ -200,7 +200,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Resonant Style | Consequence | Show him that the Templar deployments are producing worse outcomes than restraint — that the military posture is feeding the resistance it claims to suppress. A general who loses faith in his strategy is reachable. |
 | Secondary Resonant Style | Solidarity | Jarnstal's soldiers are his family. Any appeal invoking specific Templars — their names, their sacrifices, how they've been used and spent — reaches him where strategic argument cannot. |
 | Thread Sensitivity | 0 | Non-practitioner. Active theological prophylaxis. |
-| Certainty | 4 | Military piety — faith as discipline, not theology. |
+| Truth | 4 | Military piety — faith as discipline, not theology. |
 | Leadership Deviation Ob | 3 during schism / 4 during normal Church operations | He subordinates himself to Himlensendt absolutely during stability. |
 
 **Beliefs:**
@@ -215,7 +215,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 **Arc B: The Questioning Sword**
 - Branch condition: Church Stability ≤ 2 OR Himlensendt has ≥ 2 Scars publicly known OR player defeats Templar forces in T9 (Himmelenger home territory) AND Jarnstal was present.
-- Transformation: Jarnstal's Faith conviction faces the Consequence attack point — is the Temple achieving anything? Certainty: 4 → 3. He begins counting costs that he previously refused to count.
+- Transformation: Jarnstal's Faith conviction faces the Consequence attack point — is the Temple achieving anything? Truth: 4 → 3. He begins counting costs that he previously refused to count.
 - Behavior: Jarnstal takes 1 independent action per season not directed by Himlensendt. He uses this to: (a) assess the military situation accurately (Tribune Investigate on enemy Military, not Intel from Himlensendt), (b) personally meet with Templar soldiers and listen to their experience on the ground.
 - New Belief: "I was told we were winning. I am starting to wonder what winning means."
 - Decision Fork trigger: If Himlensendt in Arc C (Confrontation) attempts to order Jarnstal to suppress his own congregation (arrest devout citizens for political reasons), Jarnstal faces a Decision Fork. He cannot suppress people he has sworn to defend. He will disobey that specific order (Leadership Deviation check Ob 3 — he usually succeeds in resisting because his Order conviction supports institutional defiance on grounds of clear harm).
@@ -242,7 +242,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Resonant Style | Authority | Olafsson is himself an authority — he yields only to higher authority within his framework. The Holy See (distant, unreachable), a direct canonical text he cannot reinterpret, or (in extremis) a miraculous event he personally witnesses could move him. No human argument moves him. |
 | Secondary Resonant Style | Evidence | His hardline Faith claims to be empirically grounded in Scripture. Evidence that Scripture does not say what he claims it says — documented, authenticated textual evidence — is the only argumentation vector. |
 | Thread Sensitivity | 0 | Prophylaxis at maximum. He has seen the consequences of Thread exposure and actively maintains theological inoculation. |
-| Certainty | 5 | He is the highest Certainty NPC in the game. First Coherence loss nullified per session. +2D on Faith-aligned actions during schism. |
+| Truth | 5 | He is the highest Truth NPC in the game. First Coherence loss nullified per session. +2D on Faith-aligned actions during schism. |
 | Leadership Deviation Ob | 5 | Effectively never deviates from Faith framework. Conviction crisis table rolls still apply at 3+ Scars, but Scar accumulation requires Total Victory via Evidence RS. |
 
 **Beliefs:**
@@ -252,7 +252,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 **Arc A: The Instrument of Purity (Default)**
 - Behavior: Olafsson prosecutes Heresy Investigations systematically. Any named practitioner who appears in a Church Attention Pool at ≥ 3 becomes a Olafsson target. His investigations are thorough, documented, and procedurally correct. He is not cruel — he is precise.
-- Game mechanic: Voss-prosecuted Heresy Investigations use Ob 1 (he is the best investigator the Church has). His Argue pool in tribunal: Cognition 5, Church Domain Expertise +1D, Certainty 5 bonus +2D = formidable. Player faces the hardest possible Tribunal opponent when Olafsson prosecutes.
+- Game mechanic: Voss-prosecuted Heresy Investigations use Ob 1 (he is the best investigator the Church has). His Argue pool in tribunal: Cognition 5, Church Domain Expertise +1D, Truth 5 bonus +2D = formidable. Player faces the hardest possible Tribunal opponent when Olafsson prosecutes.
 - Arc A passive conditioner: Every 4 seasons in Arc A, Olafsson completes one Structural Investigation on the Thread practitioner network (Evidence Track advancing +2/season automatically from Inquisition resources). At Evidence 8, he has a Structural Finding implicating a named PC-affiliated NPC. This generates an automatic Priority 2 (Heresy Investigation) against that NPC.
 
 **Arc B: The Zealot in Question**
@@ -285,7 +285,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Resonant Style | Evidence | Show her the fiscal data. Specific numbers, documented ledgers, projected deficits. Her framework claims to be reality-grounded (the institution must be funded). Evidence that the institution cannot fund its current trajectory moves her. |
 | Secondary Resonant Style | Consequence | Project the consequences of financial ruin. She has already run these numbers. Hearing them stated by someone outside the Church — especially a Guild representative — forces public confrontation with what she privately fears. |
 | Thread Sensitivity | 0 | Pragmatic non-interest. She has no theological position on Thread. If Thread practitioners paid tithes reliably, she would probably tolerate them. |
-| Certainty | 3 | Pragmatic believer. Faith is institutional habit and social infrastructure. She does not experience it as revealed truth. |
+| Truth | 3 | Pragmatic believer. Faith is institutional habit and social infrastructure. She does not experience it as revealed truth. |
 | Leadership Deviation Ob | 1 | Lowest of all Cardinals. She is the most independent operator in the Church. Her institution is finance, not theology. |
 
 **Beliefs:**
@@ -326,7 +326,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Resonant Style | Evidence | Show her specific, documented, authenticated facts she cannot explain within her theological framework. She is looking for these already. She will receive them as gifts rather than attacks. |
 | Secondary Resonant Style | Authority | Within her framework: a canonical text she has not seen, authenticated by multiple chains of custody, citing Thread phenomena in non-condemnatory terms, would be Authority that forces framework revision. She knows such texts may exist — the Einhir archive at T15 is her greatest unresolved question. |
 | Thread Sensitivity | 8 | Undiscovered. Her scholarly engagement with Thread-adjacent texts has produced micro-TS development she has not attributed correctly. She occasionally perceives things she explains as spiritual intuition. |
-| Certainty | 3 | Precisely balanced. She holds Faith and Reason in an equilibrium that requires constant maintenance. Any strong evidence in either direction tips the balance. |
+| Truth | 3 | Precisely balanced. She holds Faith and Reason in an equilibrium that requires constant maintenance. Any strong evidence in either direction tips the balance. |
 | Leadership Deviation Ob | 2 | She operates independently when scholarly integrity requires it. |
 
 **Beliefs:**
@@ -366,7 +366,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Attribute | Value |
 |-----------|-------|
 | Thread Sensitivity | 0 (confirmed per ED-392 resolution) |
-| Certainty | 5 (per ED-393, provisional — confirm pending: Deed-logic worldview is self-reinforcing) |
+| Truth | 5 (per ED-393, provisional — confirm pending: Deed-logic worldview is self-reinforcing) |
 | Coherence | N/A |
 
 **Beliefs:**
@@ -427,7 +427,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Resonant Style | Consequence | Show him that his operations are producing worse outcomes than alternatives — that the Riskbreaker approach to a problem is creating the threat it's supposed to solve. Operationally pragmatic minds respond to demonstrated failure. |
 | Secondary Resonant Style | Evidence | Present specific operational intelligence about his network's compromises — Niflhel infiltration of a Riskbreaker cell, Church surveillance that has been two steps ahead. His operational pride is the entry point. |
 | Thread Sensitivity | 20+ (active, hidden) | He has perceived Thread phenomena during operations in the Southernmost adjacent zones. He calls it "reading the ground." He does not have a framework for what he experiences. |
-| Certainty | 2 (Skeptic) | Operational awareness of Thread reality — he has seen too much to dismiss it and too little to integrate it. He operates empirically: what works, not what it means. |
+| Truth | 2 (Skeptic) | Operational awareness of Thread reality — he has seen too much to dismiss it and too little to integrate it. He operates empirically: what works, not what it means. |
 | Leadership Deviation Ob | 1 | He is the most operationally independent NPC in the game. Ehrenwall tasks him and looks away. |
 
 **Beliefs:**
@@ -539,7 +539,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Primary Conviction | Continuity | The work. Only the work. He has been at the Southernmost for 31 years. He does not know what he would do elsewhere. |
 | Secondary Conviction | Equity | He grew up in a fishing village. The people who suffer most from the Calamity's boundary effects are not the powerful factions — they are the coastal communities. He does not say this often. |
 | Thread Sensitivity | 60 | Second only to Edeyja. He perceives configurations she cannot reach because his perception is less structured — he feels the substrate's mood rather than reading it. Complements Edeyja's technical precision. |
-| Certainty | 0 | Thread reality is the only reality. He has not thought about Solmund in twenty years. |
+| Truth | 0 | Thread reality is the only reality. He has not thought about Solmund in twenty years. |
 | Resonant Style | Evidence | Show him specific RS data — the numbers, the drift rates. His worldview is calibrated to exact metrics. |
 | Leadership Deviation | N/A | Answers to Edeyja and to the work. No other authority. |
 
@@ -582,9 +582,9 @@ When RS crosses a band boundary at Accounting, the following arc effects fire ac
 | RS Transition | NPC arc effects |
 |--------------|----------------|
 | 72 → Strained (79→59) | No arc effect. (Starting band in most campaigns.) |
-| Strained → Fragile (59→39) | Vaynard: TS check if in Arc A — if TS ≥ 14, Spirit check TN7 Ob 2; success = TS +5 (Calamity proximity effect). Edeyja: Belief 1 intensifies — she cannot accept visitors until Warden Cooperation ≥ 1. All Church Cardinals: Certainty −1 (the world's visible degradation undermines the "Solmund's creation is complete and whole" theology). |
+| Strained → Fragile (59→39) | Vaynard: TS check if in Arc A — if TS ≥ 14, Spirit check TN7 Ob 2; success = TS +5 (Calamity proximity effect). Edeyja: Belief 1 intensifies — she cannot accept visitors until Warden Cooperation ≥ 1. All Church Cardinals: Truth −1 (the world's visible degradation undermines the "Solmund's creation is complete and whole" theology). |
 | Fragile → Fractured (39→19) | All NPCs with TS ≥ 30: Discovery Event risk fires regardless of other conditions (the substrate is generating its own encounters). Himlensendt: if still in Arc A, mandatory Conviction check — he must publicly explain the visible world degradation within his theology. If he cannot (Cognition 4 roll vs Ob 3, failure = public contradiction): Scar 1 fires automatically regardless of player action. Torsvald: TS 20+ → Stirring (30) guaranteed within 1 season. Vossen: Continuity secondary fully activates ("the work must survive even if the movement doesn't"). |
-| Fractured → Critical (19→1) | All NPC factions enter Arc C or their existing Arc C accelerates. No new arc movement — this is the end state. Edeyja: if in Arc A (no collaboration): she abandons the Southernmost. If in Arc B: she performs the last warden action (a permanent structural Mending attempt, campaign climax, OW required or RS → 0 immediately from her failure). Almud (in any state): Certainty forced to 0 regardless of previous trajectory (the world's collapse shatters the Order Conviction that claimed to protect it). |
+| Fractured → Critical (19→1) | All NPC factions enter Arc C or their existing Arc C accelerates. No new arc movement — this is the end state. Edeyja: if in Arc A (no collaboration): she abandons the Southernmost. If in Arc B: she performs the last warden action (a permanent structural Mending attempt, campaign climax, OW required or RS → 0 immediately from her failure). Almud (in any state): Truth forced to 0 regardless of previous trajectory (the world's collapse shatters the Order Conviction that claimed to protect it). |
 
 ---
 
@@ -594,10 +594,10 @@ When TC crosses a milestone, the following arc effects fire:
 
 | TC Milestone | NPC arc effects |
 |-------------|----------------|
-| TC 40 (Church Assertive) | Baralta: Certainty check (Categorical Imperative framework claims to prevent this — if it hasn't, something is wrong). Attunement 4D TN7 Ob 2; failure = Certainty −1. Ehrenwall: Coup Counter check trigger — if Crown Stability ≤ 3 at TC 40 crossing: Coup Counter +1 (Church growing AND Crown weak = existential threat to Valoria). |
+| TC 40 (Church Assertive) | Baralta: Truth check (Categorical Imperative framework claims to prevent this — if it hasn't, something is wrong). Attunement 4D TN7 Ob 2; failure = Truth −1. Ehrenwall: Coup Counter check trigger — if Crown Stability ≤ 3 at TC 40 crossing: Coup Counter +1 (Church growing AND Crown weak = existential threat to Valoria). |
 | TC 55 (Church Prominent) | Torben: Loyalty check — if Loyalty ≤ 3 to Crown AND TC 55: Torben begins seeking information about Thread independently (his curiosity, previously dormant, activates under environmental stress). TS: 0 → 5 (environmental exposure begins). Klapp (Cardinal of Temperance): her private dataset gains 2 new entries. She presents a truncated summary to Himlensendt — not the full dataset, just the trend line. This is an Authority trigger attempt that Himlensendt can accept (Scar) or dismiss (no change). |
 | TC 65 (Church Dominant) | Baralta: if in Arc A (Constitutional Triumph path) AND TC 65: the constitutional framework has failed by her own definition. Baralta automatically enters Arc B (The Pragmatist) — no player action required. The system itself produced the proof her framework predicted would never come. Vossen: RM Presence markers in TC-prominent territories: survival check. Presence markers in TC ≥ 65 territories face Church suppression — −1 Presence marker per Church-Prominent territory per Accounting unless player protects. |
-| TC 80 (Church Ascendant) | Almud (any arc): Belief 3 crisis — "Torben must be kept from Altonian influence." TC 80 PT drift means the entire peninsula is more pious. If Almud is in any arc, this produces a forced Decision Fork: accept the new theological reality (Certainty −1) or reassert Order (Coup Counter +1 if Ehrenwall perceives Crown as theologically capitulating). Both consequences fire regardless of what the player has done. The milestone is the trigger. |
+| TC 80 (Church Ascendant) | Almud (any arc): Belief 3 crisis — "Torben must be kept from Altonian influence." TC 80 PT drift means the entire peninsula is more pious. If Almud is in any arc, this produces a forced Decision Fork: accept the new theological reality (Truth −1) or reassert Order (Coup Counter +1 if Ehrenwall perceives Crown as theologically capitulating). Both consequences fire regardless of what the player has done. The milestone is the trigger. |
 
 ---
 
