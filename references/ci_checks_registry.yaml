@@ -196,6 +196,13 @@ ci_checks:
     ci_job: mechanics-index-check
     notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
 
+  - path: tools/wiring_map_check.py
+    level: 5
+    role: "Report-only wiring-manifest gate (ED-IN-0074): every module:/adapter: tag in references/wiring_manifest.yaml resolves in its live registry (module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, valid build/godot vocab. Backs the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/wiring_map.html) — catches a module rename / moved adapter as a caught error, not silent drift."
+    paired_hook: ""
+    ci_job: wiring-map-check
+    notes: "Added 2026-07-18 (ED-IN-0074 follow-up). Report-only (continue-on-error): the manifest is analysis-derived, not ratified canon, so a legitimate rename shouldn't block an unrelated PR. Also runs locally via valoria_local.py --staged (report-only). The same tool also emits --work-list (ranked Godot port queue), --summary, and --emit-map-json (regenerates the map's embedded PORT block). Flip to blocking (drop continue-on-error, add to ci-summary needs) once the manifest ratifies."
+
   - path: tools/validate_ed_citations.py
     level: 5
     role: "Every ED-NNN / ED-<LANE>-NNNN cited in canon/design docs resolves to a real, non-open ledger entry (active + archives)."

@@ -39,6 +39,7 @@ def main(argv):
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
         ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
+        ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the
