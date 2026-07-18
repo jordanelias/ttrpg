@@ -30,18 +30,28 @@ highest-value work is **not tuning numbers**; it is **ratifying two foundations*
 the character schema) and **wiring what is already built** but dead-in-campaign. Balance tuning on top of
 an unwired skeleton measures the skeleton.
 
-## The eight headline findings
+> **Correction pass (2026-07-18, post adversarial review).** An independent read-only reviewer re-ran
+> every executable finding and confirmed H1–H3, H5–H7, H9 and the §3.5 region table (several *stronger*
+> than first stated). It refuted one graded claim and flagged three overreaches, all in the currency
+> section — corrected in place below and marked **↺ corrected**: **H8/C-b retracted** (CURRENT.md is
+> *accurate* — 311 files still carry live `certainty`, so the corpus sweep is genuinely STAGED, not stale);
+> **H4 narrowed** (adapter-level n=100–500 runs *do* exist in `audit_registry.jsonl`); rename stats fixed
+> to the git-verified `96 files, +513/−475`; the §1 count-table relabeled (34 = modules + adapters); and the
+> headline count reconciled to **nine**.
+
+## The nine headline findings
 
 | # | Finding | Grade | Evidence |
 |---|---|---|---|
-| **H1** | **`VICTORY_THRESHOLD` is a dead parameter.** Setting it to 1, 11, or 999 yields *identical* win-shares. The campaign resolves winners by something other than its nominal victory gate. | **[VERIFIED]** — `test_f7_victory_threshold_is_a_dead_param` passes | §5 |
+| **H1** | **`VICTORY_THRESHOLD` is a dead parameter.** Setting it to 1, 11, or 999 yields *identical* win-shares — **structurally, at any n**: `victory.py:27,70,88` read the module-level global; `run_batch(params=…)` writes `world.params`, which no victory consumer ever reads. The campaign resolves winners by something other than its nominal gate. | **[VERIFIED]** — test passes + `victory.py` grep | §5 |
 | **H2** | **NPC Convictions never reach a contest verdict.** The judging armature is arithmetically single-axis (a balanced judge ties all four styles at **0.7250**), and the substrate's Conviction axes `(hierarchical, sacred, instrumental, traditional)` are a *different space* from the contest's `(evidence, consequence, authority, insinuation)`, with no bridge. | **[VERIFIED]** — ran the live armature | §4 |
 | **H3** | **The "~87% win-share degeneracy" is stale lore.** The real n=8/seed-42 batch is `{Crown 37.5, Church 12.5, Hafenmark 12.5, Varfell 37.5}` — no degeneracy. CLAUDE.md §7 still asserts it as fact; five docs cite it; the two-day-review doc repeated it. | **[CONTRADICTED]** — ran `mc_v18` | §5 |
-| **H4** | **Real balance is unmeasured.** No n≥100 campaign characterization exists anywhere in the repo. The only n=100 datapoint is one I generated ad-hoc (Varfell 55% skew), and it is in no ledger. | **[VERIFIED]** | §5 |
+| **H4 ↺** | **`mc_v18` campaign win-share is uncharacterized at scale.** No n≥100 *campaign win-share* run is pinned in any ledger; the only such datapoint is one I generated ad-hoc (Varfell 55% skew). *Corrected:* adapter-level n=100–500 runs **do** exist in `audit_registry.jsonl` (2026-07-12; two flag `DEGENERATE_DISTRIBUTION`) — so the earlier "nothing anywhere" was too broad. | **[VERIFIED]** (narrowed) | §5 |
 | **H5** | **Mass-battle progress is negative-signed and churning.** The historical gauge is frozen at **7/20**; the Lanchester melee exponent is **p≈3.2** (worse than the p≈2.5 still circulating), against a required **≤1.4**. DG-6..16 all open. | **[RELAYED]** + ledger-cross-checked | §5 |
 | **H6** | **Wired-but-vacuous registries.** `generate_npc`/`form_knot`/`register_settlement` have zero callers, so `world.npcs/knots/settlements` stay empty forever and every downstream consumer silently no-ops. | **[RELAYED]** — audit D6 | §3 |
 | **H7** | **Fabricated-adjacent citations pass CI green.** `clock_registry_v30`'s `ED-793/794/795/796` tags resolve to unrelated already-closed items; the checker only verifies an ID *exists*, not that it's relevant. | **[VERIFIED]** — grepped the ledger | §2, §8 |
-| **H8** | **The currency authority is stale about itself.** CURRENT.md still says the Certainty→Truth rename is "STAGED" when it *executed*; CLAUDE.md §7 asserts a debunked balance fact; `conviction_taxonomy_v30.md` states its own status four times with two different values. | **[VERIFIED]** | §8 |
+| **H8 ↺** | **CLAUDE.md §7 is stale about a balance fact** (the debunked "~87%"), and `conviction_taxonomy_v30.md` states its own status four times with two values. *Corrected:* the third sub-claim is **retracted** — CURRENT.md's "Certainty→Truth rename STAGED" is **accurate**, not stale (blame: written in the rename commit; **311 files still carry live `certainty`**, so the corpus sweep genuinely did not execute). | **[VERIFIED]** (C-b retracted) | §8 |
+| **H9** | **The Key substrate is write-only outside one slice.** Keys are produced but the universal apply path (`articulation`) is a stub — all 3 entry points `raise`; flagship types (`state.scar_acquired`…) emit nowhere. Only `echo_transport` applies (to 7 `MULTS` faction stats). | **[VERIFIED]** — grep | §3.5 |
 
 ## The balance-readiness verdict, by domain
 
@@ -82,7 +92,8 @@ number below, because **a balance figure measured on an unwired path is measurin
 `faction_take_action` calls → conquest → `resolve_mass_battle`; a 1-of-8 scene trigger; a parliamentary
 scene) → `run_accounting` → `check_all_factions` → GD-1 victory check.
 
-**Build-state coverage of the 27 contracted modules** (`references/wiring_manifest.yaml`, validated by
+**Build-state coverage of all 34 conversion units** (the 27 modules **+ 7 adapters**; module-only counts are
+`live 2 · gated 1 · deferred 10 · design 9 · stub 3 · unwired 2`) (`references/wiring_manifest.yaml`, validated by
 `tools/wiring_map_check.py`):
 
 | build-state | count | meaning |
@@ -451,17 +462,20 @@ Listed as findings; **not executed here** (this pass is analysis-only per its St
 | # | Surface | Defect | Fix |
 |---|---|---|---|
 | C-a | **CLAUDE.md §7** | asserts the debunked "~87% degeneracy" as a live fact | replace with the H3/H4 read (small-N artifact; n≥100 unmeasured) |
-| C-b | **CURRENT.md:115 + ED-IN-0075 ledger** | say Certainty→Truth is "STAGED"; it **executed** (89 files/515 refs, commit `6dd2f9f`) | STAGED → EXECUTED |
+| ~~C-b~~ ↺ | ~~CURRENT.md "STAGED"~~ | **RETRACTED after review.** CURRENT.md:115 correctly labels the corpus-wide rename **STAGED** — only a partial sweep landed (`git show 6dd2f9f`: **96 files, +513/−475**) and **311 files still carry live `certainty`**. No fix owed; the follow-up sweep is real outstanding work | (none) |
 | C-c | **`conviction_taxonomy_v30.md`** | 4 status assertions, 2 values (lines 1/2/6/9) | single-source via the `obs_core` `## Status:` regex owner (audit C-9) |
 | C-d | **`clock_registry_v30.md`** | 3+ unstruck stale rows; `ED-793/794/795/796` tags cite unrelated closed items (pass CI green) | strike the rows; fix or remove the citations |
 | C-e | **`mechanics_index.yaml:145,950`** | still keys the meter `certainty_track` (not in the documented keep-list) | re-key → `truth` |
 | C-f | **`references/values_master.yaml`** | carries the struck Combat Pool formula (already quarantine-flagged) | out of scope until the typed-params migration (§CLAUDE.md 5) |
 | C-g | **PR #185 review doc §5** | propagated the "~87%" claim (my own error) | remove; cite H3 |
 
-**Meta-point:** C-a, C-b, C-c are the ones that matter most, because CLAUDE.md §7 and CURRENT.md are the
-designated currency *authorities*. When the authority is stale, every downstream session inherits the error —
-exactly how the "87%" survived into five docs and this program's own review. This is the propagation-lag
-failure mode CLAUDE.md §2 (ED-1094) was written to prevent, caught live.
+**Meta-point:** C-a and C-c matter most, because CLAUDE.md §7 is a designated currency *authority*. When the
+authority is stale, every downstream session inherits the error — exactly how the "87%" survived into five
+docs and this program's own review (and, in the first draft of *this* audit, into a retracted C-b). This is
+the propagation-lag failure mode CLAUDE.md §2 (ED-1094) was written to prevent, caught live — including
+against itself. **The C-b retraction is the counter-example that proves the discipline:** CURRENT.md was
+*right* to say STAGED; the adversarial pass, not deference, is what established which "authority is stale"
+claims actually hold.
 
 ---
 
@@ -476,7 +490,7 @@ failure mode CLAUDE.md §2 (ED-1094) was written to prevent, caught live.
 | Armature schism (L2) | printed `keys.AXES` vs `ArmatureAxis.ALL` | disjoint spaces confirmed |
 | doc:null count | `grep -n "doc: null"` + line-level read | **9** fields (10th is a comment); CLAUDE.md's "10" stale |
 | clock_registry citations | grepped `ED-793..796` in `editorial_ledger.jsonl` | all four are unrelated closed 2026-05-10 items |
-| Truth rename executed | `git show 6dd2f9f` + grep live corpus | prose sweep landed; residuals in `mechanics_index`, `conviction.py` (intentional) |
+| Truth rename **partially** executed | `git show 6dd2f9f` (96 files, +513/−475) + grep live corpus | SoT authored + partial sweep; **311 files still carry live `certainty`** → the corpus-wide sweep is genuinely STAGED (CURRENT.md accurate). Correction to the first draft, which overstated this |
 
 *Filed as adversarial analysis. Governing docs named inline are authoritative; this audit ratifies nothing.
 Grades: [VERIFIED] = independently reproduced · [CONTRADICTED] = verification refuted the received claim ·
