@@ -1,0 +1,392 @@
+<title>Valoria — Wiring Map (tag-anchored, 9-tier)</title>
+<style>
+  :root{
+    --ground:#f5f1e8; --panel:#fbf8f1; --panel-2:#efe9db; --ink:#23252b; --ink-soft:#4a4a48; --muted:#6f6d64; --faint:#93907f;
+    --rule:#e2dbc9; --rule-2:#d3cbb6; --gold:#a9781a; --gold-soft:#ece0c0;
+    --live:#3f7d54; --gated:#2c7d79; --deferred:#b07f22; --unwired:#6a5aa0; --stub:#b0563a; --design:#8a857a; --state:#a9781a;
+    --live-bg:#e4efe4; --gated-bg:#e0eeed; --deferred-bg:#f1e6cc; --unwired-bg:#e9e5f2; --stub-bg:#f2e1da; --design-bg:#eae7dd; --state-bg:#f0e6cd;
+    --t-module:#a9781a; --t-adapter:#2c7d79; --t-key:#a9781a; --t-ed:#6a5aa0; --t-q:#4f79b0; --t-sub:#8a857a;
+    --rd:#4f79b0; --wr:#b0563a;
+    --shadow:0 1px 0 rgba(30,26,15,.04), 0 6px 24px -14px rgba(30,26,15,.28);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ground:#14161c; --panel:#1a1d25; --panel-2:#20242e; --ink:#e9e3d4; --ink-soft:#c8c3b5; --muted:#9a968a; --faint:#6f6c60;
+    --rule:#2a2e39; --rule-2:#353a47; --gold:#d3a748; --gold-soft:#37301d;
+    --live:#5fb07a; --gated:#4bb2ad; --deferred:#d3a24c; --unwired:#a99ad8; --stub:#d67a5c; --design:#9a9488; --state:#d3a748;
+    --live-bg:#1a2a20; --gated-bg:#152826; --deferred-bg:#2c2515; --unwired-bg:#211d31; --stub-bg:#2c1a15; --design-bg:#23241e; --state-bg:#2c2515;
+    --t-module:#d3a748; --t-adapter:#4bb2ad; --t-key:#d3a748; --t-ed:#a99ad8; --t-q:#7aa5da; --t-sub:#9a9488; --rd:#7aa5da; --wr:#d67a5c;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.7);
+  }}
+  :root[data-theme="light"]{--ground:#f5f1e8;--panel:#fbf8f1;--panel-2:#efe9db;--ink:#23252b;--ink-soft:#4a4a48;--muted:#6f6d64;--faint:#93907f;--rule:#e2dbc9;--rule-2:#d3cbb6;--gold:#a9781a;--gold-soft:#ece0c0;--live:#3f7d54;--gated:#2c7d79;--deferred:#b07f22;--unwired:#6a5aa0;--stub:#b0563a;--design:#8a857a;--state:#a9781a;--live-bg:#e4efe4;--gated-bg:#e0eeed;--deferred-bg:#f1e6cc;--unwired-bg:#e9e5f2;--stub-bg:#f2e1da;--design-bg:#eae7dd;--state-bg:#f0e6cd;--t-module:#a9781a;--t-adapter:#2c7d79;--t-key:#a9781a;--t-ed:#6a5aa0;--t-q:#4f79b0;--t-sub:#8a857a;--rd:#4f79b0;--wr:#b0563a;}
+  :root[data-theme="dark"]{--ground:#14161c;--panel:#1a1d25;--panel-2:#20242e;--ink:#e9e3d4;--ink-soft:#c8c3b5;--muted:#9a968a;--faint:#6f6c60;--rule:#2a2e39;--rule-2:#353a47;--gold:#d3a748;--gold-soft:#37301d;--live:#5fb07a;--gated:#4bb2ad;--deferred:#d3a24c;--unwired:#a99ad8;--stub:#d67a5c;--design:#9a9488;--state:#d3a748;--live-bg:#1a2a20;--gated-bg:#152826;--deferred-bg:#2c2515;--unwired-bg:#211d31;--stub-bg:#2c1a15;--design-bg:#23241e;--state-bg:#2c2515;--t-module:#d3a748;--t-adapter:#4bb2ad;--t-key:#d3a748;--t-ed:#a99ad8;--t-q:#7aa5da;--t-sub:#9a9488;--rd:#7aa5da;--wr:#d67a5c;}
+  *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 20px 96px}
+  header.mast{padding:36px 0 16px;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px}
+  .eyebrow::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--rule-2),transparent)}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(25px,4vw,40px);line-height:1.05;letter-spacing:-.015em;margin:.3em 0 .12em;text-wrap:balance}
+  .sub{color:var(--ink-soft);font-size:15px;max-width:84ch;margin:.2em 0 0} .sub b{color:var(--ink);font-weight:600} .sub code{font-family:var(--mono);font-size:13px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+  .valid{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+  .vcard{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--live);border-radius:10px;padding:9px 13px;box-shadow:var(--shadow)}
+  .vcard.warn{border-left-color:var(--deferred)}
+  .vcard .vn{font-family:var(--mono);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .vcard .vk{font-size:11px;color:var(--muted);margin-top:2px}
+  .tagkey{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px;font-size:11.5px;color:var(--muted);align-items:center}
+  .tagkey b{color:var(--ink-soft)}
+  .rail{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:saturate(1.4) blur(9px);-webkit-backdrop-filter:saturate(1.4) blur(9px);border-bottom:1px solid var(--rule);margin-top:18px;padding:10px 0}
+  .rail-in{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap}
+  .ctl-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--rule);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
+  .seg button{font-family:var(--sans);font-size:11.5px;font-weight:500;color:var(--ink-soft);background:transparent;border:0;border-radius:6px;padding:5px 8px;cursor:pointer;white-space:nowrap}
+  .seg button .lv{font-family:var(--mono);font-size:9px;color:var(--faint);display:block;margin-top:1px}
+  .seg button:hover{color:var(--ink)} .seg button[aria-pressed="true"]{background:var(--gold);color:#fff}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#17140c} @media (prefers-color-scheme:dark){.seg button[aria-pressed="true"]{color:#17140c}}
+  .seg button[aria-pressed="true"] .lv{color:rgba(255,255,255,.72)}
+  .btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule-2);border-radius:8px;padding:6px 10px;cursor:pointer} .btn:hover{border-color:var(--gold);color:var(--ink)} .btn[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);color:var(--ink)} .spacer{flex:1;min-width:8px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px;align-items:center}
+  .lg{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:4px 11px 4px 8px;cursor:pointer} .lg[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+  .lg .sw{width:10px;height:10px;border-radius:3px;flex:none}
+  .sw.live{background:var(--live)}.sw.gated{background:var(--gated)}.sw.deferred{background:var(--deferred)}.sw.unwired{background:var(--unwired)}.sw.stub{background:var(--stub)}.sw.design{background:var(--design)}.sw.state{background:var(--state)}
+  .lg .cnt{font-family:var(--mono);font-size:10px;color:var(--faint)} .lg .di{color:var(--muted);font-size:11px}
+  .trace-banner{display:none;align-items:center;gap:10px;margin:12px 0 0;background:var(--gold-soft);border:1px solid var(--gold);border-radius:9px;padding:8px 12px;font-size:13px} body.is-tracing .trace-banner{display:flex}
+  .trace-banner .tk{font-family:var(--mono);font-weight:600;color:var(--gold)} .trace-banner .tstat{color:var(--muted);font-size:12px} .trace-banner button{margin-left:auto}
+  .tree{margin-top:14px}
+  .node{--stripe:var(--rule-2)}
+  .node[data-status="live"]{--stripe:var(--live)}.node[data-status="gated"]{--stripe:var(--gated)}.node[data-status="deferred"]{--stripe:var(--deferred)}.node[data-status="unwired"]{--stripe:var(--unwired)}.node[data-status="stub"]{--stripe:var(--stub)}.node[data-status="design"]{--stripe:var(--design)}.node[data-status="state"]{--stripe:var(--state)}
+  .node.tier-hidden{display:none}
+  .row{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:start;padding:7px 10px 7px 11px;border-radius:9px;position:relative} .row:hover{background:var(--panel)} .node.has-kids>.row{cursor:pointer}
+  .node>.row::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:3px;background:var(--stripe);opacity:.9}
+  .tw{width:16px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--faint);flex:none;margin-left:2px} .tw svg{width:9px;height:9px;transition:transform .16s} .node:not(.has-kids)>.row .tw{visibility:hidden} .node.open>.row .tw svg{transform:rotate(90deg)}
+  .lvtag{font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--rule);border-radius:4px;padding:2px 5px;white-space:nowrap;margin-top:2px;align-self:start;min-width:74px;text-align:center}
+  .body{min-width:0}
+  .ttl{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+  .lbl{font-weight:600;font-size:14px;color:var(--ink)} .lbl.code{font-family:var(--mono);font-weight:600;font-size:12.5px}
+  .badge{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:999px;font-weight:600;white-space:nowrap;transform:translateY(-1px)}
+  .badge.live{color:var(--live);background:var(--live-bg)}.badge.gated{color:var(--gated);background:var(--gated-bg)}.badge.deferred{color:var(--deferred);background:var(--deferred-bg)}.badge.unwired{color:var(--unwired);background:var(--unwired-bg)}.badge.stub{color:var(--stub);background:var(--stub-bg)}.badge.design{color:var(--design);background:var(--design-bg)}.badge.state{color:var(--state);background:var(--state-bg)}
+  /* godot-status axis — sourced from PORT (references/wiring_manifest.yaml) */
+  .gb{font-family:var(--mono);font-size:8.5px;letter-spacing:.03em;text-transform:uppercase;padding:2px 6px;border-radius:5px;font-weight:700;white-space:nowrap;transform:translateY(-1px);border:1px solid transparent}
+  .gb .gi{opacity:.55;font-weight:400;margin-right:3px}
+  .gb.ported{color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,transparent);border-color:color-mix(in srgb,var(--gold) 38%,transparent)}
+  .gb.typed{color:var(--gated);background:color-mix(in srgb,var(--gated) 15%,transparent)}
+  .gb.oracle{color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,transparent);border-color:color-mix(in srgb,var(--rd) 34%,transparent)}
+  .gb.none{color:var(--stub);background:color-mix(in srgb,var(--stub) 13%,transparent)}
+  .gb.retire{color:var(--faint);background:transparent;text-decoration:line-through;opacity:.85}
+  .portview{margin:16px 0 2px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);display:none}
+  body.show-port .portview{display:block}
+  .portview h2{font-family:var(--serif);font-weight:600;font-size:19px;margin:0 0 3px;letter-spacing:-.01em}
+  .portview .pv-sub{color:var(--muted);font-size:12.5px;margin:0 0 13px;max-width:92ch} .portview .pv-sub code{font-family:var(--mono);font-size:11.5px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+  .pv-grid{display:grid;gap:12px}
+  .pv-band{border-left:3px solid var(--rule-2);padding:1px 0 1px 13px}
+  .pv-band.b-ported{border-color:var(--gold)} .pv-band.b-next{border-color:var(--rd)} .pv-band.b-blocked{border-color:var(--stub)} .pv-band.b-retire{border-color:var(--faint)} .pv-band.b-gap{border-color:var(--deferred)}
+  .pv-h{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:7px;display:flex;align-items:baseline;gap:8px}
+  .pv-h .n{color:var(--faint);font-weight:400} .pv-h .hint{margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;color:var(--faint);font-size:10.5px}
+  .pv-item{display:grid;grid-template-columns:22px 150px 1fr;gap:9px;padding:3px 6px;font-size:12.5px;align-items:baseline;cursor:pointer;border-radius:6px}
+  .pv-item:hover{background:var(--panel-2)}
+  .pv-rank{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center}
+  .pv-name{font-family:var(--mono);font-weight:600;font-size:12px;color:var(--ink)} .pv-name .kd{color:var(--faint);font-weight:400;font-size:9.5px;margin-left:5px}
+  .pv-note{color:var(--muted);font-size:11.5px;line-height:1.4} .pv-note b{color:var(--ink-soft);font-weight:600}
+  @media (max-width:640px){.pv-item{grid-template-columns:1fr;gap:2px}.pv-rank{display:none}}
+  .tag{font-family:var(--mono);font-size:10px;border-radius:5px;padding:1px 7px;white-space:nowrap;cursor:pointer;border:1px solid var(--rule-2);background:var(--panel);font-weight:600}
+  .tag .tp{opacity:.6;font-weight:400}
+  .tag.t-module{color:var(--t-module)} .tag.t-adapter{color:var(--t-adapter)} .tag.t-key{color:var(--t-key)} .tag.t-ed{color:var(--t-ed)} .tag.t-q{color:var(--t-q)} .tag.t-sub{color:var(--t-sub)}
+  .tag:hover{border-color:var(--gold)} .tag.hit{border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 1px var(--gold)}
+  .desc{color:var(--ink-soft);font-size:12.5px;margin-top:3px;line-height:1.42;max-width:98ch} .desc code,.desc b.c{font-family:var(--mono);font-size:11px;background:var(--panel-2);padding:1px 4px;border-radius:4px;color:var(--ink);font-weight:600}
+  .flag{color:var(--stub);font-weight:600} .att{color:var(--unwired);font-weight:600}
+  .wires{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .kchip{font-family:var(--mono);font-size:10px;border-radius:5px;padding:2px 7px;cursor:pointer;border:1px solid var(--rule-2);background:var(--panel);color:var(--ink-soft);white-space:nowrap;line-height:1.5}
+  .kchip .ar{margin-right:4px;font-weight:700;font-size:9px} .kchip.emit .ar{color:var(--gold)} .kchip.cons .ar{color:var(--gated)} .kchip.rd .ar{color:var(--rd)} .kchip.wr .ar{color:var(--wr)}
+  .kchip:hover{border-color:var(--gold)} .kchip.hit{border-color:var(--gold);background:var(--gold-soft);color:var(--ink);box-shadow:0 0 0 1px var(--gold)}
+  .children{margin-left:18px;padding-left:12px;border-left:1px solid var(--rule);margin-top:1px} .node:not(.open)>.children{display:none}
+  @media (max-width:640px){.children{margin-left:9px;padding-left:8px} .lvtag{min-width:0}}
+  body.is-tracing .tree .node:not(.trace-node)>.row .lbl{opacity:.45} body.is-tracing .tree .node.trace-node>.row{background:var(--gold-soft)} body.is-tracing .tree .node.trace-node>.row .lbl{opacity:1}
+  body.is-focusing .node:not(.focus-hit)>.row{opacity:.3} .node.focus-hit>.row{background:var(--panel)}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px;line-height:1.6} footer code{font-family:var(--mono);font-size:11.5px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Valoria · tag-anchored wiring · 9-tier</div>
+    <h1>Wiring map — anchored on registry tags, not file paths</h1>
+    <p class="sub">Every node hangs off a <b>stable pointer/tag</b> (<span style="color:var(--t-module);font-family:var(--mono);font-size:12px">module:</span> from the 27-module contract · <span style="color:var(--t-adapter);font-family:var(--mono);font-size:12px">adapter:</span> from cross-scale · <span style="color:var(--t-key);font-family:var(--mono);font-size:12px">key:</span> from the type registry · <span style="color:var(--t-ed);font-family:var(--mono);font-size:12px">ed:</span> from the ledger · <span style="color:var(--t-q);font-family:var(--mono);font-size:12px">q:</span> from the quantity registries) — so it survives file moves like the <code>sim/→engine/</code> restructure. Structured on the 9-tier ladder: <b>Wrapper → System → Subsystem → Module → Adapter → Mechanic → Submechanic → Routine → Subroutine.</b> Two axes per unit: a <b>build badge</b> (this node's runtime wiring state) and a <b>gd badge</b> (the tagged unit's Godot-port state). Both, and every tag, are checked by <code>tools/wiring_map_check.py --check</code> against <code>references/wiring_manifest.yaml</code> — open <b>◧ Godot port view</b> for the ranked port work-list.</p>
+    <div class="valid" id="valid"></div>
+    <div class="tagkey" id="tagkey"></div>
+  </header>
+
+  <div class="rail"><div class="wrap" style="padding:0 20px"><div class="rail-in">
+    <span class="ctl-lbl">Tier</span>
+    <div class="seg" id="tierSeg" role="group" aria-label="tier depth"></div>
+    <button class="btn" id="expandAll">All</button>
+    <button class="btn" id="collapseAll">Top</button>
+    <div class="spacer"></div>
+    <button class="btn" id="portBtn" aria-pressed="false" title="the Godot port work-list, from the manifest">◧ Godot port view</button>
+    <button class="btn" id="themeBtn" style="font-family:var(--mono);font-size:11px">◐</button>
+  </div></div></div>
+
+  <section class="portview" id="portview"></section>
+  <div class="legend" id="legend"></div>
+  <div class="trace-banner" id="traceBanner"><span>Tracing <span class="tk" id="traceKey"></span></span><span class="tstat" id="traceStat"></span><button class="btn" id="clearTrace">Clear ✕</button></div>
+  <main class="tree" id="tree"></main>
+
+  <footer>
+    <div><b>Tags are the identity; paths are not stored.</b> Validated against <code>references/module_contracts.yaml</code> (27 modules) · <code>systems/_architecture/key_type_registry_v30.md</code> (49 key types) · <code>engine/cross_scale/</code> (7 adapters) · <code>references/descriptor_registry.yaml</code> + <code>clock_registry_v30</code> (quantities) · the editorial ledger (ED ids). A tag that stops resolving is a caught error, not silent drift.</div>
+    <div style="margin-top:7px">Tiers: <b>Wrapper</b> (holonic container) · <b>System</b> (engine/layer) · <b>Subsystem</b> (grouping) · <b>Module</b> (contract unit) · <b>Adapter</b> (cross-scale bridge) · <b>Mechanic → Submechanic → Routine → Subroutine</b> (granularity). Colour = build state; the tag = durable identity.</div>
+    <div style="margin-top:7px"><b>gd badge</b> = Godot-port axis (the second axis, from the manifest): <span class="gb ported"><span class="gi">gd</span>Ported</span> a GDScript port exists · <span class="gb typed"><span class="gi">gd</span>Typed export</span> CI-checked param export · <span class="gb oracle"><span class="gi">gd</span>Py oracle</span> real Python to port from, no GDScript yet (the work-list) · <span class="gb none"><span class="gi">gd</span>No oracle</span> canon must be authored first · <span class="gb retire"><span class="gi">gd</span>Retire</span> do not port. Regenerate the map's data with <code>python3 tools/wiring_map_check.py --emit-map-json</code>.</div>
+  </footer>
+</div>
+
+<script>
+const LEVELS=["Wrapper","System","Subsystem","Module","Adapter","Mechanic","Submechanic","Routine","Subroutine"];
+const STATUS={live:["Live"],gated:["Gated"],deferred:["Deferred"],unwired:["Unwired"],stub:["Stub"],design:["Design"],state:["State"]};
+// authoritative registries (extracted from the live tree) — the validator checks tags against these
+const REG={
+ module:new Set("faction_state npc_behavior npc_memory piety_track territorial_piety threadwork fieldwork_knots scene_slate game_director scene_timer audit social_contest mass_battle domain_actions peninsular_strain settlement_layer settlement_economy ci_political victory engine_clock faction_politics miraculous_event scenario_authoring articulation_layer clock_registry personal_combat campaign_architecture".split(" ")),
+ adapter:new Set("scene_dispatch parliamentary_bridge echo_transport domain_echo zoom_in_out handoff_rules articulation".split(" ")),
+ key:new Set("da.antinomian_action da.covert_betrayal da.diplomatic_alliance da.economic_intervention da.public_governance env.crisis env.disaster env.peninsular_strain_shock env.population_change mechanical.accounting mechanical.cascade_resolution mechanical.mission_shift mechanical.project_advanced mechanical.scene_entered mechanical.scene_exited mechanical.scene_skipped mechanical.season_change meta.cascade_cluster_event meta.knot_formed meta.knot_ruptured meta.legacy_event meta.miraculous_event meta.thread_woven scene.battle_concluded scene.combat_felled scene.combat_hit scene.combat_resolved scene.combat_strike scene.contest_resolved scene.dialogue scene.displacement scene.draft_da scene.gift scene.gossip scene.insult scene.interaction scene.investigation_resolved scene.thread_operation scene.threat scene.witness state.belief_revised state.concern_resolved state.coup_attempted state.opinion_revised state.project_completed state.project_failed state.scar_acquired state.standing_change state.succession".split(" ")),
+};
+
+// ── PORT: the godot-status axis, GENERATED from references/wiring_manifest.yaml
+//    regenerate:  python3 tools/wiring_map_check.py --emit-map-json
+const PORT={"as_of":"2026-07-18","golden_path":{"unit":"personal_combat","chain":"combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI round-trip) -> godot/skeleton/engines/combat/ (strike + wound)","note":"The only unit where Python oracle + typed export + GDScript port all exist. This is the template every other port copies."},"modules":{"personal_combat":{"tier":"module","scale":"personal","resolver":"d_sigma","build":"unwired","godot":"gd-ported","port_rank":0,"parity":"key-log + typed-export round-trip","note":"built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path — BUT the mc_v18 loop never routes here (combat branch is dead code), so end-to-end parity is unvalidated."},"mass_battle":{"tier":"module","scale":"scene","resolver":"dice_pool","build":"live","godot":"python-oracle","port_rank":1,"parity":"key-log","note":"ratified engine; fires ~30-45 battles/campaign via conquest. A RICHER unwired engine sits at tests/sim/mass_battle (mislabeled a frozen archive) — reconcile before porting."},"social_contest":{"tier":"module","scale":"scene","resolver":"dice_pool","build":"gated","godot":"python-oracle","port_rank":1,"parity":"key-log","note":"Agon kernel built (1 of 4 games); reached live only via emergency_council."},"victory":{"tier":"module","scale":"provincial","resolver":"state_reader","build":"live","godot":"python-oracle","port_rank":1,"parity":"state read","note":"GD-1; small + fully live. Easy first strategic port."},"threadwork":{"tier":"module","scale":"personal","resolver":"dice_pool","build":"unwired","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"13 operations built, zero live callers; rendering is a stub."},"territorial_piety":{"tier":"module","scale":"territory","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"CI generation live via ci_track; CANONICAL doc with ZERO Key integration."},"clock_registry":{"tier":"module","scale":"provincial","resolver":"manifest","build":"design","godot":"python-oracle","port_rank":2,"parity":"data","note":"pure catalog; ports as a data table."},"faction_state":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION]."},"faction_politics":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"contest/faction.py succession/coalition math exists but unwired."},"piety_track":{"tier":"module","scale":"personal","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"conviction.py Scar accumulation real; reached only via the unwired knot chain."},"settlement_layer":{"tier":"module","scale":"territory","resolver":"deterministic_accounting","build":"design","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"territory/ substrate built but unwired; Mandate aggregation (7T/(T+6)) unbuilt."},"engine_clock":{"tier":"module","scale":"provincial","resolver":"clock_advance","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null temporal spine — the sole remaining T0 blocker (ED-1051). Blocks the season/accounting cadence port."},"npc_behavior":{"tier":"module","scale":"personal","resolver":"deterministic_accounting","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle."},"npc_memory":{"tier":"module","scale":"personal","resolver":"state_reader","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; schema lives in a doc-12 bridge."},"fieldwork_knots":{"tier":"module","scale":"personal","resolver":"dice_pool","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"fieldwork/investigation raise; knots built but the scene runner is a stub."},"domain_actions":{"tier":"module","scale":"provincial","resolver":"d_sigma","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"da.* 5-tag taxonomy; doc:null, zero code."},"ci_political":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"CANONICAL doc, ZERO Key integration; card system unbuilt."},"peninsular_strain":{"tier":"module","scale":"peninsula","resolver":"deterministic_accounting","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"owns Turmoil + IP; env.* emitters + occupation ladder unbuilt (IP isn't even a clocks key)."},"scene_slate":{"tier":"module","scale":"scene","resolver":"manifest","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; built = a 59-line queue, the canonical §4 generator is unbuilt."},"game_director":{"tier":"module","scale":"scene","resolver":"manifest","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; scene lifecycle + zoom stack."},"scene_timer":{"tier":"module","scale":"scene","resolver":"state_reader","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"n/a","note":"doc:null observability sidecar."},"audit":{"tier":"module","scale":"scene","resolver":"state_reader","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"n/a","note":"doc:null QA telemetry sink."},"miraculous_event":{"tier":"module","scale":"personal","resolver":"state_reader","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"trigger raises."},"scenario_authoring":{"tier":"module","scale":"peninsula","resolver":"manifest","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"compile-time injection; execution unbuilt."},"articulation_layer":{"tier":"module","scale":"personal","resolver":"armature_dot_product","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"the universal Key consumer — 3x raises. No consume-side oracle exists anywhere."},"settlement_economy":{"tier":"module","scale":"settlement","resolver":"deterministic_accounting","build":"design","godot":"retire","port_rank":9,"parity":"n/a","note":"phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer."},"campaign_architecture":{"tier":"module","scale":"provincial","resolver":"none","build":"design","godot":"retire","port_rank":9,"parity":"n/a","note":"reclassified: a consolidation doc, not a runtime module."}},"adapters":{"scene_dispatch":{"tier":"adapter","scale":null,"resolver":null,"build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"down-scale seam; only 1 of 8 triggers fires."},"parliamentary_bridge":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"runs every season (echo on); emits 13-65 keys/campaign — the ONLY live Key producer."},"echo_transport":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"the paired apply-closure — the only live Key CONSUMER (writes Faction.L/I)."},"domain_echo":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"compute_domain_echo/accord/thread."},"zoom_in_out":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"zoom protocol §4; maps to the Godot GameDirector zoom stack."},"handoff_rules":{"tier":"adapter","scale":null,"resolver":null,"build":"unwired","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"8 §3 rules built, ZERO callers; §3.7 Mass->Personal Duel never fires."},"articulation":{"tier":"adapter","scale":null,"resolver":null,"build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"the intended universal Key reader — stub. The consume/handoff half of the substrate has NO oracle on either side."}},"foundation_gaps":{"godot_spine":{"godot":"no-oracle","note":"BaseEngine / EngineModule / KeyBus / Resolver / GameState are referenced by the skeleton but class_name def = NONE anywhere. Gate-0; the skeleton is non-compilable. The map's Wrapper tier = this undefined spine."},"character_layer":{"godot":"no-oracle","note":"No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every personal-scale port needs this first."},"save_replay_premise":{"status":"violated","note":"Strategy premise 'save = initial conditions + Key log'. But the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key trace, so the Key log cannot reconstruct strategic state. Save/replay/parity holds only for the echo-keyed slice today."}},"build_counts":{"unwired":3,"live":2,"gated":5,"deferred":11,"design":9,"stub":4},"godot_counts":{"gd-ported":1,"python-oracle":16,"no-oracle":15,"retire":2}};
+// n(label,status,{t,tag,mono,desc,cons,emit,rd,wr},children)
+function n(l,s,o={},c){return Object.assign({l,s,c:c||o.c||null},o);}
+const TREE=[
+ // ══════════════ WRAPPER 1 — the campaign engine ══════════════
+ n("Campaign Engine — the orchestrating wrapper","live",{t:1,tag:"ed:ED-IN-0071",mono:1,desc:"The holonic top wrapper: run_campaign composes one season tick at a time until a winner. Every scale-container hangs off this. (Oracle moved sim/→engine/ in ED-IN-0071 — this map no longer cites the path.)"},[
+   n("Season loop — the temporal spine","live",{t:2,tag:"module:engine_clock",desc:"run_season = tick → action → accounting, repeated. engine_clock is the (doc:null) temporal module that owns it."},[
+     n("① Season tick","live",{t:3,tag:"module:engine_clock",desc:"advance_season: counter, arc boundary, flag resets. The mechanical.season_change Key it 'should' emit is unbuilt (engine_clock has no code)."},[
+       n("engine_clock","gated",{t:4,tag:"module:engine_clock",desc:"doc:null temporal spine. The sole remaining T0 blocker (ED-1051).",emit:["mechanical.season_change","mechanical.accounting"]}),
+     ]),
+     n("② Action phase","live",{t:3,tag:"module:faction_state",desc:"The per-season turn: strategic actions → scene distribution → parliamentary vote. Outputs land in the faction_state accounting hub."},[
+       n("faction_state — the accounting hub (in-13)","deferred",{t:4,tag:"module:faction_state",desc:"<span class=\"att\">The graph's densest junction.</span> Consumes ~20 edges; the whole Key graph terminates here at DA_proposal / settlement_accounting. [ASSUMPTION] resolver.",cons:["da.public_governance","da.covert_betrayal","scene.battle_concluded","scene.contest_resolved","state.coup_attempted","state.succession","state.scar_acquired","meta.miraculous_event"],emit:["mechanical.cascade_resolution","mechanical.mission_shift","state.standing_change"]},[
+         n("Conquest","live",{t:6,tag:"module:mass_battle",desc:"Take adjacent territory by force. ~30–45 battles/campaign.",wr:["Territory.owner","Faction.L"]},[
+           n("Terms vs Storm fork","live",{t:7,desc:"Attacker win → Terms (cheaper) else Storm. ED-FA-0013.",wr:["Territory.accord"]}),
+           n("_try_conquest → resolve_mass_battle","live",{t:8,tag:"module:mass_battle",mono:1,desc:"Live routine. Gate: target &amp; Mil≥3."},[
+             n("units.py object model · phase checks","live",{t:9,mono:1,desc:"Subunit/Unit + stamina/morale/rout; rally/reform/threadwork are no-op hooks."}),
+             n("run_multi_unit_battle · tests/sim/mass_battle","unwired",{t:9,mono:1,desc:"The richer engine (formations/collision/Lanchester) — built, bypassed, mislabeled a 'frozen archive'."}),
+           ]),
+         ]),
+         n("Muster · Govern","live",{t:6,tag:"module:settlement_layer",desc:"_try_muster (buy Mil / spend W); _try_govern (Accord/PT, −Sta on fail).",wr:["Faction.Mil","Territory.accord","Faction.Sta"]},[
+           n("Governance verbs (15)","design",{t:7,tag:"module:settlement_layer",desc:"Develop/Fortify/Levy/Survey/Bind-the-Cells/… — the designed replacement for Govern. Zero code. Feeds settlement_layer + Mandate."}),
+         ]),
+         n("Faction-unique","live",{t:6,tag:"module:faction_politics",desc:"By faction; universal Censure fallback."},[
+           n("Crown initiative (3 modes)","live",{t:8,mono:1,desc:"royal_progress / great_work / coronation_renewal.",wr:["Faction.L","Faction.standing"]}),
+           n("Church chain","live",{t:8,mono:1,desc:"excommunication → council → absolution (d10).",wr:["Faction.L","clocks.CI"]}),
+           n("Varfell / Hafenmark → _NOOP","deferred",{t:8,mono:1,desc:"Route around 7 unwired-or-stub unique modules."}),
+           n("propose_censure fallback","gated",{t:8,mono:1,desc:"Only Censure of the §5.4 tier is built; 9 other motions design-only.",wr:["Faction.L","Faction.Sta"]}),
+         ]),
+       ]),
+       n("Cross-scale adapters","gated",{t:3,tag:"adapter:scene_dispatch",desc:"The bridges that ADAPT the strategic aggregate down to personal scenes and back up. All now in engine/cross_scale/."},[
+         n("scene_dispatch","deferred",{t:5,tag:"adapter:scene_dispatch",desc:"Distributes DOWN. 1 of 8 triggers fires; only combat/contest route (combat is dead).",wr:["world.scenes_resolved"]},[
+           n("Stability-Crisis trigger → emergency_council","gated",{t:6,tag:"module:social_contest",desc:"The one live personal scene — fires only at Sta≤2 (0× in ~half of seeds).",emit:["scene.contest_resolved"]},[
+             n("build/resolve_contest — 8 proceedings, 4 games","stub",{t:7,tag:"module:social_contest",desc:"Only game 'agon' built; consensus/negotiation/inquiry stub. sigma_leverage (d+σ)."}),
+             n("_emergency_council_parties [SEED]","gated",{t:9,mono:1,desc:"Both sides from the faction's own L/Sta — no invented actor."}),
+           ]),
+           n("combat trigger (dead)","unwired",{t:6,tag:"module:personal_combat",desc:"Nothing queues scene_type='combat'; targets the deprecated sim combat.py, not the canonical engine."}),
+           n("thread scene → threadwork","unwired",{t:6,tag:"module:threadwork",desc:"13 operations built (Leap/Weave/Pull/…), none dispatched; rendering = stub.",emit:["scene.thread_operation","meta.thread_woven"]}),
+           n("fieldwork / investigation scene","stub",{t:6,tag:"module:fieldwork_knots",desc:"fieldwork/investigation raise; knots built but unwired.",emit:["meta.knot_formed","meta.knot_ruptured","scene.gift","state.belief_revised"]}),
+           n("personal Conviction scars","deferred",{t:6,tag:"module:piety_track",desc:"Scars accrue as scenes resolve; g_scar gates. 3-way name collision with territorial_piety.",cons:["scene.battle_concluded","scene.witness","meta.knot_ruptured","meta.thread_woven"],emit:["state.scar_acquired"]}),
+         ]),
+         n("parliamentary_bridge","gated",{t:5,tag:"adapter:parliamentary_bridge",desc:"Runs every season (echo on). §10 vote → composed Domain Echo. Emits 13–65 Keys/campaign.",emit:["scene.contest_resolved"]},[
+           n("direct Mandate write on Total Victory","live",{t:7,mono:1,desc:"<span class=\"flag\">Latent bug:</span> writes Faction.L OUTSIDE Keys; 'restoration' unimplemented.",wr:["Faction.L"]}),
+         ]),
+         n("echo_transport","gated",{t:5,tag:"adapter:echo_transport",desc:"The paired apply-closure fires at accounting_boundary — the real (narrow) Key consumer, writing Faction.L/I.",emit:["mechanical.cascade_resolution"],wr:["Faction.L","Faction.I"]}),
+         n("domain_echo","gated",{t:5,tag:"adapter:domain_echo",desc:"compute_domain_echo/accord/thread (§5). Reached via the echo path."},[
+           n("zoom_in_out — the zoom protocol","gated",{t:6,tag:"adapter:zoom_in_out",desc:"zoom_in / zoom_out / check_mandatory_triggers (§4)."}),
+         ]),
+         n("handoff_rules","unwired",{t:5,tag:"adapter:handoff_rules",desc:"8 §3 handoff rules built — ZERO callers. §3.7 Mass→Personal Duel (would create a combat scene) never fires."}),
+         n("articulation — the Key consumer","stub",{t:5,tag:"adapter:articulation",desc:"<span class=\"att\">The intended universal Key reader — 3× raises.</span> This is why emitted Keys have no subscriber.",cons:["scene.contest_resolved","mechanical.cascade_resolution"]}),
+       ]),
+     ]),
+     n("③ Accounting","live",{t:3,tag:"module:territorial_piety",desc:"End-of-season settle: CI · MS · insurgency · NPC drift, and where the intended-but-unbuilt strategic modules would run."},[
+       n("territorial_piety","deferred",{t:4,tag:"module:territorial_piety",desc:"CI generation (live via ci_track). CANONICAL doc with ZERO Key integration.",wr:["clocks.CI"]},[
+         n("ci_political — political card system","deferred",{t:6,tag:"module:ci_political",desc:"CI bonus dice feed dice_pool; CI=100 Theocracy Unification is unkeyed. ZERO Key integration.",rd:["clocks.CI"]}),
+       ]),
+       n("peninsular_strain","deferred",{t:4,tag:"module:peninsular_strain",desc:"Owns Turmoil + IP; the occupation-phase era ladder. Pure emitter — none of it live (IP isn't even a clocks key).",emit:["env.crisis","env.disaster","env.peninsular_strain_shock","env.population_change"]}),
+       n("settlement_layer — Mandate aggregation","design",{t:4,tag:"module:settlement_layer",desc:"Mandate aggregation (7T/(T+6)) would run here; unbuilt (uses scalar Faction.L).",cons:["env.population_change","da.economic_intervention"]},[
+         n("settlement_economy — phantom (retire)","design",{t:6,tag:"module:settlement_economy",desc:"in-3/out-0 sink; ED-SE-0005 folds it into settlement_layer.",cons:["da.economic_intervention","env.population_change"]}),
+       ]),
+       n("npc_behavior Procedures B/C/D/E","design",{t:4,tag:"module:npc_behavior",desc:"The REAL npc system (Concern/Project/Opinion/Gossip) — npc_ai is a 28-line stub. The other in-12 hub.",emit:["scene.gossip","scene.interaction","state.opinion_revised","state.concern_resolved","state.belief_revised"],cons:["scene.contest_resolved"]},[
+         n("npc_memory — the memory store","deferred",{t:6,tag:"module:npc_memory",desc:"Queried inline by the Procedures; doc:null.",cons:["scene.gossip","scene.interaction","state.concern_resolved","state.opinion_revised"]}),
+       ]),
+       n("insurgency · NPE drift","live",{t:6,desc:"GD-3 emergence/promotion (live) + simulate_npc_actions (live but vacuous — world.npcs never populated).",wr:["world.insurgencies"]}),
+       n("miraculous_event · restoration_movement","stub",{t:4,tag:"module:miraculous_event",desc:"World processes — both raise.",emit:["meta.miraculous_event"]}),
+       n("scenario_authoring","design",{t:4,tag:"module:scenario_authoring",desc:"Compile-time event injection; execution unbuilt.",emit:["env.crisis","env.disaster"]}),
+     ]),
+   ]),
+   n("Victory — GD-1","live",{t:2,tag:"module:victory",desc:"Checked every season; the only game-end trigger."},[
+     n("check_peninsular_sovereignty","live",{t:8,mono:1,desc:"15/15 · Accord≥2 · PS≤6 · 2 seasons.",rd:["Territory.owner","Territory.accord","clocks.Turmoil"]}),
+     n("era transitions","stub",{t:6,tag:"module:peninsular_strain",desc:"Post-Calamity / Phased-Occupation / Anarchy — ip_track raises; the rest have no code."}),
+   ]),
+   n("Resolution regimes — the dice layer","live",{t:2,desc:"How every action rolls; two regimes fire in one turn."},[
+     n("_successes d6 · dice_engine.roll_pool d10 · sigma_leverage d+σ","live",{t:6,mono:1,desc:"Conquest/Muster/Govern → d6; Crown/Church uniques + parliament → d10; contest/combat → d+σ."}),
+   ]),
+   n("Strategic modules not on the live turn","design",{t:2,tag:"module:domain_actions",desc:"Contract modules whose home is the strategic layer but which the loop doesn't drive."},[
+     n("domain_actions (da.* taxonomy)","design",{t:4,tag:"module:domain_actions",desc:"5-tag outcome taxonomy; zero code. Rides every resolved action.",emit:["da.public_governance","da.antinomian_action","da.covert_betrayal","da.diplomatic_alliance","da.economic_intervention"]}),
+     n("faction_politics","deferred",{t:4,tag:"module:faction_politics",desc:"Coup / succession / rank-ladder; emits into faction_state.",emit:["state.coup_attempted","state.succession","state.standing_change","scene.investigation_resolved"]}),
+     n("scene infra — game_director","deferred",{t:4,tag:"module:game_director",desc:"Season-loop + zoom-stack orchestrator; emits the scene lifecycle Keys. doc:null.",emit:["mechanical.scene_entered","mechanical.scene_exited","mechanical.scene_skipped"]},[
+       n("scene_slate — the slate queue","deferred",{t:6,tag:"module:scene_slate",desc:"7-priority slate; the canonical §4 generator is unbuilt (built = a 59-line queue).",emit:["scene.dialogue","scene.insult","scene.threat","scene.witness","scene.gift"]}),
+       n("scene_timer — wall-clock sidecar","deferred",{t:6,tag:"module:scene_timer",desc:"Observability; advances no game clock.",cons:["mechanical.scene_entered"]}),
+       n("audit — QA telemetry sink","deferred",{t:6,tag:"module:audit",desc:"QA/telemetry consumer of the lifecycle Keys; not a runtime resolver.",cons:["mechanical.scene_exited"]}),
+     ]),
+     n("clock_registry — manifest catalog","design",{t:4,tag:"module:clock_registry",desc:"Pure manifest of clocks/tracks; owns no state."},[
+       n("campaign_architecture — retired stub","design",{t:6,tag:"module:campaign_architecture",desc:"Reclassified: a consolidation doc, not a runtime module. Recommend retirement."}),
+     ]),
+     n("Board-game layer","design",{t:6,desc:"PI · Ministry (5th faction) · Cardinals · Löwenritter · Tensions Deck · special-NPC tracks — near-entirely design-only."}),
+   ]),
+ ]),
+
+ // ══════════════ WRAPPER 2 — the Key substrate ══════════════
+ n("Key Substrate — the propagation wrapper","gated",{t:1,tag:"module:articulation_layer",mono:1,desc:"The lateral wrapper: every consequential event is an emitted, registry-validated Key. 'Save = initial conditions + Key log.' 13–65 Keys/campaign flow; the subscribe() channel is dead (articulation stub), so only the paired apply-closure consumes."},[
+   n("Key type families — 49 registered types","gated",{t:2,tag:"module:articulation_layer",desc:"The registry vocabulary. Click a key chip anywhere to trace its producer→consumer fan-out."},[
+     n("da.* (5)","design",{t:4,desc:"Domain-action outcome tags.",emit:["da.public_governance","da.covert_betrayal","da.antinomian_action","da.diplomatic_alliance","da.economic_intervention"]}),
+     n("env.* (4)","deferred",{t:4,emit:["env.crisis","env.disaster","env.peninsular_strain_shock","env.population_change"]}),
+     n("scene.* (17)","gated",{t:4,emit:["scene.contest_resolved","scene.battle_concluded","scene.combat_hit","scene.combat_resolved","scene.dialogue","scene.gossip","scene.thread_operation","scene.witness","scene.investigation_resolved"]}),
+     n("state.* (9)","design",{t:4,emit:["state.standing_change","state.coup_attempted","state.succession","state.scar_acquired","state.opinion_revised","state.belief_revised","state.concern_resolved"]}),
+     n("meta.* (6)","design",{t:4,emit:["meta.miraculous_event","meta.knot_formed","meta.knot_ruptured","meta.thread_woven"]}),
+     n("mechanical.* (8)","gated",{t:4,emit:["mechanical.accounting","mechanical.cascade_resolution","mechanical.season_change","mechanical.scene_entered"]}),
+   ]),
+   n("Key schema §2.1 · value buckets","gated",{t:2,desc:"id · type · source_actor · causes[] (0 populated) · targets[] (1 emitter) · impact_vector[4] · symbolic_dimensions[4]. Buckets: Pool/Derived/Track/Clock."}),
+ ]),
+
+ // ══════════════ WRAPPER 3 — World state ══════════════
+ n("World State — the container wrapper","state",{t:1,mono:1,desc:"The single mutable state; strategic actions mutate it directly (few Keys flow). No DB."},[
+   n("Faction · Territory · clocks","state",{t:2,desc:"The live state.",wr:["Faction.L","Faction.Sta","Faction.Mil","Territory.owner","Territory.accord","clocks.CI","clocks.MS"]},[
+     n("field gaps: Mandate · Intel · Treasury · PS","design",{t:4,tag:"q:fac.intel",desc:"fac.intel ratified with a floor but no Faction field; Mandate/Treasury/PS absent (LPS-1)."}),
+     n("dead clocks: Turmoil (write-dead) · IP (not a key)","deferred",{t:4,tag:"q:clocks.Turmoil",desc:"Turmoil read once by victory, never written → PS≤6 trivially true. IP never initialised."}),
+   ]),
+   n("Character / Actor layer — MISSING","design",{t:2,desc:"<span class=\"att\">No Character/Actor dataclass exists.</span> The attribute→derived-stat foundation has no runtime home; 9- vs 10-attribute rival rosters, neither wired."}),
+   n("Quantity graph — clock_registry (~40)","design",{t:2,tag:"module:clock_registry",desc:"World.clocks holds 5; canon names ~40 (Persuasion/Disposition/Standing/Renown/Coherence/Evidence/Bonds/Piety…). ~8 live-written."}),
+   n("Dead-reg registries","unwired",{t:2,desc:"practitioners/knots/convictions/beliefs/treaties/settlements/infrastructure — real code, zero campaign call path."}),
+ ]),
+];
+
+const CARET='<svg viewBox="0 0 10 10"><path d="M2 1 L8 5 L2 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHIP={emit:["emit","→"],cons:["cons","←"],rd:["rd","rd"],wr:["wr","wr"]};
+const counts={live:0,gated:0,deferred:0,unwired:0,stub:0,design:0,state:0};
+const tagStats={module:new Set(),adapter:new Set(),key:new Set(),unresolved:[]};
+function esc(s){return s==null?"":String(s);}
+function kchip(id,kind){const m=CHIP[kind];return `<span class="kchip ${m[0]}" data-key="${esc(id)}" role="button" tabindex="0"><span class="ar">${m[1]}</span>${esc(id)}</span>`;}
+// godot-port axis (from PORT). The gd badge describes the tagged UNIT's port state — a second
+// axis, distinct from the node's build badge; shown once per unit (first occurrence).
+const GODOT={"gd-ported":["ported","Ported"],"typed-exported":["typed","Typed export"],"python-oracle":["oracle","Py oracle"],"no-oracle":["none","No oracle"],"retire":["retire","Retire"]};
+const seenGB=new Set();
+function gbadge(tag){
+  if(!tag) return '';
+  const i=tag.indexOf(':'); const tp=tag.slice(0,i), name=tag.slice(i+1);
+  const src = tp==="module"?PORT.modules:tp==="adapter"?PORT.adapters:null;
+  if(!src||!src[name]||seenGB.has(tag)) return '';
+  seenGB.add(tag);
+  const e=src[name], m=GODOT[e.godot]; if(!m) return '';
+  return `<span class="gb ${m[0]}" title="Godot port: ${e.godot} · rank ${e.port_rank} — ${esc(e.note)}"><span class="gi">gd</span>${m[1]}</span>`;
+}
+function tagchip(tag){
+  const [tp,...rest]=tag.split(":");const name=rest.join(":");
+  // validate against registry
+  if(REG[tp] && !REG[tp].has(name)) tagStats.unresolved.push(tag);
+  if(tp==="module")tagStats.module.add(name); if(tp==="adapter")tagStats.adapter.add(name);
+  const ok = !REG[tp] || REG[tp].has(name);
+  return `<span class="tag t-${tp}" data-key="tag:${esc(tag)}" title="${ok?'resolves in registry':'UNRESOLVED — not in registry'}" role="button" tabindex="0"><span class="tp">${tp}:</span>${esc(name)}${ok?'':' ⚠'}</span>`;
+}
+function build(nd){
+  counts[nd.s]=(counts[nd.s]||0)+1;
+  const kids=nd.c&&nd.c.length; const el=document.createElement('div');
+  el.className='node'+(kids?' has-kids':''); el.dataset.status=nd.s; el.dataset.tier=nd.t||1;
+  const tag=nd.tag?tagchip(nd.tag):'';
+  const gb=nd.tag?gbadge(nd.tag):'';
+  let w='';['cons','rd','wr','emit'].forEach(k=>{(nd[k]||[]).forEach(id=>{w+=kchip(id,k);});});
+  const wires=w?`<div class="wires">${w}</div>`:'';
+  el.innerHTML=`<div class="row"><span class="tw">${CARET}</span><span class="lvtag">${LEVELS[(nd.t||1)-1]}</span>
+    <span class="body"><span class="ttl"><span class="lbl${nd.mono?' code':''}">${esc(nd.l)}</span><span class="badge ${nd.s}">${STATUS[nd.s][0]}</span>${gb}${tag}</span>
+    ${nd.desc?`<div class="desc">${nd.desc}</div>`:''}${wires}</span></div>`;
+  if(kids){const box=document.createElement('div');box.className='children';nd.c.forEach(ch=>box.appendChild(build(ch)));el.appendChild(box);}
+  return el;
+}
+const treeEl=document.getElementById('tree');
+TREE.forEach(nd=>treeEl.appendChild(build(nd)));
+const allNodes=[...document.querySelectorAll('.node')];
+
+// validation cards
+const vEl=document.getElementById('valid');
+const modPct=tagStats.module.size, adPct=tagStats.adapter.size, unres=tagStats.unresolved.length;
+const cards=[
+  [`${modPct} / 27`,"module tags used (of the contract spine)",modPct>0],
+  [`${adPct} / 7`,"adapter tags used (cross-scale bridges)",adPct>0],
+  [`${unres}`, unres?"UNRESOLVED tags (not in any registry)":"tags failed to resolve — all valid ✓", unres===0],
+];
+vEl.innerHTML=cards.map(([n,k,ok])=>`<div class="vcard ${ok?'':'warn'}"><div class="vn" style="color:${ok?'var(--live)':'var(--deferred)'}">${n}</div><div class="vk">${k}</div></div>`).join('')
+  +`<div class="vcard" style="border-left-color:var(--gold)"><div class="vn" style="color:var(--gold)">${(PORT.godot_counts['gd-ported']||0)} / ${Object.values(PORT.godot_counts).reduce((a,b)=>a+b,0)}</div><div class="vk">units GDScript-ported · ${PORT.godot_counts['python-oracle']||0} Python-oracle awaiting port</div></div>`;
+document.getElementById('tagkey').innerHTML='<b>Tag types:</b> '+
+ ['module:contract unit','adapter:cross-scale bridge','key:Key type','ed:ledger id','q:quantity'].map(x=>{const[a,b]=x.split(':');return `<span class="tag t-${a}" style="cursor:default"><span class="tp">${a}:</span>${b}</span>`;}).join(' ');
+
+// legend
+document.getElementById('legend').innerHTML=Object.entries(STATUS).map(([k,v])=>`<button class="lg" data-st="${k}" aria-pressed="false"><span class="sw ${k}"></span>${v[0]}<span class="cnt" id="cnt-${k}"></span></button>`).join('')+`<span class="lg" style="cursor:default;border-style:dashed"><span class="di">click a status to spotlight · click a tag or key chip to trace</span></span>`;
+Object.keys(counts).forEach(k=>{const e=document.getElementById('cnt-'+k);if(e)e.textContent=counts[k];});
+
+// tier control
+function setTier(N){
+  allNodes.forEach(nd=>{const t=+nd.dataset.tier;nd.classList.toggle('tier-hidden',t>N);if(nd.classList.contains('has-kids'))nd.classList.toggle('open',t<N);});
+  [...seg.children].forEach(b=>b.setAttribute('aria-pressed',(+b.dataset.n===N)?'true':'false'));
+}
+const seg=document.getElementById('tierSeg');
+LEVELS.forEach((nm,i)=>{const b=document.createElement('button');b.dataset.n=i+1;b.innerHTML=`${nm}<span class="lv">${i+1}</span>`;b.addEventListener('click',()=>setTier(i+1));seg.appendChild(b);});
+document.getElementById('expandAll').addEventListener('click',()=>{allNodes.forEach(x=>{x.classList.remove('tier-hidden');if(x.classList.contains('has-kids'))x.classList.add('open');});[...seg.children].forEach(b=>b.setAttribute('aria-pressed','false'));});
+document.getElementById('collapseAll').addEventListener('click',()=>setTier(1));
+treeEl.addEventListener('click',e=>{if(e.target.closest('.tag,.kchip'))return;const row=e.target.closest('.row');if(!row)return;const nd=row.parentElement;if(nd.classList.contains('has-kids'))nd.classList.toggle('open');});
+
+// trace (tags + keys share data-key)
+let tracing=null;const banner=document.getElementById('traceBanner');
+function expandAnc(el){let p=el.parentElement;while(p){if(p.classList&&p.classList.contains('node')){if(p.classList.contains('has-kids'))p.classList.add('open');p.classList.remove('tier-hidden');}p=p.parentElement;}}
+function clearTrace(){tracing=null;document.body.classList.remove('is-tracing');document.querySelectorAll('.kchip.hit,.tag.hit').forEach(c=>c.classList.remove('hit'));document.querySelectorAll('.node.trace-node').forEach(nd=>nd.classList.remove('trace-node'));}
+function doTrace(key){if(tracing===key){clearTrace();return;}clearTrace();tracing=key;document.body.classList.add('is-tracing');let hits=0;
+  document.querySelectorAll('.tree [data-key]').forEach(ch=>{if(ch.dataset.key===key){ch.classList.add('hit');hits++;const nd=ch.closest('.node');if(nd){nd.classList.add('trace-node');nd.classList.remove('tier-hidden');expandAnc(nd);}}});
+  document.getElementById('traceKey').textContent=key.replace(/^tag:/,'');document.getElementById('traceStat').textContent=`— ${hits} reference${hits!==1?'s':''}`;banner.scrollIntoView({behavior:'smooth',block:'nearest'});}
+treeEl.addEventListener('click',e=>{const c=e.target.closest('.tag,.kchip');if(c)doTrace(c.dataset.key);});
+document.getElementById('clearTrace').addEventListener('click',clearTrace);
+
+let focus=null;
+document.getElementById('legend').addEventListener('click',e=>{const b=e.target.closest('.lg[data-st]');if(!b)return;const st=b.dataset.st;
+  document.querySelectorAll('.lg[data-st]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  if(focus===st){focus=null;document.body.classList.remove('is-focusing');allNodes.forEach(x=>x.classList.remove('focus-hit'));return;}
+  focus=st;b.setAttribute('aria-pressed','true');document.body.classList.add('is-focusing');
+  allNodes.forEach(x=>{const hit=x.dataset.status===st;x.classList.toggle('focus-hit',hit);if(hit)expandAnc(x);});});
+
+document.getElementById('themeBtn').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const d=cur?cur==='dark':matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',d?'light':'dark');});
+
+// ── Godot port-status panel — rendered from PORT (the manifest), never hand-authored ──
+function renderPort(){
+  const all=[...Object.entries(PORT.modules).map(([n,e])=>[n,'module',e]),...Object.entries(PORT.adapters).map(([n,e])=>[n,'adapter',e])];
+  const by=g=>all.filter(([,,e])=>e.godot===g);
+  const byRank=(a,b)=>((a[2].port_rank||9)-(b[2].port_rank||9))||a[0].localeCompare(b[0]);
+  const byName=(a,b)=>a[0].localeCompare(b[0]);
+  const item=([n,k,e],showRank)=>`<div class="pv-item" data-key="tag:${k}:${n}" role="button" tabindex="0">
+    <span class="pv-rank">${showRank?'#'+e.port_rank:''}</span>
+    <span class="pv-name">${n}<span class="kd">${k}</span></span>
+    <span class="pv-note"><b>${e.build}</b> · ${esc(e.note)}</span></div>`;
+  const band=(cls,head,n,rows)=>`<div class="pv-band ${cls}"><div class="pv-h">${head}<span class="n">${n}</span></div>${rows}</div>`;
+  const gp=PORT.golden_path;
+  const gpRow=`<div class="pv-item" data-key="tag:module:${gp.unit}" role="button" tabindex="0"><span class="pv-rank">#0</span><span class="pv-name">${gp.unit}</span><span class="pv-note">${esc(gp.chain)}</span></div>`;
+  const ported=[...by('gd-ported'),...by('typed-exported')].filter(([n])=>n!==gp.unit);
+  const gaps=Object.entries(PORT.foundation_gaps).map(([n,e])=>`<div class="pv-item" style="cursor:default"><span class="pv-rank">⚠</span><span class="pv-name">${n}</span><span class="pv-note">${esc(e.status?('['+e.status+'] '):'')}${esc(e.note)}</span></div>`).join('');
+  document.getElementById('portview').innerHTML=
+    `<h2>Godot port status</h2>
+     <p class="pv-sub">The godot-translatability axis, rendered from <code>references/wiring_manifest.yaml</code> — the same data the CI-ready gate <code>tools/wiring_map_check.py --check</code> validates (27/27 modules · 7/7 adapters). Click any unit to trace its tag in the tree.</p>
+     <div class="pv-grid">
+       ${band('b-ported','✓ golden path — the one end-to-end template',gp.unit,gpRow+ported.map(x=>item(x,false)).join(''))}
+       ${band('b-next','▶ next — has a Python oracle, no GDScript yet','ranked · '+by('python-oracle').length,by('python-oracle').sort(byRank).map(x=>item(x,true)).join(''))}
+       ${band('b-blocked','⛔ blocked — author canon first','no oracle · '+by('no-oracle').length,by('no-oracle').sort(byName).map(x=>item(x,false)).join(''))}
+       ${band('b-retire','🗑 retire — do not port',by('retire').length,by('retire').map(x=>item(x,false)).join(''))}
+       ${band('b-gap','⚠ foundation gaps — block whole tiers, not single units',Object.keys(PORT.foundation_gaps).length,gaps)}
+     </div>`;
+}
+renderPort();
+document.getElementById('portview').addEventListener('click',e=>{const it=e.target.closest('.pv-item[data-key]');if(it){doTrace(it.dataset.key);document.getElementById('tree').scrollIntoView({behavior:'smooth',block:'start'});}});
+const portBtn=document.getElementById('portBtn');
+portBtn.addEventListener('click',()=>{const on=document.body.classList.toggle('show-port');portBtn.setAttribute('aria-pressed',on?'true':'false');if(on)document.getElementById('portview').scrollIntoView({behavior:'smooth',block:'nearest'});});
+
+setTier(4);
+</script>
