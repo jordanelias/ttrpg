@@ -27,6 +27,7 @@ Entry points:
 from __future__ import annotations
 
 import os
+import sys
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -93,8 +94,12 @@ def _faction_actions_callback(world):
             continue
         try:
             faction_take_action(faction, world, world.rng)
-        except Exception:
-            pass  # action error — skip
+        except Exception as e:
+            # Resilience: one faction's action error must not abort the whole season — but
+            # it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7). Surface it to
+            # stderr so batch runs reveal errors instead of hiding a degenerate campaign.
+            print(f"[mc_v18] faction_take_action error for {fn!r}: "
+                  f"{type(e).__name__}: {e}", file=sys.stderr)
     # Scale seam (§4 zoom protocol): dispatch personal-scale scenes triggered by
     # this season's world-state. Caller-side per season.py design. Side-effect-free
     # on strategic stats until the context-derivation bridge lands — see

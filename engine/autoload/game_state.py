@@ -219,7 +219,13 @@ def create_world(seed: int | None = None) -> World:
     return World(
         factions=factions,
         territories=territories,
-        clocks={'CI': 30.0, 'MS': 60.0, 'PI': 0.0, 'Strain': 0.0, 'Turmoil': 0.0},
+        # IP (Institutional Pressure) added per audit ED-IN-0074 D2 — it was absent from the
+        # roster entirely, so the peninsular_strain occupation-phase era ladder could never
+        # read it. Currently unread by live code (peninsular_strain is unbuilt), so this is
+        # dormant groundwork with no behavioural effect today; recalibrate the start when that
+        # module wires readers (the live CI/MS starts already diverge from the registry doc).
+        # [canonical: clock_registry_v30.md — IP start 20]
+        clocks={'CI': 30.0, 'MS': 60.0, 'IP': 20.0, 'PI': 0.0, 'Strain': 0.0, 'Turmoil': 0.0},
         rng=rng,
     )
 
