@@ -1,393 +1,351 @@
-<title>Valoria — Wiring & Build-State Map</title>
+<title>Valoria — Wiring Map (tag-anchored, 9-tier)</title>
 <style>
   :root{
-    --ground:#f5f1e8; --panel:#fbf8f1; --panel-2:#efe9db;
-    --ink:#23252b; --ink-soft:#4a4a48; --muted:#6f6d64; --faint:#93907f;
-    --rule:#e2dbc9; --rule-2:#d3cbb6; --gold:#a9781a; --gold-bright:#c79226; --gold-soft:#ece0c0;
-    --live:#3f7d54; --gated:#2c7d79; --deferred:#b07f22; --unwired:#6a5aa0; --stub:#b0563a; --design:#8a857a; --state:#a9781a;
-    --live-bg:#e4efe4; --gated-bg:#e0eeed; --deferred-bg:#f1e6cc; --unwired-bg:#e9e5f2; --stub-bg:#f2e1da; --design-bg:#eae7dd; --state-bg:#f0e6cd;
-    --rd:#4f79b0; --wr:#b0563a;
-    --shadow:0 1px 0 rgba(30,26,15,.04), 0 6px 24px -14px rgba(30,26,15,.28);
-    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,'Times New Roman',serif;
-    --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    --mono:ui-monospace,'JetBrains Mono','SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
-  }
-  @media (prefers-color-scheme:dark){:root{
-    --ground:#14161c; --panel:#1a1d25; --panel-2:#20242e; --ink:#e9e3d4; --ink-soft:#c8c3b5; --muted:#9a968a; --faint:#6f6c60;
-    --rule:#2a2e39; --rule-2:#353a47; --gold:#d3a748; --gold-bright:#e2b859; --gold-soft:#37301d;
-    --live:#5fb07a; --gated:#4bb2ad; --deferred:#d3a24c; --unwired:#a99ad8; --stub:#d67a5c; --design:#9a9488; --state:#d3a748;
-    --live-bg:#1a2a20; --gated-bg:#152826; --deferred-bg:#2c2515; --unwired-bg:#211d31; --stub-bg:#2c1a15; --design-bg:#23241e; --state-bg:#2c2515;
-    --rd:#7aa5da; --wr:#d67a5c;
-    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.7);
-  }}
-  :root[data-theme="light"]{
     --ground:#f5f1e8; --panel:#fbf8f1; --panel-2:#efe9db; --ink:#23252b; --ink-soft:#4a4a48; --muted:#6f6d64; --faint:#93907f;
     --rule:#e2dbc9; --rule-2:#d3cbb6; --gold:#a9781a; --gold-soft:#ece0c0;
     --live:#3f7d54; --gated:#2c7d79; --deferred:#b07f22; --unwired:#6a5aa0; --stub:#b0563a; --design:#8a857a; --state:#a9781a;
-    --live-bg:#e4efe4; --gated-bg:#e0eeed; --deferred-bg:#f1e6cc; --unwired-bg:#e9e5f2; --stub-bg:#f2e1da; --design-bg:#eae7dd; --state-bg:#f0e6cd; --rd:#4f79b0; --wr:#b0563a;
+    --live-bg:#e4efe4; --gated-bg:#e0eeed; --deferred-bg:#f1e6cc; --unwired-bg:#e9e5f2; --stub-bg:#f2e1da; --design-bg:#eae7dd; --state-bg:#f0e6cd;
+    --t-module:#a9781a; --t-adapter:#2c7d79; --t-key:#a9781a; --t-ed:#6a5aa0; --t-q:#4f79b0; --t-sub:#8a857a;
+    --rd:#4f79b0; --wr:#b0563a;
+    --shadow:0 1px 0 rgba(30,26,15,.04), 0 6px 24px -14px rgba(30,26,15,.28);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
   }
-  :root[data-theme="dark"]{
+  @media (prefers-color-scheme:dark){:root{
     --ground:#14161c; --panel:#1a1d25; --panel-2:#20242e; --ink:#e9e3d4; --ink-soft:#c8c3b5; --muted:#9a968a; --faint:#6f6c60;
     --rule:#2a2e39; --rule-2:#353a47; --gold:#d3a748; --gold-soft:#37301d;
     --live:#5fb07a; --gated:#4bb2ad; --deferred:#d3a24c; --unwired:#a99ad8; --stub:#d67a5c; --design:#9a9488; --state:#d3a748;
-    --live-bg:#1a2a20; --gated-bg:#152826; --deferred-bg:#2c2515; --unwired-bg:#211d31; --stub-bg:#2c1a15; --design-bg:#23241e; --state-bg:#2c2515; --rd:#7aa5da; --wr:#d67a5c;
-  }
+    --live-bg:#1a2a20; --gated-bg:#152826; --deferred-bg:#2c2515; --unwired-bg:#211d31; --stub-bg:#2c1a15; --design-bg:#23241e; --state-bg:#2c2515;
+    --t-module:#d3a748; --t-adapter:#4bb2ad; --t-key:#d3a748; --t-ed:#a99ad8; --t-q:#7aa5da; --t-sub:#9a9488; --rd:#7aa5da; --wr:#d67a5c;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.7);
+  }}
+  :root[data-theme="light"]{--ground:#f5f1e8;--panel:#fbf8f1;--panel-2:#efe9db;--ink:#23252b;--ink-soft:#4a4a48;--muted:#6f6d64;--faint:#93907f;--rule:#e2dbc9;--rule-2:#d3cbb6;--gold:#a9781a;--gold-soft:#ece0c0;--live:#3f7d54;--gated:#2c7d79;--deferred:#b07f22;--unwired:#6a5aa0;--stub:#b0563a;--design:#8a857a;--state:#a9781a;--live-bg:#e4efe4;--gated-bg:#e0eeed;--deferred-bg:#f1e6cc;--unwired-bg:#e9e5f2;--stub-bg:#f2e1da;--design-bg:#eae7dd;--state-bg:#f0e6cd;--t-module:#a9781a;--t-adapter:#2c7d79;--t-key:#a9781a;--t-ed:#6a5aa0;--t-q:#4f79b0;--t-sub:#8a857a;--rd:#4f79b0;--wr:#b0563a;}
+  :root[data-theme="dark"]{--ground:#14161c;--panel:#1a1d25;--panel-2:#20242e;--ink:#e9e3d4;--ink-soft:#c8c3b5;--muted:#9a968a;--faint:#6f6c60;--rule:#2a2e39;--rule-2:#353a47;--gold:#d3a748;--gold-soft:#37301d;--live:#5fb07a;--gated:#4bb2ad;--deferred:#d3a24c;--unwired:#a99ad8;--stub:#d67a5c;--design:#9a9488;--state:#d3a748;--live-bg:#1a2a20;--gated-bg:#152826;--deferred-bg:#2c2515;--unwired-bg:#211d31;--stub-bg:#2c1a15;--design-bg:#23241e;--state-bg:#2c2515;--t-module:#d3a748;--t-adapter:#4bb2ad;--t-key:#d3a748;--t-ed:#a99ad8;--t-q:#7aa5da;--t-sub:#9a9488;--rd:#7aa5da;--wr:#d67a5c;}
   *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  .wrap{max-width:1200px;margin:0 auto;padding:0 20px 96px}
-  header.mast{padding:38px 0 18px;border-bottom:1px solid var(--rule)}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 20px 96px}
+  header.mast{padding:36px 0 16px;border-bottom:1px solid var(--rule)}
   .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px}
   .eyebrow::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--rule-2),transparent)}
-  h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,4.1vw,41px);line-height:1.05;letter-spacing:-.015em;margin:.32em 0 .12em;text-wrap:balance}
-  .sub{color:var(--ink-soft);font-size:15px;max-width:82ch;margin:.2em 0 0}
-  .sub b{color:var(--ink);font-weight:600} .sub code{font-family:var(--mono);font-size:13px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
-  .note-strip{margin-top:16px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow);font-size:13.5px;color:var(--ink-soft)}
-  .note-strip b{color:var(--ink)} .note-strip code{font-family:var(--mono);font-size:11.5px;background:var(--panel-2);padding:1px 4px;border-radius:4px}
-  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
-  .tile{background:var(--panel);border:1px solid var(--rule);border-radius:11px;padding:12px 13px;box-shadow:var(--shadow)}
-  .tile .n{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
-  .tile .k{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.32}
-  .tile.warn .n{color:var(--deferred)} .tile.bad .n{color:var(--stub)} .tile.good .n{color:var(--live)} .tile.mut .n{color:var(--ink)} .tile.uw .n{color:var(--unwired)}
-  .rail{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:saturate(1.4) blur(9px);-webkit-backdrop-filter:saturate(1.4) blur(9px);border-bottom:1px solid var(--rule);margin-top:20px;padding:10px 0}
-  .rail-in{display:flex;gap:12px 15px;align-items:center;flex-wrap:wrap}
-  .ctl-lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(25px,4vw,40px);line-height:1.05;letter-spacing:-.015em;margin:.3em 0 .12em;text-wrap:balance}
+  .sub{color:var(--ink-soft);font-size:15px;max-width:84ch;margin:.2em 0 0} .sub b{color:var(--ink);font-weight:600} .sub code{font-family:var(--mono);font-size:13px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+  .valid{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+  .vcard{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--live);border-radius:10px;padding:9px 13px;box-shadow:var(--shadow)}
+  .vcard.warn{border-left-color:var(--deferred)}
+  .vcard .vn{font-family:var(--mono);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .vcard .vk{font-size:11px;color:var(--muted);margin-top:2px}
+  .tagkey{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px;font-size:11.5px;color:var(--muted);align-items:center}
+  .tagkey b{color:var(--ink-soft)}
+  .rail{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:saturate(1.4) blur(9px);-webkit-backdrop-filter:saturate(1.4) blur(9px);border-bottom:1px solid var(--rule);margin-top:18px;padding:10px 0}
+  .rail-in{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap}
+  .ctl-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--rule);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
-  .seg button{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink-soft);background:transparent;border:0;border-radius:6px;padding:5px 8px;cursor:pointer;white-space:nowrap;transition:background .12s,color .12s}
+  .seg button{font-family:var(--sans);font-size:11.5px;font-weight:500;color:var(--ink-soft);background:transparent;border:0;border-radius:6px;padding:5px 8px;cursor:pointer;white-space:nowrap}
   .seg button .lv{font-family:var(--mono);font-size:9px;color:var(--faint);display:block;margin-top:1px}
-  .seg button:hover{color:var(--ink)} .seg button[aria-pressed="true"]{background:var(--gold);color:#fff} :root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#17140c}
-  @media (prefers-color-scheme:dark){.seg button[aria-pressed="true"]{color:#17140c}}
-  .seg button[aria-pressed="true"] .lv{color:rgba(255,255,255,.72)} :root[data-theme="dark"] .seg button[aria-pressed="true"] .lv{color:rgba(23,20,12,.6)}
-  .btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule-2);border-radius:8px;padding:6px 10px;cursor:pointer;transition:border-color .12s,color .12s}
-  .btn:hover{border-color:var(--gold);color:var(--ink)} .spacer{flex:1;min-width:8px}
-  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0 4px;align-items:center}
-  .lg{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:4px 11px 4px 8px;cursor:pointer;transition:border-color .12s,background .12s}
-  .lg:hover{border-color:var(--rule-2)} .lg[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+  .seg button:hover{color:var(--ink)} .seg button[aria-pressed="true"]{background:var(--gold);color:#fff}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#17140c} @media (prefers-color-scheme:dark){.seg button[aria-pressed="true"]{color:#17140c}}
+  .seg button[aria-pressed="true"] .lv{color:rgba(255,255,255,.72)}
+  .btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule-2);border-radius:8px;padding:6px 10px;cursor:pointer} .btn:hover{border-color:var(--gold);color:var(--ink)} .btn[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);color:var(--ink)} .spacer{flex:1;min-width:8px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px;align-items:center}
+  .lg{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:4px 11px 4px 8px;cursor:pointer} .lg[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
   .lg .sw{width:10px;height:10px;border-radius:3px;flex:none}
-  .sw.live{background:var(--live)} .sw.gated{background:var(--gated)} .sw.deferred{background:var(--deferred)} .sw.unwired{background:var(--unwired)} .sw.stub{background:var(--stub)} .sw.design{background:var(--design)} .sw.state{background:var(--state)}
-  .lg .cnt{font-family:var(--mono);font-size:10.5px;color:var(--faint);font-variant-numeric:tabular-nums} .lg .di{color:var(--muted);font-size:11px}
-  .trace-banner{display:none;align-items:center;gap:10px;margin:14px 0 0;background:var(--gold-soft);border:1px solid var(--gold);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--ink)}
-  body.is-tracing .trace-banner{display:flex}
+  .sw.live{background:var(--live)}.sw.gated{background:var(--gated)}.sw.deferred{background:var(--deferred)}.sw.unwired{background:var(--unwired)}.sw.stub{background:var(--stub)}.sw.design{background:var(--design)}.sw.state{background:var(--state)}
+  .lg .cnt{font-family:var(--mono);font-size:10px;color:var(--faint)} .lg .di{color:var(--muted);font-size:11px}
+  .trace-banner{display:none;align-items:center;gap:10px;margin:12px 0 0;background:var(--gold-soft);border:1px solid var(--gold);border-radius:9px;padding:8px 12px;font-size:13px} body.is-tracing .trace-banner{display:flex}
   .trace-banner .tk{font-family:var(--mono);font-weight:600;color:var(--gold)} .trace-banner .tstat{color:var(--muted);font-size:12px} .trace-banner button{margin-left:auto}
-  .tree{margin-top:15px}
+  .tree{margin-top:14px}
   .node{--stripe:var(--rule-2)}
-  .node[data-status="live"]{--stripe:var(--live)} .node[data-status="gated"]{--stripe:var(--gated)} .node[data-status="deferred"]{--stripe:var(--deferred)}
-  .node[data-status="unwired"]{--stripe:var(--unwired)} .node[data-status="stub"]{--stripe:var(--stub)} .node[data-status="design"]{--stripe:var(--design)} .node[data-status="state"]{--stripe:var(--state)}
-  .row{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:start;padding:7px 10px 7px 11px;border:1px solid transparent;border-radius:9px;position:relative;transition:background .1s}
-  .row:hover{background:var(--panel)} .node.has-kids>.row{cursor:pointer}
+  .node[data-status="live"]{--stripe:var(--live)}.node[data-status="gated"]{--stripe:var(--gated)}.node[data-status="deferred"]{--stripe:var(--deferred)}.node[data-status="unwired"]{--stripe:var(--unwired)}.node[data-status="stub"]{--stripe:var(--stub)}.node[data-status="design"]{--stripe:var(--design)}.node[data-status="state"]{--stripe:var(--state)}
+  .node.tier-hidden{display:none}
+  .row{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:start;padding:7px 10px 7px 11px;border-radius:9px;position:relative} .row:hover{background:var(--panel)} .node.has-kids>.row{cursor:pointer}
   .node>.row::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:3px;background:var(--stripe);opacity:.9}
-  .tw{width:16px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--faint);flex:none;margin-left:2px}
-  .tw svg{width:9px;height:9px;transition:transform .16s ease} .node:not(.has-kids)>.row .tw{visibility:hidden} .node.open>.row .tw svg{transform:rotate(90deg)}
-  .lvtag{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--rule);border-radius:4px;padding:2px 5px;white-space:nowrap;margin-top:2px;align-self:start}
+  .tw{width:16px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--faint);flex:none;margin-left:2px} .tw svg{width:9px;height:9px;transition:transform .16s} .node:not(.has-kids)>.row .tw{visibility:hidden} .node.open>.row .tw svg{transform:rotate(90deg)}
+  .lvtag{font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--rule);border-radius:4px;padding:2px 5px;white-space:nowrap;margin-top:2px;align-self:start;min-width:74px;text-align:center}
   .body{min-width:0}
-  .ttl{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-  .lbl{font-weight:600;font-size:14px;color:var(--ink);letter-spacing:-.005em} .lbl.code{font-family:var(--mono);font-weight:600;font-size:12.5px;letter-spacing:-.01em}
+  .ttl{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+  .lbl{font-weight:600;font-size:14px;color:var(--ink)} .lbl.code{font-family:var(--mono);font-weight:600;font-size:12.5px}
   .badge{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:999px;font-weight:600;white-space:nowrap;transform:translateY(-1px)}
-  .badge.live{color:var(--live);background:var(--live-bg)} .badge.gated{color:var(--gated);background:var(--gated-bg)} .badge.deferred{color:var(--deferred);background:var(--deferred-bg)}
-  .badge.unwired{color:var(--unwired);background:var(--unwired-bg)} .badge.stub{color:var(--stub);background:var(--stub-bg)} .badge.design{color:var(--design);background:var(--design-bg)} .badge.state{color:var(--state);background:var(--state-bg)}
-  .src{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--panel-2);border:1px solid var(--rule);border-radius:5px;padding:1px 6px;white-space:nowrap}
-  .desc{color:var(--ink-soft);font-size:12.5px;margin-top:3px;line-height:1.42;max-width:98ch}
-  .desc code,.desc b.c{font-family:var(--mono);font-size:11px;background:var(--panel-2);padding:1px 4px;border-radius:4px;color:var(--ink);font-weight:600}
+  .badge.live{color:var(--live);background:var(--live-bg)}.badge.gated{color:var(--gated);background:var(--gated-bg)}.badge.deferred{color:var(--deferred);background:var(--deferred-bg)}.badge.unwired{color:var(--unwired);background:var(--unwired-bg)}.badge.stub{color:var(--stub);background:var(--stub-bg)}.badge.design{color:var(--design);background:var(--design-bg)}.badge.state{color:var(--state);background:var(--state-bg)}
+  /* godot-status axis — sourced from PORT (references/wiring_manifest.yaml) */
+  .gb{font-family:var(--mono);font-size:8.5px;letter-spacing:.03em;text-transform:uppercase;padding:2px 6px;border-radius:5px;font-weight:700;white-space:nowrap;transform:translateY(-1px);border:1px solid transparent}
+  .gb .gi{opacity:.55;font-weight:400;margin-right:3px}
+  .gb.ported{color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,transparent);border-color:color-mix(in srgb,var(--gold) 38%,transparent)}
+  .gb.typed{color:var(--gated);background:color-mix(in srgb,var(--gated) 15%,transparent)}
+  .gb.oracle{color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,transparent);border-color:color-mix(in srgb,var(--rd) 34%,transparent)}
+  .gb.none{color:var(--stub);background:color-mix(in srgb,var(--stub) 13%,transparent)}
+  .gb.retire{color:var(--faint);background:transparent;text-decoration:line-through;opacity:.85}
+  .portview{margin:16px 0 2px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);display:none}
+  body.show-port .portview{display:block}
+  .portview h2{font-family:var(--serif);font-weight:600;font-size:19px;margin:0 0 3px;letter-spacing:-.01em}
+  .portview .pv-sub{color:var(--muted);font-size:12.5px;margin:0 0 13px;max-width:92ch} .portview .pv-sub code{font-family:var(--mono);font-size:11.5px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+  .pv-grid{display:grid;gap:12px}
+  .pv-band{border-left:3px solid var(--rule-2);padding:1px 0 1px 13px}
+  .pv-band.b-ported{border-color:var(--gold)} .pv-band.b-next{border-color:var(--rd)} .pv-band.b-blocked{border-color:var(--stub)} .pv-band.b-retire{border-color:var(--faint)} .pv-band.b-gap{border-color:var(--deferred)}
+  .pv-h{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:7px;display:flex;align-items:baseline;gap:8px}
+  .pv-h .n{color:var(--faint);font-weight:400} .pv-h .hint{margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;color:var(--faint);font-size:10.5px}
+  .pv-item{display:grid;grid-template-columns:22px 150px 1fr;gap:9px;padding:3px 6px;font-size:12.5px;align-items:baseline;cursor:pointer;border-radius:6px}
+  .pv-item:hover{background:var(--panel-2)}
+  .pv-rank{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:center}
+  .pv-name{font-family:var(--mono);font-weight:600;font-size:12px;color:var(--ink)} .pv-name .kd{color:var(--faint);font-weight:400;font-size:9.5px;margin-left:5px}
+  .pv-note{color:var(--muted);font-size:11.5px;line-height:1.4} .pv-note b{color:var(--ink-soft);font-weight:600}
+  @media (max-width:640px){.pv-item{grid-template-columns:1fr;gap:2px}.pv-rank{display:none}}
+  .tag{font-family:var(--mono);font-size:10px;border-radius:5px;padding:1px 7px;white-space:nowrap;cursor:pointer;border:1px solid var(--rule-2);background:var(--panel);font-weight:600}
+  .tag .tp{opacity:.6;font-weight:400}
+  .tag.t-module{color:var(--t-module)} .tag.t-adapter{color:var(--t-adapter)} .tag.t-key{color:var(--t-key)} .tag.t-ed{color:var(--t-ed)} .tag.t-q{color:var(--t-q)} .tag.t-sub{color:var(--t-sub)}
+  .tag:hover{border-color:var(--gold)} .tag.hit{border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 1px var(--gold)}
+  .desc{color:var(--ink-soft);font-size:12.5px;margin-top:3px;line-height:1.42;max-width:98ch} .desc code,.desc b.c{font-family:var(--mono);font-size:11px;background:var(--panel-2);padding:1px 4px;border-radius:4px;color:var(--ink);font-weight:600}
   .flag{color:var(--stub);font-weight:600} .att{color:var(--unwired);font-weight:600}
   .wires{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-  .kchip{font-family:var(--mono);font-size:10px;border-radius:5px;padding:2px 7px;cursor:pointer;border:1px solid var(--rule-2);background:var(--panel);color:var(--ink-soft);white-space:nowrap;transition:border-color .1s,background .1s;line-height:1.5}
-  .kchip .ar{margin-right:4px;font-style:normal;font-weight:700;font-size:9px}
-  .kchip.emit .ar{color:var(--gold)} .kchip.cons .ar{color:var(--gated)} .kchip.rd .ar{color:var(--rd)} .kchip.wr .ar{color:var(--wr)}
+  .kchip{font-family:var(--mono);font-size:10px;border-radius:5px;padding:2px 7px;cursor:pointer;border:1px solid var(--rule-2);background:var(--panel);color:var(--ink-soft);white-space:nowrap;line-height:1.5}
+  .kchip .ar{margin-right:4px;font-weight:700;font-size:9px} .kchip.emit .ar{color:var(--gold)} .kchip.cons .ar{color:var(--gated)} .kchip.rd .ar{color:var(--rd)} .kchip.wr .ar{color:var(--wr)}
   .kchip:hover{border-color:var(--gold)} .kchip.hit{border-color:var(--gold);background:var(--gold-soft);color:var(--ink);box-shadow:0 0 0 1px var(--gold)}
-  .children{margin-left:19px;padding-left:13px;border-left:1px solid var(--rule);margin-top:1px}
-  .node:not(.open)>.children{display:none}
-  @media (max-width:640px){.children{margin-left:10px;padding-left:9px}}
+  .children{margin-left:18px;padding-left:12px;border-left:1px solid var(--rule);margin-top:1px} .node:not(.open)>.children{display:none}
+  @media (max-width:640px){.children{margin-left:9px;padding-left:8px} .lvtag{min-width:0}}
+  body.is-tracing .tree .node:not(.trace-node)>.row .lbl{opacity:.45} body.is-tracing .tree .node.trace-node>.row{background:var(--gold-soft)} body.is-tracing .tree .node.trace-node>.row .lbl{opacity:1}
   body.is-focusing .node:not(.focus-hit)>.row{opacity:.3} .node.focus-hit>.row{background:var(--panel)}
-  body.is-tracing .tree .node:not(.trace-node)>.row .lbl{opacity:.5} body.is-tracing .tree .node.trace-node>.row{background:var(--gold-soft)} body.is-tracing .tree .node.trace-node>.row .lbl{opacity:1}
-  footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px;line-height:1.6} footer code{font-family:var(--mono);font-size:11.5px}
-  a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px;line-height:1.6} footer code{font-family:var(--mono);font-size:11.5px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
   <header class="mast">
-    <div class="eyebrow">Valoria · sim/ runtime · one tree · adversarially verified</div>
-    <h1>Everything the game does — and everything it would do if built</h1>
-    <p class="sub">One tree. Wired, gated, deferred, unwired, stubbed, and design-only components sit <b>side by side at the point where each attaches</b> to the live campaign chain — so an unbuilt mechanic shows exactly where it <i>would</i> plug in. Colour is build state; position is wiring. Toggle depth <b>Main → Subroutine</b>. Click a <span style="font-family:var(--mono);font-size:12px">key.type</span> or a <span style="font-family:var(--mono);font-size:12px">State.field</span> chip to trace it across the whole tree.</p>
-    <div class="note-strip">
-      <b>Data-flow edges added.</b> Live nodes now carry <span style="color:var(--rd);font-weight:700">rd</span> (reads) / <span style="color:var(--wr);font-weight:700">wr</span> (writes) chips on the World state, alongside <span style="color:var(--gold);font-weight:700">→</span> Key emits. <b>Coverage-audited along four vectors</b> (code symbols · the 27-module contract &amp; ~50 Key edges · designed layers · the state/quantity graph). Each diffed the corpus against this map and returned only what was missing; the deltas are grafted below at their attach points. The headline: the live loop runs a thin ~15% slice, and the missing bulk is the <b>character/attribute foundation</b> (no <code>Character</code> dataclass exists), the strategic <b>Key-wiring layer</b> (the <code>faction_state</code> hub consumes 20 of the 47 newly-drawn edges), the <b>board-game layer</b>, ~40 canonical quantities, and a second, richer mass-battle engine sitting unwired under <code>tests/</code>.
-    </div>
-    <div class="tiles" id="tiles"></div>
+    <div class="eyebrow">Valoria · tag-anchored wiring · 9-tier</div>
+    <h1>Wiring map — anchored on registry tags, not file paths</h1>
+    <p class="sub">Every node hangs off a <b>stable pointer/tag</b> (<span style="color:var(--t-module);font-family:var(--mono);font-size:12px">module:</span> from the 27-module contract · <span style="color:var(--t-adapter);font-family:var(--mono);font-size:12px">adapter:</span> from cross-scale · <span style="color:var(--t-key);font-family:var(--mono);font-size:12px">key:</span> from the type registry · <span style="color:var(--t-ed);font-family:var(--mono);font-size:12px">ed:</span> from the ledger · <span style="color:var(--t-q);font-family:var(--mono);font-size:12px">q:</span> from the quantity registries) — so it survives file moves like the <code>sim/→engine/</code> restructure. Structured on the 9-tier ladder: <b>Wrapper → System → Subsystem → Module → Adapter → Mechanic → Submechanic → Routine → Subroutine.</b> Two axes per unit: a <b>build badge</b> (this node's runtime wiring state) and a <b>gd badge</b> (the tagged unit's Godot-port state). Both, and every tag, are checked by <code>tools/wiring_map_check.py --check</code> against <code>references/wiring_manifest.yaml</code> — open <b>◧ Godot port view</b> for the ranked port work-list.</p>
+    <div class="valid" id="valid"></div>
+    <div class="tagkey" id="tagkey"></div>
   </header>
 
   <div class="rail"><div class="wrap" style="padding:0 20px"><div class="rail-in">
-    <span class="ctl-lbl">Depth</span>
-    <div class="seg" id="depthSeg" role="group" aria-label="depth"></div>
-    <button class="btn" id="expandAll">Expand all</button>
-    <button class="btn" id="collapseAll">Collapse</button>
+    <span class="ctl-lbl">Tier</span>
+    <div class="seg" id="tierSeg" role="group" aria-label="tier depth"></div>
+    <button class="btn" id="expandAll">All</button>
+    <button class="btn" id="collapseAll">Top</button>
     <div class="spacer"></div>
-    <button class="btn" id="themeBtn" style="font-family:var(--mono);font-size:11px">◐ theme</button>
+    <button class="btn" id="portBtn" aria-pressed="false" title="the Godot port work-list, from the manifest">◧ Godot port view</button>
+    <button class="btn" id="themeBtn" style="font-family:var(--mono);font-size:11px">◐</button>
   </div></div></div>
 
+  <section class="portview" id="portview"></section>
   <div class="legend" id="legend"></div>
   <div class="trace-banner" id="traceBanner"><span>Tracing <span class="tk" id="traceKey"></span></span><span class="tstat" id="traceStat"></span><button class="btn" id="clearTrace">Clear ✕</button></div>
   <main class="tree" id="tree"></main>
 
   <footer>
-    <div>Verified against the working tree by independent lanes + live execution of <code>run_campaign</code> (7 seeds). Anchors: <code>sim/mc_v18.py</code> · <code>peninsular/{season,accounting}.py</code> · <code>provincial/{faction_action,massbattle,parliamentary_action,crown_initiative}.py</code> · <code>cross_scale/{scene_dispatch,parliamentary_bridge}.py</code> · <code>autoload/{dice_engine,sigma_leverage,victory}.py</code> · <code>personal/contest/</code>.</div>
-    <div style="margin-top:8px">Depth: <b>Main → System → Subsystem → Mechanic → Submechanic → Routine → Subroutine</b>. Colour = build state. <b>Live/Gated</b> = the loop runs it. <b>Deferred/Unwired/Stub/Design</b> = it doesn't (yet) — shown where it would attach.</div>
+    <div><b>Tags are the identity; paths are not stored.</b> Validated against <code>references/module_contracts.yaml</code> (27 modules) · <code>systems/_architecture/key_type_registry_v30.md</code> (49 key types) · <code>engine/cross_scale/</code> (7 adapters) · <code>references/descriptor_registry.yaml</code> + <code>clock_registry_v30</code> (quantities) · the editorial ledger (ED ids). A tag that stops resolving is a caught error, not silent drift.</div>
+    <div style="margin-top:7px">Tiers: <b>Wrapper</b> (holonic container) · <b>System</b> (engine/layer) · <b>Subsystem</b> (grouping) · <b>Module</b> (contract unit) · <b>Adapter</b> (cross-scale bridge) · <b>Mechanic → Submechanic → Routine → Subroutine</b> (granularity). Colour = build state; the tag = durable identity.</div>
+    <div style="margin-top:7px"><b>gd badge</b> = Godot-port axis (the second axis, from the manifest): <span class="gb ported"><span class="gi">gd</span>Ported</span> a GDScript port exists · <span class="gb typed"><span class="gi">gd</span>Typed export</span> CI-checked param export · <span class="gb oracle"><span class="gi">gd</span>Py oracle</span> real Python to port from, no GDScript yet (the work-list) · <span class="gb none"><span class="gi">gd</span>No oracle</span> canon must be authored first · <span class="gb retire"><span class="gi">gd</span>Retire</span> do not port. Regenerate the map's data with <code>python3 tools/wiring_map_check.py --emit-map-json</code>.</div>
   </footer>
 </div>
 
 <script>
-const LEVELS=["Main","System","Subsystem","Mechanic","Submechanic","Routine","Subroutine"];
-const STATUS={
-  live:["Live","runs every season, real effect"],
-  gated:["Gated","runs only under a condition (flag · eligibility · trigger)"],
-  deferred:["Deferred","the loop reaches it but it resolves nothing today"],
-  unwired:["Unwired","real, tested code — the loop has no path to it"],
-  stub:["Stub","raises NotImplementedError — a shell, no logic"],
-  design:["Design-only","specified in a doc, zero code exists"],
-  state:["State","World data read/written by the chain"],
+const LEVELS=["Wrapper","System","Subsystem","Module","Adapter","Mechanic","Submechanic","Routine","Subroutine"];
+const STATUS={live:["Live"],gated:["Gated"],deferred:["Deferred"],unwired:["Unwired"],stub:["Stub"],design:["Design"],state:["State"]};
+// authoritative registries (extracted from the live tree) — the validator checks tags against these
+const REG={
+ module:new Set("faction_state npc_behavior npc_memory piety_track territorial_piety threadwork fieldwork_knots scene_slate game_director scene_timer audit social_contest mass_battle domain_actions peninsular_strain settlement_layer settlement_economy ci_political victory engine_clock faction_politics miraculous_event scenario_authoring articulation_layer clock_registry personal_combat campaign_architecture".split(" ")),
+ adapter:new Set("scene_dispatch parliamentary_bridge echo_transport domain_echo zoom_in_out handoff_rules articulation".split(" ")),
+ key:new Set("da.antinomian_action da.covert_betrayal da.diplomatic_alliance da.economic_intervention da.public_governance env.crisis env.disaster env.peninsular_strain_shock env.population_change mechanical.accounting mechanical.cascade_resolution mechanical.mission_shift mechanical.project_advanced mechanical.scene_entered mechanical.scene_exited mechanical.scene_skipped mechanical.season_change meta.cascade_cluster_event meta.knot_formed meta.knot_ruptured meta.legacy_event meta.miraculous_event meta.thread_woven scene.battle_concluded scene.combat_felled scene.combat_hit scene.combat_resolved scene.combat_strike scene.contest_resolved scene.dialogue scene.displacement scene.draft_da scene.gift scene.gossip scene.insult scene.interaction scene.investigation_resolved scene.thread_operation scene.threat scene.witness state.belief_revised state.concern_resolved state.coup_attempted state.opinion_revised state.project_completed state.project_failed state.scar_acquired state.standing_change state.succession".split(" ")),
 };
-const TILES=[
-  ["~15%","of the designed game the live loop actually runs — the rest is grafted below by build state","warn"],
-  ["27 / 27","contract modules now represented (a 4-vector audit found 12 missing, incl. the faction_state hub)","good"],
-  ["50 / 50","intended Key-type edges now drawn (was 3) — click any chip to trace producer→consumer","good"],
-  ["0","Character/Actor dataclasses in World — the attribute/derived-stat foundation is structurally absent","bad"],
-  ["9 vs 10","rival attribute rosters (descriptor_registry vs params/core) — neither is wired","bad"],
-  ["2","mass-battle engines — 1 wired-but-shallow, 1 richer &amp; unwired (mislabeled a test archive)","warn"],
-  ["~8 / 50","canonical clocks/tracks that are live-written; the rest design-only or dead-reg","warn"],
-  ["6","World registries that are real code but have zero campaign call path (dead-reg)","uw"],
-];
 
-// n(label,status,{mono,src,desc, emit:[],cons:[],rd:[],wr:[]}, children)
+// ── PORT: the godot-status axis, GENERATED from references/wiring_manifest.yaml
+//    regenerate:  python3 tools/wiring_map_check.py --emit-map-json
+const PORT={"as_of":"2026-07-18","golden_path":{"unit":"personal_combat","chain":"combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI round-trip) -> godot/skeleton/engines/combat/ (strike + wound)","note":"The only unit where Python oracle + typed export + GDScript port all exist. This is the template every other port copies."},"modules":{"personal_combat":{"tier":"module","scale":"personal","resolver":"d_sigma","build":"unwired","godot":"gd-ported","port_rank":0,"parity":"key-log + typed-export round-trip","note":"built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path — BUT the mc_v18 loop never routes here (combat branch is dead code), so end-to-end parity is unvalidated."},"mass_battle":{"tier":"module","scale":"scene","resolver":"dice_pool","build":"live","godot":"python-oracle","port_rank":1,"parity":"key-log","note":"ratified engine; fires ~30-45 battles/campaign via conquest. A RICHER unwired engine sits at tests/sim/mass_battle (mislabeled a frozen archive) — reconcile before porting."},"social_contest":{"tier":"module","scale":"scene","resolver":"dice_pool","build":"gated","godot":"python-oracle","port_rank":1,"parity":"key-log","note":"Agon kernel built (1 of 4 games); reached live only via emergency_council."},"victory":{"tier":"module","scale":"provincial","resolver":"state_reader","build":"live","godot":"python-oracle","port_rank":1,"parity":"state read","note":"GD-1; small + fully live. Easy first strategic port."},"threadwork":{"tier":"module","scale":"personal","resolver":"dice_pool","build":"unwired","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"13 operations built, zero live callers; rendering is a stub."},"territorial_piety":{"tier":"module","scale":"territory","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"CI generation live via ci_track; CANONICAL doc with ZERO Key integration."},"clock_registry":{"tier":"module","scale":"provincial","resolver":"manifest","build":"design","godot":"python-oracle","port_rank":2,"parity":"data","note":"pure catalog; ports as a data table."},"faction_state":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION]."},"faction_politics":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"contest/faction.py succession/coalition math exists but unwired."},"piety_track":{"tier":"module","scale":"personal","resolver":"deterministic_accounting","build":"deferred","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"conviction.py Scar accumulation real; reached only via the unwired knot chain."},"settlement_layer":{"tier":"module","scale":"territory","resolver":"deterministic_accounting","build":"design","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"territory/ substrate built but unwired; Mandate aggregation (7T/(T+6)) unbuilt."},"engine_clock":{"tier":"module","scale":"provincial","resolver":"clock_advance","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null temporal spine — the sole remaining T0 blocker (ED-1051). Blocks the season/accounting cadence port."},"npc_behavior":{"tier":"module","scale":"personal","resolver":"deterministic_accounting","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle."},"npc_memory":{"tier":"module","scale":"personal","resolver":"state_reader","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; schema lives in a doc-12 bridge."},"fieldwork_knots":{"tier":"module","scale":"personal","resolver":"dice_pool","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"fieldwork/investigation raise; knots built but the scene runner is a stub."},"domain_actions":{"tier":"module","scale":"provincial","resolver":"d_sigma","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"da.* 5-tag taxonomy; doc:null, zero code."},"ci_political":{"tier":"module","scale":"provincial","resolver":"deterministic_accounting","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"CANONICAL doc, ZERO Key integration; card system unbuilt."},"peninsular_strain":{"tier":"module","scale":"peninsula","resolver":"deterministic_accounting","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"owns Turmoil + IP; env.* emitters + occupation ladder unbuilt (IP isn't even a clocks key)."},"scene_slate":{"tier":"module","scale":"scene","resolver":"manifest","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; built = a 59-line queue, the canonical §4 generator is unbuilt."},"game_director":{"tier":"module","scale":"scene","resolver":"manifest","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"doc:null; scene lifecycle + zoom stack."},"scene_timer":{"tier":"module","scale":"scene","resolver":"state_reader","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"n/a","note":"doc:null observability sidecar."},"audit":{"tier":"module","scale":"scene","resolver":"state_reader","build":"deferred","godot":"no-oracle","port_rank":8,"parity":"n/a","note":"doc:null QA telemetry sink."},"miraculous_event":{"tier":"module","scale":"personal","resolver":"state_reader","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"trigger raises."},"scenario_authoring":{"tier":"module","scale":"peninsula","resolver":"manifest","build":"design","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"compile-time injection; execution unbuilt."},"articulation_layer":{"tier":"module","scale":"personal","resolver":"armature_dot_product","build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"the universal Key consumer — 3x raises. No consume-side oracle exists anywhere."},"settlement_economy":{"tier":"module","scale":"settlement","resolver":"deterministic_accounting","build":"design","godot":"retire","port_rank":9,"parity":"n/a","note":"phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer."},"campaign_architecture":{"tier":"module","scale":"provincial","resolver":"none","build":"design","godot":"retire","port_rank":9,"parity":"n/a","note":"reclassified: a consolidation doc, not a runtime module."}},"adapters":{"scene_dispatch":{"tier":"adapter","scale":null,"resolver":null,"build":"deferred","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"down-scale seam; only 1 of 8 triggers fires."},"parliamentary_bridge":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"runs every season (echo on); emits 13-65 keys/campaign — the ONLY live Key producer."},"echo_transport":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"the paired apply-closure — the only live Key CONSUMER (writes Faction.L/I)."},"domain_echo":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"compute_domain_echo/accord/thread."},"zoom_in_out":{"tier":"adapter","scale":null,"resolver":null,"build":"gated","godot":"python-oracle","port_rank":2,"parity":"key-log","note":"zoom protocol §4; maps to the Godot GameDirector zoom stack."},"handoff_rules":{"tier":"adapter","scale":null,"resolver":null,"build":"unwired","godot":"python-oracle","port_rank":3,"parity":"key-log","note":"8 §3 rules built, ZERO callers; §3.7 Mass->Personal Duel never fires."},"articulation":{"tier":"adapter","scale":null,"resolver":null,"build":"stub","godot":"no-oracle","port_rank":8,"parity":"key-log","note":"the intended universal Key reader — stub. The consume/handoff half of the substrate has NO oracle on either side."}},"foundation_gaps":{"godot_spine":{"godot":"no-oracle","note":"BaseEngine / EngineModule / KeyBus / Resolver / GameState are referenced by the skeleton but class_name def = NONE anywhere. Gate-0; the skeleton is non-compilable. The map's Wrapper tier = this undefined spine."},"character_layer":{"godot":"no-oracle","note":"No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every personal-scale port needs this first."},"save_replay_premise":{"status":"violated","note":"Strategy premise 'save = initial conditions + Key log'. But the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key trace, so the Key log cannot reconstruct strategic state. Save/replay/parity holds only for the echo-keyed slice today."}},"build_counts":{"unwired":3,"live":2,"gated":5,"deferred":11,"design":9,"stub":4},"godot_counts":{"gd-ported":1,"python-oracle":16,"no-oracle":15,"retire":2}};
+// n(label,status,{t,tag,mono,desc,cons,emit,rd,wr},children)
 function n(l,s,o={},c){return Object.assign({l,s,c:c||o.c||null},o);}
 const TREE=[
- n("run_campaign(seed, max_seasons, params)","live",{mono:1,src:"mc_v18.py",desc:"The whole game = one seeded run. Loops seasons until a winner. Each faction_take_action is wrapped in <code>try/except: pass</code> — action errors vanish silently.",wr:["world.winner"]},[
-
-   // ---- STATE ----
-   n("Game State — the World","state",{mono:1,src:"game_state.py",desc:"The single mutable state. No DB, no event store — strategic actions mutate this directly."},[
-     n("Faction ×4","state",{mono:1,desc:"L · Sta · W · I · Mil · standing · territories[] · parliamentary. adjust() clamps 0.5–7.0.",wr:["Faction.L","Faction.Sta","Faction.W","Faction.Mil"]}),
-     n("Territory ×15+","state",{mono:1,desc:"owner · accord · pt · garrison · prosperity · fort_level.",wr:["Territory.owner","Territory.accord"]}),
-     n("clocks{}","state",{mono:1,desc:"Turmoil(=Political Stability) · CI · MS · IP.",wr:["clocks.CI","clocks.MS","clocks.Turmoil"]}),
-     n("Mandate / Legitimacy-PopularSupport (LPS-1)","design",{mono:1,src:"ED-FA-0004",desc:"<span class=\"att\">Would live here.</span> The ratified per-settlement Mandate = 7T/(T+6) + Treasury model is UNIMPLEMENTED across 8 files. The Faction dataclass has no Mandate/PS/Treasury field — everything routes around it via the scalar <code>Faction.L</code>."}),
-     n("echo_scheduler + key_log","gated",{mono:1,desc:"Attached when ECHO_TRANSPORT on (default). The pub/sub <b class=\"c\">subscribe()</b> channel is <span class=\"flag\">dead</span> (0 subscribers — articulation, the intended reader, stubs out) — BUT each Key carries a paired <b class=\"c\">apply=</b> closure that DOES fire at accounting_boundary and writes Faction.L/I. The echo is a real, narrow effect, not inert. NB: key_log is a dynamic attribute, not a dataclass field — serialize_world drops it.",wr:["world.key_log"]}),
-     n("Character / Actor layer — the missing foundation","design",{mono:1,src:"HEADLINE GAP",desc:"<span class=\"att\">Structurally absent.</span> There is NO Character/Actor/PC dataclass in World, so no personal-scale resolver has a typed home for attributes or derived stats — combat/contest/fieldwork either duck-type <code>getattr(actor,'strength',3)</code> or bypass character state entirely."},[
-       n("9-attribute roster (descriptor_registry, IN FLUX)","design",{mono:1,desc:"attr.body/mind/social.{…} + agg.* placeholders — the registry's own header says 'NOT yet wired into derived values'."}),
-       n("10-attribute roster (params/core.md)","design",{mono:1,desc:"<span class=\"flag\">Rival schema:</span> Agility/Endurance/Strength/Cognition/Recall/Focus/Attunement/Bonds/Charisma/Spirit — a different, incompatible 'canonical' roster."}),
-       n("Derived stats (derived_stats_v30)","design",{mono:1,desc:"Health · Stamina · Composure · Concentration · Thread Fatigue · Wounds · Momentum — fully specified, instantiated in NO sim code."}),
-       n("combat_engine_v1/combatant.py — the one working pipeline","unwired",{mono:1,desc:"health_full()/stamina_max()/WoundTracker are real — but use the old 10-key roster and are imported nowhere in sim/."}),
+ // ══════════════ WRAPPER 1 — the campaign engine ══════════════
+ n("Campaign Engine — the orchestrating wrapper","live",{t:1,tag:"ed:ED-IN-0071",mono:1,desc:"The holonic top wrapper: run_campaign composes one season tick at a time until a winner. Every scale-container hangs off this. (Oracle moved sim/→engine/ in ED-IN-0071 — this map no longer cites the path.)"},[
+   n("Season loop — the temporal spine","live",{t:2,tag:"module:engine_clock",desc:"run_season = tick → action → accounting, repeated. engine_clock is the (doc:null) temporal module that owns it."},[
+     n("① Season tick","live",{t:3,tag:"module:engine_clock",desc:"advance_season: counter, arc boundary, flag resets. The mechanical.season_change Key it 'should' emit is unbuilt (engine_clock has no code)."},[
+       n("engine_clock","gated",{t:4,tag:"module:engine_clock",desc:"doc:null temporal spine. The sole remaining T0 blocker (ED-1051).",emit:["mechanical.season_change","mechanical.accounting"]}),
      ]),
-     n("Dead-reg registries — real code, zero campaign call path","unwired",{mono:1,src:"game_state.py",desc:"<span class=\"att\">6+ World registries whose owning modules are real (full to_dict/from_dict round-trips) but nothing in the loop reaches them; ~10 persisted-state dataclasses (~80 fields) live behind them.</span>"},[
-       n("practitioners (CoherenceState) · knots (Knot) · convictions (ConvictionState/Scar) · beliefs (Belief)","unwired",{mono:1,desc:"All of sim/thread/* + personal/{conviction,knots,beliefs} — unreachable from run_campaign."}),
-       n("treaties (TreatyRecord) · threadcut_beings (ThreadcutState) · comovement_deck","unwired",{mono:1,desc:"propose_treaty raises; thread threadcut/co_movement unreachable."}),
-       n("settlements (Settlement, 24 fields) · territory_infrastructure (InfrastructureState)","unwired",{mono:1,desc:"register_settlement / build_infrastructure — zero external callers; world.settlements never populated."}),
-     ]),
-     n("Faction / Territory field gaps","design",{mono:1,src:"game_state.py",desc:"Canon-vs-code, plus live flags and dead fields the map hadn't charted."},[
-       n("no field exists: Mandate · Intel · Treasury · PS","design",{mono:1,desc:"fac.intel was ratified with a floor (2026-07-08) but the dataclass has no intel field; Mandate/Treasury/PS likewise absent (the LPS-1 gap).",wr:["Faction.Intel"]}),
-       n("live but uncharted: senator_inward_used · consul_used · excommunicated · council_used_this_arc","live",{mono:1,desc:"Real per-season/arc flags reset by season_manager / written by excommunication."}),
-       n("declared but dead: Faction.peaceful · Territory.uncontrolled_since · clocks.{IP,PI,Strain}","deferred",{mono:1,desc:"Never written live. IP isn't even a clocks key; PI/Strain are vestigial pre-v18 carryover; Turmoil is write-dead (read once, never assigned)."}),
-     ]),
-     n("The quantity graph — clock_registry (~40 tracked values)","design",{mono:1,src:"clock_registry_v30.md",desc:"<span class=\"att\">World.clocks holds 5; canon names ~40.</span> ~8 are live-written, the rest design-only or dead-reg. Grouped by category:"},[
-       n("Faction-specific tracks (7)","design",{mono:1,desc:"Torben/Elske Loyalty · Löwenritter Autonomy · Popular Will · Warden Cooperation/Recognition · Intel Advancement — zero implementation."}),
-       n("Personal tracks (9)","design",{mono:1,desc:"Coherence · Certainty · Thread Sensitivity · Composure · Health · Wounds · Stamina · Momentum · Knot Count — none stored on any World object (dead-reg or ephemeral)."}),
-       n("Contest: Persuasion Track · Obligation clocks","design",{mono:1,desc:"PersuasionTrack class is real but the one live proceeding resolves via a ballot, never the track."}),
-       n("Fieldwork: Exposure · Cover · Evidence · Disposition — all STUB","stub",{mono:1,desc:"fieldwork.py raises end-to-end."}),
-       n("Settlement / Player / NPC (10+)","design",{mono:1,desc:"Resources · Guild Favour · Church Attention · Cardinal Influence · Ministry AP-Tokens · Casus Belli · Thread Debt · settlement Prosperity/Defense/Order + derived values."}),
-     ]),
-   ]),
-
-   // ---- RESOLUTION LAYER ----
-   n("Resolution layer — how every action rolls","live",{mono:1,desc:"Three dice regimes; two fire in a single faction turn."},[
-     n("_successes(pool, rng) — d6 ≥4","live",{mono:1,src:"faction_action.py:89",desc:"Strategic scale. Conquest / Muster / Govern."}),
-     n("dice_engine.roll_pool — d10","live",{mono:1,src:"autoload/dice_engine.py",desc:"Crown &amp; Church uniques + the parliamentary vote. One turn mixes d6 &amp; d10."}),
-     n("sigma_leverage — d+σ continuous","gated",{mono:1,src:"autoload/sigma_leverage.py",desc:"The contest kernel (gated-live) and combat_engine_v1 (unwired) roll this."}),
-   ]),
-
-   n("① Bootstrap","live",{src:"mc_v18.py",desc:"create_world(seed) · victory.reset() · scene_slate.clear() · attach echo_scheduler.",wr:["Faction.L","Territory.owner","clocks.Turmoil"]},[
-     n("scenario_authoring — compile-time event injection","design",{mono:1,src:"doc:null",desc:"<span class=\"att\">Authoring-time.</span> Injects env.crisis/disaster seed events; execution unbuilt (no compile tooling / template-pack format).",emit:["env.crisis","env.disaster"]}),
-   ]),
-
-   // ---- SEASON LOOP ----
-   n("② Season loop — run_season(world, cb)","live",{mono:1,src:"season.py",desc:"↻ until world.winner. Composes tick → action → accounting.",rd:["world.winner"]},[
-
-     n("Step 1 — advance_season(world)","live",{mono:1,src:"season_manager.py",desc:"season++, arc boundary, Faction.reset_seasonal/reset_arc. Emits NO Key (season_change belongs to the codeless engine_clock).",wr:["world.season","world.arc"]}),
-
-     n("Step 2 — ACTION: _faction_actions_callback","live",{mono:1,src:"mc_v18.py",desc:"Three layers: strategic actions → scene resolution → parliamentary vote.",rd:["Faction.parliamentary","Faction.territories"]},[
-
-       n("Strategic turn — faction_take_action","live",{mono:1,src:"faction_action.py",desc:"Per parliamentary faction w/ territory. Signals reweight the 30/35/20/15 mix; one roll dispatches unique→conquest→muster→govern.",rd:["Faction.Mil","Faction.W"]},[
-
-         n("Conquest — _try_conquest()","live",{mono:1,src:"faction_action.py",desc:"~30 battles/campaign. Gate: target exists &amp; Mil≥3. On a win the loser faction loses L (−10).",rd:["Faction.Mil","Territory.owner"],wr:["Territory.owner","Territory.accord","Faction.L","world.battle_count"]},[
-           n("resolve_mass_battle(atk, def)","live",{mono:1,src:"massbattle.py",desc:"The ratified 1905-line engine. Per-phase resolution → degree + attacker_wins."},[
-             n("phases: stamina · morale · rout · discipline","live",{mono:1,desc:"Real, every phase."}),
-             n("rally · reform · threadwork hooks","deferred",{mono:1,desc:"<span class=\"flag\">No-op:</span> called every phase_boundary, bodies bare <code>pass</code> (future cycles)."}),
-             n("Invasion &amp; Defense — §5.1/§5.2 garrison, siege","design",{mono:1,src:"settlement_layer §5",desc:"<span class=\"att\">Attaches here.</span> Only the Terms-vs-Storm accord fork is built; full garrison/siege is design-only. _GarrisonStub fills defenderless territories."}),
-             n("units.py (Subunit / Unit) — the object model","live",{mono:1,src:"provincial/units.py",desc:"The tactical objects resolve_mass_battle actually operates on (cells / advance / collisions / pool / discipline). Live, just never charted."}),
-             n("run_multi_unit_battle — the richer model, bypassed","unwired",{mono:1,src:"massbattle.py:1357",desc:"Multi-subunit, multi-turn, pursuit / rout-chase. Built — but resolve_mass_battle runs single-encounter only and never reaches it."}),
-             n("SECOND mass-battle engine — tests/sim/mass_battle/","unwired",{mono:1,src:"tests/sim/mass_battle/",desc:"<span class=\"flag\">Headline gap:</span> a far more sophisticated engine (Line/Arrowhead/Column formations, time-of-impact collision, Lanchester validation, fighting-withdrawal), actively developed through 2026-07-08, fully disconnected and mislabeled by sim/README as a 'frozen archive.' No sim/-based trace could find it."}),
-             n("tactic_cards · formations · terrain · siege — stub/design","stub",{mono:1,desc:"FACTION_TACTIC_CARD_POOL_MODIFIERS is an empty dict [BLOCKED]; formations/terrain/siege/artillery have no or no-op code."}),
+     n("② Action phase","live",{t:3,tag:"module:faction_state",desc:"The per-season turn: strategic actions → scene distribution → parliamentary vote. Outputs land in the faction_state accounting hub."},[
+       n("faction_state — the accounting hub (in-13)","deferred",{t:4,tag:"module:faction_state",desc:"<span class=\"att\">The graph's densest junction.</span> Consumes ~20 edges; the whole Key graph terminates here at DA_proposal / settlement_accounting. [ASSUMPTION] resolver.",cons:["da.public_governance","da.covert_betrayal","scene.battle_concluded","scene.contest_resolved","state.coup_attempted","state.succession","state.scar_acquired","meta.miraculous_event"],emit:["mechanical.cascade_resolution","mechanical.mission_shift","state.standing_change"]},[
+         n("Conquest","live",{t:6,tag:"module:mass_battle",desc:"Take adjacent territory by force. ~30–45 battles/campaign.",wr:["Territory.owner","Faction.L"]},[
+           n("Terms vs Storm fork","live",{t:7,desc:"Attacker win → Terms (cheaper) else Storm. ED-FA-0013.",wr:["Territory.accord"]}),
+           n("_try_conquest → resolve_mass_battle","live",{t:8,tag:"module:mass_battle",mono:1,desc:"Live routine. Gate: target &amp; Mil≥3."},[
+             n("units.py object model · phase checks","live",{t:9,mono:1,desc:"Subunit/Unit + stamina/morale/rout; rally/reform/threadwork are no-op hooks."}),
+             n("run_multi_unit_battle · tests/sim/mass_battle","unwired",{t:9,mono:1,desc:"The richer engine (formations/collision/Lanchester) — built, bypassed, mislabeled a 'frozen archive'."}),
            ]),
          ]),
-         n("Muster — _try_muster()","live",{mono:1,src:"faction_action.py",desc:"Buy Mil, spend W.",rd:["Faction.W","Faction.Mil"],wr:["Faction.Mil","Faction.W"]}),
-         n("Govern — _try_govern()","live",{mono:1,src:"faction_action.py",desc:"Raise Accord/PT, or −Sta on failure.",wr:["Territory.accord","Faction.Sta"]},[
-           n("Governance verbs (15) — the designed replacement","design",{mono:1,src:"governance_play_redesign_v1.md",desc:"<span class=\"att\">Would replace/expand Govern.</span> Develop · Fortify · Keep Order · Hold Court · Sponsor · Treat · Levy · Investigate · Survey · Negotiate-Quota · Bind-the-Cells · Ordenanza · Clerk-Capacity · Petition · Defy. Zero code.",wr:["Territory.accord","Territory.prosperity"]}),
-           n("Settlement substrate — sim/territory/","unwired",{mono:1,src:"territory/",desc:"<span class=\"att\">Feeds Govern + Mandate.</span> registry · settlement · ledger · infrastructure · temperaments — ~35KB built, ZERO callers; world.settlements never populated. + event deck / NPC ambition = design-only."}),
+         n("Muster · Govern","live",{t:6,tag:"module:settlement_layer",desc:"_try_muster (buy Mil / spend W); _try_govern (Accord/PT, −Sta on fail).",wr:["Faction.Mil","Territory.accord","Faction.Sta"]},[
+           n("Governance verbs (15)","design",{t:7,tag:"module:settlement_layer",desc:"Develop/Fortify/Levy/Survey/Bind-the-Cells/… — the designed replacement for Govern. Zero code. Feeds settlement_layer + Mandate."}),
          ]),
-         n("Faction-unique — _faction_specific_unique()","live",{mono:1,src:"faction_action.py",desc:"By faction.name; universal Censure fallback."},[
-           n("Crown — crown_initiative (3 modes)","live",{mono:1,src:"crown_initiative.py",desc:"royal_progress / great_work / coronation_renewal. §3.3/§3.4 sub-effects unmodeled.",rd:["Faction.L"],wr:["Faction.L","Faction.standing"]},[
-             n("+ Royal Charter · Decree · Thread Liaison · Schoenland Outreach","design",{mono:1,src:"faction_actions.md",desc:"Designed Crown verbs, no code."}),
-           ]),
-           n("Church — excomm → council → absolution","live",{mono:1,src:"excommunication.py",desc:"Priority chain, all real (d10). Council's Cardinal Focus + excomm §9 sub-effects unmodeled.",rd:["Faction.L","clocks.CI"],wr:["Faction.L","clocks.CI","Faction.Sta"]},[
-             n("mass_seizure","unwired",{mono:1,src:"provincial/mass_seizure.py",desc:"Built (CI-60+ Church seizure) — zero callers; not one of the 4 dispatch buckets."}),
-             n("home_sanctuary · infrastructure_reclamation","stub",{mono:1,desc:"Both raise NotImplementedError — Church mechanics, unreachable."}),
-             n("+ Piety Spread · Active Inquisition · Ecclesiastical Appointment","design",{mono:1,desc:"Designed Church verbs, no code."}),
-           ]),
-           n("Hafenmark → _NOOP","deferred",{mono:1,src:"faction_action.py:317",desc:"Hard-returns _NOOP — routes around its own modules.",},[
-             n("charter_liberties · hafenmark_equipment · altonian_reinforcements","stub",{mono:1,desc:"3× raise NotImplementedError, unreachable."}),
-             n("+ Parliamentary Challenge/Session · Diplomat · Dynastic Proclamation · Martial Governance","design",{mono:1,desc:"Designed Hafenmark verbs, no code."}),
-           ]),
-           n("Varfell → _NOOP","deferred",{mono:1,src:"faction_action.py:317",desc:"Hard-returns _NOOP."},[
-             n("varfell_mandate_action · varfell_territorial_acquisition","stub",{mono:1,desc:"2× raise, unreachable."}),
-             n("+ Revelation Tokens · Counter-Narrative · Cultural Reclamation","design",{mono:1,desc:"Designed Varfell verbs, no code."}),
-           ]),
-           n("Fallback — propose_censure()","gated",{mono:1,src:"parliamentary_action.py",desc:"ED-FA-0012 — any faction with no unique attempts a Censure if eligible. On pass: target −1 L and −1 Sta.",wr:["Faction.L","Faction.Sta"]},[
-             n("+ 9 parliamentary motions — Embargo · Blockade · Outlawry · Subsidy · War Auth · Treaty Ratification · Recognition · Succession · Target Rebuttal","design",{mono:1,src:"faction_layer §5.4",desc:"Only Censure of the tier is built — the rest are TODO comments."}),
-             n("parliamentary_transfer","unwired",{mono:1,desc:"propose_transfer — 204-line real impl, zero callers."}),
-             n("treaty","stub",{mono:1,src:"provincial/treaty.py:97",desc:"propose_treaty raises (canon routes treaties via crown_initiative); its register/expire helpers are real but also unwired."}),
-           ]),
-         ]),
-         n("(resolved actions would tag da.*)","design",{mono:1,src:"da_framework doc:null",desc:"<span class=\"att\">Would ride every action.</span> The 5-tag outcome taxonomy, consumed by faction_state/npc_behavior. Zero code.",emit:["da.public_governance","da.covert_betrayal","da.antinomian_action","da.diplomatic_alliance","da.economic_intervention"]}),
-         n("faction_politics — coup / succession / rank ladder","contract",{mono:1,src:"faction_politics_v30.md (PP-660)",desc:"<span class=\"att\">The political layer above actions.</span> Standing 0–7 progression, coups, successions — emits into the faction_state hub. Boundary vs faction_state [OPEN].",emit:["state.coup_attempted","state.succession","state.standing_change","scene.investigation_resolved"]},[
-           n("contest/faction.py — succession / coalition math","unwired",{mono:1,src:"personal/contest/faction.py",desc:"vote / succession / coalition_vote — built, called by nothing (not even crown_initiative's coronation)."}),
-         ]),
-         n("Board-game layer — the strategic superstructure","design",{mono:1,src:"params/bg/",desc:"<span class=\"att\">Almost entirely design-only.</span> The board game most of these verbs are drawn from:"},[
-           n("Parliament Integrity (PI) · Open Pledge","design",{mono:1,desc:"Zero tracked state; the PI Scale + pledge system are unbuilt."}),
-           n("Ministry — the 5th NPC faction","design",{mono:1,desc:"mc_v18 instantiates only 4 factions; the Ministry isn't in the roster."}),
-           n("Four Cardinals · Löwenritter · Parish/Cathedral","design",{mono:1,desc:"Cardinal Focus 'not in v18 schema'; Lions'-Table/Riskbreakers/Civic-Arm not even a simulated faction."}),
-           n("Tensions Deck · Royal Assassination Fuse","design",{mono:1,desc:"The 6-card S1–S12 fuse + assassination clock — design-only."}),
-           n("Special-NPC tracks (Torben · Elske · Warden)","design",{mono:1,desc:"Loyalty / Recognition / Cooperation / Intel-Advancement counters — zero code."}),
-           n("BG victory apparatus (7 faction victories, Co-Victory)","design",{mono:1,desc:"Actively SUPERSEDED — victory.py enforces GD-1 as the sole victory by design."}),
+         n("Faction-unique","live",{t:6,tag:"module:faction_politics",desc:"By faction; universal Censure fallback."},[
+           n("Crown initiative (3 modes)","live",{t:8,mono:1,desc:"royal_progress / great_work / coronation_renewal.",wr:["Faction.L","Faction.standing"]}),
+           n("Church chain","live",{t:8,mono:1,desc:"excommunication → council → absolution (d10).",wr:["Faction.L","clocks.CI"]}),
+           n("Varfell / Hafenmark → _NOOP","deferred",{t:8,mono:1,desc:"Route around 7 unwired-or-stub unique modules."}),
+           n("propose_censure fallback","gated",{t:8,mono:1,desc:"Only Censure of the §5.4 tier is built; 9 other motions design-only.",wr:["Faction.L","Faction.Sta"]}),
          ]),
        ]),
-
-       n("Scene resolution (zoom-in) — run_scene_phase","deferred",{mono:1,src:"scene_dispatch.py",desc:"Distributes DOWN to personal scenes. Side-effect-free by construction. Only combat/contest have routing; the rest hit 'resolver not live'.",rd:["Faction.Sta"],wr:["world.scenes_resolved"]},[
-         n("8 zoom-in triggers","deferred",{mono:1,src:"zoom_in_out.py:154",desc:"Each would queue a scene toward a resolver below."},[
-           n("① Stability Crisis (Faction.Sta≤2)","gated",{mono:1,desc:"The only one that fires → emergency-council contest.",rd:["Faction.Sta"]}),
-           n("②–⑧ deferred — would target: mass battle · investigation · leader-removal · companion · knots · rank","deferred",{mono:1,desc:"Settlement Revolt · Heresy Investigation · Faction Leader Removal · Mass Battle at Settlement · Companion Arc · Knot Partner in Crisis · Rank Advancement. Need world-state schema absent from the aggregate World. (+5 optional §4.3.3 triggers, also no code.)"}),
-         ]),
-         n("contest → emergency_council","gated",{mono:1,src:"scene_dispatch.py",desc:"Seed-dependent: fires only when Sta≤2 — 0× in 4 of 7 seeds, 13–40× in the others. Derives both sides from the faction's own L/Sta [SEED].",rd:["Faction.L","Faction.Sta"],emit:["scene.contest_resolved"]},[
-           n("build/resolve_contest — 8 proceedings","gated",{mono:1,src:"contest/wrapper.py",desc:"The promoted Agôn kernel (d+σ). All 8 proceedings built."},[
-             n("4 games: agon LIVE · consensus/negotiation/inquiry STUB","stub",{mono:1,src:"wrapper.py:206",desc:"Only agon is WIRED; 3 games + Dyadic/Ceremonial modes raise. Stage 4 unbuilt."}),
+       n("Cross-scale adapters","gated",{t:3,tag:"adapter:scene_dispatch",desc:"The bridges that ADAPT the strategic aggregate down to personal scenes and back up. All now in engine/cross_scale/."},[
+         n("scene_dispatch","deferred",{t:5,tag:"adapter:scene_dispatch",desc:"Distributes DOWN. 1 of 8 triggers fires; only combat/contest route (combat is dead).",wr:["world.scenes_resolved"]},[
+           n("Stability-Crisis trigger → emergency_council","gated",{t:6,tag:"module:social_contest",desc:"The one live personal scene — fires only at Sta≤2 (0× in ~half of seeds).",emit:["scene.contest_resolved"]},[
+             n("build/resolve_contest — 8 proceedings, 4 games","stub",{t:7,tag:"module:social_contest",desc:"Only game 'agon' built; consensus/negotiation/inquiry stub. sigma_leverage (d+σ)."}),
+             n("_emergency_council_parties [SEED]","gated",{t:9,mono:1,desc:"Both sides from the faction's own L/Sta — no invented actor."}),
            ]),
+           n("combat trigger (dead)","unwired",{t:6,tag:"module:personal_combat",desc:"Nothing queues scene_type='combat'; targets the deprecated sim combat.py, not the canonical engine."}),
+           n("thread scene → threadwork","unwired",{t:6,tag:"module:threadwork",desc:"13 operations built (Leap/Weave/Pull/…), none dispatched; rendering = stub.",emit:["scene.thread_operation","meta.thread_woven"]}),
+           n("fieldwork / investigation scene","stub",{t:6,tag:"module:fieldwork_knots",desc:"fieldwork/investigation raise; knots built but unwired.",emit:["meta.knot_formed","meta.knot_ruptured","scene.gift","state.belief_revised"]}),
+           n("personal Conviction scars","deferred",{t:6,tag:"module:piety_track",desc:"Scars accrue as scenes resolve; g_scar gates. 3-way name collision with territorial_piety.",cons:["scene.battle_concluded","scene.witness","meta.knot_ruptured","meta.thread_woven"],emit:["state.scar_acquired"]}),
          ]),
-         n("combat → combat scene","unwired",{mono:1,src:"scene_dispatch.py:141",desc:"<span class=\"flag\">Dead branch:</span> nothing queues scene_type='combat'. Routes to the DEPRECATED sim/personal/combat.py, not the canonical engine below."},[
-           n("combat_engine_v1 — the canonical engine (11 modules)","unwired",{mono:1,src:"designs/scene/combat_engine_v1/",desc:"<span class=\"att\">Would resolve combat scenes.</span> Ratified 51-weapon engine — lives OUTSIDE sim/, runs only in its own workbench."},[
-             n("strike · wound","unwired",{mono:1,desc:"Built in Python + the Godot skeleton slice."}),
-             n("bind · approach · displace · grapple · halfsword · initiative · poise","unwired",{mono:1,desc:"Built in Python, called live in wrapper.py (ledger's 'PENDING' is stale — that's Godot-port status). Not ported to Godot."}),
-             n("feint RETIRED · armour_defeat FOLDED","design",{mono:1,desc:"feint dissolved into the attack by design; armour_defeat folded into strike."}),
-             n("Weapon &amp; tradition roster","unwired",{mono:1,src:"combat_engine_v1/weapons.py",desc:"<span class=\"att\">The combat content layer.</span> 53 weapons (morphology axes: mass/head/grip/hands/class) + 7 historical traditions (german/italian/spanish/japanese/chinese/filipino/english) — only 6 abilities coded across 4 of 7. Real, CI-tested, disconnected from sim/."}),
-           ]),
+         n("parliamentary_bridge","gated",{t:5,tag:"adapter:parliamentary_bridge",desc:"Runs every season (echo on). §10 vote → composed Domain Echo. Emits 13–65 Keys/campaign.",emit:["scene.contest_resolved"]},[
+           n("direct Mandate write on Total Victory","live",{t:7,mono:1,desc:"<span class=\"flag\">Latent bug:</span> writes Faction.L OUTSIDE Keys; 'restoration' unimplemented.",wr:["Faction.L"]}),
          ]),
-         n("fieldwork scene","stub",{mono:1,src:"personal/fieldwork.py",desc:"<span class=\"att\">Would attach here.</span> run_fieldwork_scene / advance_disposition / advance_evidence — 3× raise. + Exposure/Cover, Interview = design-only."}),
-         n("investigation scene","stub",{mono:1,src:"personal/investigation.py",desc:"dialogue_lattice / response_matrix / npe_response — 3× raise. The Dialogue Lattice (canonical Interview home) unbuilt; Case Board = design-only."}),
-         n("companion scene","stub",{mono:1,src:"personal/companion.py",desc:"run_companion_scene raises."}),
-         n("beliefs · conviction (personal scene state)","unwired",{mono:1,src:"personal/",desc:"beliefs.add_belief (nothing calls it → no actor ever has beliefs) + conviction Scar accumulation (reached only via the unwired knot chain). Both real, both dead-reg."}),
-         n("Scene infrastructure — game_director · scene_timer · audit","contract",{mono:1,src:"module_contracts doc:null",desc:"<span class=\"att\">The scene lifecycle.</span> game_director pushes/pops the zoom stack and emits lifecycle Keys; scene_timer + audit are observability sidecars. All doc:null.",emit:["mechanical.scene_entered","mechanical.scene_exited","mechanical.scene_skipped"]}),
-         n("piety_track — personal Conviction scars","contract",{mono:1,src:"conviction_track_v1.md",desc:"<span class=\"att\">Emission-processing tier.</span> Scars accrue as scenes resolve; g_scar2/g_scar3 gate crisis. 3-way name collision with territorial_piety.",cons:["scene.battle_concluded","scene.dialogue","scene.insult","scene.threat","scene.witness","meta.knot_ruptured","meta.thread_woven","da.antinomian_action"],emit:["state.scar_acquired"]}),
-         n("scene_slate — the real §4 generator vs the 59-line queue","design",{mono:1,src:"player_agency_v30 §4",desc:"<span class=\"att\">Player agency.</span> The canonical 8-step priority-tiered Scene-Slate generation + pruning; the built scene_slate.py is a bare queue. Needs the (absent) Conviction/Duty/Standing/Renown data to fire.",emit:["scene.dialogue","scene.insult","scene.threat","scene.witness","scene.gift"]}),
-         n("thread scene — threadwork","unwired",{mono:1,src:"thread/",desc:"<span class=\"att\">Would attach as a scene type / knot-crisis trigger.</span> 13 operations built (Leap · Weave · Pull · Lock · Dissolve · Mend · Collective · Opposing · Co-Movement · Threadcut · Coherence) — none dispatched. coherence fires only via the equally-unwired knots. rendering/Calamity = stub."},[
-           n("knots — form / sustain / rupture","unwired",{mono:1,src:"personal/knots.py",desc:"Best-tested module; reached only by tests / unwired opposing.py."}),
+         n("echo_transport","gated",{t:5,tag:"adapter:echo_transport",desc:"The paired apply-closure fires at accounting_boundary — the real (narrow) Key consumer, writing Faction.L/I.",emit:["mechanical.cascade_resolution"],wr:["Faction.L","Faction.I"]}),
+         n("domain_echo","gated",{t:5,tag:"adapter:domain_echo",desc:"compute_domain_echo/accord/thread (§5). Reached via the echo path."},[
+           n("zoom_in_out — the zoom protocol","gated",{t:6,tag:"adapter:zoom_in_out",desc:"zoom_in / zoom_out / check_mandatory_triggers (§4)."}),
          ]),
-         n("echo &amp; scale glue","gated",{mono:1,desc:"emit_scene_echo · zoom_out (run when a scene resolves).",emit:["mechanical.cascade_resolution"]},[
-           n("handoff_rules.apply_handoff","unwired",{mono:1,src:"cross_scale/handoff_rules.py",desc:"All 8 §3 handoff rules built — ZERO callers. §3.7 Mass→Personal Duel (which would create a combat scene) never fires — a big reason combat is dead."}),
-           n("articulation — the Key consumer","stub",{mono:1,src:"cross_scale/articulation.py",desc:"<span class=\"att\">Would consume the Key stream.</span> lens / triggers / chronicle — 3× raise. This is why the 13–65 emitted Keys have no reader.",cons:["scene.contest_resolved","mechanical.cascade_resolution"]}),
-         ]),
-       ]),
-
-       n("Parliamentary vote — run_parliamentary_scene","gated",{mono:1,src:"parliamentary_bridge.py",desc:"Runs EVERY season when echo on (50/50) — the personal-scale path that actually fires. §10 vote → composed Domain Echo. Emits the 13–65 Keys on a decisive result; the paired apply-closure then writes the winner's Faction.L (Memory) or Faction.I (Projection) ±1/±2 at accounting_boundary.",rd:["Faction.L","Faction.Sta"],emit:["scene.contest_resolved"]},[
-         n("direct Mandate write on Total Victory","live",{mono:1,src:"parliamentary_vote.py:213",desc:"<span class=\"flag\">Missed edge + latent bug:</span> synchronously adjust('L', …) OUTSIDE the Key system. Its 'restoration deferred to season_manager' promise is UNIMPLEMENTED — a possible one-way penalty.",wr:["Faction.L"]}),
-         n("parliamentary_stay — §10.1 Stay procedure","unwired",{mono:1,src:"personal/parliamentary_stay.py",desc:"<span class=\"att\">Would attach right after the vote.</span> invoke_stay / resolve_stay_lift — built, zero callers ('caller-invoked', nobody invokes)."}),
-       ]),
-       n("Echo boundary — accounting_boundary · next_tick","gated",{mono:1,src:"echo_transport.py",desc:"ACTION→ACCOUNTING seam: this is where each emitted Key's paired apply-closure fires — the real (narrow) Key-consumption path, writing Faction.L/I ±1/±2.",wr:["Faction.L","Faction.I"]}),
-     ]),
-
-     n("Step 3 — ACCOUNTING: run_accounting(world)","live",{mono:1,src:"accounting.py",desc:"End-of-season settle, five sub-steps.",emit:["mechanical.accounting"]},[
-       n("apply_seasonal_ci(world)","live",{mono:1,src:"ci_track.py",desc:"PP-412 5-step Church-Influence calc.",rd:["Territory.owner","Territory.pt","Faction.L"],wr:["clocks.CI"]}),
-       n("apply_ms_baseline_decay(world)","live",{mono:1,src:"ms_track.py",desc:"MS decay, year-end cadence only.",wr:["clocks.MS"]}),
-       n("Mandate / LPS aggregation","design",{mono:1,src:"settlement_layer §1.8",desc:"<span class=\"att\">Would run here.</span> Aggregate settlement L/PS → faction Mandate = 7T/(T+6), + Treasury from Prosperity. Unbuilt — no aggregation step exists; the sim uses scalar Faction.L instead.",rd:["Territory.prosperity"],wr:["Faction.L"]}),
-       n("check_insurgency_triggers / _promotion","live",{mono:1,src:"insurgency_pipeline.py",desc:"GD-3 — insurgency emergence + promotion (sets promoted / parliamentary_status on the InsurgencyRecord).",rd:["Territory.owner"],wr:["world.insurgencies","world.uncontrolled_streaks"]}),
-       n("NPC ecology","live",{mono:1,src:"npe.py",desc:"simulate_npc_actions runs every season — but <span class=\"flag\">vacuous:</span> world.npcs is never populated (generate_npc has zero callers), so it iterates an empty dict and no-ops.",rd:["world.npcs"]},[
-         n("npe.generate_npc","unwired",{mono:1,desc:"<span class=\"att\">Would populate world.npcs.</span> Built, ZERO callers → CampaignResult.npcs_generated is ALWAYS 0."}),
-         n("npc_ai — select_action / priority_stack","stub",{mono:1,src:"autoload/npc_ai.py",desc:"<span class=\"att\">Would drive NPC decisions.</span> Both raise."}),
-       ]),
-       n("miraculous_event · restoration_movement","stub",{mono:1,src:"world/",desc:"<span class=\"att\">Would run as world processes here.</span> trigger_miraculous_event, process_rm_pt_decay/emergence — all raise (docstring even names the intended validated constants).",emit:["meta.miraculous_event"]}),
-       n("── Contract Key-wiring layer (intended, mostly unbuilt) ──","contract",{mono:1,src:"module_contracts.yaml",desc:"The 27-module Key graph the canon specifies. 12 of these modules were entirely absent from the map; 47 of ~50 Key edges undrawn. Grafted here at the ACCOUNTING boundary where most resolve. Click any chip to trace producer→consumer."},[
-         n("faction_state — the hub (in-degree 13)","contract",{mono:1,src:"faction_behavior_v30.md",desc:"<span class=\"att\">The graph's densest junction.</span> deterministic_accounting [ASSUMPTION]. Consumes nearly every other module's emissions at DA_proposal + settlement_accounting; the whole Key graph terminates here. Absent from every prior draft.",cons:["da.public_governance","da.covert_betrayal","da.antinomian_action","da.diplomatic_alliance","da.economic_intervention","env.disaster","env.peninsular_strain_shock","env.population_change","scene.battle_concluded","scene.contest_resolved","scene.dialogue","scene.insult","scene.threat","scene.gift","scene.investigation_resolved","state.coup_attempted","state.succession","state.scar_acquired","state.standing_change","meta.miraculous_event","mechanical.accounting"],emit:["mechanical.cascade_resolution","mechanical.mission_shift","state.standing_change"]}),
-         n("peninsular_strain — crises &amp; the occupation ladder","contract",{mono:1,src:"peninsular_strain_v30.md",desc:"Owns Turmoil (0–10) + IP (0–100); gates g_ip100/85/80 drive the Occupation-Phase era ladder. Pure emitter.",emit:["env.crisis","env.disaster","env.peninsular_strain_shock","env.population_change"]}),
-         n("territorial_piety — CV/CI per territory","contract",{mono:1,src:"conviction_track_v30.md",desc:"CANONICAL doc with ZERO Key integration (in-0/out-0). CI generation lives here; CI calc is a named accounting sub-step.",wr:["clocks.CI"]}),
-         n("ci_political — CI card / political system","contract",{mono:1,src:"ci_political_v30.md",desc:"CANONICAL, ZERO Key integration. CI=100 Theocracy Unification is unkeyed; CI bonus dice feed dice_pool contexts.",rd:["clocks.CI"]}),
-         n("settlement_economy — phantom (recommend retire)","design",{mono:1,src:"doc:null",desc:"in-3/out-0 pure sink; ED-SE-0005 folds its player-facing half into settlement_layer. Arguably should be omitted, not built.",cons:["da.economic_intervention","env.population_change"]}),
-         n("npc_behavior — Procedures B/C/D/E (the REAL npc system)","design",{mono:1,src:"npc_behavior_v30.md (1258 lines)",desc:"<span class=\"att\">Distinct from npe stance-drift.</span> Concern/Project/Opinion/Gossip procedures — npc_ai.py is a 28-line stub. The other in-12 hub. Emits a large scene.*/state.* set consumed by faction_state + npc_memory.",cons:["scene.contest_resolved","state.opinion_revised","meta.thread_woven","scene.witness"],emit:["scene.witness","scene.gossip","scene.interaction","scene.dialogue","scene.displacement","state.opinion_revised","state.concern_resolved","state.belief_revised","state.project_advanced","state.project_completed","state.project_failed","mechanical.mission_shift"]}),
-         n("npc_memory — the memory store","contract",{mono:1,src:"doc:null",desc:"state_reader. Queried inline by the Procedures; doc:null (schema in a doc-12 §2.3 bridge).",cons:["scene.gossip","scene.interaction","state.concern_resolved","state.opinion_revised"]}),
+         n("handoff_rules","unwired",{t:5,tag:"adapter:handoff_rules",desc:"8 §3 handoff rules built — ZERO callers. §3.7 Mass→Personal Duel (would create a combat scene) never fires."}),
+         n("articulation — the Key consumer","stub",{t:5,tag:"adapter:articulation",desc:"<span class=\"att\">The intended universal Key reader — 3× raises.</span> This is why emitted Keys have no subscriber.",cons:["scene.contest_resolved","mechanical.cascade_resolution"]}),
        ]),
      ]),
+     n("③ Accounting","live",{t:3,tag:"module:territorial_piety",desc:"End-of-season settle: CI · MS · insurgency · NPC drift, and where the intended-but-unbuilt strategic modules would run."},[
+       n("territorial_piety","deferred",{t:4,tag:"module:territorial_piety",desc:"CI generation (live via ci_track). CANONICAL doc with ZERO Key integration.",wr:["clocks.CI"]},[
+         n("ci_political — political card system","deferred",{t:6,tag:"module:ci_political",desc:"CI bonus dice feed dice_pool; CI=100 Theocracy Unification is unkeyed. ZERO Key integration.",rd:["clocks.CI"]}),
+       ]),
+       n("peninsular_strain","deferred",{t:4,tag:"module:peninsular_strain",desc:"Owns Turmoil + IP; the occupation-phase era ladder. Pure emitter — none of it live (IP isn't even a clocks key).",emit:["env.crisis","env.disaster","env.peninsular_strain_shock","env.population_change"]}),
+       n("settlement_layer — Mandate aggregation","design",{t:4,tag:"module:settlement_layer",desc:"Mandate aggregation (7T/(T+6)) would run here; unbuilt (uses scalar Faction.L).",cons:["env.population_change","da.economic_intervention"]},[
+         n("settlement_economy — phantom (retire)","design",{t:6,tag:"module:settlement_economy",desc:"in-3/out-0 sink; ED-SE-0005 folds it into settlement_layer.",cons:["da.economic_intervention","env.population_change"]}),
+       ]),
+       n("npc_behavior Procedures B/C/D/E","design",{t:4,tag:"module:npc_behavior",desc:"The REAL npc system (Concern/Project/Opinion/Gossip) — npc_ai is a 28-line stub. The other in-12 hub.",emit:["scene.gossip","scene.interaction","state.opinion_revised","state.concern_resolved","state.belief_revised"],cons:["scene.contest_resolved"]},[
+         n("npc_memory — the memory store","deferred",{t:6,tag:"module:npc_memory",desc:"Queried inline by the Procedures; doc:null.",cons:["scene.gossip","scene.interaction","state.concern_resolved","state.opinion_revised"]}),
+       ]),
+       n("insurgency · NPE drift","live",{t:6,desc:"GD-3 emergence/promotion (live) + simulate_npc_actions (live but vacuous — world.npcs never populated).",wr:["world.insurgencies"]}),
+       n("miraculous_event · restoration_movement","stub",{t:4,tag:"module:miraculous_event",desc:"World processes — both raise.",emit:["meta.miraculous_event"]}),
+       n("scenario_authoring","design",{t:4,tag:"module:scenario_authoring",desc:"Compile-time event injection; execution unbuilt.",emit:["env.crisis","env.disaster"]}),
+     ]),
    ]),
+   n("Victory — GD-1","live",{t:2,tag:"module:victory",desc:"Checked every season; the only game-end trigger."},[
+     n("check_peninsular_sovereignty","live",{t:8,mono:1,desc:"15/15 · Accord≥2 · PS≤6 · 2 seasons.",rd:["Territory.owner","Territory.accord","clocks.Turmoil"]}),
+     n("era transitions","stub",{t:6,tag:"module:peninsular_strain",desc:"Post-Calamity / Phased-Occupation / Anarchy — ip_track raises; the rest have no code."}),
+   ]),
+   n("Resolution regimes — the dice layer","live",{t:2,desc:"How every action rolls; two regimes fire in one turn."},[
+     n("_successes d6 · dice_engine.roll_pool d10 · sigma_leverage d+σ","live",{t:6,mono:1,desc:"Conquest/Muster/Govern → d6; Crown/Church uniques + parliament → d10; contest/combat → d+σ."}),
+   ]),
+   n("Strategic modules not on the live turn","design",{t:2,tag:"module:domain_actions",desc:"Contract modules whose home is the strategic layer but which the loop doesn't drive."},[
+     n("domain_actions (da.* taxonomy)","design",{t:4,tag:"module:domain_actions",desc:"5-tag outcome taxonomy; zero code. Rides every resolved action.",emit:["da.public_governance","da.antinomian_action","da.covert_betrayal","da.diplomatic_alliance","da.economic_intervention"]}),
+     n("faction_politics","deferred",{t:4,tag:"module:faction_politics",desc:"Coup / succession / rank-ladder; emits into faction_state.",emit:["state.coup_attempted","state.succession","state.standing_change","scene.investigation_resolved"]}),
+     n("scene infra — game_director","deferred",{t:4,tag:"module:game_director",desc:"Season-loop + zoom-stack orchestrator; emits the scene lifecycle Keys. doc:null.",emit:["mechanical.scene_entered","mechanical.scene_exited","mechanical.scene_skipped"]},[
+       n("scene_slate — the slate queue","deferred",{t:6,tag:"module:scene_slate",desc:"7-priority slate; the canonical §4 generator is unbuilt (built = a 59-line queue).",emit:["scene.dialogue","scene.insult","scene.threat","scene.witness","scene.gift"]}),
+       n("scene_timer — wall-clock sidecar","deferred",{t:6,tag:"module:scene_timer",desc:"Observability; advances no game clock.",cons:["mechanical.scene_entered"]}),
+       n("audit — QA telemetry sink","deferred",{t:6,tag:"module:audit",desc:"QA/telemetry consumer of the lifecycle Keys; not a runtime resolver.",cons:["mechanical.scene_exited"]}),
+     ]),
+     n("clock_registry — manifest catalog","design",{t:4,tag:"module:clock_registry",desc:"Pure manifest of clocks/tracks; owns no state."},[
+       n("campaign_architecture — retired stub","design",{t:6,tag:"module:campaign_architecture",desc:"Reclassified: a consolidation doc, not a runtime module. Recommend retirement."}),
+     ]),
+     n("Board-game layer","design",{t:6,desc:"PI · Ministry (5th faction) · Cardinals · Löwenritter · Tensions Deck · special-NPC tracks — near-entirely design-only."}),
+   ]),
+ ]),
 
-   n("③ Victory check — GD-1","live",{src:"victory.py",desc:"Every season. The only game-end trigger."},[
-     n("check_peninsular_sovereignty(fid, world)","live",{mono:1,src:"victory.py:52",desc:"15/15 territories · Accord≥2 all · PS≤6 · sustained 2 seasons. Writes no World state — the streak lives in a module-level dict; the loop sets world.winner from the result.",rd:["Territory.owner","Territory.accord","clocks.Turmoil"]}),
-     n("era transitions — Post-Calamity · Phased Occupation · Anarchy","stub",{mono:1,src:"victory_v30 §5",desc:"<span class=\"att\">Would fire off the clocks.</span> MS=0, IP=100 (3 phases), all-dissolved. ip_track + calamity check raise; Anarchy/Rupture/Second-Calamity have no code."}),
+ // ══════════════ WRAPPER 2 — the Key substrate ══════════════
+ n("Key Substrate — the propagation wrapper","gated",{t:1,tag:"module:articulation_layer",mono:1,desc:"The lateral wrapper: every consequential event is an emitted, registry-validated Key. 'Save = initial conditions + Key log.' 13–65 Keys/campaign flow; the subscribe() channel is dead (articulation stub), so only the paired apply-closure consumes."},[
+   n("Key type families — 49 registered types","gated",{t:2,tag:"module:articulation_layer",desc:"The registry vocabulary. Click a key chip anywhere to trace its producer→consumer fan-out."},[
+     n("da.* (5)","design",{t:4,desc:"Domain-action outcome tags.",emit:["da.public_governance","da.covert_betrayal","da.antinomian_action","da.diplomatic_alliance","da.economic_intervention"]}),
+     n("env.* (4)","deferred",{t:4,emit:["env.crisis","env.disaster","env.peninsular_strain_shock","env.population_change"]}),
+     n("scene.* (17)","gated",{t:4,emit:["scene.contest_resolved","scene.battle_concluded","scene.combat_hit","scene.combat_resolved","scene.dialogue","scene.gossip","scene.thread_operation","scene.witness","scene.investigation_resolved"]}),
+     n("state.* (9)","design",{t:4,emit:["state.standing_change","state.coup_attempted","state.succession","state.scar_acquired","state.opinion_revised","state.belief_revised","state.concern_resolved"]}),
+     n("meta.* (6)","design",{t:4,emit:["meta.miraculous_event","meta.knot_formed","meta.knot_ruptured","meta.thread_woven"]}),
+     n("mechanical.* (8)","gated",{t:4,emit:["mechanical.accounting","mechanical.cascade_resolution","mechanical.season_change","mechanical.scene_entered"]}),
    ]),
-   n("Result — CampaignResult","state",{mono:1,src:"mc_v18.py",desc:"winner · battle_count · scenes_resolved · key_log_hash · keys_emitted · npcs_generated(=0) · final_state.",rd:["world.winner","world.battle_count"]}),
-   n("Cross-cutting &amp; infrastructure","unwired",{desc:"Systems that span the whole loop or sit just outside it."},[
-     n("run_batch(n) — the CI / regression oracle","live",{mono:1,src:"mc_v18.py:199",desc:"One level ABOVE run_campaign — runs N campaigns, aggregates win-share. What CI + every seeded regression test actually invokes."}),
-     n("scale_transitions — the cross-scale contract","contract",{mono:1,src:"scale_transitions_v30.md",desc:"<span class=\"att\">The named subsystem behind zoom/echo/handoff.</span> 3-mode architecture, 5-tier scale table, 8 handoff rules (§3), Zoom In/Out (§4), Domain Echo (§5), Contested Figure (§11), All-Directions delivery (§12). Partly built (domain_echo/zoom_in_out live; handoff_rules unwired)."}),
-     n("registry.py (MechanicsIndex) — unwired lookup","unwired",{mono:1,src:"autoload/registry.py",desc:"Loads mechanics_index.yaml, dispatches by scale/faction — zero importers anywhere."}),
-     n("restore_world — the unbuilt half of save/load","unwired",{mono:1,src:"game_state.py:291",desc:"serialize_world is live (feeds CampaignResult); its deserialization partner has zero callers, so no save round-trips."}),
-     n("contest_legacy_stub · check_arc_boundary · _atom_avg_facing — dead code","design",{mono:1,desc:"contest_legacy_stub fully migrated off (only its constants still referenced); the other two are a dead duplicate + an unused function."}),
+   n("Key schema §2.1 · value buckets","gated",{t:2,desc:"id · type · source_actor · causes[] (0 populated) · targets[] (1 emitter) · impact_vector[4] · symbolic_dimensions[4]. Buckets: Pool/Derived/Track/Clock."}),
+ ]),
+
+ // ══════════════ WRAPPER 3 — World state ══════════════
+ n("World State — the container wrapper","state",{t:1,mono:1,desc:"The single mutable state; strategic actions mutate it directly (few Keys flow). No DB."},[
+   n("Faction · Territory · clocks","state",{t:2,desc:"The live state.",wr:["Faction.L","Faction.Sta","Faction.Mil","Territory.owner","Territory.accord","clocks.CI","clocks.MS"]},[
+     n("field gaps: Mandate · Intel · Treasury · PS","design",{t:4,tag:"q:fac.intel",desc:"fac.intel ratified with a floor but no Faction field; Mandate/Treasury/PS absent (LPS-1)."}),
+     n("dead clocks: Turmoil (write-dead) · IP (not a key)","deferred",{t:4,tag:"q:clocks.Turmoil",desc:"Turmoil read once by victory, never written → PS≤6 trivially true. IP never initialised."}),
    ]),
+   n("Character / Actor layer — MISSING","design",{t:2,desc:"<span class=\"att\">No Character/Actor dataclass exists.</span> The attribute→derived-stat foundation has no runtime home; 9- vs 10-attribute rival rosters, neither wired."}),
+   n("Quantity graph — clock_registry (~40)","design",{t:2,tag:"module:clock_registry",desc:"World.clocks holds 5; canon names ~40 (Persuasion/Disposition/Standing/Renown/Coherence/Evidence/Bonds/Piety…). ~8 live-written."}),
+   n("Dead-reg registries","unwired",{t:2,desc:"practitioners/knots/convictions/beliefs/treaties/settlements/infrastructure — real code, zero campaign call path."}),
  ]),
 ];
 
-const CARET='<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1 L8 5 L2 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CARET='<svg viewBox="0 0 10 10"><path d="M2 1 L8 5 L2 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHIP={emit:["emit","→"],cons:["cons","←"],rd:["rd","rd"],wr:["wr","wr"]};
 const counts={live:0,gated:0,deferred:0,unwired:0,stub:0,design:0,state:0};
-const CHIP={emit:['emit','→'],cons:['cons','←'],rd:['rd','rd'],wr:['wr','wr']};
+const tagStats={module:new Set(),adapter:new Set(),key:new Set(),unresolved:[]};
 function esc(s){return s==null?"":String(s);}
-function chip(id,kind){const m=CHIP[kind];return `<span class="kchip ${m[0]}" data-key="${esc(id)}" role="button" tabindex="0"><span class="ar">${m[1]}</span>${esc(id)}</span>`;}
-function buildNode(nd,depth){
+function kchip(id,kind){const m=CHIP[kind];return `<span class="kchip ${m[0]}" data-key="${esc(id)}" role="button" tabindex="0"><span class="ar">${m[1]}</span>${esc(id)}</span>`;}
+// godot-port axis (from PORT). The gd badge describes the tagged UNIT's port state — a second
+// axis, distinct from the node's build badge; shown once per unit (first occurrence).
+const GODOT={"gd-ported":["ported","Ported"],"typed-exported":["typed","Typed export"],"python-oracle":["oracle","Py oracle"],"no-oracle":["none","No oracle"],"retire":["retire","Retire"]};
+const seenGB=new Set();
+function gbadge(tag){
+  if(!tag) return '';
+  const i=tag.indexOf(':'); const tp=tag.slice(0,i), name=tag.slice(i+1);
+  const src = tp==="module"?PORT.modules:tp==="adapter"?PORT.adapters:null;
+  if(!src||!src[name]||seenGB.has(tag)) return '';
+  seenGB.add(tag);
+  const e=src[name], m=GODOT[e.godot]; if(!m) return '';
+  return `<span class="gb ${m[0]}" title="Godot port: ${e.godot} · rank ${e.port_rank} — ${esc(e.note)}"><span class="gi">gd</span>${m[1]}</span>`;
+}
+function tagchip(tag){
+  const [tp,...rest]=tag.split(":");const name=rest.join(":");
+  // validate against registry
+  if(REG[tp] && !REG[tp].has(name)) tagStats.unresolved.push(tag);
+  if(tp==="module")tagStats.module.add(name); if(tp==="adapter")tagStats.adapter.add(name);
+  const ok = !REG[tp] || REG[tp].has(name);
+  return `<span class="tag t-${tp}" data-key="tag:${esc(tag)}" title="${ok?'resolves in registry':'UNRESOLVED — not in registry'}" role="button" tabindex="0"><span class="tp">${tp}:</span>${esc(name)}${ok?'':' ⚠'}</span>`;
+}
+function build(nd){
   counts[nd.s]=(counts[nd.s]||0)+1;
   const kids=nd.c&&nd.c.length; const el=document.createElement('div');
-  el.className='node'+(kids?' has-kids':''); el.dataset.status=nd.s; el.dataset.depth=depth;
-  let w='';
-  ['cons','rd','wr','emit'].forEach(k=>{(nd[k]||[]).forEach(id=>{w+=chip(id,k);});});
+  el.className='node'+(kids?' has-kids':''); el.dataset.status=nd.s; el.dataset.tier=nd.t||1;
+  const tag=nd.tag?tagchip(nd.tag):'';
+  const gb=nd.tag?gbadge(nd.tag):'';
+  let w='';['cons','rd','wr','emit'].forEach(k=>{(nd[k]||[]).forEach(id=>{w+=kchip(id,k);});});
   const wires=w?`<div class="wires">${w}</div>`:'';
-  const src=nd.src?`<span class="src">${esc(nd.src)}</span>`:'';
-  el.innerHTML=`<div class="row"><span class="tw">${CARET}</span><span class="lvtag">${LEVELS[depth-1]||'·'}</span>
-    <span class="body"><span class="ttl"><span class="lbl${nd.mono?' code':''}">${esc(nd.l)}</span><span class="badge ${nd.s}">${STATUS[nd.s][0]}</span>${src}</span>
+  el.innerHTML=`<div class="row"><span class="tw">${CARET}</span><span class="lvtag">${LEVELS[(nd.t||1)-1]}</span>
+    <span class="body"><span class="ttl"><span class="lbl${nd.mono?' code':''}">${esc(nd.l)}</span><span class="badge ${nd.s}">${STATUS[nd.s][0]}</span>${gb}${tag}</span>
     ${nd.desc?`<div class="desc">${nd.desc}</div>`:''}${wires}</span></div>`;
-  if(kids){const box=document.createElement('div');box.className='children';nd.c.forEach(ch=>box.appendChild(buildNode(ch,depth+1)));el.appendChild(box);}
+  if(kids){const box=document.createElement('div');box.className='children';nd.c.forEach(ch=>box.appendChild(build(ch)));el.appendChild(box);}
   return el;
 }
 const treeEl=document.getElementById('tree');
-TREE.forEach(nd=>treeEl.appendChild(buildNode(nd,1)));
+TREE.forEach(nd=>treeEl.appendChild(build(nd)));
 const allNodes=[...document.querySelectorAll('.node')];
 
-document.getElementById('tiles').innerHTML=TILES.map(([n,k,c])=>`<div class="tile ${c}"><div class="n">${n}</div><div class="k">${k}</div></div>`).join('');
-document.getElementById('legend').innerHTML=Object.entries(STATUS).map(([k,v])=>`<button class="lg" data-st="${k}" aria-pressed="false"><span class="sw ${k}"></span>${v[0]}<span class="cnt" id="cnt-${k}"></span></button>`).join('')+`<span class="lg" style="cursor:default;border-style:dashed"><span class="di">click a status to spotlight · click a <b style="color:var(--rd)">rd</b>/<b style="color:var(--wr)">wr</b>/<b style="color:var(--gold)">→</b> chip to trace a wire</span></span>`;
+// validation cards
+const vEl=document.getElementById('valid');
+const modPct=tagStats.module.size, adPct=tagStats.adapter.size, unres=tagStats.unresolved.length;
+const cards=[
+  [`${modPct} / 27`,"module tags used (of the contract spine)",modPct>0],
+  [`${adPct} / 7`,"adapter tags used (cross-scale bridges)",adPct>0],
+  [`${unres}`, unres?"UNRESOLVED tags (not in any registry)":"tags failed to resolve — all valid ✓", unres===0],
+];
+vEl.innerHTML=cards.map(([n,k,ok])=>`<div class="vcard ${ok?'':'warn'}"><div class="vn" style="color:${ok?'var(--live)':'var(--deferred)'}">${n}</div><div class="vk">${k}</div></div>`).join('')
+  +`<div class="vcard" style="border-left-color:var(--gold)"><div class="vn" style="color:var(--gold)">${(PORT.godot_counts['gd-ported']||0)} / ${Object.values(PORT.godot_counts).reduce((a,b)=>a+b,0)}</div><div class="vk">units GDScript-ported · ${PORT.godot_counts['python-oracle']||0} Python-oracle awaiting port</div></div>`;
+document.getElementById('tagkey').innerHTML='<b>Tag types:</b> '+
+ ['module:contract unit','adapter:cross-scale bridge','key:Key type','ed:ledger id','q:quantity'].map(x=>{const[a,b]=x.split(':');return `<span class="tag t-${a}" style="cursor:default"><span class="tp">${a}:</span>${b}</span>`;}).join(' ');
+
+// legend
+document.getElementById('legend').innerHTML=Object.entries(STATUS).map(([k,v])=>`<button class="lg" data-st="${k}" aria-pressed="false"><span class="sw ${k}"></span>${v[0]}<span class="cnt" id="cnt-${k}"></span></button>`).join('')+`<span class="lg" style="cursor:default;border-style:dashed"><span class="di">click a status to spotlight · click a tag or key chip to trace</span></span>`;
 Object.keys(counts).forEach(k=>{const e=document.getElementById('cnt-'+k);if(e)e.textContent=counts[k];});
 
-function setDepth(d){allNodes.forEach(nd=>{if(nd.classList.contains('has-kids'))nd.classList.toggle('open',(+nd.dataset.depth)<d);});[...seg.children].forEach(b=>b.setAttribute('aria-pressed',(+b.dataset.d===d)?'true':'false'));}
-const seg=document.getElementById('depthSeg');
-LEVELS.forEach((nm,i)=>{const b=document.createElement('button');b.dataset.d=i+1;b.innerHTML=`${nm}<span class="lv">${i+1}</span>`;b.addEventListener('click',()=>setDepth(i+1));seg.appendChild(b);});
-document.getElementById('expandAll').addEventListener('click',()=>{allNodes.forEach(x=>x.classList.contains('has-kids')&&x.classList.add('open'));[...seg.children].forEach(b=>b.setAttribute('aria-pressed','false'));});
-document.getElementById('collapseAll').addEventListener('click',()=>setDepth(1));
-treeEl.addEventListener('click',e=>{if(e.target.closest('.kchip'))return;const row=e.target.closest('.row');if(!row)return;const nd=row.parentElement;if(nd.classList.contains('has-kids'))nd.classList.toggle('open');});
+// tier control
+function setTier(N){
+  allNodes.forEach(nd=>{const t=+nd.dataset.tier;nd.classList.toggle('tier-hidden',t>N);if(nd.classList.contains('has-kids'))nd.classList.toggle('open',t<N);});
+  [...seg.children].forEach(b=>b.setAttribute('aria-pressed',(+b.dataset.n===N)?'true':'false'));
+}
+const seg=document.getElementById('tierSeg');
+LEVELS.forEach((nm,i)=>{const b=document.createElement('button');b.dataset.n=i+1;b.innerHTML=`${nm}<span class="lv">${i+1}</span>`;b.addEventListener('click',()=>setTier(i+1));seg.appendChild(b);});
+document.getElementById('expandAll').addEventListener('click',()=>{allNodes.forEach(x=>{x.classList.remove('tier-hidden');if(x.classList.contains('has-kids'))x.classList.add('open');});[...seg.children].forEach(b=>b.setAttribute('aria-pressed','false'));});
+document.getElementById('collapseAll').addEventListener('click',()=>setTier(1));
+treeEl.addEventListener('click',e=>{if(e.target.closest('.tag,.kchip'))return;const row=e.target.closest('.row');if(!row)return;const nd=row.parentElement;if(nd.classList.contains('has-kids'))nd.classList.toggle('open');});
 
+// trace (tags + keys share data-key)
 let tracing=null;const banner=document.getElementById('traceBanner');
-function expandAncestors(el){let p=el.parentElement;while(p){if(p.classList&&p.classList.contains('node')&&p.classList.contains('has-kids'))p.classList.add('open');p=p.parentElement;}}
-function clearTrace(){tracing=null;document.body.classList.remove('is-tracing');document.querySelectorAll('.kchip.hit').forEach(c=>c.classList.remove('hit'));document.querySelectorAll('.node.trace-node').forEach(nd=>nd.classList.remove('trace-node'));}
-function doTrace(key){if(tracing===key){clearTrace();return;}clearTrace();tracing=key;document.body.classList.add('is-tracing');
-  const cc={emit:0,cons:0,rd:0,wr:0};
-  document.querySelectorAll('.kchip').forEach(ch=>{if(ch.dataset.key===key){ch.classList.add('hit');['emit','cons','rd','wr'].forEach(k=>{if(ch.classList.contains(k))cc[k]++;});const nd=ch.closest('.node');if(nd){nd.classList.add('trace-node');expandAncestors(nd);}}});
-  document.getElementById('traceKey').textContent=key;
-  const parts=[];if(cc.wr)parts.push(`${cc.wr} write`);if(cc.rd)parts.push(`${cc.rd} read`);if(cc.emit)parts.push(`${cc.emit} emit →`);if(cc.cons)parts.push(`${cc.cons} consume ←`);
-  document.getElementById('traceStat').textContent='— '+(parts.join(' · ')||'no references');banner.scrollIntoView({behavior:'smooth',block:'nearest'});}
-treeEl.addEventListener('click',e=>{const c=e.target.closest('.kchip');if(c)doTrace(c.dataset.key);});
-treeEl.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('.kchip')){e.preventDefault();doTrace(e.target.closest('.kchip').dataset.key);}});
+function expandAnc(el){let p=el.parentElement;while(p){if(p.classList&&p.classList.contains('node')){if(p.classList.contains('has-kids'))p.classList.add('open');p.classList.remove('tier-hidden');}p=p.parentElement;}}
+function clearTrace(){tracing=null;document.body.classList.remove('is-tracing');document.querySelectorAll('.kchip.hit,.tag.hit').forEach(c=>c.classList.remove('hit'));document.querySelectorAll('.node.trace-node').forEach(nd=>nd.classList.remove('trace-node'));}
+function doTrace(key){if(tracing===key){clearTrace();return;}clearTrace();tracing=key;document.body.classList.add('is-tracing');let hits=0;
+  document.querySelectorAll('.tree [data-key]').forEach(ch=>{if(ch.dataset.key===key){ch.classList.add('hit');hits++;const nd=ch.closest('.node');if(nd){nd.classList.add('trace-node');nd.classList.remove('tier-hidden');expandAnc(nd);}}});
+  document.getElementById('traceKey').textContent=key.replace(/^tag:/,'');document.getElementById('traceStat').textContent=`— ${hits} reference${hits!==1?'s':''}`;banner.scrollIntoView({behavior:'smooth',block:'nearest'});}
+treeEl.addEventListener('click',e=>{const c=e.target.closest('.tag,.kchip');if(c)doTrace(c.dataset.key);});
 document.getElementById('clearTrace').addEventListener('click',clearTrace);
 
 let focus=null;
@@ -395,8 +353,40 @@ document.getElementById('legend').addEventListener('click',e=>{const b=e.target.
   document.querySelectorAll('.lg[data-st]').forEach(x=>x.setAttribute('aria-pressed','false'));
   if(focus===st){focus=null;document.body.classList.remove('is-focusing');allNodes.forEach(x=>x.classList.remove('focus-hit'));return;}
   focus=st;b.setAttribute('aria-pressed','true');document.body.classList.add('is-focusing');
-  allNodes.forEach(x=>{const hit=x.dataset.status===st;x.classList.toggle('focus-hit',hit);if(hit)expandAncestors(x);});});
+  allNodes.forEach(x=>{const hit=x.dataset.status===st;x.classList.toggle('focus-hit',hit);if(hit)expandAnc(x);});});
 
-document.getElementById('themeBtn').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const isDark=cur?cur==='dark':matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',isDark?'light':'dark');});
-setDepth(2);
+document.getElementById('themeBtn').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const d=cur?cur==='dark':matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',d?'light':'dark');});
+
+// ── Godot port-status panel — rendered from PORT (the manifest), never hand-authored ──
+function renderPort(){
+  const all=[...Object.entries(PORT.modules).map(([n,e])=>[n,'module',e]),...Object.entries(PORT.adapters).map(([n,e])=>[n,'adapter',e])];
+  const by=g=>all.filter(([,,e])=>e.godot===g);
+  const byRank=(a,b)=>((a[2].port_rank||9)-(b[2].port_rank||9))||a[0].localeCompare(b[0]);
+  const byName=(a,b)=>a[0].localeCompare(b[0]);
+  const item=([n,k,e],showRank)=>`<div class="pv-item" data-key="tag:${k}:${n}" role="button" tabindex="0">
+    <span class="pv-rank">${showRank?'#'+e.port_rank:''}</span>
+    <span class="pv-name">${n}<span class="kd">${k}</span></span>
+    <span class="pv-note"><b>${e.build}</b> · ${esc(e.note)}</span></div>`;
+  const band=(cls,head,n,rows)=>`<div class="pv-band ${cls}"><div class="pv-h">${head}<span class="n">${n}</span></div>${rows}</div>`;
+  const gp=PORT.golden_path;
+  const gpRow=`<div class="pv-item" data-key="tag:module:${gp.unit}" role="button" tabindex="0"><span class="pv-rank">#0</span><span class="pv-name">${gp.unit}</span><span class="pv-note">${esc(gp.chain)}</span></div>`;
+  const ported=[...by('gd-ported'),...by('typed-exported')].filter(([n])=>n!==gp.unit);
+  const gaps=Object.entries(PORT.foundation_gaps).map(([n,e])=>`<div class="pv-item" style="cursor:default"><span class="pv-rank">⚠</span><span class="pv-name">${n}</span><span class="pv-note">${esc(e.status?('['+e.status+'] '):'')}${esc(e.note)}</span></div>`).join('');
+  document.getElementById('portview').innerHTML=
+    `<h2>Godot port status</h2>
+     <p class="pv-sub">The godot-translatability axis, rendered from <code>references/wiring_manifest.yaml</code> — the same data the CI-ready gate <code>tools/wiring_map_check.py --check</code> validates (27/27 modules · 7/7 adapters). Click any unit to trace its tag in the tree.</p>
+     <div class="pv-grid">
+       ${band('b-ported','✓ golden path — the one end-to-end template',gp.unit,gpRow+ported.map(x=>item(x,false)).join(''))}
+       ${band('b-next','▶ next — has a Python oracle, no GDScript yet','ranked · '+by('python-oracle').length,by('python-oracle').sort(byRank).map(x=>item(x,true)).join(''))}
+       ${band('b-blocked','⛔ blocked — author canon first','no oracle · '+by('no-oracle').length,by('no-oracle').sort(byName).map(x=>item(x,false)).join(''))}
+       ${band('b-retire','🗑 retire — do not port',by('retire').length,by('retire').map(x=>item(x,false)).join(''))}
+       ${band('b-gap','⚠ foundation gaps — block whole tiers, not single units',Object.keys(PORT.foundation_gaps).length,gaps)}
+     </div>`;
+}
+renderPort();
+document.getElementById('portview').addEventListener('click',e=>{const it=e.target.closest('.pv-item[data-key]');if(it){doTrace(it.dataset.key);document.getElementById('tree').scrollIntoView({behavior:'smooth',block:'start'});}});
+const portBtn=document.getElementById('portBtn');
+portBtn.addEventListener('click',()=>{const on=document.body.classList.toggle('show-port');portBtn.setAttribute('aria-pressed',on?'true':'false');if(on)document.getElementById('portview').scrollIntoView({behavior:'smooth',block:'nearest'});});
+
+setTier(4);
 </script>

@@ -6,7 +6,9 @@
 
 **Scope.** A full accounting of what the Valoria simulation engine actually wires together at runtime, versus what the design corpus says *should* wire, versus what exists as code but is never reached. Built as an interactive, depth-toggleable map (`wiring_map.html`, this folder) and verified against the working tree by **six adversarial verification lanes + four coverage vectors** — not by reading alone. Every quantitative claim below was either executed (`run_campaign` over 7 seeds) or grep/AST-verified with a `file:line` citation in the lane reports.
 
-The companion interactive map is `wiring_map.html` (open in a browser): one tree, every node a real `file · function` or cited design doc, coloured by build state, toggleable **Main → System → Subsystem → Mechanic → Submechanic → Routine → Subroutine**. Click any `key.type` or `State.field` chip to trace it across the tree.
+The companion interactive map is `wiring_map.html` (open in a browser): one tree, every node anchored on a **stable registry tag** (`module:` / `adapter:` / `key:` / `ed:` / `q:`) rather than a file path — so it survives restructures like the `sim/→engine/` move. Toggleable across the 9-tier ladder **Wrapper → System → Subsystem → Module → Adapter → Mechanic → Submechanic → Routine → Subroutine**; each unit carries two axes — a **build badge** (this node's runtime wiring state) and a **gd badge** (the tagged unit's Godot-port state). Click any `key.type`, `State.field`, tag, or port-list unit to trace it across the tree. The **◧ Godot port view** renders the ranked port work-list.
+
+**This map is now backed by a machine layer (the reusable utility) — see §9.** Its tags, coverage, and both axes are checked against the live registries by a committed validator, so the map can't silently drift as the code moves.
 
 ---
 
@@ -122,3 +124,19 @@ Already-filed relatives (not re-raised here): `scene_outcome.battle_concluded` f
 ## 8. Provenance
 
 Interactive companion: `wiring_map.html` (this folder). Verified against the working tree on branch `claude/monte-carlo-wiring-question-thpxul`. Primary anchors: `sim/mc_v18.py`, `sim/peninsular/{season,accounting,ci_track,ms_track}.py`, `sim/provincial/{faction_action,massbattle,parliamentary_action,crown_initiative}.py`, `sim/cross_scale/{scene_dispatch,parliamentary_bridge,echo_transport}.py`, `sim/autoload/{game_state,season_manager,victory,dice_engine,sigma_leverage}.py`, `sim/personal/contest/`, `references/module_contracts.yaml`, `references/{descriptor_registry,key_type_registry_v30}.*`, `designs/provincial/clock_registry_v30.md`, `designs/architecture/{player_agency,scale_transitions}_v30.md`, and the `2026-07-14` gameplay-subsystem observatory.
+
+---
+
+## 9. Machine layer — the reusable utility (not just a briefing)
+
+The map is no longer a static one-off. It is now driven by a committed data source + validator, so it doubles as a **Godot-port work-driver** that stays honest as the code moves:
+
+| Piece | What it is |
+|---|---|
+| **`references/wiring_manifest.yaml`** | The single source of truth: all **27 modules + 7 adapters**, each anchored on a stable registry **tag** (never a file path), carrying a `build` state (runtime wiring: `live / gated / deferred / unwired / stub / design`) and an orthogonal `godot` state (port axis: `gd-ported / typed-exported / python-oracle / no-oracle / retire`) + `port_rank`, `parity`, and a note. Plus the `golden_path` and three `foundation_gaps` that block whole tiers. |
+| **`tools/wiring_map_check.py`** | The machine side. `--check` (default) is a **CI-ready gate**: it fails if any tag stops resolving in its live registry (`references/module_contracts.yaml`, `engine/cross_scale/`, the key registry), if coverage isn't 27/27 + 7/7, or if any vocab value is invalid — so a rename or a moved adapter is a *caught error*, not silent drift. `--work-list` emits the ranked port work-list; `--summary` the build/godot counts; `--json` / `--emit-map-json` the machine dumps. |
+| **`wiring_map.html`** | The human view. Its godot axis (the **gd** badges + the **◧ Godot port view** panel) is **generated** from the manifest via `--emit-map-json` — the embedded `const PORT` block — so the picture a reader sees is the same data the gate checks. |
+
+**The two axes are deliberately orthogonal.** `build` answers *"is this wired into the running `mc_v18` game?"*; `godot` answers *"what porting artifact exists?"*. This is what surfaces the sharpest fact for the port: **`personal_combat` is `unwired` + `gd-ported`** — the one unit with a GDScript port is *not* on the live Python loop (the combat branch is dead code, §5.4), so its end-to-end parity is unvalidated. The port work-list therefore reads: 1 ported · **16 units have a Python oracle awaiting GDScript** (ranked) · 15 blocked on canon-authoring first (`engine_clock` the T0 blocker) · 2 to retire.
+
+Regenerate the map's data after any manifest edit: `python3 tools/wiring_map_check.py --emit-map-json` → paste into the `const PORT=` block. Run the gate: `python3 tools/wiring_map_check.py --check`.
