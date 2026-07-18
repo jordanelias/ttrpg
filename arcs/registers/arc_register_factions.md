@@ -127,7 +127,7 @@ Independence Drift counter (0–3, never decrements). At Drift 3: Church Militar
 Practitioner PC sustained relationship with Vaynard pushes TK (cap ×2/season from relationship). Each TK level increases TC (TK 3 = +1; TK 4 = +2; TK 5 = +3). Private Collection use adds hidden TS +1/use; at TS 14+ each use risks Discovery Event (Spirit TN 7 Ob 1). Direction: helping Vaynard understand the world simultaneously raises the theocracy clock. At TK 4, Vaynard offers the Collection and Southernmost partnership; at TK 5, he seeks capability, not knowledge.
 
 **ARC-S13 — Duke Awakens** `Varfell | T12 | TTRPG`
-Vaynard TS 14 (Dormant). Discovery Event trigger: Thread activity of sufficient intensity in proximity. Spirit TN 7 Ob 1. Over 5 Private Collection uses: P(at least one success) ≈ 99.97%. Direction: once Discovery Event fires, TS jumps to 30 (Stirring), Certainty −1, TK +2 immediately. Vaynard moves from knowledge-seeker to practitioner.
+Vaynard TS 14 (Dormant). Discovery Event trigger: Thread activity of sufficient intensity in proximity. Spirit TN 7 Ob 1. Over 5 Private Collection uses: P(at least one success) ≈ 99.97%. Direction: once Discovery Event fires, TS jumps to 30 (Stirring), Truth −1, TK +2 immediately. Vaynard moves from knowledge-seeker to practitioner.
 
 **ARC-S16 — Coherence Zero: Vaynard** `Varfell | T12, T15 | TTRPG`
 Discovery Event success → TS 30 → practice at scale. Consequentialist framework meets ontological experience — his political calculus and his substrate perception are now in direct contact. Belief revision required.

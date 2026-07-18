@@ -18,7 +18,7 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
   reconciliation) + a `CURRENT.md` fieldwork row settle governance — this MERGE retires ED-921 + the fieldwork
   half of ED-IN-0016/EP-8 to one ruling. **Dialogue Lattice REFINE:** the five-filter Response-Matrix chain
   gets a build-gating requirement for a compact "why this NPC responded" readout (composed-system Q-elegant
-  strain); the Lattice design + Certainty Gate are KEPT (ordinary finding, not a scope cut). `params/fieldwork.md`
+  strain); the Lattice design + Truth Gate are KEPT (ordinary finding, not a scope cut). `params/fieldwork.md`
   carries a doc-side co-file note (no values changed). No sim edits (investigation.py/fieldwork.py are stubs).
   **Decision packet available** for the canonical-head governance question (which file's Status line
   binds, Option B full-port vs Option C split-head):

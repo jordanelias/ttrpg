@@ -27,7 +27,7 @@
 | 11 | 148 | 2 | Arc 26: The Duke Awakens |
 | 12 | 155 | 3 | Narrative |
 | 13 | 167 | 3 | Branch A — Spirit Check Succeeds: Thread Sensitivity Advances to 30 |
-| 14 | 175 | 3 | Branch B — Spirit Check Fails: Certainty −1, Belief from Ignorance |
+| 14 | 175 | 3 | Branch B — Spirit Check Fails: Truth −1, Belief from Ignorance |
 | 15 | 185 | 3 | Mechanical Causal Chain |
 | 16 | 211 | 2 | Arc 27: The Dissolution |
 | 17 | 218 | 3 | Narrative |
@@ -54,7 +54,7 @@
 | 11 | 2,808 | Arc 26: The Duke Awakens |
 | 12 | 442 | Narrative |
 | 13 | 372 | Branch A — Spirit Check Succeeds: Thread Sensitivity Advances to 30 |
-| 14 | 422 | Branch B — Spirit Check Fails: Certainty −1, Belief from Ignorance |
+| 14 | 422 | Branch B — Spirit Check Fails: Truth −1, Belief from Ignorance |
 | 15 | 1,431 | Mechanical Causal Chain |
 | 16 | 3,073 | Arc 27: The Dissolution |
 | 17 | 396 | Narrative |

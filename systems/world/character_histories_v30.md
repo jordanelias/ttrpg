@@ -16,7 +16,7 @@
 
 | Stage | Question | What It Determines | Starting Skills |
 |---|---|---|---|
-| 1. Origin | Where were you born and who raised you? | Geographic roots, cultural baseline, starting Certainty, first Knot | 1 |
+| 1. Origin | Where were you born and who raised you? | Geographic roots, cultural baseline, starting Truth, first Knot | 1 |
 | 2. Formation | How were you educated or shaped? | Intellectual framework, institutional exposure, second Knot | 1 |
 | 3. Vocation | What were you trained to do? | Professional skills, factional affiliation, third Knot | 2 |
 | 4. Catalyst | What happened that put you on this path? | Inciting event, starting Belief, campaign hook | 1 |
@@ -56,7 +56,7 @@
 ### 1A. Crown Heartland Child
 
 
-**Starting Certainty:** 4 (Average Valorian).
+**Starting Truth:** 4 (Average Valorian).
 
 **Modifier: River District (Valorsplatz)** — Born along the river-sea junction. Trade, not agriculture. Replace Heartland Roots with **River Mouth** (unique): +1D on Domain Actions involving Schoenland or eastern maritime trade. Knot shifts to a dockside trader or river-barge family.
 
@@ -92,9 +92,9 @@
 ### 1C. Fjord Child (Varfell)
 
 
-**Starting Certainty:** 4 (Average Valorian) in northern Varfell.
+**Starting Truth:** 4 (Average Valorian) in northern Varfell.
 
-**Modifier: Southern (Oastad)** — Certainty drops to 3 (Secular). Add **Calamity Familiarity** § to spark list: +1D on Attunement rolls at node distance 0-2. The Calamity's influence is part of your childhood — animals unsettled, elders who know things they can't explain.
+**Modifier: Southern (Oastad)** — Truth drops to 3 (Secular). Add **Calamity Familiarity** § to spark list: +1D on Attunement rolls at node distance 0-2. The Calamity's influence is part of your childhood — animals unsettled, elders who know things they can't explain.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -108,11 +108,11 @@
 ### 1D. Southern Einhir Descendant
 
 
-**Starting Certainty:** 2 (Skeptic). The Church's account does not match your inherited experience.
+**Starting Truth:** 2 (Skeptic). The Church's account does not match your inherited experience.
 
 **Modifier: Askeheim-Adjacent (T6 Stillhelm / T13 Oastad — node distance 1)** — Add **Wound Proximity** (unique) to spark list: when RS crosses a threshold band, you feel it as physical unease before anyone announces it. +1D on Attunement rolls at node distance 1.
 
-**Modifier: Deep South (near Askeheim — node distance 0-1)** — Inherited Resonance TS bonus +8 (instead of +5). Starting Certainty drops to 1 (Transitional). Songs that produce involuntary weeping. Gestures that calm animals too effectively.
+**Modifier: Deep South (near Askeheim — node distance 0-1)** — Inherited Resonance TS bonus +8 (instead of +5). Starting Truth drops to 1 (Transitional). Songs that produce involuntary weeping. Gestures that calm animals too effectively.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -135,7 +135,7 @@
 
 **Knot:** A childhood mentor within the Church — parish teacher, seminary instructor, family confessor. They represent the certainty you grew up inside. Whether that certainty holds or cracks defines your arc. When Thread truth reaches Himmelenger (and it will, as RS drops), this person's reaction will either anchor you or devastate you.
 
-**Narrative impact:** Certainty 5 means the first Coherence loss per session is nullified by doctrine scaffolding (params_core). When doctrine finally cracks, the fall is further. Node distance 4 — at RS 60, Himmelenger is untouched. The wound hasn't reached you yet.
+**Narrative impact:** Truth 5 means the first Coherence loss per session is nullified by doctrine scaffolding (params_core). When doctrine finally cracks, the fall is further. Node distance 4 — at RS 60, Himmelenger is untouched. The wound hasn't reached you yet.
 
 ---
 
@@ -177,7 +177,7 @@ Starting skill: ★ **Foundations** (unique) — Once per arc, an object from th
 
 **1H-i. Occupation Displaced**
 
-Starting Certainty: 3. Starting skill: ★ **Nowhere to Return** (unique) — No ethical framework modifier on Domain Actions. +1D on rolls involving displacement, refugee communities, or post-conflict resettlement.
+Starting Truth: 3. Starting skill: ★ **Nowhere to Return** (unique) — No ethical framework modifier on Domain Actions. +1D on rolls involving displacement, refugee communities, or post-conflict resettlement.
 
 
 **1H-ii. Calamity Orphan**
@@ -187,7 +187,7 @@ Starting Certainty: 3. Starting skill: ★ **Nowhere to Return** (unique) — No
 **1H-iii. Church Ward**
 Raised in a Church orphanage. Parents unknown or dead.
 
-Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional Child** (unique) — +1D on all rolls involving Church infrastructure, personnel, or procedures. You grew up inside the institution.
+Starting Truth: 4 or 5 (GM determines). Starting skill: ★ **Institutional Child** (unique) — +1D on all rolls involving Church infrastructure, personnel, or procedures. You grew up inside the institution.
 
 
 ---
@@ -200,7 +200,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2A. Church Schooling
 
-**Certainty modifier:** +1 if starting Certainty below 5. The most powerful socialisation tool the Church possesses.
+**Truth modifier:** +1 if starting Truth below 5. The most powerful socialisation tool the Church possesses.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -213,7 +213,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2B. Ducal Household Education
 
-**Certainty modifier:** None.
+**Truth modifier:** None.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -226,7 +226,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2C. Guild Apprenticeship
 
-**Certainty modifier:** −1 if starting at 5. Guild culture is secular; prolonged immersion in an institution that recognises no universal moral principles loosens orthodoxy through exposure, not argument.
+**Truth modifier:** −1 if starting at 5. Guild culture is secular; prolonged immersion in an institution that recognises no universal moral principles loosens orthodoxy through exposure, not argument.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -251,7 +251,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2E. Military Training
 
-**Certainty modifier:** None.
+**Truth modifier:** None.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -264,7 +264,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2F. Practitioner Mentorship
 
-**Certainty modifier:** −2 (minimum 0). Practitioner education systematically dismantles Solmund cosmology through experience, not argument.
+**Truth modifier:** −2 (minimum 0). Practitioner education systematically dismantles Solmund cosmology through experience, not argument.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -278,7 +278,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### 2G. Monastic Seclusion
 
-**Certainty modifier:** +1 or −1 (GM determines). Monastic seclusion either deepens faith or cracks it. The player does not choose.
+**Truth modifier:** +1 or −1 (GM determines). Monastic seclusion either deepens faith or cracks it. The player does not choose.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -313,7 +313,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 | **3-CH2: Templar** | ★ Smite the Heretic (unique: +1D Offence vs declared heretic/practitioner in Thread ops) [ED-388: intra-party hostility potential — intentional?] · ★ Shield of Faith § (+1D Defence in Full Guard) | Righteous Conviction § (immune to Doubt Markers in Church Tribunal) | A fellow Templar whose faith is deeper than yours — or shallower. You trained together. The order's bonds are designed to be absolute. They may not survive what comes. |
 | **3-CH3: Parish Priest** | ★ Sermon Delivery (unique: +1 Piety Track on Revealing win before Crowd) · ★ Folk Trust § (−1 Ob DA involving common population where Church Mandate ≥ 4) | Road Survival § (+1D Endurance in unfamiliar territory) | A parishioner who trusts you personally, not institutionally. They represent what the Church is supposed to be. When the Church fails them, you are the face of that failure. |
 | **3-CH4: Church Archivist** | ★ Forbidden Knowledge (unique: once/arc suppressed document recall) · ★ Paper Trail § (+1D institutional records) | Doctrinal Inconsistency (unique: +1D arguing against Church position in Memory genre) | A fellow archivist who discovered the same suppressed material — and chose differently about what to do with it. |
-| **3-CH5: Church Investigator** | ★ Inquisitorial Method (unique: +1D Investigation targeting heresy/Thread practice/Einhir activity) · ★ Suppressed Exposure (unique: TS +3 from occupational handling of confiscated Einhir texts and practitioner testimony) [ED-389: occupational TS gain — canonical?] | Doctrinal Fluency § | A subject of a past investigation — someone you investigated and either prosecuted or quietly released. If prosecuted: the weight of what you did. If released: the secret you share. Certainty modifier from Vocation: −1 or +1 (GM determines). |
+| **3-CH5: Church Investigator** | ★ Inquisitorial Method (unique: +1D Investigation targeting heresy/Thread practice/Einhir activity) · ★ Suppressed Exposure (unique: TS +3 from occupational handling of confiscated Einhir texts and practitioner testimony) [ED-389: occupational TS gain — canonical?] | Doctrinal Fluency § | A subject of a past investigation — someone you investigated and either prosecuted or quietly released. If prosecuted: the weight of what you did. If released: the secret you share. Truth modifier from Vocation: −1 or +1 (GM determines). |
 
 ### Hafenmark Vocations
 
@@ -384,11 +384,11 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 You saw a Thread phenomenon. Your rendering cracked.
 
 
-**Certainty modifier:** −1. **Belief shape:** "The world is not what [institution/faith/common sense] says — I must [investigate/understand/warn]."
+**Truth modifier:** −1. **Belief shape:** "The world is not what [institution/faith/common sense] says — I must [investigate/understand/warn]."
 
 | Skill | Domain | Effect |
 |---|---|---|
-| ★ **Shaken Certainty** (unique) | Investigation / Debate | Immune to Composure loss and surprise-round penalty from Thread phenomena. Certainty movement toward 0 from Discovery Events costs 1 less. |
+| ★ **Shaken Truth** (unique) | Investigation / Debate | Immune to Composure loss and surprise-round penalty from Thread phenomena. Truth movement toward 0 from Discovery Events costs 1 less. |
 | **Shifting Object Recognition** § | Investigation | Automatic recognition. |
 | **Obsessive Recall** (unique) | Investigation | +1D on Recall about the specific event witnessed. If event at Askeheim: TS confirmed 10+ minimum (Forgetting partial failure is diagnostic). |
 
@@ -396,7 +396,7 @@ You saw a Thread phenomenon. Your rendering cracked.
 
 ### 4B. Betrayed by Your Institution
 
-**Certainty modifier:** −1 if Church; none otherwise. **Belief shape:** "I will never trust [institution] again — I will [expose/build/survive/repay]."
+**Truth modifier:** −1 if Church; none otherwise. **Belief shape:** "I will never trust [institution] again — I will [expose/build/survive/repay]."
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -408,7 +408,7 @@ You saw a Thread phenomenon. Your rendering cracked.
 
 ### 4C. Lost Someone
 
-**Certainty modifier:** None. **Belief shape:** "I will [find/avenge/complete their work/protect what they loved] — nothing else matters."
+**Truth modifier:** None. **Belief shape:** "I will [find/avenge/complete their work/protect what they loved] — nothing else matters."
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -420,11 +420,11 @@ You saw a Thread phenomenon. Your rendering cracked.
 
 ### 4D. Recruited — Faction-Specific
 
-**4D-i. Crown** — Certainty: none. ★ **Crown Mandate** (unique): +1D first DA/season on Crown's behalf.
-**4D-ii. Church** — Certainty: +1. ★ **Ecclesial Trust** (unique): +1D first DA/season on Church's behalf.
+**4D-i. Crown** — Truth: none. ★ **Crown Mandate** (unique): +1D first DA/season on Crown's behalf.
+**4D-ii. Church** — Truth: +1. ★ **Ecclesial Trust** (unique): +1D first DA/season on Church's behalf.
 **4D-iii. [STRUCK — Niflhel dissolved per conflict_architecture_proposal.md]** Formerly a recruitment option. Settlement-layer intelligence brokers do not recruit at character-creation granularity; PCs with broker ties should use 4B (Betrayed by Your Institution) or 4C (Lost Someone) framings. Numbering preserved to avoid breaking cross-references.
-**4D-iv. Restoration** — Certainty: −1. ★ **Movement Trust** (unique): +1D first Restoration-aligned DA/season.
-**4D-v. Practitioner** — Certainty: −1. ★ **Marked for Practice** (unique): +1D on First Leap attempt. Stacks with Approach Training.
+**4D-iv. Restoration** — Truth: −1. ★ **Movement Trust** (unique): +1D first Restoration-aligned DA/season.
+**4D-v. Practitioner** — Truth: −1. ★ **Marked for Practice** (unique): +1D on First Leap attempt. Stacks with Approach Training.
 
 All variants share spark list: Quick Adaptation § (once/session +1D in a domain with no other skill bonuses), Recruiter's Trust (unique: +1D Investigation pursuing recruiter's objectives).
 
@@ -434,7 +434,7 @@ All variants share spark list: Quick Adaptation § (once/session +1D in a domain
 ### 4E. The First Leap
 Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from other sources.
 
-**Certainty modifier:** −1 (permanent, per threadwork_v25 §2.3). **Belief shape:** "I have been outside rendering. The world is [not what it seems/more fragile/beautiful beyond language] — I must [continue/find others/fix what's broken]."
+**Truth modifier:** −1 (permanent, per threadwork_v25 §2.3). **Belief shape:** "I have been outside rendering. The world is [not what it seems/more fragile/beautiful beyond language] — I must [continue/find others/fix what's broken]."
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -447,7 +447,7 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 ### 4F. War / Invasion — Specified
 
 
-**Certainty modifier:** None. **Belief shape:** "War took [what I had] — I will [prevent/fight/build]."
+**Truth modifier:** None. **Belief shape:** "War took [what I had] — I will [prevent/fight/build]."
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -459,7 +459,7 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 
 ### 4G. Religious Crisis
 
-**Certainty modifier:** −2 or +2 (GM determines). **Belief shape:** "The Church is [wrong/the only defence] — I will [find truth/defend faith]."
+**Truth modifier:** −2 or +2 (GM determines). **Belief shape:** "The Church is [wrong/the only defence] — I will [find truth/defend faith]."
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -503,11 +503,11 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 
 ## Character Creation Summary
 
-1. **Choose Origin** (Stage 1) → geography, culture, Certainty base, first Knot. 1 starting skill.
-2. **Choose Formation** (Stage 2) → intellectual framework, Certainty modifier, second Knot. 1 starting skill.
+1. **Choose Origin** (Stage 1) → geography, culture, Truth base, first Knot. 1 starting skill.
+2. **Choose Formation** (Stage 2) → intellectual framework, Truth modifier, second Knot. 1 starting skill.
 3. **Choose Vocation** (Stage 3) → profession, faction, third Knot. 2 starting skills.
 5. **Allocate attributes** (31 points). Recall determines equip slots and skill depth ceiling.
-6. **Resolve Certainty** (base from Origin + modifiers).
+6. **Resolve Truth** (base from Origin + modifiers).
 7. **Name Knots** (three suggested; assign Close vs Distant).
 8. **Write Beliefs** (Catalyst provides shape; Knots provide additional Belief material).
 9. **Equip skills** (5 starting; Recall ≥ 5 equips all).
@@ -519,10 +519,10 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 
 | Stage | Choice | Result |
 |---|---|---|
-| Origin | 1D: Southern Einhir Descendant + Deep South modifier | Born near Oastad. Inherited Resonance (+8 TS). Certainty 1. **Starting skill: Inherited Resonance.** Knot: grandmother who taught folk songs — practices alive in her hands, now in yours. |
-| Formation | 2F: Practitioner Mentorship | Trained by a solitary practitioner. Certainty 1 → 0 (clamped). **Starting skill: Approach Training.** Knot: mentor, possibly connected to warden network, Coherence state unknown. |
+| Origin | 1D: Southern Einhir Descendant + Deep South modifier | Born near Oastad. Inherited Resonance (+8 TS). Truth 1. **Starting skill: Inherited Resonance.** Knot: grandmother who taught folk songs — practices alive in her hands, now in yours. |
+| Formation | 2F: Practitioner Mentorship | Trained by a solitary practitioner. Truth 1 → 0 (clamped). **Starting skill: Approach Training.** Knot: mentor, possibly connected to warden network, Coherence state unknown. |
 | Vocation | 3-VA3: Einhir Antiquarian | Works Varfell's covert antiquities network. **Starting skills: Artefact Authentication, Black Market Contacts.** Knot: a dealer whose ethics differ and whose shared enterprise is shared risk. |
-| Catalyst | 4E: The First Leap | Leap succeeded. Certainty 0 (already there). **Starting skill: Leap Scar.** Belief: "The wound at Askeheim is killing the rendered world — someone must make the factions understand before it is too late." |
+| Catalyst | 4E: The First Leap | Leap succeeded. Truth 0 (already there). **Starting skill: Leap Scar.** Belief: "The wound at Askeheim is killing the rendered world — someone must make the factions understand before it is too late." |
 
 
 ---

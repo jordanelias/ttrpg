@@ -4,7 +4,7 @@
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-13
-## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
+## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Truth), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
 ## Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9)
 ## Patches: None (new system)
 ## §1 CORE CONCEPTS
@@ -58,7 +58,7 @@ Non-named NPCs (officers, functionaries, soldiers, citizens) follow the Ethical 
 Exception: NPCs who have been promoted to named status through play interaction (sustained PC Knot, campaign-significant events) receive a Stance Triangle at the GM's discretion.
 ## §5 ARC EMERGENCE: STATE MACHINE
 ### §5.0b Transformation Knot Strain Propagation (AUD-NPC-02 fix, P-12 compliance)
-Strain propagates to PCs and NPCs knotted to the transforming NPC. PCs experience this as Knot strain per threadwork_v25 §Knots. NPCs experience it as a rendering disruption that may trigger their own Certainty movement (−1 Certainty per season of sustained Close Knot strain from a transforming NPC).
+Strain propagates to PCs and NPCs knotted to the transforming NPC. PCs experience this as Knot strain per threadwork_v25 §Knots. NPCs experience it as a rendering disruption that may trigger their own Truth movement (−1 Truth per season of sustained Close Knot strain from a transforming NPC).
 ### §5.1 Generic Transition Triggers
 ### §5.2 Named NPC Arc Profiles
 Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are NOT mutually exclusive until a branch point fires. Branch points are specific game-state conditions.
@@ -77,7 +77,7 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 - Conviction: Faith primary remains but is now qualified. Secondary (Order) becomes active. He retreats to institutional authority as his theological certainty wavers.
 - Resonant Style: Authority activates as secondary. He is now reachable by appeals from sources his framework recognises.
 - Branch condition: Direct contact with threadcut being (PCs engineer this) OR brought to Locked Zone. Requires physical presence — cannot be achieved through argument alone.
-- Effect: Certainty drops by 2–3 (confrontation development model, Foundations §14). TS may awaken from 0 (confrontation is the development mechanism). If TS reaches Stirring (30), Himlensendt's entire theological framework shatters.
+- Effect: Truth drops by 2–3 (confrontation development model, Foundations §14). TS may awaken from 0 (confrontation is the development mechanism). If TS reaches Stirring (30), Himlensendt's entire theological framework shatters.
 - Conviction: Faith becomes paradoxical. He has experienced what his theology forbids. Both Faith and a new, unnamed conviction (something like "Truth" — he has no framework for it) compete. Decision Fork fires on EVERY subsequent decision.
 - Behavior: Genuinely unpredictable. The campaign's most dramatic NPC transformation. May become a reformer, a madman, or a saint. GM should use the Conviction crisis table (§3.3) freely.
 #### Inge Baralta — Arc Map
@@ -125,7 +125,7 @@ Each Ethical Framework produces a natural drift — the direction the faction mo
 ### §7.2 Drift and NPC Arc Interaction
 Framework Drift feeds arc emergence: unchecked drift produces the conditions under which NPC arc branch points fire. Examples:
 - Church Influence drift + unchallenged Himlensendt → Arc A (Zealot) branch fires because no Evidence confrontation occurred.
-- Crown Certainty drift upward + Almud unchallenged → Arc B (Fortress) conditions met (Certainty stays ≥ 3).
+- Crown Truth drift upward + Almud unchallenged → Arc B (Fortress) conditions met (Truth stays ≥ 3).
 - Varfell TK drift to 3 + no PC interaction → Vaynard stalls at intellectual understanding, never reaching Arc B (Awakened).
 PCs shape NPC arcs by disrupting or accelerating these drifts through Domain Actions, Contests, and relationship-building.
 ## §8 BOARD GAME MODE: NPC FACTION PRIORITY TREES
@@ -178,5 +178,5 @@ Each NPC faction follows a deterministic priority tree during the BG Strategic P
 ### §7.8 Altonian Vanguard Priority Tree (NPC faction — activates at IP ≥ 75)
 ### §7.9 Priority Tree Override Conditions
 - **Co-victory cooperation:** When co-victory conditions are ≥ 75% met, cooperating factions shift to a simplified tree: (1) protect shared conditions, (2) advance weakest shared condition, (3) normal tree.
-### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)
+### §7.10 NPC Stat Values (Thread Sensitivity and Truth)
 ## §13 PROPAGATION ON ACCEPTANCE

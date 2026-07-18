@@ -56,7 +56,7 @@ table gives the term, abbreviation, and a pointer only.
 | Intelligibility | — | (see Coherence — same source) | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
 | Composure | — | `params/core.md` §Derived Scores | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
 | Focus | — | `references/descriptor_registry.yaml` (attribute) | Attribute governing Thread contact economy — see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description). |
-| Certainty | CERT* | `params/core.md` §PP-551 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. *CERT not standalone — write Certainty.* |
+| Truth | — | `params/core.md` §Truth Track (PP-551) | Per-character metaphysical stance (**formerly "Certainty"**; also consolidates the retired character "Piety Track" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0–5; **players see qualitative bands, never the number**. All PCs have it; named NPCs at GM discretion; factions do not hold Truth. *Legacy "Certainty"/`CERT` resolve to Truth pending the corpus rename (ED-IN-0075 staged sweep).* |
 | Momentum | — | `params/core.md` §Derived Scores | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
 
 ### Thread Practitioner Stats
@@ -258,7 +258,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Resolution | Status |
 |-------------|------------|--------|
-| CERT | Certainty (cosmological worldview track, 0–5; PP-551). See Part One. | RESOLVED — active stat |
+| CERT | Legacy abbreviation for the former **Certainty** Track — now **Truth** (renamed + consolidated, ED-IN-0075; see Part One). Retire; do not use for new writing. | SUPERSEDED — renamed to Truth |
 | TLK | Torben Loyalty Clock (narrative-specific, 10→0; F72 gap). | DEPRECATED — historical only |
 | DD | Deniability Debt (Niflhel Operative mechanic). Niflhel-as-faction struck per ED-764; mechanic survives as "Deniability Debt" full term where retained. | DEPRECATED — abbreviation not in active use |
 | FSTAT | Faction Stats (collective shorthand for Mandate / Influence / Wealth / Military / Intel / Stability). | DEPRECATED — simulator code, never in-game term |

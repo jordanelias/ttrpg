@@ -8,7 +8,7 @@
 | Zone | Thread State | Primary Hazard |
 |------|-------------|----------------|
 | Snapped | Maximum tension | Objects crumble; configurations disrupt |
-| Locked | Frozen at catastrophe moment | Configuration instability; Certainty drain |
+| Locked | Frozen at catastrophe moment | Configuration instability; Truth drain |
 | Oscillating | Continuous cycling | Gap formation; monstrous entities |
 
 ## Forgetting Check
@@ -69,7 +69,7 @@ Gate: [NAME-PENDING: ED-048] Ritual without Awareness 5+ → +2 Ob.
 |------|--------|------|----|-----------------|
 | Border (Snapped) | Shifting Objects | Weave or Agi | 2 | 1 Wound/character |
 | Inner (Oscillating) | Monstrous entity | Combat | varies | Gap open, TT +2 |
-| Core (Locked) | Config instability | Spirit (non-practitioners) | 2/round | Certainty −1 |
+| Core (Locked) | Config instability | Spirit (non-practitioners) | 2/round | Truth −1 |
 
 Core zone: Contact duration halved for practitioners.
 

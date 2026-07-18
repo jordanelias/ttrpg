@@ -121,7 +121,7 @@ Each interpretation is internally consistent. None requires falsehood. Each requ
 
 When a named character witnesses Miraculous Event effects (present in affected territory during the season Miraculous Event fires):
 
-Roll Cognition vs Ob = current Certainty. Success: Certainty unchanged (framework holds). Partial: Certainty −1 (framework strained). Failure: Certainty −2 (framework shaken).
+Roll Cognition vs Ob = current Truth. Success: Truth unchanged (framework holds). Partial: Truth −1 (framework strained). Failure: Truth −2 (framework shaken).
 
 Fires once per character per Miraculous Event. Characters with TS perceive more of the underlying mechanism and face sharper Conviction pressure — the experience is harder to reconcile with their existing framework, whether that framework is theological or secular.
 

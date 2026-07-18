@@ -93,7 +93,7 @@ The Sincerity Gate is not a punishment for strategic play. It is a mechanical ex
 ### §5.4 Information Gates
 ### §5.5 Socializing and Beliefs
 When a social action aligns with or challenges a character's stated Belief, mechanical consequences apply:
-- **Social action that requires betraying a Belief:** Certainty pressure — GM marks potential Certainty shift. Does not fire automatically; resolves at session end per accumulated pressure.
+- **Social action that requires betraying a Belief:** Truth pressure — GM marks potential Truth shift. Does not fire automatically; resolves at session end per accumulated pressure.
 ### §5.6 Knot Integration
 At Disposition +5 (Bonded), the NPC becomes a Knot candidate per existing threadwork rules. Forming a Knot with a Bonded NPC follows standard Knot procedures (threadwork_redesign_v25.md §8).
 ### §5.7 Contest Escalation and Negotiate Boundary
@@ -128,15 +128,15 @@ Fieldwork scenes occur during Personal Phase. If a Strategic Phase order trigger
 ## §10 GODOT VIDEO GAME IMPLEMENTATION
 ### §10.1 Exploration Map Architecture
 Each territory is a navigable area containing POI nodes. POI nodes exist in the scene tree at authoring time but are conditionally visible based on the player-character's perception gates.
-**Perception gate implementation:** Each POI node has an `is_perceivable(character)` method that checks the character's TS, Cognition, Certainty, and relevant Histories against the POI's depth requirements. POI nodes that fail the perception check are not rendered — they do not exist in the character's world.
+**Perception gate implementation:** Each POI node has an `is_perceivable(character)` method that checks the character's TS, Cognition, Truth, and relevant Histories against the POI's depth requirements. POI nodes that fail the perception check are not rendered — they do not exist in the character's world.
 **Conditional POI gates:** POIs gated by RS band, season, faction control, or prior discovery are evaluated dynamically. A Remnant that becomes perceivable when RS drops below 60 appears in-world at the moment RS crosses the threshold — the world changes because the substrate's intelligibility has changed.
 ### §10.2 Intelligibility Gradient Visualisation
 The Intelligibility Gradient is the system's signature visual feature. The Godot implementation makes the character's rendering capacity visible — not as a filter over a single objective world, but as the character's genuine experiential reality.
 **There is no neutral visual layer.** The Thread configuration constitutes a different experiential reality depending on how the observer's consciousness renders it. The Godot implementation uses different visual presentations for different characters, but this is not a "filter" — each visual is the world as that character genuinely inhabits it. The relationship between rendering and world is constitution/experience (Foundations §3.1), not appearance/reality.
-The same POI constitutes a different world for characters at different Certainty values. This is not interpretation or opinion — it is the world as given to that consciousness:
-- **Certainty 5 (Orthodox):** Thread phenomena constitute a world where demonic intrusion is real. The visual language uses Church iconography — hellfire palette, sin-associated imagery. The character's rendering genuinely produces this world.
-- **Certainty 3 (Questioning):** Thread phenomena constitute an ambiguous world. Undefined shimmer, neutral colour shifts. The character's rendering is uncertain — the world itself is uncertain.
-- **Certainty 0 (Accepted):** Thread phenomena constitute a world where the substrate is natural. Calm, structural, the fabric of reality experienced directly. Beauty rather than horror.
+The same POI constitutes a different world for characters at different Truth values. This is not interpretation or opinion — it is the world as given to that consciousness:
+- **Truth 5 (Orthodox):** Thread phenomena constitute a world where demonic intrusion is real. The visual language uses Church iconography — hellfire palette, sin-associated imagery. The character's rendering genuinely produces this world.
+- **Truth 3 (Questioning):** Thread phenomena constitute an ambiguous world. Undefined shimmer, neutral colour shifts. The character's rendering is uncertain — the world itself is uncertain.
+- **Truth 0 (Accepted):** Thread phenomena constitute a world where the substrate is natural. Calm, structural, the fabric of reality experienced directly. Beauty rather than horror.
 ### §10.3 Investigation Journal System
 **Inert Knowledge UI:** When a non-sensitive character receives Thread-verified evidence, the journal displays it with a distinctive visual treatment — grayed out, slightly blurred, with a tooltip: "Your character knows this was said, but cannot fully grasp its implications." The player can *read* the information (maintaining player agency) but the character cannot act on it mechanically (maintaining the epistemological barrier).
 ### §10.4 Disposition and Dialogue

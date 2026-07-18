@@ -212,7 +212,7 @@ These three character-mechanics are distinct and operate at different scales:
 
 | Mechanic | Scale | Function | Persistence |
 |---|---|---|---|
-| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; tracked on Piety Track | Lifetime; shifts only through Scar accumulation or major narrative events |
+| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; per-Conviction Scar tracking per `conviction_taxonomy_v30.md` (the former "Piety Track" label for this is retired — see §14.2; not to be confused with the **Truth** axis) | Lifetime; shifts only through Scar accumulation or major narrative events |
 | **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |
 | **Inspiration** (this section) | Emotional/ideological investment | Specific focus that grants +1D / Ob −1 when actively engaged | Persistent until focus lost; modifiable via play |
 
@@ -525,7 +525,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 - DR / armor damage reduction tables
 - All faction stat → dice pool relationships
 - All mass combat formulas (Pool, H, damage per success)
-- Coherence (10→0 countdown), Certainty (0–5), Momentum (0–4)
+- Coherence (10→0 countdown), Truth (0–5), Momentum (0–4)
 - Social contest: Argue pools, genre/orientation, Persuasion Track, interaction types
 - Thread operations: Leap procedure, operation types, co-movement, Ob values
 - Disposition Track, Renown Track, Standing
@@ -565,12 +565,13 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Track | Range | Direction | Owner | Notes |
 |-------|-------|-----------|-------|-------|
 | Disposition | −5 to +5 | Oscillating | Relational (per NPC) | Flat; Bonds does NOT cap (ED-912) |
-| Piety Track | 0–10 | Oscillating | Per character | Personal religious standing |
-| Certainty | 0–5 | Drifts down with Thread exposure | Per character | Cosmological worldview |
+| Truth | 0–5 | Oscillating (drifts toward 0 with Thread exposure) | Per character | Metaphysical stance: Solmund orthodoxy (5, *Himmelenger pole*) ↔ Thread-truth acceptance (0, *Edeyja pole*). **Consolidates the former Certainty track + the character "Piety Track" / religious-standing meter** (ED-IN-0075). Player-facing as qualitative bands (`engine/params/core.md` §Truth Track); the number is engine-internal, never shown to players. |
 | Coherence | 0–10 | Monotonic drain | Per character | Personal rendering legibility — moved from "Derived Scores" per F7 |
 | Thread Sensitivity (TS) | 0–N | Grows | Per character | Cumulative perceptual depth |
 | Renown | varies | Grows | Per character | Reputation in narrow domain |
 | Standing | varies | Oscillating | Per character | Social class indicator |
+
+> *The former character **"Piety Track"** name is retired (ED-IN-0075): its metaphysical-stance / religious-standing role folds into **Truth** (above); the moral value-frame that name also labelled is the separate **13-Conviction** system (`designs/personal/conviction_taxonomy_v30.md`, per-Conviction Scar tracking), which is unchanged. The territory-scale **Piety (PT)** — Church-seizure progress — is a distinct stat and keeps its name.*
 
 ### §14.3 Clocks — world/scene/campaign progress, mostly monotonic
 

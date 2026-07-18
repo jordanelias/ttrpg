@@ -428,7 +428,7 @@ The deed-monarchy: Crown legitimacy is the continuously demonstrated act of gove
 
 ### Substrate-Posture
 
-`[GAP — Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal — Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Certainty 3 (Questioning)` per `npc_behavior §2.1` and his "privately sympathises with Restoration; recognises Thread reality may be true; does not act on it" stance suggests substrate-acknowledgment-without-engagement. Author at Phase B.
+`[GAP — Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal — Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Truth 3 (Questioning)` per `npc_behavior §2.1` and his "privately sympathises with Restoration; recognises Thread reality may be true; does not act on it" stance suggests substrate-acknowledgment-without-engagement. Author at Phase B.
 
 ### Ethical Disposition
 
@@ -477,8 +477,8 @@ Above-average baseline (Stability 4) but exposed to Trigger 1 (territorial loss 
 
 ### Arc Trajectories (per `npc_behavior §5.2 Almud Arc Map`)
 
-- **Arc A — The Reformer.** Almud Certainty ≤ 1 + Löwenritter Autonomy = Loyal. Hardest arc; window narrow. Player must destabilize Almud's worldview while keeping Crown stable enough that Löwenritter doesn't intervene. Reform from within is the most demanding path.
-- **Arc B — The Fortress.** Crown Stability ≤ 2 + Almud Certainty ≥ 3 (unconfronted). Order doubles down; Reason secondary suppressed. Authority-only Resonant Style.
+- **Arc A — The Reformer.** Almud Truth ≤ 1 + Löwenritter Autonomy = Loyal. Hardest arc; window narrow. Player must destabilize Almud's worldview while keeping Crown stable enough that Löwenritter doesn't intervene. Reform from within is the most demanding path.
+- **Arc B — The Fortress.** Crown Stability ≤ 2 + Almud Truth ≥ 3 (unconfronted). Order doubles down; Reason secondary suppressed. Authority-only Resonant Style.
 - **Arc C — The Overthrown.** Löwenritter Autonomy reaches Split (stage 4). Order → Autonomy survival. Almud becomes exile. Torben transfers to Löwenritter.
 - **Arc D — The Avenger** (Royal Assassination sub-roll 1–2: Lenneth target).
 - **Arc E — The Bereaved Father** (sub-roll 3–4: Torben target). Crown must retrieve Elske from Altonia. Compound provocation.
@@ -498,11 +498,11 @@ Arcs D/E/F mutually exclusive — one sub-roll determines which (if any) fires p
 ### Sub-Organizations
 
 **Crown Inner Circle** (per `npc_behavior_v30 §2.15`, ED-634):
-- Royal Marshal — **Wilhelm Voss** (Order / Authority MS / Certainty 4)
-- Lord Treasurer — **Annalie Reichard** (Precedent / Evidence MS / Certainty 5)
-- Spymaster — **Kolbrun Thale** (Autonomy / Consequence MS / Certainty 3) — sole inner-circle contact to settlement-layer intelligence brokers
-- Archbishop's Representative — **Father Gustav Linder** (Faith / Authority MS / Certainty 5) — Himlensendt's agent
-- Royal Guard Captain / Löwenritter Liaison — **Theodor Kreutz** (Order / Authority MS / Certainty 4) — pre-designated allegiance to Almud personally; his removal triggers Löwenritter Autonomy escalation toward Split
+- Royal Marshal — **Wilhelm Voss** (Order / Authority MS / Truth 4)
+- Lord Treasurer — **Annalie Reichard** (Precedent / Evidence MS / Truth 5)
+- Spymaster — **Kolbrun Thale** (Autonomy / Consequence MS / Truth 3) — sole inner-circle contact to settlement-layer intelligence brokers
+- Archbishop's Representative — **Father Gustav Linder** (Faith / Authority MS / Truth 5) — Himlensendt's agent
+- Royal Guard Captain / Löwenritter Liaison — **Theodor Kreutz** (Order / Authority MS / Truth 4) — pre-designated allegiance to Almud personally; his removal triggers Löwenritter Autonomy escalation toward Split
 
 **Specialty Branches** (Standing 3+ unlock per `faction_politics §1.1b`).
 

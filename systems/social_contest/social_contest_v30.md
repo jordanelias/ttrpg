@@ -560,7 +560,7 @@ A practitioner may initiate a Thread operation between exchanges. Effects apply 
 
 When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, Parliamentary Session, Church Inquiry) witnesses Thread use during the proceeding:
 
-| Adjudicator Certainty | Response |
+| Adjudicator Truth | Response |
 |---|---|
 | C5 (Orthodox) | Declares proceedings **corrupted**. Contest immediately suspended. Church Heresy Investigation fires (existing PP-182 pathway). Adjudicator's Faith Conviction receives Scar per §3.4 of npc_behavior_v30. Results from the corrupted exchange are voided — last exchange before Thread use stands as final. |
 | C4 (Faithful) | Declares **irregularity**. Current exchange result stands but adjudicator applies +1 Ob to all subsequent rolls by the Thread-using party (procedural suspicion). Church Investigation optional (adjudicator discretion based on Scar count). |
@@ -634,7 +634,7 @@ Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: CI ≥ 4
 *The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while CI < 55.*
 
 **Consequences on success:**
-- Named NPC: CI +4; target Mandate −2; Certainty forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Certainty Ob 1 or lose Disposition −1.
+- Named NPC: CI +4; target Mandate −2; Truth forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Truth Ob 1 or lose Disposition −1.
 - Player Character: Faction Mandate −3; excluded from Parliamentary motions; Standing −2; Faith-conviction Companions make departure scene check (Scar 1).
 - Faction: Mandate −2; all Church Domain Actions vs faction Ob −1; CI +3.
 
@@ -662,7 +662,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 
 ## §12 OPEN ITEMS AND EDITORIAL FLAGS
 
-| ED-667 | Adjudicator Thread Response: §9.4b added. Certainty-indexed response table. Visibility gate. Propagation from npc_behavior_v30 ED-663. | P1 — resolved |
+| ED-667 | Adjudicator Thread Response: §9.4b added. Truth-indexed response table. Visibility gate. Propagation from npc_behavior_v30 ED-663. | P1 — resolved |
 
 ### Resolved by this version (PP-234)
 | Item | Resolution |

@@ -13,7 +13,7 @@ Character creation moves through **four lifepath stages**. Each stage answers a 
 **Sub-modifiers:** Origins, Formations, and Vocations that span multiple geographic or institutional variants include sub-modifiers — a secondary selection that adjusts one skill, one Knot detail, or one narrative element. Sub-modifiers do not add a new History; they specialise the existing one.
 - **Equip slots:** `max_equipped = Recall` (1–7). All sparked skills retained permanently; only Recall-many active at any time. Swap loadout between scenes.
 - **Skill depth:** Skills have Levels 1–3. Level 2 requires History dice_bonus ≥ 3; Level 3 requires dice_bonus ≥ 5. Recall caps dice_bonus, so Recall indirectly caps max level.
-**Certainty:** Stage 1 sets the baseline. Later stages modify it. Final Certainty recorded after all four stages.
+**Truth:** Stage 1 sets the baseline. Later stages modify it. Final Truth recorded after all four stages.
 ## STAGE 1: ORIGIN — Where were you born and who raised you?
 Origin establishes geographic and cultural foundation. **Grants 1 starting skill** (first skill listed). Remaining skills on spark list.
 ### 1A. Crown Heartland Child
@@ -23,7 +23,7 @@ Born in the eastern lowlands — Valorsplatz, Kronmark, Feldmark, or Stillhelm. 
 ### 1B. Highland Born (Hafenmark)
 Born in the northwestern highlands — Gransol, Rendstad, Spartfell, or Halvarshelm. Landlocked, mineral-rich, Swiss-character territory that Altonia squeezed hardest during the occupation.
 **Who raised you:** Highland family — miners, herders, artisans, or minor functionaries. Tight community, procedural, suspicious of outsiders. The occupation ended generations ago but its shadow shapes everything: emphasis on law, distrust of charismatic leaders, institutional stubbornness.
-**Starting Certainty:** 4 (Average Valorian). The Church is present but culturally secondary to Hafenmark's constitutional identity.
+**Starting Truth:** 4 (Average Valorian). The Church is present but culturally secondary to Hafenmark's constitutional identity.
 **Knot:** A community elder or extended family figure who embodies constitutional values. They taught you that procedure is the wall between civilisation and tyranny. When Baralta invokes Sovereign Authority Doctrine, this person either celebrates (law triumphant) or worries (overreach by a single ruler).
 **Narrative impact:** Law over personality, procedure over charisma. Strength against demagogues; blindness to action that can't be procedurally justified.
 ### 1C. Fjord Child (Varfell)
@@ -37,24 +37,24 @@ Born in communities closest to the Southernmost — southern Oastad, settlements
 ### 1E. Himmelenger Child (Church Territory)
 Born and raised in Himmelenger — Cathedral city, the Church's seat, the theological centre. Bells, scripture, liturgy, towering architecture of institutional faith.
 **Who raised you:** A family within the Church's cultural orbit. Himmelenger is not a city with a cathedral; it is a city that IS a cathedral. Every institution operates under the Church's moral framework.
-**Starting Certainty:** 5 (Orthodox). The Church's account of reality is not something you were taught — it is the air you breathed.
+**Starting Truth:** 5 (Orthodox). The Church's account of reality is not something you were taught — it is the air you breathed.
 ### 1F. Valorsplatz Underclass
 Born in the capital's lower districts. Not a generic urban poor — a resident of specific Valorsplatz geography.
 **Who raised you:** Single parent, extended working family, or the street itself. The capital's wealth flows through your neighbourhood without stopping.
-**Starting Certainty:** 3 (Questioning). Neither institution has earned your faith. Neither has lost it entirely.
+**Starting Truth:** 3 (Questioning). Neither institution has earned your faith. Neither has lost it entirely.
 **Modifier: Tideward (river/harbour district)** — The flood-prone lower district between the river and the eastern harbour. Schoenland ships dock at your doorstep. Niflhel's dockworker arm operates the same routes you grew up on.
 - *Tideward:* A sibling who works Niflhel's dockworker arm and doesn't know you know — or who knows and pretends not to. Their safety depends on your silence; your conscience depends on not examining what they move.
 - *Ashmarket:* A Church charity teacher who taught you to read and whose faith you both respect and resent. They believe the Church saved you. You believe the Church demolished the civilisation whose ruins you grew up on.
 ### 1G. Border Settlement Child
 Born in northern border territories — Lowenskyst, Spartfell, or Halvarshelm. Communities that exist because a fortress needs people to supply it.
 **Who raised you:** Military family or military-adjacent — blacksmiths, provisioners, farriers. The border is a physical presence. You grew up watching the mountain passes.
-**Starting Certainty:** 4. The Löwenritter are a visible presence — the military order shapes border life as much as the Crown or Church.
+**Starting Truth:** 4. The Löwenritter are a visible presence — the military order shapes border life as much as the Crown or Church.
 **Knot:** A garrison soldier or parent who served at the border — and who specifically remembers what it was like when Altonian forces last probed the pass. They carry a warning that the rest of the peninsula doesn't take seriously enough. When Institutional Pressure rises, they write you letters that grow increasingly urgent.
 ### 1H. Displaced — No longer generic
 Family displaced during the Altonian occupation's aftermath — post-liberation resettlement, collaborator property seizure, destroyed communities.
 Knot: A member of another displaced family whose trajectory diverged from yours — they joined Niflhel, or the Restoration, or the Crown army. You share landlessness and nothing else.
 Family destroyed by a Calamity event — Shifting Object, rendering failure, threadcut being encounter at the southern edge.
-Starting Certainty: 2. Starting skill: ★ **Scarred by the Unreal** (unique) — Immune to Composure loss and surprise-round penalties from Thread phenomena. Thread Sensitivity +3.
+Starting Truth: 2. Starting skill: ★ **Scarred by the Unreal** (unique) — Immune to Composure loss and surprise-round penalties from Thread phenomena. Thread Sensitivity +3.
 Knot: Surviving family member who witnessed the same event and accepted the Church's explanation (natural disaster). Your insistence that something else happened has strained the relationship. They think you're traumatised. You think they're in denial.
 Knot: A fellow orphan who chose a different path. The bond is pre-institutional — it exists because you shared a dormitory, not a worldview.
 ## STAGE 2: FORMATION — How were you educated or shaped?
@@ -69,7 +69,7 @@ Apprenticed to a master. Trained in a specific craft and socialised into the Gui
 **Knot:** Your master craftsperson. Professional standards, craft values, the specific relationship between someone who knows and someone who is learning. Whether kind or demanding, the most formative relationship of your adolescence.
 ### 2D. Self-Taught / Empiricist
 No formal education. The Church controls formal education; the Guilds provide trade apprenticeships; ducal households educate retinues. You exist **outside the peninsula's entire epistemological apparatus.** What you learned, you learned by observing the world directly — empirical, fragmented, uncontaminated by institutional framing.
-**Certainty modifier:** −1 regardless of starting value. Without institutional education, no framework reinforces any Certainty level. Your Certainty is inherently unstable — it moves in either direction more easily because nothing anchors it.
+**Truth modifier:** −1 regardless of starting value. Without institutional education, no framework reinforces any Truth level. Your Truth is inherently unstable — it moves in either direction more easily because nothing anchors it.
 **Knot:** A specific person who showed you something that contradicted institutional reality — a midwife who treated patients the Church said were cursed, a veteran who told you the occupation ended differently than official history claims. Their specific knowledge gave you reason to trust observation over authority.
 ### 2E. Military Training
 Educated through military service — Crown army, Hafenmark ducal guard, Varfell household troops, or Löwenritter squire training. Specify which institution (affects military culture).
@@ -113,7 +113,7 @@ Skills that activate when Thread phenomena occur near non-practitioner character
 ## Character Creation Summary
 4. **Choose Catalyst** (Stage 4) → inciting event, starting Belief, campaign hook. 1 starting skill.
 ## Example: Mira Sondhal (canonical test character, ED-143)
-**Result:** Practitioner-Scholar. TS 61 (canonical — 8 from Origin + growth through play). Certainty 0. Three Knots. 5 starting skills equipped (Inherited Resonance, Approach Training, Artefact Authentication, Black Market Contacts, Leap Scar). Recall 5 needed to equip all. Remaining spark list skills (Cultural Memory, Calamity Familiarity, Thread Perception, Philosophical Grounding, Einhir Lore, Post-Leap Clarity, Rendering Memory) develop through scene use.
+**Result:** Practitioner-Scholar. TS 61 (canonical — 8 from Origin + growth through play). Truth 0. Three Knots. 5 starting skills equipped (Inherited Resonance, Approach Training, Artefact Authentication, Black Market Contacts, Leap Scar). Recall 5 needed to equip all. Remaining spark list skills (Cultural Memory, Calamity Familiarity, Thread Perception, Philosophical Grounding, Einhir Lore, Post-Leap Clarity, Rendering Memory) develop through scene use.
 ## Open Editorial Items
 - [EDITORIAL: ED-377 — Intuitive Threadwork (3-RE3) + Co-Movement interaction: does folk practice trigger P-01?]
 - [EDITORIAL: ED-380 — Southern Einhir Descendant Deep South +8 TS: Leap-eligible with Formation 2F at session 1?]

@@ -457,7 +457,7 @@ This perception provides investigative information (fieldwork_v30 §2.4) and fee
 | Killing named NPC | Knot rupture + Conviction Scar on witnesses | §13.3 Death Cascade; npc_behavior_v30 §3.4 |
 | Practitioner Dissolution in combat | RS cost + Scar on all witnesses with engaged Conviction | threadwork_v30 §5.2; npc_behavior_v30 §3.4 |
 | Practitioner Dissolution witnessed by companion | Companion Thread violation departure if Faith/Order/Equity Conviction | companion_specification_v30 §6.1 |
-| Thread operation witnessed by adjudicator in formal proceeding | Certainty-indexed adjudicator response | social_contest_v30 §9.4b |
+| Thread operation witnessed by adjudicator in formal proceeding | Truth-indexed adjudicator response | social_contest_v30 §9.4b |
 
 **Board Game:** Thread operations abstracted to Co-Movement cards and faction Thread orders. See threadwork_v30 §7.1.
 

@@ -174,7 +174,7 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 **TS pathway.** Lenneth starts TS 0 with a developable but bounded pathway: slow scholarly loosening through accretive exposure to the archive's Einhir materials. Progression is gated by Crown SA (consolidated guide §24) — each TS increment requires the broader scholarly-awareness track to reach a threshold before the next loosening is available — with a ceiling of TS 10–20. Lenneth does not reach the TS 30 practitioner threshold through this pathway; Seam Text legibility, direct Thread operation, and witness-account recognition remain closed to her unless an alternate developmental route fires. [EDITORIAL: D-6 — resolved 2026-04-20; propagated this commit; ED-727.]
 
 **Arc A: The Reformist Queen Consort (Default)**
-- Role: policy influence through Almud. Crown reform advances only insofar as Almud's Certainty declines and he permits her programme to enter Crown action.
+- Role: policy influence through Almud. Crown reform advances only insofar as Almud's Truth declines and he permits her programme to enter Crown action.
 - Foils: Baralta (Succession Triangle), Vaynard (Einhir Triangle) — see npc_foils_v30.md.
 
 **Arc B: The Widow Regent (Royal Assassination Fuse — Almud target, sub-roll 5–6)**

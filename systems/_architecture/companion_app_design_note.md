@@ -6,7 +6,7 @@
 The reference architecture (META-3 in cogload_moderate_target.md) is a low-tech prototype of what should be a digital companion app. The game's tracking layer is computational; its experience layer is human. These should be separated.
 
 ## What the App Handles
-- RS, Coherence, Certainty tracking (auto-updated on every Thread operation)
+- RS, Coherence, Truth tracking (auto-updated on every Thread operation)
 - Three-dimensional co-movement auto-effects (P-01 compliance automatic — no missed effects)
 - Damage simultaneity in mass combat (Phase 6 Step 1 resolution)
 - Seasonal accounting cascades (clock updates, threshold checks, NPC trigger evaluation)

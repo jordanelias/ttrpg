@@ -29,8 +29,8 @@
 | 14 | 112 | 3 | §1.4 Thread Operation CV Drift (ED-676) |
 | 15 | 132 | 2 | ED-677: Thread Perception Extension |
 | 16 | 138 | 3 | Rendered-Level Thread Event Visibility (ED-677) |
-| 17 | 156 | 2 | ED-678: Lifepath → Starting TS/Certainty Derivation |
-| 18 | 162 | 3 | Starting Certainty and Thread Sensitivity from Lifepath (ED-678) |
+| 17 | 156 | 2 | ED-678: Lifepath → Starting TS/Truth Derivation |
+| 18 | 162 | 3 | Starting Truth and Thread Sensitivity from Lifepath (ED-678) |
 | 19 | 185 | 2 | ED-679: Thread Warfare NPC AI Doctrine |
 | 20 | 191 | 3 | Thread Warfare Doctrine — Priority Tree Amendments (ED-679) |
 | 21 | 213 | 2 | ED-680: Case Board Dual-Depth Overlay |
@@ -61,8 +61,8 @@
 | 14 | 315 | §1.4 Thread Operation CV Drift (ED-676) |
 | 15 | 512 | ED-677: Thread Perception Extension |
 | 16 | 476 | Rendered-Level Thread Event Visibility (ED-677) |
-| 17 | 388 | ED-678: Lifepath → Starting TS/Certainty Derivation |
-| 18 | 346 | Starting Certainty and Thread Sensitivity from Lifepath (ED-678) |
+| 17 | 388 | ED-678: Lifepath → Starting TS/Truth Derivation |
+| 18 | 346 | Starting Truth and Thread Sensitivity from Lifepath (ED-678) |
 | 19 | 479 | ED-679: Thread Warfare NPC AI Doctrine |
 | 20 | 438 | Thread Warfare Doctrine — Priority Tree Amendments (ED-679) |
 | 21 | 292 | ED-680: Case Board Dual-Depth Overlay |

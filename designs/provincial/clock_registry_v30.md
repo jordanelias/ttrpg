@@ -68,7 +68,7 @@ Reputation and Standing (oscillating, BG):
 | Track | Range | Start | Source |
 |-------|-------|-------|--------|
 | Coherence | 0–10 | 10 | params_threadwork.md §Coherence |
-| Certainty | 0–5 | Varies by background (see params_core.md) | params_core.md §Certainty. Oscillating: 5 = Solmund orthodoxy, 0 = Thread acceptance. |
+| Truth | 0–5 | Varies by background (see params_core.md) | params_core.md §Truth Track (formerly §Certainty; consolidates the character piety/religious-standing meter, ED-IN-0075). Oscillating: 5 = Solmund orthodoxy (*Himmelenger pole*), 0 = Thread-truth acceptance (*Edeyja pole*). Engine-internal number; players see qualitative bands only. |
 | Thread Sensitivity (TS) | 0–100 (hard cap) | Varies (0 for non-practitioners) | params_threadwork.md §TS |
 | Composure | 3–21 | Charisma × 3 | derived_stats_v30.md §5.1 / §14.1 |
 | Concentration | 5–35 | (3×Focus)+(2×Spirit) | derived_stats_v30.md §5.2 / §14.1 (ED-902) |

@@ -87,7 +87,7 @@ Four is the minimum coherent set.
 | T-15b | Löwenritter Substrate-Agnostic Protector | М-4 | М-6 | Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war). | factions, faction_layer, military_layer, mass_combat, conviction_track, threadwork |
 | T-15c | RM Substrate-Heritage Reclaimer | М-4 | М-6 | Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation). | factions, faction_layer, conviction_track, threadwork |
 | T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). | threadwork, conviction_track, derived_stats |
-| T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. | threadwork, derived_stats, conviction_track, solmund_philosophy, solmund |
+| T-13 | Truth Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. | threadwork, derived_stats, conviction_track, solmund_philosophy, solmund |
 | T-14 | Conviction Architecture | М-6 | — | Forced-choice — Scar accumulation forces arc transitions. | conviction_track, factions, faction_layer |
 | T-15 | Player Progression | М-5 | — | Scale-connecting — personal Standing ladder produces settlement→province→faction progression. | scale_transitions, settlement_layer, faction_layer, factions |
 | T-16 | Knot Propagation | М-5 | М-3 | Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded. | threadwork, scale_transitions, factions |
@@ -204,7 +204,7 @@ The previous meta-throughlines document (PP-671) had misclassifications caught b
 
 - Old М-1 included T-18 Radiation Gradient and T-19 Southernmost Hidden Front. These are geographic, not clock-based. They feed decay but their structural pattern is spatial. Split off into new М-2 (Geography holds pressure).
 
-- Old М-2 "Substrate as universal medium" included T-08 (Church), T-13 (Certainty), T-18, T-21, T-22. Most were secondary participations. The primary substrate-grounding T's are T-01, T-02, T-03 — the ontological throughlines. Revised М-3 primary list to these three.
+- Old М-2 "Substrate as universal medium" included T-08 (Church), T-13 (Truth), T-18, T-21, T-22. Most were secondary participations. The primary substrate-grounding T's are T-01, T-02, T-03 — the ontological throughlines. Revised М-3 primary list to these three.
 
 - Old М-3 "Institutional identity" included T-05 (CI accumulation). But T-05 is clock-based, not identity-based. The Church HAS an identity (T-08) distinct from the fact that CI accumulates over time (T-05). Removed T-05 from М-3 (now М-4); left it in М-1 where it belongs.
 
@@ -375,7 +375,7 @@ These are requirements for the implementation to honor the framework, not sugges
 
 **Dominant strategy.** A choice that pays more than alternatives in all situations. Example: a Thread operation that gives a strategic benefit with no Coherence cost. Violates Ω-d and М-6. Note: a choice that dominates in *some* situations is not a dominant strategy; dominance requires context-independence.
 
-**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no MS cost, no TS requirement, no Coherence effect, no Certainty shift. The name is Thread; the mechanic is not. Violates Μ-γ.
+**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no MS cost, no TS requirement, no Coherence effect, no Truth shift. The name is Thread; the mechanic is not. Violates Μ-γ.
 
 **Scale break.** A mechanic that operates in one scale with no traceable consequence at other scales. Example: a scene-level "Thread sensing" skill that reveals information but whose use doesn't register in province-scale Church AP, doesn't accumulate Exposure, doesn't produce Knot strain in witnessing NPCs. Violates Μ-δ.
 

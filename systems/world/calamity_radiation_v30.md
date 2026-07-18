@@ -26,7 +26,7 @@ Within a province, different settlement types experience radiation effects at di
 | Outpost (near Askeheim: S-011, S-033, S-034) | Effects manifest one MS band earlier than province level |
 | Town, Mine (distance-1/2 provinces) | Effects manifest at province level (no modifier) |
 | Fortress, City, Seat | Effects manifest one MS band later (institutional buffer) |
-| Cathedral | Population Certainty preserved one band later (psychological buffer). Physical substrate effects at province level. |
+| Cathedral | Population Truth preserved one band later (psychological buffer). Physical substrate effects at province level. |
 
 The radiation creeps inward from the periphery. Frontier outposts fall first. The Seat is the last to feel the Catastrophe's reach.
 

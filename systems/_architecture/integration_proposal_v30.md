@@ -72,7 +72,7 @@ This matters for videogame implementation because the World State Model IS the g
 
 For integration purposes, the World State Model has three scales that are already named in the game:
 
-**Personal Scale**: Character attributes, Coherence, Wounds, Exposure per territory, Disposition per NPC, Certainty, TS, active Beliefs, Standing per faction, Evidence Tracks, Case Board entries, active Duties.
+**Personal Scale**: Character attributes, Coherence, Wounds, Exposure per territory, Disposition per NPC, Truth, TS, active Beliefs, Standing per faction, Evidence Tracks, Case Board entries, active Duties.
 
 **Territory Scale**: Accord, Piety, Prosperity, Fort Level, Occupation status, active investigations, NPC Genome states, Spiritual Weight.
 
@@ -139,7 +139,7 @@ For a videogame, the integration architecture is necessary but not sufficient. T
 
 Across all documents, the game has a flat information hierarchy — every system is presented at full complexity. The V30 documents specify the faction layer completely from the first page; the fieldwork document introduces all six investigation actions at once; the social contest document presents the full 2×2×4 tactical space immediately. This is appropriate for design documents. It is fatal for player onboarding.
 
-The videogame needs an information hierarchy that introduces complexity as the player demonstrates (not declares) the capacity to engage with it. The mechanism for this is already present in the game: the player's own character state limits what they can perceive and do. A character with TS 0 cannot see Thread gates in the Dialogue Lattice. A character with Certainty 5 cannot access Thread-referencing utterances. A character at Standing 1 cannot access Parliament. These gates already exist — they just haven't been formally treated as an *onboarding architecture*.
+The videogame needs an information hierarchy that introduces complexity as the player demonstrates (not declares) the capacity to engage with it. The mechanism for this is already present in the game: the player's own character state limits what they can perceive and do. A character with TS 0 cannot see Thread gates in the Dialogue Lattice. A character with Truth 5 cannot access Thread-referencing utterances. A character at Standing 1 cannot access Parliament. These gates already exist — they just haven't been formally treated as an *onboarding architecture*.
 
 **The progressive revelation sequence for videogame:**
 
@@ -223,9 +223,9 @@ These are UI/writing specifications, not new mechanics. In the videogame, they'r
 
 **What's missing**: The NPE generates procedural minor NPCs. The NPC Behavior system specifies 13 named NPCs with full Genome specs. How do named NPCs relate to the territory ecology the NPE generates?
 
-**The V30 connection**: Named NPCs are always physically in territories (Haelgrund in Himmelenger, Baralta in Gransol, etc.). Their presence should affect the territory's social ecology — an NPC with Certainty 4 and high Mandate living in a territory should shift that territory's ecology weights toward their worldview.
+**The V30 connection**: Named NPCs are always physically in territories (Haelgrund in Himmelenger, Baralta in Gransol, etc.). Their presence should affect the territory's social ecology — an NPC with Truth 4 and high Mandate living in a territory should shift that territory's ecology weights toward their worldview.
 
-**Resolution**: Named NPCs function as **Ecology Anchors**. Each named NPC contributes their own conviction and ethical framework to the territory's ecology weights as a fixed offset: a named NPC with Faith conviction weight 3 and Certainty 4 in a territory adds +1 to the Church-aligned worldview weight for the territory's NPE generation, regardless of that territory's baseline Piety/Accord. This means territories feel inhabited by their named NPCs — Haelgrund's presence in Himmelenger is perceptible in the population's tone before the player has discovered him specifically. When the player discovers Haelgrund and his hidden TS, the retroactive reframing of the territory's social ecology (the source of the subtle Thread-awareness in the population's conversations) is a revelation moment of the first order.
+**Resolution**: Named NPCs function as **Ecology Anchors**. Each named NPC contributes their own conviction and ethical framework to the territory's ecology weights as a fixed offset: a named NPC with Faith conviction weight 3 and Truth 4 in a territory adds +1 to the Church-aligned worldview weight for the territory's NPE generation, regardless of that territory's baseline Piety/Accord. This means territories feel inhabited by their named NPCs — Haelgrund's presence in Himmelenger is perceptible in the population's tone before the player has discovered him specifically. When the player discovers Haelgrund and his hidden TS, the retroactive reframing of the territory's social ecology (the source of the subtle Thread-awareness in the population's conversations) is a revelation moment of the first order.
 
 ## Gap 7: The Scene Slate + Faction_Layer_V30 Recovery Mechanic
 
@@ -247,7 +247,7 @@ The fieldwork_v30, social_contest_v30, and investigation_systems_proposal collec
 
 **Register 2 — Social Investigation**: The Dialogue Lattice with its five filters. NPCs as nodes in the investigation's social graph. Conviction Wounds as evidence of prior pressure on a worldview. This is the Disco Elysian register — facts that emerge from the world's inhabitants, colored by their worldview, filtered through their fear and loyalty and self-interest. The Sincerity Gate is what separates this from mere Charisma farming: genuine social investment is its own reward, instrumentalism has its own cost.
 
-**Register 3 — Thread Investigation**: Thread-Read as perceptive Leap. The Evidence Track advancing when operations reveal investigation-relevant configurations. This is the register no other game has, and it should be experienced as genuinely different from the other two — not just harder, but categorically different in what it reveals. A Depth 4 Thread-Read doesn't reveal more facts; it reveals facts that exist at a different ontological level from what the first two registers can access. The Certainty system makes this register exclusive to characters who have moved toward Thread-awareness — it's a gate, not just a difficulty modifier.
+**Register 3 — Thread Investigation**: Thread-Read as perceptive Leap. The Evidence Track advancing when operations reveal investigation-relevant configurations. This is the register no other game has, and it should be experienced as genuinely different from the other two — not just harder, but categorically different in what it reveals. A Depth 4 Thread-Read doesn't reveal more facts; it reveals facts that exist at a different ontological level from what the first two registers can access. The Truth system makes this register exclusive to characters who have moved toward Thread-awareness — it's a gate, not just a difficulty modifier.
 
 The richest investigations in the game will weave all three registers. The Church-Thread-Lab investigation example in the investigation proposal is a perfect template: physical examination of the archive reveals documents, social investigation of the official reveals the Conviction Wound that produces the involuntary confirmation, and Thread investigation of the site reveals the substrate damage that proves what the documents only imply. Three registers, one investigation, convergent evidence that lands with full weight because all three lines agree.
 

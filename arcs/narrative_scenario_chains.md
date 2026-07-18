@@ -196,7 +196,7 @@ ALMUD'S CONSTRAINT — EROSION PATHS
 │   ├─ Any Thread-significant event with him present: passive perception check
 │   │   TS 30+ practitioners who succeed notice his threads register faint sensitivity
 │   ├─ If Discovery Event fires (Spirit TN 7 Ob 1):
-│   │   TS advances to 30 (Stirring); Certainty −1 (permanent)
+│   │   TS advances to 30 (Stirring); Truth −1 (permanent)
 │   │   He now KNOWS the world is not what the Church says it is.
 │   │   His Belief 2 becomes untenable in its current form.
 │   │   His Belief 1 (Altonian trade at all costs) is re-examined through
@@ -566,7 +566,7 @@ SOUTHERNMOST CRISIS TIMELINE (MS-driven, not fixed season)
 │   Season 2 — Exploration (3 zones):
 │   ├─ Border (Snapped): Shifting Objects; Weaving Ob 2 or Agility Ob 2
 │   ├─ Inner (Oscillating): Gap incursion; monstrous entity combat
-│   └─ Core (Locked): Spirit Ob 2/round or Certainty −1 (non-practitioners)
+│   └─ Core (Locked): Spirit Ob 2/round or Truth −1 (non-practitioners)
 │       Contact duration halved for practitioners
 │       Forgetting Check Ob 4 fires here
 │
@@ -717,7 +717,7 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
 │
 └─ VAYNARD'S DISCOVERY EVENT (possible at any TK level once TS 14+)
     Each Private Collection use: Spirit TN 7 Ob 1 for Discovery Event
-    ├─ DISCOVERY EVENT FIRES: TS advances to 30 (Stirring); Certainty −1 permanent
+    ├─ DISCOVERY EVENT FIRES: TS advances to 30 (Stirring); Truth −1 permanent
     │   The world reorganises itself for him. He now KNOWS, not calculates.
     │   His consequentialist framework meets something that cannot be instrumentalised.
     │   → Belief revision required: "Reason" conviction meets ontological rupture
@@ -728,7 +728,7 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
     │      He has the Private Collection, the Southernmost road, and the will
     │      to use all of it. And he is no longer purely consequentialist.
     └─ DISCOVERY EVENT FAILS (Spirit Ob 1 failure):
-        The weight lands without context. Certainty −1. New Belief from ignorance.
+        The weight lands without context. Truth −1. New Belief from ignorance.
         Vaynard becomes more dangerous in his confusion than in his clarity.
 ```
 
@@ -771,7 +771,7 @@ Klapp develops Thread sensitivity (Trajectory B/C)
 
 ```
 Almud develops TS 30 (Discovery Event)
-→ He knows. Not intellectually — ontologically. Certainty −1.
+→ He knows. Not intellectually — ontologically. Truth −1.
 → His Belief 1 (Altonian trade at all costs) is re-examined:
   Altonian policy is built on suppressing what he now knows to be real.
   Does trade continuity justify complicity in that suppression?

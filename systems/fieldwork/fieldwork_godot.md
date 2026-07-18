@@ -26,7 +26,7 @@ Territory (Node2D / Node3D)
 └── POI_Breaches[] (visible if TS ≥ 50; existential encounter zone)
 ```
 
-**Perception gate implementation:** Each POI node has an `is_perceivable(character)` method that checks the character's TS, Cognition, Certainty, and relevant Histories against the POI's depth requirements. POI nodes that fail the perception check are not rendered — they do not exist in the character's world.
+**Perception gate implementation:** Each POI node has an `is_perceivable(character)` method that checks the character's TS, Cognition, Truth, and relevant Histories against the POI's depth requirements. POI nodes that fail the perception check are not rendered — they do not exist in the character's world.
 
 **Conditional POI gates:** POIs gated by MS band, season, faction control, or prior discovery are evaluated dynamically. A Remnant that becomes perceivable when MS drops below 60 appears in-world at the moment MS crosses the threshold — the world changes because the substrate's intelligibility has changed.
 
@@ -44,13 +44,13 @@ The Intelligibility Gradient is the system's signature visual feature. The Godot
 | 50–69 | Full thread-sight. The substrate is experienced as a dimension of reality, not a hidden layer. | Shader: persistent overlay on all objects within Calamity zones. NPC aura indicators. |
 | 70+ | The boundary of the intelligible. What lies beyond is not darkness or void — it is the rendering's dissolution, the edge of what consciousness can constitute. | Shader: dissolve effect at zone boundaries. Particle systems for surfeit-of-being eruptions. Audio: low-frequency rumble. |
 
-**Certainty-dependent constitution:**
+**Truth-dependent constitution:**
 
-The same POI constitutes a different world for characters at different Certainty values. This is not interpretation or opinion — it is the world as given to that consciousness:
+The same POI constitutes a different world for characters at different Truth values. This is not interpretation or opinion — it is the world as given to that consciousness:
 
-- **Certainty 5 (Orthodox):** Thread phenomena constitute a world where demonic intrusion is real. The visual language uses Church iconography — hellfire palette, sin-associated imagery. The character's rendering genuinely produces this world.
-- **Certainty 3 (Questioning):** Thread phenomena constitute an ambiguous world. Undefined shimmer, neutral colour shifts. The character's rendering is uncertain — the world itself is uncertain.
-- **Certainty 0 (Accepted):** Thread phenomena constitute a world where the substrate is natural. Calm, structural, the fabric of reality experienced directly. Beauty rather than horror.
+- **Truth 5 (Orthodox):** Thread phenomena constitute a world where demonic intrusion is real. The visual language uses Church iconography — hellfire palette, sin-associated imagery. The character's rendering genuinely produces this world.
+- **Truth 3 (Questioning):** Thread phenomena constitute an ambiguous world. Undefined shimmer, neutral colour shifts. The character's rendering is uncertain — the world itself is uncertain.
+- **Truth 0 (Accepted):** Thread phenomena constitute a world where the substrate is natural. Calm, structural, the fabric of reality experienced directly. Beauty rather than horror.
 
 ### §10.3 Investigation Journal System
 

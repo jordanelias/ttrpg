@@ -91,7 +91,7 @@ Proposed UI placement: RS and WC displayed alongside each other in the persisten
 | Varfell | Primary WC driver (WR gates WC) | Varfell's engagement with Askeheim is the prerequisite for WC advancement. Path B (Southernmost Dominion) makes WC Varfell's primary strategic objective. |
 | Wardens/Edeyja | WC beneficiary and executor | WC 3 activates Edeyja's Mending. Edeyja Burnout (ARC-S34) is the hidden fail state: if Edeyja reaches Coherence 0, WC 3's +2/season stops. |
 | Crown | WC enabler (Thread Liaison PP-436) | Crown can designate Thread Liaison, crediting allied Thread ops. Crown's political interest may align with WC if RS threatens sovereignty. |
-| Church | WC resistor (institutional) | Church's Certainty framework opposes Thread engagement. TC advancement competes with WC investment. But at RS Critical, even Church factions face the survival question. |
+| Church | WC resistor (institutional) | Church's Truth framework opposes Thread engagement. TC advancement competes with WC investment. But at RS Critical, even Church factions face the survival question. |
 | Hafenmark | WC pragmatist | Hafenmark's consequentialist framework supports WC investment when RS threatens trade infrastructure. |
 | Niflhel | WC adversary (structural) | If Harvest = Dissolution Residue collection, Niflhel's strategic interest diverges from RS preservation. Niflhel is structurally incentivized to maximize Dissolution activity just short of Rupture — the only faction whose interest opposes WC. |
 

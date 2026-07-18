@@ -16,7 +16,7 @@ The gradient describes variation in **substrate accessibility** — how much of 
 
 **Why rendering strain fires on passive Depth 3+ encounter, but co-movement is reserved for Thread-Read:**
 
-P-01 (Inseparability) specifies co-movement as the consequence of Thread *manipulation* — "manipulations of threads" cause substrate co-movement. Passive perception, even of Depth 3+ content, is not a Thread manipulation. A character observing an Einhir Remnant is not performing an operation on the Thread substrate; they are perceiving something the substrate presents to them. Rendering strain (Coherence pressure, Certainty shift) is appropriate for the perceptual encounter; co-movement would overextend P-01 into perceptual territory it was not designed to govern.
+P-01 (Inseparability) specifies co-movement as the consequence of Thread *manipulation* — "manipulations of threads" cause substrate co-movement. Passive perception, even of Depth 3+ content, is not a Thread manipulation. A character observing an Einhir Remnant is not performing an operation on the Thread substrate; they are perceiving something the substrate presents to them. Rendering strain (Coherence pressure, Truth shift) is appropriate for the perceptual encounter; co-movement would overextend P-01 into perceptual territory it was not designed to govern.
 
 Thread-Read is the exception precisely because it is a perceptive Leap — an active Thread operation packaged as investigation. The Leap is a Thread manipulation (extending Thread contact into the investigative domain). P-01 fires on Thread-Read because Thread-Read IS a Thread operation.
 

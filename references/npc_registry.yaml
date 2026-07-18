@@ -398,7 +398,7 @@ characters:
     territory: null  # off-board (Altonia) unless Elske Return arc
     ts: 0  # per behavior_v30 TS/certainty table
     coherence: null  # [GAP]
-    certainty: 3  # per behavior_v30: 'Certainty disrupted by hostage status and competing loyalties'
+    certainty: 3  # per behavior_v30: 'Truth disrupted by hostage status and competing loyalties'
     stats: null  # [GAP]
     convictions:
       primary: null  # [GAP: no conviction data in canon — off-board]
@@ -469,9 +469,9 @@ characters:
         - {conviction: Utility, weight: 0.30}
       cultural_label: valorian_court
       self_other_initial: 0.00
-      migration_notes: "faction_canon: 'Autonomy / Consequence MS / Certainty 3'. Autonomy → Liberty; Consequence → Utility. Per PP-685 §4."
+      migration_notes: "faction_canon: 'Autonomy / Consequence MS / Truth 3'. Autonomy → Liberty; Consequence → Utility. Per PP-685 §4."
     goals: null  # [GAP]
-    arc_trajectory: "Sole inner-circle contact to settlement-layer intelligence brokers. Certainty 3 (lowest in Inner Circle)."
+    arc_trajectory: "Sole inner-circle contact to settlement-layer intelligence brokers. Truth 3 (lowest in Inner Circle)."
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-034
@@ -493,9 +493,9 @@ characters:
         - {conviction: Authority, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
-      migration_notes: "faction_canon: 'Faith / Authority MS / Certainty 5'. Direct mapping. Per PP-685 §4."
+      migration_notes: "faction_canon: 'Faith / Authority MS / Truth 5'. Direct mapping. Per PP-685 §4."
     goals: null  # [GAP]
-    arc_trajectory: "Dual-loyalty NPC — Himlensendt's agent inside Crown Inner Circle. Certainty 5 (highest)."
+    arc_trajectory: "Dual-loyalty NPC — Himlensendt's agent inside Crown Inner Circle. Truth 5 (highest)."
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-035
@@ -516,7 +516,7 @@ characters:
         - {conviction: Authority, weight: 0.25}
       cultural_label: lowenritter_military
       self_other_initial: -0.10
-      migration_notes: "faction_canon: 'Order / Authority MS / Certainty 4'. Direct mapping. Per PP-685 §4."
+      migration_notes: "faction_canon: 'Order / Authority MS / Truth 4'. Direct mapping. Per PP-685 §4."
     goals: null  # [GAP]
     arc_trajectory: "Pre-designated allegiance to Almud personally. His removal triggers Löwenritter Autonomy escalation toward Split."
     source: faction_canon_v30 §Crown sub-Organizations
@@ -539,7 +539,7 @@ characters:
         - {conviction: Authority, weight: 0.25}
       cultural_label: valorian_court
       self_other_initial: 0.00
-      migration_notes: "faction_canon: 'Order / Authority MS / Certainty 4'. Direct mapping. Per PP-685 §4."
+      migration_notes: "faction_canon: 'Order / Authority MS / Truth 4'. Direct mapping. Per PP-685 §4."
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Crown sub-Organizations
@@ -562,7 +562,7 @@ characters:
         - {conviction: Authority, weight: 0.25}
       cultural_label: valorian_court
       self_other_initial: 0.00
-      migration_notes: "faction_canon: 'Precedent / Evidence MS / Certainty 5'. Direct mapping on Precedent; Evidence is Resonant Style. Per PP-685 §4."
+      migration_notes: "faction_canon: 'Precedent / Evidence MS / Truth 5'. Direct mapping on Precedent; Evidence is Resonant Style. Per PP-685 §4."
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Crown sub-Organizations

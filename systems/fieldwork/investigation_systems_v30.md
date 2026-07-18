@@ -3,7 +3,7 @@
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-15-21-07
 ## Affects: S10 NPC Behavior, S14 Fieldwork, S12 Social Contests, S16 Emergent Arcs, S17 Scale Transitions, S03 Geography, S18 Characters
-## Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Certainty is personal, Conviction is cultural-ethical, Thread substrate is metaphysical)
+## Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Truth is personal, Conviction is cultural-ethical, Thread substrate is metaphysical)
 
 ---
 
@@ -37,7 +37,7 @@ TERRITORY ECOLOGY
 
 | Ledger Field | Source | Range |
 |---|---|---|
-| Certainty | Character creation + shifts | 0–5 |
+| Truth | Character creation + shifts | 0–5 |
 | Thread Sensitivity | Encounter/exposure | 0–100 |
 | Beliefs | Player-authored (§2 of Agency proposal) | 3 active |
 | Evidence | Fieldwork Evidence Track, per investigation | Tagged discoveries |
@@ -62,8 +62,8 @@ Each territory has a **social ecology** — a weighted distribution of worldview
 
 | Territory Stat | Ecology Effect |
 |---|---|
-| Piety 4–5 | +2 weight to Church-aligned worldviews; Certainty 4–5 most common |
-| Piety 0–1 | +2 weight to Thread-aware or RM-sympathetic worldviews; Certainty 1–2 possible |
+| Piety 4–5 | +2 weight to Church-aligned worldviews; Truth 4–5 most common |
+| Piety 0–1 | +2 weight to Thread-aware or RM-sympathetic worldviews; Truth 1–2 possible |
 | Accord 0–1 | +2 weight to resentment/survival-first worldviews; Volatility +1 to all generated NPCs |
 | Accord 4–5 | +1 weight to institutional-trust worldviews; Volatility −1 to all generated NPCs |
 | Prosperity 4–5 | +2 weight to trade/guild affiliations; Compromise Profile biases toward economic exchange |
@@ -253,10 +253,10 @@ Each utterance in the Lattice has zero or more gates — conditions that must be
 - Produces a different Disposition response when used: the NPC reads genuine investment, not mere inquiry
 - Integrates with Sincerity Gate: Belief-gated utterances pass the Sincerity check automatically (the investment is genuine)
 
-**4. Certainty Gate** — player's Certainty must fall within a range
-- Certainty ≥ 4: orthodox utterances available ("As the Church teaches…", "The Solmundian texts confirm…")
-- Certainty ≤ 2: Thread-referencing utterances available ("The threads here are damaged", "I can feel what happened in this place")
-- Certainty 3: the middle ground — neither set of utterances is fully available; the character is epistemically in transition
+**4. Truth Gate** — player's Truth must fall within a range
+- Truth ≥ 4: orthodox utterances available ("As the Church teaches…", "The Solmundian texts confirm…")
+- Truth ≤ 2: Thread-referencing utterances available ("The threads here are damaged", "I can feel what happened in this place")
+- Truth 3: the middle ground — neither set of utterances is fully available; the character is epistemically in transition
 - **This is the ontological status gate.** A character who has seen the Thread cannot honestly speak pure orthodoxy. A character who hasn't cannot honestly claim Thread knowledge. The game enforces this.
 
 **5. History Gate** — requires named History background
@@ -272,7 +272,7 @@ Each utterance in the Lattice has zero or more gates — conditions that must be
 **7. Thread Sensitivity Gate** — TS threshold
 - TS ≥ 30 (Leap capable): Thread-direct utterances available ("I can feel what you've done to this place", "The thread here has been pulled")
 - TS 1–29 (aware but not capable): perceptual observations available ("Something feels wrong here", "The air is different")
-- TS 0 (unaware): no Thread-referencing utterances available regardless of Certainty
+- TS 0 (unaware): no Thread-referencing utterances available regardless of Truth
 
 ### Visibility Rules
 
@@ -287,7 +287,7 @@ This tells the player what to pursue to unlock the option. It is the game making
 
 **Hidden:** The utterance does not appear at all. Hidden gates are used for:
 - Thread-sensitivity utterances when TS = 0 (the player shouldn't know these options exist before discovering Thread reality)
-- Certainty-specific utterances at the far end of the range from the player's current position (a Certainty 5 character doesn't see the Thread-claiming options; a Certainty 0 character doesn't see the orthodox options)
+- Truth-specific utterances at the far end of the range from the player's current position (a Truth 5 character doesn't see the Thread-claiming options; a Truth 0 character doesn't see the orthodox options)
 - Disposition-gated Knot-level utterances (the intimacy of the option shouldn't be visible until the relationship is there)
 
 ### Outcome Types
@@ -323,15 +323,15 @@ What's needed: a filter chain that takes a player utterance (from the Dialogue L
 
 Every NPC response to a player utterance passes through five filters in sequence. Each filter can: **pass** (response proceeds unmodified), **modify** (response character changes), **block** (response is impossible — NPC cannot engage), or **escalate** (response triggers arc moment or Contest).
 
-> **[ED-FI-0004, 2026-07-08 — pessimist-action audit REFINE (build-gating requirement, not a scope cut).** Each filter is simple in isolation, but the composed five-filter resolution of a *single* utterance (each filter itself branching on NPC Certainty / conviction-wound-count / Disposition-range / Compromise-Profile / Ethical-Framework alignment) is not "restatable after one reading" — a genuine Q-elegant strain on the *composed system*. Because this is a no-GM engine, that depth must run silently AND stay compactly legible to the player. **Requirement before build:** either simplify the chain, or ship a mandated compact player-facing readout — a single "why this NPC responded this way" line surfacing the one or two filters that actually bound the response — so the player can read the outcome without simulating five filters in their head. The Dialogue Lattice's underlying design (character-state-gated utterances, its Certainty Gate the corpus's clearest Ω-b mechanic) is sound and KEPT; this REFINE targets only the response-chain's legibility.]
+> **[ED-FI-0004, 2026-07-08 — pessimist-action audit REFINE (build-gating requirement, not a scope cut).** Each filter is simple in isolation, but the composed five-filter resolution of a *single* utterance (each filter itself branching on NPC Truth / conviction-wound-count / Disposition-range / Compromise-Profile / Ethical-Framework alignment) is not "restatable after one reading" — a genuine Q-elegant strain on the *composed system*. Because this is a no-GM engine, that depth must run silently AND stay compactly legible to the player. **Requirement before build:** either simplify the chain, or ship a mandated compact player-facing readout — a single "why this NPC responded this way" line surfacing the one or two filters that actually bound the response — so the player can read the outcome without simulating five filters in their head. The Dialogue Lattice's underlying design (character-state-gated utterances, its Truth Gate the corpus's clearest Ω-b mechanic) is sound and KEPT; this REFINE targets only the response-chain's legibility.]
 
 **Filter 1 — Information Filter**
 
 *Does the NPC have the conceptual framework to understand what the player is saying?*
 
-The NPC's Certainty and Thread Sensitivity determine their interpretive framework:
-- A Certainty 5 NPC receiving a Thread-reality utterance ("The thread here is unstable") does not have a framework for this. They interpret it through orthodoxy: heresy, delusion, or metaphor. Their response is filtered through that interpretation, not through the literal meaning of the utterance.
-- A Certainty 0 NPC receiving an orthodox utterance ("The Church's doctrine on the Catastrophe explains…") interprets it with skepticism or as social performance.
+The NPC's Truth and Thread Sensitivity determine their interpretive framework:
+- A Truth 5 NPC receiving a Thread-reality utterance ("The thread here is unstable") does not have a framework for this. They interpret it through orthodoxy: heresy, delusion, or metaphor. Their response is filtered through that interpretation, not through the literal meaning of the utterance.
+- A Truth 0 NPC receiving an orthodox utterance ("The Church's doctrine on the Catastrophe explains…") interprets it with skepticism or as social performance.
 - A Thread-aware NPC (TS 30+) receiving a TS-gated utterance from a player who also has TS 30+ is receiving it on a different channel than a non-aware NPC receiving the same words.
 
 **Effect of Information Filter:** Responses that pass unmodified are direct engagement. Responses that are modified by the Filter are indirect — the NPC is engaging with their interpretation of what was said, not what was said. This produces the authentic experience of talking past each other — and of the rare moment when genuine comprehension occurs.
@@ -384,9 +384,9 @@ Each utterance carries an implicit style (matching the Social Contest taxonomy: 
 
 ### Full Chain Example
 
-Player utterance: "I know about the Thread experiments in Gransol" [Evidence-gated: Church-Thread-Lab]. Target NPC: a Church-aligned senior official, Certainty 4, Conviction (Faith) Wound 1, Disposition −1.
+Player utterance: "I know about the Thread experiments in Gransol" [Evidence-gated: Church-Thread-Lab]. Target NPC: a Church-aligned senior official, Truth 4, Conviction (Faith) Wound 1, Disposition −1.
 
-- Filter 1 (Information): Certainty 4 — the NPC understands "Thread experiments" as heretical practice. Their interpretive frame is threat assessment, not acknowledgment. Modified: they hear this as an accusation of Church heresy, not a neutral disclosure.
+- Filter 1 (Information): Truth 4 — the NPC understands "Thread experiments" as heretical practice. Their interpretive frame is threat assessment, not acknowledgment. Modified: they hear this as an accusation of Church heresy, not a neutral disclosure.
 - Filter 2 (Conviction): Faith conviction, Wound 1. The utterance engages their conviction. Wound 1 response: defensive engagement with involuntary reveal. They do not deny the experiments — they argue for their doctrinal legitimacy. This is the crack: they've implicitly confirmed the experiments exist.
 - Filter 3 (Disposition −1): Defensive response character. They confirm without admitting. Minimal disclosure.
 - Filter 4 (Compromise): No offer in this utterance. Pass.
@@ -400,7 +400,7 @@ Without the filter chain, this would be a binary roll. With it, the resolution r
 
 The matrix is bidirectional. The player's Ontological Ledger gates what they can say; the NPC's Genome filters what response is produced; the outcome of the response modifies both:
 
-- Player's Ledger: Disposition changes, Evidence Track advances, Case Board updates, potential Certainty shift (if NPC reveals Thread truth)
+- Player's Ledger: Disposition changes, Evidence Track advances, Case Board updates, potential Truth shift (if NPC reveals Thread truth)
 - NPC's Genome: Conviction Wound state may change, Volatility may shift (sustained engagement either entrenches or erodes), hidden Affiliation may be revealed, Compromise Profile may activate
 
 This creates genuine interdependency: as both parties change, the conversation's possibility space changes. The options available in round 3 of a conversation are not the same as those available in round 1, because both Ledger and Genome have shifted.
@@ -409,11 +409,11 @@ This creates genuine interdependency: as both parties change, the conversation's
 
 The player's approach interacts with NPC axes as follows:
 
-|  | NPC Certainty 4–5 | NPC Certainty 2–3 | NPC Certainty 0–1 |
+|  | NPC Truth 4–5 | NPC Truth 2–3 | NPC Truth 0–1 |
 |--|---|---|---|
-| **Player Certainty 4–5** | Orthodox alignment; smooth channel | Partial comprehension; interpretive gap | Full blockage on Thread-content; purely political channel only |
-| **Player Certainty 2–3** | NPC reads uncertainty; moderate engagement | Both in transition; unpredictable; high Volatility sensitivity | Thread-aware NPC reads the hesitation; may attempt to pull player toward lower Certainty |
-| **Player Certainty 0–1** | Complete mismatch; NPC routes to heresy framing | NPC partially follows; sensitive to Thread utterances | Full alignment; Thread channel open; most direct conversation possible |
+| **Player Truth 4–5** | Orthodox alignment; smooth channel | Partial comprehension; interpretive gap | Full blockage on Thread-content; purely political channel only |
+| **Player Truth 2–3** | NPC reads uncertainty; moderate engagement | Both in transition; unpredictable; high Volatility sensitivity | Thread-aware NPC reads the hesitation; may attempt to pull player toward lower Truth |
+| **Player Truth 0–1** | Complete mismatch; NPC routes to heresy framing | NPC partially follows; sensitive to Thread utterances | Full alignment; Thread channel open; most direct conversation possible |
 
 The same interaction matrix applies for TS levels, Disposition ranges, and Conviction wound states — producing a multi-axis space of conversational possibility that is not a lookup table but an emergent result of the five-filter chain.
 
@@ -429,7 +429,7 @@ The same interaction matrix applies for TS levels, Disposition ranges, and Convi
 | S16 Emergent Arcs | Vector format; 120+ arc vectors | NPE deviation ≥ 5 NPCs become latent arc vectors; Dialogue Lattice arc-trigger outcomes fire arc vectors; Response Matrix Conviction Wound changes update arc evaluator |
 | S17 Scale Transitions | Domain Echo formula | Scene graph IS the Zoom In trigger system; scene graph templates address ED-545 |
 | Player Agency Proposal | Beliefs, Duties, Scene Slate, scene action budget | Scene Slate Priority 4/5 now populated by NPE-generated NPCs with Genomes; Belief-gate in Dialogue Lattice directly references active Beliefs; Belief-gated utterances bypass Sincerity Gate |
-| S18 Characters | All attributes; Certainty range; Histories | Certainty and TS now explicit gates in Dialogue Lattice, not just pool modifiers; Histories function as named tags that unlock History-gated utterances |
+| S18 Characters | All attributes; Truth range; Histories | Truth and TS now explicit gates in Dialogue Lattice, not just pool modifiers; Histories function as named tags that unlock History-gated utterances |
 | S04 Clocks | No changes to clock mechanics | Season-end ecology updates (Piety drift → ecology weight shift) flow through existing accounting phase |
 
 ---
@@ -440,7 +440,7 @@ The same interaction matrix applies for TS levels, Disposition ranges, and Convi
 |---|---|---|
 | NPE-01 | Confirm ecology weight formula. Current proposal derives weights directly from territory stat values (Piety 4 = +2 Church weight). Alternative: step-function (Piety ≥ 3 = Church dominant, Piety ≤ 2 = contested). | Affects generation smoothness vs categorical clarity |
 | NPE-02 | Persistence ceiling. How many generated NPCs can a territory hold before earlier ones are retired? Propose: cap at 3 persistent minor NPCs per territory per year; oldest retired if cap exceeded. | Prevents unbounded state accumulation |
-| DL-01 | Hidden vs visible-locked threshold. At what distance from a gate condition does an utterance become hidden vs shown-locked? Propose: Attribute/Evidence/History gates always visible-locked (player can pursue these). Certainty/TS gates are hidden at extreme distance (more than 2 Certainty points away), visible-locked when close. | Affects pacing of discovery vs information |
+| DL-01 | Hidden vs visible-locked threshold. At what distance from a gate condition does an utterance become hidden vs shown-locked? Propose: Attribute/Evidence/History gates always visible-locked (player can pursue these). Truth/TS gates are hidden at extreme distance (more than 2 Truth points away), visible-locked when close. | Affects pacing of discovery vs information |
 | DL-02 | Lattice node count per conversation. Propose: 3–5 utterances available per Lattice node, 2–4 nodes per conversation before natural exit or escalation trigger. | Balances expressiveness against complexity |
 | RR-01 | Filter failure handling. If Filters 1+5 both produce hostile modifiers, should they stack or cap? Propose: stack (maximum hostility reflects genuine incompatibility), cap at Disposition −2 (absolute floor for the round — the NPC is still present). | Affects ceiling of conversational failure states |
 

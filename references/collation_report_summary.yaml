@@ -859,11 +859,11 @@ rollups:
         - "designs/architecture/scale_transitions_v30.md"
         - "designs/architecture/videogame_mode_spec.md"
         - "designs/arcs/arc_expansion_v30.md"
-    - token: "Certainty"
+    - token: "Truth"
       total_count: 303
       file_count: 23
       severity: info
-      hint: "Uncategorized capitalized token \"Certainty\" appears 8 times in designs/architecture/complete_systems_reference.md"
+      hint: "Uncategorized capitalized token \"Truth\" appears 8 times in designs/architecture/complete_systems_reference.md"
       top_files:
         - "designs/architecture/complete_systems_reference.md"
         - "designs/arcs/arc_expansion_v30.md"

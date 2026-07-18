@@ -353,7 +353,7 @@ decisions:
     bucket: reject_mechanical_compound
     rule: "single_word_mechanical"
   starting_certainty:
-    token: "Starting Certainty"
+    token: "Starting Truth"
     bucket: reject_mechanical_compound
     rule: "mechanical_prefix"
   domain_echo:

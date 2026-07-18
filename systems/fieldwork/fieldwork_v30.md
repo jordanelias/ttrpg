@@ -19,7 +19,7 @@
 
 The Intelligibility Gradient produces two mechanical consequences:
 
-1. **Perception gates.** What a character can discover at a given depth depends on their Thread Sensitivity (TS), their Certainty, and their Coherence. Two characters standing in the same location inhabit genuinely different experiential worlds — not filtered views of one world.
+1. **Perception gates.** What a character can discover at a given depth depends on their Thread Sensitivity (TS), their Truth, and their Coherence. Two characters standing in the same location inhabit genuinely different experiential worlds — not filtered views of one world.
 
 
 ---
@@ -241,9 +241,9 @@ Einhir sites (Remnants, Anomalies, Breaches) render on the world map according t
 
 | Depth | Rendering Strain Effect |
 |-------|------------------------|
-| 3 (Remnant) | **Minor strain.** Characters with TS ≥ 10: no mechanical effect (their rendering processes Einhir traces without difficulty). Characters with TS < 10 who are present: vague unease (per observation table, params_threadwork.md). **Certainty pressure:** GM marks the character as having encountered something that challenges their operative framework. Certainty movement (if any) resolves at session end per GM judgment — not automatic. |
-| 4 (Anomaly) | **Significant strain.** Coherence check Ob 1 (the character's layer-2 unconscious self-rendering is challenged per P-15). Failure: Coherence −1. **Certainty −1** if Certainty ≥ 3 (the evidence is too direct to resist — active Thread phenomena contradict Solmund orthodoxy structurally). TS ≥ 30 characters perceive the anomaly's Thread configuration; TS < 30 characters perceive distortion without detail. |
-| 5 (Breach) | **Severe strain.** Coherence −1 automatic (layer-2 failure threshold — the rendering encounters the boundary of what it can process). **Certainty forced to ≤ 2** (the unintelligible ground is directly proximate). **TS +1** (the character's rendering, forced to operate at its absolute limit, permanently expands its capacity — not from perceiving the unintelligible itself, which remains inaccessible, but from perceiving the boundary). **Warning:** A practitioner at Coherence ≤ 2 who enters a Breach risks Rendering Crisis from the encounter alone (Breach −1 + any subsequent Thread operation −1 = Coherence 0). This is intentional — the Breach is the rendering's edge, and a practitioner near their own rendering's edge should not approach it without preparation or support. |
+| 3 (Remnant) | **Minor strain.** Characters with TS ≥ 10: no mechanical effect (their rendering processes Einhir traces without difficulty). Characters with TS < 10 who are present: vague unease (per observation table, params_threadwork.md). **Truth pressure:** GM marks the character as having encountered something that challenges their operative framework. Truth movement (if any) resolves at session end per GM judgment — not automatic. |
+| 4 (Anomaly) | **Significant strain.** Coherence check Ob 1 (the character's layer-2 unconscious self-rendering is challenged per P-15). Failure: Coherence −1. **Truth −1** if Truth ≥ 3 (the evidence is too direct to resist — active Thread phenomena contradict Solmund orthodoxy structurally). TS ≥ 30 characters perceive the anomaly's Thread configuration; TS < 30 characters perceive distortion without detail. |
+| 5 (Breach) | **Severe strain.** Coherence −1 automatic (layer-2 failure threshold — the rendering encounters the boundary of what it can process). **Truth forced to ≤ 2** (the unintelligible ground is directly proximate). **TS +1** (the character's rendering, forced to operate at its absolute limit, permanently expands its capacity — not from perceiving the unintelligible itself, which remains inaccessible, but from perceiving the boundary). **Warning:** A practitioner at Coherence ≤ 2 who enters a Breach risks Rendering Crisis from the encounter alone (Breach −1 + any subsequent Thread operation −1 = Coherence 0). This is intentional — the Breach is the rendering's edge, and a practitioner near their own rendering's edge should not approach it without preparation or support. |
 
 
 
@@ -342,7 +342,7 @@ Desperate Trail clears when: (a) any single action produces a Success or Overwhe
 **Procedure:**
 3. **Perception.** Roll (Spirit × 2) + History bonus + Thread Pool Score (TPS = TS ÷ 10, round down), TN 7, Ob per Depth. (PP-619, PP-626: Thread-Read is a Leap; all Leaps use (Spirit × 2) + History + TPS per PP-619. Attunement struck from Thread contact pools.)
 
-4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Certainty modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
+4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Truth modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
 5. **Coherence cost.** Per scale table (stage11 §11.1): Object/Personal scale = 0 auto-cost; Relational+ scale = −1 Coherence.
 6. **Evidence progress.** Apply degree result per §4.2 table.
 
@@ -725,7 +725,7 @@ Territory (Node2D / Node3D)
 | 50–69 | Full thread-sight. The substrate is experienced as a dimension of reality, not a hidden layer. | Shader: persistent overlay on all objects within Calamity zones. NPC aura indicators. |
 | 70+ | The boundary of the intelligible. What lies beyond is not darkness or void — it is the rendering's dissolution, the edge of what consciousness can constitute. | Shader: dissolve effect at zone boundaries. Particle systems for surfeit-of-being eruptions. Audio: low-frequency rumble. |
 
-**Certainty-dependent constitution:**
+**Truth-dependent constitution:**
 
 
 

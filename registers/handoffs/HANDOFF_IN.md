@@ -8,6 +8,36 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **⚠ IN lane-ledger AT CAP — archive pass needed before the next IN ED.** `registers/editorial_ledger_in.jsonl`
+  is **49,857 / 50,000 tokens (99.7%)** after `ED-IN-0074` (main #173 MC-wiring) + `ED-IN-0075` (Truth ruling).
+  The **next IN ED will exceed the register-size cap** (`tools/ci_register_size_check.py`, BLOCKING CI). Next IN
+  work must FIRST archive `status: resolved`/superseded entries to a `registers/editorial_ledger_in_archive*.jsonl`
+  per the chunking protocol, and confirm the citation consumers (`validate_ed_citations.py`,
+  `broken_dependency_checker.py`) read the archive too (they read all lane files today). Flagged 2026-07-18.
+
+- **ED-IN-0075 FILED 2026-07-18 — "Truth" consolidation RULED + SoT authored; corpus sweep STAGED.**
+  Jordan ruling (option A): the per-character metaphysical-stance axis is renamed **Truth**, consolidating
+  the former **Certainty Track** (`params/core.md` PP-551, 0–5) + the retired character **"Piety Track"** /
+  religious-standing meter (`derived_stats §14.2`). Keeps Certainty's engine-internal 0–5 spine + all PP-551
+  mechanics; **players see qualitative bands only, never the number**. Poles: 5 = *Himmelenger* (Solmund
+  orthodoxy) ↔ 0 = *Edeyja* (Thread-truth). OUT OF SCOPE (ruled A, not B/C): the 13-Conviction system
+  (`conviction_taxonomy_v30`) and the territory-scale **Piety (PT)** — both DISTINCT and unchanged. SoT
+  authored this pass: `engine/params/core.md` §Truth Track, `derived_stats_v30` §14.2 + §5.3.4,
+  `clock_registry_v30`, `glossary.md`, `alias_registry.yaml`; ledger ED-IN-0075; `CURRENT.md`.
+  **Corpus sweep EXECUTED (2026-07-18, second commit of this PR):** case-sensitive `\bCertainty\b → Truth`
+  across the live corpus — **89 files / 515 refs** (NPC stat blocks, world/fieldwork/threadwork docs, arcs,
+  machine-read `values_master`/`npc_registry`/`numeric_bounds`, `mechanical_terms_index`, glossary `CERT` entry).
+  Case-sensitive so prose "certainty"/"uncertainty" is untouched. Excluded: the SoT files authored in commit 1
+  (they intentionally keep "formerly Certainty" history), `deprecated/`, `designs/audit/`, `threadwork_superseded.md`.
+  **Residuals (deliberately deferred):** (a) the `sim/personal/conviction.py` internal identifier
+  `CERTAINTY_SCALING` / `certainty` param is RETAINED — renaming it would churn frozen `tests/sim` callers; the
+  docstring notes it now denotes the Truth value; (b) the glossary "Piety Track (CT)" **debate-position tracker**
+  is a distinct social-contest mechanic and keeps its name (out of scope for the Truth axis); (c) four
+  **params-bearing / generated** files retain "Certainty" (alias-covered) to avoid the co-file params-co-change
+  rule firing on a terminology-only change: `systems/factions/factions_personal_v30.md`,
+  `systems/threadwork/threadwork_v30.md` (+ `_infill`), and the generated `registers/patch_register_index.md`.
+  A params-coordinated rename (touching `engine/params/*` alongside) can fold these in later.
+
 - **ED-IN-0073 FILED 2026-07-17 — adversarial audit of the character-decision machinery (read-only).**
   `designs/audit/2026-07-17-character-decision-adversarial-audit/` (00_findings + 01_remediation_L1_L2 +
   02_emergence_oracle_spec). Three-axis attack (logic / narrative emergence / qualitative rendering);

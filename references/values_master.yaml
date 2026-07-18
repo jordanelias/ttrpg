@@ -1024,55 +1024,55 @@ values:
       value_raw: "** The character's operative cosmological framework"
       kind: formula
       formula: "** The character's operative cosmological framework"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 147
     - name: "Who has it"
       value_raw: "** All player characters"
       kind: formula
       formula: "** All player characters"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 159
     - name: "Starting value"
       value_raw: "** Assigned at creation by background"
       kind: formula
       formula: "** Assigned at creation by background"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 161
     - name: "Movement toward 5 (Solmund reinforcement)"
       value_raw: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
       kind: formula
       formula: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 165
     - name: "Mechanical effects"
       value_raw: "**"
       kind: formula
       formula: "**"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 167
-    - name: "Certainty 5"
+    - name: "Truth 5"
       value_raw: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
       kind: formula
       formula: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 169
-    - name: "Certainty 0"
+    - name: "Truth 0"
       value_raw: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
       kind: formula
       formula: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 171
     - name: "Church interaction by level"
-      value_raw: "** Certainty 5 → Heresy Investigation Ob +2"
+      value_raw: "** Truth 5 → Heresy Investigation Ob +2"
       kind: formula
-      formula: "** Certainty 5 → Heresy Investigation Ob +2"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      formula: "** Truth 5 → Heresy Investigation Ob +2"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 172
     - name: "Relationships"
       value_raw: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
       kind: formula
       formula: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 174
     - name: "Cover (derived)"
       value_raw: "Cognition + most relevant History for concealment/tradecraft"
@@ -1178,14 +1178,14 @@ values:
       section: "params_core.md — Core Dice Engine > Derived Scores"
       table_col: range
       line: 125
-    - name: "Certainty (formula)"
+    - name: "Truth (formula)"
       value_raw: "5 (starting, varies by background)"
       kind: formula
       formula: "5 (starting, varies by background)"
       section: "params_core.md — Core Dice Engine > Derived Scores"
       table_col: formula
       line: 126
-    - name: "Certainty (range)"
+    - name: "Truth (range)"
       value_raw: "0–5"
       kind: numeric
       numeric: 0
@@ -2734,9 +2734,9 @@ values:
       section: "params_threadwork.md — Thread Operations (v2.5) > Collective Forgetting — Companion Carrying (PP-279)"
       line: 612
     - name: "Additional consequence (untrained only)"
-      value_raw: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      value_raw: "**Truth −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
       kind: formula
-      formula: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      formula: "**Truth −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
       section: "params_threadwork.md — Thread Operations (v2.5) > Untrained Leap Auto-Fail (PP-281) [PROVISIONAL — ED-178]"
       line: 624
     - name: "Lenneth Almqvist"

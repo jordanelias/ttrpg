@@ -339,7 +339,7 @@ ED-PC-0012 [point-transmit floor-lock, sabre-class] filed as new, explicitly non
 | RC-5 — 9/20 gauge rows failing | triage per-row — **partially done** (ED-MB-0004, 2026-07-08: 3 of the failing rows diagnosed via A/B slot-swap, a slot-dependent `ANCHOR_MAP` asymmetry lead, not root-caused; ~6-7 rows still untriaged, exact scope disputed across sources — re-run `gauge_mb.py`, don't trust a frozen list) | MB gauge confidence | MB handoff |
 | ED-1090 residual — Command-clamp(1–7)-vs-cap-11 span-of-control reconciliation (the cap-11 ruling itself is `resolved`, 2026-07-02; this is the sub-question it explicitly carved out and left open) | keep TTRPG cap until ruled — **ED-MB-0006 (2026-07-08) changed what Command drives (pool is now `POOL_QUALITY_MODEL`, troop-quality×numbers) but did not touch this reconciliation** | MB Stage E | MB handoff |
 | fork 3 — convergence temporal window | same-Accounting priors; 4-season cosine discovery | narrative Stage 3 | v2 §10 |
-| fork 6 — Certainty-in-bake | include (headline ~1,200–2,700 units); fallback lexicon-swap (230–450) | Stage-5 build scoping | v2 §6/§10 |
+| fork 6 — Truth-in-bake | include (headline ~1,200–2,700 units); fallback lexicon-swap (230–450) | Stage-5 build scoping | v2 §6/§10 |
 | fork 10 — faction-count reconciliation (4–8 across four docs) | **ED-FA-0001 filed**; the count ruling itself is Jordan's (no default) | faction-scope banks/bindings | v2 §10; census §1.2 |
 | fork 11 — scenario_authoring authoring-vs-runtime | compile = authoring-time | Stage 1 compile home | v2 §10; module_contracts [OPEN] |
 | F-A — forecast fidelity per branch class | Layer A continuous / Layer B discrete; discrete per-lever deferred post-M1 | Stage 2.5 | v2 §3/§10 |

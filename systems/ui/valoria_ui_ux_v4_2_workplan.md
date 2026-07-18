@@ -170,7 +170,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 
 | Item | Finding | File + Section | Change | Dep source |
 |---|---|---|---|---|
-| 4.1 | F-7 | `valoria_ui_ux_v4_1.md` §5.3 | Rewrite 8-row table as 7-gate Dialogue Lattice taxonomy (Attribute, Evidence, Belief, Certainty, History, Disposition, TS). Add visibility-rules subsection (visible-locked vs hidden, hint text). Integrate existing Conviction-lock / Framework-aligned rows as gate-type variants | `investigation_systems_proposal_2026-04-15.md` §Gate Types |
+| 4.1 | F-7 | `valoria_ui_ux_v4_1.md` §5.3 | Rewrite 8-row table as 7-gate Dialogue Lattice taxonomy (Attribute, Evidence, Belief, Truth, History, Disposition, TS). Add visibility-rules subsection (visible-locked vs hidden, hint text). Integrate existing Conviction-lock / Framework-aligned rows as gate-type variants | `investigation_systems_proposal_2026-04-15.md` §Gate Types |
 | 4.2 | F-11 | `valoria_ui_ux_v4_1.md` §6.1 Step 2 | Add Style Decision UI: 4 plain-language buttons (Cite the record / Show the future / Raise the doubt / Anchor the fear). Appraise result surfaces recommendation | `integration_proposal_2026-04-15.md` Part 9 |
 | 4.3 | F-32 | `valoria_ui_ux_v4_1.md` §9.4 and §11.1 | Add Domain Echo Reference Table as pre-commit UI in Thread panel (§9.4) and Domain Action panel (§11.1). Table content per integration_proposal Part 8 (13 rows). Stature modifier visible | `integration_proposal_2026-04-15.md` Part 8 |
 | 4.4 | F-33 | `valoria_ui_ux_v4_1.md` §6.2 | Add Parliamentary Intent scene action for Standing 3+ characters. Binds Finding to next Parliamentary vote; +1D Corroboration appears on next Senator card | `integration_proposal_2026-04-15.md` Gap 3 |

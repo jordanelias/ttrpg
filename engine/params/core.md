@@ -161,7 +161,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Combat Pool | max(5, Relevant History + 6) | min 5 | **Agility-INDEPENDENT** resolution pool — ratified 2026-05-29 R1 (ED-901; re-ratified ED-900/904 with combat_engine_v1). Supersedes the struck (Agility × 2) + History + 3 form (PP-615/PP-247 era). Single source: `designs/scene/combat_engine_v1/` (see `references/module_contracts.yaml` personal_combat). ED-1084 propagation. |
 | Thread Fatigue | Spirit × 5 (threshold) | 5–35 | Thread action economy. Counts up from 0. Contact breaks at threshold. Variable operation costs (Pulling 5, Locking 7, Dissolution 10). Focus sets max operations per session (Focus − 1). (ED-694, replaces Contact Rounds = Focus) |
 | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`designs/scene/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `designs/scene/derived_stats_v30.md` §4 as authoritative.** |
-| Certainty | 5 (starting, varies by background) | 0–5 | Cosmological worldview: Solmund orthodoxy (5) → Thread acceptance (0). See PP-551 section below. |
+| Truth | 5 (starting, varies by background) | 0–5 | Per-character metaphysical stance — **consolidates the former Certainty Track + the character-scale piety / "religious standing" notion** (ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Numeric is engine-internal — **players see the qualitative band, never the number**. The 13 Convictions are a separate value-frame system (`conviction_taxonomy_v30.md`) and are unchanged. See Truth Track section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
@@ -181,21 +181,23 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
 
 
-## Certainty Track (PP-551 — redesigned from PP-289)
-**Definition:** The character's operative cosmological framework. Tracks the journey from Solmund orthodoxy to Thread cosmology acceptance. Both poles are stable states. This is a transformation track, not a deterioration track.
+## Truth Track (PP-551 — redesigned from PP-289; renamed from the former "Certainty Track" and consolidated with the character-scale piety / "religious standing" notion per ED-IN-0075)
+**Definition:** The character's operative metaphysical stance — where they sit on the axis between Solmund orthodoxy and acceptance of Thread cosmology as the true foundation of the rendered world. This subsumes both the former **Certainty** track (cosmological framework) and the vague character-scale **piety / "religious standing"** meter: a character's standing toward Church orthodoxy *is* their Truth band. Both poles are stable states; this is a transformation track, not a deterioration track. The **13 Convictions** (Faith, Order, Reason, … — `conviction_taxonomy_v30.md`) are a **separate, orthogonal value-frame system and are UNCHANGED** by this consolidation — Truth is *what one holds true about reality's foundation*; Convictions are *the values one judges by*.
 
-**Range: 0–5 (oscillating).** 5 = Full Solmund orthodoxy. 0 = Full Thread acceptance.
+**Pole exemplars:** the **Edeyja pole** (0 — knows Thread as the metaphysical foundation) ↔ the **Himmelenger pole** (5 — devout Solmund orthodoxy). Naming the poles after canonical exemplars, not after a "more/less true" reading of the number: high Truth = deep orthodoxy (which canon holds to be *sincerely wrong*), low Truth = Thread-truth acceptance.
+
+**Range: 0–5 (oscillating), engine-internal.** 5 = Full Solmund orthodoxy. 0 = Full Thread-truth acceptance. **Players never see the number — only the band label below.**
 
 | Value | Label | Operative belief |
 |-------|-------|-----------------|
-| 5 | Orthodox | Solmund created the rendered world. Thread phenomena are demonic or heretical. |
+| 5 | Orthodox *(Himmelenger pole)* | Solmund created the rendered world. Thread phenomena are demonic or heretical. |
 | 4 | Faithful | Doctrine is basically correct; Thread phenomena are unusual but explicable within faith. |
 | 3 | Questioning | Doctrine shows cracks; Thread experiences are real but not fully explained. |
 | 2 | Skeptic | Solmund framework has failed to explain too much; Thread substrate is real. |
 | 1 | Transitional | Thread cosmology is the better account; Solmund is a rendering, not the source. |
-| 0 | Accepted | Thread substrate is the ground of being; Solmund is a human rendering that exceeds it. |
+| 0 | Accepted *(Edeyja pole)* | Thread substrate is the ground of being; Solmund is a human rendering that exceeds it. |
 
-**Who has it:** All player characters. Named NPCs at GM discretion. Factions do not hold Certainty.
+**Who has it:** All player characters. Named NPCs at GM discretion. Factions do not hold Truth.
 
 **Starting value:** Assigned at creation by background. Devout orthodox: 5. Average Valorian: 4. Secular: 3. Post-First Leap practitioner: 2. Thread cosmology adherent: 1.
 
@@ -204,15 +206,15 @@ Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 
 **Movement toward 5 (Solmund reinforcement):** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1).
 
 **Mechanical effects:**
-- Certainty 5: +1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds).
-- Certainty 2–1: −1D in Church/orthodox contexts; Coherence recovery +1 per long rest.
-- Certainty 0: −2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification.
+- Truth 5: +1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds).
+- Truth 2–1: −1D in Church/orthodox contexts; Coherence recovery +1 per long rest.
+- Truth 0: −2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification.
 
-**Church interaction by level:** Certainty 5 → Heresy Investigation Ob +2. Certainty 2–1 → standard Ob. Certainty 0 → Investigation Ob −2; Excommunication automatic on capture.
+**Church interaction by level:** Truth 5 → Heresy Investigation Ob +2. Truth 2–1 → standard Ob. Truth 0 → Investigation Ob −2; Excommunication automatic on capture.
 
 **Relationships:** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth). Can diverge from Beliefs (declared vs confronted). Not tracked in Board Game mode — abstracted into PT dynamics.
 
-Spirit is unrelated to Certainty.
+Spirit is unrelated to Truth.
 
 ## Reach Terminology (PP-290) — replaces Close zone / Far zone
 - Short Reach: melee contact (≤ 1 metre). Applies to most melee weapons.

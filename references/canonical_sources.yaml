@@ -128,7 +128,7 @@ systems:
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
   victory:
     design_doc: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
+    canonical_sha__designs__provincial__victory_v30_md: "dd4f89da9af220dc6ed7c2bbc8137a333ddfe090"
     params: engine/params/bg/victory.md
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
@@ -215,7 +215,7 @@ systems:
     canonical_sha__systems___architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "40a2e46788347b30b12f47bc1333c3d2c566ce59"
+    canonical_sha__designs__scene__derived_stats_v30_md: "5ebff478516c320e58e46b89de9d50578c649b7d"
     supplemental: engine/params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
@@ -248,7 +248,7 @@ systems:
     design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "9dc9c5a093ffa44fc0c4fc09266bc68a5bdc4552"
     infill: references/throughlines_meta_infill.md
-    canonical_sha__references__throughlines_meta_infill_md: "923cdaf1d0d0339802ea42aab17e7af4194f50c4"
+    canonical_sha__references__throughlines_meta_infill_md: "12176c5612c1ac413007b37a3a89e0bcad247263"
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
@@ -304,7 +304,7 @@ systems:
     added: '2026-04-25 Stage 4'
   miraculous_event:
     design_doc: designs/scene/miraculous_event_v30.md
-    canonical_sha__designs__scene__miraculous_event_v30_md: "8ad342a3fe3075a77bc17aac356bb10a8c2d5c13"
+    canonical_sha__designs__scene__miraculous_event_v30_md: "c599040b984203de94a4c0cde289660f5ccba5d9"
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
@@ -388,7 +388,7 @@ systems:
 
   character_generation_questionnaire:
     design_doc: designs/personal/character_generation_questionnaire_v30.md
-    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "2689abd282ced34a94156fc320015b0c7afc1ec8"
+    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "fb4bbed40b2f7f7ce2eb640e8baea33db08f3ce6"
     status: design-direction
     added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
 
@@ -418,7 +418,7 @@ systems:
     canonical_sha__systems__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "c5351bbd43c8277da97cf79e56231d8641aaf52f"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "cc5845ded3612f3d9ab342870bf4daf1b14a65c1"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:

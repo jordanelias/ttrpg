@@ -21,7 +21,7 @@ Three games inform this direction:
 
 **Derive character state from narrative choices, not stat assignment.**
 
-The existing mechanical substrate (Convictions, Self-Other, Beliefs, histories, skills, TS/Coherence/Spirit/Certainty) is retained unchanged. What changes is the authoring interface:
+The existing mechanical substrate (Convictions, Self-Other, Beliefs, histories, skills, TS/Coherence/Spirit/Truth) is retained unchanged. What changes is the authoring interface:
 
 - **PC creation:** player answers 12–16 scenario-based questions across 4 Lifepath stages. Engine derives the full character-state object from the answer pattern. Player never sees Conviction weights, Self-Other values, or cultural template assignments.
 - **NPC authoring:** designer answers the same questions FOR each NPC. Same output: character-state object + textural hooks. NPC backstory expressed as specific authored answers to the same framework.
@@ -52,7 +52,7 @@ Total creation time: 10–15 minutes. Each question: short, evocative, Valoria-s
 
 | Stage | Derives | Textural hooks |
 |---|---|---|
-| **Origin** | Cultural template, caste, early Conviction seeding, starting Certainty, TS baseline, first Knot seed | Place of childhood, family situation, formative memory, first relationship |
+| **Origin** | Cultural template, caste, early Conviction seeding, starting Truth, TS baseline, first Knot seed | Place of childhood, family situation, formative memory, first relationship |
 | **Formation** | Conviction weight calibration (big moment), skill direction, Self-Other initial setting, second Knot seed | Training context, guiding principle, duty-vs-conscience moment, mentor/teacher |
 | **Vocation** | History tag, skills, Belief #1 generation, content-access assignment | What you do, what you're best at, what you believe, what you can't forget |
 | **Catalyst** | Arc-initiating event, Goal, final Conviction calibration, possible starting Scar | What changed everything, what you want now, what you'd protect, who you want to become |
@@ -107,7 +107,7 @@ Preserves hooks (the NPC's history happened). Allows agency (the player's interp
 
 ## §7 — Relationship to existing canon
 
-The questionnaire does NOT replace the mechanical substrate. Convictions, Self-Other, Beliefs, histories, skills, TS/Coherence/Spirit/Certainty — all identical to what exists. The questionnaire is a **derivation interface** that produces the same character-state object the substrate defines.
+The questionnaire does NOT replace the mechanical substrate. Convictions, Self-Other, Beliefs, histories, skills, TS/Coherence/Spirit/Truth — all identical to what exists. The questionnaire is a **derivation interface** that produces the same character-state object the substrate defines.
 
 - `conviction_taxonomy_v30` (PP-684) remains canonical.
 - `conviction_migration_roster_v30` (PP-685) remains canonical for existing NPC profiles; questionnaire answers supersede migration-roster entries when authored.

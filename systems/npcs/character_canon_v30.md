@@ -57,7 +57,7 @@ Each named NPC in Part B follows this schema. The schema parallels the per-facti
 
 ```
 ## <Name> — <Title / Role> (<Faction>)
-[Tier · Status · TS · Coherence · Spirit · Certainty · Self-Other]
+[Tier · Status · TS · Coherence · Spirit · Truth · Self-Other]
 
 Identity            — full name, pronouns, title, faction, archetype, role within faction
 Convictions         — primary 1–3 (13-Conviction weights, sum 0.6–0.8) + cultural template
@@ -79,7 +79,7 @@ Physical Signature  — sensory anchors where they exist (Edeyja's Thread injury
 Speech Register     — diction, register, characteristic patterns; defaults to focalization-
                       driven via prose-writer
 Personal-scale axes — Thread Sensitivity (0–100) · Coherence (0–10) · Spirit (1–7) ·
-                      Certainty (0–5) — with [PROVISIONAL] flags where authored values
+                      Truth (0–5) — with [PROVISIONAL] flags where authored values
                       diverge from defaults
 Knot/Bond capacity  — relational thresholds + named close Knots
 Key Relationships   — foil pairings, advisor-principal links, faction Cascade position
@@ -219,9 +219,9 @@ Old Belief → permanent Scar. New Belief forms.
 
 ### §6.4 Thread Operation → Conviction Scar Triggers (ED-663, ED-664)
 
-Per `conviction_track_v1 §3`. Thread operations witnessed by NPCs produce Scars. Parallels Certainty Track (cosmological framework shift; `params_core` PP-551) but targets a different track: Certainty = framework shift; Scar = moral wound.
+Per `conviction_track_v1 §3`. Thread operations witnessed by NPCs produce Scars. Parallels Truth Track (cosmological framework shift; `params_core` PP-551) but targets a different track: Truth = framework shift; Scar = moral wound.
 
-Witness requirement: direct witness OR credible testimony (Evidence Track + Disposition ≥ +1). Certainty scaling: C5 +1 Scar severity; C0 −1; C2–3 standard. Season cap: max 1 Scar/season from Thread witnessing per NPC. Mending exception: never produces Scars. **Faith specificity:** Faith-primary NPCs Scar from ANY Thread operation except Mending.
+Witness requirement: direct witness OR credible testimony (Evidence Track + Disposition ≥ +1). Truth scaling: C5 +1 Scar severity; C0 −1; C2–3 standard. Season cap: max 1 Scar/season from Thread witnessing per NPC. Mending exception: never produces Scars. **Faith specificity:** Faith-primary NPCs Scar from ANY Thread operation except Mending.
 
 Player Conviction Checks (ED-664): player witnesses Thread event → Spirit pool, TN 7, Ob 1. Failure: active Conviction shaken (mechanical = NPC Scar 1 effect) for 1 season.
 
@@ -278,11 +278,11 @@ Whether the will continues to grip when rendering fails. From the prose-writer s
 
 **Spirit is essentially absent from canonical NPC sheets.** Per Decision Log §11 D5: per-NPC sheets in Part B carry default Spirit 4 (mid-range neutral) with `[ASSUMPTION]` flag. Where the design pressure clearly diverges (Edeyja high; Vaynard at Arc C low), the sheet notes the design pressure but does not author a specific value.
 
-### §7.4 Certainty (0–5)
+### §7.4 Truth (0–5)
 
-Cosmological framework alignment with Solmundan orthodoxy. Distinct from Conviction (the moral-belief axis) — Certainty tracks whether the actor's interpretive framework matches Church doctrine.
+Cosmological framework alignment with Solmundan orthodoxy. Distinct from Conviction (the moral-belief axis) — Truth tracks whether the actor's interpretive framework matches Church doctrine.
 
-| Certainty | Label |
+| Truth | Label |
 |---|---|
 | 5 | Orthodox |
 | 4 | Faithful |
@@ -302,7 +302,7 @@ The prose-writer's coherence-tier weighting requires these axes be tracked indep
 - A low-Coherence **high-Spirit** PC grips the decision (Beckett texture) while rendering fails.
 - A low-Coherence **low-Spirit** PC dissolves into the dissolution (Lispector texture) — agency yields.
 
-Conflating them produces incorrect prose. Per-NPC sheets in Part B always show all four values (TS / Coherence / Spirit / Certainty) so the prose-writer can calibrate without inference.
+Conflating them produces incorrect prose. Per-NPC sheets in Part B always show all four values (TS / Coherence / Spirit / Truth) so the prose-writer can calibrate without inference.
 
 ---
 
@@ -318,8 +318,8 @@ Per `npc_behavior_v30 §5`. Generic transition triggers + per-NPC arc profiles.
 | Belief Scar (per §6 above) | Per Scar accumulation | Per Scar accumulation | Per Scar accumulation |
 | Faction Stability ≤ 1 | Collapses to Liberty | All Resonant Styles suppressed | Any action that improves Stability, regardless of Framework |
 | PC Knot ≥ Intimate | Solidarity Resonant Style activates (if absent) | — | NPC weighs PC relationship in Decision Fork |
-| TS crosses threshold (Stirring 30 / Active 50) | Ontological confrontation challenges Conviction | Evidence style intensifies | Certainty movement; less predictable behavior |
-| Certainty reaches 0 | Conviction permanently altered | Primary becomes Authority (old framework's authority void) | NPC in crisis; new arc phase |
+| TS crosses threshold (Stirring 30 / Active 50) | Ontological confrontation challenges Conviction | Evidence style intensifies | Truth movement; less predictable behavior |
+| Truth reaches 0 | Conviction permanently altered | Primary becomes Authority (old framework's authority void) | NPC in crisis; new arc phase |
 | Faction eliminated | Conviction collapses to Liberty | All styles suppressed for 1 season (shock) | NPC becomes unaffiliated actor; new Belief set forms |
 
 **Constrained sub-arc state** (ED-586): when faction Mandate < 3, NPC's primary arc behaviors requiring Mandate expenditure suspend. NPC enters Constrained state — Priority 2/3 actions replaced by Priority 6 (institutional rebuilding). Conviction and Resonant Style unchanged; only behavioral priority sequence shifts. Mandate ≥ 3 → exits Constrained, resumes prior arc.
@@ -354,12 +354,12 @@ Per `npc_behavior_v30 §11` (PP-661). Roster Tracking Capacity defines tracking 
 |---|---|---|
 | **Tier 1** (Tracked Named) | Full per-season state evolution; Belief revision; Scar accumulation; arc transitions | All schema fields populated; ≥1 Belief; ≥1 Goal; Inspiration; Arc Map A/B/C minimum; Resonant Style primary+secondary |
 | **Tier 2** (Operational Supporting) | State updates per-season; Belief tracked; arc trajectory tracked | Identity + Convictions + Behavioral AI flaw + Goal + Inspiration (where authored) + Arc trajectory; Beliefs **may be implicit in Behavioral AI prose** |
-| **Tier 3** (Inner Circle / Council) | Conviction tracked; Disposition updated; arc not tracked individually | Identity + Conviction tag + MS + Certainty + 1-line disposition note. **Below prose-writer minimum** — see D3. |
+| **Tier 3** (Inner Circle / Council) | Conviction tracked; Disposition updated; arc not tracked individually | Identity + Conviction tag + MS + Truth + 1-line disposition note. **Below prose-writer minimum** — see D3. |
 | **Background** | Cohort-tracked; no individual evolution | N/A — not in this consolidation |
 
 ### §9.2 Tier-3 prose-feedstock deficit
 
-The audit (2026-05-07) verified: Tier-3 NPCs (Crown IC, Hafenmark IC, Varfell Jarl Council, Cardinal Officers — ~14 NPCs) carry only Conviction tag + MS + Certainty + brief disposition note. **Below the prose-writer's stated minimum of one anchored dimension.**
+The audit (2026-05-07) verified: Tier-3 NPCs (Crown IC, Hafenmark IC, Varfell Jarl Council, Cardinal Officers — ~14 NPCs) carry only Conviction tag + MS + Truth + brief disposition note. **Below the prose-writer's stated minimum of one anchored dimension.**
 
 When `articulation_layer §3.1` Tier 2 cut scenes fire on Inner Circle NPCs (e.g., Torvi Heljason as Baralta's legal advisor at a Knot rupture trigger), the prose-writer has only one anchored dimension to draw from. Per Decision Log §11 D3: Part B sheets for Tier-3 NPCs carry `[GAP — Phase B authoring]` per missing field. **Texture floor extension is recommended at minimum** ≥1 Belief + ≥1 Goal + ≥1 Inspiration per Tier-3 NPC. ~14 NPCs × 3 fields = ~42 author-decisions.
 
@@ -390,7 +390,7 @@ The prose-writer skill (`skills/prose-writer/SKILL.md` line 153) names the minim
 | (implicit) Voice anchor | UNEVEN | First-person Beliefs in `npc_behavior §2` pulled into `Beliefs` field. Coverage gaps flagged. |
 | (implicit) Speech register | OFFLOADED to prose-writer | Per-NPC notes added where character_analyses gives diction guidance. Prose-writer remains primary calibrator. |
 | (implicit) Physical signature | NEAR-ABSENT | Pulled where authored (Edeyja Thread injury). [GAP] for the rest. |
-| (implicit) TS / Coherence / Spirit | TS reliable; Coherence partial; Spirit absent | All four axes (incl Certainty) shown per NPC; defaults flagged with [ASSUMPTION]. |
+| (implicit) TS / Coherence / Spirit | TS reliable; Coherence partial; Spirit absent | All four axes (incl Truth) shown per NPC; defaults flagged with [ASSUMPTION]. |
 
 ### §10.2 What the prose-writer cannot consult an NPC sheet for
 
@@ -425,7 +425,7 @@ Decisions made in producing this consolidation. Surfaced rather than silently re
 |---|---|---|
 | **D1** | Conviction values when sources conflict (e.g., Maret Uln: behavior says Equity/Reason; migration roster says Honor/Authority/Identity. Yrsa Vossen: behavior says Equity/Continuity; migration roster says Honor/Warden/Community.) | Use `conviction_migration_roster_v30` (PP-685) values as **primary** in per-NPC sheets — most-recent canonical. Show legacy values inline as "← was [old]" for traceability. Flag any case where I'm uncertain with `[CONFLICT-RESOLVE: <which I picked> — basis: <why>]`. **Do not attempt to silently regenerate `npc_behavior §2` from migration roster** — that's a separate propagation cycle. |
 | **D2** | Ethical Framework labels SUPERSEDED per PP-684 §6 + alias_registry, but still embedded in `npc_behavior §2` and mechanically active via Ob modifiers | Retain as **descriptive disposition tag** ("Crown / Virtue legacy") with `[SUPERSEDED → mechanical role replaced by PP-686 §3.7 triadic Ob calc]` note. Mechanical Ob modifiers stay attached to the label since they're live in engine. **Do not silently re-derive Ob modifiers from conviction vector** — that's a separate cycle. |
-| **D3** | Tier-3 NPCs (Inner Circles / Cardinal Officers / Jarl Council) carry only Conviction + MS + Certainty + 1-line note. Below prose-writer minimum. | Mark `[GAP — Phase B authoring]` per missing field per NPC. **Do not invent.** Recommend texture-floor extension: ≥1 Belief + ≥1 Goal + ≥1 Inspiration per Tier-3 NPC. |
+| **D3** | Tier-3 NPCs (Inner Circles / Cardinal Officers / Jarl Council) carry only Conviction + MS + Truth + 1-line note. Below prose-writer minimum. | Mark `[GAP — Phase B authoring]` per missing field per NPC. **Do not invent.** Recommend texture-floor extension: ≥1 Belief + ≥1 Goal + ≥1 Inspiration per Tier-3 NPC. |
 | **D4** | Empty-body sections (Vaynard Arc A and Arc B in `npc_behavior §5.2`; ~5 character_analyses entries title-only; ~40% of foil pairings; redirect-stub sections in `npc_behavior §1.2 / §3.3 / §3.4` pointing to stale `conviction_track_v1`) | Surface what exists; flag `[GAP]` for empty bodies. **Do not fabricate.** |
 | **D5** | Spirit values absent from canonical NPC sheets; prose-writer treats Spirit as third independent axis at Coherence ≤ 4 | Default Spirit 4 (mid-range neutral) per prose-writer guidance. Flag with `[ASSUMPTION]` per NPC where applied. Where design pressure clearly diverges (Edeyja high; Vaynard at Arc C low), note the pressure but do not author specific value. |
 | **D6** | Baralta (Hafenmark sovereign claimant) misfiled in `migration_roster §2.3` under "Ecclesiastical Faction" with cultural template `ecclesiastical` | **Surface, do not fix.** Per-NPC sheet shows `[CONFLICT: migration_roster §2.3 places under Ecclesiastical with template "ecclesiastical"; npc_behavior §2.3 places her in Hafenmark with Categorical Imperative framework. Recommend correction to hafenmark_procedural template — defer to Jordan.]` |

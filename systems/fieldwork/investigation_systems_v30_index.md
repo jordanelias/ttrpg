@@ -17,7 +17,7 @@
 | 2 | 3 | 2 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 3 | 4 | 2 | Date: 2026-04-15-21-07 |
 | 4 | 5 | 2 | Affects: S10 NPC Behavior, S14 Fieldwork, S12 Social Contests, S16 Emergent Arcs, S17 Scale Transitions, S03 Geography, S18 Characters |
-| 5 | 6 | 2 | Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Certainty is personal, Conviction is cultural-ethical, Thread substrate is metaphysical) |
+| 5 | 6 | 2 | Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Truth is personal, Conviction is cultural-ethical, Thread substrate is metaphysical) |
 | 6 | 10 | 2 | ARCHITECTURE |
 | 7 | 53 | 2 | SYSTEM 1: NPC POPULATION ENGINE (NPE) |
 | 8 | 55 | 3 | What exists / what's missing |
@@ -60,7 +60,7 @@
 | 2 | 17 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) |
 | 3 | 6 | Date: 2026-04-15-21-07 |
 | 4 | 34 | Affects: S10 NPC Behavior, S14 Fieldwork, S12 Social Contests, S16 Emergent Arcs, S17 Scale Transitions, S03 Geography, S18 Characters |
-| 5 | 67 | Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Certainty is personal, Conviction is cultural-ethical, Thread substrate is metaphysical) |
+| 5 | 67 | Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Truth is personal, Conviction is cultural-ethical, Thread substrate is metaphysical) |
 | 6 | 462 | ARCHITECTURE |
 | 7 | 1,419 | SYSTEM 1: NPC POPULATION ENGINE (NPE) |
 | 8 | 130 | What exists / what's missing |

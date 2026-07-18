@@ -35,7 +35,7 @@
 
 A **relational edge** between two named NPCs models a binding, oath, kinship, or rivalry that shapes how each interprets the other's actions and how their behavior couples in faction-Cascade aggregation. Each edge has a canonical type (`§2`), directionality, strength, formation conditions, strain accumulation, capacity, break/rupture rules. Edges compose: two NPCs may have multiple edges (a sworn-bond ally who is also a rival; a liege-vassal who is also kin). Composition rules in `§5`.
 
-The state lives on the dyad, not on individual NPCs. Each NPC's individual character state (Conviction vector, Self-Other, TS, Coherence, Spirit, Certainty per `character_canon §3-§7`) is unchanged.
+The state lives on the dyad, not on individual NPCs. Each NPC's individual character state (Conviction vector, Self-Other, TS, Coherence, Spirit, Truth per `character_canon §3-§7`) is unchanged.
 
 **The substrate question this answers.** The framework has *renderable* (`canon/01 §Am 3`) per individual; relational edges are renderable *between* individuals. A patron-client tie is substrate-real per `М-3` (substrate grounds all): the rendering of authority flowing from patron to client *is* a configuration of Thread-substrate at the dyadic level, not a flavor-tag. This grounds NPC-NPC mechanics ontologically the same way `М-9` grounds clinical-trauma vocabulary at the personal level.
 

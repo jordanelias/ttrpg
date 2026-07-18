@@ -94,11 +94,11 @@ Scale: 0–7 (where applicable) or 0–10 for factions with active research infr
 |---|---|---|---|
 | Border zone | Snapped | Shifting Objects: thread configurations at maximum tension; objects around the expedition behave unpredictably | Thread operation (Weaving Ob 2 to stabilise) or Agility Ob 2 to avoid. Failure: 1 Wound per exposed character. |
 | Inner zone | Oscillating | Gap incursion: continuous Gap formation produces monstrous entities | Monstrous entity encounter (Mode 1 or 2; see §5.13). Scale determines combat procedure: personal or mass. |
-| Core zone | Locked | Configuration instability: the frozen moment of catastrophe exerts pressure on present-state consciousness | All non-practitioners: Spirit check Ob 2 per round of exposure or Certainty −1. Practitioners: Contact duration halved (Thread density saturates the working space). Forgetting Check fires at full Ob for Core Sites (Ob 4). |
+| Core zone | Locked | Configuration instability: the frozen moment of catastrophe exerts pressure on present-state consciousness | All non-practitioners: Spirit check Ob 2 per round of exposure or Truth −1. Practitioners: Contact duration halved (Thread density saturates the working space). Forgetting Check fires at full Ob for Core Sites (Ob 4). |
 
 ### Expedition Failure
 
-- All participants: Certainty −1
+- All participants: Truth −1
 - Retreat from Core zone: Agility Ob 2 or an additional encounter fires before the party exits
 
 ### Expedition Success Indicators

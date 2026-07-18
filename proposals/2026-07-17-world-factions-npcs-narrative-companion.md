@@ -30,7 +30,7 @@ inline and summarized in Part IV.
 The companion builds directly on material the assessment flagged as unsettled, and repeats the flags here so
 a reader of *this* document alone is not misled:
 
-- The Solmund cosmology it extends (the Forgetting, the Perceptual Prophylaxis, Certainty) is **DRAFT with no
+- The Solmund cosmology it extends (the Forgetting, the Perceptual Prophylaxis, Truth) is **DRAFT with no
   `CURRENT.md` row.**
 - Several proposals build on the **~90%-unlanded comparative-governance research** (`research/governance/`,
   the two-signal primitive, the standing-as-currency finding).

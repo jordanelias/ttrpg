@@ -5,7 +5,7 @@
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-13
-## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
+## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Truth), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
 ## Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9)
 ## Patches: None (new system)
 
@@ -53,7 +53,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Mending Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
 | Secondary Resonant Style | Solidarity | Activates only via intimate Knot. He is guarded; reaching him personally requires sustained relationship. |
 | Thread Sensitivity | 28 (near Stirring) | Unrecognised. His proximity to Thread awareness makes Evidence attacks partially effective but he lacks the perceptual framework to integrate what he is told. |
-| Certainty | 3 (Questioning) | Already cracking. Further decline possible through play. |
+| Truth | 3 (Questioning) | Already cracking. Further decline possible through play. |
 
 **Beliefs:**
 2. "The Restoration whispers truth, but acting on it would destroy everything I maintain."
@@ -73,7 +73,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Evidence | Show him facts he cannot dismiss within his theology. Specific, documented, verifiable. His Faith claims the world is fully intelligible through Solmund's revelation. Evidence that the world is not what revelation says strains the framework where it is weakest. |
 | Secondary Resonant Style | Authority | The only authority he would recognise above his own is the Holy See or a direct Solmund-connected revelation. Practically unreachable — but a Cardinal defection or inner-tradition document authenticated by Church archival methods could fire this. |
 | Thread Sensitivity | 0 | Theologically foreclosed (Foundations §9.1). Cannot develop without confrontation that shatters the prophylaxis. |
-| Certainty | 5 (Orthodox) | Maximum. First Coherence loss per session nullified. +1D in Church contexts. |
+| Truth | 5 (Orthodox) | Maximum. First Coherence loss per session nullified. +1D in Church contexts. |
 
 **Beliefs:**
 1. "Solmund's word is the only truth — I will root out heresy wherever I find it."
@@ -94,7 +94,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Evidence | Show her that constitutional procedure has failed to prevent the specific injustice she claims it prevents. She cannot dismiss evidence that her own system is broken without abandoning her standard. Documents, records, historical cases — these are her language. |
 | Secondary Resonant Style | Consequence | If Evidence fails (she rationalises the failure as procedural error, not systemic), Consequence activates: project the future where continued proceduralism permits Church domination. Her faith and her politics are structurally incompatible; Consequence exposes that. |
 | Thread Sensitivity | 0 | Essentialist theology forecloses development. |
-| Certainty | 4 (Faithful) | Doctrine basically correct; unusual phenomena explicable within faith. |
+| Truth | 4 (Faithful) | Doctrine basically correct; unusual phenomena explicable within faith. |
 
 **Beliefs:**
 1. "Constitutional procedure IS justice — when it is followed, justice follows."
@@ -114,7 +114,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Consequence | Show him that his pursuit of Thread knowledge is producing specific bad outcomes — for Valoria, for his duchy, for himself. His consequentialism evaluates actions by results. Demonstrate the results are bad. |
 | Secondary Resonant Style | Evidence | If Consequence fails (he judges the bad outcomes acceptable), Evidence activates: present Thread-level data he cannot explain within his current TK level. He is a collector; present something worth more than what he is sacrificing. |
 | Thread Sensitivity | 14 (Dormant) | Unrecognised. At TS 14+, Private Collection use triggers Spirit check for Discovery Event. |
-| Certainty | 3 (Questioning) | Secular intellectual. Thread reality is a hypothesis he is testing. |
+| Truth | 3 (Questioning) | Secular intellectual. Thread reality is a hypothesis he is testing. |
 
 **Beliefs:**
 1. "Thread reality is the most important discovery in a generation — I will understand it."
@@ -135,7 +135,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Consequence | Show her that her actions are producing the instability she exists to prevent. The Löwenritter autonomy track (Loyal → Restless → Autonomous → Split) IS her consequence vulnerability: she is keeping count of the Crown's failures. Turn the count on her own decisions. |
 | Secondary Resonant Style | Solidarity | Ehrenwall is a soldier. She has comrades. If a Knot-connected PC or NPC makes a personal appeal grounded in shared service, shared sacrifice, or military bonds, it reaches her where strategic argument cannot. |
 | Thread Sensitivity | 0 (military career, no practitioner exposure — ED-392 resolved) |
-| Certainty | 4 (Faithful — conventional piety, martial background. Consistent with Order/Autonomy Conviction — ED-393 resolved) |
+| Truth | 4 (Faithful — conventional piety, martial background. Consistent with Order/Autonomy Conviction — ED-393 resolved) |
 
 **Beliefs:**
 1. "Valoria endures, whatever the cost — I will ensure it."
@@ -156,7 +156,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Solidarity | She is a grassroots organiser. Her commitments are relational. Appeal to the people she has made promises to, the communities that depend on her, the practitioners she has sheltered. She cannot abandon relationships without abandoning her identity. |
 | Secondary Resonant Style | Consequence | If Solidarity fails (she judges the relationship cost acceptable for the cause), show her that her methods are producing specific harm to the people she claims to serve. The movement's agitation increasing Public Instability that hurts the working population she fights for. |
 | Thread Sensitivity | 0 | Non-practitioner. Charisma 5+, Circles 3+ in working-class networks. |
-| Certainty | 2 (Skeptic) | Solmund framework has failed her community. Thread substrate is probably real. |
+| Truth | 2 (Skeptic) | Solmund framework has failed her community. Thread substrate is probably real. |
 
 **Beliefs:**
 3. "Violence is the tool of the powerful — the movement wins through community, not force."
@@ -175,7 +175,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Consequence | Hann is a doer. Show him that his operations are producing bad outcomes. Logistics-focused minds respond to demonstrated operational failure. |
 | Secondary Resonant Style | Evidence | If Consequence fails, present evidence of structural problems in his network — compromised cells, settlement-layer broker infiltration (post-Niflhel dissolution), Church surveillance he has missed. His operational pride is the access point. |
 | Thread Sensitivity | 0 | Non-practitioner. Lower Charisma than Vossen, higher Circles in logistics and street-level networks. |
-| Certainty | 3 (Questioning) | Less committed than Vossen to Thread cosmology; more committed to practical liberation. |
+| Truth | 3 (Questioning) | Less committed than Vossen to Thread cosmology; more committed to practical liberation. |
 
 **Beliefs:**
 1. "The movement needs infrastructure, not speeches — I will build what Yrsa inspires."
@@ -196,7 +196,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Solidarity | He is young, isolated, and has been treated as a political asset rather than a person. Anyone who treats him as a person — who builds a genuine relationship — gains enormous leverage. |
 | Secondary Resonant Style | Authority | He respects power and competence. If Solidarity fails (the relationship is insufficient), demonstrate that you are the strongest actor in the room. He follows strength when he cannot follow friendship. |
 | Thread Sensitivity | 0 (court-raised, no practitioner exposure — ED-395 resolved. Note: Conviction window ED-618 means mutable through play S1-8) |
-| Certainty | 4 (Faithful — conventional education. Mutable through faction investment per Conviction window ED-618 — ED-396 resolved) |
+| Truth | 4 (Faithful — conventional education. Mutable through faction investment per Conviction window ED-618 — ED-396 resolved) |
 
 **Beliefs:**
 
@@ -215,7 +215,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Resonant Style | Evidence | "Show her the Thread state data." Abstract appeals do not register. Demonstrated competence in Thread work does. Her entire worldview is calibrated to what she can perceive at TS 75–80. |
 | Secondary Resonant Style | Consequence | If Evidence fails (she has already perceived the data and judges it insufficient), project the long-term trajectory: the wardens are dying out, the Gaps are expanding, without outside help the Southernmost falls within a generation. She knows this already. Hearing it stated forces confrontation with what she has been avoiding. |
 | Thread Sensitivity | 75–80 | Highest living practitioner. |
-| Certainty | 0 (Accepted) | Full Thread acceptance. Solmund is a rendering, not the source. |
+| Truth | 0 (Accepted) | Full Thread acceptance. Solmund is a rendering, not the source. |
 | Coherence | 9 | Sustained through disciplined practice. |
 
 **Beliefs:**
@@ -238,7 +238,7 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 | Primary Resonant Style | Evidence | Same vulnerability structure as Vaynard but directed differently: show her evidence that collaboration with RM is producing worse outcomes than Vaynard's independent path would have. |
 | Secondary Resonant Style | Solidarity | She has relationships in both Varfell and RM networks. Relational appeals carry weight. |
 | Thread Sensitivity | 35 (sustained Varfell Thread exposure under Vaynard's intelligence program. Crosses Active threshold — can perform Thread-Read. Affects arc behavior if Vaynard eliminated — ED-397 resolved) |
-| Certainty | 2 (Skeptic — secular intellectual like Vaynard but more community-oriented. Does not deny Thread reality but approaches it pragmatically — ED-398 resolved) |
+| Truth | 2 (Skeptic — secular intellectual like Vaynard but more community-oriented. Does not deny Thread reality but approaches it pragmatically — ED-398 resolved) |
 
 **Beliefs:**
 1. "Vaynard's path led to destruction — knowledge must serve the community, not the collector."
@@ -256,7 +256,7 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 | Primary Resonant Style | Consequence | The Council is a pragmatic body. Show them that their current course is losing money, losing market share, losing guild autonomy. They respond to economic outcomes. |
 | Secondary Resonant Style | [None at collective level. Individual guild leaders can be targeted through Evidence or Solidarity.] |
 | Thread Sensitivity | 0 (collective) | Individual guild members may vary. |
-| Certainty | Variable (collective) | Average 4. |
+| Truth | Variable (collective) | Average 4. |
 
 **Beliefs:**
 1. [Collective] "Commerce sustains Valoria — whoever threatens trade threatens everyone."
@@ -306,7 +306,7 @@ Church heresy designation operates differently inside vs outside Church-controll
 | Primary Resonant Style | Consequence | Show him that the Ministry's neutrality enables harm. His Continuity conviction claims the work is apolitical. Demonstrated political consequences challenge this. |
 | Secondary Resonant Style | Evidence | Present documentary evidence the Ministry has been politicized — census alterations, maintenance priority biases, intelligence leaks to factions. |
 | Thread Sensitivity | 12 (Hidden) | Encountered Thread-adjacent phenomena in deep archives. Documents that remember differently. Does not understand what he has seen. |
-| Certainty | 3 (Questioning) | Institutional certainty intact. Metaphysical certainty disrupted. |
+| Truth | 3 (Questioning) | Institutional certainty intact. Metaphysical certainty disrupted. |
 | Home Settlement | S-013 Ehrenfeld Market |
 
 **Beliefs:**
@@ -354,7 +354,7 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 ### §2.15 Crown Inner Circle [PROVISIONAL: ED-634 — names proposed, naming pending Jordan]
 
-| Role | Name | Conviction | MS | Certainty | Notes |
+| Role | Name | Conviction | MS | Truth | Notes |
 |------|------|------------|-----|-----------|-------|
 | Royal Marshal | Wilhelm Voss | Order | Authority | 4 | Distrusts Löwenritter. Disposition vs Southern Einhir: −1. |
 | Lord Treasurer | Annalie Reichard | Precedent | Evidence | 5 | Distant Feldhaus cousin. Disposition toward Baralta: +1. |
@@ -364,14 +364,14 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 ### §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17)
 
-| Role | Name | Conviction | MS | Certainty |
+| Role | Name | Conviction | MS | Truth |
 |------|------|------------|-----|-----------|
 | Legal Advisor | Torvi Heljason | Precedent | Evidence | 5 |
 | Military Commander | Olaf Geirson | Order | Consequence | 4 |
 
 ### §2.17 Varfell Jarl Council (ED-637, ED-638, approved 2026-04-17)
 
-| Role | Name | Conviction | MS | Certainty |
+| Role | Name | Conviction | MS | Truth |
 |------|------|------------|-----|-----------|
 | Senior Jarl of the Western Highlands | Björn Holdar | Continuity | Consequence | 3 |
 | Skald-Chief | Ingrid Stenskald | Community | Solidarity | 3 |
@@ -405,7 +405,7 @@ specification (Scar count → Conviction state effects, Conviction crisis d6 tab
 
 *The Thread Event × Conviction Scar matrix has been promoted to its own canonical doc per PP-681.
 See `designs/personal/conviction_track_v1.md` §3 for the canonical specification (full matrix,
-witness requirements, Certainty scaling, Faith-specificity rule, Player Conviction Checks).*
+witness requirements, Truth scaling, Faith-specificity rule, Player Conviction Checks).*
 
 ### §3.5 Advisor-Principal Confidentiality Boundary (NEW — ED-664)
 
@@ -536,8 +536,8 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 | Belief Scar (§3.2) | Per Scar accumulation table (§3.3) | Per Scar accumulation table | Per Scar accumulation table |
 | Faction Stability ≤ 1 | Collapses to Autonomy | All Resonant Styles suppressed | Any action that improves Stability, regardless of Framework |
 | PC Knot ≥ Intimate | Solidarity Resonant Style activates (if absent) | — | NPC weighs PC relationship in Decision Fork |
-| TS crosses threshold (Stirring 30 / Active 50) | Ontological confrontation challenges Conviction | Evidence style intensifies | Certainty movement; less predictable behavior |
-| Certainty reaches 0 | Conviction permanently altered | Primary becomes Authority (old framework's authority void) | NPC in crisis; new arc phase |
+| TS crosses threshold (Stirring 30 / Active 50) | Ontological confrontation challenges Conviction | Evidence style intensifies | Truth movement; less predictable behavior |
+| Truth reaches 0 | Conviction permanently altered | Primary becomes Authority (old framework's authority void) | NPC in crisis; new arc phase |
 | Faction eliminated | Conviction collapses to Autonomy | All styles suppressed for 1 season (shock) | NPC becomes unaffiliated actor; new Belief set forms |
 
 **Constrained sub-arc state (ED-586):** When a named NPC's faction Mandate drops below 3, the NPC's primary arc behaviors that require Mandate expenditure are suspended. The NPC enters a "Constrained" sub-arc state for as long as Mandate < 3. In Constrained state: Priority 2 (Conviction-critical) and Priority 3 (Domain expansion) actions are replaced by Priority 6 (institutional rebuilding: Govern, Trade). The NPC's Conviction and Resonant Style are unchanged — only their behavioral priority sequence shifts. When Mandate recovers to ≥ 3, the NPC exits Constrained state and resumes their active arc from its prior state. Scar count and arc progress are preserved during Constrained state.
@@ -553,14 +553,14 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 #### Almud Almqvist — Arc Map
 
 **Arc A: The Reformer**
-- Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Autonomy = Loyal.
+- Branch condition: Almud's Truth reaches 1 or 0 AND Löwenritter Autonomy = Loyal.
 - Risk: CI acceleration (Church responds to Crown heresy). Löwenritter Autonomy may advance toward Restless if reforms perceived as weakness.
 
-> **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Löwenritter Autonomy stage advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment) per Graduated Autonomy track (ED-781). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
+> **Timing window clarification (ED-672):** Arc A requires Truth ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Truth declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Truth per 2–3 seasons of sustained effort). Löwenritter Autonomy stage advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment) per Graduated Autonomy track (ED-781). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Truth is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
 
 
 **Arc B: The Fortress**
-- Branch condition: Crown Stability ≤ 2 at any point AND Almud's Certainty ≥ 3 (he has not been confronted).
+- Branch condition: Crown Stability ≤ 2 at any point AND Almud's Truth ≥ 3 (he has not been confronted).
 - Conviction shift: Order doubles down. Secondary Conviction (Reason) suppressed entirely.
 - Resonant Style shift: Authority only. He can only be moved by someone he personally respects and whose competence he has witnessed — Ehrenwall, possibly PCs with Military or Mandate achievements.
 
@@ -623,7 +623,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 **Arc B: The Awakened**
 
 **Arc C: Consumed**
-- Behavior: Vaynard becomes a local threat — a non-practitioner experiencing the consequences of practitioner-level perception without the training to manage it. Coherence may degrade. Certainty drops to 0 but without the stability that genuine practitioners develop.
+- Behavior: Vaynard becomes a local threat — a non-practitioner experiencing the consequences of practitioner-level perception without the training to manage it. Coherence may degrade. Truth drops to 0 but without the stability that genuine practitioners develop.
 
 ---
 
@@ -750,7 +750,7 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 |---|---|---|---|
 | Faith | Church | CI +1 passive (already in rules) | Per season |
 | Faith | Church | If no external challenge for 2 consecutive seasons: Influence +1 (institutional confidence) | Per 2 seasons |
-| Virtue | Crown | Crown NPCs at Certainty ≥ 3: +1 Certainty per year of unchallenged governance | Per year |
+| Virtue | Crown | Crown NPCs at Truth ≥ 3: +1 Truth per year of unchallenged governance | Per year |
 | Categorical Imperative | Hafenmark | Influence +1 per season in which ALL Hafenmark actions were framework-aligned | Per season (conditional) |
 | Utility-driven Pragmatism | Varfell | TK +0.5 per season of active investigation. Caps at TK 3 without PC interaction. | Per season |
 | Equity Social Contract | Restoration | RM Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3 | Per season (conditional) |
@@ -1061,17 +1061,17 @@ An NPC who has been recruited defects if:
 | ED-390 | Belief revision triple gate (decisive + Resonant Style + Belief engagement): sufficiently achievable? | P2 |
 | ED-391 | Solidarity Resonant Style Knot requirement: Knot formation with NPCs not fully specified. Cross-ref threadwork_v25. | P2 |
 | ED-392 | Ehrenwall Thread Sensitivity: not specified. Estimate 0–5. Confirm. | P3 |
-| ED-393 | Ehrenwall Certainty: not specified. Estimate 4. Confirm. | P3 |
+| ED-393 | Ehrenwall Truth: not specified. Estimate 4. Confirm. | P3 |
 | ED-394 | Torben Conviction: starts blank? Or assigned at creation? Design decision. | P2 |
 | ED-395 | Torben Thread Sensitivity: not specified. Probable 0. Confirm. | P3 |
-| ED-396 | Torben Certainty: not specified. Probable 4. Confirm. | P3 |
+| ED-396 | Torben Truth: not specified. Probable 4. Confirm. | P3 |
 | ED-397 | Maret Uln Thread Sensitivity: not specified. Confirm. | P3 |
-| ED-398 | Maret Uln Certainty: not specified. Confirm. | P3 |
+| ED-398 | Maret Uln Truth: not specified. Confirm. | P3 |
 | ED-399 | Cardinal Stance Triangles: confirm before Church schism simulation. | P2 |
 
 ---
 
-| ED-663 | Thread → Conviction Scar Triggers: §3.4. 7×6 matrix. Certainty scaling. Season cap. Player parallel. | P0 — resolved |
+| ED-663 | Thread → Conviction Scar Triggers: §3.4. 7×6 matrix. Truth scaling. Season cap. Player parallel. | P0 — resolved |
 | ED-664 | Player Conviction × Thread events: Spirit TN 7 Ob 1. In §3.4. | P0 — resolved |
 | ED-665 | NPC Practitioner Coherence AI: §4.3. 6-tier table. Warden MS override. BG priority tree note. | P0 — resolved |
 | ED-666 | Companion departure Thread triggers: propagation to companion_specification_v30. | P1 — pending |
@@ -1176,25 +1176,25 @@ An NPC who has been recruited defects if:
 - **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (CI/Church, PI/Hafenmark, WR/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum. (PP-663: Varfell unique clock changed from VTM to WR.)
 
 
-### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)
+### §7.10 NPC Stat Values (Thread Sensitivity and Truth)
 
 Canonical values for NPC Behavior System integration:
 
-| NPC | Thread Sensitivity (TS) | Certainty | Rationale |
+| NPC | Thread Sensitivity (TS) | Truth | Rationale |
 |---|---|---|---|
-| Almud | 0 | 3 | TS 0 per ED-398 (provisional — confirm pending). Certainty 3 — governance pragmatist with genuine ethical doubt. |
-| Lenneth | 8 (starting, develops) | 3 | TS 8 per lenneth_threadwork_design. Certainty 3 — institutional certainty disrupted by archive encounters. |
-| Baralta | 0 (triple-barrier) | 5 | TS 0, Ob 4 on growth (ED-417). Certainty 5 — unshakeable sovereign divine right conviction. |
-| Vaynard | 10 (hidden) | 2 | TS 10 starting, environmental exposure. Certainty 2 — direct Thread perception has destabilised worldview. |
+| Almud | 0 | 3 | TS 0 per ED-398 (provisional — confirm pending). Truth 3 — governance pragmatist with genuine ethical doubt. |
+| Lenneth | 8 (starting, develops) | 3 | TS 8 per lenneth_threadwork_design. Truth 3 — institutional certainty disrupted by archive encounters. |
+| Baralta | 0 (triple-barrier) | 5 | TS 0, Ob 4 on growth (ED-417). Truth 5 — unshakeable sovereign divine right conviction. |
+| Vaynard | 10 (hidden) | 2 | TS 10 starting, environmental exposure. Truth 2 — direct Thread perception has destabilised worldview. |
 | Ehrenwall | 0 | 5 | Non-practitioner. Deed-logic worldview is self-reinforcing. |
 | Himlensendt | 0 | 4 | Non-practitioner. Pastoral certainty — high but not absolute (consecration crisis can shake it). |
 | Torben | 0 | 4 | Contested asset, no Thread exposure. Moderate institutional certainty. |
-| Elske | 0 | 3 | No Thread exposure. Certainty disrupted by hostage status and competing loyalties. |
+| Elske | 0 | 3 | No Thread exposure. Truth disrupted by hostage status and competing loyalties. |
 | Maret Uln | 35 | 2 | Active practitioner. Low certainty from direct Thread experience. |
-| Haelgrund | 12 (hidden) | 4 | Hidden TS. Certainty 4 — procedural certainty masking buried knowledge. |
+| Haelgrund | 12 (hidden) | 4 | Hidden TS. Truth 4 — procedural certainty masking buried knowledge. |
 | Torsvald | 20+ | 2 | Active Riskbreaker. Low certainty — operational awareness of Thread reality. |
-| Edeyja | 50+ | 1 | Warden. Certainty 1 — Thread reality is her primary frame. |
-| Yrsa Vossen | 0 | 3 | Non-practitioner RM leader. Certainty 3 — political conviction with pragmatic flexibility. |
+| Edeyja | 50+ | 1 | Warden. Truth 1 — Thread reality is her primary frame. |
+| Yrsa Vossen | 0 | 3 | Non-practitioner RM leader. Truth 3 — political conviction with pragmatic flexibility. |
 
 ---
 
