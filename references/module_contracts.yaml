@@ -52,7 +52,7 @@ modules:
 
   - module: faction_state
     registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: designs/provincial/faction_behavior_v30.md
+    doc: systems/factions/faction_behavior_v30.md
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
     consumes:
@@ -642,7 +642,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: ci_political
-    doc: designs/provincial/ci_political_v30.md
+    doc: systems/factions/ci_political_v30.md
     scales: [provincial]
     resolver: deterministic_accounting   # stat economy §4 + card system §5; CI bonus dice feed dice_pool contexts §3.2-§3.4
     consumes: []
@@ -722,7 +722,7 @@ modules:
 
   - module: faction_politics
     registry_system: "faction_politics"   # Key Type Registry vocabulary
-    doc: designs/provincial/faction_politics_v30.md   # [verification ED-IN-0016: doc:null was stale — CANONICAL, PP-660, 1115 lines; confirmed by key_type_registry_v30.md:502,506,525,546,723 and references/restructure_ledger.md:165]
+    doc: systems/factions/faction_politics_v30.md   # [verification ED-IN-0016: doc:null was stale — CANONICAL, PP-660, 1115 lines; confirmed by key_type_registry_v30.md:502,506,525,546,723 and references/restructure_ledger.md:165]
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION]
     consumes: []
@@ -736,7 +736,7 @@ modules:
     loops: []
     gap_notes:
       - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
-      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to designs/provincial/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
+      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"

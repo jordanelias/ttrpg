@@ -1,5 +1,5 @@
 """
-sim/provincial/mass_seizure.py — Church Mass Seizure (PP-411 + supersession 250715f)
+systems/factions/sim/mass_seizure.py — Church Mass Seizure (PP-411 + supersession 250715f)
 
 Canon source: designs/provincial/victory_v30.md §3.2; designs/architecture/campaign_architecture_v30.md §1.3
 Supersession: registers/supersession_register.yaml 250715f — threshold remains CI ≥ 60

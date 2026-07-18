@@ -1,5 +1,5 @@
 """
-sim/provincial/crown_initiative.py — Crown Initiative — three modes
+systems/factions/sim/crown_initiative.py — Crown Initiative — three modes
 
 Canon source: designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md
               (Royal Progress Ob ED-840 closure, Pass 2h, 2026-05-17)

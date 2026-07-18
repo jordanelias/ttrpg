@@ -1,5 +1,5 @@
 """
-sim/provincial/hafenmark_equipment.py — Hafenmark faction-specific equipment (Wagenburg + Bombards tactic cards)
+systems/factions/sim/hafenmark_equipment.py — Hafenmark faction-specific equipment (Wagenburg + Bombards tactic cards)
 
 Canon source: (pending — hafenmark_equipment_v30.md not yet authored)
 Params source: params/factions.md (Hafenmark section)
@@ -19,4 +19,4 @@ from __future__ import annotations
 
 
 def apply_hafenmark_equipment(faction_state):
-    raise NotImplementedError("sim/provincial/hafenmark_equipment.py — content pending contamination audit")
+    raise NotImplementedError("systems/factions/sim/hafenmark_equipment.py — content pending contamination audit")

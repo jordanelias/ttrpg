@@ -3,7 +3,7 @@ sim/peninsular/accounting.py — End-of-season Accounting
 
 Canon source: designs/scene/conviction_track_v30.md §3 PP-412 (CI generation);
               params/core.md §MS Baseline Decay PP-255 (MS year-end decay);
-              designs/provincial/ci_political_v30.md (CI political role);
+              systems/factions/ci_political_v30.md (CI political role);
               canon/02_canon_constraints.md §B GD-3 (insurgency pipeline);
               systems/fieldwork/investigation_systems_v30.md SYSTEM 1 (NPE).
 Status: [CANONICAL — Phase 2 2026-05-17; Deferred Migration Batch 2026-05-20;

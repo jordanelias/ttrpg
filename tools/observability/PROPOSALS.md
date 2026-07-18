@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**251 open work items** · **98 need your decision**.
+**253 open work items** · **98 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 10, Provisional / draft design docs — 20
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 12, Provisional / draft design docs — 20
 
 ## MB — Mass battle  (6 items, 5 need decision)
 
@@ -56,7 +56,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 
 ## FA — Faction actions  (28 items, 16 need decision)
 
-- 🔸 `designs/provincial/franchise_v30.md` — franchise v30  _(DRAFT — awaiting Jordan review)_
+- 🔸 `systems/factions/franchise_v30.md` — franchise v30  _(DRAFT — awaiting Jordan review)_
 - 🔸 `ED-FA-0010` — FA-3 FORK (needs Jordan -- differentiates faction identity, a design-taste surface previously reserved, cf. ED-776): coercion-intensive vs capital-intensive muster asymmetry. Hafenmark musters via capital (W-2 substitutes for the Mil prereq  _(open)_
 - 🔸 `ED-FA-0013` — FA-6 (mixed -- (a)/(b) promote-ready, (c) FORK needing Jordan): Storm vs Terms at conquest, differentiating _try_conquest's flat Accord -25. (a) Accept surrender on terms (Success, not Overwhelming): Accord -10, settlement L seeds 2, defend  _(open)_
 - 🔸 `ED-FA-0014` — FA-7 FORK (needs Jordan -- new subsystem state, interacts with Royal Assassination fuse arcs D/E/F): Regency interregnum on leader death with no adult designated heir. Faction enters Regency until succession resolves (unique action locked,   _(open)_
@@ -177,13 +177,15 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (102 items, 28 need decision)
+## unassigned — Unassigned / cross-lane  (104 items, 28 need decision)
 
 - 🔸 `proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
 - 🔸 `proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
 - 🔸 `proposals/pc_formation_system.md` — pc formation system  _(PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - 🔸 `proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - `proposals/2026-05-16-faction-audit-followup-plan.md` — 2026-05-16-faction-audit-followup-plan  _(SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15])_
+- `proposals/2026-07-17-world-factions-npcs-narrative-assessment.md` — 2026-07-17-world-factions-npcs-narrative-assessment  _((no Status line — proposals/))_
+- `proposals/2026-07-17-world-factions-npcs-narrative-companion.md` — 2026-07-17-world-factions-npcs-narrative-companion  _((no Status line — proposals/))_
 - `proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _(SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED'])_
 - `proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
 - `proposals/stub_infill_plan.md` — stub infill plan  _(SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15])_
@@ -217,7 +219,5 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-597` — Vossen full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
 - 🔸 `ED-598` — Hann full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
 - 🔸 `ED-599` — Orm (Warden second) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-601` — Almud Arc C three-trajectory expansion (Abdicant/Pretender/Broken) proposed. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-602` — Vaynard Arc A and Arc B full specification proposed. Creative NPC arc profile.  _(open)_
-- …and 62 more (see `proposals.json`).
+- …and 64 more (see `proposals.json`).
 

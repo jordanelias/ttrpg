@@ -5,11 +5,11 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 251,
+    "total": 253,
     "needs_jordan": 98,
     "by_kind": {
       "provisional_status_doc": 20,
-      "proposal_doc": 10,
+      "proposal_doc": 12,
       "ledger_actionable": 119,
       "ledger_needs_jordan": 85,
       "audit_partial": 17
@@ -48,14 +48,14 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 102,
+        "total": 104,
         "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 102,
+      "total": 104,
       "needs_jordan": 28,
       "items": [
         {
@@ -226,6 +226,26 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+          "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+          "title": "2026-07-17-world-factions-npcs-narrative-assessment",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+          "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+          "title": "2026-07-17-world-factions-npcs-narrative-companion",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
           "links": []
         },
         {
@@ -1080,14 +1100,82 @@
         }
       ]
     },
+    "MB": {
+      "total": 6,
+      "needs_jordan": 5,
+      "items": [
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/mass_battle_fighting_withdrawal_v1.md",
+          "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
+          "title": "mass battle fighting withdrawal v1",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = registers/handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/multiunit_envelopment_plan.md",
+          "id": "proposals/multiunit_envelopment_plan.md",
+          "title": "multiunit envelopment plan",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0008",
+          "title": "Two contradictory ranged/volley Damage-Reduction tables coexist in params/mass_combat.md, both live (neither marked superseded/struck). (1) 'Projectile weapons (mass combat only -- PP-104)' table (~L191-200) gives Heavy-armour DR of LP/arro",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0009",
+          "title": "designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending ",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0010",
+          "title": "The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle",
+          "title": "[PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step",
+          "lane": "MB",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/mass_battle/"
+          ]
+        }
+      ]
+    },
     "FA": {
       "total": 28,
       "needs_jordan": 16,
       "items": [
         {
           "kind": "provisional_status_doc",
-          "source": "designs/provincial/franchise_v30.md",
-          "id": "designs/provincial/franchise_v30.md",
+          "source": "systems/factions/franchise_v30.md",
+          "id": "systems/factions/franchise_v30.md",
           "title": "franchise v30",
           "lane": "FA",
           "needs_jordan": true,
@@ -1364,74 +1452,6 @@
           "status": "PARTIAL",
           "links": [
             "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/faction_political"
-          ]
-        }
-      ]
-    },
-    "MB": {
-      "total": 6,
-      "needs_jordan": 5,
-      "items": [
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/mass_battle_fighting_withdrawal_v1.md",
-          "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
-          "title": "mass battle fighting withdrawal v1",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = registers/handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/multiunit_envelopment_plan.md",
-          "id": "proposals/multiunit_envelopment_plan.md",
-          "title": "multiunit envelopment plan",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0008",
-          "title": "Two contradictory ranged/volley Damage-Reduction tables coexist in params/mass_combat.md, both live (neither marked superseded/struck). (1) 'Projectile weapons (mass combat only -- PP-104)' table (~L191-200) gives Heavy-armour DR of LP/arro",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0009",
-          "title": "designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending ",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-MB-0010",
-          "title": "The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl",
-          "lane": "MB",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "audit_partial",
-          "source": "references/audit_registry.jsonl",
-          "id": "valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle",
-          "title": "[PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step",
-          "lane": "MB",
-          "needs_jordan": false,
-          "status": "PARTIAL",
-          "links": [
-            "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/mass_battle/"
           ]
         }
       ]
@@ -2795,16 +2815,6 @@
       "links": []
     },
     {
-      "kind": "provisional_status_doc",
-      "source": "designs/provincial/franchise_v30.md",
-      "id": "designs/provincial/franchise_v30.md",
-      "title": "franchise v30",
-      "lane": "FA",
-      "needs_jordan": true,
-      "status": "DRAFT — awaiting Jordan review",
-      "links": []
-    },
-    {
       "kind": "proposal_doc",
       "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
       "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
@@ -2832,6 +2842,26 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+      "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+      "title": "2026-07-17-world-factions-npcs-narrative-assessment",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+      "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+      "title": "2026-07-17-world-factions-npcs-narrative-companion",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
       "links": []
     },
     {
@@ -2922,6 +2952,16 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.",
+      "links": []
+    },
+    {
+      "kind": "provisional_status_doc",
+      "source": "systems/factions/franchise_v30.md",
+      "id": "systems/factions/franchise_v30.md",
+      "title": "franchise v30",
+      "lane": "FA",
+      "needs_jordan": true,
+      "status": "DRAFT — awaiting Jordan review",
       "links": []
     },
     {

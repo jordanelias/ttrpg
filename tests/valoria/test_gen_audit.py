@@ -104,7 +104,7 @@ def test_classify_archival_path_wins_even_if_in_live_set():
 def test_classify_live_head_survives_banner_discourse_false_hit():
     # ED-IN-0055 reconciliation (agonist + antagonist both flagged this): the weak
     # banner_classify CONTENT-keyword must NOT override an authoritative live-head
-    # registration. Real instance: designs/factions/faction_systems_overview_v30.md
+    # registration. Real instance: systems/factions/faction_systems_overview_v30.md
     # (a registered REFERENCE head) was demoted because "audit" appears in its Scope
     # prose. A registered head now stays LIVE even when banner_classify -> 'discourse'.
     content = 'This document is a STRESS TEST log.\n'

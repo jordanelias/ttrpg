@@ -515,7 +515,7 @@ mechanics:
     scale: provincial
     faction: Crown
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
-    sim_module: sim/provincial/crown_initiative.py
+    sim_module: systems/factions/sim/crown_initiative.py
     test_status: not_implemented
     open_editorial: ED-840 (closed 2026-05-17 Pass 2h, commit pending)
     notes: "Royal Progress Ob iteration ratified 2026-05-17 Pass 2h: Ob = max(2, floor((sum_max - sum_current) / 2)) where sum_max = 7 × num_owned_territories. Matches descriptive text. part10 §3.2 amended."
@@ -524,23 +524,23 @@ mechanics:
     scale: provincial
     faction: Crown
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
-    sim_module: sim/provincial/crown_initiative.py
+    sim_module: systems/factions/sim/crown_initiative.py
     test_status: not_implemented
 
   coronation_renewal:
     scale: provincial
     faction: Crown
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
-    sim_module: sim/provincial/crown_initiative.py
+    sim_module: systems/factions/sim/crown_initiative.py
     test_status: not_implemented
 
   excommunication_action:
     scale: provincial
     faction: Church
     canon_sources:
-      - "designs/provincial/faction_canon_v30.md#section-8-2"
+      - "systems/factions/faction_canon_v30.md#section-8-2"
       - "systems/social_contest/social_contest_v30.md#section-7-1"
-    sim_module: sim/provincial/excommunication.py
+    sim_module: systems/factions/sim/excommunication.py
     test_status: not_implemented
     dependencies:
       mechanics: [excommunication_tribunal]
@@ -549,30 +549,30 @@ mechanics:
   absolution:
     scale: provincial
     faction: Church
-    canon_sources: ["designs/provincial/faction_canon_v30.md#section-8"]
-    sim_module: sim/provincial/absolution.py
+    canon_sources: ["systems/factions/faction_canon_v30.md#section-8"]
+    sim_module: systems/factions/sim/absolution.py
     test_status: not_implemented
 
   council_solmund:
     scale: provincial
     faction: Church
-    canon_sources: ["designs/provincial/faction_canon_v30.md"]
-    sim_module: sim/provincial/council_solmund.py
+    canon_sources: ["systems/factions/faction_canon_v30.md"]
+    sim_module: systems/factions/sim/council_solmund.py
     test_status: not_implemented
     notes: "Rare 1/arc gathering."
 
   charter_of_liberties:
     scale: provincial
     faction: Hafenmark
-    canon_sources: ["designs/provincial/faction_canon_v30.md#section-6"]
-    sim_module: sim/provincial/charter_liberties.py
+    canon_sources: ["systems/factions/faction_canon_v30.md#section-6"]
+    sim_module: systems/factions/sim/charter_liberties.py
     test_status: not_implemented
 
   varfell_mandate_action:
     scale: provincial
     faction: Varfell
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-3"]
-    sim_module: sim/provincial/varfell_mandate_action.py
+    sim_module: systems/factions/sim/varfell_mandate_action.py
     test_status: contested
     notes: "Module name placeholder pending Jordan rename. Current canon mechanic (W -1 + Mil -1 -> +1 L) flagged broken by Jordan 2026-05-17 (double-cost asymmetry). Current canon flavor framing (mead-hall / Tribune Network / Heorot / Althing anchors stitched into Reinhardt anchor) flagged as contamination. Canonical Vaynard identity per registers/supersession_register.yaml CR-STRIKE-2026-04-19 is Reinhardt-coded military conqueror. Mechanic + name redesign pending."
 
@@ -582,7 +582,7 @@ mechanics:
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-1"
     canon_authoring_target: "designs/provincial/varfell_territorial_acquisition_v30.md (Pass 2d, pending; placeholder-named per VARFELL-TERRITORIAL-ACQUISITION-001)"
-    sim_module: sim/provincial/varfell_territorial_acquisition.py
+    sim_module: systems/factions/sim/varfell_territorial_acquisition.py
     test_status: validated_n1000_v12c
     test_results:
       v12c_n1000: {varfell_win_rate: 22.5, in_band_20_30: true}
@@ -614,7 +614,7 @@ mechanics:
     faction: Church
     canon_sources: []
     canon_authoring_target: "designs/provincial/infrastructure_reclamation_v30.md (Pass 2f, pending)"
-    sim_module: sim/provincial/infrastructure_reclamation.py
+    sim_module: systems/factions/sim/infrastructure_reclamation.py
     test_status: not_implemented
     notes: "When Church invades territory with existing Church-built infrastructure (Religious Buildings / Templar Stations / Inquisitor Bases), attacker pool +(infra_count + max(0, PT-3)), defender pool -min(3, floor(bonus/2)). Cap +6/-3. Pass 2f canon authoring pending."
 
@@ -632,8 +632,8 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-4"
-    canon_authoring_target: "designs/provincial/parliamentary_transfer_v30.md (Pass 2h canonized 2026-05-17)"
-    sim_module: sim/provincial/parliamentary_transfer.py
+    canon_authoring_target: "systems/factions/parliamentary_transfer_v30.md (Pass 2h canonized 2026-05-17)"
+    sim_module: systems/factions/sim/parliamentary_transfer.py
     test_status: validated_n1000_v12c
     dependencies:
       mechanics: [parliamentary_vote]
@@ -644,9 +644,9 @@ mechanics:
     faction: Church
     canon_sources:
       - "designs/scene/conviction_track_v30.md#section-2"
-      - "designs/provincial/ci_political_v30.md#section-7-6"
+      - "systems/factions/ci_political_v30.md#section-7-6"
       - "designs/provincial/victory_v30.md#section-3-2"
-    sim_module: sim/provincial/mass_seizure.py
+    sim_module: systems/factions/sim/mass_seizure.py
     test_status: not_implemented
     gd_applicable: [GD-1]
     pp: PP-411
@@ -657,7 +657,7 @@ mechanics:
     faction: Crown
     canon_sources: []
     canon_authoring_target: "designs/provincial/treaty_v30.md (Pass 2h, pending - currently no dedicated canon doc)"
-    sim_module: sim/provincial/treaty.py
+    sim_module: systems/factions/sim/treaty.py
     test_status: not_implemented
 
   treaty_expiration:
@@ -665,8 +665,8 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-5"
-    canon_authoring_target: "designs/provincial/treaty_expiration_v30.md (Pass 2h canonized 2026-05-17)"
-    sim_module: sim/provincial/treaty.py
+    canon_authoring_target: "systems/factions/treaty_expiration_v30.md (Pass 2h canonized 2026-05-17)"
+    sim_module: systems/factions/sim/treaty.py
     test_status: validated_n1000_v12c
     notes: "90-95%/arc lapse per v12c balance. Crown nerf primary effect."
 
@@ -675,9 +675,9 @@ mechanics:
     faction: universal
     canon_sources:
       - "canon/02_canon_constraints.md#section-b-gd-2"
-      - "designs/provincial/faction_canon_v30.md"
+      - "systems/factions/faction_canon_v30.md"
     params: "engine/params/factions.md"
-    sim_module: sim/provincial/faction_action.py
+    sim_module: systems/factions/sim/faction_action.py
     test_status: not_implemented
     gd_applicable: [GD-2]
     notes: "GD-2 enforcement boundary. Mandatory actions before stochastic candidate generation. Up to 3 mandatories per faction per season."
@@ -688,7 +688,7 @@ mechanics:
     canon_sources:
       - "systems/mass_battle/mass_battle_v30.md"
       - "canon/02_canon_constraints.md#section-b-gd-1"
-    sim_module: sim/provincial/faction_action.py
+    sim_module: systems/factions/sim/faction_action.py
     test_status: not_implemented
     dependencies:
       mechanics: [mass_battle]
@@ -697,8 +697,8 @@ mechanics:
   govern:
     scale: provincial
     faction: universal
-    canon_sources: ["designs/provincial/faction_canon_v30.md"]
-    sim_module: sim/provincial/faction_action.py
+    canon_sources: ["systems/factions/faction_canon_v30.md"]
+    sim_module: systems/factions/sim/faction_action.py
     test_status: not_implemented
     gd_applicable: [GD-2]
     notes: "GD-2 mandatory trigger: Accord <= 2 garrisoned territory."
@@ -706,8 +706,8 @@ mechanics:
   muster:
     scale: provincial
     faction: universal
-    canon_sources: ["designs/provincial/faction_canon_v30.md"]
-    sim_module: sim/provincial/faction_action.py
+    canon_sources: ["systems/factions/faction_canon_v30.md"]
+    sim_module: systems/factions/sim/faction_action.py
     test_status: not_implemented
     gd_applicable: [GD-2]
     notes: "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory."

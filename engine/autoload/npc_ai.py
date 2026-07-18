@@ -7,7 +7,7 @@ Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17 (priority-stack conten
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/provincial/faction_action
+  - systems/factions/sim/faction_action
 
 Entry points:
   - select_action(actor_id: str, world: GameState) -> Action

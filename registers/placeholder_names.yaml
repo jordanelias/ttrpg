@@ -38,7 +38,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: yes
     paths_using_placeholder:
-      - sim/provincial/varfell_mandate_action.py
+      - systems/factions/sim/varfell_mandate_action.py
       - registers/mechanics_index.yaml::mechanics.varfell_mandate_action
     contamination_audit_scope: |
       Audit Vaynard's identity claims across faction_canon, designs/audit/...,
@@ -61,7 +61,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: no  # mechanism canonized; only name + identity-claims placeholder
     paths_using_placeholder:
-      - sim/provincial/varfell_territorial_acquisition.py
+      - systems/factions/sim/varfell_territorial_acquisition.py
       - registers/mechanics_index.yaml::mechanics.varfell_territorial_acquisition
     contamination_audit_scope: |
       Validate or strike 'Einhir' cultural framing. v12c §4.1 mechanism (Pool I;
@@ -106,7 +106,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: yes  # mechanism not yet canonized
     paths_using_placeholder:
-      - sim/provincial/infrastructure_reclamation.py
+      - systems/factions/sim/infrastructure_reclamation.py
       - registers/mechanics_index.yaml::mechanics.infrastructure_reclamation
     contamination_audit_scope: |
       Audit Church identity claims. Author infrastructure_reclamation_v30.md
@@ -147,7 +147,7 @@ placeholders:
     deadline_status: pending
     blocks_canonization: yes
     paths_using_placeholder:
-      - sim/provincial/hafenmark_equipment.py
+      - systems/factions/sim/hafenmark_equipment.py
       - registers/mechanics_index.yaml::mechanics.hafenmark_equipment
     contamination_audit_scope: |
       Audit Hafenmark identity claims AND tactic_cards module contents

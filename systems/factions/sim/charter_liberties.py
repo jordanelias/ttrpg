@@ -1,7 +1,7 @@
 """
-sim/provincial/charter_liberties.py — Hafenmark Charter of Liberties
+systems/factions/sim/charter_liberties.py — Hafenmark Charter of Liberties
 
-Canon source: designs/provincial/faction_canon_v30.md §6
+Canon source: systems/factions/faction_canon_v30.md §6
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
@@ -17,4 +17,4 @@ from __future__ import annotations
 
 
 def attempt_charter(world: GameState):
-    raise NotImplementedError("sim/provincial/charter_liberties.py — Pass 2l armature stub")
+    raise NotImplementedError("systems/factions/sim/charter_liberties.py — Pass 2l armature stub")

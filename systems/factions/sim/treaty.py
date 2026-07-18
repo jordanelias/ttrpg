@@ -1,7 +1,7 @@
 """
-sim/provincial/treaty.py — Crown Treaties + Treaty Expiration (90-95%/arc lapse per v12c)
+systems/factions/sim/treaty.py — Crown Treaties + Treaty Expiration (90-95%/arc lapse per v12c)
 
-Canon source: designs/provincial/treaty_expiration_v30.md (CANONICAL, Pass 2h
+Canon source: systems/factions/treaty_expiration_v30.md (CANONICAL, Pass 2h
 2026-05-17); designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5 + §4.7
 
 IMPLEMENTATION STATUS (2026-05-26 review):
@@ -105,7 +105,7 @@ def propose_treaty(parties: list, terms: dict, world=None) -> TreatyResult:
     Senator Outward (crown_initiative) for the canonical Crown path.
     """
     raise NotImplementedError(
-        "sim/provincial/treaty.py:propose_treaty — no canonized generic "
+        "systems/factions/sim/treaty.py:propose_treaty — no canonized generic "
         "formation path. Canon formation is Senator Outward (treaty_expiration_v30 "
         "§2, resolved in crown_initiative). Use register_treaty for test insertion."
     )

@@ -1,5 +1,5 @@
 """pr119_guild_ladder.py — provisional adapter testing PR#119's Guild-ladder items:
-  - designs/provincial/faction_politics_v30.md §2.5a Entry and Mastership Forks
+  - systems/factions/faction_politics_v30.md §2.5a Entry and Mastership Forks
     (ED-FA-0022/ED-FA-0023): guarantor-gated entry vs. sole-patron entry; capital-gated
     Free Mastership vs. the existing Masterpiece Examination.
   - systems/settlements/governance_play_redesign_v1.md §1.3c Ordenanza Ratification
@@ -58,7 +58,7 @@ class GuildLadderAdapter(Adapter):
                 "describes the applicant choosing one of two entry paths, no base rate given",
             "p_entry_violation": "test-scenario value, not canon-derived: no base violation "
                 "rate stated for the Gu-Std 0/1 Demotion Triggers §2.5a's entry fork reacts to",
-            "n_guarantors": "PROVISIONAL: designs/provincial/faction_politics_v30.md §2.5a "
+            "n_guarantors": "PROVISIONAL: systems/factions/faction_politics_v30.md §2.5a "
                 "BYZ-3 — 'Recruit 3-5 existing Guild members ... as guarantors' (midpoint "
                 "test-scenario choice within the cited 3-5 range)",
             "p_choose_capital_buyin": "test-scenario value, not canon-derived: §2.5a IT-8 "
@@ -66,7 +66,7 @@ class GuildLadderAdapter(Adapter):
                 "Examination",
             "p_masterpiece_pass": "test-scenario value, not canon-derived: no pass rate "
                 "stated for the Masterpiece Examination",
-            "p_caste_reject_on_fail": "PROVISIONAL: designs/provincial/faction_politics_v30.md "
+            "p_caste_reject_on_fail": "PROVISIONAL: systems/factions/faction_politics_v30.md "
                 "§2.5 caste note — 'the committee can reject Einhir candidates on procedural "
                 "grounds' — modeled here as one possible cause of a Masterpiece Examination "
                 "failure (rate itself is test-scenario, not stated numerically in canon)",

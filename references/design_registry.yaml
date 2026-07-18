@@ -114,9 +114,9 @@ registry:
   varfell_path_b:
     system: board_game
     mode: BG
-    canonical_v30: designs/provincial/varfell_path_b_v30.md
-    skeleton: designs/provincial/varfell_path_b_v30.md
-    infill: designs/provincial/varfell_path_b_v30_infill.md
+    canonical_v30: systems/factions/varfell_path_b_v30.md
+    skeleton: systems/factions/varfell_path_b_v30.md
+    infill: systems/factions/varfell_path_b_v30_infill.md
     atomized: complete
     predecessor: designs/board_game/varfell_path_b_redesign_ed311.md
     params: null
@@ -247,7 +247,7 @@ registry:
   factions_ttrpg:
     system: factions
     mode: TTRPG
-    canonical_v30: designs/provincial/factions_personal_v30.md
+    canonical_v30: systems/factions/factions_personal_v30.md
     skeleton: engine/params/factions_personal.md
     infill: engine/params/factions_personal.md
     atomized: complete
@@ -345,9 +345,9 @@ registry:
   baralta_crown_claim:
     system: mechanics
     mode: ALL
-    canonical_v30: designs/provincial/baralta_crown_claim_v30.md
-    skeleton: designs/provincial/baralta_crown_claim_v30.md
-    infill: designs/provincial/baralta_crown_claim_v30_infill.md
+    canonical_v30: systems/factions/baralta_crown_claim_v30.md
+    skeleton: systems/factions/baralta_crown_claim_v30.md
+    infill: systems/factions/baralta_crown_claim_v30_infill.md
     atomized: complete
     predecessor: designs/mechanics/baralta_crown_claim_mechanic.md
     params: null

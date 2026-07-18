@@ -308,7 +308,7 @@ class IntegratedCampaignAdapter(Adapter):
                 "(the Directive usually conflicts with a Need)'; rate itself is test-scenario "
                 "(not numerically stated) -- wires the real Settlement.order field so "
                 "province_accord() aggregates a moving number, not a flat one",
-            "pa_demotion_streak": "PROVISIONAL: designs/provincial/faction_politics_v30.md "
+            "pa_demotion_streak": "PROVISIONAL: systems/factions/faction_politics_v30.md "
                 "§1.0d -- 3-season triplicate-ledger demotion trigger",
             "cc_cap": "PROVISIONAL: governance_play_redesign_v1.md §1.1a -- 'CC, 0-3'",
             "p_retain_clerks": "test-scenario value, not canon-derived",

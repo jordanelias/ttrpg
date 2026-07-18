@@ -1,7 +1,7 @@
 """
-sim/provincial/parliamentary_transfer.py — Universal CB-required territorial transfer (§§1-4)
+systems/factions/sim/parliamentary_transfer.py — Universal CB-required territorial transfer (§§1-4)
 
-Canon source: designs/provincial/parliamentary_transfer_v30.md (CANONICAL, Pass 2h 2026-05-17;
+Canon source: systems/factions/parliamentary_transfer_v30.md (CANONICAL, Pass 2h 2026-05-17;
     v12c-balance-validated N=1000). Resolution wraps social_contest_v30 §10 (vote) + §10.1 (stay).
 Status: [implemented 2026-05-31 — §1 Pool=Proposer Influence / Ob=Holder Legitimacy + PARL_MAJORITY_OB_BONUS(2),
     §1.2 4-degree outcome, §1.3 protections, §2 four modes, §3 CB sources, §4 vote-wrapped resolution.]

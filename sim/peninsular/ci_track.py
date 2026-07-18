@@ -54,7 +54,7 @@ HAFENMARK_BARALTA_THRESHOLD_MANDATE = 4
 HAFENMARK_SUPPRESS_PER_SEASON = -1
 
 # PP-412 starting CI. NO phase-transition freeze: PP-421 superseded the CI-75 freeze —
-# CI runs 0-100 with no freeze (designs/provincial/ci_political_v30.md §0 + the
+# CI runs 0-100 with no freeze (systems/factions/ci_political_v30.md §0 + the
 # designs/scene/conviction_track_v30.md §3 propagation, 2026-07-07). The dead
 # CI_PHASE_TRANSITION=75 constant (zero callers in sim/) was removed here — CI75-9 / ED-IN-0025.
 # [canonical: §3 — "Starting CI: 28 (canonical BG)."]

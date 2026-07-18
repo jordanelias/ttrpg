@@ -166,7 +166,7 @@ SKIP_DIR_PARTS = {'__pycache__', 'tests', 'test', 'deprecated', 'archives'}
 
 
 def _module_name(rel_path):
-    """sim/provincial/faction_action.py -> sim.provincial.faction_action;
+    """systems/factions/sim/faction_action.py -> systems.factions.sim.faction_action;
     .../__init__.py -> the package name."""
     p = rel_path[:-3] if rel_path.endswith('.py') else rel_path
     parts = p.split('/')
