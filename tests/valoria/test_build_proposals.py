@@ -32,8 +32,9 @@ def test_all_proposals_docs_surface_by_location():
     # Regression pin on the location-scan count; bump when a proposals doc
     # is added/removed. 12 since #171 relocated the two 2026-07-17
     # world-factions-npcs narrative docs (assessment + companion) into proposals/;
-    # 13 with the 2026-07-17 cast-and-culture-expansion companion alongside them.
-    assert len(props) == 13
+    # 13 with the 2026-07-17 cast-and-culture-expansion companion alongside them;
+    # 14 with the 2026-07-18 precedent-to-mechanism design brief.
+    assert len(props) == 14
 
 
 def test_all_seventeen_audit_verdicts_present():
