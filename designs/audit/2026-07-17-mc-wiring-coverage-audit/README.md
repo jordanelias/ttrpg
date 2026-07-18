@@ -109,6 +109,8 @@ The verification lanes refuted the map repeatedly — recorded here so the proce
 
 Already-filed relatives (not re-raised here): `scene_outcome.battle_concluded` fabricated emit (**ED-MB-0010**), parliamentary total-victory Mandate stacking (**ED-SC-0015**).
 
+**Correction status (2026-07-18).** **D2 / D4 / D5 / D7 are fixed and merged** (PR #180 landed D2/D5/D7; PR #182 landed D4). The four remaining — **D1, D3, D6, D8** — change campaign balance or need a schema ruling, so each is held for separate, sign-off-gated work. A companion brief, **`held_defects_brief.html`** (this folder), gives an executive summary + full detail for those four: the bug, the mechanism, the fix, and the catch (e.g. D3's restoration is verified correct but flips ~72% of campaign winners; D8 needs the 9- vs 10-attribute roster ruled first).
+
 ---
 
 ## 7. Residual limits (honest)
