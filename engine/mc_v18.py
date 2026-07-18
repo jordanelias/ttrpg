@@ -18,7 +18,7 @@ Phase 2: faction actions (conquest/muster/govern) + accounting wired in.
 Dependencies:
   - sim/autoload/* (all autoload services)
   - sim/peninsular/season (season composition)
-  - sim/provincial/faction_action
+  - systems/factions/sim/faction_action
 
 Entry points:
   - run_campaign(seed, max_seasons, params) -> CampaignResult
@@ -32,7 +32,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from engine.autoload import game_state, victory, scene_slate
-from sim.provincial.faction_action import faction_take_action
+from systems.factions.sim.faction_action import faction_take_action
 from sim.peninsular.season import run_season
 from engine.cross_scale import scene_dispatch
 

@@ -8,7 +8,7 @@ Status: [CANONICAL — Phase 1 implementation 2026-05-17]
  faction stat model — this is literally where "no Mandate" lives. The ratified LPS-1 model
  (per-settlement L/PS, Mandate = 7T/(T+6), Treasury) is UNIMPLEMENTED. Do NOT port this schema
  as canon-conformant until ED-FA-0004's Stratum-B reconciliation lands. See
- designs/provincial/faction_canon_v30.md / faction_behavior_v30.md.]
+ systems/factions/faction_canon_v30.md / faction_behavior_v30.md.]
 
 Dependencies:
   - none — root primitive
@@ -168,7 +168,7 @@ class World:
     uncontrolled_streaks: dict = field(default_factory=dict)     # frozenset[tid] → consecutive seasons (from systems/world/sim/insurgency_pipeline)
     npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from systems/world/sim/npe)
     npc_counter: int = 0                                          # incrementing id source for NPC generation
-    treaties: dict = field(default_factory=dict)                 # frozenset[parties] → TreatyRecord (from sim/provincial/treaty)
+    treaties: dict = field(default_factory=dict)                 # frozenset[parties] → TreatyRecord (from systems/factions/sim/treaty)
     # ─── Schema migration #2 — 2026-05-19 ─────────────────────────────────
     # Tier 1/2 registries. Same Any-typing rationale + _store(world) router
     # pattern as migration #1. Modules retain module-level fallback when
@@ -335,7 +335,7 @@ def restore_world(snapshot: dict) -> World:
                    for tid, npc_list in snapshot['npcs'].items()}
     w.npc_counter = snapshot.get('npc_counter', 0)
     if 'treaties' in snapshot:
-        from sim.provincial.treaty import TreatyRecord
+        from systems.factions.sim.treaty import TreatyRecord
         w.treaties = {frozenset(entry['parties_key']): TreatyRecord.from_dict(entry['record'])
                        for entry in snapshot['treaties']}
 

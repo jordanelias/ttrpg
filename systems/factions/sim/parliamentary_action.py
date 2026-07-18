@@ -1,7 +1,7 @@
 """
-sim/provincial/parliamentary_action.py — Parliamentary Sanction proposal mechanism (faction scale)
+systems/factions/sim/parliamentary_action.py — Parliamentary Sanction proposal mechanism (faction scale)
 
-Canon source: designs/provincial/faction_layer_v30.md §5.4 (Parliamentary Actions table) —
+Canon source: systems/factions/faction_layer_v30.md §5.4 (Parliamentary Actions table) —
     the "Parliamentary Sanction" parameterized action (ED-FA-0006 DISTILL). This module implements
     the CENSURE tier only (the mildest sanction: Mandate-2 proposer min, Majority vote, target
     Stability −1 / Mandate −1, no proposer cost, one-time). The four heavier Sanction tiers
@@ -14,7 +14,7 @@ Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot pr
 
 Status: [implemented: 2026-07-08 — ED-SC-0007 residual "parliamentary_vote-in-the-loop" MECHANISM
     (the proposer/target/declaration authoring that systems/social_contest/sim/parliamentary_vote.py never had a
-    caller for). WIRED (same session, ED-FA-0012): sim/provincial/faction_action.py's
+    caller for). WIRED (same session, ED-FA-0012): systems/factions/sim/faction_action.py's
     _try_faction_unique now calls propose_censure as a universal fallback in the existing
     faction-unique action slot, so this reaches every live campaign via faction_take_action — not a
     standalone unreachable mechanism. Not yet wired: scene_dispatch.py has no direct caller (the

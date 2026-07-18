@@ -1,0 +1,1 @@
+"""systems.factions.sim — faction/domain-action oracle (was sim.provincial.{faction_action,parliamentary_action,parliamentary_transfer,treaty,council_solmund,crown_initiative,charter_liberties,absolution,excommunication,hafenmark_equipment,infrastructure_reclamation,mass_seizure,varfell_mandate_action,varfell_territorial_acquisition})."""

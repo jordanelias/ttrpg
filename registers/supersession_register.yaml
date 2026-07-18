@@ -25,7 +25,7 @@ entries:
       Models Church institutional restraint dominating until near ceiling.
     files_to_recheck:
       - designs/provincial/victory_v30.md
-      - designs/provincial/ci_political_v30.md
+      - systems/factions/ci_political_v30.md
       - engine/params/bg/ci_seizure.md
 
   - superseded_id: tests/audit/editorial_decisions_ci_pv_2026-04-18.md Decision 3
@@ -43,7 +43,7 @@ entries:
       Varfell victory paths requiring VTM need editorial rewrite. Cultural Reformation also STRUCK (see CR-STRIKE entry).
     files_to_recheck:
       - designs/provincial/victory_v30.md
-      - designs/provincial/varfell_path_b_v30.md
+      - systems/factions/varfell_path_b_v30.md
       - engine/params/bg/core.md
       - engine/params/bg/npc_priority_trees.md
     commits: [f7aa0ed, 297f892, 13b8f30]
@@ -60,7 +60,7 @@ entries:
     files_to_recheck:
       - engine/params/bg/faction_actions.md
       - engine/params/bg/npc_priority_trees.md
-      - designs/provincial/faction_politics_v30.md
+      - systems/factions/faction_politics_v30.md
       - systems/npcs/npc_behavior_v30.md
       - designs/provincial/victory_v30.md
     commits: [297f892, 13b8f30]
@@ -105,7 +105,7 @@ entries:
   - superseded_id: "PP-686-001"
     date: 2026-05-01
     scope: "engine/params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
-    superseded_by: "PP-686 v2 / designs/provincial/faction_behavior_v30.md §3.7"
+    superseded_by: "PP-686 v2 / systems/factions/faction_behavior_v30.md §3.7"
     replacement: >
       Ethical Framework Modifiers superseded by triadic decomposition: 
       mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier
@@ -258,7 +258,7 @@ entries:
       (no faction-specific victory; Peninsular Sovereignty is the sole win path).
     files_to_recheck:
       - designs/scene/conviction_track_v30.md    # propagated 2026-07-07 (§3/§4.1/§8/§9/§10/§11.3); residual: contested per-territory seizure trigger (CI75-1) + GD-1 §4.1 checklist gap (CI75-11)
-      - designs/provincial/ci_political_v30.md
+      - systems/factions/ci_political_v30.md
       - designs/provincial/victory_v30.md
       - designs/provincial/peninsular_strain_v30.md §7c
       - engine/params/bg/ci_seizure.md

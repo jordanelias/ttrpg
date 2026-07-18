@@ -1,5 +1,5 @@
 """
-sim/provincial/varfell_territorial_acquisition.py — Varfell territorial-acquisition mechanic (placeholder-named per registers/placeholder_names.yaml VARFELL-TERRITORIAL-ACQUISITION-001)
+systems/factions/sim/varfell_territorial_acquisition.py — Varfell territorial-acquisition mechanic (placeholder-named per registers/placeholder_names.yaml VARFELL-TERRITORIAL-ACQUISITION-001)
 
 Canon source: designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.1 (validated_n1000 mechanic spec in v12c balance work)
 
@@ -30,4 +30,4 @@ from __future__ import annotations
 
 
 def attempt_territorial_acquisition(target_territory: str, world: GameState):
-    raise NotImplementedError("sim/provincial/varfell_territorial_acquisition.py — Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)")
+    raise NotImplementedError("systems/factions/sim/varfell_territorial_acquisition.py — Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)")

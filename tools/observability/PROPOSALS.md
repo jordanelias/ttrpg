@@ -56,7 +56,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 
 ## FA — Faction actions  (28 items, 16 need decision)
 
-- 🔸 `designs/provincial/franchise_v30.md` — franchise v30  _(DRAFT — awaiting Jordan review)_
+- 🔸 `systems/factions/franchise_v30.md` — franchise v30  _(DRAFT — awaiting Jordan review)_
 - 🔸 `ED-FA-0010` — FA-3 FORK (needs Jordan -- differentiates faction identity, a design-taste surface previously reserved, cf. ED-776): coercion-intensive vs capital-intensive muster asymmetry. Hafenmark musters via capital (W-2 substitutes for the Mil prereq  _(open)_
 - 🔸 `ED-FA-0013` — FA-6 (mixed -- (a)/(b) promote-ready, (c) FORK needing Jordan): Storm vs Terms at conquest, differentiating _try_conquest's flat Accord -25. (a) Accept surrender on terms (Success, not Overwhelming): Accord -10, settlement L seeds 2, defend  _(open)_
 - 🔸 `ED-FA-0014` — FA-7 FORK (needs Jordan -- new subsystem state, interacts with Royal Assassination fuse arcs D/E/F): Regency interregnum on leader death with no adult designated heir. Faction enters Regency until succession resolves (unique action locked,   _(open)_

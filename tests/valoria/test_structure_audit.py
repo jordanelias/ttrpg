@@ -95,7 +95,7 @@ def test_as_list_handles_string_and_list():
 
 
 def test_module_name():
-    assert sa._module_name('sim/provincial/faction_action.py') == 'sim.provincial.faction_action'
+    assert sa._module_name('systems/factions/sim/faction_action.py') == 'systems.factions.sim.faction_action'
     assert sa._module_name('sim/personal/__init__.py') == 'sim.personal'
 
 

@@ -1,9 +1,9 @@
 """
-sim/provincial/absolution.py — Church Absolution faction-unique action
+systems/factions/sim/absolution.py — Church Absolution faction-unique action
 
 Canon source:
-  - designs/provincial/faction_canon_v30.md §8.2 (Recovery paths — Church Absolution +1 Stab to target)
-  - designs/provincial/faction_canon_v30.md §8.3 Stability Profile ("at cost of 1 Mandate")
+  - systems/factions/faction_canon_v30.md §8.2 (Recovery paths — Church Absolution +1 Stab to target)
+  - systems/factions/faction_canon_v30.md §8.3 Stability Profile ("at cost of 1 Mandate")
   - tests/sim/v17-integration/m6_faction_actions.py (M6_ASSUMPTION_ONE — Pool=I, Ob=3)
 Game Design constraints applicable: GD-2 (Church faction-unique action)
 Status: [PROVISIONAL — Phase 5/9 integration 2026-05-17. §8.2 canon specifies the

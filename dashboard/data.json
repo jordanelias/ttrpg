@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-17T21:00:08+00:00",
-    "commit_sha": "5c7a32c"
+    "timestamp_utc": "2026-07-18T00:04:24+00:00",
+    "commit_sha": "9d4a510"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 279 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 292 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,13 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "9d4a51036a",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[infrastructure] P4 slice 9: extract mass_battle → systems/mass_battle/ (ED-IN-0071) (#174)",
+        "scope": "infrastructure"
+      },
       {
         "sha": "5c7a32c497",
         "date": "2026-07-17",
@@ -673,13 +680,6 @@
         "author": "jordanelias",
         "subject": "[editorial] Refresh workplan progress board (as_of b5db2c8) (#120)",
         "scope": "editorial"
-      },
-      {
-        "sha": "691d578370",
-        "date": "2026-07-13",
-        "author": "jordanelias",
-        "subject": "Cross-scale governance grounding docket (ED-IN-0051) (#133)",
-        "scope": null
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 279 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 292 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,13 +720,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "480 in-scope file(s) changed since last refresh",
+        "detail": "492 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 5c7a32c (2026-07-17)",
+        "ref": "base 9d4a510 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -736,7 +736,7 @@
         "category": "audit-family",
         "ref": "base 6e79eb6 (2026-07-17)",
         "stale": true,
-        "detail": "91 in-scope file(s) changed since last refresh",
+        "detail": "103 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -750,7 +750,7 @@
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 5c7a32c (2026-07-17)",
+        "ref": "base 9d4a510 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -766,7 +766,7 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 5c7a32c (2026-07-17)",
+        "ref": "base 9d4a510 (2026-07-17)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -784,7 +784,7 @@
         "category": "index",
         "ref": "last reconciled 2026-07-17",
         "stale": false,
-        "detail": "last hand-reconciled 0 day(s) ago",
+        "detail": "last hand-reconciled 1 day(s) ago",
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
@@ -794,7 +794,7 @@
       {
         "surface": "HANDOFF.md",
         "last_updated": "2026-07-17",
-        "days_ago": 0
+        "days_ago": 1
       }
     ],
     "note": "detection only — surfaces are refreshed by their owning skill/PR, never by this job"
@@ -1980,16 +1980,16 @@
           "status": "PROPOSED"
         }
       ],
+      "factions": [
+        {
+          "path": "systems/factions/franchise_v30.md",
+          "status": "DRAFT — awaiting Jordan review"
+        }
+      ],
       "npcs": [
         {
           "path": "systems/npcs/character_canon_v30.md",
           "status": "PROVISIONAL — pending ratification."
-        }
-      ],
-      "provincial": [
-        {
-          "path": "designs/provincial/franchise_v30.md",
-          "status": "DRAFT — awaiting Jordan review"
         }
       ],
       "settlements": [
@@ -2010,8 +2010,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"fieldwork\"]\n    D7[\"mass_battle\"]\n    D8[\"npcs\"]\n    D9[\"personal\"]\n    D10[\"provincial\"]\n    D11[\"scene\"]\n    D12[\"settlements\"]\n    D13[\"social_contest\"]\n    D14[\"threadwork\"]\n    D15[\"ui\"]\n    D16[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 17,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"factions\"]\n    D7[\"fieldwork\"]\n    D8[\"mass_battle\"]\n    D9[\"npcs\"]\n    D10[\"personal\"]\n    D11[\"provincial\"]\n    D12[\"scene\"]\n    D13[\"settlements\"]\n    D14[\"social_contest\"]\n    D15[\"threadwork\"]\n    D16[\"ui\"]\n    D17[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 18,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
@@ -2263,10 +2263,10 @@
           {
             "name": "Parliamentary motions",
             "desc": "Censure · Embargo · Blockade · Outlawry · Subsidy · War Authorisation · Treaty Ratification · Recognition Challenge · Succession Endorsement",
-            "source": "designs/provincial/faction_layer_v30.md §5.4"
+            "source": "systems/factions/faction_layer_v30.md §5.4"
           }
         ],
-        "caveat": "The live sim (sim/provincial/faction_action.py) dispatches unique → Conquest → Muster → Govern each season; some code verbs (Crown Royal Progress/Great Work) are PROVISIONAL and differ from the ratified Royal Decree."
+        "caveat": "The live sim (systems/factions/sim/faction_action.py) dispatches unique → Conquest → Muster → Govern each season; some code verbs (Crown Royal Progress/Great Work) are PROVISIONAL and differ from the ratified Royal Decree."
       },
       {
         "name": "Settlements / territory",

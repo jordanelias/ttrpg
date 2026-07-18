@@ -1,9 +1,9 @@
 """
-sim/provincial/excommunication.py — Church Excommunication faction-unique action
+systems/factions/sim/excommunication.py — Church Excommunication faction-unique action
 
 Canon source:
-  - designs/provincial/faction_canon_v30.md §9 (Tactic / Unique Action Overview)
-  - designs/provincial/faction_canon_v30.md (Church faction sheet — Tactic / Unique Actions)
+  - systems/factions/faction_canon_v30.md §9 (Tactic / Unique Action Overview)
+  - systems/factions/faction_canon_v30.md (Church faction sheet — Tactic / Unique Actions)
   - systems/social_contest/social_contest_v30.md §7.1 (Excommunication Tribunal, ED-625)
 Game Design constraints applicable: GD-2 (mandatory-before-stochastic action selection)
 Status: [PROVISIONAL — Phase 5/9 integration 2026-05-17. §9 strategic-scale

@@ -1,8 +1,8 @@
 """pr119_recognition_accountability.py — provisional adapter testing PR#119's three
 faction-rank accountability items (all PROPOSED, no sim code):
-  - designs/provincial/faction_politics_v30.md §1.0b Recognition Fork (ED-FA-0019)
-  - designs/provincial/faction_politics_v30.md §1.0c Court Attendance / Hostage-Kin (ED-FA-0020)
-  - designs/provincial/faction_politics_v30.md §1.0d Patron-Sponsored Performance Audit (ED-FA-0021)
+  - systems/factions/faction_politics_v30.md §1.0b Recognition Fork (ED-FA-0019)
+  - systems/factions/faction_politics_v30.md §1.0c Court Attendance / Hostage-Kin (ED-FA-0020)
+  - systems/factions/faction_politics_v30.md §1.0d Patron-Sponsored Performance Audit (ED-FA-0021)
 
 The load-bearing decision point is `performance_audit_vs_g606`. PR#125's reconciliation pass
 (designs/audit/2026-07-12-settlement-season-stress-sim/reconciliation_with_existing_territory_work.md,
@@ -28,7 +28,7 @@ _KONRAD = NPCS["NPC-G06"]
 
 @register_adapter("pr119_recognition_accountability")
 class RecognitionAccountabilityAdapter(Adapter):
-    contract_module = "faction_politics"  # references/module_contracts.yaml -> designs/provincial/faction_politics_v30.md
+    contract_module = "faction_politics"  # references/module_contracts.yaml -> systems/factions/faction_politics_v30.md
     canon_row = None  # all three items are PROPOSED, no CURRENT.md row yet
     registry_subsystem = "faction_political"
 
@@ -51,7 +51,7 @@ class RecognitionAccountabilityAdapter(Adapter):
             "p_comply": "test-scenario value, not canon-derived: the shared per-season "
                 "compliance draw both cascades below react to — neither doc specifies a "
                 "base compliance rate",
-            "pa_demotion_streak": "PROVISIONAL: designs/provincial/faction_politics_v30.md "
+            "pa_demotion_streak": "PROVISIONAL: systems/factions/faction_politics_v30.md "
                 "§1.0d — 'It converts to an immediate Demotion Magnitude-1 trigger ... after "
                 "3 seasons, bypassing the normal grace period'",
             "konrad_fire_threshold": "PROVISIONAL: systems/settlements/goldenfurt_slice/"

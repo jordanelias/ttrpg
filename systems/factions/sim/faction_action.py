@@ -1,5 +1,5 @@
 """
-sim/provincial/faction_action.py — Faction action selection + resolution
+systems/factions/sim/faction_action.py — Faction action selection + resolution
 
 Canon source: mc_v17.py faction_take_action; GD-2 (mandatory before stochastic)
 Game Design constraints applicable: GD-1, GD-2
@@ -21,22 +21,22 @@ onset tracks perceived relative power → Conquest keys off a mil-advantage sign
 Dependencies:
   - sim/autoload/game_state
   - systems/settlements/sim/adjacency
-  - sim/provincial/crown_initiative (Phase 5/9)
-  - sim/provincial/excommunication (Phase 5/9)
-  - sim/provincial/absolution (Phase 5/9)
-  - sim/provincial/council_solmund (Phase 5/9)
-  - sim/provincial/parliamentary_action (ED-SC-0007 mechanism; wired here per ED-FA-0012 fallback)
+  - systems/factions/sim/crown_initiative (Phase 5/9)
+  - systems/factions/sim/excommunication (Phase 5/9)
+  - systems/factions/sim/absolution (Phase 5/9)
+  - systems/factions/sim/council_solmund (Phase 5/9)
+  - systems/factions/sim/parliamentary_action (ED-SC-0007 mechanism; wired here per ED-FA-0012 fallback)
 """
 from __future__ import annotations
 
 import math
 from engine.autoload.game_state import MULTS, ALL_PLAYABLE_15
 from systems.settlements.sim.adjacency import ADJACENCY
-from sim.provincial import crown_initiative
-from sim.provincial import excommunication
-from sim.provincial import absolution
-from sim.provincial import council_solmund
-from sim.provincial import parliamentary_action
+from systems.factions.sim import crown_initiative
+from systems.factions.sim import excommunication
+from systems.factions.sim import absolution
+from systems.factions.sim import council_solmund
+from systems.factions.sim import parliamentary_action
 
 # ── ED-FA-0012 (FA-5): state-conditioned action mix — PRIOR (base) weights ─────────────────────
 # The retired M7_ASSUMPTION_SIX fixed vector, kept ONLY as the neutral-state prior. In a neutral

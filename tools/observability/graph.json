@@ -248,7 +248,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "ci_political",
-      "doc": "designs/provincial/ci_political_v30.md",
+      "doc": "systems/factions/ci_political_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -462,7 +462,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "faction_politics",
-      "doc": "designs/provincial/faction_politics_v30.md",
+      "doc": "systems/factions/faction_politics_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -473,7 +473,7 @@
       "loops": [],
       "gap_notes": [
         "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
-        "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale \u2014 doc: field flipped to designs/provincial/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
+        "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale \u2014 doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -509,7 +509,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "faction_layer",
-      "doc": "designs/provincial/faction_behavior_v30.md",
+      "doc": "systems/factions/faction_behavior_v30.md",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"

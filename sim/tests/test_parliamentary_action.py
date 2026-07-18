@@ -1,14 +1,14 @@
 """
 sim/tests/test_parliamentary_action.py — Parliamentary Sanction (Censure tier) mechanism oracle
 
-Guards sim/provincial/parliamentary_action.py — the ED-SC-0007 residual "parliamentary_vote-in-the-
+Guards systems/factions/sim/parliamentary_action.py — the ED-SC-0007 residual "parliamentary_vote-in-the-
 loop" MECHANISM (proposer/target/declaration authoring for the §10 BG-vote resolver, which shipped
 tested but caller-less). Scope is the CENSURE tier only (faction_layer_v30.md §5.4: Mandate-2
 proposer min, Majority vote, target Stability −1 / Mandate −1, no proposer cost).
 
 Conventions (matching sim/tests/test_echo_transport.py / test_mc_v18_regression.py):
   - pinned seeds, no unseeded randomness; every roll goes through a random.Random(seed).
-  - the passing/committee/failing seeds below are pinned goldens over sim.provincial.parliamentary_action
+  - the passing/committee/failing seeds below are pinned goldens over systems.factions.sim.parliamentary_action
     on a fixed 4-faction strong-proposer world; a surprise failure means the proposal mechanism or the
     §10 resolver changed — investigate before repinning.
 """
@@ -24,7 +24,7 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 from engine.autoload import game_state
-from sim.provincial import parliamentary_action as pa
+from systems.factions.sim import parliamentary_action as pa
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────

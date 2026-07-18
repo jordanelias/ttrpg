@@ -38,7 +38,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('1', 'designs/th
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/scene/combat_v30.md');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/coherence.py', 'thread', 0, 'verified', 'designs/threadwork/threadwork_v30.md', NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/combat.py', 'personal', 1, 'partial', 'designs/scene/combat_v30.md', NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/charter_liberties.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2e Hafenmark');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('systems/factions/sim/charter_liberties.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2e Hafenmark');
 """
 
 
@@ -51,7 +51,7 @@ def _schema_only(dump):
 def test_stub_summary_by_status_and_link(tmp_path):
     conn = R.open_db(Path(str(tmp_path / 's.db')), FIXTURE)
     assert ix.stub_summary(conn) == {'canon_gated': 1, 'partial': 1, 'verified': 1}
-    assert ix.stubs_by_status(conn, 'canon_gated') == ['sim/provincial/charter_liberties.py']
+    assert ix.stubs_by_status(conn, 'canon_gated') == ['systems/factions/sim/charter_liberties.py']
     # concept-join: threadwork -> coherence stub (via canon_source -> concept_files)
     assert ix.stub_status(conn, 'threadwork') == [('sim/thread/coherence.py', 'verified', 0, None)]
     assert ix.stub_status(conn, 'combat') == [('sim/personal/combat.py', 'partial', 1, None)]

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "files_scanned": 1373,
-    "total_open": 984,
+    "files_scanned": 1375,
+    "total_open": 983,
     "by_category": {
-      "ratification": 47,
+      "ratification": 46,
       "ruling": 219,
       "naming": 72,
       "mechanics": 24,
@@ -13,13 +13,13 @@
       "todo": 14
     },
     "by_priority": {
-      "1": 326,
+      "1": 325,
       "2": 36,
       "3": 622
     },
     "by_lane": {
       "FA": 68,
-      "unassigned": 704,
+      "unassigned": 703,
       "PC": 112,
       "SC": 7,
       "GO": 19,
@@ -36,7 +36,7 @@
         "3": 64
       },
       "unassigned": {
-        "1": 283,
+        "1": 282,
         "2": 32,
         "3": 389
       },
@@ -152,10 +152,10 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/provincial/faction_behavior_v30.md:548",
         "designs/personal/conviction_taxonomy_v30.md:337",
         "systems/_architecture/key_substrate_v30.md:627",
-        "systems/articulation/articulation_layer_v30.md:363"
+        "systems/articulation/articulation_layer_v30.md:363",
+        "systems/factions/faction_behavior_v30.md:548"
       ],
       "systems": [],
       "count": 4,
@@ -197,8 +197,8 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "designs/provincial/faction_canon_v30.md:7",
-        "systems/npcs/character_canon_v30.md:6"
+        "systems/npcs/character_canon_v30.md:6",
+        "systems/factions/faction_canon_v30.md:7"
       ],
       "systems": [],
       "count": 2,
@@ -938,30 +938,6 @@
       "lane": null
     },
     {
-      "text": "<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions \u00a77 bullet 5 + \u00a75 Domain Echo. Jordan-vetoable.] -->",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "designs/provincial/faction_behavior_v30.md:437"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:2"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "Status:** WORKPLAN (draft pending ratification)",
       "category": "ratification",
       "priority": 1,
@@ -1406,6 +1382,30 @@
       "lane": "SC"
     },
     {
+      "text": "<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions \u00a77 bullet 5 + \u00a75 Domain Echo. Jordan-vetoable.] -->",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/factions/faction_behavior_v30.md:437"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:2"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
       "text": "INNOV-NNN: <description> [pending ratification]",
       "category": "ratification",
       "priority": 1,
@@ -1436,18 +1436,6 @@
       "label": "Awaiting ratification",
       "locations": [
         "references/module_contracts.yaml:14"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "varfell_mandate_action: Varfell Mandate-gain action (placeholder name per VARFELL-MANDATE-ACTION-001; mechanic pending Jordan ratification)",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "sim/provincial/__init__.py:15"
       ],
       "systems": [],
       "count": 1,
@@ -7393,6 +7381,54 @@
       "lane": "SC"
     },
     {
+      "text": "[ASSUMPTION: declaration_used flag stored on World \u2014 basis: one-shot",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/factions/sim/mass_seizure.py:20"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: pool roll uses Church.L as Influence proxy \u2014 basis: World",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/factions/sim/mass_seizure.py:26"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: game_state uses faction.I (Investments-renamed-Influence",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/factions/sim/mass_seizure.py:110"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: game_state models NO Casus Belli ledger (verified \u2014 no casus_belli field). CB is read from an",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/factions/sim/parliamentary_transfer.py:22"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
       "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
       "category": "assumption",
       "priority": 3,
@@ -7669,54 +7705,6 @@
       "lane": null
     },
     {
-      "text": "[ASSUMPTION: declaration_used flag stored on World \u2014 basis: one-shot",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/mass_seizure.py:20"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: pool roll uses Church.L as Influence proxy \u2014 basis: World",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/mass_seizure.py:26"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: game_state uses faction.I (Investments-renamed-Influence",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/mass_seizure.py:110"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: game_state models NO Casus Belli ledger (verified \u2014 no casus_belli field). CB is read from an",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "sim/provincial/parliamentary_transfer.py:22"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "\"\"\"Duck-typed actor per operations.py's [ASSUMPTION] contract.\"\"\"",
       "category": "assumption",
       "priority": 3,
@@ -7799,102 +7787,6 @@
       "systems": [],
       "count": 1,
       "lane": "GO"
-    },
-    {
-      "text": "Does not author missing substrate-postures (Crown / Church / Varfell / Guilds \u2014 all four are flagged `[GAP \u2014 Phase B]`).",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:42"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "Substrate-Posture   \u2014 T-15 series where authored; [GAP \u2014 Phase B] for unauthored",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:67"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "Doctrine Notes      \u2014 published \u00a71.5 material where present; [GAP] otherwise",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:72"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "| **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP \u2014 Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / L\u00f6wenritter) have authored T-15 postures; rest pending per ED-717. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:361"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "| **D5** | Inspirations field \u2014 lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no parallel is documented, mark `[GAP]`. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:362"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal \u2014 Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Certainty 3 (Questio\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:431"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Likely structural shape: rendering-reinforcement posture (T-08 candidate per cross-references). Church's framework actively suppresses Thread perception (perceptual prophylaxis at `Foundations \u00a79.1`) \u2014 Faith Conviction interprets Thread phenomena as illusion-or-heresy. Theolog\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:595"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP]` \u2014 no published \u00a71.5 Church doctrine note in `faction_layer_v30`. The \u00a73 ecclesiastical material lives in `factions_personal \u00a78.3` and is captured above. Author at Phase B if differentiation from generic ecclesiastical role is needed.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "designs/provincial/faction_canon_v30.md:653"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
     },
     {
       "text": "[GAP: CI pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]",
@@ -11185,6 +11077,114 @@
       "lane": null
     },
     {
+      "text": "Does not author missing substrate-postures (Crown / Church / Varfell / Guilds \u2014 all four are flagged `[GAP \u2014 Phase B]`).",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:42"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Substrate-Posture   \u2014 T-15 series where authored; [GAP \u2014 Phase B] for unauthored",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:67"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Doctrine Notes      \u2014 published \u00a71.5 material where present; [GAP] otherwise",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:72"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "| **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP \u2014 Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / L\u00f6wenritter) have authored T-15 postures; rest pending per ED-717. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:361"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "| **D5** | Inspirations field \u2014 lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no parallel is documented, mark `[GAP]`. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:362"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal \u2014 Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Certainty 3 (Questio\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:431"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Likely structural shape: rendering-reinforcement posture (T-08 candidate per cross-references). Church's framework actively suppresses Thread perception (perceptual prophylaxis at `Foundations \u00a79.1`) \u2014 Faith Conviction interprets Thread phenomena as illusion-or-heresy. Theolog\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:595"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP]` \u2014 no published \u00a71.5 Church doctrine note in `faction_layer_v30`. The \u00a73 ecclesiastical material lives in `factions_personal \u00a78.3` and is captured above. Author at Phase B if differentiation from generic ecclesiastical role is needed.",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:653"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/sim/faction_action.py:354"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
       "text": "age: null  # [GAP: no age in canon]",
       "category": "gap",
       "priority": 3,
@@ -11437,18 +11437,6 @@
       "lane": null
     },
     {
-      "text": "terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "sim/provincial/faction_action.py:354"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "| 8 | engine_clock | clock_advance | provincial | `SeasonManager`/`GameStateMachine` (refit) | S | Emits mechanical.accounting / season_change; **home doc unlocated [GAP]** \u2014 contract is the spec seed. |",
       "category": "gap",
       "priority": 3,
@@ -11601,18 +11589,6 @@
       ],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "<!-- [STUB: drift magnitude/curve unspecified \u2014 provisional; pending Jordan tuning; tracked workplan #30 / ED-936] -->",
-      "category": "stub",
-      "priority": 3,
-      "label": "Stub / pointer only",
-      "locations": [
-        "designs/provincial/political_dynamics_keys_migration_v30.md:328"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
     },
     {
       "text": "`scene.thread_operation` (Thread-Reads' likely carrier) is `[STUB]` \u2014 payload inferred, not",
@@ -11999,6 +11975,18 @@
       "lane": null
     },
     {
+      "text": "<!-- [STUB: drift magnitude/curve unspecified \u2014 provisional; pending Jordan tuning; tracked workplan #30 / ED-936] -->",
+      "category": "stub",
+      "priority": 3,
+      "label": "Stub / pointer only",
+      "locations": [
+        "systems/factions/political_dynamics_keys_migration_v30.md:328"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
       "text": "| **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete \u00a710.2 \u2014 TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |",
       "category": "todo",
       "priority": 3,
@@ -12095,6 +12083,30 @@
       "lane": "PC"
     },
     {
+      "text": "deliberately NOT built here \u2014 see the module TODO for the future-extension surface.",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "systems/factions/sim/parliamentary_action.py:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "systems/factions/sim/parliamentary_action.py:162"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
       "text": "{item: \"legacy faction name (naming-rule)\", at: \"faction_politics_v30 \u00a7naming-note\", actual: \"appears only in an editorial note ABOUT the naming rule, not live usage \u2014 NOT a violation; but the note flags a 'Galbadian->Solmund' propagation TODO to grep designs/ for the adjective form\"}",
       "category": "todo",
       "priority": 3,
@@ -12117,30 +12129,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "deliberately NOT built here \u2014 see the module TODO for the future-extension surface.",
-      "category": "todo",
-      "priority": 3,
-      "label": "TODO / FIXME",
-      "locations": [
-        "sim/provincial/parliamentary_action.py:10"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
-      "category": "todo",
-      "priority": 3,
-      "label": "TODO / FIXME",
-      "locations": [
-        "sim/provincial/parliamentary_action.py:162"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
     },
     {
       "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
@@ -12208,7 +12196,7 @@
     {
       "id": "PP-686-001",
       "scope": "engine/params/bg/core.md \u00a7Ethical Framework Modifiers (philosophical-tradition vocabulary, \u00b13 Ob cap)",
-      "superseded_by": "PP-686 v2 / designs/provincial/faction_behavior_v30.md \u00a73.7",
+      "superseded_by": "PP-686 v2 / systems/factions/faction_behavior_v30.md \u00a73.7",
       "date": "2026-05-01",
       "replacement": "Ethical Framework Modifiers superseded by triadic decomposition:  mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier clamp"
     },

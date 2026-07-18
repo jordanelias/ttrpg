@@ -1,5 +1,5 @@
 """
-sim/provincial/varfell_mandate_action.py — Varfell Mandate-gain action (placeholder-named per registers/placeholder_names.yaml VARFELL-MANDATE-ACTION-001)
+systems/factions/sim/varfell_mandate_action.py — Varfell Mandate-gain action (placeholder-named per registers/placeholder_names.yaml VARFELL-MANDATE-ACTION-001)
 
 Canon source: designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md §5.3 (current canon, marked for audit-driven supersession)
 
@@ -28,4 +28,4 @@ from __future__ import annotations
 
 
 def attempt_mandate_action(world: GameState):
-    raise NotImplementedError("sim/provincial/varfell_mandate_action.py — Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)")
+    raise NotImplementedError("systems/factions/sim/varfell_mandate_action.py — Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)")

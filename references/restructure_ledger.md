@@ -72,17 +72,17 @@
 | `designs/board_game/board_game_v30.md` | `designs/provincial/strategic_layer_v30.md` | PENDING |
 | `designs/board_game/board_game_v30_infill.md` | `designs/provincial/strategic_layer_v30_infill.md` | PENDING |
 | `designs/board_game/board_game_v30_skeleton.md` | `designs/provincial/strategic_layer_v30_skeleton.md` | PENDING |
-| `designs/board_game/faction_layer_v30.md` | `designs/provincial/faction_layer_v30.md` | PENDING |
-| `designs/board_game/faction_layer_v30_infill.md` | `designs/provincial/faction_layer_v30_infill.md` | PENDING |
+| `designs/board_game/faction_layer_v30.md` | `systems/factions/faction_layer_v30.md` | PENDING |
+| `designs/board_game/faction_layer_v30_infill.md` | `systems/factions/faction_layer_v30_infill.md` | PENDING |
 | `designs/board_game/faction_layer_v30_skeleton.md` | `designs/provincial/faction_layer_v30_skeleton.md` | PENDING |
-| `designs/board_game/fail_forward_pp177_2026-04-02.md` | `designs/provincial/fail_forward_pp177.md` | PENDING |
+| `designs/board_game/fail_forward_pp177_2026-04-02.md` | `systems/factions/fail_forward_pp177.md` | PENDING |
 | `designs/board_game/military_layer_v30.md` | `deprecated/designs/board_game/military_layer_v30.md` | PENDING |
 | `designs/board_game/peninsular_strain_v1.md` | `designs/provincial/peninsular_strain_v30.md` | PENDING |
 | `designs/board_game/peninsular_strain_v1_skeleton.md` | `designs/provincial/peninsular_strain_v30_skeleton.md` | PENDING |
 | `designs/board_game/tc_political_redesign_v30.md` | `deprecated/designs/board_game/tc_political_redesign_v30.md` | PENDING |
 | `designs/board_game/valoria_map_v2.svg` | `designs/provincial/valoria_map_v2.svg` | PENDING |
-| `designs/board_game/varfell_path_b_v30.md` | `designs/provincial/varfell_path_b_v30.md` | PENDING |
-| `designs/board_game/varfell_path_b_v30_infill.md` | `designs/provincial/varfell_path_b_v30_infill.md` | PENDING |
+| `designs/board_game/varfell_path_b_v30.md` | `systems/factions/varfell_path_b_v30.md` | PENDING |
+| `designs/board_game/varfell_path_b_v30_infill.md` | `systems/factions/varfell_path_b_v30_infill.md` | PENDING |
 | `designs/board_game/victory_v30.md` | `designs/provincial/victory_v30.md` | PENDING |
 | `designs/board_game/victory_v30_infill.md` | `designs/provincial/victory_v30_infill.md` | PENDING |
 | `designs/board_game/victory_v30_skeleton.md` | `designs/provincial/victory_v30_skeleton.md` | PENDING |
@@ -139,8 +139,8 @@
 | `designs/mass_combat/mass_battle_v30.md` | `systems/mass_battle/mass_battle_v30.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_infill.md` | `systems/mass_battle/mass_battle_v30_infill.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_skeleton.md` | `designs/provincial/mass_battle_v30_skeleton.md` | PENDING |
-| `designs/mechanics/baralta_crown_claim_v30.md` | `designs/provincial/baralta_crown_claim_v30.md` | PENDING |
-| `designs/mechanics/baralta_crown_claim_v30_infill.md` | `designs/provincial/baralta_crown_claim_v30_infill.md` | PENDING |
+| `designs/mechanics/baralta_crown_claim_v30.md` | `systems/factions/baralta_crown_claim_v30.md` | PENDING |
+| `designs/mechanics/baralta_crown_claim_v30_infill.md` | `systems/factions/baralta_crown_claim_v30_infill.md` | PENDING |
 | `designs/setting/adjacency_map.jsx` | `systems/world/adjacency_map.jsx` | PENDING |
 | `designs/setting/calamity_radiation_v30.md` | `systems/world/calamity_radiation_v30.md` | PENDING |
 | `designs/setting/calamity_radiation_v30_infill.md` | `systems/world/calamity_radiation_v30_infill.md` | PENDING |
@@ -162,7 +162,7 @@
 | `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `systems/_architecture/complete_systems_reference.md` | PENDING |
 | `designs/systems/derived_stats_v1.md` | `designs/scene/derived_stats_v30.md` | PENDING |
 | `designs/systems/derived_stats_v1_skeleton.md` | `designs/scene/derived_stats_v30_skeleton.md` | PENDING |
-| `designs/systems/faction_politics_expanded_v1.md` | `designs/provincial/faction_politics_v30.md` | DONE (2026-07-08, ED-IN-0016 — file move already complete, old path long gone; citation-repointing half executed this pass across the live corpus) |
+| `designs/systems/faction_politics_expanded_v1.md` | `systems/factions/faction_politics_v30.md` | DONE (2026-07-08, ED-IN-0016 — file move already complete, old path long gone; citation-repointing half executed this pass across the live corpus) |
 | `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | N/A (2026-07-08, ED-IN-0016 — not executed: `faction_politics_v30.md` was promoted as a single monolithic doc; no index/skeleton split was ever authored for it, confirmed no such file exists) |
 | `designs/systems/integration_proposal_2026-04-15.md` | `systems/_architecture/integration_proposal_v30.md` | PENDING |
 | `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `systems/_architecture/integration_proposal_v30_skeleton.md` | PENDING |
@@ -185,8 +185,8 @@
 | `designs/systems/throughline_resolutions_v1.md` | `designs/arcs/throughline_resolutions_v30.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1_skeleton.md` | `designs/arcs/throughline_resolutions_v30_skeleton.md` | PENDING |
 | `designs/ttrpg/edeyja_npc.md` | `systems/npcs/edeyja_npc.md` | PENDING |
-| `designs/ttrpg/factions_ttrpg_v30.md` | `designs/provincial/factions_personal_v30.md` | PENDING |
-| `designs/ttrpg/factions_ttrpg_v30_infill.md` | `designs/provincial/factions_personal_v30_infill.md` | PENDING |
+| `designs/ttrpg/factions_ttrpg_v30.md` | `systems/factions/factions_personal_v30.md` | PENDING |
+| `designs/ttrpg/factions_ttrpg_v30_infill.md` | `systems/factions/factions_personal_v30_infill.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_skeleton.md` | `designs/provincial/factions_personal_v30_skeleton.md` | PENDING |
 | `designs/ttrpg/threadwork_philosophical_reference_v30.md` | `systems/threadwork/threadwork_philosophical_reference_v30.md` | PENDING |
 | `designs/ttrpg/threadwork_philosophical_reference_v30_infill.md` | `systems/threadwork/threadwork_philosophical_reference_v30_infill.md` | PENDING |
@@ -891,3 +891,81 @@
 | `sim/provincial/units` | `systems/mass_battle/sim/units` |
 | `sim/provincial/tactic_cards` | `systems/mass_battle/sim/tactic_cards` |
 | `sim/provincial/altonian_reinforcements` | `systems/mass_battle/sim/altonian_reinforcements` |
+
+
+## 2026-07-18 — factions provincial split (part 2) -> systems/factions/ (P4 slice 10, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/provincial/baralta_crown_claim_v30.md` | `systems/factions/baralta_crown_claim_v30.md` |
+| `designs/provincial/baralta_crown_claim_v30_infill.md` | `systems/factions/baralta_crown_claim_v30_infill.md` |
+| `designs/provincial/ci_political_v30.md` | `systems/factions/ci_political_v30.md` |
+| `designs/provincial/ci_political_v30_index.md` | `systems/factions/ci_political_v30_index.md` |
+| `designs/provincial/faction_behavior_v30.md` | `systems/factions/faction_behavior_v30.md` |
+| `designs/provincial/faction_canon_v30.md` | `systems/factions/faction_canon_v30.md` |
+| `designs/provincial/faction_layer_v30.md` | `systems/factions/faction_layer_v30.md` |
+| `designs/provincial/faction_layer_v30_index.md` | `systems/factions/faction_layer_v30_index.md` |
+| `designs/provincial/faction_layer_v30_infill.md` | `systems/factions/faction_layer_v30_infill.md` |
+| `designs/provincial/faction_politics_v30.md` | `systems/factions/faction_politics_v30.md` |
+| `designs/provincial/faction_politics_v30_index.md` | `systems/factions/faction_politics_v30_index.md` |
+| `designs/provincial/faction_state_authoring_v30.md` | `systems/factions/faction_state_authoring_v30.md` |
+| `designs/provincial/faction_succession_split_v30.md` | `systems/factions/faction_succession_split_v30.md` |
+| `designs/provincial/faction_succession_split_v30_index.md` | `systems/factions/faction_succession_split_v30_index.md` |
+| `designs/factions/faction_systems_overview_v30.md` | `systems/factions/faction_systems_overview_v30.md` |
+| `designs/provincial/factions_personal_v30.md` | `systems/factions/factions_personal_v30.md` |
+| `designs/provincial/factions_personal_v30_index.md` | `systems/factions/factions_personal_v30_index.md` |
+| `designs/provincial/factions_personal_v30_infill.md` | `systems/factions/factions_personal_v30_infill.md` |
+| `designs/provincial/fail_forward_pp177.md` | `systems/factions/fail_forward_pp177.md` |
+| `designs/provincial/fractional_province_ownership_v30.md` | `systems/factions/fractional_province_ownership_v30.md` |
+| `designs/provincial/fractional_province_ownership_v30_index.md` | `systems/factions/fractional_province_ownership_v30_index.md` |
+| `designs/provincial/franchise_v30.md` | `systems/factions/franchise_v30.md` |
+| `designs/provincial/parliamentary_transfer_v30.md` | `systems/factions/parliamentary_transfer_v30.md` |
+| `designs/provincial/political_dynamics_keys_migration_v30.md` | `systems/factions/political_dynamics_keys_migration_v30.md` |
+| `designs/provincial/treaty_expiration_v30.md` | `systems/factions/treaty_expiration_v30.md` |
+| `designs/provincial/varfell_path_b_v30.md` | `systems/factions/varfell_path_b_v30.md` |
+| `designs/provincial/varfell_path_b_v30_infill.md` | `systems/factions/varfell_path_b_v30_infill.md` |
+| `sim/provincial/absolution.py` | `systems/factions/sim/absolution.py` |
+| `sim/provincial/charter_liberties.py` | `systems/factions/sim/charter_liberties.py` |
+| `sim/provincial/council_solmund.py` | `systems/factions/sim/council_solmund.py` |
+| `sim/provincial/crown_initiative.py` | `systems/factions/sim/crown_initiative.py` |
+| `sim/provincial/excommunication.py` | `systems/factions/sim/excommunication.py` |
+| `sim/provincial/faction_action.py` | `systems/factions/sim/faction_action.py` |
+| `sim/provincial/hafenmark_equipment.py` | `systems/factions/sim/hafenmark_equipment.py` |
+| `sim/provincial/infrastructure_reclamation.py` | `systems/factions/sim/infrastructure_reclamation.py` |
+| `sim/provincial/mass_seizure.py` | `systems/factions/sim/mass_seizure.py` |
+| `sim/provincial/parliamentary_action.py` | `systems/factions/sim/parliamentary_action.py` |
+| `sim/provincial/parliamentary_transfer.py` | `systems/factions/sim/parliamentary_transfer.py` |
+| `sim/provincial/treaty.py` | `systems/factions/sim/treaty.py` |
+| `sim/provincial/varfell_mandate_action.py` | `systems/factions/sim/varfell_mandate_action.py` |
+| `sim/provincial/varfell_territorial_acquisition.py` | `systems/factions/sim/varfell_territorial_acquisition.py` |
+| `designs/provincial/baralta_crown_claim_v30` | `systems/factions/baralta_crown_claim_v30` |
+| `designs/provincial/ci_political_v30` | `systems/factions/ci_political_v30` |
+| `designs/provincial/faction_behavior_v30` | `systems/factions/faction_behavior_v30` |
+| `designs/provincial/faction_canon_v30` | `systems/factions/faction_canon_v30` |
+| `designs/provincial/faction_layer_v30` | `systems/factions/faction_layer_v30` |
+| `designs/provincial/faction_politics_v30` | `systems/factions/faction_politics_v30` |
+| `designs/provincial/faction_state_authoring_v30` | `systems/factions/faction_state_authoring_v30` |
+| `designs/provincial/faction_succession_split_v30` | `systems/factions/faction_succession_split_v30` |
+| `designs/factions/faction_systems_overview_v30` | `systems/factions/faction_systems_overview_v30` |
+| `designs/provincial/factions_personal_v30` | `systems/factions/factions_personal_v30` |
+| `designs/provincial/fail_forward_pp177` | `systems/factions/fail_forward_pp177` |
+| `designs/provincial/fractional_province_ownership_v30` | `systems/factions/fractional_province_ownership_v30` |
+| `designs/provincial/franchise_v30` | `systems/factions/franchise_v30` |
+| `designs/provincial/parliamentary_transfer_v30` | `systems/factions/parliamentary_transfer_v30` |
+| `designs/provincial/political_dynamics_keys_migration_v30` | `systems/factions/political_dynamics_keys_migration_v30` |
+| `designs/provincial/treaty_expiration_v30` | `systems/factions/treaty_expiration_v30` |
+| `designs/provincial/varfell_path_b_v30` | `systems/factions/varfell_path_b_v30` |
+| `sim/provincial/absolution` | `systems/factions/sim/absolution` |
+| `sim/provincial/charter_liberties` | `systems/factions/sim/charter_liberties` |
+| `sim/provincial/council_solmund` | `systems/factions/sim/council_solmund` |
+| `sim/provincial/crown_initiative` | `systems/factions/sim/crown_initiative` |
+| `sim/provincial/excommunication` | `systems/factions/sim/excommunication` |
+| `sim/provincial/faction_action` | `systems/factions/sim/faction_action` |
+| `sim/provincial/hafenmark_equipment` | `systems/factions/sim/hafenmark_equipment` |
+| `sim/provincial/infrastructure_reclamation` | `systems/factions/sim/infrastructure_reclamation` |
+| `sim/provincial/mass_seizure` | `systems/factions/sim/mass_seizure` |
+| `sim/provincial/parliamentary_action` | `systems/factions/sim/parliamentary_action` |
+| `sim/provincial/parliamentary_transfer` | `systems/factions/sim/parliamentary_transfer` |
+| `sim/provincial/treaty` | `systems/factions/sim/treaty` |
+| `sim/provincial/varfell_mandate_action` | `systems/factions/sim/varfell_mandate_action` |
+| `sim/provincial/varfell_territorial_acquisition` | `systems/factions/sim/varfell_territorial_acquisition` |

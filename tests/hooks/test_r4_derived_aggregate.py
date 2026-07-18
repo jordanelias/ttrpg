@@ -9,7 +9,7 @@ from github_ops import quick_bootstrap
 def run(h, content):
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        try: h.pre_commit_gate([('designs/provincial/faction_layer_v30.md', content)], [])
+        try: h.pre_commit_gate([('systems/factions/faction_layer_v30.md', content)], [])
         except Exception: pass
     return 'R4 advisory' in buf.getvalue()
 

@@ -1,5 +1,5 @@
 """
-sim/provincial/council_solmund.py — Council of Solmund — rare 1/arc gathering
+systems/factions/sim/council_solmund.py — Council of Solmund — rare 1/arc gathering
 
 Canon source: designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md §5.1
 Game Design constraints applicable: GD-2 (Church faction-unique action)

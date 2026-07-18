@@ -50,7 +50,7 @@ THE CORE PARTITION (get this right — it is the whole point of the tool):
   does NOT demote a live head is `banner_classify()`'s weak CONTENT-keyword
   heuristic: its `AUDIT` regex false-hits the bare word "audit" inside a live
   head's own prose (real instance:
-  `designs/factions/faction_systems_overview_v30.md`, a registered REFERENCE head,
+  `systems/factions/faction_systems_overview_v30.md`, a registered REFERENCE head,
   cites a `designs/audit/...` companion doc in its Scope paragraph). Before the
   ED-IN-0055 reconciliation that false-hit demoted the doc; now `live_set`
   membership is checked before the banner heuristic, so an authoritative
@@ -245,7 +245,7 @@ def classify(relpath, content, live_set, superseded_set):
     filed under `designs/audit/`). But `banner_classify()`'s CONTENT-keyword
     heuristic is weak and substring-based — its `AUDIT` regex false-hits the bare
     word "audit" inside a live head's own prose (real instance:
-    `designs/factions/faction_systems_overview_v30.md`, a registered REFERENCE head,
+    `systems/factions/faction_systems_overview_v30.md`, a registered REFERENCE head,
     cites a `designs/audit/...` companion doc in its Scope paragraph). A weak
     content keyword must NOT override an authoritative live-head registration, so
     `live_set` membership is checked BEFORE the banner heuristic — which then only
@@ -648,7 +648,7 @@ def run(root, out):
              'by a later bolded `**Status:** PROVISIONAL …` line the parser never sees (real, swept '
              '2026-07-13: ≥11 docs, incl. `designs/territory/march_layer_v30.md`, '
              '`designs/territory/settlement_adjacency_v30.md`, '
-             '`designs/provincial/fractional_province_ownership_v30.md`). "Declares a canonical-family '
+             '`systems/factions/fractional_province_ownership_v30.md`). "Declares a canonical-family '
              'heading" therefore ≠ "is settled CANONICAL" — verify the body\'s `**Status:**` line '
              'before registering any of these. Not fixed in-tool: writing a second, laxer status-line '
              'parser is exactly what §8 (every rule lives once) forbids — the one parser is '
