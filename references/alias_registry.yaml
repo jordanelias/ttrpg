@@ -91,13 +91,15 @@ derived_stats:
     abbreviations: []
     category: stat
     range: "1-5+"
-  certainty:
-    canonical: "Certainty"
-    abbreviations: ["CERT"]
-    standalone_ok: false
-    category: stat
+  truth:
+    canonical: "Truth"
+    abbreviations: []
+    aliases: ["Certainty", "Certainty Track"]
+    legacy: ["CERT"]
+    standalone_ok: true
+    category: track
     range: "0-5"
-    note: "Cosmological worldview track (PP-551 — redesigned from PP-289). Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty."
+    note: "Per-character metaphysical stance — renamed from Certainty and consolidates the retired character 'Piety Track' / religious-standing meter (ED-IN-0075). Solmund orthodoxy (5, Himmelenger pole) → Thread-truth acceptance (0, Edeyja pole). Engine-internal 0–5; players see qualitative bands only, never the number. 'Certainty' remains an accepted alias pending the corpus rename (ED-IN-0075 staged sweep). Distinct from the territory-scale Piety (PT, Church seizure) and from the 13-Conviction value system (conviction_taxonomy_v30) — both unchanged."
   momentum:
     canonical: "Momentum"
     abbreviations: []

@@ -56,7 +56,7 @@ table gives the term, abbreviation, and a pointer only.
 | Intelligibility | — | (see Coherence — same source) | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
 | Composure | — | `params/core.md` §Derived Scores | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
 | Focus | — | `references/descriptor_registry.yaml` (attribute) | Attribute governing Thread contact economy — see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description). |
-| Certainty | CERT* | `params/core.md` §PP-551 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. *CERT not standalone — write Certainty.* |
+| Truth | — | `params/core.md` §Truth Track (PP-551) | Per-character metaphysical stance (**formerly "Certainty"**; also consolidates the retired character "Piety Track" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0–5; **players see qualitative bands, never the number**. All PCs have it; named NPCs at GM discretion; factions do not hold Truth. *Legacy "Certainty"/`CERT` resolve to Truth pending the corpus rename (ED-IN-0075 staged sweep).* |
 | Momentum | — | `params/core.md` §Derived Scores | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
 
 ### Thread Practitioner Stats
