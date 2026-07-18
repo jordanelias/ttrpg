@@ -5,11 +5,11 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 251,
+    "total": 253,
     "needs_jordan": 98,
     "by_kind": {
       "provisional_status_doc": 20,
-      "proposal_doc": 10,
+      "proposal_doc": 12,
       "ledger_actionable": 119,
       "ledger_needs_jordan": 85,
       "audit_partial": 17
@@ -48,14 +48,14 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 102,
+        "total": 104,
         "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 102,
+      "total": 104,
       "needs_jordan": 28,
       "items": [
         {
@@ -226,6 +226,26 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+          "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+          "title": "2026-07-17-world-factions-npcs-narrative-assessment",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+          "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+          "title": "2026-07-17-world-factions-npcs-narrative-companion",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
           "links": []
         },
         {
@@ -2822,6 +2842,26 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+      "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+      "title": "2026-07-17-world-factions-npcs-narrative-assessment",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+      "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+      "title": "2026-07-17-world-factions-npcs-narrative-companion",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
       "links": []
     },
     {

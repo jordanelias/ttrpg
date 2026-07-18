@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-07-18T00:04:24+00:00",
-    "commit_sha": "9d4a510"
+    "timestamp_utc": "2026-07-18T00:27:05+00:00",
+    "commit_sha": "4e4fd19"
   },
   "workplan": {
     "available": true,
@@ -156,7 +156,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 292 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 337 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -401,6 +401,34 @@
   "activity": {
     "available": true,
     "commits": [
+      {
+        "sha": "4e4fd1971f",
+        "date": "2026-07-18",
+        "author": "Claude",
+        "subject": "[infrastructure] P4 slice 10: extract factions -> systems/factions/ (ED-IN-0071)",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "7559878da8",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "Rename designs/audit/2026-07-17-world-factions-npcs-narrative-companion.md to proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+        "scope": null
+      },
+      {
+        "sha": "634e56c66c",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "Rename designs/audit/2026-07-17-world-factions-npcs-narrative-assessment.md to proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+        "scope": null
+      },
+      {
+        "sha": "81901324a2",
+        "date": "2026-07-17",
+        "author": "jordanelias",
+        "subject": "[design] Narrative compendium + speculative companion — world, factions & NPCs (#171)",
+        "scope": "design"
+      },
       {
         "sha": "9d4a51036a",
         "date": "2026-07-17",
@@ -652,34 +680,6 @@
         "author": "jordanelias",
         "subject": "[design] L/PS wiring — buildable spec (E5 execution) (#136)",
         "scope": "design"
-      },
-      {
-        "sha": "9c3c09b80c",
-        "date": "2026-07-14",
-        "author": "jordanelias",
-        "subject": "[fix] Fable-5 audit reconciliation batch 1 — self-consistency, determinism, a vacuous test — ED-IN-0063 (#135)",
-        "scope": "fix"
-      },
-      {
-        "sha": "596c616910",
-        "date": "2026-07-14",
-        "author": "jordanelias",
-        "subject": "[design] Governance docket: Fable-5 audit + interactive artifact (ED-IN-0051) (#134)",
-        "scope": "design"
-      },
-      {
-        "sha": "385b6c3e29",
-        "date": "2026-07-13",
-        "author": "jordanelias",
-        "subject": "[skill] Structural Observatory — full Tier-0 layer stack (L0 + G_code/L2 + G_pointer + L1 + G_generation) — WS0 (#132)",
-        "scope": "skill"
-      },
-      {
-        "sha": "5ab0cb2c8e",
-        "date": "2026-07-13",
-        "author": "jordanelias",
-        "subject": "[editorial] Refresh workplan progress board (as_of b5db2c8) (#120)",
-        "scope": "editorial"
       }
     ]
   },
@@ -712,7 +712,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 292 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 337 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -720,13 +720,13 @@
         "category": "audit-family",
         "ref": "base b8c8a5d (2026-07-14)",
         "stale": true,
-        "detail": "492 in-scope file(s) changed since last refresh",
+        "detail": "537 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: decisions-digest",
         "category": "audit-family",
-        "ref": "base 9d4a510 (2026-07-17)",
+        "ref": "base 4e4fd19 (2026-07-18)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -734,9 +734,9 @@
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base 6e79eb6 (2026-07-17)",
-        "stale": true,
-        "detail": "103 in-scope file(s) changed since last refresh",
+        "ref": "base 4e4fd19 (2026-07-18)",
+        "stale": false,
+        "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -750,7 +750,7 @@
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base 9d4a510 (2026-07-17)",
+        "ref": "base 4e4fd19 (2026-07-18)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -766,7 +766,7 @@
       {
         "surface": "Audit family: mechanics-index",
         "category": "audit-family",
-        "ref": "base 9d4a510 (2026-07-17)",
+        "ref": "base 4e4fd19 (2026-07-18)",
         "stale": false,
         "detail": "current",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
@@ -788,7 +788,7 @@
         "refresh": "monthly/weekly reconcile (workplan v6 §6) — human-ratified, never auto-written"
       }
     ],
-    "stale_count": 6,
+    "stale_count": 5,
     "total": 10,
     "handoffs": [
       {
@@ -2010,8 +2010,8 @@
   },
   "repo_shape": {
     "available": true,
-    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"factions\"]\n    D7[\"fieldwork\"]\n    D8[\"mass_battle\"]\n    D9[\"npcs\"]\n    D10[\"personal\"]\n    D11[\"provincial\"]\n    D12[\"scene\"]\n    D13[\"settlements\"]\n    D14[\"social_contest\"]\n    D15[\"threadwork\"]\n    D16[\"ui\"]\n    D17[\"world\"]\n  end\n  DESIGN --> SS",
-    "subsystem_count": 18,
+    "mermaid": "graph TD\n  CANON[\"canon/ — philosophy P-01..P-14 · ledgers · mechanics index\"]\n  REF[\"references/ — registries · module_contracts · indices\"]\n  DESIGN[\"designs/ — subsystem design docs\"]\n  PARAMS[\"engine/params/ — mechanical parameter tables\"]\n  SIM[\"sim/ — Python oracle · 1:1 port reference\"]\n  TOOLS[\"tools/ — CI checks · validators · generators\"]\n  GODOT[\"Godot port — valoria-game · frozen 2026-05-04\"]\n  CANON --> DESIGN\n  DESIGN --> PARAMS\n  PARAMS --> SIM\n  SIM --> GODOT\n  REF -.-> DESIGN\n  TOOLS -.-> CANON\n  subgraph SS[\"designs/ subsystems\"]\n    D0[\"__pycache__\"]\n    D1[\"_architecture\"]\n    D2[\"articulation\"]\n    D3[\"audit\"]\n    D4[\"combat\"]\n    D5[\"factions\"]\n    D6[\"fieldwork\"]\n    D7[\"mass_battle\"]\n    D8[\"npcs\"]\n    D9[\"personal\"]\n    D10[\"provincial\"]\n    D11[\"scene\"]\n    D12[\"settlements\"]\n    D13[\"social_contest\"]\n    D14[\"threadwork\"]\n    D15[\"ui\"]\n    D16[\"world\"]\n  end\n  DESIGN --> SS",
+    "subsystem_count": 17,
     "note": "High-level repo structure: the layer spine (canon → design → params → sim → godot) plus the designs/ subsystem folders (generated from disk)."
   },
   "keys": {
