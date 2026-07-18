@@ -96,6 +96,12 @@ class Faction:
     W: float = 2.0
     I: float = 2.0
     Mil: float = 3.0
+    # fac.intel — ratified 2026-07-08 (descriptor_registry.yaml, OPT-AV-18 / ED-IN-0029) with
+    # floor 0, scale 0-7, but the Faction dataclass never carried the field (audit ED-IN-0074 D4).
+    # Added at the ratified floor. Currently unread/unwritten by live code (adjust() is not wired
+    # for it — no MULTS['intel'] entry until its mechanic is designed); this only closes the
+    # canon-vs-code gap so a future reader of `faction.intel` doesn't AttributeError.
+    intel: float = 0.0
     territories: list = field(default_factory=list)  # [hash-seed fix 2026-05-20] was set; set iteration depends on PYTHONHASHSEED for str keys, producing cross-process variance in mc_v18 batches. list preserves insertion order; faction territories ≤15 so O(n) membership is negligible.
     # Seasonal resets
     senator_inward_used: bool = False
