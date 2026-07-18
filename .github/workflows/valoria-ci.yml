@@ -59,7 +59,8 @@ jobs:
             tools/doc_index_gen.py \
             tools/index_gen.py \
             tools/quantity_registry.py \
-            tools/ci_quantity_vocabulary_check.py
+            tools/ci_quantity_vocabulary_check.py \
+            tools/wiring_map_check.py
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -545,6 +546,36 @@ jobs:
       # names-drift, currency-consistency, etc.). See the check's own module
       # docstring; feeds tools/dashboard_data.py's audit-verdict table, not a
       # merge gate.
+
+  wiring-map-check:
+    name: Wiring Manifest Coverage (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0074 follow-up): validates references/wiring_manifest.yaml — the
+    # data source behind the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/
+    # wiring_map.html). Asserts every module:/adapter: tag resolves in its live registry
+    # (references/module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, and
+    # valid build/godot vocab — so a module rename or a moved adapter is a caught error, not
+    # silent drift in the map. Currently GREEN. Wired report-only (continue-on-error) because
+    # the manifest is analysis-derived, not ratified canon: a legitimate rename in
+    # module_contracts.yaml shouldn't block an unrelated PR — it surfaces the drift loudly and
+    # the map/manifest get re-synced. Also runs locally via valoria_local.py --staged
+    # (report-only). Flip to blocking (drop continue-on-error, add to ci-summary needs) once
+    # the manifest ratifies into canon. Deliberately not in ci-summary's needs, matching the
+    # other report-only gates.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Every wiring-manifest tag resolves; coverage + vocab valid (report-only)
+        run: python3 tools/wiring_map_check.py --check
 
   integrity:
     name: Repository Integrity
