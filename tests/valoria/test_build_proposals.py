@@ -33,8 +33,10 @@ def test_all_proposals_docs_surface_by_location():
     # is added/removed. 12 since #171 relocated the two 2026-07-17
     # world-factions-npcs narrative docs (assessment + companion) into proposals/;
     # 13 with the 2026-07-17 cast-and-culture-expansion companion alongside them;
-    # 14 with the 2026-07-18 precedent-to-mechanism design brief.
-    assert len(props) == 14
+    # 14 with the 2026-07-18 precedent-to-mechanism design brief;
+    # 16 after pessimist_ners_audit_v1.md and grounded_event_card_deck_v1.md
+    # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops).
+    assert len(props) == 16
 
 
 def test_all_seventeen_audit_verdicts_present():

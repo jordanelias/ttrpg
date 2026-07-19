@@ -30,11 +30,7 @@ if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
 
 SRC = sys.argv[1]
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
-<<<<<<< HEAD
-    r"C:/Github/ttrpg/audit/lane-a/2026-06-22-npc-comprehensive-audit.md"
-=======
-    os.path.join(_REPO_ROOT, "designs", "audit", "2026-06-22-npc-comprehensive-audit.md")
->>>>>>> origin/main
+    os.path.join(_REPO_ROOT, "audit", "lane-a", "2026-06-22-npc-comprehensive-audit.md")
 
 data = json.load(open(SRC, encoding="utf-8"))
 res = data.get("result", {})
