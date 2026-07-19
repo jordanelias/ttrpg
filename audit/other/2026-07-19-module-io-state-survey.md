@@ -328,7 +328,7 @@ The sim runs an **old `Territory`** model *and* a **new `Settlement`** model sim
 | — | `clocks['PI']` | **ORPHAN** — no registry row; leftover from retired `mc_v*` monoliths |
 | Peninsular Strain | `clocks['Strain']` | **DORMANT** — no live reader |
 | — | `clocks['MASS_SEIZURE_USED']` | **SIM-ONLY** — improvised one-shot flag on the generic dict |
-| **Rendering Stability (RS)** | `rs_track.py` | **STUB** + name-collides with MS — no `RS` clock key exists; threadwork Part 5 is headed "Rendering Stability" but its body is all "Mending Stability" |
+| **RS track** (retired *Rendering*-Stability label) | `rs_track.py` | **STUB** + name-collides with MS — no `RS` clock key exists; threadwork Part 5's heading uses the retired RS label but its body is entirely Mending Stability |
 
 ## E4 · Personal / combat — a large SIM-ONLY continuous layer
 
