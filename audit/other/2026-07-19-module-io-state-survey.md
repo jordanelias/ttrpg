@@ -287,7 +287,7 @@ via `Faction.adjust()` — the F1 guard is real in code.
 | **Reputation** | *(none)* | **STUB** |
 | Casus Belli | `world.casus_belli` | **SIM-ONLY** duck-typed — not a schema field; only Crown-restoration CB is derivable |
 | Excommunication | `Faction.excommunicated` | LIVE (sim-only flag; no registry row) |
-| — | `Faction.consul_used`, `Faction.peaceful` | **DEAD** (declared, never read) |
+| — | `Faction.consul_used`, `Faction.peaceful` | **DEAD** — `consul_used` is written at seasonal reset but read nowhere; `peaceful` is fully inert (default-only) |
 
 The `MULTS` table `{L:20, Sta:10, W:100, I:15, Mil:10, accord:10, pt:10}` is the **actual numeric
 backbone** — it, not the design tables, defines granular-delta magnitudes.
@@ -363,9 +363,11 @@ Fieldwork: `Knot.{strain, tier, disposition, active}` LIVE (in `knots.py`) — b
 ## E5 · Social-contest kernel — new primitives + duplicates
 
 `Standing.v` **is** Face (literal Python alias; Composure retired) · `Reserve` = Concentration (an
-abstract seed pool, not `3·Foc+2·Spi`) · `ContestState.adv` = Persuasion merits. ⚠️ **`ArmaturePosition`
-(evidence / consequence / authority / insinuation)** is a **SIM-ONLY new 4-axis primitive** the code
-itself flags as having *no design-registry counterpart*. **Doubt Marker** is fully spec'd in
+abstract seed pool, not `3·Foc+2·Spi`) · `ContestState.adv` = Persuasion merits. **`ArmaturePosition`
+(evidence / consequence / authority / insinuation)** is a new field carried alongside the frozen
+adjudicator — its 3 first axes map to **CANONICAL** contest styles (`STYLE_AXIS`, citing
+`npc_behavior_v30 §1.3`) and the 4th (`insinuation`) is a **RATIFIED** new axis (ED-1062); the
+**continuous dot-product itself** is the sim-only construct (no design-registry row), not the axes. **Doubt Marker** is fully spec'd in
 `dictionaries.py` but **UNIMPLEMENTED** as live state. **Persuasion Track and "resistance" are each
 implemented twice** (resolver vs `parliamentary_vote`) with different math.
 
@@ -388,9 +390,11 @@ hafenmark-equipment, infrastructure-reclamation, both varfell actions) · `propo
 
 ## E8 · Save/restore gaps (real state lost on snapshot)
 
-`Territory.uncontrolled_since` · the entire Key/Echo log (`world.key_log`, `echo_scheduler`,
-`_echo_key_seq`, attached via `setattr`) · `victory._qualifying_streak` (module global) ·
-`world.convictions` / `world.beliefs` (module-level fallback, no confirmed `World` field).
+`Territory.uncontrolled_since` (declared but omitted from `serialize_world`/`restore_world`) · the
+entire Key/Echo log (`world.key_log`, `echo_scheduler`, `_echo_key_seq`, attached via `setattr`) ·
+`victory._qualifying_streak` (module global). *(NOT a save-gap: `world.convictions`/`world.beliefs`
+ARE declared `World` fields and DO round-trip through serialize/restore — the module-level dicts are
+only the `world=None` fallback. Corrected per the E-verification pass.)*
 
 ## E9 · The headline
 
@@ -398,7 +402,8 @@ hafenmark-equipment, infrastructure-reclamation, both varfell actions) · `propo
    settlement `L/PS` is inert. The ratified `7T/(T+6)` aggregate (Part A/B3) **is not implemented**.
    This is the single biggest port blocker (ED-FA-0004).
 2. **A whole SIM-ONLY continuous layer exists with no design pointers** — combat morphology
-   (poise/grip/lunge/facing) and the contest `ArmaturePosition` axes. These need design-registry rows
+   (poise/grip/lunge/facing) and the contest `ArmaturePosition` *continuous dot-product* (its axes
+   are canonical, but the continuous vector primitive is not). These need design-registry rows
    *created*, or they will cross into Godot undocumented.
 3. **A whole set of design pointers have no sim** — Thread Fatigue, IP, RS, Treasury, tactic cards,
    per-sub-unit stats, fieldwork Disposition/Evidence/Exposure, Doubt Marker. Porting these is
