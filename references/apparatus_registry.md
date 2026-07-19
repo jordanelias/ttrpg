@@ -4,7 +4,7 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**92 apparatuses** — hook: 4, skill-script: 8, tool: 77, workflow: 3 · **4 orphaned**.
+**93 apparatuses** — hook: 4, skill-script: 8, tool: 78, workflow: 3 · **4 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
@@ -71,6 +71,7 @@
 | `tools/validate_ed_citations.py` | — | yes | ci:valoria-ci.yml, skill:valoria-editorial-register, tool:imported |
 | `tools/valoria_local.py` | — | yes | ci:valoria-ci.yml, hook:pre-commit |
 | `tools/valoria_rename.py` | `<path>` (unknown) | yes | ci:valoria-ci.yml |
+| `tools/wiring_map_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/workplan_status.py` | — | yes | skill:valoria-workplan-navigator, tool:imported |
 
 ### D — Import-only library (no CLI writes)
@@ -130,5 +131,5 @@
 |---|---|---|
 | `.github/workflows/audit-refresh.yml` | `tools/build_apparatus_registry.py`, `tools/observability/build_decisions.py`, `tools/observability/build_proposals.py` | commit/PR |
 | `.github/workflows/dashboard.yml` | `tools/dashboard_data.py` | github-pages |
-| `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vetting_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/patch_propagation_checker.py`, `tools/validate_ed_citations.py` | ci-status |
+| `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vetting_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/patch_propagation_checker.py`, `tools/validate_ed_citations.py`, `tools/wiring_map_check.py` | ci-status |
 

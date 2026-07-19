@@ -5,11 +5,11 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 253,
+    "total": 257,
     "needs_jordan": 98,
     "by_kind": {
       "provisional_status_doc": 20,
-      "proposal_doc": 12,
+      "proposal_doc": 16,
       "ledger_actionable": 119,
       "ledger_needs_jordan": 85,
       "audit_partial": 17
@@ -48,26 +48,16 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 104,
+        "total": 108,
         "needs_jordan": 28
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 104,
+      "total": 108,
       "needs_jordan": 28,
       "items": [
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
-          "id": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
-          "title": "grounded event card deck v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified",
-          "links": []
-        },
         {
           "kind": "provisional_status_doc",
           "source": "designs/audit/2026-07-12-governance-compendium/00_index.md",
@@ -199,6 +189,16 @@
           "links": []
         },
         {
+          "kind": "provisional_status_doc",
+          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
+          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
+          "title": "03 remediation program",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).",
+          "links": []
+        },
+        {
           "kind": "proposal_doc",
           "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
           "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
@@ -230,6 +230,16 @@
         },
         {
           "kind": "proposal_doc",
+          "source": "proposals/2026-07-17-cast-and-culture-expansion.md",
+          "id": "proposals/2026-07-17-cast-and-culture-expansion.md",
+          "title": "2026-07-17-cast-and-culture-expansion",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
           "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
           "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
           "title": "2026-07-17-world-factions-npcs-narrative-assessment",
@@ -250,6 +260,26 @@
         },
         {
           "kind": "proposal_doc",
+          "source": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
+          "id": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
+          "title": "2026-07-18-precedent-to-mechanism-design-brief",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "(no Status line — proposals/)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/grounded_event_card_deck_v1.md",
+          "id": "proposals/grounded_event_card_deck_v1.md",
+          "title": "grounded event card deck v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
           "source": "proposals/mass_battle_shape_echelon_revamp.md",
           "id": "proposals/mass_battle_shape_echelon_revamp.md",
           "title": "mass battle shape echelon revamp",
@@ -266,6 +296,16 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/pessimist_ners_audit_v1.md",
+          "id": "proposals/pessimist_ners_audit_v1.md",
+          "title": "pessimist ners audit v1",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).",
           "links": []
         },
         {
@@ -2676,16 +2716,6 @@
   "items": [
     {
       "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
-      "id": "designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md",
-      "title": "grounded event card deck v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
       "source": "designs/audit/2026-07-12-governance-compendium/00_index.md",
       "id": "designs/audit/2026-07-12-governance-compendium/00_index.md",
       "title": "00 index",
@@ -2815,6 +2845,16 @@
       "links": []
     },
     {
+      "kind": "provisional_status_doc",
+      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
+      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
+      "title": "03 remediation program",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).",
+      "links": []
+    },
+    {
       "kind": "proposal_doc",
       "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
       "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
@@ -2846,6 +2886,16 @@
     },
     {
       "kind": "proposal_doc",
+      "source": "proposals/2026-07-17-cast-and-culture-expansion.md",
+      "id": "proposals/2026-07-17-cast-and-culture-expansion.md",
+      "title": "2026-07-17-cast-and-culture-expansion",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
       "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
       "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
       "title": "2026-07-17-world-factions-npcs-narrative-assessment",
@@ -2862,6 +2912,26 @@
       "lane": "unassigned",
       "needs_jordan": false,
       "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
+      "id": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
+      "title": "2026-07-18-precedent-to-mechanism-design-brief",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/grounded_event_card_deck_v1.md",
+      "id": "proposals/grounded_event_card_deck_v1.md",
+      "title": "grounded event card deck v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified",
       "links": []
     },
     {
@@ -2902,6 +2972,16 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15]",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/pessimist_ners_audit_v1.md",
+      "id": "proposals/pessimist_ners_audit_v1.md",
+      "title": "pessimist ners audit v1",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).",
       "links": []
     },
     {
