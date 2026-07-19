@@ -1,0 +1,256 @@
+{
+ "subsystem": "settlement_territory",
+ "core_loop": "Province (17) contains Settlements (37, S-001..S-037). Governor gets one mandatory seasonal verb (Develop/Fortify/Pacify/Administer, \u00a73.2) targeting Prosperity/Defense/Order; Order\u2192province Accord (floor-mean, \u00a71.3). Settlement L/PS (\u00a71.8 LPS-2e) aggregate size-weighted into faction Mandate, which mean-reverts L/PS back (damped, sim-bounded 0-7/30 seasons). Local Actors + settlement events feed the Scene Slate. Subnational factions can be granted management (\u00a73.3); Thread ops nudge settlement stats automatically (\u00a74.4); Thread Exploitation Sites are a discoverable harvest tap (\u00a74.9).",
+ "decision_points": [
+  {
+   "where": "settlement_layer_v30 \u00a73.2 seasonal governance action",
+   "options": "Develop / Fortify / Pacify / Administer",
+   "meaningful": "degenerate",
+   "note": "single stat-pump, no political cost or fork; self-diagnosed by governance_play_redesign_v1 as 'roll one die a season'; no GM exists to compensate (CLAUDE.md header)"
+  },
+  {
+   "where": "\u00a73.3 subnational management grant/revoke",
+   "options": "grant to Church/Guild/Ministry/L\u00f6wenritter/RM/Wardens vs retain direct control",
+   "meaningful": "moderate",
+   "note": "real tradeoff, but rare Domain Action, flat Ob not costed against alternatives"
+  },
+  {
+   "where": "\u00a74.3 RM-takeover Governance Transition scene",
+   "options": "Disestablishment / Accommodation / Transformation",
+   "meaningful": "rich",
+   "note": "three well-costed tradeoffs; fires only on a narrow trigger"
+  },
+  {
+   "where": "\u00a71.4.3 facility-slot capacity pressure at Standing 6",
+   "options": "wait for departure / expand capacity / accept Prince-in-Waiting + recurring contest",
+   "meaningful": "moderate",
+   "note": "late-game, inner-circle Seats only"
+  },
+  {
+   "where": "\u00a74.9 Thread Exploitation Site harvesting",
+   "options": "harvest or don't (no contest, no cap)",
+   "meaningful": "degenerate",
+   "note": "uncapped, uncontested Wealth+1/RS-0.5 faucet once discovered"
+  },
+  {
+   "where": "governance_play_redesign_v1.md Parts 1-4 (PROPOSAL)",
+   "options": "AP allocation across 8 method-forcing verbs; Directive comply/bargain/defy; Petition/Friction/Crisis event-deck responses",
+   "meaningful": "rich",
+   "note": "not the ratified loop \u2014 absent from CURRENT.md, gated on unbuilt settlement registry (\u00a75.2 G1)"
+  },
+  {
+   "where": "\u00a75.1 Assault/Siege/Bypass (attacker)",
+   "options": "fast-risky / slow-attrition / skip-with-consequence",
+   "meaningful": "moderate",
+   "note": "shared with mass-battle lane, not settlement-governance-specific"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "Local Actors (~45-50, Conviction+Disposition) and settlement events feed Scene Slate P4/P5; the Mandate<->L/PS loop is a genuine cross-scale (\u03a9-a) channel. But most collision fodder comes from passive state, not named player tradeoffs \u2014 that gap is exactly what the unratified redesign targets.",
+  "verdict": "The ratified settlement-governance loop does not yet point at the North Star (thin/degenerate seasonal cadence); a well-aimed fix is drafted but unratified, untracked, and gated on unbuilt sim infrastructure, while the Mandate math and adjacency/siege machinery around it are comparatively solid."
+ },
+ "nq": [
+  {
+   "criterion": "N",
+   "observation": "Size-weighted settlement L/PS -> saturating faction Mandate models a real Renaissance dynamic (legitimacy scales with population/wealth actually held); CK3/EU4/Victoria/KOEI anchors cited in-doc.",
+   "cite": "settlement_layer_v30.md \u00a71.8"
+  },
+  {
+   "criterion": "Omega",
+   "observation": "Mandate formula 7T/(T+K) is explicitly saturating/anti-runaway and Stage-4-sim-verified bounded 0-7 over 30 seasons under mission shocks \u2014 solid non-dominance evidence.",
+   "cite": "settlement_layer_v30.md \u00a71.8"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Dramatic-legibility fails for the seasonal governance action (one verb, one roll, no named-actor stakes) but passes for the RM Governance Transition scene and the unratified Directive comply/bargain/defy fork.",
+   "cite": "settlement_layer_v30.md \u00a73.2 vs \u00a74.3; governance_play_redesign_v1.md \u00a71.4"
+  },
+  {
+   "criterion": "Q-elegant",
+   "observation": "settlement_adjacency_v30.md's own worked hub/edge examples cite pre-PP-726 settlement IDs (S-015 Gransol, S-023 Himmelenger, S-026 Sigurdshelm) that contradict the actual canonical YAML, which already uses post-renumbering IDs (S-018/S-036/S-031, verified directly).",
+   "cite": "settlement_adjacency_v30.md \u00a71.2/\u00a73 vs valoria_geography_v30.yaml lines 616-652"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "Relational+ Thread ops -> settlement stat deltas (Weaving/Pulling/Mending/etc, \u00b11/season cap)",
+   "status": "present",
+   "evidence": "settlement_layer_v30.md \u00a74.4 (matches 03_threadwork_surface.md tracked listing)"
+  },
+  {
+   "juncture": "Thread Exploitation Sites (Proximity \u22642) harvestable by any actor",
+   "status": "present",
+   "evidence": "settlement_layer_v30.md \u00a74.9"
+  },
+  {
+   "juncture": "Settlement-governance verb to regulate/exploit/seal a Thread site",
+   "status": "absent-plausible",
+   "evidence": "\u00a73.2 verb menu has no Thread-response verb despite \u00a74.4/\u00a74.9 existing as automatic triggers \u2014 the practitioner acts, the governor never gets to; sharper scope than the already-tracked temperament gap"
+  },
+  {
+   "juncture": "Governance-deck 'Thread' card family (RS bleed, Calamity edge)",
+   "status": "present",
+   "evidence": "governance_play_redesign_v1.md \u00a72.3 \u2014 but PROPOSAL-only, gated on G1, not in CURRENT.md"
+  },
+  {
+   "juncture": "Territory temperament \u03b1/\u03b2 <-> Thread/RS state",
+   "status": "absent-deliberate",
+   "evidence": "territory_temperaments_v30.md \u2014 Calamity-adjacency flavor correlation only (T6/T13/T15 seeded near outcomes-only), zero live coupling; KNOWN-TRACKED per 03_threadwork_surface.md \u00a73"
+  }
+ ],
+ "legibility": {
+  "answerable": "partial",
+  "note": "Whose-position-at-risk: answerable at the faction/Mandate tier (\u00a71.8) but not at the settlement-governor tier in ratified state (no suspicion/recall clock \u2014 that's governance_play_redesign \u00a71.4, unratified). Actor-wants: Local Actors have one Conviction but no ambition/goal (unratified NPC ambition schema would fix this, \u00a73.1 of the proposal). What-happens-if-no-one-acts: answerable cleanly (\u00a74.3 stat-threshold events: Prosperity 0->famine, Order 0->revolt)."
+ },
+ "degenerate_candidates": [
+  "settlement_layer_v30.md \u00a73.2 \u2014 single mandatory governance verb-pick, no political cost, self-diagnosed in governance_play_redesign_v1.md's problem statement",
+  "settlement_layer_v30.md \u00a74.9 \u2014 Thread Exploitation Site harvesting: uncapped, uncontested, no depletion, a free recurring Wealth+1/RS-0.5 tap"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "faction_state (Mandate)",
+   "mechanism": "\u00a71.8 size-weighted aggregate + mean-reverting feedback",
+   "status": "implemented",
+   "cite": "module_contracts.yaml settlement_layer entry"
+  },
+  {
+   "dir": "out",
+   "other": "victory (Accord\u22652 gate)",
+   "mechanism": "province Accord = floor(mean settlement Order)",
+   "status": "implemented",
+   "cite": "settlement_layer_v30.md \u00a71.3"
+  },
+  {
+   "dir": "out",
+   "other": "mass_battle / settlement_adjacency",
+   "mechanism": "Fort Level->Defender Ob, siege/assault/bypass, Manoeuvre modifiers",
+   "status": "implemented",
+   "cite": "settlement_adjacency_v30.md \u00a72, cross-checked valoria_geography_v30.yaml"
+  },
+  {
+   "dir": "in",
+   "other": "threadwork",
+   "mechanism": "\u00a74.4 stat deltas, \u00a74.9 exploitation sites",
+   "status": "implemented",
+   "cite": "settlement_layer_v30.md \u00a74.4/\u00a74.9"
+  },
+  {
+   "dir": "out",
+   "other": "territory_temperaments",
+   "mechanism": "none found \u2014 zero mechanical consumption of \u03b1/\u03b2 in settlement_layer or module_contracts",
+   "status": "divergent",
+   "cite": "territory_temperaments_v30.md vs settlement_layer_v30.md (no cross-reference either way)"
+  },
+  {
+   "dir": "in",
+   "other": "governance_play_redesign_v1 (proposal)",
+   "mechanism": "AP verbs, Directive, event deck, NPC ambition would replace \u00a73.2",
+   "status": "declared-only",
+   "cite": "governance_play_redesign_v1.md, gated \u00a75.2 G1"
+  },
+  {
+   "dir": "out",
+   "other": "faction_layer (subnational management)",
+   "mechanism": "\u00a73.3 grant/revoke/contested management via social contest",
+   "status": "implemented",
+   "cite": "settlement_layer_v30.md \u00a73.3"
+  }
+ ],
+ "directions": {
+  "top-down": "\u03a9/N pass cleanly at the Mandate-math layer, but the seasonal verb-pick contradicts the corpus's own stated design philosophy that 'governing is choosing under constraint.'",
+  "bottom-up": "\u00a71.8's formulas are Stage-4 sim-verified bounded over 30 seasons; the \u00a73.2 verb menu has no comparable sim backing and its calibration items (ED-SETT-01/02) remain DEFERRED.",
+  "lateral": "territory_temperaments (province-grain, uniform-weighted, PROVISIONAL) sits orthogonal to settlement-grain governance with no mechanical bridge in either direction.",
+  "diagonal": "settlement<->faction Mandate is the strongest cross-scale channel in this lane; settlement<->thread is present but mechanically inert as a governor-facing choice.",
+  "forwards": "governance_play_redesign_v1 is a correctly-aimed forward path but is gated on an unbuilt settlement registry (G1) and is absent from both CURRENT.md and HANDOFF_SE.md's (empty) pending list \u2014 a real risk of falling through the cracks.",
+  "backwards": "settlement_adjacency_v30.md's worked examples still cite pre-PP-726 settlement IDs that no longer match the canonical YAML or settlement_layer's renumbered registry, despite both being authored the same day."
+ },
+ "findings": [
+  {
+   "id": "settlement-governance-thin-loop",
+   "subsystem": "settlement_territory",
+   "claim": "The ratified seasonal governance loop is a single stat-pump verb-pick with no political tradeoff, self-diagnosed by the corpus's own redesign proposal as collapsing to 'roll one die a season' \u2014 and Valoria has no GM to compensate.",
+   "cite": "designs/territory/settlement_layer_v30.md \u00a73.2; designs/territory/governance_play_redesign_v1.md (problem statement)",
+   "criterion": "Q-robust",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "governance-redesign-orphaned",
+   "subsystem": "settlement_territory",
+   "claim": "governance_play_redesign_v1.md is a well-aimed fix for the P1 loop above but is absent from CURRENT.md's settlement/territory head list and from HANDOFF_SE.md's pending items (which log 'none'), risking permanent orphan status alongside its unbuilt G1 prerequisite.",
+   "cite": "CURRENT.md (settlement/territory row); handoffs/HANDOFF_SE.md; designs/territory/governance_play_redesign_v1.md \u00a75.2",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "thread-exploitation-faucet",
+   "subsystem": "settlement_territory",
+   "claim": "Thread Exploitation Sites are an uncapped, uncontested income tap (Wealth+1/RS-0.5 per season) once discovered, with no depletion or rival-actor contest specified \u2014 a degenerate line and a missed collision-engine opportunity.",
+   "cite": "designs/territory/settlement_layer_v30.md \u00a74.9",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": true,
+   "tracked_ref": ""
+  },
+  {
+   "id": "settlement-governance-no-thread-verb",
+   "subsystem": "settlement_territory",
+   "claim": "Settlement governance has no verb to respond to Thread ops/exploitation at its own location \u2014 Thread affects the settlement automatically but the governor never gets a choice about it; sharper scope than the already-tracked temperament-thread absence.",
+   "cite": "designs/territory/settlement_layer_v30.md \u00a73.2 vs \u00a74.4/\u00a74.9",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "03_threadwork_surface.md \u00a73 (territory_temperaments absence) \u2014 this finding extends that to settlement \u00a73.2's verb menu itself"
+  },
+  {
+   "id": "adjacency-stale-ids",
+   "subsystem": "settlement_territory",
+   "claim": "settlement_adjacency_v30.md's own worked hub/edge examples cite pre-PP-726 settlement IDs that contradict the actual canonical adjacency data, which already uses the post-renumbering IDs.",
+   "cite": "designs/territory/settlement_adjacency_v30.md \u00a71.2/\u00a73 vs designs/territory/valoria_geography_v30.yaml lines 616-652",
+   "criterion": "Q-elegant",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "legibility-partial-settlement-tier",
+   "subsystem": "settlement_territory",
+   "claim": "Two of the three dramatic-legibility questions (whose position is at risk; what each actor wants) cannot be answered from ratified settlement-tier state alone \u2014 only the third (what happens if no one acts) can.",
+   "cite": "designs/territory/settlement_layer_v30.md \u00a73.2/\u00a74.3/\u00a74.5 (Local Actors, one Conviction, no ambition field)",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "temperament-mechanically-inert",
+   "subsystem": "settlement_territory",
+   "claim": "Territory temperament \u03b1/\u03b2 has zero mechanical consumption anywhere in the ratified settlement layer or module_contracts, not just with respect to Thread \u2014 broader inertness than the already-tracked thread-specific gap.",
+   "cite": "designs/territory/territory_temperaments_v30.md vs designs/territory/settlement_layer_v30.md and references/module_contracts.yaml (no temperament references found)",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "03_threadwork_surface.md \u00a73 (thread-specific); this finding broadens to full mechanical inertness"
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_settlement_territory.md"
+}

@@ -1,0 +1,259 @@
+{
+    "family": "F-DESIGN",
+    "items": [
+        {
+            "name": "Health",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:55-90 (\u00a74.1, AUTHORITATIVE)",
+            "detail": "Health(full) = round(WI \u00d7 (MW+1) + 0.25 \u00d7 Strength \u00d7 Endurance); WI = round(Endurance + 4 + 0.4\u00d7Spirit); MW = min(floor(Endurance/2)+1, 3). Felled at cumulative damage \u2265 Health (D-A, ED-1021).",
+            "aliases_or_variants": [
+                "Vitality (struck, ED-694 reverted by PP-716)"
+            ],
+            "consumers_seen": [
+                "designs/scene/combat_v30.md (references, partially superseded resolution)"
+            ],
+            "notes": "combat_v30.md:517 comment retained '(End+6) x (MW+1)' wording pre-D-A weight terms in some places \u2014 verify propagation of the ED-1021 Spirit/Strength terms into combat_v30.md prose."
+        },
+        {
+            "name": "Wound penalty (fractional Ob per wound)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:72,92,517 (\u00a74.1, \u00a713); designs/scene/combat_v30.md:39,298",
+            "detail": "Combat: +0.15 Ob attacking / +0.25 Ob defending per wound (ED-1041, per Jordan ruling 2026-07-08 ED-PC-0005), superseding PP-716's universal \u22121D. Non-combat pools (Thread ops, fieldwork, mass-battle Command) get a fractional-Ob-per-wound value flagged pending (ED-PC-0006).",
+            "key_bindings_seen": [
+                "stat_deltas-style wound channel referenced generically, no Key payload example located in this family"
+            ]
+        },
+        {
+            "name": "Stamina",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:96-122 (\u00a74.2), :538 (\u00a714.1); designs/scene/combat_v30.md:302-303",
+            "detail": "CURRENT (derived_stats, RATIFIED S1 2026-05-29): (3\u00d7Endurance)+(2\u00d7Spirit), range 5\u201347. Recovery: Take a Breath restores (Endurance + relevant History)\u00d72, capped at max. combat_v30.md:303 still states the OLD formula 'Stamina = Endurance \u00d7 5 (range 5\u201335)... (ED-694, replaces composite formula)' with recovery 'Recover Stamina by Endurance score' (combat_v30.md:98) \u2014 no S1 propagation.",
+            "notes": "See Finding re: combat_v30.md stale Stamina formula."
+        },
+        {
+            "name": "Composure / Face / Concentration (social-contest trackers)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:128-161 (\u00a75.1-5.2), :539-540 (\u00a714.1); designs/scene/social_contest_v30.md:229-258,481-512 (CR3, ED-1056)",
+            "detail": "Composure (buffer magnitude) = Charisma \u00d7 3, range 3\u201321 \u2014 RETIRED as the social-contest tracker name (CR3, ED-1056, 2026-06-01) and re-homed as Face: Face_max = Charisma\u00d73; Face_current = round(Standing\u00f710 \u00d7 Face_max). Concentration = (3\u00d7Focus)+(2\u00d7Spirit), range 5\u201335, depletes 5/exchange (ED-890/DEP), \u22125 on loss.",
+            "aliases_or_variants": [
+                "Composure (retained name in combat/knots/conviction per ED-1056 scoping note, social_contest_v30.md:509-512)"
+            ],
+            "notes": "ED-1056 explicitly scopes the Composure\u2192Face rename to social-contest only; combat/knots/conviction keep 'Composure' \u2014 self-documented, not re-litigated here (KNOWN-TRACKED)."
+        },
+        {
+            "name": "Argue Pool",
+            "kind_guess": "pool",
+            "surface": "designs/scene/social_contest_v30.md:119,135,164,490; designs/scene/derived_stats_v30.md:585 (\u00a714.4)",
+            "detail": "Headline/repeated form in social_contest_v30.md: '(Primary Attribute \u00d7 2) + History bonus' (History bonus = points+3, per line 135). Style/audience bonus dice (up to +2D, line 78) are 'added to the Argue pool at Step 3' but never folded into the three repeated 'Argue Pool =' statements. derived_stats_v30.md:585 states the complete form: '(Primary \u00d7 2) + History + 3 + style'.",
+            "notes": "See Finding: incomplete formula repeated 3x in its own home doc."
+        },
+        {
+            "name": "Thread Pool / TPS",
+            "kind_guess": "pool",
+            "surface": "designs/threadwork/threadwork_v30.md:19,155,266,317,350,374,455; designs/scene/derived_stats_v30.md:586 (\u00a714.4)",
+            "detail": "Pool = (Spirit\u00d72) + History bonus (points+3) + Thread Pool Score (TPS = TS\u00f710, round down) \u2014 PP-619/PP-624/PP-625/PP-616, consistently restated ~7 times across Leap/Weave/Pull/Lock/Dissolution/Mending in threadwork_v30.md with no divergence found among those restatements."
+        },
+        {
+            "name": "Thread Fatigue",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:227-260 (\u00a76.1), :541 (\u00a714.1)",
+            "detail": "Threshold = Spirit \u00d7 5, range 5\u201335, counts up from 0 to threshold (thread exhaustion). Per-operation costs table (Leap 3, Passive sensing 2, Mending 4, Pulling 5, Locking 7, Dissolution 10)."
+        },
+        {
+            "name": "Coherence",
+            "kind_guess": "track",
+            "surface": "designs/scene/derived_stats_v30.md:261,563 (\u00a714.2); designs/threadwork/threadwork_v30.md:56,92,133,283-284,344,395,429,446,481",
+            "detail": "0\u201310 (or 10\u21920 in some framings), monotonic-drain personal track; explicitly NOT a derived value ('a permanent degradation track', derived_stats_v30.md:261). Mending costs 0 Coherence (asymmetry, threadwork_v30.md:481); other ops cost 0/\u22121/\u22121(cap) by band."
+        },
+        {
+            "name": "TroopCount / Size / block_size",
+            "kind_guess": "unit_stat",
+            "surface": "designs/scene/derived_stats_v30.md:265-289 (\u00a77), :543 (\u00a714.1); designs/provincial/mass_battle_v30.md:68-91,138-140",
+            "detail": "TroopCount = Size \u00d7 block_size (set at muster); Size = floor(TroopCount/block_size). block_size by scale: Skirmish 10, Company 100, Battle 500, Campaign 1000, War 5000. Output scaling: effective_damage = floor(successes\u00d7(1+Power)\u00d7TroopCount/max_TroopCount), capped 1.0. Consistent between both docs."
+        },
+        {
+            "name": "Mass Combat Pool (unit, TTRPG mode)",
+            "kind_guess": "pool",
+            "surface": "designs/provincial/mass_battle_v30.md:28 (A.1 headline), :443 (A.7 step 1, with ED-899/ED-1013 aside); designs/scene/derived_stats_v30.md:589 (\u00a714.4)",
+            "detail": "Headline/repeated form (PP-233): min(Size, Command) + Command. Line 443's own inline parenthetical says this is superseded by ED-899's engine default (2\u00d7Command with Size via Lanchester frontage, COMMAND_SIGMA_ENABLED=0) and further refined by ED-1013 to Command\u00d7(1+cohesion). derived_stats_v30.md \u00a714.4 restates the PP-233 form with no ED-899/1013 caveat at all.",
+            "notes": "See Finding: superseded formula still the headline/comparison-table statement in two design docs."
+        },
+        {
+            "name": "Mass Combat Pool (Board Game mode)",
+            "kind_guess": "pool",
+            "surface": "designs/provincial/mass_battle_v30.md:755 (B.3)",
+            "detail": "Pool = sum of all engaged unit Martial values + commander bonus. Distinct BG-mode formula, explicitly a separate mode per doc's own 'Three-mode' framing (line 9) \u2014 not treated as a collision, catalogued for completeness."
+        },
+        {
+            "name": "Command (rating)",
+            "kind_guess": "unit_stat",
+            "surface": "designs/provincial/mass_battle_v30.md:266",
+            "detail": "Command = clamp(round((2\u00d7Charisma + Cognition)\u00f73), 1, 7) \u2014 ED-899, Charisma-primary/Cognition-secondary, supersedes the equal-weight ceil((Cha+Cog)/2) form. Single stated form found; no divergence located in this family."
+        },
+        {
+            "name": "Army Morale",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:396-407 (\u00a710.2); designs/provincial/mass_battle_v30.md:867-869 (Part C)",
+            "detail": "Army Morale = floor(average unit Morale) + Command modifier (\u00b11) + Discipline modifier (\u00b11). Thresholds 6+ Resolute...0 Routed. Consistent between the two citing docs."
+        },
+        {
+            "name": "Mandate (faction headline stat)",
+            "kind_guess": "faction_stat",
+            "surface": "designs/provincial/faction_behavior_v30.md:398-410 (\u00a74); designs/provincial/faction_canon_v30.md:216; designs/territory/settlement_layer_v30.md:147-177 (\u00a71.8, LPS-2e)",
+            "detail": "Mandate(faction) = clamp(round(7\u00b7T/(T+K)),0,7), T = \u03a3_s W_s\u00b7(0.5\u00b7Legitimacy_s + 0.5\u00b7Popular_Support_s)/7, K=6 (size-weighted, saturating). W_s = base(Type)+Prosperity_s+FacilityTier_s (settlement_layer_v30.md:159). Agrees between faction_behavior_v30 and faction_canon_v30.",
+            "notes": "Diverges from params/factions_personal.md:14's flat 'Mandate = round(0.5\u00d7Legitimacy+0.5\u00d7Popular_Support)' citing 'faction_behavior_v30 \u00a74' \u2014 that section was rewritten to the saturating form under LPS-2e (2026-05-30); the params citation is now stale. This is the exact divergence flagged in the audit's baseline facts \u2014 confirmed here with citations. See Finding."
+        },
+        {
+            "name": "Legitimacy / Popular Support (per-settlement)",
+            "kind_guess": "settlement_stat",
+            "surface": "designs/territory/settlement_layer_v30.md:147-177 (\u00a71.8); designs/provincial/faction_behavior_v30.md:227-330 (\u00a73.4-\u00a73.5, marked SUPERSEDED-BY LPS-1 inline); designs/provincial/faction_canon_v30.md:153-223 (\u00a73.4)",
+            "detail": "L, PS each 0\u20137, per-settlement (NOT faction-level, per Jordan ruling 2026-05-30, supersedes PP-686 v2's faction-level L/PS). faction_behavior_v30.md retains its old \u00a73.4/\u00a73.5 per-territory dynamics formulas under an inline SUPERSEDED-BY banner rather than being rewritten/removed \u2014 old formulas (\u0394Legitimacy per season etc., lines 292-328) still printed in full beneath the banner."
+        },
+        {
+            "name": "Faction Legitimacy (derived meter)",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:297,325-336,544,554 (\u00a78, \u00a714.1 + footnote)",
+            "detail": "Legitimacy(derived) = Mandate \u00d7 20, 0\u2013140. Footnote (line 554) explicitly documents the LPS-1\u2192LPS-2e correction and disclaims a 0\u2013100 master scale."
+        },
+        {
+            "name": "Treasury / Reputation / Discipline / Levies Available",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:298-360 (\u00a78), :545-548 (\u00a714.1)",
+            "detail": "Treasury = Wealth\u00d7100; Reputation = Influence\u00d715; Discipline = Stability\u00d710; Levies Available = Military\u00d72 (ceiling). Full income/drain event tables at \u00a78.1 (lines 303-360)."
+        },
+        {
+            "name": "Settlement Prosperity / Defense / Order \u2192 Local Economy / Garrison Strength / Public Order",
+            "kind_guess": "settlement_stat",
+            "surface": "designs/territory/settlement_layer_v30.md:43-59 (\u00a71.3-ish); designs/scene/derived_stats_v30.md:372-382 (\u00a79, PENDING), :550-552 (\u00a714.1, PENDING)",
+            "detail": "Local Economy = Prosperity\u00d750; Garrison Strength = Defense\u00d720 + Fort Level\u00d730; Public Order = Order\u00d720. settlement_layer_v30.md:43 cites 'derived_stats_v1 \u00a74' (stale section-number citation \u2014 current doc numbers this \u00a79, not \u00a74) as its source."
+        },
+        {
+            "name": "Province Accord (from settlement Order)",
+            "kind_guess": "derived_value",
+            "surface": "designs/territory/settlement_layer_v30.md:61",
+            "detail": "Province Accord = floor(mean settlement Order across province settlements). Example given: floor((4+2+1)/3)=2."
+        },
+        {
+            "name": "Knot Pool",
+            "kind_guess": "pool",
+            "surface": "designs/scene/derived_stats_v30.md:588 (\u00a714.4)",
+            "detail": "(Bonds \u00d7 2) + 3, range 5\u201317D. Only occurrence located in this family sweep; not cross-checked against a dedicated knots_v30.md in this pass (out of assigned surface)."
+        },
+        {
+            "name": "Fieldwork Pool",
+            "kind_guess": "pool",
+            "surface": "designs/scene/derived_stats_v30.md:587 (\u00a714.4); designs/scene/fieldwork_v30.md:217",
+            "detail": "(Primary Attribute \u00d7 2) + History bonus (fieldwork_v30.md:217, TN7, Ob per Depth table) matches derived_stats' '(Primary\u00d72)+History+3' framing (History bonus already = points+3 per social_contest's convention) \u2014 consistent naming, not independently verified for the +3 constant inside fieldwork_v30.md's own prose."
+        },
+        {
+            "name": "Evidence Track",
+            "kind_guess": "track",
+            "surface": "designs/scene/fieldwork_v30.md:254-272 (\u00a74.1); designs/scene/derived_stats_v30.md:576 (\u00a714.3)",
+            "detail": "Range 0 to per-investigation threshold; persistent across scenes/sessions; one track per investigation regardless of territory (Exposure tracked separately per territory)."
+        },
+        {
+            "name": "Piety Track / Conviction / PT / CT \u2014 multi-referent name",
+            "kind_guess": "track",
+            "surface": "designs/scene/conviction_track_v30.md:5,10,14-23; designs/personal/conviction_track_v1.md:1-10; references/glossary.md:86,241; designs/scene/derived_stats_v30.md:561 (\u00a714.2); designs/scene/social_contest_v30.md:276",
+            "detail": "At least four distinct referents share the name: (a) conviction_track_v30.md \u2014 per-territory Church institutional-standing stat, 0-5, 'Conviction (PT)' (glossary-style note at :10 typos it '(CT)' vs. '(PT)' used 3x elsewhere in that doc); (b) conviction_track_v1.md \u2014 'the personal-scale moral-belief mechanic', per-character Conviction/Scar tracker (no explicit 0-10 scale stated in the excerpt read); (c) glossary.md:86 \u2014 'Piety Track | CT* | 0-10 | Debate position tracker, Side A wins \u22657, Side B \u22643, compromise 4-6' citing conviction_track_v1.md as canonical doc, but this description verbatim matches social_contest_v30.md:276's Persuasion Track, not conviction_track_v1.md's Scar mechanic; (d) derived_stats_v30.md:561 \u2014 'Piety Track | 0-10 | Per character | Personal religious standing' \u2014 a fourth restatement not explicitly tied to (b) or (c).",
+            "notes": "(a)'s narrow duplicate against tc_political_redesign_v30's 'Piety (PT)' is KNOWN-TRACKED: faction_politics_v30.md:25 (A-06, P1) and :1048 (ED-644, 'rename deferred'). The (b)/(c)/(d) cross-scale collision and glossary.md's apparent miscitation are not covered by ED-644 (which is scoped to the (a)-vs-tc_political_redesign duplicate only). See Finding."
+        },
+        {
+            "name": "Persuasion Track",
+            "kind_guess": "track",
+            "surface": "designs/scene/social_contest_v30.md:89-93,184-276,481-488",
+            "detail": "0\u201310, banded: \u22657 Side A wins, \u22643 Side B wins, 4-6 compromise. Regroup/Concede a Point each move it \u00b11. Preserved unchanged by CR3 (line 481)."
+        },
+        {
+            "name": "Disposition",
+            "kind_guess": "track",
+            "surface": "designs/scene/derived_stats_v30.md:388-394,560 (\u00a710.1, \u00a714.2)",
+            "detail": "Flat \u22125..+5, per NPC. Decoupled from Bonds as a ceiling (ED-912, supersedes PP-684 'ceiling=Bonds'). Bonds gates Knot eligibility (\u22655) and max Knot count but no longer caps Disposition."
+        },
+        {
+            "name": "Resonant Style / Conviction (personal worldview)",
+            "kind_guess": "track",
+            "surface": "designs/npcs/npc_behavior_v30.md:32-34,53-315 (throughout \u00a71.3 + arc profiles); designs/personal/conviction_track_v1.md:10-14 (\u00a71 taxonomy: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden)",
+            "detail": "Resonant Style \u2208 {Consequence, Evidence, Authority, Solidarity, ...} determined by an NPC's Conviction; Conviction taxonomy per conviction_track_v1.md \u00a71 (9 listed) though CLAUDE.md's baseline cites a separate 'ED-IN-0025 resonance_style retirement correction, NEEDS-JORDAN' as the tracked open item for this exact area (not re-litigated here)."
+        },
+        {
+            "name": "Inspiration",
+            "kind_guess": "derived_value",
+            "surface": "designs/scene/derived_stats_v30.md:164-221 (\u00a75.3)",
+            "detail": "Total Inspiration per focus \u2264 Spirit (Resolve cap, params/core L128 cited); +1D bonus when pursued genuinely, Ob \u22121 when spent strategically (per fieldwork_v30 \u00a72.2, cross-referenced not independently reread in this pass)."
+        },
+        {
+            "name": "Faction Domain Pool",
+            "kind_guess": "pool",
+            "surface": "designs/scene/derived_stats_v30.md:590 (\u00a714.4)",
+            "detail": "Bare faction stat, 1\u20137D. Only occurrence found in this family; V-1 note (\u00a714.5, line 592-596) explicitly flags this as an intentional non-proportional scale-shift vs. personal-scale pools."
+        }
+    ],
+    "findings": [
+        {
+            "id": "F-DESIGN-1",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "designs/scene/derived_stats_v30.md self-contradicts its own Combat Pool formula: \u00a713 ('What Does NOT Change') states the pre-ED-901 formula as still-current, while \u00a714.4 two sections later states that exact formula was STRUCK.",
+            "evidence": "designs/scene/derived_stats_v30.md:515 ('Combat Pool: (Agi \u00d7 2) + History + 3, split offense/defense') vs designs/scene/derived_stats_v30.md:584 ('Combat Pool | max(5, History + 6) \u2014 Agility-independent... STRUCK old (Agility\u00d72)+History+3 2026-06-04... ED-901')."
+        },
+        {
+            "id": "F-DESIGN-2",
+            "severity": "P1",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "designs/scene/combat_v30.md \u2014 still flagged 'the design-layer source for personal combat' for non-resolution content \u2014 carries the pre-S1-ratification Stamina formula and recovery rule with no pointer to the superseding RATIFIED S1 (2026-05-29) values that derived_stats_v30.md documents as current.",
+            "evidence": "designs/scene/combat_v30.md:303 ('Stamina = Endurance \u00d7 5 (range 5-35)... ED-694, replaces composite formula') and :98 ('Recover Stamina by Endurance score') vs designs/scene/derived_stats_v30.md:98 ('(3\u00d7Endurance)+(2\u00d7Spirit)... RATIFIED 2026-05-29 S1') and :102 ('Take a Breath: restores (Endurance + relevant combat History) \u00d7 2, capped at max') and :505 (\u00a712 table documenting the S1 supersession explicitly)."
+        },
+        {
+            "id": "F-DESIGN-3",
+            "severity": "P1",
+            "kind": "stale",
+            "calibration": "KNOWN-UNTRACKED",
+            "claim": "The superseded PP-233 Mass Combat Pool formula (min(Size,Command)+Command) is still the headline/comparison-table statement in two design surfaces \u2014 mass_battle_v30.md's own \u00a7A.1 overview and step-1 restatement, and derived_stats_v30.md's \u00a714.4 cross-scale comparison table \u2014 even though the same mass_battle_v30.md line that restates it also flags it superseded by ED-899/ED-1013.",
+            "evidence": "designs/provincial/mass_battle_v30.md:28 ('Effective Combat Pool = min(Size, Command) + Command (PP-233)') and :443 ('1. Effective Pool = min(Size, Command) + Command \u2212 Discipline penalty (PP-233...) *(ED-899:... engine default pool base = 2 \u00d7 Command with Size via Lanchester frontage... ED-1013 refines this to Command \u00d7 (1 + cohesion))*'); designs/scene/derived_stats_v30.md:589 ('Mass Combat Pool | min(Size, Command) + Command') carries no ED-899/ED-1013 caveat at all. Related to the already-known params/mass_combat.md header duplication (CLAUDE.md baseline) but this specific design-doc-headline instance is a distinct, uncited residual."
+        },
+        {
+            "id": "F-DESIGN-4",
+            "severity": "P1",
+            "kind": "collision",
+            "calibration": "NEW",
+            "claim": "'Piety Track' (and its abbreviations PT/CT) names at least four structurally different quantities across the corpus, and references/glossary.md's own entry appears to describe the wrong mechanic under that name while citing the wrong canonical doc.",
+            "evidence": "designs/scene/conviction_track_v30.md:14-18 (per-territory Church stat, 0-5, 'Conviction (PT)'; a glossary-style note at :10 renders it '(CT)' inconsistently with the doc's own 3 uses of '(PT)' at :16,21,23); designs/personal/conviction_track_v1.md:10 (per-character 'personal-scale moral-belief mechanic', distinct scale/mechanic); references/glossary.md:86 ('Piety Track | CT* | 0-10 | Debate position tracker. Side A wins at \u22657; Side B wins at \u22643. Compromise zone 4-6. Canonical doc: designs/personal/conviction_track_v1.md') \u2014 this description verbatim matches designs/scene/social_contest_v30.md:276 ('Persuasion Track \u22657 = Side A wins; \u22643 = Side B wins; 4-6 = compromise'), not the Scar mechanic conviction_track_v1.md actually defines; designs/scene/derived_stats_v30.md:561 ('Piety Track | 0-10 | Per character | Personal religious standing') restates a fourth, uncited version. The narrower (a)-vs-tc_political_redesign duplicate is separately KNOWN-TRACKED per designs/provincial/faction_politics_v30.md:25 (A-06) and :1048 (ED-644, 'rename deferred') \u2014 that ED does not cover this broader cross-scale/glossary collision."
+        },
+        {
+            "id": "F-DESIGN-5",
+            "severity": "P2",
+            "kind": "export-drift",
+            "calibration": "NEW",
+            "claim": "The Mandate formula cited by params/factions_personal.md ('per faction_behavior_v30 \u00a74') no longer matches what faction_behavior_v30.md \u00a74 actually says \u2014 that section was rewritten under the LPS-2e ruling to a saturating, size-weighted aggregate, not the flat mean the params citation states. Confirms the divergence flagged in this audit's baseline facts, with exact citations.",
+            "evidence": "params/factions_personal.md:14 ('Mandate = round(0.5 \u00d7 Legitimacy + 0.5 \u00d7 Popular_Support) per faction_behavior_v30 \u00a74') vs designs/provincial/faction_behavior_v30.md:405 ('Mandate(faction) = clamp(round(7 \u00b7 T / (T + K)), 0, 7), T = \u03a3_s W_s\u00b7(0.5\u00b7L_s + 0.5\u00b7PS_s)/7, K = 6') and designs/provincial/faction_canon_v30.md:216 (same saturating form) and designs/territory/settlement_layer_v30.md:147-177 (\u00a71.8, LPS-2e, the ruling that revised \u00a74)."
+        },
+        {
+            "id": "F-DESIGN-6",
+            "severity": "P2",
+            "kind": "stale",
+            "calibration": "NEW",
+            "claim": "The Argue Pool 'formula' is restated three times verbatim in its own home document (social_contest_v30.md) as '(Primary Attribute \u00d7 2) + History bonus', omitting the up-to-+2D style/audience bonus dice that the same document says are added to that same pool \u2014 only derived_stats_v30.md states the complete formula.",
+            "evidence": "designs/scene/social_contest_v30.md:119,164,490 (three restatements of 'Argue Pool = (Primary Attribute \u00d7 2) + History bonus') vs :78 ('These dice are added to the Argue pool at Step 3 of each exchange... maximum +2D') vs designs/scene/derived_stats_v30.md:585 ('Argue Pool | (Primary \u00d7 2) + History + 3 + style')."
+        },
+        {
+            "id": "F-DESIGN-7",
+            "severity": "P1",
+            "kind": "enforcement-gap",
+            "calibration": "NEW",
+            "claim": "designs/scene/derived_stats_v30_index.md is severely stale relative to its canonical head (still calls \u00a74.1 'Vitality' not 'Health', its 32-row heading list has no trace of \u00a714's 5 subsections or the entire post-2026-04-19 revision history visible in the body), and tools/ci_co_file_checker.py \u2014 the tool CLAUDE.md \u00a74 names as CI-enforcing 'keep the pair in sync' for *_index.md/*_infill.md \u2014 contains no rule that checks index-file staleness at all; its four rules govern unrelated co-changes (design doc\u2192canonical_sources.yaml, patch register\u2192propagation_map.md, sim output\u2192coverage_matrix.md, design doc\u2192params file).",
+            "evidence": "designs/scene/derived_stats_v30_index.md:1-5 (generated 2026-04-19T02:19:34Z, canonical_sha af3d4c643cea, canonical_tokens 5924) vs current `git hash-object designs/scene/derived_stats_v30.md` = 09abf17ac6390d9784766a9dacf52a7f02aad697 (different) and the file's actual content running to line 597 with \u00a714.1-14.5 subsections (designs/scene/derived_stats_v30.md:529-597) absent from the index; designs/scene/derived_stats_v30_index.md:24 ('4.1 Vitality (survival resource)') vs designs/scene/derived_stats_v30.md:55 ('4.1 Health (survival resource) \u2014 AUTHORITATIVE'); tools/ci_co_file_checker.py:1-100 (full file \u2014 four rules, none referencing *_index.md or doc_index_gen.py output)."
+        },
+        {
+            "id": "F-DESIGN-8",
+            "severity": "P3",
+            "kind": "other",
+            "calibration": "NEW",
+            "claim": "designs/scene/derived_stats_v30.md's own header carries two directly contradictory ## Status: lines (CANONICAL, then two lines later PROPOSAL \u2014 supersedes prior), while descriptor_registry.yaml (per the audit's own baseline) treats this file as authoritative \u2014 CLAUDE.md's rule that only a head's '## Status:' line can establish currency is undermined when that line itself is self-contradictory.",
+            "evidence": "designs/scene/derived_stats_v30.md:2 ('## Status: CANONICAL') and :4 ('## Status: PROPOSAL \u2014 supersedes prior derived_stats_v30.md')."
+        }
+    ],
+    "coverage_notes": "Swept via targeted grep-then-read (deterministic extraction, not full line-by-line reads of all ~6,200 lines across the 7 assigned .md heads plus combat_engine_v1/). Fully read: designs/scene/derived_stats_v30.md (all 597 lines) and its index (all 84 lines). Grep-targeted + spot-read: designs/scene/combat_v30.md (pool/Stamina/wound sections only, not the full 590 lines incl. weapon tables/maneuver list), designs/scene/social_contest_v30.md (Argue Pool/Composure/Concentration/Face/Persuasion Track passages, not the full 710 lines incl. proceeding-type tables and coalition rules beyond what's quoted), designs/provincial/mass_battle_v30.md (Pool/Command/TroopCount/Morale sections + header, not the full 966 lines incl. Parts B/D/E in depth beyond the Board-Game pool line and Part-C Morale citation), designs/territory/settlement_layer_v30.md (\u00a71.3-\u00a71.8 region + settlement-type/derived-value tables, not the full 780 lines incl. \u00a72-\u00a74 facility/governance detail), designs/threadwork/threadwork_v30.md (Thread Pool/TPS/Coherence formula restatements across all operation types, not the full 1,017 lines of Ob tables and lore), designs/npcs/npc_behavior_v30.md (Resonant Style/Conviction/Standing grep hits only, not the full 1,258 lines of per-NPC arc profiles), designs/scene/fieldwork_v30.md (Depth/Evidence Track/Pool passages, not the full 905 lines). designs/provincial/faction_behavior_v30.md, faction_canon_v30.md, faction_state_authoring_v30.md read for Mandate/Legitimacy/Popular Support sections specifically, not cover-to-cover. designs/scene/conviction_track_v30.md and designs/personal/conviction_track_v1.md read for their opening/naming sections only. NOT swept in this pass, flagged rather than silently skipped: designs/scene/combat_engine_v1/*.py (config.py, core.py, systems.py, combatant.py, etc.) beyond a one-line grep of config.py and the README \u2014 these are closer to sim/engine-code surface than F-DESIGN prose and a fuller pass would need the sim-code finder family; designs/factions/faction_systems_overview_v30.md (the named overview head) not opened; params/*.md files only touched twice for corroboration (factions_personal.md:14, glossary.md \u2014 both cross-family, cited only as supporting evidence for design-doc findings, not catalogued as F-DESIGN's own items); designs/scene/fieldwork_v30.md's fieldwork-action-type tables (\u00a72-\u00a73 detail) and designs/npcs/npc_behavior_v30.md's per-NPC arc-profile mechanical tables were not individually verified line-by-line for internal formula consistency beyond the grep hits shown. No conviction_track_v30_infill.md or conviction_track_v30_index.md content read (co-file pair of the per-territory Piety Track doc) \u2014 a follow-up pass should check whether that index is equally stale, mirroring F-DESIGN-7's finding for derived_stats. Board-game-mode formulas (mass_battle_v30.md Part B) were catalogued but not adversarially checked against params/board_game.md or params/bg/* (out of family)."
+}

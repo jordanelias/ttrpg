@@ -8,12 +8,12 @@ corpus from many sessions — into ONE deduplicated, categorized, prioritized li
 so you can see (and clear) the decisions you actually still owe.
 
 Sources:
-  - corpus sweep (designs/ canon/ params/ references/ sim/) for explicit markers:
+  - corpus sweep (designs/ canon/ engine/params/ references/ sim/) for explicit markers:
         [OPEN — Jordan] · ruling pending · pending ratification · awaiting ratification
         [GAP …] · F1/F2 class · registry §10 candidate · [ASSUMPTION …]
   - references/module_contracts.yaml  (gap_notes, with affected systems)
   - tools/observability/lexicon.json  (abbreviation collisions, placeholders, censured)
-  - canon/supersession_register.yaml  (what's already settled — shown for reassurance)
+  - registers/supersession_register.yaml  (what's already settled — shown for reassurance)
 
 Output: decisions.json, decisions_data.js (window.VALORIA_DECISIONS), DECISIONS.md
 Run:    python tools/observability/build_decisions.py
@@ -28,7 +28,248 @@ except ImportError:
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = Path(__file__).resolve().parent
-SWEEP_DIRS = ["designs", "canon", "params", "references", "sim", "engine"]
+
+# Redact EVERY legacy name (block- and warn-tier alike, references/names_index.yaml —
+# single source of truth per tools/ci_naming_check.py / tools/ci_names_check.py, imported
+# here, not re-hardcoded) out of any corpus text this tool quotes verbatim. This register
+# aggregates arbitrary corpus lines, including decision/supersession entries that
+# legitimately DISCUSS a renamed/forbidden term by name (quoting the exact token, as part
+# of explaining the rename or the naming gate itself) — without this, regenerating the
+# register can re-introduce a legacy token into decisions.json/DECISIONS.md and trip
+# ci_naming_check.py (block-tier) or ci_names_check.py (warn-tier) on the next commit (both
+# failed this way in practice, 2026-07-10). This masks the generator's OWN output; it does
+# not touch either gate's exclusion list or matching logic — enforce=None pulls every tier
+# so a future warn->block promotion needs no change here. MUST be applied to every text
+# field this tool writes, not just add()'s corpus-sweep path — the supersession-register
+# "resolved" entries below are a second, separate source of quoted corpus text.
+def _redact_forbidden_names(text: str) -> str:
+    sys.path.insert(0, str(REPO / "tools"))
+    try:
+        import names as _names
+        legacy = _names.all_legacy(enforce=None)
+    except Exception:
+        return text
+    for legacy_name, canon, _key, _tier in legacy:
+        text = re.sub(re.escape(legacy_name), f"[REDACTED-LEGACY-NAME, canon={canon}]",
+                      text, flags=re.IGNORECASE)
+    return text
+
+SWEEP_DIRS = ["designs", "systems", "canon", "params", "references", "sim", "engine", "godot"]
+
+# ---------------------------------------------------------------------------------------
+# Path -> ED-<LANE> lane inference (audit-ecosystem Phase 4 — no ED allocated for this
+# tooling change itself; this table informs triage, it does not promote or file anything).
+#
+# THE single home for this mapping — do not re-derive it elsewhere ("every rule lives
+# once", CLAUDE.md §8). Checked for an existing authoritative source first and found none
+# usable for the CLAUDE.md §3 9-lane taxonomy (MB/PC/FI/SC/FA/WR/IN/GO/SE):
+#   - references/lane_assignments.yaml exists but is a DIFFERENT, older concept (its own
+#     header warns against conflating them) — the write-disjoint Lane A/B/C concurrency
+#     model, not the ED-<LANE>-NNNN editorial namespace. Its owns-globs are bulk
+#     (e.g. Lane A owns the whole of designs/scene/**), too coarse to separate PC/SC/FI.
+#   - workplans/valoria_master_workplan_v6.md and workplan_v6_progress.yaml
+#     enumerate lane WORK ITEMS, not a path->lane ownership table.
+#   - registers/handoffs/HANDOFF_<LANE>.md files each open with a short "canonical head(s)" pointer
+#     (e.g. HANDOFF_PC.md -> systems/combat/combat_engine_v1/) — real signal, used below,
+#     but only names a handful of files per lane, not a full corpus partition.
+#
+# So: a minimal prefix table, hand-built from the above signals plus each subsystem's
+# obvious subject-matter grouping (sim/ subpackages, engine/params/ files, designs/ subdirs).
+# Matched by LONGEST-PREFIX-WINS (a file-specific entry beats its parent directory's).
+# Deliberately NOT exhaustive: designs/audit/**, references/** (module_contracts.yaml,
+# values_master.yaml, names_index.yaml, npc_registry.yaml, etc.), proposals/**,
+# and designs/personal/conviction_*/piety_* are left OUT on purpose — these are
+# genuinely cross-lane/shared surfaces (module_contracts.yaml's own gap_notes span all 27
+# modules; conviction/piety tracks are drawn on by PC+SC+FI alike; most audit folders are
+# investigative snapshots that don't map 1:1 to a single lane). Forcing a guess there would
+# violate the "don't force-classify" instruction more than it would help triage. A handful
+# of individually-named audit folders ARE included below because a HANDOFF_<LANE>.md file
+# explicitly cites them as that lane's own audit trail (not a guess from the folder name).
+LANE_PATH_PREFIXES: list[tuple[str, str]] = [
+    # --- MB: mass battle ---
+    ("systems/mass_battle/mass_battle_v30", "MB"),
+    ("systems/mass_battle/mass_battle_integration_v30.md", "MB"),
+    ("systems/mass_battle/military_layer_v30", "MB"),
+    ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
+    ("proposals/multiunit_envelopment_plan.md", "MB"),
+    ("engine/params/mass_combat.md", "MB"),
+    ("systems/mass_battle/sim/massbattle.py", "MB"),
+    ("systems/mass_battle/sim/units.py", "MB"),
+    ("systems/mass_battle/sim/tactic_cards.py", "MB"),
+    ("systems/mass_battle/sim/altonian_reinforcements.py", "MB"),
+    ("designs/audit/2026-06-30-massbattle-bottomup/", "MB"),
+    ("designs/audit/2026-06-01-massbattle-stub-wiring/", "MB"),
+    ("designs/audit/2026-05-29-massbattle-sim-foundation/", "MB"),
+    ("designs/audit/2026-05-15-mb-comparative-audit/", "MB"),
+    ("designs/audit/2026-06-23-mb-fidelity-critique/", "MB"),
+
+    # --- PC: personal combat ---
+    ("systems/combat/combat_v30", "PC"),
+    ("systems/combat/combat_design_v1", "PC"),
+    ("systems/combat/combat_c4_draft_v0.md", "PC"),
+    ("systems/combat/combat_engine_v1/", "PC"),
+    ("systems/combat/scene_combat_v1/", "PC"),
+    # derived_stats_v30 deliberately NOT mapped: it explicitly scopes itself
+    # "across personal, unit, settlement, and faction scales" and CLAUDE.md
+    # Section 5 flags the derived-stat schema as cross-system "IN FLUX" -- a
+    # single-lane assignment would contradict this script's own
+    # spans-multiple-lanes -> null policy (caught in adversarial review of
+    # Phase 4 / ED-IN-0032's audit-ecosystem plan).
+    ("systems/combat/sim/combat.py", "PC"),
+    ("designs/audit/2026-06-09-personal-combat-comprehensive/", "PC"),
+    ("designs/audit/2026-06-13-combat-bottomup/", "PC"),
+    ("designs/audit/2026-06-16-combat-reconciliation/", "PC"),
+    ("designs/audit/2026-06-17-combat-decision-docket/", "PC"),
+    ("designs/audit/2026-06-19-personal-combat-loose-ends/", "PC"),
+    ("designs/audit/2026-06-22-combat-analysis/", "PC"),
+    ("designs/audit/2026-06-28-combat-critique/", "PC"),
+    ("designs/audit/2026-06-28-combat-critique-recovered.json", "PC"),
+    ("designs/audit/2026-06-29-combat-corpus-recovery/", "PC"),
+    ("designs/audit/2026-06-30-combat-grounding/", "PC"),
+    ("designs/audit/2026-06-30-scene-combat-gate1-audit/", "PC"),
+    ("designs/audit/2026-07-04-weapon-morphology-granularity/", "PC"),
+    ("designs/audit/2026-06-02-combat-engine/", "PC"),
+    ("designs/audit/2026-05-28-combat-reframe/", "PC"),
+    ("designs/audit/2026-05-29-combat-armature/", "PC"),
+    ("designs/audit/2026-05-31-percell-combat/", "PC"),
+
+    # --- SC: social contest ---
+    ("systems/social_contest/social_contest_v30", "SC"),
+    ("systems/social_contest/social_contest_system_v2", "SC"),
+    ("systems/social_contest/sim/contest/", "SC"),
+    ("systems/social_contest/sim/contest_legacy_stub.py", "SC"),
+    ("engine/params/contest.md", "SC"),
+    ("engine/params/contest_extensions.md", "SC"),
+    ("designs/audit/2026-06-01-contest-redesign/", "SC"),
+    ("designs/audit/2026-06-03-contest-groundup/", "SC"),
+    ("designs/audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
+    ("designs/audit/2026-06-30-contest-fractional-ob-probe/", "SC"),
+    ("designs/audit/2026-06-30-contest-gate-1c-packet/", "SC"),
+    ("designs/audit/2026-07-01-contest-gate-a-packet/", "SC"),
+    ("designs/audit/2026-07-01-contest-gate-b-packet/", "SC"),
+    ("designs/audit/2026-07-01-contest-player-interaction/", "SC"),
+    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-2_SC", "SC"),
+
+    # --- FI: field investigation ---
+    ("designs/scene/fieldwork", "FI"),
+    ("systems/fieldwork/investigation_systems_v30", "FI"),
+    ("systems/fieldwork/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
+    ("systems/fieldwork/sim/fieldwork.py", "FI"),
+    ("systems/fieldwork/sim/investigation.py", "FI"),
+    ("systems/fieldwork/sim/knots.py", "FI"),
+    ("engine/params/fieldwork.md", "FI"),
+    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
+
+    # --- FA: faction actions ---
+    ("systems/factions/faction_", "FA"),
+    ("systems/factions/factions_personal_v30", "FA"),   # ED-IN-0071 P4 slice 10: lane-map omission fixed (params counterpart engine/params/factions_personal.md was already FA)
+    ("systems/factions/ci_political_v30", "FA"),
+    ("systems/factions/baralta_crown_claim_v30", "FA"),
+    ("systems/factions/franchise_v30.md", "FA"),
+    ("systems/factions/parliamentary_transfer_v30.md", "FA"),
+    ("systems/factions/fractional_province_ownership_v30", "FA"),
+    ("systems/factions/fail_forward_pp177.md", "FA"),
+    ("systems/factions/political_dynamics_keys_migration_v30.md", "FA"),
+    ("systems/factions/treaty_expiration_v30.md", "FA"),
+    ("systems/factions/varfell_path_b_v30", "FA"),
+    ("designs/audit/2026-04-28-political-dynamics-session/", "FA"),
+    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA", "FA"),
+    ("systems/factions/sim/faction_action.py", "FA"),
+    ("systems/factions/sim/parliamentary_action.py", "FA"),
+    ("systems/factions/sim/parliamentary_transfer.py", "FA"),
+    ("systems/factions/sim/treaty.py", "FA"),
+    ("systems/factions/sim/council_solmund.py", "FA"),
+    ("systems/factions/sim/crown_initiative.py", "FA"),
+    ("systems/factions/sim/charter_liberties.py", "FA"),
+    ("systems/factions/sim/absolution.py", "FA"),
+    ("systems/factions/sim/excommunication.py", "FA"),
+    ("systems/factions/sim/hafenmark_equipment.py", "FA"),
+    ("systems/factions/sim/infrastructure_reclamation.py", "FA"),
+    ("systems/factions/sim/mass_seizure.py", "FA"),
+    ("systems/factions/sim/varfell_mandate_action.py", "FA"),
+    ("systems/factions/sim/varfell_territorial_acquisition.py", "FA"),
+    ("systems/social_contest/sim/parliamentary_stay.py", "FA"),
+    ("systems/social_contest/sim/parliamentary_vote.py", "FA"),
+    ("engine/params/bg/faction_actions.md", "FA"),
+    ("engine/params/bg/parliament.md", "FA"),
+    ("engine/params/bg/ministry.md", "FA"),
+    ("engine/params/bg/ci_seizure.md", "FA"),
+    ("engine/params/bg/royal_assassination.md", "FA"),
+    ("engine/params/bg/institutions.md", "FA"),
+    ("engine/params/bg/tensions_deck.md", "FA"),
+    ("engine/params/factions.md", "FA"),
+    ("engine/params/factions_personal.md", "FA"),
+    ("engine/params/factions/", "FA"),
+
+    # --- WR: world ---
+    ("systems/world/", "WR"),
+    ("systems/threadwork/", "WR"),
+    ("designs/scene/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
+    ("engine/params/threadwork.md", "WR"),
+    ("engine/params/threadwork_superseded.md", "WR"),
+    ("engine/params/southernmost.md", "WR"),
+    ("systems/world/sim/", "WR"),
+    ("systems/threadwork/sim/", "WR"),
+    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
+
+    # --- GO: godot ---
+    ("godot/", "GO"),
+    ("engine/engine_params/", "GO"),
+
+    # --- SE: settlements ---
+    ("systems/settlements/settlement_layer_v30", "SE"),
+    ("systems/settlements/settlement_adjacency_v30", "SE"),
+    ("systems/settlements/territory_temperaments_v30.md", "SE"),
+    ("systems/settlements/governance_play_redesign_v1.md", "SE"),
+    ("systems/settlements/march_layer_v30.md", "SE"),
+    ("systems/settlements/valoria_political_hierarchy_v30.md", "SE"),
+    ("systems/settlements/valoria_geography_v30.yaml", "SE"),
+    ("systems/settlements/goldenfurt_slice/", "SE"),
+    ("designs/provincial/peninsular_strain_v30", "SE"),
+    ("systems/settlements/sim/", "SE"),
+    ("sim/peninsular/", "SE"),
+    ("engine/params/bg/geography.md", "SE"),
+    ("designs/audit/2026-06-22-territory-settlement-audit/", "SE"),
+
+    # --- IN: infrastructure / cross-cutting ---
+    ("canon/", "IN"),
+    ("tools/", "IN"),
+    ("engine/", "IN"),
+    ("designs/architecture/", "IN"),
+    ("designs/articulation/", "IN"),
+    ("workplans/", "IN"),
+    ("designs/provincial/clock_registry_v30", "IN"),   # timer/scheduling registry, engine_clock-adjacent
+    ("references/id_reservations.yaml", "IN"),
+    ("references/ci_checks_registry.yaml", "IN"),
+    ("references/lane_assignments.yaml", "IN"),
+    ("sim/substrate/", "IN"),
+    ("sim/autoload/", "IN"),
+    ("sim/cross_scale/", "IN"),
+]
+# Longest-prefix-wins: sort once, most specific first.
+_LANE_PREFIXES_SORTED = sorted(LANE_PATH_PREFIXES, key=lambda kv: -len(kv[0]))
+
+
+LANE_ORDER = ["MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE"]
+LANE_NAMES = {
+    "MB": "Mass battle", "PC": "Personal combat", "FI": "Field investigation",
+    "SC": "Social contest", "FA": "Faction actions", "WR": "World",
+    "IN": "Infrastructure / cross-cutting", "GO": "Godot", "SE": "Settlements",
+}
+
+
+def infer_lane(path_or_loc: str) -> str | None:
+    """Infer an ED-<LANE> code from a corpus-relative path (or 'path:line' location
+    string). Returns None honestly when nothing in LANE_PATH_PREFIXES matches — no
+    force-classification (CLAUDE.md's anti-fabrication ethos)."""
+    if not path_or_loc:
+        return None
+    path = path_or_loc.split(":", 1)[0] if re.search(r":\d+$", path_or_loc) else path_or_loc
+    path = path.replace("\\", "/")
+    for prefix, lane in _LANE_PREFIXES_SORTED:
+        if path.startswith(prefix):
+            return lane
+    return None
 
 # lines that mention a marker but are ALREADY settled — do not list as open
 RESOLVED_SKIP = re.compile(
@@ -74,20 +315,22 @@ def main():
     decisions: dict[str, dict] = {}   # norm-text -> record
 
     def add(text, cat, prio, label, where, system=""):
-        text = text.strip()
+        text = _redact_forbidden_names(text.strip())
         if len(text) > 320:
             text = text[:317] + "…"
         k = norm(text)
         if not k:
             return
         rec = decisions.setdefault(k, {"text": text, "category": cat, "priority": prio,
-                                       "label": label, "locations": [], "systems": [], "count": 0})
+                                       "label": label, "locations": [], "systems": [], "count": 0,
+                                       "_lane_votes": set()})
         rec["count"] += 1
         rec["priority"] = min(rec["priority"], prio)
         if where and where not in rec["locations"]:
             rec["locations"].append(where)
         if system and system not in rec["systems"]:
             rec["systems"].append(system)
+        rec["_lane_votes"].add(infer_lane(where))
 
     # ---- 1. corpus sweep ----
     files = 0
@@ -147,37 +390,54 @@ def main():
         for ph in L.get("placeholders", []):
             if ph.get("status") != "expired":
                 add(f"Placeholder name '{ph.get('placeholder_name','')}' (was '{ph.get('prior_name','')}') — needs canonical name [{ph.get('status','')}]",
-                    "naming", 2, "Placeholder name (rename pending)", "canon/placeholder_names.yaml")
+                    "naming", 2, "Placeholder name (rename pending)", "registers/placeholder_names.yaml")
 
     # ---- 4. supersessions (settled — for reassurance / stale-vs-fresh) ----
     resolved = []
-    sr = REPO / "canon" / "supersession_register.yaml"
+    sr = REPO / "registers" / "supersession_register.yaml"
     if sr.exists():
         try:
             raw = yaml.safe_load(sr.read_text(encoding="utf-8")) or {}
             for e in (raw.get("entries") or []):
                 if isinstance(e, dict) and e.get("superseded_id"):
+                    # A supersession entry's whole POINT is often "old term -> new term",
+                    # so this is the source most likely to quote a legacy name verbatim —
+                    # redact the same as add()'s corpus-sweep text (see note above).
                     resolved.append({"id": str(e.get("superseded_id")),
-                                     "scope": str(e.get("scope", "")),
+                                     "scope": _redact_forbidden_names(str(e.get("scope", ""))),
                                      "superseded_by": str(e.get("superseded_by", "")),
                                      "date": str(e.get("superseded_date") or e.get("date", "")),
-                                     "replacement": str(e.get("replacement") or "")[:160]})
+                                     "replacement": _redact_forbidden_names(str(e.get("replacement") or "")[:160])})
         except yaml.YAMLError:
             pass
 
     items = sorted(decisions.values(), key=lambda r: (r["priority"], -len(r["locations"]), r["category"]))
+
+    # ---- finalize per-item lane: one lane if every location agrees, else null ----
+    # (mixed non-null votes across an item's locations means it genuinely spans lanes —
+    # null is the honest answer there too, not a coin-flip pick of one.)
+    for r in items:
+        lane_votes = r.pop("_lane_votes", set())
+        lane_votes.discard(None)
+        r["lane"] = next(iter(lane_votes)) if len(lane_votes) == 1 else None
+
     by_cat, by_prio, by_file = {}, {1: 0, 2: 0, 3: 0}, {}
+    by_lane, by_lane_prio = {}, {}
     for r in items:
         by_cat[r["category"]] = by_cat.get(r["category"], 0) + 1
         by_prio[r["priority"]] = by_prio.get(r["priority"], 0) + 1
         for loc in r["locations"]:
             f = loc.rsplit(":", 1)[0]
             by_file[f] = by_file.get(f, 0) + 1
+        ln = r["lane"] or "unassigned"
+        by_lane[ln] = by_lane.get(ln, 0) + 1
+        by_lane_prio.setdefault(ln, {1: 0, 2: 0, 3: 0})[r["priority"]] += 1
     hotspots = sorted(by_file.items(), key=lambda kv: -kv[1])[:15]
 
     payload = {
         "meta": {"files_scanned": files, "total_open": len(items),
                  "by_category": by_cat, "by_priority": by_prio,
+                 "by_lane": by_lane, "by_lane_priority": by_lane_prio,
                  "hotspots": hotspots, "resolved_count": len(resolved)},
         "decisions": items, "resolved": resolved[:200],
     }
@@ -195,6 +455,23 @@ def main():
     md.append(f"**{len(items)} open items** across {files} files "
               f"· P1 {by_prio.get(1,0)} · P2 {by_prio.get(2,0)} · P3 {by_prio.get(3,0)} "
               f"· {len(resolved)} already settled (supersessions).\n")
+
+    md.append("\n## By lane\n")
+    md.append("_Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — "
+              "informs lane-scoped triage, does not auto-file anything. An item with "
+              "locations in more than one lane, or no matching path prefix at all, lands "
+              "in **unassigned** rather than a forced guess._\n")
+    md.append("| Lane | P1 | P2 | P3 | Total |")
+    md.append("|---|---|---|---|---|")
+    for lane in LANE_ORDER:
+        p = by_lane_prio.get(lane, {1: 0, 2: 0, 3: 0})
+        total = by_lane.get(lane, 0)
+        if total == 0:
+            continue
+        md.append(f"| **{lane}** — {LANE_NAMES[lane]} | {p.get(1,0)} | {p.get(2,0)} | {p.get(3,0)} | {total} |")
+    up = by_lane_prio.get("unassigned", {1: 0, 2: 0, 3: 0})
+    md.append(f"| _unassigned_ (`lane: null`) | {up.get(1,0)} | {up.get(2,0)} | {up.get(3,0)} | {by_lane.get('unassigned',0)} |")
+
     md.append("\n## By category\n")
     for cat, n in sorted(by_cat.items(), key=lambda kv: -kv[1]):
         md.append(f"- **{CATEGORY_LABEL.get(cat,cat)}** — {n}")
@@ -202,7 +479,12 @@ def main():
     for f, n in hotspots:
         md.append(f"- `{f}` — {n}")
 
-    PER_CAT_CAP = 60
+    # 2026-07-09 (token-efficiency pass): was 60. DECISIONS.md is a human-skimmable
+    # summary — decisions.json (unchanged, uncapped) is the complete machine-readable
+    # source both console.html and any programmatic consumer actually read. At 60,
+    # DECISIONS.md had grown to ~59k tokens (4x its own atomization_rules.yaml cap)
+    # without adding real coverage, since nothing reads the .md for completeness.
+    PER_CAT_CAP = 12
 
     def section(title, prio):
         rows = [r for r in items if r["priority"] == prio]
@@ -243,7 +525,7 @@ def main():
     md.append("\n---\n\n## Already settled (recent supersessions)\n")
     md.append("_These are NOT open — shown so stale references don't read as live decisions "
               "(your “stale vs fresh” problem). Before treating any old ED/PP as authoritative, "
-              "check `canon/supersession_register.yaml`._\n")
+              "check `registers/supersession_register.yaml`._\n")
     for r in resolved[:40]:
         md.append(f"- **{r.get('id','')}** — {r.get('scope','')[:120]} → _{r.get('replacement','') or r.get('superseded_by','')}_")
     (OUT / "DECISIONS.md").write_text("\n".join(md) + "\n", encoding="utf-8")

@@ -36,7 +36,7 @@ Read the following files from the working tree (use the Read tool) before procee
 - `designs/architecture/complete_systems_reference.md` — NPC list, faction list
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
-- `canon/patch_register_active.yaml` — PP affects: lists for G_pp
+- `registers/patch_register_active.yaml` — PP affects: lists for G_pp
 
 The pipeline ALWAYS bypasses index routing for content reads — index files lack the body content needed for citation graph extraction; read the full files above.
 
@@ -60,13 +60,23 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 
 ## Step 3 — Pipeline Stages
 
-The full pipeline lives in `scripts/vector_audit.py` and runs in sequence:
+The pipeline's specification is this stage table. **`scripts/vector_audit.py` now implements it**
+(stage dispatcher landed 2026-07-13, repo-realignment WS0a): it reads the working tree, builds the
+five graphs, runs P1/P2/P3 validation and all 8 diagnostic modes, and writes the outputs below. Run
+it directly:
+
+```
+python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
+```
+
+It is **working-tree only** (no GitHub fetch) and degrades gracefully without `numpy`/`sklearn` (the
+supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage table:
 
 | Stage | What | Output |
 |---|---|---|
 | 0 | Pilot validation (8 well-understood tokens, sanity check tokenization) | `data/pilot.json` |
 | 1 | Corpus extraction with banner classifier (design vs discourse) | `data/corpus_*.json`, `data/corpus_manifest.json` |
-| 2 | Token curation: seed + auto-extract with disambiguation rules | `data/tokens.json`, `data/auto_candidates.json` |
+| 2 | Token curation: **derived from the live registries** (canonical_sources `systems:` + names_index + proper_noun_registry) layered on the curated disambiguation core — see `derive_tokens()` | `data/tokens.json` |
 | 2.5 | Expanded citation graph (explicit refs + implicit ≥2 body mentions + PP affects) | `data/g_cite.json` |
 | 3 | Standard sklearn TF-IDF over paragraphs (supporting only) | `data/g_tfidf.npz` |
 | 4 | Metadata graphs from throughlines table + Μ collapsing + PP affects | `data/g_metadata.json` |
@@ -101,7 +111,7 @@ Tokens in bottom 10th percentile of paragraph count AND bottom 10th percentile o
 For each throughline, count substantiating paragraphs (paragraphs mentioning ≥2 of throughline's load-bearing systems). ≤2 substantiating = at risk of being orphaned. **Requires `references/throughlines_meta_infill.md` to have the Load-bearing systems column** (added by PP-677). Without that column, this mode degenerates to null — diagnose accordingly.
 
 ### Mode G — Vocabulary debt sweep
-Direct grep for known-struck terms (parsed from `canon/supersession_register.yaml`). Reports paragraph count + doc-level concentration per legacy term.
+Direct grep for known-struck terms (parsed from `registers/supersession_register.yaml`). Reports paragraph count + doc-level concentration per legacy term.
 
 ### Mode H — Multi-graph isolates
 Tokens with degree ≤1 in **every** graph. Conceptually present, structurally disconnected. Often canonical concepts lacking first-class doc status.
@@ -184,13 +194,112 @@ PP entry references the audit folder; ED entry describes what was found.
 - `references/methodology.md` — v3 multi-graph triangulation specification (full §3 procedure, all pre-committed thresholds, class taxonomy)
 - `references/diagnostic_modes.md` — A through H mode specifications with worked examples
 - `references/v1_v2_v3_history.md` — methodology evolution, why each pivot was needed (institutional memory)
-- `scripts/vector_audit.py` — full pipeline, runs all stages
+- `scripts/vector_audit.py` — **runnable pipeline** (stage dispatcher implemented 2026-07-13,
+  repo-realignment WS0a; supersedes the 2026-07-11 STUB status noted under ED-IN-0035/0036).
+  Implements Stages 1–6 (Stage 0 pilot + Stage 7 discourse overlay reserved), reads the working
+  tree only, and writes `data/*.json` + `02_weakness_register.md` + `03_validation_report.md`.
+  Reuses the in-file `SEED_TOKENS`/`PILOT_TOKENS`/`CLASSES`/helper scaffolding. `numpy`/`sklearn`
+  are optional (only the supporting TF-IDF graph needs them). Invoke via the command in Step 3.
+  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run;
+  validation may still report FAILED (P2 conviction-symmetry) — that is a real finding, not a bug
+  (methodology §3.8).
+- `scripts/structure_audit.py` — the observatory's **architecture layers** (WS0b core, added
+  2026-07-13). Companion to `vector_audit.py` (which is the L0 prose layer). Builds **G_code** (AST
+  import graph over `sim/` + `tools/` — cycles, cut-vertices, orphans) and **L2** (the
+  `module_contracts.yaml` producer→consumer wiring graph — Key emit/consume closure, phantom
+  producers, dangling non-terminal emits, `doc:null` modules, cross-scale locality). Stdlib + PyYAML
+  only (no numpy/sklearn/networkx — the graph algorithms are implemented in-file), working-tree only,
+  deterministic. **Provenance-tagged** (notional/`[ASSUMPTION]`/`doc:null` modules bucketed as
+  lower-confidence) and it **measures, never gates** (pytest + import-smoke gate). Invoke:
+  `python3 scripts/structure_audit.py --repo-root . --output-dir <run>` → `structure_register.md` +
+  `data/*.json`. Regression-pinned in `tests/valoria/test_structure_audit.py` against PR #131's
+  hand-caught L2 defects (the mass_battle fabricated emit, the personal_combat dead emits).
+- `scripts/pointer_audit.py` — the observatory's **G_pointer** layer (WS0b, added 2026-07-13; the WS1
+  registry-work progress meter). For every stat/quantity identifier on the same surfaces A17 scans
+  (`module_contracts.yaml` `state`/`derivations` + `sim/*.py` `stat_deltas`/`impact_vector` literals),
+  does it resolve to a `descriptor_registry`/`names_index` key, or is it hardcoded pointer-debt? It
+  **reuses A17's rule, does not reimplement it** (CLAUDE.md §8) — imports `tools/quantity_registry.py`
+  `resolve()` and `tools/ci_quantity_vocabulary_check.py`'s scanners verbatim; A17 is the CI gate, this
+  is the graph/meter VIEW. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates.** The unresolved list is *candidate* debt — it explicitly flags that some rows are
+  computed/internal quantities (e.g. `cumulative_damage`, `L_s`) that A17 calls "expected backlog, not
+  a bug," so triage before acting. Invoke:
+  `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>` → `pointer_register.md` +
+  `data/{g_pointer,pointer_scorecard}.json`. Tests: `tests/valoria/test_pointer_audit.py` (pins the
+  §8 reuse-by-identity + the A17 ground-truth count match).
+- `scripts/formula_audit.py` — the observatory's **L1 formula-dependency** layer (WS0b, added
+  2026-07-13). Builds the quantity-dependency DAG (output ← input) from `module_contracts.yaml`
+  `derivations` + `descriptor_registry.yaml`, detecting orphan inputs (a quantity consumed but never
+  produced), multi-definition conflicts (the "Combat Pool defined three ways" class), and dependency
+  cycles. **Reuses** `tools/quantity_registry.py` `resolve()`,
+  `ci_quantity_vocabulary_check._split_bundled`, and `structure_audit.py`'s `tarjan_scc`/`degrees`
+  (no reimplementation, §8). Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates**; the unresolved/orphan list is *candidate* debt (triage first — some are computed/placeholder
+  quantities). A malformed derivation with a null `output` is surfaced via a sentinel node, never
+  silently dropped. Invoke: `python3 scripts/formula_audit.py --repo-root . --output-dir <run>` →
+  `formula_register.md` + `data/*.json`. Tests: `tests/valoria/test_formula_audit.py` (§8
+  reuse-by-identity + end-to-end cycle detection + the null-output regression).
+- `scripts/gen_audit.py` — the observatory's **G_generation** currency layer (WS0b, added 2026-07-13;
+  the WS3 / NS4 v40-transition meter). Partitions the whole `.md` corpus into LIVE heads vs HISTORICAL
+  records (so a historical doc's stale refs are *structurally* never scanned), then runs three
+  detections: (1) **stale version-pointers** inside live heads — a `_vNN.md` ref that is superseded,
+  *moved* (successor exists per the restructure ledger — a trivial repoint), or genuinely nonexistent;
+  (2) **unregistered canonical heads** (a `## Status: CANONICAL` doc absent from
+  `canonical_sources.yaml`); (3) **currency drift** (registered AND superseded). **Reuses**
+  `ci_generation_consistency.py`'s currency rule (`canonical_docs`/`status_of`/`superseded_ids`/
+  `RECOGNIZED`), `broken_dependency_checker.py`'s
+  `extract_file_refs`/`get_all_repo_files`/`_load_restructure_map`, and `vector_audit.banner_classify`
+  — no rule re-derived (§8). Authoritative registration beats the weak banner content-keyword; physical
+  archival paths still demote. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
+  gates** (`ci_generation_consistency.py` is the WARN-only gate). The stale-pointer list is
+  severity-triaged (superseded/moved = mechanical repoints; only *nonexistent* needs a human). Invoke:
+  `python3 scripts/gen_audit.py --repo-root . --output-dir <run>` → `generation_register.md` +
+  `data/g_generation.json`. Tests: `tests/valoria/test_gen_audit.py` (33 tests: §8 reuse-by-identity,
+  the LIVE/HISTORICAL discriminator, the moved-vs-nonexistent severity split).
 
 ## Cross-references
 
-- Original execution: `designs/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file)
-- Workplan v3: `designs/audit/2026-04-29-topographic-analysis/00_workplan.md`
-- Weakness register: `designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
+- Original execution: `deprecated/archives/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file —
+  moved from `designs/audit/` to `deprecated/archives/audit/` at some point after this skill was written;
+  corrected 2026-07-11, ED-IN-0036)
+- Workplan v3: `deprecated/archives/audit/2026-04-29-topographic-analysis/00_workplan.md`
+- Weakness register: `deprecated/archives/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
 - PP-676 / ED-762 (v2+v3 execution)
 - PP-677 / ED-764 (throughlines load-bearing systems column — restored Mode F)
 - PP-678 / ED-765 (vocabulary debt sweep workflow demonstrated)
+
+## Forward-only findings-disposition discipline
+
+Every finding in `02_weakness_register.md` must resolve to either a filed `ED-<LANE>-NNNN` id
+(per `references/id_reservations.yaml`'s allocation protocol) or an explicit no-action line (e.g.
+"no action — working as intended," "no action — superseded by PP-NNN"). This mirrors the
+disposition-table discipline added to `valoria-mechanic-audit`'s output contract in the same
+audit-ecosystem consolidation batch. Applies going forward only — the existing
+`02_weakness_register.md` from the 2026-04-29 run is not retroactively required to carry this
+(no findings-schema existed at that time to check it against).
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type vector_audit \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-vector-audit \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass — this skill's
+own runs are usually `corpus_wide`). See `tools/audit_registry.py`'s module
+docstring for the full field/vocabulary reference — this is the single source of
+truth for the schema, not this note.

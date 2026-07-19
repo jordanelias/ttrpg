@@ -87,7 +87,7 @@ Four is the minimum coherent set.
 | T-15b | Löwenritter Substrate-Agnostic Protector | М-4 | М-6 | Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war). | factions, faction_layer, military_layer, mass_combat, conviction_track, threadwork |
 | T-15c | RM Substrate-Heritage Reclaimer | М-4 | М-6 | Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation). | factions, faction_layer, conviction_track, threadwork |
 | T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). | threadwork, conviction_track, derived_stats |
-| T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. | threadwork, derived_stats, conviction_track, solmund_philosophy, solmund |
+| T-13 | Truth Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. | threadwork, derived_stats, conviction_track, solmund_philosophy, solmund |
 | T-14 | Conviction Architecture | М-6 | — | Forced-choice — Scar accumulation forces arc transitions. | conviction_track, factions, faction_layer |
 | T-15 | Player Progression | М-5 | — | Scale-connecting — personal Standing ladder produces settlement→province→faction progression. | scale_transitions, settlement_layer, faction_layer, factions |
 | T-16 | Knot Propagation | М-5 | М-3 | Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded. | threadwork, scale_transitions, factions |
@@ -204,7 +204,7 @@ The previous meta-throughlines document (PP-671) had misclassifications caught b
 
 - Old М-1 included T-18 Radiation Gradient and T-19 Southernmost Hidden Front. These are geographic, not clock-based. They feed decay but their structural pattern is spatial. Split off into new М-2 (Geography holds pressure).
 
-- Old М-2 "Substrate as universal medium" included T-08 (Church), T-13 (Certainty), T-18, T-21, T-22. Most were secondary participations. The primary substrate-grounding T's are T-01, T-02, T-03 — the ontological throughlines. Revised М-3 primary list to these three.
+- Old М-2 "Substrate as universal medium" included T-08 (Church), T-13 (Truth), T-18, T-21, T-22. Most were secondary participations. The primary substrate-grounding T's are T-01, T-02, T-03 — the ontological throughlines. Revised М-3 primary list to these three.
 
 - Old М-3 "Institutional identity" included T-05 (CI accumulation). But T-05 is clock-based, not identity-based. The Church HAS an identity (T-08) distinct from the fact that CI accumulates over time (T-05). Removed T-05 from М-3 (now М-4); left it in М-1 where it belongs.
 
@@ -375,7 +375,7 @@ These are requirements for the implementation to honor the framework, not sugges
 
 **Dominant strategy.** A choice that pays more than alternatives in all situations. Example: a Thread operation that gives a strategic benefit with no Coherence cost. Violates Ω-d and М-6. Note: a choice that dominates in *some* situations is not a dominant strategy; dominance requires context-independence.
 
-**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no MS cost, no TS requirement, no Coherence effect, no Certainty shift. The name is Thread; the mechanic is not. Violates Μ-γ.
+**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no MS cost, no TS requirement, no Coherence effect, no Truth shift. The name is Thread; the mechanic is not. Violates Μ-γ.
 
 **Scale break.** A mechanic that operates in one scale with no traceable consequence at other scales. Example: a scene-level "Thread sensing" skill that reveals information but whose use doesn't register in province-scale Church AP, doesn't accumulate Exposure, doesn't produce Knot strain in witnessing NPCs. Violates Μ-δ.
 
@@ -392,6 +392,16 @@ These are requirements for the implementation to honor the framework, not sugges
 **Personal-only.** Mechanic operates at scene scale with no strategic consequence. Example: a new companion-conversation topic that produces +1 Disposition but doesn't feed into any strategic mechanic, doesn't contribute to Knot formation, doesn't register in faction Stability. Violates Ω-a.
 
 **Authored emergence.** Mechanic claims to produce emergent narrative but actually triggers pre-authored scripted events. Example: a "random encounter" system that selects from a fixed list of scripted encounters based on game-state flags. The emergence is authorial, not compositional. Violates Μ-β.
+
+---
+
+## §7-A Subtractive dispositions (the Failure Lexicon's missing verdict half) — ED-IN-0027, 2026-07-08
+
+The Failure Lexicon above names *why* a mechanic doesn't deserve to exist, but §8.2's failure-behavior table only ever routes to a *constructive* disposition (build/wire/redesign/flag/iterate). For a **new proposal** that is correct — you don't add what fails N. But for an **existing action** already in the corpus, "flag Jordan, iterate" leaves over-articulation in place forever: the framework could describe the disease and never prescribe removal. The skeleton's §8.2-A supplies the subtractive verdicts (KEEP/REFINE/DISTILL/MERGE/PRUNE/CUT); this note records the two design commitments behind it.
+
+**Why "as-if-built" is the governing rule.** A subtractive audit that penalized unbuilt actions would just be a second wiring-backlog under a hostile name — and it would fight the additive resolution program, which owns wiring debt. Keeping build-state out of the verdict is what makes the two programs *complementary*: the subtractive pass decides *what is worth building* (design merit, judged counterfactually); the additive pass decides *how to build what survives*. A stub can be a KEEP; a fully-wired action can be a CUT. The moment a verdict leans on "it isn't wired yet," it has changed subject from design to schedule, and is void.
+
+**Why the two guards (downstream-naming + inverted critic) are not optional.** Without the downstream-naming requirement, "cut" is free — every reviewer can prune on taste and nothing is accountable; requiring each cut to name the Stratum/OPT/lane task it retires makes a cut a *measurable scope reduction* or nothing at all. Without the inverted-critic steelman, a pessimist default over-cuts by construction (the whole point is to demand each action justify itself, which biases toward removal); forcing an independent pass to argue *for* each condemned action, as-if-built, and only upholding the cut if that argument fails against source, is what keeps disciplined pessimism from becoming vandalism. In the 2026-07-08 corpus run this gate overturned 2 of 37 candidates (one for the as-if-built violation itself) and softened 2 more — evidence the guard bites.
 
 ---
 
@@ -499,7 +509,7 @@ A framework that is advisory is not a framework. The previous state (PP-672) com
 
 ### §11.2 Enforcement mechanism
 
-`valoria_hooks.vetting_gate(additions)` fires during `pre_commit_gate` when additions include `canon/patch_register_active.yaml`. It parses the patch register, finds PP entries with `id >= PP-674`, and for each verifies:
+`valoria_hooks.vetting_gate(additions)` fires during `pre_commit_gate` when additions include `registers/patch_register_active.yaml`. It parses the patch register, finds PP entries with `id >= PP-674`, and for each verifies:
 
 - The entry has a `vetting:` block.
 - The block has `class:` with value A/B/C/D/E.

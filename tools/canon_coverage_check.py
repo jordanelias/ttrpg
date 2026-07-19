@@ -18,16 +18,23 @@ Usage (CLI):
 
 Usage (in-session, hook-friendly):
     from tools.canon_coverage_check import run_check
-    report = run_check()                      # uses live GitHub state
-    report = run_check(local_cs_yaml=text)    # use specific yaml content
+    report = run_check()                      # reads references/canonical_sources.yaml
+                                                # and walks designs/ from the working tree
+    report = run_check(local_cs_yaml=text)    # use specific yaml content instead
     if report['unregistered_with_header'] or report['registered_no_header']:
         ...
 
-Method:
+Method (working-tree only — no network, per CLAUDE.md's working-tree-is-truth doctrine;
+this previously used the GitHub code-search API, a direct violation of that doctrine,
+ported out 2026-07-11, ED-IN-0031):
     1. Load `references/canonical_sources.yaml`. Recursively walk all string values;
        any value ending in .md / .yaml / .svg is "registered".
-    2. Use the GitHub code-search API to find every file under designs/ containing
-       "Status: CANONICAL" (header marker convention).
+    2. Walk the working tree under `designs/` (os.walk) and read every `.md` file,
+       checking its content for the literal header marker "Status: CANONICAL" — the
+       same literal-string convention the prior GitHub-search query used
+       (`"Status: CANONICAL" repo:... path:designs`), so the matched set is unchanged
+       by the port. Files under `designs/audit/` are still excluded (audit reports
+       that *describe* canonical content are not themselves canonical sources).
     3. Compute set difference both directions:
        - unregistered_with_header: declares CANONICAL, not in registry
        - registered_no_header: in registry under designs/, no header
@@ -36,9 +43,9 @@ Method:
 Exit codes (when --strict):
     0  no drift in either direction
     1  drift detected
-    2  unable to perform check (network, auth, parse error)
+    2  unable to perform check (parse error, missing file)
 
-Dependencies: stdlib + PyYAML (already in container).
+Dependencies: stdlib + PyYAML (already in container). No network calls.
 
 Related:
     - audit/lane-b/2026-05-10-canonical-index-audit_canon_coverage_drift.yaml
@@ -51,15 +58,15 @@ import os
 import sys
 import json
 import argparse
-import urllib.request
-import urllib.parse
 from typing import Iterable
 
 import yaml
 
 
-REPO = 'jordanelias/ttrpg'
-PAT_FILE = '/home/claude/.valoria_pat'
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DESIGNS_DIR = os.path.join(_REPO_ROOT, 'designs')
+CANONICAL_SOURCES_PATH = os.path.join(_REPO_ROOT, 'references', 'canonical_sources.yaml')
+STATUS_MARKER = 'Status: CANONICAL'
 
 
 # ── Walking the registry ─────────────────────────────────────────────────────
@@ -85,50 +92,50 @@ def registered_paths(canonical_sources_yaml_text: str) -> set[str]:
 
 # ── Walking declared-canonical headers ───────────────────────────────────────
 
-def _pat() -> str:
-    with open(PAT_FILE) as f:
-        return f.read().strip()
-
-
-def declared_canonical_files(pat: str | None = None) -> set[str]:
+def declared_canonical_files(designs_dir: str | None = None) -> set[str]:
     """
-    Set of designs/ files whose content contains the literal "Status: CANONICAL".
+    Set of designs/ files (repo-relative paths, forward-slash) whose content
+    contains the literal "Status: CANONICAL".
 
-    Uses GitHub code-search API. Limit 100/page; for current corpus the count is
-    well under that. If we ever exceed, paginate via &page=2 etc.
+    Pure working-tree walk (os.walk under designs/) — no network. Matches the
+    same literal-string convention the prior GitHub code-search query used
+    ("Status: CANONICAL" as a phrase, anywhere in the file). Extension set
+    (.md/.yaml/.svg) matches registered_paths' — a couple of real canonical
+    sources are .yaml/.svg, not .md.
 
     Files under designs/audit/ are excluded — these are audit reports that may
     *describe* canonical content but are not themselves canonical sources. The
     audit subtree is the natural home for the diagnostic snapshots produced by
     this tool, and including them would create a self-referential false positive.
     """
-    pat = pat or _pat()
-    q = '"Status: CANONICAL" repo:' + REPO + ' path:designs'
-    url = (
-        'https://api.github.com/search/code'
-        f'?q={urllib.parse.quote(q)}&per_page=100'
-    )
-    req = urllib.request.Request(
-        url,
-        headers={
-            'Authorization': f'token {pat}',
-            'Accept': 'application/vnd.github.v3+json',
-        },
-    )
-    with urllib.request.urlopen(req) as r:
-        data = json.loads(r.read())
-    items = data.get('items', [])
-    total = data.get('total_count', 0)
-    files = {
-        item['path'] for item in items
-        if not item['path'].startswith('designs/audit/')
-    }
-    if total > len(items):
-        # We didn't get them all — page 2+ may exist. Surface as warning by raising.
-        raise RuntimeError(
-            f"declared_canonical_files: total_count={total} but only "
-            f"{len(items)} returned. Need pagination support."
-        )
+    root = designs_dir or DESIGNS_DIR
+    files: set[str] = set()
+    for dirpath, dirnames, filenames in os.walk(root):
+        relroot = os.path.relpath(dirpath, _REPO_ROOT).replace(os.sep, '/')
+        if relroot == 'designs/audit' or relroot.startswith('designs/audit/'):
+            dirnames[:] = []  # don't descend into designs/audit/
+            continue
+        for fn in filenames:
+            # Match registered_paths' extension set (line 83) exactly — the registry
+            # can name .md/.yaml/.svg files, and a couple of real canonical sources
+            # (e.g. systems/settlements/valoria_geography_v30.yaml,
+            # valoria_map_v30.svg) carry the "Status: CANONICAL" marker in a
+            # header comment despite not being Markdown. Restricting this walk to
+            # .md only (as an earlier version of this fix did) silently drops
+            # those from the declared set and produces false-positive
+            # registered_no_header drift — caught in adversarial review of
+            # ED-IN-0031.
+            if not (fn.endswith('.md') or fn.endswith('.yaml') or fn.endswith('.svg')):
+                continue
+            fpath = os.path.join(dirpath, fn)
+            relpath = os.path.relpath(fpath, _REPO_ROOT).replace(os.sep, '/')
+            try:
+                with open(fpath, encoding='utf-8', errors='strict') as f:
+                    content = f.read()
+            except (OSError, UnicodeDecodeError):
+                continue
+            if STATUS_MARKER in content:
+                files.add(relpath)
     return files
 
 
@@ -136,22 +143,22 @@ def declared_canonical_files(pat: str | None = None) -> set[str]:
 
 def run_check(
     local_cs_yaml: str | None = None,
-    pat: str | None = None,
 ) -> dict:
     """
     Run the bidirectional coverage check; return a report dict.
 
     local_cs_yaml: if provided, use this content for canonical_sources.yaml
                    (e.g. for pre-commit checks against staged content).
-                   If None, fetch live from GitHub main.
+                   If None, read references/canonical_sources.yaml from the
+                   working tree.
     """
     if local_cs_yaml is None:
-        cs_text = _fetch_canonical_sources(pat)
+        cs_text = _read_canonical_sources()
     else:
         cs_text = local_cs_yaml
 
     registered = registered_paths(cs_text)
-    declared = declared_canonical_files(pat)
+    declared = declared_canonical_files()
 
     unregistered_with_header = sorted(declared - registered)
     registered_no_header = sorted(
@@ -173,23 +180,10 @@ def run_check(
     }
 
 
-def _fetch_canonical_sources(pat: str | None = None) -> str:
-    pat = pat or _pat()
-    url = (
-        f'https://api.github.com/repos/{REPO}/contents/'
-        'references/canonical_sources.yaml?ref=main'
-    )
-    req = urllib.request.Request(
-        url,
-        headers={
-            'Authorization': f'token {pat}',
-            'Accept': 'application/vnd.github.v3+json',
-        },
-    )
-    import base64
-    with urllib.request.urlopen(req) as r:
-        body = json.loads(r.read())
-    return base64.b64decode(body['content']).decode()
+def _read_canonical_sources() -> str:
+    """Read references/canonical_sources.yaml from the working tree (no network)."""
+    with open(CANONICAL_SOURCES_PATH, encoding='utf-8') as f:
+        return f.read()
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────

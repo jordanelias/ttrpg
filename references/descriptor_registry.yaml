@@ -14,8 +14,10 @@
 #         formula references back-resolve (this is what makes the roster cheap to churn).
 #
 # KIND: attribute_scalar | attribute_aggregate | faction_stat | settlement_stat |
-#       conviction_weight | ethical_axis | conviction_axis_map | orientation_scalar |
-#       contest_style | temperament_type | template
+#       practitioner_stat | territory_stat | conviction_weight | ethical_axis |
+#       conviction_axis_map | orientation_scalar | contest_style | temperament_type | template
+#   practitioner_stat and territory_stat added 2026-07-08 (ED-IN-0029 docket, OPT-AV-3, D2/D3):
+#   these two KINDs existed informally in audit census rows before this registry recognized them.
 # Entries that ALREADY have a canonical source doc are REGISTERED BY REFERENCE (source:) rather
 # than re-transcribed here -- the source doc stays authoritative (re-transcription = drift).
 
@@ -56,30 +58,57 @@ aggregates:
     NOT active until that migration; R7 + derived_stats §14 remain authoritative meanwhile.
 
 # ============================================================================
-# FACTION stats (actor/faction) -- scalar 1-7. Mandate is DERIVED, not a base descriptor.
+# PRACTITIONER stats (actor/thread-practitioner). RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-3, D2):
+# Thread Sensitivity/Thread Pool Score were load-bearing in 3+ pool formulas (threadwork, knot
+# formation, fieldwork investigation) with zero prior registry presence.
+# ============================================================================
+practitioner_stats:
+  source: "engine/params/threadwork.md; references/glossary.md (Thread Practitioner Stats)"
+  entries:
+    - {key: prac.thread_sensitivity, name: Thread Sensitivity, aliases: [TS], scale: "0-100+"}
+    - {key: prac.tps, name: Thread Pool Score, aliases: [TPS], derived_from: prac.thread_sensitivity, formula: "floor(TS / 10)"}
+
+# ============================================================================
+# TERRITORY/PROVINCE stats. RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-3, D3): Fort Level was
+# load-bearing in the Garrison Strength formula with zero registry presence; distinct scale from
+# settlement_stats below (17 province/territory nodes vs 35-37 settlements -- the
+# province-to-settlement inheritance rule itself is a separate open item, OPT-AV-18, fed to SE).
+# ============================================================================
+territory_stats:
+  source: "engine/params/bg/geography.md; systems/settlements/settlement_layer_v30.md (Fort Level)"
+  entries:
+    - {key: terr.fort_level, name: Fort Level, aliases: [Fort], scale: "0-4"}
+
+# ============================================================================
+# FACTION stats (actor/faction) -- Mandate is DERIVED, not a base descriptor.
+# Per-entry floor/ceiling RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14/D14 + OPT-AV-18 Intel
+# floor): the prior blanket "1-7" scale lost the per-stat floor table in engine/params/bg/core.md
+# §Stat Ceilings and Floors -- Influence floors at 1 (never fully vanishes institutionally),
+# Wealth/Military/Stability float at 0; Intel had no independently-declared floor anywhere in the
+# corpus, ratified here at 0 (matching the other non-Influence stats) per OPT-AV-18's default.
 # ============================================================================
 faction_stats:
-  scale: "1-7"
-  source: params/factions/stats_1_7_scale.md
+  source: engine/params/factions/stats_1_7_scale.md
   entries:
-    - {key: fac.influence, name: Influence}
-    - {key: fac.wealth,    name: Wealth}
-    - {key: fac.military,  name: Military}
-    - {key: fac.intel,     name: Intel}
-    - {key: fac.stability, name: Stability}
+    - {key: fac.influence, name: Influence, scale: "1-7"}
+    - {key: fac.wealth,    name: Wealth,    scale: "0-7"}
+    - {key: fac.military,  name: Military,  scale: "0-7"}
+    - {key: fac.intel,     name: Intel,     scale: "0-7"}   # floor ratified 2026-07-08, OPT-AV-18 (no prior declared floor anywhere)
+    - {key: fac.stability, name: Stability, scale: "0-7"}
   note: "Mandate is a size-weighted derived aggregate of settlement L/PS (settlement_layer §1.8) -- NOT a base attribute."
 
 # ============================================================================
 # SETTLEMENT stats (settlement domain).
 # ============================================================================
 settlement_stats:
-  source: "designs/territory/settlement_layer_v30.md §1.8"
+  source: "systems/settlements/settlement_layer_v30.md §1.8"
   entries:
     - {key: set.legitimacy,      name: Legitimacy,       scale: "0-7"}
     - {key: set.popular_support, name: Popular Support,  scale: "0-7"}
     - {key: set.prosperity,      name: Prosperity,       scale: "0-5"}
     - {key: set.defense,         name: Defense,          scale: "0-5"}
     - {key: set.order,           name: Order,            scale: "0-5"}
+    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "systems/settlements/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
@@ -89,26 +118,65 @@ by_reference:
   - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "designs/personal/conviction_axis_matrix_v30.md / PP-687"}
   - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "designs/personal/conviction_axis_matrix_v30.md §2"}
   - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "designs/personal/conviction_taxonomy_v30.md §3"}
-  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "designs/scene/social_contest_v30.md (Step 2-3)"}
-  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "designs/territory/territory_temperaments_v30.md §3.4.1"}
+  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/social_contest_v30.md (Step 2-3)"}
+  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/territory_temperaments_v30.md §3.4.1"}
   - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "designs/personal/conviction_taxonomy_v30.md §5"}
 
 # ============================================================================
 # DEPRECATED.
 # ============================================================================
 deprecated:
-  - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan)."}
+  - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan). ⚠️ CORRECTION (ED-IN-0025, 2026-07-07, C-VERIFY-20): the 'never canonically enumerated' premise is factually FALSE — npc_behavior_v30.md §1.3's Resonant Style Taxonomy is CANONICAL (approved 2026-04-17) and player_agency_v30.md:71 treats it as live, bidirectional, load-bearing. Whether the retirement should stand given this is a Jordan design call (NEEDS-JORDAN), not re-litigated here; retirement status left unchanged."}
 
 # ============================================================================
 # NOT DESCRIPTORS -- computed/bounded runtime containers (derived_stats §14). Listed so consumers
 # do not mistake them for registry-bound descriptors.
+#
+# Lists extended 2026-07-08 (ED-IN-0029 docket, OPT-AV-3/D6/D7/D9/D10, OPT-AV-18/D8) to close a
+# registry-completeness gap the coherence audit found: derived_stats_v30.md §14.1 actually tables
+# 16+ derived values and the pools list was missing an 8th live pool, vs. the 9 originally listed
+# here -- none of the additions below change any formula, they only register names already live
+# and computed elsewhere. Bare-string entries only (no individual keys/formulas) -- matches this
+# block's existing minimal-registration pattern; per-entry structure (formula_pointer, D13) is
+# specified as a future W2.8-style migration, not implemented by this ruling.
 # ============================================================================
 not_descriptors:
-  derived_values: [Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate]
-  tracks:  [Piety, Disposition, Renown, Standing, Persuasion]
+  derived_values: [Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate, Wound Interval, Max Wounds, Face, TroopCount, "Legitimacy (faction, derived)", Treasury, Levies Available, Reputation, "Discipline (faction)", Intelligence Holdings, Public Order, Settlement Weight]
+  tracks:  [Piety, Disposition, Renown, Standing, Persuasion, Coherence, Warden Recognition]
   clocks:  [Evidence, CI, MS, IP]
-  pools:   [Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain]
+  pools:   [Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain, Political Pool]
   note: >
     Computed/bounded FROM registered descriptors (derived_stats §14). The §14.1 derivation specs
     (which attribute x what multiplier) are registry-ADJACENT data; a future step (W2.8 migration)
     may hold them here so multipliers are data, not code.
+
+    Disambiguation notes (RATIFIED 2026-07-08, ED-IN-0029 docket):
+    - "Legitimacy (faction, derived)" is Mandate x 20, a 0-140 faction buffer -- distinct from
+      `set.legitimacy` (settlement_stats above, 0-7). "Discipline (faction)" is Stability x 10, a
+      0-70 faction buffer -- distinct from the unrelated unit-scale mass-battle Discipline stat
+      (1-7, organisational integrity; lives in mass_battle_v30.md, not this registry). Display-scope
+      label ratified OPT-AV-18: prefer "Faction Discipline" in new UI/prose to reduce the collision,
+      formula unchanged.
+    - Coherence: registered here as a `track` per the already-resolved-but-never-propagated ED-830
+      ruling ("Coherence reclassified from Derived Value to Track"). `module_contracts.yaml`'s
+      `threadwork` module still tags its Coherence state entry `bucket: pool` -- that is now a
+      confirmed 3-way disagreement (ledger: track / here: track / contracts: pool) pending the
+      `contracts_bucket` <-> registry-KIND crosswalk (D15, not yet built) or a direct contracts fix.
+    - "Political Pool" (D8): the parliamentary vote-tally construct (Church `Mandate+floor(CI/20)`;
+      opponents `max(0,Mandate-floor(CI/30))`, ci_political_v30 §3.4). Name ratified per existing
+      prior art in mechanical_terms_index.md (which already deprecates "Mandate/Faction Pool" in
+      favor of this name) -- not a new coinage.
+
+  wave_q_step3_additions: >
+    Residual filed 2026-07-08 alongside the Wave-Q-step-3 tooling build (A17 checker +
+    `sim/substrate/keys.py` stat_vocabulary hook, see registers/handoffs/HANDOFF_IN.md): `set.facility_tier`
+    (settlement_stats, D5 residual -- distinct from `terr.fort_level` above) and "Settlement Weight"
+    (D5's derived companion, no `derived.*` KIND exists in this file so it's a plain name here, same
+    treatment as the other derived_values). Two proposed deltas remain REJECTED, not filed, by both
+    this pass and the prior ratification pass: D11 (`pool.knot`/`track.persuasion` cross-link -- no
+    linkage exists at either cited source) and D15 (`contracts_bucket`<->KIND crosswalk field --
+    `not_descriptors` carries no KIND field to cross against). Also flagged, not fixed: the Coherence
+    disambiguation note two paragraphs up is itself now STALE -- `module_contracts.yaml`'s
+    `threadwork` module's Coherence entry was corrected to `bucket: track` in this same PR #112
+    ratification pass, so the "3-way disagreement... contracts: pool" claim no longer holds; left
+    as-is rather than hand-edited, since fixing PR #112's own prose is out of this pass's scope.

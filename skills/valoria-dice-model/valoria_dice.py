@@ -1,7 +1,15 @@
+import math
 import random
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 TRIALS = 200_000
+
+# Continuous engine (Decision E, params/core.md "Continuous Engine") — canonical for the
+# Godot videogame implementation. net ~ Normal(mu*N, sigma*sqrt(N)) per die at the active TN;
+# statistically equivalent to the discrete d10 rule below (validated to within 0.03 in mean/std,
+# pool sizes 5-17, Phase 5 sim 2026-05-15). The discrete rule stays canonical for TTRPG-mode play.
+_CONTINUOUS_MU = {6: 0.50, 7: 0.40, 8: 0.30}
+_CONTINUOUS_SIGMA = {6: 0.806, 7: 0.800, 8: 0.781}
 
 def die_ev(tn: int) -> float:
     p_minus = 0.1
@@ -12,15 +20,41 @@ def die_ev(tn: int) -> float:
 def pool_ev(n: int, tn: int) -> float:
     return n * die_ev(tn)
 
-def _roll_die(tn: int) -> int:
-    r = random.randint(1, 10)
+def _roll_die(tn: int, rng: Optional[random.Random] = None) -> int:
+    r = (rng or random).randint(1, 10)
     if r == 1:  return -1
     if r == 10: return 2
     if r >= tn: return 1
     return 0
 
-def _roll_pool(n: int, tn: int) -> int:
-    return sum(_roll_die(tn) for _ in range(n))
+def _roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
+    return sum(_roll_die(tn, rng) for _ in range(n))
+
+def roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
+    """Public wrapper for _roll_pool — one pool roll's net successes. Exists so
+    callers outside this module (e.g. tools/sim_harness/) depend on a stable public
+    name instead of an underscore-prefixed implementation detail.
+
+    rng is optional and defaults to the global random module (unchanged behavior
+    for every existing caller, none of which pass it) — a caller that needs
+    isolated, injected randomness (e.g. tools/sim_harness/'s per-trial Random
+    instance) can pass one explicitly instead of relying on global random.seed()
+    having been called first."""
+    return _roll_pool(n, tn, rng)
+
+def classify_outcome(r: int, ob: int) -> str:
+    """Bucket a net-successes result against an obstacle: overwhelming/success/
+    partial/failure. Extracted from outcome_probs' loop body so any caller needing
+    single-trial classification (not just a bulk trial distribution) shares the
+    exact same rule rather than re-deriving it."""
+    if ob == 10:
+        if r >= ob:  return "success"
+        if r >= 5:   return "partial"
+        return "failure"
+    if r >= 2 * ob: return "overwhelming"
+    if r >= ob:     return "success"
+    if r > 0:       return "partial"
+    return "failure"
 
 def simulate_pool(n: int, tn: int, trials: int = TRIALS) -> List[int]:
     return [_roll_pool(n, tn) for _ in range(trials)]
@@ -29,15 +63,11 @@ def outcome_probs(n: int, tn: int, ob: int, trials: int = TRIALS) -> Dict[str, f
     results = simulate_pool(n, tn, trials)
     overwhelming = success = partial = failure = 0
     for r in results:
-        if ob == 10:
-            if r >= ob:   success += 1
-            elif r >= 5:  partial += 1
-            else:         failure += 1
-        else:
-            if r >= 2*ob: overwhelming += 1
-            elif r >= ob: success += 1
-            elif r > 0:   partial += 1
-            else:         failure += 1
+        bucket = classify_outcome(r, ob)
+        if bucket == "overwhelming": overwhelming += 1
+        elif bucket == "success":    success += 1
+        elif bucket == "partial":    partial += 1
+        else:                        failure += 1
     t = trials
     return {
         "overwhelming": overwhelming/t, "success": success/t,
@@ -102,6 +132,56 @@ def momentum_value(tn: int, ob: int, pool: int, trials: int = TRIALS) -> Dict:
         "momentum_p_full":   mom_full / trials,
         "momentum_vs_die":   (mom_full/trials) - extra["p_full"],
     }
+
+def _norm_cdf(x: float) -> float:
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
+    """Canonical videogame-mode (Godot) resolver — net ~ Normal(mu*N, sigma*sqrt(N)) per
+    params/core.md's Continuous Engine. Continuity-corrected (resolve against x - 0.5, per
+    the ER-2 fix landed in params/core.md, commit a3d3888) so odds track the discrete model
+    even at small pools, per params/core.md's own equivalence note. Ob may be fractional
+    (fractional Ob is canonical in videogame mode); clamped to the canonical [1, 20] range.
+    Degree thresholds match params/core.md's Degrees of Success table: Overwhelming
+    net >= max(2*Ob, 3), Success net >= Ob, Partial 0 < net < Ob, Failure net <= 0 —
+    EXCEPT the documented Ob-20 exception (params/core.md "Degrees of Success"): at Ob 20,
+    Overwhelming is unavailable (folds into Success) and Partial requires net >= 10 instead
+    of net > 0."""
+    if tn not in _CONTINUOUS_MU:
+        raise ValueError(f"No continuous-engine mu/sigma for TN {tn} — only 6/7/8 defined")
+    mu = _CONTINUOUS_MU[tn] * n
+    sigma = _CONTINUOUS_SIGMA[tn] * math.sqrt(n)
+    ob = max(1.0, min(20.0, ob))
+
+    def p_at_least(x: float) -> float:
+        return 1 - _norm_cdf((x - 0.5 - mu) / sigma)
+
+    p_success_or_better = p_at_least(ob)
+    if ob >= 20:
+        # Ob-20 exception: Overwhelming unavailable, Partial requires net >= 10.
+        p_partial_or_better = p_at_least(10)
+        return {
+            "overwhelming": 0.0,
+            "success": p_success_or_better,
+            "partial": p_partial_or_better - p_success_or_better,
+            "failure": 1 - p_partial_or_better,
+            "p_full": p_success_or_better,
+        }
+    p_overwhelming = p_at_least(max(2 * ob, 3))
+    p_partial_or_better = p_at_least(1e-9)  # net > 0
+    return {
+        "overwhelming": p_overwhelming,
+        "success": p_success_or_better - p_overwhelming,
+        "partial": p_partial_or_better - p_success_or_better,
+        "failure": 1 - p_partial_or_better,
+        "p_full": p_success_or_better,
+    }
+
+def continuous_quick_check(n: int, tn: int, ob: float) -> str:
+    p = continuous_outcome_probs(n, tn, ob)
+    return (f"[continuous/Godot-canonical] Pool {n} TN{tn} Ob{ob}: "
+            f"Overwhelm {p['overwhelming']:.1%} | Success {p['success']:.1%} | "
+            f"Partial {p['partial']:.1%} | Fail {p['failure']:.1%}")
 
 def quick_check(n: int, tn: int, ob: int) -> str:
     p = outcome_probs(n, tn, ob, 100_000)

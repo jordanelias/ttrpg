@@ -363,7 +363,7 @@ At session close, append to session_log_current.md:
 ### §5.3 Session log file management
 
 - One `session_log_current.md` at canon root, replaced each session
-- Previous logs archived to `archives/session/session_log_archive_YYYY-MM.yaml`
+- Previous logs archived to `deprecated/archives/session/session_log_archive_YYYY-MM.yaml`
 - `g.safe_session_close(new_log, bootstrap_log)` handles this
 
 ---
@@ -375,7 +375,7 @@ At session close, append to session_log_current.md:
 **Status:** Y1-Y2 done in this session. Y3-Y7 compressed; needs granular treatment.
 
 **Pre-sim canon to pull (additional to base 28):**
-- `designs/scene/social_contest_v30.md`
+- `systems/social_contest/social_contest_v30.md`
 - `designs/scene/conviction_track_v30.md`
 
 **NRSE-prep targets (mechanics to exercise in Y3-Y7):**
@@ -404,7 +404,7 @@ At session close, append to session_log_current.md:
 
 **Pre-sim canon to pull:**
 - `designs/provincial/mass_battle_v30.md` (60,996 bytes) — primary
-- `designs/territory/march_layer_v30.md` — march/A* mechanics
+- `systems/settlements/march_layer_v30.md` — march/A* mechanics
 - `params/mass_combat.md`
 - `designs/provincial/military_layer_v30.md` (verify path)
 - `params/bg/military.md`
@@ -562,7 +562,7 @@ At session close, append to session_log_current.md:
 ### §6.6 A6 DEEP THREADWORK
 
 **Pre-sim canon:**
-- All `designs/threadwork/` files
+- All `systems/threadwork/` files
 - `params/threadwork.md` (already in base — full read)
 - `canon/01_foundations_amendment_self_rendering.md`
 - `canon/02_foundations_amendment_leap_mechanism.md`
@@ -631,7 +631,7 @@ At session close, append to session_log_current.md:
 ### §6.8 A8 GENERATIONAL deep
 
 **Pre-sim canon:**
-- `designs/architecture/generational_transition_v30.md` (already in base)
+- `systems/_architecture/generational_transition_v30.md` (already in base)
 - `params/factions_personal.md`
 - Companion mechanics docs (search)
 
@@ -866,7 +866,7 @@ Per Valoria PI. Note ED-796 (open) — manual override of context_gate hard-stop
 ### §11.4 Session log management
 
 - One `session_log_current.md` at canon root
-- Archive previous logs to `archives/session/session_log_archive_YYYY-MM.yaml` at session close
+- Archive previous logs to `deprecated/archives/session/session_log_archive_YYYY-MM.yaml` at session close
 
 ---
 

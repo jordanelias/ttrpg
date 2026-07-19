@@ -1,0 +1,12 @@
+{
+  "name": "Valoria Dashboard",
+  "short_name": "Valoria",
+  "description": "Workplan, recent activity, and audit/simulation verdicts for the Valoria design corpus.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f9f9f7",
+  "theme_color": "#2a78d6",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

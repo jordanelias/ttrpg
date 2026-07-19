@@ -20,8 +20,8 @@ writes nothing. Matching is CASE-SENSITIVE by default (display names are
 capitalized; this avoids corrupting lowercase dotted keys like `attr.mind.acuity`);
 pass --ignore-case to widen.
 
-SCOPE: walks designs/ params/ references/ canon/ for text files, skipping history
-and test fixtures (archives/, deprecated/, tests/, designs/audit/, the editorial
+SCOPE: walks designs/ engine/params/ references/ canon/ for text files, skipping history
+and test fixtures (deprecated/archives/, deprecated/, tests/, designs/audit/, the editorial
 ledger, prose-writer fixtures) so the past is never rewritten. Reads the current
 name from the index via tools/names.py — no rule re-implemented here.
 """
@@ -45,10 +45,10 @@ EXTS = ('.md', '.yaml', '.yml', '.jsonl', '.txt')
 # which also shields registries — here we WANT to update the registries).
 SKIP = (
     'tests/',
-    'archives/',
+    'deprecated/archives/',
     'deprecated/',
     'designs/audit/',
-    'canon/editorial_ledger',
+    'registers/editorial_ledger',
     'skills/prose-writer/',
 )
 

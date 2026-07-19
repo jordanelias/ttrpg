@@ -158,9 +158,12 @@ While atomizing, if a section is flagged `[INDEX-DEBT: ...]` anywhere in the doc
 python3 tools/freshness_gate.py --update
 python3 tools/broken_dependency_checker.py
 python3 tools/patch_propagation_checker.py
+python3 tools/ci_co_file_checker.py
 ```
 
-Exit 0 required. On non-zero: fix before committing.
+Exit 0 required. On non-zero: fix before committing. `ci_co_file_checker.py` is the CI-enforced
+check for the index/infill co-filing convention this skill produces (CLAUDE.md §4) — run it,
+don't just trust the file pair looks right by eye.
 
 ## Post-Commit Verification
 
@@ -171,18 +174,22 @@ After committing, re-read both output files from the working tree. Confirm:
 
 ## Priority Order for Atomization
 
-Work through in this order (highest mechanical value / most cross-referenced first):
+Work through in this order (highest mechanical value / most cross-referenced first). **Resolve
+each target via `CURRENT.md` before atomizing it** — a `_v30` filename does not mean current
+(CLAUDE.md §4). Concrete case: `designs/scene/combat_v30.md` is *PARTIALLY SUPERSEDED*; the
+live personal-combat head is `designs/scene/combat_engine_v1/`, a Python resolver package with
+its own `.md` design docs, not a single markdown doc this skill's index/infill split model fits.
+Do not atomize `combat_v30.md` as if it were still the canonical combat doc.
 1. `designs/threadwork/threadwork_v30.md` (856 lines — highest complexity)
-2. `designs/scene/combat_v30.md`
-3. `designs/provincial/strategic_layer_v30.md`
-4. `designs/scene/fieldwork_v30.md`
-5. `designs/provincial/mass_battle_v30.md`
-6. `designs/scene/social_contest_v30.md`
-7. `designs/architecture/scale_transitions_v30.md`
-8. `designs/npcs/npc_behavior_v30.md`
-9. `designs/provincial/clock_registry_v30.md`
-10. All others from `references/design_registry.yaml`
+2. `designs/provincial/strategic_layer_v30.md`
+3. `designs/scene/fieldwork_v30.md`
+4. `designs/provincial/mass_battle_v30.md`
+5. `designs/scene/social_contest_v30.md`
+6. `designs/architecture/scale_transitions_v30.md`
+7. `designs/npcs/npc_behavior_v30.md`
+8. `designs/provincial/clock_registry_v30.md`
+9. All others from `references/design_registry.yaml`
 
 ## Collision Prevention
 
-Before every commit, re-read all files being written from the working tree and compare against your earlier read. If changed: STOP, report collision. See valoria-orchestrator skill §Collision Prevention.
+Before every commit, re-read all files being written from the working tree and compare against your earlier read. If changed: STOP, report collision, and re-derive the edit against the current content — never blind-overwrite. (`valoria-orchestrator`, the skill this section used to cite, is retired to `deprecated/skills/` — do not look for it.)

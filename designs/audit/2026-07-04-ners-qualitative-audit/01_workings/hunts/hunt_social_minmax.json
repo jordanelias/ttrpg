@@ -1,0 +1,112 @@
+{
+ "arena": "social_minmax",
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/hunt/hunt_social_minmax.md",
+ "lines": [
+  {
+   "line": "In every Formal Contest, cite a named precedent each exchange for +2D Recall (uncapped, per-exchange), and stack Corroborate +1D, plus Ex1 Prep +1D and Findings +2D; the base Charisma\u00d72 pool becomes noise (+8D Ex1, +5D sustained).",
+   "permitting_rules": "social_contest_v30 \u00a74 Step 3 (v30:166 Recall +2D binary; ED-617 nerf is Grand-ONLY, Formal retains per-exchange) + \u00a79.1 (Findings/Prep) + \u00a74 Step 2b Corroborate; the +2D cap at \u00a72 Step 3 (v30:85) covers ONLY genre+boost, not Recall/corrob/prep/findings \u2014 no global pool cap.",
+   "what_breaks": "Omega non-dominance: the attribute-build choice collapses to 'how many uncapped bonus sources can I stack'; base-pool investment is dominated. Q-robust.",
+   "confidence": "high"
+  },
+  {
+   "line": "Never Appraise for the audience boost \u2014 read it off the public faction table (Church=Obscuring, Crown=Revealing, Varfell=Projection, Hafenmark=Memory) and the deterministic Guilds venue rule; pick the Revealing style matching the known primary genre + boost and bank +1D/+1D. A failed Appraise can't mislead a player who never consults it.",
+   "permitting_rules": "params/contest.md \u00a7Faction Boosts (deterministic per-faction) + sim dictionaries.guilds_boost_for (deterministic logos/pathos/ethos map); social_contest_v30 \u00a74 Step 1 bands 1-2 reveal only the boost. armature.py protects the ARMATURE from lookup but it is gated off in asymmetric proceedings and only \u22640.50\u03c3.",
+   "what_breaks": "The Appraise bet the design intends: the +1D-boost dimension is a solved lookup. Protection was placed on the smaller lever (0.5\u03c3 armature), not the larger (+1D boost). Omega.",
+   "confidence": "high"
+  },
+  {
+   "line": "Always pick a Revealing style (Precedent / Vision); never Suppression / Insinuation. The resolver does not consume orientation, the Doubt Marker is unwired and EV-0, and CR5 self-Face backfire (wired) makes a failed Obscuring move pure downside \u2014 Obscuring has upside nowhere.",
+   "permitting_rules": "sim dictionaries.py DOUBT_MARKER (scope_note: 'resolver does not yet consume orientation'; 'Suppression strictly dominated by Precedent, Insinuation by Vision'); social_contest_v30 \u00a74 Step 4 (Doubt Marker EV-0 at close, ED-1060 unratified); params/contest.md \u00a7Interaction Types CR5 (cr5_self_backfire wired).",
+   "what_breaks": "The 4-style (Genre\u00d7Orientation) choice tree collapses to 2 Revealing styles. Omega non-dominance.",
+   "confidence": "high"
+  },
+  {
+   "line": "Never argue solo. Bring a declared coalition and REINFORCE (all pick the same style): ~5 track movement/exchange vs solo CLASH ~0 at median. The shared-pool sum makes the interaction-type choice moot.",
+   "permitting_rules": "params/contest.md \u00a7'P1 Findings \u2014 Resolved 2026-05-17' ED-297 (coalition dominance RATIFIED) + \u00a79.2 shared Concentration pool (PP-237); ED-295 CLASH-stalls-at-median only eroded every 2 exchanges, so solo CLASH stays ~0 in 3-exchange/single-exchange proceedings.",
+   "what_breaks": "CLASH/CROSS/solo interaction-type tree becomes a dead branch; ratification rewarded alliances but left solo advocacy dominated. Omega.",
+   "confidence": "high"
+  },
+  {
+   "line": "Dump Focus and Spirit. The strain\u2192Rattled\u2192Face-consumption channel is unwired, so you never become Rattled and losing exchanges accrues no cumulative penalty; Focus-defence and Concentration management are decorative (only Spent still drains).",
+   "permitting_rules": "social_contest_v30 \u00a74 Step 6 honesty note + \u00a78 Stage-1d status ('strain does not yet consume it in code'; Face 'monotonic-up'; general strain\u2192Rattled 'not yet realized in code'); params/contest.md \u00a7Face and Rattled [PARTIALLY REACHABLE].",
+   "what_breaks": "The RATIFIED omega line-20 stamina/standing/merits three-way tradeoff does not exist in play; the defensive-build decision collapses. Q-robust.",
+   "confidence": "high"
+  },
+  {
+   "line": "One play pattern across all four venues: coalition + Revealing-style-matching-the-known-boost + Recall-spam, skip Appraise, never Obscuring, dump defensive stats. The adjudicator type only changes which attribute you doubled \u2014 the play pattern is venue-invariant.",
+   "permitting_rules": "Composite of L-A..L-E: params/contest.md \u00a7Pools (only the doubled attribute varies by adjudicator) + the four flattening lines above.",
+   "what_breaks": "Subsystem-level Omega non-dominance: a single solvable strategy across the whole social contest; the 'myriad meaningful choices' North Star collapses.",
+   "confidence": "medium"
+  }
+ ],
+ "findings": [
+  {
+   "id": "recall-uncapped-stack-flattens-pool",
+   "subsystem": "social_contest",
+   "claim": "Formal-Contest Recall (+2D binary, per-exchange) plus uncapped Corroborate/Prep/Findings channels dwarf the base attribute pool, so build choice collapses to bonus-stacking.",
+   "cite": "social_contest_v30.md \u00a74 Step 3 (v30:166,168) + \u00a79.1; \u00a72 Step 3 (v30:85 cap covers only genre+boost)",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "appraise-boost-is-solved-lookup",
+   "subsystem": "social_contest",
+   "claim": "Appraise's audience-boost read is a deterministic public lookup (faction table + engine Guilds rule), so the +1D-boost style dimension is pre-solved and Appraise is skippable; the design protected only the smaller \u22640.5\u03c3 armature against lookup.",
+   "cite": "params/contest.md \u00a7Faction Boosts; sim/personal/contest/dictionaries.py guilds_boost_for; social_contest_v30.md \u00a74 Step 1; sim/.../appraise.py",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "obscuring-styles-dominated-inert",
+   "subsystem": "social_contest",
+   "claim": "Orientation is inert in the resolver while CR5 self-Face backfire is wired, so Suppression/Insinuation are pure downside and the 4-style tree collapses to 2 Revealing styles.",
+   "cite": "sim/personal/contest/dictionaries.py DOUBT_MARKER scope_note; social_contest_v30.md \u00a74 Step 4; params/contest.md \u00a7Interaction Types (CR5)",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "ED-1060"
+  },
+  {
+   "id": "coalition-reinforce-dominates-solo",
+   "subsystem": "social_contest",
+   "claim": "Ratified coalition-REINFORCE (~5 track/exchange) versus solo CLASH (~0 at median) makes solo advocacy a dominated dead branch, collapsing the interaction-type choice \u2014 a scope the ED-297 ratification did not weigh.",
+   "cite": "params/contest.md \u00a7'P1 Findings \u2014 Resolved 2026-05-17' (ED-297); social_contest_v30.md \u00a79.2 (PP-237); ED-295 erosion",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "ED-297"
+  },
+  {
+   "id": "face-rattled-buffer-inert",
+   "subsystem": "social_contest",
+   "claim": "The strain\u2192Rattled\u2192Face channel is unwired, so losing exchanges carry no cumulative cost and the ratified stamina/standing/merits three-tracker tradeoff is decorative; dump Focus/Spirit is optimal.",
+   "cite": "social_contest_v30.md \u00a74 Step 6 honesty note + \u00a78 Stage-1d status; params/contest.md \u00a7Face and Rattled",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": false
+  },
+  {
+   "id": "four-games-collapse-one-pattern",
+   "subsystem": "social_contest",
+   "claim": "The four adjudicator games reduce to one venue-invariant optimum (coalition + Revealing-matching-known-boost + Recall-spam, skip Appraise/Obscuring/defense); only the doubled attribute varies, so the subsystem has a solvable strategy.",
+   "cite": "params/contest.md \u00a7Pools + composite of the five lines above (hunt_social_minmax.md L-A..L-F)",
+   "criterion": "Omega",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false
+  }
+ ]
+}

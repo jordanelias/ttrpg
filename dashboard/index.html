@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valoria Dashboard</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="theme-color" content="#2a78d6">
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:      #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --chip-ink:       #0b0b0b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:      #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-blue:    #3987e5;
+      --good:           #0ca30c;
+      --warning:        #fab219;
+      --serious:        #ec835a;
+      --critical:       #e66767;
+      --chip-ink:       #0b0b0b;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.4;
+    padding: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 { font-size: 1.25rem; margin: 4px 0 2px; }
+  h2 { font-size: 1rem; margin: 0 0 10px; color: var(--text-primary); }
+
+  .meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+  }
+  .meta.stale { color: var(--critical); font-weight: 600; }
+
+  section.card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  /* Single column by default (mobile-first); side-by-side only above ~700px */
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  ul.plain { list-style: none; margin: 0; padding: 0; }
+  ul.plain li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gridline);
+    font-size: 0.92rem;
+  }
+  ul.plain li:last-child { border-bottom: none; }
+
+  .decision-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .decision-item .dot {
+    flex: 0 0 auto;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--critical);
+    margin-top: 6px;
+  }
+  .decision-source {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .bar { font-family: monospace; letter-spacing: 1px; font-size: 1.1rem; }
+  .juncture-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--gridline);
+    font-size: 0.88rem;
+    align-items: baseline;
+  }
+  .juncture-row:last-child { border-bottom: none; }
+  .juncture-glyph { font-family: monospace; }
+  .juncture-next { color: var(--text-secondary); font-size: 0.82rem; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .chip.good     { background: var(--good); }
+  .chip.warning  { background: var(--warning); color: var(--chip-ink); }
+  .chip.serious  { background: var(--serious); color: var(--chip-ink); }
+  .chip.critical { background: var(--critical); }
+  .chip.unknown  { background: var(--text-muted); }
+
+  .badge-inferred {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    border: 1px solid var(--gridline);
+    border-radius: 6px;
+    padding: 1px 5px;
+    margin-left: 4px;
+  }
+
+  table.audit-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.audit-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--gridline);
+    padding: 4px 6px;
+  }
+  table.audit-table td {
+    padding: 6px;
+    border-bottom: 1px solid var(--gridline);
+    vertical-align: top;
+  }
+  .subsystem-group-header {
+    font-weight: 700;
+    padding-top: 10px !important;
+    color: var(--series-blue);
+  }
+  .audit-scope { color: var(--text-secondary); font-size: 0.78rem; }
+  .audit-link { font-size: 0.78rem; }
+  a { color: var(--series-blue); }
+
+  .balance-block { margin-bottom: 14px; }
+  .balance-block:last-child { margin-bottom: 0; }
+  .balance-block-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+  .balance-bar-row {
+    display: grid;
+    grid-template-columns: minmax(80px, 34%) 1fr 46px;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    padding: 3px 0;
+  }
+  .balance-bar-row > span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .balance-bar-track {
+    background: var(--gridline);
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .balance-bar-fill {
+    background: var(--series-blue);
+    height: 100%;
+    border-radius: 4px;
+  }
+  .balance-bar-value { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .balance-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; }
+  .balance-stale-banner {
+    background: rgba(250, 178, 25, 0.15);
+    border: 1px solid var(--warning);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 0.78rem;
+    margin-bottom: 6px;
+  }
+  .balance-nodata {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    padding: 4px 0;
+  }
+
+  .lane-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 10px; }
+  .lane-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--gridline);
+    padding: 3px 6px;
+  }
+  .lane-table td { padding: 3px 6px; border-bottom: 1px solid var(--gridline); font-variant-numeric: tabular-nums; }
+  .lane-table td:first-child, .lane-table th:first-child { font-variant-numeric: normal; }
+
+  .stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat-tile { flex: 1 1 120px; }
+  .stat-tile .value { font-size: 1.5rem; font-weight: 700; }
+  .stat-tile .label { font-size: 0.75rem; color: var(--text-muted); }
+
+  .commit-row { font-size: 0.85rem; display: flex; gap: 8px; }
+  .commit-scope {
+    flex: 0 0 auto;
+    font-family: monospace;
+    color: var(--series-blue);
+    font-size: 0.75rem;
+  }
+  .commit-date { color: var(--text-muted); font-size: 0.75rem; flex: 0 0 auto; }
+  .unavailable { color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
+  .empty-state { color: var(--text-muted); font-size: 0.85rem; }
+
+  /* links inside surfaced text */
+  a { color: var(--series-blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* juncture readability (North star) */
+  .juncture-row { align-items: baseline; }
+  .juncture-title { font-weight: 600; color: var(--text-primary); }
+  .milestone-head { margin: 14px 0 4px; }
+  .milestone-head:first-child { margin-top: 2px; }
+
+  /* collapsible accordions (details/summary) */
+  details.acc { border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; overflow: hidden; }
+  details.acc > summary {
+    cursor: pointer; padding: 9px 12px; font-weight: 600; color: var(--text-primary);
+    list-style: none; background: var(--page-plane); user-select: none;
+  }
+  details.acc > summary::-webkit-details-marker { display: none; }
+  details.acc > summary::before {
+    content: '▸'; display: inline-block; width: 1em; color: var(--text-muted);
+    transition: transform 0.15s ease;
+  }
+  details.acc[open] > summary::before { transform: rotate(90deg); }
+  details.acc > .acc-body { padding: 10px 12px; border-top: 1px solid var(--border); }
+  .acc-count { color: var(--text-muted); font-weight: 400; font-size: 0.82rem; }
+
+  /* work-by-area queue */
+  .area-group { margin: 4px 0 12px; }
+  .area-name { font-weight: 600; color: var(--text-primary); margin: 8px 0 4px; }
+  .lane-block { margin: 6px 0 6px 4px; }
+  .lane-label { font-size: 0.82rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+  ul.tight { list-style: disc; margin: 4px 0 8px 20px; padding: 0; }
+  ul.tight li { margin: 3px 0; font-size: 0.88rem; }
+  .split-you   { border-left: 3px solid var(--warning); padding-left: 8px; }
+  .split-claude { border-left: 3px solid var(--good); padding-left: 8px; }
+  .split-head { font-weight: 600; font-size: 0.82rem; margin: 6px 0 2px; }
+
+  /* mermaid repo shape */
+  .mermaid-wrap { overflow-x: auto; }
+  .mermaid { min-width: 480px; }
+  pre.mermaid-src { white-space: pre; overflow-x: auto; font-size: 0.72rem; color: var(--text-secondary); background: var(--page-plane); padding: 8px; border-radius: 6px; }
+
+  /* keys/actions reference */
+  .kv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .kv-table td { padding: 4px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .kv-table td.k { font-weight: 600; white-space: nowrap; color: var(--text-primary); }
+  .ref-note { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; }
+  .status-pill { font-size: 0.72rem; padding: 1px 6px; border-radius: 4px; background: var(--page-plane); border: 1px solid var(--border); color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <h1>Valoria — what's been happening</h1>
+  <div class="meta" id="generated-meta">loading…</div>
+
+  <section class="card" id="decisions-card">
+    <h2>Needs your decision</h2>
+    <div id="decisions-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="drift-card">
+    <h2>Reconciliation status</h2>
+    <div id="drift-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="workplan-card">
+    <h2>North star — workplan</h2>
+    <div id="workplan-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="queue-card">
+    <h2>Work by area</h2>
+    <div id="queue-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="proposals-card">
+    <h2>Proposals awaiting ratification</h2>
+    <div id="proposals-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="audits-card">
+    <h2>Audit &amp; balance verdicts</h2>
+    <div id="audits-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="balance-card">
+    <h2>Balance &amp; victory data</h2>
+    <div id="balance-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="registers-card">
+    <h2>Registers</h2>
+    <div id="registers-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="shape-card">
+    <h2>Repository shape</h2>
+    <div id="shape-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="keys-card">
+    <h2>Keys &amp; substrates</h2>
+    <div id="keys-body" class="empty-state">loading…</div>
+  </section>
+
+  <section class="card" id="actions-card">
+    <h2>Character actions &amp; interactions</h2>
+    <div id="actions-body" class="empty-state">loading…</div>
+  </section>
+
+  <div class="grid-2">
+    <section class="card" id="ci-card">
+      <h2>CI health</h2>
+      <div id="ci-body" class="empty-state">loading…</div>
+    </section>
+    <section class="card" id="currency-card">
+      <h2>Currency drift</h2>
+      <div id="currency-body" class="empty-state">loading…</div>
+    </section>
+  </div>
+
+  <section class="card" id="activity-card">
+    <h2>Recent activity</h2>
+    <div id="github-stats" class="stat-row" style="margin-bottom:10px;"></div>
+    <div id="activity-body" class="empty-state">loading…</div>
+  </section>
+
+<script type="module">
+// Mermaid is loaded from CDN for the collapsible "Repository shape" diagram.
+// If it fails (offline / CSP), the raw mermaid source stays visible as a fallback.
+try {
+  const mod = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+  const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  mod.default.initialize({ startOnLoad: false, securityLevel: 'strict', theme: dark ? 'dark' : 'neutral' });
+  window.__mermaid = mod.default;
+  window.dispatchEvent(new Event('mermaid-ready'));
+} catch (e) {
+  window.__mermaidFailed = true;
+}
+</script>
+<script>
+const GLYPH = { done: '■', in_progress: '◐', blocked: '⊘', not_started: '▢' };
+
+const VERDICT_CLASS = {
+  PASS: 'good', CONFORMANT: 'good', CLOSED: 'good',
+  PARTIAL: 'warning', MIXED: 'warning', OPEN: 'warning',
+  FAIL: 'critical', NON_CONFORMANT: 'critical',
+};
+const VERDICT_ICON = {
+  PASS: '✓', CONFORMANT: '✓', CLOSED: '✓',
+  PARTIAL: '◐', MIXED: '◐', OPEN: '◐',
+  FAIL: '✕', NON_CONFORMANT: '✕',
+};
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const REPO = 'https://github.com/jordanelias/ttrpg';
+const REPO_BLOB = REPO + '/blob/main/';
+function fileUrl(path, line) { return REPO_BLOB + path + (line ? '#L' + line : ''); }
+function ghSearch(q) { return REPO + '/search?q=' + encodeURIComponent(q) + '&type=code'; }
+
+// Escape first, THEN wrap recognized tokens (file paths, ED/PP ids, PR #NNN) in
+// links. Patterns never match HTML-escape sequences, so running them on escaped
+// text is safe. Anchors always target GitHub (blob for files, code-search for ids).
+function linkify(raw) {
+  let s = esc(raw);
+  s = s.replace(/\b((?:designs|sim|tools|canon|references|params|handoffs|docs|research|tests|engine)\/[\w./-]+\.\w+)(?::(\d+))?/g,
+    (m, path, ln) => `<a href="${fileUrl(path, ln)}" target="_blank" rel="noopener">${m}</a>`);
+  s = s.replace(/\b(ED-[A-Z]{0,3}-?\d{3,4}|PP-\d{2,4})\b/g,
+    (m) => `<a href="${ghSearch(m)}" target="_blank" rel="noopener">${m}</a>`);
+  s = s.replace(/(^|[^\w">/=])#(\d{2,4})\b/g,
+    (m, pre, n) => `${pre}<a href="${REPO}/pull/${n}" target="_blank" rel="noopener">#${n}</a>`);
+  return s;
+}
+
+// A clickable source path (or path:line) shown as its basename.
+function srcLink(path) {
+  if (!path) return '';
+  const mm = String(path).match(/^([^\s:]+?)(?::(\d+))?$/);
+  const p = mm ? mm[1] : path, ln = mm ? mm[2] : null;
+  const base = p.split('/').pop() + (ln ? ':' + ln : '');
+  return `<a href="${fileUrl(p, ln)}" target="_blank" rel="noopener" title="${esc(p)}">${esc(base)}</a>`;
+}
+
+function cleanMarkdown(s) {
+  // Strip a leading list marker and ** bold markers — this is a raw source line
+  // from HANDOFF.md/handoffs/, not authored for display.
+  return String(s ?? '').replace(/^[-*]\s+/, '').replace(/\*\*/g, '');
+}
+
+function verdictChip(verdict) {
+  const cls = VERDICT_CLASS[verdict] || 'unknown';
+  const icon = VERDICT_ICON[verdict] || '?';
+  return `<span class="chip ${cls}">${icon} ${esc(verdict || 'UNKNOWN')}</span>`;
+}
+
+function renderGeneratedMeta(d) {
+  const el = document.getElementById('generated-meta');
+  const g = d.generated_at || {};
+  if (!g.timestamp_utc) { el.textContent = 'generation time unknown'; return; }
+  const genDate = new Date(g.timestamp_utc);
+  const ageHours = (Date.now() - genDate.getTime()) / 3_600_000;
+  const stale = ageHours > 48;
+  el.textContent = `generated ${genDate.toLocaleString()} · commit ${g.commit_sha || '?'}` +
+    (stale ? `  ⚠ stale (${Math.round(ageHours)}h old — check the dashboard.yml workflow run)` : '');
+  el.classList.toggle('stale', stale);
+}
+
+function renderDecisions(d) {
+  const el = document.getElementById('decisions-body');
+  const nd = d.needs_decision;
+  if (!nd || nd.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  if (!nd.items || nd.items.length === 0) {
+    el.innerHTML = '<div class="empty-state">nothing open — nice.</div>';
+    return;
+  }
+  const items = nd.items.map(item => `
+    <li class="decision-item">
+      <span class="dot"></span>
+      <span>${linkify(cleanMarkdown(item.text))}<br><span class="decision-source">${item.source && item.source.includes('/') ? srcLink(item.source + (item.line ? ':' + item.line : '')) : esc(item.source || '')}</span></span>
+    </li>`).join('');
+  el.innerHTML = `<ul class="plain">${items}</ul>
+    <div class="decision-source" style="margin-top:8px;">heuristic prose scan — a floor, not a guarantee</div>`;
+}
+
+function renderDrift(d) {
+  const el = document.getElementById('drift-body');
+  const dr = d.drift;
+  if (!dr || dr.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const surfaces = dr.surfaces || [];
+  const staleCount = dr.stale_count || 0;
+  const chip = staleCount === 0
+    ? '<span class="chip good">✓ all surfaces current</span>'
+    : `<span class="chip warning">◐ ${staleCount} of ${dr.total} surface(s) drifted</span>`;
+  const rows = surfaces.map(s => `
+    <li class="decision-item">
+      <span class="dot" style="background:${s.stale ? 'var(--warning)' : 'var(--good)'}"></span>
+      <span>
+        <strong>${esc(s.surface)}</strong> — ${esc(s.detail)}<br>
+        <span class="decision-source">${esc(s.ref)} · refresh: ${esc(s.refresh)}</span>
+      </span>
+    </li>`).join('');
+  const handoffs = (dr.handoffs || [])
+    .filter(h => h.days_ago !== null && h.days_ago !== undefined && h.surface !== 'HANDOFF_archive.md')
+    .sort((a, b) => (b.days_ago || 0) - (a.days_ago || 0));
+  const handoffList = handoffs.length
+    ? `<div class="decision-source" style="margin-top:12px;">Continuity notes — last updated (informational, not counted as drift):</div>
+       <div class="stat-row" style="margin-top:6px;flex-wrap:wrap;gap:6px;">`
+      + handoffs.map(h => {
+          const label = (h.surface.replace(/^HANDOFF_?/, '').replace(/\.md$/, '') || 'root');
+          return `<span class="chip ${(h.days_ago || 0) > 14 ? 'warning' : 'unknown'}">${esc(label)} · ${h.days_ago}d</span>`;
+        }).join('')
+      + `</div>`
+    : '';
+  el.innerHTML = `<div style="margin-bottom:10px;">${chip}</div>
+    <ul class="plain">${rows}</ul>
+    ${handoffList}
+    <div class="decision-source" style="margin-top:10px;">${esc(dr.note)}</div>`;
+}
+
+function renderWorkplan(d) {
+  const el = document.getElementById('workplan-body');
+  const wp = d.workplan;
+  if (!wp || wp.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  let html = '';
+  if (wp.staleness_warning) {
+    html += `<div class="decision-source" style="color:var(--warning);margin-bottom:8px;">⚠ ${esc(wp.staleness_warning)}</div>`;
+  }
+  for (const mkey of ['M1', 'M2', 'M3']) {
+    const ms = wp.milestones && wp.milestones[mkey];
+    if (!ms || !ms.rows || ms.rows.length === 0) continue;
+    const bar = ms.rows.map(r => GLYPH[r.state] || GLYPH.not_started).join('');
+    html += `<div class="milestone-head"><strong>${mkey}</strong> <span class="bar">${bar}</span> — ${esc(ms.label)}</div>`;
+    for (const r of ms.rows) {
+      const glyph = GLYPH[r.state] || GLYPH.not_started;
+      html += `<div class="juncture-row">
+        <span><span class="juncture-glyph">${glyph}</span> <span class="juncture-title">${esc(r.label)}</span>${r.blocked_on ? ' <span class="decision-source">[gate: ' + linkify(r.blocked_on) + ']</span>' : ''}</span>
+      </div>`;
+      if (r.next) html += `<div class="juncture-next">▸ next: ${linkify(r.next)}</div>`;
+    }
+  }
+  if (wp.decisions_t0_open && wp.decisions_t0_open.length) {
+    html += `<div style="margin-top:10px;"><strong>T0 open:</strong> ${wp.decisions_t0_open.map(esc).join(' · ')}</div>`;
+  }
+  el.innerHTML = html || '<div class="empty-state">no rows</div>';
+}
+
+function renderAudits(d) {
+  const el = document.getElementById('audits-body');
+  const au = d.audits;
+  if (!au || au.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  if (!au.entries || au.entries.length === 0) {
+    el.innerHTML = '<div class="empty-state">registry is empty — nothing has logged a verdict yet</div>';
+    return;
+  }
+  const bySubsystem = {};
+  for (const e of au.entries) {
+    const key = e.subsystem || 'uncategorized';
+    (bySubsystem[key] = bySubsystem[key] || []).push(e);
+  }
+  let html = '<table class="audit-table"><thead><tr><th>Type</th><th>Verdict</th><th>Date</th><th>Scope</th></tr></thead><tbody>';
+  for (const subsystem of Object.keys(bySubsystem).sort()) {
+    html += `<tr><td colspan="4" class="subsystem-group-header">${esc(subsystem)}</td></tr>`;
+    for (const e of bySubsystem[subsystem].sort((a, b) => (a.audit_type || '').localeCompare(b.audit_type || ''))) {
+      const inferred = e.confidence === 'inferred'
+        ? '<span class="badge-inferred" title="backfilled by heuristic scan, not self-reported">🔎 inferred, verify</span>' : '';
+      const link = e.folder
+        ? `<a class="audit-link" href="https://github.com/jordanelias/ttrpg/tree/main/${encodeURI(e.folder)}" target="_blank" rel="noopener">${esc(e.folder)}</a>`
+        : '';
+      html += `<tr>
+        <td>${esc(e.audit_type)}${inferred}</td>
+        <td>${verdictChip(e.verdict)}${e.verdict_detail ? '<div class="audit-scope">' + esc(e.verdict_detail) + '</div>' : ''}</td>
+        <td>${esc(e.date)}</td>
+        <td><div class="audit-scope">${esc(e.scope)}</div>${link}</td>
+      </tr>`;
+    }
+  }
+  html += '</tbody></table>';
+  if (au.entries.some(e => e.audit_type === 'simulation_balance')) {
+    html += `<div class="decision-source" style="margin-top:8px;">
+      ⚠ no n≥100 full-campaign balance run is persisted anywhere in the repo — only two small-n
+      (2 and 8) CI-pinned regression goldens exist (sim/tests/). See the Balance &amp; victory data
+      card below for the actual numbers. (The older "~87% degenerate win-share" claim was itself a
+      small-N artifact, since debunked — see sim/tests/test_f7_smoke_oracle.py's docstring.)</div>`;
+  }
+  el.innerHTML = html;
+}
+
+function renderCi(d) {
+  const el = document.getElementById('ci-body');
+  const ci = d.ci_health;
+  if (!ci || ci.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable' + (ci && ci.reason ? ': ' + esc(ci.reason) : '') + '</div>';
+    return;
+  }
+  const conclChip = c => c === 'success'
+    ? '<span class="chip good">✓ pass</span>'
+    : c ? `<span class="chip critical">✕ ${esc(c)}</span>` : '<span class="chip unknown">?</span>';
+  el.innerHTML = `
+    <div style="margin-bottom:6px;">${conclChip(ci.conclusion_summary)} <strong>All Gates Green</strong></div>
+    <div style="margin-bottom:6px;">${conclChip(ci.conclusion_unit_tests)} Validator Unit Tests</div>
+    <div style="margin-bottom:6px;">${conclChip(ci.conclusion_sim_regression)} Sim Reference Regression</div>
+    <div class="decision-source">commit ${esc(ci.commit_sha)}${ci.run_html_url ? ' · <a href="' + esc(ci.run_html_url) + '" target="_blank" rel="noopener">view run</a>' : ''}</div>`;
+}
+
+function renderCurrency(d) {
+  const el = document.getElementById('currency-body');
+  const cu = d.currency;
+  if (!cu || cu.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  el.innerHTML = `<div>${esc(cu.summary)}</div>`;
+}
+
+const SUBSYSTEM_LABEL = {
+  personal_combat: 'Personal combat', mass_battle: 'Mass battle', social_contest: 'Social contest',
+  faction_political: 'Faction political', settlement_territory: 'Settlement / territory',
+  threadwork: 'Threadwork',
+};
+
+function barRows(pairs, maxVal) {
+  return pairs.map(([label, pct]) => `
+    <div class="balance-bar-row">
+      <span>${esc(label)}</span>
+      <span class="balance-bar-track"><span class="balance-bar-fill" style="width:${maxVal ? Math.round(pct / maxVal * 100) : 0}%;"></span></span>
+      <span class="balance-bar-value">${pct}%</span>
+    </div>`).join('');
+}
+
+function renderBalanceBlock(subsystemKey, block) {
+  const title = SUBSYSTEM_LABEL[subsystemKey] || subsystemKey;
+  if (!block || block.available === false) {
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)}</div>
+      <div class="balance-nodata">no data — ${esc((block && block.reason) || 'unavailable')}</div>
+    </div>`;
+  }
+  if (subsystemKey === 'personal_combat') {
+    const pairs = Object.entries(block.field_win_rate_pct || {});
+    const maxVal = Math.max(...pairs.map(p => p[1]), 1);
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)} — weapon win-rate vs field</div>
+      ${block.stale ? `<div class="balance-stale-banner">⚠ stale (as of ${esc(block.as_of)}): ${esc(block.stale_reason)}</div>` : ''}
+      ${barRows(pairs, maxVal)}
+      <div class="balance-meta">source: <a href="https://github.com/jordanelias/ttrpg/blob/main/${encodeURI(block.source)}" target="_blank" rel="noopener">${esc(block.source)}</a></div>
+    </div>`;
+  }
+  if (subsystemKey === 'faction_political') {
+    const goldenBlocks = (block.goldens || []).map(g => {
+      const pairs = Object.entries(g.win_share_pct || {});
+      const maxVal = Math.max(...pairs.map(p => p[1]), 1);
+      return `<div style="margin-bottom:8px;">
+        <div class="decision-source">${esc(g.label)} — <a href="https://github.com/jordanelias/ttrpg/blob/main/${encodeURI(g.source)}" target="_blank" rel="noopener">${esc(g.source)}</a></div>
+        ${barRows(pairs, maxVal)}
+      </div>`;
+    }).join('');
+    return `<div class="balance-block">
+      <div class="balance-block-title">${esc(title)} — win-share goldens</div>
+      ${goldenBlocks}
+      <div class="balance-meta">${esc(block.note)}</div>
+    </div>`;
+  }
+  return '';
+}
+
+function renderBalance(d) {
+  const el = document.getElementById('balance-body');
+  const bal = d.balance;
+  if (!bal || bal.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const order = ['personal_combat', 'faction_political', 'mass_battle', 'social_contest', 'threadwork', 'settlement_territory'];
+  el.innerHTML = order.map(key => renderBalanceBlock(key, bal[key])).join('');
+}
+
+function renderRegisters(d) {
+  const el = document.getElementById('registers-body');
+  const reg = d.registers;
+  if (!reg || reg.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const ed = reg.editorial_ledger || {};
+  const byLane = ed.by_lane || {};
+  const laneRows = Object.keys(byLane).sort().map(lane => `
+    <tr><td>${esc(lane)}</td><td>${byLane[lane].open}</td><td>${byLane[lane].needs_jordan}</td></tr>`).join('');
+  const patch = reg.patch_register_active || {};
+  const patchStatuses = Object.entries(patch.by_status || {}).map(([s, n]) => `${esc(s)}: ${n}`).join(' · ');
+  el.innerHTML = `
+    <div class="stat-row" style="margin-bottom:10px;">
+      <div class="stat-tile"><div class="value">${ed.total_open ?? 0}</div><div class="label">editorial items open</div></div>
+      <div class="stat-tile"><div class="value">${ed.total_needs_jordan ?? 0}</div><div class="label">need Jordan's ruling</div></div>
+      <div class="stat-tile"><div class="value">${patch.total ?? 0}</div><div class="label">active patches</div></div>
+    </div>
+    <table class="lane-table">
+      <thead><tr><th>Lane</th><th>Open</th><th>Needs Jordan</th></tr></thead>
+      <tbody>${laneRows}</tbody>
+    </table>
+    ${patchStatuses ? `<div class="decision-source">patch register: ${patchStatuses}</div>` : ''}`;
+}
+
+function renderActivity(d) {
+  const el = document.getElementById('activity-body');
+  const gh = document.getElementById('github-stats');
+  const ghData = d.github;
+  if (ghData && ghData.available) {
+    gh.innerHTML = `
+      <div class="stat-tile"><div class="value">${ghData.open_pr_count}</div><div class="label">open PRs</div></div>
+      <div class="stat-tile"><div class="value">${ghData.open_issue_count}</div><div class="label">open issues</div></div>`;
+  } else {
+    gh.innerHTML = '';
+  }
+
+  const act = d.activity;
+  if (!act || act.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  if (!act.commits || act.commits.length === 0) {
+    el.innerHTML = '<div class="empty-state">no commits found</div>';
+    return;
+  }
+  el.innerHTML = '<ul class="plain">' + act.commits.slice(0, 20).map(c => `
+    <li class="commit-row">
+      <span class="commit-date">${esc(c.date)}</span>
+      ${c.scope ? '<span class="commit-scope">[' + esc(c.scope) + ']</span>' : ''}
+      <span>${esc(c.subject)}</span>
+    </li>`).join('') + '</ul>';
+}
+
+function renderQueue(d) {
+  const el = document.getElementById('queue-body');
+  const q = d.queue;
+  if (!q || q.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const t = q.totals || {};
+  let html = `<div style="margin-bottom:10px;">
+    <span class="chip warning">◐ ${t.needs_jordan || 0} need your decision</span>
+    <span class="chip good">✓ ${t.actionable || 0} Claude can action</span>
+    <span class="acc-count"> ${t.open || 0} open ledger items</span></div>`;
+  const items = arr => arr.length
+    ? '<ul class="tight">' + arr.map(it => `<li>${linkify(it.id)} — ${linkify(it.desc)}${it.source ? ' · ' + srcLink(it.source) : ''}</li>`).join('') + '</ul>'
+    : '<div class="empty-state" style="margin:2px 0 6px;">none</div>';
+  for (const cat of q.category_order) {
+    const groups = q.categories[cat] || {};
+    const names = Object.keys(groups).sort();
+    if (!names.length) continue;
+    const nj = names.reduce((n, g) => n + groups[g].needs_jordan.length, 0);
+    const ac = names.reduce((n, g) => n + groups[g].actionable.length, 0);
+    let inner = '';
+    for (const g of names) {
+      const b = groups[g];
+      if (!b.needs_jordan.length && !b.actionable.length) continue;
+      inner += `<div class="lane-block">`;
+      if (cat === 'subsystem') inner += `<div class="lane-label">${esc(g)}</div>`;
+      inner += `<div class="split-you"><div class="split-head">Needs your decision (${b.needs_jordan.length})</div>${items(b.needs_jordan)}</div>`;
+      inner += `<div class="split-claude"><div class="split-head">Claude can action (${b.actionable.length})</div>${items(b.actionable)}</div>`;
+      inner += `</div>`;
+    }
+    html += `<details class="acc"><summary>${esc(q.category_labels[cat] || cat)} <span class="acc-count">— ${nj} decision · ${ac} actionable</span></summary><div class="acc-body">${inner}</div></details>`;
+  }
+  html += `<div class="ref-note">${esc(q.note)}</div>`;
+  el.innerHTML = html;
+}
+
+function renderProposals(d) {
+  const el = document.getElementById('proposals-body');
+  const p = d.proposals;
+  if (!p || p.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  if (!p.count) { el.innerHTML = '<div class="empty-state">nothing PROPOSED/PROVISIONAL — all landed.</div>'; return; }
+  let html = `<div style="margin-bottom:8px;"><span class="chip warning">◐ ${p.count} awaiting ratification</span></div>`;
+  for (const g of Object.keys(p.groups).sort()) {
+    const rows = p.groups[g];
+    html += `<details class="acc"><summary>designs/${esc(g)} <span class="acc-count">— ${rows.length}</span></summary><div class="acc-body"><ul class="tight">`
+      + rows.map(r => `<li>${srcLink(r.path)} <span class="status-pill">${esc(r.status)}</span></li>`).join('')
+      + `</ul></div></details>`;
+  }
+  html += `<div class="ref-note">${esc(p.note)}</div>`;
+  el.innerHTML = html;
+}
+
+function renderRepoShape(d) {
+  const el = document.getElementById('shape-body');
+  const rs = d.repo_shape;
+  if (!rs || rs.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const code = rs.mermaid || '';
+  el.innerHTML = `<details class="acc"><summary>Structure diagram <span class="acc-count">— ${rs.subsystem_count} subsystem folders</span></summary>
+    <div class="acc-body">
+      <div class="mermaid-wrap"><div class="mermaid" id="repo-mermaid">${esc(code)}</div></div>
+      <pre class="mermaid-src" id="repo-mermaid-src" hidden>${esc(code)}</pre>
+      <div class="ref-note">${esc(rs.note)}</div>
+    </div></details>`;
+  const details = el.querySelector('details');
+  let done = false;
+  const render = () => {
+    if (done) return;
+    const host = document.getElementById('repo-mermaid');
+    const src = document.getElementById('repo-mermaid-src');
+    if (window.__mermaidFailed || !window.__mermaid) { if (src) src.hidden = false; return; }
+    done = true;
+    window.__mermaid.render('repo-mermaid-svg', code)
+      .then(({ svg }) => { host.innerHTML = svg; })
+      .catch(() => { if (src) src.hidden = false; });
+  };
+  details.addEventListener('toggle', () => {
+    if (!details.open) return;
+    if (window.__mermaid || window.__mermaidFailed) render();
+    else window.addEventListener('mermaid-ready', render, { once: true });
+  });
+}
+
+function renderKeys(d) {
+  const el = document.getElementById('keys-body');
+  const k = d.keys;
+  if (!k || k.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  const fam = k.families.map(f => `<tr><td class="k">${esc(f.family)} <span class="acc-count">(${f.count})</span></td><td>${esc(f.types)}</td></tr>`).join('');
+  const comp = k.components.map(c => `<tr><td class="k">${esc(c.name)}</td><td>${esc(c.role)}</td></tr>`).join('');
+  const prop = k.propagation.map(p => `<tr><td class="k">${esc(p.name)}</td><td>${esc(p.desc)}<br><span class="decision-source">${srcLink(p.source)}</span></td></tr>`).join('');
+  const flag = (k.count_check && k.count_check !== 'current')
+    ? `<span class="chip warning">⚠ ${esc(k.count_check)}</span>`
+    : `<span class="chip good">✓ ${k.type_total} types · registry in sync</span>`;
+  el.innerHTML = `
+    <div style="margin-bottom:8px;">${flag}</div>
+    <p style="font-size:0.9rem;">${esc(k.definition)} <span class="decision-source">${srcLink(k.definition_source)}</span></p>
+    <details class="acc" open><summary>Key type registry <span class="acc-count">— ${k.type_total} types · ${k.families.length} families</span></summary>
+      <div class="acc-body"><table class="kv-table">${fam}</table>
+      <div class="ref-note">Symbolic axes: ${esc(k.conviction_axes)}. * = STUB/provisional subtype. Source: ${srcLink(k.registry_source)}</div></div></details>
+    <details class="acc"><summary>Substrate components <span class="acc-count">— ${k.components.length} · keys.py</span></summary>
+      <div class="acc-body"><table class="kv-table">${comp}</table><div class="ref-note">Source: ${srcLink(k.components_source)}</div></div></details>
+    <details class="acc"><summary>Propagation model</summary>
+      <div class="acc-body"><table class="kv-table">${prop}</table></div></details>
+    <details class="acc"><summary>${esc(k.field_extension.name)}</summary>
+      <div class="acc-body"><p style="font-size:0.88rem;">${esc(k.field_extension.desc)}</p><div class="decision-source">${srcLink(k.field_extension.source)}</div></div></details>
+    <div class="ref-note">${esc(k.note)}</div>`;
+}
+
+function renderActions(d) {
+  const el = document.getElementById('actions-body');
+  const a = d.actions;
+  if (!a || a.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  let html = '';
+  for (const s of a.subsystems) {
+    const rows = s.actions.map(x => `<tr><td class="k">${esc(x.name)}</td><td>${esc(x.desc)} <span class="decision-source">${srcLink(x.source)}</span></td></tr>`).join('');
+    html += `<details class="acc"><summary>${esc(s.name)} <span class="acc-count">— ${s.actions.length} · ${esc(s.availability)}</span></summary>
+      <div class="acc-body"><table class="kv-table">${rows}</table>
+      ${s.caveat ? `<div class="ref-note">⚠ ${linkify(s.caveat)}</div>` : ''}</div></details>`;
+  }
+  html += `<div class="ref-note">${esc(a.note)}</div>`;
+  el.innerHTML = html;
+}
+
+async function load() {
+  try {
+    const res = await fetch('data.json', { cache: 'no-store' });
+    const d = await res.json();
+    renderGeneratedMeta(d);
+    renderDecisions(d);
+    renderDrift(d);
+    renderWorkplan(d);
+    renderQueue(d);
+    renderProposals(d);
+    renderAudits(d);
+    renderBalance(d);
+    renderRegisters(d);
+    renderRepoShape(d);
+    renderKeys(d);
+    renderActions(d);
+    renderCi(d);
+    renderCurrency(d);
+    renderActivity(d);
+  } catch (e) {
+    document.getElementById('generated-meta').textContent = 'failed to load data.json: ' + e;
+  }
+}
+load();
+</script>
+</body>
+</html>

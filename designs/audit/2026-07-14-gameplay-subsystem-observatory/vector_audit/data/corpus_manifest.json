@@ -1,0 +1,467 @@
+{
+ "design_files": [
+  {
+   "path": "canon/00_philosophical_foundations.md",
+   "chars": 63540
+  },
+  {
+   "path": "canon/01_foundations_amendment_self_rendering.md",
+   "chars": 14735
+  },
+  {
+   "path": "canon/02_canon_constraints.md",
+   "chars": 16773
+  },
+  {
+   "path": "canon/02_foundations_amendment_leap_mechanism.md",
+   "chars": 14707
+  },
+  {
+   "path": "canon/03_canonical_timeline.md",
+   "chars": 20141
+  },
+  {
+   "path": "designs/architecture/campaign_architecture_v30.md",
+   "chars": 18849
+  },
+  {
+   "path": "designs/architecture/campaign_architecture_v30_index.md",
+   "chars": 5247
+  },
+  {
+   "path": "designs/architecture/complete_systems_reference.md",
+   "chars": 15891
+  },
+  {
+   "path": "designs/architecture/conflict_architecture_proposal.md",
+   "chars": 20175
+  },
+  {
+   "path": "designs/architecture/holonic_container_doctrine_v1.md",
+   "chars": 9858
+  },
+  {
+   "path": "designs/architecture/key_substrate_v30.md",
+   "chars": 29576
+  },
+  {
+   "path": "designs/architecture/key_type_registry_v30.md",
+   "chars": 41787
+  },
+  {
+   "path": "designs/architecture/player_agency_v30.md",
+   "chars": 54412
+  },
+  {
+   "path": "designs/architecture/player_agency_v30_index.md",
+   "chars": 6407
+  },
+  {
+   "path": "designs/architecture/propagation_spec_v1.md",
+   "chars": 54054
+  },
+  {
+   "path": "designs/architecture/scale_transitions_v30.md",
+   "chars": 29249
+  },
+  {
+   "path": "designs/architecture/videogame_mode_spec.md",
+   "chars": 16455
+  },
+  {
+   "path": "designs/architecture/videogame_mode_spec_index.md",
+   "chars": 3524
+  },
+  {
+   "path": "designs/arcs/arc_expansion_v30.md",
+   "chars": 90699
+  },
+  {
+   "path": "designs/arcs/arc_expansion_v30_index.md",
+   "chars": 7483
+  },
+  {
+   "path": "designs/arcs/throughline_resolutions_v30.md",
+   "chars": 32584
+  },
+  {
+   "path": "designs/arcs/throughline_resolutions_v30_index.md",
+   "chars": 7134
+  },
+  {
+   "path": "designs/articulation/articulation_layer_v30.md",
+   "chars": 17943
+  },
+  {
+   "path": "designs/audit/2026-05-17-v18-integration/integration_plan_v18.md",
+   "chars": 32785
+  },
+  {
+   "path": "designs/factions/faction_systems_overview_v30.md",
+   "chars": 17033
+  },
+  {
+   "path": "designs/npcs/baralta_v30.md",
+   "chars": 3941
+  },
+  {
+   "path": "designs/npcs/character_canon_v30.md",
+   "chars": 32756
+  },
+  {
+   "path": "designs/npcs/companion_specification_v30.md",
+   "chars": 11203
+  },
+  {
+   "path": "designs/npcs/edeyja_npc.md",
+   "chars": 9720
+  },
+  {
+   "path": "designs/npcs/npc_behavior_v30.md",
+   "chars": 104982
+  },
+  {
+   "path": "designs/npcs/npc_behavior_v30_index.md",
+   "chars": 12893
+  },
+  {
+   "path": "designs/npcs/npc_behavior_v30_infill.md",
+   "chars": 19315
+  },
+  {
+   "path": "designs/npcs/npc_relational_graph_v30.md",
+   "chars": 59298
+  },
+  {
+   "path": "designs/npcs/npc_roster_v30.md",
+   "chars": 34964
+  },
+  {
+   "path": "designs/npcs/npc_roster_v30_index.md",
+   "chars": 5050
+  },
+  {
+   "path": "designs/npcs/npc_roster_v30_infill.md",
+   "chars": 32797
+  },
+  {
+   "path": "designs/personal/character_generation_questionnaire_v30.md",
+   "chars": 8489
+  },
+  {
+   "path": "designs/personal/conviction_axis_matrix_v30.md",
+   "chars": 12245
+  },
+  {
+   "path": "designs/personal/conviction_migration_roster_v30.md",
+   "chars": 10428
+  },
+  {
+   "path": "designs/personal/conviction_taxonomy_v30.md",
+   "chars": 16125
+  },
+  {
+   "path": "designs/personal/knots_v30.md",
+   "chars": 24176
+  },
+  {
+   "path": "designs/provincial/ci_political_v30.md",
+   "chars": 25816
+  },
+  {
+   "path": "designs/provincial/clock_registry_v30.md",
+   "chars": 9187
+  },
+  {
+   "path": "designs/provincial/clock_registry_v30_infill.md",
+   "chars": 645
+  },
+  {
+   "path": "designs/provincial/faction_behavior_v30.md",
+   "chars": 28232
+  },
+  {
+   "path": "designs/provincial/faction_canon_v30.md",
+   "chars": 51512
+  },
+  {
+   "path": "designs/provincial/faction_layer_v30.md",
+   "chars": 57440
+  },
+  {
+   "path": "designs/provincial/faction_politics_v30.md",
+   "chars": 166953
+  },
+  {
+   "path": "designs/provincial/faction_politics_v30_index.md",
+   "chars": 13214
+  },
+  {
+   "path": "designs/provincial/faction_state_authoring_v30.md",
+   "chars": 19452
+  },
+  {
+   "path": "designs/provincial/faction_succession_split_v30.md",
+   "chars": 13975
+  },
+  {
+   "path": "designs/provincial/factions_personal_v30.md",
+   "chars": 30056
+  },
+  {
+   "path": "designs/provincial/mass_battle_integration_v30.md",
+   "chars": 30359
+  },
+  {
+   "path": "designs/provincial/mass_battle_v30.md",
+   "chars": 77472
+  },
+  {
+   "path": "designs/provincial/mass_battle_v30_index.md",
+   "chars": 5678
+  },
+  {
+   "path": "designs/provincial/mass_battle_v30_infill.md",
+   "chars": 3159
+  },
+  {
+   "path": "designs/provincial/military_layer_v30.md",
+   "chars": 26694
+  },
+  {
+   "path": "designs/provincial/parliamentary_transfer_v30.md",
+   "chars": 12323
+  },
+  {
+   "path": "designs/provincial/peninsular_strain_v30.md",
+   "chars": 50588
+  },
+  {
+   "path": "designs/provincial/peninsular_strain_v30_index.md",
+   "chars": 6886
+  },
+  {
+   "path": "designs/provincial/political_dynamics_keys_migration_v30.md",
+   "chars": 28215
+  },
+  {
+   "path": "designs/provincial/treaty_expiration_v30.md",
+   "chars": 10358
+  },
+  {
+   "path": "designs/provincial/victory_v30.md",
+   "chars": 59252
+  },
+  {
+   "path": "designs/scene/combat_v30.md",
+   "chars": 41520
+  },
+  {
+   "path": "designs/scene/conviction_track_v30.md",
+   "chars": 33466
+  },
+  {
+   "path": "designs/scene/conviction_track_v30_index.md",
+   "chars": 4931
+  },
+  {
+   "path": "designs/scene/derived_stats_v30.md",
+   "chars": 45506
+  },
+  {
+   "path": "designs/scene/fieldwork_bg_v30_infill.md",
+   "chars": 961
+  },
+  {
+   "path": "designs/scene/fieldwork_hybrid_v30_infill.md",
+   "chars": 907
+  },
+  {
+   "path": "designs/scene/fieldwork_v30.md",
+   "chars": 79299
+  },
+  {
+   "path": "designs/scene/fieldwork_v30_index.md",
+   "chars": 8944
+  },
+  {
+   "path": "designs/scene/fieldwork_v30_infill.md",
+   "chars": 27736
+  },
+  {
+   "path": "designs/scene/investigation_systems_v30.md",
+   "chars": 37453
+  },
+  {
+   "path": "designs/scene/investigation_systems_v30_index.md",
+   "chars": 4624
+  },
+  {
+   "path": "designs/scene/miraculous_event_v30.md",
+   "chars": 10603
+  },
+  {
+   "path": "designs/scene/social_contest_v30_index.md",
+   "chars": 5899
+  },
+  {
+   "path": "designs/scene/social_contest_v30_infill.md",
+   "chars": 6377
+  },
+  {
+   "path": "designs/territory/settlement_layer_v30.md",
+   "chars": 107476
+  },
+  {
+   "path": "designs/territory/settlement_layer_v30_index.md",
+   "chars": 10589
+  },
+  {
+   "path": "designs/territory/territory_temperaments_v30.md",
+   "chars": 7649
+  },
+  {
+   "path": "designs/threadwork/thread_horizontal_integration_spec.md",
+   "chars": 19659
+  },
+  {
+   "path": "designs/threadwork/thread_horizontal_integration_spec_index.md",
+   "chars": 3979
+  },
+  {
+   "path": "designs/threadwork/threadwork_v30.md",
+   "chars": 83765
+  },
+  {
+   "path": "designs/ui/valoria_ui_ux_v4.md",
+   "chars": 141956
+  },
+  {
+   "path": "designs/world/calamity_radiation_v30.md",
+   "chars": 11890
+  },
+  {
+   "path": "designs/world/calamity_radiation_v30_infill.md",
+   "chars": 4508
+  },
+  {
+   "path": "designs/world/character_histories_v30.md",
+   "chars": 39117
+  },
+  {
+   "path": "designs/world/character_histories_v30_index.md",
+   "chars": 5755
+  },
+  {
+   "path": "designs/world/character_histories_v30_infill.md",
+   "chars": 16307
+  },
+  {
+   "path": "designs/world/geography_v30.md",
+   "chars": 7660
+  },
+  {
+   "path": "designs/world/geography_v30_infill.md",
+   "chars": 5454
+  },
+  {
+   "path": "designs/world/insurgency_pipeline_v30.md",
+   "chars": 24873
+  },
+  {
+   "path": "designs/world/ms_trajectory_v1.md",
+   "chars": 17053
+  },
+  {
+   "path": "designs/world/narrative_voice_canon_v30.md",
+   "chars": 7226
+  },
+  {
+   "path": "designs/world/solmund_artifacts_v30.md",
+   "chars": 3621
+  },
+  {
+   "path": "designs/world/solmund_philosophy_v30.md",
+   "chars": 4791
+  },
+  {
+   "path": "designs/world/solmund_v30.md",
+   "chars": 8615
+  },
+  {
+   "path": "designs/world/solmund_voice_v30.md",
+   "chars": 17255
+  },
+  {
+   "path": "params/bg/clocks.md",
+   "chars": 3528
+  },
+  {
+   "path": "params/bg/royal_assassination.md",
+   "chars": 2642
+  },
+  {
+   "path": "params/bg/tensions_deck.md",
+   "chars": 2068
+  },
+  {
+   "path": "params/bg/victory.md",
+   "chars": 12534
+  },
+  {
+   "path": "params/contest.md",
+   "chars": 38408
+  },
+  {
+   "path": "params/core.md",
+   "chars": 18250
+  },
+  {
+   "path": "params/factions.md",
+   "chars": 2816
+  },
+  {
+   "path": "params/factions/npc_stance_triangles.md",
+   "chars": 4247
+  },
+  {
+   "path": "params/mass_combat.md",
+   "chars": 35323
+  },
+  {
+   "path": "params/threadwork.md",
+   "chars": 17358
+  },
+  {
+   "path": "references/throughlines_meta.md",
+   "chars": 15489
+  },
+  {
+   "path": "references/throughlines_meta_infill.md",
+   "chars": 55772
+  }
+ ],
+ "discourse_files": [
+  {
+   "path": "params/bg/core.md",
+   "chars": 22221
+  },
+  {
+   "path": "params/scale_transitions.md",
+   "chars": 7380
+  }
+ ],
+ "excluded": [],
+ "missing": [],
+ "design_count": 110,
+ "discourse_count": 2,
+ "excluded_count": 0,
+ "missing_count": 0,
+ "coverage": {
+  "design_files_scanned": 110,
+  "repo_total_md": 1758,
+  "designs_total_md": 1071,
+  "pct_of_designs_md": 10.3,
+  "pct_of_repo_md": 6.3
+ }
+}

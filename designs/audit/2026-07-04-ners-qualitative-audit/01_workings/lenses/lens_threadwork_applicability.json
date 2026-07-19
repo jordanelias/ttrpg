@@ -1,0 +1,123 @@
+{
+ "lens": "threadwork_applicability",
+ "verdict": "Thread wiring is deep where present (social \u00a79.3-9.4b, mass battle \u00a7A.10, faction Domain Echo, NPC conviction), but the absences form ONE coherent P-14 hole: personal combat cannot host a thread op, articulation cannot render one, and the faction disposition engine cannot feel one. Verified directly: combat_engine_v1's 20 \"thread\" hits are all the verb \"threads\" (data-threading), zero threadwork; articulation_layer_v30 has 0 Thread/Coherence/Gap mentions; faction_behavior's \u03b1/\u03b2/\u03b3/\u03bb math takes none. P-14's real failure shape is (b) \"a whole play mode is thread-impossible,\" not (a) co-movement omission \u2014 and combat is its sharpest case. Only Church exclusion (ED-679) is genuinely deliberate. MS/RS naming fork and ED-1010/1011 are hidden preconditions on the top wire-its, not fresh findings.",
+ "key_points": [
+  "P-14 bar (canon 02 \u00a7P-14) = co-movement expressed in EVERY play mode; the live failure is mode-cannot-host-a-thread-op, not co-movement omission \u2014 no omission cases found.",
+  "WIRE-IT rank by North-Star value: 1 combat_engine_v1 (ED-911), 2 articulation render-path, 3 General Duel (child of 1), 4 faction_behavior engine math, 5 NPC Priority Trees (7/9 blind), 6 settlement governance verb, 7 Scene\u2192Mass thread channel, 8 npc_memory P-09, 9 insurgency\u2192Gap, 10 propagation-spec spine.",
+  "Verified combat_engine_v1 zero threadwork by direct read \u2014 all 'thread' tokens are function-data-threading, not Leap/Coherence; ED-911 confirmed, not rediscovered.",
+  "Verified articulation_layer_v30 has literally zero Thread/Coherence/Calamity/Gap/Rendering hits \u2014 the densest collision feed (thread\u2192faction/settlement/NPC) computes but never surfaces; ED-681 authored 4 VG thread beats with no render path.",
+  "faction_behavior_v30 disposition engine (\u03b1/\u03b2/\u03b3/\u03bb, cosine cascade) takes only env.* shocks \u2014 no Coherence/Calamity term \u2014 a P-14 (b)-smell at the STRATEGIC layer's core mechanism.",
+  "Only 2 of 9 NPC faction Priority Trees (Varfell, Wardens) have any Thread-conditioned row; the asymmetry is arbitrary, not scaled to faction thread-exposure.",
+  "Settlement \u00a73.2 governance verbs offer NO thread-response option though thread hits the settlement automatically (\u00a74.4/\u00a74.9) \u2014 passive state that should be a player choice.",
+  "DELIBERATELY ABSENT: Church thread-resistance (ED-679 cited intent) \u2014 do not wire, though the doctrine itself is stranded (Niflhel dissolved).",
+  "DEFER: sim/contest kernel thread hooks (staged, Stage 4 next) and territory_temperaments coupling (province-grain PROVISIONAL, mechanically inert corpus-wide).",
+  "MS/RS naming fork (ED-428/731/772, sweep never reached params/threadwork.md) plus ED-1010/1011 Coherence-cost contradictions are hidden PRECONDITIONS on wire-its #1/#4/#6/#10 \u2014 assessed, not re-reported as novel.",
+  "combat_v30 \u00a710 (superseded) HAD Leap-in-combat that never migrated to combat_engine_v1 \u2014 the top gap is a regression, not an original absence.",
+  "scene.thread_operation Key exists in the substrate but its payload is [STUB]/unratified \u2014 thread is present-but-thin at the architecture layer, distinct from the true absences."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "tw-combat-mode-thread-impossible",
+   "subsystem": "personal_combat / combat_engine_v1",
+   "claim": "The personal-combat play mode cannot host a thread operation at all (verified: all 20 'thread' tokens in core/systems/wrapper.py are data-threading, zero Leap/Coherence), so P-14's 'expressed in every play mode' is vacuously unmet \u2014 the sharpest live P-14 (b)-shape failure; wire a mid-fight Leap/Coherence-commit hook.",
+   "cite": "designs/scene/combat_engine_v1/{core,systems,wrapper}.py (grep: no threadwork); combat_v30.md \u00a710 superseded Leap-in-combat never migrated; ED-911",
+   "criterion": "P-philosophy",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911",
+   "threadwork": true
+  },
+  {
+   "id": "tw-articulation-no-render-path",
+   "subsystem": "articulation_layer_v30",
+   "claim": "The sole narrative-surfacing layer has literally zero Thread/Coherence/Calamity/Gap/Rendering hits, so the corpus's densest collision feed (thread\u2192faction/settlement/NPC per ED-673/675/676) computes but never reaches the player; ED-681 authored 4 thread narrative beats explicitly for the videogame with no consuming trigger.",
+   "cite": "designs/articulation/articulation_layer_v30.md (grep: 0 hits); grounding 03 \u00a73",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "tw-faction-engine-thread-inert",
+   "subsystem": "faction_political / faction_behavior_v30",
+   "claim": "The \u03b1/\u03b2/\u03b3/\u03bb disposition engine (cosine cascade, Mission/Legitimacy/PS) that gates every faction's signature action takes only env.* shocks \u2014 no Coherence/Calamity input (verified: 1 incidental thread mention, none in the math) \u2014 a P-14 inseparability smell at the strategic layer's core mechanism.",
+   "cite": "designs/provincial/faction_behavior_v30.md \u00a73.4.2 (grep: 1 incidental hit)",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "tw-priority-tree-asymmetry",
+   "subsystem": "npc_behavior BG mode",
+   "claim": "Only 2 of 9 faction Priority Trees (Varfell \u00a78.5, Wardens \u00a78.10) carry any Thread-conditioned row; Church/Crown/Hafenmark/Guilds/L\u00f6wenritter/RM have none, so institutional posture ignores Thread events in their own territory \u2014 arbitrary, not scaled to thread-exposure; wire a Thread-state row per tree.",
+   "cite": "designs/npcs/npc_behavior_v30.md \u00a78.2-8.4,8.6,8.7,8.9 vs \u00a78.5/\u00a78.10",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "tw-settlement-no-governor-verb",
+   "subsystem": "settlement_territory",
+   "claim": "Settlement governance \u00a73.2 offers no verb to respond to Thread ops/exploitation at the governor's own location \u2014 thread affects the settlement automatically (\u00a74.4/\u00a74.9) but is never a player choice; a Regulate/Seal/Exploit-Thread-Site verb converts passive state into decision at the thinnest governance loop.",
+   "cite": "designs/territory/settlement_layer_v30.md \u00a73.2 vs \u00a74.4/\u00a74.9",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "03_threadwork_surface.md \u00a73",
+   "threadwork": true
+  },
+  {
+   "id": "tw-scene-mass-no-thread-channel",
+   "subsystem": "mass_battle / scale_transitions \u00a73.8",
+   "claim": "The Scene\u2192Mass win-bonus table covers Social/Investigation/Combat wins only, with no Thread-scene channel, despite thread being the densest personal-scale action (\u00a7A.10) \u2014 the one action with no cross-scale up-transition.",
+   "cite": "designs/provincial/scale_transitions_v30.md \u00a73.8 vs mass_battle_v30.md \u00a7A.10",
+   "criterion": "Q-smooth",
+   "direction": "diagonal",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "tw-propagation-spine-thread-silent",
+   "subsystem": "architecture_spine / propagation_spec_v1",
+   "claim": "The flagship cross-scale-consequence spine (propagation_spec_v1, holonic_container_doctrine) never names threadwork or Coherence, so the transform that should route thread state up/down the scale ladder omits it; also scene.thread_operation's Key payload is [STUB], leaving thread present-but-thin at the substrate.",
+   "cite": "designs/architecture/propagation_spec_v1.md (grep 0 hits); key_type_registry_v30.md \u00a72 scene.thread_operation [STUB]",
+   "criterion": "P-philosophy",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911 orbit",
+   "threadwork": true
+  },
+  {
+   "id": "tw-ms-rs-precondition",
+   "subsystem": "threadwork",
+   "claim": "The live MS(threadwork_v30 \u00a75)/RS(params/threadwork.md) naming fork and the ED-1010/1011 per-op Coherence-cost contradictions are hidden preconditions on the top wire-its: Leap-in-combat cannot be cost-specified while \u00a73.7 and mass \u00a7A.10 disagree, and a Godot Resource field cannot bind a two-named track \u2014 assessed as a gating dependency, not a novel find.",
+   "cite": "threadwork_v30.md \u00a75 vs params/threadwork.md L136-138; canon/editorial_ledger.jsonl ED-428/731/772; grounding 03 \u00a75 ED-1010/1011",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-428/731/772/1010/1011",
+   "threadwork": true
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_threadwork_applicability.md"
+}

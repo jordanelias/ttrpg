@@ -24,7 +24,7 @@ Plus apply_ci_delta for non-seasonal mutations (Excommunication +4, etc).
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/territory/infrastructure (for Templar Station CI gain integration)
+  - systems/settlements/sim/infrastructure (for Templar Station CI gain integration)
 
 Entry points:
   - compute_seasonal_ci_delta(world: GameState) -> dict
@@ -53,10 +53,12 @@ CI_YIELD_BY_PT = {
 HAFENMARK_BARALTA_THRESHOLD_MANDATE = 4
 HAFENMARK_SUPPRESS_PER_SEASON = -1
 
-# PP-412 starting + phase transition
-# [canonical: §3 — "Starting CI: 28 (canonical BG). Phase transition: CI 75."]
+# PP-412 starting CI. NO phase-transition freeze: PP-421 superseded the CI-75 freeze —
+# CI runs 0-100 with no freeze (systems/factions/ci_political_v30.md §0 + the
+# designs/scene/conviction_track_v30.md §3 propagation, 2026-07-07). The dead
+# CI_PHASE_TRANSITION=75 constant (zero callers in sim/) was removed here — CI75-9 / ED-IN-0025.
+# [canonical: §3 — "Starting CI: 28 (canonical BG)."]
 CI_STARTING = 28
-CI_PHASE_TRANSITION = 75
 
 # PP-412 floor / ceiling
 CI_FLOOR = 0
@@ -113,7 +115,7 @@ def compute_seasonal_ci_delta(world,
     # [BUG FIX 2026-05-19: canon PT is categorical 0-5 but Territory.pt is
     #  continuous 0.5-7.0 via PT_MAP. Must bucket through canonical_pt;
     #  int(t.pt) drifts (pt=7.0 → int=7 has no CI_YIELD entry → 0 yield).]
-    from sim.autoload.game_state import canonical_pt
+    from engine.autoload.game_state import canonical_pt
     raw_yield = 0.0
     for tid, t in world.territories.items():
         if not _church_is_prominent(world, tid):

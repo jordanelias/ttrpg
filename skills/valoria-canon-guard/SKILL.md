@@ -82,3 +82,28 @@ Read them from the working tree — do not rely on remembered Foundations conten
 - When uncertain whether something violates: flag as PARTIAL with reasoning, not PASS.
 - All Foundations citations must reference the working-tree file, not memory.
 - Do not use remembered constraint values — P-15 in particular must be read from `canon/02_canon_constraints.md` in the working tree.
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type canon_guard \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-canon-guard \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
+`tools/audit_registry.py`'s module docstring for the full field/vocabulary
+reference — this is the single source of truth for the schema, not this note.

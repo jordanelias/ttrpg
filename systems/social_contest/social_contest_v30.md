@@ -1,0 +1,724 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: social_contest_v30_infill.md -->
+
+<!-- v30 baseline — renamed from designs/contest/social_contest_system_v2.md on 2026-04-13 -->
+# VALORIA — SOCIAL CONTEST SYSTEM v2
+## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
+## Patches applied: PP-234, PP-235, PP-236, PP-237, PP-272, PP-278, PP-279
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Supersedes debate_system_redesign_v1.md Part 6.
+## Source: Opus 4.6 session 2026-04-04
+## Patch: PP-234 (genre restructure, attribute renames, Composure resolution, faction boost revision, dice consistency)
+## Three-mode: TTRPG (§§1–9), Board Game (§10), Hybrid (§11)
+
+### Attribute renames
+- Memory → Recall (Rec). "Memory" freed for genre name.
+
+### Genre restructure
+- Three genres (Past/Present/Future) → two genres (Memory/Projection).
+
+---
+
+## §1 CORE PRINCIPLE: FORMAT FOLLOWS CONTEXT
+
+
+
+
+---
+
+## §2 GM SETUP (Before Contest Begins)
+
+**Step 1 — Determine adjudicator type:**
+
+| Type | Who decides | Examples | Primary attribute |
+|---|---|---|---|
+| Expert judge | A single authority evaluates arguments on merits | Royal Audience, Church Tribunal | Cognition |
+| Crowd | A collective audience reacts to delivery and force | Parliamentary session, public forum, street crowd | Charisma |
+| No adjudicator | The parties themselves are the decision-makers | Private negotiation, personal appeal | Attunement |
+| Panel | Multiple individual judges deliberating | **Guild Arbitration** (a bench of guild masters — ED-1059 rebind); appellate bench, high tribunal, magisterial college [ED-1059: Guild Arbitration REBOUND from Expert Judge to Panel, so Panel is proceeding-reachable in normal play; the mechanism is per-member VoteAtClose ballot aggregated WEIGHTED-BY-STANDING — ED-137 CLOSED, ED-1057; see params/contest.md §Panel Adjudicator] | Cognition |
+
+The adjudicator type determines the primary attribute for the Argue pool (§4, Step 3). The adjudicator type is **fixed for the duration of a contest.** If circumstances change enough to shift the adjudicator type (a private negotiation goes public), the current contest ends and a new contest begins under the new type.
+
+**Step 2 — Determine primary genre from the question:**
+
+| Question shape | Primary genre |
+|---|---|
+| "Did X happen? Was X done? What was established?" | Memory |
+| "Should we do X? What will follow? What should become?" | Projection |
+
+**CR4 — the primary genre is TERRAIN-DERIVED, not GM-fiat (RATIFIED_2026-06-01.md CR4; ED-1062; Stage 3 / Gate C).** The table above still names the two question-shapes, but the assignment is now a **function of the proceeding's live Ciceronian stasis** (the classical *stasis* — "what is actually being contested" — conjectural / definitional / qualitative / translative; `sim/personal/contest/primitives.py` `Stasis`), not a per-contest GM pick:
+
+| Classical stasis | Kernel ground | Primary genre |
+|---|---|---|
+| Conjectural ("did it happen?") | FACT | Memory |
+| Definitional ("what is it?") | DEFINITION | *none* — a higher-order REFRAME, not a genre (re-classifies the act; can re-open a settled FACT question) |
+| Qualitative ("was it justified?") | QUALITY | *none* — present-tense terrain (the epideictic register lives here; see §4 Step 6 armature note) |
+| Translative ("is this the right venue?") | JURISDICTION | *none* — PRE-MERITS (the Stay); contested before the merits |
+| Deliberative-consequence ("what follows?") | CONSEQUENCE / FEASIBILITY | Projection |
+
+Only a conjectural (FACT) stasis sets Memory primary; only a deliberative (CONSEQUENCE/FEASIBILITY) stasis sets Projection primary. A proceeding's **starting** stasis is fixed by the proceeding (§2 Step 5 table, "Stasis Start" column); stasis then only ever shifts **upward** on the ladder (FACT < DEFINITION < QUALITY < JURISDICTION < CONSEQUENCE < FEASIBILITY) as play re-terrains the argument — it never shifts back down within a contest. The orator's **chosen genre** (the Style card picked at Step 2 of §4 — Precedent/Suppression = Memory, Vision/Insinuation = Projection) earns the Step 3 +1D when it matches whichever primary genre the *live* stasis currently sets; see §4 Step 3.
+
+**CR4 reachability (ED-1062):** because stasis only shifts upward and every proceeding previously defaulted to a QUALITY start, a conjectural FACT stasis — and therefore the Memory-primary +1D a Precedent/Suppression orator earns from it — was unreachable in any of the 8 canonical proceedings. **Church Tribunal now starts at the conjectural FACT stasis** (§2 Step 5; §7), the one canonical proceeding whose thematic shape is genuinely conjectural: an Inquisitor investigating whether the accused *committed an act* ("did X happen? was X done?" — exactly the Memory question-shape above), not judging the wisdom of an already-settled matter. The other 7 proceedings are unchanged (still start at QUALITY).
+
+**Step 3 — Set style bonus dice:**
+
+(The player chose one style at Step 2 — a single choice among Precedent, Suppression, Vision, or Insinuation. This step calculates which bonus dice that choice earns.)
+
+Base: orators arguing in the primary genre receive +1D. Orators arguing in the non-primary genre receive +0D.
+
+Audience boost: the dominant faction's boost adds +1D to any argument matching their boosted axis. A faction boosts ONE of four options (one genre OR one orientation, not both):
+
+| Faction | Ethical Mode | Boost | Axis |
+|---|---|---|---|
+| Church | Divine Command | Obscuring | Orientation |
+| Crown | Virtue Ethics | Revealing | Orientation |
+| Varfell | Consequentialism | Projection | Genre |
+| Hafenmark | Categorical Imperative | Memory | Genre |
+| Restoration | Rawlsian Social Contract | Revealing | Orientation |
+| Guilds | Moral Relativism | Venue-derived (engine) | Either |
+| Löwenritter | Duty-based (if emerged) | Projection | Genre |
+
+The Guilds either-axis boost is **resolved by the engine, not picked (ED-1061)**: with no GM, the boost applies to whichever axis (a genre or an orientation) the **current contest's adjudicator already favours** — derived from the adjudicator's ethos/pathos/logos weighting (Expert Judge / Panel ↔ logos → Memory; Crowd ↔ pathos → Projection; No Adjudicator ↔ ethos → Revealing). Not an orator pick, not random, not a GM pick; deterministic (ties break by the Aristotelian order logos > pathos > ethos). See `dictionaries.guilds_boost_for()`.
+
+<!-- ED-1061 (2026-07-01, Jordan Gate B): Guilds boost was "GM picks one" — a defect under the no-GM mandate. Corrected to the engine rule (context-derived from the venue's adjudicator) above. -->
+<!-- Niflhel boost row STRUCK (ED-899 / ED-764): Niflhel cannot participate in Formal/Grand Contests (§9.7), so a parliamentary boost row is incoherent. -->
+
+An orator's total bonus dice from genre + audience: maximum +2D (primary genre +1D AND audience boost matches on the other axis +1D). Minimum +0D (non-primary genre, audience boost doesn't match).
+
+These dice are added to the Argue pool at Step 3 of each exchange. They are fixed at setup — no mid-contest changes.
+
+**[ED-SC-0012, 2026-07-08 — pessimist-action audit REFINE; the KU-1 combined-stacking-cap decision, resolving "whether to cap" — the exact ceiling VALUE binds with Jordan's ED-SC-0005 ruling.]** The genre + audience bonus above is explicitly capped at +2D, but the *other* class of non-attribute Argue-pool bonus — **Recall (+2D, §4 Step 3) + Corroborate (+1D, Step 2b) + Pre-Contest Prep (+1D, §9.1) + Findings citation (up to +2D, F-TRANS-11)** — is subject to *no* combined cap and stacks freely (a Formal-Contest Exchange 1 can run base +8D from these alone). That is the same cost-hidden shape (Ω-d/М-6) the +2D genre cap exists to prevent, plus a Q-elegant "except when X" the design never flags. **A single global stacking cap on the combined Recall + Corroborate + Prep + Findings non-attribute bonus is hereby adopted (KU-1), mirroring the +2D genre/audience ceiling in spirit** — so "how much total non-attribute bonus enters one roll" is one legible number, not an unbounded sum of remembered exceptions. The individual actions (cite Recall; prepare; import Findings — a genuinely good FI→SC hook) are **not** cut. The **numeric ceiling** is deliberately left to Jordan's `ED-SC-0005` ruling (P0 docket, needs_jordan — cap value is Jordan's design number; distinct from `ED-SC-0004`'s Argue-pool-formula fork), which this REFINE narrows from an open "whether to cap" to a settled "cap — pick the value." Retires the KU-1 open question (`fable5_social_contest_audit_v1.md` §6 P0; `resolution_plan_v1.md` C-RESPESS-2..5).
+
+**Step 4 — Set Persuasion Track:**
+- Scale: 0–10. Side A wins at ≥ 7. Side B wins at ≤ 3. Compromise zone: 4–6.
+- Starting position: GM-set (typical neutral: 5).
+- Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
+- With no adjudicator (private negotiation, personal appeal): Persuasion Track is optional. If not used, winner determined by exchange majority. If exchange majority is tied, the contest stalls: strain persists, all Read results from the contest become permanent knowledge (the parties learned things about each other that cannot be unlearned), and the relationship is stressed. The narrative moves forward — the failure to agree IS a consequential outcome.
+
+**Step 5 — Set exchange count and role structure:**
+
+| Proceeding Type | Exchange Count | Role Structure | Audience Resistance Modifier | Stasis Start (CR4; ED-1062) |
+|---|---|---|---|---|
+| Formal Contest (Parliament) | 3 | Alternating | Standard | Qualitative (QUALITY) |
+| Grand Contest (faction-defining) | 5 | Alternating | Standard | Qualitative (QUALITY) |
+| Royal Audience | 3 | Crown objects throughout | Halved for petitioner | Qualitative (QUALITY) |
+| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused | **Conjectural (FACT)** — the ONE proceeding starting off the QUALITY default (CR4 reachability fix, ED-1062; see §2 Step 2 + §7) |
+| Guild Arbitration | 3 | Symmetric before bench (Panel — ED-1059) | Standard | Qualitative (QUALITY) |
+| Casual Dispute | 1 | Initiator proposes | N/A (no tracker) | Qualitative (QUALITY) |
+| Private Negotiation | 1–3 | Symmetric | N/A (tracker optional) | Qualitative (QUALITY) |
+| Personal Appeal | 1 | Appealer proposes | N/A (tracker optional) | Qualitative (QUALITY) |
+
+
+**Step 6 — Define stakes.** What each side wins, loses, or compromises on (detailed in the infill). Record before the first exchange. [ED-897: Step 6 restored to the skeleton — atomization had dropped it, leaving §2 jumping Step 5 → Step 7.]
+
+**Step 7 — Record all above in the hidden GM ledger.**
+
+---
+
+## §3 ARGUE POOL CONSTRUCTION
+
+The primary attribute for the Argue roll shifts based on the adjudicator type.
+
+**Argue Pool = (Primary Attribute × 2) + History bonus**
+
+| Adjudicator Type | Primary Attribute | Reasoning |
+|---|---|---|
+| Expert judge | Cognition | Judge evaluates logical structure |
+| Crowd | Charisma | Crowd responds to delivery and authority |
+| No adjudicator | Attunement | You must read the other party and calibrate |
+| Panel | Cognition | Panel DESIGNED (ED-137 CLOSED, ED-1057): Cognition-primary as Expert Judge for the Argue pool; verdict by per-member VoteAtClose ballot aggregated WEIGHTED-BY-STANDING (each juror's ballot counts by its bench-weight = discipline). Reached via Guild Arbitration (ED-1059 rebind). — params/contest.md §Panel Adjudicator. |
+
+TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 Desperate) apply as normal.
+
+This originally followed the combat pool's construction pattern. ⚠️ The combat analogy is
+**historical** (ED-1084): the combat pool was re-ratified Agility-independent —
+`max(5, Relevant History + 6)` (ED-901, ED-900/904; single source
+`designs/scene/combat_engine_v1/`) — so the doubled-attribute pattern here is now native to
+the social contest, not borrowed from combat. The +3 constant remains embedded in the History
+bonus formula (History bonus = points + 3, per §4.1 of Stage 2).
+
+The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator type. Appraising the audience or opponent is always an act of empathetic perception. (PP-278)
+
+
+---
+
+## §4 EXCHANGE STRUCTURE
+
+**Step 1 — Appraise (both orators) (PP-278 / PP-614):**
+Roll Attunement + Recall, TN 7, Ob = opponent's Charisma ÷ 2 (round up, min 1). [ED-893 (pending reconciliation): adopts the canonical PP-614 form; the prior "Attunement alone, Ob 1" was struck in params. Recall contributes to the Appraise pool and the citation bonus, but not to Concentration (ED-694).]
+
+Each exchange's Appraise senses the CURRENT state of the audience (which may have shifted from Doubt Markers, track movement, or strain). This is not a re-attempt of the same question — it is a fresh perception of changed circumstances.
+
+| Appraise Net Successes | Information |
+|---|---|
+| Failure (0) | Misleading signal: GM identifies a wrong boost as the audience's actual boost |
+| Partial (1) | Boosted axis type identified (genre or orientation) but not which specific one |
+| Success (2) | Full boost identified (e.g. "this audience favours Revealing") |
+| Overwhelming (3+) | Boost identified + one specific detail: a key individual's Belief, the audience's resistance threshold, or the opponent's emotional state |
+
+**[ED-SC-0012, 2026-07-08 — pessimist-action audit REFINE (split-and-sharpen; Appraise is KEPT).** Appraise carries two reveal-channels that do *not* have equal standing. **Channel (a), the audience/faction-boost read** (the table above) is **not a genuine bet even fully realized**: the boost is a deterministic function of *public* world-state — which faction is dominant, resolved through the public Faction Boosts table (§2 Step 3), and the Guilds case is a deterministic function of the adjudicator's own already-shown ethos/pathos/logos. A player who reads the public table never needs to roll for it and is never worse off skipping it (N-Abstractable). **Fold channel (a) into free setup-screen knowledge** — the audience's boost is simply shown at setup, exactly as Venue and Adjudicator type already are — losing no real decision. **Channel (b), the adjudicator-armature read** (§4 Step 1 armature PARTIAL-reveal boundary, below) is the genuinely load-bearing one: the judge's exact per-axis weights are *never* fully revealed, so a Style choice stays a bet under uncertainty at every band. The Appraise roll's remaining, sharpened purpose is that armature read alone: "Appraise reveals what moves this judge, in coarsening detail; nothing else is worth spending the beat on." The audience-boost table above is retained as the current spec until the setup-screen surface is built. Intent gate: NOT-INTENDED (the armature side was deliberately engineered to resist exactly this solved-lookup failure; the boost channel's un-protected redundancy reads as an oversight).]
+
+**Step 2 — Choose genre + orientation (style).** Each orator selects a genre (Memory or Projection) and an orientation (Revealing or Obscuring) as a single style pick (detailed in infill §4 Step 2). [ED-897: Step 2 restored — atomization left a "Step 2b" with no "Step 2".]
+
+**Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
+
+**Step 3 — Argue:**
+First-to-speak holder declares argument and rolls first. Respondent hears, then declares and rolls.
+
+Pool: (Primary Attribute × 2) + History bonus (per §3), TN 7.
+Add genre/orientation bonus dice per §2 Step 3 (primary genre +1D; audience boost match +1D; max +2D total).
+Recall bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary. Available in either genre.
+
+**Grand Contest Recall (PP-NEW, ED-617):** In Grand Contests (5-exchange format), the Recall bonus (+2D) applies *once per cited source for the entire contest*, not once per exchange. After Recall is used for a specific document, date, or named precedent, that source is exhausted and cannot generate a new Recall bonus in later exchanges. The orator must cite a different source to claim Recall in subsequent exchanges. This prevents pool-compounding from repeating a single high-quality citation across all five exchanges. Formal Contests (3 exchanges) retain per-exchange Recall (shorter format makes source-cycling mechanically impractical).
+Momentum: before rolling, spend any amount of Momentum to add automatic successes (1 Momentum = 1 success, per core engine §1.7).
+
+**The Adjudicator Armature (Stage 3 / Gate C; ED-1062).** Every adjudicator (Expert Judge, Crowd member, Panel juror) carries a hidden `armature_position` — a Conviction-like vector over four axes: **Evidence, Consequence, Authority, Insinuation**. This is what the ADJUDICATOR is moved by, distinct from (and in addition to) the audience-resistance scalar (§2 Step 4) and the existing opponent-aimed Resonant Style targeting (npc_behavior_v30.md §1.3/§6.3), which fires on the party you are *arguing against*. The armature fires on the party who *rules*.
+
+- **The dot-product.** Each of the four Contest Styles (Precedent, Suppression, Vision, Insinuation) projects onto the four armature axes — its targeted Conviction vulnerability carries the primary weight, the other three axes a smaller partial-overlap weight. The chosen Style's alignment with the adjudicator's `armature_position` (Σ over axes) measures how much that Style speaks to what *this* judge is moved by.
+- **RATIFIED axis basis (Jordan, Gate C, 2026-07-02; ED-1062): the basis stays {Evidence, Consequence, Authority, Insinuation}.** Three axes (Evidence, Consequence, Authority) are the canonical Resonant-Style vulnerability map (npc_behavior_v30.md §1.3). The fourth, **Insinuation, is a deliberate NEW axis authored specifically for this third-party-adjudicator mechanism** — it is NOT a reuse of canon's actual 4th Resonant-Style type (Solidarity, npc_behavior_v30.md:39), because Solidarity is Knot-gated and relational (it presumes an active Knot between the two orators), which does not fit a third-party judge, crowd, or panel who need not be Knot-bound to either side. Insinuation instead names what a third party CAN plausibly be moved by: the implied, unstated register — inference rather than open proof.
+- **Channel: a continuous δσ-leverage shift, not a bonus die.** The alignment enters resolution as a continuous σ-space leverage boost (a "setup advantage" in the CR6 sense — see §8), not as a flat +1D. This is deliberate: a fractional/partial alignment (e.g. a style that only partly overlaps the judge's convictions) still buys a real, non-zero edge — it is never rounded away to nothing the way a fractional bonus die would be. A style aimed squarely at what the judge cares about buys the most leverage; a style aimed at the judge's least-relevant axis still buys a small amount (never a penalty — misalignment simply forgoes the boost, it does not cost you anything).
+- **Asymmetric-proceeding gate-off.** In proceedings where the adjudicator IS the opponent (Royal Audience — the Crown objects; Church Tribunal — the Inquisitor proposes), the armature is gated off entirely, so the existing opponent-aimed Resonant Style targeting is not double-counted against the same party.
+- **The Appraise PARTIAL-reveal boundary (§4 Step 1).** The adjudicator's `armature_position` is not simply knowable — it is revealed by the Step 1 Appraise roll on the SAME four-band ladder (Failure/Partial/Success/Overwhelming) that already governs audience-boost reads, re-purposed for the judge's convictions: Failure gives a misleading (wrong-axis) read; **Partial reveals only the coarse register** (whether the judge leans toward the Revealing-aligned axes or the Obscuring-aligned ones — not which specific axis); Success reveals the dominant axis; Overwhelming reveals the dominant axis plus a coarse strength band. **No band ever reveals the judge's exact per-axis weights** — the residual stays hidden by design, so choosing a Style against a judge's convictions is always a bet under uncertainty (a stronger bet at higher Appraise bands, never a certainty), never a lookup table. This keeps the armature from degrading into a solved "always pick the maximally-aligned style" optimization.
+
+**Step 4 — Resolve by interaction type:**
+
+**CLASH** (same genre, opposite orientation):
+Direct contest within the same temporal horizon.
+- Compare successes. Higher wins. Margin = difference.
+- If margin > resistance → Persuasion Track moves (margin − resistance) toward winner's position.
+- If margin ≤ resistance → 0 movement.
+- Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage minimum 0. Focus defence can fully absorb strain just as armour can fully absorb damage.]
+- Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) × 3 → Cha 1–3: +0; Cha 4–5: +3; Cha 6–7: +6. [ED-891: ×3-scaled to match the ×3 Face/standing buffer (CR3/ED-1056; formerly "Composure ×3") and derived_stats §5.1; resolves the prior unscaled-0–2 vs scaled-0–6 strain-math ambiguity. The ×3 scaling is unchanged by CR3 — only the buffer's role-name (Composure → Face) changed.]
+- Focus defence: floor(Focus ÷ 2) × 3 → Foc 1: 0; Foc 2–3: 3; Foc 4–5: 6; Foc 6–7: 9. [ED-891: ×3-scaled to match derived_stats §5.1.]
+
+**REINFORCE** (same genre, same orientation):
+Both orators push in the same direction within the same temporal horizon.
+- Same resolution as CLASH.
+- Strain to loser: (margin − 1, minimum 0) + Charisma modifier − Focus defence. Minimum 0.
+
+**CROSS** (different genres):
+- No direct comparison. Each argument evaluated independently.
+- Effective margin for each = floor(successes ÷ 2).
+- For each side: if effective margin > resistance → that side moves the track (effective margin − resistance) toward their position.
+- Net track movement = difference between the two movements; direction toward the side with larger movement.
+- Obscuring in CROSS: if the side with larger movement used Obscuring, place a Doubt Marker on the opponent instead of track movement.
+- No strain dealt. Neither argument attacked the other.
+- First to speak stays with holder.
+
+**TIE** (equal successes, any interaction type):
+- Both orators take 1 strain. **Exception (PP-236): if the interaction type is CROSS, no strain is dealt — CROSS no-strain rule takes precedence. Neither argument attacked the other; a tie does not change that structural fact.**
+- Persuasion Track moves +1 toward first-to-speak holder's position.
+- First to speak stays with holder.
+
+- Persuasion Track does not move toward winner.
+- Place a Doubt Marker on the opponent.
+- Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
+- Only one Doubt Marker active at a time. New replaces old.
+- Consumed on use.
+- **Terminal Doubt (Gate B; ED-1060 — OPEN DECISION FOR JORDAN; flagged, pending Jordan's ratification):** an unconsumed Doubt Marker still on the board when the contest CLOSES (a single-exchange proceeding — Casual Dispute, Personal Appeal — or the final exchange of any proceeding, where there is no "next winning exchange" for it to fire on) is applied **once, terminally, against the marked side** (i.e. in the Obscuring winner's / planter's favour — the marker always works against the party it was placed on, exactly as it fires in play: it is placed *on the opponent* (line 180) and reduces *that side's* winning margin (line 181), so its terminal application does likewise; minimum 0). **How it applies is split by the closing proceeding's resolution mechanism**, because banded and raw-tally proceedings expose different quantities and the named single-exchange proceedings do not all resolve the same way:
+  - **(i) Banded** (the Persuasion Track is used — among the single-exchange-capable cases only **Church Tribunal** at length 1): the −2 is subtracted from the closing **margin/band** against the marked side (a Compromise-zone contest slides one step toward the Obscuring winner; cannot flip a decisive band it does not reach).
+  - **(ii) Raw-tally** (no tracker → exchange-majority — **Casual Dispute** always, **Personal Appeal** / **Private Negotiation** by default when run at length 1): there is **no band or margin** to slide (the tally returns raw A / B / draw). Instead the −2 is subtracted from the **marked side's raw exchange advantage** before the majority comparison (minimum 0). A close raw tally can flip toward the Obscuring winner or fall to a draw; the marker can never *manufacture* a lead the planter did not earn — it only removes up to 2 of the marked side's own advantage. *(Tally-scoped alternative: gate Obscuring out of the raw-tally single-exchange proceedings specifically.)*
+  - **Rationale:** without this an Obscuring win in a single/final exchange forgoes *all* track movement for a marker whose sole effect (−2 to a *next* winning exchange) has EV exactly 0 when there is no next exchange — so Suppression is strictly dominated by Precedent and Insinuation by Vision in every single-exchange contest, a dead/dominated choice (churn axiom: every style must be correct *somewhere*). Splitting the rule by mechanism gives the marker a non-zero terminal value in **both** banded and raw-tally proceedings — the original single-clause "margin/band" wording was well-defined only for the banded Church Tribunal and left the raw-tally Casual Dispute / Personal Appeal (the motivating cases) undefined, so Obscuring stayed dominated exactly there. **Alternative (b):** gate Obscuring style-selection out of single-exchange proceedings entirely and document why. Implemented as the terminal-value rule (a); it is a *table/design commitment* only — the resolver does **not** yet consume orientation (Stage-3 CR5 rhetoric-armature scope), so no resolution number changes this pass. Flagged provisional / needs_jordan; couples to the Obscuring flavor (Suppression/Insinuation) which is only behaviorally honest once this is resolved.
+
+**CR5 — self-Face backfire on a FAILED Obscuring move (RATIFIED_2026-06-01.md CR5; ED-1062; Stage 3 / Gate C).** The Doubt Marker above is the Obscuring orientation's WIN-side consequence (a landed Obscuring win plants the marker on the opponent). CR5 adds the FAIL-side consequence: an Obscuring (Indirect) argue move that **fails as a move entirely — lands nowhere, wins nothing, plants no marker** — costs the mover their own Face. This is the Nyāya *nigrahasthāna* (defeat-condition) principle: obstruction is a legitimate tactic, but it is bounded by your own standing, and a rule-violating or over-reaching move that fails outright is a "point of defeat" against the one who attempted it (a fallacy-as-foul: eristic has a cost, it is not pure upside).
+
+- **Trigger:** an Obscuring (Suppression or Insinuation) argue move that does not land at all — it neither wins the exchange nor advances the mover's own position by any degree. A move that lands (including a partial success that still advanced the mover's own track) is NOT a foul and does not backfire — the cost attaches only to a genuine failure, never to a partial success that helped the mover.
+- **Magnitude:** the mover strips **min(2, own current Face)** from their own Face — anchored to the same −2 the Doubt Marker uses (a magnitude precedent, not a fresh number), but bounded by the mover's own standing: a mover with less than 2 Face at risk can only lose what they hold, never more. A high-Face orator risks the full −2; a low-Face orator risks proportionally less.
+- **Both pieces together are CR5:** the Doubt Marker (a landed Obscuring win, above) and this self-Face backfire (a failed Obscuring move) are **not alternative or conflicting mechanics — together they ARE the full CR5 realization.** Obscuring is a genuine two-sided bet: win, and you plant a marker on your opponent; fail outright, and you cost yourself standing. The Suppression/Insinuation styles are honest about this risk only once both halves are in play.
+
+**Step 5 — Forfeit actions:**
+- **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max ((3 × Focus) + (2 × Spirit)).
+- **Concede a Point:** Forfeit exchange. Take 1 strain. Persuasion Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
+
+**Step 6 — Strain, Face, and Concentration (CR3 — three trackers):**
+
+**CR3 (RATIFIED 2026-06-01):** the single **Composure** buffer is **RETIRED as the social-contest tracker** and split into the two distinct trackers whose roles it conflated (Lesson-1 repair: one variable, one role). The contest now carries **three** trackers:
+
+| Tracker | Role | Formula / range | Provenance |
+|---|---|---|---|
+| **Concentration** | Stamina — depletes per exchange, gates Spent | (3 × Focus) + (2 × Spirit), range 5–35 | ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation) |
+| **Face** | Contest-local ethos / standing — **transient** standing within the contest; distinct from persistent Disposition/Reputation | Face_max = Charisma × 3, range 3–21 (the retired Composure magnitude, unchanged — a build-time ceiling); Face_current = round(Standing ÷ 10 × Face_max), where Standing is the unchanged kernel 0–10 ethos-built value | CR3 (RATIFIED 2026-06-01); ED-1056 (three-tracker/Face-primitive fold-in + Gate-A scale-binding resolution — provisional, pending Gate-A ratification) |
+| **Persuasion Track** | The merits clock (PRESERVED) | 0–10, banded (§2 Step 4) | preserved (CR3) |
+
+**Face** is the social analogue of standing/composure: it is the transient credibility an orator holds *in this proceeding*. Its kernel representation (Standing, 0–10) is built by Revealing/ethos-bearing argument and support; its surface representation (Face_current, 3–21) rises and falls with Standing inside the Charisma-set ceiling. **Face ≠ Disposition and Face ≠ Reputation:** Disposition/Reputation are persistent cross-scene relationship stats; Face is a within-contest tracker that resets at contest end.
+
+- Strain accumulates against **Face** (the standing buffer). At strain ≥ Face threshold: take a **Rattled** mark (Face resets to full, excess strain carries over).
+- All subsequent contest rolls: −1D per Rattled level (cumulative). [ED-892: actor-state degradation is a Pool penalty, not Ob, per the channel reservation (Decision-B 2026-05-15 / PP-716). Supersedes the prior "+1 Ob".]
+- Rattled recovery: 1 mark clears per full scene of non-social activity or rest.
+- Face recovery: full restore at scene change (new location, new interlocutors). Equipment (attire, regalia) adds flat Face.
+- **Honesty note (still true after the Gate-A scale-binding resolution):** the strip/strain-consumption channel above (the Rattled mark being triggered *by strain against Face*, and Face being *stripped* by Indirect Face-attacks, CR5) is **still not wired this pass**. What Gate A resolves is the SCALE formula only — Face_current is now a real, well-defined value (Standing-derived, Charisma-scaled), not an arbitrary or undefined one — but strain does not yet consume it in code. The strip/strain-consumption wiring stays an honestly-flagged near-term gap (CR5, Stage 3 rhetoric-armature scope), not silently claimed as wired.
+
+[ED-1056 — CR3 Composure retirement, SCOPED to the social-contest tracker only. The Charisma×3 buffer, the Charisma modifier (§4 Step 4), and the Focus defence keep their ×3 scaling and their mechanical behaviour verbatim — this is a RENAME of the contest buffer's *role* (Composure → Face-as-standing), not a mechanical re-point. **Composure references in unrelated systems (knots, combat, conviction) are NOT touched by CR3** (see §8 OPEN-DECISION note on the Knot-as-Composure-buffer coupling).]
+
+> **[FACE SCALE-BINDING — RESOLVED, Gate A, 2026-07-01 (ED-1056)]**
+> "Face" denotes two representations that Stage 1d established but did not reconcile; Jordan has now resolved the scale-binding as a **combo formula**, not a straight rescale either direction:
+> 1. **Face_max = Charisma × 3** (unchanged v30-surface formula, range 3–21 — the retired Composure magnitude). A **build-time ceiling**: Charisma is a player-controlled attribute set at creation, so Face_max is fixed for a given character and is in the player's control.
+> 2. **Face_current = round(Standing ÷ 10 × Face_max).** Standing is the **unchanged** kernel 0–10 ethos-built value (`sim/personal/contest/primitives.py` `Standing`/`Face = Standing`) — its internal representation, its `.build()`/`.strip()` ethos-build mechanics, and its existing feed into Readiness/leak are **not modified** by this resolution. Standing determines Face's **position within** the Charisma-set ceiling; it is earned through play, not directly in the player's moment-to-moment control.
+> This is implemented as a pure derived accessor (`FaceScale.face_max` / `FaceScale.face_current`, and `_Side.face_max()` / `_Side.face_current()`) added ON TOP OF the existing Standing primitive — no new invented constants (it reuses the existing Cha×3 formula and the existing 0–10 Standing range) and no change to any currently-tested Standing/Readiness behaviour. See `sim/personal/contest/primitives.py` (`FaceScale`) and `sim/personal/contest/resolver.py` (`_Side.face_max`/`_Side.face_current`).
+> The strip/strain-consumption channel (Rattled-by-strain, CR5 Face-attacks) remains unwired — see the honesty note above; that is a separate, still-open near-term gap, not resolved by this scale-binding decision.
+
+**Concentration = (3 × Focus) + (2 × Spirit).** Range 5–35. (Canonical per derived_stats_v30 §14.1: ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation); supersedes the struck Focus × 3.) Depletes by 5 per exchange, −5 additional on exchange loss. [ED-890 / DEP: depletion rescaled −3 → −5 so Spent stays reachable mid-contest under the larger 5–35 range — an average Focus 4 / Spirit 3 = 18 reaches Spent by exchange 3–4, faster for the loser.] (ED-694: Recall removed from Concentration — Recall's role is the +2D citation bonus in Argue and the Appraise pool, not sustained focus.)
+- At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
+  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to (3 × Focus) + (2 × Spirit) after the penalty exchange resolves.
+- If both Rattled and Spent active: penalties cumulative. Pool minimum 1D per core engine.
+
+**Step 7 — GM records exchange on hidden ledger.**
+
+---
+
+## §5 FIRST TO SPEAK
+
+- Exchange 1: **Rolled** — both orators roll Attunement, TN 7, Ob 1. Higher net successes acts last (declares second; information advantage). On tie: higher Attunement stat wins. On stat tie: neutral party (adjudicator) assigns. (ED-581 resolution: rolled first-to-speak aligns with combat initiative for cross-system consistency. The roll adds variance to opening exchanges — a less attuned orator can occasionally seize the read.)
+- Subsequent exchanges: transfers to exchange winner.
+- On tie: stays with current holder.
+
+---
+
+## §6 POST-CONTEST RESOLUTION
+
+- GM reveals ledger.
+- Persuasion Track ≥ 7 = Side A wins; ≤ 3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
+- No Persuasion Track (private): exchange majority determines winner. Tie = stall with consequences (see §2 Step 4).
+
+**Thread co-movement by winning genre:**
+
+| Genre Won | Thread Consequence |
+|---|---|
+| Memory | Temporal co-movement (retention shift). The audience re-experiences cited configurations. Observers with Thread Sensitivity (TS) 30+ perceive thread-shimmer. Mending Stability (MS) +1. |
+| Projection | Actualization co-movement (protention anchor). The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that outcome within the season. MS +1 if the projection involves Thread-sensitive matters. |
+
+
+**Domain Echo:**
+- Decisive win + Memory genre: winning faction's Mandate +1 in the domain of the cited precedent.
+- Decisive win + Projection genre: +1D on first Domain Action pursuing the argued outcome within the season.
+- Compromise: no Domain Echo.
+
+**Reconciled with scale_transitions_v30 §5.4 as COMPOSED (ED-SC-0002, Jordan ruling 2026-07-08).**
+This §6 genre scheme selects the **STAT/CHANNEL** (Memory → Mandate; Projection → the outward-initiative
+channel — the "+1D first Domain Action" bonus above); §5.4's Persuasion-Track band supplies the
+**MAGNITUDE** (Total → ±2, Decisive → ±1, Compromise → none). Neither doc supersedes the other; they
+compose. Sim realization: `sim/cross_scale/parliamentary_bridge.py` (Memory → L / Mandate, Projection
+→ I / Influence on the aggregate stat set) + `sim/cross_scale/domain_echo.py` (band → degree magnitude).
+
+**Total Victory** (Persuasion Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
+
+**Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. MS changes subject to MS ceiling (100) and MS=0 lockout.
+
+### §6.1 Obligations (NEW — post-contest binding commitments)
+
+**GM advisory — Obligation tracking (ED-619):** GMs are advised to cap active Obligations at 3 simultaneously across all parties for tracking tractability. Beyond 3 active Obligations in the same campaign season, use a dedicated ledger rather than session notes. The system allows any number of concurrent Obligations; the cap is a GM guidance note, not a mechanical limit.
+
+A Decisive win (Persuasion Track ≥ 7 or ≤ 3) in a Formal or Grand Contest produces a binding **Obligation** — a mechanical commitment that persists across seasons. The Obligation is the contest's lasting consequence in the game world, not just a stat change.
+
+**Obligation structure:** The winning side names one specific commitment that the losing side must honor. The commitment must be achievable and verifiable (not "be good" but "withdraw Templars from Gransol within 2 seasons").
+
+| Contest Type | Obligation Duration | Violation Consequence |
+|-------------|--------------------|--------------------|
+| Formal Contest (Parliament) | 2 seasons | Violating faction: Mandate −1. Reputation shift. Contest Fatigue on faction leader. |
+| Grand Contest | 4 seasons or until a specified game-state condition changes | Violating faction: Mandate −2. Stability −1. Faction's next DA targeting the violated party faces +2 Ob (institutional credibility lost). |
+| Royal Audience | 2 seasons (Crown-imposed) | Crown Mandate −1 on violation (the Crown's word is broken). |
+| Church Tribunal | Until formally revoked by Church authority | Heresy Investigation acceleration. Excommunication eligible. |
+
+**Settlement-targeted Obligations (per settlement_bridge_unification C-08):** Obligations may target specific settlements instead of provinces. Examples: "Church must not station Inquisitors in S-017 Gransol Market Quarter for 2 seasons"; "Crown must maintain Defense ≥ 2 in S-006 Lowenskyst Fortress"; "Varfell must not develop Prosperity in S-032 Oastad Shrine." Settlement-targeted Obligations use the settlement stat as the verification condition. Violation consequences are the same as province-level Obligations.
+
+**Obligation interruption (all Obligations — ED-SC-0012, 2026-07-08 general rule).** An Obligation may be interrupted before it resolves by **counterparty death / incapacitation** (the obligated party dies, reaches Coherence 0 with no Reconstitution, or is permanently incapacitated), **counterparty institutional collapse** (the obligated faction dissolves per faction_layer §1 while the party was institutionally bound), or **PC succession** (the PC holding *or* owing the Obligation dies). All three resolve through the canonical `generational_transition_v30` machinery — no bespoke apparatus per Obligation type: the Obligation **TRANSFERS** to the relevant faction/institution (the institution remembers the commitment; the countdown and violation conditions carry to the successor), and NPC Disposition toward any successor PC **RESETS** to faction-default (the successor is a new person). If no successor acquires the relevant Standing within the standard succession window (Standing ≥ 5 in a Conviction-aligned faction within 4 seasons), the Obligation **discharges neutrally** (no benefit, no violation consequence). This one rule covers plain and Wager Obligations alike; Wager adds only the overlay consequences noted in §6.1.1.
+
+**Wager Obligations (extension — verifiable-future-condition framing):** Obligations may take a future-conditional form when the winning side explicitly extends present trust against future delivery. Wager Obligations are valid only in Grand Contests using Projection genre + Consequence Resonant Style. The losing side's commitment names a specific, time-bound, verifiable outcome in the future (e.g., "MS recovers to 60+ by Season N"; "Crown enters formal Warden alliance within 12 seasons"; "all three persistent Gaps in T6 closed within 6 seasons"). Wager content must be: (a) verifiable from game-state at the resolution moment, (b) achievable through actions the obligated party can plausibly take, (c) time-bound with a named season or condition trigger.
+
+Wager resolution operates on the named condition rather than on duration alone:
+- **Condition met within timeframe:** Obligation discharged successfully. Counterparty grants the negotiated benefit (typically: arc-specific advancement, accumulated penalties cleared, secondary Conviction shift toward Scholastic for Warden NPCs). Counterparty's Belief may form: "[Obligated party] are practitioners/factions worth the cost."
+- **Condition not met within timeframe:** Obligation fails. Default Grand Contest violation consequences fire (Mandate −2, Stability −1, +2 Ob next DA targeting violated party) AND the original arc transition that the wager replaced now fires immediately with no probation or appeal path.
+- **Condition partially met:** GM judgment. Typical resolution: no advance, no decay; Obligation discharged neutrally.
+
+The Wager Obligation is the structural mechanism by which Warden-Conviction NPCs (npc_behavior_v30 §1.2) extend cooperation against present substrate or institutional cost. Edeyja's Arc E "The Wager" (npc_behavior_v30 §5.2 → "Edeyja — Arc Map") is the canonical example. The structure is generalizable: any NPC with secondary Conviction Scholastic or Precedent and primary Conviction Warden, Faith, or Order may accept Wager Obligations from Petitioners with established Consequence-genre track records.
+
+**§6.1.1 Wager Obligation Edge Cases (NEW — ED-778)**
+
+**[ED-SC-0012, 2026-07-08 — pessimist-action audit DISTILL (Wager is KEPT as a named variant).** Four of the five edge cases below are **not actually about the future-conditional nature of a Wager** — *counterparty death/incapacitation*, *counterparty institutional collapse*, *PC death holding*, and *PC death owing* are all scenarios that befall an **ordinary** (non-Wager) Obligation exactly as written: any Obligation has a duration in which the obligated party can die or their faction collapse. They already resolve by reusing `generational_transition_v30`'s TRANSFER/RESET machinery. So they should be a **single general "Obligation interrupted by counterparty death / institutional collapse / PC succession" rule at the §6.1 level that both plain and Wager Obligations inherit** — one rule instead of building the death/collapse/succession apparatus twice (implicitly-absent for plain Obligations, explicitly bespoke here). Only **"condition becomes structurally impossible"** is genuinely Wager-specific (a plain Obligation has no future condition to render impossible) and stays here, alongside Wager's distinct met/not-met/partial resolution-table shape. This loses no player decision — it collapses duplicated *specification*, not choice. **EXECUTED 2026-07-08: the shared machinery now lives in the "Obligation interruption (all Obligations)" rule at §6.1 above** (counterparty death / institutional collapse / PC succession → generational_transition TRANSFER/RESET, discharge-neutral if no successor). The rows below are retained as the **Wager-specific OVERLAY** on that general rule — the extra consequences that apply *because a Wager replaced an arc transition* (the arc-transition firing/not-firing, and the Renown/Conviction-Scar effects) — plus the one genuinely Wager-only case, "condition becomes structurally impossible." Intent gate: NOT-INTENDED (ED-778's own cases already lean on the generic generational-transition machinery; the Wager-only framing was scope creep from the motivating stress-test).]
+
+The general §6.1 interruption rule above resolves *whether and how* the Obligation transfers or discharges. The rows below add the **Wager-specific overlay** — what additionally happens because a Wager stood in for an arc transition (met/not-met/partial is the base table; the three edge rows layer on the general rule), plus the one Wager-only case (structural impossibility):
+
+| Edge Case | Trigger | Resolution |
+|---|---|---|
+| **Counterparty death / incapacitation** | The party owing the Wager benefit (typically the NPC who lost the Grand Contest) dies, suffers Coherence 0 with no Reconstitution, or is permanently incapacitated before the Wager condition resolves | Wager is **discharged neutrally**: no benefit granted, no violation consequences fire. Original arc transition that the wager replaced does NOT fire (the counterparty is no longer available to undergo the transition). The PC who held the Wager Obligation gains Renown +1 in factions aligned with the Wager subject (the counterparty's commitment is publicly remembered as honor-fulfilled-by-circumstance). |
+| **Counterparty institutional collapse** | The counterparty's faction collapses (Stability 0, formal dissolution per faction_layer §1) before the Wager condition resolves AND the counterparty was institutionally bound (e.g., wagered as Cardinal, as Jarl, as Crown Inner Circle member) | Wager is **suspended**, not discharged. If the counterparty re-acquires equivalent Standing in a successor faction within 4 seasons (Standing ≥ 5 in any faction Conviction-aligned with the original wager): Wager resumes with original timeframe extended by the suspension duration. If 4 seasons pass without successor Standing: Wager is discharged neutrally per counterparty-incapacitation rule above. |
+| **Condition becomes structurally impossible** | The Wager condition referenced a specific event or state that has been rendered impossible by intervening game-state changes (e.g., Wager named "Edeyja's recovery from Niflhel association" but Niflhel has been STRUCK; Wager named "MS recovery to 80 by Year 5" but MS has reached 0 / Rupture by Year 4) | The Wager **fails forward**: original arc transition fires immediately at next Accounting (the substrate-level support the Wager required is gone). No additional Mandate/Stability penalties apply (the failure is structural, not procedural breach). The PC who held the Wager Obligation gains 1 Conviction Scar (or, for PCs without Scar tracks per conviction_track_v1.md §2/§3: their active Conviction is "shaken" for 2 seasons). |
+
+**Special case — PC death holding Wager Obligation:** If the PC dies while holding an outstanding Wager Obligation toward an NPC, the Obligation transfers per the canonical Generational Transition rule (generational_transition_v30 — TRANSFER section: "Active Obligations transfer to new character's faction; the institution remembers the commitment even if the individual doesn't. New character inherits obligation countdown and violation conditions"). The successor character's faction inherits the right to the Wager benefit. The Wager-bound NPC's Disposition with the successor starts at faction-default (per generational_transition RESET section: "Disposition toward PC: all NPCs reset to faction-default" — the successor is a new person, the personal relationship the deceased PC had does not transfer).
+
+**Special case — PC death owing Wager Obligation:** If the PC dies while OWING a Wager Obligation toward an NPC (the PC was the loser of the Grand Contest who committed to a future condition), the Obligation transfers to the predecessor's faction per generational_transition TRANSFER rule. The successor character inherits the obligation countdown — they may complete the wagered condition to discharge it cleanly. If the condition is no longer achievable by the successor (e.g., it was tied to the predecessor's specific Standing or Conviction state that does not transfer): Obligation discharges as **failure-by-incapacitation**. The NPC counterparty receives faction Mandate +1 (institutional benefit from the deceased PC's faction's failure to deliver).
+
+**Verifiability requirement (carry-over from base spec):** All edge case resolutions require the GM/engine to confirm the triggering condition. Counterparty death must be verifiable (PC must be informed via NPC reaction or Investigation). Faction collapse must be public via Accounting Step 5 announcements. Structural impossibility must be testable against current world-state. Unverifiable edge cases (the PC believes counterparty died but cannot confirm) leave the Wager active until verification or timeframe expiration.
+
+[EDITORIAL: ED-778 — Wager Obligation edge cases specified in §6.1.1. Closes spec gap surfaced by stress-test 49: base Wager spec (Condition Met / Not Met / Partial) didn't handle counterparty death, faction collapse, condition becoming structurally impossible, PC death holding/owing Wager. Three primary edge cases plus two PC-death special cases now specified with explicit resolution paths. Verifiability requirement aligned with base spec. Source: 2026-04-25 stress-test 49.]
+
+**Obligation tracking:** Obligations are tracked as clocks per clock_registry_v30. Each Obligation has: source (which contest), parties (who is bound), commitment (what must be done or not done), duration (seasons remaining), and violation trigger (what constitutes breach).
+
+**Player Obligations:** When the player loses a contest, they receive an Obligation. The player is not forced to comply — they may violate it. Violation consequences apply: the player's faction loses Mandate, the player loses Reputation, and the NPC who won the original contest gains Disposition +1 toward the player's rivals (the violation justifies their position).
+
+**NPC Obligations:** When an NPC faction loses a contest and receives an Obligation, the NPC priority tree is modified: any action that would violate the Obligation is blocked for the Obligation's duration unless the faction enters Survival priority (Stability ≤ 2). This means a won contest has lasting strategic impact — the player can constrain an NPC faction's behavior through political victory, not just stat changes.
+
+### §6.2 Conviction Scar Visibility (NEW — player-facing)
+
+When a player's contest argument produces a Conviction Scar on an NPC (per npc_behavior_v30 §3.3 — decisive outcome via Resonant Style targeting with Conviction engagement), the player receives a narrative signal. The GM states: "Something shifted in [NPC]'s expression. Your argument reached something they cannot dismiss." This is not a stat reveal — the player does not learn the Scar count. They learn that their words had structural impact.
+
+**Videogame implementation:** NPC portrait shows a subtle visual indicator (a crack, a flicker, a moment of instability) when a Scar is produced. The indicator is momentary — it does not persist on the portrait. The player must remember that they wounded this NPC's conviction. If they Appraise in a future contest, the Scar count is revealed per npc_behavior_v30 §6.1 (Appraise Revelation); Scar tracking per conviction_track_v1.md §2.
+
+[EDITORIAL: ED-1042 — outbound dangling cross-reference repairs (docket J-31): CM-4 §9.1 `fieldwork_investigation §2.3` → §4.1/§4.3; CM-6 §6.1.1 self-ref `§3.6.1` → conviction_track_v1 §2/§3; CM-7 §6.1 Wager eligibility deprecated labels Continuity → Warden, Reason → Scholastic (npc_behavior_v30 §1.2 / conviction_migration_roster PP-685); CM-8 §6.2 `npc_behavior §3.1` (Belief Structure) → §6.1 Appraise Revelation; CM-10 §6.1 Edeyja citation pinned to npc_behavior_v30 §5.2 "Edeyja — Arc Map".]
+
+### §6.3 Chain Contests (NEW — unresolved tension generates follow-up)
+
+When a contest ends in Compromise (Persuasion Track 4–6), the tension is deferred, not resolved. The unresolved contest generates a Scene Slate entry for the following season per player_agency_v30 §4.2 (Priority 1 — the unresolved political tension is a crisis event).
+
+**Chain contest rules:**
+- The follow-up contest starts at the Persuasion Track's final position from the previous contest (not reset to 5). If the first contest ended at Track 4, the chain contest starts at Track 4.
+- All strain and Concentration reset normally between sessions.
+- Disposition changes from the first contest carry into the second.
+- The NPC's Scar count from the first contest persists — accumulated wounds do not heal between chain contests.
+- A chain contest's Decisive win produces an Obligation (§6.1) as normal. A second Compromise extends the chain — another follow-up Scene Slate entry for the next season.
+
+**Resistance stall-break (ED-582 — partially subsumed, ED-896 / D-9):** [The per-exchange resistance erosion (ED-864 / ED-295 Option D: Stab_resistance_t = max(0, Stab_resistance_0 − ⌊exchange_count ÷ 2⌋), all contests) already lowers resistance every two exchanges, so the Deadlock resistance-drop below is redundant and retired. The chain hard-stop rules (third consecutive zero-movement → Compromise; max-chain-3 cold equilibrium) remain in force as the chain-contest terminator.] If two consecutive exchanges in a chain contest produce zero track movement (both sides' margins ≤ resistance), the contest enters Deadlock. In Deadlock:
+- Resistance for both sides drops by 1 (minimum 0) for the remainder of this contest.
+- If a third consecutive zero-movement exchange occurs after the Resistance drop, the contest ends immediately as a Compromise at the current track position.
+- Rationale: prolonged mutual stonewalling exhausts the audience's patience. The institutional pressure forces resolution or capitulation.
+- Maximum chain length: 3 contests. After 3 consecutive Compromises, the tension resolves as a permanent stalemate: both parties establish a cold equilibrium. Disposition freezes at current level. Neither party can initiate a contest on this topic for 4 seasons.
+
+---
+
+## §7 ASYMMETRIC PROCEEDINGS
+
+
+**Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
+- Institution assigns Proposer/Respondent roles. Roles do NOT alternate.
+- Disadvantaged party (accused, petitioner) faces halved resistance (round up) when moving the Persuasion Track.
+- Advantaged orator accumulates 0 strain from CROSS exchanges.
+- CLASH strain applies normally when advantaged side loses.
+
+**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Persuasion Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
+
+**Church Tribunal starts at the conjectural (FACT) stasis, not the qualitative (QUALITY) default the other 7 proceedings use (CR4 reachability fix; ED-1062; see §2 Step 2).** The Inquisitor's whole purpose is investigating *whether the accused committed an act* — "did X happen? was X done?", the conjectural question-shape (§2 Step 2) — not weighing the wisdom of an already-settled matter (the qualitative terrain every other proceeding opens on). This is the one canonical proceeding whose thematic shape is genuinely conjectural, so it is the one proceeding where a Precedent/Suppression (Memory-chosen) orator's CR4 +1D fires from the opening exchange: the accused arguing "it did not happen" and the Inquisitor arguing "it did" are both native Memory-genre moves on FACT terrain. The starting-stasis change touches nothing else about Church Tribunal (exchange count, role structure, halved-accused resistance, Expert Judge adjudicator, and the biased-6 track start are all unchanged).
+
+### §7.2 Succession Contest (NEW — ED-665 closure)
+
+When a faction leader is removed (death, incapacitation, exile, formal resignation), a **Succession Contest** opens at the next Accounting. The Succession Contest uses Grand Contest infrastructure (§3-§5) with the following adaptations:
+
+**Eligible claimants:** Any NPC or PC at Standing ≥ 5 in the affected faction. Cross-faction challengers (e.g., Hafenmark claiming Crown per baralta_crown_claim_v30 §2) require Mandate ≥ 3 in their home faction plus a structural claim mechanism (Deed-Claim, Bloodline, institutional precedent).
+
+**Contest structure:**
+- **Adjudicator:** the faction's institutional body (Crown: inner circle by majority Disposition; Hafenmark: Parliament by Mandate-weighted vote; Varfell: Jarl Assembly by quorum; Church: College of Cardinals by Disposition; Löwenritter: surviving Knight-Commanders by seniority; Guilds: Council by Favour-weighted vote; RM: Mandate ≥ 3 organizers by consensus).
+- **Genre selection:** typically Memory (claimants cite past deeds, lineage, established precedent) or Projection (claimants project their future governance). Claimant selects per §3.
+- **Persuasion Track length:** 5 exchanges by default. Adjudicator may set 3-7 depending on contested-ness. A "narrow contest" (close institutional support among claimants) uses longer tracks; a "settled contest" (one obvious successor) uses shorter.
+- **Resolution:**
+
+| Track outcome | Result |
+|---|---|
+| Decisive (≥ 7 or ≤ 3) | Single winner takes faction leadership. Other claimants face Disposition penalty with the new leader (−2 with adjudicator NPCs); winner gains Mandate +1 in the faction's primary territory. |
+| Compromise (4-6) | **Faction split**: factional sub-divisions emerge (e.g., losing claimant retains personal retainers, may be granted a province as semi-autonomous fief). New sub-faction acquires partial inheritance of original faction's stat values per §7.2.1 split-rule below; track-distance weighting applies (Track 4 = 60/40 majority-favored split; Track 5 = 55/45; Track 6 = 50/50 even split) per stress-test ED-762. |
+| Total Victory (≥ 9 or ≤ 1) | Unified transition. No faction split. Winner takes full inheritance + Wager-Obligation power: may extract one verifiable future-condition Obligation from the runner-up at no cost (per §6.1 Wager Obligation). |
+
+**§7.2.1 Faction split rule (Compromise outcome — track-distance weighted per ED-762):**
+
+Track-weighted split ratios:
+- Track 4 (barely-Compromise): majority winner takes 60%, losing claimant 40%.
+- Track 5 (mid-Compromise): 55%/45% split.
+- Track 6 (strong-Compromise): 50%/50% even split.
+
+Stat division: Original faction's Mandate, Wealth, Military, Influence, Stability multiplied by the track ratio (round down for whole-stat values; track-4 majority gets floor(orig × 0.6), losing claimant gets floor(orig × 0.4); etc.).
+
+**Stability floor:** both resulting factions guaranteed minimum Stability 3 — sub-factions emerging from Compromise do not start in immediate Stability Crisis (which would fire mandatory Zoom-In per scale_transitions §4.3.2 + ED-749 hysteresis at Stab ≤ 2). The post-split civil-war drama is institutional, not catastrophic; Stab 3 floor preserves playable space.
+
+Territory division: per claimants' geographic strongholds (Adjudicator decides ties; for Track 4: 60/40 territory split where possible; Track 5: 55/45; Track 6: 50/50).
+
+Treaties: both factions inherit existing Treaties as co-signatories; Embargoes split per territory.
+
+Identity: New sub-faction acquires identity per losing claimant's Conviction (e.g., Faith → schismatic Church; Order → loyalist Crown remnant; Autonomy → independent Jarldom).
+
+**Cross-references:** baralta_crown_claim_v30 §2 (Crown Succession Contest, the canonical instance for Crown elimination); npc_behavior §5 (faction leader arc transitions trigger Succession Contest); player_agency §5.2 (Standing ≥ 5 PCs eligible to claim).
+
+[EDITORIAL: ED-665 — Succession Contest specified as Grand Contest variant. Closes "Grand Contest as succession trial not in canonical docs" by anchoring the mechanism to existing §3-§5 Grand Contest infrastructure with succession-specific adjudicator and outcome rules. baralta_crown_claim §2 remains the canonical Crown instance; this section provides the generalizable framework for all factions. Source: 2026-04-24 audit ED-665 closure.]
+
+---
+
+### §7.3 Heresy Investigation Lifecycle (ED-772)
+
+The Heresy Investigation is the precursor proceeding to Excommunication Tribunal (§7.1). Per faction_politics §2.3, an Inquisitor at rank ≥ 2 may **initiate** Heresy Proceedings against non-leadership NPCs/PCs; rank ≥ 3 may target Standing 4+ NPCs/PCs. The Investigation runs through several phases before either resolving in dismissal or escalating to Tribunal.
+
+**§7.3.1 Investigation Lifecycle Phases**
+
+| Phase | Duration | Scene Type | Closure Conditions |
+|---|---|---|---|
+| **Initiation** | 1 season | Inquisitor declares filing; target receives summons | Inquisitor may withdraw before next season (Disposition cost: −1 with Cardinal Justice if dismissal seems unjustified) |
+| **Investigation Proper** | 2-4 seasons (Inquisitor declares duration at filing) | One Mandatory Zoom-In Interrogation per season per scale_transitions §4.3.2 (asymmetric Persuasion Track, Ob 2 vs target framework) | See §7.3.2 closure conditions below |
+| **Verdict** | 1 season (final Interrogation) | Conclusive Persuasion Track exchange (Track length = standard §7 contest, set by Inquisitor) | Verdict: Acquittal (Investigation closed, no further consequence) / Insufficient Evidence (Investigation suspended; may resume if Evidence Track reaches 3 within 4 seasons) / Tribunal Recommended (escalates to §7.1 Excommunication Tribunal) |
+
+**Total nominal duration: 4-6 seasons** from Initiation to Verdict (1 + 2-4 + 1).
+
+**§7.3.2 Investigation Closure Conditions (other than Verdict)**
+
+An active Heresy Investigation closes immediately if any of the following occur:
+
+| Condition | Effect | Rationale |
+|---|---|---|
+| **Inquisitor death** | Investigation suspended. Cardinal Justice may reassign to another Inquisitor of equal rank within 2 seasons (Disposition with target +1 from delay; Investigation resumes mid-phase). After 2 seasons without reassignment: Investigation closes; target may invoke Acquittal-by-default (Disposition with surviving Inquisitorial apparatus −1; future Investigation re-filing requires fresh Evidence Track). | Inquisitor authority is personal; absent reassignment, the proceeding loses procedural footing. |
+| **Inquisitor demoted/excommunicated** | Investigation immediately closed. Target may invoke Acquittal-by-default (full Disposition restoration; Renown +1 in Hafenmark/Crown for surviving institutional capture). The Cardinal Justice loses Mandate −1 (institutional embarrassment). New Investigation against same target requires Cardinal-grade approval AND fresh Evidence Track. | A discredited Inquisitor's filings cannot stand. |
+| **Inquisitor reassigned to another case** | Investigation suspended for up to 2 seasons. If not re-staffed within 2 seasons: closes per Inquisitor death rule. Reassignment requires Cardinal Justice approval — an Inquisitor cannot self-reassign to escape an Investigation. | Prevents Inquisitorial neglect of procedural obligations. |
+| **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics §2.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost −1 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tribunals are political-symbolic, not investigative. |
+| **Target's faction protection** | If target's faction successfully passes a Parliamentary Stay (per §10.1) AND CI < 55: Investigation suspended for 1 season per Stay. Multiple Stays possible (one per Tribunal-equivalent filing per season). Stays do not close the Investigation, only suspend it. | Civil-jurisdiction assertion can delay but not nullify ecclesiastical proceeding. |
+| **Acquittal by Verdict** | Investigation closed. Target receives institutional rehabilitation: Renown +1 in non-Church factions. Re-filing same charge requires fresh Evidence Track (cannot recycle prior testimony). | Procedural double-jeopardy protection. |
+| **Target's faction conversion to Church** | If target faction enters Establishment (CI ≥ 80) under target's leadership: Investigation closes (target now sits on Church side). Politically pyrrhic — historically rare. | The institutional alignment changes; the Inquisitor's premise dissolves. |
+| **Target's defection** | If target formally defects to Church (via Catechumen rank entry per faction_politics §2): Investigation suspended pending theological retraining (1-3 seasons). On retraining completion: closed with Acquittal-by-Submission. Target's prior framework Convictions take Scar 1. | Defection is implicit recantation; Church absorbs rather than judges. |
+
+**§7.3.3 Multiple Inquisitors / Multiple Investigations**
+
+Only one Heresy Investigation per target may be active at any time within a given Cardinal Justice's jurisdiction. A second Inquisitor seeking to file against an already-Investigated target must:
+
+- Wait for current Investigation to close (any condition above).
+- OR petition Cardinal Justice to consolidate Investigations under a single Inquisitor (rare — typically only when the second Inquisitor has Senior Inquisitor rank and the original is Junior).
+
+Cross-jurisdictional Investigations (different Cardinal Justice regions) may run in parallel but do not stack effects — each Investigation is its own track. **Cross-reference:** the per-region Cardinal Justice structure per faction_politics §2 means a target traveling between regions may face new filings on arrival.
+
+**§7.3.4 Player Strategic Implications**
+
+The 4-6 season duration window gives the player time to:
+
+- Acquire counter-Evidence (fieldwork on the original accusation; Investigation procedure permits Evidence introduction during any Interrogation phase).
+- Build coalitional defense: Disposition ≥ +3 with Cardinal Fortitude or Cardinal Prudence opens Witness opportunities at Verdict phase (per §7.1 Tribunal procedures cross-application).
+- Pursue Inquisitor reassignment / death by political maneuver (Niflhel-broker assassination is hypothetically available but radically undermines the player's Conviction; Inquisitor death from non-player causes is a Game Master event).
+- Trigger Parliamentary Stay (§10.1) to delay during evidence-gathering.
+- Defection if Conviction-aligned with Church (rare for active investigations — typically Investigation targets are Reason/Autonomy/Equity-aligned, where defection would compound the Conviction crisis).
+
+[EDITORIAL: ED-772 — Heresy Investigation Lifecycle specified in social_contest §7.3. Closes the gap surfaced by stress-test 24: scale_transitions §4.3.2 referenced 'active Heresy Investigation' as Mandatory Zoom-In trigger but the lifecycle (initiation, closure conditions, multiple-Inquisitor handling) was not specified anywhere in the active corpus. The 4-6 season nominal duration with 8 distinct closure conditions covers Inquisitor death/demotion/reassignment, target death/defection/protection, acquittal/conversion. Source: 2026-04-25 stress-test 24.]
+
+---
+
+## §8 DERIVED VALUES SUMMARY
+
+**CR3 — three trackers (RATIFIED 2026-06-01; ED-1056 provisional, pending Gate-A): Concentration (stamina) + Face (contest-local ethos/standing) + Persuasion Track (merits, preserved). Composure retired → split into Concentration + Face.**
+
+| Value | Formula | Range | Parallel |
+|---|---|---|---|
+| Face | Face_max = Charisma × 3 (ceiling); Face_current = round(Standing ÷ 10 × Face_max) | 3–21 | Contest-local ethos/standing buffer (the retired Composure magnitude, re-homed as transient standing; CR3/ED-1056; scale-binding resolved Gate A — §4 Step 6). Face ≠ Disposition/Reputation. |
+| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | — |
+| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | Armour Rating (damage reduction), scaled ×3 |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Maximum = (3 × Focus) + (2 × Spirit) (Regroup restores to max). Depletes 5/exchange, −5 on loss (ED-890/DEP). Recall removed from Concentration (ED-694); formula per ED-901 (STRUCK Focus×3) + ED-902 (coefficients + Cognition→Focus engine fix) + ED-933 (params propagation). |
+| Appraise pool | Attunement + Recall | 2–14 | Ob = opponent Cha ÷ 2 (round up, min 1); PP-614 (ED-893) |
+| Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = max(5, History + 6) — Agility-independent (ED-901; comparison column, not a shared formula) |
+
+**CR1/CR2 substrate (RATIFIED 2026-06-01; realized in code Stage 1a–1c, confirmed Stage 1d):**
+- **CR1 — wrapper→modules architecture.** Contest resolution runs through a wrapper that ADAPTS + ROUTES but RESOLVES NOTHING (`sim/personal/contest/wrapper.py`: `build_contest` adapter + `resolve_contest` router, mirroring `tests/sim/mass_battle/engine.py`). The venue/adjudicator/proceeding specs and win-conditions are the modules; the stochastic surface is the reception roll only, all else deterministic accounting. **Already realized (Stage 1c); Stage 1d confirms + cites.**
+- **CR2 — substrate migration to δσ.** Social resolution no longer counts successes; it resolves on the **shared sigma-leverage net engine** (per-die −1/0/+1/+2, δσ μ-shift, TN7), single-sourced with combat/core via `sim/autoload/sigma_leverage.py` (D0-2). This is the deep Smoothness fix — one substrate for both systems. **CR2 governs the resolution substrate; CR6 (leverage-as-δσ, the +0.191-uniform lever accumulation) is the leverage-accumulation half of the same migration — CR2 = "what the roll is", CR6 = "how setup advantages enter it". Both already realized (Stage 1a/1b + D0-3 HYBRID, ED-1055 substrate confirmation); Stage 1d confirms + cites, does not re-build.** Contest stays δσ at TN7 per D0-3; the fractional-Ob representation is display-only (D0-3 HYBRID, ED-1055).
+
+**CR4/CR5/Armature — rhetoric grounding + adjudicator armature (RATIFIED_2026-06-01.md CR4/CR5; Stage 3 / Gate C; ED-1062):**
+- **CR4 — Ciceronian stasis × genre.** The primary genre (§2 Step 2 table) is a **function of the live classical stasis** (conjectural/definitional/qualitative/translative — the kernel's `Stasis` ground), not a GM-fiat pick. Only conjectural (FACT) sets Memory primary; only deliberative (CONSEQUENCE/FEASIBILITY) sets Projection primary; qualitative (QUALITY) and translative (JURISDICTION) carry no primary genre (present-tense terrain / pre-merits jurisdiction respectively); definitional (DEFINITION) is a higher-order reframe, not a genre. See §2 Step 2 for the full table + the +1D consumer.
+- **CR4 reachability (ED-1062, the Gate C fix).** Stasis only ever shifts UPWARD during play and every canonical proceeding previously opened on the QUALITY default, so the conjectural FACT stasis — and the Memory-primary +1D it sets — was unreachable in any shipped proceeding. **Church Tribunal now opens at the conjectural (FACT) stasis** (§2 Step 5 table; §7): the Inquisitor's whole purpose is investigating whether the accused *committed an act*, the thematically strongest conjectural match among the 8 proceedings. The other 7 proceedings are unchanged (still open on QUALITY). This is a single, surgical starting-stasis change — it does not add any new down-shift mechanic; stasis still only ever moves up the ladder within a contest.
+- **CR5 — self-Face backfire, together with the Doubt Marker.** The Obscuring orientation's WIN-side consequence (a landed Obscuring win plants a Doubt Marker on the opponent, §4 Step 4/CROSS, ED-1060) is joined by a FAIL-side consequence: an Obscuring move that lands nowhere costs the mover min(2, own current Face) from their own Face (the Doubt Marker's −2 as a magnitude precedent, standing-bounded so a low-Face mover cannot lose more than they hold). **Both pieces together are the full CR5 realization**, not two alternative or conflicting mechanics — Obscuring is a genuine two-sided bet (win big, or fail and pay for it). See §4 Step 4.
+- **The Adjudicator Armature.** A continuous Style × adjudicator-Conviction dot-product (four axes: Evidence, Consequence, Authority, Insinuation) that enters resolution as a **continuous δσ-leverage shift** — the same CR6 "setup advantage accumulates as δσ, tanh soft-capped" channel used for Recall/Face/corroboration/prep/commit-spend (see CR2/CR6 note above), not a rounded bonus die (a fractional/partial alignment would round away to nothing on the integer Argue pool). See §4 Step 3 for the full mechanic, the RATIFIED 4th-axis decision, and the Appraise PARTIAL-reveal boundary.
+- **RATIFIED (Jordan, Gate C, 2026-07-02): the armature's 4th axis is a deliberate NEW Insinuation axis, not a reuse of canon's Solidarity type** (Knot-gated/relational, does not fit a third-party adjudicator — see §4 Step 3). **RATIFIED: the 2-genre (Memory/Projection) compression is accepted as-is** — epideictic survives only via the ethos_present/praise-blame register (§9 core-engine cross-reference), not as a first-class genre. **RATIFIED: CR5's Doubt Marker + self-Face backfire are kept together**, not treated as competing mechanics (see above).
+
+**[CR3 Face — scope-honest status of the code binding (Stage 1d, scale-binding resolved Gate A)]** Stage 1d establishes Face as a **named, canonical tracker + test surface**, not a fully-realized two-sided resource. Precisely what is and is not wired in `sim/personal/contest/`:
+> - **Established:** `Face` is a canonical *alias* of the kernel `Standing` primitive (same Python class, no special-casing); a `TRACKERS` registry ({Face→Standing, Concentration→Reserve, PersuasionTrack→adv}) and `RETIRED_TRACKERS=('Composure',)` name the three-tracker model; `_Side.face`/`_Side.concentration` accessors expose the canonical names; the underlying **Standing IS live in resolution** (ethos-build raises it; it feeds Readiness + leak). **Gate-A addition:** `FaceScale.face_max`/`FaceScale.face_current` (primitives.py) and `_Side.face_max()`/`_Side.face_current()` (resolver.py) give Face a real, legible scale-binding (Face_max = Charisma × 3; Face_current = round(Standing ÷ 10 × Face_max)) — a pure derived accessor added on top of the unchanged Standing, not a new mechanic.
+> - **NOT wired this stage:** Standing has **no strip/strain channel** in the contest kernel (`.strip()` is never called; Face is monotonic-*up*). The prose "strain → Rattled → −1D Argue pool" behaviour above (§4 Step 6) is therefore **unimplemented in code** — Gate A resolves the SCALE formula only, not the strip/strain-consumption wiring, which remains an honestly-flagged near-term gap. The RATIFIED_2026-06-01 omega line-20 **stamina/standing/merits tradeoff** (and CR5 F7 self-gating) is **NOT yet realized** — the two-sided "spend Face to attack, risk your own Face" dynamic is Stage 3 (rhetoric-armature) scope. The MECHANICS `face_tracker=WIRED` row is defensible **only** because the underlying Standing is live in resolution; the *Face-attack / strain / Rattled* half is not.
+> This is a representational-honesty statement, not a promise of new mechanics at Stage 1d. See ED-1056.
+
+> **[RESOLVED — Composure-retirement blast radius / Knot coupling (Gate A, 2026-07-01)]**
+> CR3 retires Composure *as the social-contest tracker* and re-homes its buffer role onto **Face**. Per the Stage-1d scope guardrail this retirement is **scoped to the social-contest system only** — Composure references in **knots** (`designs/personal/knots_v30.md` §4.2 "Knot-as-Composure-buffer"; social_contest_v30_infill §4), **combat**, and **conviction** are deliberately NOT rewritten here, because RATIFIED_2026-06-01.md CR3 names only "Composure-as-buffer" in the contest and is silent on corpus-wide retirement.
+> **The coupling:** the Knot-as-Composure-buffer (infill §4 Step 6 / knots_v30 §4.2) lets a Knot partner absorb "Composure damage" *dealt in a social contest*. With the contest buffer renamed Face, that absorption now targets **Face** in-contest — but the knots/threadwork docs still say "Composure". Two candidate resolutions were flagged:
+> (a) **Scoped rename only** (implemented here): in-contest, the Knot absorbs *Face* damage; knots_v30/threadwork keep "Composure" as their own cross-system strain currency, and a single bridging note maps "Composure damage in a contest = Face strain". Minimal blast radius.
+> (b) **Corpus-wide rename** Composure→Face everywhere it denotes social/standing strain (knots, threadwork strain rows, glossary, conviction cross-refs). Larger blast radius, cleaner single name — but exceeds what CR3 ratified and touches unrelated systems.
+> **CONFIRMED by Jordan (Gate A): (a) scoped-rename-only.** No further change made — knots/combat/conviction are NOT touched. This item is closed.
+
+---
+
+## §9 ADDITIONAL TTRPG RULES
+
+### §9.1 Pre-Contest Preparation
+Available when an orator has deliberate preparation time. Not available for impromptu contests.
+
+Pool: Attunement + most relevant History, TN 7, Ob 1.
+
+| Degree | Effect |
+|---|---|
+| Failure / Partial | No effect |
+| Success | +1D on Exchange 1 Argue roll |
+| Overwhelming | +1D on Exchange 1 Argue roll AND Exchange 1 Appraise uses TN 6 |
+
+Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
+
+**Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §4.1 (Evidence Track / Findings), §4.3 (+2D Documentary citation).
+
+### §9.2 Multi-Party Contest — Coalition Structure
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). **Face** and Rattled tracked individually. [CR3/ED-1056: "Composure" re-homed onto the per-orator Face tracker; each coalition member carries their own Face + Rattled.] **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (3 × Focus) + (2 × Spirit) at contest setup. [ED-894: Recall removed to match solo Concentration (ED-694); the coalition pool now mirrors the solo formula.] Each exchange depletes the shared pool by 5 (plus 5 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
+
+### §9.3 Practitioner Weaving in Contests (R-65)
+A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.
+
+### §9.4 Thread Operations Between Exchanges
+A practitioner may initiate a Thread operation between exchanges. Effects apply before next exchange's Read step. Genre/orientation dice are fixed at setup — Thread operations cannot change them mid-contest. Temporal axis conflict: if the Thread operation's temporal axis contradicts the contest's primary genre (Memory-axis operation during Projection-primary contest, or vice versa), the operation's co-movement effects apply to the Persuasion Track (±1 shift per co-movement instance during the contest scene), per the canonical PP-351 (contest_extensions). [ED-900 / D-3: the prior "TN 8 on both next Read rolls" and the params "PP-258 −1D both Argue" forms are superseded; routing temporal dissonance to Track co-movement preserves P-14.]
+
+
+**Temporal Axis Conflict (PP-351 — canonical, ED-900 / D-3):** If a practitioner initiates a Thread operation on a temporal axis that opposes the contest's primary temporal orientation (e.g., a Past-axis operation during a Future-primary contest, or vice versa), the resulting temporal dissonance routes the operation's co-movement to the Persuasion Track: ±1 Track shift per co-movement instance during the contest scene (preserves P-14). This applies regardless of which side the practitioner supports — temporal contradiction disrupts the entire epistemic field. Same-axis operations and non-temporal Thread operations (Object-scale, Relational without temporal component) are unaffected. [Supersedes this block's prior "TN 8 on next Read" text and params PP-258 "−1D both Argue".]
+### §9.4b Adjudicator Thread Response (ED-667)
+
+When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, Parliamentary Session, Church Inquiry) witnesses Thread use during the proceeding:
+
+| Adjudicator Truth | Response |
+|---|---|
+| C5 (Orthodox) | Declares proceedings **corrupted**. Contest immediately suspended. Church Heresy Investigation fires (existing PP-182 pathway). Adjudicator's Faith Conviction receives Scar per §3.4 of npc_behavior_v30. Results from the corrupted exchange are voided — last exchange before Thread use stands as final. |
+| C4 (Faithful) | Declares **irregularity**. Current exchange result stands but adjudicator applies +1 Ob to all subsequent rolls by the Thread-using party (procedural suspicion). Church Investigation optional (adjudicator discretion based on Scar count). |
+| C3 (Questioning) | Notes the event. No procedural consequence. Adjudicator's internal conflict deepens — Conviction Scar check per §3.4. May influence post-contest Disposition shift toward the Thread-using party (curiosity or fear, GM judgment). |
+| C2–0 (Skeptic to Accepted) | No procedural response. Thread use is understood as part of reality. If adjudicator has TS ≥ 30: may privately note the Thread-user's technique as relevant evidence (adds +1 to Evidence Track if investigation active). |
+
+**Scope:** This applies only to formal adjudicated proceedings (Court, Tribunal, Parliamentary Session, Church Inquiry). Informal debates, tavern arguments, and private conversations are not adjudicated and do not fire this response.
+
+**Visibility gate:** Adjudicator must perceive the Thread use. Per threadwork_v30 §2.3 visibility table: TS 0–9 perceives nothing; TS 10–29 perceives vague unease (triggers at C5 only if adjudicator is already suspicious); TS 30+ perceives the operation. If the practitioner successfully conceals (Cognition roll per §2.3), adjudicator does not respond.
+
+---
+
+### §9.5 Beliefs Integration
+Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
+
+### §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]
+
+### §9.7 Niflhel Social Toolkit
+Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
+- Private negotiation: one-on-one only; Attunement-primary pool (per §3 "no adjudicator"); TN 7; Ob = floor(target Stability / 2) + 1.
+- Thread Insight (TS ≥ 30 only): Attunement read before negotiation reveals one unstated position.
+[EDITORIAL: ED-041 — full Niflhel social toolkit pending design.]
+
+---
+
+## §10 BOARD GAME PARLIAMENTARY VOTE
+
+Faction-level contest resolution for BG scale. To zoom into personal scale, use §11 (Hybrid).
+
+### BG Vote Setup
+1. Each faction declares Side A or Side B. Non-declaring factions Abstain.
+2. Each side declares one genre (Memory or Projection).
+3. Resistance: base 0. If a faction with Stability ≥ 6 Abstains: +1 resistance (max +2).
+4. Starting Persuasion Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
+
+**Lobby cap — BG mode (ED-621):** The lobbying offset is restricted to the compromise zone at BG Vote start. Maximum starting Persuasion Track: 6. Minimum starting track: 4. Lobbying cannot predetermine a vote — it provides advantage, not a guaranteed outcome. This matches the Hybrid mode restriction (§11 / PP-256). Example: if lobbying would push the track to 7, it is capped at 6.
+
+### BG Vote Resolution
+Pool: sum of Mandate of all factions on each side. Roll combined pool TN 7.
+Genre bonus: +1D if the side's genre matches the primary genre of the question.
+Audience boost: +1D if the side's genre matches the Parliament's dominant faction boost. [Orientation boost does not apply at BG scale — factions vote publicly.]
+
+Each side: if net successes > resistance → movement = successes − resistance.
+Net track movement = difference; direction toward the larger side.
+Persuasion Track ≥ 7 = motion passes; ≤ 3 = motion fails; 4–6 = referred to committee.
+Zero-zero: if both sides fail to exceed resistance, motion referred to committee.
+Thread consequences do not fire from BG Parliamentary Vote (personal-scale argument required).
+Total Victory: Persuasion Track ≥ 9 or ≤ 1 → losing coalition's dominant faction takes Mandate −1 for one season.
+
+---
+
+## §11 HYBRID CONTEST
+
+1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Persuasion Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
+2. **Set TTRPG starting Persuasion Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
+3. **Run the TTRPG personal contest:** standard Formal (3 exchanges) or Grand (5) per §§4–7 from the adjusted starting position. [ED-897: step 3 restored — §11 skipped from 2 to 4.]
+4. **Resolution:** final TTRPG Persuasion Track position determines outcome. Thread consequences may fire.
+
+---
+
+## §7.1 Excommunication Tribunal (ED-625 — approved 2026-04-17)
+
+Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: CI ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions.
+
+**Modifications vs standard §7:**
+- Persuasion Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)
+- No accused corroboration permitted
+- Exchange count: 1–3 (set by Inquisitor)
+- Resistance for accused: halved (same as standard)
+
+*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while CI < 55.*
+
+**Consequences on success:**
+- Named NPC: CI +4; target Mandate −2; Truth forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Truth Ob 1 or lose Disposition −1.
+- Player Character: Faction Mandate −3; excluded from Parliamentary motions; Standing −2; Faith-conviction Companions make departure scene check (Scar 1).
+- Faction: Mandate −2; all Church Domain Actions vs faction Ob −1; CI +3.
+
+**Revocation — Act of Contrition:** Church declares (Mandate ≥ 5, CI ≥ 50 required). Target fulfils Obligation abjuring the violation. Result: Church Mandate −1, CI −1, Excommunication lifted.
+
+---
+
+
+**Church Self-Investigation Exception (PP-349):** The Church does not file Heresy Investigation against its own ordained members who are supporting Church interests. An ordained member acting in alignment with Church doctrine, even if their methods are controversial, is shielded from internal investigation. This does not prevent: (1) opposing factions from filing Heresy Investigation against Church members via the standard PP-182 path, or (2) the Church from investigating ordained members who are actively working against Church interests (e.g., aiding the Restoration Movement, collaborating with crime or underground networks operating against Church interests).
+## §10.1 Parliamentary Stay (ED-631)
+
+A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season. It represents Parliament asserting civil jurisdiction over an ecclesiastical proceeding.
+
+**Requirements:** 2+ factions on Side A (the filing-suspension side). Church on Side B. Standard BG Parliamentary Vote resolution (§10).
+
+**Availability:** Only while CI < 55. At CI 55+, the Church's CI political pool bonus (floor(CI/20)) makes the Stay motion effectively unpassable — Church's institutional authority at that level exceeds Parliamentary reach.
+
+**Effect on success:** The Church Tribunal is suspended for 1 season. Church may re-file in the following season (no permanent bar). The Stay buys 1 season of disruption window — enough for the target to address one prerequisite condition (Attention Pool reduction, prior conviction, Obligation status).
+
+**Effect on failure:** The Tribunal proceeds immediately. The motion's failure cannot be appealed or re-filed in the same season.
+
+**CI < 55 gate rationale:** As Church grows more prominent (CI 55 = Church Prominent milestone), Parliamentary institutions lose the political standing to override ecclesiastical authority. The Stay window closes as Church grows — creating a genuine strategic timing incentive: suppress CI before it reaches 55, or lose the ability to check Church judicial power through Parliament.
+
+---
+
+## §12 OPEN ITEMS AND EDITORIAL FLAGS
+
+| ED-667 | Adjudicator Thread Response: §9.4b added. Truth-indexed response table. Visibility gate. Propagation from npc_behavior_v30 ED-663. | P1 — resolved |
+
+### Resolved by this version (PP-234)
+| Item | Resolution |
+|---|---|
+| ED-127 (Composure redesign) | Composure = Charisma × 3 (range 3–21). [ED-898: prior "Charisma + 6" was the pre-ED-694 value; §6/§8 govern with ×3.] **[CR3 re-homes this buffer's role onto the Face tracker (ED-1056 provisional, pending Gate-A) — the Charisma×3 buffer is retained but "Composure" as the social-contest tracker name is retired; see §4 Step 6 / §8.]** |
+| Three-genre system | Turfed. Two genres (Memory/Projection). |
+| Faction boost system | Four options (Memory/Projection/Revealing/Obscuring), one per faction. |
+| Fractional multipliers | Replaced with integer bonus dice (+1D primary, +1D audience boost). |
+| Presence → Charisma | Applied throughout. |
+| Memory → Recall | Applied throughout. |
+| Attribute weight by adjudicator type | §3 table. |
+| Strain minimum inconsistency | Strain minimum 0 (matches combat damage minimum 0). |
+| Momentum spend cap | Matches core engine: any amount, not limited to 1. |
+| Private negotiation tie / Fail Forward | Stall with consequences (strain persists, Read info permanent). |
+| Contest-level Let It Ride | Explicit rule in §1. |
+| Adjudicator type mid-contest | Fixed per contest; change = new contest. |
+
+### New editorial items
+| ID | Description | Priority |
+|---|---|---|
+| ED-136 | System rename: "Debate" → "Contest" (or alternative). Pending user decision. | P1 |
+| ED-137 | Panel adjudicator type. **CLOSED (Stage 2 / Gate B; ED-1057 aggregation + ED-1059 reachability, both RATIFIED by Jordan):** Panel = bench of individual judges deliberating to a terminal per-member VoteAtClose ballot, aggregated WEIGHTED-BY-STANDING (each juror's ballot counts by its bench-weight = discipline); Cognition-primary as Expert Judge. Reachable in normal play via Guild Arbitration (rebound Expert Judge → Panel; no appeal mechanic). See params/contest.md §Panel Adjudicator. | Resolved |
+| ED-138 | Social first-to-speak deterministic vs rolled. **Resolved (ED-581):** Changed to rolled (Attunement vs Attunement, TN 7, Ob 1). See §5. | Resolved |
+
+### Carried forward
+| ID | Description | Priority |
+|---|---|---|
+| ED-132 | Appraise step action name resolved: Appraise (PP-278) | P3 |
+| ED-133 | Diverge state — superseded by CROSS. Confirm Diverge no longer needed. | P2 |
+| ED-041 | Niflhel social toolkit — provisional stub in §9.7 | P2 |
+| ED-051 | Corroboration full port (Knot requirement removed per ED-014) | P3 |
+
+### Future design work (not blocking)
+| Topic | Status |
+|---|---|
+| Escalation between social modes (negotiation → debate → appeal) | Conceptually identified, not designed |
+| Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Persuasion Track, not designed |
+| Mass battle rally action (Attunement-based) | Gap identified, belongs in mass_battle_v3 |
+| Appraise step expansion (reveal Beliefs, Knot vulnerabilities) | Conceptually identified, not specified |
+
+### Simulation debt
+| ID | Description |
+|---|---|
+| SIM-DEBT-03 | Full re-simulation under two-genre system with integer bonus dice. All prior SIM-D baselines invalidated. |
+| SIM-DEBT-04 | Adjudicator-type pool variation untested. Charisma×2 and Attunement×2 pools need calibration. |
+
+### Propagation required on approval
+| File | Change |
+|---|---|
+| references/params_debate.md | Full rewrite |
+| references/canonical_sources.yaml | Update canonical doc for social_debate |
+| references/propagation_map.md | Update cross-references |
+| compilation/v0.14/stage1_core_engine_deprecated.md | Attribute rename in attribute table and derived scores |
+| compilation/v0.14/stage2_characters_deprecated.md | Attribute rename throughout; Composure formula; Circles/Resources pool base; §4.14 social rolls |
+| designs/mass_combat/mass_battle_v3.md | Coherence Rating derivation: ⌈(Charisma + Cognition) ÷ 2⌉ |
+| references/params_mass_combat.md | Coherence Rating derivation |
+| references/params_core.md | Attribute names; Composure in derived scores |
+| references/params_combat.md | Any Presence references |
+| All test outputs referencing old genre names | Flag as stale |

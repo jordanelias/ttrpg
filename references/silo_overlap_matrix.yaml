@@ -1,6 +1,7 @@
 register: cross_silo_overlaps
 source: references/mechanical_terms_index.md §2
 extracted: '2026-05-10'
+disposition: "RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot, no live regeneration path."
 description: Terms appearing in 2+ vocabulary silos. Intentional polysemy, accidental duplicates, word-class violations.
 total_entries: 55
 entries:
@@ -15,9 +16,9 @@ entries:
 - word: '**Mending Stability (MS)**'
   silos_where_it_appears: §4 world-cosmological · §7 threadwork · §12 clocks · §14 victory
   verdict_+_rationale: INTENTIONAL — MS is the canonical world-clock; every system that touches it cross-references the same value. **Keep.**
-- word: '**Certainty**'
+- word: '**Truth**'
   silos_where_it_appears: §1 character stat · §4 solmund-world
-  verdict_+_rationale: INTENTIONAL — Certainty is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character
+  verdict_+_rationale: INTENTIONAL — Truth is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character
     sheet. **Keep.**
 - word: '**~~Conviction Track / CV~~**'
   silos_where_it_appears: §9 (per-territory) · §12 clocks · §14 victory · §6 debate
@@ -57,7 +58,7 @@ entries:
   silos_where_it_appears: '§1 (Conviction #2) · §6 (debate Pressure Point Type — **RENAMED to Sanction**) · §2 (faction-attribute parlance, adjacent
     to Mandate)'
   verdict_+_rationale: '~~Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction''s English root, but mechanically
-    "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in params/contest.md. Remaining
+    "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in engine/params/contest.md. Remaining
     uses (Conviction #2, faction-attribute parlance) are non-colliding.**'
 - word: '**Equity / Order / Precedent / Continuity / Honor**'
   silos_where_it_appears: '§1 (Convictions #6/3/8/legacy/13) · debate argument-style classifiers (Citation = Precedent + Revealing; etc.)'

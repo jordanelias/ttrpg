@@ -1,7 +1,7 @@
 """
 sim/personal/companion.py — Companion scene resolution
 
-Canon source: designs/godot/scene_tree_architecture.md (CompanionScene)
+Canon source: godot/scene_tree_architecture.md (CompanionScene)
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:

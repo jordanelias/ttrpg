@@ -269,7 +269,7 @@ E: pass/fail — <defect, severity, lesson/property>
 REMEDIATION (worst-first):
   <severity> <finding> → Lesson <n> / P-<x>: <concrete fix>
 ```
-**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to `canon/editorial_ledger.jsonl` (commit gate; if blocked, stage inline and flag `[DRIFT]`).
+**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to the relevant `registers/editorial_ledger_<lane>.jsonl` (lane chosen by the engine's subsystem), per `references/id_reservations.yaml`'s Collision Guard allocation protocol (see `valoria-editorial-register`'s ID Law section) — commit gate; if blocked, stage inline and flag `[DRIFT]`.
 
 ---
 
@@ -356,3 +356,28 @@ Starting assessments, **not** pipeline-confirmed. Each needs a full Stage 0→4 
 - `[UNVERIFIED]` "omega" Class-A-new-system vetting framework — spec not read this session; NERS retained as the verdict.
 - `[CALIBRATION DEPENDENCY]` Stage 0 assumes ED-876 (mass-battle cliff fix) and ED-884 (Ob-floor) as settled ground truth; if either reopens, recalibrate Stage 0.
 - `[HOUSEKEEPING]` The deterministic+stochastic resolver lives as a ratified candidate spec under `designs/audit/2026-05-28-resolution-diagnostic/` + ED-874. Promote the ratified form into `params/core.md` (or a canonical resolution doc) so this skill's primary reference is canon, not an audit-dir file. (The property abstraction above reduces but does not remove this dependency.)
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type resolution_diagnostic \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-resolution-diagnostic \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
+`tools/audit_registry.py`'s module docstring for the full field/vocabulary
+reference — this is the single source of truth for the schema, not this note.

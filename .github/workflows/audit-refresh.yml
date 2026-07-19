@@ -1,0 +1,118 @@
+name: Valoria Audit Refresh
+
+# One-time manual step required before this workflow's PR-creation step can
+# succeed: repo Settings -> Actions -> General -> Workflow permissions ->
+# "Allow GitHub Actions to create and approve pull requests" (the default
+# GITHUB_TOKEN cannot flip that setting itself; mirrors dashboard.yml's own
+# one-time Pages-source precondition note above its trigger block).
+#
+# Scheduled maintenance for the audit-freshness tooling itself — NOT a merge gate.
+# Deliberately a separate workflow file from valoria-ci.yml: different trigger
+# philosophy/cadence (time-based, not push/PR-based), shouldn't share its
+# concurrency group, keeps "one workflow = one concern."
+#
+# This is the repo's first use of `schedule:`, `workflow_dispatch:`, and
+# `$GITHUB_STEP_SUMMARY` in a maintenance role (dashboard.yml, added the same
+# week, is the first use of schedule:/workflow_dispatch: overall — this
+# workflow follows its pattern for a second, independent purpose).
+#
+# SCOPE NOTE (why this workflow has one job, not two): the original design for
+# this phase called for a second job re-running skills/valoria-vector-audit/
+# scripts/vector_audit.py's deterministic corpus-extraction/diagnostic stages.
+# When this note was first written that script was a stub (no stage dispatcher).
+# THAT IS NO LONGER TRUE (corrected after the Fable-5 2026-07-14 audit, Obs-7):
+# vector_audit.py's main()->run() is a working pipeline (110 design docs, 176
+# tokens, real diagnostics + a P1/P2/P3 verdict), and it now has four sibling
+# Tier-0 scripts (structure_audit / pointer_audit / formula_audit / gen_audit),
+# each with committed unit + regression tests. So the precondition that blocked
+# automating a refresh no longer holds. It remains UNWIRED here by an open
+# DECISION, not by inability: the observatory is a "measures, never gates"
+# hygiene instrument, and whether a monthly non-gating refresh job should
+# persist its scorecards (and where) is the reopened call tracked in the
+# 2026-07-14 holistic-unification doc. Until that lands, refresh stays manual
+# (`--output-dir <run>`), which is why tools/audit_staleness.py still reports
+# vector-audit drift honestly.
+
+on:
+  schedule:
+    # Monthly, 1st of the month. GitHub auto-disables scheduled workflows
+    # after 60 days with no repository activity -- this repo commits far more
+    # often than that, so the disable condition shouldn't trigger in practice;
+    # workflow_dispatch below is the manual fallback regardless.
+    - cron: '0 6 1 * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: audit-refresh
+  cancel-in-progress: false
+
+jobs:
+  decisions-digest-refresh:
+    name: Refresh open-decision digest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Regenerate decisions digest
+        run: python3 tools/observability/build_decisions.py
+
+      - name: Regenerate proposals register
+        run: python3 tools/observability/build_proposals.py
+
+      - name: Regenerate apparatus registry
+        run: python3 tools/build_apparatus_registry.py
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open PR with refreshed digest
+        if: steps.diff.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          # run_id suffix: a same-day cron run + manual workflow_dispatch run would
+          # otherwise both compute "decisions-digest-<DATE>" and the second run's
+          # `git push` would fail non-fast-forward on the first's branch (caught in
+          # adversarial review). run_id is unique per workflow run.
+          BRANCH="audit-refresh/decisions-digest-${DATE}-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md
+          git commit -m "[infrastructure] Scheduled decisions-digest + proposals + apparatus refresh (${DATE})"
+          git push origin "$BRANCH"
+          URL=$(gh pr create \
+            --title "Scheduled decisions-digest + proposals refresh (${DATE})" \
+            --body "Automated corpus re-scan by \`.github/workflows/audit-refresh.yml\` (\`tools/observability/build_decisions.py\` + \`build_proposals.py\`). Deterministic, no judgment applied -- review the diff before merging like any other PR. Lane-priority rollup in \`DECISIONS.md\`; unified unratified-work register in \`PROPOSALS.md\`." \
+            --base main --head "$BRANCH")
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
+            echo "## Decisions digest refreshed" >> "$GITHUB_STEP_SUMMARY"
+            echo "Corpus scan found changes -- opened ${{ steps.pr.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Decisions digest unchanged" >> "$GITHUB_STEP_SUMMARY"
+            echo "No drift since the last refresh -- nothing to do." >> "$GITHUB_STEP_SUMMARY"
+          fi

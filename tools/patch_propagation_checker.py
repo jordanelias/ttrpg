@@ -78,7 +78,7 @@ def parse_patches(content, from_id=None):
             continue
 
         # Files — YAML list item
-        file_item_m = re.match(r'-\s*(params/\S+\.md)', line_s)
+        file_item_m = re.match(r'-\s*(engine/params/\S+\.md)', line_s)
         if file_item_m:
             current["files"].append(file_item_m.group(1))
             continue
@@ -101,7 +101,7 @@ def parse_patches(content, from_id=None):
     # Filter to params-affecting patches only
     params_patches = []
     for p in patches:
-        params_files = [f for f in p["files"] if f.startswith("params/")]
+        params_files = [f for f in p["files"] if f.startswith("engine/params/")]
         if params_files:
             p["params_files"] = params_files
             params_patches.append(p)
@@ -142,7 +142,7 @@ def main():
     args = parser.parse_args()
 
     print("Loading patch_register.yaml...")
-    pr_content = read_file("canon/patch_register_active.yaml")
+    pr_content = read_file("registers/patch_register_active.yaml")
     if not pr_content:
         print("[ERROR] Cannot read patch_register.yaml")
         sys.exit(1)

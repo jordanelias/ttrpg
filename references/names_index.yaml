@@ -1,6 +1,6 @@
 # names_index.yaml — UNIFIED NAMES INDEX (the one place a definition's name lives).
 #
-# WHY: names used to be hardcoded and duplicated across 50+ prose docs, params/, the
+# WHY: names used to be hardcoded and duplicated across 50+ prose docs, engine/params/, the
 # registries, and the tools (ci_naming_check.py even hardcoded the deprecated proper
 # noun). descriptor_registry.yaml already promised "a descriptor can be renamed HERE
 # without rewriting any consumer" — this index makes that real for ALL named
@@ -31,12 +31,13 @@
 # Mechanic/clock/track legacy entries are seeded from references/deprecated_terms_registry.yaml
 # and references/synonym_registry.yaml; they drive the drift lint + rename, not a mirror.
 #
-# MIGRATION: this is the initial seed (attributes, faction/settlement stats, the proper-noun
-# naming invariant, and the clean mechanic renames). The existing registries keep their `name`
-# fields as validated mirrors for now; folding the rest of the proper-noun corpus in, and
-# flipping `warn -> block` per entry, are follow-ups (see HANDOFF.md).
+# MIGRATION: seeded 2026-06-28 (attributes, faction/settlement stats, the proper-noun
+# naming invariant, and the clean mechanic renames). 2026-07-01 (ED-1084): the rest of the
+# proper-noun corpus folded in below as warn-tier `world.*` entries (generated from
+# proper_noun_registry.yaml; ci_names_consistency keeps the pair agreeing). Remaining
+# follow-up: flipping `warn -> block` per entry as each is triaged.
 
-version: 1
+version: 2
 
 entries:
 
@@ -126,3 +127,77 @@ entries:
     legacy: ["EventImpact"]
     category: substrate
     enforce: warn
+
+  # ── PROPER-NOUN CORPUS FOLD-IN (2026-07-01, ED-1084) ─────────────────────────
+  # Generated from references/proper_noun_registry.yaml (every category); warn-tier;
+  # mirror-checked by ci_names_consistency (last key segment -> registry entry).
+  # world.solmund stays above at block tier (the naming invariant).
+  # -- characters --
+  world.aldric_tormann: {canonical: "Aldric Tormann", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.annika_feldhaus: {canonical: "Annika Feldhaus", aliases: ["Feldhaus"], legacy: [], category: proper_noun, enforce: warn}
+  world.cardinal_arnlod_olafsson: {canonical: "Cardinal Arnlod Olafsson", aliases: ["Olafsson"], legacy: [], category: proper_noun, enforce: warn}
+  world.cardinal_magnus_klapp: {canonical: "Cardinal Magnus Klapp", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.cardinal_osten_jarnstal: {canonical: "Cardinal Osten Jarnstal", aliases: ["Jarnstal"], legacy: [], category: proper_noun, enforce: warn}
+  world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn}
+  world.dalla_virke: {canonical: "Dalla Virke", aliases: ["Virke"], legacy: [], category: proper_noun, enforce: warn}
+  world.doux_alexios_laskaris: {canonical: "Doux Alexios Laskaris", aliases: ["Laskaris"], legacy: [], category: proper_noun, enforce: warn}
+  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn}
+  world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn}
+  world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.gerik_strand: {canonical: "Gerik Strand", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.grandmaster_ehrenwall: {canonical: "Grandmaster Ehrenwall", aliases: ["Ehrenwall"], legacy: [], category: proper_noun, enforce: warn}
+  world.halvar_brandt: {canonical: "Halvar Brandt", aliases: ["Brandt"], legacy: [], category: proper_noun, enforce: warn}
+  world.king_almud_almqvist: {canonical: "King Almud Almqvist", aliases: ["Almud"], legacy: [], category: proper_noun, enforce: warn}
+  world.maret_uln: {canonical: "Maret Uln", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.yrsa_vossen: {canonical: "Yrsa Vossen", aliases: ["Vossen"], legacy: [], category: proper_noun, enforce: warn}
+  world.peder_almstedt: {canonical: "Peder Almstedt", aliases: ["Almstedt"], legacy: [], category: proper_noun, enforce: warn}
+  world.prince_torben_almqvist: {canonical: "Prince Torben Almqvist", aliases: ["Torben"], legacy: [], category: proper_noun, enforce: warn}
+  world.princess_elske_almqvist: {canonical: "Princess Elske Almqvist", aliases: ["Elske"], legacy: [], category: proper_noun, enforce: warn}
+  world.queen_lenneth_almqvist: {canonical: "Queen Lenneth Almqvist", aliases: ["Lenneth"], legacy: [], category: proper_noun, enforce: warn}
+  world.rikard_solberg: {canonical: "Rikard Solberg", aliases: ["Solberg"], legacy: [], category: proper_noun, enforce: warn}
+  world.sigrid_torsvald: {canonical: "Sigrid Torsvald", aliases: ["Torsvald"], legacy: [], category: proper_noun, enforce: warn}
+  world.sæmund_haelgrund: {canonical: "Sæmund Haelgrund", aliases: ["Haelgrund"], legacy: [], category: proper_noun, enforce: warn}
+  # -- territories --
+  world.askeheim: {canonical: "Askeheim", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.ehrenfeld: {canonical: "Ehrenfeld", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.feldmark: {canonical: "Feldmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.gransol: {canonical: "Gransol", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.grauwald: {canonical: "Grauwald", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.halvardshelm: {canonical: "Halvardshelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.halvarshelm: {canonical: "Halvarshelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.himmelenger: {canonical: "Himmelenger", aliases: ["Himmelenger Child"], legacy: [], category: proper_noun, enforce: warn}
+  world.kronmark: {canonical: "Kronmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.lowenskyst: {canonical: "Lowenskyst", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.oastad: {canonical: "Oastad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.rendstad: {canonical: "Rendstad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.schoenland: {canonical: "Schoenland", aliases: ["Schoenland Factor"], legacy: [], category: proper_noun, enforce: warn}
+  world.sigurdshelm: {canonical: "Sigurdshelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.spartfell: {canonical: "Spartfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.stillhelm: {canonical: "Stillhelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  # -- factions --
+  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  # -- subfactions --
+  world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn}
+  world.wardens: {canonical: "Wardens", aliases: ["Warden"], legacy: [], category: proper_noun, enforce: warn}
+  # -- organizations --
+  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn}
+  # -- realms --
+  world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}
+  world.valorsmark: {canonical: "Valorsmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  # -- regions --
+  world.ashmarket: {canonical: "Ashmarket", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.southernmost: {canonical: "Southernmost", aliases: ["Southernmost Awareness"], legacy: [], category: proper_noun, enforce: warn}
+  # -- peoples --
+  world.almqvist: {canonical: "Almqvist", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.altonian: {canonical: "Altonian", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.einhir: {canonical: "Einhir", aliases: ["Southern Einhir", "Southern Einhir Descendant", "Einhir Lore"], legacy: [], category: proper_noun, enforce: warn}
+  world.riskbreaker: {canonical: "Riskbreaker", aliases: ["Riskbreaker Exposure", "Riskbreaker Identity", "Riskbreakers"], legacy: [], category: proper_noun, enforce: warn}
+  # -- concepts --
+  world.almaic_kyriakos: {canonical: "Almaic Kyriakos", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.forgetting: {canonical: "Forgetting", aliases: ["Forgetting Check", "Maritime Forgetting", "Maritime Forgetting Zone"], legacy: [], category: proper_noun, enforce: warn}

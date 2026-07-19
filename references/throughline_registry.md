@@ -9,7 +9,7 @@
 # NARRATIVE THROUGHLINES (what the game is about)
 
 ## N1 — Thread Revelation Is the Master Clock
-As MS drops, Thread becomes visible to non-practitioners. This drives every NPC arc (Himlensendt's theological crisis, Vossen's identity crisis, Edeyja's political emergence, Vaynard's vindication), every faction response, and the player's Certainty track. The revelation curve (threadwork_v30 §5.6) is the game's primary narrative driver — everything is downstream of "the world is discovering that the stories were true."
+As MS drops, Thread becomes visible to non-practitioners. This drives every NPC arc (Himlensendt's theological crisis, Vossen's identity crisis, Edeyja's political emergence, Vaynard's vindication), every faction response, and the player's Truth track. The revelation curve (threadwork_v30 §5.6) is the game's primary narrative driver — everything is downstream of "the world is discovering that the stories were true."
 
 **Key docs:** threadwork_v30 §5.6, campaign_architecture_v1 §4, npc_behavior_v30 §5 (arc profiles)
 

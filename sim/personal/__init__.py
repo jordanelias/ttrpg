@@ -13,6 +13,6 @@ Modules:
   - investigation: NPE / Interface / Lattice / Matrix (investigation_systems_v30)
   - conviction: Conviction Scar + Belief revision (conviction_track_v30)
   - beliefs: Belief system
-  - knots: Knot lifecycle (PP-632; designs/personal/knots_v30.md pending Pass 2g)
+  - knots: Knot lifecycle (PP-632; systems/fieldwork/knots_v30.md pending Pass 2g)
   - companion: Companion scene
 """

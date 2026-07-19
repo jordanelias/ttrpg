@@ -21,12 +21,34 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     for u in [unit_a, unit_b]:
         if u.routed:
             continue
+        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of own morale and
+        # overall morale; more likely to wilt if other subunits losing, more likely to rally if other
+        # subunits winning."] Phase-start snapshot of every living subunit's morale, taken BEFORE any
+        # mutation this phase. [2026-07-04 adversarial-review fix, two findings]: (1) siblings pull
+        # toward this FIXED snapshot, not toward siblings' already-updated values later in this same
+        # loop -- the original per-atom-live-read version was a Gauss-Seidel order-dependency that
+        # systematically favored whichever subunit happened to iterate first. (2) the pull is applied
+        # BEFORE this atom's own casualty/exhaustion erosion below (reordered from after), so a
+        # subunit's own bad phase always has the final say on whether IT routs this phase -- the
+        # original after-erosion ordering let a healthy sibling's pull retroactively rescue a subunit
+        # from a same-phase rout its own casualties would otherwise have caused, before
+        # rout_resolution ever saw the value. A sibling's state can soften/harden the morale a
+        # subunit ENTERS this phase's own erosion with; it can no longer erase that erosion's result.
+        snapshot = {id(s): s.eff_morale for s in u.subunits if not s.routed}
         # step 3 (Jordan directive 2026-06-03): canonical Size-fraction morale triggers (§A.4),
         # replacing the per-tick absolute-damage erosion. Routs occur at meaningful casualty levels,
         # not ~98% intact. No general-floor in the unit duel (units rout from their own casualties).
         for atom in u.subunits:
             if atom.routed:
                 continue
+            siblings = [s for s in u.subunits if s is not atom and not s.routed]
+            if siblings:
+                sib_troops = sum(s.troop_count for s in siblings)
+                if sib_troops > 0:
+                    sib_agg = sum(snapshot[id(s)] * s.troop_count for s in siblings) / sib_troops
+                    pull = MORALE_SIBLING_PULL * (sib_agg - snapshot[id(atom)])
+                    if pull:
+                        atom.pull_morale(pull)
             frac = atom.cohesion           # single-subunit: == u.hp/u.hp_max (byte-exact); else this subunit's own
             loss = 0.0
             if frac < 0.50: loss += 1.0    # [canonical: mass_battle_v30.md §A.4 — Size<50% morale trigger] Size < 50% max -> -1

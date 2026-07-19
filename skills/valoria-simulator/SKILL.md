@@ -121,6 +121,14 @@ Systematic search across nine categories:
 
 **Output:** `sim_edge_cases_[domain].md`
 
+**Forward-only findings-disposition discipline:** every finding above must resolve to either a
+filed `ED-<LANE>-NNNN` id (per `references/id_reservations.yaml`'s allocation protocol) or an
+explicit no-action line (e.g. "no action — working as intended," "no action — superseded by
+PP-NNN"). P1 findings must be filed as ED entries, not merely flagged in the findings section.
+Mirrors the disposition-table discipline added to `valoria-mechanic-audit` and
+`valoria-vector-audit`'s output contracts in the same audit-ecosystem consolidation batch.
+Applies going forward only.
+
 ### Mode F — Fieldwork Simulation (G-FW)
 
 Simulate fieldwork operations across investigation, exploration, and socializing tracks.
@@ -186,9 +194,9 @@ Each module gets its own session. The session protocol:
 5. Write the module code. Every mechanical constant carries an inline `# [canonical: path §section]` comment OR corresponds to a ledger entry. The fabrication check verifies this at commit.
 6. Run module in isolation against known inputs. Outputs logged.
 7. Commit the module file with an updated `tests/sim/<sim-name>/module_manifest.md` that marks the module `status: verified`.
-8. Record in `HANDOFF.md`: module completed, ledger entries added, next module to build.
+8. Record in the relevant `registers/handoffs/HANDOFF_<LANE>.md`: module completed, ledger entries added, next module to build. (Root `HANDOFF.md` only for genuinely cross-cutting items — CLAUDE.md §1/§2.)
 
-**If a session cannot complete a module:** write a checkpoint to `HANDOFF.md` with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
+**If a session cannot complete a module:** write a checkpoint to the relevant `registers/handoffs/HANDOFF_<LANE>.md` with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
 
 **Step 3 — Inter-module integration.**
 
@@ -261,3 +269,28 @@ Quick reference:
 - After each simulation: update `sim_coverage_matrix.md` and commit findings.
 - Simulations exceeding 30 resolution steps: checkpoint mid-simulation, summarize state, continue.
 - All mechanical values must be sourced from the working-tree params or design doc. Never use remembered values.
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type simulation_balance \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-simulator \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
+`tools/audit_registry.py`'s module docstring for the full field/vocabulary
+reference — this is the single source of truth for the schema, not this note.

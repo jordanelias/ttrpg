@@ -1,0 +1,239 @@
+# Patch Register — Active
+# Applied/approved/consumed patches archived to registers/patch_register_archive_*.yaml
+# Next PP number: 727 (header reconciled 2026-07-01 — body already held PP-724..726; new PPs
+# allocate from reserved blocks, see references/id_reservations.yaml)
+# 2026-05-02: Renumbered mass-battle PP-684..688 → PP-711..715 to resolve register collision
+# with 2026-05-01 architecture-session ratification set (which retains canonical PP-684..688 as
+# the primary semantic owner — 50+ downstream files). Mass-battle entries below carry MB-03/04/06/02/07
+# finding_ids and date 2026-04-30 for archival traceability.
+# Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → deprecated/archives/patches/patch_register_archive_2026_05_01_b.yaml
+# 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
+# Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → deprecated/archives/patches/patch_register_archive_2026_04_30_a.yaml
+# Archival batch 2026-05-02 (a): 17 applied PPs (date <= 2026-04-30) → deprecated/archives/patches/patch_register_archive_2026_05_02_a.yaml
+# Includes mass-battle PP-711..715 (renumbered from PP-684..688 per ED-782) and PP-681..683, PP-690..704.
+# Active register retains: 3 provisional (PP-652, PP-675, PP-676) + 11 applied 2026-05-01 entries (architecture set + workplan v3 series).
+# Archival batch 2026-05-10: PP-684..PP-688, PP-705..PP-723 (applied) → deprecated/archives/patches/patch_register_archive_2026_05_10.yaml
+
+patches:
+- id: PP-652
+  date: 2026-04-14
+  severity: P2
+  description: Starting PT values per territory proposed. T9 Himmelenger 5, T6 Stillhelm 1, T13 Oastad 1, T4/T11/T12 at 2
+    (Varfell-area old Einhir traditions), remainder at 3.
+  affects:
+  - designs/provincial/peninsular_strain_v30.md
+  - references/params_board_game.md
+  status: provisional
+- id: PP-675
+  date: 2026-04-29
+  severity: P1
+  description: 'Terminology conversion workplan — eliminate framing terms (TTRPG/BG/Hybrid) and retire Hybrid as a third mode
+    of play. Preserves all mechanical vocabulary (dice pool, TN, Ob, exchange, degree of success, pool formulas, Wound, Stamina,
+    Fibonacci scaling). Single architectural change: scale_transitions_v30 §1, §6 rewritten from three-mode (TTRPG/BG/Hybrid)
+    to two-mode (Strategic/Scene) plus Zoom-In as transition verb. All other changes are vocabulary substitution enforced
+    by a new terminology_gate hook in safe_commit. Workplan at designs/audit/2026-04-29-terminology-conversion/00_workplan.md
+    proposes 5 phases: (0) decisions locked (5 Jordan calls itemized, recommended answers given); (1) terminology_canon.md
+    authority doc; (2) sweep inventory; (3) staged propagation by directory cluster, archives skipped; (4) terminology_gate
+    CI/hook enforcement; (5) project-level cleanup including project knowledge instructions block. Status: PROVISIONAL pending
+    Jordan signoff on §4 decisions. ED-759.'
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+  - designs/audit/2026-04-29-terminology-conversion/00_workplan.md
+  - registers/patch_register_active.yaml
+  - canon/editorial_ledger.yaml
+  - session_log_current.md
+  - references/propagation_map.md
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Self-exempting on Ω/Μ pattern — same as PP-674. The single Class A gameplay-touching element (retiring Hybrid as
+      a mode in scale_transitions_v30 §6) is structural-vocabulary only: removes a textual abstraction, no behavior change.
+      Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual not implementation.'
+- id: PP-676
+  date: 2026-04-29
+  severity: P2
+  applied_commit: 'v1 (commit ac8f55aa) executed 12 TOPO findings; v2 + v3 executed 2026-04-29 same session. v2 methodology
+    validation FAILED; v3 multi-graph triangulation methodology VALIDATED (2/3 structural properties). v3 corrects v2 flagship
+    finding: corpus is system-anchored, not faction/NPC/Conviction-anchored as v2 claimed (TF-IDF cosine artifact). NPC Behavior
+    identified as integration spine (cite-deg 56 in+out). Combined v2+v3 register at designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md.
+    Status: PROVISIONAL pending Jordan review of v3 corrections and recommendations.'
+  description: 'Topographic analysis — multi-graph triangulation over canonical+provisional corpus as analytic instrument
+    for surfacing project weaknesses unreachable by hand-curation. Five graphs: G_cite (expanded explicit+implicit citations,
+    421 edges), G_throughline (T-NN table parse), G_mu (Μ mode collapsing), G_pp (PP affects coupling), G_tfidf (supporting
+    only). Eight diagnostics: multi-graph hubs, implied-but-missing, notional edges, cascade-without-return, sparse-context,
+    throughline orphan check, discourse-design divergence, multi-graph isolates. Workplan v3 supersedes v1+v2 same-session.
+    Status: PROVISIONAL pending Jordan signoff. ED-760, ED-762.'
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+  - designs/audit/2026-04-29-topographic-analysis/00_workplan.md
+  - registers/patch_register_active.yaml
+  - canon/editorial_ledger.yaml
+  - references/propagation_map.md
+  - session_log_current.md
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic. Stages 1-4 executed
+      2026-04-29 within same chat session per Jordan directive 'let's dig into that workplan'. 12 weakness findings (TOPO-01..TOPO-12)
+      PROVISIONAL pending review. Methodology limits documented in register §0/§8.
+
+- id: PP-724
+  class: A
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: "NPC-NPC relational graph framework (B1.1 of improvement_avenues_2026-05-10). Class A new substrate-defining system. Specifies six canonical edge types (sworn-bond, liege-vassal, kinship, patronage, rivalry, feud) with directionality, strength scalar (1-3), formation conditions, strain accumulation rules, capacity, break consequences, rupture triggers, and strain decay rules — paralleling F2 Knot lifecycle (fieldwork §5.6b) at the NPC-NPC dyadic level. Closes the canon-wide gap surfaced in improvement_avenues §B1: KOEI ROTK + CK3 precedents named in settlement_layer §Precedent and settlement_adjacency_v30 canon-compliance, but the relational graph that gives those precedents their texture (rival officers, sworn brotherhoods, defection cascades, hereditary feuds) had no canonical mechanic. Authored at systems/npcs/npc_relational_graph_v30.md (~585 lines / ~47k chars). Strain mechanics, multi-edge composition rules, NPC-NPC Disposition derivation specified. Hooks for B1.2 (defection cascade, §7), B1.3 (faction-Cascade integration, §8), B1.4 (settlement-coupling, §6) are named but bodies deferred to follow-up PPs. Honor-Conviction-crisis cascade specified (§3.9): an NPC entering 3+ Honor Scars per PP-718 cascade-breaks all sworn-bonds and liege-vassal edges, propagating to faction-Cascade. Composes with PP-684 (Conviction taxonomy), PP-685 (Migration roster), PP-686 (Cascade math, B1.3 hook), PP-718 (per-Conviction Scar, §3.9), PP-723 (settlement adjacency, §6 hook)."
+  finding_id: improvement_avenues_2026-05-10 B1.1 (foundational P1 gap surfaced by improvement-avenues review)
+  source: editorial
+  affects:
+    - systems/npcs/npc_relational_graph_v30.md
+    - registers/patch_register_active.yaml
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-724 (this commit)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-β", "Μ-δ"]
+    mu_secondary_preserved: ["Μ-α", "Μ-γ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "+"
+      M-5: "+"
+      M-6: "+"
+      M-7: "✓"
+      M-8: "○"
+      M-9: "○"
+      M-10: "✓"
+      M-11: "+"
+    m_summary: "6 + · 2 ✓ · 3 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations). Genuine extensions: M-1 (continuous strain pressure per-edge), M-3 (relational edges substrate-real), M-4 (institutional substrate-postures gain topology-weighted contribution via B1.3 hook), M-5 (cross-scale composition through B1.2/B1.3/B1.4 hooks), M-6 (Decision Fork consumes relational valence per §9.3), M-11 (voluntary/involuntary edge duality). M-7/M-10 satisfied (faithful ROTK/CK3 borrowing; environment-constitution preserved). M-2/M-8/M-9 ○ scope-mismatch — geography hook deferred to B1.4, access/clinical-borrowing patterns engage indirectly without extension. Per-pattern reasoning grounded in fieldwork §5.6b Knot lifecycle architectural template at systems/npcs/npc_relational_graph_v30.md §10."
+    t_touches:
+      extends: ["T-23", "T-24", "T-25", "T-15"]
+      preserves: ["T-08", "T-09", "T-11", "T-15a", "T-15b", "T-15c", "T-14", "T-22", "T-17"]
+      breaks: []
+    q: pass
+    note: "Class A new system. Companion docs read at full depth: fieldwork_v30 §5.6+§5.6a+§5.6b (Knot lifecycle template), character_canon_v30 §1-§11 (per-NPC vector state composition), npc_behavior_v30 §1.1-§1.3+§3+§5 (Stance Triangle, Resonant Style, Belief, Arc state), npc_roster_v30 (13+ named NPCs for B2 instantiation), faction_politics_v30 §1-§2 (rank ladders for liege-vassal grounding), conviction_taxonomy_v30 + axis_matrix_v30 + migration_roster_v30 (Conviction-edge coupling)."
+
+- id: PP-725
+  class: B
+  pre-framework: false
+  date: 2026-05-10
+  severity: P2
+  description: "B1.4 of improvement_avenues_2026-05-10 — settlement coupling for the NPC-NPC relational graph. Operationalizes the PP-724 §6 hook with: (a) NPC residence canon (§6.1 derivation order: explicit override > Governor assignment > faction-headquarters default — canonical HQ mapping for Crown S-001, Hafenmark S-015, Church S-023, Varfell S-026, Löwenritter S-012, RM S-029, Wardens S-033); (b) hop-distance algorithm (§6.2 BFS on valoria_geography_v30.yaml :: settlement_adjacency from PP-723, army-traversable subgraph by default, Thread-Witnessed bypass when both NPCs TS ≥ 30 matching Knot Thread-contact prereq); (c) strain-trigger classification (§6.3 universal triggers and patronage attribution drift scale by distance; kinship absence already geographic; direct hostile + rupture triggers do NOT scale); (d) officer reassignment shock (§6.4 +1 strain on edges whose hop-distance increased ≥1 tier, −1 reverse-shock on decreased; no retroactive recomputation); (e) integration formula (§6.6 strain_add = round_half_up(base × distance_scaling) for scalable triggers); (f) worked examples (§6.5 six canonical NPC pairs 0..7 hops). Composes PP-723 + PP-724 per Jordan guidance ('settlements need zoomed-in geography and ROTK network style is key'). Pre-validates ED-055 naval-scope: 7-hop canonical maximum (Baralta↔Schoenland Governor) motivates naval routes as strategic-compression mechanism."
+  finding_id: improvement_avenues_2026-05-10 B1.4 (settlement coupling composes A1 PP-723 + B1.1 PP-724)
+  source: editorial
+  affects:
+    - systems/npcs/npc_relational_graph_v30.md
+    - registers/patch_register_active.yaml
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-725 (this commit)
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: ["Μ-δ", "Μ-α"]
+    mu_secondary_preserved: ["Μ-β", "Μ-γ"]
+    m_ratings:
+      M-1: "○"
+      M-2: "+"
+      M-3: "✓"
+      M-4: "○"
+      M-5: "+"
+      M-6: "○"
+      M-7: "✓"
+      M-8: "○"
+      M-9: "○"
+      M-10: "+"
+      M-11: "○"
+    m_summary: "3 + · 2 ✓ · 6 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the six ○ ratings are appropriate scope-mismatch on patterns where geographic-coupling extension doesn't engage the pattern). Genuine extensions: M-2 (geography distributes relational pressure spatially via the ×1.0..×2.0 scaling), M-5 (cross-scale composition of PP-723 settlement adjacency + PP-724 relational substrate via the BFS hop-distance algorithm), M-10 (environment co-constitutes relational capacity — settlement geography actively constitutes the rate at which ties strain, matching T-34 Distal Interoception substrate-channel-crossing pattern at the NPC-NPC layer)."
+    t_touches:
+      extends: ["T-23", "T-34", "T-18"]
+      preserves: ["T-08", "T-09", "T-11", "T-15", "T-15a", "T-15b", "T-15c", "T-22", "T-25"]
+      breaks: []
+    q: pass
+    note: "Class B system extension. Composes PP-723 (settlement-zoomed geography) + PP-724 (ROTK-network framework) per Jordan's specific guidance — B1.4 is the precise intersection point of those two ambitions. Algorithm validated against PP-723's canonical 49-edge settlement graph (BFS connectivity confirmed: all 36 settlements reachable from S-001 in ≤6 hops; max canonical pair-distance is 7 hops at Baralta↔Schoenland Governor). Self-review bias acknowledged: this composes Claude's prior PP-723 with another session's PP-724; coordination verified by reading the committed PP-724 §6 hook in full before authoring extension; PP-724 §6 hook's scaling table (×1.0..×2.0) preserved verbatim from the parallel-session canonization."
+
+- id: PP-726
+  class: A
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: "Substrate canon for the Valoria political hierarchy: Valn peninsula → Kingdom of Valoria → 3 duchies (Valorsmark/Almud-monarch, Hafenmark/Baralta, Varfell/Vaynard) → 14 provinces → 35 settlements (1-3 per province; siege-targets at city/fortress/village/town granularity). Plus Himmelenger Church city-state (sovereign ecclesiastical entity, like Vatican; 1 settlement) and Schoenland foreign Altonian island (politically independent; 1 settlement, sea-connected to Valorsplatz only). Askeheim is unincorporated Calamity-zone wilderness (0 settlements until healing). Resolves the granularity error that ran through PP-666/ED-710/PP-723: those iterations conflated siege-target settlements with subservient districts and outposts (Cathedrals, Markets, Barracks, Harbors, garrison towns, mines, watchtowers, lodges, shrines, watches, storehouses, coves, gates, ruins) at one level, producing a 36-entry §2.1 registry that mixed two granularities and a 49-edge adjacency graph at the wrong level. PP-726 establishes: (a) new substrate doc systems/settlements/valoria_political_hierarchy_v30.md defining the duchy/province/settlement hierarchy + fracturing rule (province with faction-split territories canonically fractures into northern/southern or western/eastern sub-provinces) + political-value computation (unified province > sum of constituent territories, structural; specific scalars TBD pending balance pass) + governor assignment (per-settlement, by faction); (b) refactored settlement_layer §2.1 with 37-settlement registry (S-001..S-037) + new §2.2 sub-features registry (22 sub-features as properties of parent settlements) + §2.3 migration map from old S-001..S-036; (c) rebuilt valoria_geography_v30.yaml :: settlement_adjacency: with 55 edges (28 intra-province with 7 triangles + 7 singles; 24 primary inter-province + 1 Schoenland sea-route + 3 second-routes for ≥2-rule resilience); (d) retuned PP-724/PP-725 §6.1 NPC residence canon to settlement names (Almud at Valorsplatz, Baralta at Gransol, Vaynard at Sigurdshelm, Confessor at Himmelenger, etc.) and §6.5 worked examples to corrected hop distances. All 35 Kingdom settlements + Himmelenger have ≥2 march-route connections verified; Schoenland at degree 1 is foreign-exempt awaiting ED-055 naval-scope expansion. Settlement counts: 7 provinces at 3 settlements (Valorsplatz capital, Kronmark+Feldmark breadbaskets, Gransol commerce-on-lake-Switzerland, Halvarshelm mining, Halvardshelm multi-fjord, Sigurdshelm ducal capital), 7 provinces at 2 settlements (Lowenskyst+Spartfell chokepoints, Stillhelm+Oastad Calamity-edge, Ehrenfeld fortress-city itself-the-gate, Rendstad remote valley, Grauwald highland sparse). New settlements authored: Auerheim, Königsbrück, Saatfeld, Goldenfurt, Tiefental, Erntehof, Spelzdorf, Aschenbach, Nordhain, Holzbrück, Niedersol, Saltbrück, Gelbgrund, Erzbach, Schmiedhof, Skogheim, Geirsvik, Yrnastead, Brynjard, Sundfjord, Salgrund (21 new names with culturally-coherent naming per duchy template). Old S-IDs deprecated; lazy migration in non-substrate documents (character_canon, migration_roster, npc_roster, editorial_ledger historical entries) as those documents are next touched. Per Jordan canonical clarification 2026-05-10: settlement = siege-target = city/fortress/village/town; districts/outposts/garrison-towns/mines/watchtowers etc. are subservient sub-features. Ehrenfeld is fortress-city gating crownlands from west and north (no forward defensive screens needed — fortress IS the gate). Gransol is Switzerland-like landlocked lake province (Gransol Harbor district is a lake-harbor not sea-harbor; Hafenmark trade routes overland via lake). Schoenland connects to Valorsplatz via the port (foreign Altonian, exempt from Kingdom's ≥2 rule pending ED-055)."
+  finding_id: Jordan canonical clarification 2026-05-10 (Valn → Kingdom → Duchy → Province → Settlement hierarchy; settlement granularity = siege-target; ED-710 placeholder closure at correct level)
+  source: user
+  affects:
+    - systems/settlements/valoria_political_hierarchy_v30.md
+    - systems/settlements/settlement_layer_v30.md
+    - systems/settlements/valoria_geography_v30.yaml
+    - systems/npcs/npc_relational_graph_v30.md
+    - registers/patch_register_active.yaml
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-726 (this commit)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-δ"]
+    mu_secondary_preserved: ["Μ-β", "Μ-γ"]
+    m_ratings:
+      M-1: "○"
+      M-2: "+"
+      M-3: "+"
+      M-4: "+"
+      M-5: "+"
+      M-6: "✓"
+      M-7: "✓"
+      M-8: "○"
+      M-9: "○"
+      M-10: "✓"
+      M-11: "○"
+    m_summary: "4 + · 3 ✓ · 4 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the four ○ ratings are appropriate scope-mismatch on patterns where political-hierarchy substrate clarification doesn't engage the pattern, not failures). Genuine extensions: M-2 (geography-holds-pressure operates at correct settlement granularity), M-3 (substrate vectorization at political-administrative axis with explicit duchy/province/settlement state-machine), M-4 (institutional substrate-postures sharpened with explicit duchy/province/territory ownership relations and political-value formula structure), M-5 (full cross-scale chain canonical at every level: kingdom→duchy→province→settlement, no longer collapsed at the duchy/province join)."
+    t_touches:
+      extends: ["T-23", "T-22", "T-18", "T-19", "T-25"]
+      preserves: ["T-08", "T-09", "T-11", "T-14", "T-15a", "T-15b", "T-15c", "T-17", "T-20"]
+      breaks: []
+    q: pass
+    note: "Class A substrate canon. Resolves the granularity error that ran through PP-666 (ED-710 placeholder)/PP-723 (49-edge wrong-granularity adjacency)/PP-725 (worked examples at wrong granularity). Authoritative resolution per Jordan canonical clarification 2026-05-10 in single conversation: settlement = siege-target = city/fortress/village; districts and outposts subservient. Establishes hierarchy + new schema + corrected adjacency + retuned NPC-residence canon in one coordinated commit. Substrate-canonical files updated; downstream document migration (S-ID references in character_canon, migration_roster, npc_roster, etc.) deferred to lazy update as those documents are next touched. PP-723 (49-edge block) and PP-725 (worked-examples table) are superseded by this commit at canonical-substrate level; their patch_register entries remain in archive as historical record."
+

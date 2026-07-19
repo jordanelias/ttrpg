@@ -1,0 +1,426 @@
+{
+ "arming": {
+  "MoI": 0.088458825245,
+  "PoB_frac": 0.130341542607,
+  "PoB_m": 0.125127880903,
+  "afforded": {
+   "cut_thrust": [
+    0.93,
+    "shear_or_puncture"
+   ]
+  },
+  "agility": 0.394842890988,
+  "gap": 0.55,
+  "length_m": 0.96,
+  "m_head": 0.693318597036,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "light": [
+    "shear",
+    "cut_thrust"
+   ],
+   "medium": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "none": [
+    "shear",
+    "cut_thrust"
+   ]
+  },
+  "static_moment": 0.150153457084
+ },
+ "dagger": {
+  "MoI": 0.002387024726,
+  "PoB_frac": 0.12172587496,
+  "PoB_m": 0.040169538737,
+  "afforded": {
+   "cut_thrust": [
+    0.89,
+    "shear_or_puncture"
+   ]
+  },
+  "agility": 0.974193854449,
+  "gap": 0.84,
+  "length_m": 0.33,
+  "m_head": 0.202659298518,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "light": [
+    "shear",
+    "cut_thrust"
+   ],
+   "medium": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "none": [
+    "shear",
+    "cut_thrust"
+   ]
+  },
+  "static_moment": 0.012050861621
+ },
+ "greatsword": {
+  "MoI": 0.666286966034,
+  "PoB_frac": 0.168207913082,
+  "PoB_m": 0.277543056585,
+  "afforded": {
+   "straight_cut": [
+    0.89,
+    "shear"
+   ]
+  },
+  "agility": 0.238338545996,
+  "gap": 0.61,
+  "length_m": 1.65,
+  "m_head": 1.783892720183,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "shear",
+    "straight_cut"
+   ],
+   "light": [
+    "shear",
+    "straight_cut"
+   ],
+   "medium": [
+    "shear",
+    "straight_cut"
+   ],
+   "none": [
+    "shear",
+    "straight_cut"
+   ]
+  },
+  "static_moment": 0.749366252779
+ },
+ "longsword": {
+  "MoI": 0.138991761068,
+  "PoB_frac": 0.138249036351,
+  "PoB_m": 0.151382694805,
+  "afforded": {
+   "cut_thrust": [
+    0.89,
+    "shear_or_puncture"
+   ]
+  },
+  "agility": 0.352664991908,
+  "gap": 0.78,
+  "length_m": 1.095,
+  "m_head": 0.81777600935,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "light": [
+    "shear",
+    "cut_thrust"
+   ],
+   "medium": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "none": [
+    "shear",
+    "cut_thrust"
+   ]
+  },
+  "static_moment": 0.211935772727
+ },
+ "longsword_halfsword": {
+  "MoI": 0.02470629,
+  "PoB_frac": 0.055125,
+  "PoB_m": 0.06615,
+  "afforded": {
+   "point": [
+    0.85,
+    "puncture"
+   ]
+  },
+  "agility": 0.543134926638,
+  "gap": 0.85,
+  "length_m": 1.2,
+  "m_head": 0.49,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "point"
+   ],
+   "light": [
+    "puncture",
+    "point"
+   ],
+   "medium": [
+    "puncture",
+    "point"
+   ],
+   "none": [
+    "puncture",
+    "point"
+   ]
+  },
+  "static_moment": 0.09261
+ },
+ "mace": {
+  "MoI": 0.170886408428,
+  "PoB_frac": 0.406211523733,
+  "PoB_m": 0.3046586428,
+  "afforded": {
+   "blunt": [
+    7.451204178,
+    "percussion"
+   ]
+  },
+  "agility": 0.334913562158,
+  "gap": 0.23,
+  "length_m": 0.75,
+  "m_head": 0.540265542746,
+  "perc_auth": 7.45120417781,
+  "select_mode": {
+   "heavy": [
+    "percussion",
+    "blunt"
+   ],
+   "light": [
+    "percussion",
+    "blunt"
+   ],
+   "medium": [
+    "percussion",
+    "blunt"
+   ],
+   "none": [
+    "percussion",
+    "blunt"
+   ]
+  },
+  "static_moment": 0.36559037136
+ },
+ "paired_short": {
+  "MoI": 0.01517560081,
+  "PoB_frac": 0.039973855917,
+  "PoB_m": 0.022785097873,
+  "afforded": {
+   "cut_thrust": [
+    0.93,
+    "shear_or_puncture"
+   ]
+  },
+  "agility": 0.613512112633,
+  "gap": 0.58,
+  "length_m": 0.57,
+  "m_head": 0.282574123147,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "light": [
+    "shear",
+    "cut_thrust"
+   ],
+   "medium": [
+    "puncture",
+    "cut_thrust"
+   ],
+   "none": [
+    "shear",
+    "cut_thrust"
+   ]
+  },
+  "static_moment": 0.015949568511
+ },
+ "poleaxe": {
+  "MoI": 1.136635419087,
+  "PoB_frac": 0.091147636703,
+  "PoB_m": 0.164065746065,
+  "afforded": {
+   "blunt": [
+    5.832812632,
+    "percussion"
+   ],
+   "point": [
+    0.78,
+    "puncture"
+   ]
+  },
+  "agility": 0.208547178588,
+  "gap": 0.78,
+  "length_m": 1.8,
+  "m_head": 0.696637302591,
+  "perc_auth": 5.832812632351,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "point"
+   ],
+   "light": [
+    "percussion",
+    "blunt"
+   ],
+   "medium": [
+    "percussion",
+    "blunt"
+   ],
+   "none": [
+    "percussion",
+    "blunt"
+   ]
+  },
+  "static_moment": 0.410164365162
+ },
+ "rapier": {
+  "MoI": 0.112511076913,
+  "PoB_frac": 0.107455621282,
+  "PoB_m": 0.122499408261,
+  "afforded": {
+   "point": [
+    0.61,
+    "puncture"
+   ]
+  },
+  "agility": 0.37180120637,
+  "gap": 0.61,
+  "length_m": 1.14,
+  "m_head": 0.537488947777,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "point"
+   ],
+   "light": [
+    "puncture",
+    "point"
+   ],
+   "medium": [
+    "puncture",
+    "point"
+   ],
+   "none": [
+    "puncture",
+    "point"
+   ]
+  },
+  "static_moment": 0.159249230739
+ },
+ "sabre": {
+  "MoI": 0.065685794573,
+  "PoB_frac": 0.11612246938,
+  "PoB_m": 0.114961244686,
+  "afforded": {
+   "curved_cut": [
+    1.24,
+    "shear"
+   ]
+  },
+  "agility": 0.425345409946,
+  "gap": 0.36,
+  "length_m": 0.99,
+  "m_head": 0.451403772406,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "shear",
+    "curved_cut"
+   ],
+   "light": [
+    "shear",
+    "curved_cut"
+   ],
+   "medium": [
+    "shear",
+    "curved_cut"
+   ],
+   "none": [
+    "shear",
+    "curved_cut"
+   ]
+  },
+  "static_moment": 0.103465120217
+ },
+ "spear": {
+  "MoI": 2.066505483526,
+  "PoB_frac": 0.352592458452,
+  "PoB_m": 0.70871084149,
+  "afforded": {
+   "point": [
+    0.72,
+    "puncture"
+   ]
+  },
+  "agility": 0.179597577532,
+  "gap": 0.72,
+  "length_m": 2.01,
+  "m_head": 0.396307360522,
+  "perc_auth": 0.0,
+  "select_mode": {
+   "heavy": [
+    "puncture",
+    "point"
+   ],
+   "light": [
+    "puncture",
+    "point"
+   ],
+   "medium": [
+    "puncture",
+    "point"
+   ],
+   "none": [
+    "puncture",
+    "point"
+   ]
+  },
+  "static_moment": 1.417421682979
+ },
+ "staff": {
+  "MoI": 0.362314896206,
+  "PoB_frac": 0.00717632376,
+  "PoB_m": 0.012056223916,
+  "afforded": {
+   "blunt": [
+    2.514720313,
+    "percussion"
+   ]
+  },
+  "agility": 0.277547977834,
+  "gap": 0.19,
+  "length_m": 1.68,
+  "m_head": 0.022194815751,
+  "perc_auth": 2.51472031259,
+  "select_mode": {
+   "heavy": [
+    "percussion",
+    "blunt"
+   ],
+   "light": [
+    "percussion",
+    "blunt"
+   ],
+   "medium": [
+    "percussion",
+    "blunt"
+   ],
+   "none": [
+    "percussion",
+    "blunt"
+   ]
+  },
+  "static_moment": 0.018084335874
+ }
+}

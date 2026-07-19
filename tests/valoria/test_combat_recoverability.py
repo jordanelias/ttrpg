@@ -8,13 +8,13 @@ multiplier), longsword is the 1.0 reference, and the multiplier is floored so it
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 import pytest  # noqa: E402
 pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
 
-import systems as S  # noqa: E402
+import combat_systems as S  # noqa: E402
 from combatant import WEAPONS, Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 
@@ -31,7 +31,15 @@ def test_recoverability_ordering_by_static_moment():
 
 def test_anchor_is_near_one():
     """The 2H cut-thrust anchor (a ~1.4kg longsword-class blade) sets the scale -> recoverability ~1.0. The refs
-    (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0."""
+    (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0.
+    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real per-part longsword MoI (grip/pommel/guard at
+    their true measured positions, not the old formula's residual-lump) reads meaningfully higher than the
+    Phase-A reproduction, pushing this anchor to ~1.29. The ordering test above (still green) shows the STRUCTURE
+    survives; REC_I_REF/REC_S_REF need Phase C's balance-harness re-tune against the now-grounded MoI, not a
+    per-weapon mass fudge.
+    [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (the closing-distance/facing/grip/contact redesign, I0->I8) is
+    complete and did not touch REC_I_REF/REC_S_REF or this anchor; still correctly deferred to Phase C — see
+    designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md item 7."""
     assert abs(_r('longsword') - 1.0) < 0.03
 
 

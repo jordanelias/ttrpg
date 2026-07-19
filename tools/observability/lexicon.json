@@ -7,13 +7,13 @@
       "references/deprecated_terms_registry.yaml",
       "references/censured_vocabulary.yaml",
       "references/proper_noun_registry.yaml",
-      "canon/placeholder_names.yaml",
+      "registers/placeholder_names.yaml",
       "references/descriptor_registry.yaml",
       "references/glossary.md",
       "designs/architecture/scale_transitions_v30.md"
     ],
     "stats": {
-      "terms": 390,
+      "terms": 392,
       "abbreviations": 35,
       "collisions": 4,
       "deprecated": 20,
@@ -168,7 +168,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -255,7 +255,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -274,7 +274,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -285,8 +285,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Narrative sequence \u2014 a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in designs/arcs/. See designs/arcs/arc_expansion_v30.md.",
-      "range": "Narrative sequence \u2014 a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in designs/arcs/. See designs/arcs/arc_expansion_v30.md.",
+      "definition": "Narrative sequence \u2014 a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See arcs/arc_expansion_v30.md.",
+      "range": "Narrative sequence \u2014 a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See arcs/arc_expansion_v30.md.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -338,8 +338,8 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "Behaviour-tree decision logic for NPC-controlled factions/characters. See designs/npcs/npc_behavior_v30.md.",
-      "range": "Behaviour-tree decision logic for NPC-controlled factions/characters. See designs/npcs/npc_behavior_v30.md.",
+      "definition": "Behaviour-tree decision logic for NPC-controlled factions/characters. See systems/npcs/npc_behavior_v30.md.",
+      "range": "Behaviour-tree decision logic for NPC-controlled factions/characters. See systems/npcs/npc_behavior_v30.md.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -378,7 +378,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -736,8 +736,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See designs/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
-      "range": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See designs/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
+      "definition": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See systems/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
+      "range": "Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See systems/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance).",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -761,7 +761,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -778,7 +778,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -797,7 +797,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -897,7 +897,7 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "Cosmological worldview track (PP-551). Solmund orthodoxy (5) \u2192 Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. CERT not standalone \u2014 write Certainty.",
+      "definition": "Cosmological worldview track. Solmund orthodoxy (5) \u2192 Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. CERT not standalone \u2014 write Certainty.",
       "range": "0-5",
       "status": "canonical",
       "replacement": "",
@@ -998,7 +998,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -1402,7 +1402,7 @@
       "aliases": [],
       "legacy": [],
       "definition": "Social endurance track. Used in Debate. Rattled at \u2264 2; concession forced at 0.",
-      "range": "varies",
+      "range": "params/core.md \u00a7Derived Scores",
       "status": "canonical",
       "replacement": "",
       "collision_note": "COMP also means Computation/Composition in general English. Write 'Composure' in game documents.",
@@ -1482,7 +1482,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -1716,7 +1716,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -1790,7 +1790,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2006,8 +2006,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
-      "range": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
+      "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
+      "range": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -2061,8 +2061,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in designs/architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 346 chains).",
-      "range": "Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in designs/architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 346 chains).",
+      "definition": "Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in systems/_architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 346 chains).",
+      "range": "Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in systems/_architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 346 chains).",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -2126,7 +2126,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2145,7 +2145,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -2165,7 +2165,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -2182,7 +2182,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -2238,7 +2238,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -2500,6 +2500,26 @@
       ]
     },
     {
+      "canonical": "Facility Tier",
+      "type": "descriptor",
+      "category": "",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [
+        "FacilityTier",
+        "FacilityTier_s"
+      ],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ]
+    },
+    {
       "canonical": "Faction Behavior Tree",
       "type": "",
       "category": "",
@@ -2615,7 +2635,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -2663,7 +2683,7 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Contact duration in Thread operation rounds.",
+      "definition": "Attribute governing Thread contact economy \u2014 see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description).",
       "range": "1-5+",
       "status": "canonical",
       "replacement": "",
@@ -2731,6 +2751,25 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Fort Level",
+      "type": "descriptor",
+      "category": "",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [
+        "Fort"
+      ],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
       ]
     },
     {
@@ -2926,7 +2965,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -3000,7 +3039,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -3017,7 +3056,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3034,7 +3073,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3069,7 +3108,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3088,7 +3127,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3107,7 +3146,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -3124,7 +3163,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3141,7 +3180,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3155,7 +3194,7 @@
       "aliases": [],
       "legacy": [],
       "definition": "Wound track. Resets per wound. HP not standalone \u2014 write Health.",
-      "range": "= Endurance",
+      "range": "params/core.md \u00a7Derived Scores; derived_stats_v30.md \u00a74.1 (authoritative)",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -3246,7 +3285,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3283,7 +3322,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3433,7 +3472,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -3686,7 +3725,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -3722,7 +3761,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3831,7 +3870,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -3966,7 +4005,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -4327,8 +4366,8 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per designs/npcs/npc_behavior_v30.md.",
-      "range": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per designs/npcs/npc_behavior_v30.md.",
+      "definition": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per systems/npcs/npc_behavior_v30.md.",
+      "range": "A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per systems/npcs/npc_behavior_v30.md.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -4370,7 +4409,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -4387,7 +4426,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -4719,7 +4758,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -5059,7 +5098,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5078,7 +5117,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5165,7 +5204,7 @@
       "range": "",
       "status": "canonical",
       "replacement": "PT",
-      "collision_note": "CV was a legacy abbreviation for the per-territory track. PT is canonical per ED-644.",
+      "collision_note": "CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644 (rename pending).",
       "sources": [
         "references/censured_vocabulary.yaml"
       ]
@@ -5261,7 +5300,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_character_analyses_v30.md"
+        "systems/npcs/npc_character_analyses_v30.md"
       ]
     },
     {
@@ -5331,7 +5370,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -5421,7 +5460,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -5529,7 +5568,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -5651,7 +5690,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -5668,7 +5707,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -5906,7 +5945,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -6013,7 +6052,7 @@
       "aliases": [],
       "legacy": [],
       "definition": "Combat resource. Degrades per round.",
-      "range": "Endurance + History + 1 (armour-modified)",
+      "range": "params/core.md \u00a7Derived Scores",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -6062,7 +6101,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -6188,7 +6227,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -6246,7 +6285,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -6526,7 +6565,9 @@
       "abbreviations": [
         "TPS"
       ],
-      "aliases": [],
+      "aliases": [
+        "TPS"
+      ],
       "legacy": [],
       "definition": "Bonus dice added to Thread operation pools.",
       "range": "= Thread Sensitivity \u00f7 10 (round down)",
@@ -6536,6 +6577,7 @@
       "sources": [
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml",
         "references/glossary.md"
       ]
     },
@@ -6547,7 +6589,9 @@
       "abbreviations": [
         "TS"
       ],
-      "aliases": [],
+      "aliases": [
+        "TS"
+      ],
       "legacy": [],
       "definition": "Perception depth and operation eligibility. Determines accessible operation scale.",
       "range": "0-100+",
@@ -6557,6 +6601,7 @@
       "sources": [
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml",
         "references/glossary.md"
       ]
     },
@@ -6704,7 +6749,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -6814,7 +6859,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -6831,7 +6876,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/world/geography_v30.md"
+        "systems/world/geography_v30.md"
       ]
     },
     {
@@ -6850,7 +6895,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -6869,7 +6914,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "canon/placeholder_names.yaml"
+        "registers/placeholder_names.yaml"
       ]
     },
     {
@@ -7187,7 +7232,7 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "designs/npcs/npc_roster_v30.md"
+        "systems/npcs/npc_roster_v30.md"
       ]
     },
     {
@@ -7232,8 +7277,8 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See designs/architecture/scale_transitions_v30.md \u00a74.",
-      "range": "Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See designs/architecture/scale_transitions_v30.md \u00a74.",
+      "definition": "Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See systems/_architecture/scale_transitions_v30.md \u00a74.",
+      "range": "Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See systems/_architecture/scale_transitions_v30.md \u00a74.",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
@@ -7964,9 +8009,9 @@
     },
     {
       "term": "CV (abbreviation for Conviction Track)",
-      "reason": "CV was a legacy abbreviation for the per-territory track. PT is canonical per ED-644.",
+      "reason": "CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644 (rename pending).",
       "replacement": "PT",
-      "authority": "ED-644 + vocabulary audit",
+      "authority": "ED-644 + vocabulary audit (rename pending)",
       "canonical_full": "PT (Piety Track)"
     },
     {
@@ -9655,11 +9700,26 @@
     "social": [
       "Social"
     ],
+    "fort level": [
+      "Fort Level"
+    ],
+    "fort": [
+      "Fort Level"
+    ],
     "prosperity": [
       "Prosperity"
     ],
     "defense": [
       "Defense"
+    ],
+    "facility tier": [
+      "Facility Tier"
+    ],
+    "facilitytier": [
+      "Facility Tier"
+    ],
+    "facilitytier_s": [
+      "Facility Tier"
     ],
     "13 convictions": [
       "13 Convictions"

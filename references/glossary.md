@@ -1,8 +1,11 @@
 # VALORIA GLOSSARY
 ## Terms, Abbreviations, and Acronyms
-## Last updated: 2026-04-30
+## Last updated: 2026-07-01 (maintenance pointer repaired — ED-1084; content last swept 2026-04-30, PP-691)
 ## Authority: This file is the canonical reference for all term expansions project-wide.
-## Maintained by: valoria-orchestrator skill (update on any commit that introduces a new term)
+## Maintained by: hand, in the same commit as any file that introduces or retires a term
+## (the former maintainer, the valoria-orchestrator skill, was retired to deprecated/skills/
+## on 2026-06-28 — LB-22. Definition display names live in references/names_index.yaml;
+## this glossary covers expansions and abbreviations.)
 
 ---
 
@@ -25,6 +28,8 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 
 ### Core Attributes
 
+⚠️ **IN FLUX** (ED-IN-0025, 2026-07-07, C-VERIFY-19/21): this 7-attribute roster conflicts with `references/descriptor_registry.yaml`'s 9-attribute roster (where Cognition/Presence/Spirit are aliases of Acuity/Charisma/Will). Neither file defers to the other, and `references/names_index.yaml`'s MIRRORS block omits this glossary, so `tools/ci_names_consistency.py` never flags the disagreement. Do not treat either table as settled. (Building a real glossary mirror into names_index + the consistency checker is a follow-on tooling change.)
+
 | Full Term | Abbr | Range | Description |
 |-----------|------|-------|-------------|
 | Agility | — | 1–7 | Physical speed and coordination. Combat pool base. |
@@ -37,16 +42,22 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 
 ### Derived Character Stats
 
-| Full Term | Abbr | Formula / Range | Description |
-|-----------|------|-----------------|-------------|
-| Health | HP* | = Endurance | Wound track. Resets per wound. *HP not standalone — write Health.* |
-| Stamina | — | Endurance + History + 1 (armour-modified) | Combat resource. Degrades per round. |
-| Coherence | — | 10→0 | Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner. |
-| Intelligibility | — | 10→0 | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
-| Composure | — | varies | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
-| Focus | — | 1–5+ | Contact duration in Thread operation rounds. |
-| Certainty | CERT* | 0–5 | Cosmological worldview track (PP-551). Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. *CERT not standalone — write Certainty.* |
-| Momentum | — | 0–4 | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
+**Formula column retired 2026-07-08 (ED-IN-0029 docket, OPT-AV-7):** this glossary's own charter
+(header above) is term/abbreviation expansion, not mechanical authority — restating formulas here
+duplicated `params/core.md`/`derived_stats_v30.md` and had already drifted two supersessions stale
+(Health/Stamina) with no mechanism to catch it. Formulas now live in exactly one place each; this
+table gives the term, abbreviation, and a pointer only.
+
+| Full Term | Abbr | Formula lives at | Description |
+|-----------|------|-------------------|-------------|
+| Health | HP* | `params/core.md` §Derived Scores; `derived_stats_v30.md` §4.1 (authoritative) | Wound track. Resets per wound. *HP not standalone — write Health.* |
+| Stamina | — | `params/core.md` §Derived Scores | Combat resource. Degrades per round. |
+| Coherence | — | `params/core.md` §Derived Scores | Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner. |
+| Intelligibility | — | (see Coherence — same source) | How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold. |
+| Composure | — | `params/core.md` §Derived Scores | Social endurance track. Used in Debate. Rattled at ≤ 2; concession forced at 0. |
+| Focus | — | `references/descriptor_registry.yaml` (attribute) | Attribute governing Thread contact economy — see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description). |
+| Truth | — | `params/core.md` §Truth Track (PP-551) | Per-character metaphysical stance (**formerly "Certainty"**; also consolidates the retired character "Piety Track" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0–5; **players see qualitative bands, never the number**. All PCs have it; named NPCs at GM discretion; factions do not hold Truth. *Legacy "Certainty"/`CERT` resolve to Truth pending the corpus rename (ED-IN-0075 staged sweep).* |
+| Momentum | — | `params/core.md` §Derived Scores | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). |
 
 ### Thread Practitioner Stats
 
@@ -70,7 +81,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 | Institutional Pressure | IP | 0–100 | ALL | 20 | 75/80 = Altonian Vanguard (BG) | Pressure from the Altonian Empire. Invasion threat tracker. |
 | Public Instability | PI | 0–10 | BG | 5 | 0 = Parliament dissolved + Löwenritter coup | Parliamentary health tracker. Board Game mode only. |
 
-**Old CI = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `CI` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `canon/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `CI` in new content.**
+**Old CI = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `CI` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `registers/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `CI` in new content.**
 
 ---
 
@@ -152,16 +163,16 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Inspiration | — | Named focus that grants bonus dice when engaged in relevant scenes. Distinct from Belief (which drives Momentum/CP) and History (which is experiential skill). Per ED-779. |
 | History | — | Skill-equivalent. Specific experiential knowledge that grants bonus dice. Cap = Memory score. |
 | Character Point | CP | Advancement currency earned through Beliefs and session milestones. **CP refers to Character Points only** (ED-136); see PART TWELVE collision entry. |
-| Disposition | — | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `designs/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). |
-| Domain Action | — | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `designs/architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). |
+| Disposition | — | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). |
+| Domain Action | — | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `systems/_architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). |
 | Domain Echo | — | Faction-level consequence triggered by decisive Debate outcomes. |
 | Grievance Marker | — | Token placed on a faction after hostile covert action. Originally scoped to Niflhel hostile action; Niflhel-as-faction struck per ED-764, scope extended to any covert/hostile action. |
 | Co-Movement Card | — | Strategic-layer mechanism for Thread co-movement; resolved on every Thread operation result. (BG layer — name reflects card-economy origin; engine implementation is automatic on Thread-operation-completion event.) |
 | Einhir | — | Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis. |
-| Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in designs/arcs/. See `designs/arcs/arc_expansion_v30.md`. |
-| Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `designs/architecture/scale_transitions_v30.md` §4. |
+| Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. |
+| Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `systems/_architecture/scale_transitions_v30.md` §4. |
 | Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
-| Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `designs/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
+| Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `systems/npcs/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
 
 ---
 
@@ -192,10 +203,10 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Editorial Decision | ED-NNN | Editorial decision requiring user approval. Tracked in `canon/editorial_ledger.yaml`. |
 | Simulation Debt | SIM-DEBT-NNN | Outstanding simulation recalibration needed after a mechanical change. |
 | Game Master | GM | Design-source-of-truth role term. **In Valoria's videogame target there is no GM** — engine handles all resolution. The term persists in design corpus as legacy taxonomy; in implementation it maps to engine resolution authority (priority systems, scripted scene resolution, NPC AI orchestration). The bare-`GM` corpus sweep is queued; new content should use "engine" or write "Game Master" in full only when referring to the design-source taxonomic role. |
-| Non-Player Character | NPC | A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per `designs/npcs/npc_behavior_v30.md`. |
+| Non-Player Character | NPC | A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per `systems/npcs/npc_behavior_v30.md`. |
 | Player Character | PC | A character controlled by a player. |
 | Burning Wheel | BW | Precedent game (Burning Wheel by Luke Crane). Referenced in cognitive load / precedent analysis. **Design-precedent term**; not an in-game mechanic. |
-| Artificial Intelligence | AI | Behaviour-tree decision logic for NPC-controlled factions/characters. See `designs/npcs/npc_behavior_v30.md`. |
+| Artificial Intelligence | AI | Behaviour-tree decision logic for NPC-controlled factions/characters. See `systems/npcs/npc_behavior_v30.md`. |
 
 For Expected Value (EV) / Target Number (TN) / Obstacle (Ob) — see Part Six.
 
@@ -218,8 +229,8 @@ These are canonical-authority systems with their own design docs. Hub-centrality
 | Full Term | Canonical doc | Description |
 |-----------|---------------|-------------|
 | Turmoil | `designs/provincial/peninsular_strain_v30.md` | Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A — top quintile in cite + mu + pp). |
-| Conflict Architecture | `designs/architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
-| Campaign Architecture | `designs/architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
+| Conflict Architecture | `systems/_architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
+| Campaign Architecture | `systems/_architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
 | Victory | `designs/provincial/victory_v30.md` + `params/bg/victory.md` | Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / Löwenritter / RM / Guilds). |
 | CI Political | `designs/provincial/ci_political_v30.md` | Church Influence political dynamics — milestones, seizure mechanics, Theocracy Unification spec. Renamed from `tc_political_redesign_v30` (same doc, CI = Church Influence's politically-active form per `references/canonical_sources.yaml` note). |
 
@@ -247,7 +258,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Resolution | Status |
 |-------------|------------|--------|
-| CERT | Certainty (cosmological worldview track, 0–5; PP-551). See Part One. | RESOLVED — active stat |
+| CERT | Legacy abbreviation for the former **Certainty** Track — now **Truth** (renamed + consolidated, ED-IN-0075; see Part One). Retire; do not use for new writing. | SUPERSEDED — renamed to Truth |
 | TLK | Torben Loyalty Clock (narrative-specific, 10→0; F72 gap). | DEPRECATED — historical only |
 | DD | Deniability Debt (Niflhel Operative mechanic). Niflhel-as-faction struck per ED-764; mechanic survives as "Deniability Debt" full term where retained. | DEPRECATED — abbreviation not in active use |
 | FSTAT | Faction Stats (collective shorthand for Mandate / Influence / Wealth / Military / Intel / Stability). | DEPRECATED — simulator code, never in-game term |
@@ -268,4 +279,5 @@ DR contribution to Health per Size means heavily armoured units accumulate Healt
 - **2026-04-30 (PP-691):** P0 propagation pass following terminology vector-audit. CI thresholds reconciled to ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic / 65 / 80 / 100). Added Disposition + Domain Action (Mode D cascade sinks). Added new Part Eleven for top-level systems (Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A hubs). Old Part Twelve (UNRESOLVED) replaced by new Part Thirteen (DEPRECATED / RESOLVED) reflecting alias_registry deprecated_abbreviations. Old Part Eleven (collision table) renumbered to Part Twelve. Added VG-target preamble and Game Master engine-resolution note. RS legacy entry added to collision table. Coherence vs Intelligibility disambiguation. TT/MS opposite-direction note. CE relationship to Stamina clarified. Inspiration/Belief/History distinction added.
 - 2026-04-24 (PP-678): Game Master full-phrase corpus sweep. Cardinal naming reconciled. Earlier glossary touchpoints.
 
-*Glossary maintained by valoria-orchestrator. Update in the same commit as any file that introduces or retires a term.*
+*Glossary maintained by hand (the valoria-orchestrator skill was retired 2026-06-28, LB-22).
+Update in the same commit as any file that introduces or retires a term. (ED-1084)*

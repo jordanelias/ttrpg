@@ -1,0 +1,105 @@
+{
+ "lens": "playability_legibility",
+ "verdict": "The North Star's \"answer it from the screen\" bar has no maintained home. The one comprehensive player-facing spec (UI/UX v4.1, CANONICAL 2026-04-16) predates the entire current generation, is absent from CURRENT.md, and its 20-P1 repair workplan never executed \u2014 so the only current-era player-interaction artifact is the contest walkthrough (DRAFT, one subsystem). Applying the three dramatic-legibility questions per scale: only Ag\u00f4n contest passes; combat fails outright (no per-exchange input, stakeless Wounds); governance, faction, thread, and season-close are partial-to-weak. The player must hold ~27-30 named trackers across scales \u2014 far above the corpus's own immersion ceilings (3-4 personal / 7 strategic) \u2014 with presentation-layer translation existing for only two scales.",
+ "key_points": [
+  "Contest walkthrough is the only CURRENT-ERA player-interaction model; a large CANONICAL UI/UX v4.1 exists but is stale (2026-04-16, pre-d+\u03c3/combat_engine_v1/contest-rebuild/Key-substrate), absent from CURRENT.md, and its v4.2 replacement was never built.",
+  "The stale v4.1 actively contaminates the Godot-facing reference: it still specifies Taint (0-6) and CD as player-facing tracks that canon STRUCK (threadwork_v30 line 653/984/990); the repair items are untracked and their proposed ED numbers are already occupied.",
+  "~27-30 named trackers across scales vs the 2026-05-08 immersion audit's own ceilings (3-4 personal, 7 strategic); only contest and (partially) combat carry any presentation-layer translation.",
+  "Dramatic-legibility walk: Ag\u00f4n contest PASS; faction strategic PARTIAL (whose-at-risk scattered, GM-controls-votes hole); governance WEAK (no NPC ambition field); combat FAIL (no per-exchange input, stakeless Wounds); thread PARTIAL (MS/RS split blocks one-sentence read); season-close UNEVEN (articulation blind to thread/era, starvation gap).",
+  "~6 of 7 scales have no live player-interaction model and no index entry commissioning one \u2014 the GM-removal mandate the walkthrough exists to satisfy is unmet almost everywhere.",
+  "Preserve: the walkthrough's resolved-value=visible-value + hidden-value->consequence-class contract, and v4.1's capability-gated method (salvage, not rewrite)."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "ui-spec-stranded-off-index",
+   "subsystem": "player-facing legibility layer",
+   "claim": "The only comprehensive player-facing spec (UI/UX v4.1, CANONICAL) predates the entire current generation, is absent from CURRENT.md, and its 20-P1 repair workplan (v4.2) was never executed \u2014 leaving the 'from the screen' North Star bar with no maintained home and the DRAFT one-subsystem contest walkthrough as the only current-era interaction artifact.",
+   "cite": "designs/ui/valoria_ui_ux_v4_1.md header (CANONICAL, 2026-04-16, deps='19 v30 docs'+combat_v30); CURRENT.md (no designs/ui or player_agency row); designs/ui/valoria_ui_ux_v4_2_workplan.md (69 findings/20 P1, target v4.2 absent from dir)",
+   "criterion": "Q-robust",
+   "direction": "backwards",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "no-interaction-model-6of7-scales",
+   "subsystem": "cross-scale player interaction",
+   "claim": "Only Ag\u00f4n contest has a current-era player-interaction model; combat, domain/settlement governance, faction strategic, thread ops, mass battle, and season-close/articulation have none and no live index entry commissioning one, so the GM-removal mandate the walkthrough exists to satisfy is unmet for ~6 of 7 scales.",
+   "cite": "designs/audit/2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md (scoped to 'the one game fully built'); CURRENT.md (no player-interaction rows for other scales)",
+   "criterion": "Q-robust",
+   "direction": "top-down",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "tracker-cognitive-load-over-ceiling",
+   "subsystem": "HUD / cognitive load",
+   "claim": "The player must hold ~27-30 named trackers across scales (Coherence/Fatigue/Face/Concentration/Persuasion/Doubt/Wounds/Momentum/Resources/TS/Certainty/Evidence/Exposure/Disposition/Standing/Renown + Mandate/Stability/Accord/Turmoil/CI/MS-RS/IP/Prosperity-Order-Defense/L-PS/Treasury), far above the corpus's own immersion ceilings, with presentation-layer translation existing for only two scales.",
+   "cite": "designs/audit/2026-05-08-meta-audit-immersion.md \u00a73,\u00a75 (3-4 personal / 7 strategic ceiling; mechanical vocabulary leak); designs/architecture/player_agency_v30.md \u00a75-\u00a76 (Standing/Renown/scene-budget)",
+   "criterion": "Q-elegant",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": false,
+   "tracked_ref": "2026-05-08-meta-audit-immersion \u00a75 finding 2 (new scope: cross-scale count + stale mitigating layer)"
+  },
+  {
+   "id": "ui-taint-cd-noncanon-tracks",
+   "subsystem": "UI/UX v4.1 vs threadwork canon",
+   "claim": "The CANONICAL Godot-facing UI reference still specifies Taint (0-6) and CD as player-facing tracks that canon explicitly struck, so a developer building the character sheet renders two trackers that do not exist; the repair items are untracked and their proposed ED numbers are already occupied by unrelated entries.",
+   "cite": "designs/ui/valoria_ui_ux_v4_1.md \u00a79.7/\u00a79.8/\u00a710.2/\u00a711.3; designs/threadwork/threadwork_v30.md:653,984,990 (Taint struck); designs/ui/valoria_ui_ux_v4_2_workplan.md F-15/F-16; canon/editorial_ledger.jsonl ED-638/639/641 (occupied)",
+   "criterion": "Q-smooth",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": true,
+   "tracked_ref": ""
+  },
+  {
+   "id": "combat-legibility-blackhole",
+   "subsystem": "personal_combat playability",
+   "claim": "player_agency routes a scene into combat as the player's choice of system, but the engagement loop exposes no per-exchange player-decision parameter and Health/Wounds carry no goal/stake/season-clock, so all three dramatic-legibility questions fail from the combat screen \u2014 the one current-era scale with neither an interaction model nor threadwork.",
+   "cite": "designs/architecture/player_agency_v30.md \u00a74.4 (scene->combat routing); dossier personal_combat (engagement() no player-decision param; scene.combat_resolved health-bar payload); designs/audit/.../00_grounding/03_threadwork_surface.md \u00a73 (ED-911)",
+   "criterion": "Q-robust",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "ED-911 (thread gap); combat legibility per personal_combat dossier pc-legibility-fails"
+  },
+  {
+   "id": "season-close-surfacing-uneven",
+   "subsystem": "articulation / season close",
+   "claim": "Season-close narrative surfacing runs through articulation, which is silent on Thread/Calamity, self-contradictory on battle-conclusion coverage, blind to victory-era transitions, and has a starvation path (a Bonded NPC whose Keys never match a trigger is never rendered) \u2014 so 'what happened / whose position moved' is weakest exactly at the moment designed to answer it.",
+   "cite": "dossier articulation (starvation-mechanism-unwired \u00a73.3/\u00a75; thread-silence full-text; ED-1006 era-blindness); designs/audit/.../00_grounding/03_threadwork_surface.md \u00a73",
+   "criterion": "N",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "ED-1006 (era transitions); grounding 03 \u00a73 (articulation thread silence)"
+  },
+  {
+   "id": "thread-worldtrack-unreadable",
+   "subsystem": "threadwork legibility",
+   "claim": "A player cannot state in one sentence which world track is failing because the MS-vs-RS naming split is live across canonical docs, imposing a legibility tax on the corpus's richest decision space.",
+   "cite": "designs/audit/.../00_grounding/03_threadwork_surface.md \u00a71 (MS in threadwork_v30 \u00a75 vs RS in params/threadwork.md); dossier threadwork ms-rs-split-live (ED-731/772 sweep never reached params)",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "threadwork": true,
+   "tracked_ref": "ED-428/731/772"
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_playability_legibility.md"
+}

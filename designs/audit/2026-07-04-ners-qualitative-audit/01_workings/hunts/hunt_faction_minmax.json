@@ -1,0 +1,80 @@
+{
+ "arena": "faction_minmax",
+ "lines": [
+  {
+   "line": "Sign a qualifying Treaty (Crown Treaty / Peace / Alliance / Capitulation / Tributary) with the other 3 factions, hold ONE province at Accord>=2, and win \u2014 treaty-held territory counts toward the 15, is EXEMPT from your Accord>=2 requirement, AND drives Turmoil down. I never govern the other 14 territories.",
+   "permitting_rules": "peninsular_strain_v30.md \u00a76 L351/L432 (treaty territory counts, 'do not need to meet Accord>=2 for the hegemon'), ED-791 treaty-type qualification; victory_v30.md \u00a70 effective hegemony; strain \u00a74.2 (treaty formation -1, active pair -2/season Strain)",
+   "what_breaks": "Omega non-dominance: treaty-hegemony strictly dominates conquer-and-govern (less Turmoil, no Accord burden, no MS loss). Collapses the entire settlement/Accord/Govern cultivation tree \u2014 the densest interdependency edge \u2014 for 14 of 15 territories.",
+   "confidence": "high"
+  },
+  {
+   "line": "Run many Debate/personal scenes per season to farm my Mandate UP and a rival's Mandate DOWN at the same time \u2014 the cap is one Echo per SCENE, not per season, so I just make more scenes until hegemon Mandate>=5 and rival Mandate<=1.",
+   "permitting_rules": "scale_transitions_v30.md \u00a75.1 (cap = 1 Echo/scene/faction), \u00a75.2 (OW \u00b12 / Success \u00b11 to faction stat), \u00a75.4 (Debate Track>=7: winner +1 Mandate, loser -1 Mandate); \u00a75.3 only fixes timing not count",
+   "what_breaks": "Omega non-dominance + cross-scale-consequence clause: the personal-scene bridge becomes a Mandate farm feeding the Line-1 institutional-domination clause; outruns the \u00a71.8 mean-reverting stabilizer at >=1 debate/rival/season.",
+   "confidence": "medium"
+  },
+  {
+   "line": "Reach Mandate 5 by developing ONE metropolis province (Weight-weighted saturating Mandate), then ignore breadth \u2014 my institutional power and Parliament votes don't need more land.",
+   "permitting_rules": "settlement_layer_v30.md \u00a71.8 (Mandate=clamp(round(7T/(T+6))), size-weighted, 'one province of large developed settlements has higher Mandate than many tiny'; sim Church Himmelenger=5); faction_layer \u00a75.3 votes=Mandate",
+   "what_breaks": "Enabler for Line 1's hegemon>=5; largely intended/N-grounded (metropolis>hamlets) so not itself a flatten \u2014 P3.",
+   "confidence": "high"
+  },
+  {
+   "line": "As the incumbent, strip -1 insurgent Presence marker every season with Enforce at Ob 2, permanently choking any emergent faction before it can form.",
+   "permitting_rules": "victory_v30.md \u00a73.5 (Crown Enforce = Military vs Ob 2, Success -1 marker; RM spread +1/season only at Stability>=3; marker cap 5)",
+   "what_breaks": "GD-3 Revolt->Insurgency->Faction pipeline and the 'build your own faction from nothing' North-Star promise (victory \u00a73). Damped by Enforce's Order -1 self-cost feeding Accord down \u2014 a real but possibly-ignored trade.",
+   "confidence": "medium"
+  }
+ ],
+ "findings": [
+  {
+   "id": "hegemony-accord-exemption-solves-gd1",
+   "subsystem": "faction/victory (GD-1)",
+   "claim": "GD-1 is dominated by a treaty-hegemony line: qualifying treaties make rival territory count toward the 15, exempt it from Accord>=2, AND lower Turmoil, so 'sign 3-4 treaties + hold one province' strictly beats conquer-and-govern and makes the settlement/Accord/Govern game optional for victory.",
+   "cite": "peninsular_strain_v30.md \u00a76 L432 (Accord exemption) + L351 (treaty territory counts) + ED-791; victory_v30.md \u00a70 effective hegemony; strain \u00a74.2 (treaties reduce Strain)",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "domain-echo-per-scene-not-per-season",
+   "subsystem": "scale_transitions / Domain Echo",
+   "claim": "Domain Echo's cap is per-scene not per-season, so Debate-scene spam farms hegemon Mandate up and rival Mandate down simultaneously \u2014 the exact quantities the GD-1 institutional-domination clause reads \u2014 with no count limit found; \u00a75.3 only fixes timing.",
+   "cite": "scale_transitions_v30.md \u00a75.1 (1 Echo/scene/faction), \u00a75.2, \u00a75.4 (Debate \u00b11 Mandate), \u00a75.3",
+   "criterion": "Omega",
+   "direction": "diagonal",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "enforce-rote-chokes-gd3-emergence",
+   "subsystem": "faction/insurgency (GD-3)",
+   "claim": "Incumbents can strip insurgent Presence markers by rote (Crown Enforce, Military vs Ob 2, -1 marker/season), permanently choking the Revolt->Insurgency->Faction emergence pipeline and the 'found your own faction' North-Star promise; only partially self-limited by Enforce's Order -1 cost.",
+   "cite": "victory_v30.md \u00a73.5 (Enforce Ob 2; RM spread only at Stability>=3; marker cap 5)",
+   "criterion": "GD",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  },
+  {
+   "id": "mandate-saturation-decouples-power-from-land",
+   "subsystem": "settlement/Mandate (\u00a71.8)",
+   "claim": "Saturating size-weighted Mandate lets a faction reach Mandate 5 by developing one metropolis province, decoupling institutional power (and Parliament votes) from territorial breadth and making the hegemon>=5 half of the Line-1 domination clause nearly free \u2014 largely intended/N-grounded, so friction not flatten.",
+   "cite": "settlement_layer_v30.md \u00a71.8 (Mandate=clamp(round(7T/(T+6))), size-weighted; sim Himmelenger=5); faction_layer \u00a75.3",
+   "criterion": "N",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false,
+   "tracked_ref": ""
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/faction_minmax/hunt_faction_minmax.md"
+}

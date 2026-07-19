@@ -1,0 +1,119 @@
+{
+ "lens": "centralization_schema",
+ "verdict": "The single-source machinery (names_index.yaml + descriptor_registry mirror + rename executor + 4 readers) is unusually well-designed, but its BINDING is loose, so definitions still diverge. Two files each self-declare the naming authority and contradict each other on the attribute roster (glossary: 7 attrs, Cognition/Presence/Spirit canonical; descriptor_registry/names_index: 9 attrs, those are aliases). The registry deprecates a concept (resonance_style) that runs live and central as npc_behavior's Resonant Style. MS/RS drift survives its own registered lint because enforcement is warn-tier, not block. glossary is a third authority outside the mirror gate entirely. Combat Pool, by contrast, is genuinely reconciled \u2014 do not report it as divergent. Cohesiveness: MODERATE-WEAK.",
+ "key_points": [
+  "names_index.yaml is the correct every-rule-lives-once home and is well-built; the failure is enforcement/binding, not architecture.",
+  "Attribute roster diverges across the two naming authorities: glossary Part One (7 attrs) vs descriptor_registry+names_index (9 attrs), disagreeing on both count and which name is canonical.",
+  "descriptor_registry DEPRECATES resonance_style ('superseded by contest_style, retired 2026-06-06') while npc_behavior_v30 \u00a71.3 runs Resonant Style as the live gating mechanic for all NPC contest AI \u2014 a registry-vs-mechanism contradiction a Godot importer would trip on.",
+  "MS/RS: names_index registers the rename (clock.mending_stability, legacy Rendering Stability) but only at enforce:warn, so params/threadwork.md still reads RS canonically \u2014 the lint that should catch it is non-blocking.",
+  "glossary.md self-claims naming authority yet is NOT in the ci_names_consistency mirror set (only descriptor_registry + proper_noun_registry are) \u2014 the un-mirrored third authority is the systemic root of the roster drift.",
+  "Enforcement is almost entirely warn-tier: only world.solmund (Galbados) is enforce:block; every attribute/stat/clock/mechanic is warn, so Godot-load-bearing names have no hard gate.",
+  "Only combat_engine_v1.json is a typed export; 26 modules are prose-only, so every non-combat value crossing into Godot is hand-transcribed with no round-trip check (CLAUDE.md \u00a75).",
+  "Combat Pool is VERIFIED reconciled: core.md line 161 and module_contracts line 801 agree on max(5,History+6); the struck Agi\u00d72 form survives only in quarantined/known-stale carriers \u2014 not a live divergence.",
+  "conviction_track_v1 (personal Scars) vs conviction_track_v30 (territory Piety) share a stem whose version suffix falsely reads as supersession \u2014 already miscited by mechanics_index.",
+  "Fix path: fold glossary tables into the mirror gate (or generate them from names_index), flip attribute/MS-RS entries warn->block, and reconcile resonance_style against live Resonant Style.",
+  "Terminological cohesiveness grade: MODERATE-WEAK \u2014 sound design, loose binding.",
+  "mass_combat Command formula (Presence+Cognition, PP-232) is written against LEGACY attribute names, so roster churn silently propagates into live formula prose."
+ ],
+ "tree": {
+  "trunk": [],
+  "branches": [],
+  "orphan_throughlines": [],
+  "trunkless_mechanics": []
+ },
+ "findings": [
+  {
+   "id": "attr-roster-two-authorities",
+   "subsystem": "centralization_schema",
+   "claim": "glossary.md Part One (7 attributes; Cognition/Presence/Spirit as canonical) and descriptor_registry.yaml+names_index.yaml (9 attributes; those three demoted to aliases of Acuity/Charisma/Will) each self-declare the naming authority and directly contradict each other on attribute count and canonical names.",
+   "cite": "references/glossary.md \u00a7Part One Core Attributes vs references/descriptor_registry.yaml \u00a7attributes + references/names_index.yaml attr.*",
+   "criterion": "Q-smooth",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "resonance-style-deprecated-but-live",
+   "subsystem": "centralization_schema",
+   "claim": "descriptor_registry marks resonance_style deprecated/superseded-by-contest_style/retired, but npc_behavior_v30 \u00a71.3 runs Resonant Style as the live, central contest-targeting mechanic for every named NPC \u2014 the registry declares a load-bearing mechanic dead.",
+   "cite": "references/descriptor_registry.yaml \u00a7deprecated (resonance_style, line 100) vs designs/npcs/npc_behavior_v30.md \u00a71.3 Resonant Style Taxonomy",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "glossary-unmirrored-third-authority",
+   "subsystem": "centralization_schema",
+   "claim": "ci_names_consistency mirror-checks descriptor_registry and proper_noun_registry against names_index but NOT glossary.md, so the glossary \u2014 which self-claims 'canonical reference for all term expansions' \u2014 sits outside the single-source gate and drifts freely, which is why the attribute roster contradiction persists.",
+   "cite": "references/names_index.yaml header MIRRORS block; references/glossary.md line 4 authority claim",
+   "criterion": "Q-elegant",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": false
+  },
+  {
+   "id": "ms-rs-lint-nonblocking",
+   "subsystem": "centralization_schema",
+   "claim": "The MS/RS rename is registered in names_index (clock.mending_stability, legacy Rendering Stability) but only at enforce:warn, so params/threadwork.md still reads RS as canonical throughout \u2014 the single-source home exists yet its own drift-lint is non-blocking and never forced the sweep.",
+   "cite": "references/names_index.yaml clock.mending_stability (enforce: warn); params/threadwork.md \u00a7'RS Track (PP-603 \u2014 canonical)'",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-731/ED-772 (threadwork dossier ms-rs-split-live); new scope: the registered lint is warn-tier so drift survives the machinery",
+   "threadwork": true
+  },
+  {
+   "id": "prose-params-one-typed-export",
+   "subsystem": "centralization_schema",
+   "claim": "references/engine_params/ holds only combat_engine_v1.json; the other 26 modules are prose-only, so every non-combat value crossing into Godot is hand-transcribed with no round-trip CI check \u2014 the definitional pipeline is single-sourced-and-typed for exactly one subsystem.",
+   "cite": "references/engine_params/ (only combat_engine_v1.json); CLAUDE.md \u00a75",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "CLAUDE.md \u00a75 typed engine-params gap (ED-1052 first artifact)",
+   "threadwork": false
+  },
+  {
+   "id": "naming-enforcement-warn-only",
+   "subsystem": "centralization_schema",
+   "claim": "In names_index only world.solmund is enforce:block; every attribute, faction/settlement stat, clock (including MS/RS) and mechanic rename is enforce:warn, so the Godot-load-bearing definition names have no hard gate and drift persists by construction.",
+   "cite": "references/names_index.yaml (enforce fields across all non-solmund entries)",
+   "criterion": "Q-smooth",
+   "direction": "top-down",
+   "severity": "P3",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "combat-pool-reconciled-not-divergent",
+   "subsystem": "centralization_schema",
+   "claim": "Contrary to CLAUDE.md \u00a75's 'defined three ways', Combat Pool is now single-sourced at both live sites (params/core.md line 161 and module_contracts line 801 both = max(5,History+6)); the struck (Agility\u00d72)+History+3 form survives only in quarantined values_master and enumerated known-stale carriers (mechanics_index, sim, data_serialization), so it is not a live divergence.",
+   "cite": "params/core.md:161; references/module_contracts.yaml:801,841; references/values_master.yaml banner (QUARANTINED)",
+   "criterion": "Q-robust",
+   "direction": "bottom-up",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-1084 propagation; module_contracts line 841 stale-carrier list",
+   "threadwork": false
+  },
+  {
+   "id": "conviction-track-stem-collision",
+   "subsystem": "centralization_schema",
+   "claim": "conviction_track_v1.md (personal per-Conviction Scars) and conviction_track_v30.md (per-territory Piety BG stat) share a stem whose version suffix falsely reads as supersession rather than 'different mechanic', a schema hazard that already caused mechanics_index to cite the wrong file.",
+   "cite": "designs/personal/conviction_track_v1.md and designs/scene/conviction_track_v30.md (both extant); references/glossary.md \u00a7Part Three Piety Track",
+   "criterion": "Q-smooth",
+   "direction": "backwards",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "npc_behavior dossier mechanics-index-wrong-file",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_centralization_schema.md"
+}

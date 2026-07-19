@@ -13,7 +13,7 @@ Sources (canon-over-memory; nothing is invented — every node/edge traces to a 
                                                  + gates + derivations + transitions
   - designs/architecture/key_type_registry_v30.md : authoritative Key metadata
                                                  (family, scale, permanence, routing)
-  - canon/mechanics_index.yaml                : scale / GD-constraint / sim_module enrichment
+  - registers/mechanics_index.yaml                : scale / GD-constraint / sim_module enrichment
 
 Output:
   - tools/observability/graph_data.js  : `window.VALORIA_GRAPH = {...}` (loaded by index.html
@@ -37,8 +37,8 @@ except ImportError:
 
 REPO = Path(__file__).resolve().parents[2]
 CONTRACTS = REPO / "references" / "module_contracts.yaml"
-REGISTRY = REPO / "designs" / "architecture" / "key_type_registry_v30.md"
-MECHANICS = REPO / "canon" / "mechanics_index.yaml"
+REGISTRY = REPO / "systems" / "_architecture" / "key_type_registry_v30.md"
+MECHANICS = REPO / "registers" / "mechanics_index.yaml"
 OUT_DIR = Path(__file__).resolve().parent
 
 # --- Vocabulary reconciliation -------------------------------------------------

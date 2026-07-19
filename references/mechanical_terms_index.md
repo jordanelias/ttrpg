@@ -3,6 +3,10 @@
 
 **Status:** PROPOSAL — diagnostic deliverable for vocabulary audit, not yet committed to canonical sources.
 **Date:** 2026-05-08
+**Disposition (RATIFIED 2026-07-08, ED-IN-0029 docket, OPT-AV-14):** permanent historical snapshot,
+no live regeneration (its would-be regenerator is the dead `tools/valoria_collator.py`, CLAUDE.md §8).
+Flagged as the best candidate among the six sampled secondary indices for a future re-platform as
+live A17/A18 signal, if that work is ever prioritized — not done by this ruling.
 **Purpose:** complete enumeration of mechanical terms organized into vocabulary-isolated silos, with diagnostic registers identifying cross-silo overlaps, attribute↔mechanic word-class violations, synonym candidates, orphan terms, and deprecated/superseded terms. Designed as a working tool for identifying overlap, duplication, and confusion across the system corpus.
 
 ---
@@ -29,7 +33,7 @@ Built from 80 cached design files (~1.08 MB) including:
 - 17 canonical system docs from `references/canonical_sources.yaml` plus their auxiliary docs
 - All `params/` parameter files, `params/bg/` strategic-mode files, `params/factions/` faction-specific files
 - All `designs/scene/` (combat_v30, social_contest_v30, fieldwork_v30, investigation_systems_v30, conviction_track_v30, derived_stats_v30, miraculous_event_v30)
-- All `designs/threadwork/`, `designs/personal/`, `designs/architecture/`, `designs/articulation/`, `designs/territory/`, `designs/world/`
+- All `systems/threadwork/`, `designs/personal/`, `systems/_architecture/`, `systems/articulation/`, `systems/settlements/`, `systems/world/`
 - `canon/01_foundations_amendment_self_rendering.md`, `canon/02_foundations_amendment_leap_mechanism.md`
 
 Algorithmic extraction surfaced 2,166 candidate terms with 131 cross-silo overlaps; this file presents the curated set with diagnostic verdicts.
@@ -95,7 +99,7 @@ Diagnostic registers:
 | Composure | (COMP) | varies | Social endurance track. Rattled at ≤2; concession forced at 0. | contest §6 |
 | Concentration | — | varies | Action-economy resource for sustained rhetorical positions. | contest, derived_stats §5.2 |
 | Focus | — | 1–5+ | Contact duration in Thread operation rounds. | threadwork §2.3 |
-| Certainty | (CERT) | 0–5 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). PCs only; named NPCs at GM discretion. | conviction_track, glossary §1 |
+| Truth | — | 0–5 | Per-character metaphysical stance (renamed from Certainty + consolidates the retired character "Piety Track"/religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, Himmelenger pole) → Thread-truth acceptance (0, Edeyja pole). Engine-internal; players see qualitative bands. PCs only; named NPCs at GM discretion. Legacy abbr `CERT` retired. | conviction_track, glossary §1 |
 | Momentum | — | 0–4 | Tactical resource. Earned on Overwhelming success or Belief achieved; spent for automatic successes (non-Thread only). | combat_v30 §1 |
 | Thread Fatigue | — | resource | Replaces Contact Rounds (ED-694). | threadwork §2.3 |
 | Bonds | — | 1–7 | Structural relationship capacity. Caps Disposition Track (PP-684). Companion formation requires Bonds ≥ 5. | derived_stats §10.1, params/core |
@@ -193,8 +197,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | CI Bonus Dice | Bonus to Church faction in political forums per CI threshold. | ci_political §3.2 |
 | CI Obstacle Modifier | +1 Ob to actions opposing Church Domain Actions at CI ≥ 55. | ci_political §3.3 |
 | Spiritual Weight (territory-attached, faction-relevant) | Repurposed from old PV; affects CI generation. | ci_political §1 |
-| Public Support (PS) | Outcome accumulator from Mission/Domain Action outcomes. | faction_behavior §3.4 |
-| Legitimacy (L) | Faction trust currency, tracked alongside PS. | faction_behavior §3.4 |
+| Popular Support (PS) | Per-**settlement** (not faction-level) outcome accumulator, 0-7, aggregated into faction Mandate (LPS-2e, Jordan 2026-05-30). **Corrected 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)**: this row carried both the deprecated name "Public Support" and the superseded pre-LPS-2e faction-level-accumulator model — the real untracked residual the audit found (`name_collision_database.yaml`'s tracked citation pointed at a since-changed settlement_layer_v30.md line that no longer has the issue). | `settlement_layer_v30.md §1.8` |
+| Legitimacy (L) | Per-settlement (0-7) faction trust currency, tracked alongside PS; aggregated into Mandate. | `settlement_layer_v30.md §1.8` |
 | Income / Drain | Per-season resource flow (Wealth/Mandate/Influence/Military). | derived_stats §8.1 |
 | Cascade resolution | Faction-Conviction cascade math; produces Effective Convictions. | faction_behavior §3.2 |
 | Mission | Stated faction objective; alignment with Conviction profile. | faction_behavior §3.1 |
@@ -404,8 +408,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Solmund Artifacts | Material objects of Solmund-cosmological significance. | solmund_artifacts_v30 |
 | Miraculous Event | Cosmologically-charged rare event class. | miraculous_event_v30 |
 | Baralta (the entity) | Cosmological/historical figure (extracted from miraculous_event §21). | baralta_v30 |
-| Solmund Orthodoxy | Highest Certainty value (5). World-religious orthodoxy. | conviction_track |
-| Thread acceptance | Lowest Certainty value (0). Worldview accepting Thread substrate. | conviction_track |
+| Solmund Orthodoxy | Highest Truth value (5). World-religious orthodoxy. | conviction_track |
+| Thread acceptance | Lowest Truth value (0). Worldview accepting Thread substrate. | conviction_track |
 
 ### 4.6 Peninsular-scale world state
 | Term | Abbr | Definition | Source |
@@ -1164,8 +1168,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 |------|------------|--------|
 | Stability (faction state) | Per-faction internal coherence (1–7); not strictly a clock but tracked as one. | faction_layer §1 |
 | Standing | Per-faction reputation track (0–10). | factions/stats_1_7_scale |
-| Public Support (PS) | Per-faction outcome accumulator. | faction_behavior §3.4 |
-| Legitimacy (L) | Per-faction trust currency. | faction_behavior §3.4 |
+| Popular Support (PS) | Per-**settlement** (0-7) outcome accumulator, aggregated into faction Mandate (LPS-2e). Corrected 2026-07-08 (ED-IN-0029, OPT-AV-7) — was "Public Support," faction-scale. | `settlement_layer_v30.md §1.8` |
+| Legitimacy (L) | Per-settlement (0-7) trust currency, aggregated into Mandate. Corrected 2026-07-08 (same basis) — was faction-scale. | `settlement_layer_v30.md §1.8` |
 | Church Attention Pool | Player-facing Church-detection track. | conviction_track_v30 §11.2, fieldwork §6.5 |
 | Public Expectation | Populace's expected behaviour gating outcomes. | faction_behavior §3.5 |
 
@@ -1405,7 +1409,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Proper Noun Registry | — | World-entity (people/places) registry. | references/proper_noun_registry |
 | Canonical Sources | — | System → doc-path map. | references/canonical_sources |
 | File Index Summary | — | Sparse repo-tree summary. | references/file_index_summary |
-| Supersession Register | — | History of superseded design entries. | canon/supersession_register |
+| Supersession Register | — | History of superseded design entries. | registers/supersession_register |
 | Patch Register (in victory_v30) | — | Per-doc patch log. | victory §12 |
 | Sign-off Block (PP-674 Vetting) | — | Stage-gate sign-off schema. | (PP-674) |
 | Stage Gates | — | Sequential design-progression gates. | (cross-cutting) |
@@ -1430,7 +1434,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | **Composure** | §1 character stat (derived) · §6 debate damage track · §16 (dice engine, indirectly) | INTENTIONAL — debate-system damage track *is* the character's Composure stat being attacked. Same noun, same referent. Glossary cross-lists it. **Keep.** |
 | **Coherence** | §1 character stat · §4 cosmological state · §7 threadwork track | INTENTIONAL — Coherence is one concept (rendering integrity) examined at three scales (personal stat, cosmological substrate, in-operation track). **Keep.** |
 | **Mending Stability (MS)** | §4 world-cosmological · §7 threadwork · §12 clocks · §14 victory | INTENTIONAL — MS is the canonical world-clock; every system that touches it cross-references the same value. **Keep.** |
-| **Certainty** | §1 character stat · §4 solmund-world | INTENTIONAL — Certainty is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character sheet. **Keep.** |
+| **Truth** | §1 character stat · §4 solmund-world | INTENTIONAL — Truth is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character sheet. **Keep.** |
 | **~~Conviction Track / CV~~** | §9 (per-territory) · §12 clocks · §14 victory · §6 debate | **NO LONGER KEPT.** Renamed: territory = Piety Track (PT); contest = Persuasion Track. "Conviction" is a §1 attribute word — silo contamination. |
 | **The 13 Conviction names** (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor) | §1 character attributes · §2 faction attributes (via faction Cascade) | INTENTIONAL — same Conviction set at personal and faction scale (per conviction_taxonomy §1). **Keep but FLAG for §3 collision audit:** a Conviction name appearing as a *mechanic verb* would be a violation. None currently do. |
 | **Domain Echo** | §6 debate (bridge out) · §10 mass combat (bridge out) · §11 faction layer · §15 scale-bridging | INTENTIONAL — Domain Echo is the canonical *bridge mechanism*; every personal-scale system that can trigger it cross-references the same primitive. **Keep.** |
@@ -1720,7 +1724,7 @@ Anything else is a violation requiring rename.
 4. **Piety Track (PT) vs Conviction Track (CV)** — ~~verify these are distinct or unify.~~ **RESOLVED: ED-644 in conviction_track_v30 explicitly confirms PT ≡ CV — same track, same abbreviation (PT), range 0–5. "CV" and "0–10" were index errors. §3.1, §4, §9 entries updated.** (§4 synonym register, closed.)
 5. **Bonds attribute and Renown derived value** — ~~verify if first-class character properties; add to §1.2 if so.~~ **RESOLVED: both confirmed first-class. Bonds = structural relationship capacity (PP-684, derived_stats §10.1). Renown = governance-linked reputation track (derived_stats §10.3). Added to §1.2.** (§5 orphan, closed.)
 6. **Conviction-name appearances in mechanic context** — full sweep recommended; add inline cross-references to §1.5 anywhere a Conviction word is used in a mechanic. **OPEN: requires text sweep of all contest, faction_behavior, and argument-style contexts.** (§3.3, §3.5 #5.)
-7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue, Faith, Scholastic, Equity, Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, designs/npcs/, designs/provincial/, designs/scene/, designs/arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
+7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue, Faith, Scholastic, Equity, Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, systems/npcs/, designs/provincial/, designs/scene/, arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
 8. **Corpus residual sweep for TC** — ~~npc_behavior swept; remaining 5 paragraphs across throughlines_meta_infill, npc_character_analyses, mass_battle queued.~~ **PARTIALLY RESOLVED: mass_battle_v30 (1 TC→CI), npc_character_analyses_v30_infill (2 TC→CI) fixed this session. throughlines_meta_infill clean (0 hits). Remaining TC residuals exist in 40+ other files (mostly in references/, designs/audit/, and non-canonical docs). See corpus_fix_manifest.md.** (§6.1.)
 
 ## §V.3 Recommended commit path

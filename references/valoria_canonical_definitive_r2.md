@@ -1,7 +1,15 @@
 # VALORIA — Canonical Registry (Definitive, Revision 2)
+## Status: PARTIALLY SUPERSEDED (combat rows) + DUPLICATE COPY — banner added 2026-07-01 (ED-1084)
 ## Supersedes: valoria_canonical_definitive.md (Revision 1)
 ## All corrections from cross-conversation review and simulation inventory applied
 ## Date: 2026-04-15
+
+> ⚠️ **DUPLICATE COPY (2026-07-01, ED-1084).** This file duplicates
+> `designs/architecture/canonical_registry.md` (same Revision-2 compilation in two homes).
+> Its combat rows (`(Agi×2) + Hist + 3`, TN 7) predate the d+σ resolver and are **no longer
+> canon** — the head is `designs/scene/combat_engine_v1/` (pool `max(5, History+6)`, ED-901,
+> ED-900/904). Resolve currency via `CURRENT.md`. Which home is retained (and which retires
+> to `deprecated/archives/`) is queued for Jordan — see the 2026-07-01 decision queue.
 
 ---
 
@@ -193,7 +201,7 @@ Higher net = first-to-speak holder = declares last (information advantage). Tie:
 
 ## 4.8 Personal Tracks
 
-Coherence (10→0, practitioners), Thread Sensitivity (0–100), Certainty (0–5), Momentum (0–4, resets per session), Disposition (per NPC, PP-632), Exposure (per territory per season, 0–10+).
+Coherence (10→0, practitioners), Thread Sensitivity (0–100), Truth (0–5), Momentum (0–4, resets per session), Disposition (per NPC, PP-632), Exposure (per territory per season, 0–10+).
 
 ---
 

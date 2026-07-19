@@ -1,0 +1,371 @@
+{
+ "weapons": {
+  "yari": {
+   "total_length_m": 2.1501,
+   "total_mass_kg": 1.23,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "main_point",
+     "mass_kg_est": 0.28,
+     "x_m": 1.712,
+     "orient_deg": 0,
+     "extent_m": 0.30,
+     "material": "steel",
+     "geom_notes": "Needle-to-willow-leaf diamond or triangular cross-section blade (su-yari); tang runs into the socket. Documented blade-length span across surviving specimens is roughly 0.12-0.60m with 0.20-0.35m most common for a dueling/infantry su-yari (Met su-yari blade 0.206m at 90.7g steel-only; Kikuchi-yari-attributed blade 0.348m). 0.30m chosen as mid-range for a two-handed infantry/dueling yari (matches the audit's ~30cm anchor, not the longer nagae-yari pike variant). Acutely tapered tip, stiff diamond section for penetration, single continuous cutting edge on each face possible but not the trained-use mode.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "habaki_collar",
+     "type": "collar",
+     "extent_m": 0.02,
+     "material": "iron",
+     "x_m": 1.412,
+     "orient_deg": 90,
+     "mass_kg_est": 0.0232
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "oak_or_ash (hexagonal/octagonal section documented for yari shafts, e.g. rokkakubo/hakkakubo)",
+    "notes": "Lacquered wood shaft (occasionally rattan-wrapped or bare-lacquer, kuda-yari variants add a sliding tube grip); no separate 'grip' wrap section distinguished from the shaft proper in typical su-yari construction; diameter narrower than European ash war-spear (~35mm), consistent with a lighter dueling/skirmish weapon."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.0,
+    "pommel_x_m": 0.0,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": -0.3852,
+    "notes": "Ishizuki (metal butt-cap/ferrule) is a light fitting for ground-planting and wear protection, not a functional counterweight; mass folded to ~0 per audit note (unlike the European spear's 0.25kg sauroter)."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "shaft_estimate_kg": 0.9268,
+    "elements_sum_kg": 0.30,
+    "guards_sum_kg": 0.0232,
+    "pommel_butt_kg": 0.0,
+    "computed_total_kg": 1.23,
+    "residual_pct": 0.0,
+    "method": "shaft_mass = pi*(haft_d/2)^2 * total_length_m * 700 kg/m3 (RHO_WOOD); head_residual = total_mass - shaft_mass, split main_point + habaki collar."
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, Blade for a Spear (Su-yari), accession search/30843 - blade length 20.6cm, weight 90.7g (steel head only)",
+     "Metropolitan Museum of Art, Blade for a Spear (Jumonji-yari), accession search/22530 - blade length 19.8cm, width 15cm",
+     "Worcester Art Museum, Yari (spear), object 48726, 1500s - total length 249cm, weight ~2.15kg (4lb 12oz) [note: longer nagae-yari-class specimen, used only to cross-check total-mass order of magnitude, not as the primary anchor]",
+     "Kikuchi-Yari-attributed specimen (Samurai Museum Shop listing) - blade length 34.8cm",
+     "prior cluster research: polearm_spears_A.json audit_note (shaft/head mass split 0.927/0.30 reproduced independently here)"
+    ],
+    "confidence_tier": "S2",
+    "note": "Overall total_mass_kg=1.23 and total_length_m=2.15 are typology-typical for an infantry/dueling su-yari (not the longer nagae-yari pike), triangulated against Met blade-only weights + the Worcester full-weapon specimen; not a single named accessioned specimen matched end-to-end."
+   }
+  },
+  "kama_yari": {
+   "total_length_m": 2.0001,
+   "total_mass_kg": 1.44,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "main_point",
+     "mass_kg_est": 0.28,
+     "x_m": 1.593,
+     "orient_deg": 0,
+     "extent_m": 0.30,
+     "material": "steel",
+     "geom_notes": "Central straight thrusting blade, same order-of-magnitude geometry as the plain yari's main point (diamond/triangular section, acute tip) but socketed into a cross-forging that adds the two side sickle-blades below it. Met jumonji-yari specimen (search/22530): overall head 19.8cm long x 15cm wide (width driven by the cross-blades, not the central point alone).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "cross_blade_left",
+     "mass_kg_est": 0.085,
+     "x_m": 1.36,
+     "orient_deg": 60,
+     "extent_m": 0.13,
+     "material": "steel",
+     "geom_notes": "Curved sickle-shaped side blade (kama) forge-welded to the socket below the main point, angled forward-and-out (documented jumonji-yari cross geometry is not a flat 90-degree perpendicular cross but swept forward at an angle for hooking/thrusting-adjacent use); single beveled edge on the inner (catching) face, concave curvature toward the shaft.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "cross_blade_right",
+     "mass_kg_est": 0.085,
+     "x_m": 1.36,
+     "orient_deg": -60,
+     "extent_m": 0.13,
+     "material": "steel",
+     "geom_notes": "Mirror of cross_blade_left; the pair forms the jumonji (cross-shaped) head signature. Met jumonji-yari head width 15cm implies each blade projects roughly 6-7cm laterally from the socket centerline once the central point's own width is subtracted.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "cross_blade_pair_as_catch",
+     "type": "wing",
+     "extent_m": 0.13,
+     "material": "steel",
+     "x_m": 1.36,
+     "orient_deg": 60,
+     "mass_kg_est": 0.0,
+     "geom_notes_only": "The cross-blades ARE the head_elements above (cross_blade_left/right) — listed here only as a cross-reference note that their catching/hooking FUNCTION (kama-gake, hikiotoshi, makiotoshi per prior handling research) is a guard-type behaviour riding on striking-element geometry, not a separate mass. Mass already counted in head_elements; do not double-count."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.030,
+    "material": "oak_or_ash, hexagonal/octagonal section",
+    "notes": "Slightly stouter than the plain yari's 0.028m haft to carry the socketed cross-forging's added head mass and leverage loads from hooking technique; otherwise same lacquered-wood construction family."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.0,
+    "pommel_x_m": 0.0,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": -0.3582,
+    "notes": "Ishizuki end-cap, light fitting, mass ~0 (same as plain yari)."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "shaft_estimate_kg": 0.9897,
+    "elements_sum_kg": 0.45,
+    "guards_sum_kg": 0.0,
+    "pommel_butt_kg": 0.0,
+    "computed_total_kg": 1.4397,
+    "residual_pct": -0.02,
+    "method": "shaft_mass = pi*(0.030/2)^2 * 2.0001 * 700; head_residual = 1.44 - 0.9897 = 0.4503, split main_point 0.28 + two cross-blades 0.085 each (0.4503 vs 0.45 modeled, resid 0.07%)."
+   },
+   "provenance": {
+    "citations": [
+     "Metropolitan Museum of Art, Blade for a Spear (Jumonji-yari), accession search/22530 - head 19.8cm long x 15cm wide, 18th century",
+     "Metropolitan Museum of Art, Kama-yari, search listing, 16th century - overall length ~86in (~2.18m), cross-referenced for total-length order of magnitude",
+     "Grokipedia, Kama-yari entry - general morphology cross-check (secondary, S3-grade corroboration only, not load-bearing for numbers)",
+     "prior cluster research: polearm_spears_A.json audit_note (shaft/head mass split 0.99/0.45 reproduced independently here) and handling research (Hozoin-ryu Sojutsu densho, S1) establishing the cross-blade catching function"
+    ],
+    "confidence_tier": "S2",
+    "note": "Head overall width (15cm) is specimen-sourced (Met jumonji-yari); the individual cross-blade mass split (0.085kg each) is an S3 estimate apportioning the specimen-typical head residual, not independently weighed per-element. Weakest link: no source directly weighs the two side-blades separately from the main point."
+   }
+  },
+  "dangpa": {
+   "total_length_m": 2.2899,
+   "total_mass_kg": 1.84,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "center_prong",
+     "mass_kg_est": 0.32,
+     "x_m": 1.823,
+     "orient_deg": 0,
+     "extent_m": 0.25,
+     "material": "iron",
+     "geom_notes": "Elongated central spearpoint-form tine, longer than the two flanking tines by explicit design rationale (Muyedobotongji: prevents the weapon lodging in the target and drives the killing thrust past the flanking tines' catch-point). Stiff quadrangular-to-diamond cross-section optimized for thrust penetration and clean withdrawal, not cutting geometry.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "flank_tine_left",
+     "mass_kg_est": 0.115,
+     "x_m": 1.71,
+     "orient_deg": 25,
+     "extent_m": 0.16,
+     "material": "iron",
+     "geom_notes": "Shorter outer tine, gently outward-curved/angled from the socket, forming the trident's flanking prongs. Documented function is catching/hooking an opponent's blade or shaft to control it before the central thrust lands (Muyedobotongji dangpa chongbo); not a cutting edge, blunt-to-lightly-edged lateral faces.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "flank_tine_right",
+     "mass_kg_est": 0.115,
+     "x_m": 1.71,
+     "orient_deg": -25,
+     "extent_m": 0.16,
+     "material": "iron",
+     "geom_notes": "Mirror of flank_tine_left; the pair plus center_prong form the tang-pa/dangpa trident head.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "flanking_tine_pair_as_catch",
+     "type": "lug",
+     "extent_m": 0.16,
+     "material": "iron",
+     "x_m": 1.71,
+     "orient_deg": 25,
+     "mass_kg_est": 0.0,
+     "geom_notes_only": "The flanking tines ARE flank_tine_left/right in head_elements above — cross-referenced here because their documented function (hook/trap an opposing weapon before the central thrust, per Muyedobotongji dangpa chongbo) is a guard-type behaviour sourced from head geometry rather than a hilt. Mass already counted in head_elements; do not double-count."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.032,
+    "material": "oak_or_ash",
+    "notes": "Stouter shaft than a plain spear to seat the trident socket; documented overall weapon height in period sources is roughly 7-8 Korean feet (chi), consistent with the 2.29m fighting-length figure used here (upper end of the documented range, appropriate for an infantry formation thrusting weapon)."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.0,
+    "pommel_x_m": 0.0,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": -0.4101,
+    "notes": "Some period tang-pa descriptions note a sharpened rear spike/ferrule for two-ended versatility (per secondary dangpa literature), but no source gives it independent mass; modeled as a light fitting (~0) consistent with the socketed-trident family here, not a counterweighted butt."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "shaft_estimate_kg": 1.2892,
+    "elements_sum_kg": 0.55,
+    "guards_sum_kg": 0.0,
+    "pommel_butt_kg": 0.0,
+    "computed_total_kg": 1.8392,
+    "residual_pct": -0.04,
+    "method": "shaft_mass = pi*(0.032/2)^2 * 2.2899 * 700; head_residual = 1.84 - 1.2892 = 0.5508, split center_prong 0.32 + two flank tines 0.115 each (0.55 vs 0.5508 modeled, resid 0.15%)."
+   },
+   "provenance": {
+    "citations": [
+     "Muyedobotongji (1790/1795), dangpa chongbo chapter - design rationale for elongated center prong vs shorter flanking prongs (thrust/withdrawal, not cutting)",
+     "Muyejebo (1610) - predecessor source for the tang-pa/dangpa in Korean military manuals",
+     "Qi Jiguang, Jixiao Xinshu (1560/1584) - Ming Chinese tang-pa antecedent, mandarin-duck formation rear-rank support role",
+     "taekwondopreschool.com Muyesinbo dangpa entry and martialartswords.com 'What Is the Dangpa?' - secondary morphology cross-checks (S2/S3), average height cited 7-8 feet",
+     "prior cluster research: polearm_spears_A.json audit_note (shaft/head mass split 1.29/0.55 reproduced independently here)"
+    ],
+    "confidence_tier": "S2",
+    "note": "Overall weapon length (7-8ft documented range) and thrust-and-catch functional description are S1/S2 treatise-sourced (Muyedobotongji, Muyejebo, Jixiao Xinshu); the specific per-tine mass split (0.32/0.115/0.115) is an S3 estimate apportioning the typology-implied head residual across three tines by relative documented length ratio, not an independently weighed specimen. Weakest link in this batch alongside kama_yari's cross-blades."
+   }
+  },
+  "bear_spear": {
+   "total_length_m": 2.0499,
+   "total_mass_kg": 2.35,
+   "mass_grade": "S1",
+   "head_elements": [
+    {
+     "label": "main_point",
+     "mass_kg_est": 0.46,
+     "x_m": 1.75,
+     "orient_deg": 0,
+     "extent_m": 0.35,
+     "material": "steel",
+     "geom_notes": "Broad bay-leaf (laurel-leaf) blade, deliberately wide rather than needle-pointed, with a pronounced medial ridge for stiffness (Royal Armouries comparanda: leaf-shaped blade with pronounced medial ridge, head-and-socket length 0.404m on a related 16th-c. specimen). Double-edged, moderate edge keenness — a genuine hunting/fighting blade, not a pure armor-gap point. 0.35m chosen at the top of the documented 0.20-0.40m boar-spear-blade band, consistent with the audit note.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "crossbar_lug",
+     "type": "lug",
+     "extent_m": 0.22,
+     "material": "iron",
+     "x_m": 1.55,
+     "orient_deg": 90,
+     "mass_kg_est": 0.087,
+     "geom_notes": "Toggle/crossbar (Fr. arret, Ger. Fangeisen-style toggle) socketed through or forge-collared to the blade base below the point, projecting laterally perpendicular to the haft. Documented dual function: (1) caps thrust penetration depth so a charging animal cannot run up the shaft onto the wielder, (2) per Arms & Armor synthesis and the weapon's presence in Talhoffer's/Mair's combative (not purely hunting) manuscript sections, used to 'parry with the wings' — a genuine bind/catch surface in person-vs-person spear combat. Royal Armouries-comparable specimen (rac-object-890/object-32032 family) shows a hexagonal socket with an iron cross-toggle riveted through it near the blade's base."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.040,
+    "material": "ash or oak, round-to-octagonal section",
+    "notes": "Documented as deliberately longer and stouter than a war-spear shaft to survive a charging animal's impact; 0.040m matches the audit's 'longer and harder shaft' characterization and sits above the plain war-spear's 0.035m."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.0,
+    "pommel_x_m": 0.0,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": -0.246,
+    "notes": "No counterweighted pommel documented; rear end is typically a plain ferrule or planting spike for ground-bracing during a charge reception (Gaston Phoebus, Livre de Chasse), mass folded to ~0."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "shaft_estimate_kg": 1.8032,
+    "elements_sum_kg": 0.46,
+    "guards_sum_kg": 0.087,
+    "pommel_butt_kg": 0.0,
+    "computed_total_kg": 2.3502,
+    "residual_pct": 0.01,
+    "method": "shaft_mass = pi*(0.040/2)^2 * 2.0499 * 700; head_residual = 2.35 - 1.8032 = 0.5468, split main_point 0.46 + crossbar lug 0.087 (0.547 vs 0.5468 modeled, resid 0.04%)."
+   },
+   "provenance": {
+    "citations": [
+     "Royal Armouries, Boar spear - 16th century, collection object-32032; comparable specimen (Hunting spear, object-890, ~1610) - overall length 1861mm, head length (blade+socket) 404mm, weight 5lb (2.27kg), leaf-shaped blade with medial ridge and hexagonal socket",
+     "Gaston Phoebus (Gaston III, Count of Foix), Livre de Chasse, c.1387-1389 - S1, two-fisted uncouched charge-reception technique, couched driving thrust, crossbar capping penetration depth",
+     "Hans Talhoffer, Fechtbuch of 1459 (Ms. Thott.290.2, Royal Danish Library), 'Mixed Weapons' section - S1, combative (not purely hunting) boar-spear use",
+     "Paulus Hector Mair, Opus Amplissimum de Arte Athletica, c.1540-1542 - S1, boar-spear-vs-halberd play",
+     "Arms & Armor blog series, 'Medieval Boar Spear Technology' - S2 secondary synthesis, documents lugs used to 'parry with the wings'",
+     "prior cluster research: polearm_spears_A.json audit_note (shaft/head mass split 1.80/0.55 reproduced independently here; total length anchored to boar-spear exemplar 2.096m)"
+    ],
+    "confidence_tier": "S1",
+    "note": "Strongest-confidence weapon in this batch: overall length, head length, and total weight are all directly specimen-grounded (Royal Armouries object-890/object-32032 family, 1.861m/0.404m/2.27kg), and the crossbar's dual function (penetration-stop + combative parry surface) is S1-treatise-documented (Phoebus, Talhoffer, Mair). The lug's own isolated mass (0.087kg) is still an S3 apportionment of the specimen-implied head residual, not independently weighed."
+   }
+  },
+  "ranseur": {
+   "total_length_m": 2.1000,
+   "total_mass_kg": 2.15,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "main_point",
+     "mass_kg_est": 0.48,
+     "x_m": 1.672,
+     "orient_deg": 0,
+     "extent_m": 0.42,
+     "material": "steel",
+     "geom_notes": "Narrow, flattened-diamond thrusting blade, the primary and dominant documented action across every source (Fiore lanza corpus, Marozzo partisan chapters). Royal Armouries comparable specimen (late 16th/early 17th c., likely Italian): steel head totaling 0.576m long including flanges/wings, mounted on ash shaft; main-blade-only portion estimated at 0.42m with the wing-lugs occupying the remaining ~0.16m of head length nearer the socket.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "wing_lug_left",
+     "type": "wing",
+     "extent_m": 0.16,
+     "material": "steel",
+     "x_m": 1.30,
+     "orient_deg": 45,
+     "mass_kg_est": 0.087
+    },
+    {
+     "label": "wing_lug_right",
+     "type": "wing",
+     "extent_m": 0.16,
+     "material": "steel",
+     "x_m": 1.30,
+     "orient_deg": -45,
+     "mass_kg_est": 0.087
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.036,
+    "material": "ash, round section",
+    "notes": "Notably narrower/lighter than dangpa (0.032->but ranseur listed 0.036, still the most thrust-pure of the flanged-partisan family per the audit note) and near the plain war-spear's 0.035m — the ranseur is built for clean thrusting, not absorbing heavy blunt impact the way the bear-spear's stouter shaft is."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.0,
+    "pommel_x_m": 0.0,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": -0.3762,
+    "notes": "No documented counterweighted pommel; plain ferrule/butt-cap only, mass folded to ~0, consistent with the rest of the two-handed thrusting-polearm family in this batch."
+   },
+   "adornments": [
+    {
+     "label": "tassel_or_streamer",
+     "count": 1,
+     "extent_m": 0.15,
+     "attachment_x_m": 1.30,
+     "attested": "S3 — later parade/ceremonial ranseurs and partisans (16th-17th c. guard/court use) are widely depicted with a cloth tassel or streamer at the socket/wing junction in period art and surviving ceremonial examples, but this is a documented feature of the CEREMONIAL/guard-weapon phase of the type's life, not the earlier combative partisan/spetum use; include only as an attested-but-secondary later-period feature, not a combat-functional element."
+    }
+   ],
+   "mass_budget": {
+    "shaft_estimate_kg": 1.4963,
+    "elements_sum_kg": 0.48,
+    "guards_sum_kg": 0.174,
+    "pommel_butt_kg": 0.0,
+    "computed_total_kg": 2.1503,
+    "residual_pct": 0.01,
+    "method": "shaft_mass = pi*(0.036/2)^2 * 2.1000 * 700; head_residual = 2.15 - 1.4963 = 0.6537, split main_point 0.48 + two wing-lugs 0.087 each (0.654 vs 0.6537 modeled, resid 0.02%)."
+   },
+   "provenance": {
+    "citations": [
+     "Royal Armouries collection, ranseur-type polearm, late 16th/early 17th c., likely Italian - steel head 0.576m total length on ash shaft (collection.royalarmouries.org, per Wikipedia/Grokipedia Ranseur entry summary)",
+     "Grokipedia, Ranseur entry - general weight figure ~4kg cited for some ranseur examples (cross-checked, NOT used directly here since it disagrees with the lighter 2.15kg partisan-family anchor already in the roster; flagged as a range/variance note, not adopted)",
+     "Wikipedia, Spetum entry - weight range 1.4-2.3kg (0.64-1.05kg... corrected: 3-5 lb) for spetum-family polearms, corroborates the lighter end of the ranseur/spetum weight band used here",
+     "Achille Marozzo, Opera Nova (1536), partisan chapters - S2, thrust-primary technique with haft-control actions",
+     "Fiore dei Liberi, Fior di Battaglia / Flos Duellatorum, lanza and lanza cinghiale plays (Getty MS Ludwig XV 13, Pisani-Dossi MS, Morgan MS M.383) - S2 analogical source for winged/lugged thrusting spear handling",
+     "prior cluster research: polearm_spears_A.json audit_note (shaft/head mass split 1.50/0.65 reproduced independently here)"
+    ],
+    "confidence_tier": "S2",
+    "note": "Weakest-confidence weapon in this batch alongside kama_yari/dangpa's sub-element splits. No S1 period treatise names 'ranseur' directly (handling is reasoned by analogy from Fiore's lanza and Marozzo's partisan); the type also shows real specimen weight variance in secondary sources (Grokipedia's ~4kg vs the lighter spetum-family 1.4-2.3kg band used to anchor this record), so total_mass_kg=2.15 sits in the middle of a documented spread rather than pinned to one named accessioned example. Wing-lug individual mass (0.087kg each) is an S3 apportionment."
+   }
+  }
+ },
+ "cluster_notes": "All five weapons share the two-handed hafted_tip family (spear-grip grammar, grip fraction ~0.12-0.18 of total length depending on braced vs. neutral stance) and were cross-checked against weapons.py's canonical 'spear' record (mass=2.0kg, haft_d=0.035m, butt_kg=0.25 sauroter) as the anchor. Per-weapon mass budgets all closed to within 0.15% residual (well inside the 10% coherence-assert tolerance), computed as shaft_mass=pi*(haft_d/2)^2*total_length_m*700(RHO_WOOD, ash/oak) subtracted from total_mass_kg to get a head_residual, then split across the cluster-specified separate elements (kama_yari: point+2 cross-blades; dangpa: center prong+2 flank tines; bear_spear: point+1 crossbar lug; ranseur: point+2 wing-lugs) using documented specimen head-length/width ratios where available (Met jumonji-yari 15cm head width, Royal Armouries ranseur 57.6cm total head length, Royal Armouries boar-spear 40.4cm head length) and even apportionment by attested relative tine/blade length elsewhere. bear_spear is the strongest-confidence record (Royal Armouries object-890/object-32032 family gives directly specimen-grounded total length 1.861m, head length 0.404m, and weight 2.27kg, closely matching the audit's 2.05m/2.35kg working figures, plus S1 treatise documentation — Phoebus, Talhoffer, Mair — for the crossbar-lug's dual penetration-stop/combative-parry function). kama_yari and dangpa are the weakest-confidence records for PER-ELEMENT mass splits specifically: the cross-blades' (kama_yari) and flanking-tines' (dangpa) own isolated masses are S3 apportionments of a specimen-typical head residual rather than independently weighed sub-parts — no source found weighs a jumonji-yari's two sickle blades or a dangpa's two flank tines separately from the whole head. ranseur is weakest at the whole-weapon level: no S1 period treatise names the type directly (its handling is reasoned by analogy to Fiore's lanza and Marozzo's partisan), and secondary sources show real total-mass variance (Grokipedia's ~4kg figure vs. the lighter 1.4-2.3kg spetum-family band); total_mass_kg=2.15 sits mid-band rather than pinned to a single named accessioned specimen. No adornments are attested for yari, kama_yari, dangpa, or bear_spear as combat-relevant features (battlefield/hunting/formation weapons, not court/parade pieces); ranseur carries one S3-attested ceremonial-phase tassel/streamer, included but flagged as non-combat-functional and from the type's later parade-weapon life rather than its combative partisan/spetum origin."
+}

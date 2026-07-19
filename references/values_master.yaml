@@ -1,7 +1,31 @@
 # Valoria Values Master Registry
-# Auto-extracted from params/*.md by tools/extract_values.py
+# Auto-extracted from engine/params/*.md by tools/extract_values.py
 # Each entry records a named mechanical value with its source location.
 # Conflicts (same name, different values across files) surfaced below.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⚠️ QUARANTINED — STALE SNAPSHOT, DO NOT CITE AS CANONICAL (2026-07-01, ED-1084;
+#    documented by ED-1052).
+#
+# This file has not been regenerated since its generator went dead
+# (tools/extract_values.py imports the retired orchestrator's github_ops — CLAUDE.md §8
+# dead-tools list). Known rot, verified 2026-07-01:
+#   * ~70 entries are filed under "engine/params/combat.md" — that file DOES NOT EXIST; those
+#     entries carry the STRUCK pre-ED-901 Combat Pool formula ((Agility×2)+History+3).
+#     Canonical pool is max(5, History+6) — systems/combat/combat_engine_v1/.
+#   * 8 entries are extracted from engine/params/threadwork_superseded.md — a deliberately
+#     superseded source feeding this "master" registry as a live conflict side.
+#   * formula fields are free-text English, not typed data (see CLAUDE.md §5).
+#
+# When you need a number: resolve the subsystem head via CURRENT.md and read the prose
+# param/design doc. Typed, CI-round-trip-checked exports are the successor discipline —
+# first artifact: engine/engine_params/combat_engine_v1.json (ED-1052).
+#
+# RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-2): RETIRE. This file is a permanent
+# point-in-time historical snapshot — kept for citation archaeology only, never regenerated
+# until a typed extraction pipeline exists (the dead tools/extract_values.py is not that
+# pipeline). Closes the 2026-07-01 decision-queue item 17 regenerate-vs-retire question.
+# ═══════════════════════════════════════════════════════════════════════════════
 
 version: 1
 total_values: 464
@@ -14,11 +38,11 @@ conflicts:
       - "history points + 3 (per Stage 2 §4"
       - "relevant History points + 3"
     instances:
-      - file: "params/contest.md"
+      - file: "engine/params/contest.md"
         section: "params_contest.md — Social Contest System (v2) > History bonus note (PP-234 era)"
         line: 175
         raw_value: "history points + 3 (per Stage 2 §4"
-      - file: "params/fieldwork.md"
+      - file: "engine/params/fieldwork.md"
         section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
         line: 8
         raw_value: "relevant History points + 3"
@@ -27,11 +51,11 @@ conflicts:
       - "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
       - "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
     instances:
-      - file: "params/threadwork.md"
+      - file: "engine/params/threadwork.md"
         section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
         line: 124
         raw_value: "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
         line: 523
         raw_value: "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
@@ -40,11 +64,11 @@ conflicts:
       - "+1 Ob next op, 2 Composure"
       - "+1 Ob, 2 Comp"
     instances:
-      - file: "params/threadwork.md"
+      - file: "engine/params/threadwork.md"
         section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6) > Knot Strain"
         line: 234
         raw_value: "+1 Ob, 2 Comp"
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632) > Knot Strain"
         line: 286
         raw_value: "+1 Ob next op, 2 Composure"
@@ -53,11 +77,11 @@ conflicts:
       - "+1"
       - "+1 to +2 RS per operation"
     instances:
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > Rendering Stability (RS) Track"
         line: 245
         raw_value: "+1"
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
         line: 525
         raw_value: "+1 to +2 RS per operation"
@@ -67,22 +91,22 @@ conflicts:
       - "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
       - "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
     instances:
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195) > PP-192: Mass Battle RS Multiplier [STRUCK — campaign_architecture_v1 §3.1]"
         line: 355
         raw_value: "** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3"
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-225: RS ×3 Multiplier Applies to Gains [STRUCK — campaign_architecture_v1 §3.1]"
         line: 442
         raw_value: "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
-      - file: "params/threadwork_superseded.md"
+      - file: "engine/params/threadwork_superseded.md"
         section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [STRUCK — campaign_architecture_v1 §3.1]"
         line: 446
         raw_value: "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
 
 # ═══ FULL VALUES INDEX (by source file) ═══
 values:
-  "params/campaign_modes.md":
+  "engine/params/campaign_modes.md":
     - name: "Season pacing"
       value_raw: "1 season = 1–2 sessions"
       kind: formula
@@ -187,7 +211,7 @@ values:
       section: "params_campaign_modes.md — Campaign Mode Structure > Starting Clock Values (TTRPG Session Zero)"
       table_col: start
       line: 47
-  "params/combat.md":
+  "engine/params/combat.md":
     - name: "Combat Pool"
       value_raw: "(Agility × 2) + Relevant History + 3 (minimum 5)"
       kind: formula
@@ -639,7 +663,7 @@ values:
       section: "params_combat.md — Personal Combat > Feint — PP-294"
       table_col: value
       line: 252
-  "params/contest.md":
+  "engine/params/contest.md":
     - name: "Interaction type derived"
       value_raw: "same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS"
       kind: formula
@@ -893,7 +917,7 @@ values:
       section: "params_contest.md — Social Contest System (v2) > Derived Values"
       table_col: range
       line: 108
-  "params/core.md":
+  "engine/params/core.md":
     - name: "Thread operations"
       value_raw: "TN 7 standard; TN 8 for Locking, Dissolution, and Past-Oriented Pulling"
       kind: formula
@@ -1000,55 +1024,55 @@ values:
       value_raw: "** The character's operative cosmological framework"
       kind: formula
       formula: "** The character's operative cosmological framework"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 147
     - name: "Who has it"
       value_raw: "** All player characters"
       kind: formula
       formula: "** All player characters"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 159
     - name: "Starting value"
       value_raw: "** Assigned at creation by background"
       kind: formula
       formula: "** Assigned at creation by background"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 161
     - name: "Movement toward 5 (Solmund reinforcement)"
       value_raw: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
       kind: formula
       formula: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 165
     - name: "Mechanical effects"
       value_raw: "**"
       kind: formula
       formula: "**"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 167
-    - name: "Certainty 5"
+    - name: "Truth 5"
       value_raw: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
       kind: formula
       formula: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 169
-    - name: "Certainty 0"
+    - name: "Truth 0"
       value_raw: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
       kind: formula
       formula: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 171
     - name: "Church interaction by level"
-      value_raw: "** Certainty 5 → Heresy Investigation Ob +2"
+      value_raw: "** Truth 5 → Heresy Investigation Ob +2"
       kind: formula
-      formula: "** Certainty 5 → Heresy Investigation Ob +2"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      formula: "** Truth 5 → Heresy Investigation Ob +2"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 172
     - name: "Relationships"
       value_raw: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
       kind: formula
       formula: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
-      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      section: "params_core.md — Core Dice Engine > Truth Track (PP-551 — redesigned from PP-289)"
       line: 174
     - name: "Cover (derived)"
       value_raw: "Cognition + most relevant History for concealment/tradecraft"
@@ -1154,14 +1178,14 @@ values:
       section: "params_core.md — Core Dice Engine > Derived Scores"
       table_col: range
       line: 125
-    - name: "Certainty (formula)"
+    - name: "Truth (formula)"
       value_raw: "5 (starting, varies by background)"
       kind: formula
       formula: "5 (starting, varies by background)"
       section: "params_core.md — Core Dice Engine > Derived Scores"
       table_col: formula
       line: 126
-    - name: "Certainty (range)"
+    - name: "Truth (range)"
       value_raw: "0–5"
       kind: numeric
       numeric: 0
@@ -1196,7 +1220,7 @@ values:
       section: "params_core.md — Core Dice Engine > Derived Scores"
       table_col: range
       line: 128
-  "params/factions_personal.md":
+  "engine/params/factions_personal.md":
     - name: "NPC factions"
       value_raw: "Pool = faction's relevant stat"
       kind: formula
@@ -1355,7 +1379,7 @@ values:
       section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
       table_col: ob
       line: 79
-  "params/fieldwork.md":
+  "engine/params/fieldwork.md":
     - name: "Fieldwork Pool"
       value_raw: "(Primary Attribute × 2) + History bonus"
       kind: formula
@@ -1468,13 +1492,13 @@ values:
       value_raw: "Close (5pts) / Medium (2pts) / Loose (1pt)"
       kind: formula
       formula: "Close (5pts) / Medium (2pts) / Loose (1pt)"
-      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see params/threadwork.md for full mechanics)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see engine/params/threadwork.md for full mechanics)"
       line: 167
     - name: "Full mechanics"
-      value_raw: "params/threadwork"
+      value_raw: "engine/params/threadwork"
       kind: formula
-      formula: "params/threadwork"
-      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see params/threadwork.md for full mechanics)"
+      formula: "engine/params/threadwork"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see engine/params/threadwork.md for full mechanics)"
       line: 173
     - name: "Trigger"
       value_raw: "GM-called when Belief contradicts genuine engagement"
@@ -1595,7 +1619,7 @@ values:
       section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
       table_col: value
       line: 145
-  "params/mass_combat.md":
+  "engine/params/mass_combat.md":
     - name: "Group 1"
       value_raw: "** Size 5, Command 5, Discipline 5, Power 3 (Heavy Infantry), DR 2"
       kind: formula
@@ -1908,7 +1932,7 @@ values:
       section: "params_mass_combat.md — Mass Battle (v3) > Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)"
       table_col: formula
       line: 359
-  "params/scale_transitions.md":
+  "engine/params/scale_transitions.md":
     - name: "Amount"
       value_raw: "** Faction stat change = +1 per degree above Partial"
       kind: formula
@@ -1945,7 +1969,7 @@ values:
       formula: "fires at end of current Domain Action being resolved (full procedure pending ED-073)"
       section: "params_scale_transitions.md — Scale and Mode Transitions > Mode Tags (for simulation tagging)"
       line: 62
-  "params/southernmost.md":
+  "engine/params/southernmost.md":
     - name: "TS bonus"
       value_raw: "TS ÷ 20 (round down) additional dice"
       kind: formula
@@ -2049,7 +2073,7 @@ values:
       section: "params_southernmost.md — Southernmost Mechanics > Zone Hazard Table"
       table_col: ob
       line: 72
-  "params/threadwork.md":
+  "engine/params/threadwork.md":
     - name: "Key changes"
       value_raw: "pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;"
       kind: formula
@@ -2402,7 +2426,7 @@ values:
       section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
       table_col: ob
       line: 99
-  "params/threadwork_superseded.md":
+  "engine/params/threadwork_superseded.md":
     - name: "RS maximum"
       value_raw: "**100**"
       kind: formula
@@ -2710,9 +2734,9 @@ values:
       section: "params_threadwork.md — Thread Operations (v2.5) > Collective Forgetting — Companion Carrying (PP-279)"
       line: 612
     - name: "Additional consequence (untrained only)"
-      value_raw: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      value_raw: "**Truth −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
       kind: formula
-      formula: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      formula: "**Truth −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
       section: "params_threadwork.md — Thread Operations (v2.5) > Untrained Leap Auto-Fail (PP-281) [PROVISIONAL — ED-178]"
       line: 624
     - name: "Lenneth Almqvist"

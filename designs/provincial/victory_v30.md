@@ -491,7 +491,7 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 
 **Diplomatic Exchange (Loyalty ≥ 6, IP < 60):** Senator Outward, Ob 2. Success: IP −10, threshold +5, Elske status changes to willing resident. OW: All above + Schoenland Treaty.
 
-**"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. MS: Solidarity. Certainty: 4.*
+**"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. MS: Solidarity. Truth: 4.*
 
 #### Alternate — Military Consolidation
 Only available if Regency Establishment not achieved after 8 Löwenritter seasons (track with counter on Löwenritter mat).

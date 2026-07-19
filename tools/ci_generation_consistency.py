@@ -8,7 +8,7 @@ references/canonical_sources.yaml. This gate asserts, for every canonical design
 
   1. it exists on disk;
   2. it carries a recognized `## Status:` line (the per-doc currency signal); and
-  3. its path is NOT recorded as a `superseded_id:` in canon/supersession_register.yaml
+  3. its path is NOT recorded as a `superseded_id:` in registers/supersession_register.yaml
      (a doc cannot be both a canonical head and superseded — that is currency drift).
 
 This is the durable fix for the v30/v32 proliferation: currency is *enforced*, not
@@ -25,7 +25,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CANON_SOURCES = os.path.join(ROOT, "references", "canonical_sources.yaml")
-SUPERSESSION = os.path.join(ROOT, "canon", "supersession_register.yaml")
+SUPERSESSION = os.path.join(ROOT, "registers", "supersession_register.yaml")
 
 # Recognized lifecycle vocabulary for a current canonical doc's Status line.
 RECOGNIZED = ("CANONICAL", "CURRENT", "CANON", "WORKING", "DESIGN", "REFERENCE", "PROVISIONAL")
@@ -40,7 +40,7 @@ def canonical_docs():
         for line in fh:
             if line.lstrip().startswith("#"):
                 continue
-            for m in re.finditer(DOC_KEYS + r"\s*:\s*(designs/[^\s#]+\.md)", line):
+            for m in re.finditer(DOC_KEYS + r"\s*:\s*((?:designs|systems)/[^\s#]+\.md)", line):
                 docs.add(m.group(2))
     return sorted(d for d in docs if os.path.isfile(os.path.join(ROOT, d)))
 
@@ -59,7 +59,7 @@ def superseded_ids():
     ids = set()
     with open(SUPERSESSION, encoding="utf-8") as fh:
         for line in fh:
-            m = re.match(r"""\s*-?\s*superseded_id:\s*["']?(designs/[^\s"'#]+\.md)""", line)
+            m = re.match(r"""\s*-?\s*superseded_id:\s*["']?((?:designs|systems)/[^\s"'#]+\.md)""", line)
             if m:
                 ids.add(m.group(1))
     return ids

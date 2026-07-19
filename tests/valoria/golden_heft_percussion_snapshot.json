@@ -1,0 +1,206 @@
+{
+ "arming": {
+  "heft": 0.7698040986502862,
+  "percussion": 0.0
+ },
+ "bardiche": {
+  "heft": 7.911360605638609,
+  "percussion": 0.0
+ },
+ "bear_spear": {
+  "heft": 2.5465849179479694,
+  "percussion": 0.0
+ },
+ "bec_de_corbin": {
+  "heft": 1.551245909607584,
+  "percussion": 6.36290385020776
+ },
+ "changdao": {
+  "heft": 1.1749288479156341,
+  "percussion": 1.7819361715915734
+ },
+ "cinquedea": {
+  "heft": 0.0,
+  "percussion": 0.0
+ },
+ "dagger": {
+  "heft": 0.1878278858557576,
+  "percussion": 0.0
+ },
+ "dangpa": {
+  "heft": 2.7341689470893003,
+  "percussion": 0.0
+ },
+ "estoc": {
+  "heft": 1.5013146100758952,
+  "percussion": 1.7133200487497202
+ },
+ "falchion": {
+  "heft": 1.5920575966452153,
+  "percussion": 0.0
+ },
+ "fauchard": {
+  "heft": 2.7870053633877,
+  "percussion": 0.0
+ },
+ "flamberge": {
+  "heft": 1.928814943591515,
+  "percussion": 1.773658843236118
+ },
+ "glaive": {
+  "heft": 1.733165947096223,
+  "percussion": 0.0
+ },
+ "goedendag": {
+  "heft": 2.0554369855853403,
+  "percussion": 8.0
+ },
+ "greatsword": {
+  "heft": 1.6039360210015918,
+  "percussion": 1.733087599331821
+ },
+ "guandao": {
+  "heft": 9.176998268174183,
+  "percussion": 0.0
+ },
+ "guisarme": {
+  "heft": 0.029146037406244812,
+  "percussion": 0.0
+ },
+ "hook_sword": {
+  "heft": 0.7756306510166978,
+  "percussion": 0.0
+ },
+ "ji": {
+  "heft": 0.035342764578080485,
+  "percussion": 0.0
+ },
+ "jian": {
+  "heft": 1.2818948401658736,
+  "percussion": 0.0
+ },
+ "kama_yari": {
+  "heft": 2.297251023323309,
+  "percussion": 0.0
+ },
+ "katana": {
+  "heft": 1.53121393712251,
+  "percussion": 1.507039172971257
+ },
+ "longsword": {
+  "heft": 1.0,
+  "percussion": 1.5413128801277691
+ },
+ "lucerne_hammer": {
+  "heft": 1.8635379719793188,
+  "percussion": 6.539155172397454
+ },
+ "mace": {
+  "heft": 5.524720693685236,
+  "percussion": 8.0
+ },
+ "main_gauche": {
+  "heft": 0.2560193141516861,
+  "percussion": 0.0
+ },
+ "misericorde": {
+  "heft": 0.3415335562482936,
+  "percussion": 0.0
+ },
+ "naginata": {
+  "heft": 0.6892732729709677,
+  "percussion": 0.0
+ },
+ "nandao": {
+  "heft": 2.2542474544980613,
+  "percussion": 1.4004649186069495
+ },
+ "odachi": {
+  "heft": 4.44227071955484,
+  "percussion": 1.5174755099131467
+ },
+ "paired_short": {
+  "heft": 0.38347559851812096,
+  "percussion": 0.0
+ },
+ "partisan": {
+  "heft": 4.165564375333702,
+  "percussion": 0.0
+ },
+ "podao": {
+  "heft": 6.486052782829954,
+  "percussion": 0.0
+ },
+ "poleaxe": {
+  "heft": 2.5278239877450166,
+  "percussion": 7.48428269296238
+ },
+ "pulwar": {
+  "heft": 1.4472673567783045,
+  "percussion": 0.0
+ },
+ "ranseur": {
+  "heft": 2.515109823299874,
+  "percussion": 0.0
+ },
+ "rapier": {
+  "heft": 0.3736300320709167,
+  "percussion": 0.0
+ },
+ "rondel": {
+  "heft": 0.4425237486314279,
+  "percussion": 0.0
+ },
+ "sabre": {
+  "heft": 0.9740232672109141,
+  "percussion": 0.0
+ },
+ "scimitar": {
+  "heft": 1.537920007616399,
+  "percussion": 0.0
+ },
+ "shamshir": {
+  "heft": 1.272475394873594,
+  "percussion": 0.0
+ },
+ "sparr_axe": {
+  "heft": 5.45716520652714,
+  "percussion": 0.0
+ },
+ "spear": {
+  "heft": 1.4336740119139546,
+  "percussion": 0.0
+ },
+ "spetum": {
+  "heft": 1.4937001579423081,
+  "percussion": 0.0
+ },
+ "staff": {
+  "heft": 0.0,
+  "percussion": 0.0
+ },
+ "stiletto": {
+  "heft": 0.34034437086092706,
+  "percussion": 0.0
+ },
+ "szabla": {
+  "heft": 0.8559794222858588,
+  "percussion": 0.0
+ },
+ "tachi": {
+  "heft": 1.6981446523922394,
+  "percussion": 1.5060140141050022
+ },
+ "tsurugi": {
+  "heft": 0.9497277403058991,
+  "percussion": 0.0
+ },
+ "voulge": {
+  "heft": 5.210584021717969,
+  "percussion": 0.0
+ },
+ "yari": {
+  "heft": 1.367882839512296,
+  "percussion": 0.0
+ }
+}

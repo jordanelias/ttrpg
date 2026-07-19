@@ -1,0 +1,212 @@
+{
+ "core_loop": "This lane is process/infra, not gameplay: it governs how design decisions (combat R2/R3, contest rebuild stages, mass-battle, propagation-spec) get authored, ratified, and sequenced into the corpus that eventually drives play. Its \"loop\" is Jordan reviews/merges \u2192 ratifies-by-default (ED-1094) \u2192 steering docs should update \u2192 next session bootstraps from them. That loop is currently broken at the last link.",
+ "decision_points": [
+  {
+   "where": "decision_queue.md items 1-3 (scene-combat wt/spd de-leak, WP.reach/authority home, Phase4/5)",
+   "options": "which residual to ratify next, in what order",
+   "meaningful": "moderate",
+   "note": "frozen since 07-01, not reconciled against R2 merge (07-04) that changed the underlying physics"
+  },
+  {
+   "where": "workplan v5 J-38 row vs. decision_queue item 18 vs. CURRENT.md",
+   "options": "is propagation-spec authorship open or ratified",
+   "meaningful": "degenerate",
+   "note": "three steering docs disagree on the status of the same decision; a reader gets a different answer depending which file they trust"
+  },
+  {
+   "where": "roadmap_state.yaml phase table",
+   "options": "which phase/items are 'current'",
+   "meaningful": "degenerate",
+   "note": "frozen at pre-07-01 content; does not offer a real choice, just stale state"
+  },
+  {
+   "where": "contest_rebuild stage gates (Gate 0->A->B->C, Stage 4 next)",
+   "options": "per-stage Jordan ratification forks (D0-1..D0-3, JD-style)",
+   "meaningful": "rich",
+   "note": "the one steering artifact in this scope that IS sequencing cleanly, stage-by-stage, evidenced"
+  }
+ ],
+ "north_star": {
+  "choice_density": "thin",
+  "collision_feed": "This territory feeds the collision engine only indirectly: it determines whether the architecture (propagation-spec, holonic doctrine) that should carry cross-scale consequence into play actually gets authored coherently and stays legible to the next session. Right now it feeds inconsistent status signals into downstream work.",
+  "verdict": "Points at the North Star in intent (propagation-spec explicitly targets cross-scale consequence) but the sequencing layer itself has drifted enough that a session bootstrapping from workplan v5 or roadmap_state.yaml alone would build on stale premises -- a meta-level legibility failure that risks propagating into gameplay decisions."
+ },
+ "nq": [
+  {
+   "criterion": "Omega",
+   "observation": "Propagation-spec (ED-1093, CANONICAL) is the doc explicitly named to carry the 'cross-scale consequence' Omega-clause, but zero mentions of threadwork/Coherence appear in it.",
+   "cite": "designs/architecture/propagation_spec_v1.md (grep, 0 hits)"
+  },
+  {
+   "criterion": "Q-robust",
+   "observation": "Sim's ~87%/0%/0% degenerate win-share has no regression oracle beyond a smoke test, unaddressed through a month that hardened CI everywhere else.",
+   "cite": "decision_queue.md item 8; CLAUDE.md \u00a77"
+  },
+  {
+   "criterion": "N",
+   "observation": "Spear/polearm dominance measurably improved by R2 (94-96%->78-93%) but the declared 55-75% contested band is still not met.",
+   "cite": "designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md"
+  }
+ ],
+ "threadwork_junctures": [
+  {
+   "juncture": "propagation_spec_v1.md aggregate-up/distribute-down transform",
+   "status": "absent-plausible",
+   "evidence": "0 grep hits for 'threadwork'/'Coherence' in the doc despite it being pitched as the cross-scale consequence spine"
+  },
+  {
+   "juncture": "holonic_container_doctrine_v1.md",
+   "status": "absent-plausible",
+   "evidence": "same grep, 0 hits; doctrine cross-maps container/wrapper vocab onto Key-substrate/sim-ladder but not thread state"
+  },
+  {
+   "juncture": "combat_engine_v1 (R2/R3 in flight)",
+   "status": "absent-deliberate",
+   "evidence": "ED-911 (open, P1) already tracks 'no threadwork interface'; R2/R3 scope (closing-distance, weapon-model) did not add one"
+  },
+  {
+   "juncture": "social_contest_v30.md / Gate-A packet",
+   "status": "present",
+   "evidence": "grep confirms Coherence/threadwork language retained through the contest rebuild"
+  }
+ ],
+ "legibility": {
+  "answerable": "no",
+  "note": "This is a process/architecture territory, not a scene; there is no single actor/season state to read a dramatic-legibility answer from. The closer analogue -- 'can a designer tell what's actually ratified vs. open right now' -- fails: workplan v5 and decision_queue disagree on J-38's status."
+ },
+ "degenerate_candidates": [
+  "sim/mc_v18 seeded win-share ~87%/0%/0%, no regression oracle -- decision_queue.md item 8 / CLAUDE.md \u00a77",
+  "spear/yari/guisarme/poleaxe post-R2 still 75-93% vs declared 55-75% band -- i8_capstone_audit.md, R3 (PR#76) assigned to close it"
+ ],
+ "edges": [
+  {
+   "dir": "in",
+   "other": "holonic_container_doctrine_v1.md",
+   "mechanism": "doctrine names propagation-spec as its unauthored cross-scale transform",
+   "status": "implemented"
+  },
+  {
+   "dir": "out",
+   "other": "module_contracts.yaml engine_clock entry",
+   "mechanism": "propagation-spec supplies candidate home doc",
+   "status": "declared-only"
+  },
+  {
+   "dir": "out",
+   "other": "threadwork / Coherence subsystem",
+   "mechanism": "cross-scale consequence should route thread state",
+   "status": "divergent"
+  },
+  {
+   "dir": "in",
+   "other": "HANDOFF.md Next-actions",
+   "mechanism": "points sessions at decision_queue.md as authoritative",
+   "status": "divergent"
+  },
+  {
+   "dir": "out",
+   "other": "roadmap_state.yaml",
+   "mechanism": "workplan v5 'binds' it per its own header",
+   "status": "declared-only"
+  },
+  {
+   "dir": "out",
+   "other": "combat R2/R3 (PR#72/#76)",
+   "mechanism": "decision_queue items 1-3 assume pre-R2 physics context",
+   "status": "divergent"
+  }
+ ],
+ "directions": {
+  "top-down": "P-14/Omega cross-scale-consequence philosophy is not engaged by name in the month's two flagship architecture docs (propagation-spec, holonic doctrine).",
+  "bottom-up": "sim/mc_v18's degenerate ~87% win-share persists untouched while every adjacent CI/tooling layer got hardened this month.",
+  "lateral": "contest-rebuild sequencing (clean, gated, evidenced per stage) contrasts sharply with combat R2/R3 and decision_queue.md, which drifted out of sync with each other.",
+  "diagonal": "propagation-spec claims cross-scale reach but shows no linkage to mass-battle DG-3/DG-4 (landed same week, PR#75) or to threadwork.",
+  "forwards": "workplan v5 and roadmap_state.yaml, the two documents meant to orient forward sequencing, are both ~1 week stale on substance despite superficial recent touches.",
+  "backwards": "decision_queue.md's frozen items 1-3 still reflect pre-R2 combat physics, creating resumed-from-superseded risk for the next session that reads it in isolation."
+ },
+ "findings": [
+  {
+   "id": "roadmap-state-stale",
+   "subsystem": "roadmap_state.yaml",
+   "claim": "The steering file that declares its own staleness a defect has not been updated with any of the last week's work (contest Stages 1a-3, R2 merge, R3, month-overview EDs, propagation-spec/doctrine ratification, mass-battle DG-3/4).",
+   "cite": "references/roadmap_state.yaml (updated: 2026-06-28; git log shows only a 07-01 path-repoint touch)",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "threadwork": false
+  },
+  {
+   "id": "workplan-decision-queue-contradiction",
+   "subsystem": "workplans/decision_queue",
+   "claim": "workplan v5 \u00a73 still describes J-38 (propagation-spec authorship) as open/PROPOSED-to-come, while decision_queue.md item 18 and CURRENT.md mark it CANONICAL/resolved -- two steering docs give opposite answers for the same decision.",
+   "cite": "designs/workplans/valoria_master_workplan_v5.md \u00a73 vs decision_queue.md item 18 vs CURRENT.md",
+   "criterion": "GD",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "decision-queue-preR2-drift",
+   "subsystem": "decision_queue.md",
+   "claim": "Items 1-3 (scene-combat Track-2 residuals) are frozen against pre-R2 physics and were never amended after R2 merged (07-04), risking a session acting on superseded context.",
+   "cite": "decision_queue.md items 1-3 vs HANDOFF_PC.md / CURRENT.md R2 merge entry",
+   "criterion": "GD",
+   "direction": "backwards",
+   "severity": "P2",
+   "novelty": "NEW",
+   "threadwork": false
+  },
+  {
+   "id": "propagation-spec-threadwork-silence",
+   "subsystem": "propagation_spec_v1 / holonic doctrine",
+   "claim": "The month's flagship cross-scale-consequence architecture docs never mention threadwork or Coherence, despite P-14 and the Omega cross-scale clause.",
+   "cite": "designs/architecture/propagation_spec_v1.md; holonic_container_doctrine_v1.md (grep, 0 hits)",
+   "criterion": "P-philosophy",
+   "direction": "top-down",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911",
+   "threadwork": true
+  },
+  {
+   "id": "spear-r2-partial",
+   "subsystem": "combat_engine_v1 R2/R3",
+   "claim": "R2 reduced spear/polearm dominance from 84-96% to 78-93% but the declared 55-75% contested band is still not met; R3 is the now-assigned remainder.",
+   "cite": "designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md",
+   "criterion": "N",
+   "direction": "bottom-up",
+   "severity": "P2",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "calibration list item 1 / PR#72,#76",
+   "threadwork": false
+  },
+  {
+   "id": "sim-winshare-untouched",
+   "subsystem": "sim/mc_v18",
+   "claim": "The degenerate ~87%/0%/0% seeded win-share remains unaddressed despite a month of otherwise-heavy CI/tooling investment.",
+   "cite": "decision_queue.md item 8; CLAUDE.md \u00a77",
+   "criterion": "Omega",
+   "direction": "bottom-up",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "decision_queue item 8",
+   "threadwork": false
+  },
+  {
+   "id": "lane-scoping-unenforced",
+   "subsystem": "ED-<LANE>-NNNN convention",
+   "claim": "Session-lane-scoping is documented but not CI-enforced, while contest-rebuild and combat R2/R3 already run as concurrent lane sessions unguarded.",
+   "cite": "handoffs/HANDOFF_IN.md 'Next actions' residual note; CLAUDE.md \u00a73",
+   "criterion": "GD",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-IN-0001 residual",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/tmp/claude-0/-home-user-ttrpg/cfbcd16d-e30a-5113-95d5-28bec14cdd8d/scratchpad/dossier_recent_infra.md",
+ "subsystem": "recent_infra (SEQUENCE lane: last-month infra/ecosystem work vs. the four steering surfaces)"
+}

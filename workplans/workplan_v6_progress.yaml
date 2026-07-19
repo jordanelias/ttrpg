@@ -1,0 +1,152 @@
+# Workplan v6 Progress Board — the ONE home for milestone/juncture-level rollup status.
+# (ED-IN-0010, 2026-07-05. Companion to valoria_master_workplan_v6.md §1; printed by
+# tools/workplan_status.py; owned + refreshed by skills/valoria-workplan-navigator.)
+#
+# RULES (anti-rot — this surface class killed roadmap_state.yaml, retired ED-IN-0006):
+#   1. Rollup ONLY. Lane detail stays in registers/handoffs/HANDOFF_<LANE>.md; every row POINTS at
+#      its evidence (PR / ED / commit), it never restates lane narrative.
+#   2. Verify before trust: tools/workplan_status.py --check warns whenever
+#      workplan-relevant paths (designs/, registers/handoffs/, canon/, sim/) changed since this
+#      file's last-touch commit (the machine freshness base; `as_of` below is the
+#      human-facing record). The navigator skill runs the check on EVERY read; stale
+#      board -> refresh rows from the registers/handoffs/ledger FIRST, then answer.
+#   3. Refresh-on-use: any session that lands juncture/stage-relevant work updates the
+#      touched rows + appends one last_progress line + bumps as_of (skill Workflow C).
+#   4. States: not_started | in_progress | blocked | done. `blocked_on` names the gate
+#      (a §5 register fork / ED); `next` is the next concrete increment (one line).
+#
+# Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
+
+as_of:
+  sha: "470aa09"
+  date: "2026-07-16"
+
+milestones:
+  M1:
+    label: "One playable season"
+    junctures:
+      - n: 1
+        label: "Strategic decision"
+        state: not_started
+        blocked_on: null
+        next: "author the domain_actions home (ED-FA-0002) + ratification-flip the FA §1.0c/§1.0d/§2.5 riders RULED 2026-07-13 (ED-IN-0046/0047), landing E11 (symmetric suspicion-reduction) in the same pass; fork-10 no longer blocks faction-scope work"
+        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring"]
+      - n: 2
+        label: "Domain action"
+        state: not_started
+        blocked_on: null
+        next: "domain_actions authoring (IN); echo render rides narrative Stage 0"
+        evidence: ["ED-IN-0028 echo-transport substrate landed 2026-07-08 (sim/cross_scale/echo_transport.py, flag-gated) — cross-scale plumbing only, not domain_actions authoring itself"]
+      - n: 3
+        label: "Social contest"
+        state: in_progress
+        blocked_on: null
+        next: "Stage 4 (four deliberative games) — gated on P0 docket ED-SC-0003/0004/0005 (all needs_jordan: Piety/Persuasion naming, canonical Argue-pool formula, bonus-die cap)"
+        evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration", "ED-SC-0012 resolved 2026-07-08 (PR #104) — pessimist subtractive-action audit now fully executed across all 6 lanes (SC was the last outstanding one); 4 audit-residual decision packets (DP-1..DP-4) authored for Jordan, no verdict smuggled in", "Parliamentary Censure wired into campaign loop 2026-07-08 (PR #105) surfaced ED-SC-0015 (total-victory Mandate stacking, −1 vs −2) — filed needs_jordan; PR #117's open-items docket recommends the −1 cap but nothing is ratified yet"]
+      - n: 4
+        label: "Personal combat"
+        state: in_progress
+        blocked_on: null
+        next: "R3 U3 (Edges primitive, ED-PC-0004) — soft-gated on JD-2 (edges data table FLAG rows; default = land marked-provisional if unruled, so U3 is not hard-blocked); ED-PC-0008's bookkeeping (ledger status still open despite its findings being actioned by ED-PC-0009/0011) and ED-PC-0012 (point floor-lock, sabre-class) are open but explicitly non-blocking residuals"
+        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)", "ED-PC-0005 wound ruling resolved+executed 2026-07-08 (combat scope only; non-combat calibration spun out as ED-PC-0006, resolved 2026-07-08)", "JD-1 RULED 2026-07-08 (Jordan: \"accept plan bands\") — U1 PoB recalibration DONE (ED-PC-0010, PR #99); T0 register item closed", "JD-4/JD-9 DETERMINED 2026-07-08 (ED-PC-0009) + U2 live-wired 2026-07-08 (ED-PC-0011, PR #109, 13-agent adversarial validation) — graded mode-affordance + Phase-C percussion enactment DONE; U0/U1/U2 all landed"]
+      - n: 5
+        label: "Thread operation"
+        state: in_progress
+        blocked_on: null
+        next: "WR sweeps ED-WR-0001/0002 (still open, cheap, unblocking); then thread preconditions ED-1010/1011"
+        evidence: ["Stratum-B 2026-07-07: ED-871 closed (Mending cost fix) + C-TW-12 closed (knots.py rebuilt onto ED-912 gauge), both with pinned regression tests", "ED-WR-0007 subtractive-action verdicts executed 2026-07-08 (threadwork Pulling/Mending prose distilled)"]
+      - n: 6
+        label: "Season close"
+        state: blocked
+        blocked_on: "ED-1051 (engine_clock ratification; home candidate = propagation_spec_v1)"
+        next: "rule ED-1051, then ORD-3/ORD-4 ordering flags"
+        evidence: ["propagation_spec_v1 CANONICAL (ED-1093)"]
+      - n: 7
+        label: "Articulation render"
+        state: in_progress
+        blocked_on: null
+        next: "execute narrative Stage 0 (ED-IN-0004 render-gap close) — design PROPOSED, not yet implemented"
+        evidence: ["PR #78 narrative engine v1+v2 designs (Stage 0 spec'd)"]
+
+  M2:
+    label: "Any-seed story bar (fixtures F1 + F8 green)"
+    stages:
+      - key: "S0"
+        label: "Render-gap close"
+        state: in_progress
+        blocked_on: null
+        next: "implement ED-IN-0004 triggers + renders (ships first, J-7)"
+        evidence: ["PR #78 design"]
+      - key: "S1"
+        label: "Generator compile gate"
+        state: not_started
+        blocked_on: null
+        next: "execute the ratified fork-1 Coup-Counter remap + fork-2 ARC-T04 strike, then compile the 138+8 validation set"
+        evidence: ["forks 1/2/11 RATIFIED at defaults (ED-IN-0011)"]
+      - key: "S2"
+        label: "Store + tick"
+        state: not_started
+        blocked_on: null
+        next: "lifecycle FSMs (after S1; presumes Accounting substrate — Gate-0 honesty)"
+        evidence: []
+      - key: "S2.5"
+        label: "Forecast (Layer A for M1)"
+        state: not_started
+        blocked_on: null
+        next: "Layer A analytic horizons; Layer B stays hard-gated (stubs, deck, scene-EV flag, key-log spec + ORD-3/4, F7+F8)"
+        evidence: []
+      - key: "S3"
+        label: "Detect (discovery + priors)"
+        state: not_started
+        blocked_on: null
+        next: "build discovery under the ratified window (same-Accounting priors / 4-season cosine — ED-IN-0011); after S2/S2.5"
+        evidence: ["fork 3 RATIFIED at default (ED-IN-0011)"]
+      - key: "S4"
+        label: "Light + cast"
+        state: not_started
+        blocked_on: null
+        next: "build the light allocator under the RATIFIED F-F surface (subtract-only + weight-set-as-data, ED-IN-0011); after S2/S2.5"
+        evidence: ["F-F/fork-8 RATIFIED at default (ED-IN-0011)"]
+      - key: "S5"
+        label: "Substance + banks + fixtures"
+        state: blocked
+        blocked_on: "ERA instrument unbuilt (Stage-5 blocker)"
+        next: "scale-complete banks under the ratified fork-6 INCLUDE default (~1,200-2,700 units); build the ERA gate"
+        evidence: ["fork 6 RATIFIED at include-default (ED-IN-0011)"]
+
+  M3:
+    label: "Godot vertical slice"
+    stages:
+      - key: "G0"
+        label: "Gate-0 spine (G0.1-G0.5)"
+        state: blocked
+        blocked_on: "ED-1051 + strategy-doc register (queue 10-12)"
+        next: "G0.1 Key.gd v2 once ED-1051 ruled; valoria-game frozen since 2026-05-04"
+        evidence: []
+      - key: "GX"
+        label: "Typed engine-params exports"
+        state: blocked
+        blocked_on: "ED-1052 (scope/fence ruling)"
+        next: "extend the combat_engine_v1.json pattern to settled non-combat values"
+        evidence: ["combat_engine_v1.json round-trip gate live"]
+      - key: "GP"
+        label: "Generator corpus as data pack"
+        state: blocked
+        blocked_on: "M2 S1 (compile gate)"
+        next: "load the compiled pack via the v2 §7 wrapper"
+        evidence: []
+
+decisions_t0_open:
+  - "ED-1051 — engine_clock ratification"
+
+last_progress:
+  - "2026-07-08: SC consequence spine LIVE (ED-SC-0002/0006/0007 — kernel live in campaign + parliamentary vote/domain-echo composition); MB partition-invariance fix (ED-MB-0004) + DG-2 yield mechanic (ED-MB-0005) + Command decoupled from pool (ED-MB-0006); attribute/value coherence audit (ED-IN-0029) filed, held back for Jordan ratification"
+  - "2026-07-08: JD-1 RULED (\"accept plan bands\") + U1 DONE (ED-PC-0010, PR #99) — T0 wall drops to ED-1051 alone; PC R3 U2 DONE (ED-PC-0011, PR #109, 13-agent adversarial validation)"
+  - "2026-07-08: MB full 11-surface gauge architecture audit (ED-MB-0007, PR #114) — D1 super-linear resolution architecture (p≈3.2) proven by ablation; 11 new decision points DG-6..16 opened, none ruled; diagnostic only, no gauge row fixed"
+  - "2026-07-08: Open-items Jordan decision docket (PR #117) — consolidated recommendations for ~32 open needs_jordan items; a proposal surface only, ratifies nothing on merge (now itself stale vs. the 07-09/07-13 waves below)"
+  - "2026-07-09: Comparative-governance round-2 docket — ED-FA-0018..0035 + ED-SE-0018..0044 filed (mostly PROPOSED/needs_jordan); FA riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder + the SE historical-precedent mechanics authored as PROPOSED text, awaiting rulings"
+  - "2026-07-13: Multi-agent mechanic audit P1 batch — 7 subsystems PARTIAL, module-adjudicator OPEN (22 violations); ~20 new needs_jordan EDs (ED-MB-0008..0010, ED-FI-0006..0008, ED-SC-0016, ED-WR-0008, ED-SE-0045..0048, ED-IN-0046..0050/0062)"
+  - "2026-07-13: Governance D1-D6 RULED (ED-IN-0046/0047) — card-deck/AP-economy/Compact-as-Debt/Mandate-retirement/1.0d-merge accepted; D6 recall-clock cumulative accrual conditioned on E11; B1 faction count = 4 (resolves ED-FA-0001, closes fork-10); B12 new Settlement->Territory->Province->Duchy->Country hierarchy (Jordan overrules old nesting) — L/PS wiring now the highest-priority open item"
+  - "2026-07-14: WS0/WS1 Structural Observatory (ED-IN-0057..0064); ED-IN-0064 specs the L/PS §5 sequence (PR #136) but lps_inert_check stays 100/100 red (nothing has consequence yet); governance vector-audit run"
+  - "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16"
+  - "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"

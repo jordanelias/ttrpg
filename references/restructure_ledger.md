@@ -72,50 +72,50 @@
 | `designs/board_game/board_game_v30.md` | `designs/provincial/strategic_layer_v30.md` | PENDING |
 | `designs/board_game/board_game_v30_infill.md` | `designs/provincial/strategic_layer_v30_infill.md` | PENDING |
 | `designs/board_game/board_game_v30_skeleton.md` | `designs/provincial/strategic_layer_v30_skeleton.md` | PENDING |
-| `designs/board_game/faction_layer_v30.md` | `designs/provincial/faction_layer_v30.md` | PENDING |
-| `designs/board_game/faction_layer_v30_infill.md` | `designs/provincial/faction_layer_v30_infill.md` | PENDING |
+| `designs/board_game/faction_layer_v30.md` | `systems/factions/faction_layer_v30.md` | PENDING |
+| `designs/board_game/faction_layer_v30_infill.md` | `systems/factions/faction_layer_v30_infill.md` | PENDING |
 | `designs/board_game/faction_layer_v30_skeleton.md` | `designs/provincial/faction_layer_v30_skeleton.md` | PENDING |
-| `designs/board_game/fail_forward_pp177_2026-04-02.md` | `designs/provincial/fail_forward_pp177.md` | PENDING |
+| `designs/board_game/fail_forward_pp177_2026-04-02.md` | `systems/factions/fail_forward_pp177.md` | PENDING |
 | `designs/board_game/military_layer_v30.md` | `deprecated/designs/board_game/military_layer_v30.md` | PENDING |
 | `designs/board_game/peninsular_strain_v1.md` | `designs/provincial/peninsular_strain_v30.md` | PENDING |
 | `designs/board_game/peninsular_strain_v1_skeleton.md` | `designs/provincial/peninsular_strain_v30_skeleton.md` | PENDING |
 | `designs/board_game/tc_political_redesign_v30.md` | `deprecated/designs/board_game/tc_political_redesign_v30.md` | PENDING |
 | `designs/board_game/valoria_map_v2.svg` | `designs/provincial/valoria_map_v2.svg` | PENDING |
-| `designs/board_game/varfell_path_b_v30.md` | `designs/provincial/varfell_path_b_v30.md` | PENDING |
-| `designs/board_game/varfell_path_b_v30_infill.md` | `designs/provincial/varfell_path_b_v30_infill.md` | PENDING |
+| `designs/board_game/varfell_path_b_v30.md` | `systems/factions/varfell_path_b_v30.md` | PENDING |
+| `designs/board_game/varfell_path_b_v30_infill.md` | `systems/factions/varfell_path_b_v30_infill.md` | PENDING |
 | `designs/board_game/victory_v30.md` | `designs/provincial/victory_v30.md` | PENDING |
 | `designs/board_game/victory_v30_infill.md` | `designs/provincial/victory_v30_infill.md` | PENDING |
 | `designs/board_game/victory_v30_skeleton.md` | `designs/provincial/victory_v30_skeleton.md` | PENDING |
-| `designs/characters/character_histories_v30.md` | `designs/world/character_histories_v30.md` | PENDING |
-| `designs/characters/character_histories_v30_infill.md` | `designs/world/character_histories_v30_infill.md` | PENDING |
-| `designs/characters/character_histories_v30_skeleton.md` | `designs/world/character_histories_v30_skeleton.md` | PENDING |
-| `designs/combat/combat_design_v1.md` | `designs/scene/combat_design_v1.md` | PENDING |
+| `designs/characters/character_histories_v30.md` | `systems/world/character_histories_v30.md` | PENDING |
+| `designs/characters/character_histories_v30_infill.md` | `systems/world/character_histories_v30_infill.md` | PENDING |
+| `designs/characters/character_histories_v30_skeleton.md` | `systems/world/character_histories_v30_skeleton.md` | PENDING |
+| `designs/combat/combat_design_v1.md` | `systems/combat/combat_design_v1.md` | PENDING |
 | `designs/combat/combat_design_v1_skeleton.md` | `designs/scene/combat_design_v1_skeleton.md` | PENDING |
-| `designs/combat/combat_v30.md` | `designs/scene/combat_v30.md` | PENDING |
-| `designs/combat/combat_v30_infill.md` | `designs/scene/combat_v30_infill.md` | PENDING |
+| `designs/combat/combat_v30.md` | `systems/combat/combat_v30.md` | PENDING |
+| `designs/combat/combat_v30_infill.md` | `systems/combat/combat_v30_infill.md` | PENDING |
 | `designs/combat/combat_v30_skeleton.md` | `designs/scene/combat_v30_skeleton.md` | PENDING |
-| `designs/contest/social_contest_system_v2.md` | `designs/scene/social_contest_system_v2.md` | PENDING |
+| `designs/contest/social_contest_system_v2.md` | `systems/social_contest/social_contest_system_v2.md` | PENDING |
 | `designs/contest/social_contest_system_v2_skeleton.md` | `designs/scene/social_contest_system_v2_skeleton.md` | PENDING |
-| `designs/contest/social_contest_v30.md` | `designs/scene/social_contest_v30.md` | PENDING |
-| `designs/contest/social_contest_v30_infill.md` | `designs/scene/social_contest_v30_infill.md` | PENDING |
+| `designs/contest/social_contest_v30.md` | `systems/social_contest/social_contest_v30.md` | PENDING |
+| `designs/contest/social_contest_v30_infill.md` | `systems/social_contest/social_contest_v30_infill.md` | PENDING |
 | `designs/contest/social_contest_v30_skeleton.md` | `designs/scene/social_contest_v30_skeleton.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30.md` | `designs/scene/conviction_track_v30.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30_infill.md` | `designs/scene/conviction_track_v30_infill.md` | PENDING |
 | `designs/conviction_track/conviction_track_v30_skeleton.md` | `designs/scene/conviction_track_v30_skeleton.md` | PENDING |
-| `designs/fieldwork/fieldwork_bg_v30.md` | `designs/scene/fieldwork_bg_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_bg_v30_infill.md` | `designs/scene/fieldwork_bg_v30_infill.md` | PENDING |
-| `designs/fieldwork/fieldwork_editorial.md` | `designs/scene/fieldwork_editorial.md` | PENDING |
-| `designs/fieldwork/fieldwork_exploration.md` | `designs/scene/fieldwork_exploration.md` | PENDING |
-| `designs/fieldwork/fieldwork_exposure.md` | `designs/scene/fieldwork_exposure.md` | PENDING |
-| `designs/fieldwork/fieldwork_godot.md` | `designs/scene/fieldwork_godot.md` | PENDING |
-| `designs/fieldwork/fieldwork_hybrid_v30.md` | `designs/scene/fieldwork_hybrid_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_hybrid_v30_infill.md` | `designs/scene/fieldwork_hybrid_v30_infill.md` | PENDING |
-| `designs/fieldwork/fieldwork_investigation.md` | `designs/scene/fieldwork_investigation.md` | PENDING |
-| `designs/fieldwork/fieldwork_rationale.md` | `designs/scene/fieldwork_rationale.md` | PENDING |
-| `designs/fieldwork/fieldwork_socializing.md` | `designs/scene/fieldwork_socializing.md` | PENDING |
-| `designs/fieldwork/fieldwork_summary.md` | `designs/scene/fieldwork_summary.md` | PENDING |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/scene/fieldwork_v30.md` | PENDING |
-| `designs/fieldwork/fieldwork_v30_infill.md` | `designs/scene/fieldwork_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_bg_v30.md` | `systems/fieldwork/fieldwork_bg_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_bg_v30_infill.md` | `systems/fieldwork/fieldwork_bg_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_editorial.md` | `systems/fieldwork/fieldwork_editorial.md` | PENDING |
+| `designs/fieldwork/fieldwork_exploration.md` | `systems/fieldwork/fieldwork_exploration.md` | PENDING |
+| `designs/fieldwork/fieldwork_exposure.md` | `systems/fieldwork/fieldwork_exposure.md` | PENDING |
+| `designs/fieldwork/fieldwork_godot.md` | `systems/fieldwork/fieldwork_godot.md` | PENDING |
+| `designs/fieldwork/fieldwork_hybrid_v30.md` | `systems/fieldwork/fieldwork_hybrid_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_hybrid_v30_infill.md` | `systems/fieldwork/fieldwork_hybrid_v30_infill.md` | PENDING |
+| `designs/fieldwork/fieldwork_investigation.md` | `systems/fieldwork/fieldwork_investigation.md` | PENDING |
+| `designs/fieldwork/fieldwork_rationale.md` | `systems/fieldwork/fieldwork_rationale.md` | PENDING |
+| `designs/fieldwork/fieldwork_socializing.md` | `systems/fieldwork/fieldwork_socializing.md` | PENDING |
+| `designs/fieldwork/fieldwork_summary.md` | `systems/fieldwork/fieldwork_summary.md` | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `systems/fieldwork/fieldwork_v30.md` | PENDING |
+| `designs/fieldwork/fieldwork_v30_infill.md` | `systems/fieldwork/fieldwork_v30_infill.md` | PENDING |
 | `designs/fieldwork/fieldwork_v30_skeleton.md` | `designs/scene/fieldwork_v30_skeleton.md` | PENDING |
 | `designs/gm_ref_cp14/README.md` | `designs/arcs/README.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/arcs_16_19_faction_domain_echoes.md` | `designs/arcs/arcs_16_19.md` | PENDING |
@@ -131,78 +131,78 @@
 | `designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental.md` | `designs/arcs/emergent_arcs_experimental.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental_skeleton.md` | `designs/arcs/emergent_arcs_experimental_skeleton.md` | PENDING |
 | `designs/gm_ref_cp14/arcs/valoria_emergent_campaign_arcs.md` | `designs/arcs/emergent_campaign_arcs.md` | PENDING |
-| `designs/hybrid/hybrid_gaps_v30.md` | `designs/architecture/hybrid_gaps_v30.md` | PENDING |
-| `designs/hybrid/hybrid_gaps_v30_infill.md` | `designs/architecture/hybrid_gaps_v30_infill.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30.md` | `designs/architecture/scale_transitions_v30.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30_infill.md` | `designs/architecture/scale_transitions_v30_infill.md` | PENDING |
-| `designs/hybrid/scale_transitions_v30_skeleton.md` | `designs/architecture/scale_transitions_v30_skeleton.md` | PENDING |
-| `designs/mass_combat/mass_battle_v30.md` | `designs/provincial/mass_battle_v30.md` | PENDING |
-| `designs/mass_combat/mass_battle_v30_infill.md` | `designs/provincial/mass_battle_v30_infill.md` | PENDING |
+| `designs/hybrid/hybrid_gaps_v30.md` | `systems/_architecture/hybrid_gaps_v30.md` | PENDING |
+| `designs/hybrid/hybrid_gaps_v30_infill.md` | `systems/_architecture/hybrid_gaps_v30_infill.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30.md` | `systems/_architecture/scale_transitions_v30.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30_infill.md` | `systems/_architecture/scale_transitions_v30_infill.md` | PENDING |
+| `designs/hybrid/scale_transitions_v30_skeleton.md` | `systems/_architecture/scale_transitions_v30_skeleton.md` | PENDING |
+| `designs/mass_combat/mass_battle_v30.md` | `systems/mass_battle/mass_battle_v30.md` | PENDING |
+| `designs/mass_combat/mass_battle_v30_infill.md` | `systems/mass_battle/mass_battle_v30_infill.md` | PENDING |
 | `designs/mass_combat/mass_battle_v30_skeleton.md` | `designs/provincial/mass_battle_v30_skeleton.md` | PENDING |
-| `designs/mechanics/baralta_crown_claim_v30.md` | `designs/provincial/baralta_crown_claim_v30.md` | PENDING |
-| `designs/mechanics/baralta_crown_claim_v30_infill.md` | `designs/provincial/baralta_crown_claim_v30_infill.md` | PENDING |
-| `designs/setting/adjacency_map.jsx` | `designs/world/adjacency_map.jsx` | PENDING |
-| `designs/setting/calamity_radiation_v30.md` | `designs/world/calamity_radiation_v30.md` | PENDING |
-| `designs/setting/calamity_radiation_v30_infill.md` | `designs/world/calamity_radiation_v30_infill.md` | PENDING |
-| `designs/setting/geography_v30.md` | `designs/world/geography_v30.md` | PENDING |
-| `designs/setting/geography_v30_infill.md` | `designs/world/geography_v30_infill.md` | PENDING |
-| `designs/setting/southernmost_v30.md` | `designs/world/southernmost_v30.md` | PENDING |
-| `designs/setting/southernmost_v30_infill.md` | `designs/world/southernmost_v30_infill.md` | PENDING |
+| `designs/mechanics/baralta_crown_claim_v30.md` | `systems/factions/baralta_crown_claim_v30.md` | PENDING |
+| `designs/mechanics/baralta_crown_claim_v30_infill.md` | `systems/factions/baralta_crown_claim_v30_infill.md` | PENDING |
+| `designs/setting/adjacency_map.jsx` | `systems/world/adjacency_map.jsx` | PENDING |
+| `designs/setting/calamity_radiation_v30.md` | `systems/world/calamity_radiation_v30.md` | PENDING |
+| `designs/setting/calamity_radiation_v30_infill.md` | `systems/world/calamity_radiation_v30_infill.md` | PENDING |
+| `designs/setting/geography_v30.md` | `systems/world/geography_v30.md` | PENDING |
+| `designs/setting/geography_v30_infill.md` | `systems/world/geography_v30_infill.md` | PENDING |
+| `designs/setting/southernmost_v30.md` | `systems/world/southernmost_v30.md` | PENDING |
+| `designs/setting/southernmost_v30_infill.md` | `systems/world/southernmost_v30_infill.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16.md` | `designs/arcs/arc_expansion_v30.md` | PENDING |
 | `designs/systems/arc_expansion_v1_2026-04-16_skeleton.md` | `designs/arcs/arc_expansion_v30_skeleton.md` | PENDING |
-| `designs/systems/campaign_architecture_v1.md` | `designs/architecture/campaign_architecture_v30.md` | PENDING |
-| `designs/systems/campaign_modes_v30.md` | `designs/architecture/campaign_modes_v30.md` | PENDING |
-| `designs/systems/campaign_modes_v30_infill.md` | `designs/architecture/campaign_modes_v30_infill.md` | PENDING |
-| `designs/systems/canonical_registry_r2_2026-04-15.md` | `designs/architecture/canonical_registry.md` | PENDING |
+| `designs/systems/campaign_architecture_v1.md` | `systems/_architecture/campaign_architecture_v30.md` | PENDING |
+| `designs/systems/campaign_modes_v30.md` | `systems/_architecture/campaign_modes_v30.md` | PENDING |
+| `designs/systems/campaign_modes_v30_infill.md` | `systems/_architecture/campaign_modes_v30_infill.md` | PENDING |
+| `designs/systems/canonical_registry_r2_2026-04-15.md` | `systems/_architecture/canonical_registry.md` | PENDING |
 | `designs/systems/clock_registry_v30.md` | `designs/provincial/clock_registry_v30.md` | PENDING |
 | `designs/systems/clock_registry_v30_infill.md` | `designs/provincial/clock_registry_v30_infill.md` | PENDING |
-| `designs/systems/cogload_moderate_target.md` | `designs/architecture/cogload_moderate_target.md` | PENDING |
-| `designs/systems/companion_app_design_note_2026-04-04.md` | `designs/architecture/companion_app_design_note.md` | PENDING |
-| `designs/systems/companion_specification_v30.md` | `designs/npcs/companion_specification_v30.md` | PENDING |
-| `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `designs/architecture/complete_systems_reference.md` | PENDING |
+| `designs/systems/cogload_moderate_target.md` | `systems/_architecture/cogload_moderate_target.md` | PENDING |
+| `designs/systems/companion_app_design_note_2026-04-04.md` | `systems/_architecture/companion_app_design_note.md` | PENDING |
+| `designs/systems/companion_specification_v30.md` | `systems/npcs/companion_specification_v30.md` | PENDING |
+| `designs/systems/complete_systems_reference_r2_2026-04-15.md` | `systems/_architecture/complete_systems_reference.md` | PENDING |
 | `designs/systems/derived_stats_v1.md` | `designs/scene/derived_stats_v30.md` | PENDING |
 | `designs/systems/derived_stats_v1_skeleton.md` | `designs/scene/derived_stats_v30_skeleton.md` | PENDING |
-| `designs/systems/faction_politics_expanded_v1.md` | `designs/provincial/faction_politics_v30.md` | PENDING |
-| `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | PENDING |
-| `designs/systems/integration_proposal_2026-04-15.md` | `designs/architecture/integration_proposal_v30.md` | PENDING |
-| `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `designs/architecture/integration_proposal_v30_skeleton.md` | PENDING |
-| `designs/systems/investigation_systems_proposal_2026-04-15.md` | `designs/scene/investigation_systems_v30.md` | PENDING |
+| `designs/systems/faction_politics_expanded_v1.md` | `systems/factions/faction_politics_v30.md` | DONE (2026-07-08, ED-IN-0016 — file move already complete, old path long gone; citation-repointing half executed this pass across the live corpus) |
+| `designs/systems/faction_politics_expanded_v1_skeleton.md` | `designs/provincial/faction_politics_v30_skeleton.md` | N/A (2026-07-08, ED-IN-0016 — not executed: `faction_politics_v30.md` was promoted as a single monolithic doc; no index/skeleton split was ever authored for it, confirmed no such file exists) |
+| `designs/systems/integration_proposal_2026-04-15.md` | `systems/_architecture/integration_proposal_v30.md` | PENDING |
+| `designs/systems/integration_proposal_2026-04-15_skeleton.md` | `systems/_architecture/integration_proposal_v30_skeleton.md` | PENDING |
+| `designs/systems/investigation_systems_proposal_2026-04-15.md` | `systems/fieldwork/investigation_systems_v30.md` | PENDING |
 | `designs/systems/investigation_systems_proposal_2026-04-15_skeleton.md` | `designs/scene/investigation_systems_v30_skeleton.md` | PENDING |
-| `designs/systems/military_layer_v30.md` | `designs/provincial/military_layer_v30.md` | PENDING |
+| `designs/systems/military_layer_v30.md` | `systems/mass_battle/military_layer_v30.md` | PENDING |
 | `designs/systems/military_layer_v30_skeleton.md` | `designs/provincial/military_layer_v30_skeleton.md` | PENDING |
-| `designs/systems/npc_behavior_system_v1.md` | `designs/npcs/npc_behavior_system_v1.md` | PENDING |
-| `designs/systems/npc_behavior_system_v1_skeleton.md` | `designs/npcs/npc_behavior_system_v1_skeleton.md` | PENDING |
-| `designs/systems/npc_behavior_v30.md` | `designs/npcs/npc_behavior_v30.md` | PENDING |
-| `designs/systems/npc_behavior_v30_infill.md` | `designs/npcs/npc_behavior_v30_infill.md` | PENDING |
-| `designs/systems/npc_behavior_v30_skeleton.md` | `designs/npcs/npc_behavior_v30_skeleton.md` | PENDING |
-| `designs/systems/player_agency_v30.md` | `designs/architecture/player_agency_v30.md` | PENDING |
-| `designs/systems/player_agency_v30_skeleton.md` | `designs/architecture/player_agency_v30_skeleton.md` | PENDING |
-| `designs/systems/settlement_layer_v30.md` | `designs/territory/settlement_layer_v30.md` | PENDING |
-| `designs/systems/settlement_layer_v30_skeleton.md` | `designs/territory/settlement_layer_v30_skeleton.md` | PENDING |
+| `designs/systems/npc_behavior_system_v1.md` | `systems/npcs/npc_behavior_system_v1.md` | PENDING |
+| `designs/systems/npc_behavior_system_v1_skeleton.md` | `systems/npcs/npc_behavior_system_v1_skeleton.md` | PENDING |
+| `designs/systems/npc_behavior_v30.md` | `systems/npcs/npc_behavior_v30.md` | PENDING |
+| `designs/systems/npc_behavior_v30_infill.md` | `systems/npcs/npc_behavior_v30_infill.md` | PENDING |
+| `designs/systems/npc_behavior_v30_skeleton.md` | `systems/npcs/npc_behavior_v30_skeleton.md` | PENDING |
+| `designs/systems/player_agency_v30.md` | `systems/_architecture/player_agency_v30.md` | PENDING |
+| `designs/systems/player_agency_v30_skeleton.md` | `systems/_architecture/player_agency_v30_skeleton.md` | PENDING |
+| `designs/systems/settlement_layer_v30.md` | `systems/settlements/settlement_layer_v30.md` | PENDING |
+| `designs/systems/settlement_layer_v30_skeleton.md` | `systems/settlements/settlement_layer_v30_skeleton.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30.md` | `designs/provincial/tc_political_v30.md` | PENDING |
 | `designs/systems/tc_political_redesign_v30_skeleton.md` | `designs/provincial/tc_political_v30_skeleton.md` | PENDING |
-| `designs/systems/thread_horizontal_integration_spec.md` | `designs/threadwork/thread_horizontal_integration_spec.md` | PENDING |
+| `designs/systems/thread_horizontal_integration_spec.md` | `systems/threadwork/thread_horizontal_integration_spec.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1.md` | `designs/arcs/throughline_resolutions_v30.md` | PENDING |
 | `designs/systems/throughline_resolutions_v1_skeleton.md` | `designs/arcs/throughline_resolutions_v30_skeleton.md` | PENDING |
-| `designs/ttrpg/edeyja_npc.md` | `designs/npcs/edeyja_npc.md` | PENDING |
-| `designs/ttrpg/factions_ttrpg_v30.md` | `designs/provincial/factions_personal_v30.md` | PENDING |
-| `designs/ttrpg/factions_ttrpg_v30_infill.md` | `designs/provincial/factions_personal_v30_infill.md` | PENDING |
+| `designs/ttrpg/edeyja_npc.md` | `systems/npcs/edeyja_npc.md` | PENDING |
+| `designs/ttrpg/factions_ttrpg_v30.md` | `systems/factions/factions_personal_v30.md` | PENDING |
+| `designs/ttrpg/factions_ttrpg_v30_infill.md` | `systems/factions/factions_personal_v30_infill.md` | PENDING |
 | `designs/ttrpg/factions_ttrpg_v30_skeleton.md` | `designs/provincial/factions_personal_v30_skeleton.md` | PENDING |
-| `designs/ttrpg/threadwork_philosophical_reference_v30.md` | `designs/threadwork/threadwork_philosophical_reference_v30.md` | PENDING |
-| `designs/ttrpg/threadwork_philosophical_reference_v30_infill.md` | `designs/threadwork/threadwork_philosophical_reference_v30_infill.md` | PENDING |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/threadwork/threadwork_v25_historical.md` | PENDING |
-| `designs/ttrpg/threadwork_redesign_v25_skeleton.md` | `designs/threadwork/threadwork_v25_historical_skeleton.md` | PENDING |
-| `designs/ttrpg/threadwork_v30.md` | `designs/threadwork/threadwork_v30.md` | PENDING |
-| `designs/ttrpg/threadwork_v30_infill.md` | `designs/threadwork/threadwork_v30_infill.md` | PENDING |
-| `designs/ttrpg/threadwork_v30_skeleton.md` | `designs/threadwork/threadwork_v30_skeleton.md` | PENDING |
+| `designs/ttrpg/threadwork_philosophical_reference_v30.md` | `systems/threadwork/threadwork_philosophical_reference_v30.md` | PENDING |
+| `designs/ttrpg/threadwork_philosophical_reference_v30_infill.md` | `systems/threadwork/threadwork_philosophical_reference_v30_infill.md` | PENDING |
+| `designs/ttrpg/threadwork_redesign_v25.md` | `systems/threadwork/threadwork_v25_historical.md` | PENDING |
+| `designs/ttrpg/threadwork_redesign_v25_skeleton.md` | `systems/threadwork/threadwork_v25_historical_skeleton.md` | PENDING |
+| `designs/ttrpg/threadwork_v30.md` | `systems/threadwork/threadwork_v30.md` | PENDING |
+| `designs/ttrpg/threadwork_v30_infill.md` | `systems/threadwork/threadwork_v30_infill.md` | PENDING |
+| `designs/ttrpg/threadwork_v30_skeleton.md` | `systems/threadwork/threadwork_v30_skeleton.md` | PENDING |
 | `designs/ttrpg/valoria_emergent_scenarios.md` | `designs/arcs/emergent_scenarios.md` | PENDING |
 | `designs/ttrpg/valoria_emergent_scenarios_skeleton.md` | `designs/arcs/emergent_scenarios_skeleton.md` | PENDING |
 | `designs/ttrpg/valoria_narrative_scenario_chains.md` | `designs/arcs/narrative_scenario_chains.md` | PENDING |
 | `designs/ttrpg/valoria_narrative_scenario_chains_skeleton.md` | `designs/arcs/narrative_scenario_chains_skeleton.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_canon_audit_v30.md` | `designs/world/worldbuilding_canon_audit_v30.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_canon_audit_v30_infill.md` | `designs/world/worldbuilding_canon_audit_v30_infill.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_v30.md` | `designs/world/worldbuilding_v30.md` | PENDING |
-| `designs/worldbuilding/worldbuilding_v30_infill.md` | `designs/world/worldbuilding_v30_infill.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_canon_audit_v30.md` | `systems/world/worldbuilding_canon_audit_v30.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_canon_audit_v30_infill.md` | `systems/world/worldbuilding_canon_audit_v30_infill.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_v30.md` | `systems/world/worldbuilding_v30.md` | PENDING |
+| `designs/worldbuilding/worldbuilding_v30_infill.md` | `systems/world/worldbuilding_v30_infill.md` | PENDING |
 | `gm_ref/README.md` | `designs/arcs/gm_ref/README.md` | PENDING |
 | `gm_ref/arc_narrative_analysis.md` | `designs/arcs/gm_ref/arc_narrative_analysis.md` | PENDING |
 | `gm_ref/arcs_01_04_nongreedy.md` | `designs/arcs/gm_ref/arcs_01_04.md` | PENDING |
@@ -259,7 +259,7 @@
 | `references/params_threadwork_history.md` | `params/history/threadwork.md` | PENDING |
 | `references/params_threadwork_superseded.md` | `params/threadwork_superseded.md` | PENDING |
 | `references/sim_decision_protocols.md` | `tests/sim/sim_decision_protocols.md` | PENDING |
-| `references/videogame_mode_spec.md` | `designs/architecture/videogame_mode_spec.md` | PENDING |
+| `references/videogame_mode_spec.md` | `systems/_architecture/videogame_mode_spec.md` | PENDING |
 | `session_log_archive_part_1.md` | `archives/session/session_log_archive_part_1.md` | PENDING |
 | `session_log_archive_part_2.md` | `archives/session/session_log_archive_part_2.md` | PENDING |
 | `session_log_archive_part_3.md` | `archives/session/session_log_archive_part_3.md` | PENDING |
@@ -507,3 +507,465 @@
 | `designs/board_game/tc_political_redesign_v30_skeleton.md` | PENDING |
 | `path` | PENDING |
 | `session_log_archive.md` | PENDING |
+
+
+## 2026-07-16 — Registers out of canon/ (ED-IN-0071 P0)
+
+| old path | new path |
+|---|---|
+| `canon/editorial_ledger.jsonl` | `registers/editorial_ledger.jsonl` |
+| `canon/editorial_ledger_archive.jsonl` | `registers/editorial_ledger_archive.jsonl` |
+| `canon/editorial_ledger_fa.jsonl` | `registers/editorial_ledger_fa.jsonl` |
+| `canon/editorial_ledger_fi.jsonl` | `registers/editorial_ledger_fi.jsonl` |
+| `canon/editorial_ledger_in.jsonl` | `registers/editorial_ledger_in.jsonl` |
+| `canon/editorial_ledger_mb.jsonl` | `registers/editorial_ledger_mb.jsonl` |
+| `canon/editorial_ledger_migration_2026-05-28.md` | `registers/editorial_ledger_migration_2026-05-28.md` |
+| `canon/editorial_ledger_pc.jsonl` | `registers/editorial_ledger_pc.jsonl` |
+| `canon/editorial_ledger_sc.jsonl` | `registers/editorial_ledger_sc.jsonl` |
+| `canon/editorial_ledger_se.jsonl` | `registers/editorial_ledger_se.jsonl` |
+| `canon/editorial_ledger_wr.jsonl` | `registers/editorial_ledger_wr.jsonl` |
+| `canon/mechanics_index.yaml` | `registers/mechanics_index.yaml` |
+| `canon/patch_register_active.yaml` | `registers/patch_register_active.yaml` |
+| `canon/patch_register_index.md` | `registers/patch_register_index.md` |
+| `canon/placeholder_names.yaml` | `registers/placeholder_names.yaml` |
+| `canon/supersession_register.yaml` | `registers/supersession_register.yaml` |
+
+
+## 2026-07-16 — designs/proposals -> proposals (ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `designs/proposals/2026-05-16-PC-4.4-unified-success-stress.md` | `proposals/2026-05-16-PC-4.4-unified-success-stress.md` |
+| `designs/proposals/2026-05-16-faction-audit-followup-plan.md` | `proposals/2026-05-16-faction-audit-followup-plan.md` |
+| `designs/proposals/2026-05-25-mechanics-integration-v3_1.md` | `proposals/2026-05-25-mechanics-integration-v3_1.md` |
+| `designs/proposals/mass_battle_fighting_withdrawal_v1.md` | `proposals/mass_battle_fighting_withdrawal_v1.md` |
+| `designs/proposals/mass_battle_shape_echelon_revamp.md` | `proposals/mass_battle_shape_echelon_revamp.md` |
+| `designs/proposals/multiunit_envelopment_plan.md` | `proposals/multiunit_envelopment_plan.md` |
+| `designs/proposals/pc_formation_system.md` | `proposals/pc_formation_system.md` |
+| `designs/proposals/repo-reorganization-v1.md` | `proposals/repo-reorganization-v1.md` |
+| `designs/proposals/stub_infill_plan.md` | `proposals/stub_infill_plan.md` |
+| `designs/proposals/weapon_physics_and_concentration_model.md` | `proposals/weapon_physics_and_concentration_model.md` |
+
+## 2026-07-16 — primary promotions batch (research/dashboard/workplans, ED-IN-0071 P1)
+
+| old path | new path |
+|---|---|
+| `references/historical/mass_battle_gauge_grounding.md` | `research/historical/mass_battle_gauge_grounding.md` |
+| `references/historical/precedents_analysis.md` | `research/historical/precedents_analysis.md` |
+| `references/historical/precedents_warfare.md` | `research/historical/precedents_warfare.md` |
+| `docs/dashboard/data.json` | `dashboard/data.json` |
+| `docs/dashboard/icon.svg` | `dashboard/icon.svg` |
+| `docs/dashboard/index.html` | `dashboard/index.html` |
+| `docs/dashboard/manifest.json` | `dashboard/manifest.json` |
+| `designs/workplans/README.md` | `workplans/README.md` |
+| `designs/workplans/valoria_master_workplan_v6.md` | `workplans/valoria_master_workplan_v6.md` |
+| `designs/workplans/workplan_v6_progress.yaml` | `workplans/workplan_v6_progress.yaml` |
+
+
+## 2026-07-16 — Godot three-home collapse -> godot/ (ED-IN-0071 P2)
+
+| old path | new path |
+|---|---|
+| `designs/godot/` | `godot/` |
+| `designs/videogame/` | `godot/` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/` | `godot/` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/README.md` | `godot/README.md` |
+| `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md` | `godot/godot_conversion_strategy_v1.md` |
+| `designs/godot/data_serialization_spec.md` | `godot/data_serialization_spec.md` |
+| `designs/godot/gm_to_engine_conversion.md` | `godot/gm_to_engine_conversion.md` |
+| `designs/godot/implementation_sequence.md` | `godot/implementation_sequence.md` |
+| `designs/godot/scene_tree_architecture.md` | `godot/scene_tree_architecture.md` |
+| `designs/godot/skeleton/core/engine_manifest.gd` | `godot/skeleton/core/engine_manifest.gd` |
+| `designs/godot/skeleton/core/key_type_resource.gd` | `godot/skeleton/core/key_type_resource.gd` |
+| `designs/godot/skeleton/data/combat_config.tres` | `godot/skeleton/data/combat_config.tres` |
+| `designs/godot/skeleton/data/engines/combat/combat.tres` | `godot/skeleton/data/engines/combat/combat.tres` |
+| `designs/godot/skeleton/data/engines/combat/strike.tres` | `godot/skeleton/data/engines/combat/strike.tres` |
+| `designs/godot/skeleton/data/engines/combat/wound.tres` | `godot/skeleton/data/engines/combat/wound.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_felled.tres` | `godot/skeleton/data/key_types/scene_combat_felled.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_hit.tres` | `godot/skeleton/data/key_types/scene_combat_hit.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_resolved.tres` | `godot/skeleton/data/key_types/scene_combat_resolved.tres` |
+| `designs/godot/skeleton/data/key_types/scene_combat_strike.tres` | `godot/skeleton/data/key_types/scene_combat_strike.tres` |
+| `designs/godot/skeleton/data/traditions/german.tres` | `godot/skeleton/data/traditions/german.tres` |
+| `designs/godot/skeleton/data/traditions/none.tres` | `godot/skeleton/data/traditions/none.tres` |
+| `designs/godot/skeleton/data/weapons/arming.tres` | `godot/skeleton/data/weapons/arming.tres` |
+| `designs/godot/skeleton/data/weapons/longsword.tres` | `godot/skeleton/data/weapons/longsword.tres` |
+| `designs/godot/skeleton/engines/combat/combat_engine.gd` | `godot/skeleton/engines/combat/combat_engine.gd` |
+| `designs/godot/skeleton/engines/combat/modules/strike_module.gd` | `godot/skeleton/engines/combat/modules/strike_module.gd` |
+| `designs/godot/skeleton/engines/combat/modules/wound_module.gd` | `godot/skeleton/engines/combat/modules/wound_module.gd` |
+| `designs/godot/skeleton/engines/combat/resources/combat_config.gd` | `godot/skeleton/engines/combat/resources/combat_config.gd` |
+| `designs/godot/skeleton/engines/combat/resources/tradition_resource.gd` | `godot/skeleton/engines/combat/resources/tradition_resource.gd` |
+| `designs/godot/skeleton/engines/combat/resources/weapon_resource.gd` | `godot/skeleton/engines/combat/resources/weapon_resource.gd` |
+| `designs/videogame/godot_architecture_specification.md` | `godot/godot_architecture_specification.md` |
+
+
+## 2026-07-16 — arcs primary promotion -> arcs/ (+ arcs/registers/) (ED-IN-0071 P1-class)
+
+| old path | new path |
+|---|---|
+| `designs/arcs/` | `arcs/` |
+| `references/arcs/` | `arcs/registers/` |
+| `references/arc_register.md` | `arcs/registers/arc_register.md` |
+| `references/arc_register_infill.md` | `arcs/registers/arc_register_infill.md` |
+| `designs/arcs/README.md` | `arcs/README.md` |
+| `designs/arcs/arc_expansion_v30.md` | `arcs/arc_expansion_v30.md` |
+| `designs/arcs/arc_expansion_v30_index.md` | `arcs/arc_expansion_v30_index.md` |
+| `designs/arcs/arcs_16_19.md` | `arcs/simulated/arcs_16_19.md` |
+| `designs/arcs/arcs_16_19_index.md` | `arcs/simulated/arcs_16_19_index.md` |
+| `designs/arcs/arcs_20_23.md` | `arcs/simulated/arcs_20_23.md` |
+| `designs/arcs/arcs_20_23_index.md` | `arcs/simulated/arcs_20_23_index.md` |
+| `designs/arcs/arcs_24_27.md` | `arcs/simulated/arcs_24_27.md` |
+| `designs/arcs/arcs_24_27_index.md` | `arcs/simulated/arcs_24_27_index.md` |
+| `designs/arcs/arcs_28_30.md` | `arcs/simulated/arcs_28_30.md` |
+| `designs/arcs/arcs_28_30_index.md` | `arcs/simulated/arcs_28_30_index.md` |
+| `designs/arcs/arcs_31_35.md` | `arcs/simulated/arcs_31_35.md` |
+| `designs/arcs/arcs_31_35_index.md` | `arcs/simulated/arcs_31_35_index.md` |
+| `designs/arcs/emergent_arcs_experimental.md` | `arcs/emergent_arcs_experimental.md` |
+| `designs/arcs/emergent_arcs_experimental_index.md` | `arcs/emergent_arcs_experimental_index.md` |
+| `designs/arcs/emergent_campaign_arcs.md` | `arcs/emergent_campaign_arcs.md` |
+| `designs/arcs/emergent_scenarios.md` | `arcs/emergent_scenarios.md` |
+| `designs/arcs/emergent_scenarios_index.md` | `arcs/emergent_scenarios_index.md` |
+| `designs/arcs/gm_ref/README.md` | `arcs/simulated/README.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis.md` | `arcs/simulated/arc_narrative_analysis.md` |
+| `designs/arcs/gm_ref/arc_narrative_analysis_index.md` | `arcs/simulated/arc_narrative_analysis_index.md` |
+| `designs/arcs/gm_ref/arcs_01_04.md` | `arcs/simulated/arcs_01_04.md` |
+| `designs/arcs/gm_ref/arcs_01_04_index.md` | `arcs/simulated/arcs_01_04_index.md` |
+| `designs/arcs/gm_ref/arcs_05_09.md` | `arcs/simulated/arcs_05_09.md` |
+| `designs/arcs/gm_ref/arcs_05_09_index.md` | `arcs/simulated/arcs_05_09_index.md` |
+| `designs/arcs/gm_ref/arcs_10_18.md` | `arcs/simulated/arcs_10_18.md` |
+| `designs/arcs/gm_ref/arcs_10_18_index.md` | `arcs/simulated/arcs_10_18_index.md` |
+| `designs/arcs/gm_ref/arcs_36_40.md` | `arcs/simulated/arcs_36_40.md` |
+| `designs/arcs/gm_ref/arcs_36_40_index.md` | `arcs/simulated/arcs_36_40_index.md` |
+| `designs/arcs/gm_ref/arcs_41_45.md` | `arcs/simulated/arcs_41_45.md` |
+| `designs/arcs/gm_ref/arcs_41_45_index.md` | `arcs/simulated/arcs_41_45_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55.md` | `arcs/simulated/arcs_46_55.md` |
+| `designs/arcs/gm_ref/arcs_46_55_index.md` | `arcs/simulated/arcs_46_55_index.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved.md` | `arcs/simulated/arcs_46_55_resolved.md` |
+| `designs/arcs/gm_ref/arcs_46_55_resolved_index.md` | `arcs/simulated/arcs_46_55_resolved_index.md` |
+| `designs/arcs/narrative_scenario_chains.md` | `arcs/narrative_scenario_chains.md` |
+| `designs/arcs/narrative_scenario_chains_index.md` | `arcs/narrative_scenario_chains_index.md` |
+| `designs/arcs/throughline_resolutions_v30.md` | `arcs/throughline_resolutions_v30.md` |
+| `designs/arcs/throughline_resolutions_v30_index.md` | `arcs/throughline_resolutions_v30_index.md` |
+| `references/arc_register.md` | `arcs/registers/arc_register.md` |
+| `references/arc_register_infill.md` | `arcs/registers/arc_register_infill.md` |
+| `references/arcs/arc_register_clocks.md` | `arcs/registers/arc_register_clocks.md` |
+| `references/arcs/arc_register_events.md` | `arcs/registers/arc_register_events.md` |
+| `references/arcs/arc_register_factions.md` | `arcs/registers/arc_register_factions.md` |
+| `references/arcs/arc_register_territory.md` | `arcs/registers/arc_register_territory.md` |
+| `references/arcs/arc_register_threads.md` | `arcs/registers/arc_register_threads.md` |
+
+
+## 2026-07-16 — arcs/gm_ref -> simulated + root arc-batches pulled in (ED-IN-0071 follow-up)
+
+| old path | new path |
+|---|---|
+| `arcs/gm_ref/` | `arcs/simulated/` |
+| `arcs/arcs_16_19.md` | `arcs/simulated/arcs_16_19.md` |
+| `arcs/arcs_16_19_index.md` | `arcs/simulated/arcs_16_19_index.md` |
+| `arcs/arcs_20_23.md` | `arcs/simulated/arcs_20_23.md` |
+| `arcs/arcs_20_23_index.md` | `arcs/simulated/arcs_20_23_index.md` |
+| `arcs/arcs_24_27.md` | `arcs/simulated/arcs_24_27.md` |
+| `arcs/arcs_24_27_index.md` | `arcs/simulated/arcs_24_27_index.md` |
+| `arcs/arcs_28_30.md` | `arcs/simulated/arcs_28_30.md` |
+| `arcs/arcs_28_30_index.md` | `arcs/simulated/arcs_28_30_index.md` |
+| `arcs/arcs_31_35.md` | `arcs/simulated/arcs_31_35.md` |
+| `arcs/arcs_31_35_index.md` | `arcs/simulated/arcs_31_35_index.md` |
+
+
+## 2026-07-16 — handoffs/ -> registers/handoffs/ (ED-IN-0071 P0b, part 1)
+
+| old path | new path |
+|---|---|
+| `handoffs/` | `registers/handoffs/` |
+| `handoffs/HANDOFF_FA.md` | `registers/handoffs/HANDOFF_FA.md` |
+| `handoffs/HANDOFF_FI.md` | `registers/handoffs/HANDOFF_FI.md` |
+| `handoffs/HANDOFF_GO.md` | `registers/handoffs/HANDOFF_GO.md` |
+| `handoffs/HANDOFF_IN.md` | `registers/handoffs/HANDOFF_IN.md` |
+| `handoffs/HANDOFF_MB.md` | `registers/handoffs/HANDOFF_MB.md` |
+| `handoffs/HANDOFF_PC.md` | `registers/handoffs/HANDOFF_PC.md` |
+| `handoffs/HANDOFF_SC.md` | `registers/handoffs/HANDOFF_SC.md` |
+| `handoffs/HANDOFF_SE.md` | `registers/handoffs/HANDOFF_SE.md` |
+| `handoffs/HANDOFF_WR.md` | `registers/handoffs/HANDOFF_WR.md` |
+| `handoffs/HANDOFF_archive.md` | `registers/handoffs/HANDOFF_archive.md` |
+
+
+## 2026-07-16 — archives/ -> deprecated/archives/ (merge graveyards, ED-IN-0071 P5, fork #1)
+
+| old path | new path |
+|---|---|
+| `archives/` | `deprecated/archives/` |
+| `archives/audit/` | `deprecated/archives/audit/` |
+| `archives/editorial/` | `deprecated/archives/editorial/` |
+| `archives/editorials/` | `deprecated/archives/editorials/` |
+| `archives/handoffs/` | `deprecated/archives/handoffs/` |
+| `archives/patches/` | `deprecated/archives/patches/` |
+| `archives/propagation/` | `deprecated/archives/propagation/` |
+| `archives/session/` | `deprecated/archives/session/` |
+| `archives/workplans/` | `deprecated/archives/workplans/` |
+
+
+## 2026-07-16 — references/engine_params -> engine/engine_params (ED-IN-0071 P3 seed)
+
+| old path | new path |
+|---|---|
+| `references/engine_params/` | `engine/engine_params/` |
+| `references/engine_params/combat_engine_v1.json` | `engine/engine_params/combat_engine_v1.json` |
+
+
+## 2026-07-16 — params/ -> engine/params/ (ED-IN-0071 P3; pointers for prose refs)
+
+| old path | new path |
+|---|---|
+| `params/` | `engine/params/` |
+| `params/bg/ci_seizure.md` | `engine/params/bg/ci_seizure.md` |
+| `params/bg/clocks.md` | `engine/params/bg/clocks.md` |
+| `params/bg/core.md` | `engine/params/bg/core.md` |
+| `params/bg/ed_resolutions.md` | `engine/params/bg/ed_resolutions.md` |
+| `params/bg/faction_actions.md` | `engine/params/bg/faction_actions.md` |
+| `params/bg/geography.md` | `engine/params/bg/geography.md` |
+| `params/bg/institutions.md` | `engine/params/bg/institutions.md` |
+| `params/bg/military.md` | `engine/params/bg/military.md` |
+| `params/bg/ministry.md` | `engine/params/bg/ministry.md` |
+| `params/bg/npc_priority_trees.md` | `engine/params/bg/npc_priority_trees.md` |
+| `params/bg/npcs_special.md` | `engine/params/bg/npcs_special.md` |
+| `params/bg/parliament.md` | `engine/params/bg/parliament.md` |
+| `params/bg/phases.md` | `engine/params/bg/phases.md` |
+| `params/bg/royal_assassination.md` | `engine/params/bg/royal_assassination.md` |
+| `params/bg/stress_patches.md` | `engine/params/bg/stress_patches.md` |
+| `params/bg/tensions_deck.md` | `engine/params/bg/tensions_deck.md` |
+| `params/bg/tracks.md` | `engine/params/bg/tracks.md` |
+| `params/bg/victory.md` | `engine/params/bg/victory.md` |
+| `params/board_game.md` | `engine/params/board_game.md` |
+| `params/board_game_misc.md` | `engine/params/board_game_misc.md` |
+| `params/campaign_modes.md` | `engine/params/campaign_modes.md` |
+| `params/contest.md` | `engine/params/contest.md` |
+| `params/contest_extensions.md` | `engine/params/contest_extensions.md` |
+| `params/core.md` | `engine/params/core.md` |
+| `params/factions.md` | `engine/params/factions.md` |
+| `params/factions/npc_stance_triangles.md` | `engine/params/factions/npc_stance_triangles.md` |
+| `params/factions/riskbreakers_identity.md` | `engine/params/factions/riskbreakers_identity.md` |
+| `params/factions/stats_1_7_scale.md` | `engine/params/factions/stats_1_7_scale.md` |
+| `params/factions_personal.md` | `engine/params/factions_personal.md` |
+| `params/fieldwork.md` | `engine/params/fieldwork.md` |
+| `params/history/board_game.md` | `engine/params/history/board_game.md` |
+| `params/history/campaign_modes.md` | `engine/params/history/campaign_modes.md` |
+| `params/history/combat.md` | `engine/params/history/combat.md` |
+| `params/history/core.md` | `engine/params/history/core.md` |
+| `params/history/factions_personal.md` | `engine/params/history/factions_personal.md` |
+| `params/history/mass_combat.md` | `engine/params/history/mass_combat.md` |
+| `params/history/southernmost.md` | `engine/params/history/southernmost.md` |
+| `params/history/threadwork.md` | `engine/params/history/threadwork.md` |
+| `params/mass_combat.md` | `engine/params/mass_combat.md` |
+| `params/scale_transitions.md` | `engine/params/scale_transitions.md` |
+| `params/southernmost.md` | `engine/params/southernmost.md` |
+| `params/threadwork.md` | `engine/params/threadwork.md` |
+| `params/threadwork_superseded.md` | `engine/params/threadwork_superseded.md` |
+
+
+## 2026-07-16 — sim/ engine core -> engine/ (ED-IN-0071 P3 Phase A)
+
+| old path | new path |
+|---|---|
+| `sim/substrate/` | `engine/substrate/` |
+| `sim/autoload/` | `engine/autoload/` |
+| `sim/cross_scale/` | `engine/cross_scale/` |
+| `sim/mc_v18.py` | `engine/mc_v18.py` |
+
+
+## 2026-07-17 — designs/ -> systems/ P4 slice 1 (doc-only clean subsystems, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/npcs/` | `systems/npcs/` |
+| `designs/articulation/` | `systems/articulation/` |
+| `designs/ui/` | `systems/ui/` |
+
+
+## 2026-07-17 — threadwork designs/ + sim/ -> systems/ (P4 slice 2, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/threadwork/` | `systems/threadwork/` |
+| `sim/thread/` | `systems/threadwork/sim/` |
+
+
+## 2026-07-17 — designs/architecture/ -> systems/_architecture/ (P4 slice 3, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/architecture/` | `systems/_architecture/` |
+
+
+## 2026-07-17 — world designs/ + sim/ -> systems/ (P4 slice 4, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/world/` | `systems/world/` |
+| `sim/world/` | `systems/world/sim/` |
+
+
+## 2026-07-17 — settlements designs/territory + sim/territory -> systems/settlements/ (P4 slice 5, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/territory/` | `systems/settlements/` |
+| `sim/territory/` | `systems/settlements/sim/` |
+
+
+## 2026-07-17 — fieldwork cross-subdir extraction -> systems/fieldwork/ (P4 slice 6, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/fieldwork_bg_v30.md` | `systems/fieldwork/fieldwork_bg_v30.md` |
+| `designs/scene/fieldwork_bg_v30_infill.md` | `systems/fieldwork/fieldwork_bg_v30_infill.md` |
+| `designs/scene/fieldwork_editorial.md` | `systems/fieldwork/fieldwork_editorial.md` |
+| `designs/scene/fieldwork_exploration.md` | `systems/fieldwork/fieldwork_exploration.md` |
+| `designs/scene/fieldwork_exposure.md` | `systems/fieldwork/fieldwork_exposure.md` |
+| `designs/scene/fieldwork_godot.md` | `systems/fieldwork/fieldwork_godot.md` |
+| `designs/scene/fieldwork_hybrid_v30.md` | `systems/fieldwork/fieldwork_hybrid_v30.md` |
+| `designs/scene/fieldwork_hybrid_v30_infill.md` | `systems/fieldwork/fieldwork_hybrid_v30_infill.md` |
+| `designs/scene/fieldwork_investigation.md` | `systems/fieldwork/fieldwork_investigation.md` |
+| `designs/scene/fieldwork_rationale.md` | `systems/fieldwork/fieldwork_rationale.md` |
+| `designs/scene/fieldwork_socializing.md` | `systems/fieldwork/fieldwork_socializing.md` |
+| `designs/scene/fieldwork_summary.md` | `systems/fieldwork/fieldwork_summary.md` |
+| `designs/scene/fieldwork_v30.md` | `systems/fieldwork/fieldwork_v30.md` |
+| `designs/scene/fieldwork_v30_index.md` | `systems/fieldwork/fieldwork_v30_index.md` |
+| `designs/scene/fieldwork_v30_infill.md` | `systems/fieldwork/fieldwork_v30_infill.md` |
+| `designs/scene/investigation_systems_v30.md` | `systems/fieldwork/investigation_systems_v30.md` |
+| `designs/scene/investigation_systems_v30_index.md` | `systems/fieldwork/investigation_systems_v30_index.md` |
+| `designs/personal/knots_v30.md` | `systems/fieldwork/knots_v30.md` |
+| `sim/personal/fieldwork.py` | `systems/fieldwork/sim/fieldwork.py` |
+| `sim/personal/investigation.py` | `systems/fieldwork/sim/investigation.py` |
+| `sim/personal/knots.py` | `systems/fieldwork/sim/knots.py` |
+| `sim/personal/fieldwork` | `systems/fieldwork/sim/fieldwork` |
+| `sim/personal/investigation` | `systems/fieldwork/sim/investigation` |
+| `sim/personal/knots` | `systems/fieldwork/sim/knots` |
+
+
+## 2026-07-17 — social_contest cross-subdir extraction -> systems/social_contest/ (P4 slice 7, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/social_contest_system_v2.md` | `systems/social_contest/social_contest_system_v2.md` |
+| `designs/scene/social_contest_system_v2_index.md` | `systems/social_contest/social_contest_system_v2_index.md` |
+| `designs/scene/social_contest_v30.md` | `systems/social_contest/social_contest_v30.md` |
+| `designs/scene/social_contest_v30_index.md` | `systems/social_contest/social_contest_v30_index.md` |
+| `designs/scene/social_contest_v30_infill.md` | `systems/social_contest/social_contest_v30_infill.md` |
+| `sim/personal/parliamentary_vote.py` | `systems/social_contest/sim/parliamentary_vote.py` |
+| `sim/personal/parliamentary_stay.py` | `systems/social_contest/sim/parliamentary_stay.py` |
+| `sim/personal/contest_legacy_stub.py` | `systems/social_contest/sim/contest_legacy_stub.py` |
+| `sim/personal/contest/` | `systems/social_contest/sim/contest/` |
+
+
+## 2026-07-17 — combat scene split -> systems/combat/ (P4 slice 8, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/scene/combat_c4_draft_v0.md` | `systems/combat/combat_c4_draft_v0.md` |
+| `designs/scene/combat_design_v1.md` | `systems/combat/combat_design_v1.md` |
+| `designs/scene/combat_design_v1_index.md` | `systems/combat/combat_design_v1_index.md` |
+| `designs/scene/combat_v30.md` | `systems/combat/combat_v30.md` |
+| `designs/scene/combat_v30_index.md` | `systems/combat/combat_v30_index.md` |
+| `designs/scene/combat_v30_infill.md` | `systems/combat/combat_v30_infill.md` |
+| `sim/personal/combat.py` | `systems/combat/sim/combat.py` |
+| `designs/scene/combat_engine_v1/` | `systems/combat/combat_engine_v1/` |
+| `designs/scene/scene_combat_v1/` | `systems/combat/scene_combat_v1/` |
+| `designs/scene/combat_engine_v1/systems.py` | `systems/combat/combat_engine_v1/combat_systems.py` |
+
+
+## 2026-07-17 — mass_battle provincial split (part 1) -> systems/mass_battle/ (P4 slice 9, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/provincial/mass_battle_integration_v30.md` | `systems/mass_battle/mass_battle_integration_v30.md` |
+| `designs/provincial/mass_battle_v30.md` | `systems/mass_battle/mass_battle_v30.md` |
+| `designs/provincial/mass_battle_v30_index.md` | `systems/mass_battle/mass_battle_v30_index.md` |
+| `designs/provincial/mass_battle_v30_infill.md` | `systems/mass_battle/mass_battle_v30_infill.md` |
+| `designs/provincial/military_layer_v30.md` | `systems/mass_battle/military_layer_v30.md` |
+| `designs/provincial/military_layer_v30_index.md` | `systems/mass_battle/military_layer_v30_index.md` |
+| `sim/provincial/massbattle.py` | `systems/mass_battle/sim/massbattle.py` |
+| `sim/provincial/units.py` | `systems/mass_battle/sim/units.py` |
+| `sim/provincial/tactic_cards.py` | `systems/mass_battle/sim/tactic_cards.py` |
+| `sim/provincial/altonian_reinforcements.py` | `systems/mass_battle/sim/altonian_reinforcements.py` |
+| `designs/provincial/mass_battle_v30` | `systems/mass_battle/mass_battle_v30` |
+| `sim/provincial/massbattle` | `systems/mass_battle/sim/massbattle` |
+| `sim/provincial/units` | `systems/mass_battle/sim/units` |
+| `sim/provincial/tactic_cards` | `systems/mass_battle/sim/tactic_cards` |
+| `sim/provincial/altonian_reinforcements` | `systems/mass_battle/sim/altonian_reinforcements` |
+
+
+## 2026-07-18 — factions provincial split (part 2) -> systems/factions/ (P4 slice 10, ED-IN-0071)
+
+| old path | new path |
+|---|---|
+| `designs/provincial/baralta_crown_claim_v30.md` | `systems/factions/baralta_crown_claim_v30.md` |
+| `designs/provincial/baralta_crown_claim_v30_infill.md` | `systems/factions/baralta_crown_claim_v30_infill.md` |
+| `designs/provincial/ci_political_v30.md` | `systems/factions/ci_political_v30.md` |
+| `designs/provincial/ci_political_v30_index.md` | `systems/factions/ci_political_v30_index.md` |
+| `designs/provincial/faction_behavior_v30.md` | `systems/factions/faction_behavior_v30.md` |
+| `designs/provincial/faction_canon_v30.md` | `systems/factions/faction_canon_v30.md` |
+| `designs/provincial/faction_layer_v30.md` | `systems/factions/faction_layer_v30.md` |
+| `designs/provincial/faction_layer_v30_index.md` | `systems/factions/faction_layer_v30_index.md` |
+| `designs/provincial/faction_layer_v30_infill.md` | `systems/factions/faction_layer_v30_infill.md` |
+| `designs/provincial/faction_politics_v30.md` | `systems/factions/faction_politics_v30.md` |
+| `designs/provincial/faction_politics_v30_index.md` | `systems/factions/faction_politics_v30_index.md` |
+| `designs/provincial/faction_state_authoring_v30.md` | `systems/factions/faction_state_authoring_v30.md` |
+| `designs/provincial/faction_succession_split_v30.md` | `systems/factions/faction_succession_split_v30.md` |
+| `designs/provincial/faction_succession_split_v30_index.md` | `systems/factions/faction_succession_split_v30_index.md` |
+| `designs/factions/faction_systems_overview_v30.md` | `systems/factions/faction_systems_overview_v30.md` |
+| `designs/provincial/factions_personal_v30.md` | `systems/factions/factions_personal_v30.md` |
+| `designs/provincial/factions_personal_v30_index.md` | `systems/factions/factions_personal_v30_index.md` |
+| `designs/provincial/factions_personal_v30_infill.md` | `systems/factions/factions_personal_v30_infill.md` |
+| `designs/provincial/fail_forward_pp177.md` | `systems/factions/fail_forward_pp177.md` |
+| `designs/provincial/fractional_province_ownership_v30.md` | `systems/factions/fractional_province_ownership_v30.md` |
+| `designs/provincial/fractional_province_ownership_v30_index.md` | `systems/factions/fractional_province_ownership_v30_index.md` |
+| `designs/provincial/franchise_v30.md` | `systems/factions/franchise_v30.md` |
+| `designs/provincial/parliamentary_transfer_v30.md` | `systems/factions/parliamentary_transfer_v30.md` |
+| `designs/provincial/political_dynamics_keys_migration_v30.md` | `systems/factions/political_dynamics_keys_migration_v30.md` |
+| `designs/provincial/treaty_expiration_v30.md` | `systems/factions/treaty_expiration_v30.md` |
+| `designs/provincial/varfell_path_b_v30.md` | `systems/factions/varfell_path_b_v30.md` |
+| `designs/provincial/varfell_path_b_v30_infill.md` | `systems/factions/varfell_path_b_v30_infill.md` |
+| `sim/provincial/absolution.py` | `systems/factions/sim/absolution.py` |
+| `sim/provincial/charter_liberties.py` | `systems/factions/sim/charter_liberties.py` |
+| `sim/provincial/council_solmund.py` | `systems/factions/sim/council_solmund.py` |
+| `sim/provincial/crown_initiative.py` | `systems/factions/sim/crown_initiative.py` |
+| `sim/provincial/excommunication.py` | `systems/factions/sim/excommunication.py` |
+| `sim/provincial/faction_action.py` | `systems/factions/sim/faction_action.py` |
+| `sim/provincial/hafenmark_equipment.py` | `systems/factions/sim/hafenmark_equipment.py` |
+| `sim/provincial/infrastructure_reclamation.py` | `systems/factions/sim/infrastructure_reclamation.py` |
+| `sim/provincial/mass_seizure.py` | `systems/factions/sim/mass_seizure.py` |
+| `sim/provincial/parliamentary_action.py` | `systems/factions/sim/parliamentary_action.py` |
+| `sim/provincial/parliamentary_transfer.py` | `systems/factions/sim/parliamentary_transfer.py` |
+| `sim/provincial/treaty.py` | `systems/factions/sim/treaty.py` |
+| `sim/provincial/varfell_mandate_action.py` | `systems/factions/sim/varfell_mandate_action.py` |
+| `sim/provincial/varfell_territorial_acquisition.py` | `systems/factions/sim/varfell_territorial_acquisition.py` |
+| `designs/provincial/baralta_crown_claim_v30` | `systems/factions/baralta_crown_claim_v30` |
+| `designs/provincial/ci_political_v30` | `systems/factions/ci_political_v30` |
+| `designs/provincial/faction_behavior_v30` | `systems/factions/faction_behavior_v30` |
+| `designs/provincial/faction_canon_v30` | `systems/factions/faction_canon_v30` |
+| `designs/provincial/faction_layer_v30` | `systems/factions/faction_layer_v30` |
+| `designs/provincial/faction_politics_v30` | `systems/factions/faction_politics_v30` |
+| `designs/provincial/faction_state_authoring_v30` | `systems/factions/faction_state_authoring_v30` |
+| `designs/provincial/faction_succession_split_v30` | `systems/factions/faction_succession_split_v30` |
+| `designs/factions/faction_systems_overview_v30` | `systems/factions/faction_systems_overview_v30` |
+| `designs/provincial/factions_personal_v30` | `systems/factions/factions_personal_v30` |
+| `designs/provincial/fail_forward_pp177` | `systems/factions/fail_forward_pp177` |
+| `designs/provincial/fractional_province_ownership_v30` | `systems/factions/fractional_province_ownership_v30` |
+| `designs/provincial/franchise_v30` | `systems/factions/franchise_v30` |
+| `designs/provincial/parliamentary_transfer_v30` | `systems/factions/parliamentary_transfer_v30` |
+| `designs/provincial/political_dynamics_keys_migration_v30` | `systems/factions/political_dynamics_keys_migration_v30` |
+| `designs/provincial/treaty_expiration_v30` | `systems/factions/treaty_expiration_v30` |
+| `designs/provincial/varfell_path_b_v30` | `systems/factions/varfell_path_b_v30` |
+| `sim/provincial/absolution` | `systems/factions/sim/absolution` |
+| `sim/provincial/charter_liberties` | `systems/factions/sim/charter_liberties` |
+| `sim/provincial/council_solmund` | `systems/factions/sim/council_solmund` |
+| `sim/provincial/crown_initiative` | `systems/factions/sim/crown_initiative` |
+| `sim/provincial/excommunication` | `systems/factions/sim/excommunication` |
+| `sim/provincial/faction_action` | `systems/factions/sim/faction_action` |
+| `sim/provincial/hafenmark_equipment` | `systems/factions/sim/hafenmark_equipment` |
+| `sim/provincial/infrastructure_reclamation` | `systems/factions/sim/infrastructure_reclamation` |
+| `sim/provincial/mass_seizure` | `systems/factions/sim/mass_seizure` |
+| `sim/provincial/parliamentary_action` | `systems/factions/sim/parliamentary_action` |
+| `sim/provincial/parliamentary_transfer` | `systems/factions/sim/parliamentary_transfer` |
+| `sim/provincial/treaty` | `systems/factions/sim/treaty` |
+| `sim/provincial/varfell_mandate_action` | `systems/factions/sim/varfell_mandate_action` |
+| `sim/provincial/varfell_territorial_acquisition` | `systems/factions/sim/varfell_territorial_acquisition` |

@@ -1,0 +1,463 @@
+# Valoria — Master Workplan v6 (North-Star master: milestones, lanes, tiered decision register)
+
+**2026-07-05 · status: CANON — RATIFIED (Jordan, 2026-07-05: "Ratify commit merge all", PR #78;
+ED-IN-0011); the active master, supersedes v5. §5 is the live decision register (see its
+ratification update — the T0 wall shrank to JD-1 + ED-1051).**
+
+**as_of: HEAD `d31ac85a` (branch `claude/ners-audit-fable5-9cpfdz`, PR #78). Verified live:
+`canon/editorial_ledger.jsonl` = 581 lines / 580 distinct IDs / flat-ED ceiling ED-1096 /
+lane-tagged EDs through ED-IN-0008 · ED-MB-0002 · ED-PC-0001 · ED-SC-0001 · ED-SE-0001 ·
+ED-WR-0002 · ED-FI-0001 (counts by direct JSONL scan at this SHA — the v5 header's "713
+entries" no longer matches the live file's line count; report the method, not the memory).
+Two count artifacts, surfaced not hidden: ED-306 appears twice (legacy duplicate in the
+append-only ledger; rewriting it is a Jordan-reserved canon edit — register row T2-H3), and
+ED-1095/ED-1096 are same-day-as-cutover 2026-07-02 flat allocations (valid; the flat freeze
+holds from the cutover forward — no later flat allocation observed).**
+
+**Supersedes (on merge):** `workplans/valoria_master_workplan_v5.md` → moves to
+`deprecated/archives/workplans/` with a supersession banner (per `workplans/README.md`). v5's
+J-/LA-/LB-/LC- keys and v4's register rows 1–43 stay citable and are NOT renumbered; Appendix
+A accounts for every open v5 item. v4 stays the frozen 06-11/06-22 record.
+
+**Binds (does not fork):** `references/lane_assignments.yaml` (owns-globs; source pointer
+repointed here) · `references/id_reservations.yaml` (lane counters live; allocation protocol
+below) · `HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` (the ONLY per-lane status surface) ·
+`CURRENT.md` (currency authority). Steering reconciliation executed with this document:
+**ED-IN-0009** (this workplan) closing **ED-IN-0006** (roadmap_state retired, decision queue
+refreshed, v5 archived, hierarchy adopted).
+
+`[SELF-AUTHORED — bias risk: the inputs (the 07-04 NERS audit, the 07-05 narrative-engine
+v1/v2 designs, the recent PC/MB session records) are Claude-authored; the 12 NERS EDs were
+ratified-as-accepted by Jordan 2026-07-05 but their execution plans here are proposals. This
+document sequences and dockets; it rules nothing — every fork in §5 is Jordan's, and the
+held-back items are named loudly in the PR body.]`
+
+---
+
+## §0 · The North Star and how this document works
+
+**North Star (ratified framing, 07-04 audit):** a Godot emergent grand-strategy ·
+tactical-management · political-simulation · narrative RPG where **every subsystem points
+toward an emergent-narrative player experience with rich meaningful choices**. The narrative
+engine (v2, the Churn Engine) is the surface where all subsystems become visible; the
+milestones below order everything by distance to that experience.
+
+**Hierarchy (J-13, adopted per ED-IN-0006):** `CURRENT.md` (currency) → lane handoffs
+(status) → this workplan (sequencing, milestones, decision register — DERIVED, it points at
+the handoffs and never duplicates their status) → dated audit folders (evidence). Register
+rows here carry **no status field** — only fork · default · what-it-blocks · home pointer.
+Statuses live in exactly one place (the lane handoff or the ledger); the monthly reconcile
+(§6) refreshes the pointers. This is the anti-drift design: v5 §3's J-38 line contradicted
+CURRENT.md within four days precisely because two surfaces both claimed status.
+
+**Completeness rule (2026-07-08, Jordan directive):** every §4 lane section MUST open with
+an explicit `registers/handoffs/HANDOFF_<LANE>.md` pointer, even where the section's own prose is
+thin or the lane is quiet — the pointer is what guarantees nothing gets missed, not literal
+enumeration of every open item here. A session (human or agent) scoping into a lane via
+this document is not "caught up" until it has also read that lane's handoff; a §4 entry
+with no handoff pointer is a bug in this document, not an acceptable shorthand (this closed
+a real gap 2026-07-08: SE/WR/FI/FA had no handoff pointer at all, and GO's was hedged
+"if present" despite the file existing). Same rule for §5: every ledger entry tagged
+`needs_jordan: true` must be reachable from this document (a T0/T1/T2 row, a §4 mention, or
+an explicit range/queue citation) — checked by hand 2026-07-08 (0 gaps as of that pass); a
+future mechanical CI check would be the sturdier version of this same rule (not yet built).
+
+**How to read:** §1 milestones · §2 the cross-cutting IN spine · §3 the narrative-engine
+workstream · §4 per-lane workstreams (pointer + next increments + gates) · §5 the tiered
+Jordan-decision register · §6 governance · Appendices A (v5 supersession) / B (session
+inventory), both dated snapshots.
+
+---
+
+## §1 · Milestones
+
+### M1 — ONE PLAYABLE SEASON (the ordering criterion, J-1)
+
+A player takes a character through one full season loop in which every juncture is playable
+and legible (the three questions answerable from the screen at each: what is at stake · who
+is acting and why · what changed). Seven junctures, each mapped to the work that delivers it:
+
+| # | Juncture | Delivering work (lane) |
+|---|---|---|
+| 1 | Strategic decision (the season's posture) | FA decision-surface work (J-5) + `domain_actions` module home (IN spine) |
+| 2 | Domain action (resolve + Domain Echo render) | `domain_actions` authoring (IN); echo render via narrative Stage 0 |
+| 3 | Social contest (a matter argued) | SC next stage (four deliberative games) + the claim-grammar requirements input (v2 §5) |
+| 4 | Personal combat (one fight, legible) | PC lane R3 U-series; player-input surface (ED-PC-0001, post-R3) |
+| 5 | Thread operation | Threadwork live; preconditions ED-1010/1011 (Coherence cap + C0 rule); MS naming sweep ED-WR-0002 |
+| 6 | Season close (Accounting + propagation) | `engine_clock` ratification (ED-1051, home candidate = propagation_spec, ED-1093) + ordering flags ORD-3/ORD-4 |
+| 7 | Articulation render (the season told back) | Narrative engine Stage 0 (ED-IN-0004) — ships first, J-7 visibility-before-rebalancing |
+
+M1 requires **Layer A forecast only** (v2 §3 hard gate), the 8 authored COLLISION priors as
+the convergence surface, and no Layer-B ensemble.
+
+### M2 — THE ANY-SEED STORY BAR
+
+v2 §9's fixture F1 as a shippable milestone: 5+ seeds each yield a chronicle that is
+connected, continuous, rooted, live (invariants i–iv) and distinct in named actors, stakes,
+outcomes — plus the F8 anti-self-fulfillment control passing. Requires narrative Stages 1–4
+under the ratified Light-Function surface (F-F/fork-8, ED-IN-0011) and the Stage-1 compile
+(fork-1 remap + fork-2 strike execution).
+
+### M3 — GODOT VERTICAL SLICE
+
+Gate-0 spine executed (G0.1–G0.5, §4-GO) + typed engine-params exports (ED-1052 scope
+ruling) + the compiled generator corpus loading as a data pack (v2 §7 kernel/data/wrapper).
+Explicitly after M1/M2's design closure: porting beyond the combat slice stays blocked on
+authoring canon first (CLAUDE.md §6), and `valoria-game` has been frozen since 2026-05-04.
+
+---
+
+## §2 · Cross-cutting spine (IN lane)
+
+Ordered; each item cites its ledger anchor. Status: `registers/handoffs/HANDOFF_IN.md`.
+
+1. **Steering reconcile (ED-IN-0006 → ED-IN-0009)** — EXECUTED WITH THIS PR: roadmap_state
+   retired to `deprecated/references/` (banner), decision-queue items 1–3 refreshed, v5
+   archived, hierarchy adopted (§0), CURRENT.md repointed.
+2. **Gate-0 / ED-1051** — `engine_clock` ratification is juncture 6's gate and the GO lane's
+   entry condition; the candidate home doc exists (propagation_spec_v1, CANONICAL ED-1093);
+   what remains is the ruling that flips `module_contracts.yaml`'s `doc: null` (and then the
+   other ~10 doc:null modules + 13 [ASSUMPTION] resolvers, prioritized by M1's junctures).
+3. **`domain_actions` module home** — junctures 1–2 have no owning design doc; author the
+   home (smallest of the doc:null closures, highest M1 leverage).
+4. **Transport seams (J-3)** — consumer-declaration closure + targets[]/causes[] population
+   rules are now v2 conformance rules (R1–R10 + R-F1/R-F2/R-HB/R-CL/R-AI/R-RL); the tools/
+   home for each is narrative Stage-5 work but the RULES bind from Stage 0.
+5. **Register back-propagation gate (ED-IN-0007)** — the CI register-touch discipline;
+   pairs with the narrative Stage-1 compile (the register becomes a CI-round-tripped asset).
+6. **Naming unification (ED-IN-0008)** — glossary fold-in, the 7-vs-9 attribute roster
+   surface (queue item 13), resonance_style; feeds fork 10's faction-count ruling.
+7. **Carried v5 LB tail** — LB-23 (freshness + ED-citation blocking-flips, gated on K-2 and
+   triage-to-zero) · LB-24 (`ci_political_v30` read-routing) · supersession_register wiring
+   (LB-19/22 tail) · names warn→block flips (v5 §10) · contest.py fabrication triage (queue
+   16, prerequisite to the J-31 sim edit).
+
+---
+
+## §3 · Narrative-engine workstream (the Churn Engine, v2)
+
+Head: `designs/audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md`
+(+ v1, spec chapters s1–s5 as amended by `spec/churn_amendments.md`). Executes ED-IN-0003
+(detection) and ED-IN-0004 (render gaps). Stages, each independently mergeable:
+
+| Stage | Contents | Gate |
+|---|---|---|
+| 0 | Render-gap close (ED-IN-0004: combat_resolved / investigation_resolved / 4 ED-681 thread beats / 2 meta Keys; §6.4 correction) | none — ships first (J-7) |
+| 1 | Generator compile gate: template grammar + the 138+8 validation compile | execute the ratified fork-1 remap + fork-2 strike; fork 11 ratified at default |
+| 2 | Store + tick (lifecycle FSMs) | Gate-0 honesty: Accounting substrate |
+| 2.5 | Forecast — **Layer A alone for M1 (hard gate)**; Layer B only after: sim stubs (`npc_ai`, `ip_track`, `rs_track`, ~8 provincial), event-deck first code, scene-EV flag path, `canonical_key_log` serialization spec + ORD-3/ORD-4, fixtures F7+F8 | the listed preconditions |
+| 3 | Detect (discovery + authored priors) | fork 3 window |
+| 4 | Light + cast (+ ORD-4 scene-queue fix, scene_entered single-sourcing) | F-F/fork-8 RATIFIED (ED-IN-0011) — build gate only (after S2/S2.5) |
+| 5 | Substance interface + scale-complete banks + conformance suite + fixtures F1–F8 | fork 6 (bake scoping); ERA instrument build |
+
+Cross-lane handoff sequenced here: **v2 §5 (claim grammar) is a requirements input to the SC
+lane's next stage** — four new contest sub-systems (evidence-weight δσ family · bluster move
+class + pricing · precedent store + Recall rewire · commitment store + hypocrisy read),
+shapes the SC lane's to accept or reshape. The FI lane (ED-FI-0001) is the evidence supply
+chain for the same interface. ED-1054's residual (~>1MB tests/ narrative markdown) is now
+ALSO a bake input asset — coordinate its relocation with Stage 5, don't lose it.
+
+---
+
+## §4 · Per-lane workstreams
+
+_Format: **status pointer** (the handoff file — no status duplicated here) · next increments
+· gates. Lane discipline: ED-<LANE>-NNNN allocation per `references/id_reservations.yaml`._
+
+### PC — personal combat
+Status: `registers/handoffs/HANDOFF_PC.md` (progress detail lives there, not here). Plan-of-record: R3
+weapon-model consolidation
+(`designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md`, RATIFIED).
+Sequence: **U0** units-honesty (✅ DONE, ED-PC-0002) → **U1** PoB recalibration
+(✅ DONE 2026-07-08, ED-PC-0010 — JD-1 RULED, "accept plan bands") → **U2** graded
+mode-affordance + Phase-C percussion enactment (✅ DONE 2026-07-08, ED-PC-0011 — JD-4/JD-9
+DETERMINED via ED-PC-0009, then live-wired and validated by a 13-agent adversarial Workflow;
+residual **ED-PC-0012** — point-transmit floor-lock for the one-handed sabre-class roster
+[sabre/scimitar/falchion], open, explicitly deferred/non-blocking) → **U3** edges
+primitive (JD-2, next — soft-gated: default is "land FLAG rows provisional" if unruled, not
+a hard block) → **U4** half-sword from attested grip (JD-3) → **U5** counterbalance →
+**U6** retreat-as-default → **U7** weapon-class facing → **U8** guard-schema hygiene →
+**U9** joint recalibration/capstone → **T-P2** profile-data campaign (JD-6, parallel) →
+**T5** gated re-baselines incl. cross_section swap (JD-7). Forced order:
+PoB → modes → capstone → P2-c. **Note:** `ED-PC-0008` (the U2-scoping-findings entry) stays
+ledger-status `open`/`needs_jordan` even though all three of its findings were subsequently
+actioned by ED-PC-0009/ED-PC-0011 — a bookkeeping flip, not a live decision. THEN: the
+player-input surface + ED-911 slots (**allocate
+fresh ED-PC ids at filing — §6 collision rule**), Track-2 residuals (wt/spd damage-path
+ready-except-spear; tempo-path NOT ready — double-counting; reach()/authority() =
+retire-docstrings recommendation), phase4_5 (4a game-theoretic · 4b abilities-as-access ·
+4c §C leverage · Phase 5 contact axis — gated on ED-911 + WS-7). M1 needs juncture 4 only:
+one legible fight — the U-series' front half, not phase4_5.
+
+### MB — mass battle
+Status: `registers/handoffs/HANDOFF_MB.md` (+ the 06-30 bottom-up workplan,
+`designs/audit/2026-06-30-mass-battle-bottomup/05_redesign_workplan.md` — the governing
+plan; do NOT resume `references/mass_battle_redesign_workplan_v1.md`, banner-superseded).
+**DG-1 RULED and CLOSED** (2026-07-05, ED-MB-0003): symmetric-at-parity infantry +
+majority (2/3) infantry-pin/cavalry-wing composition for C4/C7, per Polybius/Livy order of
+battle — conditional on the bottom-up-emergent-primitives approach. This closes the
+*decision gate* only; it does not by itself close the underlying gauge-band problem (see
+below). **DG-2 authored (2026-07-05, ED-MB-0003) and a commanded-entry yield slice BUILT
+(2026-07-08, ED-MB-0005)** — NOT validated as fixing anything: a bespoke n=20 test found an
+unconditional whole-battle yield policy raises center survival (35.8%→40.6%) while
+collapsing the attacker's win rate (70%→0%); emergent auto-entry, rally exit, and pocket
+exit remain unbuilt, and the underlying combat-pool formula this measurement depends on was
+itself superseded hours later in the same PR (ED-MB-0006, below) with no re-measurement
+since. **RC-5 partially triaged** (2026-07-08, ED-MB-0004): a preliminary A/B slot-swap
+diagnostic ran on 3 of its rows (a slot-dependent asymmetry tentatively linked to
+`ANCHOR_MAP`'s per-shape deployment column, not root-caused); the remaining rows (commonly
+cited as H7/H8/R1/R3/C1/C3/C5, though the corpus's own sources disagree on the exact
+count/membership) stay untriaged — re-run `gauge_mb.py` rather than trust any frozen list,
+since ED-MB-0006 incidentally flipped at least one of them (C5) to passing. **ED-MB-0004**
+also fixed a genuine partition-invariance defect in the pool/convergence math — confirmed
+real (fires on the large majority of sampled ticks) but gauge-neutral, moving no H3–H6/C4
+row. **ED-MB-0006** (2026-07-08, Jordan directive) abandoned Command as a combat-pool
+driver entirely — pool is now `POOL_QUALITY_MODEL` (troop-type quality × numbers); Command
+still governs morale/formation-hold/orders/rout, just not the dice pool. Mixed result: the
+20-row gauge moved 6/20→7/20, but H4 (the actual Cannae scenario) flips to the attacker
+losing badly, and a **new, unresolved Lanchester-exponent problem surfaced** (p≈2.50 vs. a
+required ≤1.4) — arguably a bigger open lever than any single row's band. **ED-1090
+residual still open**: the cap-of-11 ruling itself is resolved (2026-07-02), but the
+Command-clamp(1–7)-vs-cap-11 span-of-control reconciliation it explicitly carved out and
+declined to resolve remains unassigned to any future ED — untouched by ED-MB-0006's pool
+change. Then Stage-E UX depth, Stage-F actor-gate, LC-8 re-baseline. Doc↔sim: §A.3b geometry
++ §A.8 splitting numbers are banner-flagged; **sim leads canon** (ED-899/909/MB-0001..0006).
+
+### SC — social contest
+Status: `registers/handoffs/HANDOFF_SC.md` is the current, actively-maintained record — through the
+2026-07-05 Fable-5 subsystem audit (ED-SC-0002–0013) and the 2026-07-08 consequence-spine
+work. **Root `HANDOFF.md` still carries a stale, un-updated pre-split SC snapshot** (frozen
+since before the 2026-07-02 lane split — it reads "PR #63 open, CI running" though PR #63 in
+fact merged, `f0ed31c`); that block is ~a week stale against the lane file and should be
+trimmed to a pointer, not read as a live status source (the *previously*-described "Stage 3
+vs Stage 4" framing here was itself imprecise and is now corrected out). **2026-07-08:
+consequence spine LIVE** — ED-SC-0002 (Domain-Echo keying) RULED composed; ED-SC-0006/0007
+EXECUTED (the contest kernel is wired live into the `mc_v18` campaign loop via the Emergency
+Council path, no longer dead-in-campaign, with a parliamentary-vote/Domain-Echo composition
+bridge; `ECHO_TRANSPORT` flipped default ON); **ED-SC-0012 EXECUTED** (pessimist
+subtractive-action verdicts — Appraise REFINE, Recall+Prep REFINE narrowing the ED-SC-0005
+cap question specifically, Wager Obligation DISTILL folded into a general
+Obligation-interruption rule) — the last of ED-IN-0027's six lane-dispositions to land.
+Next stage: the four deliberative games (Agôn / Negotiation / Inquiry / Consensus —
+agonists read the source-research trilogy directly: liberum veto → Consensus antibody,
+Dowlen lottery → WeightedLot, Putnam two-level → ZOPA/win-sets) **+ the v2 §5 claim-grammar
+requirements input (the four added sub-systems, shapes theirs)** — gated on the **P0 decision
+docket**, still all open/`needs_jordan` as of 2026-07-08: **ED-SC-0003** (Piety/Persuasion
+Track naming collision), **ED-SC-0004** (canonical Argue-pool formula), **ED-SC-0005**
+(Recall/Corroborate/Prep/Findings bonus-die stacking cap — a ready-to-rule decision packet,
+`decision_packets/DP-2_SC_KU1_stacking_cap.md`, already drafted). ED-SC-0001's sweeps fold
+in (Recall/pool-cap, boost-vs-Appraise, coalition/solo floor per ED-297). Then seams (J-36
+share) and settled canon (T-25).
+
+### SE — settlements
+Status: `registers/handoffs/HANDOFF_SE.md` (full open-item list lives there — read it before treating
+this section as complete). ED-SE-0001 (governance_play redesign staging; the event deck it
+specifies is also the narrative generator's card substrate — no deck code exists yet, and
+Stage-2.5 Layer B lists it as a precondition, so SE's deck work is on the M2 critical path
+even though SE itself is not M1-gating beyond juncture 1's venue).
+
+### WR — world
+Status: `registers/handoffs/HANDOFF_WR.md` (full open-item list lives there — read it before treating
+this section as complete). ED-WR-0001 (GD-1 strain sweep, ~8 sites, grep-derived) + ED-WR-0002
+(MS naming sweep + enforce:block — precondition for the thread typed export and juncture 5).
+Cheap, early, unblocking — schedule before the heavy lanes.
+
+### FI — field investigation
+Status: `registers/handoffs/HANDOFF_FI.md` (full open-item list lives there — read it before treating
+this section as complete). ED-FI-0001 (investigation audit) — now explicitly the **evidence
+supply chain** for the claim-grammar interface (trails → evidence → argument → precedent →
+new stakes).
+
+### FA — factions
+Status: `registers/handoffs/HANDOFF_FA.md` (full open-item list lives there — read it before treating
+this section as complete). Decision-surface work (J-5) delivers juncture 1; fork 10 (faction
+count 4–8 unreconciled across four docs, census finding) blocks any faction-scope
+bank/binding table and needs its own ED + ruling. Sim win-share rebalancing stays post-M1
+(J-7; queue 8) — but F7's smoke oracle (narrative Stage 2.5 precondition) is where its
+regression gate lands.
+
+### GO — Godot
+Status: `registers/handoffs/HANDOFF_GO.md` (full open-item list lives there — read it before treating
+this section as complete). Governing spec =
+`godot/godot_conversion_strategy_v1.md`
+(PROPOSED; 8-item register open). Gate-0 exact deliverables, none executed: **G0.1** Key.gd
+v1→v2 (structured targets[], scale_signature[], symbolic_dimensions[4], time_horizon,
+permanence, causes[]; drop scalar salience) · **G0.2** one ruled docs/architecture.md v2
+(Meta-as-single-state-owner + thin services) + supersession banners on
+implementation_sequence.md / data_serialization_spec.md · **G0.3** K8
+Resource-vs-RefCounted verdict · **G0.4** register scene.combat_resolved +
+scene.thread_operation, drop scene.draft_da · **G0.5** standing canonical-source gate.
+Plus ED-1050's residual (re-export RESIST/GAP_EXPOSURE/gap-game to weapon_resource.gd /
+strike_module.gd — Key-log parity known-red until done) and ED-1006 (downward Key
+delivery). Consumes the IN spine; M3-gated.
+
+---
+
+## §5 · Tiered Jordan-decision register
+
+_Rows: fork · default · blocks · home pointer. **No status column** — resolution lives in
+the ledger/handoffs; the monthly reconcile refreshes this table's pointers. Tier = T0 blocks
+M1 · T1 blocks a named stage · T2 taste/tuning/housekeeping._
+
+**Ratification update (2026-07-05, ED-IN-0011 — Jordan: "Ratify commit merge all"):** every
+fork in this register that carried a stated default is RATIFIED at that default — struck
+below where T0, adopted-in-place for T1/T2 (F-F/fork-8 incl. the subtract-only discipline;
+forks 1/2/3/6/7/9/11; v1 forks 4–5; F-A..F-G with F-G's numbers still Jordan's later).
+ExecUTION of ruled directions (fork-1 remap, fork-2 strike) remains scheduled work.
+Still genuinely open (no default existed): fork 10's faction COUNT (ED-FA-0001),
+JD-2/3/5/6/7/8, DG-2 (authored+built, not validated), RC-5 (partially triaged), ED-1090's
+span-of-control residual (the cap-11 ruling itself is resolved), ED-1051, ED-1052,
+ED-911/WS-7, attribute roster (now superseded in scope by the broader ED-IN-0029 docket —
+see T1), the DP-1..DP-4 residual decision packets (below), the
+Godot register — cross-lane questions this PR never carried. (ED-1042 removed from this
+list 2026-07-07 per ED-PC-0004: it was STRUCK 2026-06-28, superseded_by ED-1021, so it was
+already stale when this line was written; the reverse-direction residual drift is re-filed
+as ED-PC-0005. JD-1 removed 2026-07-08 — RULED by Jordan, "accept plan bands"; executed as
+U1/ED-PC-0010, see `registers/handoffs/HANDOFF_PC.md`. DG-1 removed 2026-07-08 — actually RULED
+2026-07-05 (ED-MB-0003; this list simply wasn't refreshed until now): symmetric-at-parity
+infantry + majority-pin/cavalry-wing composition for C4/C7, per Polybius/Livy — closes the
+decision gate only, not the underlying gauge-band overshoot (§4-MB). JD-4/JD-9 removed
+2026-07-08 — DETERMINED by Jordan directive (ED-PC-0009), live-wired ED-PC-0011; residual
+ED-PC-0012 [point-transmit floor-lock, sabre-class] filed as new, explicitly non-blocking.)
+
+### T0 — block the M1 path
+
+| Fork | Default | Blocks | Home |
+|---|---|---|---|
+| ~~F-F/fork-8 — the Light-Function decision~~ **RATIFIED at default 2026-07-05 (ED-IN-0011)** | subtract-only + the §4 weight enumeration (values stay tunable data) | — | v2 §4/§10 |
+| ~~fork 1 — Coup-Counter remap~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | 1:1 remap onto Löwenritter Autonomy 4-stage | narrative Stage 1 compile (execution) | v2 §2 |
+| ~~fork 2 — ARC-T04~~ **RATIFIED at default (ED-IN-0011); execution = Stage-1 work item** | strike; COLLISION-C → 7-of-8 | Stage-1 validation set (execution) | v2 §2 |
+| ~~JD-1 — PoB bands (PC U1)~~ **RULED 2026-07-08 (Jordan: "accept plan bands"); executed U1/ED-PC-0010** | per consolidation_v1 | the whole U-series chain → juncture 4 | R3 consolidation_v1 |
+| ED-1051 — engine_clock ratification | flip doc:null to propagation_spec_v1 | juncture 6; GO entry | decision queue 12; CURRENT.md L32 |
+
+### T1 — block a named stage
+
+| Fork | Default | Blocks | Home |
+|---|---|---|---|
+| ~~DG-1 — pinning-force ratification validity~~ **RULED+CLOSED 2026-07-05 (ED-MB-0003): symmetric-at-parity + majority-pin/cavalry-wing (C4/C7), per Polybius/Livy — decision gate only, not the gauge-band overshoot itself** | re-adjudicate post-RC-2 | MB next stage | MB 06-30 workplan |
+| DG-2 — fighting-withdrawal/yield | author the mechanic — **DONE** (ED-MB-0003 authored, ED-MB-0005 built a commanded-entry slice 2026-07-08); **NOT validated as closing the gap** — measured to raise center survival 35.8%→40.6% while collapsing attacker win-rate 70%→0% unconditionally; the pool formula this was measured against was itself superseded hours later (ED-MB-0006), no re-measurement since | MB next stage; H3/H5/H6 draws | MB 06-30 workplan |
+| RC-5 — 9/20 gauge rows failing | triage per-row — **partially done** (ED-MB-0004, 2026-07-08: 3 of the failing rows diagnosed via A/B slot-swap, a slot-dependent `ANCHOR_MAP` asymmetry lead, not root-caused; ~6-7 rows still untriaged, exact scope disputed across sources — re-run `gauge_mb.py`, don't trust a frozen list) | MB gauge confidence | MB handoff |
+| ED-1090 residual — Command-clamp(1–7)-vs-cap-11 span-of-control reconciliation (the cap-11 ruling itself is `resolved`, 2026-07-02; this is the sub-question it explicitly carved out and left open) | keep TTRPG cap until ruled — **ED-MB-0006 (2026-07-08) changed what Command drives (pool is now `POOL_QUALITY_MODEL`, troop-quality×numbers) but did not touch this reconciliation** | MB Stage E | MB handoff |
+| fork 3 — convergence temporal window | same-Accounting priors; 4-season cosine discovery | narrative Stage 3 | v2 §10 |
+| fork 6 — Truth-in-bake | include (headline ~1,200–2,700 units); fallback lexicon-swap (230–450) | Stage-5 build scoping | v2 §6/§10 |
+| fork 10 — faction-count reconciliation (4–8 across four docs) | **ED-FA-0001 filed**; the count ruling itself is Jordan's (no default) | faction-scope banks/bindings | v2 §10; census §1.2 |
+| fork 11 — scenario_authoring authoring-vs-runtime | compile = authoring-time | Stage 1 compile home | v2 §10; module_contracts [OPEN] |
+| F-A — forecast fidelity per branch class | Layer A continuous / Layer B discrete; discrete per-lever deferred post-M1 | Stage 2.5 | v2 §3/§10 |
+| JD-2/JD-3/JD-5/JD-6/JD-7/JD-8 (PC) — **JD-4/JD-9 removed 2026-07-08, DETERMINED (ED-PC-0009) + live-wired (ED-PC-0011); residual ED-PC-0012 [point floor-lock, sabre-class] filed open, explicitly non-blocking** | per consolidation_v1 rows | the named U-steps / T-P2 / T5 | R3 consolidation_v1 |
+| **NEW** DP-1..DP-4 — pessimist-audit (ED-IN-0027) residual decision packets, no verdict recommended: DP-1 (FA, 3 `da.*` outcome-tag bucket boundaries) · DP-2 (SC, ED-SC-0005's bonus-die cap numeric value) · DP-3 (WR/TW, whether Gap-repair/Mending needs a second branch) · DP-4 (FI, Dialogue-Lattice build-commitment governance) | each packet lays out options + tradeoffs, no default | FA/SC/WR/FI residual scope | `designs/audit/2026-07-08-pessimist-action-audit/decision_packets/`; lane handoffs |
+| **NEW** ED-IN-0029 — attribute/value coherence audit (18-item `OPT-AV-1..18` docket: 4 incompatible attribute rosters, 4-formula Knot Pool, Godot RESIST-port drift, warn-tier-only naming) | none stated — explicitly held back from merge-ratification per ED-1094 (`needs_jordan: true`) | supersedes/subsumes the "attribute-roster ratification (queue 13)" row below in scope | `designs/audit/2026-07-08-attribute-value-coherence-audit/` (+ companion planning surface `quantity_reference_and_decision_surface_v1.md` in the same folder, PR #110) |
+| **NEW** ED-SE-0002 — Accord/Order stacking contradiction (edge-playability EP-9): `scale_transitions_v30` §5.5 says personal Domain Echoes don't stack with faction Govern actions in the same territory/season (higher applies); `peninsular_strain_v30` §2.7 (the CURRENT.md-listed head) says they stack normally (±1 cap per source). Neither cites the other; Accounting §7 Step 4c resolves neither | Jordan's call — which doc wins | SE's governance-play redesign (`ED-SE-0001`), which is on the M2 critical path (deck work) | edge-playability EP-9; SE handoff |
+| **NEW** ED-IN-0030 — phantom "debt scene" mechanic: `scale_transitions_v30` §4.3.2 row 8 cites a "debt scene per §1" that does not exist anywhere in the promoted `faction_politics_v30.md` (surfaced executing ED-IN-0016's citation-repoint) | flagged, not authored or struck — Jordan's call: author the missing mechanic, or strike the dangling reference | FA/political-lane doc integrity | IN handoff |
+| J-31 extended sitting (SC deliberative findings) | per critique §6 tags | SC next stage; LA-19 | v5 row 39; SC handoff |
+| J-36 — Key-bus closure (six off-bus writers) | on-bus, carve-outs explicit | Lane-C wiring; chronicle completeness | v5 row 40; [VERIFY] pass still deferred |
+| ~~ED-1042 — wound-model spec-vs-code drift~~ **STRUCK in ledger 2026-06-28 (superseded_by ED-1021); reconciliation = ED-PC-0004; residual re-filed ED-PC-0005** | — | PC coverage confidence | queue 4 (superseded pointer) |
+| ED-1052 — typed-params layer scope (+ queue 17/24) | extend the combat_engine_v1.json pattern to settled non-combat values | M3 exports | queue 24 |
+| ED-911 (P1) + WS-7 | — | PC phase4_5 | PC handoff |
+| fork 9 — Torben Loyalty range (register/sim 8→0 vs clock_registry 0–7) | reconcile at Stage-1 compile | ARC-S07 fidelity | v2 §2 |
+| ED-609 — Torben Conviction emergence | stays open; compile cites with disposition | Conviction-emergence beats only | s2 compile note |
+| attribute-roster ratification (queue 13) — **now the narrower half of the broader ED-IN-0029 docket above; rule via that entry, not this pointer alone** | — | ED-IN-0008 completion; descriptor keys for Godot | descriptor_registry; queue 13; ED-IN-0029 |
+| Godot strategy 8-item register + K8 + first-module target (queue 10–11) | — | Gate-0 execution | strategy doc |
+
+### T2 — taste / tuning / housekeeping
+
+| Fork | Default | Blocks | Home |
+|---|---|---|---|
+| F-B horizon k + ensemble N | k≈4, N≈64 | tuning only | v2 §3 |
+| F-C forecast-render access rules | position-scoped (T-30); NPC reads barred by R-AI | counsel/omen surfaces | v2 §10 |
+| F-D counterfactual-ghost budget | sparing | chronicle texture | v2 §10 |
+| F-E anticipation reflexivity | one-pass | — | v2 §10 |
+| F-G evidence-weight formula | form canonical, numbers Jordan's (ED-874 split) | SC addition (1) numbers | v2 §5/§10 |
+| fork 7 — GM-judgment residue ~15% + bespoke-EFFECT NPC-ARCs | declare non-firing / hand-authored effect tables | honesty ledger only | v2 §2/§10 |
+| forks 4–5 (v1: casting-breadth, venue-matrix edges) | v1 defaults | — | v1 §forks |
+| J-8's six-part faction-inversion sitting (with J-7-key of v4 — naming collision with this plan's J-7 judgment noted; cite as "v4 J-7/J-8") | — | faction write-path port | v4 §3 |
+| JD-6 P2 scope · JD-8 renderer recovery | per consolidation_v1 | T-P2/T5 detail | R3 plan |
+| queue 8 — sim degenerate win-share | post-M1 (J-7); F7 oracle first | balance tuning | queue 8 |
+| queue 9 — sim/ vs tests/sim naming | documented, high blast radius | — | sim/README.md |
+| queue 14 — needs_jordan ledger set | — | per-entry | ledger |
+| queue 19 — agent-roster promotion | on recurrence only | — | doctrine §7 |
+| queue 21–23 — stale branches · duplicate compilation homes · pre-restructure ledger paths (+ ED-306 dup, header note) | — | — | queue; T2-H3 |
+| ED-1054 residual — >1MB narrative-md relocation + sim README regeneration | coordinate with narrative Stage 5 (bake asset) | — | queue 25 |
+| ED-879 (G8 C3×PoolFloor) · ED-538 (Accord/Stability compound) · ED-1043 (orchestration.py stages) · ED-1006 (downward Key delivery) · ED-1009 (multi-emitter attribution; v2 defers-with-pointer) · ED-1010/1011 (thread preconditions — T1 if juncture 5 slips) | — | as cited | ledger |
+| ED-595–610 creative block · ED-913–932 hygiene batch | — | — | index-only |
+| **NEW** ED-507/ED-508 (territory POI catalog authorship; starting NPC-roster Dispositions — both authorial content, `needs_jordan: true`) · ED-634 umbrella (its own ledger text: "umbrella range-label ED-634-ED-658" — Crown inner-circle/Ministry/succession naming backlog) · ED-885 (`canonical_sources.yaml` cites it as the 2026-05-30 F-RESID migration's ratification, but ED-885 was never written outside the ED-874-882 block — plausibly ED-874, unverified; Jordan to confirm or fix the citation) | authorial content — no design default possible; ED-885 — confirm or correct | worldbuilding completeness; canonical_sources citation integrity | queue 14 (needs_jordan ledger set — these are the pre-2026-07 residual of that set not otherwise bulk-referenced above) |
+| npc-comprehensive-audit orphan (Appendix B) | one triage ED, NPC-adjacent lane | — | Appendix B |
+
+---
+
+## §6 · Governance
+
+- **Monthly reconcile (J-14, institutionalized):** checklist = re-verify ledger counts by
+  scan → refresh §5 pointers (strike resolved rows, no status edits elsewhere) → confirm
+  CURRENT.md rows against heads → confirm handoff freshness per lane → **confirm every §4
+  lane section still opens with its `registers/handoffs/HANDOFF_<LANE>.md` pointer (§0's completeness
+  rule) and every `needs_jordan: true` ledger entry is still reachable from this document**
+  → refresh the progress board (below) → dated-snapshot the session inventory delta → one
+  commit `[editorial]` citing this section.
+- **Progress board (ED-IN-0010):** `workplans/workplan_v6_progress.yaml` is the
+  ONE designated home for milestone/juncture-level rollup status (a rollup nothing else
+  carries — lane detail stays in the handoffs; rows point at evidence). Rendered only by
+  `tools/workplan_status.py` (one-liner in the SessionStart banner; `--full` ASCII
+  diagram); owned and freshness-verified-on-every-read by the
+  `valoria-workplan-navigator` skill ("where are we?" / "resume from the workplan" →
+  position + options). A stale `as_of` is surfaced, never silently trusted — the
+  anti-rot answer to the retired roadmap_state.yaml.
+- **Register-touch rule (ED-IN-0007):** any edit to a compiled register surface must touch
+  its runtime form in the same PR once narrative Stage 1 lands.
+- **ID protocol:** `references/id_reservations.yaml` is the allocation source (read
+  `next_free`, allocate, bump, co-commit — never max+1). Flat sequence frozen (ED-IN-0001);
+  ledger ceiling verified ED-1096 (header note). **ED-PC collision rule, resolved loudly:**
+  R3's ratified plan text labels its increments "ED-PC-0001..0012" — those are plan-text
+  LABELS, never filed; the ledger's real ED-PC-0001 is the player-input item (filed
+  2026-07-05). When R3 increments file, they allocate fresh IDs from `next_free` at filing
+  time and cite the plan-text label in the description. Never trust an ID printed in a plan
+  over the counter.
+- **Skeptic convention (carried v4 §8 / v5 §8):** propagate-don't-caveat · ED citations
+  ledger-verified, never memory-sourced · source-tier discipline · rules live once, in
+  `tools/`.
+- **Session lane-scoping (CLAUDE.md §4):** declare the lane, keep the PR scoped; IN only for
+  genuinely cross-cutting work.
+
+---
+
+## Appendix A · v5 supersession table (dated snapshot, 2026-07-05 — every open v5 item accounted)
+
+| v5 item | Disposition in v6 |
+|---|---|
+| §0a / LB-21 reserved-ID exhaustion | EXECUTED 2026-07-01 (id_reservations v3, blocks D/E) then made structurally moot by the ED-IN-0001 lane cutover (2026-07-02) — lane counters, no shared blocks. |
+| Row 39 / J-31 extended / LA-19 | Carried → §4-SC (four games + ED-SC-0001 folds + v2 §5 requirements input); the commitment store the critique wanted is now SC addition (4). Register: J-31 in T1. |
+| Row 40 / J-36 Key-bus closure | Carried → T1; the deferred [VERIFY] adversarial pass still gates it; the narrative engine RAISES its priority (six off-bus writers break the chronicle's one-ledger property). |
+| Row 41 / J-33 combat-traditions critique | Superseded-in-part by R2 (MERGED PR #72) + R3 (RATIFIED plan-of-record): the morphology line landed as the granularity audit + consolidation_v1. Residue = JD-1..8 + Track-2 + phase4_5 → §4-PC + §5. |
+| Row 42 deprecation sweep | Executed (v5 §10 #17). Residual supersession_register wiring → §2 item 7. |
+| Row 43 / J-37 deterministic-NLG realizer | **SUPERSEDED by the narrative engine v1+v2** — the offline prose-writer bake + splice realizer IS the PP-688 §11 answer (v2 §6); J-37's ratification question becomes the narrative staging's fork gates. |
+| J-38 propagation-spec authorship | RATIFIED (ED-1093/ED-1083/ED-1094, 2026-07-02) — the v5 §3 line saying "open/PROPOSED" was the ED-IN-0006 contradiction; corrected here, v5 archived with banner. |
+| LA-23 residual (ED-914 mechanical: PP-719 record-or-strike + dead fieldwork_design_v1 refs in 3 files) | Carried → WR/IN small-sweep pool (schedule with ED-WR sweeps). |
+| LB-22 | Done (v5 §10). `tools/`-scope hooks-verifier flip residual → §2 item 7 (names/tools tail). |
+| LB-23 freshness + ED-citation flips | Carried → §2 item 7 (gates unchanged: K-2 SHA-split; triage-to-zero). |
+| LB-24 ci_political read-routing | Carried → §2 item 7. |
+| Lane-C contest.py fabrication triage | Carried → §2 item 7 (queue 16). |
+| Names LB item (v5 §10 #22) | Carried → §2 item 6 (folds into ED-IN-0008) + §2 item 7. |
+| v4 rows 1–38 + docket J-1…J-35 | Carry as before (v4 frozen record); still-open keys resolve through §5's pointers (headline carriers: J-31, J-33, J-36, v4 J-7/J-8, J-12/J-18 tails). |
+| Decision-queue (2026-07-01) items | Refreshed in place this PR: 1–2 superseded by R2 → R3 JDs; 3 superseded (phase4_5 sequenced §4-PC); 6/18/20 strikethroughs confirmed; 4/5/7–17/19/21–25 carried with §5 pointers. |
+
+## Appendix B · Session-inventory snapshot (dated 2026-07-05; ~40 dated sessions, 2026-06→07)
+
+Dispositions per the 07-05 inventory sweep: PC 16 sessions · MB 5 · SC 8 · IN/GO 11 ·
+SE/WR/FA/FI 1 + heads — all tracked into a lane workstream or an archived/superseded record,
+EXCEPT:
+
+- **ORPHAN: `designs/audit/2026-06-22-npc-comprehensive-audit.md`** — 449 verified findings,
+  zero inbound references from any live surface (v5 §0 staged it as "ledger candidates at
+  next lane entry"; no lane entered). Default (T2 row): file ONE triage ED in the
+  NPC-adjacent lane to fold-or-retire it; its findings are also candidate inputs to the
+  narrative engine's NPC voice/anti-oatmeal banks (v2 §6).
+- Weak-tracked (note-only): `2026-06-19-pc-loose-ends` (superseded by R2/R3 line),
+  `2026-06-09-consolidation-master` (historical; superseded by v5→v6 lineage).
+
+The 2026-07-04/05 sessions themselves: the NERS qualitative audit (MERGED PR #77, 12 EDs
+ratified) · the narrative engine v1 + v2 + this workplan (PR #78, this document).
+
+---
+*v6 is the single working master on merge, superseding v5 (archived). Every §5 row is
+Jordan's; the held-back item is F-F/fork-8 (one surface: subtract-only + the weight set).
+This document allocated **ED-IN-0009** (steering reconcile execution + v6 authorship record)
+per the lane protocol; no other IDs assigned here.*

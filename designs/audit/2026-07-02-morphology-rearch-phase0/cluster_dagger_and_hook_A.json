@@ -1,0 +1,331 @@
+{
+ "weapons": {
+  "rondel": {
+   "total_length_m": 0.36,
+   "total_mass_kg": 0.35,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.235,
+     "x_m": 0.12,
+     "orient_deg": 0,
+     "extent_m": 0.24,
+     "material": "steel",
+     "geom_notes": "Rigid, needle-to-diamond or hexagonal cross-section blade with essentially no cutting edge (\"long straight blade does not lend itself to a slashing or sabre action\"). Wallace Collection A726 (French, c.1400-1450, bog find) carries a single-edged 39.4cm blade, hollow-ground, 14mm thick at the hilt tapering to ~9-10mm over the first 50mm, with a maker's mark inlaid in copper alloy 5.0cm from the shoulder — used here as a typology/section anchor, not a 1:1 length match (that specimen runs longer than the engine's 0.24m head_len, which follows the shorter end of the Wallace/Royal Armouries 15th-c. survey range of 21-32cm quoted in the prior audit). Stiff quadrilateral/hexagonal section chosen for maximal rigidity in a maille-punching thruster; tip is acutely tapered to a fine point, not chisel-ground.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "hand_guard_disc",
+     "type": "disc",
+     "extent_m": 0.055,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.045,
+     "geom_notes": "Flat or slightly domed steel disc at the blade/grip junction, functioning as a hand-stop and grip stabilizer rather than a blade-catching structure (documented function: keep the hand from sliding onto the blade during a powerful thrust, and provide a purchase surface against an opponent's incidental contact during grappling — not a trained bind/parry surface). Diameter approximated from the Wallace A726 family of hollow steel rondels; treated as the larger of the weapon's two discs since it must resist the full thrust load transmitted through the palm."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.022,
+    "material": "wood (grip core, commonly bone/antler or wood scales), sometimes bronze side-panels",
+    "notes": "Short straight cylindrical or slightly waisted grip between the two discs; Wallace A726 uses bronze-alloy side panels riveted to a wood/bone core. No wrap documented as standard (unlike the leather/wire wraps on swept-hilt weapons) — grip surface is the fitted scale material itself."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.02,
+    "pommel_x_m": -0.12,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": 0.0,
+    "notes": "The second (rear) disc, functioning as a palm-driving pommel for push-thrust delivery — smaller/lighter than the hand-guard disc since it does not carry the same thrust-reaction load, consistent with the calibration prior's pommel_kg=0.02."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "blade_kg": 0.235,
+    "guards_sum_kg": 0.045,
+    "pommel_butt_kg": 0.02,
+    "grip_estimate_kg": 0.05,
+    "computed_total_kg": 0.35,
+    "residual_pct": 0.0,
+    "method": "Residual split: total_mass_kg (0.35, calibration prior) minus guard-disc + pommel-disc (specimen-typology estimates) minus a wood/bone-scale grip allowance leaves the blade mass; matches the calibration prior's cross_section=0.85/point_concentration=0.97 rigid-needle profile (denser per-unit-length than a standard edged dagger)."
+   },
+   "provenance": {
+    "citations": [
+     "Wallace Collection, London — rondel dagger A726, French, c.1400-1450, bog find: 39.4cm single-edged hollow-ground blade, disc guard + pommel, wood/bone grip with bronze-alloy side panels and rivets, maker's mark inlaid in copper alloy 5.0cm from the shoulder",
+     "Royal Armouries / Wallace Collection 15th-c. survey (prior cluster audit): OaL 35-46cm, blade 21-32cm, used as the primary length/mass typology anchor for the engine's shorter head_len",
+     "prior cluster research: dagger_and_hook_A.json calibration + audit_note (mass 0.35kg, head_len 0.8u/grip_len 0.4u, pommel_kg 0.02)"
+    ],
+    "confidence_tier": "S2",
+    "note": "Blade/guard/pommel split is a residual estimate against a specimen-typology total mass, not a single accessioned specimen's part-by-part weighing (no museum source publishes per-component mass breakdowns for rondel daggers)."
+   }
+  },
+  "main_gauche": {
+   "total_length_m": 0.435,
+   "total_mass_kg": 0.55,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.24,
+     "x_m": 0.15,
+     "orient_deg": 0,
+     "extent_m": 0.30,
+     "material": "steel",
+     "geom_notes": "Progressively diamond-sectioned, thrust-oriented blade, edge functionally secondary to the point even where a sharpened edge is physically present (period commentary: the blade thickens toward a rigid diamond section through its length). Period main-gauches typically run blade length ~480mm (19in) or slightly more per general parrying-dagger surveys; the engine's shorter 0.30m head_len sits below that survey figure, reflecting the audit note's deliberate choice of the low end of the range (\"an over-long off-hand dagger is unwieldy\"). No cutting technique documented — blade geometry supports bind/deflect-then-thrust, not draw-cuts.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "quillon_and_ring_and_shell_complex",
+     "type": "shell",
+     "extent_m": 0.14,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.16,
+     "geom_notes": "Wide knuckle-guard curving from the quillons to the pommel (triangular in outline per general parrying-dagger surveys), combined with a side ring/shell and extended, often inward-curved quillons. General survey figures put quillon tip-to-tip span at 11in (280mm) or more on developed examples; extent_m here (0.14m) is the RADIUS/reach of the catching surface from the blade centerline (i.e. half the tip-to-tip span), matching the cluster-note instruction that extent_m is the catch surface's physical span. This is the weapon's defining functional feature per Fabris/Capoferro/Giganti: documented to actively trap and control an incoming rapier point, not merely deflect it (period hilts + material-culture gloss both confirm a genuine blade-catching, not just hand-protecting, structure)."
+    },
+    {
+     "label": "side_ring",
+     "type": "ring",
+     "extent_m": 0.05,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.02,
+     "geom_notes": "Secondary finger/side ring projecting from the main guard complex, adding a second catching surface and finger protection; mass counted separately from the main shell/quillon assembly since it is a distinct forged/riveted element on surviving specimens (e.g. Royal Armouries ridged hand-guard parrying daggers)."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.028,
+    "material": "wood core, wire-wrapped or ridged/filed steel grip sleeve",
+    "notes": "Royal Armouries specimens (e.g. RAC object 8570) show ridged/filed steel hand-guard grips for a secure hold under bind pressure; wire-wrap or file-work rather than plain leather, consistent with a weapon meant to be gripped hard through a parry."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.04,
+    "pommel_x_m": -0.135,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": 0.0,
+    "notes": "Faceted or spherical steel pommel, matching the calibration prior's pommel_kg=0.04; heavier than a plain dagger pommel to counterbalance the substantial forward guard-hardware mass."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "blade_kg": 0.24,
+    "guards_sum_kg": 0.18,
+    "pommel_butt_kg": 0.04,
+    "grip_estimate_kg": 0.09,
+    "computed_total_kg": 0.55,
+    "residual_pct": 0.0,
+    "method": "Residual split against the calibration prior's total_mass_kg=0.55 (Royal Armouries German main-gauche 1580-1620 family; modern full-guard repros run 540-850g). Guard hardware (quillon/shell/ring complex) is scaled up sharply relative to the point-pure daggers in this batch, consistent with the prior audit's note that guard mass is this weapon's defining physical feature."
+   },
+   "provenance": {
+    "citations": [
+     "Royal Armouries, Leeds — German main-gauche, 1580-1620 (cited in prior cluster audit); RAC object 8570, parrying dagger with ridged hand-guard grip",
+     "Royal Armouries, Leeds — 1595 steel-hilted dagger with arched quillons; mid-16th-c. example excavated from the Thames",
+     "General parrying-dagger survey data: quillons typically 280mm (11in)+ tip-to-tip; blade length ~480mm (19in) or slightly more",
+     "Modern HEMA/material-culture reconstruction weight range: 540-850g including full guard hardware (prior cluster audit)",
+     "prior cluster research: dagger_and_hook_A.json calibration + handling (Fabris 1606, Capoferro 1610, Giganti 1606)"
+    ],
+    "confidence_tier": "S2",
+    "note": "No single accessioned specimen in the sources consulted publishes a full mass + guard-component breakdown; total mass and guard proportions are triangulated across the Royal Armouries specimen family, general parrying-dagger surveys, and modern reconstruction weight ranges."
+   }
+  },
+  "stiletto": {
+   "total_length_m": 0.375,
+   "total_mass_kg": 0.22,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.155,
+     "x_m": 0.135,
+     "orient_deg": 0,
+     "extent_m": 0.27,
+     "material": "steel",
+     "geom_notes": "Hammer-forged, dense, narrow triangular (occasionally round, square, or diamond) cross-section rod blade, without any sharpened edge in the majority of surviving examples — the slimmest/lightest-per-unit-length blade in this batch (a micro-section markedly finer than the rondel's quad/hex profile). 16th-17th-c. Italian specimens run ~30cm overall length, described in period/collector sources as \"the lightest of daggers.\" A distinct gunner's-stiletto variant carries graduated engraved markings for measuring cannon bore/powder (a civilian/artillery tool use, not combat-relevant to this record). Acutely tapered to a fine rigid point; near-total absence of a cutting edge across the blade length.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "collar_guard",
+     "type": "cross",
+     "extent_m": 0.03,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.01,
+     "geom_notes": "Simple small cross or oval collar guard, sometimes absent entirely on surviving specimens; built to protect a thrust grip only, not to absorb or catch a percussive/cutting blow. No documented specimen shows quillons, rings, or wings performing a bind/catch function — the smallest, lightest guard structure in this batch."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.018,
+    "material": "wood, bone, or metal grip (faceted/fluted on decorative examples), sometimes wire-bound",
+    "notes": "Slender grip proportioned to the blade's fine section; civilian Italian/Spanish/Portuguese examples often show decorative faceted or filed metal grips (\"small, delicate looking, always fancy\") rather than the plain wood/leather of a battlefield dagger."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.012,
+    "pommel_x_m": -0.105,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": 0.0,
+    "notes": "Small steel or decorative pommel, matching the calibration prior's pommel_kg=0.012 — the lightest pommel in the batch, consistent with the weapon's overall minimal-mass profile."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "blade_kg": 0.155,
+    "guards_sum_kg": 0.01,
+    "pommel_butt_kg": 0.012,
+    "grip_estimate_kg": 0.043,
+    "computed_total_kg": 0.22,
+    "residual_pct": 0.0,
+    "method": "Residual split against the calibration prior's total_mass_kg=0.22 (16th-17th-c. Italian specimens, ~30cm OaL, described as the lightest of the dagger family). Blade mass reduced sharply relative to the rondel/misericorde per the prior audit's note that the stiletto's micro-section is markedly slimmer than a diamond-section rondel blade despite comparable or greater length."
+   },
+   "provenance": {
+    "citations": [
+     "16th-17th-c. Italian stiletto specimen family (prior cluster audit): ~30cm OaL, triangular/square/round/diamond cross-section, no sharpened edge on the majority of surviving examples",
+     "Tod Cutler / Kult of Athena, 17th Century Stiletto Dagger (typology reference, modern reproduction of a period Italian form)",
+     "Antique 17th-c. Italian gunner's stiletto (engraved graduated-measurement variant) — morphology cross-reference only, not used for combat-relevant facts",
+     "prior cluster research: dagger_and_hook_A.json calibration + handling (Marozzo 1536, Fabris 1606, Capoferro 1610)"
+    ],
+    "confidence_tier": "S2",
+    "note": "No single accessioned museum specimen in the sources consulted publishes a full mass breakdown by component; the stiletto is the thinnest-margin estimate of the three point-pure daggers in this batch given the minimal published dimensional detail (weakest confidence weapon in this file alongside the hook sword's crescent-guard mass split)."
+   }
+  },
+  "misericorde": {
+   "total_length_m": 0.435,
+   "total_mass_kg": 0.28,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "blade",
+     "mass_kg_est": 0.185,
+     "x_m": 0.15,
+     "orient_deg": 0,
+     "extent_m": 0.30,
+     "material": "steel",
+     "geom_notes": "Long, narrow, triangular/square/flat cross-section blade designed to slip between mail rings or plate gaps; 13th-14th-c. specimens run blade 20-30cm typical (one specimen 30cm blade / 46cm OaL), with a documented cross-section around 25mm x 5mm near the guard on the longer example. The longest/thinnest blade of the three point-pure daggers in this batch (longer than the rondel for maximum reach into a visor slit, but thinner per unit length so total mass stays comparable to the rondel). Some specimens carry a faint finishing edge; overwhelmingly a pure thruster with no documented cutting repertoire.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "hand_guard_disc",
+     "type": "disc",
+     "extent_m": 0.045,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 90,
+     "mass_kg_est": 0.022,
+     "geom_notes": "Deliberately minimal flat disc guard (per arms-and-armor synthesis) sized only to keep the hand from sliding onto the blade and to aid grip retention — explicitly NOT a hand-protecting fencing crossguard and smaller/lighter than the rondel's disc, consistent with the calibration prior sharing hand_guard/blade_guard values with the rondel but at the lighter end of the disc-dagger family. No quillons, wings, or rings on any documented specimen."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.02,
+    "material": "wood or bone grip, sometimes wire-bound",
+    "notes": "Simple grip between two thin flat discs; no specialized construction documented beyond the generic disc-dagger family this weapon shares with the rondel."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.018,
+    "pommel_x_m": -0.135,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": 0.0,
+    "notes": "Matching flat disc pommel, lighter than the rondel's per the calibration prior's pommel_kg=0.018 — the misericorde trades pommel/guard mass for extra blade length/reach relative to the rondel."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "blade_kg": 0.185,
+    "guards_sum_kg": 0.022,
+    "pommel_butt_kg": 0.018,
+    "grip_estimate_kg": 0.055,
+    "computed_total_kg": 0.28,
+    "residual_pct": 0.0,
+    "method": "Residual split against the calibration prior's total_mass_kg=0.28, held close to the rondel's mass despite greater length: a long thin triangular section is lighter per unit length than the rondel's thicker diamond/hex section, so the blade carries proportionally more of the total mass while guard/pommel are both reduced relative to the rondel."
+   },
+   "provenance": {
+    "citations": [
+     "13th-14th-c. misericorde specimen family (prior cluster audit): blade 20-30cm typical, one specimen 30cm blade/46cm OaL, ~25mm x 5mm triangular section near guard",
+     "General arms-and-armor synthesis on misericorde guard design: flat disc plates at guard and pommel, explicitly minimal (grip retention only, not hand protection or blade-binding)",
+     "prior cluster research: dagger_and_hook_A.json calibration + handling (Fiore dei Liberi daga corpus reasoned onto this weapon by analogy, S2; Talhoffer Degen material, S2)"
+    ],
+    "confidence_tier": "S2",
+    "note": "No period fencing manual or museum catalog entry specifically organized around the 'misericorde' as a distinct named class was found; morphology and mass are triangulated from the general disc-dagger/coup-de-grace battlefield-use literature and cross-checked against the rondel's closely related family."
+   }
+  },
+  "hook_sword": {
+   "total_length_m": 0.6,
+   "total_mass_kg": 0.75,
+   "mass_grade": "S2",
+   "head_elements": [
+    {
+     "label": "blade_with_hooked_tip",
+     "mass_kg_est": 0.38,
+     "x_m": 0.225,
+     "orient_deg": 0,
+     "extent_m": 0.45,
+     "material": "steel",
+     "geom_notes": "Double-edged, shallow-curved (curvature 0.15 per calibration prior) blade terminating in a hooked tip used for catching/trapping the opponent's weapon or limb — a control action, not primarily a striking one. Reference specimen: Mandarin Mansion Qing-era antique hu tou shuang gou, total length 103.7cm, blade length 62cm, total weapon weight 979g, scaled by length ratio (0.6m/1.037m ≈ 0.579) to the engine's lighter/shorter single-blade record (per weapons.py audit note citing a 90-101cm/blade-incl-spike, ~0.8kg/blade paired-shuang-gou typology as the correlation anchor). The hook itself is a distinct curved terminal geometry continuous with the blade, not a separately mass-budgeted element (folded into this element per the cluster note's guidance that only the crescent needs the dual-record split).",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    },
+    {
+     "label": "crescent_hand_guard_striking_element",
+     "mass_kg_est": 0.14,
+     "x_m": 0.0,
+     "orient_deg": 75,
+     "extent_m": 0.183,
+     "material": "steel",
+     "geom_notes": "CLUSTER-FLAGGED DUAL-RECORD ELEMENT: the crescent is simultaneously the hand-guard (see guards[] below, SAME mass_kg_est=0.14, SAME physical structure — not double-counted in mass_budget) and a genuine striking/slashing/trapping element in its own right, per modern-transmitted wushu sources (Northern Shaolin Double Tiger Head Hook Swords form) which document the crescent performing active slash/trap/block actions, not passive hand-shielding. Reference specimen: Mandarin Mansion antique, crescent blade 31.6cm x 10.9cm on a 103.7cm/979g weapon; scaled by the same 0.579 length ratio to ~18.3cm x 6.3cm for this engine record. Knife-shaped in cross-section (sharpened on its outer/leading arc per general antique-arms cataloguing), distinguishing it from a purely defensive knucklebow.",
+     "edge_undulation": {"amplitude_mm": 0, "period_mm": 0}
+    }
+   ],
+   "guards": [
+    {
+     "label": "crescent_hand_guard_striking_element",
+     "type": "crescent-guard",
+     "extent_m": 0.183,
+     "material": "steel",
+     "x_m": 0.0,
+     "orient_deg": 75,
+     "mass_kg_est": 0.14,
+     "geom_notes": "SHARED MASS WITH head_elements['crescent_hand_guard_striking_element'] — flagged per cluster instructions, do not double-count in mass_budget (counted once, under head_elements, in the sum below). Documented as the weapon's primary trapping/binding/catching structure (functionally analogous to a spear's wings or a sword's quillons catching a bind, but here the guard's PRIMARY documented role, per the prior handling research's blade_guard_note). Added during the Qing-era refinement of the earlier plain-hilted form specifically to serve this dual guard/weapon function."
+    }
+   ],
+   "haft_or_grip": {
+    "diameter_m": 0.025,
+    "material": "wood core, wrapped (cord or leather) grip, integrated with a steel tang/ferrule into the crescent guard assembly",
+    "notes": "Short single-hand grip between the crescent guard and the rear spike/pommel; on paired examples the grip is sized to allow the hook-to-hook linking maneuver (joining both weapons into one extended flexible weapon), a documented technique-driven design constraint on grip proportions rather than a pure dimensional fact."
+   },
+   "pommel_or_butt": {
+    "pommel_mass_kg_est": 0.05,
+    "pommel_x_m": -0.15,
+    "butt_mass_kg_est": 0.0,
+    "butt_x_m": 0.0,
+    "notes": "A small rear spike, not a proper rounded pommel — functions as both a counterweight and a genuine secondary thrust point (documented as becoming the primary working tip once the pair is linked into an extended weapon). Matches the calibration prior's pommel_kg=0.05 (reduced from a paired_short-analog 0.202 since the counterweight here is a slim spike, not a substantial pommel mass)."
+   },
+   "adornments": [],
+   "mass_budget": {
+    "head_elements_sum_kg": 0.52,
+    "head_elements_note": "0.38 (blade+hook) + 0.14 (crescent, counted ONCE despite dual-listing under guards[])",
+    "guards_sum_kg_excl_shared": 0.0,
+    "pommel_butt_kg": 0.05,
+    "grip_estimate_kg": 0.18,
+    "computed_total_kg": 0.75,
+    "residual_pct": 0.0,
+    "method": "Residual split against the calibration prior's total_mass_kg=0.75. Crescent guard mass (0.14kg) is listed under both head_elements and guards per the cluster note's explicit instruction but summed ONCE (the guards[] entry contributes 0.0 additional to computed_total_kg to avoid double-counting). Crescent proportions scaled from the Mandarin Mansion antique specimen (crescent 31.6x10.9cm on a 103.7cm/979g weapon) by the total-length ratio to this lighter/shorter engine record."
+   },
+   "provenance": {
+    "citations": [
+     "Mandarin Mansion, antique Qing-era Chinese hook sword (hu tou shuang gou) — total length 103.7cm, blade length 62cm, total weight 979g, crescent blade 31.6cm x 10.9cm",
+     "weapons.py PRIMITIVE-AUDIT note (canonical engine anchor): shuang gou / hu tou gou, Qing-era paired short-sword, ~90-101cm/blade incl. rear spike, ~0.8kg/blade for a light pair",
+     "Northern Shaolin 'Double Tiger Head Hook Swords' modern-transmitted form (47 postures) — documents crescent guard active slash/trap/block use, S2",
+     "General antique/museum survey scholarship (Mandarin Mansion cataloguing; general Chinese-arms historiography) — crescent guard added during Qing-era refinement, serving dual hand-guard/cutting-edge function",
+     "prior cluster research: dagger_and_hook_A.json calibration + handling"
+    ],
+    "confidence_tier": "S3",
+    "note": "WEAKEST-CONFIDENCE weapon in this batch. No period military or fencing treatise documents the hook sword at all (weapons.py and the cluster handling research both confirm this); all technical/morphological grounding is modern-transmitted wushu forms and antique-dealer catalog entries (S2/S3), not period specimens with published mass breakdowns. The crescent's dual guard/striking-element role is a genuine structural ambiguity in the weapon itself (flagged per cluster instructions), not an artifact of incomplete research — any Phase B implementation must decide whether the bake treats it as one part-record referenced twice or two independent records summing to double its true mass."
+   }
+  }
+ },
+ "cluster_notes": "Batch covers three point-pure thrusting daggers (rondel, stiletto, misericorde — all disc-guarded, edgeless-or-near-edgeless maille/plate-gap specialists sharing a common typological family), one guard-heavy parrying dagger (main_gauche, whose extent_m on its shell/quillon/ring complex is load-bearing since it is the weapon's entire functional identity per Fabris/Capoferro/Giganti), and one structurally distinct trapping weapon (hook_sword, whose crescent is genuinely both a guard AND a striking element and is recorded under both head_elements and guards with shared, non-duplicated mass per the cluster instruction). All five mass budgets close to 0.0% residual against each weapon's calibration-prior total_mass_kg. Confidence ranking within this batch: main_gauche and rondel are best-attested (named Royal Armouries/Wallace Collection specimen families with partial dimensional publication); misericorde is S2 by analogy (no period treatise organized around the name); stiletto is S2 but thin on published per-component dimensions; hook_sword is the clear weakest link (S3) — no period treatise exists for it at all, its total mass/length were scaled from a single antique dealer specimen (Mandarin Mansion, Qing-era, 979g/103.7cm) down to the engine's lighter anchor, and the crescent's dual-role mass-sharing is a genuine open modeling question for Phase B rather than a resolved fact."
+}

@@ -57,7 +57,10 @@ jobs:
             tools/compliance_check.py \
             tools/atomizer.py \
             tools/doc_index_gen.py \
-            tools/index_gen.py
+            tools/index_gen.py \
+            tools/quantity_registry.py \
+            tools/ci_quantity_vocabulary_check.py \
+            tools/wiring_map_check.py
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -204,6 +207,203 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_names_check.py
 
+  currency-consistency:
+    name: Currency Consistency (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): the self-updating recency gate
+    # (ED-1087) — CURRENT.md stamp vs head commit dates, ID ceilings vs the ledger,
+    # register headers vs bodies, dead "maintained by" pointers, HANDOFF banner heading.
+    # The drift class that rotted the currency surfaces during 2026-06 (PR #50 failure
+    # class). Flip to blocking after a green baseline cycle.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # commit dates per head file
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Stamps, ceilings, registers, maintainers current
+        run: python3 tools/currency_consistency_check.py
+
+  contract-conformance:
+    name: Module-Contract Conformance (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only: the EXISTING design-side conformance scan (contract_adjudicator A1-A12,
+    # the valoria-module-adjudicator skill's machine checks — reused, not re-implemented;
+    # holonic doctrine ED-1083: conformance is deterministic, make it cheap and standing).
+    # Current tree carries ~21 pre-existing violations / ~64 warnings — the ED-1051 backlog
+    # (doc:null modules, cross-scale edges without transitions, unregistered Key types).
+    # STEP-level continue-on-error (the freshness-gate precedent): the job stays green while
+    # the log carries the standing count — a permanently red X for a known, docketed backlog
+    # trains alarm-blindness. Remove the step flag (blocking) when ED-1051 triage reaches zero.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Contracts conform to the Key Type Registry + canonical sources (report-only)
+        continue-on-error: true
+        run: |
+          python3 skills/valoria-module-adjudicator/scripts/contract_adjudicator.py \
+            --contracts references/module_contracts.yaml \
+            --registry  designs/architecture/key_type_registry_v30.md \
+            --sources   references/canonical_sources.yaml
+
+  quantity-vocabulary-check:
+    name: Quantity Vocabulary Closure — A17 (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only: A17 from the Key & Echo Armature's quantity-layer extension
+    # (designs/audit/2026-07-08-attribute-value-coherence-audit/
+    # proposed_quantity_armature_extension.md §3.1, ED-IN-0029 — the mechanical
+    # rows OPT-AV-4/16 executed by direct Jordan instruction; the doc's
+    # design-naming forks, e.g. OPT-AV-1/9/10/11/12/13/15/18, remain open and
+    # are NOT decided by this job). Same lifecycle + same STEP-level
+    # continue-on-error precedent as contract-conformance above: land
+    # report-only, burn the backlog via a shaping wave, flip to blocking only
+    # at zero backlog (armature §4 / extension §3, OPT-AV-6). Deliberately not
+    # listed in ci-summary's needs, matching contract-conformance.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Stat identifiers resolve to the descriptor registry (report-only)
+        continue-on-error: true
+        run: python3 tools/ci_quantity_vocabulary_check.py
+
+  mechanics-index-check:
+    name: Mechanics Index Validation (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0033, Phase 2 item 7): validates registers/mechanics_index.yaml
+    # (schema, cross-references, GD-1 singularity invariant, drift report) via its own
+    # --strict CLI contract. Never wired into CI before despite being fully CI-shaped.
+    # Same STEP-level continue-on-error precedent as contract-conformance: land quiet,
+    # burn the current schema/scale-value backlog, flip to blocking once clean.
+    # Deliberately not listed in ci-summary's needs, matching contract-conformance /
+    # quantity-vocabulary-check.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Mechanics index schema + cross-reference + GD-1 drift (report-only)
+        continue-on-error: true
+        run: python3 tools/mechanics_index_gen.py --strict
+
+  generation-consistency-check:
+    name: Generation v40 Currency Gate (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0033, Phase 2 item 8): closes the local/CI parity gap —
+    # ci_generation_consistency.py already runs on every local commit via
+    # tools/valoria_local.py --staged (one of its 13 checks) but never ran in CI.
+    # The script is warn-only-by-design (always exits 0 per its own docstring), so
+    # this costs one CI job and zero new blocking risk. continue-on-error kept for
+    # consistency with the other report-only jobs in this file even though the
+    # script itself never returns nonzero.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every canonical doc carries a Status line and isn't superseded (report-only)
+        continue-on-error: true
+        run: python3 tools/ci_generation_consistency.py
+
+  canon-coverage-check:
+    name: Canonical Index Coverage (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (Jordan's ruling, ED-IN-0033, Phase 2 item 9): bidirectional
+    # Status:CANONICAL <-> canonical_sources.yaml drift check. Ported off the
+    # GitHub code-search API onto a working-tree os.walk in Phase 1 (ED-IN-0031);
+    # this job is the deferred CI wire now that the doctrine violation is fixed.
+    # Current tree carries real drift (1 unregistered-with-header, 28
+    # registered-no-header as of 2026-07-11) — same ratchet pattern as the other
+    # report-only jobs above: land quiet, burn the backlog, flip to blocking later.
+    # Deliberately not listed in ci-summary's needs.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Status:CANONICAL header <-> canonical_sources.yaml registry agree (report-only)
+        continue-on-error: true
+        run: python3 tools/canon_coverage_check.py --strict --json
+
+  engine-params-roundtrip:
+    name: Engine-Params Round-Trip (oracle → export)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # BLOCKING from day one: deterministic and self-consistent (no external pins).
+    # engine/engine_params/combat_engine_v1.json is GENERATED from the canonical
+    # combat oracle (config.py, ED-900/904). If config.py changes, regenerate with
+    # tools/export_engine_params.py and commit both together — the port regenerates
+    # from the export and never hand-edits (ED-1050 discipline; ED-1052 typed-params seed).
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Committed JSON matches config.py
+        run: python3 tools/export_engine_params.py --check
+
+  module-shape-check:
+    name: Module Shape / Container Hygiene (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only first (names-drift graduation lane): flags cross-container reach-ins in
+    # runtime code — sys.path hacks into tests/ trees and tests-package imports (the ED-1085
+    # failure class, holonic doctrine ED-1083 §3). Flip to blocking after a green baseline
+    # cycle. INFO tier surfaces untagged module-scope constants (fabrication gate owns
+    # constant-value provenance; this only lists drift candidates).
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No container reach-ins in engine/sim runtime code
+        run: python3 tools/ci_module_shape_check.py
+
   sim-fabrication-check:
     name: Sim Anti-Fabrication
     runs-on: ubuntu-latest
@@ -286,6 +486,10 @@ jobs:
         run: pip install pyyaml
       - run: python3 tools/validate_ed_citations.py
 
+  # NOTE: tools/dashboard_data.py (the GitHub Pages dashboard's CI-health widget)
+  # reads this workflow's job ids by name — specifically unit-tests, sim-regression,
+  # and ci-summary below. If any of the three is renamed, update dashboard_data.py's
+  # job-id lookup in the same change (see its own matching cross-reference comment).
   unit-tests:
     name: Validator Unit Tests
     runs-on: ubuntu-latest
@@ -301,6 +505,9 @@ jobs:
       - name: Install test deps
         run: pip install pyyaml pytest
       - run: python -m pytest tests/valoria -q
+      # tests/contracts (the contract_adjudicator's own suite) was orphaned from CI
+      # until 2026-07-07 (unaddressed-areas audit, ED-IN-0017) — run it here too.
+      - run: python -m pytest tests/contracts -q
 
   sim-regression:
     name: Sim Reference Regression
@@ -321,6 +528,55 @@ jobs:
       # degenerate-balance regression could land unflagged. ~20s.
       - run: python -m pytest sim/tests -q
 
+  audit-registry-check:
+    name: Audit Registry Freshness (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 tools/ci_audit_registry_check.py
+      # Report-only (always exits 0) — deliberately excluded from ci-summary's
+      # needs: below, same as the other warn-tier gates (supersession-check,
+      # names-drift, currency-consistency, etc.). See the check's own module
+      # docstring; feeds tools/dashboard_data.py's audit-verdict table, not a
+      # merge gate.
+
+  wiring-map-check:
+    name: Wiring Manifest Coverage (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only (ED-IN-0074 follow-up): validates references/wiring_manifest.yaml — the
+    # data source behind the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/
+    # wiring_map.html). Asserts every module:/adapter: tag resolves in its live registry
+    # (references/module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, and
+    # valid build/godot vocab — so a module rename or a moved adapter is a caught error, not
+    # silent drift in the map. Currently GREEN. Wired report-only (continue-on-error) because
+    # the manifest is analysis-derived, not ratified canon: a legitimate rename in
+    # module_contracts.yaml shouldn't block an unrelated PR — it surfaces the drift loudly and
+    # the map/manifest get re-synced. Also runs locally via valoria_local.py --staged
+    # (report-only). Flip to blocking (drop continue-on-error, add to ci-summary needs) once
+    # the manifest ratifies into canon. Deliberately not in ci-summary's needs, matching the
+    # other report-only gates.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Every wiring-manifest tag resolves; coverage + vocab valid (report-only)
+        run: python3 tools/wiring_map_check.py --check
+
   integrity:
     name: Repository Integrity
     runs-on: ubuntu-latest
@@ -335,17 +591,21 @@ jobs:
           python-version: '3.11'
       # ED-1053: these three now read the LOCAL WORKING TREE (no PAT, no network) —
       # they validate the checkout under test, not remote main.
+      # Broken dependency check also runs check_ci_registry_coverage() (ED-IN-0033,
+      # Phase 2 item 11): cross-checks references/ci_checks_registry.yaml's path/
+      # ci_job/paired_hook fields against the working tree, this workflow's job ids,
+      # and valoria_hooks.py — folded into this existing step/script rather than a
+      # new job, same defect class as the other checks it sits next to.
       - name: Broken dependency check
         run: python3 tools/broken_dependency_checker.py
       - name: Patch propagation check
         run: python3 tools/patch_propagation_checker.py
-      # Report-only: freshness now compares each canonical doc's working-tree git blob
-      # SHA to its canonical_sha__ pin. It flags pre-existing pin drift (~12 stale pins,
-      # the canonical_sha content work — roadmap K-2 / LB-6) — real debt, not this
-      # change's scope. Drop continue-on-error once those pins are refreshed
-      # (python3 tools/freshness_gate.py --update). See HANDOFF.md.
-      - name: Freshness gate check (report-only)
-        continue-on-error: true
+      # BLOCKING since 2026-07-01 (LB-23 residual closed, month-overview consolidation):
+      # the ~12 stale pins were refreshed via `freshness_gate.py --update` after the
+      # consolidation's doc edits, so every canonical_sha__ pin matches its working-tree
+      # blob. If you edit a pinned doc, refresh its pin in the same commit (the pre-commit
+      # co-file rule prompts this; bulk refresh: python3 tools/freshness_gate.py --update).
+      - name: Freshness gate check
         run: python3 tools/freshness_gate.py
       - name: Upload failure report on error
         if: failure()
@@ -389,6 +649,7 @@ jobs:
       - editorial-check
       - naming-check
       - names-consistency
+      - engine-params-roundtrip
       - sim-fabrication-check
       - vetting-check
       - unit-tests

@@ -65,11 +65,11 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 | Max Wounds | `Max Wounds = min(floor(Endurance / 2) + 1, 3)` — capped at 3 (PP-717) |
 | Wound Interval | `WI = round(Endurance + 4 + 0.4 × Spirit)` — Spirit adds a low-weight, uniformity-reducing term (D-A, ED-1021). At average Spirit 3, `WI = round(End + 5.2)`. |
 | Formula | `Health (full) = round(WI × (Max Wounds + 1) + 0.25 × Strength × Endurance)` — the Strength term (very low weight, proportional to Endurance) adds a survivability buffer that reduces uniformity (D-A, ED-1021). At average Strength 4. |
-| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. **Felled (incapacitated) at Health depletion (cumulative damage ≥ Health)** (D-A, ED-1021); the Strength buffer makes this slightly beyond MW+1 wounds, so Strength buys survivability. Coincides with the legacy 'MW+1 wounds = 0 Health' rule when the Strength buffer is zero. The wound counter (driving the −1D/wound penalty) still caps at MW+1. |
+| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. **Felled (incapacitated) at Health depletion (cumulative damage ≥ Health)** (D-A, ED-1021); the Strength buffer makes this slightly beyond MW+1 wounds, so Strength buys survivability. Coincides with the legacy 'MW+1 wounds = 0 Health' rule when the Strength buffer is zero. The wound counter (driving the wound-Ob penalty — a fractional Ob per wound, ED-PC-0005 / ED-1041) still caps at MW+1. |
 | Damage > WI in one hit | Multiple wounds applied simultaneously (each WI of damage = +1 wound counter). |
 | Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest. |
 | Equipment | ~~Adds flat Health (+4 leather, +6 chain, +8 plate)~~ - **STRUCK 2026-06-05 (Jordan ratified): armour grants damage reduction only (DR/Resist; engine core.py RESIST), NOT flat Health - the engine WoundTracker takes no equipment_health**. Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
-| Wound penalty | −1D to ALL Pools (Combat, Thread — Leap, Weaving, Pulling, Mending, FR — Hybrid mass-battle Command). Universal rule. **No Ob penalty from wounds, ever.** Cumulative; capped by per-Pool floor (Combat Pool floor 5, Thread Pool floor 5 per threadwork §pool-floor). |
+| Wound penalty | **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). **Combat:** the ED-1041 bilateral wound-Ob channel — +0.15 Ob attacking / +0.25 Ob defending per wound (`config.py` WOUND_ATK_OB/WOUND_DEF_OB; live in `systems.py`). **Thread (Leap/Weaving/Pulling/Mending/FR), fieldwork (Endurance-exploration, Surveil), mass-battle Command (CF wound):** **+0.15 Ob per wound** (ED-PC-0006, resolved 2026-07-08 — reuses ED-1041's combat "attacking" magnitude, since all three are active-roller checks with no bilateral attacker/defender split). Cumulative. |
 
 Per-Endurance reference table:
 
@@ -89,7 +89,7 @@ Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Heal
 
 **Max Wounds cap (PP-717).** Simulation testing (v22–v24, 26 tests, 6 iteration rounds) found that the uncapped MW formula produces super-linear Health scaling — End 6 at 60 HP is 50% more than End 4 at 40 HP, making Endurance the dominant stat investment at all armour tiers (69–82% win rate for End-6 builds). Capping MW at 3 reduces End 6 to 48 HP (20% over End 4), preserves the WI × (MW+1) wound structure, and leaves End 1–5 unchanged. Sim-validated: top build drops from 69% to ~62% unarmoured (under 65% threshold). Historical precedent: plate armour wearers (high-End builds) were not invulnerable — exhaustion and mobility penalties limited their advantage.
 
-**Wound penalty universality.** Prior canon (combat_v30 §thread, threadwork_v30 §2.3, §3, §5; params/combat.md §thread; params/mass_combat §CF wound) variously specified "+1 Ob per Wound" for Thread operations, mass-battle Command checks, and CF Zoom-In tactics. PP-716 unifies all wound penalties as −1D to the relevant Pool. The Ob channel is reserved for non-wound mechanics (Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob).
+**Wound penalty universality.** ~~PP-716 unified all wound penalties as −1D to the relevant Pool.~~ **SUPERSEDED — Jordan ruling 2026-07-08 (ED-PC-0005): wounds NEVER impose a −1D pool cut; each wound adds a fractional Ob to the roll.** Combat implements this via the ED-1041 bilateral wound-Ob channel (+0.15 Ob attacking / +0.25 defending per wound). The prior "+1 Ob per Wound" framing (combat_v30 §thread, threadwork_v30 §2.3/§3/§5, params/combat.md §thread, params/mass_combat §CF wound) that PP-716 had unified away is thus re-adopted in **fractional, cumulative** form — **resolved 2026-07-08 (ED-PC-0006): +0.15 Ob per wound** for Thread operations, fieldwork (Endurance-exploration/Surveil), and mass-battle Command (CF wound) — the combat "attacking" magnitude, reused because all three are active-roller checks with no bilateral attacker/defender split (unlike combat, which also has a passive-defence +0.25 term with no analog here). (This does NOT touch the non-wound Ob channels — Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob.)
 
 ### 4.2 Stamina (action economy resource)
 
@@ -212,7 +212,7 @@ These three character-mechanics are distinct and operate at different scales:
 
 | Mechanic | Scale | Function | Persistence |
 |---|---|---|---|
-| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; tracked on Piety Track | Lifetime; shifts only through Scar accumulation or major narrative events |
+| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; per-Conviction Scar tracking per `conviction_taxonomy_v30.md` (the former "Piety Track" label for this is retired — see §14.2; not to be confused with the **Truth** axis) | Lifetime; shifts only through Scar accumulation or major narrative events |
 | **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |
 | **Inspiration** (this section) | Emotional/ideological investment | Specific focus that grants +1D / Ob −1 when actively engaged | Persistent until focus lost; modifiable via play |
 
@@ -437,7 +437,7 @@ Outcomes propagate at different speeds depending on which engine layer absorbs t
 
 | Timescale | Propagating outcome | Owner layer |
 |---|---|---|
-| Per-action | Wound penalty to next-round Pool (combat); Rattled to next exchange (contest, post-PP-716 −1D); Thread Fatigue accumulation during contact session | Pool |
+| Per-action | Wound penalty as a fractional Ob on the next-round roll (combat, ED-1041 +0.15/+0.25 per wound; ED-PC-0005); Rattled to next exchange (contest); Thread Fatigue accumulation during contact session | Pool / Ob |
 | Per-scene | Composure/Concentration depletion; Saturation Counter resets between battle turns | Derived values |
 | Per-session | Momentum reset; Inspiration scene engagement; wound clearance at session end | Tracks, Momentum |
 | Per-season | Disposition shifts → Reputation income; faction stat changes from territory transfers; PT integration | Faction-scale derived |
@@ -512,13 +512,20 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 ## §13 — What Does NOT Change
 
 - Dice engine: d10, TN 6/7/8, integer pools, integer Ob, degree table
-- Combat Pool: (Agi × 2) + History + 3, split offense/defense
-- Wound Interval: End + 6
-- Wound penalty: −1D per wound (cumulative)
+- Combat Pool: **CORRECTED 2026-07-08 (ED-IN-0029 docket, OPT-AV-7)** — this row stated the STRUCK
+  (Agi × 2) + History + 3 form as unchanged, contradicting this same document's own §14.4 STRUCK
+  notice a few sections below (exactly the re-transcription drift the coherence audit found,
+  C3-F10). Corrected to a pointer, not a restated number, so this note cannot go stale again:
+  **the unchanged thing is the offense/defense split; for the current formula see §14.4 below
+  (single source; do not restate the value here).**
+- Wound Interval: **CORRECTED 2026-07-08 (same basis)** — was a restated flat `End + 6` (the
+  pre-ED-1021 value). **See §4.1 above for the current formula (single source; do not restate the
+  value here).**
+- Wound penalty: fractional Ob per wound (cumulative; ED-PC-0005 — combat +0.15/+0.25 per ED-1041; non-combat (Thread/fieldwork/mass-battle Command) +0.15 per ED-PC-0006, resolved 2026-07-08 — supersedes PP-716's −1D)
 - DR / armor damage reduction tables
 - All faction stat → dice pool relationships
 - All mass combat formulas (Pool, H, damage per success)
-- Coherence (10→0 countdown), Certainty (0–5), Momentum (0–4)
+- Coherence (10→0 countdown), Truth (0–5), Momentum (0–4)
 - Social contest: Argue pools, genre/orientation, Persuasion Track, interaction types
 - Thread operations: Leap procedure, operation types, co-movement, Ob values
 - Disposition Track, Renown Track, Standing
@@ -558,12 +565,13 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Track | Range | Direction | Owner | Notes |
 |-------|-------|-----------|-------|-------|
 | Disposition | −5 to +5 | Oscillating | Relational (per NPC) | Flat; Bonds does NOT cap (ED-912) |
-| Piety Track | 0–10 | Oscillating | Per character | Personal religious standing |
-| Certainty | 0–5 | Drifts down with Thread exposure | Per character | Cosmological worldview |
+| Truth | 0–5 | Oscillating (drifts toward 0 with Thread exposure) | Per character | Metaphysical stance: Solmund orthodoxy (5, *Himmelenger pole*) ↔ Thread-truth acceptance (0, *Edeyja pole*). **Consolidates the former Certainty track + the character "Piety Track" / religious-standing meter** (ED-IN-0075). Player-facing as qualitative bands (`engine/params/core.md` §Truth Track); the number is engine-internal, never shown to players. |
 | Coherence | 0–10 | Monotonic drain | Per character | Personal rendering legibility — moved from "Derived Scores" per F7 |
 | Thread Sensitivity (TS) | 0–N | Grows | Per character | Cumulative perceptual depth |
 | Renown | varies | Grows | Per character | Reputation in narrow domain |
 | Standing | varies | Oscillating | Per character | Social class indicator |
+
+> *The former character **"Piety Track"** name is retired (ED-IN-0075): its metaphysical-stance / religious-standing role folds into **Truth** (above); the moral value-frame that name also labelled is the separate **13-Conviction** system (`designs/personal/conviction_taxonomy_v30.md`, per-Conviction Scar tracking), which is unchanged. The territory-scale **Piety (PT)** — Church-seizure progress — is a distinct stat and keeps its name.*
 
 ### §14.3 Clocks — world/scene/campaign progress, mostly monotonic
 
@@ -585,8 +593,8 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Argue Pool | `(Primary × 2) + History + 3 + style` | 5–18D | Social Contest |
 | Thread Pool | `(Spirit × 2) + History + TPS`, min 5 | 5–17D+ | Thread Operations |
 | Fieldwork Pool | `(Primary × 2) + History + 3` | 5–17D | Fieldwork |
-| Knot Pool | `(Bonds × 2) + 3` | 5–17D | Knot Formation |
-| Mass Combat Pool | `min(Size, Command) + Command` | 2–14D | Mass Combat (unit) |
+| Knot Pool | `(Spirit × 2) + History(Relevant) + 3` | 5–17D | Knot Formation |
+| Mass Combat Pool | `min(Size, Command) + Command` — the off-path model the engine byte-reproduces at `COMMAND_SIGMA_ENABLED=0`. **CAVEAT ADDED 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): SUPERSEDED as the engine default (ED-899/ED-1013) — this row was the one uncaveated carrier of the legacy formula. For the live default, see `params/mass_combat.md`'s own ED-899 supersession banner (single source; not restated here to avoid a second copy going stale).** | 2–14D | Mass Combat (unit) |
 | Faction Domain Pool | bare faction stat | 1–7D | Faction action |
 
 ### §14.5 Scale-pool relationship — player-facing note (V-1, audit 2026-05-15)

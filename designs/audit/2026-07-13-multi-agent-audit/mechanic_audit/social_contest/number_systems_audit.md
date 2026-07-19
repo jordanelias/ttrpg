@@ -1,0 +1,39 @@
+# Social Contest — Mode B: Number System Coherence
+
+**Audit date:** 2026-07-13
+**Target:** `designs/scene/social_contest_v30.md` (+ `_index`/`_infill`), `params/contest.md`
+
+| System | Range | Scale Basis | Analogous Systems | Inconsistency |
+|---|---|---|---|---|
+| Attributes (Cha, Cog, Att, Foc, Spi, etc.) | 1–7 (inferred from Concentration's stated 5–35 range = (3×Foc)+(2×Spi) at Foc/Spi ∈ [1,7]; confirmed by Charisma-modifier bands topping out at Cha 6–7) | Core-engine attribute scale | Corpus-wide attribute scale | None — internally consistent within this doc |
+| Argue Pool | Variable, floor ~5 (Attribute 1×2 + History-bonus-min 3) | (Primary Attribute × 2) + History bonus | Combat Pool `max(5, History + 6)`, Agility-independent (§8 L504) | Explicitly flagged in-doc as a "comparison column, not a shared formula" — the two pools no longer share a construction pattern post-ED-1084/ED-901 (combat re-ratified Agility-independent). **No action — already tracked** (historical-analogy note already in-doc, `designs/scene/social_contest_v30.md` §3 L132–137; kernel-level formula fork is `ED-SC-0004`) |
+| Persuasion Track | 0–10, Decisive at ≥7/≤3, Total Victory at ≥9/≤1, Compromise 4–6 | Bespoke contest merits-clock | BG Vote Persuasion Track (§10, same 0–10/7/3 bands, reused directly — consistent) | None — the BG-mode reuse of the same 0–10 scale and thresholds is a genuine unification, not a collision |
+| Face (Face_max / Face_current) | Face_max 3–21 (Cha×3, build-time ceiling); Face_current 0–Face_max (derived from underlying kernel Standing) | CR3/ED-1056 combo formula | Retired "Composure" (Cha×3, same magnitude, scoped rename only) | Two representations of "Face" co-exist by design (a ceiling and a position-within-ceiling) — this is a resolved, RATIFIED scale-binding (Gate A, ED-1056), not an open inconsistency. **No action — already resolved** |
+| Standing (kernel, contest-local ethos) | 0–10, START 5, ethos-built | `sim/personal/contest/primitives.py` | (1) BG faction-level "Standing" track; (2) `faction_politics_v30.md` rank-ladder Standing 0–7 (Standing 0–7, with a documented −1 "Dismissed-with-Dishonor" floor per §1.4 L77); (3) social_contest_v30 §7.2 Succession Contest's own "Standing ≥ 5 in the affected faction" eligibility gate | **Three-way homonym, not two.** The existing ledger entry `ED-SC-0014` (RATIFIED-but-execution-deferred) already names a 0–10-vs-0–5 collision between "BG faction track" and "contest kernel," flags a 4th-entry addition to `name_collision_database.yaml`, and requires FA co-sign. This audit's read of the working tree finds the *contest kernel's own* Standing is 0–10 (not 0–5 — `social_contest_v30.md` §8 L255 "Standing is the unchanged kernel 0–10 ethos-built value"), which doesn't match ED-SC-0014's "0-5 (contest kernel)" description verbatim — worth a citation-precision check when FA/SC execute the rename, but not a new collision. Separately, `faction_politics_v30.md`'s rank-ladder Standing (0–7, institutional/political rank) is a **third, distinct scale** sharing the same bare name, and `social_contest_v30.md` §7.2 (Succession Contest, "Standing ≥ 5 in the affected faction") is a concrete live consumer of that third scale sitting inside the very doc under audit. | **No action — already tracked** (`ED-SC-0014`, decision-ratified/execution-deferred, FA co-sign required); flagging the §7.2 usage and the third rank-ladder scale as additional evidence for whoever executes that rename, not as a new finding |
+| Charisma modifier | 0–6 | max(0, floor((Cha−3)÷2))×3 | Focus defence (same ×3 scaling pattern) | Deliberately unified ×3 scaling per ED-891 — consistent | No action |
+| Focus defence | 0–9 | floor(Foc÷2)×3 | Charisma modifier | Same as above | No action |
+| Concentration | 5–35 | (3×Focus)+(2×Spirit) | — | None | No action |
+| Rattled marks | 0–2 (2 = socially incapacitated) | Threshold-and-mark, unbounded accumulation in theory but gameplay-capped at 2 by the incapacitation rule | Combat Wound levels (also escalating penalty per mark, though combat channels via History/Ob per the corpus's channel-reservation discipline while contest channels via Pool per ED-892) | Different channel (Pool vs the literal wording of core-principle #6, "+1 Ob per wound") — this is a corpus-wide post-PP-716 shift (all wound-analog penalties flipped to −1D Pool), not contest-specific. See core_principles_audit.md P6 | No action — corpus-wide precedent (PP-716) |
+| Doubt Marker | Binary (present/absent), single-slot ("only one active at a time... new replaces old") | Bespoke | Combat has no direct analogue (closest is a debuff-token pattern) | None structural | No action |
+| Recall / Corroborate / Prep / Findings bonus dice | +2D / +1D / +1D / up to +2D respectively, **no combined cap** (doc-math reachable: +8D in a Grand Contest Exchange 1) vs the +2D genre/audience cap | Ad hoc per-source bonus stacking | The +2D genre+audience cap on the *other* non-attribute bonus class | **Redundant/uncapped lever relative to its sibling class** — flagged and partially resolved (`ED-SC-0012`: "whether to cap" settled → adopt a cap; exact numeric ceiling still open) | No action — already tracked, `ED-SC-0005` (P0, needs_jordan, cap VALUE only) |
+| Evidence Track (fieldwork Findings feed) | Implied 0–3+ (per §7.3.2 "Evidence Track reaches 3") | `fieldwork_v30.md` | Contest's own citation bonus (Findings, up to +2D) | Cross-system reuse is coherent (Evidence Track lives in fieldwork, consumed here as a citation source) — no scale mismatch found | No action |
+| Obligation duration | 2 seasons (Formal) / 4 seasons or condition (Grand) / 2 seasons (Royal) / "until formally revoked" (Church) | Per-proceeding-type table, §6.1 | Wager Obligation condition timeframes (player/GM-set, verifiable) | Mixed fixed-duration and open-condition types coexist by design (table explicitly enumerates both shapes) — not a collision, a deliberate per-proceeding-type variance | No action |
+| CI (Church Influence, referenced via CI<55/CI≥55/CI≥40/CI≥80 gates in §7.1/§7.3/§10.1) | Not defined in this doc — consumed as an external 0–100-ish scale (band language "CI 55 = Church Prominent milestone" implies a percentage-like range) | `clock_registry_v30.md` (per CURRENT.md's Clocks & tracks row) | — | Out of this doc's authoring scope; social_contest correctly treats CI as an imported external track rather than redefining it | No action |
+| "Piety Track" (referenced transitively via `scale_transitions_v30.md`'s Domain-Echo composition, §6 L295–300) | Two referents across three docs: the 0–10 debate tracker (glossary/`conviction_track_v1.md`) vs the per-territory BG stat (`params/bg/core.md`) | — | — | **No action — already tracked**, `ED-SC-0003` (P0 docket, P2, needs_jordan, open) |
+
+## Redundant difficulty levers (TN × Ob interaction)
+
+Reviewed for the pattern the skill flags explicitly (TN × Ob double-dipping): social_contest keeps a
+clean separation — TN is fixed per roll-type (Argue TN 7 standard / 6 Controlled / 8 Desperate per core
+engine; Appraise TN 7; Pre-Contest Prep TN 7, TN 8 if rushed), and Ob is the sole situational-difficulty
+lever (Appraise Ob = opponent Cha÷2; asymmetric-proceeding halved resistance is a Track-side modifier,
+not a second Ob stack on the same roll). No roll in this doc stacks both a TN shift and an Ob shift for
+the same situational cause. **No action — working as intended.**
+
+## Proposed unifications (non-blocking, Foundations-compatible)
+
+- The Argue-pool "comparison column, not a shared formula" note (already in-doc) could be tightened once
+  `ED-SC-0004`'s kernel-formula fork resolves — at that point the doc could either drop the
+  historical-analogy paragraph entirely or make explicit that no unification with combat's pool formula
+  is intended going forward. Purely editorial; no mechanical change implied. **No action — deferred to
+  ED-SC-0004's resolution, not a separate finding.**

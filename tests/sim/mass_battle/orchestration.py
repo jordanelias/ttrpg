@@ -472,14 +472,115 @@ import os
 PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
+# [partition-invariance fix, 2026-07-08, Jordan-ruled "genuine defect -- fix it"] renormalizes a
+# convergence group -- >=2 of ONE side's atoms simultaneously, independently fully engaging the
+# SAME single opposing atom (e.g. a pinning body plus wings all converging on one Line defender)
+# -- back down to what ONE merged atom of the group's combined troops would contribute. Toggle OFF
+# reproduces the pre-fix (multiplicative-per-attacker) behaviour byte-exact, for ablation/compare.
+PC_CONVERGENCE_NORM = (os.environ.get("PC_CONVERGENCE_NORM", "1") == "1")
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
+
+def _convergence_scale(unit_a, unit_b, pairs):
+    """[partition-invariance fix] `subunit_combat_pool` is, by Jordan's own DG-3 characterization,
+    a per-atom COMBAT SCORE (Command + per-subunit discipline/cohesion/stamina) rather than a
+    per-troop rate -- deliberately (ED-899: "base driven SOLELY by Command"). `pair_pool_contribution`
+    correctly renormalizes when ONE atom is itself split across MULTIPLE enemies (an atom fighting on
+    two fronts gets its OWN score divided between them, by troop share). It does nothing for the
+    mirror case: when SEVERAL of one side's atoms each independently, fully engage the SAME single
+    opposing atom, each gets its own near-full base_pool with no reduction -- so splitting a fixed
+    total force into more simultaneously-converging atoms multiplies total dice against that one
+    shared target, purely from the split, not from any change in troops or quality. This is exactly
+    the mechanism the 2026-07-05 Cannae follow-up (`designs/proposals/mass_battle_fighting_withdrawal_v1.md`
+    §7) measured and flagged as a genuinely undecided architecture question; Jordan ruled it a
+    genuine defect (2026-07-08) rather than an intended encirclement bonus.
+
+    For every group of >=2 atoms on one side sharing one target atom on the other, this computes
+    the troop-weighted-mean base score across the group (`merged_base`) and the group's combined
+    own-troop count (`merged_troops`) and combined engaged troops (`total_wt`), then derives what
+    ONE merged atom of that combined size would contribute: `(merged_base / merged_troops) *
+    total_wt`. Dividing that by the naive (uncorrected) group sum gives a single scale factor
+    applied uniformly to every member's own pair contribution -- preserving each member's relative
+    share while capping the group's total at the merged-atom figure. A group of size 1 (the
+    overwhelming majority of pairs -- every single-subunit-vs-single-subunit gauge row has no other
+    shape) is mathematically a no-op (scale 1.0, verified: merged/naive collapse to the same ratio
+    algebraically) and is skipped outright below for clarity/speed. Dead atoms (routed/broken,
+    base_pool==0 by `subunit_combat_pool`'s own gate) are excluded from a group's aggregate --
+    they contribute 0 to `merged_base` already downstream (`a_dead`/`b_dead` zero their net outright),
+    so counting their troops in `merged_troops` would only dilute their live siblings' credit for no
+    reason.
+
+    Returns (a_scale, b_scale): dicts keyed by (id(atom_a), id(atom_b)) -> float. Missing key means
+    1.0 (no convergence for that pair on that side). Only meaningful for POOL_VARIANT=="C-ii" (the
+    live variant) -- callers gate application accordingly; this function itself is pure dict/float
+    math, safe to compute unconditionally."""
+    def _dead(unit, atom):
+        return unit.routed or unit.broken or atom.routed or atom.broken
+
+    def _group_and_scale(key_of, attacker_of, attacker_unit, cells_of, out):
+        """attacker_of(p)/cells_of(p) select the CONVERGING side's atom/contact-cells for pair p;
+        key_of(p) selects the shared TARGET atom the group is defined by. attacker_unit is that
+        side's Unit (fixed for the whole call -- unit_a for the a_scale pass, unit_b for b_scale)."""
+        groups = {}
+        for p in pairs:
+            groups.setdefault(id(key_of(p)), []).append(p)
+        for group in groups.values():
+            if len(group) < 2:
+                continue
+            infos = []
+            for p in group:
+                atk = attacker_of(p)
+                if _dead(attacker_unit, atk):
+                    continue
+                base = subunit_combat_pool(attacker_unit, atk)
+                wt = _pair_engaged_troops(atk, cells_of(p))
+                if base <= 0 or wt <= 0:
+                    continue
+                infos.append((p, atk, base, wt))
+            if len(infos) < 2:
+                continue
+            total_wt = sum(i[3] for i in infos)
+            merged_troops = sum(i[1].cur_troops for i in infos)
+            if total_wt <= 0 or merged_troops <= 0:
+                continue
+            merged_base = sum(i[2] * i[3] for i in infos) / total_wt
+            corrected_total = (merged_base / merged_troops) * total_wt
+            naive_total = sum((i[2] / i[1].cur_troops) * i[3] for i in infos)
+            if naive_total <= 0:
+                continue
+            factor = corrected_total / naive_total
+            for p, atk, base, wt in infos:
+                out[(id(p["atom_a"]), id(p["atom_b"]))] = factor
+
+    a_scale, b_scale = {}, {}
+    # Group by shared B-side target (>=2 atom_a's converging on one atom_b) -> corrects a_pool_raw
+    _group_and_scale(key_of=lambda p: p["atom_b"], attacker_of=lambda p: p["atom_a"],
+                      attacker_unit=unit_a, cells_of=lambda p: p["a_cells"], out=a_scale)
+    # Group by shared A-side target (>=2 atom_b's converging on one atom_a) -> corrects b_pool_raw
+    _group_and_scale(key_of=lambda p: p["atom_a"], attacker_of=lambda p: p["atom_b"],
+                      attacker_unit=unit_b, cells_of=lambda p: p["b_cells"], out=b_scale)
+    return a_scale, b_scale
+
+
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
-    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
+    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
+    t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
+    # [partition-invariance fix] conv_scale is precomputed ONCE per TICK on the FULL tick's pairs
+    # by the caller (run_battle, before any CASCADING_ENABLED sub-phase split -- see
+    # resolve_engagements_cascading) so a convergence group spanning multiple cascade sub-phases is
+    # still corrected as one group. A direct caller that never precomputes it (tests, or the
+    # non-cascading path where `pairs` already IS the full tick) gets it computed here instead --
+    # identical math either way, since resolve_engagements_cascading passes the SAME `pairs` this
+    # function would otherwise recompute from.
+    if conv_scale is None:
+        a_conv_scale, b_conv_scale = _convergence_scale(unit_a, unit_b, pairs)
+    else:
+        a_conv_scale, b_conv_scale = conv_scale
     # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
     # wheel as a body to face a SEPARATE detachment on its flank/rear -- so that detachment's hit lands
     # with the zone penalty (the envelopment of a fixed unit). "Fixed" is emergent from frontal contact
@@ -504,9 +605,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         a_base = subunit_combat_pool(unit_a, atom_a)   # per-subunit pool (shared command; per-subunit discipline+cohesion)
         b_base = subunit_combat_pool(unit_b, atom_b)
 
-        # F-i: support-stack-adjusted engage_frac
-        a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
-        b_engage_frac = support_engage_frac(atom_b, p["b_cells"])
+        # F-i: support-stack-adjusted engage_frac -- only computed for the variants that actually
+        # use it (baseline/C-i). [ED-MB-0002 perf fix] C-ii's bottom-up pair_pool_contribution()
+        # does its own abs->orig cell-coordinate conversion (cells_to_orig_coords) internally;
+        # unconditionally also calling support_engage_frac here duplicated that same conversion for
+        # a value C-ii never reads, roughly doubling per-pair cost for no reason (measured: a
+        # multi-subunit field-path battery went from ~seconds to ~3 minutes before this fix).
+        if POOL_VARIANT != "C-ii":
+            a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
+            b_engage_frac = support_engage_frac(atom_b, p["b_cells"])
 
         if POOL_VARIANT == "baseline":
             a_pool_raw = a_base * a_troops_frac * a_engage_frac
@@ -515,15 +622,73 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             a_pool_raw = a_base * a_engage_frac
             b_pool_raw = b_base * b_engage_frac
         elif POOL_VARIANT == "C-ii":
-            a_pool_raw = max(a_base * a_engage_frac * 0.5,
-                             a_base * a_troops_frac * a_engage_frac)
-            b_pool_raw = max(b_base * b_engage_frac * 0.5,
-                             b_base * b_troops_frac * b_engage_frac)
+            # [DG-3, ED-MB-0002, 2026-07-04 Jordan ruling: "Combat pool for a subunit is
+            # misleading. It should be based upon combat pool per cell as per troop type/quality/
+            # density, and the overall combat pool for a subunit is actually just a combat score
+            # for the subunit. This is bottom-up, and it solves issues with multiple engagements."]
+            # `a_base`/`b_base` (subunit_combat_pool) stay exactly what Jordan calls them: the
+            # subunit's aggregate COMBAT SCORE -- unchanged formula, not touched here.
+            # `pair_pool_contribution` (core/exchange.py) is the bottom-up piece: it redistributes
+            # that score across THIS specific pair by actual troop density in the cells engaged with
+            # THIS enemy (`p["a_cells"]`/`p["b_cells"]`, already pair-scoped by find_contacts), plus
+            # depth-weighted support from ranks behind — replacing a flat "divide by how many
+            # simultaneous pairs" approximation (an earlier version of this fix used exactly that,
+            # via eng_counts/count_engagements_per_atom; corrected same-session per Jordan's
+            # feedback that it was still top-down, not bottom-up) with an exact per-pair troop-
+            # weighted split.
+            #
+            # [2026-07-05 fix, mass-battle Cannae gauge follow-up audit, Jordan-ratified: "Intensive
+            # (per-troop, partition-invariant)"] `a_troops_frac`/`b_troops_frac` was PREVIOUSLY kept
+            # as an outer multiplier here on the theory that it was a separate, pre-existing concern
+            # (dampening a multi-subunit army's shared-Command-driven score). A Fable-5 adversarial
+            # audit found this reasoning didn't hold: `pair_pool_contribution` already normalizes
+            # per-troop internally (`base_pool / atom.cur_troops`), so multiplying `a_base` by
+            # `a_troops_frac` (== atom.troop_count / unit.total_troops()) BEFORE that division makes
+            # the pair's effectiveness scale with the subunit's share of the WHOLE ARMY's troops, not
+            # its own troop type/quality/density -- identical troops fought at 1/3 effectiveness
+            # merely because their army had 3 subunits instead of 1, an army-bookkeeping denominator
+            # Jordan's own DG-3 wording never asked for. Confirmed by direct trace: this was the
+            # dominant reason the H3/H5/H6 gauge rows locked into 100% draws even after DG-3/DG-4
+            # landed. Fixed by dropping the outer multiplier here -- a subunit's combat score is now
+            # partition-invariant (splitting one army into N subunits does not change its total
+            # output), matching the ratified "intensive" reading.
+            a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base)
+            b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base)
+            # [partition-invariance fix, 2026-07-08] The per-pair split above is exact for ONE atom
+            # split across several enemies; it does nothing when several of THIS side's atoms
+            # instead converge on the SAME single opposing atom (a_conv_scale/b_conv_scale key on
+            # (id(atom_a), id(atom_b)), 1.0 -- i.e. absent -- for every non-converging pair, so this
+            # is a no-op for the overwhelming majority of pairs, byte-exact).
+            if PC_CONVERGENCE_NORM:
+                a_pool_raw *= a_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
+                b_pool_raw *= b_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
-        a_pool = max(1, math.floor(a_pool_raw))
-        b_pool = max(1, math.floor(b_pool_raw))
+        # [ED-MB-0002 §2 step 2] Guard against float accumulation error dropping a whole die when
+        # a pool value should land exactly on an integer boundary (e.g. a_pool_raw == 3.0 stored as
+        # 2.9999999999999996). Confirmed to touch all 4 bat.py digest modes, not just field-path --
+        # this variable is shared combat-resolution code, unlike every prior mass-battle fix in this
+        # lane, which lived entirely inside the FIELD_MOVEMENT-gated node path.
+        #
+        # [D3 fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] The `max(1, ...)` floor
+        # below existed to guarantee a live atom always rolls AT LEAST one die -- but it applied
+        # unconditionally, so a ROUTED/BROKEN atom (whose true a_pool_raw/b_pool_raw is exactly 0.0,
+        # from subunit_combat_pool's own `if unit.routed or ... atom.broken: return 0` gate) got
+        # resurrected to pool 1 and kept dealing real damage for many ticks after routing --
+        # contradicts §A.12 ("routing: cannot fight back") and confirmed by direct trace (a routed
+        # subunit dealt ~5-18 casualties/turn for 9 turns while flagged routed=True). `a_pool`/`b_pool`
+        # is forced to exactly 0 here for bookkeeping (trace_event, the ranged//3 and encirclement
+        # adjustments below) -- but see the SECOND part of this fix at `a_net`/`b_net` below:
+        # `roll_pool`/`_sigma_net_boost` BOTH independently re-floor their own `pool` argument to a
+        # minimum of 1 internally (`resolution.py`'s `range(max(1,n))` / `math.sqrt(max(1,pool))`), so
+        # zeroing `a_pool` here ALONE has zero effect on the actual dice/damage outcome -- confirmed by
+        # an adversarial reviewer's revert-and-diff test (byte-identical digest with vs without this
+        # zeroing). The real fix forces `a_net`/`b_net` to 0 directly, downstream of those calls.
+        a_dead = unit_a.routed or unit_a.broken or atom_a.routed or atom_a.broken
+        b_dead = unit_b.routed or unit_b.broken or atom_b.routed or atom_b.broken
+        a_pool = 0 if a_dead else max(1, math.floor(a_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
+        b_pool = 0 if b_dead else max(1, math.floor(b_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
 
         # v11: Per-cell octagon angle — replace centroid-to-centroid with per-cell raw vectors
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]
@@ -707,7 +872,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 if PER_CELL:
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
@@ -717,22 +882,40 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
                         # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
                         _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    # [ED-1091, Jordan-approved 2026-07-02] PC_RECOIL_FRONTAL zone-gates the recoil to the
+                    # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
+                    # (Burkholder 2007), so a flank/rear charge into a braced wall is no longer wrongly
+                    # recoiled (the latent flag mass_battle_gauge_grounding.md §4.3 carried since 2026-06-16;
+                    # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
+                    # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
+                    # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
+                    # [ED-1095, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
+                    # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
+                    # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
+                    # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
+                    # back, so the wall cannot retaliate/recoil it). reach_for is structural only today
+                    # (TROOP_TYPE_REACH is deliberately empty -> everyone is REACH_SHORT -> this half of the
+                    # gate is a no-op until reach assignments are separately ratified).
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _subunit_braced(atom_b):
+                        if (a_mom > b_mom and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
+                                                                     and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                        elif (b_mom > a_mom and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                                and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
+                                                                     and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
@@ -765,6 +948,16 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
             a_net = roll_pool(a_pool)
             b_net = roll_pool(b_pool)
+        # [D3 fix, part 2 -- 2026-07-05 adversarial-review correction] `roll_pool`/`_sigma_net_boost`
+        # BOTH independently floor their own pool argument to a minimum of 1 internally, so zeroing
+        # `a_pool`/`b_pool` above (for a routed/broken atom) has NO effect on `a_net`/`b_net` -- the
+        # dice/sigma-boost math never sees the zero. Force the net directly here instead: a dead atom
+        # always resolves to `compute_degree`'s `net<=0` -> "Failure" -> `DAMAGE_BY_DEGREE["Failure"]`
+        # = 0 damage, closing the gap the first pass of this fix only appeared to close (confirmed by
+        # the reviewer's revert-and-diff test: without this, the digest is byte-identical to no fix
+        # at all).
+        if a_dead: a_net = 0
+        if b_dead: b_net = 0
         a_deg = compute_degree(a_net, max(1, b_net))
         b_deg = compute_degree(b_net, max(1, a_net))
         if LANCHESTER_ENABLED:
@@ -785,7 +978,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     a_deg=a_deg, b_deg=b_deg)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
-def resolve_engagements_cascading(unit_a, unit_b, pairs):
+def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
     [canonical: Jordan handoff §(3)]
 
@@ -793,9 +986,15 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
     one depth group, then rotates engaged cells' facings toward their attacker.
     Later sub-phases see FLANK/REAR angles on already-rotated cells.
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
-    Arrowhead rows are simultaneously adjacent to Line cells."""
+    Arrowhead rows are simultaneously adjacent to Line cells.
+    t: current battle tick, threaded to resolve_engagements for the brace-setup-delay gate. [ED-1095]"""
+    # [partition-invariance fix] Compute the convergence scale ONCE on the FULL tick's pairs, before
+    # any cascading sub-phase split below -- a convergence group (e.g. a pinning body's pair resolves
+    # in an early sub-phase, a wing's pair in a later one) must be seen as a whole to be corrected
+    # correctly; splitting it across sub-phase calls would under-count each sub-phase's group size.
+    conv_scale = _convergence_scale(unit_a, unit_b, pairs)
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -827,7 +1026,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -912,6 +1111,13 @@ def volley_phase(unit_a, unit_b):
         """Pick nearest in-range target atom, roll Power vs TN, return Size loss inflicted.
         Volley loss scales with the TARGET formation's density (_volley_density_mult)."""
         if shooter_atom.unit_type != "ranged":
+            return 0, None, False
+        # [DG-2 §2.3/2.5, Jordan-ruled "build it now" 2026-07-08] "No volleying while yielding" --
+        # a body actively repositioning doesn't also fire, matching the existing 'kite' precedent.
+        # `yield_active` is already melee-only-gated, so this only ever fires for a ranged atom in
+        # the (currently unreachable, by construction) case its unit_type somehow flips mid-battle;
+        # kept for defence-in-depth, not because it's expected to trigger today.
+        if shooter_atom.yield_active:
             return 0, None, False
         target_atoms = target_unit.subunits
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
@@ -1086,9 +1292,16 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                                  + _atom_b.cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
                         _atom_b.halted_cells.add((orig_r, orig_c)); break
-        assign_targets(unit_a, unit_b)
+        # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
+        # target_condition/target_delay_ticks/stance/instructions, so orders must land first. Hoisting
+        # a_cells_set/b_cells_set up here (they were computed just after assign_targets) is a pure,
+        # behavior-preserving reorder: both are recomputed fresh from current cell positions with no
+        # side effects, so moving the computation 3 lines earlier changes nothing else.
         b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
         a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
+        check_orders(unit_a, t, b_cells_set)
+        check_orders(unit_b, t, a_cells_set)
+        assign_targets(unit_a, unit_b)
         # v21: SIMULTANEOUS RESOLUTION — cache all target centroids BEFORE any
         # atom moves. Without this, unit_a advances toward unit_b's pre-move
         # centroid, but unit_b advances toward unit_a's POST-move centroid,
@@ -1099,16 +1312,98 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in unit_a.subunits + unit_b.subunits:
             if atom.target_atom:
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
-        for atom in unit_a.subunits:
-            if atom.target_atom:
-                # per-subunit formation-hold: each subunit advances on its OWN Discipline
-                # (single-subunit inherits -> == unit.discipline -> byte-exact)
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=b_cells_set)
-        for atom in unit_b.subunits:
-            if atom.target_atom:
-                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
-                                   enemy_cells=a_cells_set)
+
+        # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
+        # archers"). A screening subunit (escort_of set) has no enemy target yet, so it was never in
+        # cached_centroids above and the movement gate below (`if atom.target_atom:`) never fired for
+        # it — confirmed dead code in an earlier draft. Two additive fixes, computed here (same
+        # synchronized pre-move point as cached_centroids, preserving the v21 simultaneity discipline):
+        # latch the one-shot engage-on-contact switch now that assign_targets has run (a just-acquired
+        # real target_atom takes over targeting immediately, not one tick late), then give any
+        # still-escorting atom a centroid to advance toward -- the escorted subunit's live centroid
+        # plus escort_offset ROTATED into its current facing frame (not the static spawn-time
+        # advance_dir), so screening survives the escorted unit wheeling/enveloping/sweeping.
+        def _escort_facing(sub):
+            if PC_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
+                fr, fc = sub._node_facing
+            elif sub.cell_facing_vec:
+                _vecs = list(sub.cell_facing_vec.values())
+                fr = sum(v[0] for v in _vecs) / len(_vecs)
+                fc = sum(v[1] for v in _vecs) / len(_vecs)
+            else:
+                fr, fc = sub.advance_dir, 0
+            mag = math.hypot(fr, fc)
+            return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)  # [canonical: epsilon: float magnitude guard]
+
+        for atom in unit_a.subunits + unit_b.subunits:
+            if (atom.escort_of is not None and atom.escort_engage_on_contact
+                    and not atom._escort_engaged and atom.target_atom is not None):
+                atom._escort_engaged = True
+            # NOTE: the escort centroid overrides cached_centroids whenever escorting-and-not-yet-
+            # engaged, regardless of target_atom -- assign_targets' default 'nearest' condition sets
+            # target_atom to SOME enemy unconditionally the instant one exists (it is not gated on
+            # range), so gating this override on "target_atom is None" (an earlier version of this
+            # fix did) left it dead in every ordinary scenario: target_atom becomes non-None almost
+            # immediately, long before real contact, and the escort would silently start chasing the
+            # enemy directly instead of holding its screening position -- confirmed empirically (a
+            # screen with escort_engage_on_contact=False still switched to chasing the enemy on tick
+            # 1). "Screen IS the front line" (the False default) means movement is governed by the
+            # escort relationship until the one-shot latch above actually fires; a caller wanting
+            # real range-gated engagement should set target_condition='in_range:D' on the escorting
+            # subunit (an existing primitive) rather than relying on target_atom's mere presence.
+            if atom.escort_of is not None and not atom._escort_engaged:
+                _esc = atom.escort_of
+                _fr, _fc = _escort_facing(_esc)
+                _ex, _ey = _esc.centroid()
+                _dr, _dc = atom.escort_offset
+                cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
+
+        def _cells_float_of(unit):
+            return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
+
+        # [TOI refactor] b_cells_float/a_cells_float are now consulted by _node_advance ONLY for
+        # truthiness -- a non-empty list signals "defer to the cross-side TOI resolve rather than
+        # commit immediately" (see _node_advance's toi_deferred). The actual cross-side standoff
+        # computation (reach- and facing-asymmetric, exact time-of-impact) now runs once, after both
+        # sides have proposed, in resolve_toi_and_commit below -- replacing the old sequential,
+        # halved-closing-budget anchor pre-cap this comment used to describe (see git history: that
+        # design fixed a real first-mover bias but only approximately, and was retired once the bias's
+        # true fix -- exact per-pair TOI -- was designed properly instead of adopted under time
+        # pressure). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
+        b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
+        a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
+        # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
+        # even with target_atom=None, using the escort centroid computed above. Every existing
+        # scenario's `if atom.target_atom:` case is untouched (escort_of defaults to None).
+        moving_a = [atom for atom in unit_a.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        moving_b = [atom for atom in unit_b.subunits
+                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        for atom in moving_a:
+            # per-subunit formation-hold: each subunit advances on its OWN Discipline
+            # (single-subunit inherits -> == unit.discipline -> byte-exact)
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
+        for atom in moving_b:
+            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+                               enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
+        # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED
+        # (uncapped) end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being
+        # non-empty (b_cells_float/a_cells_float, built above) signals _node_advance to defer rather
+        # than commit. Resolve the cross-side continuous-collision time-of-impact ONCE, across both
+        # sides together (not per-atom, not sequential), and commit final positions now. Replaces the
+        # old per-atom halved-anchor-precap + iterated per-cell pull-back entirely.
+        #
+        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit
+        # with no target yet (a reserve, or gated by target_delay_ticks/target_condition) never called
+        # advance_cells and so has no pending proposal, but its cells are real, occupied positions that
+        # the OTHER side's moving cells must still treat as obstacles -- resolve_toi_and_commit reads
+        # such atoms' current true positions directly (adversarial-review-caught: an earlier version
+        # passed only moving_a/moving_b, silently dropping idle/reserve subunits as obstacles for a
+        # tick, a regression versus the pre-refactor enemy_cells_float, which was always built from
+        # ALL of a unit's subunits unconditionally).
+        if FIELD_MOVEMENT:
+            resolve_toi_and_commit(unit_a.subunits, unit_b.subunits)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
         for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)
@@ -1145,9 +1440,9 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                             cic += len(p.get('b_cells', []))
                     if cic > 0:
                         atom.drain_stamina(cic * STAMINA_DRAIN_PER_CONTACT_CELL)
-        result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
+        result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
-                  else resolve_engagements(unit_a, unit_b, pairs))
+                  else resolve_engagements(unit_a, unit_b, pairs, t=t))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
@@ -1332,11 +1627,48 @@ def reset_morale_between_battles(unit):
 
 
 def reset_positions(unit, shape, anchor_map):
-    """Reset subunit positions for re-engagement after disengagement.
-    Units return to their starting rows for fresh approach."""
+    """Reset subunit positions for re-engagement after disengagement -- LEGACY GRID PATH ONLY.
+    Units return to their starting rows for fresh approach.
+
+    [Fix, 2026-07-02] Each subunit now returns to its OWN spawn column (Subunit._spawn_position,
+    snapshotted once at construction) rather than a single shape-keyed anchor shared by every
+    subunit in the unit. The old behaviour was byte-exact-correct only by coincidence for a
+    single-subunit unit built via build_unit (whose one subunit's spawn position IS exactly
+    anchor_map[(shape,tier)] -- so this change reproduces identical results for every such case,
+    confirmed via bat.py's byte-exact battery, which exercises exactly this path). It was silently
+    WRONG for a multi-subunit army (build_army/build_envelopment/build_refused_flank): resetting
+    EVERY subunit to one shared anchor column collapsed any wide-placed wing/escort back onto the
+    center on every subsequent battle-turn, discovered while dogfooding build_envelopment/
+    build_refused_flank through the multi-turn ('multi'/"resolving mode") path for the first time
+    -- Stage C's own verification only ever exercised kind='single', which never calls this
+    function, so the gap went unexercised until now. `shape`/`anchor_map` stay as parameters (no
+    call-site signature change) and are used only as a defensive fallback for a subunit that
+    somehow lacks a spawn snapshot (should not occur for anything built through __post_init__).
+
+    [Fix, 2026-07-02, movement audit finding 1.1 / ED-1096] Node-path atoms are now explicitly
+    SKIPPED, not silently corrupted. This function writes only starting_position/cell_offsets/
+    cell_offsets_c -- the legacy grid fields -- which _node_cells()/cells() never reads once
+    PC_NODE_COHESION is on (node position lives in _node_pos). The old code wrote these fields
+    unconditionally anyway: a harmless no-op for the node path's OWN rendering, but a landmine for
+    any OTHER code that reads Subunit.starting_position post-construction expecting it to track a
+    node-path atom's live position (it never has) -- most immediately the forthcoming waypoint
+    primitive (fix-plan step 7), which must not inherit a stale "reset to spawn" value. Per
+    Jordan's ruling (2026-07-02, verbatim): "an army only has subunits reset to initial
+    positions... at the start of a new battle. it is nonsensical for them to return to starting
+    positions within the same battle" -- the correct node-path behaviour for a within-battle
+    re-engagement turn is to do NOTHING to position at all, continuing exactly where the subunit
+    currently is. (The separate question of whether/how a subunit can be mid-battle REDIRECTED to
+    a new position or role once already committed -- e.g. disengaging from contact -- is gate 1's
+    Command/Discipline-gated conditional-tactics system, explicitly deferred until
+    envelopment/pincer/wheeling pathing is confirmed working.) Legacy-path atoms are completely
+    unaffected -- this is an additive skip, not a behavior change to the branch that fires."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
-    anchor_col = anchor_map.get((shape, unit.subunits[0].tier), 10)
+    fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
+        if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+            continue
+        spawn = getattr(atom, '_spawn_position', None)
+        anchor_col = spawn[1] if spawn is not None else fallback_col
         atom.starting_position = (start_row, anchor_col)
         atom.cell_offsets = {}
         atom.cell_offsets_c = {}

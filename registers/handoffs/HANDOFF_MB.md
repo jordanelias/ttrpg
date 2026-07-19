@@ -1,0 +1,253 @@
+# Handoff — MB (Mass Battle)
+
+Lane-scoped continuity for the `MB` (mass battle) lane, per the `ED-<LANE>-NNNN` namespace
+(`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
+index; see it for cross-lane/global items.
+
+## Pending
+
+(none beyond the items tracked under Next actions below.)
+
+## Decisions
+
+(none logged yet under this lane split — prior mass-battle decisions predate the lane-tagged
+namespace and are folded into Next actions below, which carries the full narrative.)
+
+## Next actions
+
+- **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59).**
+  Coordinate-field true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
+  (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/
+  `build_refused_flank` Unit-level presets (Stage D, ED-907/908/909) are all merged. **LC-8 executed
+  2026-07-02 (ED-1088):** `Horseshoe`/`RefusedFlank` retired as `Subunit.shape` values per Jordan's
+  go-ahead ("those are emergent outcomes") — only Line/Arrowhead/GappedLine/Column remain valid
+  subunit shapes; envelopment/refused-flank exist only as the Unit-level presets above.
+  `bat.py`'s grid-mode golden digests were deliberately re-baselined (approved behavior change).
+  The workbench (`tests/sim/mass_battle/workbench/`) was extended to visualize the new multi-subunit
+  presets — see `tests/coverage_matrix.md`'s 2026-07-02 entries for what shipped and two real bugs
+  found/fixed along the way (a `reset_positions` multi-subunit collapse bug; a frontend preset-dispatch
+  bug). **Governing plan:** `designs/audit/2026-06-30-massbattle-bottomup/05_redesign_workplan.md` +
+  the session's own staged plan (Stages A–F, not yet promoted into the repo — ask the session for
+  `using-opus-4-8-ultracode-floating-tiger.md` if resuming this thread).
+- **Three Jordan rulings landed 2026-07-02 (all executed same day):**
+  1. **ED-1089** — `FIELD_MOVEMENT=1`/`PC_NODE_COHESION=1` are now the DEFAULTS (Stage A step 7 executed;
+     "yes, field movement is default."); the grid stays the byte-exact oracle via explicit
+     `FIELD_MOVEMENT=0 PC_NODE_COHESION=0` pins (the CI gate was updated from env.pop to explicit '0'
+     pins — load-bearing, see `test_mass_battle_byte_exact.py`), and `bat.py`'s field digests were
+     re-recorded (they had gone stale vs the LC-8 battery).
+  2. **ED-1090** — videogame sub-unit cap is **11** ("subunits can be as high as 11."), lifting the
+     TTRPG hard cap of 3; enforced in `engine.build_army`; open reconciliation flagged: Command clamps
+     1–7, so >7 commanded subunits needs a future Command-exceeding mechanism (subordinate officers?)
+     — future ED.
+  3. **ED-1091** — the charge-recoil now zone-gates to the frontal (GREEN) arc (`PC_RECOIL_FRONTAL`,
+     default ON; historical-validity condition verified against `mass_battle_gauge_grounding.md`
+     §4.3/Burkholder before executing, per Jordan's "c7 if it is historically valid"); gauge row C7
+     can now legitimately add a braced+enveloped variant (grounding doc §4.3/§5.7 still says "flagged,
+     not fixed" — update on the next gauge pass).
+- **Stage E MVP shipped, Stage F investigated (2026-07-02, PRs #62/#64/#65).** Army Configuration Mode
+  (click-to-place deployment) landed as an MVP. Stage F ("Charge/Depth/Equipment Physics") was
+  investigated before writing new physics code (ED-1092): speed-differential punctures and
+  depth-absorption are already DONE; fidelity D1's zone half is done (ED-1091 above), the actor half
+  remains OPEN (no canonical predicate exists for "actor-gate," flagged for Jordan); fidelity D2 was
+  VERIFIED ALREADY CORRECT by direct numeric probe, no code change needed.
+- **Still open:** Stage E's deeper UX beyond the MVP, and the rest of Stage F (actor-gate predicate,
+  `PC_CHARGE_*` derive-not-assert — tracked separately as Track M Stage 5, the engine-wide
+  calibrated-debt retirement sweep).
+- **An orphaned-proposal audit (2026-07-02) also flagged:** `references/
+  mass_battle_redesign_workplan_v1.md` is fully superseded (no banner exists — worth a supersession
+  marker); `proposals/multiunit_envelopment_plan.md`'s cross-**Unit** spatial envelopment
+  ("Path B") is a materially different, still-unbuilt mechanism from the Unit-level `build_envelopment`
+  that landed — don't conflate "Envelopment shipped" with "Path B shipped."
+
+## Catch-up (2026-07-04) — this file fell behind; see root HANDOFF.md for the fuller narrative
+
+This lane file wasn't kept in sync since the entries above (predates ED-MB-0001). Condensed summary of
+what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-battle block and
+`tests/coverage_matrix.md`'s dated entries:
+
+- **T1-T4 charge-recoil ruling (ED-1095)** executed; **movement/pathing audit (ED-1096)** found
+  `envelop`/`sweep`/`wheel`/`kite` only worked on the legacy grid path, unreachable on the live default
+  node path since ED-1089's field-movement flip.
+- **ED-MB-0001 (2026-07-02, PR #66, merged):** the movement/pathing fix-plan executed end-to-end —
+  waypoint primitive gives `_node_advance` real per-tick steering for `envelop`/`sweep`; `PER_CELL`
+  default flipped 0→1 (gate 4). Disclosed, not chased: enabling `PER_CELL`'s fatigue/attrition mechanics
+  made the H3-H6 Cannae-pattern gauge rows collapse (0-13% losses vs. a 45-72% expected band) — landed
+  as a loud `xfail` on `test_envelop_reaches_rear_node`, flagged as the next investigation.
+- **ED-MB-0002 (2026-07-04, PR #73 audit + PR #75 ratification):** a Fable-led Workflow diagnosed the
+  H3-H6 collapse as composition-coupling defects in the pool/morale accounting layer (RC-1), not the
+  "two racing clocks" theory the xfail's own docstring proposed (refuted by gauge row C7). Jordan ruled
+  DG-3 (bottom-up per-cell pool split — corrected mid-session from an initial flat-divide attempt per
+  Jordan's own "per-cell troop density... bottom-up" feedback) and DG-4 (a blend of per-subunit and
+  whole-unit morale, with continuous sibling-pull, wiring already-existing `agg_morale`/`derive_rout`/
+  `cascade_morale_hit` machinery). Both implemented on `claude/mass-battle-cannae-gauge-dg-rulings`; all
+  4 `bat.py` digests re-recorded (expected — touches shared, non-gated combat-resolution code);
+  `tests/valoria` 87 passed/17 skipped/1 xfailed (after an adversarial review found and fixed 4 real
+  bugs: a pool-zeroing bug for continuous-scale subunits; a same-phase-rout-masking ordering bug and a
+  Gauss-Seidel sibling-aggregation bug in the new morale pull, both fixed by snapshotting siblings and
+  running self-erosion last; a dormant `morale: None` footgun in `build_army`). **DG-5 CLOSED**: a
+  frozen-vs-wheeling-wings gauge ablation (H3-H6) shows byte-identical outcomes — no maneuver-timing
+  race exists at all, refuting the original "two racing clocks" theory outright, not just narrowly.
+  C4-vs-C7's gap is fully explained by `stance='hold'` alone (discipline contributes nothing).
+  **Honest result: the DG-3/DG-4 fix did NOT close the targeted gap.** Gauge re-run (n=20): aggregate
+  pass counts unchanged (single 2/20, multi 4/20) but composition shifted (H1 newly fails, C1 newly
+  passes); H3/H5/H6 remain fully unresolved (100% draws); H4/C4 show real but insufficient movement
+  toward their bands. RC-1's accounting fix looks necessary but not sufficient — DG-1 (was the
+  pinning-force composition ever historically ratified, given it only passed under the now-confirmed
+  RC-2 invincibility artifact) and DG-2 (a fighting-withdrawal/yield mechanic) are the better-evidenced
+  remaining levers. `test_envelop_reaches_rear_node`'s xfail reason/docstring updated to retire the
+  superseded racing-clocks narrative and record this finding instead. **Next action: this is now a
+  Jordan-ruling unblock (DG-1/DG-2), not further engine implementation.** RC-5 (9/20 gauge rows failing
+  for unrelated reasons) remains a separate, not-yet-opened lane item.
+
+- **ED-MB-0003 (2026-07-05): follow-up Fable-5 audit found 4 more real defects; Jordan ruled all 3
+  gates; DG-2 captured as a workplan, not built.** The "RC-1 fully fixed" story was false — D1 (an
+  outer army-size dilution multiplier double-diluting a composed subunit's pool, removed per Jordan's
+  ratified "intensive/partition-invariant" semantics), D2/D2b (`_envelop_goal`'s hysteresis-free limit
+  cycle + `_node_advance`'s step-freeze bug, together the actual reason wings never reached contact —
+  both fixed), D3 (routed atoms resurrected to pool 1; first-pass fix was a no-op per adversarial
+  review, corrected to force `a_net`/`b_net=0` directly since `roll_pool`/`_sigma_net_boost` re-floor
+  pool internally), D4 (`distribute_casualties` cross-subunit column-leak, fixed via per-subunit
+  scoping), plus a harness force-ratio bug (`_envelop_army`/`_refused_army` fielding 3x/2x a
+  single-subunit opponent's troops, fixed via `total_troops` force parity). **Jordan's rulings
+  (AskUserQuestion): DG-3 completion = intensive pool semantics; DG-1 = symmetric-at-parity (infantry)
+  + majority-pin/cavalry-wing (C4/C7, Polybius/Livy order of battle); DG-2 = "create as workplan"** —
+  `proposals/mass_battle_fighting_withdrawal_v1.md`, PROPOSED, NOT implemented. Independent
+  adversarial review caught 2 more real bugs (D3's no-op; `wing_speed` never reaching `Unit.speed`) —
+  both fixed. **Honest result: H3/H4/H5/H6/C4's draws are entirely GONE, but every row now OVERSHOOTS
+  its band decisively in the attacker's favor** (except C7, still passing). Full 20-row gauge: 4/20 →
+  5/20 (C1 newly passes; RC-5's 9 rows untouched). **New, deliberately undecided finding:**
+  `subunit_combat_pool`'s Command-driven score may not scale by troop share, letting spatially-separated
+  attacking fronts each roll near-full combat strength against one defender at once — genuine defect or
+  historically-correct mechanism (with bands needing reconsideration)? Flagged, not silently tuned.
+  DG-5 re-confirmed closed for a corrected reason (D2's bug, not a genuine non-race). All 4 `bat.py`
+  digests re-recorded; `tests/valoria` 88 passed/16 skipped(numpy)/1 xfailed. See
+  `tests/coverage_matrix.md`'s 2026-07-05 entry + ED-MB-0003. **Next action: Jordan's ruling on the new
+  partition-invariance question and DG-2's build sequencing — not further unprompted implementation.**
+
+- **ED-MB-0004 (2026-07-08): partition-invariance fix landed; RC-5 preliminary finding; DG-2 build
+  in progress.** Jordan ruled (AskUserQuestion): partition-invariance = **"genuine defect — fix it"**;
+  DG-2 = **"build it now"**; RC-5 triage = **start now**. Fixed `subunit_combat_pool`'s Command-driven
+  score being troop-count-independent per atom in a way that let >=2 of one side's atoms simultaneously,
+  fully engage the SAME single opposing atom (a pinning center + 2 wings converging on one Line/Arrowhead
+  defender — H3-H6/C4/C7's exact shape) each roll near-full base_pool, multiplying total dice by the
+  convergence-group size for identical total troops. New `core/exchange.py:_pair_engaged_troops` +
+  `orchestration.py:_convergence_scale`/`PC_CONVERGENCE_NORM` (default ON) renormalize any such group to
+  what ONE merged atom of the combined troops would contribute; verified live via direct trace (fires on
+  1446/1686 sampled ticks of an H3-style battle, max group size 3 — not a no-op). All 4 `bat.py` digests
+  re-recorded (shared, non-gated code). `tests/valoria`: 112 passed/57 skipped/1 xfailed/0 failed (the 7
+  `test_names.py` failures seen locally are PRE-EXISTING and unrelated — confirmed via `git stash`
+  bisection, an environment/fixture issue). **Honest result:** gauge re-run (multi, n=60) shows the fix
+  does NOT move H3-H6/C4's win/loss/draw split at all (bit-for-bit identical to the pre-fix baseline) —
+  the defect was real and is now closed, but was never the dominant lever for these rows' overshoot
+  (envelopment/charge-shock morale collapse dominates). Full 20-row gauge unchanged (single 2/20, multi
+  6/20). **RC-5 preliminary finding (diagnostic only):** a controlled A/B-slot-swap test on 3 pairs
+  (Arrowhead/Line, GappedLine/Line, GappedLine/Arrowhead) found an inconsistent slot-dependent asymmetry
+  that tracks neither a uniform side bias nor shape hierarchy (a true Line-Line mirror stays near-even,
+  17/13 of 30, ruling out a blanket engine-wide bug) — likely shared ingredient (not traced further):
+  `ANCHOR_MAP`'s per-shape deployment column (Line=9/Arrowhead=8/GappedLine=7) applied regardless of
+  which side carries that shape, so differently-shaped sides deploy at different absolute columns. Next
+  concrete lead for RC-5, not claimed solved; the other 6 rows (H7,H8,R1,R3,C1,C3,C5) untouched. Full
+  record: `tests/coverage_matrix.md`'s 2026-07-08 entry + ED-MB-0004 (now resolved).
+
+- **ED-MB-0005 (2026-07-08): DG-2 fighting-withdrawal/yield mechanic — commanded-entry slice built.**
+  Per Jordan's "build it now" ruling, built exactly the proposal doc's own §4 step-1 scope: `Subunit.
+  yielding`/`yield_active` (discipline-gated, melee-only), a `'yield'` order (composes with existing
+  Order/check_orders — `yielding` added to `_ORDER_SAFE_FIELDS`), movement (`_yield_goal`, reuses
+  `_kite_goal`'s flee vector, capped 1 cell/tick, node/field path only — same scope as envelop/sweep),
+  facing-lock (fires regardless of `PC_FACING_MODEL`, the mechanically load-bearing "faces the enemy,
+  unlike rout" distinction), combat-pool malus (`YIELD_POOL_MULT`, reuses `PC_SHOCK_HOLD_BRACE`=0.35),
+  and anti-abuse (no volleying while yielding). Both new magnitudes (`D_YIELD=3`, `YIELD_POOL_MULT`)
+  flagged `[CALIBRATED-DEBT]`, not independently derived, per the doc's own §5. All 4 `bat.py` digests
+  confirmed BYTE-IDENTICAL (genuinely inert-by-default, no re-record needed). New
+  `tests/valoria/test_mass_battle_yield.py` (9 tests, all green); full `tests/valoria` suite green, no
+  regressions (123 passed/56 skipped/1 xfailed/6 pre-existing-unrelated `test_names.py` failures).
+  **NOT built this pass (disclosed):** emergent auto-entry, rally exit, pocket exit — only the free
+  "collapse to routed" exit exists (needed no new code).
+  **Honest measurement:** center-yields-from-tick-0 (n=20, node path) raises center hp retained
+  35.8%→40.6% (the mechanism works) but collapses the attacking army's win rate 70%→0% — an
+  unconditional, whole-battle yield trades far more offense than it recoups. Not a broken mechanic;
+  Cannae's yield was TIMED, this pass didn't build/measure timed entry — flagged as the natural next
+  experiment. Full record: `tests/coverage_matrix.md`'s second 2026-07-08 entry + ED-MB-0005.
+  **Next actions for whoever continues this lane:** (1) a timed/conditional yield-entry experiment
+  (Order `tick:N` trigger, or emergent entry keyed to encirclement progress) to see whether a properly
+  time-boxed yield recovers the army-level win-rate cost while keeping the center-survival benefit;
+  (2) RC-5's other 6 untriaged rows (H7,H8,R1,R3,C1,C3,C5) plus tracing the ANCHOR_MAP deployment-column
+  asymmetry lead to a root cause; (3) DG-1's composition question and the still-live envelopment-shock
+  magnitude remain the larger unaddressed levers for H3-H6's overshoot (the partition-invariance fix
+  closed a real defect but was never the dominant one there).
+
+- **ED-MB-0006 (2026-07-08): combat pool abandons Command entirely — troop type/quality/numbers.**
+  Per Jordan's direct instruction ("consider abandoning combat pools being related to the commander,
+  and instead being solely derived from the subunit troop type, quality and numbers"), new
+  `POOL_QUALITY_MODEL` (default ON): base pool = `eff_power × eff_size × POOL_QUALITY_SCALE` —
+  troop-TYPE quality (`TROOP_TYPE_STATS`/§B.2) × NUMBERS (troops/BLOCK_SIZE), no Command anywhere.
+  `POOL_QUALITY_SCALE=0.5` renormalizes to the historical baseline magnitude. Discipline/stamina
+  penalties unchanged. Command still governs morale/formation-speed/orders/`derive_rout`, just not
+  the dice pool. Applied consistently to both `subunit_combat_pool` and `Unit.base_combat_pool`
+  (pursuit path). `COMMAND_SIGMA_ENABLED` branches remain selectable (`POOL_QUALITY_MODEL=0`) for
+  A/B. All 4 `bat.py` digests re-recorded; `tests/valoria` 121 passed/57 skipped/1 xpassed (the
+  usual pre-existing `test_names.py` failures aside).
+  **Honest, mixed gauge result:** 6/20→7/20 (multi). C4/C5 newly pass (bigger-force cavalry rows
+  correctly reward numbers now); **H4 (actual Cannae) flips from attacker-WIN-OUT to attacker
+  LOSING badly** (1.7%/65%/33% draws) — composed-army rows lose out because their PER-ATOM numbers
+  are now smaller than the single consolidated defender's, an real emergent trade-off, not a bug.
+  **Open, disclosed residual:** `lanchester_signature.py`'s law-exponent check (melee should conserve
+  p≤1.4) fails under BOTH models — pre-existing baseline already measured p≈1.55 (previously
+  undetected, unrelated to this change) and a separate apparent "2:1 army loses 97% of the time"
+  reading that a quick trace suggests may be test-methodology noise (single 18-tick `run_battle`
+  call rarely resolves decisively at this ratio), not independently confirmed. The new model measures
+  p≈2.50, tested extensively (sqrt-numbers variant, 8-point scale sweep) without finding a scale that
+  reaches ≤1.4 — plateaus at p≈1.65-1.7, confirmed NOT a Lanchester double-count (disabling
+  `LANCHESTER_ENABLED` doesn't change the exponent at all) — the amplification is internal to how
+  larger absolute pools reduce variance and make `compute_degree`'s discrete tier assignment
+  near-deterministic from the pool ratio alone. **Next action: this needs the degree/damage-tier
+  discretization or the Lanchester coefficient's own interaction reconsidered — not another pool-
+  formula scale tweak (provably can't fix a ratio-sensitive test).** Full record: `tests/
+  coverage_matrix.md`'s third 2026-07-08 entry; canon note in `designs/provincial/mass_battle_v30.md`
+  §A.1 (ED-MB-0006).
+
+- **ED-MB-0007 (2026-07-08): full 11-surface agonist-antagonist gauge architecture audit — why
+  7/20, and what to do about it.** Per Jordan's direct instruction to investigate "from all
+  directions and surfaces" (widened mid-session to explicitly add movement/pathing/routes/
+  strategies/tactics/stances/reach, then ranged weaponry), two Workflow waves (7 + 4 surfaces;
+  producer → isolated adversarial critic → opus-4.8-max synthesis per wave, then a third
+  opus-4.8-max combination pass) fielded 24 subagents across ~1288 tool calls. **Full record:**
+  `designs/audit/2026-07-08-mass-battle-gauge-architecture-audit/README.md` (+ `01_wave1_synthesis.md`/
+  `02_wave2_synthesis.md` for per-wave detail). **Honest result:** the 13 nominal failures decompose
+  to ~9 genuinely-deep engine divergences (C3/H9 are n=60 sampling noise; R1/R3 are
+  harness-construction failures). Two mechanisms dominate, both causally proven by reversal
+  ablation: **E1**, a cell-count/density plumbing defect (`geometry.py`'s two unreconciled
+  cell-count generators → a static, never-recomputed `Unit.ncells` → the Lanchester density term)
+  that reverses H3/H10 outright when patched; and **D1**, the super-linear resolution architecture
+  ED-MB-0006 already flagged, now measured at melee exponent **p≈3.2 under the live PER_CELL=1
+  path** — worse than ED-MB-0006's disclosed p≈2.50, which turns out to have been measured under
+  the WRONG `PER_CELL` setting by `lanchester_signature.py`'s own hardcoded default. **These two are
+  multiplicative, not competing, and neither alone lands a row in-band — this investigation is
+  diagnostic, not curative**, disclosed as a first-class finding. **Granularity directive verdict:**
+  the per-cell quality/type axis (veteran-front/levy-rear) is confirmed byte-inert for all 20 rows
+  by four independent lines of evidence — a legitimate future architecture, not a gauge fix. The
+  per-cell COUNT axis is already the #1 defect (E1). Troop-grounded speed and the entire
+  ranged/volley pool were never brought under `POOL_QUALITY_MODEL` and remain ungrounded. **New
+  empirical result** (found by the wave-2 synthesis's own probe, not present in either wave in
+  isolation): the two cheapest-looking fixes for the ranged rows (R1: correct archer stats; R3:
+  the `kite` instruction) are **mutually incompatible** — a correctly-statted discipline-3 archer
+  computes a live movement step of exactly zero (no fractional-velocity accumulator on the node
+  path), so `kite` cannot rescue a unit physically unable to move. This reverses an earlier reading
+  that had listed a ranged-`hold` variant as a safe, contained fix — it is not; it is gated on
+  **DG-10**. Ten new engine defects (E1-E10) and a harness-artifact cluster identified and bucketed
+  (full detail + file:line citations in the audit README). **Eleven new Jordan-ruling decision
+  points opened: DG-6 (the resolution-architecture calibration itself — the deepest, highest-
+  leverage call) through DG-16 (tactical/role-layer grounding).** DG-numbering note: an earlier
+  combination draft had reused DG-1..DG-5 for these new gates, colliding with the ALREADY-RULED
+  namespace from ED-MB-0002/0003/0005 — caught and corrected to the DG-6..DG-16 sequence above
+  (crosswalk in the audit README's Appendix). **Not yet implemented:** this ED closes the
+  investigation itself; the ~10-item safe-to-fix list and all eleven DG-6..DG-16 rulings remain
+  open follow-up work, gated primarily on Jordan's ruling on DG-6.
+  **[CALIBRATED-DEBT] flagged, not resolved:** the currently-passing cavalry rows (C4, C5, C7) may
+  be passing partly on the same E1/D1 artifacts targeted for removal — the pass count is not
+  confirmed monotonic in fixes applied. **Next action for whoever continues this lane: DG-6 first**
+  (it gates the highest-leverage fix and several other rulings) — either via Jordan's direct ruling
+  or an `AskUserQuestion` pass through DG-6..DG-16 in priority order, then land the safe-to-fix list
+  paired with whichever DG-6/DG-7 direction is chosen, then re-run the full 20-row gauge (no surface
+  in this audit ran the complete battery — only directional/single-row causal evidence exists for
+  any proposed fix).

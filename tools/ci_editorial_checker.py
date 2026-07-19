@@ -4,8 +4,8 @@ ci_editorial_checker.py
 Runs in CI. Checks that commits to editorial-governed paths contain
 [EDITORIAL] or [PROVISIONAL] markers for substantive content.
 
-Editorial paths: designs/npcs/, designs/world/,
-                 designs/arcs/gm_ref/, canon/03_ (timeline)
+Editorial paths: systems/npcs/, systems/world/,
+                 arcs/simulated/, canon/03_ (timeline)
 
 Short stubs (< 200 chars) are exempt.
 Mechanical-only content (tables, formulas) is NOT exempt — the rule is path-based.
@@ -21,9 +21,9 @@ except ImportError:
     import ci_common
 
 EDITORIAL_PATHS = (
-    'designs/npcs/',
-    'designs/world/',
-    'designs/arcs/gm_ref/',
+    'systems/npcs/',
+    'systems/world/',
+    'arcs/simulated/',
     'canon/03_',
 )
 MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
@@ -36,8 +36,11 @@ violations = []
 
 # Check deleted editorial files — deletion also requires a marker in the commit message
 # (can't check deleted file content, so check git log message instead)
+# Editorial markers govern editorial CONTENT (markdown docs) only. Since the ED-IN-0071 P4
+# reorg co-locates each subsystem's sim/ CODE under systems/<sub>/ (an editorial path), the
+# path-based rule must exclude non-.md files — .py/.jsx/etc. are code+data, not editorial prose.
 deleted = {p for p in ci_common.get_changed_files_filtered(_mode, diff_filter='D')
-           if any(p.startswith(ep) for ep in EDITORIAL_PATHS)}
+           if p.endswith('.md') and any(p.startswith(ep) for ep in EDITORIAL_PATHS)}
 
 if deleted:
     # Get commit message to check for [EDITORIAL] marker
@@ -52,6 +55,8 @@ if deleted:
             print(f"OK   {path}: deleted, [EDITORIAL] in commit message")
 
 for path in sorted(changed):
+    if not path.endswith('.md'):
+        continue  # editorial markers govern .md content only (co-located sim/ code is exempt)
     if not any(path.startswith(p) for p in EDITORIAL_PATHS):
         continue
     if not os.path.exists(path):

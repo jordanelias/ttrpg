@@ -1,0 +1,101 @@
+# references/wiring_manifest.yaml
+# =====================================================================================
+# The wiring map as DATA — the single source of truth behind the interactive map and
+# the Godot port work-list. Every entry is anchored on a stable registry TAG (module
+# name / adapter name), NOT a file path, so it survives restructures like ED-IN-0071.
+#
+# Validated + queried by tools/wiring_map_check.py:
+#   python3 tools/wiring_map_check.py --check       # gate: every tag resolves; 27/27 + 7/7 coverage
+#   python3 tools/wiring_map_check.py --work-list    # the Godot port work-list, ranked
+#   python3 tools/wiring_map_check.py --summary      # build-state / godot-status counts
+#
+# Filed ED-IN-0074 (2026-07-17 MC-wiring coverage audit). Analysis-derived; build/godot
+# fields are the audit's verdicts (adversarially verified over 7-seed run_campaign +
+# 6 lanes + a 4-vector coverage diff) — revise as the port advances.
+# =====================================================================================
+version: 1
+as_of: "2026-07-18"
+
+# ── vocabularies (the tool validates that every value below is one of these) ──
+build_states: [live, gated, deferred, unwired, stub, design]
+#   live      — executes every season in the mc_v18 loop
+#   gated     — runs only under a condition (flag / eligibility / trigger)
+#   deferred  — reached but resolves nothing today
+#   unwired   — real, tested code the loop never calls
+#   stub      — raises NotImplementedError
+#   design    — specified in a doc, zero code
+godot_states: [gd-ported, typed-exported, python-oracle, no-oracle, retire]
+#   gd-ported      — a GDScript port exists (the skeleton slice)
+#   typed-exported — a CI-checked typed param export exists (config → JSON round-trip)
+#   python-oracle  — real Python to port FROM; no GDScript yet   ← the port work-list
+#   no-oracle      — nothing to port from; canon must be authored first (Gate-0.5 halts)
+#   retire         — recommended for removal; do not port
+
+# ── registries the tags resolve against (checked live by the tool) ──
+registries:
+  module: references/module_contracts.yaml          # the 27 module: tags
+  adapter: engine/cross_scale/                       # the 7 adapter: tags
+  key: systems/_architecture/key_type_registry_v30.md
+  quantity: [references/descriptor_registry.yaml, designs/provincial/clock_registry_v30.md]
+
+# ── the one proof-of-concept the whole strategy leans on ──
+golden_path:
+  unit: personal_combat
+  chain: "combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI round-trip) -> godot/skeleton/engines/combat/ (strike + wound)"
+  note: "The only unit where Python oracle + typed export + GDScript port all exist. This is the template every other port copies."
+
+# ═══════════════════════════ MODULES (27 — the conversion units) ═══════════════════════════
+# One module contract = one conversion unit = one parity target (godot_conversion_strategy_v1 §IV.3).
+modules:
+  personal_combat:   {tier: module, scale: personal,   resolver: d_sigma,               build: unwired,  godot: gd-ported,     port_rank: 0, parity: "key-log + typed-export round-trip", note: "built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path — BUT the mc_v18 loop never routes here (combat branch is dead code), so end-to-end parity is unvalidated."}
+  mass_battle:       {tier: module, scale: scene,      resolver: dice_pool,             build: live,     godot: python-oracle, port_rank: 1, parity: "key-log", note: "ratified engine; fires ~30-45 battles/campaign via conquest. A RICHER unwired engine sits at tests/sim/mass_battle (mislabeled a frozen archive) — reconcile before porting."}
+  social_contest:    {tier: module, scale: scene,      resolver: dice_pool,             build: gated,    godot: python-oracle, port_rank: 1, parity: "key-log", note: "Agon kernel built (1 of 4 games); reached live only via emergency_council."}
+  victory:           {tier: module, scale: provincial, resolver: state_reader,          build: live,     godot: python-oracle, port_rank: 1, parity: "state read", note: "GD-1; small + fully live. Easy first strategic port."}
+  threadwork:        {tier: module, scale: personal,   resolver: dice_pool,             build: unwired,  godot: python-oracle, port_rank: 2, parity: "key-log", note: "13 operations built, zero live callers; rendering is a stub."}
+  territorial_piety: {tier: module, scale: territory,  resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 2, parity: "key-log", note: "CI generation live via ci_track; CANONICAL doc with ZERO Key integration."}
+  clock_registry:    {tier: module, scale: provincial, resolver: manifest,              build: design,   godot: python-oracle, port_rank: 2, parity: "data", note: "pure catalog; ports as a data table."}
+  faction_state:     {tier: module, scale: provincial, resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 2, parity: "key-log", note: "the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION]."}
+  faction_politics:  {tier: module, scale: provincial, resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 3, parity: "key-log", note: "contest/faction.py succession/coalition math exists but unwired."}
+  piety_track:       {tier: module, scale: personal,   resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 3, parity: "key-log", note: "conviction.py Scar accumulation real; reached only via the unwired knot chain."}
+  settlement_layer:  {tier: module, scale: territory,  resolver: deterministic_accounting, build: design, godot: python-oracle, port_rank: 3, parity: "key-log", note: "territory/ substrate built but unwired; Mandate aggregation (7T/(T+6)) unbuilt."}
+  # ── no-oracle: canon must be authored before these can port (Gate-0.5 halts on un-canonical values) ──
+  engine_clock:      {tier: module, scale: provincial, resolver: clock_advance,         build: design,   godot: no-oracle,     port_rank: 8, parity: "key-log", note: "doc:null temporal spine — the sole remaining T0 blocker (ED-1051). Blocks the season/accounting cadence port."}
+  npc_behavior:      {tier: module, scale: personal,   resolver: deterministic_accounting, build: design, godot: no-oracle,   port_rank: 8, parity: "key-log", note: "Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle."}
+  npc_memory:        {tier: module, scale: personal,   resolver: state_reader,          build: design,   godot: no-oracle,     port_rank: 8, parity: "key-log", note: "doc:null; schema lives in a doc-12 bridge."}
+  fieldwork_knots:   {tier: module, scale: personal,   resolver: dice_pool,             build: stub,     godot: no-oracle,     port_rank: 8, parity: "key-log", note: "fieldwork/investigation raise; knots built but the scene runner is a stub."}
+  domain_actions:    {tier: module, scale: provincial, resolver: d_sigma,               build: design,   godot: no-oracle,     port_rank: 8, parity: "key-log", note: "da.* 5-tag taxonomy; doc:null, zero code."}
+  ci_political:      {tier: module, scale: provincial, resolver: deterministic_accounting, build: deferred, godot: no-oracle, port_rank: 8, parity: "key-log", note: "CANONICAL doc, ZERO Key integration; card system unbuilt."}
+  peninsular_strain: {tier: module, scale: peninsula,  resolver: deterministic_accounting, build: deferred, godot: no-oracle, port_rank: 8, parity: "key-log", note: "owns Turmoil + IP; env.* emitters + occupation ladder unbuilt (IP isn't even a clocks key)."}
+  scene_slate:       {tier: module, scale: scene,      resolver: manifest,              build: deferred, godot: no-oracle,     port_rank: 8, parity: "key-log", note: "doc:null; built = a 59-line queue, the canonical §4 generator is unbuilt."}
+  game_director:     {tier: module, scale: scene,      resolver: manifest,              build: deferred, godot: no-oracle,     port_rank: 8, parity: "key-log", note: "doc:null; scene lifecycle + zoom stack."}
+  scene_timer:       {tier: module, scale: scene,      resolver: state_reader,          build: deferred, godot: no-oracle,     port_rank: 8, parity: "n/a", note: "doc:null observability sidecar."}
+  audit:             {tier: module, scale: scene,      resolver: state_reader,          build: deferred, godot: no-oracle,     port_rank: 8, parity: "n/a", note: "doc:null QA telemetry sink."}
+  miraculous_event:  {tier: module, scale: personal,   resolver: state_reader,          build: stub,     godot: no-oracle,     port_rank: 8, parity: "key-log", note: "trigger raises."}
+  scenario_authoring: {tier: module, scale: peninsula, resolver: manifest,              build: design,   godot: no-oracle,     port_rank: 8, parity: "key-log", note: "compile-time injection; execution unbuilt."}
+  articulation_layer: {tier: module, scale: personal,   resolver: armature_dot_product,  build: stub,     godot: no-oracle,     port_rank: 8, parity: "key-log", note: "the universal Key consumer — 3x raises. No consume-side oracle exists anywhere."}
+  # ── retire: do not port ──
+  settlement_economy: {tier: module, scale: settlement, resolver: deterministic_accounting, build: design, godot: retire,      port_rank: 9, parity: "n/a", note: "phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer."}
+  campaign_architecture: {tier: module, scale: provincial, resolver: none,               build: design,   godot: retire,        port_rank: 9, parity: "n/a", note: "reclassified: a consolidation doc, not a runtime module."}
+
+# ═══════════════════════════ ADAPTERS (7 — the KeyBus / GameDirector seam) ═══════════════════════════
+# Cross-scale bridges; conversion units too (godot_conversion_strategy_v1 §I.3 cross-cutting).
+adapters:
+  scene_dispatch:      {tier: adapter, build: deferred, godot: python-oracle, port_rank: 2, parity: "key-log", note: "down-scale seam; only 1 of 8 triggers fires."}
+  parliamentary_bridge: {tier: adapter, build: gated,   godot: python-oracle, port_rank: 2, parity: "key-log", note: "runs every season (echo on); emits 13-65 keys/campaign — the ONLY live Key producer."}
+  echo_transport:      {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "the paired apply-closure — the only live Key CONSUMER (writes Faction.L/I)."}
+  domain_echo:         {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "compute_domain_echo/accord/thread."}
+  zoom_in_out:         {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "zoom protocol §4; maps to the Godot GameDirector zoom stack."}
+  handoff_rules:       {tier: adapter, build: unwired,  godot: python-oracle, port_rank: 3, parity: "key-log", note: "8 §3 rules built, ZERO callers; §3.7 Mass->Personal Duel never fires."}
+  articulation:        {tier: adapter, build: stub,     godot: no-oracle,     port_rank: 8, parity: "key-log", note: "the intended universal Key reader — stub. The consume/handoff half of the substrate has NO oracle on either side."}
+
+# ═══════════════════════════ FOUNDATION GAPS (not modules — block whole tiers) ═══════════════════════════
+foundation_gaps:
+  godot_spine:
+    godot: no-oracle
+    note: "BaseEngine / EngineModule / KeyBus / Resolver / GameState are referenced by the skeleton but class_name def = NONE anywhere. Gate-0; the skeleton is non-compilable. The map's Wrapper tier = this undefined spine."
+  character_layer:
+    godot: no-oracle
+    note: "No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every personal-scale port needs this first."
+  save_replay_premise:
+    status: violated
+    note: "Strategy premise 'save = initial conditions + Key log'. But the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key trace, so the Key log cannot reconstruct strategic state. Save/replay/parity holds only for the echo-keyed slice today."

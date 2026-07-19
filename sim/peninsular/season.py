@@ -32,7 +32,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Callable
 
-from sim.autoload.season_manager import advance_season, SEASONS_PER_ARC
+from engine.autoload.season_manager import advance_season, SEASONS_PER_ARC
 from sim.peninsular.accounting import run_accounting
 
 

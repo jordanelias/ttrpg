@@ -3,7 +3,8 @@
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §22, §23, §24, §25, §26, §27, §28, §29
-**Status:** PROVISIONAL — pending Jordan editorial review.
+<!-- Struck 2026-07-07 (ED-IN-0023, C-INJ-2): the leftover Stage-4-atomization boilerplate "**Status:** PROVISIONAL — pending Jordan editorial review." contradicted the live `## Status: CANONICAL` header at line 2 (the doc is cited as canonical corpus-wide — module_contracts.yaml, mechanics_index.yaml). Removed as a stale artifact, not a live provisional flag. -->
+
 
 <!-- atom: solmund_master_document__22__19-the-problem | section_index: 22 | source_section: "19. The Problem" -->
 
@@ -120,7 +121,7 @@ Each interpretation is internally consistent. None requires falsehood. Each requ
 
 When a named character witnesses Miraculous Event effects (present in affected territory during the season Miraculous Event fires):
 
-Roll Cognition vs Ob = current Certainty. Success: Certainty unchanged (framework holds). Partial: Certainty −1 (framework strained). Failure: Certainty −2 (framework shaken).
+Roll Cognition vs Ob = current Truth. Success: Truth unchanged (framework holds). Partial: Truth −1 (framework strained). Failure: Truth −2 (framework shaken).
 
 Fires once per character per Miraculous Event. Characters with TS perceive more of the underlying mechanism and face sharper Conviction pressure — the experience is harder to reconcile with their existing framework, whether that framework is theological or secular.
 

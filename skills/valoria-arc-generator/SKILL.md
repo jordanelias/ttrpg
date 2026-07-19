@@ -19,11 +19,11 @@ Before generating arcs, read these from the working tree:
 
 - Step 1: always read `references/canonical_sources.yaml` first — it resolves which docs are current.
 - Step 2: read required docs based on arc scope (see Read Protocol below).
-- Step 3: check the `designs/arcs/gm_ref/` directory to avoid arc duplication.
+- Step 3: check the `arcs/simulated/` directory to avoid arc duplication.
 
 **Do not read compilation stage files from memory.** Read them from the working tree, and check `canonical_sources.yaml` for which version is current before using any values.
 
-**If `compilation_current: false` in `canonical_sources.yaml`:** Use the canonical design doc for that system, not the compilation snapshot.
+**Always use the canonical design doc, never a compilation snapshot.** `references/canonical_sources.yaml` carries no `compilation_current` field (that schema was never migrated into the live file) — resolve currency via `CURRENT.md` and a doc's own `## Status:` line instead (CLAUDE.md §4).
 
 ## What This Produces
 
@@ -63,7 +63,7 @@ Read in this order. Check `canonical_sources.yaml` to confirm current paths befo
 - The canonical territories doc (check `canonical_sources.yaml` for current path)
 
 **Check for prior arcs (avoid duplication):**
-- `designs/arcs/gm_ref/` — list the directory contents before generating; do not reproduce an arc already documented there
+- `arcs/simulated/` — list the directory contents before generating; do not reproduce an arc already documented there
 
 ---
 
@@ -118,7 +118,6 @@ Read in this order. Check `canonical_sources.yaml` to confirm current paths befo
 
 - Inline in chat if 3 arcs or fewer and no prior arcs to check.
 - `.md` file if 4+ arcs or if the user requests a document.
-Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
-- Commit to `designs/arcs/gm_ref/` after every batch. File naming: `arcs_NN_MM_[topic].md`.
+- Commit to `arcs/simulated/` after every batch. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.

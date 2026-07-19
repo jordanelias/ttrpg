@@ -1,0 +1,275 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: npc_character_analyses_v30_infill.md -->
+
+<!-- v30 baseline — renamed from designs/npcs/npc_character_analyses.md on 2026-04-13 -->
+# Valoria — NPC Character Analyses
+## Consolidated | Date: 2026-04-11 | Status: DESIGN
+## Incorporates: npc_character_analyses.md (roster NPCs) + npc_character_analyses_existing.md (ruler diamond + existing named NPCs)
+## [EDITORIAL: All analyses flagged for user review.]
+
+---
+
+# PART ONE: ROSTER NPCs
+
+## 1. Edeyja — The Last Maintenance Technician
+
+Edeyja is the only NPC in the roster who is not compromised, and this is itself her dramatic function. She is what competence without compromise looks like — and the setting punishes it. She has TS 75–80 (the highest living), Coherence 9 (near-perfect rendering stability), and absolute clarity of purpose: the substrate must hold. Everything else is noise.
+
+
+
+
+
+---
+
+## 2. Maret Uln — The Agent Who Became the Asset
+
+
+
+
+
+**Thematic role:** Maret tests P-10 (Coherence ≠ corruption). Her perceptual shift — seeing RM communities as they are at the Thread level, not as Varfell's intelligence framework categorises them — is exactly the "epistemic seduction" the Foundations describe, except it's seduction toward empathy rather than toward monstrosity. The Framework says the shift "dissolves categories." For Maret, the category dissolving is "asset vs person."
+
+---
+
+## 3. Yrsa Vossen — The Visible Revolution
+
+
+
+**Her TS 25 adds a specific cruelty.** She is Thread Sensitive enough to perceive Thread-touched artefacts and to sense the substrate strain that justifies the movement's existence. But TS 25 is below the Forgetting resistance threshold (29). When she operates near the Southernmost (T13/T15), the Forgetting degrades her knowledge. She must re-learn fragments of Einhir cultural practice each time she returns — the very knowledge that motivates her movement is unstable in her own mind. She is leading a cultural restoration movement while experiencing the cultural erasure her movement opposes.
+
+
+
+---
+
+## 4. Sæmund Haelgrund — The Inquisitor's Uncertainty Principle
+
+
+
+
+**The TS 12 revelation is the single highest-impact personal scene in the roster.** If a PC Diagnoses Haelgrund's Thread Sensitivity, the Inquisitor discovers that he IS the thing he investigates. The Church's epistemological framework (P-08: Thread truth is experiential, not transmissible) means that knowing he has TS does not, by itself, change his ontological status — he was always Thread Sensitive. But it changes his self-understanding catastrophically. He can no longer attribute his perceptions to professional skill. He must either integrate his TS into a new self-concept (defection) or suppress the knowledge and continue operating (institutional survival at the cost of self-knowledge). Neither option leaves him intact.
+
+
+---
+
+## 5. Sigrid Torsvald — The Operative Who Became the Operation
+
+
+
+**Her RISK-AVERSE flaw on Thread collateral is not cowardice.** It is perception. Non-TS Riskbreakers cannot see the Thread damage their operations cause — substrate strain, Coherence effects on bystanders, MS micro-degradation from covert activities in Thread-active zones. Torsvald can see all of this. Her ~30% abort rate in Thread-active territories is the rate at which she decides the collateral is unacceptable. Her colleagues see mission failure. She sees mission success at a cost they are constitutionally incapable of perceiving.
+
+
+**Arc trajectory:** Torsvald's arc is a velocity problem. Her TS is developing. Every Thread-active operation she runs, every exposure to the archive, every perception of collateral damage pushes her TS higher. At some threshold (GM discretion — TS 40? 45?), her perceptions become too acute to conceal. She starts seeing things she cannot not-react-to. Her abort rate rises. Ehrenwall (or Brandt) notices. The Riskbreakers investigate their own operative. The arc resolves when the institution discovers what she has become — and must decide whether a Thread-Sensitive Riskbreaker is an asset or a threat.
+
+---
+
+## 6. Halvar Brandt — The Right Answer to the Wrong Question
+
+
+
+**His EXTERNAL THREAT FIXATED flaw is a correct assessment applied without context.** Altonia IS a real threat. IP IS rising. The border passes ARE the invasion corridor. Brandt is right about all of this. What he cannot see is that internal stability is a prerequisite for external defence. A peninsula torn apart by Church seizure, Hafenmark expansion, and RM cultural revolution cannot mount a coherent defence even if every soldier is at the border. Brandt's tragedy is that he sees the threat clearly and the conditions for meeting it not at all.
+
+**Arc trajectory:** If Ehrenwall falls and Brandt succeeds her, the Löwenritter become a border defence force rather than a political instrument. Martial Law still fires (Brandt's threshold is 2, not 3 — he acts sooner), but military assets redirect to T3/T10 (the invasion corridors). Crown territories lose internal garrison coverage. This is catastrophic for internal stability and potentially brilliant for external defence — depending on whether Altonia actually invades. Brandt's arc resolves on the answer to a question the setting may never definitively answer: was he right?
+
+---
+
+## 7. Annika Feldhaus — The Invisible Supply Chain
+
+
+
+**Her PROFIT-MAXIMISING flaw produces a specific and ironic failure mode.** By prioritising Guilds Wealth above all other stats, she drives Guilds Mandate toward 2 (political irrelevance). The Guilds become wealthy and voiceless. In a peninsula where political power (Mandate, Influence) determines outcomes, economic power without political standing is a resource other factions exploit. Feldhaus is building the treasury that funds everyone else's wars.
+
+
+**Arc trajectory:** Feldhaus arcs through discovery or through consequences. Discovery: a PC Diagnoses guild merchandise and reveals the Thread connection. Feldhaus must choose between shutting down the supply chain (Guilds Wealth −1 permanently, reputation preserved) or continuing (revenue maintained, reputation destroyed if it comes out later). Consequences: the Thread-touched goods produce low-grade effects in non-sensitive households over time (a design gap flagged in the roster but narratively rich). If communities start experiencing subtle Coherence effects from prolonged exposure to Thread-touched luxury goods, Feldhaus faces a liability she cannot conceptualise — she is poisoning her customers with something that doesn't exist in her ontological framework.
+
+---
+
+## 8. Peder Almstedt — The System's Immune Response
+
+
+
+
+**Arc trajectory:** Almstedt doesn't arc in the dramatic sense. He is a constant — like Edeyja, but institutional rather than metaphysical. Characters arc around him. The arc question is not "will Almstedt change?" but "will the players decide the system he protects is worth preserving?" If they co-opt him (Influence vs Ob 3), they gain the system's support at the cost of accepting its constraints. If they remove him (scandal, dismissal), they gain freedom at the cost of institutional capacity (PI recovery lost, reform Ob penalty lifted but no procedural infrastructure to implement reforms). The choice is between order and agency.
+
+---
+
+## 9. Gerik Strand — The Proving Ground
+
+
+
+
+**The flattery vulnerability is the most gameable mechanic in the roster.** Any faction that treats Strand as a peer — genuine acknowledgment of his competence, not transparent manipulation — gets −1 Ob to social actions targeting him. Strand is smart enough to detect lies. He is not smart enough to resist truth that confirms what he desperately wants to believe: that he belongs. This makes him simultaneously the Crown's best asset and its softest target. The faction that understands Strand's psychology can extract intelligence, redirect resources, and manipulate Crown scheduling through a man whose loyalty to Crown is genuine but whose need for validation is exploitable.
+
+
+---
+
+## 10. Dalla Virke — The Trust Economy
+
+
+
+
+
+---
+
+## 11. Doux Alexios Laskaris — The Empire's Weakest Link
+
+
+
+
+**The PROTECTIVE flaw has a catastrophic reversal condition.** While Elske is safe (Loyalty ≥ 3), Laskaris sandbangs IP at −1/season. The peninsula benefits from his emotional attachment without knowing it. But if Elske is threatened (Loyalty ≤ 2 or Return attempt fails), Laskaris flips. IP +3 immediately. He stops shielding Valoria and prioritises Elske's extraction. The protective instinct that held the empire back now accelerates it — Laskaris will deliver whatever the imperial court wants if they guarantee Elske's safety. This flip transforms the IP track from slow-burn to crisis in a single Accounting step. Every season of sandbagged IP has been accruing as potential energy. When it releases, it releases all at once.
+
+---
+
+## 12. Rikard Solberg — The Unconscious Peacemaker
+
+
+
+
+**Arc trajectory:** Solberg arcs through discovery of his bias or through the offer of recall. Discovery: a faction identifies the pattern in Schoenland's peninsula policy (Intel action vs Ob 3). Schoenland central recalls Solberg. His replacement is genuinely neutral — arms flows increase, intelligence sharpens, Schoenland becomes more dangerous. Solberg goes home. The peninsula gets worse. Offer: PCs who discover Solberg's motivation can offer a real path to recall — a stability treaty, a commercial agreement, anything that would make Schoenland central decide the posting is no longer valuable. If the offer is genuine, Solberg becomes an active asset, working to make the treaty happen. If the offer is false, Solberg detects it (he is not stupid) and the leverage evaporates. The arc is about whether the players can find a solution where Solberg's personal desire and the peninsula's strategic needs align — or whether those things are structurally incompatible.
+
+---
+
+## 13. [Name Pending] — Prudence Cardinal: The Efficient Erosion
+
+
+
+
+
+
+---
+
+# PART TWO: RULER DIAMOND & EXISTING NAMED NPCs
+
+## Ruler Diamond Positions on the Einhir/Caste Axis
+
+| Ruler | Position | TS | Method |
+|-------|----------|-----|--------|
+| Almud | Governance pragmatism + ethical doubt | 0 | Manages the question without resolving it |
+| Lenneth | Institutional empowerment through revival | 0; slow scholarly loosening, SA-gated, ceiling 10–20 (D-6 ED-727) | Build up, not tear down — Crown as patron |
+| Baralta | Pure adversary of Restoration | 0 | Sovereign divine right requires theological monopoly |
+| Vaynard | Revolutionary expulsion | Environmental (southern baseline) | Tear down Church and caste entirely |
+
+---
+
+## 1. King Almud Almqvist — The Competent Custodian
+
+
+**Crown Mandate 5 is the answer: yes.** The highest starting faction stat. This is not an accident. A king who had been incapable for 27 years under pressure from Altonia, Church, Hafenmark, Varfell, Löwenritter, Schoenland, and the Restoration Movement would have been deposed — and in a deed-monarchy, deposition is the system working as designed, not treason. The deed-presumption is rebuttable. Almud has not been rebutted. He is competent.
+
+
+
+
+
+**His relationship to the Restoration Movement is genuinely adversarial in effect.** The Restoration sees him as complicit and cowardly. They are half right. He is complicit — he maintains the system that oppresses them through cost-benefit calculation. He is not cowardly — he is uncertain. From the Restoration's perspective, the distinction is irrelevant. A man who questions the system and does nothing is worse than a man who defends it sincerely.
+
+
+
+**The Discovery Event arc is rupture, not confirmation.** If Almud's TS crosses 0 through external contact (player characters bringing Thread reality to Valorsplatz), everything he understood about the Einhir question changes. He was managing it as a governance variable. Now he is experiencing what southern Einhir experience. His entire framework — the cost-benefit calculation, the ethical uncertainty, the administrative distance — is invalidated by personal perception. He did not know what he was deciding about. Now he does. This is more dramatically powerful than the previous version: not a man confirmed in hidden sympathies but a man whose entire worldview is ruptured by something he never anticipated.
+
+---
+
+## 2. Queen Lenneth Almqvist — The Institutional Revivalist
+
+**Base profile.** Lenneth Almqvist is the Queen Consort. Primary Conviction: Equity. She believes caste suppression is wrong and the Crown should be the instrument of reform. Her programme: Einhir revival through Crown authority. Archivist by training — she has network access to pre-Suppression texts and institutional records. She does not hold a faction stat sheet; her influence routes through Almud (Crown Mandate modulation) and, in extreme cases, through direct ascension.
+
+**TS pathway.** Lenneth starts TS 0 with a developable but bounded pathway: slow scholarly loosening through accretive exposure to the archive's Einhir materials. Progression is gated by Crown SA (consolidated guide §24) — each TS increment requires the broader scholarly-awareness track to reach a threshold before the next loosening is available — with a ceiling of TS 10–20. Lenneth does not reach the TS 30 practitioner threshold through this pathway; Seam Text legibility, direct Thread operation, and witness-account recognition remain closed to her unless an alternate developmental route fires. [EDITORIAL: D-6 — resolved 2026-04-20; propagated this commit; ED-727.]
+
+**Arc A: The Reformist Queen Consort (Default)**
+- Role: policy influence through Almud. Crown reform advances only insofar as Almud's Truth declines and he permits her programme to enter Crown action.
+- Foils: Baralta (Succession Triangle), Vaynard (Einhir Triangle) — see npc_foils_v30.md.
+
+**Arc B: The Widow Regent (Royal Assassination Fuse — Almud target, sub-roll 5–6)**
+- Branch condition: Royal Crisis Tension Card fires with Almud as sub-rolled target (params/bg/royal_assassination.md). Almud dies S8–S12. Lenneth assumes the throne.
+- Conviction: Equity becomes primary Crown doctrine. Ethical Framework shifts (Virtue Ethics → Equity doctrine). Crown factional identity inverts — pro-Einhir, pro-Thread-research, anti-caste-suppression becomes explicit Crown policy.
+- Consequences: Church opens Heresy Investigation against Crown (Crown Mandate −2 to −3). Crown aligns with Varfell and RM on the Einhir question. Löwenritter decision forced: protect the heretic queen (stay Loyal/Restless) or advance toward Autonomous/Split. Torben's Loyalty track transfers to Lenneth. Most transformative fuse outcome — changes what Crown IS.
+
+**Arc C: The Assassination Victim (Royal Assassination Fuse — Lenneth target, sub-roll 1–2)**
+- Branch condition: Royal Crisis Tension Card fires with Lenneth as sub-rolled target. Lenneth dies S8–S12.
+- Arc terminates on fire. Consequences activate Almud's Arc D (The Avenger — see designs/npcs/npc_behavior_v30.md §5.2 Almud Arc Map). Without Lenneth's moderating influence Crown's Einhir policy hardens, RM PW advances, Southern Accord erodes.
+
+*Arcs B/C are mutually exclusive — a sub-roll at game start (or when Royal Crisis card is drawn) determines which (if any) of Lenneth/Torben/Almud is targeted. See params/bg/royal_assassination.md.*
+
+---
+
+
+
+
+
+
+---
+
+## 3. Prince Torben Almqvist — The Disputed Inheritance
+
+**Royal Assassination Fuse — target possibility (sub-roll 3–4, params/bg/royal_assassination.md):** If Torben is the sub-rolled target, the fuse fires S8–S12 and he dies. His Conviction window arc (ED-618) terminates; consequences activate Almud's Arc E (The Bereaved Father) — Crown must deploy military to T4 to retrieve Elske from Altonia. Compound Varfell provocation + Altonian diplomatic crisis. See designs/npcs/npc_behavior_v30.md §2.8 and §5.2 Almud Arc Map for mechanical hooks.
+
+Altonia's Tutoring Demand (IP 30) is an attack on the deed-presumption itself: if Torben is educated in Altonian values, the next Almqvist monarch would be culturally Altonian — the deed-monarchy's legitimation logic would be hollow, a northern Einhir throne occupied by an Altonian-trained prince.
+
+---
+
+## 4. Princess Elske Almqvist — The Divided Inheritance
+
+**Base profile.** Elske is in Altonia (tutoring arrangement — see §3 Torben on the Altonian Tutoring Demand). She is not directly playable as a Crown heir in the default campaign because Torben holds the succession position. She becomes operationally relevant in two scenarios:
+
+1. **Royal Assassination Fuse — Torben target (sub-roll 3–4, params/bg/royal_assassination.md):** Torben dies. Elske becomes the only remaining Almqvist heir. Crown deploys military to T4 (Varfell territory) to establish an extraction route. Extraction succeeds, fails, or becomes a multi-season arc depending on Varfell disposition and Altonian response. If Elske is retrieved: she becomes the new heir, culturally Altonian-leaning, and the campaign's succession arc takes on an acculturation dimension (her Conviction emerges through Crown-side faction investment in a post-retrieval window, analogous to Torben's ED-618 window but with Altonian cultural priors).
+2. **Altonian leverage without fire:** Absent the fuse, Elske's status is a standing Altonian chip — Altonia can raise Tutoring-Demand IP threats or threaten to send Elske back at politically inconvenient moments.
+
+---
+
+## 5. Duke Magnus Vaynard — The Revolutionary
+
+
+
+
+
+
+
+
+
+---
+
+## 6. Duchess Inge Baralta — The Protestant Monarch
+
+Baralta wants the Crown. This is active ambition, not contingency.
+
+She has governed Hafenmark for decades as an unmarried, childless woman with no identified successor by direct lineage. Her eschatological orientation — she believes her work will be recognised in the afterlife — means she has no need for dynastic continuity. Her constitutional framework is her legacy, and she trusts it to persist without her. The game's mechanics say she is wrong: Leadership Deviation Ob 1 means Baralta IS Hafenmark. PP-487's PI-gated succession fork means at Public Instability (PI) < 4, the institution fractures without her.
+
+
+
+**Her cadet-branch deed-claim is the strongest on the peninsula.** The deed-monarchy's own logic — competence determines legitimacy — points to her. Decades of governance, Mandate 7, Ob 1 deviation cost. If the Almqvist line fails, she is the obvious successor. She knows this. She is not waiting for it to happen passively — her constitutional framework, her parliamentary positioning, her Church confrontations are a decades-long campaign for the throne.
+
+**Theological profile (PR-11 BA-1 resolved 2026-04-20, ED-732).** Baralta accepts the Church's theological *content* — Solmund is real, his acts were divine — but rejects the Church's monopoly on mediation. She believes in direct communion: anyone can commune with Solmund without Church mediation, and her deeds are evidence of divine favour confirming her as a divinely ordained superior person. This is simultaneously Henry VIII (sovereign authority supersedes Church jurisdiction), Luther's priesthood of all believers (direct communion), prosperity gospel (success = divine favour), and deed-monarchy theology (worthiness is divinely conferred, proven by deeds). The framing "she does not question the Church's theology" in prior drafts should be read specifically: she does not question the Church's theological content. She questions the Church's exclusive claim to mediate. This is a theological innovation, not merely a jurisdictional challenge, and it partially cracks the Perceptual Prophylaxis in populations under her influence by introducing contingency into an otherwise-essentialist cognitive frame (full reconciliation: `designs/world/solmund_cultural_guide_consolidated.md` §21; throughline mapping: T-D, accidental prophylaxis cracker). [EDITORIAL: PR-11 BA-1 — resolved 2026-04-20; supplement, not supersession.]
+
+**What happens to Hafenmark when Baralta is imperiled or dies:** Without her, the succession is purely institutional. Parliament selects. But the bench of successors learned to govern in her shadow. None have been tested independently. At PI ≥ 4, institutional succession works procedurally but the new leader inherits her enemies without her Mandate. At PI < 4, the faction fractures — legalists vs pragmatists. Hafenmark without Baralta is a personality cult that discovers it was always a personality cult.
+
+---
+
+## 7. Confessor Arne Himlensendt — The Structural Keystone
+
+
+**He is not cynical, not calculating, not a political operator.** He believes completely in the Church's theological framework. His TC accumulation — hospitals, charities, dispute resolution — is not strategy. It is pastoring. The structural consequence is theocratic drift he would be horrified to recognise.
+
+
+
+
+
+
+---
+
+## 8. Cardinal Magnus Klapp — The Scholar's Dilemma
+
+
+---
+
+## 9. Cardinal Arnlod Olafsson — The Compromised Enforcer
+
+
+---
+
+## 10. Cardinal Osten Jarnstal — The Soldier Who Outgrew His Chain of Command
+
+Unchanged. His Belief drift toward Templar independence is orthogonal to the caste axis.
+
+---
+
+## 11. Grandmaster Ehrenwall — The Ledger That Never Forgives
+
+

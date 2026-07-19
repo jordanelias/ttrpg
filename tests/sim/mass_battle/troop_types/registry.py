@@ -5,8 +5,11 @@ per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only — no up-DA
 Re-imported by orchestration via star-import (Subunit.of_type and the stress-test imports unchanged).
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from mass_battle.config import *
+from mass_battle.equipment import loadout_for
 
-__all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for']
+__all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
+           'REACH_SHORT', 'REACH_LONG', 'TROOP_TYPE_REACH', 'reach_for',
+           'unit_type_for']
 
 
 def roles_for(troop_type):
@@ -52,3 +55,50 @@ def stats_for(troop_type):
         return None
     preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())
     return dict(preset) if preset is not None else None
+
+
+# ─── REACH (Stage A — true-adjacency stand-off primitive) ───────────────────
+# [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach: melee contact (<=1 metre).
+#  Applies to most melee weapons." / "Long Reach: extended melee (polearms, spears; <=3 metres)."]
+# The 3x ratio is applied to the movement lattice's own pitch (COL_WIDTH=1.0, hierarchy/units.py)
+# rather than injecting an unratified meters-per-lattice-unit conversion.
+REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
+REACH_LONG = 1.5   # [canonical: params/core.md §Reach Terminology (PP-290) — "Long Reach... <=3 metres", 3x ratio]
+
+# No TROOP_TYPE_STATS key today is textually a polearm/spear unit (PP-290's literal Long-Reach
+# examples). cavalry/knights_templar plausibly carry lances, but PP-290's cited text does not
+# actually say "lances" -- that would be an inference beyond the citation, not licensed by it. Left
+# empty (every type falls through to Short) rather than fabricating an assignment; extend this table
+# when a troop type explicitly wielding a polearm/spear is added, or Jordan rules on cavalry/lances.
+TROOP_TYPE_REACH = {}
+
+
+def reach_for(troop_type):
+    """PP-290 reach class for a troop type, in lattice units (COL_WIDTH=1.0 pitch). Unmapped types,
+    including bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through
+    to Short Reach -- stated here as intended, not an implicit side effect. Lookup is
+    case-insensitive, matching stats_for."""
+    cls = TROOP_TYPE_REACH.get(str(troop_type).strip().lower()) if troop_type else None
+    return REACH_LONG if cls == 'long' else REACH_SHORT
+
+
+# ─── unit_type (movement audit gate 2, ED-MB-0001) ──────────────────────────────
+# [canonical: Jordan-ruled 2026-07-02, verbatim: "Ranged is troop type as per the weapon assigned
+#  to troop."] unit_type ('ranged'/'melee') must derive from the troop's ASSIGNED WEAPON, not from
+# its role -- ED-1095/T4's mistake was defaulting a mounted_archers spec to role='Kite' without
+# this half, so the unit never actually got unit_type='ranged' (role='Kite' carries no unit_type
+# of its own; ROLE_SPEC never has). The primitive already existed and was already "NOT YET WIRED
+# into resolution" per its own docstring: mass_battle.equipment.loadout_for(troop_type) returns
+# (weapon_record, armour_record) from the provisional TROOP_LOADOUT table (mass_battle_v30 §B.2 +
+# the mounted_archers extension added alongside this fix); a weapon record's `reach` field is
+# already exactly 'melee'/'ranged' (equipment/weapons.py ARSENAL). This wires that existing,
+# previously-inert mapping -- no new primitive invented.
+def unit_type_for(troop_type):
+    """'ranged'/'melee' derived from troop_type's assigned weapon (TROOP_LOADOUT/loadout_for). An
+    unmapped troop type (no loadout entry -- e.g. bare 'infantry', a real call-site default that is
+    not a TROOP_TYPE_STATS/TROOP_LOADOUT key) falls through to 'melee', preserving every existing
+    call site's byte-exact default. Lookup is case-insensitive, matching stats_for/reach_for."""
+    weapon, _armour = loadout_for(troop_type)
+    if weapon is None:
+        return 'melee'
+    return weapon.get('reach', 'melee')

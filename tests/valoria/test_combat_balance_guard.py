@@ -13,22 +13,28 @@ These are SEEDED, so they are deterministic (never flaky) yet still fail loudly 
 A deliberate re-baseline updates the bands with a recorded reason; an accidental regression trips them.
 """
 import os
+import random
 import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, 'tests', 'sim', 'v32-combat-balance'))
+
+
+class _Rng:
+    """Engine rng factory — the contract is a stdlib random.Random since the ED-1085 numpy
+    de-leak (core resolves through engine.autoload.sigma_leverage; rng.gauss/betavariate/randrange).
+    Wrapped so a future substrate change is a one-line re-point here, and bands re-baseline
+    with a recorded reason per the module docstring."""
+    default_rng = staticmethod(lambda seed: random.Random(seed))
 
 
 def _engine():
-    pytest.importorskip("numpy")  # the engine resolves via r8 -> numpy; skip cleanly where numpy is absent
-    import numpy as np
     import combatant as C
     import wrapper as W
     from config import CFG
-    return np, C, W, CFG
+    return _Rng, C, W, CFG
 
 
 @pytest.mark.parametrize("wa,wb,armor,trad", [
@@ -39,10 +45,10 @@ def _engine():
 def test_seeded_determinism(wa, wb, armor, trad):
     """Same seed + same setup -> byte-identical outcome sequence. A wrapper that leaks state across fights or
     reorders an rng draw (the failure mode an incomplete de-leak risks) breaks this."""
-    np, C, W, CFG = _engine()
+    np, C, W, CFG = _engine()   # np is the rng factory shim (stdlib contract, ED-1085)
 
     def run():
-        rng = np.random.default_rng(20260630)
+        rng = np.default_rng(20260630)
         out = []
         for _ in range(60):
             a = C.Combatant('A', weapon=wa, armor=armor, tradition=trad)
@@ -59,8 +65,8 @@ def test_mirror_fairness(weapon):
     aggressor/defender per beat over fixed A/B objects precisely so neither label is privileged; a leak that ties a
     mechanic to raw A/B shows up as a skewed mirror. Seeded -> deterministic. Band [0.40, 0.60] is generous around
     the observed ~0.45-0.55 spread so only a real asymmetry (not noise) trips it."""
-    np, C, W, CFG = _engine()
-    rng = np.random.default_rng(424242)
+    np, C, W, CFG = _engine()   # np is the rng factory shim (stdlib contract, ED-1085)
+    rng = np.default_rng(424242)
     n = 300
     a_wins = 0
     for _ in range(n):
@@ -81,8 +87,8 @@ def test_heavy_mirror_fair_and_decisive(weapon):
     (b) the DECIDED fraction stays healthy (>=0.40) — a regression that re-breaks armour-defeat (every mode failing vs
     plate -> draw-stalemate) trips (b). Seeded -> deterministic. Current engine decides ~0.98-1.00; the old broken
     state was ~0.17-0.35 — the 0.40 floor sits robustly between."""
-    np, C, W, CFG = _engine()
-    rng = np.random.default_rng(20260630)
+    np, C, W, CFG = _engine()   # np is the rng factory shim (stdlib contract, ED-1085)
+    rng = np.default_rng(20260630)
     n = 300
     a_wins = decided = 0
     for _ in range(n):

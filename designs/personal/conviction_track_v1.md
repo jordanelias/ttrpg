@@ -63,7 +63,7 @@ This document is the canonical reference for the Piety Track mechanic. NPC prior
 
 ## §3 Thread Operation → Conviction Scar Triggers (ED-663, ED-664)
 
-Thread operations witnessed by NPCs produce Conviction Scars. Parallels the Certainty Track movement triggers (params_core PP-551) but targets a different track: Certainty = cosmological framework shift; Conviction Scar = moral wound.
+Thread operations witnessed by NPCs produce Conviction Scars. Parallels the Truth Track movement triggers (params_core PP-551) but targets a different track: Truth = cosmological framework shift; Conviction Scar = moral wound.
 
 **Thread Event × Conviction Scar Matrix:**
 
@@ -78,7 +78,7 @@ Thread operations witnessed by NPCs produce Conviction Scars. Parallels the Cert
 
 **Conditions:**
 - **Witness requirement:** Direct witness (present in scene) or credible testimony (Evidence Track contribution + Disposition ≥ +1).
-- **Certainty scaling:** C5: +1 Scar severity. C0: −1 Scar severity. C2–3: standard.
+- **Truth scaling:** C5: +1 Scar severity. C0: −1 Scar severity. C2–3: standard.
 - **Season cap:** Max 1 Scar per season from Thread witnessing per NPC.
 - **Mending exception:** Mending never produces Scars.
 - **Faith specificity:** Faith NPCs Scar from ANY Thread operation except Mending.
@@ -97,7 +97,7 @@ Player witnesses Thread event → Spirit pool, TN 7, Ob 1. Failure: active Convi
   - `designs/architecture/complete_systems_reference.md` §1.4 NPC Almud Arcs (Reformer/Fortress/Overthrown gated on Conviction state)
   - All NPC Conviction declarations (King Almud: Order; Confessor Arne: Faith; etc.)
 - **Related mechanics:**
-  - `designs/threadwork/threadwork_v30.md` §Certainty Track (parallel mechanic — cosmological shift vs moral wound)
+  - `designs/threadwork/threadwork_v30.md` §Truth Track (parallel mechanic — cosmological shift vs moral wound)
   - `designs/threadwork/threadwork_v30.md` §Resonant Style (consumes Conviction values)
 - **Editorial history:**
   - ED-663 (Thread Operation Conviction Scar matrix)

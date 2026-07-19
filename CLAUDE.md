@@ -19,22 +19,27 @@ are more "current state" files than there should be; trust them in this strict p
 1. **`CURRENT.md`** — the **single human-readable index** of the live canonical head per subsystem.
    When unsure whether a doc is current, this is the authority. Last reconciled by hand (2026-06-28),
    so treat it as fresher than any filename or in-file version string.
-2. **`HANDOFF.md`** — the **single live continuity surface**: pending work, decisions, next actions.
-   The SessionStart banner (`tools/session_status.py`) reads its "Next actions" section.
-3. **`references/canonical_sources.yaml`** + **`canon/mechanics_index.yaml`** — machine-readable
+2. **`HANDOFF.md`** — the **continuity index**: root file pointing to lane-scoped
+   `registers/handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
+   GO, SE`) plus genuinely cross-cutting pending work/decisions/next actions. Split 2026-07-02 to
+   reduce concurrent-session merge-collision surface on one shared file, the same motivation
+   behind the ID namespace itself. The SessionStart banner (`tools/session_status.py`) reads root
+   `HANDOFF.md`'s "Next actions" section only — check your lane's file too.
+3. **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable
    indices. ⚠️ The `canonical_sha__*` pins in `canonical_sources.yaml` are **not verified against the
    working tree** (the only tooling re-syncs them *from* GitHub, which contradicts the working-tree
    rule). Treat the pins as advisory, not a trustworthy integrity signal.
 
 **Ignore for currency** — these are stale or retired, do not resume from them:
 - `README.md` — outdated navigational pointers; defers to the three files above.
-- `session_log_current.md`, `session_log_archive.md`, `session-handoff-2026-05-06.md`,
-  `session_logs/`, `handoffs/`, `canon/session_checkpoint.md` — **retired session-log/checkpoint
-  machinery still present in the tree** (one even carries `status: active`). They are NOT
-  authoritative; **`HANDOFF.md` is the only live continuity surface.** Do not write into them and do
-  not resume from `canon/session_checkpoint.md`. *(Recommended cleanup, not yet done: move these under
-  `deprecated/`.)*
-- `archives/`, `deprecated/` — history only, never canonical.
+- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`,
+  `deprecated/session_machinery/handoffs/` — old per-lane-A/B/C `.yaml` files, a **different,
+  retired thing** from the live root-level `registers/handoffs/*.md` directory below, do not confuse them —
+  `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
+  — **relocated to `deprecated/session_machinery/` (2026-07-01, ED-1084)**. NOT authoritative;
+  **`HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` are the only live continuity surface.** Do not
+  write into or resume from anything under `deprecated/session_machinery/`.
+- `deprecated/` (incl. `deprecated/archives/`, the former top-level `archives/` merged in 2026-07-16, ED-IN-0071 P5) — history only, never canonical.
 
 ---
 
@@ -47,11 +52,22 @@ are more "current state" files than there should be; trust them in this strict p
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
-  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix`.
+  `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` in the description when applicable.
-- **Continuity = git history + `HANDOFF.md`.** No session-log/checkpoint machinery is in use (despite
-  retired files lingering — §1). When you pause mid-task, capture next actions in `HANDOFF.md`; a
-  commit *is* the session close.
+- **Continuity = git history + `HANDOFF.md`/`registers/handoffs/HANDOFF_<LANE>.md`.** No session-log/checkpoint
+  machinery is in use (despite retired files lingering — §1). When you pause mid-task, capture next
+  actions in your lane's `registers/handoffs/HANDOFF_<LANE>.md` (or root `HANDOFF.md` only for genuinely
+  cross-cutting items); a commit *is* the session close.
+- **Merging a PR ratifies its PROPOSED contents by default (ED-1094, 2026-07-02).** If a PR lands a
+  design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
+  that PR *is* the ratification — flip the doc's `## Status:` line, the ED ledger `status`/`needs_jordan`
+  fields, and `CURRENT.md` as part of the same merge, not as a separate later step nobody triggers.
+  **The exception must be loud, not silent:** if something in the PR genuinely needs separate,
+  explicit sign-off beyond ordinary merge review, call it out prominently in the PR body as *held
+  back* — never bundle a hard design call into a routine-work PR and rely on an unprompted follow-up
+  to ratify it later. (This closes a real recurring failure: ED-1083's doctrine sat PROPOSED in `main`
+  after PR #55 was reviewed and merged, because the prior convention required a distinct explicit
+  ratification step that nothing forced to happen.)
 
 ---
 
@@ -59,6 +75,7 @@ are more "current state" files than there should be; trust them in this strict p
 
 | Directory | Contents |
 |---|---|
+<<<<<<< HEAD
 | `canon/` | Philosophical foundations (P-01..P-14), editorial ledger (`editorial_ledger.jsonl`), patch register, mechanics index, canonical timeline, supersession register |
 | `audit/` | The audit-report corpus, organized by write-ownership lane (`references/lane_assignments.yaml`): `lane-a/` (design-content), `lane-b/` (infrastructure), `lane-c/` (simulation/Godot), `other/` (cross-cutting/unowned). Consolidated 2026-07-18 from `designs/audit/`, `tests/audit/`, and scattered locations — but only *standalone* documents; audits embedded in a numbered session-chapter sequence or sitting beside the code they critique were deliberately left where they were (see the residual `designs/audit/<dated-session>/` folders) rather than fragment a session record. |
 | `designs/` | System design docs by subsystem: `architecture/` (Key substrate), `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `territory/`, `threadwork/`, `npcs/`, `articulation/`, `world/`, `workplans/`, `godot/`. `workplans/` is the **one live home for the master workplan** (see its `README.md`) — new revisions go there, not a new `designs/audit/` folder. `audit/` (the subfolder, not the top-level one above) now holds only dated session folders whose audit-named files are numbered chapters or sit beside live code — the standalone audit corpus lives in the top-level `audit/` folder instead. |
@@ -67,8 +84,25 @@ are more "current state" files than there should be; trust them in this strict p
 | `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests — CI runs only `pytest tests/valoria` and `pytest sim/tests`; `tests/contracts/`, `tests/hooks/`, `tests/index/` hold real `test_*.py` files that are collected by **nothing**, a separate un-fixed debt) + simulation outputs + coverage matrix. The audit-report corpus formerly in `tests/audit/` moved to the top-level `audit/` folder (2026-07-18). Still holds narrative content like the `emergent_arc_skeleton_test_*` batches that is **prose, not executable specs** — don't mine it as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
 | `sim/` | Monte-Carlo / simulation code (`mc_v18.py`, per-scale subpackages) — the **1:1 Python reference the GDScript port is built from**. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
 | `engine/` | Sigma-leverage engine armature. Its audit report moved to `audit/lane-c/sigma_leverage_engine_audit.md` (2026-07-18). ⚠️ `engine_audit_harness.py` is **dead** (hardcoded `/home/claude` paths) — do not invoke. |
+=======
+| `canon/` | Philosophical foundations (P-01..P-14), canonical timeline, canon constraints, self-rendering/leap-mechanism amendments. **The process registers moved OUT to `registers/` (2026-07-16, ED-IN-0071 P0)** — canon/ now holds only world/design truth. |
+| `registers/` | Process ledgers/registers, moved out of `canon/` (ED-IN-0071 P0, 2026-07-16): editorial ledger (`editorial_ledger.jsonl` pre-cutover flat IDs + lane-split `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN`, §3), patch register, supersession register, mechanics index, placeholder names. Old `canon/…` citations resolve via `references/restructure_ledger.md`'s alias map. |
+| `registers/handoffs/` | Lane-scoped continuity: `HANDOFF_<LANE>.md` per `ED-<LANE>-NNNN` lane (§1), moved under `registers/` from top-level `handoffs/` (ED-IN-0071 P0b, 2026-07-16). Root `HANDOFF.md` (the index the SessionStart banner reads) **stays at repo root**. ⚠️ Do not confuse with the unrelated, retired `deprecated/session_machinery/handoffs/` (old per-lane-A/B/C `.yaml` files, a different concept — §1). |
+| `designs/` | System design docs, **being rehomed subsystem-by-subsystem to `systems/`** (ED-IN-0071 P4, §2a). Still here: `scene/` (combat engine, social contest), `provincial/` (mass battle, factions), `personal/`, `factions/`, and `audit/` (audits stay — they go to the by-category `audits/` lifecycle in P5, not `systems/`). |
+| `systems/` | Design docs by **subsystem** (ED-IN-0071 P4, RULED §2a: one subsystem = one folder = one ID lane = one CURRENT.md row = one `HANDOFF_<LANE>.md` = one Godot module tree). Each subsystem co-locates its design `.md` at the root + a `sim/` subfolder for its oracle scripts. **P4 slices EXECUTED (2026-07-17):** slice 1 — the three doc-only clean subsystems `npcs/`, `articulation/`, `ui/` (no sim, RULED 1:1) moved from `designs/`, and the whole toolchain was taught the new primary (`systems/` is now a Python **package**). Slice 2 — **`threadwork/`** (the doc+sim template): `designs/threadwork/` + `sim/thread/` → `systems/threadwork/` + `systems/threadwork/sim/`, imported as `systems.threadwork.sim.*` (was `sim.thread.*`); `ci_co_file_checker` gained a **pure-rename exemption** so relocating a params-bearing `_v30` doc doesn't demand a spurious params co-change. Slice 3 — the substrate design docs `designs/architecture/` → `systems/_architecture/` (doc-only, not editorial-governed; the RULED underscore-prefix substrate tier). The dir-prefix alias-pointer convention was made robust here: `broken_dependency_checker`'s restructure remap gained **longest-dir-prefix resolution** so a single `designs/X/ → systems/…/` pointer row resolves every moved file's live ledger refs (no per-file enumeration). Old `designs/{npcs,articulation,ui,threadwork,architecture}/…` + `sim/thread/…` paths alias via `references/restructure_ledger.md`. Slices 4–7 continued: `world/` (slice 4), `settlements/` (slice 5, from `designs/territory/`+`sim/territory/`), `fieldwork/` (slice 6, the first **cross-subdir split** — `fieldwork_*`/`investigation_*` docs from `designs/scene/` + `knots_v30` from `designs/personal/` + the fieldwork/investigation/knots sim from `sim/personal/`), `social_contest/` (slice 7, also cross-subdir — the `social_contest_*` docs from `designs/scene/` + the `contest/` sim package + `parliamentary_vote`/`parliamentary_stay`/`contest_legacy_stub` from `sim/personal/`, imported as `systems.social_contest.sim.*`; `tribunal` stays in `sim/personal/` — faction-side, deferred), and `combat/` (slice 8, PC lane — the `combat_v30`/`combat_design_v1`/`combat_c4_draft` docs + the `combat_engine_v1/` resolver dir (moved **wholesale at identical depth** so every internal `sys.path`/`../../..` reach survives) + `scene_combat_v1/` (ED-911 envelope) from `designs/scene/` + the DEPRECATED `sim/personal/combat.py` → `systems/combat/sim/`. **This slice RETIRED the `import systems` landmine**: `combat_engine_v1/systems.py` → `combat_systems.py` (the bare `import systems` that collided with this top-level package is gone), so `sim/tests` + `tests/valoria` can now be collected in one process. `combat_engine_v1/` stays a **non-package scripts-on-path** dir; only `systems/combat/` + `systems/combat/sim/` are packages), and `mass_battle/` (slice 9, MB lane, provincial split part 1 — the `mass_battle_v30`/`mass_battle_integration_v30`/`military_layer_v30` docs from `designs/provincial/` + the `massbattle`/`units`/`tactic_cards`/`altonian_reinforcements` sim from `sim/provincial/`, imported as `systems.mass_battle.sim.*`; membership is authoritative from the `build_decisions` MB lane-map, NOT a bare `designs/provincial/` sweep. The FA-lane `faction_action` (still in `sim/provincial/`) lazy-imports `massbattle` across the lane boundary until the factions slice), and `factions/` (**slice 10** 2026-07-18, FA lane, provincial split part 2 — the `faction_*`/`ci_political`/`baralta_crown_claim`/`franchise`/`parliamentary_transfer`/`fractional_province_ownership`/`fail_forward_pp177`/`political_dynamics_keys_migration`/`treaty_expiration`/`varfell_path_b`/`factions_personal` docs + `faction_systems_overview` from `designs/provincial/` + `designs/factions/` + the 14 FA sim modules from `sim/provincial/`, imported as `systems.factions.sim.*`; membership authoritative from the `build_decisions` FA lane-map. `faction_action`'s cross-lane lazy-import of `massbattle` (slice 9) is preserved. **Jordan-ruled inclusion:** `factions_personal_v30` was UNMAPPED in the lane-map yet its params counterpart `engine/params/factions_personal.md` was already FA-tagged, so it moved and the lane-map omission was fixed; `home_sanctuary` (UNMAPPED, Church T9 protection) stays in `sim/provincial/`). Remaining: **character/\*** (personal, folds the RULED ED-644 piety rename) + the un-lane-tagged provincial leftovers `strategic_layer_v30`/`victory_v30` (route in a later slice; `clock_registry_v30`→IN/`peninsular_strain_v30`→settlements). The scene docs `conviction_track_v30`/`derived_stats_v30`/`miraculous_event_v30` STAY in `designs/scene/` (route to settlements/character/other in later slices). |
+| `godot/` | The Godot port, consolidated out of THREE former homes (`designs/godot/`, `designs/videogame/`, `designs/audit/2026-06-10-godot-conversion-strategy/`) to a top-level primary (ED-IN-0071 P2, 2026-07-16): the PROPOSED governing `godot_conversion_strategy_v1.md`, the `godot_architecture_specification.md`, the 4 stale pre-`d+σ` docs, and `skeleton/` (§6). **Is** the eventual `res://` project root. Old paths alias via `references/restructure_ledger.md`. |
+| `arcs/` | Generated **narrative content**, promoted out of `designs/arcs/` to a top-level primary (ED-IN-0071, 2026-07-16) — neither system-mechanics nor world-canon. Root holds the non-batch narrative (`arc_expansion`, `emergent_*`, `narrative_scenario_chains`, `throughline_resolutions`); the numbered arc batches (`arcs_01_04`…`arcs_46_55` + `arc_narrative_analysis`) live in `arcs/simulated/` (renamed from `gm_ref/`, root batches consolidated in). Arc **registers** (`arc_register*` tracking clocks/events/factions/territory/threads, formerly `references/arc_register*` + `references/arcs/`) live in `arcs/registers/` — distinct from the process ledgers in top-level `registers/`. Old paths alias via `references/restructure_ledger.md`. |
+| `workplans/` | The master workplan + progress board, promoted out of `designs/workplans/` (ED-IN-0071 P1, 2026-07-16) to a top-level primary. `workplan_v6_progress.yaml` is the board the SessionStart banner reads (`tools/workplan_status.py`); `valoria_master_workplan_v6.md` is the live steering surface. Old `designs/workplans/…` paths alias via `references/restructure_ledger.md`. |
+| `dashboard/` | The published GitHub-Pages status site, promoted out of `docs/dashboard/` (ED-IN-0071 P1). `tools/dashboard_data.py` writes `dashboard/data.json`; `.github/workflows/dashboard.yml` deploys it. |
+| `proposals/` | Unratified design proposals, promoted out of `designs/proposals/` (ED-IN-0071 P1, 2026-07-16). Surfaced BY LOCATION by `tools/observability/build_proposals.py`. Old `designs/proposals/…` citations alias via `references/restructure_ledger.md`. |
+| `engine/params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*` — moved from top-level `engine/params/` into the `engine/` executable-model primary (ED-IN-0071 P3, 2026-07-16). ⚠️ Numbers live as English tables, not typed data (see §5). ⚠️ **Prose refs to the old `engine/params/…` path (sim comments, design-doc mentions, the append-only ledgers, and these tables' own internal cross-refs) were left in place and resolve via `references/restructure_ledger.md`'s alias map** — only the machine-read functional layer (tools/, `references/*.yaml`, `registers/*.yaml`) was rewritten to `engine/params/`. |
+| `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `values_master.yaml`, propagation maps, throughlines. ⚠️ `values_master.yaml` is quarantined-stale (banner, ED-1084); the retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
+| `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
+| `sim/` | Monte-Carlo / simulation code — the **1:1 Python reference the GDScript port is built from**. The **per-subsystem** sims live here (`personal/` — now partial: its `fieldwork`/`investigation`/`knots` modules moved to `systems/fieldwork/sim/` (P4 slice 6), its `contest/` package + `parliamentary_vote`/`parliamentary_stay`/`contest_legacy_stub` to `systems/social_contest/sim/` (slice 7), the DEPRECATED `combat.py` to `systems/combat/sim/` (slice 8), the rest (conviction, beliefs, companion, `tribunal`, …) distribute in the personal split — `provincial/` — now nearly empty: its `massbattle`/`units`/`tactic_cards`/`altonian_reinforcements` modules moved to `systems/mass_battle/sim/` (slice 9) and its 14 FA-lane modules (`faction_action`/`parliamentary_action`/`treaty`/`council_solmund`/…) to `systems/factions/sim/` (slice 10), imported as `systems.factions.sim.*`; only `home_sanctuary` (UNMAPPED) remains — `peninsular/` — `thread/` moved to `systems/threadwork/sim/` (P4 slice 2), `world/` to `systems/world/sim/` (slice 4), and `territory/` to `systems/settlements/sim/` (slice 5), imported as `systems.<sub>.sim.*`; `peninsular/` stays for now — imported by `factions` + `mc_v18`, its home resolved in a later slice — and the rest distribute to `systems/<subsystem>/sim/` in later P4 slices); the engine **core** (`substrate`/`autoload`/`cross_scale`/`mc_v18`) moved to `engine/` (P3 Phase A, 2026-07-16) and is imported as `engine.*`. See `sim/README.md` + `sim/CONVENTIONS.md`, but note those docs understate progress (§7). `sim/README.md` also disambiguates against the confusingly-named `tests/sim/` and `tests/sim_framework/` (neither is this package). |
+| `engine/` | Executable-model primary (assembling per ED-IN-0071 P3). Holds the typed Class-C export `engine/engine_params/combat_engine_v1.json` (moved from `references/engine_params/`, 2026-07-16 — GENERATED from `systems/combat/combat_engine_v1/config.py` via `tools/export_engine_params.py`, round-trip-checked in CI; the Godot port regenerates from it) + the prose param tables `engine/params/` (moved from top-level `params/`, 2026-07-16) + the sigma-leverage armature/audit docs. **Is now a Python PACKAGE** (`engine/__init__.py`): the executable engine CORE — `engine/substrate/` (Key substrate), `engine/autoload/` (singleton/registry hub), `engine/cross_scale/` (inter-scale), `engine/mc_v18.py` (campaign driver) — moved from `sim/` (ED-IN-0071 P3 Phase A, 2026-07-16); imported as `engine.substrate` etc. Per-subsystem sims stay in `sim/` (→ `systems/<subsystem>/sim/` in P4) and depend UPWARD on this core (acyclic — autoload is a leaf). ⚠️ Historical `sim.{substrate,autoload,cross_scale,mc_v18}` refs in prose/frozen `tests/sim/` are left to the alias map. The dead `engine_audit_harness.py` was retired to `deprecated/engine/` (2026-07-09) — do not resurrect. |
+>>>>>>> origin/main
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once. Some tools are dead or GitHub-dependent — §6. |
-| `archives/`, `deprecated/` | History; not canonical. |
+| `deprecated/` | History; not canonical. The two former graveyards are merged (ED-IN-0071 P5, fork #1): dead **content** under `deprecated/archives/` (the former top-level `archives/`), dead **code/machinery** under `deprecated/{tools,skills,engine,session_machinery,…}`. |
 
 ---
 
@@ -80,12 +114,34 @@ are more "current state" files than there should be; trust them in this strict p
   filename `_v30`, in-file `## Version: vN.N`, and the `v40` generation marker (no file carries `_v40`).
   **A filename or in-file version cannot tell you what is current — only `CURRENT.md` and a head's
   `## Status:` line can.** Concrete hazard: `_v30` is nominally "current generation", but the current
-  **combat** head is `designs/scene/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
+  **combat** head is `systems/combat/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
   *PARTIALLY SUPERSEDED*. Always resolve combat via `CURRENT.md`, never by the `_v30` suffix.
-- **ID systems.** `PP-NNN` patches (`canon/patch_register_active.yaml`), `ED-NNN` editorial items
-  (`canon/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. Reserved-ID blocks are tracked and
-  currently **exhausted** (ED ceiling 1042) — re-block before allocating new IDs
-  (`references/id_reservations.yaml` + `HANDOFF.md`).
+- **ID systems.** `PP-NNN` patches (`registers/patch_register_active.yaml`), `ED-NNN` editorial items
+  (`registers/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
+  is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
+  **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
+  at `ED-1096` (two more flat IDs, ED-1095/1096, landed the same cutover day before the sequence
+  fully stopped — `ED-1094` is the ruling that established the freeze, not the last ID issued
+  under it; corrected 2026-07-11, ED-IN-0034, caught auditing `skills/valoria-editorial-register`
+  against the ledger) — no new allocations, but permanently valid for existing citations — and all NEW EDs
+  use the lane-tagged `ED-<LANE>-NNNN` format (e.g. `ED-MB-0001`), zero-padded to 4 digits. Lanes:
+  `MB` mass battle, `PC` personal combat, `FI` field investigation, `SC` social contest,
+  `FA` faction actions, `WR` world, `IN` infrastructure/cross-cutting, `GO` godot, `SE` settlements.
+  Motivated by two same-session concurrent-allocation collisions on the flat sequence in one PR
+  (see `ED-1094`'s ledger entry) — a lane tag makes cross-lane collision impossible by
+  construction, not just by allocation discipline. Both formats resolve through the same
+  citation-audit path (`tools/validate_ed_citations.py`) and currency gate
+  (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
+  **The ledger file itself is lane-split too (2026-07-08):** an `ED-<LANE>-NNNN` entry lives in
+  `registers/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
+  `registers/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
+  merge-collision reason. Pre-cutover flat-ID entries stay in the main file (no retrofit). A
+  lane file exists only once that lane has allocated an ED (no `_go.jsonl` yet). Both the main
+  file and every lane file are "active, authoritative" — read all of them, not just one.
+  **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
+  lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
+  to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
+  cross-cutting `IN` work (like this namespace itself) or resolving a cross-lane collision.
 - **Naming gate.** Canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
   `tools/ci_naming_check.py` (CI + pre-commit) and an edit-time nudge. Definition naming is centralized
   in `references/names_index.yaml`.
@@ -97,16 +153,16 @@ are more "current state" files than there should be; trust them in this strict p
 This is the most fragile and most load-bearing surface for the videogame, and it has known traps. Do
 not treat any "structured" data layer as ground truth without checking it against the prose.
 
-- **Numbers live as prose, not typed data.** All mechanical parameters in `params/*.md` are markdown
+- **Numbers live as prose, not typed data.** All mechanical parameters in `engine/params/*.md` are markdown
   tables (unicode `×`, en-dashes, parenthetical caveats like "minimum 5", footnotes). A Godot importer
   **cannot ingest these directly** — there is no typed engine-params file yet.
 - **`references/values_master.yaml` is auto-extracted and partly stale/wrong.** Its `formula` fields are
-  byte-identical free-text English (not parseable ASTs); it indexes a **nonexistent** `params/combat.md`
-  (~70 entries) and pulls 8 values from `params/threadwork_superseded.md`. **Do not lift numbers from it
+  byte-identical free-text English (not parseable ASTs); it indexes a **nonexistent** `engine/params/combat.md`
+  (~70 entries) and pulls 8 values from `engine/params/threadwork_superseded.md`. **Do not lift numbers from it
   as canonical** — verify against the current prose head in `CURRENT.md` first.
 - **Derived-stat schema is IN FLUX.** `descriptor_registry.yaml` marks the 9-attribute roster "IN FLUX",
   aggregates (`agg.body/mind/social`) as `placeholder` and not wired, and attribute keys as `warn` (not
-  `block`). **Combat Pool is defined three different ways** across `values_master.yaml`, `params/core.md`
+  `block`). **Combat Pool is defined three different ways** across `values_master.yaml`, `engine/params/core.md`
   (PP-247), and `module_contracts.yaml`. Do not bind Godot resource fields to these keys yet.
 - **When you need a number for the engine:** resolve the subsystem head via `CURRENT.md` → read the prose
   param/design doc → cite the `PP-NNN`/`ED-NNN` that established it. Do not synthesize a value the ledger
@@ -122,24 +178,32 @@ not treat any "structured" data layer as ground truth without checking it agains
 The conversion is **PROPOSED and largely un-executed**. The skeleton is illustrative, not buildable.
 Do not represent the skeleton as a runnable head-start.
 
-- **Governing spec:** `designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md`
+- **One home now.** The Godot material was consolidated from three scattered homes into the top-level
+  `godot/` primary (ED-IN-0071 P2, 2026-07-16): the governing strategy (formerly under
+  `designs/audit/2026-06-10-godot-conversion-strategy/`), `godot_architecture_specification.md` (formerly
+  `designs/videogame/`), and the stale docs + `skeleton/` (formerly `designs/godot/`). Old paths alias.
+- **Governing spec:** `godot/godot_conversion_strategy_v1.md`
   — status **PROPOSED (Jordan-vetoable throughout)**, with an open 8-item register and **unexecuted
   Gate-0 preconditions** (KeyStore v2, base classes, RNG service). It is the plan, **not yet a ratified
   contract**. Drive its register + Gate-0 to closure before treating any decision as fixed.
-- **Skeleton is non-compilable.** `designs/godot/skeleton/` covers only **1 of 27** modules
+- **Skeleton is non-compilable.** `godot/skeleton/` covers only **1 of 27** modules
   (`personal_combat`) and `extends`/calls a spine (`BaseEngine`, `EngineModule`, `Key`, `KeyBus`,
   `GameState`, `Resolver`) **defined nowhere in the corpus**. It cannot be opened and run in Godot 4.6.
-- **The one ported module already disagrees with its oracle.** `combat_config.gd` hand-edits
-  `adef_threshold` away from the canonical Python oracle (`designs/scene/combat_engine_v1/config.py`),
-  with an inline `[AUDIT-FIX]` note — so Key-log parity (the master validation gate) cannot go green.
-  **Never let a port "correct" its oracle in-place;** fix `config.py` in canon via the editorial ledger,
-  then re-export.
+- **Port↔oracle discipline (ED-1050, resolved 2026-06-30).** `combat_config.gd` once hand-edited
+  `adef_threshold` away from the canonical Python oracle with an inline `[AUDIT-FIX]`; Jordan resolved it
+  by re-sweeping the oracle (`config.py`, monotone ADEF_THRESHOLD) and re-exporting — port and oracle now
+  match. The rule stands: **never let a port "correct" its oracle in-place** — fix canon via the ledger,
+  then re-export. Key-log parity is still known-red, but only because RESIST/GAP_EXPOSURE/gap-game logic
+  has not yet been re-exported to `weapon_resource.gd`/`strike_module.gd` (ED-1050 residual).
 - **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 10/27 modules
   have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
   are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
   with `engine_clock`).
-- **The four `designs/godot/*.md` docs are stale (all 2026-04-18) with no supersession banner** and encode
-  the pre-`d+σ` model. `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
+- **The four stale pre-`d+σ` docs** (`godot/{scene_tree_architecture,gm_to_engine_conversion,data_serialization_spec,implementation_sequence}.md`,
+  all 2026-04-18) encode the pre-`d+σ` model — each carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner
+  (flagged 2026-06-30, ED-1054) pointing at the strategy doc. (`godot/`'s other `.md` files —
+  `README.md`, `godot_conversion_strategy_v1.md`, `godot_architecture_specification.md` — are current.)
+  `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
   settlements). Do not implement from them; defer to the strategy doc + Key substrate.
 
 ---
@@ -178,10 +242,37 @@ Do not represent the skeleton as a runnable head-start.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
-- **Several tools are dead** (import the orchestrator's `github_ops.py`, only present under
-  `deprecated/`, or hardcode `/home/claude`): `compliance_check`, `extract_values`, `extract_proper_nouns`,
-  `valoria_collator`, `valoria_bulk_fix`, `file_lookup`, `engine/engine_audit_harness.py`.
-  They fail opaquely — don't assume "tool exists ⇒ rule enforced."
+- **Several tools were dead** (imported the orchestrator's `github_ops.py`, only present under
+  `deprecated/`, or hardcoded `/home/claude`) and were **retired to `deprecated/tools/` /
+  `deprecated/engine/` (2026-07-09, token-efficiency pass)**, mirroring the earlier
+  `valoria-orchestrator` → `deprecated/skills/` retirement: `extract_values.py`,
+  `extract_proper_nouns.py`, `valoria_collator.py`, `valoria_bulk_fix.py`, `file_lookup.py`,
+  `compliance_dryrun.py`, `engine/engine_audit_harness.py`. None were invoked by CI, local
+  hooks, or any skill — confirmed by grepping every workflow/hook/skill for each filename
+  before moving. `skills/prose-writer/scripts/consistency_check.py` (the pre-`ci_naming_check.py`
+  naming-gate matcher, GitHub-API-only) retired the same way, to
+  `deprecated/skills/prose-writer/scripts/`. `tools/canon_coverage_check.py` is a **different**
+  case — GitHub-API-based and unwired (`ci_job: ""` in `references/ci_checks_registry.yaml`) but
+  explicitly awaiting Jordan's inclusion decision, not confirmed-dead legacy; left in place.
+  (`compliance_check` is
+  half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
+  BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
+  compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
+- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/obs_core.py`
+  is now the single owner of the primitives that were re-implemented ≥4 ways (editorial-ledger read,
+  the 9-code lane roster **including GO**, the reconciled `## Status:` regex, the narrow needs-Jordan
+  vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
+  it. `tools/observability/build_proposals.py` generates the **unified proposals/open-work register**
+  (`PROPOSALS.md` triad — one lane-partitioned view of every unratified item, covering
+  `proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
+  it complements `DECISIONS.md` (marker-level debt) rather than duplicating it.
+  `tools/build_apparatus_registry.py` generates `references/apparatus_registry.{yaml,md}` — the
+  inventory of every tool/skill/hook/workflow with its output destination + format + orphan status
+  (orphan flag derived from `structure_audit`'s import graph). That prune pass retired 4 zero-importer
+  dead pure-function tools (`propagator`, `verify_cuts`, `coverage_matrix`, `find_references`) to
+  `deprecated/tools/`. Still deliberately deferred (blocking-gate risk): migrating
+  `currency_consistency_check`'s flat-file-only ledger reader and the `ci_audit_registry_check`
+  all-entries reader onto `core` — each needs its own expected-delta test, not a drop-in.
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
@@ -203,14 +294,15 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | If the task is… | Use |
 |---|---|
 | Writing infill prose | `prose-writer` |
-| Dice/EV/pool/Momentum math, d10 success probs | `valoria-dice-model` |
-| Combat-balance simulation | `valoria-combat-simulator` |
+| Dice/EV/pool/Momentum math, d10 success probs (+ Godot-canonical continuous mode) | `valoria-dice-model` |
+| Combat-balance simulation | `systems/combat/combat_engine_v1/workbench/balance.py` directly (run `python workbench/balance.py [weapon\|attr\|tradition\|all] [n]`) — no skill wrapper; see §8's retirement note |
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (P-01..P-14) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
 | NERS resolver stress methodology | `valoria-resolution-diagnostic` |
 | Emergent-arc generation | `valoria-arc-generator` |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
+| "Where are we in the workplan?" / resume-with-options / progress board | `valoria-workplan-navigator` |
 | Index/infill doc hygiene | `valoria-atomizer` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |
@@ -218,10 +310,15 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Incremental module-by-module sim build | `valoria-simulator` |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
-driver; superseded by the Claude Code-native model).
+driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
+(2026-07-12, ED-IN-0039) — its bundled script was a hand-hardcoded, long-frozen 9-weapon model,
+fully superseded by `systems/combat/combat_engine_v1/workbench/balance.py`, the actively-maintained
+51-weapon canonical balance harness (40 added in the 2026-07-02 morphology expansion, plus the
+original 11); see `deprecated/skills/README.md` for detail.
 
-**General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` for in-flight/next actions
-→ read the subsystem head and its `## Status:` line → make the change in the working tree → run the
+**General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
+`registers/handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
+line → make the change in the working tree → run the
 relevant `tools/` validator and `pytest tests/valoria` → commit with the `[scope]` format and any
 `PP-NNN`/`ED-NNN` citation. When a number must cross into Godot, follow §5; when porting, follow §6/§7.
 
@@ -241,6 +338,7 @@ Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
 | **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
 | **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
 | **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
+| **`fable`** | The rare top-of-stack judgment nodes (added 2026-07-01, ED-1086 — availability restored 2026-07-01) | canonical-contract & **propagation-spec authorship** (the aggregate-up/distribute-down + termination artifact — doctrine ED-1083 §4), the emergence audit (seeded-sim + ablation verdicts, once runnable), deepest cross-corpus synthesis. Caveats: subscription metering (~50% weekly cap through 2026-07-07 — verify current terms); **no zero-data-retention** → use `opus` for retention-sensitive content; the safety classifier is irrelevant to game-design content. `fable` is an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. |
 
 **Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
 `haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
@@ -249,9 +347,28 @@ genuinely unsure, omit the override and inherit — but flag the stages above wh
 fits, rather than defaulting the whole fan-out to Opus.
 
 **How to set it:**
-- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus"` (e.g. `Explore`/`general-purpose`
-  file-finding on `haiku`–`sonnet`; reserve `opus` for `Plan` and adjudication agents).
+- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus" | "fable"` (e.g. `Explore`/`general-purpose`
+  file-finding on `haiku`–`sonnet`; reserve `opus`+ for `Plan` and adjudication agents).
 - **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
   mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
   `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
   Opus verifier/synthesizer.**
+
+**Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
+`designs/architecture/holonic_container_doctrine_v1.md` for the doctrine side):
+- **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
+  dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
+  orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
+  more independent. Make independence structural: critic gets read-only tools.
+- **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
+  binding constraint is.
+- **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
+  lanes return **fixed-format summaries**, not raw context — synthesis binds on the orchestrator's
+  window.
+- **Guardrails binding on every infill lane** (doctrine ED-1083 §2): implement the local rule only;
+  declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
+  scale-local interface dialect (**shape divergence**).
+- **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
+  *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
+  watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
+  are runnable) an emergence-auditor — see the 2026-07-01 decision queue.

@@ -121,11 +121,14 @@ def generate_editorial_index(active_yaml: str, archive_yamls: dict[str, str] = N
     """Compact index for ED-NNN entries.
 
     SUPERSEDED 2026-05-28 (JSONL migration). The editorial ledger is now the
-    single store canon/editorial_ledger.jsonl; the YAML inputs this digests were
-    deprecated to deprecated/canon/ and the generated canon/editorial_ledger_index.md
+    single store registers/editorial_ledger.jsonl; the YAML inputs this digests were
+    deprecated to deprecated/canon/ and the generated registers/editorial_ledger_index.md
     output is no longer consumed by any hook/gate. Retained (not deleted) because
     deleting generator code is a separate call; do NOT wire this back to a live path
-    without first repointing it at the JSONL store. See canon/editorial_ledger_migration_2026-05-28.md.
+    without first repointing it at the JSONL store. See registers/editorial_ledger_migration_2026-05-28.md.
+    Also note: this generator's r'ED-\d+' id_pattern predates the ED-<LANE>-NNNN
+    namespace (2026-07-02) and does not recognize lane-tagged ids — one more reason
+    not to revive it without an update pass first.
     """
     entries = _collect_ed_entries(active_yaml, archive_yamls or {})
     lines = [
@@ -152,12 +155,12 @@ def generate_editorial_summary(active_yaml: str, archive_yamls: dict[str, str] =
     SUPERSEDED 2026-05-28 (JSONL migration). canon/editorial_ledger_summary.yaml —
     this function's output — was retired in the reader cutover (commit 6a42b1f1):
     bootstrap and the editorial/propose_mechanic/design_proposal gates now read
-    canon/editorial_ledger.jsonl directly, and the summary file was deprecated to
+    registers/editorial_ledger.jsonl directly, and the summary file was deprecated to
     deprecated/canon/. The atomization regen trigger (regenerate_summary_on) was
     removed from references/atomization_rules.yaml, so nothing invokes this on a
     change anymore. Retained (not deleted) — deleting generator code is a separate
     call. If a JSONL-derived digest is ever wanted, repoint at the JSONL store
-    rather than reviving the YAML inputs. See canon/editorial_ledger_migration_2026-05-28.md.
+    rather than reviving the YAML inputs. See registers/editorial_ledger_migration_2026-05-28.md.
 
     archive_yamls: optional dict[filename, content] of archive ledger files.
     When provided, next_id is computed across the union (active + archives),

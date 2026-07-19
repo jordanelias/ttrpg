@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""
+tools/observability/obs_core.py — shared observability primitives (single owner).
+
+The observability tier had the same rules re-implemented in ≥4 places (editorial
+ledger parsed 4 ways; status-line regex 3 ways; lane rosters 3 ways; the
+`window.VALORIA_X = …` JS bundle hand-rolled 3 times). This module is the ONE
+home for those primitives (CLAUDE.md §8 "every rule lives once"), so
+build_proposals.py, dashboard_data.py and future consumers share them instead of
+diverging (the GO-lane undercount, the disagreeing Status regexes, etc.).
+
+Design:
+  • REUSE, don't duplicate, the richest existing implementations — build_decisions.py
+    already owns the best lane table (infer_lane / LANE_PATH_PREFIXES), the corpus
+    marker set (MARKERS) and the name-redaction mirror. core imports them; it never
+    re-derives them, and build_decisions NEVER imports core (no cycle — guarded by
+    tests/valoria/test_observability_core.py).
+  • OWN the genuinely-new shared primitives below (ledger reader, status parser,
+    JS-bundle writer, the narrow needs-Jordan marker vocab).
+
+Import-only module (no __main__): consumers `import core`.
+"""
+from __future__ import annotations
+import json, re, sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[1]
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))       # sibling import of build_decisions
+
+# --- reuse build_decisions' owned primitives (do not re-implement) -------------
+import build_decisions as _bd            # noqa: E402
+
+infer_lane = _bd.infer_lane                      # path -> ED-<LANE> (richest table)
+LANE_NAMES = _bd.LANE_NAMES                       # 9-lane display names
+DECISION_MARKERS = _bd.MARKERS                    # corpus-wide 13-pattern open-item set
+redact_forbidden_names = _bd._redact_forbidden_names  # names_index.yaml redaction mirror
+
+# --- lane roster (the single canonical 9-code tuple) ---------------------------
+# The prior rosters that must migrate to this: dashboard_data.LEDGER_LANES (which
+# silently OMITTED 'go'), currency_consistency_check.LANE_CODES, validate_ed_citations.LANE_CODES.
+LANE_CODES: tuple[str, ...] = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
+LEDGER_LANE_CODES: tuple[str, ...] = tuple(c.lower() for c in LANE_CODES)  # ledger filename lanes
+
+
+# --- A. editorial-ledger reader (single owner) ---------------------------------
+def read_ledger_entries(repo: Path | None = None) -> list[dict]:
+    """Every entry across registers/editorial_ledger*.jsonl (flat + per-lane), normalized.
+    Lane comes free from the filename (`editorial_ledger_<xx>.jsonl`) — the 2-letter
+    match captures GO, which dashboard_data.LEDGER_LANES did not. Archive file skipped
+    (settled history, not live debt)."""
+    repo = repo or REPO
+    out: list[dict] = []
+    for path in sorted((repo / "registers").glob("editorial_ledger*.jsonl")):
+        base = path.name
+        if "archive" in base:
+            continue
+        m = re.match(r"editorial_ledger_([a-z]{2})\.jsonl$", base)
+        lane = m.group(1).upper() if m else None
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                e = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            desc = e.get("description") or ""
+            if isinstance(desc, list):            # schema drift: some entries use a list
+                desc = " ".join(str(x) for x in desc)
+            out.append({
+                "id": e.get("id", "?"),
+                "lane": lane,
+                "status": e.get("status"),
+                # flat pre-cutover entries predate the needs_jordan FIELD — fall back
+                # to a pending-Jordan text scan so they aren't miscounted actionable.
+                "needs_jordan": bool(e.get("needs_jordan")) or text_needs_jordan(desc),
+                "description": str(desc).strip(),
+                "source": e.get("source"),
+                "file": base,
+            })
+    return out
+
+
+def open_ledger_entries(repo: Path | None = None) -> list[dict]:
+    return [e for e in read_ledger_entries(repo) if e.get("status") == "open"]
+
+
+# --- D. status-line parsing (single owner) -------------------------------------
+# One tolerance policy, a superset of the two prior regexes it replaces:
+#   dashboard_data._STATUS_RE        = ^#{1,3}\s*Status:        (needs a hash, no space)
+#   ci_generation_consistency.status_of = #{0,3}\s*Status\s*:   (0-3 hashes, tolerates 'Status :')
+# Using the tolerant superset is a deliberate RECONCILIATION (may match a few more
+# docs); the expected delta is asserted in the core test, not hidden under a
+# "byte-identical" claim.
+STATUS_RE = re.compile(r'^#{0,3}\s*Status\s*:\s*(.+)$', re.I)
+
+
+def first_status(head_text: str) -> str | None:
+    """The first `## Status:` value in a doc head, or None."""
+    for line in head_text.splitlines():
+        m = STATUS_RE.match(line.strip())
+        if m:
+            return m.group(1).strip()
+    return None
+
+
+def is_unratified_status(status: str | None) -> bool:
+    """True for PROPOSED / PROVISIONAL / DRAFT statuses that are not CANONICAL."""
+    up = (status or "").upper()
+    prefix = up.split("(")[0]  # "CANONICAL (with provisional elements)" stays canonical
+    return (("PROPOSED" in up or "PROVISIONAL" in up or "DRAFT" in up)
+            and "CANONICAL" not in prefix)
+
+
+# --- narrow needs-Jordan marker vocab (distinct from DECISION_MARKERS) ----------
+# Scanned ONLY over handoff files for the high-signal "needs YOUR decision" inbox.
+# Kept SEPARATE from DECISION_MARKERS (the corpus-wide TODO/GAP/STUB sweep) on
+# purpose — merging them would flood the inbox with hygiene items (finding B3).
+NEEDS_JORDAN_MARKERS = re.compile(r'JORDAN RULING NEEDED|needs_jordan\s*[:=]\s*true', re.I)
+
+# --- pending-Jordan free-text detection (single owner) --------------------------
+# Rescues two STRUCTURAL undercounts in build_proposals' needs-your-decision split:
+#   (A) proposal_doc / provisional_status_doc kinds never carried a needs_jordan
+#       flag at all, so a design doc whose Status reads "HELD FOR JORDAN" showed as
+#       plain actionable — structurally unflaggable.
+#   (B) pre-cutover flat ledger entries (registers/editorial_ledger.jsonl) predate the
+#       needs_jordan FIELD, so an entry whose own text says "PENDING Jordan" /
+#       "Jordan to confirm" / "DECISION (Jordan)" defaulted to actionable.
+# The vocabulary deliberately matches FUTURE / PENDING Jordan action ONLY, never a
+# citation of a PAST ruling — so "evidence-decided, not a Jordan choice" (ED-913) and
+# "per Jordan's prior ruling" (ED-930) correctly STAY actionable. Verified empirically
+# against the live ledger + proposals/ when this landed (see
+# tests/valoria/test_observability_core.py::test_text_needs_jordan_*).
+NEEDS_JORDAN_TEXT = re.compile(
+    r"""
+      HELD \s+ FOR \s+ JORDAN
+    | JORDAN \s+ RULING \s+ NEEDED
+    | needs_jordan \s* [:=] \s* true
+    | PENDING \s* :? \s* JORDAN
+    | AWAITING \s+ (?:A \s+)? JORDAN
+    | JORDAN [-\s] VETO(?:ABLE)?
+    | \b for \s+ Jordan \s+ veto \b
+    | DECISION \s* \( \s* JORDAN \s* \)
+    | \[ \s* (?:GATE [^\]]* [-–] \s*)? JORDAN \s+ DECISION [^\]]* \]
+    | \b JORDAN \s+ (?: TO \s+ (?:CONFIRM|NAME|RULE|DECIDE|ADJUDICATE|CHOOSE|RESOLVE|VET)
+                     | NAMING \s+ RULING
+                     | DECISION \s+ NEEDED )
+    | \[ \s* JORDAN \s+ TO \s+ \w+ [^\]]* \]
+    | UNDETERMINED [:,]? \s+ JORDAN
+    """,
+    re.I | re.X,
+)
+
+
+def text_needs_jordan(text: str | None) -> bool:
+    """True when free text signals a *pending* Jordan decision (see NEEDS_JORDAN_TEXT).
+    Matches future/pending phrasings only — never a past ruling's citation."""
+    return bool(text) and bool(NEEDS_JORDAN_TEXT.search(text))
+
+
+# --- 3-artifact JS-bundle writer (single owner) --------------------------------
+def write_js_bundle(path: Path, var: str, obj) -> None:
+    """Emit `window.<var> = <json>;` — the committed dashboard bundle idiom that
+    build_decisions / build_graph / build_lexicon each hand-rolled independently."""
+    path.write_text(f"window.{var} = " + json.dumps(obj, ensure_ascii=False) + ";\n",
+                    encoding="utf-8")

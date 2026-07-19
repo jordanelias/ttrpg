@@ -19,9 +19,9 @@ bootstrap, wrong CI job count). For anything current, defer to:
 - **`CURRENT.md`** — the single human-readable index of the live canonical head per subsystem
   (Generation v40). The authority on what is current.
 - **`HANDOFF.md`** — the single live continuity surface: pending work and next actions.
-- **`references/canonical_sources.yaml`** + **`canon/mechanics_index.yaml`** — machine-readable indices.
+- **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable indices.
 
-Superseded exploration lives under `archives/` and `deprecated/` — history, not canon.
+Superseded exploration lives under `deprecated/archives/` and `deprecated/` — history, not canon.
 
 ## License
 

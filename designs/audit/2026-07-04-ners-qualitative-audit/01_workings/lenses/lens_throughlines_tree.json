@@ -1,0 +1,138 @@
+{
+ "lens": "throughlines_tree",
+ "verdict": "The corpus maps onto four load-bearing TRUNKS (\u039c-\u03b4/\u041c-5 cross-scale, \u039c-\u03b1/\u041c-1+\u041c-6 pressure/forced-choice, \u039c-\u03b3/\u041c-3 substrate-grounds-all, \u039c-\u03b2 autonomous-world) and five single-limb BRANCHES (\u041c-4 institutions, \u041c-2 geography, personal-transformation arcs, strategic clocks, emergent-narrative generation). Dominant structural defect: \u039c-\u03b3/\u041c-3 \u2014 the one meta-pattern declared universal (T-01 \"Systems: ALL\", P-14 \"every play mode\") \u2014 is the most severed, amputated at combat_engine_v1, articulation, faction_behavior math, and 7/9 NPC faction trees. Mirror-image: the entire \u041c-7..\u041c-11 phenomenology tier (T-31/33/34/35/37/38/39/40) is a declared throughline limb with NO mechanic (orphan), while live mechanics (territory temperament, Consolidation turtle, Recall +2D) carry no throughline (trunkless). The \u041c-5 collision trunk is delivered bottom-up but not top-down.",
+ "key_points": [
+  "TRUNK = 4 meta-patterns in nearly every dossier: \u041c-5 cross-scale (collision-engine spine), \u041c-1+\u041c-6 pressure/forced-choice, \u041c-3 substrate-grounds-all (P-14), \u039c-\u03b2 autonomous-world.",
+  "\u041c-3 is the trunk with severed limbs: T-01 declares Systems:ALL but combat_engine_v1 (ED-911), articulation, faction_behavior \u03b1/\u03b2/\u03b3/\u03bb math, and 7/9 npc faction trees carry zero Thread hooks.",
+  "BRANCHES (one limb each): \u041c-4 institutions (faction+npc), \u041c-2 geography (settlement+mass_battle terrain+calamity_radiation), personal-transformation arcs T-12/13/16/17 (threadwork+conviction), strategic clocks T-04..07/20/25 (victory+peninsular_strain), emergent-narrative T-23/24 (npc+faction, rendered by articulation).",
+  "ORPHAN throughlines (grep-verified): T-31/33/34/35/37/38/39/40 \u2014 the whole \u041c-7..\u041c-11 phenomenology tier \u2014 appear only in designs/audit synthesis+workplan docs and the registry, never in threadwork_v30 or any subsystem head.",
+  "Secondary orphans: T-02/T-30 (rendering=consciousness, information-asymmetry) home to investigation_systems_v30, which no dossier lane audited; T-26/27/28/29 'design-complete, impl-pending' with prose-only homes.",
+  "TRUNKLESS mechanics (why-gap): territory temperament \u03b1/\u03b2 (inert, no consumer), Institutional Consolidation passive recovery (anti-\u041c-1 rest state), Recall +2D (anti-\u041c-6 cost-hidden).",
+  "articulation is the rendering terminus for T-23/T-24 ('the game's emergent narrative engine') yet is Thread/battle/era-blind \u2014 drops exactly the throughlines it exists to render.",
+  "\u039c-\u03b2 autonomous-world contradicted at the letter by faction_layer_v30 \u00a75.8 (GM controls NPC votes).",
+  "Final report should be organized by the four trunks; the \u041c-3 severance is the spine."
+ ],
+ "tree": {
+  "trunk": [
+   "\u039c-\u03b4 / \u041c-5 scales-connect-through-substrate \u2014 the cross-scale collision-engine spine; every dossier carries a cross-scale edge (Domain Echo, Obligations/Mandate, Part D/E, LPS-2e, GD-1, Key emit/observe)",
+   "\u039c-\u03b1 / \u041c-1 pressure-continuous + \u041c-6 forced-choice \u2014 clocks (MS/RS T-04, TC T-05, IP T-06, Turmoil T-07, Campaign Supply, Coherence) and scarcity; carried by mass_battle, faction, settlement, victory, threadwork",
+   "\u039c-\u03b3 / \u041c-3 substrate-grounds-all (P-14 inseparability) \u2014 T-01 Systems:ALL; the trunk declared universal but most severed (combat/articulation/faction-math/7-of-9-npc-trees)",
+   "\u039c-\u03b2 autonomous-agent-composition \u2014 autonomous world (T-23/24/25, priority trees, accounting, clocks); carried by npc_behavior, faction, victory; contradicted by faction_layer \u00a75.8"
+  ],
+  "branches": [
+   {
+    "branch": "\u041c-4 institutions stake substrate-postures (T-08/09/11/15a/b/c, T-21, T-27, T-39)",
+    "carries": "faction_political + npc_behavior \u2014 6 faction sheets, priority trees, Conviction architecture"
+   },
+   {
+    "branch": "\u041c-2 geography holds pressure (T-18 Radiation Gradient, T-19 Southernmost)",
+    "carries": "settlement_territory + mass_battle terrain \u00a7A.9 + calamity_radiation gradient"
+   },
+   {
+    "branch": "personal-transformation arc cluster (T-12 Practitioner, T-13 Certainty, T-16 Knot, T-17 Companion; \u03a9-b/\u041c-6)",
+    "carries": "threadwork + npc_behavior/conviction_track"
+   },
+   {
+    "branch": "strategic-clock cluster (T-04/05/06/07, T-20 Two Contests, T-25 Generational)",
+    "carries": "victory_strategic + peninsular_strain + faction_political"
+   },
+   {
+    "branch": "emergent-narrative generation (T-23 NPC Arc Emergence, T-24 Convergence-as-Crisis)",
+    "carries": "npc_behavior + faction produce it; articulation renders it (but Thread/battle/era-blind)"
+   }
+  ],
+  "orphan_throughlines": [
+   "T-31 Reflexive Suspension \u2014 Proposed/Wave1; no head (grep: only audit synthesis)",
+   "T-33 TS Developmental Arc \u2014 Proposed; receptive-capacity vocab absent from threadwork_v30",
+   "T-34 Distal Interoception through Knot Tethers \u2014 Proposed; 'seismographic'/'distal interoception' only in synthesis docs",
+   "T-35 Unified Uncanny Capacity Synthesis \u2014 Proposed/Wave4; no mechanical head",
+   "T-37 Stimulus Resistance Triplet \u2014 Proposed; no head",
+   "T-38 Real as Continuous Amplitude \u2014 Proposed; environmental-design only, no ratified head",
+   "T-39 Textual Mode Typology \u2014 Proposed/Wave2; no head",
+   "T-40 TS as Taxonomic Expansion \u2014 Proposed; no head",
+   "T-02 Rendering=Consciousness-Performed + T-30 Information Asymmetry \u2014 home is investigation_systems_v30, un-audited by any dossier lane",
+   "T-26/T-27/T-28/T-29 \u2014 'design complete, implementation pending'; prose-only homes (baralta/faction/world), no mechanical head"
+  ],
+  "trunkless_mechanics": [
+   "Territory temperament \u03b1/\u03b2 (territory_temperaments_v30) \u2014 zero mechanical consumption anywhere; mechanic with no throughline",
+   "Institutional Consolidation passive recovery (faction_layer_v30 \u00a71.3) \u2014 Stability+1/Accord+1 for a null season; anti-\u041c-1 rest state",
+   "Recall +2D near-costless citation (social_contest_v30 \u00a74 Step 3) \u2014 anti-\u041c-6 cost-hidden checkbox, no throughline",
+   "Meta-lanes trunkless by nature (not defects but stale where trunks are live): registers_graphs shape artifacts + recent_infra steering docs"
+  ]
+ },
+ "findings": [
+  {
+   "id": "substrate-trunk-severed-limbs",
+   "subsystem": "threadwork x combat/articulation/faction/npc (\u041c-3 trunk)",
+   "claim": "The \u039c-\u03b3/\u041c-3 'substrate grounds all' trunk \u2014 declared universal by T-01 (Systems:ALL) and P-14 \u2014 is severed at four major limbs at once: combat_engine_v1, articulation_layer_v30, the faction_behavior_v30 \u03b1/\u03b2/\u03b3/\u03bb engine math, and 7 of 9 NPC faction priority trees, all carrying zero Thread hooks; the one meta-pattern declared load-bearing everywhere is the most-broken.",
+   "cite": "references/throughlines_complete.md T-01/T-03; designs/scene/combat_engine_v1/ (ED-911); designs/articulation/articulation_layer_v30.md; designs/provincial/faction_behavior_v30.md \u00a73.2-\u00a73.5; designs/npcs/npc_behavior_v30.md \u00a78.2-\u00a78.10",
+   "criterion": "P-philosophy",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-911 (combat only; articulation/faction-math/npc-trees untracked)",
+   "threadwork": true
+  },
+  {
+   "id": "phenomenology-orphan-tier",
+   "subsystem": "throughlines registry (\u041c-7..\u041c-11)",
+   "claim": "The entire \u041c-7..\u041c-11 phenomenology meta-tier \u2014 T-31/33/34/35/37/38/39/40 \u2014 is declared canonical in throughlines_complete.md but implemented by no ratified subsystem head; grep for its signature vocabulary hits only designs/audit synthesis and workplan docs, never threadwork_v30 or any design head, so a whole throughline limb is registry-resident and mechanically absent.",
+   "cite": "references/throughlines_complete.md T-31..T-41 ('Implementation status: Proposed. Wave N'); grep 'reflexive suspension|distal interoception|seismographic|Textual Mode' \u2192 only designs/audit/*",
+   "criterion": "Omega",
+   "direction": "forwards",
+   "severity": "P2",
+   "novelty": "KNOWN-UNTRACKED",
+   "tracked_ref": "",
+   "threadwork": true
+  },
+  {
+   "id": "xscale-trunk-one-directional",
+   "subsystem": "architecture_spine (\u041c-5 trunk)",
+   "claim": "The \u041c-5 cross-scale trunk that carries emergent narrative is delivered bottom-up (Domain Echo: capped, timed, enumerated) but not top-down: the \u00a712.4 down-seam targets[] are emitter-unpopulated, scene.combat_resolved's declared consumers do not consume it, and the \u00a73.8 Scene\u2192Mass bonus is never hooked in mass_battle's turn structure \u2014 the collision spine is one-directional in practice.",
+   "cite": "references/scale_transitions_v30.md \u00a77 vs \u00a712.4; 02_interdependency_map.md (b) item 2; scale_transitions_v30 \u00a73.8 vs mass_battle_v30.md \u00a7A.7",
+   "criterion": "Q-robust",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "propagation_spec_v1 \u00a75 decision-queue item 18; module_contracts personal_combat gap_notes A4",
+   "threadwork": false
+  },
+  {
+   "id": "articulation-renders-not-what-it-carries",
+   "subsystem": "articulation_layer_v30 (emergent-narrative branch terminus)",
+   "claim": "Articulation is the designated rendering terminus for T-23/T-24 \u2014 canonically 'the game's emergent narrative engine' \u2014 yet is Thread/Coherence/Calamity-silent, omits scene.battle_concluded and scene.investigation_resolved from its trigger table, and is blind to victory era-transitions; the surface drops exactly the throughlines it exists to render.",
+   "cite": "designs/articulation/articulation_layer_v30.md \u00a73.1; references/throughlines_complete.md T-24; references/module_contracts.yaml L679 (era transitions UNKEYED, ED-1006)",
+   "criterion": "N",
+   "direction": "diagonal",
+   "severity": "P1",
+   "novelty": "KNOWN-TRACKED",
+   "tracked_ref": "ED-1006 (era); ED-681 (thread beats)",
+   "threadwork": true
+  },
+  {
+   "id": "trunkless-mechanics-cluster",
+   "subsystem": "territory_temperaments / faction_layer / social_contest",
+   "claim": "Three live mechanics serve no throughline: territory temperament \u03b1/\u03b2 (zero mechanical consumption anywhere), Institutional Consolidation passive recovery (an anti-\u041c-1 rest state), and the +2D Recall citation (an anti-\u041c-6 near-costless checkbox) \u2014 mechanics without a why, the inverse of the orphan-throughline gap.",
+   "cite": "designs/territory/territory_temperaments_v30.md (no consumer); designs/provincial/faction_layer_v30.md \u00a71.3; designs/scene/social_contest_v30.md \u00a74 Step 3",
+   "criterion": "N",
+   "direction": "lateral",
+   "severity": "P3",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  },
+  {
+   "id": "investigation-limb-unaudited",
+   "subsystem": "investigation_systems_v30 (T-02/T-30 epistemic limb)",
+   "claim": "T-02 (Rendering=Consciousness-Performed) and T-30 (Information Asymmetry \u2014 canonically 'the gap between player and character knowledge IS the gameplay') home to investigation_systems_v30.md, which no dossier lane in this audit covered, leaving a whole epistemic/perception throughline limb outside the audited surface \u2014 a scope gap the synthesis must flag, not treat as absent.",
+   "cite": "references/throughlines_complete.md T-02/T-30; designs/scene/investigation_systems_v30.md (exists, un-dossiered); 12-dossier subsystem list (no investigation/fieldwork lane)",
+   "criterion": "GD",
+   "direction": "lateral",
+   "severity": "P2",
+   "novelty": "NEW",
+   "tracked_ref": "",
+   "threadwork": false
+  }
+ ],
+ "scratch_file": "/home/user/ttrpg/designs/audit/2026-07-04-ners-qualitative-audit/lens_throughlines_tree.md"
+}

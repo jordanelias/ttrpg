@@ -19,7 +19,11 @@
 #   thread_sensitivity: legitimate tier thresholds (0/20/30/50)
 #   thread_tension: legitimate thresholds (40/50)
 #   ttrpg: false positive (scanner noise)
-# Status: REVIEWED — no action required. Regenerate after next collator run.
+# Status: REVIEWED — no action required.
+# Disposition (RATIFIED 2026-07-08, ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot.
+# "Regenerate after next collator run" will not happen -- the only plausible collator
+# (tools/valoria_collator.py) is dead (CLAUDE.md §8) and its own docstring cross-references
+# values_master.yaml, itself RETIRED (OPT-AV-2). Do not wait on a regeneration that isn't coming.
 
 # Not every 'conflict' is drift: same-named stat can have multiple legitimate thresholds
 # (e.g., Coherence 10 at start, <=4 Fragmented, <=3 further effects). Manual triage needed.
@@ -117,7 +121,7 @@ Ob f"
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 482
         value: 2
         pattern: named_bound
@@ -178,12 +182,12 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
     hit_count: 2
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 482
         value: 4
         pattern: named_bound
         context: "**Finding F-54 [P2] — Generational Shift clock absent from v4.1.** For 10–30 year campaigns this is a meaningful clock. "
-      - file: "designs/ui/valoria_ui_ux_v4_2_workplan.md"
+      - file: "systems/ui/valoria_ui_ux_v4_2_workplan.md"
         line: 252
         value: 4
         pattern: named_bound
@@ -205,7 +209,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_2_workplan.md"
+      - file: "systems/ui/valoria_ui_ux_v4_2_workplan.md"
         line: 248
         value: 3
         pattern: named_bound
@@ -216,7 +220,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 362
         value: 3
         pattern: named_bound
@@ -252,7 +256,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
         line: 85
         value: 5
         pattern: named_bound
-        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Truth\" | **GAP — no settlement-level Truth defined"
   ci_mass_seizure:
     distinct_values: [60]
     file_count: 1
@@ -303,7 +307,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 291
         value: 2
         pattern: named_bound
@@ -491,7 +495,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
         line: 135
         value: 245
         pattern: named_bound
-        context: "`designs/world/calamity_radiation_v30.md` (MS band → territory effect; radiation matrix) · `designs/threadwork/threadwor"
+        context: "`designs/world/calamity_radiation_v30.md` (MS band → territory effect; radiation matrix) · `systems/threadwork/threadwor"
   gm_advisory:
     distinct_values: [3]
     file_count: 1
@@ -733,17 +737,17 @@ Minimum 1 real-world session per in-game season. No maximum — a season may spa
         value: 50
         pattern: known_clock_threshold
         context: "> **Clarification (PP-035):** \"Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction"
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 246
         value: 40
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 246
         value: 20
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
-      - file: "designs/threadwork/threadwork_v30.md"
+      - file: "systems/threadwork/threadwork_v30.md"
         line: 784
         value: 10
         pattern: known_clock_threshold
@@ -844,12 +848,12 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
         line: 21
         value: 3
         pattern: named_bound
-        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+        context: "You choose a starting Truth (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
       - file: "designs/audit/valoria_how_to_play.md"
         line: 21
         value: 3
         pattern: starts_at
-        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+        context: "You choose a starting Truth (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
   n_dice:
     distinct_values: [3]
     file_count: 2
@@ -937,7 +941,7 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4.md"
+      - file: "systems/ui/valoria_ui_ux_v4.md"
         line: 2042
         value: 2
         pattern: named_bound
@@ -948,7 +952,7 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1.md"
         line: 1021
         value: 2
         pattern: named_bound
@@ -1020,37 +1024,37 @@ Companion cap 2. Connection action during social scene: requires Disp +3, not fa
         value: 50
         pattern: known_clock_threshold
         context: "## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 238
         value: 40
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 238
         value: 20
         pattern: known_clock_threshold
         context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 310
         value: 60
         pattern: known_clock_threshold
         context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 765
         value: 10
         pattern: known_clock_threshold
         context: "| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (t"
-      - file: "designs/threadwork/threadwork_v25_historical.md"
+      - file: "systems/threadwork/threadwork_v25_historical.md"
         line: 772
         value: 0
         pattern: known_clock_threshold
         context: "Rendering Stability replaces Thread Tension on the board game track. Invert all Thread Tension references: where Thread "
-      - file: "designs/threadwork/threadwork_v30_infill.md"
+      - file: "systems/threadwork/threadwork_v30_infill.md"
         line: 74
         value: 60
         pattern: known_clock_threshold
         context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
-      - file: "designs/threadwork/threadwork_v30_infill.md"
+      - file: "systems/threadwork/threadwork_v30_infill.md"
         line: 157
         value: 0
         pattern: known_clock_threshold
@@ -1116,7 +1120,7 @@ Companion cap 2. Connection action during social scene: requires Disp +3, not fa
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4.md"
+      - file: "systems/ui/valoria_ui_ux_v4.md"
         line: 1334
         value: 1
         pattern: named_bound
@@ -1287,7 +1291,7 @@ CI starts at 28 per P-32. Unchanged."
         value: 4
         pattern: named_bound
         context: "The cap is 4. A moderately active season (2 Belief-pursuit scenes + 1 Rescue success) generates +4, hitting the cap imme"
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 365
         value: 3
         pattern: named_bound
@@ -1386,7 +1390,7 @@ CI starts at 28 per P-32. Unchanged."
         value: 30
         pattern: known_clock_threshold
         context: "The expedition uses Approach Training-tagged practitioners (Thread Sensitivity ≥ 30 to cross the Forgetting barrier). In"
-      - file: "designs/npcs/edeyja_npc.md"
+      - file: "systems/npcs/edeyja_npc.md"
         line: 72
         value: 20
         pattern: known_clock_threshold
@@ -1447,7 +1451,7 @@ CI starts at 28 per P-32. Unchanged."
     hit_count: 5
     potentially_drifted: true
     occurrences:
-      - file: "designs/npcs/npc_behavior_system_v1.md"
+      - file: "systems/npcs/npc_behavior_system_v1.md"
         line: 706
         value: 40
         pattern: known_clock_threshold
@@ -1516,7 +1520,7 @@ CI starts at 28 per P-32. Unchanged."
     hit_count: 1
     potentially_drifted: false
     occurrences:
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 221
         value: 6
         pattern: starts_at
@@ -1605,7 +1609,7 @@ CI starts at 28 per P-32. Unchanged."
         line: 85
         value: 3
         pattern: named_bound
-        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Truth\" | **GAP — no settlement-level Truth defined"
   victory:
     distinct_values: [18]
     file_count: 1
@@ -1628,7 +1632,7 @@ CI starts at 28 per P-32. Unchanged."
         value: 3
         pattern: named_bound
         context: "**Total immediate effects from this card play:** 3 (Overwhelming Decree binding + free HI + Standing consequence). Withi"
-      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+      - file: "systems/ui/valoria_ui_ux_v4_1_max_audit.md"
         line: 364
         value: 3
         pattern: named_bound

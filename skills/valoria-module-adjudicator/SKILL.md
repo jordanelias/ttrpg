@@ -145,7 +145,7 @@ necessary, not sufficient, for NERS; behavioral compliance stays with
 valoria-resolution-diagnostic.
 ```
 
-Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Derived views (flowchart, state graph, flattened pipeline map) are regenerated into the same directory by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited. P1/P2 findings that are canonical gaps go to `canon/editorial_ledger.jsonl` via `append_to_register` — compute the next ED id at append time (parallel sessions assign concurrently; the class-#12 collision is live).
+Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Derived views (flowchart, state graph, flattened pipeline map) are regenerated into the same directory by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited. P1/P2 findings that are canonical gaps append to the relevant `registers/editorial_ledger_<lane>.jsonl` (lane chosen by the finding's subsystem; cross-cutting architecture findings default to `_in`), per `references/id_reservations.yaml`'s Collision Guard allocation protocol — read `next_free`, form the entry, bump, co-commit (see `valoria-editorial-register`'s ID Law section). There is no `append_to_register` function to call; that was retired orchestrator-era GitHub-API tooling (`deprecated/skills/valoria-orchestrator/`).
 
 ## STAGE 4 — ENFORCE & RE-TEST
 
@@ -166,3 +166,29 @@ Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Der
 - **The script is subordinate to canon.** If the assessor and a canonical doc disagree, the doc wins and the script (or the contract) is the defect — fix it; never `--force` past it.
 - **Scope the enums.** The `scales` and `resolver` enums are `[ASSUMPTION]`-grade until Jordan ratifies; the assessor treats unknown members as warnings so a wrong enum cannot false-halt work.
 - **RuntimeError from any hook = hard halt.** Report verbatim, stop. (Read-ordering errors from `read_sections` prescribe their own remedy — index first — which is compliance, not bypass.)
+
+## Dashboard registry logging (MANDATORY on completion)
+
+When this skill's run concludes — pass, fail, or partial — append one record to the
+Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
+GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
+every time, not only on request — a skipped append is what makes the dashboard's
+verdict table go stale.
+
+```bash
+python tools/audit_registry.py append \
+  --audit-type module_adjudicator \
+  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
+  --skill valoria-module-adjudicator \
+  --date <YYYY-MM-DD> \
+  --folder "<designs/audit/... path this run's output actually lives at>" \
+  --scope "<one-line: what was audited>" \
+  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
+  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
+```
+
+Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
+genuinely spans several — a whole-graph verdict, as opposed to a per-module one,
+normally does). See `tools/audit_registry.py`'s module docstring for the full
+field/vocabulary reference — this is the single source of truth for the schema,
+not this note.

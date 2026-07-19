@@ -1,0 +1,724 @@
+<style>
+  * { box-sizing: border-box; }
+  :root{
+    --bg:#f4f2ec; --panel:#fbfaf6; --panel2:#f0ede4; --text:#2b2b2b; --muted:#6c6a62;
+    --border:#dcd6c8; --accent:#4a6b8a; --accent-soft:#e7edf3;
+    --live:#2e7d5b; --doctrine:#b07714; --broken:#bf422e;
+    --chip-bg:#fbfaf6;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#11141a; --panel:#1a1f27; --panel2:#151a21; --text:#e7e7e4; --muted:#9aa3ad;
+      --border:#2c333d; --accent:#7fa8cf; --accent-soft:#1e2732;
+      --live:#4ec091; --doctrine:#e0a63d; --broken:#e8705c; --chip-bg:#1a1f27;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f2ec; --panel:#fbfaf6; --panel2:#f0ede4; --text:#2b2b2b; --muted:#6c6a62;
+    --border:#dcd6c8; --accent:#4a6b8a; --accent-soft:#e7edf3;
+    --live:#2e7d5b; --doctrine:#b07714; --broken:#bf422e; --chip-bg:#fbfaf6;
+  }
+  :root[data-theme="dark"]{
+    --bg:#11141a; --panel:#1a1f27; --panel2:#151a21; --text:#e7e7e4; --muted:#9aa3ad;
+    --border:#2c333d; --accent:#7fa8cf; --accent-soft:#1e2732;
+    --live:#4ec091; --doctrine:#e0a63d; --broken:#e8705c; --chip-bg:#1a1f27;
+  }
+
+  .wrap{ font-family:var(--font); color:var(--text); background:var(--bg);
+    line-height:1.5; padding:18px; max-width:1400px; margin:0 auto; }
+  .wrap, .wrap *{ overflow-wrap:anywhere; }
+  header.top{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px 20px; justify-content:space-between; margin-bottom:14px; }
+  h1{ font-size:1.32rem; margin:0 0 4px; letter-spacing:.2px; }
+  .sub{ margin:0; color:var(--muted); font-size:.82rem; max-width:70ch; }
+  .themebtn{ font-family:var(--font); font-size:.78rem; cursor:pointer; background:var(--panel);
+    color:var(--text); border:1px solid var(--border); border-radius:8px; padding:7px 11px; white-space:nowrap; }
+  .themebtn:hover{ border-color:var(--accent); }
+
+  .layout{ display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:16px; align-items:start; }
+  @media (max-width:900px){ .layout{ grid-template-columns:1fr; } }
+  .col{ min-width:0; }
+
+  .card{ background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:14px; }
+  .card h2{ font-size:.82rem; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin:0 0 10px; }
+
+  fieldset{ border:1px solid var(--border); border-radius:9px; margin:0 0 10px; padding:8px 11px 10px; }
+  fieldset legend{ font-size:.7rem; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); padding:0 5px; }
+  .togrow{ display:flex; flex-wrap:wrap; gap:6px 14px; }
+  .togrow label{ display:inline-flex; align-items:center; gap:6px; font-size:.8rem; cursor:pointer; }
+  .hlcap{ font-size:.72rem; color:var(--muted); margin:4px 2px 0; min-height:1em; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 22px; font-size:.76rem; color:var(--muted);
+    border-top:1px dashed var(--border); margin-top:4px; padding-top:10px; }
+  .legend .lt{ font-weight:600; color:var(--text); margin-right:6px; }
+  .sw{ display:inline-block; width:26px; height:0; border-bottom-width:3px; vertical-align:middle; margin-right:4px; }
+  .sw-live{ border-bottom-style:solid; border-color:var(--live); }
+  .sw-doctrine{ border-bottom-style:dashed; border-color:var(--doctrine); }
+  .sw-broken{ border-bottom-style:dotted; border-color:var(--broken); }
+  .gl{ display:inline-block; font-weight:700; font-size:.7rem; padding:1px 5px; border:1px solid var(--border);
+    border-radius:5px; margin-right:2px; color:var(--text); }
+
+  .svg-scroll{ overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:var(--panel2); }
+  svg#graph{ display:block; width:100%; min-width:680px; height:auto; }
+
+  /* SVG graph */
+  .node{ cursor:pointer; }
+  .node rect{ fill:var(--panel); stroke:var(--border); stroke-width:1.5; transition:stroke .12s; }
+  .node:hover rect, .node:focus rect{ stroke:var(--accent); outline:none; }
+  .node.sel rect{ stroke:var(--accent); stroke-width:2.6; }
+  .node .n-name{ fill:var(--text); font:600 15px var(--font); }
+  .node .n-sub{ fill:var(--muted); font:400 10.5px var(--font); }
+
+  .edge{ cursor:pointer; }
+  .edge-hit{ fill:none; stroke:transparent; stroke-width:16px; }
+  .edge-line{ fill:none; stroke-width:2.2px; transition:stroke-width .1s; }
+  .status-live{ stroke:var(--live); }
+  .status-doctrine{ stroke:var(--doctrine); stroke-dasharray:7 5; }
+  .status-broken{ stroke:var(--broken); stroke-dasharray:1.6 6; stroke-linecap:round; }
+  .edge:hover .edge-line, .edge:focus .edge-line{ stroke-width:3.4px; }
+  .edge:focus{ outline:none; }
+  .edge.sel .edge-line{ stroke-width:3.8px; }
+  .edge-chip rect{ fill:var(--chip-bg); stroke-width:1; }
+  .edge-chip text{ font:600 10px var(--font); }
+  .chip-live rect{ stroke:var(--live); } .chip-live text{ fill:var(--live); }
+  .chip-doctrine rect{ stroke:var(--doctrine); } .chip-doctrine text{ fill:var(--doctrine); }
+  .chip-broken rect{ stroke:var(--broken); } .chip-broken text{ fill:var(--broken); }
+  .edge.sel .edge-chip rect{ fill:var(--accent); stroke:var(--accent); }
+  .edge.sel .edge-chip text{ fill:#fff; }
+  .mk-live{ fill:var(--live); } .mk-doctrine{ fill:var(--doctrine); } .mk-broken{ fill:var(--broken); }
+  .coll-band rect{ fill:var(--broken); opacity:.055; }
+  .coll-band text{ fill:var(--broken); opacity:.55; font:600 10px var(--font); }
+
+  /* detail panel */
+  #detail{ font-size:.83rem; }
+  #detail .dh{ font-size:1rem; font-weight:600; margin:0 0 2px; }
+  #detail .dsub{ color:var(--muted); font-size:.78rem; margin:0 0 10px; }
+  .kv{ margin:0 0 7px; }
+  .kv .k{ font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); display:block; }
+  .kv .v{ display:block; }
+  .badge{ display:inline-block; font-size:.66rem; font-weight:700; letter-spacing:.4px; padding:2px 7px; border-radius:20px; border:1px solid; }
+  .b-live{ color:var(--live); border-color:var(--live); }
+  .b-doctrine{ color:var(--doctrine); border-color:var(--doctrine); }
+  .b-broken{ color:var(--broken); border-color:var(--broken); }
+  .gapblock{ border:1px solid var(--border); border-radius:9px; padding:9px 11px; margin-top:8px; background:var(--panel2); }
+  .hint{ color:var(--muted); font-size:.8rem; }
+  .hint b{ color:var(--text); }
+
+  /* class chips */
+  .gchip{ display:inline-block; font-weight:700; font-size:.68rem; padding:1px 6px; border-radius:5px; border:1px solid; margin-right:5px; }
+  .ctc{ color:var(--live); border-color:var(--live); }
+  .genuine{ color:var(--broken); border-color:var(--broken); }
+  .mixed{ color:var(--doctrine); border-color:var(--doctrine); }
+  .held{ color:var(--muted); border-color:var(--border); }
+  .clslabel.ctc{ color:var(--live); } .clslabel.genuine{ color:var(--broken); }
+  .clslabel.mixed{ color:var(--doctrine); } .clslabel.held{ color:var(--muted); }
+
+  details.panel{ background:var(--panel); border:1px solid var(--border); border-radius:12px; margin-bottom:14px; }
+  details.panel>summary{ cursor:pointer; padding:12px 14px; font-size:.82rem; text-transform:uppercase;
+    letter-spacing:.7px; color:var(--muted); font-weight:600; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  details.panel>summary::-webkit-details-marker{ display:none; }
+  details.panel>summary::after{ content:"+"; font-size:1.1rem; color:var(--muted); }
+  details.panel[open]>summary::after{ content:"\2212"; }
+  .panel-body{ padding:0 14px 14px; }
+
+  .callout{ border-left:3px solid var(--doctrine); background:var(--panel2); padding:8px 11px; border-radius:0 8px 8px 0; font-size:.78rem; margin-bottom:11px; }
+  .tally{ font-size:.74rem; color:var(--muted); margin:0 0 10px; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .fbtn{ font-family:var(--font); font-size:.72rem; cursor:pointer; background:var(--panel2); color:var(--text);
+    border:1px solid var(--border); border-radius:20px; padding:3px 10px; }
+  .fbtn[aria-pressed="true"]{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  ul.reg{ list-style:none; margin:0; padding:0; }
+  ul.reg li{ border:1px solid var(--border); border-radius:8px; padding:7px 9px; margin-bottom:6px; cursor:pointer; font-size:.79rem; background:var(--panel); }
+  ul.reg li:hover{ border-color:var(--accent); }
+  ul.reg li.sel{ border-color:var(--accent); background:var(--accent-soft); }
+  ul.reg li .lead{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:2px; }
+  ul.reg li .cat{ font-size:.68rem; color:var(--muted); }
+  ul.reg li .iss{ color:var(--muted); font-size:.77rem; }
+
+  .tier{ margin-bottom:12px; }
+  .tier h3{ font-size:.8rem; margin:0 0 6px; color:var(--accent); }
+  .ditem{ border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-bottom:7px; font-size:.79rem; background:var(--panel); }
+  .ditem .dt{ display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; margin-bottom:3px; }
+  .dnum{ font-weight:700; color:var(--accent); }
+  .ditem .dec{ color:var(--muted); }
+  .ditem .why{ color:var(--muted); font-size:.74rem; margin-top:4px; font-style:italic; }
+  .gapchip-inline{ cursor:pointer; text-decoration:underline dotted; }
+
+  .fam{ border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-bottom:6px; font-size:.79rem; }
+  .fam .fn{ font-weight:600; }
+  .fam .fd{ color:var(--muted); font-size:.76rem; }
+  .shape{ font-size:.79rem; margin-bottom:5px; }
+  .shape b{ color:var(--text); }
+
+  footer.foot{ margin-top:16px; padding-top:12px; border-top:1px solid var(--border); color:var(--muted); font-size:.74rem; }
+  code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9em; background:var(--panel2); padding:0 3px; border-radius:3px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Valoria &mdash; Cross-Scale Governance Nexus <span style="color:var(--muted);font-weight:500">(ED-IN-0051)</span></h1>
+      <p class="sub">Read-only synthesis of the governance-grounding docket. Six scales as a vertical spine; cross-scale edges styled by <b>status</b> and glyph-coded by <b>direction</b>. Click a node for its grounding-matrix row, an edge or a gap for its detail. Currency resolved via <code>CURRENT.md</code> (2026-07-13).</p>
+    </div>
+    <button class="themebtn" id="themebtn" type="button">Toggle theme</button>
+  </header>
+
+  <div class="layout">
+    <div class="col">
+      <div class="card">
+        <h2>Filters &mdash; the interactive lens</h2>
+        <fieldset>
+          <legend>Direction</legend>
+          <div class="togrow" id="dirtoggles">
+            <label><input type="checkbox" data-dir="up" checked> UP &middot; aggregate</label>
+            <label><input type="checkbox" data-dir="down" checked> DOWN &middot; distribute</label>
+            <label><input type="checkbox" data-dir="lateral" checked> LAT &middot; lateral</label>
+            <label><input type="checkbox" data-dir="skip" checked> SKIP &middot; skip-scale</label>
+            <label><input type="checkbox" data-dir="bend" checked> BEND &middot; bend-around</label>
+            <label><input type="checkbox" data-dir="collision" checked> COLL &middot; collision</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Status</legend>
+          <div class="togrow" id="statustoggles">
+            <label><input type="checkbox" data-status="live" checked> LIVE</label>
+            <label><input type="checkbox" data-status="doctrine" checked> DOCTRINE-ONLY</label>
+            <label><input type="checkbox" data-status="broken" checked> BROKEN</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Highlight by gap-class (Phase-F corrected)</legend>
+          <div class="togrow" id="hltoggles">
+            <label><input type="radio" name="hl" value="all" checked> All</label>
+            <label><input type="radio" name="hl" value="ctc"> Complete-the-chain</label>
+            <label><input type="radio" name="hl" value="genuine"> Genuine-gap</label>
+          </div>
+          <div class="hlcap" id="hlcap">All edges shown at full weight.</div>
+        </fieldset>
+        <div class="legend">
+          <div><span class="lt">Status</span>
+            <span class="sw sw-live"></span>LIVE (built &amp; running) &nbsp;
+            <span class="sw sw-doctrine"></span>DOCTRINE-ONLY (ruled, uncoded) &nbsp;
+            <span class="sw sw-broken"></span>BROKEN (should fire, doesn&rsquo;t)
+          </div>
+          <div><span class="lt">Direction glyphs</span>
+            <span class="gl">UP</span>aggregate <span class="gl">DOWN</span>distribute <span class="gl">LAT</span>lateral
+            <span class="gl">SKIP</span>skip-scale <span class="gl">BEND</span>bend-around <span class="gl">COLL</span>collision
+          </div>
+        </div>
+      </div>
+
+      <div class="svg-scroll">
+        <svg id="graph" viewBox="0 0 1000 840" role="img" aria-label="Cross-scale governance nexus graph: six scales with directed cross-scale edges">
+          <defs>
+            <marker id="arw-live" class="mk-live" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z"/></marker>
+            <marker id="arw-doctrine" class="mk-doctrine" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z"/></marker>
+            <marker id="arw-broken" class="mk-broken" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z"/></marker>
+          </defs>
+          <g id="bandLayer"></g>
+          <g id="edgeLayer"></g>
+          <g id="nodeLayer"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <h2>Detail</h2>
+        <div id="detail">
+          <p class="hint">Nothing selected. <b>Click a node</b> for its per-scale grounding-matrix row, <b>click an edge</b> for its mechanism and gap status, or <b>click a gap</b> in the register below to trace its edges on the graph.</p>
+        </div>
+      </div>
+
+      <details class="panel" id="regpanel" open>
+        <summary>Gap register &mdash; ~24 gaps, 8 categories</summary>
+        <div class="panel-body">
+          <div class="callout">
+            <b>&#9888; Phase-F correction.</b> The adversarial gate reclassified 6 gaps &mdash; <b>A4, C3-hardness, D2, F3, H3, B5-extension</b> &mdash; from GENUINE-GAP &rarr; COMPLETE-THE-CHAIN, and <b>C4</b> &rarr; MIXED. The classes below are the corrected ones, not the originals.
+          </div>
+          <p class="tally" id="regtally"></p>
+          <div class="filterbar" id="regfilter">
+            <button class="fbtn" data-cls="all" aria-pressed="true" type="button">All</button>
+            <button class="fbtn" data-cls="ctc" aria-pressed="false" type="button">Complete-the-chain</button>
+            <button class="fbtn" data-cls="genuine" aria-pressed="false" type="button">Genuine-gap</button>
+            <button class="fbtn" data-cls="mixed" aria-pressed="false" type="button">Mixed</button>
+          </div>
+          <ul class="reg" id="reglist"></ul>
+        </div>
+      </details>
+
+      <details class="panel" id="dqpanel">
+        <summary>Decision queue &mdash; what Jordan decides (4 tiers)</summary>
+        <div class="panel-body" id="dqbody"></div>
+      </details>
+
+      <details class="panel" id="keypanel">
+        <summary>Pressure-key families &mdash; legend</summary>
+        <div class="panel-body" id="keybody"></div>
+      </details>
+    </div>
+  </div>
+
+  <footer class="foot">
+    Mirrors <code>governance_grounding_v1.md</code> (the 4 cuts + per-scale matrix + edge statuses/GAP-ids), <code>gap_register_v1.md</code> (Phase-F-corrected classifications), <code>pressure_key_registry_v1.md</code> (key families), and <code>decision_queue.md</code> (4 tiers). Read-only synthesis over already-ruled canon &mdash; it invents nothing, flips no <code>## Status:</code> line, wires no field. ED-IN-0051, lane IN, 2026-07-13.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs){
+    var el = document.createElementNS(SVGNS, tag);
+    if(attrs){ for(var k in attrs){ el.setAttribute(k, attrs[k]); } }
+    return el;
+  }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  // ---- scales (nodes) with grounding-matrix rows (governance_grounding_v1 §2) ----
+  var NODE_X = 440, NODE_W = 224, NODE_H = 54, LX = 328, RX = 552;
+  var scales = [
+    { name:"Individual", sub:"personal / scene", y:70,
+      governs:"Convictions + Duties + personal Standing; caste gates (faction_politics_v30 §3); Disposition.",
+      keyk:"Personal Standing/Renown ladder 0–7; Conviction strain; Disposition −5..+5 (player_agency_v30 §2).",
+      enters:"Scene outcomes (contest / combat / fieldwork); NPC ambition; Directive response.",
+      up:"Domain Echo scene→faction, degree-keyed ±2/±1 — LIVE at faction-scale (parliamentary_bridge.py); personal-scale actor-derivation deferred (ED-SC-0006).",
+      down:"Distribute-down da.*→npc_behavior — DOCTRINE, targets[] unpopulated (propagation_spec §3 D.4).",
+      lat:"Scene handoffs — LIVE at scene scale (key_echo_armature §2.3).",
+      sb:"Monarch may act on an individual (bend-around, §5.3); caste-transgressive Conviction crisis." },
+    { name:"Settlement", sub:"base unit — people live here", y:210,
+      governs:"Settlement Governor + Provincial Authority (Two-Tier); council; governance verbs (governance_play_redesign §1.3, uncoded — GAP-A3).",
+      keyk:"L/PS 0–7 — INERT 100/100 (GAP-B1); Order 0–5; Pressure Π 0–10; Ledger tags (FLAG).",
+      enters:"Directive (Extract / Tax / Suppress / Install / Host / Cede); Needs; event-deck cards; exogenous shock.",
+      up:"L/PS→Mandate + Order→Accord — LIVE recompute (§1.8); Accord echo — BROKEN (GAP-A2).",
+      down:"Province imposes gov-type — LIVE base case, but L/PS-modulation INERT (GAP-B1).",
+      lat:"Quo Warranto peninsula echo; grain-route; Weight-as-Exit — DOCTRINE (governance_type_registry §2.4).",
+      sb:"Claimed directly by a national faction (§5.2, diagonal, DOCTRINE); Monarch/Parliament transfer — BROKEN (GAP-A1)." },
+    { name:"Territory", sub:"NEW tier — multiple settlements", y:350,
+      governs:"Territory authority sets settlement gov-type (scale_hierarchy §3); temperament α/β.",
+      keyk:"Territory temperament (VECTOR); Piety Track; Guild Favour — DOCTRINE-ONLY tier (GAP-A3).",
+      enters:"Aggregation from constituent settlements; province directives.",
+      up:"Population-weighted temperament → faction — DOCTRINE (GAP-A3).",
+      down:"Sets settlement gov-type — DOCTRINE (GAP-A3).",
+      lat:"Grain-route / adjacency between territories — DOCTRINE.",
+      sb:"Territory can secede at any tier (§5.2); whole row blocked on engine_clock (GAP-H3)." },
+    { name:"Province", sub:"conditional aggregation", y:490,
+      governs:"Duke-appointed Governor; Provincial Authority; conditional aggregation — exists only while constituent territories share a faction holder (scale_hierarchy §2).",
+      keyk:"Province Accord = floor-mean of settlement Order — LIVE recompute (governance_type_registry §2.3); IP aggregates.",
+      enters:"Settlement Order changes (up); Duke gov-type (down).",
+      up:"Accord→Strain/IP — LIVE; Province→Duchy — DOCTRINE.",
+      down:"Sets territorial gov-type — DOCTRINE; “vets” settlement decisions (§5.4, bidirectional).",
+      lat:"Province re-forms / dissolves on faction alignment — existence-conditional (§2).",
+      sb:"Province independence (§5.2); Monarch/Parliament forcibly impact (§5.3)." },
+    { name:"National", sub:"Duchy + Country + faction-tier", y:630,
+      governs:"Monarch royal-court + appointment (Almud); Duke gov-types; national factions hold people not territory (§5.1).",
+      keyk:"Faction Mandate round(7T/(T+K)), K=6, saturating (§1.8); CI; MS; Standing 0–7. No withdrawal/collapse (GAP-B2); ΔLegitimacy no decay (GAP-B4); 3 competing power formulas (GAP-B3).",
+      enters:"Aggregated Mandate; parliamentary-vote outcomes — LIVE (§10); CI milestones; exogenous Calamity.",
+      up:"Victory conditions; IP=100 world-state transition.",
+      down:"Gov-type cascade to duchies/provinces — DOCTRINE; Domain-Echo write — LIVE (parliamentary_bridge.py).",
+      lat:"Inter-faction politics (nine axes); coalitions; Parliamentary vote — LIVE (§10).",
+      sb:"Monarch bypass any tier (§5.3, DOCTRINE); cross-scale claiming (§5.2)." },
+    { name:"Ruling-authority", sub:"Monarch + Parliament", y:770,
+      governs:"Monarch — unconditional reach (Crown); Parliament — no chain position but forcibly impacts any tier (scale_hierarchy §5.3).",
+      keyk:"Crown Mandate; Parliamentary Persuasion Track — LIVE (§10); Censure tier — LIVE (parliamentary_action.py); bypass UNRANKED (GAP-D1) + UN-METERED (GAP-D2).",
+      enters:"Parliamentary motions — LIVE; Crown initiatives; succession.",
+      up:"— (top of stack).",
+      down:"Bend-around to any tier: Monarch→any DOCTRINE; Parliament→named-settlement transfer — BROKEN (GAP-A1).",
+      lat:"Monarch-vs-Parliament collision — UNRANKED (GAP-D1).",
+      sb:"This is the bend-around layer; both bypass free / unmetered (GAP-D2)." }
+  ];
+
+  // ---- gap register (gap_register_v1, Phase-F corrected classes) ----
+  var gapInfo = {
+    "A1":{cat:"A · Spatial containment",cls:"ctc",state:"BROKEN",issue:"faction → named settlement/territory transfer never fires (parliamentary_transfer.py has no live-loop caller).",fix:"Wire it: parliamentary_bridge.py already fires the seasonal vote → connect its output to the existing transfer resolver. No import."},
+    "A2":{cat:"A · Spatial containment",cls:"ctc",state:"BROKEN",issue:"Accord echo aggregation broken — compute_accord_echo() has zero callers (distinct from the LIVE static recompute).",fix:"Invoke the existing function from the Accounting boundary; the aggregation math already exists."},
+    "A3":{cat:"A · Spatial containment",cls:"ctc",state:"DOCTRINE-ONLY",issue:"Territory tier ruled (scale_hierarchy §3) but only Settlement↔Province floor-mean aggregation is live.",fix:"Extend the one live aggregation pattern to the ruled tiers; unblock via engine_clock authoring (H3). Blocked on B11."},
+    "A4":{cat:"A · Spatial containment",cls:"ctc",state:"UNPROVEN",issue:"Cross-tick convergence unproven — propagation_spec proves per-tick / per-cascade only; D.6 double-count flag.",fix:"Phase-F: reclassified GENUINE→CTC. Rule down-stat_deltas / up-aggregate domains disjoint → contraction/termination proof."},
+    "B1":{cat:"B · Legitimacy–consent",cls:"ctc",state:"INERT",issue:"L/PS INERT (100/100) — the whole consent-cascade has no consequence (lps_inert_check, tracked E5). scale_hierarchy §6 calls it “the single highest-priority open item.”",fix:"Wire from surrounding logic: aggregation + consent-gate + deferred-apply boundary + Field/Gauge shape all exist. Do NOT import CK3. Precedent (Vic3, EU4) confirmatory."},
+    "B2":{cat:"B · Legitimacy–consent",cls:"genuine",state:"no withdrawal path",issue:"Mandate round(7T/(T+6)) is monotone — no withdrawal/collapse path; masks peripheral collapse (D4).",fix:"GENUINE: import the Mandate-of-Heaven structure — collapse = a two-signal collision (material + interpretive) whose output is power devolution. Devolution (D4/A1/F5) is CTC; the withdrawal layer is the genuine gap."},
+    "B3":{cat:"B · Legitimacy–consent",cls:"ctc",state:"UNRECONCILED",issue:"Three competing “faction political power” formulas (National-Influence · political_value() · Mandate).",fix:"One reconciliation item, determined by D4’s ruling — not three independent gaps."},
+    "B4":{cat:"B · Legitimacy–consent",cls:"ctc",state:"no decay term",issue:"ΔLegitimacy has NO decay term — event-builds + uncapped +λ×seasons_in_role, no entropy; legitimacy only ratchets up.",fix:"Add the decay term via the deferred OF-3 decay(). Anacyclosis/regime-cycle theory confirms the need (not imported)."},
+    "B5":{cat:"B · Legitimacy–consent",cls:"ctc",state:"under-wired",issue:"Standing ladder’s cross-scale role under-wired; appointment-eligibility & secession-scale mapping absent.",fix:"Phase-F: extension reclassified GENUINE→CTC. Ladder = CTC (exists); the rank = secession blast-radius mapping is now CTC (was import ROTK Prefect/Viceroy)."},
+    "C1":{cat:"C · Governance-type cascade",cls:"ctc",state:"conflated",issue:"Two senses of “governance type” conflated — manager-type (who governs) vs decision-procedure mode.",fix:"Split the two senses; the manager enum is built, the mode taxonomy needs enumeration (C2)."},
+    "C2":{cat:"C · Governance-type cascade",cls:"genuine",state:"under-specified",issue:"Governance-mode taxonomy under-specified — consensus / deliberative / franchise / oligarchic / royal-appointment not enumerated as a FLAG domain.",fix:"GENUINE: import the taxonomy (Aristotle regime types; Athens sortition; Roman comitia; consensus polities). Decision-queue adopts an 8-value domain; decide start-active vs latent."},
+    "C3":{cat:"C · Governance-type cascade",cls:"ctc",state:"hardness",issue:"Does an imposed type stick? + is the cascade too hard (forcing an identical type down)?",fix:"Phase-F: hardness reclassified GENUINE→CTC. Confirm the noisy, L/PS-gated model (broadcast + local attenuation), NOT a hard identical-type cascade. “Does it stick” = CTC once B1 wired."},
+    "C4":{cat:"C · Governance-type cascade",cls:"mixed",state:"STUB",issue:"Mode ↔ deliberative-game binding; Consensus game STUB (wrapper.py raises NotImplementedError).",fix:"Phase-F: CTC→MIXED. Each mode selects its resolving contest-game (derivable); the Consensus game is a known STUB to build (unanimity / holdout / veto)."},
+    "D1":{cat:"D · Chain-bypass",cls:"genuine",state:"UNRANKED",issue:"Monarch + Parliament both bypass the chain, UNRANKED — no precedence (§5.3).",fix:"GENUINE: Bodin’s exact warning (→ French Wars of Religion). Import (1) nest one inside the other (Tokugawa / constitutional-monarchy), OR (2) make Monarch-vs-Parliament collision a named designed crisis mode."},
+    "D2":{cat:"D · Chain-bypass",cls:"ctc",state:"UN-METERED",issue:"Bypass has no metered cost — bypass acts are free.",fix:"Phase-F: reclassified GENUINE→CTC. Meter the bypass as a new Turmoil/IP feeder (structurally identical to the built Revolt +1). Imperator-Tyranny confirmatory."},
+    "E1":{cat:"E · Collision-of-stresses",cls:"genuine",state:"not unified",issue:"Collision primitive not unified — MS falloff + Calamity radiation + Peninsular Strain + Π cascade exist as four separate systems; D.6 + OF-3 oscillation fork.",fix:"GENUINE: unify into a collision primitive grounded in Mandate-of-Heaven two-signal resonance + independent top-down ∧ bottom-up crossing. True parallel collision is a Valoria departure."},
+    "E2":{cat:"E · Collision-of-stresses",cls:"genuine",state:"not modeled",issue:"Collision needs two independent signals — a famine reads as a lone settlement problem, never material-threshold-AND-interpretive-trigger.",fix:"GENUINE: a Mandate-tier event requires a material threshold AND an independently-arriving interpretive trigger (portent / rumor / interdict); a court scene adjudicates whether it “counts.”"},
+    "E3":{cat:"E · Collision-of-stresses",cls:"ctc",state:"partial",issue:"Collapse-is-a-dial (recovery/decay) partial — E11 suspicion-decay exists but is not systematized as an anti-cascade dampener.",fix:"Extend existing E7/E11 counters into the general dampener (RimWorld/DF confirm collapse must be a dial)."},
+    "F1":{cat:"F · Internal-population",cls:"ctc",state:"ORPHAN",issue:"franchise_v30 ORPHAN through every currency layer (absent from CURRENT.md, canonical_sources, mechanics_index; DRAFT).",fix:"Re-index + reconcile pre-PP-726 nomenclature; the caste→territory→national-power cascade (Franchise 0–5) is fully specified."},
+    "F2":{cat:"F · Internal-population",cls:"ctc",state:"under-wired",issue:"Caste cross-scale cascade under-wired — caste gating is personal-scale; settlement-composition → territory advancement → national franchise-suppression not wired.",fix:"Wire the cascade from existing caste keys + franchise caste-gradient."},
+    "F3":{cat:"F · Internal-population",cls:"ctc",state:"absent",issue:"Caste circumvention general mechanism absent — only §2.5a Entry/Mastership Forks (PROPOSED) instance.",fix:"Phase-F: reclassified GENUINE→CTC (with a genuine sliver: the limpieza forged-genealogy temporal mechanic). Import capital/social-collateral routes around caste gates."},
+    "F4":{cat:"F · Internal-population",cls:"ctc",state:"under-integrated",issue:"Intrapopulation-conflict → fracturing under-integrated (insurgency_pipeline + faction_succession_split ORPHAN-vs-CURRENT).",fix:"Re-index; wire the fracturing engine with the causal-justification constraint; adopt the two-stage split resolver (dice = who-leads, gap G = whether-splits)."},
+    "F5":{cat:"F · Internal-population",cls:"ctc",state:"absent",issue:"Fracture RESOLUTION absent — Independence-at-any-tier has no resolution roll; Fragmentation Check + Consolidation orphaned.",fix:"Adopt the orphaned Fragmentation Check (recurring hold/collapse roll) + Consolidation Domain Action; anchor dissolution on the RAND 4-path model."},
+    "G1":{cat:"G · Orthodoxy",cls:"ctc",state:"not integrated",issue:"Orthodoxy↔heresy↔non-orthodoxy not a nexus axis — Church keys exist but aren’t integrated cross-scale.",fix:"Lift existing Church keys into the registry as an ideological-consent axis parallel to L/PS: belief → doctrinal composition → territory piety → national CI."},
+    "G2":{cat:"G · Orthodoxy",cls:"genuine",state:"under-wired",issue:"Cultural suppression / genocide not a costed consequence-bearing action — suppression→backlash→insurgency cross-scale consequence under-wired.",fix:"GENUINE: import the backfire structure (Reconquista/Morisco; Shimabara; iconoclasm) → severe L/PS collapse + intrapopulation conflict + durable resistance identity. Never consequence-free."},
+    "H1":{cat:"H · Currency / hygiene",cls:"ctc",state:"header/body",issue:"Docs with ## Status: CANONICAL header vs PROVISIONAL/DRAFT body (Phase-F: 3 of the 5, not 5).",fix:"Header/body reconciliation (currency-hygiene)."},
+    "H2":{cat:"H · Currency / hygiene",cls:"ctc",state:"ORPHAN",issue:"Cited/pinned docs orphan from CURRENT.md (franchise, fractional_province_ownership, insurgency_pipeline, faction_succession_split).",fix:"Re-index into CURRENT.md’s subsystem table."},
+    "H3":{cat:"H · Currency / hygiene",cls:"ctc",state:"doc:null",issue:"domain_actions module doc:null (strategic-turn home); module_contracts 10/27 doc:null incl. engine_clock.",fix:"Phase-F: reclassified GENUINE→CTC. Author the home doc using already-authored homes (propagation_spec §1 for engine_clock; governance_play_redesign §1.3 for the 13 verbs). Blocks A3."}
+  };
+
+  var CLSLABEL = {ctc:"COMPLETE-THE-CHAIN", genuine:"GENUINE-GAP", mixed:"MIXED", held:"HELD"};
+  var DIRLABEL = {up:"Bottom-up (aggregate)", down:"Top-down (distribute)", lateral:"Lateral (dissemination)",
+                  skip:"Diagonal / skip-scale", bend:"Bend-around (Monarch / Parliament)", collision:"Collision-of-stresses"};
+  var DIRCODE = {up:"UP", down:"DOWN", lateral:"LAT", skip:"SKIP", bend:"BEND", collision:"COLL"};
+  var STLABEL = {live:"LIVE", doctrine:"DOCTRINE-ONLY", broken:"BROKEN"};
+
+  // ---- edges (from governance_grounding_v1 §1 cuts A/B/C/D + §2 matrix) ----
+  // ordered per side so span nests cleanly; lane offset assigned by direction counter
+  var edges = [
+    // UP (left)
+    {from:1,to:2,dir:"up",status:"doctrine",gap:"A3",label:"Settlement→Territory aggregation — ruled, uncoded."},
+    {from:2,to:3,dir:"up",status:"doctrine",gap:"A3",label:"Population-weighted temperament → Province — DOCTRINE."},
+    {from:1,to:3,dir:"up",status:"live",gap:null,label:"Order→Accord floor-mean; L/PS→Mandate recompute (§1.8) — the one live aggregation rung. Only Settlement↔Province is wired (GAP-A3 context)."},
+    {from:1,to:3,dir:"up",status:"broken",gap:"A2",label:"Event-driven Accord echo (compute_accord_echo) — zero callers; distinct from the LIVE static recompute."},
+    {from:0,to:4,dir:"up",status:"live",gap:null,label:"Domain Echo scene→faction, degree-keyed ±2/±1 (parliamentary_bridge.py) — LIVE at faction-scale; personal-scale actor-derivation deferred (ED-SC-0006)."},
+    // DOWN (right)
+    {from:3,to:2,dir:"down",status:"doctrine",gap:"A3",label:"Province sets territorial gov-type — DOCTRINE."},
+    {from:3,to:1,dir:"down",status:"live",gap:"B1",label:"Province imposes gov-type — LIVE base case (Two-Tier); but the L/PS-modulation that should gate it is INERT (GAP-B1)."},
+    {from:4,to:1,dir:"down",status:"broken",gap:"A1",label:"Faction/authority → named-settlement territorial transfer — never fires in the live loop (GAP-A1)."},
+    {from:4,to:0,dir:"down",status:"doctrine",gap:null,label:"Distribute-down da.*→npc_behavior — DOCTRINE, targets[] unpopulated (propagation_spec §3 D.4)."},
+    // SKIP (left, far)
+    {from:4,to:1,dir:"skip",status:"doctrine",gap:null,label:"Restoration Movement (national faction) claims one settlement directly, skipping intervening tiers (scale_hierarchy §5.2) — the canonical skip example."},
+    {from:1,to:4,dir:"skip",status:"live",gap:null,label:"Faction Mandate = Settlement→Faction direct aggregation, skips Territory/Province (§1.8) — the flagship LIVE skip."},
+    // BEND (right, far) — span 1,2,3,4
+    {from:5,to:4,dir:"bend",status:"live",gap:null,label:"Parliamentary Censure reach — partly LIVE (parliamentary_action.py)."},
+    {from:5,to:3,dir:"bend",status:"doctrine",gap:null,label:"Parliament forcibly impacts a province despite no chain position (§5.3)."},
+    {from:5,to:2,dir:"bend",status:"broken",gap:"A1",label:"Parliament → named-settlement/territory transfer reach — BROKEN (propose_transfer never called; GAP-A1)."},
+    {from:5,to:1,dir:"bend",status:"doctrine",gap:null,label:"Monarch may act directly on any settlement (bend-around, scale_hierarchy §5.3)."},
+    // LATERAL (self-loops)
+    {from:0,to:0,dir:"lateral",status:"live",gap:null,label:"Scene handoffs — LIVE at scene scale (key_echo_armature §2.3)."},
+    {from:1,to:1,dir:"lateral",status:"doctrine",gap:null,label:"Quo Warranto peninsula-wide charter echo; grain-route dependency; Weight-as-Exit emigration (governance_type_registry §2.4)."},
+    {from:2,to:2,dir:"lateral",status:"doctrine",gap:null,label:"Grain-route / adjacency between territories — DOCTRINE."},
+    {from:3,to:3,dir:"lateral",status:"doctrine",gap:null,label:"Province re-forms / dissolves on faction alignment — existence-conditional (scale_hierarchy §2)."},
+    {from:4,to:4,dir:"lateral",status:"live",gap:null,label:"Inter-faction politics (nine axes); coalitions; Parliamentary vote — LIVE (§10)."},
+    {from:5,to:5,dir:"lateral",status:"doctrine",gap:"D1",label:"Monarch-vs-Parliament collision — UNRANKED (no precedence rule; GAP-D1)."},
+    // COLLISION (right, farthest) — Cut D overlay, converging on the intermediate scales
+    {from:4,to:3,dir:"collision",status:"broken",gap:"E1",label:"Exogenous shock arrives top-down (Calamity radiation / MS falloff) — four un-unified systems, no shared collision primitive (GAP-E1)."},
+    {from:4,to:2,dir:"collision",status:"broken",gap:"E1",label:"Top-down radiation into territory; up-aggregates meet down-deltas → bounded oscillation (D.6 + OF-3; GAP-E1)."},
+    {from:1,to:3,dir:"collision",status:"broken",gap:"E2",label:"Bottom-up cascade (Π→Order→Accord→Strain→IP); a collision is not modeled as requiring two independent signals — a famine reads as a lone settlement problem (GAP-E2)."}
+  ];
+  edges.forEach(function(e){ e.gapClass = e.gap && gapInfo[e.gap] ? gapInfo[e.gap].cls : null; });
+
+  // ---- decision queue (decision_queue.md, Phase-F classes) ----
+  var tiers = [
+    { title:"Tier 1 — unblock the whole spine (do these first)", items:[
+      {n:1,item:"Wire L/PS (E5)",gaps:["B1"],cls:"ctc",dec:"Approve wiring L/PS from the surrounding logic (LPS-2e aggregation + consent-gate + deferred-apply boundary + Field/Gauge shape). Do NOT import CK3.",why:"The single highest-priority open item; every consent / fracturing / emergence arc is dark until this bites."},
+      {n:2,item:"Wire propose_transfer + compute_accord_echo",gaps:["A1","A2"],cls:"ctc",dec:"Connect the two zero-caller functions into the live season loop.",why:"Pure wiring; ends “lost territory is unrecoverable” and closes the political→spatial return path. Cheapest high-leverage fix."},
+      {n:3,item:"Mandate collapse: ratify D4 + author two relief-valves",gaps:["B2"],cls:"genuine",dec:"Confirm D4 (retire round(7T/(T+K)) as collapse-carrier), then rule the two Mandate-of-Heaven relief-valves: (a) scapegoat — an appointee absorbs the hit at the cost of their Standing; (b) self-reproach — the ruler spends their own resource to arrest the slide.",why:"Gives the L/PS spine a downward consequence (collapse), not just upward aggregation."}
+    ]},
+    { title:"Tier 2 — the genuine new-mechanism surface (small, load-bearing)", items:[
+      {n:4,item:"Rank the two chain-bypass authorities",gaps:["D1"],cls:"genuine",dec:"Pick: nest one inside the other (constitutional-monarchy / Tokugawa asymmetry), or make Monarch-vs-Parliament collision a named designed crisis mode.",why:"Bodin indivisible-sovereignty. The sharpest single finding; currently the most dangerous under-specification."},
+      {n:5,item:"Collision-of-stresses primitive + two-signal trigger",gaps:["E1","E2"],cls:"genuine",dec:"Approve a unified collision primitive requiring two independently-arriving signals (a material threshold AND an interpretive trigger); a court social-contest scene adjudicates whether a disaster “counts.”",why:"Mandate-of-Heaven zaiyi two-channel resonance + DF mandate-clock + Imperator Tyranny×Aggressive-Expansion (not EU4 Court-and-Country — struck in Phase-F)."},
+      {n:6,item:"Governance-mode FLAG taxonomy",gaps:["C2","C4"],cls:"genuine",dec:"Adopt an 8-value governance_mode FLAG domain (AUTOCRATIC_FIAT / ROYAL_COURT_APPOINTMENT / OLIGARCHIC_COUNCIL / LANDHOLDER_FRANCHISE / DELIBERATIVE_ASSEMBLY / CONSENSUS_UNANIMITY / NEGOTIATED_ESTATES / MERITOCRATIC_BUREAUCRATIC); decide start-active vs latent. Build sortition/consensus/negotiated + the Consensus resolver.",why:"Aristotle / Athens-sortition / Roman-comitia / consensus polities. 5/8 are corpus-native."},
+      {n:7,item:"Suppression as consequence-bearing + identity-migration",gaps:["G2"],cls:"genuine",dec:"Model cultural suppression via the seven backfire mechanisms, esp. the novel identity-migration hand-off (severe suppression converts a militarily-solvable problem into a militarily-unsolvable one). Never consequence-free.",why:"Reconquista / limpieza / Morisco; Rome-vs-Jerusalem substrate-migration; Carthage = floor-not-zero."},
+      {n:8,item:"Two missing resolution registers",gaps:["F6","F7"],cls:"genuine",dec:"F6 recognition-fission — a peaceful negotiated-recognition insurgency-formation path. F7 reaggregation — a Crown action that changes the allegiance aggregation topology (redraw the blocs), not the values.",why:"Ottoman millet fission; Cleisthenes tribal reaggregation. Both verified REAL."}
+    ]},
+    { title:"Tier 3 — rulings that unblock chain-completions", items:[
+      {n:9,item:"ΔLegitimacy decay / OF-3 decay()",gaps:["B4"],cls:"ctc",dec:"Approve adding the deferred decay() term (mean-reversion) so legitimacy can rot, not only ratchet up.",why:"Old-World cognomen-decay / EU4 Horde-Unity confirmatory; anacyclosis thematic. Enables decline-and-fall arcs."},
+      {n:10,item:"Author engine_clock + domain_actions home docs",gaps:["H3","A3"],cls:"ctc",dec:"Flip the two doc:null contracts using their already-authored homes (propagation_spec §1; governance_play_redesign §1.3).",why:"Unblocks the Territory tier + the governor decision-surface (the verbs that make L/PS bite)."},
+      {n:11,item:"D.6 disjoint ruling + convergence proof",gaps:["A4"],cls:"ctc",dec:"Rule the down-stat_deltas / up-aggregate domains disjoint (propagation_spec §4.3), enabling the contraction/termination proof.",why:"Closes the collision-oscillation risk."},
+      {n:12,item:"Cascade “hardness”",gaps:["C3"],cls:"ctc",dec:"Confirm the cascade is the noisy, L/PS-gated model (broadcast + local attenuation), NOT a hard identical-type cascade.",why:"Mostly a confirmation; a hard cascade has no game precedent."},
+      {n:13,item:"Bypass metering",gaps:["D2"],cls:"ctc",dec:"Meter a chain-bypass as a new Turmoil/IP feeder (structurally identical to the built Revolt +1).",why:"Imperator-Tyranny confirmatory; draws on the same fragility pool F5’s fracture roll reads."}
+    ]},
+    { title:"Tier 4 — hygiene, slivers, and a flagged proposal", items:[
+      {n:14,item:"Re-index the orphans + reconcile status headers",gaps:["F1","H1","H2"],cls:"ctc",dec:"Add franchise / fractional_province_ownership / insurgency_pipeline / faction_succession_split to CURRENT.md; reconcile the 3 CANONICAL-vs-PROVISIONAL docs.",why:"Pure currency-hygiene."},
+      {n:15,item:"Caste cross-scale cascade + circumvention",gaps:["F2","F4","F5","F3"],cls:"ctc",dec:"Wire caste-composition→franchise-suppression; adopt the orphaned Fragmentation-Check + Consolidation + two-stage split resolver; generalize the §2.5a wealth-buyout. F3 genuine sliver: the limpieza forged-genealogy temporal mechanic.",why:"The one route lacking a corpus hook is the genuine sliver."},
+      {n:16,item:"Orthodoxy-as-nexus-axis",gaps:["G1"],cls:"ctc",dec:"Lift the built Church keys (CI / Piety / Excommunication) into an L/PS-parallel ideological-consent axis.",why:""},
+      {n:17,item:"“Elect-inward, account-back” propagation shape",gaps:[],cls:"held",dec:"A proposed new armature direction (Venice Great Council→Senate→Ten). Verified REAL but same-tier (intra-tier), not cross-scale. Adding an armature direction is fable/opus-gated PROPOSED-doc work — do not treat as ratified; author separately if desired.",why:"HELD."}
+    ]}
+  ];
+
+  // ---- pressure-key families (pressure_key_registry_v1) ----
+  var families = [
+    {n:1,name:"Structural / hierarchy",desc:"Who can act on whom, at what scale. Two-Tier Authority, province existence-conditionality, cross-scale claiming, chain-bypass (Monarch / Parliament)."},
+    {n:2,name:"Legitimacy–consent spine (L / PS / Mandate / Standing)",desc:"The single most important cross-scale throughline. L/PS 0–7 (INERT), Faction Mandate, aggregate L/PS, Strictness, Order, Accord, Standing, Renown, Suspicion."},
+    {n:3,name:"Governance-mode & franchise",desc:"The content of the imposed governance-type + the parliamentary-weight apparatus. Cascade, mode taxonomy, manager-type enum, Directive, Franchise, National Influence, Charter, Quo Warranto."},
+    {n:4,name:"Caste & internal-population",desc:"Caste composition, rank-advancement gates, Renown/Initiation modifiers, Disposition-floor / Conviction risk, Demotion ladder, Guild Entry/Mastership Forks."},
+    {n:5,name:"Religious / ideological (CI / Piety / heresy)",desc:"Church Influence, Spiritual Weight, Piety Track, Church Attention Pool, Institutional Weight, Certainty, nine political axes, substrate-posture."},
+    {n:6,name:"Economic / fiscal",desc:"Fiscal Stance, Treasury, Prosperity, Ledger-of-Consequence tags, Dearth / Grain-route, HRE-4 Borrow."},
+    {n:7,name:"Cross-cutting clocks (MS / Π / CI / IP / Turmoil)",desc:"Mending Stability, Pressure Π, Institutional Pressure, Turmoil/Strain — plus decay() (OF-3, DEFERRED) and the Field/Gauge primitive proposal."}
+  ];
+  var shapes = [
+    {n:"FLAG",d:"A discrete policy choice: boolean, small enum, staged state-machine, or a threshold-derived event. Selected occasionally by an authority; does not accumulate."},
+    {n:"VECTOR",d:"A continuous / multi-dimensional weighted quantity: accumulates, decays, aggregates, blends. E.g. L/PS, Mandate, Π, MS, Accord, temperament α/β."},
+    {n:"BOTH (VECTOR-with-derived-FLAGS)",d:"The dominant real shape — a continuous body that periodically throws a discrete FLAG when it crosses a threshold (MS, CI, IP, Π, Accord all do this)."},
+    {n:"Field / Gauge (PROPOSED, not ratified)",d:"The missing substrate primitive for a VECTOR’s continuous body: persistent, continuously readable, with a required decay_fn (closing OF-3 generically) and aggregate_fn. The substrate gap under the whole matrix."}
+  ];
+
+  // ---------- render graph ----------
+  var nodeLayer = document.getElementById("nodeLayer");
+  var edgeLayer = document.getElementById("edgeLayer");
+  var bandLayer = document.getElementById("bandLayer");
+  var edgeEls = [];
+  var nodeEls = [];
+
+  // collision band behind Territory + Province
+  (function(){
+    var g = svgEl("g", {"class":"coll-band"});
+    var yTop = scales[2].y - 42, yBot = scales[3].y + 42;
+    g.appendChild(svgEl("rect", {x:40, y:yTop, width:920, height:(yBot-yTop), rx:14}));
+    var t = svgEl("text", {x:52, y:yTop+16}); t.textContent = "collision meets at the intermediate scales";
+    g.appendChild(t);
+    bandLayer.appendChild(g);
+    bandLayer._band = g;
+  })();
+
+  scales.forEach(function(s, i){
+    var g = svgEl("g", {"class":"node", "data-i":i, tabindex:"0", role:"button",
+                        "aria-label":"Scale: "+s.name});
+    g.appendChild(svgEl("rect", {x:NODE_X-NODE_W/2, y:s.y-NODE_H/2, width:NODE_W, height:NODE_H, rx:9}));
+    var nm = svgEl("text", {"class":"n-name", x:NODE_X, y:s.y-3, "text-anchor":"middle"}); nm.textContent = s.name;
+    var sb = svgEl("text", {"class":"n-sub", x:NODE_X, y:s.y+14, "text-anchor":"middle"}); sb.textContent = s.sub;
+    g.appendChild(nm); g.appendChild(sb);
+    g.addEventListener("click", function(){ selectNode(i); });
+    g.addEventListener("keydown", function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); selectNode(i); } });
+    nodeLayer.appendChild(g);
+    nodeEls[i] = g;
+  });
+
+  var base = {up:46, down:46, skip:200, bend:196, collision:315};
+  var step = {up:30, down:30, skip:42, bend:34, collision:28};
+  var sideLeft = {up:true, skip:true, down:false, bend:false, collision:false};
+  var cnt = {up:0, down:0, skip:0, bend:0, collision:0};
+
+  edges.forEach(function(e, idx){
+    var d, ax, ay;
+    if(e.dir === "lateral"){
+      var y = scales[e.from].y, x = RX, o = 42, cx = x + o;
+      d = "M "+x+" "+(y-11)+" C "+cx+" "+(y-24)+", "+cx+" "+(y+24)+", "+x+" "+(y+11);
+      ax = 0.25*x + 0.75*cx; ay = y;
+    } else {
+      var y1 = scales[e.from].y, y2 = scales[e.to].y;
+      var off = base[e.dir] + cnt[e.dir]*step[e.dir]; cnt[e.dir]++;
+      if(sideLeft[e.dir]){ var xl = LX, cxl = xl - off;
+        d = "M "+xl+" "+y1+" C "+cxl+" "+y1+", "+cxl+" "+y2+", "+xl+" "+y2;
+        ax = 0.25*xl + 0.75*cxl; ay = (y1+y2)/2;
+      } else { var xr = RX, cxr = xr + off;
+        d = "M "+xr+" "+y1+" C "+cxr+" "+y1+", "+cxr+" "+y2+", "+xr+" "+y2;
+        ax = 0.25*xr + 0.75*cxr; ay = (y1+y2)/2;
+      }
+    }
+    var g = svgEl("g", {"class":"edge dir-"+e.dir, tabindex:"0", role:"button",
+      "aria-label":DIRCODE[e.dir]+" edge, "+STLABEL[e.status]+(e.gap?(", "+e.gap):"")});
+    g.appendChild(svgEl("path", {"class":"edge-hit", d:d}));
+    g.appendChild(svgEl("path", {"class":"edge-line status-"+e.status, d:d, "marker-end":"url(#arw-"+e.status+")"}));
+    var chip = svgEl("g", {"class":"edge-chip chip-"+e.status});
+    var txt = DIRCODE[e.dir] + (e.gap ? ("·"+e.gap) : "");
+    var w = txt.length*6.3 + 10;
+    chip.appendChild(svgEl("rect", {x:ax-w/2, y:ay-8, width:w, height:16, rx:8}));
+    var tt = svgEl("text", {x:ax, y:ay+4, "text-anchor":"middle"}); tt.textContent = txt;
+    chip.appendChild(tt);
+    g.appendChild(chip);
+    g.addEventListener("click", function(){ selectEdge(idx); });
+    g.addEventListener("keydown", function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); selectEdge(idx); } });
+    edgeLayer.appendChild(g);
+    edgeEls[idx] = g;
+  });
+
+  // ---------- state + filtering ----------
+  var dirState = {up:true, down:true, lateral:true, skip:true, bend:true, collision:true};
+  var statusState = {live:true, doctrine:true, broken:true};
+  var highlightClass = "all";
+  var selectedGap = null;
+
+  function applyFilters(){
+    var anySelMatch = false, i;
+    if(selectedGap){ for(i=0;i<edges.length;i++){ if(edges[i].gap===selectedGap){ anySelMatch=true; break; } } }
+    edges.forEach(function(e, idx){
+      var g = edgeEls[idx];
+      var visible = dirState[e.dir] && statusState[e.status];
+      g.style.display = visible ? "" : "none";
+      var isSel = !!selectedGap && e.gap === selectedGap;
+      g.classList.toggle("sel", isSel);
+      var op = 1;
+      if(highlightClass !== "all"){ op = (e.gapClass === highlightClass) ? 1 : 0.14; }
+      if(anySelMatch){ op = isSel ? 1 : Math.min(op, 0.16); }
+      g.style.opacity = visible ? op : "";
+    });
+    bandLayer._band.style.display = dirState.collision ? "" : "none";
+  }
+
+  function clearNodeSel(){ nodeEls.forEach(function(n){ n.classList.remove("sel"); }); }
+
+  var detail = document.getElementById("detail");
+
+  function badge(status){ return '<span class="badge b-'+status+'">'+STLABEL[status]+'</span>'; }
+
+  function gapBlockHTML(id){
+    var gi = gapInfo[id];
+    if(!gi){ return '<div class="gapblock"><b>'+esc(id)+'</b> — re-homed register item (see decision queue, Tier 2 #8).</div>'; }
+    return '<div class="gapblock">'
+      + '<div style="margin-bottom:5px"><span class="gchip '+gi.cls+'">'+esc(id)+'</span>'
+      + '<span class="clslabel '+gi.cls+'" style="font-weight:700;font-size:.72rem">'+CLSLABEL[gi.cls]+'</span>'
+      + ' <span style="color:var(--muted);font-size:.72rem">· '+esc(gi.state)+'</span></div>'
+      + '<div class="kv"><span class="k">Category</span><span class="v">'+esc(gi.cat)+'</span></div>'
+      + '<div class="kv"><span class="k">Issue &middot; state</span><span class="v">'+esc(gi.issue)+'</span></div>'
+      + '<div class="kv"><span class="k">Fix-direction</span><span class="v">'+esc(gi.fix)+'</span></div>'
+      + '</div>';
+  }
+
+  function selectNode(i){
+    selectedGap = null;
+    clearNodeSel(); nodeEls[i].classList.add("sel");
+    var s = scales[i];
+    detail.innerHTML =
+      '<p class="dh">'+esc(s.name)+'</p>'
+      + '<p class="dsub">'+esc(s.sub)+' &nbsp;&middot;&nbsp; grounding-matrix row (§2)</p>'
+      + '<div class="kv"><span class="k">What governs here</span><span class="v">'+esc(s.governs)+'</span></div>'
+      + '<div class="kv"><span class="k">Legitimacy / authority / standing key</span><span class="v">'+esc(s.keyk)+'</span></div>'
+      + '<div class="kv"><span class="k">Pressure enters via</span><span class="v">'+esc(s.enters)+'</span></div>'
+      + '<div class="kv"><span class="k">Radiates up</span><span class="v">'+esc(s.up)+'</span></div>'
+      + '<div class="kv"><span class="k">Radiates down</span><span class="v">'+esc(s.down)+'</span></div>'
+      + '<div class="kv"><span class="k">Lateral</span><span class="v">'+esc(s.lat)+'</span></div>'
+      + '<div class="kv"><span class="k">Skip / bend-around</span><span class="v">'+esc(s.sb)+'</span></div>';
+    applyFilters();
+  }
+
+  function selectEdge(idx){
+    var e = edges[idx];
+    clearNodeSel();
+    selectedGap = e.gap || null;
+    detail.innerHTML =
+      '<p class="dh">'+esc(scales[e.from].name)+' &rarr; '+esc(scales[e.to].name)+'</p>'
+      + '<p class="dsub">'+esc(DIRLABEL[e.dir])+'</p>'
+      + '<div class="kv"><span class="k">Status</span><span class="v">'+badge(e.status)+'</span></div>'
+      + '<div class="kv"><span class="k">Mechanism</span><span class="v">'+esc(e.label)+'</span></div>'
+      + (e.gap ? gapBlockHTML(e.gap) : '<p class="hint" style="margin-top:8px">No gap on this edge.</p>');
+    syncRegSel();
+    applyFilters();
+  }
+
+  function selectGapById(id){
+    clearNodeSel();
+    selectedGap = id;
+    var gi = gapInfo[id];
+    detail.innerHTML =
+      '<p class="dh">Gap '+esc(id)+'</p>'
+      + '<p class="dsub">'+(gi?esc(gi.cat):'')+'</p>'
+      + gapBlockHTML(id)
+      + '<p class="hint" style="margin-top:8px">Matching edges are highlighted on the graph (if any carry this GAP-id).</p>';
+    syncRegSel();
+    applyFilters();
+  }
+
+  // ---------- gap register panel ----------
+  var reglist = document.getElementById("reglist");
+  var regIds = Object.keys(gapInfo);
+  (function(){
+    var c = {ctc:0, genuine:0, mixed:0};
+    regIds.forEach(function(id){ c[gapInfo[id].cls]++; });
+    document.getElementById("regtally").innerHTML =
+      'This view (Phase-F-corrected): <b class="clslabel ctc">'+c.ctc+' complete-the-chain</b> · '
+      + '<b class="clslabel genuine">'+c.genuine+' genuine-gap</b> · '
+      + '<b class="clslabel mixed">'+c.mixed+' mixed</b>. '
+      + '(gap_register’s pre-Phase-F body tally was 14 / 8 / 2 before the 6 reclassifications.)';
+  })();
+  regIds.forEach(function(id){
+    var gi = gapInfo[id];
+    var li = document.createElement("li");
+    li.setAttribute("data-cls", gi.cls);
+    li.setAttribute("data-id", id);
+    li.innerHTML = '<div class="lead"><span class="gchip '+gi.cls+'">'+esc(id)+'</span>'
+      + '<span class="clslabel '+gi.cls+'" style="font-weight:700;font-size:.7rem">'+CLSLABEL[gi.cls]+'</span>'
+      + '<span class="cat">· '+esc(gi.state)+'</span></div>'
+      + '<div class="cat" style="margin-bottom:2px">'+esc(gi.cat)+'</div>'
+      + '<div class="iss">'+esc(gi.issue)+'</div>';
+    li.addEventListener("click", function(){ selectGapById(id); });
+    reglist.appendChild(li);
+  });
+  function syncRegSel(){
+    var lis = reglist.querySelectorAll("li");
+    lis.forEach(function(li){ li.classList.toggle("sel", li.getAttribute("data-id")===selectedGap); });
+  }
+  // register class-filter buttons
+  document.getElementById("regfilter").addEventListener("click", function(ev){
+    var b = ev.target.closest(".fbtn"); if(!b) return;
+    var cls = b.getAttribute("data-cls");
+    this.querySelectorAll(".fbtn").forEach(function(x){ x.setAttribute("aria-pressed", x===b ? "true":"false"); });
+    reglist.querySelectorAll("li").forEach(function(li){
+      li.style.display = (cls==="all" || li.getAttribute("data-cls")===cls) ? "" : "none";
+    });
+  });
+
+  // ---------- decision queue panel ----------
+  (function(){
+    var body = document.getElementById("dqbody");
+    var html = '<p class="tally">Ordering = leverage × 1/cost × novelty. Classes are Phase-F revised. Nothing here is executed by the docket — it indexes, classifies, and hands off; the fixes remain PROPOSED.</p>';
+    tiers.forEach(function(t){
+      html += '<div class="tier"><h3>'+esc(t.title)+'</h3>';
+      t.items.forEach(function(it){
+        var chips = it.gaps.map(function(gp){
+          if(gapInfo[gp]){ return '<span class="gchip '+gapInfo[gp].cls+' gapchip-inline" data-gap="'+gp+'">'+esc(gp)+'</span>'; }
+          return '<span class="gchip held">'+esc(gp)+'</span>';
+        }).join("");
+        html += '<div class="ditem"><div class="dt"><span class="dnum">#'+it.n+'</span>'
+          + '<span style="font-weight:600">'+esc(it.item)+'</span>'
+          + '<span class="clslabel '+it.cls+'" style="font-weight:700;font-size:.68rem">['+CLSLABEL[it.cls]+']</span>'
+          + chips + '</div>'
+          + '<div class="dec">'+esc(it.dec)+'</div>'
+          + (it.why ? '<div class="why">'+esc(it.why)+'</div>' : '')
+          + '</div>';
+      });
+      html += '</div>';
+    });
+    body.innerHTML = html;
+    body.addEventListener("click", function(ev){
+      var c = ev.target.closest(".gapchip-inline"); if(!c) return;
+      var gp = c.getAttribute("data-gap");
+      if(gapInfo[gp]){ document.getElementById("regpanel").open = true; selectGapById(gp); }
+    });
+  })();
+
+  // ---------- keys legend panel ----------
+  (function(){
+    var body = document.getElementById("keybody");
+    var html = '<p class="tally">Full per-key census (every governance / legitimacy / authority / standing key × scale) lives in pressure_key_registry_v1.md. Seven families:</p>';
+    families.forEach(function(f){
+      html += '<div class="fam"><div class="fn">Family '+f.n+' — '+esc(f.name)+'</div><div class="fd">'+esc(f.desc)+'</div></div>';
+    });
+    html += '<h2 style="margin:12px 0 8px">Three primitive shapes</h2>';
+    shapes.forEach(function(sh){
+      html += '<div class="shape"><b>'+esc(sh.n)+'</b> — '+esc(sh.d)+'</div>';
+    });
+    body.innerHTML = html;
+  })();
+
+  // ---------- filter wiring ----------
+  document.getElementById("dirtoggles").addEventListener("change", function(ev){
+    var cb = ev.target; if(!cb.dataset.dir) return;
+    dirState[cb.dataset.dir] = cb.checked; applyFilters();
+  });
+  document.getElementById("statustoggles").addEventListener("change", function(ev){
+    var cb = ev.target; if(!cb.dataset.status) return;
+    statusState[cb.dataset.status] = cb.checked; applyFilters();
+  });
+  document.getElementById("hltoggles").addEventListener("change", function(ev){
+    if(ev.target.name !== "hl") return;
+    highlightClass = ev.target.value;
+    var cap = {all:"All edges shown at full weight.",
+      ctc:"Complete-the-chain edges emphasized; others dimmed. (A1 · A2 · A3 · B1 carry edges.)",
+      genuine:"Genuine-gap edges emphasized; others dimmed. (D1 · E1 · E2 carry edges.)"};
+    document.getElementById("hlcap").textContent = cap[highlightClass];
+    applyFilters();
+  });
+
+  // ---------- theme toggle ----------
+  document.getElementById("themebtn").addEventListener("click", function(){
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next;
+    if(cur === "dark") next = "light";
+    else if(cur === "light") next = "dark";
+    else next = prefersDark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+  });
+
+  applyFilters();
+})();
+</script>

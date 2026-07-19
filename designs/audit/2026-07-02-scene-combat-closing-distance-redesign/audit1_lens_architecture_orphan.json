@@ -1,0 +1,234 @@
+{
+  "audit_meta": {
+    "lens": "code-architecture / staging / orphan-detection",
+    "plan": "C:/Users/Jordan/.claude/plans/things-like-a-feather-compressed-rivest.md",
+    "engine_root": "C:/Github/ttrpg-morph-rearch/designs/scene/combat_engine_v1/",
+    "date": "2026-07-02",
+    "note": "Plan 'D1..D10' references are the plan's own 'Resolved design decisions' 1..10. The plan's 'Fable 5 audit findings' section is [PENDING] at read time; findings below assume the plan text as written."
+  },
+
+  "layering_findings": [
+    {
+      "id": "L1",
+      "topic": "at_circumstance stays L0-pure",
+      "verdict": "HONORS the discipline (as written)",
+      "evidence": "D1 extends at_grip(w,g) -> at_circumstance(w, grip=0.0, range_avail=1.0), returning {I_g,S_g,d_g,u} PLUS omega_cap/m_eff/rear_clearance. Signature is (weapon, scalar circumstance params) only — no Combatant. This matches the existing L0 pattern exactly: at_grip(w,g) (weapon_physics.py:454) already takes a scalar circumstance param and is called from L2 (systems.wield_heft:30, _recovery_mode_commitment:107, recoverability_factor:125) with getattr(c,'grip_position',0.0) resolved on the L2 side. The plan correctly keeps range_avail a SCALAR passed in, not the Combatant. Jordan's prior placement note ('STAY IN L0, no new module ... weapon+circumstance only, no Combatant object') is honored."
+    },
+    {
+      "id": "L2",
+      "topic": "range_avail is COMPUTED in L2, CONSUMED in L0 — the split is correct but load-bearing",
+      "verdict": "OK but flag: the L0/L2 boundary hinges on range_utilization living in L2",
+      "evidence": "D4 places range_utilization(c, measure_gap, cfg) in systems.py (L2, Combatant-aware, reads c + measure_gap). Its OUTPUT (a scalar c.range_avail) is what feeds at_circumstance's range_avail param in L0. This is the correct shape (L2 derives the scalar from Combatant state; L0 consumes only the scalar) and mirrors how grip_position is derived by systems.grip_target(c,closed,cfg) (L2, systems.py:147) then written to the Combatant and passed into at_grip as a bare float. NO L0 purity violation as described. The discipline holds ONLY IF at_circumstance never reaches for measure_gap/Combatant itself — the plan's D1 text is clean on this, but I7's rear_clearance(w,g) and D1's omega_cap ('scaled by room-to-develop') must take room-to-develop as an ALREADY-RESOLVED scalar arg, not compute it from engagement state. Recommend an explicit test asserting at_circumstance's signature contains no Combatant/measure_gap param (a structural guard, like the existing test_no_weapon_name_literal_in_resolution)."
+    },
+    {
+      "id": "L3",
+      "topic": "facing / range_avail as Combatant per-beat state, wrapper as sole mutator",
+      "verdict": "HONORS the discipline",
+      "evidence": "D6 puts facing on the Combatant 'like grip_position/lunge_depth', written per-beat by the wrapper from a facing_target(c,closed,cfg) policy (pure, returns the value; wrapper writes). This is byte-identical in shape to the live pattern: combatant.py:100-103 declares grip_position/lunge_depth/sel_head/sel_dmg; systems.grip_target/select_mode/halfsword_target are PURE (return values, comment 'the wrapper writes'); wrapper.py:66-69 does c.grip_position=S.grip_target(...), c.lunge_depth=0.0, c.sel_dmg,c.sel_head=S.select_mode(...). D4's per-beat c.range_avail write and D6's c.facing write slot into that exact same wrapper loop. All mutation stays in wrapper.py (L3). No L2 function is described as mutating a Combatant."
+    },
+    {
+      "id": "L4",
+      "topic": "contact.py scoped as L2 (Combatant-aware, no mutation)",
+      "verdict": "HONORS the discipline",
+      "evidence": "D8 makes contact.py a new L2 subsystem: grab_available/grab_sigma are role-objects-in / contribution-out (same contract as bind_sigma at systems.py:464), and 'wrapper branches mirror bind/riposte' — i.e. the BRANCHING grab_outcome menu resolves in the wrapper (L3), which owns mutation, exactly as the bind loop does (wrapper.py:260-279). Splitting into its own module (vs adding to the 657-line systems.py) is the sizing call Jordan's prior note explicitly left to R1 ('Whether it's big enough to split into its own module ... is an R1 sizing call'). Cross-file consistency: state_graph.py's contact.axis injection point (state_graph.py:88-90) is pre-declared at node 'Bind' and capabilities.py already has the _affords_point cycle-safe local-import idiom for grab/disarm/pin gates to follow."
+    },
+    {
+      "id": "L5",
+      "topic": "core.py signature widening (heft/percussion_authority) is a threading change, NOT a new layer",
+      "verdict": "OK — matches Jordan's flagged 'signature consequence'",
+      "evidence": "D2 widens heft(w) -> heft(w, grip, range_avail) and percussion_authority likewise. core.heft_resp(w,cfg) (core.py:64) and core.strike (core.py:158) currently call WP.heft(attacker.w) / WP.percussion_authority(attacker.w) with only the weapon. Threading grip/range from the attacker Combatant into these L1 calls is the SAME threading wield_heft/recoverability_factor already do at L2 — Jordan's prior note pre-approved this ('A real but contained signature change, not a new architectural layer'). NOTE the plan's D2 says core.py threads 'grip/range into heft_resp/strike' — core.strike already reads attacker.grip_position-adjacent state indirectly, so this is the wiring point. No layering inversion: L1 still calls L0, L0 stays pure."
+    },
+    {
+      "id": "L6",
+      "topic": "no self-text contradiction of L0 purity found",
+      "verdict": "CLEAN",
+      "evidence": "Scanned the plan for any function described as needing to 'read the wrapper's state' or engagement/er-dict state from inside an L0 function. None found. The er-dict-recompute in D3/I3 ('the wrapper's frozen-at-engagement-start er dict recomputes per-beat') is correctly a WRAPPER change (L3 recomputes er by calling reach_base per-beat), not an L0 reach_base change that reaches INTO the wrapper. reach_base itself stays L2 pure (reads c.w + grip_position, returns a scalar)."
+    }
+  ],
+
+  "sequencing_findings": [
+    {
+      "id": "S1",
+      "topic": "I3 (grip-aware reach) vs I4/I5 (mode/measure coupling) — the audit's headline sequencing question",
+      "severity": "SERIOUS",
+      "verdict": "NOT cleanly independent as staged — I3 silently changes the 'closed' boundary that I4/I5 build on",
+      "evidence": "reach_base is the SOLE definition of what 'close' means: wrapper.py:32-38 computes er=reach_base per fighter, measure_gap = er[longer]-er[shorter], and closed = (measure_gap<=0.3). I3 makes reach_base subtract the gather's forward hand-slide u (grip-aware) AND recomputes er per-beat instead of once-per-engagement. That mutates measure_gap and the closed flag DYNAMICALLY. I4 (select_mode close-efficacy 'a broad arc-requiring swing collapses in tight quarters') and I5 (range_utilization -> commit window 'as room vanishes') both key off exactly that measure/closed signal. So I4/I5's 'behavior-preserving until I turn them on' claim is fine, but their DESIGN ASSUMES the post-I3 measure semantics (a choked pole now reads as genuinely closer). If I4/I5 were tuned against pre-I3 static reach they would mis-fire. Staging I3 BEFORE I4/I5 is therefore correct and necessary — but the plan states them as independent increments; they are a DEPENDENT CHAIN (I3 -> I4 -> I5). Recommend: annotate I4/I5 as 'depends on I3's measure semantics' and re-run the I3 acceptance (polearm-vs-arming out of the 93-96% band) AGAIN after I5 lands, since I5's dynamic range_avail can re-open the measure I3 closed."
+    },
+    {
+      "id": "S2",
+      "topic": "I2b (KE swung damage) forward-dependency risk on I2a bundle output",
+      "severity": "MINOR",
+      "verdict": "Correctly ordered; no forward dep",
+      "evidence": "I2b's KE formula (~1/2 m_eff omega_cap^2) consumes m_eff and omega_cap, which are INTRODUCED by I2a's at_circumstance bundle. I2a lands first (behavior-preserving, ideal defaults byte-identical), I2b consumes it. Order is correct. The only wrinkle: I2b re-anchors HEFT_REF and re-evaluates two [PHASE-C]-flagged red tests (the poleaxe percussion_authority flip documented at weapon_physics.py:206-224). That is a re-baseline, correctly Jordan-gated, and does not depend on any LATER increment."
+    },
+    {
+      "id": "S3",
+      "topic": "I1 scaffold (facing/range_avail fields) precedes their consumers by many increments — dead-field window",
+      "severity": "MINOR",
+      "verdict": "Acceptable under 'empty=>identity' discipline, but creates a multi-increment orphan window",
+      "evidence": "I1 adds facing/range_avail Combatant fields 'defaulting to ideal => identity'. range_avail's first real CONSUMER is I5 (range_utilization -> commit_depth). facing's first real consumer is I6 (facing_target -> lateral-void). So between I1 and I5/I6 these fields exist with no reader — technically an orphan, but a DELIBERATE, time-boxed one the plan closes within the same effort. This is the same pattern the codebase already uses (sel_head/sel_dmg were added as scaffold). Low risk PROVIDED I5/I6 actually land; if the effort is cut after I4, range_avail/facing become permanent clinch-class orphans. Recommend: gate the field additions behind their consumer increment, OR add an I8 sweep assertion that every Combatant circumstance field has >=1 live reader (a structural anti-orphan test)."
+    },
+    {
+      "id": "S4",
+      "topic": "I4's approach_displace sel_head fix depends on select_mode already writing sel_head (pre-existing) — no new dep, but a latent one",
+      "severity": "MINOR",
+      "verdict": "OK — the dependency is on ALREADY-LIVE code, not a later increment",
+      "evidence": "I4 changes approach_displace to read sel_head/sel_dmg (falling back to static head when unset). sel_head is ALREADY written by the live wrapper (wrapper.py:69,123 via select_mode) and lives on the Combatant (combatant.py:102). So I4's read target exists today. The plan's 'falls back to static head when unset' preserves the byte-identity guarantee. No forward dependency. Note approach_displace currently gates on longer.w['head']!='point' (systems.py:448) — the exact static-head staleness the ideal_state_audit flagged; I4 fixes it in place."
+    },
+    {
+      "id": "S5",
+      "topic": "I7 bundles four distinct deliverables (rear_clearance penalty, hook_affordance, contact.py, wiring) — merge/split opportunity",
+      "severity": "MINOR",
+      "verdict": "I7 is over-bundled; rear_clearance is separable and should precede the grab subsystem",
+      "evidence": "I7 chains: rear_clearance penalty (D7, a close-quarters footwork cost — an INDEPENDENT lever consuming rear_clearance from the I2a bundle) -> hook_affordance (D9, saturating sum over dual_role_element guards) -> contact.py grab/pin (D8) -> wrapper/state_graph/capabilities wiring. rear_clearance's penalty (close_tempo/str_demand) has NO dependency on the grab subsystem and could land as its own increment right after I2a (its producer). Bundling it into the big contact increment couples a low-risk continuous lever to a high-risk new-subsystem-with-branching-outcomes, enlarging the increment that is hardest to verify. Recommend splitting I7 into I7a (rear_clearance penalty, independently ablation-gated) and I7b (contact.py + hook_affordance + wiring). Shorter, safer critical path; each half independently verifiable per the plan's own discipline."
+    },
+    {
+      "id": "S6",
+      "topic": "er-dict per-beat recompute (I3) interacts with the half-sword form-switch and grip_target ordering",
+      "severity": "SERIOUS",
+      "verdict": "Under-specified: recomputing er per-beat must happen AFTER grip_target AND after the half-sword weapon swap, or reach reads a stale grip/weapon",
+      "evidence": "Today er is frozen at wrapper.py:32-33 (engagement start), while grip_position mutates per-beat (wrapper.py:66) and the half-sword form (which changes head_len/grip_len, hence reach_base) swaps mid-loop (wrapper.py:120-121). I3 makes er grip-aware and per-beat. For correctness the per-beat er recompute must be sequenced AFTER c.grip_position=grip_target(...) AND after aggressor.weapon=halfsword_target(...) each beat — otherwise reach is computed off last beat's grip or the pre-swap weapon. The plan says 'the wrapper's frozen-at-engagement-start er dict recomputes per-beat' but does not pin WHERE in the beat. This is exactly the kind of ordering the 'no rng-draw reordering / seeded determinism' discipline can miss (it's not an rng reorder, it's a read-order bug). Recommend: I3's acceptance must include an explicit per-beat sequencing spec (grip_target -> weapon swap -> er recompute -> measure_gap/closed re-derive) and a test that a mid-engagement choke visibly shrinks er on the NEXT beat."
+    }
+  ],
+
+  "orphan_table": [
+    {
+      "item": "at_circumstance.omega_cap (achievable angular velocity)",
+      "introduced_increment": "I2a (bundle scaffold, byte-identical) then live in I2b",
+      "consumer": "weapon_physics.heft() swing branch (~1/2 m_eff*omega_cap^2), I2b; also percussion_authority/agility read the bundle, D2",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "at_circumstance.m_eff (effective mass at impact point)",
+      "introduced_increment": "I2a then live in I2b",
+      "consumer": "weapon_physics.heft() swing branch KE term, I2b",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "at_circumstance.rear_clearance (length trailing behind working hand)",
+      "introduced_increment": "I2a (bundle) / D1",
+      "consumer": "rear_clearance(w,g) spatial close penalty feeding close_tempo/str_demand, D7 / I7",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "Combatant.range_avail (per-beat)",
+      "introduced_increment": "I1 (scaffold, defaults ideal)",
+      "consumer": "range_utilization(c,measure_gap,cfg) writes it; commit_depth reads it (window contraction) + approach stophit commitment term, D4/D5 / I5",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "Combatant.facing (per-beat)",
+      "introduced_increment": "I1 (scaffold, defaults neutral)",
+      "consumer": "facing_target(c,closed,cfg) writes it; lateral-void component into closing + small profile term in reach_sigma/legibility, D6 / I6",
+      "status": "VERIFIED (ships near-neutral; consumer named but effect deliberately non-load-bearing per C1)"
+    },
+    {
+      "item": "contact.grab_available (the gate)",
+      "introduced_increment": "I7",
+      "consumer": "wrapper contact branch (mirrors bind/riposte) — gates whether a grab can fire at all, I7",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "contact.grab_sigma (strength-dominant)",
+      "introduced_increment": "I7",
+      "consumer": "wrapper contact branch resolves grab_sigma like bind_sigma, I7",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "contact.grab_outcome (branching menu: disarm/throw/pin/control/seize/foot-pin/escape)",
+      "introduced_increment": "I7",
+      "consumer": "wrapper branches on it; capabilities.py grab/disarm/pin affordance gates, I7",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "hook_affordance(w) (saturating sum over dual_role_element guards)",
+      "introduced_increment": "I7 / D9",
+      "consumer": "grab affinity derivation (feeds grab_available/grab_sigma weapon precondition), I7",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "close-efficacy factor (D5 mode selection)",
+      "introduced_increment": "I4 / D5",
+      "consumer": "select_mode scales each afforded element's effectiveness by it; approach_displace reads sel_head/sel_dmg, I4",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "lateral-void term (D6 facing)",
+      "introduced_increment": "I6 / D6",
+      "consumer": "the closing computation (close_rate / measure) + reach_sigma profile term, I6",
+      "status": "VERIFIED (named consumer; ships near-neutral so magnitude is small by design, C1 unresolved)"
+    },
+    {
+      "item": "commitment-depth term in approach-phase stop-hit",
+      "introduced_increment": "I5 / D4",
+      "consumer": "stophit_sigma (deep measured thrusts vs rapid shallow probes), I5",
+      "status": "VERIFIED"
+    },
+    {
+      "item": "at_grip thin alias (kept after at_circumstance extension)",
+      "introduced_increment": "I2a / D1",
+      "consumer": "existing L2 callers wield_heft/_recovery_mode_commitment/recoverability_factor (systems.py:30,107,125) keep calling at_grip",
+      "status": "VERIFIED (back-compat alias; NOT an orphan — it has 3 live L2 readers today)"
+    },
+    {
+      "item": "clinch (existing 1-10 field on every weapon record)",
+      "introduced_increment": "pre-existing; plan D9 disposes of it",
+      "consumer": "D9 resolves by DERIVATION (grab affinity from real primitives via hook_affordance/free-hand/leverage); the field is 'retired or reduced to a residual bias'. I7 acceptance: 'clinch has a live reader or is retired.'",
+      "status": "GAP — see G1: D9 leaves clinch's final disposition as an OR (retired vs residual-bias), and the residual-bias branch would re-instate a live-but-vestigial reader without a stated consumer formula"
+    }
+  ],
+
+  "findings": [
+    {
+      "severity": "SERIOUS",
+      "claim": "I3 (grip-aware reach) is staged as independent of I4/I5, but it silently redefines the 'closed' boundary those increments build on.",
+      "evidence": "reach_base is the single source of measure_gap and the closed flag (wrapper.py:37-38). I3 makes it grip-aware and per-beat. I4's close-efficacy ('collapses in tight quarters') and I5's range_utilization window both key off that measure/closed signal. They are a dependent chain I3->I4->I5, not three independent increments. The 'each increment independently verified' discipline still holds numerically (empty=>identity), but the DESIGN of I4/I5 presumes post-I3 measure semantics; tuning them against pre-I3 static reach would mis-fire, and I5's dynamic range_avail can re-open the measure I3 closed.",
+      "recommendation": "Re-label I4/I5 as explicitly dependent on I3's measure semantics. Re-run I3's acceptance gate (polearm-vs-arming out of 93-96%) AFTER I5 lands, because I5's dynamic range_avail feeds back into what 'closed' means."
+    },
+    {
+      "severity": "SERIOUS",
+      "claim": "The I3 per-beat er-dict recompute is under-specified on WHERE in the beat it runs, risking a stale-grip / stale-weapon reach read.",
+      "evidence": "Today er is frozen at engagement start (wrapper.py:32) while grip mutates per-beat (wrapper.py:66) and the half-sword form (which changes reach-relevant head_len/grip_len) swaps mid-loop (wrapper.py:120-121). Making er grip-aware and per-beat without pinning the recompute AFTER grip_target and AFTER the weapon swap would compute reach off last beat's grip or the pre-swap weapon. This is a read-ordering bug that the 'no rng reordering' determinism discipline does not catch.",
+      "recommendation": "I3 acceptance must specify the per-beat order (grip_target -> half-sword swap -> er recompute -> measure_gap/closed re-derive) and include a test that a mid-engagement choke shrinks er on the next beat."
+    },
+    {
+      "severity": "SERIOUS",
+      "claim": "D9 does not guarantee clinch is FULLY retired — its 'retired OR reduced to a residual bias' leaves an orphan-reintroduction path.",
+      "evidence": "clinch is confirmed dead today: it appears only as a data field on all ~55 weapon records (weapons.py, e.g. rapier=2 ... dagger=10) and in prose/PENDING-contract references (module_contracts.yaml:833 'combat.grapple ... clinch (the currently-unconsumed clinch weapon field)'), with ZERO live engine readers (grep-confirmed). D9 says grab affinity DERIVES from real primitives (hook_affordance + free-hand + leverage) and the inert field 'is retired or reduced to a residual bias.' If the residual-bias branch is chosen, clinch gains a live reader again but WITHOUT a stated consumer formula — re-creating a vestigial-data-driven term, which is the exact anti-pattern (a hand-authored per-weapon scalar back in the resolution path) this whole re-architecture exists to purge. I7's acceptance ('clinch has a live reader or is retired') accepts BOTH outcomes, so it would pass either way.",
+      "recommendation": "Force a single disposition: retire the clinch field entirely (delete it from weapons.py records) once hook_affordance/free-hand/leverage cover the grab derivation. If a residual bias is genuinely wanted, it must be a NAMED term with its own [FIAT]/[SIM-CALIBRATE] tag and an ablation gate — not a fallback that quietly re-reads the old scalar. Tighten I7's acceptance to 'clinch is DELETED from weapon records' (not the current disjunction)."
+    },
+    {
+      "severity": "SERIOUS",
+      "claim": "I7 is over-bundled: it couples a low-risk continuous lever (rear_clearance penalty) to a high-risk new-subsystem-with-branching-outcomes (contact.py), enlarging the hardest-to-verify increment.",
+      "evidence": "I7 chains rear_clearance penalty (D7) -> hook_affordance (D9) -> contact.py grab/pin (D8) -> wrapper/state_graph/capabilities wiring. rear_clearance's penalty (close_tempo/str_demand) consumes only the I2a bundle and has NO dependency on the grab subsystem; it could land right after I2a as its own ablation-gated lever. Bundling it obscures which half moved a balance number and makes the branching-outcome increment (the riskiest, per the plan's own 'branching outcomes fire across seeds' acceptance) larger than necessary.",
+      "recommendation": "Split I7 into I7a (rear_clearance penalty, independently ablation-gated, can land as early as post-I2a) and I7b (contact.py + hook_affordance + wiring). Shorter, safer critical path; honors 'each increment independently verified.'"
+    },
+    {
+      "severity": "MINOR",
+      "claim": "I1's facing/range_avail scaffold fields sit orphaned for several increments (I1 introduces, I5/I6 first consume).",
+      "evidence": "range_avail's first live reader is I5; facing's is I6. Between I1 and those, the fields exist with no consumer — a deliberate, time-boxed orphan the plan closes within the same effort (same pattern as the existing sel_head/sel_dmg scaffold). Risk only materializes if the effort is truncated before I5/I6, in which case they become permanent clinch-class orphans.",
+      "recommendation": "Either gate each field addition behind its consumer increment, or add an I8 structural assertion that every Combatant circumstance field has >=1 live reader (a standing anti-orphan test, generalizing the lesson clinch taught)."
+    },
+    {
+      "severity": "MINOR",
+      "claim": "The old static call paths (heft/percussion_authority/agility off derive(w)) become dead once their bundle-reading replacements land — confirm no vestigial static path is left wired.",
+      "evidence": "D2 says heft/percussion_authority/agility all switch to reading the at_circumstance bundle. agility currently reads static derive(w)['MoI'] (weapon_physics.py:260); I1 already switches agility to at_grip I_g. Once I2a/I2b land, the static derive-based impact/authority reads are superseded. This is a de-leak (good), but the audit-relevant risk is a HALF-switch: e.g. defense_affinities (weapon_physics.py:270) builds on agility(w) and reads derive(w)['MoI'] directly for lever_norm — if agility becomes circumstance-aware but lever_norm stays static, the two disagree about the same weapon's inertia at a given grip (the same class of inconsistency the ideal_state_audit flagged for agility-vs-wield_heft). Not a plan contradiction, but a latent consistency gap the plan does not call out.",
+      "recommendation": "Add to I1/I2's acceptance an explicit check that every consumer of derive(w)['MoI'] on the dynamics path (agility, defense_affinities.lever_norm, wield_heft, _recovery_mode_commitment) reads the SAME grip-adjusted I_g, so no function reads static MoI while a sibling reads circumstance-adjusted MoI for the same blow."
+    },
+    {
+      "severity": "MINOR",
+      "claim": "The plan's own 'Fable 5 audit findings' section is [PENDING] — the plan is not self-complete at approval time.",
+      "evidence": "Section 'Fable 5 audit findings (folded in)' is a [PENDING] placeholder listing anticipated BLOCKER/SERIOUS candidates (mode_elements carry no positions; Phase-0 orient_deg/material dropped by weapons.py; er-freeze; UNIT_M double-bookkeeping). Approving the plan before those verdicts fold in means the sequencing above may shift.",
+      "recommendation": "Do not ratify the increment sequence until the four-lens findings are folded in; specifically the 'mode_elements carry no positions' candidate directly affects I4 (per-element range-gating), which this audit flagged as measure-dependent (S1)."
+    }
+  ],
+
+  "summary": {
+    "orphan_gap_count": 1,
+    "orphan_gaps": ["clinch (D9 'retired OR residual bias' disjunction leaves a re-orphaning path)"],
+    "orphan_verified_count": 12,
+    "most_consequential_finding": "S1/S6: I3 (grip-aware, per-beat reach) is staged as independent of I4/I5 but actually redefines the 'closed'/measure_gap boundary they build on AND is under-specified on per-beat read ordering (grip -> weapon-swap -> er recompute) — the single biggest correctness+sequencing risk.",
+    "layering_verdict": "The plan HONORS L0/L1/L2/L3 and the Key-IN/resolver-OUT convention as written, and honors Jordan's prior placement notes (at_circumstance stays L0-pure, facing on Combatant, contact.py as L2, wrapper as sole mutator). No layering violation found in the plan text.",
+    "net": "Layering is sound; the risks are in SEQUENCING (I3->I4->I5 dependency chain, I3 per-beat read-order, I7 over-bundling) and in one genuine orphan-disposition GAP (clinch's D9 disjunction)."
+  }
+}

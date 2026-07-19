@@ -6,13 +6,13 @@ stance policy and that lunge raises / choke lowers irrecoverability (the recover
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'designs', 'scene', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
 import pytest  # noqa: E402
 pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
 
-import systems as S  # noqa: E402
+import combat_systems as S  # noqa: E402
 from combatant import Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 
@@ -32,6 +32,12 @@ def test_open_or_non_pole_does_not_gather():
 
 
 def test_lunge_quality_is_weapon_derived_continuous():
+    # [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real rapier pommel/guard/grip positions shift
+    # PoB_frac slightly (hand-balance term), so q('rapier') now reads 0.963, just under the 1.0 cap — a Phase-C
+    # re-tune item (MOMENT_MASS_EXP / the cap floor), not a regression; the ordering below is unaffected.
+    # [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (I0->I8) is complete and did not touch MOMENT_MASS_EXP or the
+    # cap floor; still correctly deferred to Phase C — see the closing-distance-redesign folder's
+    # i8_capstone_audit.md item 7.
     q = lambda w: S.lunge_quality(Combatant('x', weapon=w), CFG)
     assert q('rapier') == 1.0                        # light, hand-balanced, one-handed, point-concentrated: lunges freely (capped)
     assert q('greatsword') < 0.25                    # heavy forward cutter: a poor lunge (LOW via mass+balance, not a hard-0 head gate)

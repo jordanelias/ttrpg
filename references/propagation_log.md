@@ -344,7 +344,7 @@ Propagation targets:
 - params_threadwork.md: Inert Knowledge, Dissonant rates ✓
 - canonical_sources.yaml: social_debate→v2, clocks→registry ✓
 - designs/systems/clock_registry_v30.md: created ✓
-- designs/npcs/npc_roster.md: created ✓
+- systems/npcs/npc_roster.md: created ✓
 - worldbuilding_integration_v3.md: old territory names fixed ✓
 - valoria_bg_v04.md: SUPERSEDED — not updated (stale Hardar ref acceptable in deprecated file)
 
@@ -356,30 +356,30 @@ Propagation targets:
 ## 2026-04-11 Session — New Propagation Entries
 
 ### canon/03_canonical_timeline.md
-- -> designs/npcs/npc_character_analyses_existing.md (Almud TS 0, Baralta Crown ambition, Vaynard southern heritage, Lenneth revivalist)
-- -> designs/npcs/ruler_diamond_foil_analysis.md (all pairings)
-- -> designs/npcs/ruler_diamond_extended_foils.md (all perspectives)
+- -> systems/npcs/npc_character_analyses_existing.md (Almud TS 0, Baralta Crown ambition, Vaynard southern heritage, Lenneth revivalist)
+- -> systems/npcs/ruler_diamond_foil_analysis.md (all pairings)
+- -> systems/npcs/ruler_diamond_extended_foils.md (all perspectives)
 - -> gm_ref/arcs_01_04_nongreedy.md (Arc 1 Almud reframing)
 - -> designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md (Arc 9 consecration crisis)
 - -> designs/mechanics/baralta_crown_claim_mechanic.md (deed-monarchy -> Crown Succession Contest)
-- -> designs/npcs/lenneth_threadwork_design.md (Lenneth characterisation -> TS development)
+- -> systems/npcs/lenneth_threadwork_design.md (Lenneth characterisation -> TS development)
 
-### designs/npcs/lenneth_threadwork_design.md
+### systems/npcs/lenneth_threadwork_design.md
 - -> references/params_threadwork.md (Lenneth TS 8 supersedes TS 72)
 - -> designs/mechanics/baralta_crown_claim_mechanic.md (Cultural Revival Track interacts with consecration crisis timing)
-- -> designs/npcs/npc_character_analyses_existing.md (Lenneth section)
-- -> designs/npcs/ruler_diamond_foil_analysis.md (Lenneth-Baralta confrontation)
+- -> systems/npcs/npc_character_analyses_existing.md (Lenneth section)
+- -> systems/npcs/ruler_diamond_foil_analysis.md (Lenneth-Baralta confrontation)
 - -> gm_ref/arcs_01_04_nongreedy.md (Arc 1 RM ambient track affected by Cultural Revival Track)
 - -> compilation/v0.14/stage4_southernmost_deprecated.md (Southernmost Awareness — Crown gains access via Lenneth at TS 30)
 
 ### designs/mechanics/baralta_crown_claim_mechanic.md
 - -> references/params_board_game.md (Crown Succession Contest, Stake Claim DA — NOT YET INTEGRATED into params)
-- -> designs/npcs/ed_403_406_407_resolutions.md (Ehrenwall assessment, consecration conditional)
-- -> designs/npcs/npc_character_analyses_existing.md (Baralta Crown ambition)
+- -> systems/npcs/ed_403_406_407_resolutions.md (Ehrenwall assessment, consecration conditional)
+- -> systems/npcs/npc_character_analyses_existing.md (Baralta Crown ambition)
 - -> designs/worldbuilding/worldbuilding_integration_v3.md (Motion of No Confidence — deed-monarchy context)
 
-### designs/npcs/npc_roster_caste_annotations.md
-- -> designs/npcs/npc_roster.md (companion document — all 13 NPCs annotated)
+### systems/npcs/npc_roster_caste_annotations.md
+- -> systems/npcs/npc_roster.md (companion document — all 13 NPCs annotated)
 - -> canon/03_canonical_timeline.md (caste system definition)
 - -> designs/setting/geography_v30.md (TS gradient by territory)
 
@@ -395,7 +395,7 @@ Propagation targets:
 | social_contest_system_v2.md | extends | Resonant Style targeting, Appraise revelation |
 | params_factions.md | reads + future write | Faction stats, Ob modifiers; will receive Stance Triangles |
 | params_board_game.md | reads + future write | BG mechanics, NPC priority trees |
-| params_core.md | reads | Certainty, Coherence, attributes |
+| params_core.md | reads | Truth, Coherence, attributes |
 | params_contest.md | extends | Resonant Style targeting to be extracted |
 | threadwork_redesign_v25.md | reads | Knots, TS thresholds, epistemic seduction |
 | edeyja_npc.md | reads | Edeyja Stance Triangle, Arc profiles |
@@ -408,7 +408,7 @@ Propagation targets:
 | From | To | Nature |
 |---|---|---|
 | TE-15 | ARC-S34 | Edeyja Coherence <= 5 at TE-15: Dissolution -> Rendering Crisis regardless of outcome |
-| TE-12 | ARC-S15, ARC-T04 | Varfell gate control during S15 cracking phase blocks Ceiral Ritual expedition |
+| ~~TE-12~~ | ~~ARC-S15, ARC-T04~~ | ~~Varfell gate control during S15 cracking phase blocks Ceiral Ritual expedition~~ — STRUCK (fork 2 / PP-602: ARC-T04 struck entirely; no expedition to block; executed 2026-07-07, ED-IN-0011) |
 | ARC-S44 | ARC-T17 | Both target AER via Schoenland; highest-roll success takes priority same season |
 | ARC-S56 | ARC-T26 | T26 resolves first (Leadership Deviation check); S56 resolves under result |
 | TE-09 | NPC-ARC-JAR | Jarnstal threat-assessment governs autonomous deployment trigger |
@@ -556,7 +556,7 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/hybrid/scale_transitions_v30.md` §4.3.2 | Rank Advancement Recognition Event added to Mandatory Zoom In triggers |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/tc_political_redesign_v30.md` §3.5 | TC × Rank Ladder Interaction subsection added |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/ttrpg/factions_ttrpg_v30.md` §8 | Rank-ladder callouts required per faction; ED-640 (Hafenmark Militia), ED-642 (Guild Grand Guildmaster) pending |
-| `designs/systems/faction_politics_expanded_v1.md` | `designs/npcs/npc_roster_v30.md` §14 | Caste-gating layer per rank; inner circle provisional names (ED-634 through ED-638) |
+| `designs/systems/faction_politics_expanded_v1.md` | `systems/npcs/npc_roster_v30.md` §14 | Caste-gating layer per rank; inner circle provisional names (ED-634 through ED-638) |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/systems/npc_behavior_v30.md` §1.2, §3, §7 | Warden Conviction (ED-641); caste-transgressive Conviction Scar (ED-654); cross-rank advancement (ED-656) |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/varfell_path_b_v30.md` | Warden Ladder × Path B integration (ED-658) |
 | `designs/systems/faction_politics_expanded_v1.md` | `tests/coverage_matrix.md` | 5 SIM-DEBT items (SIM-POL-R01 through R05) |

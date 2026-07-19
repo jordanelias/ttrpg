@@ -1,0 +1,131 @@
+{
+  "contradictions": [
+    {
+      "id": "C1",
+      "topic": "Polearm / greatsword (2H) facing: square vs bladed",
+      "cluster_a": "facing_stance F3 (German Vom Tag, 2H, square) + F8 (chudan-no-kamae, kendo/naginata/kenjutsu 2H/pole, square) converge on 'long 2H weapons tend square'.",
+      "cluster_b": "facing_stance explicit_disagreements: an un-verified Quora search-snippet (HTTP-403, only the search-engine summary obtained) asserts the OPPOSITE — that both European AND Japanese polearm traditions use a side-on/angled stance for hip rotation and reduced target profile.",
+      "status": "UNRESOLVED. Neither claim independently corroborated. This is the single weakest-grounded of the three facing sub-questions and is directly load-bearing for a polearm redesign. Needs a primary polearm-treatise read (Fiore spear/pollax, Meyer Stange) before design relies on either direction.",
+      "affects": "facing_stance cluster internally; and any design that would key facing/profile off weapon handedness."
+    },
+    {
+      "id": "C2",
+      "topic": "Does facing correlate with weapon handedness (1H vs 2H) at all?",
+      "cluster_a": "facing_stance F3 + F8 support '2H tends square, 1H rapier tends bladed'.",
+      "cluster_b": "facing_stance F1 (Fiore Posta di Donna, 2H longsword, explicitly BLADED/turned) is a direct counterexample within the same weapon class and tradition-family; F9 concludes facing is per-guard/per-moment, NOT per-weapon-class.",
+      "status": "RESOLVED AS 'NO CLEAN RULE' by the facing_stance file itself (F9), stated as an explicit disagreement, not silently picked. Flagged here because it bounds design latitude: facing cannot be modeled as a per-weapon-class constant; it is closer to a per-guard/per-moment property.",
+      "affects": "facing_stance cluster; any per-weapon facing constant."
+    },
+    {
+      "id": "C3",
+      "topic": "Does a bladed/oblique stance imply linear-only footwork? (the task's specific cross-check: facing_stance oblique-reach account vs commitment_depth full-extension account)",
+      "cluster_a": "facing_stance F4/F5/F15 (Italian rapier: bladed + a single discrete LINEAR lunge) aligns cleanly with commitment_depth F1/F2 (Capoferro larga/stretta, the lunge as a distinct deep linear action, weight thrown back-to-front). The two clusters AGREE on the Italian-rapier linear-lunge account — no contradiction there.",
+      "cluster_b": "BUT facing_stance F14 (Spanish destreza: bladed stance + SYSTEMATIC CIRCULAR footwork that demonstrably closes measure) and F13 (Bolognese Manciolino, 1H lateral traverse) contradict a UNIVERSAL 'bladed => linear-only' reading. commitment_depth's lunge account is drawn ENTIRELY from the Italian linear-lunge tradition and does not address circular closing.",
+      "status": "PARTIAL CONTRADICTION / SCOPE MISMATCH. The two clusters are consistent WHERE they overlap (Italian rapier), but the commitment_depth cluster's full-extension/lunge model is silent on the circular-closing case that facing_stance F14 raises. A redesign that models closing as linear-lunge-only would be over-fitting to the Italian tradition and would contradict destreza. State explicitly; do not generalize the Italian lunge to all bladed fighters."
+    },
+    {
+      "id": "C4",
+      "topic": "Force-vs-distance monotonicity (is 'more room = more power' strictly true?)",
+      "cluster_a": "commitment_depth F8/F9 + measure_gap fencing-lunge research imply force rises with kinetic-chain completion / available distance (supports a 'needs room to develop the strike' intuition).",
+      "cluster_b": "commitment_depth F10 (Bolander et al. 2009) finds the relationship is NON-monotonic for at least one strike type (middle-distance chest palm out-accelerated the long-distance one) — there is an OPTIMAL distance, not 'farther is strictly better'.",
+      "status": "SOFT CONTRADICTION within the commitment_depth cluster, self-flagged. Matters because a naive 'closer = weaker, farther = stronger' curve is NOT what the biomechanics support — there is an interior optimum. F10 is also the least-triple-verified numeric claim (full results table unread). Do not encode a strictly monotonic range-power relationship on this evidence."
+    },
+    {
+      "id": "C5",
+      "topic": "'clinch' weapon-field values vs the documented hooking/grappling history (project-data vs sourced facts)",
+      "cluster_a": "grappling cluster: dedicated purpose-built HOOK hardware is documented (and already recorded in weapons.py morphology) on guisarme/ji/ranseur/partisan/voulge/fauchard/dangpa; the German material documents a FREE HAND as the precondition for a grab (short/handy weapon grapples well).",
+      "cluster_b": "The actual clinch VALUES in the working tree (VERIFIED this pass): guisarme=2, ji=3, fauchard=2, dangpa=2, partisan=3 (bottom of scale) despite carrying the roster's most explicit hook hardware; while dagger=10, rondel=9, estoc_halfsword=9 (top). The field currently encodes ONLY the 'free/unencumbered hand' framing, not the 'dedicated hook hardware' framing.",
+      "status": "REAL DATA/SOURCE TENSION, self-flagged by the grappling file and CONFIRMED against weapons.py this pass. Both framings are independently attested (a free hand IS a documented grapple precondition; dedicated hook hardware IS a documented distinct feature); the historical record does not say only one should set the value. NOTE the grappling file mis-cited some values ('estoc_halfsword' was labeled as if a different weapon and one value quote was off) — the CORRECTED verified values are as listed here. The next phase must decide whether clinch is one composite of both framings or two separate fields; not resolved here.",
+      "affects": "grappling cluster + the dead clinch field wiring (Phase 5)."
+    }
+  ],
+  "weakly_grounded": [
+    {
+      "claim": "Polearm/greatsword facing (square vs side-on).",
+      "why": "Best evidence is circumstantial (F3/F8) contradicted by an un-verified 403-blocked Quora snippet. No primary polearm treatise read. LEAST-grounded of the facing questions.",
+      "source_count": "2 secondary circumstantial + 1 unverified snippet (contradictory)"
+    },
+    {
+      "claim": "Silver's stance is 'square-footed' (facing_stance F7).",
+      "why": "Rests on AI-aggregated Wiktenauer/Grokipedia paraphrase; Silver's PRIMARY text (pbm.com/~lindahl) was located but NOT read word-for-word. May be a modern paraphrase, not Silver's term. Lowest-confidence claim in the facing set.",
+      "source_count": "secondary/tertiary paraphrase only"
+    },
+    {
+      "claim": "Bolander 2009 non-monotonic force-vs-distance (optimal interior distance).",
+      "why": "Single study; the specific non-monotonic finding read from search snippets only, full results table unverified; unarmed strikes, not weapons. Self-flagged as the most load-bearing least-verified numeric claim.",
+      "source_count": "1 (partially read)"
+    },
+    {
+      "claim": "Butt-spike as a documented fallback strike when the primary head can't bear.",
+      "why": "General polearm-survey material, not tied to a specific named treatise play (no specific Talhoffer/Fiore pollax play retrieved).",
+      "source_count": "general survey aggregation"
+    },
+    {
+      "claim": "'Shaft/haft is easier to grab than a hilt.'",
+      "why": "INFERENCE, not attested. Documented indirectly (a mid-blade grab technique exists; the dagger's compact hilt-to-blade ratio differs), but NO source makes the comparative claim directly. Flag as inference if used downstream.",
+      "source_count": "0 direct (inference from differing grab-targets)"
+    },
+    {
+      "claim": "Forte/foible is a within-exchange contact-point quantity vs the engine's per-weapon leverage() scalar.",
+      "why": "Analytical coverage observation synthesized across sources + code read, not a single-source factual claim. Real and worth the next phase's attention, but explicitly an observation, not attested fact.",
+      "source_count": "synthesis/observation"
+    },
+    {
+      "claim": "Named forged-guisarme-hook grappling play.",
+      "why": "The hook-created-opening -> pull-down -> finish PATTERN is strongly grounded (Fiore plain-spear, Getty-cited), but for an IMPROVISED shaft-hook; no primary source describing a named play with a FORGED guisarme hook was located.",
+      "source_count": "pattern strong; forged-hook-specific play 0"
+    },
+    {
+      "claim": "Ott Jud specific named/numbered wrestling plays.",
+      "why": "Wiktenauer 403-blocked; only secondary characterization ('forceful arm grabs + hip throws') obtained, no page-cited play.",
+      "source_count": "secondary summary only"
+    },
+    {
+      "claim": "Treatise language for a CUT/SWING (not thrust) failing to develop full force from inside its optimal arc.",
+      "why": "ABSENCE finding. Strong evidence exists for thrusts/lunges being measure-gated and for punches being distance-gated, but no explicit swing-arc-truncation treatise passage was found. Open research item.",
+      "source_count": "0 (negative finding)"
+    },
+    {
+      "claim": "A quantified minimum-distance threshold for a full-power strike (the '~50cm' intuition).",
+      "why": "UNSUPPORTED BY SOURCES RETRIEVED. The biomechanics show continuous adaptation to distance, not a hard cutoff; no source quantifies a minimum distance below which a weapon class cannot deliver a full strike. Do NOT encode a hard threshold on this evidence."
+    }
+  ],
+  "strongly_grounded_highlights": [
+    {
+      "finding": "The void and the close are the SAME motion (step offline + beat + pass the back foot forward), and Fiore generalizes it to 'any long hand held weapon'.",
+      "grounding": "Fiore Fior di Battaglia fol. 39r (verbatim play text + folio), corroborated selohaar.org. Treatise-explicit."
+    },
+    {
+      "finding": "Sword-on-sword grappling is BIND-GATED in BOTH traditions (Fiore Zogho Stretto 'from an existing crossing'; German Ringen 'When you bind against his sword'). Dagger/unarmed grabs are open-contact (first contact IS the grab).",
+      "grounding": "Independently corroborated across Fiore AND German sources (hemapenzance, chicagoswordplayguild, thearma.org/Ringeck, fightlikefiore). Highest cross-tradition agreement in the corpus."
+    },
+    {
+      "finding": "A single dominant grip yields a MENU of branching outcomes: arm-break / throw / disarm / restrain (Fiore Dagger 2nd Remedy Master, four named branches).",
+      "grounding": "Verbatim treatise text (fightlikefiore, armizare.org). Clearest evidence that grappling produces branching, not fixed, consequences."
+    },
+    {
+      "finding": "Every documented grab/pin is OPPORTUNISTIC on a PRIOR opening (bind / beaten-aside weapon / committed strike); grabs are timed to the apex/commitment of the incoming blow; leverage-torque not raw grip; a free hand is a precondition. No source documents a grab against an un-compromised weapon/limb.",
+      "grounding": "Consistent across all grappling sources (Fiore dagger + Ringeck). State-conditional gate, not a standing per-weapon probability."
+    },
+    {
+      "finding": "Leverage = absolute hand-to-contact distance (forte-foible), rigid-body lever mechanics; matches the engine's leverage() structure (grip_len minus a load term, NOT a ratio) and the documented dagger>spear inversion fix.",
+      "grounding": "Uncontroversial physics, near-identical across multiple sources + confirmed by direct code read. Load-bearing fact."
+    },
+    {
+      "finding": "Thrust mechanics measurably reconfigure with available distance, and strike force scales with kinetic-chain/joint-extension completion (fencing-lunge PMC10203838; Rinaldi 2018 karate 181.2 N; Dinu 2020; Beattie & Ruddock 2022; Dunn 2021).",
+      "grounding": "Peer-reviewed instrumented biomechanics — strongest-tier evidence. QUALITATIVE fact transfers to weapons; specific numbers (1.5x height, 260cm) are modern-sport-fencing/unarmed and should NOT be transferred directly."
+    },
+    {
+      "finding": "The long weapon's behind-the-hands length becomes an ACTIVE liability at close range (impedes strike/thrust/ward/retreat), and recovery requires FOOTWORK (slower-timed per true-times) — half-swording / choke-up to a centre grip is the documented response.",
+      "grounding": "Silver (short-staff & rapier-crossing paradoxes) + half-sword treatises (Talhoffer et al., high-confidence) + MoI/choking-up physics. Consistent with the engine's existing halfsword_target / grip_target / can_choke primitives (NOT a gap)."
+    },
+    {
+      "finding": "Polearm hooking hardware is real, purpose-built, and ALREADY in the roster (weapons.py Phase B2/B4 records with citations to Monte, Manciolino, Muyedobotongji); the hook-created-opening -> pull-down -> finish pattern is Getty-cited (Fiore spear).",
+      "grounding": "Project data read directly + corroborating web sources + Getty Ms. Ludwig XV.13 Carta 28V. High for the pattern; forged-guisarme-specific play remains a gap (see weakly_grounded)."
+    },
+    {
+      "finding": "TWO structural engine gaps confirmed against the working tree (not missing mechanisms, but decouplings): (a) commit_depth/lunge_depth are driven by disposition/wariness only, NEVER by current measure_gap; (b) closing is purely linear with NO facing/lateral/circular dimension and dodge is one uniform void mode.",
+      "grounding": "Confirmed by direct code read this pass across all four files' engine scans; the two clearest candidate targets for the redesign."
+    }
+  ]
+}

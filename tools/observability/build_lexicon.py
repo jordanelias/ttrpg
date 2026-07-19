@@ -16,7 +16,7 @@ Sources (canon — nothing invented):
   references/deprecated_terms_registry.yaml renamed/retired terms
   references/censured_vocabulary.yaml      do-not-use terms + replacements
   references/proper_noun_registry.yaml     world entities (characters/territories/factions…)
-  canon/placeholder_names.yaml             placeholder vs prior/canonical names
+  registers/placeholder_names.yaml             placeholder vs prior/canonical names
   references/descriptor_registry.yaml      attributes/stats/axes/styles + legacy aliases
   references/glossary.md                   authoritative definitions (term/abbr/range/desc)
   designs/architecture/scale_transitions_v30.md  the cross-scale handshakes (§3/§5/§12)
@@ -196,8 +196,8 @@ def main():
                          sources=e.get("source", s_pn))
 
     # ---- placeholder_names.yaml ----
-    ph = load_yaml(REPO / "canon" / "placeholder_names.yaml")
-    s_ph = "canon/placeholder_names.yaml"
+    ph = load_yaml(REPO / "registers" / "placeholder_names.yaml")
+    s_ph = "registers/placeholder_names.yaml"
     if isinstance(ph, dict):
         for e in ph.get("placeholders", []) or []:
             if not isinstance(e, dict):
@@ -255,7 +255,7 @@ def main():
                 in_tbl = False
 
     # ---- handshakes: scale_transitions_v30.md §3 handoffs + §5 Domain Echo ----
-    st = REPO / "designs" / "architecture" / "scale_transitions_v30.md"
+    st = REPO / "systems" / "_architecture" / "scale_transitions_v30.md"
     s_st = "designs/architecture/scale_transitions_v30.md"
     if st.exists():
         lines = st.read_text(encoding="utf-8").splitlines()

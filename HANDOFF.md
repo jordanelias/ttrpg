@@ -7,26 +7,14 @@ surfaces the "Next actions" section below, alongside `git status` / last commit.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## Pending
+## History
 
-- **Social-contest staged rebuild (`claude/happy-shaw-da0f1d`, IN PROGRESS).** Agonist/antagonist gated rebuild
-  of the contest engine: promote the stranded 62-test groundup engine (`designs/audit/2026-06-03-contest-groundup/`,
-  actually **9 modules / 151 tests green**) onto the v30 surface + fold in CR1–CR7, build all four deliberative
-  games (Agôn/Negotiation/Inquiry/Consensus), close J-36 seams, drive to settled canon (T-25 + sim-validation).
-  Plan: `C:\Users\Jordan\.claude\plans\this-is-a-broader-nested-mountain.md`. Runs stage-by-stage via the Workflow
-  tool (Opus agonist/antagonist/judge + Haiku scribe), Jordan ratifies each gate; cadence = auto-advance, interrupt
-  only for design-authority forks.
-  - **Stage 0 (Foundation) DONE + Gate 0 RATIFIED (2026-06-30).** Reconciliation contract + decisions:
-    `designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md` (+ raw map + gate packet). Three ratified
-    forks: **D0-1** appeal ethos/pathos/logos = build both multiplicative+additive behind a flag, decide by seeded
-    A/B (player-win-rate vs venue-identity-spread); **D0-2** σ-leverage → new numpy-free `sim/autoload/sigma_leverage.py`
-    sibling (retires the test-dir/numpy/sys.path-hack + the two-σ-kernels debt); **D0-3** TN6/7/8 divergence + Jordan's
-    fractional-Ob idea → contest stays δσ TN7 (unaffected), open a substrate probe (reopens CR6 uniformity), non-blocking.
-    Good news: `faction.py` already has BG-Vote/Succession/committee-band → Consensus mostly promote-existing.
-    IDs reserved: `contest_rebuild` = ED 1055-1079 / PP 800-809.
-  - **NEXT: Stage 1** — build `sigma_leverage.py` + parity; promote the 9-module kernel to `sim/personal/contest/`
-    re-skinned + `build_contest`/`resolve_contest` wrapper; propagate CR1/CR2/CR3; golden-trace + 151-test parity → Gate A.
+Full narrative for the work below (2026-06-24 through 2026-07-02) moved to
+`registers/handoffs/HANDOFF_archive.md` (2026-07-08, token-efficiency pass) — this file had drifted from
+"index" to a full append-only session log. Nothing was deleted, only relocated; the archive is
+frozen, do not resume work from it.
 
+<<<<<<< HEAD
 - **`design/scene-combat-v1`** (UNMERGED) — the scene-combat engine build. After the WS-0..WS-8 build + the
   L0/L2/L3 re-architecture, now in **Phase 3 (wire derived weapon-physics into live consumers + re-baseline)**.
   - **Committed Phase-3 chain:** `297458d7` (foundation: leverage→lever-arm, FIX-1b, M3, half-sword geometry) →
@@ -146,161 +134,119 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
       home decision (see above — now safely deferred rather than silently resolved); the greedy-comparator-vs-damage
       docstring; the displace/reach `sel_head` consistency (D-1/D-2). **Track 4** build-forward (abilities-as-access,
       §C, contact axis, WS-7) remains design-gated.
+=======
+Per-lane continuity now lives in `registers/handoffs/HANDOFF_<LANE>.md`, using the same 9 lane codes as
+the `ED-<LANE>-NNNN` editorial namespace (`ED-IN-0001`, `CLAUDE.md` §3). This file is the
+**index** plus genuinely cross-cutting items — read the lane file(s) relevant to your session
+before starting work, and keep your own updates scoped to your lane's file (or this one, only
+for cross-cutting items).
+>>>>>>> origin/main
 
-- **Ecosystem-review Top-5 (filed 2026-06-30 as ED-1050..1054, all open).** Tracked, not yet actioned:
-  ED-1050 combat parity oracle (config.py ADEF_THRESHOLD non-monotonic vs port's [AUDIT-FIX]; needs a
-  harness re-sweep — **needs_jordan**); ED-1051 module-contract gaps (10/27 `doc:null`, 11/27 `[ASSUMPTION]`
-  resolvers, Gate-0 spine unbuilt — **needs_jordan**); ED-1052 typed engine-params layer for Godot ingestion;
-  ED-1054 navigation surface (partially done this pass). Full report:
-  `designs/audit/2026-06-30-ecosystem-adversarial-review.md`.
-  **ED-1053 RESOLVED 2026-06-30** (see Decisions). Residual: 12 stale `canonical_sha__` pins surfaced
-  by the now-local freshness gate — refresh via `python3 tools/freshness_gate.py --update`, then flip
-  the freshness CI step off `continue-on-error`.
+| Lane | Subsystem | File |
+|---|---|---|
+| `MB` | Mass battle | `registers/handoffs/HANDOFF_MB.md` |
+| `PC` | Personal / scene combat | `registers/handoffs/HANDOFF_PC.md` |
+| `FI` | Field investigation | `registers/handoffs/HANDOFF_FI.md` |
+| `SC` | Social contest | `registers/handoffs/HANDOFF_SC.md` |
+| `FA` | Faction actions | `registers/handoffs/HANDOFF_FA.md` |
+| `WR` | World | `registers/handoffs/HANDOFF_WR.md` |
+| `IN` | Infrastructure / cross-cutting | `registers/handoffs/HANDOFF_IN.md` |
+| `GO` | Godot conversion | `registers/handoffs/HANDOFF_GO.md` |
+| `SE` | Settlements | `registers/handoffs/HANDOFF_SE.md` |
 
-## Decisions
+**Why the split:** the ID-collision incidents that motivated `ED-<LANE>-NNNN` (two same-session
+concurrent-allocation collisions on the flat sequence within one PR — see `ED-1094`'s ledger
+entry) are the same failure class that makes one shared `HANDOFF.md` a merge-collision magnet
+once multiple lane-sessions run concurrently. This is a **partial, deliberate exception** to the
+repo's earlier "one continuity surface" consolidation (`deprecated/session_machinery/` retired
+per-topic session-log files because they rotted independently) — the difference is this split is
+keyed to the SAME lane taxonomy the ID system already enforces, not an ad-hoc per-topic split,
+and this root file remains the one stable SessionStart entry point.
 
-- 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the three
-  "integrity" gates off the GitHub API to the working tree (no PAT/network): `broken_dependency_checker`
-  and `patch_propagation_checker` now `os.walk`/read locally (both green against the checkout);
-  `freshness_gate` computes git blob SHAs locally (verified identical to `git hash-object`) and checks
-  119/131 `canonical_sha__` pins (12 stale → report-only). Dropped `GITHUB_PAT` from the CI integrity job.
-  Hardened `ci_sim_fabrication_check`: full float-literal capture + `(variable,value)` matching close the
-  value-collision / float-split holes (corpus blast kept to +~200 latent, changeset-scoped; `tools/`
-  excluded from sim-classification). Added the first `sim/` test — `sim/tests/test_mc_v18_regression.py`
-  (deterministic seeded `run_batch(n=2,seed=0)`: determinism + golden + bounded smoke) — and a new
-  'Sim Reference Regression' CI job wired into All-Gates-Green. Updated CLAUDE.md §8.
-- 2026-06-30 — **Adversarial ecosystem review + safe fixes.** Ran a 72-agent verification workflow
-  (6 audit dimensions × 2 skeptical lenses); 24 findings survived, headline items hand-spot-checked.
-  Rewrote `CLAUDE.md` into a Claude-Code-optimized operating manual (numbered sections, currency
-  priority, data→Godot pipeline, port state, known-defect callouts). Filed the report under
-  `designs/audit/` and the Top-5 as ED-1050..1054. **Re-blocked IDs** (`references/id_reservations.yaml`
-  v2: round-1 A/B/C exhausted+overrun to ED-1042; round-2 block D = ED 1050-1099 / PP 800-829, next_free
-  ED-1081, after contest_rebuild reserved 1055-1079 + combat at 1080). **Safe code/doc fixes applied:** single-sourced the patch-register size cap
-  (`ci_register_size_check.py` 20k→policy 15k; register is ~5k); RETIRED banners on
-  `references/subsystems/{handoff,checkpoint,session_log}_subsystem.md`; flipped
-  `canon/session_checkpoint.md` `status: active`→`retired`; STALE banners on the four `designs/godot/*.md`
-  specs; rewrote `README.md` to defer to CLAUDE/CURRENT/HANDOFF. **Not done (needs Jordan / re-sweep):**
-  the parity-oracle balance values (ED-1050) and the Gate-0/contracts authoring (ED-1051).
-
-- 2026-06-29 — **Scene-combat engine (`design/scene-combat-v1`, 22 commits, UNMERGED — awaiting ratification).**
-  Built the 1v1 scene-combat engine (`designs/scene/combat_engine_v1/`: wrapper=state machine, core=σ-leverage
-  resolution, systems=subsystems, tradition=affinity model, combatant/config=continuous morphology, workbench=
-  visual tuning + narrated n=1 watch + depth-2 branch explorer). Delivered the 7 requirements (WS-1 state-graph
-  integrity+injection points, WS-2 continuous morphology weight=kg + affordance gates, WS-3 bottom-up tradition
-  decomposition, WS-4 representation, WS-5 The Approach, WS-6 workbench, WS-8 balancing methodology) + WS-7
-  multi-combatant design. Core design decisions this session:
-  - **Commitment is a SPECTRUM** — commit is continuous (`2+3·Beta`), not integer rungs; feint↔all-in is one axis.
-  - **Commitment = recovery, made PHYSICAL** — overcommit cost scales with how hard the weapon is to arrest, and
-    weight is **NON-LINEAR** (`mass**1.5 · pob`): rapier 0.93 < longsword 1.0 < mace 1.45 < poleaxe 2.24.
-  - **Grip/stance/lunge DERIVED from morphology, never flagged** (Jordan's directive) — `close_unwieldiness`(reach),
-    `can_choke`(grip_len), `lunge_quality`(thrust × non-linear lightness × hand-balance × 1H). Emergent: the
-    rapier (long reach, short grip) can't choke → suffers in the close; a longsword lunge ≠ a rapier lunge.
-  - **Tempo coupled to commitment+recovery** — a deep/heavy commit costs readiness (slower next action); heavy
-    weapons self-regulate. `RECOVERY_TEMPO_K=0.15` (structural ~5pp effect on extremes; magnitude is Jordan's).
-  - **WS-4 dissolution** — the channel vector became an **affinity point-buy budget** (equal total per tradition;
-    shape=identity, total=equal) + the **imposition gate** (default on). Fixed the `none` injustice (46→49) and
-    beats the keep-bias baseline. **Weapons are NOT equalised** (spear 94 / mace 38) — a battlefield weapon ≠ a
-    duelling weapon (the contextual-balance principle).
-  - **§C verdict — PARTIAL** (honest, refines the "clears §C" commit msg): none-fairness fixed + beats keep-bias,
-    but the C1 contextual test (`balance.tradition_context_matrix`) shows only **2 distinct leaders / 5 contexts**
-    — spanish broadly strong (clean niche: rapier/measure), chinese broadly weak. Residual = channel **leverage**.
-  All gates green; 26 combat tests pass; mirrors fair (~0.50).
-- 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOCKING).** Diagnosed the
-  292 report-only violations: 286 `NONEXISTENT` from **dual ledger-of-record drift** (design docs minted ED
-  numbers in inline `[EDITORIAL:]` tables never migrated to the JSONL), 6 `OPEN_AS_BASIS` (2 of them validator
-  false positives). Fixed 3 validator defects (`tools/validate_ed_citations.py`): active-ledger precedence
-  over stale archives, loud-parse + regex-salvage of 7 malformed archive YAMLs, and same-line basis scoping
-  (table-row bleed). **Registered 91 grounded entries** (36 resolved / 12 provisional / 30 open / 13
-  needs_jordan) — each verified against its citing doc by per-batch subagents (anti-fabrication). Repointed
-  the ED-814→ED-907 phantom and reworded open/provisional over-claims to `pending`. Dropped `continue-on-error`
-  on the `ed-citations` CI job + added to `ci-summary` needs. Report:
-  `designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md`. **Residual for Jordan:** 13 needs_jordan
-  items (NPC naming ED-634/595–602/610, ED-885 ratification ID); ID collisions ED-408–411/413/417/647.
-- 2026-06-28 — **Editorial-ledger relevance triage.** Deep per-item verification of all **93 unresolved**
-  entries (82 open + 10 provisional + 1 deferred) against the live working tree, in 6 read-only cluster
-  passes. Result: **37 still relevant** (25 real open work + 12 NEEDS_JORDAN), **56 stale**. Applied via
-  Workflow D: **31 struck** (21 superseded by later canon — esp. the mass-battle per-cell/Lanchester
-  re-architecture + the 2026-06-22 `net-(Ob-0.5)` continuity fix; 10 `[PROPOSED:…]` migration residue),
-  **25 resolved** (open-but-done — decision had landed, row never closed). Unresolved queue 93→37.
-  ED-citation violations dropped 315→292 as a side effect. Report:
-  `designs/audit/2026-06-28-editorial-relevance-triage/relevance_triage.md`. **Residual for Jordan:** 12
-  NEEDS_JORDAN items (NPC naming ED-649/650/651, deferrals ED-644/788, design-intent gates
-  ED-879/893/911/920/924/1033/1036); three of these (644/649/893) are the OPEN_AS_BASIS citations still
-  holding the ED-citation validator report-only.
-- 2026-06-28 — **Open-session unification + LB-22 closed.** Reviewed every `origin` session branch;
-  six were already squash-merged into main (#14–#21), one (`claude/github-ci-environment-review` = PR #18)
-  carried genuinely-unmerged work, and `claude/refresh-state-3m7nL` (abandoned 04-20 pre-migration line
-  carrying the retired `session_checkpoint`/`session_log` harness) was excluded from the merge. Unified
-  PR #18's **net-new** half (the LB-22 backlog) onto main — its already-landed half (12 skills +
-  coverage_matrix, via #16) was kept at main's version, no re-litigation. **LB-22 done:** `valoria-orchestrator`
-  retired to `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier.py`
-  Check 4 flipped to **blocking for `skills/`** (`tools/` stays WARN pending the API→disk port). PR #18
-  closed as superseded. `ci_register_size_check.py` taken from #18 (importable, no-PyYAML, ships the
-  drift-guard test) with #22's `names_index.yaml` threshold line re-added; `lane_assignments.yaml`
-  owns-globs repointed to `deprecated/`.
-- 2026-06-28 — **Master Workplan v5** authored (`designs/audit/2026-06-28-recent-work-orchestration/`),
-  reconciling the post-v4 work (06-12→06-28) into one register and superseding v4. Roadmap +
-  lane_assignments repointed to v5. Ledger verified live: **713** entries / 0 duplicate IDs / ED 1042.
-  (v5 de-staled this pass to live HEAD; PRs #16–#22 reconciled — see its §0/§10.)
-- 2026-06-28 — **ED-912**: Disposition & Knot unified on a ±5 swing (Bonds ≥5 now a Knot
-  prerequisite; break = Disposition −3 / 4 Composure). Resolves ED-841/842/912/914; supersedes
-  PP-632/PP-684. Source-of-truth + consumer tail regenerated; "Stance table" rename in combat.
-- 2026-06-26 — **J-31** social-contest docket recovered (ED-938/939/1042 + rule resolutions);
-  22-doc cross-corpus reference + terminology repair landed (#13). contest.py sim edit deferred
-  behind pre-existing sim-fabrication debt (19 uncited constants on main).
-- 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
-  retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
-  and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
-- 2026-07-01 — **Workplan sprawl cleanup.** `designs/workplans/` was dead (both files pre-dated v3/v4)
-  while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
-  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `designs/workplans/` (now the
-  one live home — see its `README.md`); archived the two dead files to `archives/workplans/`. Repointed
-  `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
-  commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
-  `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling
-  audit artifacts and CURRENT.md already documents them as frozen records, not lost ones. Separately,
-  flagged (not moved) the `sim/` vs `tests/sim/` vs `tests/sim_framework/` naming collision — three
-  distinct-purpose directories, not duplicates; disambiguated via README notes in each rather than a
-  path rename, since `tests/sim/` is path-matched by `ci_sim_fabrication_check.py`/`atomization_rules.yaml`/
-  `lane_assignments.yaml` and a rename would need to update all three.
+**Full detail on the split itself, and every historical decision predating it, is filed at
+`registers/handoffs/HANDOFF_IN.md`'s Decisions log** — this root file does not duplicate that history.
 
 ## Next actions
 
-_(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
-allocation: workplan-v5 **LB-21**, at the next integration pause.)_
+_(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
+verified live max, allocated ED 1081–1087 to the month-overview consolidation from
+block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
+per the file's protocol; never max+1. Since the 2026-07-02 cutover (ED-IN-0001), new EDs
+allocate per-lane from `lane_ids` — the flat sequence is frozen.)_
 
-- **Scene-combat (`design/scene-combat-v1`) — awaiting Jordan, then merge:**
-  1. **Close the channel-leverage residual (the §C remainder).** The affinity budget fixed total-competence but
-     not per-channel leverage → spanish broad-strong, chinese broad-weak, only 2 niches. The fix is the
-     **effectiveness-functions calibration**: measure each channel's marginal win-leverage, then normalise so each
-     paradigm is decisive in *its* context (chinese-burst should win a fast/light-weapon context; german-bind the
-     longsword context — currently it doesn't). **Design-laden** (how strong each paradigm should be = Jordan).
-     Re-measure with `python designs/scene/combat_engine_v1/workbench/balance.py context`.
-  2. **The abilities-as-access depth** (WS-4's other half): the 7 phase-slots + techniques-as-permission + the
-     learning-gate ("can't bind-and-wind / Spanish footwork without having trained it"). Carries the open
-     decisions the plan flags as Jordan's: affinity full-point-buy vs thin, the cyclic node relation, naming.
-  3. **Tunable magnitudes** (Class-C, workbench-adjustable): `RECOVERY_TEMPO_K` (0.15), `LUNGE_*`, `CLOSE_REACH_REF`.
-  4. **Ratify → merge to main** (squash; the branch is self-contained under `designs/scene/` + `tests/valoria/`).
-- **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired to
-  `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier` Check 4 blocking
-  for `skills/`). Earlier passes already landed the coverage_matrix single-source + 12-skill boilerplate
-  strip (#16) — kept at main's version during the unify.
-- **LB-22 residual (small):** `tools/` analysis utilities still carry `/home/claude` refs (WARN tier in
-  `ci_hooks_verifier`); flip the `tools/` scope to blocking only after the GitHub-API→working-tree port
-  (`freshness_gate`, `broken_dependency_checker`, `compliance_check`, `extract_*`, `valoria_collator`,
-  `valoria_bulk_fix`). `valoria-orchestrator`'s old `tests/registry/test_descriptor_registry.py` import
-  is dead (reads `/home/claude/…`, not CI-collected) — left as-is.
-- **CI debt blocking-flips (LB-23):** after the **K-2 SHA-split** (115 `canonical_sha` fields out of
-  `canonical_sources.yaml` → `references/canonical_freshness.yaml`), flip `freshness_gate`'s
-  stale-canonical step back to blocking; flip `validate_ed_citations` (tool `sys.exit(1)`s but the CI job
-  pins `continue-on-error: true` → non-blocking) once its count is triaged toward 0 — **now 315 violations
-  / 190 open-ref info live** (was 748/788; #20's validator-precision pass dropped it). Solo / K-2 / LB-6.
-- **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 (index-routes).
-- **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
-  and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the
-  report-only `validate_ed_citations` count 748→731. **Residual:** ED-914 left `open` — its mechanical
-  parts remain (PP-719 record-or-strike; dead `fieldwork_design_v1` parent-path refs in `params/bg/core.md`,
-  `designs/scene/fieldwork_v30.md`, `designs/scene/fieldwork_godot.md`).
-- **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
-  row #39 → LA-19) and the new **J-36** (Key-bus closure for the 6 off-bus writers, row #40 — gated on
-  the distillation report's deferred adversarial pass).
+- **Current state (2026-07-16).** The **sole remaining T0 blocker** on M1 is **ED-1051**
+  (engine_clock ratification — default: flip `references/module_contracts.yaml` `engine_clock`
+  `doc:null` → `systems/_architecture/propagation_spec_v1.md`); it also gates the GO lane's
+  Gate-0 entry. Governance **D1–D6 RULED 2026-07-13** (ED-IN-0046/0047): the FA §1.0c/§1.0d/§2.5
+  riders, B1 faction-count = 4, and B12's new Settlement→Territory→Province→Duchy→Country
+  hierarchy await ratification-flip + authoring (E11 symmetric suspicion-reduction; **L/PS
+  wiring** is flagged the single highest-priority open item). The dashboard's proposals register
+  was made honest 2026-07-16 (**ED-IN-0072**): of the open work, ~136 items are genuinely
+  agent-executable (no ruling needed) and ~97 need your decision — see
+  `tools/observability/PROPOSALS.md`. Lane detail in each `registers/handoffs/HANDOFF_<LANE>.md`.
+- **Mobile-friendly status dashboard built (2026-07-11, ED-IN-0031)** — `dashboard/`,
+  published by `.github/workflows/dashboard.yml` to GitHub Pages. Surfaces workplan progress,
+  recent activity, a "needs your decision" inbox, and audit/simulation-balance verdicts
+  (`references/audit_registry.jsonl`, now kept current by the 8 audit/simulation skills'
+  retrofitted registry-append step). **One manual step needed from Jordan before it goes
+  live:** repo Settings → Pages → Source: "GitHub Actions" (the default token can't flip this).
+  **Extended 2026-07-11 (ED-IN-0037** — renumbered from a collision with PR #122's concurrent
+  audit-ecosystem batch, which independently claimed ED-IN-0032 through 0036; see
+  `references/id_reservations.yaml`'s IN-lane comment**)**: Balance & victory data card (personal-combat weapon
+  matrix — flagged stale; faction win-share goldens from `sim/tests/`, labeled as CI regression
+  guards, not a persisted full-campaign run; honest no-data flags for mass_battle/social_contest/
+  threadwork/settlement_territory) + Registers card (editorial-ledger open/needs_jordan counts by
+  lane, active patch-register counts). Also corrected a stale dashboard callout that had been
+  repeating the now-debunked "~87% degenerate win-share" claim (CLAUDE.md §7) — see
+  `sim/tests/test_f7_smoke_oracle.py`'s docstring for the actual correction.
+- **ED-IN-0044 RATIFIED 2026-07-12 (simulation/test harness methodology + Gate-0 prototype).**
+  `designs/audit/2026-07-12-simulation-test-harness-methodology/` +
+  `tools/sim_harness/` (six rounds of adversarial review/stress-testing since filing, 34 real bugs
+  found and fixed — see the package's own README). §11's four open questions were put to Jordan
+  directly, not assumed: rollout order extended (§8 gained faction actions/settlement-territory/
+  threadwork as waves 5–7, per Jordan flagging the gap; field investigation excluded as still
+  stub-only); Wave 1 CI burn-in stays full report-only; `mc_v18` never gates a PR; the four §9
+  quick wins filed separately as **ED-IN-0045** (open, execution pending — see
+  `registers/handoffs/HANDOFF_IN.md`). Full resolution text: `registers/editorial_ledger_in.jsonl`.
+- **JORDAN RULING NEEDED — ED-SC-0015 (Parliamentary total-victory Mandate stacking).** Full
+  detail in `registers/handoffs/HANDOFF_SC.md`'s Pending section (also cross-referenced from
+  `registers/handoffs/HANDOFF_FA.md`). The one item from the 2026-07-08 FA/SE historical-precedent build
+  genuinely needing Jordan's own call, not routine merge-ratification — everything else in that
+  build ratifies normally on merge per ED-1094.
+- **START HERE — Master Workplan v6 is the live steering surface, RATIFIED with the whole
+  of PR #78 (2026-07-05, ED-IN-0009/ED-IN-0011 — Jordan: "Ratify commit merge all").** `workplans/valoria_master_workplan_v6.md`: North-Star milestones (M1 one
+  playable season · M2 any-seed story bar · M3 Godot slice), per-lane workstreams (status
+  stays in `registers/handoffs/HANDOFF_<LANE>.md` — v6 only sequences), and the tiered T0/T1/T2
+  Jordan-decision register (§5) that **supersedes the 2026-07-01 `decision_queue.md` as the
+  live decision list** (that file is now a dated snapshot; its items 1–3 were refreshed at
+  supersession). Steering reconciliation ED-IN-0006 EXECUTED: `roadmap_state.yaml` retired to
+  `deprecated/references/`, workplan v5 archived with banner (its J-38 contradiction
+  corrected), hierarchy adopted (CURRENT.md → lane handoffs → workplan-derived). Same PR:
+  the **narrative engine v2 "Churn Engine"** (`designs/audit/2026-07-05-emergent-narrative-engine/
+  narrative_engine_design_v2_churn.md`, five-refuter adversarial pass applied) — **RATIFIED
+  in full 2026-07-05 (ED-IN-0011), including F-F/fork-8 at its default** (subtract-only +
+  the weight set as versioned data; values revisable anytime). Remaining T0 wall: **ED-1051
+  (engine_clock) alone** — JD-1 RULED 2026-07-08 (U1/ED-PC-0010) and fork 10's faction count
+  RULED = 4 (2026-07-13, ED-IN-0047, resolves ED-FA-0001); both struck from the wall.
+- **Month-overview + consolidation (2026-07-01), doctrine + propagation spec RATIFIED (2026-07-02).**
+  Full narrative + the 23-item Jordan decision queue: `designs/audit/2026-07-01-month-overview-architecture-consolidation/`
+  (`decision_queue.md` first) and `registers/handoffs/HANDOFF_IN.md`'s Next actions. Doctrine ratification
+  (ED-1083) and J-38 propagation-spec authorship (ED-1093) are both **CANONICAL** as of PR #58
+  (ED-1094 merge-ratifies-by-default).
+- **Per-lane "Next actions" content lives in each lane's own file (2026-07-08 atomization pass)** —
+  this root file no longer carries lane-owned detail, only genuinely cross-cutting items. Every
+  lane-specific bullet previously here was cross-checked against its lane file first and dropped only
+  where already covered (one gap found and backfilled: the R2 capstone finding → `HANDOFF_PC.md`;
+  J-36 → `HANDOFF_IN.md`). Start with:
+  - **Mass battle** (coordinate-field engine, DG-1..DG-5, the open partition-invariance ruling):
+    `registers/handoffs/HANDOFF_MB.md`.
+  - **Personal / scene combat** (R2 capstone finding, Track-2 residuals, weapon-morphology
+    consolidation, JD-1..JD-9): `registers/handoffs/HANDOFF_PC.md`.
+  - **Infrastructure / CI** (LB-22/23/24 residuals, LA-23 ledger reconciliation, J-36):
+    `registers/handoffs/HANDOFF_IN.md`.
+  - **Social contest** (ED-SC-0015, J-31): `registers/handoffs/HANDOFF_SC.md`.
+- **Reserved-ID state:** the flat `ED-NNNN` sequence is FROZEN (2026-07-02 cutover,
+  `ED-IN-0001`) — the ruling `ED-1094` established the freeze; the live ceiling is `ED-1096`
+  (ED-1095/1096 landed same-day). All NEW EDs use `ED-<LANE>-NNNN` — `references/id_reservations.yaml`'s
+  `lane_ids` section is the live allocation source; read `next_free` for your lane, allocate,
+  bump, co-commit. Never max+1.

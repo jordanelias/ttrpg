@@ -1,6 +1,7 @@
 register: attribute_mechanic_collisions
 source: references/mechanical_terms_index.md §3
 extracted: '2026-05-10'
+disposition: "RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-14): permanent historical snapshot, no live regeneration path."
 rule: Character/faction characteristics must not collide with mechanic words.
 active_violations:
 - violation: '**"Mandate Pool"** as a strategic-layer pool name (when "Faction Pool" or "Political Pool" is also in use)'
@@ -8,11 +9,11 @@ active_violations:
   why_it's_a_violation: The faction stat *Mandate* drives a pool that shares its name. Pattern 2 (State-change-naming) doesn't apply because the
     pool is not *changing* Mandate, it's *spending dice driven by* Mandate. Risks reading "Mandate Pool" as "Mandate ATTRIBUTE = Mandate POOL."
   rename_target: Use **"Political Pool"** (already canonical in `ci_political_v30 §3.4, §7.2`). Verify all other docs collapse to single name.
-- violation: '**"~~Authority~~Sanction"** as Pressure Point Type (§6). *Renamed in params/contest.md this session.*'
+- violation: '**"~~Authority~~Sanction"** as Pressure Point Type (§6). *Renamed in engine/params/contest.md this session.*'
   severity: MEDIUM → **DONE**
   why_it's_a_violation: The Conviction word was used as a debate-Pressure-Point-Type label. Pattern 1 (input) doesn't apply — the Pressure Point
     isn't checking the Conviction; it's a *style of argument.*
-  rename_target: '~~Rename Pressure Point Type to **"Sanction"** or **"Authority Citation"**.~~ **DONE: renamed to Sanction in params/contest.md.**'
+  rename_target: '~~Rename Pressure Point Type to **"Sanction"** or **"Authority Citation"**.~~ **DONE: renamed to Sanction in engine/params/contest.md.**'
 - violation: '**"Cardinal"** as NPC role AND structural frame ("Four-Cardinal Structure" of Church Convictions)'
   severity: LOW
   why_it's_a_violation: 'The named NPCs *are* called Cardinals (proper noun). The structural frame uses "Cardinal" generically (cardinal virtues).

@@ -57,16 +57,32 @@ def _morale_sigma(u, atom=None):
     if not morale_start: return 0.0
     frac = max(0.0, min(1.0, morale / morale_start))
     return MORALE_SIGMA_SCALE * (frac - 1.0)
-def _unit_braced(unit):
+def _brace_setup_ok(atom, t):
+    """[ED-1095, Jordan-ruled 2026-07-02] True iff `atom`'s brace has been held continuously since
+    a tick strictly before `t` (>=1 full tick of setup). -1 means not currently braced (never true).
+    A subunit deployed already braced is stamped 0 at construction (exempt from the delay -- it had
+    time to set up before the battle began). PC_RECOIL_FRONTAL-style safety net: t=None -> caller
+    didn't pass a tick -> treat as instantaneous (True) so old call sites stay byte-exact."""
+    if t is None or not PC_BRACE_SETUP_DELAY:
+        return True
+    since = getattr(atom, '_brace_since_tick', 0)
+    return since >= 0 and (t - since) >= 1
+
+def _unit_braced(unit, t=None):
     """True if any subunit carries the 'brace' instruction (the FM brace tactic). Gates the brace
     benefit (charge-resistance) and the reciprocal charge-recoil; INERT for instruction-less units
-    (the historical gauge + signature scenarios) -> byte-exact."""
-    return any('brace' in getattr(su, 'instructions', ()) for su in getattr(unit, 'subunits', ()))
+    (the historical gauge + signature scenarios) -> byte-exact.
+    t=None (default) preserves the old instantaneous check. t given + PC_BRACE_SETUP_DELAY on ->
+    also requires >=1 full tick since the brace instruction was set (see _brace_setup_ok)."""
+    return any('brace' in getattr(su, 'instructions', ()) and _brace_setup_ok(su, t)
+               for su in getattr(unit, 'subunits', ()))
 
-def _subunit_braced(atom):
+def _subunit_braced(atom, t=None):
     """Per-subunit brace (Jordan directive): THIS subunit carries 'brace'. For a single-subunit
-    unit this equals _unit_braced(unit) -> byte-exact; for a mixed unit only the braced subunit resists."""
-    return 'brace' in getattr(atom, 'instructions', ())
+    unit this equals _unit_braced(unit) -> byte-exact; for a mixed unit only the braced subunit resists.
+    t=None (default) preserves the old instantaneous check. t given + PC_BRACE_SETUP_DELAY on ->
+    also requires >=1 full tick since the brace instruction was set (see _brace_setup_ok)."""
+    return 'brace' in getattr(atom, 'instructions', ()) and _brace_setup_ok(atom, t)
 
 def _disc_prep(disc):
     """Discipline -> preparedness 0..1. SHARED by the charge-shock brace gate (independent retention)
@@ -85,7 +101,7 @@ def _wall_prep(unit, contact_cells, atom=None):
     disc = atom.eff_discipline if atom is not None else getattr(unit, 'discipline', 5)
     return _disc_prep(disc) * _depth_prep(_defender_depth(unit, contact_cells))
 
-def _charge_shock_sigma(defender, def_cells, zone, atom=None):
+def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
     """Phase 3: DEFENDER moral-shock delta-sigma (<=0) on a charge impact.
     Cavalry's weapon is the MORAL impulse (du Picq), gated by the defender's preparedness:
     near-zero vs a braced+disciplined+deep defender facing the charge (Waterloo squares),
@@ -104,7 +120,7 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None):
     # atom (Jordan directive): per-subunit defender stats; None -> unit. Single-subunit: atom.stance==unit.stance,
     # eff_discipline/eff_morale inherit -> byte-exact. brace gate (multiplicative): hold-stance x discipline x depth.
     _stance = atom.stance if atom is not None else getattr(defender, 'stance', 'balanced')
-    _braced = _subunit_braced(atom) if atom is not None else _unit_braced(defender)
+    _braced = _subunit_braced(atom, t) if atom is not None else _unit_braced(defender, t)
     b_stance = PC_SHOCK_HOLD_BRACE if (_stance == 'hold' or _braced) else 1.0
     disc = atom.eff_discipline if atom is not None else getattr(defender, 'discipline', 5)
     b_disc = 1.0 - _disc_prep(disc) * (1.0 - PC_SHOCK_DISC_FULL)        # independent disc retention (shared prep curve)

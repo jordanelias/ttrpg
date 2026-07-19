@@ -1,0 +1,476 @@
+<style>
+  /* Gameplay-Subsystem Observatory — interactive architecture nexus.
+     Self-contained (no external requests). Body-only (Artifact-wrapped); also opens standalone. */
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    color-scheme:light;
+    --page:#f2f1ea; --surface:#fbfaf6; --surface2:#eeece2; --ink:#1a1a17; --ink2:#54524b;
+    --muted:#8a887f; --line:#dcd9cc; --hair:rgba(20,20,15,.10); --accent:#3d5a80; --accent-soft:#e6ecf3;
+    /* categorical node families (dataviz reference palette, validated CVD ΔE 24.2) */
+    --f-combat:#2a78d6; --f-social:#1baf7a; --f-faction:#4a3aa7; --f-settle:#eda100;
+    --f-thread:#008300; --f-mass:#eb6834; --f-npc:#e87ba4; --f-world:#e34948; --f-infra:#8f8d84;
+    /* semantic edge-status (reserved; never a node hue) */
+    --s-live:#7d8a97; --s-orphan:#d03b3b; --s-seam:#e08a1e; --s-notional:#a7a49a; --s-wild:#8256c4; --s-read:#c23b6a;
+    --node-stroke:#2b2b28;
+  }
+  @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --page:#0f0f0c; --surface:#1a1a17; --surface2:#232320; --ink:#f4f3ec; --ink2:#c3c1b6;
+    --muted:#8f8d84; --line:#2f2f2a; --hair:rgba(255,255,255,.10); --accent:#79a0cf; --accent-soft:#22303f;
+    --f-combat:#3987e5; --f-social:#199e70; --f-faction:#9085e9; --f-settle:#c98500;
+    --f-thread:#159015; --f-mass:#d95926; --f-npc:#d55181; --f-world:#e66767; --f-infra:#8f8d84;
+    --s-live:#8a97a4; --s-orphan:#e46060; --s-seam:#f0a63a; --s-notional:#77756c; --s-wild:#a284e0; --s-read:#e06893;
+    --node-stroke:#0c0c0a;
+  }}
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --page:#0f0f0c; --surface:#1a1a17; --surface2:#232320; --ink:#f4f3ec; --ink2:#c3c1b6;
+    --muted:#8f8d84; --line:#2f2f2a; --hair:rgba(255,255,255,.10); --accent:#79a0cf; --accent-soft:#22303f;
+    --f-combat:#3987e5; --f-social:#199e70; --f-faction:#9085e9; --f-settle:#c98500;
+    --f-thread:#159015; --f-mass:#d95926; --f-npc:#d55181; --f-world:#e66767; --f-infra:#8f8d84;
+    --s-live:#8a97a4; --s-orphan:#e46060; --s-seam:#f0a63a; --s-notional:#77756c; --s-wild:#a284e0; --s-read:#e06893;
+    --node-stroke:#0c0c0a;
+  }
+  html,body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1400px;margin:0 auto;padding:22px 20px 40px}
+  header.masthead{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.01em;text-wrap:balance;margin:.15em 0 .1em}
+  .sub{color:var(--ink2);font-size:14px;max-width:78ch}
+  .banner{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);border:1px solid var(--hair);
+    border-left:4px solid var(--s-seam);border-radius:8px;padding:10px 13px;margin:12px 0;font-size:13px;color:var(--ink2)}
+  .banner b{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .chip{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:7px 11px;min-width:88px}
+  .chip .n{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .chip .k{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .chip.warn .n{color:var(--s-seam)} .chip.bad .n{color:var(--s-orphan)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:11px 13px;margin:14px 0}
+  .fgroup{display:flex;flex-direction:column;gap:6px}
+  .fgroup h4{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .frow{display:flex;flex-wrap:wrap;gap:5px}
+  .tgl{display:inline-flex;align-items:center;gap:5px;font-size:12px;border:1px solid var(--line);background:var(--surface2);
+    color:var(--ink2);border-radius:20px;padding:3px 9px;cursor:pointer;user-select:none;transition:opacity .12s}
+  .tgl:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .tgl .sw{width:10px;height:10px;border-radius:50%;flex:none;border:1px solid var(--node-stroke)}
+  .tgl[aria-pressed="false"]{opacity:.34;text-decoration:line-through}
+  .tgl.line .sw{border-radius:1px;height:0;border:0;border-top-width:3px;border-top-style:solid;width:16px}
+  .btn{font-size:12px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:7px;
+    padding:5px 11px;cursor:pointer;font-weight:600}
+  .btn:hover{background:var(--accent-soft)}
+  .stage{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:stretch}
+  @media(max-width:900px){.stage{grid-template-columns:1fr}}
+  .canvas-wrap{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    min-height:560px;height:66vh}
+  svg#net{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+  svg#net.drag{cursor:grabbing}
+  .band-label{font-size:12px;font-weight:700;fill:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .band-rect{fill:var(--surface2);opacity:.5}
+  .edge{fill:none;stroke-width:1.6;transition:opacity .12s} .edge.dim{opacity:.06}
+  .edge:hover{stroke-width:3}
+  .node{cursor:pointer} .node.dim{opacity:.12}
+  .node .shape{stroke:var(--node-stroke);stroke-width:1.5}
+  .node .lbl{font-size:11px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+  .node.sel .shape{stroke:var(--accent);stroke-width:3}
+  .node .deg{font-size:9px;fill:var(--surface);font-weight:800;font-variant-numeric:tabular-nums}
+  .badge{font-size:10px;font-weight:800}
+  .zoomctl{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:5px}
+  .zoomctl button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    border-radius:7px;cursor:pointer;font-size:16px;font-weight:700;line-height:1}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto;max-height:66vh}
+  .panel .hint{color:var(--muted);font-size:13px}
+  .panel h3{font-size:16px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+  .dot{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid var(--node-stroke)}
+  .kv{margin-top:10px;font-size:12.5px;color:var(--ink2)}
+  .kv b{color:var(--ink);display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-top:9px;color:var(--muted)}
+  .flags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .flag{font-size:10.5px;font-weight:700;border-radius:5px;padding:2px 7px;border:1px solid var(--hair)}
+  .flag.dn{background:rgba(208,59,59,.14);color:var(--s-orphan)} .flag.as{background:rgba(224,138,30,.16);color:var(--s-seam)}
+  .flag.rt{background:var(--surface2);color:var(--muted);text-decoration:line-through} .flag.hub{background:var(--accent-soft);color:var(--accent)}
+  .flag.cp{background:rgba(42,120,214,.14);color:var(--f-combat)} .flag.zk{background:rgba(208,59,59,.12);color:var(--s-orphan)}
+  .legend{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .legend h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px 18px;font-size:12px;color:var(--ink2)}
+  .li{display:flex;align-items:center;gap:7px}
+  .li .ln{width:22px;height:0;border-top-width:3px;border-top-style:solid;flex:none}
+  .foot{margin-top:16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+  code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.92em;background:var(--surface2);padding:1px 4px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Valoria · Gameplay-Subsystem Observatory · ED-IN-0064 · 2026-07-14</div>
+    <h1>Architecture Nexus — shape, connectivity &amp; gaps</h1>
+    <p class="sub">The 27 <code>module_contracts.yaml</code> modules as one graph. Nodes = modules (color by
+      subsystem family, shape by role). Edges = Key-type flows, laid out on the scale ladder so
+      <b>aggregate-up reads left→right</b> and <b>distribute-down reads right→left</b>. Click any node or edge.</p>
+    <div class="banner">
+      <span>⚠</span>
+      <div><b>Analytic instrument — leads, not verdicts.</b> The L0 <code>vector_audit</code> validation gate
+      <b>FAILED 1/3</b> (P1 foundation-periphery, P2 conviction-symmetry — both real corpus findings). L1/L2 numbers
+      are exact but measure, never gate. No canon status flips; every fix is <b>HELD-BACK</b> (ED-1094).</div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </header>
+
+  <div class="toolbar" id="toolbar"></div>
+
+  <div class="stage">
+    <div class="canvas-wrap">
+      <svg id="net" role="img" aria-label="Interactive module architecture graph"></svg>
+      <div class="zoomctl">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+        <button id="zfit" aria-label="Fit to view" style="font-size:11px">fit</button>
+      </div>
+    </div>
+    <aside class="panel" id="panel"><p class="hint">Select a node to see its inventory, code shape, connectivity,
+      and gaps — or an edge to see its Key types, status, and direction. Use the filters to isolate a family,
+      an edge status, or a delivery direction.</p></aside>
+  </div>
+
+  <div class="legend" id="legend"></div>
+  <p class="foot">Generated from the verbatim observatory run: L2 wiring <code>graphs/module_flowchart.mermaid</code> +
+    <code>structure/data/g_l2.json</code>; G_code AST <code>structure/data/structure_metrics.json</code>. Directions
+    derive from the scale-ladder position of each edge's endpoints; the <code>!A6</code> cross-scale seams are
+    <b>annotation-debt</b> (sparse sub-scale <code>targets[]</code>), not missing mechanisms, per
+    <code>scale_transitions_v30 §12</code> (A6 exemption, J-1/ED-1038). Two-tier gap classification in
+    <code>gap_register_v1.md</code>.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---- families ----------------------------------------------------------
+  var FAM = {
+    combat:{c:'--f-combat',name:'Personal combat'}, social:{c:'--f-social',name:'Social contest'},
+    faction:{c:'--f-faction',name:'Faction / political'}, settle:{c:'--f-settle',name:'Settlement / territory'},
+    thread:{c:'--f-thread',name:'Thread / fieldwork'}, mass:{c:'--f-mass',name:'Mass battle'},
+    npc:{c:'--f-npc',name:'NPC'}, world:{c:'--f-world',name:'Piety / victory / world'}, infra:{c:'--f-infra',name:'Infra / substrate'}
+  };
+  // bands: 0 personal · 1 scene · 2 settlement · 3 provincial · 4 peninsula · 5 substrate strip (bottom)
+  var BANDS=['PERSONAL','SCENE','TERRITORY / SETTLEMENT','PROVINCIAL','PENINSULA','SUBSTRATE'];
+  // ---- nodes -------------------------------------------------------------
+  // role: play|infra|substrate|sink ; flags: dn(doc:null) as([ASSUMPTION]) rt(retire) hub cp(compound) zk(zeroKey) rd(reader)
+  function N(id,fam,role,band,row,inD,outD,flags,d){return{id:id,fam:fam,role:role,band:band,row:row,inD:inD,outD:outD,flags:flags||[],d:d};}
+  var nodes=[
+    // personal (band 0)
+    N('personal_combat','combat','play',0,0,2,1,['cp'],{inv:'Head <code>combat_engine_v1/</code> (CANONICAL, ED-900/904). d+σ resolver. State: Health(derived), Wounds, Stamina, Initiative, Poise.',shape:'Compound <b>CombatEngine</b> hosting 11 EngineModules — strike+wound PORTED, armour_defeat FOLDED, 8 PENDING. Real <code>sim.personal.combat</code>; only module skeletoned to Godot (non-compilable spine).',conn:'Consumes scene.combat_strike ← scene_slate/player_input. Self-loop scene.combat_hit (Strike→Wound). Emits combat_felled/resolved (orphan).',gaps:'GAP-C2 two dead emits (CTC, in gap_notes). GAP-G1 Wounds/Poise/Initiative un-pointered.'}),
+    N('threadwork','thread','play',0,1,0,2,[],{inv:'Head <code>threadwork_v30.md</code>. dice_pool (Leap + op rolls). State: Coherence, Thread Fatigue.',shape:'Real <code>sim/thread/</code> (7 modules).',conn:'Root emitter → npc_behavior, piety_track (meta.thread_woven, scene.thread_operation).',gaps:'GAP-H6 L0 Mode-A hub (cite 135) AND Mode-D cascade sink (190 chains). GAP-H7 vocab-debt "Game Master".'}),
+    N('fieldwork_knots','thread','play',0,2,1,3,[],{inv:'Heads <code>fieldwork_v30</code> + <code>investigation_systems_v30</code> + <code>knots_v30</code>. dice_pool. State: knot strain, Bonds, Evidence/Disposition Track.',shape:'<code>sim.personal.fieldwork/investigation/knots</code> are <b>import-orphans</b> (dead-ish). Reads whole Key stream via {type:"*"} Memory-Query wildcard.',conn:'in-1(wildcard)/out-3 → npc_behavior, faction_state, piety_track.',gaps:'GAP-I3 import-orphan sim modules. GAP-G3 knot strain un-pointered.'}),
+    N('piety_track','world','play',0,3,7,2,['as'],{inv:'Head <code>conviction_track_v1.md</code>. deterministic_accounting [ASSUMPTION]. State: conviction scars. Gates: Scars=2 Resonant Style, ≥3 crisis.',shape:'The personal scar/crisis track; the 7 Convictions live inline here (the P2 isolation origin).',conn:'in-7/out-2. Emits state.scar_acquired → faction_state, npc_behavior. 1 !A6 (scene_slate→).',gaps:'GAP-H2 home unregistered in canonical_sources (ED-IN-0048). GAP-J1 "Piety Track" 3-way name collision. GAP-B8 [ASSUMPTION].'}),
+    N('npc_behavior','npc','play',0,4,12,4,['as','hub'],{inv:'Head <code>npc_behavior_v30.md</code>. [ASSUMPTION]. State: beliefs/opinions, concerns, projects, arc state. Gates: stall≥8, drift>0.5.',shape:'<b>The integration spine</b>; L2 cut-vertex. <code>sim.autoload.npc_ai</code> import-orphan. Consumes 23 Key types, emits 11.',conn:'in-12/out-4. Self-loop. Loop with social_contest (one-sided damper). Sole feeder of npc_memory.',gaps:'GAP-B7 [ASSUMPTION] on the #2 hub. GAP-G2 non-scalar state (design ruling). GAP-J3 dual-emit scene.dialogue.'}),
+    N('npc_memory','infra','infra',0,5,4,0,['dn'],{inv:'doc:null. state_reader. Pure consumer, zero emits.',shape:'Backend memory store.',conn:'in-4/out-0 ← npc_behavior only (gossip/interaction/concern/opinion).',gaps:'GAP-A3 doc:null (plumbing).'}),
+    N('miraculous_event','world','play',0,6,0,2,['as'],{inv:'Head <code>miraculous_event_v30.md</code> (resolved from null). state_reader [ASSUMPTION], gated emitter.',shape:'Rare gated narrative-mechanical event.',conn:'in-0/out-2 → faction_state, npc_behavior (meta.miraculous_event).',gaps:'GAP-B (—) [ASSUMPTION] resolver.'}),
+    N('player_input','infra','substrate',0,-1.1,0,1,[],{inv:'Player action source (not a module).',shape:'Input into personal_combat.',conn:'→ personal_combat (scene.combat_strike).',gaps:'—'}),
+    // scene (band 1)
+    N('scene_slate','infra','infra',1,0,0,4,['dn'],{inv:'doc:null. manifest (7-priority slate generation).',shape:'Scene-generation manifest; out-4 root notional.',conn:'in-0/out-4 → faction_state, npc_behavior, personal_combat, piety_track(!A6).',gaps:'GAP-A3 doc:null.'}),
+    N('social_contest','social','play',1,1,1,3,[],{inv:'Head <code>social_contest_v30.md</code> (CANONICAL) +params/contest.md. dice_pool. State: persuasion_track. <b>contest_rebuild in flight</b>.',shape:'Largest code SCC: 9-module <code>sim.personal.contest</code> import cycle (contest↔appraise↔armature↔…). Code hub in-6/out-13.',conn:'in-1/out-3. Consumes opinion_revised ← npc_behavior; emits contest_resolved/dialogue/insult/threat.',gaps:'GAP-H1 head reads unregistered (regex blind spot). GAP-C3 one-sided loop damper. GAP-I1 9-module cycle.'}),
+    N('mass_battle','mass','play',1,2,0,3,[],{inv:'Heads <code>mass_battle_v30</code> + <code>_integration_v30</code>. dice_pool. No state block.',shape:'Real sim; import cycle <code>massbattle↔units</code>.',conn:'in-0/out-3 root → faction_state, npc_behavior, piety_track (scene.battle_concluded).',gaps:'GAP-C1 scene_outcome.battle_concluded FABRICATED (ED-MB-0010, known no-action — not a real edge). GAP-I2 cycle.'}),
+    N('game_director','infra','infra',1,3,0,2,['dn'],{inv:'doc:null. manifest (season-loop + zoom-stack).',shape:'Orchestrator.',conn:'in-0/out-2 → audit, scene_timer (mechanical.scene_*).',gaps:'GAP-A3 doc:null.'}),
+    N('scene_timer','infra','infra',1,4,0,0,['dn'],{inv:'doc:null. state_reader (wall-clock telemetry sidecar; NOT a gameplay resolver).',shape:'Telemetry.',conn:'in ← game_director.',gaps:'GAP-A3 doc:null.'}),
+    N('audit','infra','infra',1,5,0,0,['dn'],{inv:'doc:null. state_reader (QA/telemetry).',shape:'Telemetry consumer.',conn:'in ← game_director.',gaps:'GAP-A3 doc:null.'}),
+    // settlement (band 2)
+    N('settlement_layer','settle','play',2,0,2,2,[],{inv:'Head <code>settlement_layer_v30.md</code>. State: Prosperity/Defense/Order, L/PS, Local Economy/Garrison/Public Order(derived), province Accord(derived). Richest gate+derivation surface.',shape:'deterministic_accounting; governance-play redesign in PROPOSAL.',conn:'in-2/out-2. env.disaster/shock ← peninsular_strain/scenario_authoring; emits population_change. <b>Mandate↔L/PS loop with faction_state</b> (saturating damper).',gaps:'GAP-G6 province Accord + cross-module Mandate/Treasury un-pointered. GAP-H8 Prosperity ×50-vs-×10 (prose, not a contract collision; ED-SE-0045).'}),
+    N('settlement_economy','settle','infra',2,1,3,0,['dn','as','rt'],{inv:'doc:null, [ASSUMPTION], no state, no emits. <b>Retirement-flagged</b> (ED-SE-0005).',shape:'Phantom module — no doc, no state, no logic.',conn:'in-3/out-0 pure sink ← domain_actions, peninsular_strain, settlement_layer.',gaps:'GAP-K2 retire (fold into settlement_layer). GAP-A2 doc:null + GAP-B5 [ASSUMPTION], both moot if retired.'}),
+    N('territorial_piety','settle','play',2,2,0,0,['as','zk'],{inv:'Head <code>conviction_track_v30.md</code>. [ASSUMPTION]. State: CV(per-territory Piety), CI(Church Influence). Gates: CI=100 Theocracy.',shape:'Territorial piety/CI accounting; no dedicated sim module.',conn:'<b>in-0/out-0 — ZERO Key integration</b> (CANONICAL doc, unwired).',gaps:'GAP-E2 zero-Key INERT. GAP-J1 "Piety Track" collision. GAP-B4 [ASSUMPTION].'}),
+    // provincial (band 3)
+    N('domain_actions','faction','play',3,0,0,4,['dn','as'],{inv:'doc:null, d_sigma [ASSUMPTION]. No state. The strategic-turn verb surface.',shape:'Root emitter; <code>sim.provincial.faction_action</code> (cut-vertex out-9) hosts much of it; many provincial action modules are import-orphans.',conn:'in-0/out-4 → faction_state + 3 !A6 seams (npc_behavior, piety_track, settlement_economy). 5 da.* types.',gaps:'GAP-A1 doc:null — <b>GENUINE</b> (strategic-turn home; ED-FA-0002). GAP-B1 [ASSUMPTION]. GAP-D1 seams.'}),
+    N('faction_politics','faction','play',3,1,0,4,['as'],{inv:'Head <code>faction_politics_v30.md</code> (flipped from null 2026-07-08, ED-IN-0016). [ASSUMPTION]. No state block.',shape:'Root emitter; Standing-ladder / coup / succession engine.',conn:'in-0/out-4 → faction_state, npc_behavior(!A6). investigation/coup/standing/succession.',gaps:'GAP-B3 [ASSUMPTION]. GAP-D2 seam. GAP-K1 no state block despite 1115-line head.'}),
+    N('faction_state','faction','play',3,2,13,2,['as','hub'],{inv:'Head <code>faction_behavior_v30.md</code> (d_sigma contested, ED-874). [ASSUMPTION]. State: Mandate(derived), Treasury(derived), faction stats 1-7.',shape:'Folded into <code>sim.provincial.faction_action</code> (cut-vertex). <b>The primary integration hub.</b>',conn:'<b>in-13/out-2 — dominant sink.</b> Self-loop (cascade/mission/standing, drift_coef 0.6 damper).',gaps:'GAP-B2 [ASSUMPTION] on the in-13 hub (highest leverage). GAP-G4 stats un-pointered. GAP-J2 Mandate↔L/PS loop invisible to formula_audit.'}),
+    N('ci_political','faction','play',3,3,0,0,['zk'],{inv:'Head <code>ci_political_v30.md</code> (CANONICAL). State: CI(read), faction political pool, card hands/cooldown.',shape:'Stat economy §4 + card system §5.',conn:'<b>in-0/out-0 — ZERO Key integration</b> in a CANONICAL doc.',gaps:'GAP-E1 zero-Key INERT — key the Church card-game. GAP-G5 card hands/pool un-pointered.'}),
+    N('victory','world','play',3,4,0,0,['rd'],{inv:'Head <code>victory_v30.md</code>. state_reader. Reads MS/IP/CI/Turmoil/Accord/Mandate/PV/PT. The era machine + GD-1 single victory path.',shape:'Pure reader gating era transitions; owns no state.',conn:'in-0/out-0 at the Key layer (reads clocks directly). Reads MS — ticked in sim, owned by no contract.',gaps:'GAP-F1 reads MS, a clock with no owning <b>contract</b> — CTC (corrected): MS is ticked (PP-255); add a contract owner. GAP-G7 era reads un-pointered.'}),
+    N('engine_clock','infra','infra',3,5,0,2,['dn'],{inv:'doc:null (candidate home propagation_spec_v1, ED-1051). clock_advance. State: season counter.',shape:'The temporal spine.',conn:'in-0/out-2 → faction_state (accounting) + season_change (orphan/ambient).',gaps:'GAP-A3 doc:null — CTC (corrected): home doc propagation_spec_v1 is CANONICAL (§O.2); only the pointer-flip pends ED-1051.'}),
+    N('clock_registry','infra','infra',3,6,0,0,[],{inv:'Head <code>clock_registry_v30.md</code>. manifest (pure catalog).',shape:'Owns no state, resolves nothing.',conn:'in-0/out-0.',gaps:'—'}),
+    // peninsula (band 4)
+    N('peninsular_strain','settle','play',4,0,0,4,['as'],{inv:'Head <code>peninsular_strain_v30.md</code>. [ASSUMPTION]. State: Turmoil, IP. Gates: IP thresholds (Occupation P1-3).',shape:'Root strain emitter (Hafenmark-invasion pressure spine). ms_track/season cut-vertices; ip/rs_track import-orphans.',conn:'in-0/out-4 → faction_state + 3 !A6 seams (settlement_layer, settlement_economy, npc_behavior) + env.crisis (orphan).',gaps:'GAP-C4 env.crisis consumed by ZERO module — <b>GENUINE-candidate</b>. GAP-D3 seams. GAP-H9 vocab-debt "Cultural Reformation".'}),
+    N('scenario_authoring','infra','infra',4,1,0,2,['dn','as'],{inv:'doc:null, [ASSUMPTION], manifest. Authoring-time event injection (fork 11, ED-IN-0011).',shape:'Compile-time injection, not runtime.',conn:'in-0/out-2 → faction_state, settlement_layer(!A6). env.crisis/disaster.',gaps:'GAP-A3 doc:null (mark authoring-time). GAP-D3 seam.'}),
+    // substrate strip (band 5)
+    N('ENGINE','infra','substrate',5,0.5,0,2,[],{inv:'The Key stream / Memory / clock-state substrate — NOT one of the 27 modules.',shape:'The single update rule + observer resolution; the sole cross-scale delivery path (§12.2, no private channels).',conn:'Wildcard {type:"*"} source → articulation_layer, fieldwork_knots (Memory-Query).',gaps:'Home of the ownerless MS clock (GAP-F1); direction is a property of a Key here, not a channel.'}),
+    N('articulation_layer','infra','infra',5,1.6,0,0,['rd'],{inv:'Head <code>articulation_layer_v30.md</code>. Universal wildcard reader of the entire Key stream.',shape:'Presentation/chronicle layer — not a played mechanic.',conn:'in(wildcard) ← ENGINE. Emits nothing.',gaps:'Reader; by design.'}),
+    N('campaign_architecture','infra','infra',5,2.7,0,0,['rt'],{inv:'Head <code>campaign_architecture_v30.md</code>. STUB (0 edges).',shape:'Consolidation doc, not a runtime module.',conn:'in-0/out-0.',gaps:'GAP-K3 retire (content distributes across victory/threadwork/settlement/peninsular_strain).'}),
+    N('MS','world','sink',5,3.7,1,0,['zk'],{inv:'Mending Stability clock — the terminal Calamity/recovery dial.',shape:'<b>NO owning module in the 27 contracts.</b>',conn:'Read by victory (era gates MS=0, MS≤5, MS→20). Ticked in the sim (PP-255 ms_track/accounting) but declared by no contract.',gaps:'GAP-F1 — COMPLETE-THE-CHAIN (corrected): MS is already ticked; add a contract owner (env.ms_delta). Not a genuine gap.'}),
+    N('UNCONSUMED','infra','sink',5,4.7,6,0,[],{inv:'Synthetic sink for orphan (dangling) emits.',shape:'Not a module.',conn:'Receives 6 orphan emits: env.crisis ×2, mechanical.season_change, scene.combat_felled, scene.combat_resolved, scene_outcome.battle_concluded(UNREG).',gaps:'GAP-C — 4 concrete dangling emits (structure_audit); only env.crisis plausibly a genuine missing consumer.'})
+  ];
+  var NX={}; nodes.forEach(function(n){NX[n.id]=n;});
+  // ---- edges: [from,to,status,label] ; status: live|seam|orphan|wild|read -----
+  function E(a,b,s,l){return{a:a,b:b,s:s,l:l};}
+  var edges=[
+    E('domain_actions','faction_state','live','da.* ×5'),
+    E('domain_actions','npc_behavior','seam','da.* ×3, scene.draft_da'),
+    E('domain_actions','piety_track','seam','da.* ×2'),
+    E('domain_actions','settlement_economy','seam','da.economic_intervention'),
+    E('engine_clock','faction_state','live','mechanical.accounting'),
+    E('faction_politics','faction_state','live','investigation, state.* ×3'),
+    E('faction_politics','npc_behavior','seam','investigation, state.* ×3'),
+    E('faction_state','faction_state','live','cascade/mission/standing (self)'),
+    E('faction_state','npc_behavior','live','mechanical.* ×2, standing_change'),
+    E('fieldwork_knots','faction_state','live','scene.gift'),
+    E('fieldwork_knots','npc_behavior','live','meta.* ×2, gift, belief'),
+    E('fieldwork_knots','piety_track','live','meta.knot_ruptured'),
+    E('game_director','audit','live','mechanical.* ×3'),
+    E('game_director','scene_timer','live','mechanical.* ×3'),
+    E('mass_battle','faction_state','live','scene.battle_concluded'),
+    E('mass_battle','npc_behavior','live','scene.battle_concluded'),
+    E('mass_battle','piety_track','live','scene.battle_concluded'),
+    E('mass_battle','UNCONSUMED','orphan','scene_outcome.battle_concluded *UNREG (ED-MB-0010)'),
+    E('miraculous_event','faction_state','live','meta.miraculous_event'),
+    E('miraculous_event','npc_behavior','live','meta.miraculous_event'),
+    E('npc_behavior','npc_behavior','live','project/scene/state (self)'),
+    E('npc_behavior','npc_memory','live','scene.* ×2, state.* ×2'),
+    E('npc_behavior','piety_track','live','scene.witness'),
+    E('npc_behavior','social_contest','live','state.opinion_revised'),
+    E('peninsular_strain','faction_state','live','env.* ×3'),
+    E('peninsular_strain','npc_behavior','seam','env.peninsular_strain_shock'),
+    E('peninsular_strain','settlement_economy','seam','env.population_change'),
+    E('peninsular_strain','settlement_layer','seam','env.* ×2'),
+    E('peninsular_strain','UNCONSUMED','orphan','env.crisis'),
+    E('personal_combat','personal_combat','live','scene.combat_hit (Strike→Wound self)'),
+    E('personal_combat','UNCONSUMED','orphan','scene.combat_felled'),
+    E('personal_combat','UNCONSUMED','orphan','scene.combat_resolved'),
+    E('piety_track','faction_state','live','state.scar_acquired'),
+    E('piety_track','npc_behavior','live','state.scar_acquired'),
+    E('player_input','personal_combat','live','scene.combat_strike'),
+    E('scenario_authoring','faction_state','live','env.disaster'),
+    E('scenario_authoring','settlement_layer','seam','env.disaster'),
+    E('scenario_authoring','UNCONSUMED','orphan','env.crisis'),
+    E('scene_slate','faction_state','live','scene.* ×5'),
+    E('scene_slate','npc_behavior','live','scene.* ×6'),
+    E('scene_slate','personal_combat','live','scene.combat_strike'),
+    E('scene_slate','piety_track','seam','scene.* ×4'),
+    E('settlement_layer','faction_state','live','env.population_change'),
+    E('settlement_layer','settlement_economy','live','env.population_change'),
+    E('social_contest','faction_state','live','scene.* ×4'),
+    E('social_contest','npc_behavior','live','scene.* ×4'),
+    E('social_contest','piety_track','live','scene.* ×3'),
+    E('threadwork','npc_behavior','live','meta.thread_woven, thread_operation'),
+    E('threadwork','piety_track','live','meta.thread_woven'),
+    E('engine_clock','UNCONSUMED','orphan','mechanical.season_change'),
+    E('ENGINE','articulation_layer','wild','* (wildcard)'),
+    E('ENGINE','fieldwork_knots','wild','* (wildcard Memory-Query)'),
+    E('victory','MS','read','reads MS (no owner)')
+  ];
+  // direction from band delta ---------------------------------------------
+  function dirOf(e){
+    if(e.a===e.b) return 'self';
+    if(e.s==='orphan') return 'orphan';
+    if(e.s==='wild') return 'wildcard';
+    if(e.s==='read') return 'read';
+    var A=NX[e.a],B=NX[e.b];
+    if(A.band===5||B.band===5) return 'lateral';
+    if(B.band>A.band) return 'up'; if(B.band<A.band) return 'down'; return 'lateral';
+  }
+  edges.forEach(function(e){e.dir=dirOf(e);});
+  var DIRS={up:'▲ aggregate-up',down:'▼ distribute-down',lateral:'◀▶ lateral',self:'↻ self-loop',
+    wildcard:'✳ wildcard',orphan:'⌀ orphan-emit',read:'◇ reads (no owner)'};
+  var STAT={live:{c:'--s-live',dash:'0',name:'LIVE'},seam:{c:'--s-seam',dash:'7 5',name:'cross-scale seam !A6'},
+    orphan:{c:'--s-orphan',dash:'3 4',name:'orphan-emit'},wild:{c:'--s-wild',dash:'2 4',name:'wildcard *'},
+    read:{c:'--s-read',dash:'5 4',name:'reads (ownerless)'}};
+
+  // ---- layout ------------------------------------------------------------
+  var COLW=250, ROWH=68, PADX=90, PADY=64, W, H;
+  var byBand={}; nodes.forEach(function(n){(byBand[n.band]=byBand[n.band]||[]).push(n);});
+  function layout(){
+    nodes.forEach(function(n){
+      n.x=PADX + n.band*COLW;
+      n.y=PADY + (n.row+1.2)*ROWH;
+    });
+    // substrate strip laid horizontally along the bottom
+    var strip=byBand[5]||[]; var maxRow=0; nodes.forEach(function(n){if(n.band<5)maxRow=Math.max(maxRow,n.row);});
+    var baseY=PADY+(maxRow+2.6)*ROWH;
+    strip.forEach(function(n,i){ n.y=baseY + (n.row-0.5)*10; n.x=PADX + (n.band-5+ i)*COLW*0.9 + COLW*0.2; });
+    // give substrate nodes spread across width
+    strip.forEach(function(n,i){ n.x=PADX + i*(COLW*1.05); n.y=baseY; });
+    W = PADX*2 + 4*COLW + 60;
+    H = baseY + ROWH*1.4;
+  }
+  layout();
+
+  var svg=document.getElementById('net');
+  var SVGNS='http://www.w3.org/2000/svg';
+  function el(t,a){var e=document.createElementNS(SVGNS,t);if(a)for(var k in a)e.setAttribute(k,a[k]);return e;}
+  function cvar(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+  var root=el('g'); svg.appendChild(root);
+  var bandLayer=el('g'), edgeLayer=el('g'), nodeLayer=el('g');
+  root.appendChild(bandLayer); root.appendChild(edgeLayer); root.appendChild(nodeLayer);
+
+  // band backdrops + labels
+  for(var b=0;b<5;b++){
+    var bx=PADX + b*COLW - COLW*0.42;
+    bandLayer.appendChild(el('rect',{x:bx,y:PADY-34,width:COLW*0.84,height:H-PADY-6,rx:12,'class':'band-rect'}));
+    var t=el('text',{x:PADX+b*COLW,y:PADY-16,'text-anchor':'middle','class':'band-label'});t.textContent=BANDS[b];
+    bandLayer.appendChild(t);
+  }
+  var stripT=el('text',{x:PADX,y:H-14,'class':'band-label'});stripT.textContent='SUBSTRATE / READERS / SINKS';bandLayer.appendChild(stripT);
+  // direction hint arrows
+  var hint=el('text',{x:W-40,y:PADY-16,'text-anchor':'end','class':'band-label'});hint.textContent='aggregate-up →';bandLayer.appendChild(hint);
+
+  // arrowhead markers per status
+  var defs=el('defs'); svg.appendChild(defs);
+  Object.keys(STAT).forEach(function(k){
+    var m=el('marker',{id:'ar-'+k,viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'});
+    var p=el('path',{d:'M0,0L10,5L0,10z'}); p.setAttribute('fill','var('+STAT[k].c+')'); m.appendChild(p); defs.appendChild(m);
+  });
+
+  function nodeCenter(n){return{x:n.x,y:n.y};}
+  function edgePath(e){
+    var A=NX[e.a],B=NX[e.b];
+    if(e.a===e.b){ // self loop
+      var r=26; return 'M'+(A.x+18)+','+(A.y-10)+' a'+r+','+r+' 0 1 1 -10,-16';
+    }
+    var x1=A.x,y1=A.y,x2=B.x,y2=B.y;
+    var mx=(x1+x2)/2, my=(y1+y2)/2, dx=x2-x1, dy=y2-y1;
+    var nx=-dy, ny=dx, len=Math.hypot(nx,ny)||1; var k=(e.dir==='up'?26:e.dir==='down'?-26:14);
+    var cx=mx+nx/len*k, cy=my+ny/len*k;
+    return 'M'+x1+','+y1+' Q'+cx+','+cy+' '+x2+','+y2;
+  }
+  // draw edges
+  var edgeEls=[];
+  edges.forEach(function(e){
+    var p=el('path',{d:edgePath(e),'class':'edge','marker-end':'url(#ar-'+e.s+')'});
+    p.setAttribute('stroke','var('+STAT[e.s].c+')');
+    p.setAttribute('stroke-dasharray',STAT[e.s].dash);
+    p.dataset.fam=NX[e.a].fam+' '+NX[e.b].fam; p.dataset.stat=e.s; p.dataset.dir=e.dir;
+    p.addEventListener('click',function(ev){ev.stopPropagation();selectEdge(e);});
+    edgeLayer.appendChild(p); e._el=p; edgeEls.push(e);
+  });
+  // draw nodes
+  nodes.forEach(function(n){
+    var g=el('g',{'class':'node',tabindex:'0',role:'button','aria-label':n.id});
+    g.setAttribute('transform','translate('+n.x+','+n.y+')');
+    var fill='var('+FAM[n.fam].c+')';
+    var shape;
+    if(n.role==='substrate'){ shape=el('polygon',{points:hexPts(30,20),'class':'shape'}); }
+    else if(n.role==='sink'){ shape=el('polygon',{points:'0,-20 24,0 0,20 -24,0','class':'shape'}); fill=(n.id==='MS'?'var(--s-orphan)':'var(--surface2)'); }
+    else if(n.role==='infra'){ shape=el('rect',{x:-52,y:-16,width:104,height:32,rx:3,'class':'shape'}); }
+    else { shape=el('rect',{x:-56,y:-18,width:112,height:36,rx:12,'class':'shape'}); }
+    shape.setAttribute('fill',fill);
+    if(n.flags.indexOf('dn')>=0){shape.setAttribute('stroke-dasharray','5 3');}
+    else if(n.flags.indexOf('as')>=0){shape.setAttribute('stroke-dasharray','2 3');}
+    if(n.flags.indexOf('rt')>=0){g.setAttribute('opacity','.62');}
+    g.appendChild(shape);
+    var lbl=el('text',{'text-anchor':'middle',y:n.role==='substrate'?'0':'-1','class':'lbl'});
+    lbl.textContent=n.id; g.appendChild(lbl);
+    // degree pill for hubs
+    if(n.flags.indexOf('hub')>=0){var d=el('text',{x:44,y:'-8','class':'deg','text-anchor':'middle'});d.textContent='in'+n.inD;
+      var dc=el('circle',{cx:44,cy:-11,r:9,fill:'var(--accent)'});g.insertBefore(dc,lbl);g.appendChild(d);}
+    // flag badges
+    var bx=-52;
+    n.flags.forEach(function(f){
+      var sym={dn:'⌀',as:'~',cp:'⊞',zk:'∅',rt:'␥',rd:'◇'}[f]; if(!sym)return;
+      var col={dn:'--s-orphan',as:'--s-seam',cp:'--f-combat',zk:'--s-orphan',rt:'--muted',rd:'--s-read'}[f];
+      var t=el('text',{x:bx,y:-22,'class':'badge'});t.setAttribute('fill','var('+col+')');t.textContent=sym;g.appendChild(t);bx+=13;
+    });
+    g.addEventListener('click',function(ev){ev.stopPropagation();selectNode(n);});
+    g.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();selectNode(n);}});
+    nodeLayer.appendChild(g); n._el=g;
+  });
+  function hexPts(w,h){var p=[];for(var i=0;i<6;i++){var a=Math.PI/3*i-Math.PI/6;p.push((w*Math.cos(a)).toFixed(1)+','+(h*Math.sin(a)).toFixed(1));}return p.join(' ');}
+
+  // ---- pan / zoom --------------------------------------------------------
+  var vb={x:0,y:0,w:W,h:H};
+  function setVB(){svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);}
+  function fit(){var r=svg.getBoundingClientRect();var ar=r.width/r.height;var gar=W/H;
+    if(gar>ar){vb.w=W*1.04;vb.h=vb.w/ar;}else{vb.h=H*1.06;vb.w=vb.h*ar;}
+    vb.x=(W-vb.w)/2;vb.y=(H-vb.h)/2;setVB();}
+  fit(); window.addEventListener('resize',fit);
+  var drag=null;
+  svg.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};svg.classList.add('drag');svg.setPointerCapture(e.pointerId);});
+  svg.addEventListener('pointermove',function(e){if(!drag)return;var r=svg.getBoundingClientRect();
+    vb.x-=(e.clientX-drag.x)*vb.w/r.width;vb.y-=(e.clientY-drag.y)*vb.h/r.height;drag.x=e.clientX;drag.y=e.clientY;setVB();});
+  function endDrag(){drag=null;svg.classList.remove('drag');}
+  svg.addEventListener('pointerup',endDrag);svg.addEventListener('pointercancel',endDrag);
+  svg.addEventListener('wheel',function(e){e.preventDefault();var r=svg.getBoundingClientRect();
+    var mx=vb.x+(e.clientX-r.left)/r.width*vb.w, my=vb.y+(e.clientY-r.top)/r.height*vb.h;
+    var f=e.deltaY>0?1.12:0.89; f=Math.max(0.4,Math.min(2.6,vb.w*f/W))*W/vb.w;
+    vb.w*=f;vb.h*=f;vb.x=mx-(mx-vb.x)*f;vb.y=my-(my-vb.y)*f;setVB();},{passive:false});
+  document.getElementById('zin').onclick=function(){zoom(0.82);};
+  document.getElementById('zout').onclick=function(){zoom(1.22);};
+  document.getElementById('zfit').onclick=fit;
+  function zoom(f){var cx=vb.x+vb.w/2,cy=vb.y+vb.h/2;vb.w*=f;vb.h*=f;vb.x=cx-vb.w/2;vb.y=cy-vb.h/2;setVB();}
+
+  // ---- selection / panel -------------------------------------------------
+  var panel=document.getElementById('panel'); var selNode=null;
+  function selectNode(n){
+    if(selNode)selNode._el.classList.remove('sel'); selNode=n; n._el.classList.add('sel');
+    var fl=n.flags.map(function(f){var m={dn:['dn','doc:null'],as:['as','[ASSUMPTION]'],rt:['rt','retire'],hub:['hub','hub in-'+n.inD],cp:['cp','compound 11-module'],zk:['zk','zero-Key'],rd:['hub','pure reader']}[f];return m?'<span class="flag '+m[0]+'">'+m[1]+'</span>':'';}).join('');
+    panel.innerHTML='<h3><span class="dot" style="background:var('+FAM[n.fam].c+')"></span>'+n.id+'</h3>'+
+      '<div class="flags">'+fl+'</div>'+
+      '<div class="kv"><b>Inventory</b>'+n.d.inv+'<b>Shape of code architecture</b>'+n.d.shape+
+      '<b>Connectivity</b>'+n.d.conn+'<b>Gaps</b>'+n.d.gaps+
+      '<b>Family / role</b>'+FAM[n.fam].name+' · '+({play:'gameplay',infra:'infrastructure',substrate:'substrate',sink:'sink'})[n.role]+'</div>';
+    panel.scrollTop=0;
+  }
+  function selectEdge(e){
+    if(selNode){selNode._el.classList.remove('sel');selNode=null;}
+    var A=NX[e.a],B=NX[e.b];
+    panel.innerHTML='<h3><span class="dot" style="background:var('+STAT[e.s].c+')"></span>'+e.a+' → '+e.b+'</h3>'+
+      '<div class="kv"><b>Key types</b><code>'+e.l+'</code>'+
+      '<b>Status</b>'+STAT[e.s].name+'<b>Direction</b>'+DIRS[e.dir]+
+      '<b>From → To</b>'+FAM[A.fam].name+' → '+FAM[B.fam].name+
+      (e.s==='seam'?'<b>Note</b>Annotation-debt: sparse sub-scale <code>targets[]</code>, not a missing mechanism (§12.2 A6 exemption).':'')+
+      (e.s==='orphan'?'<b>Note</b>Non-terminal Key emitted, consumed nowhere. '+(e.l.indexOf('ED-MB')>=0?'Known fabrication (ED-MB-0010) — not a real edge.':'Candidate missing-consumer.'):'')+
+      (e.dir==='read'&&e.b==='MS'?'<b>Note</b>MS is ticked in the sim (PP-255) but declared by no contract — GAP-F1, COMPLETE-THE-CHAIN.':'')+'</div>';
+    panel.scrollTop=0;
+  }
+  svg.addEventListener('click',function(){if(selNode){selNode._el.classList.remove('sel');selNode=null;}
+    panel.innerHTML='<p class="hint">Select a node or an edge. Filters isolate a family, edge status, or delivery direction.</p>';});
+
+  // ---- scorecard chips ---------------------------------------------------
+  var chips=[['27','modules',''],['99','L2 wiring edges',''],['173','code modules',''],['9','doc:null','warn'],
+    ['13','[ASSUMPTION]','warn'],['4','dangling emits','warn'],['20','!A6 seams','warn'],['3','import cycles','warn'],
+    ['52.7%','pointer resolved','warn'],['1/3','validation','bad']];
+  document.getElementById('chips').innerHTML=chips.map(function(c){return '<div class="chip '+c[2]+'"><span class="n">'+c[0]+'</span><span class="k">'+c[1]+'</span></div>';}).join('');
+
+  // ---- filters -----------------------------------------------------------
+  var state={fam:{},stat:{},dir:{},flag:{}};
+  Object.keys(FAM).forEach(function(k){state.fam[k]=true;});
+  Object.keys(STAT).forEach(function(k){state.stat[k]=true;});
+  ['up','down','lateral','self','wildcard','orphan','read'].forEach(function(k){state.dir[k]=true;});
+  ['dn','as','zk','hub','rt'].forEach(function(k){state.flag[k]=false;}); // flag filter = "highlight only"; off by default
+  function tgl(cls,label,color,pressed,cb){
+    var b=document.createElement('button');b.className='tgl '+(cls||'');b.setAttribute('aria-pressed',pressed);
+    b.innerHTML=(color?'<span class="sw" style="'+(cls==='line'?'border-top-color:':'background:')+color+'"></span>':'')+label;
+    b.onclick=function(){var p=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',!p);cb(!p);apply();};return b;
+  }
+  var tb=document.getElementById('toolbar');
+  var g1=grp('Subsystem family');Object.keys(FAM).forEach(function(k){g1.appendChild(tgl('',FAM[k].name,'var('+FAM[k].c+')',true,function(v){state.fam[k]=v;}));});
+  var g2=grp('Edge status');Object.keys(STAT).forEach(function(k){g2.appendChild(tgl('line',STAT[k].name,'var('+STAT[k].c+')',true,function(v){state.stat[k]=v;}));});
+  var g3=grp('Delivery direction');['up','down','lateral','self','wildcard','orphan','read'].forEach(function(k){g3.appendChild(tgl('',DIRS[k],'',true,function(v){state.dir[k]=v;}));});
+  var g4=grp('Isolate flag');[['dn','doc:null'],['as','[ASSUMPTION]'],['zk','zero-Key'],['hub','hub'],['rt','retire']].forEach(function(f){g4.appendChild(tgl('',f[1],'',false,function(v){state.flag[f[0]]=v;}));});
+  var rb=document.createElement('button');rb.className='btn';rb.textContent='Reset';rb.onclick=function(){location.reload();};
+  var g5=document.createElement('div');g5.className='fgroup';g5.appendChild(document.createElement('h4')).textContent='';g5.appendChild(rb);tb.appendChild(g5);
+  function grp(t){var d=document.createElement('div');d.className='fgroup';var h=document.createElement('h4');h.textContent=t;d.appendChild(h);var r=document.createElement('div');r.className='frow';d.appendChild(r);tb.appendChild(d);return r;}
+  function anyFlag(){return Object.keys(state.flag).some(function(k){return state.flag[k];});}
+  function apply(){
+    var fl=anyFlag();
+    nodes.forEach(function(n){
+      var vis=state.fam[n.fam];
+      if(vis&&fl){vis=n.flags.some(function(f){return state.flag[f];});}
+      n._vis=vis; n._el.classList.toggle('dim',!vis);
+    });
+    edges.forEach(function(e){
+      var v=state.stat[e.s]&&state.dir[e.dir]&&NX[e.a]._vis&&NX[e.b]._vis;
+      e._el.classList.toggle('dim',!v);
+    });
+  }
+  apply();
+
+  // ---- legend ------------------------------------------------------------
+  var lg=document.getElementById('legend');
+  var famHTML=Object.keys(FAM).map(function(k){return '<div class="li"><span class="dot" style="background:var('+FAM[k].c+')"></span>'+FAM[k].name+'</div>';}).join('');
+  var statHTML=Object.keys(STAT).map(function(k){return '<div class="li"><span class="ln" style="border-top-color:var('+STAT[k].c+');border-top-style:'+(STAT[k].dash==='0'?'solid':'dashed')+'"></span>'+STAT[k].name+'</div>';}).join('');
+  var dirHTML=Object.keys(DIRS).map(function(k){return '<div class="li">'+DIRS[k]+'</div>';}).join('');
+  var flagHTML='<div class="li"><b style="color:var(--s-orphan)">⌀</b>&nbsp;doc:null</div><div class="li"><b style="color:var(--s-seam)">~</b>&nbsp;[ASSUMPTION] resolver</div><div class="li"><b style="color:var(--f-combat)">⊞</b>&nbsp;compound (11 modules)</div><div class="li"><b style="color:var(--s-orphan)">∅</b>&nbsp;zero-Key / ownerless</div><div class="li"><b style="color:var(--muted)">␥</b>&nbsp;retirement candidate</div>';
+  lg.innerHTML='<h4>Node family (fill)</h4><div class="legend-grid">'+famHTML+'</div>'+
+    '<h4 style="margin-top:12px">Edge status (line)</h4><div class="legend-grid">'+statHTML+'</div>'+
+    '<h4 style="margin-top:12px">Delivery direction (§12 six-directional substrate)</h4><div class="legend-grid">'+dirHTML+'</div>'+
+    '<h4 style="margin-top:12px">Node flag (badge)</h4><div class="legend-grid">'+flagHTML+'</div>'+
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:10px">Shape: rounded = gameplay module · rectangle = infrastructure · hexagon = substrate · diamond = sink/ownerless. Dashed border = doc:null; dotted = [ASSUMPTION].</div>';
+})();
+</script>

@@ -30,6 +30,37 @@ def main():
     else:
         print("working tree: clean")
 
+    # currency drift (ED-1087): one line from the self-updating recency gate — stamps,
+    # ID ceilings, register headers, dead maintainers. Import (one rule, one home);
+    # never allowed to break session start.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import currency_consistency_check as ccc
+        print(ccc.summary_line())
+    except Exception:
+        pass
+
+    # workplan position (ED-IN-0010): one line from the progress board + staleness flag.
+    # Renderer lives once in workplan_status.py; never allowed to break session start.
+    try:
+        import workplan_status as wps
+        print(wps.summary_line())
+        warn = wps.staleness()
+        if warn:
+            print(warn)
+    except Exception:
+        pass
+
+    # audit-family staleness (Phase 5a, ED-IN-0032 planning): at most two stalest
+    # one-line warnings. Renderer lives once in audit_staleness.py; never allowed to
+    # break session start.
+    try:
+        import audit_staleness as ast
+        for warn in ast.top_stale():
+            print(warn)
+    except Exception:
+        pass
+
     if os.path.exists('HANDOFF.md'):
         try:
             with open('HANDOFF.md', encoding='utf-8', errors='replace') as f:
