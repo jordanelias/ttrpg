@@ -44,7 +44,7 @@ Grouped by scale band. Within each row: **Owner** = the one module that may writ
 
 | Primitive | Owner | Bucket · Range | ← Writers (digested in) | → Readers (exported out) |
 |---|---|---|---|---|
-| **Mending Stability (MS)** | threadwork | `[C]` 0–100, start 60 | threadwork ops (Weaving ±1/−2, Pulling −1/−2, POP −3, Locking −1/−3, Dissolution −3/−8, **Mending +1/+2**); mass_battle Substrate Fracture −1; Calamity drift | victory (MS=0 Post-Calamity, ≤5 Second Calamity, →20 recovery); territorial_piety CV drift; threadwork op Ob scaling; scene_slate Thread-State scenes; articulation |
+| **Mending Stability (MS)** | ⚠️ *ownerless* (multi-writer) | `[C]` 0–100, start 60 | threadwork ops (Weaving ±1/−2, Pulling −1/−2, POP −3, Locking −1/−3, Dissolution −3/−8, **Mending +1/+2**); mass_battle Substrate Fracture −1; Calamity drift — canon flags MS *unowned* (victory reads it as an "unowned clock"; threadwork `state[]` omits it) | victory (MS=0 Post-Calamity, ≤5 Second Calamity, →20 recovery); territorial_piety CV drift; threadwork op Ob scaling; scene_slate Thread-State scenes; articulation |
 | **Institutional Pressure (IP)** | peninsular_strain | `[C]` 0–100, start 20 | peninsular_strain accounting (rises from low-Accord territories); mass_battle deferred IP advance; **Crown "Diplomatic Outreach to Schoenland" reduces** | victory (IP=100 Occupation P1; ≥85/≥80 for 3s → P2/P3; <85/<75 stalls); Trade Ob (+1 if IP≥30) |
 | **Turmoil** | peninsular_strain | `[C]` 0–10, start 0 | peninsular_strain accounting; battle aftermath (Campaign/War) | victory era reads; articulation (replaces retired Parliament Integrity) |
 | **Church Influence (CI)** | territorial_piety | `[C]` 0–100, start 28 | territorial_piety generation (Piety Spread, CV); faction **Assert +1**, **Suppress negates gain**; seasonal cap | ci_political (Political Pool = f(Mandate,CI)); victory; Parliamentary Stay (gated CI<55); Theocracy Unification at CI=100 |
@@ -63,7 +63,14 @@ Grouped by scale band. Within each row: **Owner** = the one module that may writ
 | **Military** | faction_state | `[A]` 0–7 | Muster; battle losses; War-Auth | Blockade gate (Mil 3); Martial-Governance; Commander bonus `floor(Mil/2)`; Levies |
 | **Intel** | faction_state | `[A]` 0–7 | Spy/Investigate outcomes; Intel-Advancement Counter (resets +1 at 4) | Spy Ob (floor target Intel/2); Counter-Intelligence; Intelligence-Holdings buffer |
 | **Stability** | faction_state | `[A]` 0–7 (0=eliminated) | Censure −1, Blockade −1, Outlawry −2; Suppress-fail −1; Ransom-refuse −1; env shocks | Faction-Discipline `Stability·10`; Diplomacy Ob (floor Sta/2); succession; victory |
-| **Faction rank Standing** | faction_politics | `[T]` 0–7 | promotion/demotion/succession/exile; magnitude 1–3 | player action gates; sub-office ladders; `state.standing_change` |
+| **Faction rank Standing** | faction_politics | `[T]` 0–7 ⚠️ | promotion/demotion/succession/exile; magnitude 1–3 | player action gates; sub-office ladders; `state.standing_change` — ⚠️ BG faction/political Standing is **0–5** (P-15): open scale divergence |
+| **Faction Legitimacy (buffer)** | faction_state | `[D]` 0–140 `Mandate·20` | Mandate | Mandate-loss absorption buffer — distinct from settlement `set.legitimacy` (0–7) |
+| **Faction Discipline (buffer)** | faction_state | `[D]` 0–70 `Stability·10` | Stability | Stability-loss buffer — distinct from unit Discipline (1–7) |
+| **Levies Available** | faction_state | `[D]` | Wealth / Military | Muster ceiling |
+| **Intelligence Holdings** | faction_state | `[D]` | Intel | Spy / counter-intel reserve |
+| **Reputation** | faction_state | `[T]` 0–5 (BG, P-14) | conduct | Rep≥3 → +1 starting Disposition (fieldwork §5) |
+| **Casus Belli** | faction_state | `[C]` per-faction (cap 1/target) | seizure; Outlawry rider; parliament/treaty breach | −1 Ob to a Military action (consumed on use) |
+| **Thread Debt** | faction_state | `[C]` per-token (territory) | thread-op token issuance | tokens >1 season old → MS/RS −1/token |
 | **CI Political Pool** | ci_political | `[P]` | Church `Mandate+floor(CI/20)`; opp `max(0,Mandate−floor(CI/30))` | Parliamentary vote resolution |
 | **Faction-specific tracks** | faction_state | `[T]` | per-track (Torben/Elske Loyalty, Löwenritter Autonomy, Popular Will, Warden Coop/Recognition, Intel-Advancement, Guild Favour, Cardinal Influence, Ministry tokens) | faction behaviour, victory paths, unique cards |
 
@@ -82,7 +89,8 @@ Grouped by scale band. Within each row: **Owner** = the one module that may writ
 | **Fort Level** | territory_stats | `[A]` 0–4 | Fortify (territory); geography seed | Garrison Strength `+Fort·30`; occupy Ob `2+Fort` |
 | **Accord** | peninsular_strain (per-territory) | `[T]` 0–3 | conquest→1; governance; battle defender Order−1 | revolt eligibility (0); IP/Strain advance; victory; Duty Governance |
 | **Piety Track (PT/CV)** | territorial_piety | `[T]` 0–5 (per-territory) | Piety-Spread +1; Cultural Reclamation −1; thread/Calamity drift | **CI generation**; temperaments; Church victory |
-| **Administration Points (AP)** | settlement_layer (redesign) | `[P]` 2–5 | `=2+FacilityTier`; Retain-Clerks +1/Clerk | governance verb budget/season |
+| **Administration Points** (admin-AP) | settlement_layer (redesign) | `[P]` 2–5 | `=2+FacilityTier`; Retain-Clerks +1/Clerk | governance verb budget/season — ⚠️ acronym "AP" collides with Church Attention Pool below |
+| **Church Attention Pool** (AP) | territorial_piety / Church | `[C]` 0–10 per-territory | failed deep Survey; Niflhel / heresy activity; Active Inquisition | First Inquisitor at AP≥3; second at AP≥6 |
 | **Guild Favour** | settlement_layer | `[T]` 1–7 | Guild contracts/Ordenanza | Guild contract access; player Resources |
 | *derived (ro):* **Local Economy** `Pros·50` · **Garrison Strength** `Def·20+Fort·30` · **Public Order** `Order·20` · **province Accord** `floor(mean Order)` · **Settlement Weight** `W_s` — writers = their inputs above; readers = income, defense math, riot gate, Mandate | | | | |
 
@@ -93,9 +101,15 @@ Grouped by scale band. Within each row: **Owner** = the one module that may writ
 | Primitive | Owner | Bucket · Range | ← Writers (digested in) | → Readers (exported out) |
 |---|---|---|---|---|
 | **Attributes** (Str/End/Agi/Foc/Acu/Will·Spi/Att/Cha/Bonds) | actor substrate | `[A]` 1–7 | character build; legacy/growth | every personal pool + derived value |
-| **Health** | personal_combat | `[D]` 13–55 (ro) | `(End+6)(MW+1)−cumulative_damage`; wounds land on cumulative_damage substrate | felling gate (Health=0→`scene.combat_felled`) |
+| **Health** | personal_combat | `[D]` (ro) | ⚠️ **canonical = combat_engine_v1** `round(WI·(MW+1)+0.25·Str·End) − cumulative_damage`, `WI=round(End+4+0.4·Spi)` (module_contracts §827-838). The v30 `(End+6)(MW+1)` 13–55 form is SUPERSEDED; range itself diverges in canon (13–55 clock_registry / 14–48 core.md / sigma engine) — flagged | felling gate (Health=0→`scene.combat_felled`) |
+| **cumulative_damage** | personal_combat | `[T]` | combat_hit accrual (the substrate every Health delta lands on — **F1 guard**, never write Health directly) | Health derivation; Wounds `min(floor(cum/WI),MW+1)` |
+| **Wound Interval / Max Wounds** | personal_combat | `[D]` | `WI=round(End+4+0.4·Spi)`; `MW=min(floor(End/2)+1,3)` | Health formula; Wounds cap |
 | **Wounds** | personal_combat | `[T]` 0–max `floor(End/2)+1` | combat_hit accrual | bilateral-Ob penalty (+0.15 atk/+0.25 def, ED-1041) |
+| **Initiative (Vor/Nach)** | personal_combat | `[T]` (continuous, decaying) | disposition lean; hit-gains; Indes steals | exchange-order; who acts first |
+| **Poise / structure (kuzushi)** | personal_combat | `[T]` (per-beat) | overcommit/bind/hit degrade −; per-beat regen + | structure-break; mode availability |
 | **Stamina** | personal_combat | `[P]` 5–47 `3·End+2·Spi` | exertion; Take-a-Breath +End | combat action economy |
+| **Resolve** | actor substrate | `[D]` 1–7 (`Spirit`) | Spirit | **Inspiration** pool ceiling (core.md §Resolve) |
+| **Inspiration** | actor substrate | `[P]` 0–Resolve | narrative earn | spendable re-roll/boost (fieldwork Inspiration Spend) |
 | **Composure** | actor substrate | `[D]` 3–21 `Cha·3` | knot_ruptured −5; contest strain | contest survival; Rattled marks |
 | **Concentration** | social_contest | `[P]` 5–35 `3·Foc+2·Spi` | −5/exchange, +5 loss | Spent gate (0→−2D self) |
 | **Momentum** | actor substrate | `[T]` 0–4 | Rescue +2; contest wins | spendable bonus dice |
@@ -225,7 +239,7 @@ hand-wired: `L/PS→Mandate`, `Prosperity→Treasury`, `CV→CI`. These are the 
    is the temporal spine — ED-1051 open.
 2. **Unkeyed CANONICAL primitives:** CV/CI and the victory-era transitions emit **no Key** —
    articulation/observers are blind to Church-power and era changes through the bus.
-3. **3-way pointer disagreements:** Combat Pool (3 defs); Coherence bucket; attribute roster `IN FLUX`.
+3. **Pointer disagreements:** Combat Pool (still 3 defs, CLAUDE.md §5); attribute roster `IN FLUX`; Health formula/range diverges (v30 13–55 vs core.md 14–48 vs the sigma engine). *(Coherence's former 3-way was resolved to `track` by PR #112 — no longer open.)*
 4. **Name collisions:** personal Truth/"Piety" vs territory "Piety Track" vs Church "Piety Spread";
    faction "Legitimacy" (`Mandate·20`) vs settlement `set.legitimacy` (0–7); faction "Discipline"
    (`Stability·10`) vs unit Discipline (1–7).
