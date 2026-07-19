@@ -147,6 +147,13 @@ ci_checks:
     ci_job: quantity-vocabulary-check
     notes: "Report-only (continue-on-error), ED-IN-0029. Not listed in ci-summary's needs."
 
+  - path: tools/ci_formula_prose_check.py
+    level: 5
+    role: "A18 formula single-source / prose-drift: one defining_surface per quantity, every other carrier must cite or textually match it (string-diff, no formula evaluation). Reuses tools/quantity_registry.py; anchors on the 2026-07-08 census."
+    paired_hook: ""
+    ci_job: formula-prose-check
+    notes: "Report-only (continue-on-error), ED-IN-0029 / OPT-AV-5 / ED-1052. Also runs locally via valoria_local.py (report-only). Attribute-family rows excluded while the roster (OPT-AV-1) is OPEN; the warn->block flip is OPT-AV-6. Not listed in ci-summary's needs."
+
   - path: tools/ci_sim_fabrication_check.py
     level: 5
     role: "Blocking anti-fabrication guard: every numeric literal in sim/*.py must be ledger-cited or carry a canonical-source comment."
