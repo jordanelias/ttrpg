@@ -76,7 +76,7 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
     Phase-2 "wrapper computes NO σ" invariant was only PARTIALLY met (the APPROACH path + several sites still
     assembled σ inline) and "ONE derivation" is violated (percussion authority derived twice with DIFFERENT inputs —
     `core.p_auth` reads hand-set `pob_frac`, `WP.percussion_authority` the derived `PoB_frac`; diverge up to Δ0.359).
-    Report: `designs/audit/2026-06-30-scene-combat-gate1-audit/gate1_audit_report.md`.
+    Report: `audit/lane-a/2026-06-30-scene-combat-gate1_audit_report.md`.
     - **LANDED (byte-identical — seeded 576-cell SHA `71c3bce9…` reproduced; pytest 65→73):** `250eefd7` wrapper
       de-leak completion (lifted the real inline σ-assemblies — `stophit_sigma`/`init_emphasis_sigma`/
       `counter_success_prob`/`close_rate`/`consistency`/`mental_fatigue`/`poise_regen`/`bind_dominance_p`/

@@ -90,7 +90,7 @@ are injected by their owning modules; the core never reaches up the DAG.
 |---|---|---|
 | troop types | `TROOP_TYPE_ROLES`/`ROLE_SPEC` dicts (config L148/164); `TROOP_TYPE_STATS`/`stats_for`/`of_type` (orch, ED-1018) | stats wired; **roles inert** |
 | formations | `CELL_PATTERN_FN` + `*_cells` generators (geometry L9–80) | pattern-generators, not a `Formation` object; effects partly in hardcoded `cell_speed` |
-| tactics | — | **absent**; 4 in-scope GAPs (feigned-retreat, ambush, hammer&anvil, skirmish) per `mb_engine_completeness_audit.md` |
+| tactics | — | **absent**; 4 in-scope GAPs (feigned-retreat, ambush, hammer&anvil, skirmish) per `audit/lane-c/2026-06-01-massbattle-stub-wiring_mb_engine_completeness_audit.md` |
 | strategy/doctrine | only `Unit.stance` (orch L1253) | **absent**; Aggression/Cohesion unbuilt |
 | cells | `_ColBlock` (percell L10), `build_column_grid` (percell L25), octagon (geometry) | **WIRED, genuinely bottom-up** |
 | unit/subunit hierarchy | `Subunit`/`Unit` (orch L534/1235) | exists but **anatomical, not tactical** — subunit carries own stats (ED-1016/17/19) yet is inert in default mode; resolution operates on the unit pool |

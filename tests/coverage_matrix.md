@@ -380,3 +380,8 @@ Archived entries in tests/coverage_matrix_archive.md
   provenance comments citing that file in phase4_agi_dominance_2026-05-15.py, phase5_continuous_engine_2026-05-15.py,
   phase6_dominance_solvers_2026-05-15.py, phase7_action_triangle_2026-05-15.py, phase8_smart_ai_v2_2026-05-15.py —
   path text only, no formula/threshold/logic touched. Co-file satisfied (documentation-only trip).
+
+## 2026-07-18b — adversarial-pass follow-up: two more stale path fixes [no mechanical change]
+- mass_battle/engine.py comment + phase6_sim_verification_ledger.json `canonical_source` both still cited the
+  pre-move `tests/audit/...` path; repointed to `audit/lane-*/...`. Path text only. Register near its 10k-token
+  cap — trim to the archive file at the next real entry.

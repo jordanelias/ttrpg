@@ -37,7 +37,7 @@ def _resolve(sym):
     return None
 
 # MECHANICS registry — name -> {fn, toggle (env var or None), source, status}
-# status: WIRED | PARTIAL | STUB. Mirrors the completeness audit (designs/audit/.../mb_engine_completeness_audit.md).
+# status: WIRED | PARTIAL | STUB. Mirrors the completeness audit (audit/lane-c/2026-06-01-massbattle-stub-wiring_mb_engine_completeness_audit.md).
 MECHANICS = {
     # geometry / deployment
     "cell_layout":        {"fn":"oriented_pattern",      "toggle":None,        "source":"mass_battle_v30 §A.3b", "status":"WIRED"},

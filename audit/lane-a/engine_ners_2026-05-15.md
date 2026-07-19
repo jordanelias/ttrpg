@@ -3,7 +3,7 @@
 **Date:** 2026-05-15
 **Scope:** Dice engine + derived score architecture + Ob/Pool channel design, audited as the unified mechanical substrate underneath all Valoria systems.
 **Method:** Throughlines → NERS per throughline → six-direction audit → consolidated inconsistency map → unification proposals.
-**Predecessors reviewed:** `tests/audit/all_directions_ners_v27.md` (weapon-system scope), `tests/audit/pp717_ners_all_directions.md` (PP-717 D1–D5 scope), `tests/audit/engine_audit_2026-04-18.md` (sim-code-vs-canon scope). This audit is **first engine-design NERS at the architectural level** — no prior coverage at this scope.
+**Predecessors reviewed:** `audit/lane-a/all_directions_ners_v27.md` (weapon-system scope), `audit/lane-a/pp717_ners_all_directions.md` (PP-717 D1–D5 scope), `audit/lane-c/engine_audit_2026-04-18.md` (sim-code-vs-canon scope). This audit is **first engine-design NERS at the architectural level** — no prior coverage at this scope.
 
 ---
 

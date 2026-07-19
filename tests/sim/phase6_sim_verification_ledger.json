@@ -93,7 +93,7 @@
     {
       "sim_variable": "pool_E_softcap formula",
       "value": "min(agi, 4) * 2 + max(0, agi - 4) + hist + 3",
-      "canonical_source": "tests/audit/all_directions_ners_v27.md",
+      "canonical_source": "audit/lane-a/all_directions_ners_v27.md",
       "section": "PP-717 D2 \u2014 ratified in v22-v27 weapon sim, reverted by Decision A 2026-05-15",
       "quoted_text": "Combat Pool = min(Agi,4)*2 + max(0,Agi-4)*1 + Hist + 3 \u2014 diminishing returns above Agi 4"
     },

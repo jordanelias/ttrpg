@@ -11,7 +11,7 @@ import json, sys, os, collections
 SRC = sys.argv[1] if len(sys.argv) > 1 else \
     r"C:/Users/Jordan/AppData/Local/Temp/claude/C--Github-ttrpg/3aeb16e9-3e5b-4241-b8a5-b8d5dd701181/tasks/w4cn2qkxi.output"
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
-    r"C:/Github/ttrpg/designs/audit/2026-06-22-npc-comprehensive-audit.md"
+    r"C:/Github/ttrpg/audit/lane-a/2026-06-22-npc-comprehensive-audit.md"
 
 data = json.load(open(SRC, encoding="utf-8"))
 res = data.get("result", {})
