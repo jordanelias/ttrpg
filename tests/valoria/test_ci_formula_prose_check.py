@@ -37,6 +37,19 @@ def test_core_expr_takes_primary_not_recovery_subformula():
     assert mod._norm(prose) == mod._norm('(3 × Endurance) + (2 × Spirit)')
 
 
+def test_norm_does_not_truncate_after_second_operator():
+    # REGRESSION (drift-hiding bug): a difference in the 2nd term must remain visible — the
+    # normalizer previously truncated at the 2nd operator, collapsing both to "(3*end)+(2".
+    assert mod._norm('(3*Endurance)+(2*Spirit)') != mod._norm('(3*Endurance)+(2*Focus)')
+    assert mod._norm('(3*Endurance)+(2*Spirit)') == '(3*endurance)+(2*spirit)'
+
+
+def test_norm_rejects_bare_numeric_range():
+    # "5-35" is a bound, not a subtraction formula
+    assert mod._norm('range 5-35') == ''
+    assert mod._core_expr('Threshold = Spirit*5, range 5-35') == 'Spirit*5'
+
+
 def test_looks_like_formula_rejects_bold_number_and_hyphenated_word():
     assert not mod._looks_like_formula('**28**')          # markdown bold, not a `*` operator
     assert not mod._looks_like_formula('slow-integrating')  # hyphenated word, not subtraction
@@ -81,6 +94,13 @@ def test_scan_suppresses_superseded_restatement():
     assert stats['census_drift'] == 0
 
 
+def test_scan_does_not_oversuppress_on_the_word_was():
+    # REGRESSION (over-suppression bug): a genuine stale restatement phrased "X was <formula>" must
+    # still be flagged — bare "was"/"old"/"corrected" are no longer treated as supersession markers.
+    findings, stats = mod.scan('.', _census('was (Agility × 2) + 3'), live_scan=False)
+    assert stats['census_drift'] == 1
+
+
 def test_scan_excludes_attribute_rows_while_roster_open():
     # attribute_scalar rows carry "raw attribute 1-7" and must never be flagged (OPT-AV-1 OPEN)
     row = [{
@@ -95,6 +115,39 @@ def test_scan_excludes_attribute_rows_while_roster_open():
     findings, stats = mod.scan('.', row, live_scan=False)
     assert stats['roster_skipped'] == 1
     assert stats['census_drift'] == 0
+
+
+# ─── live-scan path (previously untested): extraction, subject match, end-to-end ───
+
+def test_extract_line_formula_matches_only_correct_subject():
+    names, key = ['Test Pool', 'TP'], None
+    # table row whose first cell is the quantity -> extracted
+    assert mod._extract_line_formula('| Test Pool | (Agility × 2) + 3 | min 5 |', names, key) \
+        == ('Test Pool', '(Agility × 2) + 3')
+    # a DIFFERENT quantity that merely mentions the name in an effect line -> not attributed
+    assert mod._extract_line_formula('| Thread Tension | Test Pool +2 |', names, key) is None
+    # inline definition
+    got = mod._extract_line_formula('Test Pool = floor(Bonds/2)+1 per rule', names, key)
+    assert got and got[0] == 'Test Pool'
+
+
+def test_scan_live_flags_prose_restatement(tmp_path):
+    # a real prose file under engine/params with a drifting restatement is caught by --live-scan
+    d = tmp_path / 'engine' / 'params'
+    d.mkdir(parents=True)
+    (d / 'x.md').write_text('| Test Pool | (Agility × 2) + 3 | min 5 |\n', encoding='utf-8')
+    census = _census('(Spirit*2)+3')  # defining surface says Spirit-based; prose says Agility
+    findings, stats = mod.scan(str(tmp_path), census, live_scan=True)
+    live = [f for f in findings if f['type'] == 'LIVE_DRIFT']
+    assert stats['live_drift'] == 1 and live and live[0]['drift_surface'].endswith('x.md:1')
+
+
+def test_scan_live_off_by_default_reads_no_prose(tmp_path):
+    d = tmp_path / 'engine' / 'params'
+    d.mkdir(parents=True)
+    (d / 'x.md').write_text('| Test Pool | (Agility × 2) + 3 |\n', encoding='utf-8')
+    findings, stats = mod.scan(str(tmp_path), _census('(Spirit*2)+3'), live_scan=False)
+    assert stats['live_drift'] == 0
 
 
 # ─── reuse-by-identity (CLAUDE.md §8): the resolver is imported, not re-implemented ───

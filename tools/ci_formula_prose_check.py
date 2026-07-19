@@ -19,9 +19,10 @@ automated detector." This is that detector.
 WHAT IT DOES (§3.2 mechanical predicate, verbatim intent):
   1. Anchors on the 2026-07-08 census (02_census/quantity_census.yaml): each row already carries
      the ONE `defining_surface` and the formula asserted there, plus every other carrier surface.
-  2. Re-scans the LIVE prose (engine/params/**/*.md + the design surfaces the census cites) for
-     each quantity's name/aliases, extracting any formula RESTATEMENT (markdown table cell or
-     inline `X = expr`).
+  2. Re-scans the LIVE prose under engine/params/**/*.md for each quantity's name/aliases,
+     extracting any formula RESTATEMENT (markdown table cell or inline `X = expr`). (Scope limit:
+     the live scan currently walks ONLY engine/params — design-doc / systems/ / module_contracts
+     carriers the census cites are covered by the deterministic census-diff core, not re-scanned.)
   3. Normalizes both strings (unicode ×/÷/−/⌊⌋, markdown emphasis, bracketed citations, min/max
      clamps) — it does NOT evaluate formulas; string-normalized inequality plus a supersession
      whitelist is the whole test (§3.2: "does not need to evaluate formulas").
@@ -38,9 +39,11 @@ SCOPE / TRUST CAVEATS (stated, not silently dropped — the observatory's under-
     CANDIDATE drift to triage, not verdicts — precision is favored over recall (a missed
     restatement is a quiet false-negative; a noisy false-positive erodes trust). The census-diff
     core (intra-quantity recorded-formula divergence) is the deterministic, reliable half.
-  * The census is a 2026-07-08 evidence snapshot; a cited surface may have MOVED. A surface whose
-    line no longer exists / no longer states the formula is reported as STALE-SURFACE, separately
-    from live drift — a repoint, not a contradiction.
+  * The census is a 2026-07-08 evidence snapshot; a cited `defining_surface` may since have MOVED
+    (params/ -> engine/params/, designs/scene/combat -> systems/combat/). The report echoes the
+    census's file:lines verbatim and does NOT yet verify they still resolve at HEAD — treat a
+    defining-surface path as needing a repoint check before acting. (A surface-liveness check is a
+    documented next step, not implemented here.)
 
 REUSE, NOT REIMPLEMENTATION (CLAUDE.md §8 — every rule lives once):
   * tools/quantity_registry.py `resolve()` — the ONE resolver for name→registry key (imported,
@@ -89,9 +92,11 @@ _ROSTER_GATED_KINDS = {'attribute_scalar', 'attribute_aggregate'}
 # Prose surfaces the live re-scan walks (in addition to any design surface the census cites).
 _PROSE_ROOTS = [os.path.join('engine', 'params')]
 
+# Deliberately SPECIFIC: bare "was"/"old"/"corrected" over-suppressed real drift phrased
+# "Mandate was round(0.5L+0.5PS)" (a genuine stale restatement) — dropped. These markers only
+# fire on explicit supersession vocabulary.
 _SUPERSESSION_MARKERS = re.compile(
-    r'struck|superseded|supersede|deprecat|historical|legacy|no longer|~~|'
-    r'\bwas\b|\bold\b|pre-?ed|corrected|retired|OFF-path|not current',
+    r'struck|supersede|deprecat|\blegacy\b|no longer|~~|retired|off-path|historical record',
     re.IGNORECASE)
 
 
@@ -116,33 +121,37 @@ def _demark(s):
     return s
 
 
-# A formula run: a function call, a `*`//` run, or a +/- with a NUMERIC/paren operand (so a
-# hyphenated word like "slow-integrating" is not read as subtraction).
-_OP_RUN_RE = re.compile(
-    r'(?:floor|ceil|round|min|max)\s*\([^)]*\)'
-    r'|[A-Za-z0-9_(). ]*[*/][A-Za-z0-9_(). +\-]*'
-    r'|[A-Za-z0-9_(). ]*[0-9)] *[+\-] *[0-9(][A-Za-z0-9_(). +\-]*')
 # A bare state-change delta ("MS +2", "Stability -1") — an EFFECT, not a definition.
 _DELTA_RE = re.compile(r'^[A-Za-z .]{0,24}[+\-]\s*\d+\s*$')
+# A bare numeric range ("5-35", "0-100") — a bound, not a formula.
+_RANGE_RE = re.compile(r'^\(?\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?\)?$')
+# Trailing prose-annotation / secondary-formula clauses on a formula field
+# (", range 5-47", "; recovery = (End+H)*2", ", depletes 5/exchange"). NOTE: 'threshold' is
+# deliberately NOT a cut keyword — it is often the definiendum ("Threshold = Spirit*5").
+_ANNOT_CLAUSE_RE = re.compile(
+    r'[;,]\s*(?:range|recovery|recover|deplet|cap|starts?|per[- ]?op|per exchange|'
+    r'scale|where|note|see)\b.*$', re.IGNORECASE)
+# A short prose "Name = " definitional prefix ("Threshold = Spirit*5" -> "Spirit*5"); the LHS must
+# be plain words, so it never eats a formula LHS like "(3*End)+...".
+_DEF_PREFIX_RE = re.compile(r'^[A-Za-z][A-Za-z ]{0,30}=\s*')
+# An "(Author 2026-...)" annotation parenthesis (no arithmetic meaning).
+_YEAR_PAREN_RE = re.compile(r'\([^)]*\b(?:19|20)\d\d\b[^)]*\)')
 
 
 def _core_expr(s):
-    """Pull the PRIMARY arithmetic expression out of a prose-wrapped formula field. The census
-    records formulas as prose ("CURRENT: (3*End)+(2*Spirit), range 5-47; recovery = (End+H)*2");
-    comparing the whole blob false-positives, and taking the LONGEST run wrongly grabs the recovery
-    sub-formula. The primary formula leads, so take the FIRST run and strip any prose lead-in."""
+    """Reduce a prose-wrapped formula field to its arithmetic expression. Correctness invariants
+    (each a fixed bug): (1) NEVER truncate at the 2nd operator — the whole expression is kept, so
+    `(3*End)+(2*Spirit)` != `(3*End)+(2*Focus)`; (2) a leading `LABEL:` and a short `Name =` prefix
+    are stripped; (3) trailing ", range .../; recovery ..." annotation clauses are cut; (4) a bare
+    numeric range is NOT a formula. The primary formula leads the field, so cut tail-first."""
     if not s:
         return ''
     s = _demark(s)
     s = re.sub(r'^[^:]{0,22}:\s*', '', s.strip())   # drop a leading "CURRENT:" / "LINEAR:" label
-    runs = _OP_RUN_RE.findall(s)
-    if not runs:
-        return s
-    core = runs[0]
-    # strip a lowercase prose lead-in ("implemented as (3*..." -> "(3*..."), but never a function
-    # head like "min(" (no trailing space before the operand).
-    core = re.sub(r'^[a-z]+(?: [a-z]+)* +(?=[(\d])', '', core)
-    return core
+    s = _ANNOT_CLAUSE_RE.sub('', s)                  # cut trailing ", range .../; recovery ..." tails
+    s = _DEF_PREFIX_RE.sub('', s)                    # "Threshold = " -> "" (keep the RHS definition)
+    s = re.sub(r'^\s*[a-z]+(?: [a-z]+)* +(?=[(\d])', '', s.strip())  # strip a lowercase prose lead-in
+    return s.strip()
 
 
 def _norm(expr):
@@ -152,24 +161,25 @@ def _norm(expr):
     if not expr:
         return ''
     s = _core_expr(expr)
+    s = _YEAR_PAREN_RE.sub('', s)                   # drop "(Author 2026-..)" annotations
     s = _CITATION_RE.sub('', s)                     # drop [..]/(per..)/(ED-..) citations
     s = _CLAMP_RE.sub(r'min:\1', s)                 # "minimum 5" -> min:5
     s = _CLAMPMAX_RE.sub(r'max:\1', s)
     s = s.lower()
-    s = re.sub(r'\bhistory\s+points\b', 'history', s)
-    s = re.sub(r'\brelevant\s+history\b', 'history', s)
-    s = re.sub(r'\bpoints\b', '', s)
+    s = re.sub(r'\b(?:relevant\s+)?history(?:\s+points)?\b', 'history', s)
     s = re.sub(r'[\s,]+', '', s)                    # drop whitespace + separators
-    return s.strip('.')
+    s = s.strip('.')
+    return '' if _RANGE_RE.match(s) else s
 
 
 def _looks_like_formula(cell):
-    """Cell/RHS is a real formula worth comparing: has a binary/function operator AND is not a bare
-    state-change delta ("MS +2"). A definition combines operands; an effect just nudges a track."""
+    """Cell/RHS is a real formula worth comparing: has a binary/function operator AND is neither a
+    bare state-change delta ("MS +2") nor a bare numeric range ("5-35"). A definition combines
+    operands; an effect just nudges a track; a range is a bound."""
     if not cell or len(cell) > 200:
         return False
     c = _demark(cell).strip()
-    if _DELTA_RE.match(c):
+    if _DELTA_RE.match(c) or _RANGE_RE.match(c):
         return False
     return bool(re.search(r'[*/]|[0-9)] *[+\-] *[0-9(]|\b(?:floor|ceil|round|min|max)\s*\(', c))
 
@@ -259,7 +269,7 @@ def scan(root, census, live_scan=False):
     """
     findings = []
     stats = {'rows': 0, 'formula_rows': 0, 'roster_skipped': 0, 'live_drift': 0,
-             'census_drift': 0, 'stale_surface': 0, 'clean': 0}
+             'census_drift': 0}
 
     prose = {}
     if live_scan:
@@ -392,6 +402,13 @@ def run(root, output_dir=None, census_path=None, live_scan=False):
 
 
 def main():
+    # Report text echoes census formulas that contain ×/÷/− etc.; a cp1252 console would otherwise
+    # crash (or mojibake) on them. Force UTF-8 with lossy fallback for the CLI entry point only
+    # (never in run(), so pytest's capture is untouched).
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
     ap.add_argument('--output-dir', default=None, help='write register.md + data/ here (else stdout)')
