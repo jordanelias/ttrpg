@@ -14,7 +14,7 @@ Immutable source documents and compliance records. Higher-ranked document always
 | File | Scope | Result | Date |
 |------|-------|--------|------|
 | `audit_threadwork_v24.md` | Threadwork v2.4 — 14-constraint check | PASS 14/14 | 2026-03-30 |
-| `audit_threadwork_v25.md` | Threadwork v2.5 — recheck + 3 new philosophical claims | PASS 14/14 | 2026-03-30 |
+| `audit/lane-a/audit_threadwork_v25.md` | Threadwork v2.5 — recheck + 3 new philosophical claims | PASS 14/14 | 2026-03-30 |
 
 ## Live Registers
 | File | Purpose |

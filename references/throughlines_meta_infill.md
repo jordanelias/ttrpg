@@ -184,7 +184,7 @@ Coverage: 40 of 41 + T-15a/b/c (T-10 struck; T-15a/b/c added; T-26..T-41 from v3
 
 ---
 
-*[EDITORIAL: ED-738-adjacent — М-7..М-11 derived from S1–S7 audit synthesis per designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md.]*
+*[EDITORIAL: ED-738-adjacent — М-7..М-11 derived from S1–S7 audit synthesis per audit/lane-a/rigorous_audit_synthesis_s1_s7_v3_1.md.]*
 
 ### §3.2 М-dependencies explained
 

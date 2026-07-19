@@ -374,4 +374,4 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 
 **Count: 41 throughlines (30 pre-atomization + 11 novel from S1–S7 rigorous audit synthesis v3.1, post-ED-738). All 11 novel entries have Wave 1–4 workplan mappings.**
 
-*[EDITORIAL: T-31..T-41 derived from designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md per ED-738 pivot. М-7..М-11 meta-throughline additions propagated separately.]*
+*[EDITORIAL: T-31..T-41 derived from audit/lane-a/rigorous_audit_synthesis_s1_s7_v3_1.md per ED-738 pivot. М-7..М-11 meta-throughline additions propagated separately.]*

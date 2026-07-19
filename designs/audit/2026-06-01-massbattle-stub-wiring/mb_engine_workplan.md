@@ -1,6 +1,6 @@
 # Mass-Battle Engine — Comprehensive Workplan
 **Date:** 2026-06-01 · **Engine:** `tests/sim/sim_mb_sigma.py` @ `7cfa44d5` · **Spec:** `designs/provincial/mass_battle_v30.md` (v4.8)
-**Inputs:** the architecture+completeness audit (`1a525127`, `…/mb_engine_completeness_audit.md`) + Jordan directives 2026-06-01.
+**Inputs:** the architecture+completeness audit (`1a525127`, `audit/lane-c/2026-06-01-massbattle-stub-wiring_mb_engine_completeness_audit.md`) + Jordan directives 2026-06-01.
 `[SELF-AUTHORED — bias risk]` engine is largely my own; phases stated as an independent reviewer; all mechanical magnitudes Jordan-vetoable, no canon edited without the editorial workflow.
 
 **Standing directives this plan encodes:**

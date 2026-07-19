@@ -5,7 +5,7 @@
 **Companion to:**
   - `designs/audit/2026-05-17-scene-combat-contest/decisions.md`
   - `designs/audit/2026-05-17-scene-combat-contest/battlecon_extraction.md`
-  - `designs/audit/2026-05-17-scene-combat-contest/mass_battle_audit_flags.md`
+  - `audit/lane-a/2026-05-17-scene-combat-contest_mass_battle_audit_flags.md`
   - `designs/scene/combat_c4_draft_v0.md`
   - `tests/sim/phase11_c4_v0_2026-05-17.md`
   - `tests/sim/phase12_mass_archetype_v0_2026-05-17.md`

@@ -204,4 +204,4 @@ Category admission via receptive-capacity development.
 No moral agency in substrate damage; demonology is T-27 interpreter output.
 **Key docs:** canon/00 §4.3; designs/audit/mechanical_implementation_revised_2026_04_21.md §9.
 
-*[EDITORIAL: T-31..T-41 registry entries per designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md + ED-738.]*
+*[EDITORIAL: T-31..T-41 registry entries per audit/lane-a/rigorous_audit_synthesis_s1_s7_v3_1.md + ED-738.]*

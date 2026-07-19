@@ -45,7 +45,7 @@ def check(pool: int, ob: int, tn: int = 7):
 # PR = Proximity Rating (RS effect graduation)
 # ═══════════════════════════════════════════════════════════════
 
-# [canonical: editorial_decisions_ci_pv_2026-04-18.md §5 — PV by settlement type]
+# [canonical: audit/lane-a/editorial_decisions_ci_pv_2026-04-18.md §5 — PV by settlement type]
 # Cathedral City=5, National capital=5, Duchy capitals=4, Fortresses/strategic=3, others=1
 # Remaining territories TBD — using 1 as placeholder
 TERRITORIES = {

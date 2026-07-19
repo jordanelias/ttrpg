@@ -61,7 +61,7 @@ values must derive from — currently not connected to the engine.** Also
 | Path | Note |
 |---|---|
 | `designs/audit/2026-06-01-massbattle-stub-wiring/mb_engine_workplan.md` | The dependency-ordered P-A..P-G workplan (modularize → Lanchester → FM formation/tactic). |
-| `…/mb_engine_completeness_audit.md` | Mechanic-wiring completeness: 22 WIRED / 8 PARTIAL / 6 in-scope GAP. |
+| `audit/lane-c/2026-06-01-massbattle-stub-wiring_mb_engine_completeness_audit.md` | Mechanic-wiring completeness: 22 WIRED / 8 PARTIAL / 6 in-scope GAP. |
 | `…/mb_lanchester_design.md`, `…/cavalry_shock_design.md` | The two foundational additions' designs. |
 | `designs/proposals/pc_formation_system.md` | The bottom-up FM three-level formation/tactic/doctrine design ("emergence, not decree"). PROPOSAL. |
 | `designs/proposals/multiunit_envelopment_plan.md` | Army-scale envelopment, Path B (unify the field → envelopment emerges). Phase 0 confirmed. |

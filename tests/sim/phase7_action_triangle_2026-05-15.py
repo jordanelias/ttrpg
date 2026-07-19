@@ -285,7 +285,7 @@ def run_matchup(a, b, strat_a='strike_only', strat_b='strike_only', n=3000):  # 
 
 def main():
     random.seed(42)  # [canonical: N/A — reproducibility]
-    threshold = 0.65  # [canonical: tests/audit/all_directions_ners_v27.md — 65% dominance threshold]
+    threshold = 0.65  # [canonical: audit/lane-a/all_directions_ners_v27.md — 65% dominance threshold]
 
     print("=" * 84)  # [canonical: N/A — formatting]
     print("Phase 7 sim — Action triangle (Strike/Feint/Full Guard) impact on dominance")  # [canonical: N/A — header]

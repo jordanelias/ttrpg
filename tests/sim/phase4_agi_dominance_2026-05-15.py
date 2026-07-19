@@ -192,7 +192,7 @@ def main():
         decisive = wa + wb  # [canonical: N/A — structural]
         a_cond = (wa / decisive) if decisive > 0 else 0.5  # [canonical: N/A — structural]
         spread = abs(a_cond - (1 - a_cond)) * 100  # [canonical: N/A — display percentage]
-        threshold = 0.65  # [canonical: tests/audit/all_directions_ners_v27.md — 65% pass threshold]
+        threshold = 0.65  # [canonical: audit/lane-a/all_directions_ners_v27.md — 65% pass threshold]
         flag = " DOMINANT" if a_cond >= threshold or a_cond <= (1 - threshold) else ""
         print(f"  {label:40} {wa:>6.1%} {wb:>6.1%} {dr:>5.1%} {a_cond:>6.1%} {spread:>7.1f}pp{flag}")
     print()  # [canonical: N/A — formatting]

@@ -28,12 +28,12 @@ entries:
       - systems/factions/ci_political_v30.md
       - engine/params/bg/ci_seizure.md
 
-  - superseded_id: tests/audit/editorial_decisions_ci_pv_2026-04-18.md Decision 3
+  - superseded_id: audit/lane-a/editorial_decisions_ci_pv_2026-04-18.md Decision 3
     scope: "Seizure available from CI >= 60 (automatic availability)"
     superseded_by: "(this commit)"
     superseded_date: 2026-04-19
     replacement: "CI >= 60 makes Mass Seizure available; declaration still probabilistic (see 250715f entry)."
-    files_to_recheck: [tests/audit/editorial_decisions_ci_pv_2026-04-18.md]
+    files_to_recheck: [audit/lane-a/editorial_decisions_ci_pv_2026-04-18.md]
   - superseded_id: "VTM-STRIKE-2026-04-19"
     date: 2026-04-19
     scope: "Vaynard Thread Mastery (VTM) track — 0-5 range, used in Cultural Reformation pool and Varfell victory paths A/B/C"
