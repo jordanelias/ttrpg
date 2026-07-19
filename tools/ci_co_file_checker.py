@@ -55,9 +55,11 @@ if register_writes and 'references/propagation_map.md' not in changed:
 # ── Rule 3: sim output → coverage_matrix.md ──────────────────────────────────
 # README.md is directory-level housekeeping, not a sim run output — exclude it so
 # adding/updating a folder README doesn't false-positive this rule.
+# tests/audit/ was retired 2026-07-18 (audit corpus relocated to audit/lane-*/,
+# organized by lane rather than treated as sim output) — no replacement clause needed.
 sim_outputs = [
     f for f in changed
-    if (f.startswith('tests/sim/') or f.startswith('tests/audit/'))
+    if f.startswith('tests/sim/')
     and os.path.basename(f) != 'README.md'
 ]
 if sim_outputs and 'tests/coverage_matrix.md' not in changed:

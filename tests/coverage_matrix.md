@@ -373,3 +373,10 @@ Archived entries in tests/coverage_matrix_archive.md
 - Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
   7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
   non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
+
+## 2026-07-18 — audit-corpus relocation: provenance-comment path fixes only [no mechanical change]
+- Repo-wide audit reorg moved `tests/audit/all_directions_ners_v27.md` to
+  `audit/lane-a/all_directions_ners_v27.md` (see CLAUDE.md §3). Updated the stale `[canonical: tests/audit/...]`
+  provenance comments citing that file in phase4_agi_dominance_2026-05-15.py, phase5_continuous_engine_2026-05-15.py,
+  phase6_dominance_solvers_2026-05-15.py, phase7_action_triangle_2026-05-15.py, phase8_smart_ai_v2_2026-05-15.py —
+  path text only, no formula/threshold/logic touched. Co-file satisfied (documentation-only trip).

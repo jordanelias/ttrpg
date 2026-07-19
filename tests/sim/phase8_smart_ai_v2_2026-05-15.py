@@ -246,7 +246,7 @@ def run_matchup(a, b, strat_a='strike_only', strat_b='strike_only', n=3000):  # 
 
 def main():
     random.seed(42)  # [canonical: N/A — reproducibility]
-    threshold = 0.65  # [canonical: tests/audit/all_directions_ners_v27.md — 65% dominance threshold]
+    threshold = 0.65  # [canonical: audit/lane-a/all_directions_ners_v27.md — 65% dominance threshold]
 
     print("=" * 84)  # [canonical: N/A — formatting]
     print("Phase 8 sim — Better-tuned Smart AI v2 — resolves WS-H-3 and WS-H-4")  # [canonical: N/A — header]

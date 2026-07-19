@@ -1,7 +1,7 @@
 # VALORIA — UI/UX v4.1 REPAIR WORKPLAN
 
 **Date:** 2026-04-16
-**Source audit:** `designs/ui/valoria_ui_ux_v4_1_max_audit.md` (69 findings, 20 P1 / 37 P2 / 12 P3)
+**Source audit:** `audit/lane-a/valoria_ui_ux_v4_1_max_audit.md` (69 findings, 20 P1 / 37 P2 / 12 P3)
 **Target:** `designs/ui/valoria_ui_ux_v4_2.md` (replacement canonical document)
 **Status:** WORKPLAN — awaiting Jordan's approval of sequencing and finding accepts/rejects before execution begins
 

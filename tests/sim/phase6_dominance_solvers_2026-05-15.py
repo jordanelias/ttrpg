@@ -8,7 +8,7 @@
 # B. Drop doubling — `Attr + H + 3` (PP-612 path, was reversed by PP-615)  # [canonical: archives/patches PP-612, PP-615]
 # C. Pool cap at 14 — `min((Attr*2)+H+3, 14)` (post-derivation ceiling)  # [canonical: N/A — proposal]
 # D. Pool cap at 12 — `min((Attr*2)+H+3, 12)` (tighter ceiling)  # [canonical: N/A — proposal]
-# E. PP-717 D2 softcap — `min(Attr,4)*2 + max(0,Attr-4) + H + 3`  # [canonical: tests/audit/all_directions_ners_v27.md — ratified v22-v27, then reverted Decision A]
+# E. PP-717 D2 softcap — `min(Attr,4)*2 + max(0,Attr-4) + H + 3`  # [canonical: audit/lane-a/all_directions_ners_v27.md — ratified v22-v27, then reverted Decision A]
 #
 # Engine: continuous Normal(0.4*pool, 0.8*sqrt(pool)) per Phase 5  # [canonical: tests/sim/phase5_continuous_engine_2026-05-15.py]
 
@@ -53,8 +53,8 @@ def pool_D_cap12(agi, hist):
 
 
 def pool_E_softcap(agi, hist):
-    # PP-717 D2 ratified formula — diminishing returns above Agi 4  # [canonical: tests/audit/all_directions_ners_v27.md PP-717 D2]
-    return max(POOL_FLOOR, min(agi, 4) * 2 + max(0, agi - 4) + hist + 3)  # [canonical: tests/audit PP-717 D2 formula]
+    # PP-717 D2 ratified formula — diminishing returns above Agi 4  # [canonical: audit/lane-a/all_directions_ners_v27.md PP-717 D2]
+    return max(POOL_FLOOR, min(agi, 4) * 2 + max(0, agi - 4) + hist + 3)  # [canonical: audit/lane-a PP-717 D2 formula]
 
 
 CANDIDATES = [
@@ -186,7 +186,7 @@ def run_matchup(a, b, n=3000):  # [canonical: N/A — sim N — moderate for 5-c
 
 def main():
     random.seed(42)  # [canonical: N/A — reproducibility]
-    threshold = 0.65  # [canonical: tests/audit/all_directions_ners_v27.md — 65% dominance threshold]
+    threshold = 0.65  # [canonical: audit/lane-a/all_directions_ners_v27.md — 65% dominance threshold]
     target = 0.55  # [canonical: N/A — sim — 55% considered "moderate advantage, not dominance"]
 
     print("=" * 80)  # [canonical: N/A — formatting]

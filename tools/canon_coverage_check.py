@@ -41,7 +41,7 @@ Exit codes (when --strict):
 Dependencies: stdlib + PyYAML (already in container).
 
 Related:
-    - designs/audit/2026-05-10-canonical-index-audit/canon_coverage_drift.yaml
+    - audit/lane-b/2026-05-10-canonical-index-audit_canon_coverage_drift.yaml
       — last full snapshot; this script regenerates it on demand.
     - references/canonical_sources.yaml — the registry under check.
 """
