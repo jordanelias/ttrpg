@@ -249,4 +249,166 @@ hand-wired: `L/PS→Mandate`, `Prosperity→Treasury`, `CV→CI`. These are the 
 
 ---
 
-*Survey only. Establishes no canon; every flag points to an existing open ED / gap_note.*
+# PART E — SIM ↔ DESIGN RECONCILIATION (code truth: where the pointers actually live)
+
+Parts A–D describe the *design* pointers. But the pointers that will actually drive Godot live in
+the **Python sim** (`engine/`, `sim/`, `systems/*/sim/` — ~12.7k LOC, the 1:1 GDScript oracle). That
+layer **diverges materially** from the design registry, and *that gap is the opacity*: a designer
+reads "Mandate = 7T/(T+6) aggregate of settlement L/PS", but the running code holds a single flat
+`Faction.L` scalar and no settlement L/PS at all. This part reconciles the two, per primitive.
+
+**Sim-status flags:** `LIVE` (wired, read+written) · `DORMANT` (declared, never read) · `STUB`
+(NotImplementedError / no field — the design primitive has *no* sim state) · `DIVERGENT` (name or
+value mismatch) · `SIM-ONLY` (real code state with no design-registry row) · `SAVE-GAP` (real state
+not serialized — lost on snapshot).
+
+## E0 · The actual persistent container — `engine/autoload/game_state.py`
+
+The whole live world state is one `World` dataclass: `factions: dict[str,Faction]`,
+`territories: dict[str,Territory]`, `clocks: dict[str,float]`, `settlements: dict[str,Settlement]`,
+`season`, `arc`, `winner`, plus **14 sub-registries** (`practitioners, insurgencies,
+uncontrolled_streaks, npcs, treaties, convictions, beliefs, knots, territory_infrastructure,
+npc_drift_state, threadcut_beings, comovement_deck, settlements, …`). Deltas are applied through the
+**Key substrate** (`engine/substrate/keys.py`): a `Target.stat_deltas` dict (e.g. `{'L': +1}`) routed
+via `Faction.adjust()` — the F1 guard is real in code.
+
+## E1 · Faction (sim) — the PRE-LPS-1 model is what actually runs
+
+| Design primitive | Sim field (game_state.py) | Status |
+|---|---|---|
+| **Mandate** *and* **Legitimacy** | `Faction.L` (float 0.5–7, `MULTS['L']=20`) | ⚠️ **DIVERGENT + CONFLATED** — one flat scalar read as *both* Mandate and faction-Legitimacy; self-flagged `[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004]`. The `×20` granular scale *is* the 0–140 Legitimacy buffer. **No `7T/(T+6)` aggregate, no per-settlement L/PS feed exists.** |
+| Stability | `Faction.Sta` (`MULTS 10`) | LIVE |
+| Wealth | `Faction.W` (`MULTS 100`) | LIVE |
+| Influence | `Faction.I` (`MULTS 15`) | LIVE (mass_seizure reads it as Influence `[ASSUMPTION]`) |
+| Military | `Faction.Mil` (`MULTS 10`) | LIVE |
+| Intel | `Faction.intel` (0.0) | **DORMANT** — no `MULTS` entry, never read/written |
+| Faction Standing | `Faction.standing` (int) | LIVE but **flat** (one per-faction int, not the per-officer ladder) |
+| **Treasury** | *(none)* | **STUB** — no Treasury field; `ΣProsperity·10` unimplemented |
+| **Reputation** | *(none)* | **STUB** |
+| Casus Belli | `world.casus_belli` | **SIM-ONLY** duck-typed — not a schema field; only Crown-restoration CB is derivable |
+| Excommunication | `Faction.excommunicated` | LIVE (sim-only flag; no registry row) |
+| — | `Faction.consul_used`, `Faction.peaceful` | **DEAD** (declared, never read) |
+
+The `MULTS` table `{L:20, Sta:10, W:100, I:15, Mil:10, accord:10, pt:10}` is the **actual numeric
+backbone** — it, not the design tables, defines granular-delta magnitudes.
+
+## E2 · Two coexisting settlement/territory models
+
+The sim runs an **old `Territory`** model *and* a **new `Settlement`** model simultaneously:
+
+| Design primitive | Sim field | Status |
+|---|---|---|
+| Accord | `Territory.accord` (float, `MULTS 10`, `ACCORD_MAP` **0–4** buckets) | LIVE — ⚠️ range diverges (registry says 0–3) |
+| Piety (PT/CV) | `Territory.pt` (`MULTS 10`) | LIVE |
+| Prosperity | `Territory.prosperity` **and** `Settlement.prosperity` | **DUAL** — two coexisting grains |
+| Fort Level | `Territory.fort_level` **and** `Settlement.fort_level` | **DUAL** |
+| Defense / Order | `Settlement.defense` / `.order` (0–5) | LIVE |
+| **Legitimacy (L)** | `Settlement.legitimacy` (0–7) | ⚠️ **INERT** — declared, **zero read/write anywhere in sim/** (ED-FA-0004) |
+| **Popular Support (PS)** | `Settlement.popular_support` (0–7) | ⚠️ **INERT** — same |
+| Facility Tier / Admin Points | `Settlement.facility_tier` → `.ap` property | LIVE |
+| Church Attention Pool | `Settlement.church_attention` | LIVE (undocumented in §1.3) |
+| — | `Settlement.suspicion`, `Settlement.pressure` (Π, 4.0), `Settlement.governor_emergence` | **SIM-ONLY** (the Goldenfurt dossier/governance-deck subsystem — not in `settlement_layer_v30 §1.3`) |
+| Ledger tags | `LedgerTag.kind ∈ {Precedent, Grudge, Debt, Reputation, Leverage}` | LIVE — ⚠️ **missing `Compact`** (the 5th family ratified ED-SE-0019); recurring-fire semantics unimplemented |
+| Religious building (Axis 1) | `Settlement.religious_building` (sid-keyed) **and** `InfrastructureState.religious_building` (tid-keyed) | ⚠️ **DUAL-TRACKED**, no reconciliation code |
+| Church infra (Axis 2–4) | `InfrastructureState.{templar_station, inquisitor_base, church_governor}` | LIVE, keyed per-territory (canon says per-settlement) |
+| temperament_drift | `world.npc_drift_state` | LIVE — ⚠️ DIVERGENT name (canon: `territory.temperament_drift`) |
+| Entry-Terms L seed | `Territory.entry_terms_l_seed` (dynamic attr) | **SIM-ONLY** inert placeholder, schema-undeclared |
+| — | `ADJACENCY` graph | ⚠️ **code bug** — missing a `T16` (Schoenland) entry though `T1` names it |
+
+## E3 · The `clocks` dict — most of it is dormant
+
+`create_world()` seeds `{'CI':30.0, 'MS':60.0, 'IP':20.0, 'PI':0.0, 'Strain':0.0, 'Turmoil':0.0}`.
+
+| Design clock | Sim key | Status |
+|---|---|---|
+| Church Influence | `clocks['CI']` | LIVE — ⚠️ start **30** in world-init vs **28** in `ci_track.CI_STARTING` (registry says 28) |
+| Mending Stability | `clocks['MS']` | LIVE (start 60, matches) |
+| Institutional Pressure | `clocks['IP']` | **DORMANT** — `ip_track.py` is a `NotImplementedError` stub; nothing reads it |
+| Turmoil | `clocks['Turmoil']` | ⚠️ **DIVERGENT (3-way name)** — `victory.py` reads it as "Political Stability"; dormant in peninsular |
+| — | `clocks['PI']` | **ORPHAN** — no registry row; leftover from retired `mc_v*` monoliths |
+| Peninsular Strain | `clocks['Strain']` | **DORMANT** — no live reader |
+| — | `clocks['MASS_SEIZURE_USED']` | **SIM-ONLY** — improvised one-shot flag on the generic dict |
+| **Rendering Stability (RS)** | `rs_track.py` | **STUB** + name-collides with MS — no `RS` clock key exists; threadwork Part 5 is headed "Rendering Stability" but its body is all "Mending Stability" |
+
+## E4 · Personal / combat — a large SIM-ONLY continuous layer
+
+The canonical resolver is `combat_engine_v1`; the old `sim/combat.py` (flat wounds, −1D penalty) is
+**dead canon**. On the live `Combatant`:
+
+| Design primitive | Sim field | Status |
+|---|---|---|
+| Combat Pool | `Combatant.pool = max(5, history+6)` | LIVE (matches R1 canon) |
+| Health / cum-damage / Wounds / WI / MW | `WoundTracker.{cumulative_damage, wounds, wi, max_wounds, health_full, felled}` | LIVE (the sigma model, F1 substrate) |
+| Stamina | `stamina_max = 3·End+2·Spi` | LIVE — ⚠️ DIVERGENT (doc still says `End×5`) |
+| Concentration | `conc_max = 3·Foc+2·Spi` | LIVE |
+| Initiative | `Combatant.initiative` (continuous sigma Vor/Nach/Indes) | ⚠️ **FALSE COGNATE** — a *different* mechanic from design's discrete PP-232 Initiative; all constants `[FIAT]`/`[SIM-CALIBRATE]` |
+| — | `Combatant.poise` (kuzushi), `grip_position`, `lunge_depth`, `facing`, `range_avail`, `sel_*`, `disp` | **SIM-ONLY** — a whole continuous per-beat morphology layer (the 2026-07 closing-distance redesign) with **no design-registry pointers** |
+| — | `Combatant.ready` | **DEAD** (shadowed by an engagement-local dict) |
+
+Threadwork: `CoherenceState.coherence` LIVE · `ThreadcutState.{rendering_strain, deactualisation_round}`
+LIVE · co-movement deck LIVE (**15 of 18 cards**). **`Thread Fatigue` = STUB (zero implementation
+anywhere).** **Composure and Knot-Strain are computed in `opposing.py` but never persisted** —
+return values dressed as consequences.
+
+Conviction/belief: `ConvictionState.{scars, resonant_active, in_crisis, pending_belief_revisions,
+last_scar_season}` LIVE · `Belief.{position, underlying_convictions, revision_pressure}` LIVE · **Truth**
+= `CERTAINTY_SCALING` (sim keeps the old "certainty" identifier). ⚠️ **Three incompatible
+`CONVICTIONS` taxonomies run at once** — `conviction.py` (9, mislabeled "13"), `npe.py` (8, different
+set), vs canonical 13 (ED-1006 open). Non-listed convictions silently no-op when scarred.
+
+Fieldwork: `Knot.{strain, tier, disposition, active}` LIVE (in `knots.py`) — but **`fieldwork.py` /
+`investigation.py` are pure stubs**, so **Disposition, Evidence, Exposure, Cover have no sim state**
+(Disposition exists only as a formation-time snapshot inside a Knot).
+
+## E5 · Social-contest kernel — new primitives + duplicates
+
+`Standing.v` **is** Face (literal Python alias; Composure retired) · `Reserve` = Concentration (an
+abstract seed pool, not `3·Foc+2·Spi`) · `ContestState.adv` = Persuasion merits. ⚠️ **`ArmaturePosition`
+(evidence / consequence / authority / insinuation)** is a **SIM-ONLY new 4-axis primitive** the code
+itself flags as having *no design-registry counterpart*. **Doubt Marker** is fully spec'd in
+`dictionaries.py` but **UNIMPLEMENTED** as live state. **Persuasion Track and "resistance" are each
+implemented twice** (resolver vs `parliamentary_vote`) with different math.
+
+## E6 · Mass battle
+
+`Unit.{power, command, discipline, morale, size, dr, h_per_size, speed, broken, routed}` LIVE. ⚠️
+`Unit.hp/hp_max` **is** TroopCount (DIVERGENT name). **`quality`** (canon "unit quality") — **STUB**
+(no field; pre-baked into power/morale_start). `Unit.stamina` — **SIM-ONLY** (self-flagged, no canon).
+`stance` orders vocab — SIM-ONLY. **Per-sub-unit stats (ED-1018) — UNIMPLEMENTED** (Subunit has no
+power/discipline/morale). **Tactic-card hand — STUB** (`FACTION_TACTIC_CARD_POOL_MODIFIERS = {}`).
+`altonian_reinforcements` choice-lock — STUB.
+
+## E7 · Stub inventory — design primitives with NO sim state
+
+`Thread Fatigue` · `IP` track · `RS` / Calamity track · `Treasury` / `Reputation` (faction) · settlement
+`Legitimacy`/`Popular Support` (inert) · Disposition/Evidence/Exposure/Cover (fieldwork stubs) ·
+Doubt Marker · tactic cards · per-sub-unit stats · unit `quality` · miraculous_event ·
+restoration_movement · home_sanctuary · companion · npc_ai · 5 faction modules (charter,
+hafenmark-equipment, infrastructure-reclamation, both varfell actions) · `propose_treaty`.
+
+## E8 · Save/restore gaps (real state lost on snapshot)
+
+`Territory.uncontrolled_since` · the entire Key/Echo log (`world.key_log`, `echo_scheduler`,
+`_echo_key_seq`, attached via `setattr`) · `victory._qualifying_streak` (module global) ·
+`world.convictions` / `world.beliefs` (module-level fallback, no confirmed `World` field).
+
+## E9 · The headline
+
+1. **The live faction + settlement model is PRE-LPS-1** — `Faction.L` conflates Mandate/Legitimacy;
+   settlement `L/PS` is inert. The ratified `7T/(T+6)` aggregate (Part A/B3) **is not implemented**.
+   This is the single biggest port blocker (ED-FA-0004).
+2. **A whole SIM-ONLY continuous layer exists with no design pointers** — combat morphology
+   (poise/grip/lunge/facing) and the contest `ArmaturePosition` axes. These need design-registry rows
+   *created*, or they will cross into Godot undocumented.
+3. **A whole set of design pointers have no sim** — Thread Fatigue, IP, RS, Treasury, tactic cards,
+   per-sub-unit stats, fieldwork Disposition/Evidence/Exposure, Doubt Marker. Porting these is
+   blocked on *implementing the oracle first*.
+4. **Silent divergences to reconcile before transcription** — CI start (30 vs 28), Stamina
+   (`3·End+2·Spi` vs `End×5`), Accord range (0–4 vs 0–3), TroopCount↔`hp`, temperament_drift naming,
+   3 conviction taxonomies, the missing `Compact` ledger family, dual-tracked religious building.
+
+---
+
+*Survey only. Establishes no canon; every flag points to an existing open ED / gap_note. Part E is a
+code-truth census of the working tree (`engine/`, `sim/`, `systems/*/sim/`), compiled by a six-way
+sim-extraction fan-out.*
