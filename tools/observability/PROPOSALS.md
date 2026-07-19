@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**253 open work items** · **98 need your decision**.
+**257 open work items** · **98 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 12, Provisional / draft design docs — 20
+By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 16, Provisional / draft design docs — 20
 
 ## MB — Mass battle  (6 items, 5 need decision)
 
@@ -177,22 +177,25 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (104 items, 28 need decision)
+## unassigned — Unassigned / cross-lane  (108 items, 28 need decision)
 
 - 🔸 `proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
 - 🔸 `proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
 - 🔸 `proposals/pc_formation_system.md` — pc formation system  _(PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - 🔸 `proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - `proposals/2026-05-16-faction-audit-followup-plan.md` — 2026-05-16-faction-audit-followup-plan  _(SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15])_
+- `proposals/2026-07-17-cast-and-culture-expansion.md` — 2026-07-17-cast-and-culture-expansion  _((no Status line — proposals/))_
 - `proposals/2026-07-17-world-factions-npcs-narrative-assessment.md` — 2026-07-17-world-factions-npcs-narrative-assessment  _((no Status line — proposals/))_
 - `proposals/2026-07-17-world-factions-npcs-narrative-companion.md` — 2026-07-17-world-factions-npcs-narrative-companion  _((no Status line — proposals/))_
+- `proposals/2026-07-18-precedent-to-mechanism-design-brief.md` — 2026-07-18-precedent-to-mechanism-design-brief  _((no Status line — proposals/))_
+- `proposals/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
 - `proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _(SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED'])_
+- `proposals/pessimist_ners_audit_v1.md` — pessimist ners audit v1  _(FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).)_
 - `proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
 - `proposals/stub_infill_plan.md` — stub infill plan  _(SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15])_
 - 🔸 `designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md` — governance cluster reconciliation v1  _(PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout)_
 - 🔸 `systems/_architecture/governance_type_registry_v1.md` — governance type registry v1  _(PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.)_
 - 🔸 `systems/npcs/character_canon_v30.md` — character canon v30  _(PROVISIONAL — pending ratification.)_
-- `designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
 - `designs/audit/2026-07-12-governance-compendium/00_index.md` — 00 index  _(PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Read-only research consolidation. NOT canon; nothing here flips a `Status:` line. The single home for this session's entire governance-design body of work, so nothing is left stranded as unused research.)_
 - `designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md` — 42 action verb catalogue  _(PROPOSED — compiled 2026-07-12, Lane: IN (cross-cutting; touches FA, SE, MB, GO))_
 - `designs/audit/2026-07-12-governance-compendium/43_directive_types.md` — 43 directive types  _(PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md`))_
@@ -205,6 +208,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md` — 00 findings  _(PROPOSED — read-only, docket unruled)_
 - `designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md` — 01 remediation L1 L2  _(PROPOSED)_
 - `designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md` — 02 emergence oracle spec  _(PROPOSED)_
+- `designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md` — 03 remediation program  _(PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).)_
 - `systems/_architecture/governance_ripple_substrate_v1.md` — governance ripple substrate v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified)_
 - `systems/settlements/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
 - 🔸 `ED-1006` — Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3  _(open)_
@@ -215,9 +219,5 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-507` — POI catalog per territory: each needs 2-6 authored POIs across depth levels (authorial). P2.  _(open)_
 - 🔸 `ED-508` — Specific starting Dispositions for named NPC roster (lifepath formula canonical; roster values pending Jordan).  _(open)_
 - 🔸 `ED-595` — Ehrenwall full arc (A/B/C) proposed; explicitly 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-596` — Torsvald (Riskbreaker) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-597` — Vossen full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-598` — Hann full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- 🔸 `ED-599` — Orm (Warden second) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- …and 64 more (see `proposals.json`).
+- …and 68 more (see `proposals.json`).
 

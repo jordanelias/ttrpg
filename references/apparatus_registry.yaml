@@ -4,15 +4,15 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 92
+  total: 93
   by_kind:
-    tool: 77
+    tool: 78
     skill-script: 8
     hook: 4
     workflow: 3
   by_role:
     A:writes-artifact: 14
-    B:stdout-or-gate: 38
+    B:stdout-or-gate: 39
     D:import-only-library: 37
     workflow: 3
   orphaned: 4
@@ -1242,6 +1242,22 @@ entries:
   role: B:stdout-or-gate
   imports:
   - names
+- path: tools/wiring_map_check.py
+  kind: tool
+  stem: wiring_map_check
+  writes: []
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:valoria-ci.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports:
+  - yaml
 - path: tools/workplan_status.py
   kind: tool
   stem: workplan_status
@@ -1475,6 +1491,7 @@ entries:
   - tools/mechanics_index_gen.py
   - tools/patch_propagation_checker.py
   - tools/validate_ed_citations.py
+  - tools/wiring_map_check.py
   emits:
   - ci-status
   writes: []
