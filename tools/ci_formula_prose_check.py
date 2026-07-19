@@ -33,8 +33,10 @@ SCOPE / TRUST CAVEATS (stated, not silently dropped — the observatory's under-
   * MEASURES, NEVER GATES. Always exits 0. The warn→block flip is OPT-AV-6, gated on OPT-AV-1
     (the attribute roster, still OPEN) and a swept backlog — not this tool's call.
   * ATTRIBUTE-FAMILY ROWS ARE EXCLUDED from violations (roster OPEN, Jordan 2026-07-08 / this
-    session): attribute_scalar/attribute_aggregate rows carry "raw attribute 1-7", not a formula,
-    and A18 asserts nothing about the roster. They are counted as skipped, never flagged.
+    session): attribute_scalar rows ("raw attribute 1-7") AND attribute_aggregate rows
+    ("sum(Str,End,Agi)") are counted as roster-skipped BEFORE the formula gate — so the count is
+    honest whether or not their census text happens to parse as a formula — never flagged. A18
+    asserts nothing about the roster.
   * The live re-scan is BEST-EFFORT extraction (regex heuristics over prose). Findings are
     CANDIDATE drift to triage, not verdicts — precision is favored over recall (a missed
     restatement is a quiet false-negative; a noisy false-positive erodes trust). The census-diff
@@ -181,7 +183,7 @@ def _looks_like_formula(cell):
     c = _demark(cell).strip()
     if _DELTA_RE.match(c) or _RANGE_RE.match(c):
         return False
-    return bool(re.search(r'[*/]|[0-9)] *[+\-] *[0-9(]|\b(?:floor|ceil|round|min|max)\s*\(', c))
+    return bool(re.search(r'[*/]|[0-9)] *[+\-] *[0-9(]|\b(?:floor|ceil|round|min|max|sum)\s*\(', c))
 
 
 # ─────────────────────────── census loading ───────────────────────────
@@ -197,14 +199,36 @@ def load_census(path):
     return data.get('rows', []) or []
 
 
+# A "path:linespec" token, e.g. "params/core.md:161" out of
+# "params/core.md:161 (ratified 2026-05-29 R1, ED-901)" — the census annotates defining_surface
+# but not the bare formulas[].surface, so exact-equality matching is DEAD on real rows.
+_SURFACE_KEY_RE = re.compile(r'([^\s(]+:[0-9][^\s(;,]*)')
+
+
+def _surface_key(s):
+    m = _SURFACE_KEY_RE.search(s or '')
+    return m.group(1).lower() if m else (s or '').strip().lower()
+
+
 def _defining_formula(row):
-    """The formula asserted at the row's defining_surface (else the first recorded formula)."""
+    """The formula asserted at the row's defining_surface. Matches by the `path:linespec` KEY (the
+    defining_surface carries annotations the bare formulas[].surface never repeats — exact-equality
+    matching silently failed and fell through to forms[0], which may be a STRUCK formula, inverting
+    the whole drift report). Fallbacks never anchor on a superseded formula if a live one exists."""
     ds = (row.get('defining_surface') or '').strip()
-    forms = row.get('formulas') or []
+    dskey = _surface_key(ds)
+    forms = [f for f in (row.get('formulas') or []) if isinstance(f, dict)]
+    # 1) surface-key match against the defining surface
     for f in forms:
-        if isinstance(f, dict) and (f.get('surface') or '').strip() == ds:
+        if dskey and _surface_key(f.get('surface')) == dskey:
             return f.get('formula', ''), ds
-    if forms and isinstance(forms[0], dict):
+    # 2) first NON-superseded formula (never blindly forms[0] — it may be the struck one)
+    for f in forms:
+        fm = f.get('formula', '')
+        if fm and not _SUPERSESSION_MARKERS.search(fm):
+            return fm, (f.get('surface') or ds)
+    # 3) last resort
+    if forms:
         return forms[0].get('formula', ''), (forms[0].get('surface') or ds)
     return '', ds
 
@@ -221,7 +245,8 @@ def _iter_prose_files(root):
             if os.path.basename(dirpath) == 'history':
                 dirs[:] = []
                 continue
-            for fn in files:
+            dirs.sort()                                  # deterministic walk order across platforms
+            for fn in sorted(files):
                 if fn.endswith('.md') and not fn.endswith('_superseded.md'):
                     yield os.path.join(dirpath, fn)
 
@@ -287,12 +312,15 @@ def scan(root, census, live_scan=False):
         if not name:
             continue
         def_formula, def_surface = _defining_formula(row)
-        if not _looks_like_formula(def_formula):
-            continue  # not a formula-bearing quantity (raw attributes, tracks w/o formula, etc.)
-        stats['formula_rows'] += 1
+        # Roster OPEN (OPT-AV-1): attribute_scalar/_aggregate rows are NEVER checked, regardless of
+        # whether their census formula text ("raw attribute, scale 1-7", "sum(Str,End,Agi)") parses
+        # as a formula. Count as skipped BEFORE the formula gate so the stat is honest for both.
         if kind in _ROSTER_GATED_KINDS:
             stats['roster_skipped'] += 1
             continue
+        if not _looks_like_formula(def_formula):
+            continue  # not a formula-bearing quantity (tracks/clocks w/o a formula, etc.)
+        stats['formula_rows'] += 1
 
         names = [name] + [a for a in (row.get('aliases') or []) if a]
         def_norm = _norm(def_formula)
@@ -381,9 +409,10 @@ def build_report(findings, stats):
     return '\n'.join(L) + '\n'
 
 
-def run(root, output_dir=None, census_path=None, live_scan=False):
+def run(root, output_dir=None, census_path=None, live_scan=False, report_stdout=False):
     census = load_census(census_path or os.path.join(root, DEFAULT_CENSUS))
     findings, stats = scan(root, census, live_scan=live_scan)
+    findings.sort(key=lambda f: (f['quantity'], f['type'], f['drift_surface']))  # deterministic order
     report = build_report(findings, stats)
     if output_dir:
         out = os.path.join(output_dir)
@@ -393,11 +422,13 @@ def run(root, output_dir=None, census_path=None, live_scan=False):
         with open(os.path.join(out, 'data', 'formula_prose.json'), 'w', encoding='utf-8') as f:
             json.dump({'findings': findings, 'stats': stats}, f, indent=1, sort_keys=True)
         print(f'[done] {out}/formula_prose_register.md')
-    else:
+    elif report_stdout:
         print(report)
+    # Concise summary always (suitable for the CI report-only job / local hook line).
     print(f"[A18] {stats['census_drift']} census-drift + {stats['live_drift']} live-drift findings "
           f"across {stats['formula_rows']} formula-bearing quantities "
-          f"({stats['roster_skipped']} attribute rows skipped; roster OPEN). Report-only.")
+          f"({stats['roster_skipped']} attribute rows skipped; roster OPEN). Report-only "
+          f"(--report or --output-dir for detail).")
     return findings, stats
 
 
@@ -416,8 +447,11 @@ def main():
     ap.add_argument('--live-scan', action='store_true',
                     help='additionally re-scan live prose for restatements (best-effort, '
                          'precision-limited — see docstring; default off)')
+    ap.add_argument('--report', action='store_true',
+                    help='print the full per-quantity report to stdout (default: concise summary)')
     a = ap.parse_args()
-    run(os.path.abspath(a.repo_root), a.output_dir, census_path=a.census, live_scan=a.live_scan)
+    run(os.path.abspath(a.repo_root), a.output_dir, census_path=a.census,
+        live_scan=a.live_scan, report_stdout=a.report)
     return 0  # report-only: never non-zero (flip is OPT-AV-6, roster-gated)
 
 

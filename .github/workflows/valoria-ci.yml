@@ -288,6 +288,30 @@ jobs:
         continue-on-error: true
         run: python3 tools/ci_quantity_vocabulary_check.py
 
+  formula-prose-check:
+    name: Formula Prose-Drift — A18 (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    # Report-only: A18 from the quantity-armature extension §3.2 (ED-IN-0029, OPT-AV-5) — the
+    # deferred prose-formula-drift detector CLAUDE.md §5 names as the missing artifact. Anchors on
+    # the 2026-07-08 census, string-diffs each quantity's carriers against its defining surface.
+    # Sequenced after A17 (consumes its resolver). Same lifecycle: land report-only, burn the
+    # backlog via Wave Q, flip to blocking only at zero backlog on a ratified roster (OPT-AV-6/-1 —
+    # both OPEN; attribute-family rows are excluded meanwhile). Not in ci-summary's needs.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: One defining surface per formula; carriers must cite/match it (report-only)
+        continue-on-error: true
+        run: python3 tools/ci_formula_prose_check.py --report
+
   mechanics-index-check:
     name: Mechanics Index Validation (report-only)
     runs-on: ubuntu-latest

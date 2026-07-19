@@ -82,6 +82,45 @@ def test_scan_flags_divergent_carrier():
     assert findings[0]['drift_surface'] == 'b.md:9'
 
 
+def test_defining_formula_matches_annotated_surface_not_first_listed():
+    # REGRESSION (severe, reviewer #1): defining_surface carries an annotation the bare
+    # formulas[].surface never repeats. Must match by path:line KEY and pick the surface's formula
+    # (max(5,..)), NOT fall through to the STRUCK first-listed one — which would invert drift.
+    row = {
+        'canonical_name': 'Combat Pool',
+        'defining_surface': 'params/core.md:161 (ratified 2026-05-29 R1, ED-901)',
+        'formulas': [
+            {'formula': '(Agility × 2) + History + 3', 'surface': 'params/core.md:143 legacy'},
+            {'formula': 'max(5, History+6)', 'surface': 'params/core.md:161'},
+        ],
+    }
+    formula, _surface = mod._defining_formula(row)
+    assert formula == 'max(5, History+6)'
+
+
+def test_defining_formula_never_anchors_on_struck_when_live_exists():
+    # even with NO surface-key match, the fallback picks the first NON-superseded formula
+    row = {
+        'canonical_name': 'X', 'defining_surface': 'nowhere:9',
+        'formulas': [
+            {'formula': 'old (Agi × 2) + 3 [STRUCK]', 'surface': 'a:1'},
+            {'formula': 'max(5, History+6)', 'surface': 'b:2'},
+        ],
+    }
+    formula, _s = mod._defining_formula(row)
+    assert formula == 'max(5, History+6)'
+
+
+def test_roster_aggregate_counted_skipped_not_invisible():
+    # reviewer #2: attribute_aggregate rows carry "sum(...)"; they must be counted as roster-skipped
+    # (honest stat), not silently dropped before counting.
+    row = [{'canonical_name': 'Body', 'kind': 'attribute_aggregate', 'defining_surface': 'r:1',
+            'formulas': [{'formula': 'sum(Strength, Endurance, Agility)', 'surface': 'r:1'}],
+            'status': 'COHERENT'}]
+    _f, stats = mod.scan('.', row, live_scan=False)
+    assert stats['roster_skipped'] == 1 and stats['formula_rows'] == 0
+
+
 def test_scan_does_not_flag_matching_carrier():
     findings, stats = mod.scan('.', _census('(Spirit*2)+3'), live_scan=False)
     assert stats['census_drift'] == 0
