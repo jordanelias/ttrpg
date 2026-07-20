@@ -32,3 +32,6 @@ signals:
   definitions.parity:
     baseline: 0        # definitions store current + name parity holds; boolean fallback — drift/mismatch regresses
     target: 0
+  vocab.parity:
+    baseline: 0        # folded vocab register views match vocab_source.yaml (ED-IN-0078); drift regresses
+    target: 0

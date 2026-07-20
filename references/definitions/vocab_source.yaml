@@ -1,0 +1,1035 @@
+# vocab_source.yaml — the single source for the folded vocabulary registers (ED-IN-0078, Phase 3).
+# Each top-level key under `registers:` is the authoritative data for one register; the register
+# files at references/*.yaml are GENERATED views of these blocks (tools/vocab_store.py --build).
+# Edit vocab data HERE, then --build. Drift-locked by `--check`.
+version: 1
+registers:
+  alias_registry:
+    version: 2
+    core_attributes:
+      agility:
+        canonical: Agility
+        abbreviations: []
+        category: stat
+        range: 1-7
+      attunement:
+        canonical: Attunement
+        abbreviations: []
+        category: stat
+        range: 1-7
+      cognition:
+        canonical: Cognition
+        abbreviations: []
+        category: stat
+        range: 1-7
+      endurance:
+        canonical: Endurance
+        abbreviations: []
+        category: stat
+        range: 1-7
+      presence:
+        canonical: Presence
+        abbreviations: []
+        category: stat
+        range: 1-7
+      spirit:
+        canonical: Spirit
+        abbreviations: []
+        category: stat
+        range: 1-7
+      strength:
+        canonical: Strength
+        abbreviations: []
+        category: stat
+        range: 1-7
+    derived_stats:
+      health:
+        canonical: Health
+        abbreviations:
+        - HP
+        standalone_ok: false
+        category: stat
+      stamina:
+        canonical: Stamina
+        abbreviations: []
+        category: stat
+      coherence:
+        canonical: Coherence
+        abbreviations: []
+        category: stat
+        range: 10->0
+      intelligibility:
+        canonical: Intelligibility
+        abbreviations: []
+        category: stat
+        range: 10->0
+      composure:
+        canonical: Composure
+        abbreviations:
+        - COMP
+        standalone_ok: false
+        collision_note: COMP also means Computation/Composition in general English. Write 'Composure'
+          in game documents.
+        category: stat
+      focus:
+        canonical: Focus
+        abbreviations: []
+        category: stat
+        range: 1-5+
+      truth:
+        canonical: Truth
+        abbreviations: []
+        aliases:
+        - Certainty
+        - Certainty Track
+        legacy:
+        - CERT
+        standalone_ok: true
+        category: track
+        range: 0-5
+        note: Per-character metaphysical stance — renamed from Certainty and consolidates the retired
+          character 'Piety Track' / religious-standing meter (ED-IN-0075). Solmund orthodoxy (5, Himmelenger
+          pole) → Thread-truth acceptance (0, Edeyja pole). Engine-internal 0–5; players see qualitative
+          bands only, never the number. 'Certainty' remains an accepted alias pending the corpus rename
+          (ED-IN-0075 staged sweep). Distinct from the territory-scale Piety (PT, Church seizure) and
+          from the 13-Conviction value system (conviction_taxonomy_v30) — both unchanged.
+      momentum:
+        canonical: Momentum
+        abbreviations: []
+        category: stat
+        range: 0-4
+    thread_practitioner_stats:
+      thread_sensitivity:
+        canonical: Thread Sensitivity
+        abbreviations:
+        - TS
+        standalone_ok: false
+        category: stat
+        range: 0-100+
+      thread_pool_score:
+        canonical: Thread Pool Score
+        abbreviations:
+        - TPS
+        standalone_ok: false
+        category: stat
+        formula: Thread Sensitivity / 10 (round down)
+      thread_depth:
+        canonical: Thread Depth
+        abbreviations:
+        - TD
+        status: REMOVED
+        removed_by: PP-166
+        legacy:
+        - Thread Depth
+        note: Phantom stat; not tracked. TD also appears as 'flowchart TD' Mermaid syntax — not a game
+          term.
+        category: stat
+      thread_tension:
+        canonical: Thread Tension
+        abbreviations:
+        - TT
+        standalone_ok: false
+        category: track
+        range: 0-100+
+    world_clocks:
+      mending_stability:
+        canonical: Mending Stability
+        abbreviations:
+        - MS
+        standalone_ok: false
+        category: clock
+        range: 100->0
+        loss_threshold: 0 = The Rupture (campaign ends)
+      church_influence:
+        canonical: Church Influence
+        abbreviations:
+        - CI
+        standalone_ok: false
+        category: clock
+        range: 0-100
+        milestones:
+          '40': Church Assertive (+1D on Assert and Seizure rolls)
+          '55': Institutional Reach (Ob +1 to actions opposing Church Domain Actions)
+          '60': Mass Seizure available — probabilistic declaration P = ((CI-60)/40)^3.3 per season (supersession_register
+            entry 250715f)
+          '65': Church Dominant (secular factions need extra slot to oppose Church motions)
+          '80': Church Ascendant (Seizure Ob -1 globally; PT drift)
+          '100': Theocracy Unification Attempt (see ci_political_v30 §2.2)
+        note: Renamed from Theocracy Counter (TC) per ED-782. Canonical thresholds per designs/provincial/ci_political_v30.md
+          §2.1. Old 75-threshold seizure removed; Mass Seizure now probabilistic from CI >= 60.
+        legacy:
+        - Theocracy Counter
+        - TC
+      institutional_pressure:
+        canonical: Institutional Pressure
+        abbreviations:
+        - IP
+        standalone_ok: false
+        category: clock
+        range: 0-100
+        loss_threshold: 75/80 = Altonian Vanguard (BG)
+      public_instability:
+        canonical: Public Instability
+        abbreviations:
+        - PI
+        standalone_ok: false
+        category: clock
+        range: 0-10
+        mode: BG
+        loss_threshold: 0 = Parliament dissolved + Löwenritter coup
+    debate_system:
+      conviction_track:
+        canonical: Conviction Track
+        abbreviations:
+        - CT
+        standalone_ok: false
+        collision_note: CT was preferred over TC to disambiguate from Theocracy Counter, but CT should
+          still not stand alone — write full term.
+        category: track
+        range: 0-10
+      concentration:
+        canonical: Concentration
+        abbreviations: []
+        category: mechanic
+      doubt_marker:
+        canonical: Doubt Marker
+        abbreviations: []
+        category: mechanic
+      genre:
+        canonical: Genre
+        abbreviations: []
+        category: mechanic
+        values: Past | Present | Future
+      orientation:
+        canonical: Orientation
+        abbreviations: []
+        category: mechanic
+        values: Revealing | Obscuring
+      interaction_type:
+        canonical: Interaction Type
+        abbreviations: []
+        category: mechanic
+        values: CLASH | AMPLIFY | CROSS | DIVERGE
+    faction_stats:
+      mandate:
+        canonical: Mandate
+        abbreviations:
+        - M
+        standalone_ok: false
+        note: Single-letter abbreviation permitted only in table headers following a full-term legend.
+        category: stat
+        collapse_threshold: 0 = Collapse state
+      influence:
+        canonical: Influence
+        abbreviations:
+        - I
+        standalone_ok: false
+        note: Single-letter abbreviation permitted only in table headers. Cannot drop below 1.
+        category: stat
+      wealth:
+        canonical: Wealth
+        abbreviations:
+        - W
+        standalone_ok: false
+        note: 0 = cannot Trade or fund Wealth-requiring actions.
+        category: stat
+      military:
+        canonical: Military
+        abbreviations:
+        - Mil
+        standalone_ok: false
+        note: 0 = cannot Muster.
+        category: stat
+      intel:
+        canonical: Intel
+        abbreviations:
+        - Int
+        standalone_ok: false
+        category: stat
+      stability:
+        canonical: Stability
+        abbreviations:
+        - Sta
+        standalone_ok: false
+        note: 0 = Collapse trigger (P-15).
+        category: stat
+      standing:
+        canonical: Standing
+        abbreviations: []
+        category: stat
+        range: 0-10
+    combat:
+      combat_endurance:
+        canonical: Combat Endurance
+        abbreviations:
+        - CE
+        standalone_ok: false
+        category: stat
+      command:
+        canonical: Command
+        abbreviations: []
+        category: stat
+        formula: ceil((Presence + Cognition) / 2)
+      damage_resistance:
+        canonical: Damage Resistance
+        abbreviations:
+        - DR
+        standalone_ok: false
+        category: stat
+      size:
+        canonical: Size
+        abbreviations: []
+        category: stat
+        note: At 0 = unit destroyed. Replaces Strength in mass combat.
+      power:
+        canonical: Power
+        abbreviations: []
+        category: stat
+        legacy:
+        - Combat Power
+        - CP
+        note: Damage per success = 1 + Power. Renamed from Combat Power (PP-232). ED-136 locks CP to Character
+          Points only.
+      discipline:
+        canonical: Discipline
+        abbreviations: []
+        category: stat
+        legacy:
+        - Cohesion
+        note: Renamed from Cohesion (PP-232).
+      health_per_size:
+        canonical: Health per Size
+        abbreviations:
+        - H
+        standalone_ok: false
+        category: stat
+        formula: min(Discipline, Command) + DR
+      total_health:
+        canonical: Total Health
+        abbreviations: []
+        category: stat
+        formula: Size × H
+    dice_engine:
+      target_number:
+        canonical: Target Number
+        abbreviations:
+        - TN
+        standalone_ok: true
+        note: Exception — abbreviation permitted standalone.
+        category: mechanic
+        values: 6 | 7 | 8
+      obstacle:
+        canonical: Obstacle
+        abbreviations:
+        - Ob
+        standalone_ok: true
+        note: Exception — abbreviation permitted standalone.
+        category: mechanic
+      expected_value:
+        canonical: Expected Value
+        abbreviations:
+        - EV
+        standalone_ok: false
+        category: infra
+      degree_of_success:
+        canonical: Degree of Success
+        abbreviations: []
+        category: mechanic
+        values: Overwhelming | Success | Partial | Failure
+      overwhelming:
+        canonical: Overwhelming
+        abbreviations: []
+        category: mechanic
+        formula_ttrpg: Net successes ≥ 2× Ob AND ≥ 3 minimum (PP-232)
+        formula_bg: Net successes ≥ Ob + 1 (provisional)
+      partial:
+        canonical: Partial
+        abbreviations: []
+        category: mechanic
+        formula: Net successes > 0 but < Ob
+    world_narrative:
+      gap:
+        canonical: Gap
+        abbreviations: []
+        category: mechanic
+        variants: Micro-Gap | Standard Gap | Entrenched Gap | Catastrophic Gap
+      shifting_object:
+        canonical: Shifting Object
+        abbreviations: []
+        category: mechanic
+        note: Pre-Gap substrate instability.
+      locked_zone:
+        canonical: Locked Zone
+        abbreviations: []
+        category: mechanic
+      monstrous_incursion:
+        canonical: Monstrous Incursion
+        abbreviations: []
+        category: mechanic
+      the_rupture:
+        canonical: The Rupture
+        abbreviations: []
+        category: mechanic
+        note: Campaign-ending event when Mending Stability reaches 0.
+      knot:
+        canonical: Knot
+        abbreviations: []
+        category: mechanic
+        variants: Close | Regular | Distant
+      belief:
+        canonical: Belief
+        abbreviations: []
+        category: mechanic
+      inspiration:
+        canonical: Inspiration
+        abbreviations: []
+        category: mechanic
+      history:
+        canonical: History
+        abbreviations: []
+        category: mechanic
+        note: Skill-equivalent. Cap = Memory score.
+      character_point:
+        canonical: Character Point
+        abbreviations:
+        - CP
+        standalone_ok: false
+        collision_note: CP previously ambiguous with Combat Power. ED-136 locks CP to Character Points
+          only; 'Power' is the unit offensive stat.
+        category: mechanic
+      domain_echo:
+        canonical: Domain Echo
+        abbreviations: []
+        category: mechanic
+      grievance_marker:
+        canonical: Grievance Marker
+        abbreviations: []
+        category: mechanic
+      co_movement_card:
+        canonical: Co-Movement Card
+        abbreviations: []
+        category: mechanic
+        mode: BG
+      disposition:
+        canonical: Disposition
+        abbreviations: []
+        category: mechanic
+        note: NPC-attached attitude state toward another entity. Drives behaviour-tree branching. Canonical
+          in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal —
+          391 chains. Added to glossary 2026-04-30 (PP-691).
+      domain_action:
+        canonical: Domain Action
+        abbreviations: []
+        category: mechanic
+        note: Faction-level strategic action resolved at scale-transition phase. Unit of strategic-layer
+          decision. Canonical in systems/_architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md;
+          no separate first-class doc. Mode D cascade-terminal — 346 chains. Added to glossary 2026-04-30
+          (PP-691).
+    thread_operations:
+      weaving:
+        canonical: Weaving
+        abbreviations: []
+        category: operation
+      pulling:
+        canonical: Pulling
+        abbreviations: []
+        category: operation
+        variants: Present-Oriented | Past-Oriented
+      past_oriented_pulling:
+        canonical: Past-Oriented Pulling
+        abbreviations:
+        - POP
+        standalone_ok: false
+        category: operation
+        requires: Thread Sensitivity 70+
+      locking:
+        canonical: Locking
+        abbreviations: []
+        category: operation
+        requires: Thread Sensitivity 50+
+      dissolution:
+        canonical: Dissolution
+        abbreviations: []
+        category: operation
+        requires: Thread Sensitivity 50+
+      mending:
+        canonical: Mending
+        abbreviations: []
+        category: operation
+        requires: Thread Sensitivity 50+
+      diagnosis:
+        canonical: Diagnosis
+        abbreviations: []
+        category: operation
+        note: Mandatory pre-operation read. No roll. Required before Mending/Locking/Dissolution/Past-Oriented
+          Pulling.
+      leap:
+        canonical: Leap
+        abbreviations: []
+        category: operation
+        note: Full-round action (Priority 5). Prerequisite for all Thread operations.
+      forced_resolution:
+        canonical: Forced Resolution
+        abbreviations:
+        - FR
+        standalone_ok: false
+        category: operation
+        note: Collective term for Locking and Dissolution. TN 8. No Thread Pool Score added.
+      dissolution_residue:
+        canonical: Dissolution Residue
+        abbreviations: []
+        category: mechanic
+      overweaving:
+        canonical: Overweaving
+        abbreviations: []
+        category: mechanic
+        note: +1 Ob per op after first on same configuration in one contact window.
+    infrastructure:
+      simulation_identifier:
+        canonical: Simulation Identifier
+        abbreviations:
+        - SIM-NNN
+        standalone_ok: true
+        category: infra
+      patch:
+        canonical: Patch
+        abbreviations:
+        - PP-NNN
+        - PP
+        standalone_ok: true
+        category: infra
+      editorial_decision:
+        canonical: Editorial Decision
+        abbreviations:
+        - ED-NNN
+        - ED
+        standalone_ok: true
+        category: infra
+      simulation_debt:
+        canonical: Simulation Debt
+        abbreviations:
+        - SIM-DEBT-NNN
+        standalone_ok: true
+        category: infra
+      game_master:
+        canonical: Game Master
+        abbreviations:
+        - GM
+        standalone_ok: true
+        category: infra
+      non_player_character:
+        canonical: Non-Player Character
+        abbreviations:
+        - NPC
+        standalone_ok: true
+        category: infra
+      player_character:
+        canonical: Player Character
+        abbreviations:
+        - PC
+        standalone_ok: true
+        category: infra
+      burning_wheel:
+        canonical: Burning Wheel
+        abbreviations:
+        - BW
+        standalone_ok: false
+        category: infra
+    modes:
+      tabletop_roleplaying_game:
+        canonical: Tabletop Roleplaying Game
+        abbreviations:
+        - TTRPG
+        standalone_ok: true
+        category: mode
+      board_game:
+        canonical: Board Game
+        abbreviations:
+        - BG
+        standalone_ok: true
+        category: mode
+      hybrid:
+        canonical: Hybrid
+        abbreviations:
+        - HYB
+        standalone_ok: false
+        category: mode
+        note: Write in full; HYB not permitted alone.
+    collision_table:
+      tc:
+        abbreviation: TC
+        meaning_a: Church Influence (CI) — renamed from Theocracy Counter per ED-782
+        meaning_b: Conviction Track (CT) — debate position tracker, 0-10
+        resolution: 'RESOLVED at term level: TC no longer used. Church Influence = CI; Conviction Track
+          = CT. Corpus residuals: npc_behavior_v30.md swept 2026-04-30 (PP-691, 16 paragraphs CI-context).
+          Other corpus residuals (5 paragraphs across throughlines_meta_infill + npc_character_analyses
+          + mass_battle) noted in censured_vocabulary.yaml; queued for future sweep cycles.'
+        status: resolved_term_partial_corpus
+      cp:
+        abbreviation: CP
+        meaning_a: Character Point (advancement currency) — CURRENT
+        meaning_b: Combat Power (renamed to Power — PP-232)
+        resolution: CP refers to Character Points only. Use 'Power' for unit offensive stat. [ED-136]
+      td:
+        abbreviation: TD
+        meaning_a: Thread Depth (phantom stat; REMOVED PP-166)
+        meaning_b: Top-Down (Mermaid flowchart directive)
+        resolution: Thread Depth does not exist. 'flowchart TD' is valid Mermaid syntax — not a game term.
+      comp:
+        abbreviation: COMP
+        meaning_a: Composure (Debate context)
+        meaning_b: Computation / Composition (general English)
+        resolution: Write 'Composure' in game documents.
+    unresolved: {}
+    deprecated_abbreviations:
+      tlk:
+        abbreviation: TLK
+        canonical: Torben Loyalty Clock
+        context: Narrative-specific clock for Prince Torben Almqvist's loyalty. Range 10->0. Drain rate
+          historically undefined (F72 gap).
+        status: DEPRECATED — confirmed in deprecated/tests/valoria_mechanic_audit_p1.md; retained here
+          for historical grep
+        active_canonical: null
+      dd:
+        abbreviation: DD
+        canonical: Deniability Debt
+        context: Deniability Debt mechanic — DEPRECATED. Originally tied to Niflhel Operative mechanic
+          (Niflhel struck per CR-STRIKE-2026-04-19 / conflict_architecture_proposal §Niflhel Dissolution).
+          Mechanic functions redistributed to settlement-broker (settlement_layer §4.7-4.9).
+        status: DEPRECATED — still referenced in some active design docs as 'Deniability Debt' (full term).
+          The abbreviation DD is not in active use.
+        active_canonical: Deniability Debt
+      fstat:
+        abbreviation: FSTAT
+        canonical: Faction Stats (collective)
+        context: Collective shorthand for all faction stat lines (Mandate, Influence, Wealth, Military,
+          Intel, Stability).
+        status: DEPRECATED — was a simulator category code, never an in-game term
+        active_canonical: null
+    substrate_aliases:
+      key:
+        canonical: Key
+        abbreviations: []
+        aliases:
+        - EventImpact
+        legacy:
+        - EventImpact Matrix
+        - event record
+        - Memory record
+        patch: PP-687
+        note: Doc 08 EventImpact is the Key prototype; specific subtypes are da_outcome.* and state_transition.*
+          per key_type_registry_v30.md.
+      memory_entry:
+        canonical: Memory entry (Key reference + per-NPC salience)
+        aliases:
+        - Memory record
+        - Memory schema
+        patch: PP-687
+        note: NPC.memory is list of Key references with salience; not bespoke per-NPC event copies. See
+          key_substrate_v30.md §4.3.
+      philosophical_tradition_legacy:
+        canonical: Conviction (PP-684 13-Conviction taxonomy)
+        aliases: []
+        legacy:
+        - Categorical Imperative
+        - Virtue
+        - Faith
+        - Scholastic
+        - Equity
+        - Honor
+        - Reason (legacy tag)
+        - Continuity (legacy tag)
+        patch: PP-684
+        note: Legacy philosophical-tradition labels superseded by 13-Conviction taxonomy (Faith, Authority,
+          Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue,
+          Honor). Per-character migration in PP-685 / conviction_migration_roster_v30.
+      ethical_framework_modifier:
+        canonical: Ob_modifier (per faction_behavior_v30 §3.7 triadic decomposition)
+        aliases: []
+        legacy:
+        - Ethical Framework Modifier
+        patch: PP-686
+        note: Replaced by mission + cascade + expectation triadic decomposition clamped at ±2. See SUPERSESSION-PP686-001.
+    legacy_renames:
+      combat_power_to_power:
+        old: Combat Power
+        new: Power
+        abbreviation_freed: CP was ambiguous; now locked to Character Points
+        patch: PP-232
+      cohesion_to_discipline:
+        old: Cohesion
+        new: Discipline
+        patch: PP-232
+      thread_depth_removed:
+        old: Thread Depth (TD)
+        new: null
+        status: REMOVED — phantom stat
+        patch: PP-166
+      rendering_stability_to_mending_stability:
+        old: Rendering Stability (RS)
+        new: Mending Stability (MS)
+        patch: ED-731
+        note: Historical RS references retained as annotations in canon/02 per intentional design.
+  deprecated_terms_registry:
+    register: deprecated_superseded
+    source: references/mechanical_terms_index.md §6
+    extracted: '2026-05-10'
+    description: Retired terms. Should not appear in active docs.
+    total_entries: 32
+    renamed:
+    - old: Theocracy Counter (TC)
+      new: Church Influence (CI)
+      patch: ED-782
+    - old: Rendering Stability (RS)
+      new: Mending Stability (MS)
+      patch: ED-731
+    - old: Combat Power (CP)
+      new: Power
+      patch: PP-232
+    - old: Cohesion
+      new: Discipline
+      patch: PP-232
+    - old: Strength (mass-combat unit)
+      new: Size
+      patch: PP-232
+    - old: Command Rating (CR)
+      new: Command
+      patch: PP-232
+    - old: EventImpact / EventImpact Matrix
+      new: Key (substrate)
+      patch: PP-687
+    - old: Memory record / Memory schema
+      new: Memory entry
+      patch: PP-687
+    - old: Contact Rounds
+      new: Thread Fatigue
+      patch: ED-694
+    - old: Health (combat damage track)
+      new: Vitality
+      patch: ED-548, ED-694
+    - old: Diagnosis (as separate operation)
+      new: Mandatory pre-op read; no roll
+      patch: ED-134, ED-124
+    - old: GM resolution (in canon-context)
+      new: Engine resolution
+      patch: canon/01
+    removed:
+    - term: Thread Depth (TD)
+      status: REMOVED — phantom stat; never tracked
+      reference: PP-166
+    - term: Piety Domain Action
+      status: DISSOLVED
+      reference: conviction_track_v30 §3
+    - term: 75-threshold Seizure
+      status: REPLACED by Mass Seizure (CI ≥ 60 probabilistic)
+      reference: ci_political §2 supersession
+    - term: Path C — Thread Supremacy (Varfell)
+      status: STRUCK
+      reference: PP-663
+    - term: Niflhel as faction
+      status: STRUCK; mechanic functions redistributed to settlement-broker
+      reference: CR-STRIKE-2026-04-19, conflict_architecture
+    - term: Vaynard Thread Mastery (VTM)
+      status: STRUCK
+      reference: PP-663
+    - term: Cultural Reformation (PP-650)
+      status: STRUCK
+      reference: PP-650 (replaced by PP-685)
+    - term: Co-Movement Card (BG-only ten-card deck)
+      status: REPLACED by 18-card deck
+      reference: threadwork §7.1
+    deprecated_abbreviations:
+    - abbreviation: TLK
+      meaning: Torben Loyalty Clock
+      status: DEPRECATED — drain rate undefined (F72 gap)
+    - abbreviation: DD
+      meaning: Deniability Debt
+      status: DEPRECATED (Niflhel-tied; mechanic functions redistributed). Full term still appears in
+        some docs as "Deniability Debt."
+    - abbreviation: FSTAT
+      meaning: Faction Stats (collective)
+      status: DEPRECATED — was simulator category code, never an in-game term
+    legacy_frameworks:
+    - legacy_label: Categorical Imperative
+      replacement: One of the 13 Convictions per faction; see conviction_migration_roster
+    - legacy_label: Virtue
+      replacement: 'Virtue (Conviction #12) + Self-Other orientation'
+    - legacy_label: Faith
+      replacement: 'Faith (Conviction #1) + Authority (Conviction #2)'
+    - legacy_label: Scholastic
+      replacement: 'Scholastic (Conviction #4)'
+    - legacy_label: Equity
+      replacement: 'Equity (Conviction #6)'
+    - legacy_label: Honor
+      replacement: 'Honor (Conviction #13)'
+    - legacy_label: Reason (legacy tag)
+      replacement: (per migration roster — varies by character)
+    - legacy_label: Continuity (legacy tag)
+      replacement: (per migration roster — varies by character)
+    - legacy_label: Ethical Framework Modifier
+      replacement: Mission + Cascade + Public Expectation triadic decomposition (PP-686)
+  censured_vocabulary:
+    terms:
+    - term: VTM
+      canonical_full: Vaynard Thread Mastery
+      reason: Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural
+        Reformation pool but never defined.
+      replacement: null
+      date: '2026-04-19'
+      authority: ED-706 / VTM-STRIKE-2026-04-19
+      residual_count: 18
+      residual_at_audit: '2026-04-30'
+      residual_concentration: designs/provincial/victory_v30.md (5) + engine/params/bg/victory.md (4)
+    - term: Vaynard Thread Mastery
+      canonical_full: Vaynard Thread Mastery
+      reason: Full phrase of struck VTM.
+      replacement: null
+      date: '2026-04-19'
+      authority: ED-706 / VTM-STRIKE-2026-04-19
+      residual_count: 2
+      residual_at_audit: '2026-04-30'
+      residual_concentration: engine/params/bg/victory.md (2)
+    - term: Cultural Reformation
+      canonical_full: Cultural Reformation
+      reason: Varfell Colonist card territorial conversion. Incompatible with Vaynard's military-conqueror
+        identity. Vaynard does not convert populations ideologically.
+      replacement: Military conquest only. Tribune intel preserved. Thread operations remain personal-scale
+        only.
+      date: '2026-04-19'
+      authority: ED-707 / CR-STRIKE-2026-04-19
+      residual_count: 13
+      residual_at_audit: '2026-04-30'
+      residual_concentration: designs/provincial/peninsular_strain_v30.md (10/13)
+    - term: Combat Power
+      canonical_full: Power
+      reason: Renamed to Power. CP abbreviation freed (now locks to Character Points only per ED-136).
+      replacement: Power
+      date: 2026-02-XX
+      authority: PP-232
+      residual_count: 0
+      residual_at_audit: '2026-04-30'
+      residual_concentration: null
+    - term: Cohesion
+      canonical_full: Discipline
+      reason: Renamed to Discipline.
+      replacement: Discipline
+      date: 2026-02-XX
+      authority: PP-232
+      residual_count: 5
+      residual_at_audit: '2026-04-30'
+      residual_concentration: systems/mass_battle/mass_battle_v30.md (2) + engine/params/mass_combat.md
+        (2) + designs/provincial/peninsular_strain_v30.md (1)
+    - term: Thread Depth
+      canonical_full: Thread Depth
+      reason: Phantom stat; not tracked. TD abbreviation also collides with Mermaid 'flowchart TD' syntax.
+      replacement: null
+      date: 2026-XX-XX
+      authority: PP-166
+      residual_count: 0
+      residual_at_audit: '2026-04-30'
+      residual_concentration: null
+    - term: Rendering Stability
+      canonical_full: Mending Stability
+      reason: Renamed to Mending Stability.
+      replacement: Mending Stability (MS)
+      date: 2026-04-XX
+      authority: ED-731
+      residual_count: 1
+      residual_at_audit: '2026-04-30'
+      residual_concentration: canon/02_foundations_amendment_leap_mechanism.md (1) — possibly intentional
+        retention per ED-731 note; verify before action
+    - term: Theocracy Counter
+      canonical_full: Church Influence
+      reason: Renamed to Church Influence (CI).
+      replacement: Church Influence (CI)
+      date: '2026-04-25'
+      authority: ED-782
+      residual_count: 0
+      residual_at_audit: '2026-04-30'
+      residual_concentration: null
+    - term: TC (as Church Influence)
+      canonical_full: Church Influence (CI)
+      reason: Abbreviation rename per ED-782. Distinct from Conviction Track context (CT) — context filter
+        required during sweep.
+      replacement: CI
+      date: '2026-04-25'
+      authority: ED-782
+      residual_count: 2
+      residual_at_audit: 2026-04-30 (post-PP-691)
+      residual_concentration: 'Pre-PP-691 audit: 16 of 21 in npc_behavior_v30.md (swept this commit).
+        throughlines_meta_infill.md (3 — also cleared this commit). Remaining post-commit: npc_character_analyses_v30.md
+        (1) + mass_battle_v30.md (1).'
+    - term: Coup Counter
+      canonical_full: Graduated Autonomy
+      reason: Replaced by Löwenritter Graduated Autonomy mechanism.
+      replacement: Graduated Autonomy (Löwenritter-specific) — per-site substitution required, not 1:1
+        mechanical replacement
+      date: '2026-04-25'
+      authority: ED-781
+      residual_count: 6
+      residual_at_audit: '2026-04-30'
+      residual_concentration: systems/_architecture/conflict_architecture_proposal.md (3) + canon/03_canonical_timeline.md
+        (1) + systems/_architecture/campaign_architecture_v30.md (1) + systems/factions/faction_layer_v30.md
+        (1)
+    - term: Niflhel (as faction)
+      canonical_full: Niflhel (faction-context only — place-references retained)
+      reason: Niflhel-as-faction dissolved per conflict_architecture_proposal. Place references retained;
+        faction mechanics struck.
+      replacement: 'Per-site design judgment: substitute alternate covert-action faction or remove faction-context
+        references.'
+      date: '2026-04-25'
+      authority: ED-764
+      residual_count: 23
+      residual_at_audit: '2026-04-30'
+      residual_concentration: systems/_architecture/conflict_architecture_proposal.md (5) + systems/factions/faction_layer_v30.md
+        (5)
+    - term: GM (bare)
+      canonical_full: Game Master
+      reason: 'Project-instructions level: ''There is no GM — the engine handles all resolution.'' Bare
+        GM standalone distinct from the Game Master bigram (which PP-678 swept to 0). Glossary §9 marks
+        Game Master as design-source legacy mapped to engine resolution authority.'
+      replacement: Engine / Game Master full phrase / context-appropriate term — corpus-wide pass per
+        P1 directive
+      date: '2026-04-30'
+      authority: PP-691 (formal censure); session-log P1 directive
+      residual_count: 29
+      residual_at_audit: '2026-04-30'
+      residual_concentration: systems/npcs/npc_behavior_v30.md (5) + engine/params/core.md (4) + systems/factions/faction_layer_v30.md
+        (3); diffuse — 14 docs total
+    - term: Conviction Track (contest-context)
+      canonical_full: Persuasion Track
+      reason: '''Conviction'' is a §1 character-attribute vocabulary word (the 13 Convictions). Using
+        it for the contest debate-score track (0–10) contaminates the attribute silo with mechanic vocabulary.'
+      replacement: Persuasion Track (0–10, debate score)
+      date: '2026-05-08'
+      authority: vocabulary audit — silo isolation directive
+      residual_count: 89
+      residual_at_audit: '2026-05-08'
+      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md
+        (FIXED) + 87 remaining files
+    - term: Conviction Track (territory-context)
+      canonical_full: Piety Track (PT)
+      reason: '''Conviction'' is a §1 character-attribute vocabulary word. Per-territory Solmund-orthodoxy
+        track is about piety, not personal Convictions. ED-644 already acknowledged equivalence with Piety
+        Track.'
+      replacement: Piety Track (PT) (0–5, per-territory Solmund orthodoxy)
+      date: '2026-05-08'
+      authority: ED-644 + vocabulary audit — silo isolation directive
+      residual_count: 89
+      residual_at_audit: '2026-05-08'
+      residual_concentration: Shared count with contest-context; both appear as 'Conviction Track'
+    - term: CT (abbreviation for Conviction Track)
+      canonical_full: PT (Piety Track) or Persuasion Track (no abbreviation)
+      reason: CT is deprecated. PT is the territory track abbreviation. Persuasion Track is spelled out
+        (no abbreviation assigned).
+      replacement: PT (territory) or Persuasion Track (contest)
+      date: '2026-05-08'
+      authority: vocabulary audit
+    - term: CV (abbreviation for Conviction Track)
+      canonical_full: PT (Piety Track)
+      reason: CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644 (rename
+        pending).
+      replacement: PT
+      date: '2026-05-08'
+      authority: ED-644 + vocabulary audit (rename pending)
+    - term: Initiative (contest-context)
+      canonical_full: First to Speak
+      reason: '''Initiative'' in contest context collides with combat Initiative (§5). Different systems
+        should not share mechanic names.'
+      replacement: First to Speak
+      date: '2026-05-08'
+      authority: vocabulary audit — silo isolation directive
+      residual_count: 5
+      residual_at_audit: '2026-05-08'
+      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md
+        (FIXED) + infill/v2 files pending
+  synonym_registry:
+    register: synonym
+    source: references/mechanical_terms_index.md §4
+    extracted: '2026-05-10'
+    description: Different words for the same mechanical concept. Canonical winner marked.
+    total_entries: 20
+    entries:
+    - concept: World rendering-stability clock
+      canonical: '**Mending Stability (MS)**'
+      aliases___synonyms: Rendering Stability (RS)
+      source: ED-731. Historical RS retained only in canon/02 annotations by intentional design.
+    - concept: Church-faction's institutional reach
+      canonical: '**Church Influence (CI)**'
+      aliases___synonyms: Theocracy Counter (TC)
+      source: ED-782. TC retained in alias_registry collision_table; corpus residuals queued.
+    - concept: Mass-combat unit-size stat
+      canonical: '**Size**'
+      aliases___synonyms: Strength (legacy)
+      source: PP-232.
+    - concept: Mass-combat offensive stat
+      canonical: '**Power**'
+      aliases___synonyms: Combat Power (CP, legacy)
+      source: PP-232. ED-136 locks CP to Character Points.
+    - concept: Mass-combat defensive coherence stat
+      canonical: '**Discipline**'
+      aliases___synonyms: Cohesion (legacy)
+      source: PP-232.
+    - concept: Mass-combat command stat
+      canonical: '**Command**'
+      aliases___synonyms: Command Rating (CR, legacy)
+      source: PP-232.
+    - concept: Substrate event-record
+      canonical: '**Key**'
+      aliases___synonyms: EventImpact (legacy)
+      source: PP-687.
+    - concept: Per-NPC remembered Key reference
+      canonical: '**Memory entry**'
+      aliases___synonyms: Memory record, Memory schema (legacy)
+      source: PP-687.
+    - concept: Thread-contact action-economy resource
+      canonical: '**Thread Fatigue**'
+      aliases___synonyms: Contact Rounds (legacy)
+      source: ED-694.
+    - concept: Wound-track survival resource (combat)
+      canonical: '**Vitality**'
+      aliases___synonyms: Health (legacy in combat context)
+      source: ED-548 + ED-694. **Note:** Health is still used as the universal name (the personal stat);
+        Vitality is the *combat-instance* of it.
+    - concept: Action-card faction-strategic system
+      canonical: '**Card Hands** + **Card → Action Mapping** + **Cooldown Track**'
+      aliases___synonyms: Various legacy formulations of "card system"
+      source: PP-177 unified.
+    - concept: Faction-strategic ethical-framework modifier
+      canonical: '**Mission + Cascade + Public Expectation triadic decomposition**'
+      aliases___synonyms: Ethical Framework Modifier (legacy)
+      source: PP-686 / SUPERSESSION-PP686-001.
+    - concept: Conviction taxonomy
+      canonical: '**The 13 Convictions** (PP-684)'
+      aliases___synonyms: Categorical Imperative · Virtue · Faith · Scholastic · Equity · Honor · Reason
+        (legacy) · Continuity (legacy)
+      source: PP-684.
+    - concept: Engine-resolution model
+      canonical: '**Engine Setup / Resolution**'
+      aliases___synonyms: GM Setup / Resolution (legacy in always-already canon context)
+      source: canon/01 (consciousness-performed rendering).
+    - concept: TTRPG mode
+      canonical: '**Tabletop Roleplaying Game (TTRPG)**'
+      aliases___synonyms: (none)
+      source: alias_registry.
+    - concept: Hybrid mode (full term)
+      canonical: '**Hybrid (HYB)**'
+      aliases___synonyms: (none — HYB never standalone)
+      source: alias_registry.
+    - concept: BG mode
+      canonical: '**Board Game (BG)**'
+      aliases___synonyms: (none)
+      source: alias_registry.
+    - concept: World-track for Solmund-orthodoxy at territory scale
+      canonical: '**Piety Track (PT)**'
+      aliases___synonyms: Conviction Track (CT/CV — legacy abbreviation in some docs)
+      source: 'ED-644 explicitly confirms: "Conviction (PT) here is the same per-territory stat as Piety
+        (PT)." Range is 0–5, NOT 0–10. PT is canonical. **RESOLVED — same track.**'
+    - concept: ~~Per-territory Solmund-orthodoxy track~~
+      canonical: ~~**Piety Track (PT)** vs **Conviction Track (CV)**~~ — ~~POTENTIAL DUPLICATION~~
+      aliases___synonyms: ~~If PT and CV are the same axis at the same scale, one is redundant.~~
+      source: '**RESOLVED per ED-644: they ARE the same track. PT is canonical. CV/CT are legacy abbreviations.**'
+    - concept: Mass Seizure
+      canonical: '**Mass Seizure** (probabilistic, CI ≥ 60)'
+      aliases___synonyms: Old "75-threshold Seizure" (gated, replaced)
+      source: ci_political §2.2 — replacement noted in supersession.
