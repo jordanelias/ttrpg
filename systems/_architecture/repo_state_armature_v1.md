@@ -116,10 +116,12 @@ pin.
   **Slice 1:** retired the 2 reader-less registers (collision_registry, orphan_terms_registry) →
   `deprecated/references/`. **Slice 2:** folded alias/deprecated/censured/synonym into
   `references/definitions/vocab_source.yaml` (source) + regenerated each as a GENERATED view via
-  `tools/vocab_store.py`. **Slice 3:** folded name_collision_database — migrated its 13 inline
-  `# COLLISION` comments to a `note:` data field, taught `build_lexicon` to read it, then folded it
-  as a view. ⚠️ Slice 3 **overturns OPT-AV-14** specifically (name_collision's own "permanent
-  historical snapshot, no live regeneration" ruling within the ED-IN-0029 docket) — loud per ED-1094.
+  `tools/vocab_store.py`. **Slice 3:** name_collision_database handled by
+  **DUPLICATION, not overturn** (Jordan ruling — "keep the frozen snapshot but also one where we can
+  get the info"). **OPT-AV-14 is PRESERVED:** the frozen file stays untouched (no regeneration path),
+  while its data — 13 inline `# COLLISION` comments lifted into `note:` fields — is MIRRORED into
+  `vocab_source.yaml` for unified querying. `vocab_store.py` treats it as a FROZEN_MIRROR (never
+  regenerated; `--check` verifies the mirror matches the frozen file). `build_lexicon` unchanged.
 - **P4 — freshness absorption + graduation:** §3; retire `freshness_gate.py`; add `review-state` to
   `ci-summary.needs`, drop its `continue-on-error`.
 - **P5 — attribute centralization: HARD-GATED on a Jordan ruling of OPT-AV-1** (the 7/9/10-with-Recall

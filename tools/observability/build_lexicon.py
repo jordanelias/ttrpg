@@ -124,10 +124,7 @@ def main():
         for abbr, info in (ncd.get("abbreviations") or {}).items():
             if not isinstance(info, dict):
                 continue
-            # Prefer the structured `note:` data field (ED-IN-0078 fold — name_collision became a
-            # generated view, so its former inline `# COLLISION` comments now live as data); fall
-            # back to the raw-line comment for any un-migrated inline note.
-            note = info.get("note") or comment_by_abbr.get(abbr, "")
+            note = comment_by_abbr.get(abbr, "")
             rec = {"abbr": abbr, "expands_to": info.get("term", ""), "silo": info.get("silo", ""),
                    "status": info.get("status", ""), "scope": info.get("scope", ""),
                    "exempt": bool(info.get("exempt")), "note": note, "sources": [s_ncd]}

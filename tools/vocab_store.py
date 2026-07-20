@@ -20,6 +20,7 @@ CLI:
 """
 from __future__ import annotations
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -34,9 +35,16 @@ REGISTERS = {
     "deprecated_terms_registry": ROOT / "references" / "deprecated_terms_registry.yaml",
     "censured_vocabulary": ROOT / "references" / "censured_vocabulary.yaml",
     "synonym_registry": ROOT / "references" / "synonym_registry.yaml",
-    # Slice 3 (ED-IN-0078): name_collision_database's former inline `# COLLISION` comments were
-    # migrated to a per-abbreviation `note:` data field (build_lexicon now reads that field), so a
-    # YAML-dump view is faithful and this register folds in like the rest.
+}
+
+# Frozen mirrors: registers we DUPLICATE into vocab_source.yaml for unified querying but do NOT
+# regenerate — the file on disk stays authoritative and untouched. name_collision_database.yaml is
+# RATIFIED a "permanent historical snapshot, no live regeneration path" (ED-IN-0029 docket, OPT-AV-14),
+# so folding it as a generated view would overturn that ruling. Instead its data (with the inline
+# `# COLLISION` comments lifted into a `note:` field) is mirrored into vocab_source.yaml so the info is
+# retrievable from the one place, while the frozen file is left exactly as ratified. `--check` verifies
+# the mirror still matches the frozen file's data, so the duplicate can't silently drift.
+FROZEN_MIRRORS = {
     "name_collision_database": ROOT / "references" / "name_collision_database.yaml",
 }
 
@@ -71,6 +79,22 @@ def _load_source() -> dict:
     return (yaml.safe_load(SOURCE.read_text(encoding="utf-8")) or {}).get("registers", {})
 
 
+def _frozen_data(path: Path) -> dict:
+    """A frozen file's data with its inline `# COLLISION`/`# NOTE` abbr comments lifted into `note:`
+    fields — matching how the mirror stores them, for the mirror-parity comparison. Read-only."""
+    raw = path.read_text(encoding="utf-8")
+    comment_by_abbr = {}
+    for ln in raw.splitlines():
+        m = re.match(r"\s*([A-Za-z0-9]+):\s*\{.*?\}\s*#\s*(.+)$", ln)
+        if m:
+            comment_by_abbr[m.group(1)] = m.group(2).strip()
+    data = yaml.safe_load(raw) or {}
+    for abbr, info in (data.get("abbreviations") or {}).items():
+        if abbr in comment_by_abbr and isinstance(info, dict):
+            info["note"] = comment_by_abbr[abbr]
+    return data
+
+
 def build() -> list[str]:
     """Regenerate every register view from the source. Returns the paths written."""
     regs = _load_source()
@@ -96,6 +120,14 @@ def check() -> tuple[bool, list[str]]:
             msgs.append(f"view missing: {path.relative_to(ROOT)}"); ok = False; continue
         if path.read_text(encoding="utf-8") != _render(name, regs[name]):
             msgs.append(f"DRIFT: {path.relative_to(ROOT)} != fresh render — run --build and commit"); ok = False
+    # frozen mirrors: the vocab_source copy must still match the (untouched) frozen file's data
+    for name, path in FROZEN_MIRRORS.items():
+        if name not in regs:
+            msgs.append(f"source missing frozen-mirror block: {name}"); ok = False; continue
+        if not path.exists():
+            msgs.append(f"frozen mirror source missing: {path.relative_to(ROOT)}"); ok = False; continue
+        if _frozen_data(path) != regs[name]:
+            msgs.append(f"MIRROR DRIFT: vocab_source[{name}] != frozen {path.relative_to(ROOT)} data"); ok = False
     return ok, msgs
 
 
