@@ -367,7 +367,15 @@ def main(argv) -> int:
         mode = 'local'
 
     changed = ci_common.get_changed_files(mode)
-    sim_paths = sorted(p for p in changed if is_sim_file(p))
+    # Pure-rename exemption (mirrors ci_co_file_checker / ci_editorial_checker): a file
+    # relocated by `git mv` with no content edit surfaces in `changed` at its new path but
+    # has NO added lines. This gate catches NEWLY-fabricated constants; a content-identical
+    # move introduces none. Without this, the ED-IN-0071 reorg (relocating throwaway
+    # audit-session sims from designs/audit/.../sims/ to audit/.../sims/) trips the gate on
+    # their pre-existing uncited constants purely because the rename lands them in the
+    # changeset. A rename that ALSO edits content keeps added lines, so it stays scanned.
+    added = ci_common.get_added_lines(mode)
+    sim_paths = sorted(p for p in changed if is_sim_file(p) and p in added)
     if not sim_paths:
         print("[SIM-FABRICATION OK] no changed sim .py files — nothing to check.")
         return 0

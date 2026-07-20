@@ -15,7 +15,7 @@ REPO = os.path.join(os.path.dirname(__file__), "..", "..")
 
 # The surfaces that carry the Knot Pool *formation-pool* formula (not the count cap).
 SURFACES = (
-    "designs/scene/derived_stats_v30.md",
+    "systems/_architecture/derived_stats_v30.md",
     "systems/fieldwork/knots_v30.md",
     "systems/fieldwork/fieldwork_editorial.md",
 )

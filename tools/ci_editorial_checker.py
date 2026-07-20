@@ -32,6 +32,13 @@ SKELETON_EXEMPT = '_skeleton.md'  # auto-generated, exempt from editorial marker
 
 _mode = 'staged' if '--staged' in sys.argv else ('local' if '--local' in sys.argv else 'ci')
 changed = ci_common.get_changed_files(_mode)
+# A pure rename (git mv with no content edit) surfaces in `changed` at its new path but
+# has NO added lines in the diff. Editorial markers govern authored CONTENT, so relocating
+# an already-authored doc INTO an editorial path (e.g. the ED-IN-0071 reorg moving
+# miraculous_event_v30.md into systems/world/) must not demand a fresh [EDITORIAL] marker.
+# Mirrors the ci_co_file_checker pure-rename exemption. A rename that ALSO edits content
+# still has added lines, so it stays governed.
+_added = ci_common.get_added_lines(_mode)
 violations = []
 
 # Check deleted editorial files — deletion also requires a marker in the commit message
@@ -61,6 +68,8 @@ for path in sorted(changed):
         continue
     if not os.path.exists(path):
         continue  # deleted (already handled above)
+    if path not in _added:
+        continue  # pure rename / relocation with no added content — not a substantive edit
     with open(path, encoding='utf-8', errors='strict') as f:
         try:
             content = f.read()

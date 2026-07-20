@@ -25,7 +25,7 @@ sources:
       name: "All faction-specific victory conditions (8 alternates + Partition co-victory)"
       reason: "STRUCK by GD-1 (canon/02_canon_constraints.md §B, canonized 2026-05-17). Peninsular Sovereignty (11/15 territories sustained 2 seasons) is the sole victory condition. Includes: Altonian Theocracy (PP-414), Hollow Victory (PP-415), Southernmost Dominion (PP-417 Path B including all conditional and calamity-healed variants), Thread Supremacy as victory path (PP-417 Path C — first-mover advantage in threadwork remains as tactical lever toward universal victory), Co-Victory Varfell+RM (PP-418), Hafenmark Dynastic Assertion, Church Theocratic Bid, Löwenritter Military Regency, Partition Co-Victory."
       eds: ["pending-batch-Pass-2k"]
-      replacement: "Universal Peninsular Sovereignty (designs/provincial/victory_v30.md §0). Faction-specific tactical content (territorial actions, faction levers, Mandate-gain actions, mass-battle outcomes) remains valid as approach-to-universal-victory; only victory-trigger language is struck. The faction-unique advantages (Crown Treaty network, Church Mass Seizure, Hafenmark Charter of Liberties + Altonian Reinforcements + equipment, Varfell threadwork first-mover + Einhir Revival, RM extra-parliamentary emergence) are tactical leverage toward the universal goal, not alternate paths to it."
+      replacement: "Universal Peninsular Sovereignty (systems/victory/victory_v30.md §0). Faction-specific tactical content (territorial actions, faction levers, Mandate-gain actions, mass-battle outcomes) remains valid as approach-to-universal-victory; only victory-trigger language is struck. The faction-unique advantages (Crown Treaty network, Church Mass Seizure, Hafenmark Charter of Liberties + Altonian Reinforcements + equipment, Varfell threadwork first-mover + Einhir Revival, RM extra-parliamentary emergence) are tactical leverage toward the universal goal, not alternate paths to it."
       commits: ["fe367105 (GD-1 canonization Pass 2b)", "pending (Pass 2c propagation in this commit)"]
       gd_constraint: "GD-1"
       date: "2026-05-17"
@@ -39,8 +39,8 @@ sources:
     canonized_pass: "Pass 2 follow-up"
 
   v18_integration_plan:
-    design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
-    canonical_sha__designs__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
+    design_doc: audit/2026-05-17-v18-integration/integration_plan_v18.md
+    canonical_sha__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2m"
     declares_pass_2_content_complete: true
@@ -127,8 +127,8 @@ systems:
     stats: engine/params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
   victory:
-    design_doc: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "dd4f89da9af220dc6ed7c2bbc8137a333ddfe090"
+    design_doc: systems/victory/victory_v30.md
+    canonical_sha__systems__victory__victory_v30_md: "dd4f89da9af220dc6ed7c2bbc8137a333ddfe090"
     params: engine/params/bg/victory.md
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
@@ -197,10 +197,10 @@ systems:
     design_doc: systems/factions/ci_political_v30.md
     canonical_sha__designs__provincial__ci_political_v30_md: "32b30e19e986dcbda51f54ffddc0057a52fb5acc"
   peninsular_strain:
-    design_doc: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "6dd874b636ec25e638d067e76814facd424ce566"
-    peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
+    design_doc: systems/overview/peninsular_strain_v30.md
+    canonical_sha__systems__overview__peninsular_strain_v30_md: "6dd874b636ec25e638d067e76814facd424ce566"
+    peninsular_strain_index: systems/overview/peninsular_strain_v30_index.md
+    canonical_sha__systems__overview__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
   settlement_layer:
     note__lps2d: "LPS-2d (2026-05-30) final residual close: remaining faction-level Church/target-L degree effects -> per-territory Legitimacy (Excommunication/Heresy/Baralta-suppression, magnitude-preserving) OR Mandate −1 (Seizure FAILURE, authoritative faction_layer §2.7) in stats_1_7_scale + faction_canon. Broadened same-line sweep = 0 faction-level L/PS across 11 docs; faction system verified end-to-end."
     note__lps2c: "LPS-2c functional reconciliation (2026-05-30): CI-60 Seizure aligned to AUTHORITATIVE faction_layer §2.7 (Influence+floor(CI/15) vs Ob 7−PT; Fail->Mandate−1) in faction_canon §9+Church sheet+stats_1_7_scale (FCN-SEIZURE-DRIFT closed); Excommunication degree effects (faction L +-1) -> per-territory Legitimacy (magnitude-preserving); Restoration PS clarified community-level per FSA §6/PP-460. §1.8 zero-territory refined (Lowenritter embedded vs Restoration community). Detail: master."
@@ -214,18 +214,18 @@ systems:
     campaign_architecture_index: systems/_architecture/campaign_architecture_v30_index.md
     canonical_sha__systems___architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
-    design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "5ebff478516c320e58e46b89de9d50578c649b7d"
+    design_doc: systems/_architecture/derived_stats_v30.md
+    canonical_sha__systems___architecture__derived_stats_v30_md: "5ebff478516c320e58e46b89de9d50578c649b7d"
     supplemental: engine/params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
-    design_doc: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "e87de1344a30019a1e5fa6629420803c5200a81f"
-    conviction_track_index: designs/scene/conviction_track_v30_index.md
-    canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
-    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
+    design_doc: systems/characters/conviction_track_v30.md
+    canonical_sha__systems__characters__conviction_track_v30_md: "e87de1344a30019a1e5fa6629420803c5200a81f"
+    conviction_track_index: systems/characters/conviction_track_v30_index.md
+    canonical_sha__systems__characters__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
+    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by systems/characters/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: engine/params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
     related: systems/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
@@ -303,8 +303,8 @@ systems:
     status: provisional
     added: '2026-04-25 Stage 4'
   miraculous_event:
-    design_doc: designs/scene/miraculous_event_v30.md
-    canonical_sha__designs__scene__miraculous_event_v30_md: "c599040b984203de94a4c0cde289660f5ccba5d9"
+    design_doc: systems/world/miraculous_event_v30.md
+    canonical_sha__systems__world__miraculous_event_v30_md: "c599040b984203de94a4c0cde289660f5ccba5d9"
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
@@ -333,13 +333,13 @@ systems:
     status: canonical
     added: '2026-07-02 ED-1093/ED-1094 ratification (pre-staged) — ordering/determinism, aggregate-up, distribute-down, termination transforms (TERMINATION-ONLY; cross-tick convergence NOT proven); supplies engine_clock candidate home doc (ED-1051, open — awaiting Jordan; doc:null stays unflipped until then)'
   conviction_taxonomy:
-    design_doc: designs/personal/conviction_taxonomy_v30.md
-    canonical_sha__designs__personal__conviction_taxonomy_v30_md: "cb112f39d0cdbcf522d617a4b28e95ea6dbe8fb0"
+    design_doc: systems/characters/conviction_taxonomy_v30.md
+    canonical_sha__systems__characters__conviction_taxonomy_v30_md: "cb112f39d0cdbcf522d617a4b28e95ea6dbe8fb0"
     status: canonical
     added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
   conviction_migration_roster:
-    design_doc: designs/personal/conviction_migration_roster_v30.md
-    canonical_sha__designs__personal__conviction_migration_roster_v30_md: "af7eac17f3551746dc7cc2b2d924d672d6030fd1"
+    design_doc: systems/characters/conviction_migration_roster_v30.md
+    canonical_sha__systems__characters__conviction_migration_roster_v30_md: "af7eac17f3551746dc7cc2b2d924d672d6030fd1"
     status: canonical
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
@@ -354,8 +354,8 @@ systems:
     status: canonical
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
   conviction_axis_matrix:
-    design_doc: designs/personal/conviction_axis_matrix_v30.md
-    canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "34381c8ec44955910deadae3293f75610ee919a7"
+    design_doc: systems/characters/conviction_axis_matrix_v30.md
+    canonical_sha__systems__characters__conviction_axis_matrix_v30_md: "34381c8ec44955910deadae3293f75610ee919a7"
     status: canonical
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
   faction_state_authoring:
@@ -387,8 +387,8 @@ systems:
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
 
   character_generation_questionnaire:
-    design_doc: designs/personal/character_generation_questionnaire_v30.md
-    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "fb4bbed40b2f7f7ce2eb640e8baea33db08f3ce6"
+    design_doc: systems/characters/character_generation_questionnaire_v30.md
+    canonical_sha__systems__characters__character_generation_questionnaire_v30_md: "fb4bbed40b2f7f7ce2eb640e8baea33db08f3ce6"
     status: design-direction
     added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
 
@@ -417,10 +417,10 @@ systems:
     infill: systems/world/character_histories_v30_infill.md
     canonical_sha__systems__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
-    design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "cc5845ded3612f3d9ab342870bf4daf1b14a65c1"
-    infill: designs/provincial/clock_registry_v30_infill.md
-    canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
+    design_doc: systems/overview/clock_registry_v30.md
+    canonical_sha__systems__overview__clock_registry_v30_md: "cc5845ded3612f3d9ab342870bf4daf1b14a65c1"
+    infill: systems/overview/clock_registry_v30_infill.md
+    canonical_sha__systems__overview__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
     design_doc: systems/npcs/companion_specification_v30.md
     canonical_sha__systems__npcs__companion_specification_v30_md: "5740e5ebd6ec336847183d41aedd03530e42829f"

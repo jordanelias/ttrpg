@@ -16,8 +16,8 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-717 npc_behavior §1.2 stale-redirect fix (2026-05-10)
 **Class E (editorial); applied this commit.** No mechanical propagation; corrects documentation pointer drift.
-- `systems/npcs/npc_behavior_v30.md §1.2`: redirects updated to point at `designs/personal/conviction_taxonomy_v30.md` (PP-684 canonical) and companion `conviction_axis_matrix_v30.md`.
-- `designs/personal/conviction_track_v1.md`: SUPERSEDED banner added at top; §1 deprecated; §2 Scar accumulation preserved as canonical pending PP-718 weight-scaling review.
+- `systems/npcs/npc_behavior_v30.md §1.2`: redirects updated to point at `systems/characters/conviction_taxonomy_v30.md` (PP-684 canonical) and companion `conviction_axis_matrix_v30.md`.
+- `systems/characters/conviction_track_v1.md`: SUPERSEDED banner added at top; §1 deprecated; §2 Scar accumulation preserved as canonical pending PP-718 weight-scaling review.
 - `references/canonical_sources.yaml`: conviction_track entry annotated as PARTIALLY SUPERSEDED.
 - No code changes. No simulation re-run.
 - Surfaced by: conviction_stress_01 (A-L09 P1 drift) commit 57bd26f4.
@@ -58,7 +58,7 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 
 ## PP-718 Conviction Scar accumulation per-Conviction clarification (2026-05-10)
 **Class B (system extension); applied this commit.** Closes P1 ambiguity from conviction_stress_01 (commit 57bd26f4); reserved by PP-717 as next_pp.
-- `designs/personal/conviction_track_v1.md §2`: rewritten to specify per-Conviction Scar accumulation under PP-684 structured concentration.
+- `systems/characters/conviction_track_v1.md §2`: rewritten to specify per-Conviction Scar accumulation under PP-684 structured concentration.
   - Crisis at 3+ Scars on **any single Conviction** (not aggregate count).
   - Multi-primary NPCs Scar each Conviction independently; concurrent crises possible.
   - Cultural-background Conviction crises produce muted drift (no full arc transition).
@@ -90,14 +90,14 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 ## PP-718 vetting walkthrough — full M-1..M-11 (2026-05-10)
 **Class B vetting documentation; commit follows PP-718 mechanical commit 239922c6.** No mechanical change to PP-718; replaces the abbreviated vetting block in patch_register with full per-pattern walkthrough grounded in canonical reads.
 - `registers/patch_register_active.yaml` PP-718 entry: vetting block expanded to per-M reasoning (M-1 through M-11), T-touches enumeration (extends 6, preserves 8, breaks 0), Q-robust/smooth/elegant detail. m_summary: 6+/3✓/1○/0−.
-- `designs/personal/conviction_track_v1_pp718_vetting.md` (NEW): standalone full walkthrough doc with N/Μ/М/Τ/Q sections, M-1..M-11 per-pattern reasoning, per-T touch verdicts. ~273 lines / ~35k chars.
+- `systems/characters/conviction_track_v1_pp718_vetting.md` (NEW): standalone full walkthrough doc with N/Μ/М/Τ/Q sections, M-1..M-11 per-pattern reasoning, per-T touch verdicts. ~273 lines / ~35k chars.
 - `references/canonical_sources.yaml`: pp718_vetting_walkthrough field added under conviction_track entry.
 - Sources read at full depth for the walkthrough: throughlines_meta (skeleton + infill §3.4-§3.8), conviction_taxonomy_v30, conviction_axis_matrix_v30, conviction_track_v1 (post-PP-717/PP-718 state), npc_behavior_v30 §1-§3, conviction_migration_roster_v30.
 
 ## PP-718 vetting walkthrough — m_summary count correction (2026-05-10)
 **Class E (editorial fix); applied this commit.** Off-by-one defect in m_summary count corrected.
 - `registers/patch_register_active.yaml` PP-718 vetting m_summary: "6 + · 3 ✓ · 1 ○ · 0 −" → "7 + · 3 ✓ · 1 ○ · 0 −". Actual M-ratings (M-1+, M-3+, M-4+, M-5+, M-6+, M-9+, M-11+ = 7) verified against per-pattern body.
-- `designs/personal/conviction_track_v1_pp718_vetting.md` §М summary: "Six +, three ✓..." → "Seven +, three ✓..."; final summary table row "**6 + · 3 ✓ ... pass**" → "**7 + · 3 ✓ ... pass**".
+- `systems/characters/conviction_track_v1_pp718_vetting.md` §М summary: "Six +, three ✓..." → "Seven +, three ✓..."; final summary table row "**6 + · 3 ✓ ... pass**" → "**7 + · 3 ✓ ... pass**".
 - No mechanical change. Self-review caught the inconsistency between counted ratings (7 +) and summary claim (6 +).
 
 ## PP-718 vetting walkthrough — M-1/M-9 recalibration (2026-05-10)
