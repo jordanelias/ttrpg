@@ -873,9 +873,159 @@ def build_actions():
     }
 
 
+# ── repository-state armature (review_core verdict roll-up) ──────────────────
+# The Pages face of the Repository State Armature (ED-IN-0077). review_core is the single
+# verdict aggregator (one core, three faces per CLAUDE.md §8); this section is the artifact
+# face — the SessionStart banner and the CI job read the SAME collect(). No rules reimplemented.
+
+def build_review_state():
+    import review_core
+    state = review_core.collect()
+    r = state["rollup"]
+    return {
+        "available": True,
+        "grade": r["grade"],
+        "rollup": r,
+        "head_sha": state.get("head_sha"),
+        "signals": [
+            {
+                "id": s["id"], "lane": s["lane"], "tier": s["tier"],
+                "verdict": s["verdict"], "count": s.get("count"),
+                "baseline": s.get("baseline"), "regressed": s.get("regressed"),
+                "source": s["source"], "detail": (s.get("detail") or [])[:2],
+            }
+            for s in state["signals"]
+        ],
+        "subsystems": state.get("subsystems", {}),
+    }
+
+
+# ── browse: modules-by-chain + systems-by-primitive ──────────────────────────
+# The two browsable surfaces (dashboard/browse.html). BOTH derive purely from the
+# machine-maintained structured sources — references/module_contracts.yaml (the 27-module
+# I/O spine: consumes/emits = the chains; state[] with bucket = the module-owned primitives)
+# and references/descriptor_registry.yaml (the pointer roster: attributes/aggregates/stats).
+# No prose is scraped: the human survey (audit/other/2026-07-19-module-io-state-survey.md) is
+# the narrative; THIS reads the same YAML the survey was built from, so the browse view can
+# never drift from canon the way a hand-maintained copy would.
+
+def build_browse():
+    with open(os.path.join('references', 'module_contracts.yaml'), encoding='utf-8') as f:
+        mc = yaml.safe_load(f)
+    modules = mc.get('modules') or []
+    module_names = {m.get('module') for m in modules}
+
+    def _froms(c):
+        # `from` is usually a list of module names but is occasionally a bare string
+        # (e.g. {type: '*', from: 'engine'}) — normalize so we never iterate a string char-wise.
+        fr = c.get('from')
+        if isinstance(fr, str):
+            return [fr]
+        return list(fr or [])
+
+    # downstream index: module X consuming type T "from" module Y is an edge Y -> X on T.
+    # Only real modules get downstream cards; external sources (engine, player_input) are inputs.
+    downstream = {}
+    for m in modules:
+        consumer = m.get('module')
+        for c in (m.get('consumes') or []):
+            for src in _froms(c):
+                if src in module_names:
+                    downstream.setdefault(src, []).append({"module": consumer, "type": c.get('type')})
+    by_module = []
+    for m in modules:
+        name = m.get('module')
+        by_module.append({
+            "module": name,
+            "registry_system": m.get('registry_system'),
+            "doc": m.get('doc'),
+            "scales": m.get('scales') or [],
+            "resolver": m.get('resolver'),
+            "consumes": [{"type": c.get('type'), "from": _froms(c),
+                          "external": [x for x in _froms(c) if x not in module_names]}
+                         for c in (m.get('consumes') or [])],
+            "emits": [{"type": e.get('type'), "terminal": bool(e.get('terminal'))} for e in (m.get('emits') or [])],
+            "state": [{"name": s.get('name'), "bucket": s.get('bucket'), "writable": s.get('writable')}
+                      for s in (m.get('state') or [])],
+            "downstream": sorted(downstream.get(name, []), key=lambda x: (x["module"] or '', x["type"] or '')),
+            "status": m.get('status'),
+        })
+    by_module.sort(key=lambda x: x["module"] or '')
+    # module-owned state primitives (the 34 track/clock/pool/derived rows)
+    module_state = []
+    for m in modules:
+        for s in (m.get('state') or []):
+            module_state.append({
+                "name": s.get('name'), "bucket": s.get('bucket'), "module": m.get('module'),
+                "writable": s.get('writable'), "scales": m.get('scales') or [],
+            })
+    module_state.sort(key=lambda x: (x["bucket"] or '', x["name"] or ''))
+    # descriptor/pointer roster (attributes + aggregates + per-scale stat rosters)
+    roster = []
+    try:
+        with open(os.path.join('references', 'descriptor_registry.yaml'), encoding='utf-8') as f:
+            dr = yaml.safe_load(f) or {}
+    except Exception:
+        dr = {}
+    attrs = dr.get('attributes') or {}
+    for grp in ('body', 'mind', 'social'):
+        for e in (attrs.get(grp) or []):
+            roster.append({"key": e.get('key'), "name": e.get('name'), "aliases": e.get('aliases') or [],
+                           "scale": attrs.get('scale'), "category": "attribute", "sub": grp})
+    for e in ((dr.get('aggregates') or {}).get('entries') or []):
+        roster.append({"key": e.get('key'), "name": e.get('name'), "aliases": [], "scale": e.get('compute'),
+                       "category": "aggregate", "sub": e.get('status')})
+    for cat in ('practitioner_stats', 'territory_stats', 'faction_stats', 'settlement_stats'):
+        for e in ((dr.get(cat) or {}).get('entries') or []):
+            roster.append({"key": e.get('key'), "name": e.get('name'), "aliases": e.get('aliases') or [],
+                           "scale": e.get('scale'), "category": cat.replace('_stats', ''), "sub": None})
+    external_sources = sorted({x for m in by_module for c in m["consumes"] for x in c["external"]})
+    return {
+        "available": True,
+        "by_module": by_module,
+        "module_names": sorted(module_names),
+        "external_sources": external_sources,
+        "primitives": {"module_state": module_state, "roster": roster},
+        "counts": {
+            "modules": len(by_module),
+            "module_primitives": len(module_state),
+            "roster": len(roster),
+            "emit_types": len({e["type"] for m in by_module for e in m["emits"]}),
+            "module_edges": sum(len(m["downstream"]) for m in by_module),
+            "external_sources": len(external_sources),
+        },
+        "sources": ["references/module_contracts.yaml", "references/descriptor_registry.yaml"],
+    }
+
+
+# ── definitions store (unified definitional surface, Phase 2) ────────────────
+
+def build_definitions():
+    import definitions_store as ds
+    store = ds.load_store()
+    ok, msgs = ds.check()
+    defs = store.get('definitions') or {}
+    rows = [dict(key=k, **v) for k, v in defs.items()]
+    from collections import Counter
+    cats = Counter(r.get('category') for r in rows)
+    return {
+        "available": True,
+        "count": store.get('count', len(rows)),
+        "parity_ok": ok,
+        "messages": msgs,
+        "categories": dict(cats),
+        "gaps": [r['key'] for r in rows if r.get('gap')],
+        "definitions": rows,
+        "sources": store.get('generated_from') or [],
+    }
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
+        "review_state": _safe('review_state', build_review_state),
+        "browse": _safe('browse', build_browse),
+        "definitions": _safe('definitions', build_definitions),
         "workplan": _safe('workplan', build_workplan),
         "audits": _safe('audits', build_audits),
         "activity": _safe('activity', build_activity),

@@ -69,6 +69,9 @@ EXCLUDE = (
     # rationale as the source registries above; a regen must not trip the gate.
     'tools/observability/lexicon',          # lexicon.json, lexicon_data.js
     'tools/observability/console.html',     # embeds window.VALORIA_LEXICON
+    'references/definitions/',              # generated unified definitions store — carries `legacy`
+                                            # names AS DATA (merged from names_index), same as above
+    'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
     'engine/params/bg/institutions.md',
     'skills/prose-writer/',
     'tests/',

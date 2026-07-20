@@ -1,7 +1,7 @@
 <!-- Architecture spec. Substrate tier (RULED underscore-prefix, not editorial-governed content). -->
 # Repository State Armature — v1
 
-## Status: PROPOSED (ED-IN-0077, 2026-07-20)
+## Status: RATIFIED — charter + Phases 0–2 plan-of-record (ED-IN-0077, PR #193 merged 2026-07-20). Phase 0/1 EXECUTED; the artifact face (Pages "Repository state" card) added 2026-07-20. **Phases 3 & 5 HELD BACK** pending Jordan rulings tracked under ED-IN-0029 (the ED-IN-0029 frozen-keep overturn; the OPT-AV-1 attribute roster). Phase 4 (freshness absorption + CI job) staged.
 ## Class: A — substrate/infrastructure architecture. Merge of the Phase-1 PR ratifies Phases 0–2 (ED-1094 merge-ratifies-by-default); Phases 3–5 carry their own loudly-held-back EDs.
 ## Provenance: designed by a producer→critic→informed-design relay — an initial plan (Opus adversarial review, verdict NEEDS-REDESIGN) then a Fable-5 max-effort redesign built around the critique. Seeded by this session's world-state primitive survey (`audit/other/2026-07-19-module-io-state-survey.md`).
 
@@ -50,13 +50,15 @@ verdict, count, baseline, regressed, detail`), then rolls up a **per-lane + over
 grade** (GREEN/AMBER/RED). Collectors are a single `CHECKS` registry (adding a signal = one row);
 Phase-1 subset: currency, A17 vocabulary closure, wiring coverage, audit staleness, workplan. Later
 collectors fold in freshness, A18, contract conformance, apparatus-diff, registry coverage,
-definitions round-trip, and (online) the GitHub CI mirror. **One core, three faces (target):** the
-SessionStart banner (`session_status.py`, guarded — **BUILT**), a GitHub `review-state` job
-(**Phase 4**), and the published artifact (`window.VALORIA_REVIEW` — `write_state` emits the js
-bundle; the page that reads it is **Phase 2**). All three read from here; only the banner is wired
-today. ⚠️ The banner reads the committed `review_state.json`, which is currently git-ignored (a
-head-sha-bearing file manufactures currency drift on every regen) — so on a fresh clone it prints
-"not yet computed" until the Phase-4 `refresh.yml` commits state, exactly as the decisions digest does.
+definitions round-trip, and (online) the GitHub CI mirror. **One core, three faces:** the
+SessionStart banner (`session_status.py`, guarded — **BUILT**), the published artifact — the
+**Repository state** card on the GitHub Pages dashboard (`dashboard/`, via `dashboard_data.py`'s
+`build_review_state()` → `review_core.collect()` — **BUILT**), and a GitHub `review-state` CI job
+(**Phase 4**). Two of three wired; each reads the SAME `collect()`, zero rules re-implemented.
+⚠️ The banner reads the committed `review_state.json`, which is git-ignored (a head-sha-bearing file
+manufactures currency drift on every regen) — so on a fresh clone the *banner* prints "not yet
+computed" until the Phase-4 refresh commits state; the *dashboard* face has no such gap, it calls
+`collect()` live at build time.
 
 ### 2.3 `registers/review_baseline.yaml` — the ratchet (Phase 1, BUILT)
 One row per report-only signal = its accepted-debt **count** ceiling. Each tool's `count_re` (in
@@ -107,9 +109,14 @@ pin.
   parity test** in `tests/valoria/` asserts `quantity_registry.load()` + `names.all_legacy(block)`
   are set-identical pre/post inversion. Attributes imported `status: in_flux` — **no roster choice
   made** (see §6).
-- **P3 — vocab fold:** alias/deprecated/censured/synonym/collision registers → store projections;
-  `build_lexicon.py` re-sourced; glossary tables projected. Record the ED-IN-0029 frozen-keep
-  overturn as a loud held-back superseding ED (ED-1094) before executing.
+- **P3 — vocab fold (IN PROGRESS, ED-IN-0078, overturns the ED-IN-0029 frozen-keep — Jordan-authorized 2026-07-20):**
+  De-risked: NO blocking gate reads these registers (ci_naming_check enforces from names_index only;
+  they are on its scan-EXCLUDE, not enforcement sources); the sole active consumer is the report-only
+  `build_lexicon.py`. **Slice 1 (DONE):** retired the 2 reader-less registers (collision_registry,
+  orphan_terms_registry) → `deprecated/references/`. **Slice 2 (staged):** fold the 5 live-reader
+  registers (alias/deprecated/censured/synonym/name_collision) into `references/definitions/` as the
+  source + regenerate each at its existing path as a GENERATED view (build_lexicon-preserving;
+  name_collision lands last — build_lexicon parses its inline comments, needs comment-aware handling).
 - **P4 — freshness absorption + graduation:** §3; retire `freshness_gate.py`; add `review-state` to
   `ci-summary.needs`, drop its `continue-on-error`.
 - **P5 — attribute centralization: HARD-GATED on a Jordan ruling of OPT-AV-1** (the 7/9/10-with-Recall

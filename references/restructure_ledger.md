@@ -46,6 +46,8 @@
 | `canon/patch_register_archive_601_800.yaml` | `archives/patches/patch_register_archive_601_800.yaml` | PENDING |
 | `canon/patch_register_archive_801_1000.yaml` | `archives/patches/patch_register_archive_801_1000.yaml` | PENDING |
 | `canon/patch_register_index_archive.md` | `archives/patches/patch_register_index_archive.md` | PENDING |
+| `references/collision_registry.yaml` | `deprecated/references/collision_registry.yaml` | DONE (2026-07-20, ED-IN-0078 — reader-less vocab register retired, Phase 3 slice 1) |
+| `references/orphan_terms_registry.yaml` | `deprecated/references/orphan_terms_registry.yaml` | DONE (2026-07-20, ED-IN-0078 — reader-less vocab register retired, Phase 3 slice 1) |
 | `compilation/README.md` | `deprecated/compilation/README.md` | PENDING |
 | `compilation/v0.14/README.md` | `deprecated/compilation/v0.14/README.md` | PENDING |
 | `compilation/v0.14/stage10_advancement_deprecated.md` | `deprecated/compilation/v0.14/stage10_advancement_deprecated.md` | PENDING |

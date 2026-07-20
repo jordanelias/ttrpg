@@ -89,7 +89,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 
 | Full Term | Abbr | Range / Type | Description |
 |-----------|------|--------------|-------------|
-| Piety Track | CT* | 0–10 | Debate position tracker. Side A wins at ≥ 7; Side B wins at ≤ 3. Compromise zone: 4–6. Canonical doc: `designs/personal/conviction_track_v1.md` (promoted PP-681). |
+| Piety Track | CT* | 0–10 | Debate position tracker. Side A wins at ≥ 7; Side B wins at ≤ 3. Compromise zone: 4–6. Canonical doc: `systems/characters/conviction_track_v1.md` (promoted PP-681). ⚠ NAMING: `systems/social_contest/social_contest_v30.md` calls this same debate tracker **Persuasion Track** — unresolved glossary↔social-contest name collision (also tangles with the ED-IN-0075 character-Piety→Truth rename); flagged for reconciliation. |
 | Concentration | — | varies | Debate resource spent to sustain rhetorical positions. |
 | Doubt Marker | — | token | Applied on Obscuring loss in Diverge state. |
 | Composure | — | varies | Social endurance (see Part One). Also the damage track in Debate exchanges. |

@@ -114,13 +114,13 @@ settlement_stats:
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================
 by_reference:
-  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "designs/personal/conviction_taxonomy_v30.md §2"}
-  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "designs/personal/conviction_axis_matrix_v30.md / PP-687"}
-  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "designs/personal/conviction_axis_matrix_v30.md §2"}
-  - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "designs/personal/conviction_taxonomy_v30.md §3"}
+  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "systems/characters/conviction_taxonomy_v30.md §2"}
+  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "systems/characters/conviction_axis_matrix_v30.md / PP-687"}
+  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "systems/characters/conviction_axis_matrix_v30.md §2"}
+  - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "systems/characters/conviction_taxonomy_v30.md §3"}
   - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/social_contest_v30.md (Step 2-3)"}
   - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/territory_temperaments_v30.md §3.4.1"}
-  - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "designs/personal/conviction_taxonomy_v30.md §5"}
+  - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "systems/characters/conviction_taxonomy_v30.md §5"}
 
 # ============================================================================
 # DEPRECATED.

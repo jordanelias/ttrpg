@@ -29,3 +29,6 @@ signals:
   wiring.coverage:
     baseline: 0        # wiring_map_check --check passes (27/27 · 7/7); boolean fallback — any failure regresses
     target: 0
+  definitions.parity:
+    baseline: 0        # definitions store current + name parity holds; boolean fallback — drift/mismatch regresses
+    target: 0
