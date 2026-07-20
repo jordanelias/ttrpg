@@ -58,6 +58,7 @@ CHECKS = [
     {"id": "wiring.coverage",   "argv": ["tools/wiring_map_check.py", "--check"],  "tier": "report_only", "lane": "IN"},
     {"id": "definitions.parity", "argv": ["tools/definitions_store.py", "--check"], "tier": "report_only", "lane": "IN"},
     {"id": "vocab.parity",      "argv": ["tools/vocab_store.py", "--check"],       "tier": "report_only", "lane": "IN"},
+    {"id": "sim_params.export", "argv": ["tools/export_sim_params.py", "--check"], "tier": "report_only", "lane": "IN"},
     {"id": "audit.staleness",   "argv": ["tools/audit_staleness.py"],             "tier": "info",        "lane": "IN"},
     {"id": "workplan.state",    "argv": ["tools/workplan_status.py"],             "tier": "info",        "lane": "IN"},
 ]
