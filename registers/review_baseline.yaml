@@ -38,3 +38,6 @@ signals:
   sim_params.export:
     baseline: 0        # sim_params.json matches a fresh extract from the sim code (ED-IN-0079); regen on drift
     target: 0
+  value_links.export:
+    baseline: 0        # value_pointer_links.json matches a fresh build (ED-IN-0079); regen on drift
+    target: 0
