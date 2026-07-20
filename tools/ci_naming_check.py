@@ -73,6 +73,7 @@ EXCLUDE = (
                                             # — carry `legacy`/deprecated names AS DATA, same as above
     'references/censured_vocabulary.yaml',  # GENERATED view (ED-IN-0078 fold) — lists censured terms by design
     'references/synonym_registry.yaml',     # GENERATED view (ED-IN-0078 fold) — lists legacy synonyms by design
+    'references/name_collision_database.yaml',  # GENERATED view (ED-IN-0078 slice 3) — deprecated terms (incl. Galbados) as data
     'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
     'engine/params/bg/institutions.md',
     'skills/prose-writer/',

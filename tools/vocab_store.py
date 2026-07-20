@@ -34,6 +34,10 @@ REGISTERS = {
     "deprecated_terms_registry": ROOT / "references" / "deprecated_terms_registry.yaml",
     "censured_vocabulary": ROOT / "references" / "censured_vocabulary.yaml",
     "synonym_registry": ROOT / "references" / "synonym_registry.yaml",
+    # Slice 3 (ED-IN-0078): name_collision_database's former inline `# COLLISION` comments were
+    # migrated to a per-abbreviation `note:` data field (build_lexicon now reads that field), so a
+    # YAML-dump view is faithful and this register folds in like the rest.
+    "name_collision_database": ROOT / "references" / "name_collision_database.yaml",
 }
 
 _SRC_HEADER = """\

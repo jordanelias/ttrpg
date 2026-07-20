@@ -103,6 +103,7 @@ PROVENANCE_PATHS = {
     'references/censured_vocabulary.yaml',
     'references/deprecated_terms_registry.yaml',
     'references/alias_registry.yaml',
+    'references/name_collision_database.yaml',
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
