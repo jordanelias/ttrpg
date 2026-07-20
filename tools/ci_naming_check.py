@@ -69,8 +69,10 @@ EXCLUDE = (
     # rationale as the source registries above; a regen must not trip the gate.
     'tools/observability/lexicon',          # lexicon.json, lexicon_data.js
     'tools/observability/console.html',     # embeds window.VALORIA_LEXICON
-    'references/definitions/',              # generated unified definitions store — carries `legacy`
-                                            # names AS DATA (merged from names_index), same as above
+    'references/definitions/',              # generated unified definitions store + vocab_source (ED-IN-0078)
+                                            # — carry `legacy`/deprecated names AS DATA, same as above
+    'references/censured_vocabulary.yaml',  # GENERATED view (ED-IN-0078 fold) — lists censured terms by design
+    'references/synonym_registry.yaml',     # GENERATED view (ED-IN-0078 fold) — lists legacy synonyms by design
     'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
     'engine/params/bg/institutions.md',
     'skills/prose-writer/',
