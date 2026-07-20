@@ -1,5 +1,9 @@
 # Valoria Collation Report — Summary
-# Rolled-up per-token view. For per-instance line numbers, run tools/valoria_collator.py and inspect /tmp/valoria/collation_report.yaml
+# ⚠️ FROZEN HISTORICAL SNAPSHOT — do NOT treat as live (flagged 2026-07-20, ED-IN-0077 freshness
+#    review). The generator tools/valoria_collator.py is RETIRED (deprecated/tools/, CLAUDE.md §8),
+#    so the drill-down instruction below is dead — the per-instance report cannot be regenerated.
+#    This mirrors the sibling snapshots values_master.yaml / numeric_bounds_report.yaml.
+# Rolled-up per-token view. (Historical: "run tools/valoria_collator.py" — that tool no longer exists.)
 
 version: 1
 total_findings: 9101

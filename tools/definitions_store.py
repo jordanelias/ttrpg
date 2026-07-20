@@ -61,7 +61,10 @@ def _load_descriptors() -> dict:
             out[e["key"]] = {"name": e.get("name"), "aliases": e.get("aliases") or [],
                              "scale": attrs.get("scale"), "group": grp, "category": "attribute"}
     for e in ((d.get("aggregates") or {}).get("entries") or []):
-        out[e["key"]] = {"name": e.get("name"), "aliases": [], "scale": e.get("compute"),
+        # aggregates have a compute-verb ("sum"), NOT a numeric range — keep it in its own field
+        # so `scale` means "numeric range" uniformly across every category (a downstream importer
+        # would otherwise mishandle scale=="sum").
+        out[e["key"]] = {"name": e.get("name"), "aliases": [], "compute": e.get("compute"),
                          "group": e.get("status"), "category": "aggregate"}
     for section, cat in (("practitioner_stats", "practitioner_stat"), ("territory_stats", "territory_stat"),
                          ("faction_stats", "faction_stat"), ("settlement_stats", "settlement_stat")):
@@ -85,6 +88,7 @@ def build() -> dict:
             "category": (n or {}).get("category") if n else (dd or {}).get("category"),
             "enforce": (n or {}).get("enforce") if n else None,
             "scale": (dd or {}).get("scale"),
+            "compute": (dd or {}).get("compute"),
             "group": (dd or {}).get("group"),
             "in_registers": in_regs,
         }
@@ -144,7 +148,7 @@ def check() -> tuple[bool, list[str]]:
 
 def _fmt(key: str, rec: dict) -> str:
     bits = [f"  {key}", f"    canonical : {rec.get('canonical')}"]
-    for f in ("aliases", "legacy", "category", "enforce", "scale", "group", "in_registers", "gap"):
+    for f in ("aliases", "legacy", "category", "enforce", "scale", "compute", "group", "in_registers", "gap"):
         if rec.get(f) not in (None, [], ""):
             bits.append(f"    {f:9}: {rec[f]}")
     return "\n".join(bits)

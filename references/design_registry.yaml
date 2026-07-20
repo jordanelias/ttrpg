@@ -91,12 +91,16 @@ registry:
     params: null
 
   # ─── BOARD GAME ────────────────────────────────────────────────────────────
+  # ⚠ SUPERSEDED: strategic_layer_v30* was RETIRED to deprecated/archives/ (2026-07-19,
+  # ED-IN-0071 P4/P5). The live board-game head is engine/params/board_game.md + engine/params/bg/*
+  # (see CURRENT.md). Paths below repointed to the archived location so they are not dangling;
+  # this entry is retained for historical reference only.
   board_game:
     system: board_game
     mode: BG
-    canonical_v30: designs/provincial/strategic_layer_v30.md
-    skeleton: designs/provincial/strategic_layer_v30.md
-    infill: designs/provincial/strategic_layer_v30_infill.md
+    canonical_v30: deprecated/archives/audit/strategic_layer_v30.md
+    skeleton: deprecated/archives/audit/strategic_layer_v30.md
+    infill: deprecated/archives/audit/strategic_layer_v30_infill.md
     atomized: complete
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: engine/params/board_game.md
@@ -104,9 +108,9 @@ registry:
   victory:
     system: victory
     mode: BG
-    canonical_v30: designs/provincial/victory_v30.md
-    skeleton: designs/provincial/victory_v30.md
-    infill: designs/provincial/victory_v30_infill.md
+    canonical_v30: systems/victory/victory_v30.md
+    skeleton: systems/victory/victory_v30.md
+    infill: systems/victory/victory_v30_infill.md
     atomized: complete
     predecessor: designs/board_game/victory_architecture_v1.md
     params: null
@@ -258,12 +262,14 @@ registry:
       until a design-layer doc is created from stage6 content. Flag for design session.
     blocker: "[EDITORIAL: no design-layer TTRPG factions doc — stage6 unverified]"
 
+  # ⚠ SUPERSEDED: strategic_layer_v30* retired to deprecated/archives/ (2026-07-19, ED-IN-0071
+  # P4/P5). Live faction head: systems/factions/* + engine/params/factions.md (see CURRENT.md).
   factions_bg_hybrid:
     system: factions
     mode: BG
-    canonical_v30: designs/provincial/strategic_layer_v30.md
-    skeleton: designs/provincial/strategic_layer_v30.md
-    infill: designs/provincial/strategic_layer_v30_infill.md_ttrpg.md
+    canonical_v30: deprecated/archives/audit/strategic_layer_v30.md
+    skeleton: deprecated/archives/audit/strategic_layer_v30.md
+    infill: deprecated/archives/audit/strategic_layer_v30_infill.md
     atomized: not_applicable
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: engine/params/factions.md

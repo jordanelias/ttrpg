@@ -94,8 +94,13 @@ def get_file(path):
 # ── Parsing helpers ────────────────────────────────────────────────────────────
 
 # Matches any indented key-value where value is a repo path
+# Prefix allow-list MUST track the live repo map — the ED-IN-0071 restructure (2026-07-16..19)
+# moved canonical content into systems/ engine/ registers/ arcs/, and the pre-restructure regex
+# (designs|params|compilation|canon|references|skills|tests only) silently matched just ~4% of the
+# 133 pins, passing the BLOCKING gate green while blind to the rest (ED-IN-0077 freshness review).
 _CANON_PATH_RE = re.compile(
-    r'^(\s+)([a-z_]+):\s+((?:designs|params|compilation|canon|references|skills|tests)/[^\s#"\']+)'
+    r'^(\s+)([a-z_]+):\s+((?:designs|params|compilation|canon|references|skills|tests'
+    r'|systems|engine|registers|arcs)/[^\s#"\']+)'
 )
 # Matches sha lines:  canonical_sha__...: "40hexchars"
 _SHA_LINE_RE = re.compile(

@@ -4,16 +4,16 @@ Status: [RATIFIED — Key & Echo armature v1, ED-IN-0018, 2026-07-07; §5 fork d
 Jordan's consolidated "ratify all" pass, ED-IN-0026, same date]
 
 Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
-  - designs/architecture/key_substrate_v30.md
+  - systems/_architecture/key_substrate_v30.md
       §2.1 universal Key schema · §2.2 field semantics · §2.3 validation
       invariants 1-8 · §2.5 canonical 4-axis set · §4.1 single update rule
       (steps 1-2, 5-6 subset; steps 3-4 observer/armature NOT implemented,
       blocked on ORD-3 — see module docstring of engine.substrate).
-  - designs/architecture/key_type_registry_v30.md
+  - systems/_architecture/key_type_registry_v30.md
       §1 type format (required/optional payload fields, defaults) · §2-§8 the
       44-type roster, parsed at load time — the registry markdown remains the
       single source of truth; nothing is duplicated here.
-  - designs/architecture/propagation_spec_v1.md
+  - systems/_architecture/propagation_spec_v1.md
       §1 O.4/SSI-1..4 (sub_step_index = append-order tiebreak ONLY; the
       re-entrancy meter `cascade_depth` lives on the tick-scoped scheduler and
       is NEVER a field on the logged Key) · §4.2 Level-B termination guard
@@ -33,7 +33,7 @@ consolidated ruling pass, 2026-07-07, ED-IN-0026 — see propagation_spec_v1.md'
 amended "Relationship to other canonical surfaces" section) and default ON here,
 while remaining ordinary caller-toggleable flags rather than hardcoded behavior.
 
-Quantity-layer extension (designs/audit/2026-07-08-attribute-value-coherence-audit/
+Quantity-layer extension (audit/2026-07-08-attribute-value-coherence-audit/
 proposed_quantity_armature_extension.md §3.1, ED-IN-0029 — the mechanical row
 OPT-AV-16 executed by direct Jordan instruction; the doc's design-naming forks,
 e.g. OPT-AV-1/9/10/11/12/13/15/18, remain OPEN and are NOT decided here):
@@ -176,7 +176,7 @@ _YAML_BLOCK = re.compile(r"```yaml\s*\n(?P<body>.*?)\n```", re.DOTALL)
 
 
 class TypeRegistry:
-    """Loader/validator over designs/architecture/key_type_registry_v30.md.
+    """Loader/validator over systems/_architecture/key_type_registry_v30.md.
 
     The registry markdown is the single source of truth (CLAUDE.md §8 "every
     rule lives once"); this class parses it at load time rather than

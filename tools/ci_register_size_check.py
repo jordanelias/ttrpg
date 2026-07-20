@@ -65,6 +65,12 @@ THRESHOLDS = {
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
+    # ── Previously-uncapped large registers (added 2026-07-20, ED-IN-0077 data-mgmt review) ──
+    # Growth caps with headroom over current size; values_master is known-stale (do not grow it).
+    "references/values_master.yaml":         40_000,  # quarantined stale snapshot (ED-IN-0029) — cap so it can't grow
+    "references/id_reservations.yaml":       15_000,  # the ID-allocation source of truth
+    "references/module_contracts.yaml":      18_000,  # the 27-module I/O spine
+    "references/definitions/definitions.yaml": 8_000,  # generated unified definitions store (ED-IN-0077)
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
     "registers/patch_register_archive.yaml":     100_000,

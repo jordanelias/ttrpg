@@ -10,30 +10,30 @@ definitions:
   agg.body:
     canonical: Body
     category: aggregate
+    compute: sum
     enforce: warn
     group: placeholder
     in_registers:
     - names_index
     - descriptor_registry
-    scale: sum
   agg.mind:
     canonical: Mind
     category: aggregate
+    compute: sum
     enforce: warn
     group: placeholder
     in_registers:
     - names_index
     - descriptor_registry
-    scale: sum
   agg.social:
     canonical: Social
     category: aggregate
+    compute: sum
     enforce: warn
     group: placeholder
     in_registers:
     - names_index
     - descriptor_registry
-    scale: sum
   attr.body.agility:
     aliases:
     - Dexterity

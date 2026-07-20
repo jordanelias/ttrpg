@@ -195,12 +195,14 @@ def write_state(state: dict) -> None:
 
 
 def summary_lines(fast: bool = False) -> list[str]:
-    """Banner lines for the SessionStart face. fast=True reads the last committed state (instant,
-    no subprocess) so the session banner never pays the collection cost or risks a hang."""
+    """Banner lines for the SessionStart face. fast=True reads the last LOCALLY-GENERATED state
+    (review_state.json is git-ignored, so on a fresh clone it is absent and the banner shows one
+    'not yet computed' line until `--json` runs — the Phase-4 refresh closes this gap). fast avoids
+    the collection cost / subprocess-hang risk at session start."""
     state = None
     if fast:
-        # SessionStart face: read the last committed state ONLY — never pay the collection cost
-        # or risk a subprocess hang at session start. Absent state => one informational line.
+        # SessionStart face: read the last locally-generated state ONLY (gitignored — see docstring);
+        # never pay the collection cost or risk a subprocess hang at session start. Absent => info line.
         try:
             state = json.loads(STATE_PATH.read_text())
         except Exception:
