@@ -1,0 +1,25 @@
+# review_baseline.yaml — the ratchet for the Repository State Armature (ED-IN-0077).
+#
+# One row per report-only signal in tools/review_core.py's CHECKS registry. `baseline` is the
+# ACCEPTED DEBT CEILING as measured at seeding: review_core `--check` fails only when a signal
+# exceeds its baseline (a REGRESSION), so report-only signals are blocking-on-regression from day
+# one WITHOUT branch-protection edits or CI job renames. Debt can only shrink — lowering a
+# `baseline` is a one-line edit in the PR that earns it; when a row reaches `target` it is fully
+# blocking. See systems/_architecture/repo_state_armature_v1.md §2.3.
+#
+# Governance: registers/review_baseline.yaml is CODEOWNERS-gated to Jordan (a debt ceiling is a
+# design commitment). Raising any baseline requires an explicit ED and a loud call-out per ED-1094.
+schema_version: 1
+seeded: "2026-07-20"
+seeded_by: "ED-IN-0077"
+signals:
+  currency.stamps:
+    baseline: 1        # SessionStart banner: "currency drift: 1 item" (stale CURRENT.md path, pre-existing)
+    target: 0
+  vocab.a17:
+    baseline: 36       # A17 quantity-vocabulary closure: 36/71 identifiers unresolved (CURRENT.md Key-substrate row)
+    target: 0
+    flip_blocking_at: 0
+  wiring.coverage:
+    baseline: 1        # wiring_map_check --check tolerance; tightens as mc_v18 wiring coverage rises
+    target: 0

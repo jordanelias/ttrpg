@@ -1,0 +1,11 @@
+# CODEOWNERS — Repository State Armature (ED-IN-0077).
+# Scope deliberately narrow: only the armature's AUTHORITY files require Jordan's review — the
+# single definitions store, the debt-ceiling ratchet, and the CI/workflow gates. Generated VIEWS
+# (names_index.yaml, descriptor_registry.yaml) are intentionally NOT listed: the round-trip gate
+# owns them, and requiring review on machine output would just add noise. Everything else in the
+# repo keeps its existing (unowned) flow.
+
+/references/definitions/          @jordanelias
+/registers/review_baseline.yaml   @jordanelias
+/.github/workflows/               @jordanelias
+/.github/CODEOWNERS               @jordanelias
