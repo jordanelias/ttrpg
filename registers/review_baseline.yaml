@@ -35,3 +35,6 @@ signals:
   vocab.parity:
     baseline: 0        # folded vocab register views match vocab_source.yaml (ED-IN-0078); drift regresses
     target: 0
+  sim_params.export:
+    baseline: 0        # sim_params.json matches a fresh extract from the sim code (ED-IN-0079); regen on drift
+    target: 0

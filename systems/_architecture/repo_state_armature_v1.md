@@ -109,14 +109,19 @@ pin.
   parity test** in `tests/valoria/` asserts `quantity_registry.load()` + `names.all_legacy(block)`
   are set-identical pre/post inversion. Attributes imported `status: in_flux` — **no roster choice
   made** (see §6).
-- **P3 — vocab fold (IN PROGRESS, ED-IN-0078, overturns the ED-IN-0029 frozen-keep — Jordan-authorized 2026-07-20):**
+- **P3 — vocab fold (COMPLETE, ED-IN-0078, overturns the ED-IN-0029 frozen-keep — Jordan-authorized 2026-07-20):**
   De-risked: NO blocking gate reads these registers (ci_naming_check enforces from names_index only;
   they are on its scan-EXCLUDE, not enforcement sources); the sole active consumer is the report-only
-  `build_lexicon.py`. **Slice 1 (DONE):** retired the 2 reader-less registers (collision_registry,
-  orphan_terms_registry) → `deprecated/references/`. **Slice 2 (staged):** fold the 5 live-reader
-  registers (alias/deprecated/censured/synonym/name_collision) into `references/definitions/` as the
-  source + regenerate each at its existing path as a GENERATED view (build_lexicon-preserving;
-  name_collision lands last — build_lexicon parses its inline comments, needs comment-aware handling).
+  `build_lexicon.py`, whose output was verified BYTE-IDENTICAL before/after each slice.
+  **Slice 1:** retired the 2 reader-less registers (collision_registry, orphan_terms_registry) →
+  `deprecated/references/`. **Slice 2:** folded alias/deprecated/censured/synonym into
+  `references/definitions/vocab_source.yaml` (source) + regenerated each as a GENERATED view via
+  `tools/vocab_store.py`. **Slice 3:** name_collision_database handled by
+  **DUPLICATION, not overturn** (Jordan ruling — "keep the frozen snapshot but also one where we can
+  get the info"). **OPT-AV-14 is PRESERVED:** the frozen file stays untouched (no regeneration path),
+  while its data — 13 inline `# COLLISION` comments lifted into `note:` fields — is MIRRORED into
+  `vocab_source.yaml` for unified querying. `vocab_store.py` treats it as a FROZEN_MIRROR (never
+  regenerated; `--check` verifies the mirror matches the frozen file). `build_lexicon` unchanged.
 - **P4 — freshness absorption + graduation:** §3; retire `freshness_gate.py`; add `review-state` to
   `ci-summary.needs`, drop its `continue-on-error`.
 - **P5 — attribute centralization: HARD-GATED on a Jordan ruling of OPT-AV-1** (the 7/9/10-with-Recall
