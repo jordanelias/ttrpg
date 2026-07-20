@@ -969,3 +969,40 @@
 | `sim/provincial/treaty` | `systems/factions/sim/treaty` |
 | `sim/provincial/varfell_mandate_action` | `systems/factions/sim/varfell_mandate_action` |
 | `sim/provincial/varfell_territorial_acquisition` | `systems/factions/sim/varfell_territorial_acquisition` |
+
+## ED-IN-0071 P4/P5 continuation (2026-07-19) — designs/ retired: audit corpus → audit/, subsystem leftovers → systems/, strategic_layer → deprecated/archives/
+
+<!-- designs/ is now fully emptied; every old designs/<...> ref resolves through the rows below (exact-path first, then the designs/audit/ dir-prefix). Append-only ledgers keep their pre-move text. -->
+
+| Old path | New path |
+|---|---|
+| `designs/audit/` | `audit/` |
+| `designs/provincial/strategic_layer_v30.md` | `deprecated/archives/audit/strategic_layer_v30.md` |
+| `designs/provincial/strategic_layer_v30_index.md` | `deprecated/archives/audit/strategic_layer_v30_index.md` |
+| `designs/provincial/strategic_layer_v30_infill.md` | `deprecated/archives/audit/strategic_layer_v30_infill.md` |
+| `designs/scene/derived_stats_v30.md` | `systems/_architecture/derived_stats_v30.md` |
+| `designs/scene/derived_stats_v30_index.md` | `systems/_architecture/derived_stats_v30_index.md` |
+| `designs/personal/character_generation_questionnaire_v30.md` | `systems/characters/character_generation_questionnaire_v30.md` |
+| `systems/world/character_histories_v30.md` | `systems/characters/character_histories_v30.md` |
+| `systems/world/character_histories_v30_index.md` | `systems/characters/character_histories_v30_index.md` |
+| `systems/world/character_histories_v30_infill.md` | `systems/characters/character_histories_v30_infill.md` |
+| `designs/personal/conviction_axis_matrix_v30.md` | `systems/characters/conviction_axis_matrix_v30.md` |
+| `designs/personal/conviction_migration_roster_v30.md` | `systems/characters/conviction_migration_roster_v30.md` |
+| `designs/personal/conviction_taxonomy_v30.md` | `systems/characters/conviction_taxonomy_v30.md` |
+| `designs/personal/conviction_track_v1.md` | `systems/characters/conviction_track_v1.md` |
+| `designs/personal/conviction_track_v1_pp718_vetting.md` | `systems/characters/conviction_track_v1_pp718_vetting.md` |
+| `designs/scene/conviction_track_v30.md` | `systems/characters/conviction_track_v30.md` |
+| `designs/scene/conviction_track_v30_index.md` | `systems/characters/conviction_track_v30_index.md` |
+| `designs/scene/conviction_track_v30_infill.md` | `systems/characters/conviction_track_v30_infill.md` |
+| `systems/combat/scene_combat_v1/scene_combat_design_v1.md` | `systems/combat/scene_combat_design_v1.md` |
+| `designs/provincial/clock_registry_v30.md` | `systems/overview/clock_registry_v30.md` |
+| `designs/provincial/clock_registry_v30_infill.md` | `systems/overview/clock_registry_v30_infill.md` |
+| `designs/provincial/peninsular_strain_v30.md` | `systems/overview/peninsular_strain_v30.md` |
+| `designs/provincial/peninsular_strain_v30_index.md` | `systems/overview/peninsular_strain_v30_index.md` |
+| `designs/provincial/victory_v30.md` | `systems/victory/victory_v30.md` |
+| `designs/provincial/victory_v30_index.md` | `systems/victory/victory_v30_index.md` |
+| `designs/provincial/victory_v30_infill.md` | `systems/victory/victory_v30_infill.md` |
+| `designs/scene/miraculous_event_v30.md` | `systems/world/miraculous_event_v30.md` |
+| `designs/conviction_track/conviction_track_v30.md` | `systems/characters/conviction_track_v30.md` |
+| `designs/conviction_track/conviction_track_v30_index.md` | `systems/characters/conviction_track_v30_index.md` |
+| `designs/conviction_track/conviction_track_v30_infill.md` | `systems/characters/conviction_track_v30_infill.md` |
