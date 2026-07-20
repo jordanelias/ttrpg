@@ -24,6 +24,8 @@ on:
       - 'references/definitions/**'      # the generated unified definitions store
       - 'references/names_index.yaml'    # authoritative name source the definitions store merges
       - 'references/descriptor_registry.yaml'  # descriptor roster the definitions store merges
+      - 'engine/engine_params/sim_params.json'         # the values-layer 'By value' browse surface
+      - 'engine/engine_params/value_pointer_links.json'  # value<->pointer links rendered in browse
       - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
       - '.github/workflows/dashboard.yml'
   schedule:

@@ -1020,12 +1020,37 @@ def build_definitions():
     }
 
 
+# ── values layer: typed sim constants + their pointer links (ED-IN-0079) ─────
+
+def build_values():
+    """The values-to-pointers browse surface: the typed sim constants + which pointers each
+    references. Reads the generated engine/engine_params/{sim_params,value_pointer_links}.json."""
+    sp = json.load(open(os.path.join(HERE, '..', 'engine', 'engine_params', 'sim_params.json'), encoding='utf-8'))
+    lk = json.load(open(os.path.join(HERE, '..', 'engine', 'engine_params', 'value_pointer_links.json'), encoding='utf-8'))
+    by_value = lk.get('by_value') or {}
+    params = [{
+        "key": r["key"], "name": r["name"], "value": r["value"], "kind": r["kind"],
+        "module": r["module"], "file": r["file"], "note": r.get("note", ""),
+        "pointers": by_value.get(r["key"], []),
+    } for r in sp.get("params", [])]
+    return {
+        "available": True,
+        "count": sp.get("count", len(params)),
+        "by_module": sp.get("by_module", {}),
+        "link_count": lk.get("link_count", 0),
+        "linked_values": lk.get("linked_values", 0),
+        "by_pointer": lk.get("by_pointer", {}),
+        "params": params,
+    }
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
         "review_state": _safe('review_state', build_review_state),
         "browse": _safe('browse', build_browse),
         "definitions": _safe('definitions', build_definitions),
+        "values": _safe('values', build_values),
         "workplan": _safe('workplan', build_workplan),
         "audits": _safe('audits', build_audits),
         "activity": _safe('activity', build_activity),
