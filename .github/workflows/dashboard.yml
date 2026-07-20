@@ -18,6 +18,8 @@ on:
       - 'CURRENT.md'            # rendered by the Reconciliation-status panel (build_drift)
       - 'dashboard/**'
       - 'tools/dashboard_data.py'
+      - 'tools/review_core.py'          # Repository-state card reads review_core.collect()
+      - 'registers/review_baseline.yaml' # the ratchet the review_state grade is graded against
       - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
       - '.github/workflows/dashboard.yml'
   schedule:

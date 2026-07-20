@@ -300,6 +300,11 @@
     <div id="decisions-body" class="empty-state">loading…</div>
   </section>
 
+  <section class="card" id="reviewstate-card">
+    <h2>Repository state</h2>
+    <div id="reviewstate-body" class="empty-state">loading…</div>
+  </section>
+
   <section class="card" id="drift-card">
     <h2>Reconciliation status</h2>
     <div id="drift-body" class="empty-state">loading…</div>
@@ -468,6 +473,44 @@ function renderDecisions(d) {
     </li>`).join('');
   el.innerHTML = `<ul class="plain">${items}</ul>
     <div class="decision-source" style="margin-top:8px;">heuristic prose scan — a floor, not a guarantee</div>`;
+}
+
+function renderReviewState(d) {
+  const el = document.getElementById('reviewstate-body');
+  const rs = d.review_state;
+  if (!rs || rs.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  const GRADE_COLOR = { GREEN: 'var(--good)', AMBER: 'var(--warning)', RED: 'var(--critical)' };
+  const r = rs.rollup || {};
+  const gcolor = GRADE_COLOR[rs.grade] || 'var(--text-muted)';
+  const head = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+      <span class="chip" style="background:${gcolor};color:#fff;font-size:0.9rem;padding:3px 10px;">${esc(rs.grade)}</span>
+      <span class="decision-source">${r.blocking_failures || 0} blocking · ${r.regressions_vs_baseline || 0} regressions ·
+        ${r.report_only_failures || 0} report-only · ${r.errors || 0} errors · ${r.signal_count || 0} signals</span>
+    </div>`;
+  const VCOLOR = { pass: 'var(--good)', fail: 'var(--warning)', error: 'var(--critical)' };
+  const rows = (rs.signals || []).map(s => {
+    const regressed = s.regressed;
+    const dot = regressed ? 'var(--critical)' : (VCOLOR[s.verdict] || 'var(--text-muted)');
+    const gauge = (s.count !== null && s.count !== undefined && s.baseline !== null && s.baseline !== undefined)
+      ? ` <span class="status-pill">${s.count}/${s.baseline}</span>` : '';
+    const tag = regressed ? '<span class="chip warning">REGRESSED</span> '
+      : (s.tier === 'info' ? '<span class="status-pill">info</span> ' : '');
+    return `<li class="decision-item">
+      <span class="dot" style="background:${dot}"></span>
+      <span>
+        <strong>${esc(s.id)}</strong>${gauge} ${tag}<span class="status-pill">${esc(s.lane)}</span><br>
+        <span class="decision-source">${esc(s.verdict)} · ${esc(s.source)}</span>
+      </span>
+    </li>`;
+  }).join('');
+  const note = `<div class="ref-note">Repository State Armature (ED-IN-0077) · <code>tools/review_core.py</code> —
+    one verdict aggregator behind the SessionStart banner, this card, and (soon) a CI job.
+    Report-only signals are graded against <code>registers/review_baseline.yaml</code> (the ratchet):
+    a signal regresses only when its debt count exceeds the accepted baseline.</div>`;
+  el.innerHTML = head + `<ul class="plain">${rows}</ul>` + note;
 }
 
 function renderDrift(d) {
@@ -852,6 +895,7 @@ async function load() {
     const d = await res.json();
     renderGeneratedMeta(d);
     renderDecisions(d);
+    renderReviewState(d);
     renderDrift(d);
     renderWorkplan(d);
     renderQueue(d);

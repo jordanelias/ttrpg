@@ -127,7 +127,7 @@ the head of its lineage; predecessors are archived._
 | **Godot conversion** | `godot/godot_conversion_strategy_v1.md` (Lane-C governing spec) |
 | **Board game** | `engine/params/board_game.md` + `engine/params/bg/*` governing tables |
 | **Dice / resolution** | `engine/params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |
-| **Repository state armature** | `systems/_architecture/repo_state_armature_v1.md` (PROPOSED, ED-IN-0077) — the single review engine `tools/review_core.py` (emits a generated `review_state.json`) + `registers/review_baseline.yaml` ratchet; Phase 0/1 built, Phases 2–5 (definitions store / view inversion / vocab fold / freshness / attribute-roster on OPT-AV-1) staged |
+| **Repository state armature** | `systems/_architecture/repo_state_armature_v1.md` (RATIFIED charter + Phase 0/1, ED-IN-0077) — the single review engine `tools/review_core.py` (verdict aggregator) + `registers/review_baseline.yaml` (count-aware ratchet). Two faces built: SessionStart banner + the GitHub Pages **Repository state** card (`dashboard/` via `dashboard_data.build_review_state`); the `review-state` CI job is Phase 4. Phases 3 & 5 (vocab fold / attribute-roster on OPT-AV-1) held back under ED-IN-0029 |
 
 ## Naming / versioning note
 

@@ -873,9 +873,37 @@ def build_actions():
     }
 
 
+# ── repository-state armature (review_core verdict roll-up) ──────────────────
+# The Pages face of the Repository State Armature (ED-IN-0077). review_core is the single
+# verdict aggregator (one core, three faces per CLAUDE.md §8); this section is the artifact
+# face — the SessionStart banner and the CI job read the SAME collect(). No rules reimplemented.
+
+def build_review_state():
+    import review_core
+    state = review_core.collect()
+    r = state["rollup"]
+    return {
+        "available": True,
+        "grade": r["grade"],
+        "rollup": r,
+        "head_sha": state.get("head_sha"),
+        "signals": [
+            {
+                "id": s["id"], "lane": s["lane"], "tier": s["tier"],
+                "verdict": s["verdict"], "count": s.get("count"),
+                "baseline": s.get("baseline"), "regressed": s.get("regressed"),
+                "source": s["source"], "detail": (s.get("detail") or [])[:2],
+            }
+            for s in state["signals"]
+        ],
+        "subsystems": state.get("subsystems", {}),
+    }
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
+        "review_state": _safe('review_state', build_review_state),
         "workplan": _safe('workplan', build_workplan),
         "audits": _safe('audits', build_audits),
         "activity": _safe('activity', build_activity),
