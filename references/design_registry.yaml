@@ -91,8 +91,8 @@ registry:
     params: null
 
   # ─── BOARD GAME ────────────────────────────────────────────────────────────
-  # ⚠ SUPERSEDED: strategic_layer_v30* was RETIRED to deprecated/archives/ (2026-07-19,
-  # ED-IN-0071 P4/P5). The live board-game head is engine/params/board_game.md + engine/params/bg/*
+  # ⚠ SUPERSEDED: strategic_layer_v30* was RETIRED to deprecated/archives/ in the 2026-07-19
+  # designs/ retirement. The live board-game head is engine/params/board_game.md + engine/params/bg/*
   # (see CURRENT.md). Paths below repointed to the archived location so they are not dangling;
   # this entry is retained for historical reference only.
   board_game:
@@ -262,8 +262,8 @@ registry:
       until a design-layer doc is created from stage6 content. Flag for design session.
     blocker: "[EDITORIAL: no design-layer TTRPG factions doc — stage6 unverified]"
 
-  # ⚠ SUPERSEDED: strategic_layer_v30* retired to deprecated/archives/ (2026-07-19, ED-IN-0071
-  # P4/P5). Live faction head: systems/factions/* + engine/params/factions.md (see CURRENT.md).
+  # ⚠ SUPERSEDED: strategic_layer_v30* retired to deprecated/archives/ in the 2026-07-19 designs/
+  # retirement. Live faction head: systems/factions/* + engine/params/factions.md (see CURRENT.md).
   factions_bg_hybrid:
     system: factions
     mode: BG
