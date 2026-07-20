@@ -96,6 +96,13 @@ PROVENANCE_PATHS = {
     'references/synonym_registry.yaml',
     'references/mechanical_terms_index.md',
     'registers/supersession_register.yaml',
+    # The vocab fold (ED-IN-0078): the source + its generated register views record ED provenance
+    # (authority/patch/source fields) — RECORDS of where an ED applied, not canonical-basis claims,
+    # same rationale as synonym_registry above (already provenance; it is one of the folded views).
+    'references/definitions/vocab_source.yaml',
+    'references/censured_vocabulary.yaml',
+    'references/deprecated_terms_registry.yaml',
+    'references/alias_registry.yaml',
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
