@@ -1561,3 +1561,78 @@ registers:
         definitional 'Name (ACR)' collisions, deprecated-term residuals, cross-silo appearances. Does
         NOT discover brand-new undefined terms. Term-level silo-uniqueness (Rule 2) and bare deprecated-term
         usage (Rule 3) remain ungated by abbreviation_registry_gate.
+view_headers:
+  alias_registry: '# Valoria Alias Registry — Mechanic Naming
+
+    #
+
+    # Purpose: canonical name → aliases/abbreviations/legacy names for mechanical
+
+    # terms (distinct from the proper noun registry which handles world entities).
+
+    #
+
+    # This file is the source of truth for how mechanical terms may be written.
+
+    # The collator (tools/valoria_collator.py) checks every design/params file
+
+    # against this registry and flags:
+
+    #   - Uses of an alias without the canonical term on first use in a section
+
+    #   - Uses of a legacy/collision abbreviation that must not appear alone
+
+    #   - Uses of an unknown abbreviation not registered anywhere
+
+    #
+
+    # Seed source: references/glossary.md (2026-04-02)
+
+    #
+
+    # Schema per entry:
+
+    #   canonical: <full term as it must appear>
+
+    #   abbreviations: <list of permitted abbreviations (with restrictions)>
+
+    #   aliases: <list of alternative phrasings treated as equivalent>
+
+    #   legacy: <list of deprecated names that must not be used>
+
+    #   collision_note: <if abbreviation collides with another term>
+
+    #   standalone_ok: true|false  (may the abbreviation stand alone in prose?)
+
+    #   category: stat | clock | track | mechanic | operation | mode | infra
+
+    '
+  censured_vocabulary: '# Censured Vocabulary
+
+    # Authoritative term-governance store referenced by PP-675 / ED-783 (Canon Rectification, 2026-04-25).
+
+    # Populated 2026-04-30 (PP-691) following terminology vector-audit.
+
+    #
+
+    # Schema:
+
+    #   terms:
+
+    #     - term: <string>
+
+    #       reason: <why censured>
+
+    #       replacement: <preferred alternative or null>
+
+    #       date: <YYYY-MM-DD>
+
+    #       authority: <ED-NNN or PP-NNN>
+
+    #       residual_count: <integer or null — actionable corpus paragraphs at last audit>
+
+    #       residual_at_audit: <YYYY-MM-DD>
+
+    #       residual_concentration: <single-doc concentration if any, else null>
+
+    '

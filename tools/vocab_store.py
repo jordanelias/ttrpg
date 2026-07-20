@@ -71,12 +71,26 @@ def seed() -> None:
     SOURCE.write_text(_SRC_HEADER + yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=100))
 
 
-def _render(name: str, data) -> str:
-    return _view_header(name) + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=100)
+def _render(name: str, data, headers: dict | None = None) -> str:
+    headers = _load_headers() if headers is None else headers
+    doc = headers.get(name, "")
+    if doc and not doc.endswith("\n"):
+        doc += "\n"
+    return _view_header(name) + doc + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=100)
+
+
+def _load_full() -> dict:
+    return yaml.safe_load(SOURCE.read_text(encoding="utf-8")) or {}
 
 
 def _load_source() -> dict:
-    return (yaml.safe_load(SOURCE.read_text(encoding="utf-8")) or {}).get("registers", {})
+    return _load_full().get("registers", {})
+
+
+def _load_headers() -> dict:
+    """Per-register hand-authored doc-headers (purpose/schema/provenance) preserved through the fold
+    so the generated views stay self-documenting — legibility is not sacrificed to generation."""
+    return _load_full().get("view_headers", {})
 
 
 def _frozen_data(path: Path) -> dict:
