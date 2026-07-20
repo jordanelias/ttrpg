@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valoria — browse modules & primitives</title>
+<link rel="icon" href="icon.svg">
+<style>
+  :root {
+    --surface-1:#faf9f5; --page-plane:#ffffff; --text-primary:#0b0b0b; --text-secondary:#3d3d3a;
+    --text-muted:#6b6a64; --border:rgba(11,11,11,0.12); --gridline:#e1e0d9;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --blue:#2a78d6;
+    --chip-ink:#0b0b0b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:#1a1a19; --page-plane:#0d0d0d; --text-primary:#ffffff; --text-secondary:#c3c2b7;
+      --text-muted:#898781; --border:rgba(255,255,255,0.12); --gridline:#2c2c2a;
+      --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#e66767; --blue:#3987e5;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; max-width:1100px; margin:0 auto; background:var(--page-plane);
+         color:var(--text-primary); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  h1 { font-size:1.4rem; margin:0 0 2px; }
+  a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
+  .meta { color:var(--text-muted); font-size:0.85rem; margin-bottom:14px; }
+  .controls { position:sticky; top:0; background:var(--page-plane); padding:10px 0; z-index:5;
+              border-bottom:1px solid var(--border); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .toggle button { font:inherit; padding:5px 12px; border:1px solid var(--border); background:var(--surface-1);
+                   color:var(--text-secondary); border-radius:6px; cursor:pointer; }
+  .toggle button.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+  #search { flex:1; min-width:180px; padding:6px 10px; border:1px solid var(--border);
+            border-radius:6px; background:var(--surface-1); color:var(--text-primary); font:inherit; }
+  .summary { color:var(--text-muted); font-size:0.82rem; }
+  details.mod { border:1px solid var(--border); border-radius:8px; margin:8px 0; background:var(--surface-1); }
+  details.mod > summary { padding:10px 12px; cursor:pointer; list-style:none; display:flex; gap:8px;
+                          flex-wrap:wrap; align-items:center; }
+  details.mod > summary::-webkit-details-marker { display:none; }
+  details.mod[open] > summary { border-bottom:1px solid var(--border); }
+  .mod-body { padding:12px; }
+  .col2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+  @media (max-width:640px){ .col2 { grid-template-columns:1fr; } }
+  h4 { margin:6px 0 4px; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); }
+  ul.plain { list-style:none; padding:0; margin:0; } ul.plain li { padding:2px 0; }
+  .pill { font-size:0.72rem; padding:1px 7px; border-radius:10px; background:var(--page-plane);
+          border:1px solid var(--border); color:var(--text-secondary); white-space:nowrap; }
+  .scale { font-size:0.72rem; padding:1px 7px; border-radius:4px; background:var(--gridline); color:var(--text-secondary); }
+  .muted { color:var(--text-muted); font-size:0.82rem; }
+  .type { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.82rem; }
+  .b-track{ background:var(--blue); } .b-clock{ background:var(--warning); color:var(--chip-ink); }
+  .b-pool{ background:var(--good); } .b-derived_value{ background:var(--serious); color:var(--chip-ink); }
+  .bucket { color:#fff; font-size:0.7rem; padding:1px 6px; border-radius:4px; }
+  .prim-group { border:1px solid var(--border); border-radius:8px; margin:10px 0; background:var(--surface-1); padding:10px 12px; }
+  .prim-row { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; padding:3px 0; border-top:1px solid var(--gridline); }
+  .prim-row:first-of-type { border-top:none; }
+  .k { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.8rem; color:var(--text-muted); }
+  .ext { color:var(--text-muted); font-style:italic; border-bottom:1px dotted var(--text-muted); }
+  .hidden { display:none; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.85em; }
+</style>
+</head>
+<body>
+  <h1>Valoria — browse</h1>
+  <div class="meta"><a href="index.html">← dashboard</a> · one navigable surface over the 27-module I/O spine
+    (<code>module_contracts.yaml</code>) + pointer roster (<code>descriptor_registry.yaml</code>). Same YAML the
+    <a href="https://github.com/jordanelias/ttrpg/blob/main/audit/other/2026-07-19-module-io-state-survey.md" target="_blank" rel="noopener">primitive survey</a> was built from.</div>
+
+  <div class="controls">
+    <span class="toggle">
+      <button id="btn-chain" class="active" onclick="setMode('chain')">By chain</button>
+      <button id="btn-prim" onclick="setMode('primitive')">By primitive</button>
+    </span>
+    <input id="search" placeholder="filter — module, primitive, Key type…" oninput="applyFilter()">
+    <span class="summary" id="summary"></span>
+  </div>
+
+  <div id="chain-view"></div>
+  <div id="primitive-view" class="hidden"></div>
+
+<script>
+let DATA = null, MODE = 'chain';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const REPO = 'https://github.com/jordanelias/ttrpg/blob/main/';
+const bucketChip = b => `<span class="bucket b-${esc(b)}">${esc((b||'').replace('_value',''))}</span>`;
+
+let MODULE_SET = new Set();
+function modLink(name) {
+  if (MODULE_SET.has(name)) return `<a href="#" onclick="jumpToModule('${esc(name)}');return false;">${esc(name)}</a>`;
+  return `<span class="ext" title="external input — not a module">${esc(name)}</span>`;  // engine, player_input
+}
+
+function renderChain(b) {
+  const el = document.getElementById('chain-view');
+  el.innerHTML = (b.by_module || []).map(m => {
+    const consumes = (m.consumes || []).map(c =>
+      `<li><span class="type">${esc(c.type)}</span> <span class="muted">←</span> ${
+        (c.from || []).map(modLink).join(', ') || '<span class="muted">—</span>'}</li>`).join('');
+    const emits = (m.emits || []).map(e =>
+      `<li><span class="type">${esc(e.type)}</span>${e.terminal ? ' <span class="pill">terminal</span>' : ''}</li>`).join('')
+      || '<li class="muted">— none declared —</li>';
+    const downstream = (m.downstream || []).map(d =>
+      `<li>${modLink(d.module)} <span class="muted">←</span> <span class="type">${esc(d.type)}</span></li>`).join('')
+      || '<li class="muted">— no downstream consumers —</li>';
+    const state = (m.state || []).map(s =>
+      `<span class="pill">${esc(s.name)} ${bucketChip(s.bucket)}${s.writable === false ? ' <span class="muted">ro</span>' : ''}</span>`).join(' ')
+      || '<span class="muted">— no owned state —</span>';
+    const doc = m.doc ? `<a href="${REPO}${encodeURI(m.doc)}" target="_blank" rel="noopener">${esc(m.doc)}</a>` : '<span class="muted">no doc</span>';
+    return `<details class="mod" id="mod-${esc(m.module)}" data-name="${esc(m.module)}">
+      <summary><strong>${esc(m.module)}</strong>
+        ${(m.scales || []).map(s => `<span class="scale">${esc(s)}</span>`).join('')}
+        <span class="pill">${(m.state || []).length} state</span>
+        <span class="muted">${(m.consumes || []).length} in · ${(m.emits || []).length} out · ${(m.downstream || []).length} downstream</span>
+      </summary>
+      <div class="mod-body">
+        <div class="muted">registry: ${esc(m.registry_system)} · resolver: ${esc(m.resolver)} · ${doc}</div>
+        <div style="margin-top:8px;"><h4>State primitives owned</h4>${state}</div>
+        <div class="col2">
+          <div><h4>Consumes (upstream)</h4><ul class="plain">${consumes || '<li class="muted">— none —</li>'}</ul></div>
+          <div><h4>Emits</h4><ul class="plain">${emits}</ul>
+               <h4 style="margin-top:10px;">Downstream (who consumes this)</h4><ul class="plain">${downstream}</ul></div>
+        </div>
+      </div>
+    </details>`;
+  }).join('');
+}
+
+function renderPrimitive(b) {
+  const el = document.getElementById('primitive-view');
+  const p = b.primitives || {};
+  const BUCKETS = ['track', 'clock', 'pool', 'derived_value'];
+  const ms = p.module_state || [];
+  let html = `<div class="prim-group"><h4>Module-owned state — ${ms.length} primitives, from module_contracts.yaml</h4>`;
+  for (const bk of BUCKETS) {
+    const rows = ms.filter(x => x.bucket === bk);
+    if (!rows.length) continue;
+    html += `<div style="margin:8px 0 2px;">${bucketChip(bk)} <span class="muted">${rows.length}</span></div>`;
+    html += rows.map(x => `<div class="prim-row" data-txt="${esc((x.name+' '+x.module).toLowerCase())}">
+        <strong>${esc(x.name)}</strong>
+        <span class="muted">owner:</span> ${modLink(x.module)}
+        ${x.writable === false ? '<span class="pill">read-only</span>' : '<span class="pill">writable</span>'}
+        ${(x.scales || []).map(s => `<span class="scale">${esc(s)}</span>`).join('')}
+      </div>`).join('');
+  }
+  html += `</div>`;
+  // pointer roster grouped by category
+  const roster = p.roster || [];
+  const cats = [...new Set(roster.map(r => r.category))];
+  html += `<div class="prim-group"><h4>Pointer roster — ${roster.length} descriptors, from descriptor_registry.yaml</h4>`;
+  for (const cat of cats) {
+    const rows = roster.filter(r => r.category === cat);
+    html += `<div style="margin:8px 0 2px;"><span class="pill">${esc(cat)}</span> <span class="muted">${rows.length}</span></div>`;
+    html += rows.map(r => `<div class="prim-row" data-txt="${esc(((r.name||'')+' '+(r.key||'')+' '+(r.aliases||[]).join(' ')).toLowerCase())}">
+        <strong>${esc(r.name)}</strong> <span class="k">${esc(r.key)}</span>
+        ${r.sub ? `<span class="scale">${esc(r.sub)}</span>` : ''}
+        ${r.scale ? `<span class="pill">scale ${esc(r.scale)}</span>` : ''}
+        ${(r.aliases && r.aliases.length) ? `<span class="muted">aka ${r.aliases.map(esc).join(', ')}</span>` : ''}
+      </div>`).join('');
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function setMode(m) {
+  MODE = m;
+  document.getElementById('btn-chain').classList.toggle('active', m === 'chain');
+  document.getElementById('btn-prim').classList.toggle('active', m === 'primitive');
+  document.getElementById('chain-view').classList.toggle('hidden', m !== 'chain');
+  document.getElementById('primitive-view').classList.toggle('hidden', m !== 'primitive');
+  applyFilter();
+}
+
+function jumpToModule(name) {
+  setMode('chain');
+  document.querySelectorAll('details.mod').forEach(d => { d.open = (d.dataset.name === name); });
+  const t = document.getElementById('mod-' + name);
+  if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function applyFilter() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  if (MODE === 'chain') {
+    let shown = 0;
+    document.querySelectorAll('#chain-view details.mod').forEach(d => {
+      const hit = !q || d.textContent.toLowerCase().includes(q);
+      d.classList.toggle('hidden', !hit); if (hit) shown++;
+      d.open = !!q && hit;
+    });
+    setSummary(`${shown} module(s)`);
+  } else {
+    let shown = 0;
+    document.querySelectorAll('#primitive-view .prim-row').forEach(r => {
+      const hit = !q || (r.dataset.txt || '').includes(q);
+      r.classList.toggle('hidden', !hit); if (hit) shown++;
+    });
+    setSummary(`${shown} primitive(s)`);
+  }
+}
+function setSummary(s) {
+  const c = DATA && DATA.browse && DATA.browse.counts || {};
+  document.getElementById('summary').textContent =
+    `${s} · ${c.modules||0} modules · ${c.module_primitives||0} state + ${c.roster||0} roster primitives · ${c.emit_types||0} Key types · ${c.module_edges||0} module edges · ${c.external_sources||0} external inputs`;
+}
+
+(async function () {
+  try {
+    const res = await fetch('data.json', { cache: 'no-store' });
+    DATA = await res.json();
+    const b = DATA.browse;
+    if (!b || b.available === false) {
+      document.getElementById('chain-view').innerHTML = '<p class="muted">browse data unavailable in data.json</p>';
+      return;
+    }
+    MODULE_SET = new Set(b.module_names || (b.by_module || []).map(m => m.module));
+    renderChain(b); renderPrimitive(b); setMode('chain');
+  } catch (e) {
+    document.getElementById('chain-view').innerHTML = '<p class="muted">failed to load data.json: ' + esc(e) + '</p>';
+  }
+})();
+</script>
+</body>
+</html>
