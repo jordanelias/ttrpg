@@ -61,6 +61,16 @@ def main():
     except Exception:
         pass
 
+    # Repository State Armature (ED-IN-0077): one-line repo-state grade from the single review
+    # engine. fast=True reads the last committed review_state.json only (no subprocess, no hang);
+    # silent if absent. Renderer lives once in review_core.py; never allowed to break session start.
+    try:
+        import review_core
+        for ln in review_core.summary_lines(fast=True):
+            print(ln)
+    except Exception:
+        pass
+
     if os.path.exists('HANDOFF.md'):
         try:
             with open('HANDOFF.md', encoding='utf-8', errors='replace') as f:

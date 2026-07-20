@@ -248,7 +248,7 @@ systems:
     design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "9dc9c5a093ffa44fc0c4fc09266bc68a5bdc4552"
     infill: references/throughlines_meta_infill.md
-    canonical_sha__references__throughlines_meta_infill_md: "12176c5612c1ac413007b37a3a89e0bcad247263"
+    canonical_sha__references__throughlines_meta_infill_md: "663e6905da0ee3cc28359e9dfb57c07468618a9e"
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
@@ -508,7 +508,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "33fb7e91b3362624655203c6bb2f9433da4c2b65"
+    canonical_sha__references__module_contracts_yaml: "531f6f37443a9866e061e4ccdb59d6b195853a37"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

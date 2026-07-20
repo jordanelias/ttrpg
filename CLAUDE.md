@@ -298,6 +298,7 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
 | Incremental module-by-module sim build | `valoria-simulator` |
+| "What's the state of the repo?" / exhaustive repo-state review | `python tools/review_core.py --summary` (Repository State Armature, ED-IN-0077; the single verdict-aggregator — one core behind the SessionStart banner + a GitHub job + the artifact) |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
 driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
