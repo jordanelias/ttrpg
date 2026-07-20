@@ -56,6 +56,7 @@ CHECKS = [
     {"id": "vocab.a17",         "argv": ["tools/ci_quantity_vocabulary_check.py"], "tier": "report_only", "lane": "IN",
      "count_re": r"(\d+) unresolved"},
     {"id": "wiring.coverage",   "argv": ["tools/wiring_map_check.py", "--check"],  "tier": "report_only", "lane": "IN"},
+    {"id": "definitions.parity", "argv": ["tools/definitions_store.py", "--check"], "tier": "report_only", "lane": "IN"},
     {"id": "audit.staleness",   "argv": ["tools/audit_staleness.py"],             "tier": "info",        "lane": "IN"},
     {"id": "workplan.state",    "argv": ["tools/workplan_status.py"],             "tier": "info",        "lane": "IN"},
 ]

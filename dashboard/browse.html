@@ -70,6 +70,7 @@
     <span class="toggle">
       <button id="btn-chain" class="active" onclick="setMode('chain')">By chain</button>
       <button id="btn-prim" onclick="setMode('primitive')">By primitive</button>
+      <button id="btn-def" onclick="setMode('definition')">By definition</button>
     </span>
     <input id="search" placeholder="filter — module, primitive, Key type…" oninput="applyFilter()">
     <span class="summary" id="summary"></span>
@@ -77,6 +78,7 @@
 
   <div id="chain-view"></div>
   <div id="primitive-view" class="hidden"></div>
+  <div id="definition-view" class="hidden"></div>
 
 <script>
 let DATA = null, MODE = 'chain';
@@ -161,12 +163,48 @@ function renderPrimitive(b) {
   el.innerHTML = html;
 }
 
+function renderDefinitions(d) {
+  const el = document.getElementById('definition-view');
+  const df = d.definitions;
+  if (!df || df.available === false) { el.innerHTML = '<p class="muted">definitions store unavailable</p>'; return; }
+  const parity = df.parity_ok
+    ? '<span class="pill" style="background:var(--good);color:#fff;">parity OK</span>'
+    : '<span class="pill" style="background:var(--critical);color:#fff;">DRIFT</span>';
+  const gaps = (df.gaps && df.gaps.length)
+    ? `<span class="muted">· ${df.gaps.length} key(s) in only one register (surfaced): ${df.gaps.map(esc).join(', ')}</span>` : '';
+  let html = `<div class="prim-group"><h4>Unified definitions — ${df.count} records ${parity} ${gaps}</h4>
+    <div class="muted" style="margin-bottom:6px;">generated from ${(df.sources||[]).map(s=>`<code>${esc(s)}</code>`).join(' + ')} ·
+    retrieve any term in one place · drift-locked by <code>definitions_store.py --check</code></div>`;
+  const cats = [...new Set((df.definitions || []).map(r => r.category))].sort();
+  for (const cat of cats) {
+    const rows = df.definitions.filter(r => r.category === cat);
+    html += `<div style="margin:8px 0 2px;"><span class="pill">${esc(cat||'—')}</span> <span class="muted">${rows.length}</span></div>`;
+    html += rows.map(r => {
+      const regs = (r.in_registers || []).map(x => `<span class="scale">${esc(x)}</span>`).join(' ');
+      const legacy = (r.legacy && r.legacy.length) ? ` <span class="muted">legacy: ${r.legacy.map(esc).join(', ')}</span>` : '';
+      const aliases = (r.aliases && r.aliases.length) ? ` <span class="muted">aka ${r.aliases.map(esc).join(', ')}</span>` : '';
+      const gap = r.gap ? ` <span class="pill" style="background:var(--warning);color:var(--chip-ink);">${esc(r.gap)}</span>` : '';
+      const txt = ((r.canonical||'')+' '+(r.key||'')+' '+(r.aliases||[]).join(' ')+' '+(r.legacy||[]).join(' ')).toLowerCase();
+      return `<div class="prim-row" data-txt="${esc(txt)}">
+        <strong>${esc(r.canonical)}</strong> <span class="k">${esc(r.key)}</span>
+        ${r.scale ? `<span class="pill">scale ${esc(r.scale)}</span>` : ''}
+        ${r.enforce ? `<span class="scale">${esc(r.enforce)}</span>` : ''}
+        ${regs}${aliases}${legacy}${gap}
+      </div>`;
+    }).join('');
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
 function setMode(m) {
   MODE = m;
   document.getElementById('btn-chain').classList.toggle('active', m === 'chain');
   document.getElementById('btn-prim').classList.toggle('active', m === 'primitive');
+  document.getElementById('btn-def').classList.toggle('active', m === 'definition');
   document.getElementById('chain-view').classList.toggle('hidden', m !== 'chain');
   document.getElementById('primitive-view').classList.toggle('hidden', m !== 'primitive');
+  document.getElementById('definition-view').classList.toggle('hidden', m !== 'definition');
   applyFilter();
 }
 
@@ -187,13 +225,21 @@ function applyFilter() {
       d.open = !!q && hit;
     });
     setSummary(`${shown} module(s)`);
-  } else {
+  } else if (MODE === 'primitive') {
     let shown = 0;
     document.querySelectorAll('#primitive-view .prim-row').forEach(r => {
       const hit = !q || (r.dataset.txt || '').includes(q);
       r.classList.toggle('hidden', !hit); if (hit) shown++;
     });
     setSummary(`${shown} primitive(s)`);
+  } else {
+    let shown = 0;
+    document.querySelectorAll('#definition-view .prim-row').forEach(r => {
+      const hit = !q || (r.dataset.txt || '').includes(q);
+      r.classList.toggle('hidden', !hit); if (hit) shown++;
+    });
+    const dc = DATA && DATA.definitions && DATA.definitions.count || 0;
+    setSummary(`${shown} of ${dc} definition(s)`);
   }
 }
 function setSummary(s) {
@@ -212,7 +258,7 @@ function setSummary(s) {
       return;
     }
     MODULE_SET = new Set(b.module_names || (b.by_module || []).map(m => m.module));
-    renderChain(b); renderPrimitive(b); setMode('chain');
+    renderChain(b); renderPrimitive(b); renderDefinitions(DATA); setMode('chain');
   } catch (e) {
     document.getElementById('chain-view').innerHTML = '<p class="muted">failed to load data.json: ' + esc(e) + '</p>';
   }

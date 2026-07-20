@@ -998,11 +998,34 @@ def build_browse():
     }
 
 
+# ── definitions store (unified definitional surface, Phase 2) ────────────────
+
+def build_definitions():
+    import definitions_store as ds
+    store = ds.load_store()
+    ok, msgs = ds.check()
+    defs = store.get('definitions') or {}
+    rows = [dict(key=k, **v) for k, v in defs.items()]
+    from collections import Counter
+    cats = Counter(r.get('category') for r in rows)
+    return {
+        "available": True,
+        "count": store.get('count', len(rows)),
+        "parity_ok": ok,
+        "messages": msgs,
+        "categories": dict(cats),
+        "gaps": [r['key'] for r in rows if r.get('gap')],
+        "definitions": rows,
+        "sources": store.get('generated_from') or [],
+    }
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
         "review_state": _safe('review_state', build_review_state),
         "browse": _safe('browse', build_browse),
+        "definitions": _safe('definitions', build_definitions),
         "workplan": _safe('workplan', build_workplan),
         "audits": _safe('audits', build_audits),
         "activity": _safe('activity', build_activity),
