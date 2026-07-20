@@ -12,14 +12,20 @@
 schema_version: 1
 seeded: "2026-07-20"
 seeded_by: "ED-IN-0077"
+# `baseline` is a DEBT-COUNT ceiling: review_core parses the count each tool prints on failure
+# (count_re in tools/review_core.py's CHECKS) and regresses only when count > baseline. Where a
+# tool prints no parseable count (wiring), the ratchet falls back to boolean (any failure on a
+# baseline-0 signal regresses). Banked 2026-07-20 (ED-IN-0077) to true measured debt after the
+# currency/freshness reconcile drove currency to 0 — the shrink is banked per the ratchet rule
+# "debt can only shrink; each shrink is a one-line baseline edit in the PR that earns it."
 signals:
   currency.stamps:
-    baseline: 1        # SessionStart banner: "currency drift: 1 item" (stale CURRENT.md path, pre-existing)
+    baseline: 0        # reconciled to 0 this PR (CURRENT.md paths + id ceilings all current); any drift now regresses
     target: 0
   vocab.a17:
-    baseline: 36       # A17 quantity-vocabulary closure: 36/71 identifiers unresolved (CURRENT.md Key-substrate row)
+    baseline: 29       # A17 quantity-vocabulary closure: measured 29/71 unresolved (was seeded 36, stale by 7)
     target: 0
     flip_blocking_at: 0
   wiring.coverage:
-    baseline: 1        # wiring_map_check --check tolerance; tightens as mc_v18 wiring coverage rises
+    baseline: 0        # wiring_map_check --check passes (27/27 · 7/7); boolean fallback — any failure regresses
     target: 0

@@ -46,21 +46,30 @@ precedent) byte-diffs regenerated views vs committed, so a hand-edit to a projec
 ### 2.2 `tools/review_core.py` → `review_state.json` — the one review engine (Phase 1, BUILT)
 Implements **zero rules** (CLAUDE.md §8: every rule lives once) — a **verdict aggregator** that
 runs each existing check tool and normalizes the result to a `Signal` (`id, source, tier, lane,
-verdict, baseline, regressed, detail`), then rolls up a **per-lane + overall repository grade**
-(GREEN/AMBER/RED). Collectors are a single `CHECKS` registry (adding a signal = one row); Phase-1
-subset: currency, A17 vocabulary closure, wiring coverage, audit staleness, workplan. Later
+verdict, count, baseline, regressed, detail`), then rolls up a **per-lane + overall repository
+grade** (GREEN/AMBER/RED). Collectors are a single `CHECKS` registry (adding a signal = one row);
+Phase-1 subset: currency, A17 vocabulary closure, wiring coverage, audit staleness, workplan. Later
 collectors fold in freshness, A18, contract conformance, apparatus-diff, registry coverage,
-definitions round-trip, and (online) the GitHub CI mirror. **One core, three faces:** the
-SessionStart banner (`session_status.py`, guarded, reads committed state), a GitHub `review-state`
-job, and the published artifact (`window.VALORIA_REVIEW`) all read from here.
+definitions round-trip, and (online) the GitHub CI mirror. **One core, three faces (target):** the
+SessionStart banner (`session_status.py`, guarded — **BUILT**), a GitHub `review-state` job
+(**Phase 4**), and the published artifact (`window.VALORIA_REVIEW` — `write_state` emits the js
+bundle; the page that reads it is **Phase 2**). All three read from here; only the banner is wired
+today. ⚠️ The banner reads the committed `review_state.json`, which is currently git-ignored (a
+head-sha-bearing file manufactures currency drift on every regen) — so on a fresh clone it prints
+"not yet computed" until the Phase-4 `refresh.yml` commits state, exactly as the decisions digest does.
 
 ### 2.3 `registers/review_baseline.yaml` — the ratchet (Phase 1, BUILT)
-One row per report-only signal = its accepted-debt ceiling. `review_core --check` fails only on a
-**regression vs baseline** (a signal exceeding its ceiling) or a blocking failure — so report-only
-signals are **blocking-on-regression from day one** with no branch-protection edits and no CI job
-renames. Debt can only shrink; each shrink is a one-line baseline edit in the PR that earns it;
-when a row hits `target: 0` it is fully blocking. This is the safe report-only→blocking burndown
-(incl. A17 36/71 and the ~12 stale freshness pins). CODEOWNERS-gated to Jordan.
+One row per report-only signal = its accepted-debt **count** ceiling. Each tool's `count_re` (in
+`CHECKS`) parses the debt count it prints on failure; `review_core --check` fails only on a
+**regression vs baseline** (`count > ceiling`) or a blocking failure — so a report-only signal is
+**blocking-on-regression** even while its debt sits above zero: a growing count trips it. Where a
+tool prints no parseable count (wiring), the ratchet falls back to boolean (any failure on a
+baseline-0 signal regresses). Debt can only shrink; each shrink is a one-line baseline edit in the
+PR that earns it; when a row hits `target: 0` it is fully blocking. Seeded at true measured debt
+(currency **0** post-reconcile, A17 **29/71**, wiring **0**) so `--check` exits 0 (AMBER) today.
+This is the safe report-only→blocking burndown (incl. A17 and the ~12 stale freshness pins).
+CODEOWNERS-gated to Jordan. ⚠️ Count-aware grading covers only signals with a `count_re`; a
+count-less signal is still boolean (Phase-2 work extends `count_re` coverage as collectors fold in).
 
 ## 3. Currency / freshness (Phase 4)
 `freshness_gate.py` + `currency_consistency_check.py` are superseded **by absorption**: freshness

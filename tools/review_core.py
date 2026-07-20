@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """review_core.py — the single repository-state review engine (Repository State Armature, ED-IN-0077).
 
-One core, three faces (CLAUDE.md §8 "every rule lives once"): the SessionStart banner
-(tools/session_status.py), a GitHub `review-state` job, and the published artifact all read
-from HERE. This module implements ZERO rules of its own — it is a VERDICT AGGREGATOR that runs
-each existing check tool and normalizes the result into a Signal, then rolls the signals up into
-one per-lane + overall repository grade.
+One core, three faces (CLAUDE.md §8 "every rule lives once") — all read from HERE: the SessionStart
+banner (tools/session_status.py, BUILT), a GitHub `review-state` job (Phase 4), and the published
+artifact (Phase 2; write_state already emits the js bundle). Only the banner is wired today. This
+module implements ZERO rules of its own — it is a VERDICT AGGREGATOR that runs each existing check
+tool and normalizes the result into a Signal, then rolls the signals up into one per-lane + overall
+repository grade.
 
 The ratchet: report-only signals are graded against `registers/review_baseline.yaml` — a signal
 is a REGRESSION (and fails `--check`) only when it exceeds its accepted baseline. Debt can only
@@ -25,6 +26,7 @@ inversion promotes the hottest ones to in-process imports. Adding a signal = one
 from __future__ import annotations
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -36,15 +38,23 @@ BASELINE_PATH = ROOT / "registers" / "review_baseline.yaml"
 SCHEMA_VERSION = 1
 _TIMEOUT = 90  # per-check seconds; a hung check degrades to `error`, never blocks the engine
 
-# ── the signal registry: (id, argv, tier, lane) ──────────────────────────────
+# ── the signal registry: (id, argv, tier, lane, count_re?) ────────────────────
 #   tier: "blocking"  -> a nonzero exit fails --check outright
 #         "report_only" -> graded against the baseline ratchet (regression fails --check)
 #         "info"        -> surfaced, never fails
+#   count_re (optional): a regex whose FIRST group captures the debt count the tool prints on
+#         FAILURE. When present, the ratchet compares the parsed count to the baseline ceiling
+#         (regression = count > ceiling) instead of the boolean exit code — so a report_only
+#         signal detects a debt that GROWS while staying above its accepted floor. Without a
+#         count_re, a failure falls back to the boolean rule (any fail on a baseline-0 signal
+#         regresses). count is read only on failure; a passing check is always count 0.
 # Adding a check to the armature is a single row here. All are existing CLIs (has_cli in
 # references/apparatus_registry.yaml); review_core runs them, it does not reimplement them.
 CHECKS = [
-    {"id": "currency.stamps",   "argv": ["tools/currency_consistency_check.py"], "tier": "report_only", "lane": "IN"},
-    {"id": "vocab.a17",         "argv": ["tools/ci_quantity_vocabulary_check.py"], "tier": "report_only", "lane": "IN"},
+    {"id": "currency.stamps",   "argv": ["tools/currency_consistency_check.py"], "tier": "report_only", "lane": "IN",
+     "count_re": r"\[CURRENCY DRIFT: (\d+)\]"},
+    {"id": "vocab.a17",         "argv": ["tools/ci_quantity_vocabulary_check.py"], "tier": "report_only", "lane": "IN",
+     "count_re": r"(\d+) unresolved"},
     {"id": "wiring.coverage",   "argv": ["tools/wiring_map_check.py", "--check"],  "tier": "report_only", "lane": "IN"},
     {"id": "audit.staleness",   "argv": ["tools/audit_staleness.py"],             "tier": "info",        "lane": "IN"},
     {"id": "workplan.state",    "argv": ["tools/workplan_status.py"],             "tier": "info",        "lane": "IN"},
@@ -80,29 +90,48 @@ def _run_check(chk: dict) -> dict:
         out = (proc.stdout or "") + (proc.stderr or "")
         verdict = "pass" if rc == 0 else "fail"
         detail = [ln for ln in out.strip().splitlines() if ln.strip()][-4:]
+        count = _parse_count(chk.get("count_re"), out, verdict)
     except subprocess.TimeoutExpired:
-        rc, verdict, detail = 124, "error", [f"timeout after {_TIMEOUT}s"]
-    except Exception as exc:  # missing file, unrunnable, etc. — degrade, don't crash the engine
-        rc, verdict, detail = 127, "error", [f"{type(exc).__name__}: {exc}"]
+        rc, verdict, detail, count = 124, "error", [f"timeout after {_TIMEOUT}s"], None
+    except Exception as exc:  # unrunnable executable, OSError, etc. — degrade, don't crash the engine.
+        # NOTE: a missing *.py tool does NOT land here — `python missing.py` exits 2, so it is
+        # graded a "fail" (rc 2), which correctly alarms rather than passing silently.
+        rc, verdict, detail, count = 127, "error", [f"{type(exc).__name__}: {exc}"], None
     return {
         "id": chk["id"], "source": "tools/" + chk["argv"][0].split("/")[-1],
         "tier": chk["tier"], "lane": chk["lane"], "verdict": verdict, "returncode": rc,
+        "count": count,
         "elapsed_ms": int((time.monotonic() - started) * 1000), "detail": detail,
     }
 
 
+def _parse_count(count_re: str | None, out: str, verdict: str) -> int | None:
+    """The debt count a report_only tool prints on failure. A passing check is always 0 debt.
+    On failure: parse count_re's first group if given; None (=> boolean fallback) if it can't."""
+    if verdict == "pass":
+        return 0
+    if not count_re:
+        return None
+    m = re.search(count_re, out)
+    return int(m.group(1)) if m else None
+
+
 def _apply_ratchet(sig: dict, baseline: dict) -> dict:
-    """Grade a report_only signal against its baseline row. A `fail` at or under baseline is
-    accepted debt (regressed=False); above baseline (or a fresh fail with baseline 0) regresses."""
+    """Grade a report_only signal against its baseline row. A `fail` whose debt count is at or
+    under the baseline ceiling is accepted debt (regressed=False); a count ABOVE the ceiling, or
+    a fresh fail on a baseline-0 signal, regresses."""
     row = baseline.get(sig["id"], {}) if isinstance(baseline.get(sig["id"]), dict) else {}
     ceiling = row.get("baseline")
     sig["baseline"] = ceiling
-    # The subprocess exit code is boolean; without a parsed count we treat any fail on a
-    # baseline-0 signal as a regression, and a fail on a baseline>0 signal as accepted debt
-    # (its count is presumed at-or-below the ceiling until a count-parser lands in Phase 2).
+    count = sig.get("count")
     if sig["tier"] != "report_only" or sig["verdict"] != "fail":
         sig["regressed"] = False
+    elif isinstance(count, int):
+        # count-aware ratchet: a growing debt regresses even while it stays above its floor.
+        sig["regressed"] = count > (ceiling if isinstance(ceiling, int) else 0)
     else:
+        # boolean fallback (tool prints no parseable count): any fail on a baseline-0 signal
+        # regresses; a fail on a baseline>0 signal is presumed at-or-under its ceiling.
         sig["regressed"] = not (isinstance(ceiling, int) and ceiling > 0)
     return sig
 
@@ -184,7 +213,9 @@ def summary_lines(fast: bool = False) -> list[str]:
     worst = [s for s in state["signals"] if s["verdict"] != "pass"]
     for s in worst[:3]:
         tag = "REGRESS" if s.get("regressed") else s["verdict"]
-        lines.append(f"  [{tag}] {s['id']} ({s['source']})")
+        cnt = s.get("count")
+        gauge = f" {cnt}/{s.get('baseline')}" if isinstance(cnt, int) else ""
+        lines.append(f"  [{tag}] {s['id']}{gauge} ({s['source']})")
     return lines
 
 
