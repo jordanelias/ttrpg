@@ -103,3 +103,42 @@ Scorecard: cite-edges=9582, hubs=7, implied-missing=32, notional=9356, cascade-s
 - Body (cite 0, tl 0, mu 0, pp 0, canonical)
 - NPC Relational Graph (cite 0, tl 0, mu 0, pp 0, canonical)
 - Territory Temperaments (cite 0, tl 0, mu 0, pp 0, canonical)
+
+---
+
+## §Backtrace correction (2026-07-21, adversarial re-verification)
+
+An independent opus verifier backtraced this run's headline claims to the source
+registries. It **refuted** one of them — recorded here so the deliverable is honest.
+
+- **P2 "conviction-symmetry FAIL" is REFUTED as a corpus finding — it is an instrument
+  artifact, the same class as the G_pp dead-graph.** `references/throughlines_meta_infill.md`
+  routes all seven convictions through the aggregate load-bearing slug `conviction_track`
+  and never names Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity individually, so
+  their *throughline* degree is permanently `[0,0,0,0,0,0,0]` → `cv=999` → **guaranteed FAIL
+  by construction**, unsatisfiable under the current schema. But the convictions are richly
+  present (cite-degrees ~93–131) and the symmetry the property intends to check **holds on
+  the cite axis: CV=0.112 (≤0.5 → PASS).** ⇒ The published **"validation FAILED (1/3)" is
+  substantially an artifact**; correcting P2 flips it to **VALIDATED (2/3)** (P3 already
+  passes). The corpus findings above were already framed as *leads*, so their disposition is
+  unchanged — but the FAILED *verdict* itself should not be read as a real corpus weakness.
+- **P1 FAIL is also partly suspect** (adjacent, unverified): the `Ein Sof` foundation token is
+  absent from the token set and Leap/Coherence/Throughlines carry tl=0 — a token-coverage gap,
+  not necessarily a corpus property.
+- **Confirmed sound** by the same pass: the G_pp fix is correct (edges trace to PP-726's real
+  `affects:` list); no other graph is silently degraded; the restructure resolver cannot
+  false-heal.
+- **Token-layer defect found separately:** the standalone `Baralta` token and the NPC tokens
+  `Inge Baralta` / `Duchess Inge Baralta` all carry the bare `Baralta` pattern with no
+  disambiguation context, so the surname is triple-counted — inflating the `Baralta` hub and
+  manufacturing co-occurrence. Surname substrings are not covered by the English-word
+  disambiguation core.
+
+**HELD BACK for Jordan (do not auto-ratify — these change a published verdict / locked
+validation):** (1) redefine P2 to measure convictions on an axis where they are represented
+(cite-CV), or fold the 7 tokens into `conviction_track` before P2, and fix the `mean==0 →
+cv=999` sentinel to report *not-measurable* rather than *asymmetric*; (2) add `Ein Sof` +
+the foundation tokens to token coverage for P1; (3) surname-substring disambiguation for the
+Baralta family. These are the proposed **vector-audit v4** methodology revision — filed as a
+proposal, not applied, because they flip the FAILED→VALIDATED verdict and touch locked
+validation properties (CLAUDE.md §2 loud-not-silent / ED-1094).

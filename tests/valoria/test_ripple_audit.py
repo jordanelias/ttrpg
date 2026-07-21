@@ -95,6 +95,28 @@ def test_kind_namespacing_prevents_merge():
     assert mods and qtys and not (mods & qtys)
 
 
+def test_vector_overlay_accepts_real_degrees_shape(tmp_path):
+    """attach_vector_degrees must consume vector_audit's ACTUAL degrees.json, whose
+    axis-major keys are cite/throughline/mu/pp/tfidf (NOT tl) — the axis-key mismatch
+    silently returned -1 and annotated 0 nodes before the 2026-07-21 backtrace fix."""
+    import json
+    g = {'nodes': {'module:threadwork': {'kind': 'module', 'name': 'threadwork'},
+                   'quantity:set.order': {'kind': 'quantity', 'name': 'set.order'}},
+         'edges': [], 'adj': {}, 'radj': {}}
+    run = tmp_path / 'vrun'
+    (run / 'data').mkdir(parents=True)
+    # the real axis-major shape: 'throughline' (not 'tl') + an extra 'tfidf' axis
+    (run / 'data' / 'degrees.json').write_text(json.dumps({
+        'cite': {'threadwork': 134}, 'throughline': {'threadwork': 18},
+        'mu': {'threadwork': 25}, 'pp': {'threadwork': 0}, 'tfidf': {'threadwork': 9},
+    }))
+    hits = ra.attach_vector_degrees(g, str(run))
+    assert hits == 1
+    q = g['nodes']['module:threadwork']['quantized']
+    assert q['cite'] == 134 and q['tl'] == 18 and q['mu'] == 25  # 'throughline' -> 'tl'
+    assert 'tfidf' not in q                                       # unrecognized axis ignored
+
+
 def test_coarse_bridges_excluded_from_default():
     """The coarse produces/reads bridges must NOT inflate the default ripple
     (critic finding #3: ~6x downstream over-report). Full-layer reach >= default,

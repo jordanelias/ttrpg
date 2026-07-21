@@ -286,16 +286,22 @@ def attach_vector_degrees(graph, vector_run_dir):
 
     def norm(s):
         return re.sub(r'[^a-z0-9]+', '', str(s).lower())
-    # shape A: {'cite': {token: n}, 'tl': ...}  ·  shape B: {token: {cite,tl,mu,pp}}
+    # Axis aliases: vector_audit's degrees.json writes the throughline axis as
+    # `throughline` (not `tl`) and adds a `tfidf` axis — the axis-major detector must
+    # accept those or the overlay is dead on arrival against the sibling it consumes.
+    _AXIS = {'cite': 'cite', 'tl': 'tl', 'throughline': 'tl', 'mu': 'mu', 'pp': 'pp'}
+    # shape A (axis-major): {'cite': {token: n}, 'throughline': ...} — recognized axis
+    # keys map to dicts.  shape B (token-major): {token: {cite,tl,mu,pp}}.
     coords = defaultdict(dict)
-    if degs and all(k in ('cite', 'tl', 'mu', 'pp') for k in degs):
-        for axis, m in degs.items():
-            for tok, v in (m or {}).items():
-                coords[tok][axis] = v
+    axis_keys = [k for k in degs if k in _AXIS and isinstance(degs[k], dict)]
+    if axis_keys:
+        for axis in axis_keys:                       # unrecognized axes (e.g. tfidf) ignored
+            for tok, v in (degs[axis] or {}).items():
+                coords[tok][_AXIS[axis]] = v
     else:
         for tok, m in degs.items():
             if isinstance(m, dict):
-                got = {k: m.get(k) for k in ('cite', 'tl', 'mu', 'pp') if k in m}
+                got = {_AXIS[k]: m.get(k) for k in m if k in _AXIS}
                 if got:
                     coords[tok] = got
     if not coords:                          # parsed but no recognizable axis data
