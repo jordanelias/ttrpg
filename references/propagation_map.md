@@ -1,7 +1,7 @@
 <!-- v30 path update applied 2026-04-13 -->
 # VALORIA PROPAGATION MAP
 
-> **Historical batches archived.** Sections from 2026-05-02 (Mandate audit ED-784, Register cap ED-786, ED-784 Phase 2 sweep commits A–D) moved to `deprecated/archives/propagation/propagation_map_archive_2026_05_02.md` (this archival sweep). Earlier batches: `deprecated/archives/propagation/propagation_map_archive_2026_05_10.md` (+ `..._2026_05_10b.md`; relocated from references/ 2026-07-21), `deprecated/archives/propagation/propagation_map_archive_2026_05_01*.md` (4 batches). Active file tracks 2026-05-09 onwards.
+> **Historical batches archived** to `deprecated/archives/propagation/` (the 2026-05-01/02/10 batches; the 05-10 pair relocated from references/ 2026-07-21). Active file tracks 2026-05-09 onwards.
 
 ## Register-header reconcile (2026-07-01, ED-1082)
 **Class E; applied this commit.** Patch-register header `Next PP number: 724` was stale vs
