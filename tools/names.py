@@ -122,3 +122,20 @@ def key_for(name, path=None):
         if target in [a.strip() for a in (e.get('aliases') or []) if isinstance(a, str)]:
             return key
     return None
+
+
+def context(key, path=None):
+    """The disambiguation `context` regex terms for `key` (empty list if none).
+
+    The single home for the §3.5 disambiguation gate (Reconciliation Program §3): a `canonical`
+    display that collides with a common English word (Faith/Order/Reason/…) counts as THIS
+    definition only when one of these terms co-occurs. vector_audit reads this here (§8) instead
+    of carrying its own hardcoded copy."""
+    v = _entry(key, path).get('context') or []
+    return list(v) if isinstance(v, list) else []
+
+
+def by_category(category, path=None):
+    """{key: entry} for every entry whose `category` == `category`, in index order."""
+    return {k: e for k, e in entries(path).items()
+            if isinstance(e, dict) and e.get('category') == category}

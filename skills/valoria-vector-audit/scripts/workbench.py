@@ -59,6 +59,8 @@ try:
     import broken_dependency_checker as bdc   # noqa: E402  (§8: reuse the longest-dir-prefix resolver)
 except Exception:                              # pragma: no cover - degrade if tools/ shape changes
     bdc = None
+import tag_normalizer as _tags                 # noqa: E402  (§3 keystone: the ONE tag resolver/stripper)
+import names as _names                         # noqa: E402  (§8: the ONE names_index reader — registry match forms)
 
 DISPOSITIONS = 'references/observatory_dispositions.yaml'
 PROX = 240  # chars — how near two endpoints must co-occur to count as 'co-mentioned' (~1-2 sentences)
@@ -143,14 +145,14 @@ def _resolve_doc(root, doc_rel):
     p = os.path.join(str(root), doc_rel)
     if os.path.isfile(p):
         with open(p, encoding='utf-8', errors='replace') as fh:
-            return fh.read(), 'declared'
+            return _tags.strip(fh.read()), 'declared'
     if bdc is not None:
         remapped = bdc._resolve_remap(doc_rel, _restructure_remap(root))
         if remapped:
             rp = os.path.join(str(root), remapped)
             if os.path.isfile(rp):
                 with open(rp, encoding='utf-8', errors='replace') as fh:
-                    return fh.read(), 'remapped'
+                    return _tags.strip(fh.read()), 'remapped'
     return None, 'missing'
 
 
@@ -167,6 +169,16 @@ def _surface_forms(term):
         words = human.split()
         if len(words) >= 2 or (len(words) == 1 and len(words[0]) >= 4):
             forms.append((human, True))
+    # registry-backed forms (§3 canonical identifiers): if `term` is a names_index id or a known
+    # display, add its canonical + aliases as PRECISE surface forms — a POINTER into the central
+    # registry, not a guess. Pure gain: the registry supplies real aliases the humanizer cannot
+    # infer (e.g. attr.mind.will → 'Spirit'). Unregistered engine ids (module names, Key types)
+    # keep the heuristic humanize above.
+    key = term if _names.canonical(term) else _names.key_for(term)
+    if key and _names.canonical(key):
+        for surf in [_names.canonical(key)] + list(_names.aliases(key)):
+            if surf and (surf, True) not in forms and (surf, False) not in forms:
+                forms.append((surf, True))
     return forms
 
 

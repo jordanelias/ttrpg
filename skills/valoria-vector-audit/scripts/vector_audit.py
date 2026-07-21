@@ -73,8 +73,22 @@ except Exception:  # pragma: no cover — degrade to the local _yaml reader if u
 # ──────────────────────────── CANONICAL TAXONOMY ─────────────────────────────
 
 CLASSES = {
-    'conviction': ['Faith', 'Order', 'Reason', 'Equity', 'Precedent', 'Autonomy', 'Continuity'],
-    'pressure_point': ['Evidence', 'Consequence', 'Authority', 'Loyalty'],
+    # the conviction ROSTER is sourced from references/names_index.yaml conv.* entries AFTER
+    # SEED_TOKENS (§8; R2/ED-IN-0082) — the hardcoded list moved into the central registry.
+    'conviction': [],
+    # pressure_point ROSTER sourced from names_index ppt.* below (§8; R2/ED-IN-0082)
+    'pressure_point': [],
+    # ── DEFERRED to the R2 migration wave (still hardcoded here; FLAGGED, not silently left, per
+    # the hardcode-elimination directive). Each needs reconciliation before it can source from the
+    # central registry the way conviction/pressure_point now do:
+    #   faction / npc → central home is names_index world.* (the proper_noun mirror of
+    #     references/proper_noun_registry.yaml). Blocked on (a) the audit's short match-forms —
+    #     'Crown', 'Torben', surname-only — don't map 1:1 to the formal world.* canonicals, and
+    #     (b) the disambiguation `context` + custom patterns (negative lookaheads) must move
+    #     WITHOUT disturbing the world.* ↔ proper_noun_registry mirror (ci_names_consistency).
+    #     Reserved prefixes: org. (faction/order), npc. (named character) — §3.2 names_index header.
+    #   clock → systems/overview/clock_registry_v30.md is prose, not machine-readable; author
+    #     clock.* entries once that registry is structured.
     'faction': ['Crown', 'Church', 'Hafenmark', 'Varfell', 'Löwenritter',
                 'Restoration Movement', 'Guilds'],
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
@@ -219,47 +233,10 @@ SEED_TOKENS = {
                              'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
     'TCV':                  {'patterns': [r'\bTCV\b'],
                              'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    # Convictions (disambiguated)
-    'Faith':                {'patterns': [r'\bFaith\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFramework\b', r'\bDivine\b',
-                                         r'\bChurch\b', r'\bCardinal\b', r'\bdoctrine\b']},
-    'Order':                {'patterns': [r'\bOrder\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFaith\b', r'\bAutonomy\b',
-                                         r'\bReason\b', r'\bEquity\b']},
-    'Reason':               {'patterns': [r'\bReason\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFaith\b', r'\bOrder\b',
-                                         r'\bAutonomy\b']},
-    'Equity':               {'patterns': [r'\bEquity\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bRestoration\b']},
-    'Precedent':            {'patterns': [r'\bPrecedent\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bHafenmark\b', r'\blegal\b']},
-    'Autonomy':             {'patterns': [r'\bAutonomy\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bVarfell\b', r'L[oö]wenritter']},
-    'Continuity':           {'patterns': [r'\bContinuity\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bRestoration\b']},
-    # Pressure Points (disambiguated)
-    'Evidence':             {'patterns': [r'\bEvidence\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bInvestigation\b',
-                                         r'\bEvidence Track\b']},
-    'Consequence':          {'patterns': [r'\bConsequence\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bConsequentialist\b']},
-    'Authority':            {'patterns': [r'\bAuthority\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bAuthority Challenge\b',
-                                         r'\binstitutional\b']},
-    'Loyalty':              {'patterns': [r'\bLoyalty\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bKnot\b',
-                                         r'\brelational\b']},
+    # Convictions: sourced from references/names_index.yaml conv.* entries just AFTER this
+    # literal (§8 — the §3.5 disambiguation `context` lives ONCE there; R2/ED-IN-0082).
+    # Pressure Points: sourced from references/names_index.yaml ppt.* entries AFTER this literal
+    # (§8; R2/ED-IN-0082) — the hardcoded roster + §3.5 context moved into the central registry.
     # NPCs
     'King Almud':           {'patterns': ['Almud', 'Almqvist'],
                              'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
@@ -318,6 +295,29 @@ SEED_TOKENS = {
     'Tensions':             {'patterns': [r'\bTensions\b'],
                              'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
 }
+
+# Token classes sourced from references/names_index.yaml (§8 — the class ROSTERS and their §3.5
+# disambiguation `context` live ONCE in the central registry; Reconciliation R2 / ED-IN-0082).
+# For each class: CLASSES[<cls>] = the ordered display roster; each member's SEED token gets its
+# match patterns (the entry's explicit `patterns` if present, else [\bcanonical\b]) + `context`.
+# Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
+# names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
+# derive_tokens already has, since the whole audit reads the index.
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point')
+if names is not None:
+    for _cls in _INDEX_TOKEN_CLASSES:
+        _members = names.by_category(_cls)
+        # ordered display roster (index order matches the former hardcoded order, so P2's
+        # per-conviction vector and the class taxonomy are unchanged)
+        CLASSES[_cls] = [_e['canonical'] for _e in _members.values() if _e.get('canonical')]
+        for _e in _members.values():
+            _disp = _e.get('canonical')
+            if not _disp:
+                continue
+            SEED_TOKENS[_disp] = {
+                'patterns': list(_e.get('patterns') or []) or [r'\b' + _disp + r'\b'],
+                'scale': _cls, 'status': 'canonical', 'source': 'seed',
+                'context': list(_e.get('context') or [])}
 
 
 # ──────────────────────────── HELPERS ────────────────────────────────────────

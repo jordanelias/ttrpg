@@ -173,6 +173,47 @@ def test_p2_v4_gated_presence_and_not_measurable_sentinel():
     assert v3['p2']['cv'] is None
 
 
+def test_token_classes_sourced_from_names_index_byte_identical():
+    """R2 (ED-IN-0082, CLAUDE.md §8): the §3.5 disambiguation `context` AND the class rosters for
+    the conviction + pressure_point classes moved OUT of vector_audit's hardcoded SEED_TOKENS INTO
+    references/names_index.yaml (conv.* / ppt.* entries); vector_audit now builds them via
+    names.by_category(<cls>). This pins the sourced tokens byte-identical to the former hardcoded
+    blocks — so P2 (conviction symmetry) and the class taxonomy are provably unchanged. Reverting
+    the sourcing, drifting a context term, or reordering the index roster breaks this."""
+    EXPECTED = {
+        'conviction': {
+            'Faith':      [r'\bConviction\b', r'\bFramework\b', r'\bDivine\b', r'\bChurch\b',
+                           r'\bCardinal\b', r'\bdoctrine\b'],
+            'Order':      [r'\bConviction\b', r'\bFaith\b', r'\bAutonomy\b', r'\bReason\b', r'\bEquity\b'],
+            'Reason':     [r'\bConviction\b', r'\bFaith\b', r'\bOrder\b', r'\bAutonomy\b'],
+            'Equity':     [r'\bConviction\b', r'\bRestoration\b'],
+            'Precedent':  [r'\bConviction\b', r'\bHafenmark\b', r'\blegal\b'],
+            'Autonomy':   [r'\bConviction\b', r'\bVarfell\b', r'L[oö]wenritter'],
+            'Continuity': [r'\bConviction\b', r'\bRestoration\b'],
+        },
+        'pressure_point': {
+            'Evidence':    [r'\bPressure Point\b', r'\bInvestigation\b', r'\bEvidence Track\b'],
+            'Consequence': [r'\bPressure Point\b', r'\bConsequentialist\b'],
+            'Authority':   [r'\bPressure Point\b', r'\bAuthority Challenge\b', r'\binstitutional\b'],
+            'Loyalty':     [r'\bPressure Point\b', r'\bKnot\b', r'\brelational\b'],
+        },
+    }
+    import names
+    for cls, members in EXPECTED.items():
+        # roster order preserved (P2's per-conviction vector depends on it)
+        assert va.CLASSES[cls] == list(members), (cls, va.CLASSES[cls])
+        for disp, ctx in members.items():
+            tok = va.SEED_TOKENS.get(disp)
+            assert tok is not None, (cls, disp)
+            assert tok['patterns'] == [r'\b' + disp + r'\b'], (cls, disp)
+            assert tok['scale'] == cls, (cls, disp)
+            assert tok['context'] == ctx, (cls, disp)
+        # roster genuinely comes from the index (not a lingering hardcode)
+        assert {m['canonical'] for m in names.by_category(cls).values()} == set(members)
+    assert names.context('conv.order') == EXPECTED['conviction']['Order']
+    assert names.context('ppt.loyalty') == EXPECTED['pressure_point']['Loyalty']
+
+
 def test_vector_audit_reuses_the_real_names_reader():
     # Fable-5 finding: §8 "every rule lives once" — vector_audit must import the
     # real tools/names.py, not re-parse names_index.yaml with a private matcher.

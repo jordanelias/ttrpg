@@ -20,10 +20,17 @@
 #     aliases:   [<allowed equivalent phrasings — not errors>]
 #     legacy:    [<deprecated names that must NOT appear in active docs>]
 #     category:  attribute | aggregate | faction_stat | settlement_stat | clock |
-#                track | mechanic | mass_combat_stat | substrate | proper_noun
+#                track | mechanic | mass_combat_stat | substrate | proper_noun |
+#                conviction | pressure_point   (new 2026-07-21, Reconciliation R2 / ED-IN-0082)
 #     enforce:   block | warn
 #                  block = hard CI gate (ci_naming_check) — naming invariants.
 #                  warn  = report-only drift lint (ci_names_check) until triaged, then flipped.
+#     context:   [<regex terms>]  — OPTIONAL. When the `canonical` display collides with a
+#                  common English word (Faith / Order / Reason / …), the disambiguation terms
+#                  that must co-occur for a prose hit to count as THIS definition. The single
+#                  home for the §3.5 disambiguation gate — vector_audit reads it FROM here
+#                  (CLAUDE.md §8), migrated verbatim from the prior hardcoded SEED table so P2
+#                  stays byte-identical. Terms are Python regex fragments (word-boundaried).
 #
 # MIRRORS (consistency-checked by tools/ci_names_consistency.py):
 #   attr.* / agg.* / fac.* / set.*  -> references/descriptor_registry.yaml
@@ -37,7 +44,29 @@
 # proper_noun_registry.yaml; ci_names_consistency keeps the pair agreeing). Remaining
 # follow-up: flipping `warn -> block` per entry as each is triaged.
 
-version: 2
+# ── NAMESPACE PREFIXES (id ↔ silo table; Reconciliation Program §3.2) ─────────────────
+# Every id's first dotted segment is a namespace prefix bound to ONE class/silo. Engine and
+# pre-existing ids WIN any conflict; references/name_collision_database.yaml stays the
+# historical silo authority. Existing prefixes are kept as-is; NEW prefixes are added only for
+# classes that lacked one. Key-family prefixes used in module_contracts (scene. da. env.
+# mechanical. …) are the engine's own and are NOT re-homed here.
+#   attr.      character attribute            (mirror: descriptor_registry.yaml)   [existing]
+#   agg.       attribute aggregate            (mirror: descriptor_registry.yaml)   [existing]
+#   fac.       faction stat                   (mirror: descriptor_registry.yaml)   [existing]
+#   set.       settlement stat                (mirror: descriptor_registry.yaml)   [existing]
+#   world.     proper noun (place/person/org) (mirror: proper_noun_registry.yaml)  [existing]
+#   clock.     named clock                                                          [existing]
+#   mass.      mass-combat stat                                                     [existing]
+#   thread.    threadwork mechanic                                                  [existing]
+#   substrate. Key substrate primitive                                             [existing]
+#   conv.      character conviction (the 7-axis class)                              [NEW 2026-07-21]
+#   ppt.       social-contest pressure point (the 4-axis class)                     [NEW 2026-07-21]
+# Reserved for the R2 migration wave (authored as entries land, not pre-populated):
+#   npc.  named character · place.  location · org.  organisation/order
+#   ppl.  people/populace group · concept.  design concept · act.  performable action verb
+# ID-form tokens ([[conv.faith]]) are resolved to display by tools/tag_normalizer.py and are
+# EXCLUDED from prose matching (A6 / perf).
+version: 3
 
 entries:
 
@@ -56,6 +85,29 @@ entries:
   agg.body:   {canonical: Body,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.mind:   {canonical: Mind,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.social: {canonical: Social, aliases: [], legacy: [], category: aggregate, enforce: warn}
+
+  # ── CONVICTIONS (the 7-axis character conviction class; new 2026-07-21, R2 / ED-IN-0082) ──
+  # `context` is the §3.5 disambiguation gate, migrated VERBATIM from vector_audit's former
+  # hardcoded SEED table (test_vector_audit pins byte-identical behaviour). vector_audit now
+  # reads these FROM here (CLAUDE.md §8). enforce: warn — every display collides with a common
+  # word. Single-quoted so YAML keeps the regex backslashes literal.
+  conv.faith:      {canonical: Faith,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFramework\b', '\bDivine\b', '\bChurch\b', '\bCardinal\b', '\bdoctrine\b']}
+  conv.order:      {canonical: Order,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bAutonomy\b', '\bReason\b', '\bEquity\b']}
+  conv.reason:     {canonical: Reason,     aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bOrder\b', '\bAutonomy\b']}
+  conv.equity:     {canonical: Equity,     aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bRestoration\b']}
+  conv.precedent:  {canonical: Precedent,  aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bHafenmark\b', '\blegal\b']}
+  conv.autonomy:   {canonical: Autonomy,   aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bVarfell\b', 'L[oö]wenritter']}
+  conv.continuity: {canonical: Continuity, aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bRestoration\b']}
+
+  # ── PRESSURE POINTS (the 4-axis social-contest class; new 2026-07-21, R2 / ED-IN-0082) ──
+  # Same shape as convictions: `context` is the §3.5 disambiguation gate, migrated VERBATIM from
+  # vector_audit's former hardcoded SEED (test_vector_audit pins byte-identical). vector_audit
+  # sources CLASSES['pressure_point'] + the SEED tokens FROM here (§8). enforce: warn — the
+  # displays collide with common words.
+  ppt.evidence:    {canonical: Evidence,    aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bInvestigation\b', '\bEvidence Track\b']}
+  ppt.consequence: {canonical: Consequence, aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bConsequentialist\b']}
+  ppt.authority:   {canonical: Authority,   aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bAuthority Challenge\b', '\binstitutional\b']}
+  ppt.loyalty:     {canonical: Loyalty,     aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bKnot\b', '\brelational\b']}
 
   # ── FACTION STATS (mirror: descriptor_registry.yaml faction_stats; scalar 1-7) ─
   fac.influence:  {canonical: Influence, aliases: [], legacy: [], category: faction_stat, enforce: warn}
