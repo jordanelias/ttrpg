@@ -1056,3 +1056,16 @@
 | `references/ecosystem_versions.yaml` | `deprecated/references/ecosystem_versions.yaml` |
 | `references/valoria_index.sql` | `deprecated/references/valoria_index.sql` |
 | `tests/index/` | `deprecated/tests/index/` |
+
+## references/ consolidation, workstream B (2026-07-21) — vocab cluster
+
+<!-- mechanical_terms_index.md: frozen 1746-line diagnostic superset of glossary.md, 0 functional
+     readers, dead regenerator (valoria_collator.py). Retired. Its PROVENANCE_PATHS exemption in
+     validate_ed_citations.py removed (deprecated/ is auto-skipped). name_collision_database.yaml
+     KEPT: it is the distinct collision/silo layer (not a duplicate of the 4 generated vocab views),
+     hand-maintained and consumed by build_lexicon.py — folding a frozen artifact into the
+     regenerated vocab_source pipeline was assessed and rejected as architecturally backwards. -->
+
+| Old path | New path |
+|---|---|
+| `references/mechanical_terms_index.md` | `deprecated/archives/mechanical_terms_index.md` |
