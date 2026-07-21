@@ -227,7 +227,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/settlements/goldenfurt_slice/", "SE"),
     ("designs/provincial/peninsular_strain_v30", "SE"),
     ("systems/settlements/sim/", "SE"),
-    ("sim/peninsular/", "SE"),
+    ("systems/overview/sim/", "SE"),
     ("engine/params/bg/geography.md", "SE"),
     ("designs/audit/2026-06-22-territory-settlement-audit/", "SE"),
 

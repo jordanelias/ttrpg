@@ -365,8 +365,8 @@ def _extract_module_dict_const(pyfile, varname):
 
 def build_balance_faction_political():
     specs = [
-        (os.path.join('sim', 'tests', 'test_mc_v18_regression.py'), 'seed 0, n=2 (fast regression oracle)'),
-        (os.path.join('sim', 'tests', 'test_f7_smoke_oracle.py'), 'seed 42, n=8 (F7 smoke oracle)'),
+        (os.path.join('engine', 'tests', 'test_mc_v18_regression.py'), 'seed 0, n=2 (fast regression oracle)'),
+        (os.path.join('engine', 'tests', 'test_f7_smoke_oracle.py'), 'seed 42, n=8 (F7 smoke oracle)'),
     ]
     goldens = []
     for path, label in specs:
@@ -381,10 +381,10 @@ def build_balance_faction_political():
             "win_share_pct": win_share,
         })
     if not goldens:
-        return {"available": False, "reason": "no GOLDEN_WIN_SHARE constant found in sim/tests/"}
+        return {"available": False, "reason": "no GOLDEN_WIN_SHARE constant found in engine/tests/"}
     return {
         "available": True,
-        "kind": "CI-pinned regression goldens (sim/tests, run by the sim-regression CI job) — "
+        "kind": "CI-pinned regression goldens (engine/tests, run by the sim-regression CI job) — "
                 "not a persisted full-campaign run",
         "goldens": goldens,
         # Correction, not the original claim: the widely-cited "~87% degenerate win-share"

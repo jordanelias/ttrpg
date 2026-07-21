@@ -345,7 +345,7 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
             consequences['conviction_scar'] = 1
             # Late-import conviction
             try:
-                from sim.personal.conviction import apply_conviction_scar
+                from systems.characters.sim.conviction import apply_conviction_scar
                 # Caller specifies which Conviction; default to a generic flag
                 apply_conviction_scar(actor, f"Close Knot break (id={knot_id})",
                                       magnitude=1, conviction='Loyalty',

@@ -34,7 +34,7 @@ from dataclasses import dataclass, field
 
 from engine.autoload import game_state, victory, scene_slate
 from systems.factions.sim.faction_action import faction_take_action
-from sim.peninsular.season import run_season
+from systems.overview.sim.season import run_season
 from engine.cross_scale import scene_dispatch
 
 

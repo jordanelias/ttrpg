@@ -1,4 +1,9 @@
-# sim/ Module Conventions
+# sim reference — Module Conventions (relocated)
+
+> **RELOCATED 2026-07-21 (ED-IN-0071 P4 continuation — sim/ hollow-out).** The `sim/` tree is
+> fully emptied; its modules now live under `systems/<subsystem>/sim/` and `engine/`. See
+> `engine/sim_reference_README.md` and `references/restructure_ledger.md` for the path map. The
+> conventions below still describe the module-stub anatomy the relocated modules follow.
 
 Status: [PROVISIONAL — Pass 2l armature scaffold 2026-05-17]
 

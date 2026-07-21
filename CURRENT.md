@@ -23,7 +23,7 @@ token cannot do this itself). See `tools/ci_audit_registry_check.py` for the reg
 with PR #122's concurrent audit-ecosystem batch, which independently claimed ED-IN-0032 through
 0036; see `references/id_reservations.yaml`'s IN-lane comment) **with a Balance & victory data
 card** (personal-combat weapon matrix — flagged stale, predates the 2026-07-02 40-weapon expansion;
-faction win-share goldens read from `sim/tests/`, labeled as CI regression guards not a persisted
+faction win-share goldens read from `engine/tests/`, labeled as CI regression guards not a persisted
 full-campaign run; explicit no-data flags for mass_battle/social_contest/threadwork/
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
