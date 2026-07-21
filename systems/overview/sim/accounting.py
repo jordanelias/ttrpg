@@ -27,8 +27,8 @@ and NPC ecology run through their pipeline modules.
 """
 from __future__ import annotations
 
-from sim.peninsular.ci_track import apply_seasonal_ci
-from sim.peninsular.ms_track import apply_ms_baseline_decay, SEASONS_PER_YEAR
+from systems.overview.sim.ci_track import apply_seasonal_ci
+from systems.overview.sim.ms_track import apply_ms_baseline_decay, SEASONS_PER_YEAR
 from systems.world.sim.insurgency_pipeline import (
     check_insurgency_triggers,
     check_insurgency_promotion,

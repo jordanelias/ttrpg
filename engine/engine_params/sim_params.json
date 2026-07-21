@@ -6,12 +6,12 @@
     "engine.autoload": 18,
     "engine.cross_scale": 15,
     "engine": 1,
-    "sim.peninsular": 12,
-    "sim.personal": 15,
+    "characters": 7,
     "combat": 13,
-    "factions": 58,
+    "factions": 66,
     "fieldwork": 15,
     "mass_battle": 39,
+    "overview": 12,
     "settlements": 24,
     "social_contest": 52,
     "threadwork": 37,
@@ -422,140 +422,25 @@
       "note": ""
     },
     {
-      "key": "sim.peninsular.CI_CEILING",
-      "name": "CI_CEILING",
-      "value": 100,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.CI_FLOOR",
-      "name": "CI_FLOOR",
-      "value": 0,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.CI_INSTITUTIONAL_MOMENTUM",
-      "name": "CI_INSTITUTIONAL_MOMENTUM",
-      "value": 1,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.CI_STARTING",
-      "name": "CI_STARTING",
-      "value": 28,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.CI_YIELD_BY_PT",
-      "name": "CI_YIELD_BY_PT",
-      "value": {
-        "5": 1.0,
-        "4": 0.5,
-        "3": 0.0,
-        "2": 0.0,
-        "1": 0.0,
-        "0": 0.0
-      },
-      "kind": "table",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.HAFENMARK_BARALTA_THRESHOLD_MANDATE",
-      "name": "HAFENMARK_BARALTA_THRESHOLD_MANDATE",
-      "value": 4,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.HAFENMARK_SUPPRESS_PER_SEASON",
-      "name": "HAFENMARK_SUPPRESS_PER_SEASON",
-      "value": -1,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ci_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.MS_BASELINE_DECAY_PER_YEAR",
-      "name": "MS_BASELINE_DECAY_PER_YEAR",
-      "value": -1,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ms_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.MS_CEILING",
-      "name": "MS_CEILING",
-      "value": 100,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ms_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.peninsular.MS_FLOOR",
-      "name": "MS_FLOOR",
-      "value": 0,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ms_track.py",
-      "note": "Rupture"
-    },
-    {
-      "key": "sim.peninsular.MS_START",
-      "name": "MS_START",
-      "value": 60,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ms_track.py",
-      "note": "videogame canonical (Jordan 2026-06-06); the prior 60/72 mode-split was deprecated framing"
-    },
-    {
-      "key": "sim.peninsular.SEASONS_PER_YEAR",
-      "name": "SEASONS_PER_YEAR",
-      "value": 4,
-      "kind": "scalar",
-      "module": "sim.peninsular",
-      "file": "sim/peninsular/ms_track.py",
-      "note": ""
-    },
-    {
-      "key": "sim.personal.BELIEF_MOMENTUM_PER_CONTEST_CAP",
+      "key": "characters.BELIEF_MOMENTUM_PER_CONTEST_CAP",
       "name": "BELIEF_MOMENTUM_PER_CONTEST_CAP",
       "value": 1,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/beliefs.py",
+      "module": "characters",
+      "file": "systems/characters/sim/beliefs.py",
       "note": ""
     },
     {
-      "key": "sim.personal.MOMENTUM_CAP",
+      "key": "characters.MOMENTUM_CAP",
       "name": "MOMENTUM_CAP",
       "value": 4,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/beliefs.py",
+      "module": "characters",
+      "file": "systems/characters/sim/beliefs.py",
       "note": ""
     },
     {
-      "key": "sim.personal.CERTAINTY_SCALING",
+      "key": "characters.CERTAINTY_SCALING",
       "name": "CERTAINTY_SCALING",
       "value": {
         "0": -1,
@@ -566,117 +451,45 @@
         "5": 1
       },
       "kind": "table",
-      "module": "sim.personal",
-      "file": "sim/personal/conviction.py",
+      "module": "characters",
+      "file": "systems/characters/sim/conviction.py",
       "note": ""
     },
     {
-      "key": "sim.personal.SCAR_CRISIS",
+      "key": "characters.SCAR_CRISIS",
       "name": "SCAR_CRISIS",
       "value": 3,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/conviction.py",
+      "module": "characters",
+      "file": "systems/characters/sim/conviction.py",
       "note": "Scar 3+: Conviction crisis on X"
     },
     {
-      "key": "sim.personal.SCAR_DESTABILISE",
+      "key": "characters.SCAR_DESTABILISE",
       "name": "SCAR_DESTABILISE",
       "value": 1,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/conviction.py",
+      "module": "characters",
+      "file": "systems/characters/sim/conviction.py",
       "note": "Scar 1: Conviction X destabilises"
     },
     {
-      "key": "sim.personal.SCAR_SEASON_CAP_THREAD",
+      "key": "characters.SCAR_SEASON_CAP_THREAD",
       "name": "SCAR_SEASON_CAP_THREAD",
       "value": 1,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/conviction.py",
+      "module": "characters",
+      "file": "systems/characters/sim/conviction.py",
       "note": ""
     },
     {
-      "key": "sim.personal.SCAR_SHIFT",
+      "key": "characters.SCAR_SHIFT",
       "name": "SCAR_SHIFT",
       "value": 2,
       "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/conviction.py",
+      "module": "characters",
+      "file": "systems/characters/sim/conviction.py",
       "note": "Scar 2: weight may shift; Resonant Style activates"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_EXCHANGE_COUNT_MAX",
-      "name": "TRIBUNAL_EXCHANGE_COUNT_MAX",
-      "value": 3,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_EXCHANGE_COUNT_MIN",
-      "name": "TRIBUNAL_EXCHANGE_COUNT_MIN",
-      "value": 1,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
-      "name": "TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
-      "value": 1,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "derived: +1D abstraction of Persuasion start 7"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_PERSUASION_TRACK_START",
-      "name": "TRIBUNAL_PERSUASION_TRACK_START",
-      "value": 7,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_PREREQ_CI_FORMAL",
-      "name": "TRIBUNAL_PREREQ_CI_FORMAL",
-      "value": 40,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_PREREQ_L_FORMAL",
-      "name": "TRIBUNAL_PREREQ_L_FORMAL",
-      "value": 4,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_RESISTANCE_HALVED_FACTOR",
-      "name": "TRIBUNAL_RESISTANCE_HALVED_FACTOR",
-      "value": 0.5,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: social_contest_v30.md §7.1]"
-    },
-    {
-      "key": "sim.personal.TRIBUNAL_TN",
-      "name": "TRIBUNAL_TN",
-      "value": 7,
-      "kind": "scalar",
-      "module": "sim.personal",
-      "file": "sim/personal/tribunal.py",
-      "note": "[canonical: params/core.md §TN Values]"
     },
     {
       "key": "combat.ACTION_RESOLUTION_ORDER",
@@ -1355,6 +1168,78 @@
       "note": "balanced value per §5.1 (table 0.90-0.95 range)"
     },
     {
+      "key": "factions.TRIBUNAL_EXCHANGE_COUNT_MAX",
+      "name": "TRIBUNAL_EXCHANGE_COUNT_MAX",
+      "value": 3,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_EXCHANGE_COUNT_MIN",
+      "name": "TRIBUNAL_EXCHANGE_COUNT_MIN",
+      "value": 1,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
+      "name": "TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
+      "value": 1,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "derived: +1D abstraction of Persuasion start 7"
+    },
+    {
+      "key": "factions.TRIBUNAL_PERSUASION_TRACK_START",
+      "name": "TRIBUNAL_PERSUASION_TRACK_START",
+      "value": 7,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_PREREQ_CI_FORMAL",
+      "name": "TRIBUNAL_PREREQ_CI_FORMAL",
+      "value": 40,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_PREREQ_L_FORMAL",
+      "name": "TRIBUNAL_PREREQ_L_FORMAL",
+      "value": 4,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_RESISTANCE_HALVED_FACTOR",
+      "name": "TRIBUNAL_RESISTANCE_HALVED_FACTOR",
+      "value": 0.5,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: social_contest_v30.md §7.1]"
+    },
+    {
+      "key": "factions.TRIBUNAL_TN",
+      "name": "TRIBUNAL_TN",
+      "value": 7,
+      "kind": "scalar",
+      "module": "factions",
+      "file": "systems/factions/sim/tribunal.py",
+      "note": "[canonical: params/core.md §TN Values]"
+    },
+    {
       "key": "fieldwork.BREAK_COMPOSURE_DAMAGE",
       "name": "BREAK_COMPOSURE_DAMAGE",
       "value": 4,
@@ -1878,6 +1763,121 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/massbattle.py",
+      "note": ""
+    },
+    {
+      "key": "overview.CI_CEILING",
+      "name": "CI_CEILING",
+      "value": 100,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.CI_FLOOR",
+      "name": "CI_FLOOR",
+      "value": 0,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.CI_INSTITUTIONAL_MOMENTUM",
+      "name": "CI_INSTITUTIONAL_MOMENTUM",
+      "value": 1,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.CI_STARTING",
+      "name": "CI_STARTING",
+      "value": 28,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.CI_YIELD_BY_PT",
+      "name": "CI_YIELD_BY_PT",
+      "value": {
+        "5": 1.0,
+        "4": 0.5,
+        "3": 0.0,
+        "2": 0.0,
+        "1": 0.0,
+        "0": 0.0
+      },
+      "kind": "table",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.HAFENMARK_BARALTA_THRESHOLD_MANDATE",
+      "name": "HAFENMARK_BARALTA_THRESHOLD_MANDATE",
+      "value": 4,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.HAFENMARK_SUPPRESS_PER_SEASON",
+      "name": "HAFENMARK_SUPPRESS_PER_SEASON",
+      "value": -1,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ci_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.MS_BASELINE_DECAY_PER_YEAR",
+      "name": "MS_BASELINE_DECAY_PER_YEAR",
+      "value": -1,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ms_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.MS_CEILING",
+      "name": "MS_CEILING",
+      "value": 100,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ms_track.py",
+      "note": ""
+    },
+    {
+      "key": "overview.MS_FLOOR",
+      "name": "MS_FLOOR",
+      "value": 0,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ms_track.py",
+      "note": "Rupture"
+    },
+    {
+      "key": "overview.MS_START",
+      "name": "MS_START",
+      "value": 60,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ms_track.py",
+      "note": "videogame canonical (Jordan 2026-06-06); the prior 60/72 mode-split was deprecated framing"
+    },
+    {
+      "key": "overview.SEASONS_PER_YEAR",
+      "name": "SEASONS_PER_YEAR",
+      "value": 4,
+      "kind": "scalar",
+      "module": "overview",
+      "file": "systems/overview/sim/ms_track.py",
       "note": ""
     },
     {

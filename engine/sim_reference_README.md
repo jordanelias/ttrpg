@@ -1,4 +1,13 @@
-# sim/ — Valoria simulation armature
+# sim reference — Valoria simulation armature (relocated)
+
+> **RELOCATED 2026-07-21 (ED-IN-0071 P4 continuation — sim/ hollow-out).** The `sim/` tree is
+> fully emptied. Its residual subpackages moved to their subsystem/engine homes: `sim/peninsular/`
+> → `systems/overview/sim/`, `sim/personal/{conviction,beliefs,companion}` →
+> `systems/characters/sim/`, `sim/personal/tribunal` + `sim/provincial/home_sanctuary` →
+> `systems/factions/sim/`, `sim/tests/` → `engine/tests/`. The engine core (`substrate`,
+> `autoload`, `cross_scale`, `mc_v18`) already lives in `engine/` (P3 Phase A). This doc is kept
+> for orientation; the subpackage map below describes the pre-move layout — resolve live homes via
+> `CURRENT.md` and `references/restructure_ledger.md`.
 
 **Status:** scaffold (Pass 2l, 2026-05-17). All modules are stubs. **Stale caveat (see CLAUDE.md §7):**
 this understates progress — many modules are real and `mc_v18.py` runs full campaigns.

@@ -353,11 +353,11 @@ def restore_world(snapshot: dict) -> World:
 
     # ─── Schema migration #2 registries ──────────────────────────────────
     if 'convictions' in snapshot:
-        from sim.personal.conviction import ConvictionState
+        from systems.characters.sim.conviction import ConvictionState
         w.convictions = {k: ConvictionState.from_dict(v)
                           for k, v in snapshot['convictions'].items()}
     if 'beliefs' in snapshot:
-        from sim.personal.beliefs import Belief
+        from systems.characters.sim.beliefs import Belief
         w.beliefs = {k: [Belief.from_dict(b) for b in v]
                       for k, v in snapshot['beliefs'].items()}
     if 'knots' in snapshot:
