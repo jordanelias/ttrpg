@@ -111,3 +111,13 @@ def test_doc_resolver_distinguishes_none_declared_and_missing():
     text, status = workbench._resolve_doc(_ROOT, 'systems/settlements/settlement_layer_v30.md')
     assert status == 'declared' and text and 'Prosperity' in text
     assert workbench._resolve_doc(_ROOT, 'systems/nope/ghost_v30.md') == (None, 'missing')
+
+
+def test_doc_resolver_handles_directory_valued_doc():
+    """A DIRECTORY-valued doc (personal_combat -> combat_engine_v1/) is resolved by concatenating
+    its .md files, not spuriously reported 'missing' — the corpus-wide Workbench run surfaced this
+    false negative (a real dir mis-read as a broken pointer)."""
+    text, status = workbench._resolve_doc(_ROOT, 'systems/combat/combat_engine_v1/')
+    assert status == 'declared-dir' and text and len(text) > 500
+    eng, has_doc, cards, rows = workbench.weave(_ROOT, 'personal_combat')
+    assert has_doc and eng['doc_status'] == 'declared-dir'

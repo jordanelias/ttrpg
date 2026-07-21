@@ -146,6 +146,17 @@ def _resolve_doc(root, doc_rel):
     if os.path.isfile(p):
         with open(p, encoding='utf-8', errors='replace') as fh:
             return _tags.strip(fh.read()), 'declared'
+    if os.path.isdir(p):
+        # a DIRECTORY-valued doc (e.g. personal_combat -> systems/combat/combat_engine_v1/): the
+        # design lives across the dir's .md files — concatenate them so prose matching sees the
+        # whole corpus, not a spurious 'missing'. (Only personal_combat uses this today.)
+        mds = sorted(f for f in os.listdir(p) if f.endswith('.md'))
+        if mds:
+            parts = []
+            for f in mds:
+                with open(os.path.join(p, f), encoding='utf-8', errors='replace') as fh:
+                    parts.append(fh.read())
+            return _tags.strip('\n\n'.join(parts)), 'declared-dir'
     if bdc is not None:
         remapped = bdc._resolve_remap(doc_rel, _restructure_remap(root))
         if remapped:
@@ -242,7 +253,7 @@ def weave(root, module):
     eng = engine_facts(root, module)
     text, doc_status = _resolve_doc(root, eng['doc'])
     eng['doc_status'] = doc_status
-    has_doc = doc_status in ('declared', 'remapped')
+    has_doc = doc_status in ('declared', 'remapped', 'declared-dir')
     notional_node = eng['notional'] or eng['node_state'] != 'engine-live'
     cards = []
     rows = []
@@ -334,6 +345,8 @@ def render(eng, has_doc, rows, open_cards, resolved_cards):
         doc_bit = f" · **doc: BROKEN pointer `{eng['doc']}` (declared, not on disk)**"
     elif doc_status == 'remapped':
         doc_bit = f" · doc `{eng['doc']}` (moved; read via restructure ledger)"
+    elif doc_status == 'declared-dir':
+        doc_bit = f" · doc `{eng['doc']}` (directory — all .md files concatenated)"
     elif eng['doc']:
         doc_bit = f" · doc `{eng['doc']}`"
     else:
