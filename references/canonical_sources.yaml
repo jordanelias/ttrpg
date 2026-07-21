@@ -542,7 +542,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "a0741a60b71889a53f64f28875c5f4efa5536611"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "531f6f37443a9866e061e4ccdb59d6b195853a37"
+    canonical_sha__references__module_contracts_yaml: "550a9599224409566f33a0f0fddcff35304554cd"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
