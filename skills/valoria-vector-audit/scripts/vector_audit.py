@@ -498,6 +498,129 @@ def _count_in(text, compiled):
     return sum(len(rx.findall(text)) for rx in compiled)
 
 
+def _norm_name(s):
+    return re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).strip()
+
+
+def _build_coref(root):
+    """Alias → canonical map from the LIVE name registries (proper_noun_registry +
+    names_index `aliases:`). Authoritative coreference: e.g. both registries declare
+    `Baralta` an alias of `Duchess Inge Baralta`, so every surface form of one entity
+    resolves to a single canonical. Returns {normalized_surface_form: canonical_label}."""
+    coref = {}
+
+    def _ingest(canonical, aliases):
+        if not canonical:
+            return
+        label, _ = _strip_display(canonical)
+        for form in [label] + list(aliases or []):
+            nf = _norm_name(form)
+            if nf and len(nf) >= 3:
+                coref.setdefault(nf, label)
+
+    pn = _yaml(root, 'references/proper_noun_registry.yaml')
+    for cat in ('characters', 'factions', 'subfactions', 'organizations'):
+        for item in (pn.get(cat, {}) or {}).values():
+            if isinstance(item, dict):
+                _ingest(item.get('canonical'), item.get('aliases'))
+    ni = _yaml(root, 'references/names_index.yaml')
+    for e in (ni.get('entries', {}) or {}).values():
+        if isinstance(e, dict) and e.get('category') in ('proper_noun', 'npc', 'faction', None):
+            _ingest(e.get('canonical'), e.get('aliases'))
+    return coref
+
+
+# Scales whose tokens are NAMED ENTITIES — safe to coref-merge by shared proper-noun head.
+# Mechanic/system scales are NOT merged ("Combat" ⊂ "Mass Combat" are different mechanics).
+_NAME_SCALES = {'npc', 'faction', 'proper_noun', 'character', 'organization'}
+
+
+def consolidate_tokens(token_defs, coref):
+    """Unify every surface form of one named entity into a SINGLE token (user directive
+    2026-07-21: "unify and simplify … for names"). Two coreference signals:
+      1. registry aliases (authoritative) — forms sharing a `_build_coref` canonical merge;
+      2. proper-noun substring — among NAME-scale tokens only, a name that is a contiguous
+         whole-word substring of another (`Baralta` ⊂ `Inge Baralta` ⊂ `Duchess Inge Baralta`)
+         is the same entity.
+    Each group collapses to one token labelled by its canonical (registry canonical if any,
+    else the longest/most-specific form) and matched by its HEAD — the shortest form that is a
+    whole-word substring of every other form (so a single `\\bBaralta\\b` pattern catches every
+    variant exactly once, no over-count). Non-name tokens pass through untouched."""
+    names = list(token_defs)
+    parent = {n: n for n in names}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        parent[find(a)] = find(b)
+
+    norm = {n: _norm_name(n) for n in names}
+    # signal 1: registry-alias coreference (any scale — a declared alias is authoritative)
+    canon_group = {}
+    for n in names:
+        c = coref.get(norm[n])
+        if c:
+            canon_group.setdefault(_norm_name(c), []).append(n)
+    for members in canon_group.values():
+        for m in members[1:]:
+            union(members[0], m)
+    # signal 2: proper-noun substring, NAME scales only — but ONLY when the container is
+    # UNIQUE. A form contained in exactly one longer name is that person with a title/surname
+    # added (`Inge Baralta` ⊂ `Duchess Inge Baralta`); a form contained in MANY (`Almqvist` ⊂
+    # King Almud / Prince Torben / Princess Elske …) is a shared DYNASTY name, not one person —
+    # never merge distinct people through a family name.
+    name_toks = [n for n in names if (token_defs[n].get('scale') in _NAME_SCALES)]
+    for a in name_toks:
+        if not norm[a]:
+            continue
+        containers = [b for b in name_toks
+                      if a != b and (' ' + norm[a] + ' ') in (' ' + norm[b] + ' ')]
+        if len(containers) == 1:
+            union(a, containers[0])
+
+    groups = defaultdict(list)
+    for n in names:
+        groups[find(n)].append(n)
+
+    out = {}
+    for members in groups.values():
+        if len(members) == 1:
+            out[members[0]] = token_defs[members[0]]
+            continue
+        # canonical label: a registry canonical among members, else the longest name
+        reg_canon = next((coref[norm[m]] for m in members if norm[m] in coref), None)
+        label = reg_canon or max(members, key=len)
+        # HEAD = shortest member that is a whole-word substring of every other member
+        head = None
+        for cand in sorted(members, key=len):
+            nc = norm[cand]
+            if all((' ' + nc + ' ') in (' ' + norm[o] + ' ') for o in members):
+                head = cand
+                break
+        if head:
+            patterns = _pattern_for(head)
+        else:  # no common head — union every form (word-boundary), deduped
+            patterns = sorted({p for m in members for p in _pattern_for(m)})
+        # keep the most authoritative member's scale/source/status
+        best = min(members, key=lambda m: _source_rank(token_defs[m].get('source')))
+        bm = token_defs[best]
+        merged = dict(bm)
+        merged['patterns'] = patterns
+        merged['aliases_merged'] = sorted(set(members))
+        out[label] = merged
+    return out
+
+
+def _source_rank(src):
+    order = {'derived:proper_noun': 0, 'seed': 1, 'derived:names_index': 2,
+             'derived:canonical_sources': 3}
+    return order.get(src, 4)
+
+
 def _passes_context(para, ctx_compiled):
     """Disambiguation (§3.5): a collision token counts in a paragraph only if a
     context pattern is also present."""
@@ -620,7 +743,9 @@ def derive_tokens(root):
             pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
             add(label, pats, scale, 'derived:proper_noun')
 
-    return tokens
+    # Coreference consolidation: unify every surface form of one named entity into a
+    # single token (registry aliases + proper-noun substring). "Just search Baralta."
+    return consolidate_tokens(tokens, _build_coref(root))
 
 
 def curate_tokens(design, token_defs):
