@@ -1,0 +1,5 @@
+# Regenerable machine artifacts from the observatory tools (vector_audit / ripple_audit):
+# the human-readable *.md deliverables are committed; the data/*.json is regenerated on
+# demand by re-running the tool (kept out of git to avoid churn + report-only names-lint
+# noise from machine-slugged token spellings). See the skill's SKILL.md.
+data/
