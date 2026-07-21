@@ -33,7 +33,7 @@ from dataclasses import dataclass
 from typing import Optional, Callable
 
 from engine.autoload.season_manager import advance_season, SEASONS_PER_ARC
-from sim.peninsular.accounting import run_accounting
+from systems.overview.sim.accounting import run_accounting
 
 
 @dataclass

@@ -262,56 +262,56 @@
       "method": "name_token"
     },
     {
+      "value": "factions.TRIBUNAL_PREREQ_CI_FORMAL",
+      "value_file": "systems/factions/sim/tribunal.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
+      "value": "overview.CI_CEILING",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
+      "value": "overview.CI_FLOOR",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
+      "value": "overview.CI_INSTITUTIONAL_MOMENTUM",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
+      "value": "overview.CI_STARTING",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
+      "value": "overview.CI_YIELD_BY_PT",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "CI",
+      "pointer": "Church Influence",
+      "pointer_key": "nc.CI",
+      "method": "name_token"
+    },
+    {
       "value": "settlements.CI_GAIN_TEMPLAR",
       "value_file": "systems/settlements/sim/infrastructure.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_CEILING",
-      "value_file": "sim/peninsular/ci_track.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_FLOOR",
-      "value_file": "sim/peninsular/ci_track.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_INSTITUTIONAL_MOMENTUM",
-      "value_file": "sim/peninsular/ci_track.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_STARTING",
-      "value_file": "sim/peninsular/ci_track.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_YIELD_BY_PT",
-      "value_file": "sim/peninsular/ci_track.py",
-      "token": "CI",
-      "pointer": "Church Influence",
-      "pointer_key": "nc.CI",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.personal.TRIBUNAL_PREREQ_CI_FORMAL",
-      "value_file": "sim/personal/tribunal.py",
       "token": "CI",
       "pointer": "Church Influence",
       "pointer_key": "nc.CI",
@@ -334,32 +334,32 @@
       "method": "name_token"
     },
     {
-      "value": "sim.peninsular.MS_BASELINE_DECAY_PER_YEAR",
-      "value_file": "sim/peninsular/ms_track.py",
+      "value": "overview.MS_BASELINE_DECAY_PER_YEAR",
+      "value_file": "systems/overview/sim/ms_track.py",
       "token": "MS",
       "pointer": "Mending Stability",
       "pointer_key": "nc.MS",
       "method": "name_token"
     },
     {
-      "value": "sim.peninsular.MS_CEILING",
-      "value_file": "sim/peninsular/ms_track.py",
+      "value": "overview.MS_CEILING",
+      "value_file": "systems/overview/sim/ms_track.py",
       "token": "MS",
       "pointer": "Mending Stability",
       "pointer_key": "nc.MS",
       "method": "name_token"
     },
     {
-      "value": "sim.peninsular.MS_FLOOR",
-      "value_file": "sim/peninsular/ms_track.py",
+      "value": "overview.MS_FLOOR",
+      "value_file": "systems/overview/sim/ms_track.py",
       "token": "MS",
       "pointer": "Mending Stability",
       "pointer_key": "nc.MS",
       "method": "name_token"
     },
     {
-      "value": "sim.peninsular.MS_START",
-      "value_file": "sim/peninsular/ms_track.py",
+      "value": "overview.MS_START",
+      "value_file": "systems/overview/sim/ms_track.py",
       "token": "MS",
       "pointer": "Mending Stability",
       "pointer_key": "nc.MS",
@@ -414,6 +414,14 @@
       "method": "name_token"
     },
     {
+      "value": "overview.CI_YIELD_BY_PT",
+      "value_file": "systems/overview/sim/ci_track.py",
+      "token": "PT",
+      "pointer": "Piety Track",
+      "pointer_key": "nc.PT",
+      "method": "name_token"
+    },
+    {
       "value": "settlements.PT_GAIN_CATHEDRAL",
       "value_file": "systems/settlements/sim/infrastructure.py",
       "token": "PT",
@@ -440,14 +448,6 @@
     {
       "value": "settlements.PT_GAIN_CHURCH",
       "value_file": "systems/settlements/sim/infrastructure.py",
-      "token": "PT",
-      "pointer": "Piety Track",
-      "pointer_key": "nc.PT",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.peninsular.CI_YIELD_BY_PT",
-      "value_file": "sim/peninsular/ci_track.py",
       "token": "PT",
       "pointer": "Piety Track",
       "pointer_key": "nc.PT",
@@ -542,8 +542,8 @@
       "method": "name_token"
     },
     {
-      "value": "sim.personal.SCAR_SEASON_CAP_THREAD",
-      "value_file": "sim/personal/conviction.py",
+      "value": "characters.SCAR_SEASON_CAP_THREAD",
+      "value_file": "systems/characters/sim/conviction.py",
       "token": "THREAD",
       "pointer": "Thread Sensitivity",
       "pointer_key": "prac.thread_sensitivity",
@@ -590,6 +590,14 @@
       "method": "name_token"
     },
     {
+      "value": "factions.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
+      "value_file": "systems/factions/sim/tribunal.py",
+      "token": "POOL",
+      "pointer": "Thread Pool Score",
+      "pointer_key": "prac.tps",
+      "method": "name_token"
+    },
+    {
       "value": "mass_battle.STAMINA_EXHAUSTED_POOL_PENALTY",
       "value_file": "systems/mass_battle/sim/massbattle.py",
       "token": "POOL",
@@ -600,14 +608,6 @@
     {
       "value": "mass_battle.STAMINA_POOL_THRESHOLDS",
       "value_file": "systems/mass_battle/sim/massbattle.py",
-      "token": "POOL",
-      "pointer": "Thread Pool Score",
-      "pointer_key": "prac.tps",
-      "method": "name_token"
-    },
-    {
-      "value": "sim.personal.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
-      "value_file": "sim/personal/tribunal.py",
       "token": "POOL",
       "pointer": "Thread Pool Score",
       "pointer_key": "prac.tps",
@@ -842,13 +842,13 @@
         "factions.MASS_SEIZURE_AVAILABILITY_CI",
         "factions.MASS_SEIZURE_FORCED_CI",
         "factions.POOL_CI_DIVISOR",
+        "factions.TRIBUNAL_PREREQ_CI_FORMAL",
+        "overview.CI_CEILING",
+        "overview.CI_FLOOR",
+        "overview.CI_INSTITUTIONAL_MOMENTUM",
+        "overview.CI_STARTING",
+        "overview.CI_YIELD_BY_PT",
         "settlements.CI_GAIN_TEMPLAR",
-        "sim.peninsular.CI_CEILING",
-        "sim.peninsular.CI_FLOOR",
-        "sim.peninsular.CI_INSTITUTIONAL_MOMENTUM",
-        "sim.peninsular.CI_STARTING",
-        "sim.peninsular.CI_YIELD_BY_PT",
-        "sim.personal.TRIBUNAL_PREREQ_CI_FORMAL",
         "social_contest.STAY_CI_AVAILABILITY_MAX"
       ]
     },
@@ -861,10 +861,10 @@
     "nc.MS": {
       "pointer": "Mending Stability",
       "values": [
-        "sim.peninsular.MS_BASELINE_DECAY_PER_YEAR",
-        "sim.peninsular.MS_CEILING",
-        "sim.peninsular.MS_FLOOR",
-        "sim.peninsular.MS_START"
+        "overview.MS_BASELINE_DECAY_PER_YEAR",
+        "overview.MS_CEILING",
+        "overview.MS_FLOOR",
+        "overview.MS_START"
       ]
     },
     "nc.Mil": {
@@ -886,11 +886,11 @@
         "engine.autoload.MULTS",
         "engine.autoload.PT_MAP",
         "engine.autoload.STARTING_PT",
+        "overview.CI_YIELD_BY_PT",
         "settlements.PT_GAIN_CATHEDRAL",
         "settlements.PT_GAIN_CATHEDRAL_ADJACENT",
         "settlements.PT_GAIN_CHAPEL",
         "settlements.PT_GAIN_CHURCH",
-        "sim.peninsular.CI_YIELD_BY_PT",
         "world.INSURGENCY_RM_PT_THRESHOLD"
       ]
     },
@@ -917,7 +917,7 @@
     "prac.thread_sensitivity": {
       "pointer": "Thread Sensitivity",
       "values": [
-        "sim.personal.SCAR_SEASON_CAP_THREAD"
+        "characters.SCAR_SEASON_CAP_THREAD"
       ]
     },
     "prac.tps": {
@@ -928,9 +928,9 @@
         "factions.MUSTER_WEALTH_TO_POOL_DIV",
         "factions.PARL_VOTE_POOL_MOD",
         "factions.POOL_CI_DIVISOR",
+        "factions.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
         "mass_battle.STAMINA_EXHAUSTED_POOL_PENALTY",
         "mass_battle.STAMINA_POOL_THRESHOLDS",
-        "sim.personal.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS",
         "social_contest.ARGUE_POOL_TN",
         "social_contest.CR4_PRIMARY_GENRE_POOL_BONUS"
       ]
@@ -1091,26 +1091,26 @@
       "nc.CI",
       "prac.tps"
     ],
-    "settlements.CI_GAIN_TEMPLAR": [
+    "factions.TRIBUNAL_PREREQ_CI_FORMAL": [
       "nc.CI"
     ],
-    "sim.peninsular.CI_CEILING": [
+    "overview.CI_CEILING": [
       "nc.CI"
     ],
-    "sim.peninsular.CI_FLOOR": [
+    "overview.CI_FLOOR": [
       "nc.CI"
     ],
-    "sim.peninsular.CI_INSTITUTIONAL_MOMENTUM": [
+    "overview.CI_INSTITUTIONAL_MOMENTUM": [
       "nc.CI"
     ],
-    "sim.peninsular.CI_STARTING": [
+    "overview.CI_STARTING": [
       "nc.CI"
     ],
-    "sim.peninsular.CI_YIELD_BY_PT": [
+    "overview.CI_YIELD_BY_PT": [
       "nc.CI",
       "nc.PT"
     ],
-    "sim.personal.TRIBUNAL_PREREQ_CI_FORMAL": [
+    "settlements.CI_GAIN_TEMPLAR": [
       "nc.CI"
     ],
     "social_contest.STAY_CI_AVAILABILITY_MAX": [
@@ -1119,16 +1119,16 @@
     "mass_battle.RANGED_DR_DEFAULT": [
       "nc.DR"
     ],
-    "sim.peninsular.MS_BASELINE_DECAY_PER_YEAR": [
+    "overview.MS_BASELINE_DECAY_PER_YEAR": [
       "nc.MS"
     ],
-    "sim.peninsular.MS_CEILING": [
+    "overview.MS_CEILING": [
       "nc.MS"
     ],
-    "sim.peninsular.MS_FLOOR": [
+    "overview.MS_FLOOR": [
       "nc.MS"
     ],
-    "sim.peninsular.MS_START": [
+    "overview.MS_START": [
       "nc.MS"
     ],
     "engine.autoload.MULTS": [
@@ -1187,19 +1187,19 @@
     "threadwork.LEAP_OB_TS_LOW": [
       "nc.TS"
     ],
-    "sim.personal.SCAR_SEASON_CAP_THREAD": [
+    "characters.SCAR_SEASON_CAP_THREAD": [
       "prac.thread_sensitivity"
     ],
     "factions.PARL_VOTE_POOL_MOD": [
+      "prac.tps"
+    ],
+    "factions.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS": [
       "prac.tps"
     ],
     "mass_battle.STAMINA_EXHAUSTED_POOL_PENALTY": [
       "prac.tps"
     ],
     "mass_battle.STAMINA_POOL_THRESHOLDS": [
-      "prac.tps"
-    ],
-    "sim.personal.TRIBUNAL_FORMAL_GROUNDS_POOL_BONUS": [
       "prac.tps"
     ],
     "social_contest.ARGUE_POOL_TN": [

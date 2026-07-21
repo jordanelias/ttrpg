@@ -32,8 +32,7 @@ OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 SCAN_DIRS = [
     "systems/factions/sim", "systems/social_contest/sim", "systems/mass_battle/sim",
     "systems/threadwork/sim", "systems/world/sim", "systems/settlements/sim",
-    "systems/fieldwork/sim", "systems/combat/sim", "engine", "sim/personal",
-    "sim/peninsular", "sim/provincial",
+    "systems/fieldwork/sim", "systems/combat/sim", "systems/characters/sim", "systems/overview/sim", "engine",
 ]
 
 
@@ -113,7 +112,10 @@ def _iter_py_files():
         if not base.exists():
             continue
         for p in sorted(base.rglob("*.py")):
-            if "__pycache__" in p.parts or p in seen:
+            # Skip test files: their fixture constants (GOLDEN_WINNERS, etc.) are not
+            # engine params. (Before the sim/ hollow-out these lived under sim/tests/,
+            # which was never in SCAN_DIRS; now under engine/tests/ they must stay excluded.)
+            if "tests" in p.parts or p.name.startswith("test_") or "__pycache__" in p.parts or p in seen:
                 continue
             seen.add(p)
             yield p

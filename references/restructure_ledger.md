@@ -1084,3 +1084,42 @@
 |---|---|
 | `references/design_registry.yaml` | `deprecated/references/design_registry.yaml` |
 | `skills/valoria-atomizer/` | `deprecated/skills/valoria-atomizer/` |
+
+## 2026-07-21 — sim/ hollow-out: residual sim modules → systems/ + engine/ (ED-IN-0071 P4 continuation)
+
+<!-- The sim/ package is now fully emptied. Its residual subpackages routed to their
+     subsystem/engine homes (peninsular → overview, personal residuals → characters,
+     tribunal/home_sanctuary → factions, tests + walkthrough/README/CONVENTIONS → engine).
+     Live imports were rewritten to systems.<sub>.sim.* / engine.*; prose refs resolve
+     through the rows below (exact-path first, then dir-prefix). Append-only ledgers keep
+     their pre-move text. -->
+
+| Old path | New path |
+|---|---|
+| `sim/peninsular/` | `systems/overview/sim/` |
+| `sim/peninsular/accounting.py` | `systems/overview/sim/accounting.py` |
+| `sim/peninsular/ci_track.py` | `systems/overview/sim/ci_track.py` |
+| `sim/peninsular/ip_track.py` | `systems/overview/sim/ip_track.py` |
+| `sim/peninsular/ms_track.py` | `systems/overview/sim/ms_track.py` |
+| `sim/peninsular/rs_track.py` | `systems/overview/sim/rs_track.py` |
+| `sim/peninsular/season.py` | `systems/overview/sim/season.py` |
+| `sim/peninsular/accounting` | `systems/overview/sim/accounting` |
+| `sim/peninsular/ci_track` | `systems/overview/sim/ci_track` |
+| `sim/peninsular/ip_track` | `systems/overview/sim/ip_track` |
+| `sim/peninsular/ms_track` | `systems/overview/sim/ms_track` |
+| `sim/peninsular/rs_track` | `systems/overview/sim/rs_track` |
+| `sim/peninsular/season` | `systems/overview/sim/season` |
+| `sim/personal/conviction.py` | `systems/characters/sim/conviction.py` |
+| `sim/personal/beliefs.py` | `systems/characters/sim/beliefs.py` |
+| `sim/personal/companion.py` | `systems/characters/sim/companion.py` |
+| `sim/personal/conviction` | `systems/characters/sim/conviction` |
+| `sim/personal/beliefs` | `systems/characters/sim/beliefs` |
+| `sim/personal/companion` | `systems/characters/sim/companion` |
+| `sim/personal/tribunal.py` | `systems/factions/sim/tribunal.py` |
+| `sim/personal/tribunal` | `systems/factions/sim/tribunal` |
+| `sim/provincial/home_sanctuary.py` | `systems/factions/sim/home_sanctuary.py` |
+| `sim/provincial/home_sanctuary` | `systems/factions/sim/home_sanctuary` |
+| `sim/tests/` | `engine/tests/` |
+| `sim/mc_v18_walkthrough.md` | `engine/mc_v18_walkthrough.md` |
+| `sim/README.md` | `engine/sim_reference_README.md` |
+| `sim/CONVENTIONS.md` | `engine/sim_reference_CONVENTIONS.md` |

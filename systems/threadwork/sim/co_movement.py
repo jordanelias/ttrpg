@@ -139,7 +139,7 @@ def apply_comovement_effects(card: CoMovementCard, op_result, world) -> dict:
     ms_before = world.clocks.get('MS', 80.0)
     # [2026-05-20 migration] route through ms_track.apply_ms_delta — single
     # canonical surface for MS arithmetic per PP-255. Was: inline clamp.
-    from sim.peninsular.ms_track import apply_ms_delta
+    from systems.overview.sim.ms_track import apply_ms_delta
     new_ms = apply_ms_delta(card.ms_delta, source=f"co_movement {card.card_id}", world=world)
     return {
         'card_id': card.card_id,
