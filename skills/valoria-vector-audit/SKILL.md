@@ -289,6 +289,22 @@ PP entry references the audit folder; ED entry describes what was found.
   G_generation (supersedes) as further edge types on the same node namespace — so every
   wrapper/system/subsystem/mechanic/routine/primitive/formula/value/token/key becomes one navigable,
   all-directions, all-scales chain the rest of the toolchain (audits, sim, tests, design) can hook into.
+- `scripts/loom.py` — the **Reconciliation Workbench** (R1 prototype, 2026-07-21; program doc
+  `proposals/2026-07-21-reconciliation-program.md` §2). Holds the **ENGINE** view (warp — what the
+  contracts/sim actually wire) beside the **PROSE** view (weft — what a design doc articulates) for a
+  module, and flags every **divergence** as an iteration **card**. Engine and prose are complementary
+  and iterative: a card is a question a human resolves by moving *either* side (articulate the prose,
+  or change the engine) — the Loom never auto-reconciles. **Composition, not a parser** (§8): reuses
+  `structure_audit.build_l2` (module→module Key wiring + notional provenance) + `formula_audit.build_contract_edges`
+  (derivations). Edge axis = **articulated / mentioned / silent**; the `mentioned` state (endpoints in
+  the doc, relationship unstated) is the siloed-prose fingerprint. Cards carry a **stable id** so
+  `references/observatory_dispositions.yaml` (shared with Augur) records human answers and only OPEN/CHANGED
+  cards surface; **notional-shadow guard** stops a fabricated contract row (the ED-MB-0010 class) from
+  being reconciled *to*. **Measures, never gates**; deterministic, model-free; prose matching is heuristic
+  co-mention, confidence-tagged (a lead, not a verdict). Invoke: `python3 scripts/loom.py --repo-root .
+  --module <name> [--output-dir <run>]`. Tests: `tests/valoria/test_loom.py` (§8 reuse-by-identity, the
+  two-sided rows, stable/deterministic card ids, the notional-shadow guard, dispositions memory, and the
+  two program vignettes — `settlement_layer` both-sided at 9/16 articulated, `domain_actions` one-sided/notional).
 
 ## Cross-references
 
