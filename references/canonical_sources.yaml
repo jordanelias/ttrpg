@@ -97,7 +97,7 @@ sources:
 systems:
   core_engine:
     design_doc: systems/_architecture/complete_systems_reference.md
-    canonical_sha__systems___architecture__complete_systems_reference_md: "4cd8e928d8200674c2c2a8a8a33d7d54ea681b18"
+    canonical_sha__systems___architecture__complete_systems_reference_md: "8e5c96b05c0f87f54077e10cd2c8bf64ca13665e"
     params: engine/params/core.md
     canonical_sha__engine__params__core_md: "01db5583fc6bd0ded0d5594c21ea865711babd86"
     canonical_sha__params__core_md: "1b58325bc4949d76af1f5b755298604e7d496734"

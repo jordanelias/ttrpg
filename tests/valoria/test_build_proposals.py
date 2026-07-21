@@ -39,11 +39,14 @@ def test_all_proposals_docs_surface_by_location():
     assert len(props) == 16
 
 
-def test_all_seventeen_audit_verdicts_present():
-    # id is shared across subsystem rows; the register must not collapse them
+def test_all_audit_verdicts_present():
+    # id is shared across subsystem rows; the register must not collapse them.
+    # Regression pin on the audit_partial count; bump when a PARTIAL/MIXED audit
+    # run is logged to references/audit_registry.jsonl. 18 since the 2026-07-21
+    # repo-state vector-audit run (validation FAILED → PARTIAL) was appended.
     reg = _reg()
     audits = [i for i in reg["items"] if i["kind"] == "audit_partial"]
-    assert len(audits) == 17
+    assert len(audits) == 18
 
 
 def test_every_item_lane_tagged():

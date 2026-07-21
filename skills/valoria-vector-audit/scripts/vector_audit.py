@@ -80,6 +80,17 @@ CLASSES = {
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
             'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
+    # The performable ACTION vocabulary (verbs). No structured registry exists yet — the
+    # `domain_actions` home is the open M1 blocker (ED-FA-0002); until it is authored these
+    # are enumerated ONLY in prose (module_contracts.yaml's ED-FA-0006 verb note +
+    # wiring_manifest.yaml "conquest/muster/govern/uniques"). Curated here from that
+    # enumeration, exactly as the other seed classes are registry-backed hand lists.
+    # Replace with the authored registry once ED-FA-0002 lands.
+    'action': ['Muster', 'March', 'Fortify', 'Blockade', 'Conquest', 'Govern', 'Trade',
+               'Subsidy', 'Treaty', 'Diplomacy', 'Spy', 'Investigate', 'Counter-Intelligence',
+               'Censure', 'Embargo', 'Outlawry', 'Excommunication', 'Active Inquisition',
+               'Church Seizure', 'Recognition Challenge', 'Succession Endorsement',
+               'War Authorisation', 'Piety Spread', 'Community Organising', 'Martial Governance'],
 }
 
 
@@ -361,7 +372,10 @@ def banner_classify(content, path):
         return 'design'
     if re.search(r'\b(WORKPLAN|AUDIT|SESSION CLOSE|STRESS TEST)\b', head, re.I):
         return 'discourse'
-    if path.startswith('designs/audit/'):
+    # Audit-corpus path signal. `designs/audit/` retired 2026-07-19 (ED-IN-0071 P4/P5) →
+    # the audit corpus is now the top-level `audit/` primary; the old prefix is kept for
+    # historical/aliased refs (e.g. archived docs still cited as `designs/audit/…`).
+    if path.startswith('audit/') or path.startswith('designs/audit/'):
         if 'development_specification' in path:
             return 'design'
         return 'discourse'
@@ -391,9 +405,42 @@ def _canonical_paths(root):
               'canon/03_canonical_timeline.md',
               'references/throughlines_meta.md',
               'references/throughlines_meta_infill.md',
-              'designs/architecture/complete_systems_reference.md'):
+              # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5); this reference doc
+              # moved to `systems/_architecture/` — the old path was silently `missing`.
+              'systems/_architecture/complete_systems_reference.md'):
         paths.add(p)
     return sorted(paths)
+
+
+def _restructure_remap(root):
+    """Old→new path map from `references/restructure_ledger.md` (working tree, root-honoring).
+    Only the root-parameterized read is local — this pipeline is `--repo-root` driven while
+    broken_dependency_checker's loader is cwd-bound; the non-trivial longest-dir-prefix
+    RESOLUTION is reused from bdc below (CLAUDE.md §8, never re-derive a rule)."""
+    fp = root / 'references' / 'restructure_ledger.md'
+    if not fp.exists():
+        return {}
+    mapping = {}
+    for m in re.finditer(r'^\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|',
+                         fp.read_text(encoding='utf-8', errors='replace'), re.M):
+        mapping[m.group(1).strip()] = m.group(2).strip()
+    return mapping
+
+
+def _resolve_live(root, rel, remap):
+    """The path that actually EXISTS: literal `rel` if present, else its restructure-ledger
+    successor. Self-heals a moved input on the NEXT restructure with no code edit — the class
+    of bug behind this run's four hardcoded-path fixes (designs/→systems/, canon/→registers/).
+    Returns None only when neither the literal nor a mapped home exists (a true `missing`)."""
+    if (root / rel).exists():
+        return rel
+    mapped = None
+    try:
+        import broken_dependency_checker as _bdc  # the sanctioned old→new resolver (§8)
+        mapped = _bdc._resolve_remap(rel, remap)
+    except Exception:
+        mapped = remap.get(rel)  # graceful fallback: exact-row only, no dir-prefix
+    return mapped if (mapped and (root / mapped).exists()) else None
 
 
 def extract_corpus(root):
@@ -401,18 +448,20 @@ def extract_corpus(root):
     Banner-classifies each doc (design / discourse / excluded)."""
     design, discourse = {}, {}
     manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': []}
+    remap = _restructure_remap(root)
     for rel in _canonical_paths(root):
-        fp = root / rel
-        if not fp.exists():
+        live = _resolve_live(root, rel, remap)  # self-heal a moved input via the ledger
+        if live is None:
             manifest['missing'].append(rel)
             continue
+        fp = root / live
         try:
             content = fp.read_text(encoding='utf-8', errors='replace')
         except OSError:
             manifest['missing'].append(rel)
             continue
-        cls = banner_classify(content, rel)
-        rec = {'path': rel, 'chars': len(content)}
+        cls = banner_classify(content, live)
+        rec = {'path': live, 'chars': len(content)}
         if cls == 'excluded':
             manifest['excluded'].append(rel)
         elif cls == 'discourse':
@@ -428,16 +477,17 @@ def extract_corpus(root):
     # capstone #6 (ED-IN-0056): the L0 corpus is a CURATED slice (`_canonical_paths`), not the
     # whole repo. Quantify what it structurally does NOT see so a green L0 result is never
     # misread as whole-repo coverage. (pathlib-only; skip VCS/cache dirs.)
+    # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5) — the old `designs_total_md`
+    # denominator now globs an empty tree, yielding a nonsensical "0.0% of 0" line.
+    # Post-retirement the honest denominator is the whole repo; the curated slice draws
+    # from `systems/`, `canon/`, `engine/params/`, `arcs/`, `references/`.
     _skip = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache'}
     all_md = [p for p in root.rglob('*.md')
               if not any(part in _skip for part in p.relative_to(root).parts)]
     total_md = len(all_md)
-    designs_md = sum(1 for p in all_md if p.relative_to(root).parts[:1] == ('designs',))
     manifest['coverage'] = {
         'design_files_scanned': len(design),
         'repo_total_md': total_md,
-        'designs_total_md': designs_md,
-        'pct_of_designs_md': round(100 * len(design) / designs_md, 1) if designs_md else 0.0,
         'pct_of_repo_md': round(100 * len(design) / total_md, 1) if total_md else 0.0,
     }
     return design, discourse, manifest
@@ -457,6 +507,129 @@ def _compiled(patterns):
 
 def _count_in(text, compiled):
     return sum(len(rx.findall(text)) for rx in compiled)
+
+
+def _norm_name(s):
+    return re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).strip()
+
+
+def _build_coref(root):
+    """Alias → canonical map from the LIVE name registries (proper_noun_registry +
+    names_index `aliases:`). Authoritative coreference: e.g. both registries declare
+    `Baralta` an alias of `Duchess Inge Baralta`, so every surface form of one entity
+    resolves to a single canonical. Returns {normalized_surface_form: canonical_label}."""
+    coref = {}
+
+    def _ingest(canonical, aliases):
+        if not canonical:
+            return
+        label, _ = _strip_display(canonical)
+        for form in [label] + list(aliases or []):
+            nf = _norm_name(form)
+            if nf and len(nf) >= 3:
+                coref.setdefault(nf, label)
+
+    pn = _yaml(root, 'references/proper_noun_registry.yaml')
+    for cat in ('characters', 'factions', 'subfactions', 'organizations'):
+        for item in (pn.get(cat, {}) or {}).values():
+            if isinstance(item, dict):
+                _ingest(item.get('canonical'), item.get('aliases'))
+    ni = _yaml(root, 'references/names_index.yaml')
+    for e in (ni.get('entries', {}) or {}).values():
+        if isinstance(e, dict) and e.get('category') in ('proper_noun', 'npc', 'faction', None):
+            _ingest(e.get('canonical'), e.get('aliases'))
+    return coref
+
+
+# Scales whose tokens are NAMED ENTITIES — safe to coref-merge by shared proper-noun head.
+# Mechanic/system scales are NOT merged ("Combat" ⊂ "Mass Combat" are different mechanics).
+_NAME_SCALES = {'npc', 'faction', 'proper_noun', 'character', 'organization'}
+
+
+def consolidate_tokens(token_defs, coref):
+    """Unify every surface form of one named entity into a SINGLE token (user directive
+    2026-07-21: "unify and simplify … for names"). Two coreference signals:
+      1. registry aliases (authoritative) — forms sharing a `_build_coref` canonical merge;
+      2. proper-noun substring — among NAME-scale tokens only, a name that is a contiguous
+         whole-word substring of another (`Baralta` ⊂ `Inge Baralta` ⊂ `Duchess Inge Baralta`)
+         is the same entity.
+    Each group collapses to one token labelled by its canonical (registry canonical if any,
+    else the longest/most-specific form) and matched by its HEAD — the shortest form that is a
+    whole-word substring of every other form (so a single `\\bBaralta\\b` pattern catches every
+    variant exactly once, no over-count). Non-name tokens pass through untouched."""
+    names = list(token_defs)
+    parent = {n: n for n in names}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        parent[find(a)] = find(b)
+
+    norm = {n: _norm_name(n) for n in names}
+    # signal 1: registry-alias coreference (any scale — a declared alias is authoritative)
+    canon_group = {}
+    for n in names:
+        c = coref.get(norm[n])
+        if c:
+            canon_group.setdefault(_norm_name(c), []).append(n)
+    for members in canon_group.values():
+        for m in members[1:]:
+            union(members[0], m)
+    # signal 2: proper-noun substring, NAME scales only — but ONLY when the container is
+    # UNIQUE. A form contained in exactly one longer name is that person with a title/surname
+    # added (`Inge Baralta` ⊂ `Duchess Inge Baralta`); a form contained in MANY (`Almqvist` ⊂
+    # King Almud / Prince Torben / Princess Elske …) is a shared DYNASTY name, not one person —
+    # never merge distinct people through a family name.
+    name_toks = [n for n in names if (token_defs[n].get('scale') in _NAME_SCALES)]
+    for a in name_toks:
+        if not norm[a]:
+            continue
+        containers = [b for b in name_toks
+                      if a != b and (' ' + norm[a] + ' ') in (' ' + norm[b] + ' ')]
+        if len(containers) == 1:
+            union(a, containers[0])
+
+    groups = defaultdict(list)
+    for n in names:
+        groups[find(n)].append(n)
+
+    out = {}
+    for members in groups.values():
+        if len(members) == 1:
+            out[members[0]] = token_defs[members[0]]
+            continue
+        # canonical label: a registry canonical among members, else the longest name
+        reg_canon = next((coref[norm[m]] for m in members if norm[m] in coref), None)
+        label = reg_canon or max(members, key=len)
+        # HEAD = shortest member that is a whole-word substring of every other member
+        head = None
+        for cand in sorted(members, key=len):
+            nc = norm[cand]
+            if all((' ' + nc + ' ') in (' ' + norm[o] + ' ') for o in members):
+                head = cand
+                break
+        if head:
+            patterns = _pattern_for(head)
+        else:  # no common head — union every form (word-boundary), deduped
+            patterns = sorted({p for m in members for p in _pattern_for(m)})
+        # keep the most authoritative member's scale/source/status
+        best = min(members, key=lambda m: _source_rank(token_defs[m].get('source')))
+        bm = token_defs[best]
+        merged = dict(bm)
+        merged['patterns'] = patterns
+        merged['aliases_merged'] = sorted(set(members))
+        out[label] = merged
+    return out
+
+
+def _source_rank(src):
+    order = {'derived:proper_noun': 0, 'seed': 1, 'derived:names_index': 2,
+             'derived:canonical_sources': 3}
+    return order.get(src, 4)
 
 
 def _passes_context(para, ctx_compiled):
@@ -558,30 +731,92 @@ def derive_tokens(root):
 
     _ni_entries = (names.entries(path=str(root / 'references' / 'names_index.yaml')) if names
                    else (_yaml(root, 'references/names_index.yaml').get('entries', {}) or {}))
+    # Expansive token universe (Jordan 2026-07-21): include the PRIMITIVE / stat / definition
+    # categories too (attribute, aggregate, faction_stat, settlement_stat, mass_combat_stat,
+    # clock, substrate), not just proper_noun — every named definition is a token.
+    _PRIMITIVE_CATS = {'attribute', 'aggregate', 'faction_stat', 'settlement_stat',
+                       'mass_combat_stat', 'clock', 'substrate'}
     for e in _ni_entries.values():
-        if not isinstance(e, dict) or e.get('category') == 'attribute':
+        if not isinstance(e, dict):
             continue
+        cat = e.get('category')
         label, abbr = _strip_display(e.get('canonical'))
         pats = _pattern_for(label, abbr) + [re.escape(a) for a in (e.get('aliases') or []) if len(a) >= 4]
-        add(label, pats, e.get('category') or 'mechanic', 'derived:names_index')
+        scale = 'primitive' if cat in _PRIMITIVE_CATS else (cat or 'mechanic')
+        add(label, pats, scale, 'derived:names_index')
 
     pn = _yaml(root, 'references/proper_noun_registry.yaml')
     for cat, scale in (('characters', 'npc'), ('factions', 'faction'),
-                       ('subfactions', 'faction'), ('organizations', 'faction')):
+                       ('subfactions', 'faction'), ('organizations', 'faction'),
+                       # place names, peoples, concepts, historical figures — the full ontology
+                       ('territories', 'place'), ('realms', 'place'), ('regions', 'place'),
+                       ('peoples', 'people'), ('concepts', 'concept')):
         grp = pn.get(cat, {}) or {}
         if not isinstance(grp, dict):
             continue
         for item in grp.values():
             if not isinstance(item, dict):
                 continue
-            occ = item.get('occurrences_count')
-            if isinstance(occ, int) and occ < 5:  # drop barely-present entities (noise)
-                continue
+            # No occurrence floor (Jordan 2026-07-21: "ensure ALL NPCs and movements and
+            # concepts and canon stuff"). Every registered named entity is a token, however
+            # rarely mentioned — a rarely-cited canon entity is a finding, not noise to drop.
             label, _ = _strip_display(item.get('canonical'))
             pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
             add(label, pats, scale, 'derived:proper_noun')
 
-    return tokens
+    # ── PRIMITIVES / values from descriptor_registry.yaml (attributes + stat rosters) ──
+    dr = _yaml(root, 'references/descriptor_registry.yaml')
+    prim_rows = []
+    attrs = dr.get('attributes', {})
+    if isinstance(attrs, dict):
+        for grp in ('body', 'mind', 'social'):
+            g = attrs.get(grp, {})
+            if isinstance(g, dict) and isinstance(g.get('entries'), list):
+                prim_rows += g['entries']
+    for sect in ('aggregates', 'practitioner_stats', 'territory_stats',
+                 'faction_stats', 'settlement_stats'):
+        v = dr.get(sect, {})
+        e = v.get('entries') if isinstance(v, dict) else None
+        if isinstance(e, list):
+            prim_rows += e
+    for row in prim_rows:
+        if not isinstance(row, dict) or not row.get('name'):
+            continue
+        key = row.get('key')
+        pats = _pattern_for(row['name']) + ([re.escape(key)] if key else []) \
+            + [re.escape(a) for a in (row.get('aliases') or []) if len(a) >= 4]
+        add(row['name'], pats, 'primitive', 'derived:descriptor_registry')
+
+    # ── MECHANICS (modules), KEYS (schema names), VALUES (derivations) from module_contracts ──
+    mc = _yaml(root, 'references/module_contracts.yaml')
+    keys_seen = set()
+    for m in (mc.get('modules', []) or []):
+        if not isinstance(m, dict):
+            continue
+        mod = m.get('module')
+        if mod:
+            add(_humanize_system(mod), _pattern_for(_humanize_system(mod)) + [re.escape(mod)],
+                'mechanic', 'derived:module_contracts')
+        for e in (m.get('emits') or []) + (m.get('consumes') or []):
+            if isinstance(e, dict) and e.get('type') and e['type'] != '*':
+                keys_seen.add(e['type'])
+        for d in (m.get('derivations') or []):
+            if isinstance(d, dict) and d.get('output'):
+                for out in (s.strip() for s in re.split(r'\s*/\s*', d['output'])):
+                    if out:
+                        add(out, _pattern_for(out), 'value', 'derived:module_contracts')
+    for ktype in sorted(keys_seen):
+        # a Key like `scene.gossip` — match the identifier and its humanized tail ("gossip")
+        tail = _humanize_system(ktype.split('.')[-1])
+        add(f'Key: {ktype}', [re.escape(ktype)] + _pattern_for(tail), 'key', 'derived:module_contracts')
+
+    # ── ACTIONS (performable verbs) — "anything that can be performed in a system is a token" ──
+    for act in CLASSES['action']:
+        add(act, _pattern_for(act), 'action', 'seed:action')
+
+    # Coreference consolidation: unify every surface form of one named entity into a
+    # single token (registry aliases + proper-noun substring). "Just search Baralta."
+    return consolidate_tokens(tokens, _build_coref(root))
 
 
 def curate_tokens(design, token_defs):
@@ -718,7 +953,10 @@ def build_g_mu(rows, tokens):
 
 def build_g_pp(root, tokens):
     """Tokens whose primary docs co-appear in a patch's affects: list (§1 G_pp)."""
-    fp = root / 'canon' / 'patch_register_active.yaml'
+    # Moved out of `canon/` to `registers/` (ED-IN-0071 P0, 2026-07-16). The old
+    # `canon/` path silently didn't exist → G_pp loaded EMPTY (every `pp` degree a
+    # false 0), which corrupted the Mode A/B metadata-graph agreement counts.
+    fp = root / 'registers' / 'patch_register_active.yaml'
     doc_to_tokens = defaultdict(list)
     for name, m in tokens.items():
         if m['primary_doc']:
@@ -1053,11 +1291,11 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
           '',
           f"**Coverage disclosure (capstone #6):** this L0 layer is a CURATED slice — "
           f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
-          f"{_cov.get('pct_of_designs_md', '?')}% of the {_cov.get('designs_total_md', '?')} `.md` under "
-          f"`designs/`, and only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
+          f"only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
           f"{_cov.get('repo_total_md', '?')} `.md` files. Everything outside `_canonical_paths()` "
-          f"(most of `designs/`, all of `params/`/`sim/`/`tests/`/`canon/` prose) is structurally "
-          f"invisible to L0 — a green result here is NOT whole-repo coverage.",
+          f"(most of `systems/`, all of `engine/params/`/`sim/`/`tests/`/`canon/` prose not named in "
+          f"`canonical_sources.yaml`) is structurally invisible to L0 — a green result here is NOT "
+          f"whole-repo coverage.",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "

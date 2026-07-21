@@ -104,6 +104,52 @@ def test_diagnostics_records_true_notional_total_not_just_shown_slice():
 
 # ── §8 reuse: the real names reader, not a re-parse ─────────────────────────
 
+def test_name_coreference_unifies_one_entity_but_not_a_family():
+    """Consolidation (2026-07-21, "unify and simplify … for names"): every surface form
+    of ONE person collapses to a single token, but a shared DYNASTY surname must NOT merge
+    distinct people."""
+    import os
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    defs = va.derive_tokens(__import__('pathlib').Path(root))
+
+    # (1) the Baralta family is ONE token — registry declares `Baralta` an alias of the
+    #     Duchess, and `Inge Baralta` folds in by unique-container substring.
+    baralta = [n for n in defs if 'baralta' in n.lower()]
+    assert len(baralta) == 1, baralta
+    merged = defs[baralta[0]].get('aliases_merged') or []
+    assert {'Baralta', 'Inge Baralta', 'Duchess Inge Baralta'} <= set(merged)
+    # the head pattern is the shared surname — "just search Baralta"
+    assert defs[baralta[0]]['patterns'] == ['Baralta']
+
+    # (2) the Almqvist ROYALS are distinct people, not one merged token; the House stands alone.
+    royals = ['Prince Torben Almqvist', 'Princess Elske Almqvist', 'Queen Lenneth Almqvist']
+    present = [r for r in royals if r in defs]
+    assert len(present) >= 2, present                      # they survive as separate entities
+    for r in present:
+        assert 'Almqvist' not in (defs[r].get('aliases_merged') or []), r  # dynasty not folded in
+
+
+def test_token_universe_is_expansive_across_entity_classes():
+    """Jordan 2026-07-21: the token universe must span the whole ontology — mechanics,
+    Keys/schema names, primitives, values, actions, places, and named entities — so the
+    audit can surface how anything connects to everything."""
+    import os
+    from collections import Counter
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    defs = va.derive_tokens(__import__('pathlib').Path(root))
+    scales = Counter(m.get('scale') for m in defs.values())
+    # every ontology class the expansion added must be non-empty
+    for cls in ('mechanic', 'key', 'primitive', 'value', 'action'):
+        assert scales.get(cls, 0) > 0, (cls, dict(scales))
+    # specific entities the expansion must reach
+    names = set(defs)
+    assert any('baralta' in n.lower() for n in names)               # consolidated NPC
+    assert any(m.get('scale') == 'action' and n == 'Muster' for n, m in defs.items())
+    assert 'Löwenritter' in names                                    # faction/order
+    assert any('Key:' in n for n in names)                           # Key schema names
+    assert len(defs) > 200                                           # genuinely expansive
+
+
 def test_vector_audit_reuses_the_real_names_reader():
     # Fable-5 finding: §8 "every rule lives once" — vector_audit must import the
     # real tools/names.py, not re-parse names_index.yaml with a private matcher.

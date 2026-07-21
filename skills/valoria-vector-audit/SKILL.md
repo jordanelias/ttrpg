@@ -33,7 +33,7 @@ Surface project weaknesses that hand-curation cannot reliably find: implied-but-
 Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
 - `references/canonical_sources.yaml` — systems list (controlled vocabulary)
-- `designs/architecture/complete_systems_reference.md` — NPC list, faction list
+- `systems/_architecture/complete_systems_reference.md` — NPC list, faction list (moved from the retired `designs/architecture/` 2026-07-19, ED-IN-0071 P4/P5)
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
 - `registers/patch_register_active.yaml` — PP affects: lists for G_pp
@@ -256,6 +256,36 @@ PP entry references the audit folder; ED entry describes what was found.
   `python3 scripts/gen_audit.py --repo-root . --output-dir <run>` → `generation_register.md` +
   `data/g_generation.json`. Tests: `tests/valoria/test_gen_audit.py` (33 tests: §8 reuse-by-identity,
   the LIVE/HISTORICAL discriminator, the moved-vs-nonexistent severity split).
+- `scripts/ripple_audit.py` — the observatory's **L3 cross-scale RIPPLE / propagation** layer (added
+  2026-07-21). The **qualitative** complement to `vector_audit`'s **quantized** map: where the vector
+  audit gives every token numeric coordinates, this makes the typed dependency **chains** explicit and
+  traversable in **all directions** and **sliceable** by scale, answering *"if I change X, what ripples —
+  downstream (what a change affects) AND upstream (provenance) — and WHY does each hop exist?"* It is a
+  **composition, not a new parser** (§8): unifies `structure_audit.build_l2()` (module→module Key wiring,
+  the mechanic scale) + `formula_audit.build_contract_edges()` (quantity input→output derivations, the
+  value scale) into one typed directed graph, **bridged across scales** (`quantity --reads--> module
+  --emits_consumes(Key)--> module --produces--> quantity`). Edge types `emits_consumes` / `derives` /
+  `produces` / `reads`, all oriented src→dst = "flows into"; forward-BFS = downstream ripple, backward-BFS
+  = provenance. Every hop carries **WHAT** (node kind), **HOW** (edge type), **WHY** (provenance: the Key
+  type / formula / contract source — never synthesized). **Provenance-tagged** (`⚠notional` hop = through a
+  doc:null / [ASSUMPTION]-grade module). Optional **quantized overlay** (`--vector-run <dir>`) annotates
+  name-matching nodes with a vector_audit run's cite/tl/mu/pp degrees, so the qualitative chain and the
+  quantized coordinate travel on one node. Stdlib + PyYAML only, working-tree only, deterministic.
+  **Measures, never gates.** Invoke: `python3 scripts/ripple_audit.py --repo-root . --output-dir <run>`
+  (→ `ripple_register.md` + `data/ripple_graph.json`, the machine-hookable surface other tooling reads),
+  or ad-hoc `--node <X> --direction {up,down,both} --depth N --layers <slice>`. **Full-token
+  impact query (2026-07-21):** `--vector-run <dir> --impact <token>` loads a vector_audit run's
+  exported full-token `G_cite`+metadata graph and does UNDIRECTED transitive reachability —
+  "tug anything, see what moves" — ranking every reachable token by graph distance and flagging
+  the far (≥3 hop) cross-subsystem *surprising* hits with their path (e.g. `Clocks → Factions →
+  Key: mechanical.project_advanced → Game Director`). This unifies the vector audit's QUANTIZED
+  graph with ripple's directional reachability into one query. Tests:
+  `tests/valoria/test_ripple_audit.py` (§8 reuse-by-identity, bidirectionality, depth/slice, cycle-safety).
+  **v1 scope:** L1+L2 (mechanic+value+Key scales). Documented extension points: fold in `vector_audit`'s
+  L0 doc-citation graph (design scale), `pointer_audit`'s G_pointer (identifier→key), and `gen_audit`'s
+  G_generation (supersedes) as further edge types on the same node namespace — so every
+  wrapper/system/subsystem/mechanic/routine/primitive/formula/value/token/key becomes one navigable,
+  all-directions, all-scales chain the rest of the toolchain (audits, sim, tests, design) can hook into.
 
 ## Cross-references
 
