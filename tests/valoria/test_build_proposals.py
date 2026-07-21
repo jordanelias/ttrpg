@@ -36,8 +36,9 @@ def test_all_proposals_docs_surface_by_location():
     # 14 with the 2026-07-18 precedent-to-mechanism design brief;
     # 16 after pessimist_ners_audit_v1.md and grounded_event_card_deck_v1.md
     # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops);
-    # 17 with the 2026-07-21 observatory-holonic-refactor proposal.
-    assert len(props) == 17
+    # 17 with the 2026-07-21 observatory-holonic-refactor proposal;
+    # 18 with the 2026-07-21 reconciliation-program (consolidates the plan fragments).
+    assert len(props) == 18
 
 
 def test_all_audit_verdicts_present():

@@ -200,9 +200,12 @@ PP entry references the audit folder; ED entry describes what was found.
   tree only, and writes `data/*.json` + `02_weakness_register.md` + `03_validation_report.md`.
   Reuses the in-file `SEED_TOKENS`/`PILOT_TOKENS`/`CLASSES`/helper scaffolding. `numpy`/`sklearn`
   are optional (only the supporting TF-IDF graph needs them). Invoke via the command in Step 3.
-  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run;
-  validation may still report FAILED (P2 conviction-symmetry) — that is a real finding, not a bug
-  (methodology §3.8).
+  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run.
+  P2 conviction-symmetry is **v4 as of 2026-07-21 (ED-IN-0080, Jordan ruling A)**: measured on
+  context-gated prose presence (the v3 throughline formulation was unsatisfiable by construction),
+  with an all-zero vector reporting NOT MEASURABLE rather than the retired `cv=999` sentinel —
+  see methodology §3.8 for the ruling, the thin-pass caveats, and the staged attribute-symmetry
+  extension.
 - `scripts/structure_audit.py` — the observatory's **architecture layers** (WS0b core, added
   2026-07-13). Companion to `vector_audit.py` (which is the L0 prose layer). Builds **G_code** (AST
   import graph over `sim/` + `tools/` — cycles, cut-vertices, orphans) and **L2** (the
