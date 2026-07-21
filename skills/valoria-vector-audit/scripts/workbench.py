@@ -406,6 +406,65 @@ def render(eng, has_doc, rows, open_cards, resolved_cards):
     return '\n'.join(L)
 
 
+# ──────────────────────────── CORPUS-WIDE (--all) ───────────────────────────
+
+def weave_all(root):
+    """Corpus-wide reconciliation: weave every module in module_contracts → per-module summary.
+    The RELIABLE signal is STRUCTURAL (node_state, doc_status, built-but-unspecced); co-mention is
+    a secondary heuristic (derivation-edge only — see render_all's caveat)."""
+    from pathlib import Path
+    from collections import Counter
+    with open(Path(root) / 'references' / 'module_contracts.yaml', encoding='utf-8') as fh:
+        contracts = yaml.safe_load(fh) or {}
+    mods = [m['module'] for m in (contracts.get('modules') or [])
+            if isinstance(m, dict) and m.get('module')]
+    disp = load_dispositions(root)
+    out = []
+    for m in mods:
+        eng, has_doc, cards, rows = weave(root, m)
+        open_, _resolved = partition(cards, disp)
+        st = Counter(r['state'] for r in rows)
+        out.append({'module': m, 'node_state': eng['node_state'], 'doc_status': eng['doc_status'],
+                    'has_doc': has_doc, 'edges': len(rows), 'co': st.get('co-mentioned', 0),
+                    'mentioned': st.get('mentioned', 0), 'silent': st.get('silent', 0),
+                    'open_cards': len(open_)})
+    return out
+
+
+def render_all(summary):
+    from collections import Counter
+    L = ['# Workbench — corpus-wide reconciliation map', '']
+    unspecced = [s['module'] for s in summary
+                 if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
+    broken = [s['module'] for s in summary if s['doc_status'] == 'missing']
+    dirdoc = [s['module'] for s in summary if s['doc_status'] == 'declared-dir']
+    ns = Counter(s['node_state'] for s in summary)
+    ds = Counter(s['doc_status'] for s in summary)
+    L.append(f"**{len(summary)} modules** · node: " + ', '.join(f'{k} {v}' for k, v in sorted(ns.items()))
+             + " · doc: " + ', '.join(f'{k} {v}' for k, v in sorted(ds.items())))
+    L.append('')
+    L.append(f"**Built-but-unspecced ({len(unspecced)})** — engine wires them, no design doc: "
+             + (', '.join(f'`{m}`' for m in unspecced) or '_(none)_'))
+    if broken:
+        L.append(f"**⚠ Broken doc pointer ({len(broken)})** — declared doc missing on disk: "
+                 + ', '.join(f'`{m}`' for m in broken))
+    if dirdoc:
+        L.append(f"**Directory-valued doc ({len(dirdoc)})**: " + ', '.join(f'`{m}`' for m in dirdoc))
+    L.append('')
+    L.append('| module | node | doc | edges | co / ment / silent | open cards |')
+    L.append('|---|---|---|--:|---|--:|')
+    for s in sorted(summary, key=lambda s: (s['node_state'], -s['edges'])):
+        L.append(f"| {s['module']} | {s['node_state']} | {s['doc_status']} | {s['edges']} | "
+                 f"{s['co']} / {s['mentioned']} / {s['silent']} | {s['open_cards']} |")
+    L.append('')
+    L.append("_The RELIABLE signal here is STRUCTURAL (node state / doc status / built-but-unspecced) "
+             "— precise engine truth. Co-mention is a secondary heuristic that currently fires mainly "
+             "on DERIVATION edges with registered scalar counterparts; module↔module emit/consume "
+             "articulation reads mostly silent/mentioned because Key concepts are rarely prose-literal "
+             "(a real siloed-prose signal, not a matcher defect). MEASURES, never gates._")
+    return '\n'.join(L)
+
+
 # ──────────────────────────── CLI ───────────────────────────────────────────
 
 def run(root, module):
@@ -418,7 +477,9 @@ def run(root, module):
 def main():
     ap = argparse.ArgumentParser(description='The Workbench — engine↔prose reconciliation workbench (R1).')
     ap.add_argument('--repo-root', default='.')
-    ap.add_argument('--module', required=True, help='the module/subsystem to weave')
+    ap.add_argument('--module', default=None, help='the module/subsystem to weave (omit with --all)')
+    ap.add_argument('--all', action='store_true', dest='all_',
+                    help='corpus-wide reconciliation map over every module')
     ap.add_argument('--entity', default=None, help='(reserved for R4 per-primitive focus; no-op)')
     ap.add_argument('--output-dir', default=None, help='write workbench_<module>.md + cards json here')
     args = ap.parse_args()
@@ -426,6 +487,23 @@ def main():
     contracts = os.path.join(args.repo_root, 'references', 'module_contracts.yaml')
     if not os.path.isfile(contracts):
         ap.error(f'not a repo root (missing {contracts})')
+    if not args.all_ and not args.module:
+        ap.error('give --module <name> or --all')
+
+    if args.all_:
+        summary = weave_all(args.repo_root)
+        view = render_all(summary)
+        if args.output_dir:
+            from pathlib import Path
+            out = Path(args.output_dir)
+            (out / 'data').mkdir(parents=True, exist_ok=True)
+            (out / 'workbench_corpus.md').write_text(view, encoding='utf-8')
+            (out / 'data' / 'workbench_corpus.json').write_text(
+                json.dumps(summary, indent=1, sort_keys=True), encoding='utf-8')
+            print(f"[workbench] corpus: {len(summary)} modules -> {out}")
+        else:
+            print(view)
+        return 0
 
     eng, has_doc, rows, open_, resolved = run(args.repo_root, args.module)
     view = render(eng, has_doc, rows, open_, resolved)

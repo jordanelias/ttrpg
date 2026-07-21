@@ -59,6 +59,21 @@ def test_vignette_domain_actions_is_one_sided_notional():
     assert len(rows) >= 6
 
 
+def test_weave_all_corpus_map():
+    """The --all corpus mode weaves every module and surfaces the STRUCTURAL reconciliation map:
+    node state, doc status, and the built-but-unspecced set (the reliable, precise signal)."""
+    summary = workbench.weave_all(_ROOT)
+    assert len(summary) == 27
+    assert all('node_state' in s and 'doc_status' in s and 'edges' in s for s in summary)
+    unspecced = [s['module'] for s in summary
+                 if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
+    assert 'engine_clock' in unspecced and len(unspecced) >= 5      # the T0 blocker is one of them
+    # personal_combat's directory doc is surfaced as such, not a false 'missing'
+    assert any(s['module'] == 'personal_combat' and s['doc_status'] == 'declared-dir' for s in summary)
+    view = workbench.render_all(summary)
+    assert 'corpus-wide reconciliation map' in view and 'Built-but-unspecced' in view
+
+
 def test_card_ids_are_stable_and_deterministic():
     a = workbench._card_id('unspecced_wiring', 'm', 'cp', 'emits [k] to')
     b = workbench._card_id('unspecced_wiring', 'm', 'cp', 'emits [k] to')
