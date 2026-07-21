@@ -1,5 +1,7 @@
 """
-sim.peninsular — Strategic-scale world tracks + season/accounting
+systems.overview.sim — Strategic-scale world tracks + season/accounting
+
+(was sim.peninsular — relocated ED-IN-0071 P4 continuation, sim/ hollow-out)
 
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 

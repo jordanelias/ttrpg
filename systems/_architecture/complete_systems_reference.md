@@ -9,9 +9,10 @@
 > d+σ resolver and the combat re-ratification: its PART 2 combat core (pool `(Agi×2)+H+3`,
 > TN 7, versus initiative, multiplicative damage) is **no longer canon** — the current head is
 > `designs/scene/combat_engine_v1/` (pool `max(5, History+6)`, d_sigma resolution, ED-900/904,
-> ED-1041 wounds). Resolve any combat number via `CURRENT.md`, never from this file. A near-
-> duplicate copy of this compilation exists at `references/valoria_complete_systems_r2.md`
-> (duplicate-home resolution queued for Jordan — see the 2026-07-01 decision queue).
+> ED-1041 wounds). Resolve any combat number via `CURRENT.md`, never from this file.
+> **Duplicate-home resolved 2026-07-21:** this file is now the sole home; the former
+> `references/valoria_complete_systems_r2.md` copy was retired to `deprecated/archives/`
+> (closes the 2026-07-01 decision-queue duplicate item).
 
 ---
 

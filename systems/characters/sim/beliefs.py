@@ -173,7 +173,7 @@ def revise_belief(actor: str, belief_id: str, new_position: str,
     notified = False
     if belief.underlying_convictions:
         # Late-import to break the cycle at module-import time
-        from sim.personal.conviction import mark_belief_revision_pending
+        from systems.characters.sim.conviction import mark_belief_revision_pending
         mark_belief_revision_pending(actor, belief_id, world)
         notified = True
 
@@ -224,7 +224,7 @@ def social_success(actor: str, belief_id: str, aligned: bool,
     #  Belief revision opportunity."]
     belief.revision_pressure += 1
     # Notify conviction module
-    from sim.personal.conviction import mark_belief_revision_pending
+    from systems.characters.sim.conviction import mark_belief_revision_pending
     mark_belief_revision_pending(actor, belief_id, world)
     return RevisionResult(
         actor=actor, belief_id=belief_id, accepted=True,

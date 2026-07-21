@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sim.personal import tribunal
+from systems.factions.sim import tribunal
 from engine.autoload.dice_engine import Degree
 
 
@@ -163,7 +163,7 @@ def attempt_excommunication(church, target_faction, world, rng) -> ExcommResult:
             old_ci = world.clocks.get('CI', 0.0)
             # [2026-05-20 migration] route through ci_track.apply_ci_delta — single
             # canonical surface for CI arithmetic. Was: inline ceiling clamp.
-            from sim.peninsular.ci_track import apply_ci_delta
+            from systems.overview.sim.ci_track import apply_ci_delta
             new_ci = apply_ci_delta(EXCOMM_FORMAL_CI_DELTA,
                                     source=f"excommunication §7.1 formal",
                                     world=world)

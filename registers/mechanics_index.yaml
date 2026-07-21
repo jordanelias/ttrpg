@@ -122,7 +122,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#MS Baseline Decay"]
-    sim_module: sim/peninsular/ms_track.py
+    sim_module: systems/overview/sim/ms_track.py
     test_status: not_implemented
     notes: "PP-255. MS world-track per-arc decay."
 
@@ -146,7 +146,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Truth Track"]
-    sim_module: sim/personal/conviction.py
+    sim_module: systems/characters/sim/conviction.py
     test_status: not_implemented
     notes: "PP-551 redesigned."
 
@@ -235,7 +235,7 @@ mechanics:
     scale: personal
     faction: Church
     canon_sources: ["systems/social_contest/social_contest_v30.md#section-7-1"]
-    sim_module: sim/personal/tribunal.py
+    sim_module: systems/factions/sim/tribunal.py
     test_status: not_implemented
     dependencies:
       mechanics: [social_contest, conviction_scar]
@@ -304,7 +304,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["designs/scene/conviction_track_v30.md#section-1"]
-    sim_module: sim/personal/conviction.py
+    sim_module: systems/characters/sim/conviction.py
     test_status: not_implemented
     notes: "Sections 1-3 and 5 of conviction_track_v30 remain canonical post-GD-1. Sections 4.2, 4.3, 6, 7 SUPERSEDED-BY GD-1."
 
@@ -312,7 +312,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["godot/scene_tree_architecture.md#CompanionScene"]
-    sim_module: sim/personal/companion.py
+    sim_module: systems/characters/sim/companion.py
     test_status: not_implemented
     notes: "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc."
 
@@ -323,7 +323,7 @@ mechanics:
       - "systems/fieldwork/fieldwork_v30.md#section-5-5"
       - "systems/social_contest/social_contest_v30.md#section-9-5"
       - "systems/articulation/articulation_layer_v30.md#section-3-5"
-    sim_module: sim/personal/beliefs.py
+    sim_module: systems/characters/sim/beliefs.py
     test_status: not_implemented
     notes: "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass."
 
@@ -623,7 +623,7 @@ mechanics:
     faction: Church
     canon_sources: []
     canon_authoring_target: "designs/provincial/home_sanctuary_t9_v30.md (Pass 2f, pending)"
-    sim_module: sim/provincial/home_sanctuary.py
+    sim_module: systems/factions/sim/home_sanctuary.py
     test_status: not_implemented
     notes: "T9 invasion Ob +4 for first 12 seasons. End conditions: Church PT<3 OR Church L<2.5 OR any faction holds CB vs Church."
 
@@ -755,14 +755,14 @@ mechanics:
     scale: peninsular
     faction: universal
     canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
-    sim_module: sim/peninsular/season.py
+    sim_module: systems/overview/sim/season.py
     test_status: not_implemented
 
   accounting_cascade:
     scale: peninsular
     faction: universal
     canon_sources: ["systems/_architecture/campaign_architecture_v30.md"]
-    sim_module: sim/peninsular/accounting.py
+    sim_module: systems/overview/sim/accounting.py
     test_status: not_implemented
     notes: "13-step end-of-season cascade."
 
@@ -770,7 +770,7 @@ mechanics:
     scale: peninsular
     faction: Church
     canon_sources: ["designs/scene/conviction_track_v30.md#section-3"]
-    sim_module: sim/peninsular/ci_track.py
+    sim_module: systems/overview/sim/ci_track.py
     test_status: not_implemented
     pp: PP-412
     notes: "Church Influence world-track. SW-weighted CI generation per Tier 2 gap."
@@ -779,7 +779,7 @@ mechanics:
     scale: peninsular
     faction: universal
     canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
-    sim_module: sim/peninsular/rs_track.py
+    sim_module: systems/overview/sim/rs_track.py
     test_status: not_implemented
     notes: "Rendering Stability world-track."
 
@@ -787,7 +787,7 @@ mechanics:
     scale: peninsular
     faction: universal
     canon_sources: ["engine/params/core.md#MS Baseline Decay"]
-    sim_module: sim/peninsular/ms_track.py
+    sim_module: systems/overview/sim/ms_track.py
     test_status: not_implemented
     notes: "Mending Stability world-track. PP-255 baseline decay."
 
@@ -795,7 +795,7 @@ mechanics:
     scale: peninsular
     faction: Hafenmark
     canon_sources: ["designs/provincial/peninsular_strain_v30.md"]
-    sim_module: sim/peninsular/ip_track.py
+    sim_module: systems/overview/sim/ip_track.py
     test_status: not_implemented
     notes: "Altonian Imperial Pressure world-track."
 

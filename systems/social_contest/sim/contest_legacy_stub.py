@@ -237,7 +237,7 @@ def run_contest(parties: list, stakes: dict, world=None, rng=None) -> ContestRes
             belief_id = belief_ids[actor_id]
             # Late-import to break cycle with beliefs module
             try:
-                from sim.personal.beliefs import social_success
+                from systems.characters.sim.beliefs import social_success
                 current_momentum = getattr(winning_actor, 'momentum', 0)
                 rr = social_success(actor_id, belief_id, aligned=True,
                                     current_momentum=current_momentum, world=world)

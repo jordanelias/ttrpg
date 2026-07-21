@@ -547,10 +547,11 @@ jobs:
           python-version: '3.11'
       - name: Install test deps
         run: pip install pyyaml pytest
-      # Deterministic seeded oracle for the sim/ reference the Godot port validates
-      # against (ED-1053). Before this, sim/ had zero tests and never ran in CI, so a
-      # degenerate-balance regression could land unflagged. ~20s.
-      - run: python -m pytest sim/tests -q
+      # Deterministic seeded oracle for the sim reference the Godot port validates
+      # against (ED-1053). Before this, the reference had zero tests and never ran in
+      # CI, so a degenerate-balance regression could land unflagged. Relocated from
+      # sim/tests/ to engine/tests/ in the sim/ hollow-out (ED-IN-0071 P4 cont.). ~20s.
+      - run: python -m pytest engine/tests -q
 
   audit-registry-check:
     name: Audit Registry Freshness (report-only)

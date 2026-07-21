@@ -228,7 +228,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     if world is not None and 'MS' in world.clocks and ms_delta != 0:
         # [2026-05-20 migration] route through ms_track.apply_ms_delta — single
         # canonical surface for MS arithmetic per PP-255. Was: inline clamp.
-        from sim.peninsular.ms_track import apply_ms_delta
+        from systems.overview.sim.ms_track import apply_ms_delta
         apply_ms_delta(ms_delta, source=f"opposing {op_type}", world=world)
 
     # Apply Knot strain if Knots specified

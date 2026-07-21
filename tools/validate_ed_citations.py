@@ -94,7 +94,6 @@ WORKING_PREFIXES = ('designs/audit/', 'workplans/')
 PROVENANCE_PATHS = {
     'references/roadmap_state.yaml',
     'references/synonym_registry.yaml',
-    'references/mechanical_terms_index.md',
     'registers/supersession_register.yaml',
     # The vocab fold (ED-IN-0078): the source + its generated register views record ED provenance
     # (authority/patch/source fields) — RECORDS of where an ED applied, not canonical-basis claims,
