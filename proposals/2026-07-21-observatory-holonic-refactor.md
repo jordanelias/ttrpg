@@ -1,6 +1,6 @@
 # The Observatory — Holonic Refactor into Assay / Atlas / Augur
 
-## Status: PROPOSED (r2) — HELD FOR JORDAN. Architecture + issue-resolution + operations proposal for the vector-audit / ripple observability tooling. Nothing here is ratified; the P2 and validation changes below are explicitly loud-not-silent (ED-1094) and must not be auto-adopted on merge.
+## Status: RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0081.)
 
 **Date:** 2026-07-21 (r2 same day — see Revision log)
 **Lane:** IN (cross-cutting observatory)
