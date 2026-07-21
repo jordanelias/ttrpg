@@ -97,6 +97,10 @@ CV: cite-degree **0.163** (flattered by neighbor-set saturation) · context-gate
 
 **Recommendation:** flip P2 FAILED→VALIDATED **on the context-gated presence measure** (not cite-degree), fix the `mean==0 → cv=999` sentinel to report *not-measurable*, and ship the per-conviction spread with the verdict: the pass is **thin**, and "Equity/Continuity/Reason (23–34) are ~2-3× thinner than Faith/Order/Autonomy (50–71)" is a real, mild curation signal — a natural early Loom worklist, not a rubber-stamp. The 0.5 bar is pre-committed and kept; measure-sensitivity is disclosed rather than hidden behind one number.
 
+**RULED — 2026-07-21, Jordan, in-session: Option A. Implemented in this same PR as ED-IN-0080** (methodology v3→v4: `validate()` P2 measure + NOT-MEASURABLE sentinel; `methodology.md` §3.8 amendment; SKILL.md note; regression tests). This item is therefore **no longer held back** — the merge ratifies a decided change.
+
+**Attributes extension (same ruling):** the attribute class (9 today; roster IN FLUX, possibly 10) becomes a **second symmetry probe on the same measure and bar** once two preconditions clear: (1) the descriptor-registry roster stabilizes, and (2) the attributes gain disambiguation contexts — `Will`/`Focus`/`Order`-class common words make ungated counts noise (the session's raw attribute CV 0.46 was borderline *with* that contamination; Charisma/Will-heavy, Body-group underweight). Staged, not implemented; lands with the vocabulary work (§3).
+
 ## 6. Phasing (product-first; each phase independently valuable)
 
 | Phase | Deliverable | Depends on |
@@ -112,7 +116,7 @@ Observatory r2's §7 phasing is amended accordingly: its "Phase 0 coverage map" 
 
 ## 7. Governance & discipline (carried forward, unchanged)
 
-Observe→human→act, never observe→act→observe. Cards and lenses are report-only; gates only via the Tier-3 admission test. Scheduled refreshes ride `audit-refresh.yml`'s branch-PR pattern; staleness via the ED-IN-0032 slot; scheduled runs never append `audit_registry`; the pipeline stays deterministic and model-free. **Held for Jordan:** the §5 P2 flip; any lens→gate promotion; the observatory-r2 §8 items (unchanged); acceptance of this program's phasing amendment. **Parked, explicitly not lost:** the four-bloc win-probability gate (sim/balance harness — §7's unmonitored ~87% degenerate win-share); `build_graph`↔substrate unification; key-level G_code descent.
+Observe→human→act, never observe→act→observe. Cards and lenses are report-only; gates only via the Tier-3 admission test. Scheduled refreshes ride `audit-refresh.yml`'s branch-PR pattern; staleness via the ED-IN-0032 slot; scheduled runs never append `audit_registry`; the pipeline stays deterministic and model-free. **Held for Jordan:** ~~the §5 P2 flip~~ (**RULED A 2026-07-21, implemented — ED-IN-0080**); any lens→gate promotion; the observatory-r2 §8 items (unchanged); acceptance of this program's phasing amendment. **Parked, explicitly not lost:** the four-bloc win-probability gate (sim/balance harness — §7's unmonitored ~87% degenerate win-share); `build_graph`↔substrate unification; key-level G_code descent.
 
 ## Appendix — adversarial findings this rewrite resolves
 

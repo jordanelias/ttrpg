@@ -150,6 +150,29 @@ def test_token_universe_is_expansive_across_entity_classes():
     assert len(defs) > 200                                           # genuinely expansive
 
 
+def test_p2_v4_gated_presence_and_not_measurable_sentinel():
+    """P2 v4 (ED-IN-0080, Jordan ruling A, 2026-07-21): conviction symmetry is measured on
+    CONTEXT-GATED prose presence, not throughline degree (the v3 formulation was
+    unsatisfiable by construction); an all-zero vector is NOT MEASURABLE, never cv=999."""
+    convs = va.CLASSES['conviction']
+    # (a) gated presence drives P2 even with an EMPTY throughline graph (deg_tl={})
+    tokens = {c: {'paragraph_count': 40} for c in convs}
+    v = va.validate(tokens, {}, {}, {'A': {'B': 1}})
+    assert v['p2']['measure'] == 'context_gated_paragraphs'
+    assert v['p2']['measurable'] is True and v['p2']['pass'] is True
+    assert v['p2']['cv'] == 0.0
+    # (b) a real spread beyond the (unchanged) 0.5 bar fails honestly
+    tokens2 = {c: {'paragraph_count': (100 if i == 0 else 5)}
+               for i, c in enumerate(convs)}
+    v2 = va.validate(tokens2, {}, {}, {})
+    assert v2['p2']['measurable'] is True and v2['p2']['pass'] is False
+    # (c) all-zero => NOT MEASURABLE: cv is None (999 sentinel retired), never a pass
+    tokens3 = {c: {'paragraph_count': 0} for c in convs}
+    v3 = va.validate(tokens3, {}, {}, {})
+    assert v3['p2']['measurable'] is False and v3['p2']['pass'] is False
+    assert v3['p2']['cv'] is None
+
+
 def test_vector_audit_reuses_the_real_names_reader():
     # Fable-5 finding: §8 "every rule lives once" — vector_audit must import the
     # real tools/names.py, not re-parse names_index.yaml with a private matcher.

@@ -135,11 +135,27 @@ Three properties checked. Methodology validates if ≥2 of 3 pass. None depend o
 
 **P1 — Foundation periphery:** Foundation tokens (Self-Rendering, Leap, Coherence, Throughlines, Ein Sof) have HIGHER mean degree than corpus median, in BOTH G_cite and G_throughline.
 
-**P2 — Conviction class symmetry:** The 7 Convictions show ≤50% coefficient of variation in G_throughline degree. (Tests whether the throughline framework treats Convictions symmetrically.)
+**P2 — Conviction class symmetry (v4, RULED 2026-07-21 — ED-IN-0080, Jordan option A):** The 7
+Convictions show ≤50% coefficient of variation in **context-gated prose presence** (the §3.5
+disambiguation-gated `paragraph_count`), NOT G_throughline degree. The 0.5 bar is unchanged.
+*Why the measure changed:* the v3 throughline formulation was **unsatisfiable by construction** —
+`throughlines_meta_infill.md` routes all 7 convictions through the aggregate `conviction_track`
+slug and never names them individually, so their degrees were permanently `[0,…,0]` regardless of
+the corpus (the PP-677 column did not change this). The 2026-07-21 backtrace + A8 re-derivation
+established the property genuinely holds on gated presence (CV 0.403, a **thin** pass) with a real
+per-conviction spread (Equity/Continuity/Reason ~2–3× thinner than Faith/Order/Autonomy) that
+runs must report alongside the verdict, plus a disclosed co-mention bias in the gate itself
+(context words are partly other conviction names). See the 2026-07-21 reconciliation-program §5.
+**Sentinel (same ruling):** an all-zero vector reports **NOT MEASURABLE**, never "maximally
+asymmetric" — the `cv=999` sentinel is retired; a not-measurable P2 does not count as a pass.
+*Future extension (Jordan, same ruling):* once the descriptor-registry attribute roster stabilizes
+(currently IN FLUX, 9-vs-10) **and** the attributes gain disambiguation contexts (Will/Focus/Order
+are common words; ungated counts are noise), attribute-class symmetry becomes a second calibration
+probe on the same measure and bar.
 
 **P3 — Citation density smoke test:** G_cite has ≥100 token-edges. Lower = explicit-only parsing, structurally inadequate for filter use.
 
-**Validation FAILED** (P2 specifically) was itself a finding in v3: throughlines lack lexical anchoring of Convictions. PP-677 added Load-bearing systems column to address — future runs should re-test P2 with the new column data.
+**Validation FAILED** (P2 specifically) was itself a finding in v3: throughlines lack lexical anchoring of Convictions. PP-677 added the Load-bearing systems column, which did **not** resolve it (the column carries the aggregate slug, not the 7 names) — resolved instead by the v4 measure change above.
 
 ---
 

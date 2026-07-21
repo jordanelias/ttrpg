@@ -1060,15 +1060,24 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
     f_tl_mean = sum(f_tl) / len(f_tl) if f_tl else 0.0
     p1 = bool(f_cite_mean > cite_med and f_tl_mean > tl_med)
 
+    # P2 v4 (RULED option A, Jordan 2026-07-21 — ED-IN-0080; program doc §5): measure
+    # conviction symmetry on CONTEXT-GATED PROSE PRESENCE (paragraph_count, which
+    # curate_tokens computes under the §3.5 disambiguation gate), NOT throughline-degree.
+    # The v3 throughline formulation was unsatisfiable by construction: the throughline
+    # table routes all 7 convictions through the aggregate `conviction_track` slug, so
+    # their individual degrees were permanently [0,…,0]. The 0.5 bar is UNCHANGED.
+    # Sentinel fix (same ruling): an all-zero vector is NOT MEASURABLE, never
+    # "maximally asymmetric" — the cv=999.0 sentinel is retired.
     convs = CLASSES['conviction']
-    cd = [deg_tl.get(c, 0) for c in convs]
+    cd = [(tokens.get(c) or {}).get('paragraph_count', 0) for c in convs]
     mean = sum(cd) / len(cd) if cd else 0.0
-    if mean > 0:
+    measurable = mean > 0
+    if measurable:
         var = sum((x - mean) ** 2 for x in cd) / len(cd)
         cv = (var ** 0.5) / mean
     else:
-        cv = 999.0
-    p2 = bool(mean > 0 and cv <= 0.5)
+        cv = None
+    p2 = bool(measurable and cv <= 0.5)
 
     n_edges = sum(len(v) for v in g_cite.values())
     p3 = bool(n_edges >= 100)
@@ -1078,8 +1087,9 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         'p1': {'pass': p1, 'foundation_cite_mean': round(f_cite_mean, 3),
                'overall_cite_median': cite_med, 'foundation_tl_mean': round(f_tl_mean, 3),
                'overall_tl_median': tl_med},
-        'p2': {'pass': p2, 'conviction_degrees': cd, 'mean': round(mean, 3),
-               'cv': round(cv, 3)},
+        'p2': {'pass': p2, 'measure': 'context_gated_paragraphs', 'measurable': measurable,
+               'conviction_presence': cd, 'mean': round(mean, 3),
+               'cv': round(cv, 3) if cv is not None else None},
         'p3': {'pass': p3, 'n_cite_edges': n_edges},
         'passed': passed, 'verdict': 'VALIDATED' if passed >= 2 else 'FAILED',
     }
@@ -1273,9 +1283,12 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
           f"foundation cite-mean {validation['p1']['foundation_cite_mean']} vs median "
           f"{validation['p1']['overall_cite_median']}; tl-mean {validation['p1']['foundation_tl_mean']} "
           f"vs median {validation['p1']['overall_tl_median']}",
-          f"- **P2 conviction-symmetry:** {'PASS' if validation['p2']['pass'] else 'FAIL'} — "
-          f"throughline-degree CV {validation['p2']['cv']} (≤0.5 to pass), degrees "
-          f"{validation['p2']['conviction_degrees']}",
+          f"- **P2 conviction-symmetry (v4, context-gated presence):** "
+          + ("NOT MEASURABLE — zero gated presence across all 7 convictions"
+             if not validation['p2']['measurable'] else
+             f"{'PASS' if validation['p2']['pass'] else 'FAIL'} — "
+             f"context-gated paragraph CV {validation['p2']['cv']} (≤0.5 to pass), presence "
+             f"{validation['p2']['conviction_presence']}"),
           f"- **P3 citation-density:** {'PASS' if validation['p3']['pass'] else 'FAIL'} — "
           f"{validation['p3']['n_cite_edges']} cite token-edges (≥100 to pass)", '',
           f"TF-IDF supporting graph: {'built' if tfidf_on else 'skipped (numpy/sklearn absent)'}."]
