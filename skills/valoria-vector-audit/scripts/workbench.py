@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-loom.py — the Reconciliation Workbench (R1 prototype).
+workbench.py — the Reconciliation Workbench (R1 prototype).
 
-Program: proposals/2026-07-21-reconciliation-program.md §2. The Loom holds the ENGINE view
+Program: proposals/2026-07-21-reconciliation-program.md §2. The Workbench holds the ENGINE view
 (warp — what the contracts/sim actually wire) beside the PROSE view (weft — what a design doc
 articulates) and flags every DIVERGENCE between them as an iteration CARD. Engine and prose are
-complementary and iterative: a card is a question a human answers by moving EITHER side; the Loom
+complementary and iterative: a card is a question a human answers by moving EITHER side; the Workbench
 never auto-reconciles.
 
 It is a COMPOSITION, not a new parser (CLAUDE.md §8): the engine side reuses
@@ -21,15 +21,15 @@ Divergence model (program §1):
                extraction exists; it is scaffolded but not emitted here to avoid guessing.)
 
 Cards carry a STABLE id (hash of class+endpoints+relationship) so `references/observatory_dispositions.yaml`
-(shared with Augur) can record human answers and the Loom surfaces only OPEN/CHANGED cards.
+(shared with Augur) can record human answers and the Workbench surfaces only OPEN/CHANGED cards.
 
 MEASURES, never gates. Deterministic, model-free, working-tree only. Prose matching is heuristic
 and confidence-tagged — this is a prototype surface, honest about its own fuzziness.
 
 Usage:
-    python3 loom.py --repo-root . --module settlement_layer
-    python3 loom.py --repo-root . --module domain_actions --entity Muster   # one-sided / notional demo
-    python3 loom.py --repo-root . --module settlement_layer --output-dir <run>   # write view + cards
+    python3 workbench.py --repo-root . --module settlement_layer
+    python3 workbench.py --repo-root . --module domain_actions --entity Muster   # one-sided / notional demo
+    python3 workbench.py --repo-root . --module settlement_layer --output-dir <run>   # write view + cards
 """
 import sys
 import os
@@ -120,7 +120,7 @@ def articulation(text, counterpart, relationship):
 
 def _card_id(cls, module, counterpart, rel):
     h = hashlib.sha1(f'{cls}|{module}|{counterpart}|{rel}'.encode()).hexdigest()[:10]
-    return f'loom-{h}'
+    return f'wb-{h}'
 
 
 def weave(root, module):
@@ -188,7 +188,7 @@ _STATE_MARK = {'articulated': '✓ articulated', 'mentioned': '~ mentioned (link
 
 def render(eng, has_doc, rows, open_cards, resolved_cards):
     L = []
-    L.append(f"# Loom — {eng['module']}")
+    L.append(f"# Workbench — {eng['module']}")
     L.append('')
     L.append(f"**node:** {eng['node_state']}"
              + (f" · resolver `{eng['resolver']}`" if eng['resolver'] else '')
@@ -237,11 +237,11 @@ def run(root, module):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='The Loom — engine↔prose reconciliation workbench (R1).')
+    ap = argparse.ArgumentParser(description='The Workbench — engine↔prose reconciliation workbench (R1).')
     ap.add_argument('--repo-root', default='.')
     ap.add_argument('--module', required=True, help='the module/subsystem to weave')
     ap.add_argument('--entity', default=None, help='(reserved) focus one primitive/action/effect')
-    ap.add_argument('--output-dir', default=None, help='write loom_<module>.md + cards json here')
+    ap.add_argument('--output-dir', default=None, help='write workbench_<module>.md + cards json here')
     args = ap.parse_args()
 
     contracts = os.path.join(args.repo_root, 'references', 'module_contracts.yaml')
@@ -255,12 +255,12 @@ def main():
         from pathlib import Path
         out = Path(args.output_dir)
         (out / 'data').mkdir(parents=True, exist_ok=True)
-        (out / f'loom_{args.module}.md').write_text(view, encoding='utf-8')
-        (out / 'data' / f'loom_{args.module}_cards.json').write_text(
+        (out / f'workbench_{args.module}.md').write_text(view, encoding='utf-8')
+        (out / 'data' / f'workbench_{args.module}_cards.json').write_text(
             json.dumps({'module': args.module, 'node_state': eng['node_state'],
                         'open': open_, 'resolved': resolved}, indent=1, sort_keys=True),
             encoding='utf-8')
-        print(f"[loom] {args.module}: {len(open_)} open cards, {len(resolved)} resolved -> {out}")
+        print(f"[workbench] {args.module}: {len(open_)} open cards, {len(resolved)} resolved -> {out}")
     else:
         print(view)
     return 0
