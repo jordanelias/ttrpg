@@ -33,7 +33,7 @@ Surface project weaknesses that hand-curation cannot reliably find: implied-but-
 Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
 - `references/canonical_sources.yaml` — systems list (controlled vocabulary)
-- `designs/architecture/complete_systems_reference.md` — NPC list, faction list
+- `systems/_architecture/complete_systems_reference.md` — NPC list, faction list (moved from the retired `designs/architecture/` 2026-07-19, ED-IN-0071 P4/P5)
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
 - `registers/patch_register_active.yaml` — PP affects: lists for G_pp

@@ -1,0 +1,29 @@
+{
+ "p1": {
+  "pass": false,
+  "foundation_cite_mean": 55.75,
+  "overall_cite_median": 89.0,
+  "foundation_tl_mean": 1.0,
+  "overall_tl_median": 0.0
+ },
+ "p2": {
+  "pass": false,
+  "conviction_degrees": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "mean": 0.0,
+  "cv": 999.0
+ },
+ "p3": {
+  "pass": true,
+  "n_cite_edges": 9582
+ },
+ "passed": 1,
+ "verdict": "FAILED"
+}

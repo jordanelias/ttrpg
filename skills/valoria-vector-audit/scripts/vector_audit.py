@@ -391,7 +391,9 @@ def _canonical_paths(root):
               'canon/03_canonical_timeline.md',
               'references/throughlines_meta.md',
               'references/throughlines_meta_infill.md',
-              'designs/architecture/complete_systems_reference.md'):
+              # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5); this reference doc
+              # moved to `systems/_architecture/` — the old path was silently `missing`.
+              'systems/_architecture/complete_systems_reference.md'):
         paths.add(p)
     return sorted(paths)
 
@@ -428,16 +430,17 @@ def extract_corpus(root):
     # capstone #6 (ED-IN-0056): the L0 corpus is a CURATED slice (`_canonical_paths`), not the
     # whole repo. Quantify what it structurally does NOT see so a green L0 result is never
     # misread as whole-repo coverage. (pathlib-only; skip VCS/cache dirs.)
+    # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5) — the old `designs_total_md`
+    # denominator now globs an empty tree, yielding a nonsensical "0.0% of 0" line.
+    # Post-retirement the honest denominator is the whole repo; the curated slice draws
+    # from `systems/`, `canon/`, `engine/params/`, `arcs/`, `references/`.
     _skip = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache'}
     all_md = [p for p in root.rglob('*.md')
               if not any(part in _skip for part in p.relative_to(root).parts)]
     total_md = len(all_md)
-    designs_md = sum(1 for p in all_md if p.relative_to(root).parts[:1] == ('designs',))
     manifest['coverage'] = {
         'design_files_scanned': len(design),
         'repo_total_md': total_md,
-        'designs_total_md': designs_md,
-        'pct_of_designs_md': round(100 * len(design) / designs_md, 1) if designs_md else 0.0,
         'pct_of_repo_md': round(100 * len(design) / total_md, 1) if total_md else 0.0,
     }
     return design, discourse, manifest
@@ -1053,11 +1056,11 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
           '',
           f"**Coverage disclosure (capstone #6):** this L0 layer is a CURATED slice — "
           f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
-          f"{_cov.get('pct_of_designs_md', '?')}% of the {_cov.get('designs_total_md', '?')} `.md` under "
-          f"`designs/`, and only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
+          f"only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
           f"{_cov.get('repo_total_md', '?')} `.md` files. Everything outside `_canonical_paths()` "
-          f"(most of `designs/`, all of `params/`/`sim/`/`tests/`/`canon/` prose) is structurally "
-          f"invisible to L0 — a green result here is NOT whole-repo coverage.",
+          f"(most of `systems/`, all of `engine/params/`/`sim/`/`tests/`/`canon/` prose not named in "
+          f"`canonical_sources.yaml`) is structurally invisible to L0 — a green result here is NOT "
+          f"whole-repo coverage.",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "
