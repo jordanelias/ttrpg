@@ -795,5 +795,96 @@
    "Scale Transitions": 1
   }
  },
- "pp": {}
+ "pp": {
+  "Conflict Architecture": {
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Defense": {
+   "Conflict Architecture": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Feldmark": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Himmelenger": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Player Agency": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Prosperity": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Settlement Adjacency": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Stillhelm": 1,
+   "Valorsplatz": 1
+  },
+  "Stillhelm": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Valorsplatz": 1
+  },
+  "Valorsplatz": {
+   "Conflict Architecture": 1,
+   "Defense": 1,
+   "Feldmark": 1,
+   "Himmelenger": 1,
+   "Player Agency": 1,
+   "Prosperity": 1,
+   "Settlement Adjacency": 1,
+   "Stillhelm": 1
+  }
+ }
 }

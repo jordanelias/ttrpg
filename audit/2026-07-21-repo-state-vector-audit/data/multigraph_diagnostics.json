@@ -9,6 +9,14 @@
    "pp": 0
   },
   {
+   "token": "Conflict Architecture",
+   "in_graphs": 3,
+   "cite": 108,
+   "throughline": 10,
+   "mu": 21,
+   "pp": 8
+  },
+  {
    "token": "Factions",
    "in_graphs": 3,
    "cite": 137,
@@ -463,7 +471,7 @@
    "cite_weight": 149
   }
  ],
- "C_notional_total": 9423,
+ "C_notional_total": 9356,
  "D_cascade_sinks": [
   {
    "terminal": "Territories",
@@ -518,11 +526,11 @@
    "chains": 139
   },
   {
-   "terminal": "Factions",
+   "terminal": "Order",
    "chains": 138
   },
   {
-   "terminal": "Order",
+   "terminal": "Factions",
    "chains": 138
   }
  ],

@@ -361,7 +361,10 @@ def banner_classify(content, path):
         return 'design'
     if re.search(r'\b(WORKPLAN|AUDIT|SESSION CLOSE|STRESS TEST)\b', head, re.I):
         return 'discourse'
-    if path.startswith('designs/audit/'):
+    # Audit-corpus path signal. `designs/audit/` retired 2026-07-19 (ED-IN-0071 P4/P5) →
+    # the audit corpus is now the top-level `audit/` primary; the old prefix is kept for
+    # historical/aliased refs (e.g. archived docs still cited as `designs/audit/…`).
+    if path.startswith('audit/') or path.startswith('designs/audit/'):
         if 'development_specification' in path:
             return 'design'
         return 'discourse'
@@ -398,23 +401,56 @@ def _canonical_paths(root):
     return sorted(paths)
 
 
+def _restructure_remap(root):
+    """Old→new path map from `references/restructure_ledger.md` (working tree, root-honoring).
+    Only the root-parameterized read is local — this pipeline is `--repo-root` driven while
+    broken_dependency_checker's loader is cwd-bound; the non-trivial longest-dir-prefix
+    RESOLUTION is reused from bdc below (CLAUDE.md §8, never re-derive a rule)."""
+    fp = root / 'references' / 'restructure_ledger.md'
+    if not fp.exists():
+        return {}
+    mapping = {}
+    for m in re.finditer(r'^\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|',
+                         fp.read_text(encoding='utf-8', errors='replace'), re.M):
+        mapping[m.group(1).strip()] = m.group(2).strip()
+    return mapping
+
+
+def _resolve_live(root, rel, remap):
+    """The path that actually EXISTS: literal `rel` if present, else its restructure-ledger
+    successor. Self-heals a moved input on the NEXT restructure with no code edit — the class
+    of bug behind this run's four hardcoded-path fixes (designs/→systems/, canon/→registers/).
+    Returns None only when neither the literal nor a mapped home exists (a true `missing`)."""
+    if (root / rel).exists():
+        return rel
+    mapped = None
+    try:
+        import broken_dependency_checker as _bdc  # the sanctioned old→new resolver (§8)
+        mapped = _bdc._resolve_remap(rel, remap)
+    except Exception:
+        mapped = remap.get(rel)  # graceful fallback: exact-row only, no dir-prefix
+    return mapped if (mapped and (root / mapped).exists()) else None
+
+
 def extract_corpus(root):
     """Return (design, discourse, manifest): {relpath: content} maps + a manifest dict.
     Banner-classifies each doc (design / discourse / excluded)."""
     design, discourse = {}, {}
     manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': []}
+    remap = _restructure_remap(root)
     for rel in _canonical_paths(root):
-        fp = root / rel
-        if not fp.exists():
+        live = _resolve_live(root, rel, remap)  # self-heal a moved input via the ledger
+        if live is None:
             manifest['missing'].append(rel)
             continue
+        fp = root / live
         try:
             content = fp.read_text(encoding='utf-8', errors='replace')
         except OSError:
             manifest['missing'].append(rel)
             continue
-        cls = banner_classify(content, rel)
-        rec = {'path': rel, 'chars': len(content)}
+        cls = banner_classify(content, live)
+        rec = {'path': live, 'chars': len(content)}
         if cls == 'excluded':
             manifest['excluded'].append(rel)
         elif cls == 'discourse':
@@ -721,7 +757,10 @@ def build_g_mu(rows, tokens):
 
 def build_g_pp(root, tokens):
     """Tokens whose primary docs co-appear in a patch's affects: list (§1 G_pp)."""
-    fp = root / 'canon' / 'patch_register_active.yaml'
+    # Moved out of `canon/` to `registers/` (ED-IN-0071 P0, 2026-07-16). The old
+    # `canon/` path silently didn't exist → G_pp loaded EMPTY (every `pp` degree a
+    # false 0), which corrupted the Mode A/B metadata-graph agreement counts.
+    fp = root / 'registers' / 'patch_register_active.yaml'
     doc_to_tokens = defaultdict(list)
     for name, m in tokens.items():
         if m['primary_doc']:
