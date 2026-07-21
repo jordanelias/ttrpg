@@ -1069,3 +1069,18 @@
 | Old path | New path |
 |---|---|
 | `references/mechanical_terms_index.md` | `deprecated/archives/mechanical_terms_index.md` |
+
+## references/ consolidation, workstream C (2026-07-21) — retire design_registry.yaml + valoria-atomizer
+
+<!-- design_registry.yaml: spent atomization-tracking ledger — every entry atomized:complete/
+     not_applicable, no functional reader (only a size-cap + the atomizer prose skill), canonical_v30/
+     params duplicated canonical_sources.yaml, skeleton/infill duplicated the co-file naming convention.
+     valoria-atomizer: prose skill whose work is done and whose priority-list pointed at retired designs/
+     paths; index/infill hygiene is now auto-enforced by ci_co_file_checker + the compliance size gate,
+     and valoria-chunker covers splitting a new oversized doc. Both retired (user decision, 2026-07-21).
+     Removed the design_registry size-cap from ci_register_size_check.py; repointed CLAUDE.md §9 routing. -->
+
+| Old path | New path |
+|---|---|
+| `references/design_registry.yaml` | `deprecated/references/design_registry.yaml` |
+| `skills/valoria-atomizer/` | `deprecated/skills/valoria-atomizer/` |

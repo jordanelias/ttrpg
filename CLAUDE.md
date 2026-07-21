@@ -293,7 +293,7 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Emergent-arc generation | `valoria-arc-generator` |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | "Where are we in the workplan?" / resume-with-options / progress board | `valoria-workplan-navigator` |
-| Index/infill doc hygiene | `valoria-atomizer` |
+| Index/infill doc hygiene | auto-enforced by `ci_co_file_checker` + the compliance size gate; split a new oversized doc with `valoria-chunker` (the `valoria-atomizer` skill + its `references/design_registry.yaml` work-list were **retired 2026-07-21** — atomization complete for every subsystem) |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
