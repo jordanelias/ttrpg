@@ -63,7 +63,6 @@ THRESHOLDS = {
     "tests/coverage_matrix.md":   COVERAGE_MATRIX_LIMIT,
     "arcs/registers/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
-    "references/design_registry.yaml":        8_000,
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
     # ── Previously-uncapped large registers (added 2026-07-20, ED-IN-0077 data-mgmt review) ──
     # Growth caps with headroom over current size; values_master is known-stale (do not grow it).

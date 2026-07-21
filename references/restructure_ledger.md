@@ -1009,6 +1009,81 @@
 | `designs/conviction_track/conviction_track_v30_index.md` | `systems/characters/conviction_track_v30_index.md` |
 | `designs/conviction_track/conviction_track_v30_infill.md` | `systems/characters/conviction_track_v30_infill.md` |
 
+## references/ consolidation (2026-07-21) — historical/stale residue → deprecated/, misfiled canonical docs → systems/overview/
+
+<!-- Low-risk consolidation sweep of references/: frozen/one-time/orphaned files relocated to deprecated/,
+     two misfiled CANONICAL design docs (ms_budget, wc_survival_spine) moved to their systems/ home,
+     two stale/superseded workplans to deprecated/archives/workplans/, and the stale/broken npc_registry.sql
+     export retired. Ratified retire-in-place snapshots (values_master, numeric_bounds_report,
+     silo_overlap_matrix, collation_report_summary — ED-IN-0029) were LEFT in place by design. Old
+     references/<...> refs resolve through the exact-path rows below. -->
+
+| Old path | New path |
+|---|---|
+| `references/silo_cohesion_analysis.md` | `deprecated/archives/silo_cohesion_analysis.md` |
+| `references/corpus_fix_manifest.md` | `deprecated/archives/corpus_fix_manifest.md` |
+| `references/valoria_cross_conversation_review.md` | `deprecated/archives/valoria_cross_conversation_review.md` |
+| `references/valoria_simulation_review.md` | `deprecated/archives/valoria_simulation_review.md` |
+| `references/proper_noun_candidates.yaml` | `deprecated/archives/proper_noun_candidates.yaml` |
+| `references/proper_noun_triage_decisions.yaml` | `deprecated/archives/proper_noun_triage_decisions.yaml` |
+| `references/proper_noun_triage_round2.yaml` | `deprecated/archives/proper_noun_triage_round2.yaml` |
+| `references/file_index_summary.md` | `deprecated/archives/file_index_summary.md` |
+| `references/propagation_map_archive_2026-05-10.md` | `deprecated/archives/propagation/propagation_map_archive_2026_05_10.md` |
+| `references/propagation_map_archive_2026-05-10b.md` | `deprecated/archives/propagation/propagation_map_archive_2026_05_10b.md` |
+| `references/propagation_log.md` | `deprecated/session_machinery/propagation_log.md` |
+| `references/subsystems/ci_subsystem.md` | `deprecated/references/subsystems/ci_subsystem.md` |
+| `references/subsystems/compliance_subsystem.md` | `deprecated/references/subsystems/compliance_subsystem.md` |
+| `references/subsystems/freshness_subsystem.md` | `deprecated/references/subsystems/freshness_subsystem.md` |
+| `references/npc_registry.sql` | `deprecated/references/npc_registry.sql` |
+| `references/ms_budget.md` | `systems/overview/ms_budget.md` |
+| `references/wc_survival_spine.md` | `systems/overview/wc_survival_spine.md` |
+| `references/mass_battle_redesign_workplan_v1.md` | `deprecated/archives/workplans/mass_battle_redesign_workplan_v1.md` |
+| `references/simulation_workplan_v1.md` | `deprecated/archives/workplans/simulation_workplan_v1.md` |
+
+## references/ consolidation, workstream A (2026-07-21) — orphans + format cleanup
+
+<!-- r2 duplicate pair retired in favor of the authoritative systems/_architecture/ copies
+     (closes the 2026-07-01 duplicate-home decision-queue item); superseded/orphaned refs
+     and the dead file-index feature (valoria_index.sql + tests/index/, generator already in
+     deprecated/skills/) retired. -->
+
+| Old path | New path |
+|---|---|
+| `references/valoria_canonical_definitive_r2.md` | `deprecated/archives/valoria_canonical_definitive_r2.md` |
+| `references/valoria_complete_systems_r2.md` | `deprecated/archives/valoria_complete_systems_r2.md` |
+| `references/throughline_registry.md` | `deprecated/archives/throughline_registry.md` |
+| `references/effort-guide.md` | `deprecated/references/effort-guide.md` |
+| `references/ecosystem_versions.yaml` | `deprecated/references/ecosystem_versions.yaml` |
+| `references/valoria_index.sql` | `deprecated/references/valoria_index.sql` |
+| `tests/index/` | `deprecated/tests/index/` |
+
+## references/ consolidation, workstream B (2026-07-21) — vocab cluster
+
+<!-- mechanical_terms_index.md: frozen 1746-line diagnostic superset of glossary.md, 0 functional
+     readers, dead regenerator (valoria_collator.py). Retired. Its PROVENANCE_PATHS exemption in
+     validate_ed_citations.py removed (deprecated/ is auto-skipped). name_collision_database.yaml
+     KEPT: it is the distinct collision/silo layer (not a duplicate of the 4 generated vocab views),
+     hand-maintained and consumed by build_lexicon.py — folding a frozen artifact into the
+     regenerated vocab_source pipeline was assessed and rejected as architecturally backwards. -->
+
+| Old path | New path |
+|---|---|
+| `references/mechanical_terms_index.md` | `deprecated/archives/mechanical_terms_index.md` |
+
+## references/ consolidation, workstream C (2026-07-21) — retire design_registry.yaml + valoria-atomizer
+
+<!-- design_registry.yaml: spent atomization-tracking ledger — every entry atomized:complete/
+     not_applicable, no functional reader (only a size-cap + the atomizer prose skill), canonical_v30/
+     params duplicated canonical_sources.yaml, skeleton/infill duplicated the co-file naming convention.
+     valoria-atomizer: prose skill whose work is done and whose priority-list pointed at retired designs/
+     paths; index/infill hygiene is now auto-enforced by ci_co_file_checker + the compliance size gate,
+     and valoria-chunker covers splitting a new oversized doc. Both retired (user decision, 2026-07-21).
+     Removed the design_registry size-cap from ci_register_size_check.py; repointed CLAUDE.md §9 routing. -->
+
+| Old path | New path |
+|---|---|
+| `references/design_registry.yaml` | `deprecated/references/design_registry.yaml` |
+| `skills/valoria-atomizer/` | `deprecated/skills/valoria-atomizer/` |
 
 ## 2026-07-21 — sim/ hollow-out: residual sim modules → systems/ + engine/ (ED-IN-0071 P4 continuation)
 

@@ -4,14 +4,14 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 93
+  total: 99
   by_kind:
-    tool: 78
+    tool: 84
     skill-script: 8
     hook: 4
     workflow: 3
   by_role:
-    A:writes-artifact: 14
+    A:writes-artifact: 20
     B:stdout-or-gate: 39
     D:import-only-library: 37
     workflow: 3
@@ -85,7 +85,7 @@ entries:
   uses_cli_args: false
   invoked_by:
   - ci:valoria-ci.yml
-  - skill:valoria-atomizer
+  - skill:valoria-editorial-register
   - tool:imported
   imported_internally: true
   orphaned: false
@@ -176,7 +176,6 @@ entries:
   uses_cli_args: true
   invoked_by:
   - ci:valoria-ci.yml
-  - skill:valoria-atomizer
   imported_internally: false
   orphaned: false
   prune_candidate: false
@@ -214,6 +213,30 @@ entries:
   role: D:import-only-library
   imports:
   - ci_common
+- path: tools/ci_formula_prose_check.py
+  kind: tool
+  stem: ci_formula_prose_check
+  writes:
+  - dest: formula_prose_register.md
+    format: markdown
+    mode: write
+  - dest: formula_prose.json
+    format: json
+    mode: write
+  - dest: <stream>
+    format: json
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:valoria-ci.yml
+  imported_internally: false
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports:
+  - yaml
 - path: tools/ci_generation_consistency.py
   kind: tool
   stem: ci_generation_consistency
@@ -455,6 +478,28 @@ entries:
   - audit_staleness
   - workplan_status
   - yaml
+- path: tools/definitions_store.py
+  kind: tool
+  stem: definitions_store
+  writes:
+  - dest: <stream>
+    format: yaml
+    mode: write
+  - dest: definitions.yaml
+    format: yaml
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:dashboard.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports:
+  - yaml
 - path: tools/descriptor_registry.py
   kind: tool
   stem: descriptor_registry
@@ -502,6 +547,23 @@ entries:
   prune_candidate: false
   role: B:stdout-or-gate
   imports: []
+- path: tools/export_sim_params.py
+  kind: tool
+  stem: export_sim_params
+  writes:
+  - dest: sim_params.json
+    format: json
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports: []
 - path: tools/freshness_gate.py
   kind: tool
   stem: freshness_gate
@@ -514,7 +576,6 @@ entries:
   uses_cli_args: true
   invoked_by:
   - ci:valoria-ci.yml
-  - skill:valoria-atomizer
   imported_internally: false
   orphaned: false
   prune_candidate: false
@@ -565,6 +626,24 @@ entries:
   orphaned: false
   prune_candidate: false
   role: B:stdout-or-gate
+  imports:
+  - yaml
+- path: tools/link_values_pointers.py
+  kind: tool
+  stem: link_values_pointers
+  writes:
+  - dest: value_pointer_links.json
+    format: json
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
   imports:
   - yaml
 - path: tools/mechanics_index_gen.py
@@ -738,7 +817,6 @@ entries:
   uses_cli_args: true
   invoked_by:
   - ci:valoria-ci.yml
-  - skill:valoria-atomizer
   imported_internally: false
   orphaned: false
   prune_candidate: false
@@ -776,6 +854,28 @@ entries:
   role: D:import-only-library
   imports:
   - names
+- path: tools/review_core.py
+  kind: tool
+  stem: review_core
+  writes:
+  - dest: review_state.json
+    format: json
+    mode: write
+  - dest: <js>
+    format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:dashboard.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports:
+  - yaml
 - path: tools/session_handoff_reminder.py
   kind: tool
   stem: session_handoff_reminder
@@ -857,7 +957,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -926,7 +1026,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -939,7 +1039,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -952,7 +1052,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -979,7 +1079,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1006,7 +1106,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1033,7 +1133,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1047,7 +1147,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1060,7 +1160,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1073,7 +1173,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1086,7 +1186,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1099,7 +1199,7 @@ entries:
   has_cli: false
   uses_cli_args: false
   invoked_by: []
-  imported_internally: true
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: D:import-only-library
@@ -1242,6 +1342,30 @@ entries:
   role: B:stdout-or-gate
   imports:
   - names
+- path: tools/vocab_store.py
+  kind: tool
+  stem: vocab_store
+  writes:
+  - dest: vocab_source.yaml
+    format: yaml
+    mode: write
+  - dest: <stream>
+    format: yaml
+    mode: write
+  - dest: <path>
+    format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports:
+  - yaml
 - path: tools/wiring_map_check.py
   kind: tool
   stem: wiring_map_check
@@ -1473,6 +1597,7 @@ entries:
   - tools/ci_audit_registry_check.py
   - tools/ci_co_file_checker.py
   - tools/ci_editorial_checker.py
+  - tools/ci_formula_prose_check.py
   - tools/ci_generation_consistency.py
   - tools/ci_hooks_verifier.py
   - tools/ci_module_shape_check.py
