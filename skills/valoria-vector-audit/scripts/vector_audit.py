@@ -80,6 +80,17 @@ CLASSES = {
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
             'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
+    # The performable ACTION vocabulary (verbs). No structured registry exists yet — the
+    # `domain_actions` home is the open M1 blocker (ED-FA-0002); until it is authored these
+    # are enumerated ONLY in prose (module_contracts.yaml's ED-FA-0006 verb note +
+    # wiring_manifest.yaml "conquest/muster/govern/uniques"). Curated here from that
+    # enumeration, exactly as the other seed classes are registry-backed hand lists.
+    # Replace with the authored registry once ED-FA-0002 lands.
+    'action': ['Muster', 'March', 'Fortify', 'Blockade', 'Conquest', 'Govern', 'Trade',
+               'Subsidy', 'Treaty', 'Diplomacy', 'Spy', 'Investigate', 'Counter-Intelligence',
+               'Censure', 'Embargo', 'Outlawry', 'Excommunication', 'Active Inquisition',
+               'Church Seizure', 'Recognition Challenge', 'Succession Endorsement',
+               'War Authorisation', 'Piety Spread', 'Community Organising', 'Martial Governance'],
 }
 
 
@@ -720,28 +731,88 @@ def derive_tokens(root):
 
     _ni_entries = (names.entries(path=str(root / 'references' / 'names_index.yaml')) if names
                    else (_yaml(root, 'references/names_index.yaml').get('entries', {}) or {}))
+    # Expansive token universe (Jordan 2026-07-21): include the PRIMITIVE / stat / definition
+    # categories too (attribute, aggregate, faction_stat, settlement_stat, mass_combat_stat,
+    # clock, substrate), not just proper_noun — every named definition is a token.
+    _PRIMITIVE_CATS = {'attribute', 'aggregate', 'faction_stat', 'settlement_stat',
+                       'mass_combat_stat', 'clock', 'substrate'}
     for e in _ni_entries.values():
-        if not isinstance(e, dict) or e.get('category') == 'attribute':
+        if not isinstance(e, dict):
             continue
+        cat = e.get('category')
         label, abbr = _strip_display(e.get('canonical'))
         pats = _pattern_for(label, abbr) + [re.escape(a) for a in (e.get('aliases') or []) if len(a) >= 4]
-        add(label, pats, e.get('category') or 'mechanic', 'derived:names_index')
+        scale = 'primitive' if cat in _PRIMITIVE_CATS else (cat or 'mechanic')
+        add(label, pats, scale, 'derived:names_index')
 
     pn = _yaml(root, 'references/proper_noun_registry.yaml')
     for cat, scale in (('characters', 'npc'), ('factions', 'faction'),
-                       ('subfactions', 'faction'), ('organizations', 'faction')):
+                       ('subfactions', 'faction'), ('organizations', 'faction'),
+                       # place names, peoples, concepts, historical figures — the full ontology
+                       ('territories', 'place'), ('realms', 'place'), ('regions', 'place'),
+                       ('peoples', 'people'), ('concepts', 'concept')):
         grp = pn.get(cat, {}) or {}
         if not isinstance(grp, dict):
             continue
         for item in grp.values():
             if not isinstance(item, dict):
                 continue
-            occ = item.get('occurrences_count')
-            if isinstance(occ, int) and occ < 5:  # drop barely-present entities (noise)
-                continue
+            # No occurrence floor (Jordan 2026-07-21: "ensure ALL NPCs and movements and
+            # concepts and canon stuff"). Every registered named entity is a token, however
+            # rarely mentioned — a rarely-cited canon entity is a finding, not noise to drop.
             label, _ = _strip_display(item.get('canonical'))
             pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
             add(label, pats, scale, 'derived:proper_noun')
+
+    # ── PRIMITIVES / values from descriptor_registry.yaml (attributes + stat rosters) ──
+    dr = _yaml(root, 'references/descriptor_registry.yaml')
+    prim_rows = []
+    attrs = dr.get('attributes', {})
+    if isinstance(attrs, dict):
+        for grp in ('body', 'mind', 'social'):
+            g = attrs.get(grp, {})
+            if isinstance(g, dict) and isinstance(g.get('entries'), list):
+                prim_rows += g['entries']
+    for sect in ('aggregates', 'practitioner_stats', 'territory_stats',
+                 'faction_stats', 'settlement_stats'):
+        v = dr.get(sect, {})
+        e = v.get('entries') if isinstance(v, dict) else None
+        if isinstance(e, list):
+            prim_rows += e
+    for row in prim_rows:
+        if not isinstance(row, dict) or not row.get('name'):
+            continue
+        key = row.get('key')
+        pats = _pattern_for(row['name']) + ([re.escape(key)] if key else []) \
+            + [re.escape(a) for a in (row.get('aliases') or []) if len(a) >= 4]
+        add(row['name'], pats, 'primitive', 'derived:descriptor_registry')
+
+    # ── MECHANICS (modules), KEYS (schema names), VALUES (derivations) from module_contracts ──
+    mc = _yaml(root, 'references/module_contracts.yaml')
+    keys_seen = set()
+    for m in (mc.get('modules', []) or []):
+        if not isinstance(m, dict):
+            continue
+        mod = m.get('module')
+        if mod:
+            add(_humanize_system(mod), _pattern_for(_humanize_system(mod)) + [re.escape(mod)],
+                'mechanic', 'derived:module_contracts')
+        for e in (m.get('emits') or []) + (m.get('consumes') or []):
+            if isinstance(e, dict) and e.get('type') and e['type'] != '*':
+                keys_seen.add(e['type'])
+        for d in (m.get('derivations') or []):
+            if isinstance(d, dict) and d.get('output'):
+                for out in (s.strip() for s in re.split(r'\s*/\s*', d['output'])):
+                    if out:
+                        add(out, _pattern_for(out), 'value', 'derived:module_contracts')
+    for ktype in sorted(keys_seen):
+        # a Key like `scene.gossip` — match the identifier and its humanized tail ("gossip")
+        tail = _humanize_system(ktype.split('.')[-1])
+        add(f'Key: {ktype}', [re.escape(ktype)] + _pattern_for(tail), 'key', 'derived:module_contracts')
+
+    # ── ACTIONS (performable verbs) — "anything that can be performed in a system is a token" ──
+    for act in CLASSES['action']:
+        add(act, _pattern_for(act), 'action', 'seed:action')
 
     # Coreference consolidation: unify every surface form of one named entity into a
     # single token (registry aliases + proper-noun substring). "Just search Baralta."
