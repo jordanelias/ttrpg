@@ -35,8 +35,9 @@ def test_all_proposals_docs_surface_by_location():
     # 13 with the 2026-07-17 cast-and-culture-expansion companion alongside them;
     # 14 with the 2026-07-18 precedent-to-mechanism design brief;
     # 16 after pessimist_ners_audit_v1.md and grounded_event_card_deck_v1.md
-    # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops).
-    assert len(props) == 16
+    # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops);
+    # 17 with the 2026-07-21 observatory-holonic-refactor proposal.
+    assert len(props) == 17
 
 
 def test_all_audit_verdicts_present():
