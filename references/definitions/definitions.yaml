@@ -5,7 +5,7 @@
 # here: `python tools/definitions_store.py --get <key>`. Drift-locked: `--check` asserts this equals
 # a fresh rebuild and that name fields agree across the source registers (extends ci_names_consistency).
 # `in_registers` records provenance; `gap` flags a key present in only one register (surfaced, not fixed).
-count: 94
+count: 105
 definitions:
   agg.body:
     canonical: Body
@@ -148,6 +148,48 @@ definitions:
     - names_index
     legacy:
     - Rendering Stability
+  conv.autonomy:
+    canonical: Autonomy
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.continuity:
+    canonical: Continuity
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.equity:
+    canonical: Equity
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.faith:
+    canonical: Faith
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.order:
+    canonical: Order
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.precedent:
+    canonical: Precedent
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.reason:
+    canonical: Reason
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
   fac.influence:
     canonical: Influence
     category: faction_stat
@@ -212,6 +254,30 @@ definitions:
     - names_index
     legacy:
     - Combat Power
+  ppt.authority:
+    canonical: Authority
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.consequence:
+    canonical: Consequence
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.evidence:
+    canonical: Evidence
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.loyalty:
+    canonical: Loyalty
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
   prac.thread_sensitivity:
     aliases:
     - TS
