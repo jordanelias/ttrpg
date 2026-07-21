@@ -1039,3 +1039,20 @@
 | `references/wc_survival_spine.md` | `systems/overview/wc_survival_spine.md` |
 | `references/mass_battle_redesign_workplan_v1.md` | `deprecated/archives/workplans/mass_battle_redesign_workplan_v1.md` |
 | `references/simulation_workplan_v1.md` | `deprecated/archives/workplans/simulation_workplan_v1.md` |
+
+## references/ consolidation, workstream A (2026-07-21) — orphans + format cleanup
+
+<!-- r2 duplicate pair retired in favor of the authoritative systems/_architecture/ copies
+     (closes the 2026-07-01 duplicate-home decision-queue item); superseded/orphaned refs
+     and the dead file-index feature (valoria_index.sql + tests/index/, generator already in
+     deprecated/skills/) retired. -->
+
+| Old path | New path |
+|---|---|
+| `references/valoria_canonical_definitive_r2.md` | `deprecated/archives/valoria_canonical_definitive_r2.md` |
+| `references/valoria_complete_systems_r2.md` | `deprecated/archives/valoria_complete_systems_r2.md` |
+| `references/throughline_registry.md` | `deprecated/archives/throughline_registry.md` |
+| `references/effort-guide.md` | `deprecated/references/effort-guide.md` |
+| `references/ecosystem_versions.yaml` | `deprecated/references/ecosystem_versions.yaml` |
+| `references/valoria_index.sql` | `deprecated/references/valoria_index.sql` |
+| `tests/index/` | `deprecated/tests/index/` |

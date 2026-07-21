@@ -8,9 +8,9 @@
 > d+σ resolver: its Combat Pool rows (`(Agi×2) + Hist + 3`) and the cross-system Pool
 > comparison row are **no longer canon** — combat's pool is `max(5, History + 6)`,
 > Agility-independent (ED-901, ED-900/904; head `designs/scene/combat_engine_v1/`). Resolve
-> combat numbers via `CURRENT.md`. A near-duplicate copy exists at
-> `references/valoria_canonical_definitive_r2.md` (duplicate-home resolution queued for
-> Jordan — see the 2026-07-01 decision queue).
+> combat numbers via `CURRENT.md`. **Duplicate-home resolved 2026-07-21:** this file is now the
+> sole home; the former `references/valoria_canonical_definitive_r2.md` copy was retired to
+> `deprecated/archives/` (closes the 2026-07-01 decision-queue duplicate item).
 
 ---
 
