@@ -95,6 +95,50 @@ def test_kind_namespacing_prevents_merge():
     assert mods and qtys and not (mods & qtys)
 
 
+def test_impact_query_reaches_and_flags_surprising():
+    """The full-token impact query does UNDIRECTED transitive reachability and flags a far
+    (>=3 hop) cross-subsystem hit as surprising, with the path."""
+    # A(sys) - B(sys) - C(key) - D(mechanic): D is 3 hops from A and a different scale.
+    nodes = {n: {'kind': k, 'name': n} for n, k in
+             [('A', 'system'), ('B', 'system'), ('C', 'key'), ('D', 'mechanic')]}
+    edges = [{'src': 'A', 'dst': 'B', 'type': 'cites'},
+             {'src': 'B', 'dst': 'C', 'type': 'cites'},
+             {'src': 'C', 'dst': 'D', 'type': 'cites'}]
+    from collections import defaultdict
+    adj, radj = defaultdict(list), defaultdict(list)
+    for i, e in enumerate(edges):
+        adj[e['src']].append(i)
+        radj[e['dst']].append(i)
+    g = {'nodes': nodes, 'edges': edges, 'adj': dict(adj), 'radj': dict(radj)}
+    r = ra.impact_query(g, 'A', depth=5)
+    assert r['reached_total'] == 3
+    surp = {h['node'] for h in r['surprising']}
+    assert 'D' in surp                                  # far + cross-scale
+    d = next(h for h in r['surprising'] if h['node'] == 'D')
+    assert d['dist'] == 3 and d['path'] == ['A', 'B', 'C', 'D']
+    # undirected: querying D also reaches A
+    assert any(h['node'] == 'A' for h in ra.impact_query(g, 'D', depth=5)['nearest']
+               ) or ra.impact_query(g, 'D', depth=5)['reached_total'] == 3
+
+
+def test_load_vector_graph_from_exported_json(tmp_path):
+    """load_vector_graph builds a traversable graph from a vector_audit run's data/*.json."""
+    import json
+    data = tmp_path / 'run' / 'data'
+    data.mkdir(parents=True)
+    (data / 'g_cite.json').write_text(json.dumps({'Clocks': {'Victory': 4}, 'Victory': {}}))
+    (data / 'g_metadata.json').write_text(json.dumps({'throughline': {'Clocks': {'Threadwork': 1}},
+                                                      'mu': {}, 'pp': {}}))
+    (data / 'tokens.json').write_text(json.dumps({'tokens': {
+        'Clocks': {'scale': 'system'}, 'Victory': {'scale': 'system'},
+        'Threadwork': {'scale': 'system'}}}))
+    g = ra.load_vector_graph(str(tmp_path / 'run'))
+    assert 'Clocks' in g['nodes'] and g['nodes']['Clocks']['kind'] == 'system'
+    types = {e['type'] for e in g['edges']}
+    assert 'cites' in types and 'throughline' in types
+    assert ra.impact_query(g, 'Clocks', depth=3)['reached_total'] >= 2
+
+
 def test_vector_overlay_accepts_real_degrees_shape(tmp_path):
     """attach_vector_degrees must consume vector_audit's ACTUAL degrees.json, whose
     axis-major keys are cite/throughline/mu/pp/tfidf (NOT tl) — the axis-key mismatch

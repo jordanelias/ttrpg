@@ -273,7 +273,13 @@ PP entry references the audit folder; ED entry describes what was found.
   quantized coordinate travel on one node. Stdlib + PyYAML only, working-tree only, deterministic.
   **Measures, never gates.** Invoke: `python3 scripts/ripple_audit.py --repo-root . --output-dir <run>`
   (→ `ripple_register.md` + `data/ripple_graph.json`, the machine-hookable surface other tooling reads),
-  or ad-hoc `--node <X> --direction {up,down,both} --depth N --layers <slice>`. Tests:
+  or ad-hoc `--node <X> --direction {up,down,both} --depth N --layers <slice>`. **Full-token
+  impact query (2026-07-21):** `--vector-run <dir> --impact <token>` loads a vector_audit run's
+  exported full-token `G_cite`+metadata graph and does UNDIRECTED transitive reachability —
+  "tug anything, see what moves" — ranking every reachable token by graph distance and flagging
+  the far (≥3 hop) cross-subsystem *surprising* hits with their path (e.g. `Clocks → Factions →
+  Key: mechanical.project_advanced → Game Director`). This unifies the vector audit's QUANTIZED
+  graph with ripple's directional reachability into one query. Tests:
   `tests/valoria/test_ripple_audit.py` (§8 reuse-by-identity, bidirectionality, depth/slice, cycle-safety).
   **v1 scope:** L1+L2 (mechanic+value+Key scales). Documented extension points: fold in `vector_audit`'s
   L0 doc-citation graph (design scale), `pointer_audit`'s G_pointer (identifier→key), and `gen_audit`'s

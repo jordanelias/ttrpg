@@ -269,6 +269,105 @@ def ripple(graph, start, direction='both', depth=None, layers=None):
     return res
 
 
+# ─────────────── FULL-TOKEN IMPACT QUERY (vector G_cite + metadata) ──────────
+# "Tug anything, see what moves." Unifies the vector audit's QUANTIZED full-token graph
+# (all 276 tokens: mechanics, Keys, primitives, actions, places, …) with ripple's directional
+# reachability, so a change to A can be traced to distant/surprising j,q — not just neighbours.
+
+def load_vector_graph(run_dir):
+    """Build a ripple-style graph from a vector_audit run's exported data/*.json:
+    nodes = every token (kind = its scale), edges = the citation graph (`cites`) + the three
+    metadata layers (`throughline`/`mu`/`pp`). Node ids are the bare token names."""
+    data = os.path.join(run_dir, 'data')
+    with open(os.path.join(data, 'g_cite.json'), encoding='utf-8') as fh:
+        g_cite = json.load(fh)
+    try:
+        with open(os.path.join(data, 'g_metadata.json'), encoding='utf-8') as fh:
+            g_meta = json.load(fh)
+    except OSError:
+        g_meta = {}
+    try:
+        with open(os.path.join(data, 'tokens.json'), encoding='utf-8') as fh:
+            toks = json.load(fh).get('tokens', {})
+    except OSError:
+        toks = {}
+    nodes = {}
+
+    def _n(name):
+        if name not in nodes:
+            nodes[name] = {'kind': (toks.get(name) or {}).get('scale', '?'), 'name': name}
+        return name
+
+    edges = []
+    for a, nbrs in g_cite.items():
+        for b, w in (nbrs or {}).items():
+            edges.append({'src': _n(a), 'dst': _n(b), 'type': 'cites',
+                          'provenance': f'cite×{w}', 'notional': False, 'weight': w})
+    for layer in ('throughline', 'mu', 'pp'):
+        for a, nbrs in (g_meta.get(layer) or {}).items():
+            for b, w in (nbrs or {}).items():
+                edges.append({'src': _n(a), 'dst': _n(b), 'type': layer,
+                              'provenance': f'{layer}×{w}', 'notional': False})
+    adj, radj = defaultdict(list), defaultdict(list)
+    for i, e in enumerate(edges):
+        adj[e['src']].append(i)
+        radj[e['dst']].append(i)
+    return {'nodes': nodes, 'edges': edges, 'adj': dict(adj), 'radj': dict(radj)}
+
+
+def impact_query(graph, start, depth=6, top=40):
+    """UNDIRECTED transitive reachability from `start` over the full token graph — "what
+    moves if I tug this". Returns every reachable token with its shortest graph distance,
+    the path, and a SURPRISE flag: reachable but in a DIFFERENT scale/subsystem AND ≥3 hops
+    away (a far, cross-subsystem link no one would predict), or reached only through a single
+    non-obvious intermediary."""
+    start = resolve_node(graph, start)
+    if start is None:
+        return {'error': 'unknown token'}
+    edges = graph['edges']
+    seen = {start: (0, None, None)}  # node -> (dist, parent, via_edge_type)
+    q = deque([start])
+    while q:
+        cur = q.popleft()
+        d = seen[cur][0]
+        if d >= depth:
+            continue
+        # undirected: both out-edges and in-edges
+        for ei in graph['adj'].get(cur, ()):
+            nxt = edges[ei]['dst']
+            if nxt not in seen:
+                seen[nxt] = (d + 1, cur, edges[ei]['type'])
+                q.append(nxt)
+        for ei in graph['radj'].get(cur, ()):
+            nxt = edges[ei]['src']
+            if nxt not in seen:
+                seen[nxt] = (d + 1, cur, edges[ei]['type'])
+                q.append(nxt)
+
+    def _path(n):
+        out = []
+        while n is not None:
+            out.append(n)
+            n = seen[n][1]
+        return list(reversed(out))
+
+    src_scale = graph['nodes'][start]['kind']
+    reached = []
+    for n, (dist, _parent, via) in seen.items():
+        if n == start:
+            continue
+        scale = graph['nodes'][n]['kind']
+        cross = scale != src_scale
+        reached.append({'node': n, 'scale': scale, 'dist': dist, 'via': via,
+                        'cross_scale': cross, 'surprising': cross and dist >= 3,
+                        'path': _path(n)})
+    reached.sort(key=lambda r: (not r['surprising'], -r['dist'], r['node']))
+    surprising = [r for r in reached if r['surprising']]
+    return {'start': start, 'scale': src_scale, 'reached_total': len(reached),
+            'surprising_total': len(surprising), 'surprising': surprising[:top],
+            'nearest': sorted(reached, key=lambda r: (r['dist'], r['node']))[:12]}
+
+
 # ──────────────────────────── QUANTIZED OVERLAY ─────────────────────────────
 
 def attach_vector_degrees(graph, vector_run_dir):
@@ -435,6 +534,28 @@ def write_register(graph, out_dir, vector_hits=0):
 
 # ──────────────────────────── CLI ───────────────────────────────────────────
 
+def _print_impact(vg, token, depth):
+    r = impact_query(vg, token, depth=depth)
+    if 'error' in r:
+        print(f'unknown token: {token!r}')
+        nl = token.lower()
+        near = sorted(n for n in vg['nodes'] if nl in n.lower())[:10]
+        if near:
+            print('did you mean:', ', '.join(near))
+        return 1
+    print(f"# impact({token!r}) over the full token graph — scale={r['scale']}; reached "
+          f"{r['reached_total']} tokens, {r['surprising_total']} SURPRISING (≥3 hops + cross-subsystem)")
+    print("\n## nearest — immediate blast radius:")
+    for h in r['nearest']:
+        print(f"  d{h['dist']}  {h['node']} ({h['scale']})  via {h['via']}")
+    print(f"\n## SURPRISING — tug {token!r} and these move via a far, non-obvious path:")
+    for h in r['surprising']:
+        print(f"  d{h['dist']}  {h['node']} ({h['scale']})   {'  →  '.join(h['path'])}")
+    if not r['surprising']:
+        print("  (none — nothing distant-and-cross-subsystem within depth)")
+    return 0
+
+
 def _print_query(graph, node, direction, depth, layers):
     r = ripple(graph, node, direction=direction, depth=depth, layers=layers)
     if 'error' in r:
@@ -471,8 +592,19 @@ def main():
                          "emits_consumes,derives). Use 'all' or add produces,reads for the "
                          "coarse cross-scale bridges.")
     ap.add_argument('--vector-run', default=None,
-                    help='a vector_audit run dir to overlay quantized degrees from')
+                    help='a vector_audit run dir: overlays quantized degrees, and is the graph '
+                         'source for --impact')
+    ap.add_argument('--impact', default=None,
+                    help='full-token change-impact query: given a token, rank every reachable '
+                         'token by graph distance over the vector G_cite+metadata graph and flag '
+                         'the far/cross-subsystem "surprising" ones. Requires --vector-run.')
     args = ap.parse_args()
+
+    # --impact operates on the vector run's exported full-token graph, not the contract graph.
+    if args.impact:
+        if not args.vector_run:
+            ap.error('--impact requires --vector-run <a vector_audit run dir> (its exported g_cite)')
+        return _print_impact(load_vector_graph(args.vector_run), args.impact, args.depth or 6)
 
     contracts = os.path.join(args.repo_root, 'references', 'module_contracts.yaml')
     if not os.path.isfile(contracts):
