@@ -51,6 +51,7 @@ status: EXTRACTED_STAGE1  # campaign_architecture stub remains; personal_combat 
 modules:
 
   - module: faction_state
+    aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
     doc: systems/factions/faction_behavior_v30.md
     scales: [provincial]
@@ -103,6 +104,7 @@ modules:
       - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
 
   - module: npc_behavior
+    aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
     doc: systems/npcs/npc_behavior_v30.md
     scales: [personal, scene]
@@ -205,6 +207,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: piety_track
+    aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
     doc: designs/personal/conviction_track_v1.md
     scales: [personal]
@@ -305,6 +308,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: fieldwork_knots
+    aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
     doc: systems/fieldwork/knots_v30.md
     scales: [personal, scene]
@@ -459,6 +463,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: mass_battle
+    aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: systems/mass_battle/mass_battle_v30.md
     scales: [scene]
@@ -480,6 +485,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: domain_actions
+    aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "da_framework"   # Key Type Registry vocabulary
     doc: null
     scales: [provincial]

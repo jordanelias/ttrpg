@@ -193,10 +193,12 @@ def _surface_forms(term):
     return forms
 
 
-def _positions(text, term):
+def _positions(text, term, extra_surfaces=()):
     """Start offsets of every accepted surface form of `term` in `text` (word-boundary; literal
-    case-sensitive, humanized case-insensitive). Positions let articulation() require PROXIMITY
-    for the top state, so a lone word can never by itself manufacture a co-mention."""
+    case-sensitive, humanized case-insensitive). `extra_surfaces` are additional prose forms (a
+    module's declared display-aliases from module_contracts) matched case-insensitively — a
+    POINTER into the engine's own module registry, not a guess. Positions let articulation()
+    require PROXIMITY for the top state, so a lone word can never by itself manufacture a co-mention."""
     if not text or not term:
         return []
     pos = []
@@ -205,6 +207,10 @@ def _positions(text, term):
             continue
         for mm in re.finditer(r'(?<!\w)' + re.escape(surface) + r'(?!\w)', text, re.I if ci else 0):
             pos.append(mm.start())
+    for surf in extra_surfaces:
+        if surf:
+            for mm in re.finditer(r'(?<!\w)' + re.escape(surf) + r'(?!\w)', text, re.I):
+                pos.append(mm.start())
     return sorted(set(pos))
 
 
@@ -212,18 +218,20 @@ def _mentions(text, term):
     return bool(_positions(text, term))
 
 
-def articulation(text, counterpart, relationship):
+def articulation(text, counterpart, relationship, cp_aliases=()):
     """How prose expresses an engine relationship: co-mentioned / mentioned / silent.
     Heuristic co-occurrence, confidence-tagged — NOT semantic link detection:
       'co-mentioned' — counterpart AND relationship term appear within ~PROX chars (a lead the
                        doc may state the link);
       'mentioned'    — the counterpart appears, but the relationship term is absent or far;
       'silent'       — the counterpart is absent from the doc.
-    Precise articulation detection needs the program §3 canonical-identifier registry — until
-    then these are leads, not verdicts (see render()'s caveat)."""
+    `cp_aliases` are the counterpart module's declared display-names (module_contracts), matched
+    alongside its id so a doc that refers to it by its prose name still registers. Precise
+    articulation detection needs the program §3 canonical-identifier registry — until then these
+    are leads, not verdicts (see render()'s caveat)."""
     if text is None:
         return {'state': 'silent', 'confidence': 'n/a (no doc)'}
-    cp = _positions(text, counterpart)
+    cp = _positions(text, counterpart, cp_aliases)
     if not cp:
         return {'state': 'silent', 'confidence': 'medium (endpoint absent from doc)'}
     # a self-relationship (dangling emit: the key IS the counterpart) has no second endpoint to
@@ -277,19 +285,22 @@ def weave(root, module):
         cards.append({'id': cid, 'class': klass, 'module': module, 'counterpart': counterpart,
                       'relationship': rel, 'prose': art, 'shadow': shadow, 'question': q})
 
-    def edge(engine_str, counterpart, rel_label, rel_term, kind, edge_notional=False):
-        art = articulation(text, counterpart, rel_term)
+    def edge(engine_str, counterpart, rel_label, rel_term, kind, edge_notional=False, cp_aliases=()):
+        art = articulation(text, counterpart, rel_term, cp_aliases=cp_aliases)
         if engine_str not in seen_rows:                       # dedup identical rows (Finding 6)
             seen_rows.add(engine_str)
             rows.append({'engine': engine_str, 'state': art['state']})
         if art['state'] != 'co-mentioned':
             add(kind, counterpart, rel_label, art, edge_notional=edge_notional)
 
+    def _ma(module):                                          # a module's declared display-aliases
+        return eng['meta'].get(module, {}).get('aliases', [])
+
     for e in eng['emits']:
         if e['to']:
             for dst in e['to']:
                 edge(f"emits `{e['key']}` → {dst}", dst, f"emits [{e['key']}] to", e['key'],
-                     'unspecced_wiring')
+                     'unspecced_wiring', cp_aliases=_ma(dst))
         else:
             # dangling emit: declared but no known module consumes it (engine finding). No target
             # module — articulation reduces to 'is this emitted key named in the doc'.
@@ -302,7 +313,7 @@ def weave(root, module):
             estr = (f"consumes `{c['key']}` ← {src}" if src
                     else f"consumes `{c['key']}` (source unspecified)")
             edge(estr, cp, f"consumes [{c['key']}] from", (c['key'] if src else None),
-                 'unspecced_wiring')
+                 'unspecced_wiring', cp_aliases=(_ma(src) if src else ()))
     for d in eng['derivations']:
         edge(f"`{d['output']}` ← `{d['input']}`", d['input'], f"derives [{d['output']}] from",
              d['output'], 'unspecced_wiring', edge_notional=d['notional'])

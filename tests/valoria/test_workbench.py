@@ -85,6 +85,23 @@ def test_articulation_states():
                                   'env.disaster')['state'] == 'co-mentioned'
 
 
+def test_module_aliases_improve_counterpart_detection():
+    """R2 (ED-IN-0082): a module's declared display-aliases (module_contracts, carried through
+    structure_audit.build_l2) let the Workbench match a counterpart referred to by its PROSE name,
+    not just its humanized id. settlement_layer's doc says 'Faction Layer' (not 'faction_state'),
+    so the emit->faction_state edge reads 'mentioned' (counterpart present) instead of a false
+    'silent'. Co-mention is unchanged — the emit's Key concept genuinely isn't in the prose."""
+    import structure_audit as sa
+    from pathlib import Path
+    _, meta, *_ = sa.build_l2(Path(_ROOT))
+    assert 'Faction Layer' in meta['faction_state'].get('aliases', [])       # carried through build_l2
+    # counterpart found via its display alias -> mentioned; without the alias the humanized id is absent -> silent
+    assert workbench.articulation('the Faction Layer reacts here', 'faction_state', 'zzz.none',
+                                  cp_aliases=['Faction Layer'])['state'] == 'mentioned'
+    assert workbench.articulation('the Faction Layer reacts here', 'faction_state',
+                                  'zzz.none')['state'] == 'silent'
+
+
 def test_matcher_rejects_common_word_and_distant_false_positives():
     """The Opus-Max adversarial pass (Finding 1): the old common-word tail fallback let a
     fabricated `env.disaster` edge read as a link whenever any 'disaster' appeared in rich prose.
