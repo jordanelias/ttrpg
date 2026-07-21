@@ -85,7 +85,23 @@ import formula_audit as fa              # noqa: E402  (the ONE L1 derivation-DAG
 # ──────────────────────────── GRAPH CONSTRUCTION ────────────────────────────
 
 EDGE_TYPES = ('emits_consumes', 'derives', 'produces', 'reads')
+# The PRECISE edge types traversed by default. `produces`/`reads` are COARSE
+# module-granularity cross-scale bridges: `reads` links every input a module
+# consumes to the module and `produces` links the module to every output it
+# computes, ignoring which input actually feeds which output — so including them
+# by default smears a per-derivation dependency into a module-wide over-approximation
+# (measured ~6× downstream over-report). They stay in the graph and are opt-in via
+# an explicit `layers` slice for cross-scale queries, but never pollute the default
+# "what does a change here affect" answer.
+DEFAULT_LAYERS = ('emits_consumes', 'derives')
+_BRIDGE_TYPES = ('produces', 'reads')
 _BRIDGE_LAYER = 'ripple.bridge'
+
+
+def _nid(kind, name):
+    """Kind-qualified node id — modules and quantities never share an id, so a
+    quantity named identically to a module can't silently merge onto it."""
+    return f'{kind}:{name}'
 
 
 def _load_contracts(root):
@@ -110,29 +126,32 @@ def build_graph(root):
 
     nodes = {}
     edges = []
+    _UNSET = object()
 
-    def _node(nid, kind, **attrs):
+    def _node(kind, name, notional=_UNSET, scales=None, doc=None):
+        """Get-or-create a kind-qualified node. `notional` is STICKY-TRUE: it is only
+        ever raised to True by an explicit True; a bare re-reference (notional unset)
+        never clears it, so a doc:null / [ASSUMPTION] module keeps its tag no matter
+        how many load-bearing edges also touch it."""
+        nid = _nid(kind, name)
         n = nodes.get(nid)
         if n is None:
-            nodes[nid] = {'kind': kind, 'notional': attrs.get('notional', False),
-                          'scales': attrs.get('scales', []), 'doc': attrs.get('doc')}
+            n = nodes[nid] = {'kind': kind, 'name': name,
+                              'notional': bool(notional) if notional is not _UNSET else False,
+                              'scales': scales or [], 'doc': doc}
         else:
-            # a node seen as both module and quantity keeps 'module' (the coarser scale);
-            # notional is sticky-false (any load-bearing appearance clears the flag).
-            if kind == 'module':
-                n['kind'] = 'module'
-            if not attrs.get('notional', False):
-                n['notional'] = False
-            if attrs.get('scales'):
-                n['scales'] = attrs['scales'] or n['scales']
-            if attrs.get('doc') and not n.get('doc'):
-                n['doc'] = attrs['doc']
+            if notional is not _UNSET and notional:
+                n['notional'] = True
+            if scales and not n['scales']:
+                n['scales'] = scales
+            if doc and not n.get('doc'):
+                n['doc'] = doc
         return nid
 
     # ---- L2: module -> module (emits_consumes), provenance = Key type ----
     g_l2, meta, edges_meta, findings, _assump = sa.build_l2(root)
     for mod, m in meta.items():
-        _node(mod, 'module', notional=m.get('notional', False),
+        _node('module', mod, notional=m.get('notional', False),
               scales=m.get('scales') or [], doc=m.get('doc'))
     for e in edges_meta:
         src, dst, ktype = e.get('src'), e.get('dst'), e.get('type')
@@ -140,37 +159,36 @@ def build_graph(root):
             # self-consume (a module reading a Key it also emits) is a real contract
             # pattern but a NO-OP for cross-node ripple — it only inflates hub degree.
             continue
-        notional = nodes.get(src, {}).get('notional', False) or nodes.get(dst, {}).get('notional', False)
-        edges.append({'src': _node(src, 'module'), 'dst': _node(dst, 'module'),
-                      'type': 'emits_consumes',
+        sid, did = _node('module', src), _node('module', dst)
+        notional = nodes[sid]['notional'] or nodes[did]['notional']
+        edges.append({'src': sid, 'dst': did, 'type': 'emits_consumes',
                       'provenance': f'Key::{ktype}', 'notional': notional})
 
     # ---- L1: quantity -> quantity (derives) + module<->quantity bridges ----
     contracts = _load_contracts(root)
     fa_edges, _definitions = fa.build_contract_edges(contracts)
     for e in fa_edges:
-        in_node, out_node = e.get('src'), e.get('dst')
-        if not in_node or not out_node:
+        in_raw, out_raw = e.get('src'), e.get('dst')
+        if not in_raw or not out_raw:
             continue
         mod = e.get('module')
         notional = bool(e.get('notional'))
         formula = e.get('formula')
         source = e.get('source')
         prov = f'formula::{formula}' if formula else (f'source::{source}' if source else 'derivation')
-        _node(in_node, 'quantity', notional=notional)
-        _node(out_node, 'quantity', notional=notional)
-        if in_node != out_node:  # a quantity derived from itself is a no-op for ripple
-            edges.append({'src': in_node, 'dst': out_node, 'type': 'derives',
+        in_id = _node('quantity', in_raw, notional=notional)
+        out_id = _node('quantity', out_raw, notional=notional)
+        if in_id != out_id:  # a quantity derived from itself is a no-op for ripple
+            edges.append({'src': in_id, 'dst': out_id, 'type': 'derives',
                           'provenance': prov, 'notional': notional, 'module': mod})
-        # cross-scale bridges: the owning module PRODUCES the output and READS the input.
+        # COARSE cross-scale bridges (opt-in; excluded from DEFAULT_LAYERS — see note
+        # on _BRIDGE_TYPES). module PRODUCES the output; module READS the input.
         if mod:
-            _node(mod, 'module')
-            if mod != out_node:
-                edges.append({'src': mod, 'dst': out_node, 'type': 'produces',
-                              'provenance': f'{_BRIDGE_LAYER}::{mod} derivation', 'notional': notional})
-            if in_node != mod:
-                edges.append({'src': in_node, 'dst': mod, 'type': 'reads',
-                              'provenance': f'{_BRIDGE_LAYER}::{mod} derivation', 'notional': notional})
+            mid = _node('module', mod)
+            edges.append({'src': mid, 'dst': out_id, 'type': 'produces',
+                          'provenance': f'{_BRIDGE_LAYER}::{mod} derivation', 'notional': notional})
+            edges.append({'src': in_id, 'dst': mid, 'type': 'reads',
+                          'provenance': f'{_BRIDGE_LAYER}::{mod} derivation', 'notional': notional})
 
     adj = defaultdict(list)
     radj = defaultdict(list)
@@ -184,22 +202,38 @@ def build_graph(root):
 
 # ──────────────────────────── RIPPLE TRAVERSAL ──────────────────────────────
 
+def resolve_node(graph, ref):
+    """Accept a kind-qualified id (`module:faction_state`) OR a bare name
+    (`faction_state`); return the canonical node id, preferring a module on a
+    bare-name tie. None if unknown."""
+    if ref in graph['nodes']:
+        return ref
+    for kind in ('module', 'quantity'):
+        nid = _nid(kind, ref)
+        if nid in graph['nodes']:
+            return nid
+    return None
+
+
 def ripple(graph, start, direction='both', depth=None, layers=None):
-    """Bidirectional depth-limited reachability from `start`.
+    """Bidirectional depth-limited reachability from `start` (a node id or bare name).
 
     direction: 'down' (forward src->dst = what a change affects),
                'up'   (backward dst->src = provenance / dependencies),
                'both'.
     depth:     hop limit (None = unbounded, cycle-safe).
-    layers:    iterable of edge types to traverse (None = all EDGE_TYPES) — this is the SLICE.
+    layers:    iterable of edge types to traverse. None = DEFAULT_LAYERS (the PRECISE
+               emits_consumes+derives; the coarse produces/reads bridges are opt-in) —
+               this is the SLICE. Pass EDGE_TYPES explicitly for the full cross-scale view.
 
-    Returns {'down': [hop, ...], 'up': [hop, ...]} where each hop is
-      {'node', 'kind', 'via_edge': {type, provenance, notional}, 'from', 'depth'}.
+    Returns {'node','kind','down':[hop,...],'up':[hop,...]} where each hop is
+      {'node','name','kind','via_edge':{type,provenance,notional},'from','depth'}.
     Order is BFS (nearest first); each node reported once per direction (shortest hop).
     """
-    if start not in graph['nodes']:
-        return {'error': f'unknown node: {start!r}', 'down': [], 'up': []}
-    allow = set(layers) if layers else set(EDGE_TYPES)
+    start = resolve_node(graph, start)
+    if start is None:
+        return {'error': 'unknown node', 'down': [], 'up': []}
+    allow = set(layers) if layers else set(DEFAULT_LAYERS)
     edges = graph['edges']
 
     def walk(index_map, endpoint):
@@ -218,10 +252,12 @@ def ripple(graph, start, direction='both', depth=None, layers=None):
                 if nxt in seen:
                     continue
                 seen.add(nxt)
-                out.append({'node': nxt, 'kind': graph['nodes'].get(nxt, {}).get('kind'),
+                nn = graph['nodes'].get(nxt, {})
+                out.append({'node': nxt, 'name': nn.get('name', nxt), 'kind': nn.get('kind'),
                             'via_edge': {'type': e['type'], 'provenance': e['provenance'],
                                          'notional': e['notional']},
-                            'from': cur, 'depth': d + 1})
+                            'from': cur, 'from_name': graph['nodes'].get(cur, {}).get('name', cur),
+                            'depth': d + 1})
                 q.append((nxt, d + 1))
         return out
 
@@ -238,32 +274,37 @@ def ripple(graph, start, direction='both', depth=None, layers=None):
 def attach_vector_degrees(graph, vector_run_dir):
     """Annotate name-matching nodes with a vector_audit run's quantized coordinates
     (cite/tl/mu/pp degrees), so the qualitative node carries its quantized measure.
-    Best-effort: matches on exact node id, else a normalized (lower/underscore) form."""
+    Matches on the node's display NAME (ids are kind-qualified), exact then normalized.
+    Returns hit count; -1 if the file is present but the wrong shape (caller can warn)."""
     path = os.path.join(vector_run_dir, 'data', 'degrees.json')
     if not os.path.isfile(path):
         return 0
     with open(path, encoding='utf-8', errors='replace') as fh:
         degs = json.load(fh)
+    if not isinstance(degs, dict):          # a list / scalar degrees.json is unusable
+        return -1
 
     def norm(s):
         return re.sub(r'[^a-z0-9]+', '', str(s).lower())
-    by_norm = {}
-    # degrees.json shape: {'cite': {token: n}, 'tl': {...}, 'mu': {...}, 'pp': {...}} OR
-    # {token: {cite,tl,mu,pp}} — support both.
+    # shape A: {'cite': {token: n}, 'tl': ...}  ·  shape B: {token: {cite,tl,mu,pp}}
     coords = defaultdict(dict)
     if degs and all(k in ('cite', 'tl', 'mu', 'pp') for k in degs):
         for axis, m in degs.items():
             for tok, v in (m or {}).items():
                 coords[tok][axis] = v
     else:
-        for tok, m in (degs or {}).items():
+        for tok, m in degs.items():
             if isinstance(m, dict):
-                coords[tok] = {k: m.get(k) for k in ('cite', 'tl', 'mu', 'pp') if k in m}
-    for tok, c in coords.items():
-        by_norm[norm(tok)] = c
+                got = {k: m.get(k) for k in ('cite', 'tl', 'mu', 'pp') if k in m}
+                if got:
+                    coords[tok] = got
+    if not coords:                          # parsed but no recognizable axis data
+        return -1
+    by_norm = {norm(tok): c for tok, c in coords.items()}
     hits = 0
-    for nid, n in graph['nodes'].items():
-        c = coords.get(nid) or by_norm.get(norm(nid))
+    for n in graph['nodes'].values():
+        name = n.get('name', '')
+        c = coords.get(name) or by_norm.get(norm(name))
         if c:
             n['quantized'] = c
             hits += 1
@@ -272,10 +313,15 @@ def attach_vector_degrees(graph, vector_run_dir):
 
 # ──────────────────────────── REPORTING ─────────────────────────────────────
 
-def _degree(graph):
+def _degree(graph, allow=DEFAULT_LAYERS):
+    """In/out degree counting only `allow` edge types — defaults to the PRECISE layers
+    so hub ranking + orphan/sink analysis are not inflated by the coarse bridges."""
+    allow = set(allow)
     out = {n: 0 for n in graph['nodes']}
     inn = {n: 0 for n in graph['nodes']}
     for e in graph['edges']:
+        if e['type'] not in allow:
+            continue
         out[e['src']] = out.get(e['src'], 0) + 1
         inn[e['dst']] = inn.get(e['dst'], 0) + 1
     return inn, out
@@ -283,8 +329,8 @@ def _degree(graph):
 
 def _fmt_hop(h):
     tag = ' ⚠notional' if h['via_edge']['notional'] else ''
-    return (f"{h['from']} --{h['via_edge']['type']}[{h['via_edge']['provenance']}]--> "
-            f"{h['node']} ({h['kind']}){tag}")
+    return (f"{h.get('from_name', h['from'])} --{h['via_edge']['type']}"
+            f"[{h['via_edge']['provenance']}]--> {h['name']} ({h['kind']}){tag}")
 
 
 def write_register(graph, out_dir, vector_hits=0):
@@ -302,10 +348,11 @@ def write_register(graph, out_dir, vector_hits=0):
         by_type[e['type']] += 1
         notional_edges += bool(e['notional'])
     total_deg = {n: inn[n] + outd[n] for n in nodes}
-    hubs = sorted(nodes, key=lambda n: -total_deg[n])[:12]
-    orphans = sorted(n for n in nodes if inn.get(n, 0) == 0 and outd.get(n, 0) > 0)   # pure sources
-    sinks = sorted(n for n in nodes if outd.get(n, 0) == 0 and inn.get(n, 0) > 0)     # pure sinks
-    isolated = sorted(n for n in nodes if inn.get(n, 0) == 0 and outd.get(n, 0) == 0)
+    nm = lambda nid: nodes[nid].get('name', nid)  # noqa: E731
+    hubs = sorted(nodes, key=lambda n: (-total_deg[n], n))[:12]  # explicit tiebreak (deterministic)
+    orphans = sorted((nm(n) for n in nodes if inn.get(n, 0) == 0 and outd.get(n, 0) > 0))  # pure sources
+    sinks = sorted((nm(n) for n in nodes if outd.get(n, 0) == 0 and inn.get(n, 0) > 0))     # pure sinks
+    isolated = sorted((nm(n) for n in nodes if inn.get(n, 0) == 0 and outd.get(n, 0) == 0))
 
     L = []
     L.append('# Ripple register — cross-scale propagation map (observatory L3, v1)')
@@ -317,9 +364,13 @@ def write_register(graph, out_dir, vector_hits=0):
     L.append('')
     L.append(f'**Nodes:** {len(nodes)} ({n_mod} module · {n_qty} quantity)  ·  '
              f'**Edges:** {len(edges)} ({notional_edges} notional)')
-    L.append('**Edge types:** ' + ', '.join(f'{t}={by_type.get(t, 0)}' for t in EDGE_TYPES))
-    if vector_hits:
+    L.append('**Edge types:** ' + ', '.join(f'{t}={by_type.get(t, 0)}' for t in EDGE_TYPES)
+             + '  (`produces`/`reads` are COARSE module-granularity bridges — opt-in, '
+               'excluded from the default precise ripple).')
+    if vector_hits > 0:
         L.append(f'**Quantized overlay:** {vector_hits} node(s) annotated with vector-audit degrees.')
+    elif vector_hits < 0:
+        L.append('**Quantized overlay:** a degrees.json was found but had no usable cite/tl/mu/pp data.')
     L.append('')
     L.append('## What / How / Why')
     L.append('- **WHAT** a node is: its `kind` (module = mechanic/subsystem; quantity = value/derived stat/Key output).')
@@ -328,11 +379,11 @@ def write_register(graph, out_dir, vector_hits=0):
     L.append('- **WHY** the coupling exists: the edge `provenance` — the Key type, formula, or contract source '
              'that established it (never synthesized; read from module_contracts / descriptor_registry).')
     L.append('')
-    L.append('## Highest change-impact nodes (by total degree — a change here ripples furthest)')
+    L.append('## Highest change-impact nodes (by precise degree — a change here ripples furthest)')
     for h in hubs:
         q = nodes[h].get('quantized')
         qs = f'  ·  quantized={q}' if q else ''
-        L.append(f'- **{h}** ({nodes[h]["kind"]}) — downstream {outd[h]} · upstream {inn[h]}{qs}')
+        L.append(f'- **{nm(h)}** ({nodes[h]["kind"]}) — downstream {outd[h]} · upstream {inn[h]}{qs}')
     L.append('')
     # a worked example on the top hub
     if hubs:
@@ -381,15 +432,15 @@ def write_register(graph, out_dir, vector_hits=0):
 def _print_query(graph, node, direction, depth, layers):
     r = ripple(graph, node, direction=direction, depth=depth, layers=layers)
     if 'error' in r:
-        print(r['error'])
-        # offer near-matches
+        print(f'unknown node: {node!r}')
         nl = node.lower()
-        near = [n for n in graph['nodes'] if nl in n.lower()][:10]
+        near = sorted({n.get('name', '') for n in graph['nodes'].values()
+                       if nl in n.get('name', '').lower()})[:10]
         if near:
             print('did you mean:', ', '.join(near))
         return 1
     print(f'# ripple({node!r}, direction={direction}, depth={depth}, '
-          f'layers={sorted(layers) if layers else "all"})')
+          f'layers={sorted(layers) if layers else list(DEFAULT_LAYERS)})')
     if 'down' in r:
         print(f'\n## downstream — a change to {node!r} affects ({len(r["down"])}):')
         for h in r['down']:
@@ -410,13 +461,24 @@ def main():
     ap.add_argument('--direction', default='both', choices=('down', 'up', 'both'))
     ap.add_argument('--depth', type=int, default=None)
     ap.add_argument('--layers', default=None,
-                    help='comma-separated edge-type slice, e.g. derives,produces,reads')
+                    help="comma-separated edge-type slice (default: the precise "
+                         "emits_consumes,derives). Use 'all' or add produces,reads for the "
+                         "coarse cross-scale bridges.")
     ap.add_argument('--vector-run', default=None,
                     help='a vector_audit run dir to overlay quantized degrees from')
     args = ap.parse_args()
 
+    contracts = os.path.join(args.repo_root, 'references', 'module_contracts.yaml')
+    if not os.path.isfile(contracts):
+        ap.error(f'not a repo root (missing {contracts}) — pass --repo-root at the checkout root')
+
     graph = build_graph(args.repo_root)
-    layers = tuple(s.strip() for s in args.layers.split(',')) if args.layers else None
+    if args.layers and args.layers.strip() == 'all':
+        layers = EDGE_TYPES
+    elif args.layers:
+        layers = tuple(s.strip() for s in args.layers.split(','))
+    else:
+        layers = None
     vector_hits = attach_vector_degrees(graph, args.vector_run) if args.vector_run else 0
 
     if args.node:

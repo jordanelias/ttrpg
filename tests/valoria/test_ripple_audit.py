@@ -49,17 +49,65 @@ def test_build_graph_nonempty_and_typed():
 
 # ── traversal correctness ───────────────────────────────────────────────────
 
+def _node_with_precise_outedge(g):
+    precise = set(ra.DEFAULT_LAYERS)
+    for n in g['nodes']:
+        if any(g['edges'][ei]['type'] in precise for ei in g['adj'].get(n, ())):
+            return n
+    raise AssertionError('no node with a precise out-edge')
+
+
 def test_bidirectionality_is_consistent():
     """If B is reachable downstream of A over an allowed edge type, then A must be
     reachable upstream of B — the up/down views are the same graph, reversed."""
     g = ra.build_graph(_ROOT)
-    # pick a node that actually has out-edges
-    src = next(n for n in g['nodes'] if g['adj'].get(n))
+    src = _node_with_precise_outedge(g)
     down = ra.ripple(g, src, direction='down')
-    assert 'down' in down
+    assert down['down'], 'chosen node should have a precise downstream'
     for hop in down['down'][:20]:
         back = ra.ripple(g, hop['node'], direction='up')
         assert any(h['node'] == src for h in back['up']), (src, hop['node'])
+
+
+# ── regression pins for the 2026-07-21 adversarial-review fixes ─────────────
+
+def test_notional_flag_is_sticky_true():
+    """A doc:null/[ASSUMPTION] module must KEEP its notional tag no matter how many
+    load-bearing edges also touch it (critic finding #1: bare re-refs were clearing it)."""
+    import structure_audit as sa
+    from pathlib import Path
+    _g, meta, _e, _f, _a = sa.build_l2(Path(_ROOT))
+    meta_notional = {m for m, v in meta.items() if v.get('notional')}
+    assert meta_notional, 'fixture expects at least one notional module in contracts'
+    g = ra.build_graph(_ROOT)
+    for m in meta_notional:
+        n = g['nodes'].get(ra._nid('module', m))
+        assert n and n['notional'] is True, f'{m} lost its notional tag'
+
+
+def test_kind_namespacing_prevents_merge():
+    """module and quantity ids live in disjoint namespaces (critic finding #2)."""
+    g = ra.build_graph(_ROOT)
+    for nid, n in g['nodes'].items():
+        assert nid == ra._nid(n['kind'], n['name'])
+    mods = {nid for nid in g['nodes'] if nid.startswith('module:')}
+    qtys = {nid for nid in g['nodes'] if nid.startswith('quantity:')}
+    assert mods and qtys and not (mods & qtys)
+
+
+def test_coarse_bridges_excluded_from_default():
+    """The coarse produces/reads bridges must NOT inflate the default ripple
+    (critic finding #3: ~6x downstream over-report). Full-layer reach >= default,
+    and strictly greater for at least one node that has bridge edges."""
+    g = ra.build_graph(_ROOT)
+    assert set(ra.DEFAULT_LAYERS) == {'emits_consumes', 'derives'}
+    bigger = False
+    for n in list(g['nodes'])[:200]:
+        d_default = len(ra.ripple(g, n, direction='down')['down'])
+        d_all = len(ra.ripple(g, n, direction='down', layers=ra.EDGE_TYPES)['down'])
+        assert d_all >= d_default
+        bigger = bigger or d_all > d_default
+    assert bigger, 'expected the bridges to add reach somewhere (else the test is vacuous)'
 
 
 def test_depth_limits_and_slice():
