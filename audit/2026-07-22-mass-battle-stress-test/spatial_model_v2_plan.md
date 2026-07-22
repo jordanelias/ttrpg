@@ -107,16 +107,37 @@ deleting that one recording snap.
 - **Gate:** fuzz (0 engine failures, I1 holds), mirror symmetry, and a **directional contact test**
   (pike reaches before sword head-on; neither reaches sideways).
 
-### Stage C — TOI halt on OBB (motion stops at box-touch, not circle-touch)
-- `resolve_toi_and_commit` currently caps each cell's advance at the circular `standoff`. Recompute
-  the time-of-impact against the **OBB front face** along the Euclidean velocity ray (ray–OBB / expanding-
-  box test). Motion stays Euclidean; only the *stop condition* becomes the box.
-- **Trace:** halt distance must equal Stage B's contact trigger (or cells interpenetrate / stall short).
+### Stage C — TOI halt on the BODY OBB (bodies collide; weapons reach across the gap)
+- `resolve_toi_and_commit` caps each cell's advance via an **analytic swept-SAT** time-of-impact
+  (`_swept_first_overlap_s` / `_pair_toi_box_scale`): each of the ≤4 SAT axes gives a linear-in-`s`
+  overlap band, intersect them, first-touch = the window's left edge — O(4)/pair, zero iteration
+  (replaces the parked scan+bisection; verified against it to ~1e-15 over 700 seeded fuzzed pairs).
+- **CORRECTION (2026-07-22, prompted by Jordan "why decelerate instead of collide? / wouldn't that
+  break charging?").** The original plan had the halt surface EQUAL Stage B's contact surface (the
+  reach-extended box) — "halt distance must equal the contact trigger." **That is wrong and it
+  deadlocks:** the TOI parks a closing cell EXACTLY on the `obb_front_reach_overlap` *touch* boundary,
+  where the strict-overlap contact predicate returns False → a permanent zero-casualty standoff at
+  gap `2·(CELL_RADIUS+reach)` (observed: head-on Line-vs-Line froze at gap 1.5 for the whole battle,
+  0 casualties). **Resolution:** the hard geometric stop is **BODY vs BODY** (unit squares, reach 0) —
+  the only thing that physically cannot interpenetrate — while **contact/engagement fires on the
+  reach-extended box** (Stage B). Reach is a weapon envelope reaching ACROSS a gap, not a wall to
+  decelerate against. Because the body surface sits strictly *inside* the reach surface (for reach>0),
+  contact fires on the way in, before bodies touch. Bodies collide; weapons engage across the closing
+  gap. The stop is symmetric and reach-independent → the reach *throttle* (`_reach_throttle`) is
+  retired; both cells cap at the shared body-touch fraction. **Charging is preserved, in fact restored:**
+  `_momentum_speed` reads `cell_last_speed` (the pre-cap intended step = the charge velocity), so charge
+  shock reflects closing speed; under the old reach-stop, contact never fired at all, so charge shock
+  never triggered. Motion stays Euclidean; only the *stop condition* is the body box.
+- **Trace:** body-stop (gap ≥ 2·CELL_RADIUS) sits inside the reach-contact trigger (gap <
+  2·(CELL_RADIUS+reach)); contact fires as cells pass through the reach band into body contact.
   Depends on Stage A/B.
-- **Adversarial:** cells never interpenetrate (no overlap > ε post-commit); no permanent stall
-  (bodies that should reach contact do); charge closing speed preserved (cavalry still reaches).
-  I1/I2.
-- **Gate:** trace a charge + a shieldwall meeting; assert touch-not-overlap and no freeze; fuzz.
+- **Adversarial:** cell BODIES never interpenetrate (unit-square bodies stay disjoint-or-touching
+  post-commit; reach surfaces MAY overlap — that overlap IS the engagement); no permanent stall
+  (head-on Line-vs-Line and a cavalry charge both reach contact and exchange casualties); charge
+  closing speed preserved (`cell_last_speed` pre-cap). I1/I2.
+- **Gate:** `test_obb_contact_toi.py` — head-on no-interpenetration-no-stall, cavalry-charge-reaches-
+  contact, grid path never calls OBB code, conservation, determinism; the analytic-TOI-vs-oracle
+  verification; fuzz. **DONE 2026-07-22 (this pass).**
 
 ### Stage D — frontage & depth from OBB extents (delete the last integer: `contact.py:292-293`)
 - Replace the `int(round)` engaged-cell recording with the **OBB-overlap-derived engaged frontage**:
@@ -183,7 +204,7 @@ separate epic.
 
 | # | risk | mitigation |
 |---|---|---|
-| R1 | OBB overlap ≠ TOI halt → interpenetration or stall | build B+C together; assert touch-not-overlap invariant |
+| R1 | OBB overlap ≠ TOI halt → interpenetration or stall | **MATERIALIZED then FIXED:** making halt == contact surface (reach box) deadlocked at the touch boundary (0-casualty standoff). Fix: halt on the BODY box (reach 0), contact on the reach box — body strictly inside reach, so contact fires before body-touch. Bodies collide, weapons reach across the gap. (Stage C CORRECTION.) |
 | R2 | continuous frontage breaks conservation (I1) | frontage as a *partition* of the meeting width; unit-test Σ=hp before wiring |
 | R3 | gauge shift misread as a bug | A/B every stage, disclose, DG-6-gate; never tune to target |
 | R4 | OBB rotation cost (perf / complexity) | small boxes near-axis-aligned most ticks; use reduced SAT + early-out |

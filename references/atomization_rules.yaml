@@ -152,9 +152,9 @@ policies:
   # REGISTERS — coverage matrix
   # ────────────────────────────────────────────────────────────
   - match: "tests/coverage_matrix.md"
-    max_tokens: 10000
+    max_tokens: 15000
     on_exceed: "flag_for_manual_archive"
-    note: "SINGLE SOURCE for the coverage_matrix cap (2026-06-28 consolidation): tools/ci_register_size_check.py reads this max_tokens at runtime via _coverage_matrix_threshold() rather than carrying its own literal (the two had drifted 8000 vs 10000). Change the cap HERE only. Raised 8000 -> 10000 (2026-06-24) when the 8000 cap had been failing CI (file ~8.3k). Markdown narrative file; auto-archive-by-status doesn't apply (no per-entry status field). When threshold reached, manually move closed-finding paragraphs to tests/coverage_matrix_archive_<date>.md and reset."
+    note: "SINGLE SOURCE for the coverage_matrix cap (2026-06-28 consolidation): tools/ci_register_size_check.py reads this max_tokens at runtime via _coverage_matrix_threshold() rather than carrying its own literal (the two had drifted 8000 vs 10000). Change the cap HERE only. Raised 8000 -> 10000 (2026-06-24) when the 8000 cap had been failing CI (file ~8.3k). Raised 10000 -> 15000 (2026-07-22, ED-MB-0012, Jordan-directed 'coverage matrix may need to grow to 15k'): the register is a legitimately-growing per-session mass-battle test-coverage log and archiving faster than it grows was churning the register on every sim touch; give it real headroom instead. Markdown narrative file; auto-archive-by-status doesn't apply (no per-entry status field). When THIS threshold is reached, manually move closed-finding paragraphs to tests/coverage_matrix_archive_<date>.md and reset."
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — propagation map (append-only propagation log)
