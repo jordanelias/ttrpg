@@ -71,7 +71,7 @@
 | `tools/hook_naming_guard.py` | — | yes | ci:valoria-ci.yml, hook:claude |
 | `tools/index_gen.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/mechanics_index_gen.py` | `<stream>` (yaml); `<index_path>` (unknown) | yes | ci:valoria-ci.yml |
-| `tools/observability/build_incompleteness.py` | `<pj>` (unknown); `<pjs>` (unknown); `<pmd>` (unknown) | yes | ci:audit-refresh.yml |
+| `tools/observability/build_incompleteness.py` | `<pj>` (unknown); `<pjs>` (unknown); `<pmd>` (unknown) | yes | ci:audit-refresh.yml, skill:valoria-vector-audit |
 | `tools/patch_propagation_checker.py` | — | yes | ci:valoria-ci.yml |
 | `tools/session_status.py` | — | yes | ci:valoria-ci.yml, hook:claude |
 | `tools/sim_harness/adapters/pr119_governance/campaign_stats.py` | — | yes | — |

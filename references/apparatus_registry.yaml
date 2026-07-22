@@ -750,6 +750,7 @@ entries:
   uses_cli_args: true
   invoked_by:
   - ci:audit-refresh.yml
+  - skill:valoria-vector-audit
   imported_internally: false
   orphaned: false
   prune_candidate: false

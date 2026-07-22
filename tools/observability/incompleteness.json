@@ -1,63 +1,89 @@
 {
   "schema_version": 1,
   "generator": "tools/observability/build_incompleteness.py",
-  "note": "GENERATED \u2014 the absorb-everything Incompleteness Ledger. Surfaces every stub / null / missing / excluded / unverified thing across the tree. Nothing culled to stay 'signal-heavy'.",
+  "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 76,
+    "findings": 145,
     "by_category": {
+      "apparatus_orphan": 3,
       "audit_excluded_system": 16,
-      "contract_doc_null": 9,
-      "contract_island": 7,
-      "contract_missing_entirely": 2,
-      "contract_no_resolver": 1,
-      "integrity_unverified_pin": 1,
-      "key_orphan_emit": 1,
-      "register_quarantined": 1,
-      "sim_stub": 38
-    }
-  },
-  "by_lane": {
-    "MB": {
-      "total": 1,
-      "sim_stub": 1
-    },
-    "FI": {
-      "total": 6,
-      "sim_stub": 6
-    },
-    "SC": {
-      "total": 7,
-      "sim_stub": 7
-    },
-    "FA": {
-      "total": 8,
-      "contract_island": 1,
-      "sim_stub": 7
-    },
-    "WR": {
-      "total": 5,
-      "sim_stub": 5
-    },
-    "IN": {
-      "total": 24,
-      "audit_excluded_system": 16,
-      "contract_island": 1,
-      "integrity_unverified_pin": 1,
-      "register_quarantined": 1,
-      "sim_stub": 5
-    },
-    "SE": {
-      "total": 3,
-      "sim_stub": 3
-    },
-    "unassigned": {
-      "total": 22,
+      "code_marker": 3,
+      "contract_doc_dead": 6,
       "contract_doc_null": 9,
       "contract_island": 5,
       "contract_missing_entirely": 2,
       "contract_no_resolver": 1,
+      "integrity_unverified_pin": 1,
       "key_orphan_emit": 1,
-      "sim_stub": 4
+      "prose_marker": 32,
+      "register_phantom_source": 1,
+      "register_quarantined": 1,
+      "sim_not_implemented": 39,
+      "status_noncurrent": 25
+    }
+  },
+  "by_lane": {
+    "MB": {
+      "total": 7,
+      "prose_marker": 4,
+      "sim_not_implemented": 1,
+      "status_noncurrent": 2
+    },
+    "FI": {
+      "total": 7,
+      "prose_marker": 1,
+      "sim_not_implemented": 6
+    },
+    "SC": {
+      "total": 10,
+      "code_marker": 2,
+      "sim_not_implemented": 7,
+      "status_noncurrent": 1
+    },
+    "FA": {
+      "total": 21,
+      "code_marker": 1,
+      "contract_island": 1,
+      "prose_marker": 11,
+      "sim_not_implemented": 6,
+      "status_noncurrent": 2
+    },
+    "WR": {
+      "total": 9,
+      "contract_doc_dead": 1,
+      "sim_not_implemented": 5,
+      "status_noncurrent": 3
+    },
+    "IN": {
+      "total": 38,
+      "apparatus_orphan": 3,
+      "audit_excluded_system": 16,
+      "contract_doc_dead": 1,
+      "contract_island": 1,
+      "integrity_unverified_pin": 1,
+      "prose_marker": 5,
+      "register_phantom_source": 1,
+      "register_quarantined": 1,
+      "sim_not_implemented": 7,
+      "status_noncurrent": 2
+    },
+    "SE": {
+      "total": 7,
+      "contract_doc_dead": 1,
+      "prose_marker": 3,
+      "sim_not_implemented": 3
+    },
+    "unassigned": {
+      "total": 46,
+      "contract_doc_dead": 3,
+      "contract_doc_null": 9,
+      "contract_island": 3,
+      "contract_missing_entirely": 2,
+      "contract_no_resolver": 1,
+      "key_orphan_emit": 1,
+      "prose_marker": 8,
+      "sim_not_implemented": 4,
+      "status_noncurrent": 15
     }
   },
   "prose_marker_rollup": {
@@ -66,7 +92,39 @@
     "stub": 30,
     "todo": 14
   },
+  "coverage_gaps": [
+    "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, descriptor_registry 'IN FLUX' roster, names_index, \u2026) are not yet structurally scanned",
+    "co-file _index/_infill pairing gaps are owned by ci_co_file_checker and not yet absorbed here",
+    "broken restructure_ledger.md pointers are not yet validated",
+    "which of the canonical_sha pins are actually STALE (vs merely advisory) is delegated to freshness_gate.py --update, not enumerated here",
+    "the alias(<4)/paragraph(<50)/citation(<2) audit floors are recorded as COUNTS by vector_audit.audit_exclusions, not enumerated per-item",
+    "prose/status scans cover the canonical doc roots only; audit/ and workplans/ working docs are intentionally out of scope (they PROPOSE, not assert)"
+  ],
   "findings": [
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/build_audit_registry_backfill.py",
+      "title": "tools/build_audit_registry_backfill.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/build_audit_registry_backfill.py",
+      "lane": "IN"
+    },
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/geography/jsx_to_canonical.py",
+      "title": "tools/geography/jsx_to_canonical.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/geography/jsx_to_canonical.py",
+      "lane": "IN"
+    },
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/observability/npc_audit_report_gen.py",
+      "title": "tools/observability/npc_audit_report_gen.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/observability/npc_audit_report_gen.py",
+      "lane": "IN"
+    },
     {
       "category": "audit_excluded_system",
       "id": "character_canon_consolidation",
@@ -196,6 +254,78 @@
       "lane": "IN"
     },
     {
+      "category": "code_marker",
+      "id": "systems/factions/sim/parliamentary_action.py:162",
+      "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
+      "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
+      "path": "systems/factions/sim/parliamentary_action.py",
+      "lane": "FA"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/modes.py:148",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:148",
+      "detail": "INSTITUTIONAL_MODES = {            # placeholder keys (mechanism, not world); Jordan assigns Valorian names",
+      "path": "systems/social_contest/sim/contest/modes.py",
+      "lane": "SC"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/modes.py:316",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:316",
+      "detail": "CROSS_CULTURAL_VENUES = {          # placeholder keys; Valorian names are Jordan's to assign",
+      "path": "systems/social_contest/sim/contest/modes.py",
+      "lane": "SC"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "clock_registry",
+      "title": "clock_registry",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/clock_registry_v30.md",
+      "path": "designs/provincial/clock_registry_v30.md",
+      "lane": "IN"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "miraculous_event",
+      "title": "miraculous_event",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/scene/miraculous_event_v30.md",
+      "path": "designs/scene/miraculous_event_v30.md",
+      "lane": "WR"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "peninsular_strain",
+      "title": "peninsular_strain",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/peninsular_strain_v30.md",
+      "path": "designs/provincial/peninsular_strain_v30.md",
+      "lane": "SE"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "piety_track",
+      "title": "piety_track",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/personal/conviction_track_v1.md",
+      "path": "designs/personal/conviction_track_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "territorial_piety",
+      "title": "territorial_piety",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/scene/conviction_track_v30.md",
+      "path": "designs/scene/conviction_track_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_dead",
+      "id": "victory",
+      "title": "victory",
+      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/victory_v30.md",
+      "path": "designs/provincial/victory_v30.md",
+      "lane": "unassigned"
+    },
+    {
       "category": "contract_doc_null",
       "id": "audit",
       "title": "audit",
@@ -293,22 +423,6 @@
     },
     {
       "category": "contract_island",
-      "id": "engine",
-      "title": "engine",
-      "detail": "synthesized graph node with no emits/consumes \u2014 untraceable island",
-      "path": "",
-      "lane": "unassigned"
-    },
-    {
-      "category": "contract_island",
-      "id": "player_input",
-      "title": "player_input",
-      "detail": "synthesized graph node with no emits/consumes \u2014 untraceable island",
-      "path": "",
-      "lane": "unassigned"
-    },
-    {
-      "category": "contract_island",
       "id": "territorial_piety",
       "title": "territorial_piety",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
@@ -327,7 +441,7 @@
       "category": "contract_missing_entirely",
       "id": "engine",
       "title": "engine",
-      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
       "path": "",
       "lane": "unassigned"
     },
@@ -335,7 +449,7 @@
       "category": "contract_missing_entirely",
       "id": "player_input",
       "title": "player_input",
-      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
       "path": "",
       "lane": "unassigned"
     },
@@ -364,6 +478,270 @@
       "lane": "unassigned"
     },
     {
+      "category": "prose_marker",
+      "id": "canon/03_canonical_timeline.md",
+      "title": "canon/03_canonical_timeline.md",
+      "detail": "prose gap markers: TBD\u00d74",
+      "path": "canon/03_canonical_timeline.md",
+      "lane": "IN"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/ci_seizure.md",
+      "title": "engine/params/bg/ci_seizure.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "engine/params/bg/ci_seizure.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/core.md",
+      "title": "engine/params/bg/core.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "engine/params/bg/core.md",
+      "lane": "IN"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/faction_actions.md",
+      "title": "engine/params/bg/faction_actions.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "engine/params/bg/faction_actions.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/institutions.md",
+      "title": "engine/params/bg/institutions.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "engine/params/bg/institutions.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/phases.md",
+      "title": "engine/params/bg/phases.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "engine/params/bg/phases.md",
+      "lane": "IN"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/bg/stress_patches.md",
+      "title": "engine/params/bg/stress_patches.md",
+      "detail": "prose gap markers: TODO\u00d72",
+      "path": "engine/params/bg/stress_patches.md",
+      "lane": "IN"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/board_game.md",
+      "title": "engine/params/board_game.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "engine/params/board_game.md",
+      "lane": "IN"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/factions/riskbreakers_identity.md",
+      "title": "engine/params/factions/riskbreakers_identity.md",
+      "detail": "prose gap markers: TODO\u00d72",
+      "path": "engine/params/factions/riskbreakers_identity.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/factions/stats_1_7_scale.md",
+      "title": "engine/params/factions/stats_1_7_scale.md",
+      "detail": "prose gap markers: TODO\u00d71",
+      "path": "engine/params/factions/stats_1_7_scale.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "engine/params/mass_combat.md",
+      "title": "engine/params/mass_combat.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "engine/params/mass_combat.md",
+      "lane": "MB"
+    },
+    {
+      "category": "prose_marker",
+      "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "title": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "lane": "MB"
+    },
+    {
+      "category": "prose_marker",
+      "id": "references/throughlines_meta_infill.md",
+      "title": "references/throughlines_meta_infill.md",
+      "detail": "prose gap markers: XXX\u00d71",
+      "path": "references/throughlines_meta_infill.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "registers/handoffs/HANDOFF_SC.md",
+      "title": "registers/handoffs/HANDOFF_SC.md",
+      "detail": "prose gap markers: TODO\u00d71",
+      "path": "registers/handoffs/HANDOFF_SC.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/_architecture/derived_stats_v30.md",
+      "title": "systems/_architecture/derived_stats_v30.md",
+      "detail": "prose gap markers: TODO\u00d72",
+      "path": "systems/_architecture/derived_stats_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/_architecture/player_agency_v30.md",
+      "title": "systems/_architecture/player_agency_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/_architecture/player_agency_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/_architecture/player_agency_v30_index.md",
+      "title": "systems/_architecture/player_agency_v30_index.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "systems/_architecture/player_agency_v30_index.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/ci_political_v30.md",
+      "title": "systems/factions/ci_political_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/factions/ci_political_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/faction_layer_v30.md",
+      "title": "systems/factions/faction_layer_v30.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "systems/factions/faction_layer_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/faction_politics_v30.md",
+      "title": "systems/factions/faction_politics_v30.md",
+      "detail": "prose gap markers: TBD\u00d77",
+      "path": "systems/factions/faction_politics_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/faction_state_authoring_v30.md",
+      "title": "systems/factions/faction_state_authoring_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/factions/faction_state_authoring_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/fractional_province_ownership_v30.md",
+      "title": "systems/factions/fractional_province_ownership_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/factions/fractional_province_ownership_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/factions/franchise_v30.md",
+      "title": "systems/factions/franchise_v30.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "systems/factions/franchise_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/fieldwork/fieldwork_v30.md",
+      "title": "systems/fieldwork/fieldwork_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/fieldwork/fieldwork_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/fieldwork/knots_v30.md",
+      "title": "systems/fieldwork/knots_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/fieldwork/knots_v30.md",
+      "lane": "FI"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/mass_battle/mass_battle_integration_v30.md",
+      "title": "systems/mass_battle/mass_battle_integration_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/mass_battle/mass_battle_integration_v30.md",
+      "lane": "MB"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/mass_battle/military_layer_v30.md",
+      "title": "systems/mass_battle/military_layer_v30.md",
+      "detail": "prose gap markers: TBD\u00d72",
+      "path": "systems/mass_battle/military_layer_v30.md",
+      "lane": "MB"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/npcs/npc_character_analyses_v30_infill.md",
+      "title": "systems/npcs/npc_character_analyses_v30_infill.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/npcs/npc_character_analyses_v30_infill.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/npcs/npc_relational_graph_v30.md",
+      "title": "systems/npcs/npc_relational_graph_v30.md",
+      "detail": "prose gap markers: TBD\u00d71, XXX\u00d71",
+      "path": "systems/npcs/npc_relational_graph_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+      "title": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+      "lane": "SE"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/settlements/settlement_layer_v30.md",
+      "title": "systems/settlements/settlement_layer_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/settlements/settlement_layer_v30.md",
+      "lane": "SE"
+    },
+    {
+      "category": "prose_marker",
+      "id": "systems/settlements/valoria_political_hierarchy_v30.md",
+      "title": "systems/settlements/valoria_political_hierarchy_v30.md",
+      "detail": "prose gap markers: TBD\u00d71",
+      "path": "systems/settlements/valoria_political_hierarchy_v30.md",
+      "lane": "SE"
+    },
+    {
+      "category": "register_phantom_source",
+      "id": "values_master::engine/params/combat.md",
+      "title": "69 entries index a NON-EXISTENT source: engine/params/combat.md",
+      "detail": "values_master.yaml has 69 entries whose source file engine/params/combat.md does not exist on disk \u2014 phantom index rows (CLAUDE.md \u00a75)",
+      "path": "references/values_master.yaml",
+      "lane": "IN"
+    },
+    {
       "category": "register_quarantined",
       "id": "references/values_master.yaml",
       "title": "values_master.yaml",
@@ -372,7 +750,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "engine/autoload/npc_ai.py:23",
       "title": "NotImplementedError @ engine/autoload/npc_ai.py:23",
       "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
@@ -380,7 +758,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "engine/autoload/npc_ai.py:27",
       "title": "NotImplementedError @ engine/autoload/npc_ai.py:27",
       "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
@@ -388,7 +766,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "engine/cross_scale/articulation.py:24",
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:24",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
@@ -396,7 +774,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "engine/cross_scale/articulation.py:28",
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:28",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
@@ -404,7 +782,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "engine/cross_scale/articulation.py:32",
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:32",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
@@ -412,7 +790,7 @@
       "lane": "IN"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/characters/sim/companion.py:21",
       "title": "NotImplementedError @ systems/characters/sim/companion.py:21",
       "detail": "raise NotImplementedError(\"sim/personal/companion.py \u2014 Pass 2l armature stub\")",
@@ -420,7 +798,7 @@
       "lane": "unassigned"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/charter_liberties.py:20",
       "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:20",
       "detail": "raise NotImplementedError(\"systems/factions/sim/charter_liberties.py \u2014 Pass 2l armature stub\")",
@@ -428,7 +806,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/hafenmark_equipment.py:22",
       "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:22",
       "detail": "raise NotImplementedError(\"systems/factions/sim/hafenmark_equipment.py \u2014 content pending contamination audit\")",
@@ -436,7 +814,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/home_sanctuary.py:21",
       "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:21",
       "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
@@ -444,7 +822,7 @@
       "lane": "unassigned"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/home_sanctuary.py:25",
       "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:25",
       "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
@@ -452,7 +830,7 @@
       "lane": "unassigned"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/infrastructure_reclamation.py:21",
       "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:21",
       "detail": "raise NotImplementedError(\"systems/factions/sim/infrastructure_reclamation.py \u2014 Pass 2l armature stub\")",
@@ -460,15 +838,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
-      "id": "systems/factions/sim/parliamentary_action.py:162",
-      "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
-      "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
-      "path": "systems/factions/sim/parliamentary_action.py",
-      "lane": "FA"
-    },
-    {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/treaty.py:107",
       "title": "NotImplementedError @ systems/factions/sim/treaty.py:107",
       "detail": "raise NotImplementedError(",
@@ -476,7 +846,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/tribunal.py:149",
       "title": "NotImplementedError @ systems/factions/sim/tribunal.py:149",
       "detail": "raise NotImplementedError(",
@@ -484,7 +854,7 @@
       "lane": "unassigned"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/varfell_mandate_action.py:31",
       "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:31",
       "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_mandate_action.py \u2014 Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)\")",
@@ -492,7 +862,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/factions/sim/varfell_territorial_acquisition.py:33",
       "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:33",
       "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_territorial_acquisition.py \u2014 Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)",
@@ -500,7 +870,7 @@
       "lane": "FA"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/fieldwork.py:25",
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:25",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
@@ -508,7 +878,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/fieldwork.py:29",
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:29",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
@@ -516,7 +886,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/fieldwork.py:33",
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:33",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
@@ -524,7 +894,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/investigation.py:23",
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:23",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
@@ -532,7 +902,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/investigation.py:27",
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:27",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
@@ -540,7 +910,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/fieldwork/sim/investigation.py:31",
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:31",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
@@ -548,7 +918,7 @@
       "lane": "FI"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/mass_battle/sim/altonian_reinforcements.py:21",
       "title": "NotImplementedError @ systems/mass_battle/sim/altonian_reinforcements.py:21",
       "detail": "raise NotImplementedError(\"systems/mass_battle/sim/altonian_reinforcements.py \u2014 Pass 2l armature stub\")",
@@ -556,7 +926,7 @@
       "lane": "MB"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/overview/sim/ip_track.py:22",
       "title": "NotImplementedError @ systems/overview/sim/ip_track.py:22",
       "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
@@ -564,7 +934,7 @@
       "lane": "SE"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/overview/sim/ip_track.py:26",
       "title": "NotImplementedError @ systems/overview/sim/ip_track.py:26",
       "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
@@ -572,7 +942,7 @@
       "lane": "SE"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/overview/sim/rs_track.py:21",
       "title": "NotImplementedError @ systems/overview/sim/rs_track.py:21",
       "detail": "raise NotImplementedError(\"sim/peninsular/rs_track.py \u2014 Pass 2l armature stub\")",
@@ -580,7 +950,7 @@
       "lane": "SE"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/dictionaries.py:710",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/dictionaries.py:710",
       "detail": "raise NotImplementedError(",
@@ -588,7 +958,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/modes.py:328",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:328",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"dyadic counsel is a separate sub-system \u2014 scaffold only\")",
@@ -596,7 +966,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/modes.py:331",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:331",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"negotiation is a separate sub-system \u2014 scaffold only\")",
@@ -604,7 +974,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/modes.py:334",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:334",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"ceremonial is a separate sub-system \u2014 scaffold only\")",
@@ -612,7 +982,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/resolver.py:51",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/resolver.py:51",
       "detail": "def resolve(self, s, closing, adj=None): raise NotImplementedError",
@@ -620,7 +990,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/wrapper.py:201",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:201",
       "detail": "raise NotImplementedError(",
@@ -628,7 +998,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/social_contest/sim/contest/wrapper.py:222",
       "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:222",
       "detail": "games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a",
@@ -636,7 +1006,7 @@
       "lane": "SC"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/threadwork/sim/rendering.py:22",
       "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:22",
       "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
@@ -644,7 +1014,7 @@
       "lane": "WR"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/threadwork/sim/rendering.py:26",
       "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:26",
       "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
@@ -652,7 +1022,7 @@
       "lane": "WR"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/world/sim/miraculous_event.py:21",
       "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:21",
       "detail": "raise NotImplementedError(\"systems/world/sim/miraculous_event.py \u2014 Pass 2l armature stub\")",
@@ -660,7 +1030,7 @@
       "lane": "WR"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/world/sim/restoration_movement.py:23",
       "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:23",
       "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
@@ -668,11 +1038,227 @@
       "lane": "WR"
     },
     {
-      "category": "sim_stub",
+      "category": "sim_not_implemented",
       "id": "systems/world/sim/restoration_movement.py:27",
       "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:27",
       "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
       "path": "systems/world/sim/restoration_movement.py",
+      "lane": "WR"
+    },
+    {
+      "category": "sim_not_implemented",
+      "id": "tools/observability/build_incompleteness.py:483",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:483",
+      "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
+      "path": "tools/observability/build_incompleteness.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_not_implemented",
+      "id": "tools/sim_harness/adapters/dice_pool_demo.py:118",
+      "title": "NotImplementedError @ tools/sim_harness/adapters/dice_pool_demo.py:118",
+      "detail": "raise NotImplementedError(",
+      "path": "tools/sim_harness/adapters/dice_pool_demo.py",
+      "lane": "IN"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "engine/params/history/mass_combat.md",
+      "title": "engine/params/history/mass_combat.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "engine/params/history/mass_combat.md",
+      "lane": "IN"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "engine/sim_reference_CONVENTIONS.md",
+      "title": "engine/sim_reference_CONVENTIONS.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "engine/sim_reference_CONVENTIONS.md",
+      "lane": "IN"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+      "title": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
+      "title": "proposals/2026-05-16-faction-audit-followup-plan.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/2026-05-16-faction-audit-followup-plan.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "title": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/grounded_event_card_deck_v1.md",
+      "title": "proposals/grounded_event_card_deck_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/grounded_event_card_deck_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "title": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
+      "lane": "MB"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/mass_battle_shape_echelon_revamp.md",
+      "title": "proposals/mass_battle_shape_echelon_revamp.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/mass_battle_shape_echelon_revamp.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/multiunit_envelopment_plan.md",
+      "title": "proposals/multiunit_envelopment_plan.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/multiunit_envelopment_plan.md",
+      "lane": "MB"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/pc_formation_system.md",
+      "title": "proposals/pc_formation_system.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/pc_formation_system.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/stub_infill_plan.md",
+      "title": "proposals/stub_infill_plan.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/stub_infill_plan.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/weapon_physics_and_concentration_model.md",
+      "title": "proposals/weapon_physics_and_concentration_model.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "proposals/weapon_physics_and_concentration_model.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/canonical_registry.md",
+      "title": "systems/_architecture/canonical_registry.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "systems/_architecture/canonical_registry.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/complete_systems_reference.md",
+      "title": "systems/_architecture/complete_systems_reference.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "systems/_architecture/complete_systems_reference.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/governance_ripple_substrate_v1.md",
+      "title": "systems/_architecture/governance_ripple_substrate_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "systems/_architecture/governance_ripple_substrate_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/governance_type_registry_v1.md",
+      "title": "systems/_architecture/governance_type_registry_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "systems/_architecture/governance_type_registry_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/factions/faction_canon_v30.md",
+      "title": "systems/factions/faction_canon_v30.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "systems/factions/faction_canon_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/factions/franchise_v30.md",
+      "title": "systems/factions/franchise_v30.md",
+      "detail": "doc Status is not current: DRAFT",
+      "path": "systems/factions/franchise_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/npcs/character_canon_v30.md",
+      "title": "systems/npcs/character_canon_v30.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "systems/npcs/character_canon_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/npcs/npc_behavior_system_v1.md",
+      "title": "systems/npcs/npc_behavior_system_v1.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "systems/npcs/npc_behavior_system_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/settlements/lps_wiring_v1.md",
+      "title": "systems/settlements/lps_wiring_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "systems/settlements/lps_wiring_v1.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/social_contest/social_contest_system_v2.md",
+      "title": "systems/social_contest/social_contest_system_v2.md",
+      "detail": "doc Status is not current: SUPERSEDED",
+      "path": "systems/social_contest/social_contest_system_v2.md",
+      "lane": "SC"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/world/ms_trajectory_v1.md",
+      "title": "systems/world/ms_trajectory_v1.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "systems/world/ms_trajectory_v1.md",
+      "lane": "WR"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/world/narrative_voice_canon_v30.md",
+      "title": "systems/world/narrative_voice_canon_v30.md",
+      "detail": "doc Status is not current: PROVISIONAL",
+      "path": "systems/world/narrative_voice_canon_v30.md",
+      "lane": "WR"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/world/solmund_master_document.md",
+      "title": "systems/world/solmund_master_document.md",
+      "detail": "doc Status is not current: DRAFT",
+      "path": "systems/world/solmund_master_document.md",
       "lane": "WR"
     }
   ]

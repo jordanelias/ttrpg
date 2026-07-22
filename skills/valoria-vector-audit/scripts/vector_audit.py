@@ -710,6 +710,18 @@ def derive_tokens(root, record_drops=None):
         tokens[name] = {'patterns': patterns, 'scale': scale, 'status': 'canonical',
                         'source': source, 'context': []}
 
+    def alias_pats(aliases, owner):
+        """Keep aliases >=4 chars as escaped patterns; RECORD the shorter ones dropped by the
+        alias_min_chars floor (F4 — the floor's culling effect is now surfaced, not silent)."""
+        kept = []
+        for a in (aliases or []):
+            if len(a) >= 4:
+                kept.append(re.escape(a))
+            elif record_drops is not None and len(a) > 0:
+                record_drops.append({'candidate': a, 'scale': 'alias', 'source': owner,
+                                     'reason': 'alias_shorter_than_4_chars'})
+        return kept
+
     cs = _yaml(root, 'references/canonical_sources.yaml')
     for key in sorted((cs.get('systems', {}) or {})):
         if key in SKIP_SYSTEMS:
@@ -739,7 +751,7 @@ def derive_tokens(root, record_drops=None):
             continue
         cat = e.get('category')
         label, abbr = _strip_display(e.get('canonical'))
-        pats = _pattern_for(label, abbr) + [re.escape(a) for a in (e.get('aliases') or []) if len(a) >= 4]
+        pats = _pattern_for(label, abbr) + alias_pats(e.get('aliases'), 'names_index:'+str(label))
         scale = 'primitive' if cat in _PRIMITIVE_CATS else (cat or 'mechanic')
         add(label, pats, scale, 'derived:names_index')
 
@@ -759,7 +771,7 @@ def derive_tokens(root, record_drops=None):
             # concepts and canon stuff"). Every registered named entity is a token, however
             # rarely mentioned — a rarely-cited canon entity is a finding, not noise to drop.
             label, _ = _strip_display(item.get('canonical'))
-            pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
+            pats = _pattern_for(label) + alias_pats(item.get('aliases'), 'proper_noun:'+str(label))
             add(label, pats, scale, 'derived:proper_noun')
 
     # ── PRIMITIVES / values from descriptor_registry.yaml (attributes + stat rosters) ──
@@ -782,7 +794,7 @@ def derive_tokens(root, record_drops=None):
             continue
         key = row.get('key')
         pats = _pattern_for(row['name']) + ([re.escape(key)] if key else []) \
-            + [re.escape(a) for a in (row.get('aliases') or []) if len(a) >= 4]
+            + alias_pats(row.get('aliases'), 'descriptor:'+str(row.get('name')))
         add(row['name'], pats, 'primitive', 'derived:descriptor_registry')
 
     # ── MECHANICS (modules), KEYS (schema names), VALUES (derivations) from module_contracts ──
@@ -817,13 +829,16 @@ def derive_tokens(root, record_drops=None):
     return consolidate_tokens(tokens, _build_coref(root))
 
 
-# Corpus-level methodology floors (documented, not hidden — surfaced by audit_exclusions).
-# These are analysis parameters, not a denylist; listed so their culling effect is visible.
+# Methodology floors (documented, not hidden). `enumerated` marks whether audit_exclusions records
+# EACH culled item (via record_drops) or only documents the threshold. name<3 + alias<4 are
+# enumerated per-item; the two corpus-runtime floors (paragraph<50 in to_paragraphs, citation<2 in
+# build_g_cite) are thresholds whose per-item effect is NOT enumerated — honestly noted, not implied
+# away (see build_incompleteness COVERAGE_GAPS).
 AUDIT_FLOORS = {
-    'paragraph_min_chars': 50,       # to_paragraphs drops shorter blocks
-    'citation_min_mentions': 2,      # build_g_cite drops edges below this
-    'alias_min_chars': 4,            # registry aliases shorter than this are not added as patterns
-    'name_min_chars': 3,             # add() rejects shorter token names
+    'paragraph_min_chars': {'value': 50, 'enumerated': False},   # to_paragraphs drops shorter blocks
+    'citation_min_mentions': {'value': 2, 'enumerated': False},  # build_g_cite drops edges below this
+    'alias_min_chars': {'value': 4, 'enumerated': True},         # short registry aliases, recorded
+    'name_min_chars': {'value': 3, 'enumerated': True},          # short token names, recorded
 }
 
 
