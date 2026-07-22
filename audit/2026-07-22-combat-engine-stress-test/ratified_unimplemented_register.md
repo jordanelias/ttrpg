@@ -41,9 +41,29 @@ mechanic, so PC-1 and PC-5 should land together, not PC-1 alone.
 
 _pending subagent verification_
 
-## MB / FA / WR / FI / SE — (populating from corpus sweep)
+## MB / FA / WR / FI / SE — (corpus sweep, code-verified)
 
-_pending subagent verification_
+**Systemic meta-finding.** A recurring failure mode across FA/SE/WR: PR#119/#129-era items were logged
+`ratified` in `registers/editorial_ledger_*.jsonl` **and** in `CURRENT.md`'s own prose, but the target docs
+were **never flipped from `## Status: PROPOSED` to CANONICAL** — precisely the ED-1094/ED-1083 "merge ratifies
+by default" failure the convention exists to prevent, recurring anyway. These are cheap flips (a Status line +
+sometimes a short merge/authoring pass), high-value to close. **Mass Battle: no qualifying items** (DG-1..DG-5 /
+ED-MB-0001..0006 were implemented same-session; DG-6+ are still `open`/`needs_jordan`, i.e. not yet ratified).
+
+| # | Item | Ratified where | Requires | State | Evidence |
+|---|---|---|---|---|---|
+| FA-1 | **B12 scale-tier rewrite** (Settlement→Territory→Province→Duchy→Country + bidirectional governance cascade) | `systems/settlements/scale_hierarchy_v1.md:3` "RATIFIED — Jordan 2026-07-13"; `CURRENT.md`:114 ("highest-priority open wiring gap") | author the new Territory tier into canon + wire into code | **NOT STARTED** | `scale_hierarchy_v1.md:161` itself says "needs a real rewrite"; `systems/settlements/sim/registry.py` has **no `Territory` symbol** |
+| FA-2 | **ED-FA-0002 domain_actions home** (M1 workplan next-action) | ledger "RATIFIED 2026-07-05" (PR #81); rescoped by ED-FA-0006 | flip `domain_actions` off `doc:null`; add per-verb `da.*` tag column; rule 3 bucket forks | **NOT DONE** | `references/module_contracts.yaml:482` no tag column; `HANDOFF_FA.md:95` "ED-FA-0002 (open)" |
+| FA-3 | **ED-FA-0021 §1.0d Kaochengfa merge + E11** | ledger `ratified`; `governance_consolidation_v1.md:3` "D1–D6 RATIFIED" (ED-IN-0046/47) | merge §1.0d into the suspicion/recall spine + author E11 counter | **NOT DONE** | `faction_politics_v30.md:129` still `PROPOSED`, no merge; **E11 exists only in the ruling doc**, never authored into canon (grep-empty) |
+| FA-4 | **ED-FA-0020 §1.0c** (Court Attendance & Hostage-Kin) | ledger `ratified` 2026-07-13 (ED-IN-0046); `CURRENT.md`:113 | flip §1.0c → CANONICAL | **NOT DONE** | `faction_politics_v30.md:117` still `**Status: PROPOSED.**` |
+| FA-5 | **ED-FA-0022/0023 §2.5a** (Guild entry/mastership forks) | same (ED-IN-0046) | flip §2.5a → CANONICAL | **NOT DONE** | `faction_politics_v30.md:568` still `PROPOSED` |
+| SE-1 | **ED-SE-0021 §3.3b** (Za patron-lapse) | ledger `ratified` 2026-07-13 | flip §3.3b → CANONICAL | **NOT DONE** | `settlement_layer_v30.md:640` still `PROPOSED` |
+| SE-2 | **ED-SE-0023 §1.3c** (Ordenanza Ratification) | ledger `ratified` 2026-07-13 | flip §1.3c → CANONICAL | **NOT DONE** | `governance_play_redesign_v1.md:97` still `PROPOSED` |
+| WR-1 | **ED-WR-0002 MS supersedes RS** world-track sweep | ledger "RATIFIED 2026-07-05" (PR #77); **gates any Godot engine-params export** (CLAUDE.md §5) | rename RS→MS across `params/threadwork.md`; flip `names_index` lint `warn`→`block` | **NOT DONE** | `engine/params/threadwork.md` reads "RS" throughout; `names_index.yaml:94` still `enforce: warn` |
+| WR-2 | **ED-WR-0001 GD-1 strike-banner sweep** (peninsular_strain co-victory sites) | ledger "RATIFIED 2026-07-05" (PR #77) | add `[SUPERSEDED-BY: GD-1]` to ~7 live sites | **NOT DONE** | `grep -c SUPERSEDED-BY peninsular_strain_v30.md`=0 (vs 4 in sibling `victory_v30.md`) |
+| WR-3 | **ED-WR-0003 Appraise Revelation §6.1/§6.1b + "overheard" rule** | ledger "RATIFIED 2026-07-05" (PR #81, EP-7) | write the §6.1/6.1b procedure; add a player-observer conditional to gossip Keys | **NOT STARTED** | `npc_behavior_v30.md:679-684` §6.1/§6.1b headers **empty**; gossip emits hardcode `private_observers` (no player conditional) |
+| FI-1 | **ED-FI-0002 Counter-espionage loop** | ledger "RATIFIED 2026-07-05" (PR #81, EP-6) | investigable trail + exposure-flip + response surface for enemy covert `da.*` | **NOT STARTED** | no doc/code; `HANDOFF_FI.md:27` "(open)"; the one FI item the audit called "genuine new design" |
+| FI-2 | **ED-FI-0001 Field-investigation lane audit** | ledger "RATIFIED 2026-07-05" (PR #77) | run the audit-style pass on `investigation_systems_v30`; address orphan throughlines T-02/T-30 | **NOT STARTED** | unresolved in HANDOFF_FI/IN; last listed un-actioned 2026-07-07 |
 
 ---
 
