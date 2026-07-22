@@ -44,6 +44,7 @@
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     background: var(--page-plane);
     color: var(--text-primary);
@@ -52,7 +53,12 @@
     padding: 12px;
     max-width: 900px;
     margin: 0 auto;
+    /* Long file paths / URLs / Key types must wrap, never push the page wider than the viewport */
+    overflow-wrap: anywhere;
   }
+
+  /* Wide content (tables) scrolls inside its own container — the page body never scrolls sideways */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   h1 { font-size: 1.25rem; margin: 4px 0 2px; }
   h2 { font-size: 1rem; margin: 0 0 10px; color: var(--text-primary); }
@@ -76,6 +82,18 @@
   .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
   @media (min-width: 700px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Phone tuning: tighter chrome, comfortable tap targets, no cramped headings */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    section.card { padding: 12px; border-radius: 8px; }
+    h1 { font-size: 1.15rem; }
+    .stat-tile .value { font-size: 1.3rem; }
+    /* give accordion headers a finger-friendly height */
+    details.acc > summary { padding: 12px; }
+    /* let long key names wrap instead of forcing the 2-col reference tables wide */
+    .kv-table td.k { white-space: normal; }
   }
 
   ul.plain { list-style: none; margin: 0; padding: 0; }
@@ -598,7 +616,7 @@ function renderAudits(d) {
     const key = e.subsystem || 'uncategorized';
     (bySubsystem[key] = bySubsystem[key] || []).push(e);
   }
-  let html = '<table class="audit-table"><thead><tr><th>Type</th><th>Verdict</th><th>Date</th><th>Scope</th></tr></thead><tbody>';
+  let html = '<div class="table-wrap"><table class="audit-table"><thead><tr><th>Type</th><th>Verdict</th><th>Date</th><th>Scope</th></tr></thead><tbody>';
   for (const subsystem of Object.keys(bySubsystem).sort()) {
     html += `<tr><td colspan="4" class="subsystem-group-header">${esc(subsystem)}</td></tr>`;
     for (const e of bySubsystem[subsystem].sort((a, b) => (a.audit_type || '').localeCompare(b.audit_type || ''))) {
@@ -615,7 +633,7 @@ function renderAudits(d) {
       </tr>`;
     }
   }
-  html += '</tbody></table>';
+  html += '</tbody></table></div>';
   if (au.entries.some(e => e.audit_type === 'simulation_balance')) {
     html += `<div class="decision-source" style="margin-top:8px;">
       ⚠ no n≥100 full-campaign balance run is persisted anywhere in the repo — only two small-n
@@ -734,10 +752,10 @@ function renderRegisters(d) {
       <div class="stat-tile"><div class="value">${ed.total_needs_jordan ?? 0}</div><div class="label">need Jordan's ruling</div></div>
       <div class="stat-tile"><div class="value">${patch.total ?? 0}</div><div class="label">active patches</div></div>
     </div>
-    <table class="lane-table">
+    <div class="table-wrap"><table class="lane-table">
       <thead><tr><th>Lane</th><th>Open</th><th>Needs Jordan</th></tr></thead>
       <tbody>${laneRows}</tbody>
-    </table>
+    </table></div>
     ${patchStatuses ? `<div class="decision-source">patch register: ${patchStatuses}</div>` : ''}`;
 }
 
