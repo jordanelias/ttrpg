@@ -112,12 +112,15 @@ def test_name_coreference_unifies_one_entity_but_not_a_family():
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     defs = va.derive_tokens(__import__('pathlib').Path(root))
 
-    # (1) the Baralta family is ONE token — registry declares `Baralta` an alias of the
-    #     Duchess, and `Inge Baralta` folds in by unique-container substring.
+    # (1) the Baralta family is ONE token, labelled by the registry canonical. Since the NPC
+    #     roster is now sourced from names_index world.* (token_class: npc; R2/ED-IN-0082), the
+    #     Duchess canonical is the surface token and the `baralta` canonical-sources system key
+    #     folds in by registry-alias coreference.
     baralta = [n for n in defs if 'baralta' in n.lower()]
     assert len(baralta) == 1, baralta
+    assert baralta[0] == 'Duchess Inge Baralta'
     merged = defs[baralta[0]].get('aliases_merged') or []
-    assert {'Baralta', 'Inge Baralta', 'Duchess Inge Baralta'} <= set(merged)
+    assert {'Baralta', 'Duchess Inge Baralta'} <= set(merged)
     # the head pattern is the shared surname — "just search Baralta"
     assert defs[baralta[0]]['patterns'] == ['Baralta']
 
@@ -257,10 +260,37 @@ def test_token_classes_sourced_from_names_index_byte_identical():
         tok = va.SEED_TOKENS.get(disp)
         assert tok is not None and tok['scale'] == 'clock' and tok['patterns'] == pats, disp
     assert names.canonical('clock.ms') == 'MS' and 'clock' in va._INDEX_TOKEN_CLASSES
+
+    # NPCs: sourced from names_index world.* (token_class 'npc') with FIRST-NAME / TITLE patterns
+    # — the shared `Almqvist` dynasty surname is deliberately dropped so distinct royals never
+    # collide on it (Jordan 2026-07-22), and the shared `Magnus` first name is dropped from the
+    # Duke (unique on `Vaynard`; `Magnus` also names Cardinal Klapp). Sourced by canonical full
+    # form; scale defaults to the token_class ('npc').
+    NPC = {
+        'King Almud Almqvist':        [r'\bAlmud\b'],
+        'Prince Torben Almqvist':     [r'\bTorben\b'],
+        'Princess Elske Almqvist':    [r'\bElske\b'],
+        'Queen Lenneth Almqvist':     [r'\bLenneth\b'],
+        'Duchess Inge Baralta':       [r'\bBaralta\b', r'\bInge\b'],
+        'Duke Magnus Vaynard':        [r'\bVaynard\b'],
+        'Confessor Arne Himlensendt': [r'\bArne\b', r'\bHimlensendt\b', r'\bConfessor\b'],
+        'Yrsa Vossen':                [r'\bYrsa\b', r'\bVossen\b'],
+        'Edeyja':                     [r'\bEdeyja\b'],
+        'Grandmaster Ehrenwall':      [r'\bEhrenwall\b', r'\bLisbeth\b'],
+    }
+    assert set(va.CLASSES['npc']) == set(NPC)
+    for disp, pats in NPC.items():
+        tok = va.SEED_TOKENS.get(disp)
+        assert tok is not None and tok['scale'] == 'npc' and tok['patterns'] == pats, disp
+    # the dropped-surname invariant: no NPC pattern matches the bare dynasty name
+    assert not any('Almqvist' in p for pats in NPC.values() for p in pats)
+    # sourced via token_class (proper_noun entries that ALSO carry the audit npc class)
+    assert {m['canonical'] for m in names.by_token_class('npc').values()} == set(NPC)
+
     # SOURCING-LINKAGE guard (adversarial-pass hardening): the classes are actually driven through
     # the names_index sourcing loop, so a revert that re-hardcodes identical dicts but drops the
     # sourcing is caught, not just a value-identical pass.
-    assert set(EXPECTED) | {'faction'} <= set(va._INDEX_TOKEN_CLASSES)
+    assert set(EXPECTED) | {'faction', 'mech', 'clock', 'npc'} <= set(va._INDEX_TOKEN_CLASSES)
 
 
 def test_vector_audit_reuses_the_real_names_reader():

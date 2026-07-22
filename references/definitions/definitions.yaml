@@ -609,6 +609,7 @@ definitions:
   world.grandmaster_ehrenwall:
     aliases:
     - Ehrenwall
+    - Lisbeth
     canonical: Grandmaster Ehrenwall
     category: proper_noun
     enforce: warn

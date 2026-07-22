@@ -83,18 +83,11 @@ CLASSES = {
     # world.* proper_noun mirror is undisturbed (canonical unchanged). world.guilds added +
     # mirrored in proper_noun_registry (flagged for Jordan). Order-independent (verified).
     'faction': [],
-    # ── STILL DEFERRED (FLAGGED, not silently left):
-    #   npc → central home is names_index world.* but the audit's short match-forms ('Torben',
-    #     surname-only) don't map 1:1 to the formal world.* canonicals; needs the short<->formal
-    #     reconciliation before sourcing (risk to name-coreference). Reserved prefix npc. (§3.2).
-    #   clock → 2 of 6 already have clock.* entries (clock.church_influence, clock.mending_stability)
-    #     but as FULL-NAME canonicals, while the audit roster is ABBREVIATIONS (MS/CI/IP/PI/TS/TCV)
-    #     and 4/6 have no entry at all — needs the abbreviation<->full-name mapping before sourcing.
-    # npc: DEFERRED — namespacing npc.* into names_index empirically collapses name-coreference
-    # (the generic-layer derived pattern [King\ Almud] overrode the SEED match-forms [Almud,
-    # Almqvist], reducing P1 coverage). Needs a coreference-aware fix before sourcing. Kept hardcoded.
-    'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
-            'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
+    # npc ROSTER sourced from names_index world.* entries tagged `token_class: npc` below
+    # (§8; R2 namespacing / ED-IN-0082). The former short<->formal reconciliation risk is closed:
+    # the entries carry explicit first-name/title patterns (no shared `Almqvist` surname) and the
+    # generic-layer token_class-skip stops the double-source that used to collapse coreference.
+    'npc': [],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
     # The performable ACTION vocabulary (verbs). No structured registry exists yet — the
     # `domain_actions` home is the open M1 blocker (ED-FA-0002); until it is authored these
@@ -228,27 +221,12 @@ SEED_TOKENS = {
     # literal (§8 — the §3.5 disambiguation `context` lives ONCE there; R2/ED-IN-0082).
     # Pressure Points: sourced from references/names_index.yaml ppt.* entries AFTER this literal
     # (§8; R2/ED-IN-0082) — the hardcoded roster + §3.5 context moved into the central registry.
-    # NPCs (disambiguated) — kept hardcoded (see CLASSES['npc'] note: namespacing breaks coreference).
-    'King Almud':           {'patterns': ['Almud', 'Almqvist'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Confessor Arne':       {'patterns': ['Arne', 'Himlensendt', 'Confessor'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Inge Baralta':         {'patterns': ['Baralta', r'\bInge\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Magnus Vaynard':       {'patterns': ['Vaynard', r'\bMagnus\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Lisbeth Ehrenwall':    {'patterns': ['Ehrenwall', 'Lisbeth'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Yrsa Vossen':          {'patterns': [r'\bYrsa\b', 'Vossen'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Torben':               {'patterns': [r'\bTorben\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Elske':                {'patterns': [r'\bElske\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Edeyja':               {'patterns': [r'\bEdeyja\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Lenneth':              {'patterns': [r'\bLenneth\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
+    # NPCs: sourced from references/names_index.yaml world.* entries tagged `token_class: npc`
+    # AFTER this literal (§8; R2 namespacing / ED-IN-0082) — the hardcoded roster + short match-
+    # forms migrated into the central registry as FIRST-NAME/TITLE patterns (the shared `Almqvist`
+    # dynasty surname is dropped, per Jordan 2026-07-22, so distinct royals never collide on it).
+    # The coreference-collapse hazard the old deferral note warned about is closed by the
+    # token_class-skip in derive_tokens (generic layer no longer double-sources these).
     # Factions: sourced from references/names_index.yaml world.* entries tagged
     # `token_class: faction` AFTER this literal (§8; R2/ED-IN-0082) — roster + custom patterns
     # (negative lookaheads) + §3.5 disambiguation context migrated to the central registry.
@@ -269,7 +247,7 @@ SEED_TOKENS = {
 # Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
 # names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
 # derive_tokens already has, since the whole audit reads the index.
-_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech', 'clock')
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech', 'clock', 'npc')
 if names is not None:
     for _cls in _INDEX_TOKEN_CLASSES:
         _members = names.by_token_class(_cls)
@@ -704,6 +682,12 @@ def derive_tokens(root):
                        'mass_combat_stat', 'clock', 'substrate'}
     for e in _ni_entries.values():
         if not isinstance(e, dict):
+            continue
+        if (e.get('token_class') or e.get('category')) in _INDEX_TOKEN_CLASSES:
+            # already SEED-sourced with explicit patterns via the _INDEX_TOKEN_CLASSES loop
+            # (conviction/faction/mech/clock/…) — don't ALSO derive a context-free token here,
+            # which would collide + let coreference pick the wrong surface form (R2 namespacing).
+            # Non-sourced token_class values (e.g. clock_full) are NOT skipped — they stay tokens.
             continue
         cat = e.get('category')
         label, abbr = _strip_display(e.get('canonical'))

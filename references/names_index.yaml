@@ -213,28 +213,37 @@ entries:
   # Generated from references/proper_noun_registry.yaml (every category); warn-tier;
   # mirror-checked by ci_names_consistency (last key segment -> registry entry).
   # world.solmund stays above at block tier (the naming invariant).
+  #
+  # NPC audit sourcing (R2/ED-IN-0082, 2026-07-22): the 10 curated tracked NPCs carry
+  # `token_class: npc` + explicit `patterns:` so the vector-audit sources them from HERE
+  # (§8 "every rule lives once") instead of a hardcoded SEED roster. Patterns use the
+  # FIRST NAME / TITLE and deliberately DROP the shared `Almqvist` dynasty surname (Jordan
+  # 2026-07-22: "drop all Almqvist and use their first name … or title") — a family name is
+  # ambiguous across four royals, so matching it would collide distinct people. `scale`
+  # defaults to the token_class ('npc'). This also unifies the former Lisbeth/Grandmaster
+  # Ehrenwall duplicate onto one token. Untagged characters below stay proper-noun tokens.
   # -- characters --
   world.aldric_tormann: {canonical: "Aldric Tormann", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.annika_feldhaus: {canonical: "Annika Feldhaus", aliases: ["Feldhaus"], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_arnlod_olafsson: {canonical: "Cardinal Arnlod Olafsson", aliases: ["Olafsson"], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_magnus_klapp: {canonical: "Cardinal Magnus Klapp", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_osten_jarnstal: {canonical: "Cardinal Osten Jarnstal", aliases: ["Jarnstal"], legacy: [], category: proper_noun, enforce: warn}
-  world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn}
+  world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bArne\b', '\bHimlensendt\b', '\bConfessor\b']}
   world.dalla_virke: {canonical: "Dalla Virke", aliases: ["Virke"], legacy: [], category: proper_noun, enforce: warn}
   world.doux_alexios_laskaris: {canonical: "Doux Alexios Laskaris", aliases: ["Laskaris"], legacy: [], category: proper_noun, enforce: warn}
-  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn}
-  world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn}
-  world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bBaralta\b', '\bInge\b']}
+  world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bVaynard\b']}
+  world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bEdeyja\b']}
   world.gerik_strand: {canonical: "Gerik Strand", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.grandmaster_ehrenwall: {canonical: "Grandmaster Ehrenwall", aliases: ["Ehrenwall"], legacy: [], category: proper_noun, enforce: warn}
+  world.grandmaster_ehrenwall: {canonical: "Grandmaster Ehrenwall", aliases: ["Ehrenwall", "Lisbeth"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bEhrenwall\b', '\bLisbeth\b']}
   world.halvar_brandt: {canonical: "Halvar Brandt", aliases: ["Brandt"], legacy: [], category: proper_noun, enforce: warn}
-  world.king_almud_almqvist: {canonical: "King Almud Almqvist", aliases: ["Almud"], legacy: [], category: proper_noun, enforce: warn}
+  world.king_almud_almqvist: {canonical: "King Almud Almqvist", aliases: ["Almud"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bAlmud\b']}
   world.maret_uln: {canonical: "Maret Uln", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.yrsa_vossen: {canonical: "Yrsa Vossen", aliases: ["Vossen"], legacy: [], category: proper_noun, enforce: warn}
+  world.yrsa_vossen: {canonical: "Yrsa Vossen", aliases: ["Vossen"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bYrsa\b', '\bVossen\b']}
   world.peder_almstedt: {canonical: "Peder Almstedt", aliases: ["Almstedt"], legacy: [], category: proper_noun, enforce: warn}
-  world.prince_torben_almqvist: {canonical: "Prince Torben Almqvist", aliases: ["Torben"], legacy: [], category: proper_noun, enforce: warn}
-  world.princess_elske_almqvist: {canonical: "Princess Elske Almqvist", aliases: ["Elske"], legacy: [], category: proper_noun, enforce: warn}
-  world.queen_lenneth_almqvist: {canonical: "Queen Lenneth Almqvist", aliases: ["Lenneth"], legacy: [], category: proper_noun, enforce: warn}
+  world.prince_torben_almqvist: {canonical: "Prince Torben Almqvist", aliases: ["Torben"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bTorben\b']}
+  world.princess_elske_almqvist: {canonical: "Princess Elske Almqvist", aliases: ["Elske"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bElske\b']}
+  world.queen_lenneth_almqvist: {canonical: "Queen Lenneth Almqvist", aliases: ["Lenneth"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bLenneth\b']}
   world.rikard_solberg: {canonical: "Rikard Solberg", aliases: ["Solberg"], legacy: [], category: proper_noun, enforce: warn}
   world.sigrid_torsvald: {canonical: "Sigrid Torsvald", aliases: ["Torsvald"], legacy: [], category: proper_noun, enforce: warn}
   world.sæmund_haelgrund: {canonical: "Sæmund Haelgrund", aliases: ["Haelgrund"], legacy: [], category: proper_noun, enforce: warn}
