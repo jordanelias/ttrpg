@@ -2,6 +2,22 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0015: spatial-model v2 Stage F — verification + golden re-record + historical revalidation
+- Full verification of Stages D+E (no new mechanics). **I1–I7 all hold**: I1 conservation 0 violations /
+  300-battle field fuzz; I2/I6 stress-harness S5 (determinism PASS, mirror |skew|=0/48); I3 no live-path
+  position integer; I4 byte-exact grid oracle green; I7 facing-away→0 reach. **Stress harness S0–S5 all
+  green** (30 mechanics WIRED, 0 engine failures, all off-by-default gates SAFE). Lanchester exponent
+  p=2.50 + depth-2 experiment byte-identical (preserved).
+- **Field goldens re-recorded** (grid unchanged, I4): `unit_field 2da5183…` (`--check` verified),
+  `cell_field 5f5db96…`.
+- **P-DEC-4 historical revalidation** (`gauge_mb.py`, history-grounded bands): pre-D baseline (A–C) =
+  **10/20**, v2 (A–E) = **6/20** multi — D+E moved the gauge down 4 rows (authorized re-baseline, but
+  material). Dominant failure = **DG-6 over-decisiveness**; root cause confirmed: melee pool sums N
+  independent dice → CV collapses ~1/√N (measured 0.89→0.06, N=4→1024) → `compute_degree` deterministic
+  from force ratio → 100%/0% vs bands. Stage E win: C2/C6 (Cav vs BRACED) REPEL, matching history.
+  Per Jordan directive 2026-07-22, the DG-6 grounded resolution (scale-invariant variance) is **underway**
+  as a follow-on ED-MB. Full detail: `stage_F_verification.md` + ED-MB-0015.
+
 ## 2026-07-22 — ED-MB-0014: spatial-model v2 Stage E — weapon-class reach + pike troop type
 - Stage E of `spatial_model_v2_plan.md` (Jordan P-DEC-1). The flat `REACH_SHORT=0.5` placeholder →
   per-troop-type **front-face reach** (`reach_for`/`TROOP_TYPE_REACH`): non-pole melee 0.1, pole/spear

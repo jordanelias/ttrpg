@@ -261,7 +261,14 @@ EXPECTED = {
     # used to freeze at range now engage) — a DG-6-gated balance surface, disclosed, no constant tuned.
     # Both GRID modes stay BYTE-IDENTICAL (resolve_toi_and_commit runs only under `if FIELD_MOVEMENT`,
     # orchestration.py:1405; test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and still passes: 2 passed).
-    'unit_field': 'a73237df3142b991dd64234a4d8e760e48e8e506b707387a3a9ea486648e6f73',
+    # [2026-07-22, ED-MB-0013+0014, spatial-model v2 Stages D+E — see the 'unit_field' note above] re-recorded
+    # (Stage F digest re-record). Stage D routed the melee Lanchester frontage off the integer distinct-column
+    # count onto the continuous OBB front-overlap width; Stage E wired the P-DEC-1 per-troop-type reach
+    # (non-pole 0.1/pole 0.2/pike 0.3/lance 0.2/ranged 0.1) replacing the flat REACH_SHORT=0.5. Both move the
+    # field gauge (DG-6-gated, disclosed, no constant tuned): symmetric axis-aligned meetings stay identical,
+    # offset/asymmetric-width/charge-brace meetings shift. GRID modes stay BYTE-IDENTICAL (field-gated;
+    # test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and passes).
+    'unit_field': '2da5183aeeedfadaf3acba1d72c2868b7b7d3a83a832df6e66d4f9d964f1bc38',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -303,7 +310,10 @@ EXPECTED = {
     # resolve_toi_and_commit halts on the BODY box (not the reach-extended box): bodies close to touch and
     # fight rather than freezing at the reach-touch boundary (a 0-casualty standoff). Moves the field gauge
     # broadly (DG-6-gated, disclosed, no constant tuned); GRID modes byte-identical (FIELD_MOVEMENT-gated).
-    'cell_field': '9d0b63b90314e9d95ddcd1effcdd14b05652a449eee1174eeae249c015202a3d',
+    # [2026-07-22, ED-MB-0013+0014, spatial-model v2 Stages D+E — see the 'unit_field' note above] re-recorded
+    # (Stage F). Continuous OBB frontage (D) + per-troop-type reach (E). DG-6-gated field-gauge shift,
+    # disclosed, no constant tuned; GRID modes byte-identical (field-gated).
+    'cell_field': '5f5db965f2712ae1b2b4fc614c827b6cb74a98fab4b4e9dfb410e5010ee5c273',
 }
 
 

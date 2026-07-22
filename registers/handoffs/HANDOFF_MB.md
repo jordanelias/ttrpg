@@ -15,6 +15,23 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0015 (2026-07-22): spatial-model v2 Stage F — verification + golden re-record + P-DEC-4
+  historical revalidation.** All I1–I7 hold; stress harness S0–S5 green; Lanchester exponent + depth-2
+  preserved; field goldens re-recorded (`unit_field 2da5183…` verified, `cell_field 5f5db96…`; grid
+  unchanged). **P-DEC-4:** gauge pre-D baseline (A–C) = **10/20**, v2 (A–E) = **6/20** multi — D+E moved
+  it down 4 rows (authorized re-baseline, but material; see `stage_F_verification.md` §5). Dominant
+  failure = **DG-6 over-decisiveness**, root-caused: melee pool sums N independent dice → CV collapses
+  ~1/√N → `compute_degree` deterministic from force ratio → 100%/0% vs historical bands. **Now being
+  RESOLVED** (Jordan directive 2026-07-22: extend code to resolve standing issues via academic research /
+  military theory / mathematics / historical precedent) — the DG-6 grounded resolution (restore
+  scale-invariant outcome variance so a large advantage is decisive-but-uncertain/banded) is UNDERWAY as
+  a follow-on ED-MB, built on stochastic-Lanchester/breakpoint models + Sabin's *Lost Battles*
+  decisiveness bands. **Stage G (retire integer engine)** remains after: note the field engine lives in
+  `tests/sim/mass_battle` (not `systems/`), so routing `resolve_mass_battle` (`systems/mass_battle/sim/
+  massbattle.py`, called by `systems/factions/sim/faction_action.py:_try_conquest`) onto it needs a
+  faction→army adapter + outcome→`{degree,attacker_wins}` mapping + likely a field-engine relocation —
+  an architecturally-significant, cross-lane (MB+FA) epic.
+
 - **ED-MB-0014 (2026-07-22): spatial-model v2 Stage E — weapon-class reach + the `pike` troop type.**
   Per `spatial_model_v2_plan.md` §3 Stage E / Jordan P-DEC-1. `reach_for`/`TROOP_TYPE_REACH` now return
   the per-type front-face reach (non-pole 0.1 / pole 0.2 / **pike 0.3** / lance 0.2 / ranged 0.1 sidearm),
