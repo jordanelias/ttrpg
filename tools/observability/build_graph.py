@@ -474,6 +474,29 @@ def build():
     return payload
 
 
+def _strip_volatile_review(feed: str) -> str:
+    """Drop the volatile fields (generated_epoch, head_sha) from a `window.VALORIA_REVIEW = {…};`
+    bundle so the review-state inlined into the committed console.html is stable across CI runs
+    and only changes when actual signal content changes. Falls back to the raw text if the shape
+    is unexpected (never blocks the build)."""
+    m = re.match(r"\s*window\.VALORIA_REVIEW\s*=\s*(.*?);\s*$", feed, re.DOTALL)
+    if not m:
+        return feed
+    try:
+        state = json.loads(m.group(1))
+    except Exception:
+        return feed
+    if not isinstance(state, dict):
+        return feed
+    state.pop("generated_epoch", None)
+    state.pop("head_sha", None)
+    # per-signal wall-clock timing varies every run — strip it too so the bundle is stable
+    for sig in state.get("signals", []) or []:
+        if isinstance(sig, dict):
+            sig.pop("elapsed_ms", None)
+    return "window.VALORIA_REVIEW = " + json.dumps(state, indent=2) + ";\n"
+
+
 def main():
     payload = build()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -514,7 +537,17 @@ def main():
             tag = f'<script src="{src}"></script>'
             p = OUT_DIR / src
             if p.exists():
-                html = html.replace(tag, "<script>/*inlined*/" + p.read_text(encoding="utf-8") + "</script>")
+                feed = p.read_text(encoding="utf-8")
+                if src == "review_state_data.js":
+                    # The committed console.html is a tracked artifact, but review_state is a
+                    # git-IGNORED live feed carrying volatile fields (generated_epoch changes every
+                    # run, head_sha every commit). Inlining them verbatim would make console.html
+                    # differ on every CI run and open a spurious audit-refresh PR each time (the
+                    # diff-check would always see it changed). Strip the volatile fields so the
+                    # inlined snapshot is deterministic w.r.t. actual signal content; the SERVED
+                    # index.html still loads the full live feed with the timestamp/sha.
+                    feed = _strip_volatile_review(feed)
+                html = html.replace(tag, "<script>/*inlined*/" + feed + "</script>")
             else:
                 html = html.replace(tag, f"<!-- {src} absent at build time ({var} feed empty) -->")
         (OUT_DIR / "console.html").write_text(html, encoding="utf-8")

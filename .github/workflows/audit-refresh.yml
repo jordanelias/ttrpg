@@ -92,7 +92,12 @@ jobs:
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js; then
+          # NOTE: console.html is intentionally NOT in this diff-check trigger — it is a
+          # generated bundle that rides along in the git-add below. It inlines review-state
+          # (whose volatile fields build_graph strips), so gating on it could still churn; the
+          # corpus/content feeds here are the real "is there work?" signal. It IS git-added so it
+          # ships fresh whenever a real change opens a PR.
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
