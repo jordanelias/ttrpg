@@ -26,11 +26,17 @@ recent work" therefore targets that engine for the flag/gate stress surface (S0�
 "subunits aren't moving when they have previously" / "if it's broken and not commensurate with system,
 disable" / "fields, not grids. no grids." the freeze is disabled there too. That engine holds *integer*
 cell positions (contact = set-membership on integer coords), so it cannot carry a true sub-cell field
-velocity the way the field engine can (the two are unreconciled, ED-IN-0074 D5); the fix takes the real
-velocity with no floor and lets an advancing body take at least one whole cell instead of freezing —
-Discipline≥5 (incl. the wired `resolve_mass_battle` default) is **byte-identical** (`round(1.0)==floor(1.0)`),
-only the previously-frozen sub-disc-5 space moves. Guarded by `tests/valoria/test_mass_battle_systems_movement.py`
-(8 tests: per-disc closing isolation + all-disc aggregate + disc≥5 regression/determinism).
+velocity the way the field engine can (the two are unreconciled, ED-IN-0074 D5). Representing 0.4/0.7
+cells/tick on the grid would need the accumulator (rejected) or float positions (breaks integer
+contact), so the fix **clamps to the grid's minimum quantum** — an advancing body takes at least one
+whole cell instead of a frozen zero. **Disclosed cost (surfaced by the adversarial pass, §6):** this
+flattens the sub-disc-5 speed gradient — disc 1/2/3/4 all advance at 1 cell/tick here, where the field
+engine faithfully keeps 0.4/0.4/0.7/0.7; the field engine is the faithful one, this is an unfreeze
+stopgap for the wired engine. Discipline≥5 (incl. the wired `resolve_mass_battle` default of 5) is
+**byte-identical** (`round(1.0)==floor(1.0)`; an adversarial A/B incl. mid-battle degradation and
+volley-under-approach found no disc≥5 outcome that differs — degradation lags contact when movement is
+already moot). Guarded by `tests/valoria/test_mass_battle_systems_movement.py` (8 tests: per-disc
+closing isolation + all-disc aggregate + disc≥5 regression/determinism).
 
 ## 1. Headline finding + fix (DG-10) — field movement was broken
 
@@ -150,7 +156,33 @@ touched.
 
 ## 5. Files
 
-- `tests/sim/mass_battle/hierarchy/units.py` — DG-10 field-movement fix (`_node_advance`).
+- `tests/sim/mass_battle/hierarchy/units.py` — DG-10 field-movement fix (`_node_advance`, faithful float velocity).
 - `tests/sim/mass_battle/bat.py` — field goldens re-recorded (`cell_field`/`unit_field`).
+- `systems/mass_battle/sim/units.py` — DG-10 fix in the **wired** engine (`advance_cells`, grid clamp-to-1).
+- `tests/valoria/test_mass_battle_systems_movement.py` — wired-engine movement tests (8).
 - `audit/2026-07-22-mass-battle-stress-test/` — this harness + report.
 - `registers/editorial_ledger_mb.jsonl` — ED-MB-0011.
+
+## 6. Adversarial pass (self-review)
+
+Ran an antagonist pass against the two claims most likely to be wrong. Two survived, one landed.
+
+- **A — "Discipline≥5 is byte-identical, so the wired `resolve_mass_battle` path is untouched": SURVIVED.**
+  The attack: the wired engine degrades discipline mid-battle (`discipline_check_phase`, casualty-driven,
+  incl. volley losses), so a disc-5 unit could drop to disc-4 *before contact* where old=frozen /
+  new=moving would differ. Tested it hard — normal battles, long lethal battles that degrade to disc-4,
+  and an 8000-archer force over a 33-row approach designed to force pre-contact degradation. **All
+  byte-identical old-vs-new.** Degradation lags contact: by the phase boundary where a unit hits disc-4
+  it is already in melee, where movement is moot. The claim holds; the *original justification*
+  (`round(1.0)==floor(1.0)`) was incomplete and is now corrected to name the real reason.
+- **B — "the 4 inert S3 flags are inert-on-scenario, not dead": SURVIVED.** All four are consumed at
+  live call sites — `MORALE_FIX` (resolution.py:54), `PC_RECOIL_FRONTAL` (orchestration.py:897),
+  `PC_WHEEL` (units.py:1187), `PC_BRACE_SETUP_DELAY` (resolution.py:66). None are dead gates; each
+  simply needs a triggering scenario the S3 probe didn't supply (symmetry-cancel / construction-brace
+  exemption / specific geometry).
+- **C — "the wired fix takes the real velocity": LANDED (disclosure defect, now fixed).** `max(1,
+  round(vel))` *clamps* sub-disc-5 velocity to 1 cell/tick, **flattening the speed gradient** (disc
+  1/2/3/4 all move at 1, where the field engine keeps 0.4/0.4/0.7/0.7). Calling it "real velocity"
+  overclaimed. The fix itself stands — an integer-contact grid can't carry sub-cell velocity without
+  the rejected accumulator or float positions — but the wording in `units.py`, this README, and the
+  ledger is corrected to name it a clamp/stopgap and point at the field engine as the faithful one.

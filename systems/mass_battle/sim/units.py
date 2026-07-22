@@ -138,15 +138,24 @@ class Subunit:
             # levy/light_inf/heavy_inf/archers/crossbow/sling/artillery (all disc<5 in §B.2) never
             # advanced to contact. This is the wired engine's copy of the coordinate-field engine's
             # DG-10 freeze (fixed there the same day). This engine holds INTEGER cell positions —
-            # contact detection is set-membership on integer coords — so it cannot carry a true
-            # sub-cell field velocity the way the field engine does (the two are unreconciled,
-            # ED-IN-0074 D5); the minimal non-breaking unfreeze is to take the REAL velocity (no floor)
-            # and let an advancing body take at least one whole cell rather than a frozen zero. NOT an
-            # accumulator. Discipline>=5 (incl. the wired resolve_mass_battle default) is unchanged
-            # bit-for-bit: round(1.0)=1 == floor(1.0). Only the previously-frozen sub-disc-5 space moves.
+            # contact detection is set-membership on integer coords — so it CANNOT carry a true sub-cell
+            # field velocity (0.4/0.7 cells/tick) the way the coordinate-field engine can; representing
+            # that on the grid would need either the fractional-velocity accumulator (Jordan rejected:
+            # "what even is the point of the continuous velocity accumulator?") or float positions (which
+            # break integer contact). So the honest non-breaking unfreeze here is a CLAMP to the grid's
+            # minimum quantum: an advancing body takes at least one whole cell instead of a frozen zero.
+            # DISCLOSED COST (verified by an adversarial pass): this FLATTENS the sub-Discipline-5 speed
+            # gradient — disc 1/2/3/4 all advance at 1 cell/tick here, where the field engine keeps
+            # 0.4/0.4/0.7/0.7. A faithful sub-cell gradient on this engine is out of scope until the
+            # field↔grid reconciliation (ED-IN-0074 D5) — the field engine is the faithful one; this is
+            # a stopgap that trades the sub-disc-5 speed curve for un-freezing the wired engine at all.
+            # Discipline>=5 (incl. the wired resolve_mass_battle default of 5) is UNCHANGED bit-for-bit
+            # (round(1.0)=1 == floor(1.0)); an adversarial A/B (incl. mid-battle degradation and volley-
+            # under-approach) found no disc>=5 outcome that differs, since degradation lags contact when
+            # movement is already moot. NOT an accumulator.
             vel = base_speed * disc_mult + stance_mod
             if vel <= 0: continue                      # 'hold' (stance_mod -99) / non-advancing → no move
-            actual_speed = max(1, round(vel))
+            actual_speed = max(1, round(vel))          # clamp to >=1 cell: unfreeze, not faithful sub-cell velocity
             if _mb.TIP_SUPPORT_ENABLED and base_speed > min_speed:
                 current_offset = self.cell_offsets.get((orig_r, orig_c), 0)
                 slow_offsets = [
