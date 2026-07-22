@@ -763,3 +763,20 @@ allocate, bump, co-commit; never max+1.)_
   (D1–D16)**; P0 (instrument hardening, net of #139: the G_code __init__ HIGH, banner_classify tie-break,
   contract↔code join, direction_audit.py) can start in parallel, IN lane. Program structure ratifies on
   merge; every D-row stays needs_jordan.
+
+- **Incompleteness Ledger + audit de-cull (2026-07-22, PR #205)** — the vectorization apparatus'
+  core purpose is to **SURFACE WHAT IS MISSING**; it had been silently culling (a 16-system
+  `SKIP_SYSTEMS` denylist + four length/threshold floors) to stay "signal-heavy" — the exact
+  opposite. Fixed: (1) every cull is now a *surfaced, reasoned exclusion*
+  (`vector_audit.audit_exclusions()`); (2) new `tools/observability/build_incompleteness.py` —
+  the absorb-everything **Incompleteness Ledger** (`INCOMPLETENESS.md` / `incompleteness.json` /
+  `_data.js`) scanning the whole tree for every stub/null/missing/excluded/unverified thing,
+  surfaced as the dashboard's **Missing** face; (3) doctrine enshrined in
+  `skills/valoria-vector-audit/SKILL.md` (⛔ SURFACE, NEVER CULL) so it survives context loss.
+  **Next action (pending Jordan design call):** Stage F — wire the 7 island modules + 11 doc:null
+  contracts. BLOCKED honestly: the design docs don't speak in the Key vocabulary, so any IN/OUT
+  edge is *inference*, not extraction. Do NOT fabricate contract edges into the source of truth;
+  author them grounded (e.g. re-point the 3 stale `designs/` doc paths first: `victory`,
+  `clock_registry`/overview, `territorial_piety`→`conviction_track`) and mark any inferred edge
+  `[ASSUMPTION]`, held back loudly per CLAUDE.md §2. `engine_clock` (ED-1051) + `domain_actions`
+  (ED-FA-0002) need canon before their edges are real.

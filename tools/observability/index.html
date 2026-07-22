@@ -142,6 +142,7 @@
         <div class="tab gov" data-tab="review">Health</div>
         <div class="tab gov" data-tab="proposal">Proposals</div>
         <div class="tab gov" data-tab="decision">Decisions</div>
+        <div class="tab gov" data-tab="missing">Missing</div>
       </div>
       <div class="lanebar" id="lanebar"></div>
       <div class="filters">
@@ -182,6 +183,7 @@
 <script src="decisions_data.js"></script>
 <script src="proposals_data.js"></script>
 <script src="review_state_data.js"></script>
+<script src="incompleteness_data.js"></script>
 <script>
 "use strict";
 const G = window.VALORIA_GRAPH;
@@ -216,10 +218,18 @@ function label(id){const k=kindOf(id);if(k==='scalar')return scById[id].name;ret
 const REV = window.VALORIA_REVIEW || null;                       // CI health signals (may be absent)
 const PROP = window.VALORIA_PROPOSALS || {items:[],by_lane:{},counts:{}};
 const DEC = window.VALORIA_DECISIONS || {decisions:[],meta:{}};
+const INC = window.VALORIA_INCOMPLETENESS || {findings:[],totals:{by_category:{}},by_lane:{}}; // the Missing ledger
+const INC_CAT_LABEL={contract_doc_null:'doc:null contract',contract_island:'island (no I/O)',
+  contract_missing_entirely:'no contract entry',contract_no_resolver:'no resolver',
+  contract_assumption:'[ASSUMPTION] contract',key_orphan_emit:'orphan-emit Key',
+  key_unemitted_consume:'unemitted-consume Key',sim_stub:'sim/engine stub',
+  integrity_unverified_pin:'unverified pin',register_quarantined:'quarantined register',
+  audit_excluded_system:'audit-denylisted system'};
 const LANES=['MB','PC','FI','SC','FA','WR','IN','GO','SE','unassigned'];
 // index governance items by lane for the cross-cut lens
-const propByLane={},decByLane={},sigByLane={};
-LANES.forEach(l=>{propByLane[l]=[];decByLane[l]=[];sigByLane[l]=[];});
+const propByLane={},decByLane={},sigByLane={},incByLane={};
+LANES.forEach(l=>{propByLane[l]=[];decByLane[l]=[];sigByLane[l]=[];incByLane[l]=[];});
+(INC.findings||[]).forEach(f=>{const l=LANES.includes(f.lane)?f.lane:'unassigned';(incByLane[l]=incByLane[l]||[]).push(f);});
 (PROP.items||[]).forEach(p=>{const l=LANES.includes(p.lane)?p.lane:'unassigned';propByLane[l].push(p);});
 (DEC.decisions||[]).forEach(d=>{const l=LANES.includes(d.lane)?d.lane:'unassigned';decByLane[l].push(d);});
 (REV&&REV.signals||[]).forEach(s=>{const l=LANES.includes(s.lane)?s.lane:'unassigned';(sigByLane[l]=sigByLane[l]||[]).push(s);});
@@ -233,7 +243,9 @@ function decFiles(d){return (d.locations||[]).map(l=>String(l).split(':')[0]);}
 function govForNode(id){
   const sys=sysById[id]; const doc=sys&&sys.doc; const lane=sys&&sys.lane;
   const decs=(DEC.decisions||[]).filter(d=>(d.systems||[]).includes(id)||(doc&&decFiles(d).includes(doc)));
-  return {decs,lane};
+  // incompleteness findings naming this node directly (island/doc:null/no-contract/etc.)
+  const incs=(INC.findings||[]).filter(f=>f.id===id||(f.path&&doc&&f.path===doc));
+  return {decs,lane,incs};
 }
 function verdictClass(s){return s.regressed?'v-regress':(s.verdict==='pass'?'v-pass':'v-fail');}
 function verdictWord(s){return s.regressed?'REGRESSED':(s.verdict==='pass'?'pass':'FAIL');}
@@ -261,7 +273,7 @@ function inOf(id){
 // ---- state ----
 let TAB='system', SELECTED=null, SELTERM=null, SELGOV=null, MODE='ripple', DEPTH=3, FILTER_SCALE='', FILTER_EXTRA='', LANE='';
 let view={x:0,y:0,k:1};
-const GOV_TABS=new Set(['review','proposal','decision']);
+const GOV_TABS=new Set(['review','proposal','decision','missing']);
 
 // ---- header chips ----
 (function(){
@@ -292,6 +304,11 @@ const GOV_TABS=new Set(['review','proposal','decision']);
   } else { add('repo-state <b class="muted">n/a</b>'); }
   if(PROP.counts&&PROP.counts.total!=null)add(`<b>${PROP.counts.total}</b> proposals · <b style="color:#ffd27a">${PROP.counts.needs_jordan||0}</b> need Jordan`);
   if(DEC.meta&&DEC.meta.total_open!=null)add(`<b>${DEC.meta.total_open}</b> open decisions`);
+  if(INC.totals&&INC.totals.findings!=null){
+    const chip=el('span',{class:'chip',html:`<b style="color:#ff8c42">${INC.totals.findings}</b> missing/stub/null`});
+    chip.style.cursor='pointer';chip.title='the Incompleteness Ledger — what is unfinished across the tree';
+    chip.onclick=()=>switchTab('missing');c.append(chip);
+  }
 })();
 
 // ---- filters ----
@@ -309,6 +326,7 @@ function refreshExtraFilter(){
   else if(TAB==='review'){opts=['blocking','report_only'];sel.append(el('option',{value:''},'all tiers'));}
   else if(TAB==='proposal'){opts=[...new Set((PROP.items||[]).map(p=>p.kind).filter(Boolean))].sort();sel.append(el('option',{value:''},'all kinds'));}
   else if(TAB==='decision'){opts=Object.keys((DEC.meta&&DEC.meta.by_category)||{}).sort();sel.append(el('option',{value:''},'all categories'));}
+  else if(TAB==='missing'){opts=Object.keys((INC.totals&&INC.totals.by_category)||{}).sort();sel.append(el('option',{value:''},'all kinds'));}
   opts.forEach(o=>sel.append(el('option',{value:o},o)));
   FILTER_EXTRA='';
 }
@@ -332,6 +350,9 @@ function listItems(){
   else if(TAB==='decision')items=(DEC.decisions||[]).map((d,i)=>({gov:{type:'decision',data:d},id:'dec:'+i,name:(d.label||d.category)+' — '+(d.text||'').slice(0,60),isGov:true,
         lane:d.lane,prio:d.priority,dotc:'prio'+(d.priority||3),meta:'P'+(d.priority||3)+(d.count>1?' ×'+d.count:''),extra:d.category,
         search:((d.text||'')+' '+(d.label||'')+' '+d.category+' '+(d.systems||[]).join(' ')+' '+d.lane).toLowerCase()}));
+  else if(TAB==='missing')items=(INC.findings||[]).map((f,i)=>({gov:{type:'missing',data:f},id:'inc:'+i,name:f.title||f.id,isGov:true,
+        lane:f.lane,dotc:'v-regress',meta:INC_CAT_LABEL[f.category]||f.category,extra:f.category,
+        search:((f.title||'')+' '+(f.detail||'')+' '+f.category+' '+(f.path||'')+' '+f.lane).toLowerCase()}));
   return items.filter(it=>{
     if(q){const hay=(it.isTerm||it.isGov)?it.search:(it.name||it.id).toLowerCase();if(!hay.includes(q))return false;}
     if(it.isGov && !laneOK(it.lane))return false;
@@ -346,6 +367,7 @@ function renderList(){
   if(TAB==='decision')items.sort((a,b)=>(a.prio-b.prio)||(a.name).localeCompare(b.name)); // priority-first
   else if(TAB==='review')items.sort((a,b)=>(b.gov.data.regressed-a.gov.data.regressed)||a.name.localeCompare(b.name));
   else if(TAB==='proposal')items.sort((a,b)=>(b.nj-a.nj)||a.name.localeCompare(b.name)); // needs-Jordan first
+  else if(TAB==='missing')items.sort((a,b)=>(a.extra||'').localeCompare(b.extra||'')||a.name.localeCompare(b.name)); // by category
   else items.sort((a,b)=>(a.name||a.id).localeCompare(b.name||b.id));
   items.forEach(it=>{
     const isSel=it.isTerm?(SELTERM&&SELTERM.canonical===it.term.canonical):
@@ -607,9 +629,9 @@ function renderHealth(){
   // lane × governance matrix
   hp.append(el('h3',{},'Lane matrix — click any lane or cell to focus'));
   const tbl=el('table',{class:'matrix'});
-  const hr=el('tr');['lane','CI signals','proposals','needs Jordan','open decisions','P1'].forEach(h=>hr.append(el('th',{},h)));
+  const hr=el('tr');['lane','CI signals','proposals','needs Jordan','open decisions','P1','missing'].forEach(h=>hr.append(el('th',{},h)));
   tbl.append(hr);
-  const activeLanes=LANES.filter(l=>(propByLane[l]||[]).length||(decByLane[l]||[]).length||(sigByLane[l]||[]).length);
+  const activeLanes=LANES.filter(l=>(propByLane[l]||[]).length||(decByLane[l]||[]).length||(sigByLane[l]||[]).length||(incByLane[l]||[]).length);
   activeLanes.forEach(l=>{
     const tr=el('tr');
     const laneTd=el('td',{class:'lane'},l);laneTd.onclick=()=>{setLane(LANE===l?'':l);};tr.append(laneTd);
@@ -624,6 +646,9 @@ function renderHealth(){
     const dc=el('td',{html:decs.length?String(decs.length):'<span class="cell-none">·</span>'});
     dc.style.cursor='pointer';dc.onclick=()=>{setLane(l);switchTab('decision');};tr.append(dc);
     tr.append(el('td',{class:p1?'prio1':'',html:p1?String(p1):'<span class="cell-none">·</span>'}));
+    const inc=incByLane[l]||[];
+    const mc=el('td',{class:inc.length?'v-regress':'',html:inc.length?String(inc.length):'<span class="cell-none">·</span>'});
+    mc.style.cursor='pointer';mc.onclick=()=>{setLane(l);switchTab('missing');};tr.append(mc);
     if(LANE===l)tr.style.background='#243044';
     tbl.append(tr);
   });
@@ -675,7 +700,19 @@ function detailGov(it){
   const d=it.gov;
   if(d.type==='signal')return detailSignal(d.data);
   if(d.type==='proposal')return detailProposal(d.data);
+  if(d.type==='missing')return detailMissing(d.data);
   return detailDecision(d.data);
+}
+function detailMissing(f){
+  head(f.title||f.id,'missing · '+(INC_CAT_LABEL[f.category]||f.category),'#ff8c42');
+  let m=sec('what is missing');
+  m.append(el('div',{class:'small'},esc(f.detail||'')));
+  m.append(el('div',{class:'small muted',html:`kind <code>${esc(f.category)}</code> · lane ${f.lane||'unassigned'}`}));
+  if(f.path){let p=sec('where');locRow(p,f.path);}
+  // graph cross-link: if this finding names a graph node, jump to it
+  const node=kindOf(f.id)?f.id:(kindOf((f.id||'').split(':')[0])?(f.id||'').split(':')[0]:null);
+  if(node){let g=sec('maps to graph');const pl=el('span',{class:'pill'});pl.append(el('span',{class:'dot'}));pl.lastChild.style.background=nodeColor(node);pl.append(document.createTextNode(node));pl.onclick=()=>select(node);g.append(pl);}
+  govLaneLink(f.lane);
 }
 function detailSignal(s){
   head(s.id,'CI signal · '+s.tier,govDotColor(verdictClass(s)));
@@ -763,8 +800,14 @@ function detailSystem(s){
 // (systems[]) or share its home doc, and proposals filed against that doc. Ties the graph back
 // to the health/proposals/decisions feeds so a node inspection surfaces its open work.
 function govSection(nodeId){
-  const {decs,lane}=govForNode(nodeId);
+  const {decs,lane,incs}=govForNode(nodeId);
   const laneProps=lane?(propByLane[lane]||[]):[];
+  // what's MISSING about this node itself — surfaced first (the tool's whole point)
+  if(incs&&incs.length){
+    let mg=sec(`⚠ missing / incomplete (${incs.length})`);
+    incs.forEach(f=>{const d=el('div',{class:'note',html:`<span class="v-regress">●</span> <b>${esc(INC_CAT_LABEL[f.category]||f.category)}</b> <span class="muted">${esc(f.detail||'')}</span>`});
+      d.style.cursor='pointer';d.onclick=()=>{const i=(INC.findings||[]).indexOf(f);switchTab('missing');selectGov({id:'inc:'+i,gov:{type:'missing',data:f}});};mg.append(d);});
+  }
   if(!decs.length&&!laneProps.length)return;
   let g=sec(`governance — open work (${decs.length} decision${decs.length===1?'':'s'}${lane?` · lane ${lane}`:''})`);
   // decisions: the precise per-node link (systems[]/doc)
@@ -817,7 +860,7 @@ function renderLaneBar(){
   bar.style.display='flex';
   const all=el('span',{class:'lanechip'+(LANE===''?' on':'')},'all lanes');all.onclick=()=>setLane('');bar.append(all);
   LANES.forEach(l=>{
-    const n=(propByLane[l]||[]).length+(decByLane[l]||[]).length+((sigByLane[l]||[]).length);
+    const n=(propByLane[l]||[]).length+(decByLane[l]||[]).length+((sigByLane[l]||[]).length)+((incByLane[l]||[]).length);
     if(!n)return;
     const c=el('span',{class:'lanechip'+(LANE===l?' on':'')},l);
     c.onclick=()=>setLane(LANE===l?'':l);bar.append(c);

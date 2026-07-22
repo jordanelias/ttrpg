@@ -544,7 +544,8 @@ def main():
         # (the viewer treats a missing window.VALORIA_* as an empty feed).
         for src, var in (("decisions_data.js", "VALORIA_DECISIONS"),
                          ("proposals_data.js", "VALORIA_PROPOSALS"),
-                         ("review_state_data.js", "VALORIA_REVIEW")):
+                         ("review_state_data.js", "VALORIA_REVIEW"),
+                         ("incompleteness_data.js", "VALORIA_INCOMPLETENESS")):
             tag = f'<script src="{src}"></script>'
             p = OUT_DIR / src
             if p.exists():

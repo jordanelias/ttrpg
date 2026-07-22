@@ -1,0 +1,679 @@
+{
+  "schema_version": 1,
+  "generator": "tools/observability/build_incompleteness.py",
+  "note": "GENERATED \u2014 the absorb-everything Incompleteness Ledger. Surfaces every stub / null / missing / excluded / unverified thing across the tree. Nothing culled to stay 'signal-heavy'.",
+  "totals": {
+    "findings": 76,
+    "by_category": {
+      "audit_excluded_system": 16,
+      "contract_doc_null": 9,
+      "contract_island": 7,
+      "contract_missing_entirely": 2,
+      "contract_no_resolver": 1,
+      "integrity_unverified_pin": 1,
+      "key_orphan_emit": 1,
+      "register_quarantined": 1,
+      "sim_stub": 38
+    }
+  },
+  "by_lane": {
+    "MB": {
+      "total": 1,
+      "sim_stub": 1
+    },
+    "FI": {
+      "total": 6,
+      "sim_stub": 6
+    },
+    "SC": {
+      "total": 7,
+      "sim_stub": 7
+    },
+    "FA": {
+      "total": 8,
+      "contract_island": 1,
+      "sim_stub": 7
+    },
+    "WR": {
+      "total": 5,
+      "sim_stub": 5
+    },
+    "IN": {
+      "total": 24,
+      "audit_excluded_system": 16,
+      "contract_island": 1,
+      "integrity_unverified_pin": 1,
+      "register_quarantined": 1,
+      "sim_stub": 5
+    },
+    "SE": {
+      "total": 3,
+      "sim_stub": 3
+    },
+    "unassigned": {
+      "total": 22,
+      "contract_doc_null": 9,
+      "contract_island": 5,
+      "contract_missing_entirely": 2,
+      "contract_no_resolver": 1,
+      "key_orphan_emit": 1,
+      "sim_stub": 4
+    }
+  },
+  "prose_marker_rollup": {
+    "gap": 274,
+    "assumption": 246,
+    "stub": 30,
+    "todo": 14
+  },
+  "findings": [
+    {
+      "category": "audit_excluded_system",
+      "id": "character_canon_consolidation",
+      "title": "Character Canon Consolidation",
+      "detail": "vector-audit denylists this system: consolidation/migration doc, not a mechanic",
+      "path": "canonical_sources:character_canon_consolidation",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "character_generation_questionnaire",
+      "title": "Character Generation Questionnaire",
+      "detail": "vector-audit denylists this system: authoring aid, not a mechanic",
+      "path": "canonical_sources:character_generation_questionnaire",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "character_histories",
+      "title": "Character Histories",
+      "detail": "vector-audit denylists this system: lore/backstory, not a mechanic",
+      "path": "canonical_sources:character_histories",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "conviction_migration_roster",
+      "title": "Conviction Migration Roster",
+      "detail": "vector-audit denylists this system: migration roster, not a mechanic",
+      "path": "canonical_sources:conviction_migration_roster",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "core_engine",
+      "title": "Core Engine",
+      "detail": "vector-audit denylists this system: substrate/kernel doc, not a domain mechanic",
+      "path": "canonical_sources:core_engine",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "faction_canon_consolidation",
+      "title": "Faction Canon Consolidation",
+      "detail": "vector-audit denylists this system: consolidation/migration doc, not a mechanic",
+      "path": "canonical_sources:faction_canon_consolidation",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "module_contracts",
+      "title": "Module Contracts",
+      "detail": "vector-audit denylists this system: index/spine doc, not a mechanic surface (the contracts themselves)",
+      "path": "canonical_sources:module_contracts",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "narrative_voice_canon",
+      "title": "Narrative Voice Canon",
+      "detail": "vector-audit denylists this system: voice/style canon, not a mechanic",
+      "path": "canonical_sources:narrative_voice_canon",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "political_dynamics_keys_migration",
+      "title": "Political Dynamics Keys Migration",
+      "detail": "vector-audit denylists this system: migration doc, not a mechanic",
+      "path": "canonical_sources:political_dynamics_keys_migration",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "solmund_artifacts",
+      "title": "Solmund Artifacts",
+      "detail": "vector-audit denylists this system: lore artifacts, not a mechanic",
+      "path": "canonical_sources:solmund_artifacts",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "solmund_philosophy",
+      "title": "Solmund Philosophy",
+      "detail": "vector-audit denylists this system: philosophy canon, not a mechanic",
+      "path": "canonical_sources:solmund_philosophy",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "solmund_voice",
+      "title": "Solmund Voice",
+      "detail": "vector-audit denylists this system: voice/style canon, not a mechanic",
+      "path": "canonical_sources:solmund_voice",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "tc_political",
+      "title": "Tc Political",
+      "detail": "vector-audit denylists this system: DEPRECATED pre-CI naming variant; superseded by the CI Political token",
+      "path": "canonical_sources:tc_political",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "throughlines_framework",
+      "title": "Throughlines Framework",
+      "detail": "vector-audit denylists this system: meta-framework doc, not a mechanic",
+      "path": "canonical_sources:throughlines_framework",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "ui_ux",
+      "title": "UI UX",
+      "detail": "vector-audit denylists this system: presentation-layer spec, not a mechanic",
+      "path": "canonical_sources:ui_ux",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_excluded_system",
+      "id": "videogame_mode_spec",
+      "title": "Videogame Mode Spec",
+      "detail": "vector-audit denylists this system: platform/mode spec, not a mechanic",
+      "path": "canonical_sources:videogame_mode_spec",
+      "lane": "IN"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "audit",
+      "title": "audit",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "domain_actions",
+      "title": "domain_actions",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "engine_clock",
+      "title": "engine_clock",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "game_director",
+      "title": "game_director",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "npc_memory",
+      "title": "npc_memory",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "scenario_authoring",
+      "title": "scenario_authoring",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "scene_slate",
+      "title": "scene_slate",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "scene_timer",
+      "title": "scene_timer",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_doc_null",
+      "id": "settlement_economy",
+      "title": "settlement_economy",
+      "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_island",
+      "id": "campaign_architecture",
+      "title": "campaign_architecture",
+      "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
+      "path": "systems/_architecture/campaign_architecture_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_island",
+      "id": "ci_political",
+      "title": "ci_political",
+      "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
+      "path": "systems/factions/ci_political_v30.md",
+      "lane": "FA"
+    },
+    {
+      "category": "contract_island",
+      "id": "clock_registry",
+      "title": "clock_registry",
+      "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
+      "path": "designs/provincial/clock_registry_v30.md",
+      "lane": "IN"
+    },
+    {
+      "category": "contract_island",
+      "id": "engine",
+      "title": "engine",
+      "detail": "synthesized graph node with no emits/consumes \u2014 untraceable island",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_island",
+      "id": "player_input",
+      "title": "player_input",
+      "detail": "synthesized graph node with no emits/consumes \u2014 untraceable island",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_island",
+      "id": "territorial_piety",
+      "title": "territorial_piety",
+      "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
+      "path": "designs/scene/conviction_track_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_island",
+      "id": "victory",
+      "title": "victory",
+      "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
+      "path": "designs/provincial/victory_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_missing_entirely",
+      "id": "engine",
+      "title": "engine",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_missing_entirely",
+      "id": "player_input",
+      "title": "player_input",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "contract_no_resolver",
+      "id": "campaign_architecture",
+      "title": "campaign_architecture",
+      "detail": "module declares no resolver",
+      "path": "systems/_architecture/campaign_architecture_v30.md",
+      "lane": "unassigned"
+    },
+    {
+      "category": "integrity_unverified_pin",
+      "id": "canonical_sha_layer",
+      "title": "163 canonical_sha pins \u2014 all advisory",
+      "detail": "CLAUDE.md \u00a71: the entire canonical_sha pin layer (163 pins) is NOT verified against the working tree \u2014 treat as advisory, not an integrity signal. Stale subset via freshness_gate.py --update.",
+      "path": "references/canonical_sources.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "meta.legacy_event",
+      "title": "meta.legacy_event",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned"
+    },
+    {
+      "category": "register_quarantined",
+      "id": "references/values_master.yaml",
+      "title": "values_master.yaml",
+      "detail": "quarantined-stale (CLAUDE.md \u00a77): free-text formulas, indexes a nonexistent combat.md, pulls from a superseded threadwork doc \u2014 do not lift as canonical",
+      "path": "references/values_master.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "engine/autoload/npc_ai.py:23",
+      "title": "NotImplementedError @ engine/autoload/npc_ai.py:23",
+      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
+      "path": "engine/autoload/npc_ai.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "engine/autoload/npc_ai.py:27",
+      "title": "NotImplementedError @ engine/autoload/npc_ai.py:27",
+      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
+      "path": "engine/autoload/npc_ai.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "engine/cross_scale/articulation.py:24",
+      "title": "NotImplementedError @ engine/cross_scale/articulation.py:24",
+      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
+      "path": "engine/cross_scale/articulation.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "engine/cross_scale/articulation.py:28",
+      "title": "NotImplementedError @ engine/cross_scale/articulation.py:28",
+      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
+      "path": "engine/cross_scale/articulation.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "engine/cross_scale/articulation.py:32",
+      "title": "NotImplementedError @ engine/cross_scale/articulation.py:32",
+      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
+      "path": "engine/cross_scale/articulation.py",
+      "lane": "IN"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/characters/sim/companion.py:21",
+      "title": "NotImplementedError @ systems/characters/sim/companion.py:21",
+      "detail": "raise NotImplementedError(\"sim/personal/companion.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/characters/sim/companion.py",
+      "lane": "unassigned"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/charter_liberties.py:20",
+      "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:20",
+      "detail": "raise NotImplementedError(\"systems/factions/sim/charter_liberties.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/factions/sim/charter_liberties.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/hafenmark_equipment.py:22",
+      "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:22",
+      "detail": "raise NotImplementedError(\"systems/factions/sim/hafenmark_equipment.py \u2014 content pending contamination audit\")",
+      "path": "systems/factions/sim/hafenmark_equipment.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/home_sanctuary.py:21",
+      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:21",
+      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/factions/sim/home_sanctuary.py",
+      "lane": "unassigned"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/home_sanctuary.py:25",
+      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:25",
+      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/factions/sim/home_sanctuary.py",
+      "lane": "unassigned"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/infrastructure_reclamation.py:21",
+      "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:21",
+      "detail": "raise NotImplementedError(\"systems/factions/sim/infrastructure_reclamation.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/factions/sim/infrastructure_reclamation.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/parliamentary_action.py:162",
+      "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
+      "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
+      "path": "systems/factions/sim/parliamentary_action.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/treaty.py:107",
+      "title": "NotImplementedError @ systems/factions/sim/treaty.py:107",
+      "detail": "raise NotImplementedError(",
+      "path": "systems/factions/sim/treaty.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/tribunal.py:149",
+      "title": "NotImplementedError @ systems/factions/sim/tribunal.py:149",
+      "detail": "raise NotImplementedError(",
+      "path": "systems/factions/sim/tribunal.py",
+      "lane": "unassigned"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/varfell_mandate_action.py:31",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:31",
+      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_mandate_action.py \u2014 Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)\")",
+      "path": "systems/factions/sim/varfell_mandate_action.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/factions/sim/varfell_territorial_acquisition.py:33",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:33",
+      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_territorial_acquisition.py \u2014 Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)",
+      "path": "systems/factions/sim/varfell_territorial_acquisition.py",
+      "lane": "FA"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/fieldwork.py:25",
+      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:25",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/fieldwork.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/fieldwork.py:29",
+      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:29",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/fieldwork.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/fieldwork.py:33",
+      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:33",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/fieldwork.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/investigation.py:23",
+      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:23",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/investigation.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/investigation.py:27",
+      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:27",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/investigation.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/fieldwork/sim/investigation.py:31",
+      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:31",
+      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/fieldwork/sim/investigation.py",
+      "lane": "FI"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/mass_battle/sim/altonian_reinforcements.py:21",
+      "title": "NotImplementedError @ systems/mass_battle/sim/altonian_reinforcements.py:21",
+      "detail": "raise NotImplementedError(\"systems/mass_battle/sim/altonian_reinforcements.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/mass_battle/sim/altonian_reinforcements.py",
+      "lane": "MB"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/overview/sim/ip_track.py:22",
+      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:22",
+      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/overview/sim/ip_track.py",
+      "lane": "SE"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/overview/sim/ip_track.py:26",
+      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:26",
+      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/overview/sim/ip_track.py",
+      "lane": "SE"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/overview/sim/rs_track.py:21",
+      "title": "NotImplementedError @ systems/overview/sim/rs_track.py:21",
+      "detail": "raise NotImplementedError(\"sim/peninsular/rs_track.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/overview/sim/rs_track.py",
+      "lane": "SE"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/dictionaries.py:710",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/dictionaries.py:710",
+      "detail": "raise NotImplementedError(",
+      "path": "systems/social_contest/sim/contest/dictionaries.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/modes.py:328",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:328",
+      "detail": "def play(self, *a, **k): raise NotImplementedError(\"dyadic counsel is a separate sub-system \u2014 scaffold only\")",
+      "path": "systems/social_contest/sim/contest/modes.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/modes.py:331",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:331",
+      "detail": "def play(self, *a, **k): raise NotImplementedError(\"negotiation is a separate sub-system \u2014 scaffold only\")",
+      "path": "systems/social_contest/sim/contest/modes.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/modes.py:334",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:334",
+      "detail": "def play(self, *a, **k): raise NotImplementedError(\"ceremonial is a separate sub-system \u2014 scaffold only\")",
+      "path": "systems/social_contest/sim/contest/modes.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/resolver.py:51",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/resolver.py:51",
+      "detail": "def resolve(self, s, closing, adj=None): raise NotImplementedError",
+      "path": "systems/social_contest/sim/contest/resolver.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/wrapper.py:201",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:201",
+      "detail": "raise NotImplementedError(",
+      "path": "systems/social_contest/sim/contest/wrapper.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/social_contest/sim/contest/wrapper.py:222",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:222",
+      "detail": "games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a",
+      "path": "systems/social_contest/sim/contest/wrapper.py",
+      "lane": "SC"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/threadwork/sim/rendering.py:22",
+      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:22",
+      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/threadwork/sim/rendering.py",
+      "lane": "WR"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/threadwork/sim/rendering.py:26",
+      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:26",
+      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/threadwork/sim/rendering.py",
+      "lane": "WR"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/world/sim/miraculous_event.py:21",
+      "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:21",
+      "detail": "raise NotImplementedError(\"systems/world/sim/miraculous_event.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/world/sim/miraculous_event.py",
+      "lane": "WR"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/world/sim/restoration_movement.py:23",
+      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:23",
+      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/world/sim/restoration_movement.py",
+      "lane": "WR"
+    },
+    {
+      "category": "sim_stub",
+      "id": "systems/world/sim/restoration_movement.py:27",
+      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:27",
+      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
+      "path": "systems/world/sim/restoration_movement.py",
+      "lane": "WR"
+    }
+  ]
+}

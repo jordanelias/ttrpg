@@ -4,15 +4,15 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 102
+  total: 103
   by_kind:
-    tool: 85
+    tool: 86
     skill-script: 10
     hook: 4
     workflow: 3
   by_role:
     A:writes-artifact: 22
-    B:stdout-or-gate: 39
+    B:stdout-or-gate: 40
     D:import-only-library: 38
     workflow: 3
   orphaned: 3
@@ -730,6 +730,30 @@ entries:
   orphaned: false
   prune_candidate: false
   role: A:writes-artifact
+  imports:
+  - yaml
+- path: tools/observability/build_incompleteness.py
+  kind: tool
+  stem: build_incompleteness
+  writes:
+  - dest: <pj>
+    format: unknown
+    mode: write
+  - dest: <pjs>
+    format: unknown
+    mode: write
+  - dest: <pmd>
+    format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:audit-refresh.yml
+  imported_internally: false
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
   imports:
   - yaml
 - path: tools/observability/build_lexicon.py
@@ -1627,6 +1651,7 @@ entries:
   - tools/build_apparatus_registry.py
   - tools/observability/build_decisions.py
   - tools/observability/build_graph.py
+  - tools/observability/build_incompleteness.py
   - tools/observability/build_proposals.py
   - tools/review_core.py
   emits:

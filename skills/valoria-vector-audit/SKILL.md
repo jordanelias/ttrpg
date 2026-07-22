@@ -20,6 +20,22 @@ description: >
 
 ## Purpose
 
+> ### ⛔ CORE DOCTRINE — SURFACE, NEVER CULL (read first; survives context loss)
+> **The entire point of this tool is to point out WHAT IS MISSING.** A stub, a null, an empty
+> contract, an untraceable module, a denylisted system, an unverified pin, a rarely-cited orphan —
+> **those are the signal, not the noise.** Never run this pipeline in a "signal-heavy / drop the
+> marginal" mode: that hides exactly what the tool exists to expose. Every cull must be a
+> *surfaced, reasoned exclusion*, never a silent drop.
+> - `vector_audit.audit_exclusions(root)` surfaces every cull (the `SKIP_SYSTEMS` denylist + the
+>   `AUDIT_FLOORS`) with reasons — nothing is dropped silently.
+> - `tools/observability/build_incompleteness.py` is the **absorb-everything Incompleteness
+>   Ledger**: it scans the whole tree for every stub/null/missing/excluded/unverified thing and is
+>   surfaced as the dashboard's **Missing** face. When you touch this apparatus, keep that ledger
+>   comprehensive — add categories, never quietly narrow them.
+> - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
+>   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
+>   systems + four length/threshold floors).
+
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
 
 **Scope:** **Analytic instrument only**, never gameplay mechanic. Self-exempting on Ω/Μ vetting (Class A, mu: [], M-ratings ○ across the board) — produces evidence for design decisions but is not itself a design decision. Findings are PROVISIONAL leads, not verdicts; methodology validation outcome must be reported with results.
