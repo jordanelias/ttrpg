@@ -226,12 +226,14 @@ LANES.forEach(l=>{propByLane[l]=[];decByLane[l]=[];sigByLane[l]=[];});
 // a governance item's file(s) — for file↔node cross-linking
 function propFile(p){return p.source||p.id||'';}
 function decFiles(d){return (d.locations||[]).map(l=>String(l).split(':')[0]);}
-// which decisions/proposals touch a given graph node (by declared systems[], or by shared doc file)
+// which decisions touch a given graph node — declared systems[] (the precise, semantic join)
+// OR its home doc file. Proposals are NOT doc-anchored in this corpus (they live in registers/
+// & proposals/), so a per-file proposal↔node join is structurally empty; proposals associate to
+// a node by its LANE instead (inferred in build_graph via the same infer_lane the feeds use).
 function govForNode(id){
-  const sys=sysById[id]; const doc=sys&&sys.doc;
+  const sys=sysById[id]; const doc=sys&&sys.doc; const lane=sys&&sys.lane;
   const decs=(DEC.decisions||[]).filter(d=>(d.systems||[]).includes(id)||(doc&&decFiles(d).includes(doc)));
-  const props=(PROP.items||[]).filter(p=>doc&&propFile(p)===doc);
-  return {decs,props};
+  return {decs,lane};
 }
 function verdictClass(s){return s.regressed?'v-regress':(s.verdict==='pass'?'v-pass':'v-fail');}
 function verdictWord(s){return s.regressed?'REGRESSED':(s.verdict==='pass'?'pass':'FAIL');}
@@ -700,7 +702,7 @@ function detailDecision(d){
   head(d.label||d.category,'decision · '+d.category,govDotColor('prio'+(d.priority||3)));
   let m=sec('marker');
   m.append(el('div',{class:'small'},esc(d.text||'')));
-  m.append(el('div',{class:'small muted',html:`priority <b class="prio${d.priority||3}">P${d.priority||3}</b> · lane ${d.lane} · category ${d.category}${d.count>1?` · ${d.count} occurrences`:''}`}));
+  m.append(el('div',{class:'small muted',html:`priority <b class="prio${d.priority||3}">P${d.priority||3}</b> · lane ${d.lane||'unassigned'} · category ${d.category}${d.count>1?` · ${d.count} occurrences`:''}`}));
   // graph cross-link via declared systems[]
   const sysHits=[...new Set((d.systems||[]).filter(s=>kindOf(s)))];
   if(sysHits.length){let g=sec('affects systems');pills(g,sysHits);}
@@ -761,14 +763,20 @@ function detailSystem(s){
 // (systems[]) or share its home doc, and proposals filed against that doc. Ties the graph back
 // to the health/proposals/decisions feeds so a node inspection surfaces its open work.
 function govSection(nodeId){
-  const {decs,props}=govForNode(nodeId);
-  if(!decs.length&&!props.length)return;
-  let g=sec(`governance — open work (${decs.length+props.length})`);
-  props.forEach(p=>{const d=el('div',{class:'note',html:`<span class="njdot" style="display:inline-block"></span> <b>proposal</b> ${esc(p.title||p.id)} <span class="muted">${p.lane}${p.needs_jordan?' · needs Jordan':''}</span>`});
-    d.style.cursor='pointer';d.onclick=()=>{const i=(PROP.items||[]).indexOf(p);switchTab('proposal');selectGov({id:'prop:'+i,gov:{type:'proposal',data:p}});};g.append(d);});
-  decs.slice(0,10).forEach(dc=>{const d=el('div',{class:'note',html:`<span class="prio${dc.priority||3}">●</span> <b>${esc(dc.label||dc.category)}</b> <span class="muted">P${dc.priority||3} · ${dc.category} · ${dc.lane}</span>`});
+  const {decs,lane}=govForNode(nodeId);
+  const laneProps=lane?(propByLane[lane]||[]):[];
+  if(!decs.length&&!laneProps.length)return;
+  let g=sec(`governance — open work (${decs.length} decision${decs.length===1?'':'s'}${lane?` · lane ${lane}`:''})`);
+  // decisions: the precise per-node link (systems[]/doc)
+  decs.slice(0,10).forEach(dc=>{const d=el('div',{class:'note',html:`<span class="prio${dc.priority||3}">●</span> <b>${esc(dc.label||dc.category)}</b> <span class="muted">P${dc.priority||3} · ${dc.category} · ${dc.lane||'unassigned'}</span>`});
     d.style.cursor='pointer';d.onclick=()=>{const i=(DEC.decisions||[]).indexOf(dc);switchTab('decision');selectGov({id:'dec:'+i,gov:{type:'decision',data:dc}});};g.append(d);});
   if(decs.length>10)g.append(el('div',{class:'muted small'},`… +${decs.length-10} more decisions`));
+  // proposals: lane-scoped (they are not doc-anchored) — a summary that opens the filtered list
+  if(laneProps.length){
+    const nj=laneProps.filter(p=>p.needs_jordan).length;
+    const s=el('div',{class:'note',html:`<span class="njdot" style="display:inline-block"></span> <b>${laneProps.length}</b> open proposal${laneProps.length===1?'':'s'} in lane <b>${lane}</b>${nj?` · <span class="v-regress">${nj} need Jordan</span>`:''} <span class="muted">— open list</span>`});
+    s.style.cursor='pointer';s.onclick=()=>{setLane(lane);switchTab('proposal');};g.append(s);
+  }
 }
 function detailKey(k){
   head(k.id,'key · '+k.family,nodeColor(k.id));

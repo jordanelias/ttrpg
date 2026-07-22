@@ -79,8 +79,11 @@ jobs:
         # Refresh the live CI-health feed (review_state.json / review_state_data.js — both
         # git-ignored) BEFORE build_graph so the self-contained console.html bundle inlines a
         # current health snapshot alongside the committed decisions/proposals feeds (Stage D:
-        # the unified dashboard's fourth face).
-        run: python3 tools/review_core.py --json || true
+        # the unified dashboard's fourth face). `--json` computes + writes and exits 0 on success
+        # regardless of gate verdicts (it is not `--check`), so a NON-zero exit means review_core
+        # itself broke — let it fail the job loudly rather than silently shipping a console.html
+        # that strips the health block (no `|| true` mask).
+        run: python3 tools/review_core.py --json
 
       - name: Regenerate connectivity graph + lexicon + unified console (build_graph)
         # Un-orphans build_graph (Stage B): the richest connectivity view (systems/Keys/scalars

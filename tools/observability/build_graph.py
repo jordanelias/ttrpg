@@ -35,6 +35,16 @@ except ImportError:
     print("PyYAML required: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
+# reuse the SINGLE lane resolver (build_decisions.infer_lane) so a node's lane is inferred the
+# same way decisions/proposals are lane-bucketed — the join key for the unified dashboard's
+# per-node governance section (§8: one rule, one place). Best-effort: None when unresolved.
+try:
+    import build_decisions as _bd
+    _infer_lane = _bd.infer_lane
+except Exception:
+    def _infer_lane(_p):
+        return None
+
 REPO = Path(__file__).resolve().parents[2]
 CONTRACTS = REPO / "references" / "module_contracts.yaml"
 REGISTRY = REPO / "systems" / "_architecture" / "key_type_registry_v30.md"
@@ -284,6 +294,7 @@ def build():
             "registry_only": False,
             "registry_system": mod.get("registry_system") or sid,
             "doc": mod.get("doc"),
+            "lane": _infer_lane(mod.get("doc") or "") if mod.get("doc") else None,
             "resolver": mod.get("resolver", ""),
             "scales": mod_scales,
             "status": mod.get("status", ""),
