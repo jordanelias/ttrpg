@@ -20,7 +20,34 @@ description: >
 
 ## Purpose
 
+> ### ⛔ CORE DOCTRINE — SURFACE, NEVER CULL (read first; survives context loss)
+> **The entire point of this tool is to point out WHAT IS MISSING.** A stub, a null, an empty
+> contract, an untraceable module, a denylisted system, an unverified pin, a rarely-cited orphan —
+> **those are the signal, not the noise.** Never run this pipeline in a "signal-heavy / drop the
+> marginal" mode: that hides exactly what the tool exists to expose. Every cull must be a
+> *surfaced, reasoned exclusion*, never a silent drop.
+> - `vector_audit.audit_exclusions(root)` surfaces every cull (the `SKIP_SYSTEMS` denylist + the
+>   `AUDIT_FLOORS`) with reasons — nothing is dropped silently.
+> - `tools/observability/build_incompleteness.py` is the **absorb-everything Incompleteness
+>   Ledger**: it scans the whole tree for every stub/null/missing/excluded/unverified thing and is
+>   surfaced as the dashboard's **Missing** face. When you touch this apparatus, keep that ledger
+>   comprehensive — add categories, never quietly narrow them.
+> - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
+>   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
+>   systems + four length/threshold floors).
+> - **The `--emit-findings` feed obeys this too (retain-and-flag, added 2026-07-22).** An adversarial
+>   pass caught the first cut *dropping* lower-confidence findings (hub×hub Mode-B pairs, and — before
+>   Direction #5 — Key-token Mode-H isolates) from `audit_findings.json`. FIX: emit EVERY finding;
+>   attach `filtered` + `filter_reason` to the lower-confidence hub×hub Mode-B pairs. The Incompleteness
+>   Ledger reads only the unfiltered rows for its Missing face, but the feed itself is complete — a
+>   reader auditing it sees everything and can overrule a flag. Never delete a finding from the feed to
+>   raise the ledger's signal. (The Key-token isolate filter is GONE entirely — Direction #5 gave the
+>   audit the actual Key graph, so those tokens are resolved for real, not flagged; no isolate is
+>   filtered anymore.)
+
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
+
+**Five structural graphs (Direction #5, 2026-07-22 — "why not key propagation too"):** the triangulation is `cite` (citation), `throughline` + `mu` (throughlines_meta + throughlines_complete), `pp` (patch co-affects), and **`key` — the engine KEY-PROPAGATION graph** (`build_g_key`, from `module_contracts.yaml`'s emit→consume flow: the actual IN→resolver→OUT wiring the Godot engine runs). Folding `key` in means Mode-A hubs / Mode-B implied-missing / Mode-H isolates now triangulate **design intent against engine data-flow** — "wired in the engine but never cited in the design" is a real port gap; a Key-type token isolated in the citation graph but central in the Key graph is *resolved*, not filtered; and a Key that stays isolated is a real finding whose mechanism is NOT assumed — an **orphan/dangling emit** (emitted but unconsumed, per `structure_audit`'s `dangling_emit`), an unemitted/unconsumed Key, or a `derivations`-only cross-module flow this typed graph doesn't read. This retired the old "filter Key tokens as expected false alarms" cull — the audit now SEES the Key graph instead of apologising for not seeing it. ⚠️ `build_g_key` is a deliberately-narrower TOKEN projection of `module_contracts` emit/consume; **`tools/observability/build_graph.py` is the authoritative richer engine graph** (folds the Key Type Registry, `from:`, drift-normalization) — do not treat the two as equal (§8 single-source follow-up tracked).
 
 **Scope:** **Analytic instrument only**, never gameplay mechanic. Self-exempting on Ω/Μ vetting (Class A, mu: [], M-ratings ○ across the board) — produces evidence for design decisions but is not itself a design decision. Findings are PROVISIONAL leads, not verdicts; methodology validation outcome must be reported with results.
 
@@ -37,6 +64,7 @@ Read the following files from the working tree (use the Read tool) before procee
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
 - `registers/patch_register_active.yaml` — PP affects: lists for G_pp
+- `references/module_contracts.yaml` — emit→consume Key flow for G_key (Direction #5)
 
 The pipeline ALWAYS bypasses index routing for content reads — index files lack the body content needed for citation graph extraction; read the full files above.
 
@@ -68,6 +96,21 @@ it directly:
 ```
 python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
 ```
+
+**Corpus-breadth layers (`--layer`).** The default **L0** is a CURATED slice — only the
+`canonical_sources.yaml` heads (~6% of the repo's `.md`); it is the calibrated P1/P2/P3 scope, so a
+green L0 result is **not** whole-repo coverage. `--layer L1` extends the trace across the whole
+**design** tree (systems/engine/canon/godot/proposals; ~15% of all `.md` = the full design corpus,
+~2.5× the docs, fewer structural isolates). **Scope honesty — L1 is one direction, not "all
+directions":** it extends corpus breadth and the **cite graph only**. It does **NOT** extend the
+throughline/mu/key graphs (registry-derived: throughline from `throughlines_meta` + `throughlines_complete`,
+mu from `throughlines_meta`, key from `module_contracts` — the same at every layer), the token universe
+(registry-derived — a token absent from `names_index`/`proper_noun`/`module_contracts` is invisible at
+every layer), non-`.md` content (sim `.py`, typed `engine/params`), or the
+P1/P2/P3 thresholds (calibrated on L0 — an L1 run reuses them but does **not** re-validate). Narrative
+`arcs/` + `workplans/` are excluded (would pollute cite with story co-mention). L0 stays the default;
+every run's weakness register discloses the layer, the coverage %, AND the un-extended directions —
+surface the slice, never let a green slice read as the whole.
 
 It is **working-tree only** (no GitHub fetch) and degrades gracefully without `numpy`/`sklearn` (the
 supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage table:

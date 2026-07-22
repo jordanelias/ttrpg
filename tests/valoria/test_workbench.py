@@ -59,6 +59,21 @@ def test_vignette_domain_actions_is_one_sided_notional():
     assert len(rows) >= 6
 
 
+def test_weave_all_corpus_map():
+    """The --all corpus mode weaves every module and surfaces the STRUCTURAL reconciliation map:
+    node state, doc status, and the built-but-unspecced set (the reliable, precise signal)."""
+    summary = workbench.weave_all(_ROOT)
+    assert len(summary) == 27
+    assert all('node_state' in s and 'doc_status' in s and 'edges' in s for s in summary)
+    unspecced = [s['module'] for s in summary
+                 if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
+    assert 'engine_clock' in unspecced and len(unspecced) >= 5      # the T0 blocker is one of them
+    # personal_combat's directory doc is surfaced as such, not a false 'missing'
+    assert any(s['module'] == 'personal_combat' and s['doc_status'] == 'declared-dir' for s in summary)
+    view = workbench.render_all(summary)
+    assert 'corpus-wide reconciliation map' in view and 'Built-but-unspecced' in view
+
+
 def test_card_ids_are_stable_and_deterministic():
     a = workbench._card_id('unspecced_wiring', 'm', 'cp', 'emits [k] to')
     b = workbench._card_id('unspecced_wiring', 'm', 'cp', 'emits [k] to')
@@ -83,6 +98,23 @@ def test_articulation_states():
     # endpoint + relationship near => co-mentioned
     assert workbench.articulation('peninsular strain emits an env.disaster shock', 'peninsular_strain',
                                   'env.disaster')['state'] == 'co-mentioned'
+
+
+def test_module_aliases_improve_counterpart_detection():
+    """R2 (ED-IN-0082): a module's declared display-aliases (module_contracts, carried through
+    structure_audit.build_l2) let the Workbench match a counterpart referred to by its PROSE name,
+    not just its humanized id. settlement_layer's doc says 'Faction Layer' (not 'faction_state'),
+    so the emit->faction_state edge reads 'mentioned' (counterpart present) instead of a false
+    'silent'. Co-mention is unchanged — the emit's Key concept genuinely isn't in the prose."""
+    import structure_audit as sa
+    from pathlib import Path
+    _, meta, *_ = sa.build_l2(Path(_ROOT))
+    assert 'Faction Layer' in meta['faction_state'].get('aliases', [])       # carried through build_l2
+    # counterpart found via its display alias -> mentioned; without the alias the humanized id is absent -> silent
+    assert workbench.articulation('the Faction Layer reacts here', 'faction_state', 'zzz.none',
+                                  cp_aliases=['Faction Layer'])['state'] == 'mentioned'
+    assert workbench.articulation('the Faction Layer reacts here', 'faction_state',
+                                  'zzz.none')['state'] == 'silent'
 
 
 def test_matcher_rejects_common_word_and_distant_false_positives():
@@ -111,3 +143,13 @@ def test_doc_resolver_distinguishes_none_declared_and_missing():
     text, status = workbench._resolve_doc(_ROOT, 'systems/settlements/settlement_layer_v30.md')
     assert status == 'declared' and text and 'Prosperity' in text
     assert workbench._resolve_doc(_ROOT, 'systems/nope/ghost_v30.md') == (None, 'missing')
+
+
+def test_doc_resolver_handles_directory_valued_doc():
+    """A DIRECTORY-valued doc (personal_combat -> combat_engine_v1/) is resolved by concatenating
+    its .md files, not spuriously reported 'missing' — the corpus-wide Workbench run surfaced this
+    false negative (a real dir mis-read as a broken pointer)."""
+    text, status = workbench._resolve_doc(_ROOT, 'systems/combat/combat_engine_v1/')
+    assert status == 'declared-dir' and text and len(text) > 500
+    eng, has_doc, cards, rows = workbench.weave(_ROOT, 'personal_combat')
+    assert has_doc and eng['doc_status'] == 'declared-dir'

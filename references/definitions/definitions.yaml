@@ -5,7 +5,7 @@
 # here: `python tools/definitions_store.py --get <key>`. Drift-locked: `--check` asserts this equals
 # a fresh rebuild and that name fields agree across the source registers (extends ci_names_consistency).
 # `in_registers` records provenance; `gap` flags a key present in only one register (surfaced, not fixed).
-count: 94
+count: 117
 definitions:
   agg.body:
     canonical: Body
@@ -140,6 +140,18 @@ definitions:
     - names_index
     legacy:
     - Theocracy Counter
+  clock.ci:
+    canonical: CI
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.ip:
+    canonical: IP
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
   clock.mending_stability:
     canonical: Mending Stability
     category: clock
@@ -148,6 +160,72 @@ definitions:
     - names_index
     legacy:
     - Rendering Stability
+  clock.ms:
+    canonical: MS
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.pi:
+    canonical: PI
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.tcv:
+    canonical: TCV
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.ts:
+    canonical: TS
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.autonomy:
+    canonical: Autonomy
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.continuity:
+    canonical: Continuity
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.equity:
+    canonical: Equity
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.faith:
+    canonical: Faith
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.order:
+    canonical: Order
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.precedent:
+    canonical: Precedent
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
+  conv.reason:
+    canonical: Reason
+    category: conviction
+    enforce: warn
+    in_registers:
+    - names_index
   fac.influence:
     canonical: Influence
     category: faction_stat
@@ -212,6 +290,60 @@ definitions:
     - names_index
     legacy:
     - Combat Power
+  mech.disposition:
+    canonical: Disposition
+    category: mechanic
+    enforce: warn
+    in_registers:
+    - names_index
+  mech.mandate:
+    canonical: Mandate
+    category: mechanic
+    enforce: warn
+    in_registers:
+    - names_index
+  mech.stability:
+    canonical: Stability
+    category: mechanic
+    enforce: warn
+    in_registers:
+    - names_index
+  mech.standing:
+    canonical: Standing
+    category: mechanic
+    enforce: warn
+    in_registers:
+    - names_index
+  mech.tensions:
+    canonical: Tensions
+    category: mechanic
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.authority:
+    canonical: Authority
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.consequence:
+    canonical: Consequence
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.evidence:
+    canonical: Evidence
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
+  ppt.loyalty:
+    canonical: Loyalty
+    category: pressure_point
+    enforce: warn
+    in_registers:
+    - names_index
   prac.thread_sensitivity:
     aliases:
     - TS
@@ -477,6 +609,7 @@ definitions:
   world.grandmaster_ehrenwall:
     aliases:
     - Ehrenwall
+    - Lisbeth
     canonical: Grandmaster Ehrenwall
     category: proper_noun
     enforce: warn
@@ -490,6 +623,12 @@ definitions:
     - names_index
   world.grauwald:
     canonical: Grauwald
+    category: proper_noun
+    enforce: warn
+    in_registers:
+    - names_index
+  world.guilds:
+    canonical: Guilds
     category: proper_noun
     enforce: warn
     in_registers:

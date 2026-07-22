@@ -298,6 +298,9 @@ def build_l2(root):
             'scales': m.get('scales') or [], 'resolver': resolver,
             'doc': doc, 'status': m.get('status'),
             'notional': bool(notional),
+            # optional prose display-names for this module (how OTHER docs refer to it) — lets the
+            # Workbench match a module counterpart precisely instead of only humanizing its id.
+            'aliases': [a for a in (m.get('aliases') or []) if isinstance(a, str)],
         }
         for e in (m.get('emits') or []):
             if isinstance(e, dict) and e.get('type'):

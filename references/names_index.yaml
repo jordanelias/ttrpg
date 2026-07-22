@@ -20,10 +20,17 @@
 #     aliases:   [<allowed equivalent phrasings — not errors>]
 #     legacy:    [<deprecated names that must NOT appear in active docs>]
 #     category:  attribute | aggregate | faction_stat | settlement_stat | clock |
-#                track | mechanic | mass_combat_stat | substrate | proper_noun
+#                track | mechanic | mass_combat_stat | substrate | proper_noun |
+#                conviction | pressure_point   (new 2026-07-21, Reconciliation R2 / ED-IN-0082)
 #     enforce:   block | warn
 #                  block = hard CI gate (ci_naming_check) — naming invariants.
 #                  warn  = report-only drift lint (ci_names_check) until triaged, then flipped.
+#     context:   [<regex terms>]  — OPTIONAL. When the `canonical` display collides with a
+#                  common English word (Faith / Order / Reason / …), the disambiguation terms
+#                  that must co-occur for a prose hit to count as THIS definition. The single
+#                  home for the §3.5 disambiguation gate — vector_audit reads it FROM here
+#                  (CLAUDE.md §8), migrated verbatim from the prior hardcoded SEED table so P2
+#                  stays byte-identical. Terms are Python regex fragments (word-boundaried).
 #
 # MIRRORS (consistency-checked by tools/ci_names_consistency.py):
 #   attr.* / agg.* / fac.* / set.*  -> references/descriptor_registry.yaml
@@ -37,7 +44,34 @@
 # proper_noun_registry.yaml; ci_names_consistency keeps the pair agreeing). Remaining
 # follow-up: flipping `warn -> block` per entry as each is triaged.
 
-version: 2
+# ── NAMESPACE PREFIXES (id ↔ silo table; Reconciliation Program §3.2) ─────────────────
+# Every id's first dotted segment is a namespace prefix bound to ONE class/silo. Engine and
+# pre-existing ids WIN any conflict; references/name_collision_database.yaml stays the
+# historical silo authority. Existing prefixes are kept as-is; NEW prefixes are added only for
+# classes that lacked one. Key-family prefixes used in module_contracts (scene. da. env.
+# mechanical. …) are the engine's own and are NOT re-homed here.
+#   attr.      character attribute            (mirror: descriptor_registry.yaml)   [existing]
+#   agg.       attribute aggregate            (mirror: descriptor_registry.yaml)   [existing]
+#   fac.       faction stat                   (mirror: descriptor_registry.yaml)   [existing]
+#   set.       settlement stat                (mirror: descriptor_registry.yaml)   [existing]
+#   world.     proper noun (place/person/org) (mirror: proper_noun_registry.yaml)  [existing]
+#   clock.     named clock                                                          [existing]
+#   mass.      mass-combat stat                                                     [existing]
+#   thread.    threadwork mechanic                                                  [existing]
+#   substrate. Key substrate primitive                                             [existing]
+#   conv.      character conviction (the 7-axis class)                              [NEW 2026-07-21]
+#   ppt.       social-contest pressure point (the 4-axis class)                     [NEW 2026-07-21]
+#   mech.      strategic-layer mechanic (Disposition/Standing/Stability/Mandate/…)  [NEW 2026-07-22]
+# An entry MAY also carry `token_class: <cls>` (audit vocabulary class) distinct from its naming
+# `category` — e.g. a world.* proper_noun tagged `token_class: faction`, or a mech.* tagged
+# `token_class: mech` — so the vector-audit CLASSES roster + §3.5 disambiguation live here (§8)
+# without disturbing the category/mirror. `scale:` overrides the audit scale when it differs.
+# Reserved for the R2 migration wave (authored as entries land, not pre-populated):
+#   npc.  named character · place.  location · org.  organisation/order
+#   ppl.  people/populace group · concept.  design concept · act.  performable action verb
+# ID-form tokens ([[conv.faith]]) are resolved to display by tools/tag_normalizer.py and are
+# EXCLUDED from prose matching (A6 / perf).
+version: 3
 
 entries:
 
@@ -56,6 +90,51 @@ entries:
   agg.body:   {canonical: Body,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.mind:   {canonical: Mind,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.social: {canonical: Social, aliases: [], legacy: [], category: aggregate, enforce: warn}
+
+  # ── CONVICTIONS (the 7-axis character conviction class; new 2026-07-21, R2 / ED-IN-0082) ──
+  # `context` is the §3.5 disambiguation gate, migrated VERBATIM from vector_audit's former
+  # hardcoded SEED table (test_vector_audit pins byte-identical behaviour). vector_audit now
+  # reads these FROM here (CLAUDE.md §8). enforce: warn — every display collides with a common
+  # word. Single-quoted so YAML keeps the regex backslashes literal.
+  conv.faith:      {canonical: Faith,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFramework\b', '\bDivine\b', '\bChurch\b', '\bCardinal\b', '\bdoctrine\b']}
+  conv.order:      {canonical: Order,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bAutonomy\b', '\bReason\b', '\bEquity\b']}
+  conv.reason:     {canonical: Reason,     aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bOrder\b', '\bAutonomy\b']}
+  conv.equity:     {canonical: Equity,     aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bRestoration\b']}
+  conv.precedent:  {canonical: Precedent,  aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bHafenmark\b', '\blegal\b']}
+  conv.autonomy:   {canonical: Autonomy,   aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bVarfell\b', 'L[oö]wenritter']}
+  conv.continuity: {canonical: Continuity, aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bRestoration\b']}
+
+  # ── PRESSURE POINTS (the 4-axis social-contest class; new 2026-07-21, R2 / ED-IN-0082) ──
+  # Same shape as convictions: `context` is the §3.5 disambiguation gate, migrated VERBATIM from
+  # vector_audit's former hardcoded SEED (test_vector_audit pins byte-identical). vector_audit
+  # sources CLASSES['pressure_point'] + the SEED tokens FROM here (§8). enforce: warn — the
+  # displays collide with common words.
+  ppt.evidence:    {canonical: Evidence,    aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bInvestigation\b', '\bEvidence Track\b']}
+  ppt.consequence: {canonical: Consequence, aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bConsequentialist\b']}
+  ppt.authority:   {canonical: Authority,   aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bAuthority Challenge\b', '\binstitutional\b']}
+  ppt.loyalty:     {canonical: Loyalty,     aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bKnot\b', '\brelational\b']}
+
+  # ── MECHANICS (strategic-layer mechanic tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
+  # Namespaced ids so a generic "Stability"/"Mandate"/"Standing" is COLLISION-SAFE from the faction
+  # stat fac.stability etc. — author or wire with [[mech.stability]] vs [[fac.stability]]. patterns
+  # migrated verbatim from the hardcoded SEED; token_class: mechanic sources them into the audit
+  # (category mechanic has no proper-noun mirror). enforce: warn (all collide with common words).
+  mech.disposition: {canonical: Disposition, aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bDisposition\b']}
+  mech.standing:    {canonical: Standing,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStanding\b']}
+  mech.stability:   {canonical: Stability,   aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStability\b']}
+  mech.mandate:     {canonical: Mandate,     aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bMandate\b']}
+  mech.tensions:    {canonical: Tensions,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bTensions\b']}
+
+
+  # ── CLOCK TRACKS (abbreviation audit tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
+  # clock.<abbr> ids for the 6 peninsular clocks (full-name clock.church_influence etc. stay
+  # separate). token_class clock_track so the 2 existing full-name clock.* aren't pulled.
+  clock.ms: {canonical: "MS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bMS\b(?![A-Za-z])', 'Mending Stability']}
+  clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
+  clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Invasion Pressure']}
+  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Political Instability']}
+  clock.ts: {canonical: "TS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTS\b(?![A-Za-z])', 'Thread Sensitivity']}
+  clock.tcv: {canonical: "TCV", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTCV\b']}
 
   # ── FACTION STATS (mirror: descriptor_registry.yaml faction_stats; scalar 1-7) ─
   fac.influence:  {canonical: Influence, aliases: [], legacy: [], category: faction_stat, enforce: warn}
@@ -90,12 +169,14 @@ entries:
     aliases: []
     legacy: ["Theocracy Counter"]
     category: clock
+    token_class: clock_full
     enforce: warn
   clock.mending_stability:
     canonical: Mending Stability
     aliases: []
     legacy: ["Rendering Stability"]
     category: clock
+    token_class: clock_full
     enforce: warn
   mass.power:
     canonical: Power
@@ -132,28 +213,37 @@ entries:
   # Generated from references/proper_noun_registry.yaml (every category); warn-tier;
   # mirror-checked by ci_names_consistency (last key segment -> registry entry).
   # world.solmund stays above at block tier (the naming invariant).
+  #
+  # NPC audit sourcing (R2/ED-IN-0082, 2026-07-22): the 10 curated tracked NPCs carry
+  # `token_class: npc` + explicit `patterns:` so the vector-audit sources them from HERE
+  # (§8 "every rule lives once") instead of a hardcoded SEED roster. Patterns use the
+  # FIRST NAME / TITLE and deliberately DROP the shared `Almqvist` dynasty surname (Jordan
+  # 2026-07-22: "drop all Almqvist and use their first name … or title") — a family name is
+  # ambiguous across four royals, so matching it would collide distinct people. `scale`
+  # defaults to the token_class ('npc'). This also unifies the former Lisbeth/Grandmaster
+  # Ehrenwall duplicate onto one token. Untagged characters below stay proper-noun tokens.
   # -- characters --
   world.aldric_tormann: {canonical: "Aldric Tormann", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.annika_feldhaus: {canonical: "Annika Feldhaus", aliases: ["Feldhaus"], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_arnlod_olafsson: {canonical: "Cardinal Arnlod Olafsson", aliases: ["Olafsson"], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_magnus_klapp: {canonical: "Cardinal Magnus Klapp", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.cardinal_osten_jarnstal: {canonical: "Cardinal Osten Jarnstal", aliases: ["Jarnstal"], legacy: [], category: proper_noun, enforce: warn}
-  world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn}
+  world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bArne\b', '\bHimlensendt\b', '\bConfessor\b']}
   world.dalla_virke: {canonical: "Dalla Virke", aliases: ["Virke"], legacy: [], category: proper_noun, enforce: warn}
   world.doux_alexios_laskaris: {canonical: "Doux Alexios Laskaris", aliases: ["Laskaris"], legacy: [], category: proper_noun, enforce: warn}
-  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn}
-  world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn}
-  world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bBaralta\b']}
+  world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bVaynard\b']}
+  world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bEdeyja\b']}
   world.gerik_strand: {canonical: "Gerik Strand", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.grandmaster_ehrenwall: {canonical: "Grandmaster Ehrenwall", aliases: ["Ehrenwall"], legacy: [], category: proper_noun, enforce: warn}
+  world.grandmaster_ehrenwall: {canonical: "Grandmaster Ehrenwall", aliases: ["Ehrenwall", "Lisbeth"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bEhrenwall\b', '\bLisbeth\b']}
   world.halvar_brandt: {canonical: "Halvar Brandt", aliases: ["Brandt"], legacy: [], category: proper_noun, enforce: warn}
-  world.king_almud_almqvist: {canonical: "King Almud Almqvist", aliases: ["Almud"], legacy: [], category: proper_noun, enforce: warn}
+  world.king_almud_almqvist: {canonical: "King Almud Almqvist", aliases: ["Almud"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bAlmud\b']}
   world.maret_uln: {canonical: "Maret Uln", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.yrsa_vossen: {canonical: "Yrsa Vossen", aliases: ["Vossen"], legacy: [], category: proper_noun, enforce: warn}
+  world.yrsa_vossen: {canonical: "Yrsa Vossen", aliases: ["Vossen"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bYrsa\b', '\bVossen\b']}
   world.peder_almstedt: {canonical: "Peder Almstedt", aliases: ["Almstedt"], legacy: [], category: proper_noun, enforce: warn}
-  world.prince_torben_almqvist: {canonical: "Prince Torben Almqvist", aliases: ["Torben"], legacy: [], category: proper_noun, enforce: warn}
-  world.princess_elske_almqvist: {canonical: "Princess Elske Almqvist", aliases: ["Elske"], legacy: [], category: proper_noun, enforce: warn}
-  world.queen_lenneth_almqvist: {canonical: "Queen Lenneth Almqvist", aliases: ["Lenneth"], legacy: [], category: proper_noun, enforce: warn}
+  world.prince_torben_almqvist: {canonical: "Prince Torben Almqvist", aliases: ["Torben"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bTorben\b']}
+  world.princess_elske_almqvist: {canonical: "Princess Elske Almqvist", aliases: ["Elske"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bElske\b']}
+  world.queen_lenneth_almqvist: {canonical: "Queen Lenneth Almqvist", aliases: ["Lenneth"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bLenneth\b']}
   world.rikard_solberg: {canonical: "Rikard Solberg", aliases: ["Solberg"], legacy: [], category: proper_noun, enforce: warn}
   world.sigrid_torsvald: {canonical: "Sigrid Torsvald", aliases: ["Torsvald"], legacy: [], category: proper_noun, enforce: warn}
   world.sæmund_haelgrund: {canonical: "Sæmund Haelgrund", aliases: ["Haelgrund"], legacy: [], category: proper_noun, enforce: warn}
@@ -176,16 +266,17 @@ entries:
   world.stillhelm: {canonical: "Stillhelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- factions --
-  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.guilds: {canonical: "Guilds", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bGuilds?\b']}
+  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
+  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
+  world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}
   world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bVarfell\b']}
   # -- subfactions --
-  world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn}
+  world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['L[oö]wenritter']}
   world.wardens: {canonical: "Wardens", aliases: ["Warden"], legacy: [], category: proper_noun, enforce: warn}
   # -- organizations --
-  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn}
+  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
   # -- realms --
   world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}

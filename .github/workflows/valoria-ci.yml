@@ -659,6 +659,15 @@ jobs:
       - name: Run compliance check
         run: python3 tools/compliance_check.py --check-only --repo-state .
 
+      - name: Repository-state regression ratchet (review_core --check)
+        # Stage C (earned-gate): the ED-IN-0077 ratchet grades every report-only signal against
+        # registers/review_baseline.yaml and fails only on a REGRESSION (a signal's debt count
+        # GROWS past its accepted baseline). Wiring it into this already-required job makes every
+        # report-only check blocking-on-regression — outputs now ENFORCE "no new debt" — with no
+        # branch-protection edit and no backlog burn (debt can only shrink; lowering a baseline is
+        # the one-line edit in the PR that earns it, CODEOWNERS-gated to Jordan).
+        run: python3 tools/review_core.py --check
+
   # ── AGGREGATOR: the single required check for branch protection ──────────────
   # Proves every authoritative gate actually RAN and PASSED (not skipped). Make
   # this job the required status check on main.

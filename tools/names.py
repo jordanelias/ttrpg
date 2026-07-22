@@ -122,3 +122,35 @@ def key_for(name, path=None):
         if target in [a.strip() for a in (e.get('aliases') or []) if isinstance(a, str)]:
             return key
     return None
+
+
+def context(key, path=None):
+    """The disambiguation `context` regex terms for `key` (empty list if none).
+
+    The single home for the §3.5 disambiguation gate (Reconciliation Program §3): a `canonical`
+    display that collides with a common English word (Faith/Order/Reason/…) counts as THIS
+    definition only when one of these terms co-occurs. vector_audit reads this here (§8) instead
+    of carrying its own hardcoded copy."""
+    v = _entry(key, path).get('context') or []
+    return list(v) if isinstance(v, list) else []
+
+
+def by_category(category, path=None):
+    """{key: entry} for every entry whose `category` == `category`, in index order."""
+    return {k: e for k, e in entries(path).items()
+            if isinstance(e, dict) and e.get('category') == category}
+
+
+def by_token_class(token_class, path=None):
+    """{key: entry} for every entry in the audit token-class `token_class`, in index order.
+
+    An entry's token class is its explicit `token_class` field if present, else its `category`.
+    This lets a proper_noun (world.*) entry ALSO carry an audit class (e.g. `faction`) without
+    disturbing its naming category/mirror — the single home for the vector-audit CLASSES rosters
+    and their §3.5 disambiguation (CLAUDE.md §8).
+
+    NOTE: an explicit `token_class` MASKS the entry's `category` here, so `by_token_class('proper_noun')`
+    will NOT return an entry tagged `token_class: faction`. That is intended for the audit (an entry
+    belongs to its token class, not its naming category) — use `by_category()` for category queries."""
+    return {k: e for k, e in entries(path).items()
+            if isinstance(e, dict) and (e.get('token_class') or e.get('category')) == token_class}

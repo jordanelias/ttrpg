@@ -35,6 +35,16 @@ except ImportError:
     print("PyYAML required: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
+# reuse the SINGLE lane resolver (build_decisions.infer_lane) so a node's lane is inferred the
+# same way decisions/proposals are lane-bucketed — the join key for the unified dashboard's
+# per-node governance section (§8: one rule, one place). Best-effort: None when unresolved.
+try:
+    import build_decisions as _bd
+    _infer_lane = _bd.infer_lane
+except Exception:
+    def _infer_lane(_p):
+        return None
+
 REPO = Path(__file__).resolve().parents[2]
 CONTRACTS = REPO / "references" / "module_contracts.yaml"
 REGISTRY = REPO / "systems" / "_architecture" / "key_type_registry_v30.md"
@@ -284,6 +294,7 @@ def build():
             "registry_only": False,
             "registry_system": mod.get("registry_system") or sid,
             "doc": mod.get("doc"),
+            "lane": _infer_lane(mod.get("doc") or "") if mod.get("doc") else None,
             "resolver": mod.get("resolver", ""),
             "scales": mod_scales,
             "status": mod.get("status", ""),
@@ -474,6 +485,29 @@ def build():
     return payload
 
 
+def _strip_volatile_review(feed: str) -> str:
+    """Drop the volatile fields (generated_epoch, head_sha) from a `window.VALORIA_REVIEW = {…};`
+    bundle so the review-state inlined into the committed console.html is stable across CI runs
+    and only changes when actual signal content changes. Falls back to the raw text if the shape
+    is unexpected (never blocks the build)."""
+    m = re.match(r"\s*window\.VALORIA_REVIEW\s*=\s*(.*?);\s*$", feed, re.DOTALL)
+    if not m:
+        return feed
+    try:
+        state = json.loads(m.group(1))
+    except Exception:
+        return feed
+    if not isinstance(state, dict):
+        return feed
+    state.pop("generated_epoch", None)
+    state.pop("head_sha", None)
+    # per-signal wall-clock timing varies every run — strip it too so the bundle is stable
+    for sig in state.get("signals", []) or []:
+        if isinstance(sig, dict):
+            sig.pop("elapsed_ms", None)
+    return "window.VALORIA_REVIEW = " + json.dumps(state, indent=2) + ";\n"
+
+
 def main():
     payload = build()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -493,7 +527,12 @@ def main():
     if lex_path.exists():
         lex_js = lex_path.read_text(encoding="utf-8")
 
-    # self-contained single-file bundle (data inlined) for zero-friction double-click
+    # self-contained single-file bundle (data inlined) for zero-friction double-click.
+    # Inlines all FIVE feeds so the unified dashboard (graph + lexicon + the three governance
+    # feeds: decisions, proposals, review-state) works offline from one file. The governance
+    # feeds are presence-guarded: decisions/proposals snapshots are committed, but the
+    # review-state feed is git-ignored (live CI state) so it inlines only when present — the
+    # viewer degrades gracefully when a feed is absent.
     index = OUT_DIR / "index.html"
     if index.exists():
         html = index.read_text(encoding="utf-8")
@@ -501,6 +540,28 @@ def main():
                             "<script>/*inlined*/" + data_js + "</script>")
         html = html.replace('<script src="lexicon_data.js"></script>',
                             "<script>/*inlined*/" + lex_js + "</script>")
+        # governance feeds — inline the on-disk bundle if present, else drop the <script src>
+        # (the viewer treats a missing window.VALORIA_* as an empty feed).
+        for src, var in (("decisions_data.js", "VALORIA_DECISIONS"),
+                         ("proposals_data.js", "VALORIA_PROPOSALS"),
+                         ("review_state_data.js", "VALORIA_REVIEW"),
+                         ("incompleteness_data.js", "VALORIA_INCOMPLETENESS")):
+            tag = f'<script src="{src}"></script>'
+            p = OUT_DIR / src
+            if p.exists():
+                feed = p.read_text(encoding="utf-8")
+                if src == "review_state_data.js":
+                    # The committed console.html is a tracked artifact, but review_state is a
+                    # git-IGNORED live feed carrying volatile fields (generated_epoch changes every
+                    # run, head_sha every commit). Inlining them verbatim would make console.html
+                    # differ on every CI run and open a spurious audit-refresh PR each time (the
+                    # diff-check would always see it changed). Strip the volatile fields so the
+                    # inlined snapshot is deterministic w.r.t. actual signal content; the SERVED
+                    # index.html still loads the full live feed with the timestamp/sha.
+                    feed = _strip_volatile_review(feed)
+                html = html.replace(tag, "<script>/*inlined*/" + feed + "</script>")
+            else:
+                html = html.replace(tag, f"<!-- {src} absent at build time ({var} feed empty) -->")
         (OUT_DIR / "console.html").write_text(html, encoding="utf-8")
 
     s = payload["meta"]["stats"]

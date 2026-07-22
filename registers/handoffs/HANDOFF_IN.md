@@ -777,3 +777,78 @@ allocate, bump, co-commit; never max+1.)_
   (D1–D16)**; P0 (instrument hardening, net of #139: the G_code __init__ HIGH, banner_classify tie-break,
   contract↔code join, direction_audit.py) can start in parallel, IN lane. Program structure ratifies on
   merge; every D-row stays needs_jordan.
+
+- **Incompleteness Ledger + audit de-cull (2026-07-22, PR #205)** — the vectorization apparatus'
+  core purpose is to **SURFACE WHAT IS MISSING**; it had been silently culling (a 16-system
+  `SKIP_SYSTEMS` denylist + four length/threshold floors) to stay "signal-heavy" — the exact
+  opposite. Fixed: (1) every cull is now a *surfaced, reasoned exclusion*
+  (`vector_audit.audit_exclusions()`); (2) new `tools/observability/build_incompleteness.py` —
+  the absorb-everything **Incompleteness Ledger** (`INCOMPLETENESS.md` / `incompleteness.json` /
+  `_data.js`) scanning the whole tree for every stub/null/missing/excluded/unverified thing,
+  surfaced as the dashboard's **Missing** face; (3) doctrine enshrined in
+  `skills/valoria-vector-audit/SKILL.md` (⛔ SURFACE, NEVER CULL) so it survives context loss.
+  **Next action (pending Jordan design call):** Stage F — wire the 7 island modules + 11 doc:null
+  contracts. BLOCKED honestly: the design docs don't speak in the Key vocabulary, so any IN/OUT
+  edge is *inference*, not extraction. Do NOT fabricate contract edges into the source of truth;
+  author them grounded (e.g. re-point the 3 stale `designs/` doc paths first: `victory`,
+  `clock_registry`/overview, `territorial_piety`→`conviction_track`) and mark any inferred edge
+  `[ASSUMPTION]`, held back loudly per CLAUDE.md §2. `engine_clock` (ED-1051) + `domain_actions`
+  (ED-FA-0002) need canon before their edges are real.
+
+- **"Extend audit in all directions" — trace-completeness pass (2026-07-22, PR #205, in flight).**
+  Working most→least impactful with an **adversarial pass at the end of each direction**:
+  - **Dir #1 (DONE)** — `discover_unregistered_candidates`: name-level ontology match over the
+    whole design corpus (folding + expanded stopwords; critic caught a substring-unsound first cut
+    at ~50% noise → rebuilt to 39 high-signal). Feeds the ledger's `unregistered_term` face.
+  - **Dir #2 (DONE + reconciled)** — the two observatories now TALK: `vector_audit --emit-findings`
+    writes `tools/observability/audit_findings.json` (its UNIQUE cross-graph Mode-B implied-missing +
+    Mode-H isolates), the Incompleteness Ledger surfaces them. TWO adversarial passes. Final state
+    (commit 68a29955): **retain-and-flag, never cull** — the feed emits EVERY finding with a
+    `filtered`+`filter_reason` flag (hub×hub Mode-B, Key-token Mode-H); the ledger consumes the
+    unfiltered subset. Every implied-missing row carries a `primary_doc` back-link; every isolate
+    links to the REGISTRY that defines it (source→registry map). Isolate text states the STRONG,
+    accurate signal (max-deg ≤1 across all four graphs, no design-prose home) — the 2nd critic
+    caught the 1st fix *softening* it. `audit_staleness` `vector-audit`+`npc-audit` families
+    repointed to live artifacts; scope corrected to the real L0 inputs (systems/engine/canon/arcs/
+    audit/references + registers/patch_register_active.yaml — the pp-graph source). Schema
+    handshake (`schema_version==1`) self-surfaces a mismatch. Doctrine in SKILL.md.
+  - **Dir #3 (DONE, commit 7cb3d432)** — broadened the **throughline graph** from a second registry
+    source: `throughlines_complete.md`'s POST-ATOMIZATION `**Systems:**` lines (`parse_throughlines_
+    complete` + `build_g_throughline(extra_rows=…)`, opt-in). MEASURED before adopting: +2
+    implied-missing, +1 legit hub (Player Agency), 0 new isolates, no blob. The doc's INTERACTION
+    MATRIX was measured + REJECTED (20/21 pairs interact → dense, 149/181 edges redundant, would
+    inflate Clocks/MS hubs). The **μ graph is NOT extended** — no clean second Μ-mode source
+    (`silo_overlap_matrix.yaml` is a frozen snapshot; the complete doc has no μ data). A critic is
+    auditing #3 now.
+  - **Dir #5 (DONE, commit c0f913e6) — "why not key propagation too" (Jordan steer).** Folded the
+    engine **Key-propagation graph** into the audit as a 5th structural graph: `build_g_key` reads
+    `module_contracts.yaml`'s emit→consume flow (the IN→resolver→OUT wiring the Godot engine runs),
+    projected to token level (system↔system via shared Keys + keytype↔system). Now Mode-A hubs /
+    Mode-B implied-missing / Mode-H isolates triangulate **design intent against engine data-flow**.
+    MEASURED: hubs 11→16 (the +5 are genuinely engine-central; Domain Actions being a doc:null
+    contract that's heavily wired is itself signal), implied-missing +1, isolates 11→9. **RETIRED
+    the Mode-H Key-token filter** — the audit now SEES the Key graph, so wired Key tokens resolve
+    for real and the ones that stay isolated (e.g. `Key: scene_outcome.battle_concluded`, a
+    dangling/misnamed Key no module emits) SURFACE as honest gaps. A critic is auditing #5 now.
+    **Adversarial pass reconciled (commit follows):** the critic verified all deltas (hubs 11→16,
+    isolates 11→9, deterministic, backward-compat, 18/18) and caught two MED issues, both fixed:
+    (1) **honesty** — I had mislabeled `Key: scene_outcome.battle_concluded` as "a Key no module
+    emits"; it is EMITTED by mass_battle (`module_contracts.yaml:473`, a known naming-drift
+    `[OPEN — Jordan]`) but CONSUMED by nothing = an **orphan/dangling emit** (deg 1). Fixed the
+    ledger text (now reports the structural fact + points to the register for mechanism, asserts no
+    cause), SKILL.md, the emit note, and the test; (2) **`_keytype_token` hardened** to only map to
+    `Key:`-named tokens (no future broad system pattern can steal a key-type mapping). Also documented
+    the 2 `faction … (cross-module → faction_state)` isolates honestly — they are `derivations:` outputs
+    (real settlement→faction flows) the typed emit/consume graph structurally can't see.
+    **DRY FOLLOW-UP (tracked, MED, NOT yet done):** `build_g_key` re-parses `module_contracts`
+    emit/consume that `tools/observability/build_graph.py` (+ `structure_audit.py`'s `dangling_emit`)
+    already own — §8 "every rule lives once". They're deliberately different projections (token-level
+    narrow vs system/key/scalar rich) and agree on system↔system edges today (latent, not diverging),
+    so I DID NOT force a risky refactor: build_graph reads a richer normalized graph, and consuming its
+    generated `graph.json` would create an audit-refresh ordering hazard (graph.json regenerates AFTER
+    emit-findings). The clean fix is to lift the shared module-level emit/consume parse into ONE owner
+    both import — deferred as its own change with an expected-delta test. Comment in `build_g_key`
+    now states the narrowness + names build_graph.py as authoritative (no more "mirrors build_graph").
+  - **Dir #4 (pending, now lowest priority)** — L1-layer validation calibration: P3's absolute
+    `n_cite_edges≥100` bar is trivially met at L1's larger corpus; make it scale-relative. Already
+    honestly DISCLOSED as "L0-calibrated, not re-validated for L1", so the gap is surfaced not hidden.

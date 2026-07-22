@@ -141,6 +141,7 @@
       "registry_only": false,
       "registry_system": "articulation",
       "doc": "systems/articulation/articulation_layer_v30.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -173,6 +174,7 @@
       "registry_only": false,
       "registry_system": "audit",
       "doc": null,
+      "lane": null,
       "resolver": "state_reader",
       "scales": [
         "scene"
@@ -221,6 +223,7 @@
       "registry_only": false,
       "registry_system": "campaign_architecture",
       "doc": "systems/_architecture/campaign_architecture_v30.md",
+      "lane": null,
       "resolver": "",
       "scales": [
         "provincial"
@@ -249,6 +252,7 @@
       "registry_only": false,
       "registry_system": "ci_political",
       "doc": "systems/factions/ci_political_v30.md",
+      "lane": "FA",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -297,7 +301,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "clock_registry",
-      "doc": "designs/provincial/clock_registry_v30.md",
+      "doc": "systems/overview/clock_registry_v30.md",
+      "lane": null,
       "resolver": "manifest",
       "scales": [
         "provincial"
@@ -327,6 +332,7 @@
       "registry_only": false,
       "registry_system": "da_framework",
       "doc": null,
+      "lane": null,
       "resolver": "d_sigma",
       "scales": [
         "provincial"
@@ -414,6 +420,7 @@
       "registry_only": false,
       "registry_system": "engine_clock",
       "doc": null,
+      "lane": null,
       "resolver": "clock_advance",
       "scales": [
         "provincial"
@@ -463,6 +470,7 @@
       "registry_only": false,
       "registry_system": "faction_politics",
       "doc": "systems/factions/faction_politics_v30.md",
+      "lane": "FA",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -510,6 +518,7 @@
       "registry_only": false,
       "registry_system": "faction_layer",
       "doc": "systems/factions/faction_behavior_v30.md",
+      "lane": "FA",
       "resolver": "deterministic_accounting",
       "scales": [
         "provincial"
@@ -731,6 +740,7 @@
       "registry_only": false,
       "registry_system": "fieldwork",
       "doc": "systems/fieldwork/knots_v30.md",
+      "lane": "FI",
       "resolver": "dice_pool",
       "scales": [
         "personal",
@@ -833,6 +843,7 @@
       "registry_only": false,
       "registry_system": "game_director",
       "doc": null,
+      "lane": null,
       "resolver": "manifest",
       "scales": [
         "scene"
@@ -875,6 +886,7 @@
       "registry_only": false,
       "registry_system": "mass_battle",
       "doc": "systems/mass_battle/mass_battle_v30.md",
+      "lane": "MB",
       "resolver": "dice_pool",
       "scales": [
         "scene"
@@ -916,7 +928,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "miraculous_event",
-      "doc": "designs/scene/miraculous_event_v30.md",
+      "doc": "systems/world/miraculous_event_v30.md",
+      "lane": "WR",
       "resolver": "state_reader",
       "scales": [
         "personal",
@@ -928,7 +941,7 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): designs/scene/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
+        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -953,6 +966,7 @@
       "registry_only": false,
       "registry_system": "npc_behavior (+ Procedures B/D/E)",
       "doc": "systems/npcs/npc_behavior_v30.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -1270,6 +1284,7 @@
       "registry_only": false,
       "registry_system": "npc_memory",
       "doc": null,
+      "lane": null,
       "resolver": "state_reader",
       "scales": [
         "personal"
@@ -1324,7 +1339,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "peninsular_strain",
-      "doc": "designs/provincial/peninsular_strain_v30.md",
+      "doc": "systems/overview/peninsular_strain_v30.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "peninsula"
@@ -1413,6 +1429,7 @@
       "registry_only": false,
       "registry_system": "personal_combat",
       "doc": "systems/combat/combat_engine_v1/",
+      "lane": "PC",
       "resolver": "d_sigma",
       "scales": [
         "personal"
@@ -1533,7 +1550,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "conviction_track",
-      "doc": "designs/personal/conviction_track_v1.md",
+      "doc": "systems/characters/conviction_track_v1.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "personal"
@@ -1543,7 +1561,7 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/conviction_track_v1.md) vs designs/scene/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) \u2014 two different systems share both names"
+        "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) \u2014 two different systems share both names"
       ],
       "sources": [
         "key_substrate_v30 \u00a78.4 [READ: 2026-06-10]",
@@ -1676,6 +1694,7 @@
       "registry_only": false,
       "registry_system": "scenario_authoring",
       "doc": null,
+      "lane": null,
       "resolver": "manifest",
       "scales": [
         "peninsula"
@@ -1714,6 +1733,7 @@
       "registry_only": false,
       "registry_system": "scene_slate",
       "doc": null,
+      "lane": null,
       "resolver": "manifest",
       "scales": [
         "scene"
@@ -1778,6 +1798,7 @@
       "registry_only": false,
       "registry_system": "scene_timer",
       "doc": null,
+      "lane": null,
       "resolver": "state_reader",
       "scales": [
         "scene"
@@ -1826,6 +1847,7 @@
       "registry_only": false,
       "registry_system": "settlement_economy",
       "doc": null,
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "settlement"
@@ -1871,6 +1893,7 @@
       "registry_only": false,
       "registry_system": "settlement_layer",
       "doc": "systems/settlements/settlement_layer_v30.md",
+      "lane": "SE",
       "resolver": "deterministic_accounting",
       "scales": [
         "settlement",
@@ -2036,6 +2059,7 @@
       "registry_only": false,
       "registry_system": "social_contest",
       "doc": "systems/social_contest/social_contest_v30.md",
+      "lane": "SC",
       "resolver": "dice_pool",
       "scales": [
         "scene"
@@ -2102,7 +2126,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "territorial_piety",
-      "doc": "designs/scene/conviction_track_v30.md",
+      "doc": "systems/characters/conviction_track_v30.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "territory",
@@ -2163,6 +2188,7 @@
       "registry_only": false,
       "registry_system": "threadwork",
       "doc": "systems/threadwork/threadwork_v30.md",
+      "lane": "WR",
       "resolver": "dice_pool",
       "scales": [
         "personal",
@@ -2221,7 +2247,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "victory",
-      "doc": "designs/provincial/victory_v30.md",
+      "doc": "systems/victory/victory_v30.md",
+      "lane": null,
       "resolver": "state_reader",
       "scales": [
         "provincial",

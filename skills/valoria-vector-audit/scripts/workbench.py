@@ -59,6 +59,8 @@ try:
     import broken_dependency_checker as bdc   # noqa: E402  (§8: reuse the longest-dir-prefix resolver)
 except Exception:                              # pragma: no cover - degrade if tools/ shape changes
     bdc = None
+import tag_normalizer as _tags                 # noqa: E402  (§3 keystone: the ONE tag resolver/stripper)
+import names as _names                         # noqa: E402  (§8: the ONE names_index reader — registry match forms)
 
 DISPOSITIONS = 'references/observatory_dispositions.yaml'
 PROX = 240  # chars — how near two endpoints must co-occur to count as 'co-mentioned' (~1-2 sentences)
@@ -143,14 +145,25 @@ def _resolve_doc(root, doc_rel):
     p = os.path.join(str(root), doc_rel)
     if os.path.isfile(p):
         with open(p, encoding='utf-8', errors='replace') as fh:
-            return fh.read(), 'declared'
+            return _tags.strip(fh.read()), 'declared'
+    if os.path.isdir(p):
+        # a DIRECTORY-valued doc (e.g. personal_combat -> systems/combat/combat_engine_v1/): the
+        # design lives across the dir's .md files — concatenate them so prose matching sees the
+        # whole corpus, not a spurious 'missing'. (Only personal_combat uses this today.)
+        mds = sorted(f for f in os.listdir(p) if f.endswith('.md'))
+        if mds:
+            parts = []
+            for f in mds:
+                with open(os.path.join(p, f), encoding='utf-8', errors='replace') as fh:
+                    parts.append(fh.read())
+            return _tags.strip('\n\n'.join(parts)), 'declared-dir'
     if bdc is not None:
         remapped = bdc._resolve_remap(doc_rel, _restructure_remap(root))
         if remapped:
             rp = os.path.join(str(root), remapped)
             if os.path.isfile(rp):
                 with open(rp, encoding='utf-8', errors='replace') as fh:
-                    return fh.read(), 'remapped'
+                    return _tags.strip(fh.read()), 'remapped'
     return None, 'missing'
 
 
@@ -167,13 +180,25 @@ def _surface_forms(term):
         words = human.split()
         if len(words) >= 2 or (len(words) == 1 and len(words[0]) >= 4):
             forms.append((human, True))
+    # registry-backed forms (§3 canonical identifiers): if `term` is a names_index id or a known
+    # display, add its canonical + aliases as PRECISE surface forms — a POINTER into the central
+    # registry, not a guess. Pure gain: the registry supplies real aliases the humanizer cannot
+    # infer (e.g. attr.mind.will → 'Spirit'). Unregistered engine ids (module names, Key types)
+    # keep the heuristic humanize above.
+    key = term if _names.canonical(term) else _names.key_for(term)
+    if key and _names.canonical(key):
+        for surf in [_names.canonical(key)] + list(_names.aliases(key)):
+            if surf and (surf, True) not in forms and (surf, False) not in forms:
+                forms.append((surf, True))
     return forms
 
 
-def _positions(text, term):
+def _positions(text, term, extra_surfaces=()):
     """Start offsets of every accepted surface form of `term` in `text` (word-boundary; literal
-    case-sensitive, humanized case-insensitive). Positions let articulation() require PROXIMITY
-    for the top state, so a lone word can never by itself manufacture a co-mention."""
+    case-sensitive, humanized case-insensitive). `extra_surfaces` are additional prose forms (a
+    module's declared display-aliases from module_contracts) matched case-insensitively — a
+    POINTER into the engine's own module registry, not a guess. Positions let articulation()
+    require PROXIMITY for the top state, so a lone word can never by itself manufacture a co-mention."""
     if not text or not term:
         return []
     pos = []
@@ -182,6 +207,10 @@ def _positions(text, term):
             continue
         for mm in re.finditer(r'(?<!\w)' + re.escape(surface) + r'(?!\w)', text, re.I if ci else 0):
             pos.append(mm.start())
+    for surf in extra_surfaces:
+        if surf:
+            for mm in re.finditer(r'(?<!\w)' + re.escape(surf) + r'(?!\w)', text, re.I):
+                pos.append(mm.start())
     return sorted(set(pos))
 
 
@@ -189,18 +218,20 @@ def _mentions(text, term):
     return bool(_positions(text, term))
 
 
-def articulation(text, counterpart, relationship):
+def articulation(text, counterpart, relationship, cp_aliases=()):
     """How prose expresses an engine relationship: co-mentioned / mentioned / silent.
     Heuristic co-occurrence, confidence-tagged — NOT semantic link detection:
       'co-mentioned' — counterpart AND relationship term appear within ~PROX chars (a lead the
                        doc may state the link);
       'mentioned'    — the counterpart appears, but the relationship term is absent or far;
       'silent'       — the counterpart is absent from the doc.
-    Precise articulation detection needs the program §3 canonical-identifier registry — until
-    then these are leads, not verdicts (see render()'s caveat)."""
+    `cp_aliases` are the counterpart module's declared display-names (module_contracts), matched
+    alongside its id so a doc that refers to it by its prose name still registers. Precise
+    articulation detection needs the program §3 canonical-identifier registry — until then these
+    are leads, not verdicts (see render()'s caveat)."""
     if text is None:
         return {'state': 'silent', 'confidence': 'n/a (no doc)'}
-    cp = _positions(text, counterpart)
+    cp = _positions(text, counterpart, cp_aliases)
     if not cp:
         return {'state': 'silent', 'confidence': 'medium (endpoint absent from doc)'}
     # a self-relationship (dangling emit: the key IS the counterpart) has no second endpoint to
@@ -230,7 +261,7 @@ def weave(root, module):
     eng = engine_facts(root, module)
     text, doc_status = _resolve_doc(root, eng['doc'])
     eng['doc_status'] = doc_status
-    has_doc = doc_status in ('declared', 'remapped')
+    has_doc = doc_status in ('declared', 'remapped', 'declared-dir')
     notional_node = eng['notional'] or eng['node_state'] != 'engine-live'
     cards = []
     rows = []
@@ -254,19 +285,22 @@ def weave(root, module):
         cards.append({'id': cid, 'class': klass, 'module': module, 'counterpart': counterpart,
                       'relationship': rel, 'prose': art, 'shadow': shadow, 'question': q})
 
-    def edge(engine_str, counterpart, rel_label, rel_term, kind, edge_notional=False):
-        art = articulation(text, counterpart, rel_term)
+    def edge(engine_str, counterpart, rel_label, rel_term, kind, edge_notional=False, cp_aliases=()):
+        art = articulation(text, counterpart, rel_term, cp_aliases=cp_aliases)
         if engine_str not in seen_rows:                       # dedup identical rows (Finding 6)
             seen_rows.add(engine_str)
             rows.append({'engine': engine_str, 'state': art['state']})
         if art['state'] != 'co-mentioned':
             add(kind, counterpart, rel_label, art, edge_notional=edge_notional)
 
+    def _ma(module):                                          # a module's declared display-aliases
+        return eng['meta'].get(module, {}).get('aliases', [])
+
     for e in eng['emits']:
         if e['to']:
             for dst in e['to']:
                 edge(f"emits `{e['key']}` → {dst}", dst, f"emits [{e['key']}] to", e['key'],
-                     'unspecced_wiring')
+                     'unspecced_wiring', cp_aliases=_ma(dst))
         else:
             # dangling emit: declared but no known module consumes it (engine finding). No target
             # module — articulation reduces to 'is this emitted key named in the doc'.
@@ -279,7 +313,7 @@ def weave(root, module):
             estr = (f"consumes `{c['key']}` ← {src}" if src
                     else f"consumes `{c['key']}` (source unspecified)")
             edge(estr, cp, f"consumes [{c['key']}] from", (c['key'] if src else None),
-                 'unspecced_wiring')
+                 'unspecced_wiring', cp_aliases=(_ma(src) if src else ()))
     for d in eng['derivations']:
         edge(f"`{d['output']}` ← `{d['input']}`", d['input'], f"derives [{d['output']}] from",
              d['output'], 'unspecced_wiring', edge_notional=d['notional'])
@@ -322,6 +356,8 @@ def render(eng, has_doc, rows, open_cards, resolved_cards):
         doc_bit = f" · **doc: BROKEN pointer `{eng['doc']}` (declared, not on disk)**"
     elif doc_status == 'remapped':
         doc_bit = f" · doc `{eng['doc']}` (moved; read via restructure ledger)"
+    elif doc_status == 'declared-dir':
+        doc_bit = f" · doc `{eng['doc']}` (directory — all .md files concatenated)"
     elif eng['doc']:
         doc_bit = f" · doc `{eng['doc']}`"
     else:
@@ -370,6 +406,65 @@ def render(eng, has_doc, rows, open_cards, resolved_cards):
     return '\n'.join(L)
 
 
+# ──────────────────────────── CORPUS-WIDE (--all) ───────────────────────────
+
+def weave_all(root):
+    """Corpus-wide reconciliation: weave every module in module_contracts → per-module summary.
+    The RELIABLE signal is STRUCTURAL (node_state, doc_status, built-but-unspecced); co-mention is
+    a secondary heuristic (derivation-edge only — see render_all's caveat)."""
+    from pathlib import Path
+    from collections import Counter
+    with open(Path(root) / 'references' / 'module_contracts.yaml', encoding='utf-8') as fh:
+        contracts = yaml.safe_load(fh) or {}
+    mods = [m['module'] for m in (contracts.get('modules') or [])
+            if isinstance(m, dict) and m.get('module')]
+    disp = load_dispositions(root)
+    out = []
+    for m in mods:
+        eng, has_doc, cards, rows = weave(root, m)
+        open_, _resolved = partition(cards, disp)
+        st = Counter(r['state'] for r in rows)
+        out.append({'module': m, 'node_state': eng['node_state'], 'doc_status': eng['doc_status'],
+                    'has_doc': has_doc, 'edges': len(rows), 'co': st.get('co-mentioned', 0),
+                    'mentioned': st.get('mentioned', 0), 'silent': st.get('silent', 0),
+                    'open_cards': len(open_)})
+    return out
+
+
+def render_all(summary):
+    from collections import Counter
+    L = ['# Workbench — corpus-wide reconciliation map', '']
+    unspecced = [s['module'] for s in summary
+                 if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
+    broken = [s['module'] for s in summary if s['doc_status'] == 'missing']
+    dirdoc = [s['module'] for s in summary if s['doc_status'] == 'declared-dir']
+    ns = Counter(s['node_state'] for s in summary)
+    ds = Counter(s['doc_status'] for s in summary)
+    L.append(f"**{len(summary)} modules** · node: " + ', '.join(f'{k} {v}' for k, v in sorted(ns.items()))
+             + " · doc: " + ', '.join(f'{k} {v}' for k, v in sorted(ds.items())))
+    L.append('')
+    L.append(f"**Built-but-unspecced ({len(unspecced)})** — engine wires them, no design doc: "
+             + (', '.join(f'`{m}`' for m in unspecced) or '_(none)_'))
+    if broken:
+        L.append(f"**⚠ Broken doc pointer ({len(broken)})** — declared doc missing on disk: "
+                 + ', '.join(f'`{m}`' for m in broken))
+    if dirdoc:
+        L.append(f"**Directory-valued doc ({len(dirdoc)})**: " + ', '.join(f'`{m}`' for m in dirdoc))
+    L.append('')
+    L.append('| module | node | doc | edges | co / ment / silent | open cards |')
+    L.append('|---|---|---|--:|---|--:|')
+    for s in sorted(summary, key=lambda s: (s['node_state'], -s['edges'])):
+        L.append(f"| {s['module']} | {s['node_state']} | {s['doc_status']} | {s['edges']} | "
+                 f"{s['co']} / {s['mentioned']} / {s['silent']} | {s['open_cards']} |")
+    L.append('')
+    L.append("_The RELIABLE signal here is STRUCTURAL (node state / doc status / built-but-unspecced) "
+             "— precise engine truth. Co-mention is a secondary heuristic that currently fires mainly "
+             "on DERIVATION edges with registered scalar counterparts; module↔module emit/consume "
+             "articulation reads mostly silent/mentioned because Key concepts are rarely prose-literal "
+             "(a real siloed-prose signal, not a matcher defect). MEASURES, never gates._")
+    return '\n'.join(L)
+
+
 # ──────────────────────────── CLI ───────────────────────────────────────────
 
 def run(root, module):
@@ -382,7 +477,9 @@ def run(root, module):
 def main():
     ap = argparse.ArgumentParser(description='The Workbench — engine↔prose reconciliation workbench (R1).')
     ap.add_argument('--repo-root', default='.')
-    ap.add_argument('--module', required=True, help='the module/subsystem to weave')
+    ap.add_argument('--module', default=None, help='the module/subsystem to weave (omit with --all)')
+    ap.add_argument('--all', action='store_true', dest='all_',
+                    help='corpus-wide reconciliation map over every module')
     ap.add_argument('--entity', default=None, help='(reserved for R4 per-primitive focus; no-op)')
     ap.add_argument('--output-dir', default=None, help='write workbench_<module>.md + cards json here')
     args = ap.parse_args()
@@ -390,6 +487,23 @@ def main():
     contracts = os.path.join(args.repo_root, 'references', 'module_contracts.yaml')
     if not os.path.isfile(contracts):
         ap.error(f'not a repo root (missing {contracts})')
+    if not args.all_ and not args.module:
+        ap.error('give --module <name> or --all')
+
+    if args.all_:
+        summary = weave_all(args.repo_root)
+        view = render_all(summary)
+        if args.output_dir:
+            from pathlib import Path
+            out = Path(args.output_dir)
+            (out / 'data').mkdir(parents=True, exist_ok=True)
+            (out / 'workbench_corpus.md').write_text(view, encoding='utf-8')
+            (out / 'data' / 'workbench_corpus.json').write_text(
+                json.dumps(summary, indent=1, sort_keys=True), encoding='utf-8')
+            print(f"[workbench] corpus: {len(summary)} modules -> {out}")
+        else:
+            print(view)
+        return 0
 
     eng, has_doc, rows, open_, resolved = run(args.repo_root, args.module)
     view = render(eng, has_doc, rows, open_, resolved)

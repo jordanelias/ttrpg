@@ -182,6 +182,13 @@ ci_checks:
     ci_job: compliance-check
     notes: "CI mode (--check-only --repo-state .) is the live BLOCKING half; NOT in valoria_local.py's local check list, so local-green != compliance-green (ED-1082 correction, CLAUDE.md §8). Its orchestrator-era check_all()/validate_commit() harness paths (github_ops import, /home/claude sys.path insert) remain dead outside CI mode."
 
+  - path: tools/review_core.py
+    level: 5
+    role: "Repository State Armature verdict aggregator (ED-IN-0077) — the regression ratchet. --check fails on any signal exceeding its registers/review_baseline.yaml baseline."
+    paired_hook: ""    # the SessionStart banner (session_status.py) reads review_core.collect()
+    ci_job: compliance-check
+    notes: "Stage C (ED-IN-0082): wired as a --check step inside the compliance-check job so report-only signals are blocking-on-regression with no branch-protection edit. Also read by dashboard.yml + the SessionStart banner."
+
   - path: tools/currency_consistency_check.py
     level: 5
     role: "Self-updating recency gate (ED-1087): CURRENT.md reconcile-stamp vs head freshness, ED-ceiling consistency, register header/body currency, dead maintainer pointers."

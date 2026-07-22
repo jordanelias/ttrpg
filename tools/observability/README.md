@@ -30,6 +30,24 @@ how attributes / scores / statistics / Keys propagate, instead of reading it fil
 - **Health panel (chips)** — emit/route closure %, orphan emits, broadcast keys, **naming alerts**
   (the canonical registry-system ↔ module-name drift, surfaced and reconciled, never hidden), and
   term / abbreviation / collision / handshake counts.
+- **Governance layer (the unified dashboard)** — three cross-linked feeds fold the project's
+  *open work* into the same console as its *structure*, joined on **lane**, **file**, and
+  **declared system**:
+  - **Health** (left tab + canvas **Health** mode) — the `review_core` CI signals (blocking vs
+    report-only, verdict, regression-vs-baseline) with the repo-state **grade** (GREEN / AMBER /
+    RED), presented as a **lane × {CI signals · proposals · needs-Jordan · open decisions · P1}**
+    matrix plus the signal roster and the decision-debt file hotspots. Every cell click-throughs
+    into the filtered list.
+  - **Proposals** — the unified unratified-work register (`build_proposals`): every provisional
+    doc / proposal / actionable ledger item, lane-partitioned, **needs-Jordan** flagged.
+  - **Decisions** — the marker-level decision debt (`build_decisions`): 900+ open
+    ratification / ruling / naming / gap / assumption / stub markers, priority-sorted, each with
+    its source locations and any `systems[]` it touches.
+  - **Cross-links both ways:** a governance item's detail lists its file locations (click to copy)
+    and jumps to the graph node whose home doc it targets; a graph node's detail gains a
+    **governance — open work** section listing the decisions/proposals attached to it; and the
+    **lane lens** (a chip on every governance detail + the Health matrix) focuses one lane across
+    *all* panels at once.
 
 ## Use it
 
@@ -50,9 +68,16 @@ python -m http.server 8000                     # then open http://localhost:8000
 python tools/observability/build_graph.py
 ```
 
-This one command rebuilds **both** datasets (it calls `build_lexicon.py` for you) and rewrites
-`graph.json`, `graph_data.js`, `lexicon.json`, `lexicon_data.js`, and the self-contained
-`console.html`. Run it whenever the inputs change. (`build_lexicon.py` can also be run standalone.)
+This one command rebuilds the graph + lexicon (it calls `build_lexicon.py` for you) and
+re-inlines **all present feeds** into the self-contained `console.html`. The three governance
+feeds are built by their own generators on the audit-refresh cadence — to refresh them too:
+
+```bash
+python tools/observability/build_decisions.py    # decisions_data.js
+python tools/observability/build_proposals.py     # proposals_data.js
+python tools/review_core.py --json                # review_state_data.js (git-ignored, live)
+python tools/observability/build_graph.py         # rebuilds console.html inlining all five
+```
 
 ## Data sources (single source of truth — nothing is invented)
 
@@ -74,11 +99,14 @@ tracing, and records every substitution in `graph.json → meta.naming_alerts`.
 
 | File | Purpose |
 |---|---|
-| `console.html` | self-contained viewer (graph + lexicon inlined) — **double-click to open** |
-| `index.html` | viewer that loads `graph_data.js` + `lexicon_data.js` (edit this to change the UI; rebuild to refresh `console.html`) |
+| `console.html` | self-contained unified viewer (**all five feeds** inlined) — **double-click to open** |
+| `index.html` | viewer that loads the five `*_data.js` feeds (edit this to change the UI; rebuild to refresh `console.html`) |
 | `graph_data.js` / `graph.json` | `window.VALORIA_GRAPH = {…}` — the propagation graph |
 | `lexicon_data.js` / `lexicon.json` | `window.VALORIA_LEXICON = {…}` — terms, abbreviations, collisions, deprecated, handshakes |
-| `build_graph.py` | the graph extractor (also drives the lexicon build + the bundle) |
+| `decisions_data.js` / `decisions.json` | `window.VALORIA_DECISIONS = {…}` — marker-level decision debt (`build_decisions.py`) |
+| `proposals_data.js` / `proposals.json` | `window.VALORIA_PROPOSALS = {…}` — the unratified-work register (`build_proposals.py`) |
+| `review_state_data.js` / `review_state.json` | `window.VALORIA_REVIEW = {…}` — the `review_core.py` CI-health snapshot. **git-ignored** (live state): absent on a fresh clone; the viewer degrades gracefully and `build_graph` inlines it only when present |
+| `build_graph.py` | the graph extractor (also drives the lexicon build + inlines all five feeds into the `console.html` bundle) |
 | `build_lexicon.py` | the lexicon extractor |
 
 ## Relationship to the other two deliverables

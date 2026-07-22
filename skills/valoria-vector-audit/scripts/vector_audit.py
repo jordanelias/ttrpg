@@ -73,24 +73,27 @@ except Exception:  # pragma: no cover — degrade to the local _yaml reader if u
 # ──────────────────────────── CANONICAL TAXONOMY ─────────────────────────────
 
 CLASSES = {
-    'conviction': ['Faith', 'Order', 'Reason', 'Equity', 'Precedent', 'Autonomy', 'Continuity'],
-    'pressure_point': ['Evidence', 'Consequence', 'Authority', 'Loyalty'],
-    'faction': ['Crown', 'Church', 'Hafenmark', 'Varfell', 'Löwenritter',
-                'Restoration Movement', 'Guilds'],
-    'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
-            'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
+    # the conviction ROSTER is sourced from references/names_index.yaml conv.* entries AFTER
+    # SEED_TOKENS (§8; R2/ED-IN-0082) — the hardcoded list moved into the central registry.
+    'conviction': [],
+    # pressure_point ROSTER sourced from names_index ppt.* below (§8; R2/ED-IN-0082)
+    'pressure_point': [],
+    # faction ROSTER + disambiguation sourced from names_index world.* entries tagged
+    # `token_class: faction` below (§8; R2/ED-IN-0082) — patterns/context migrated verbatim; the
+    # world.* proper_noun mirror is undisturbed (canonical unchanged). world.guilds added +
+    # mirrored in proper_noun_registry (flagged for Jordan). Order-independent (verified).
+    'faction': [],
+    # npc ROSTER sourced from names_index world.* entries tagged `token_class: npc` below
+    # (§8; R2 namespacing / ED-IN-0082). The former short<->formal reconciliation risk is closed:
+    # the entries carry explicit first-name/title patterns (no shared `Almqvist` surname) and the
+    # generic-layer token_class-skip stops the double-source that used to collapse coreference.
+    'npc': [],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
-    # The performable ACTION vocabulary (verbs). No structured registry exists yet — the
-    # `domain_actions` home is the open M1 blocker (ED-FA-0002); until it is authored these
-    # are enumerated ONLY in prose (module_contracts.yaml's ED-FA-0006 verb note +
-    # wiring_manifest.yaml "conquest/muster/govern/uniques"). Curated here from that
-    # enumeration, exactly as the other seed classes are registry-backed hand lists.
-    # Replace with the authored registry once ED-FA-0002 lands.
-    'action': ['Muster', 'March', 'Fortify', 'Blockade', 'Conquest', 'Govern', 'Trade',
-               'Subsidy', 'Treaty', 'Diplomacy', 'Spy', 'Investigate', 'Counter-Intelligence',
-               'Censure', 'Embargo', 'Outlawry', 'Excommunication', 'Active Inquisition',
-               'Church Seizure', 'Recognition Challenge', 'Succession Endorsement',
-               'War Authorisation', 'Piety Spread', 'Community Organising', 'Martial Governance'],
+    # The performable ACTION vocabulary (verbs) is sourced from references/action_vocabulary.yaml
+    # AFTER this literal (§8; R2 / ED-IN-0082) — the hand-list moved OUT of this hardcoded audit
+    # into a central (provisional) register. It stays PROVISIONAL because the authoritative
+    # `domain_actions` home is unbuilt (ED-FA-0002); when that lands, regenerate the register.
+    'action': [],
 }
 
 
@@ -206,118 +209,67 @@ SEED_TOKENS = {
                              'scale': 'peninsula', 'status': 'provisional', 'source': 'seed'},
     'Miraculous Event':     {'patterns': ['Miraculous Event', 'miraculous_event'],
                              'scale': 'peninsula', 'status': 'provisional', 'source': 'seed'},
-    # Clocks
-    'MS':                   {'patterns': [r'\bMS\b(?![A-Za-z])', 'Mending Stability'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'CI':                   {'patterns': [r'\bCI\b(?![A-Za-z])', 'Church Influence'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'IP':                   {'patterns': [r'\bIP\b(?![A-Za-z])', 'Invasion Pressure'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'PI':                   {'patterns': [r'\bPI\b(?![A-Za-z])', 'Political Instability'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'TS':                   {'patterns': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'TCV':                  {'patterns': [r'\bTCV\b'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    # Convictions (disambiguated)
-    'Faith':                {'patterns': [r'\bFaith\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFramework\b', r'\bDivine\b',
-                                         r'\bChurch\b', r'\bCardinal\b', r'\bdoctrine\b']},
-    'Order':                {'patterns': [r'\bOrder\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFaith\b', r'\bAutonomy\b',
-                                         r'\bReason\b', r'\bEquity\b']},
-    'Reason':               {'patterns': [r'\bReason\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bFaith\b', r'\bOrder\b',
-                                         r'\bAutonomy\b']},
-    'Equity':               {'patterns': [r'\bEquity\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bRestoration\b']},
-    'Precedent':            {'patterns': [r'\bPrecedent\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bHafenmark\b', r'\blegal\b']},
-    'Autonomy':             {'patterns': [r'\bAutonomy\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bVarfell\b', r'L[oö]wenritter']},
-    'Continuity':           {'patterns': [r'\bContinuity\b'], 'scale': 'conviction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bConviction\b', r'\bRestoration\b']},
-    # Pressure Points (disambiguated)
-    'Evidence':             {'patterns': [r'\bEvidence\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bInvestigation\b',
-                                         r'\bEvidence Track\b']},
-    'Consequence':          {'patterns': [r'\bConsequence\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bConsequentialist\b']},
-    'Authority':            {'patterns': [r'\bAuthority\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bAuthority Challenge\b',
-                                         r'\binstitutional\b']},
-    'Loyalty':              {'patterns': [r'\bLoyalty\b'], 'scale': 'pressure_point',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bPressure Point\b', r'\bKnot\b',
-                                         r'\brelational\b']},
-    # NPCs
-    'King Almud':           {'patterns': ['Almud', 'Almqvist'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Confessor Arne':       {'patterns': ['Arne', 'Himlensendt', 'Confessor'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Inge Baralta':         {'patterns': ['Baralta', r'\bInge\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Magnus Vaynard':       {'patterns': ['Vaynard', r'\bMagnus\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Lisbeth Ehrenwall':    {'patterns': ['Ehrenwall', 'Lisbeth'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Yrsa Vossen':          {'patterns': [r'\bYrsa\b', 'Vossen'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Torben':               {'patterns': [r'\bTorben\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Elske':                {'patterns': [r'\bElske\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Edeyja':               {'patterns': [r'\bEdeyja\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    'Lenneth':              {'patterns': [r'\bLenneth\b'],
-                             'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    # Factions (disambiguated)
-    'Crown':                {'patterns': [r'\bCrown\b(?! Treaty)'], 'scale': 'faction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b',
-                                         r'\bTreaty\b', r'\bTorben\b']},
-    'Church':               {'patterns': [r'\bChurch\b(?! Influence)'], 'scale': 'faction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b',
-                                         r'\bHeresy\b', r'\bfaction\b', r'\bConfessor\b',
-                                         r'\bdoctrine\b']},
-    'Hafenmark':            {'patterns': [r'\bHafenmark\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Varfell':              {'patterns': [r'\bVarfell\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Löwenritter':          {'patterns': [r'L[oö]wenritter'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Restoration Movement': {'patterns': ['Restoration Movement', r'\bRM\b(?![a-z])'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Guilds':               {'patterns': [r'\bGuilds?\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
+    # Clocks (abbreviations): sourced from names_index clock.* (token_class: clock_track) AFTER
+    # this literal (§8; R2/ED-IN-0082) — collision-safe ids for MS/CI/IP/PI/TS/TCV.
+    # Convictions: sourced from references/names_index.yaml conv.* entries just AFTER this
+    # literal (§8 — the §3.5 disambiguation `context` lives ONCE there; R2/ED-IN-0082).
+    # Pressure Points: sourced from references/names_index.yaml ppt.* entries AFTER this literal
+    # (§8; R2/ED-IN-0082) — the hardcoded roster + §3.5 context moved into the central registry.
+    # NPCs: sourced from references/names_index.yaml world.* entries tagged `token_class: npc`
+    # AFTER this literal (§8; R2 namespacing / ED-IN-0082) — the hardcoded roster + short match-
+    # forms migrated into the central registry as FIRST-NAME/TITLE patterns (the shared `Almqvist`
+    # dynasty surname is dropped, per Jordan 2026-07-22, so distinct royals never collide on it).
+    # The coreference-collapse hazard the old deferral note warned about is closed by the
+    # token_class-skip in derive_tokens (generic layer no longer double-sources these).
+    # Factions: sourced from references/names_index.yaml world.* entries tagged
+    # `token_class: faction` AFTER this literal (§8; R2/ED-IN-0082) — roster + custom patterns
+    # (negative lookaheads) + §3.5 disambiguation context migrated to the central registry.
     # Cross-cutting
     'Armature System':      {'patterns': ['Armature System', 'Armature'],
                              'scale': 'crosscutting', 'status': 'provisional', 'source': 'seed'},
     'Event Impact Matrix':  {'patterns': ['Event Impact Matrix', 'EventImpact'],
                              'scale': 'crosscutting', 'status': 'provisional', 'source': 'seed'},
-    # Mechanics
-    'Disposition':          {'patterns': [r'\bDisposition\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Standing':             {'patterns': [r'\bStanding\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Stability':            {'patterns': [r'\bStability\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Mandate':              {'patterns': [r'\bMandate\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Tensions':             {'patterns': [r'\bTensions\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
+    # Mechanics: sourced from references/names_index.yaml mech.* (token_class: mechanic) AFTER this
+    # literal (§8; R2 namespacing / ED-IN-0082) — namespaced ids make "Stability"/"Mandate" etc.
+    # collision-safe from the faction stats (fac.stability …).
 }
+
+# Token classes sourced from references/names_index.yaml (§8 — the class ROSTERS and their §3.5
+# disambiguation `context` live ONCE in the central registry; Reconciliation R2 / ED-IN-0082).
+# For each class: CLASSES[<cls>] = the ordered display roster; each member's SEED token gets its
+# match patterns (the entry's explicit `patterns` if present, else [\bcanonical\b]) + `context`.
+# Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
+# names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
+# derive_tokens already has, since the whole audit reads the index.
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech', 'clock', 'npc')
+if names is not None:
+    for _cls in _INDEX_TOKEN_CLASSES:
+        _members = names.by_token_class(_cls)
+        # ordered display roster (index order matches the former hardcoded order, so P2's
+        # per-conviction vector and the class taxonomy are unchanged)
+        CLASSES[_cls] = [_e['canonical'] for _e in _members.values() if _e.get('canonical')]
+        for _e in _members.values():
+            _disp = _e.get('canonical')
+            if not _disp:
+                continue
+            SEED_TOKENS[_disp] = {
+                'patterns': list(_e.get('patterns') or []) or [r'\b' + _disp + r'\b'],
+                'scale': _e.get('scale') or _cls, 'status': 'canonical', 'source': 'seed',
+                'context': list(_e.get('context') or [])}
+
+# The performable-action verb roster is sourced from references/action_vocabulary.yaml (§8; the
+# provisional central home — see that file's PROVISIONAL banner + ED-FA-0002). It is NOT in
+# names_index, so it does NOT go through _INDEX_TOKEN_CLASSES / SEED_TOKENS: the derive_tokens
+# ACTIONS loop reads CLASSES['action'] and applies _pattern_for, exactly as before — only the
+# roster's HOME moved out of this file. Loaded from the real repo (via __file__) at import.
+_ACTION_VOCAB = os.path.join(
+    os.path.dirname(_TOOLS_DIR), 'references', 'action_vocabulary.yaml')
+try:
+    with open(_ACTION_VOCAB, encoding='utf-8') as _af:
+        _av = yaml.safe_load(_af) or {}
+    CLASSES['action'] = [v for v in (_av.get('verbs') or []) if isinstance(v, str) and v.strip()]
+except Exception:  # pragma: no cover — degrade to empty (same failure mode as a missing register)
+    CLASSES['action'] = []
 
 
 # ──────────────────────────── HELPERS ────────────────────────────────────────
@@ -412,6 +364,37 @@ def _canonical_paths(root):
     return sorted(paths)
 
 
+# Design-content trees the EXTENDED layer (L1) traces — the whole authored DESIGN corpus, not just
+# the canonical_sources slice. IMPORTANT SCOPE HONESTY (adversarial-pass H1/H2, 2026-07-22): L1
+# extends ONLY the corpus-breadth direction, and within the 4-graph triangulation ONLY the CITE
+# graph consumes the doc corpus. The throughline graph derives from two registries
+# (throughlines_meta + throughlines_complete's POST-ATOMIZATION Systems lines) and the mu graph from
+# throughlines_meta, and the token universe derives from names_index/proper_noun/module_contracts — NONE of
+# those grow with L1. So L1 = more DOCS, same TOKENS, cite-graph only. Narrative (arcs/) and planning
+# (workplans/) trees are EXCLUDED: they are not design mechanics, and letting a token's primary_doc
+# migrate to a narrative doc would pollute cite with story co-mention (H2). The design corpus is
+# systems/engine/canon/godot/proposals.
+_L1_TREES = ('systems', 'engine', 'canon', 'godot', 'proposals')
+_L1_SKIP_DIRS = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache',
+                 'deprecated', 'sim', 'node_modules'}
+
+
+def _design_tree_paths(root):
+    """Every .md under the design-content trees (_L1_TREES) — the L1 extended-corpus scope.
+    Co-file _index/_infill halves are INCLUDED (they are authored content). Skips history/tooling."""
+    paths = set()
+    for tree in _L1_TREES:
+        base = root / tree
+        if not base.exists():
+            continue
+        for p in base.rglob('*.md'):
+            rel = p.relative_to(root)
+            if any(part in _L1_SKIP_DIRS for part in rel.parts):
+                continue
+            paths.add(str(rel))
+    return paths
+
+
 def _restructure_remap(root):
     """Old→new path map from `references/restructure_ledger.md` (working tree, root-honoring).
     Only the root-parameterized read is local — this pipeline is `--repo-root` driven while
@@ -443,17 +426,30 @@ def _resolve_live(root, rel, remap):
     return mapped if (mapped and (root / mapped).exists()) else None
 
 
-def extract_corpus(root):
+def extract_corpus(root, layer='L0'):
     """Return (design, discourse, manifest): {relpath: content} maps + a manifest dict.
-    Banner-classifies each doc (design / discourse / excluded)."""
+    Banner-classifies each doc (design / discourse / excluded).
+
+    `layer`: 'L0' (default) = the curated canonical_sources slice (~6% of the repo; the validated
+    methodology scope). 'L1' = extend the trace to the WHOLE design tree (_design_tree_paths) so
+    the graphs trace connections across every authored doc — "extend audit performance in the
+    corpus-breadth direction". L0 stays default so P1/P2/P3 calibration + tests are unchanged."""
     design, discourse = {}, {}
-    manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': []}
+    manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': [],
+                'layer': layer}
     remap = _restructure_remap(root)
-    for rel in _canonical_paths(root):
+    scope = set(_canonical_paths(root))
+    if layer == 'L1':
+        scope |= _design_tree_paths(root)
+    seen_live = set()  # dedup by LIVE path, not scope key (guards the L1 alias↔glob double-count)
+    for rel in sorted(scope):
         live = _resolve_live(root, rel, remap)  # self-heal a moved input via the ledger
         if live is None:
             manifest['missing'].append(rel)
             continue
+        if live in seen_live:
+            continue  # same physical file reached by two scope keys (alias + glob) — read once
+        seen_live.add(live)
         fp = root / live
         try:
             content = fp.read_text(encoding='utf-8', errors='replace')
@@ -674,16 +670,28 @@ def _pattern_for(label, abbr=None):
     return pats
 
 
-# Canonical-source `systems:` keys that are lore/meta/migration docs, not mechanics —
-# excluded from derivation to keep the token set signal-heavy.
-SKIP_SYSTEMS = {
-    'module_contracts', 'ui_ux', 'videogame_mode_spec', 'core_engine',
-    'narrative_voice_canon', 'solmund_voice', 'solmund_philosophy', 'solmund_artifacts',
-    'character_generation_questionnaire', 'character_histories', 'character_canon_consolidation',
-    'faction_canon_consolidation', 'political_dynamics_keys_migration',
-    'conviction_migration_roster', 'throughlines_framework',
-    'tc_political',  # deprecated pre-CI naming variant; the 'CI Political' seed token is canonical
+# Canonical-source `systems:` keys NOT tokenized — each paired with WHY (never a silent drop;
+# a core purpose of this tool is to SURFACE what is excluded, not hide it — see audit_exclusions()
+# and the Incompleteness Ledger). An exclusion is a claim you can audit and challenge, not noise.
+SKIP_SYSTEMS_REASONS = {
+    'module_contracts': 'index/spine doc, not a mechanic surface (the contracts themselves)',
+    'ui_ux': 'presentation-layer spec, not a mechanic',
+    'videogame_mode_spec': 'platform/mode spec, not a mechanic',
+    'core_engine': 'substrate/kernel doc, not a domain mechanic',
+    'narrative_voice_canon': 'voice/style canon, not a mechanic',
+    'solmund_voice': 'voice/style canon, not a mechanic',
+    'solmund_philosophy': 'philosophy canon, not a mechanic',
+    'solmund_artifacts': 'lore artifacts, not a mechanic',
+    'character_generation_questionnaire': 'authoring aid, not a mechanic',
+    'character_histories': 'lore/backstory, not a mechanic',
+    'character_canon_consolidation': 'consolidation/migration doc, not a mechanic',
+    'faction_canon_consolidation': 'consolidation/migration doc, not a mechanic',
+    'political_dynamics_keys_migration': 'migration doc, not a mechanic',
+    'conviction_migration_roster': 'migration roster, not a mechanic',
+    'throughlines_framework': 'meta-framework doc, not a mechanic',
+    'tc_political': 'DEPRECATED pre-CI naming variant; superseded by the CI Political token',
 }
+SKIP_SYSTEMS = set(SKIP_SYSTEMS_REASONS)  # keys only, for the fast membership test in derive_tokens
 
 _ACRONYMS = {'Npc': 'NPC', 'Ci': 'CI', 'Ms': 'MS', 'Ip': 'IP', 'Ui': 'UI',
              'Ux': 'UX', 'Ap': 'AP', 'Pi': 'PI', 'Ts': 'TS', 'Rm': 'RM'}
@@ -697,9 +705,14 @@ def _humanize_system(key):
     return ' '.join(_ACRONYMS.get(w, w) for w in label.split())
 
 
-def derive_tokens(root):
+def derive_tokens(root, record_drops=None):
     """Build the token table from the LIVE central registries (NS2: derived, not a
-    hardcoded frozen list), layered on the curated SEED_TOKENS core. The curated core
+    hardcoded frozen list), layered on the curated SEED_TOKENS core.
+
+    `record_drops`: optional list; when provided, every candidate the cull rules reject is
+    appended (with a reason) so nothing is dropped silently. The returned token table is
+    IDENTICAL whether or not recording is on — recording is pure observation (audit_exclusions
+    uses it to surface the culls into the Incompleteness Ledger). The curated core
     carries the validated §3.5 disambiguation context plus the foundation / 7-Conviction
     / 4-Pressure-Point / clock sets that P2 validation and the class taxonomy depend on,
     and it WINS on any name collision — so the English-word collision tokens
@@ -715,16 +728,51 @@ def derive_tokens(root):
     seen = {norm(n) for n in tokens}
 
     def add(name, patterns, scale, source):
+        # SURFACE, never silently cull (the tool's purpose is to expose what's missing).
+        # When a drop recorder is attached, every rejected candidate is recorded with a reason
+        # so audit_exclusions()/the Incompleteness Ledger can list it. The token OUTPUT is
+        # unchanged whether or not recording is on — recording is pure observation.
         n = norm(name)
-        if not name or not patterns or not n or n in seen or len(name) < 3:
+        if not name or not n:
+            if record_drops is not None and name:
+                record_drops.append({'candidate': str(name), 'scale': scale, 'source': source,
+                                     'reason': 'empty_after_normalization'})
             return
+        if len(name) < 3:
+            if record_drops is not None:
+                record_drops.append({'candidate': name, 'scale': scale, 'source': source,
+                                     'reason': 'name_shorter_than_3_chars'})
+            return
+        if not patterns:
+            if record_drops is not None:
+                record_drops.append({'candidate': name, 'scale': scale, 'source': source,
+                                     'reason': 'no_match_patterns'})
+            return
+        if n in seen:
+            return  # dedup of an already-present entity, not a cull of a missing thing
         seen.add(n)
         tokens[name] = {'patterns': patterns, 'scale': scale, 'status': 'canonical',
                         'source': source, 'context': []}
 
+    def alias_pats(aliases, owner):
+        """Keep aliases >=4 chars as escaped patterns; RECORD the shorter ones dropped by the
+        alias_min_chars floor (F4 — the floor's culling effect is now surfaced, not silent)."""
+        kept = []
+        for a in (aliases or []):
+            if len(a) >= 4:
+                kept.append(re.escape(a))
+            elif record_drops is not None and len(a) > 0:
+                record_drops.append({'candidate': a, 'scale': 'alias', 'source': owner,
+                                     'reason': 'alias_shorter_than_4_chars'})
+        return kept
+
     cs = _yaml(root, 'references/canonical_sources.yaml')
     for key in sorted((cs.get('systems', {}) or {})):
         if key in SKIP_SYSTEMS:
+            if record_drops is not None:
+                record_drops.append({'candidate': _humanize_system(key), 'scale': 'system',
+                                     'source': 'canonical_sources:' + key, 'reason': 'skip_systems_denylist',
+                                     'detail': SKIP_SYSTEMS_REASONS.get(key, '')})
             continue
         label = _humanize_system(key)
         add(label, _pattern_for(label) + [re.escape(key)], 'system', 'derived:canonical_sources')
@@ -739,9 +787,15 @@ def derive_tokens(root):
     for e in _ni_entries.values():
         if not isinstance(e, dict):
             continue
+        if (e.get('token_class') or e.get('category')) in _INDEX_TOKEN_CLASSES:
+            # already SEED-sourced with explicit patterns via the _INDEX_TOKEN_CLASSES loop
+            # (conviction/faction/mech/clock/…) — don't ALSO derive a context-free token here,
+            # which would collide + let coreference pick the wrong surface form (R2 namespacing).
+            # Non-sourced token_class values (e.g. clock_full) are NOT skipped — they stay tokens.
+            continue
         cat = e.get('category')
         label, abbr = _strip_display(e.get('canonical'))
-        pats = _pattern_for(label, abbr) + [re.escape(a) for a in (e.get('aliases') or []) if len(a) >= 4]
+        pats = _pattern_for(label, abbr) + alias_pats(e.get('aliases'), 'names_index:'+str(label))
         scale = 'primitive' if cat in _PRIMITIVE_CATS else (cat or 'mechanic')
         add(label, pats, scale, 'derived:names_index')
 
@@ -761,7 +815,7 @@ def derive_tokens(root):
             # concepts and canon stuff"). Every registered named entity is a token, however
             # rarely mentioned — a rarely-cited canon entity is a finding, not noise to drop.
             label, _ = _strip_display(item.get('canonical'))
-            pats = _pattern_for(label) + [re.escape(a) for a in (item.get('aliases') or []) if len(a) >= 4]
+            pats = _pattern_for(label) + alias_pats(item.get('aliases'), 'proper_noun:'+str(label))
             add(label, pats, scale, 'derived:proper_noun')
 
     # ── PRIMITIVES / values from descriptor_registry.yaml (attributes + stat rosters) ──
@@ -784,7 +838,7 @@ def derive_tokens(root):
             continue
         key = row.get('key')
         pats = _pattern_for(row['name']) + ([re.escape(key)] if key else []) \
-            + [re.escape(a) for a in (row.get('aliases') or []) if len(a) >= 4]
+            + alias_pats(row.get('aliases'), 'descriptor:'+str(row.get('name')))
         add(row['name'], pats, 'primitive', 'derived:descriptor_registry')
 
     # ── MECHANICS (modules), KEYS (schema names), VALUES (derivations) from module_contracts ──
@@ -817,6 +871,46 @@ def derive_tokens(root):
     # Coreference consolidation: unify every surface form of one named entity into a
     # single token (registry aliases + proper-noun substring). "Just search Baralta."
     return consolidate_tokens(tokens, _build_coref(root))
+
+
+# Methodology floors (documented, not hidden). `enumerated` marks whether audit_exclusions records
+# EACH culled item (via record_drops) or only documents the threshold. name<3 + alias<4 are
+# enumerated per-item; the two corpus-runtime floors (paragraph<50 in to_paragraphs, citation<2 in
+# build_g_cite) are thresholds whose per-item effect is NOT enumerated — honestly noted, not implied
+# away (see build_incompleteness COVERAGE_GAPS).
+AUDIT_FLOORS = {
+    'paragraph_min_chars': {'value': 50, 'enumerated': False},   # to_paragraphs drops shorter blocks
+    'citation_min_mentions': {'value': 2, 'enumerated': False},  # build_g_cite drops edges below this
+    'alias_min_chars': {'value': 4, 'enumerated': True},         # short registry aliases, recorded
+    'name_min_chars': {'value': 3, 'enumerated': True},          # short token names, recorded
+}
+
+
+def audit_exclusions(root):
+    """SURFACE everything the token pipeline culls — the whole point of the tool is to expose
+    what is missing/excluded, never to hide it. Returns a structured manifest of:
+      - skip_systems: the hand-maintained denylist, each with its reason + would-be label
+      - dropped_candidates: every registry-derived candidate the cull rules rejected, with reason
+      - floors: the corpus-level methodology parameters and their culling effect
+    Consumed by the Incompleteness Ledger (build_incompleteness.py) so the culls appear there."""
+    from pathlib import Path as _P
+    root = _P(root) if not hasattr(root, 'joinpath') else root
+    drops = []
+    derive_tokens(root, record_drops=drops)  # token output ignored; we want the drop record
+    cs = _yaml(root, 'references/canonical_sources.yaml')
+    present = set((cs.get('systems', {}) or {}))
+    skip = [{'system': k, 'would_be_label': _humanize_system(k),
+             'reason': SKIP_SYSTEMS_REASONS.get(k, ''), 'present_in_canonical_sources': k in present}
+            for k in sorted(SKIP_SYSTEMS_REASONS)]
+    from collections import Counter as _C
+    by_reason = _C(d['reason'] for d in drops)
+    return {
+        'skip_systems': skip,
+        'dropped_candidates': drops,
+        'dropped_by_reason': dict(by_reason),
+        'floors': AUDIT_FLOORS,
+        'totals': {'skip_systems': len(skip), 'dropped_candidates': len(drops)},
+    }
 
 
 def curate_tokens(design, token_defs):
@@ -920,10 +1014,52 @@ def parse_throughlines(root):
     return rows
 
 
-def build_g_throughline(rows, tokens):
+# references/throughlines_complete.md carries a SECOND, richer throughline→systems membership than
+# the meta table: EVERY `### T-NN:` block (T-01..T-41, both the main sections AND the post-atomization
+# T-31..T-41) has a `**Systems:**` line, and it lists more systems than the meta table's row (T-04:
+# 7 systems here vs 4 there). Same relation (systems co-listed under a throughline), broader source.
+# Directions-audit #3 (2026-07-22): folding it in was MEASURED before adopting (unlike the reverted
+# bridge attempt) — +2 implied-missing surfaced, +1 legitimate hub (Player Agency), 0 new isolates,
+# no dense-blob inflation. (The doc's INTERACTION MATRIX was measured and REJECTED: 20/21 throughline
+# pairs "interact", a near-complete graph that would just inflate the Clocks/MS hubs with no
+# discrimination.) SCOPE-HONESTY (adversarial pass, 2026-07-22): this reads the WHOLE doc, not just
+# §VIII — an earlier cut mislabeled it "POST-ATOMIZATION only". The regex is (a) letter-suffix aware
+# (`T-\d+[a-z]?` catches T-15b/T-15c) and (b) BLOCK-BOUNDED via a tempered dot that will not cross the
+# next `### `/`## ` header — so a STRUCK Chain-less block (T-10) can't bleed its match into T-11.
+_TL_COMPLETE_RE = re.compile(
+    r'^### (T-\d+[a-z]?):[^\n]*\n'          # header line (letter-suffix aware)
+    r'(?:(?!^### )(?!^## ).)*?'             # body, tempered: never crosses another header
+    r'^\*\*Systems:\*\*[ \t]*([^\n]+)',     # the Systems line, within THIS block
+    re.S | re.M)
+
+
+def parse_throughlines_complete(root):
+    """Yield (T-id, '', '', [system_slugs]) from EVERY `### T-NN:` block's `**Systems:**` line in
+    throughlines_complete.md (whole doc — T-01..T-41, letter-suffixed T-15b/T-15c included; the
+    STRUCK T-10 has no Systems line so it is correctly skipped). Shape matches parse_throughlines so
+    it composes with build_g_throughline; the two μ fields are empty (this source carries no Μ-mode
+    data — μ stays meta-table-only)."""
+    fp = root / 'references' / 'throughlines_complete.md'
+    if not fp.exists():
+        return []
+    rows = []
+    for tid, line in _TL_COMPLETE_RE.findall(fp.read_text(encoding='utf-8', errors='replace')):
+        # strip parentheticals + section refs, then split — the prose qualifiers ("(Church tree)",
+        # "§3.2") are not systems; only the bare slugs map to tokens (unmapped prose is dropped by
+        # the lut membership test in build_g_throughline, same as the meta parser).
+        clean = re.sub(r'\([^)]*\)', '', line)
+        clean = re.sub(r'§[0-9.]+', '', clean)
+        systems = [s.strip() for s in re.split(r'[;,]', clean) if s.strip()]
+        rows.append((tid, '', '', systems))
+    return rows
+
+
+def build_g_throughline(rows, tokens, extra_rows=None):
+    """Systems co-listed under a throughline are connected. `extra_rows` folds in a second
+    membership source (parse_throughlines_complete) — same relation, broader coverage."""
     lut, norm = _slug_lookup(tokens)
     g = {}
-    for _tid, _p, _s, systems in rows:
+    for _tid, _p, _s, systems in list(rows) + list(extra_rows or []):
         members = [lut[norm(s)] for s in systems if norm(s) in lut]
         for i in range(len(members)):
             for j in range(i + 1, len(members)):
@@ -988,6 +1124,86 @@ def build_g_pp(root, tokens):
         for i in range(len(hit)):
             for j in range(i + 1, len(hit)):
                 _add_edge(g, hit[i], hit[j])
+    return g
+
+
+def _keytype_token(kt, tokens):
+    """Map a contract Key-TYPE string (e.g. 'mechanical.scene_exited') to the `Key:`-named token that
+    names it, by full-matching the token's patterns. HARDENING (adversarial pass, LOW): restricted to
+    Key-type tokens (name starts with 'Key:') so a future broad SYSTEM-token pattern can't silently
+    steal a key-type mapping — a key type only ever maps to a key token. Deterministic first match."""
+    for name, rec in tokens.items():
+        if not name.startswith('Key:'):
+            continue
+        for pat in rec['patterns']:
+            try:
+                if re.fullmatch(pat, kt):
+                    return name
+            except re.error:
+                continue
+    return None
+
+
+def build_g_key(root, tokens):
+    """G_key — the KEY PROPAGATION graph (Direction #5, 2026-07-22): the engine's IN→resolver→OUT data
+    flow, projected to token level. Two edge kinds:
+      • system↔system: module A emits Key K, module B consumes K → A and B are wired (data flows).
+      • keytype↔system: a Key-TYPE token (e.g. 'Key: mechanical.scene_exited') ↔ every module that
+        emits/consumes it — this is what UN-ISOLATES Key-type tokens (they are absent from the design
+        CITATION graph by construction — prose rarely cites a Key by name — but CENTRAL here).
+    This is the graph the audit was previously BLIND to (it used to filter Key tokens out of Mode-H
+    as 'expected false alarms'); folding it in RESOLVES them for real, and triangulates design intent
+    (cite/tl/mu/pp) against engine wiring. A Key-type token that stays isolated is a real finding —
+    an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a flow declared only via
+    `derivations:` — NOT necessarily "un-emitted"; the register carries the mechanism.
+
+    DRY / SCOPE HONESTY (adversarial pass, §8 'every rule lives once'): this reads the SAME FILE as
+    tools/observability/build_graph.py but is a DELIBERATELY NARROWER projection — typed module-level
+    `emits`/`consumes` only, at TOKEN granularity. build_graph.py is the AUTHORITATIVE, richer engine
+    graph: it additionally folds the Key Type Registry's emitting/consuming_systems, `from:` fields,
+    key-name-drift normalization, and DROP/BROADCAST sentinels, at system/key/scalar granularity. Do
+    NOT treat this token-projection as build_graph's graph. The two agree on system↔system edges today
+    (0 consumed types lack a module emitter); if that ever diverges, single-source the module-level
+    parse. (A follow-up to lift the shared emit/consume parse into one owner is tracked in HANDOFF_IN.)"""
+    fp = root / 'references' / 'module_contracts.yaml'
+    g = {}
+    if not fp.exists():
+        return g
+    try:
+        data = yaml.safe_load(fp.read_text(encoding='utf-8', errors='replace')) or {}
+    except Exception:
+        return g
+    lut, norm = _slug_lookup(tokens)
+    emitters, consumers = defaultdict(set), defaultdict(set)
+    modtok = {}
+    for m in data.get('modules', []) or []:
+        if not isinstance(m, dict):
+            continue
+        name = m.get('module')
+        if name and norm(name) in lut:
+            modtok[name] = lut[norm(name)]
+        for em in m.get('emits') or []:
+            if isinstance(em, dict) and em.get('type'):
+                emitters[em['type']].add(name)
+        for co in m.get('consumes') or []:
+            if isinstance(co, dict) and co.get('type'):
+                consumers[co['type']].add(name)
+    # FULLSTREAM consume ('*' = subscribes to the whole Key stream) is NOT a discriminating edge —
+    # it would connect one module to every emitter, a blob. Excluded (mirrors build_graph's handling).
+    for k in sorted(set(emitters) | set(consumers)):
+        if k == '*':
+            continue
+        es, cs = emitters.get(k, set()), consumers.get(k, set())
+        for a in sorted(es):
+            for b in sorted(cs):
+                if modtok.get(a) and modtok.get(b):
+                    _add_edge(g, modtok[a], modtok[b])
+        ktok = _keytype_token(k, tokens)
+        if ktok:
+            for s in sorted(es | cs):
+                if modtok.get(s):
+                    _add_edge(g, ktok, modtok[s])
+    g.pop(None, None)  # defensive: _add_edge guards a==b but never inserts None (both sides checked)
     return g
 
 
@@ -1120,10 +1336,13 @@ def _percentile_10_cut(values):
 def diagnostics(tokens, graphs, degs):
     names = list(tokens)
     g_cite = graphs['cite']
-    dg = {k: degs[k] for k in ('cite', 'throughline', 'mu', 'pp')}
+    # The structural graphs, in fixed order. `key` (the engine Key-propagation graph, Direction #5)
+    # is included WHEN PRESENT — diagnostics stays backward-compatible for callers that build only
+    # the design-4. With key, hubs/isolates triangulate design intent AND engine data-flow.
+    dg = {k: degs[k] for k in ('cite', 'throughline', 'mu', 'pp', 'key') if k in degs}
     out = {}
 
-    # A — multi-graph hubs (top quintile in >=3 of 4)
+    # A — multi-graph hubs (top quintile in >=3 of the structural graphs)
     tq = {k: _top_quintile(dg[k]) for k in dg}
     hubs = []
     for t in names:
@@ -1136,7 +1355,9 @@ def diagnostics(tokens, graphs, degs):
     # B — implied-but-missing (>=2 metadata graphs link, no cite edge, cross-class)
     def cite_linked(a, b):
         return b in g_cite.get(a, {}) or a in g_cite.get(b, {})
-    meta = ('throughline', 'mu', 'pp')
+    # metadata graphs (everything but cite): a pair linked here but NOT cited is implied-missing.
+    # `key` joins when present — "engine-wired but never cited" is a genuine port-relevant gap.
+    meta = tuple(k for k in ('throughline', 'mu', 'pp', 'key') if k in graphs)
     implied = []
     for a in names:
         for b in names:
@@ -1164,6 +1385,8 @@ def diagnostics(tokens, graphs, degs):
     # D — cascade-without-return (chains len>=3, no return path)
     sinks = Counter()
     adj = {a: set(g_cite.get(a, {})) for a in names}
+    _trunc = [0]  # M2: count reaches() calls that hit the traversal cap — a capped 'False' may be a
+                  # FALSE 'does-not-return' (=> false cascade-sink). SURFACE it, never hide it.
     def reaches(start, target):
         stack, seen2 = [start], {start}
         steps = 0
@@ -1175,6 +1398,8 @@ def diagnostics(tokens, graphs, degs):
                     return True
                 if nx not in seen2 and len(seen2) < 200:
                     seen2.add(nx); stack.append(nx)
+        if steps >= 5000 or len(seen2) >= 200:
+            _trunc[0] += 1   # cap tripped: this False is unreliable
         return False
     for a in names:
         for b in adj.get(a, ()):
@@ -1184,6 +1409,7 @@ def diagnostics(tokens, graphs, degs):
     sinks_ranked = sinks.most_common()
     out['D_cascade_sinks'] = [{'terminal': t, 'chains': n} for t, n in sinks_ranked[:15]]
     out['D_cascade_sinks_total'] = len(sinks_ranked)   # true total (side channel; not just the shown 15)
+    out['D_cascade_truncated_calls'] = _trunc[0]       # >0 => some sinks may be cap-artifacts (denser corpora)
 
     # E — sparse-context (paragraph AND cite-degree in bottom 10th pct)
     pcut = _percentile_10_cut([tokens[t]['paragraph_count'] for t in names])
@@ -1234,6 +1460,152 @@ def vocabulary_debt(design, struck_terms):
     return sorted(rows, key=lambda r: -r['total'])
 
 
+# ── Token-universe extension: DISCOVER authored terms the registries don't know ──
+# The token universe is registry-derived, so a design term never registered is invisible to the
+# WHOLE audit (every graph, every layer). This finds candidate terms in the corpus that NO token
+# pattern matches — i.e. MISSING REGISTRATIONS — so the audit surfaces what it cannot yet see and
+# the terms can be registered (then everything downstream can trace them). Leads, not verdicts.
+_CANDIDATE_STOPWORDS = {
+    'Status', 'Version', 'Scope', 'Section', 'Overview', 'Design', 'Note', 'Notes', 'Example',
+    'Examples', 'Table', 'Figure', 'Appendix', 'Summary', 'Rationale', 'Purpose', 'Goal', 'Goals',
+    'Context', 'Background', 'Detail', 'Details', 'Definition', 'Definitions', 'Mechanic',
+    'Mechanics', 'System', 'Systems', 'Phase', 'Stage', 'Step', 'Steps', 'Rule', 'Rules', 'Case',
+    'Cases', 'Type', 'Types', 'Value', 'Values', 'State', 'States', 'Event', 'Events', 'Action',
+    'Actions', 'Result', 'Results', 'Output', 'Input', 'Change', 'Model', 'Layer', 'Track', 'Clock',
+    'Key', 'Keys', 'Token', 'Tokens', 'Player', 'Game', 'Turn', 'Round', 'Score', 'Pool', 'Check',
+    'Roll', 'Test', 'Tests', 'Tier', 'Level', 'Point', 'Points', 'Count', 'Total', 'Draft', 'Final',
+    'Current', 'Canonical', 'Reference', 'Proposed', 'Provisional', 'Open', 'Closed', 'Yes', 'No',
+    'The', 'This', 'That', 'When', 'What', 'Where', 'How', 'Why', 'For', 'And', 'But', 'Not',
+    # doc-structure / formatting noise (not design concepts) — adversarial-pass (c) expansion
+    'Board Game', 'Heading Index', 'Section Sizes', 'Table Of', 'Open Items', 'Year-End',
+    'Design Doc', 'Index File', 'Infill File', 'Co-File', 'Design Principle', 'Design Principles',
+    'Philosophical Foundations', 'Starting Values', 'Personal Phase', 'Strategic Phase',
+    'Cascade Phase', 'Design Note', 'Design Notes', 'Design Goal', 'Design Intent', 'Worked Example',
+    'Section Size', 'Line Count', 'Word Count', 'Key Insight', 'Core Loop', 'Core Idea',
+    # repudiated / external / generic-TTRPG (NOT candidate registrations)
+    'Game Master', 'Player Character', 'Player Characters', 'Non-Player Character',
+    'Non-Player Characters', 'Crusader Kings', 'Koei', 'Paradox', 'Total War', 'Martial Law',
+    'Royal Decree', 'Real World', 'Real Time', 'Disco Elysium', 'Derived Value', 'Derived Values',
+    'Primary Attribute', 'Primary Attributes', 'Worked Examples', 'Hybrid Mode',
+}
+_CAND_BOLD = re.compile(r'\*\*([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\*\*')
+_CAND_HEAD = re.compile(r'^#{2,5}\s+([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\s*$', re.M)
+_CAND_TITLE = re.compile(r'\b([A-Z][a-z]{2,}(?:[ -][A-Z][a-z]{2,}){1,3})\b')
+# a leading article/honorific stripped so "The Church"==Church, "Magnus Vaynard"==Duke … Vaynard
+_LEAD_RE = re.compile(r'^(the|a|an|king|queen|prince|princess|duke|duchess|cardinal|confessor'
+                      r'|grandmaster|consul|senator|tribune|warden|guildmaster|doux|lord|lady|sir)\s+',
+                      re.I)
+
+
+def _known_ontology(root, token_defs):
+    """Every concept the central ontology ALREADY knows: token names+aliases, module ids (raw +
+    humanized) + their aliases, descriptor attribute/stat names, and graph node ids/names. A
+    candidate matching any of these (name-level, with plural folding) is NOT an unregistered term.
+    Fixes the substring predicate (adversarial-pass a): it neither drops a multi-word extension of
+    a registered head-word (false-neg) nor re-surfaces a concept another scanner already carries
+    (redundancy f)."""
+    def norm(s):
+        return re.sub(r'[^a-z0-9]+', '', (s or '').lower())
+    def fold(s):  # plural-fold each word so "Domain Action" == module "domain_actions"
+        return ''.join(re.sub(r's$', '', w) for w in re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).split())
+    known = set()
+    def add(s):
+        if s:
+            known.add(norm(s)); known.add(fold(s))
+    # a leading article/honorific-title variant is also "known" (so "The Church" == Church,
+    # "Magnus Vaynard" == Duke Magnus Vaynard) — the residual surface-form false-positives.
+    def add2(s):
+        add(s)
+        if s:
+            add(_LEAD_RE.sub('', s))
+    for name, meta in token_defs.items():
+        add2(name)
+        for a in (meta.get('aliases_merged') or []):
+            add2(a)
+    mc = _yaml(root, 'references/module_contracts.yaml') or {}
+    for m in (mc.get('modules') or []):
+        if isinstance(m, dict) and m.get('module'):
+            add(m['module']); add2(_humanize_system(m['module']))
+            for a in (m.get('aliases') or []):
+                add2(a)
+    pn = _yaml(root, 'references/proper_noun_registry.yaml') or {}
+    for grp in pn.values():
+        if isinstance(grp, dict):
+            for item in grp.values():
+                if isinstance(item, dict):
+                    add2(item.get('canonical'))
+                    for a in (item.get('aliases') or []):
+                        add2(a)
+    dr = _yaml(root, 'references/descriptor_registry.yaml') or {}
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k in ('name', 'key', 'canonical') and isinstance(v, str):
+                    add(v)
+                walk(v)
+        elif isinstance(node, list):
+            for it in node:
+                walk(it)
+    walk(dr)
+    g = _load_json_local(root, 'tools/observability/graph.json')
+    for grp in ('systems', 'keys', 'scalars'):
+        for n in (g.get(grp, []) if g else []):
+            add(n.get('id')); add(n.get('name'))
+    return known, norm, fold
+
+
+def _load_json_local(root, rel):
+    fp = root / rel
+    if not fp.exists():
+        return None
+    try:
+        return json.loads(fp.read_text(encoding='utf-8'))
+    except Exception:
+        return None
+
+
+def discover_unregistered_candidates(root, design=None, token_defs=None, min_docs=8):
+    """Corpus terms the central ontology does NOT know — candidate MISSING registrations. Uses a
+    NAME-LEVEL (not substring) known-set over tokens+modules+descriptors+graph nodes, so it neither
+    drops multi-word extensions of a registered head-word nor re-reports concepts other scanners
+    already carry. No hard top-N cap (churn-proof: the `min_docs` floor is the only cutoff — a
+    boundary tie can't reshuffle a committed slice). Each finding back-links to its top docs.
+    (root, or a prebuilt design/token_defs to reuse an in-flight run — the reuse hook is now live.)"""
+    from pathlib import Path as _P
+    root = _P(root) if not hasattr(root, 'joinpath') else root
+    if design is None:
+        design, _, _ = extract_corpus(root, layer='L1')
+    if token_defs is None:
+        token_defs = derive_tokens(root)
+    known, norm, fold = _known_ontology(root, token_defs)
+    def is_known(term):
+        t2 = _LEAD_RE.sub('', term)   # "The Church" -> "Church"; "Magnus Vaynard" stays
+        return any(norm(x) in known or fold(x) in known for x in (term, t2))
+    doc_count, total, doc_hits = Counter(), Counter(), defaultdict(Counter)
+    for doc, content in design.items():
+        seen_here = set()
+        for rx in (_CAND_BOLD, _CAND_HEAD, _CAND_TITLE):
+            for m in rx.finditer(content):
+                term = m.group(1).strip().rstrip(' -/')
+                if len(term) < 4 or term in _CANDIDATE_STOPWORDS:
+                    continue
+                if all(w in _CANDIDATE_STOPWORDS for w in term.split()):
+                    continue
+                total[term] += 1
+                doc_hits[term][doc] += 1
+                seen_here.add(term)
+        for term in seen_here:
+            doc_count[term] += 1
+    out = []
+    for term, dc in doc_count.items():
+        if dc < min_docs or is_known(term):
+            continue
+        top_docs = [d for d, _ in doc_hits[term].most_common(3)]
+        out.append({'term': term, 'docs': dc, 'total': total[term], 'top_docs': top_docs})
+    out.sort(key=lambda r: (-r['docs'], -r['total'], r['term']))
+    return out
+
+
 def throughline_orphans(rows, design):
     """Mode F: throughlines with <=2 substantiating paragraphs (>=2 load-bearing
     systems mentioned in the paragraph)."""
@@ -1267,7 +1639,8 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
     dump('tokens.json', {'tokens': _clean_tokens(tokens)})
     dump('g_cite.json', graphs['cite'])
     dump('g_metadata.json', {'throughline': graphs['throughline'],
-                             'mu': graphs['mu'], 'pp': graphs['pp']})
+                             'mu': graphs['mu'], 'pp': graphs['pp'],
+                             'key': graphs.get('key', {})})
     dump('degrees.json', degs)
     dump('validation.json', validation)
     diag = dict(diag)
@@ -1297,24 +1670,50 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
     # 02_weakness_register.md — primary deliverable
     conf = "leads, not verdicts" if validation['verdict'] == 'FAILED' else "structural findings"
     _cov = manifest.get('coverage', {})
+    _layer = manifest.get('layer', 'L0')
+    _scope_note = ("the curated `canonical_sources.yaml` slice — most of `systems/`, all of "
+                   "`engine/`/`sim/`/`tests/`/`canon/` prose not named there is invisible"
+                   if _layer == 'L0' else
+                   "the whole DESIGN tree (systems/engine/canon/godot/proposals); still excludes "
+                   "arcs/ narrative, workplans/, tests/, deprecated/, audit prose, and non-.md")
+    # H1/M1 honesty: name the directions L1 does NOT extend + that validation is L0-calibrated.
+    _extend_note = ("L1 extends the corpus-breadth direction and the CITE graph ONLY. NOT extended: "
+                    "the throughline/mu/key graphs (registry-derived: throughline from throughlines_meta "
+                    "+ throughlines_complete, mu from throughlines_meta, key from module_contracts), the "
+                    "token universe (registry-derived; a token absent from names_index/proper_noun/"
+                    "module_contracts is invisible at EVERY layer), non-.md content (sim .py, "
+                    "engine/params values), and the P1/P2/P3 thresholds "
+                    "(calibrated on L0 — the verdict below is NOT re-validated for the L1 corpus)."
+                    if _layer == 'L1' else
+                    "Directions this tool does not trace at any layer: non-.md content (sim .py, "
+                    "typed engine/params values) and registry-absent tokens. (The engine Key-propagation "
+                    "graph IS traced now — build_g_key, Direction #5 — as a 5th structural graph.)")
+    _run_hint = ("" if _layer == 'L1' else
+                 " Run `--layer L1` to extend the CITE trace across the whole design tree "
+                 "(L0 stays the validated default; L1 does NOT re-validate).")
     wr = [f'# Weakness register — vector audit v3 ({conf})', '',
           f"Corpus: {manifest['design_count']} design docs, "
           f"{len(tokens)} tokens. Validation: **{validation['verdict']}** "
-          f"({validation['passed']}/3). Confidence inherits from validation (methodology §3.8).",
+          f"({validation['passed']}/3){' — L0-calibrated thresholds, NOT re-validated for L1' if _layer=='L1' else ''}. "
+          f"Confidence inherits from validation (methodology §3.8).",
           '',
-          f"**Coverage disclosure (capstone #6):** this L0 layer is a CURATED slice — "
+          f"**Coverage disclosure (capstone #6):** layer **{_layer}** traces "
           f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
-          f"only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
-          f"{_cov.get('repo_total_md', '?')} `.md` files. Everything outside `_canonical_paths()` "
-          f"(most of `systems/`, all of `engine/params/`/`sim/`/`tests/`/`canon/` prose not named in "
-          f"`canonical_sources.yaml`) is structurally invisible to L0 — a green result here is NOT "
-          f"whole-repo coverage.",
+          f"{_cov.get('pct_of_repo_md', '?')}% of the repo's "
+          f"{_cov.get('repo_total_md', '?')} `.md` files — {_scope_note}. A green result at this "
+          f"layer is NOT whole-repo coverage.{_run_hint}",
+          '',
+          f"**Direction disclosure:** {_extend_note}",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "
           f"cascade-sinks={diag.get('D_cascade_sinks_total', len(diag['D_cascade_sinks']))}, "
           f"sparse={len(diag['E_sparse_context'])}, "
-          f"isolates={len(diag['H_isolates'])}, vocab-debt-terms={len(vocab)}.", '']
+          f"isolates={len(diag['H_isolates'])}, vocab-debt-terms={len(vocab)}.",
+          (f"⚠ Mode D reachability hit its traversal cap on {diag['D_cascade_truncated_calls']} "
+           f"call(s) — some cascade-sinks may be cap artifacts, not true sinks (denser corpus / L1). "
+           f"Treat cascade-sinks as leads here." if diag.get('D_cascade_truncated_calls') else ''),
+          '']
     def section(title, rows, fmt, empty='(none)', total=None):
         # total overrides len(rows) when the caller already capped `rows` upstream (Modes
         # C/D), so the disclosed "… N more" reflects the TRUE count, not the shown slice.
@@ -1361,14 +1760,16 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
 
 # ──────────────────────────── DRIVER ─────────────────────────────────────────
 
-def run(root, out):
+def run(root, out, layer='L0'):
     root, out = Path(root), Path(out)
     (out / 'data').mkdir(parents=True, exist_ok=True)
 
-    print('[stage 1] extracting corpus (working tree)...')
-    design, discourse, manifest = extract_corpus(root)
+    print(f'[stage 1] extracting corpus (working tree, layer {layer})...')
+    design, discourse, manifest = extract_corpus(root, layer=layer)
+    cov = manifest.get('coverage', {})
     print(f'          {manifest["design_count"]} design / {manifest["discourse_count"]} discourse '
-          f'/ {manifest["missing_count"]} missing')
+          f'/ {manifest["missing_count"]} missing  ({cov.get("pct_of_repo_md", "?")}% of '
+          f'{cov.get("repo_total_md", "?")} repo .md)')
 
     print('[stage 2] deriving + curating tokens (registries + seed core)...')
     token_defs = derive_tokens(root)
@@ -1379,18 +1780,21 @@ def run(root, out):
     print('[stage 2.5] citation graph...')
     g_cite = build_g_cite(tokens, design)
 
-    print('[stage 4] metadata graphs (throughline / mu / pp)...')
+    print('[stage 4] metadata graphs (throughline / mu / pp / key)...')
     rows = parse_throughlines(root)
-    g_tl = build_g_throughline(rows, tokens)
+    g_tl = build_g_throughline(rows, tokens, extra_rows=parse_throughlines_complete(root))
     g_mu = build_g_mu(rows, tokens)
     g_pp = build_g_pp(root, tokens)
+    g_key = build_g_key(root, tokens)   # Direction #5 — the engine Key-propagation graph
 
     print('[stage 3] tf-idf (supporting)...')
     g_tfidf, tfidf_on = build_g_tfidf(tokens, paras_by_doc)
 
-    graphs = {'cite': g_cite, 'throughline': g_tl, 'mu': g_mu, 'pp': g_pp, 'tfidf': g_tfidf}
+    graphs = {'cite': g_cite, 'throughline': g_tl, 'mu': g_mu, 'pp': g_pp,
+              'key': g_key, 'tfidf': g_tfidf}
     names = list(tokens)
-    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp', 'tfidf')}
+    degs = {k: _degrees(graphs[k], names)
+            for k in ('cite', 'throughline', 'mu', 'pp', 'key', 'tfidf')}
 
     print('[stage 5] validation...')
     validation = validate(tokens, degs['cite'], degs['throughline'], g_cite)
@@ -1408,18 +1812,133 @@ def run(root, out):
     return validation
 
 
+# Map a token's `source` label (derive_tokens) → the registry file that DEFINES it, so a Mode-H
+# isolate (a term with no design-prose home, hence no primary_doc) still links SOMEWHERE navigable:
+# the register you'd edit to author a doc for it or de-register it. Verified all paths exist.
+_SOURCE_REGISTRY = {
+    'derived:names_index': 'references/names_index.yaml',
+    'derived:module_contracts': 'references/module_contracts.yaml',
+    'derived:descriptor_registry': 'references/descriptor_registry.yaml',
+    'derived:proper_noun_registry': 'references/proper_noun_registry.yaml',
+    'derived:canonical_sources': 'references/canonical_sources.yaml',
+    'seed:action': 'references/action_vocabulary.yaml',
+    'seed': 'skills/valoria-vector-audit/scripts/vector_audit.py',  # hardcoded SEED constants
+}
+
+
+def _source_registry(source):
+    """Registry file that defines a token, from its `source` label (best-effort, longest match)."""
+    if not source:
+        return None
+    if source in _SOURCE_REGISTRY:
+        return _SOURCE_REGISTRY[source]
+    return _SOURCE_REGISTRY.get(source.split(':', 1)[0])
+
+
+def emit_structural_findings(root, out_path, layer='L0'):
+    """Write a COMPACT, deterministic feed of the audit's UNIQUE structural findings — Mode B
+    (implied-but-missing: two design concepts linked in >=2 metadata graphs but never cited
+    together) + Mode H (multi-graph isolates: structurally disconnected tokens). This is how the
+    vector-audit TALKS to the Incompleteness Ledger / dashboard: its cross-graph findings, which
+    no other tool computes, become surfaced findings. No timestamps (churn-proof). Skips tf-idf
+    (supporting-only) for speed."""
+    root, out_path = Path(root), Path(out_path)
+    design, _, manifest = extract_corpus(root, layer=layer)
+    token_defs = derive_tokens(root)
+    tokens, _ = curate_tokens(design, token_defs)
+    g_cite = build_g_cite(tokens, design)
+    rows = parse_throughlines(root)
+    graphs = {'cite': g_cite,
+              'throughline': build_g_throughline(rows, tokens,
+                                                 extra_rows=parse_throughlines_complete(root)),
+              'mu': build_g_mu(rows, tokens), 'pp': build_g_pp(root, tokens),
+              'key': build_g_key(root, tokens)}   # Direction #5 — engine Key-propagation graph
+    names = list(tokens)
+    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp', 'key')}
+    diag = diagnostics(tokens, graphs, degs)
+    pdoc = lambda t: (tokens.get(t) or {}).get('primary_doc')
+    # SURFACE, NEVER CULL (SKILL.md doctrine). The adversarial pass caught the prior cut DROPPING
+    # findings — the exact anti-pattern this apparatus exists to kill. So we emit EVERY finding and
+    # instead ANNOTATE the lower-confidence ones with `filtered` + `filter_reason`. Nothing vanishes
+    # from the feed; the Incompleteness Ledger consumes the unfiltered subset for its high-signal
+    # Missing face, but a reader auditing the feed sees the full picture and can judge the flags.
+    hubs = {r['token'] for r in diag.get('A_multigraph_hubs', [])}
+    def _im_filter(r):
+        # Mode B hub×hub: BOTH endpoints are multi-graph hubs. Lower-confidence (a hub co-occurs
+        # with many tokens, so a missing edge is less surprising) — but NOT a mechanical artifact
+        # (empirically only ~2 of C(hubs,2) pairs clear the ≥2-meta-links/no-cite/cross-class bar),
+        # so these are RETAINED-BUT-FLAGGED, potentially the highest-value gaps (two central systems
+        # that arguably should cross-reference and don't).
+        if r['a'] in hubs and r['b'] in hubs:
+            return 'both-endpoints-are-multigraph-hubs (lower confidence, not dropped)'
+        return None
+    # NOTE (Direction #5): the Mode-H Key-token filter is GONE. It used to flag Key/cross-module
+    # tokens as "expected false alarms" because the audit couldn't see the Key graph. Now it CAN
+    # (build_g_key), so those tokens are genuinely un-isolated when they are wired — and the ones that
+    # REMAIN isolated are real findings we SURFACE, whose mechanism is NOT assumed (an adversarial
+    # pass caught the earlier text calling an orphan-emit "un-emitted"): a still-isolated Key may be a
+    # dangling emit (emitted, unconsumed — structure_audit's `dangling_emit`, e.g. mass_battle's
+    # scene_outcome.battle_concluded), an unemitted/unconsumed Key, or a cross-module `derivations`
+    # flow this typed-emit/consume graph does not read. No isolate is filtered; each is honest.
+    payload = {
+        'schema_version': 1,
+        'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
+        'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
+                'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
+                'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: triangulates FIVE '
+                'structural graphs — design cite/throughline/mu/pp AND the engine Key-propagation '
+                'graph (module_contracts emit→consume). Per SURFACE-NEVER-CULL EVERY finding is '
+                'emitted; lower-confidence Mode-B hub×hub pairs carry a `filtered`+`filter_reason` '
+                'flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing '
+                'face. Isolates are NO LONGER filtered — the Key graph resolves the ones that are '
+                'genuinely wired; a still-isolated Key is a real finding (orphan/dangling emit, '
+                'unemitted/unconsumed Key, or a derivations-only flow) — mechanism per the register.',
+        'layer': layer,
+        'design_docs': manifest.get('design_count'),
+        'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),
+                             'a_doc': pdoc(r['a']), 'b_doc': pdoc(r['b']),
+                             'filtered': bool(_im_filter(r)), 'filter_reason': _im_filter(r)}
+                            for r in diag.get('B_implied_missing', [])],
+        'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token']),
+                      'registry': _source_registry((tokens.get(r['token']) or {}).get('source')),
+                      # max degree across ALL FIVE graphs (Mode-H is max-deg<=1) — carried so the
+                      # ledger text is ACCURATE (degree 0 = truly untouched everywhere, engine
+                      # wiring included) rather than assuming a value.
+                      'max_deg': max(r.get(k, 0) for k in ('cite', 'throughline', 'mu', 'pp', 'key')),
+                      'filtered': False, 'filter_reason': None}
+                     for r in diag.get('H_isolates', [])],
+    }
+    out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
+    kept_im = sum(1 for r in payload['implied_missing'] if not r['filtered'])
+    kept_iso = sum(1 for r in payload['isolates'] if not r['filtered'])
+    print(f'[emit] {len(payload["implied_missing"])} implied-missing ({kept_im} unfiltered) + '
+          f'{len(payload["isolates"])} isolates ({kept_iso} unfiltered) -> {out_path}')
+    return payload
+
+
 def main():
     ap = argparse.ArgumentParser(description='Valoria v3 multi-graph vector audit (working-tree).')
-    ap.add_argument('--output-dir', required=True, help='audit output folder')
+    ap.add_argument('--output-dir', help='audit output folder (full run)')
     ap.add_argument('--mode', default='all', help='(reserved) stage selector')
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
+    ap.add_argument('--layer', default='L0', choices=['L0', 'L1'],
+                    help="corpus breadth: L0 = curated canonical_sources slice (~6%%, validated "
+                         "scope); L1 = extend the trace to the whole design tree (all directions)")
+    ap.add_argument('--emit-findings', metavar='PATH',
+                    help="write ONLY the compact structural-findings feed (Mode B implied-missing "
+                         "+ Mode H isolates) to PATH — for the Incompleteness Ledger to surface")
     args = ap.parse_args()
 
     root = Path(args.repo_root)
     if not (root / 'references' / 'canonical_sources.yaml').exists():
         sys.exit(f"not a Valoria repo root (no references/canonical_sources.yaml): {root}")
     print(f"[vector_audit v3] corpus root (working tree): {root.resolve()}")
-    run(root, args.output_dir)
+    if args.emit_findings:
+        emit_structural_findings(root, args.emit_findings, layer=args.layer)
+        return
+    if not args.output_dir:
+        sys.exit("either --output-dir (full run) or --emit-findings PATH is required")
+    run(root, args.output_dir, layer=args.layer)
 
 
 if __name__ == '__main__':

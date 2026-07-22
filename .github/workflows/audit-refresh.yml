@@ -35,11 +35,12 @@ name: Valoria Audit Refresh
 
 on:
   schedule:
-    # Monthly, 1st of the month. GitHub auto-disables scheduled workflows
+    # WEEKLY, Mondays 06:00 UTC (Stage B: was monthly `0 6 1 * *` — digests were drifting a
+    # full month; weekly keeps DECISIONS/PROPOSALS/apparatus/graph fresh). GitHub auto-disables scheduled workflows
     # after 60 days with no repository activity -- this repo commits far more
     # often than that, so the disable condition shouldn't trigger in practice;
     # workflow_dispatch below is the manual fallback regardless.
-    - cron: '0 6 1 * *'
+    - cron: '0 6 * * 1'
   workflow_dispatch: {}
 
 concurrency:
@@ -74,10 +75,45 @@ jobs:
       - name: Regenerate apparatus registry
         run: python3 tools/build_apparatus_registry.py
 
+      - name: Emit the vector-audit's structural findings feed (implied-missing + isolates)
+        # The audit's UNIQUE cross-graph findings (Mode B implied-but-missing connections + Mode H
+        # isolates) — no other tool computes them. Written as a committed feed the Incompleteness
+        # Ledger surfaces (the two observatories talk). ~70s (curate_tokens); weekly cadence, fine.
+        # MUST run before build_incompleteness, which reads audit_findings.json.
+        run: python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --emit-findings tools/observability/audit_findings.json
+
+      - name: "Regenerate the Incompleteness Ledger (absorb-everything: stubs/nulls/missing)"
+        # The vectorization apparatus exists to SURFACE WHAT IS MISSING. This scans the whole
+        # tree for every stub/null/missing/excluded/unverified thing and refreshes the ledger +
+        # the dashboard's Missing face on the same cadence.
+        run: python3 tools/observability/build_incompleteness.py
+
+      - name: Recompute repository-state signals (review_core --json)
+        # Refresh the live CI-health feed (review_state.json / review_state_data.js — both
+        # git-ignored) BEFORE build_graph so the self-contained console.html bundle inlines a
+        # current health snapshot alongside the committed decisions/proposals feeds (Stage D:
+        # the unified dashboard's fourth face). `--json` computes + writes and exits 0 on success
+        # regardless of gate verdicts (it is not `--check`), so a NON-zero exit means review_core
+        # itself broke — let it fail the job loudly rather than silently shipping a console.html
+        # that strips the health block (no `|| true` mask).
+        run: python3 tools/review_core.py --json
+
+      - name: Regenerate connectivity graph + lexicon + unified console (build_graph)
+        # Un-orphans build_graph (Stage B): the richest connectivity view (systems/Keys/scalars
+        # graph + the derived lexicon) now refreshes on the same cadence instead of drifting.
+        # Stage D: also rebuilds console.html inlining ALL FIVE feeds (graph + lexicon + the
+        # three governance feeds) into the one double-click-to-open unified dashboard.
+        run: python3 tools/observability/build_graph.py
+
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md; then
+          # NOTE: console.html is intentionally NOT in this diff-check trigger — it is a
+          # generated bundle that rides along in the git-add below. It inlines review-state
+          # (whose volatile fields build_graph strips), so gating on it could still churn; the
+          # corpus/content feeds here are the real "is there work?" signal. It IS git-added so it
+          # ships fresh whenever a real change opens a PR.
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -98,7 +134,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md
+          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json
           git commit -m "[infrastructure] Scheduled decisions-digest + proposals + apparatus refresh (${DATE})"
           git push origin "$BRANCH"
           URL=$(gh pr create \

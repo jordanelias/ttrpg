@@ -1,0 +1,60 @@
+# action_vocabulary.yaml — the performable domain-action VERB roster
+# ─────────────────────────────────────────────────────────────────────────────
+# Central home for the performable-action vocabulary (the verbs a faction/player can
+# DO on the strategic layer). This exists so the roster lives ONCE in a register
+# (CLAUDE.md §8) instead of hardcoded inside the vector-audit skill — the vector-audit
+# sources CLASSES['action'] from here (token_class: action).
+#
+# ⚠️ STATUS: PROVISIONAL. This is NOT the authoritative domain-action registry — the
+# `domain_actions` subsystem home is unbuilt (doc:null, zero code; wiring_manifest.yaml
+# port_rank 8, resolver d_sigma). The verbs below are curated from the module_contracts
+# ED-FA-0006 verb note + wiring_manifest's "conquest/muster/govern/uniques" enumeration,
+# exactly as they were previously hand-listed in the audit. When the domain_actions home
+# is authored (ED-FA-0002), that becomes the source of truth and this roster should be
+# regenerated from / folded into it — treat this file as the relocation of a provisional
+# hand-list, not a design ratification.
+#
+# Distinct from the `da.*` 5-tag OUTCOME taxonomy (da.antinomian_action, da.covert_betrayal,
+# da.diplomatic_alliance, da.economic_intervention, da.public_governance) which lives in
+# references/module_contracts.yaml as emitted Key types — those are the Keys domain-action
+# resolution EMITS; the verbs below are the actions a player SELECTS.
+status: provisional
+# awaiting/pending: this roster is provisional until the authoritative domain_actions
+# home is authored; regenerate or fold in then. ED-FA-0002 is OPEN (a forward dependency,
+# not a resolved basis) — reported as OPEN_INFO by the ED-citation gate, never a basis claim.
+blocked_on: ED-FA-0002
+token_class: action
+source_note: >-
+  curated from references/module_contracts.yaml (ED-FA-0006 verb note) +
+  references/wiring_manifest.yaml (faction_state note: "conquest/muster/govern/uniques")
+verbs:
+  # military
+  - Muster
+  - March
+  - Fortify
+  - Blockade
+  - Conquest
+  # governance / economy
+  - Govern
+  - Trade
+  - Subsidy
+  - Treaty
+  - Diplomacy
+  # intelligence
+  - Spy
+  - Investigate
+  - Counter-Intelligence
+  # coercive / political
+  - Censure
+  - Embargo
+  - Outlawry
+  - Excommunication
+  - Active Inquisition
+  - Church Seizure
+  - Recognition Challenge
+  - Succession Endorsement
+  - War Authorisation
+  # popular / religious
+  - Piety Spread
+  - Community Organising
+  - Martial Governance
