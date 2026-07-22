@@ -19,11 +19,31 @@ import combat_systems as S  # noqa: E402
 from combatant import WEAPONS, Combatant, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: E402
 
 
-def test_affords_halfsword_emergent_set_is_parity():
-    """P3 acceptance: on the un-extended roster the emergent affordance set is EXACTLY {longsword, estoc}
-    (only those carry a `grippable` element). Marking a further attested ricasso is the JD-3 expansion."""
+def test_affords_halfsword_emergent_set():
+    """The emergent affordance set. PC-1 (ED-PC-0014) shipped {longsword, estoc}; PC-2 (ED-PC-0016) marks the two
+    further attested ricassos grippable=True — greatsword ("with ricasso, often flanked by parrying lugs") and
+    flamberge (a dedicated `ricasso` element + Parierhaken grip-stop) — so the CAPABILITY set is now exactly these
+    four. (The greatsword/flamberge SWITCH is deliberately HELD — see test_pc2_capability_recorded_but_switch_held
+    and audit/2026-07-22-combat-engine-stress-test/pc2_halfsword_expansion.md; the capability is a physical fact,
+    the switch activation is a separate, duel-aware design call.)"""
     aff = {n for n, w in WEAPONS.items() if 'base' not in w and S.affords_halfsword(w)}
-    assert aff == {'longsword', 'estoc'}, aff
+    assert aff == {'longsword', 'estoc', 'greatsword', 'flamberge'}, aff
+
+
+def test_pc2_capability_recorded_but_switch_held():
+    """PC-2 held-back invariant (ED-PC-0016): greatsword/flamberge AFFORD the half-sword (physical fact recorded) but
+    do NOT switch — no `*_halfsword` form is wired into HALFSWORD_FORM for them, so halfsword_target returns the base
+    at every armour tier. This guards against a naive re-activation re-introducing the documented liability (the
+    unconditional switch loses ~40pp at medium for these reach+mass-dominant weapons)."""
+    from combatant import HALFSWORD_FORM
+    for n in ('greatsword', 'flamberge'):
+        assert S.affords_halfsword(WEAPONS[n]), n            # capability recorded
+        assert n not in HALFSWORD_FORM, n                    # but no form wired
+        assert f'{n}_halfsword' not in WEAPONS, n            # and no orphan form record
+        c = Combatant.__new__(Combatant); c.weapon = n
+        for closed in (True, False):
+            for a in ('none', 'light', 'medium', 'heavy'):
+                assert S.halfsword_target(c, closed, a) == n, (n, closed, a)   # never switches
 
 
 def test_grippable_is_the_gate_not_geometry_alone():
