@@ -251,11 +251,12 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     the SAME grip as core.strike (D2b). Byte-identical at grip=0/room=1.0/gap=None for every weapon."""
     head = head if head is not None else w['head']
     gap = gap if gap is not None else w['gap']
+    tauth = core.thrust_authority(w['head_len'])   # PC-5: point-to-hand lever authority — scales the gap-THRUST armour-defeat terms (a short/half-sword thrust presses the harness; a reach-thrust at extension cannot), keeping adef consistent with coupling. NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its percussion energy, already in puncture_pressure) nor to the pure-cut collapse.
     if head=='blunt':
         return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
                    cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
-    if head=='point':      return cfg['ADEF_POINT']*gap
-    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap)   # cut OR half-sword gap-thrust
+    if head=='point':      return cfg['ADEF_POINT']*gap*tauth
+    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
 
 # ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
@@ -547,7 +548,7 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         # coupling scale — and the spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02).
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
-                  eff=heads[hd][0])
+                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']))
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
