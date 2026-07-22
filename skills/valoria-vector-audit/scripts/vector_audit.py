@@ -1696,18 +1696,33 @@ def emit_structural_findings(root, out_path, layer='L0'):
     names = list(tokens)
     degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp')}
     diag = diagnostics(tokens, graphs, degs)
+    pdoc = lambda t: (tokens.get(t) or {}).get('primary_doc')
+    # (a) FILTER the adversarial-pass artifacts, so the surfaced findings are high-signal:
+    #   Mode B — drop hub×hub pairs: a multi-graph HUB (Mode A) with a narrow primary_doc
+    #   mechanically implies a "missing" edge to every other hub — that's the metric's signature,
+    #   not an authoring gap. Keep pairs where at least one side is NOT a hub (a genuine surprise).
+    hubs = {r['token'] for r in diag.get('A_multigraph_hubs', [])}
+    #   Mode H — drop Key tokens + cross-module Key-flow tokens: they are isolated ONLY in the
+    #   design-citation graph (prose rarely cites a Key by name) but are CENTRAL in the Key
+    #   propagation graph this audit does not compute. Flagging them "isolated" is a false alarm.
+    def _is_key_token(t):
+        return t.startswith('Key:') or 'cross-module' in t
     payload = {
         'schema_version': 1,
         'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
         'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
                 'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
-                'Layer ' + layer + ' (curated slice — not whole-repo).',
+                'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: this audit sees only '
+                'the design CITATION/throughline/mu/pp graphs, NOT the Key propagation graph — so '
+                'hub×hub Mode-B pairs and Key-token Mode-H isolates are filtered out as artifacts.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
-        'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links')}
-                            for r in diag.get('B_implied_missing', [])],
-        'isolates': [{'token': r['token'], 'status': r.get('status')}
-                     for r in diag.get('H_isolates', [])],
+        'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),
+                             'a_doc': pdoc(r['a']), 'b_doc': pdoc(r['b'])}
+                            for r in diag.get('B_implied_missing', [])
+                            if not (r['a'] in hubs and r['b'] in hubs)],
+        'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token'])}
+                     for r in diag.get('H_isolates', []) if not _is_key_token(r['token'])],
     }
     out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
     print(f'[emit] {len(payload["implied_missing"])} implied-missing + {len(payload["isolates"])} '

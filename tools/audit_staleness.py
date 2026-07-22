@@ -46,10 +46,15 @@ import sys
 FAMILIES = [
     {
         "name": "vector-audit",
-        # Repointed 2026-07-14 (ED-IN-0064) from the stale 2026-04-29 baseline to the fresh
-        # gameplay-subsystem observatory run — the first real run since the pipeline dispatcher landed.
-        "artifact_paths": ["designs/audit/2026-07-14-gameplay-subsystem-observatory/"],
-        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/"),
+        # Repointed 2026-07-22 (ED-IN-0071 continuation) from the dead `designs/audit/2026-07-14-…/`
+        # tree (retired with `designs/`, so the base could never resolve — the family was silently
+        # inert) to the LIVE committed feed the audit now emits: `--emit-findings` writes
+        # audit_findings.json every audit-refresh, and the Incompleteness Ledger reads it. This is
+        # the artifact whose drift actually matters now (the snapshot the ledger surfaces).
+        "artifact_paths": ["tools/observability/audit_findings.json"],
+        # The audit's corpus is the design tree + the central registries it derives its token
+        # universe from (see extract_corpus / derive_tokens in vector_audit.py).
+        "scope_prefixes": ("systems/", "canon/", "engine/", "godot/", "proposals/", "references/"),
     },
     {
         "name": "decisions-digest",
@@ -90,7 +95,9 @@ FAMILIES = [
     },
     {
         "name": "npc-audit",
-        "artifact_paths": ["designs/audit/2026-06-22-npc-comprehensive-audit.md"],
+        # Repointed 2026-07-22: the audit corpus moved out of the retired `designs/audit/` tree to
+        # `audit/lane-a/` (ED-IN-0071 P4/P5) — the old path was dead, so the family reported "no data".
+        "artifact_paths": ["audit/lane-a/2026-06-22-npc-comprehensive-audit.md"],
         "scope_prefixes": ("systems/npcs/", "references/npc_registry.yaml"),
     },
     {

@@ -450,22 +450,29 @@ def scan_audit_structural():
     d = _load_json("tools/observability/audit_findings.json")
     if not d:
         return []
+    # SNAPSHOT disclosure: these rows are read from a weekly-committed feed, not recomputed here
+    # (the 70s audit runs in audit-refresh). audit_staleness.py watches the feed for drift.
+    snap = "snapshot (audit_findings.json, refreshed weekly by audit-refresh)"
     out = []
     for r in d.get("implied_missing", []):
         a, b = r.get("a"), r.get("b")
+        # (e) navigability: carry the tokens' primary_doc(s) as the finding path so the row links
+        # somewhere. Prefer a's doc; fall back to b's. Emitted by --emit-findings as a_doc/b_doc.
+        p = r.get("a_doc") or r.get("b_doc") or ""
         out.append(finding("audit_implied_missing", f"impl::{a}||{b}",
                            f"{a} ⋯ {b} — implied but never cited",
                            f"“{a}” and “{b}” are linked in {r.get('meta_links','?')} metadata graphs "
                            f"(throughline/mu/pp) but are NEVER cited together — a missing connection the "
-                           f"design should make explicit or is a real gap (vector-audit Mode B)",
-                           path="", lane="IN"))
+                           f"design should make explicit or is a real gap (vector-audit Mode B; {snap})",
+                           path=p, lane="IN"))
     for r in d.get("isolates", []):
         t = r.get("token")
         out.append(finding("audit_isolate", f"iso::{t}",
                            f"{t} — structurally isolated",
                            f"“{t}” has degree <=1 across ALL of the cite/throughline/mu/pp graphs — "
-                           f"structurally disconnected from the rest of the design (vector-audit Mode H); "
-                           f"status {r.get('status','?')}", path="", lane="IN"))
+                           f"isolated in the design CITATION graph (this audit does not see the Key "
+                           f"propagation graph, where it may be central); vector-audit Mode H; "
+                           f"status {r.get('status','?')} ({snap})", path=r.get("doc") or "", lane="IN"))
     return out
 
 
