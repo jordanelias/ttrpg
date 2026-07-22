@@ -39,6 +39,46 @@ read-only.
 
 ---
 
+## Adversarial revision (2026-07-22, same day — supersedes the affected items below)
+
+A second, adversarial pass (`adversarial_pass.py`; corpus cross-check via the combat audits/handoffs/ledger)
+turned the skepticism on this report's own claims. Three material corrections:
+
+- **G2 was mis-diagnosed — and the real finding is bigger. The half-sword auto-switch is a NET LIABILITY.**
+  My "mail valley / medium-tier coupling discontinuity" was wrong: the coupling tables are perfectly monotone
+  for every weapon (longsword none/light/med/heavy = 1.45/1.28/**1.02/1.02** — no dip). The win-rate dip is
+  real but its cause is the **half-sword form-switch itself**. Ablating it (weapon never half-swords):
+  longsword vs arming at mail/plate **27→62 (+35pp) / 41→73 (+32pp)**; estoc **70→94 / 79→96**. The ablated
+  arcs are clean and monotone-rising. So `halfsword_target` — the mechanic that implements "mit dem kurzen
+  Schwert" to help vs harness — makes the fighter *worse*. **Mechanism:** the full longsword's *versatile*
+  `cut_thrust` head already gets ~90% of the gap-thrust for free (adef_cap 0.94 vs the half-sword's 1.02;
+  coupling 1.02 vs 1.11) **without** losing reach, while the half-sword form has ~**3× the leverage**
+  (leverage-proxy 0.29→0.90) that `adef_cap(point)=ADEF_POINT·gap` **never reads** — it credits point
+  concentration only, not the weight-bearing leveraged thrust. So the switch pays a large reach cost (−0.44)
+  for a tiny anti-armour gain. **This is backwards from the source** (Jordan, this session: half-swording with
+  high-pressure weight-bearing thrusts *is* the answer to penetrating armour; edged weapons should struggle to
+  cut mail — the engine gets the cut-vs-mail half right, the half-sword half wrong). A **prototype** crediting
+  leverage into the gap-thrust adef (emergent, no weapon name) moves the arc the right way (longsword vs plate
+  44→64 at K=0.8), but it lifts *every* thrust weapon and so needs a roster-wide joint re-tune — a validated
+  *direction*, not a finished fix. **This B.1 "half-swording engages vs harness" strength claim below is
+  RETRACTED; G2 below is superseded by this item.** Corpus: an earlier hand-audit flagged the half-sword
+  under-credited vs plate (2026-06-29 recovery, F3) and a damage-path fix (`d3661936`) lifted its *damage*;
+  the *switch decision* was never re-checked and is still a net loss — this is the novel part.
+- **The C1 "5 distinct context-leaders" claim (B.1) was a low-N artifact — RETRACTED.** At N=120 the per-context
+  leaders sat within ~2pp of each other (noise). Re-run at N=400: only **3** distinct leaders, margins
+  0.2–0.6pp — i.e. the leader is effectively random per context. The **2.9pp unconditional field spread is the
+  real, solid C1 result** (no globally dominant tradition); the "leader flips across every context" gloss is not
+  supported. (Historically the handoff recorded only ~2 distinct leaders, so the unconditional flatness *is* a
+  genuine improvement — just not via a robust per-context flip.)
+- **Agility-dominance SURVIVED falsification (strengthened).** Re-measured from an all-4 baseline: agi
+  **+34.4pp**, still the clear leader by ~17pp over cog — not a baseline artifact.
+
+Unchanged by the adversarial pass: M1 (overflow), G1 (cutting-polearm cliff — confirmed **novel**, ED-PC-0011/12
+adjacent), G3/G4 (confirmed **known**, deferred to Phase-C), and the physics-layer MATCH set (the point-superiority
+check even survived a cherry-pick test: every real weapon's own `gap_prec` still out-couples a cut vs plate).
+
+---
+
 ## Part A — Mechanical correctness (`stress_battery.py`)
 
 | category | result | evidence |
@@ -83,8 +123,10 @@ column:
   retains ≤ 22% of its unarmoured damage vs plate (Williams: cutting riveted mail is "functionally impossible").
 - **Percussion & gap-thrust rise vs plate:** mace **+12**, bec_de_corbin **+10**, goedendag **+10**,
   lucerne_hammer **+8**, spear **+10**, jian **+8**. Direction is right; magnitudes see B.2.
-- **Half-swording engages vs harness** (`halfsword_target`): longsword & estoc switch to their half-sword form
-  in the close vs medium/heavy, full form vs unarmoured (Talhoffer/Ringeck).
+- ~~**Half-swording engages vs harness**~~ **[RETRACTED — see Adversarial revision]**: the switch *fires*
+  (longsword/estoc adopt the half-sword form vs medium/heavy in the close), but it is a **net liability**, not a
+  strength — the fighter wins ~30pp *more* vs armour when it never half-swords. The mechanic is backwards from
+  the source.
 - **Reach threat decays vs plate** (FIX-1): a cutting polearm's reach advantage drops (factor 1.00 → 0.86) once
   the target's armour makes its edge irrelevant — "the armoured man walks through a threat that can't hurt him."
 
@@ -98,9 +140,10 @@ context matrix flips the leader every time:
 | longsword | **english** | spear | **filipino** |
 | rapier | **japanese** | | |
 
-**5 distinct leaders across 5 contexts** — each tradition owns a paradigm, none is best everywhere. This is the
-"preferred paradigm" design goal realised, and it reads as historically sensible (German bind at the longsword,
-English true-times counter, Japanese counter-time at the duelling rapier, Filipino flow with the spear).
+~~**5 distinct leaders across 5 contexts**~~ **[the per-context leader claim is RETRACTED — low-N artifact; see
+Adversarial revision]**. What holds is the **2.9pp unconditional field spread** — no globally dominant tradition,
+the core C1 requirement met. The per-context "leader flip" was noise (N=120; at N=400 only 3 leaders, ~0.4pp
+margins). The unconditional flatness is real and is an improvement over the handoff's prior ~2-leader state.
 
 ### B.2 Where emergent play DIVERGES from the source (the findings)
 
@@ -127,7 +170,7 @@ roster audit of anti-armour affordance coverage (every pole/haft weapon can half
 degree; a pure-cutter-vs-plate floor of ~8% should require a positive physical reason, e.g. a true edge-only
 Dane axe, rather than falling out of missing data).
 
-#### Finding G2 (MEDIUM, appears new) — the non-monotone "mail valley"
+#### Finding G2 [SUPERSEDED by the Adversarial revision — kept for the audit trail; the cause is the half-sword switch, not a coupling discontinuity] — the non-monotone "mail valley"
 The half-sword switchers perform **worse against mail (medium) than against plate (heavy)** — backwards, since
 mail should be *easier* to defeat than plate. N=600/cell, CIs non-overlapping (not noise):
 
@@ -186,9 +229,10 @@ cd systems/combat/combat_engine_v1 && python workbench/balance.py armour 300   #
 
 | id | severity | type | owner-lane |
 |---|---|---|---|
+| **half-sword switch is a net liability** (fix direction: credit the leveraged weight-bearing thrust into gap-thrust adef, emergent; roster-wide joint re-tune) | **high (grounding)** | grounding / calibration | PC |
+| G1 cutting-polearm anti-armour affordance cliff (novel) | medium | grounding / roster data | PC |
+| agility single-stat dominance (novel; robust to baseline) | medium | balance budget | PC |
 | M1 unguarded logistic overflow (4 sites) | low | robustness hardening | PC |
-| G1 cutting-polearm anti-armour affordance cliff | medium | grounding / roster data | PC |
-| G2 non-monotone mail valley (half-sword switchers) | medium | grounding / coupling calibration | PC |
 | G3 poleaxe hammer-not-spike vs plate | known | grounding / Phase-C | PC |
 | G4 reach-class flat-dominance | known | grounding / Phase-C mass model | PC |
-| agility single-stat dominance | note | balance budget | PC |
+| ~~G2 mail valley~~ | superseded | → the half-sword finding above | — |
