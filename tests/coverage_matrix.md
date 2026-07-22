@@ -2,27 +2,17 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
-## 2026-07-22 — ED-MB-0011: DG-10 field-movement freeze fix + full field-based stress test
-- **Defect (DG-10, generalized):** `_node_advance` (the live path since `FIELD_MOVEMENT=1`, ED-1089)
-  computed the advance step as `max(0, math.floor(base*disc_mult) + stance_mod)`; with the universal
-  base cell-speed 1 and `disc_mult` 0.7 (disc 3-4) / 0.4 (disc<3), `floor(1*0.7)=0` froze every
-  balanced sub-Discipline-5 body in place → the majority of §B.2 troop types (levy/light_inf/heavy_inf/
-  archers/crossbow/sling/artillery) never advanced to contact. The continuous-velocity accumulator meant
-  to prevent this was wired only into the legacy grid `advance_cells` and sat dead there.
-- **Fix (Jordan-ruled in-session, "fields, not grids. no grids."):** on the FIELD path `step` is now the
-  real velocity (no floor, no accumulator) — anchor/pos are already floats, consumer moves by
-  `min(step,mag)`. Whole velocities stay int (disc≥5 byte-exact); fractions (disc<5) advance the float
-  anchor at their true rate. Legacy GRID path untouched (`if FIELD_MOVEMENT` gate).
-- **Digests:** GRID `unit`/`cell` BYTE-IDENTICAL (CI `test_mass_battle_byte_exact.py` still 2 passed).
-  FIELD `cell_field`/`unit_field` re-recorded (mirror/ranged byte-identical; the 8 decisive rows move
-  because a unit degrading below disc-5 mid-battle used to freeze and now keeps moving — trace: wedge
-  seed 0 → disc 3). maneuvers+yield 12 passed/1 xpassed.
-- **Stress test** (`audit/2026-07-22-mass-battle-stress-test/`): all 30 MECHANICS resolve; aggregate fuzz
-  0 engine failures over 197 battles, 77.7% contact, 1/197 minor clean-unit cell-vs-hp accounting drift;
-  12/16 gates proven WIRED by subprocess A/B (4 inert-on-scenario); off-by-default gates (PC_FACING_MODEL/
-  FIELD_CONTACT/REFORM_CHECK) all SAFE when activated; determinism + perfect mirror symmetry.
-- **Scope:** MOVEMENT only. Shifts the 20-row Cannae balance gauge (frozen units now fight) — DG-6-gated;
-  NOT a balance-calibration claim, no balance constant tuned.
+## 2026-07-22 — ED-MB-0011: DG-10 field-movement freeze fix + field-based stress test (condensed)
+- DG-10 (ED-MB-0007) fixed: `_node_advance` floored sub-Discipline-5 velocity to 0
+  (`floor(1*0.7)=0`) → most §B.2 troop types (all disc<5) never closed on the live field path. The
+  continuous-velocity accumulator meant to prevent it sat dead in the legacy grid `advance_cells`. Fix
+  (Jordan-ruled "fields, not grids. no grids."): FIELD-path `step` is the real velocity (no floor, no
+  accumulator; anchor/pos already float, consumer uses `min(step,mag)`); whole velocities stay int so
+  disc≥5 is byte-exact, fractions advance at true rate. GRID path untouched (`if FIELD_MOVEMENT`) → CI
+  byte-exact still 2 passed; FIELD goldens re-recorded (mirror/ranged byte-identical, 8 decisive rows
+  move because units degrading below disc-5 mid-battle used to freeze). maneuvers+yield 12 passed/1
+  xpassed. MOVEMENT-only; shifts the DG-6-gated Cannae gauge, no balance constant tuned. Full detail:
+  `audit/2026-07-22-mass-battle-stress-test/` + ED-MB-0011.
 ## 2026-06-15/20 — ED-1013 through ED-1032 (archived — condensed)
 - Smooth command-sigma pool + continuous discipline penalty (ED-1013); gauge recalibration (ED-1014);
   cavalry-construction gauge fix, not an engine defect (ED-1015); per-subunit stat/stamina/troop-type/
